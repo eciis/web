@@ -1,0 +1,17 @@
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+default_expiration: "1s"
+
+handlers:
+- url: /api.*
+  script: main.app
+
+- url: (.*)/
+  static_files: app/index.html
+  upload: app/index.html
+
+- url: (.*)
+  static_files: app\1
+  upload: app/(.*)

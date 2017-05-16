@@ -60,7 +60,6 @@ class MainHandler(BaseHandler):
             (self.request.host, self.request.path)
         }))
 
-
 class LoginHandler(BaseHandler):
     """Login Handler."""
 

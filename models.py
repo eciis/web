@@ -48,20 +48,6 @@ class Institution(ndb.Model):
         'inactive'
     ]), default='pending')
 
-    @staticmethod
-    def get_all(add=[], remove=[]):
-        query = Institution.query()
-        data = []
-        for institution in query.fetch():
-            pdict = institution.to_dict() 
-            for prop in add:
-                pdict[prop] = getattr(institution, prop)
-            for prop in remove:
-                del pdict[prop]
-            data.append(pdict)
-
-        return data
-
 class User(ndb.Model):
     name = ndb.StringProperty(required=True)
     cpf = ndb.StringProperty()

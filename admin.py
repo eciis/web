@@ -26,6 +26,7 @@ class BaseHandler(webapp2.RequestHandler):
 class InitHandler(BaseHandler):
     def get(self):
 
+        #new User Mayza
         mayza = User()
         mayza.name = 'Mayza Nunes'
         mayza.cpf = '089.675.908-90'
@@ -38,8 +39,9 @@ class InitHandler(BaseHandler):
         mayza.posts = []
         mayza.put()
 
+        #new User André
         andre = User()
-        andre.name = 'Andre Abrantes'
+        andre.name = 'André Abrantes'
         andre.cpf = '089.675.908-89'
         andre.photo_url = ''
         andre.email = 'andredossantosabrantes@gmail.com'
@@ -54,7 +56,7 @@ class InitHandler(BaseHandler):
         self.response.write('{"msg":"database initialized with a few users", "projetos_url":"http://localhost:8080/api/user"}')
         self.response.out.write("\n")
 
-        #
+        #new Institution CERTBIO with User Mayza like a member and User André like a follower
         certbio = Institution()
         certbio.name = 'CERTBIO'
         certbio.cnpj = '18.104.068/0001-86'
@@ -71,7 +73,7 @@ class InitHandler(BaseHandler):
         certbio.posts = []
         certbio.put()
 
-        #
+        #new Institution SPLAB with User André like a member and User Mayza like a follower
         splab = Institution()
         splab.name = 'SPLAB'
         splab.cnpj = '18.104.068/0001-56'
@@ -94,10 +96,12 @@ class InitHandler(BaseHandler):
         self.response.write('{"msg":"database initialized with a few institutions", "projetos_url":"http://localhost:8080/api/institution"}')
         self.response.out.write("\n")
 
-        #
+        #Updating Institutions of Users Mayza and André
         mayza.institutions = [certbio.key] 
+        mayza.follows = [splab.key] 
         mayza.put()
         andre.institutions = [splab.key] 
+        andre.follows = [certbio.key] 
         andre.put()
 
         #POST of Mayza To Certbio Institution
@@ -108,6 +112,7 @@ class InitHandler(BaseHandler):
         mayza_post.institution = certbio.key
         mayza_post.put()
 
+        #POST of Mayza To Certbio Institution with image
         mayza_post_comIMG = Post()
         mayza_post_comIMG.title = "Dolor sit amet"
         mayza_post_comIMG.headerImage = "https://workingatbooking.com/content/uploads/2017/04/womenintech_heroimage.jpg"
@@ -116,21 +121,28 @@ class InitHandler(BaseHandler):
         mayza_post_comIMG.institution = certbio.key
         mayza_post_comIMG.put()
 
+        #side efect of a post
+        mayza.posts = [mayza_post.key, mayza_post_comIMG.key]
+        mayza.put()
+        certbio.posts = [mayza_post.key, mayza_post_comIMG.key]
+        certbio.put()
 
-
-        #
+        #POST of André To SPLAB Institution
         andre_post = Post()
-        andre_post.title = "Novo edital do CERTBIO"
+        andre_post.title = "Novo edital do SPLAB"
         andre_post.text = "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat."
         andre_post.author = andre.key
         andre_post.institution = splab.key
         andre_post.put()
 
-
-
+        #side efect of a post
+        andre.posts = [andre_post.key]
+        andre.put()
+        splab.posts = [andre_post.key]
+        splab.put()
 
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-        self.response.write('{"msg":"database initialized with a few posts", "projetos_url":"http://localhost:8080/api/institution"}')
+        self.response.write('{"msg":"database initialized with a few posts", "projetos_url":"http://localhost:8080/api/post"}')
         self.response.out.write("\n")
 
 app = webapp2.WSGIApplication([

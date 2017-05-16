@@ -56,7 +56,7 @@ class MainHandler(BaseHandler):
             'email': user.email(),
             'id': user.user_id(),
             'nickname': user.nickname(),
-            'logout': 'http://%s/api/auth/logout?redirect=%s' %
+            'logout': 'http://%s/logout?redirect=%s' %
             (self.request.host, self.request.path)
         }))
 

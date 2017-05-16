@@ -37,7 +37,6 @@ app.service("AuthService", function AuthService($http, GravatarService) {
             service.user.image = gravatarUrl(info.data.email);
 
             GravatarService.load(service.user.email).then(function loadProfile(info) {
-                console.log(info.data.entry[0])
                 service.user.profile = info.data.entry[0];
             }, function error(error) {
                 service.user.profile = {

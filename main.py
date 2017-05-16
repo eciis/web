@@ -13,6 +13,30 @@ from models import User
 from utils import Utils
 
 
+def login_required(method):
+    """Handle required login."""
+    def login(self, *args):
+        user = users.get_current_user()
+        if user is None:
+            self.response.write(json.dumps({
+                'msg': 'Auth needed',
+                'login_url': 'http://%s/login' % self.request.host
+            }))
+            self.response.set_status(401)
+            return
+        method(self, user, *args)
+    return login
+
+
+def json_response(method):
+    """Add content type header to the response."""
+    def response(self, *args):
+        self.response.headers[
+            'Content-Type'] = 'application/json; charset=utf-8'
+        method(self, *args)
+    return response
+
+
 class BaseHandler(webapp2.RequestHandler):
     """Base Handler."""
 
@@ -24,27 +48,41 @@ class BaseHandler(webapp2.RequestHandler):
 class MainHandler(BaseHandler):
     """Main Handler."""
 
-    def get(self):
-        """Handle GET Requests."""
-        user = users.get_current_user()
-        if user:
-            pass
+    @json_response
+    @login_required
+    def get(self, user):
+        """Handle HTTP GET request."""
+        self.response.write(json.dumps({
+            'email': user.email(),
+            'id': user.user_id(),
+            'nickname': user.nickname(),
+            'logout': 'http://%s/api/auth/logout?redirect=%s' %
+            (self.request.host, self.request.path)
+        }))
 
 
 class LoginHandler(BaseHandler):
     """Login Handler."""
 
     def get(self):
-        """Handle GET Requests."""
-        pass
+        """Handle GET request."""
+        user = users.get_current_user()
+        if user is None:
+            self.redirect(users.create_login_url("/"))
+        else:
+            self.redirect("/")
 
 
 class LogoutHandler(BaseHandler):
     """Logout Handler."""
 
     def get(self):
-        """Handle GET Requests."""
-        pass
+        """Handle GET request."""
+        user = users.get_current_user()
+        if user:
+            self.redirect(users.create_logout_url("/"))
+        else:
+            self.redirect("/login")
 
 
 class InstitutionHandler(BaseHandler):
@@ -112,9 +150,9 @@ class ErroHandler(BaseHandler):
         self.response.write("Not Found")
 
 app = webapp2.WSGIApplication([
+    ("/login", LoginHandler),
+    ("/logout", LogoutHandler),
     ("/api", MainHandler),
-    ("/api/login", LoginHandler),
-    ("/api/logout", LogoutHandler),
     ("/api/institution", InstitutionHandler),
     ("/api/institution/(.*)", InstitutionHandler),
     ("/api/post", PostHandler),

@@ -1,0 +1,77 @@
+<div layout="column">
+  <div class="padded" md-whiteframe>
+    <md-content>
+      <md-tabs md-border-bottom md-dynamic-height>
+
+        <!-- Instituições -->
+        <md-tab label="Instituições">
+          <md-content class="md-padding">
+            <div layout="column">
+              <div flex>
+                <md-content>
+                  <md-list flex>
+                    <md-list-item class="md-3-line" ng-repeat="item in homeCtrl.institutions" ng-click="homeCtrl.showAdvanced($event, item)">
+                      <img ng-src="{{item.image}}" class="md-avatar"/>
+                      <div class="md-list-item-text" layout="column">
+                        <h3>{{ item.name }}</h3>
+                        <h4>{{ item.email }}</h4>
+                      </div>
+                      <md-button class="md-fab md-primary" ng-click="homeCtrl.delete(item, $index)" >
+                        <md-icon md-font-set="md">delete</md-icon>
+                      </md-button>
+                    </md-list-item>
+                  </md-list>
+                </md-content>
+              </div>
+            </div>
+          </md-content>
+        </md-tab>
+
+
+        <!-- Posts -->
+        <md-tab label="Posts">
+          <md-content class="md-padding">
+            <div layout="column">
+              <div flex>
+                <md-content>
+                  <md-list flex>
+                    <md-list-item class="md-3-line" ng-click="null">
+                    <img ng-src="{{item.image}}" class="md-avatar" alt="{{item.who}}" />
+                      <div class="md-list-item-text" layout="column">
+                        <h3>{{ item.name }}</h3>
+                        <h4>{{ item.email }} - ID: {{ item.iid }}</h4>
+                        <p>{{ item.description }}</p>
+                      </div>
+                    </md-list-item>
+                  </md-list>
+                </md-content>
+              </div>
+            </div>
+          </md-content>
+        </md-tab>
+
+        <!-- Usuários -->
+        <md-tab label="Usuários">
+          <md-content class="md-padding">
+            <div layout="column">
+              <div flex>
+                <md-content>
+                  <md-list flex>
+                    <md-list-item class="md-3-line" ng-click="null">
+                    <img ng-src="{{item.image}}" class="md-avatar" alt="{{item.who}}" />
+                      <div class="md-list-item-text" layout="column">
+                        <h3>{{ item.name }}</h3>
+                        <h4>{{ item.email }} - ID: {{ item.iid }}</h4>
+                        <p>{{ item.description }}</p>
+                      </div>
+                    </md-list-item>
+                  </md-list>
+                </md-content>
+              </div>
+            </div>
+          </md-content>
+        </md-tab>
+      </md-tabs>
+    </md-content>
+  </div>
+</div>

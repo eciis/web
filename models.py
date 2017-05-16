@@ -95,28 +95,30 @@ class User(ndb.Model):
     ]), default='pending')
 
 class Post(ndb.Model):
-	title = ndb.StringProperty(required=True)
+    title = ndb.StringProperty(required=True)
+    
+    headerImage = ndb.StringProperty()
 
-	content = ndb.TextProperty(required=True)
+    text= ndb.TextProperty(required=True)
 
-	# user who is the author
-	author = ndb.KeyProperty(kind="User", required=True)
+    # user who is the author
+    author = ndb.KeyProperty(kind="User", required=True)
 
-	# institution to which this post belongs
-	institution = ndb.KeyProperty(kind="Institution")
+    # institution to which this post belongs
+    institution = ndb.KeyProperty(kind="Institution")
 
-	state = ndb.StringProperty(choices=set([
-		'draft',
-		'published',
-		'deleted'
-	]), default='draft')
+    state = ndb.StringProperty(choices=set([
+        'draft',
+        'published',
+        'deleted'
+    ]), default='draft')
 
-	# Comments of the post
-	# Concurrency controlled by Transactions
-	comments = ndb.JsonProperty(repeated=True)
+    # Comments of the post
+    # Concurrency controlled by Transactions
+    comments = ndb.JsonProperty(repeated=True)
 
-	#date and time of a creation of a post 
-	publication_date = ndb.DateTimeProperty(auto_now_add=True)
+    #date and time of a creation of a post 
+    publication_date = ndb.DateTimeProperty(auto_now_add=True)
 
-	#number of likes 
-	likes = ndb.IntegerProperty(default=0)
+    #number of likes 
+    likes = ndb.IntegerProperty(default=0)

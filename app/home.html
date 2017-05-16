@@ -1,77 +1,33 @@
-<div layout="column">
-  <div class="padded" md-whiteframe>
-    <md-content>
-      <md-tabs md-border-bottom md-dynamic-height>
-
-        <!-- Instituições -->
-        <md-tab label="Instituições">
-          <md-content class="md-padding">
-            <div layout="column">
-              <div flex>
-                <md-content>
-                  <md-list flex>
-                    <md-list-item class="md-3-line" ng-repeat="item in homeCtrl.institutions" ng-click="homeCtrl.showAdvanced($event, item)">
-                      <img ng-src="{{item.image}}" class="md-avatar"/>
-                      <div class="md-list-item-text" layout="column">
-                        <h3>{{ item.name }}</h3>
-                        <h4>{{ item.email }}</h4>
-                      </div>
-                      <md-button class="md-fab md-primary" ng-click="homeCtrl.delete(item, $index)" >
-                        <md-icon md-font-set="md">delete</md-icon>
-                      </md-button>
-                    </md-list-item>
-                  </md-list>
-                </md-content>
-              </div>
-            </div>
-          </md-content>
-        </md-tab>
-
-
-        <!-- Posts -->
-        <md-tab label="Posts">
-          <md-content class="md-padding">
-            <div layout="column">
-              <div flex>
-                <md-content>
-                  <md-list flex>
-                    <md-list-item class="md-3-line" ng-click="null">
-                    <img ng-src="{{item.image}}" class="md-avatar" alt="{{item.who}}" />
-                      <div class="md-list-item-text" layout="column">
-                        <h3>{{ item.name }}</h3>
-                        <h4>{{ item.email }} - ID: {{ item.iid }}</h4>
-                        <p>{{ item.description }}</p>
-                      </div>
-                    </md-list-item>
-                  </md-list>
-                </md-content>
-              </div>
-            </div>
-          </md-content>
-        </md-tab>
-
-        <!-- Usuários -->
-        <md-tab label="Usuários">
-          <md-content class="md-padding">
-            <div layout="column">
-              <div flex>
-                <md-content>
-                  <md-list flex>
-                    <md-list-item class="md-3-line" ng-click="null">
-                    <img ng-src="{{item.image}}" class="md-avatar" alt="{{item.who}}" />
-                      <div class="md-list-item-text" layout="column">
-                        <h3>{{ item.name }}</h3>
-                        <h4>{{ item.email }} - ID: {{ item.iid }}</h4>
-                        <p>{{ item.description }}</p>
-                      </div>
-                    </md-list-item>
-                  </md-list>
-                </md-content>
-              </div>
-            </div>
-          </md-content>
-        </md-tab>
-      </md-tabs>
-    </md-content>
-  </div>
-</div>
+<md-card ng-repeat="post in homeCtrl.posts">
+  <md-card-header>
+    <md-card-avatar>
+      <img src="https://material.angularjs.org/latest/img/logo.svg"/>
+    </md-card-avatar>
+    <md-card-header-text>
+      <span class="md-title">AngularJS</span>
+      <span class="md-subhead">Material</span>
+    </md-card-header-text>
+  </md-card-header>
+  <img ng-src="https://material.angularjs.org/latest/img/washedout.png" class="md-card-image" alt="Washed Out">
+  <md-card-title>
+    <md-card-title-text>
+      <span class="md-headline">{{post.title}}</span>
+    </md-card-title-text>
+  </md-card-title>
+  <md-card-content>
+    <p>
+      {{post.text}}
+    </p>
+  </md-card-content>
+  <md-card-actions layout="row" layout-align="end center">
+    <md-button class="md-icon-button" aria-label="Favorite">
+      <md-icon md-svg-icon="img/icons/favorite.svg"></md-icon>
+    </md-button>
+    <md-button class="md-icon-button" aria-label="Settings">
+      <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
+    </md-button>
+    <md-button class="md-icon-button" aria-label="Share">
+      <md-icon md-svg-icon="img/icons/share-arrow.svg"></md-icon>
+    </md-button>
+  </md-card-actions>
+</md-card>

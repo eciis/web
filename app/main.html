@@ -1,6 +1,6 @@
 <!-- TOOLBAR -->
 <md-toolbar md-colors="{background: 'blue-800'}" layout-wrap layout-align="center" layout="row">
-  <div class="md-toolbar-tools" flex="100" flex-lg=80 flex-xl="80">
+  <div class="md-toolbar-tools" flex="100" flex-lg=80 flex-xl="80" layout="row" layout-align="center center">
     <md-button class="md-icon-button" aria-label="Settings" ng-click="mainCtrl.toggle()">
       <md-icon>menu</md-icon>
     </md-button>
@@ -8,10 +8,12 @@
     <md-button disabled="true">
       <img src="https://static1.squarespace.com/static/56b753bac6fc0886a1bf0739/t/56ba0030356fb05e0f01cb70/1455030358655/" aria-label="WHO Logo" style="height: 80%;filter: brightness(10) grayscale(1)">
     </md-button>
-    <h2 flex md-truncate>e-CIIS</h2>
+    <h2>e-CIIS</h2>
 
-    <md-button class="md-icon-button" aria-label="Favorite">
-      <a href="/logout"><md-icon style="color: white;">account_circle</md-icon></a>
+    <span flex md-truncate></span>
+
+    <md-button class="md-icon-button" aria-label="Logout">
+      <a href="/logout"><md-icon style="color: white;">exit_to_app</md-icon></a>
     </md-button>
 
     <md-button class="md-icon-button" aria-label="Favorite">
@@ -72,9 +74,9 @@
   </div>
 
   <!-- CENTER PANEL -->
-  <div flex-xs="90" flex-sm="90" flex-md="50" flex="40" layout="column" layout-padding>
+  <md-content flex-xs="90" flex-sm="90" flex-md="50" flex="40" layout="column">
     <div ui-view="content"></div>
-  </div>
+  </md-content>
 
   <!-- RIGHT SIDE PANEL -->
   <div  flex-xs="0" flex-sm="0" flex="20" layout-padding laoyout="row">

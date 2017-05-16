@@ -22,7 +22,7 @@ class Utils():
         for key in keys:
             value = propertiesValue.get(key)
             attribute = getattr(EntityClass, key)
-
+            
             if value and isinstance(attribute, ndb.IntegerProperty):
                 value = int(value)
             elif value and isinstance(attribute, ndb.KeyProperty):
@@ -31,7 +31,6 @@ class Utils():
             elif value and isinstance(attribute, ndb.DateTimeProperty):
                 value = datetime.datetime.strptime(
                     value, "%Y-%m-%dT%H:%M:%S.%f")
-
             setattr(entity, key, value)
         return entity
 

@@ -14,6 +14,9 @@ handlers:
 - url: /api.*
   script: main.app
 
+- url: /admin.*
+  script: admin.app
+
 - url: (.*)/
   static_files: app/index.html
   upload: app/index.html

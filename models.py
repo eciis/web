@@ -80,6 +80,13 @@ class User(ndb.Model):
         'inactive'
     ]), default='pending')
 
+    @staticmethod
+    def get_by_email(email):
+        query = User.query(User.email == email)
+        user = query.get()
+        return user
+
+
 class Post(ndb.Model):
     title = ndb.StringProperty(required=True)
     

@@ -24,6 +24,7 @@ def login_required(method):
             }))
             self.response.set_status(401)
             return
+        user = User.get_by_email(user.email())
         method(self, user, *args)
     return login
 
@@ -53,9 +54,8 @@ class MainHandler(BaseHandler):
     def get(self, user):
         """Handle HTTP GET request."""
         self.response.write(json.dumps({
-            'email': user.email(),
-            'id': user.user_id(),
-            'nickname': user.nickname(),
+            'email': user.email,
+            'nickname': user.name,
             'logout': 'http://%s/logout?redirect=%s' %
             (self.request.host, self.request.path)
         }))
@@ -75,9 +75,9 @@ class LoginHandler(BaseHandler):
 class LogoutHandler(BaseHandler):
     """Logout Handler."""
 
-    def get(self):
+    @login_required
+    def get(self, user):
         """Handle GET request."""
-        user = users.get_current_user()
         if user:
             self.redirect(users.create_logout_url("/"))
         else:
@@ -143,15 +143,14 @@ class PostHandler(BaseHandler):
 
 class UserTimelineHandler(BaseHandler):
     """Get posts of all institutions that the user follow."""
-    def get(self, userId):
-        user = User.get_by_id(int(userId))
+    @json_response
+    @login_required
+    def get(self, user):
         
         queryPosts = Post.query(Post.institution.IN(user.follows))
 
         dataPosts = [Utils.toJson(post) for post in queryPosts]
        
-        self.response.headers[
-            'Content-Type'] = 'application/json; charset=utf-8'
         self.response.write(json.dumps(dataPosts))
 
 
@@ -169,7 +168,7 @@ app = webapp2.WSGIApplication([
     ("/api/institution", InstitutionHandler),
     ("/api/institution/(.*)", InstitutionHandler),
     ("/api/post", PostHandler),
-    ("/api/user/(\d+)/timeline", UserTimelineHandler),
+    ("/api/user/timeline", UserTimelineHandler),
     ("/api/user", UserHandler),
     ("/api/.*", ErroHandler),
 ], debug=True)

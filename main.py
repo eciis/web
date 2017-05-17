@@ -142,15 +142,13 @@ class PostHandler(BaseHandler):
 
 
 class UserTimelineHandler(BaseHandler):
-    #get posts of all institutions that the user follow
+    """Get posts of all institutions that the user follow."""
     def get(self, userId):
         user = User.get_by_id(int(userId))
         
         queryPosts = Post.query(Post.institution.IN(user.follows))
 
-        posts = []
-        for post in queryPosts.iter():
-            posts.append(post)
+        posts = [Utils.toJson(post) for post in queryPosts]
         self.response.write(posts)
 
 

@@ -80,6 +80,13 @@ class User(ndb.Model):
         'inactive'
     ]), default='pending')
 
+    @staticmethod
+    def get_by_email(email):
+        query = User.query(User.email == email)
+        user = query.get()
+        return user
+
+
 class Post(ndb.Model):
     title = ndb.StringProperty(required=True)
     
@@ -108,3 +115,11 @@ class Post(ndb.Model):
 
     #number of likes 
     likes = ndb.IntegerProperty(default=0)
+
+class Timeline(ndb.Model):
+
+    # TODO: In the future think about maximum size of the entity
+    # The data of the posts
+    # The only required data is the Post Key/id
+    # Ordered by the datetime (most recent first)
+    posts = ndb.JsonProperty(repeated=True, compressed=True)

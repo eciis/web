@@ -148,8 +148,11 @@ class UserTimelineHandler(BaseHandler):
         
         queryPosts = Post.query(Post.institution.IN(user.follows))
 
-        posts = [Utils.toJson(post) for post in queryPosts]
-        self.response.write(posts)
+        dataPosts = [Utils.toJson(post) for post in queryPosts]
+       
+        self.response.headers[
+            'Content-Type'] = 'application/json; charset=utf-8'
+        self.response.write(json.dumps(dataPosts))
 
 
 class ErroHandler(BaseHandler):

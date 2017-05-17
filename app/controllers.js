@@ -46,6 +46,12 @@
             }
         });
 
+        homeCtrl.createdAt = function(post) {
+            if (post) {
+                post.created_at = new Date();
+            }
+        };
+
         homeCtrl.posts = [{
             title: "Dolor sit amet",
             headerImage: "https://workingatbooking.com/content/uploads/2017/04/womenintech_heroimage.jpg",

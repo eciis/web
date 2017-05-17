@@ -141,6 +141,19 @@ class PostHandler(BaseHandler):
         Utils.postEntity(Post, self.request, self.response)
 
 
+class UserTimelineHandler(BaseHandler):
+    #get posts of all institutions that the user follow
+    def get(self, userId):
+        user = User.get_by_id(int(userId))
+        
+        queryPosts = Post.query(Post.institution.IN(user.follows))
+
+        posts = []
+        for post in queryPosts.iter():
+            posts.append(post)
+        self.response.write(posts)
+
+
 class ErroHandler(BaseHandler):
     """Error Handler."""
 
@@ -155,6 +168,7 @@ app = webapp2.WSGIApplication([
     ("/api/institution", InstitutionHandler),
     ("/api/institution/(.*)", InstitutionHandler),
     ("/api/post", PostHandler),
+    ("/api/user/(\d+)/timeline", UserTimelineHandler),
     ("/api/user", UserHandler),
     ("/api/.*", ErroHandler),
 ], debug=True)

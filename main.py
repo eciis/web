@@ -146,6 +146,7 @@ class PostHandler(BaseHandler):
             Utils.getAll(Post, self.response)
 
     @login_required
+    @ndb.transactional(xg=True)
     def post(self, user):
         """Handle POST Requests."""
         #Utils.postEntity(Post, self.request, self.response)
@@ -171,12 +172,13 @@ class PostHandler(BaseHandler):
         user.posts.append(post.key)
         user.put()
 
-        # response
         self.response.write('{"iid": "%d"}' % post.key.integer_id())
         self.response.set_status(201)
 
+
 class UserTimelineHandler(BaseHandler):
     """Get posts of all institutions that the user follow."""
+
     @json_response
     @login_required
     def get(self, user):

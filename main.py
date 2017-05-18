@@ -196,7 +196,6 @@ class UserTimelineHandler(BaseHandler):
                 'author':  post.author.get().name,
                 'author_img': post.author.get().photo_url,
                 'institution_name': post.institution.get().name,
-                'institution' : post.institution,
                 'institution_image': post.institution.get().image_url,
                 'likes' : post.likes,
                 'headerImage': post.headerImage,
@@ -207,7 +206,7 @@ class UserTimelineHandler(BaseHandler):
         }))
         self.response.write(json.dumps(array))
        
-       
+
 class ErroHandler(BaseHandler):
     """Error Handler."""
 

@@ -1,5 +1,5 @@
 <!-- TOOLBAR -->
-<md-toolbar md-colors="{background: 'blue-800'}" layout-wrap layout-align="center" layout="row">
+<md-toolbar md-colors="{background: 'blue-900'}" layout-wrap layout-align="center" layout="row">
   <div class="md-toolbar-tools" flex="100" flex-lg=80 flex-xl="80" layout="row" layout-align="center center">
     <md-button class="md-icon-button" aria-label="Settings" ng-click="mainCtrl.toggle()">
       <md-icon>menu</md-icon>
@@ -39,71 +39,88 @@
   </md-content>
 </md-sidenav>
 
-<!-- CONTENT -->
-<div layout="row" layout-wrap layout-padding layout-align="center">
+<div layout="row" md-colors="{background: 'grey-200'}">
 
-  <!-- LEFT SIDE PANEL -->
-  <div flex-xs="75" flex-sm="75" flex-md="30" flex="20" layout="column">
-    <md-card>
-      <md-card-header>
-        <md-card-avatar>
-          <img src="{{ mainCtrl.user.image }}" class="md-user-avatar"/>
-        </md-card-avatar>
-        <md-card-header-text>
-          <span class="md-title">{{ mainCtrl.user.profile.displayName }}</span>
-          <span class="md-subhead">{{ mainCtrl.user.profile.preferredUsername }}</span>
-        </md-card-header-text>
-      </md-card-header>
-      <img ng-src="https://media.licdn.com/media/AAEAAQAAAAAAAAOzAAAAJDA4NDJiOTY0LWY0ZjEtNDI0MS05YWFiLWVmMTczYzc2ZmRjZQ.jpg" class="md-card-image">
-      <md-card-title>
-        <md-card-title-text>
-          <span class="md-headline">Meu Perfil</span>
-        </md-card-title-text>
-      </md-card-title>
-      <md-card-actions layout="row">
-        <md-card-icon-actions>
-          <md-button class="md-icon-button" aria-label="Favorite">
-            <md-icon>favorite</md-icon>
-          </md-button>
-          <md-button class="md-icon-button" aria-label="Share">
-            <md-icon>share</md-icon>
-          </md-button>
-        </md-card-icon-actions>
-      </md-card-actions>
-    </md-card>
+  <!-- Insitutions sidebar -->
+  <div flex layout="column" md-colors="{background: 'blue-800'}">
+      <md-whiteframe flex class="glyph" >
+         <md-list-item>
+           <md-icon ng-style="{color: '#ffffff'}">account_balance</md-icon>
+         </md-list-item>
+         <md-list-item>
+           <md-icon ng-style="{color: '#ffffff'}">account_box</md-icon>
+         </md-list-item>
+         <span flex></span>
+         <md-list-item>
+           <md-icon ng-style="{color: '#ffffff'}">broken_image</md-icon>
+         </md-list-item>
+      </md-whiteframe>
   </div>
 
-  <!-- CENTER PANEL -->
-  <md-content flex-xs="90" flex-sm="90" flex-md="50" flex="40" layout="column">
-    <div ui-view="content"></div>
-  </md-content>
+  <!-- CONTENT -->
+  <div flex="95" layout="row" layout-wrap layout-padding layout-align="center">
+    <!-- LEFT SIDE PANEL -->
+    <div flex-xs="75" flex-sm="75" flex-md="30" flex="20" layout="column">
+      <md-card>
+        <md-card-header>
+          <md-card-avatar>
+            <img src="{{ mainCtrl.user.image }}" class="md-user-avatar"/>
+          </md-card-avatar>
+          <md-card-header-text>
+            <span class="md-title">{{ mainCtrl.user.profile.displayName }}</span>
+            <span class="md-subhead">{{ mainCtrl.user.profile.preferredUsername }}</span>
+          </md-card-header-text>
+        </md-card-header>
+        <img ng-src="https://media.licdn.com/media/AAEAAQAAAAAAAAOzAAAAJDA4NDJiOTY0LWY0ZjEtNDI0MS05YWFiLWVmMTczYzc2ZmRjZQ.jpg" class="md-card-image">
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline">Meu Perfil</span>
+          </md-card-title-text>
+        </md-card-title>
+        <md-card-actions layout="row">
+          <md-card-icon-actions>
+            <md-button class="md-icon-button" aria-label="Favorite">
+              <md-icon>favorite</md-icon>
+            </md-button>
+            <md-button class="md-icon-button" aria-label="Share">
+              <md-icon>share</md-icon>
+            </md-button>
+          </md-card-icon-actions>
+        </md-card-actions>
+      </md-card>
+    </div>
 
-  <!-- RIGHT SIDE PANEL -->
-  <div  flex-xs="0" flex-sm="0" flex="20" layout-padding laoyout="row">
-    <div layout="column">
+    <!-- CENTER PANEL -->
+    <md-content flex-xs="90" flex-sm="90" flex-md="50" flex="40" layout="column" md-colors="{background: 'grey-200'}">
+      <div ui-view="content"></div>
+    </md-content>
 
-      <!-- UPPER PANEL -->
-      <div class="padded" md-whiteframe flex="40" layout-align="center center"></div>
+    <!-- RIGHT SIDE PANEL -->
+    <div  flex-xs="0" flex-sm="0" flex="20" layout-padding laoyout="row" >
+      <div layout="column">
 
-      <hr/>
+        <!-- UPPER PANEL -->
+        <div class="padded" md-whiteframe flex="40" layout-align="center center"></div>
 
-      <!-- MIDDLE PANEL -->
-      <div class="padded" md-whiteframe flex="20" layout-align="center center"></div>
-
-      <hr/>
-      
-      <!-- COPYRIGHT FOOTER -->
-      <div class="padded">
         <hr/>
-        <md-content>
-          <p align="center" class="md-body-1">
-            <small class="md-caption">
-              e-CIIS - OMS/OPAS © 2017 
-            </small>
-          </p>
-        </md-content>
+
+        <!-- MIDDLE PANEL -->
+        <div class="padded" md-whiteframe flex="20" layout-align="center center"></div>
+
+        <hr/>
+        
+        <!-- COPYRIGHT FOOTER -->
+        <div class="padded">
+          <hr/>
+          <md-content  md-colors="{background: 'grey-200'}">
+            <p align="center" class="md-body-1">
+              <small class="md-caption">
+                e-CIIS - OMS/OPAS © 2017 
+              </small>
+            </p>
+          </md-content>
+        </div>
       </div>
     </div>
   </div>
-
 </div>

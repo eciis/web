@@ -23,10 +23,12 @@ app.service("InstitutionService", function InstitutionService($http) {
 app.service("PostService", function PostService($http) {
   var service = this;
 
+  //TODO Error treatment
   service.get = function getPosts() {
     return $http.get("/api/user/timeline");
   };
 
+  //TODO Error treatment
   service.post = function post(post) {
     var deferred = $q.defer();
     return $http.post("/api/post", post);

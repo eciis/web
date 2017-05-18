@@ -53,12 +53,14 @@
             }
         };
 
+        //TODO Error treatment
         var loadPosts = function(){
             PostService.get().then(function(response) {
                 homeCtrl.posts = response.data;
             });
         };
-
+        
+        //TODO Error treatment
         homeCtrl.post = function(post) {
             PostService.post(post)
         };

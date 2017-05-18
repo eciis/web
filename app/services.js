@@ -19,3 +19,16 @@ app.service("InstitutionService", function InstitutionService($http) {
     });
   };
 });
+
+app.service("PostService", function PostService($http) {
+  var service = this;
+
+  service.get = function getPosts() {
+    return $http.get("/api/user/timeline");
+  };
+
+  service.post = function post(post) {
+    return $http.post("/api/post", post);
+  };
+
+});

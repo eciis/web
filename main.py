@@ -5,6 +5,7 @@ import webapp2
 import json
 
 from google.appengine.api import users
+from google.appengine.ext import ndb
 
 from models import Institution
 from models import Post
@@ -136,18 +137,42 @@ class PostHandler(BaseHandler):
         else:
             Utils.getAll(Post, self.response)
 
-    def post(self):
+    @login_required
+    def post(self, user):
         """Handle POST Requests."""
-        Utils.postEntity(Post, self.request, self.response)
+        #Utils.postEntity(Post, self.request, self.response)
+        data = json.loads(self.request.body)
 
+        post = Post()
+        post.title = data['title']
+        post.headerImage = data.get('headerImage')
+        post.text = data['text']
+        post.author = user.key
+        """TODO see how get the institution that the user stay work now."""
+        post.institution = user.institutions[0]
+        post.comments = []
+        post.put()
+
+        """ Update Institution."""
+        institution = post.institution.get()
+        institution.posts.append(post.key)
+        institution.put()
+
+        """Update User."""
+        user = post.author.get()
+        user.posts.append(post.key)
+        user.put()
+
+        # response
+        self.response.write('{"iid": "%d"}' % post.key.integer_id())
+        self.response.set_status(201)
 
 class UserTimelineHandler(BaseHandler):
     """Get posts of all institutions that the user follow."""
     @json_response
     @login_required
     def get(self, user):
-        
-        queryPosts = Post.query(Post.institution.IN(user.follows))
+        queryPosts = Post.query(Post.institution.IN(user.follows)).order(Post.publication_date)
 
         dataPosts = [Utils.toJson(post) for post in queryPosts]
        

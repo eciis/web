@@ -24,7 +24,7 @@
   <md-card-actions layout="row" layout-align="end center" ng-show="post">
     {{ homeCtrl.createdAt(post) }}
     <span class="md-caption">{{ post.created_at | date:'dd-MM-yyyy HH:mm:ss' }}</span>
-    <md-button ng-click="homeCtrl.posts.push(post); post = undefined;">Enviar</md-button>
+    <md-button ng-click="homeCtrl.post(post); post = undefined;">Enviar</md-button>
     <md-button ng-click="post = undefined;">Limpar</md-button>
   </md-card-actions>
 </md-card>

@@ -32,6 +32,7 @@ def login_required(method):
                 'login_url': 'http://%s/login' % self.request.host
             }))
             self.response.set_status(403)
+            self.redirect("/logout")
             return
         method(self, user, *args)
     return login
@@ -83,9 +84,9 @@ class LoginHandler(BaseHandler):
 class LogoutHandler(BaseHandler):
     """Logout Handler."""
 
-    @login_required
-    def get(self, user):
+    def get(self):
         """Handle GET request."""
+        user = users.get_current_user()
         if user:
             self.redirect(users.create_logout_url("/"))
         else:

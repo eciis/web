@@ -150,7 +150,6 @@ class PostHandler(BaseHandler):
     @ndb.transactional(xg=True)
     def post(self, user):
         """Handle POST Requests."""
-        #Utils.postEntity(Post, self.request, self.response)
         data = json.loads(self.request.body)
 
         post = Post()
@@ -173,8 +172,7 @@ class PostHandler(BaseHandler):
         user.posts.append(post.key)
         user.put()
 
-        self.response.write('{"iid": "%d"}' % post.key.integer_id())
-        self.response.set_status(201)
+        self.response.write(json.dumps(Utils.toJson(post)))
 
 
 class UserTimelineHandler(BaseHandler):
@@ -183,6 +181,7 @@ class UserTimelineHandler(BaseHandler):
     @json_response
     @login_required
     def get(self, user):
+        """TODO change to get a timeline without query."""
         queryPosts = Post.query(Post.institution.IN(user.follows)).order(Post.publication_date)
 
         dataPosts = [Utils.toJson(post) for post in queryPosts]

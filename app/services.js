@@ -28,7 +28,7 @@ app.service("PostService", function PostService($http) {
   };
 
   service.post = function post(post) {
+    var deferred = $q.defer();
     return $http.post("/api/post", post);
   };
-
 });

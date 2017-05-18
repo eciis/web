@@ -39,6 +39,7 @@
 
     app.controller("HomeController", function HomeController(InstitutionService, PostService, $mdDialog, AuthService) {
         var homeCtrl = this;
+        homeCtrl.posts = []
 
         Object.defineProperty(homeCtrl, 'user', {
             get: function() {
@@ -55,16 +56,11 @@
         var loadPosts = function(){
             PostService.get().then(function(response) {
                 homeCtrl.posts = response.data;
-            }, function(response) {
-
             });
-        }
+        };
 
         homeCtrl.post = function(post) {
-            PostService.post(post).then(function(response) {
-            }, function(response){
-
-            });
+            PostService.post(post)
         };
 
         loadPosts();

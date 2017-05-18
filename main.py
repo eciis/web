@@ -3,6 +3,7 @@
 
 import webapp2
 import json
+import datetime
 
 from google.appengine.api import users
 from google.appengine.ext import ndb
@@ -185,10 +186,28 @@ class UserTimelineHandler(BaseHandler):
         queryPosts = Post.query(Post.institution.IN(user.follows)).order(Post.publication_date)
 
         dataPosts = [Utils.toJson(post) for post in queryPosts]
+        array = []
+        for post in queryPosts:
+            value = post.publication_date.strftime("%d-%m-%Y")
+            array.append((
+                {
+                'title': post.title,
+                'content': post.text,
+                'author':  post.author.get().name,
+                'author_img': post.author.get().photo_url,
+                'institution_name': post.institution.get().name,
+                'institution' : post.institution,
+                'institution_image': post.institution.get().image_url,
+                'likes' : post.likes,
+                'headerImage': post.headerImage,
+                'state' : post.state,
+                'comments' : post.comments,
+                'publication_date' : value
+
+        }))
+        self.response.write(json.dumps(array))
        
-        self.response.write(json.dumps(dataPosts))
-
-
+       
 class ErroHandler(BaseHandler):
     """Error Handler."""
 

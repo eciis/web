@@ -26,6 +26,13 @@ def login_required(method):
             self.response.set_status(401)
             return
         user = User.get_by_email(user.email())
+        if user is None:
+            self.response.write(json.dumps({
+                'msg': 'Forbidden',
+                'login_url': 'http://%s/login' % self.request.host
+            }))
+            self.response.set_status(403)
+            return
         method(self, user, *args)
     return login
 

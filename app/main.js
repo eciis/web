@@ -51,6 +51,20 @@
             }
           },
           authenticate: false
+      })
+      .state("error", {
+          url: "/error",
+          views: {
+            main: {
+              templateUrl: "error/error.html",
+              controller: "ErrorController as errorCtrl"
+            }
+          },
+          data: {
+            msg: "Ocorreu um erro.",
+            status: "500"
+          },
+          authenticate: false
       });
 
       $urlRouterProvider.otherwise("/");
@@ -73,8 +87,10 @@
     var service = this;
 
     service.responseError = function(response) {
-        if (response.status == 401){
-            $state.go("signin", {}, {reload: true});
+        if (response.status >= 401 & response.status <= 403){
+          $state.go("signin", {}, {reload: true});
+        } else if (response.status > 403) {
+          $state.go("error", {msg: response.error, status: response.status}, {reload: true})
         }
         return $q.reject(response);
     };

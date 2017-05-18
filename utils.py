@@ -86,11 +86,13 @@ class Utils():
     @staticmethod
     def toJson(entity, loadkey=None, host=None):
         if isinstance(entity, list):
-            return [Utils.toJson(item, loadkey=loadkey, host=host) for item in entity]
+            return [Utils.toJson(
+                item, loadkey=loadkey, host=host) for item in entity]
         if isinstance(entity, dict):
             out = {}
             for item in entity:
-                out[item] = Utils.toJson(entity[item], loadkey=loadkey, host=host)
+                out[item] = Utils.toJson(
+                    entity[item], loadkey=loadkey, host=host)
             return out
         if isinstance(entity, datetime.datetime):
             return entity.isoformat()
@@ -100,6 +102,11 @@ class Utils():
                 return Utils.toJson(entity, loadkey=loadkey, host=host)
             else:
                 if host is not None:
+                    """
+                    TODO: Change between http and https when local and deployed
+
+                    @author: André Abrantes
+                    """
                     return "http://%s/api/get/%s" % (host, entity.urlsafe())
                 else:
                     return entity.urlsafe()

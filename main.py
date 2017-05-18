@@ -3,7 +3,6 @@
 
 import webapp2
 import json
-import datetime
 
 from google.appengine.api import users
 from google.appengine.ext import ndb
@@ -69,6 +68,7 @@ class MainHandler(BaseHandler):
             'logout': 'http://%s/logout?redirect=%s' %
             (self.request.host, self.request.path)
         }))
+
 
 class LoginHandler(BaseHandler):
     """Login Handler."""
@@ -181,32 +181,32 @@ class UserTimelineHandler(BaseHandler):
     @json_response
     @login_required
     def get(self, user):
-        """TODO
-            Autor: Mayza Nunes 18/05/2017 
-            Change to get a timeline without query."""
-        queryPosts = Post.query(Post.institution.IN(user.follows)).order(Post.publication_date)
+        """TODO.
 
-        dataPosts = [Utils.toJson(post) for post in queryPosts]
+        Autor: Mayza Nunes 18/05/2017
+        Change to get a timeline without query.
+        """
+        queryPosts = Post.query(Post.institution.IN(
+            user.follows)).order(Post.publication_date)
+
         array = []
         for post in queryPosts:
             value = post.publication_date.strftime("%d-%m-%Y")
-            array.append((
-                {
+            array.append(({
                 'title': post.title,
                 'text': post.text,
-                'author':  post.author.get().name,
+                'author': post.author.get().name,
                 'author_img': post.author.get().photo_url,
                 'institution_name': post.institution.get().name,
                 'institution_image': post.institution.get().image_url,
-                'likes' : post.likes,
+                'likes': post.likes,
                 'headerImage': post.headerImage,
-                'state' : post.state,
-                'comments' : post.comments,
-                'publication_date' : value
-
-        }))
+                'state': post.state,
+                'comments': post.comments,
+                'publication_date': value
+            }))
         self.response.write(json.dumps(array))
-       
+
 
 class ErroHandler(BaseHandler):
     """Error Handler."""

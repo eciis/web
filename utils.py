@@ -107,7 +107,7 @@ class Utils():
 
                     @author: André Abrantes
                     """
-                    return "http://%s/api/get/%s" % (host, entity.urlsafe())
+                    return "http://%s/api/key/%s" % (host, entity.urlsafe())
                 else:
                     return entity.urlsafe()
         if isinstance(entity, ndb.Model):

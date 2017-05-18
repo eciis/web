@@ -181,7 +181,9 @@ class UserTimelineHandler(BaseHandler):
     @json_response
     @login_required
     def get(self, user):
-        """TODO change to get a timeline without query."""
+        """TODO
+            Autor: Mayza Nunes 18/05/2017 
+            Change to get a timeline without query."""
         queryPosts = Post.query(Post.institution.IN(user.follows)).order(Post.publication_date)
 
         dataPosts = [Utils.toJson(post) for post in queryPosts]
@@ -191,7 +193,7 @@ class UserTimelineHandler(BaseHandler):
             array.append((
                 {
                 'title': post.title,
-                'content': post.text,
+                'text': post.text,
                 'author':  post.author.get().name,
                 'author_img': post.author.get().photo_url,
                 'institution_name': post.institution.get().name,

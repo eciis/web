@@ -53,14 +53,20 @@
             }
         };
 
-        //TODO Error treatment
+        /** TODO 
+            Autor: Mayza Nunes 18/05/2016
+            Error treatment
+        **/
         var loadPosts = function(){
             PostService.get().then(function(response) {
                 homeCtrl.posts = response.data;
             });
         };
-        
-        //TODO Error treatment
+
+        /** TODO 
+            Autor: Mayza Nunes 18/05/2016
+            Error treatment
+        **/
         homeCtrl.post = function(post) {
             PostService.post(post)
         };

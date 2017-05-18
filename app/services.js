@@ -20,17 +20,31 @@ app.service("InstitutionService", function InstitutionService($http) {
   };
 });
 
-app.service("PostService", function PostService($http) {
+app.service("PostService", function PostService($http, $q) {
   var service = this;
 
-  //TODO Error treatment
+  /** TODO 
+    Autor: Mayza Nunes 18/05/2016
+    Error treatment
+  **/
   service.get = function getPosts() {
-    return $http.get("/api/user/timeline");
+    var deferred = $q.defer();
+    $http.get("/api/user/timeline").then(function(response){
+      deferred.resolve(response);
+    });
+    return deferred.promise;
   };
 
-  //TODO Error treatment
+  /** TODO 
+    Autor: Mayza Nunes 18/05/2016
+    Error treatment
+  **/
   service.post = function post(post) {
     var deferred = $q.defer();
-    return $http.post("/api/post", post);
+    $http.post("/api/post", post).then(function(response){
+      deferred.resolve(response);
+    });
+    return deferred.promise;
   };
+
 });

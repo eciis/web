@@ -84,24 +84,27 @@ class Utils():
         return entity
 
     @staticmethod
-    def toJson(entity, loadkey=None):
+    def toJson(entity, loadkey=None, host=None):
         if isinstance(entity, list):
-            return [Utils.toJson(item, loadkey=loadkey) for item in entity]
+            return [Utils.toJson(item, loadkey=loadkey, host=host) for item in entity]
         if isinstance(entity, dict):
             out = {}
             for item in entity:
-                out[item] = Utils.toJson(entity[item], loadkey=loadkey)
+                out[item] = Utils.toJson(entity[item], loadkey=loadkey, host=host)
             return out
         if isinstance(entity, datetime.datetime):
             return entity.isoformat()
         if isinstance(entity, ndb.Key):
             if loadkey:
                 entity = entity.get()
-                return Utils.toJson(entity, loadkey=loadkey)
+                return Utils.toJson(entity, loadkey=loadkey, host=host)
             else:
-                return entity.urlsafe()
+                if host is not None:
+                    return "http://%s/api/get/%s" % (host, entity.urlsafe())
+                else:
+                    return entity.urlsafe()
         if isinstance(entity, ndb.Model):
             out = entity.to_dict()
             out['iid'] = entity.key.id()
-            return Utils.toJson(out, loadkey=loadkey)
+            return Utils.toJson(out, loadkey=loadkey, host=host)
         return entity

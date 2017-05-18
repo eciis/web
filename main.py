@@ -62,12 +62,10 @@ class MainHandler(BaseHandler):
     @login_required
     def get(self, user):
         """Handle HTTP GET request."""
-        self.response.write(json.dumps({
-            'email': user.email,
-            'nickname': user.name,
-            'logout': 'http://%s/logout?redirect=%s' %
+        user_json = Utils.toJson(user, host=self.request.host)
+        user_json['logout'] = 'http://%s/logout?redirect=%s' %\
             (self.request.host, self.request.path)
-        }))
+        self.response.write(json.dumps(user_json))
 
 
 class LoginHandler(BaseHandler):
@@ -122,6 +120,7 @@ class InstitutionHandler(BaseHandler):
 class UserHandler(BaseHandler):
     """User Handler."""
 
+    @json_response
     def get(self):
         """Handle GET Requests."""
         iid = self.request.get('id')
@@ -172,7 +171,7 @@ class PostHandler(BaseHandler):
         user.posts.append(post.key)
         user.put()
 
-        self.response.write(json.dumps(Utils.toJson(post)))
+        self.response.write(json.dumps(Utils.toJson(post, host=self.request.host)))
 
 
 class UserTimelineHandler(BaseHandler):
@@ -215,14 +214,30 @@ class ErroHandler(BaseHandler):
         """Handle GET Requests."""
         self.response.write("Not Found")
 
+
+class GetKeyHandler(BaseHandler):
+    """Handle generic key requests."""
+
+    @json_response
+    @login_required
+    def get(self, user, url_string):
+        """GET request passing url_safe."""
+        obj_key = ndb.Key(urlsafe=url_string)
+        obj = obj_key.get()
+        self.response.write(json.dumps(
+            Utils.toJson(obj, host=self.request.host)
+        ))
+
+
 app = webapp2.WSGIApplication([
-    ("/login", LoginHandler),
-    ("/logout", LogoutHandler),
     ("/api", MainHandler),
     ("/api/institution", InstitutionHandler),
     ("/api/institution/(.*)", InstitutionHandler),
+    ("/api/key/(.*)", GetKeyHandler),
     ("/api/post", PostHandler),
-    ("/api/user/timeline", UserTimelineHandler),
     ("/api/user", UserHandler),
+    ("/api/user/timeline", UserTimelineHandler),
+    ("/login", LoginHandler),
+    ("/logout", LogoutHandler),
     ("/api/.*", ErroHandler),
 ], debug=True)

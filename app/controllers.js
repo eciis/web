@@ -53,7 +53,6 @@
         };
 
         var loadPosts = function(){
-            console.log("entra aqui");
             PostService.get().then(function(response) {
                 homeCtrl.posts = response.data;
             }, function(response) {

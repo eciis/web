@@ -171,7 +171,9 @@ class PostHandler(BaseHandler):
         user.posts.append(post.key)
         user.put()
 
-        self.response.write(json.dumps(Utils.toJson(post, host=self.request.host)))
+        self.response.write(json.dumps(
+            Utils.toJson(post, host=self.request.host)
+        ))
 
 
 class UserTimelineHandler(BaseHandler):

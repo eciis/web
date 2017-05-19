@@ -91,6 +91,23 @@ class InitHandler(BaseHandler):
         splab.posts = []
         splab.put()
 
+        eciis = Institution()
+        eciis.name = 'e-ciis'
+        eciis.cnpj = '18.104.068/0001-30'
+        eciis.legal_nature = 'public'
+        eciis.address =  'Universidade Federal de Campina Grande'
+        eciis.occupation_area = ''
+        eciis.description = 'The mission of the e-CIIS \
+            is to promote the development of the state-of-the-art in the \
+            theory and practice of Software Engineering.'
+        eciis.image_url = 'http://amaurymedeiros.com/images/splab.png'
+        eciis.email = 'eciis@ufcg.edu.br'
+        eciis.phone_number = '(83) 3322 7865'
+        eciis.members = [andre.key]
+        eciis.followers =  [mayza.key]
+        eciis.posts = []
+        eciis.put()
+
 
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
         self.response.write('{"msg":"database initialized with a few institutions", "projetos_url":"http://localhost:8080/api/institution"}')
@@ -98,9 +115,9 @@ class InitHandler(BaseHandler):
 
         # Updating Institutions of Users Mayza and André
         mayza.institutions = [certbio.key] 
-        mayza.follows = [splab.key] 
+        mayza.follows = [splab.key, eciis.key] 
         mayza.put()
-        andre.institutions = [splab.key] 
+        andre.institutions = [splab.key, eciis.key] 
         andre.follows = [certbio.key] 
         andre.put()
 

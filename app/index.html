@@ -29,14 +29,23 @@
   <script src="//unpkg.com/angular-ui-router/release/angular-ui-router.min.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
-
+  
   <!-- Main Application Library -->
-  <script src="main.js"></script>
-  <script src="controllers.js"></script>
-  <script src="services.js"></script>
+  <script src="app.js"></script>
+  <script src="main/mainController.js"></script>
+
+  <!-- Auth/Login Library -->
   <script src="auth/authService.js"></script>
-  <script src="auth/gravatarService.js"></script>
+  <script src="auth/loginController.js"></script>
+
+  <!-- Error Library -->
   <script src="error/errorController.js"></script>
 
+  <!-- Home Library -->
+  <script src="home/homeController.js"></script>
+
+  <!-- Services -->
+  <script src="service/gravatarService.js"></script>
+  <script src="service/postService.js"></script>
 </body>
 </html>

@@ -1,0 +1,126 @@
+<!-- TOOLBAR -->
+<md-toolbar md-colors="{background: 'blue-900'}" layout-wrap layout-align="center" layout="row">
+  <div class="md-toolbar-tools" flex="100" flex-lg=80 flex-xl="80" layout="row" layout-align="center center">
+    <md-button class="md-icon-button" aria-label="Settings" ng-click="mainCtrl.toggle()">
+      <md-icon>menu</md-icon>
+    </md-button>
+
+    <md-button disabled="true">
+      <img src="https://static1.squarespace.com/static/56b753bac6fc0886a1bf0739/t/56ba0030356fb05e0f01cb70/1455030358655/" aria-label="WHO Logo" style="height: 80%;filter: brightness(10) grayscale(1)">
+    </md-button>
+    <h2>e-CIIS</h2>
+
+    <span flex md-truncate></span>
+
+    <md-button class="md-icon-button" aria-label="Logout">
+      <a href="/logout"><md-icon style="color: white;">exit_to_app</md-icon></a>
+    </md-button>
+
+    <md-button class="md-icon-button" aria-label="Favorite">
+      <md-icon style="color: white;">build</md-icon>
+    </md-button>
+
+    <md-button class="md-icon-button" aria-label="More">
+      <md-icon>more_vert</md-icon>
+    </md-button>
+  </div>
+</md-toolbar>
+
+<!-- SIDENAV -->
+<md-sidenav class="md-sidenav-left" md-component-id="leftNav" md-whiteframe="4">
+  <md-toolbar md-colors="{background: 'blue-900'}" layout="row">
+    <h1 class="md-toolbar-tools">Menu</h1>
+  </md-toolbar>
+  <md-content>
+     <md-list-item ng-click="mainCtrl.goTo(setting.stateTo)" ng-repeat="setting in mainCtrl.settings">
+       <md-icon>{{setting.icon}}</md-icon>
+       <p> {{ setting.name }} </p>
+     </md-list-item>
+  </md-content>
+</md-sidenav>
+
+<div layout="row" md-colors="{background: 'grey-200'}">
+
+  <!-- Insitutions sidebar -->
+  <div flex layout="column" md-colors="{background: 'blue-800'}">
+      <md-whiteframe flex class="glyph" >
+         <md-list-item>
+           <md-icon ng-style="{color: '#ffffff'}">account_balance</md-icon>
+         </md-list-item>
+         <md-list-item>
+           <md-icon ng-style="{color: '#ffffff'}">account_box</md-icon>
+         </md-list-item>
+         <span flex></span>
+         <md-list-item>
+           <md-icon ng-style="{color: '#ffffff'}">broken_image</md-icon>
+         </md-list-item>
+      </md-whiteframe>
+  </div>
+
+  <!-- CONTENT -->
+  <div flex="95" layout="row" layout-wrap layout-padding layout-align="center">
+    <!-- LEFT SIDE PANEL -->
+    <div flex-xs="75" flex-sm="75" flex-md="30" flex="20" layout="column">
+      <md-card>
+        <md-card-header>
+          <md-card-avatar>
+            <img src="{{ mainCtrl.user.image }}" class="md-user-avatar"/>
+          </md-card-avatar>
+          <md-card-header-text>
+            <span class="md-title">{{ mainCtrl.user.profile.displayName }}</span>
+            <span class="md-subhead">{{ mainCtrl.user.profile.preferredUsername }}</span>
+          </md-card-header-text>
+        </md-card-header>
+        <img ng-src="https://media.licdn.com/media/AAEAAQAAAAAAAAOzAAAAJDA4NDJiOTY0LWY0ZjEtNDI0MS05YWFiLWVmMTczYzc2ZmRjZQ.jpg" class="md-card-image">
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline">Meu Perfil</span>
+          </md-card-title-text>
+        </md-card-title>
+        <md-card-actions layout="row">
+          <md-card-icon-actions>
+            <md-button class="md-icon-button" aria-label="Favorite">
+              <md-icon>favorite</md-icon>
+            </md-button>
+            <md-button class="md-icon-button" aria-label="Share">
+              <md-icon>share</md-icon>
+            </md-button>
+          </md-card-icon-actions>
+        </md-card-actions>
+      </md-card>
+    </div>
+
+    <!-- CENTER PANEL -->
+    <md-content flex-xs="90" flex-sm="90" flex-md="50" flex="40" layout="column" md-colors="{background: 'grey-200'}">
+      <div ui-view="content"></div>
+    </md-content>
+
+    <!-- RIGHT SIDE PANEL -->
+    <div  flex-xs="0" flex-sm="0" flex="20" layout-padding laoyout="row" >
+      <div layout="column">
+
+        <!-- UPPER PANEL -->
+        <div class="padded" md-whiteframe flex="40" layout-align="center center"></div>
+
+        <hr/>
+
+        <!-- MIDDLE PANEL -->
+        <div class="padded" md-whiteframe flex="20" layout-align="center center"></div>
+
+        <hr/>
+        
+        <!-- COPYRIGHT FOOTER -->
+        <div class="padded">
+          <hr/>
+          <md-content  md-colors="{background: 'grey-200'}">
+            <p align="center" class="md-body-1">
+              <small class="md-caption">
+                e-CIIS - OMS/OPAS © 2017 
+              </small>
+            </p>
+          </md-content>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

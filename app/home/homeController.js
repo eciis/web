@@ -3,7 +3,7 @@
 
     app.controller("HomeController", function HomeController(PostService, AuthService) {
         var homeCtrl = this;
-        homeCtrl.posts = []
+        homeCtrl.posts = [];
 
         Object.defineProperty(homeCtrl, 'user', {
             get: function() {
@@ -32,7 +32,7 @@
             Error treatment
         **/
         homeCtrl.post = function(post) {
-            PostService.post(post)
+            PostService.post(post);
         };
 
         loadPosts();

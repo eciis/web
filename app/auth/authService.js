@@ -1,7 +1,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.service("AuthService", function AuthService($http, GravatarService) {
+    app.service("AuthService", function AuthService($http, $q, GravatarService) {
         var service = this;
 
         var LOGIN_URI = "/login";
@@ -33,21 +33,31 @@
         }
 
         service.load = function load() {
+            var deffered = $q.defer();
             $http.get('/api').then(function loadUser(info) {
                 service.user = info.data;
                 service.user.image = gravatarUrl(info.data.email);
 
-                GravatarService.load(service.user.email).then(function loadProfile(info) {
-                    service.user.profile = info.data.entry[0];
-                }, function error(error) {
-                    service.user.profile = {
-                        displayName: service.user.nickname,
-                        preferredUsername: service.user.email
-                    }
-                });
+                deffered.resolve(service.user);
+            }, function error(data) {
+                deffered.reject(data);
             });
+            return deffered.promise;
         };
 
-        service.load();
+        service.load().then(function resolve(user) {
+            GravatarService.load(service.user.email).then(function loadProfile(info) {
+                service.user.profile = info.data.entry[0];
+            }, function error(error) {
+                service.user.profile = {
+                    displayName: service.user.nickname,
+                    preferredUsername: service.user.email
+                }
+            });
+
+            $http.get(user.institutions[0]).then(function (info) {
+                service.user.current_institution = info.data;
+            });
+        });
     });
 })();

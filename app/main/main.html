@@ -43,19 +43,13 @@
 
   <!-- Insitutions sidebar -->
   <div flex layout="column" md-colors="{background: 'blue-800'}">
-      <md-whiteframe flex class="glyph" >
-         <md-list-item>
-           <md-icon ng-style="{color: '#ffffff'}">account_balance</md-icon>
-         </md-list-item>
-         <md-list-item>
-           <md-icon ng-style="{color: '#ffffff'}">account_box</md-icon>
-         </md-list-item>
-         <span flex></span>
-         <md-list-item>
-           <md-icon ng-style="{color: '#ffffff'}">broken_image</md-icon>
-         </md-list-item>
-      </md-whiteframe>
-  </div>
+    <md-list md-colors="{background: 'grey-200'}">
+      <md-list-item ng-class="noright" md-colors="{background: 'grey-200'}">
+        <img alt="name" ng-src="{{ mainCtrl.user.current_institution.image_url }}"
+          class="md-avatar" />
+      </md-list-item>
+    </md-list>
+  </div>  
 
   <!-- CONTENT -->
   <div flex="95" layout="row" layout-wrap layout-padding layout-align="center">

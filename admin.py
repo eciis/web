@@ -83,7 +83,7 @@ class InitHandler(BaseHandler):
         splab.description = 'The mission of the Software Practices Laboratory (SPLab) \
             is to promote the development of the state-of-the-art in the \
             theory and practice of Software Engineering.'
-        splab.image_url = 'http://amaurymedeiros.com/images/splab.png'
+        splab.image_url = 'https://pbs.twimg.com/profile_images/1782760873/Logo_do_site_400x400.jpg'
         splab.email = 'splab@ufcg.edu.br'
         splab.phone_number = '(83) 3322 7865'
         splab.members = [andre.key]

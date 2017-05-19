@@ -11,6 +11,8 @@ class Utils():
 
     STATUS_SUCCESS = 201
     NOT_FOUND = 404
+    FORBIDDEN = 403
+
 
     # Responsável por criar uma instância da classe com os valores dos
     # atributos setados.

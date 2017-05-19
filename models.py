@@ -48,6 +48,7 @@ class Institution(ndb.Model):
         'inactive'
     ]), default='pending')
 
+
 class User(ndb.Model):
     name = ndb.StringProperty(required=True)
     cpf = ndb.StringProperty()
@@ -92,13 +93,13 @@ class Post(ndb.Model):
     
     headerImage = ndb.StringProperty()
 
-    text= ndb.TextProperty(required=True)
+    text = ndb.TextProperty(required=True)
 
     # user who is the author
     author = ndb.KeyProperty(kind="User", required=True)
 
     # institution to which this post belongs
-    institution = ndb.KeyProperty(kind="Institution")
+    institution = ndb.KeyProperty(kind="Institution", required=True)
 
     state = ndb.StringProperty(choices=set([
         'draft',

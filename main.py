@@ -144,7 +144,6 @@ class PostHandler(BaseHandler):
             Utils.get(Post, int(iid), self.response)
         else:
             Utils.getAll(Post, self.response)
- 
 
     @login_required
     @ndb.transactional(xg=True)
@@ -158,7 +157,7 @@ class PostHandler(BaseHandler):
             post.title = data['title']
             post.headerImage = data.get('headerImage')
             post.text = data['text']
-            post.author = user.key           
+            post.author = user.key
 
             post.institution = institution_key
             post.comments = []
@@ -169,7 +168,7 @@ class PostHandler(BaseHandler):
             institution.posts.append(post.key)
             institution.put()
 
-            """Update User."""
+            """ Update User."""
             user = post.author.get()
             user.posts.append(post.key)
             user.put()
@@ -187,14 +186,12 @@ class PostHandler(BaseHandler):
 
 
 class UserTimelineHandler(BaseHandler):
-    """Get posts of all institutions that the user follow."""
-
+    """ Get posts of all institutions that the user follow."""
     @json_response
     @login_required
     def get(self, user):
         """TODO: Change to get a timeline without query.
-
-        @author: Mayza Nunes 18/05/2017
+            @author: Mayza Nunes 18/05/2017
         """
         queryPosts = Post.query(Post.institution.IN(
             user.follows)).order(Post.publication_date)
@@ -238,7 +235,6 @@ class GetKeyHandler(BaseHandler):
         self.response.write(json.dumps(
             Utils.toJson(obj, host=self.request.host)
         ))
-
 
 app = webapp2.WSGIApplication([
     ("/api", MainHandler),

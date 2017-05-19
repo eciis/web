@@ -14,8 +14,7 @@ class Utils():
     FORBIDDEN = 403
 
 
-    # Responsável por criar uma instância da classe com os valores dos
-    # atributos setados.
+    """Responsible for creating an instance of the class with the values ​​of the attributes set."""
     @staticmethod
     def createEntity(EntityClass, propertiesValue):
         entity = EntityClass()

@@ -30,7 +30,7 @@ class InitHandler(BaseHandler):
         mayza = User()
         mayza.name = 'Mayza Nunes'
         mayza.cpf = '089.675.908-90'
-        mayza.photo_url = ''
+        mayza.photo_url = 'https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRmhGDdO4jK0eOeEsRfQAohYnkdZeAMUoV3odKlP7D2jsRLP_pXbCHHNw'
         mayza.email = 'mayzabeel@gmail.com'
         mayza.institutions = [] 
         mayza.follows = []
@@ -43,7 +43,7 @@ class InitHandler(BaseHandler):
         andre = User()
         andre.name = 'André Abrantes'
         andre.cpf = '089.675.908-89'
-        andre.photo_url = ''
+        andre.photo_url = 'https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAATIAAAAJDY5NDQxOTk2LTUxZmUtNDZkZi04NTdmLTdiN2Y0MDU5YTIxNA.jpg'
         andre.email = 'andredossantosabrantes@gmail.com'
         andre.institutions = [] 
         andre.follows = []
@@ -69,7 +69,7 @@ class InitHandler(BaseHandler):
         certbio.email = 'certbio@ufcg.edu.br'
         certbio.phone_number = '(83) 3322 4455'
         certbio.members = [mayza.key]
-        certbio.followers =  [andre.key]
+        certbio.followers = [andre.key]
         certbio.posts = []
         certbio.put()
 
@@ -100,7 +100,7 @@ class InitHandler(BaseHandler):
         eciis.description = 'The mission of the e-CIIS \
             is to promote the development of the state-of-the-art in the \
             theory and practice of Software Engineering.'
-        eciis.image_url = 'http://amaurymedeiros.com/images/splab.png'
+        eciis.image_url = 'http://www.paho.org/bra/images/stories/BRA01A/logobireme.jpg'
         eciis.email = 'eciis@ufcg.edu.br'
         eciis.phone_number = '(83) 3322 7865'
         eciis.members = [andre.key]

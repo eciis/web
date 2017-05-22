@@ -20,6 +20,10 @@
           Autor: Mayza Nunes 18/05/2016
           Error treatment
         **/
+        /**
+          FIXME: Set the post.institution before send to backend!
+          Autor: Mayza Nunes 22/05/2016
+        **/
         service.post = function post(post) {
             var deferred = $q.defer();
             $http.post("/api/post", post).then(function(response) {

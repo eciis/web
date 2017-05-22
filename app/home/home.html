@@ -32,11 +32,11 @@
 <md-card ng-repeat="post in homeCtrl.posts | orderBy:'$index':true">
   <md-card-header>
     <md-card-avatar>
-      <img src="{{ mainCtrl.user.current_institution.image_url }}" class="md-user-avatar"/>
+      <img src="{{ post.institution_image }}" class="md-user-avatar"/>
     </md-card-avatar>
     <md-card-header-text>
-      <span class="md-title">{{ homeCtrl.user.current_institution.name }}</span>
-      <span class="md-subhead">por {{ homeCtrl.user.profile.displayName }} as {{ post.publication_date }}</span>
+      <span class="md-title">{{ post.institution_name }}</span>
+      <span class="md-subhead">por {{ post.author }} as {{ post.publication_date }}</span>
     </md-card-header-text>
   </md-card-header>
   <img ng-src="{{ post.headerImage }}" class="md-card-image">

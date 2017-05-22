@@ -1,23 +1,27 @@
+"""Models."""
 from google.appengine.ext import ndb
 
 
 class Institution(ndb.Model):
+    """Model of Institution."""
+
     name = ndb.StringProperty(required=True)
 
     cnpj = ndb.StringProperty()
-    
-    legal_nature = ndb.StringProperty(choices=set(["public", "private", "philanthropic"]))
-    
+
+    legal_nature = ndb.StringProperty(
+        choices=set(["public", "private", "philanthropic"]))
+
     address = ndb.StringProperty()
-    
+
     occupation_area = ndb.StringProperty()
-    
+
     description = ndb.TextProperty()
-    
+
     image_url = ndb.StringProperty()
-    
+
     email = ndb.StringProperty()
-    
+
     phone_number = ndb.StringProperty()
 
     # The admin user of this institution
@@ -39,9 +43,8 @@ class Institution(ndb.Model):
     # Posts created by members of this institution
     posts = ndb.KeyProperty(kind="Post", repeated=True)
 
-    """TODO: First version don't have timeline. Do After
-        @author: Mayza Nunes 22/05/2017
-    """
+    # TODO: First version don't have timeline. Do After
+    # @author: Mayza Nunes 22/05/2017
     # timeline = ndb.KeyProperty(kind="Timeline")
 
     state = ndb.StringProperty(choices=set([
@@ -52,6 +55,8 @@ class Institution(ndb.Model):
 
 
 class User(ndb.Model):
+    """Model of User."""
+
     name = ndb.StringProperty(required=True)
     cpf = ndb.StringProperty()
     photo_url = ndb.StringProperty()
@@ -74,11 +79,10 @@ class User(ndb.Model):
     # The id of the posts authored by the user
     posts = ndb.KeyProperty(kind="Post", repeated=True)
 
-    """TODO: First version don't have timeline. Do After
-        The id of the user timeline
-        @author: Mayza Nunes 22/05/2017
-    """
-    #timeline = ndb.KeyProperty(kind="Timeline")
+    # TODO: First version don't have timeline. Do After
+    # The id of the user timeline
+    # @author: Mayza Nunes 22/05/2017
+    # timeline = ndb.KeyProperty(kind="Timeline")
 
     state = ndb.StringProperty(choices=set([
         'pending',
@@ -88,14 +92,17 @@ class User(ndb.Model):
 
     @staticmethod
     def get_by_email(email):
+        """Get user by email."""
         query = User.query(User.email == email)
         user = query.get()
         return user
 
 
 class Post(ndb.Model):
+    """Model of a post."""
+
     title = ndb.StringProperty(required=True)
-    
+
     headerImage = ndb.StringProperty()
 
     text = ndb.TextProperty(required=True)
@@ -116,13 +123,15 @@ class Post(ndb.Model):
     # Concurrency controlled by Transactions
     comments = ndb.JsonProperty(repeated=True)
 
-    # date and time of a creation of a post 
+    # Date and time of a creation of a post
     publication_date = ndb.DateTimeProperty(auto_now_add=True)
 
-    # number of likes 
+    # Number of likes
     likes = ndb.IntegerProperty(default=0)
 
+
 class Timeline(ndb.Model):
+    """Model of Timeline."""
 
     # TODO: In the future think about maximum size of the entity
     # The data of the posts

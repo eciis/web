@@ -13,17 +13,18 @@ class Utils():
     NOT_FOUND = 404
     FORBIDDEN = 403
 
-
-    """Responsible for creating an instance of the class with the values ​​of the attributes set."""
     @staticmethod
     def createEntity(EntityClass, propertiesValue):
+        """Responsible for creating an instance
+        of the class with the values ​​of the attributes set.
+        """
         entity = EntityClass()
         keys = entity._to_dict().keys()  # _to_dict operação do ndb.Model
 
         for key in keys:
             value = propertiesValue.get(key)
             attribute = getattr(EntityClass, key)
-            
+
             if value and isinstance(attribute, ndb.IntegerProperty):
                 value = int(value)
             elif value and isinstance(attribute, ndb.KeyProperty):
@@ -103,11 +104,8 @@ class Utils():
                 return Utils.toJson(entity, loadkey=loadkey, host=host)
             else:
                 if host is not None:
-                    """
-                    TODO: Change between http and https when local and deployed
-
-                    @author: André Abrantes
-                    """
+                    # TODO: Change between http and https when deployed and local
+                    # @author: André Abrantes
                     return "http://%s/api/key/%s" % (host, entity.urlsafe())
                 else:
                     return entity.urlsafe()

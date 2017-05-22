@@ -69,7 +69,7 @@ class InitHandler(BaseHandler):
         certbio.email = 'certbio@ufcg.edu.br'
         certbio.phone_number = '(83) 3322 4455'
         certbio.members = [mayza.key]
-        certbio.followers =  [andre.key]
+        certbio.followers = [andre.key]
         certbio.posts = []
         certbio.put()
 
@@ -100,7 +100,7 @@ class InitHandler(BaseHandler):
         eciis.description = 'The mission of the e-CIIS \
             is to promote the development of the state-of-the-art in the \
             theory and practice of Software Engineering.'
-        eciis.image_url = 'http://amaurymedeiros.com/images/splab.png'
+        eciis.image_url = 'http://www.paho.org/bra/images/stories/BRA01A/logobireme.jpg'
         eciis.email = 'eciis@ufcg.edu.br'
         eciis.phone_number = '(83) 3322 7865'
         eciis.members = [andre.key]

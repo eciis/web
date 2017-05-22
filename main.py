@@ -150,7 +150,8 @@ class PostHandler(BaseHandler):
     def post(self, user):
         """Handle POST Requests."""
         data = json.loads(self.request.body)
-        institution_key = data['institution']
+        institution_iid = data['institution']
+        institution_key = Institution.get_by_id(institution_iid).key
 
         if (user.key in institution_key.get().members):
             post = Post()

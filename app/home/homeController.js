@@ -31,7 +31,8 @@
             Autor: Mayza Nunes 18/05/2016
             Error treatment
         **/
-        homeCtrl.post = function(post) {
+        homeCtrl.post = function(post, institution_id) {
+            post.institution = institution_id;
             PostService.post(post);
         };
 

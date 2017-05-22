@@ -21,7 +21,7 @@
           Error treatment
         **/
         service.post = function post(post) {
-            var deferred = $q.defer();
+            var deferred = $q.defer(); 
             $http.post("/api/post", post).then(function(response) {
                 deferred.resolve(response);
             });

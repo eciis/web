@@ -30,7 +30,7 @@ class InitHandler(BaseHandler):
         mayza = User()
         mayza.name = 'Mayza Nunes'
         mayza.cpf = '089.675.908-90'
-        mayza.photo_url = ''
+        mayza.photo_url = 'https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRmhGDdO4jK0eOeEsRfQAohYnkdZeAMUoV3odKlP7D2jsRLP_pXbCHHNw'
         mayza.email = 'mayzabeel@gmail.com'
         mayza.institutions = [] 
         mayza.follows = []
@@ -43,7 +43,7 @@ class InitHandler(BaseHandler):
         andre = User()
         andre.name = 'André Abrantes'
         andre.cpf = '089.675.908-89'
-        andre.photo_url = ''
+        andre.photo_url = 'https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAATIAAAAJDY5NDQxOTk2LTUxZmUtNDZkZi04NTdmLTdiN2Y0MDU5YTIxNA.jpg'
         andre.email = 'andredossantosabrantes@gmail.com'
         andre.institutions = [] 
         andre.follows = []

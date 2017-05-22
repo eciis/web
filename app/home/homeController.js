@@ -1,7 +1,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.controller("HomeController", function HomeController(PostService, AuthService) {
+    app.controller("HomeController", function HomeController(PostService) {
         var homeCtrl = this;
         homeCtrl.posts = [];
 
@@ -31,8 +31,7 @@
             Autor: Mayza Nunes 18/05/2016
             Error treatment
         **/
-        homeCtrl.post = function(post, institution_id) {
-            post.institution = institution_id;
+        homeCtrl.post = function(post) {
             PostService.post(post);
         };
 

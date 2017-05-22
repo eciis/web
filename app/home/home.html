@@ -22,7 +22,7 @@
     </md-card-title-text>
   </md-card-title>
   <md-card-actions layout="row" layout-align="end center" ng-show="post">
-    <md-button ng-click="homeCtrl.post(post, homeCtrl.user.current_institution.iid); post = undefined;">Enviar</md-button>
+    <md-button ng-click="homeCtrl.post(post); post = undefined;">Enviar</md-button>
     <md-button ng-click="post = undefined;">Limpar</md-button>
   </md-card-actions>
 </md-card>

@@ -36,17 +36,18 @@ class Institution(ndb.Model):
     # of this institution in their timeline.
     followers = ndb.KeyProperty(kind="User", repeated=True)
 
-    #Posts created by members of this institution
+    # Posts created by members of this institution
     posts = ndb.KeyProperty(kind="Post", repeated=True)
 
     #
-    #timeline = ndb.KeyProperty(kind="Timeline")
+    # timeline = ndb.KeyProperty(kind="Timeline")
 
     state = ndb.StringProperty(choices=set([
         'pending',
         'active',
         'inactive'
     ]), default='pending')
+
 
 class User(ndb.Model):
     name = ndb.StringProperty(required=True)
@@ -92,13 +93,13 @@ class Post(ndb.Model):
     
     headerImage = ndb.StringProperty()
 
-    text= ndb.TextProperty(required=True)
+    text = ndb.TextProperty(required=True)
 
     # user who is the author
     author = ndb.KeyProperty(kind="User", required=True)
 
     # institution to which this post belongs
-    institution = ndb.KeyProperty(kind="Institution")
+    institution = ndb.KeyProperty(kind="Institution", required=True)
 
     state = ndb.StringProperty(choices=set([
         'draft',
@@ -110,10 +111,10 @@ class Post(ndb.Model):
     # Concurrency controlled by Transactions
     comments = ndb.JsonProperty(repeated=True)
 
-    #date and time of a creation of a post 
+    # date and time of a creation of a post 
     publication_date = ndb.DateTimeProperty(auto_now_add=True)
 
-    #number of likes 
+    # number of likes 
     likes = ndb.IntegerProperty(default=0)
 
 class Timeline(ndb.Model):

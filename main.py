@@ -150,42 +150,48 @@ class PostHandler(BaseHandler):
     def post(self, user):
         """Handle POST Requests."""
         data = json.loads(self.request.body)
+        institution_key = data['institution']
 
-        post = Post()
-        post.title = data['title']
-        post.headerImage = data.get('headerImage')
-        post.text = data['text']
-        post.author = user.key
-        """TODO see how get the institution that the user stay work now."""
-        post.institution = user.institutions[0]
-        post.comments = []
-        post.put()
+        if (user.key in institution_key.get().members):
+            post = Post()
+            post.title = data['title']
+            post.headerImage = data.get('headerImage')
+            post.text = data['text']
+            post.author = user.key
 
-        """ Update Institution."""
-        institution = post.institution.get()
-        institution.posts.append(post.key)
-        institution.put()
+            post.institution = institution_key
+            post.comments = []
+            post.put()
 
-        """Update User."""
-        user = post.author.get()
-        user.posts.append(post.key)
-        user.put()
+            """ Update Institution."""
+            institution = post.institution.get()
+            institution.posts.append(post.key)
+            institution.put()
 
-        self.response.write(json.dumps(
-            Utils.toJson(post, host=self.request.host)
-        ))
+            """ Update User."""
+            user = post.author.get()
+            user.posts.append(post.key)
+            user.put()
+
+            self.response.write(json.dumps(
+                Utils.toJson(post, host=self.request.host)
+            ))
+        else:
+            """TODO: Fix to no not change the view to /login.
+                @author: Mayza Nunes 19/05/2017
+            """
+            self.response.set_status(Utils.FORBIDDEN)
+            self.response.write(Utils.getJSONError(
+                Utils.FORBIDDEN, "User is not a member of this Institution"))
 
 
 class UserTimelineHandler(BaseHandler):
-    """Get posts of all institutions that the user follow."""
-
+    """ Get posts of all institutions that the user follow."""
     @json_response
     @login_required
     def get(self, user):
-        """TODO.
-
-        Autor: Mayza Nunes 18/05/2017
-        Change to get a timeline without query.
+        """TODO: Change to get a timeline without query.
+            @author: Mayza Nunes 18/05/2017
         """
         queryPosts = Post.query(Post.institution.IN(
             user.follows)).order(Post.publication_date)
@@ -229,7 +235,6 @@ class GetKeyHandler(BaseHandler):
         self.response.write(json.dumps(
             Utils.toJson(obj, host=self.request.host)
         ))
-
 
 app = webapp2.WSGIApplication([
     ("/api", MainHandler),

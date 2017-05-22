@@ -1,7 +1,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.controller("HomeController", function HomeController(PostService) {
+    app.controller("HomeController", function HomeController(PostService, AuthService) {
         var homeCtrl = this;
         homeCtrl.posts = [];
 

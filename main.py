@@ -3,56 +3,29 @@
 
 import webapp2
 import json
+import logging
 
 from google.appengine.api import users
 from google.appengine.ext import ndb
 
 from models import Institution
 from models import Post
-from models import User
 
 from utils import Utils
-
-
-def login_required(method):
-    """Handle required login."""
-    def login(self, *args):
-        user = users.get_current_user()
-        if user is None:
-            self.response.write(json.dumps({
-                'msg': 'Auth needed',
-                'login_url': 'http://%s/login' % self.request.host
-            }))
-            self.response.set_status(401)
-            return
-        user = User.get_by_email(user.email())
-        if user is None:
-            self.response.write(json.dumps({
-                'msg': 'Forbidden',
-                'login_url': 'http://%s/login' % self.request.host
-            }))
-            self.response.set_status(403)
-            self.redirect("/logout")
-            return
-        method(self, user, *args)
-    return login
-
-
-def json_response(method):
-    """Add content type header to the response."""
-    def response(self, *args):
-        self.response.headers[
-            'Content-Type'] = 'application/json; charset=utf-8'
-        method(self, *args)
-    return response
+from utils import login_required
+from utils import json_response
 
 
 class BaseHandler(webapp2.RequestHandler):
     """Base Handler."""
 
-    def get(self):
-        """Handle GET Requests."""
-        pass
+    @json_response
+    def handle_exception(self, exception, debug):
+        """Handle exception."""
+        logging.error(str(exception))
+        self.response.write(json.dumps({
+            "msg": "Error! %s" % str(exception)
+        }))
 
 
 class MainHandler(BaseHandler):
@@ -65,6 +38,11 @@ class MainHandler(BaseHandler):
         user_json = Utils.toJson(user, host=self.request.host)
         user_json['logout'] = 'http://%s/logout?redirect=%s' %\
             (self.request.host, self.request.path)
+        user_json['institutions'] = []
+        for institution in user.institutions:
+            user_json['institutions'].append(
+                Utils.toJson(institution.get())
+            )
         self.response.write(json.dumps(user_json))
 
 
@@ -95,7 +73,9 @@ class LogoutHandler(BaseHandler):
 class InstitutionHandler(BaseHandler):
     """Institution Handler."""
 
-    def get(self):
+    @json_response
+    @login_required
+    def get(self, user):
         """Handle GET Requests."""
         iid = self.request.get('id')
         if iid:
@@ -103,54 +83,36 @@ class InstitutionHandler(BaseHandler):
         else:
             Utils.getAll(Institution, self.response)
 
-    def post(self):
-        """Handle POST Requests."""
-        Utils.postEntity(Institution, self.request, self.response)
-
-    def delete(self, iid):
-        """Handle DELETE Requests."""
-        inst = Institution.get_by_id(int(iid))
-        if inst:
-            self.response.write(json.dumps(inst.to_dict()))
-            inst.key.delete()
-        else:
-            self.response.set_status(Utils.NOT_FOUND)
-
 
 class UserHandler(BaseHandler):
     """User Handler."""
 
     @json_response
-    def get(self):
+    @login_required
+    def get(self, user):
         """Handle GET Requests."""
-        iid = self.request.get('id')
-        if iid:
-            Utils.get(User, int(iid), self.response)
-        else:
-            Utils.getAll(User, self.response)
-
-    def post(self):
-        """Handle POST Requests."""
-        Utils.postEntity(User, self.request, self.response)
+        self.response.write(json.dumps(
+            Utils.toJson(user, host=self.request.host)
+        ))
 
 
 class PostHandler(BaseHandler):
     """Post Handler."""
 
-    def get(self):
+    @json_response
+    @login_required
+    def get(self, user):
         """Handle GET Requests."""
-        iid = self.request.get('id')
-        if iid:
-            Utils.get(Post, int(iid), self.response)
-        else:
-            Utils.getAll(Post, self.response)
+        posts = Utils.toJson(user.posts, host=self.request.host)
+        self.response.write(json.dumps(posts))
 
+    @json_response
     @login_required
     @ndb.transactional(xg=True)
     def post(self, user):
         """Handle POST Requests."""
         data = json.loads(self.request.body)
-        institution_key = data['institution']
+        institution_key = ndb.Key(urlsafe=data['institution'])
 
         if (user.key in institution_key.get().members):
             post = Post()
@@ -178,7 +140,8 @@ class PostHandler(BaseHandler):
             ))
         else:
             """TODO: Fix to no not change the view to /login.
-                @author: Mayza Nunes 19/05/2017
+
+            @author: Mayza Nunes 19/05/2017
             """
             self.response.set_status(Utils.FORBIDDEN)
             self.response.write(Utils.getJSONError(
@@ -186,19 +149,21 @@ class PostHandler(BaseHandler):
 
 
 class UserTimelineHandler(BaseHandler):
-    """ Get posts of all institutions that the user follow."""
+    """Get posts of all institutions that the user follow."""
+
     @json_response
     @login_required
     def get(self, user):
         """TODO: Change to get a timeline without query.
-            @author: Mayza Nunes 18/05/2017
+
+        @author: Mayza Nunes 18/05/2017
         """
         queryPosts = Post.query(Post.institution.IN(
             user.follows)).order(Post.publication_date)
 
         array = []
         for post in queryPosts:
-            value = post.publication_date.strftime("%d-%m-%Y")
+            value = post.publication_date.isoformat()
             array.append(({
                 'title': post.title,
                 'text': post.text,
@@ -218,9 +183,13 @@ class UserTimelineHandler(BaseHandler):
 class ErroHandler(BaseHandler):
     """Error Handler."""
 
+    @json_response
     def get(self):
         """Handle GET Requests."""
-        self.response.write("Not Found")
+        self.response.write(json.dumps({
+            "msg": "Not found",
+            "status": 404
+        }))
 
 
 class GetKeyHandler(BaseHandler):
@@ -239,7 +208,6 @@ class GetKeyHandler(BaseHandler):
 app = webapp2.WSGIApplication([
     ("/api", MainHandler),
     ("/api/institution", InstitutionHandler),
-    ("/api/institution/(.*)", InstitutionHandler),
     ("/api/key/(.*)", GetKeyHandler),
     ("/api/post", PostHandler),
     ("/api/user", UserHandler),

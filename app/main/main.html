@@ -6,7 +6,7 @@
     </md-button>
 
     <md-button disabled="true">
-      <img src="https://static1.squarespace.com/static/56b753bac6fc0886a1bf0739/t/56ba0030356fb05e0f01cb70/1455030358655/" aria-label="WHO Logo" style="height: 80%;filter: brightness(10) grayscale(1)">
+      <img src="images/oms.png" aria-label="WHO Logo" style="height: 80%;filter: brightness(10) grayscale(1);">
     </md-button>
     <h2>e-CIIS</h2>
 
@@ -43,10 +43,11 @@
 
   <!-- Insitutions sidebar -->
   <div flex layout="column" md-colors="{background: 'blue-800'}">
-    <md-list md-colors="{background: 'grey-200'}">
-      <md-list-item ng-class="noright" md-colors="{background: 'grey-200'}">
-        <img alt="name" ng-src="{{ mainCtrl.user.current_institution.image_url }}"
-          class="md-avatar" />
+    <md-list>
+      <md-list-item ng-class="noright" md-colors="{background: '{{ mainCtrl.isActive(institution)}}'}"
+          ng-repeat="institution in mainCtrl.user.institutions">
+        <img alt="name" ng-src="{{ institution.image_url }}" ng-click="mainCtrl.changeInstitution(institution.name)"
+          class="md-avatar" md-colors="{background: 'grey-200'}"/>
       </md-list-item>
     </md-list>
   </div>  
@@ -61,8 +62,8 @@
             <img src="{{ mainCtrl.user.image }}" class="md-user-avatar"/>
           </md-card-avatar>
           <md-card-header-text>
-            <span class="md-title">{{ mainCtrl.user.profile.displayName }}</span>
-            <span class="md-subhead">{{ mainCtrl.user.profile.preferredUsername }}</span>
+            <span class="md-title">{{ mainCtrl.user.name }}</span>
+            <span class="md-subhead">{{ mainCtrl.user.current_institution.name }}</span>
           </md-card-header-text>
         </md-card-header>
         <img ng-src="https://media.licdn.com/media/AAEAAQAAAAAAAAOzAAAAJDA4NDJiOTY0LWY0ZjEtNDI0MS05YWFiLWVmMTczYzc2ZmRjZQ.jpg" class="md-card-image">

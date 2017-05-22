@@ -39,7 +39,9 @@ class Institution(ndb.Model):
     # Posts created by members of this institution
     posts = ndb.KeyProperty(kind="Post", repeated=True)
 
-    #
+    """TODO: First version don't have timeline. Do After
+        @author: Mayza Nunes 22/05/2017
+    """
     # timeline = ndb.KeyProperty(kind="Timeline")
 
     state = ndb.StringProperty(choices=set([
@@ -72,7 +74,10 @@ class User(ndb.Model):
     # The id of the posts authored by the user
     posts = ndb.KeyProperty(kind="Post", repeated=True)
 
-    # The id of the user timeline
+    """TODO: First version don't have timeline. Do After
+        The id of the user timeline
+        @author: Mayza Nunes 22/05/2017
+    """
     #timeline = ndb.KeyProperty(kind="Timeline")
 
     state = ndb.StringProperty(choices=set([

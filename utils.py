@@ -14,6 +14,7 @@ class Utils():
     STATUS_SUCCESS = 201
     NOT_FOUND = 404
     FORBIDDEN = 403
+    BAD_REQUEST = 400
 
     @staticmethod
     def createEntity(EntityClass, propertiesValue):

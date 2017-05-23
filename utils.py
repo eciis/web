@@ -14,6 +14,7 @@ class Utils():
     STATUS_SUCCESS = 201
     NOT_FOUND = 404
     FORBIDDEN = 403
+    BAD_REQUEST = 400
 
     @staticmethod
     def createEntity(EntityClass, propertiesValue):
@@ -166,17 +167,3 @@ def is_institution_member(method):
             self.response.write(Utils.getJSONError(
                 Utils.FORBIDDEN, "User is not a member of this Institution"))
     return check_members
-
-
-def check_post_required_fields(method):
-    """Check if required fields text and title of a post are not empty."""
-    def check_fields(self, user, *args):
-        data = json.loads(self.request.body)
-
-        if (data.get('title') and data.get('text')):
-            method(self, user, *args)
-        else:
-            self.response.set_status(Utils.FORBIDDEN)
-            self.response.write(Utils.getJSONError(
-                Utils.FORBIDDEN, "Required fields are empty"))
-    return check_fields

@@ -1,7 +1,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.service("AuthService", function AuthService($http, $q, GravatarService) {
+    app.service("AuthService", function AuthService($http, $q) {
         var service = this;
 
         var LOGIN_URI = "/login";

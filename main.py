@@ -14,6 +14,7 @@ from models import Post
 from utils import Utils
 from utils import login_required
 from utils import json_response
+from utils import is_institution_member
 
 
 class BaseHandler(webapp2.RequestHandler):
@@ -110,49 +111,31 @@ class PostHandler(BaseHandler):
 
     @json_response
     @login_required
+    @is_institution_member
     @ndb.transactional(xg=True)
-    def post(self, user):
+    def post(self, user, institution):
         """Handle POST Requests."""
         data = json.loads(self.request.body)
-        institution_key = ndb.Key(urlsafe=data['institution'])
 
-        if (user.key in institution_key.get().members):
-            post = Post()
-            post.title = data['title']
-            post.headerImage = data.get('headerImage')
-            post.text = data['text']
-            post.author = user.key
+        post = Post()
+        post.title = data['title']
+        post.headerImage = data.get('headerImage')
+        post.text = data['text']
+        post.author = user.key
 
-            post.institution = institution_key
-            post.comments = []
-            post.put()
+        post.institution = institution.key
+        post.comments = []
+        post.put()
 
-            """ Update Institution."""
-            institution = post.institution.get()
-            institution.posts.append(post.key)
-            institution.put()
+        """ Update Institution."""
+        institution.posts.append(post.key)
+        institution.put()
 
-            """ Update User."""
-            author = post.author.get()
-            author.posts.append(post.key)
-            author.put()
+        """ Update User."""
+        user.posts.append(post.key)
+        user.put()
 
-            post_json = Utils.toJson(post, host=self.request.host)
-
-            post_json['author'] = author.name
-            post_json['author_img'] = author.photo_url
-            post_json['institution_name'] = institution.name
-            post_json['institution_image'] = institution.image_url
-
-            self.response.write(json.dumps(post_json))
-        else:
-            """TODO: Fix to no not change the view to /login.
-
-            @author: Mayza Nunes 19/05/2017
-            """
-            self.response.set_status(Utils.FORBIDDEN)
-            self.response.write(Utils.getJSONError(
-                Utils.FORBIDDEN, "User is not a member of this Institution"))
+        self.response.write(json.dumps(Post.make(post)))
 
 
 class UserTimelineHandler(BaseHandler):
@@ -168,22 +151,8 @@ class UserTimelineHandler(BaseHandler):
         queryPosts = Post.query(Post.institution.IN(
             user.follows)).order(Post.publication_date)
 
-        array = []
-        for post in queryPosts:
-            value = post.publication_date.isoformat()
-            array.append(({
-                'title': post.title,
-                'text': post.text,
-                'author': post.author.get().name,
-                'author_img': post.author.get().photo_url,
-                'institution_name': post.institution.get().name,
-                'institution_image': post.institution.get().image_url,
-                'likes': post.likes,
-                'headerImage': post.headerImage,
-                'state': post.state,
-                'comments': post.comments,
-                'publication_date': value
-            }))
+        array = [Post.make(post) for post in queryPosts]
+
         self.response.write(json.dumps(array))
 
 

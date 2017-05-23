@@ -1,7 +1,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.controller("HomeController", function HomeController(PostService, AuthService, $state) {
+    app.controller("HomeController", function HomeController(PostService, AuthService, $interval) {
         var homeCtrl = this;
         homeCtrl.posts = [];
 
@@ -38,5 +38,7 @@
         };
 
         loadPosts();
+
+        $interval(loadPosts, 5000);
     });
 })();

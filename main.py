@@ -133,13 +133,18 @@ class PostHandler(BaseHandler):
             institution.put()
 
             """ Update User."""
-            user = post.author.get()
-            user.posts.append(post.key)
-            user.put()
+            author = post.author.get()
+            author.posts.append(post.key)
+            author.put()
 
-            self.response.write(json.dumps(
-                Utils.toJson(post, host=self.request.host)
-            ))
+            post_json = Utils.toJson(post, host=self.request.host)
+
+            post_json['author'] = author.name
+            post_json['author_img'] = author.photo_url
+            post_json['institution_name'] = institution.name
+            post_json['institution_image'] = institution.image_url
+
+            self.response.write(json.dumps(post_json))
         else:
             """TODO: Fix to no not change the view to /login.
 

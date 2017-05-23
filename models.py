@@ -129,6 +129,26 @@ class Post(ndb.Model):
     # Number of likes
     likes = ndb.IntegerProperty(default=0)
 
+    @staticmethod
+    def make(post):
+        """Create personalized json of post."""
+        publication_date = post.publication_date.isoformat()
+        author = post.author.get()
+        institution = post.institution.get()
+        return {
+            'title': post.title,
+            'text': post.text,
+            'author': author.name,
+            'author_img': author.photo_url,
+            'institution_name': institution.name,
+            'institution_image': institution.image_url,
+            'likes': post.likes,
+            'headerImage': post.headerImage,
+            'state': post.state,
+            'comments': post.comments,
+            'publication_date': publication_date
+        }
+
 
 class Timeline(ndb.Model):
     """Model of Timeline."""

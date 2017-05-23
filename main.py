@@ -117,10 +117,7 @@ class PostHandler(BaseHandler):
         """Handle POST Requests."""
         data = json.loads(self.request.body)
         try:
-            post = Post.createPost(data)
-            post.author = user.key
-            post.institution = institution.key
-            post.comments = []
+            post = Post.create(data, user.key, institution.key)
             post.put()
 
             """ Update Institution."""
@@ -132,10 +129,10 @@ class PostHandler(BaseHandler):
             user.put()
 
             self.response.write(json.dumps(Post.make(post)))
-        except Exception as e:
+        except Exception as error:
             self.response.set_status(Utils.BAD_REQUEST)
             self.response.write(Utils.getJSONError(
-                Utils.BAD_REQUEST, e.message))
+                Utils.BAD_REQUEST, error.message))
 
 
 class UserTimelineHandler(BaseHandler):

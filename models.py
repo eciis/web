@@ -130,19 +130,21 @@ class Post(ndb.Model):
     likes = ndb.IntegerProperty(default=0)
 
     @staticmethod
-    def createPost(data):
+    def create(data, author, institution):
         """Create a post and check required fields."""
         if not data['title']:
             raise Exception("Field title can not be empty")
         if not data['text']:
             raise Exception("Field text can not be empty")
-        else:
-            post = Post()
-            post.title = data['title']
-            post.headerImage = data.get('headerImage')
-            post.text = data['text']
+        post = Post()
+        post.title = data['title']
+        post.headerImage = data.get('headerImage')
+        post.text = data['text']
+        post.author = author
+        post.institution = institution
+        post.comments = []
 
-            return post
+        return post
 
     @staticmethod
     def make(post):

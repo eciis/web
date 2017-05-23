@@ -7,7 +7,6 @@ function Post(data, institution) {
     this.institution = institution;
 }
 
-
 Post.prototype.isValid = function isValid() {
     if (_.isUndefined(this.title) || _.isEmpty(this.title)) {
         return false; 

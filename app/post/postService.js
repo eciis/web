@@ -4,27 +4,22 @@
     app.service("PostService", function PostService($http, $q, AuthService) {
         var service = this;
 
-        /** TODO 
-          Autor: Mayza Nunes 18/05/2016
-          Error treatment
-        **/
         service.get = function getPosts() {
             var deferred = $q.defer();
-            $http.get("/api/user/timeline").then(function(response) {
+            $http.get("/api/user/timeline").then(function success(response) {
                 deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
             });
             return deferred.promise;
         };
 
-        /** TODO 
-          Autor: Mayza Nunes 18/05/2016
-          Error treatment
-        **/
-        service.post = function post(post) {
+        service.createPost = function createPost(post) {
             var deferred = $q.defer();
-            post.institution = AuthService.user.current_institution.key;
-            $http.post("/api/post", post).then(function(response) {
+            $http.post("/api/post", post).then(function success(response) {
                 deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
             });
             return deferred.promise;
         };

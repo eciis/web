@@ -17,12 +17,12 @@
         <md-input-container ng-show="post">
           <label>Mensagem</label>
           <textarea ng-model="post.text" md-maxlength="150" rows="4" md-select-on-focus
-            maxlength="150"></textarea>
+            maxlength="150" required="true"></textarea>
         </md-input-container>
     </md-card-title-text>
   </md-card-title>
   <md-card-actions layout="row" layout-align="end center" ng-show="post">
-    <md-button ng-click="homeCtrl.post(post); post = undefined;">Enviar</md-button>
+    <md-button ng-click="homeCtrl.createPost(post); post = undefined;" ng-disabled="homeCtrl.isPostInvalid(post)">Enviar</md-button>
     <md-button ng-click="post = undefined;">Limpar</md-button>
   </md-card-actions>
 </md-card>

@@ -23,6 +23,7 @@ class BaseHandler(webapp2.RequestHandler):
     def handle_exception(self, exception, debug):
         """Handle exception."""
         logging.error(str(exception))
+        self.response.set_status(500)
         self.response.write(json.dumps({
             "msg": "Error! %s" % str(exception)
         }))
@@ -75,13 +76,14 @@ class InstitutionHandler(BaseHandler):
 
     @json_response
     @login_required
-    def get(self, user):
+    def get(self, user, url_string):
         """Handle GET Requests."""
-        iid = self.request.get('id')
-        if iid:
-            Utils.get(Institution, int(iid), self.response)
-        else:
-            Utils.getAll(Institution, self.response)
+        obj_key = ndb.Key(urlsafe=url_string)
+        obj = obj_key.get()
+        assert type(obj) is Institution, "Key is not an Institution"
+        self.response.write(json.dumps(
+            Utils.toJson(obj, host=self.request.host)
+        ))
 
 
 class UserHandler(BaseHandler):
@@ -207,7 +209,7 @@ class GetKeyHandler(BaseHandler):
 
 app = webapp2.WSGIApplication([
     ("/api", MainHandler),
-    ("/api/institution", InstitutionHandler),
+    ("/api/institution/(.*)", InstitutionHandler),
     ("/api/key/(.*)", GetKeyHandler),
     ("/api/post", PostHandler),
     ("/api/user", UserHandler),

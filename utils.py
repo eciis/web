@@ -153,7 +153,7 @@ def json_response(method):
 
 
 def is_institution_member(method):
-    """Check if user logged in is member of an institution."""
+    """Check if user passed as parameter is member of an institution."""
     def check_members(self, user, *args):
         data = json.loads(self.request.body)
         institution_key = ndb.Key(urlsafe=data['institution'])

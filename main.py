@@ -15,6 +15,7 @@ from utils import Utils
 from utils import login_required
 from utils import json_response
 from utils import is_institution_member
+from utils import check_post_required_fields
 
 
 class BaseHandler(webapp2.RequestHandler):
@@ -112,36 +113,31 @@ class PostHandler(BaseHandler):
     @json_response
     @login_required
     @is_institution_member
+    @check_post_required_fields
     @ndb.transactional(xg=True)
     def post(self, user, institution):
         """Handle POST Requests."""
         data = json.loads(self.request.body)
 
-        if (data.get('title') and data.get('text')):
-            post = Post()
-            post.title = data['title']
-            post.headerImage = data.get('headerImage')
-            post.text = data['text']
-            post.author = user.key
+        post = Post()
+        post.title = data['title']
+        post.headerImage = data.get('headerImage')
+        post.text = data['text']
+        post.author = user.key
 
-            post.institution = institution.key
-            post.comments = []
-            post.put()
+        post.institution = institution.key
+        post.comments = []
+        post.put()
 
-            """ Update Institution."""
-            institution.posts.append(post.key)
-            institution.put()
+        """ Update Institution."""
+        institution.posts.append(post.key)
+        institution.put()
 
-            """ Update User."""
-            user.posts.append(post.key)
-            user.put()
+        """ Update User."""
+        user.posts.append(post.key)
+        user.put()
 
-            self.response.write(json.dumps(Post.make(post)))
-        else:
-            self.response.set_status(Utils.FORBIDDEN)
-            self.response.write(Utils.getJSONError(
-                Utils.FORBIDDEN,
-                "Required fields are empty"))
+        self.response.write(json.dumps(Post.make(post)))
 
 
 class UserTimelineHandler(BaseHandler):

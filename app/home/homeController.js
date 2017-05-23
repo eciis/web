@@ -1,7 +1,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.controller("HomeController", function HomeController(PostService, AuthService) {
+    app.controller("HomeController", function HomeController(PostService, AuthService, $state) {
         var homeCtrl = this;
         homeCtrl.posts = [];
 
@@ -32,7 +32,9 @@
             Error treatment
         **/
         homeCtrl.post = function(post) {
-            PostService.post(post);
+            PostService.post(post).then(function success(info) {
+                homeCtrl.posts.push(info.data)
+            });
         };
 
         loadPosts();

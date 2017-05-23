@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
-import logging
 import json
 import datetime
 
+from google.appengine.api import users
 from google.appengine.ext import ndb
 from google.appengine.ext.ndb import Key
+
+from models import User
 
 
 class Utils():
@@ -104,13 +106,47 @@ class Utils():
                 return Utils.toJson(entity, loadkey=loadkey, host=host)
             else:
                 if host is not None:
-                    # TODO: Change between http and https when deployed and local
+                    # TODO: Change between http and https when deployed
+                    # and local
                     # @author: André Abrantes
                     return "http://%s/api/key/%s" % (host, entity.urlsafe())
                 else:
                     return entity.urlsafe()
         if isinstance(entity, ndb.Model):
             out = entity.to_dict()
-            out['iid'] = entity.key.id()
+            out['key'] = entity.key.urlsafe()
             return Utils.toJson(out, loadkey=loadkey, host=host)
         return entity
+
+
+def login_required(method):
+    """Handle required login."""
+    def login(self, *args):
+        user = users.get_current_user()
+        if user is None:
+            self.response.write(json.dumps({
+                'msg': 'Auth needed',
+                'login_url': 'http://%s/login' % self.request.host
+            }))
+            self.response.set_status(401)
+            return
+        user = User.get_by_email(user.email())
+        if user is None:
+            self.response.write(json.dumps({
+                'msg': 'Forbidden',
+                'login_url': 'http://%s/login' % self.request.host
+            }))
+            self.response.set_status(403)
+            self.redirect("/logout")
+            return
+        method(self, user, *args)
+    return login
+
+
+def json_response(method):
+    """Add content type header to the response."""
+    def response(self, *args):
+        self.response.headers[
+            'Content-Type'] = 'application/json; charset=utf-8'
+        method(self, *args)
+    return response

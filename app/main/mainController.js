@@ -14,6 +14,17 @@
             $mdSidenav('leftNav').toggle();
         };
 
+        mainCtrl.isActive = function isActive(inst) {
+            if (mainCtrl.user.current_institution == inst) {
+                return 'grey-200'; 
+            }
+            return 'blue-800';
+        };
+
+        mainCtrl.changeInstitution = function changeInstitution(name) {
+            mainCtrl.user.changeInstitution(name);
+        };
+
         mainCtrl.settings = [{
             name: 'Início',
             stateTo: 'app.home',

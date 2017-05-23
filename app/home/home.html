@@ -5,14 +5,14 @@
     </md-card-avatar>
     <md-card-header-text>
       <span class="md-title">{{ homeCtrl.user.current_institution.name }}</span>
-      <span class="md-subhead">por {{ homeCtrl.user.profile.displayName }}</span>
+      <span class="md-subhead">por {{ homeCtrl.user.name }}</span>
     </md-card-header-text>
   </md-card-header>
   <md-card-title>
     <md-card-title-text>
         <md-input-container>
           <label>Título</label>
-          <input ng-model="post.title" md-maxlength="30" maxlength="30" placeholder="Escreva aqui uma nova publicação como {{ homeCtrl.user.profile.displayName }}">
+          <input ng-model="post.title" md-maxlength="30" maxlength="30" placeholder="Escreva aqui uma nova publicação">
         </md-input-container>
         <md-input-container ng-show="post">
           <label>Mensagem</label>
@@ -36,7 +36,7 @@
     </md-card-avatar>
     <md-card-header-text>
       <span class="md-title">{{ post.institution_name }}</span>
-      <span class="md-subhead">por {{ post.author }} as {{ post.publication_date }}</span>
+      <span class="md-subhead">por {{ post.author }} em {{ post.publication_date | date:'dd-MM-yyyy' }}</span>
     </md-card-header-text>
   </md-card-header>
   <img ng-src="{{ post.headerImage }}" class="md-card-image">

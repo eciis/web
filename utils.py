@@ -150,3 +150,19 @@ def json_response(method):
             'Content-Type'] = 'application/json; charset=utf-8'
         method(self, *args)
     return response
+
+
+def is_institution_member(method):
+    """Check if user logged in is member of an institution."""
+    def check_members(self, user, *args):
+        data = json.loads(self.request.body)
+        institution_key = ndb.Key(urlsafe=data['institution'])
+        institution = institution_key.get()
+
+        if user.key in institution.members:
+            method(self, user, institution, *args)
+        else:
+            self.response.set_status(Utils.FORBIDDEN)
+            self.response.write(Utils.getJSONError(
+                Utils.FORBIDDEN, "User is not a member of this Institution"))
+    return check_members

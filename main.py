@@ -117,25 +117,31 @@ class PostHandler(BaseHandler):
         """Handle POST Requests."""
         data = json.loads(self.request.body)
 
-        post = Post()
-        post.title = data['title']
-        post.headerImage = data.get('headerImage')
-        post.text = data['text']
-        post.author = user.key
+        if (data.get('title') and data.get('text')):
+            post = Post()
+            post.title = data['title']
+            post.headerImage = data.get('headerImage')
+            post.text = data['text']
+            post.author = user.key
 
-        post.institution = institution.key
-        post.comments = []
-        post.put()
+            post.institution = institution.key
+            post.comments = []
+            post.put()
 
-        """ Update Institution."""
-        institution.posts.append(post.key)
-        institution.put()
+            """ Update Institution."""
+            institution.posts.append(post.key)
+            institution.put()
 
-        """ Update User."""
-        user.posts.append(post.key)
-        user.put()
+            """ Update User."""
+            user.posts.append(post.key)
+            user.put()
 
-        self.response.write(json.dumps(Post.make(post)))
+            self.response.write(json.dumps(Post.make(post)))
+        else:
+            self.response.set_status(Utils.FORBIDDEN)
+            self.response.write(Utils.getJSONError(
+                Utils.FORBIDDEN,
+                "Required fields are empty"))
 
 
 class UserTimelineHandler(BaseHandler):

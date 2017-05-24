@@ -1,6 +1,6 @@
 <!-- TOOLBAR -->
 <md-toolbar md-colors="{background: 'blue-900'}" layout-wrap layout-align="center" layout="row">
-  <div class="md-toolbar-tools" flex="100" flex-lg=80 flex-xl="80" layout="row" layout-align="center center">
+  <div class="md-toolbar-tools" flex-lg="90" flex-gt-lg="80" layout="row" layout-align="center center">
     <md-button class="md-icon-button" aria-label="Settings" ng-click="mainCtrl.toggle()">
       <md-icon>menu</md-icon>
     </md-button>
@@ -27,35 +27,42 @@
 </md-toolbar>
 
 <!-- SIDENAV -->
-<md-sidenav class="md-sidenav-left" md-component-id="leftNav" md-whiteframe="4">
-  <md-toolbar md-colors="{background: 'blue-900'}" layout="row">
+<md-sidenav class="md-sidenav-left" md-component-id="leftNav" md-whiteframe="4" layout="column">
+  <md-toolbar md-colors="{background: dashboard? 'blue-grey-900' : 'blue-grey-700' }" layout="row" layout-align="center center">
     <h1 class="md-toolbar-tools">Menu</h1>
+    <span flex></span>
+    <md-button ng-hide="dashboard" ng-click="dashboard = !dashboard" class="md-icon-button" aria-label="More">
+      <md-icon>dashboard</md-icon>
+    </md-button>
+    <md-button ng-show="dashboard" ng-click="dashboard = !dashboard" class="md-icon-button" aria-label="More">
+      <md-icon>more_vert</md-icon>
+    </md-button>
   </md-toolbar>
-  <md-content>
-     <md-list-item ng-click="mainCtrl.goTo(setting.stateTo)" ng-repeat="setting in mainCtrl.settings">
-       <md-icon>{{setting.icon}}</md-icon>
-       <p> {{ setting.name }} </p>
-     </md-list-item>
+  <md-content flex md-colors="{background: dashboard? 'blue-grey-700' : 'grey-200' }">
+    <md-list ng-hide="dashboard">
+      <md-list-item ng-click="mainCtrl.goTo(setting.stateTo)" ng-repeat="setting in mainCtrl.settings">
+        <md-icon>{{setting.icon}}</md-icon>
+        <p> {{ setting.name }} </p>
+      </md-list-item>
+    </md-list>
+    <md-list ng-show="dashboard">
+      <md-list-item class="md-3-line" ng-repeat="institution in mainCtrl.user.institutions" ng-click="mainCtrl.changeInstitution(institution.name)">
+        <img ng-src="{{ institution.image_url }}" alt="{{ institution.name }}" class="md-avatar" md-colors="{background: 'grey-200'}">
+        <p> {{ institution.name }} </p>
+        <md-button class="md-warn md-hue-1 md-icon-button" ng-show="mainCtrl.isActive(institution)">
+          <md-icon>check</md-icon>
+        </md-button>
+      </md-list-item>
+    </md-list>
   </md-content>
 </md-sidenav>
 
-<div layout="row" md-colors="{background: 'grey-200'}">
-
-  <!-- Insitutions sidebar -->
-  <div flex layout="column" md-colors="{background: 'blue-800'}">
-    <md-list>
-      <md-list-item ng-class="noright" md-colors="{background: '{{ mainCtrl.isActive(institution)}}'}"
-          ng-repeat="institution in mainCtrl.user.institutions">
-        <img alt="name" ng-src="{{ institution.image_url }}" ng-click="mainCtrl.changeInstitution(institution.name)"
-          class="md-avatar" md-colors="{background: 'grey-200'}"/>
-      </md-list-item>
-    </md-list>
-  </div>  
+<md-content layout="row" md-colors="{background: 'grey-200'}" layout-align="center">
 
   <!-- CONTENT -->
-  <div flex="95" layout="row" layout-wrap layout-padding layout-align="center">
+  <div flex-gt-lg="80" flex-lg="90" layout="row" layout-wrap layout-padding layout-align="center">
     <!-- LEFT SIDE PANEL -->
-    <div flex-xs="75" flex-sm="75" flex-md="30" flex="20" layout="column">
+    <div flex-gt-md="20" flex-md="25" layout="column" hide show-gt-sm>
       <md-card>
         <md-card-header>
           <md-card-avatar>
@@ -86,12 +93,12 @@
     </div>
 
     <!-- CENTER PANEL -->
-    <md-content flex-xs="90" flex-sm="90" flex-md="50" flex="40" layout="column" md-colors="{background: 'grey-200'}">
+    <div flex-gt-md="60" flex-md="75" layout="column" md-colors="{background: 'grey-200'}">
       <div ui-view="content"></div>
-    </md-content>
+    </div>
 
     <!-- RIGHT SIDE PANEL -->
-    <div  flex-xs="0" flex-sm="0" flex="20" layout-padding laoyout="row" >
+    <div flex-gt-md="20" layout-padding laoyout="row" md-colors="{background: 'grey-200'}" hide show-gt-sm >
       <div layout="column">
 
         <!-- UPPER PANEL -->
@@ -118,4 +125,4 @@
       </div>
     </div>
   </div>
-</div>
+</md-content>

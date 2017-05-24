@@ -16,9 +16,9 @@
 
         mainCtrl.isActive = function isActive(inst) {
             if (mainCtrl.user.current_institution == inst) {
-                return 'grey-200'; 
+                return true; 
             }
-            return 'blue-800';
+            return false;
         };
 
         mainCtrl.changeInstitution = function changeInstitution(name) {

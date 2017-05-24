@@ -27,21 +27,31 @@
 </md-toolbar>
 
 <!-- SIDENAV -->
-<md-sidenav class="md-sidenav-left" md-component-id="leftNav" md-whiteframe="4">
-  <md-toolbar md-colors="{background: 'blue-900'}" layout="row">
+<md-sidenav class="md-sidenav-left" md-component-id="leftNav" md-whiteframe="4" layout="column">
+  <md-toolbar md-colors="{background: dashboard? 'blue-grey-900' : 'blue-grey-700' }" layout="row" layout-align="center center">
     <h1 class="md-toolbar-tools">Menu</h1>
+    <span flex></span>
+    <md-button ng-hide="dashboard" ng-click="dashboard = !dashboard" class="md-icon-button" aria-label="More">
+      <md-icon>dashboard</md-icon>
+    </md-button>
+    <md-button ng-show="dashboard" ng-click="dashboard = !dashboard" class="md-icon-button" aria-label="More">
+      <md-icon>more_vert</md-icon>
+    </md-button>
   </md-toolbar>
-  <md-content>
-      <!-- Insitutions sidebar -->
-      <div flex layout="column">
-        <md-list>
-          <md-list-item ng-class="noright" md-colors="{background: '{{ mainCtrl.isActive(institution)}}'}"
-              ng-repeat="institution in mainCtrl.user.institutions">
-            <img alt="name" ng-src="{{ institution.image_url }}" ng-click="mainCtrl.changeInstitution(institution.name)"
-              class="md-avatar" md-colors="{background: 'grey-200'}"/>
-          </md-list-item>
-        </md-list>
-      </div>  
+  <md-content flex md-colors="{background: dashboard? 'blue-grey-700' : 'grey-200' }">
+    <md-list-item ng-hide="dashboard" ng-click="mainCtrl.goTo(setting.stateTo)" ng-repeat="setting in mainCtrl.settings">
+      <md-icon>{{setting.icon}}</md-icon>
+      <p> {{ setting.name }} </p>
+    </md-list-item>
+    <md-list ng-show="dashboard">
+      <md-list-item class="md-3-line" ng-repeat="institution in mainCtrl.user.institutions" ng-click="mainCtrl.changeInstitution(institution.name)">
+        <img ng-src="{{ institution.image_url }}" alt="{{ institution.name }}" class="md-avatar" md-colors="{background: 'grey-200'}">
+        <p> {{ institution.name }} </p>
+        <md-button class="md-warn md-hue-1 md-icon-button" ng-show="mainCtrl.isActive(institution)">
+          <md-icon>check</md-icon>
+        </md-button>
+      </md-list-item>
+    </md-list>
   </md-content>
 </md-sidenav>
 

@@ -6,7 +6,7 @@ from google.appengine.api import users
 from google.appengine.ext import ndb
 from google.appengine.ext.ndb import Key
 
-from models import User
+from models.user import User
 
 
 class Utils():

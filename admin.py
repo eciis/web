@@ -4,8 +4,6 @@ import json
 import datetime
 import logging
 
-from google.appengine.api import users
-
 from models import *
 
 class BaseHandler(webapp2.RequestHandler):

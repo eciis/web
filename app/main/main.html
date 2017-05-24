@@ -39,10 +39,12 @@
     </md-button>
   </md-toolbar>
   <md-content flex md-colors="{background: dashboard? 'blue-grey-700' : 'grey-200' }">
-    <md-list-item ng-hide="dashboard" ng-click="mainCtrl.goTo(setting.stateTo)" ng-repeat="setting in mainCtrl.settings">
-      <md-icon>{{setting.icon}}</md-icon>
-      <p> {{ setting.name }} </p>
-    </md-list-item>
+    <md-list ng-hide="dashboard">
+      <md-list-item ng-click="mainCtrl.goTo(setting.stateTo)" ng-repeat="setting in mainCtrl.settings">
+        <md-icon>{{setting.icon}}</md-icon>
+        <p> {{ setting.name }} </p>
+      </md-list-item>
+    </md-list>
     <md-list ng-show="dashboard">
       <md-list-item class="md-3-line" ng-repeat="institution in mainCtrl.user.institutions" ng-click="mainCtrl.changeInstitution(institution.name)">
         <img ng-src="{{ institution.image_url }}" alt="{{ institution.name }}" class="md-avatar" md-colors="{background: 'grey-200'}">

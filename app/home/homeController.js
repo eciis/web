@@ -12,20 +12,6 @@
             }
         });
 
-        homeCtrl.createPost = function createPost(data) {
-            var post = new Post(data, homeCtrl.user.current_institution.key);
-            if (post.isValid()) {
-                PostService.createPost(post).then(function success(response) {
-                    showToast('Postado com sucesso!');
-                    homeCtrl.posts.push(response.data);
-                }, function error(response) {
-                    showToast(response.data.msg);
-                });
-            } else {
-                showToast('Post inválido!');
-            }
-        };
-
         var loadPosts = function() {
             PostService.get().then(function success(response) {
                 homeCtrl.posts = response.data;

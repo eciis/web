@@ -1,34 +1,3 @@
-<md-card>
-  <md-card-header>
-    <md-card-avatar>
-      <img src="{{ mainCtrl.user.current_institution.image_url }}" class="md-user-avatar"/>
-    </md-card-avatar>
-    <md-card-header-text>
-      <span class="md-title">{{ homeCtrl.user.current_institution.name }}</span>
-      <span class="md-subhead">por {{ homeCtrl.user.name }}</span>
-    </md-card-header-text>
-  </md-card-header>
-  <md-card-title>
-    <md-card-title-text>
-        <md-input-container>
-          <label>Título</label>
-          <input ng-model="post.title" md-maxlength="30" maxlength="30" placeholder="Escreva aqui uma nova publicação">
-        </md-input-container>
-        <md-input-container ng-show="post">
-          <label>Mensagem</label>
-          <textarea ng-model="post.text" md-maxlength="150" rows="4" md-select-on-focus
-            maxlength="150" required="true"></textarea>
-        </md-input-container>
-    </md-card-title-text>
-  </md-card-title>
-  <md-card-actions layout="row" layout-align="end center" ng-show="post">
-    <md-button ng-click="homeCtrl.createPost(post); post = undefined;" ng-disabled="homeCtrl.isPostInvalid(post)">Enviar</md-button>
-    <md-button ng-click="post = undefined;">Limpar</md-button>
-  </md-card-actions>
-</md-card>
-
- <md-divider layout-margin></md-divider>
-
 <md-card ng-repeat="post in homeCtrl.posts | orderBy:'$index':true">
   <md-card-header>
     <md-card-avatar>

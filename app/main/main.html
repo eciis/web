@@ -16,10 +16,6 @@
       <a href="/logout"><md-icon style="color: white;">exit_to_app</md-icon></a>
     </md-button>
 
-    <md-button class="md-icon-button" aria-label="Favorite">
-      <md-icon style="color: white;">build</md-icon>
-    </md-button>
-
     <md-button class="md-icon-button" aria-label="More">
       <md-icon>more_vert</md-icon>
     </md-button>
@@ -61,6 +57,7 @@
 
   <!-- CONTENT -->
   <div flex-gt-lg="80" flex-lg="90" layout="row" layout-wrap layout-padding layout-align="center">
+    
     <!-- LEFT SIDE PANEL -->
     <div flex-gt-md="20" flex-md="25" layout="column" hide show-gt-sm>
       <md-card>
@@ -126,3 +123,10 @@
     </div>
   </div>
 </md-content>
+<md-fab-speed-dial id="fab-new-post" class="md-fab-bottom-right">
+  <md-fab-trigger> 
+    <md-button aria-label="menu" class="md-fab md-primary" ng-click="mainCtrl.newPost()">
+      <md-icon>add</md-icon>
+    </md-button>
+  </md-fab-trigger>
+</md-fab-speed-dial>

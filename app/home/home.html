@@ -55,8 +55,9 @@
     <md-button class="md-icon-button" aria-label="Data" ng-click="time = !time;">
       <md-icon>access_time</md-icon>
     </md-button>
-    <md-button class="md-icon-button" aria-label="Favorite" ng-click="homeCtrl.likePost(post)">
-      <md-icon>favorite</md-icon>
+    <md-button class="md-icon-button" aria-label="Favorite" ng-click="homeCtrl.likePost(post)"
+      ng-class="post.liked?'md-warn':' '">
+      <md-icon>grade</md-icon>
     </md-button>
     <md-button class="md-icon-button" aria-label="Settings">
       <md-icon>menu</md-icon>

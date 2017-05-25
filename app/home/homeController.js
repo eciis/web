@@ -29,15 +29,22 @@
         var loadPosts = function() {
             PostService.get().then(function success(response) {
                 homeCtrl.posts = response.data;
+                setLikedAttr(homeCtrl.posts);
             }, function error(response) {
                 showToast(response.data.msg);
             });
         };
 
         homeCtrl.likePost = function(post) {
-            PostService.likePost(post);
-        }
+            PostService.likePost(post).then(function success(response) {
+                post.likes += 1;
+                post.liked = !post.liked;
+            }, function error(response) {
+                showToast(response.data.msg);
+            });
+        };
 
+        // TODO: create method to dislike
 
         loadPosts();
 
@@ -52,6 +59,12 @@
                     .hideDelay(5000)
                     .position('bottom right')
             );
-        }
+        };
+
+        function setLikedAttr(posts) {
+            _.map(posts, function(post) {
+                _.assign(post, {liked: false});
+            });
+        };
     });
 })();

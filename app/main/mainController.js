@@ -16,7 +16,7 @@
 
         mainCtrl.isActive = function isActive(inst) {
             if (mainCtrl.user.current_institution == inst) {
-                return true; 
+                return true;
             }
             return false;
         };
@@ -63,30 +63,30 @@
 
         mainCtrl.newPost = function(event) {
             $mdDialog.show({
-                  controller: MainController,
-                  controllerAs: "mainCtrl",
-                  templateUrl: 'main/new_post.html',
-                  parent: angular.element(document.body),
-                  targetEvent: event,
-                  clickOutsideToClose:true,
-                  openFrom: '#fab-new-post',
-                  closeTo: angular.element(document.querySelector('#fab-new-post'))
-                })
-                .then(function(answer) {
-                    if (answer == 'send') {
-                        var post = new Post(data, mainCtrl.user.current_institution.key);
-                        if (post.isValid()) {
-                            PostService.createPost(post).then(function success(response) {
+                controller: MainController,
+                controllerAs: "mainCtrl",
+                templateUrl: 'main/new_post.html',
+                parent: angular.element(document.body),
+                targetEvent: event,
+                clickOutsideToClose:true,
+                openFrom: '#fab-new-post',
+                closeTo: angular.element(document.querySelector('#fab-new-post'))
+            }).then(function(answer) {
+                if (answer == 'send') {
+                    var post = new Post(data, mainCtrl.user.current_institution.key);
+                    if (post.isValid()) {
+                        PostService.createPost(post).then(
+                            function success(response) {
                                 showToast('Postado com sucesso!');
                                 mainCtrl.posts.push(response.data);
                             }, function error(response) {
                                 showToast(response.data.msg);
-                            });
-                        } else {
-                            showToast('Post inválido!');
-                        }
+                        });
+                    } else {
+                        showToast('Post inválido!');
                     }
-                });
+                }
+            });
         };
 
         function showToast(msg) {

@@ -1,10 +1,10 @@
 # coding: utf-8
 import webapp2
-import json
-import datetime
 import logging
 
-from models import *
+from models.user import User
+from models.institution import Institution
+from models.post import Post
 
 class BaseHandler(webapp2.RequestHandler):
     def handle_exception(self, exception, debug):
@@ -93,7 +93,7 @@ class InitHandler(BaseHandler):
         splab.name = 'SPLAB'
         splab.cnpj = '18.104.068/0001-56'
         splab.legal_nature = 'public'
-        splab.address =  'Universidade Federal de Campina Grande'
+        splab.address = 'Universidade Federal de Campina Grande'
         splab.occupation_area = ''
         splab.description = 'The mission of the Software Practices Laboratory (SPLab) \
             is to promote the development of the state-of-the-art in the \
@@ -102,7 +102,7 @@ class InitHandler(BaseHandler):
         splab.email = 'splab@ufcg.edu.br'
         splab.phone_number = '(83) 3322 7865'
         splab.members = [jorge.key, andre.key]
-        splab.followers =  [jorge.key, andre.key]
+        splab.followers = [jorge.key, andre.key]
         splab.posts = []
         splab.put()
 

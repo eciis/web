@@ -36,8 +36,7 @@
 
         homeCtrl.likePost = function(post) {
             PostService.likePost(post);
-        }
-
+        };
 
         loadPosts();
 

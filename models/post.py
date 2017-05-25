@@ -22,7 +22,7 @@ class Post(ndb.Model):
         'draft',
         'published',
         'deleted'
-    ]), default='draft')
+    ]), default='published')
 
     # Comments of the post
     # Concurrency controlled by Transactions

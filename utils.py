@@ -7,6 +7,7 @@ from google.appengine.ext import ndb
 from google.appengine.ext.ndb import Key
 
 from models.user import User
+from models.institution import Institution
 
 
 class Utils():
@@ -123,23 +124,41 @@ class Utils():
 def login_required(method):
     """Handle required login."""
     def login(self, *args):
-        user = users.get_current_user()
-        if user is None:
+        current_user = users.get_current_user()
+        if current_user is None:
             self.response.write(json.dumps({
                 'msg': 'Auth needed',
                 'login_url': 'http://%s/login' % self.request.host
             }))
             self.response.set_status(401)
             return
-        user = User.get_by_email(user.email())
+        user = User.get_by_email(current_user.email())
         if user is None:
-            self.response.write(json.dumps({
-                'msg': 'Forbidden',
-                'login_url': 'http://%s/login' % self.request.host
-            }))
-            self.response.set_status(403)
-            self.redirect("/logout")
-            return
+            user = User()
+            user.email = current_user.email()
+            user.name = current_user.nickname()
+
+            splab = Institution.query(Institution.name == "SPLAB").get()
+
+            user.institutions = [splab.key]
+            user.follows = [splab.key]
+
+            user.put()
+
+            splab.members.append(user.key)
+
+            splab.put()
+            # TODO:
+            # Return this block of code when user sign up is created
+            # @author André L. Abrantes - 25-05-2017
+            #
+            # self.response.write(json.dumps({
+            #     'msg': 'Forbidden',
+            #     'login_url': 'http://%s/login' % self.request.host
+            # }))
+            # self.response.set_status(403)
+            # self.redirect("/logout")
+            # return
         method(self, user, *args)
     return login
 

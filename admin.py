@@ -21,7 +21,7 @@ class InitHandler(BaseHandler):
         mayza.cpf = '089.675.908-90'
         mayza.photo_url = 'https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRmhGDdO4jK0eOeEsRfQAohYnkdZeAMUoV3odKlP7D2jsRLP_pXbCHHNw'
         mayza.email = 'mayzabeel@gmail.com'
-        mayza.institutions = [] 
+        mayza.institutions = []
         mayza.follows = []
         mayza.institutions_admin = []
         mayza.notifications = []
@@ -34,7 +34,7 @@ class InitHandler(BaseHandler):
         andre.cpf = '089.675.908-89'
         andre.photo_url = 'https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAATIAAAAJDY5NDQxOTk2LTUxZmUtNDZkZi04NTdmLTdiN2Y0MDU5YTIxNA.jpg'
         andre.email = 'andredossantosabrantes@gmail.com'
-        andre.institutions = [] 
+        andre.institutions = []
         andre.follows = []
         andre.institutions_admin = []
         andre.notifications = []
@@ -47,7 +47,7 @@ class InitHandler(BaseHandler):
         jorge.cpf = '089.675.908-10'
         jorge.photo_url = 'http://www.ceei.ufcg.edu.br/_/rsrc/1472854148636/AssessoriadeComunicacao/noticias/iforumdegestoresdaufcg/0003.jpg?height=150&width=200'
         jorge.email = 'abrantes@dsc.ufcg.edu.br'
-        jorge.institutions = [] 
+        jorge.institutions = []
         jorge.follows = []
         jorge.institutions_admin = []
         jorge.notifications = []
@@ -59,13 +59,79 @@ class InitHandler(BaseHandler):
         dalton.name = 'Dalton Serey'
         dalton.cpf = '089.675.908-20'
         dalton.photo_url = 'https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/3/000/013/13e/08261fc.jpg'
-        dalton.email = 'dalton@dsc.ufcg.edu.br'
+        dalton.email = 'dalton@splab.ufcg.edu.br'
         dalton.institutions = [] 
         dalton.follows = []
         dalton.institutions_admin = []
         dalton.notifications = []
         dalton.posts = []
         dalton.put()
+
+        # new User Maiana
+        maiana = User()
+        maiana.name = 'Maiana Brito'
+        maiana.cpf = '089.675.908-65'
+        maiana.photo_url = ''
+        maiana.email = 'maiana.brito@ccc.ufcg.edu.br'
+        maiana.institutions = []
+        maiana.follows = []
+        maiana.institutions_admin = []
+        maiana.notifications = []
+        maiana.posts = []
+        maiana.put()
+
+        # new User Raoni
+        raoni = User()
+        raoni.name = 'Raoni Smaneoto'
+        raoni.cpf = '089.675.908-65'
+        raoni.photo_url = ''
+        raoni.email = 'raoni.smaneoto@ccc.ufcg.edu.br '
+        raoni.institutions = []
+        raoni.follows = []
+        raoni.institutions_admin = []
+        raoni.notifications = []
+        raoni.posts = []
+        raoni.put()
+
+        # new User Luiz
+        luiz = User()
+        luiz.name = 'Luiz Silva'
+        luiz.cpf = '089.675.908-65'
+        luiz.photo_url = ''
+        luiz.email = 'luiz.silva@ccc.ufcg.edu.br'
+        luiz.institutions = []
+        luiz.follows = []
+        luiz.institutions_admin = []
+        luiz.notifications = []
+        luiz.posts = []
+        luiz.put()
+
+        # new User Ruan
+        ruan = User()
+        ruan.name = 'Ruan Silveira'
+        ruan.cpf = '089.675.908-65'
+        ruan.photo_url = ''
+        ruan.email = 'ruan.silveira@ccc.ufcg.edu.br '
+        ruan.institutions = []
+        ruan.follows = []
+        ruan.institutions_admin = []
+        ruan.notifications = []
+        ruan.posts = []
+        ruan.put()
+
+        # new User Tiago
+        tiago = User()
+        tiago.name = 'Tiago Pereira'
+        tiago.cpf = '089.675.908-65'
+        tiago.photo_url = ''
+        tiago.email = 'tiago.pereira@ccc.ufcg.edu.br'
+        tiago.institutions = []
+        tiago.follows = []
+        tiago.institutions_admin = []
+        tiago.notifications = []
+        tiago.posts = []
+        tiago.put()
+
 
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
         self.response.write('{"msg":"database initialized with a few users", "projetos_url":"http://localhost:8080/api/user"}')
@@ -84,7 +150,7 @@ class InitHandler(BaseHandler):
         certbio.email = 'certbio@ufcg.edu.br'
         certbio.phone_number = '(83) 3322 4455'
         certbio.members = [mayza.key, dalton.key]
-        certbio.followers = [jorge.key, mayza.key]
+        certbio.followers = [jorge.key, mayza.key, maiana.key, luiz.key, raoni.key, ruan.key, tiago.key]
         certbio.posts = []
         certbio.put()
 
@@ -102,7 +168,7 @@ class InitHandler(BaseHandler):
         splab.email = 'splab@ufcg.edu.br'
         splab.phone_number = '(83) 3322 7865'
         splab.members = [jorge.key, andre.key]
-        splab.followers = [jorge.key, andre.key]
+        splab.followers = [jorge.key, andre.key, maiana.key, luiz.key, raoni.key, ruan.key, tiago.key]
         splab.posts = []
         splab.put()
 
@@ -118,8 +184,8 @@ class InitHandler(BaseHandler):
         eciis.image_url = 'http://www.paho.org/bra/images/stories/BRA01A/logobireme.jpg'
         eciis.email = 'eciis@ufcg.edu.br'
         eciis.phone_number = '(83) 3322 7865'
-        eciis.members = [dalton.key, andre.key, jorge.key]
-        eciis.followers = [mayza.key, andre.key, jorge.key, dalton.key]
+        eciis.members = [dalton.key, andre.key, jorge.key, maiana.key, luiz.key, raoni.key, ruan.key, tiago.key]
+        eciis.followers = [mayza.key, andre.key, jorge.key, dalton.key, maiana.key, luiz.key, raoni.key, ruan.key, tiago.key]
         eciis.posts = []
         eciis.put()
 
@@ -128,19 +194,34 @@ class InitHandler(BaseHandler):
         self.response.write('{"msg":"database initialized with a few institutions", "projetos_url":"http://localhost:8080/api/institution"}')
         self.response.out.write("\n")
 
-        # Updating Institutions of Users Mayza and André
-        mayza.institutions = [certbio.key] 
-        mayza.follows = [splab.key, eciis.key, certbio.key] 
+        # Updating Institutions
+        mayza.institutions = [certbio.key]
+        mayza.follows = [splab.key, eciis.key, certbio.key]
         mayza.put()
-        andre.institutions = [splab.key, eciis.key] 
-        andre.follows = [splab.key, eciis.key] 
+        andre.institutions = [splab.key, eciis.key]
+        andre.follows = [splab.key, eciis.key]
         andre.put()
-        jorge.institutions = [splab.key, eciis.key] 
-        jorge.follows = [certbio.key, splab.key, eciis.key] 
+        jorge.institutions = [splab.key, eciis.key]
+        jorge.follows = [certbio.key, splab.key, eciis.key]
         jorge.put()
-        dalton.institutions = [eciis.key, certbio.key] 
-        dalton.follows = [splab.key, eciis.key] 
+        dalton.institutions = [eciis.key, certbio.key]
+        dalton.follows = [splab.key, eciis.key]
         dalton.put()
+        maiana.institutions = [eciis.key]
+        maiana.follows = [splab.key, eciis.key, certbio.key]
+        maiana.put()
+        luiz.institutions = [eciis.key]
+        luiz.follows = [splab.key, eciis.key, certbio.key]
+        luiz.put()
+        raoni.institutions = [eciis.key]
+        raoni.follows = [splab.key, eciis.key, certbio.key]
+        raoni.put()
+        ruan.institutions = [eciis.key]
+        ruan.follows = [splab.key, eciis.key, certbio.key]
+        ruan.put()
+        tiago.institutions = [eciis.key]
+        tiago.follows = [splab.key, eciis.key, certbio.key]
+        tiago.put()
 
         # POST of Mayza To Certbio Institution
         mayza_post = Post()

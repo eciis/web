@@ -6,7 +6,7 @@ import json
 from utils import login_required
 from utils import json_response
 
-from handlers.base import BaseHandler
+from handlers.base_handler import BaseHandler
 from models.post import Post
 
 

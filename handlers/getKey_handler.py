@@ -9,7 +9,7 @@ from utils import Utils
 from utils import login_required
 from utils import json_response
 
-from handlers.base import BaseHandler
+from handlers.base_handler import BaseHandler
 
 
 class GetKeyHandler(BaseHandler):

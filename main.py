@@ -13,12 +13,16 @@ from handlers.user_timeline_handler import UserTimelineHandler
 from handlers.erro_handler import ErroHandler
 from handlers.get_key_handler import GetKeyHandler
 
+methods = set(webapp2.WSGIApplication.allowed_methods)
+methods.add('PATCH')
+webapp2.WSGIApplication.allowed_methods = frozenset(methods)
 
 app = webapp2.WSGIApplication([
     ("/api", MainHandler),
     ("/api/institution/(.*)", InstitutionHandler),
     ("/api/key/(.*)", GetKeyHandler),
     ("/api/post", PostHandler),
+    ("/api/post/(.*)/like", PostHandler),
     ("/api/user", UserHandler),
     ("/api/user/timeline", UserTimelineHandler),
     ("/login", LoginHandler),

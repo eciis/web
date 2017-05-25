@@ -3,7 +3,7 @@
 
 from google.appengine.api import users
 
-from handlers.base import BaseHandler
+from handlers.base_handler import BaseHandler
 
 
 class LoginHandler(BaseHandler):

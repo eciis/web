@@ -9,9 +9,9 @@ from handlers.login_logout_handler import LoginHandler
 from handlers.login_logout_handler import LogoutHandler
 from handlers.user_handler import UserHandler
 from handlers.post_handler import PostHandler
-from handlers.userTimeline_handler import UserTimelineHandler
+from handlers.user_timeline_handler import UserTimelineHandler
 from handlers.erro_handler import ErroHandler
-from handlers.getKey_handler import GetKeyHandler
+from handlers.get_key_handler import GetKeyHandler
 
 
 app = webapp2.WSGIApplication([

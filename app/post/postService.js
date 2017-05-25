@@ -23,5 +23,10 @@
             });
             return deferred.promise;
         };
+
+
+        service.likePost = function likePost(post) {
+            console.log('Post liked');
+        };
     });
 })();

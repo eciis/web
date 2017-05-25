@@ -34,6 +34,11 @@
             });
         };
 
+        homeCtrl.likePost = function(post) {
+            PostService.likePost(post);
+        }
+
+
         loadPosts();
 
         $interval(loadPosts, 5000);

@@ -7,6 +7,7 @@ from utils import Utils
 from utils import login_required
 from utils import json_response
 from utils import is_institution_member
+from utils import is_author
 
 from handlers.base_handler import BaseHandler
 from models.post import Post
@@ -46,3 +47,19 @@ class PostHandler(BaseHandler):
             self.response.set_status(Utils.BAD_REQUEST)
             self.response.write(Utils.getJSONError(
                 Utils.BAD_REQUEST, error.message))
+
+    @login_required
+    @is_author
+    @ndb.transactional(xg=True)
+    def delete(self, user, key):
+        """Handle DELETE Requests."""
+        """Get the post and the institution from the datastore."""
+        post = key.get()
+
+        """Set the post's state to deleted."""
+        post.state = 'deleted'
+
+        """Update the post, the user and the institution in datastore."""
+        post.put()
+
+        self.response.set_status(200)

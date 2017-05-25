@@ -12,17 +12,20 @@
             }
         });
 
+        var intervalPromise;
+
         var loadPosts = function() {
             PostService.get().then(function success(response) {
                 homeCtrl.posts = response.data;
             }, function error(response) {
+                $interval.cancel(intervalPromise); // Cancel the interval promise that load posts in case of error
                 showToast(response.data.msg);
             });
         };
 
         loadPosts();
 
-        $interval(loadPosts, 5000);
+        intervalPromise = $interval(loadPosts, 5000);
 
         function showToast(msg) {
             $mdToast.show(

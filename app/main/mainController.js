@@ -1,7 +1,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("MainController", function MainController($mdSidenav, $mdDialog, $state, AuthService, PostService) {
+    app.controller("MainController", function MainController($mdSidenav, $mdDialog, $mdToast, $state, AuthService, PostService) {
         var mainCtrl = this;
 
         Object.defineProperty(mainCtrl, 'user', {
@@ -47,13 +47,19 @@
             mainCtrl.toggle();
         };
 
+        mainCtrl.isPostValid = function isPostValid(post) {
+            var post = new Post(post, mainCtrl.user.current_institution.key);
+            return post.isValid();
+        };
+
         mainCtrl.createPost = function createPost(data) {
             var post = new Post(data, mainCtrl.user.current_institution.key);
             if (post.isValid()) {
                 PostService.createPost(post).then(function success(response) {
                     showToast('Postado com sucesso!');
-                    mainCtrl.posts.push(response.data);
+                    $mdDialog.hide();
                 }, function error(response) {
+                    $mdDialog.hide();
                     showToast(response.data.msg);
                 });
             } else {
@@ -71,22 +77,11 @@
                 clickOutsideToClose:true,
                 openFrom: '#fab-new-post',
                 closeTo: angular.element(document.querySelector('#fab-new-post'))
-            }).then(function(answer) {
-                if (answer == 'send') {
-                    var post = new Post(data, mainCtrl.user.current_institution.key);
-                    if (post.isValid()) {
-                        PostService.createPost(post).then(
-                            function success(response) {
-                                showToast('Postado com sucesso!');
-                                mainCtrl.posts.push(response.data);
-                            }, function error(response) {
-                                showToast(response.data.msg);
-                        });
-                    } else {
-                        showToast('Post inválido!');
-                    }
-                }
             });
+        };
+
+        mainCtrl.cancelDialog = function() {
+            $mdDialog.hide();
         };
 
         function showToast(msg) {

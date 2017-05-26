@@ -18,7 +18,7 @@ class InstitutionFollowerHandler(BaseHandler):
 
     @json_response
     @login_required
-    def get(self, url_string):
+    def get(self, user, url_string):
         """Get all followers the institution."""
         institution_key = ndb.Key(urlsafe=url_string)
         institution = institution_key.get()
@@ -32,15 +32,11 @@ class InstitutionFollowerHandler(BaseHandler):
 
     @json_response
     @login_required
-    def post(self, url_string):
+    def post(self, user, url_string):
         """Add follower in the institution."""
         institution_key = ndb.Key(urlsafe=url_string)
         institution = institution_key.get()
         assert type(institution) is Institution, "Key is not an Institution"
-
-        from models.user import User
-        data = json.loads(self.request.body)
-        user = User.get_by_id(data["id"])
 
         user.add_followers(institution_key)
         institution.add_followers(user.key)

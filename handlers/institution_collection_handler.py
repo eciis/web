@@ -17,7 +17,7 @@ class InstitutionCollectionHandler(BaseHandler):
 
     @json_response
     @login_required
-    def get(self):
+    def get(self, user):
         """Get all institutions."""
         institution_collection = Institution.query().fetch()
         self.response.write(json.dumps(

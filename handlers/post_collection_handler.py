@@ -7,7 +7,6 @@ from utils import Utils
 from utils import login_required
 from utils import json_response
 from utils import is_institution_member
-from json_patch import JsonPatch
 
 from handlers.base_handler import BaseHandler
 from models.post import Post

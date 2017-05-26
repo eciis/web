@@ -25,20 +25,14 @@
         };
 
         service.likePost = function likePost(post) {
-            data = {
-                "op": "replace", 
-                "path": "/likes",
-                "value": "1"
-            };
             var deferred = $q.defer();
-            $http.patch('/api/post/' + post.key + '/like', data).then(function success(response) {
+            var data = {};
+            $http.post('/api/post/' + post.key + '/like', data).then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.resolve(response);
             })
             return deferred.promise;
         };
-
-        // TODO: create method to dislike
     });
 })();

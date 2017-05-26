@@ -36,7 +36,6 @@
         };
 
         homeCtrl.likePost = function(post) {
-
             PostService.likePost(post).then(function success(response) {
                 post.likes += 1;
                 post.liked = !post.liked;
@@ -44,8 +43,6 @@
                 showToast(response.data.msg);
             });
         };
-
-        // TODO: create method to dislike
 
         loadPosts();
 

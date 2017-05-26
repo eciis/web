@@ -29,6 +29,15 @@ def create_entity(entity_class, properties_values):
     return entity
 
 
+def list_insert(list, value, index):
+    """Insert element in list."""
+    top_list = -1
+    if index == top_list:
+        list.append(value)
+    else:
+        list.insert(index, value)
+
+
 def verify_entity(func):
     """Decorator for verify if value passed is dict.
 
@@ -163,7 +172,7 @@ class Add(Operation):
     @verify_entity
     def operation_in_list(self, value, entity_class, attribute_list, index):
         """Execute operation add in list."""
-        attribute_list.insert(index, value)
+        list_insert(attribute_list, value, index)
 
     @verify_entity
     def operation_in_attribute(self, value, entity_class, obj, attribute):
@@ -207,9 +216,8 @@ class Replace(Operation):
     @verify_entity
     def operation_in_list(self, value, entity_class, attribute_list, index):
         """Execute operation replace in list."""
-        # TODO vetificar problema de remocao do ultimo indice
-        attribute_list.insert(index, value)
         attribute_list.pop(index)
+        list_insert(attribute_list, value, index)
 
     @verify_entity
     def operation_in_attribute(self, value, entity_class, obj, attribute):

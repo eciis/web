@@ -18,9 +18,14 @@ class PostHandler(BaseHandler):
     @login_required
     def post(self, user, url_string):
         """Handle POST Requests."""
-        post = ndb.Key(urlsafe=url_string).get()
-        post.likes += 1
-        post.put()
+        if url_string not in user.liked_posts:
+            post = ndb.Key(urlsafe=url_string).get()
+            post.likes += 1
+            post.put()
+            user.liked_posts.append(url_string)
+            user.put()
+        else:
+            self.response.set_status(Utils.BAD_REQUEST)
 
     @json_response
     @login_required

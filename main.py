@@ -8,7 +8,6 @@ from handlers.institution_handler import InstitutionHandler
 from handlers.login_logout_handler import LoginHandler
 from handlers.login_logout_handler import LogoutHandler
 from handlers.user_handler import UserHandler
-from handlers.posts_handler import PostsHandler
 from handlers.post_handler import PostHandler
 from handlers.user_timeline_handler import UserTimelineHandler
 from handlers.erro_handler import ErroHandler
@@ -19,8 +18,7 @@ app = webapp2.WSGIApplication([
     ("/api", MainHandler),
     ("/api/institution/(.*)", InstitutionHandler),
     ("/api/key/(.*)", GetKeyHandler),
-    ("/api/post", PostsHandler),
-    ("/api/post/(.*)", PostHandler),
+    ("/api/post", PostHandler),
     ("/api/user", UserHandler),
     ("/api/user/timeline", UserTimelineHandler),
     ("/login", LoginHandler),

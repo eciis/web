@@ -191,7 +191,8 @@ def is_institution_member(method):
 def is_author(method):
     """Check if the user is the author of the post."""
     def check_author(self, user, key, *args):
-        post = key.get()
+        obj_key = ndb.Key(urlsafe=key)
+        post = obj_key.get()
         institution = post.institution.get()
         if not post or not institution:
             self.response.set_status(404)

@@ -13,7 +13,7 @@ from models.post import Post
 
 
 class PostCollectionHandler(BaseHandler):
-    """Post Handler."""
+    """Post  Collection Handler."""
 
     @json_response
     @login_required

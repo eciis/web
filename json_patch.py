@@ -198,12 +198,7 @@ class Remove(Operation):
             "Attribute %s not found" % attribute
         )
 
-        if isinstance(value, int):
-            actual_value = obj.__getattribute__(attribute)
-            value = actual_value - value
-            obj.__setattr__(attribute, value)
-        else:
-            obj.__delattr__(attribute)
+        obj.__delattr__(attribute)
 
 
 class Replace(Operation):
@@ -226,10 +221,6 @@ class Replace(Operation):
             not hasattr(obj, attribute),
             "Attribute %s not found" % attribute
         )
-
-        if isinstance(value, int):
-            actual_value = obj.__getattribute__(attribute)
-            value = actual_value + value
 
         obj.__setattr__(attribute, value)
 

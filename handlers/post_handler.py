@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Post  Collection Handler."""
+"""Post  Handler."""
 
 from google.appengine.ext import ndb
 
@@ -16,13 +16,15 @@ class PostHandler(BaseHandler):
 
     @json_response
     @login_required
+    @ndb.transactional(xg=True)
     def post(self, user, url_string):
         """Handle POST Requests."""
-        if url_string not in user.liked_posts:
-            post = ndb.Key(urlsafe=url_string).get()
+        post_key = ndb.Key(urlsafe=url_string)
+        if post_key not in user.liked_posts:
+            post = post_key.get()
             post.likes += 1
             post.put()
-            user.liked_posts.append(url_string)
+            user.liked_posts.append(post_key)
             user.put()
         else:
             self.response.set_status(Utils.BAD_REQUEST)

@@ -39,7 +39,7 @@ class User(ndb.Model):
     ]), default='pending')
 
     # Post likeds
-    liked_posts = ndb.StringProperty(repeated=True)
+    liked_posts = ndb.KeyProperty(kind="Post", repeated=True)
 
     @staticmethod
     def get_by_email(email):

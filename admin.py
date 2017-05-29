@@ -1,20 +1,26 @@
 # coding: utf-8
+"""Administrator Handlers."""
 import webapp2
 import logging
 
 from models.user import User
 from models.institution import Institution
 from models.post import Post
+from google.appengine.ext import ndb
 
 class BaseHandler(webapp2.RequestHandler):
+    """Base Handler."""
     def handle_exception(self, exception, debug):
+        """."""
         logging.error(str(exception))
         self.response.write("oops! %s\n" % str(exception))
 
 
 class InitHandler(BaseHandler):
-    def get(self):
+    """Init Handler."""
 
+    def get(self):
+        """Inicialize entities."""
         # new User Mayza
         mayza = User()
         mayza.name = 'Mayza Nunes'
@@ -60,7 +66,7 @@ class InitHandler(BaseHandler):
         dalton.cpf = '089.675.908-20'
         dalton.photo_url = 'https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/3/000/013/13e/08261fc.jpg'
         dalton.email = 'dalton@splab.ufcg.edu.br'
-        dalton.institutions = [] 
+        dalton.institutions = []
         dalton.follows = []
         dalton.institutions_admin = []
         dalton.notifications = []
@@ -132,9 +138,8 @@ class InitHandler(BaseHandler):
         tiago.posts = []
         tiago.put()
 
-
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-        self.response.write('{"msg":"database initialized with a few users", "projetos_url":"http://localhost:8080/api/user"}')
+        self.response.write('{"msg":"database initialized with a few users"}')
         self.response.out.write("\n")
 
         # new Institution CERTBIO with User Mayza like a member and User André like a follower
@@ -142,7 +147,7 @@ class InitHandler(BaseHandler):
         certbio.name = 'CERTBIO'
         certbio.cnpj = '18.104.068/0001-86'
         certbio.legal_nature = 'public'
-        certbio.address =  'Universidade Federal de Campina Grande'
+        certbio.address = 'Universidade Federal de Campina Grande'
         certbio.occupation_area = ''
         certbio.description = 'Ensaio Químico - Determinação de Material Volátil por \
             Gravimetria e Ensaio Biológico - Ensaio de Citotoxicidade'
@@ -189,9 +194,8 @@ class InitHandler(BaseHandler):
         eciis.posts = []
         eciis.put()
 
-
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-        self.response.write('{"msg":"database initialized with a few institutions", "projetos_url":"http://localhost:8080/api/institution"}')
+        self.response.write('{"msg":"database initialized with a few institutions"}')
         self.response.out.write("\n")
 
         # Updating Institutions
@@ -240,7 +244,6 @@ class InitHandler(BaseHandler):
         mayza_post_comIMG.institution = certbio.key
         mayza_post_comIMG.put()
 
-
         # POST of André To SPLAB Institution
         andre_post = Post()
         andre_post.title = "Novo edital do SPLAB"
@@ -274,11 +277,10 @@ class InitHandler(BaseHandler):
         jorge_post.institution = splab.key
         jorge_post.put()
 
-
         # POST of Jorge To e-CIIS Institution
         jorge_post_eCIIS = Post()
         jorge_post_eCIIS.title = "Post de Jorge no e-CIIS"
-        jorge_post_eCIIS.text = "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat."
+        jorge_post_eCIIS.text = "At vero eos et accusamus et iusto odio dignissimos ducimus quiblanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat."
         jorge_post_eCIIS.headerImage = "http://unef.edu.br/hotsite/wp-content/uploads/2016/04/EDITAL.jpg"
         jorge_post_eCIIS.author = jorge.key
         jorge_post_eCIIS.institution = eciis.key
@@ -307,12 +309,29 @@ class InitHandler(BaseHandler):
         splab.put()
 
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-        self.response.write('{"msg":"database initialized with a few posts", "projetos_url":"http://localhost:8080/api/post"}')
+        self.response.write('{"msg":"database initialized with a few posts"}')
         self.response.out.write("\n")
+
+
+class RemoveAllHandler(BaseHandler):
+    """Remove all Entities Handler."""
+
+    def get(self):
+        """Clean the Datastore."""
+        users = User.query().fetch(keys_only=True)
+        ndb.delete_multi(users)
+        posts = Post.query().fetch(keys_only=True)
+        ndb.delete_multi(posts)
+        institutions = Institution.query().fetch(keys_only=True)
+        ndb.delete_multi(institutions)
+
+        self.response.write('Datastore cleaned')
 
 app = webapp2.WSGIApplication([
     ('/admin/init', InitHandler),
+    ('/admin/removeAll', RemoveAllHandler),
 ], debug=True)
+
 
 def erro404(request, response, exception):
     response.write("url invalida: " + str(exception))

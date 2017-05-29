@@ -186,3 +186,20 @@ def is_institution_member(method):
             self.response.write(Utils.getJSONError(
                 Utils.FORBIDDEN, "User is not a member of this Institution"))
     return check_members
+
+    def is_author(method):
+        """Check if the user is the author of the post."""
+        def check_author(self, user, key, *args):
+            obj_key = ndb.Key(urlsafe=key)
+            post = obj_key.get()
+            institution = post.institution.get()
+            if not post or not institution:
+                self.response.set_status(404)
+            if not post.author == user.key:
+                if not institution.admin == user.key:
+                    self.response.set_status(Utils.FORBIDDEN)
+                    self.response.write(Utils.getJSONError(
+                        Utils.FORBIDDEN, "User is not the post's author"))
+            else:
+                method(self, user, key, *args)
+        return check_author

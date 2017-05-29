@@ -38,6 +38,9 @@ class User(ndb.Model):
         'inactive'
     ]), default='pending')
 
+    # Post likeds
+    liked_posts = ndb.StringProperty(repeated=True)
+
     @staticmethod
     def get_by_email(email):
         """Get user by email."""

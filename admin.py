@@ -85,7 +85,7 @@ class InitHandler(BaseHandler):
         raoni.name = 'Raoni Smaneoto'
         raoni.cpf = '089.675.908-65'
         raoni.photo_url = ''
-        raoni.email = 'raoni.smaneoto@ccc.ufcg.edu.br '
+        raoni.email = 'raoni.smaneoto@ccc.ufcg.edu.br'
         raoni.institutions = []
         raoni.follows = []
         raoni.institutions_admin = []
@@ -111,7 +111,7 @@ class InitHandler(BaseHandler):
         ruan.name = 'Ruan Silveira'
         ruan.cpf = '089.675.908-65'
         ruan.photo_url = ''
-        ruan.email = 'ruan.silveira@ccc.ufcg.edu.br '
+        ruan.email = 'ruan.silveira@ccc.ufcg.edu.br'
         ruan.institutions = []
         ruan.follows = []
         ruan.institutions_admin = []

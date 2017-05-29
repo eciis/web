@@ -17,7 +17,7 @@
                 .clickOutsideToClose(true)
                 .title('Excluir Post')
                 .textContent('Este post será excluído e desaparecerá para os usuários que seguem a instituição.')
-                .ariaLabel('Delete')
+                .ariaLabel('Delete post')
                 .targetEvent(ev)
                 .ok('Excluir')
                 .cancel('Cancelar');
@@ -34,9 +34,10 @@
             });
         };
 
-        homeCtrl.isAuthor = function isAuthor(post) {
-            if (post.author_key == homeCtrl.user.key 
-                && _.find(homeCtrl.user.institutions, ['key', post.institution_key])) {
+        homeCtrl.isAuthorized = function isAuthorized(post) {
+            if ((post.author_key == homeCtrl.user.key 
+                && _.find(homeCtrl.user.institutions, ['key', post.institution_key]))
+                || _.find(homeCtrl.user.institutions_admin, ['key', post.institution_key])) {
                 return true;
             };
             return false;

@@ -52,3 +52,8 @@ class Institution(ndb.Model):
         'active',
         'inactive'
     ]), default='pending')
+
+    def add_followers(self, follow):
+        """Add one follow in followers."""
+        self.followers.append(follow)
+        self.put()

@@ -29,7 +29,6 @@
         var loadPosts = function() {
             PostService.get().then(function success(response) {
                 homeCtrl.posts = response.data;
-                setLikedAttr(homeCtrl.posts);
             }, function error(response) {
                 showToast(response.data.msg);
             });
@@ -37,11 +36,26 @@
 
         homeCtrl.likePost = function(post) {
             PostService.likePost(post).then(function success(response) {
-                post.likes += 1;
-                post.liked = !post.liked;
+                addPostKeyToUser(post.key);
             }, function error(response) {
                 showToast(response.data.msg);
             });
+        };
+
+        homeCtrl.isLikedByUser = function isLikedByUser(post) {
+            var likedPosts = homeCtrl.user ? homeCtrl.user.liked_posts : [];
+            var likedPostsKeys = _.map(likedPosts, getKeyFromUrl);
+            return _.includes(likedPostsKeys, post.key);
+        };
+
+        function addPostKeyToUser(key) {
+            homeCtrl.user.liked_posts.push("http://localhost:8080/api/key/" + key);
+        };
+
+        function getKeyFromUrl(url) {
+            var splitedUrl = url.split("http://localhost:8080/api/key/");
+            var key = splitedUrl[1];
+            return key;
         };
 
         loadPosts();
@@ -57,12 +71,6 @@
                     .hideDelay(5000)
                     .position('bottom right')
             );
-        };
-
-        function setLikedAttr(posts) {
-            _.map(posts, function(post) {
-                _.assign(post, {liked: false});
-            });
         };
     });
 })();

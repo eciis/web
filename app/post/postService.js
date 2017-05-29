@@ -30,7 +30,7 @@
             $http.post('/api/post/' + post.key + '/like', data).then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
-                deferred.resolve(response);
+                deferred.reject(response);
             })
             return deferred.promise;
         };

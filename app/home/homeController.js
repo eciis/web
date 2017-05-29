@@ -12,12 +12,12 @@
             }
         });
 
-        homeCtrl.deletePost(ev, post) {
+        homeCtrl.deletePost = function deletePost(ev, post) {
             var confirm = $mdDialog.confirm()
                 .clickOutsideToClose(true)
                 .title('Excluir Post')
                 .textContent('Este post será excluído definitivamente.')
-                .arialLabel('Lucky day')
+                .ariaLabel('Lucky day')
                 .targetEvent(ev)
                 .ok('Excluir')
                 .cancel('Cancelar');
@@ -32,6 +32,14 @@
             }, function() {
                 showToast('Cancelado');
             });
+        };
+
+        homeCtrl.isAuthor = function isAuthor(post) {
+            if (post.author_key == homeCtrl.user.key 
+                && _.find(homeCtrl.user.institutions, ['key', post.institution_key])) {
+                return true;
+            };
+            return false;
         };
 
         var intervalPromise;

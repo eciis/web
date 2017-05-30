@@ -1,3 +1,5 @@
+'use strict';
+
 (function() {
     'use strict';
     var app = angular.module("app");
@@ -54,6 +56,33 @@
                 showToast(response.data.msg);
             });
         };
+
+        homeCtrl.likePost = function(post) {
+            PostService.likePost(post).then(function success() {
+                addPostKeyToUser(post.key);
+            }, function error(response) {
+                showToast(response.data.msg);
+            });
+        };
+
+        homeCtrl.isLikedByUser = function isLikedByUser(post) {
+            var likedPosts = homeCtrl.user ? homeCtrl.user.liked_posts : [];
+            var likedPostsKeys = _.map(likedPosts, getKeyFromUrl);
+            return _.includes(likedPostsKeys, post.key);
+        };
+
+        function addPostKeyToUser(key) {
+            homeCtrl.user.liked_posts.push(key);
+        }
+
+        function getKeyFromUrl(url) {
+            var key = url;
+            if(url.indexOf("/api/key/") != -1) {
+                var splitedUrl = url.split("/api/key/");
+                key = splitedUrl[1];
+            }
+            return key;
+        }
 
         loadPosts();
 

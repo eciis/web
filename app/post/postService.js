@@ -1,5 +1,6 @@
+'use strict';
+
 (function() {
-    'use strict';
     var app = angular.module("app");
 
     app.service("PostService", function PostService($http, $q) {
@@ -18,6 +19,17 @@
         service.createPost = function createPost(post) {
             var deferred = $q.defer();
             $http.post("/api/post", post).then(function success(response) {
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+            return deferred.promise;
+        };
+
+        service.likePost = function likePost(post) {
+            var deferred = $q.defer();
+            var data = {};
+            $http.post('/api/post/' + post.key + '/like', data).then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);

@@ -258,7 +258,9 @@ class InitHandler(BaseHandler):
         mayza_post_comIMG = Post()
         mayza_post_comIMG.title = "Post do CERTBIO com imagem"
         mayza_post_comIMG.headerImage = "https://workingatbooking.com/content/uploads/2017/04/womenintech_heroimage.jpg"
-        mayza_post_comIMG.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent maximus id est in dapibus. Fusce lorem libero, vulputate quis purus maximus, auctor tempus enim. Sed."
+        mayza_post_comIMG.text = "Lorem ipsum dolor sit amet, consectetur \
+        adipiscing elit. Praesent maximus id est in dapibus. Fusce lorem \
+        libero, vulputate quis purus maximus, auctor tempus enim. Sed."
         mayza_post_comIMG.author = mayza.key
         mayza_post_comIMG.institution = certbio.key
         mayza_post_comIMG.put()
@@ -266,7 +268,19 @@ class InitHandler(BaseHandler):
         # POST of André To SPLAB Institution
         andre_post = Post()
         andre_post.title = "Novo edital do SPLAB"
-        andre_post.text = "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat."
+        andre_post.text = "At vero eos et accusamus et iusto odio dignissimos \
+        ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti \
+        quos dolores et quas molestias excepturi sint occaecati cupiditate non\
+        provident, similique sunt in culpa qui officia deserunt mollitia animi\
+        id est laborum et dolorum fuga. Et harum quidem rerum facilis est et\
+        expedita distinctio. Nam libero tempore, cum soluta nobis est eligen\
+        i optio cumque nihil impedit quo minus  quod maxime placeat facere \
+        possimus, omnis voluptas assumenda est, omnis dolor repellendus. \
+        Temporibus autem quibusdam et aut officiis debitis aut rerum necessi\
+        tatibus saepe eveniet ut et voluptates repudiandae sint et molestiae\
+        non recusandae. Itaque earum rerum hic tenetur a sapiente delectus,\
+        ut aut reiciendis voluptatibus maiores alias consequatur aut perf\
+        erendis doloribus asperiores repellat."
         andre_post.author = andre.key
         andre_post.institution = splab.key
         andre_post.put()
@@ -274,7 +288,19 @@ class InitHandler(BaseHandler):
         # POST of Dalton To e-CIIS Institution
         dalton_post = Post()
         dalton_post.title = "Post de Dalton no SPLAB"
-        dalton_post.text = "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat."
+        dalton_post.text = "At vero eos et accusamus et iusto odio dignissimos \
+        ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti \
+        quos dolores  quas molestias excepturi sint occaecati cupiditate non \
+        provident, similique sunt  culpa qui officia deserunt mollitia animi,\
+        id est laborum et dolorum fuga. Et harum quidem rerum facilis est et \
+        expedita distinctio. Nam libero tempore, c soluta nobis est eligendi\
+        optio cumque nihil impedit quo minus id quod maxime placeat facere \
+        possimus, omnis voluptas assumenda est, omnis dolor repellendus.\
+        Temporibusautem quibusdam et aut officiis debitis aut rerum necessitat\
+        ibus saepe eveniet ut et voluptates repudiandae sint et molestiae non \
+        recusandae. Itaque earum rerum hic tenetur sapiente delectus, ut aut \
+        reiciendis voluptatibus maiores alias consequatur aut perferendis dolo\
+        ribus asperiores repellat."
         dalton_post.headerImage = "http://noticias.universia.com.br/net/images/consejos-profesionales/l/le/lei/leia-gratuitamente-livros-alcancar-sucesso-noticias.jpg"
         dalton_post.author = dalton.key
         dalton_post.institution = splab.key
@@ -299,7 +325,19 @@ class InitHandler(BaseHandler):
         # POST of Jorge To e-CIIS Institution
         jorge_post_eCIIS = Post()
         jorge_post_eCIIS.title = "Post de Jorge no e-CIIS"
-        jorge_post_eCIIS.text = "At vero eos et accusamus et iusto odio dignissimos ducimus quiblanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat."
+        jorge_post_eCIIS.text = "At vero eos et accusamus et iusto odio dignis\
+        simos ducimus quiblanditiis praesentium voluptatum deleniti atque corr\
+        pti quos dolores et quas molestias excepturi sint occaecati cupiditate\
+        non provident, similique sunt in culpa qui officia deserunt mollitia \
+        animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis e\
+        et expedita distinctio. Nam libero tempore, cum soluta nobis est elige\
+        ndi optio cumque nihil impedit quo minus id quod maxime placeat facere\
+        possimus, omnis voluptas assumenda est, omnis dolor repellendus. \
+        Temporibus autem quibusdam et aut officiis debitis aut rerum necessit\
+        atibus saepe eveniet ut et voluptates repudiandae sint et molestiae \
+        non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, \
+        ut aut reiciendis voluptatibus maiores alias consequatur aut perferend\
+        is doloribus asperiores repellat."
         jorge_post_eCIIS.headerImage = "http://unef.edu.br/hotsite/wp-content/uploads/2016/04/EDITAL.jpg"
         jorge_post_eCIIS.author = jorge.key
         jorge_post_eCIIS.institution = eciis.key
@@ -326,7 +364,6 @@ class InitHandler(BaseHandler):
 
         splab.posts = [jorge_post.key, andre_post.key]
         splab.put()
-
 
         jsonList.append("database initialized with a few posts")
         response = {'msg': jsonList}

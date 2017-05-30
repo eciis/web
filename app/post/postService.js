@@ -1,7 +1,9 @@
+'use strict';
+
 (function() {
     var app = angular.module("app");
 
-    app.service("PostService", function PostService($http, $q, AuthService) {
+    app.service("PostService", function PostService($http, $q) {
         var service = this;
 
         service.get = function getPosts() {
@@ -31,7 +33,7 @@
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);
-            })
+            });
             return deferred.promise;
         };
     });

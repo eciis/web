@@ -1,3 +1,5 @@
+'use strict';
+
 (function() {
     var app = angular.module("app");
 
@@ -35,7 +37,7 @@
         };
 
         homeCtrl.likePost = function(post) {
-            PostService.likePost(post).then(function success(response) {
+            PostService.likePost(post).then(function success() {
                 addPostKeyToUser(post.key);
             }, function error(response) {
                 showToast(response.data.msg);
@@ -50,13 +52,13 @@
 
         function addPostKeyToUser(key) {
             homeCtrl.user.liked_posts.push("http://localhost:8080/api/key/" + key);
-        };
+        }
 
         function getKeyFromUrl(url) {
             var splitedUrl = url.split("http://localhost:8080/api/key/");
             var key = splitedUrl[1];
             return key;
-        };
+        }
 
         loadPosts();
 
@@ -71,6 +73,6 @@
                     .hideDelay(5000)
                     .position('bottom right')
             );
-        };
+        }
     });
 })();

@@ -32,6 +32,8 @@ class PostHandler(BaseHandler):
         """Update the post, the user and the institution in datastore."""
         post.put()
 
+    @json_response
+    @login_required
     @ndb.transactional(xg=True)
     def post(self, user, url_string):
         """Handle POST Requests.

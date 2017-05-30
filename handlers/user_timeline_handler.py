@@ -6,7 +6,7 @@ import json
 from utils import login_required
 from utils import json_response
 
-from handlers.base import BaseHandler
+from handlers.base_handler import BaseHandler
 from models.post import Post
 
 
@@ -22,7 +22,8 @@ class UserTimelineHandler(BaseHandler):
         """
         queryPosts = Post.query(Post.institution.IN(
             user.follows)).order(Post.publication_date)
+        publishedPosts = queryPosts.filter(Post.state == "published")
 
-        array = [Post.make(post) for post in queryPosts]
+        array = [Post.make(post) for post in publishedPosts]
 
         self.response.write(json.dumps(array))

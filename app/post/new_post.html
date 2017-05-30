@@ -1,0 +1,34 @@
+<md-card flex="100">
+  <md-card-header>
+    <md-card-avatar>
+      <img src="{{ postCtrl.user.current_institution.image_url }}" class="md-user-avatar"/>
+    </md-card-avatar>
+    <md-card-header-text>
+      <span class="md-title">{{ postCtrl.user.current_institution.name }}</span>
+      <span class="md-subhead">por {{ postCtrl.user.name }}</span>
+    </md-card-header-text>
+  </md-card-header>
+  <md-card-content layout="column">
+    <md-input-container>
+      <label>Título</label>
+      <input ng-model="postCtrl.post.title" md-maxlength="30" maxlength="30" placeholder="Escreva aqui uma nova publicação">
+    </md-input-container>
+    <md-input-container ng-show="postCtrl.post.title">
+      <label>Mensagem</label>
+      <textarea ng-model="postCtrl.post.text" md-maxlength="150" rows="4" md-select-on-focus
+        maxlength="150" required="true"></textarea>
+    </md-input-container>
+  </md-card-content>
+  <md-dialog-actions layout="row" ng-show="postCtrl.post.title">
+    <span flex></span>
+    <md-button ng-click="postCtrl.createPost(postCtrl.post)" ng-disabled="!postCtrl.isPostValid()">
+      Enviar
+    </md-button>
+    <md-button ng-click="postCtrl.cancelDialog()" ng-if="postCtrl.isDialog">
+      Cancelar
+    </md-button>
+    <md-button ng-click="postCtrl.clearPost()" ng-if="!postCtrl.isDialog">
+      Limpar
+    </md-button>
+  </md-dialog-actions>
+</md-card>

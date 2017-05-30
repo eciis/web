@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Post Handler."""
+"""Post  Collection Handler."""
 
 from google.appengine.ext import ndb
 import json
@@ -8,12 +8,12 @@ from utils import login_required
 from utils import json_response
 from utils import is_institution_member
 
-from handlers.base import BaseHandler
+from handlers.base_handler import BaseHandler
 from models.post import Post
 
 
-class PostHandler(BaseHandler):
-    """Post Handler."""
+class PostCollectionHandler(BaseHandler):
+    """Post  Collection Handler."""
 
     @json_response
     @login_required

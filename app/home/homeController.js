@@ -1,9 +1,10 @@
 'use strict';
 
 (function() {
+    'use strict';
     var app = angular.module("app");
 
-    app.controller("HomeController", function HomeController(PostService, AuthService, $interval, $mdToast) {
+    app.controller("HomeController", function HomeController(PostService, AuthService, $interval, $mdToast, $mdDialog) {
         var homeCtrl = this;
         
         homeCtrl.posts = [];
@@ -14,24 +15,44 @@
             }
         });
 
-        homeCtrl.createPost = function createPost(data) {
-            var post = new Post(data, homeCtrl.user.current_institution.key);
-            if (post.isValid()) {
-                PostService.createPost(post).then(function success(response) {
-                    showToast('Postado com sucesso!');
-                    homeCtrl.posts.push(response.data);
+        homeCtrl.deletePost = function deletePost(ev, post) {
+            var confirm = $mdDialog.confirm()
+                .clickOutsideToClose(true)
+                .title('Excluir Post')
+                .textContent('Este post será excluído e desaparecerá para os usuários que seguem a instituição.')
+                .ariaLabel('Deletar postagem')
+                .targetEvent(ev)
+                .ok('Excluir')
+                .cancel('Cancelar');
+
+            $mdDialog.show(confirm).then(function() {
+                PostService.deletePost(post).then(function success() {
+                    _.remove(homeCtrl.posts, foundPost => foundPost.author_key === post.author_key);
+                    showToast('Post excluído com sucesso');
                 }, function error(response) {
                     showToast(response.data.msg);
                 });
-            } else {
-                showToast('Post inválido!');
-            }
+            }, function() {
+                showToast('Cancelado');
+            });
         };
+
+        homeCtrl.isAuthorized = function isAuthorized(post) {
+            if ((post.author_key == homeCtrl.user.key && 
+                _.find(homeCtrl.user.institutions, ['key', post.institution_key])) || 
+                _.find(homeCtrl.user.institutions_admin, ['key', post.institution_key])) {
+                return true;
+            }
+            return false;
+        };
+
+        var intervalPromise;
 
         var loadPosts = function() {
             PostService.get().then(function success(response) {
                 homeCtrl.posts = response.data;
             }, function error(response) {
+                $interval.cancel(intervalPromise); // Cancel the interval promise that load posts in case of error
                 showToast(response.data.msg);
             });
         };
@@ -65,7 +86,7 @@
 
         loadPosts();
 
-        $interval(loadPosts, 5000);
+        intervalPromise = $interval(loadPosts, 5000);
 
         function showToast(msg) {
             $mdToast.show(

@@ -38,9 +38,20 @@ class User(ndb.Model):
         'inactive'
     ]), default='pending')
 
+    # Post likeds
+    liked_posts = ndb.KeyProperty(kind="Post", repeated=True)
+
     @staticmethod
     def get_by_email(email):
         """Get user by email."""
         query = User.query(User.email == email)
         user = query.get()
         return user
+
+    def like_post(self, post):
+        """Method to give like in post."""
+        if post.key not in self.liked_posts:
+            post.likes += 1
+            post.put()
+            self.liked_posts.append(post.key)
+            self.put()

@@ -11,7 +11,7 @@ from utils import json_response
 
 from models.institution import Institution
 
-from handlers.base import BaseHandler
+from handlers.base_handler import BaseHandler
 
 
 class InstitutionHandler(BaseHandler):

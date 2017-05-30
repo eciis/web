@@ -36,5 +36,15 @@
             });
             return deferred.promise;
         };
+
+        service.deletePost = function deletePost(post) {
+            var deferred = $q.defer();
+            $http.delete("/api/post/" + post.key).then(function success(response) {
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+            return deferred.promise;
+        };
     });
 })();

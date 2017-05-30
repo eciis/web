@@ -2,16 +2,18 @@
 """Administrator Handlers."""
 import webapp2
 import logging
+import json
 
 from models.user import User
 from models.institution import Institution
 from models.post import Post
 from google.appengine.ext import ndb
 
+
 class BaseHandler(webapp2.RequestHandler):
     """Base Handler."""
     def handle_exception(self, exception, debug):
-        """."""
+        """Exception."""
         logging.error(str(exception))
         self.response.write("oops! %s\n" % str(exception))
 
@@ -21,6 +23,7 @@ class InitHandler(BaseHandler):
 
     def get(self):
         """Inicialize entities."""
+        jsonList = []
         # new User Mayza
         mayza = User()
         mayza.name = 'Mayza Nunes'
@@ -51,7 +54,8 @@ class InitHandler(BaseHandler):
         jorge = User()
         jorge.name = 'Jorge Abrantes'
         jorge.cpf = '089.675.908-10'
-        jorge.photo_url = 'http://www.ceei.ufcg.edu.br/_/rsrc/1472854148636/AssessoriadeComunicacao/noticias/iforumdegestoresdaufcg/0003.jpg?height=150&width=200'
+        jorge.photo_url = 'http://www.ceei.ufcg.edu.br/_/rsrc/1472854148636/\
+        AssessoriadeComunicacao/noticias/iforumdegestoresdaufcg/0003.jpg?height=150&width=200'
         jorge.email = 'abrantes@dsc.ufcg.edu.br'
         jorge.institutions = []
         jorge.follows = []
@@ -139,8 +143,7 @@ class InitHandler(BaseHandler):
         tiago.put()
 
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-        self.response.write('{"msg":"database initialized with a few users"}')
-        self.response.out.write("\n")
+        jsonList.append("database initialized with a few users")
 
         # new Institution CERTBIO with User Mayza like a member and User André like a follower
         certbio = Institution()
@@ -157,6 +160,7 @@ class InitHandler(BaseHandler):
         certbio.members = [mayza.key, dalton.key]
         certbio.followers = [jorge.key, mayza.key, maiana.key, luiz.key, raoni.key, ruan.key, tiago.key]
         certbio.posts = []
+        certbio.admin = mayza.key
         certbio.put()
 
         # new Institution SPLAB with User André like a member and User Mayza like a follower
@@ -175,6 +179,7 @@ class InitHandler(BaseHandler):
         splab.members = [jorge.key, andre.key]
         splab.followers = [jorge.key, andre.key, maiana.key, luiz.key, raoni.key, ruan.key, tiago.key]
         splab.posts = []
+        splab.admin = jorge.key
         splab.put()
 
         eciis = Institution()
@@ -192,24 +197,26 @@ class InitHandler(BaseHandler):
         eciis.members = [dalton.key, andre.key, jorge.key, maiana.key, luiz.key, raoni.key, ruan.key, tiago.key]
         eciis.followers = [mayza.key, andre.key, jorge.key, dalton.key, maiana.key, luiz.key, raoni.key, ruan.key, tiago.key]
         eciis.posts = []
+        eciis.admin = dalton.key
         eciis.put()
 
-        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-        self.response.write('{"msg":"database initialized with a few institutions"}')
-        self.response.out.write("\n")
+        jsonList.append("database initialized with a few institutions")
 
         # Updating Institutions
         mayza.institutions = [certbio.key]
         mayza.follows = [splab.key, eciis.key, certbio.key]
+        mayza.institutions_admin = [certbio.key]
         mayza.put()
         andre.institutions = [splab.key, eciis.key]
         andre.follows = [splab.key, eciis.key]
         andre.put()
         jorge.institutions = [splab.key, eciis.key]
         jorge.follows = [certbio.key, splab.key, eciis.key]
+        jorge.institutions_admin = [splab.key]
         jorge.put()
         dalton.institutions = [eciis.key, certbio.key]
         dalton.follows = [splab.key, eciis.key]
+        dalton.institutions_admin = [eciis.key]
         dalton.put()
         maiana.institutions = [eciis.key]
         maiana.follows = [splab.key, eciis.key, certbio.key]
@@ -230,7 +237,19 @@ class InitHandler(BaseHandler):
         # POST of Mayza To Certbio Institution
         mayza_post = Post()
         mayza_post.title = "Novo edital do CERTBIO"
-        mayza_post.text = "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat."
+        mayza_post.text = "At vero eos et accusamus et iusto odio dignissimos \
+        ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti \
+        quos dolores et quas molestias excepturi sint occaecati cupiditate \
+        non provident, similique sunt in culpa qui officia deserunt mollitia \
+        id est laborum et dolorum fuga. Et harum quidem rerum facilis est et \
+        xpedita distinctio. Nam libero tempore, cum soluta nobis est eligendi \
+        optio cumque nihil impedit quo minus id quod maxime placeat facere \
+        possimus, omnis voluptas assumenda est, omnis dolor repellendus. \
+        emporibus autem quibusdam et aut officiis debitis aut rerum \
+        necessitatibus saepe eveniet ut et voluptates repudiandae sint \
+        et molestiae non recusandae. Itaque earum rerum hic tenetur sapiente \
+        delectus, ut aut reiciendis voluptatibus maiores alias consequatur \
+        aut perferendis doloribus asperiores repellat."
         mayza_post.author = mayza.key
         mayza_post.institution = certbio.key
         mayza_post.put()
@@ -308,8 +327,10 @@ class InitHandler(BaseHandler):
         splab.posts = [jorge_post.key, andre_post.key]
         splab.put()
 
-        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-        self.response.write('{"msg":"database initialized with a few posts"}')
+
+        jsonList.append("database initialized with a few posts")
+        response = {'msg': jsonList}
+        self.response.write(json.dumps(response))
         self.response.out.write("\n")
 
 
@@ -318,14 +339,23 @@ class RemoveAllHandler(BaseHandler):
 
     def get(self):
         """Clean the Datastore."""
+        jsonList = []
         users = User.query().fetch(keys_only=True)
         ndb.delete_multi(users)
+        jsonList.append("all users deleted from database")
+
         posts = Post.query().fetch(keys_only=True)
         ndb.delete_multi(posts)
+        jsonList.append("all posts deleted from database")
+
         institutions = Institution.query().fetch(keys_only=True)
         ndb.delete_multi(institutions)
+        jsonList.append("all institutions deleted from database")
 
-        self.response.write('Datastore cleaned')
+        response = {'msg': jsonList}
+        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+        self.response.write(json.dumps(response))
+        self.response.out.write("\n")
 
 app = webapp2.WSGIApplication([
     ('/admin/init', InitHandler),

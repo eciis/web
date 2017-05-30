@@ -1,7 +1,8 @@
 (function() {
+    'use strict';
     var app = angular.module("app");
 
-    app.controller("HomeController", function HomeController(PostService, AuthService, $interval, $mdToast) {
+    app.controller("HomeController", function HomeController(PostService, AuthService, $interval, $mdToast, $mdDialog) {
         var homeCtrl = this;
         
         homeCtrl.posts = [];
@@ -11,6 +12,37 @@
                 return AuthService.user;
             }
         });
+
+        homeCtrl.deletePost = function deletePost(ev, post) {
+            var confirm = $mdDialog.confirm()
+                .clickOutsideToClose(true)
+                .title('Excluir Post')
+                .textContent('Este post será excluído e desaparecerá para os usuários que seguem a instituição.')
+                .ariaLabel('Deletar postagem')
+                .targetEvent(ev)
+                .ok('Excluir')
+                .cancel('Cancelar');
+
+            $mdDialog.show(confirm).then(function() {
+                PostService.deletePost(post).then(function success() {
+                    _.remove(homeCtrl.posts, foundPost => foundPost.author_key === post.author_key);
+                    showToast('Post excluído com sucesso');
+                }, function error(response) {
+                    showToast(response.data.msg);
+                });
+            }, function() {
+                showToast('Cancelado');
+            });
+        };
+
+        homeCtrl.isAuthorized = function isAuthorized(post) {
+            if ((post.author_key == homeCtrl.user.key && 
+                _.find(homeCtrl.user.institutions, ['key', post.institution_key])) || 
+                _.find(homeCtrl.user.institutions_admin, ['key', post.institution_key])) {
+                return true;
+            }
+            return false;
+        };
 
         var intervalPromise;
 

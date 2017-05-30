@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Institution Follower."""
+"""Institution Follower Handler."""
 
 import json
 
@@ -14,15 +14,17 @@ from handlers.base_handler import BaseHandler
 
 
 class InstitutionFollowerHandler(BaseHandler):
-    """Institution Collection."""
+    """Institution Follower Handler."""
 
     @json_response
     @login_required
-    def get(self, user, url_string):
+    def get(self, url_string):
         """Get all followers the institution."""
         institution_key = ndb.Key(urlsafe=url_string)
         institution = institution_key.get()
-        assert type(institution) is Institution, "Key is not an Institution"
+
+        if(not type(institution) is Institution):
+            raise Exception("Key is not an Institution")
 
         followers = institution.followers
 
@@ -36,7 +38,9 @@ class InstitutionFollowerHandler(BaseHandler):
         """Add follower in the institution."""
         institution_key = ndb.Key(urlsafe=url_string)
         institution = institution_key.get()
-        assert type(institution) is Institution, "Key is not an Institution"
+
+        if(not type(institution) is Institution):
+            raise Exception("Key is not an Institution")
 
         user.add_followers(institution_key)
         institution.add_followers(user.key)

@@ -53,7 +53,8 @@ class Institution(ndb.Model):
         'inactive'
     ]), default='pending')
 
-    def add_followers(self, follow):
-        """Add one follow in followers."""
-        self.followers.append(follow)
-        self.put()
+    def follow(self, user):
+        """Add one user in collection of followers."""
+        if(not (user in self.followers)):
+            self.followers.append(user)
+            self.put()

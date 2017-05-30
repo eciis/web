@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Institution Collection."""
+"""Institution Collection Handler."""
 
 import json
 
@@ -13,7 +13,7 @@ from handlers.base_handler import BaseHandler
 
 
 class InstitutionCollectionHandler(BaseHandler):
-    """Institution Collection."""
+    """Institution Collection Handler."""
 
     @json_response
     @login_required

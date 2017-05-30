@@ -45,8 +45,8 @@ class User(ndb.Model):
         user = query.get()
         return user
 
-    def add_followers(self, follow):
-        """ Add one follow in collection of followers."""
-        self.follows.append(follow)
-        self.put()
-        return self.follows
+    def follow(self, institution):
+        """Add one institution in collection of follows."""
+        if(not (institution in self.follows)):
+            self.follows.append(institution)
+            self.put()

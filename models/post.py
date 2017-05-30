@@ -68,5 +68,8 @@ class Post(ndb.Model):
             'headerImage': post.headerImage,
             'state': post.state,
             'comments': post.comments,
-            'publication_date': publication_date
+            'publication_date': publication_date,
+            'author_key': author.key.urlsafe(),
+            'institution_key': institution.key.urlsafe(),
+            'key': post.key.urlsafe()
         }

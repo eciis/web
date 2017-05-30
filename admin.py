@@ -143,7 +143,7 @@ class InitHandler(BaseHandler):
         tiago.put()
 
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-        jsonList.append("database initialized with a few users")
+        jsonList.append({"msg": "database initialized with a few users"})
 
         # new Institution CERTBIO with User Mayza like a member and User André like a follower
         certbio = Institution()
@@ -200,7 +200,8 @@ class InitHandler(BaseHandler):
         eciis.admin = dalton.key
         eciis.put()
 
-        jsonList.append("database initialized with a few institutions")
+        jsonList.append({"msg": "database initialized with a few institutions"})
+
 
         # Updating Institutions
         mayza.institutions = [certbio.key]
@@ -365,9 +366,9 @@ class InitHandler(BaseHandler):
         splab.posts = [jorge_post.key, andre_post.key]
         splab.put()
 
-        jsonList.append("database initialized with a few posts")
-        response = {'msg': jsonList}
-        self.response.write(json.dumps(response))
+        jsonList.append({"msg": "database initialized with a few posts"})
+
+        self.response.write(json.dumps(jsonList))
         self.response.out.write("\n")
 
 
@@ -376,21 +377,17 @@ class RemoveAllHandler(BaseHandler):
 
     def get(self):
         """Clean the Datastore."""
-        jsonList = []
         users = User.query().fetch(keys_only=True)
         ndb.delete_multi(users)
-        jsonList.append("all users deleted from database")
 
         posts = Post.query().fetch(keys_only=True)
         ndb.delete_multi(posts)
-        jsonList.append("all posts deleted from database")
 
         institutions = Institution.query().fetch(keys_only=True)
         ndb.delete_multi(institutions)
-        jsonList.append("all institutions deleted from database")
 
-        response = {'msg': jsonList}
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+        response = {"msg": "Datastore Cleaned"}
         self.response.write(json.dumps(response))
         self.response.out.write("\n")
 

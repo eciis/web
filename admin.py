@@ -369,7 +369,6 @@ class InitHandler(BaseHandler):
         jsonList.append({"msg": "database initialized with a few posts"})
 
         self.response.write(json.dumps(jsonList))
-        self.response.out.write("\n")
 
 
 class RemoveAllHandler(BaseHandler):
@@ -389,7 +388,7 @@ class RemoveAllHandler(BaseHandler):
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
         response = {"msg": "Datastore Cleaned"}
         self.response.write(json.dumps(response))
-        self.response.out.write("\n")
+
 
 app = webapp2.WSGIApplication([
     ('/admin/init', InitHandler),

@@ -51,12 +51,15 @@
         };
 
         function addPostKeyToUser(key) {
-            homeCtrl.user.liked_posts.push("http://localhost:8080/api/key/" + key);
+            homeCtrl.user.liked_posts.push(key);
         }
 
         function getKeyFromUrl(url) {
-            var splitedUrl = url.split("http://localhost:8080/api/key/");
-            var key = splitedUrl[1];
+            var key = url;
+            if(url.indexOf("/api/key/") != -1) {
+                var splitedUrl = url.split("/api/key/");
+                key = splitedUrl[1];
+            }
             return key;
         }
 

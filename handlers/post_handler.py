@@ -5,7 +5,7 @@ from google.appengine.ext import ndb
 import json
 from utils import Utils
 from utils import login_required
-from utils import is_author
+from utils import is_authorized
 from utils import json_response
 
 from handlers.base_handler import BaseHandler
@@ -16,7 +16,7 @@ from handlers.base_handler import BaseHandler
 
     @json_response
     @login_required
-    @is_author
+    @is_authorized
     @ndb.transactional(xg=True)
     def delete(self, user, key):
         """Handle DELETE Requests."""

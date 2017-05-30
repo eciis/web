@@ -20,7 +20,7 @@ def create_json_patch(operation, path, value=None):
 
 
 class User(object):
-    """Pseudo class for tests."""
+    """class for using in tests."""
 
     def __init__(self, name, age, description=None):
         """Constructor of class User."""
@@ -48,11 +48,13 @@ class TestJsonPatch(unittest.TestCase):
     def test_add(self):
         """Test operation add in JsonPatch."""
         # Add attribute  registration in user
+        self.assertFalse(hasattr(self.user, 'registration'))
         json = create_json_patch('add', '/registration', '11112121')
         self.json_patch.load(json, self.user)
         self.assertEqual(self.user.registration, '11112121')
 
         # Add new email at the end of the email list of user
+        self.assertTrue('fernan.luizsilva@hotmail.com' not in self.user.emails)
         json = create_json_patch('add', '/emails/-', 'fernan.luizsilva@hotmail.com')
         self.json_patch.load(json, self.user)
         self.assertEqual(self.user.emails, [
@@ -62,6 +64,7 @@ class TestJsonPatch(unittest.TestCase):
         ])
 
         # Add new email in list emails of user in a specific index
+        self.assertTrue('fernan.luizsilva@facebook.com' not in self.user.emails)
         json = create_json_patch('add', '/emails/1', 'fernan.luizsilva@facebook.com')
         self.json_patch.load(json, self.user)
         self.assertEqual(self.user.emails, [
@@ -72,6 +75,7 @@ class TestJsonPatch(unittest.TestCase):
         ])
 
         # Add new email in list emails of user in a specific index
+        self.assertTrue('fernan.luizsilva@outlook.com' not in self.user.emails)
         json = create_json_patch('add', '/emails/0', 'fernan.luizsilva@outlook.com')
         self.json_patch.load(json, self.user)
         self.assertEqual(self.user.emails, [

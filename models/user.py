@@ -47,3 +47,11 @@ class User(ndb.Model):
         query = User.query(User.email == email)
         user = query.get()
         return user
+
+    def like_post(self, post):
+        """Method to give like in post."""
+        if post.key not in self.liked_posts:
+            post.likes += 1
+            post.put()
+            self.liked_posts.append(post.key)
+            self.put()

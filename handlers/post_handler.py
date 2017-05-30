@@ -18,16 +18,12 @@ class PostHandler(BaseHandler):
     @login_required
     @ndb.transactional(xg=True)
     def post(self, user, url_string):
-        """Handle POST Requests."""
-        post_key = ndb.Key(urlsafe=url_string)
-        if post_key not in user.liked_posts:
-            post = post_key.get()
-            post.likes += 1
-            post.put()
-            user.liked_posts.append(post_key)
-            user.put()
-        else:
-            self.response.set_status(Utils.BAD_REQUEST)
+        """Handle POST Requests.
+
+        This method is only meant to give like in post
+        """
+        post = ndb.Key(urlsafe=url_string).get()
+        user.like_post(post)
 
     @json_response
     @login_required

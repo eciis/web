@@ -18,7 +18,7 @@
                 .clickOutsideToClose(true)
                 .title('Excluir Post')
                 .textContent('Este post será excluído e desaparecerá para os usuários que seguem a instituição.')
-                .ariaLabel('Delete post')
+                .ariaLabel('Deletar postagem')
                 .targetEvent(ev)
                 .ok('Excluir')
                 .cancel('Cancelar');

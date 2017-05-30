@@ -86,6 +86,13 @@
             </md-button>
           </md-card-icon-actions>
         </md-card-actions>
+        <md-button md-no-ink class="md-primary" ng-click = "mainCtrl.getInstitutions()">Instituições</md-button>
+        <div ng-if="mainCtrl.institutions.length > 0 ">
+          <md-list-item ng-repeat="institution in mainCtrl.institutions" ng-click="null" class="noright">
+            <p>{{institution.name}}</p>
+            </md-list-item>
+          </md-list>
+        </div>
       </md-card>
     </div>
 

@@ -1,8 +1,11 @@
+var mainCtrl
 (function() {
     var app = angular.module('app');
 
-    app.controller("MainController", function MainController($mdSidenav, $mdDialog, $mdToast, $state, AuthService, PostService) {
-        var mainCtrl = this;
+    app.controller("MainController", function MainController($mdSidenav, $mdDialog, $mdToast, $state, AuthService, PostService, InstitutionService) {
+        mainCtrl = this;
+
+        mainCtrl.institutions = [];
 
         Object.defineProperty(mainCtrl, 'user', {
             get: function() {
@@ -58,6 +61,15 @@
                 openFrom: '#fab-new-post',
                 closeTo: angular.element(document.querySelector('#fab-new-post'))
             });
-        };        
+        };
+
+        mainCtrl.getInstitutions = function(){
+            InstitutionService.getInstitutions().then(function sucess(response){
+                mainCtrl.institutions = response.data;
+            }, function error(){
+
+            });
+        };
+
     });
 })();

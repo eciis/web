@@ -18,7 +18,7 @@ class InstitutionFollowerHandler(BaseHandler):
 
     @json_response
     @login_required
-    def get(self, url_string):
+    def get(self, user, url_string):
         """Get all followers the institution."""
         institution_key = ndb.Key(urlsafe=url_string)
         institution = institution_key.get()

@@ -14,8 +14,8 @@ from json_patch import JsonPatch
 from handlers.base_handler import BaseHandler
 
 
-  class PostHandler(BaseHandler):
-      """Post Handler."""
+class PostHandler(BaseHandler):
+    """Post Handler."""
 
     @login_required
     @is_authorized
@@ -27,10 +27,10 @@ from handlers.base_handler import BaseHandler
         post = obj_key.get()
 
         """Set the post's state to deleted."""
-       post.state = 'deleted'
+        post.state = 'deleted'
 
         """Update the post, the user and the institution in datastore."""
-       post.put()
+        post.put()
 
     @ndb.transactional(xg=True)
     def post(self, user, url_string):

@@ -3,3 +3,7 @@ indexes:
   properties:
   - name: institution
   - name: publication_date
+- kind: Post
+  properties:
+  - name: state
+  - name: publication_date

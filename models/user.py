@@ -52,7 +52,8 @@ class User(ndb.Model):
         """Add one institution in collection of follows."""
         if(not (institution in self.follows)):
             self.follows.append(institution)
-            
+            self.put()
+
     def like_post(self, post):
         """Method to give like in post."""
         if post.key not in self.liked_posts:

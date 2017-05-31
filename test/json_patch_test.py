@@ -172,3 +172,42 @@ class TestOperantionReplace(TestJsonPatch):
             self.json_patch.load(json, self.user)
         self.assertEqual(str(ex.exception), "Value can not be None")
         self.assertEqual(self.user.name, "Luiz")
+
+    def test_replace_attr_nonexistent(self):
+        """Replace attribute nonexitent."""
+        self.assertFalse(hasattr(self.user, "registration"))
+        json = create_json_patch("replace", "/registration", "11221212")
+        with self.assertRaises(PatchException) as ex:
+            self.json_patch.load(json, self.user)
+        self.assertEqual(str(ex.exception), "Attribute registration not found")
+
+
+class TestOperationRemove(TestJsonPatch):
+    """Class of test operation remove."""
+
+    def test_rm_simple_value(self):
+        """Remove attribute name in user."""
+        self.assertTrue(hasattr(self.user, 'name'))
+        json = create_json_patch("remove", "/name")
+        self.json_patch.load(json, self.user)
+        self.assertFalse(hasattr(self.user, 'name'))
+
+    def test_rm_in_list(self):
+        """Remove email in list emails."""
+        self.assertListEqual(self.user.emails, [
+            "luiz.silva@ccc.ufcg.edu.br",
+            "fernan.luizsilva@gmail.com"
+        ])
+        json = create_json_patch("remove", "/emails/-")
+        self.json_patch.load(json, self.user)
+        self.assertListEqual(self.user.emails, [
+            "luiz.silva@ccc.ufcg.edu.br"
+        ])
+
+    def test_rm_attr_nonexistent(self):
+        """Remove attribute nonexistent."""
+        self.assertFalse(hasattr(self.user, "registration"))
+        json = create_json_patch("remove", "/registration", "11221212")
+        with self.assertRaises(PatchException) as ex:
+            self.json_patch.load(json, self.user)
+        self.assertEqual(str(ex.exception), "Attribute registration not found")

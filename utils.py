@@ -5,6 +5,7 @@ import datetime
 from google.appengine.api import users
 from google.appengine.ext import ndb
 from google.appengine.ext.ndb import Key
+from exceptions.exception import NotAuthorizedException
 
 from models.user import User
 from models.institution import Institution
@@ -195,11 +196,13 @@ def is_authorized(method):
         post = obj_key.get()
         institution = post.institution.get()
         if not post or not institution:
-            raise Exception('Post or institution is invalid')
+            raise NotAuthorizedException('Post or institution is invalid')
         if user.key not in institution.members:
-            raise Exception('User is not a member of this institution')
+            raise NotAuthorizedException(
+                'User is not a member of this institution')
         if (not post.author == user.key and
            not institution.admin == user.key):
-                raise Exception('User is not allowed to remove this post')
+                raise NotAuthorizedException(
+                    'User is not allowed to remove this post')
         method(self, user, key, *args)
     return check_authorization

@@ -6,23 +6,26 @@ import sys
 sys.path.append("../")
 
 from json_patch import JsonPatch
+from json_patch import PatchException
 
 
 def create_json_patch(operation, path, value=None):
     """Create string of json patch."""
-    json_patch = '[{"op": "%s", "path": "%s", ' % (operation, path)
+    json_patch = '[{"op": "%s", "path": "%s"' % (operation, path)
 
     if isinstance(value, str):
-        json_patch += '"value": "%s"}]' % (value)
+        json_patch += ', "value": "%s"}]' % (value)
+    elif value is not None:
+        json_patch += ', "value": %s}]' % (str(value))
     else:
-        json_patch += '"value": %s}]' % (str(value))
+        json_patch += '}]'
     return json_patch
 
 
 class User(object):
     """class for using in tests."""
 
-    def __init__(self, name, age, description=None):
+    def __init__(self, name=None, age=None, description=None):
         """Constructor of class User."""
         self.name = name
         self.age = age
@@ -52,6 +55,13 @@ class TestJsonPatch(unittest.TestCase):
         json = create_json_patch('add', '/registration', '11112121')
         self.json_patch.load(json, self.user)
         self.assertEqual(self.user.registration, '11112121')
+
+        # Add attribute  user2 in user
+        self.assertFalse(hasattr(self.user, 'user2'))
+        json = '[{"op": "add", "path": "/user2", "value": {"age": 23, "name": "Maiza"}}]'
+        self.json_patch.load(json, self.user, User)
+        self.assertEqual(self.user.user2.name, 'Maiza')
+        self.assertEqual(self.user.user2.age, 23)
 
         # Add new email at the end of the email list of user
         self.assertTrue('fernan.luizsilva@hotmail.com' not in self.user.emails)
@@ -85,3 +95,26 @@ class TestJsonPatch(unittest.TestCase):
             "fernan.luizsilva@gmail.com",
             "fernan.luizsilva@hotmail.com"
         ])
+
+    def test_add_err(self):
+        """Test error in operation add."""
+        # Add attribute  registration in user
+        self.assertFalse(hasattr(self.user, 'registration'))
+        json = create_json_patch('add', '/registration', '11112121')
+        self.json_patch.load(json, self.user)
+        self.assertEqual(self.user.registration, '11112121')
+
+        # Adding existing attribute in user
+        self.assertTrue(hasattr(self.user, 'registration'))
+        json = create_json_patch('add', '/registration', '22222222')
+        with self.assertRaises(PatchException) as ex:
+            self.json_patch.load(json, self.user)
+        self.assertEqual(str(ex.exception), "Attribute registration already exists")
+        self.assertEqual(self.user.registration, '11112121')
+
+        #  Trying to add None
+        self.assertFalse(hasattr(self.user, 'user2'))
+        json = '[{"op": "add", "path": "/user2"}]'
+        with self.assertRaises(PatchException) as ex:
+            self.json_patch.load(json, self.user)
+        self.assertEqual(str(ex.exception), "Value can not be None")

@@ -130,6 +130,12 @@ class Utils():
             return Utils.toJson(out, loadkey=loadkey, host=host)
         return entity
 
+    @staticmethod
+    def _assert(condition, msg, exception):
+        """Check the condition, if true, raise an generic exception."""
+        if condition:
+            raise exception(msg)
+
 
 def login_required(method):
     """Handle required login."""
@@ -204,14 +210,14 @@ def is_authorized(method):
         obj_key = ndb.Key(urlsafe=key)
         post = obj_key.get()
         institution = post.institution.get()
-        if not post or not institution:
-            raise NotAuthorizedException('Post or institution is invalid')
-        if user.key not in institution.members:
-            raise NotAuthorizedException(
-                'User is not a member of this institution')
-        if (not post.author == user.key and
-           not institution.admin == user.key):
-                raise NotAuthorizedException(
-                    'User is not allowed to remove this post')
+        Utils._assert(not post or not institution,
+                      'Post or institution is invalid', NotAuthorizedException)
+        Utils._assert(user.key not in institution.members,
+                      'User is not a member of this institution',
+                      NotAuthorizedException)
+        Utils._assert(not post.author == user.key and not
+                      institution.admin == user.key,
+                      'User is not allowed to remove this post',
+                      NotAuthorizedException)
         method(self, user, key, *args)
     return check_authorization

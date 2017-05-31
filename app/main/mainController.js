@@ -1,10 +1,9 @@
-var mainCtrl
-(function() {
+ (function() {
     var app = angular.module('app');
 
     app.controller("MainController", function MainController($mdSidenav, $mdDialog, $mdToast, $state, AuthService, PostService, InstitutionService) {
-        mainCtrl = this;
-
+        var mainCtrl = this;
+        mainCtrl.expanded = false;
         mainCtrl.institutions = [];
 
         Object.defineProperty(mainCtrl, 'user', {
@@ -63,13 +62,27 @@ var mainCtrl
             });
         };
 
-        mainCtrl.getInstitutions = function(){
+        getInstitutions = function(){
             InstitutionService.getInstitutions().then(function sucess(response){
                 mainCtrl.institutions = response.data;
-            }, function error(){
-
             });
         };
 
+        mainCtrl.expand = function expand(){
+            mainCtrl.expanded = true;
+            if(mainCtrl.institutions.length  === 0){
+                getInstitutions();
+            }
+        };
+
+        mainCtrl.hide = function hide(){
+            mainCtrl.expanded = false;
+        };
+
+        mainCtrl.follow = function follow(institution_key){
+           InstitutionService.follow(institution_key).then(function sucess(response){
+                //TODO
+            }); 
+        }
     });
 })();

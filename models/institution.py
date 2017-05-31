@@ -55,6 +55,6 @@ class Institution(ndb.Model):
 
     def follow(self, user):
         """Add one user in collection of followers."""
-        if(not (user in self.followers)):
+        if user not in self.followers:
             self.followers.append(user)
             self.put()

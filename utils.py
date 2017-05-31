@@ -196,6 +196,8 @@ def is_authorized(method):
         institution = post.institution.get()
         if not post or not institution:
             raise Exception('Post or institution is invalid')
+        if user.key not in institution.members:
+            raise Exception('User is not a member of this institution')
         if not post.author == user.key:
             if not institution.admin == user.key:
                 raise Exception('User is not allowed to remove this post')

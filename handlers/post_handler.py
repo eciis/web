@@ -1,18 +1,35 @@
 # -*- coding: utf-8 -*-
-"""Post  Handler."""
+"""Post Handler."""
 
 from google.appengine.ext import ndb
 
 from utils import Utils
 from utils import login_required
+from utils import is_authorized
 from utils import json_response
+
 from json_patch import JsonPatch
+
 
 from handlers.base_handler import BaseHandler
 
 
 class PostHandler(BaseHandler):
     """Post Handler."""
+
+    @login_required
+    @is_authorized
+    def delete(self, user, key):
+        """Handle DELETE Requests."""
+        """Get the post from the datastore."""
+        obj_key = ndb.Key(urlsafe=key)
+        post = obj_key.get()
+
+        """Set the post's state to deleted."""
+        post.state = 'deleted'
+
+        """Update the post, the user and the institution in datastore."""
+        post.put()
 
     @json_response
     @login_required
@@ -22,8 +39,14 @@ class PostHandler(BaseHandler):
 
         This method is only meant to give like in post
         """
+        action = self.request.url.split('/')[-1]
         post = ndb.Key(urlsafe=url_string).get()
-        user.like_post(post)
+        if action == 'like':
+            post.like()
+            user.like_post(post.key)
+        if action == 'deslike':
+            post.deslike()
+            user.deslike_post(post.key)
 
     @json_response
     @login_required

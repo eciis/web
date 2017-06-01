@@ -44,7 +44,7 @@ class PostHandler(BaseHandler):
         if action == 'like':
             post.like()
             user.like_post(post)
-        else:
+        if action == 'deslike':
             post.deslike()
             user.deslike_post(post)
 

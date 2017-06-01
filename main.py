@@ -13,6 +13,7 @@ from handlers.post_handler import PostHandler
 from handlers.user_timeline_handler import UserTimelineHandler
 from handlers.erro_handler import ErroHandler
 from handlers.get_key_handler import GetKeyHandler
+from handlers.post_comment_handler import PostCommentHandler
 
 methods = set(webapp2.WSGIApplication.allowed_methods)
 methods.add('PATCH')
@@ -24,6 +25,7 @@ app = webapp2.WSGIApplication([
     ("/api/key/(.*)", GetKeyHandler),
     ("/api/post", PostCollectionHandler),
     ("/api/post/(.*)/like", PostHandler),
+    ("/api/post/(.*)/comment", PostCommentHandler),
     ("/api/post/(.*)", PostHandler),
     ("/api/user", UserHandler),
     ("/api/user/timeline", UserTimelineHandler),

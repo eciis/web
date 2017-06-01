@@ -26,7 +26,7 @@ class Post(ndb.Model):
 
     # Comments of the post
     # Concurrency controlled by Transactions
-    comments = ndb.JsonProperty(repeated=True)
+    comments = ndb.LocalStructuredProperty(kind="Comment", repeated=True)
 
     # Date and time of a creation of a post
     publication_date = ndb.DateTimeProperty(auto_now_add=True)
@@ -73,3 +73,37 @@ class Post(ndb.Model):
             'institution_key': institution.key.urlsafe(),
             'key': post.key.urlsafe()
         }
+
+    def add_comment(self, comment):
+        """Add a comment to the post."""
+        self.comments.append(comment.key)
+        self.put()
+
+
+class Comment(ndb.Model):
+    """Model of a Comment."""
+
+    # comment's text
+    text = ndb.StringProperty(required=True)
+
+    # date and time of the comment creation
+    publication_date = ndb.DateTimeProperty(auto_now_add=True)
+
+    # user who is the author
+    author = ndb.KeyProperty(kind="User", required=True)
+
+    # post that is being commented
+    post = ndb.KeyProperty(kind="Post", required=True)
+
+    @staticmethod
+    def create(data, author, post):
+        """Create a comment and check required fields."""
+        if not data['text']:
+            raise Exception("Field text can not be empty")
+
+        comment = Comment()
+        comment.text = data['text']
+        comment.author = author
+        comment.post = post
+
+        return comment

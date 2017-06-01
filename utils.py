@@ -2,7 +2,6 @@
 import json
 import datetime
 
-
 from google.appengine.api import users
 from google.appengine.ext import ndb
 from google.appengine.ext.ndb import Key
@@ -211,7 +210,7 @@ def is_authorized(method):
         post = obj_key.get()
         institution = post.institution.get()
         Utils._assert(not post or not institution,
-                      'Post or institution is invalid', NotAuthorizedException)
+                      'Post or institution is invalid', Exception)
         Utils._assert(user.key not in institution.members,
                       'User is not a member of this institution',
                       NotAuthorizedException)

@@ -162,10 +162,7 @@ class Add(Operation):
     @verify_entity
     def operation_in_list(self, value, entity_class, attribute_list, index):
         """Execute operation add in list."""
-        _assert(
-            value is None,
-            "Value can not be None"
-        )
+        _assert(value is None, "Value can not be None")
         list_insert(attribute_list, value, index)
 
     @verify_entity
@@ -175,10 +172,7 @@ class Add(Operation):
             hasattr(obj, attribute),
             "Attribute %s already exists" % attribute
         )
-        _assert(
-            value is None,
-            "Value can not be None"
-        )
+        _assert(value is None, "Value can not be None")
         obj.__setattr__(attribute, value)
 
 
@@ -205,10 +199,7 @@ class Replace(Operation):
     @verify_entity
     def operation_in_list(self, value, entity_class, attribute_list, index):
         """Execute operation replace in list."""
-        _assert(
-            value is None,
-            "Value can not be None"
-        )
+        _assert(value is None, "Value can not be None")
         attribute_list.pop(index)
         list_insert(attribute_list, value, index)
 
@@ -219,10 +210,7 @@ class Replace(Operation):
             not hasattr(obj, attribute),
             "Attribute %s not found" % attribute
         )
-        _assert(
-            value is None,
-            "Value can not be None"
-        )
+        _assert(value is None, "Value can not be None")
 
         obj.__setattr__(attribute, value)
 

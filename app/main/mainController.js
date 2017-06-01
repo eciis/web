@@ -1,7 +1,9 @@
+'use strict';
+
 (function() {
     var app = angular.module('app');
 
-    app.controller("MainController", function MainController($mdSidenav, $mdDialog, $mdToast, $state, AuthService, PostService) {
+    app.controller("MainController", function MainController($mdSidenav, $mdDialog, $mdToast, $state, AuthService) {
         var mainCtrl = this;
 
         Object.defineProperty(mainCtrl, 'user', {
@@ -45,19 +47,6 @@
         mainCtrl.goTo = function goTo(state) {
             $state.go(state);
             mainCtrl.toggle();
-        };
-
-        mainCtrl.newPost = function(event) {
-            $mdDialog.show({
-                controller: "MainController",
-                controllerAs: "mainCtrl",
-                templateUrl: 'main/post_dialog.html',
-                parent: angular.element(document.body),
-                targetEvent: event,
-                clickOutsideToClose:true,
-                openFrom: '#fab-new-post',
-                closeTo: angular.element(document.querySelector('#fab-new-post'))
-            });
         };        
     });
 })();

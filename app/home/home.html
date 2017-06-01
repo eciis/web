@@ -1,45 +1,119 @@
-<create-post user="homeCtrl.user"></create-post>
+<md-content layout="row" md-colors="{background: 'grey-200'}" layout-align="center">
 
-<md-divider flex></md-divider>
+  <!-- CONTENT -->
+  <div flex-gt-lg="80" flex-lg="90" layout="row" layout-wrap layout-align="center">
+    
+    <!-- LEFT SIDE PANEL -->
+    <div flex-gt-md="20" flex-md="25" layout="column" hide show-gt-sm>
+      <md-card>
+        <md-card-header>
+          <md-card-avatar>
+            <img src="{{ homeCtrl.user.image }}" class="md-user-avatar"/>
+          </md-card-avatar>
+          <md-card-header-text>
+            <span class="md-title">{{ homeCtrl.user.name }}</span>
+            <span class="md-subhead">{{ homeCtrl.user.current_institution.name }}</span>
+          </md-card-header-text>
+        </md-card-header>
+        <img ng-src="https://media.licdn.com/media/AAEAAQAAAAAAAAOzAAAAJDA4NDJiOTY0LWY0ZjEtNDI0MS05YWFiLWVmMTczYzc2ZmRjZQ.jpg" class="md-card-image">
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline">Meu Perfil</span>
+          </md-card-title-text>
+        </md-card-title>
+        <md-card-actions layout="row">
+          <md-card-icon-actions>
+            <md-button class="md-icon-button" aria-label="Favorite">
+              <md-icon>favorite</md-icon>
+            </md-button>
+            <md-button class="md-icon-button" aria-label="Share">
+              <md-icon>share</md-icon>
+            </md-button>
+          </md-card-icon-actions>
+        </md-card-actions>
+      </md-card>
+    </div>
 
-<md-card ng-repeat="post in homeCtrl.posts | orderBy:'$index':true">
-  <md-card-header>
-    <md-card-avatar>
-      <img src="{{ post.institution_image }}" class="md-user-avatar"/>
-    </md-card-avatar>
-    <md-card-header-text>
-      <span class="md-title">{{ post.institution_name }}</span>
-      <span class="md-subhead">por {{ post.author }} em {{ post.publication_date | date:'dd-MM-yyyy' }}</span>
-    </md-card-header-text>
-  </md-card-header>
-  <img ng-src="{{ post.headerImage }}" class="md-card-image">
-  <md-card-title>
-    <md-card-title-text>
-      <span class="md-headline">{{post.title}}</span>
-    </md-card-title-text>
-  </md-card-title>
-  <md-card-content>
-    <p>
-      {{post.text}}
-    </p>
-  </md-card-content>
-  <md-card-actions layout="row" layout-align="end center">
-    <span class="md-caption" ng-show="time">{{ post.publication_date | date:'dd-MM-yyyy HH:mm:ss' }}</span>
-    <md-button ng-if="homeCtrl.isAuthorized(post)" class="md-icon-button" arial-label="Delete" ng-click="homeCtrl.deletePost($event, post)">
-      <md-icon>delete</md-icon>
+    <!-- TIMELINE -->
+    <div flex-gt-md="60" flex-md="75" layout="column" md-colors="{background: 'grey-200'}">
+      <div flex>
+        <md-card ng-repeat="post in homeCtrl.posts | orderBy:'date':true">
+          <md-card-header>
+            <md-card-avatar>
+              <img src="{{ post.institution_image }}" class="md-user-avatar"/>
+            </md-card-avatar>
+            <md-card-header-text>
+              <span class="md-title">{{ post.institution_name }}</span>
+              <span class="md-subhead">por {{ post.author }} em {{ post.publication_date | date:'dd-MM-yyyy' }}</span>
+            </md-card-header-text>
+          </md-card-header>
+          <img ng-src="{{ post.headerImage }}" class="md-card-image">
+          <md-card-title>
+            <md-card-title-text>
+              <span class="md-headline">{{post.title}}</span>
+            </md-card-title-text>
+          </md-card-title>
+          <md-card-content>
+            <p>
+              {{post.text}}
+            </p>
+          </md-card-content>
+          <md-card-actions layout="row" layout-align="end center">
+            <span class="md-caption" ng-show="time">{{ post.publication_date | date:'dd-MM-yyyy HH:mm:ss' }}</span>
+            <md-button ng-if="homeCtrl.isAuthorized(post)" class="md-icon-button" arial-label="Delete" ng-click="homeCtrl.deletePost($event, post)">
+              <md-icon>delete</md-icon>
+            </md-button>
+            <md-button class="md-icon-button" aria-label="Data" ng-click="time = !time;">
+              <md-icon>access_time</md-icon>
+            </md-button>
+            <md-button class="md-icon-button" aria-label="Favorite" ng-click="homeCtrl.likePost(post)"
+              ng-class="homeCtrl.isLikedByUser(post)?'md-warn':''">
+              <md-icon>grade</md-icon>
+            </md-button>
+            <md-button class="md-icon-button" aria-label="Settings">
+              <md-icon>menu</md-icon>
+            </md-button>
+            <md-button class="md-icon-button" aria-label="Share">
+              <md-icon>share_arrow</md-icon>
+            </md-button>
+          </md-card-actions>
+        </md-card>
+      </div>
+    </div>
+
+    <!-- RIGHT SIDE PANEL -->
+    <div flex-gt-md="20" layout-padding laoyout="row" md-colors="{background: 'grey-200'}" hide-xs hide-sm >
+      <div layout="column">
+
+        <!-- UPPER PANEL -->
+        <div class="padded" md-whiteframe flex="40" layout-align="center center"></div>
+
+        <hr/>
+
+        <!-- MIDDLE PANEL -->
+        <div class="padded" md-whiteframe flex="20" layout-align="center center"></div>
+
+        <hr/>
+        
+        <!-- COPYRIGHT FOOTER -->
+        <div class="padded">
+          <hr/>
+          <md-content  md-colors="{background: 'grey-200'}">
+            <p align="center" class="md-body-1">
+              <small class="md-caption">
+                e-CIIS - OMS/OPAS © 2017 
+              </small>
+            </p>
+          </md-content>
+        </div>
+      </div>
+    </div>
+  </div>
+</md-content>
+<md-fab-speed-dial id="fab-new-post" class="md-fab-bottom-right">
+  <md-fab-trigger> 
+    <md-button aria-label="menu" class="md-fab md-primary" ng-click="homeCtrl.newPost()">
+      <md-icon>add</md-icon>
     </md-button>
-    <md-button class="md-icon-button" aria-label="Data" ng-click="time = !time;">
-      <md-icon>access_time</md-icon>
-    </md-button>
-    <md-button class="md-icon-button" aria-label="Favorite" ng-click="homeCtrl.likePost(post)"
-      ng-class="homeCtrl.isLikedByUser(post)?'md-warn':''">
-      <md-icon>grade</md-icon>
-    </md-button>
-    <md-button class="md-icon-button" aria-label="Settings">
-      <md-icon>menu</md-icon>
-    </md-button>
-    <md-button class="md-icon-button" aria-label="Share">
-      <md-icon>share_arrow</md-icon>
-    </md-button>
-  </md-card-actions>
-</md-card>
+  </md-fab-trigger>
+</md-fab-speed-dial>

@@ -105,5 +105,18 @@
                     .position('bottom right')
             );
         }
+
+        homeCtrl.newPost = function newPost(event) {
+            $mdDialog.show({
+                controller: "HomeController",
+                controllerAs: "ctrl",
+                templateUrl: 'home/post_dialog.html',
+                parent: angular.element(document.body),
+                targetEvent: event,
+                clickOutsideToClose:true,
+                openFrom: '#fab-new-post',
+                closeTo: angular.element(document.querySelector('#fab-new-post'))
+            });
+        };
     });
 })();

@@ -14,6 +14,17 @@
             }
         });
 
+        var intervalPromise;
+
+        var loadPosts = function loadPosts() {
+            PostService.get().then(function success(response) {
+                homeCtrl.posts = response.data;
+            }, function error(response) {
+                $interval.cancel(intervalPromise); // Cancel the interval promise that load posts in case of error
+                showToast(response.data.msg);
+            });
+        };
+
         homeCtrl.deletePost = function deletePost(ev, post) {
             var confirm = $mdDialog.confirm()
                 .clickOutsideToClose(true)
@@ -39,39 +50,47 @@
         homeCtrl.isAuthorized = function isAuthorized(post) {
             if ((post.author_key == homeCtrl.user.key && 
                 _.find(homeCtrl.user.institutions, ['key', post.institution_key])) || 
-                _.includes(getKeysFromUrlArray(homeCtrl.user.institutions_admin), post.institution_key)) {
+                _.includes(_.map(homeCtrl.user.institutions_admin, getKeyFromUrl), post.institution_key)) {
                 return true;
             }
             return false;
         };
 
-        var intervalPromise;
-
-        var loadPosts = function() {
-            PostService.get().then(function success(response) {
-                homeCtrl.posts = response.data;
-            }, function error(response) {
-                $interval.cancel(intervalPromise); // Cancel the interval promise that load posts in case of error
-                showToast(response.data.msg);
-            });
+        homeCtrl.likeOrDeslikePost = function likeOrDeslikePost(post) {
+            if(!homeCtrl.isLikedByUser(post)) {
+                likePost(post);
+            } else {
+                deslikePost(post);
+            }
         };
 
-        homeCtrl.likePost = function(post) {
+        function likePost(post) {
             PostService.likePost(post).then(function success() {
                 addPostKeyToUser(post.key);
             }, function error(response) {
                 showToast(response.data.msg);
             });
-        };
+        }
+
+        function deslikePost(post) {
+            PostService.deslikePost(post).then(function success() {
+                removePostKeyToUser(post.key);
+            }, function error(response) {
+                showToast(response.data.msg);
+            });
+        }
 
         homeCtrl.isLikedByUser = function isLikedByUser(post) {
-            var likedPosts = homeCtrl.user ? homeCtrl.user.liked_posts : [];
-            var likedPostsKeys = _.map(likedPosts, getKeyFromUrl);
+            var likedPostsKeys = _.map(homeCtrl.user.liked_posts, getKeyFromUrl);
             return _.includes(likedPostsKeys, post.key);
         };
 
         function addPostKeyToUser(key) {
             homeCtrl.user.liked_posts.push(key);
+        }
+
+        function removePostKeyToUser(key) {
+            _.remove(homeCtrl.user.liked_posts, foundPost => getKeyFromUrl(foundPost) === key);
         }
 
         function getKeyFromUrl(url) {
@@ -81,14 +100,6 @@
                 key = splitedUrl[1];
             }
             return key;
-        }
-
-        function getKeysFromUrlArray(urlArray) {
-            var keys = [];
-            _.forEach(urlArray, function(url) {
-                keys.push(getKeyFromUrl(url));
-            });
-            return keys;
         }
 
         loadPosts();

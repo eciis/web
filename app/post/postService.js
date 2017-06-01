@@ -6,6 +6,8 @@
     app.service("PostService", function PostService($http, $q) {
         var service = this;
 
+        var POST_URI = "/api/post/";
+
         service.get = function getPosts() {
             var deferred = $q.defer();
             $http.get("/api/user/timeline").then(function success(response) {
@@ -18,7 +20,7 @@
 
         service.createPost = function createPost(post) {
             var deferred = $q.defer();
-            $http.post("/api/post", post).then(function success(response) {
+            $http.post(POST_URI, post).then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);
@@ -28,7 +30,7 @@
 
         service.likePost = function likePost(post) {
             var deferred = $q.defer();
-            $http.post('/api/post/' + post.key + '/like').then(function success(response) {
+            $http.post(POST_URI + post.key + '/like').then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);
@@ -38,7 +40,7 @@
 
         service.deslikePost = function deslikePost(post) {
             var deferred = $q.defer();
-            $http.post('/api/post/' + post.key + '/deslike').then(function success(response) {
+            $http.post(POST_URI + post.key + '/deslike').then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);

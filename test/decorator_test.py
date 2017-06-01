@@ -61,7 +61,7 @@ class TestIsAuthorized(unittest.TestCase):
             Gravimetria e Ensaio Biológico - Ensaio de Citotoxicidade'
         cls.certbio.email = 'certbio@ufcg.edu.br'
         cls.certbio.phone_number = '(83) 3322 4455'
-        cls.certbio.members = [cls.mayza.key]
+        cls.certbio.members = [cls.mayza.key, cls.raoni.key]
         cls.certbio.followers = [cls.mayza.key, cls.raoni.key]
         cls.certbio.posts = []
         cls.certbio.admin = cls.mayza.key
@@ -86,3 +86,15 @@ class TestIsAuthorized(unittest.TestCase):
         cls.mayza_post.institution = cls.certbio.key
         cls.mayza_post.put()
 
+        def test_is_authorized(self):
+            """Test the is_authorized method."""
+            with self.assertRaises(NotAuthorizedException) as Aex:
+                self.is_decorated(self.raoni, self.mayza_post.key)
+            self.assertEqual(str(Aex.exception),
+                             'User is not allowed to remove this post')
+
+
+@is_authorized
+def is_decorated(self, user, key):
+    """Allow the system test the decorator."""
+    pass

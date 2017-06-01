@@ -74,7 +74,7 @@
 
         function deslikePost(post) {
             PostService.deslikePost(post).then(function success() {
-                removePostKeyToUser(post.key);
+                removePostKeyFromUser(post.key);
             }, function error(response) {
                 showToast(response.data.msg);
             });
@@ -89,7 +89,7 @@
             homeCtrl.user.liked_posts.push(key);
         }
 
-        function removePostKeyToUser(key) {
+        function removePostKeyFromUser(key) {
             _.remove(homeCtrl.user.liked_posts, foundPost => getKeyFromUrl(foundPost) === key);
         }
 

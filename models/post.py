@@ -73,3 +73,13 @@ class Post(ndb.Model):
             'institution_key': institution.key.urlsafe(),
             'key': post.key.urlsafe()
         }
+
+    def like(self):
+        """Increment one 'like' in post."""
+        self.likes += 1
+        self.put()
+
+    def deslike(self):
+        """Decrease one 'like' in post."""
+        self.likes -= 1
+        self.put()

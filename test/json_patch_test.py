@@ -192,6 +192,16 @@ class TestOperationRemove(TestJsonPatch):
         self.json_patch.load(json, self.user)
         self.assertFalse(hasattr(self.user, 'name'))
 
+    def test_rm_object(self):
+        """Remove attribute user2 in user."""
+        json = '[{"op": "add", "path": "/user2", "value": {"age": 23, "name": "Maiza"}}]'
+        self.json_patch.load(json, self.user, User)
+
+        self.assertTrue(hasattr(self.user, 'user2'))
+        json = create_json_patch("remove", "/user2")
+        self.json_patch.load(json, self.user, User)
+        self.assertFalse(hasattr(self.user, 'user2'))
+
     def test_rm_in_list(self):
         """Remove email in list emails."""
         self.assertListEqual(self.user.emails, [
@@ -211,3 +221,30 @@ class TestOperationRemove(TestJsonPatch):
         with self.assertRaises(PatchException) as ex:
             self.json_patch.load(json, self.user)
         self.assertEqual(str(ex.exception), "Attribute registration not found")
+
+
+class TestOperationTest(TestJsonPatch):
+    """Class of test operation test."""
+
+    def test_simple_value(self):
+        """Test if attribute name is Luiz."""
+        self.assertEqual(self.user.name, "Luiz")
+        json = create_json_patch("test", "/name", "Luiz")
+        self.json_patch.load(json, self.user)
+        self.assertEqual(self.user.name, "Luiz")
+
+    def test_in_list(self):
+        """Test if first email is luiz.silva@ccc.ufcg.edu.br."""
+        self.assertEqual(self.user.emails[0], "luiz.silva@ccc.ufcg.edu.br")
+        json = create_json_patch("test", "/emails/0", "luiz.silva@ccc.ufcg.edu.br")
+        self.json_patch.load(json, self.user)
+        self.assertEqual(self.user.emails[0], "luiz.silva@ccc.ufcg.edu.br")
+
+    def test_err_value(self):
+        """Test fail for verify if operation test it's correct."""
+        self.assertEqual(self.user.name, "Luiz")
+        json = create_json_patch("test", "/name", "Maiza")
+        with self.assertRaises(PatchException) as ex:
+            self.json_patch.load(json, self.user)
+        self.assertEqual(str(ex.exception), "Test fail, object Luiz does not correspond to what was passed Maiza")
+        self.assertEqual(self.user.name, "Luiz")

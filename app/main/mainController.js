@@ -1,8 +1,10 @@
-(function() {
+ (function() {
     var app = angular.module('app');
 
-    app.controller("MainController", function MainController($mdSidenav, $mdDialog, $mdToast, $state, AuthService, PostService) {
+    app.controller("MainController", function MainController($mdSidenav, $mdDialog, $mdToast, $state, AuthService, PostService, InstitutionService) {
         var mainCtrl = this;
+        mainCtrl.expanded = false;
+        mainCtrl.institutions = [];
 
         Object.defineProperty(mainCtrl, 'user', {
             get: function() {
@@ -58,6 +60,32 @@
                 openFrom: '#fab-new-post',
                 closeTo: angular.element(document.querySelector('#fab-new-post'))
             });
-        };        
+        };
+
+        getInstitutions = function(){
+            InstitutionService.getInstitutions().then(function sucess(response){
+                mainCtrl.institutions = response.data;
+            });
+        };
+
+        mainCtrl.expand = function expand(){
+            mainCtrl.expanded = true;
+            if(mainCtrl.institutions.length  === 0){
+                getInstitutions();
+            }
+        };
+
+        mainCtrl.hide = function hide(){
+            mainCtrl.expanded = false;
+        };
+
+        mainCtrl.follow = function follow(institution_key){
+           InstitutionService.follow(institution_key){
+                /**
+                TODO: First version doesn't treat the case in which the user is already the institution follower. Decide later
+                @author: Maiana Brito 01/06/2017
+                **/
+            }); 
+        }
     });
 })();

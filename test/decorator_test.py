@@ -1,14 +1,21 @@
+# -*- coding: utf-8 -*-
 """Decorator test."""
 
 import unittest
+import sys
+sys.path.append("../")
+sys.path.insert(1, '/usr/local/google_appengine')
+sys.path.insert(1, 'google-cloud-sdk/platform/google_appengine')
+sys.path.insert(1, 'google-cloud-sdk/platform/google_appengine/lib/yaml/lib')
+sys.path.insert(1, 'myapp/lib')
 
-from handlers.post_handler import PostHandler
-from utils import NotAuthorizedException
 from models.post import Post
+from utils import NotAuthorizedException
 from models.user import User
 from models.intitution import Institution
 from utils import is_authorized
-from utils import is_institution_member
+from google.appengine.ext import testbed
+from google.appengine.ext import ndb
 
 
 class TestIsAuthorized(unittest.TestCase):
@@ -17,6 +24,12 @@ class TestIsAuthorized(unittest.TestCase):
     @classmethod
     def setUp(cls):
         """Create the objects."""
+        #Initiate appengine services
+        cls.self.testbed = testbed.Testbed()
+        cls.testbed.activate()
+        cls.testbed.init_datastore_v3_stub()
+        ndb.get_context().clear_cache()
+
         # new User Mayza
         cls.mayza = User()
         cls.mayza.name = 'Mayza Nunes'
@@ -92,6 +105,9 @@ class TestIsAuthorized(unittest.TestCase):
                 self.is_decorated(self.raoni, self.mayza_post.key)
             self.assertEqual(str(Aex.exception),
                              'User is not allowed to remove this post')
+
+        def tearDown(self):
+            self.testbed.deactivate()
 
 
 @is_authorized

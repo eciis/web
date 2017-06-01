@@ -39,8 +39,14 @@ class PostHandler(BaseHandler):
 
         This method is only meant to give like in post
         """
+        action = self.request.url.split('/')[-1]
         post = ndb.Key(urlsafe=url_string).get()
-        user.like_post(post)
+        if action == 'like':
+            post.like()
+            user.like_post(post.key)
+        if action == 'deslike':
+            post.deslike()
+            user.deslike_post(post.key)
 
     @json_response
     @login_required

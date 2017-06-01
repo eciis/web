@@ -107,6 +107,13 @@ class Post(ndb.Model):
         else:
             self.comments = [comment]
 
-        print "=============="
-        print self.comments
+    def like(self):
+        """Increment one 'like' in post."""
+        self.likes += 1
+        self.put()
+
+    def deslike(self):
+        """Decrease one 'like' in post."""
+        self.likes -= 1
+
         self.put()

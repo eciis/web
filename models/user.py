@@ -48,10 +48,14 @@ class User(ndb.Model):
         user = query.get()
         return user
 
-    def like_post(self, post):
+    def like_post(self, postKey):
         """Method to give like in post."""
-        if post.key not in self.liked_posts:
-            post.likes += 1
-            post.put()
-            self.liked_posts.append(post.key)
+        if postKey not in self.liked_posts:
+            self.liked_posts.append(postKey)
+            self.put()
+
+    def deslike_post(self, postKey):
+        """Method to deslike a post."""
+        if postKey in self.liked_posts:
+            self.liked_posts.remove(postKey)
             self.put()

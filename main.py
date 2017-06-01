@@ -25,6 +25,7 @@ app = webapp2.WSGIApplication([
     ("/api/key/(.*)", GetKeyHandler),
     ("/api/post", PostCollectionHandler),
     ("/api/post/(.*)/like", PostHandler),
+    ("/api/post/(.*)/deslike", PostHandler),
     ("/api/post/(.*)/comment", PostCommentHandler),
     ("/api/post/(.*)", PostHandler),
     ("/api/user", UserHandler),

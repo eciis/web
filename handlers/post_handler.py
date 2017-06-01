@@ -19,7 +19,6 @@ class PostHandler(BaseHandler):
 
     @login_required
     @is_authorized
-    @ndb.transactional(xg=True)
     def delete(self, user, key):
         """Handle DELETE Requests."""
         """Get the post from the datastore."""

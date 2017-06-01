@@ -10,6 +10,15 @@ from models.user import User
 from models.institution import Institution
 
 
+class NotAuthorizedException(Exception):
+    """Not Authorized Exception."""
+
+    def __init__(self, message=None):
+        """Init method."""
+        super(NotAuthorizedException, self).__init__(
+            message or 'The user is not authorized to do this procedure.')
+
+
 class Utils():
 
     STATUS_SUCCESS = 201
@@ -120,6 +129,12 @@ class Utils():
             return Utils.toJson(out, loadkey=loadkey, host=host)
         return entity
 
+    @staticmethod
+    def _assert(condition, msg, exception):
+        """Check the condition, if true, raise an generic exception."""
+        if condition:
+            raise exception(msg)
+
 
 def login_required(method):
     """Handle required login."""
@@ -194,11 +209,14 @@ def is_authorized(method):
         obj_key = ndb.Key(urlsafe=key)
         post = obj_key.get()
         institution = post.institution.get()
-        if not post or not institution:
-            raise Exception('Post or institution is invalid')
-        if not post.author == user.key:
-            if not institution.admin == user.key:
-                raise Exception('User is not allowed to remove this post')
-        else:
-            method(self, user, key, *args)
+        Utils._assert(not post or not institution,
+                      'Post or institution is invalid', Exception)
+        Utils._assert(user.key not in institution.members,
+                      'User is not a member of this institution',
+                      NotAuthorizedException)
+        Utils._assert(not post.author == user.key and not
+                      institution.admin == user.key,
+                      'User is not allowed to remove this post',
+                      NotAuthorizedException)
+        method(self, user, key, *args)
     return check_authorization

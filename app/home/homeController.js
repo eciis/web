@@ -1,7 +1,6 @@
 'use strict';
 
 (function() {
-    'use strict';
     var app = angular.module("app");
 
     app.controller("HomeController", function HomeController(PostService, AuthService, $interval, $mdToast, $mdDialog) {
@@ -27,7 +26,7 @@
 
             $mdDialog.show(confirm).then(function() {
                 PostService.deletePost(post).then(function success() {
-                    _.remove(homeCtrl.posts, foundPost => foundPost.author_key === post.author_key);
+                    _.remove(homeCtrl.posts, foundPost => foundPost.key === post.key);
                     showToast('Post excluído com sucesso');
                 }, function error(response) {
                     showToast(response.data.msg);
@@ -40,7 +39,7 @@
         homeCtrl.isAuthorized = function isAuthorized(post) {
             if ((post.author_key == homeCtrl.user.key && 
                 _.find(homeCtrl.user.institutions, ['key', post.institution_key])) || 
-                _.find(homeCtrl.user.institutions_admin, ['key', post.institution_key])) {
+                _.includes(getKeysFromUrlArray(homeCtrl.user.institutions_admin), post.institution_key)) {
                 return true;
             }
             return false;
@@ -82,6 +81,14 @@
                 key = splitedUrl[1];
             }
             return key;
+        }
+
+        function getKeysFromUrlArray(urlArray) {
+            var keys = [];
+            _.forEach(urlArray, function(url) {
+                keys.push(getKeyFromUrl(url));
+            });
+            return keys;
         }
 
         loadPosts();

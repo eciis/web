@@ -2,8 +2,6 @@
 """Unit tests for module JsonPatch."""
 
 import unittest
-import sys
-sys.path.append("../")
 
 from json_patch import JsonPatch
 from json_patch import PatchException

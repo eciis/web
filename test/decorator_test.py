@@ -30,7 +30,63 @@ class TestIsAuthorized(unittest.TestCase):
         cls.testbed.init_memcache_stub()
         ndb.get_context().set_cache_policy(False)
 
-        # new User Mayza
+        initModels(cls)
+
+    def test_not_allowed(self):
+        """Test if the user is really not allowed."""
+        with self.assertRaises(NotAuthorizedException) as Aex:
+                is_decorated(self, self.raoni, self.mayza_post.key.urlsafe())
+        self.assertEqual(str(Aex.exception),
+                         'User is not allowed to remove this post')
+        with self.assertRaises(NotAuthorizedException) as Aex:
+                is_decorated(self, self.ruan, self.raoni_post.key.urlsafe())
+        self.assertEqual(str(Aex.exception),
+                         'User is not allowed to remove this post')
+        with self.assertRaises(NotAuthorizedException) as Aex:
+                is_decorated(self, self.raoni, self.ruan_post.key.urlsafe())
+        self.assertEqual(str(Aex.exception),
+                         'User is not allowed to remove this post')
+
+    def test_not_member(self):
+        """Test when the user isn't an institution's member."""
+        with self.assertRaises(NotAuthorizedException) as Aex:
+            is_decorated(self, self.raoni, self.raoni_post.key.urlsafe())
+        self.assertEqual(str(Aex.exception),
+                         'User is not a member of this institution')
+        with self.assertRaises(NotAuthorizedException) as Aex:
+            is_decorated(self, self.ruan, self.ruan_post.key.urlsafe())
+        self.assertEqual(str(Aex.exception),
+                         'User is not a member of this institution')
+
+    def test_not_post(self):
+        """Test when the user isn't an institution's member."""
+        with self.assertRaises(NotAuthorizedException) as Aex:
+            is_decorated(self, self.raoni, self.raoni_post.key.urlsafe())
+        self.assertEqual(str(Aex.exception),
+                         'User is not a member of this institution')
+
+    def test_everything_ok(self):
+        """Test if everything goes ok."""
+        self.assertIsNone(is_decorated(self, self.mayza,
+                          self.mayza_post.key.urlsafe()))
+        self.assertIsNone(is_decorated(self, self.mayza,
+                          self.raoni_post.key.urlsafe()))
+        self.assertIsNone(is_decorated(self, self.mayza,
+                          self.ruan_post.key.urlsafe()))
+
+    def tearDown(self):
+        """End up the testbed."""
+        self.testbed.deactivate()
+
+
+@is_authorized
+def is_decorated(self, user, key):
+    """Allow the system test the decorator."""
+    pass
+
+
+def initModels(cls):
+    # new User Mayza
         cls.mayza = User()
         cls.mayza.name = 'Mayza Nunes'
         cls.mayza.cpf = '089.675.908-90'
@@ -98,23 +154,52 @@ class TestIsAuthorized(unittest.TestCase):
         cls.mayza_post.author = cls.mayza.key
         cls.mayza_post.institution = cls.certbio.key
         cls.mayza_post.put()
-
-    def test_is_authorized(self):
-        """Test the is_authorized method."""
-        with self.assertRaises(NotAuthorizedException) as Aex:
-                is_decorated(self, self.raoni, self.mayza_post.key.urlsafe())
-        self.assertEqual(str(Aex.exception),
-                         'User is not allowed to remove this post')
-
-    def test(self):
-        self.assertEqual(1, 1)
-
-    def tearDown(self):
-        self.testbed.deactivate()
-
-
-
-@is_authorized
-def is_decorated(self, user, key):
-    """Allow the system test the decorator."""
-    pass
+        # new Institution SPLAB
+        cls.splab = Institution()
+        cls.splab.name = 'SPLAB'
+        cls.splab.cnpj = '18.104.068/0001-56'
+        cls.splab.legal_nature = 'public'
+        cls.splab.address = 'Universidade Federal de Campina Grande'
+        cls.splab.occupation_area = ''
+        cls.splab.description = 'The mission of the Software Practices Laboratory (SPLab) \
+            is to promote the development of the state-of-the-art in the \
+            theory and practice of Software Engineering.'
+        cls.splab.image_url = 'http://amaurymedeiros.com/images/splab.png'
+        cls.splab.email = 'splab@ufcg.edu.br'
+        cls.splab.phone_number = '(83) 3322 7865'
+        cls.splab.members = [cls.mayza.key, cls.ruan.key]
+        cls.splab.followers = [cls.mayza.key, cls.ruan.key]
+        cls.splab.posts = []
+        cls.splab.admin = cls.mayza.key
+        cls.splab.put()
+        # POST of Raoni To Certbio Institution
+        cls.raoni_post = Post()
+        cls.raoni_post.title = "Novwdfssdo edital do CERTBIO"
+        cls.raoni_post.text = "At vero eos et accusamus et iusto odio dignissimos \
+        ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti \
+        quos dolores et quas molestias excepturi sint occaecati cupiditate \
+        non provident, similique sunt in dfsfdsfsdculpa qui officia deseritia \
+        id est laborum et dolorum fuga. Et harum quidem rerum facilis est et \
+        xpedita distinctio. Nam libero tempore, cum soluta nobis est eligendi \
+        optio cumque nihil impedit quo minus id quod maxime placeat facere \
+        possimus, omnis voluptas assumenda est, omnis dolor repellendus. \
+        emporibus autem quibusdam et aut officiis debitis aut rerum \
+        necessitatibus saepe eveniet ut et voluptates repudiandae sint \
+        et molestiae non recusandae. Itaque earum rerum hic tenetur sapiente \
+        delectus, ut aut reiciendis voluptatibus maiores alias consequatur \
+        aut perferendis doloribus asperiores repellat."
+        cls.raoni_post.author = cls.raoni.key
+        cls.raoni_post.institution = cls.splab.key
+        cls.raoni_post.put()
+        # POST of Raoni To Certbio Institution
+        cls.ruan_post = Post()
+        cls.ruan_post.title = "Novwdfssdo edital do CERTBIO"
+        cls.ruan_post.text = "At vero eos et accusamus et iusto odio dignissimos \
+        emporibus autem quibusdam et aut officiis debitis aut rerum \
+        necessitatibus saepe eveniet ut et voluptates repudiandae sint \
+        et molestiae non recusandae. Itaque earum rerum hic tenetur sapiente \
+        delectus, ut aut reiciendis voluptatibus maiores alias consequatur \
+        aut perferendis doloribus asperiores repellat."
+        cls.ruan_post.author = cls.ruan.key
+        cls.ruan_post.institution = cls.certbio.key
+        cls.ruan_post.put()

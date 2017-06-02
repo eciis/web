@@ -23,7 +23,7 @@ def create_json_patch(operation, path, value=None):
 
 
 class User(object):
-    """class for using in tests."""
+    """Class for using in tests."""
 
     def __init__(self, name=None, age=None, description=None):
         """Constructor of class User."""
@@ -67,7 +67,7 @@ class TestOperationAdd(TestJsonPatch):
         self.assertEqual(
             self.user.registration,
             '11112121',
-            "Registration must equal 11112121"
+            "Registration must be equal to 11112121"
         )
 
     def test_add_object(self):
@@ -76,20 +76,20 @@ class TestOperationAdd(TestJsonPatch):
             hasattr(self.user, 'other_user'),
             "The attribute other_user must not exist"
         )
-        json = '[{"op": "add", "path": "/other_user", "value": {"age": 23, "name": "Maiza"}}]'
+        json = '[{"op": "add", "path": "/other_user", "value": {"age": 23, "name": "Mayza"}}]'
         self.json_patch.load(json, self.user, User)
         self.assertTrue(
             hasattr(self.user, 'other_user'),
             "The attribute other_user must exist"
         )
         self.assertEqual(
-            self.user.other_user.name, 'Maiza',
-            "other_user name must be Maiza"
+            self.user.other_user.name, 'Mayza',
+            "Other_user name must be Mayza"
         )
         self.assertEqual(
             self.user.other_user.age,
             23,
-            "other_user age must be 23"
+            "Other_user age must be 23"
         )
 
     def test_add_in_list(self):
@@ -141,7 +141,7 @@ class TestOperationAdd(TestJsonPatch):
         self.json_patch.load(json, self.user)
         self.assertEqual(
             self.user.registration, '11112121',
-            "Registration must equal 11112121")
+            "Registration must be equal to 11112121")
 
         # Adding existing attribute in user
         self.assertTrue(
@@ -152,10 +152,10 @@ class TestOperationAdd(TestJsonPatch):
             self.json_patch.load(json, self.user)
         self.assertEqual(
             str(ex.exception), "Attribute registration already exists",
-            "Expected menseger is 'Attribute registration already exists'")
+            "Expected menseger to be equal to 'Attribute registration already exists'")
         self.assertEqual(
             self.user.registration, '11112121',
-            "Registration must equal 11112121")
+            "Registration must be equal to 11112121")
 
     def test_add_none_attr(self):
         """Trying to add None."""
@@ -167,7 +167,7 @@ class TestOperationAdd(TestJsonPatch):
             self.json_patch.load(json, self.user)
         self.assertEqual(
             str(ex.exception), "Value can not be None",
-            "Expected menseger is 'Value can not be None'")
+            "Expected menseger to be equal to 'Value can not be None'")
 
 
 class TestOperantionReplace(TestJsonPatch):
@@ -175,59 +175,59 @@ class TestOperantionReplace(TestJsonPatch):
 
     def test_replace_simple_value(self):
         """Replece attribute name."""
-        self.assertEqual(self.user.name, "Luiz", "Name must equal Luiz")
+        self.assertEqual(self.user.name, "Luiz", "Name must be equal to Luiz")
         json = create_json_patch("replace", "/name", "Luiz Fernando da Silva")
         self.json_patch.load(json, self.user)
-        self.assertNotEqual(self.user.name, "Luiz", "Name must not equal Luiz")
+        self.assertNotEqual(self.user.name, "Luiz", "Name must not be equal to Luiz")
         self.assertEqual(
             self.user.name, "Luiz Fernando da Silva",
-            "Name must equal Luiz Fernando da Silva")
+            "Name must be equal to Luiz Fernando da Silva")
 
     def test_replace_object(self):
         """Replace attribute other_user in user."""
-        json = '[{"op": "add", "path": "/other_user", "value": {"age": 23, "name": "Maiza"}}]'
+        json = '[{"op": "add", "path": "/other_user", "value": {"age": 23, "name": "Mayza"}}]'
         self.json_patch.load(json, self.user, User)
 
         self.assertEqual(
-            self.user.other_user.name, "Maiza",
-            "Name must equal Maiza")
-        self.assertEqual(self.user.other_user.age, 23, "Age must equal 23")
+            self.user.other_user.name, "Mayza",
+            "Name must be equal to Mayza")
+        self.assertEqual(self.user.other_user.age, 23, "Age must be equal to 23")
         json = '[{"op": "replace", "path": "/other_user", "value": {"age": 19, "name": "Luiz"}}]'
         self.json_patch.load(json, self.user, User)
         self.assertNotEqual(
-            self.user.other_user.name, "Maiza",
-            "Name must not equal Maiza")
+            self.user.other_user.name, "Mayza",
+            "Name must not be equal to Mayza")
         self.assertNotEqual(
             self.user.other_user.age, 23,
-            "Age must not equal 23")
+            "Age must not be equal to 23")
         self.assertEqual(
             self.user.other_user.name, "Luiz",
-            "Name must equal Luiz")
-        self.assertEqual(self.user.other_user.age, 19, "Age must equal Luiz")
+            "Name must be equal to Luiz")
+        self.assertEqual(self.user.other_user.age, 19, "Age must be equal to Luiz")
 
     def test_replace_in_list(self):
         """Replace email in list of emails."""
         self.assertListEqual(self.user.emails, [
             "luiz.silva@ccc.ufcg.edu.br",
             "fernan.luizsilva@gmail.com"
-        ], "Lists emails must equal")
+        ], "Lists emails must be equal to")
         json = create_json_patch("replace", "/emails/-", "fernan.luizsilva@hotmail.com")
         self.json_patch.load(json, self.user)
         self.assertListEqual(self.user.emails, [
             "luiz.silva@ccc.ufcg.edu.br",
             "fernan.luizsilva@hotmail.com"
-        ], "Lists emails must equal")
+        ], "Lists emails must be equal to")
 
     def test_replace_value_none(self):
         """Replace attribute without passing the value."""
-        self.assertEqual(self.user.name, "Luiz", "Name must equal Luiz")
+        self.assertEqual(self.user.name, "Luiz", "Name must be equal to Luiz")
         json = create_json_patch("replace", "/name")
         with self.assertRaises(PatchException) as ex:
             self.json_patch.load(json, self.user)
         self.assertEqual(
             str(ex.exception), "Value can not be None",
-            "Expected menseger is 'Value can not be None'")
-        self.assertEqual(self.user.name, "Luiz", "Name must equal Luiz")
+            "Expected menseger to be equal to 'Value can not be None'")
+        self.assertEqual(self.user.name, "Luiz", "Name must be equal to Luiz")
 
     def test_replace_attr_nonexistent(self):
         """Replace attribute nonexitent."""
@@ -239,7 +239,7 @@ class TestOperantionReplace(TestJsonPatch):
             self.json_patch.load(json, self.user)
         self.assertEqual(
             str(ex.exception), "Attribute registration not found",
-            "Expected menseger is 'Attribute registration not found'")
+            "Expected menseger to be equal to 'Attribute registration not found'")
 
 
 class TestOperationRemove(TestJsonPatch):
@@ -258,7 +258,7 @@ class TestOperationRemove(TestJsonPatch):
 
     def test_rm_object(self):
         """Remove attribute other_user in user."""
-        json = '[{"op": "add", "path": "/other_user", "value": {"age": 23, "name": "Maiza"}}]'
+        json = '[{"op": "add", "path": "/other_user", "value": {"age": 23, "name": "Mayza"}}]'
         self.json_patch.load(json, self.user, User)
 
         self.assertTrue(
@@ -275,12 +275,12 @@ class TestOperationRemove(TestJsonPatch):
         self.assertListEqual(self.user.emails, [
             "luiz.silva@ccc.ufcg.edu.br",
             "fernan.luizsilva@gmail.com"
-        ], "Lists emails must equal")
+        ], "Lists emails must be equal to")
         json = create_json_patch("remove", "/emails/-")
         self.json_patch.load(json, self.user)
         self.assertListEqual(self.user.emails, [
             "luiz.silva@ccc.ufcg.edu.br"
-        ], "Lists emails must equal")
+        ], "Lists emails must be equal to")
 
     def test_rm_attr_nonexistent(self):
         """Remove attribute nonexistent."""
@@ -292,7 +292,7 @@ class TestOperationRemove(TestJsonPatch):
             self.json_patch.load(json, self.user)
         self.assertEqual(
             str(ex.exception), "Attribute registration not found",
-            "Expected menseger is 'Attribute registration not found'")
+            "Expected menseger to be equal to 'Attribute registration not found'")
 
 
 class TestOperationTest(TestJsonPatch):
@@ -300,10 +300,10 @@ class TestOperationTest(TestJsonPatch):
 
     def test_simple_value(self):
         """Test if attribute name is Luiz."""
-        self.assertEqual(self.user.name, "Luiz", "Name must equal Luiz")
+        self.assertEqual(self.user.name, "Luiz", "Name must be equal to Luiz")
         json = create_json_patch("test", "/name", "Luiz")
         self.json_patch.load(json, self.user)
-        self.assertEqual(self.user.name, "Luiz", "Name must equal Luiz")
+        self.assertEqual(self.user.name, "Luiz", "Name must be equal to Luiz")
 
     def test_in_list(self):
         """Test if first email is luiz.silva@ccc.ufcg.edu.br."""
@@ -318,13 +318,13 @@ class TestOperationTest(TestJsonPatch):
 
     def test_err_value(self):
         """Test fail for verify if operation test it's correct."""
-        self.assertEqual(self.user.name, "Luiz", "Name must equal Luiz")
-        json = create_json_patch("test", "/name", "Maiza")
+        self.assertEqual(self.user.name, "Luiz", "Name must be equal to Luiz")
+        json = create_json_patch("test", "/name", "Mayza")
         with self.assertRaises(PatchException) as ex:
             self.json_patch.load(json, self.user)
         self.assertEqual(
             str(ex.exception),
-            "Test fail, object Luiz does not correspond to what was passed Maiza",
-            "Expected menseger is 'Test fail, "
-            "object Luiz does not correspond to what was passed Maiza'")
-        self.assertEqual(self.user.name, "Luiz", "Name must equal Luiz")
+            "Test fail, object Luiz does not correspond to what was passed Mayza",
+            "Expected menseger to be equal to 'Test fail, "
+            "object Luiz does not correspond to what was passed Mayza'")
+        self.assertEqual(self.user.name, "Luiz", "Name must be equal to Luiz")

@@ -7,8 +7,7 @@ from utils import Utils
 from utils import login_required
 from utils import is_authorized
 from utils import json_response
-
-from json_patch import JsonPatch
+from util.json_patch import JsonPatch
 
 
 from handlers.base_handler import BaseHandler

@@ -64,7 +64,7 @@ class TestOperationAdd(TestJsonPatch):
         )
         self.assertEqual(
             self.user.registration,
-            '1111212',
+            '11112121',
             "Registration must be equal to 11112121"
         )
 

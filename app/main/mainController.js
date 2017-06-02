@@ -50,11 +50,11 @@
             mainCtrl.toggle();
         };        
 
-        getInstitutions = function(){
+        function getInstitutions(){
             InstitutionService.getInstitutions().then(function sucess(response){
                 mainCtrl.institutions = response.data;
             });
-        };
+        }
 
         mainCtrl.expand = function expand(){
             mainCtrl.expanded = true;

@@ -18,24 +18,8 @@ class InstitutionFollowerHandler(BaseHandler):
 
     @json_response
     @login_required
-    def get(self, user, url_string):
-        """Get all followers the institution."""
-        institution_key = ndb.Key(urlsafe=url_string)
-        institution = institution_key.get()
-
-        if(not type(institution) is Institution):
-            raise Exception("Key is not an Institution")
-
-        followers = institution.followers
-
-        self.response.write(json.dumps(
-            Utils.toJson(followers, host=self.request.host)
-        ))
-
-    @json_response
-    @login_required
     def post(self, user, url_string):
-        """Add follower in the institution."""
+        """Add or remove follower in the institution."""
         institution_key = ndb.Key(urlsafe=url_string)
         institution = institution_key.get()
 
@@ -50,7 +34,3 @@ class InstitutionFollowerHandler(BaseHandler):
         else:
             institution.unfollow(user.key)
             user.unfollow(institution_key)
-
-        self.response.write(json.dumps(
-            Utils.toJson(institution.followers, host=self.request.host)
-        ))

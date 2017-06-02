@@ -1,0 +1,7 @@
+language: python
+python:
+ - "2.7"
+script: python -m unittest discover -v -p "*test.py"
+
+notifications:
+    slack: e-ciis:5ttYSzVNz0z5XwYRaWBHExyW

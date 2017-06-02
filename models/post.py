@@ -4,6 +4,8 @@ from google.appengine.ext import ndb
 
 from utils import Utils
 
+import datetime
+
 
 def commentsToJsonList(comments):
     """Convert comments into a json list."""
@@ -34,6 +36,32 @@ class Comment(ndb.Model):
         comment.author = author
 
         return comment
+
+    @staticmethod
+    def reCreate(data, author, publication_date):
+        """Recreate a comment."""
+        comment = Comment.create(data, author)
+        comment.publication_date = datetime.datetime.strptime(publication_date, "%Y-%m-%dT%H:%M:%S.%f")
+        # TODO: verify if the date is overided on backend
+
+    @staticmethod
+    def make(comment):
+        """Create personalized json of comment."""
+        publication_date = comment.publication_date.isoformat()
+        author = comment.author.get()
+        return {
+            'text': comment.text,
+            'author_name': author.name,
+            'author_img': author.photo_url,
+            'author_key': author.key.urlsafe(),
+            'publication_date': publication_date
+        }
+
+    def __eq__(self, other):
+        """Compare two Comment objects."""
+        if isinstance(other, self.__class__):
+            return self.__dict__ == other.__dict__
+        return False
 
 
 class Post(ndb.Model):
@@ -113,6 +141,11 @@ class Post(ndb.Model):
             self.comments.append(comment)
         else:
             self.comments = [comment]
+        self.put()
+
+    def remove_comment(self, comment):
+        """Remove a commet from post."""
+        self.comments.remove(comment)
         self.put()
 
     def like(self):

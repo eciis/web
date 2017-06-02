@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 """Institution Follower Handler."""
 
-import json
-
 from google.appengine.ext import ndb
-from utils import Utils
 from utils import login_required
 from utils import json_response
 
@@ -18,6 +15,7 @@ class InstitutionFollowerHandler(BaseHandler):
 
     @json_response
     @login_required
+    @ndb.transactional(xg=True)
     def post(self, user, url_string):
         """Add or remove follower in the institution."""
         institution_key = ndb.Key(urlsafe=url_string)

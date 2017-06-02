@@ -1,7 +1,8 @@
- (function() {
+'use strict';
+(function() {
     var app = angular.module('app');
 
-    app.controller("MainController", function MainController($mdSidenav, $mdDialog, $mdToast, $state, AuthService, PostService, InstitutionService) {
+    app.controller("MainController", function MainController($mdSidenav, $mdDialog, $mdToast, $state, AuthService, InstitutionService) {
         var mainCtrl = this;
         mainCtrl.expanded = false;
         mainCtrl.institutions = [];
@@ -47,26 +48,13 @@
         mainCtrl.goTo = function goTo(state) {
             $state.go(state);
             mainCtrl.toggle();
-        };
+        };        
 
-        mainCtrl.newPost = function(event) {
-            $mdDialog.show({
-                controller: "MainController",
-                controllerAs: "mainCtrl",
-                templateUrl: 'main/post_dialog.html',
-                parent: angular.element(document.body),
-                targetEvent: event,
-                clickOutsideToClose:true,
-                openFrom: '#fab-new-post',
-                closeTo: angular.element(document.querySelector('#fab-new-post'))
-            });
-        };
-
-        getInstitutions = function(){
+        function getInstitutions(){
             InstitutionService.getInstitutions().then(function sucess(response){
                 mainCtrl.institutions = response.data;
             });
-        };
+        }
 
         mainCtrl.expand = function expand(){
             mainCtrl.expanded = true;
@@ -80,11 +68,12 @@
         };
 
         mainCtrl.follow = function follow(institution_key){
-           InstitutionService.follow(institution_key);
-                /**
-                TODO: First version doesn't treat the case in which the user is already the institution follower. Decide later
-                @author: Maiana Brito 01/06/2017
-                **/
+           InstitutionService.follow(institution_key); 
+           /**
+           TODO: First version doesn't treat the case in which the user is already 
+           the institution follower.
+           @author: Maiana Brito 01/06/2017
+           **/
         };
     });
 })();

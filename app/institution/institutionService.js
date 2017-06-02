@@ -5,7 +5,7 @@
     app.service("InstitutionService", function InstitutionService($http, $q) {
         var service = this;
 
-        var INSTITUTION_URI = "/api/institution/";
+        var INSTITUTION_URI = "/api/institution";
 
         service.getInstitutions = function getInstitutions() {
             var deferred = $q.defer();
@@ -19,7 +19,7 @@
 
         service.follow = function follow(institution_key) {
             var deferred = $q.defer();
-            $http.post(INSTITUTION_URI + institution_key + "/follower").then(function success(response) {
+            $http.post(INSTITUTION_URI + "/" + institution_key + "/follower").then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);

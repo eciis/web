@@ -80,12 +80,11 @@
         };
 
         mainCtrl.follow = function follow(institution_key){
-           InstitutionService.follow(institution_key){
+           InstitutionService.follow(institution_key);
                 /**
                 TODO: First version doesn't treat the case in which the user is already the institution follower. Decide later
                 @author: Maiana Brito 01/06/2017
                 **/
-            }); 
-        }
+        };
     });
 })();

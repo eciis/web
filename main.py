@@ -12,6 +12,7 @@ from handlers.login_logout_handler import LogoutHandler
 from handlers.user_handler import UserHandler
 from handlers.post_collection_handler import PostCollectionHandler
 from handlers.post_handler import PostHandler
+from handlers.institution_timeline_handler import InstitutionTimelineHandler
 from handlers.user_timeline_handler import UserTimelineHandler
 from handlers.erro_handler import ErroHandler
 from handlers.get_key_handler import GetKeyHandler
@@ -24,6 +25,7 @@ app = webapp2.WSGIApplication([
     ("/api", MainHandler),
     ("/api/institution", InstitutionCollectionHandler),
     ("/api/institution/(.*)/follower", InstitutionFollowerHandler),
+    ("/api/institution/(.*)/timeline", InstitutionTimelineHandler),
     ("/api/institution/(.*)", InstitutionHandler),
     ("/api/key/(.*)", GetKeyHandler),
     ("/api/post", PostCollectionHandler),

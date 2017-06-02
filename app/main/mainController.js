@@ -34,11 +34,6 @@
             icon: 'home',
             enabled: true
         }, {
-            name: 'Nova Instituição',
-            stateTo: 'app.institution',
-            icon: 'account_balance',
-            enabled: true
-        }, {
             name: 'Novo Usuário',
             stateTo: 'user.new',
             icon: 'person_add',
@@ -48,7 +43,12 @@
         mainCtrl.goTo = function goTo(state) {
             $state.go(state);
             mainCtrl.toggle();
-        };        
+        }; 
+
+        mainCtrl.goToInstitution = function goToInstitution(institution) {
+            $state.go('app.institution', {institution: institution});
+            mainCtrl.toggle();
+        };       
 
         function getInstitutions(){
             InstitutionService.getInstitutions().then(function sucess(response){

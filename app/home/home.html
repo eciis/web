@@ -40,8 +40,8 @@
           </md-button>
         </md-button>
         <div ng-if="mainCtrl.expanded">
-          <md-list-item ng-repeat="institution in mainCtrl.institutions" ng-click="null" class="noright">
-            <img alt="{{ institution.name }}" ng-src="{{ institution.image_url }}" class="md-avatar" />
+          <md-list-item ng-repeat="institution in mainCtrl.institutions" ng-click="mainCtrl.goToInstitution(institution.key)" class="noright">
+            <img alt="{{ institution.name }}" ng-src="{{ institution.image_url }}" class="md-avatar" ng-click="mainCtrl.goToInstitution(institution.key)"/>
             <p>{{institution.name}}</p>
             <md-button class="md-icon-button" ng-click="mainCtrl.follow(institution.key)">
               <md-icon>add_circle</md-icon>
@@ -58,7 +58,7 @@
         <md-card ng-repeat="post in homeCtrl.posts | orderBy:'date':true">
           <md-card-header>
             <md-card-avatar>
-              <img src="{{ post.institution_image }}" class="md-user-avatar"/>
+              <img src="{{ post.institution_image }}" class="md-user-avatar" ng-click="homeCtrl.goToInstitution(post.institution_key)"/>
             </md-card-avatar>
             <md-card-header-text>
               <span class="md-title">{{ post.institution_name }}</span>

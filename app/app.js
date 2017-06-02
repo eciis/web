@@ -36,8 +36,12 @@
                 url: "/institution",
                 views: {
                     content: {
-                        templateUrl: "institution/institution.html"
+                        templateUrl: "institution/institution_page.html",
+                        controller: "InstitutionController as institutionCtrl"
                     }
+                },
+                params: {
+                    institution : null
                 },
                 authenticate: true
             })

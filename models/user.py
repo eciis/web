@@ -48,6 +48,12 @@ class User(ndb.Model):
         user = query.get()
         return user
 
+    def follow(self, institution):
+        """Add one institution in collection of follows."""
+        if institution not in self.follows:
+            self.follows.append(institution)
+            self.put()
+
     def like_post(self, postKey):
         """Method to give like in post."""
         if postKey not in self.liked_posts:

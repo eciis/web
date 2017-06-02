@@ -2,6 +2,14 @@
 """Post Model."""
 from google.appengine.ext import ndb
 
+from utils import Utils
+
+
+def commentsToJsonList(comments):
+    """Convert comments into a json list."""
+    jsonList = [Utils.toJson(comment.to_dict()) for comment in comments]
+    return jsonList
+
 
 class Comment(ndb.Model):
     """Model of a Comment."""
@@ -92,8 +100,7 @@ class Post(ndb.Model):
             'likes': post.likes,
             'headerImage': post.headerImage,
             'state': post.state,
-            # TODO comments are not json serializable
-            # 'comments': post.comments,
+            'comments': commentsToJsonList(post.comments),
             'publication_date': publication_date,
             'author_key': author.key.urlsafe(),
             'institution_key': institution.key.urlsafe(),
@@ -106,6 +113,7 @@ class Post(ndb.Model):
             self.comments.append(comment)
         else:
             self.comments = [comment]
+        self.put()
 
     def like(self):
         """Increment one 'like' in post."""
@@ -115,5 +123,4 @@ class Post(ndb.Model):
     def deslike(self):
         """Decrease one 'like' in post."""
         self.likes -= 1
-
         self.put()

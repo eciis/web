@@ -120,7 +120,7 @@
         homeCtrl.newPost = function newPost(event) {
             $mdDialog.show({
                 controller: "HomeController",
-                controllerAs: "ctrl",
+                controllerAs: "homeCtrl",
                 templateUrl: 'home/post_dialog.html',
                 parent: angular.element(document.body),
                 targetEvent: event,

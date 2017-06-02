@@ -6,7 +6,6 @@ import sys
 sys.path.append("../")
 sys.path.insert(1, '/home/raoni/google-cloud-sdk/platform/google_appengine')
 sys.path.insert(1, '/home/raoni/google-cloud-sdk/platform/google_appengine/lib/yaml/lib')
-sys.path.insert(1, '/home/raoni/myapp/lib')
 
 from models.post import Post
 from utils import NotAuthorizedException

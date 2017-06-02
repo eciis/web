@@ -42,8 +42,14 @@ class InstitutionFollowerHandler(BaseHandler):
         if(not type(institution) is Institution):
             raise Exception("Key is not an Institution")
 
-        institution.follow(user.key)
-        user.follow(institution_key)
+        action = self.request.url.split('/')[-1]
+
+        if action == 'follow':
+            institution.follow(user.key)
+            user.follow(institution_key)
+        else:
+            institution.unfollow(user.key)
+            user.unfollow(institution_key)
 
         self.response.write(json.dumps(
             Utils.toJson(institution.followers, host=self.request.host)

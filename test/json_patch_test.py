@@ -152,7 +152,7 @@ class TestOperationAdd(TestJsonPatch):
             self.json_patch.load(json, self.user)
         self.assertEqual(
             str(ex.exception), "Attribute registration already exists",
-            "Expected menseger to be equal to 'Attribute registration already exists'")
+            "Expected message to be equal to 'Attribute registration already exists'")
         self.assertEqual(
             self.user.registration, '11112121',
             "Registration must be equal to 11112121")
@@ -167,7 +167,7 @@ class TestOperationAdd(TestJsonPatch):
             self.json_patch.load(json, self.user)
         self.assertEqual(
             str(ex.exception), "Value can not be None",
-            "Expected menseger to be equal to 'Value can not be None'")
+            "Expected message to be equal to 'Value can not be None'")
 
 
 class TestOperantionReplace(TestJsonPatch):
@@ -226,7 +226,7 @@ class TestOperantionReplace(TestJsonPatch):
             self.json_patch.load(json, self.user)
         self.assertEqual(
             str(ex.exception), "Value can not be None",
-            "Expected menseger to be equal to 'Value can not be None'")
+            "Expected message to be equal to 'Value can not be None'")
         self.assertEqual(self.user.name, "Luiz", "Name must be equal to Luiz")
 
     def test_replace_attr_nonexistent(self):
@@ -239,7 +239,7 @@ class TestOperantionReplace(TestJsonPatch):
             self.json_patch.load(json, self.user)
         self.assertEqual(
             str(ex.exception), "Attribute registration not found",
-            "Expected menseger to be equal to 'Attribute registration not found'")
+            "Expected message to be equal to 'Attribute registration not found'")
 
 
 class TestOperationRemove(TestJsonPatch):
@@ -292,7 +292,7 @@ class TestOperationRemove(TestJsonPatch):
             self.json_patch.load(json, self.user)
         self.assertEqual(
             str(ex.exception), "Attribute registration not found",
-            "Expected menseger to be equal to 'Attribute registration not found'")
+            "Expected message to be equal to 'Attribute registration not found'")
 
 
 class TestOperationTest(TestJsonPatch):
@@ -325,6 +325,6 @@ class TestOperationTest(TestJsonPatch):
         self.assertEqual(
             str(ex.exception),
             "Test fail, object Luiz does not correspond to what was passed Mayza",
-            "Expected menseger to be equal to 'Test fail, "
+            "Expected message to be equal to 'Test fail, "
             "object Luiz does not correspond to what was passed Mayza'")
         self.assertEqual(self.user.name, "Luiz", "Name must be equal to Luiz")

@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-"""Decorator test."""
-
 import unittest
 import sys
 sys.path.append("../")
@@ -17,9 +15,7 @@ from google.appengine.ext import testbed
 from google.appengine.ext import ndb
 
 
-
-class TestIsAuthorized(unittest.TestCase):
-    """Test class."""
+class Test(unittest.TestCase):
 
     @classmethod
     def setUp(cls):
@@ -100,22 +96,5 @@ class TestIsAuthorized(unittest.TestCase):
         cls.mayza_post.institution = cls.certbio.key
         cls.mayza_post.put()
 
-    def test_is_authorized(self):
-        """Test the is_authorized method."""
-        with self.assertRaises(NotAuthorizedException) as Aex:
-                is_decorated(self, self.raoni, self.mayza_post.key.urlsafe())
-        self.assertEqual(str(Aex.exception),
-                         'User is not allowed to remove this post')
-
     def test(self):
-        self.assertEqual(1, 1)
-
-    def tearDown(self):
-        self.testbed.deactivate()
-
-
-
-@is_authorized
-def is_decorated(self, user, key):
-    """Allow the system test the decorator."""
-    pass
+        self.assertEqual(1,1)

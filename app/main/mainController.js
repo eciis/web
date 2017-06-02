@@ -1,8 +1,11 @@
+'use strict';
 (function() {
     var app = angular.module('app');
 
-    app.controller("MainController", function MainController($mdSidenav, $mdDialog, $mdToast, $state, AuthService, PostService) {
+    app.controller("MainController", function MainController($mdSidenav, $mdDialog, $mdToast, $state, AuthService, InstitutionService) {
         var mainCtrl = this;
+        mainCtrl.expanded = false;
+        mainCtrl.institutions = [];
 
         Object.defineProperty(mainCtrl, 'user', {
             get: function() {
@@ -45,19 +48,32 @@
         mainCtrl.goTo = function goTo(state) {
             $state.go(state);
             mainCtrl.toggle();
+        };        
+
+        function getInstitutions(){
+            InstitutionService.getInstitutions().then(function sucess(response){
+                mainCtrl.institutions = response.data;
+            });
+        }
+
+        mainCtrl.expand = function expand(){
+            mainCtrl.expanded = true;
+            if(mainCtrl.institutions.length  === 0){
+                getInstitutions();
+            }
         };
 
-        mainCtrl.newPost = function(event) {
-            $mdDialog.show({
-                controller: "MainController",
-                controllerAs: "mainCtrl",
-                templateUrl: 'main/post_dialog.html',
-                parent: angular.element(document.body),
-                targetEvent: event,
-                clickOutsideToClose:true,
-                openFrom: '#fab-new-post',
-                closeTo: angular.element(document.querySelector('#fab-new-post'))
-            });
-        };        
+        mainCtrl.hide = function hide(){
+            mainCtrl.expanded = false;
+        };
+
+        mainCtrl.follow = function follow(institution_key){
+           InstitutionService.follow(institution_key); 
+           /**
+           TODO: First version doesn't treat the case in which the user is already 
+           the institution follower.
+           @author: Maiana Brito 01/06/2017
+           **/
+        };
     });
 })();

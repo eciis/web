@@ -1,10 +1,11 @@
 'use strict';
-
 (function() {
     var app = angular.module('app');
 
-    app.controller("MainController", function MainController($mdSidenav, $mdDialog, $mdToast, $state, AuthService) {
+    app.controller("MainController", function MainController($mdSidenav, $mdDialog, $mdToast, $state, AuthService, InstitutionService) {
         var mainCtrl = this;
+        mainCtrl.expanded = false;
+        mainCtrl.institutions = [];
 
         Object.defineProperty(mainCtrl, 'user', {
             get: function() {
@@ -48,5 +49,26 @@
             $state.go(state);
             mainCtrl.toggle();
         };        
+
+        getInstitutions = function(){
+            InstitutionService.getInstitutions().then(function sucess(response){
+                mainCtrl.institutions = response.data;
+            });
+        };
+
+        mainCtrl.expand = function expand(){
+            mainCtrl.expanded = true;
+            if(mainCtrl.institutions.length  === 0){
+                getInstitutions();
+            }
+        };
+
+        mainCtrl.hide = function hide(){
+            mainCtrl.expanded = false;
+        };
+
+        mainCtrl.follow = function follow(institution_key){
+           InstitutionService.follow(institution_key); 
+        };
     });
 })();

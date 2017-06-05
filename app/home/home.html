@@ -31,19 +31,15 @@
             </md-button>
           </md-card-icon-actions>
         </md-card-actions>
-        <md-button md-no-ink class="md-primary">Instituições
-          <md-button class="md-icon-button" ng-click="mainCtrl.expand()" ng-if="!mainCtrl.expanded">
-            <md-icon>expand_more</md-icon>
-          </md-button>
-          <md-button class="md-icon-button" ng-click="mainCtrl.hide()" ng-if="mainCtrl.expanded">
-            <md-icon>expand_less</md-icon>
-          </md-button>
+        <md-button md-no-ink class="md-primary" ng-click="homeCtrl.expandInstMenu()">Instituições
+            <md-icon ng-if="!homeCtrl.instMenuExpanded">expand_more</md-icon>
+            <md-icon ng-if="homeCtrl.instMenuExpanded">expand_less</md-icon>
         </md-button>
-        <div ng-if="mainCtrl.expanded">
-          <md-list-item ng-repeat="institution in mainCtrl.institutions" ng-click="null" class="noright">
+        <div ng-if="homeCtrl.instMenuExpanded">
+          <md-list-item ng-repeat="institution in homeCtrl.institutions" ng-click="null" class="noright">
             <img alt="{{ institution.name }}" ng-src="{{ institution.image_url }}" class="md-avatar" />
             <p>{{institution.name}}</p>
-            <md-button class="md-icon-button" ng-click="mainCtrl.follow(institution.key)">
+            <md-button class="md-icon-button" ng-click="homeCtrl.follow(institution)">
               <md-icon>add_circle</md-icon>
             </md-button>
             </md-list-item>

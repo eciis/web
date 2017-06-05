@@ -3,27 +3,19 @@
 (function() {
     var app = angular.module("app");
 
-    app.controller("HomeController", function HomeController(PostService, AuthService, $interval, $mdToast, $mdDialog) {
+    app.controller("HomeController", function HomeController(PostService, AuthService, InstitutionService, $interval, $mdToast, $mdDialog) {
         var homeCtrl = this;
         
         homeCtrl.posts = [];
+        homeCtrl.institutions = [];
+
+        homeCtrl.instMenuExpanded = false;
 
         Object.defineProperty(homeCtrl, 'user', {
             get: function() {
                 return AuthService.user;
             }
         });
-
-        var intervalPromise;
-
-        var loadPosts = function loadPosts() {
-            PostService.get().then(function success(response) {
-                homeCtrl.posts = response.data;
-            }, function error(response) {
-                $interval.cancel(intervalPromise); // Cancel the interval promise that load posts in case of error
-                showToast(response.data.msg);
-            });
-        };
 
         homeCtrl.deletePost = function deletePost(ev, post) {
             var confirm = $mdDialog.confirm()
@@ -102,9 +94,6 @@
             return key;
         }
 
-        loadPosts();
-
-        intervalPromise = $interval(loadPosts, 5000);
 
         function showToast(msg) {
             $mdToast.show(
@@ -129,5 +118,43 @@
                 closeTo: angular.element(document.querySelector('#fab-new-post'))
             });
         };
+
+
+        homeCtrl.expandInstMenu = function expandInstMenu(){
+            homeCtrl.instMenuExpanded = !homeCtrl.instMenuExpanded;
+        };
+
+        homeCtrl.follow = function follow(institution){
+            InstitutionService.follow(institution.key).then(function success(){
+                showToast("Seguindo "+institution.name);
+            }); 
+           /**
+           TODO: First version doesn't treat the case in which the user is already 
+           the institution follower.
+           @author: Maiana Brito 01/06/2017
+           **/
+        };
+
+        function getInstitutions(){
+            InstitutionService.getInstitutions().then(function sucess(response){
+                homeCtrl.institutions = response.data;
+            });
+        }
+
+        var intervalPromise;
+
+        var loadPosts = function loadPosts() {
+            PostService.get().then(function success(response) {
+                homeCtrl.posts = response.data;
+            }, function error(response) {
+                $interval.cancel(intervalPromise); // Cancel the interval promise that load posts in case of error
+                showToast(response.data.msg);
+            });
+        };
+        
+        loadPosts();
+        getInstitutions();
+
+        intervalPromise = $interval(loadPosts, 5000);
     });
 })();

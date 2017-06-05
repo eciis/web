@@ -41,11 +41,13 @@ class PostHandler(BaseHandler):
         action = self.request.url.split('/')[-1]
         post = ndb.Key(urlsafe=url_string).get()
         if action == 'like':
-            post.like()
-            user.like_post(post.key)
+            liked = user.like_post(post.key)
+            if liked:
+                post.like()
         if action == 'deslike':
-            post.deslike()
-            user.deslike_post(post.key)
+            desliked = user.deslike_post(post.key)
+            if desliked:
+                post.deslike()
 
     @json_response
     @login_required

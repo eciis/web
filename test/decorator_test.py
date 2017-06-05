@@ -16,14 +16,13 @@ from google.appengine.ext import testbed
 from google.appengine.ext import ndb
 
 
-
 class TestIsAuthorized(unittest.TestCase):
     """Test class."""
 
     @classmethod
     def setUp(cls):
         """Create the objects."""
-        #Initiate appengine services
+        # Initiate appengine services
         cls.testbed = testbed.Testbed()
         cls.testbed.activate()
         cls.testbed.init_datastore_v3_stub()
@@ -142,15 +141,6 @@ def initModels(cls):
     cls.mayza_post.text = "At vero eos et accusamus et iusto odio dignissimos \
         ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti \
         quos dolores et quas molestias excepturi sint occaecati cupiditate \
-        non provident, similique sunt in culpa qui officia deserunt mollitia \
-        id est laborum et dolorum fuga. Et harum quidem rerum facilis est et \
-        xpedita distinctio. Nam libero tempore, cum soluta nobis est eligendi \
-        optio cumque nihil impedit quo minus id quod maxime placeat facere \
-        possimus, omnis voluptas assumenda est, omnis dolor repellendus. \
-        emporibus autem quibusdam et aut officiis debitis aut rerum \
-        necessitatibus saepe eveniet ut et voluptates repudiandae sint \
-        et molestiae non recusandae. Itaque earum rerum hic tenetur sapiente \
-        delectus, ut aut reiciendis voluptatibus maiores alias consequatur \
         aut perferendis doloribus asperiores repellat."
     cls.mayza_post.author = cls.mayza.key
     cls.mayza_post.institution = cls.certbio.key
@@ -178,21 +168,12 @@ def initModels(cls):
     cls.raoni_post.title = "Novwdfssdo edital do CERTBIO"
     cls.raoni_post.text = "At vero eos et accusamus et iusto odio dignissimos \
         ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti \
-        quos dolores et quas molestias excepturi sint occaecati cupiditate \
-        non provident, similique sunt in dfsfdsfsdculpa qui officia deseritia \
-        id est laborum et dolorum fuga. Et harum quidem rerum facilis est et \
-        xpedita distinctio. Nam libero tempore, cum soluta nobis est eligendi \
-        optio cumque nihil impedit quo minus id quod maxime placeat facere \
-        possimus, omnis voluptas assumenda est, omnis dolor repellendus. \
-        emporibus autem quibusdam et aut officiis debitis aut rerum \
-        necessitatibus saepe eveniet ut et voluptates repudiandae sint \
-        et molestiae non recusandae. Itaque earum rerum hic tenetur sapiente \
         delectus, ut aut reiciendis voluptatibus maiores alias consequatur \
         aut perferendis doloribus asperiores repellat."
     cls.raoni_post.author = cls.raoni.key
     cls.raoni_post.institution = cls.splab.key
     cls.raoni_post.put()
-    # POST of Raoni To Certbio Institution
+    # POST of Ruan To Certbio Institution
     cls.ruan_post = Post()
     cls.ruan_post.title = "Novwdfssdo edital do CERTBIO"
     cls.ruan_post.text = "At vero eos et accusamus et iusto odio dignissimos \

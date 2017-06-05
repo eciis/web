@@ -118,7 +118,7 @@
         }
 
         homeCtrl.goToInstitution = function goToInstitution(institution) {
-            $state.go('app.institution', {institution: institution});
+            $state.go('app.institution', {institutionKey: institution});
         }; 
 
         homeCtrl.newPost = function newPost(event) {

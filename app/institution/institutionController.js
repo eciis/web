@@ -8,7 +8,7 @@
 
         institutionCtrl.current_institution = null;
 
-        institutionCtrl.current_institution_key = $state.params.institution;
+        institutionCtrl.current_institution_key = $state.params.institutionKey;
 
         institutionCtrl.posts = [];
 

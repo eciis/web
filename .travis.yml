@@ -11,6 +11,7 @@ before_script:
 - SDK_URL=https://storage.googleapis.com/appengine-sdks/featured/google_appengine_$SDK_VERSION.zip
 - wget $SDK_URL -nv
 - unzip -q google_appengine_$SDK_VERSION.zip
+- ls -la
 
 # command to run tests
 script: python -m unittest discover -v -p "*test.py"

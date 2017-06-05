@@ -6,6 +6,9 @@ import unittest
 from json_patch import JsonPatch
 from json_patch import PatchException
 
+from google.appengine.ext import testbed
+from google.appengine.ext import ndb
+
 
 def create_json_patch(operation, path, value=None):
     """Create string of json patch."""

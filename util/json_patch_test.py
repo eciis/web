@@ -3,6 +3,11 @@
 
 import unittest
 
+import sys
+sys.path.append("../")
+sys.path.insert(1, '../google_appengine')
+sys.path.insert(1, '../google_appengine/lib/yaml/lib')
+
 from json_patch import JsonPatch
 from json_patch import PatchException
 

@@ -36,7 +36,7 @@
             <md-icon ng-if="homeCtrl.instMenuExpanded">expand_less</md-icon>
         </md-button>
         <div ng-if="homeCtrl.instMenuExpanded">
-          <md-list-item ng-repeat="institution in homeCtrl.institutions" ng-click="null" class="noright">
+          <md-list-item ng-repeat="institution in homeCtrl.institutions" ng-click="homeCtrl.goToInstitution(institution.key)" class="noright">
             <img alt="{{ institution.name }}" ng-src="{{ institution.image_url }}" class="md-avatar" />
             <p>{{institution.name}}</p>
             <md-button class="md-icon-button" ng-click="homeCtrl.follow(institution)">

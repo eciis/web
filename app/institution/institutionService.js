@@ -19,7 +19,7 @@
 
         service.follow = function follow(institution_key) {
             var deferred = $q.defer();
-            $http.post(INSTITUTION_URI + "/" + institution_key + "/follower").then(function success(response) {
+            $http.post(INSTITUTION_URI + "/" + institution_key + "/follow").then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);

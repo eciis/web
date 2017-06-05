@@ -2,10 +2,8 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("MainController", function MainController($mdSidenav, $mdDialog, $mdToast, $state, AuthService, InstitutionService) {
+    app.controller("MainController", function MainController($mdSidenav, $mdDialog, $mdToast, $state, AuthService) {
         var mainCtrl = this;
-        mainCtrl.expanded = false;
-        mainCtrl.institutions = [];
 
         Object.defineProperty(mainCtrl, 'user', {
             get: function() {

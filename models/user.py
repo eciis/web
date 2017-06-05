@@ -54,6 +54,12 @@ class User(ndb.Model):
             self.follows.append(institution)
             self.put()
 
+    def unfollow(self, institution):
+        """Remove one institution in collection of follows."""
+        if institution in self.follows:
+            self.follows.remove(institution)
+            self.put()
+
     def like_post(self, postKey):
         """Method to give like in post."""
         if postKey not in self.liked_posts:

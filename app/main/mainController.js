@@ -49,31 +49,5 @@
             $state.go('app.institution', {institutionKey: institution});
             mainCtrl.toggle();
         };       
-
-        function getInstitutions(){
-            InstitutionService.getInstitutions().then(function sucess(response){
-                mainCtrl.institutions = response.data;
-            });
-        }
-
-        mainCtrl.expand = function expand(){
-            mainCtrl.expanded = true;
-            if(mainCtrl.institutions.length  === 0){
-                getInstitutions();
-            }
-        };
-
-        mainCtrl.hide = function hide(){
-            mainCtrl.expanded = false;
-        };
-
-        mainCtrl.follow = function follow(institution_key){
-           InstitutionService.follow(institution_key); 
-           /**
-           TODO: First version doesn't treat the case in which the user is already 
-           the institution follower.
-           @author: Maiana Brito 01/06/2017
-           **/
-        };
     });
 })();

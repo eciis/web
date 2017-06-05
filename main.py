@@ -24,8 +24,9 @@ webapp2.WSGIApplication.allowed_methods = frozenset(methods)
 app = webapp2.WSGIApplication([
     ("/api", MainHandler),
     ("/api/institution", InstitutionCollectionHandler),
-    ("/api/institution/(.*)/follower", InstitutionFollowerHandler),
     ("/api/institution/(.*)/timeline", InstitutionTimelineHandler),
+    ("/api/institution/(.*)/follow", InstitutionFollowerHandler),
+    ("/api/institution/(.*)/unfollow", InstitutionFollowerHandler),
     ("/api/institution/(.*)", InstitutionHandler),
     ("/api/key/(.*)", GetKeyHandler),
     ("/api/post", PostCollectionHandler),

@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.controller("HomeController", function HomeController(PostService, AuthService, $interval, $mdToast, $mdDialog, $state) {
+    app.controller("HomeController", function HomeController(PostService, AuthService, InstitutionService, $interval, $mdToast, $mdDialog, $state) {
         var homeCtrl = this;
         
         homeCtrl.posts = [];

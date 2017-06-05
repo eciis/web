@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("InstitutionController", function MainController($state, InstitutionService, $interval, $mdToast) {
+    app.controller("InstitutionController", function InstitutionController($state, InstitutionService, $interval, $mdToast) {
         var institutionCtrl = this;
 
         institutionCtrl.current_institution = null;
@@ -30,31 +30,31 @@
         var loadInstitution = function loadInstitution() {
             InstitutionService.getInstitution(current_institution_key).then(function success(response) {
                 institutionCtrl.current_institution = response.data;
-                institutionCtrl.getMembers();
-                institutionCtrl.getFollowers();
+                getMembers();
+                getFollowers();
             }, function error(response) {
                 $interval.cancel(intervalPromise); // Cancel the interval promise that load posts in case of error
                 showToast(response.data.msg);
             });
         };
 
-        institutionCtrl.getMembers = function getMembers() {
+        function getMembers() {
             InstitutionService.getMembers(current_institution_key).then(function success(response) {
                 institutionCtrl.members = response.data;
             }, function error(response) {
                 $interval.cancel(intervalPromise); // Cancel the interval promise that load posts in case of error
                 showToast(response.data.msg);
             });
-        };
+        }
 
-        institutionCtrl.getFollowers = function getFollowers() {
+        function getFollowers() {
             InstitutionService.getFollowers(current_institution_key).then(function success(response) {
                 institutionCtrl.followers = response.data;
             }, function error(response) {
                 $interval.cancel(intervalPromise); // Cancel the interval promise that load posts in case of error
                 showToast(response.data.msg);
             });
-        };
+        }
 
         loadPosts();
         loadInstitution();

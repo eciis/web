@@ -2,7 +2,6 @@
 """Post Comment Handler."""
 
 import json
-import datetime
 
 from google.appengine.ext import ndb
 
@@ -16,6 +15,14 @@ from models.post import Comment
 
 class PostCommentHandler(BaseHandler):
     """Posr Comment Handler."""
+
+    @json_response
+    @login_required
+    def get(self, user, url_string):
+        """Handle Get requests."""
+        post = ndb.Key(urlsafe=url_string).get()
+        comments = [Comment.make(c) for c in post.comments]
+        self.response.write(json.dumps(comments))
 
     @json_response
     @login_required
@@ -41,8 +48,6 @@ class PostCommentHandler(BaseHandler):
         """Handle Delete requests."""
         try:
             post = ndb.Key(urlsafe=url_string).get()
-            print 'deletar: ' + comment_id
-
             post.remove_comment(int(comment_id))
 
         except Exception as error:

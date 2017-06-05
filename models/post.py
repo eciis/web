@@ -19,9 +19,7 @@ def getHash(obj):
     if type(obj) is not dict:
         obj = obj.to_dict()
 
-    hash_value = hash(tuple(obj.items())) % (sys.maxint)
-    print hash_value
-    return hash_value
+    return hash(tuple(obj.items())) % (sys.maxint)
 
 
 class Comment(ndb.Model):
@@ -36,6 +34,7 @@ class Comment(ndb.Model):
     # user who is the author
     author = ndb.KeyProperty(kind="User", required=True)
 
+    # comment's id
     id = ndb.IntegerProperty()
 
     @staticmethod
@@ -108,7 +107,7 @@ class Post(ndb.Model):
     def create(data, author, institution):
         """Create a post and check required fields."""
         if not data['title']:
-            raise Exception("Field title can not be empty")
+            raise Exception("Field <tit></tit>le can not be empty")
         if not data['text']:
             raise Exception("Field text can not be empty")
         post = Post()

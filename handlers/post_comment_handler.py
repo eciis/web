@@ -41,7 +41,9 @@ class PostCommentHandler(BaseHandler):
         """Handle Delete requests."""
         try:
             post = ndb.Key(urlsafe=url_string).get()
-            post.remove_comment(comment_id)
+            print 'deletar: ' + comment_id
+
+            post.remove_comment(int(comment_id))
 
         except Exception as error:
             self.response.set_status(Utils.BAD_REQUEST)

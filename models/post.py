@@ -19,7 +19,9 @@ def getHash(obj):
     if type(obj) is not dict:
         obj = obj.to_dict()
 
-    return hash(tuple(obj.items())) % (sys.maxint * 2)
+    hash_value = hash(tuple(obj.items())) % (sys.maxint)
+    print hash_value
+    return hash_value
 
 
 class Comment(ndb.Model):
@@ -147,9 +149,9 @@ class Post(ndb.Model):
         self.comments.append(comment)
         self.put()
 
-    def remove_comment(self, comment):
+    def remove_comment(self, comment_id):
         """Remove a commet from post."""
-        self.comments = [c for c in self.comments if c.id != id]
+        self.comments = [c for c in self.comments if c.id != comment_id]
         self.put()
 
     def like(self):

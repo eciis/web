@@ -5,12 +5,21 @@ from google.appengine.ext import ndb
 from utils import Utils
 
 import datetime
+import sys
 
 
 def commentsToJsonList(comments):
     """Convert comments into a json list."""
     jsonList = [Utils.toJson(comment.to_dict()) for comment in comments]
     return jsonList
+
+
+def getHash(obj):
+    """Generate a hash to an object."""
+    if type(obj) is not dict:
+        obj = obj.to_dict()
+
+    return hash(tuple(obj.items())) % (sys.maxint * 2)
 
 
 class Comment(ndb.Model):
@@ -25,6 +34,8 @@ class Comment(ndb.Model):
     # user who is the author
     author = ndb.KeyProperty(kind="User", required=True)
 
+    id = ndb.IntegerProperty()
+
     @staticmethod
     def create(data, author):
         """Create a comment and check required fields."""
@@ -34,15 +45,10 @@ class Comment(ndb.Model):
         comment = Comment()
         comment.text = data['text']
         comment.author = author
+        comment.publication_date = datetime.datetime.now()
+        comment.id = getHash(comment)
 
         return comment
-
-    @staticmethod
-    def reCreate(data, author, publication_date):
-        """Recreate a comment."""
-        comment = Comment.create(data, author)
-        comment.publication_date = datetime.datetime.strptime(publication_date, "%Y-%m-%dT%H:%M:%S.%f")
-        # TODO: verify if the date is overided on backend
 
     @staticmethod
     def make(comment):
@@ -54,7 +60,8 @@ class Comment(ndb.Model):
             'author_name': author.name,
             'author_img': author.photo_url,
             'author_key': author.key.urlsafe(),
-            'publication_date': publication_date
+            'publication_date': publication_date,
+            'id': comment.id
         }
 
     def __eq__(self, other):
@@ -137,15 +144,12 @@ class Post(ndb.Model):
 
     def add_comment(self, comment):
         """Add a comment to the post."""
-        if self.comments:
-            self.comments.append(comment)
-        else:
-            self.comments = [comment]
+        self.comments.append(comment)
         self.put()
 
     def remove_comment(self, comment):
         """Remove a commet from post."""
-        self.comments.remove(comment)
+        self.comments = [c for c in self.comments if c.id != id]
         self.put()
 
     def like(self):

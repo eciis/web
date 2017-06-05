@@ -37,13 +37,11 @@ class PostCommentHandler(BaseHandler):
     @json_response
     @login_required
     @ndb.transactional(xg=True)
-    def delete(self, user, url_string):
+    def delete(self, user, url_string, comment_id):
         """Handle Delete requests."""
         try:
-            data = json.loads(self.request.body)
-            comment = Comment.create(data, user.key)
             post = ndb.Key(urlsafe=url_string).get()
-            post.remove_comment(comment)
+            post.remove_comment(comment_id)
 
         except Exception as error:
             self.response.set_status(Utils.BAD_REQUEST)

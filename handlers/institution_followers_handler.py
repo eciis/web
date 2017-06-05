@@ -11,7 +11,7 @@ from utils import json_response
 from handlers.base_handler import BaseHandler
 
 
-class InstitutionMembersHandler(BaseHandler):
+class InstitutionFollowersHandler(BaseHandler):
     """Get posts of specific institution."""
 
     @json_response
@@ -20,6 +20,6 @@ class InstitutionMembersHandler(BaseHandler):
         institution_key = ndb.Key(urlsafe=url_string)
         institution = institution_key.get()
 
-        array = [(member.get()) for member in institution.members]
+        array = [(member.get()) for member in institution.followers]
 
         self.response.write(json.dumps(Utils.toJson(array)))

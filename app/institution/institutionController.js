@@ -8,11 +8,15 @@
 
         institutionCtrl.current_institution = null;
 
-        var current_institution_key = $state.params.institutionKey;
-
         institutionCtrl.posts = [];
 
+        institutionCtrl.members = [];
+
+        institutionCtrl.followers = [];
+
         var intervalPromise;
+
+        var current_institution_key = $state.params.institutionKey;
 
         var loadPosts = function loadPosts() {
             InstitutionService.getTimeline(current_institution_key).then(function success(response) {
@@ -26,6 +30,26 @@
         var loadInstitution = function loadInstitution() {
             InstitutionService.getInstitution(current_institution_key).then(function success(response) {
                 institutionCtrl.current_institution = response.data;
+                institutionCtrl.getMembers();
+                institutionCtrl.getFollowers();
+            }, function error(response) {
+                $interval.cancel(intervalPromise); // Cancel the interval promise that load posts in case of error
+                showToast(response.data.msg);
+            });
+        };
+
+        institutionCtrl.getMembers = function getMembers() {
+            InstitutionService.getMembers(current_institution_key).then(function success(response) {
+                institutionCtrl.members = response.data;
+            }, function error(response) {
+                $interval.cancel(intervalPromise); // Cancel the interval promise that load posts in case of error
+                showToast(response.data.msg);
+            });
+        };
+
+        institutionCtrl.getFollowers = function getFollowers() {
+            InstitutionService.getFollowers(current_institution_key).then(function success(response) {
+                institutionCtrl.followers = response.data;
             }, function error(response) {
                 $interval.cancel(intervalPromise); // Cancel the interval promise that load posts in case of error
                 showToast(response.data.msg);
@@ -44,7 +68,6 @@
                     .hideDelay(5000)
                     .position('bottom right')
             );
-        }
-        
+        }   
     });
 })();

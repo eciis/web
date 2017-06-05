@@ -21,6 +21,6 @@ class InstitutionFollowersHandler(BaseHandler):
         institution_key = ndb.Key(urlsafe=url_string)
         institution = institution_key.get()
 
-        array = [(member.get()) for member in institution.followers]
+        array = [member.get() for member in institution.followers]
 
         self.response.write(json.dumps(Utils.toJson(array)))

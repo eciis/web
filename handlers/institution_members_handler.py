@@ -21,6 +21,6 @@ class InstitutionMembersHandler(BaseHandler):
         institution_key = ndb.Key(urlsafe=url_string)
         institution = institution_key.get()
 
-        array = [(member.get()) for member in institution.members]
+        array = [member.get() for member in institution.members]
 
         self.response.write(json.dumps(Utils.toJson(array)))

@@ -8,14 +8,14 @@
 
         institutionCtrl.current_institution = null;
 
-        institutionCtrl.current_institution_key = $state.params.institutionKey;
+        var current_institution_key = $state.params.institutionKey;
 
         institutionCtrl.posts = [];
 
         var intervalPromise;
 
         var loadPosts = function loadPosts() {
-            InstitutionService.getTimeline(institutionCtrl.current_institution_key).then(function success(response) {
+            InstitutionService.getTimeline(current_institution_key).then(function success(response) {
                 institutionCtrl.posts = response.data;
             }, function error(response) {
                 $interval.cancel(intervalPromise); // Cancel the interval promise that load posts in case of error
@@ -24,7 +24,7 @@
         };
 
         var loadInstitution = function loadInstitution() {
-            InstitutionService.getInstitution(institutionCtrl.current_institution_key).then(function success(response) {
+            InstitutionService.getInstitution(current_institution_key).then(function success(response) {
                 institutionCtrl.current_institution = response.data;
             }, function error(response) {
                 $interval.cancel(intervalPromise); // Cancel the interval promise that load posts in case of error

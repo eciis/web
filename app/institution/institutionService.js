@@ -46,6 +46,5 @@
             });
             return deferred.promise;
         };
-
     });
 })();

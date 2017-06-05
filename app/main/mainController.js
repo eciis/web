@@ -43,8 +43,8 @@
             mainCtrl.toggle();
         }; 
 
-        mainCtrl.goToInstitution = function goToInstitution(institution) {
-            $state.go('app.institution', {institutionKey: institution});
+        mainCtrl.goToInstitution = function goToInstitution(institutionKey) {
+            $state.go('app.institution', {institutionKey: institutionKey});
             mainCtrl.toggle();
         };       
     });

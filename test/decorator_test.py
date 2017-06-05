@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 """Decorator test."""
 
+
 import unittest
 import sys
 sys.path.append("../")
 sys.path.insert(1, '/home/raoni/google-cloud-sdk/platform/google_appengine')
+sys.path.insert(1, '/home/raoni/google-cloud-sdk/platform/google_appengine/lib/webapp2-2.5.2')
 sys.path.insert(1, '/home/raoni/google-cloud-sdk/platform/google_appengine/lib/yaml/lib')
 
 from models.post import Post
@@ -12,8 +14,11 @@ from utils import NotAuthorizedException
 from models.user import User
 from models.institution import Institution
 from utils import is_authorized
+from handlers.post_handler import PostHandler
 from google.appengine.ext import testbed
 from google.appengine.ext import ndb
+import webapp2
+import webtest
 
 
 class TestIsAuthorized(unittest.TestCase):
@@ -82,6 +87,27 @@ class TestIsAuthorized(unittest.TestCase):
 def is_decorated(self, user, key):
     """Allow the system test the decorator."""
     pass
+
+class post_handler_test(unittest.TestCase):
+
+    @classmethod
+    def setUp(cls):
+        app = webapp2.WSGIApplication([("/api/post/(.*)", PostHandler)], debug=True)
+        cls.testapp = webtest.TestApp(app)
+        cls.testbed = testbed.Testbed()
+        cls.testbed.activate()
+        cls.testbed.init_datastore_v3_stub()
+        cls.testbed.init_memcache_stub()
+        ndb.get_context().set_cache_policy(False)
+        initModels(cls)
+
+    def test_delete(self):
+        self.assertEqual(self.raoni_post.state, 'published')
+        self.testapp.delete("/api/post/%s" % self.raoni_post.key.urlsafe())
+        self.assertEqual(self.raoni_post.state, 'deleted')
+
+    def tearDown(cls):
+        cls.testbed.deactivate()
 
 
 def initModels(cls):
@@ -185,3 +211,12 @@ def initModels(cls):
     cls.ruan_post.author = cls.ruan.key
     cls.ruan_post.institution = cls.certbio.key
     cls.ruan_post.put()
+
+def suite():
+    suite = unittest.TestSuite()
+    suite.addTest(post_handler_test('test_delete'))
+    return suite
+
+
+if __name__ == '__main__':
+    unittest.TextTestRunner(verbosity=2).run(suite())

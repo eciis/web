@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 import datetime
+import sys
 
 from google.appengine.api import users
 from google.appengine.ext import ndb
@@ -135,6 +136,14 @@ class Utils():
         if condition:
             raise exception(msg)
 
+    @staticmethod
+    def getHash(obj):
+        """Generate a hash to an object."""
+        if type(obj) is not dict:
+            obj = obj.to_dict()
+
+        return hash(tuple(obj.items())) % (sys.maxint)
+
 
 def login_required(method):
     """Handle required login."""
@@ -220,3 +229,6 @@ def is_authorized(method):
                       NotAuthorizedException)
         method(self, user, key, *args)
     return check_authorization
+
+
+

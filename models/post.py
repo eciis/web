@@ -5,21 +5,27 @@ from google.appengine.ext import ndb
 from utils import Utils
 
 import datetime
-import sys
 
 
-def commentsToJsonList(comments):
-    """Convert comments into a json list."""
-    jsonList = [Utils.toJson(comment.to_dict()) for comment in comments]
-    return jsonList
+class CommentException(Exception):
+    """Comment Exception."""
+
+    def __init__(self, msg=None):
+        """Class constructor."""
+        super(CommentException, self).__init__(msg or "Invalid comment")
 
 
-def getHash(obj):
-    """Generate a hash to an object."""
-    if type(obj) is not dict:
-        obj = obj.to_dict()
+class PostException(Exception):
+    """Post Exception."""
 
-    return hash(tuple(obj.items())) % (sys.maxint)
+    def __init__(self, msg=None):
+        """Class constructor."""
+        super(PostException, self).__init__(msg or "Invalid post")
+
+
+def getCommentsUri(post, host):
+    """Create uri to access post comments."""
+    return "http://%s/api/post/%s/comment" % (host, post.key.urlsafe())
 
 
 class Comment(ndb.Model):
@@ -35,19 +41,19 @@ class Comment(ndb.Model):
     author = ndb.KeyProperty(kind="User", required=True)
 
     # comment's id
-    id = ndb.IntegerProperty()
+    id = ndb.IntegerProperty(required=True)
 
     @staticmethod
     def create(data, author):
         """Create a comment and check required fields."""
         if not data['text']:
-            raise Exception("Field text can not be empty")
+            raise CommentException("Field text can not be empty")
 
         comment = Comment()
         comment.text = data['text']
         comment.author = author
         comment.publication_date = datetime.datetime.now()
-        comment.id = getHash(comment)
+        comment.id = Utils.getHash(comment)
 
         return comment
 
@@ -64,12 +70,6 @@ class Comment(ndb.Model):
             'publication_date': publication_date,
             'id': comment.id
         }
-
-    def __eq__(self, other):
-        """Compare two Comment objects."""
-        if isinstance(other, self.__class__):
-            return self.__dict__ == other.__dict__
-        return False
 
 
 class Post(ndb.Model):
@@ -107,9 +107,9 @@ class Post(ndb.Model):
     def create(data, author, institution):
         """Create a post and check required fields."""
         if not data['title']:
-            raise Exception("Field <tit></tit>le can not be empty")
+            raise PostException("Field title can not be empty")
         if not data['text']:
-            raise Exception("Field text can not be empty")
+            raise PostException("Field text can not be empty")
         post = Post()
         post.title = data['title']
         post.headerImage = data.get('headerImage')
@@ -121,7 +121,7 @@ class Post(ndb.Model):
         return post
 
     @staticmethod
-    def make(post):
+    def make(post, host):
         """Create personalized json of post."""
         publication_date = post.publication_date.isoformat()
         author = post.author.get()
@@ -136,7 +136,7 @@ class Post(ndb.Model):
             'likes': post.likes,
             'headerImage': post.headerImage,
             'state': post.state,
-            'comments': commentsToJsonList(post.comments),
+            'comments': getCommentsUri(post, host),
             'publication_date': publication_date,
             'author_key': author.key.urlsafe(),
             'institution_key': institution.key.urlsafe(),
@@ -150,7 +150,8 @@ class Post(ndb.Model):
 
     def remove_comment(self, comment_id):
         """Remove a commet from post."""
-        self.comments = [c for c in self.comments if c.id != comment_id]
+        self.comments = [comment for comment in self.comments
+                         if comment.id != comment_id]
         self.put()
 
     def like(self):

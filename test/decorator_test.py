@@ -19,7 +19,7 @@ from google.appengine.ext import testbed
 from google.appengine.ext import ndb
 import webapp2
 import webtest
-
+import os
 
 class TestIsAuthorized(unittest.TestCase):
     """Test class."""
@@ -92,19 +92,25 @@ class post_handler_test(unittest.TestCase):
 
     @classmethod
     def setUp(cls):
-        app = webapp2.WSGIApplication([("/api/post/(.*)", PostHandler)], debug=True)
-        cls.testapp = webtest.TestApp(app)
         cls.testbed = testbed.Testbed()
         cls.testbed.activate()
         cls.testbed.init_datastore_v3_stub()
         cls.testbed.init_memcache_stub()
         ndb.get_context().set_cache_policy(False)
         initModels(cls)
+        app = webapp2.WSGIApplication([("/api/post/(.*)", PostHandler)], debug=True)
+        cls.testapp = webtest.TestApp(app)
+
+
 
     def test_delete(self):
-        self.assertEqual(self.raoni_post.state, 'published')
-        self.testapp.delete("/api/post/%s" % self.raoni_post.key.urlsafe())
-        self.assertEqual(self.raoni_post.state, 'deleted')
+        os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
+        os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
+        self.assertEqual(self.mayza_post.state, 'published')
+        self.testapp.delete("/api/post/%s" % self.mayza_post.key.urlsafe())
+        self.mayza_post = Post.query(Post.title == "Novo edital do CERTBIO").get()
+        self.assertEqual(self.mayza_post.state, 'deleted')
+
 
     def tearDown(cls):
         cls.testbed.deactivate()

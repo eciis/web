@@ -106,10 +106,6 @@ class JsonPatch(object):
 class Operation(object):
     """Class of operations in patch."""
 
-    def __init__(self, sub_class):
-        """Constructor of class Operation. Receives sub class entity."""
-        self.__subclass = sub_class
-
     def aply_patch(self, path, obj, entity_class, value=None):
         """Apply operation to received path."""
         path_list = path[1:].split('/')
@@ -123,16 +119,14 @@ class Operation(object):
             final_path = index_top
 
         if final_path.lstrip(integer_signals).isdigit():
-            self.__subclass.operation_in_list(
-                self,
+            self.operation_in_list(
                 value,
                 entity_class,
                 obj,
                 int(final_path),
             )
         else:
-            self.__subclass.operation_in_attribute(
-                self,
+            self.operation_in_attribute(
                 value,
                 entity_class,
                 obj,
@@ -165,27 +159,25 @@ class Operation(object):
 class Add(Operation):
     """Class of operation add."""
 
-    def __init__(self):
-        """Constructor of class Add."""
-        Operation.__init__(self, Add)
-
     @verify_entity
     def operation_in_list(self, value, entity_class, attribute_list, index):
         """Execute operation add in list."""
+        _assert(value is None, "Value can not be None")
         list_insert(attribute_list, value, index)
 
     @verify_entity
     def operation_in_attribute(self, value, entity_class, obj, attribute):
         """Execute Operation add in attribute."""
+        _assert(
+            hasattr(obj, attribute),
+            "Attribute %s already exists" % attribute
+        )
+        _assert(value is None, "Value can not be None")
         obj.__setattr__(attribute, value)
 
 
 class Remove(Operation):
     """Class of operation remove."""
-
-    def __init__(self):
-        """Constructor of class Remove."""
-        Operation.__init__(self, Remove)
 
     def operation_in_list(self, value, entity_class, attribute_list, index):
         """Execute operation remove in list."""
@@ -198,24 +190,16 @@ class Remove(Operation):
             "Attribute %s not found" % attribute
         )
 
-        if isinstance(value, int):
-            actual_value = obj.__getattribute__(attribute)
-            value = actual_value - value
-            obj.__setattr__(attribute, value)
-        else:
-            obj.__delattr__(attribute)
+        obj.__delattr__(attribute)
 
 
 class Replace(Operation):
     """Class of operation replace."""
 
-    def __init__(self):
-        """Constructor of class Replace."""
-        Operation.__init__(self, Replace)
-
     @verify_entity
     def operation_in_list(self, value, entity_class, attribute_list, index):
         """Execute operation replace in list."""
+        _assert(value is None, "Value can not be None")
         attribute_list.pop(index)
         list_insert(attribute_list, value, index)
 
@@ -226,20 +210,13 @@ class Replace(Operation):
             not hasattr(obj, attribute),
             "Attribute %s not found" % attribute
         )
-
-        if isinstance(value, int):
-            actual_value = obj.__getattribute__(attribute)
-            value = actual_value + value
+        _assert(value is None, "Value can not be None")
 
         obj.__setattr__(attribute, value)
 
 
 class Test(Operation):
     """Class of operation test."""
-
-    def __init__(self):
-        """Constructor of class Test."""
-        Operation.__init__(self, Test)
 
     @verify_entity
     def operation_in_list(self, value, entity_class, attribute_list, index):

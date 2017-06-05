@@ -5,6 +5,8 @@ import webapp2
 
 from handlers.main_handler import MainHandler
 from handlers.institution_handler import InstitutionHandler
+from handlers.institution_follower_handler import InstitutionFollowerHandler
+from handlers.institution_collection_handler import InstitutionCollectionHandler
 from handlers.login_logout_handler import LoginHandler
 from handlers.login_logout_handler import LogoutHandler
 from handlers.user_handler import UserHandler
@@ -20,10 +22,14 @@ webapp2.WSGIApplication.allowed_methods = frozenset(methods)
 
 app = webapp2.WSGIApplication([
     ("/api", MainHandler),
+    ("/api/institution", InstitutionCollectionHandler),
+    ("/api/institution/(.*)/follow", InstitutionFollowerHandler),
+    ("/api/institution/(.*)/unfollow", InstitutionFollowerHandler),
     ("/api/institution/(.*)", InstitutionHandler),
     ("/api/key/(.*)", GetKeyHandler),
     ("/api/post", PostCollectionHandler),
     ("/api/post/(.*)/like", PostHandler),
+    ("/api/post/(.*)/deslike", PostHandler),
     ("/api/post/(.*)", PostHandler),
     ("/api/user", UserHandler),
     ("/api/user/timeline", UserTimelineHandler),

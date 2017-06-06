@@ -18,9 +18,12 @@ def check_permission(user, post, comment_id):
     """Chech the user permission to delete comment."""
     institution = post.institution.get()
     comment = post.get_comment(comment_id)
-    Utils._assert(post.author != user.key and
-                  institution.admin != user.key and
-                  comment.author != user.key,
+    isNotPostAuthor = post.author != user.key
+    isNotAdmin = institution.admin != user.key
+    isNotCommentAuthor = comment.author != user.key
+    Utils._assert(isNotPostAuthor and
+                  isNotAdmin and
+                  isNotCommentAuthor,
                   "User not allowed to remove comment", NotAuthorizedException)
 
 

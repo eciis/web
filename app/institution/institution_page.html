@@ -1,67 +1,71 @@
 <md-content layout="row" md-colors="{background: 'grey-200'}" layout-align="center">
     <!-- CONTENT -->
-    <div flex-gt-lg="100" flex-lg="100" layout="row" layout-wrap layout-align="center">
+    <div flex-gt-lg="80" flex-lg="90" layout="row" layout-align="center">
 
         <!-- LEFT SIDE PANEL -->
-        <div flex-gt-md="20" flex-md="25" layout="column" hide show-gt-sm >
-            <md-card >
-                <md-card-title>
-                    <md-card-title-text>
-                        <span class="md-headline">{{ institutionCtrl.current_institution.name }}</span>
-                        <span class="md-subhead">{{ institutionCtrl.current_institution.phone_number }}</span>
-                    </md-card-title-text>
-                    <md-card-title-media>
-                        <img ng-src="{{ institutionCtrl.current_institution.image_url }}" class="md-media-lg card-media">
-                    </md-card-title-media>
-                </md-card-title>
+        <div flex flex-gt-xs="25" layout="column" hide show-gt-sm >
+            <div flex>
+                <md-card layout-padding>
+                    <center>
+                        <img ng-src="{{ institutionCtrl.current_institution.image_url }}" class="md-card-image"  width="50%">
+                    </center>
+                    <md-card-title>
+                        <md-card-title-text>
+                            <span class="md-headline"><b>{{ institutionCtrl.current_institution.name }}</b></span>
+                            <span class="md-subhead">{{ institutionCtrl.current_institution.phone_number }}</span>
+                        </md-card-title-text>
+                    </md-card-title>
 
-                <md-card-title>
-                    <md-card-title-text>
-                        <span class="md-subhead">{{ institutionCtrl.current_institution.address }}</span>
-                        <span class="md-subhead">{{ institutionCtrl.current_institution.description }}</span>
-                    </md-card-title-text>
-                </md-card-title>
-                
-                <md-card-actions layout="row">
-                    <md-card-icon-actions>
-                        <md-button class="md-icon-button" aria-label="Favorite"> 
-                            <md-icon>favorite</md-icon>
+                    <md-card-content>
+                        <p>{{ institutionCtrl.current_institution.address }}</p>
+                        <p>{{ institutionCtrl.current_institution.description }}</p>
+                    </md-card-content>
+                    
+                    <md-card-actions layout="row" layout-align="end center">
+                        <md-button ng-click="institutionCtrl.follow()" class="md-primary md-raised md-hue-2">
+                            <md-icon>person_add</md-icon>Seguir
                         </md-button>
-                    </md-card-icon-actions>
-                </md-card-actions>   
-            </md-card>
+                    </md-card-actions>
+                </md-card>
 
-            <!-- MEMBERS OF INSTITUTION -->
-            <md-card >
-                <md-subhead layout-padding class="md-primary" md-colors="{background: 'blue-900'}">Membros</md-subhead>
-                <md-card-content>
-                    <md-grid-list  md-cols-sm="2" md-cols-md="2" md-cols-gt-md="6" md-row-height-gt-md="1:1" md-row-height="2:2" md-gutter="4px" md-gutter-gt-sm="4px">
-                        <md-grid-tile ng-repeat="member in institutionCtrl.members" ng-click="null" md-rowspan="1" md-colspan="1" md-colspan-sm="1">
-                            <figure>
-                                <img ng-src="{{member.photo_url}}" width="100%" height="100%"/>
-                            </figure>
-                        </md-grid-tile>
-                    </md-grid-list>
-                </md-card-content>
-            </md-card>
+                <!-- MEMBERS OF INSTITUTION -->
+                <md-card >
+                    <md-subhead layout-padding class="md-primary" md-colors="{background: 'blue-900'}">Membros</md-subhead>
+                    <md-card-content>
+                        <md-grid-list  
+                                md-cols="5" md-cols-gt-md="6" 
+                                md-row-height="1:1" 
+                                md-gutter="4px" md-gutter-gt-sm="4px">
+                            <md-grid-tile ng-repeat="member in institutionCtrl.members" ng-click="null" md-rowspan="1" md-colspan="1" md-colspan-sm="1">
+                                <figure>
+                                    <img ng-src="{{member.photo_url}}" width="100%" height="100%"/>
+                                </figure>
+                            </md-grid-tile>
+                        </md-grid-list>
+                    </md-card-content>
+                </md-card>
 
-             <!-- FOLLOWERS OF INSTITUTION -->
-            <md-card >
-                <md-subhead layout-padding class="md-primary" md-colors="{background: 'blue-900'}">Seguidores</md-subhead>
-                <md-card-content>
-                    <md-grid-list md-cols-sm="2" md-cols-md="2" md-cols-gt-md="6" md-row-height-gt-md="1:1" md-row-height="2:2" md-gutter="4px" md-gutter-gt-sm="4px">
-                        <md-grid-tile ng-repeat="follower in institutionCtrl.followers" ng-click="null" md-rowspan="1" md-colspan="1" md-colspan-sm="1">
-                            <figure>
-                                <img ng-src="{{follower.photo_url}}" width="100%" height="100%"/>
-                            </figure>
-                        </md-grid-tile>
-                    </md-grid-list>
-                </md-card-content>
-            </md-card>    
+                 <!-- FOLLOWERS OF INSTITUTION -->
+                <md-card >
+                    <md-subhead layout-padding class="md-primary" md-colors="{background: 'blue-900'}">Seguidores</md-subhead>
+                    <md-card-content>
+                        <md-grid-list 
+                                md-cols="5" md-cols-gt-md="6" 
+                                md-row-height="1:1" 
+                                md-gutter="4px" md-gutter-gt-sm="4px">
+                            <md-grid-tile ng-repeat="follower in institutionCtrl.followers" ng-click="null" md-rowspan="1" md-colspan="1" md-colspan-sm="1">
+                                <figure>
+                                    <img ng-src="{{follower.photo_url}}" width="100%" height="100%"/>
+                                </figure>
+                            </md-grid-tile>
+                        </md-grid-list>
+                    </md-card-content>
+                </md-card>    
+            </div>
         </div>
 
         <!-- TIMELINE -->
-        <div flex-gt-md="60" flex-md="75" layout="column" md-colors="{background: 'grey-200'}">
+        <div flex layout="column" md-colors="{background: 'grey-200'}">
             <div flex>
                 <md-card ng-repeat="post in institutionCtrl.posts | orderBy:'date':true">
                     <md-card-header>

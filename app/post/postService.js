@@ -28,7 +28,7 @@
             return deferred.promise;
         };
 
-        service.likePost = function likePost(post) {
+        service.likeOrDeslikePost = function likePost(post) {
             var deferred = $q.defer();
             $http.post(POST_URI + '/' + post.key + '/like').then(function success(response) {
                 deferred.resolve(response);

@@ -57,7 +57,7 @@
         };
 
         function likePost(post) {
-            PostService.likePost(post).then(function success() {
+            PostService.likeOrDeslikePost(post).then(function success() {
                 addPostKeyToUser(post.key);
             }, function error(response) {
                 showToast(response.data.msg);
@@ -65,7 +65,7 @@
         }
 
         function deslikePost(post) {
-            PostService.likePost(post).then(function success() {
+            PostService.likeOrDeslikePost(post).then(function success() {
                 removePostKeyFromUser(post.key);
             }, function error(response) {
                 showToast(response.data.msg);
@@ -108,7 +108,7 @@
 
         homeCtrl.goToInstitution = function goToInstitution(institutionKey) {
             $state.go('app.institution', {institutionKey: institutionKey});
-        };   
+        };
 
         homeCtrl.newPost = function newPost(event) {
             $mdDialog.show({

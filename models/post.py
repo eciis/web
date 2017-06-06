@@ -7,20 +7,12 @@ from utils import Utils
 import datetime
 
 
-class CommentException(Exception):
-    """Comment Exception."""
+class FieldException(Exception):
+    """Field Exception."""
 
     def __init__(self, msg=None):
         """Class constructor."""
-        super(CommentException, self).__init__(msg or "Invalid comment")
-
-
-class PostException(Exception):
-    """Post Exception."""
-
-    def __init__(self, msg=None):
-        """Class constructor."""
-        super(PostException, self).__init__(msg or "Invalid post")
+        super(FieldException, self).__init__(msg or "Invalid field")
 
 
 def getCommentsUri(post, host):
@@ -47,7 +39,7 @@ class Comment(ndb.Model):
     def create(data, author):
         """Create a comment and check required fields."""
         if not data['text']:
-            raise CommentException("Field text can not be empty")
+            raise FieldException("Text can not be empty")
 
         comment = Comment()
         comment.text = data['text']
@@ -107,9 +99,9 @@ class Post(ndb.Model):
     def create(data, author, institution):
         """Create a post and check required fields."""
         if not data['title']:
-            raise PostException("Field title can not be empty")
+            raise FieldException("Title can not be empty")
         if not data['text']:
-            raise PostException("Field text can not be empty")
+            raise FieldException("Text can not be empty")
         post = Post()
         post.title = data['title']
         post.headerImage = data.get('headerImage')

@@ -18,7 +18,7 @@ class PostCommentHandler(BaseHandler):
     @json_response
     @login_required
     def get(self, user, url_string):
-        """Handle Get requests."""
+        """Handle Get Comments requests."""
         post = ndb.Key(urlsafe=url_string).get()
         comments = [Comment.make(comment)
                     for comment in post.comments]
@@ -28,7 +28,7 @@ class PostCommentHandler(BaseHandler):
     @login_required
     @ndb.transactional(xg=True)
     def post(self, user, url_string):
-        """Handle Post requests."""
+        """Handle Post Comments requests."""
         data = json.loads(self.request.body)
         post = ndb.Key(urlsafe=url_string).get()
         comment = Comment.create(data, user.key)
@@ -40,6 +40,6 @@ class PostCommentHandler(BaseHandler):
     @login_required
     @ndb.transactional(xg=True)
     def delete(self, user, url_string, comment_id):
-        """Handle Delete requests."""
+        """Handle Delete Comments requests."""
         post = ndb.Key(urlsafe=url_string).get()
         post.remove_comment(int(comment_id))

@@ -229,6 +229,3 @@ def is_authorized(method):
                       NotAuthorizedException)
         method(self, user, key, *args)
     return check_authorization
-
-
-

@@ -32,18 +32,22 @@ class Comment(ndb.Model):
     # user who is the author
     author = ndb.KeyProperty(kind="User", required=True)
 
+    # Post from which the comment belongs
+    post = ndb.KeyProperty(kind="Post", required=True)
+
     # comment's id
     id = ndb.IntegerProperty(required=True)
 
     @staticmethod
-    def create(data, author):
+    def create(data, author_key, post_key):
         """Create a comment and check required fields."""
         if not data['text']:
             raise FieldException("Text can not be empty")
 
         comment = Comment()
         comment.text = data['text']
-        comment.author = author
+        comment.author = author_key
+        comment.post = post_key
         comment.publication_date = datetime.datetime.now()
         comment.id = Utils.getHash(comment)
 
@@ -59,6 +63,7 @@ class Comment(ndb.Model):
             'author_name': author.name,
             'author_img': author.photo_url,
             'author_key': author.key.urlsafe(),
+            'post_key': comment.post.urlsafe(),
             'publication_date': publication_date,
             'id': comment.id
         }
@@ -96,7 +101,7 @@ class Post(ndb.Model):
     likes = ndb.IntegerProperty(default=0)
 
     @staticmethod
-    def create(data, author, institution):
+    def create(data, author_key, institution_key):
         """Create a post and check required fields."""
         if not data['title']:
             raise FieldException("Title can not be empty")
@@ -106,8 +111,8 @@ class Post(ndb.Model):
         post.title = data['title']
         post.headerImage = data.get('headerImage')
         post.text = data['text']
-        post.author = author
-        post.institution = institution
+        post.author = author_key
+        post.institution = institution_key
         post.comments = []
 
         return post
@@ -134,6 +139,13 @@ class Post(ndb.Model):
             'institution_key': institution.key.urlsafe(),
             'key': post.key.urlsafe()
         }
+
+    def get_comment(self, comment_id):
+        """Get a comment by id."""
+        for comment in self.comments:
+            if comment.id == comment_id:
+                return comment
+        return None
 
     def add_comment(self, comment):
         """Add a comment to the post."""

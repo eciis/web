@@ -214,18 +214,16 @@ def is_institution_member(method):
 
 def is_authorized(method):
     """Check if the user is the author of the post."""
-    def check_authorization(self, user, key, *args):
-        obj_key = ndb.Key(urlsafe=key)
+    def check_authorization(self, user, url_string, *args):
+        obj_key = ndb.Key(urlsafe=url_string)
         post = obj_key.get()
         institution = post.institution.get()
         Utils._assert(not post or not institution,
                       'Post or institution is invalid', Exception)
-        Utils._assert(user.key not in institution.members,
-                      'User is not a member of this institution',
-                      NotAuthorizedException)
-        Utils._assert(not post.author == user.key and not
-                      institution.admin == user.key,
+        Utils._assert(post.author != user.key and
+                      institution.admin != user.key,
                       'User is not allowed to remove this post',
                       NotAuthorizedException)
-        method(self, user, key, *args)
+
+        method(self, user, url_string, *args)
     return check_authorization

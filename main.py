@@ -5,7 +5,6 @@ import webapp2
 
 from handlers.main_handler import MainHandler
 from handlers.institution_handler import InstitutionHandler
-from handlers.institution_follower_handler import InstitutionFollowerHandler
 from handlers.institution_members_handler import InstitutionMembersHandler
 from handlers.institution_followers_handler import InstitutionFollowersHandler
 from handlers.institution_collection_handler import InstitutionCollectionHandler
@@ -29,8 +28,8 @@ app = webapp2.WSGIApplication([
     ("/api/institution/(.*)/timeline", InstitutionTimelineHandler),
     ("/api/institution/(.*)/members", InstitutionMembersHandler),
     ("/api/institution/(.*)/followers", InstitutionFollowersHandler),
-    ("/api/institution/(.*)/follow", InstitutionFollowerHandler),
-    ("/api/institution/(.*)/unfollow", InstitutionFollowerHandler),
+    ("/api/institution/(.*)/follow", InstitutionFollowersHandler),
+    ("/api/institution/(.*)/unfollow", InstitutionFollowersHandler),
     ("/api/institution/(.*)", InstitutionHandler),
     ("/api/key/(.*)", GetKeyHandler),
     ("/api/post", PostCollectionHandler),

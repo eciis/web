@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.controller("HomeController", function HomeController(PostService, AuthService, InstitutionService, $interval, $mdToast, $mdDialog) {
+    app.controller("HomeController", function HomeController(PostService, AuthService, InstitutionService, $interval, $mdToast, $mdDialog, $state) {
         var homeCtrl = this;
 
         homeCtrl.posts = [];
@@ -105,6 +105,10 @@
                     .position('bottom right')
             );
         }
+
+        homeCtrl.goToInstitution = function goToInstitution(institutionKey) {
+            $state.go('app.institution', {institutionKey: institutionKey});
+        };   
 
         homeCtrl.newPost = function newPost(event) {
             $mdDialog.show({

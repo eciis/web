@@ -1,0 +1,114 @@
+<md-content layout="row" md-colors="{background: 'grey-200'}" layout-align="center">
+    <!-- CONTENT -->
+    <div flex-gt-lg="100" flex-lg="100" layout="row" layout-wrap layout-align="center">
+
+        <!-- LEFT SIDE PANEL -->
+        <div flex-gt-md="20" flex-md="25" layout="column" hide show-gt-sm >
+            <md-card >
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline">{{ institutionCtrl.current_institution.name }}</span>
+                        <span class="md-subhead">{{ institutionCtrl.current_institution.phone_number }}</span>
+                    </md-card-title-text>
+                    <md-card-title-media>
+                        <img ng-src="{{ institutionCtrl.current_institution.image_url }}" class="md-media-lg card-media">
+                    </md-card-title-media>
+                </md-card-title>
+
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-subhead">{{ institutionCtrl.current_institution.address }}</span>
+                        <span class="md-subhead">{{ institutionCtrl.current_institution.description }}</span>
+                    </md-card-title-text>
+                </md-card-title>
+                
+                <md-card-actions layout="row">
+                    <md-card-icon-actions>
+                        <md-button class="md-icon-button" aria-label="Favorite"> 
+                            <md-icon>favorite</md-icon>
+                        </md-button>
+                    </md-card-icon-actions>
+                </md-card-actions>   
+            </md-card>
+
+            <!-- MEMBERS OF INSTITUTION -->
+            <md-card >
+                <md-subhead layout-padding class="md-primary" md-colors="{background: 'blue-900'}">Membros</md-subhead>
+                <md-card-content>
+                    <md-grid-list  md-cols-sm="2" md-cols-md="2" md-cols-gt-md="6" md-row-height-gt-md="1:1" md-row-height="2:2" md-gutter="4px" md-gutter-gt-sm="4px">
+                        <md-grid-tile ng-repeat="member in institutionCtrl.members" ng-click="null" md-rowspan="1" md-colspan="1" md-colspan-sm="1">
+                            <figure>
+                                <img ng-src="{{member.photo_url}}" width="100%" height="100%"/>
+                            </figure>
+                        </md-grid-tile>
+                    </md-grid-list>
+                </md-card-content>
+            </md-card>
+
+             <!-- FOLLOWERS OF INSTITUTION -->
+            <md-card >
+                <md-subhead layout-padding class="md-primary" md-colors="{background: 'blue-900'}">Seguidores</md-subhead>
+                <md-card-content>
+                    <md-grid-list md-cols-sm="2" md-cols-md="2" md-cols-gt-md="6" md-row-height-gt-md="1:1" md-row-height="2:2" md-gutter="4px" md-gutter-gt-sm="4px">
+                        <md-grid-tile ng-repeat="follower in institutionCtrl.followers" ng-click="null" md-rowspan="1" md-colspan="1" md-colspan-sm="1">
+                            <figure>
+                                <img ng-src="{{follower.photo_url}}" width="100%" height="100%"/>
+                            </figure>
+                        </md-grid-tile>
+                    </md-grid-list>
+                </md-card-content>
+            </md-card>    
+        </div>
+
+        <!-- TIMELINE -->
+        <div flex-gt-md="60" flex-md="75" layout="column" md-colors="{background: 'grey-200'}">
+            <div flex>
+                <md-card ng-repeat="post in institutionCtrl.posts | orderBy:'date':true">
+                    <md-card-header>
+                        <md-card-avatar>
+                            <img src="{{ post.institution_image }}" class="md-user-avatar" ng-click="homeCtrl.goToInstitution(institution)"/>
+                        </md-card-avatar>
+                        <md-card-header-text>
+                            <span class="md-title">{{ post.institution_name }}</span>
+                            <span class="md-subhead">por {{ post.author }} em {{ post.publication_date | date:'dd-MM-yyyy' }}</span>
+                        </md-card-header-text>
+                    </md-card-header>
+                    
+                    <img ng-src="{{ post.headerImage }}" class="md-card-image">
+                    
+                    <md-card-title>
+                        <md-card-title-text>
+                            <span class="md-headline">{{post.title}}</span>
+                        </md-card-title-text>
+                    </md-card-title>
+                    
+                    <md-card-content>
+                        <p> {{post.text}} </p>
+                    </md-card-content>
+        
+                    <md-card-actions layout="row" layout-align="end center">
+                        <span class="md-caption" ng-show="time">{{ post.publication_date | date:'dd-MM-yyyy HH:mm:ss' }}</span>
+                        <md-button ng-if="homeCtrl.isAuthorized(post)" class="md-icon-button" arial-label="Delete" 
+                            ng-click="homeCtrl.deletePost($event, post)">
+                            <md-icon>delete</md-icon>
+                        </md-button>
+                        <md-button class="md-icon-button" aria-label="Data" ng-click="time = !time;">
+                            <md-icon>access_time</md-icon>
+                        </md-button>
+                        <md-button class="md-icon-button" aria-label="Favorite" ng-click="homeCtrl.likeOrDeslikePost(post)"
+                            ng-class="homeCtrl.isLikedByUser(post)?'md-warn':''">
+                            <md-icon>grade</md-icon>
+                        </md-button>
+                        <md-button class="md-icon-button" aria-label="Settings">
+                            <md-icon>menu</md-icon>
+                        </md-button>
+                        <md-button class="md-icon-button" aria-label="Share">
+                            <md-icon>share_arrow</md-icon>
+                        </md-button>
+                    </md-card-actions>
+                </md-card>
+            </div>
+        </div>
+
+    <div>
+</md-content>

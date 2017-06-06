@@ -54,8 +54,7 @@ class InitHandler(BaseHandler):
         jorge = User()
         jorge.name = 'Jorge Abrantes'
         jorge.cpf = '089.675.908-10'
-        jorge.photo_url = 'http://www.ceei.ufcg.edu.br/_/rsrc/1472854148636/\
-        AssessoriadeComunicacao/noticias/iforumdegestoresdaufcg/0003.jpg?height=150&width=200'
+        jorge.photo_url = 'http://www.ceei.ufcg.edu.br/_/rsrc/1472854148636/AssessoriadeComunicacao/noticias/iforumdegestoresdaufcg/0003.jpg?height=150&width=200'
         jorge.email = 'abrantes@dsc.ufcg.edu.br'
         jorge.institutions = []
         jorge.follows = []
@@ -81,7 +80,7 @@ class InitHandler(BaseHandler):
         maiana = User()
         maiana.name = 'Maiana Brito'
         maiana.cpf = '089.675.908-65'
-        maiana.photo_url = ''
+        maiana.photo_url = 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSPmtcCROhhQIkQHhw_6elHBnO7b9jM-o_KiUtanTNbk1zRGzsnf0Fu2w'
         maiana.email = 'maiana.brito@ccc.ufcg.edu.br'
         maiana.institutions = []
         maiana.follows = []
@@ -94,7 +93,7 @@ class InitHandler(BaseHandler):
         raoni = User()
         raoni.name = 'Raoni Smaneoto'
         raoni.cpf = '089.675.908-65'
-        raoni.photo_url = ''
+        raoni.photo_url = 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSPmtcCROhhQIkQHhw_6elHBnO7b9jM-o_KiUtanTNbk1zRGzsnf0Fu2w'
         raoni.email = 'raoni.smaneoto@ccc.ufcg.edu.br'
         raoni.institutions = []
         raoni.follows = []
@@ -107,7 +106,7 @@ class InitHandler(BaseHandler):
         luiz = User()
         luiz.name = 'Luiz Silva'
         luiz.cpf = '089.675.908-65'
-        luiz.photo_url = ''
+        luiz.photo_url = 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSPmtcCROhhQIkQHhw_6elHBnO7b9jM-o_KiUtanTNbk1zRGzsnf0Fu2w'
         luiz.email = 'luiz.silva@ccc.ufcg.edu.br'
         luiz.institutions = []
         luiz.follows = []
@@ -120,7 +119,7 @@ class InitHandler(BaseHandler):
         ruan = User()
         ruan.name = 'Ruan Silveira'
         ruan.cpf = '089.675.908-65'
-        ruan.photo_url = ''
+        ruan.photo_url = 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSPmtcCROhhQIkQHhw_6elHBnO7b9jM-o_KiUtanTNbk1zRGzsnf0Fu2w'
         ruan.email = 'ruan.silveira@ccc.ufcg.edu.br'
         ruan.institutions = []
         ruan.follows = []
@@ -133,7 +132,7 @@ class InitHandler(BaseHandler):
         tiago = User()
         tiago.name = 'Tiago Pereira'
         tiago.cpf = '089.675.908-65'
-        tiago.photo_url = ''
+        tiago.photo_url = 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSPmtcCROhhQIkQHhw_6elHBnO7b9jM-o_KiUtanTNbk1zRGzsnf0Fu2w'
         tiago.email = 'tiago.pereira@ccc.ufcg.edu.br'
         tiago.institutions = []
         tiago.follows = []

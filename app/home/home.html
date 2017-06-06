@@ -54,11 +54,9 @@
         <md-card ng-repeat="post in homeCtrl.posts | orderBy:'date':true">
           <md-card-header>
             <md-card-avatar>
-              <div>
-                <a href="">
-                  <img src="{{ post.institution_image }}" role="button" class="md-user-avatar" ng-click="homeCtrl.goToInstitution(post.institution_key)"/>
-                </a>
-              </div>
+              <a href="">
+                <img src="{{ post.institution_image }}" role="button" class="md-user-avatar" ng-click="homeCtrl.goToInstitution(post.institution_key)"/>
+              </a>
             </md-card-avatar>
             <md-card-header-text>
               <div>

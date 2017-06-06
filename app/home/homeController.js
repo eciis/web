@@ -40,9 +40,10 @@
         };
 
         homeCtrl.isAuthorized = function isAuthorized(post) {
-            if ((post.author_key == homeCtrl.user.key &&
-                _.find(homeCtrl.user.institutions, ['key', post.institution_key])) ||
-                _.includes(_.map(homeCtrl.user.institutions_admin, getKeyFromUrl), post.institution_key)) {
+            var isAuthorPost = post.author_key == homeCtrl.user.key;
+            var isInstitutionsMember= _.find(homeCtrl.user.institutions, ['key', post.institution_key]);
+            var isInstitutionAdmin = _.includes(_.map(homeCtrl.user.institutions_admin, getKeyFromUrl), post.institution_key);
+            if (isAuthorPost && isInstitutionsMember || isInstitutionAdmin) {
                 return true;
             }
             return false;

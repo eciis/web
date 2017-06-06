@@ -62,18 +62,16 @@ class User(ndb.Model):
 
     def is_liked_post(self, postKey):
         """Verify if post is liked."""
-        if postKey in self.liked_posts:
-            return True
-        return False
+        return postKey in self.liked_posts
 
     def like_post(self, postKey):
         """Method to give like in post."""
-        if postKey not in self.liked_posts:
+        if not self.is_liked_post(postKey):
             self.liked_posts.append(postKey)
             self.put()
 
     def deslike_post(self, postKey):
         """Method to deslike a post."""
-        if postKey in self.liked_posts:
+        if self.is_liked_post(postKey):
             self.liked_posts.remove(postKey)
             self.put()

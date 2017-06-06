@@ -60,18 +60,19 @@ class User(ndb.Model):
             self.follows.remove(institution)
             self.put()
 
+    def is_liked_post(self, postKey):
+        if postKey not in self.liked_posts:
+            return False
+        return True
+
     def like_post(self, postKey):
         """Method to give like in post."""
         if postKey not in self.liked_posts:
             self.liked_posts.append(postKey)
             self.put()
-            return True
-        return False
 
     def deslike_post(self, postKey):
         """Method to deslike a post."""
         if postKey in self.liked_posts:
             self.liked_posts.remove(postKey)
             self.put()
-            return True
-        return False

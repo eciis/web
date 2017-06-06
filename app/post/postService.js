@@ -38,16 +38,6 @@
             return deferred.promise;
         };
 
-        service.deslikePost = function deslikePost(post) {
-            var deferred = $q.defer();
-            $http.post(POST_URI + '/' + post.key + '/deslike').then(function success(response) {
-                deferred.resolve(response);
-            }, function error(response) {
-                deferred.reject(response);
-            });
-            return deferred.promise;
-        };
-
         service.deletePost = function deletePost(post) {
             var deferred = $q.defer();
             $http.delete(POST_URI + '/' + post.key).then(function success(response) {

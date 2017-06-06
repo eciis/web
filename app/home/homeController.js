@@ -5,7 +5,7 @@
 
     app.controller("HomeController", function HomeController(PostService, AuthService, InstitutionService, $interval, $mdToast, $mdDialog) {
         var homeCtrl = this;
-        
+
         homeCtrl.posts = [];
         homeCtrl.institutions = [];
 
@@ -40,8 +40,8 @@
         };
 
         homeCtrl.isAuthorized = function isAuthorized(post) {
-            if ((post.author_key == homeCtrl.user.key && 
-                _.find(homeCtrl.user.institutions, ['key', post.institution_key])) || 
+            if ((post.author_key == homeCtrl.user.key &&
+                _.find(homeCtrl.user.institutions, ['key', post.institution_key])) ||
                 _.includes(_.map(homeCtrl.user.institutions_admin, getKeyFromUrl), post.institution_key)) {
                 return true;
             }
@@ -65,7 +65,7 @@
         }
 
         function deslikePost(post) {
-            PostService.deslikePost(post).then(function success() {
+            PostService.likePost(post).then(function success() {
                 removePostKeyFromUser(post.key);
             }, function error(response) {
                 showToast(response.data.msg);
@@ -127,9 +127,9 @@
         homeCtrl.follow = function follow(institution){
             InstitutionService.follow(institution.key).then(function success(){
                 showToast("Seguindo "+institution.name);
-            }); 
+            });
            /**
-           TODO: First version doesn't treat the case in which the user is already 
+           TODO: First version doesn't treat the case in which the user is already
            the institution follower.
            @author: Maiana Brito 01/06/2017
            **/
@@ -151,7 +151,7 @@
                 showToast(response.data.msg);
             });
         };
-        
+
         loadPosts();
         getInstitutions();
 

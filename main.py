@@ -17,6 +17,7 @@ from handlers.institution_timeline_handler import InstitutionTimelineHandler
 from handlers.user_timeline_handler import UserTimelineHandler
 from handlers.erro_handler import ErroHandler
 from handlers.get_key_handler import GetKeyHandler
+from handlers.post_comment_handler import PostCommentHandler
 
 methods = set(webapp2.WSGIApplication.allowed_methods)
 methods.add('PATCH')
@@ -32,9 +33,11 @@ app = webapp2.WSGIApplication([
     ("/api/institution/(.*)/unfollow", InstitutionFollowersHandler),
     ("/api/institution/(.*)", InstitutionHandler),
     ("/api/key/(.*)", GetKeyHandler),
-    ("/api/post", PostCollectionHandler),
+    ("/api/post/(.*)/comment/(.*)", PostCommentHandler),
+    ("/api/post/(.*)/comment", PostCommentHandler),
     ("/api/post/(.*)/like", PostHandler),
     ("/api/post/(.*)", PostHandler),
+    ("/api/post", PostCollectionHandler),
     ("/api/user", UserHandler),
     ("/api/user/timeline", UserTimelineHandler),
     ("/login", LoginHandler),

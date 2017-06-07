@@ -25,7 +25,6 @@ class PostHandlerTest(TestBase):
         app = cls.webapp2.WSGIApplication(
             [("/api/post/(.*)", PostHandler),
              ("/api/post/(.*)/like", PostHandler),
-             ("/api/post/(.*)/deslike", PostHandler),
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
@@ -69,8 +68,8 @@ class PostHandlerTest(TestBase):
         self.assertEqual(self.mayza_post.likes, 0,
                          "The number of likes expected was 0")
         # Call the delete method
-        self.testapp.post_json("/api/post/%s/like"
-                               % self.mayza_post.key.urlsafe())
+        self.testapp.post("/api/post/%s/like"
+                          % self.mayza_post.key.urlsafe())
         # Verify if after the like the number of likes at post is 1
         self.mayza_post = self.mayza_post.key.get()
         self.assertEqual(self.mayza_post.likes, 1,

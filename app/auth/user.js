@@ -12,6 +12,16 @@ User.prototype.changeInstitution = function changeInstitution(name) {
     this.current_institution = _.find(this.institutions, {'name': name});
 };
 
+User.prototype.follow = function follow(keyInstitution) {
+    this.follows.push(keyInstitution);
+};
+
+User.prototype.unfollow = function unfollow(keyInstitution) {
+    this.follows = _.remove(this.follows, function(institution){
+    	return getKey(institution) != keyInstitution;
+    });
+};
+
 User.prototype.isFollower = function isFollower(keyInstitution) {
 	var isFollower = false;
 
@@ -22,16 +32,6 @@ User.prototype.isFollower = function isFollower(keyInstitution) {
           }
     });
     return isFollower;
-};
-
-User.prototype.follow = function follow(keyInstitution) {
-    this.follows.push(keyInstitution);
-};
-
-User.prototype.unfollow = function unfollow(keyInstitution) {
-    this.follows = _.remove(this.follows, function(institution){
-    	return getKey(institution) != keyInstitution;
-    });
 };
 
 function getImage(email) {

@@ -127,6 +127,12 @@
             homeCtrl.instMenuExpanded = !homeCtrl.instMenuExpanded;
         };
 
+        function getInstitutions(){
+            InstitutionService.getInstitutions().then(function sucess(response){
+                homeCtrl.institutions = response.data;
+            });
+        }
+
         homeCtrl.follow = function follow(institution){
             InstitutionService.follow(institution.key).then(function success(){
                 showToast("Seguindo "+institution.name);
@@ -145,12 +151,6 @@
                 homeCtrl.user.unfollow(institution.key);
            });
         };
-
-        function getInstitutions(){
-            InstitutionService.getInstitutions().then(function sucess(response){
-                homeCtrl.institutions = response.data;
-            });
-        }
 
         var intervalPromise;
 

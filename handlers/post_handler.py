@@ -38,6 +38,7 @@ class PostHandler(BaseHandler):
 
         This method is only meant to give like in post
         """
+        print url_string
         post = ndb.Key(urlsafe=url_string).get()
         if not user.is_liked_post(post.key):
             user.like_post(post.key)

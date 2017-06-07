@@ -2,39 +2,27 @@
 """Decorator test."""
 
 
-import unittest
-import sys
-sys.path.append("../")
-sys.path.insert(1, 'google_appengine')
-sys.path.insert(1, 'google_appengine/lib/webapp2-2.5.2')
-sys.path.insert(1, 'google_appengine/lib/yaml/lib')
-
+from test_base import TestBase
 from models.post import Post
 from utils import NotAuthorizedException
 from models.user import User
 from models.institution import Institution
 from utils import is_authorized
 from handlers.post_handler import PostHandler
-from google.appengine.ext import testbed
-from google.appengine.ext import ndb
-import webapp2
-import webtest
-import os
-from google.appengine.datastore import datastore_stub_util
 
 
-class TestIsAuthorized(unittest.TestCase):
+class TestIsAuthorized(TestBase):
     """Test class."""
 
     @classmethod
     def setUp(cls):
         """Create the objects."""
         # Initiate appengine services
-        cls.testbed = testbed.Testbed()
-        cls.testbed.activate()
-        cls.testbed.init_datastore_v3_stub()
-        cls.testbed.init_memcache_stub()
-        ndb.get_context().set_cache_policy(False)
+        cls.test = cls.testbed.Testbed()
+        cls.test.activate()
+        cls.test.init_datastore_v3_stub()
+        cls.test.init_memcache_stub()
+        cls.ndb.get_context().set_cache_policy(False)
 
         initModels(cls)
 
@@ -62,23 +50,6 @@ class TestIsAuthorized(unittest.TestCase):
         self.assertEqual(str(Aex.exception),
                          'User is not allowed to remove this post')
 
-    def test_not_member(self):
-        """Test when the user isn't an institution's member."""
-        """Make sure that an exception is raised because the user
-        is not a member of the institution."""
-        with self.assertRaises(NotAuthorizedException) as Aex:
-            is_decorated(self, self.raoni, self.raoni_post.key.urlsafe())
-        # Make sure that the message of the exception is the expected one
-        self.assertEqual(str(Aex.exception),
-                         'User is not a member of this institution')
-        """Make sure that an exception is raised because the user
-        is not a member of the institution."""
-        with self.assertRaises(NotAuthorizedException) as Aex:
-            is_decorated(self, self.ruan, self.ruan_post.key.urlsafe())
-        # Make sure that the message of the exception is the expected one
-        self.assertEqual(str(Aex.exception),
-                         'User is not a member of this institution')
-
     def test_everything_ok(self):
         """Test if everything goes ok."""
         """ Make sure if the return is None, once when everything goes ok
@@ -95,8 +66,8 @@ class TestIsAuthorized(unittest.TestCase):
                                        self.ruan_post.key.urlsafe()))
 
     def tearDown(self):
-        """End up the testbed."""
-        self.testbed.deactivate()
+        """End up the test."""
+        self.test.deactivate()
 
 
 @is_authorized
@@ -105,32 +76,32 @@ def is_decorated(self, user, key):
     pass
 
 
-class PostHandlerTest(unittest.TestCase):
+class PostHandlerTest(TestBase):
     """Test the post_handler class."""
 
     @classmethod
     def setUp(cls):
         """Provide the base for the tests."""
-        cls.testbed = testbed.Testbed()
-        cls.testbed.activate()
-        cls.policy = datastore_stub_util.PseudoRandomHRConsistencyPolicy(
+        cls.test = cls.testbed.Testbed()
+        cls.test.activate()
+        cls.policy = cls.datastore.PseudoRandomHRConsistencyPolicy(
             probability=1)
-        cls.testbed.init_datastore_v3_stub(consistency_policy=cls.policy)
-        cls.testbed.init_memcache_stub()
-        ndb.get_context().set_cache_policy(False)
-        app = webapp2.WSGIApplication(
+        cls.test.init_datastore_v3_stub(consistency_policy=cls.policy)
+        cls.test.init_memcache_stub()
+        cls.ndb.get_context().set_cache_policy(False)
+        app = cls.webapp2.WSGIApplication(
             [("/api/post/(.*)", PostHandler),
              ("/api/post/(.*)/like", PostHandler),
              ("/api/post/(.*)/deslike", PostHandler),
              ], debug=True)
-        cls.testapp = webtest.TestApp(app)
+        cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
     def test_delete(self):
         """Test the post_handler's delete method."""
         # Pretend an authentication
-        os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
-        os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
+        self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
+        self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
         # Verify if before the delete the post's state is published
         self.assertEqual(self.mayza_post.state, 'published')
         # Call the delete method
@@ -139,9 +110,10 @@ class PostHandlerTest(unittest.TestCase):
         self.mayza_post = self.mayza_post.key.get()
         # Make sure the post's state is deleted
         self.assertEqual(self.mayza_post.state, 'deleted')
+
         # Pretend an authentication
-        os.environ['REMOTE_USER'] = 'raoni.smaneoto@ccc.ufcg.edu.br'
-        os.environ['USER_EMAIL'] = 'raoni.smaneoto@ccc.ufcg.edu.br'
+        self.os.environ['REMOTE_USER'] = 'raoni.smaneoto@ccc.ufcg.edu.br'
+        self.os.environ['USER_EMAIL'] = 'raoni.smaneoto@ccc.ufcg.edu.br'
         # Verify if before the delete the post's state is published
         self.assertEqual(self.raoni_post2.state, 'published')
         # Call the delete method
@@ -154,8 +126,8 @@ class PostHandlerTest(unittest.TestCase):
     def test_post(self):
         """Test the post_handler's post method."""
         # Pretend an authentication
-        os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
-        os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
+        self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
+        self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
         # Verify if before the like the number of likes at post is 0
         self.assertEqual(self.mayza_post.likes, 0)
         # Call the delete method
@@ -164,8 +136,8 @@ class PostHandlerTest(unittest.TestCase):
         self.assertEqual(self.mayza_post.likes, 1)
 
     def tearDown(cls):
-        """Deactivate the testbed."""
-        cls.testbed.deactivate()
+        """Deactivate the test."""
+        cls.test.deactivate()
 
 
 def initModels(cls):
@@ -279,13 +251,3 @@ def initModels(cls):
     cls.ruan_post.author = cls.ruan.key
     cls.ruan_post.institution = cls.certbio.key
     cls.ruan_post.put()
-
-
-def suite():
-    """Creating a suite of tests."""
-    suite = unittest.TestSuite()
-    suite.addTest(PostHandlerTest('test_delete'))
-    return suite
-
-if __name__ == '__main__':
-    unittest.TextTestRunner(verbosity=2).run(suite())

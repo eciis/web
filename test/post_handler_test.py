@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Decorator test."""
+"""Post handler test."""
 
 
 from test_base import TestBase
@@ -37,28 +37,28 @@ class PostHandlerTest(TestBase):
         self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
         # Verify if before the delete the post's state is published
         self.assertEqual(self.mayza_post.state, 'published',
-                         "The post's state is different tha expected")
+                         "The post's state must be published")
         # Call the delete method
         self.testapp.delete("/api/post/%s" % self.mayza_post.key.urlsafe())
         # Retrieve the post from the datastore, once it has been changed
         self.mayza_post = self.mayza_post.key.get()
         # Make sure the post's state is deleted
         self.assertEqual(self.mayza_post.state, 'deleted',
-                         "The post's state is different tha expected")
+                         "The post's state must be deleted")
 
         # Pretend an authentication
         self.os.environ['REMOTE_USER'] = 'raoni.smaneoto@ccc.ufcg.edu.br'
         self.os.environ['USER_EMAIL'] = 'raoni.smaneoto@ccc.ufcg.edu.br'
         # Verify if before the delete the post's state is published
         self.assertEqual(self.raoni_post2.state, 'published',
-                         "The post's state is different tha expected")
+                         "The post's state must be published")
         # Call the delete method
         self.testapp.delete("/api/post/%s" % self.raoni_post2.key.urlsafe())
         # Retrieve the post from the datastore, once it has been changed
         self.raoni_post2 = self.raoni_post2.key.get()
         # Make sure the post's state is deleted
         self.assertEqual(self.raoni_post2.state, 'deleted',
-                         "The post's state is different tha expected")
+                         "The post's state must be deleted")
 
     def test_post(self):
         """Test the post_handler's post method."""
@@ -67,13 +67,14 @@ class PostHandlerTest(TestBase):
         self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
         # Verify if before the like the number of likes at post is 0
         self.assertEqual(self.mayza_post.likes, 0,
-                         "The number of likes was different than expected")
+                         "The number of likes expected was 0")
         # Call the delete method
-        self.testapp.post("/api/post/%s/like" % self.mayza_post.key.urlsafe())
+        self.testapp.post_json("/api/post/%s/like"
+                               % self.mayza_post.key.urlsafe())
         # Verify if after the like the number of likes at post is 1
         self.mayza_post = self.mayza_post.key.get()
         self.assertEqual(self.mayza_post.likes, 1,
-                         "The number of likes was different than expected")
+                         "The number of likes expected was 1")
 
     def tearDown(cls):
         """Deactivate the test."""

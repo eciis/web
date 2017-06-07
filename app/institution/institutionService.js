@@ -27,6 +27,16 @@
             return deferred.promise;
         };
 
+        service.unfollow = function unfollow(institution_key) {
+            var deferred = $q.defer();
+            $http.post(INSTITUTION_URI + "/" + institution_key + "/unfollow").then(function success(response) {
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+            return deferred.promise;
+        };
+
         service.getTimeline = function getInstitutions(institution_key) {
             var deferred = $q.defer();
             $http.get(INSTITUTION_URI + "/" + institution_key + "/timeline").then(function success(response) {

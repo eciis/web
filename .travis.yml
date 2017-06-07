@@ -6,8 +6,6 @@ env:
   global:
   - API_CHECK=https://appengine.google.com/api/updatecheck
 before_script:
-# Intall package of web tests
-- pip install WebTest
 # Idea from https://blog.bekt.net/p/gae-sdk/
 - SDK_VERSION=$(curl -s $API_CHECK | awk -F '\"' '/release/ {print $2}')
 - SDK_URL=https://storage.googleapis.com/appengine-sdks/featured/google_appengine_$SDK_VERSION.zip

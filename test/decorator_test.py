@@ -118,10 +118,13 @@ class PostHandlerTest(unittest.TestCase):
         cls.testbed.init_datastore_v3_stub(consistency_policy=cls.policy)
         cls.testbed.init_memcache_stub()
         ndb.get_context().set_cache_policy(False)
-        initModels(cls)
         app = webapp2.WSGIApplication(
-            [("/api/post/(.*)", PostHandler)], debug=True)
+            [("/api/post/(.*)", PostHandler),
+             ("/api/post/(.*)/like", PostHandler),
+             ("/api/post/(.*)/deslike", PostHandler),
+             ], debug=True)
         cls.testapp = webtest.TestApp(app)
+        initModels(cls)
 
     def test_delete(self):
         """Test the post_handler's delete method."""
@@ -136,7 +139,6 @@ class PostHandlerTest(unittest.TestCase):
         self.mayza_post = self.mayza_post.key.get()
         # Make sure the post's state is deleted
         self.assertEqual(self.mayza_post.state, 'deleted')
-
         # Pretend an authentication
         os.environ['REMOTE_USER'] = 'raoni.smaneoto@ccc.ufcg.edu.br'
         os.environ['USER_EMAIL'] = 'raoni.smaneoto@ccc.ufcg.edu.br'
@@ -152,8 +154,8 @@ class PostHandlerTest(unittest.TestCase):
     def test_post(self):
         """Test the post_handler's post method."""
         # Pretend an authentication
-        os.environ['REMOTE_USER'] = 'raoni.smaneoto@ccc.ufcg.edu.br'
-        os.environ['USER_EMAIL'] = 'raoni.smaneoto@ccc.ufcg.edu.br'
+        os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
+        os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
         # Verify if before the like the number of likes at post is 0
         self.assertEqual(self.mayza_post.likes, 0)
         # Call the delete method

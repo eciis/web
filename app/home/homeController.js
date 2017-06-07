@@ -3,9 +3,9 @@
 (function() {
     var app = angular.module("app");
 
-    app.controller("HomeController", function HomeController(PostService, AuthService, InstitutionService, $interval, $mdToast, $mdDialog) {
+    app.controller("HomeController", function HomeController(PostService, AuthService, InstitutionService, $interval, $mdToast, $mdDialog, $state) {
         var homeCtrl = this;
-        
+
         homeCtrl.posts = [];
         homeCtrl.institutions = [];
 
@@ -40,9 +40,10 @@
         };
 
         homeCtrl.isAuthorized = function isAuthorized(post) {
-            if ((post.author_key == homeCtrl.user.key && 
-                _.find(homeCtrl.user.institutions, ['key', post.institution_key])) || 
-                _.includes(_.map(homeCtrl.user.institutions_admin, getKeyFromUrl), post.institution_key)) {
+            var isPostAuthor = post.author_key == homeCtrl.user.key;
+            var isInstitutionMember = _.find(homeCtrl.user.institutions, ['key', post.institution_key]);
+            var isInstitutionAdmin = _.includes(_.map(homeCtrl.user.institutions_admin, getKeyFromUrl), post.institution_key);
+            if (isPostAuthor && isInstitutionMember || isInstitutionAdmin) {
                 return true;
             }
             return false;
@@ -57,7 +58,7 @@
         };
 
         function likePost(post) {
-            PostService.likePost(post).then(function success() {
+            PostService.likeOrDeslikePost(post).then(function success() {
                 addPostKeyToUser(post.key);
             }, function error(response) {
                 showToast(response.data.msg);
@@ -65,7 +66,7 @@
         }
 
         function deslikePost(post) {
-            PostService.deslikePost(post).then(function success() {
+            PostService.likeOrDeslikePost(post).then(function success() {
                 removePostKeyFromUser(post.key);
             }, function error(response) {
                 showToast(response.data.msg);
@@ -106,6 +107,10 @@
             );
         }
 
+        homeCtrl.goToInstitution = function goToInstitution(institutionKey) {
+            $state.go('app.institution', {institutionKey: institutionKey});
+        };
+
         homeCtrl.newPost = function newPost(event) {
             $mdDialog.show({
                 controller: "HomeController",
@@ -127,9 +132,9 @@
         homeCtrl.follow = function follow(institution){
             InstitutionService.follow(institution.key).then(function success(){
                 showToast("Seguindo "+institution.name);
-            }); 
+            });
            /**
-           TODO: First version doesn't treat the case in which the user is already 
+           TODO: First version doesn't treat the case in which the user is already
            the institution follower.
            @author: Maiana Brito 01/06/2017
            **/
@@ -151,7 +156,7 @@
                 showToast(response.data.msg);
             });
         };
-        
+
         loadPosts();
         getInstitutions();
 

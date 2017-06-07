@@ -33,10 +33,11 @@
                 authenticate: true
             })
             .state("app.institution", {
-                url: "/institution",
+                url: "/institution/:institutionKey/details",
                 views: {
                     content: {
-                        templateUrl: "institution/institution.html"
+                        templateUrl: "institution/institution_page.html",
+                        controller: "InstitutionController as institutionCtrl"
                     }
                 },
                 authenticate: true

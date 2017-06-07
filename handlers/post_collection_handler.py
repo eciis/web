@@ -41,7 +41,7 @@ class PostCollectionHandler(BaseHandler):
             user.posts.append(post.key)
             user.put()
 
-            self.response.write(json.dumps(Post.make(post)))
+            self.response.write(json.dumps(Post.make(post, self.request.host)))
         except Exception as error:
             self.response.set_status(Utils.BAD_REQUEST)
             self.response.write(Utils.getJSONError(

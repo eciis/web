@@ -15,7 +15,7 @@ from models.post import Comment
 
 
 def check_permission(user, post, comment_id):
-    """Chech the user permission to delete comment."""
+    """Check the user permission to delete comment."""
     institution = post.institution.get()
     comment = post.get_comment(comment_id)
     isNotPostAuthor = post.author != user.key

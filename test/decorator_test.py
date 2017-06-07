@@ -20,6 +20,8 @@ from google.appengine.ext import ndb
 import webapp2
 import webtest
 import os
+from google.appengine.datastore import datastore_stub_util
+
 
 class TestIsAuthorized(unittest.TestCase):
     """Test class."""
@@ -38,45 +40,59 @@ class TestIsAuthorized(unittest.TestCase):
 
     def test_not_allowed(self):
         """Test if the user is really not allowed."""
+        """Make sure that an exception is raised because the user
+        is not authorized."""
         with self.assertRaises(NotAuthorizedException) as Aex:
-                is_decorated(self, self.raoni, self.mayza_post.key.urlsafe())
+            is_decorated(self, self.raoni, self.mayza_post.key.urlsafe())
+        # Make sure that the message of the exception is the expected one
         self.assertEqual(str(Aex.exception),
                          'User is not allowed to remove this post')
+        """Make sure that an exception is raised because the user
+        is not authorized."""
         with self.assertRaises(NotAuthorizedException) as Aex:
-                is_decorated(self, self.ruan, self.raoni_post.key.urlsafe())
+            is_decorated(self, self.ruan, self.raoni_post.key.urlsafe())
+        # Make sure that the message of the exception is the expected one
         self.assertEqual(str(Aex.exception),
                          'User is not allowed to remove this post')
+        """Make sure that an exception is raised because the user
+        is not authorized."""
         with self.assertRaises(NotAuthorizedException) as Aex:
-                is_decorated(self, self.raoni, self.ruan_post.key.urlsafe())
+            is_decorated(self, self.raoni, self.ruan_post.key.urlsafe())
+        # Make sure that the message of the exception is the expected one
         self.assertEqual(str(Aex.exception),
                          'User is not allowed to remove this post')
 
     def test_not_member(self):
         """Test when the user isn't an institution's member."""
+        """Make sure that an exception is raised because the user
+        is not a member of the institution."""
         with self.assertRaises(NotAuthorizedException) as Aex:
             is_decorated(self, self.raoni, self.raoni_post.key.urlsafe())
+        # Make sure that the message of the exception is the expected one
         self.assertEqual(str(Aex.exception),
                          'User is not a member of this institution')
+        """Make sure that an exception is raised because the user
+        is not a member of the institution."""
         with self.assertRaises(NotAuthorizedException) as Aex:
             is_decorated(self, self.ruan, self.ruan_post.key.urlsafe())
-        self.assertEqual(str(Aex.exception),
-                         'User is not a member of this institution')
-
-    def test_not_post(self):
-        """Test when the user isn't an institution's member."""
-        with self.assertRaises(NotAuthorizedException) as Aex:
-            is_decorated(self, self.raoni, self.raoni_post.key.urlsafe())
+        # Make sure that the message of the exception is the expected one
         self.assertEqual(str(Aex.exception),
                          'User is not a member of this institution')
 
     def test_everything_ok(self):
         """Test if everything goes ok."""
+        """ Make sure if the return is None, once when everything goes ok
+        the method returns nothing."""
         self.assertIsNone(is_decorated(self, self.mayza,
-                          self.mayza_post.key.urlsafe()))
+                                       self.mayza_post.key.urlsafe()))
+        """ Make sure if the return is None, once when everything goes ok
+        the method returns nothing."""
         self.assertIsNone(is_decorated(self, self.mayza,
-                          self.raoni_post.key.urlsafe()))
+                                       self.raoni_post.key.urlsafe()))
+        """ Make sure if the return is None, once when everything goes ok
+        the method returns nothing."""
         self.assertIsNone(is_decorated(self, self.mayza,
-                          self.ruan_post.key.urlsafe()))
+                                       self.ruan_post.key.urlsafe()))
 
     def tearDown(self):
         """End up the testbed."""
@@ -88,31 +104,65 @@ def is_decorated(self, user, key):
     """Allow the system test the decorator."""
     pass
 
-class post_handler_test(unittest.TestCase):
+
+class PostHandlerTest(unittest.TestCase):
+    """Test the post_handler class."""
 
     @classmethod
     def setUp(cls):
+        """Provide the base for the tests."""
         cls.testbed = testbed.Testbed()
         cls.testbed.activate()
-        cls.testbed.init_datastore_v3_stub()
+        cls.policy = datastore_stub_util.PseudoRandomHRConsistencyPolicy(
+            probability=1)
+        cls.testbed.init_datastore_v3_stub(consistency_policy=cls.policy)
         cls.testbed.init_memcache_stub()
         ndb.get_context().set_cache_policy(False)
         initModels(cls)
-        app = webapp2.WSGIApplication([("/api/post/(.*)", PostHandler)], debug=True)
+        app = webapp2.WSGIApplication(
+            [("/api/post/(.*)", PostHandler)], debug=True)
         cls.testapp = webtest.TestApp(app)
 
-
-
     def test_delete(self):
+        """Test the post_handler's delete method."""
+        # Pretend an authentication
         os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
         os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
+        # Verify if before the delete the post's state is published
         self.assertEqual(self.mayza_post.state, 'published')
+        # Call the delete method
         self.testapp.delete("/api/post/%s" % self.mayza_post.key.urlsafe())
-        self.mayza_post = Post.query(Post.title == "Novo edital do CERTBIO").get()
+        # Retrieve the post from the datastore, once it has been changed
+        self.mayza_post = self.mayza_post.key.get()
+        # Make sure the post's state is deleted
         self.assertEqual(self.mayza_post.state, 'deleted')
 
+        # Pretend an authentication
+        os.environ['REMOTE_USER'] = 'raoni.smaneoto@ccc.ufcg.edu.br'
+        os.environ['USER_EMAIL'] = 'raoni.smaneoto@ccc.ufcg.edu.br'
+        # Verify if before the delete the post's state is published
+        self.assertEqual(self.raoni_post2.state, 'published')
+        # Call the delete method
+        self.testapp.delete("/api/post/%s" % self.raoni_post2.key.urlsafe())
+        # Retrieve the post from the datastore, once it has been changed
+        self.raoni_post2 = self.raoni_post2.key.get()
+        # Make sure the post's state is deleted
+        self.assertEqual(self.raoni_post2.state, 'deleted')
+
+    def test_post(self):
+        """Test the post_handler's post method."""
+        # Pretend an authentication
+        os.environ['REMOTE_USER'] = 'raoni.smaneoto@ccc.ufcg.edu.br'
+        os.environ['USER_EMAIL'] = 'raoni.smaneoto@ccc.ufcg.edu.br'
+        # Verify if before the like the number of likes at post is 0
+        self.assertEqual(self.mayza_post.likes, 0)
+        # Call the delete method
+        self.testapp.post("/api/post/%s/like" % self.mayza_post.key.urlsafe())
+        # Verify if after the like the number of likes at post is 1
+        self.assertEqual(self.mayza_post.likes, 1)
 
     def tearDown(cls):
+        """Deactivate the testbed."""
         cls.testbed.deactivate()
 
 
@@ -195,7 +245,7 @@ def initModels(cls):
     cls.splab.posts = []
     cls.splab.admin = cls.mayza.key
     cls.splab.put()
-    # POST of Raoni To Certbio Institution
+    # POST of Raoni
     cls.raoni_post = Post()
     cls.raoni_post.title = "Novwdfssdo edital do CERTBIO"
     cls.raoni_post.text = "At vero eos et accusamus et iusto odio dignissimos \
@@ -205,6 +255,16 @@ def initModels(cls):
     cls.raoni_post.author = cls.raoni.key
     cls.raoni_post.institution = cls.splab.key
     cls.raoni_post.put()
+    # Another post of Raoni
+    cls.raoni_post2 = Post()
+    cls.raoni_post2.title = "Novwdfsadsssdo edital do CERTBIO"
+    cls.raoni_post2.text = "At vero eos et accusamus et iusto odio dignissimos \
+        ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti \
+        delectus, ut aut reiciendis voluptatibus maiores alias consequatur \
+        aut perferendis doloribus asperiores repellat."
+    cls.raoni_post2.author = cls.raoni.key
+    cls.raoni_post2.institution = cls.certbio.key
+    cls.raoni_post2.put()
     # POST of Ruan To Certbio Institution
     cls.ruan_post = Post()
     cls.ruan_post.title = "Novwdfssdo edital do CERTBIO"
@@ -218,11 +278,12 @@ def initModels(cls):
     cls.ruan_post.institution = cls.certbio.key
     cls.ruan_post.put()
 
-def suite():
-    suite = unittest.TestSuite()
-    suite.addTest(post_handler_test('test_delete'))
-    return suite
 
+def suite():
+    """Creating a suite of tests."""
+    suite = unittest.TestSuite()
+    suite.addTest(PostHandlerTest('test_delete'))
+    return suite
 
 if __name__ == '__main__':
     unittest.TextTestRunner(verbosity=2).run(suite())

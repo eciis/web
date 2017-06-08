@@ -49,14 +49,14 @@ class PostHandlerTest(TestBase):
         self.os.environ['REMOTE_USER'] = 'raoni.smaneoto@ccc.ufcg.edu.br'
         self.os.environ['USER_EMAIL'] = 'raoni.smaneoto@ccc.ufcg.edu.br'
         # Verify if before the delete the post's state is published
-        self.assertEqual(self.raoni_post2.state, 'published',
+        self.assertEqual(self.raoni_post.state, 'published',
                          "The post's state must be published")
         # Call the delete method
-        self.testapp.delete("/api/post/%s" % self.raoni_post2.key.urlsafe())
+        self.testapp.delete("/api/post/%s" % self.raoni_post.key.urlsafe())
         # Retrieve the post from the datastore, once it has been changed
-        self.raoni_post2 = self.raoni_post2.key.get()
+        self.raoni_post = self.raoni_post.key.get()
         # Make sure the post's state is deleted
-        self.assertEqual(self.raoni_post2.state, 'deleted',
+        self.assertEqual(self.raoni_post.state, 'deleted',
                          "The post's state must be deleted")
 
     # TODO:
@@ -112,17 +112,6 @@ def initModels(cls):
     cls.raoni.notifications = []
     cls.raoni.posts = []
     cls.raoni.put()
-    # new User Ruan
-    cls.ruan = User()
-    cls.ruan.name = 'Ruan'
-    cls.ruan.cpf = '089.675.908-65'
-    cls.ruan.email = 'ruan@gmail.com'
-    cls.ruan.institutions = []
-    cls.ruan.follows = []
-    cls.ruan.institutions_admin = []
-    cls.ruan.notifications = []
-    cls.ruan.posts = []
-    cls.ruan.put()
     # new Institution CERTBIO
     cls.certbio = Institution()
     cls.certbio.name = 'CERTBIO'
@@ -149,53 +138,13 @@ def initModels(cls):
     cls.mayza_post.author = cls.mayza.key
     cls.mayza_post.institution = cls.certbio.key
     cls.mayza_post.put()
-    # new Institution SPLAB
-    cls.splab = Institution()
-    cls.splab.name = 'SPLAB'
-    cls.splab.cnpj = '18.104.068/0001-56'
-    cls.splab.legal_nature = 'public'
-    cls.splab.address = 'Universidade Federal de Campina Grande'
-    cls.splab.occupation_area = ''
-    cls.splab.description = 'The mission of the Software Practices Laboratory (SPLab) \
-            is to promote the development of the state-of-the-art in the \
-            theory and practice of Software Engineering.'
-    cls.splab.image_url = 'http://amaurymedeiros.com/images/splab.png'
-    cls.splab.email = 'splab@ufcg.edu.br'
-    cls.splab.phone_number = '(83) 3322 7865'
-    cls.splab.members = [cls.mayza.key, cls.ruan.key]
-    cls.splab.followers = [cls.mayza.key, cls.ruan.key]
-    cls.splab.posts = []
-    cls.splab.admin = cls.mayza.key
-    cls.splab.put()
-    # POST of Raoni
+    # Post of Raoni
     cls.raoni_post = Post()
-    cls.raoni_post.title = "Novwdfssdo edital do CERTBIO"
+    cls.raoni_post.title = "Novwdfsadsssdo edital do CERTBIO"
     cls.raoni_post.text = "At vero eos et accusamus et iusto odio dignissimos \
         ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti \
         delectus, ut aut reiciendis voluptatibus maiores alias consequatur \
         aut perferendis doloribus asperiores repellat."
     cls.raoni_post.author = cls.raoni.key
-    cls.raoni_post.institution = cls.splab.key
+    cls.raoni_post.institution = cls.certbio.key
     cls.raoni_post.put()
-    # Another post of Raoni
-    cls.raoni_post2 = Post()
-    cls.raoni_post2.title = "Novwdfsadsssdo edital do CERTBIO"
-    cls.raoni_post2.text = "At vero eos et accusamus et iusto odio dignissimos \
-        ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti \
-        delectus, ut aut reiciendis voluptatibus maiores alias consequatur \
-        aut perferendis doloribus asperiores repellat."
-    cls.raoni_post2.author = cls.raoni.key
-    cls.raoni_post2.institution = cls.certbio.key
-    cls.raoni_post2.put()
-    # POST of Ruan To Certbio Institution
-    cls.ruan_post = Post()
-    cls.ruan_post.title = "Novwdfssdo edital do CERTBIO"
-    cls.ruan_post.text = "At vero eos et accusamus et iusto odio dignissimos \
-        emporibus autem quibusdam et aut officiis debitis aut rerum \
-        necessitatibus saepe eveniet ut et voluptates repudiandae sint \
-        et molestiae non recusandae. Itaque earum rerum hic tenetur sapiente \
-        delectus, ut aut reiciendis voluptatibus maiores alias consequatur \
-        aut perferendis doloribus asperiores repellat."
-    cls.ruan_post.author = cls.ruan.key
-    cls.ruan_post.institution = cls.certbio.key
-    cls.ruan_post.put()

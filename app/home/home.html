@@ -40,10 +40,10 @@
             <img alt="{{ institution.name }}" ng-src="{{ institution.image_url }}" class="md-avatar" />
             <p>{{institution.name}}</p>
             <md-button class="md-icon-button" ng-click="homeCtrl.follow(institution)" ng-if="!homeCtrl.user.isFollower(institution.key)">
-              <md-icon>person_add</md-icon> Seguir
+              <md-icon>person_add</md-icon>
             </md-button>
             <md-button class="md-icon-button" ng-click="homeCtrl.unfollow(institution)" ng-if="homeCtrl.user.isFollower(institution.key)">
-              <md-icon>person_outline</md-icon> Deixar
+              <md-icon>person_outline</md-icon>
             </md-button>
             </md-list-item>
         </div>

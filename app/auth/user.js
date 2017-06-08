@@ -41,7 +41,7 @@ function getImage(email) {
 
 function getKey(obj){
 	var key = obj.split("/");
-    key = key[key.length -1];
+	key = key[key.length -1];
 
     return key;
 }

@@ -3,7 +3,8 @@
 (function() {
     var app = angular.module("app");
 
-    app.controller("HomeController", function HomeController(PostService, AuthService, InstitutionService, $interval, $mdToast, $mdDialog, $state) {
+    app.controller("HomeController", function HomeController(PostService, AuthService, 
+            InstitutionService, CommentService, $interval, $mdToast, $mdDialog, $state) {
         var homeCtrl = this;
 
         homeCtrl.posts = [];
@@ -152,6 +153,11 @@
                 showToast("Deixou de seguir "+institution.name);
                 homeCtrl.user.unfollow(institution.key);
            });
+        };
+        
+        homeCtrl.getComments = function getComments(postKey) {
+            CommentService.getComments(postKey);
+            // TODO: finish this function implemantatiom
         };
 
         var intervalPromise;

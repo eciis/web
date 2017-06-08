@@ -5,12 +5,12 @@
 
     app.service('CommentService', function CommentService($http, $q) {
         var service = this;
-        
+
         var POST_URI = '/api/post/';
 
-        service.getComments = function getComments(post_key) {
+        service.getComments = function getComments(postKey) {
             var deferred = $q.defer();
-            $http.get(POST_URI + post_key + '/comment').then(function success(response) {
+            $http.get(POST_URI + postKey + '/comment').then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);
@@ -18,9 +18,9 @@
             return deferred.promise;
         };
 
-        service.createComment = function createComment(post_key) {
+        service.createComment = function createComment(postKey) {
             var deferred = $q.defer();
-            $http.post(POST_URI + post_key + '/comment').then(function success(response) {
+            $http.post(POST_URI + postKey + '/comment').then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);
@@ -28,9 +28,9 @@
             return deferred.promise;
         };
 
-        service.deleteComment = function deleteComment(post_key, comment_id) {
+        service.deleteComment = function deleteComment(postKey, commentId) {
             var deferred = $q.defer();
-            $http.delete(POST_URI + post_key + '/comment/' + comment_id).then(function success(response) {
+            $http.delete(POST_URI + postKey + '/comment/' + commentId).then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);

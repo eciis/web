@@ -99,6 +99,15 @@
               <md-icon>share_arrow</md-icon>
             </md-button>
           </md-card-actions>
+          <md-divider></md-divider>
+          <md-list-item ng-repeat="comment in getComments(post.key)" class="md-3-line md-long-text">
+            <img ng-src="{{comment.author_img}}" class="md-avatar" alt="{{comment.author_name}}" />
+            <div class="md-list-item-text">
+              <h3>{{ comment.author_name }}</h3>
+              <p>{{ comment.text }}</p>
+            </div>
+          </md-list-item>
+         <md-divider ng-if="!$last"></md-divider>
         </md-card>
       </div>
     </div>

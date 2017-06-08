@@ -35,8 +35,6 @@ def add_comments_to_post(user, post, comments_qnt=3):
             comment = Comment.create(texts[i], user.key, post.key)
             post.add_comment(comment)
 
-        post.put()
-
 
 class BaseHandler(webapp2.RequestHandler):
     """Base Handler."""
@@ -354,7 +352,6 @@ class InitHandler(BaseHandler):
         jorge_post.author = jorge.key
         jorge_post.institution = splab.key
         jorge_post.put()
-        add_comments_to_post(jorge, jorge_post, 0)
 
         # POST of Jorge To e-CIIS Institution
         jorge_post_eCIIS = Post()

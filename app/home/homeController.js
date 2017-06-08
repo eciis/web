@@ -149,7 +149,7 @@
 
         homeCtrl.unfollow = function unfollow(institution){
            InstitutionService.unfollow(institution.key).then(function sucess(){
-                showToast("Deixar de seguir "+institution.name);
+                showToast("Deixou de seguir "+institution.name);
                 homeCtrl.user.unfollow(institution.key);
            });
         };

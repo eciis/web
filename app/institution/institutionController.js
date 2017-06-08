@@ -75,13 +75,15 @@
             InstitutionService.follow(currentInstitutionKey).then(function success(){
                 showToast("Seguindo "+institutionCtrl.current_institution.name);
                 institutionCtrl.user.follow(currentInstitutionKey);
+                getFollowers();
             });
         };
 
-        institutionCtrl.unfollow = function follow(){
+        institutionCtrl.unfollow = function unfollow(){
             InstitutionService.unfollow(currentInstitutionKey).then(function success(){
                 showToast("Deixou de seguir "+institutionCtrl.current_institution.name);
                 institutionCtrl.user.unfollow(currentInstitutionKey);
+                getFollowers();
             });
         };
     });

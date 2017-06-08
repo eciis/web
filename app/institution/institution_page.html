@@ -22,8 +22,11 @@
                     </md-card-content>
                     
                     <md-card-actions layout="row" layout-align="end center">
-                        <md-button ng-click="institutionCtrl.follow()" class="md-primary md-raised md-hue-2">
+                        <md-button class="md-primary md-raised md-hue-2" ng-click="institutionCtrl.follow()" ng-if="!institutionCtrl.user.isFollower(institutionCtrl.current_institution.key)">
                             <md-icon>person_add</md-icon>Seguir
+                        </md-button>
+                        <md-button class="md-primary md-raised md-hue-2" ng-click="institutionCtrl.unfollow()" ng-if="institutionCtrl.user.isFollower(institutionCtrl.current_institution.key)">
+                            <md-icon>person_outline</md-icon>Seguindo
                         </md-button>
                     </md-card-actions>
                 </md-card>

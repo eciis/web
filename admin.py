@@ -7,7 +7,33 @@ import json
 from models.user import User
 from models.institution import Institution
 from models.post import Post
+from models.post import Comment
 from google.appengine.ext import ndb
+
+
+def add_comments_to_post(user, post, comments_qnt=3):
+        """Add comments to post."""
+        text_A = {'text': 'Lorem ipsum dolor sit amet, at a. Mauris justo ipsum, \
+        mauris justo eget, dolor justo. Aliquet amet, \
+        mi tristique. Aliquam suspendisse at.'}
+        text_B = {'text': 'Lorem ipsum dolor sit amet, orci id. Eu qui, \
+        dui eu curabitur, lacinia justo ante.'}
+        text_C = {'text': 'Lorem ipsum dolor sit amet, faucibus nunc neque ridiculus,\
+         platea penatibus fusce mattis. Consectetue ut eleifend ipsum,\
+         sapien lacinia montes gravida urna, tortor diam aenean diam vel,\
+         augue non lacus vivamus. Tempor sollicitudin adipiscing cras, \
+         etiam augue quis vestibulum est, tristique sem placerat.  \
+         Et ridiculus sapien in pede, senectus diamlorem in vitae, \
+         nunc eget adipiscing vestibulum.'}
+
+        texts = []
+        texts.append(text_A)
+        texts.append(text_B)
+        texts.append(text_C)
+        comments_qnt = comments_qnt if comments_qnt <= 3 else 3
+        for i in range(comments_qnt):
+            comment = Comment.create(texts[i], user.key, post.key)
+            post.add_comment(comment)
 
 
 class BaseHandler(webapp2.RequestHandler):
@@ -253,6 +279,7 @@ class InitHandler(BaseHandler):
         mayza_post.author = mayza.key
         mayza_post.institution = certbio.key
         mayza_post.put()
+        add_comments_to_post(mayza, mayza_post, 2)
 
         # POST of Mayza To Certbio Institution with image
         mayza_post_comIMG = Post()
@@ -264,6 +291,7 @@ class InitHandler(BaseHandler):
         mayza_post_comIMG.author = mayza.key
         mayza_post_comIMG.institution = certbio.key
         mayza_post_comIMG.put()
+        add_comments_to_post(mayza, mayza_post_comIMG, 1)
 
         # POST of André To SPLAB Institution
         andre_post = Post()
@@ -284,6 +312,7 @@ class InitHandler(BaseHandler):
         andre_post.author = andre.key
         andre_post.institution = splab.key
         andre_post.put()
+        add_comments_to_post(andre, andre_post, 3)
 
         # POST of Dalton To e-CIIS Institution
         dalton_post = Post()
@@ -305,6 +334,7 @@ class InitHandler(BaseHandler):
         dalton_post.author = dalton.key
         dalton_post.institution = splab.key
         dalton_post.put()
+        add_comments_to_post(dalton, dalton_post, 2)
 
         # POST of Dalton To CERTBIO Institution
         dalton_postCertbio = Post()
@@ -313,6 +343,7 @@ class InitHandler(BaseHandler):
         dalton_postCertbio.author = dalton.key
         dalton_postCertbio.institution = certbio.key
         dalton_postCertbio.put()
+        add_comments_to_post(dalton, dalton_postCertbio, 1)
 
         # POST of Jorge To SPLAB Institution
         jorge_post = Post()
@@ -342,6 +373,7 @@ class InitHandler(BaseHandler):
         jorge_post_eCIIS.author = jorge.key
         jorge_post_eCIIS.institution = eciis.key
         jorge_post_eCIIS.put()
+        add_comments_to_post(jorge, jorge_post_eCIIS, 3)
 
         # Side efect of a post
         jorge.posts = [jorge_post.key, jorge_post_eCIIS.key]

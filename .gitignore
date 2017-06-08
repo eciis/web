@@ -4,6 +4,7 @@
 ### AppEngine ###
 # Google App Engine - https://developers.google.com/appengine/
 appengine-generated/
+google_appengine
 
 
 ### Bower ###

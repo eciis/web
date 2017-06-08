@@ -38,11 +38,19 @@ class InstitutionFollowersHandler(BaseHandler):
         if(not type(institution) is Institution):
             raise Exception("Key is not an Institution")
 
-        action = self.request.url.split('/')[-1]
+        institution.follow(user.key)
+        user.follow(institution_key)
 
-        if action == 'follow':
-            institution.follow(user.key)
-            user.follow(institution_key)
-        else:
-            institution.unfollow(user.key)
-            user.unfollow(institution_key)
+    @json_response
+    @login_required
+    @ndb.transactional(xg=True)
+    def delete(self, user, url_string):
+        """Add or remove follower in the institution."""
+        institution_key = ndb.Key(urlsafe=url_string)
+        institution = institution_key.get()
+
+        if(not type(institution) is Institution):
+            raise Exception("Key is not an Institution")
+
+        institution.unfollow(user.key)
+        user.unfollow(institution_key)

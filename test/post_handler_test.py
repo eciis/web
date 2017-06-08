@@ -65,7 +65,7 @@ class PostHandlerTest(TestBase):
     # the handler gets the key from the beggining until the end of the url,
     # '/like' is included.
     # It's probably a bug in webtest.
-    # @author Raoni Smaneoto 08-06-2017.
+    # @author Raoni Smaneoto 08-06-2017
     @unittest.expectedFailure
     def test_post(self):
         """Test the post_handler's post method."""

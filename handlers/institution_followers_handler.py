@@ -31,7 +31,7 @@ class InstitutionFollowersHandler(BaseHandler):
     @login_required
     @ndb.transactional(xg=True)
     def post(self, user, url_string):
-        """Add or remove follower in the institution."""
+        """Add follower in the institution."""
         institution_key = ndb.Key(urlsafe=url_string)
         institution = institution_key.get()
 
@@ -45,7 +45,7 @@ class InstitutionFollowersHandler(BaseHandler):
     @login_required
     @ndb.transactional(xg=True)
     def delete(self, user, url_string):
-        """Add or remove follower in the institution."""
+        """Remove follower in the institution."""
         institution_key = ndb.Key(urlsafe=url_string)
         institution = institution_key.get()
 

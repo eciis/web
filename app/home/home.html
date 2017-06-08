@@ -1,4 +1,5 @@
 <md-content layout="row" md-colors="{background: 'grey-200'}" layout-align="center">
+  <style type="text/css">.noUnderline{text-decoration:none; color:black;}</style>
 
   <!-- CONTENT -->
   <div flex-gt-lg="80" flex-lg="90" layout="row" layout-wrap layout-align="center">
@@ -56,10 +57,14 @@
         <md-card ng-repeat="post in homeCtrl.posts | orderBy:'date':true">
           <md-card-header>
             <md-card-avatar>
-              <img src="{{ post.institution_image }}" class="md-user-avatar" ng-click="homeCtrl.goToInstitution(post.institution_key)"/>
+              <a href="">
+                <img src="{{ post.institution_image }}" role="button" class="md-user-avatar" ng-click="homeCtrl.goToInstitution(post.institution_key)"/>
+              </a>
             </md-card-avatar>
             <md-card-header-text>
-              <span class="md-title">{{ post.institution_name }}</span>
+              <div>
+                <a href="" class="md-title; noUnderline" ng-click="homeCtrl.goToInstitution(post.institution_key)">{{ post.institution_name }}</a>
+              </div>
               <span class="md-subhead">por {{ post.author }} em {{ post.publication_date | date:'dd-MM-yyyy' }}</span>
             </md-card-header-text>
           </md-card-header>

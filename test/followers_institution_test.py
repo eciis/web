@@ -92,7 +92,7 @@ class InstitutionFollowersHandlerTest(TestBase):
         self.certbio = self.certbio.key.get()
 
         # Remove one follower
-        self.assertTrue(len(self.mayza.follows) == 0, "The number of follows expected was 0")
+        self.assertTrue(len(self.mayza.follows) == 1, "The number of follows expected was 0")
         self.assertTrue(len(self.certbio.followers) == 0, "The number of followers expected was 0")
 
     def tearDown(cls):

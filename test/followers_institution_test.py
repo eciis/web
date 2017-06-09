@@ -47,8 +47,8 @@ class InstitutionFollowersHandlerTest(TestBase):
         # An user have 1 follow
         self.assertTrue(len(self.splab.followers) == 1, "The number of followers expected was 1")
         # Institution have mayza in followers
-        self.assertTrue(self.mayza.key in self.splab.followers)
-        self.assertTrue(self.splab.key in self.mayza.follows)
+        self.assertTrue(self.mayza.key in self.splab.followers, "Mayze should be in institution followers")
+        self.assertTrue(self.splab.key in self.mayza.follows, "SpLab should be in user follows")
 
         # Call the post method again
         self.testapp.post("/api/institution/%s/followers" % self.splab.key.urlsafe())

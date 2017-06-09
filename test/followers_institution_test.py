@@ -93,7 +93,7 @@ class InstitutionFollowersHandlerTest(TestBase):
 
         # Remove one follower
         self.assertTrue(len(self.mayza.follows) == 0, "The number of follows expected was 0")
-        self.assertTrue(len(self.certbio.followers) == 0, "The number of followers expected was 0")
+        self.assertTrue(len(self.certbio.followers) == 0, "Number of followers expected was 0")
 
     def tearDown(cls):
         """Deactivate the test."""

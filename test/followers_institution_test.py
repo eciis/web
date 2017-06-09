@@ -33,27 +33,27 @@ class InstitutionFollowersHandlerTest(TestBase):
         self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
         self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
         # Verified objects, are empty
-        self.assertTrue(len(self.splab.followers) == 0, "The number of followers expected was 0")
+        self.assertTrue(len(self.certbio.followers) == 0, "The number of followers expected was 0")
         self.assertTrue(len(self.mayza.follows) == 0, "The number of follows expected was 0")
         # Call the post method
-        self.testapp.post("/api/institution/%s/followers" % self.splab.key.urlsafe())
+        self.testapp.post("/api/institution/%s/followers" % self.certbio.key.urlsafe())
 
         # Update the objects
         self.mayza = self.mayza.key.get()
-        self.splab = self.splab.key.get()
+        self.certbio = self.certbio.key.get()
 
         # An institution have 1 follower
         self.assertTrue(len(self.mayza.follows) == 1, "The number of follows expected was 1")
         # An user have 1 follow
-        self.assertTrue(len(self.splab.followers) == 1, "The number of followers expected was 1")
+        self.assertTrue(len(self.certbio.followers) == 1, "The number of followers expected was 1")
         # Institution have mayza in followers
-        self.assertTrue(self.mayza.key in self.splab.followers, "Mayze should be in institution followers")
-        self.assertTrue(self.splab.key in self.mayza.follows, "SpLab should be in user follows")
+        self.assertTrue(self.mayza.key in self.certbio.followers, "Mayze should be in institution followers")
+        self.assertTrue(self.certbio.key in self.mayza.follows, "SpLab should be in user follows")
 
         # Call the post method again
-        self.testapp.post("/api/institution/%s/followers" % self.splab.key.urlsafe())
+        self.testapp.post("/api/institution/%s/followers" % self.certbio.key.urlsafe())
         # Confirmed that follow only one time
-        self.assertTrue(len(self.splab.followers) == 1, "The number of followers expected was 1")
+        self.assertTrue(len(self.certbio.followers) == 1, "The number of followers expected was 1")
         self.assertTrue(len(self.mayza.follows) == 1, "The number of follows expected was 1")
 
     def test_unfollow(self):
@@ -62,38 +62,38 @@ class InstitutionFollowersHandlerTest(TestBase):
         self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
         self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
         # Verified objects, are empty
-        self.assertTrue(len(self.splab.followers) == 0, "The number of followers expected was 0")
+        self.assertTrue(len(self.certbio.followers) == 0, "The number of followers expected was 0")
         self.assertTrue(len(self.mayza.follows) == 0, "The number of follows expected was 0")
         # Call the delete method
-        self.testapp.delete("/api/institution/%s/followers" % self.splab.key.urlsafe())
+        self.testapp.delete("/api/institution/%s/followers" % self.certbio.key.urlsafe())
 
         # Update the objects
         self.mayza = self.mayza.key.get()
-        self.splab = self.splab.key.get()
+        self.certbio = self.certbio.key.get()
 
         # Don't changed
         self.assertTrue(len(self.mayza.follows) == 0, "The number of follows expected was 0")
-        self.assertTrue(len(self.splab.followers) == 0, "The number of followers expected was 0")
+        self.assertTrue(len(self.certbio.followers) == 0, "The number of followers expected was 0")
 
         # Call the post method
-        self.testapp.post("/api/institution/%s/followers" % self.splab.key.urlsafe())
+        self.testapp.post("/api/institution/%s/followers" % self.certbio.key.urlsafe())
 
         self.mayza = self.mayza.key.get()
-        self.splab = self.splab.key.get()
+        self.certbio = self.certbio.key.get()
 
-        self.assertTrue(len(self.splab.followers) == 1, "The number of followers expected was 1")
+        self.assertTrue(len(self.certbio.followers) == 1, "The number of followers expected was 1")
         self.assertTrue(len(self.mayza.follows) == 1, "The number of follows expected was 1")
 
         # Call the delete method
-        self.testapp.delete("/api/institution/%s/followers" % self.splab.key.urlsafe())
+        self.testapp.delete("/api/institution/%s/followers" % self.certbio.key.urlsafe())
 
         # Update the objects
         self.mayza = self.mayza.key.get()
-        self.splab = self.splab.key.get()
+        self.certbio = self.certbio.key.get()
 
         # Remove one follower
         self.assertTrue(len(self.mayza.follows) == 0, "The number of follows expected was 0")
-        self.assertTrue(len(self.splab.followers) == 0, "The number of followers expected was 0")
+        self.assertTrue(len(self.certbio.followers) == 0, "The number of followers expected was 0")
 
     def tearDown(cls):
         """Deactivate the test."""

@@ -1,12 +1,10 @@
 'use strict';
 
-var institutionCtrl;
-
 (function() {
     var app = angular.module('app');
 
     app.controller("InstitutionController", function InstitutionController($state, InstitutionService, AuthService, $interval, $mdToast) {
-        institutionCtrl = this;
+        var institutionCtrl = this;
 
         institutionCtrl.current_institution = null;
 

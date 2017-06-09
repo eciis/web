@@ -124,7 +124,7 @@ def initModels(cls):
             Gravimetria e Ensaio Biológico - Ensaio de Citotoxicidade'
     cls.certbio.email = 'certbio@ufcg.edu.br'
     cls.certbio.phone_number = '(83) 3322 4455'
-    cls.certbio.members = [cls.mayza.key]
+    cls.certbio.members = []
     cls.certbio.followers = []
     cls.certbio.posts = []
     cls.certbio.admin = cls.mayza.key

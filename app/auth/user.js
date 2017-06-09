@@ -17,8 +17,8 @@ User.prototype.follow = function follow(keyInstitution) {
 };
 
 User.prototype.unfollow = function unfollow(keyInstitution) {
-    this.follows = _.remove(this.follows, function(institution){
-    	return getKey(institution) != keyInstitution;
+    _.remove(this.follows, function(institution){
+    	return getKey(institution) == keyInstitution;
     });
 };
 

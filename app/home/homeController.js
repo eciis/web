@@ -148,10 +148,15 @@
         };
 
         homeCtrl.unfollow = function unfollow(institution){
-           InstitutionService.unfollow(institution.key).then(function sucess(){
-                showToast("Deixou de seguir "+institution.name);
-                homeCtrl.user.unfollow(institution.key);
-           });
+            if(homeCtrl.user.isMember(institution.key)){
+                showToast("Você não pode deixar de seguir " + institution.name);
+            }
+            else{
+                InstitutionService.unfollow(institution.key).then(function sucess(){
+                    showToast("Deixou de seguir "+institution.name);
+                    homeCtrl.user.unfollow(institution.key);
+                });
+            }
         };
 
         var intervalPromise;

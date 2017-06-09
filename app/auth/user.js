@@ -34,9 +34,20 @@ User.prototype.isFollower = function isFollower(keyInstitution) {
     return isFollower;
 };
 
+User.prototype.isMember = function isMember(institutionKey){
+      return _.includes(_.map(this.institutions, getKeyObj), institutionKey);
+};
+
 function getImage(email) {
     var hash = CryptoJS.MD5(email).toString();
     return 'https://www.gravatar.com/avatar/' + hash;
+}
+
+
+function getKeyObj(obj) {
+    if(obj.key){
+      return obj.key;
+    }
 }
 
 function getKey(obj){

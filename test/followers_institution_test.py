@@ -113,7 +113,7 @@ def initModels(cls):
     cls.mayza.notifications = []
     cls.mayza.posts = []
     cls.mayza.put()
-    # new Institution CERTBIO with 1 followers.
+    # new Institution CERTBIO
     cls.certbio = Institution()
     cls.certbio.name = 'CERTBIO'
     cls.certbio.cnpj = '18.104.068/0001-86'

@@ -10,6 +10,7 @@
         homeCtrl.posts = [];
         homeCtrl.comments = {};
         homeCtrl.institutions = [];
+        homeCtrl.newComment = '';
 
         homeCtrl.instMenuExpanded = false;
 
@@ -174,6 +175,20 @@
             }
         };
 
+        var addComment = function addComment(post, comment) {
+            var postComments = homeCtrl.comments[post.key].data;
+            postComments.push(comment);
+        };
+
+        homeCtrl.createComment = function createComment(post) {
+            CommentService.createComment(post.key, homeCtrl.newComment).then(function success(response) {
+                homeCtrl.newComment = '';
+                addComment(post, response.data);
+            }, function error(response) {
+                showToast(response.data.msg);
+            });
+        };
+
         var intervalPromise;
 
         var loadPosts = function loadPosts() {
@@ -188,6 +203,6 @@
         loadPosts();
         getInstitutions();
 
-        intervalPromise = $interval(loadPosts, 5000);
+        intervalPromise = $interval(loadPosts, 15000);
     });
 })();

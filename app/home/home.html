@@ -102,18 +102,32 @@
               <md-icon>share_arrow</md-icon>
             </md-button>
           </md-card-actions>
-          <md-list class="md-dense" ng-if="homeCtrl.comments[post.key].show">
-            <md-list-item ng-repeat="comment in homeCtrl.comments[post.key].data" class="md-3-line">
-              <md-divider ng-if="!$last"></md-divider>
-              <img ng-src="{{comment.author_img}}" class="md-avatar" alt="{{comment.author_name}}" />
-              <div class="md-list-item-text">
-                <h3>{{ comment.author_name }}</h3>
-                <p>{{ comment.text }}</p>
-                <p>{{ comment.publication_date | date:'dd-MM-yyyy' }}</p>
-              </div>
-            </md-list-item>
+          <md-list class="md-dense">
+            <div ng-if="homeCtrl.comments[post.key].show">
+              <md-divider></md-divider>
+              <md-list-item ng-repeat="comment in homeCtrl.comments[post.key].data" class="md-3-line">
+                <md-divider ng-if="!$last"></md-divider>
+                <img ng-src="{{comment.author_img}}" class="md-avatar" alt="{{comment.author_name}}" />
+                <div class="md-list-item-text">
+                  <h3>{{comment.author_name}}</h3>
+                  <p>{{comment.text}}</p>
+                  <p>{{comment.publication_date | date:'dd-MM-yyyy'}}</p>
+                </div>
+              </md-list-item>
+              <md-list-item class="md-3-line">
+                <img ng-src="{{homeCtrl.user.image}}" class="md-avatar" alt="{{homeCtrl.user.name}}" />
+                <div class="md-list-item-text">
+                  <h3>{{comment.author_name}}</h3>
+                  <md-input-container class="md-block">
+                    <form ng-submit="homeCtrl.createComment(post)">
+                      <label>{{homeCtrl.user.name}}</label>
+                      <input ng-model="homeCtrl.newComment" type="text"> 
+                    </form>
+                  </md-input-container>
+                </div>
+              </md-list-item>
+            </div>
           </md-list>
-         
         </md-card>
       </div>
     </div>

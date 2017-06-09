@@ -28,8 +28,8 @@ class InstitutionFollowersHandlerTest(TestBase):
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
-    def test_follow(self):
-        """Test the institution_follower_handler post method."""
+    def mayza_follow_splab(self):
+        """Test with institution SPLAB and user MAYZA."""
         # Pretend an authentication
         self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
         self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
@@ -57,7 +57,8 @@ class InstitutionFollowersHandlerTest(TestBase):
         self.assertTrue(len(self.splab.followers) == 1)
         self.assertTrue(len(self.mayza.follows) == 1)
 
-        # Test with institution CERTBIO and user MAIANA
+    def maiana_follow_certbio(self):
+        """Test with institution CERTBIO and user MAIANA."""
         self.os.environ['REMOTE_USER'] = 'maiana.brito@ccc.ufcg.edu.br'
         self.os.environ['USER_EMAIL'] = 'maiana.brito@ccc.ufcg.edu.br'
 
@@ -79,7 +80,8 @@ class InstitutionFollowersHandlerTest(TestBase):
         self.testapp.post("/api/institution/%s/followers" % self.certbio.key.urlsafe())
         self.assertTrue(len(self.certbio.followers) == 1)
 
-        # Test with institution SPLAB and user Maiana
+    def maiana_follow_splab(self):
+        """Test with institution SPLAB and user Maiana."""
         self.os.environ['REMOTE_USER'] = 'maiana.brito@ccc.ufcg.edu.br'
         self.os.environ['USER_EMAIL'] = 'maiana.brito@ccc.ufcg.edu.br'
 
@@ -100,6 +102,12 @@ class InstitutionFollowersHandlerTest(TestBase):
         # Call the post method again
         self.testapp.post("/api/institution/%s/followers" % self.splab.key.urlsafe())
         self.assertTrue(len(self.splab.followers) == 2)
+
+    def test_follow(self):
+        """Test the institution_follower_handler post method."""
+        self.mayza_follow_splab()
+        self.maiana_follow_certbio()
+        self.maiana_follow_splab()
 
     def test_unfollow(self):
         """Test the institution_follower_handler delete method."""

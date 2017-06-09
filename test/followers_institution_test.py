@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Institution follower handler test."""
-
+import unittest
 from test_base import TestBase
 from models.user import User
 from models.institution import Institution
@@ -27,7 +27,7 @@ class InstitutionFollowersHandlerTest(TestBase):
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
-    def test_follow(self):
+    def test_post(self):
         """Test the institution_follower_handler post method."""
         # Pretend an authentication
         self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
@@ -56,7 +56,7 @@ class InstitutionFollowersHandlerTest(TestBase):
         self.assertTrue(len(self.certbio.followers) == 1, "The number of followers expected was 1")
         self.assertTrue(len(self.mayza.follows) == 1, "The number of follows expected was 1")
 
-    def test_unfollow(self):
+    def test_delete(self):
         """Test the institution_follower_handler delete method."""
         # Pretend an authentication
         self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'

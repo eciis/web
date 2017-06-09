@@ -8,9 +8,9 @@
 
         var POST_URI = '/api/post/';
 
-        service.getComments = function getComments(postKey) {
+        service.getComments = function getComments(commentUri) {
             var deferred = $q.defer();
-            $http.get(POST_URI + postKey + '/comment').then(function success(response) {
+            $http.get(commentUri).then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);

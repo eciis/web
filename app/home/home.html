@@ -88,6 +88,9 @@
             <md-button class="md-icon-button" aria-label="Data" ng-click="time = !time;">
               <md-icon>access_time</md-icon>
             </md-button>
+            <md-button class="md-icon-button" aria-label="Comments" ng-click="homeCtrl.showComments(post)">
+              <md-icon>comments</md-icon>
+            </md-button>
             <md-button class="md-icon-button" aria-label="Favorite" ng-click="homeCtrl.likeOrDeslikePost(post)"
               ng-class="homeCtrl.isLikedByUser(post)?'md-warn':''">
               <md-icon>grade</md-icon>
@@ -99,15 +102,18 @@
               <md-icon>share_arrow</md-icon>
             </md-button>
           </md-card-actions>
-          <md-divider></md-divider>
-          <md-list-item ng-repeat="comment in getComments(post.key)" class="md-3-line md-long-text">
-            <img ng-src="{{comment.author_img}}" class="md-avatar" alt="{{comment.author_name}}" />
-            <div class="md-list-item-text">
-              <h3>{{ comment.author_name }}</h3>
-              <p>{{ comment.text }}</p>
-            </div>
-          </md-list-item>
-         <md-divider ng-if="!$last"></md-divider>
+          <md-list class="md-dense" ng-if="homeCtrl.comments[post.key].show">
+            <md-list-item ng-repeat="comment in homeCtrl.comments[post.key].data" class="md-3-line">
+              <md-divider ng-if="!$last"></md-divider>
+              <img ng-src="{{comment.author_img}}" class="md-avatar" alt="{{comment.author_name}}" />
+              <div class="md-list-item-text">
+                <h3>{{ comment.author_name }}</h3>
+                <p>{{ comment.text }}</p>
+                <p>{{ comment.publication_date | date:'dd-MM-yyyy' }}</p>
+              </div>
+            </md-list-item>
+          </md-list>
+         
         </md-card>
       </div>
     </div>

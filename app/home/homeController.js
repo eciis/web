@@ -8,6 +8,7 @@
         var homeCtrl = this;
 
         homeCtrl.posts = [];
+        homeCtrl.comments = {};
         homeCtrl.institutions = [];
 
         homeCtrl.instMenuExpanded = false;
@@ -155,9 +156,22 @@
            });
         };
         
-        homeCtrl.getComments = function getComments(postKey) {
-            CommentService.getComments(postKey);
-            // TODO: finish this function implemantatiom
+        var getComments = function getComments(post) {
+            var commentsUri = post.comments;
+            CommentService.getComments(commentsUri).then(function success(response) {
+                homeCtrl.comments[post.key] =  {'data': response.data, 'show': true};
+            }, function error(response) {
+                showToast(response.data.msg);
+            });
+        };
+
+        homeCtrl.showComments = function showComments(post) {
+            var hasComments = homeCtrl.comments[post.key];
+            if(hasComments) {
+                homeCtrl.comments[post.key].show = !homeCtrl.comments[post.key].show;
+            } else {
+                getComments(post);
+            }
         };
 
         var intervalPromise;

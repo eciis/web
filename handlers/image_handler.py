@@ -27,7 +27,6 @@ class ImageUploadHandler(BaseHandler):
 
         # Cloud Storage file names are in the format /bucket/object.
         filename = '/{}/{}'.format(bucket, file_name)
-        print filename
 
         # Create a file in Google Cloud Storage and write something to it.
         with cloudstorage.open(filename, 'w') as filehandle:

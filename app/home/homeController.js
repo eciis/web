@@ -20,28 +20,6 @@
             }
         });
 
-        homeCtrl.deletePost = function deletePost(ev, post) {
-            var confirm = $mdDialog.confirm()
-                .clickOutsideToClose(true)
-                .title('Excluir Post')
-                .textContent('Este post será excluído e desaparecerá para os usuários que seguem a instituição.')
-                .ariaLabel('Deletar postagem')
-                .targetEvent(ev)
-                .ok('Excluir')
-                .cancel('Cancelar');
-
-            $mdDialog.show(confirm).then(function() {
-                PostService.deletePost(post).then(function success() {
-                    _.remove(homeCtrl.posts, foundPost => foundPost.key === post.key);
-                    showToast('Post excluído com sucesso');
-                }, function error(response) {
-                    showToast(response.data.msg);
-                });
-            }, function() {
-                showToast('Cancelado');
-            });
-        };
-
         homeCtrl.isAuthorized = function isAuthorized(post) {
             var isPostAuthor = post.author_key == homeCtrl.user.key;
             var isInstitutionMember = _.find(homeCtrl.user.institutions, ['key', post.institution_key]);
@@ -51,43 +29,6 @@
             }
             return false;
         };
-
-        homeCtrl.likeOrDeslikePost = function likeOrDeslikePost(post) {
-            if(!homeCtrl.isLikedByUser(post)) {
-                likePost(post);
-            } else {
-                deslikePost(post);
-            }
-        };
-
-        function likePost(post) {
-            PostService.likeOrDeslikePost(post).then(function success() {
-                addPostKeyToUser(post.key);
-            }, function error(response) {
-                showToast(response.data.msg);
-            });
-        }
-
-        function deslikePost(post) {
-            PostService.likeOrDeslikePost(post).then(function success() {
-                removePostKeyFromUser(post.key);
-            }, function error(response) {
-                showToast(response.data.msg);
-            });
-        }
-
-        homeCtrl.isLikedByUser = function isLikedByUser(post) {
-            var likedPostsKeys = _.map(homeCtrl.user.liked_posts, getKeyFromUrl);
-            return _.includes(likedPostsKeys, post.key);
-        };
-
-        function addPostKeyToUser(key) {
-            homeCtrl.user.liked_posts.push(key);
-        }
-
-        function removePostKeyFromUser(key) {
-            _.remove(homeCtrl.user.liked_posts, foundPost => getKeyFromUrl(foundPost) === key);
-        }
 
         function getKeyFromUrl(url) {
             var key = url;
@@ -108,10 +49,6 @@
                     .position('bottom right')
             );
         }
-
-        homeCtrl.goToInstitution = function goToInstitution(institutionKey) {
-            $state.go('app.institution', {institutionKey: institutionKey});
-        };
 
         homeCtrl.newPost = function newPost(event) {
             $mdDialog.show({
@@ -160,38 +97,6 @@
                     homeCtrl.user.unfollow(institution.key);
                 });
             }
-        };
-
-        var getComments = function getComments(post) {
-            var commentsUri = post.comments;
-            CommentService.getComments(commentsUri).then(function success(response) {
-                homeCtrl.comments[post.key] =  {'data': response.data, 'show': true};
-            }, function error(response) {
-                showToast(response.data.msg);
-            });
-        };
-
-        homeCtrl.showComments = function showComments(post) {
-            var hasComments = homeCtrl.comments[post.key];
-            if(hasComments) {
-                homeCtrl.comments[post.key].show = !homeCtrl.comments[post.key].show;
-            } else {
-                getComments(post);
-            }
-        };
-
-        var addComment = function addComment(post, comment) {
-            var postComments = homeCtrl.comments[post.key].data;
-            postComments.push(comment);
-        };
-
-        homeCtrl.createComment = function createComment(post) {
-            CommentService.createComment(post.key, homeCtrl.newComment).then(function success(response) {
-                homeCtrl.newComment = '';
-                addComment(post, response.data);
-            }, function error(response) {
-                showToast(response.data.msg);
-            });
         };
 
         var intervalPromise;

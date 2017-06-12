@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("InstitutionController", function InstitutionController($state, InstitutionService, $interval, $mdToast) {
+    app.controller("InstitutionController", function InstitutionController($state, InstitutionService, AuthService, $interval, $mdToast) {
         var institutionCtrl = this;
 
         institutionCtrl.current_institution = null;
@@ -15,6 +15,12 @@
         institutionCtrl.followers = [];
 
         var currentInstitutionKey = $state.params.institutionKey;
+
+        Object.defineProperty(institutionCtrl, 'user', {
+            get: function() {
+                return AuthService.user;
+            }
+        });
 
         function loadPosts() {
             InstitutionService.getTimeline(currentInstitutionKey).then(function success(response) {
@@ -68,7 +74,22 @@
         institutionCtrl.follow = function follow(){
             InstitutionService.follow(currentInstitutionKey).then(function success(){
                 showToast("Seguindo "+institutionCtrl.current_institution.name);
+                institutionCtrl.user.follow(currentInstitutionKey);
+                getFollowers();
             });
+        };
+
+        institutionCtrl.unfollow = function unfollow(){
+            if(institutionCtrl.user.isMember(institutionCtrl.current_institution.key)){
+                showToast("Você não pode deixar de seguir " + institutionCtrl.current_institution.name);
+            }
+            else{
+                InstitutionService.unfollow(currentInstitutionKey).then(function success(){
+                    showToast("Deixou de seguir "+institutionCtrl.current_institution.name);
+                    institutionCtrl.user.unfollow(currentInstitutionKey);
+                    getFollowers();
+                });
+            }
         };
     });
 })();

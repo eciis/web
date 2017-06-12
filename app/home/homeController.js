@@ -95,7 +95,6 @@
             return key;
         }
 
-
         function showToast(msg) {
             $mdToast.show(
                 $mdToast.simple()
@@ -129,10 +128,18 @@
             homeCtrl.instMenuExpanded = !homeCtrl.instMenuExpanded;
         };
 
+        function getInstitutions(){
+            InstitutionService.getInstitutions().then(function sucess(response){
+                homeCtrl.institutions = response.data;
+            });
+        }
+
         homeCtrl.follow = function follow(institution){
             InstitutionService.follow(institution.key).then(function success(){
                 showToast("Seguindo "+institution.name);
+                homeCtrl.user.follow(institution.key);
             });
+
            /**
            TODO: First version doesn't treat the case in which the user is already
            the institution follower.
@@ -140,11 +147,17 @@
            **/
         };
 
-        function getInstitutions(){
-            InstitutionService.getInstitutions().then(function sucess(response){
-                homeCtrl.institutions = response.data;
-            });
-        }
+        homeCtrl.unfollow = function unfollow(institution){
+            if(homeCtrl.user.isMember(institution.key)){
+                showToast("Você não pode deixar de seguir " + institution.name);
+            }
+            else{
+                InstitutionService.unfollow(institution.key).then(function sucess(){
+                    showToast("Deixou de seguir "+institution.name);
+                    homeCtrl.user.unfollow(institution.key);
+                });
+            }
+        };
 
         var intervalPromise;
 

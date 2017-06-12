@@ -61,6 +61,6 @@ class Institution(ndb.Model):
 
     def unfollow(self, user):
         """Remove one user in collection of followers."""
-        if user in self.followers:
+        if user in self.followers and user not in self.members:
             self.followers.remove(user)
             self.put()

@@ -1,11 +1,11 @@
 'use strict';
-var homeCtrl = null;
+
 (function() {
     var app = angular.module("app");
 
     app.controller("HomeController", function HomeController(PostService, AuthService,
             InstitutionService, CommentService, $interval, $mdToast, $mdDialog, $state) {
-        homeCtrl = this;
+        var homeCtrl = this;
 
         homeCtrl.posts = [];
         homeCtrl.comments = {};

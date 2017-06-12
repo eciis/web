@@ -3,7 +3,8 @@
 
     var app = angular.module('app');
 
-    app.controller('PostDetailsController', function(PostService, AuthService, CommentService, $mdToast, $state) {
+    app.controller('PostDetailsController', function(PostService, AuthService, CommentService, $mdToast, $state,
+        $mdDialog) {
         var postDetailsCtrl = this;
 
         postDetailsCtrl.comments = {};
@@ -14,6 +15,38 @@
                 return AuthService.user;
             }
         });
+
+        postDetailsCtrl.deletePost = function deletePost(ev, post, posts) {
+            var confirm = $mdDialog.confirm()
+                .clickOutsideToClose(true)
+                .title('Excluir Post')
+                .textContent('Este post será excluído e desaparecerá para os usuários que seguem a instituição.')
+                .ariaLabel('Deletar postagem')
+                .targetEvent(ev)
+                .ok('Excluir')
+                .cancel('Cancelar');
+
+            $mdDialog.show(confirm).then(function() {
+                PostService.deletePost(post).then(function success() {
+                    _.remove(posts, foundPost => foundPost.key === post.key);
+                    showToast('Post excluído com sucesso');
+                }, function error(response) {
+                    showToast(response.data.msg);
+                });
+            }, function() {
+                showToast('Cancelado');
+            });
+        };
+
+        postDetailsCtrl.isAuthorized = function isAuthorized(post) {
+            var isPostAuthor = post.author_key == postDetailsCtrl.user.key;
+            var isInstitutionMember = _.find(postDetailsCtrl.user.institutions, ['key', post.institution_key]);
+            var isInstitutionAdmin = _.includes(_.map(postDetailsCtrl.user.institutions_admin, getKeyFromUrl), post.institution_key);
+            if (isPostAuthor && isInstitutionMember || isInstitutionAdmin) {
+                return true;
+            }
+            return false;
+        };
 
         postDetailsCtrl.likeOrDeslikePost = function likeOrDeslikePost(post) {
             if(!postDetailsCtrl.isLikedByUser(post)) {

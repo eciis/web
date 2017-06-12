@@ -1,11 +1,11 @@
 'use strict';
-
+var homeCtrl = null;
 (function() {
     var app = angular.module("app");
 
-    app.controller("HomeController", function HomeController(PostService, AuthService, 
+    app.controller("HomeController", function HomeController(PostService, AuthService,
             InstitutionService, CommentService, $interval, $mdToast, $mdDialog, $state) {
-        var homeCtrl = this;
+        homeCtrl = this;
 
         homeCtrl.posts = [];
         homeCtrl.comments = {};
@@ -161,7 +161,7 @@
                 });
             }
         };
-        
+
         var getComments = function getComments(post) {
             var commentsUri = post.comments;
             CommentService.getComments(commentsUri).then(function success(response) {

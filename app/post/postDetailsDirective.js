@@ -39,13 +39,7 @@
         };
 
         postDetailsCtrl.isAuthorized = function isAuthorized(post) {
-            var isPostAuthor = post.author_key == postDetailsCtrl.user.key;
-            var isInstitutionMember = _.find(postDetailsCtrl.user.institutions, ['key', post.institution_key]);
-            var isInstitutionAdmin = _.includes(_.map(postDetailsCtrl.user.institutions_admin, getKeyFromUrl), post.institution_key);
-            if (isPostAuthor && isInstitutionMember || isInstitutionAdmin) {
-                return true;
-            }
-            return false;
+            return isPostAuthor(post) || isInstitutionAdmin(post);        
         };
 
         postDetailsCtrl.likeOrDeslikePost = function likeOrDeslikePost(post) {
@@ -140,6 +134,37 @@
                 showToast(response.data.msg);
             });
         };
+
+        postDetailsCtrl.canDeleteComment = function canDeleteComment(post, comment) {
+            return isCommentAuthor(comment) || isPostAuthor(post) || isInstitutionAdmin(post);
+        };
+
+        postDetailsCtrl.deleteComment = function deleteComment(post, comment) {
+            CommentService.deleteComment(post.key, comment.id).then(function success(respose) {
+                removeComment(post, comment);
+            }, function error(response) {
+                showToast(response.data.msg);
+            });
+        };
+
+        function removeComment(post, comment) {
+            var postComments = postDetailsCtrl.comments[post.key].data;
+            _.remove(postComments, function(postComment) {
+                return postComment.id == comment.id; 
+            });
+        }
+
+        function isPostAuthor(post) {
+            return post.author_key == postDetailsCtrl.user.key;
+        }
+
+        function isCommentAuthor(comment) {
+            return comment.author_key == postDetailsCtrl.user.key;
+        }
+
+        function isInstitutionAdmin(post) {
+            return _.includes(_.map(postDetailsCtrl.user.institutions_admin, getKeyFromUrl), post.institution_key);
+        }
     });
 
     app.directive("postDetails", function() {

@@ -102,16 +102,14 @@
               <md-icon>share_arrow</md-icon>
             </md-button>
           </md-card-actions>
-          <md-list class="md-dense">
+          <md-list>
             <div ng-if="homeCtrl.comments[post.key].show">
-              <md-divider></md-divider>
               <md-list-item ng-repeat="comment in homeCtrl.comments[post.key].data" class="md-3-line">
-                <md-divider ng-if="!$last"></md-divider>
                 <img ng-src="{{comment.author_img}}" class="md-avatar" alt="{{comment.author_name}}" />
                 <div class="md-list-item-text">
                   <h3>{{comment.author_name}}</h3>
                   <p>{{comment.text}}</p>
-                  <p>{{comment.publication_date | date:'dd-MM-yyyy'}}</p>
+                  <p>{{comment.publication_date | date: 'MMM d, y HH:mm'}}</p>
                 </div>
               </md-list-item>
               <md-list-item class="md-3-line">

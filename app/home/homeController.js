@@ -208,6 +208,10 @@
         loadPosts();
         getInstitutions();
 
-        intervalPromise = $interval(loadPosts, 15000);
+        //intervalPromise = $interval(loadPosts, 15000);
+        /**
+        FIXME: The timeline update interrupts the user while he is commenting on a post
+        @author: Ruan Silveira 12/06/2017
+        **/
     });
 })();

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Post handler test."""
+"""Post Collection handler test."""
 
 from test_base import TestBase
 from models.user import User
@@ -9,8 +9,8 @@ from google.appengine.ext import ndb
 import json
 
 
-class PostHandlerTest(TestBase):
-    """Test the post_handler class."""
+class PostCollectionHandlerTest(TestBase):
+    """Post Collection handler test."""
 
     @classmethod
     def setUp(cls):
@@ -53,42 +53,10 @@ class PostHandlerTest(TestBase):
         # Check if the post's attributes are the expected
         self.assertEqual(post_obj.title, 'new post',
                          "The title expected was new post")
-        self.assertFalse(post_obj.title == 'newpost',
-                         "The title shouldn't be newpost")
         self.assertEqual(post_obj.institution, self.certbio.key,
                          "The post's institution is not the expected one")
         self.assertEqual(post_obj.text,
                          'testing new post',
-                         "The post's text is not the expected one")
-
-        self.os.environ['REMOTE_USER'] = 'raoni.smaneoto@ccc.ufcg.edu.br'
-        self.os.environ['USER_EMAIL'] = 'raoni.smaneoto@ccc.ufcg.edu.br'
-        # Make the request and assign the answer to post
-        post = self.testapp.post_json("/api/post", {'title': 'another post',
-                                                    'institution':
-                                                    self.certbio.key.urlsafe(),
-                                                    'text':
-                                                    'testing another post'})
-        # Retrieve the entities
-        post = json.loads(post._app_iter[0])
-        key_post = ndb.Key(urlsafe=post['key'])
-        post_obj = key_post.get()
-        self.certbio = self.certbio.key.get()
-        self.raoni = self.raoni.key.get()
-        # Check if the post's key is in institution and user
-        self.assertTrue(key_post in self.raoni.posts,
-                        "The post is not in user.posts")
-        self.assertTrue(key_post in self.certbio.posts,
-                        "The post is not in institution.posts")
-        # Check if the post's attributes are the expected
-        self.assertEqual(post_obj.title, 'another post',
-                         "The title expected was another post")
-        self.assertFalse(post_obj.title == 'anotherpost',
-                         "The title shouldn't be anotherpost")
-        self.assertEqual(post_obj.institution, self.certbio.key,
-                         "The post's institution is not the expected one")
-        self.assertEqual(post_obj.text,
-                         'testing another post',
                          "The post's text is not the expected one")
 
         # TODO:

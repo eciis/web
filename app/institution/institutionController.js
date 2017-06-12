@@ -80,11 +80,16 @@
         };
 
         institutionCtrl.unfollow = function unfollow(){
-            InstitutionService.unfollow(currentInstitutionKey).then(function success(){
-                showToast("Deixou de seguir "+institutionCtrl.current_institution.name);
-                institutionCtrl.user.unfollow(currentInstitutionKey);
-                getFollowers();
-            });
+            if(institutionCtrl.user.isMember(institutionCtrl.current_institution.key)){
+                showToast("Você não pode deixar de seguir " + institutionCtrl.current_institution.name);
+            }
+            else{
+                InstitutionService.unfollow(currentInstitutionKey).then(function success(){
+                    showToast("Deixou de seguir "+institutionCtrl.current_institution.name);
+                    institutionCtrl.user.unfollow(currentInstitutionKey);
+                    getFollowers();
+                });
+            }
         };
     });
 })();

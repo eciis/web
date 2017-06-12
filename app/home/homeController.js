@@ -3,11 +3,14 @@
 (function() {
     var app = angular.module("app");
 
-    app.controller("HomeController", function HomeController(PostService, AuthService, InstitutionService, $interval, $mdToast, $mdDialog, $state) {
+    app.controller("HomeController", function HomeController(PostService, AuthService, 
+            InstitutionService, CommentService, $interval, $mdToast, $mdDialog, $state) {
         var homeCtrl = this;
 
         homeCtrl.posts = [];
+        homeCtrl.comments = {};
         homeCtrl.institutions = [];
+        homeCtrl.newComment = '';
 
         homeCtrl.instMenuExpanded = false;
 
@@ -158,6 +161,38 @@
                 });
             }
         };
+        
+        var getComments = function getComments(post) {
+            var commentsUri = post.comments;
+            CommentService.getComments(commentsUri).then(function success(response) {
+                homeCtrl.comments[post.key] =  {'data': response.data, 'show': true};
+            }, function error(response) {
+                showToast(response.data.msg);
+            });
+        };
+
+        homeCtrl.showComments = function showComments(post) {
+            var hasComments = homeCtrl.comments[post.key];
+            if(hasComments) {
+                homeCtrl.comments[post.key].show = !homeCtrl.comments[post.key].show;
+            } else {
+                getComments(post);
+            }
+        };
+
+        var addComment = function addComment(post, comment) {
+            var postComments = homeCtrl.comments[post.key].data;
+            postComments.push(comment);
+        };
+
+        homeCtrl.createComment = function createComment(post) {
+            CommentService.createComment(post.key, homeCtrl.newComment).then(function success(response) {
+                homeCtrl.newComment = '';
+                addComment(post, response.data);
+            }, function error(response) {
+                showToast(response.data.msg);
+            });
+        };
 
         var intervalPromise;
 
@@ -173,6 +208,10 @@
         loadPosts();
         getInstitutions();
 
-        intervalPromise = $interval(loadPosts, 5000);
+        /**
+        FIXME: The timeline update interrupts the user while he is commenting on a post
+        @author: Ruan Silveira 12/06/2017
+        **/
+        //intervalPromise = $interval(loadPosts, 15000);
     });
 })();

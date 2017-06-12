@@ -88,6 +88,9 @@
             <md-button class="md-icon-button" aria-label="Data" ng-click="time = !time;">
               <md-icon>access_time</md-icon>
             </md-button>
+            <md-button class="md-icon-button" aria-label="Comments" ng-click="homeCtrl.showComments(post)">
+              <md-icon>comments</md-icon>
+            </md-button>
             <md-button class="md-icon-button" aria-label="Favorite" ng-click="homeCtrl.likeOrDeslikePost(post)"
               ng-class="homeCtrl.isLikedByUser(post)?'md-warn':''">
               <md-icon>grade</md-icon>
@@ -99,6 +102,30 @@
               <md-icon>share_arrow</md-icon>
             </md-button>
           </md-card-actions>
+          <md-list>
+            <div ng-if="homeCtrl.comments[post.key].show">
+              <md-list-item ng-repeat="comment in homeCtrl.comments[post.key].data" class="md-3-line">
+                <img ng-src="{{comment.author_img}}" class="md-avatar" alt="{{comment.author_name}}" />
+                <div class="md-list-item-text">
+                  <h3>{{comment.author_name}}</h3>
+                  <p>{{comment.text}}</p>
+                  <p>{{comment.publication_date | date: 'MMM d, y HH:mm'}}</p>
+                </div>
+              </md-list-item>
+              <md-list-item class="md-3-line">
+                <img ng-src="{{homeCtrl.user.image}}" class="md-avatar" alt="{{homeCtrl.user.name}}" />
+                <div class="md-list-item-text">
+                  <h3>{{comment.author_name}}</h3>
+                  <md-input-container class="md-block">
+                    <form ng-submit="homeCtrl.createComment(post)">
+                      <label>{{homeCtrl.user.name}}</label>
+                      <input ng-model="homeCtrl.newComment" type="text"> 
+                    </form>
+                  </md-input-container>
+                </div>
+              </md-list-item>
+            </div>
+          </md-list>
         </md-card>
       </div>
     </div>

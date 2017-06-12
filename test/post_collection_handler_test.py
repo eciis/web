@@ -89,17 +89,6 @@ def initModels(cls):
     cls.mayza.notifications = []
     cls.mayza.posts = []
     cls.mayza.put()
-    # new User Raoni
-    cls.raoni = User()
-    cls.raoni.name = 'Raoni Smaneoto'
-    cls.raoni.cpf = '089.675.908-65'
-    cls.raoni.email = 'raoni.smaneoto@ccc.ufcg.edu.br'
-    cls.raoni.institutions = []
-    cls.raoni.follows = []
-    cls.raoni.institutions_admin = []
-    cls.raoni.notifications = []
-    cls.raoni.posts = []
-    cls.raoni.put()
     # new Institution CERTBIO
     cls.certbio = Institution()
     cls.certbio.name = 'CERTBIO'

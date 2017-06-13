@@ -192,14 +192,16 @@ class Post(ndb.Model):
 
     def like(self, author_key):
         """Increment one 'like' in post."""
-        like = Like()
-        like.author = author_key
-        like.id = Utils.getHash(like)
-        self.likes.append(like)
-        self.put()
+        if self.get_like(author_key) is None:
+            like = Like()
+            like.author = author_key
+            like.id = Utils.getHash(like)
+            self.likes.append(like)
+            self.put()
 
     def dislike(self, author_key):
         """Decrease one 'like' in post."""
         like = self.get_like(author_key)
-        self.likes.remove(like)
-        self.put()
+        if like:
+            self.likes.remove(like)
+            self.put()

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Institution follower handler test."""
-from test_base import TestBaseHandler
+from test_base_handler import TestBaseHandler
 from models.user import User
 from models.institution import Institution
 from handlers.institution_followers_handler import InstitutionFollowersHandler
@@ -13,7 +13,6 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
     def setUp(cls):
         """Provide the base for the tests."""
         super(InstitutionFollowersHandlerTest, cls).setUp()
-
         app = cls.webapp2.WSGIApplication(
             [("/api/institution/(.*)/followers",
                 InstitutionFollowersHandler)
@@ -27,8 +26,8 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
         self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
         self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
         # Verified objects, are empty
-        self.assertTrue(len(self.certbio.followers) == 0, "The number of followers expected was 0")
-        self.assertTrue(len(self.mayza.follows) == 0, "The number of follows expected was 0")
+        self.assertEquals(len(self.certbio.followers), 0, "The number of followers expected was 0")
+        self.assertEquals(len(self.mayza.follows), 0, "The number of follows expected was 0")
         # Call the post method
         self.testapp.post("/api/institution/%s/followers" % self.certbio.key.urlsafe())
 
@@ -37,9 +36,9 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
         self.certbio = self.certbio.key.get()
 
         # An institution have 1 follower
-        self.assertTrue(len(self.mayza.follows) == 1, "The number of follows expected was 1")
+        self.assertEquals(len(self.mayza.follows), 1, "The number of follows expected was 1")
         # An user have 1 follow
-        self.assertTrue(len(self.certbio.followers) == 1, "The number of followers expected was 1")
+        self.assertEquals(len(self.certbio.followers), 1, "The number of followers expected was 1")
         # Institution have mayza in followers
         self.assertTrue(self.mayza.key in self.certbio.followers, "Mayze should be in institution followers")
         self.assertTrue(self.certbio.key in self.mayza.follows, "SpLab should be in user follows")
@@ -47,8 +46,8 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
         # Call the post method again
         self.testapp.post("/api/institution/%s/followers" % self.certbio.key.urlsafe())
         # Confirmed that follow only one time
-        self.assertTrue(len(self.certbio.followers) == 1, "The number of followers expected was 1")
-        self.assertTrue(len(self.mayza.follows) == 1, "The number of follows expected was 1")
+        self.assertEquals(len(self.certbio.followers), 1, "The number of followers expected was 1")
+        self.assertEquals(len(self.mayza.follows), 1, "The number of follows expected was 1")
 
     def test_delete(self):
         """Test the institution_follower_handler delete method."""
@@ -57,8 +56,8 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
         self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
 
         # Verified objects
-        self.assertTrue(len(self.certbio.followers) == 0, "The number of followers expected was 0")
-        self.assertTrue(len(self.mayza.follows) == 0, "The number of follows expected was 0")
+        self.assertEquals(len(self.certbio.followers), 0, "The number of followers expected was 0")
+        self.assertEquals(len(self.mayza.follows), 0, "The number of follows expected was 0")
 
         # Call the post method
         self.testapp.post("/api/institution/%s/followers" % self.certbio.key.urlsafe())
@@ -68,8 +67,8 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
         self.certbio = self.certbio.key.get()
 
         # Verified objects
-        self.assertTrue(len(self.certbio.followers) == 1, "The number of followers expected was 1")
-        self.assertTrue(len(self.mayza.follows) == 1, "The number of follows expected was 1")
+        self.assertEquals(len(self.certbio.followers), 1, "The number of followers expected was 1")
+        self.assertEquals(len(self.mayza.follows), 1, "The number of follows expected was 1")
 
         # Call the delete method
         self.testapp.delete("/api/institution/%s/followers" % self.certbio.key.urlsafe())
@@ -79,8 +78,8 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
         self.certbio = self.certbio.key.get()
 
         # Remove one follower. Admin can unfollow
-        self.assertTrue(len(self.mayza.follows) == 0, "The number of follows expected was 0")
-        self.assertTrue(len(self.certbio.followers) == 0, "Number of followers expected was 0")
+        self.assertEquals(len(self.mayza.follows), 0, "The number of follows expected was 0")
+        self.assertEquals(len(self.certbio.followers), 0, "Number of followers expected was 0")
 
     def teste_delete_usermember(self):
         """Test that user member try unfollow the institution."""
@@ -89,8 +88,8 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
         self.os.environ['USER_EMAIL'] = 'maiana.brito@ccc.ufcg.edu.br'
 
         # Verified objects
-        self.assertTrue(len(self.certbio.followers) == 0, "The number of followers expected was 0")
-        self.assertTrue(len(self.maiana.follows) == 0, "The number of follows expected was 0")
+        self.assertEquals(len(self.certbio.followers), 0, "The number of followers expected was 0")
+        self.assertEquals(len(self.maiana.follows), 0, "The number of follows expected was 0")
 
         # Call the delete method
         self.testapp.post("/api/institution/%s/followers" % self.certbio.key.urlsafe())
@@ -100,8 +99,8 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
         self.certbio = self.certbio.key.get()
 
         # Verified objects
-        self.assertTrue(len(self.certbio.followers) == 1, "The number of followers expected was 1")
-        self.assertTrue(len(self.mayza.follows) == 1, "The number of follows expected was 1")
+        self.assertEquals(len(self.certbio.followers), 1, "The number of followers expected was 1")
+        self.assertEquals(len(self.maiana.follows), 1, "The number of follows expected was 1")
 
         # Call the delete method
         self.testapp.delete("/api/institution/%s/followers" % self.certbio.key.urlsafe())
@@ -111,8 +110,8 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
         self.certbio = self.certbio.key.get()
 
         # Don't remove users are members of institution
-        self.assertTrue(len(self.maiana.follows) == 1, "The number of follows expected was 1")
-        self.assertTrue(len(self.certbio.followers) == 1, "Number of followers expected was 1")
+        self.assertEquals(len(self.maiana.follows), 1, "The number of follows expected was 1")
+        self.assertEquals(len(self.certbio.followers), 1, "Number of followers expected was 1")
 
     def tearDown(cls):
         """Deactivate the test."""

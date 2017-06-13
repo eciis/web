@@ -3,8 +3,8 @@
         <md-card ng-repeat="post in posts | orderBy:'date':true">
           <md-card-header>
             <md-card-avatar>
-              <a href="">
-                <img src="{{ post.institution_image }}" role="button" class="md-user-avatar" ng-click="postDetailsCtrl.goToInstitution(post.institution_key)"/>
+              <a href="" ng-click="postDetailsCtrl.goToInstitution(post.institution_key)">
+                <img src="{{ post.institution_image }}" role="button" class="md-user-avatar"/>
               </a>
             </md-card-avatar>
             <md-card-header-text>

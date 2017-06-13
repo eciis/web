@@ -106,19 +106,20 @@
         var getComments = function getComments(post) {
             var commentsUri = post.comments;
             CommentService.getComments(commentsUri).then(function success(response) {
-                postDetailsCtrl.comments[post.key] =  {'data': response.data, 'show': true};
+                var hasComments = postDetailsCtrl.comments[post.key];
+                if(hasComments) {
+                    postDetailsCtrl.comments[post.key].data = response.data;
+                } else {
+                    postDetailsCtrl.comments[post.key] =  {'data': response.data, 'show': true};
+                }                
             }, function error(response) {
                 showToast(response.data.msg);
             });
         };
 
         postDetailsCtrl.showComments = function showComments(post) {
-            var hasComments = postDetailsCtrl.comments[post.key];
-            if(hasComments) {
-                postDetailsCtrl.comments[post.key].show = !postDetailsCtrl.comments[post.key].show;
-            } else {
-                getComments(post);
-            }
+            getComments(post);
+            postDetailsCtrl.comments[post.key].show = !postDetailsCtrl.comments[post.key].show;            
         };
 
         var addComment = function addComment(post, comment) {

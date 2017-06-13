@@ -11,6 +11,8 @@ from handlers.like_post_handler import LikePostHandler
 class LikePostHandlerTest(TestBaseHandler):
     """Test the handler like_post_handler."""
 
+    LIKE_URI = "/api/post/%s/likes"
+
     @classmethod
     def setUp(cls):
         """Provide the base for the tests."""
@@ -27,8 +29,7 @@ class LikePostHandlerTest(TestBaseHandler):
     def test_get(self):
         """Test method get of LikePostHandler."""
         # Call the get method
-        data = self.testapp.get("/api/post/%s/likes"
-                                % self.mayza_post.key.urlsafe())
+        data = self.testapp.get(self.LIKE_URI % self.mayza_post.key.urlsafe())
         # Verify the status of request
         self.assertEqual(data.status, '200 OK')
         # Get the body of request
@@ -38,15 +39,14 @@ class LikePostHandlerTest(TestBaseHandler):
         # Checks if the key of Tiago are not in the authors
         self.assertNotIn(self.tiago.key.urlsafe(), authors)
         # Call the post method
-        self.testapp.post("/api/post/%s/likes" % self.mayza_post.key.urlsafe())
+        self.testapp.post(self.LIKE_URI % self.mayza_post.key.urlsafe())
         # Verify if after the like the number of likes at post is 1
         self.mayza_post = self.mayza_post.key.get()
         self.assertEqual(self.mayza_post.get_number_of_likes(), 1,
                          "The number of likes expected was 1, but was %d"
                          % self.mayza_post.get_number_of_likes())
         # Call the get method
-        data = self.testapp.get("/api/post/%s/likes"
-                                % self.mayza_post.key.urlsafe())
+        data = self.testapp.get(self.LIKE_URI % self.mayza_post.key.urlsafe())
         # Verify the status of request
         self.assertEqual(data.status, '200 OK')
         # Get the body of request
@@ -63,24 +63,25 @@ class LikePostHandlerTest(TestBaseHandler):
                          "The number of likes expected was 0, but was %d"
                          % self.mayza_post.get_number_of_likes())
         # Call the post method
-        self.testapp.post("/api/post/%s/likes" % self.mayza_post.key.urlsafe())
+        self.testapp.post(self.LIKE_URI % self.mayza_post.key.urlsafe())
         # Verify if after the like the number of likes at post is 1
         self.mayza_post = self.mayza_post.key.get()
         self.assertEqual(self.mayza_post.get_number_of_likes(), 1,
                          "The number of likes expected was 1, but was %d"
                          % self.mayza_post.get_number_of_likes())
         # Call the post method again
-        self.testapp.post("/api/post/%s/likes" % self.mayza_post.key.urlsafe())
+        self.testapp.post(self.LIKE_URI % self.mayza_post.key.urlsafe())
         # Refresh mayza_post
         self.mayza_post = self.mayza_post.key.get()
         # Verify if after the other like the number of likes at post is 1 yet
         self.assertEqual(self.mayza_post.get_number_of_likes(), 1,
-                         "The number of likes expected was 1")
+                         "The number of likes expected was 1, but was %d"
+                         % self.mayza_post.get_number_of_likes())
         # Authentication with Mayza
         self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
         self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
         # Call the post method
-        self.testapp.post("/api/post/%s/likes" % self.mayza_post.key.urlsafe())
+        self.testapp.post(self.LIKE_URI % self.mayza_post.key.urlsafe())
         # Refresh mayza_post
         self.mayza_post = self.mayza_post.key.get()
         # Verify if after the like with other user the number of likes at
@@ -92,7 +93,7 @@ class LikePostHandlerTest(TestBaseHandler):
     def test_delete(self):
         """Test the like_post_handler's delete method."""
         # Call the post method
-        self.testapp.post("/api/post/%s/likes" % self.mayza_post.key.urlsafe())
+        self.testapp.post(self.LIKE_URI % self.mayza_post.key.urlsafe())
         # Refresh mayza_post
         self.mayza_post = self.mayza_post.key.get()
         # Verify if after the like the number of likes at post is 1
@@ -100,8 +101,7 @@ class LikePostHandlerTest(TestBaseHandler):
                          "The number of likes expected was 1, but was %d"
                          % self.mayza_post.get_number_of_likes())
         # Call the delete method
-        self.testapp.delete("/api/post/%s/likes"
-                            % self.mayza_post.key.urlsafe())
+        self.testapp.delete(self.LIKE_URI % self.mayza_post.key.urlsafe())
         # Refresh mayza_post
         self.mayza_post = self.mayza_post.key.get()
         # Verify if after the dislike the number of likes at post is 0
@@ -109,8 +109,7 @@ class LikePostHandlerTest(TestBaseHandler):
                          "The number of likes expected was 0, but was %d"
                          % self.mayza_post.get_number_of_likes())
         # Call the delete method again
-        self.testapp.delete("/api/post/%s/likes"
-                            % self.mayza_post.key.urlsafe())
+        self.testapp.delete(self.LIKE_URI % self.mayza_post.key.urlsafe())
         # Refresh mayza_post
         self.mayza_post = self.mayza_post.key.get()
         # Verify if after the other dislike the number of likes at post is 0

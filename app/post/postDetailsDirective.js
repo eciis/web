@@ -103,23 +103,19 @@
             $state.go('app.institution', {institutionKey: institutionKey});
         };
 
-        var getComments = function getComments(post) {
+        postDetailsCtrl.getComments = function getComments(post) {
             var commentsUri = post.comments;
             CommentService.getComments(commentsUri).then(function success(response) {
                 var hasComments = postDetailsCtrl.comments[post.key];
                 if(hasComments) {
                     postDetailsCtrl.comments[post.key].data = response.data;
+                    postDetailsCtrl.comments[post.key].show = !postDetailsCtrl.comments[post.key].show;  
                 } else {
-                    postDetailsCtrl.comments[post.key] =  {'data': response.data, 'show': true};
+                    postDetailsCtrl.comments[post.key] =  {'data': response.data, 'show': true, 'newComment': ''};
                 }                
             }, function error(response) {
                 showToast(response.data.msg);
             });
-        };
-
-        postDetailsCtrl.showComments = function showComments(post) {
-            getComments(post);
-            postDetailsCtrl.comments[post.key].show = !postDetailsCtrl.comments[post.key].show;            
         };
 
         var addComment = function addComment(post, comment) {
@@ -128,8 +124,9 @@
         };
 
         postDetailsCtrl.createComment = function createComment(post) {
-            CommentService.createComment(post.key, postDetailsCtrl.newComment).then(function success(response) {
-                postDetailsCtrl.newComment = '';
+            var newComment = postDetailsCtrl.comments[post.key].newComment;
+            CommentService.createComment(post.key, newComment).then(function success(response) {
+                postDetailsCtrl.comments[post.key].newComment = '';
                 addComment(post, response.data);
             }, function error(response) {
                 showToast(response.data.msg);

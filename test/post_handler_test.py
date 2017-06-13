@@ -17,7 +17,6 @@ class PostHandlerTest(TestBaseHandler):
         super(PostHandlerTest, cls).setUp()
         app = cls.webapp2.WSGIApplication(
             [("/api/post/(.*)", PostHandler),
-                ("/api/post/(.*)/like", PostHandler),
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)

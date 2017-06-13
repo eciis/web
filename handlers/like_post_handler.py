@@ -23,10 +23,8 @@ class LikePostHandler(BaseHandler):
     @login_required
     @ndb.transactional(xg=True)
     def post(self, user, url_string):
-        """Handle POST Requests.
-
-        This method is only meant to give like in post
-        """
+        """Handle POST Requests."""
+        """This method is only meant to give like in post."""
         post = ndb.Key(urlsafe=url_string).get()
         if not user.is_liked_post(post.key):
             user.like_post(post.key)
@@ -35,10 +33,8 @@ class LikePostHandler(BaseHandler):
     @login_required
     @ndb.transactional(xg=True)
     def delete(self, user, url_string):
-        """Handle DELETE Requests.
-
-        This method is only meant to dislike in post
-        """
+        """Handle DELETE Requests."""
+        """This method is only meant to dislike in post."""
         post = ndb.Key(urlsafe=url_string).get()
         if user.is_liked_post(post.key):
             user.dislike_post(post.key)

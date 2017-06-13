@@ -1,24 +1,19 @@
 # -*- coding: utf-8 -*-
 """Institution follower handler test."""
-from test_base import TestBase
+from test_base import TestBaseHandler
 from models.user import User
 from models.institution import Institution
 from handlers.institution_followers_handler import InstitutionFollowersHandler
 
 
-class InstitutionFollowersHandlerTest(TestBase):
+class InstitutionFollowersHandlerTest(TestBaseHandler):
     """Test the institution_followers_handler class."""
 
     @classmethod
     def setUp(cls):
         """Provide the base for the tests."""
-        cls.test = cls.testbed.Testbed()
-        cls.test.activate()
-        cls.policy = cls.datastore.PseudoRandomHRConsistencyPolicy(
-            probability=1)
-        cls.test.init_datastore_v3_stub(consistency_policy=cls.policy)
-        cls.test.init_memcache_stub()
-        cls.ndb.get_context().set_cache_policy(False)
+        super(InstitutionFollowersHandlerTest, cls).setUp()
+
         app = cls.webapp2.WSGIApplication(
             [("/api/institution/(.*)/followers",
                 InstitutionFollowersHandler)
@@ -61,12 +56,18 @@ class InstitutionFollowersHandlerTest(TestBase):
         self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
         self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
 
+        # Verified objects
+        self.assertTrue(len(self.certbio.followers) == 0, "The number of followers expected was 0")
+        self.assertTrue(len(self.mayza.follows) == 0, "The number of follows expected was 0")
+
         # Call the post method
         self.testapp.post("/api/institution/%s/followers" % self.certbio.key.urlsafe())
 
+        # Update the objects
         self.mayza = self.mayza.key.get()
         self.certbio = self.certbio.key.get()
 
+        # Verified objects
         self.assertTrue(len(self.certbio.followers) == 1, "The number of followers expected was 1")
         self.assertTrue(len(self.mayza.follows) == 1, "The number of follows expected was 1")
 
@@ -87,8 +88,20 @@ class InstitutionFollowersHandlerTest(TestBase):
         self.os.environ['REMOTE_USER'] = 'maiana.brito@ccc.ufcg.edu.br'
         self.os.environ['USER_EMAIL'] = 'maiana.brito@ccc.ufcg.edu.br'
 
+        # Verified objects
+        self.assertTrue(len(self.certbio.followers) == 0, "The number of followers expected was 0")
+        self.assertTrue(len(self.maiana.follows) == 0, "The number of follows expected was 0")
+
         # Call the delete method
         self.testapp.post("/api/institution/%s/followers" % self.certbio.key.urlsafe())
+
+        # Update the objects
+        self.maiana = self.maiana.key.get()
+        self.certbio = self.certbio.key.get()
+
+        # Verified objects
+        self.assertTrue(len(self.certbio.followers) == 1, "The number of followers expected was 1")
+        self.assertTrue(len(self.mayza.follows) == 1, "The number of follows expected was 1")
 
         # Call the delete method
         self.testapp.delete("/api/institution/%s/followers" % self.certbio.key.urlsafe())

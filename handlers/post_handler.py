@@ -32,22 +32,6 @@ class PostHandler(BaseHandler):
 
     @json_response
     @login_required
-    @ndb.transactional(xg=True)
-    def post(self, user, url_string):
-        """Handle POST Requests.
-
-        This method is only meant to give like in post
-        """
-        post = ndb.Key(urlsafe=url_string).get()
-        if not user.is_liked_post(post.key):
-            user.like_post(post.key)
-            post.like()
-        else:
-            user.deslike_post(post.key)
-            post.deslike()
-
-    @json_response
-    @login_required
     def patch(self, user, url_string):
         """Handler PATCH Requests."""
         data = self.request.body

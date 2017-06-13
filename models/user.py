@@ -71,7 +71,7 @@ class User(ndb.Model):
             self.liked_posts.append(postKey)
             self.put()
 
-    def deslike_post(self, postKey):
+    def dislike_post(self, postKey):
         """Method to deslike a post."""
         if self.is_liked_post(postKey):
             self.liked_posts.remove(postKey)

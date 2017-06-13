@@ -28,9 +28,19 @@
             return deferred.promise;
         };
 
-        service.likeOrDeslikePost = function likePost(post) {
+        service.likePost = function likePost(post) {
             var deferred = $q.defer();
-            $http.post(POST_URI + '/' + post.key + '/like').then(function success(response) {
+            $http.post(POST_URI + '/' + post.key + '/likes').then(function success(response) {
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+            return deferred.promise;
+        };
+
+        service.dislikePost = function dislikePost(post) {
+            var deferred = $q.defer();
+            $http.delete(POST_URI + '/' + post.key + '/likes').then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);

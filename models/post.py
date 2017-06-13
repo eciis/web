@@ -36,7 +36,7 @@ class Comment(ndb.Model):
     post = ndb.KeyProperty(kind="Post", required=True)
 
     # comment's id
-    id = ndb.IntegerProperty(required=True)
+    id = ndb.StringProperty(required=True)
 
     @staticmethod
     def create(data, author_key, post_key):

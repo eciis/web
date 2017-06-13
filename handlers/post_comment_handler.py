@@ -57,5 +57,5 @@ class PostCommentHandler(BaseHandler):
     def delete(self, user, url_string, comment_id):
         """Handle Delete Comments requests."""
         post = ndb.Key(urlsafe=url_string).get()
-        check_permission(user, post, int(comment_id))
-        post.remove_comment(int(comment_id))
+        check_permission(user, post, comment_id)
+        post.remove_comment(comment_id)

@@ -124,11 +124,13 @@
         var addComment = function addComment(post, comment) {
             var postComments = postDetailsCtrl.comments[post.key].data;
             postComments.push(comment);
+            console.log(postComments);
         };
 
         postDetailsCtrl.createComment = function createComment(post) {
             CommentService.createComment(post.key, postDetailsCtrl.newComment).then(function success(response) {
                 postDetailsCtrl.newComment = '';
+                console.log(response.data);
                 addComment(post, response.data);
             }, function error(response) {
                 showToast(response.data.msg);
@@ -140,14 +142,15 @@
         };
 
         postDetailsCtrl.deleteComment = function deleteComment(post, comment) {
+            console.log(comment);
             CommentService.deleteComment(post.key, comment.id).then(function success(respose) {
-                removeComment(post, comment);
+                deleteCommentClient(post, comment);
             }, function error(response) {
                 showToast(response.data.msg);
             });
         };
 
-        function removeComment(post, comment) {
+        function deleteCommentClient(post, comment) {
             var postComments = postDetailsCtrl.comments[post.key].data;
             _.remove(postComments, function(postComment) {
                 return postComment.id == comment.id; 

@@ -37,6 +37,7 @@ class PostCommentHandler(BaseHandler):
         post = ndb.Key(urlsafe=url_string).get()
         comments = [Comment.make(comment)
                     for comment in post.comments]
+
         self.response.write(json.dumps(comments))
 
     @json_response
@@ -57,5 +58,8 @@ class PostCommentHandler(BaseHandler):
     def delete(self, user, url_string, comment_id):
         """Handle Delete Comments requests."""
         post = ndb.Key(urlsafe=url_string).get()
+        comment = post.get_comment(comment_id)
         check_permission(user, post, comment_id)
         post.remove_comment(comment_id)
+
+        self.response.write(json.dumps(Comment.make(comment)))

@@ -139,11 +139,25 @@
             return isCommentAuthor(comment) || isPostAuthor(post) || isInstitutionAdmin(post);
         };
 
-        postDetailsCtrl.deleteComment = function deleteComment(post, comment) {
-            CommentService.deleteComment(post.key, comment.id).then(function success(respose) {
-                removeCommentFromPost(post, comment);
-            }, function error(response) {
-                showToast(response.data.msg);
+        postDetailsCtrl.deleteComment = function deleteComment(event, post, comment) {
+            var confirm = $mdDialog.confirm()
+                .clickOutsideToClose(true)
+                .title('Excluir Comentário')
+                .textContent('Este comentário será excluído e desaparecerá do referente post.')
+                .ariaLabel('Deletar comentário')
+                .targetEvent(event)
+                .ok('Excluir')
+                .cancel('Cancelar');
+
+            $mdDialog.show(confirm).then(function() {
+                CommentService.deleteComment(post.key, comment.id).then(function success(response) {
+                    removeCommentFromPost(post, response.data);
+                    showToast('Comentário excluído com sucesso');
+                }, function error(response) {
+                    showToast(response.data.msg);
+                });
+            }, function() {
+                showToast('Cancelado');
             });
         };
 

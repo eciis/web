@@ -56,7 +56,7 @@
                   <h3>{{comment.author_name}}</h3>
                   <p>{{comment.text}}</p>
                   <p>{{comment.publication_date | date: 'MMM d, y HH:mm'}}</p>
-                  <md-button class="md-icon-button" aria-label="Share" ng-click="postDetailsCtrl.deleteComment(post, comment)" 
+                  <md-button class="md-secondary md-icon-button" aria-label="Share" ng-click="postDetailsCtrl.deleteComment(post, comment)" 
                     ng-if="postDetailsCtrl.canDeleteComment(post, comment)">
                     <md-icon>delete</md-icon>
                   </md-button>

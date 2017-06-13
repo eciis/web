@@ -42,24 +42,24 @@
             return isPostAuthor(post) || isInstitutionAdmin(post);        
         };
 
-        postDetailsCtrl.likeOrDeslikePost = function likeOrDeslikePost(post) {
+        postDetailsCtrl.likeOrDislikePost = function likeOrDislikePost(post) {
             if(!postDetailsCtrl.isLikedByUser(post)) {
                 likePost(post);
             } else {
-                deslikePost(post);
+                dislikePost(post);
             }
         };
 
         function likePost(post) {
-            PostService.likeOrDeslikePost(post).then(function success() {
+            PostService.likePost(post).then(function success() {
                 addPostKeyToUser(post.key);
             }, function error(response) {
                 showToast(response.data.msg);
             });
         }
 
-        function deslikePost(post) {
-            PostService.likeOrDeslikePost(post).then(function success() {
+        function dislikePost(post) {
+            PostService.dislikePost(post).then(function success() {
                 removePostKeyFromUser(post.key);
             }, function error(response) {
                 showToast(response.data.msg);

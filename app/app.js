@@ -1,7 +1,8 @@
 (function() {
     var app = angular.module('app', [
         'ngMaterial',
-        'ui.router'
+        'ui.router',
+        'ngAnimate'
     ]);
 
     app.config(function($mdIconProvider, $mdThemingProvider, $stateProvider, $urlMatcherFactoryProvider,

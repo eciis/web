@@ -2,29 +2,23 @@
 """Post handler test."""
 
 import unittest
-from test_base import TestBase
+from test_base_handler import TestBaseHandler
 from models.post import Post
 from models.user import User
 from models.institution import Institution
 from handlers.post_handler import PostHandler
 
 
-class PostHandlerTest(TestBase):
+class PostHandlerTest(TestBaseHandler):
     """Test the post_handler class."""
 
     @classmethod
     def setUp(cls):
         """Provide the base for the tests."""
-        cls.test = cls.testbed.Testbed()
-        cls.test.activate()
-        cls.policy = cls.datastore.PseudoRandomHRConsistencyPolicy(
-            probability=1)
-        cls.test.init_datastore_v3_stub(consistency_policy=cls.policy)
-        cls.test.init_memcache_stub()
-        cls.ndb.get_context().set_cache_policy(False)
+        super(PostHandlerTest, cls).setUp()
         app = cls.webapp2.WSGIApplication(
             [("/api/post/(.*)", PostHandler),
-             ("/api/post/(.*)/like", PostHandler),
+                ("/api/post/(.*)/like", PostHandler),
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)

@@ -12,6 +12,8 @@ import json
 class PostCommentHandlerTest(TestBaseHandler):
     """Post Comment handler test."""
 
+    URL_COMMENT = "/api/post/%s/comment"
+
     @classmethod
     def setUp(cls):
         """Provide the base for the tests."""
@@ -26,44 +28,36 @@ class PostCommentHandlerTest(TestBaseHandler):
     def test_post(self):
         """Another user comment in Post of Mayza."""
         # Pretend an authentication
-        self.os.environ['REMOTE_USER'] = 'maiana.brito@ccc.ufcg.edu.br'
-        self.os.environ['USER_EMAIL'] = 'maiana.brito@ccc.ufcg.edu.br'
-
-        # Verify size of list
-        self.assertEquals(
-            len(self.mayza_post.comments),
-            0,
-            "Expected size of comment's list should be zero"
-        )
-
-        # Call the post method
-        self.testapp.post(
-            "/api/post/%s/comment" %
-            self.mayza_post.key.urlsafe(),
-            json.dumps(self.comment))
-
-        # Update post
-        self.mayza_post = self.mayza_post.key.get()
-
-        # Verify size of list
-        self.assertEquals(
-            len(self.mayza_post.comments),
-            1,
-            "Expected size of comment's list should be one")
-
-    def test_post_ownerpost(self):
-        """Owner user comment in Post."""
-        # Pretend an authentication
-        self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
-        self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
+        self.os.environ['REMOTE_USER'] = self.maiana.email
+        self.os.environ['USER_EMAIL'] = self.maiana.email
 
         # Verify size of list
         self.assertEquals(len(self.mayza_post.comments), 0,
                           "Expected size of comment's list should be zero")
 
         # Call the post method
-        self.testapp.post("/api/post/%s/comment" %
-                          self.mayza_post.key.urlsafe(),
+        self.testapp.post(self.URL_COMMENT % self.mayza_post.key.urlsafe(),
+                          json.dumps(self.comment))
+
+        # Update post
+        self.mayza_post = self.mayza_post.key.get()
+
+        # Verify size of list
+        self.assertEquals(len(self.mayza_post.comments), 1,
+                          "Expected size of comment's list should be one")
+
+    def test_post_ownerpost(self):
+        """Owner user comment in Post."""
+        # Pretend an authentication
+        self.os.environ['REMOTE_USER'] = self.mayza.email
+        self.os.environ['USER_EMAIL'] = self.mayza.email
+
+        # Verify size of list
+        self.assertEquals(len(self.mayza_post.comments), 0,
+                          "Expected size of comment's list should be zero")
+
+        # Call the post method
+        self.testapp.post(self.URL_COMMENT % self.mayza_post.key.urlsafe(),
                           json.dumps(self.other_comment))
 
         # Update post
@@ -76,13 +70,13 @@ class PostCommentHandlerTest(TestBaseHandler):
     def test_delete(self):
         """User can delete your comment in Post."""
         # Pretend an authentication
-        self.os.environ['REMOTE_USER'] = 'maiana.brito@ccc.ufcg.edu.br'
-        self.os.environ['USER_EMAIL'] = 'maiana.brito@ccc.ufcg.edu.br'
+        self.os.environ['REMOTE_USER'] = self.maiana.email
+        self.os.environ['USER_EMAIL'] = self.maiana.email
 
         # Added comment
-        self.response = self.testapp.post(
-            "/api/post/%s/comment" % self.mayza_post.key.urlsafe(),
-            json.dumps(self.comment)).json
+        self.response = self.testapp.post(self.URL_COMMENT %
+                                          self.mayza_post.key.urlsafe(),
+                                          json.dumps(self.comment)).json
         # ID of comment
         self.id_comment = self.response["id"]
         self.mayza_post = self.mayza_post.key.get()
@@ -90,8 +84,8 @@ class PostCommentHandlerTest(TestBaseHandler):
                           "Expected size of comment's list should be one")
 
         # Call the delete method
-        self.testapp.delete("/api/post/%s/comment/%s" %
-                            (self.mayza_post.key.urlsafe(), self.id_comment))
+        self.testapp.delete(self.URL_COMMENT % (self.mayza_post.key.urlsafe(),
+                                                self.id_comment))
 
         # Update post
         self.mayza_post = self.mayza_post.key.get()
@@ -103,13 +97,12 @@ class PostCommentHandlerTest(TestBaseHandler):
     def test_delete_simpleuser(self):
         """An simple user can't delete comments by other users in Post."""
         # Pretend an authentication
-        self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
-        self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
+        self.os.environ['REMOTE_USER'] = self.mayza.email
+        self.os.environ['USER_EMAIL'] = self.mayza.email
 
         # Added comment of Mayza
-        self.response = self.testapp.post(
-            "/api/post/%s/comment" % self.mayza_post.key.urlsafe(),
-            json.dumps(self.comment)).json
+        self.response = self.testapp.post(self.URL_COMMENT %
+                                          self.mayza_post.key.urlsafe(), json.dumps(self.comment)).json
         # ID of comment
         self.id_comment = self.response["id"]
         self.mayza_post = self.mayza_post.key.get()
@@ -117,12 +110,12 @@ class PostCommentHandlerTest(TestBaseHandler):
                           "Expected size of comment's list should be one")
 
         # Pretend an authentication
-        self.os.environ['REMOTE_USER'] = 'maiana.brito@ccc.ufcg.edu.br'
-        self.os.environ['USER_EMAIL'] = 'maiana.brito@ccc.ufcg.edu.br'
+        self.os.environ['REMOTE_USER'] = self.maiana.email
+        self.os.environ['USER_EMAIL'] = self.maiana.email
 
         # User Maiana call the delete method
         with self.assertRaises(Exception) as ex:
-            self.testapp.delete("/api/post/%s/comment/%s" %
+            self.testapp.delete(self.URL_COMMENT %
                                 (self.mayza_post.key.urlsafe(), self.id_comment))
 
         ex = get_message_exception(self, ex.exception.message)
@@ -133,8 +126,8 @@ class PostCommentHandlerTest(TestBaseHandler):
     def test_delete_ownerpost(self):
         """Owner user can delete comment from other user in Post."""
         # Pretend an authentication
-        self.os.environ['REMOTE_USER'] = 'maiana.brito@ccc.ufcg.edu.br'
-        self.os.environ['USER_EMAIL'] = 'maiana.brito@ccc.ufcg.edu.br'
+        self.os.environ['REMOTE_USER'] = self.maiana.email
+        self.os.environ['USER_EMAIL'] = self.maiana.email
 
         # Added comment user Maiana
         self.response = self.testapp.post(
@@ -147,8 +140,8 @@ class PostCommentHandlerTest(TestBaseHandler):
                           "Expected size of comment's list should be one")
 
         # Pretend an authentication
-        self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
-        self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
+        self.os.environ['REMOTE_USER'] = self.mayza.email
+        self.os.environ['USER_EMAIL'] = self.mayza.email
 
         # Call the delete method
         self.testapp.delete("/api/post/%s/comment/%s" %

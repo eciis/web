@@ -12,7 +12,8 @@ import json
 class PostCommentHandlerTest(TestBaseHandler):
     """Post Comment handler test."""
 
-    URL_COMMENT = "/api/post/%s/comment"
+    URL_POST_COMMENT = "/api/post/%s/comment"
+    URL_DELETE_COMMENT = "/api/post/%s/comment/%s"
 
     @classmethod
     def setUp(cls):
@@ -36,7 +37,7 @@ class PostCommentHandlerTest(TestBaseHandler):
                           "Expected size of comment's list should be zero")
 
         # Call the post method
-        self.testapp.post(self.URL_COMMENT % self.mayza_post.key.urlsafe(),
+        self.testapp.post(self.URL_POST_COMMENT % self.mayza_post.key.urlsafe(),
                           json.dumps(self.comment))
 
         # Update post
@@ -57,7 +58,7 @@ class PostCommentHandlerTest(TestBaseHandler):
                           "Expected size of comment's list should be zero")
 
         # Call the post method
-        self.testapp.post(self.URL_COMMENT % self.mayza_post.key.urlsafe(),
+        self.testapp.post(self.URL_POST_COMMENT % self.mayza_post.key.urlsafe(),
                           json.dumps(self.other_comment))
 
         # Update post
@@ -74,7 +75,7 @@ class PostCommentHandlerTest(TestBaseHandler):
         self.os.environ['USER_EMAIL'] = self.maiana.email
 
         # Added comment
-        self.response = self.testapp.post(self.URL_COMMENT %
+        self.response = self.testapp.post(self.URL_POST_COMMENT %
                                           self.mayza_post.key.urlsafe(),
                                           json.dumps(self.comment)).json
         # ID of comment
@@ -84,8 +85,8 @@ class PostCommentHandlerTest(TestBaseHandler):
                           "Expected size of comment's list should be one")
 
         # Call the delete method
-        self.testapp.delete(self.URL_COMMENT % (self.mayza_post.key.urlsafe(),
-                                                self.id_comment))
+        self.testapp.delete(self.URL_DELETE_COMMENT %
+                            (self.mayza_post.key.urlsafe(), self.id_comment))
 
         # Update post
         self.mayza_post = self.mayza_post.key.get()
@@ -97,12 +98,13 @@ class PostCommentHandlerTest(TestBaseHandler):
     def test_delete_simpleuser(self):
         """An simple user can't delete comments by other users in Post."""
         # Pretend an authentication
-        self.os.environ['REMOTE_USER'] = self.mayza.email
-        self.os.environ['USER_EMAIL'] = self.mayza.email
+        self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
+        self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
 
         # Added comment of Mayza
-        self.response = self.testapp.post(self.URL_COMMENT %
-                                          self.mayza_post.key.urlsafe(), json.dumps(self.comment)).json
+        self.response = self.testapp.post(self.URL_POST_COMMENT %
+                                          self.mayza_post.key.urlsafe(),
+                                          json.dumps(self.comment)).json
         # ID of comment
         self.id_comment = self.response["id"]
         self.mayza_post = self.mayza_post.key.get()
@@ -110,12 +112,12 @@ class PostCommentHandlerTest(TestBaseHandler):
                           "Expected size of comment's list should be one")
 
         # Pretend an authentication
-        self.os.environ['REMOTE_USER'] = self.maiana.email
-        self.os.environ['USER_EMAIL'] = self.maiana.email
+        self.os.environ['REMOTE_USER'] = 'maiana.brito@ccc.ufcg.edu.br'
+        self.os.environ['USER_EMAIL'] = 'maiana.brito@ccc.ufcg.edu.br'
 
         # User Maiana call the delete method
         with self.assertRaises(Exception) as ex:
-            self.testapp.delete(self.URL_COMMENT %
+            self.testapp.delete(self.URL_DELETE_COMMENT %
                                 (self.mayza_post.key.urlsafe(), self.id_comment))
 
         ex = get_message_exception(self, ex.exception.message)
@@ -130,9 +132,9 @@ class PostCommentHandlerTest(TestBaseHandler):
         self.os.environ['USER_EMAIL'] = self.maiana.email
 
         # Added comment user Maiana
-        self.response = self.testapp.post(
-            "/api/post/%s/comment" % self.mayza_post.key.urlsafe(),
-            json.dumps(self.other_comment)).json
+        self.response = self.testapp.post(self.URL_POST_COMMENT %
+                                          self.mayza_post.key.urlsafe(),
+                                          json.dumps(self.other_comment)).json
         # ID of comment
         self.id_other_comment = self.response["id"]
         self.mayza_post = self.mayza_post.key.get()
@@ -144,7 +146,7 @@ class PostCommentHandlerTest(TestBaseHandler):
         self.os.environ['USER_EMAIL'] = self.mayza.email
 
         # Call the delete method
-        self.testapp.delete("/api/post/%s/comment/%s" %
+        self.testapp.delete(self.URL_DELETE_COMMENT %
                             (self.mayza_post.key.urlsafe(), self.id_other_comment))
 
         # Update post

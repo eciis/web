@@ -20,7 +20,7 @@ class ImageUploadHandler(BaseHandler):
     @json_response
     def post(self, user):
         """Save image in data store."""
-        file_uploaded = self.request.POST.get("file", None)
+        file_uploaded = self.request.POST.get("image", None)
         image_name = file_uploaded.filename
         image = file_uploaded.file.read()
 

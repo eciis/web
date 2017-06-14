@@ -82,12 +82,10 @@ class StorageImage(StorageFile):
         image_name = image.filename
         image = image.file.read()
 
-        # TODO modify exception
         Utils._assert(
             not image_name.endswith(".jpg") and not image_name.endswith(".png"),
-            "Image type should be jpg or png", Exception)
+            "Image type should be jpg or png", FileStorageException)
 
-        # TODO Define image size
         image = images.resize(image, size)
         image_type = mimetypes.guess_type(image_name)[0]
 

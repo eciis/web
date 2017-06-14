@@ -86,7 +86,8 @@ class Like(ndb.Model):
         """Create a json of like."""
         author = like.author.get()
         return {
-            'author': Utils.toJson(author.key, host=host),
+            'author': author.name,
+            'author_img': author.photo_url,
             'id': like.id
         }
 

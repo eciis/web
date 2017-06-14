@@ -39,13 +39,7 @@
         };
 
         postDetailsCtrl.isAuthorized = function isAuthorized(post) {
-            var isPostAuthor = post.author_key == postDetailsCtrl.user.key;
-            var isInstitutionMember = _.find(postDetailsCtrl.user.institutions, ['key', post.institution_key]);
-            var isInstitutionAdmin = _.includes(_.map(postDetailsCtrl.user.institutions_admin, getKeyFromUrl), post.institution_key);
-            if (isPostAuthor && isInstitutionMember || isInstitutionAdmin) {
-                return true;
-            }
-            return false;
+            return isPostAuthor(post) || isInstitutionAdmin(post);        
         };
 
         postDetailsCtrl.likeOrDislikePost = function likeOrDislikePost(post) {
@@ -109,22 +103,19 @@
             $state.go('app.institution', {institutionKey: institutionKey});
         };
 
-        var getComments = function getComments(post) {
+        postDetailsCtrl.getComments = function getComments(post) {
             var commentsUri = post.comments;
             CommentService.getComments(commentsUri).then(function success(response) {
-                postDetailsCtrl.comments[post.key] =  {'data': response.data, 'show': true};
+                var comments = postDetailsCtrl.comments[post.key];
+                if(comments) {
+                    postDetailsCtrl.comments[post.key].data = response.data;
+                    postDetailsCtrl.comments[post.key].show = !postDetailsCtrl.comments[post.key].show;  
+                } else {
+                    postDetailsCtrl.comments[post.key] =  {'data': response.data, 'show': true, 'newComment': ''};
+                }                
             }, function error(response) {
                 showToast(response.data.msg);
             });
-        };
-
-        postDetailsCtrl.showComments = function showComments(post) {
-            var hasComments = postDetailsCtrl.comments[post.key];
-            if(hasComments) {
-                postDetailsCtrl.comments[post.key].show = !postDetailsCtrl.comments[post.key].show;
-            } else {
-                getComments(post);
-            }
         };
 
         var addComment = function addComment(post, comment) {
@@ -133,13 +124,59 @@
         };
 
         postDetailsCtrl.createComment = function createComment(post) {
-            CommentService.createComment(post.key, postDetailsCtrl.newComment).then(function success(response) {
-                postDetailsCtrl.newComment = '';
+            var newComment = postDetailsCtrl.comments[post.key].newComment;
+            CommentService.createComment(post.key, newComment).then(function success(response) {
+                postDetailsCtrl.comments[post.key].newComment = '';
                 addComment(post, response.data);
             }, function error(response) {
                 showToast(response.data.msg);
             });
         };
+
+        postDetailsCtrl.canDeleteComment = function canDeleteComment(post, comment) {
+            return isCommentAuthor(comment) || isPostAuthor(post) || isInstitutionAdmin(post);
+        };
+
+        postDetailsCtrl.deleteComment = function deleteComment(event, post, comment) {
+            var confirm = $mdDialog.confirm()
+                .clickOutsideToClose(true)
+                .title('Excluir Comentário')
+                .textContent('Este comentário será excluído e desaparecerá do referente post.')
+                .ariaLabel('Deletar comentário')
+                .targetEvent(event)
+                .ok('Excluir')
+                .cancel('Cancelar');
+
+            $mdDialog.show(confirm).then(function() {
+                CommentService.deleteComment(post.key, comment.id).then(function success(response) {
+                    removeCommentFromPost(post, response.data);
+                    showToast('Comentário excluído com sucesso');
+                }, function error(response) {
+                    showToast(response.data.msg);
+                });
+            }, function() {
+                showToast('Cancelado');
+            });
+        };
+
+        function removeCommentFromPost(post, comment) {
+            var postComments = postDetailsCtrl.comments[post.key].data;
+            _.remove(postComments, function(postComment) {
+                return postComment.id == comment.id; 
+            });
+        }
+
+        function isPostAuthor(post) {
+            return post.author_key == postDetailsCtrl.user.key;
+        }
+
+        function isCommentAuthor(comment) {
+            return comment.author_key == postDetailsCtrl.user.key;
+        }
+
+        function isInstitutionAdmin(post) {
+            return _.includes(_.map(postDetailsCtrl.user.institutions_admin, getKeyFromUrl), post.institution_key);
+        }
     });
 
     app.directive("postDetails", function() {

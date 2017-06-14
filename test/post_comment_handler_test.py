@@ -205,7 +205,7 @@ def initModels(cls):
     # POST of Mayza To Certbio Institution
     cls.mayza_post = Post()
     cls.mayza_post.title = "Novo edital do CERTBIO"
-    cls.mayza_post.text = "At vero eos et accusamus et iusto odio dignissimos"
+    cls.mayza_post.text = "At vero eos et accusamus et iusto odio"
     cls.mayza_post.author = cls.mayza.key
     cls.mayza_post.institution = cls.certbio.key
     cls.mayza_post.put()

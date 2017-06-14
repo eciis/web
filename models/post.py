@@ -79,7 +79,7 @@ class Like(ndb.Model):
 
     author = ndb.KeyProperty(kind="User", required=True)
 
-    id = ndb.IntegerProperty(required=True)
+    id = ndb.StringProperty(required=True)
 
     @staticmethod
     def make(like, host):

@@ -20,7 +20,7 @@ class FileStorageException(Exception):
 class StorageFile(object):
     """Class of storage file in cloud storage."""
 
-    def storage_file(self, file, file_name, content_type):
+    def store_file(self, file, file_name, content_type):
         """Method of storage file."""
         # Get the default Cloud Storage Bucket name and create a file name for
         # the object in Cloud Storage.
@@ -49,7 +49,7 @@ class StorageFile(object):
         """Get file of cloud storage."""
         Utils._assert(
             blobstore.get(blob_key) is None,
-            "Image not found",
+            "File not found",
             FileStorageException)
         blob_info = blobstore.get(blob_key)
         blob_key = blob_key
@@ -77,7 +77,7 @@ class StorageFile(object):
 class StorageImage(StorageFile):
     """Storage image in cloud storage."""
 
-    def storage_image(self, image, size):
+    def store_image(self, image, size):
         """Method of storage image."""
         image_name = image.filename
         image = image.file.read()
@@ -89,4 +89,4 @@ class StorageImage(StorageFile):
         image = images.resize(image, size)
         image_type = mimetypes.guess_type(image_name)[0]
 
-        return self.storage_file(image, image_name, image_type)
+        return self.store_file(image, image_name, image_type)

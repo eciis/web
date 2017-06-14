@@ -17,7 +17,7 @@ class ImageUploadHandler(BaseHandler):
         """Save image in data store."""
         file_uploaded = self.request.POST.get("image", None)
         image_storage = StorageImage()
-        blob_key = image_storage.storage_image(image=file_uploaded, size=200)
+        blob_key = image_storage.store_image(image=file_uploaded, size=200)
         self.redirect('/api/view_image/%s' % blob_key)
 
 

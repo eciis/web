@@ -127,6 +127,8 @@ class PostCommentHandlerTest(TestBaseHandler):
 
         ex = get_message_exception(self, ex.exception.message)
         self.assertEquals(ex, "Error! User not allowed to remove comment")
+        self.assertEquals(len(self.mayza_post.comments), 1,
+                          "Expected size of comment's list should be one")
 
     def test_delete_ownerpost(self):
         """Owner user can delete comment from other user in Post."""
@@ -203,19 +205,7 @@ def initModels(cls):
     # POST of Mayza To Certbio Institution
     cls.mayza_post = Post()
     cls.mayza_post.title = "Novo edital do CERTBIO"
-    cls.mayza_post.text = "At vero eos et accusamus et iusto odio dignissimos \
-        ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti \
-        quos dolores et quas molestias excepturi sint occaecati cupiditate \
-        non provident, similique sunt in culpa qui officia deserunt mollitia \
-        id est laborum et dolorum fuga. Et harum quidem rerum facilis est et \
-        xpedita distinctio. Nam libero tempore, cum soluta nobis est eligendi \
-        optio cumque nihil impedit quo minus id quod maxime placeat facere \
-        possimus, omnis voluptas assumenda est, omnis dolor repellendus. \
-        emporibus autem quibusdam et aut officiis debitis aut rerum \
-        necessitatibus saepe eveniet ut et voluptates repudiandae sint \
-        et molestiae non recusandae. Itaque earum rerum hic tenetur sapiente \
-        delectus, ut aut reiciendis voluptatibus maiores alias consequatur \
-        aut perferendis doloribus asperiores repellat."
+    cls.mayza_post.text = "At vero eos et accusamus et iusto odio dignissimos"
     cls.mayza_post.author = cls.mayza.key
     cls.mayza_post.institution = cls.certbio.key
     cls.mayza_post.put()

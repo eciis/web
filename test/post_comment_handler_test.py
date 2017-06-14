@@ -80,11 +80,6 @@ class PostCommentHandlerTest(TestBaseHandler):
         self.os.environ['USER_EMAIL'] = 'maiana.brito@ccc.ufcg.edu.br'
 
         # Added comment
-        self.assertEquals(len(self.mayza_post.comments), 0,
-                          "Expected size of comment's list should be zero")
-        # self.response = json.loads(self.testapp.post(
-        #     "/api/post/%s/comment" % self.mayza_post.key.urlsafe(),
-        #     json.dumps(self.comment)).text)
         self.response = self.testapp.post(
             "/api/post/%s/comment" % self.mayza_post.key.urlsafe(),
             json.dumps(self.comment)).json
@@ -112,8 +107,6 @@ class PostCommentHandlerTest(TestBaseHandler):
         self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
 
         # Added comment of Mayza
-        self.assertEquals(len(self.mayza_post.comments), 0,
-                          "Expected size of comment's list should be zero")
         self.response = self.testapp.post(
             "/api/post/%s/comment" % self.mayza_post.key.urlsafe(),
             json.dumps(self.comment)).json
@@ -142,8 +135,6 @@ class PostCommentHandlerTest(TestBaseHandler):
         self.os.environ['USER_EMAIL'] = 'maiana.brito@ccc.ufcg.edu.br'
 
         # Added comment user Maiana
-        self.assertEquals(len(self.mayza_post.comments), 0,
-                          "Expected size of comment's list should be zero")
         self.response = self.testapp.post(
             "/api/post/%s/comment" % self.mayza_post.key.urlsafe(),
             json.dumps(self.other_comment)).json

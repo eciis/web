@@ -106,8 +106,8 @@
         postDetailsCtrl.getComments = function getComments(post) {
             var commentsUri = post.comments;
             CommentService.getComments(commentsUri).then(function success(response) {
-                var hasComments = typeof(postDetailsCtrl.comments[post.key]) != 'undefined';
-                if(hasComments) {
+                var comments = postDetailsCtrl.comments[post.key];
+                if(comments) {
                     postDetailsCtrl.comments[post.key].data = response.data;
                     postDetailsCtrl.comments[post.key].show = !postDetailsCtrl.comments[post.key].show;  
                 } else {

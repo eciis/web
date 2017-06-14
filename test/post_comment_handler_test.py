@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """Post Comment handler test."""
 
-from webtest import AppError
 from test_base_handler import TestBaseHandler
 from handlers.post_comment_handler import PostCommentHandler
 from models.user import User
@@ -129,23 +128,12 @@ class PostCommentHandlerTest(TestBaseHandler):
         self.os.environ['USER_EMAIL'] = 'maiana.brito@ccc.ufcg.edu.br'
 
         # User Maiana call the delete method
+        with self.assertRaises(Exception) as ex:
+            self.testapp.delete("/api/post/%s/comment/%s" %
+                                (self.mayza_post.key.urlsafe(), self.id_comment))
 
-
-        # TODO
-        # try:
-        #     self.testapp.delete("/api/post/%s/comment/%s" %
-        #                         (self.mayza_post.key.urlsafe(), self.id_comment),
-        #                         json.dumps(self.other_comment))
-        # except AppError as e:
-        #     self.list_args = e.args[0].split("\n")
-        #     self.dict = eval(self.list_args[1])
-
-        #     print self.dict["msg"]
-
-        # with self.assertRaises(Exception) as ex:
-        #     self.testapp.delete("/api/post/%s/comment/%s" %
-        #                         (self.mayza_post.key.urlsafe(), self.id_comment),
-        #                         json.dumps(self.other_comment))
+        ex = get_message_exception(self, ex.exception.message)
+        self.assertEquals(ex, "Error! User not allowed to remove comment")
 
     def test_delete_ownerpost(self):
         """Owner user can delete comment from other user in Post."""
@@ -244,3 +232,10 @@ def initModels(cls):
     # Comments
     cls.comment = {'text': 'Frist comment. Using in Test'}
     cls.other_comment = {'text': 'Second comment. Using in Test'}
+
+
+def get_message_exception(cls, exception):
+    """Return only message of string exception."""
+    cls.list_args = exception.split("\n")
+    cls.dict = eval(cls.list_args[1])
+    return cls.dict["msg"]

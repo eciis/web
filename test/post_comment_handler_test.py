@@ -98,8 +98,8 @@ class PostCommentHandlerTest(TestBaseHandler):
     def test_delete_simpleuser(self):
         """An simple user can't delete comments by other users in Post."""
         # Pretend an authentication
-        self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
-        self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
+        self.os.environ['REMOTE_USER'] = self.mayza.email
+        self.os.environ['USER_EMAIL'] = self.mayza.email
 
         # Added comment of Mayza
         self.response = self.testapp.post(self.URL_POST_COMMENT %
@@ -112,8 +112,8 @@ class PostCommentHandlerTest(TestBaseHandler):
                           "Expected size of comment's list should be one")
 
         # Pretend an authentication
-        self.os.environ['REMOTE_USER'] = 'maiana.brito@ccc.ufcg.edu.br'
-        self.os.environ['USER_EMAIL'] = 'maiana.brito@ccc.ufcg.edu.br'
+        self.os.environ['REMOTE_USER'] = self.maiana.email
+        self.os.environ['USER_EMAIL'] = self.maiana.email
 
         # User Maiana call the delete method
         with self.assertRaises(Exception) as ex:

@@ -8,6 +8,7 @@
         var postDetailsCtrl = this;
 
         postDetailsCtrl.comments = {};
+        postDetailsCtrl.likes = {};
         postDetailsCtrl.newComment = '';
 
         Object.defineProperty(postDetailsCtrl, 'user', {
@@ -124,8 +125,51 @@
                 postDetailsCtrl.comments[post.key].show = !postDetailsCtrl.comments[post.key].show;
             } else {
                 getComments(post);
+                getLikes(post);
             }
         };
+
+        postDetailsCtrl.getLikes = function getLikes(post) {
+            var likesUri = post.likes;
+            postDetailsCtrl.current_post = post.key;
+            PostService.getLikes(likesUri).then(function success(response) {
+                //console.log(postDetailsCtrl.likes );
+                $mdDialog.show({
+                    controller: function ($mdDialog) {
+                        var vm = this;
+                        vm.likes = response.data;
+                    },
+                    controllerAs: 'modal',
+                    templateUrl: 'post/likes.html',
+                    clickOutsideToClose:true,
+                });
+                
+            }, function error(response) {
+                showToast(response.data.msg);
+            });
+        };
+
+        postDetailsCtrl.showLikes = function showLikes(post) {
+            getLikes(post);
+                $mdDialog.show({
+                    controller: function ($mdDialog) {
+                        var vm = this;
+                        vm.likes = post.likes;
+
+                        postDetailsCtrl.hide = function () {
+                            $mdDialog.hide();
+                        };
+                        postDetailsCtrl.cancel = function () {
+                            $mdDialog.cancel();
+                        };
+                    },
+                    controllerAs: 'modal',
+                    templateUrl: 'post/likes.html',
+                    clickOutsideToClose:true,
+                });
+        };
+
+        
 
         var addComment = function addComment(post, comment) {
             var postComments = postDetailsCtrl.comments[post.key].data;

@@ -112,8 +112,7 @@
                     postDetailsCtrl.comments[post.key].show = !postDetailsCtrl.comments[post.key].show;  
                 } else {
                     postDetailsCtrl.comments[post.key] =  {'data': response.data, 'show': true, 'newComment': ''};
-                }
-                postDetailsCtrl.expandComment = true;                
+                }              
             }, function error(response) {
                 showToast(response.data.msg);
             });

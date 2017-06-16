@@ -8,6 +8,7 @@ sys.path.insert(1, 'google_appengine/lib/yaml/lib')
 
 from google.appengine.ext import testbed
 from google.appengine.ext import ndb
+from google.appengine.api import images
 import webapp2
 import webtest
 import os
@@ -27,3 +28,4 @@ class TestBase(unittest.TestCase):
         cls.webtest = webtest
         cls.os = os
         cls.unittest = unittest
+        cls.images = images

@@ -174,7 +174,7 @@ class PostCommentHandlerTest(TestBaseHandler):
         # Update post
         self.mayza_post = self.mayza_post.key.get()
 
-        # When a user try delete comment of other user
+        # When a user(Maiana) try delete comment of other user(Mayza).
         with self.assertRaises(NotAuthorizedException):
             check_permission(self.maiana, self.mayza_post, self.id_comment)
 

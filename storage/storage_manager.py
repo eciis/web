@@ -86,7 +86,9 @@ class StorageImage(StorageFile):
             not image_name.endswith(".jpg") and not image_name.endswith(".png"),
             "Image type should be jpg or png", FileStorageException)
 
-        image = images.resize(image, size)
-        image_type = mimetypes.guess_type(image_name)[0]
+        # resize images images with a width greater than size
+        if images.Image(image).width > size:
+            image = images.resize(image, size)
 
+        image_type = mimetypes.guess_type(image_name)[0]
         return self.store_file(image, image_name, image_type)

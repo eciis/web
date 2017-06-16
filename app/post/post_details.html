@@ -24,10 +24,10 @@
             <p>
               {{post.text}}
             </p>
+            <md-button class="md-primary md-hue-1" ng-click="postDetailsCtrl.getLikes(post)">{{post.number_of_likes}} {{post.number_of_likes==1? 'Curtida' : 'Curtidas' }}</md-button>
+
           </md-card-content>
-          <a id="show-likes" href ng-click="postDetailsCtrl.getLikes(post)">
-              Curtidas desse post
-          </a>
+          
           <md-card-actions layout="row" layout-align="end center">
             <span class="md-caption" ng-show="time">{{ post.publication_date | date:'dd-MM-yyyy HH:mm:ss' }}</span>
             <md-button ng-if="postDetailsCtrl.isAuthorized(post)" class="md-icon-button" arial-label="Delete"

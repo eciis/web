@@ -1,12 +1,20 @@
-<md-card flex="100">
-  <div>
-  <p>{{ postDetailsCtrl.likes }}</p>
-  <p>{{ modal }}</p>
-  <p>maaaaaaaaaaayzaaaaaaaaaaaa</p>
-          <md-list-item ng-repeat="user in modal.likes" >
-          
-          <p>{{user.id}}</p>
-
-            </md-list-item>
-        </div>
+<md-card>
+    <md-card-header>
+        <md-card-avatar>
+           <md-icon class="md-avatar-icon" >grade</md-icon>
+        </md-card-avatar>
+        <md-card-header-text>
+            <span class="md-title">Curtidas</span>
+            <span class="md-subhead">{{modalCtrl.postTitle}}</span>
+        </md-card-header-text>
+    </md-card-header>
+    <md-divider></md-divider>
+    <md-content>
+        <md-card-content>
+                <md-list-item ng-repeat="like in modalCtrl.likes">
+                    <img alt="{{ like.author }}" ng-src="{{ like.author_img }}" class="md-avatar" />
+                    <p>{{like.author}}</p>
+                </md-list-item> 
+        </md-card-content> 
+    </md-content> 
 </md-card>

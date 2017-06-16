@@ -8,7 +8,6 @@
         var postDetailsCtrl = this;
 
         postDetailsCtrl.comments = {};
-        postDetailsCtrl.likes = {};
         postDetailsCtrl.newComment = '';
 
         Object.defineProperty(postDetailsCtrl, 'user', {
@@ -54,6 +53,7 @@
         function likePost(post) {
             PostService.likePost(post).then(function success() {
                 addPostKeyToUser(post.key);
+                post.number_of_likes += 1;
             }, function error(response) {
                 showToast(response.data.msg);
             });
@@ -62,6 +62,7 @@
         function dislikePost(post) {
             PostService.dislikePost(post).then(function success() {
                 removePostKeyFromUser(post.key);
+                post.number_of_likes -= 1;
             }, function error(response) {
                 showToast(response.data.msg);
             });
@@ -113,7 +114,6 @@
                     postDetailsCtrl.comments[post.key].show = !postDetailsCtrl.comments[post.key].show;  
                 } else {
                     postDetailsCtrl.comments[post.key] =  {'data': response.data, 'show': true, 'newComment': ''};
-                getLikes(post);
                 }                
             }, function error(response) {
                 showToast(response.data.msg);
@@ -122,15 +122,16 @@
 
         postDetailsCtrl.getLikes = function getLikes(post) {
             var likesUri = post.likes;
+
             postDetailsCtrl.current_post = post.key;
             PostService.getLikes(likesUri).then(function success(response) {
-                //console.log(postDetailsCtrl.likes );
                 $mdDialog.show({
-                    controller: function ($mdDialog) {
+                    controller: function DialogCtrl() {
                         var vm = this;
                         vm.likes = response.data;
+                        vm.postTitle = post.title;
                     },
-                    controllerAs: 'modal',
+                    controllerAs: 'modalCtrl',
                     templateUrl: 'post/likes.html',
                     clickOutsideToClose:true,
                 });
@@ -139,28 +140,6 @@
                 showToast(response.data.msg);
             });
         };
-
-        postDetailsCtrl.showLikes = function showLikes(post) {
-            getLikes(post);
-                $mdDialog.show({
-                    controller: function ($mdDialog) {
-                        var vm = this;
-                        vm.likes = post.likes;
-
-                        postDetailsCtrl.hide = function () {
-                            $mdDialog.hide();
-                        };
-                        postDetailsCtrl.cancel = function () {
-                            $mdDialog.cancel();
-                        };
-                    },
-                    controllerAs: 'modal',
-                    templateUrl: 'post/likes.html',
-                    clickOutsideToClose:true,
-                });
-        };
-
-        
 
         var addComment = function addComment(post, comment) {
             var postComments = postDetailsCtrl.comments[post.key].data;

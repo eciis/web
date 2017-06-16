@@ -20,6 +20,11 @@ def getCommentsUri(post, host):
     return "http://%s/api/post/%s/comment" % (host, post.key.urlsafe())
 
 
+def getLikesUri(post, host):
+    """Create uri to access post likes."""
+    return "http://%s/api/post/%s/likes" % (host, post.key.urlsafe())
+
+
 class Comment(ndb.Model):
     """Model of a Comment."""
 
@@ -36,7 +41,7 @@ class Comment(ndb.Model):
     post = ndb.KeyProperty(kind="Post", required=True)
 
     # comment's id
-    id = ndb.IntegerProperty(required=True)
+    id = ndb.StringProperty(required=True)
 
     @staticmethod
     def create(data, author_key, post_key):
@@ -69,6 +74,24 @@ class Comment(ndb.Model):
         }
 
 
+class Like(ndb.Model):
+    """Model of a Like."""
+
+    author = ndb.KeyProperty(kind="User", required=True)
+
+    id = ndb.StringProperty(required=True)
+
+    @staticmethod
+    def make(like, host):
+        """Create a json of like."""
+        author = like.author.get()
+        return {
+            'author': author.name,
+            'author_img': author.photo_url,
+            'id': like.id
+        }
+
+
 class Post(ndb.Model):
     """Model of a post."""
 
@@ -97,8 +120,8 @@ class Post(ndb.Model):
     # Date and time of a creation of a post
     publication_date = ndb.DateTimeProperty(auto_now_add=True)
 
-    # Number of likes
-    likes = ndb.IntegerProperty(default=0)
+    # Likes of Post
+    likes = ndb.LocalStructuredProperty(Like, repeated=True)
 
     @staticmethod
     def create(data, author_key, institution_key):
@@ -130,7 +153,7 @@ class Post(ndb.Model):
             'author_img': author.photo_url,
             'institution_name': institution.name,
             'institution_image': institution.image_url,
-            'likes': post.likes,
+            'likes': getLikesUri(post, host),
             'headerImage': post.headerImage,
             'state': post.state,
             'comments': getCommentsUri(post, host),
@@ -158,12 +181,28 @@ class Post(ndb.Model):
                          if comment.id != comment_id]
         self.put()
 
-    def like(self):
-        """Increment one 'like' in post."""
-        self.likes += 1
-        self.put()
+    def get_like(self, author_key):
+        """Get a like by author key."""
+        for like in self.likes:
+            if like.author == author_key:
+                return like
 
-    def deslike(self):
+    def get_number_of_likes(self):
+        """Get the number of likes in this post."""
+        return len(self.likes)
+
+    def like(self, author_key):
+        """Increment one 'like' in post."""
+        if self.get_like(author_key) is None:
+            like = Like()
+            like.author = author_key
+            like.id = Utils.getHash(like)
+            self.likes.append(like)
+            self.put()
+
+    def dislike(self, author_key):
         """Decrease one 'like' in post."""
-        self.likes -= 1
-        self.put()
+        like = self.get_like(author_key)
+        if like:
+            self.likes.remove(like)
+            self.put()

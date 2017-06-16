@@ -56,7 +56,8 @@ class User(ndb.Model):
 
     def unfollow(self, institution):
         """Remove one institution in collection of follows."""
-        if institution in self.follows:
+        if (institution in self.follows and
+                institution not in self.institutions):
             self.follows.remove(institution)
             self.put()
 
@@ -70,7 +71,7 @@ class User(ndb.Model):
             self.liked_posts.append(postKey)
             self.put()
 
-    def deslike_post(self, postKey):
+    def dislike_post(self, postKey):
         """Method to deslike a post."""
         if self.is_liked_post(postKey):
             self.liked_posts.remove(postKey)

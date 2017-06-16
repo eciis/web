@@ -161,9 +161,9 @@
             });
         };
 
-        postDetailsCtrl.textNumberComment = function textNumberComment(post) {
-            var comment =  post.number_of_comments == 1? 'Comentário' : 'Comentários';
-            return post.number_of_comments + " " + comment;
+        postDetailsCtrl.textNumberComment = function textNumberComment(number) {
+            var comment = number == 1? 'Comentário' : 'Comentários';
+            return number + " " + comment;
         };
 
         function removeCommentFromPost(post, comment) {

@@ -24,9 +24,12 @@ def create_in_memory_image_file(size):
 class ImageHandlerTest(TestBaseHandler):
     """Class of test image handler."""
 
-    POST_IMAGE_URL = '/api/images'
-    GET_IMAGE_URL = '/api/images/%s'
-    GET_IMAGE_URL_PATTERN = '/api/images/(.*)'
+    POST_IMAGE_URI = '/api/images'
+    GET_IMAGE_URI_PATTERN = '/api/images/%s'
+    GET_IMAGE_URI = '/api/images/(.*)'
+    INDEX_DATA = 0
+    INDEX_KEY_IMAGE = -1
+    MAXIMUM_SIZE = 800
 
     @classmethod
     def setUp(cls):
@@ -37,65 +40,61 @@ class ImageHandlerTest(TestBaseHandler):
         cls.test.init_blobstore_stub()
         cls.test.init_images_stub()
         app = cls.webapp2.WSGIApplication(
-            [(ImageHandlerTest.POST_IMAGE_URL, ImageHandler),
-             (ImageHandlerTest.GET_IMAGE_URL_PATTERN, ImageHandler),
+            [(ImageHandlerTest.POST_IMAGE_URI, ImageHandler),
+             (ImageHandlerTest.GET_IMAGE_URI, ImageHandler),
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
-    def test_store_image_lager_800(self):
+    def test_store_image_larger_then_maximum_size(self):
         """Test storage image with a size greater than 800 in cloud storage."""
         SIZE_IMAGE = 2000
-        INDEX_DATA = 0
-        INDEX_KEY_IMAGE = -1
-        EXPECTED_SIZE = 800
+        EXPECTED_SIZE = ImageHandlerTest.MAXIMUM_SIZE
 
         image = create_in_memory_image_file(SIZE_IMAGE)
         image = image.read()
 
         response = self.testapp.post(
-            ImageHandlerTest.POST_IMAGE_URL,
+            ImageHandlerTest.POST_IMAGE_URI,
             upload_files=[('image', 'test.png', image)])
 
-        data = response._app_iter[INDEX_DATA]
+        data = response._app_iter[ImageHandlerTest.INDEX_DATA]
         data = json.loads(data)
         url_image = data['file_url']
 
-        key_image = url_image.split('/')[INDEX_KEY_IMAGE]
+        key_image = url_image.split('/')[ImageHandlerTest.INDEX_KEY_IMAGE]
 
         response = self.testapp.get(
-            ImageHandlerTest.GET_IMAGE_URL % (key_image))
+            ImageHandlerTest.GET_IMAGE_URI_PATTERN % (key_image))
         data = response._app_iter
-        image = data[INDEX_DATA]
+        image = data[ImageHandlerTest.INDEX_DATA]
 
         self.assertEqual(
             self.images.Image(image).width, EXPECTED_SIZE,
             "Image size must be equal to 800")
 
-    def test_store_image_smaller_then_maximum_size_800(self):
+    def test_store_image_smaller_then_maximum_size(self):
         """Test storage image with a size less than 800 in cloud storage."""
         SIZE_IMAGE = 500
-        INDEX_DATA = 0
-        INDEX_KEY_IMAGE = -1
         EXPECTED_SIZE = 500
 
         image = create_in_memory_image_file(SIZE_IMAGE)
         image = image.read()
 
         response = self.testapp.post(
-            ImageHandlerTest.POST_IMAGE_URL,
+            ImageHandlerTest.POST_IMAGE_URI,
             upload_files=[('image', 'test.png', image)])
 
-        data = response._app_iter[INDEX_DATA]
+        data = response._app_iter[ImageHandlerTest.INDEX_DATA]
         data = json.loads(data)
         url_image = data['file_url']
 
-        key_image = url_image.split('/')[INDEX_KEY_IMAGE]
+        key_image = url_image.split('/')[ImageHandlerTest.INDEX_KEY_IMAGE]
 
         response = self.testapp.get(
-            ImageHandlerTest.GET_IMAGE_URL % (key_image))
+            ImageHandlerTest.GET_IMAGE_URI_PATTERN % (key_image))
         data = response._app_iter
-        image = data[INDEX_DATA]
+        image = data[ImageHandlerTest.INDEX_DATA]
 
         self.assertEqual(
             self.images.Image(image).width, EXPECTED_SIZE,

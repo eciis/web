@@ -54,7 +54,7 @@ class LikePostHandlerTest(TestBaseHandler):
         # Get the key of authors of likes
         authors = [like['author'].split('/')[-1] for like in likes]
         # Checks if the key of Tiago are in the authors
-        self.assertIn(self.tiago.key.urlsafe(), authors)
+        self.assertIn(self.tiago.name, authors)
 
     def test_post(self):
         """Test the like_post_handler's post method."""

@@ -3,6 +3,8 @@
 import webapp2
 import logging
 import json
+import urllib
+import hashlib
 
 from models.user import User
 from models.institution import Institution
@@ -36,26 +38,53 @@ def add_comments_to_post(user, post, comments_qnt=3):
             post.add_comment(comment)
 
 
+def getGravatar(email):
+    """Get Gravatar url."""
+    default = "https://www.example.com/default.jpg"
+    size = 40
+    # construct the url
+    gravatar_url = "https://www.gravatar.com/avatar/" + hashlib.md5(email.lower()).hexdigest() + "?"
+    gravatar_url += urllib.urlencode({'d': default, 's': str(size)})
+    return gravatar_url
+
+
 class BaseHandler(webapp2.RequestHandler):
     """Base Handler."""
+
     def handle_exception(self, exception, debug):
         """Exception."""
         logging.error(str(exception))
         self.response.write("oops! %s\n" % str(exception))
 
 
-class InitHandler(BaseHandler):
+class ResetHandler(BaseHandler):
     """Init Handler."""
 
     def get(self):
-        """Inicialize entities."""
+        """Reset entities."""
+
+        # Clean the Datastore
+        users = User.query().fetch(keys_only=True)
+        ndb.delete_multi(users)
+
+        posts = Post.query().fetch(keys_only=True)
+        ndb.delete_multi(posts)
+
+        institutions = Institution.query().fetch(keys_only=True)
+        ndb.delete_multi(institutions)
+
+        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+        response = {"msg": "Datastore Cleaned"}
+        self.response.write(json.dumps(response))
+
+        # Initialize the datastore
         jsonList = []
         # new User Mayza
         mayza = User()
         mayza.name = 'Mayza Nunes'
         mayza.cpf = '089.675.908-90'
-        mayza.photo_url = 'https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRmhGDdO4jK0eOeEsRfQAohYnkdZeAMUoV3odKlP7D2jsRLP_pXbCHHNw'
         mayza.email = 'mayzabeel@gmail.com'
+        mayza.photo_url = getGravatar(mayza.email)
         mayza.institutions = []
         mayza.follows = []
         mayza.institutions_admin = []
@@ -67,8 +96,8 @@ class InitHandler(BaseHandler):
         andre = User()
         andre.name = 'André Abrantes'
         andre.cpf = '089.675.908-89'
-        andre.photo_url = 'https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAATIAAAAJDY5NDQxOTk2LTUxZmUtNDZkZi04NTdmLTdiN2Y0MDU5YTIxNA.jpg'
         andre.email = 'andredossantosabrantes@gmail.com'
+        andre.photo_url = getGravatar(andre.email)
         andre.institutions = []
         andre.follows = []
         andre.institutions_admin = []
@@ -80,8 +109,8 @@ class InitHandler(BaseHandler):
         jorge = User()
         jorge.name = 'Jorge Abrantes'
         jorge.cpf = '089.675.908-10'
-        jorge.photo_url = 'http://www.ceei.ufcg.edu.br/_/rsrc/1472854148636/AssessoriadeComunicacao/noticias/iforumdegestoresdaufcg/0003.jpg?height=150&width=200'
         jorge.email = 'abrantes@dsc.ufcg.edu.br'
+        jorge.photo_url = 'http://www.ceei.ufcg.edu.br/_/rsrc/1472854148636/AssessoriadeComunicacao/noticias/iforumdegestoresdaufcg/0003.jpg?height=150&width=200'
         jorge.institutions = []
         jorge.follows = []
         jorge.institutions_admin = []
@@ -93,8 +122,8 @@ class InitHandler(BaseHandler):
         dalton = User()
         dalton.name = 'Dalton Serey'
         dalton.cpf = '089.675.908-20'
-        dalton.photo_url = 'https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/3/000/013/13e/08261fc.jpg'
         dalton.email = 'dalton@splab.ufcg.edu.br'
+        dalton.photo_url = getGravatar(dalton.email)
         dalton.institutions = []
         dalton.follows = []
         dalton.institutions_admin = []
@@ -106,8 +135,8 @@ class InitHandler(BaseHandler):
         maiana = User()
         maiana.name = 'Maiana Brito'
         maiana.cpf = '089.675.908-65'
-        maiana.photo_url = 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSPmtcCROhhQIkQHhw_6elHBnO7b9jM-o_KiUtanTNbk1zRGzsnf0Fu2w'
         maiana.email = 'maiana.brito@ccc.ufcg.edu.br'
+        maiana.photo_url = getGravatar(maiana.email)
         maiana.institutions = []
         maiana.follows = []
         maiana.institutions_admin = []
@@ -119,8 +148,8 @@ class InitHandler(BaseHandler):
         raoni = User()
         raoni.name = 'Raoni Smaneoto'
         raoni.cpf = '089.675.908-65'
-        raoni.photo_url = 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSPmtcCROhhQIkQHhw_6elHBnO7b9jM-o_KiUtanTNbk1zRGzsnf0Fu2w'
         raoni.email = 'raoni.smaneoto@ccc.ufcg.edu.br'
+        raoni.photo_url = getGravatar(raoni.email)
         raoni.institutions = []
         raoni.follows = []
         raoni.institutions_admin = []
@@ -132,8 +161,8 @@ class InitHandler(BaseHandler):
         luiz = User()
         luiz.name = 'Luiz Silva'
         luiz.cpf = '089.675.908-65'
-        luiz.photo_url = 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSPmtcCROhhQIkQHhw_6elHBnO7b9jM-o_KiUtanTNbk1zRGzsnf0Fu2w'
         luiz.email = 'luiz.silva@ccc.ufcg.edu.br'
+        luiz.photo_url = getGravatar(luiz.email)
         luiz.institutions = []
         luiz.follows = []
         luiz.institutions_admin = []
@@ -145,8 +174,8 @@ class InitHandler(BaseHandler):
         ruan = User()
         ruan.name = 'Ruan Silveira'
         ruan.cpf = '089.675.908-65'
-        ruan.photo_url = 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSPmtcCROhhQIkQHhw_6elHBnO7b9jM-o_KiUtanTNbk1zRGzsnf0Fu2w'
         ruan.email = 'ruan.silveira@ccc.ufcg.edu.br'
+        ruan.photo_url = getGravatar(ruan.email)
         ruan.institutions = []
         ruan.follows = []
         ruan.institutions_admin = []
@@ -158,8 +187,8 @@ class InitHandler(BaseHandler):
         tiago = User()
         tiago.name = 'Tiago Pereira'
         tiago.cpf = '089.675.908-65'
-        tiago.photo_url = 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSPmtcCROhhQIkQHhw_6elHBnO7b9jM-o_KiUtanTNbk1zRGzsnf0Fu2w'
         tiago.email = 'tiago.pereira@ccc.ufcg.edu.br'
+        tiago.photo_url = getGravatar(tiago.email)
         tiago.institutions = []
         tiago.follows = []
         tiago.institutions_admin = []
@@ -167,7 +196,6 @@ class InitHandler(BaseHandler):
         tiago.posts = []
         tiago.put()
 
-        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
         jsonList.append({"msg": "database initialized with a few users"})
 
         # new Institution CERTBIO with User Mayza like a member and User André like a follower
@@ -402,28 +430,8 @@ class InitHandler(BaseHandler):
         self.response.write(json.dumps(jsonList))
 
 
-class RemoveAllHandler(BaseHandler):
-    """Remove all Entities Handler."""
-
-    def get(self):
-        """Clean the Datastore."""
-        users = User.query().fetch(keys_only=True)
-        ndb.delete_multi(users)
-
-        posts = Post.query().fetch(keys_only=True)
-        ndb.delete_multi(posts)
-
-        institutions = Institution.query().fetch(keys_only=True)
-        ndb.delete_multi(institutions)
-
-        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-        response = {"msg": "Datastore Cleaned"}
-        self.response.write(json.dumps(response))
-
-
 app = webapp2.WSGIApplication([
-    ('/admin/init', InitHandler),
-    ('/admin/removeAll', RemoveAllHandler),
+    ('/admin/reset', ResetHandler),
 ], debug=True)
 
 

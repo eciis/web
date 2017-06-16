@@ -8,7 +8,6 @@
         var postCtrl = this;
 
         postCtrl.post = {};
-        postCtrl.likes = {};
 
         postCtrl.isPostValid = function isPostValid() {
             if (postCtrl.user) {

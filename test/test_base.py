@@ -21,6 +21,8 @@ class TestBase(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """setUpClass."""
+        os.environ['REMOTE_USER'] = 'luiz.silva@ccc.ufcg.edu.br'
+        os.environ['USER_EMAIL'] = 'luiz.silva@ccc.ufcg.edu.br'
         cls.ndb = ndb
         cls.datastore = datastore_stub_util
         cls.testbed = testbed

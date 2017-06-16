@@ -11,7 +11,7 @@ from models.institution import Institution
 from handlers.image_handler import ImageHandler
 
 
-def create_test_image(size):
+def create_in_memory_image_file(size):
     """Create a new image."""
     file = BytesIO()
     image = Image.new('RGBA', size=(size, size), color=(155, 0, 0))
@@ -26,6 +26,7 @@ class ImageHandlerTest(TestBaseHandler):
 
     POST_IMAGE_URL = '/api/images'
     GET_IMAGE_URL = '/api/images/%s'
+    GET_IMAGE_URL_PATTERN = '/api/images/(.*)'
 
     @classmethod
     def setUp(cls):
@@ -36,63 +37,69 @@ class ImageHandlerTest(TestBaseHandler):
         cls.test.init_blobstore_stub()
         cls.test.init_images_stub()
         app = cls.webapp2.WSGIApplication(
-            [("/api/images", ImageHandler),
-             ("/api/images/(.*)", ImageHandler),
+            [(ImageHandlerTest.POST_IMAGE_URL, ImageHandler),
+             (ImageHandlerTest.GET_IMAGE_URL_PATTERN, ImageHandler),
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
     def test_store_image_lager_800(self):
         """Test storage image with a size greater than 800 in cloud storage."""
-        self.os.environ['REMOTE_USER'] = 'luiz.silva@ccc.ufcg.edu.br'
-        self.os.environ['USER_EMAIL'] = 'luiz.silva@ccc.ufcg.edu.br'
-        image = create_test_image(2000)
+        SIZE_IMAGE = 2000
+        INDEX_DATA = 0
+        INDEX_KEY_IMAGE = -1
+        EXPECTED_SIZE = 800
+
+        image = create_in_memory_image_file(SIZE_IMAGE)
         image = image.read()
 
         response = self.testapp.post(
             ImageHandlerTest.POST_IMAGE_URL,
             upload_files=[('image', 'test.png', image)])
 
-        data = response._app_iter[0]
+        data = response._app_iter[INDEX_DATA]
         data = json.loads(data)
         url_image = data['file_url']
 
-        key_image = url_image.split('/')[-1]
+        key_image = url_image.split('/')[INDEX_KEY_IMAGE]
 
         response = self.testapp.get(
             ImageHandlerTest.GET_IMAGE_URL % (key_image))
         data = response._app_iter
-        image = data[0]
+        image = data[INDEX_DATA]
 
         self.assertEqual(
-            self.images.Image(image).width, 800,
-            "Image size muste be equal to 800")
+            self.images.Image(image).width, EXPECTED_SIZE,
+            "Image size must be equal to 800")
 
-    def test_store_image_smaller_800(self):
+    def test_store_image_smaller_then_maximum_size_800(self):
         """Test storage image with a size less than 800 in cloud storage."""
-        self.os.environ['REMOTE_USER'] = 'luiz.silva@ccc.ufcg.edu.br'
-        self.os.environ['USER_EMAIL'] = 'luiz.silva@ccc.ufcg.edu.br'
-        image = create_test_image(500)
+        SIZE_IMAGE = 500
+        INDEX_DATA = 0
+        INDEX_KEY_IMAGE = -1
+        EXPECTED_SIZE = 500
+
+        image = create_in_memory_image_file(SIZE_IMAGE)
         image = image.read()
 
         response = self.testapp.post(
             ImageHandlerTest.POST_IMAGE_URL,
             upload_files=[('image', 'test.png', image)])
 
-        data = response._app_iter[0]
+        data = response._app_iter[INDEX_DATA]
         data = json.loads(data)
         url_image = data['file_url']
 
-        key_image = url_image.split('/')[-1]
+        key_image = url_image.split('/')[INDEX_KEY_IMAGE]
 
         response = self.testapp.get(
             ImageHandlerTest.GET_IMAGE_URL % (key_image))
         data = response._app_iter
-        image = data[0]
+        image = data[INDEX_DATA]
 
         self.assertEqual(
-            self.images.Image(image).width, 500,
-            "Image size muste be equal to 500")
+            self.images.Image(image).width, EXPECTED_SIZE,
+            "Image size must be equal to 500")
 
 
 def initModels(cls):

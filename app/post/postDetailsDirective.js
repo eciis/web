@@ -162,8 +162,8 @@
         };
 
         postDetailsCtrl.textNumberComment = function textNumberComment(post) {
-            var numeral =  post.number_of_comments == 1? 'Comentário' : 'Comentários';
-            return post.number_of_comments + " " + numeral;
+            var comment =  post.number_of_comments == 1? 'Comentário' : 'Comentários';
+            return post.number_of_comments + " " + comment;
         };
 
         function removeCommentFromPost(post, comment) {

@@ -121,6 +121,7 @@
         var addComment = function addComment(post, comment) {
             var postComments = postDetailsCtrl.comments[post.key].data;
             postComments.push(comment);
+            post.number_of_comments += 1;
         };
 
         postDetailsCtrl.createComment = function createComment(post) {
@@ -151,6 +152,7 @@
                 CommentService.deleteComment(post.key, comment.id).then(function success(response) {
                     removeCommentFromPost(post, response.data);
                     showToast('Comentário excluído com sucesso');
+                    post.number_of_comments -= 1;
                 }, function error(response) {
                     showToast(response.data.msg);
                 });

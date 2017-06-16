@@ -27,7 +27,7 @@
           </md-card-content>
           <div>
             <md-button class="md-primary md-hue-1" ng-click=postDetailsCtrl.getComments(post)> 
-              {{ post.number_of_comments }} {{post.number_of_comments == 1? 'Comentário' : 'Comentários'}}
+              {{ postDetailsCtrl.textNumberComment(post) }}
             </md-button>
           <div>
           <md-divider></md-divider>

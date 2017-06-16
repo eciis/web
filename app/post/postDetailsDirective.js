@@ -161,6 +161,11 @@
             });
         };
 
+        postDetailsCtrl.textNumberComment = function textNumberComment(post) {
+            var numeral =  post.number_of_comments == 1? 'Comentário' : 'Comentários';
+            return post.number_of_comments + " " + numeral;
+        };
+
         function removeCommentFromPost(post, comment) {
             var postComments = postDetailsCtrl.comments[post.key].data;
             _.remove(postComments, function(postComment) {
@@ -180,7 +185,6 @@
             return _.includes(_.map(postDetailsCtrl.user.institutions_admin, getKeyFromUrl), post.institution_key);
         }
     });
-
 
     app.directive("postDetails", function() {
         return {

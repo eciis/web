@@ -112,7 +112,8 @@
                     postDetailsCtrl.comments[post.key].show = !postDetailsCtrl.comments[post.key].show;  
                 } else {
                     postDetailsCtrl.comments[post.key] =  {'data': response.data, 'show': true, 'newComment': ''};
-                }                
+                }
+                postDetailsCtrl.expandComment = true;                
             }, function error(response) {
                 showToast(response.data.msg);
             });
@@ -178,6 +179,7 @@
             return _.includes(_.map(postDetailsCtrl.user.institutions_admin, getKeyFromUrl), post.institution_key);
         }
     });
+
 
     app.directive("postDetails", function() {
         return {

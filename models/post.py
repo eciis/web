@@ -157,6 +157,7 @@ class Post(ndb.Model):
             'headerImage': post.headerImage,
             'state': post.state,
             'comments': getCommentsUri(post, host),
+            'number_comments': len(post.comments),
             'publication_date': publication_date,
             'author_key': author.key.urlsafe(),
             'institution_key': institution.key.urlsafe(),

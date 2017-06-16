@@ -2,7 +2,9 @@
 """Post Comment handler test."""
 
 from test_base_handler import TestBaseHandler
+from utils import NotAuthorizedException
 from handlers.post_comment_handler import PostCommentHandler
+from handlers.post_comment_handler import check_permission
 from models.user import User
 from models.institution import Institution
 from models.post import Post
@@ -155,6 +157,26 @@ class PostCommentHandlerTest(TestBaseHandler):
         # Verify size of list
         self.assertEquals(len(self.mayza_post.comments), 0,
                           "Expected size of comment's list should be zero")
+
+    def test_check_permission(self):
+        """Test method check_permission in post_comment_handler."""
+        # Pretend an authentication
+        self.os.environ['REMOTE_USER'] = self.mayza.email
+        self.os.environ['USER_EMAIL'] = self.mayza.email
+
+        # Added comment
+        self.response = self.testapp.post(self.URL_POST_COMMENT %
+                                          self.mayza_post.key.urlsafe(),
+                                          json.dumps(self.comment)).json
+        # ID of comment
+        self.id_comment = self.response["id"]
+
+        # Update post
+        self.mayza_post = self.mayza_post.key.get()
+
+        # When a user try delete comment of other user
+        with self.assertRaises(NotAuthorizedException):
+            check_permission(self.maiana, self.mayza_post, self.id_comment)
 
 
 def initModels(cls):

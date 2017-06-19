@@ -114,7 +114,7 @@
                     postDetailsCtrl.comments[post.key].show = !postDetailsCtrl.comments[post.key].show;  
                 } else {
                     postDetailsCtrl.comments[post.key] =  {'data': response.data, 'show': true, 'newComment': ''};
-                }                
+                }              
             }, function error(response) {
                 showToast(response.data.msg);
             });
@@ -149,6 +149,7 @@
         var addComment = function addComment(post, comment) {
             var postComments = postDetailsCtrl.comments[post.key].data;
             postComments.push(comment);
+            post.number_of_comments += 1;
         };
 
         postDetailsCtrl.createComment = function createComment(post) {
@@ -179,12 +180,18 @@
                 CommentService.deleteComment(post.key, comment.id).then(function success(response) {
                     removeCommentFromPost(post, response.data);
                     showToast('Comentário excluído com sucesso');
+                    post.number_of_comments -= 1;
                 }, function error(response) {
                     showToast(response.data.msg);
                 });
             }, function() {
                 showToast('Cancelado');
             });
+        };
+
+        postDetailsCtrl.textNumberComment = function textNumberComment(number) {
+            var comment = number == 1? 'Comentário' : 'Comentários';
+            return number + " " + comment;
         };
 
         function removeCommentFromPost(post, comment) {

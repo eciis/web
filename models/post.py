@@ -158,6 +158,7 @@ class Post(ndb.Model):
             'headerImage': post.headerImage,
             'state': post.state,
             'comments': getCommentsUri(post, host),
+            'number_of_comments': post.get_number_of_comment(),
             'publication_date': publication_date,
             'author_key': author.key.urlsafe(),
             'institution_key': institution.key.urlsafe(),
@@ -170,6 +171,10 @@ class Post(ndb.Model):
             if comment.id == comment_id:
                 return comment
         return None
+
+    def get_number_of_comment(self):
+        """Get number of comments."""
+        return len(self.comments)
 
     def add_comment(self, comment):
         """Add a comment to the post."""

@@ -4,7 +4,7 @@
           <md-card-header>
             <md-card-avatar>
               <a href ng-click="postDetailsCtrl.goToInstitution(post.institution_key)">
-                <img src="{{ post.institution_image }}" role="button" class="md-user-avatar"/>
+                <img ng-src="{{ post.institution_image }}" role="button" class="md-user-avatar"/>
               </a>
             </md-card-avatar>
             <md-card-header-text>
@@ -24,13 +24,13 @@
             <p>
               {{post.text}}
             </p>
-          </md-card-content>
-          <div>
+            <md-button class="md-primary md-hue-1" ng-click="postDetailsCtrl.getLikes(post)">
+             {{postDetailsCtrl.getTextNumberLikes(post.number_of_likes)}}
+            </md-button>
             <md-button class="md-primary md-hue-1" ng-click=postDetailsCtrl.getComments(post)> 
               {{ postDetailsCtrl.textNumberComment(post.number_of_comments) }}
-            </md-button>
-          <div>
-          <md-divider></md-divider>
+            </md-button>            
+          </md-card-content>
           <md-card-actions layout="row" layout-align="end center">
             <span class="md-caption" ng-show="time">{{ post.publication_date | date:'dd-MM-yyyy HH:mm:ss' }}</span>
             <md-button ng-if="postDetailsCtrl.isAuthorized(post)" class="md-icon-button" arial-label="Delete"

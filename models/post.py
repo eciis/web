@@ -154,6 +154,7 @@ class Post(ndb.Model):
             'institution_name': institution.name,
             'institution_image': institution.image_url,
             'likes': getLikesUri(post, host),
+            'number_of_likes': post.get_number_of_likes(),
             'headerImage': post.headerImage,
             'state': post.state,
             'comments': getCommentsUri(post, host),

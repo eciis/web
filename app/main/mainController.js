@@ -41,11 +41,11 @@
         mainCtrl.goTo = function goTo(state) {
             $state.go(state);
             mainCtrl.toggle();
-        }; 
+        };
 
         mainCtrl.goToInstitution = function goToInstitution(institutionKey) {
             $state.go('app.institution', {institutionKey: institutionKey});
             mainCtrl.toggle();
-        };       
+        };
     });
 })();

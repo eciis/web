@@ -7,48 +7,46 @@
     <!-- LEFT SIDE PANEL -->
     <div flex-gt-md="20" flex-md="25" layout="column" hide show-gt-sm>
       <md-card>
-      <div class="container">
-        <div class="row">
+        <div class="container">
+          <div class="row">
             <div class="col-lg-3 col-sm-6">
-
-                <div class="card hovercard">
-                  <div class="cardheader">
-
+              <div class="card hovercard">
+                <div class="cardheader">
                 </div>
                 <div class="avatar">
-                    <img alt="" src="{{ homeCtrl.user.image }}">
+                  <img alt="" src="{{ homeCtrl.user.image }}">
                 </div>
                 <div class="info">
-                    <div class="title">
-                        <span target="_blank" >{{homeCtrl.user.name}}</span>
-                    </div>
-                    <div class="desc">{{homeCtrl.user.current_institution.name}}</div>
+                  <div class="title">
+                    <span target="_blank" >{{homeCtrl.user.name}}</span>
+                  </div>
+                  <div class="desc">{{homeCtrl.user.current_institution.name}}</div>
                 </div>
+              </div>
             </div>
-         </div>
-      </div>
-    </div>
-    <div>
-      <md-list>
-        <md-list-item class="" ng-click="homeCtrl.expandInstMenu()">
-          <md-icon class="material-icons">dashboard</md-icon>
-            Instituições
-            <md-icon ng-if="!homeCtrl.instMenuExpanded">expand_more</md-icon>
-            <md-icon ng-if="homeCtrl.instMenuExpanded">expand_less</md-icon>
-        <md-list-item>
-      </md-list>
-    </div>
+          </div>
+        </div>
+        <div layout="column">
+          <md-list>
+            <md-list-item ng-click="homeCtrl.expandInstMenu()">
+              <md-icon class="material-icons">dashboard</md-icon>
+                Instituições
+                <md-icon ng-if="!homeCtrl.instMenuExpanded">expand_more</md-icon>
+                <md-icon ng-if="homeCtrl.instMenuExpanded">expand_less</md-icon>
+            <md-list-item>
+          </md-list>
+        </div>
         <div ng-if="homeCtrl.instMenuExpanded">
           <md-list-item ng-repeat="institution in homeCtrl.institutions" ng-click="homeCtrl.goToInstitution(institution.key)" class="noright">
-            <img alt="{{ institution.name }}" ng-src="{{ institution.image_url }}" class="md-avatar" />
-            <p>{{institution.name}}</p>
-            <md-button class="md-icon-button" ng-click="homeCtrl.follow(institution)" ng-if="!homeCtrl.user.isFollower(institution.key)">
-              <md-icon>person_add</md-icon>
-            </md-button>
-            <md-button class="md-icon-button" ng-click="homeCtrl.unfollow(institution)" ng-if="homeCtrl.user.isFollower(institution.key)">
+             <img alt="{{ institution.name }}" ng-src="{{ institution.image_url }}" class="md-avatar" />
+             <p>{{institution.name}}</p>
+             <md-button class="md-icon-button" ng-click="homeCtrl.follow(institution)" ng-if="!homeCtrl.user.isFollower(institution.key)">
+               <md-icon>person_add</md-icon>
+             </md-button>
+             <md-button class="md-icon-button" ng-click="homeCtrl.unfollow(institution)" ng-if="homeCtrl.user.isFollower(institution.key)">
               <md-icon>person_outline</md-icon>
-            </md-button>
-            </md-list-item>
+             </md-button>
+          </md-list-item>
         </div>
       </md-card>
     </div>

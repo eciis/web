@@ -141,8 +141,8 @@ class Utils():
         """Generate a hash to an object."""
         if type(obj) is not dict:
             obj = obj.to_dict()
-
-        return hash(tuple(obj.items())) % (sys.maxint)
+        hash_num = hash(tuple(obj.items())) % (sys.maxint)
+        return str(hash_num)
 
 
 def login_required(method):

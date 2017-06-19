@@ -34,7 +34,7 @@
             <md-button class="md-icon-button" aria-label="Data" ng-click="time = !time;">
               <md-icon>access_time</md-icon>
             </md-button>
-            <md-button class="md-icon-button" aria-label="Comments" ng-click="postDetailsCtrl.showComments(post)">
+            <md-button class="md-icon-button" aria-label="Comments" ng-click="postDetailsCtrl.getComments(post)">
               <md-icon>comments</md-icon>
             </md-button>
             <md-button class="md-icon-button" aria-label="Favorite" ng-click="postDetailsCtrl.likeOrDislikePost(post)"
@@ -56,6 +56,11 @@
                   <h3>{{comment.author_name}}</h3>
                   <p>{{comment.text}}</p>
                   <p>{{comment.publication_date | date: 'MMM d, y HH:mm'}}</p>
+                  <md-button class="md-secondary md-icon-button" aria-label="Share"
+                    ng-if="postDetailsCtrl.canDeleteComment(post, comment)"
+                    ng-click="postDetailsCtrl.deleteComment($event, post, comment)">
+                    <md-icon>delete</md-icon>
+                  </md-button>
                 </div>
               </md-list-item>
               <md-list-item class="md-3-line">
@@ -65,7 +70,7 @@
                   <md-input-container class="md-block">
                     <form ng-submit="postDetailsCtrl.createComment(post)">
                       <label>{{postDetailsCtrl.user.name}}</label>
-                      <input ng-model="postDetailsCtrl.newComment" type="text">
+                      <input ng-model="postDetailsCtrl.comments[post.key].newComment" type="text">
                     </form>
                   </md-input-container>
                 </div>

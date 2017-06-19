@@ -41,7 +41,7 @@ class Comment(ndb.Model):
     post = ndb.KeyProperty(kind="Post", required=True)
 
     # comment's id
-    id = ndb.IntegerProperty(required=True)
+    id = ndb.StringProperty(required=True)
 
     @staticmethod
     def create(data, author_key, post_key):
@@ -79,14 +79,15 @@ class Like(ndb.Model):
 
     author = ndb.KeyProperty(kind="User", required=True)
 
-    id = ndb.IntegerProperty(required=True)
+    id = ndb.StringProperty(required=True)
 
     @staticmethod
     def make(like, host):
         """Create a json of like."""
         author = like.author.get()
         return {
-            'author': Utils.toJson(author.key, host=host),
+            'author': author.name,
+            'author_img': author.photo_url,
             'id': like.id
         }
 

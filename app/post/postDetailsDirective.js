@@ -53,6 +53,7 @@
         function likePost(post) {
             PostService.likePost(post).then(function success() {
                 addPostKeyToUser(post.key);
+                post.number_of_likes += 1;
             }, function error(response) {
                 showToast(response.data.msg);
             });
@@ -61,6 +62,7 @@
         function dislikePost(post) {
             PostService.dislikePost(post).then(function success() {
                 removePostKeyFromUser(post.key);
+                post.number_of_likes -= 1;
             }, function error(response) {
                 showToast(response.data.msg);
             });
@@ -113,6 +115,32 @@
                 } else {
                     postDetailsCtrl.comments[post.key] =  {'data': response.data, 'show': true, 'newComment': ''};
                 }                
+            }, function error(response) {
+                showToast(response.data.msg);
+            });
+        };
+
+        postDetailsCtrl.getTextNumberLikes = function textNumberLikes(numberLikes) {
+             return numberLikes + ' ' + (numberLikes == 1? 'Curtida' : 'Curtidas');
+        };
+
+        postDetailsCtrl.getLikes = function getLikes(post) {
+            var likesUri = post.likes;
+
+            postDetailsCtrl.current_post = post.key;
+            PostService.getLikes(likesUri).then(function success(response) {
+                postDetailsCtrl.likes = response.data;
+                postDetailsCtrl.title = post.title;
+                $mdDialog.show({
+                    controller: 'DialogController',
+                    controllerAs: 'dialogCtrl',
+                    templateUrl: 'post/likes.html',
+                    clickOutsideToClose:true,
+                    locals: {
+                        likes : response.data,
+                        title: post.title
+                    }
+                }); 
             }, function error(response) {
                 showToast(response.data.msg);
             });
@@ -177,6 +205,12 @@
         function isInstitutionAdmin(post) {
             return _.includes(_.map(postDetailsCtrl.user.institutions_admin, getKeyFromUrl), post.institution_key);
         }
+    });
+
+    app.controller('DialogController', function(likes, title) {
+        var dialogCtrl = this;
+        dialogCtrl.likes = likes;
+        dialogCtrl.postTitle = title;
     });
 
     app.directive("postDetails", function() {

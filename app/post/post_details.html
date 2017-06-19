@@ -24,7 +24,9 @@
             <p>
               {{post.text}}
             </p>
-            <md-button class="md-primary md-hue-1" ng-click="postDetailsCtrl.getLikes(post)">{{post.number_of_likes}} {{post.number_of_likes==1? 'Curtida' : 'Curtidas' }}</md-button>
+            <md-button class="md-primary md-hue-1" ng-click="postDetailsCtrl.getLikes(post)">
+             {{postDetailsCtrl.getTextNumberLikes(post.number_of_likes)}}
+            </md-button>
 
           </md-card-content> 
           <md-card-actions layout="row" layout-align="end center">

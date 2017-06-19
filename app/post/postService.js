@@ -58,9 +58,9 @@
             return deferred.promise;
         };
 
-        service.getLikes = function getLikes(likesUri) {
+        service.getLikes = function getLikes(likesURL) {
             var deferred = $q.defer();
-            $http.get(likesUri).then(function success(response) {
+            $http.get(likesURL).then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);

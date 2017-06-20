@@ -31,6 +31,10 @@
             );
         }
 
+        homeCtrl.goToInstitution = function goToInstitution(institutionKey) {
+            $state.go('app.institution', {institutionKey: institutionKey});
+        };
+
         homeCtrl.newPost = function newPost(event) {
             $mdDialog.show({
                 controller: "HomeController",

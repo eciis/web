@@ -162,16 +162,7 @@ def login_required(method):
             user.email = current_user.email()
             user.name = current_user.nickname()
 
-            splab = Institution.query(Institution.name == "SPLAB").get()
-
-            user.institutions = [splab.key]
-            user.follows = [splab.key]
-
             user.put()
-
-            splab.members.append(user.key)
-
-            splab.put()
             # TODO:
             # Return this block of code when user sign up is created
             # @author André L. Abrantes - 25-05-2017

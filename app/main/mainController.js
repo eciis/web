@@ -2,7 +2,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("MainController", function MainController($mdSidenav, $mdDialog, $mdToast, $state, AuthService) {
+    app.controller("MainController", function MainController($mdSidenav, $mdDialog, $mdToast, $state, AuthService, $rootScope) {
         var mainCtrl = this;
 
         Object.defineProperty(mainCtrl, 'user', {
@@ -41,11 +41,17 @@
         mainCtrl.goTo = function goTo(state) {
             $state.go(state);
             mainCtrl.toggle();
-        }; 
+        };
 
         mainCtrl.goToInstitution = function goToInstitution(institutionKey) {
             $state.go('app.institution', {institutionKey: institutionKey});
             mainCtrl.toggle();
-        };       
+        };
+
+        $rootScope.$on("user_loaded", function() {
+            if (mainCtrl.user.institutions.length === 0) {
+                $state.go("choose_institution");
+            }
+        });
     });
 })();

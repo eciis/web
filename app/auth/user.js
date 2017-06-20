@@ -5,7 +5,10 @@ function User(data) {
     _.extend(this, data);
 
     this.image = getImage(this.email);
-    this.current_institution = this.institutions[0];
+    
+    if (this.institutions) {
+        this.current_institution = this.institutions[0];
+    }
 }
 
 User.prototype.changeInstitution = function changeInstitution(name) {
@@ -38,11 +41,14 @@ User.prototype.isMember = function isMember(institutionKey){
       return _.includes(_.map(this.institutions, getKeyObj), institutionKey);
 };
 
+User.prototype.addInstitution = function addInstitution(institutionKey){
+    this.institutions.push(institutionKey);
+};
+
 function getImage(email) {
     var hash = CryptoJS.MD5(email).toString();
     return 'https://www.gravatar.com/avatar/' + hash;
 }
-
 
 function getKeyObj(obj) {
     if(obj.key){

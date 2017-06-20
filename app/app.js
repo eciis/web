@@ -1,3 +1,5 @@
+'use strict';
+
 (function() {
     var app = angular.module('app', [
         'ngMaterial',
@@ -30,8 +32,7 @@
                         templateUrl: "home/home.html",
                         controller: "HomeController as homeCtrl"
                     }
-                },
-                authenticate: true
+                }
             })
             .state("app.institution", {
                 url: "/institution/:institutionKey/details",
@@ -40,8 +41,16 @@
                         templateUrl: "institution/institution_page.html",
                         controller: "InstitutionController as institutionCtrl"
                     }
-                },
-                authenticate: true
+                }
+            })
+            .state("choose_institution", {
+                url: "/chooseinstitution",
+                views: {
+                    main: {
+                        templateUrl: "auth/choose_institution.html",
+                        controller: "ChooseInstController as chooseInstCtrl"
+                    }
+                }
             })
             .state("signin", {
                 url: "/signin",
@@ -50,8 +59,7 @@
                         templateUrl: "auth/login.html",
                         controller: "LoginController as loginCtrl"
                     }
-                },
-                authenticate: false
+                }
             })
             .state("error", {
                 url: "/error",
@@ -64,8 +72,7 @@
                 data: {
                     msg: "Ocorreu um erro.",
                     status: "500"
-                },
-                authenticate: false
+                }
             });
 
         $urlRouterProvider.otherwise("/");
@@ -98,7 +105,7 @@
                     status: response.status
                 }, {
                     reload: true
-                })
+                });
             }
             return $q.reject(response);
         };

@@ -20,10 +20,13 @@ class UserTimelineHandler(BaseHandler):
 
         @author: Mayza Nunes 18/05/2017
         """
-        queryPosts = Post.query(Post.institution.IN(
-            user.follows)).order(Post.publication_date)
-        publishedPosts = queryPosts.filter(Post.state == "published")
+        array = []
 
-        array = [Post.make(post, self.request.host) for post in publishedPosts]
+        if len(user.follows) > 0:
+            queryPosts = Post.query(Post.institution.IN(
+                user.follows)).order(Post.publication_date)
+            publishedPosts = queryPosts.filter(Post.state == "published")
+
+            array = [Post.make(post, self.request.host) for post in publishedPosts]
 
         self.response.write(json.dumps(array))

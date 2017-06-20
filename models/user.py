@@ -76,3 +76,8 @@ class User(ndb.Model):
         if self.is_liked_post(postKey):
             self.liked_posts.remove(postKey)
             self.put()
+
+    def add_institution(self, institution_key):
+        if institution_key not in self.institutions:
+            self.institutions.append(institution_key)
+            self.put()

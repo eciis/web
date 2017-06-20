@@ -64,3 +64,8 @@ class Institution(ndb.Model):
         if user in self.followers and user not in self.members:
             self.followers.remove(user)
             self.put()
+
+    def add_member(self, member_key):
+        if member_key not in self.members:
+            self.members.append(member_key)
+            self.put()

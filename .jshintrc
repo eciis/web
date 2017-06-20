@@ -2,6 +2,10 @@
     // Custom Globals
     "globals"       : {
         "angular": true,
-        "_": true
+        "_": true,
+        "User": true,
+        "console": true,
+        "jsonpatch": true,
+        "CryptoJS": true
     }
 }

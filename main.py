@@ -25,7 +25,6 @@ methods.add('PATCH')
 webapp2.WSGIApplication.allowed_methods = frozenset(methods)
 
 app = webapp2.WSGIApplication([
-    ("/api", MainHandler),
     ("/api/institution", InstitutionCollectionHandler),
     ("/api/institution/(.*)/timeline", InstitutionTimelineHandler),
     ("/api/institution/(.*)/members", InstitutionMembersHandler),

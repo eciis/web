@@ -31,14 +31,15 @@
               {{ postDetailsCtrl.textNumberComment(post.number_of_comments) }}
             </md-button>            
           </md-card-content>
+          <md-divider></md-divider>
           <md-card-actions layout="row" layout-align="end center">
             <span class="md-caption" ng-show="time">{{ post.publication_date | date:'dd-MM-yyyy HH:mm:ss' }}</span>
+            <md-button class="md-icon-button" aria-label="Data" ng-click="time = !time;">
+              <md-icon>access_time</md-icon>
+            </md-button>
             <md-button ng-if="postDetailsCtrl.isAuthorized(post)" class="md-icon-button" arial-label="Delete"
               ng-click="postDetailsCtrl.deletePost($event, post, posts)">
               <md-icon>delete</md-icon>
-            </md-button>
-            <md-button class="md-icon-button" aria-label="Data" ng-click="time = !time;">
-              <md-icon>access_time</md-icon>
             </md-button>
             <md-button class="md-icon-button" aria-label="Comments" ng-click="postDetailsCtrl.getComments(post)">
               <md-icon>comments</md-icon>
@@ -46,9 +47,6 @@
             <md-button class="md-icon-button" aria-label="Favorite" ng-click="postDetailsCtrl.likeOrDislikePost(post)"
               ng-class="postDetailsCtrl.isLikedByUser(post)?'md-warn':''">
               <md-icon>grade</md-icon>
-            </md-button>
-            <md-button class="md-icon-button" aria-label="Settings">
-              <md-icon>menu</md-icon>
             </md-button>
             <md-button class="md-icon-button" aria-label="Share">
               <md-icon>share_arrow</md-icon>

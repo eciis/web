@@ -5,11 +5,12 @@
     app.service("InstitutionService", function InstitutionService($http, $q) {
         var service = this;
 
+        var INSTITUTIONS_URI = "/api/institutions";
         var INSTITUTION_URI = "/api/institution";
 
         service.getInstitutions = function getInstitutions() {
             var deferred = $q.defer();
-            $http.get(INSTITUTION_URI).then(function success(response) {
+            $http.get(INSTITUTIONS_URI).then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);

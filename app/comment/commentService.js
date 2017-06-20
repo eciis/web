@@ -21,7 +21,7 @@
         service.createComment = function createComment(postKey, text) {
             var deferred = $q.defer();
             var data = {'text': text};
-            $http.post(POST_URI + postKey + '/comment', data).then(function success(response) {
+            $http.post(POST_URI + postKey + '/comments', data).then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);

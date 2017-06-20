@@ -7,6 +7,7 @@
         var service = this;
 
         var POST_URI = "/api/post";
+        var POSTS_URI = "/api/posts";
 
         service.get = function getPosts() {
             var deferred = $q.defer();
@@ -20,7 +21,7 @@
 
         service.createPost = function createPost(post) {
             var deferred = $q.defer();
-            $http.post(POST_URI, post).then(function success(response) {
+            $http.post(POSTS_URI, post).then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);

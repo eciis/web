@@ -17,7 +17,7 @@ class FieldException(Exception):
 
 def getCommentsUri(post, host):
     """Create uri to access post comments."""
-    return "http://%s/api/post/%s/comment" % (host, post.key.urlsafe())
+    return "http://%s/api/post/%s/comments" % (host, post.key.urlsafe())
 
 
 def getLikesUri(post, host):

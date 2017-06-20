@@ -3,7 +3,8 @@
 (function() {
     var app = angular.module("app");
     
-    app.controller("ChooseInstController", function ChooseInstController(InstitutionService, AuthService, UserService, $q, $timeout, $state, $mdDialog) {
+    app.controller("ChooseInstController", function ChooseInstController(InstitutionService, AuthService, 
+            UserService, $q, $timeout, $state, $mdDialog) {
         var chooseInstCtrl = this;
 
         chooseInstCtrl.institutions = [];
@@ -52,5 +53,11 @@
                     $state.go("app.home");
                 });
         }
+
+        (function main() {
+            if (chooseInstCtrl.user.institutions.length > 0) {
+                $state.go("app.home");
+            }
+        })();
     });
 })();

@@ -87,7 +87,7 @@ class ImageHandlerTest(TestBaseHandler):
         self.assertEqual(
             filename,
             ImageHandlerTest.EXPECTED_FILENAME,
-            "Image name muste be equal to test.png")
+            "Image name must be equal to test.png")
 
     def test_store_image_smaller_then_maximum_size(self):
         """Test storage image with a size less than 800 in cloud storage."""
@@ -126,7 +126,7 @@ class ImageHandlerTest(TestBaseHandler):
         self.assertEqual(
             filename,
             ImageHandlerTest.EXPECTED_FILENAME,
-            "Image name muste be equal to test.png")
+            "Image name must be equal to test.png")
 
 
 def initModels(cls):

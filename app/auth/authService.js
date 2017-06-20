@@ -17,7 +17,7 @@
                 return _user;
             },
             set: function set(newValue) {
-                _user = newValue;
+                _user = new User(newValue);
             }
         });
 

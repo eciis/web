@@ -67,10 +67,6 @@
     text-overflow: ellipsis;
 }
 
-.btn{
-    border-radius: 50%; width:32px; height:32px; line-height:18px;
-}
-
 .blue-background{
     background-color:#1565C0;
     color:#fff;

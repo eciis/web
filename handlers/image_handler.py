@@ -13,13 +13,13 @@ class ImageHandler(BaseHandler):
     """Handler of upload image."""
 
     @login_required
-    @json_response
     def get(self, user, image_key):
         """Get image."""
         image_storage = StorageImage()
         image_data = image_storage.get_file(image_key)
         # Write the contents to the response.
         self.response.headers['Content-Type'] = image_data['content_type']
+        self.response.headers['filename'] = image_data['filename']
         self.response.write(image_data['blob_data'])
 
     @login_required

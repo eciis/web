@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 """Module of storage files in cloud storage."""
 
-import cloudstorage
 import mimetypes
-from google.appengine.api import app_identity
 from google.appengine.ext import blobstore
+from google.appengine.api import files
+from google.appengine.api.files import blobstore as files_blobstore
 from google.appengine.api import images
 from utils import Utils
 
@@ -22,27 +22,17 @@ class StorageFile(object):
 
     def store_file(self, file, file_name, content_type):
         """Method of storage file."""
-        # Get the default Cloud Storage Bucket name and create a file name for
-        # the object in Cloud Storage.
-        bucket = app_identity.get_default_gcs_bucket_name()
+        kwargs = {}
+        if content_type:
+            kwargs['mime_type'] = content_type
+        if file_name:
+            kwargs['_blobinfo_uploaded_filename'] = file_name
+        output_filename = files.blobstore.create(**kwargs)
+        with files.open(output_filename, 'a') as outfile:
+            outfile.write(file)
+        files.finalize(output_filename)
+        blob_key = files_blobstore.get_blob_key(output_filename)
 
-        # Cloud Storage file names are in the format /bucket/object.
-        filename = '/{}/{}'.format(bucket, file_name)
-
-        # Create a file in Google Cloud Storage and write something to it.
-        with cloudstorage.open(
-            filename,
-            'w',
-            content_type=content_type
-        ) as filehandle:
-            filehandle.write(file)
-
-        # In order to read the contents of the file using the Blobstore API,
-        # you must create a blob_key from the Cloud Storage file name.
-        # Blobstore expects the filename to be in the format of:
-        # /gs/bucket/object
-        blobstore_filename = '/gs{}'.format(filename)
-        blob_key = blobstore.create_gs_key(blobstore_filename)
         return blob_key
 
     def get_file(self, blob_key):
@@ -52,7 +42,6 @@ class StorageFile(object):
             "File not found",
             FileStorageException)
         blob_info = blobstore.get(blob_key)
-        blob_key = blob_key
         # Instantiate a BlobReader for a given Blobstore blob_key.
         blob_reader = blobstore.BlobReader(blob_key)
 
@@ -70,7 +59,8 @@ class StorageFile(object):
         blob_reader_data = blob_reader.read()
         return {
             'content_type': blob_info.content_type.encode('utf-8'),
-            'blob_data': blob_reader_data
+            'blob_data': blob_reader_data,
+            'filename': blob_info.filename.encode('utf-8')
         }
 
 

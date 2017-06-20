@@ -8,6 +8,7 @@ env:
 before_script:
 # Install package WebTest
 - pip install WebTest
+- pip install pillow
 # Idea from https://blog.bekt.net/p/gae-sdk/
 - SDK_VERSION=$(curl -s $API_CHECK | awk -F '\"' '/release/ {print $2}')
 - SDK_URL=https://storage.googleapis.com/appengine-sdks/featured/google_appengine_$SDK_VERSION.zip

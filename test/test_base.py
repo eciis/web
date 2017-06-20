@@ -8,6 +8,7 @@ sys.path.insert(1, 'google_appengine/lib/yaml/lib')
 
 from google.appengine.ext import testbed
 from google.appengine.ext import ndb
+from google.appengine.api import images
 import webapp2
 import webtest
 import os
@@ -20,6 +21,8 @@ class TestBase(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """setUpClass."""
+        os.environ['REMOTE_USER'] = 'luiz.silva@ccc.ufcg.edu.br'
+        os.environ['USER_EMAIL'] = 'luiz.silva@ccc.ufcg.edu.br'
         cls.ndb = ndb
         cls.datastore = datastore_stub_util
         cls.testbed = testbed
@@ -27,3 +30,4 @@ class TestBase(unittest.TestCase):
         cls.webtest = webtest
         cls.os = os
         cls.unittest = unittest
+        cls.images = images

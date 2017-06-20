@@ -5,44 +5,28 @@
         <!-- LEFT SIDE PANEL -->
         <div flex flex-gt-xs="25" layout="column" hide show-gt-sm >
             <div flex>
-                <md-card>
-                    <div class="container">
-                        <div class="row" id="main">
-                            <div class="col-md-4 well" id="leftPanel">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div>
-                                            <center>
-                                                <div>
-                                                    <img ng-src="{{ institutionCtrl.current_institution.image_url }}" class="img-circle img-thumbnail" >
-                                                </div>
-                                            </center>
-                                            <md-card-title>
-                                                <md-card-title-text>
-                                                    <span class="md-headline"><b>{{ institutionCtrl.current_institution.name }}</b></span>
-                                                    <span class="md-subhead">{{ institutionCtrl.current_institution.phone_number }}</span>
-                                                </md-card-title-text>
-                                            </md-card-title>
-
-                                            <md-card-content>
-                                                <p>{{ institutionCtrl.current_institution.address }}</p>
-                                                <p>{{ institutionCtrl.current_institution.description }}</p>
-                                                <div layout="row">
-                                                    <md-button flex="100" class="md-primary md-raised md-hue-2" ng-click="institutionCtrl.follow()" ng-if="!institutionCtrl.user.isFollower(institutionCtrl.current_institution.key)">
-                                                        <md-icon>person_add</md-icon>Seguir
-                                                    </md-button>
-                                                    <md-button flex="100" class="md-primary md-raised md-hue-2" ng-click="institutionCtrl.unfollow()" ng-if="institutionCtrl.user.isFollower(institutionCtrl.current_institution.key)">
-                                                        <md-icon>person_outline</md-icon>Seguindo
-                                                    </md-button>
-                                                </div>
-                                            </md-card-content>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                <md-card layout="column" class="blue-background">
+                    <center>
+                        <img ng-src="{{ institutionCtrl.current_institution.image_url }}" class="img-circle img-thumbnail" >
+                    </center>
+                    <md-card-title>
+                        <md-card-title-text>
+                            <span class="md-headline"><b>{{ institutionCtrl.current_institution.name }}</b></span>
+                            <span class="md-subhead">{{ institutionCtrl.current_institution.phone_number }}</span>
+                        </md-card-title-text>
+                    </md-card-title>
+                    <md-card-content>
+                        <p>{{ institutionCtrl.current_institution.address }}</p>
+                        <p>{{ institutionCtrl.current_institution.description }}</p>
+                        <div layout="row">
+                            <md-button flex="100" class="md-primary md-raised md-hue-2" ng-click="institutionCtrl.follow()" ng-if="!institutionCtrl.user.isFollower(institutionCtrl.current_institution.key)">
+                                <md-icon>person_add</md-icon>Seguir
+                            </md-button>
+                            <md-button flex="100" class="md-primary md-raised md-hue-2" ng-click="institutionCtrl.unfollow()" ng-if="institutionCtrl.user.isFollower(institutionCtrl.current_institution.key)">
+                                <md-icon>person_outline</md-icon>Seguindo
+                            </md-button>
                         </div>
-                    </div>
+                    </md-card-content>
                 </md-card>
 
                 <!-- MEMBERS OF INSTITUTION -->

@@ -10,6 +10,8 @@
         postDetailsCtrl.comments = {};
         postDetailsCtrl.newComment = '';
 
+        postDetailsCtrl.savingComment = false;
+
         Object.defineProperty(postDetailsCtrl, 'user', {
             get: function() {
                 return AuthService.user;
@@ -155,13 +157,17 @@
         postDetailsCtrl.createComment = function createComment(post) {
             var newComment = postDetailsCtrl.comments[post.key].newComment;
             if (!_.isEmpty(newComment)) {
+                postDetailsCtrl.savingComment = true;
                 CommentService.createComment(post.key, newComment).then(function success(response) {
                     postDetailsCtrl.comments[post.key].newComment = '';
                     addComment(post, response.data);
+                    postDetailsCtrl.savingComment = false;
                 }, function error(response) {
+                    postDetailsCtrl.savingComment = false;
                     showToast(response.data.msg);
                 });
             } else {
+
                 showToast("Comentário não pode ser vazio.");
             }
         };

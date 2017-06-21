@@ -74,7 +74,7 @@
                   <md-input-container class="md-block">
                     <form ng-submit="postDetailsCtrl.createComment(post)">
                       <label>{{postDetailsCtrl.user.name}}</label>
-                      <input ng-model="postDetailsCtrl.comments[post.key].newComment" type="text">
+                      <input ng-model="postDetailsCtrl.comments[post.key].newComment" type="text" ng-disabled="postDetailsCtrl.savingComment">
                     </form>
                   </md-input-container>
                 </div>

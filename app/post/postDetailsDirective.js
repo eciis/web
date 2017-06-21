@@ -161,7 +161,7 @@
                 }, function error(response) {
                     showToast(response.data.msg);
                 });
-            }else {
+            } else {
                 showToast("Comentário não pode ser vazio.");
             }
         };

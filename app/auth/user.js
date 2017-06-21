@@ -45,6 +45,22 @@ User.prototype.addInstitution = function addInstitution(institutionKey){
     this.institutions.push(institutionKey);
 };
 
+User.prototype.isValid = function isValid() {
+    if (_.isUndefined(this.name) || _.isEmpty(this.name)) {
+        return false; 
+    }
+
+    if (_.isUndefined(this.email) || _.isEmpty(this.email)) {
+        return false;
+    }
+
+    var cpfNotNull = this.cpf !== null;
+    if (cpfNotNull && (_.isUndefined(this.cpf) || _.isEmpty(this.cpf))) {
+        return false; 
+    }
+    return true;
+};
+
 function getImage(email) {
     var hash = CryptoJS.MD5(email).toString();
     return 'https://www.gravatar.com/avatar/' + hash;

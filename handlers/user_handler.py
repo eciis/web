@@ -68,3 +68,5 @@ class UserHandler(BaseHandler):
 
         """Update user."""
         user.put()
+
+        self.response.write(json.dumps(makeUser(user, self.request)))

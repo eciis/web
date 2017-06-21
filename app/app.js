@@ -43,6 +43,15 @@
                     }
                 }
             })
+            .state("config_profile", {
+                url: "/config_profile",
+                views: {
+                    main: {
+                        templateUrl: "auth/config_profile.html",
+                        controller: "ConfigProfileController as configProfileCtrl"
+                    }
+                }
+            })
             .state("choose_institution", {
                 url: "/chooseinstitution",
                 views: {

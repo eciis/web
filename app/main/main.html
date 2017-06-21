@@ -5,43 +5,55 @@
       <md-icon>menu</md-icon>
     </md-button>
 
-    <md-button disabled="true">
-      <img src="images/oms.png" aria-label="WHO Logo" style="height: 80%;filter: brightness(10) grayscale(1);">
-    </md-button>
-    <h2>e-CIIS</h2>
+    <a ui-sref="app.home"layout="row" layout-align="center center">
+      <md-button disabled="true">
+        <img src="images/oms.png" aria-label="WHO Logo" style="height: 80%;filter: brightness(10) grayscale(1);">
+      </md-button>
+      <h2>e-CIIS</h2>
+    </a>
 
     <span flex md-truncate></span>
 
-    <md-button class="md-icon-button" aria-label="Logout">
-      <a href="/logout"><md-icon style="color: white;">exit_to_app</md-icon></a>
+    <md-button aria-label="inicio" class="md-icon-button" onclick="location.href='/'">
+      <md-icon>home</md-icon>
     </md-button>
 
-    <md-button class="md-icon-button" aria-label="More">
-      <md-icon>more_vert</md-icon>
-    </md-button>
+    <md-menu md-position-mode="target-right target">
+      <md-button aria-label="menu" class="md-icon-button" ng-click="$mdMenu.open(ev)">
+        <md-icon>more_vert</md-icon>
+      </md-button>
+      <md-menu-content width="4">
+        <md-menu-item>
+          <md-button>
+            <md-icon>notifications</md-icon>
+            Notificações
+          </md-button>
+        </md-menu-item>
+        <md-menu-item>
+          <md-button ui-sref="config_profile">
+            <md-icon>dashboard</md-icon>
+            Configurações
+          </md-button>
+        </md-menu-item>
+        <md-menu-divider></md-menu-divider>
+        <md-menu-item>
+          <md-button onclick="location.href='/logout'">
+            <md-icon>exit_to_app</md-icon>
+            Sair
+          </md-button>
+        </md-menu-item>
+      </md-menu-content>
+    </md-menu>
   </div>
 </md-toolbar>
 
 <!-- SIDENAV -->
 <md-sidenav class="md-sidenav-left" md-component-id="leftNav" md-whiteframe="4" layout="column">
-  <md-toolbar md-colors="{background: dashboard? 'blue-grey-900' : 'blue-grey-700' }" layout="row" layout-align="center center">
-    <h1 class="md-toolbar-tools">Menu</h1>
-    <span flex></span>
-    <md-button ng-hide="dashboard" ng-click="dashboard = !dashboard" class="md-icon-button" aria-label="More">
-      <md-icon>dashboard</md-icon>
-    </md-button>
-    <md-button ng-show="dashboard" ng-click="dashboard = !dashboard" class="md-icon-button" aria-label="More">
-      <md-icon>more_vert</md-icon>
-    </md-button>
+  <md-toolbar md-colors="{background: 'blue-grey-900' }" layout="row" layout-align="center center">
+    <h1 class="md-toolbar-tools">Instituição Atual</h1>
   </md-toolbar>
-  <md-content flex md-colors="{background: dashboard? 'blue-grey-700' : 'grey-200' }">
-    <md-list ng-hide="dashboard">
-      <md-list-item ng-click="mainCtrl.goTo(setting.stateTo)" ng-repeat="setting in mainCtrl.settings">
-        <md-icon>{{setting.icon}}</md-icon>
-        <p> {{ setting.name }} </p>
-      </md-list-item>
-    </md-list>
-    <md-list ng-show="dashboard">
+  <md-content flex md-colors="{background: 'blue-grey-700'}">
+    <md-list>
       <md-list-item class="md-3-line" ng-repeat="institution in mainCtrl.user.institutions" ng-click="mainCtrl.changeInstitution(institution.name)">
         <img ng-src="{{ institution.image_url }}" alt="{{ institution.name }}" class="md-avatar" md-colors="{background: 'grey-200'}">
         <p> {{ institution.name }} </p>

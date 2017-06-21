@@ -109,8 +109,8 @@ class ResetHandler(BaseHandler):
         jorge = User()
         jorge.name = 'Jorge Abrantes'
         jorge.cpf = '089.675.908-10'
-        jorge.email = 'abrantes@dsc.ufcg.edu.br'
-        jorge.photo_url = 'http://www.ceei.ufcg.edu.br/_/rsrc/1472854148636/AssessoriadeComunicacao/noticias/iforumdegestoresdaufcg/0003.jpg?height=150&width=200'
+        jorge.email = 'jcafigueiredo@gmail.com'
+        jorge.photo_url = getGravatar(jorge.email)
         jorge.institutions = []
         jorge.follows = []
         jorge.institutions_admin = []

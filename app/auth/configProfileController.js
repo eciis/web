@@ -5,11 +5,11 @@
     
     app.controller("ConfigProfileController", function ConfigProfileController($state, InstitutionService, 
             AuthService, UserService, $rootScope, $mdToast) {
-        var configPrileCtrl = this;
+        var configProfileCtrl = this;
 
-        configPrileCtrl.newUser = {};
+        configProfileCtrl.newUser = {};
 
-        Object.defineProperty(configPrileCtrl, 'user', {
+        Object.defineProperty(configProfileCtrl, 'user', {
             get: function() {
                 return AuthService.user;
             },
@@ -18,10 +18,10 @@
             }
         });
 
-        configPrileCtrl.finish = function finish() {
-            if (configPrileCtrl.newUser.isValid()) {
-                UserService.save(configPrileCtrl.user, configPrileCtrl.newUser).then(function success(data) {
-                    configPrileCtrl.user = new User(data);
+        configProfileCtrl.finish = function finish() {
+            if (configProfileCtrl.newUser.isValid()) {
+                UserService.save(configProfileCtrl.user, configProfileCtrl.newUser).then(function success(data) {
+                    configProfileCtrl.user = new User(data);
                     $state.go("app.home");
                 });
             } else {
@@ -33,19 +33,19 @@
         * TODO: Refact when change authentication flow.
         * @author: Andre L. Abrantes - 21-06-2017
         */
-        if (configPrileCtrl.user) {
+        if (configProfileCtrl.user) {
             setupUser();
         } else {
             // In case of refresh
             $rootScope.$on("user_loaded", function() {
-                if (configPrileCtrl.user) {
+                if (configProfileCtrl.user) {
                     setupUser();
                 }
             });
         }
 
         function setupUser() {
-            configPrileCtrl.newUser = new User(configPrileCtrl.user);
+            configProfileCtrl.newUser = new User(configProfileCtrl.user);
         }
 
         function showToast(msg) {

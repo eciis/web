@@ -163,7 +163,7 @@
                 });
             }else{
                 showToast("Comentário não pode ser vazio.");
-            };
+            }
         };
 
         postDetailsCtrl.canDeleteComment = function canDeleteComment(post, comment) {

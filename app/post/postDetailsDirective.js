@@ -154,14 +154,14 @@
 
         postDetailsCtrl.createComment = function createComment(post) {
             var newComment = postDetailsCtrl.comments[post.key].newComment;
-            if(!_.isEmpty(newComment)){
+            if (!_.isEmpty(newComment)) {
                 CommentService.createComment(post.key, newComment).then(function success(response) {
                     postDetailsCtrl.comments[post.key].newComment = '';
                     addComment(post, response.data);
                 }, function error(response) {
                     showToast(response.data.msg);
                 });
-            }else{
+            }else {
                 showToast("Comentário não pode ser vazio.");
             }
         };

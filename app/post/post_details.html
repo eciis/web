@@ -9,7 +9,7 @@
             </md-card-avatar>
             <md-card-header-text>
               <div>
-                <a href class="md-title; noUnderline" ng-click="postDetailsCtrl.goToInstitution(post.institution_key)">{{ post.institution_name }}</a>
+                <a href class="md-title; noUnderline; hyperlink" ng-click="postDetailsCtrl.goToInstitution(post.institution_key)">{{ post.institution_name }}</a>
               </div>
               <span class="md-subhead">por {{ post.author }} em {{ post.publication_date | date:'dd-MM-yyyy' }}</span>
             </md-card-header-text>
@@ -27,9 +27,9 @@
             <md-button class="md-primary md-hue-1" ng-click="postDetailsCtrl.getLikes(post)">
              {{postDetailsCtrl.getTextNumberLikes(post.number_of_likes)}}
             </md-button>
-            <md-button class="md-primary md-hue-1" ng-click=postDetailsCtrl.getComments(post)> 
+            <md-button class="md-primary md-hue-1" ng-click=postDetailsCtrl.getComments(post)>
               {{ postDetailsCtrl.textNumberComment(post.number_of_comments) }}
-            </md-button>            
+            </md-button>
           </md-card-content>
           <md-divider></md-divider>
           <md-card-actions layout="row" layout-align="end center">

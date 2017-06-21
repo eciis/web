@@ -1,0 +1,38 @@
+<div layout-fill md-colors="{background: 'indigo-900'}" layout="column" layout-align="center">
+   <div layout="row" layout-wrap layout-align="center">
+    <md-card flex-gt-xs="50">
+      <md-toolbar md-colors="{background: 'blue-800'}" layout="row">
+        <h1 class="md-toolbar-tools">Dados do seu perfil</h1>
+      </md-toolbar>
+      <md-content md-theme="docs-dark" layout-gt-sm="column">
+        <div layout-gt-sm="column" layout-padding layout-align="center center">
+          <img style="border-radius: 50%; " ng-src="{{ configProfileCtrl.newUser.image }}" width="100px" height="100px" />
+          <md-button ng-click="null" layout-gt-sm="column">
+            <span><b>Mudar imagem do perfil</b></span>
+          </md-button>
+
+          <div layout-gt-sm="row">
+            <md-input-container flex-gt-sm>
+              <label>Nome</label>
+              <input ng-model="configProfileCtrl.newUser.name" required>
+            </md-input-container>
+
+            <md-input-container>
+              <label>Email</label>
+              <input ng-model="configProfileCtrl.newUser.email" type="email" disabled>
+            </md-input-container>
+          </div>
+
+          <md-input-container flex-gt-sm>
+            <label>CPF</label>
+            <input name="CPF" ng-model="configProfileCtrl.newUser.cpf" placeholder="123.456.789-00"
+                   ng-pattern="/^\d{3}\.\d{3}\.\d{3}\-\d{2}$/" required>
+          </md-input-container>
+        </div>
+        <section layout="row" layout="column" layout-align="end center" layout-wrap>
+          <md-button class="md-primary md-raised" ng-click="configProfileCtrl.finish()">Concluir</md-button>
+        </section>
+      </md-content>
+    </md-card>
+  </div>
+</div>

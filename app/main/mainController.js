@@ -31,12 +31,7 @@
             stateTo: 'app.home',
             icon: 'home',
             enabled: true
-        }, {
-            name: 'Novo Usuário',
-            stateTo: 'user.new',
-            icon: 'person_add',
-            enabled: true
-        }, ];
+        }];
 
         mainCtrl.goTo = function goTo(state) {
             $state.go(state);

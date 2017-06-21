@@ -11,14 +11,14 @@ from handlers.like_post_handler import LikePostHandler
 class LikePostHandlerTest(TestBaseHandler):
     """Test the handler like_post_handler."""
 
-    LIKE_URI = "/api/post/%s/likes"
+    LIKE_URI = "/api/posts/%s/likes"
 
     @classmethod
     def setUp(cls):
         """Provide the base for the tests."""
         super(LikePostHandlerTest, cls).setUp()
         app = cls.webapp2.WSGIApplication(
-            [("/api/post/(.*)/likes", LikePostHandler),
+            [("/api/posts/(.*)/likes", LikePostHandler),
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)

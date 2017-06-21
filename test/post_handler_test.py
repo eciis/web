@@ -16,7 +16,7 @@ class PostHandlerTest(TestBaseHandler):
         """Provide the base for the tests."""
         super(PostHandlerTest, cls).setUp()
         app = cls.webapp2.WSGIApplication(
-            [("/api/post/(.*)", PostHandler),
+            [("/api/posts/(.*)", PostHandler),
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
@@ -30,7 +30,7 @@ class PostHandlerTest(TestBaseHandler):
         self.assertEqual(self.mayza_post.state, 'published',
                          "The post's state must be published")
         # Call the delete method
-        self.testapp.delete("/api/post/%s" % self.mayza_post.key.urlsafe())
+        self.testapp.delete("/api/posts/%s" % self.mayza_post.key.urlsafe())
         # Retrieve the post from the datastore, once it has been changed
         self.mayza_post = self.mayza_post.key.get()
         # Make sure the post's state is deleted
@@ -44,7 +44,7 @@ class PostHandlerTest(TestBaseHandler):
         self.assertEqual(self.raoni_post.state, 'published',
                          "The post's state must be published")
         # Call the delete method
-        self.testapp.delete("/api/post/%s" % self.raoni_post.key.urlsafe())
+        self.testapp.delete("/api/posts/%s" % self.raoni_post.key.urlsafe())
         # Retrieve the post from the datastore, once it has been changed
         self.raoni_post = self.raoni_post.key.get()
         # Make sure the post's state is deleted

@@ -36,7 +36,7 @@
         chooseInstCtrl.finish = function finish(ev) {
             UserService.addInstitution(chooseInstCtrl.user, chooseInstCtrl.selectedInstitution.key)
                 .then(function success(user) {
-                    chooseInstCtrl.user = user;
+                    chooseInstCtrl.user = new User(user);
                     showDialog(ev);
                 });
         };
@@ -50,7 +50,7 @@
                     .ok('Finalizar')
                     .targetEvent(ev)
                 ).then(function ok() {
-                    $state.go("app.home");
+                    $state.go("config_profile");
                 });
         }
 

@@ -14,16 +14,16 @@ import json
 class PostCommentHandlerTest(TestBaseHandler):
     """Post Comment handler test."""
 
-    URL_POST_COMMENT = "/api/post/%s/comment"
-    URL_DELETE_COMMENT = "/api/post/%s/comment/%s"
+    URL_POST_COMMENT = "/api/posts/%s/comments"
+    URL_DELETE_COMMENT = "/api/posts/%s/comments/%s"
 
     @classmethod
     def setUp(cls):
         """Provide the base for the tests."""
         super(PostCommentHandlerTest, cls).setUp()
         app = cls.webapp2.WSGIApplication(
-            [("/api/post/(.*)/comment/(.*)", PostCommentHandler),
-             ("/api/post/(.*)/comment", PostCommentHandler),
+            [("/api/posts/(.*)/comments/(.*)", PostCommentHandler),
+             ("/api/posts/(.*)/comments", PostCommentHandler),
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)

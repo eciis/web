@@ -17,7 +17,7 @@ class PostCollectionHandlerTest(TestBaseHandler):
         """Provide the base for the tests."""
         super(PostCollectionHandlerTest, cls).setUp()
         app = cls.webapp2.WSGIApplication(
-            [("/api/post", PostCollectionHandler),
+            [("/api/posts", PostCollectionHandler),
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
@@ -28,11 +28,11 @@ class PostCollectionHandlerTest(TestBaseHandler):
         self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
         self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
         # Make the request and assign the answer to post
-        post = self.testapp.post_json("/api/post", {'title': 'new post',
-                                                    'institution':
-                                                    self.certbio.key.urlsafe(),
-                                                    'text':
-                                                    'testing new post'})
+        post = self.testapp.post_json("/api/posts", {'title': 'new post',
+                                                     'institution':
+                                                     self.certbio.key.urlsafe(),
+                                                     'text':
+                                                     'testing new post'})
         # Retrieve the entities
         post = json.loads(post._app_iter[0])
         key_post = ndb.Key(urlsafe=post['key'])
@@ -58,16 +58,16 @@ class PostCollectionHandlerTest(TestBaseHandler):
         # The try except block prevents that FieldException be raised
         # @author Raoni Smaneoto 11-06-2017
         with self.assertRaises(Exception):
-            self.testapp.post_json("/api/post", {'institution':
-                                                 self.certbio.key.urlsafe(),
-                                                 'text':
-                                                 'testing another post'})
+            self.testapp.post_json("/api/posts", {'institution':
+                                                  self.certbio.key.urlsafe(),
+                                                  'text':
+                                                  'testing another post'})
 
         with self.assertRaises(Exception):
-            self.testapp.post_json("/api/post", {'institution':
-                                                 self.certbio.key.urlsafe(),
-                                                 'title':
-                                                 'testing another post'})
+            self.testapp.post_json("/api/posts", {'institution':
+                                                  self.certbio.key.urlsafe(),
+                                                  'title':
+                                                  'testing another post'})
 
 
 def initModels(cls):

@@ -5,11 +5,11 @@
     app.service("InstitutionService", function InstitutionService($http, $q) {
         var service = this;
 
-        var INSTITUTION_URI = "/api/institution";
+        var INSTITUTIONS_URI = "/api/institutions";
 
         service.getInstitutions = function getInstitutions() {
             var deferred = $q.defer();
-            $http.get(INSTITUTION_URI).then(function success(response) {
+            $http.get(INSTITUTIONS_URI).then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);
@@ -19,7 +19,7 @@
 
         service.follow = function follow(institution_key) {
             var deferred = $q.defer();
-            $http.post(INSTITUTION_URI + "/" + institution_key + "/followers").then(function success(response) {
+            $http.post(INSTITUTIONS_URI + "/" + institution_key + "/followers").then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);
@@ -29,7 +29,7 @@
 
         service.unfollow = function unfollow(institution_key) {
             var deferred = $q.defer();
-            $http.delete(INSTITUTION_URI + "/" + institution_key + "/followers").then(function success(response) {
+            $http.delete(INSTITUTIONS_URI + "/" + institution_key + "/followers").then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);
@@ -39,7 +39,7 @@
 
         service.getTimeline = function getInstitutions(institution_key) {
             var deferred = $q.defer();
-            $http.get(INSTITUTION_URI + "/" + institution_key + "/timeline").then(function success(response) {
+            $http.get(INSTITUTIONS_URI + "/" + institution_key + "/timeline").then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);
@@ -49,7 +49,7 @@
 
         service.getMembers = function getMembers(institution_key) {
             var deferred = $q.defer();
-            $http.get(INSTITUTION_URI + "/" + institution_key + "/members").then(function success(response) {
+            $http.get(INSTITUTIONS_URI + "/" + institution_key + "/members").then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);
@@ -59,7 +59,7 @@
 
         service.getFollowers = function getFollowers(institution_key) {
             var deferred = $q.defer();
-            $http.get(INSTITUTION_URI + "/" + institution_key + "/followers").then(function success(response) {
+            $http.get(INSTITUTIONS_URI + "/" + institution_key + "/followers").then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);
@@ -69,7 +69,7 @@
 
         service.getInstitution = function getInstitution(institution_key) {
             var deferred = $q.defer();
-            $http.get(INSTITUTION_URI + "/" + institution_key).then(function success(response) {
+            $http.get(INSTITUTIONS_URI + "/" + institution_key).then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);

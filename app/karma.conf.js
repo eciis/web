@@ -25,13 +25,14 @@ module.exports = function(config) {
         'https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js',
         'https://cdn.jsdelivr.net/lodash/4.17.4/lodash.js',
         'app.js',
-        './testControllers/*.js',
-        './spec/*.spec.js'
+        './*/*.js',
+        './*/*.spec.js'
     ],
 
 
     // list of files to exclude
     exclude: [
+        './node_modules/*'
     ],
 
 

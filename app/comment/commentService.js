@@ -6,7 +6,7 @@
     app.service('CommentService', function CommentService($http, $q) {
         var service = this;
 
-        var POST_URI = '/api/post/';
+        var POST_URI = '/api/posts/';
 
         service.getComments = function getComments(commentUri) {
             var deferred = $q.defer();
@@ -31,7 +31,7 @@
 
         service.deleteComment = function deleteComment(postKey, commentId) {
             var deferred = $q.defer();
-            $http.delete(POST_URI + postKey + '/comment/' + commentId).then(function success(response) {
+            $http.delete(POST_URI + postKey + '/comments/' + commentId).then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);

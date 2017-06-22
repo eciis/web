@@ -59,9 +59,9 @@
                 addPostKeyToUser(post.key);
                 post.number_of_likes += 1;
                 postDetailsCtrl.savingLike = false;
-            }, function error(response) {
+            }, function error() {
+                $state.go('app.home');
                 postDetailsCtrl.savingLike = false;
-                showToast(response.data.msg);
             });
         }
 
@@ -71,8 +71,8 @@
                 removePostKeyFromUser(post.key);
                 post.number_of_likes -= 1;
                 postDetailsCtrl.savingLike = false;
-            }, function error(response) {
-                showToast(response.data.msg);
+            }, function error() {
+                $state.go('app.home');
                 postDetailsCtrl.savingLike = false;
             });
         }

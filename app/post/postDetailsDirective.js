@@ -167,7 +167,6 @@
                     showToast(response.data.msg);
                 });
             } else {
-
                 showToast("Comentário não pode ser vazio.");
             }
         };

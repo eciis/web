@@ -29,7 +29,7 @@ class Comment(ndb.Model):
     """Model of a Comment."""
 
     # comment's text
-    text = ndb.StringProperty(required=True)
+    text = ndb.TextProperty(required=True)
 
     # date and time of the comment creation
     publication_date = ndb.DateTimeProperty(auto_now_add=True)

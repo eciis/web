@@ -11,12 +11,12 @@
   <md-card-content layout="column">
     <md-input-container>
       <label>Título</label>
-      <input ng-model="postCtrl.post.title" md-maxlength="30" maxlength="30" placeholder="Escreva aqui uma nova publicação">
+      <input ng-model="postCtrl.post.title" md-maxlength="100" maxlength="100" placeholder="Escreva aqui uma nova publicação">
     </md-input-container>
     <md-input-container ng-show="postCtrl.post.title">
       <label>Mensagem</label>
-      <textarea ng-model="postCtrl.post.text" md-maxlength="150" rows="4" md-select-on-focus
-        maxlength="150" required="true"></textarea>
+      <textarea ng-model="postCtrl.post.text" rows="4" md-select-on-focus required="true">
+      </textarea>
     </md-input-container>
   </md-card-content>
   <md-dialog-actions layout="row" ng-show="postCtrl.post.title">

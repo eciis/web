@@ -3,14 +3,13 @@
 import webapp2
 import logging
 import json
-import urllib
-import hashlib
 
 from models.user import User
 from models.institution import Institution
 from models.post import Post
 from models.post import Comment
 from google.appengine.ext import ndb
+from utils import getGravatar
 
 
 def add_comments_to_post(user, post, comments_qnt=3):
@@ -36,16 +35,6 @@ def add_comments_to_post(user, post, comments_qnt=3):
         for i in range(comments_qnt):
             comment = Comment.create(texts[i], user.key, post.key)
             post.add_comment(comment)
-
-
-def getGravatar(email):
-    """Get Gravatar url."""
-    default = "https://www.example.com/default.jpg"
-    size = 40
-    # construct the url
-    gravatar_url = "https://www.gravatar.com/avatar/" + hashlib.md5(email.lower()).hexdigest() + "?"
-    gravatar_url += urllib.urlencode({'d': default, 's': str(size)})
-    return gravatar_url
 
 
 class BaseHandler(webapp2.RequestHandler):

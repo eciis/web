@@ -9,6 +9,8 @@ from google.appengine.ext.ndb import Key
 
 from models.user import User
 from models.institution import Institution
+import urllib
+import hashlib
 
 
 class NotAuthorizedException(Exception):
@@ -145,8 +147,20 @@ class Utils():
         return str(hash_num)
 
 
+def getGravatar(email):
+    """Get Gravatar url."""
+    default = "https://www.example.com/default.jpg"
+    size = 40
+    # construct the url
+    gravatar_url = "https://www.gravatar.com/avatar/" + \
+        hashlib.md5(email.lower()).hexdigest() + "?"
+    gravatar_url += urllib.urlencode({'d': default, 's': str(size)})
+    return gravatar_url
+
+
 def login_required(method):
     """Handle required login."""
+
     def login(self, *args):
         current_user = users.get_current_user()
         if current_user is None:
@@ -161,6 +175,7 @@ def login_required(method):
             user = User()
             user.email = current_user.email()
             user.name = current_user.nickname()
+            user.photo_url = getGravatar(current_user.email())
 
             user.put()
             # TODO:
@@ -180,6 +195,7 @@ def login_required(method):
 
 def json_response(method):
     """Add content type header to the response."""
+
     def response(self, *args):
         self.response.headers[
             'Content-Type'] = 'application/json; charset=utf-8'
@@ -189,6 +205,7 @@ def json_response(method):
 
 def is_institution_member(method):
     """Check if user passed as parameter is member of an institution."""
+
     def check_members(self, user, *args):
         data = json.loads(self.request.body)
         institution_key = ndb.Key(urlsafe=data['institution'])
@@ -205,6 +222,7 @@ def is_institution_member(method):
 
 def is_authorized(method):
     """Check if the user is the author of the post."""
+
     def check_authorization(self, user, url_string, *args):
         obj_key = ndb.Key(urlsafe=url_string)
         post = obj_key.get()

@@ -74,7 +74,7 @@ class LikePostHandlerTest(TestBaseHandler):
             self.testapp.post(self.LIKE_URI % self.mayza_post.key.urlsafe())
         # Verify if message exception
         exc = get_message_exception(self, exc.exception.message)
-        self.assertEquals(exc, "Error! User already gave like in publication.")
+        self.assertEquals(exc, "Error! User already liked the publication.")
         # Refresh mayza_post
         self.mayza_post = self.mayza_post.key.get()
         # Verify if after the other like the number of likes at post is 1 yet
@@ -117,7 +117,7 @@ class LikePostHandlerTest(TestBaseHandler):
             self.testapp.delete(self.LIKE_URI % self.mayza_post.key.urlsafe())
         # Verify if message exception
         ex = get_message_exception(self, ex.exception.message)
-        self.assertEquals(ex, "Error! User already gave deslike in publication.")
+        self.assertEquals(ex, "Error! User hasn't like in this publication.")
         # Refresh mayza_post
         self.mayza_post = self.mayza_post.key.get()
         # Verify if after the other dislike the number of likes at post is 0

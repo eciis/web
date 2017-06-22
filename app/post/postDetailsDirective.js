@@ -8,7 +8,6 @@
         var postDetailsCtrl = this;
 
         postDetailsCtrl.comments = {};
-        postDetailsCtrl.newComment = '';
 
         postDetailsCtrl.savingComment = false;
 

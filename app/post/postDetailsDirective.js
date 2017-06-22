@@ -156,9 +156,10 @@
 
         postDetailsCtrl.createComment = function createComment(post) {
             var newComment = postDetailsCtrl.comments[post.key].newComment;
+            var institutionKey = postDetailsCtrl.user.current_institution.key;
             if (!_.isEmpty(newComment)) {
                 postDetailsCtrl.savingComment = true;
-                CommentService.createComment(post.key, newComment).then(function success(response) {
+                CommentService.createComment(post.key, newComment, institutionKey).then(function success(response) {
                     postDetailsCtrl.comments[post.key].newComment = '';
                     addComment(post, response.data);
                     postDetailsCtrl.savingComment = false;

@@ -11,7 +11,7 @@
               <div>
                 <a href class="md-title hyperlink" ng-click="postDetailsCtrl.goToInstitution(post.institution_key)">{{ post.institution_name }}</a>
               </div>
-              <span class="md-subhead">por {{ post.author }} em {{ post.publication_date | date:'dd-MM-yyyy'}} às {{post.publication_date | date:'HH:mm:ss'}}</span>
+              <span class="md-subhead">por {{ post.author }} em {{ post.publication_date | date: 'MMM d, y'}} às {{post.publication_date | date:'HH:mm:ss'}}</span>
             </md-card-header-text>
           </md-card-header>
           <img ng-src="{{ post.headerImage }}" class="md-card-image">
@@ -53,8 +53,8 @@
               <md-list-item ng-repeat="comment in postDetailsCtrl.comments[post.key].data" class="md-3-line">
                 <img ng-src="{{comment.author_img}}" class="md-avatar" alt="{{comment.author_name}}" />
                 <div class="md-list-item-text">
-                  <h4><b>{{comment.author_name}}</b></h4>
-                  <small class="md-caption">{{comment.publication_date | date: 'MMM d, y HH:mm'}}</small>
+                  <h4><b>{{comment.author_name}} - {{comment.institution_name | uppercase}}</b></h4>
+                  <small class="md-caption">{{comment.publication_date | date: 'MMM d, y'}} às {{comment.publication_date | date: 'HH:mm'}}</small>
                   <p>{{comment.text}}</p>
                   <md-button class="md-secondary md-icon-button" aria-label="Share"
                     ng-if="postDetailsCtrl.canDeleteComment(post, comment)"

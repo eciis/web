@@ -17,16 +17,16 @@ def add_comments_to_post(user, post, institution, comments_qnt=3):
         """Add comments to post."""
         text_A = {'text': 'Lorem ipsum dolor sit amet, at a. Mauris justo ipsum, \
         mauris justo eget, dolor justo. Aliquet amet, \
-        mi tristique. Aliquam suspendisse at.', 'authorInstitution': institution.urlsafe()}
+        mi tristique. Aliquam suspendisse at.', 'institution_key': institution.urlsafe()}
         text_B = {'text': 'Lorem ipsum dolor sit amet, orci id. Eu qui, \
-        dui eu curabitur, lacinia justo ante.', 'authorInstitution': institution.urlsafe()}
+        dui eu curabitur, lacinia justo ante.', 'institution_key': institution.urlsafe()}
         text_C = {'text': 'Lorem ipsum dolor sit amet, faucibus nunc neque ridiculus,\
          platea penatibus fusce mattis. Consectetue ut eleifend ipsum,\
          sapien lacinia montes gravida urna, tortor diam aenean diam vel,\
          augue non lacus vivamus. Tempor sollicitudin adipiscing cras, \
          etiam augue quis vestibulum est, tristique sem placerat.  \
          Et ridiculus sapien in pede, senectus diamlorem in vitae, \
-         nunc eget adipiscing vestibulum.', 'authorInstitution': institution.urlsafe()}
+         nunc eget adipiscing vestibulum.', 'institution_key': institution.urlsafe()}
 
         texts = []
         texts.append(text_A)

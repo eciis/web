@@ -39,7 +39,7 @@ class LikePostHandler(BaseHandler):
             user.like_post(post.key)
             post.like(user.key)
         else:
-            raise LikeException('User already gave like in publication.')
+            raise LikeException('User already liked the publication.')
 
     @login_required
     @ndb.transactional(xg=True)
@@ -51,4 +51,4 @@ class LikePostHandler(BaseHandler):
             user.dislike_post(post.key)
             post.dislike(user.key)
         else:
-            raise LikeException('User already gave deslike in publication.')
+            raise LikeException("User hasn't like in this publication.")

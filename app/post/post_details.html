@@ -68,16 +68,16 @@
                 </div>
               </md-list-item>
               <md-list-item class="md-3-line">
-                <img ng-src="{{postDetailsCtrl.user.image}}" class="md-avatar" alt="{{postDetailsCtrl.user.name}}" />
+                <img ng-src="{{postDetailsCtrl.user.photo_url}}" class="md-avatar" alt="{{postDetailsCtrl.user.name}}" />
                 <div class="md-list-item-text">
                   <h3>{{comment.author_name}}</h3>
                   <md-input-container class="md-block">
                     <form ng-submit="postDetailsCtrl.createComment(post)" layout="column">
-                      <label>{{postDetailsCtrl.user.name}}</label> 
+                      <label>{{postDetailsCtrl.user.name}}</label>
                       <textarea style="max-height: 400px;overflow-y:auto;resize:none;" ng-model="postDetailsCtrl.comments[post.key].newComment" rows="1" md-select-on-focus
                         ng-disabled="postDetailsCtrl.savingComment"></textarea>
                       <div layout="row" layout-align="end center">
-                        <md-button ng-show="postDetailsCtrl.comments[post.key].newComment" 
+                        <md-button ng-show="postDetailsCtrl.comments[post.key].newComment"
                           class="md-raised md-primary" aria-label="postar" type="submit">Escrever</md-button>
                       </div>
                     </form>

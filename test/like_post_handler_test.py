@@ -70,7 +70,11 @@ class LikePostHandlerTest(TestBaseHandler):
                          "The number of likes expected was 1, but was %d"
                          % self.mayza_post.get_number_of_likes())
         # Call the post method again
-        self.testapp.post(self.LIKE_URI % self.mayza_post.key.urlsafe())
+        with self.assertRaises(Exception) as exc:
+            self.testapp.post(self.LIKE_URI % self.mayza_post.key.urlsafe())
+        # Verify if message exception
+        exc = get_message_exception(self, exc.exception.message)
+        self.assertEquals(exc, "Error! User already gave like in publication.")
         # Refresh mayza_post
         self.mayza_post = self.mayza_post.key.get()
         # Verify if after the other like the number of likes at post is 1 yet
@@ -109,7 +113,11 @@ class LikePostHandlerTest(TestBaseHandler):
                          "The number of likes expected was 0, but was %d"
                          % self.mayza_post.get_number_of_likes())
         # Call the delete method again
-        self.testapp.delete(self.LIKE_URI % self.mayza_post.key.urlsafe())
+        with self.assertRaises(Exception) as ex:
+            self.testapp.delete(self.LIKE_URI % self.mayza_post.key.urlsafe())
+        # Verify if message exception
+        ex = get_message_exception(self, ex.exception.message)
+        self.assertEquals(ex, "Error! User already gave deslike in publication.")
         # Refresh mayza_post
         self.mayza_post = self.mayza_post.key.get()
         # Verify if after the other dislike the number of likes at post is 0
@@ -170,3 +178,10 @@ def initModels(cls):
     cls.mayza_post.author = cls.mayza.key
     cls.mayza_post.institution = cls.splab.key
     cls.mayza_post.put()
+
+
+def get_message_exception(cls, exception):
+    """Return only message of string exception."""
+    cls.list_args = exception.split("\n")
+    cls.dict = eval(cls.list_args[1])
+    return cls.dict["msg"]

@@ -11,6 +11,7 @@
         postDetailsCtrl.newComment = '';
 
         postDetailsCtrl.savingComment = false;
+        postDetailsCtrl.savingLike = false;
 
         Object.defineProperty(postDetailsCtrl, 'user', {
             get: function() {
@@ -53,20 +54,26 @@
         };
 
         function likePost(post) {
+            postDetailsCtrl.savingLike = true;
             PostService.likePost(post).then(function success() {
                 addPostKeyToUser(post.key);
                 post.number_of_likes += 1;
+                postDetailsCtrl.savingLike = false;
             }, function error(response) {
+                postDetailsCtrl.savingLike = false;
                 showToast(response.data.msg);
             });
         }
 
         function dislikePost(post) {
+            postDetailsCtrl.savingLike = true;
             PostService.dislikePost(post).then(function success() {
                 removePostKeyFromUser(post.key);
                 post.number_of_likes -= 1;
+                postDetailsCtrl.savingLike = false;
             }, function error(response) {
                 showToast(response.data.msg);
+                postDetailsCtrl.savingLike = false;
             });
         }
 

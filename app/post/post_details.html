@@ -41,7 +41,7 @@
               <md-icon>comments</md-icon>
             </md-button>
             <md-button class="md-icon-button" aria-label="Favorite" ng-click="postDetailsCtrl.likeOrDislikePost(post)"
-              ng-class="postDetailsCtrl.isLikedByUser(post)?'md-warn':''">
+              ng-disabled="postDetailsCtrl.savingLike" ng-class="postDetailsCtrl.isLikedByUser(post)?'md-warn':''">
               <md-icon>grade</md-icon>
             </md-button>
             <md-button class="md-icon-button" aria-label="Share">

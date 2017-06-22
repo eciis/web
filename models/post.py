@@ -37,6 +37,9 @@ class Comment(ndb.Model):
     # user who is the author
     author = ndb.KeyProperty(kind="User", required=True)
 
+    # institution which the author is representing
+    author_institution = ndb.KeyProperty(kind="Institution", required=True)
+
     # Post from which the comment belongs
     post = ndb.KeyProperty(kind="Post", required=True)
 
@@ -48,12 +51,16 @@ class Comment(ndb.Model):
         """Create a comment and check required fields."""
         if not data['text']:
             raise FieldException("Text can not be empty")
+        if not data['authorInstitution']:
+            raise FieldException("Instituion can not be empty")
 
+        institution_key = ndb.Key(urlsafe=data['authorInstitution'])
         comment = Comment()
         comment.text = data['text']
         comment.author = author_key
         comment.post = post_key
         comment.publication_date = datetime.datetime.now()
+        comment.author_institution = institution_key
         comment.id = Utils.getHash(comment)
 
         return comment
@@ -63,9 +70,11 @@ class Comment(ndb.Model):
         """Create personalized json of comment."""
         publication_date = comment.publication_date.isoformat()
         author = comment.author.get()
+        # TODO: rever isto acima
         return {
             'text': comment.text,
             'author_name': author.name,
+            'author_institution': comment.author_institution.urlsafe(),
             'author_img': author.photo_url,
             'author_key': author.key.urlsafe(),
             'post_key': comment.post.urlsafe(),

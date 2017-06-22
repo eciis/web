@@ -57,9 +57,9 @@
               <md-list-item ng-repeat="comment in postDetailsCtrl.comments[post.key].data" class="md-3-line">
                 <img ng-src="{{comment.author_img}}" class="md-avatar" alt="{{comment.author_name}}" />
                 <div class="md-list-item-text">
-                  <h3>{{comment.author_name}}</h3>
+                  <h4><b>{{comment.author_name}}</b></h4>
+                  <small class="md-caption">{{comment.publication_date | date: 'MMM d, y HH:mm'}}</small>
                   <p>{{comment.text}}</p>
-                  <p>{{comment.publication_date | date: 'MMM d, y HH:mm'}}</p>
                   <md-button class="md-secondary md-icon-button" aria-label="Share"
                     ng-if="postDetailsCtrl.canDeleteComment(post, comment)"
                     ng-click="postDetailsCtrl.deleteComment($event, post, comment)">
@@ -72,9 +72,14 @@
                 <div class="md-list-item-text">
                   <h3>{{comment.author_name}}</h3>
                   <md-input-container class="md-block">
-                    <form ng-submit="postDetailsCtrl.createComment(post)">
-                      <label>{{postDetailsCtrl.user.name}}</label>
-                      <input ng-model="postDetailsCtrl.comments[post.key].newComment" type="text" ng-disabled="postDetailsCtrl.savingComment">
+                    <form ng-submit="postDetailsCtrl.createComment(post)" layout="column">
+                      <label>{{postDetailsCtrl.user.name}}</label> 
+                      <textarea style="max-height: 400px;overflow-y:auto;resize:none;" ng-model="postDetailsCtrl.comments[post.key].newComment" rows="1" md-select-on-focus
+                        ng-disabled="postDetailsCtrl.savingComment"></textarea>
+                      <div layout="row" layout-align="end center">
+                        <md-button ng-show="postDetailsCtrl.comments[post.key].newComment" 
+                          class="md-raised md-primary" aria-label="postar" type="submit">Escrever</md-button>
+                      </div>
                     </form>
                   </md-input-container>
                 </div>

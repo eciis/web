@@ -59,31 +59,6 @@
             });
         }
 
-        homeCtrl.follow = function follow(institution){
-            InstitutionService.follow(institution.key).then(function success(){
-                showToast("Seguindo "+institution.name);
-                homeCtrl.user.follow(institution.key);
-            });
-
-           /**
-           TODO: First version doesn't treat the case in which the user is already
-           the institution follower.
-           @author: Maiana Brito 01/06/2017
-           **/
-        };
-
-        homeCtrl.unfollow = function unfollow(institution){
-            if(homeCtrl.user.isMember(institution.key)){
-                showToast("Você não pode deixar de seguir " + institution.name);
-            }
-            else{
-                InstitutionService.unfollow(institution.key).then(function sucess(){
-                    showToast("Deixou de seguir "+institution.name);
-                    homeCtrl.user.unfollow(institution.key);
-                });
-            }
-        };
-
         var intervalPromise;
 
         var loadPosts = function loadPosts() {

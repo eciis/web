@@ -9,8 +9,7 @@ from google.appengine.ext.ndb import Key
 
 from models.user import User
 from models.institution import Institution
-import urllib
-import hashlib
+
 
 
 class NotAuthorizedException(Exception):
@@ -147,17 +146,6 @@ class Utils():
         return str(hash_num)
 
 
-def getGravatar(email):
-    """Get Gravatar url."""
-    default = "https://www.example.com/default.jpg"
-    size = 40
-    # construct the url
-    gravatar_url = "https://www.gravatar.com/avatar/" + \
-        hashlib.md5(email.lower()).hexdigest() + "?"
-    gravatar_url += urllib.urlencode({'d': default, 's': str(size)})
-    return gravatar_url
-
-
 def login_required(method):
     """Handle required login."""
 
@@ -175,7 +163,6 @@ def login_required(method):
             user = User()
             user.email = current_user.email()
             user.name = current_user.nickname()
-            user.photo_url = getGravatar(current_user.email())
 
             user.put()
             # TODO:

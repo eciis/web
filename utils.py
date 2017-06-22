@@ -11,7 +11,6 @@ from models.user import User
 from models.institution import Institution
 
 
-
 class NotAuthorizedException(Exception):
     """Not Authorized Exception."""
 
@@ -148,7 +147,6 @@ class Utils():
 
 def login_required(method):
     """Handle required login."""
-
     def login(self, *args):
         current_user = users.get_current_user()
         if current_user is None:
@@ -182,7 +180,6 @@ def login_required(method):
 
 def json_response(method):
     """Add content type header to the response."""
-
     def response(self, *args):
         self.response.headers[
             'Content-Type'] = 'application/json; charset=utf-8'
@@ -192,7 +189,6 @@ def json_response(method):
 
 def is_institution_member(method):
     """Check if user passed as parameter is member of an institution."""
-
     def check_members(self, user, *args):
         data = json.loads(self.request.body)
         institution_key = ndb.Key(urlsafe=data['institution'])
@@ -209,7 +205,6 @@ def is_institution_member(method):
 
 def is_authorized(method):
     """Check if the user is the author of the post."""
-
     def check_authorization(self, user, url_string, *args):
         obj_key = ndb.Key(urlsafe=url_string)
         post = obj_key.get()

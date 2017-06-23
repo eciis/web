@@ -44,8 +44,8 @@
               ng-class="postDetailsCtrl.isLikedByUser(post)?'md-warn':''">
               <md-icon>grade</md-icon>
             </md-button>
-            <md-button class="md-icon-button" aria-label="Share">
-              <md-icon>share_arrow</md-icon>
+            <md-button class="md-icon-button" id="bt-edit-post" aria-label="editar" ng-click="postDetailsCtrl.editPost(post, posts)">
+              <md-icon>edit</md-icon>
             </md-button>
           </md-card-actions>
           <md-list>

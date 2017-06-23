@@ -51,6 +51,27 @@
             }
         };
 
+        postDetailsCtrl.editPost = function editPost(post, posts, event) {
+            $mdDialog.show({
+                controller: "EditPostController",
+                controllerAs: "editPostCtrl",
+                templateUrl: 'home/edit_post.html',
+                parent: angular.element(document.body),
+                targetEvent: event,
+                clickOutsideToClose:true,
+                openFrom: '#bt-edit-post',
+                locals: {
+                    user : postDetailsCtrl.user,
+                    post: post
+                },
+                closeTo: angular.element(document.querySelector('#bt-edit-post'))
+            }).then(function success(editedPost) {
+                var post = _.find(posts, {key: editedPost.key});
+                post.title = editedPost.title;
+                post.text = editedPost.text;
+            });
+        };
+
         function likePost(post) {
             PostService.likePost(post).then(function success() {
                 addPostKeyToUser(post.key);
@@ -238,5 +259,54 @@
                 posts: '='
             }
         };
+    });
+
+    app.controller("EditPostController", function PostController(user, post, $mdDialog, PostService, AuthService, $mdToast) {
+        var postCtrl = this;
+
+        postCtrl.user = user;
+
+        // Original post to compare and generate PATCH actions.
+        postCtrl.post = new Post(post, postCtrl.user.current_institution.key);
+
+        // Copy of post to edit.
+        postCtrl.newPost = new Post(post, postCtrl.user.current_institution.key);
+
+        postCtrl.isPostValid = function isPostValid() {
+            if (postCtrl.user) {
+                return postCtrl.newPost.isValid();
+            } else {
+                return false;
+            }
+        };
+
+        postCtrl.editPost = function editPost() {
+            if (postCtrl.newPost.isValid()) {
+                PostService.save(postCtrl.post, postCtrl.newPost).then(function success() {
+                    showToast('Publicação editada com sucesso!');
+                    $mdDialog.hide(postCtrl.newPost);
+                }, function error(response) {
+                    $mdDialog.cancel();
+                    showToast(response.data.msg);
+                });
+            } else {
+                showToast('Edição inválida!');
+            }
+        };
+
+        postCtrl.cancelDialog = function() {
+            $mdDialog.cancel();
+        };
+
+        function showToast(msg) {
+            $mdToast.show(
+                $mdToast.simple()
+                    .textContent(msg)
+                    .action('FECHAR')
+                    .highlightAction(true)
+                    .hideDelay(5000)
+                    .position('bottom right')
+            );
+        }
     });
 })();

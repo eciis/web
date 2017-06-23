@@ -24,7 +24,7 @@
                     showToast("Problemas encontrados ao fazer upload da imagem" + response.config.data.image.name);
                 });
             } else {
-                showToast("Image deve ser do tipo png ou jpeg e deve ter tamanho menor ou igual a 5 mega bytes");
+                showToast("Imagem deve ser jpg ou png e menor que 5 Mb");
             }
         };
 

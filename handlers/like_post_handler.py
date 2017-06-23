@@ -9,6 +9,15 @@ from handlers.base_handler import BaseHandler
 from models.post import Like
 
 
+class LikeException(Exception):
+    """Like Exception."""
+
+    def __init__(self, message=None):
+        """Init method."""
+        super(LikeException, self).__init__(
+            message or 'User already made this action in publication.')
+
+
 class LikePostHandler(BaseHandler):
     """Like Handler."""
 
@@ -29,6 +38,8 @@ class LikePostHandler(BaseHandler):
         if not user.is_liked_post(post.key):
             user.like_post(post.key)
             post.like(user.key)
+        else:
+            raise LikeException('User already liked the publication.')
 
     @login_required
     @ndb.transactional(xg=True)
@@ -39,3 +50,5 @@ class LikePostHandler(BaseHandler):
         if user.is_liked_post(post.key):
             user.dislike_post(post.key)
             post.dislike(user.key)
+        else:
+            raise LikeException("User hasn't like in this publication.")

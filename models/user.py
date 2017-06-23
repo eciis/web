@@ -41,6 +41,9 @@ class User(ndb.Model):
     # Post likeds
     liked_posts = ndb.KeyProperty(kind="Post", repeated=True)
 
+    # Images uploaded
+    uploaded_images = ndb.StringProperty(repeated=True)
+
     @staticmethod
     def get_by_email(email):
         """Get user by email."""
@@ -81,3 +84,8 @@ class User(ndb.Model):
         if institution_key not in self.institutions:
             self.institutions.append(institution_key)
             self.put()
+
+    def add_image(self, url_image):
+        """Add images in list of uploaded images."""
+        self.uploaded_images.append(url_image)
+        self.put()

@@ -161,6 +161,7 @@ def login_required(method):
             user = User()
             user.email = current_user.email()
             user.name = current_user.nickname()
+            user.photo_url = "/images/avatar.jpg"
 
             user.put()
             # TODO:

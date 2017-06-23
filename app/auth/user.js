@@ -4,8 +4,6 @@ function User(data) {
     data = data || {};
     _.extend(this, data);
 
-    this.image = getImage(this.email);
-    
     if (this.institutions) {
         this.current_institution = this.institutions[0];
     }
@@ -47,7 +45,7 @@ User.prototype.addInstitution = function addInstitution(institutionKey){
 
 User.prototype.isValid = function isValid() {
     if (_.isUndefined(this.name) || _.isEmpty(this.name)) {
-        return false; 
+        return false;
     }
 
     if (_.isUndefined(this.email) || _.isEmpty(this.email)) {
@@ -56,15 +54,10 @@ User.prototype.isValid = function isValid() {
 
     var cpfNotNull = this.cpf !== null;
     if (cpfNotNull && (_.isUndefined(this.cpf) || _.isEmpty(this.cpf))) {
-        return false; 
+        return false;
     }
     return true;
 };
-
-function getImage(email) {
-    var hash = CryptoJS.MD5(email).toString();
-    return 'https://www.gravatar.com/avatar/' + hash;
-}
 
 function getKeyObj(obj) {
     if(obj.key){

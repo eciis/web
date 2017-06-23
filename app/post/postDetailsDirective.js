@@ -169,6 +169,7 @@
                         title: post.title
                     }
                 });
+                post.number_of_likes = _.size(postDetailsCtrl.likes);
             }, function error(response) {
                 showToast(response.data.msg);
             });

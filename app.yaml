@@ -22,3 +22,7 @@ handlers:
 - url: (.*)
   static_files: app\1
   upload: app/(.*)
+
+libraries:
+- name: PIL
+  version: "1.1.7"

@@ -4,7 +4,7 @@
     var app = angular.module("app");
 
     app.controller("HomeController", function HomeController(PostService, AuthService,
-            InstitutionService, CommentService, $interval, $mdToast, $mdDialog, $state) {
+            InstitutionService, CommentService, $interval, $mdToast, $mdDialog, $state, $rootScope) {
         var homeCtrl = this;
 
         homeCtrl.posts = [];
@@ -72,6 +72,11 @@
 
         loadPosts();
         getInstitutions();
+
+        $rootScope.$on("reloadPosts", function(event, data) {
+            var post = new Post(data);
+            homeCtrl.posts.push(post);
+        });
 
         /**
         FIXME: The timeline update interrupts the user while he is commenting on a post

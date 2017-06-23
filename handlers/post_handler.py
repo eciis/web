@@ -32,6 +32,7 @@ class PostHandler(BaseHandler):
 
     @json_response
     @login_required
+    @is_authorized
     def patch(self, user, url_string):
         """Handler PATCH Requests."""
         data = self.request.body

@@ -52,7 +52,7 @@ class Comment(ndb.Model):
         if not data['text']:
             raise FieldException("Text can not be empty")
         if not data['institution_key']:
-            raise FieldException("Instituion can not be empty")
+            raise FieldException("Institution can not be empty")
 
         institution = ndb.Key(urlsafe=data['institution_key']).get()
         comment = Comment()

@@ -4,7 +4,7 @@
 
     var app = angular.module("app");
 
-    app.controller("PostController", function PostController($mdDialog, PostService, AuthService, $mdToast, $state, $q, $rootScope) {
+    app.controller("PostController", function PostController($mdDialog, PostService, AuthService, $mdToast, $rootScope) {
         var postCtrl = this;
 
         postCtrl.post = {};
@@ -63,7 +63,7 @@
             controller: "PostController",
             scope: {
                 user: '=',
-                isDialog: '=',
+                isDialog: '='
             },
             bindToController: true
         };

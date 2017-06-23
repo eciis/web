@@ -40,7 +40,7 @@
         };
 
         postDetailsCtrl.isAuthorized = function isAuthorized(post) {
-            return isPostAuthor(post) || isInstitutionAdmin(post);        
+            return isPostAuthor(post) || isInstitutionAdmin(post);
         };
 
         postDetailsCtrl.likeOrDislikePost = function likeOrDislikePost(post) {
@@ -112,10 +112,11 @@
                 var comments = postDetailsCtrl.comments[post.key];
                 if(comments) {
                     postDetailsCtrl.comments[post.key].data = response.data;
-                    postDetailsCtrl.comments[post.key].show = !postDetailsCtrl.comments[post.key].show;  
+                    postDetailsCtrl.comments[post.key].show = !postDetailsCtrl.comments[post.key].show;
                 } else {
                     postDetailsCtrl.comments[post.key] =  {'data': response.data, 'show': true, 'newComment': ''};
-                }              
+                }
+                post.number_of_comments = _.size(postDetailsCtrl.comments[post.key].data);
             }, function error(response) {
                 showToast(response.data.msg);
             });
@@ -141,7 +142,7 @@
                         likes : response.data,
                         title: post.title
                     }
-                }); 
+                });
             }, function error(response) {
                 showToast(response.data.msg);
             });
@@ -205,7 +206,7 @@
         function removeCommentFromPost(post, comment) {
             var postComments = postDetailsCtrl.comments[post.key].data;
             _.remove(postComments, function(postComment) {
-                return postComment.id == comment.id; 
+                return postComment.id == comment.id;
             });
         }
 

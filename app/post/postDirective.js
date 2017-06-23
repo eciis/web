@@ -4,7 +4,7 @@
 
     var app = angular.module("app");
 
-    app.controller("PostController", function PostController($mdDialog, PostService, AuthService, $mdToast, $state, $q, $rootScope, $timeout) {
+    app.controller("PostController", function PostController($mdDialog, PostService, AuthService, $mdToast, $state, $q, $rootScope) {
         var postCtrl = this;
 
         postCtrl.post = {};

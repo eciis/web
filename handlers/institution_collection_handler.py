@@ -24,6 +24,11 @@ class InstitutionCollectionHandler(BaseHandler):
             Utils.toJson(institution_collection, host=self.request.host)
         ))
 
+
+    """
+    TODO: Create tests to post institution.
+    @author: Andre L Abrantes - 23-06-2017
+    """
     @json_response
     @login_required
     def post(self, user):

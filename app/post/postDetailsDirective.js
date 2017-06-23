@@ -60,12 +60,10 @@
                 parent: angular.element(document.body),
                 targetEvent: event,
                 clickOutsideToClose:true,
-                openFrom: '#bt-edit-post',
                 locals: {
                     user : postDetailsCtrl.user,
                     post: post
-                },
-                closeTo: angular.element(document.querySelector('#bt-edit-post'))
+                }
             }).then(function success(editedPost) {
                 var post = _.find(posts, {key: editedPost.key});
                 post.title = editedPost.title;

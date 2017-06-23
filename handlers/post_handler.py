@@ -30,8 +30,14 @@ class PostHandler(BaseHandler):
         """Update the post, the user and the institution in datastore."""
         post.put()
 
+
+    """
+    TODO: Test is_authorized
+    @author: Andre L Abrantes - 23-06-2017
+    """
     @json_response
     @login_required
+    @is_authorized
     def patch(self, user, url_string):
         """Handler PATCH Requests."""
         data = self.request.body

@@ -13,20 +13,20 @@ from models.post import Comment
 from google.appengine.ext import ndb
 
 
-def add_comments_to_post(user, post, comments_qnt=3):
+def add_comments_to_post(user, post, institution, comments_qnt=3):
         """Add comments to post."""
         text_A = {'text': 'Lorem ipsum dolor sit amet, at a. Mauris justo ipsum, \
         mauris justo eget, dolor justo. Aliquet amet, \
-        mi tristique. Aliquam suspendisse at.'}
+        mi tristique. Aliquam suspendisse at.', 'institution_key': institution.urlsafe()}
         text_B = {'text': 'Lorem ipsum dolor sit amet, orci id. Eu qui, \
-        dui eu curabitur, lacinia justo ante.'}
+        dui eu curabitur, lacinia justo ante.', 'institution_key': institution.urlsafe()}
         text_C = {'text': 'Lorem ipsum dolor sit amet, faucibus nunc neque ridiculus,\
          platea penatibus fusce mattis. Consectetue ut eleifend ipsum,\
          sapien lacinia montes gravida urna, tortor diam aenean diam vel,\
          augue non lacus vivamus. Tempor sollicitudin adipiscing cras, \
          etiam augue quis vestibulum est, tristique sem placerat.  \
          Et ridiculus sapien in pede, senectus diamlorem in vitae, \
-         nunc eget adipiscing vestibulum.'}
+         nunc eget adipiscing vestibulum.', 'institution_key': institution.urlsafe()}
 
         texts = []
         texts.append(text_A)
@@ -43,7 +43,8 @@ def getGravatar(email):
     default = "https://www.example.com/default.jpg"
     size = 40
     # construct the url
-    gravatar_url = "https://www.gravatar.com/avatar/" + hashlib.md5(email.lower()).hexdigest() + "?"
+    gravatar_url = "https://www.gravatar.com/avatar/" + \
+        hashlib.md5(email.lower()).hexdigest() + "?"
     gravatar_url += urllib.urlencode({'d': default, 's': str(size)})
     return gravatar_url
 
@@ -307,7 +308,7 @@ class ResetHandler(BaseHandler):
         mayza_post.author = mayza.key
         mayza_post.institution = certbio.key
         mayza_post.put()
-        add_comments_to_post(mayza, mayza_post, 2)
+        add_comments_to_post(mayza, mayza_post, mayza.institutions[0], 2)
 
         # POST of Mayza To Certbio Institution with image
         mayza_post_comIMG = Post()
@@ -319,7 +320,7 @@ class ResetHandler(BaseHandler):
         mayza_post_comIMG.author = mayza.key
         mayza_post_comIMG.institution = certbio.key
         mayza_post_comIMG.put()
-        add_comments_to_post(mayza, mayza_post_comIMG, 1)
+        add_comments_to_post(mayza, mayza_post_comIMG, mayza.institutions[0], 1)
 
         # POST of André To SPLAB Institution
         andre_post = Post()
@@ -340,7 +341,7 @@ class ResetHandler(BaseHandler):
         andre_post.author = andre.key
         andre_post.institution = splab.key
         andre_post.put()
-        add_comments_to_post(andre, andre_post, 3)
+        add_comments_to_post(andre, andre_post, andre.institutions[0], 3)
 
         # POST of Dalton To e-CIIS Institution
         dalton_post = Post()
@@ -362,7 +363,7 @@ class ResetHandler(BaseHandler):
         dalton_post.author = dalton.key
         dalton_post.institution = splab.key
         dalton_post.put()
-        add_comments_to_post(dalton, dalton_post, 2)
+        add_comments_to_post(dalton, dalton_post, dalton.institutions[0], 2)
 
         # POST of Dalton To CERTBIO Institution
         dalton_postCertbio = Post()
@@ -371,7 +372,7 @@ class ResetHandler(BaseHandler):
         dalton_postCertbio.author = dalton.key
         dalton_postCertbio.institution = certbio.key
         dalton_postCertbio.put()
-        add_comments_to_post(dalton, dalton_postCertbio, 1)
+        add_comments_to_post(dalton, dalton_postCertbio, dalton.institutions[0], 1)
 
         # POST of Jorge To SPLAB Institution
         jorge_post = Post()
@@ -401,7 +402,7 @@ class ResetHandler(BaseHandler):
         jorge_post_eCIIS.author = jorge.key
         jorge_post_eCIIS.institution = eciis.key
         jorge_post_eCIIS.put()
-        add_comments_to_post(jorge, jorge_post_eCIIS, 3)
+        add_comments_to_post(jorge, jorge_post_eCIIS, jorge.institutions[0], 3)
 
         # Side efect of a post
         jorge.posts = [jorge_post.key, jorge_post_eCIIS.key]

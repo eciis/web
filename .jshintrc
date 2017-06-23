@@ -4,6 +4,7 @@
         "angular": true,
         "_": true,
         "User": true,
+        "Post": true,
         "console": true,
         "jsonpatch": true,
         "CryptoJS": true

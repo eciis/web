@@ -14,7 +14,7 @@
                 <div class="cardheader">
                 </div>
                 <div class="avatar">
-                  <img alt="" ng-src="{{ homeCtrl.user.image }}">
+                  <img alt="" ng-src="{{ homeCtrl.user.photo_url }}">
                 </div>
                 <div class="info">
                   <div class="title">
@@ -40,12 +40,8 @@
           <md-list-item ng-repeat="institution in homeCtrl.institutions" ng-click="homeCtrl.goToInstitution(institution.key)" class="noright">
              <img alt="{{ institution.name }}" ng-src="{{ institution.image_url }}" class="md-avatar" />
              <p>{{institution.name}}</p>
-             <md-button class="md-icon-button" ng-click="homeCtrl.follow(institution)" ng-if="!homeCtrl.user.isFollower(institution.key)">
-               <md-icon>person_add</md-icon>
-             </md-button>
-             <md-button class="md-icon-button" ng-click="homeCtrl.unfollow(institution)" ng-if="homeCtrl.user.isFollower(institution.key)">
-              <md-icon>person_outline</md-icon>
-             </md-button>
+             <md-icon ng-if="!homeCtrl.user.isFollower(institution.key)">person_add</md-icon>
+             <md-icon ng-if="homeCtrl.user.isFollower(institution.key)">person_outline</md-icon>
           </md-list-item>
         </div>
       </md-card>

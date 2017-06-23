@@ -30,4 +30,5 @@ class ImageHandler(BaseHandler):
         image_storage = StorageImage()
         blob_key = image_storage.store_image(image=file_uploaded, size=800)
         data = {'file_url': 'http://%s/api/images/%s' % (self.request.host, blob_key)}
+        user.add_image(data['file_url'])
         self.response.write(json.dumps(data))

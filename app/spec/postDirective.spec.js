@@ -5,7 +5,7 @@ describe('Unit: postDirective', function() {
 
     var ctrl, newPost;
 
-    beforeEach(inject(function($controller, $mdDialog, PostService, AuthService, $mdToast) {
+    beforeEach(inject(function($controller) {
         ctrl = $controller('PostController');
         newPost = {
             title: 'title',

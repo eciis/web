@@ -52,7 +52,7 @@
   <md-toolbar md-colors="{background: 'green-700' }" layout="row" layout-align="center center">
     <h1 class="md-toolbar-tools">Instituição Atual</h1>
   </md-toolbar>
-  <md-content flex md-colors="{background: 'green-grey-700'}">
+  <md-content flex >
     <md-list>
       <md-list-item class="md-3-line" ng-repeat="institution in mainCtrl.user.institutions" ng-click="mainCtrl.changeInstitution(institution.name)">
         <img ng-src="{{ institution.image_url }}" alt="{{ institution.name }}" class="md-avatar" md-colors="{background: 'grey-200'}">

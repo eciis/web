@@ -9,6 +9,7 @@ from test_base_handler import TestBaseHandler
 from models.user import User
 from models.institution import Institution
 from handlers.image_handler import ImageHandler
+from handlers.user_handler import UserHandler
 
 
 def create_in_memory_image_file(size):
@@ -24,6 +25,7 @@ def create_in_memory_image_file(size):
 class ImageHandlerTest(TestBaseHandler):
     """Class of test image handler."""
 
+    USER_URI = '/api/user'
     POST_IMAGE_URI = '/api/images'
     GET_IMAGE_URI_PATTERN = '/api/images/%s'
     GET_IMAGE_URI = '/api/images/(.*)'
@@ -47,6 +49,7 @@ class ImageHandlerTest(TestBaseHandler):
         app = cls.webapp2.WSGIApplication(
             [(ImageHandlerTest.POST_IMAGE_URI, ImageHandler),
              (ImageHandlerTest.GET_IMAGE_URI, ImageHandler),
+             (ImageHandlerTest.USER_URI, UserHandler)
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
@@ -91,6 +94,34 @@ class ImageHandlerTest(TestBaseHandler):
 
     def test_store_image_smaller_then_maximum_size(self):
         """Test storage image with a size less than 800 in cloud storage."""
+        SIZE_IMAGE = 500
+        LIST_URI_IMAGES_USER = 'uploaded_images'
+
+        image = create_in_memory_image_file(SIZE_IMAGE)
+        image = image.read()
+
+        response = self.testapp.post(
+            ImageHandlerTest.POST_IMAGE_URI,
+            upload_files=[(
+                ImageHandlerTest.KEY_FORM_DATA,
+                ImageHandlerTest.EXPECTED_FILENAME,
+                image)
+            ])
+
+        data = response._app_iter[ImageHandlerTest.INDEX_DATA]
+        data = json.loads(data)
+        url_image = data[ImageHandlerTest.KEY_URL]
+        expcted_list = [url_image]
+
+        response = self.testapp.get(ImageHandlerTest.USER_URI)
+        current_user = response._app_iter[ImageHandlerTest.INDEX_DATA]
+        current_user = json.loads(current_user)
+        uploaded_images = current_user[LIST_URI_IMAGES_USER]
+
+        self.assertEqual(uploaded_images, expcted_list)
+
+    def test_add_image_in_user(self):
+        """Test storage image and add in list of uploaded images."""
         SIZE_IMAGE = 500
         EXPECTED_SIZE = 500
 

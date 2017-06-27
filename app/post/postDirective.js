@@ -4,7 +4,7 @@
 
     var app = angular.module("app");
 
-    app.controller("PostController", function PostController($mdDialog, PostService, AuthService, $mdToast) {
+    app.controller("PostController", function PostController($mdDialog, PostService, AuthService, $mdToast, $rootScope) {
         var postCtrl = this;
 
         postCtrl.post = {};
@@ -25,6 +25,7 @@
                     postCtrl.clearPost();
                     showToast('Postado com sucesso!');
                     $mdDialog.hide();
+                    $rootScope.$broadcast("reloadPosts", response.data);
                 }, function error(response) {
                     $mdDialog.hide();
                     showToast(response.data.msg);

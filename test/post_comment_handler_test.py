@@ -228,8 +228,8 @@ def initModels(cls):
     cls.mayza_post.put()
 
     # Comments
-    cls.comment = {'text': 'Frist comment. Using in Test'}
-    cls.other_comment = {'text': 'Second comment. Using in Test'}
+    cls.comment = {'text': 'Frist comment. Using in Test', 'institution_key': cls.certbio.key.urlsafe()}
+    cls.other_comment = {'text': 'Second comment. Using in Test', 'institution_key': cls.certbio.key.urlsafe()}
 
 
 def get_message_exception(cls, exception):

@@ -18,9 +18,9 @@
             return deferred.promise;
         };
 
-        service.createComment = function createComment(postKey, text) {
+        service.createComment = function createComment(postKey, text, institutionKey) {
             var deferred = $q.defer();
-            var data = {'text': text};
+            var data = {'text': text, 'institution_key': institutionKey};
             $http.post(POST_URI + postKey + '/comments', data).then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {

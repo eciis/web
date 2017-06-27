@@ -4,7 +4,8 @@
     var app = angular.module('app', [
         'ngMaterial',
         'ui.router',
-        'ngAnimate'
+        'ngAnimate',
+        'ngFileUpload'
     ]);
 
     app.config(function($mdIconProvider, $mdThemingProvider, $stateProvider, $urlMatcherFactoryProvider,

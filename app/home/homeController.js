@@ -4,7 +4,7 @@
     var app = angular.module("app");
 
     app.controller("HomeController", function HomeController(PostService, AuthService,
-            InstitutionService, CommentService, $interval, $mdToast, $mdDialog, $state) {
+            InstitutionService, CommentService, $interval, $mdToast, $mdDialog, $state, $rootScope) {
         var homeCtrl = this;
 
         homeCtrl.posts = [];
@@ -59,31 +59,6 @@
             });
         }
 
-        homeCtrl.follow = function follow(institution){
-            InstitutionService.follow(institution.key).then(function success(){
-                showToast("Seguindo "+institution.name);
-                homeCtrl.user.follow(institution.key);
-            });
-
-           /**
-           TODO: First version doesn't treat the case in which the user is already
-           the institution follower.
-           @author: Maiana Brito 01/06/2017
-           **/
-        };
-
-        homeCtrl.unfollow = function unfollow(institution){
-            if(homeCtrl.user.isMember(institution.key)){
-                showToast("Você não pode deixar de seguir " + institution.name);
-            }
-            else{
-                InstitutionService.unfollow(institution.key).then(function sucess(){
-                    showToast("Deixou de seguir "+institution.name);
-                    homeCtrl.user.unfollow(institution.key);
-                });
-            }
-        };
-
         var intervalPromise;
 
         var loadPosts = function loadPosts() {
@@ -97,6 +72,11 @@
 
         loadPosts();
         getInstitutions();
+
+        $rootScope.$on("reloadPosts", function(event, data) {
+            var post = new Post(data);
+            homeCtrl.posts.push(post);
+        });
 
         /**
         FIXME: The timeline update interrupts the user while he is commenting on a post

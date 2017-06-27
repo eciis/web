@@ -1,9 +1,9 @@
 'use strict';
 
-describe('Unit: Post model', function() {
+describe('Post model:', function() {
     beforeEach(module('app'));
 
-    var post, data;
+    var data, post;
 
     beforeEach(function() {
         data = {
@@ -11,20 +11,51 @@ describe('Unit: Post model', function() {
             text: 'text',
             institution: {}
         };
+    });
+
+    it('should be invalid because of empty title', function() {
+        data.title = "";
         post = new Post(data, {});
-    });
-
-    // it('post should be a simple object', function() {
-    //     expect(ctrl.post).toEqual({});
-    // });
-
-    it('post should be invalid', function() {
-        var post = new Post(ctrl.post, {});
+        spyOn(post, 'isValid').and.returnValue(false);
         expect(post.isValid()).toBeFalsy();
+        expect(post.isValid).toHaveBeenCalled();
     });
 
-    it('post should be valid', function() {
-        ctrl.post = new Post(newPost, {});
-        expect(ctrl.post.isValid()).toBeTruthy();
+    it('should be invalid because of undefined title', function() {
+        data.title = undefined;
+        post = new Post(data, {});
+        spyOn(post, 'isValid').and.returnValue(false);
+        expect(post.isValid()).toBeFalsy();
+        expect(post.isValid).toHaveBeenCalled();
+    });
+
+     it('should be invalid because of empty text', function() {
+        data.text = "";
+        post = new Post(data, {});
+        spyOn(post, 'isValid').and.returnValue(false);
+        expect(post.isValid()).toBeFalsy();
+        expect(post.isValid).toHaveBeenCalled();
+    });
+
+    it('should be invalid because of undefined text', function() {
+        data.text = undefined;
+        post = new Post(data, {});
+        spyOn(post, 'isValid').and.returnValue(false);
+        expect(post.isValid()).toBeFalsy();
+        expect(post.isValid).toHaveBeenCalled();
+    });
+
+    it('should be invalid because of undefined institution', function() {
+        post = new Post(data, undefined);
+        spyOn(post, 'isValid').and.returnValue(false);
+        expect(post.isValid()).toBeFalsy();
+        expect(post.isValid).toHaveBeenCalled();
+    });
+
+    it('should be valid', function() {
+        post = new Post(data, {});
+        spyOn(post, 'isValid').and.returnValue(true);
+        expect(post.isValid()).toBeTruthy();
+        expect(post.isValid).toHaveBeenCalled();
     });
 });

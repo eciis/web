@@ -5,7 +5,7 @@ module.exports = function(config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: '',
+    basePath: '.',
 
 
     // frameworks to use
@@ -15,24 +15,23 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-        'https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.js',
-        'https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.js',
-        'https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-aria.js',
-        'https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-messages.js',
-        'https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-mocks.js',
-        'https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.4/angular-material.js',
-        'https://unpkg.com/angular-ui-router/release/angular-ui-router.js',
-        'https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js',
-        'https://cdn.jsdelivr.net/lodash/4.17.4/lodash.js',
-        'app.js',
-        './*/*.js',
-        './*/*.spec.js'
+        'node_modules/angular/angular.js',
+        'node_modules/angular-animate/angular-animate.js',
+        'node_modules/angular-aria/angular-aria.js',
+        'node_modules/angular-messages/angular-messages.js',
+        'node_modules/angular-material/angular-material.js',
+        'node_modules/angular-ui-router/release/angular-ui-router.js',
+        'node_modules/crypto-js/crypto-js.js',
+        'node_modules/lodash/lodash.js',
+        'node_modules/angular-mocks/angular-mocks.js',
+        '../*.js',
+        '../*/*.js',
+        'specs/*.js'
     ],
 
 
     // list of files to exclude
     exclude: [
-        './node_modules/*'
     ],
 
 

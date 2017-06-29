@@ -1,7 +1,7 @@
 'use strict';
 
 (describe('Test InstitutionService', function () {
-        var httpBackend, $q, service, $http;
+        var httpBackend, service, $http;
         var INSTITUTIONS_URI = "/api/institutions";
         var raoni = {name: 'Raoni', key: 12345};
         var institutions = [{name: 'Splab',
@@ -11,9 +11,8 @@
 
         beforeEach(module('app'));
 
-        beforeEach(inject(function($httpBackend, _$q_, InstitutionService, _$http_) {
+        beforeEach(inject(function($httpBackend, InstitutionService, _$http_) {
             httpBackend = $httpBackend;
-            $q = _$q_;
             $http = _$http_;
             service = InstitutionService;
             httpBackend.when('GET', 'main/main.html').respond(200);

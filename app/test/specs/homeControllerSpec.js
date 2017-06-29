@@ -36,7 +36,7 @@
         httpBackend.when('GET', 'home/home.html').respond(200);
         httpBackend.when('GET', 'error/error.html').respond(200);
         homeCtrl = createCrtl();
-        httpBackend.flush();
+        httpBackend.flush();   
     }));
 
     afterEach(function() {
@@ -44,7 +44,7 @@
         httpBackend.verifyNoOutstandingRequest();
     });
 
-    it('Spy loadPosts in success case', function() {
+    it('Test loadPosts in success case', function() {
         spyOn(postService, 'get').and.returnValue(deffered.promise);
         deffered.resolve(posts);
         var ctrl = createCrtl();
@@ -53,7 +53,7 @@
         expect(postService.get).toHaveBeenCalled();
     });
 
-    it('Spy loadPosts in fail case', inject(function($interval) {
+    it('Test loadPosts in fail case and spy if $interval have been called', inject(function($interval) {
         spyOn(postService, 'get').and.returnValue(deffered.promise);
         spyOn($interval, 'cancel');
         deffered.reject({status: 400, data: {msg: 'Erro'}});
@@ -64,7 +64,7 @@
         expect($interval.cancel).toHaveBeenCalled();
     }));
 
-    it('Spy getInstitutions in success case', function() {
+    it('Test getInstitutions in success case', function() {
         spyOn(institutionService, 'getInstitutions').and.returnValue(deffered.promise);
         deffered.resolve(institutions);
         var ctrl = createCrtl();

@@ -17,7 +17,7 @@ describe('Test PostDirective', function() {
         mdToast = $mdToast;
         user = {
             name: 'name',
-            current_institution: {key: "abc"}
+            current_institution: {key: "institutuion_key"}
         };
         post = {
             title: 'title',
@@ -41,22 +41,19 @@ describe('Test PostDirective', function() {
         expect(postCtrl.post).toEqual({});
     });
 
-    it('post should be invalid', function() {
+    it('post should not be valid', function() {
         post.title = undefined;
         postCtrl.post = new Post(post, {});
-        spyOn(postCtrl, 'isPostValid').and.returnValue(false);
         expect(postCtrl.isPostValid()).toBeFalsy();
     });
 
     it('post should be valid', function() {
         postCtrl.post = new Post(post, {});
-        spyOn(postCtrl, 'isPostValid').and.returnValue(true);
         expect(postCtrl.isPostValid()).toBeTruthy();
     });
 
     it('should change the current post instance to an empty object', function() {
         postCtrl.post = new Post(post, {});
-        spyOn(postCtrl, 'clearPost').and.callThrough();
         postCtrl.clearPost();
         expect(postCtrl.post).toEqual({});
     });

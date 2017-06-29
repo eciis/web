@@ -18,7 +18,6 @@ describe('Test Post Model:', function() {
         post = new Post(data, {});
         spyOn(post, 'isValid').and.returnValue(false);
         expect(post.isValid()).toBeFalsy();
-        expect(post.isValid).toHaveBeenCalled();
     });
 
     it('should be invalid because of undefined title', function() {
@@ -26,7 +25,6 @@ describe('Test Post Model:', function() {
         post = new Post(data, {});
         spyOn(post, 'isValid').and.returnValue(false);
         expect(post.isValid()).toBeFalsy();
-        expect(post.isValid).toHaveBeenCalled();
     });
 
      it('should be invalid because of empty text', function() {
@@ -34,7 +32,6 @@ describe('Test Post Model:', function() {
         post = new Post(data, {});
         spyOn(post, 'isValid').and.returnValue(false);
         expect(post.isValid()).toBeFalsy();
-        expect(post.isValid).toHaveBeenCalled();
     });
 
     it('should be invalid because of undefined text', function() {
@@ -42,20 +39,17 @@ describe('Test Post Model:', function() {
         post = new Post(data, {});
         spyOn(post, 'isValid').and.returnValue(false);
         expect(post.isValid()).toBeFalsy();
-        expect(post.isValid).toHaveBeenCalled();
     });
 
     it('should be invalid because of undefined institution', function() {
         post = new Post(data, undefined);
         spyOn(post, 'isValid').and.returnValue(false);
         expect(post.isValid()).toBeFalsy();
-        expect(post.isValid).toHaveBeenCalled();
     });
 
     it('should be valid', function() {
         post = new Post(data, {});
         spyOn(post, 'isValid').and.returnValue(true);
         expect(post.isValid()).toBeTruthy();
-        expect(post.isValid).toHaveBeenCalled();
     });
 });

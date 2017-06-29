@@ -32,8 +32,11 @@
         httpBackend.when('GET', '/api/user').respond(user);
         httpBackend.when('GET', '/api/institutions').respond(institutions);
         httpBackend.when('GET', '/api/user/timeline').respond(posts);
+        httpBackend.when('GET', 'main/main.html').respond(200);
+        httpBackend.when('GET', 'home/home.html').respond(200);
+        httpBackend.when('GET', 'error/error.html').respond(200);
         homeCtrl = createCrtl();
-        httpBackend.flush();   
+        httpBackend.flush();
     }));
 
     afterEach(function() {
@@ -107,29 +110,5 @@
         expect(homeCtrl.instMenuExpanded).toBe(false);
         homeCtrl.expandInstMenu();
         expect(homeCtrl.instMenuExpanded).toBe(true);
-    });
-
-    it('Test follow method', function() {
-        spyOn(institutionService, 'follow').and.returnValue(deffered.promise);
-        spyOn(homeCtrl.user, 'follow');
-        deffered.resolve();
-        homeCtrl.follow(splab);
-        scope.$apply();
-        expect(institutionService.follow).toHaveBeenCalled();
-        expect(institutionService.follow).toHaveBeenCalledWith(splab.key);
-        expect(homeCtrl.user.follow).toHaveBeenCalled();
-        expect(homeCtrl.user.follow).toHaveBeenCalledWith(splab.key);
-    });
-
-    it('Test unfollow method', function() {
-        spyOn(homeCtrl.user, 'isMember');
-        spyOn(institutionService, 'unfollow').and.returnValue(deffered.promise);
-        deffered.resolve();
-        homeCtrl.unfollow(splab);
-        scope.$apply();
-        expect(homeCtrl.user.isMember).toHaveBeenCalled();
-        expect(homeCtrl.user.isMember).toHaveBeenCalledWith(splab.key);
-        expect(institutionService.unfollow).toHaveBeenCalled();
-        expect(institutionService.unfollow).toHaveBeenCalledWith(splab.key);
     });
 }));

@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Post model:', function() {
+describe('Test Post Model:', function() {
     beforeEach(module('app'));
 
     var data, post;

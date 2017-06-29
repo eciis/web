@@ -1,11 +1,12 @@
 'use strict';
 
-describe('Unit: postDirective', function() {
+describe('Test PostDirective', function() {
     beforeEach(module('app'));
 
-    var postCtrl, post, user, httpBackend, scope, deffered, mdDialog, rootScope, postService;
+    var postCtrl, post, user, httpBackend, scope, deffered, mdDialog, rootScope, postService, mdToast;
 
-    beforeEach(inject(function($controller, $httpBackend, $q, $mdDialog, PostService, AuthService, $mdToast, $rootScope) {
+    beforeEach(inject(function($controller, $httpBackend, $q, $mdDialog, 
+            PostService, AuthService, $mdToast, $rootScope) {
         postCtrl = $controller('PostController');
         httpBackend = $httpBackend;
         rootScope = $rootScope;
@@ -13,10 +14,11 @@ describe('Unit: postDirective', function() {
         deffered = $q.defer();
         mdDialog = $mdDialog;
         postService = PostService;
+        mdToast = $mdToast;
         user = {
             name: 'name',
             current_institution: {key: "abc"}
-        }
+        };
         post = {
             title: 'title',
             text: 'text',
@@ -44,14 +46,12 @@ describe('Unit: postDirective', function() {
         postCtrl.post = new Post(post, {});
         spyOn(postCtrl, 'isPostValid').and.returnValue(false);
         expect(postCtrl.isPostValid()).toBeFalsy();
-        expect(postCtrl.isPostValid).toHaveBeenCalled();
     });
 
     it('post should be valid', function() {
         postCtrl.post = new Post(post, {});
         spyOn(postCtrl, 'isPostValid').and.returnValue(true);
         expect(postCtrl.isPostValid()).toBeTruthy();
-        expect(postCtrl.isPostValid).toHaveBeenCalled();
     });
 
     it('should change the current post instance to an empty object', function() {
@@ -59,13 +59,12 @@ describe('Unit: postDirective', function() {
         spyOn(postCtrl, 'clearPost').and.callThrough();
         postCtrl.clearPost();
         expect(postCtrl.post).toEqual({});
-        expect(postCtrl.clearPost).toHaveBeenCalled();
     });
 
     it('should cancel dialog', function() {
-        spyOn(postCtrl, 'cancelDialog');
+        spyOn(mdDialog, 'hide');
         postCtrl.cancelDialog();
-        expect(postCtrl.cancelDialog).toHaveBeenCalled();
+        expect(mdDialog.hide).toHaveBeenCalled();
     });
 
     it('should create a post (successfull case)', function() {
@@ -95,7 +94,8 @@ describe('Unit: postDirective', function() {
 
     it('should not create a post (post invalid)', function() {
         postCtrl.post = {};
+        spyOn(postService, 'createPost');
         postCtrl.createPost();  
-        rootScope.$apply();
+        expect(postService.createPost).not.toHaveBeenCalled();
     });
 });

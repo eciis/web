@@ -1,12 +1,12 @@
 {
   "devDependencies": {
+    "@uirouter/angularjs": "^1.0.5",
     "angular": "^1.6.4",
     "angular-animate": "^1.6.4",
     "angular-aria": "^1.6.4",
     "angular-material": "^1.1.4",
     "angular-messages": "^1.6.4",
     "angular-mocks": "^1.6.4",
-    "angular-ui-router": "^1.0.3",
     "crypto-js": "^3.1.9-1",
     "jasmine": "^2.6.0",
     "karma": "^1.7.0",

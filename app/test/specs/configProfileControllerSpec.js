@@ -1,12 +1,7 @@
 'use strict';
 
-(describe('Test ConfigCProfileController', function() {
+(describe('Test ConfigProfileController', function() {
     var configCtrl, httpBackend, deffered, scope, userService, createCrtl;
-    var certbio = {
-        name: 'Certbio',
-        key: '123456789'
-    };
-
     var splab = {
         name: 'SPLAB',
         key: '987654321' 

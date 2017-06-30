@@ -1,9 +1,4 @@
 {
-  "name": "app",
-  "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
-  "dependencies": {},
   "devDependencies": {
     "angular": "^1.6.4",
     "angular-animate": "^1.6.4",
@@ -19,10 +14,5 @@
     "karma-jasmine": "^1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
     "lodash": "^4.17.4"
-  },
-  "scripts": {
-    "test": "karma start"
-  },
-  "author": "",
-  "license": "ISC"
+  }
 }

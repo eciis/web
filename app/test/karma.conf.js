@@ -19,7 +19,7 @@ module.exports = function (config) {
         'node_modules/angular-aria/angular-aria.js',
         'node_modules/angular-messages/angular-messages.js',
         'node_modules/angular-material/angular-material.js',
-        'node_modules/angular-ui-router/release/angular-ui-router.js',
+        'node_modules/@uirouter/angularjs/release/angular-ui-router.js',
         'node_modules/crypto-js/crypto-js.js',
         'node_modules/lodash/lodash.js',
         'node_modules/angular-mocks/angular-mocks.js',
@@ -43,7 +43,7 @@ module.exports = function (config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress', 'kjhtml'],
+    reporters: ['spec', 'kjhtml'],
 
 
     // web server port

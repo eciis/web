@@ -1,11 +1,18 @@
-language: python
+language: 
+  - python
+  - node_js
+
 python:
  - "2.7"
+
+node_js:
+ - "4.0.0"
 
 env:
   global:
   - API_CHECK=https://appengine.google.com/api/updatecheck
 before_script:
+- nvm install 4.0.0
 # Install package WebTest
 - pip install WebTest
 - pip install pillow
@@ -14,9 +21,18 @@ before_script:
 - SDK_URL=https://storage.googleapis.com/appengine-sdks/featured/google_appengine_$SDK_VERSION.zip
 - wget $SDK_URL -nv
 - unzip -q google_appengine_$SDK_VERSION.zip
+# Install dev-dependencies to frontEnd tests
+- cd app/test/
+- npm install
+- cd ../../
+# Define display to travis simulate a browser
+- export DISPLAY=:99.0
+- sh -e /etc/init.d/xvfb start
 
 # command to run tests
-script: python -m unittest discover -v -p "*test.py"
+script: 
+    - python -m unittest discover -v -p "*test.py"
+    - cd app/test && ./node_modules/.bin/karma start --browsers Firefox --single-run
 
 notifications:
     slack: e-ciis:5ttYSzVNz0z5XwYRaWBHExyW

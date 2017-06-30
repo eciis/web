@@ -88,7 +88,6 @@
         var ctrl = createCtrl();
         scope.$apply();
         httpBackend.flush();
-        expect(institutionService.getTimeline).toHaveBeenCalled();
         expect(institutionService.getTimeline).toHaveBeenCalledWith(splab.key);
     });
 
@@ -99,7 +98,6 @@
         var ctrl = createCtrl();
         scope.$apply();
         httpBackend.flush();
-        expect(institutionService.getInstitution).toHaveBeenCalled();
         expect(institutionService.getInstitution).toHaveBeenCalledWith(splab.key);
     });
 
@@ -111,9 +109,7 @@
         var ctrl = createCtrl();
         scope.$apply();
         httpBackend.flush();
-        expect(institutionService.getInstitution).toHaveBeenCalled();
         expect(institutionService.getInstitution).toHaveBeenCalledWith(splab.key);
-        expect(state.go).toHaveBeenCalled();
         expect(state.go).toHaveBeenCalledWith('app.home');
     });
 
@@ -124,7 +120,6 @@
         var ctrl = createCtrl();
         scope.$apply();
         httpBackend.flush();
-        expect(institutionService.getMembers).toHaveBeenCalled();
         expect(institutionService.getMembers).toHaveBeenCalledWith(splab.key);
     });
 
@@ -135,7 +130,6 @@
         var ctrl = createCtrl();
         scope.$apply();
         httpBackend.flush();
-        expect(institutionService.getFollowers).toHaveBeenCalled();
         expect(institutionService.getFollowers).toHaveBeenCalledWith(splab.key);
     })
 
@@ -146,9 +140,7 @@
         institutionCtrl.follow();
         scope.$apply();
         httpBackend.flush();
-        expect(institutionService.follow).toHaveBeenCalled();
         expect(institutionService.follow).toHaveBeenCalledWith(splab.key);
-        expect(institutionCtrl.user.follow).toHaveBeenCalled();
         expect(institutionCtrl.user.follow).toHaveBeenCalledWith(splab.key);
     });
 
@@ -159,9 +151,7 @@
         institutionCtrl.unfollow();
         scope.$apply();
         httpBackend.flush();
-        expect(institutionCtrl.user.isMember).toHaveBeenCalled();
         expect(institutionCtrl.user.isMember).toHaveBeenCalledWith(splab.key);
-        expect(institutionService.unfollow).toHaveBeenCalled();
         expect(institutionService.unfollow).toHaveBeenCalledWith(splab.key);
     });
 }));

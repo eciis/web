@@ -19,14 +19,17 @@
         });
 
         configProfileCtrl.finish = function finish() {
+            var promise = null;
             if (configProfileCtrl.newUser.isValid()) {
-                UserService.save(configProfileCtrl.user, configProfileCtrl.newUser).then(function success(data) {
+                promise = UserService.save(configProfileCtrl.user, configProfileCtrl.newUser);
+                promise.then(function success(data) {
                     configProfileCtrl.user = new User(data);
                     $state.go("app.home");
                 });
             } else {
                 showToast("Campos obrigatórios não preenchidos corretamente.");
             }
+            return promise;
         };
 
         /**
@@ -49,13 +52,14 @@
         }
 
         function showToast(msg) {
-            $mdToast.show(
-                $mdToast.simple()
-                    .textContent(msg)
+            var simple = $mdToast.simple()
+            simple.textContent(msg)
                     .action('FECHAR')
                     .highlightAction(true)
                     .hideDelay(5000)
-                    .position('bottom right')
+                    .position('bottom right');
+            $mdToast.show(
+                simple
             );
         }
     });

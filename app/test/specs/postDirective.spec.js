@@ -3,8 +3,12 @@
 describe('Test PostDirective', function() {
     beforeEach(module('app'));
 
-    var postCtrl, post, user, httpBackend, scope, deffered, mdDialog, rootScope, postService, mdToast;
-
+    var postCtrl, post, httpBackend, scope, deffered, mdDialog, rootScope, postService, mdToast;
+    var user = {
+        name: 'name',
+        current_institution: {key: "institutuion_key"}
+    };
+   
     beforeEach(inject(function($controller, $httpBackend, $q, $mdDialog, 
             PostService, AuthService, $mdToast, $rootScope) {
         postCtrl = $controller('PostController');
@@ -15,16 +19,12 @@ describe('Test PostDirective', function() {
         mdDialog = $mdDialog;
         postService = PostService;
         mdToast = $mdToast;
-        user = {
-            name: 'name',
-            current_institution: {key: "institutuion_key"}
-        };
+        postCtrl.user = user;
         post = {
             title: 'title',
             text: 'text',
             institution: {}
         };
-        postCtrl.user = user;
         httpBackend.when('GET', '/api/user').respond(user);
         httpBackend.when('POST', '/api/posts').respond(post);
         httpBackend.when('GET', 'main/main.html').respond(200);

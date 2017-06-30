@@ -1,4 +1,6 @@
-language: node_js
+language: 
+  - python
+  - node_js
 python:
  - "2.7"
 

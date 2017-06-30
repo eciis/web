@@ -1,6 +1,7 @@
 language: 
   - python
   - node_js
+
 python:
  - "2.7"
 
@@ -11,6 +12,7 @@ env:
   global:
   - API_CHECK=https://appengine.google.com/api/updatecheck
 before_script:
+- nvm install 4.0.0
 # Install package WebTest
 - pip install WebTest
 - pip install pillow

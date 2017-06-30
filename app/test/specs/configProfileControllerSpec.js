@@ -31,7 +31,7 @@
         createCrtl = function() {
             return $controller('ConfigProfileController', {scope: scope});
         };
-        httpBackend.when('GET', '/api/user').respond(user);
+        httpBackend.expect('GET', '/api/user').respond(user);
         configCtrl = createCrtl();
         httpBackend.flush();   
     }));
@@ -54,7 +54,7 @@
         configCtrl.newUser = new User(userInvalid);
         configCtrl.finish();
 
-        expect($mdToast.show).toHaveBeenCalled();   
+        expect($mdToast.show).toHaveBeenCalled(); 
     }));
 
     it('Spy save user in success case', function() {
@@ -70,7 +70,7 @@
         expect(configCtrl.user.email).toEqual(user.email);
         expect(configCtrl.user.cpf).toEqual(user.cpf);
 
-        httpBackend.when('PATCH', '/api/user').respond(newUser);
+        httpBackend.expect('PATCH', '/api/user').respond(newUser);
         configCtrl.finish();
         httpBackend.flush();
 
@@ -82,7 +82,7 @@
     it('Test state.go in success case', inject(function($state) {
         spyOn($state, 'go');
 
-        httpBackend.when('PATCH', '/api/user').respond(newUser);
+        httpBackend.expect('PATCH', '/api/user').respond(newUser);
         configCtrl.finish();
         httpBackend.flush();
 

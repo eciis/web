@@ -1,7 +1,7 @@
 'use strict';
 
 (describe('Test ConfigProfileController', function() {
-    var configCtrl, httpBackend, deffered, scope, userService, createCrtl, state;
+    var configCtrl, httpBackend, deffered, scope, userService, createCrtl, state, mdToast;
     var splab = {
         name: 'SPLAB',
         key: '987654321' 
@@ -23,13 +23,14 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, UserService) {
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, $mdToast, UserService) {
         httpBackend = $httpBackend;
         httpBackend.expect('GET', '/api/user').respond(user);
         httpBackend.expect('GET', 'main/main.html').respond(200);
         httpBackend.expect('GET', 'home/home.html').respond(200);
         scope = $rootScope.$new();
         state = $state;
+        mdToast = $mdToast;
         deffered = $q.defer();
         userService = UserService;
         createCrtl = function() {
@@ -48,8 +49,8 @@
         httpBackend.verifyNoOutstandingRequest();
     });
 
-    it("User isn't valid", inject(function($mdToast){
-        spyOn($mdToast, 'show');
+    it("User isn't valid", function(){
+        spyOn(mdToast, 'show');
 
         var userInvalid = {
             name: 'Maiana Brito',
@@ -60,21 +61,20 @@
         configCtrl.newUser = new User(userInvalid);
         expect(configCtrl.newUser.isValid()).toEqual(false);
 
-        configCtrl.finish();
-        expect($mdToast.show).toHaveBeenCalled(); 
-    }));
+        configCtrl.finish().should.be.rejected;
 
-    it('Spy save user in success case', function() {
-        spyOn(userService, 'save').and.returnValue(deffered.promise);
-        deffered.resolve();
-        configCtrl.finish();
-        expect(userService.save).toHaveBeenCalled();
+        expect(mdToast.show).toHaveBeenCalled(); 
     });
 
-    it('User of system has changed', inject(function() {
+    it('User of system has changed', function(done) {
         spyOn(state, 'go');
-        spyOn(userService, 'save').and.returnValue(deffered.promise);
-        deffered.resolve(newUser);
+        spyOn(userService, 'save').and.callFake(function() {
+            return {
+                then: function(callback) {
+                    return callback(newUser);
+                }
+            };
+        });
 
         expect(configCtrl.user.name).toEqual(user.name);
         expect(configCtrl.user.email).toEqual(user.email);
@@ -82,7 +82,7 @@
 
         var promise = configCtrl.finish();
 
-        promise.then(function() {
+        promise.should.be.fulfilled.then(function() {
             expect(configCtrl.user.name).toEqual(newUser.name);
             expect(configCtrl.user.email).toEqual(newUser.email);
             expect(configCtrl.user.cpf).toEqual(newUser.cpf);
@@ -90,6 +90,9 @@
             expect(state.go).toHaveBeenCalled();
             expect(state.go).toHaveBeenCalledWith('app.home');
             expect(userService.save).toHaveBeenCalled();
-        });        
-    }));
+        });
+
+        // FIXME: done() should be inside promise...then
+        done();
+    });
 }));

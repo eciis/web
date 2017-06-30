@@ -4,7 +4,7 @@
     var app = angular.module("app");
     
     app.controller("ConfigProfileController", function ConfigProfileController($state, InstitutionService, 
-            AuthService, UserService, $rootScope, $mdToast) {
+            AuthService, UserService, $rootScope, $mdToast, $q) {
         var configProfileCtrl = this;
 
         configProfileCtrl.newUser = {};
@@ -19,17 +19,18 @@
         });
 
         configProfileCtrl.finish = function finish() {
-            var promise = null;
+            var deffered = $q.defer();
             if (configProfileCtrl.newUser.isValid()) {
-                promise = UserService.save(configProfileCtrl.user, configProfileCtrl.newUser);
-                promise.then(function success(data) {
+                UserService.save(configProfileCtrl.user, configProfileCtrl.newUser).then(function success(data) {
                     configProfileCtrl.user = new User(data);
                     $state.go("app.home");
+                    deffered.resolve();
                 });
             } else {
                 showToast("Campos obrigatórios não preenchidos corretamente.");
+                deffered.reject();
             }
-            return promise;
+            return deffered.promise;
         };
 
         /**

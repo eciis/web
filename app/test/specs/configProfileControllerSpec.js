@@ -46,12 +46,9 @@
         httpBackend.verifyNoOutstandingRequest();
     });
 
-    it('User is valid', function() {
-        expect(configCtrl.user.isValid()).toEqual(true);
-        expect(configCtrl.newUser.isValid()).toEqual(true);
-    });
 
-    it("User isn't valid", function() {
+    it("User isn't valid", inject(function($mdToast){
+        spyOn($mdToast, 'show');
 
         var userInvalid = {
             name: 'Maiana Brito',
@@ -59,10 +56,11 @@
             email: 'maiana.brito@ccc.ufcg.edu.br',
             institutions: [splab]
         };
-
         configCtrl.newUser = new User(userInvalid);
-        expect(configCtrl.newUser.isValid()).toEqual(false);
-    });
+        configCtrl.finish();
+
+        expect($mdToast.show).toHaveBeenCalled();   
+    }));
 
     it('Spy save user in success case', function() {
         spyOn(userService, 'save').and.returnValue(deffered.promise);
@@ -85,5 +83,16 @@
         expect(configCtrl.user.email).toEqual(newUser.email);
         expect(configCtrl.user.cpf).toEqual(newUser.cpf);
     });
+
+    it('Test state.go in success case', inject(function($state) {
+        spyOn($state, 'go');
+
+        httpBackend.when('PATCH', '/api/user').respond(newUser);
+        configCtrl.finish();
+        httpBackend.flush();
+
+        expect($state.go).toHaveBeenCalled();
+        expect($state.go).toHaveBeenCalledWith('app.home');
+    }));
 
 }));

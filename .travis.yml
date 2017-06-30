@@ -18,7 +18,9 @@ before_script:
 - wget $SDK_URL -nv
 - unzip -q google_appengine_$SDK_VERSION.zip
 # Install dev-dependencies to frontEnd tests
-- cd app/test/ && npm install && cd ../../
+- cd app/test/
+- npm install
+- cd ../../
 # Define display to travis simulate a browser
 - export DISPLAY=:99.0
 - sh -e /etc/init.d/xvfb start

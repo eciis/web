@@ -22,6 +22,8 @@ describe('Test CommentService', function() {
     afterEach(function() {
         answer = undefined;
         error = undefined;
+        httpBackend.verifyNoOutstandingExpectation();
+        httpBackend.verifyNoOutstandingRequest();
     });
 
     describe('Test getComments', function() { 

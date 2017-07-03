@@ -113,7 +113,7 @@
         it('Test save in fail case', function() {
             spyOn($http, 'patch').and.callThrough();
             httpBackend.expect('PATCH', POSTS_URI + '/' + posts[0].key)
-            .respond(400, {status: 400, msg: "Operation invalid"});
+                                    .respond(400, {status: 400, msg: "Operation invalid"});
             var newPost = {title: 'test', institution: institutions[0].key};
             var result;
             var patch = jsonpatch.compare(posts[0], newPost);

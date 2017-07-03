@@ -37,61 +37,58 @@ describe('Test PostDirective', function() {
         httpBackend.verifyNoOutstandingRequest();
     });
 
-    it('post should not to have properties', function() {
-        expect(postCtrl.post).toEqual({});
+    describe('Test isPostValid', function() {
+        it('post should not to have properties', function() {
+            expect(postCtrl.post).toEqual({});
+        });
+
+        it('post should not be valid', function() {
+            post.title = undefined;
+            postCtrl.post = new Post(post, {});
+            expect(postCtrl.isPostValid()).toBeFalsy();
+        });
+
+        it('post should be valid', function() {
+            postCtrl.post = new Post(post, {});
+            expect(postCtrl.isPostValid()).toBeTruthy();
+        });
+    });    
+
+    describe('Test clearPost', function() {
+        it('should change the current post instance to an empty object', function() {
+            postCtrl.post = new Post(post, {});
+            postCtrl.clearPost();
+            expect(postCtrl.post).toEqual({});
+        });
     });
-
-    it('post should not be valid', function() {
-        post.title = undefined;
-        postCtrl.post = new Post(post, {});
-        expect(postCtrl.isPostValid()).toBeFalsy();
-    });
-
-    it('post should be valid', function() {
-        postCtrl.post = new Post(post, {});
-        expect(postCtrl.isPostValid()).toBeTruthy();
-    });
-
-    it('should change the current post instance to an empty object', function() {
-        postCtrl.post = new Post(post, {});
-        postCtrl.clearPost();
-        expect(postCtrl.post).toEqual({});
-    });
-
-    it('should cancel dialog', function() {
-        spyOn(mdDialog, 'hide');
-        postCtrl.cancelDialog();
-        expect(mdDialog.hide).toHaveBeenCalled();
-    });
-
-
-    describe('Test createPost', function() {
-
-        fit('should create a post (successfull case)', function() {
-            httpBackend.expect('POST', '/api/posts', newPost).respond(newPost);
-            spyOn(postService, 'createPost').and.returnValue(deffered.promise);
-            spyOn(postCtrl, 'clearPost').and.callThrough();
+    
+    describe('Test cancelDialog', function() {
+        it('should cancel dialog', function() {
             spyOn(mdDialog, 'hide');
-
+            postCtrl.cancelDialog();
+            expect(mdDialog.hide).toHaveBeenCalled();
+        });
+    });
+    
+    describe('Test createPost', function() {
+        it('should create a post (successfull case)', function() {
+            spyOn(postService, 'createPost').and.returnValue(deffered.promise);
+            spyOn(postCtrl, 'clearPost');
+            spyOn(mdDialog, 'hide');
             postCtrl.post = post;
             var newPost = new Post(postCtrl.post, postCtrl.user.current_institution.key);
             deffered.resolve(newPost);
             postCtrl.createPost();  
             scope.$apply();
-            // httpBackend.flush();
-            
             expect(postService.createPost).toHaveBeenCalledWith(newPost);
             expect(postCtrl.clearPost).toHaveBeenCalled();
             expect(mdDialog.hide).toHaveBeenCalled();
         });
 
         it('should occur an error when creating a post (Fail case)', function() {
-            // postCtrl.post = post;
-            // var newPost = new Post(postCtrl.post, postCtrl.user.current_institution.key);
-            // httpBackend.expectPOST('/api/posts', newPost).respond(newPost);
-            postCtrl.post = post;
             spyOn(postService, 'createPost').and.returnValue(deffered.promise);
             spyOn(mdDialog, 'hide');
+            postCtrl.post = post;
             deffered.reject({status: 400, data: {msg: 'Erro'}});
             postCtrl.createPost();
             rootScope.$apply();
@@ -100,8 +97,8 @@ describe('Test PostDirective', function() {
         });
 
         it('should not create a post (post invalid)', function() {
-            postCtrl.post = {};
             spyOn(postService, 'createPost');
+            postCtrl.post = {};
             postCtrl.createPost();  
             expect(postService.createPost).not.toHaveBeenCalled();
         });

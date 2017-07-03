@@ -19,7 +19,6 @@
         };
 
         service.createPost = function createPost(post) {
-            console.log('service');
             var deferred = $q.defer();
             $http.post(POSTS_URI, post).then(function success(response) {
                 deferred.resolve(response);

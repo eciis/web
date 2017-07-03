@@ -22,7 +22,6 @@
             var post = new Post(postCtrl.post, postCtrl.user.current_institution.key);
             if (post.isValid()) {
                 PostService.createPost(post).then(function success(response) {
-                    console.log('postCtrl');
                     postCtrl.clearPost();
                     showToast('Postado com sucesso!');
                     $mdDialog.hide();

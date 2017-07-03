@@ -1,7 +1,7 @@
 'use strict';
 
 describe('Test CommentService', function() {
-    var http, httpBackend, deferred, scope, commentService, comments, comment, resp, error;
+    var http, httpBackend, deferred, scope, commentService, comments, comment, answer, error;
     var postCommentsUri = '/api/posts/post-key/comments';
     comment = {text: 'text', post_key: 'post-key', id: 'comment-id'};
 
@@ -20,7 +20,7 @@ describe('Test CommentService', function() {
     }));
 
     afterEach(function() {
-        resp = undefined;
+        answer = undefined;
         error = undefined;
     });
 
@@ -28,19 +28,20 @@ describe('Test CommentService', function() {
         beforeEach(function() {
             httpBackend.expectGET(postCommentsUri).respond(comments);        
             spyOn(http, 'get').and.returnValue(deferred.promise);
-            commentService.getComments(postCommentsUri)
-            .then(function success(response) {
-                resp = response;
-            }, function err(response) {
-                error = response;
-            });
+            commentService.getComments(postCommentsUri).then(
+                function success(response) {
+                    answer = response;
+                }, function err(response) {
+                    error = response;
+                }
+            );
         });
 
         it('Success case', function() {
             deferred.resolve(comments);
             scope.$apply();
             expect(http.get).toHaveBeenCalledWith(postCommentsUri);
-            expect(resp).toEqual(comments);
+            expect(answer).toEqual(comments);
             expect(error).toBeUndefined();
         });
 
@@ -48,12 +49,12 @@ describe('Test CommentService', function() {
             deferred.reject({status: 400, data: {msg: 'Erro'}});
             scope.$apply();
             expect(http.get).toHaveBeenCalledWith(postCommentsUri);
-            expect(resp).toBeUndefined();
+            expect(answer).toBeUndefined();
             expect(error.status).toEqual(400);
         });
     });
 
-    describe('Test creatComment', function() {
+    describe('Test createComment', function() {
         var text = 'new_text';
         var institutionKey = 'institution-Key';
         var postKey = 'post-key';
@@ -63,19 +64,20 @@ describe('Test CommentService', function() {
         beforeEach(function() {
             httpBackend.expectPOST(postCommentsUri, data).respond(newComment);
             spyOn(http, 'post').and.returnValue(deferred.promise);
-            commentService.createComment(postKey, text, institutionKey)
-            .then(function success(response) {
-                resp = response;
-            }, function err(response) {
-                error = response;
-            });
+            commentService.createComment(postKey, text, institutionKey).then(
+                function success(response) {
+                    answer = response;
+                }, function err(response) {
+                    error = response;
+                }
+            );
         });
 
         it('Sucess case', function() {
             deferred.resolve(newComment);
             scope.$apply();
             expect(http.post).toHaveBeenCalledWith(postCommentsUri, data);
-            expect(resp).toEqual(newComment);
+            expect(answer).toEqual(newComment);
             expect(error).toBeUndefined();
         });
 
@@ -83,7 +85,7 @@ describe('Test CommentService', function() {
             deferred.reject({status: 400, data: {msg: 'Erro'}});
             scope.$apply();
             expect(http.post).toHaveBeenCalledWith(postCommentsUri, data);
-            expect(resp).toBeUndefined();
+            expect(answer).toBeUndefined();
             expect(error.status).toEqual(400);
         });
     });
@@ -93,19 +95,20 @@ describe('Test CommentService', function() {
         beforeEach(function() {
             httpBackend.expectDELETE(deleteCommentUri).respond(comment);
             spyOn(http, 'delete').and.returnValue(deferred.promise);
-            commentService.deleteComment('post-key', 'comment-id')
-            .then(function success(response) {
-                resp = response;
-            }, function err(response) {
-                error = response;
-            });
+            commentService.deleteComment('post-key', 'comment-id').then(
+                function success(response) {
+                    answer = response;
+                }, function err(response) {
+                    error = response;
+                }
+            );
         });
 
         it('Success case', function() {
             deferred.resolve(comment);
             scope.$apply();
             expect(http.delete).toHaveBeenCalledWith(deleteCommentUri);
-            expect(resp).toEqual(comment);
+            expect(answer).toEqual(comment);
             expect(error).toBeUndefined();
         });
 
@@ -113,7 +116,7 @@ describe('Test CommentService', function() {
             deferred.reject({status: 400, data: {msg: 'Erro'}});
             scope.$apply();
             expect(http.delete).toHaveBeenCalledWith(deleteCommentUri);
-            expect(resp).toBeUndefined();
+            expect(answer).toBeUndefined();
             expect(error.status).toEqual(400);
         });
     });

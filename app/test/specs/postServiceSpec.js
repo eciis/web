@@ -14,29 +14,19 @@
         user.follows = [institutions[0], institutions[1]];
         user.institutions = [institutions[0]];
 
-        var mainPostTest = {title: 'teste', text: 'post de teste principal', institution: institutions[0].key};
+        var posts = [
+            {title: 'teste', text: 'post de teste principal', institution: institutions[0].key},
+            {title: 'teste2', text: 'post de teste secundário', institution: institutions[0].key},
+            {title: 'teste3', text: 'post de teste auxiliar', institution: institutions[1].key}
+        ];
 
-        var secondaryPostTest = {title: 'teste2', text: 'post de teste secundário', institution: institutions[0].key};
+        institutions[0].posts = [posts[0], posts[1]];
 
-        var helperPostTest = {title: 'teste3', text: 'post de teste auxiliar', institution: institutions[1].key};
-
-        institutions[0].posts = [mainPostTest, secondaryPostTest];
-
-        institutions[1].posts= [helperPostTest];
+        institutions[1].posts= [posts[2]];
 
         var like = {author: user.key, id: '012320'};
 
-        mainPostTest.likes = [like];
-
-        function getPosts(){
-            var posts = [];
-            _.forEach(user.follows, function(institution) {
-                _.forEach(institution.posts, function(post) {
-                    posts.push(post);
-                });
-            });
-            return posts;
-        }
+        posts[0].likes = [like];
 
         beforeEach(module('app'));
 
@@ -51,7 +41,6 @@
 
         it('Test get in success case', function() {
             spyOn($http, 'get').and.callThrough();
-            var posts = getPosts();
             httpBackend.expect('GET', "/api/user/timeline").respond(posts);
             var result;
             service.get().then(function(data){
@@ -59,50 +48,50 @@
             });
             httpBackend.flush();
             expect($http.get).toHaveBeenCalled();
-            expect(result.data).toEqual([mainPostTest, secondaryPostTest, helperPostTest]);
+            expect(result.data).toEqual(posts);
         });
 
         it('Test createPost in success case', function() {
             spyOn($http, 'post').and.callThrough();
-            httpBackend.expect('POST', POSTS_URI).respond(mainPostTest);
+            httpBackend.expect('POST', POSTS_URI).respond(posts[0]);
             var result;
-            service.createPost(mainPostTest).then(function(data){
+            service.createPost(posts[0]).then(function(data){
                 result = data;
             });
             httpBackend.flush();
-            expect($http.post).toHaveBeenCalledWith(POSTS_URI, mainPostTest);
-            expect(result.data).toEqual(mainPostTest);
+            expect($http.post).toHaveBeenCalledWith(POSTS_URI, posts[0]);
+            expect(result.data).toEqual(posts[0]);
         });
 
         it('Test likePost in success case', function() {
             spyOn($http, 'post').and.callThrough();
-            httpBackend.expect('POST', POSTS_URI + '/' + mainPostTest.key + '/likes').respond();
-            service.likePost(mainPostTest);
+            httpBackend.expect('POST', POSTS_URI + '/' + posts[0].key + '/likes').respond();
+            service.likePost(posts[0]);
             httpBackend.flush();
             expect($http.post).toHaveBeenCalled();
         });
 
         it('Test dislikePost in success case', function() {
             spyOn($http, 'delete').and.callThrough();
-            httpBackend.expect('DELETE', POSTS_URI + '/' + mainPostTest.key + '/likes').respond();
-            service.dislikePost(mainPostTest);
+            httpBackend.expect('DELETE', POSTS_URI + '/' + posts[0].key + '/likes').respond();
+            service.dislikePost(posts[0]);
             httpBackend.flush();
             expect($http.delete).toHaveBeenCalled();
         });
 
         it('Test deletePost in success case', function() {
             spyOn($http, 'delete').and.callThrough();
-            httpBackend.expect('DELETE', POSTS_URI + '/' + mainPostTest.key).respond();
-            service.deletePost(mainPostTest);
+            httpBackend.expect('DELETE', POSTS_URI + '/' + posts[0].key).respond();
+            service.deletePost(posts[0]);
             httpBackend.flush();
             expect($http.delete).toHaveBeenCalled();
         });
 
         it('Test getLikes in success case', function() {
             spyOn($http, 'get').and.callThrough();
-            httpBackend.expect('GET', POSTS_URI + '/' + mainPostTest.key + '/likes').respond(mainPostTest.likes);
+            httpBackend.expect('GET', POSTS_URI + '/' + posts[0].key + '/likes').respond(posts[0].likes);
             var result;
-            service.getLikes(POSTS_URI + '/' + mainPostTest.key + '/likes').then(function(data){
+            service.getLikes(POSTS_URI + '/' + posts[0].key + '/likes').then(function(data){
                 result = data;
             });
             httpBackend.flush();
@@ -112,27 +101,27 @@
 
         it('Test save in success case', function() {
             spyOn($http, 'patch').and.callThrough();
-            httpBackend.expect('PATCH', POSTS_URI + '/' + mainPostTest.key).respond();
+            httpBackend.expect('PATCH', POSTS_URI + '/' + posts[0].key).respond();
             var newPost = {title: 'test', text: 'post de teste', institution: institutions[0].key};
-            var patch = jsonpatch.compare(mainPostTest, newPost);
-            service.save(mainPostTest, newPost);
+            var patch = jsonpatch.compare(posts[0], newPost);
+            service.save(posts[0], newPost);
             httpBackend.flush();
             expect($http.patch).toHaveBeenCalled();
-            expect($http.patch).toHaveBeenCalledWith(POSTS_URI + '/' + mainPostTest.key, patch);
+            expect($http.patch).toHaveBeenCalledWith(POSTS_URI + '/' + posts[0].key, patch);
         });
 
         it('Test save in fail case', function() {
             spyOn($http, 'patch').and.callThrough();
-            httpBackend.expect('PATCH', POSTS_URI + '/' + mainPostTest.key).respond(400, {status: 400, msg: "Operation invalid"});
+            httpBackend.expect('PATCH', POSTS_URI + '/' + posts[0].key).respond(400, {status: 400, msg: "Operation invalid"});
             var newPost = {title: 'test', institution: institutions[0].key};
             var result;
-            var patch = jsonpatch.compare(mainPostTest, newPost);
-            service.save(mainPostTest, newPost).catch(function(data) {
+            var patch = jsonpatch.compare(posts[0], newPost);
+            service.save(posts[0], newPost).catch(function(data) {
                 result = data;
             });
             httpBackend.flush();
             expect($http.patch).toHaveBeenCalled();
-            expect($http.patch).toHaveBeenCalledWith(POSTS_URI + '/' + mainPostTest.key, patch);
+            expect($http.patch).toHaveBeenCalledWith(POSTS_URI + '/' + posts[0].key, patch);
             expect(result.status).toEqual(400);
             expect(result.data.msg).toEqual("Operation invalid");
         });

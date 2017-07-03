@@ -99,6 +99,14 @@
             // Allow loading from our assets domain.  Notice the difference between * and **.
             'https://www.gravatar.com/**'
         ]);
+
+        var firebaseConfig = {
+            apiKey: "AIzaSyCrrVy8FgG_jV-1h0EM4jpKbF3Vk5EjwCc",   // Your Firebase API key
+            authDomain: "eciis-splab.firebaseapp.com",           // Your Firebase Auth domain ("*.firebaseapp.com")
+            databaseURL: "https://eciis-splab.firebaseio.com",   // Your Firebase Database URL ("https://*.firebaseio.com")
+            storageBucket: "eciis-splab.appspot.com"             // Your Cloud Storage for Firebase bucket ("*.appspot.com")
+        };
+        firebase.initializeApp(firebaseConfig);
     });
 
     app.service('AuthInterceptor', function AuthInterceptor($q, $state) {

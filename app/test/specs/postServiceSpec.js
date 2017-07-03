@@ -6,8 +6,10 @@
 
         var user = {name: 'Raoni', key: 12345};
 
-        var institutions = [{name: 'Splab',key: '098745', followers: [user], members: [user]},
-        {name: 'e-CIS', key: '456879', followers: [user], members: [user]}];
+        var institutions = [
+            {name: 'Splab',key: '098745', followers: [user], members: [user]},
+            {name: 'e-CIS', key: '456879', followers: [user], members: [user]}
+        ];
 
         user.follows = [institutions[0], institutions[1]];
         user.institutions = [institutions[0]];

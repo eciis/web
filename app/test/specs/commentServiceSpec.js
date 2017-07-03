@@ -16,7 +16,7 @@ describe('Test CommentService', function() {
         comments = [comment];
         httpBackend.when('GET', 'main/main.html').respond(200);        
         httpBackend.when('GET', 'home/home.html').respond(200);
-        httpBackend.when('GET', 'error/error.html').respond(200);        
+        httpBackend.when('GET', 'error/error.html').respond(200); 
     }));
 
     afterEach(function() {
@@ -28,7 +28,6 @@ describe('Test CommentService', function() {
 
     describe('Test getComments', function() { 
         beforeEach(function() {
-            httpBackend.expectGET(postCommentsUri).respond(comments);        
             spyOn(http, 'get').and.returnValue(deferred.promise);
             commentService.getComments(postCommentsUri).then(
                 function success(response) {
@@ -64,7 +63,6 @@ describe('Test CommentService', function() {
         var newComment = {text: text, post_key: postKey, id: 'new-comment-id'};
 
         beforeEach(function() {
-            httpBackend.expectPOST(postCommentsUri, data).respond(newComment);
             spyOn(http, 'post').and.returnValue(deferred.promise);
             commentService.createComment(postKey, text, institutionKey).then(
                 function success(response) {
@@ -73,6 +71,10 @@ describe('Test CommentService', function() {
                     error = response;
                 }
             );
+        });
+
+        afterEach(function() {
+            httpBackend.flush();
         });
 
         it('Sucess case', function() {
@@ -95,7 +97,6 @@ describe('Test CommentService', function() {
     describe('Test deleteComment', function() {
         var deleteCommentUri = postCommentsUri + '/comment-id';
         beforeEach(function() {
-            httpBackend.expectDELETE(deleteCommentUri).respond(comment);
             spyOn(http, 'delete').and.returnValue(deferred.promise);
             commentService.deleteComment('post-key', 'comment-id').then(
                 function success(response) {
@@ -104,6 +105,10 @@ describe('Test CommentService', function() {
                     error = response;
                 }
             );
+        });
+
+        afterEach(function() {
+            httpBackend.flush();
         });
 
         it('Success case', function() {

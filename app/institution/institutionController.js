@@ -72,11 +72,13 @@
         }
 
         institutionCtrl.follow = function follow(){
-            InstitutionService.follow(currentInstitutionKey).then(function success(){
+            var promise = InstitutionService.follow(currentInstitutionKey);
+            promise.then(function success(){
                 showToast("Seguindo "+institutionCtrl.current_institution.name);
                 institutionCtrl.user.follow(currentInstitutionKey);
                 getFollowers();
             });
+            return promise;
         };
 
         institutionCtrl.unfollow = function unfollow(){
@@ -84,11 +86,13 @@
                 showToast("Você não pode deixar de seguir " + institutionCtrl.current_institution.name);
             }
             else{
-                InstitutionService.unfollow(currentInstitutionKey).then(function success(){
+                var promise = InstitutionService.unfollow(currentInstitutionKey);
+                promise.then(function success(){
                     showToast("Deixou de seguir "+institutionCtrl.current_institution.name);
                     institutionCtrl.user.unfollow(currentInstitutionKey);
                     getFollowers();
                 });
+                return promise;
             }
         };
     });

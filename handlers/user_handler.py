@@ -4,6 +4,7 @@
 import json
 
 from utils import Utils
+from models.invite import Invite
 from utils import login_required
 from utils import json_response
 
@@ -18,16 +19,29 @@ TODO: Move this method to User when utils.py is refactored.
 
 @author Andre L Abrantes - 20-06-2017
 """
+def getInvites(user_email):
+    invites = []
+
+    queryInvites = Invite.query(Invite.invitee == user_email)
+
+    invites = [Invite.make(invite)for invite in queryInvites]
+
+    return invites
+
 def makeUser(user, request):
     user_json = Utils.toJson(user, host=request.host)
     user_json['logout'] = 'http://%s/logout?redirect=%s' %\
         (request.host, request.path)
     user_json['institutions'] = []
+    user_json['invites'] = getInvites(user.email)
     for institution in user.institutions:
         user_json['institutions'].append(
             Utils.toJson(institution.get())
         )
     return user_json
+
+
+
 
 
 class UserHandler(BaseHandler):

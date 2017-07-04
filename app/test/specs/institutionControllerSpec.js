@@ -2,7 +2,7 @@
 
 (describe('Test InstitutionController', function() {
 
-    var institutionCtrl, httpBackend, scope, deffered, institutionService, createCtrl, state;
+    var institutionCtrl, httpBackend, scope, institutionService, createCtrl, state;
 
     var INSTITUTIONS_URI = "/api/institutions/";
 

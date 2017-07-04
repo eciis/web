@@ -53,14 +53,13 @@
         }
 
         function showToast(msg) {
-            var simple = $mdToast.simple()
-            simple.textContent(msg)
+            $mdToast.show(
+                $mdToast.simple()
+                    .textContent(msg)
                     .action('FECHAR')
                     .highlightAction(true)
                     .hideDelay(5000)
-                    .position('bottom right');
-            $mdToast.show(
-                simple
+                    .position('bottom right')
             );
         }
     });

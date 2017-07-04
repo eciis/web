@@ -34,8 +34,7 @@
         deffered = $q.defer();
         userService = UserService;
         createCrtl = function() {
-            return $controller('ConfigProfileController', 
-                {
+            return $controller('ConfigProfileController', {
                     scope: scope,
                     userService: userService
                 });
@@ -58,11 +57,11 @@
             email: 'maiana.brito@ccc.ufcg.edu.br',
             institutions: [splab]
         };
+
         configCtrl.newUser = new User(userInvalid);
         expect(configCtrl.newUser.isValid()).toEqual(false);
 
         configCtrl.finish().should.be.rejected;
-
         expect(mdToast.show).toHaveBeenCalled(); 
     });
 
@@ -90,9 +89,8 @@
             expect(state.go).toHaveBeenCalled();
             expect(state.go).toHaveBeenCalledWith('app.home');
             expect(userService.save).toHaveBeenCalled();
-        });
+        }).should.notify(done);
 
-        // FIXME: done() should be inside promise...then
-        done();
+        scope.$apply();
     });
 }));

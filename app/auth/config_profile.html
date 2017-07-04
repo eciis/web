@@ -4,7 +4,7 @@
       <md-toolbar md-colors="{background: 'green-800'}" layout="row">
         <h1 class="md-toolbar-tools">Dados do seu perfil</h1>
       </md-toolbar>
-      <md-content md-theme="docs-dark" layout-gt-sm="column">
+      <md-content layout-gt-sm="column">
         <div layout-gt-sm="column" layout-padding layout-align="center center">
           <img style="border-radius: 50%; " ng-src="{{ configProfileCtrl.newUser.photo_url }}" width="100px" height="100px" />
           <!-- <upload-image layout-gt-sm="column" model="configProfileCtrl.newUser">Mudar imagem do perfil</upload-image> -->
@@ -27,7 +27,7 @@
           </md-input-container>
         </div>
         <section layout="row" layout="column" layout-align="end center" layout-wrap>
-          <md-button ng-click="configProfileCtrl.finish()">Concluir</md-button>
+          <md-button ng-click="configProfileCtrl.finish()" md-colors="{background: 'green-900'}">Concluir</md-button>
         </section>
       </md-content>
     </md-card>

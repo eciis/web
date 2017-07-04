@@ -73,16 +73,13 @@ describe('Test CommentService', function() {
             );
         });
 
-        afterEach(function() {
-            httpBackend.flush();
-        });
-
         it('Sucess case', function() {
             deferred.resolve(newComment);
             scope.$apply();
             expect(http.post).toHaveBeenCalledWith(postCommentsUri, data);
             expect(answer).toEqual(newComment);
             expect(error).toBeUndefined();
+            httpBackend.flush();
         });
 
         it('Failure case', function() {
@@ -91,6 +88,7 @@ describe('Test CommentService', function() {
             expect(http.post).toHaveBeenCalledWith(postCommentsUri, data);
             expect(answer).toBeUndefined();
             expect(error.status).toEqual(400);
+            httpBackend.flush();
         });
     });
 
@@ -107,16 +105,13 @@ describe('Test CommentService', function() {
             );
         });
 
-        afterEach(function() {
-            httpBackend.flush();
-        });
-
         it('Success case', function() {
             deferred.resolve(comment);
             scope.$apply();
             expect(http.delete).toHaveBeenCalledWith(deleteCommentUri);
             expect(answer).toEqual(comment);
             expect(error).toBeUndefined();
+            httpBackend.flush();
         });
 
         it('Failure case', function() {
@@ -125,6 +120,7 @@ describe('Test CommentService', function() {
             expect(http.delete).toHaveBeenCalledWith(deleteCommentUri);
             expect(answer).toBeUndefined();
             expect(error.status).toEqual(400);
+            httpBackend.flush();
         });
     });
 });

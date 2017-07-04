@@ -86,7 +86,6 @@
             expect(configCtrl.user.email).toEqual(newUser.email);
             expect(configCtrl.user.cpf).toEqual(newUser.cpf);
 
-            expect(state.go).toHaveBeenCalled();
             expect(state.go).toHaveBeenCalledWith('app.home');
             expect(userService.save).toHaveBeenCalled();
         }).should.notify(done);

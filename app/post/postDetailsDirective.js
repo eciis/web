@@ -9,6 +9,10 @@
 
         postDetailsCtrl.comments = {};
 
+        postDetailsCtrl.likes = new Map();
+
+        postDetailsCtrl.actualPost = null;
+
         postDetailsCtrl.savingComment = false;
         postDetailsCtrl.savingLike = false;
 
@@ -77,6 +81,7 @@
                 addPostKeyToUser(post.key);
                 post.number_of_likes += 1;
                 postDetailsCtrl.savingLike = false;
+                postDetailsCtrl.getLikesAfterLikeAction(post);
             }, function error() {
                 $state.go('app.home');
                 postDetailsCtrl.savingLike = false;
@@ -89,6 +94,7 @@
                 removePostKeyFromUser(post.key);
                 post.number_of_likes -= 1;
                 postDetailsCtrl.savingLike = false;
+                postDetailsCtrl.getLikesAfterLikeAction(post);
             }, function error() {
                 $state.go('app.home');
                 postDetailsCtrl.savingLike = false;
@@ -149,30 +155,40 @@
         };
 
         postDetailsCtrl.getTextNumberLikes = function textNumberLikes(numberLikes) {
-             return numberLikes + ' ' + (numberLikes == 1? 'Curtida' : 'Curtidas');
+             return numberLikes;
+        };
+
+        postDetailsCtrl.showLikes = function showLikes(post){
+            return postDetailsCtrl.actualPost === post.key;
         };
 
         postDetailsCtrl.getLikes = function getLikes(post) {
             var likesUri = post.likes;
-
             postDetailsCtrl.current_post = post.key;
             PostService.getLikes(likesUri).then(function success(response) {
-                postDetailsCtrl.likes = response.data;
+                postDetailsCtrl.likes.set(post.key, response.data);
                 postDetailsCtrl.title = post.title;
-                $mdDialog.show({
-                    controller: 'DialogController',
-                    controllerAs: 'dialogCtrl',
-                    templateUrl: 'post/likes.html',
-                    clickOutsideToClose:true,
-                    locals: {
-                        likes : response.data,
-                        title: post.title
-                    }
-                });
-                post.number_of_likes = _.size(postDetailsCtrl.likes);
+                if(postDetailsCtrl.actualPost == post.key){
+                    postDetailsCtrl.actualPost = null;
+                }
+                else{
+                    postDetailsCtrl.actualPost = post.key;
+                }
+                post.number_of_likes = _.size(postDetailsCtrl.likes.get(post.key));
             }, function error(response) {
                 showToast(response.data.msg);
             });
+        };
+
+        postDetailsCtrl.getLikesAfterLikeAction = function getLikesAfterLikeAction(post) {
+            PostService.getLikes(post.likes).then(function success(response) {
+                    postDetailsCtrl.likes.set(post.key, response.data);
+                    if(_.size(postDetailsCtrl.likes.get(post.key)) === 0){
+                        postDetailsCtrl.actualPost = null;
+                    }
+                }, function error(response) {
+                    showToast(response.data.msg);
+                });
         };
 
         var addComment = function addComment(post, comment) {
@@ -227,8 +243,7 @@
         };
 
         postDetailsCtrl.textNumberComment = function textNumberComment(number) {
-            var comment = number == 1? 'Comentário' : 'Comentários';
-            return number + " " + comment;
+            return number;
         };
 
         function removeCommentFromPost(post, comment) {
@@ -249,12 +264,6 @@
         function isInstitutionAdmin(post) {
             return _.includes(_.map(postDetailsCtrl.user.institutions_admin, getKeyFromUrl), post.institution_key);
         }
-    });
-
-    app.controller('DialogController', function(likes, title) {
-        var dialogCtrl = this;
-        dialogCtrl.likes = likes;
-        dialogCtrl.postTitle = title;
     });
 
     app.directive("postDetails", function() {

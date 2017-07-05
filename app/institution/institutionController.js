@@ -83,20 +83,19 @@
         };
 
         institutionCtrl.unfollow = function unfollow(){
-            var deffered = $q.defer();
             if(institutionCtrl.user.isMember(institutionCtrl.current_institution.key)){
                 showToast("Você não pode deixar de seguir " + institutionCtrl.current_institution.name);
-                deffered.reject();
             }
             else{
+                var deffered = $q.defer();
                 InstitutionService.unfollow(currentInstitutionKey).then(function success(){
                     showToast("Deixou de seguir "+institutionCtrl.current_institution.name);
                     institutionCtrl.user.unfollow(currentInstitutionKey);
                     getFollowers();
                     deffered.resolve();
                 });
+                return deffered.promise;
             }
-            return deffered.promise;
         };
     });
 })();

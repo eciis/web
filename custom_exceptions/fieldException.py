@@ -1,6 +1,5 @@
 """Field Exception."""
 
-
 class FieldException(Exception):
     """Field Exception."""
 

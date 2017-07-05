@@ -1,6 +1,6 @@
 """Invite Model."""
 from google.appengine.ext import ndb
-from models.fieldException import FieldException
+from custom_exceptions.fieldException import FieldException
 
 
 class Invite(ndb.Model):

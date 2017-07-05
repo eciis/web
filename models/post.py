@@ -1,8 +1,7 @@
 
 """Post Model."""
 from google.appengine.ext import ndb
-
-from models.fieldException import FieldException
+from custom_exceptions.fieldException import FieldException
 
 from utils import Utils
 

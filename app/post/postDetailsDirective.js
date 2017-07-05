@@ -9,9 +9,9 @@
 
         postDetailsCtrl.comments = {};
 
-        postDetailsCtrl.likes = new Map();
+        postDetailsCtrl.likes = {};
 
-        postDetailsCtrl.actualPost = null;
+        postDetailsCtrl.currentPost = null;
 
         postDetailsCtrl.savingComment = false;
         postDetailsCtrl.savingLike = false;
@@ -81,7 +81,7 @@
                 addPostKeyToUser(post.key);
                 post.number_of_likes += 1;
                 postDetailsCtrl.savingLike = false;
-                postDetailsCtrl.getLikesAfterLikeAction(post);
+                postDetailsCtrl.getLikes(post);
             }, function error() {
                 $state.go('app.home');
                 postDetailsCtrl.savingLike = false;
@@ -94,7 +94,7 @@
                 removePostKeyFromUser(post.key);
                 post.number_of_likes -= 1;
                 postDetailsCtrl.savingLike = false;
-                postDetailsCtrl.getLikesAfterLikeAction(post);
+                postDetailsCtrl.getLikes(post);
             }, function error() {
                 $state.go('app.home');
                 postDetailsCtrl.savingLike = false;
@@ -154,41 +154,29 @@
             });
         };
 
-        postDetailsCtrl.getTextNumberLikes = function textNumberLikes(numberLikes) {
-             return numberLikes;
+        postDetailsCtrl.showLikes = function showLikes(post){
+            postDetailsCtrl.getLikes(post);
+            if(postDetailsCtrl.currentPost === post.key){
+                postDetailsCtrl.currentPost = null;
+            }
+            else {
+                postDetailsCtrl.currentPost = post.key;
+            }
         };
 
-        postDetailsCtrl.showLikes = function showLikes(post){
-            return postDetailsCtrl.actualPost === post.key;
+        postDetailsCtrl.checkCurrentPost = function checkCurrentPost(post){
+            return postDetailsCtrl.currentPost === post.key;
         };
 
         postDetailsCtrl.getLikes = function getLikes(post) {
             var likesUri = post.likes;
-            postDetailsCtrl.current_post = post.key;
             PostService.getLikes(likesUri).then(function success(response) {
-                postDetailsCtrl.likes.set(post.key, response.data);
+                postDetailsCtrl.likes[post.key]= response.data;
                 postDetailsCtrl.title = post.title;
-                if(postDetailsCtrl.actualPost == post.key){
-                    postDetailsCtrl.actualPost = null;
-                }
-                else{
-                    postDetailsCtrl.actualPost = post.key;
-                }
-                post.number_of_likes = _.size(postDetailsCtrl.likes.get(post.key));
+                post.number_of_likes = _.size(postDetailsCtrl.likes[post.key]);
             }, function error(response) {
                 showToast(response.data.msg);
             });
-        };
-
-        postDetailsCtrl.getLikesAfterLikeAction = function getLikesAfterLikeAction(post) {
-            PostService.getLikes(post.likes).then(function success(response) {
-                    postDetailsCtrl.likes.set(post.key, response.data);
-                    if(_.size(postDetailsCtrl.likes.get(post.key)) === 0){
-                        postDetailsCtrl.actualPost = null;
-                    }
-                }, function error(response) {
-                    showToast(response.data.msg);
-                });
         };
 
         var addComment = function addComment(post, comment) {
@@ -240,10 +228,6 @@
             }, function() {
                 showToast('Cancelado');
             });
-        };
-
-        postDetailsCtrl.textNumberComment = function textNumberComment(number) {
-            return number;
         };
 
         function removeCommentFromPost(post, comment) {

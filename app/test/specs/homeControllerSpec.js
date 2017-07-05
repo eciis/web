@@ -20,7 +20,6 @@
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, InstitutionService, PostService, $mdDialog, $state) {
-
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         mdDialog = $mdDialog;
@@ -41,7 +40,6 @@
     }));
 
     afterEach(function() {
-
         httpBackend.verifyNoOutstandingExpectation();
         httpBackend.verifyNoOutstandingRequest();
     });

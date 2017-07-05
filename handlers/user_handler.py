@@ -14,12 +14,9 @@ from handlers.base_handler import BaseHandler
 
 from google.appengine.ext import ndb
 
-"""
-TODO: Move this method to User when utils.py is refactored.
 
-@author Andre L Abrantes - 20-06-2017
-"""
 def getInvites(user_email):
+    """Query that return list of invites for this user."""
     invites = []
 
     queryInvites = Invite.query(Invite.invitee == user_email)
@@ -28,6 +25,11 @@ def getInvites(user_email):
 
     return invites
 
+"""
+TODO: Move this method to User when utils.py is refactored.
+
+@author Andre L Abrantes - 20-06-2017
+"""
 def makeUser(user, request):
     user_json = Utils.toJson(user, host=request.host)
     user_json['logout'] = 'http://%s/logout?redirect=%s' %\
@@ -39,9 +41,6 @@ def makeUser(user, request):
             Utils.toJson(institution.get())
         )
     return user_json
-
-
-
 
 
 class UserHandler(BaseHandler):

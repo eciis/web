@@ -50,7 +50,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         institution and not specify the suggestion institution name."""
         # TODO:
         # Fix the post method.
-        # The try except block prevents that InvalidInvite be raised
+        # The try except block prevents that FieldException be raised
         # @author Mayza Nunes 04-07-2017
         with self.assertRaises(Exception):
             self.testapp.post_json("/api/invites", {
@@ -69,6 +69,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
             'institution_key': self.certbio.key.urlsafe()})
         # Retrieve the entities
         invite = json.loads(invite._app_iter[0])
+
         key_invite = ndb.Key(urlsafe=invite['key'])
         invite_obj = key_invite.get()
 
@@ -84,7 +85,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         for user and not specify the institution key."""
         # TODO:
         # Fix the post method.
-        # The try except block prevents that InvalidInvite be raised
+        # The try except block prevents that FieldException be raised
         # @author Mayza Nunes 04-07-2017
         with self.assertRaises(Exception):
             self.testapp.post_json("/api/invites", {

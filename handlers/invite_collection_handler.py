@@ -11,7 +11,7 @@ from models.invite import Invite
 
 class InviteCollectionHandler(BaseHandler):
     """Get user's invite."""
-    
+
     @json_response
     @login_required
     def post(self, user):

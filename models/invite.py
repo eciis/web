@@ -1,13 +1,6 @@
 """Invite Model."""
 from google.appengine.ext import ndb
-
-
-class InvalidInvite(Exception):
-    """Field Exception."""
-
-    def __init__(self, msg=None):
-        """Class constructor."""
-        super(InvalidInvite, self).__init__(msg or "Invalid invited")
+from models.fieldException import FieldException
 
 
 class Invite(ndb.Model):
@@ -37,14 +30,14 @@ class Invite(ndb.Model):
     def checkIsInviteUserValid(data):
         """Check if invite for user is valid."""
         if data.get('institution_key') is None:
-            raise InvalidInvite(
+            raise FieldException(
                 "The invite for user have to specify the institution")
 
     @staticmethod
     def checkIsInviteInstitutionValid(data):
         """Check if invite for institution is valid."""
         if data.get('suggestion_institution_name') is None:
-            raise InvalidInvite(
+            raise FieldException(
                 "The invite for institution have to specify the suggestion institution name")
 
     @staticmethod
@@ -59,7 +52,8 @@ class Invite(ndb.Model):
             invite.institution_key = ndb.Key(urlsafe=data['institution_key'])
         else:
             Invite.checkIsInviteInstitutionValid(data)
-            invite.suggestion_institution_name = data['suggestion_institution_name']
+            invite.suggestion_institution_name = data[
+                'suggestion_institution_name']
         return invite
 
     @staticmethod

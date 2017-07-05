@@ -55,7 +55,7 @@
         });
    });
 
-   describe('User methods', function() {
+   describe('User functions', function() {
 
         describe('isFollower()', function() {
 

@@ -1,6 +1,6 @@
 'use strict';
 
-(describe('Controller - HomeController', function() {
+(describe('Test HomeController', function() {
 
     var homeCtrl, httpBackend, scope, createCtrl, mdDialog, state;
     var user = {
@@ -73,7 +73,7 @@
         });
     });
 
-    describe('HomeController methods', function() {
+    describe('HomeController functions', function() {
 
         describe('goToInstitution()', function() {
 

@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("InstitutionController", function InstitutionController($state, InstitutionService, AuthService, $interval, $mdToast) {
+    app.controller("InstitutionController", function InstitutionController($state, InstitutionService, AuthService, $interval, $mdToast, $q) {
         var institutionCtrl = this;
 
         institutionCtrl.current_institution = null;
@@ -72,28 +72,31 @@
         }
 
         institutionCtrl.follow = function follow(){
-            var promise = InstitutionService.follow(currentInstitutionKey);
-            promise.then(function success(){
+            var deffered = $q.defer();
+            InstitutionService.follow(currentInstitutionKey).then(function success(){
                 showToast("Seguindo "+institutionCtrl.current_institution.name);
                 institutionCtrl.user.follow(currentInstitutionKey);
                 getFollowers();
+                deffered.resolve();
             });
-            return promise;
+            return deffered.promise;
         };
 
         institutionCtrl.unfollow = function unfollow(){
+            var deffered = $q.defer();
             if(institutionCtrl.user.isMember(institutionCtrl.current_institution.key)){
                 showToast("Você não pode deixar de seguir " + institutionCtrl.current_institution.name);
+                deffered.reject();
             }
             else{
-                var promise = InstitutionService.unfollow(currentInstitutionKey);
-                promise.then(function success(){
+                InstitutionService.unfollow(currentInstitutionKey).then(function success(){
                     showToast("Deixou de seguir "+institutionCtrl.current_institution.name);
                     institutionCtrl.user.unfollow(currentInstitutionKey);
                     getFollowers();
+                    deffered.resolve();
                 });
-                return promise;
             }
+            return deffered.promise;
         };
     });
 })();

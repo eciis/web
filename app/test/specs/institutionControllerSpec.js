@@ -1,6 +1,6 @@
 'use strict';
 
-(describe('Test InstitutionController', function() {
+(describe('Controller - InstitutionController', function() {
 
     var institutionCtrl, httpBackend, scope, institutionService, createCtrl, state;
 
@@ -67,83 +67,133 @@
         httpBackend.verifyNoOutstandingRequest();
     });
 
-    describe('Verify properties before initialize InstitutionController', function() {
+    describe('InstitutionController properties', function() {
 
-        it('Verify user', function() {
+        it('should exist a user and his name is Tiago', function() {
             expect(institutionCtrl.user.name).toEqual(tiago.name);
         });
 
-        it('Verify posts', function() {
+        it('should exist posts', function() {
             expect(institutionCtrl.posts).toEqual(posts);
         });
 
-        it('Verify members', function() {
+        it('should exist members', function() {
             expect(institutionCtrl.members).toEqual([tiago]);
         });
 
-        it('Verify followers', function() {
+        it('should exist followers', function() {
             expect(institutionCtrl.followers).toEqual([raoni]);
         });
 
-        it('Verify currentInstitution', function() {
+        it('should exist currentInstitution', function() {
             expect(institutionCtrl.current_institution).toEqual(splab);
         });
     });
     
-    describe('Test InstitutionController methods', function() {
+    describe('InstitutionController methods', function() {
 
-        it('Test follow method', function(done) {
-            spyOn(institutionService, 'getFollowers').and.callFake(function() {
-                return {
-                    then: function(callback) {
-                        return callback([raoni, tiago]);
-                    }
-                };
+        var promise;
+        
+        describe('follow()', function() {
+
+            beforeEach(function() {
+
+                spyOn(institutionService, 'getFollowers').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            return callback([raoni, tiago]);
+                        }
+                    };
+                });
+                spyOn(institutionService, 'follow').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            return callback();
+                        }
+                    };
+                });
+                spyOn(institutionCtrl.user, 'follow');
+                promise = institutionCtrl.follow();
             });
-            spyOn(institutionService, 'follow').and.callFake(function() {
-                return {
-                    then: function(callback) {
-                        return callback();
-                    }
-                };
+
+            it('should call institutionService.follow() ', function(done) {
+                promise.then(function() {
+                    expect(institutionService.follow).toHaveBeenCalledWith(splab.key);
+                    done();
+                });
+                scope.$apply();
             });
-            spyOn(institutionCtrl.user, 'follow');
-            var promise = institutionCtrl.follow();
-            promise.then(function() {
-                expect(institutionService.follow).toHaveBeenCalledWith(splab.key);
-                expect(institutionService.getFollowers).toHaveBeenCalledWith(splab.key);
-                expect(institutionCtrl.user.follow).toHaveBeenCalledWith(splab.key);
-                done();
+
+            it('should call institutionService.getFollowers()', function(done) {
+                promise.then(function() {
+                    expect(institutionService.getFollowers).toHaveBeenCalledWith(splab.key);
+                    done();
+                });
+                scope.$apply();
             });
-            scope.$apply();
+
+            it('should call user.follow()', function(done) {
+                promise.then(function() {
+                    expect(institutionCtrl.user.follow).toHaveBeenCalledWith(splab.key);
+                    done();
+                });
+                scope.$apply();
+            });
         });
 
-        it('Test unfollow method', function(done) {
-            spyOn(institutionService, 'getFollowers').and.callFake(function() {
-                return {
-                    then: function(callback) {
-                        return callback([raoni]);
-                    }
-                };
+        describe('unfollow()', function() {
+
+            beforeEach(function() {
+                spyOn(institutionService, 'getFollowers').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            return callback([raoni]);
+                        }
+                    };
+                });
+                spyOn(institutionService, 'unfollow').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            return callback();
+                        }
+                    };
+                });
+                spyOn(institutionCtrl.user, 'isMember');
+                spyOn(institutionCtrl.user, 'unfollow');
+                promise = institutionCtrl.unfollow();
             });
-            spyOn(institutionService, 'unfollow').and.callFake(function() {
-                return {
-                    then: function(callback) {
-                        return callback();
-                    }
-                };
+
+            it('should call user.isMember()', function(done) {
+                promise.then(function() {
+                    expect(institutionCtrl.user.isMember).toHaveBeenCalledWith(splab.key);
+                    done();
+                });
+                scope.$apply();
             });
-            spyOn(institutionCtrl.user, 'isMember');
-            spyOn(institutionCtrl.user, 'unfollow');
-            var promise = institutionCtrl.unfollow();
-            promise.then(function() {
-                expect(institutionCtrl.user.isMember).toHaveBeenCalledWith(splab.key);
-                expect(institutionService.unfollow).toHaveBeenCalledWith(splab.key);
-                expect(institutionService.getFollowers).toHaveBeenCalledWith(splab.key);
-                expect(institutionCtrl.user.unfollow).toHaveBeenCalledWith(splab.key);
-                done();
+
+            it('should call institutionService.unfollow()', function(done) {
+                promise.then(function() {
+                    expect(institutionService.unfollow).toHaveBeenCalledWith(splab.key);
+                    done();
+                });
+                scope.$apply();
             });
-            scope.$apply();
+
+            it('should call institutionService.getFollowers()', function(done) {
+                promise.then(function() {
+                    expect(institutionService.getFollowers).toHaveBeenCalledWith(splab.key);
+                    done();
+                });
+                scope.$apply();
+            });
+
+            it('should call user.unfollow()', function(done) {
+                promise.then(function() {
+                    expect(institutionCtrl.user.unfollow).toHaveBeenCalledWith(splab.key);
+                    done();
+                });
+                scope.$apply();
+            });
         });
     });
 }));

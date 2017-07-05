@@ -21,4 +21,6 @@ class InviteCollectionHandler(BaseHandler):
         invite = Invite.create(data)
         invite.put()
 
+        Invite.sendInvite(invite)
+
         self.response.write(json.dumps(Invite.make(invite)))

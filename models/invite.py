@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
 """Invite Model."""
 from google.appengine.ext import ndb
+from google.appengine.api import mail
 from custom_exceptions.fieldException import FieldException
 
 
@@ -55,6 +57,38 @@ class Invite(ndb.Model):
             invite.suggestion_institution_name = data[
                 'suggestion_institution_name']
         return invite
+
+    @staticmethod
+    def sendInvite(invite):
+        if invite.type_of_invite == 'user':
+            Invite.sendInviteUser(invite)
+        Invite.sendInviteInstitution(invite)
+
+    @staticmethod
+    def sendInviteUser(invite):
+        mail.send_mail(sender="e-CIS <eciis@splab.ufcg.edu.br>",
+                   to="<%s>" % invite.invitee ,
+                   subject="Convite plataforma e-CIS",
+                   body="""Oi:
+
+        Para realizar o cadastro cria sua conta em:
+        http://eciis-splab.appspot.com a
+
+        Equipe e-CIS
+        """)
+
+    @staticmethod
+    def sendInviteInstitution(invite):
+        mail.send_mail(sender="e-CIS <eciis@splab.ufcg.edu.br>",
+                   to="<%s>" % invite.invitee,
+                   subject="Convite plataforma e-CIS",
+                   body="""
+        Sua Instituicao %s foi convidada a se cadastrar na plataforma.
+        Para realizar o cadastro crie sua conta pessoal em
+        http://eciis-splab.appspot.com  e proceda com o cadastro da sua Instituicao.
+
+        Equipe e-CIS
+        """ % invite.suggestion_institution_name)
 
     @staticmethod
     def make(invite):

@@ -99,3 +99,10 @@
     border-radius: 50%;
     width: 25px;
 }
+
+.buttons {
+    margin-top: 1.5%;
+    margin-bottom: 0%;
+    box-shadow: 0 0 2px 1px #cccacc;
+    display: inline-flex;
+}

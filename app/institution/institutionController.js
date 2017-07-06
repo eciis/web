@@ -78,11 +78,13 @@
                 institutionCtrl.user.follow(currentInstitutionKey);
                 getFollowers();
                 deffered.resolve();
+            }, function error() {
+                showToast('Erro ao seguir a instituição.');
             });
             return deffered.promise;
         };
 
-        institutionCtrl.unfollow = function unfollow(){
+        institutionCtrl.unfollow = function unfollow() {
             if(institutionCtrl.user.isMember(institutionCtrl.current_institution.key)){
                 showToast("Você não pode deixar de seguir " + institutionCtrl.current_institution.name);
             }
@@ -93,6 +95,8 @@
                     institutionCtrl.user.unfollow(currentInstitutionKey);
                     getFollowers();
                     deffered.resolve();
+                }, function error() {
+                    showToast('Erro ao deixar de seguir instituição.');
                 });
                 return deffered.promise;
             }

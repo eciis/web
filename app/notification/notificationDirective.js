@@ -4,7 +4,7 @@
 
     var app = angular.module("app");
 
-    app.controller("NotificationDirective", function NotificationDirective(NotificationService, AuthService, $rootScope) {
+    app.controller("NotificationController", function NotificationController(NotificationService, AuthService, $rootScope) {
         var controller = this;
 
         Object.defineProperty(controller, 'user', {
@@ -35,7 +35,7 @@
             restrict: 'E',
             templateUrl: "notification/notifications.html",
             controllerAs: "controller",
-            controller: "NotificationDirective"
+            controller: "NotificationController"
         };
     });
 })();

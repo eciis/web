@@ -1,37 +1,115 @@
 <div layout-fill md-colors="{background: 'teal-900'}" layout="column" layout-align="center">
     <div layout="row" layout-wrap layout-align="center">
-        <md-card flex-gt-xs="60">
+        <md-card flex-gt-xs="70">
             <md-toolbar md-colors="{background: 'green-800'}" layout="row">
                 <h1 class="md-toolbar-tools">Informe os dados da Instituição</h1>
             </md-toolbar>
             <md-content layout-gt-sm="column" layout-padding>
                 <div>
                     <form name="institutionForm">
+                        <div layout="row">
+                            <md-input-container class="md-block" flex-gt-xs flex="60">
+                                <label>Nome</label>
+                                <input type="text" name="name" required 
+                                ng-model="submitInstCtrl.institution.name">
+                            </md-input-container>
+                            <md-input-container class="md-block" flex-gt-xs flex="40">
+                                <label>Sigla</label>
+                                <input type="text" name="sigla" required
+                                ng-model="submitInstCtrl.institution.sigla">
+                            </md-input-container> 
+                        </div>
                         <div>
                             <md-input-container class="md-block" flex-gt-xs>
-                                <label>Nome</label>
-                                <input type="text" name="name" ng-model="submitInstCtrl.institution.name" required>
-                            </md-input-container>                            
+                                <label>Endereço</label>
+                                <input type="text" name="Endereço" required
+                                ng-model="submitInstCtrl.institution.adress">
+                            </md-input-container>
                         </div>
                         <div layout="row">
-                            <md-input-container class="md-block" flex-gt-xs>
-                                <label>Sigla</label>
-                                <input type="text" name="sigla" ng-model="submitInstCtrl.institution.sigla" required>
-                            </md-input-container> 
-
                             <md-input-container class="md-block" flex-gt-xs>
                                 <label>CNPJ</label>
                                 <input type="text" name="cnpj" required 
                                 ng-model="submitInstCtrl.institution.cnpj"
-                                ng-pattern=submitInstCtrl.cnpjRegex md-maxlength="18">
-                                <div class="hint" ng-if="showHints">00.000.000/0001-00</div>
-                            </md-input-container>                           
+                                ng-pattern=submitInstCtrl.cnpjRegex 
+                                minlength="18" md-maxlength="18" 
+                                placeholder="00.000.000/0000-00">
+                                <!-- <div class="hint">00.000.000/0000-00</div> -->
+                            </md-input-container>
+                            <md-input-container class="md-block" flex-gt-xs>
+                                <label>Telefone</label>
+                                <input type="text" name="phone" required 
+                                ng-model="submitInstCtrl.institution.phoneNumber"
+                                ng-pattern=submitInstCtrl.phoneRegex
+                                minlength="11" md-maxlength="11" 
+                                placeholder="83 12345678">
+                            </md-input-container>                          
                         </div>
+                        <div>
+                            <div layout="row">
+                                <md-input-container class="md-block" flex-gt-sm>
+                                    <label>Área de Atuação</label>
+                                    <md-select ng-model="submitInstCtrl.institution.occupationArea" required>
+                                      <md-option ng-repeat="area in submitInstCtrl.areas | orderBy: 'name'"
+                                        ng-value="area.value">{{ area.name }}
+                                      </md-option>
+                                    </md-select>
+                                </md-input-container>  
+                                <md-input-container class="md-block" flex-gt-sm>
+                                    <label>Natureza Jurídica</label>
+                                    <md-select ng-model="submitInstCtrl.institution.legalNature" required> 
+                                      <md-option ng-repeat="nature in submitInstCtrl.natures | orderBy: 'name'"
+                                        ng-value="nature.value">{{ nature.name }}
+                                      </md-option>
+                                    </md-select>
+                                </md-input-container>
+                            </div>
+                            <div ng-if="submitInstCtrl.institution.occupationArea == 'other'">
+                                <md-input-container class="md-block" flex-gt-xs>
+                                    <label>Informe outra área de atuação</label>
+                                    <input type="text" name="outra" required
+                                    ng-model="submitInstCtrl.institution.otherArea">
+                                </md-input-container>
+                            </div>
+                        </div>
+                        <div>
+                            <md-input-container class="md-block">
+                                <label>Descrição</label>
+                                  <textarea ng-model="submitInstCtrl.institution.description" md-maxlength="300" 
+                                  rows="1" md-select-on-focus required>
+                                  </textarea>
+                            </md-input-container>
+                            <md-input-container class="md-block" flex-gt-xs>
+                                    <label>Logo da Instituição</label>
+                                    <input type="text" name="logo" disabled
+                                    ng-model="submitInstCtrl.institution.imageUrl">
+                            </md-input-container>
+                            <!-- TODO: implement functionality to add institution image
+                                author: Ruan Eloy , createdOn: 06/07/17
+                            -->
+                        </div>
+                        <div>
+                            <md-input-container class="md-block" flex-gt-xs>
+                                <label>Responsável</label>
+                                <input type="text" name="Responsavel" disabled 
+                                ng-model="submitInstCtrl.institution.adminName">
+                            </md-input-container>
+                            <div layout="row">
+                                <md-input-container class="md-block" flex-gt-xs>
+                                    <label>Email</label>
+                                    <input type="text" name="Email" disabled 
+                                    ng-model="submitInstCtrl.institution.email">
+                                </md-input-container>
+                            </div>
+                        </div>
+                        <!-- <div>{{submitInstCtrl.institution | json}}</div> -->
                     </form>
                 </div>
             </md-content>
-            <section layout="row" layout="column" layout-align="end center" layout-wrap>
-                <md-button ng-click="" md-colors="{background: 'green-900'}">Prosseguir</md-button>
+            <section layout="row" layout-align="end center" layout-wrap>
+                <md-button ng-click="submitInstCtrl.submit()" md-colors="{background: 'red-500'}">Cancelar</md-button>
+                <md-button ng-click="submitInstCtrl.submit()" md-colors="{background: 'green-900'}" 
+                ng-disabled="institutionForm.$invalid">Prosseguir</md-button>
             </section>
         </md-card>
     </div>

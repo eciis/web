@@ -94,3 +94,7 @@
     text-decoration: none;
     font-weight:bold;
 }
+
+.hint {
+    opacity: 0.5;
+}

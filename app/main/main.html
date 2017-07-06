@@ -29,6 +29,12 @@
             Notificações
           </md-button>
         </md-menu-item>
+        <md-menu-item ng-if="mainCtrl.isMembereCIS()">
+          <md-button ui-sref="invite_inst">
+            <md-icon>mail_outline</md-icon>
+            Convite
+          </md-button>
+        </md-menu-item>
         <md-menu-item>
           <md-button ui-sref="config_profile">
             <md-icon>dashboard</md-icon>

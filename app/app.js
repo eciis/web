@@ -62,6 +62,15 @@
                     }
                 }
             })
+            .state("invite_inst", {
+                url: "/inviteInstitution",
+                views: {
+                    main: {
+                        templateUrl: "invites/invite_institution.html",
+                        controller: "InviteInstController as inviteInstCtrl"
+                    }
+                }
+            })
             .state("signin", {
                 url: "/signin",
                 views: {

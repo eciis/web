@@ -30,7 +30,7 @@
           </md-button>
         </md-menu-item>
         <md-menu-item ng-if="mainCtrl.isMembereCIS()">
-          <md-button ui-sref="invite_inst">
+          <md-button ng-click="mainCtrl.goInvite()">
             <md-icon>mail_outline</md-icon>
             Convite
           </md-button>

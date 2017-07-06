@@ -7,6 +7,8 @@
 
         inviteInstCtrl.invite = {};
 
+        var currentInstitutionKey = $state.params.institutionKey;
+
         Object.defineProperty(inviteInstCtrl, 'user', {
             get: function() {
                 return AuthService.user;
@@ -29,6 +31,25 @@
             } else {
                 showToast('Convite inválido!');
             }
+        };
+
+        inviteInstCtrl.sendUserInvite = function sendInvite() {
+            var invite = new Invite(inviteInstCtrl.invite, 'user');
+            invite.institution_key = currentInstitutionKey;
+            if (invite.isValid()) {
+                InviteInstService.sendInstInvite(invite).then(function success(response) {
+                    showToast('Convite enviado com sucesso!');
+                    $state.go('app.institution', {institutionKey: currentInstitutionKey});
+                }, function error(response) {
+                    showToast(response.data.msg);
+                });
+            } else {
+                showToast('Convite inválido!');
+            }
+        };
+
+        inviteInstCtrl.cancelUserInvite = function cancelInvite() {
+           $state.go('app.institution', {institutionKey: currentInstitutionKey});
         };
 
         function showToast(msg) {

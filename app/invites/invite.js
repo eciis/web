@@ -13,11 +13,6 @@ Invite.prototype.isValid = function isValid() {
         return false;
     }
 
-    if (_.isUndefined(this.suggestion_institution_name) || _.isEmpty(this.suggestion_institution_name)) {
-        console.log("suggestion_institution_name");
-        return false;
-    }
-
     console.log("return true");
     return true;
 };

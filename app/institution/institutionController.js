@@ -91,5 +91,11 @@
                 });
             }
         };
+
+        institutionCtrl.goToManageMembers = function goToManageMembers(institutionKey){
+            console.log("no statego");
+            console.log(institutionKey);
+            $state.go('app.invite_user', {institutionKey: institutionKey});
+        };
     });
 })();

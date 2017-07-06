@@ -44,6 +44,24 @@
                     }
                 }
             })
+            .state("app.invite_inst", {
+                url: "/inviteInstitution",
+                views: {
+                    content: {
+                        templateUrl: "invites/invite_institution.html",
+                        controller: "InviteInstController as inviteInstCtrl"
+                    }
+                }
+            })
+            .state("app.invite_user", {
+                url: "/:institutionKey/inviteUser",
+                views: {
+                    content: {
+                        templateUrl: "invites/invite_user.html",
+                        controller: "InviteInstController as inviteInstCtrl"
+                    }
+                }
+            })
             .state("config_profile", {
                 url: "/config_profile",
                 views: {
@@ -59,15 +77,6 @@
                     main: {
                         templateUrl: "auth/choose_institution.html",
                         controller: "ChooseInstController as chooseInstCtrl"
-                    }
-                }
-            })
-            .state("invite_inst", {
-                url: "/inviteInstitution",
-                views: {
-                    main: {
-                        templateUrl: "invites/invite_institution.html",
-                        controller: "InviteInstController as inviteInstCtrl"
                     }
                 }
             })

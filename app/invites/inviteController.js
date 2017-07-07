@@ -22,7 +22,7 @@
         };
 
         inviteController.sendInstInvite = function sendInvite() {
-            invite = new Invite(inviteController.invite, 'institution');
+            invite = new Invite(inviteController.invite, 'institution', currentInstitutionKey);
             if (invite.isValid()) {
                 InviteService.sendInstInvite(invite).then(function success(response) {
                     showToast('Convite enviado com sucesso!');
@@ -36,8 +36,7 @@
         };
 
         inviteController.sendUserInvite = function sendInvite() {
-            invite = new Invite(inviteController.invite, 'user');
-            invite.institution_key = currentInstitutionKey;
+            invite = new Invite(inviteController.invite, 'user', currentInstitutionKey);
             if (invite.isValid()) {
                 InviteService.sendInstInvite(invite).then(function success(response) {
                     showToast('Convite enviado com sucesso!');

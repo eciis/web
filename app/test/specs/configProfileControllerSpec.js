@@ -48,48 +48,54 @@
         httpBackend.verifyNoOutstandingRequest();
     });
 
-    it("User isn't valid", function(){
-        spyOn(mdToast, 'show');
+    describe('ConfigProfileController function', function(){
 
-        var userInvalid = {
-            name: 'Maiana Brito',
-            cpf: '',
-            email: 'maiana.brito@ccc.ufcg.edu.br',
-            institutions: [splab]
-        };
+        describe('finish()', function(){
 
-        configCtrl.newUser = new User(userInvalid);
-        expect(configCtrl.newUser.isValid()).toEqual(false);
+            it("Should call mdToast.show", function(){
+                spyOn(mdToast, 'show');
 
-        configCtrl.finish().should.be.rejected;
-        expect(mdToast.show).toHaveBeenCalled(); 
-    });
+                var userInvalid = {
+                    name: 'Maiana Brito',
+                    cpf: '',
+                    email: 'maiana.brito@ccc.ufcg.edu.br',
+                    institutions: [splab]
+                };
 
-    it('User of system has changed', function(done) {
-        spyOn(state, 'go');
-        spyOn(userService, 'save').and.callFake(function() {
-            return {
-                then: function(callback) {
-                    return callback(newUser);
-                }
-            };
+                configCtrl.newUser = new User(userInvalid);
+                expect(configCtrl.newUser.isValid()).toEqual(false);
+
+                configCtrl.finish().should.be.rejected;
+                expect(mdToast.show).toHaveBeenCalled(); 
+            });
+
+            it('Should change informations of user from system', function(done) {
+                spyOn(state, 'go');
+                spyOn(userService, 'save').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            return callback(newUser);
+                        }
+                    };
+                });
+
+                expect(configCtrl.user.name).toEqual(user.name);
+                expect(configCtrl.user.email).toEqual(user.email);
+                expect(configCtrl.user.cpf).toEqual(user.cpf);
+
+                var promise = configCtrl.finish();
+
+                promise.should.be.fulfilled.then(function() {
+                    expect(configCtrl.user.name).toEqual(newUser.name);
+                    expect(configCtrl.user.email).toEqual(newUser.email);
+                    expect(configCtrl.user.cpf).toEqual(newUser.cpf);
+
+                    expect(state.go).toHaveBeenCalledWith('app.home');
+                    expect(userService.save).toHaveBeenCalled();
+                }).should.notify(done);
+
+                scope.$apply();
+            });
         });
-
-        expect(configCtrl.user.name).toEqual(user.name);
-        expect(configCtrl.user.email).toEqual(user.email);
-        expect(configCtrl.user.cpf).toEqual(user.cpf);
-
-        var promise = configCtrl.finish();
-
-        promise.should.be.fulfilled.then(function() {
-            expect(configCtrl.user.name).toEqual(newUser.name);
-            expect(configCtrl.user.email).toEqual(newUser.email);
-            expect(configCtrl.user.cpf).toEqual(newUser.cpf);
-
-            expect(state.go).toHaveBeenCalledWith('app.home');
-            expect(userService.save).toHaveBeenCalled();
-        }).should.notify(done);
-
-        scope.$apply();
-    });
+    });    
 }));

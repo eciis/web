@@ -22,7 +22,7 @@
             return false;
         };
 
-        mainCtrl.isAdmin = function isMembereCIS() {
+        mainCtrl.isAdmin = function isAdmin() {
             if (mainCtrl.user){
                 return !_.isEmpty(mainCtrl.user.institutions_admin);
             }

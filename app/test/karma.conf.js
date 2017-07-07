@@ -9,7 +9,7 @@ module.exports = function (config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine'],
+    frameworks: ['jasmine', 'chai-as-promised', 'chai'],
 
 
     // list of files / patterns to load in the browser
@@ -19,10 +19,12 @@ module.exports = function (config) {
         'node_modules/angular-aria/angular-aria.js',
         'node_modules/angular-messages/angular-messages.js',
         'node_modules/angular-material/angular-material.js',
-        'node_modules/angular-ui-router/release/angular-ui-router.js',
+        'node_modules/@uirouter/angularjs/release/angular-ui-router.js',
         'node_modules/crypto-js/crypto-js.js',
         'node_modules/lodash/lodash.js',
         'node_modules/angular-mocks/angular-mocks.js',
+        'node_modules/firebase/firebase.js',
+        'node_modules/angularfire/dist/angularfire.js',
         '../*.js',
         '../*/*.js',
         'specs/*.js'
@@ -43,7 +45,7 @@ module.exports = function (config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['spec', 'kjhtml'],
+    reporters: ['spec'],
 
 
     // web server port

@@ -37,24 +37,26 @@ describe('Test PostDirective', function() {
         httpBackend.verifyNoOutstandingRequest();
     });
 
-    describe('Test isPostValid', function() {
-        it('post should not to have properties', function() {
+    describe('Initial post', function() {
+        it('should not have properties', function() {
             expect(postCtrl.post).toEqual({});
         });
+    });
 
-        it('post should not be valid', function() {
+    describe('isPostValid()', function() {
+        it('should not be valid', function() {
             post.title = undefined;
             postCtrl.post = new Post(post, {});
             expect(postCtrl.isPostValid()).toBeFalsy();
         });
 
-        it('post should be valid', function() {
+        it('should be valid', function() {
             postCtrl.post = new Post(post, {});
             expect(postCtrl.isPostValid()).toBeTruthy();
         });
     });    
 
-    describe('Test clearPost', function() {
+    describe('clearPost()', function() {
         it('should change the current post instance to an empty object', function() {
             postCtrl.post = new Post(post, {});
             postCtrl.clearPost();
@@ -62,16 +64,16 @@ describe('Test PostDirective', function() {
         });
     });
     
-    describe('Test cancelDialog', function() {
-        it('should cancel dialog', function() {
+    describe('cancelDialog()', function() {
+        it('should call mdDialog.hide()', function() {
             spyOn(mdDialog, 'hide');
             postCtrl.cancelDialog();
             expect(mdDialog.hide).toHaveBeenCalled();
         });
     });
     
-    describe('Test createPost', function() {
-        it('should create a post (successfull case)', function() {
+    describe('createPost()', function() {
+        it('should create a post', function() {
             spyOn(postService, 'createPost').and.returnValue(deffered.promise);
             spyOn(postCtrl, 'clearPost');
             spyOn(mdDialog, 'hide');
@@ -85,7 +87,7 @@ describe('Test PostDirective', function() {
             expect(mdDialog.hide).toHaveBeenCalled();
         });
 
-        it('should occur an error when creating a post (Fail case)', function() {
+        it('should occur an error when creating a post', function() {
             spyOn(postService, 'createPost').and.returnValue(deffered.promise);
             spyOn(mdDialog, 'hide');
             postCtrl.post = post;
@@ -96,7 +98,7 @@ describe('Test PostDirective', function() {
             expect(mdDialog.hide).toHaveBeenCalled();
         });
 
-        it('should not create a post (post invalid)', function() {
+        it('should not create a post when it is invalid', function() {
             spyOn(postService, 'createPost');
             postCtrl.post = {};
             postCtrl.createPost();  

@@ -12,7 +12,5 @@ Invite.prototype.isValid = function isValid() {
         console.log("invitee");
         return false;
     }
-
-    console.log("return true");
     return true;
 };

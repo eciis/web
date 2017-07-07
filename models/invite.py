@@ -60,14 +60,16 @@ class Invite(ndb.Model):
 
     @staticmethod
     def sendInvite(invite):
+        """Send invite."""
         if invite.type_of_invite == 'user':
             Invite.sendInviteUser(invite)
         Invite.sendInviteInstitution(invite)
 
     @staticmethod
     def sendInviteUser(invite):
+        """Send Invite for user to be member of some Institution."""
         mail.send_mail(sender="e-CIS <eciis@splab.ufcg.edu.br>",
-                   to="<%s>" % invite.invitee ,
+                   to="<%s>" % invite.invitee,
                    subject="Convite plataforma e-CIS",
                    body="""Oi:
 
@@ -79,13 +81,14 @@ class Invite(ndb.Model):
 
     @staticmethod
     def sendInviteInstitution(invite):
+        """Send Invite for user create some Institution."""
         mail.send_mail(sender="e-CIS <eciis@splab.ufcg.edu.br>",
                    to="<%s>" % invite.invitee,
                    subject="Convite plataforma e-CIS",
                    body="""
-        Sua Instituicao %s foi convidada a se cadastrar na plataforma.
+        Sua empresa %s foi convidada a se cadastrar na plataforma.
         Para realizar o cadastro crie sua conta pessoal em
-        http://eciis-splab.appspot.com  e proceda com o cadastro da sua Instituicao.
+        http://eciis-splab.appspot.com  e proceda com o cadastro da sua empresa.
 
         Equipe e-CIS
         """ % invite.suggestion_institution_name)

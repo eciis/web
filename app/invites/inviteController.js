@@ -22,6 +22,7 @@
         };
 
         inviteController.sendInstInvite = function sendInvite() {
+            currentInstitutionKey = inviteController.user.current_institution.key;
             invite = new Invite(inviteController.invite, 'institution', currentInstitutionKey);
             if (invite.isValid()) {
                 InviteService.sendInstInvite(invite).then(function success(response) {

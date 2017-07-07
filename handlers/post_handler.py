@@ -6,6 +6,7 @@ from google.appengine.ext import ndb
 from utils import Utils
 from utils import login_required
 from utils import is_authorized
+from utils import NotAuthorizedException
 from utils import json_response
 from util.json_patch import JsonPatch
 
@@ -22,8 +23,8 @@ def is_post_author(method):
         Utils._assert(not post or not institution,
                       'Post or institution is invalid', Exception)
         Utils._assert(post.author != user.key,
-                      'User is not allowed to remove this post',
-                      Utils.NotAuthorizedException)
+                      'User is not allowed to edit this post',
+                      NotAuthorizedException)
 
         method(self, user, url_string, *args)
     return check_authorization

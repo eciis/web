@@ -51,6 +51,18 @@ class PostHandlerTest(TestBaseHandler):
         self.assertEqual(self.raoni_post.state, 'deleted',
                          "The post's state must be deleted")
 
+    def test_patch(self):
+        """Test the post_handler's patch method."""
+        # Pretend an authentication
+        self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
+        self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
+        # Call the patch method and assert that  it raises an exception
+        with self.assertRaises(Exception):
+            self.testapp.patch_json("/api/posts/%s"
+                                    % self.raoni_post.key.urlsafe(),
+                                    {'{"op": "replace", "path": "/text", "value": "testando"}'
+                                     })
+
     def tearDown(cls):
         """Deactivate the test."""
         cls.test.deactivate()

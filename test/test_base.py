@@ -31,7 +31,3 @@ class TestBase(unittest.TestCase):
         cls.os = os
         cls.unittest = unittest
         cls.images = images
-
-        t = cls.testbed.Testbed()
-        t.activate()
-        t.init_mail_stub()

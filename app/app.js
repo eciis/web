@@ -49,7 +49,7 @@
                 views: {
                     content: {
                         templateUrl: "invites/invite_institution.html",
-                        controller: "InviteInstController as inviteInstCtrl"
+                        controller: "InviteController as inviteCtrl"
                     }
                 }
             })
@@ -58,7 +58,7 @@
                 views: {
                     content: {
                         templateUrl: "invites/invite_user.html",
-                        controller: "InviteInstController as inviteInstCtrl"
+                        controller: "InviteController as inviteCtrl"
                     }
                 }
             })

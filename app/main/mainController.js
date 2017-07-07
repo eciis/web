@@ -33,7 +33,6 @@
             mainCtrl.user.changeInstitution(name);
         };
 
-
         mainCtrl.settings = [{
             name: 'Início',
             stateTo: 'app.home',
@@ -48,7 +47,6 @@
 
          mainCtrl.goInvite = function goInvite() {
             $state.go('app.invite_inst');
-            mainCtrl.toggle();
         };
 
         mainCtrl.goToInstitution = function goToInstitution(institutionKey) {

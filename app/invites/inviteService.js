@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.service("InviteInstService", function InviteInstService($http, $q) {
+    app.service("InviteService", function InviteService($http, $q) {
         var service = this;
 
         var INVITES_URI = "/api/invites";

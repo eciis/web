@@ -2,35 +2,33 @@
   <style type="text/css">.noUnderline{text-decoration:none; color:black;}</style>
   <!-- CONTENT -->
   <div flex-gt-lg="80" flex-lg="90" layout="row" layout-wrap layout-align="center">
-   <div layout-fill  layout="column" layout-align="center">
-   <div layout="row" layout-wrap layout-align="center">
-    <md-card flex-gt-xs="50">
-      <md-toolbar md-colors="{background: 'green-800'}" layout="row">
-        <h1 class="md-toolbar-tools">Envie convite para nova Instituição</h1>
-      </md-toolbar>
-      <md-content layout="column">
-        <div layout-gt-sm="column" layout-padding>
-          <div layout-gt-sm="column">
-            <md-input-container class="md-block" flex-gt-sm>
-              <label>Nome da Instituição convidada</label>
-              <input ng-model="inviteInstCtrl.invite.suggestion_institution_name" required>
-            </md-input-container>
+     <div layout-fill  layout="column" layout-align="center">
+       <div layout="row" layout-wrap layout-align="center">
+        <md-card flex-gt-xs="50">
+          <md-toolbar md-colors="{background: 'green-800'}" layout="row">
+            <h1 class="md-toolbar-tools">Envie convite para nova Instituição</h1>
+          </md-toolbar>
+          <md-content layout="column">
+            <div layout-gt-sm="column" layout-padding>
+              <div layout-gt-sm="column">
+                <md-input-container class="md-block" flex-gt-sm>
+                  <label>Nome da Instituição convidada</label>
+                  <input ng-model="inviteCtrl.invite.suggestion_institution_name" required>
+                </md-input-container>
 
-            <md-input-container class="md-block">
-              <label>Email convite deve ser enviado para:</label>
-              <input ng-model="inviteInstCtrl.invite.invitee" type="email"  required>
-            </md-input-container>
-          </div>
-        </div>
-        <section layout="row" layout="column" layout-align="end center" layout-wrap>
-          <md-button ng-click="inviteInstCtrl.sendInstInvite()" md-colors="{background: 'green-900'}">Enviar Convite</md-button>
-          <md-button ng-click="inviteInstCtrl.cancelInvite()" md-colors="{background: 'green-900'}">Voltar</md-button>
-        </section>
-      </md-content>
-    </md-card>
-  </div>
-</div>
-
-    
+                <md-input-container class="md-block">
+                  <label>Email convite deve ser enviado para:</label>
+                  <input ng-model="inviteCtrl.invite.invitee" type="email"  required>
+                </md-input-container>
+              </div>
+            </div>
+            <section layout="row" layout="column" layout-align="end center" layout-wrap>
+              <md-button ng-click="inviteCtrl.sendInstInvite()" md-colors="{background: 'green-900'}">Enviar Convite</md-button>
+              <md-button ng-click="inviteCtrl.cancelInvite()" md-colors="{background: 'green-900'}">Voltar</md-button>
+            </section>
+          </md-content>
+        </md-card>
+      </div>
+    </div>   
   </div>
 </md-content>

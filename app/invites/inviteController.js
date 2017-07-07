@@ -2,27 +2,29 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("InviteInstController", function InviteInstController(InviteInstService,$mdToast, $state, AuthService) {
-        var inviteInstCtrl = this;
+    app.controller("InviteController", function InviteController(
+        InviteService,$mdToast, $state, AuthService) {
+        var inviteController = this;
 
-        inviteInstCtrl.invite = {};
+        inviteController.invite = {};
 
         var currentInstitutionKey = $state.params.institutionKey;
+        var invite;
 
-        Object.defineProperty(inviteInstCtrl, 'user', {
+        Object.defineProperty(inviteController, 'user', {
             get: function() {
                 return AuthService.user;
             }
         });
 
-        inviteInstCtrl.cancelInvite = function cancelInvite() {
+        inviteController.cancelInvite = function cancelInvite() {
             $state.go("app.home");
         };
 
-        inviteInstCtrl.sendInstInvite = function sendInvite() {
-            var invite = new Invite(inviteInstCtrl.invite, 'institution');
+        inviteController.sendInstInvite = function sendInvite() {
+            invite = new Invite(inviteController.invite, 'institution');
             if (invite.isValid()) {
-                InviteInstService.sendInstInvite(invite).then(function success(response) {
+                InviteService.sendInstInvite(invite).then(function success(response) {
                     showToast('Convite enviado com sucesso!');
                     $state.go("app.home");
                 }, function error(response) {
@@ -33,11 +35,11 @@
             }
         };
 
-        inviteInstCtrl.sendUserInvite = function sendInvite() {
-            var invite = new Invite(inviteInstCtrl.invite, 'user');
+        inviteController.sendUserInvite = function sendInvite() {
+            invite = new Invite(inviteController.invite, 'user');
             invite.institution_key = currentInstitutionKey;
             if (invite.isValid()) {
-                InviteInstService.sendInstInvite(invite).then(function success(response) {
+                InviteService.sendInstInvite(invite).then(function success(response) {
                     showToast('Convite enviado com sucesso!');
                     $state.go('app.institution', {institutionKey: currentInstitutionKey});
                 }, function error(response) {
@@ -48,7 +50,7 @@
             }
         };
 
-        inviteInstCtrl.cancelUserInvite = function cancelInvite() {
+        inviteController.cancelUserInvite = function cancelInvite() {
            $state.go('app.institution', {institutionKey: currentInstitutionKey});
         };
 

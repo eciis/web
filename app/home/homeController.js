@@ -64,6 +64,7 @@
         var loadPosts = function loadPosts() {
             PostService.get().then(function success(response) {
                 homeCtrl.posts = response.data;
+                _.map(homeCtrl.posts, recognizeUrl);
             }, function error(response) {
                 $interval.cancel(intervalPromise); // Cancel the interval promise that load posts in case of error
                 showToast(response.data.msg);
@@ -75,9 +76,14 @@
 
         $rootScope.$on("reloadPosts", function(event, data) {
             var post = new Post(data);
+            recognizeUrl(post);
             homeCtrl.posts.push(post);
         });
 
+        function recognizeUrl(post) {
+            var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+            post.text = post.text.replace(exp,"<a href=\"$1\" target='_blank'>$1</a>");
+        }
         /**
         FIXME: The timeline update interrupts the user while he is commenting on a post
         @author: Ruan Silveira 12/06/2017

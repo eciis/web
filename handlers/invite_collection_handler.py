@@ -19,9 +19,10 @@ def is_admin(method):
             institution_key = ndb.Key(urlsafe=data['institution_key'])
             institution = institution_key.get()
 
-            Utils._assert(institution.key not in user.institutions_admin,
-                          'User is not administrator', NotAuthorizedException)
-            Utils._assert(institution.admin != user.key,
+            userisNotAdminOfInstitution = institution.key not in user.institutions_admin
+            institutionisNotManagedByUser = institution.admin != user.key
+
+            Utils._assert(userisNotAdminOfInstitution or institutionisNotManagedByUser,
                           'User is not administrator', NotAuthorizedException)
 
             method(self, user, *args)

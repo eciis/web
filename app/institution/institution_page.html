@@ -1,11 +1,11 @@
 <md-content layout="row" md-colors="{background: 'grey-200'}" layout-align="center">
     <!-- CONTENT -->
-    <div flex-gt-lg="80" flex-lg="90" layout="row" layout-align="center">
+    <div flex-gt-lg="80" flex-lg="90" layout="row" layout-align="center" layout-fill>
 
         <!-- LEFT SIDE PANEL -->
         <div flex flex-gt-xs="25" layout="column" hide show-gt-sm >
             <div flex>
-                <md-card layout="column" class="blue-background">
+                <md-card layout="column" class="green-background">
                     <center>
                         <img ng-src="{{ institutionCtrl.current_institution.image_url }}" class="img-circle img-thumbnail" >
                     </center>
@@ -19,11 +19,11 @@
                         <p>{{ institutionCtrl.current_institution.address }}</p>
                         <p>{{ institutionCtrl.current_institution.description }}</p>
                         <div layout="row">
-                            <md-button flex="100" class="md-primary md-raised md-hue-2" ng-click="institutionCtrl.follow()" ng-if="!institutionCtrl.user.isFollower(institutionCtrl.current_institution.key)">
+                            <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}" ng-click="institutionCtrl.follow()" ng-if="!institutionCtrl.user.isFollower(institutionCtrl.current_institution.key)">
                                 <md-icon>person_add</md-icon>Seguir
                             </md-button>
-                            <md-button flex="100" class="md-primary md-raised md-hue-2" ng-click="institutionCtrl.unfollow()" ng-if="institutionCtrl.user.isFollower(institutionCtrl.current_institution.key)">
-                                <md-icon>person_outline</md-icon>Seguindo
+                            <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}" ng-click="institutionCtrl.unfollow()" ng-if="institutionCtrl.user.isFollower(institutionCtrl.current_institution.key)">
+                                <md-icon>person_outline</md-icon>Deixar de seguir
                             </md-button>
                         </div>
                     </md-card-content>
@@ -31,7 +31,7 @@
 
                 <!-- MEMBERS OF INSTITUTION -->
                 <md-card >
-                    <md-subhead layout-padding class="md-primary" md-colors="{background: 'blue-900'}">Membros</md-subhead>
+                    <md-subhead layout-padding class="md-primary" md-colors="{background: 'green-900'}">Membros</md-subhead>
                     <md-card-content>
                         <md-grid-list
                                 md-cols="5" md-cols-gt-md="6"
@@ -48,7 +48,7 @@
 
                  <!-- FOLLOWERS OF INSTITUTION -->
                 <md-card >
-                    <md-subhead layout-padding class="md-primary" md-colors="{background: 'blue-900'}">Seguidores</md-subhead>
+                    <md-subhead layout-padding class="md-primary" md-colors="{background: 'green-900'}">Seguidores</md-subhead>
                     <md-card-content>
                         <md-grid-list
                                 md-cols="5" md-cols-gt-md="6"

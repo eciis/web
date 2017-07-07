@@ -1,6 +1,9 @@
     <!-- TIMELINE -->
       <div flex>
-        <md-card ng-repeat="post in posts | orderBy:'date':true">
+        <md-card ng-if="posts.length == 0">
+          <md-content layout-align="center center" layout="column"><h4>Esta instituição ainda não possui publicações.</h4></md-content>
+        </md-card>
+        <md-card ng-repeat="post in posts | orderBy:'date':true" ng-if="posts.length > 0">
           <md-card-header>
             <md-card-avatar>
               <a href ng-click="postDetailsCtrl.goToInstitution(post.institution_key)">

@@ -248,7 +248,7 @@ class ResetHandler(BaseHandler):
         eciis.image_url = 'http://www.paho.org/bra/images/stories/BRA01A/logobireme.jpg'
         eciis.email = 'eciis@ufcg.edu.br'
         eciis.phone_number = '(83) 3322 7865'
-        eciis.members = [dalton.key, andre.key, jorge.key, maiana.key, luiz.key, raoni.key, ruan.key, tiago.key]
+        eciis.members = [dalton.key, andre.key, jorge.key, maiana.key, luiz.key, raoni.key, ruan.key, tiago.key, mayza.key]
         eciis.followers = [mayza.key, andre.key, jorge.key, dalton.key, maiana.key, luiz.key, raoni.key, ruan.key, tiago.key]
         eciis.posts = []
         eciis.admin = dalton.key
@@ -258,7 +258,7 @@ class ResetHandler(BaseHandler):
 
 
         # Updating Institutions
-        mayza.institutions = [certbio.key]
+        mayza.institutions = [certbio.key, eciis.key]
         mayza.follows = [splab.key, eciis.key, certbio.key]
         mayza.institutions_admin = [certbio.key]
         mayza.put()

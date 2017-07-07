@@ -1,18 +1,12 @@
 
 """Post Model."""
 from google.appengine.ext import ndb
+from custom_exceptions.fieldException import FieldException
 
 from utils import Utils
 
+
 import datetime
-
-
-class FieldException(Exception):
-    """Field Exception."""
-
-    def __init__(self, msg=None):
-        """Class constructor."""
-        super(FieldException, self).__init__(msg or "Invalid field")
 
 
 def getCommentsUri(post, host):

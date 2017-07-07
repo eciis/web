@@ -72,16 +72,15 @@
         }
 
         institutionCtrl.follow = function follow(){
-            var deffered = $q.defer();
-            InstitutionService.follow(currentInstitutionKey).then(function success(){
+            var promise = InstitutionService.follow(currentInstitutionKey);
+            promise.then(function success(){
                 showToast("Seguindo "+institutionCtrl.current_institution.name);
                 institutionCtrl.user.follow(currentInstitutionKey);
                 getFollowers();
-                deffered.resolve();
             }, function error() {
                 showToast('Erro ao seguir a instituição.');
             });
-            return deffered.promise;
+            return promise;
         };
 
         institutionCtrl.unfollow = function unfollow() {
@@ -89,16 +88,15 @@
                 showToast("Você não pode deixar de seguir " + institutionCtrl.current_institution.name);
             }
             else{
-                var deffered = $q.defer();
-                InstitutionService.unfollow(currentInstitutionKey).then(function success(){
+                var promise = InstitutionService.unfollow(currentInstitutionKey);
+                promise.then(function success(){
                     showToast("Deixou de seguir "+institutionCtrl.current_institution.name);
                     institutionCtrl.user.unfollow(currentInstitutionKey);
                     getFollowers();
-                    deffered.resolve();
                 }, function error() {
                     showToast('Erro ao deixar de seguir instituição.');
                 });
-                return deffered.promise;
+                return promise;
             }
         };
     });

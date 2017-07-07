@@ -112,31 +112,34 @@
 
             it('should call institutionService.follow() ', function(done) {
                 var promise = institutionCtrl.follow();
-                promise.should.be.fulfilled.then(function() {
+                promise.then(function() {
                     expect(institutionService.follow).toHaveBeenCalledWith(splab.key);
-                }).should.notify(done);
+                    done();
+                });
                 scope.$apply();
             });
 
             it('should call institutionService.getFollowers()', function(done) {
                 var promise = institutionCtrl.follow();
-                promise.should.be.fulfilled.then(function() {
+                promise.then(function() {
                     expect(institutionService.getFollowers).toHaveBeenCalledWith(splab.key);
-                }).should.notify(done);
+                    done();
+                });
                 scope.$apply();
             });
 
             it('should call user.follow()', function(done) {
                 var promise = institutionCtrl.follow();
-                promise.should.be.fulfilled.then(function() {
+                promise.then(function() {
                     expect(institutionCtrl.user.follow).toHaveBeenCalledWith(splab.key);
-                }).should.notify(done);
+                    done();
+                });
                 scope.$apply();
             });
         });
 
         describe('unfollow()', function() {
-            
+
             beforeEach(function() {
                 spyOn(institutionCtrl.user, 'isMember');
                 spyOn(institutionService, 'getFollowers').and.callFake(function() {
@@ -158,33 +161,37 @@
 
             it('should call user.isMember()', function(done) {
                 var promise = institutionCtrl.unfollow();
-                promise.should.be.fulfilled.then(function() {
+                promise.then(function() {
                     expect(institutionCtrl.user.isMember).toHaveBeenCalledWith(splab.key);
-                }).should.notify(done);
+                    done();
+                });
                 scope.$apply();
             });
 
             it('should call institutionService.unfollow()', function(done) {
                 var promise = institutionCtrl.unfollow();
-                promise.should.be.fulfilled.then(function() {
+                promise.then(function() {
                     expect(institutionService.unfollow).toHaveBeenCalledWith(splab.key);
-                }).should.notify(done);
+                    done();
+                });
                 scope.$apply();
             });
 
             it('should call institutionService.getFollowers()', function(done) {
                 var promise = institutionCtrl.unfollow();
-                promise.should.be.fulfilled.then(function() {
+                promise.then(function() {
                     expect(institutionService.getFollowers).toHaveBeenCalledWith(splab.key);
-                }).should.notify(done);
+                    done();
+                });
                 scope.$apply();
             });
 
             it('should call user.unfollow()', function(done) {
                 var promise = institutionCtrl.unfollow();
-                promise.should.be.fulfilled.then(function() {
+                promise.then(function() {
                     expect(institutionCtrl.user.unfollow).toHaveBeenCalledWith(splab.key);
-                }).should.notify(done);
+                    done();
+                });
                 scope.$apply();
             });
         });

@@ -1,0 +1,12 @@
+<md-menu md-position-mode="target-right target">
+  <md-button aria-label="menu" class="md-icon-button" ng-click="$mdMenu.open(ev)" ng-disabled="controller.notifications.length === 0">
+    <md-icon style="color:#81C784;">{{ controller.notifications.length === 0 ? 'notifications_none' : 'notifications'}}</md-icon>
+  </md-button>
+  <md-menu-content width="4">
+    <md-menu-item ng-repeat="notification in controller.notifications" ng-click="controller.markAsRead(notification)">
+      <md-button>
+        {{notification.from}} {{notification.type == 'Comment' ? 'comentou' : notification.type}} o seu post
+      </md-button>
+    </md-menu-item>
+  </md-menu-content>
+</md-menu>

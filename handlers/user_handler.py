@@ -4,6 +4,7 @@
 import json
 
 from utils import Utils
+from models.invite import Invite
 from utils import login_required
 from utils import json_response
 
@@ -12,6 +13,17 @@ from util.json_patch import JsonPatch
 from handlers.base_handler import BaseHandler
 
 from google.appengine.ext import ndb
+
+
+def getInvites(user_email):
+    """Query that return list of invites for this user."""
+    invites = []
+
+    queryInvites = Invite.query(Invite.invitee == user_email)
+
+    invites = [Invite.make(invite)for invite in queryInvites]
+
+    return invites
 
 """
 TODO: Move this method to User when utils.py is refactored.
@@ -23,6 +35,7 @@ def makeUser(user, request):
     user_json['logout'] = 'http://%s/logout?redirect=%s' %\
         (request.host, request.path)
     user_json['institutions'] = []
+    user_json['invites'] = getInvites(user.email)
     for institution in user.institutions:
         user_json['institutions'].append(
             Utils.toJson(institution.get())

@@ -6,7 +6,7 @@
         'ui.router',
         'ngAnimate',
         'ngFileUpload',
-        'ngMessages'
+        'firebase'
     ]);
 
     app.config(function($mdIconProvider, $mdThemingProvider, $stateProvider, $urlMatcherFactoryProvider,

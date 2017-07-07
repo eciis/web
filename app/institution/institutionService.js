@@ -76,5 +76,14 @@
             });
             return deferred.promise;
         };
+
+        service.createInstitution =  function createInstitution(institution) {
+            var deferred = $q.defer();
+            $http.post(INSTITUTIONS_URI, institution).then(function sucess(response) {
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+        };
     });
 })();

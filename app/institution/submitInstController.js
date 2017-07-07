@@ -29,22 +29,18 @@
 
         submitInstCtrl.invite = submitInstCtrl.user.invites[0];
 
-
-
         submitInstCtrl.institution = {
             name: submitInstCtrl.invite.suggestion_institution_name,
-            sigla: "",
+            acronym: "",
             cnpj: "",
-            legalNature: "",
+            legal_nature: "",
             address: "",
-            occupationArea: "",
-            otherArea: "",
+            occupation_area: "",
+            other_area: "",
             description: "",
-            phoneNumber: "",
-            imageUrl: "",
+            phone_number: "",
+            image_url: "",
             email: submitInstCtrl.invite.invitee,
-            admin: submitInstCtrl.user.key,
-            adminName: submitInstCtrl.user.name,
             state: "active"
         };
         submitInstCtrl.natures = [

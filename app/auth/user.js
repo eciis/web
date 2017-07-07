@@ -59,6 +59,15 @@ User.prototype.isValid = function isValid() {
     return true;
 };
 
+User.prototype.hasPendingInvitations = function hasPendingInvitations(invitationType){
+    for(var i = 0; i < this.invites.length; i++) {
+        if(this.invites[i].type_of_invite == invitationType && this.invites[i].status == 'sent'){
+            return true;
+        }
+    }
+    return false;
+};
+
 function getKeyObj(obj) {
     if(obj.key){
       return obj.key;

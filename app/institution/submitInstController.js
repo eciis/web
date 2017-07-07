@@ -9,16 +9,30 @@
         Object.defineProperty(submitInstCtrl, 'user', {
             get: function() {
                 return AuthService.user;
+            },
+            set: function set(newValue) {
+                AuthService.user = newValue;
             }
         });
 
-        submitInstCtrl.invite = {
-            invitee: "reponsavel@email.com",
-            suggestion_institution_name: "Nome sugerido"
+        submitInstCtrl.user = {
+            name: "Ruan Silveira",
+            key: "ahdkZXZ-aGVsbG8td29ybGQtYnktcnVhbnIRCxIEVXNlchiAgICAgMDfCQw",
+            invites: [{
+                "key": "ahdkZXZ-aGVsbG8td29ybGQtYnktcnVhbnITCxIGSW52aXRlGICAgICAoOAKDA",
+                "suggestion_institution_name": "New Institution",
+                "type_of_invite": "institution",
+                "status": "sent",
+                "invitee": "ruan.silveira@ccc.ufcg.edu.br"
+            }]
         };
+
+        submitInstCtrl.invite = submitInstCtrl.user.invites[0];
+
+
+
         submitInstCtrl.institution = {
             name: submitInstCtrl.invite.suggestion_institution_name,
-            adminName: "nome do reponsavel",
             sigla: "",
             cnpj: "",
             legalNature: "",
@@ -26,10 +40,11 @@
             occupationArea: "",
             otherArea: "",
             description: "",
+            phoneNumber: "",
             imageUrl: "",
             email: submitInstCtrl.invite.invitee,
-            phoneNumber: "",
-            admin: "",
+            admin: submitInstCtrl.user.key,
+            adminName: submitInstCtrl.user.name,
             state: "active"
         };
         submitInstCtrl.natures = [

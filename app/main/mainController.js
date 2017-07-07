@@ -47,6 +47,10 @@
             if (mainCtrl.user.institutions.length === 0) {
                 $state.go("choose_institution");
             }
+
+            if (mainCtrl.user.hasPendingInvitations("institution")){
+                $state.go("submit_institution");
+            }
         });
     });
 })();

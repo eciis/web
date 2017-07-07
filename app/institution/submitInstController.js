@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.controller("SubmitInstController", function SubmitInstController(AuthService) {
+    app.controller("SubmitInstController", function SubmitInstController(AuthService, $state, $mdToast, $mdDialog) {
         var submitInstCtrl = this;
 
         Object.defineProperty(submitInstCtrl, 'user', {
@@ -49,7 +49,54 @@
         submitInstCtrl.phoneRegex = "([0-9]{2}[\\s][0-9]{8})";
 
         submitInstCtrl.submit = function submit() {
-            
+            var confirm = $mdDialog.confirm(event)
+                .clickOutsideToClose(true)
+                .title('Confirmar Cadastro')
+                .textContent('Confirmar o cadastro dessa instituição?')
+                .ariaLabel('Confirmar Cadastro')
+                .targetEvent(event)
+                .ok('Sim')
+                .cancel('Não');
+
+            $mdDialog.show(confirm).then(function() {
+                goHome();            
+                showToast('Cadastro de instituição realizado com sucesso');
+            }, function() {
+                showToast('Cancelado');
+            });
         };
+
+        submitInstCtrl.cancel = function cancel(event) {
+            var confirm = $mdDialog.confirm()
+                .clickOutsideToClose(true)
+                .title('Cancelar Cadastro')
+                .textContent('Cancelar o cadastro dessa instituição?')
+                .ariaLabel('Cancelar Cadastro')
+                .targetEvent(event)
+                .ok('Sim')
+                .cancel('Não');
+
+            $mdDialog.show(confirm).then(function() {
+                goHome();            
+                showToast('Cadastro de instituição cancelado');
+            }, function() {
+                showToast('Cancelado');
+            });
+        };
+
+         var goHome = function goToHome() {
+            $state.go('app.home');
+        };
+
+        function showToast(msg) {
+            $mdToast.show(
+                $mdToast.simple()
+                    .textContent(msg)
+                    .action('FECHAR')
+                    .highlightAction(true)
+                    .hideDelay(5000)
+                    .position('bottom right')
+            );
+        }
     });
 })();

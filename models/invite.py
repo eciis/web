@@ -26,14 +26,7 @@ class Invite(ndb.Model):
 
     """ Key of the institution who user was
     invited to be member, if the type of invite is user."""
-    institution_key = ndb.KeyProperty(kind="Institution")
-
-    @staticmethod
-    def checkIsInviteUserValid(data):
-        """Check if invite for user is valid."""
-        if data.get('institution_key') is None:
-            raise FieldException(
-                "The invite for user have to specify the institution")
+    institution_key = ndb.KeyProperty(kind="Institution", required=True)
 
     @staticmethod
     def checkIsInviteInstitutionValid(data):
@@ -48,11 +41,9 @@ class Invite(ndb.Model):
         invite = Invite()
         invite.invitee = data.get('invitee')
         invite.type_of_invite = data.get('type_of_invite')
+        invite.institution_key = ndb.Key(urlsafe=data.get('institution_key'))
 
-        if (invite.type_of_invite == 'user'):
-            Invite.checkIsInviteUserValid(data)
-            invite.institution_key = ndb.Key(urlsafe=data['institution_key'])
-        else:
+        if (invite.type_of_invite == 'institution'):
             Invite.checkIsInviteInstitutionValid(data)
             invite.suggestion_institution_name = data[
                 'suggestion_institution_name']

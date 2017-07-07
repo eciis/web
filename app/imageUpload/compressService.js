@@ -37,7 +37,7 @@
                 var cvs = document.createElement('canvas');
                 cvs.width = 800;
                 cvs.height = 800 * (height / width);
-                var ctx = cvs.getContext("2d").drawImage(source_img_obj, 0, 0, cvs.width, cvs.height);
+                cvs.getContext("2d").drawImage(source_img_obj, 0, 0, cvs.width, cvs.height);
                 var newImageData = cvs.toDataURL('image/jpeg', 70/100);
                 var compressedFile = new File([base64toBlob(newImageData.split(',')[1], 'image/jpeg')], file.name, {type: 'image/jpeg'});
 

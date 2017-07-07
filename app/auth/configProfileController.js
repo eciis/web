@@ -2,8 +2,8 @@
 
 (function() {
     var app = angular.module("app");
-    
-    app.controller("ConfigProfileController", function ConfigProfileController($state, InstitutionService, 
+
+    app.controller("ConfigProfileController", function ConfigProfileController($state, InstitutionService,
             AuthService, UserService, $rootScope, $mdToast) {
         var configProfileCtrl = this;
 
@@ -45,7 +45,7 @@
         }
 
         function setupUser() {
-            configProfileCtrl.newUser = new User(configProfileCtrl.user);
+            configProfileCtrl.newUser = new User(User.clone(configProfileCtrl.user));
         }
 
         function showToast(msg) {

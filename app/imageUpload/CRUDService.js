@@ -3,12 +3,8 @@
 (function() {
     var app = angular.module("app");
 
-    app.service("CRUDService", function($http, $q, $firebaseArray, $firebaseStorage) {
+    app.service("CRUDService", function CRUDService( $q, $firebaseStorage) {
         var service = this;
-
-        var ref = firebase.database().ref();
-        var propertiesRef = ref.child("properties");
-        var propertiesArray = $firebaseArray(propertiesRef);
 
         service.saveImage = function(file) {
             var deferred = $q.defer();

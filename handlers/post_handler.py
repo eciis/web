@@ -13,6 +13,22 @@ from util.json_patch import JsonPatch
 from handlers.base_handler import BaseHandler
 
 
+def is_post_author(method):
+    """Check if the user is the author of the post."""
+    def check_authorization(self, user, url_string, *args):
+        obj_key = ndb.Key(urlsafe=url_string)
+        post = obj_key.get()
+        institution = post.institution.get()
+        Utils._assert(not post or not institution,
+                      'Post or institution is invalid', Exception)
+        Utils._assert(post.author != user.key,
+                      'User is not allowed to remove this post',
+                      Utils.NotAuthorizedException)
+
+        method(self, user, url_string, *args)
+    return check_authorization
+
+
 class PostHandler(BaseHandler):
     """Post Handler."""
 
@@ -30,14 +46,13 @@ class PostHandler(BaseHandler):
         """Update the post, the user and the institution in datastore."""
         post.put()
 
-
     """
     TODO: Test is_authorized
     @author: Andre L Abrantes - 23-06-2017
     """
     @json_response
     @login_required
-    @is_authorized
+    @is_post_author
     def patch(self, user, url_string):
         """Handler PATCH Requests."""
         data = self.request.body

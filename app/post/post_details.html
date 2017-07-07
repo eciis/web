@@ -48,7 +48,7 @@
               <md-icon>grade</md-icon>
             </md-button>
             <md-button class="md-icon-button" aria-label="editar" ng-click="postDetailsCtrl.editPost(post, posts)"
-              ng-if="postDetailsCtrl.isAuthorized(post)">
+              ng-if="postDetailsCtrl.isPostAuthor(post)">
               <md-icon>edit</md-icon>
             </md-button>
           </md-card-actions>

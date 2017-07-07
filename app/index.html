@@ -21,9 +21,24 @@
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-aria.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-messages.min.js"></script>
 
-
   <!-- Angular Material Library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.4/angular-material.min.js"></script>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/4.1.3/firebase.js"></script>
+  <script>
+    // Initialize the Firebase SDK
+    var firebaseConfig = {
+        apiKey: "AIzaSyCrrVy8FgG_jV-1h0EM4jpKbF3Vk5EjwCc",   // Your Firebase API key
+        authDomain: "eciis-splab.firebaseapp.com",           // Your Firebase Auth domain ("*.firebaseapp.com")
+        databaseURL: "https://eciis-splab.firebaseio.com",   // Your Firebase Database URL ("https://*.firebaseio.com")
+        storageBucket: "eciis-splab.appspot.com"             // Your Cloud Storage for Firebase bucket ("*.appspot.com")
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
+
+  <!-- AngularFire -->
+  <script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
 
   <!-- Extra Libraries -->
   <script src="//unpkg.com/angular-ui-router/release/angular-ui-router.min.js"></script>
@@ -76,5 +91,9 @@
 
   <!-- Upload Image Library -->
   <script src="imageUpload/uploadDirective.js"></script>
+
+  <!-- Notifications Library -->
+  <script src="notification/notificationService.js"></script>
+  <script src="notification/notificationDirective.js"></script>
 </body>
 </html>

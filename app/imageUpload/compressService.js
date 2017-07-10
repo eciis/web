@@ -11,7 +11,7 @@
                 contentType = contentType || '';
                 var sliceSize = 1024;
                 var byteCharacters = atob(base64Data);
-                var bytesLength = byteCharacters.length;
+                var bytesLength =  byteCharacters.length;
                 var slicesCount = Math.ceil(bytesLength / sliceSize);
                 var byteArrays = new Array(slicesCount);
 
@@ -33,13 +33,28 @@
             source_img_obj.onload = function() {
                 var height = source_img_obj.height;
                 var width = source_img_obj.width;
+                var fileProperties = file.name.split(".");
+                var INDEX_TYPE_IMAGE = 1;
+                var TYPE_IMAGE = 'image/' + fileProperties[INDEX_TYPE_IMAGE];
+                var DIMENSION_IMAGE = "2d";
+                var sizeNewImage = 800;
+                var positionImage = 0;
+                var qualityImage = 0.7;
 
                 var cvs = document.createElement('canvas');
-                cvs.width = 800;
-                cvs.height = 800 * (height / width);
-                cvs.getContext("2d").drawImage(source_img_obj, 0, 0, cvs.width, cvs.height);
-                var newImageData = cvs.toDataURL('image/jpeg', 70/100);
-                var compressedFile = new File([base64toBlob(newImageData.split(',')[1], 'image/jpeg')], file.name, {type: 'image/jpeg'});
+                cvs.width = sizeNewImage;
+                cvs.height = sizeNewImage * (height / width);
+                cvs.getContext(DIMENSION_IMAGE).drawImage(
+                    source_img_obj,
+                    positionImage,
+                    positionImage,
+                    cvs.width,
+                    cvs.height);
+                var newImageData = cvs.toDataURL(TYPE_IMAGE, qualityImage);
+                var compressedFile = new File([base64toBlob(
+                    newImageData.split(',')[1],
+                    TYPE_IMAGE)],
+                file.name, {type: TYPE_IMAGE});
 
                 callback(compressedFile);
             };

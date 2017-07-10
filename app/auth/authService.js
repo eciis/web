@@ -3,45 +3,39 @@
 (function() {
     var app = angular.module("app");
 
-    app.service("AuthService", function AuthService($http, $q, $rootScope) {
+    app.service("AuthService", function AuthService($http, $q, $rootScope, $state, $firebaseAuth) {
         var service = this;
 
-        var LOGIN_URI = "/login";
-
-        var LOGOUT_URI = "/logout";
-
-        var _user;
-
-        Object.defineProperty(service, 'user', {
-            get: function get() {
-                return _user;
-            },
-            set: function set(newValue) {
-                _user = new User(newValue);
-            }
-        });
+        var authObj = $firebaseAuth();
 
         service.login = function login() {
-            window.location.replace(LOGIN_URI);
-        };
-
-        service.logout = function logout() {
-            window.location.replace(LOGOUT_URI);
-        };
-
-        service.load = function load() {
-            var deffered = $q.defer();
-            $http.get('/api/user').then(function loadUser(info) {
-                service.user = new User(info.data);
-                deffered.resolve(service.user);
-            }, function error(data) {
-                deffered.reject(data);
+            authObj.$signInWithPopup("google").then(function() {
+              $state.go("app.home");
+            }).catch(function(error) {
+              console.error("Authentication failed:", error);
             });
-            return deffered.promise;
+        };
+        
+        service.logout = function logout() {
+            authObj.$signOut();
         };
 
-        service.load().then(function success() {
-            $rootScope.$broadcast("user_loaded");
+        service.getCurrentUser = function getCurrentUser() {
+            return authObj.$getAuth();
+        };
+
+        service.isLoggedIn = function isLoggedIn() {
+            console.log("Logged in? ", authObj.$getAuth());
+            return authObj.$getAuth() !== null;
+        };
+
+        authObj.$onAuthStateChanged(function(firebaseUser) {
+          if (firebaseUser) {
+            console.log("Signed in as:", firebaseUser.displayName);
+          } else {
+            console.log("Signed out");
+            $state.go("signin");
+          }
         });
     });
 })();

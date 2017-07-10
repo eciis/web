@@ -43,6 +43,10 @@
             mainCtrl.toggle();
         };
 
+        mainCtrl.logout = function logout() {
+            AuthService.logout();
+        };
+
         $rootScope.$on("user_loaded", function() {
             if (mainCtrl.user.institutions.length === 0) {
                 $state.go("choose_institution");

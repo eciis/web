@@ -106,11 +106,13 @@
         var service = this;
 
         service.responseError = function(response) {
-            if (response.status >= 401 & response.status <= 403) {
-                $state.go("signin", {}, {
-                    reload: true
-                });
-            } else if (response.status > 403) {
+            // if (response.status >= 401 & response.status <= 403) {
+            //     $state.go("signin", {}, {
+            //         reload: true
+            //     });
+            // } 
+
+            if (response.status > 403) {
                 $state.go("error", {
                     msg: response.error,
                     status: response.status

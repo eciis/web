@@ -45,21 +45,40 @@
                     }
                 }
             })
+            .state("app.manage_institution", {
+                abstract: true,
+                url: "/institution/:institutionKey/details",
+                views: {
+                    content: {
+                        templateUrl: "institution/management_institution_page.html",
+                        controller: "InstitutionController as institutionCtrl"
+                    }
+                }
+            })
+            .state("app.manage_institution.invite_user", {
+                url: "/:institutionKey/inviteMembers",
+                views: {
+                    content_manage_institution: {
+                        templateUrl: "invites/invite_user.html",
+                        controller: "InviteUserController as inviteUserCtrl"
+                    }
+                }
+            })
+            .state("app.manage_institution.edit_info", {
+                url: "/:institutionKey/edit",
+                views: {
+                    content_manage_institution: {
+                        templateUrl: "institution/edit_info.html",
+                        controller: "InstitutionController as institutionCtrl"
+                    }
+                }
+            })
             .state("app.invite_inst", {
                 url: "/inviteInstitution",
                 views: {
                     content: {
                         templateUrl: "invites/invite_institution.html",
-                        controller: "InviteController as inviteCtrl"
-                    }
-                }
-            })
-            .state("app.invite_user", {
-                url: "/:institutionKey/inviteUser",
-                views: {
-                    content: {
-                        templateUrl: "invites/invite_user.html",
-                        controller: "InviteController as inviteCtrl"
+                        controller: "InviteInstitutionController as inviteInstCtrl"
                     }
                 }
             })

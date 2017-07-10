@@ -13,18 +13,18 @@
               <div layout-gt-sm="column">
                 <md-input-container class="md-block" flex-gt-sm>
                   <label>Nome da Instituição convidada</label>
-                  <input ng-model="inviteCtrl.invite.suggestion_institution_name" required>
+                  <input ng-model="inviteInstCtrl.invite.suggestion_institution_name" required>
                 </md-input-container>
 
                 <md-input-container class="md-block">
                   <label>Email convite deve ser enviado para:</label>
-                  <input ng-model="inviteCtrl.invite.invitee" type="email"  required>
+                  <input ng-model="inviteInstCtrl.invite.invitee" type="email"  required>
                 </md-input-container>
               </div>
             </div>
             <section layout="row" layout="column" layout-align="end center" layout-wrap>
-              <md-button ng-click="inviteCtrl.sendInstInvite()" md-colors="{background: 'green-900'}">Enviar Convite</md-button>
-              <md-button ng-click="inviteCtrl.cancelInvite()" md-colors="{background: 'green-900'}">Voltar</md-button>
+              <md-button ng-click="inviteInstCtrl.sendInstInvite()" md-colors="{background: 'green-900'}">Enviar Convite</md-button>
+              <md-button ng-click="inviteInstCtrl.cancelInvite()" md-colors="{background: 'green-900'}">Voltar</md-button>
             </section>
           </md-content>
         </md-card>

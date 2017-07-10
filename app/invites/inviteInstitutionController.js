@@ -2,7 +2,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("InviteController", function InviteController(
+    app.controller("InviteInstitutionController", function InviteInstitutionController(
         InviteService,$mdToast, $state, AuthService) {
         var inviteController = this;
 
@@ -34,24 +34,6 @@
             } else {
                 showToast('Convite inválido!');
             }
-        };
-
-        inviteController.sendUserInvite = function sendInvite() {
-            invite = new Invite(inviteController.invite, 'user', currentInstitutionKey);
-            if (invite.isValid()) {
-                InviteService.sendInstInvite(invite).then(function success(response) {
-                    showToast('Convite enviado com sucesso!');
-                    $state.go('app.institution', {institutionKey: currentInstitutionKey});
-                }, function error(response) {
-                    showToast(response.data.msg);
-                });
-            } else {
-                showToast('Convite inválido!');
-            }
-        };
-
-        inviteController.cancelUserInvite = function cancelInvite() {
-           $state.go('app.institution', {institutionKey: currentInstitutionKey});
         };
 
         function showToast(msg) {

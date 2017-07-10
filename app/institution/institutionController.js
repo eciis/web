@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("InstitutionController", function InstitutionController($state, InstitutionService, AuthService, $interval, $mdToast, $q) {
+    app.controller("InstitutionController", function InstitutionController($state, InstitutionService, InviteService, AuthService, $interval, $mdToast, $q) {
         var institutionCtrl = this;
 
         institutionCtrl.current_institution = null;
@@ -15,6 +15,7 @@
         institutionCtrl.followers = [];
 
         var currentInstitutionKey = $state.params.institutionKey;
+        var invite;
 
         Object.defineProperty(institutionCtrl, 'user', {
             get: function() {
@@ -101,7 +102,11 @@
         };
 
         institutionCtrl.goToManageMembers = function goToManageMembers(institutionKey){
-            $state.go('app.invite_user', {institutionKey: institutionKey});
+            $state.go('app.manage_institution.invite_user', {institutionKey: institutionKey});
+        };
+
+        institutionCtrl.goToEditInfo = function goToEditInfo(institutionKey){
+            $state.go('app.manage_institution.edit_info', {institutionKey: institutionKey});
         };
     });
 })();

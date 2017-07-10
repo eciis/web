@@ -1,0 +1,44 @@
+<md-content layout="row" md-colors="{background: 'grey-200'}" layout-align="center">
+  <!-- CONTENT -->
+  <div flex-gt-lg="80" flex-lg="90" layout="row" layout-align="center" layout-fill>
+
+    <!-- LEFT SIDE PANEL -->
+    <div flex flex-gt-xs="25" layout="column" hide show-gt-sm >
+      <div flex>
+        <md-card layout="column" class="green-background">
+          <center>
+            <img ng-src="{{ institutionCtrl.current_institution.image_url }}" class="img-circle img-thumbnail" >
+          </center>
+          <md-card-title>
+            <md-card-title-text>
+              <span class="md-headline"><b>{{ institutionCtrl.current_institution.name }}</b></span>
+            </md-card-title-text>
+          </md-card-title>
+          <md-card-content>
+            <div layout="row">
+              <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}" ng-click="institutionCtrl.goToEditInfo(institutionCtrl.current_institution.key)" ng-if="institutionCtrl.user.isFollower(institutionCtrl.current_institution.key)">
+                <md-icon>edit</md-icon>Editar Informações
+              </md-button>
+            </div>
+            <div layout="row">
+              <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}" ng-click="institutionCtrl.goToManageMembers(institutionCtrl.current_institution.key)" ng-if="institutionCtrl.user.isFollower(institutionCtrl.current_institution.key)">
+                <md-icon>people</md-icon>Gerenciar membros
+              </md-button>
+            </div>
+            <div layout="row">
+              <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}" ng-click="" ng-if="institutionCtrl.user.isFollower(institutionCtrl.current_institution.key)">
+                <md-icon>account_balance</md-icon>Convidar sub-instituições
+              </md-button>
+            </div>
+            <div layout="row">
+              <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}" ng-click="" ng-if="institutionCtrl.user.isFollower(institutionCtrl.current_institution.key)">
+              </md-button>
+            </div>
+          </md-card-content>
+        </md-card>
+      </div>
+    </div>
+
+  <div ui-view="content_manage_institution" flex layout="column" md-colors="{background: 'grey-200'}"></div>
+  <div>
+  </md-content>

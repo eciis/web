@@ -41,7 +41,7 @@
         };
 
         postDetailsCtrl.isAuthorized = function isAuthorized(post) {
-            return isPostAuthor(post) || isInstitutionAdmin(post);
+            return postDetailsCtrl.isPostAuthor(post) || isInstitutionAdmin(post);
         };
 
         postDetailsCtrl.likeOrDislikePost = function likeOrDislikePost(post) {
@@ -238,9 +238,9 @@
             });
         }
 
-        function isPostAuthor(post) {
+        postDetailsCtrl.isPostAuthor = function isPostAuthor(post) {
             return post.author_key == postDetailsCtrl.user.key;
-        }
+        };
 
         function isCommentAuthor(comment) {
             return comment.author_key == postDetailsCtrl.user.key;

@@ -15,6 +15,8 @@
     var posts = [{
         author: 'Mayza Nunes',
         author_key: "111111",
+        title: 'Post de Mayza',
+        text: 'Lorem ipsum'
     }];
 
     beforeEach(module('app'));
@@ -55,7 +57,12 @@
         });
 
         it('should exist a post with author and author_key equal Mayza Nunes and 111111, respectively', function() {
-            expect(homeCtrl.posts).toContain({author: 'Mayza Nunes', author_key: '111111'});
+            expect(homeCtrl.posts).toContain({
+                author: 'Mayza Nunes',
+                author_key: '111111',
+                title: 'Post de Mayza',
+                text: 'Lorem ipsum'
+            });
         });
 
         it('should exist an institution in institutions array', function() { 

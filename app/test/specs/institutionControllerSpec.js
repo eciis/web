@@ -30,7 +30,9 @@
 
     var posts = [{
         author: 'Raoni',
-        author_key: "abcdefg"
+        author_key: "abcdefg",
+        title: 'Post de Raoni',
+        text: 'Lorem ipsum'
     }];
 
     beforeEach(module('app'));

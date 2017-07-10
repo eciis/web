@@ -81,7 +81,8 @@
         });
 
         function recognizeUrl(post) {
-            var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+            var exp = /((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
+            post.title = post.title.replace(exp, "<a href=\"$1\" target='_blank'>$1</a>");
             post.text = post.text.replace(exp,"<a href=\"$1\" target='_blank'>$1</a>");
         }
         /**

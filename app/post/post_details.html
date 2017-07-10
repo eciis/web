@@ -20,7 +20,7 @@
           <img ng-src="{{ post.headerImage }}" class="md-card-image">
           <md-card-title>
             <md-card-title-text>
-              <span class="md-headline">{{post.title}}</span>
+              <span class="md-headline" ng-bind-html="post.title">{{post.title}}</span>
             </md-card-title-text>
           </md-card-title>
           <md-card-content>

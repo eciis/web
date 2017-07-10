@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("InstitutionController", function InstitutionController($state, InstitutionService, AuthService, $interval, $mdToast, $q) {
+    app.controller("InstitutionController", function InstitutionController($state, InstitutionService, AuthService, $interval, $mdToast) {
         var institutionCtrl = this;
 
         institutionCtrl.current_institution = null;
@@ -25,6 +25,7 @@
         function loadPosts() {
             InstitutionService.getTimeline(currentInstitutionKey).then(function success(response) {
                 institutionCtrl.posts = response.data;
+                _.map(institutionCtrl.posts, recognizeUrl);
             }, function error(response) {
                 showToast(response.data.msg);
             });
@@ -69,6 +70,12 @@
                     .hideDelay(5000)
                     .position('bottom right')
             );
+        }
+
+        function recognizeUrl(post) {
+            var exp = /((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
+            post.title = post.title.replace(exp, "<a href=\"$1\" target='_blank'>$1</a>");
+            post.text = post.text.replace(exp,"<a href=\"$1\" target='_blank'>$1</a>");
         }
 
         institutionCtrl.follow = function follow(){

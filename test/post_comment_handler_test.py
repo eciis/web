@@ -2,7 +2,7 @@
 """Post Comment handler test."""
 
 from test_base_handler import TestBaseHandler
-from utils import NotAuthorizedException
+from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from handlers.post_comment_handler import PostCommentHandler
 from handlers.post_comment_handler import check_permission
 from models.user import User

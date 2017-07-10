@@ -7,7 +7,9 @@
         var loginCtrl = this;
 
         loginCtrl.login = function login() {
-            AuthService.login();
+            AuthService.login().then(function success() {
+                $state.go("app.home");
+            });
         };
 
         loginCtrl.limpar = function limpar() {

@@ -91,8 +91,8 @@
         $locationProvider.html5Mode(false);
         $locationProvider.hashPrefix(''); // Uses # instead #!
 
-        // alternatively, register the interceptor via an anonymous factory
         $httpProvider.interceptors.push('AuthInterceptor');
+        $httpProvider.interceptors.push('BearerAuthInterceptor');
 
         $sceDelegateProvider.resourceUrlWhitelist([
             // Allow same origin resource loads.
@@ -112,15 +112,32 @@
             //     });
             // } 
 
-            if (response.status > 403) {
-                $state.go("error", {
-                    msg: response.error,
-                    status: response.status
-                }, {
-                    reload: true
-                });
-            }
+            // if (response.status > 403) {
+            //     $state.go("error", {
+            //         msg: response.error,
+            //         status: response.status
+            //     }, {
+            //         reload: true
+            //     });
+            // }
             return $q.reject(response);
+        };
+    });
+
+    app.factory('BearerAuthInterceptor', function ($window, $q, $state, AuthService) {
+        return {
+            request: function(config) {
+                config.headers = config.headers || {};
+                if (AuthService.isLoggedIn()) {
+                    // may also use sessionStorage
+                    var token = AuthService.getUserToken();
+                    console.log("Token: ",token);
+                    config.headers.Authorization = 'Bearer ' + token;
+                } else {
+                    $state.go("signin");
+                }
+                return config || $q.when(config);
+            }
         };
     });
 })();

@@ -22,7 +22,7 @@ def getSentInvitations(institution_key):
     queryInvites = Invite.query(Invite.institution_key == institution_key,
                                 Invite.type_of_invite == 'user')
 
-    invites = [Invite.make(invite)for invite in queryInvites]
+    invites = [Invite.make(invite) for invite in queryInvites]
 
     return invites
 

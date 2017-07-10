@@ -4,6 +4,7 @@
 import json
 
 from utils import Utils
+from models.invite import Invite
 from utils import login_required
 from utils import json_response
 
@@ -13,12 +14,23 @@ from handlers.base_handler import BaseHandler
 
 from google.appengine.ext import ndb
 
-"""
-TODO: Move this method to User when utils.py is refactored.
 
-@author Andre L Abrantes - 20-06-2017
-"""
+def getInvites(user_email):
+    """Query that return list of invites for this user."""
+    invites = []
+
+    queryInvites = Invite.query(Invite.invitee == user_email)
+
+    invites = [Invite.make(invite)for invite in queryInvites]
+
+    return invites
+
+
 def makeUser(user, request):
+    """TODO: Move this method to User when utils.py is refactored.
+
+    @author Andre L Abrantes - 20-06-2017
+    """
     user_json = Utils.toJson(user, host=request.host)
     user_json['logout'] = 'http://%s/logout?redirect=%s' %\
         (request.host, request.path)
@@ -37,7 +49,9 @@ class UserHandler(BaseHandler):
     @login_required
     def get(self, user):
         """Handle GET Requests."""
-        self.response.write(json.dumps(makeUser(user, self.request)))
+        user_json = makeUser(user, self.request)
+        user_json['invites'] = getInvites(user.email)
+        self.response.write(json.dumps(user_json))
 
     @login_required
     @ndb.transactional(xg=True)

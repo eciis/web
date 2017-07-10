@@ -1,5 +1,5 @@
 <!-- TOOLBAR -->
-<md-toolbar md-colors="{background: 'blue-900'}" layout-wrap layout-align="center" layout="row">
+<md-toolbar md-colors="{background: 'green-900'}" layout-wrap layout-align="center" layout="row">
   <div class="md-toolbar-tools" flex-lg="90" flex-gt-lg="80" layout="row" layout-align="center center">
     <md-button class="md-icon-button" aria-label="Settings" ng-click="mainCtrl.toggle()">
       <md-icon>menu</md-icon>
@@ -13,6 +13,8 @@
     </a>
 
     <span flex md-truncate></span>
+
+    <notification></notification>
 
     <md-button aria-label="inicio" class="md-icon-button" onclick="location.href='/'">
       <md-icon>home</md-icon>
@@ -49,10 +51,10 @@
 
 <!-- SIDENAV -->
 <md-sidenav class="md-sidenav-left" md-component-id="leftNav" md-whiteframe="4" layout="column">
-  <md-toolbar md-colors="{background: 'blue-grey-900' }" layout="row" layout-align="center center">
+  <md-toolbar md-colors="{background: 'green-700' }" layout="row" layout-align="center center">
     <h1 class="md-toolbar-tools">Instituição Atual</h1>
   </md-toolbar>
-  <md-content flex md-colors="{background: 'blue-grey-700'}">
+  <md-content flex >
     <md-list>
       <md-list-item class="md-3-line" ng-repeat="institution in mainCtrl.user.institutions" ng-click="mainCtrl.changeInstitution(institution.name)">
         <img ng-src="{{ institution.image_url }}" alt="{{ institution.name }}" class="md-avatar" md-colors="{background: 'grey-200'}">

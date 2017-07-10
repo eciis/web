@@ -204,7 +204,7 @@
         };
 
         postDetailsCtrl.canDeleteComment = function canDeleteComment(post, comment) {
-            return isCommentAuthor(comment) || isPostAuthor(post) || isInstitutionAdmin(post);
+            return isCommentAuthor(comment);
         };
 
         postDetailsCtrl.deleteComment = function deleteComment(event, post, comment) {

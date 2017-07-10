@@ -31,3 +31,9 @@ class TestBase(unittest.TestCase):
         cls.os = os
         cls.unittest = unittest
         cls.images = images
+
+        """Start stub to identity app"""
+        testbed_instance = cls.testbed.Testbed()
+        testbed_instance.activate()
+        testbed_instance.init_app_identity_stub()
+        testbed_instance.init_mail_stub()

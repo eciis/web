@@ -5,8 +5,7 @@
         'ngMaterial',
         'ui.router',
         'ngAnimate',
-        'ngFileUpload',
-        'ngSanitize'
+        'ngFileUpload'
     ]);
 
     app.config(function($mdIconProvider, $mdThemingProvider, $stateProvider, $urlMatcherFactoryProvider,

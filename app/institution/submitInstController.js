@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.controller("SubmitInstController", function SubmitInstController(AuthService, $state, $mdToast, $mdDialog) {
+    app.controller("SubmitInstController", function SubmitInstController(AuthService, InstitutionService, $state, $mdToast, $mdDialog) {
         var submitInstCtrl = this;
 
         Object.defineProperty(submitInstCtrl, 'user', {
@@ -70,8 +70,13 @@
                 .cancel('Não');
 
             $mdDialog.show(confirm).then(function() {
-                goHome();            
-                showToast('Cadastro de instituição realizado com sucesso');
+                console.log(InstitutionService);
+                InstitutionService.createInstitution(submitInstCtrl.institution).then(function success(response) {
+                    goHome();            
+                    showToast('Cadastro de instituição realizado com sucesso');
+                }, function error(response) {
+                    showToast(response.data.msg);
+                });
             }, function() {
                 showToast('Cancelado');
             });

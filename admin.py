@@ -208,12 +208,10 @@ class ResetHandler(BaseHandler):
             'legal_nature': 'public',
             'address': 'Universidade Federal de Campina Grande',
             'occupation_area': 'research institutes',
-            'description': 'Ensaio Químico - Determinação de Material Volátil por \
-                Gravimetria e Ensaio Biológico - Ensaio de Citotoxicidade',
-            'image_url': 'https://pbs.twimg.com/profile_images\
-                /1782760873/Logo_do_site_400x400.jpg',
+            'description': 'Ensaio Químico - Determinação de Material Volátil por Gravimetria e Ensaio Biológico - Ensaio de Citotoxicidade',
+            'image_url': 'https://pbs.twimg.com/profile_images1782760873/Logo_do_site_400x400.jpg',
             'email': 'certbio@ufcg.edu.br',
-            'phone_number': '(83) 3322 4455',
+            'phone_number': '83 33224455',
         }
         certbio = Institution.create(data, mayza)
         for user in [mayza.key, dalton.key]:
@@ -233,12 +231,10 @@ class ResetHandler(BaseHandler):
             'legal_nature': 'public',
             'address': 'Universidade Federal de Campina Grande',
             'occupation_area': 'college',
-            'description': 'The mission of the Software Practices Laboratory (SPLab) \
-                is to promote the development of the state-of-the-art in the \
-                theory and practice of Software Engineering.',
+            'description': """The mission of the Software Practices Laboratory (SPLab) is to promote the development of the state-of-the-art in the theory and practice of Software Engineering.""",
             'image_url': 'http://amaurymedeiros.com/images/splab.png',
             'email': 'splab@ufcg.edu.br',
-            'phone_number': '(83) 3322 7865',
+            'phone_number': '83 33227865',
         }
         splab = Institution.create(data, jorge)
         for user in [jorge.key, andre.key]:
@@ -257,13 +253,10 @@ class ResetHandler(BaseHandler):
             'legal_nature': 'public',
             'address': 'Universidade Federal de Campina Grande',
             'occupation_area': 'college',
-            'description': 'The mission of the e-CIIS \
-                is to promote the development of the state-of-the-art in the \
-                theory and practice of Software Engineering.',
-            'image_url': 'http://www.paho.org/bra/images\
-                /stories/BRA01A/logobireme.jpg',
+            'description': 'The mission of the e-CIIS is to promote the development of the state-of-the-art in the theory and practice of Software Engineering.',
+            'image_url': 'http://www.paho.org/bra/images/stories/BRA01A/logobireme.jpg',
             'email': 'eciis@ufcg.edu.br',
-            'phone_number': '(83) 3322 7865',
+            'phone_number': '83 33227865',
         }
         eciis = Institution.create(data, dalton)
         for user in [dalton.key, andre.key, jorge.key, maiana.key,

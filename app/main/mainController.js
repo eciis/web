@@ -48,7 +48,7 @@
                 $state.go("choose_institution");
             }
 
-            if (mainCtrl.user.hasPendingInvitations("institution")){
+            if (mainCtrl.user.getPendingInvitationOf("institution")){
                 $state.go("submit_institution");
             }
         });

@@ -34,7 +34,7 @@ class InviteCollectionHandler(BaseHandler):
 
     @json_response
     @login_required
-    @is_admin
+    # @is_admin
     def post(self, user):
         """Handle POST Requests."""
         data = json.loads(self.request.body)

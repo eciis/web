@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
 """Invite Model."""
 from google.appengine.ext import ndb
+from google.appengine.api import mail
 from custom_exceptions.fieldException import FieldException
 
 
@@ -24,14 +26,7 @@ class Invite(ndb.Model):
 
     """ Key of the institution who user was
     invited to be member, if the type of invite is user."""
-    institution_key = ndb.KeyProperty(kind="Institution")
-
-    @staticmethod
-    def checkIsInviteUserValid(data):
-        """Check if invite for user is valid."""
-        if data.get('institution_key') is None:
-            raise FieldException(
-                "The invite for user have to specify the institution")
+    institution_key = ndb.KeyProperty(kind="Institution", required=True)
 
     @staticmethod
     def checkIsInviteInstitutionValid(data):
@@ -46,15 +41,48 @@ class Invite(ndb.Model):
         invite = Invite()
         invite.invitee = data.get('invitee')
         invite.type_of_invite = data.get('type_of_invite')
+        invite.institution_key = ndb.Key(urlsafe=data.get('institution_key'))
 
-        if (invite.type_of_invite == 'user'):
-            Invite.checkIsInviteUserValid(data)
-            invite.institution_key = ndb.Key(urlsafe=data['institution_key'])
-        else:
+        if (invite.type_of_invite == 'institution'):
             Invite.checkIsInviteInstitutionValid(data)
             invite.suggestion_institution_name = data[
                 'suggestion_institution_name']
         return invite
+
+    @staticmethod
+    def sendInvite(invite):
+        """Send invite."""
+        if invite.type_of_invite == 'user':
+            Invite.sendInviteUser(invite)
+        Invite.sendInviteInstitution(invite)
+
+    @staticmethod
+    def sendInviteUser(invite):
+        """Send Invite for user to be member of some Institution."""
+        mail.send_mail(sender="e-CIS <eciis@splab.ufcg.edu.br>",
+                   to="<%s>" % invite.invitee,
+                   subject="Convite plataforma e-CIS",
+                   body="""Oi:
+
+        Para realizar o cadastro cria sua conta em:
+        http://eciis-splab.appspot.com a
+
+        Equipe e-CIS
+        """)
+
+    @staticmethod
+    def sendInviteInstitution(invite):
+        """Send Invite for user create some Institution."""
+        mail.send_mail(sender="e-CIS <eciis@splab.ufcg.edu.br>",
+                   to="<%s>" % invite.invitee,
+                   subject="Convite plataforma e-CIS",
+                   body="""
+        Sua empresa %s foi convidada a se cadastrar na plataforma.
+        Para realizar o cadastro crie sua conta pessoal em
+        http://eciis-splab.appspot.com  e proceda com o cadastro da sua empresa.
+
+        Equipe e-CIS
+        """ % invite.suggestion_institution_name)
 
     @staticmethod
     def make(invite):

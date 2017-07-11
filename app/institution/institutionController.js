@@ -74,8 +74,24 @@
 
         function recognizeUrl(post) {
             var exp = /((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
+            var urlsInTitle = post.title.match(exp);
+            var urlsInText = post.text.match(exp);
+            post.title = addHttpsToUrl(post.title, urlsInTitle);
+            post.text = addHttpsToUrl(post.text, urlsInText);
             post.title = post.title.replace(exp, "<a href=\"$1\" target='_blank'>$1</a>");
             post.text = post.text.replace(exp,"<a href=\"$1\" target='_blank'>$1</a>");
+        }
+
+        function addHttpsToUrl(text, urls) {
+            if(urls) {
+                var https = "https://";
+                for (var i = 0; i < urls.length; i++) {
+                    if(urls[i].slice(0, 4) != "http") {
+                        text = text.replace(urls[i], https + urls[i]);
+                    }
+                }
+            }
+            return text;
         }
 
         institutionCtrl.follow = function follow(){

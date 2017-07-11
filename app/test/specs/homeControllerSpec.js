@@ -56,7 +56,7 @@
             expect(homeCtrl.posts.length).toBe(1);
         });
 
-        it('should exist a post with author and author_key equal Mayza Nunes and 111111, respectively', function() {
+        it('should exist a post', function() {
             expect(homeCtrl.posts).toContain({
                 author: 'Mayza Nunes',
                 author_key: '111111',

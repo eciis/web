@@ -47,7 +47,10 @@
       </md-card>
     </div>
 
-    <post-details flex-gt-md="60" flex-md="75" layout="column" md-colors="{background: 'grey-200'}" posts="homeCtrl.posts"></post-details>
+    <div flex-gt-md="60" flex-md="10" layout="column" md-colors="{background: 'grey-200'}">
+      <create-post flex user="homeCtrl.user" is-dialog="false"></create-post>
+      <post-details flex-gt-md="60" flex-md="75" layout="column" md-colors="{background: 'grey-200'}" posts="homeCtrl.posts"></post-details>
+    </div>
 
     <!-- RIGHT SIDE PANEL -->
     <div flex-gt-md="20" layout-padding layout="row" md-colors="{background: 'grey-200'}"  hide show-gt-md >

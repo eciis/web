@@ -25,17 +25,16 @@ def getInvites(user_email):
 
     return invites
 
-"""
-TODO: Move this method to User when utils.py is refactored.
 
-@author Andre L Abrantes - 20-06-2017
-"""
 def makeUser(user, request):
+    """TODO: Move this method to User when utils.py is refactored.
+
+    @author Andre L Abrantes - 20-06-2017
+    """
     user_json = Utils.toJson(user, host=request.host)
     user_json['logout'] = 'http://%s/logout?redirect=%s' %\
         (request.host, request.path)
     user_json['institutions'] = []
-    user_json['invites'] = getInvites(user.email)
     for institution in user.institutions:
         user_json['institutions'].append(
             Utils.toJson(institution.get())
@@ -50,7 +49,9 @@ class UserHandler(BaseHandler):
     @login_required
     def get(self, user):
         """Handle GET Requests."""
-        self.response.write(json.dumps(makeUser(user, self.request)))
+        user_json = makeUser(user, self.request)
+        user_json['invites'] = getInvites(user.email)
+        self.response.write(json.dumps(user_json))
 
     @login_required
     @ndb.transactional(xg=True)

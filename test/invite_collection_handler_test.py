@@ -3,6 +3,7 @@
 
 from test_base_handler import TestBaseHandler
 from models.institution import Institution
+from models.user import User
 from handlers.invite_collection_handler import InviteCollectionHandler
 from google.appengine.ext import ndb
 import json
@@ -22,7 +23,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         initModels(cls)
 
     def test_post_invite_institution(self):
-        """Test the post_collection_handler's post method."""
+        """Test the invite_collection_handler's post method."""
         # Pretend an authentication
         self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
         self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
@@ -30,13 +31,14 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         invite = self.testapp.post_json("/api/invites", {
             'invitee': 'mayzabeel@gmail.com',
             'type_of_invite': 'institution',
-            'suggestion_institution_name': 'New Institution'})
+            'suggestion_institution_name': 'New Institution',
+            'institution_key': self.certbio.key.urlsafe()})
         # Retrieve the entities
         invite = json.loads(invite._app_iter[0])
         key_invite = ndb.Key(urlsafe=invite['key'])
         invite_obj = key_invite.get()
 
-        # Check if the post's key is in institution and user
+        # Check data of invite
         self.assertEqual(invite_obj.invitee, 'mayzabeel@gmail.com',
                          "The email expected was mayzabeel@gmail.com")
         self.assertEqual(invite_obj.type_of_invite, 'institution',
@@ -58,7 +60,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
                 'type_of_invite': 'institution'})
 
     def test_post_invite_user(self):
-        """Test the post_collection_handler's post method."""
+        """Test the invite_collection_handler's post method."""
         # Pretend an authentication
         self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
         self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
@@ -73,7 +75,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         key_invite = ndb.Key(urlsafe=invite['key'])
         invite_obj = key_invite.get()
 
-        # Check if the post's key is in institution and user
+        # Check data of invite
         self.assertEqual(invite_obj.invitee, 'mayzabeel@gmail.com',
                          "The email expected was mayzabeel@gmail.com")
         self.assertEqual(invite_obj.type_of_invite, 'user',
@@ -92,6 +94,24 @@ class InviteCollectionHandlerTest(TestBaseHandler):
                 'invitee': 'mayzabeel@gmail.com',
                 'type_of_invite': 'user'})
 
+    def test_post_invite_user_error(self):
+        """Test the invite_collection_handler's post
+        method when the inviter is not a administrator."""
+        # Pretend an authentication
+        self.os.environ['REMOTE_USER'] = 'tiago.pereira@ccc.ufcg.edu.br'
+        self.os.environ['USER_EMAIL'] = 'tiago.pereira@ccc.ufcg.edu.br'
+
+        """ Check if raise exception when the inviter id not admistrator."""
+        # TODO:
+        # Fix the post method.
+        # The try except block prevents that NotAuthorizedException be raised
+        # @author Mayza Nunes 07-07-2017
+        with self.assertRaises(Exception):
+            self.testapp.post_json("/api/invites", {
+                'invitee': 'mayzabeel@gmail.com',
+                'type_of_invite': 'user',
+                'institution_key': self.certbio.key.urlsafe()})
+
 
 def initModels(cls):
     """Init the models."""
@@ -109,3 +129,28 @@ def initModels(cls):
     cls.certbio.followers = []
     cls.certbio.posts = []
     cls.certbio.put()
+    # new User Mayza
+    cls.mayza = User()
+    cls.mayza.name = 'Mayza Nunes'
+    cls.mayza.cpf = '089.675.908-90'
+    cls.mayza.email = 'mayzabeel@gmail.com'
+    cls.mayza.institutions = []
+    cls.mayza.follows = []
+    cls.mayza.institutions_admin = [cls.certbio.key]
+    cls.mayza.notifications = []
+    cls.mayza.posts = []
+    cls.mayza.put()
+    # set Mayza to be admin of Certbio
+    cls.certbio.admin = cls.mayza.key
+    cls.certbio.put()
+    # new User Tiago
+    cls.tiago = User()
+    cls.tiago.name = 'Tiago Pereira'
+    cls.tiago.cpf = '089.675.908-65'
+    cls.tiago.email = 'tiago.pereira@ccc.ufcg.edu.br'
+    cls.tiago.institutions = []
+    cls.tiago.follows = []
+    cls.tiago.institutions_admin = []
+    cls.tiago.notifications = []
+    cls.tiago.posts = []
+    cls.tiago.put()

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+"""Utils."""
 import json
 import datetime
 import sys
@@ -8,16 +9,7 @@ from google.appengine.ext import ndb
 from google.appengine.ext.ndb import Key
 
 from models.user import User
-from models.institution import Institution
-
-
-class NotAuthorizedException(Exception):
-    """Not Authorized Exception."""
-
-    def __init__(self, message=None):
-        """Init method."""
-        super(NotAuthorizedException, self).__init__(
-            message or 'The user is not authorized to do this procedure.')
+from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
 
 class Utils():

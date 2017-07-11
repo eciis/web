@@ -27,7 +27,7 @@
                 uploadImgCtrl.model.uploaded_images.push(response.url);
                 uploadImgCtrl.file = null;
             }, function error(response) {
-                showToast("Problemas encontrados ao fazer upload da imagem " + response.data);
+                showToast("Erro no upload da imagem: " + response.data);
             });
         }
 

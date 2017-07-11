@@ -45,7 +45,7 @@
         }
 
         function setupUser() {
-            configProfileCtrl.newUser = new User(User.clone(configProfileCtrl.user));
+            configProfileCtrl.newUser = new User(deepClone(configProfileCtrl.user));
         }
 
         function showToast(msg) {

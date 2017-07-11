@@ -10,6 +10,7 @@ from models.user import User
 from models.institution import Institution
 from models.post import Post
 from models.post import Comment
+from models.invite import Invite
 from google.appengine.ext import ndb
 
 
@@ -73,6 +74,9 @@ class ResetHandler(BaseHandler):
 
         institutions = Institution.query().fetch(keys_only=True)
         ndb.delete_multi(institutions)
+
+        invites = Invite.query().fetch(keys_only=True)
+        ndb.delete_multi(invites)
 
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
         response = {"msg": "Datastore Cleaned"}

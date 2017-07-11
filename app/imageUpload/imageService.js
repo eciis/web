@@ -8,19 +8,18 @@
         var folderImages = 'images/';
 
         service.compress = function compress(file, callback) {
+            var fileReader = new FileReader();
 
-            function createImage(result) {
+            fileReader.onload = function createImage(result) {
                 var source_img_obj = new Image();
                 source_img_obj.onload = function() {
-                    var compressedFile = setImageProperties(source_img_obj, file);
+                    var compressedFile = compressImage(source_img_obj, file);
                     callback(compressedFile);
                 };
                 source_img_obj.src = result.target.result;
-            }
+            };
 
-            var fr = new FileReader();
-            fr.onload = createImage;
-            fr.readAsDataURL(file);
+            fileReader.readAsDataURL(file);
         };
 
         service.saveImage = function(file) {
@@ -72,7 +71,7 @@
             return new Blob(byteArrays, { type: contentType });
         }
 
-        function setImageProperties(source_img_obj, file) {
+        function compressImage(source_img_obj, file) {
             var height = source_img_obj.height;
             var width = source_img_obj.width;
             var fileProperties = file.name.split(".");

@@ -27,11 +27,11 @@
                 showToast('Convite inválido!');
             } else {
                 var promise = InviteService.sendInvite(invite);
-                promise.then(function success() {
+                promise.then(function success(response) {
                     showToast('Convite enviado com sucesso!');
                     $state.go("app.home");
-                }, function error() {
-                    showToast("Convite não pôde ser enviado");
+                }, function error(response) {
+                    showToast(response.data.msg);
                 });
                 return promise;
             }

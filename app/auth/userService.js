@@ -29,5 +29,16 @@
             });
             return deffered.promise;
         };
+
+        service.load = function load() {
+            var deffered = $q.defer();
+            $http.get(USER_URI).then(function loadUser(info) {
+                service.user = new User(info.data);
+                deffered.resolve(service.user);
+            }, function error(data) {
+                deffered.reject(data);
+            });
+            return deffered.promise;
+        };
     });
 })();

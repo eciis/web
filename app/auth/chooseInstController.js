@@ -14,9 +14,6 @@
         Object.defineProperty(chooseInstCtrl, 'user', {
             get: function() {
                 return AuthService.user;
-            },
-            set: function set(newValue) {
-                AuthService.user = newValue;
             }
         });
 
@@ -34,10 +31,11 @@
         };
 
         chooseInstCtrl.finish = function finish(ev) {
-            UserService.addInstitution(chooseInstCtrl.user, chooseInstCtrl.selectedInstitution.key)
-                .then(function success(user) {
-                    chooseInstCtrl.user = new User(user);
-                    showDialog(ev);
+            UserService.addInstitution(chooseInstCtrl.user, chooseInstCtrl.selectedInstitution.key).then(
+                function success() {
+                    AuthService.reload().then(function success() {
+                         showDialog(ev);
+                    });
                 });
         };
 

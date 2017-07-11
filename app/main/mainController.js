@@ -2,7 +2,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("MainController", function MainController($mdSidenav, $mdDialog, $mdToast, $state, AuthService, $rootScope) {
+    app.controller("MainController", function MainController($mdSidenav, $mdDialog, $mdToast, $state, AuthService) {
         var mainCtrl = this;
 
         Object.defineProperty(mainCtrl, 'user', {
@@ -47,10 +47,10 @@
             AuthService.logout();
         };
 
-        $rootScope.$on("user_loaded", function() {
+        (function main() {
             if (mainCtrl.user.institutions.length === 0) {
                 $state.go("choose_institution");
             }
-        });
+        })();
     });
 })();

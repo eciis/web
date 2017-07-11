@@ -153,50 +153,56 @@ class Utils():
         return str(hash_num)
 
 
+def verify_token(request):
+    # Verify Firebase auth.
+    # [START verify_token]
+    try:
+        token = request.headers['Authorization']
+        if token:
+            token = token.split(' ').pop() 
+            return google.oauth2.id_token.verify_token(
+                token, HTTP_REQUEST)
+    except Exception as e:
+        raise NotAuthorizedException()
+    return
+
+
 def login_required(method):
     """Handle required login."""
     def login(self, *args):
-        # if current_user is None:
-        #     self.response.write(json.dumps({
-        #         'msg': 'Auth needed',
-        #         'login_url': 'http://%s/login' % self.request.host
-        #     }))
-        #     self.response.set_status(401)
-        #     return
-        # user = User.get_by_email(current_user.email())
-        # if user is None:
-        #     user = User()
-        #     user.email = current_user.email()
-        #     user.name = current_user.nickname()
-        #     user.photo_url = "/images/avatar.jpg"
-
-        #     user.put()
-        #     # TODO:
-        #     # Return this block of code when user sign up is created
-        #     # @author André L. Abrantes - 25-05-2017
-        #     #
-        #     # self.response.write(json.dumps({
-        #     #     'msg': 'Forbidden',
-        #     #     'login_url': 'http://%s/login' % self.request.host
-        #     # }))
-        #     # self.response.set_status(403)
-        #     # self.redirect("/logout")
-        #     # return
-
-        # Verify Firebase auth.
-        # [START verify_token]
-        token = self.request.headers['Authorization'].split(' ').pop()
-        claims = google.oauth2.id_token.verify_token(
-            token, HTTP_REQUEST)
-        if not claims:
+        credential = verify_token(self.request)
+        if not credential:
             self.response.write(json.dumps({
                 'msg': 'Auth needed',
                 'login_url': 'http://%s/login' % self.request.host
             }))
             self.response.set_status(401)
+            return
 
-        user_email = claims.get('email', 'Unknown')
+        user_email = credential.get('email', 'Unknown')
+        user_name = credential.get('name', 'Unknown')
+
         user = User.get_by_email(user_email)
+
+        if user is None:
+            user = User()
+            user.email = user_email
+            user.name = user_name
+            user.photo_url = "/images/avatar.jpg"
+
+            user.put()
+            # TODO:
+            # Return this block of code when user sign up is created
+            # @author André L. Abrantes - 25-05-2017
+            #
+            # self.response.write(json.dumps({
+            #     'msg': 'Forbidden',
+            #     'login_url': 'http://%s/login' % self.request.host
+            # }))
+            # self.response.set_status(403)
+            # self.redirect("/logout")
+            # return
+
         method(self, user, *args)
     return login
 

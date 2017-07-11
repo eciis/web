@@ -124,14 +124,13 @@
         };
     });
 
-    app.factory('BearerAuthInterceptor', function ($window, $q, $state, AuthService) {
+    app.factory('BearerAuthInterceptor', function ($injector, $q, $state) {
         return {
             request: function(config) {
+                var AuthService = $injector.get('AuthService');
                 config.headers = config.headers || {};
                 if (AuthService.isLoggedIn()) {
-                    // may also use sessionStorage
                     var token = AuthService.getUserToken();
-                    console.log("Token: ",token);
                     config.headers.Authorization = 'Bearer ' + token;
                 } else {
                     $state.go("signin");

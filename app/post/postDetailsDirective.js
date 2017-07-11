@@ -12,11 +12,7 @@
         postDetailsCtrl.savingComment = false;
         postDetailsCtrl.savingLike = false;
 
-        Object.defineProperty(postDetailsCtrl, 'user', {
-            get: function() {
-                return AuthService.user;
-            }
-        });
+        postDetailsCtrl.user = AuthService.getCurrentUser();
 
         postDetailsCtrl.deletePost = function deletePost(ev, post, posts) {
             var confirm = $mdDialog.confirm()

@@ -8,7 +8,6 @@
 
         inviteController.invite = {};
 
-        var currentInstitutionKey = $state.params.institutionKey;
         var invite;
 
         Object.defineProperty(inviteController, 'user', {
@@ -22,17 +21,19 @@
         };
 
         inviteController.sendInstInvite = function sendInvite() {
-            currentInstitutionKey = inviteController.user.current_institution.key;
+            var currentInstitutionKey = inviteController.user.current_institution.key;
             invite = new Invite(inviteController.invite, 'institution', currentInstitutionKey);
-            if (invite.isValid()) {
-                InviteService.sendInstInvite(invite).then(function success(response) {
+            if (!invite.isValid()) {
+                showToast('Convite inválido!');
+            } else {
+                var promise = InviteService.sendInvite(invite);
+                promise.then(function success() {
                     showToast('Convite enviado com sucesso!');
                     $state.go("app.home");
-                }, function error(response) {
-                    showToast(response.data.msg);
+                }, function error() {
+                    showToast("Convite não pôde ser enviado");
                 });
-            } else {
-                showToast('Convite inválido!');
+                return promise;
             }
         };
 

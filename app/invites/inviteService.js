@@ -8,7 +8,7 @@
 
         var INVITES_URI = "/api/invites";
 
-        service.sendInstInvite = function createInstInvite(invite) {
+        service.sendInvite = function sendInvite(invite) {
             var deferred = $q.defer();
             $http.post(INVITES_URI, invite).then(function success(response) {
                 deferred.resolve(response);

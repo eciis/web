@@ -15,7 +15,6 @@
         institutionCtrl.followers = [];
 
         var currentInstitutionKey = $state.params.institutionKey;
-        var invite;
 
         Object.defineProperty(institutionCtrl, 'user', {
             get: function() {

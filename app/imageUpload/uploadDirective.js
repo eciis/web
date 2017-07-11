@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller('UpladImageController', function (CompressService, CRUDService, $mdToast) {
+    app.controller('UploadImageController', function (ImageService, $mdToast) {
         var uploadImgCtrl = this;
         uploadImgCtrl.model = {};
 
@@ -15,14 +15,14 @@
 
             if ((file.type === jpgType || file.type === pngType) && file.size <= maximumSize) {
                 uploadImgCtrl.model = model;
-                CompressService.compress(file, saveImage);
+                ImageService.compress(file, saveImage);
             } else {
                 showToast("Imagem deve ser jpg ou png e menor que 5 Mb");
             }
         };
 
         function saveImage(file) {
-            CRUDService.saveImage(file).then(function success(response) {
+            ImageService.saveImage(file).then(function success(response) {
                 uploadImgCtrl.model.photo_url = response.url;
                 uploadImgCtrl.model.uploaded_images.push(response.url);
                 uploadImgCtrl.file = null;
@@ -48,7 +48,7 @@
             restrict: 'E',
             templateUrl: "imageUpload/upload_image.html",
             controllerAs: "upImageCtrl",
-            controller: "UpladImageController",
+            controller: "UploadImageController",
             transclude: true,
             scope: {
                 model: '='

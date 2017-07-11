@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+"""Utils."""
 import json
 import datetime
 import sys
@@ -18,14 +19,7 @@ import requests_toolbelt.adapters.appengine
 requests_toolbelt.adapters.appengine.monkeypatch()
 HTTP_REQUEST = google.auth.transport.requests.Request()
 
-
-class NotAuthorizedException(Exception):
-    """Not Authorized Exception."""
-
-    def __init__(self, message=None):
-        """Init method."""
-        super(NotAuthorizedException, self).__init__(
-            message or 'The user is not authorized to do this procedure.')
+from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
 
 class Utils():

@@ -8,7 +8,7 @@ from google.appengine.ext import ndb
 from utils import login_required
 from utils import json_response
 from utils import Utils
-from utils import NotAuthorizedException
+from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
 from handlers.base_handler import BaseHandler
 from models.post import Comment

@@ -71,13 +71,8 @@ class TestIsAuthorized(TestBase):
                                        self.ruan_post.key.urlsafe()),
                           "Something went wrong during the execution")
 
-    def test_is_post_author(self):
+    def test_is_post_author_in_failure(self):
         """Test is_post_author decorator."""
-        """ Make sure if the return is None, once when everything goes ok
-        the method returns nothing."""
-        self.assertIsNone(is_decorated_by_post_author(self, self.mayza,
-                                                      self.mayza_post.key.urlsafe()),
-                          "Something went wrong during the execution")
         """Make sure that an exception is raised because the user
         is not the post's author."""
         with self.assertRaises(NotAuthorizedException) as Naex:
@@ -90,6 +85,14 @@ class TestIsAuthorized(TestBase):
         with self.assertRaises(Exception):
             is_decorated_by_post_author(
                 self, self.raoni, "")
+
+    def test_is_post_author_in_success(self):
+        """Test is_post_author decorator."""
+        """ Make sure if the return is None, once when everything goes ok
+        the method returns nothing."""
+        self.assertIsNone(is_decorated_by_post_author(self, self.mayza,
+                                                      self.mayza_post.key.urlsafe()),
+                          "Something went wrong during the execution")
 
     def tearDown(self):
         """End up the test."""

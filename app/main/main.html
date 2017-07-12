@@ -31,6 +31,12 @@
             Notificações
           </md-button>
         </md-menu-item>
+        <md-menu-item ng-if="mainCtrl.isAdmin()">
+          <md-button ng-click="mainCtrl.goInvite()">
+            <md-icon>mail_outline</md-icon>
+            Convite
+          </md-button>
+        </md-menu-item>
         <md-menu-item>
           <md-button ui-sref="config_profile">
             <md-icon>dashboard</md-icon>

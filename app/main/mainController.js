@@ -22,6 +22,12 @@
             return false;
         };
 
+        mainCtrl.isAdmin = function isAdmin() {
+            if (mainCtrl.user){
+                return !_.isEmpty(mainCtrl.user.institutions_admin);
+            }
+        };
+
         mainCtrl.changeInstitution = function changeInstitution(name) {
             mainCtrl.user.changeInstitution(name);
         };
@@ -36,6 +42,10 @@
         mainCtrl.goTo = function goTo(state) {
             $state.go(state);
             mainCtrl.toggle();
+        };
+
+         mainCtrl.goInvite = function goInvite() {
+            $state.go('app.invite_inst');
         };
 
         mainCtrl.goToInstitution = function goToInstitution(institutionKey) {

@@ -31,12 +31,6 @@ class Comment(ndb.Model):
     # user who is the author
     author = ndb.KeyProperty(kind="User", required=True)
 
-    # user who deleted the post
-    last_modified_by = ndb.KeyProperty(kind="User")
-
-    # Date and time of last modified
-    last_modified_date = ndb.DateTimeProperty(auto_now=True)
-
     # institution which the author is representing
     institution_name = ndb.StringProperty(required=True)
 
@@ -127,6 +121,12 @@ class Post(ndb.Model):
 
     # Date and time of a creation of a post
     publication_date = ndb.DateTimeProperty(auto_now_add=True)
+
+    # user who deleted the post
+    last_modified_by = ndb.KeyProperty(kind="User")
+
+    # Date and time of last modified
+    last_modified_date = ndb.DateTimeProperty(auto_now=True)
 
     # Likes of Post
     likes = ndb.LocalStructuredProperty(Like, repeated=True)

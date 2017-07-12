@@ -213,7 +213,7 @@ class ResetHandler(BaseHandler):
             'address': 'Universidade Federal de Campina Grande',
             'occupation_area': 'research institutes',
             'description': 'Ensaio Químico - Determinação de Material Volátil por Gravimetria e Ensaio Biológico - Ensaio de Citotoxicidade',
-            'image_url': 'https://pbs.twimg.com/profile_images1782760873/Logo_do_site_400x400.jpg',
+            'image_url': 'https://pbs.twimg.com/profile_images/1782760873/Logo_do_site_400x400.jpg',
             'email': 'certbio@ufcg.edu.br',
             'phone_number': '83 33224455',
         }

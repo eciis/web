@@ -6,11 +6,6 @@
     app.controller("SubmitInstController", function SubmitInstController(AuthService, InstitutionService, $state, $mdToast, $mdDialog, $q, $http) {
         var submitInstCtrl = this;
 
-        submitInstCtrl.invite = {
-            suggestion_institution_name: "",
-            invitee: ""
-        };
-
         Object.defineProperty(submitInstCtrl, 'user', {
             get: function() {
                 return AuthService.user;
@@ -65,7 +60,9 @@
             var confirm = $mdDialog.confirm()
                 .clickOutsideToClose(true)
                 .title('Cancelar Cadastro')
-                .textContent('Cancelar o cadastro dessa instituição?')
+                .textContent(`Ao cancelar o cadastro, seu convite será removido e 
+                    a instituição não poderá ser criada posteriormente sem um novo convite. 
+                    Deseja cancelar mesmo assim?`)
                 .ariaLabel('Cancelar Cadastro')
                 .targetEvent(event)
                 .ok('Sim')
@@ -111,7 +108,6 @@
                 submitInstCtrl.occupationAreas = response.data;
             });
         }
-
 
         // TODO: replace the use of this method by the InviteService
         // @author: Ruan Eloy   date: 11/07/17

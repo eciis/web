@@ -163,14 +163,13 @@
         };
 
         postDetailsCtrl.showLikes = function showLikes(post){
-            var promise = postDetailsCtrl.getLikes(post);
+            postDetailsCtrl.getLikes(post);
             if(postDetailsCtrl.currentPost === post.key){
                 postDetailsCtrl.currentPost = null;
             }
             else {
                 postDetailsCtrl.currentPost = post.key;
             }
-            return promise;
         };
 
         postDetailsCtrl.checkCurrentPost = function checkCurrentPost(post){
@@ -233,7 +232,6 @@
 
             $mdDialog.show(confirm).then(function() {
                 CommentService.deleteComment(post.key, comment.id).then(function success(response) {
-                    console.log(response);
                     removeCommentFromPost(post, response.data);
                     showToast('Comentário excluído com sucesso');
                     post.number_of_comments -= 1;

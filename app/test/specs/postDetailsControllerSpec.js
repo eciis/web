@@ -27,11 +27,15 @@ describe('Test postDetailsController', function() {
         http = $http;
         state = $state;
         commentService = CommentService;
-        posts = [{title: 'post principal', author_key: user.key, institution: institutions[0],
-                            key: "123456", comments: "/api/posts/123456/comments",
-                            likes: "/api/posts/123456/likes", number_of_likes: 0, number_of_comments: 0},
-                        {title: 'post secundário', author_key: "", institution: institutions[0], key: "123412356"},
-                        {title: 'post', author: user, institution: institutions[0], key: "123454356", number_of_likes: 1}];
+        posts = [
+            {
+                    title: 'post principal', author_key: user.key, institution: institutions[0],
+                    key: "123456", comments: "/api/posts/123456/comments",
+                    likes: "/api/posts/123456/likes", number_of_likes: 0, number_of_comments: 0
+            },
+            {title: 'post secundário', author_key: "", institution: institutions[0], key: "123412356"},
+            {title: 'post', author: user, institution: institutions[0], key: "123454356", number_of_likes: 1}
+        ];
         httpBackend.expectGET('/api/user').respond(user);
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);
@@ -60,9 +64,11 @@ describe('Test postDetailsController', function() {
             postDetailsCtrl.deletePost("$event", posts[0], posts);
             httpBackend.flush();
             expect(posts.length).toBe(2);
-            expect(postService.deletePost).toHaveBeenCalledWith({title: 'post principal', author_key: user.key, institution: institutions[0],
-                                                                                                        key: "123456", comments: "/api/posts/123456/comments",
-                                                                                                        likes: "/api/posts/123456/likes", number_of_likes: 0, number_of_comments: 0});
+            expect(postService.deletePost).toHaveBeenCalledWith({
+                                                                                                            title: 'post principal', author_key: user.key, institution: institutions[0],
+                                                                                                            key: "123456", comments: "/api/posts/123456/comments",
+                                                                                                            likes: "/api/posts/123456/likes", number_of_likes: 0, number_of_comments: 0
+                                                                                                        });
             expect(mdDialog.confirm).toHaveBeenCalled();
             expect(mdDialog.show).toHaveBeenCalled();
         });
@@ -134,7 +140,6 @@ describe('Test postDetailsController', function() {
             spyOn(state, 'go').and.callThrough();
             postDetailsCtrl.goToInstitution(institutions[0]);
             expect(state.go).toHaveBeenCalled();
-
         });
     });
 
@@ -147,7 +152,6 @@ describe('Test postDetailsController', function() {
             });
             httpBackend.flush();
             expect(commentService.getComments).toHaveBeenCalled();
-
         });
     });
 
@@ -155,13 +159,10 @@ describe('Test postDetailsController', function() {
         it('Should call getLikes and set currentPost to null', function() {
             spyOn(postDetailsCtrl, 'getLikes').and.callThrough();
             httpBackend.expect('GET', POSTS_URI + '/' + posts[0].key + '/likes').respond();
-            postDetailsCtrl.showLikes(posts[0]).then(function() {
-                expect(posts[0].number_of_likes).toEqual(0);
-                expect(postDetailsCtrl.currentPost).toEqual(posts[0].key);
-            });
+            postDetailsCtrl.showLikes(posts[0]);
             httpBackend.flush();
+            expect(postDetailsCtrl.currentPost).toEqual(posts[0].key);
             expect(postDetailsCtrl.getLikes).toHaveBeenCalled();
-
         });
     });
 

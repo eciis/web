@@ -63,7 +63,6 @@
         var loadPosts = function loadPosts() {
             PostService.get().then(function success(response) {
                 homeCtrl.posts = response.data;
-                // _.map(homeCtrl.posts, recognizeUrl);
             }, function error(response) {
                 $interval.cancel(intervalPromise); // Cancel the interval promise that load posts in case of error
                 showToast(response.data.msg);

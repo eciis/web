@@ -53,7 +53,7 @@
                                 <md-input-container class="md-block" flex-gt-sm>
                                     <label>Área de Atuação</label>
                                     <md-select ng-model="submitInstCtrl.institution.occupation_area" required>
-                                      <md-option ng-repeat="area in submitInstCtrl.areas | orderBy: 'name'"
+                                      <md-option ng-repeat="area in submitInstCtrl.occupationAreas | orderBy: 'name'"
                                         ng-value="area.value">{{ area.name }}
                                       </md-option>
                                     </md-select>
@@ -61,7 +61,7 @@
                                 <md-input-container class="md-block" flex-gt-sm>
                                     <label>Natureza Jurídica</label>
                                     <md-select ng-model="submitInstCtrl.institution.legal_nature" required> 
-                                      <md-option ng-repeat="nature in submitInstCtrl.natures | orderBy: 'name'"
+                                      <md-option ng-repeat="nature in submitInstCtrl.legalNatures | orderBy: 'name'"
                                         ng-value="nature.value">{{ nature.name }}
                                       </md-option>
                                     </md-select>

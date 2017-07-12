@@ -223,8 +223,6 @@ class ResetHandler(BaseHandler):
         for user in [jorge.key, mayza.key, maiana.key, luiz.key,
                      raoni.key, ruan.key, tiago.key]:
             certbio.follow(user)
-        # certbio.posts = []
-        # certbio.put()
 
         # new Institution SPLAB with User André like a member
         # and User Mayza like a follower
@@ -246,8 +244,6 @@ class ResetHandler(BaseHandler):
         for user in [jorge.key, andre.key, maiana.key, luiz.key,
                      raoni.key, ruan.key, tiago.key]:
             splab.follow(user)
-        # splab.posts = []
-        # splab.put()
 
         # new Institution eciis
         data = {
@@ -271,9 +267,6 @@ class ResetHandler(BaseHandler):
                      maiana.key, luiz.key, raoni.key,
                      ruan.key, tiago.key]:
             eciis.follow(user)
-
-        # eciis.posts = []
-        # eciis.put()
 
         jsonList.append({"msg": "database initialized with a few institutions"})
 

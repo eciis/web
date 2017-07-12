@@ -5,6 +5,7 @@
 
     app.controller("SubmitInstController", function SubmitInstController(AuthService, InstitutionService, $state, $mdToast, $mdDialog, $q, $http) {
         var submitInstCtrl = this;
+
         submitInstCtrl.invite = {
             suggestion_institution_name: "",
             invitee: ""
@@ -25,21 +26,8 @@
             state: "active"
         };
 
-        submitInstCtrl.natures = [
-            {value:"public", name:"Pública"}, 
-            {value:"private", name:"Privada"},
-            {value:"philanthropic", name:"Filantrópica"}
-        ];
-
-        submitInstCtrl.areas = [
-            {value:"official laboratories", name:"Laboratórios Oficiais"}, 
-            {value:"government agencies", name:"Ministérios e outros Órgãos do Governo"}, 
-            {value:"funding agencies", name:"Agências de Fomento"}, 
-            {value:"research institutes", name:"Institutos de Pesquisa"}, 
-            {value:"colleges", name:"Universidades"},
-            {value:"other", name:"Outra"}
-        ];
-
+        getLegalNatures();
+        getOccupationAreas();
         submitInstCtrl.cnpjRegex = "[0-9]{2}[\.][0-9]{3}[\.][0-9]{3}[\/][0-9]{4}[-][0-9]{2}";
         submitInstCtrl.phoneRegex = "([0-9]{2}[\\s][0-9]{8})";
 
@@ -110,6 +98,18 @@
                     .hideDelay(5000)
                     .position('bottom right')
             );
+        }
+
+        function getLegalNatures() {
+            $http.get('institution/legal_nature.json').then(function success(response) {
+                submitInstCtrl.legalNatures = response.data;
+            });
+        }
+
+        function getOccupationAreas() {
+            $http.get('institution/occupation_area.json').then(function success(response) {
+                submitInstCtrl.occupationAreas = response.data;
+            });
         }
 
 

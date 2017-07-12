@@ -46,6 +46,43 @@
                     }
                 }
             })
+            .state("app.manage_institution", {
+                abstract: true,
+                url: "/institution/:institutionKey/details",
+                views: {
+                    content: {
+                        templateUrl: "institution/management_institution_page.html",
+                        controller: "InstitutionController as institutionCtrl"
+                    }
+                }
+            })
+            .state("app.manage_institution.invite_user", {
+                url: "/:institutionKey/inviteMembers",
+                views: {
+                    content_manage_institution: {
+                        templateUrl: "invites/invite_user.html",
+                        controller: "InviteUserController as inviteUserCtrl"
+                    }
+                }
+            })
+            .state("app.manage_institution.edit_info", {
+                url: "/:institutionKey/edit",
+                views: {
+                    content_manage_institution: {
+                        templateUrl: "institution/edit_info.html",
+                        controller: "InstitutionController as institutionCtrl"
+                    }
+                }
+            })
+            .state("app.invite_inst", {
+                url: "/inviteInstitution",
+                views: {
+                    content: {
+                        templateUrl: "invites/invite_institution.html",
+                        controller: "InviteInstitutionController as inviteInstCtrl"
+                    }
+                }
+            })
             .state("config_profile", {
                 url: "/config_profile",
                 views: {
@@ -70,6 +107,14 @@
                     main: {
                         templateUrl: "auth/login.html",
                         controller: "LoginController as loginCtrl"
+                    }
+                }
+            })
+            .state("user_inactive", {
+                url: "/userinactive",
+                views: {
+                    main: {
+                      templateUrl: "error/user_inactive.html"
                     }
                 }
             })

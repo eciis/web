@@ -23,8 +23,7 @@ class InstitutionTimelineHandler(BaseHandler):
         """
         institution_key = ndb.Key(urlsafe=url_string)
         queryPosts = Post.query(Post.institution == institution_key).order(Post.publication_date)
-        publishedPosts = queryPosts.filter(Post.state == "published")
 
-        array = [Post.make(post, self.request.host) for post in publishedPosts]
+        array = [Post.make(post, self.request.host) for post in queryPosts]
 
         self.response.write(json.dumps(array))

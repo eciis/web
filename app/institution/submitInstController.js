@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.controller("SubmitInstController", function SubmitInstController(AuthService, InstitutionService, $state, $mdToast, $mdDialog, $q, $http) {
+    app.controller("SubmitInstController", function SubmitInstController(AuthService, InstitutionService, $state, $mdToast, $mdDialog, $http, InviteService) {
         var submitInstCtrl = this;
 
         Object.defineProperty(submitInstCtrl, 'user', {
@@ -39,7 +39,7 @@
             $mdDialog.show(confirm).then(function() {
                 InstitutionService.createInstitution(submitInstCtrl.institution).then(
                     function success() {
-                        deleteInvite(submitInstCtrl.invite.key).then(
+                        InviteService.deleteInvite(submitInstCtrl.invite.key).then(
                             function success() {
                                 goHome();            
                                 showToast('Cadastro de instituição realizado com sucesso');
@@ -69,7 +69,7 @@
                 .cancel('Não');
 
             $mdDialog.show(confirm).then(function() {
-                deleteInvite(submitInstCtrl.invite.key).then(
+                InviteService.deleteInvite(submitInstCtrl.invite.key).then(
                     function success() {
                         goHome();            
                         showToast('Cadastro de instituição cancelado');
@@ -82,7 +82,7 @@
             });
         };
 
-         var goHome = function goToHome() {
+        var goHome = function goToHome() {
             $state.go('app.home');
         };
 
@@ -107,20 +107,6 @@
             $http.get('institution/occupation_area.json').then(function success(response) {
                 submitInstCtrl.occupationAreas = response.data;
             });
-        }
-
-        // TODO: replace the use of this method by the InviteService
-        // @author: Ruan Eloy   date: 11/07/17
-        function deleteInvite(inviteKey) {
-            console.log(inviteKey);
-            var deferred = $q.defer();
-            var INVITE_URI = '/api/invites/';
-            $http.delete(INVITE_URI + inviteKey).then(function sucess(response) {
-                deferred.resolve(response);
-            }, function error(response) {
-                deferred.reject(response);
-            });
-            return deferred.promise;
         }
     });
 })();

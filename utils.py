@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+"""Utils."""
 import json
 import datetime
 import sys
@@ -8,16 +9,7 @@ from google.appengine.ext import ndb
 from google.appengine.ext.ndb import Key
 
 from models.user import User
-from models.institution import Institution
-
-
-class NotAuthorizedException(Exception):
-    """Not Authorized Exception."""
-
-    def __init__(self, message=None):
-        """Init method."""
-        super(NotAuthorizedException, self).__init__(
-            message or 'The user is not authorized to do this procedure.')
+from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
 
 class Utils():
@@ -205,7 +197,7 @@ def is_institution_member(method):
 
 
 def is_authorized(method):
-    """Check if the user is the author of the post."""
+    """Check if the user is the author of the post or admin of institution."""
     def check_authorization(self, user, url_string, *args):
         obj_key = ndb.Key(urlsafe=url_string)
         post = obj_key.get()

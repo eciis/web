@@ -4,7 +4,7 @@
 
 from test_base import TestBase
 from models.post import Post
-from utils import NotAuthorizedException
+from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from models.user import User
 from models.institution import Institution
 from utils import is_authorized

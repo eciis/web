@@ -1,0 +1,41 @@
+<!-- CONTENT -->
+<div flex-gt-lg="80" flex-lg="90" layout="row" layout-align="center" layout-fill>
+  <div flex layout="column" md-colors="{background: 'grey-200'}">
+    <md-card >
+      <md-subhead layout-padding class="md-primary" md-colors="{background: 'green-900'}">Gerência de Membros</md-subhead>
+      <md-card-content>
+        <md-input-container class="md-block">
+          <label>Email convite deve ser enviado para:</label>
+          <input ng-model="inviteUserCtrl.invite.invitee" type="email"  required>
+        </md-input-container>
+        <section layout="row" layout="column" layout-align="end center" layout-wrap>
+          <md-button ng-click="inviteUserCtrl.sendUserInvite()" md-colors="{background: 'green-900'}">Enviar Convite</md-button>
+        </section>
+
+        <md-list
+        md-cols="5" md-cols-gt-md="15"
+        md-row-height="1:1"
+        md-gutter="4px" md-gutter-gt-sm="4px">
+        <md-subheader class="md-no-sticky" >Convites enviados</md-subheader>
+
+        <md-list-item ng-repeat="invite in inviteUserCtrl.sent_invitations" ng-click="null">
+          <p> {{ invite.invitee }}</p>
+        </md-list-item>
+      </md-list>
+
+      <md-grid-list
+      md-cols="5" md-cols-gt-md="15"
+      md-row-height="1:1"
+      md-gutter="4px" md-gutter-gt-sm="4px">
+      <md-subheader class="md-no-sticky">Membros Atuais</md-subheader>
+      <md-grid-tile ng-repeat="member in inviteUserCtrl.members" ng-click="null" md-rowspan="1" md-colspan="1" md-colspan-sm="1">
+        <figure>
+          <img title="{{member.name}}" ng-src="{{member.photo_url}}" width="100%" height="100%"/>
+        </figure>
+      </md-grid-tile>
+    </md-grid-list>
+    <md-subheader class="md-no-sticky">Convites requisitados</md-subheader>
+  </md-card-content>
+</md-card>
+</div>
+</div>

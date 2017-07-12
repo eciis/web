@@ -37,11 +37,8 @@ class PostHandler(BaseHandler):
         obj_key = ndb.Key(urlsafe=key)
         post = obj_key.get()
 
-        """Set the post's state to deleted."""
-        post.state = 'deleted'
-
-        """Update the post, the user and the institution in datastore."""
-        post.put()
+        """Set the informations about post."""
+        post.delete(user)
 
     @json_response
     @login_required

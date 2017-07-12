@@ -122,6 +122,12 @@ class Post(ndb.Model):
     # Date and time of a creation of a post
     publication_date = ndb.DateTimeProperty(auto_now_add=True)
 
+    # user who deleted the post
+    last_modified_by = ndb.KeyProperty(kind="User")
+
+    # Date and time of last modified
+    last_modified_date = ndb.DateTimeProperty(auto_now=True)
+
     # Likes of Post
     likes = ndb.LocalStructuredProperty(Like, repeated=True)
 
@@ -136,6 +142,7 @@ class Post(ndb.Model):
         post.title = data['title']
         post.headerImage = data.get('headerImage')
         post.text = data['text']
+        post.last_modified_by = author_key
         post.author = author_key
         post.institution = institution_key
         post.comments = []
@@ -146,9 +153,11 @@ class Post(ndb.Model):
     def make(post, host):
         """Create personalized json of post."""
         publication_date = post.publication_date.isoformat()
+        last_modified_date = post.last_modified_date.isoformat()
         author = post.author.get()
+        last_modified_by = post.last_modified_by.get()
         institution = post.institution.get()
-        return {
+        post_dict = {
             'title': post.title,
             'text': post.text,
             'author': author.name,
@@ -162,10 +171,24 @@ class Post(ndb.Model):
             'comments': getCommentsUri(post, host),
             'number_of_comments': post.get_number_of_comment(),
             'publication_date': publication_date,
+            'last_modified_date': last_modified_date,
             'author_key': author.key.urlsafe(),
+            'last_modified_by': last_modified_by.name,
             'institution_key': institution.key.urlsafe(),
             'key': post.key.urlsafe()
         }
+        return post.modify_post(post_dict)
+
+    def modify_post(post, post_dict):
+        """Create personalized json if post was deleted."""
+        if(post.state == 'deleted'):
+            post_dict['title'] = None
+            post_dict['text'] = None
+        else:
+            post_dict['title'] = post.title
+            post_dict['text'] = post.text
+
+        return post_dict
 
     def get_comment(self, comment_id):
         """Get a comment by id."""
@@ -214,3 +237,11 @@ class Post(ndb.Model):
         if like:
             self.likes.remove(like)
             self.put()
+
+    def delete(self, user):
+        """Change the state and add the information about this."""
+        self.last_modified_by = user.key
+        self.state = 'deleted'
+
+        """Update the post in datastore."""
+        self.put()

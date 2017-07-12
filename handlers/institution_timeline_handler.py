@@ -22,7 +22,8 @@ class InstitutionTimelineHandler(BaseHandler):
         @author: Mayza Nunes 15/06/2017
         """
         institution_key = ndb.Key(urlsafe=url_string)
-        queryPosts = Post.query(Post.institution == institution_key).order(Post.publication_date)
+        queryPosts = Post.query(Post.institution == institution_key).order(
+            Post.last_modified_date)
 
         array = [Post.make(post, self.request.host) for post in queryPosts]
 

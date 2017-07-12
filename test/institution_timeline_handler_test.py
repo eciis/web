@@ -30,44 +30,59 @@ class InstitutionTimelineHandlerTest(TestBaseHandler):
         # Pretend an authentication
         self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
         self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
-        # Added a post in datastore
+        # Added the posts in datastore
         self.testapp.post_json("/api/posts", self.post_mayza)
+        self.testapp.post_json("/api/posts", self.post_aux)
 
         # Call the get method
-        post = self.testapp.get("/api/institutions/%s/timeline" %
-                                self.certbio.key.urlsafe())
+        posts = self.testapp.get("/api/institutions/%s/timeline" %
+                                 self.certbio.key.urlsafe())
         # Update the objects
-        post = (post.json)[0]
-        key_post = ndb.Key(urlsafe=post['key'])
-        post_obj = key_post.get()
+        post_top = (posts.json)[1]
+        key_post_top = ndb.Key(urlsafe=post_top['key'])
+        post_top_obj = key_post_top.get()
+        post_last = (posts.json)[0]
+        key_post_last = ndb.Key(urlsafe=post_last['key'])
+        post_last_obj = key_post_last.get()
 
-        # Verify if the post was published and your informations
-        self.assertEqual(post_obj.title, 'Novo edital do CERTBIO',
+        # Verify if the posts was published and your informations
+        self.assertEqual(post_top_obj.title, 'Post Auxiliar',
                          "The title expected was new post")
-        self.assertEqual(post_obj.text, "At vero eos et accusamus et iusto",
+        self.assertEqual(post_top_obj.text, "At vero eos et accusamus et iusto",
                          "The text expected was new post")
-        self.assertEqual(post_obj.state, 'published',
+        self.assertEqual(post_top_obj.state, 'published',
+                         "The state of post should be published")
+        self.assertEqual(post_last_obj.title, 'Novo edital do CERTBIO',
+                         "The title expected was new post")
+        self.assertEqual(post_last_obj.text, "At vero eos et accusamus et iusto",
+                         "The text expected was new post")
+        self.assertEqual(post_last_obj.state, 'published',
                          "The state of post should be published")
 
         # Call the delete method
-        self.testapp.delete("/api/posts/%s" % post_obj.key.urlsafe())
+        self.testapp.delete("/api/posts/%s" % post_last_obj.key.urlsafe())
 
         # Call the get method
-        post = self.testapp.get("/api/institutions/%s/timeline" %
-                                self.certbio.key.urlsafe())
+        posts = self.testapp.get("/api/institutions/%s/timeline" %
+                                 self.certbio.key.urlsafe())
 
         # Update the objects
-        post = (post.json)[0]
-        key_post = ndb.Key(urlsafe=post['key'])
-        post_obj = key_post.get()
+        post_top = (posts.json)[1]
+        post_last = (posts.json)[0]
 
         # Verify if the post was deleted and your informations
-        self.assertEqual(post["title"], None,
+        self.assertEqual(post_top["title"], None,
                          "The title expected was null")
-        self.assertEqual(post["text"], None,
+        self.assertEqual(post_top["text"], None,
                          "The text expected was null")
-        self.assertEqual(post["state"], 'deleted',
+        self.assertEqual(post_top["state"], 'deleted',
                          "The state of post should be deleted")
+        self.assertEqual(post_last["title"], "Post Auxiliar",
+                         "The title expected was of post_aux")
+        self.assertEqual(post_last["text"], "At vero eos et accusamus et iusto",
+                         "The text expected was of post_aux")
+        self.assertEqual(post_last["state"], 'published',
+                         "The state of post should be published")
 
 
 def initModels(cls):
@@ -101,6 +116,11 @@ def initModels(cls):
     # POST of Mayza To Certbio Institution
     cls.post_mayza = {
         'title': "Novo edital do CERTBIO",
+        'text': "At vero eos et accusamus et iusto",
+        'institution': cls.certbio.key.urlsafe()
+    }
+    cls.post_aux = {
+        'title': "Post Auxiliar",
         'text': "At vero eos et accusamus et iusto",
         'institution': cls.certbio.key.urlsafe()
     }

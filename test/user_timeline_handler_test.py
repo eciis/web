@@ -38,53 +38,49 @@ class UserTimelineHandlerTest(TestBaseHandler):
         posts = self.testapp.get("/api/user/timeline")
 
         # Update the objects
-        post_topo = (posts.json)[1]
-        key_post_topo = ndb.Key(urlsafe=post_topo['key'])
-        post_topo_obj = key_post_topo.get()
-        post_final = (posts.json)[0]
-        key_post_final = ndb.Key(urlsafe=post_final['key'])
-        post_final_obj = key_post_final.get()
+        post_top = (posts.json)[1]
+        key_post_top = ndb.Key(urlsafe=post_top['key'])
+        post_top_obj = key_post_top.get()
+        post_last = (posts.json)[0]
+        key_post_last = ndb.Key(urlsafe=post_last['key'])
+        post_last_obj = key_post_last.get()
 
         # Verify if the posts was published and your informations
-        self.assertEqual(post_topo_obj.title, 'Post Auxiliar',
+        self.assertEqual(post_top_obj.title, 'Post Auxiliar',
                          "The title expected was new post")
-        self.assertEqual(post_topo_obj.text, "At vero eos et accusamus et iusto",
+        self.assertEqual(post_top_obj.text, "At vero eos et accusamus et iusto",
                          "The text expected was new post")
-        self.assertEqual(post_topo_obj.state, 'published',
+        self.assertEqual(post_top_obj.state, 'published',
                          "The state of post should be published")
-        self.assertEqual(post_final_obj.title, 'Novo edital do CERTBIO',
+        self.assertEqual(post_last_obj.title, 'Novo edital do CERTBIO',
                          "The title expected was new post")
-        self.assertEqual(post_final_obj.text, "At vero eos et accusamus et iusto odio",
+        self.assertEqual(post_last_obj.text, "At vero eos et accusamus et iusto odio",
                          "The text expected was new post")
-        self.assertEqual(post_final_obj.state, 'published',
+        self.assertEqual(post_last_obj.state, 'published',
                          "The state of post should be published")
 
         # Call the delete method
-        self.testapp.delete("/api/posts/%s" % post_final_obj.key.urlsafe())
+        self.testapp.delete("/api/posts/%s" % post_last_obj.key.urlsafe())
 
         # Call the get method
         posts = self.testapp.get("/api/user/timeline")
 
         # Update the objects
-        post_topo = (posts.json)[1]
-        key_post_topo = ndb.Key(urlsafe=post_topo['key'])
-        post_topo_obj = key_post_topo.get()
-        post_final = (posts.json)[0]
-        key_post_final = ndb.Key(urlsafe=post_final['key'])
-        post_final_obj = key_post_final.get()
+        post_top = (posts.json)[1]
+        post_last = (posts.json)[0]
 
         # Verify if the post was deleted and your informations
-        self.assertEqual(post_topo["title"], None,
+        self.assertEqual(post_top["title"], None,
                          "The title expected was null")
-        self.assertEqual(post_topo["text"], None,
+        self.assertEqual(post_top["text"], None,
                          "The text expected was null")
-        self.assertEqual(post_topo["state"], 'deleted',
+        self.assertEqual(post_top["state"], 'deleted',
                          "The state of post should be deleted")
-        self.assertEqual(post_final["title"], "Post Auxiliar",
+        self.assertEqual(post_last["title"], "Post Auxiliar",
                          "The title expected was of post_aux")
-        self.assertEqual(post_final["text"], "At vero eos et accusamus et iusto",
+        self.assertEqual(post_last["text"], "At vero eos et accusamus et iusto",
                          "The text expected was of post_aux")
-        self.assertEqual(post_final["state"], 'published',
+        self.assertEqual(post_last["state"], 'published',
                          "The state of post should be published")
 
 

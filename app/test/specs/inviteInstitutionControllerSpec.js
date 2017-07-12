@@ -6,7 +6,8 @@
 
     var splab = {
             name: 'SPLAB',
-            key: '987654321' 
+            key: '987654321',
+            sent_invitations: []  
     };
 
     var tiago = {
@@ -15,6 +16,8 @@
         follows: splab.key,
         invites:[]
     };
+
+    var invite = new Invite({invitee: "mayzabeel@gmail.com", suggestion_institution_name : "New Institution"}, 'institution', splab.key);
 
     beforeEach(module('app'));
 
@@ -74,9 +77,9 @@
             
             it('should call inviteService.sendInvite()', function(done) {
                 spyOn(state, 'go');
-                inviteinstitutionCtrl.invite = {institution_key: "098745", type_of_invite: "institution", suggestion_institution_name: "New Institution", invitee: "mayzabeel@gmail.com"};
-                inviteinstitutionCtrl.user.current_institution = {'key': "123"};
-                var invite = new Invite(inviteinstitutionCtrl.invite, 'institution', inviteinstitutionCtrl.user.current_institution.key);
+                inviteinstitutionCtrl.invite.invitee = "mayzabeel@gmail.com";
+                inviteinstitutionCtrl.invite.suggestion_institution_name = "New Institution";
+                inviteinstitutionCtrl.user.current_institution = splab;
                 var promise = inviteinstitutionCtrl.sendInstInvite();
                 promise.then(function() {
                     expect(inviteService.sendInvite).toHaveBeenCalledWith(invite);

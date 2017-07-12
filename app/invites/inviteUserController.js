@@ -19,7 +19,7 @@
             } else {
                 var promise = InviteService.sendInvite(invite);
                 promise.then(function success(response) {
-                    inviteController.sent_invitations.push(inviteController.invite);
+                    inviteController.sent_invitations.push(invite);
                     inviteController.invite = {};
                     showToast('Convite enviado com sucesso!');
                 }, function error(response) {
@@ -35,8 +35,7 @@
                 getMembers();
             }, function error(response) {
                 $state.go('app.institution', {institutionKey: currentInstitutionKey});
-                //ver isso amanhã
-                showToast();
+                showToast(response.data.msg);
             });
         }
 

@@ -19,13 +19,9 @@ def is_post_author(method):
     def check_authorization(self, user, url_string, *args):
         obj_key = ndb.Key(urlsafe=url_string)
         post = obj_key.get()
-        institution = post.institution.get()
-        Utils._assert(not post or not institution,
-                      'Post or institution is invalid', Exception)
         Utils._assert(post.author != user.key,
                       'User is not allowed to edit this post',
                       NotAuthorizedException)
-
         method(self, user, url_string, *args)
     return check_authorization
 
@@ -47,10 +43,6 @@ class PostHandler(BaseHandler):
         """Update the post, the user and the institution in datastore."""
         post.put()
 
-    """
-    TODO: Test is_authorized
-    @author: Andre L Abrantes - 23-06-2017
-    """
     @json_response
     @login_required
     @is_post_author

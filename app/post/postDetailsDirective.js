@@ -49,11 +49,13 @@
         };
 
         postDetailsCtrl.likeOrDislikePost = function likeOrDislikePost(post) {
+            var promise;
             if(!postDetailsCtrl.isLikedByUser(post)) {
-                likePost(post);
+                promise = likePost(post);
             } else {
-                dislikePost(post);
+                promise = dislikePost(post);
             }
+            return promise;
         };
 
         postDetailsCtrl.editPost = function editPost(post, posts, event) {
@@ -77,7 +79,8 @@
 
         function likePost(post) {
             postDetailsCtrl.savingLike = true;
-            PostService.likePost(post).then(function success() {
+            var promise = PostService.likePost(post);
+            promise.then(function success() {
                 addPostKeyToUser(post.key);
                 post.number_of_likes += 1;
                 postDetailsCtrl.savingLike = false;
@@ -86,11 +89,13 @@
                 $state.go('app.home');
                 postDetailsCtrl.savingLike = false;
             });
+            return promise;
         }
 
         function dislikePost(post) {
             postDetailsCtrl.savingLike = true;
-            PostService.dislikePost(post).then(function success() {
+            var promise = PostService.dislikePost(post);
+            promise.then(function success() {
                 removePostKeyFromUser(post.key);
                 post.number_of_likes -= 1;
                 postDetailsCtrl.savingLike = false;
@@ -99,6 +104,7 @@
                 $state.go('app.home');
                 postDetailsCtrl.savingLike = false;
             });
+            return promise;
         }
 
         postDetailsCtrl.isLikedByUser = function isLikedByUser(post) {
@@ -140,7 +146,8 @@
 
         postDetailsCtrl.getComments = function getComments(post) {
             var commentsUri = post.comments;
-            CommentService.getComments(commentsUri).then(function success(response) {
+            var promise  =  CommentService.getComments(commentsUri);
+            promise.then(function success(response) {
                 var comments = postDetailsCtrl.comments[post.key];
                 if(comments) {
                     postDetailsCtrl.comments[post.key].data = response.data;
@@ -152,16 +159,18 @@
             }, function error(response) {
                 showToast(response.data.msg);
             });
+            return promise;
         };
 
         postDetailsCtrl.showLikes = function showLikes(post){
-            postDetailsCtrl.getLikes(post);
+            var promise = postDetailsCtrl.getLikes(post);
             if(postDetailsCtrl.currentPost === post.key){
                 postDetailsCtrl.currentPost = null;
             }
             else {
                 postDetailsCtrl.currentPost = post.key;
             }
+            return promise;
         };
 
         postDetailsCtrl.checkCurrentPost = function checkCurrentPost(post){
@@ -170,13 +179,15 @@
 
         postDetailsCtrl.getLikes = function getLikes(post) {
             var likesUri = post.likes;
-            PostService.getLikes(likesUri).then(function success(response) {
+            var promise = PostService.getLikes(likesUri);
+            promise.then(function success(response) {
                 postDetailsCtrl.likes[post.key]= response.data;
                 postDetailsCtrl.title = post.title;
                 post.number_of_likes = _.size(postDetailsCtrl.likes[post.key]);
             }, function error(response) {
                 showToast(response.data.msg);
             });
+            return promise;
         };
 
         var addComment = function addComment(post, comment) {
@@ -188,9 +199,11 @@
         postDetailsCtrl.createComment = function createComment(post) {
             var newComment = postDetailsCtrl.comments[post.key].newComment;
             var institutionKey = postDetailsCtrl.user.current_institution.key;
+            var promise;
             if (!_.isEmpty(newComment)) {
                 postDetailsCtrl.savingComment = true;
-                CommentService.createComment(post.key, newComment, institutionKey).then(function success(response) {
+                promise = CommentService.createComment(post.key, newComment, institutionKey);
+                promise.then(function success(response) {
                     postDetailsCtrl.comments[post.key].newComment = '';
                     addComment(post, response.data);
                     postDetailsCtrl.savingComment = false;
@@ -201,9 +214,10 @@
             } else {
                 showToast("Comentário não pode ser vazio.");
             }
+            return promise;
         };
 
-        postDetailsCtrl.canDeleteComment = function canDeleteComment(post, comment) {
+        postDetailsCtrl.canDeleteComment = function canDeleteComment(comment) {
             return isCommentAuthor(comment);
         };
 
@@ -219,6 +233,7 @@
 
             $mdDialog.show(confirm).then(function() {
                 CommentService.deleteComment(post.key, comment.id).then(function success(response) {
+                    console.log(response);
                     removeCommentFromPost(post, response.data);
                     showToast('Comentário excluído com sucesso');
                     post.number_of_comments -= 1;

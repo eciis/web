@@ -68,7 +68,7 @@
                   <small class="md-caption">{{comment.publication_date | date: 'MMM d, y'}} às {{comment.publication_date | date: 'HH:mm'}}</small>
                   <p>{{comment.text}}</p>
                   <md-button class="md-secondary md-icon-button" aria-label="Share"
-                    ng-if="postDetailsCtrl.canDeleteComment(post, comment)"
+                    ng-if="postDetailsCtrl.canDeleteComment(comment)"
                     ng-click="postDetailsCtrl.deleteComment($event, post, comment)">
                     <md-icon>delete</md-icon>
                   </md-button>

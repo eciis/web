@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("InstitutionController", function InstitutionController($state, InstitutionService, AuthService, $interval, $mdToast) {
+    app.controller("InstitutionController", function InstitutionController($state, InstitutionService, AuthService, $interval, $mdToast, $q) {
         var institutionCtrl = this;
 
         institutionCtrl.current_institution = null;

@@ -268,15 +268,25 @@
             return _.includes(_.map(postDetailsCtrl.user.institutions_admin, getKeyFromUrl), post.institution_key);
         }
 
+        var REGEX = /((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
+        var REPLACE_URL = "<a href=\"$1\" target='_blank'>$1</a>";
+
+        /**
+        * replace urls in a string with links to make the urls clickable.
+        * If urls don't containing http or https, this function add the https.
+        * @param {object} receivedPost - The post to be recognized.
+        * @return {object} The post with clickable urls.
+        * OBS: This function returns a new Post because this result is only for show in view.
+        * It is not necessary to change the original Post.
+        */
         postDetailsCtrl.recognizeUrl =  function recognizeUrl(receivedPost) {
             var post = new Post(receivedPost, receivedPost.institutionKey);
-            var exp = /((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
-            var urlsInTitle = post.title.match(exp);
-            var urlsInText = post.text.match(exp);
+            var urlsInTitle = post.title.match(REGEX);
+            var urlsInText = post.text.match(REGEX);
             post.title = addHttpsToUrl(post.title, urlsInTitle);
             post.text = addHttpsToUrl(post.text, urlsInText);
-            post.title = post.title.replace(exp, "<a href=\"$1\" target='_blank'>$1</a>");
-            post.text = post.text.replace(exp,"<a href=\"$1\" target='_blank'>$1</a>");
+            post.title = post.title.replace(REGEX, REPLACE_URL);
+            post.text = post.text.replace(REGEX,REPLACE_URL);
             return post;
         };
 

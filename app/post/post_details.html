@@ -23,7 +23,7 @@
           <img ng-src="{{ post.headerImage }}" class="md-card-image">
           <md-card-title>
             <md-card-title-text>
-              <span class="md-headline">{{post.title}}</span>
+               <span class="md-headline" ng-bind-html="postDetailsCtrl.recognizeUrl(post).title">{{postDetailsCtrl.recognizeUrl(post).title}}</span>
             </md-card-title-text>
           </md-card-title>
           <md-card-content>
@@ -31,8 +31,8 @@
               Esta publicação foi removida pelo usuário {{post.last_modified_by}} em 
               {{post.last_modified_date | date: 'dd-MM-yyyy'}} às {{post.last_modified_date | date: 'HH:mm:ss'}}
             </p>
-            <p>
-              {{post.text}}
+            <p ng-bind-html="postDetailsCtrl.recognizeUrl(post).text">
+              {{postDetailsCtrl.recognizeUrl(post).text}}
             </p>
             <md-button class="md-primary md-hue-1" ng-click="postDetailsCtrl.getLikes(post)">
              {{postDetailsCtrl.getTextNumberLikes(post.number_of_likes)}}
@@ -40,7 +40,7 @@
             <md-button class="md-primary md-hue-1" ng-click=postDetailsCtrl.getComments(post)>
               {{ postDetailsCtrl.textNumberComment(post.number_of_comments) }}
             </md-button>
-          </md-card-content>>
+          </md-card-content>
           <md-divider></md-divider>
           <md-card-actions layout="row" layout-align="end center">
             <md-button ng-if="postDetailsCtrl.showButtonDelete(post)" class="md-icon-button" arial-label="Delete"

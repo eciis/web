@@ -249,6 +249,30 @@
         function isInstitutionAdmin(post) {
             return _.includes(_.map(postDetailsCtrl.user.institutions_admin, getKeyFromUrl), post.institution_key);
         }
+
+        postDetailsCtrl.recognizeUrl =  function recognizeUrl(receivedPost) {
+            var post = new Post(receivedPost, receivedPost.institutionKey);
+            var exp = /((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
+            var urlsInTitle = post.title.match(exp);
+            var urlsInText = post.text.match(exp);
+            post.title = addHttpsToUrl(post.title, urlsInTitle);
+            post.text = addHttpsToUrl(post.text, urlsInText);
+            post.title = post.title.replace(exp, "<a href=\"$1\" target='_blank'>$1</a>");
+            post.text = post.text.replace(exp,"<a href=\"$1\" target='_blank'>$1</a>");
+            return post;
+        };
+
+        function addHttpsToUrl(text, urls) {
+            if(urls) {
+                var https = "https://";
+                for (var i = 0; i < urls.length; i++) {
+                    if(urls[i].slice(0, 4) != "http") {
+                        text = text.replace(urls[i], https + urls[i]);
+                    }
+                }
+            }
+            return text;
+        }
     });
 
     app.controller('DialogController', function(likes, title) {
@@ -264,7 +288,8 @@
             controllerAs: "postDetailsCtrl",
             controller: "PostDetailsController",
             scope: {
-                posts: '='
+                posts: '=',
+                institution: '='
             }
         };
     });

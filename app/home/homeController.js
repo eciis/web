@@ -11,7 +11,6 @@
         homeCtrl.comments = {};
         homeCtrl.institutions = [];
         homeCtrl.newComment = '';
-
         homeCtrl.instMenuExpanded = false;
 
         Object.defineProperty(homeCtrl, 'user', {
@@ -64,7 +63,7 @@
         var loadPosts = function loadPosts() {
             PostService.get().then(function success(response) {
                 homeCtrl.posts = response.data;
-                _.map(homeCtrl.posts, recognizeUrl);
+                // _.map(homeCtrl.posts, recognizeUrl);
             }, function error(response) {
                 $interval.cancel(intervalPromise); // Cancel the interval promise that load posts in case of error
                 showToast(response.data.msg);
@@ -76,31 +75,8 @@
 
         $rootScope.$on("reloadPosts", function(event, data) {
             var post = new Post(data);
-            recognizeUrl(post);
             homeCtrl.posts.push(post);
         });
-
-        function recognizeUrl(post) {
-            var exp = /((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
-            var urlsInTitle = post.title.match(exp);
-            var urlsInText = post.text.match(exp);
-            post.title = addHttpsToUrl(post.title, urlsInTitle);
-            post.text = addHttpsToUrl(post.text, urlsInText);
-            post.title = post.title.replace(exp, "<a href=\"$1\" target='_blank'>$1</a>");
-            post.text = post.text.replace(exp,"<a href=\"$1\" target='_blank'>$1</a>");
-        }
-
-        function addHttpsToUrl(text, urls) {
-            if(urls) {
-                var https = "https://";
-                for (var i = 0; i < urls.length; i++) {
-                    if(urls[i].slice(0, 4) != "http") {
-                        text = text.replace(urls[i], https + urls[i]);
-                    }
-                }
-            }
-            return text;
-        }
 
         /**
         FIXME: The timeline update interrupts the user while he is commenting on a post

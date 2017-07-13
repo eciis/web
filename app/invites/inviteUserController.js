@@ -20,7 +20,6 @@
 
         inviteController.sendUserInvite = function sendInvite() {
             invite = new Invite(inviteController.invite, 'user', currentInstitutionKey, inviteController.user.email);
-            console.log(invite);
             if (! invite.isValid()) {
                 showToast('Convite inválido!');
             } else {

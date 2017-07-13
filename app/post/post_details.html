@@ -23,7 +23,7 @@
           <img ng-src="{{ post.headerImage }}" class="md-card-image">
           <md-card-title>
             <md-card-title-text>
-               <span class="md-headline" ng-bind-html="postDetailsCtrl.recognizeUrl(post).title">{{postDetailsCtrl.recognizeUrl(post).title}}</span>
+               <span ng-if="!postDetailsCtrl.isDeleted(post)" class="md-headline" ng-bind-html="postDetailsCtrl.recognizeUrl(post).title">{{postDetailsCtrl.recognizeUrl(post).title}}</span>
             </md-card-title-text>
           </md-card-title>
           <md-card-content>
@@ -31,7 +31,7 @@
               Esta publicação foi removida pelo usuário {{post.last_modified_by}} em
               {{post.last_modified_date | date: 'dd-MM-yyyy'}} às {{post.last_modified_date | date: 'HH:mm:ss'}}
             </p>
-            <p ng-bind-html="postDetailsCtrl.recognizeUrl(post).text">
+            <p ng-if="!postDetailsCtrl.isDeleted(post)" ng-bind-html="postDetailsCtrl.recognizeUrl(post).text">
               {{postDetailsCtrl.recognizeUrl(post).text}}
             </p>
           </md-card-content>

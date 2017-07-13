@@ -100,6 +100,15 @@
                     }
                 }
             })
+            .state("submit_institution", {
+                url: "/submitinstitution",
+                views: {
+                    main: {
+                        templateUrl:"institution/submitInstitution.html",
+                        controller: "SubmitInstController as submitInstCtrl"
+                    }
+                }
+            })
             .state("signin", {
                 url: "/signin",
                 views: {

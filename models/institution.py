@@ -1,5 +1,13 @@
 """Institution Model."""
 from google.appengine.ext import ndb
+from custom_exceptions.fieldException import FieldException
+
+
+def get_occupation_area(data):
+    """Get the institution occupation area."""
+    if data['occupation_area'] == 'other':
+        return data['other_area']
+    return data['occupation_area']
 
 
 class Institution(ndb.Model):
@@ -7,22 +15,24 @@ class Institution(ndb.Model):
 
     name = ndb.StringProperty(required=True)
 
-    cnpj = ndb.StringProperty()
+    acronym = ndb.StringProperty(required=True)
+
+    cnpj = ndb.StringProperty(required=True)
 
     legal_nature = ndb.StringProperty(
         choices=set(["public", "private", "philanthropic"]))
 
-    address = ndb.StringProperty()
+    address = ndb.StringProperty(required=True)
 
-    occupation_area = ndb.StringProperty()
+    occupation_area = ndb.StringProperty(required=True)
 
-    description = ndb.TextProperty()
+    description = ndb.TextProperty(required=True)
 
     image_url = ndb.StringProperty()
 
-    email = ndb.StringProperty()
+    email = ndb.StringProperty(required=True)
 
-    phone_number = ndb.StringProperty()
+    phone_number = ndb.StringProperty(required=True)
 
     # The admin user of this institution
     admin = ndb.KeyProperty(kind="User")
@@ -66,6 +76,39 @@ class Institution(ndb.Model):
             self.put()
 
     def add_member(self, member_key):
+        """Add a new member to the institution."""
         if member_key not in self.members:
             self.members.append(member_key)
             self.put()
+
+    @staticmethod
+    def create(data, user):
+        """Create a new Institution."""
+        for field in ['name', 'acronym', 'cnpj', 'legal_nature',
+                      'address', 'occupation_area', 'description',
+                      'phone_number', 'email']:
+            if not data[field]:
+                raise FieldException(field + " can not be empty")
+        omsImage = "http://eciis-splab.appspot.com/images/oms.png"
+        institution = Institution()
+        institution.name = data['name']
+        institution.acronym = data['acronym']
+        institution.cnpj = data['cnpj']
+        institution.legal_nature = data['legal_nature']
+        institution.address = data['address']
+        institution.occupation_area = get_occupation_area(data)
+        institution.description = data['description']
+        institution.phone_number = data['phone_number']
+        institution.email = data['email']
+        institution.image_url = data['image_url'] or omsImage
+        institution.admin = user.key
+        institution.members.append(user.key)
+        institution.followers.append(user.key)
+        institution.put()
+
+        user.institutions.append(institution.key)
+        user.institutions_admin.append(institution.key)
+        user.follows.append(institution.key)
+        user.put()
+
+        return institution

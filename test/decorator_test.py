@@ -149,6 +149,7 @@ def initModels(cls):
     # new Institution CERTBIO
     cls.certbio = Institution()
     cls.certbio.name = 'CERTBIO'
+    cls.certbio.acronym = 'CERTBIO'
     cls.certbio.cnpj = '18.104.068/0001-86'
     cls.certbio.legal_nature = 'public'
     cls.certbio.address = 'Universidade Federal de Campina Grande'
@@ -175,6 +176,7 @@ def initModels(cls):
     # new Institution SPLAB
     cls.splab = Institution()
     cls.splab.name = 'SPLAB'
+    cls.splab.acronym = 'SPLAB'
     cls.splab.cnpj = '18.104.068/0001-56'
     cls.splab.legal_nature = 'public'
     cls.splab.address = 'Universidade Federal de Campina Grande'

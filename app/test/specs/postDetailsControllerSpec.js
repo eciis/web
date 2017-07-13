@@ -242,4 +242,36 @@
             expect(mdDialog.show).toHaveBeenCalled();
         });
     });
+
+    describe('recognizeUrl()', function() {
+        var post;
+
+        beforeEach(function() {
+           post = {
+                title: 'Post de Tiago em www.twitter.com',
+                text: 'Acessem: www.google.com',
+                institutionKey: '54321'
+            };
+        });
+
+        it('Should returns a post with https url in title', function() {
+            var newPost = postDetailsCtrl.recognizeUrl(post);
+            expect(newPost.title).toEqual("Post de Tiago em <a href='https://www.twitter.com' target='_blank'>https://www.twitter.com</a>");
+        });
+
+        it('Should not change the original post title', function() {
+            var newPost = postDetailsCtrl.recognizeUrl(post);
+            expect(post.title).toEqual("Post de Tiago em www.twitter.com");
+        });
+
+        it('Should returns a post with https url in text', function() {
+            var newPost = postDetailsCtrl.recognizeUrl(post);
+            expect(newPost.text).toEqual("Acessem: <a href='https://www.google.com' target='_blank'>https://www.google.com</a>");
+        });
+
+        it('Should not change the original post text', function() {
+            var newPost = postDetailsCtrl.recognizeUrl(post);
+            expect(post.text).toEqual("Acessem: www.google.com");
+        });
+    });
 }));

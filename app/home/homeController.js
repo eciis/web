@@ -11,7 +11,6 @@
         homeCtrl.comments = {};
         homeCtrl.institutions = [];
         homeCtrl.newComment = '';
-
         homeCtrl.instMenuExpanded = false;
 
         homeCtrl.user = AuthService.getCurrentUser();

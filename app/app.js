@@ -6,7 +6,8 @@
         'ui.router',
         'ngAnimate',
         'ngFileUpload',
-        'firebase'
+        'firebase',
+        'ngSanitize'
     ]);
 
     app.config(function($mdIconProvider, $mdThemingProvider, $stateProvider, $urlMatcherFactoryProvider,

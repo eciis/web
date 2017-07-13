@@ -41,6 +41,7 @@
         httpBackend.when('GET', 'home/home.html').respond(200);
         httpBackend.when('GET', 'error/error.html').respond(200);
         httpBackend.when('GET', 'auth/login.html').respond(200);
+        httpBackend.when('GET', 'error/error.html').respond(200);
 
         AuthService.getCurrentUser = function() {
             return new User(user);
@@ -141,7 +142,13 @@
     describe('goToInstitution()', function() {
         it('Should call state.go', function() {
             spyOn(state, 'go').and.callThrough();
+
+            httpBackend.when('GET', 'institution/institution_page.html').respond(200);
+
             postDetailsCtrl.goToInstitution(institutions[0]);
+
+            httpBackend.flush();
+            
             expect(state.go).toHaveBeenCalled();
         });
     });

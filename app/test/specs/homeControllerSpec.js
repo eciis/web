@@ -3,6 +3,7 @@
 (describe('Test HomeController', function() {
 
     var homeCtrl, httpBackend, scope, createCtrl, mdDialog, state;
+
     var user = {
         name: 'Tiago'
     };
@@ -19,17 +20,22 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, InstitutionService, PostService, $mdDialog, $state) {
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, InstitutionService, 
+            PostService, $mdDialog, $state, AuthService) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         mdDialog = $mdDialog;
         state = $state;
-        httpBackend.expect('GET', '/api/user').respond(user);
         httpBackend.expect('GET', '/api/user/timeline').respond(posts);
         httpBackend.expect('GET', '/api/institutions').respond(institutions);
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);
         httpBackend.when('GET', 'error/error.html').respond(200);
+
+        AuthService.getCurrentUser = function() {
+            return new User(user);
+        };
+
         createCtrl = function() {
             return $controller('HomeController', {
                 scope: scope

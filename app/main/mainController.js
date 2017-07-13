@@ -62,5 +62,12 @@
                 $state.go("submit_institution");
             }
         });
+
+        $rootScope.$on("user_loaded", function() {
+            if (mainCtrl.user.institutions.length === 0 &&
+             mainCtrl.user.invites.length === 0) {
+                $state.go("user_inactive");
+            }
+        });
     });
 })();

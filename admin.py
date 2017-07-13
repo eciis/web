@@ -320,6 +320,7 @@ class ResetHandler(BaseHandler):
         aut perferendis doloribus asperiores repellat."
         mayza_post.author = mayza.key
         mayza_post.institution = certbio.key
+        mayza_post.last_modified_by = mayza.key
         mayza_post.put()
         add_comments_to_post(mayza, mayza_post, mayza.institutions[0], 2)
 
@@ -332,6 +333,7 @@ class ResetHandler(BaseHandler):
         libero, vulputate quis purus maximus, auctor tempus enim. Sed."
         mayza_post_comIMG.author = mayza.key
         mayza_post_comIMG.institution = certbio.key
+        mayza_post_comIMG.last_modified_by = mayza.key
         mayza_post_comIMG.put()
         add_comments_to_post(mayza, mayza_post_comIMG, mayza.institutions[0], 1)
 
@@ -353,6 +355,7 @@ class ResetHandler(BaseHandler):
         erendis doloribus asperiores repellat."
         andre_post.author = andre.key
         andre_post.institution = splab.key
+        andre_post.last_modified_by = andre.key
         andre_post.put()
         add_comments_to_post(andre, andre_post, andre.institutions[0], 3)
 
@@ -375,6 +378,7 @@ class ResetHandler(BaseHandler):
         dalton_post.headerImage = "http://noticias.universia.com.br/net/images/consejos-profesionales/l/le/lei/leia-gratuitamente-livros-alcancar-sucesso-noticias.jpg"
         dalton_post.author = dalton.key
         dalton_post.institution = splab.key
+        dalton_post.last_modified_by = dalton.key
         dalton_post.put()
         add_comments_to_post(dalton, dalton_post, dalton.institutions[0], 2)
 
@@ -384,6 +388,7 @@ class ResetHandler(BaseHandler):
         dalton_postCertbio.text = "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat."
         dalton_postCertbio.author = dalton.key
         dalton_postCertbio.institution = certbio.key
+        dalton_postCertbio.last_modified_by = dalton.key
         dalton_postCertbio.put()
         add_comments_to_post(dalton, dalton_postCertbio, dalton.institutions[0], 1)
 
@@ -393,6 +398,7 @@ class ResetHandler(BaseHandler):
         jorge_post.text = "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat."
         jorge_post.author = jorge.key
         jorge_post.institution = splab.key
+        jorge_post.last_modified_by = jorge.key
         jorge_post.put()
 
         # POST of Jorge To e-CIIS Institution
@@ -414,6 +420,7 @@ class ResetHandler(BaseHandler):
         jorge_post_eCIIS.headerImage = "http://unef.edu.br/hotsite/wp-content/uploads/2016/04/EDITAL.jpg"
         jorge_post_eCIIS.author = jorge.key
         jorge_post_eCIIS.institution = eciis.key
+        jorge_post_eCIIS.last_modified_by = jorge.key
         jorge_post_eCIIS.put()
         add_comments_to_post(jorge, jorge_post_eCIIS, jorge.institutions[0], 3)
 

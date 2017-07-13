@@ -118,6 +118,14 @@
                     }
                 }
             })
+            .state("user_inactive", {
+                url: "/userinactive",
+                views: {
+                    main: {
+                      templateUrl: "error/user_inactive.html"
+                    }
+                }
+            })
             .state("error", {
                 url: "/error",
                 views: {

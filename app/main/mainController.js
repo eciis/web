@@ -5,11 +5,7 @@
     app.controller("MainController", function MainController($mdSidenav, $mdDialog, $mdToast, $state, AuthService) {
         var mainCtrl = this;
 
-        Object.defineProperty(mainCtrl, 'user', {
-            get: function() {
-                return AuthService.user;
-            }
-        });
+        mainCtrl.user = AuthService.getCurrentUser();
 
         mainCtrl.toggle = function toggle() {
             $mdSidenav('leftNav').toggle();

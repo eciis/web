@@ -1,4 +1,5 @@
 'use strict';
+
 (describe('Test MainController', function() {
     var mainCtrl, httpBackend, scope, createCtrl, state;
     var mayza = {
@@ -14,17 +15,26 @@
         name: 'Splab',
         key: '1239'
     };
-    mayza.institutions = [certbio.key, splab.key]
-    mayza.current_institution = certbio.key
+
+    mayza.institutions = [certbio.key, splab.key];
+
+    mayza.current_institution = certbio.key;
+
     beforeEach(module('app'));
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $state) {
+
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $state, AuthService) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
-        httpBackend.expect('GET', '/api/user').respond(mayza);
+
+        AuthService.getCurrentUser = function() {
+            return new User(mayza);
+        };
+
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', "error/user_inactive.html").respond(200);
         httpBackend.when('GET', "home/home.html").respond(200);
+        httpBackend.when('GET', "auth/login.html").respond(200);
         createCtrl = function() {
             return $controller('MainController', {
                 scope: scope
@@ -33,12 +43,15 @@
         mainCtrl = createCtrl();
         httpBackend.flush();   
     }));
+
     afterEach(function() {
         httpBackend.verifyNoOutstandingExpectation();
         httpBackend.verifyNoOutstandingRequest();
     });
+
     describe('MainController functions', function() {
         it('Should be active', function() {
+            console.log(mainCtrl.user)
             expect(mainCtrl.isActive(certbio.key)).toBe(true);            
         });
         it('Should be not active', function() {

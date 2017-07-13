@@ -3,7 +3,7 @@
     var app = angular.module('app');
 
     app.controller("InviteUserController", function InviteUserController(
-        InviteService, $mdToast, $state, InstitutionService) {
+        InviteService, $mdToast, $state, InstitutionService, AuthService) {
         var inviteController = this;
 
         inviteController.invite = {};
@@ -12,8 +12,15 @@
         var currentInstitutionKey = $state.params.institutionKey;
         var invite;
 
+        Object.defineProperty(inviteController, 'user', {
+            get: function() {
+                return AuthService.user;
+            }
+        });
+
         inviteController.sendUserInvite = function sendInvite() {
-            invite = new Invite(inviteController.invite, 'user', currentInstitutionKey);
+            invite = new Invite(inviteController.invite, 'user', currentInstitutionKey, inviteController.user.email);
+            console.log(invite);
             if (! invite.isValid()) {
                 showToast('Convite inválido!');
             } else {

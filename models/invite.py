@@ -38,11 +38,11 @@ class Invite(ndb.Model):
                 "The invite for institution have to specify the suggestion institution name")
 
     @staticmethod
-    def create(data, inviter_email):
+    def create(data):
         """Create a post and check required fields."""
         invite = Invite()
         invite.invitee = data.get('invitee')
-        invite.inviter = inviter_email
+        invite.inviter = data.get('inviter')
         invite.type_of_invite = data.get('type_of_invite')
         invite.institution_key = ndb.Key(urlsafe=data.get('institution_key'))
 

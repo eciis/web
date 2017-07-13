@@ -52,7 +52,7 @@ class InviteCollectionHandler(BaseHandler):
         """Handle POST Requests."""
         data = json.loads(self.request.body)
 
-        invite = Invite.create(data, user.email)
+        invite = Invite.create(data)
         invite.put()
 
         Invite.sendInvite(invite)

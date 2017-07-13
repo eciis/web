@@ -30,6 +30,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         # Make the request and assign the answer to post
         invite = self.testapp.post_json("/api/invites", {
             'invitee': 'ana@gmail.com',
+            'inviter': 'mayzabeel@gmail.com',
             'type_of_invite': 'institution',
             'suggestion_institution_name': 'New Institution',
             'institution_key': self.certbio.key.urlsafe()})
@@ -59,6 +60,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         with self.assertRaises(Exception):
             self.testapp.post_json("/api/invites", {
                 'invitee': 'ana@gmail.com',
+                'inviter': 'mayzabeel@gmail.com',
                 'type_of_invite': 'institution'})
 
     def test_post_invite_user(self):
@@ -69,6 +71,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         # Make the request and assign the answer to post
         invite = self.testapp.post_json("/api/invites", {
             'invitee': 'ana@gmail.com',
+            'inviter': 'mayzabeel@gmail.com',
             'type_of_invite': 'user',
             'institution_key': self.certbio.key.urlsafe()})
         # Retrieve the entities
@@ -113,6 +116,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         with self.assertRaises(Exception):
             self.testapp.post_json("/api/invites", {
                 'invitee': 'ana@gmail.com',
+                'inviter': 'mayzabeel@gmail.com',
                 'type_of_invite': 'user',
                 'institution_key': self.certbio.key.urlsafe()})
 

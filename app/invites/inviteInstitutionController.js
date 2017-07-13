@@ -23,13 +23,12 @@
 
         inviteController.sendInstInvite = function sendInvite() {
             var currentInstitutionKey = inviteController.user.current_institution.key;
-            invite = new Invite(inviteController.invite, 'institution', currentInstitutionKey);
+            invite = new Invite(inviteController.invite, 'institution', currentInstitutionKey, inviteController.user.email);
             if (!invite.isValid()) {
                 showToast('Convite inválido!');
             } else {
                 var promise = InviteService.sendInvite(invite);
                 promise.then(function success(response) {
-                    invite.inviter = inviteController.user.email;
                     inviteController.sent_invitations.push(invite);
                     showToast('Convite enviado com sucesso!');
                 }, function error(response) {

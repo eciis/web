@@ -84,7 +84,6 @@
                 var promise = inviteinstitutionCtrl.sendInstInvite();
                 promise.then(function() {
                     expect(inviteService.sendInvite).toHaveBeenCalledWith(invite);
-                    expect(state.go).toHaveBeenCalledWith('app.home');
                     done();
                 });
                 scope.$apply();

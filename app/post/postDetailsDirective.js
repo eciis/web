@@ -41,24 +41,24 @@
         };
 
         postDetailsCtrl.isAuthorized = function isAuthorized(post) {
-            return isPostAuthor(post) || isInstitutionAdmin(post);
+            return postDetailsCtrl.isPostAuthor(post) || isInstitutionAdmin(post);
         };
 
         postDetailsCtrl.isDeleted = function isDeleted(post) {
             return post.state == 'deleted';
         };
- 
+
          postDetailsCtrl.showButtonDelete = function showButtonDelete(post) {
-            return postDetailsCtrl.isAuthorized(post) && 
+            return postDetailsCtrl.isAuthorized(post) &&
                 !postDetailsCtrl.isDeleted(post);
         };
- 
+
         postDetailsCtrl.disableButtonLike = function enableButtonLike(post) {
             return postDetailsCtrl.savingLike || postDetailsCtrl.isDeleted(post);
         };
- 
+
         postDetailsCtrl.showButtonEdit = function showButtonDeleted(post) {
-            return postDetailsCtrl.isAuthorized(post) && 
+            return postDetailsCtrl.isPostAuthor(post) &&
                 !postDetailsCtrl.isDeleted(post);
         };
 
@@ -256,9 +256,9 @@
             });
         }
 
-        function isPostAuthor(post) {
+        postDetailsCtrl.isPostAuthor = function isPostAuthor(post) {
             return post.author_key == postDetailsCtrl.user.key;
-        }
+        };
 
         function isCommentAuthor(comment) {
             return comment.author_key == postDetailsCtrl.user.key;

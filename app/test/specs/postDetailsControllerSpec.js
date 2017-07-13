@@ -61,14 +61,11 @@ describe('Test postDetailsController', function() {
             });
             spyOn(postService, 'deletePost').and.callThrough();
             httpBackend.expect('DELETE', POSTS_URI + '/' + posts[0].key).respond();
-            postDetailsCtrl.deletePost("$event", posts[0], posts);
+            var post = posts[0];
+            postDetailsCtrl.deletePost("$event", post, posts);
             httpBackend.flush();
             expect(posts.length).toBe(2);
-            expect(postService.deletePost).toHaveBeenCalledWith({
-                                                                                                            title: 'post principal', author_key: user.key, institution: institutions[0],
-                                                                                                            key: "123456", comments: "/api/posts/123456/comments",
-                                                                                                            likes: "/api/posts/123456/likes", number_of_likes: 0, number_of_comments: 0
-                                                                                                        });
+            expect(postService.deletePost).toHaveBeenCalledWith(post);
             expect(mdDialog.confirm).toHaveBeenCalled();
             expect(mdDialog.show).toHaveBeenCalled();
         });

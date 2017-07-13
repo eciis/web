@@ -24,7 +24,7 @@ class UserTimelineHandler(BaseHandler):
 
         if len(user.follows) > 0:
             queryPosts = Post.query(Post.institution.IN(
-                user.follows)).order(Post.publication_date)
+                user.follows)).order(Post.last_modified_date)
 
             array = [Post.make(post, self.request.host) for post in queryPosts]
 

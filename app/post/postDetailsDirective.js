@@ -9,6 +9,10 @@
 
         postDetailsCtrl.comments = {};
 
+        postDetailsCtrl.likes = {};
+
+        postDetailsCtrl.currentPost = null;
+
         postDetailsCtrl.savingComment = false;
         postDetailsCtrl.savingLike = false;
 
@@ -41,33 +45,35 @@
         };
 
         postDetailsCtrl.isAuthorized = function isAuthorized(post) {
-            return isPostAuthor(post) || isInstitutionAdmin(post);
+            return postDetailsCtrl.isPostAuthor(post) || isInstitutionAdmin(post);
         };
 
         postDetailsCtrl.isDeleted = function isDeleted(post) {
             return post.state == 'deleted';
         };
- 
+
          postDetailsCtrl.showButtonDelete = function showButtonDelete(post) {
-            return postDetailsCtrl.isAuthorized(post) && 
+            return postDetailsCtrl.isAuthorized(post) &&
                 !postDetailsCtrl.isDeleted(post);
         };
- 
+
         postDetailsCtrl.disableButtonLike = function enableButtonLike(post) {
             return postDetailsCtrl.savingLike || postDetailsCtrl.isDeleted(post);
         };
- 
+
         postDetailsCtrl.showButtonEdit = function showButtonDeleted(post) {
-            return postDetailsCtrl.isAuthorized(post) && 
+            return postDetailsCtrl.isPostAuthor(post) &&
                 !postDetailsCtrl.isDeleted(post);
         };
 
         postDetailsCtrl.likeOrDislikePost = function likeOrDislikePost(post) {
+            var promise;
             if(!postDetailsCtrl.isLikedByUser(post)) {
-                likePost(post);
+                promise = likePost(post);
             } else {
-                dislikePost(post);
+                promise = dislikePost(post);
             }
+            return promise;
         };
 
         postDetailsCtrl.editPost = function editPost(post, posts, event) {
@@ -91,26 +97,32 @@
 
         function likePost(post) {
             postDetailsCtrl.savingLike = true;
-            PostService.likePost(post).then(function success() {
+            var promise = PostService.likePost(post);
+            promise.then(function success() {
                 addPostKeyToUser(post.key);
                 post.number_of_likes += 1;
                 postDetailsCtrl.savingLike = false;
+                postDetailsCtrl.getLikes(post);
             }, function error() {
                 $state.go('app.home');
                 postDetailsCtrl.savingLike = false;
             });
+            return promise;
         }
 
         function dislikePost(post) {
             postDetailsCtrl.savingLike = true;
-            PostService.dislikePost(post).then(function success() {
+            var promise = PostService.dislikePost(post);
+            promise.then(function success() {
                 removePostKeyFromUser(post.key);
                 post.number_of_likes -= 1;
                 postDetailsCtrl.savingLike = false;
+                postDetailsCtrl.getLikes(post);
             }, function error() {
                 $state.go('app.home');
                 postDetailsCtrl.savingLike = false;
             });
+            return promise;
         }
 
         postDetailsCtrl.isLikedByUser = function isLikedByUser(post) {
@@ -152,7 +164,8 @@
 
         postDetailsCtrl.getComments = function getComments(post) {
             var commentsUri = post.comments;
-            CommentService.getComments(commentsUri).then(function success(response) {
+            var promise  =  CommentService.getComments(commentsUri);
+            promise.then(function success(response) {
                 var comments = postDetailsCtrl.comments[post.key];
                 if(comments) {
                     postDetailsCtrl.comments[post.key].data = response.data;
@@ -164,33 +177,34 @@
             }, function error(response) {
                 showToast(response.data.msg);
             });
+            return promise;
         };
 
-        postDetailsCtrl.getTextNumberLikes = function textNumberLikes(numberLikes) {
-             return numberLikes + ' ' + (numberLikes == 1? 'Curtida' : 'Curtidas');
+        postDetailsCtrl.showLikes = function showLikes(post){
+            postDetailsCtrl.getLikes(post);
+            if(postDetailsCtrl.currentPost === post.key){
+                postDetailsCtrl.currentPost = null;
+            }
+            else {
+                postDetailsCtrl.currentPost = post.key;
+            }
+        };
+
+        postDetailsCtrl.checkCurrentPost = function checkCurrentPost(post){
+            return postDetailsCtrl.currentPost === post.key;
         };
 
         postDetailsCtrl.getLikes = function getLikes(post) {
             var likesUri = post.likes;
-
-            postDetailsCtrl.current_post = post.key;
-            PostService.getLikes(likesUri).then(function success(response) {
-                postDetailsCtrl.likes = response.data;
+            var promise = PostService.getLikes(likesUri);
+            promise.then(function success(response) {
+                postDetailsCtrl.likes[post.key]= response.data;
                 postDetailsCtrl.title = post.title;
-                $mdDialog.show({
-                    controller: 'DialogController',
-                    controllerAs: 'dialogCtrl',
-                    templateUrl: 'post/likes.html',
-                    clickOutsideToClose:true,
-                    locals: {
-                        likes : response.data,
-                        title: post.title
-                    }
-                });
-                post.number_of_likes = _.size(postDetailsCtrl.likes);
+                post.number_of_likes = _.size(postDetailsCtrl.likes[post.key]);
             }, function error(response) {
                 showToast(response.data.msg);
             });
+            return promise;
         };
 
         var addComment = function addComment(post, comment) {
@@ -202,9 +216,11 @@
         postDetailsCtrl.createComment = function createComment(post) {
             var newComment = postDetailsCtrl.comments[post.key].newComment;
             var institutionKey = postDetailsCtrl.user.current_institution.key;
+            var promise;
             if (!_.isEmpty(newComment)) {
                 postDetailsCtrl.savingComment = true;
-                CommentService.createComment(post.key, newComment, institutionKey).then(function success(response) {
+                promise = CommentService.createComment(post.key, newComment, institutionKey);
+                promise.then(function success(response) {
                     postDetailsCtrl.comments[post.key].newComment = '';
                     addComment(post, response.data);
                     postDetailsCtrl.savingComment = false;
@@ -215,9 +231,10 @@
             } else {
                 showToast("Comentário não pode ser vazio.");
             }
+            return promise;
         };
 
-        postDetailsCtrl.canDeleteComment = function canDeleteComment(post, comment) {
+        postDetailsCtrl.canDeleteComment = function canDeleteComment(comment) {
             return isCommentAuthor(comment);
         };
 
@@ -244,11 +261,6 @@
             });
         };
 
-        postDetailsCtrl.textNumberComment = function textNumberComment(number) {
-            var comment = number == 1? 'Comentário' : 'Comentários';
-            return number + " " + comment;
-        };
-
         function removeCommentFromPost(post, comment) {
             var postComments = postDetailsCtrl.comments[post.key].data;
             _.remove(postComments, function(postComment) {
@@ -256,9 +268,9 @@
             });
         }
 
-        function isPostAuthor(post) {
+        postDetailsCtrl.isPostAuthor = function isPostAuthor(post) {
             return post.author_key == postDetailsCtrl.user.key;
-        }
+        };
 
         function isCommentAuthor(comment) {
             return comment.author_key == postDetailsCtrl.user.key;
@@ -269,7 +281,7 @@
         }
 
         var URL_PATTERN = /((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
-        var REPLACE_URL = "<a href=\"$1\" target='_blank'>$1</a>";
+        var REPLACE_URL = "<a href=\'$1\' target='_blank'>$1</a>";
 
         /**
         * replace urls in a string with links to make the urls clickable.
@@ -301,12 +313,6 @@
             }
             return text;
         }
-    });
-
-    app.controller('DialogController', function(likes, title) {
-        var dialogCtrl = this;
-        dialogCtrl.likes = likes;
-        dialogCtrl.postTitle = title;
     });
 
     app.directive("postDetails", function() {

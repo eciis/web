@@ -195,5 +195,14 @@
                 scope.$apply();
             });
         });
+
+        describe('goToManageMembers()', function() {
+
+            it('should call state.go(app.manage_institution.invite_user)', function() {
+                spyOn(state, 'go');
+                institutionCtrl.goToManageMembers('123456789');
+                expect(state.go).toHaveBeenCalledWith('app.manage_institution.invite_user', {institutionKey: '123456789'});
+            });
+        });
     });
 }));

@@ -22,6 +22,12 @@
             return false;
         };
 
+        mainCtrl.isAdmin = function isAdmin() {
+            if (mainCtrl.user){
+                return !_.isEmpty(mainCtrl.user.institutions_admin);
+            }
+        };
+
         mainCtrl.changeInstitution = function changeInstitution(name) {
             mainCtrl.user.changeInstitution(name);
         };
@@ -38,6 +44,10 @@
             mainCtrl.toggle();
         };
 
+         mainCtrl.goInvite = function goInvite() {
+            $state.go('app.invite_inst');
+        };
+
         mainCtrl.goToInstitution = function goToInstitution(institutionKey) {
             $state.go('app.institution', {institutionKey: institutionKey});
             mainCtrl.toggle();
@@ -46,6 +56,13 @@
         $rootScope.$on("user_loaded", function() {
             if (mainCtrl.user.institutions.length === 0) {
                 $state.go("choose_institution");
+            }
+        });
+
+        $rootScope.$on("user_loaded", function() {
+            if (mainCtrl.user.institutions.length === 0 &&
+             mainCtrl.user.invites.length === 0) {
+                $state.go("user_inactive");
             }
         });
     });

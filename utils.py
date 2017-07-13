@@ -168,7 +168,7 @@ def login_required(method):
         if not credential:
             self.response.write(json.dumps({
                 'msg': 'Auth needed',
-                'login_url': 'http://%s/login' % self.request.host
+                'login_url': 'http://%s/#/signin' % self.request.host
             }))
             self.response.set_status(401)
             return
@@ -185,18 +185,6 @@ def login_required(method):
             user.photo_url = "/images/avatar.jpg"
 
             user.put()
-            # TODO:
-            # Return this block of code when user sign up is created
-            # @author André L. Abrantes - 25-05-2017
-            #
-            # self.response.write(json.dumps({
-            #     'msg': 'Forbidden',
-            #     'login_url': 'http://%s/login' % self.request.host
-            # }))
-            # self.response.set_status(403)
-            # self.redirect("/logout")
-            # return
-
         method(self, user, *args)
     return login
 

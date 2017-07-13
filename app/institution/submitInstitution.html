@@ -1,10 +1,10 @@
-<md-content md-colors="{background: 'teal-900'}">
+<md-toolbar md-colors="{background: 'green-800'}" layout="row">
+    <h1 class="md-toolbar-tools">Informe os dados da Instituição</h1>
+</md-toolbar>
+<md-content class="md-padding" md-colors="{background: 'teal-900'}">
     <div layout="row" layout-align="center center">
-        <md-card flex-gt-xs="70">
-            <md-toolbar md-colors="{background: 'green-800'}" layout="row">
-                <h1 class="md-toolbar-tools">Informe os dados da Instituição</h1>
-            </md-toolbar>
-            <md-card-content layout="column" layout-padding>
+        <md-card flex-gt-xs="70" layout-align="space-around none">
+            <md-card-content layout="column" layout-align="space-between none">
                 <form name="institutionForm">
                     <div layout="row">
                         <md-input-container class="md-block" flex-gt-xs flex="60">
@@ -89,13 +89,11 @@
                         <input type="text" name="Responsavel" disabled 
                         ng-model="submitInstCtrl.user.name">
                     </md-input-container>
-                    <div layout="row">
-                        <md-input-container class="md-block" flex-gt-xs>
-                            <label>Email</label>
-                            <input type="text" name="Email" disabled 
-                            ng-model="submitInstCtrl.institution.email">
-                        </md-input-container>
-                    </div>
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Email</label>
+                        <input type="text" name="Email" disabled 
+                        ng-model="submitInstCtrl.institution.email">
+                    </md-input-container>
                 </form>
             </md-card-content>
             <md-card-actions layout="row" layout-align="end center">

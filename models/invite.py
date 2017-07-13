@@ -22,7 +22,8 @@ class Invite(ndb.Model):
     # Status of Invite.
     status = ndb.StringProperty(choices=set([
         'sent',
-        'resolved']), default='sent')
+        'accepted',
+        'rejected']), default='sent')
 
     # Name of the institution invited, if the type of invite is institution.
     suggestion_institution_name = ndb.StringProperty()

@@ -215,7 +215,7 @@ def is_institution_member(method):
 
 
 def is_authorized(method):
-    """Check if the user is the author of the post."""
+    """Check if the user is the author of the post or admin of institution."""
     def check_authorization(self, user, url_string, *args):
         obj_key = ndb.Key(urlsafe=url_string)
         post = obj_key.get()

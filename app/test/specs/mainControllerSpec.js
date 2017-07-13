@@ -59,5 +59,9 @@
             mainCtrl.goToInstitution(splab.key);
             expect(state.go).toHaveBeenCalledWith('app.institution', {institutionKey: '1239'});
         });
+        it('User should not be member e-cis', function(){
+            expect(mainCtrl.isMemberEcis()).toBe(false);  
+        });
     });
+
 }));

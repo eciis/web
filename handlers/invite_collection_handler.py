@@ -12,7 +12,7 @@ from handlers.base_handler import BaseHandler
 from models.invite import Invite
 
 
-def is_admin(method):
+def is_admin_or_super_user(method):
         """Check if the user is admin of the institution."""
         def check_authorization(self, user, *args):
             data = json.loads(self.request.body)
@@ -21,25 +21,38 @@ def is_admin(method):
 
             userisNotAdminOfInstitution = institution.key not in user.institutions_admin
             institutionisNotManagedByUser = institution.admin != user.key
+            isNotSuperUser = institution.email != "eciis@ufcg.edu.br"
 
-            Utils._assert(userisNotAdminOfInstitution or institutionisNotManagedByUser,
-                          'User is not administrator', NotAuthorizedException)
+            Utils._assert((userisNotAdminOfInstitution or institutionisNotManagedByUser) and isNotSuperUser,
+                          'User is not authorized to send invites', NotAuthorizedException)
 
             method(self, user, *args)
         return check_authorization
 
 
 class InviteCollectionHandler(BaseHandler):
-    """Get user's invite."""
+    """Invite Collection Handler."""
 
     @json_response
     @login_required
-    @is_admin
+    def get(self, user):
+        """Get invites for new institutions make by Plataform"""
+        invites = []
+
+        queryInvites = Invite.query(Invite.type_of_invite == "institution")
+
+        invites = [Invite.make(invite)for invite in queryInvites]
+
+        self.response.write(json.dumps(invites))
+
+    @json_response
+    @login_required
+    @is_admin_or_super_user
     def post(self, user):
         """Handle POST Requests."""
         data = json.loads(self.request.body)
 
-        invite = Invite.create(data)
+        invite = Invite.create(data, user.email)
         invite.put()
 
         Invite.sendInvite(invite)

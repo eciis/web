@@ -11,6 +11,9 @@ class Invite(ndb.Model):
     # Email of the invitee.
     invitee = ndb.StringProperty(required=True)
 
+    # Email of the user Inviter
+    inviter = ndb.StringProperty(required=True)
+
     # Type of Invite.
     type_of_invite = ndb.StringProperty(choices=set([
         'user',
@@ -24,8 +27,7 @@ class Invite(ndb.Model):
     # Name of the institution invited, if the type of invite is institution.
     suggestion_institution_name = ndb.StringProperty()
 
-    """ Key of the institution who user was
-    invited to be member, if the type of invite is user."""
+    """ Key of the institution who inviter is associate."""
     institution_key = ndb.KeyProperty(kind="Institution", required=True)
 
     @staticmethod
@@ -36,10 +38,11 @@ class Invite(ndb.Model):
                 "The invite for institution have to specify the suggestion institution name")
 
     @staticmethod
-    def create(data):
+    def create(data, inviter_email):
         """Create a post and check required fields."""
         invite = Invite()
         invite.invitee = data.get('invitee')
+        invite.inviter = inviter_email
         invite.type_of_invite = data.get('type_of_invite')
         invite.institution_key = ndb.Key(urlsafe=data.get('institution_key'))
 
@@ -91,6 +94,7 @@ class Invite(ndb.Model):
         if invite.type_of_invite == 'user':
             return {
                 'invitee': invite.invitee,
+                'inviter': invite.inviter,
                 'type_of_invite': invite.type_of_invite,
                 'institution_key': invite.institution_key.urlsafe(),
                 'key': invite.key.urlsafe(),
@@ -99,6 +103,7 @@ class Invite(ndb.Model):
         else:
             return {
                 'invitee': invite.invitee,
+                'inviter': invite.inviter,
                 'type_of_invite': invite.type_of_invite,
                 'suggestion_institution_name': invite.suggestion_institution_name,
                 'key': invite.key.urlsafe(),

@@ -6,6 +6,7 @@
 
         var inviteUser = {institution_key: "098745", type_of_invite: "user", invitee: "mayzabeel@gmail.com"};
         var inviteInstitution = {institution_key: "098745", type_of_invite: "institution", suggestion_institution_name: "New Institution", invitee: "mayzabeel@gmail.com"};
+        var invites = [inviteInstitution];
 
         beforeEach(module('app'));
 
@@ -40,5 +41,17 @@
             httpBackend.flush();
             expect($http.post).toHaveBeenCalledWith(INVITES_URI, inviteInstitution);
             expect(result.data).toEqual(inviteInstitution);
+        });
+
+        it('Test getSentInstitutionInvitations in success case', function() {
+            spyOn($http, 'get').and.callThrough();
+            httpBackend.expect('GET', INVITES_URI).respond(invites);
+            var result;
+            service.getSentInstitutionInvitations().then(function(data){
+                result = data;
+            });
+            httpBackend.flush();
+            expect($http.get).toHaveBeenCalled();
+            expect(result.data).toEqual(invites);
         });
 }));

@@ -3,10 +3,11 @@
     var app = angular.module('app');
 
     app.controller("InviteInstitutionController", function InviteInstitutionController(
-        InviteService,$mdToast, $state, AuthService) {
+        InviteService, $mdToast, $state, AuthService) {
         var inviteController = this;
 
         inviteController.invite = {};
+        inviteController.sent_invitations = [];
 
         var invite;
 
@@ -28,8 +29,9 @@
             } else {
                 var promise = InviteService.sendInvite(invite);
                 promise.then(function success(response) {
+                    invite.inviter = inviteController.user.email;
+                    inviteController.sent_invitations.push(invite);
                     showToast('Convite enviado com sucesso!');
-                    $state.go("app.home");
                 }, function error(response) {
                     showToast(response.data.msg);
                 });
@@ -47,5 +49,16 @@
                     .position('bottom right')
             );
         }
+
+        function loadSentInvitations() {
+            InviteService.getSentInstitutionInvitations().then(function success(response) {
+                inviteController.sent_invitations = response.data;
+            }, function error(response) {
+                $state.go('app.home');
+                showToast(response.data.msg);
+            });
+        }
+
+        loadSentInvitations();
     });
 })();

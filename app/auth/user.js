@@ -35,6 +35,12 @@ User.prototype.isFollower = function isFollower(keyInstitution) {
     return isFollower;
 };
 
+User.prototype.isAdmin = function isAdmin(keyInstitution) {
+    var managed_institution = _.find(this.institutions_admin, function(institution) { 
+      return getKey(institution) == keyInstitution; });
+    return managed_institution;
+};
+
 User.prototype.isMember = function isMember(institutionKey){
       return _.includes(_.map(this.institutions, getKeyObj), institutionKey);
 };

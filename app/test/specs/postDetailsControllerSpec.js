@@ -1,11 +1,12 @@
 'use strict';
 
-describe('Test postDetailsController', function() {
+(describe('Test postDetailsController', function() {
     beforeEach(module('app'));
 
     var postDetailsCtrl, scope, httpBackend, rootScope, mdDialog, postService, mdToast, http, commentService, state, posts;
     var user = {
-        name: 'name'
+        name: 'name',
+        key: 'asd234jk2l'
     };
     var institutions = [
             {name: 'Splab',key: '098745', followers: [user], members: [user], admin: user},
@@ -36,10 +37,15 @@ describe('Test postDetailsController', function() {
             {title: 'post secundário', author_key: "", institution: institutions[0], key: "123412356"},
             {title: 'post', author: user, institution: institutions[0], key: "123454356", number_of_likes: 1}
         ];
-        httpBackend.expectGET('/api/user').respond(user);
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);
         httpBackend.when('GET', 'error/error.html').respond(200);
+        httpBackend.when('GET', 'auth/login.html').respond(200);
+
+        AuthService.getCurrentUser = function() {
+            return new User(user);
+        };
+
         postDetailsCtrl = $controller('PostDetailsController', {scope: scope});
         httpBackend.flush();
     }));
@@ -229,5 +235,4 @@ describe('Test postDetailsController', function() {
             expect(mdDialog.show).toHaveBeenCalled();
         });
     });
-
-});
+}));

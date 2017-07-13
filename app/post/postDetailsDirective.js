@@ -268,7 +268,7 @@
             return _.includes(_.map(postDetailsCtrl.user.institutions_admin, getKeyFromUrl), post.institution_key);
         }
 
-        var REGEX = /((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
+        var URL_PATTERN = /((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
         var REPLACE_URL = "<a href=\"$1\" target='_blank'>$1</a>";
 
         /**
@@ -281,12 +281,12 @@
         */
         postDetailsCtrl.recognizeUrl =  function recognizeUrl(receivedPost) {
             var post = new Post(receivedPost, receivedPost.institutionKey);
-            var urlsInTitle = post.title.match(REGEX);
-            var urlsInText = post.text.match(REGEX);
+            var urlsInTitle = post.title.match(URL_PATTERN);
+            var urlsInText = post.text.match(URL_PATTERN);
             post.title = addHttpsToUrl(post.title, urlsInTitle);
             post.text = addHttpsToUrl(post.text, urlsInText);
-            post.title = post.title.replace(REGEX, REPLACE_URL);
-            post.text = post.text.replace(REGEX,REPLACE_URL);
+            post.title = post.title.replace(URL_PATTERN, REPLACE_URL);
+            post.text = post.text.replace(URL_PATTERN,REPLACE_URL);
             return post;
         };
 

@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Test PostDirective', function() {
+(describe('Test PostDirective', function() {
     beforeEach(module('app'));
 
     var postCtrl, post, httpBackend, scope, deffered, mdDialog, rootScope, postService, mdToast, http;
@@ -26,7 +26,6 @@ describe('Test PostDirective', function() {
             text: 'text',
             institution: {}
         };
-        httpBackend.expectGET('/api/user').respond(user);
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);
         httpBackend.flush();   
@@ -105,4 +104,4 @@ describe('Test PostDirective', function() {
             expect(postService.createPost).not.toHaveBeenCalled();
         });
     });   
-});
+}));

@@ -9,11 +9,7 @@
 
         configProfileCtrl.newUser = {};
 
-        Object.defineProperty(configProfileCtrl, 'user', {
-            get: function() {
-                return AuthService.user;
-            }
-        });
+        configProfileCtrl.user = AuthService.getCurrentUser();
 
         configProfileCtrl.finish = function finish() {
             var deffered = $q.defer();

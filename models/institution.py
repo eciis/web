@@ -79,7 +79,8 @@ class Institution(ndb.Model):
             self.put()
 
     @staticmethod
-    def create_parente_inst_stub(invite):
+    @ndb.transactional(xg=True)
+    def create_parent_inst_stub(invite):
         """Create a stub of institution."""
         institution = Institution()
         institution.name = invite.suggestion_institution_name

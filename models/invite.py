@@ -57,7 +57,7 @@ class Invite(ndb.Model):
                 'suggestion_institution_name']
 
         if (invite.type_of_invite == 'institution_parent'):
-            institution = Institution.create_parente_inst_stub(invite)
+            institution = Institution.create_parent_inst_stub(invite)
             invite.stub_institution_key = institution.key
 
         return invite

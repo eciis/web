@@ -108,6 +108,8 @@ class InviteCollectionHandlerTest(TestBaseHandler):
                          "The parent institution of stub\
                          was stub")
 
+        """ Check if raise exception when the invite is
+        for user and not specify the institution key."""
         with self.assertRaises(Exception):
             self.testapp.post_json("/api/invites", {
                 'invitee': 'mayzabeel@gmail.com',

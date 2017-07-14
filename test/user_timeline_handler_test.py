@@ -101,6 +101,7 @@ def initModels(cls):
     cls.certbio = Institution()
     cls.certbio.name = 'CERTBIO'
     cls.certbio.cnpj = '18.104.068/0001-86'
+    cls.certbio.acronym = '18.104.068/0001-86'
     cls.certbio.legal_nature = 'public'
     cls.certbio.address = 'Universidade Federal de Campina Grande'
     cls.certbio.occupation_area = ''

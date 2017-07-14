@@ -19,31 +19,34 @@
             httpBackend.when('GET', 'error/error.html').respond(200); 
         }));
 
-        it('Test sendInvite user in success case', function() {
+        it('Test sendInvite user in success case', function(done) {
             spyOn($http, 'post').and.callThrough();
             httpBackend.expect('POST', INVITES_URI).respond(inviteUser);
             var result;
             service.sendInvite(inviteUser).then(function(data){
                 result = data;
+                expect($http.post).toHaveBeenCalledWith(INVITES_URI, inviteUser);
+                expect(result.data).toEqual(inviteUser);
+                done();
             });
             httpBackend.flush();
-            expect($http.post).toHaveBeenCalledWith(INVITES_URI, inviteUser);
-            expect(result.data).toEqual(inviteUser);
+           
         });
 
-        it('Test sendInvite institution in success case', function() {
+        it('Test sendInvite institution in success case', function(done) {
             spyOn($http, 'post').and.callThrough();
             httpBackend.expect('POST', INVITES_URI).respond(inviteInstitution);
             var result;
             service.sendInvite(inviteInstitution).then(function(data){
                 result = data;
+                expect($http.post).toHaveBeenCalledWith(INVITES_URI, inviteInstitution);
+                expect(result.data).toEqual(inviteInstitution);
+                done();
             });
             httpBackend.flush();
-            expect($http.post).toHaveBeenCalledWith(INVITES_URI, inviteInstitution);
-            expect(result.data).toEqual(inviteInstitution);
         });
 
-        it('Test getSentInstitutionInvitations in success case', function() {
+        it('Test getSentInstitutionInvitations in success case', function(done) {
             spyOn($http, 'get').and.callThrough();
             httpBackend.expect('GET', INVITES_URI).respond(invites);
             var result;
@@ -51,6 +54,8 @@
                 result = data;
                 expect($http.get).toHaveBeenCalled();
                 expect(result.data).toEqual(invites);
+                done();
+
             });
             httpBackend.flush();
            

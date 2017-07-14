@@ -32,11 +32,12 @@ def is_admin(method):
 def is_super_user(method):
     """Check if the user is member of e-cis."""
     def check_authorization(self, user, *args):
-        data = json.loads(self.request.body)
-        institution_key = ndb.Key(urlsafe=data['institution_key'])
-        institution = institution_key.get()
+        isMemberEcis = False;
+        for institution_key in user.institutions:
+            if institution_key.get().email == "eciis@ufcg.edu.br" and user.key in institution_key.get().members:
+                isMemberEcis = True;
 
-        Utils._assert(institution.email != "eciis@ufcg.edu.br",
+        Utils._assert(isMemberEcis is not True,
                       'User is not member e-cis', NotAuthorizedException)
 
         method(self, user, *args)

@@ -51,6 +51,7 @@ class Invite(ndb.Model):
             Invite.checkIsInviteInstitutionValid(data)
             invite.suggestion_institution_name = data[
                 'suggestion_institution_name']
+
         return invite
 
     @staticmethod

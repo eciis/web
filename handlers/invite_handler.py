@@ -15,5 +15,5 @@ class InviteHandler(BaseHandler):
         """Change invite status from 'sent' to 'resolved'."""
         invite_key = ndb.Key(urlsafe=key)
         invite = invite_key.get()
-        invite.status = 'resolved'
+        invite.status = 'rejected'
         invite.put()

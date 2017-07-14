@@ -27,5 +27,15 @@
             });
             return deferred.promise;
         };
+
+        service.getSentInstitutionInvitations = function getSentInstitutionInvitations() {
+            var deferred = $q.defer();
+            $http.get(INVITES_URI).then(function success(response) {
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+            return deferred.promise;
+        };
     });
 })();

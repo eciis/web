@@ -10,6 +10,7 @@
 
         service.addInstitution = function addInstitution(user, institutionKey) {
             var deffered = $q.defer();
+            console.log(institutionKey);
             user.addInstitution(institutionKey);
             $http.put(USER_URI, user).then(function success(info) {
                 deffered.resolve(info.data);

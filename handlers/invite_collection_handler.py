@@ -28,27 +28,11 @@ def is_admin(method):
             method(self, user, *args)
         return check_authorization
 
-
-def is_super_user(method):
-    """Check if the user is member of e-cis."""
-    def check_authorization(self, user, *args):
-        isMemberEcis = False;
-        for institution_key in user.institutions:
-            if institution_key.get().email == "eciis@ufcg.edu.br" and user.key in institution_key.get().members:
-                isMemberEcis = True;
-
-        Utils._assert(isMemberEcis is not True,
-                      'User is not member e-cis', NotAuthorizedException)
-
-        method(self, user, *args)
-    return check_authorization
-
 class InviteCollectionHandler(BaseHandler):
     """Invite Collection Handler."""
 
     @json_response
     @login_required
-    @is_super_user
     def get(self, user):
         """Get invites for new institutions make by Plataform"""
         invites = []

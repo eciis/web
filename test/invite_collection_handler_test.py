@@ -36,11 +36,8 @@ class InviteCollectionHandlerTest(TestBaseHandler):
             'institution_key': self.certbio.key.urlsafe()})
         # Retrieve the entities
         invite = json.loads(invite._app_iter[0])
-        print "mayza2"
-        print invite
 
         key_invite = ndb.Key(urlsafe=invite['key'])
-        print key_invite
 
         invite_obj = key_invite.get()
 
@@ -154,7 +151,6 @@ def initModels(cls):
     cls.mayza.posts = []
     cls.mayza.put()
     # set Mayza to be admin of Certbio
-    cls.certbio.members = [cls.mayza.key]
     cls.certbio.admin = cls.mayza.key
     cls.certbio.put()
     # new User Tiago

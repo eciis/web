@@ -55,7 +55,6 @@
                 expect($http.get).toHaveBeenCalled();
                 expect(result.data).toEqual(invites);
                 done();
-
             });
             httpBackend.flush();
            

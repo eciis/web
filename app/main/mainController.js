@@ -22,9 +22,9 @@
             return false;
         };
 
-        mainCtrl.isMemberEcis = function isMemberEcis() {
+        mainCtrl.isAdmin = function isAdmin() {
             if (mainCtrl.user){
-                return mainCtrl.user.current_institution.name === 'e-cis';
+                return !_.isEmpty(mainCtrl.user.institutions_admin);
             }
         };
 

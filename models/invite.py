@@ -102,29 +102,41 @@ class Invite(ndb.Model):
     def make(invite):
         """Create personalized json of invite."""
         if invite.type_of_invite == 'user':
-            return {
-                'invitee': invite.invitee,
-                'type_of_invite': invite.type_of_invite,
-                'institution_key': invite.institution_key.urlsafe(),
-                'key': invite.key.urlsafe(),
-                'status': invite.status
-            }
+            return invite.make_invite_user()
         # TODO: Change to general when all type of invite to institution have stub
             # @author: Maiana Brito
         elif invite.type_of_invite == 'institution_parent':
-            return {
-                'invitee': invite.invitee,
-                'type_of_invite': invite.type_of_invite,
-                'suggestion_institution_name': invite.suggestion_institution_name,
-                'institution_stub_key': invite.stub_institution_key.urlsafe(),
-                'key': invite.key.urlsafe(),
-                'status': invite.status
-            }
+            return invite.make_invite_parent_inst()
         else:
-            return {
-                'invitee': invite.invitee,
-                'type_of_invite': invite.type_of_invite,
-                'suggestion_institution_name': invite.suggestion_institution_name,
-                'key': invite.key.urlsafe(),
-                'status': invite.status
-            }
+            return invite.make_invite_institution()
+
+    def make_invite_parent_inst(self):
+        """Create json of invite to parent institution."""
+        return {
+            'invitee': self.invitee,
+            'type_of_invite': self.type_of_invite,
+            'suggestion_institution_name': self.suggestion_institution_name,
+            'institution_stub_key': self.stub_institution_key.urlsafe(),
+            'key': self.key.urlsafe(),
+            'status': self.status
+        }
+
+    def make_invite_user(self):
+        """Create json of invite to user."""
+        return {
+            'invitee': self.invitee,
+            'type_of_invite': self.type_of_invite,
+            'institution_key': self.institution_key.urlsafe(),
+            'key': self.key.urlsafe(),
+            'status': self.status
+        }
+
+    def make_invite_institution(self):
+        """Create json of invite to institution."""
+        return {
+            'invitee': self.invitee,
+            'type_of_invite': self.type_of_invite,
+            'suggestion_institution_name': self.suggestion_institution_name,
+            'key': self.key.urlsafe(),
+            'status': self.status
+        }

@@ -32,13 +32,13 @@ class Institution(ndb.Model):
     # User query to retrieve children institutions
     parent_institution = ndb.KeyProperty(kind="Institution")
 
-    # The children institution
+    # The children institutions
     # Value is None for institutions without children
-    children_institution = ndb.KeyProperty(kind="Institution", repeated=True)
+    children_institutions = ndb.KeyProperty(kind="Institution", repeated=True)
 
     # The institutions are waiting to be accept as children
     # Value is None for institutions without children waiting accept
-    children_institution_pedding = ndb.KeyProperty(kind="Institution", repeated=True)
+    children_institutions_pedding = ndb.KeyProperty(kind="Institution", repeated=True)
 
     # The ids of users who are members of this institution
     members = ndb.KeyProperty(kind="User", repeated=True)
@@ -84,7 +84,7 @@ class Institution(ndb.Model):
         institution = Institution()
         institution.name = invite.suggestion_institution_name
         institution.state = 'pending'
-        institution.children_institution = [invite.institution_key]
+        institution.children_institutions = [invite.institution_key]
         institution.put()
 
         institution_children = invite.institution_key.get()

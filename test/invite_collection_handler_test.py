@@ -76,8 +76,8 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         invite_obj = key_invite.get()
         stub_institution = invite_obj.stub_institution_key
         stub_institution_obj = stub_institution.get()
-        children_institution = invite_obj.institution_key
-        children_institution_obj = children_institution.get()
+        children_institutions = invite_obj.institution_key
+        children_institutions_obj = children_institutions.get()
 
         # Check data of invite
         self.assertEqual(invite_obj.invitee, 'mayzabeel@gmail.com',
@@ -94,26 +94,20 @@ class InviteCollectionHandlerTest(TestBaseHandler):
                          "The name of stub expected was 'Institution Parent'")
         self.assertEqual(stub_institution_obj.state, 'pending',
                          "The state of stub expected was pending")
-        self.assertEqual(stub_institution_obj.children_institution[0],
+        self.assertEqual(stub_institution_obj.children_institutions[0],
                          self.certbio.key,
                          "The children institution of stub\
                          was Certbio")
 
         # Check data of institution children
-        self.assertEqual(children_institution_obj.key, self.certbio.key,
+        self.assertEqual(children_institutions_obj.key, self.certbio.key,
                          "The children institution of stub\
                          was Certbio")
-        self.assertEqual(children_institution_obj.parent_institution,
+        self.assertEqual(children_institutions_obj.parent_institution,
                          stub_institution_obj.key,
                          "The parent institution of stub\
                          was stub")
 
-        """ Check if raise exception when the invite is for
-        institution and not specify the suggestion institution name."""
-        # TODO:
-        # Fix the post method.
-        # The try except block prevents that FieldException be raised
-        # @author Mayza Nunes 04-07-2017
         with self.assertRaises(Exception):
             self.testapp.post_json("/api/invites", {
                 'invitee': 'mayzabeel@gmail.com',

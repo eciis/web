@@ -6,7 +6,8 @@
         'ui.router',
         'ngAnimate',
         'ngFileUpload',
-        'firebase'
+        'firebase',
+        'ngSanitize'
     ]);
 
     app.config(function($mdIconProvider, $mdThemingProvider, $stateProvider, $urlMatcherFactoryProvider,
@@ -97,6 +98,15 @@
                     main: {
                         templateUrl: "auth/choose_institution.html",
                         controller: "ChooseInstController as chooseInstCtrl"
+                    }
+                }
+            })
+            .state("submit_institution", {
+                url: "/submitinstitution",
+                views: {
+                    main: {
+                        templateUrl:"institution/submitInstitution.html",
+                        controller: "SubmitInstController as submitInstCtrl"
                     }
                 }
             })

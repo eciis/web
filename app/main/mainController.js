@@ -57,6 +57,10 @@
             if (mainCtrl.user.institutions.length === 0) {
                 $state.go("choose_institution");
             }
+
+            if (mainCtrl.user.getPendingInvitationOf("institution")){
+                $state.go("submit_institution");
+            }
         });
 
         $rootScope.$on("user_loaded", function() {

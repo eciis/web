@@ -18,9 +18,9 @@
             return deferred.promise;
         };
 
-        service.getSentInstitutionInvitations = function getSentInstitutionInvitations() {
+        service.deleteInvite = function deleteInvite(inviteKey) {
             var deferred = $q.defer();
-            $http.get(INVITES_URI).then(function success(response) {
+            $http.delete(INVITES_URI + '/' + inviteKey).then(function sucess(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);

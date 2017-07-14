@@ -15,6 +15,9 @@ class PostHandlerTest(TestBaseHandler):
     def setUp(cls):
         """Provide the base for the tests."""
         super(PostHandlerTest, cls).setUp()
+        methods = set(cls.webapp2.WSGIApplication.allowed_methods)
+        methods.add('PATCH')
+        cls.webapp2.WSGIApplication.allowed_methods = frozenset(methods)
         app = cls.webapp2.WSGIApplication(
             [("/api/posts/(.*)", PostHandler),
              ], debug=True)
@@ -51,6 +54,43 @@ class PostHandlerTest(TestBaseHandler):
         self.assertEqual(self.raoni_post.state, 'deleted',
                          "The post's state must be deleted")
 
+    def test_patch(self):
+        """Test the post_handler's patch method."""
+        # Pretend an authentication
+        self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
+        self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
+        # Call the patch method and assert that  it raises an exception
+        with self.assertRaises(Exception):
+            self.testapp.patch_json("/api/posts/%s"
+                                    % self.raoni_post.key.urlsafe(),
+                                    [{"op": "replace", "path": "/text",
+                                      "value": "testando"}]
+                                    )
+        # Call the patch method and assert that it works
+        self.testapp.patch_json("/api/posts/%s"
+                                % self.mayza_post.key.urlsafe(),
+                                [{"op": "replace", "path": "/text", "value": "testando"}]
+                                )
+        self.mayza_post = self.mayza_post.key.get()
+        self.assertEqual(self.mayza_post.text, "testando")
+        # Pretend a new authentication
+        self.os.environ['REMOTE_USER'] = 'raoni.smaneoto@ccc.ufcg.edu.br'
+        self.os.environ['USER_EMAIL'] = 'raoni.smaneoto@ccc.ufcg.edu.br'
+        # Call the patch method and assert that it works
+        self.testapp.patch_json("/api/posts/%s"
+                                % self.raoni_post.key.urlsafe(),
+                                [{"op": "replace", "path": "/text", "value": "testando"}]
+                                )
+        self.raoni_post = self.raoni_post.key.get()
+        self.assertEqual(self.raoni_post.text, "testando")
+        # Call the patch method and assert that  it raises an exception
+        with self.assertRaises(Exception):
+            self.testapp.patch_json("/api/posts/%s"
+                                    % self.mayza_post.key.urlsafe(),
+                                    [{"op": "replace", "path": "/text",
+                                      "value": "testando"}]
+                                    )
+
     def tearDown(cls):
         """Deactivate the test."""
         cls.test.deactivate()
@@ -83,6 +123,7 @@ def initModels(cls):
     # new Institution CERTBIO
     cls.certbio = Institution()
     cls.certbio.name = 'CERTBIO'
+    cls.certbio.acronym = 'CERTBIO'
     cls.certbio.cnpj = '18.104.068/0001-86'
     cls.certbio.legal_nature = 'public'
     cls.certbio.address = 'Universidade Federal de Campina Grande'

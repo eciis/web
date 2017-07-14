@@ -87,4 +87,8 @@ class Institution(ndb.Model):
         institution.children_institution = [invite.institution_key]
         institution.put()
 
+        institution_children = invite.institution_key.get()
+        institution_children.parent_institution = institution.key
+        institution_children.put()
+
         return institution

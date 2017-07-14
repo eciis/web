@@ -76,6 +76,8 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         invite_obj = key_invite.get()
         stub_institution = invite_obj.stub_institution_key
         stub_institution_obj = stub_institution.get()
+        children_institution = invite_obj.institution_key
+        children_institution_obj = children_institution.get()
 
         # Check data of invite
         self.assertEqual(invite_obj.invitee, 'mayzabeel@gmail.com',
@@ -96,6 +98,15 @@ class InviteCollectionHandlerTest(TestBaseHandler):
                          self.certbio.key,
                          "The children institution of stub\
                          was Certbio")
+
+        # Check data of institution children
+        self.assertEqual(children_institution_obj.key, self.certbio.key,
+                         "The children institution of stub\
+                         was Certbio")
+        self.assertEqual(children_institution_obj.parent_institution,
+                         stub_institution_obj.key,
+                         "The parent institution of stub\
+                         was stub")
 
         """ Check if raise exception when the invite is for
         institution and not specify the suggestion institution name."""

@@ -99,6 +99,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         with self.assertRaises(Exception):
             self.testapp.post_json("/api/invites", {
                 'invitee': 'ana@gmail.com',
+                'inviter': 'mayzabeel@gmail.com',
                 'type_of_invite': 'user'})
 
     def test_post_invite_user_error(self):

@@ -44,4 +44,4 @@ script:
     - cd app/test && ./node_modules/.bin/karma start --browsers Firefox --single-run
 
 notifications:
-    slack: e-ciis:5ttYSzVNz0z5XwYRaWBHExyW
+    slack: e-cis:5ttYSzVNz0z5XwYRaWBHExyW

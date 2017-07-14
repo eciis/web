@@ -237,12 +237,12 @@ class ResetHandler(BaseHandler):
         splab.put()
 
         eciis = Institution()
-        eciis.name = 'e-ciis'
+        eciis.name = 'e-cis'
         eciis.cnpj = '18.104.068/0001-30'
         eciis.legal_nature = 'public'
         eciis.address = 'Universidade Federal de Campina Grande'
         eciis.occupation_area = ''
-        eciis.description = 'The mission of the e-CIIS \
+        eciis.description = 'The mission of the e-cis \
             is to promote the development of the state-of-the-art in the \
             theory and practice of Software Engineering.'
         eciis.image_url = 'http://www.paho.org/bra/images/stories/BRA01A/logobireme.jpg'
@@ -346,7 +346,7 @@ class ResetHandler(BaseHandler):
         andre_post.put()
         add_comments_to_post(andre, andre_post, andre.institutions[0], 3)
 
-        # POST of Dalton To e-CIIS Institution
+        # POST of Dalton To e-cis Institution
         dalton_post = Post()
         dalton_post.title = "Post de Dalton no SPLAB"
         dalton_post.text = "At vero eos et accusamus et iusto odio dignissimos \
@@ -388,9 +388,9 @@ class ResetHandler(BaseHandler):
         jorge_post.last_modified_by = jorge.key
         jorge_post.put()
 
-        # POST of Jorge To e-CIIS Institution
+        # POST of Jorge To e-cis Institution
         jorge_post_eCIIS = Post()
-        jorge_post_eCIIS.title = "Post de Jorge no e-CIIS"
+        jorge_post_eCIIS.title = "Post de Jorge no e-cis"
         jorge_post_eCIIS.text = "At vero eos et accusamus et iusto odio dignis\
         simos ducimus quiblanditiis praesentium voluptatum deleniti atque corr\
         pti quos dolores et quas molestias excepturi sint occaecati cupiditate\

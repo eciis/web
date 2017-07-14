@@ -24,7 +24,7 @@
 
         mainCtrl.isMemberEcis = function isMemberEcis() {
             if (mainCtrl.user){
-                return mainCtrl.user.current_institution.name === 'e-ciis';
+                return mainCtrl.user.current_institution.name === 'e-cis';
             }
         };
 

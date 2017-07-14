@@ -12,7 +12,7 @@ from handlers.base_handler import BaseHandler
 from models.invite import Invite
 
 
-def is_admin_or_super_user(method):
+def is_admin(method):
         """Check if the user is admin of the institution."""
         def check_authorization(self, user, *args):
             data = json.loads(self.request.body)
@@ -21,20 +21,33 @@ def is_admin_or_super_user(method):
 
             userisNotAdminOfInstitution = institution.key not in user.institutions_admin
             institutionisNotManagedByUser = institution.admin != user.key
-            isNotSuperUser = institution.email != "eciis@ufcg.edu.br"
 
-            Utils._assert((userisNotAdminOfInstitution or institutionisNotManagedByUser) and isNotSuperUser,
-                          'User is not authorized to send invites', NotAuthorizedException)
+            Utils._assert(userisNotAdminOfInstitution or institutionisNotManagedByUser,
+                          'User is not admin', NotAuthorizedException)
 
             method(self, user, *args)
         return check_authorization
 
+
+def is_super_user(method):
+    """Check if the user is member of e-cis."""
+    def check_authorization(self, user, *args):
+        data = json.loads(self.request.body)
+        institution_key = ndb.Key(urlsafe=data['institution_key'])
+        institution = institution_key.get()
+
+        Utils._assert(institution.email != "eciis@ufcg.edu.br",
+                      'User is not member e-cis', NotAuthorizedException)
+
+        method(self, user, *args)
+    return check_authorization
 
 class InviteCollectionHandler(BaseHandler):
     """Invite Collection Handler."""
 
     @json_response
     @login_required
+    @is_super_user
     def get(self, user):
         """Get invites for new institutions make by Plataform"""
         invites = []
@@ -47,7 +60,7 @@ class InviteCollectionHandler(BaseHandler):
 
     @json_response
     @login_required
-    @is_admin_or_super_user
+    @is_admin
     def post(self, user):
         """Handle POST Requests."""
         data = json.loads(self.request.body)

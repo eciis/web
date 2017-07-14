@@ -11,7 +11,7 @@ class Invite(ndb.Model):
     # Email of the invitee.
     invitee = ndb.StringProperty(required=True)
 
-    # Email of the user Inviter
+    # Inviter email
     inviter = ndb.StringProperty(required=True)
 
     # Type of Invite.

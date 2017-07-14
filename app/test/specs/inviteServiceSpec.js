@@ -49,9 +49,10 @@
             var result;
             service.getSentInstitutionInvitations().then(function(data){
                 result = data;
+                expect($http.get).toHaveBeenCalled();
+                expect(result.data).toEqual(invites);
             });
             httpBackend.flush();
-            expect($http.get).toHaveBeenCalled();
-            expect(result.data).toEqual(invites);
+           
         });
 }));

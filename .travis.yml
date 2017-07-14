@@ -25,6 +25,10 @@ before_script:
 - wget $SDK_URL -nv
 - unzip -q google_appengine_$SDK_VERSION.zip
 
+# Install dependencies to backend
+- pip install -t lib -r requirements.txt
+- mv lib/google/* google_appengine/google/
+
 # Install dev-dependencies to frontEnd tests
 - cd app/test/
 - npm install
@@ -33,10 +37,6 @@ before_script:
 # Define display to travis simulate a browser
 - export DISPLAY=:99.0
 - sh -e /etc/init.d/xvfb start
-
-# Install dependencies to backend
-- mkdir lib
-- pip install -t lib -r requirements.txt
 
 # command to run tests
 script: 

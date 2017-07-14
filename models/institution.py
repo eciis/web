@@ -5,9 +5,9 @@ from custom_exceptions.fieldException import FieldException
 
 def get_occupation_area(data):
     """Get the institution occupation area."""
-    if data['occupation_area'] == 'other':
-        return data['other_area']
-    return data['occupation_area']
+    if data.get('occupation_area') == 'other':
+        return data.get('other_area')
+    return data.get('occupation_area')
 
 
 class Institution(ndb.Model):
@@ -84,23 +84,22 @@ class Institution(ndb.Model):
     @staticmethod
     def create(data, user):
         """Create a new Institution."""
-        for field in ['name', 'acronym', 'cnpj', 'legal_nature',
-                      'address', 'occupation_area', 'description',
-                      'phone_number', 'email']:
-            if not data[field]:
+        for field in ['name']:
+            if not data.get(field):
                 raise FieldException(field + " can not be empty")
+
         omsImage = "http://eciis-splab.appspot.com/images/oms.png"
         institution = Institution()
-        institution.name = data['name']
-        institution.acronym = data['acronym']
-        institution.cnpj = data['cnpj']
-        institution.legal_nature = data['legal_nature']
-        institution.address = data['address']
+        institution.name = data.get('name')
+        institution.acronym = data.get('acronym')
+        institution.cnpj = data.get('cnpj')
+        institution.legal_nature = data.get('legal_nature')
+        institution.address = data.get('address')
         institution.occupation_area = get_occupation_area(data)
-        institution.description = data['description']
-        institution.phone_number = data['phone_number']
-        institution.email = data['email']
-        institution.image_url = data['image_url'] or omsImage
+        institution.description = data.get('description')
+        institution.phone_number = data.get('phone_number')
+        institution.email = data.get('email')
+        institution.image_url = data.get('image_url') or omsImage
         institution.admin = user.key
         institution.members.append(user.key)
         institution.followers.append(user.key)

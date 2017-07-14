@@ -60,9 +60,9 @@
             var confirm = $mdDialog.confirm()
                 .clickOutsideToClose(true)
                 .title('Cancelar Cadastro')
-                .textContent(`Ao cancelar o cadastro, seu convite será removido e 
-                    a instituição não poderá ser criada posteriormente sem um novo convite. 
-                    Deseja cancelar mesmo assim?`)
+                .textContent("Ao cancelar o cadastro, seu convite será removido e " +
+                    "a instituição não poderá ser criada posteriormente sem um novo convite. " +
+                    "Deseja cancelar mesmo assim?")
                 .ariaLabel('Cancelar Cadastro')
                 .targetEvent(event)
                 .ok('Sim')

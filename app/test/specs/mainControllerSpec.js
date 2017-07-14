@@ -3,8 +3,13 @@
     var mainCtrl, httpBackend, scope, createCtrl, state;
     var mayza = {
         name: 'Mayza',
-        institutions: [],
-        invite: []
+        key: 'user-key',
+        invites: [{
+            'invitee': 'user@email.com',
+            'suggestion_institution_name': "Suggested Name",
+            'type_of_invite': "institution",
+            'status': 'sent'
+        }]
     };
     var certbio = {
         name: 'Certbio',
@@ -14,11 +19,12 @@
         name: 'Splab',
         key: '1239'
     };
-    mayza.institutions = [certbio.key, splab.key]
-    mayza.current_institution = certbio.key
+    mayza.institutions = [certbio.key, splab.key];
+    mayza.current_institution = certbio.key;
     beforeEach(module('app'));
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $state) {
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $state, AuthService) {
         httpBackend = $httpBackend;
+        AuthService.user = new User(mayza);
         scope = $rootScope.$new();
         state = $state;
         httpBackend.expect('GET', '/api/user').respond(mayza);

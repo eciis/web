@@ -279,6 +279,40 @@
         function isInstitutionAdmin(post) {
             return _.includes(_.map(postDetailsCtrl.user.institutions_admin, getKeyFromUrl), post.institution_key);
         }
+
+        var URL_PATTERN = /((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
+        var REPLACE_URL = "<a href=\'$1\' target='_blank'>$1</a>";
+
+        /**
+        * replace urls in a string with links to make the urls clickable.
+        * If urls don't containing http or https, this function add the https.
+        * @param {object} receivedPost - The post to be recognized.
+        * @return {object} The post with clickable urls.
+        * OBS: This function returns a new Post because this result is only for show in view.
+        * It is not necessary to change the original Post.
+        */
+        postDetailsCtrl.recognizeUrl =  function recognizeUrl(receivedPost) {
+            var post = new Post(receivedPost, receivedPost.institutionKey);
+            var urlsInTitle = post.title.match(URL_PATTERN);
+            var urlsInText = post.text.match(URL_PATTERN);
+            post.title = addHttpsToUrl(post.title, urlsInTitle);
+            post.text = addHttpsToUrl(post.text, urlsInText);
+            post.title = post.title.replace(URL_PATTERN, REPLACE_URL);
+            post.text = post.text.replace(URL_PATTERN,REPLACE_URL);
+            return post;
+        };
+
+        function addHttpsToUrl(text, urls) {
+            if(urls) {
+                var https = "https://";
+                for (var i = 0; i < urls.length; i++) {
+                    if(urls[i].slice(0, 4) != "http") {
+                        text = text.replace(urls[i], https + urls[i]);
+                    }
+                }
+            }
+            return text;
+        }
     });
 
     app.directive("postDetails", function() {
@@ -288,7 +322,8 @@
             controllerAs: "postDetailsCtrl",
             controller: "PostDetailsController",
             scope: {
-                posts: '='
+                posts: '=',
+                institution: '='
             }
         };
     });

@@ -15,24 +15,24 @@ class Institution(ndb.Model):
 
     name = ndb.StringProperty(required=True)
 
-    acronym = ndb.StringProperty(required=True)
+    acronym = ndb.StringProperty()
 
-    cnpj = ndb.StringProperty(required=True)
+    cnpj = ndb.StringProperty()
 
     legal_nature = ndb.StringProperty(
         choices=set(["public", "private", "philanthropic"]))
 
-    address = ndb.StringProperty(required=True)
+    address = ndb.StringProperty()
 
-    occupation_area = ndb.StringProperty(required=True)
+    occupation_area = ndb.StringProperty()
 
-    description = ndb.TextProperty(required=True)
+    description = ndb.TextProperty()
 
     image_url = ndb.StringProperty()
 
-    email = ndb.StringProperty(required=True)
+    email = ndb.StringProperty()
 
-    phone_number = ndb.StringProperty(required=True)
+    phone_number = ndb.StringProperty()
 
     # The admin user of this institution
     admin = ndb.KeyProperty(kind="User")

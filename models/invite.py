@@ -56,15 +56,11 @@ class Invite(ndb.Model):
             invite.suggestion_institution_name = data[
                 'suggestion_institution_name']
 
-        invite.add_stub()
+        if (invite.type_of_invite == 'institution_parent'):
+            institution = Institution.create_parente_inst_stub(invite)
+            invite.stub_institution_key = institution.key
 
         return invite
-
-    def add_stub(self):
-        """Added stub in invite."""
-        if (self.type_of_invite == 'institution_parent'):
-            institution = Institution.create_parente_inst_stub(self)
-            self.stub_institution_key = institution.key
 
     @staticmethod
     def sendInvite(invite):

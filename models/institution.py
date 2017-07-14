@@ -34,7 +34,7 @@ class Institution(ndb.Model):
 
     # The children institution
     # Value is None for institutions without children
-    children_institution = ndb.KeyProperty(kind="Institution")
+    children_institution = ndb.KeyProperty(kind="Institution", repeated=True)
 
     # The institutions are waiting to be accept as children
     # Value is None for institutions without children waiting accept
@@ -84,7 +84,7 @@ class Institution(ndb.Model):
         institution = Institution()
         institution.name = invite.suggestion_institution_name
         institution.state = 'pending'
-        institution.children_institution = invite.institution_key
+        institution.children_institution = [invite.institution_key]
         institution.put()
 
         return institution

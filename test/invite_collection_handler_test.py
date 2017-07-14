@@ -92,7 +92,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
                          "The name of stub expected was 'Institution Parent'")
         self.assertEqual(stub_institution_obj.state, 'pending',
                          "The state of stub expected was pending")
-        self.assertEqual(stub_institution_obj.children_institution,
+        self.assertEqual(stub_institution_obj.children_institution[0],
                          self.certbio.key,
                          "The children institution of stub\
                          was Certbio")
@@ -106,7 +106,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         with self.assertRaises(Exception):
             self.testapp.post_json("/api/invites", {
                 'invitee': 'mayzabeel@gmail.com',
-                'type_of_invite': 'institution'})
+                'type_of_invite': 'institution_parent'})
 
     def test_post_invite_user(self):
         """Test the invite_collection_handler's post method."""

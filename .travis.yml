@@ -33,6 +33,9 @@ before_script:
 - ls
 - ls google_appengine/google
 - ls lib
+- ls /home/travis/virtualenv/python2.7.9/lib/python2.7/site-packages/google
+- ls /home/travis/virtualenv/python2.7.9/lib/python2.7/site-packages/google/appengine
+- ls /home/travis/virtualenv/python2.7.9/lib/python2.7/site-packages/google/appengine/ext
 
 # Install dev-dependencies to frontEnd tests
 # - cd app/test/

@@ -12,13 +12,7 @@ env:
   global:
   - API_CHECK=https://appengine.google.com/api/updatecheck
 
-before_script:
-- nvm install 4.0.0
-
-# Install package WebTest
-- pip install WebTest
-- pip install pillow
-
+install:
 # Idea from https://blog.bekt.net/p/gae-sdk/
 - SDK_VERSION=$(curl -s $API_CHECK | awk -F '\"' '/release/ {print $2}')
 - SDK_URL=https://storage.googleapis.com/appengine-sdks/featured/google_appengine_$SDK_VERSION.zip
@@ -37,6 +31,8 @@ before_script:
 - ls /home/travis/virtualenv/python2.7.9/lib/python2.7/site-packages/google/appengine
 - ls /home/travis/virtualenv/python2.7.9/lib/python2.7/site-packages/google/appengine/ext
 
+before_script:
+# - nvm install 4.0.0
 
 # Install dev-dependencies to frontEnd tests
 # - cd app/test/

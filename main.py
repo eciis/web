@@ -21,6 +21,7 @@ from handlers.get_key_handler import GetKeyHandler
 from handlers.post_comment_handler import PostCommentHandler
 from handlers.image_handler import ImageHandler
 from handlers.invite_collection_handler import InviteCollectionHandler
+from handlers.search_handler import SearchHandler
 
 methods = set(webapp2.WSGIApplication.allowed_methods)
 methods.add('PATCH')
@@ -43,6 +44,7 @@ app = webapp2.WSGIApplication([
     ("/api/posts", PostCollectionHandler),
     ("/api/user", UserHandler),
     ("/api/user/timeline", UserTimelineHandler),
+    ("/api/search/(.*)", SearchHandler),
     ("/login", LoginHandler),
     ("/logout", LogoutHandler),
     ("/api/.*", ErroHandler),

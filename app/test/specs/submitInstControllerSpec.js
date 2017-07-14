@@ -70,9 +70,6 @@ describe('Test SubmitInstController', function() {
         httpBackend.verifyNoOutstandingRequest();
     });
 
-    describe('test', function() {
-        it('should pass...', function() {
-            expect(true).toBe(true);
-        });
-    });
+    // TODO create tests
+    // @author Ruan Eloy,  CreatedOn: 14/07/17  
 });

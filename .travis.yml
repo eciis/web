@@ -29,15 +29,15 @@ before_script:
 - mkdir lib
 - pip install -t lib -r requirements.txt
 - mv lib/google/* google_appengine/google
-- rm lib/google
+- rm -rf lib/google
 - ls
 - ls google_appengine/google
 - ls lib
 
 # Install dev-dependencies to frontEnd tests
-- cd app/test/
-- npm install
-- cd ../../
+# - cd app/test/
+# - npm install
+# - cd ../../
 
 # Define display to travis simulate a browser
 - export DISPLAY=:99.0

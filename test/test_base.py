@@ -6,6 +6,10 @@ sys.path.insert(1, 'google_appengine')
 sys.path.insert(1, 'google_appengine/lib/webapp2-2.5.2')
 sys.path.insert(1, 'google_appengine/lib/yaml/lib')
 
+import google
+
+print google.__path__
+
 from google.appengine.ext import testbed
 from google.appengine.ext import ndb
 from google.appengine.api import images

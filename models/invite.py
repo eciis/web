@@ -3,6 +3,7 @@
 from google.appengine.ext import ndb
 from google.appengine.api import mail
 from custom_exceptions.fieldException import FieldException
+from models.institution import Institution
 
 
 class Invite(ndb.Model):
@@ -14,7 +15,9 @@ class Invite(ndb.Model):
     # Type of Invite.
     type_of_invite = ndb.StringProperty(choices=set([
         'user',
-        'institution']), required=True)
+        'institution',
+        'institution_parent',
+        'institution_children']), required=True)
 
     # Status of Invite.
     status = ndb.StringProperty(choices=set([
@@ -27,6 +30,10 @@ class Invite(ndb.Model):
     """ Key of the institution who user was
     invited to be member, if the type of invite is user."""
     institution_key = ndb.KeyProperty(kind="Institution", required=True)
+
+    # Key of stub institution to wich the invite was send.
+    # Value is None for invite the User
+    stub_institution_key = ndb.KeyProperty(kind="Institution")
 
     @staticmethod
     def checkIsInviteInstitutionValid(data):
@@ -43,11 +50,21 @@ class Invite(ndb.Model):
         invite.type_of_invite = data.get('type_of_invite')
         invite.institution_key = ndb.Key(urlsafe=data.get('institution_key'))
 
-        if (invite.type_of_invite == 'institution'):
+        if (invite.type_of_invite == 'institution' or
+                invite.type_of_invite == 'institution_parent'):
             Invite.checkIsInviteInstitutionValid(data)
             invite.suggestion_institution_name = data[
                 'suggestion_institution_name']
+
+        invite.add_stub()
+
         return invite
+
+    def add_stub(self):
+        """Added stub in invite."""
+        if (self.type_of_invite == 'institution_parent'):
+            institution = Institution.create_parente_inst_stub(self)
+            self.stub_institution_key = institution.key
 
     @staticmethod
     def sendInvite(invite):
@@ -93,6 +110,17 @@ class Invite(ndb.Model):
                 'invitee': invite.invitee,
                 'type_of_invite': invite.type_of_invite,
                 'institution_key': invite.institution_key.urlsafe(),
+                'key': invite.key.urlsafe(),
+                'status': invite.status
+            }
+        # TODO: Change to general when all type of invite to institution have stub
+            # @author: Maiana Brito
+        elif invite.type_of_invite == 'institution_parent':
+            return {
+                'invitee': invite.invitee,
+                'type_of_invite': invite.type_of_invite,
+                'suggestion_institution_name': invite.suggestion_institution_name,
+                'institution_stub_key': invite.stub_institution_key.urlsafe(),
                 'key': invite.key.urlsafe(),
                 'status': invite.status
             }

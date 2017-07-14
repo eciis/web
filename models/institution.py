@@ -32,6 +32,14 @@ class Institution(ndb.Model):
     # User query to retrieve children institutions
     parent_institution = ndb.KeyProperty(kind="Institution")
 
+    # The children institution
+    # Value is None for institutions without children
+    children_institution = ndb.KeyProperty(kind="Institution")
+
+    # The institutions are waiting to be accept as children
+    # Value is None for institutions without children waiting accept
+    children_institution_pedding = ndb.KeyProperty(kind="Institution", repeated=True)
+
     # The ids of users who are members of this institution
     members = ndb.KeyProperty(kind="User", repeated=True)
 
@@ -69,3 +77,14 @@ class Institution(ndb.Model):
         if member_key not in self.members:
             self.members.append(member_key)
             self.put()
+
+    @staticmethod
+    def create_parente_inst_stub(invite):
+        """Create a stub of institution."""
+        institution = Institution()
+        institution.name = invite.suggestion_institution_name
+        institution.state = 'pending'
+        institution.children_institution = invite.institution_key
+        institution.put()
+
+        return institution

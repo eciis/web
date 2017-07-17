@@ -6,7 +6,7 @@ from google.appengine.api import search
 INDEX_NAME = 'institution'
 
 
-def CreateDocument(id, name, state):
+def createDocument(id, name, state):
     """Create a document."""
     content = {'id': str(id), 'name': name, 'state': state}
     document = search.Document(

@@ -35,7 +35,7 @@ class InstitutionCollectionHandler(BaseHandler):
         """Create a new institution."""
         data = json.loads(self.request.body)
         institution = Institution.create(data, user)
-        search_module.CreateDocument(
+        search_module.createDocument(
             institution.key.id(), institution.name, institution.state)
 
         self.response.write(json.dumps(

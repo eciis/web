@@ -102,9 +102,10 @@ class Institution(ndb.Model):
         institution_children = invite.institution_key.get()
         institution_children.parent_institution = institution.key
         institution_children.put()
-        
+
         return institution
 
+    @staticmethod
     def create(data, user):
         """Create a new Institution."""
         for field in ['name']:
@@ -132,5 +133,5 @@ class Institution(ndb.Model):
         user.institutions_admin.append(institution.key)
         user.follows.append(institution.key)
         user.put()
-        
+
         return institution

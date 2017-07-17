@@ -30,6 +30,7 @@ webapp2.WSGIApplication.allowed_methods = frozenset(methods)
 app = webapp2.WSGIApplication([
     ("/api/images", ImageHandler),
     ("/api/images/(.*)", ImageHandler),
+    ("/api/invites/(.*)", InviteHandler),
     ("/api/invites", InviteCollectionHandler),
     ("/api/invites/(.*)", InviteHandler),
     ("/api/institutions", InstitutionCollectionHandler),

@@ -19,13 +19,13 @@
         };
 
         service.deleteInvite = function deleteInvite(inviteKey) {
-           var deferred = $q.defer();
-           $http.delete(INVITES_URI + '/' + inviteKey).then(function sucess(response) {
-               deferred.resolve(response);
-           }, function error(response) {
-               deferred.reject(response);
-           });
-           return deferred.promise;
+            var deferred = $q.defer();
+            $http.delete(INVITES_URI + '/' + inviteKey).then(function sucess(response) {
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+            return deferred.promise;
         };
     });
 })();

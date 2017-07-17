@@ -7,13 +7,13 @@ import search_module
 from handlers.search_handler import SearchHandler
 
 
-class PostHandlerTest(TestBaseHandler):
+class SearchHandlerTest(TestBaseHandler):
     """Test the SearchHandler class."""
 
     @classmethod
     def setUp(cls):
         """Provide the base for the tests."""
-        super(PostHandlerTest, cls).setUp()
+        super(SearchHandlerTest, cls).setUp()
         app = cls.webapp2.WSGIApplication(
             [("/api/search/(.*)", SearchHandler),
              ], debug=True)

@@ -26,7 +26,7 @@ install:
 - rm -rf lib/google
 - ls
 - ls google_appengine/google
-- ls lib
+- ls lib/webob
 
 before_script:
 # - nvm install 4.0.0

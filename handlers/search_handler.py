@@ -15,11 +15,14 @@ class SearchHandler(BaseHandler):
 
     @json_response
     @login_required
-    def get(self, user, institution):
+    def get(self, user, query_string):
         """Handle GET Requests."""
         index = search.Index(INDEX_NAME)
-        query_string = institution
-        results = index.search(query_string)
+        query_options = search.QueryOptions(
+            returned_fields=['institution']
+        )
+        query = search.Query(query_string=query_string, options=query_options)
+        results = index.search(query)
         self.response.write(
             processDocuments(results)
         )
@@ -28,8 +31,10 @@ class SearchHandler(BaseHandler):
 def CreateDocument(content):
     """Create a document."""
     document = search.Document(
+        doc_id=content['id'],
         fields=[
-            search.TextField(name='institutiton', value=content['name'])
+            search.TextField(name='institution', value=content['name']),
+            search.TextField(name='state', value=content['state'])
         ]
     )
     saveDocument(document)

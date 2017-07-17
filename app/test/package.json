@@ -7,6 +7,7 @@
     "angular-material": "^1.1.4",
     "angular-messages": "^1.6.4",
     "angular-mocks": "^1.6.4",
+    "angular-sanitize": "^1.6.5",
     "angularfire": "^2.3.0",
     "crypto-js": "^3.1.9-1",
     "jasmine": "^2.6.0",

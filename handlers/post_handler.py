@@ -6,11 +6,24 @@ from google.appengine.ext import ndb
 from utils import Utils
 from utils import login_required
 from utils import is_authorized
+from utils import NotAuthorizedException
 from utils import json_response
 from util.json_patch import JsonPatch
 
 
 from handlers.base_handler import BaseHandler
+
+
+def is_post_author(method):
+    """Check if the user is the author of the post."""
+    def check_authorization(self, user, url_string, *args):
+        obj_key = ndb.Key(urlsafe=url_string)
+        post = obj_key.get()
+        Utils._assert(post.author != user.key,
+                      'User is not allowed to edit this post',
+                      NotAuthorizedException)
+        method(self, user, url_string, *args)
+    return check_authorization
 
 
 class PostHandler(BaseHandler):
@@ -27,14 +40,9 @@ class PostHandler(BaseHandler):
         """Set the informations about post."""
         post.delete(user)
 
-
-    """
-    TODO: Test is_authorized
-    @author: Andre L Abrantes - 23-06-2017
-    """
     @json_response
     @login_required
-    @is_authorized
+    @is_post_author
     def patch(self, user, url_string):
         """Handler PATCH Requests."""
         data = self.request.body

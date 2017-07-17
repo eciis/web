@@ -22,6 +22,7 @@ from handlers.post_comment_handler import PostCommentHandler
 from handlers.image_handler import ImageHandler
 from handlers.invite_collection_handler import InviteCollectionHandler
 from handlers.search_handler import SearchHandler
+from handlers.invite_handler import InviteHandler
 
 methods = set(webapp2.WSGIApplication.allowed_methods)
 methods.add('PATCH')
@@ -30,6 +31,7 @@ webapp2.WSGIApplication.allowed_methods = frozenset(methods)
 app = webapp2.WSGIApplication([
     ("/api/images", ImageHandler),
     ("/api/images/(.*)", ImageHandler),
+    ("/api/invites/(.*)", InviteHandler),
     ("/api/invites", InviteCollectionHandler),
     ("/api/institutions", InstitutionCollectionHandler),
     ("/api/institutions/(.*)/timeline", InstitutionTimelineHandler),

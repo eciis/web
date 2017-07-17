@@ -44,8 +44,8 @@
             var confirm = $mdDialog.confirm()
                             .clickOutsideToClose(false)
                             .title('Rejeitar convite')
-                            .textContent(`Ao rejeitar o convite, você só poderá ser membro com um novo convite. 
-                                Deseja rejeitar mesmo assim?`)
+                            .textContent("Ao rejeitar o convite, você só poderá ser membro com um novo convite." +
+                                 " Deseja rejeitar mesmo assim?")
                             .ariaLabel('Rejeitar convite')
                             .targetEvent(event)
                             .ok('Sim')

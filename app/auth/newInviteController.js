@@ -4,7 +4,7 @@
    var app = angular.module('app');
 
    app.controller('NewInviteController', function NewInviteController(InstitutionService, AuthService, UserService, InviteService, $state, $mdToast,
-    $mdDialog, $rootScope) {
+    $mdDialog) {
         var newInviteCtrl = this;
 
         newInviteCtrl.institution = null;
@@ -27,10 +27,7 @@
         newInviteCtrl.acceptInvite = function acceptInvite(event) {
             var promise = UserService.addInstitution(newInviteCtrl.user, newInviteCtrl.institution.key);
             promise.then(function success(response) {
-                    newInviteCtrl.user = new User(response);
-                // UserService.save(newInviteCtrl.user, newInviteCtrl.newUser).then(function success(data) {
-                //     newInviteCtrl.user = new User(data);
-                // });
+                newInviteCtrl.user = new User(response);
                 deleteInvite();
                 showAlert(event, newInviteCtrl.institution.name);
             }, function error(response) {
@@ -101,22 +98,6 @@
                  .targetEvent(event)
              );
         }
-
-        if (newInviteCtrl.user) {
-            setupUser();
-        } else {
-            // In case of refresh
-            $rootScope.$on("user_loaded", function() {
-                if (newInviteCtrl.user) {
-                    setupUser();
-                }
-            });
-        }
-
-        function setupUser() {
-            newInviteCtrl.newUser = new User(newInviteCtrl.user);
-        }
-
         loadInstitution();
    });
 })();

@@ -39,7 +39,9 @@
             $mdDialog.show(confirm).then(function() {
                 InstitutionService.createInstitution(submitInstCtrl.institution).then(
                     function success() {
-                        InviteService.deleteInvite(submitInstCtrl.invite.key).then(
+                        var newInvite = angular.copy(submitInstCtrl.invite);
+                        newInvite.status = 'accepted';
+                        InviteService.updateInvite(submitInstCtrl.invite, newInvite).then(
                             function success() {
                                 goHome();            
                                 showToast('Cadastro de instituição realizado com sucesso');

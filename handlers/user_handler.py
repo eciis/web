@@ -59,7 +59,7 @@ class UserHandler(BaseHandler):
         """Handler PATCH Requests."""
         data = json.loads(self.request.body)
 
-        institution_key = ndb.Key(urlsafe=data['institutions'][0])
+        institution_key = ndb.Key(urlsafe=data['institutions'][-1])
 
         user.add_institution(institution_key)
         user.follow(institution_key)

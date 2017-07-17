@@ -25,7 +25,6 @@
         });
 
         newInviteCtrl.acceptInvite = function acceptInvite(event) {
-            console.log(institutionKey);
             var promise = UserService.addInstitution(newInviteCtrl.user, newInviteCtrl.institution.key);
             promise.then(function success(response) {
                     newInviteCtrl.user = new User(response);

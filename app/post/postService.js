@@ -71,7 +71,6 @@
         service.save = function save(post, newPost) {
             var deffered = $q.defer();
             var patch = jsonpatch.compare(post, newPost);
-            console.log(patch);
             $http.patch(POSTS_URI + '/' + post.key, patch).then(function success(info) {
                 deffered.resolve(info.data);
             }, function error(data) {

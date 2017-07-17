@@ -39,6 +39,11 @@
             $mdDialog.show(confirm).then(function() {
                 InstitutionService.createInstitution(submitInstCtrl.institution).then(
                     function success() {
+                        /* TODO: remove call for  InviteService.updateInvite, 
+                        when the Institutution has invite data. 
+                        The status invite update should be made in server.
+                        @author: Mayza Nunes 17/07/2017
+                        */
                         var newInvite = angular.copy(submitInstCtrl.invite);
                         newInvite.status = 'accepted';
                         InviteService.updateInvite(submitInstCtrl.invite, newInvite).then(

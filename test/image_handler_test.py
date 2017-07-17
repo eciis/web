@@ -11,6 +11,8 @@ from models.institution import Institution
 from handlers.image_handler import ImageHandler
 from handlers.user_handler import UserHandler
 
+from mock import patch
+
 
 def create_in_memory_image_file(size):
     """Create a new image."""
@@ -54,7 +56,8 @@ class ImageHandlerTest(TestBaseHandler):
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
-    def test_store_image_larger_then_maximum_size(self):
+    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
+    def test_store_image_larger_then_maximum_size(self, verify_token):
         """Test storage image with a size greater than 800 in cloud storage."""
         SIZE_IMAGE = 2000
         EXPECTED_SIZE = ImageHandlerTest.MAXIMUM_SIZE
@@ -92,7 +95,8 @@ class ImageHandlerTest(TestBaseHandler):
             ImageHandlerTest.EXPECTED_FILENAME,
             "Image name must be equal to test.png")
 
-    def test_store_image_smaller_then_maximum_size(self):
+    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
+    def test_store_image_smaller_then_maximum_size(self, verify_token):
         """Test storage image with a size less than 800 in cloud storage."""
         SIZE_IMAGE = 500
         LIST_URI_IMAGES_USER = 'uploaded_images'
@@ -120,7 +124,8 @@ class ImageHandlerTest(TestBaseHandler):
 
         self.assertEqual(uploaded_images, expcted_list)
 
-    def test_add_image_in_user(self):
+    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
+    def test_add_image_in_user(self, verify_token):
         """Test storage image and add in list of uploaded images."""
         SIZE_IMAGE = 500
         EXPECTED_SIZE = 500

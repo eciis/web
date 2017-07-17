@@ -9,6 +9,8 @@ from handlers.post_collection_handler import PostCollectionHandler
 from handlers.institution_timeline_handler import InstitutionTimelineHandler
 from google.appengine.ext import ndb
 
+from mock import patch
+
 
 class InstitutionTimelineHandlerTest(TestBaseHandler):
     """Institution Timeline Handler Test."""
@@ -25,7 +27,8 @@ class InstitutionTimelineHandlerTest(TestBaseHandler):
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
-    def test_get(self):
+    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
+    def test_get(self, verify_token):
         """Test the institution_timeline_handler get method."""
         # Pretend an authentication
         self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'

@@ -2,6 +2,8 @@
 """Imports."""
 from test_base import TestBase
 
+from mock import patch
+
 
 class TestBaseHandler(TestBase):
     """SuperClass of the handler's tests."""

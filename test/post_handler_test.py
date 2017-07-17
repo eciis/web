@@ -7,6 +7,8 @@ from models.user import User
 from models.institution import Institution
 from handlers.post_handler import PostHandler
 
+from mock import patch
+
 
 class PostHandlerTest(TestBaseHandler):
     """Test the post_handler class."""
@@ -24,7 +26,8 @@ class PostHandlerTest(TestBaseHandler):
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
-    def test_delete(self):
+    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
+    def test_delete(self, verify_token):
         """Test the post_handler's delete method."""
         # Pretend an authentication
         self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
@@ -41,6 +44,8 @@ class PostHandlerTest(TestBaseHandler):
                          "The post's state must be deleted")
 
         # Pretend an authentication
+        verify_token.return_value={'email': 'raoni.smaneoto@ccc.ufcg.edu.br'}
+
         self.os.environ['REMOTE_USER'] = 'raoni.smaneoto@ccc.ufcg.edu.br'
         self.os.environ['USER_EMAIL'] = 'raoni.smaneoto@ccc.ufcg.edu.br'
         # Verify if before the delete the post's state is published
@@ -54,7 +59,8 @@ class PostHandlerTest(TestBaseHandler):
         self.assertEqual(self.raoni_post.state, 'deleted',
                          "The post's state must be deleted")
 
-    def test_patch(self):
+    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
+    def test_patch(self, verify_token):
         """Test the post_handler's patch method."""
         # Pretend an authentication
         self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
@@ -74,6 +80,8 @@ class PostHandlerTest(TestBaseHandler):
         self.mayza_post = self.mayza_post.key.get()
         self.assertEqual(self.mayza_post.text, "testando")
         # Pretend a new authentication
+        verify_token.return_value={'email': 'raoni.smaneoto@ccc.ufcg.edu.br'}
+
         self.os.environ['REMOTE_USER'] = 'raoni.smaneoto@ccc.ufcg.edu.br'
         self.os.environ['USER_EMAIL'] = 'raoni.smaneoto@ccc.ufcg.edu.br'
         # Call the patch method and assert that it works

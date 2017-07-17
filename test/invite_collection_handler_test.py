@@ -8,6 +8,8 @@ from handlers.invite_collection_handler import InviteCollectionHandler
 from google.appengine.ext import ndb
 import json
 
+from mock import patch
+
 
 class InviteCollectionHandlerTest(TestBaseHandler):
     """Invite Collection handler test."""
@@ -22,7 +24,8 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
-    def test_post_invite_institution(self):
+    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
+    def test_post_invite_institution(self, verify_token):
         """Test the invite_collection_handler's post method."""
         # Pretend an authentication
         self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
@@ -59,7 +62,8 @@ class InviteCollectionHandlerTest(TestBaseHandler):
                 'invitee': 'mayzabeel@gmail.com',
                 'type_of_invite': 'institution'})
 
-    def test_post_invite_user(self):
+    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
+    def test_post_invite_user(self, verify_token):
         """Test the invite_collection_handler's post method."""
         # Pretend an authentication
         self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
@@ -94,7 +98,8 @@ class InviteCollectionHandlerTest(TestBaseHandler):
                 'invitee': 'mayzabeel@gmail.com',
                 'type_of_invite': 'user'})
 
-    def test_post_invite_user_error(self):
+    @patch('utils.verify_token', return_value={'email': 'tiago.pereira@ccc.ufcg.edu.br'})
+    def test_post_invite_user_error(self, verify_token):
         """Test the invite_collection_handler's post
         method when the inviter is not a administrator."""
         # Pretend an authentication

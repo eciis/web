@@ -62,13 +62,12 @@
             if (mainCtrl.user.institutions.length > 0 && invite) {
                 var institutionKey = invite.institution_key;
                 var inviteKey = invite.key;
+                console.log(invite);
                 $state.go("new_invite", {institutionKey: institutionKey, inviteKey: inviteKey});
-
             }
-            
+
             if (mainCtrl.user.getPendingInvitationOf("institution")){
                 $state.go("submit_institution");
-
             }
         });
 

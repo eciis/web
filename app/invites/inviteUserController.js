@@ -47,6 +47,7 @@
             });
         }
 
+
         function showToast(msg) {
             $mdToast.show(
                 $mdToast.simple()
@@ -59,5 +60,6 @@
         }
 
         loadInstitution();
+
     });
 })();

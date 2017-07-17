@@ -11,8 +11,6 @@
 
         newInviteCtrl.inviteKey = $state.params.inviteKey;
 
-        newInviteCtrl.newUser = {};
-
         var institutionKey = $state.params.institutionKey;
 
         Object.defineProperty(newInviteCtrl, 'user', {
@@ -41,7 +39,7 @@
                             .clickOutsideToClose(false)
                             .title('Rejeitar convite')
                             .textContent("Ao rejeitar o convite, você só poderá ser membro com um novo convite." +
-                                 " Deseja rejeitar mesmo assim?")
+                                 " Deseja rejeitar?")
                             .ariaLabel('Rejeitar convite')
                             .targetEvent(event)
                             .ok('Sim')

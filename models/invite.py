@@ -54,14 +54,10 @@ class Invite(ndb.Model):
         invite.type_of_invite = data.get('type_of_invite')
         invite.institution_key = ndb.Key(urlsafe=data.get('institution_key'))
 
-        if (invite.type_of_invite == 'institution' or
-                invite.type_of_invite == 'institution_parent'):
+        if (invite.type_of_invite != 'user'):
             Invite.checkIsInviteInstitutionValid(data)
-            invite.suggestion_institution_name = data[
-                'suggestion_institution_name']
-
-        if (invite.type_of_invite == 'institution_parent'):
-            institution = Institution.create_parent_inst_stub(invite)
+            invite.suggestion_institution_name = data['suggestion_institution_name']
+            institution = Institution.create_inst_stub(invite)
             invite.stub_institution_key = institution.key
 
         return invite
@@ -118,6 +114,7 @@ class Invite(ndb.Model):
         """Create json of invite to parent institution."""
         return {
             'invitee': self.invitee,
+            'inviter': self.inviter,
             'type_of_invite': self.type_of_invite,
             'suggestion_institution_name': self.suggestion_institution_name,
             'institution_stub_key': self.stub_institution_key.urlsafe(),
@@ -129,6 +126,7 @@ class Invite(ndb.Model):
         """Create json of invite to user."""
         return {
             'invitee': self.invitee,
+            'inviter': self.inviter,
             'type_of_invite': self.type_of_invite,
             'institution_key': self.institution_key.urlsafe(),
             'key': self.key.urlsafe(),
@@ -139,6 +137,7 @@ class Invite(ndb.Model):
         """Create json of invite to institution."""
         return {
             'invitee': self.invitee,
+            'inviter': self.inviter,
             'type_of_invite': self.type_of_invite,
             'suggestion_institution_name': self.suggestion_institution_name,
             'key': self.key.urlsafe(),

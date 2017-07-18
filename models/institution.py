@@ -37,6 +37,8 @@ class Institution(ndb.Model):
     # The admin user of this institution
     admin = ndb.KeyProperty(kind="User")
 
+    invite = ndb.KeyProperty(kind="Invite")
+
     # The parent institution
     # Value is None for institutions without parent
     # User query to retrieve children institutions
@@ -49,6 +51,9 @@ class Institution(ndb.Model):
     # The institutions are waiting to be accept as children
     # Value is None for institutions without children waiting accept
     children_institutions_pedding = ndb.KeyProperty(kind="Institution", repeated=True)
+
+    # Invitation to create institution
+    invite = ndb.KeyProperty(kind="Invite")
 
     # The ids of users who are members of this institution
     members = ndb.KeyProperty(kind="User", repeated=True)
@@ -91,20 +96,49 @@ class Institution(ndb.Model):
 
     @staticmethod
     @ndb.transactional(xg=True)
-    def create_parent_inst_stub(invite):
-        """Create a stub of institution."""
-        institution = Institution()
-        institution.name = invite.suggestion_institution_name
-        institution.state = 'pending'
+    def create_parent_connection(institution, invite):
+        """Makes connections between parent and daughter institution."""
         institution.children_institutions = [invite.institution_key]
         institution.put()
 
         institution_children = invite.institution_key.get()
         institution_children.parent_institution = institution.key
         institution_children.put()
-        
+
         return institution
 
+    @staticmethod
+    @ndb.transactional(xg=True)
+    def create_children_connection(institution, invite):
+        """Makes connections between daughter and parent institution."""
+        institution.parent_institution = invite.institution_key
+        institution.put()
+
+        parent_institution = invite.institution_key.get()
+        parent_institution.children_institutions.append(institution.key)
+        parent_institution.put()
+
+        return institution
+
+    @staticmethod
+    @ndb.transactional(xg=True)
+    def create_inst_stub(invite):
+        """Create a stub of institution."""
+        institution_stub = Institution()
+        institution_stub.name = invite.suggestion_institution_name
+        institution_stub.state = 'pending'
+
+        institution_stub.put()
+
+        if (invite.type_of_invite == 'institution_parent'):
+            institution_stub = Institution.create_parent_connection(institution_stub, invite)
+        elif (invite.type_of_invite == 'institution_children'):
+            institution_stub = Institution.create_children_connection(institution_stub, invite)
+
+        return institution_stub
+
+    @staticmethod
+    @ndb.transactional(xg=True)
     def create(data, user):
         """Create a new Institution."""
         for field in ['name']:
@@ -114,6 +148,7 @@ class Institution(ndb.Model):
         omsImage = "http://eciis-splab.appspot.com/images/oms.png"
         institution = Institution()
         institution.name = data.get('name')
+        institution.invite = ndb.Key(urlsafe=data.get('invite'))
         institution.acronym = data.get('acronym')
         institution.cnpj = data.get('cnpj')
         institution.legal_nature = data.get('legal_nature')
@@ -132,5 +167,9 @@ class Institution(ndb.Model):
         user.institutions_admin.append(institution.key)
         user.follows.append(institution.key)
         user.put()
-        
+
+        invite = institution.invite.get()
+        invite.status = 'accepted'
+        invite.put()
+
         return institution

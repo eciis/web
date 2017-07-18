@@ -73,6 +73,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         # Make the request and assign the answer to post
         invite = self.testapp.post_json("/api/invites", {
             'invitee': 'mayzabeel@gmail.com',
+            'inviter': 'mayzabeel@gmail.com',
             'type_of_invite': 'institution_parent',
             'suggestion_institution_name': 'Institution Parent',
             'institution_key': self.certbio.key.urlsafe()})

@@ -36,7 +36,7 @@ User.prototype.isFollower = function isFollower(keyInstitution) {
 };
 
 User.prototype.isAdmin = function isAdmin(keyInstitution) {
-    var managed_institution = _.find(this.institutions_admin, function(institution) { 
+    var managed_institution = _.find(this.institutions_admin, function(institution) {
       return getKey(institution) == keyInstitution; });
     return managed_institution;
 };
@@ -72,28 +72,6 @@ User.prototype.getPendingInvitationOf = function getPendingInvitationOf(invitati
         }
     }
     return undefined;
-};
-
-User.clone = function deepClone(initalObj, finalObj) {
-    var obj = finalObj || {};
-    for (var i in initalObj) {
-        var prop = initalObj[i];
-
-        if(prop === obj) {
-            continue;
-        }
-
-        if (typeof prop === 'object') {
-            if(prop.constructor === Array) {
-                obj[i] = deepClone(prop, []);
-            } else {
-                obj[i] = prop;
-            }
-        } else {
-            obj[i] = prop;
-        }
-    }
-    return obj;
 };
 
 function getKeyObj(obj) {

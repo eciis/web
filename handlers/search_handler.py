@@ -3,6 +3,7 @@
 
 from utils import login_required
 from utils import json_response
+import json
 from google.appengine.api import search
 
 from handlers.base_handler import BaseHandler
@@ -25,5 +26,5 @@ class SearchHandler(BaseHandler):
         query = search.Query(query_string=query_string, options=query_options)
         results = index.search(query)
         self.response.write(
-            search_module.processDocuments(results)
+            json.dumps(search_module.processDocuments(results))
         )

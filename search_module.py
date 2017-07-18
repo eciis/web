@@ -28,8 +28,11 @@ def saveDocument(document):
 def processDocuments(documents):
     """Process the documents."""
     institutions = [doc.fields for doc in documents]
-    names = []
+    doc_ids = [doc.doc_id for doc in documents]
+    documents_index = 0
+    result = {}
     for fields in institutions:
         for each in fields:
-            names.append(each.value.encode('utf-8'))
-    return names
+            result[each.value.encode('utf-8')] = doc_ids[documents_index]
+            documents_index = documents_index + 1
+    return result

@@ -26,6 +26,7 @@ module.exports = function (config) {
         'node_modules/angular-mocks/angular-mocks.js',
         'node_modules/firebase/firebase.js',
         'node_modules/angularfire/dist/angularfire.js',
+        "node_modules/mockfirebase/browser/mockfirebase.js",
         '../*.js',
         '../*/*.js',
         'specs/*.js'

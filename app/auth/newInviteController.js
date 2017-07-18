@@ -44,11 +44,13 @@
                             .targetEvent(event)
                             .ok('Sim')
                             .cancel('Não');
-                        $mdDialog.show(confirm).then(function() {
-                            deleteInvite();
-                        }, function() {
-                            showToast('Cancelado');
-                        });
+            var promise = $mdDialog.show(confirm);
+            promise.then(function() {
+                deleteInvite();
+            }, function() {
+                showToast('Cancelado');
+            });
+            return promise;
         };
 
         function deleteInvite() {
@@ -96,6 +98,7 @@
                  .targetEvent(event)
              );
         }
+        
         loadInstitution();
    });
 })();

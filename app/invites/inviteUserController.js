@@ -47,7 +47,6 @@
             });
         }
 
-
         function showToast(msg) {
             $mdToast.show(
                 $mdToast.simple()
@@ -58,8 +57,7 @@
                     .position('bottom right')
             );
         }
-
+        
         loadInstitution();
-
     });
 })();

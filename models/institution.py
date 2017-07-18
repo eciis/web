@@ -140,7 +140,8 @@ class Institution(ndb.Model):
     @staticmethod
     @ndb.transactional(xg=True)
     def create(data, user):
-        """Create a new Institution."""
+        """Create a new Institution, who user was invited.
+           Update user to be admin and status of invite to accepted."""
         for field in ['name']:
             if not data.get(field):
                 raise FieldException(field + " can not be empty")

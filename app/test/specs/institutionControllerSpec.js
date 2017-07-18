@@ -8,7 +8,7 @@
 
     var splab = {
             name: 'SPLAB',
-            key: '987654321' 
+            key: '987654321'
     };
 
     var certbio = {
@@ -87,7 +87,7 @@
             expect(institutionCtrl.current_institution).toEqual(splab);
         });
     });
-    
+
     describe('InstitutionController functions', function() {
 
         describe('follow()', function() {

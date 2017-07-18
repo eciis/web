@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.service("ImageService", function CompressService( $q, $firebaseStorage) {
+    app.service("ImageService", function ImageService( $q, $firebaseStorage) {
         var service = this;
         var folderImages = 'images/';
 

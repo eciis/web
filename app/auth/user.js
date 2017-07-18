@@ -35,6 +35,12 @@ User.prototype.isFollower = function isFollower(keyInstitution) {
     return isFollower;
 };
 
+User.prototype.isAdmin = function isAdmin(keyInstitution) {
+    var managed_institution = _.find(this.institutions_admin, function(institution) { 
+      return getKey(institution) == keyInstitution; });
+    return managed_institution;
+};
+
 User.prototype.isMember = function isMember(institutionKey){
       return _.includes(_.map(this.institutions, getKeyObj), institutionKey);
 };
@@ -57,6 +63,15 @@ User.prototype.isValid = function isValid() {
         return false;
     }
     return true;
+};
+
+User.prototype.getPendingInvitationOf = function getPendingInvitationOf(invitationType){
+    for(var i = 0; i < this.invites.length; i++) {
+        if(this.invites[i].type_of_invite == invitationType && this.invites[i].status == 'sent'){
+            return this.invites[i];
+        }
+    }
+    return undefined;
 };
 
 User.clone = function deepClone(initalObj, finalObj) {

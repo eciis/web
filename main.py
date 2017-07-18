@@ -20,12 +20,14 @@ from handlers.erro_handler import ErroHandler
 from handlers.get_key_handler import GetKeyHandler
 from handlers.post_comment_handler import PostCommentHandler
 from handlers.invite_collection_handler import InviteCollectionHandler
+from handlers.invite_handler import InviteHandler
 
 methods = set(webapp2.WSGIApplication.allowed_methods)
 methods.add('PATCH')
 webapp2.WSGIApplication.allowed_methods = frozenset(methods)
 
 app = webapp2.WSGIApplication([
+    ("/api/invites/(.*)", InviteHandler),
     ("/api/invites", InviteCollectionHandler),
     ("/api/institutions", InstitutionCollectionHandler),
     ("/api/institutions/(.*)/timeline", InstitutionTimelineHandler),

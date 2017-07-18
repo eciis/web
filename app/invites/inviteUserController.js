@@ -57,7 +57,7 @@
                     .position('bottom right')
             );
         }
-
+        
         loadInstitution();
     });
 })();

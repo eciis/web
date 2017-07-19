@@ -28,6 +28,13 @@
             }
         };
 
+        mainCtrl.userIsActive = function userIsActive() {
+            if(mainCtrl.user) {
+                return mainCtrl.user.state == 'active';
+            }
+            return false;
+        };
+
         mainCtrl.changeInstitution = function changeInstitution(name) {
             mainCtrl.user.changeInstitution(name);
         };

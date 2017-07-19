@@ -1,76 +1,78 @@
 <!-- TOOLBAR -->
-<md-toolbar md-colors="{background: 'green-900'}" layout-wrap layout-align="center" layout="row">
-  <div class="md-toolbar-tools" flex-lg="90" flex-gt-lg="80" layout="row" layout-align="center center">
-    <md-button class="md-icon-button" aria-label="Settings" ng-click="mainCtrl.toggle()">
-      <md-icon>menu</md-icon>
-    </md-button>
-
-    <a ui-sref="app.home"layout="row" layout-align="center center">
-      <md-button disabled="true">
-        <img src="images/oms.png" aria-label="OMS Logo" style="height: 80%;filter: brightness(10) grayscale(1);">
+<div ng-if="mainCtrl.userIsActive()">
+  <md-toolbar md-colors="{background: 'green-900'}" layout-wrap layout-align="center" layout="row">
+    <div class="md-toolbar-tools" flex-lg="90" flex-gt-lg="80" layout="row" layout-align="center center">
+      <md-button class="md-icon-button" aria-label="Settings" ng-click="mainCtrl.toggle()">
+        <md-icon>menu</md-icon>
       </md-button>
-      <h2>e-CIIS</h2>
-    </a>
 
-    <span flex md-truncate></span>
-
-    <notification></notification>
-
-    <md-button aria-label="inicio" class="md-icon-button" onclick="location.href='/'">
-      <md-icon>home</md-icon>
-    </md-button>
-
-    <md-menu md-position-mode="target-right target">
-      <md-button aria-label="menu" class="md-icon-button" ng-click="$mdMenu.open(ev)">
-        <md-icon>more_vert</md-icon>
-      </md-button>
-      <md-menu-content width="4">
-        <md-menu-item>
-          <md-button>
-            <md-icon>notifications</md-icon>
-            Notificações
-          </md-button>
-        </md-menu-item>
-        <md-menu-item ng-if="mainCtrl.isAdmin()">
-          <md-button ng-click="mainCtrl.goInvite()">
-            <md-icon>mail_outline</md-icon>
-            Convite
-          </md-button>
-        </md-menu-item>
-        <md-menu-item>
-          <md-button ui-sref="config_profile">
-            <md-icon>dashboard</md-icon>
-            Configurações
-          </md-button>
-        </md-menu-item>
-        <md-menu-divider></md-menu-divider>
-        <md-menu-item>
-          <md-button onclick="location.href='/logout'">
-            <md-icon>exit_to_app</md-icon>
-            Sair
-          </md-button>
-        </md-menu-item>
-      </md-menu-content>
-    </md-menu>
-  </div>
-</md-toolbar>
-
-<!-- SIDENAV -->
-<md-sidenav class="md-sidenav-left" md-component-id="leftNav" md-whiteframe="4" layout="column">
-  <md-toolbar md-colors="{background: 'green-700' }" layout="row" layout-align="center center">
-    <h1 class="md-toolbar-tools">Instituição Atual</h1>
-  </md-toolbar>
-  <md-content flex >
-    <md-list>
-      <md-list-item class="md-3-line" ng-repeat="institution in mainCtrl.user.institutions" ng-click="mainCtrl.changeInstitution(institution.name)">
-        <img ng-src="{{ institution.image_url }}" alt="{{ institution.name }}" class="md-avatar" md-colors="{background: 'grey-200'}">
-        <p> {{ institution.name }} </p>
-        <md-button class="md-warn md-hue-1 md-icon-button" ng-show="mainCtrl.isActive(institution)">
-          <md-icon>check</md-icon>
+      <a ui-sref="app.home"layout="row" layout-align="center center">
+        <md-button disabled="true">
+          <img src="images/oms.png" aria-label="OMS Logo" style="height: 80%;filter: brightness(10) grayscale(1);">
         </md-button>
-      </md-list-item>
-    </md-list>
-  </md-content>
-</md-sidenav>
+        <h2>e-CIIS</h2>
+      </a>
 
-<div ui-view="content" layout="column"></div>
+      <span flex md-truncate></span>
+
+      <notification></notification>
+
+      <md-button aria-label="inicio" class="md-icon-button" onclick="location.href='/'">
+        <md-icon>home</md-icon>
+      </md-button>
+
+      <md-menu md-position-mode="target-right target">
+        <md-button aria-label="menu" class="md-icon-button" ng-click="$mdMenu.open(ev)">
+          <md-icon>more_vert</md-icon>
+        </md-button>
+        <md-menu-content width="4">
+          <md-menu-item>
+            <md-button>
+              <md-icon>notifications</md-icon>
+              Notificações
+            </md-button>
+          </md-menu-item>
+          <md-menu-item ng-if="mainCtrl.isAdmin()">
+            <md-button ng-click="mainCtrl.goInvite()">
+              <md-icon>mail_outline</md-icon>
+              Convite
+            </md-button>
+          </md-menu-item>
+          <md-menu-item>
+            <md-button ui-sref="config_profile">
+              <md-icon>dashboard</md-icon>
+              Configurações
+            </md-button>
+          </md-menu-item>
+          <md-menu-divider></md-menu-divider>
+          <md-menu-item>
+            <md-button onclick="location.href='/logout'">
+              <md-icon>exit_to_app</md-icon>
+              Sair
+            </md-button>
+          </md-menu-item>
+        </md-menu-content>
+      </md-menu>
+    </div>
+  </md-toolbar>
+
+  <!-- SIDENAV -->
+  <md-sidenav class="md-sidenav-left" md-component-id="leftNav" md-whiteframe="4" layout="column">
+    <md-toolbar md-colors="{background: 'green-700' }" layout="row" layout-align="center center">
+      <h1 class="md-toolbar-tools">Instituição Atual</h1>
+    </md-toolbar>
+    <md-content flex >
+      <md-list>
+        <md-list-item class="md-3-line" ng-repeat="institution in mainCtrl.user.institutions" ng-click="mainCtrl.changeInstitution(institution.name)">
+          <img ng-src="{{ institution.image_url }}" alt="{{ institution.name }}" class="md-avatar" md-colors="{background: 'grey-200'}">
+          <p> {{ institution.name }} </p>
+          <md-button class="md-warn md-hue-1 md-icon-button" ng-show="mainCtrl.isActive(institution)">
+            <md-icon>check</md-icon>
+          </md-button>
+        </md-list-item>
+      </md-list>
+    </md-content>
+  </md-sidenav>
+
+  <div ui-view="content" layout="column"></div>
+</div>

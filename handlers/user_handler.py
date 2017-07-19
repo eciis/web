@@ -63,6 +63,7 @@ class UserHandler(BaseHandler):
 
         user.add_institution(institution_key)
         user.follow(institution_key)
+        user.change_state('active')
 
         institution = institution_key.get()
 

@@ -127,6 +127,7 @@ class Institution(ndb.Model):
         institution.admin = user.key
         institution.members.append(user.key)
         institution.followers.append(user.key)
+        institution.state = data.get('state')
         institution.put()
 
         user.institutions.append(institution.key)

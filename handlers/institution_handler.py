@@ -19,8 +19,7 @@ def getSentInvitations(institution_key):
     """Query that return list of invites for this user."""
     invites = []
 
-    queryInvites = Invite.query(Invite.institution_key == institution_key,
-                                Invite.type_of_invite == 'user')
+    queryInvites = Invite.query(Invite.institution_key == institution_key)
 
     invites = [Invite.make(invite) for invite in queryInvites]
 
@@ -39,6 +38,7 @@ class InstitutionHandler(BaseHandler):
         assert type(obj) is Institution, "Key is not an Institution"
         institution_json = Utils.toJson(obj, host=self.request.host)
         institution_json['sent_invitations'] = getSentInvitations(obj.key)
+
         self.response.write(json.dumps(
             institution_json
         ))

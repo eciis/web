@@ -216,6 +216,7 @@ class ResetHandler(BaseHandler):
             'image_url': 'https://pbs.twimg.com/profile_images/1782760873/Logo_do_site_400x400.jpg',
             'email': 'certbio@ufcg.edu.br',
             'phone_number': '83 33224455',
+            'state': 'active'
         }
         certbio = Institution.create(data, mayza)
         for user in [mayza.key, dalton.key]:
@@ -237,6 +238,7 @@ class ResetHandler(BaseHandler):
             'image_url': 'http://amaurymedeiros.com/images/splab.png',
             'email': 'splab@ufcg.edu.br',
             'phone_number': '83 33227865',
+            'state': 'active'
         }
         splab = Institution.create(data, jorge)
         for user in [jorge.key, andre.key]:
@@ -257,6 +259,7 @@ class ResetHandler(BaseHandler):
             'image_url': 'http://www.paho.org/bra/images/stories/BRA01A/logobireme.jpg',
             'email': 'eciis@ufcg.edu.br',
             'phone_number': '83 33227865',
+            'state': 'active'
         }
         eciis = Institution.create(data, dalton)
         for user in [dalton.key, andre.key, jorge.key, maiana.key,
@@ -267,6 +270,9 @@ class ResetHandler(BaseHandler):
                      maiana.key, luiz.key, raoni.key,
                      ruan.key, tiago.key]:
             eciis.follow(user)
+
+        eciis.parent_institution = certbio.key
+        eciis.put()
 
         jsonList.append({"msg": "database initialized with a few institutions"})
 

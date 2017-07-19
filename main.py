@@ -27,8 +27,8 @@ methods.add('PATCH')
 webapp2.WSGIApplication.allowed_methods = frozenset(methods)
 
 app = webapp2.WSGIApplication([
-    ("/api/invites/(.*)", InviteHandler),
     ("/api/invites", InviteCollectionHandler),
+    ("/api/invites/(.*)", InviteHandler),
     ("/api/institutions", InstitutionCollectionHandler),
     ("/api/institutions/(.*)/timeline", InstitutionTimelineHandler),
     ("/api/institutions/(.*)/members", InstitutionMembersHandler),

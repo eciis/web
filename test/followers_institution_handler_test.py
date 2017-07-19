@@ -176,6 +176,7 @@ def initModels(cls):
     # new Institution CERTBIO, user Maiana is follower
     cls.certbio = Institution()
     cls.certbio.name = 'CERTBIO'
+    cls.certbio.acronym = 'CERTBIO'
     cls.certbio.cnpj = '18.104.068/0001-86'
     cls.certbio.legal_nature = 'public'
     cls.certbio.address = 'Universidade Federal de Campina Grande'

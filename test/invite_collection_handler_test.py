@@ -63,7 +63,62 @@ class InviteCollectionHandlerTest(TestBaseHandler):
                 'type_of_invite': 'institution'})
 
     @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
-    def test_post_invite_user(self, verify_token):
+    def test_post_invite_institution_parent(self, verify_token):
+        """Test the invite_collection_handler's post method in case to parent institution."""
+        # Pretend an authentication
+        self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
+        self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
+        # Make the request and assign the answer to post
+        invite = self.testapp.post_json("/api/invites", {
+            'invitee': 'mayzabeel@gmail.com',
+            'type_of_invite': 'institution_parent',
+            'suggestion_institution_name': 'Institution Parent',
+            'institution_key': self.certbio.key.urlsafe()})
+        # Retrieve the entities
+        invite = json.loads(invite._app_iter[0])
+        key_invite = ndb.Key(urlsafe=invite['key'])
+        invite_obj = key_invite.get()
+        stub_institution = invite_obj.stub_institution_key
+        stub_institution_obj = stub_institution.get()
+        children_institutions = invite_obj.institution_key
+        children_institutions_obj = children_institutions.get()
+
+        # Check data of invite
+        self.assertEqual(invite_obj.invitee, 'mayzabeel@gmail.com',
+                         "The email expected was mayzabeel@gmail.com")
+        self.assertEqual(invite_obj.type_of_invite, 'institution_parent',
+                         "The type of invite expected was institution_parent")
+        self.assertEqual(invite_obj.suggestion_institution_name,
+                         'Institution Parent',
+                         "The suggestion institution name of \
+                              invite expected was Institution Parent")
+
+        # Check data of stub
+        self.assertEqual(stub_institution_obj.name, 'Institution Parent',
+                         "The name of stub expected was 'Institution Parent'")
+        self.assertEqual(stub_institution_obj.state, 'pending',
+                         "The state of stub expected was pending")
+        self.assertEqual(stub_institution_obj.children_institutions[0],
+                         self.certbio.key,
+                         "The children institution of stub\
+                         was Certbio")
+
+        # Check data of institution children
+        self.assertEqual(children_institutions_obj.key, self.certbio.key,
+                         "The children institution of stub\
+                         was Certbio")
+        self.assertEqual(children_institutions_obj.parent_institution,
+                         stub_institution_obj.key,
+                         "The parent institution of stub\
+                         was stub")
+
+        """ Check if raise exception when the invite is
+        for user and not specify the institution key."""
+        with self.assertRaises(Exception):
+            self.testapp.post_json("/api/invites", {
+                'invitee': 'mayzabeel@gmail.com',
+                'type_of_invite': 'institution_parent'})
+
         """Test the invite_collection_handler's post method."""
         # Pretend an authentication
         self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
@@ -123,6 +178,7 @@ def initModels(cls):
     # new Institution CERTBIO
     cls.certbio = Institution()
     cls.certbio.name = 'CERTBIO'
+    cls.certbio.acronym = 'CERTBIO'
     cls.certbio.cnpj = '18.104.068/0001-86'
     cls.certbio.legal_nature = 'public'
     cls.certbio.address = 'Universidade Federal de Campina Grande'

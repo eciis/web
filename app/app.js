@@ -101,6 +101,24 @@
                     }
                 }
             })
+            .state("new_invite", {
+                url: "/:institutionKey/:inviteKey/new_invite",
+                views: {
+                    main: {
+                        templateUrl: "auth/new_invite_page.html",
+                        controller: "NewInviteController as newInviteCtrl"
+                    }
+                }
+            })
+            .state("submit_institution", {
+                url: "/submitinstitution",
+                views: {
+                    main: {
+                        templateUrl:"institution/submitInstitution.html",
+                        controller: "SubmitInstController as submitInstCtrl"
+                    }
+                }
+            })
             .state("signin", {
                 url: "/signin",
                 views: {

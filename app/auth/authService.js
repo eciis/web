@@ -12,7 +12,7 @@
 
         Object.defineProperty(service, 'user', {
             get: function() {
-                return new User(userInfo);
+                return userInfo;
             }
         });
 
@@ -86,7 +86,8 @@
 
         function init() {
             if ($window.sessionStorage.userInfo) {
-                userInfo = JSON.parse($window.sessionStorage.userInfo);
+                var parse = JSON.parse($window.sessionStorage.userInfo);
+                userInfo = new User(parse);
             }
         }
 

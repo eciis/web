@@ -164,6 +164,7 @@ def initModels(cls):
     # new Institution SPLAB
     cls.splab = Institution()
     cls.splab.name = 'SPLAB'
+    cls.splab.acronym = 'SPLAB'
     cls.splab.cnpj = '18.104.068/0001-56'
     cls.splab.legal_nature = 'public'
     cls.splab.address = 'Universidade Federal de Campina Grande'

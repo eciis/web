@@ -2,19 +2,21 @@
 
 (function() {
     var app = angular.module("app");
-    
-    app.controller("ConfigProfileController", function ConfigProfileController($state, InstitutionService, 
+
+    app.controller("ConfigProfileController", function ConfigProfileController($state, InstitutionService,
             AuthService, UserService, $rootScope, $mdToast, $q) {
         var configProfileCtrl = this;
 
-        configProfileCtrl.newUser = {};
+        // Variable used to observe the changes on the user model.
+        var observer;
 
-        configProfileCtrl.user = AuthService.getCurrentUser();
+        configProfileCtrl.newUser = AuthService.getCurrentUser();
 
         configProfileCtrl.finish = function finish() {
             var deffered = $q.defer();
             if (configProfileCtrl.newUser.isValid()) {
-                UserService.save(configProfileCtrl.user, configProfileCtrl.newUser).then(function success() {
+                var patch = jsonpatch.generate(observer);
+                UserService.save(patch).then(function success() {
                     AuthService.reload().then(function success() {
                         $state.go("app.home");
                         deffered.resolve();
@@ -39,7 +41,7 @@
         }
 
         (function main() {
-            configProfileCtrl.newUser = configProfileCtrl.user;
+            observer = jsonpatch.observe(configProfileCtrl.newUser);
         })();
     });
 })();

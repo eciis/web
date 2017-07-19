@@ -26,6 +26,10 @@
             }
         };
 
+        mainCtrl.setShowSearchMenu = function setShowSearchMenu(){
+            mainCtrl.showSearchMenu = false;
+        };
+
         mainCtrl.toggle = function toggle() {
             $mdSidenav('leftNav').toggle();
         };

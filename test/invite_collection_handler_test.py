@@ -149,6 +149,15 @@ class InviteCollectionHandlerTest(TestBaseHandler):
                          "The institution key expected was key of certbio")
 
         """ Check if raise exception when the invite is
+        for user already member of institution."""
+        with self.assertRaises(Exception):
+            self.testapp.post_json("/api/invites", {
+                'invitee': 'tiago.pereira@ccc.ufcg.edu.br',
+                'inviter': 'mayzabeel@gmail.com',
+                'type_of_invite': 'user',
+                'institution_key': self.certbio.key.urlsafe()})
+
+        """ Check if raise exception when the invite is
         for user and not specify the institution key."""
         # TODO:
         # Fix the post method.
@@ -157,14 +166,6 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         with self.assertRaises(Exception):
             self.testapp.post_json("/api/invites", {
                 'invitee': 'ana@gmail.com',
-                'inviter': 'mayzabeel@gmail.com',
-                'type_of_invite': 'user'})
-
-        """ Check if raise exception when the invite is
-        for user already member of institution."""
-        with self.assertRaises(Exception):
-            self.testapp.post_json("/api/invites", {
-                'invitee': 'mayzabeel@gmail.com',
                 'inviter': 'mayzabeel@gmail.com',
                 'type_of_invite': 'user'})
 
@@ -216,10 +217,6 @@ def initModels(cls):
     cls.mayza.notifications = []
     cls.mayza.posts = []
     cls.mayza.put()
-    # set Mayza to be admin of Certbio
-    cls.certbio.admin = cls.mayza.key
-    cls.certbio.members = [cls.mayza.key]
-    cls.certbio.put()
     # new User Tiago
     cls.tiago = User()
     cls.tiago.name = 'Tiago Pereira'
@@ -231,3 +228,8 @@ def initModels(cls):
     cls.tiago.notifications = []
     cls.tiago.posts = []
     cls.tiago.put()
+    # set Mayza to be admin of Certbio
+    cls.certbio.admin = cls.mayza.key
+    cls.certbio.members = [cls.mayza.key, cls.tiago.key]
+    cls.certbio.put()
+    

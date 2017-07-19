@@ -60,8 +60,9 @@ class Invite(ndb.Model):
             Invite.type_of_invite == 'user',
             Invite.status == 'sent',
             Invite.invitee == invitee)
-        print "ooooooooooooiiiiiiiiiiiiiiiii"
-        print invited.count()
+        
+        if invited.count() > 0:
+            return True
         return False
 
     @staticmethod

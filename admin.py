@@ -271,8 +271,11 @@ class ResetHandler(BaseHandler):
                      ruan.key, tiago.key]:
             eciis.follow(user)
 
-        eciis.parent_institution = certbio.key
+        eciis.parent_institution = splab.key
         eciis.put()
+
+        splab.children_institutions = [eciis.key]
+        splab.put()
 
         jsonList.append({"msg": "database initialized with a few institutions"})
 

@@ -9,7 +9,6 @@
                 Instituições filhas
               </md-button>
               <md-button ng-click="inviteInstCtrl.createParentInstInvite()" md-colors="{background: 'green-900'}">
-              <!-- ng-disabled="inviteInstCtrl.hasParent"> -->
                 Instituição superior
               </md-button>
             </div>
@@ -33,21 +32,20 @@
             <md-list-item class="md-3-line" ng-if="inviteInstCtrl.hasParent">
               <md-icon class="md-avatar-icon" >account_balance</md-icon>
               <div class="md-list-item-text" layout="column">
-                <a href class="md-title hyperlink" ng-if="inviteInstCtrl.showLink(inviteInstCtrl.institution_parent)"
-                ng-click="inviteInstCtrl.goToInst(inviteInstCtrl.institution_parent.key)">
-                  {{ inviteInstCtrl.institution_parent.name }}
+                <a href class="md-title hyperlink" ng-if="inviteInstCtrl.showLink(inviteInstCtrl.inst_parent)"
+                ng-click="inviteInstCtrl.goToInst(inviteInstCtrl.inst_parent.key)">
+                  {{ inviteInstCtrl.inst_parent.name }}
                 </a>
-
-                <div ng-if="!inviteInstCtrl.showLink(inviteInstCtrl.institution_parent)">
-                  <h3>{{ inviteInstCtrl.institution_parent.name }}</h3>
+                <div ng-if="!inviteInstCtrl.showLink(inviteInstCtrl.inst_parent)">
+                  <h3>{{ inviteInstCtrl.inst_parent.name }}</h3>
                   <h3 style="color: red">
                   Esta instituição ainda não está cadastrada na plataforma</h3>
                 </div>
               </div>
             </md-list-item>
             <md-subheader class="md-no-sticky">Instituições filhas</md-subheader>
-            <md-list-item class="md-3-line" ng-click="null" ng-if="inviteInstCtrl.institution_children.lenght > 0"
-            ng-repeat="institution in inviteInstCtrl.institution_children">
+            <md-list-item class="md-3-line" ng-click="null"
+            ng-repeat="institution in inviteInstCtrl.inst_children">
               <md-icon class="md-avatar-icon" >account_balance</md-icon>
               <div class="md-list-item-text" layout="column">
                 <h3>{{ institution.name }}</h3>

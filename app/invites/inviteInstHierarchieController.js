@@ -10,8 +10,8 @@
         inviteInstCtrl.type_of_invite = '';
         inviteInstCtrl.sent_invitations = [];
 
-        inviteInstCtrl.institution_parent = {};
-        inviteInstCtrl.institution_children = [];
+        inviteInstCtrl.inst_parent = {};
+        inviteInstCtrl.inst_children = [];
 
         inviteInstCtrl.hasParent = false;
         inviteInstCtrl.showButton = true;
@@ -35,13 +35,8 @@
                 var promise = InviteService.sendInvite(invite);
                 promise.then(function success(response) {
                     showToast('Convite enviado com sucesso!');
-                    inviteInstCtrl.invite = {};
-                    inviteInstCtrl.sent_invitations.push(response.data);
-                    inviteInstCtrl.institution_parent = {
-                        'name': response.data.suggestion_institution_name,
-                        'state': 'pending'
-                    };
-                    inviteInstCtrl.hasParent = true;
+                    addInvite(response.data);
+
                 }, function error(response) {
                     showToast(response.data.msg);
                 });
@@ -50,8 +45,12 @@
         };
 
         inviteInstCtrl.createParentInstInvite = function createParentInstInvite(){
-            inviteInstCtrl.type_of_invite = 'institution_parent';
-            inviteInstCtrl.showButton = false;
+            if(inviteInstCtrl.hasParent){
+                showToast("Já possue instituição superior");
+            }else {
+                inviteInstCtrl.type_of_invite = 'institution_parent';
+                inviteInstCtrl.showButton = false;
+            }            
         };
 
         inviteInstCtrl.cancelInvite = function cancelInvite() {
@@ -70,7 +69,9 @@
         function loadInstitution() {
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
                 inviteInstCtrl.sent_invitations = response.data.sent_invitations;
-                getParentInstitution(response.data);
+                inviteInstCtrl.inst_parent = response.data.parent_institution;
+                inviteInstCtrl.inst_children = response.data.children_institutions;
+                inviteInstCtrl.hasParent = !_.isEmpty(inviteInstCtrl.inst_parent);
 
             }, function error(response) {
                 $state.go('app.institution', {institutionKey: currentInstitutionKey});
@@ -78,18 +79,17 @@
             });
         }
 
-        function getParentInstitution(institution) {
-            if(institution.parent_institution !== null){
-                InstitutionService.getInstitution(institution.parent_institution).then(function success(response) {
-                    inviteInstCtrl.hasParent = true;
-                    inviteInstCtrl.institution_parent = response.data;                   
-
-                }, function error(response) {
-                    $state.go('app.institution', {institutionKey: currentInstitutionKey});
-                    showToast(response.data.msg);
-                });
+        function addInvite(invite) {
+            inviteInstCtrl.invite = {};
+            inviteInstCtrl.sent_invitations.push(invite);
+            if(invite.type_of_invite == 'institution_parent'){
+                inviteInstCtrl.inst_parent = {
+                    'name': invite.suggestion_institution_name,
+                    'state': 'pending'
+                };
+                inviteInstCtrl.hasParent = true;
             }
-        }        
+        }     
 
         function showToast(msg) {
             $mdToast.show(

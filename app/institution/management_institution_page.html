@@ -16,24 +16,23 @@
           </md-card-title>
           <md-card-content>
             <div layout="row">
-              <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}" ng-click="institutionCtrl.goToEditInfo(institutionCtrl.current_institution.key)" ng-if="institutionCtrl.user.isFollower(institutionCtrl.current_institution.key)">
+              <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}" ng-click="institutionCtrl.goToEditInfo(institutionCtrl.current_institution.key)">
                 <md-icon>edit</md-icon>Editar Informações
               </md-button>
             </div>
             <div layout="row">
-              <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}" ng-click="institutionCtrl.goToManageMembers(institutionCtrl.current_institution.key)" ng-if="institutionCtrl.user.isFollower(institutionCtrl.current_institution.key)">
+              <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}" ng-click="institutionCtrl.goToManageMembers(institutionCtrl.current_institution.key)">
                 <md-icon>people</md-icon>Gerenciar membros
               </md-button>
             </div>
             <div layout="row">
-              <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}" 
-              ng-if="institutionCtrl.user.isFollower(institutionCtrl.current_institution.key)" 
+              <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}"
               ng-click="institutionCtrl.goToManageInstitutions(institutionCtrl.current_institution.key)" >
                 <md-icon>account_balance</md-icon>Convidar
               </md-button>
             </div>
             <div layout="row">
-              <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}" ng-click="" ng-if="institutionCtrl.user.isFollower(institutionCtrl.current_institution.key)">
+              <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}" ng-click="">
               </md-button>
             </div>
           </md-card-content>

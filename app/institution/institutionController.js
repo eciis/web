@@ -105,7 +105,7 @@
         };
 
         institutionCtrl.goToManageInstitutions = function goToManageInstitutions(institutionKey){
-            $state.go('app.manage_institution.invite_inst_hierarchiest', {institutionKey: institutionKey});
+            $state.go('app.manage_institution.invite_inst', {institutionKey: institutionKey});
         };
 
         institutionCtrl.goToEditInfo = function goToEditInfo(institutionKey){

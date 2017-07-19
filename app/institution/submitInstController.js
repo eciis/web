@@ -17,6 +17,7 @@
         submitInstCtrl.institution = {
             name: submitInstCtrl.invite.suggestion_institution_name,
             image_url: "",
+            uploaded_images: [],
             email: submitInstCtrl.invite.invitee,
             state: "active"
         };
@@ -41,12 +42,12 @@
                     function success() {
                         InviteService.deleteInvite(submitInstCtrl.invite.key).then(
                             function success() {
-                                goHome();            
+                                goHome();
                                 showToast('Cadastro de instituição realizado com sucesso');
                             }, function error(response) {
                                 showToast(response.data.msg);
                             }
-                        );                    
+                        );
                     }, function error(response) {
                         showToast(response.data.msg);
                     }
@@ -71,7 +72,7 @@
             $mdDialog.show(confirm).then(function() {
                 InviteService.deleteInvite(submitInstCtrl.invite.key).then(
                     function success() {
-                        goHome();            
+                        goHome();
                         showToast('Cadastro de instituição cancelado');
                     }, function error(response) {
                         showToast(response.data.msg);

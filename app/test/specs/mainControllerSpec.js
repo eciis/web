@@ -1,6 +1,6 @@
 'use strict';
 (describe('Test MainController', function() {
-    var mainCtrl, httpBackend, scope, createCtrl, state;
+    var mainCtrl, httpBackend, scope, createCtrl, state, instService;
     var mayza = {
         name: 'Mayza',
         key: 'user-key',
@@ -22,11 +22,12 @@
     mayza.institutions = [certbio.key, splab.key];
     mayza.current_institution = certbio.key;
     beforeEach(module('app'));
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $state, AuthService) {
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $state, AuthService, InstitutionService) {
         httpBackend = $httpBackend;
         AuthService.user = new User(mayza);
         scope = $rootScope.$new();
         state = $state;
+        instService = InstitutionService;
         httpBackend.expect('GET', '/api/user').respond(mayza);
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', "error/user_inactive.html").respond(200);
@@ -37,7 +38,7 @@
             });
         };
         mainCtrl = createCtrl();
-        httpBackend.flush();   
+        httpBackend.flush();
     }));
     afterEach(function() {
         httpBackend.verifyNoOutstandingExpectation();
@@ -45,10 +46,10 @@
     });
     describe('MainController functions', function() {
         it('Should be active', function() {
-            expect(mainCtrl.isActive(certbio.key)).toBe(true);            
+            expect(mainCtrl.isActive(certbio.key)).toBe(true);
         });
         it('Should be not active', function() {
-            expect(mainCtrl.isActive(splab.key)).toBe(false);            
+            expect(mainCtrl.isActive(splab.key)).toBe(false);
         });
         it('Should change active institution', function() {
             spyOn(mainCtrl.user, 'changeInstitution');
@@ -64,6 +65,32 @@
             spyOn(state, 'go');
             mainCtrl.goToInstitution(splab.key);
             expect(state.go).toHaveBeenCalledWith('app.institution', {institutionKey: '1239'});
+        });
+
+        it('Should call state.go() and InstitutionService.getInstitution() in function goToSearchedInstitution()', function(){
+            spyOn(state, 'go').and.callThrough();
+            spyOn(instService, 'getInstitution').and.callThrough();
+            httpBackend.expect('GET', "/api/institutions/" + splab.key).respond(splab);
+            mainCtrl.goToSearchedInstitution(splab.key);
+            httpBackend.flush();
+            expect(instService.getInstitution).toHaveBeenCalledWith(splab.key);
+            expect(state.go).toHaveBeenCalledWith('app.institution', {institutionKey: '1239'});
+        });
+
+        it('Should call makeSearch() in function submit()', function(){
+            var documents = [{name: splab.name, id: splab.key}];
+            mainCtrl.search = splab.name;
+            mainCtrl.finalSearch = mainCtrl.search;
+            spyOn(mainCtrl, 'makeSearch').and.callThrough();
+            spyOn(instService, 'searchInstitutions').and.callThrough();
+            httpBackend.expect('GET', "api/search/institution: " + splab.name + " AND active").respond(documents);
+            mainCtrl.submit();
+            httpBackend.flush();
+            expect(mainCtrl.makeSearch).toHaveBeenCalled();
+            expect(mainCtrl.institutions).toEqual(documents);
+            expect(mainCtrl.showSearchMenu).toEqual(true);
+            expect(mainCtrl.search).toEqual('');
+            expect(instService.searchInstitutions).toHaveBeenCalledWith(mainCtrl.finalSearch);
         });
     });
 }));

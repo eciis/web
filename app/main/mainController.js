@@ -6,7 +6,7 @@
         var mainCtrl = this;
 
         mainCtrl.search = "";
-        mainCtrl.showMenu = false;
+        mainCtrl.showSearchMenu = false;
 
         Object.defineProperty(mainCtrl, 'user', {
             get: function() {
@@ -19,10 +19,10 @@
                 mainCtrl.finalSearch = mainCtrl.search;
                 mainCtrl.makeSearch();
                 mainCtrl.search = '';
-                mainCtrl.showMenu = true;
+                mainCtrl.showSearchMenu = true;
             }
             else{
-                mainCtrl.showMenu = false;
+                mainCtrl.showSearchMenu = false;
             }
         };
 

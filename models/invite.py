@@ -70,8 +70,6 @@ class Invite(ndb.Model):
         else:
             Invite.sendInviteInstitution(invite)
 
-        print "enviou"
-
     @staticmethod
     def sendInviteUser(invite):
         """Send Invite for user to be member of some Institution."""

@@ -114,7 +114,7 @@ class Institution(ndb.Model):
             if not data.get(field):
                 raise FieldException(field + " can not be empty")
 
-        omsImage = "http://eciis-splab.appspot.com/images/oms.png"
+        institutionImage = "http://eciis-splab.appspot.com/images/institution.jpg"
         institution = Institution()
         institution.name = data.get('name')
         institution.acronym = data.get('acronym')
@@ -125,7 +125,7 @@ class Institution(ndb.Model):
         institution.description = data.get('description')
         institution.phone_number = data.get('phone_number')
         institution.email = data.get('email')
-        institution.photo_url = data.get('photo_url') or omsImage
+        institution.photo_url = data.get('photo_url') or institutionImage
         institution.admin = user.key
         institution.members.append(user.key)
         institution.followers.append(user.key)

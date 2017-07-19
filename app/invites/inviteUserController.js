@@ -23,7 +23,7 @@
 
         inviteController.sendUserInvite = function sendInvite() {
             invite = new Invite(inviteController.invite, 'user', currentInstitutionKey, inviteController.user.email);
-            if (isUserInviteValid(invite)) {
+            if (inviteController.isUserInviteValid(invite)) {
                 var promise = InviteService.sendInvite(invite);
                 promise.then(function success(response) {
                     inviteController.sent_invitations.push(invite);
@@ -77,7 +77,7 @@
             return _.some(inviteController.sent_invitations, invite);    
         }
 
-        function isUserInviteValid(invite) {
+        inviteController.isUserInviteValid = function isUserInviteValid(invite) {
             var isValid = true;
             if (! invite.isValid()) {
                 isValid = false;
@@ -90,7 +90,7 @@
                 showToast('Este email já foi convidado');
             }
             return isValid;
-        }
+        };
 
         loadInstitution();
     });

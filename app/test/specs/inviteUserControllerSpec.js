@@ -5,18 +5,20 @@
 
     var inviteUserCtrl, httpBackend, scope, inviteService, createCtrl, state;
 
-    var invite = new Invite({invitee: "mayzabeel@gmail.com"}, 'user', '987654321');
+    var invite = new Invite({invitee: "mayzabeel@gmail.com"}, 'user', '987654321', 'tiago@gmail.com');
 
-    var otherInvite = new Invite({invitee: "pedro@gmail.com"}, 'user', '987654321');
+    var otherInvite = new Invite({invitee: "pedro@gmail.com"}, 'user', '987654321', 'tiago@gmail.com');
 
     var splab = {
             name: 'SPLAB',
             key: '987654321',
-            sent_invitations: [invite]  
+            sent_invitations: [invite]  ,
+            members: [tiago]
     };
 
     var tiago = {
         name: 'Tiago',
+        email: 'tiago@gmail.com',
         institutions: splab.key,
         follows: splab.key,
         invites:[]
@@ -87,6 +89,24 @@
                     done();
                 });
                 scope.$apply();
+            });
+        });
+
+        describe('isUserInviteValid()', function() {
+            
+            it('should be true with new invite', function() {
+                var newInvite = new Invite({invitee: "pedro@gmail.com"}, 'user', '987654321', 'tiago@gmail.com');
+                expect(inviteUserCtrl.isUserInviteValid(newInvite)).toBe(true);
+            });
+
+            it('should be false when the invitee was already invited', function() {
+                var inviteInvited = new Invite({invitee: "mayzabeel@gmail.com"}, 'user', '987654321', 'tiago@gmail.com');
+                expect(inviteUserCtrl.isUserInviteValid(inviteInvited)).toBe(false);
+            });
+
+            it('should be false when the invitee was already member', function() {
+                var inviteMember = new Invite({invitee: "tiago@gmail.com"}, 'user', '987654321', 'tiago@gmail.com');
+                expect(inviteUserCtrl.isUserInviteValid(inviteMember)).toBe(false);
             });
         });
     });

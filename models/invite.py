@@ -46,15 +46,32 @@ class Invite(ndb.Model):
                 "The invite for institution have to specify the suggestion institution name")
 
     @staticmethod
-    def checkIsInviteUserValid(data):
-        """Check if invitee is already a member."""
-        print ndb.Key(urlsafe=data.get('institution_key'))
-        institution = ndb.Key(urlsafe=data.get('institution_key')).get()
+    def inviteeIsMember(invitee, institution):
         for member_key in institution.members:
             member = member_key.get()
-            if member.email == data.get('invitee'):
-                raise FieldException(
-                    "The invitee is already a member")
+            if member.email == invitee:
+                return True
+        return False
+
+    @staticmethod
+    def inviteeIsInvited(invitee, institutionKey):
+        invited = Invite.query(
+            Invite.institution_key == institutionKey,
+            Invite.type_of_invite == 'user',
+            Invite.status == 'sent',
+            Invite.invitee == invitee)
+        print "ooooooooooooiiiiiiiiiiiiiiiii"
+        print invited.count()
+        return False
+
+    @staticmethod
+    def checkIsInviteUserValid(data):
+        institution = ndb.Key(urlsafe=data.get('institution_key')).get()
+        invitee = data.get('invitee')
+        if Invite.inviteeIsMember(invitee, institution):
+            raise FieldException("The invitee is already a member")
+        if Invite.inviteeIsInvited(invitee, institution.key):
+            raise FieldException("The invitee is already invited")
 
     @staticmethod
     def create(data):

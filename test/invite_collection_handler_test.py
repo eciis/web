@@ -160,6 +160,14 @@ class InviteCollectionHandlerTest(TestBaseHandler):
                 'inviter': 'mayzabeel@gmail.com',
                 'type_of_invite': 'user'})
 
+        """ Check if raise exception when the invite is
+        for user already member of institution."""
+        with self.assertRaises(Exception):
+            self.testapp.post_json("/api/invites", {
+                'invitee': 'mayzabeel@gmail.com',
+                'inviter': 'mayzabeel@gmail.com',
+                'type_of_invite': 'user'})
+
     def test_post_invite_user_error(self):
         """Test the invite_collection_handler's post
         method when the inviter is not a administrator."""
@@ -210,6 +218,7 @@ def initModels(cls):
     cls.mayza.put()
     # set Mayza to be admin of Certbio
     cls.certbio.admin = cls.mayza.key
+    cls.certbio.members = [cls.mayza.key]
     cls.certbio.put()
     # new User Tiago
     cls.tiago = User()

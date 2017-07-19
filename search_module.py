@@ -8,7 +8,7 @@ INDEX_NAME = 'institution'
 
 def createDocument(id, name, state):
     """Create a document."""
-    content = {'id': str(id), 'name': name, 'state': state}
+    content = {'id': id, 'name': name, 'state': state}
     document = search.Document(
         doc_id=content['id'],
         fields=[
@@ -30,9 +30,12 @@ def processDocuments(documents):
     institutions = [doc.fields for doc in documents]
     doc_ids = [doc.doc_id for doc in documents]
     documents_index = 0
-    result = {}
+    result = []
     for fields in institutions:
         for each in fields:
-            result[each.value.encode('utf-8')] = doc_ids[documents_index]
+            result.append(
+                {"id": doc_ids[documents_index],
+                    "name": each.value.encode('utf-8')}
+            )
             documents_index = documents_index + 1
     return result

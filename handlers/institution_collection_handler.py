@@ -36,7 +36,7 @@ class InstitutionCollectionHandler(BaseHandler):
         data = json.loads(self.request.body)
         institution = Institution.create(data, user)
         search_module.createDocument(
-            institution.key.id(), institution.name, institution.state)
+            institution.key.urlsafe(), institution.name, institution.state)
 
         self.response.write(json.dumps(
             Utils.toJson(institution, host=self.request.host)

@@ -184,7 +184,7 @@ def initModels(cls):
     cls.splab.description = 'The mission of the Software Practices Laboratory (SPLab) \
             is to promote the development of the state-of-the-art in the \
             theory and practice of Software Engineering.'
-    cls.splab.image_url = 'http://amaurymedeiros.com/images/splab.png'
+    cls.splab.photo_url = 'http://amaurymedeiros.com/images/splab.png'
     cls.splab.email = 'splab@ufcg.edu.br'
     cls.splab.phone_number = '(83) 3322 7865'
     cls.splab.members = [cls.mayza.key, cls.ruan.key]

@@ -16,7 +16,7 @@
 
         submitInstCtrl.institution = {
             name: submitInstCtrl.invite.suggestion_institution_name,
-            image_url: "",
+            photo_url: "",
             uploaded_images: [],
             email: submitInstCtrl.invite.invitee,
             state: "active"

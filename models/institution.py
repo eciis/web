@@ -37,8 +37,6 @@ class Institution(ndb.Model):
     # The admin user of this institution
     admin = ndb.KeyProperty(kind="User")
 
-    invite = ndb.KeyProperty(kind="Invite")
-
     # The parent institution
     # Value is None for institutions without parent
     # User query to retrieve children institutions

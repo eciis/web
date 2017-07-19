@@ -13,7 +13,7 @@
         var invite;
 
         /*TODO: Change to AuthService.getCurrentUser()
-         @author: Mayza Nunes 14/07/2017
+                 @author: Mayza Nunes 14/07/2017
         */
         Object.defineProperty(inviteController, 'user', {
             get: function() {
@@ -23,9 +23,7 @@
 
         inviteController.sendUserInvite = function sendInvite() {
             invite = new Invite(inviteController.invite, 'user', currentInstitutionKey, inviteController.user.email);
-            if (! invite.isValid()) {
-                showToast('Convite inválido!');
-            } else {
+            if (isUserInviteValid(invite)) {
                 var promise = InviteService.sendInvite(invite);
                 promise.then(function success(response) {
                     inviteController.sent_invitations.push(invite);
@@ -65,6 +63,33 @@
                     .hideDelay(5000)
                     .position('bottom right')
             );
+        }
+
+        function getEmail(user) {
+            return user.email;
+        }
+
+        function inviteeIsMember(invite) {
+            return _.includes(_.map(inviteController.members, getEmail), invite.invitee);
+        }
+
+        function inviteeIsInvited(invite) {
+            return _.some(inviteController.sent_invitations, invite);    
+        }
+
+        function isUserInviteValid(invite) {
+            var isValid = true;
+            if (! invite.isValid()) {
+                isValid = false;
+                showToast('Convite inválido!');
+            } else if (inviteeIsMember(invite)) {
+                isValid = false;
+                showToast('O convidado já é um membro!');
+            } else if (inviteeIsInvited(invite)) {
+                isValid = false;
+                showToast('Este email já foi convidado');
+            }
+            return isValid;
         }
 
         loadInstitution();

@@ -46,6 +46,17 @@ class Invite(ndb.Model):
                 "The invite for institution have to specify the suggestion institution name")
 
     @staticmethod
+    def checkIsInviteUserValid(data):
+        """Check if invitee is already a member."""
+        print ndb.Key(urlsafe=data.get('institution_key'))
+        institution = ndb.Key(urlsafe=data.get('institution_key')).get()
+        for member_key in institution.members:
+            member = member_key.get()
+            if member.email == data.get('invitee'):
+                raise FieldException(
+                    "The invitee is already a member")
+
+    @staticmethod
     def create(data):
         """Create a post and check required fields."""
         invite = Invite()
@@ -59,6 +70,8 @@ class Invite(ndb.Model):
             invite.suggestion_institution_name = data['suggestion_institution_name']
             institution = Institution.create_inst_stub(invite)
             invite.stub_institution_key = institution.key
+        else:
+            Invite.checkIsInviteUserValid(data)
 
         return invite
 

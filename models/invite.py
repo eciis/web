@@ -4,6 +4,7 @@ from google.appengine.ext import ndb
 from google.appengine.api import mail
 from custom_exceptions.fieldException import FieldException
 from models.institution import Institution
+from models.user import User
 
 
 class Invite(ndb.Model):
@@ -46,10 +47,11 @@ class Invite(ndb.Model):
                 "The invite for institution have to specify the suggestion institution name")
 
     @staticmethod
-    def inviteeIsMember(invitee, institution):
-        for member_key in institution.members:
-            member = member_key.get()
-            if member.email == invitee:
+    def inviteeIsMember(inviteeEmail, institution):
+        userWithEmail = User.query(User.email == inviteeEmail)
+        if userWithEmail.count() == 1:
+            instmember = Institution.query(Institution.members.IN([userWithEmail.get().key]))
+            if instmember.count() > 0:
                 return True
         return False
 
@@ -60,7 +62,7 @@ class Invite(ndb.Model):
             Invite.type_of_invite == 'user',
             Invite.status == 'sent',
             Invite.invitee == invitee)
-        
+
         if invited.count() > 0:
             return True
         return False

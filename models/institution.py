@@ -50,7 +50,7 @@ class Institution(ndb.Model):
     # Value is None for institutions without children waiting accept
     children_institutions_pedding = ndb.KeyProperty(kind="Institution", repeated=True)
 
-    # Invitation to create institution
+    # Key of invite to create institution
     invite = ndb.KeyProperty(kind="Invite")
 
     # The ids of users who are members of this institution

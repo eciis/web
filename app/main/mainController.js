@@ -58,6 +58,6 @@
               mainCtrl.user.invites.length === 0) {
                 $state.go("user_inactive");
             }
-        });
+        })();
     });
 })();

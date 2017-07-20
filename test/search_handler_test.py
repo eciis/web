@@ -15,7 +15,7 @@ class SearchHandlerTest(TestBaseHandler):
         """Provide the base for the tests."""
         super(SearchHandlerTest, cls).setUp()
         app = cls.webapp2.WSGIApplication(
-            [("/api/search/(.*)", SearchHandler),
+            [("/api/search/institution", SearchHandler),
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
@@ -29,21 +29,21 @@ class SearchHandlerTest(TestBaseHandler):
         search_module.createDocument('123456', 'CERTBIO', 'active')
         # Call the get method
         institutions = self.testapp.get(
-            "/api/search/%s" % 'CERTBIO AND active')
+            "/api/search/institution?name=%s&state=%s" % ('CERTBIO', 'active'))
         self.assertTrue('CERTBIO' in institutions)
         # Make sure that there is no institution CERTBIO with pending state.
         institutions = self.testapp.get(
-            "/api/search/%s" % 'CERTBIO AND pending')
+            "/api/search/institution?name=%s&state=%s" % ('CERTBIO', 'pending'))
         self.assertTrue('CERTBIO' not in institutions)
         # Create a document with a pending institution
         search_module.createDocument('123456', 'SPLAB', 'pending')
         # Make sure that there is no SPLAB with pending state.
         institutions = self.testapp.get(
-            "/api/search/%s" % 'SPLAB AND active')
+            "/api/search/institution?name=%s&state=%s" % ('SPLAB', 'active'))
         self.assertTrue('SPLAB' not in institutions)
         # Assert that SPLAB has a pending state
         institutions = self.testapp.get(
-            "/api/search/%s" % 'SPLAB AND pending')
+            "/api/search/institution?name=%s&state=%s" % ('SPLAB', 'pending'))
         self.assertTrue('SPLAB' in institutions)
 
     def tearDown(cls):

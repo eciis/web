@@ -21,12 +21,12 @@
                 mainCtrl.search = '';
                 mainCtrl.showSearchMenu = true;
             }
-            else{
+            else {
                 mainCtrl.showSearchMenu = false;
             }
         };
 
-        mainCtrl.setShowSearchMenu = function setShowSearchMenu(){
+        mainCtrl.setShowSearchMenu = function setShowSearchMenu() {
             mainCtrl.showSearchMenu = false;
         };
 

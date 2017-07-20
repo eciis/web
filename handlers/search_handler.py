@@ -17,8 +17,11 @@ class SearchHandler(BaseHandler):
 
     @json_response
     @login_required
-    def get(self, user, query_string):
+    def get(self, user):
         """Handle GET Requests."""
+        institution = self.request.get('name')
+        state = self.request.get('state')
+        query_string = "institution: %s AND %s" % (institution, state)
         index = search.Index(INDEX_NAME)
         query_options = search.QueryOptions(
             returned_fields=['institution']

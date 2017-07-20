@@ -43,7 +43,7 @@ app = webapp2.WSGIApplication([
     ("/api/posts", PostCollectionHandler),
     ("/api/user", UserHandler),
     ("/api/user/timeline", UserTimelineHandler),
-    ("/api/search/(.*)", SearchHandler),
+    ("/api/search/institution", SearchHandler),
     ("/login", LoginHandler),
     ("/logout", LogoutHandler),
     ("/api/.*", ErroHandler),

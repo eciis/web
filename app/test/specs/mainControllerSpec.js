@@ -83,7 +83,7 @@
             mainCtrl.finalSearch = mainCtrl.search;
             spyOn(mainCtrl, 'makeSearch').and.callThrough();
             spyOn(instService, 'searchInstitutions').and.callThrough();
-            httpBackend.expect('GET', "api/search/institution: " + splab.name + " AND active").respond(documents);
+            httpBackend.expect('GET', "api/search/institution?name=" + splab.name + "&state=active").respond(documents);
             mainCtrl.submit();
             httpBackend.flush();
             expect(mainCtrl.makeSearch).toHaveBeenCalled();

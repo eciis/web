@@ -32,10 +32,10 @@ def processDocuments(documents):
     documents_index = 0
     result = []
     for fields in institutions:
-        for each in fields:
+        for field in fields:
             result.append(
                 {"id": doc_ids[documents_index],
-                    "name": each.value.encode('utf-8')}
+                    "name": field.value.encode('utf-8')}
             )
             documents_index = documents_index + 1
     return result

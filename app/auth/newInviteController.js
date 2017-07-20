@@ -19,10 +19,8 @@
             var promise = UserService.addInstitution(newInviteCtrl.user,
                 newInviteCtrl.institution.key);
             promise.then(function success() {
-                AuthService.reload().then(function(){
-                    deleteInvite();
-                    showAlert(event, newInviteCtrl.institution.name);
-                });
+                deleteInvite();
+                showAlert(event, newInviteCtrl.institution.name);
             }, function error(response) {
                 showToast(response.data.msg);
             });
@@ -52,8 +50,9 @@
         function deleteInvite() {
             var promise = InviteService.deleteInvite(newInviteCtrl.inviteKey);
             promise.then(function success() {
-                newInviteCtrl.user.resolveInvite(newInviteCtrl.inviteKey);
-                goHome();            
+                AuthService.reload().then(function() {
+                    goHome();
+                });            
             }, function error(response) {
                 showToast(response.data.msg);
             });

@@ -74,13 +74,6 @@ User.prototype.getPendingInvitationOf = function getPendingInvitationOf(invitati
     return undefined;
 };
 
-User.prototype.resolveInvite = function resolveInvite(inviteKey) {
-    var invite = _.find(this.invites, {key: inviteKey});
-    if(invite) {
-        invite.status = 'resolved';
-    }
-};
-
 function getKeyObj(obj) {
     if(obj.key){
       return obj.key;

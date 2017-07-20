@@ -53,7 +53,6 @@
         httpBackend.verifyNoOutstandingRequest();
     });
 
-    // TODO FIX
     describe('MainController functions', function() {
         it('Should be active', function() {
             expect(mainCtrl.isActive(certbio.key)).toBe(true);

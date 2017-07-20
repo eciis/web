@@ -224,6 +224,13 @@ class ResetHandler(BaseHandler):
         admin.state = 'active'
         admin.put()
 
+        # Invites
+        invite = Invite()
+        invite.invitee = 'testeeciis@gmail.com'
+        invite.inviter = 'eciis@gmail.com'
+        invite.type_of_invite = 'institution'
+        invite.put()
+
         jsonList.append({"msg": "database initialized with a few users"})
 
         # new Institution CERTBIO with User Mayza like a member
@@ -239,6 +246,7 @@ class ResetHandler(BaseHandler):
             'image_url': 'https://pbs.twimg.com/profile_images/1782760873/Logo_do_site_400x400.jpg',
             'email': 'certbio@ufcg.edu.br',
             'phone_number': '83 33224455',
+            'invite': invite.key.urlsafe(),
         }
         certbio = Institution.create(data, admin)
         for user in [mayza.key, dalton.key, admin.key]:
@@ -260,6 +268,7 @@ class ResetHandler(BaseHandler):
             'image_url': 'http://amaurymedeiros.com/images/splab.png',
             'email': 'splab@ufcg.edu.br',
             'phone_number': '83 33227865',
+            'invite': invite.key.urlsafe(),
         }
         splab = Institution.create(data, admin)
         for user in [jorge.key, andre.key, admin.key]:
@@ -280,6 +289,7 @@ class ResetHandler(BaseHandler):
             'image_url': 'http://www.paho.org/bra/images/stories/BRA01A/logobireme.jpg',
             'email': 'eciis@ufcg.edu.br',
             'phone_number': '83 33227865',
+            'invite': invite.key.urlsafe(),
         }
         eciis = Institution.create(data, admin)
         for user in [dalton.key, andre.key, jorge.key, maiana.key,
@@ -382,7 +392,7 @@ class ResetHandler(BaseHandler):
         andre_post.put()
         add_comments_to_post(andre, andre_post, andre.institutions[0], 3)
 
-        # POST of Dalton To e-CIIS Institution
+        # POST of Dalton To e-cis Institution
         dalton_post = Post()
         dalton_post.title = "Post de Dalton no SPLAB"
         dalton_post.text = "At vero eos et accusamus et iusto odio dignissimos \
@@ -424,9 +434,9 @@ class ResetHandler(BaseHandler):
         jorge_post.last_modified_by = jorge.key
         jorge_post.put()
 
-        # POST of Jorge To e-CIIS Institution
+        # POST of Jorge To e-cis Institution
         jorge_post_eCIIS = Post()
-        jorge_post_eCIIS.title = "Post de Jorge no e-CIIS"
+        jorge_post_eCIIS.title = "Post de Jorge no e-cis"
         jorge_post_eCIIS.text = "At vero eos et accusamus et iusto odio dignis\
         simos ducimus quiblanditiis praesentium voluptatum deleniti atque corr\
         pti quos dolores et quas molestias excepturi sint occaecati cupiditate\

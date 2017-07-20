@@ -30,7 +30,7 @@
         AuthService.getCurrentUser = function() {
             return new User(tiago);
         };
-
+        httpBackend.expect('GET', '/api/invites').respond([]);
         httpBackend.when('GET', 'institution/institution_page.html').respond(200);
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', "home/home.html").respond(200);
@@ -89,7 +89,6 @@
                 var promise = inviteinstitutionCtrl.sendInstInvite();
                 promise.then(function() {
                     expect(inviteService.sendInvite).toHaveBeenCalledWith(invite);
-                    expect(state.go).toHaveBeenCalledWith('app.home');
                     done();
                 });
                 scope.$apply();

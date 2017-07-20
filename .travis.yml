@@ -25,9 +25,6 @@ install:
 - pip install -t lib google-auth
 - mv lib/google/* google_appengine/google
 - rm -rf lib/google
-- ls
-- ls google_appengine/google
-- ls lib
 
 before_script:
 - nvm install 4.0.0

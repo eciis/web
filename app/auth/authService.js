@@ -3,45 +3,94 @@
 (function() {
     var app = angular.module("app");
 
-    app.service("AuthService", function AuthService($http, $q, $rootScope) {
+    app.service("AuthService", function AuthService($q, $state, $firebaseAuth, $window, UserService) {
         var service = this;
 
-        var LOGIN_URI = "/login";
+        var authObj = $firebaseAuth();
 
-        var LOGOUT_URI = "/logout";
-
-        var _user;
+        var userInfo;
 
         Object.defineProperty(service, 'user', {
-            get: function get() {
-                return _user;
-            },
-            set: function set(newValue) {
-                _user = new User(newValue);
+            get: function() {
+                return userInfo;
             }
         });
 
         service.login = function login() {
-            window.location.replace(LOGIN_URI);
-        };
+            var deferred = $q.defer();
+            authObj.$signInWithPopup("google").then(function(result) {
+                var userToken = {
+                    accessToken : result.credential.idToken
+                };
 
-        service.logout = function logout() {
-            window.location.replace(LOGOUT_URI);
-        };
+                userInfo = userToken;
 
-        service.load = function load() {
-            var deffered = $q.defer();
-            $http.get('/api/user').then(function loadUser(info) {
-                service.user = new User(info.data);
-                deffered.resolve(service.user);
-            }, function error(data) {
-                deffered.reject(data);
+                UserService.load().then(function success(userLoaded) {
+                    configUser(userLoaded, userToken);
+                    deferred.resolve(userInfo);
+                });
+            }).catch(function(error) {
+                console.error("Authentication failed:", error);
+                deferred.reject(error);
             });
-            return deffered.promise;
+
+            return deferred.promise;
+        };
+        
+        service.logout = function logout() {
+            authObj.$signOut();
+            $window.sessionStorage.userInfo = null;
+            userInfo = undefined;
         };
 
-        service.load().then(function success() {
-            $rootScope.$broadcast("user_loaded");
+        service.getCurrentUser = function getCurrentUser() {
+            return userInfo;
+        };
+
+        service.getUserToken = function getUserToken() {
+            return userInfo.accessToken;
+        };
+
+        service.isLoggedIn = function isLoggedIn() {
+            if (userInfo) {
+                return true;
+            }
+            return false;
+        };
+
+        service.reload = function reload() {
+            var deferred = $q.defer();
+            UserService.load().then(function success(userLoaded) {
+                var userToken = {
+                    accessToken : userInfo.accessToken
+                };
+                configUser(userLoaded, userToken);
+                deferred.resolve(userInfo);
+            }, function error(error) {
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        };
+
+        authObj.$onAuthStateChanged(function(firebaseUser) {
+            if (!firebaseUser) {
+                $state.go("signin");
+            }
         });
+
+        function configUser(userLoaded, userToken) {
+            userInfo = new User(userLoaded);
+            _.extend(userInfo, userToken);
+            $window.sessionStorage.userInfo = JSON.stringify(userInfo);
+        }
+
+        function init() {
+            if ($window.sessionStorage.userInfo) {
+                var parse = JSON.parse($window.sessionStorage.userInfo);
+                userInfo = new User(parse);
+            }
+        }
+
+        init();
     });
 })();

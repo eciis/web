@@ -2,14 +2,10 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("MainController", function MainController($mdSidenav, $mdDialog, $mdToast, $state, AuthService, $rootScope) {
+    app.controller("MainController", function MainController($mdSidenav, $mdDialog, $mdToast, $state, AuthService) {
         var mainCtrl = this;
 
-        Object.defineProperty(mainCtrl, 'user', {
-            get: function() {
-                return AuthService.user;
-            }
-        });
+        mainCtrl.user = AuthService.getCurrentUser();
 
         mainCtrl.toggle = function toggle() {
             $mdSidenav('leftNav').toggle();
@@ -53,9 +49,14 @@
             mainCtrl.toggle();
         };
 
-        $rootScope.$on("user_loaded", function() {
-            if (mainCtrl.user.institutions.length === 0) {
-                $state.go("choose_institution");
+        mainCtrl.logout = function logout() {
+            AuthService.logout();
+        };
+
+        (function main() {
+            if (mainCtrl.user.institutions.length === 0 &&
+              mainCtrl.user.invites.length === 0) {
+                $state.go("user_inactive");
             }
 
             var invite = mainCtrl.user.getPendingInvitationOf("user");
@@ -65,16 +66,9 @@
                 $state.go("new_invite", {institutionKey: institutionKey, inviteKey: inviteKey});
             }
 
-            if (mainCtrl.user.getPendingInvitationOf("institution")){
+            if (mainCtrl.user.getPendingInvitationOf("institution")) {
                 $state.go("submit_institution");
             }
-        });
-
-        $rootScope.$on("user_loaded", function() {
-            if (mainCtrl.user.institutions.length === 0 &&
-             mainCtrl.user.invites.length === 0) {
-                $state.go("user_inactive");
-            }
-        });
+        })();
     });
 })();

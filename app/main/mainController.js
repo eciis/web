@@ -61,13 +61,14 @@
         };
 
         (function main() {
+            console.log(mainCtrl.user);
             if (mainCtrl.user.institutions.length === 0 &&
               mainCtrl.user.invites.length === 0) {
                 $state.go("user_inactive");
             }
 
             var invite = mainCtrl.user.getPendingInvitationOf("user");
-            if (mainCtrl.user.institutions.length > 0 && invite) {
+            if (invite) {
                 var institutionKey = invite.institution_key;
                 var inviteKey = invite.key;
                 $state.go("new_invite", {institutionKey: institutionKey, inviteKey: inviteKey});

@@ -221,6 +221,7 @@ class ResetHandler(BaseHandler):
         admin.institutions_admin = []
         admin.notifications = []
         admin.posts = []
+        admin.state = 'active'
         admin.put()
 
         jsonList.append({"msg": "database initialized with a few users"})

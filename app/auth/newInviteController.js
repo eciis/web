@@ -13,26 +13,15 @@
 
         var institutionKey = $state.params.institutionKey;
 
-        Object.defineProperty(newInviteCtrl, 'user', {
-            get: function() {
-                return AuthService.user;
-            },
-            // TODO AuthService User is read only. This set must be removed.
-            // @author André L. Abrantes
-            set: function set(newValue) {
-                AuthService.user = newValue;
-            }
-        });
+        newInviteCtrl.user = AuthService.getCurrentUser();
 
         newInviteCtrl.acceptInvite = function acceptInvite(event) {
             var promise = UserService.addInstitution(newInviteCtrl.user, newInviteCtrl.institution.key);
-            promise.then(function success(response) {
-                // TODO AuthService User is read only. This set must be removed.
-                //      In case of need to reload user, use AuthService.reload().
-                // @author André L. Abrantes
-                newInviteCtrl.user = new User(response);
+            promise.then(function success() {
+                AuthService.reload().then(function(){
                 deleteInvite();
                 showAlert(event, newInviteCtrl.institution.name);
+            });
             }, function error(response) {
                 showToast(response.data.msg);
             });

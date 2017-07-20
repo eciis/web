@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Test CommentService', function() {
+(describe('Test CommentService', function() {
     var http, httpBackend, deferred, scope, commentService, comments, comment, answer, error;
     var postCommentsUri = '/api/posts/post-key/comments';
     comment = {text: 'text', post_key: 'post-key', id: 'comment-id'};
@@ -123,4 +123,4 @@ describe('Test CommentService', function() {
             httpBackend.flush();
         });
     });
-});
+}));

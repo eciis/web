@@ -17,6 +17,8 @@
             get: function() {
                 return AuthService.user;
             },
+            // TODO AuthService User is read only. This set must be removed.
+            // @author André L. Abrantes
             set: function set(newValue) {
                 AuthService.user = newValue;
             }
@@ -25,6 +27,9 @@
         newInviteCtrl.acceptInvite = function acceptInvite(event) {
             var promise = UserService.addInstitution(newInviteCtrl.user, newInviteCtrl.institution.key);
             promise.then(function success(response) {
+                // TODO AuthService User is read only. This set must be removed.
+                //      In case of need to reload user, use AuthService.reload().
+                // @author André L. Abrantes
                 newInviteCtrl.user = new User(response);
                 deleteInvite();
                 showAlert(event, newInviteCtrl.institution.name);

@@ -6,6 +6,8 @@ from models.user import User
 import search_module
 from handlers.search_handler import SearchHandler
 
+from mock import patch
+
 
 class SearchHandlerTest(TestBaseHandler):
     """Test the SearchHandler class."""
@@ -20,7 +22,8 @@ class SearchHandlerTest(TestBaseHandler):
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
-    def test_get(self):
+    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
+    def test_get(self, verify_token):
         """Test the search_handler's get method."""
         # Pretend an authentication
         self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'

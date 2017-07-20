@@ -19,10 +19,19 @@
             return deffered.promise;
         };
 
-        service.save = function save(user, newUser) {
+        service.save = function save(patch) {
             var deffered = $q.defer();
-            var patch = jsonpatch.compare(user, newUser);
             $http.patch(USER_URI, patch).then(function success(info) {
+                deffered.resolve(info.data);
+            }, function error(data) {
+                deffered.reject(data);
+            });
+            return deffered.promise;
+        };
+
+        service.load = function load() {
+            var deffered = $q.defer();
+            $http.get(USER_URI).then(function loadUser(info) {
                 deffered.resolve(info.data);
             }, function error(data) {
                 deffered.reject(data);

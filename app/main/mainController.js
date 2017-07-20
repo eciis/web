@@ -6,13 +6,8 @@
         var mainCtrl = this;
 
         mainCtrl.search = "";
+        mainCtrl.user = AuthService.getCurrentUser();
         mainCtrl.showSearchMenu = false;
-
-        Object.defineProperty(mainCtrl, 'user', {
-            get: function() {
-                return AuthService.user;
-            }
-        });
 
         mainCtrl.submit = function submit() {
             if(mainCtrl.search) {
@@ -84,9 +79,14 @@
             mainCtrl.toggle();
         };
 
-        $rootScope.$on("user_loaded", function() {
-            if (mainCtrl.user.institutions.length === 0) {
-                $state.go("choose_institution");
+        mainCtrl.logout = function logout() {
+            AuthService.logout();
+        };
+
+        (function main() {
+            if (mainCtrl.user.institutions.length === 0 &&
+              mainCtrl.user.invites.length === 0) {
+                $state.go("user_inactive");
             }
 
             var invite = mainCtrl.user.getPendingInvitationOf("user");
@@ -96,16 +96,9 @@
                 $state.go("new_invite", {institutionKey: institutionKey, inviteKey: inviteKey});
             }
 
-            if (mainCtrl.user.getPendingInvitationOf("institution")){
+            if (mainCtrl.user.getPendingInvitationOf("institution")) {
                 $state.go("submit_institution");
             }
-        });
-
-        $rootScope.$on("user_loaded", function() {
-            if (mainCtrl.user.institutions.length === 0 &&
-             mainCtrl.user.invites.length === 0) {
-                $state.go("user_inactive");
-            }
-        });
+        })();
     });
 })();

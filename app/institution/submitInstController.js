@@ -40,10 +40,8 @@
             $mdDialog.show(confirm).then(function() {
                 InstitutionService.createInstitution(submitInstCtrl.institution).then(
                     function success() {
-                        AuthService.reload().then(function(){
-                            $state.go('app.home');         
-                        });   
-                        showToast('Cadastro de instituição realizado com sucesso');                      
+                            goHome();         
+                            showToast('Cadastro de instituição realizado com sucesso');                      
                     }, function error(response) {
                         showToast(response.data.msg);
                     }
@@ -51,6 +49,10 @@
             }, function() {
                 showToast('Cancelado');
             });
+        };
+
+        var goHome = function goToHome() {      
+            $state.go('app.home');        
         };
 
         submitInstCtrl.cancel = function cancel(event) {

@@ -31,11 +31,23 @@ def processDocuments(documents):
     doc_ids = [doc.doc_id for doc in documents]
     documents_index = 0
     result = []
-    for fields in institutions:
-        for field in fields:
+    for institution in institutions:
+        for field in institution:
             result.append(
                 {"id": doc_ids[documents_index],
-                    "name": field.value.encode('utf-8')}
+                    "name": field.value}
             )
             documents_index = documents_index + 1
     return result
+
+
+def getDocuments(institution, state):
+    """Retrieve the documents and return them processed."""
+    query_string = "institution: %s AND %s" % (institution, state)
+    index = search.Index(INDEX_NAME)
+    query_options = search.QueryOptions(
+        returned_fields=['institution']
+    )
+    query = search.Query(query_string=query_string, options=query_options)
+    documents = index.search(query)
+    return processDocuments(documents)

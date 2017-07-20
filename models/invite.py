@@ -51,9 +51,7 @@ class Invite(ndb.Model):
         userWithEmail = User.query(User.email == inviteeEmail)
         if userWithEmail.count() == 1:
             instmember = Institution.query(Institution.members.IN([userWithEmail.get().key]))
-            if instmember.count() > 0:
-                return True
-        return False
+            return instmember.count() > 0
 
     @staticmethod
     def inviteeIsInvited(invitee, institutionKey):
@@ -63,9 +61,7 @@ class Invite(ndb.Model):
             Invite.status == 'sent',
             Invite.invitee == invitee)
 
-        if invited.count() > 0:
-            return True
-        return False
+        return invited.count() > 0
 
     @staticmethod
     def checkIsInviteUserValid(data):

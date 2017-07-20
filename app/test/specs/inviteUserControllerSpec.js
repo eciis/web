@@ -59,8 +59,6 @@
                 });
         };
         state.params.institutionKey = splab.key;
-        
-
         inviteUserCtrl = createCtrl();
         httpBackend.flush();
     }));

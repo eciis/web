@@ -101,6 +101,5 @@
                 submitInstCtrl.occupationAreas = response.data;
             });
         }
-
     }); 
 })();

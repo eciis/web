@@ -61,8 +61,8 @@
         };
 
         (function main() {
-            if (mainCtrl.user.institutions.length === 0 &&
-              mainCtrl.user.invites.length === 0) {
+            if ((mainCtrl.user.institutions.length === 0 &&
+              mainCtrl.user.invites.length === 0) || mainCtrl.user.state != 'active') {
                 $state.go("user_inactive");
             }
 

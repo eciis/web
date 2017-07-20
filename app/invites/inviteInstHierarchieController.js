@@ -89,6 +89,7 @@
                 };
                 inviteInstCtrl.hasParent = true;
             }
+            inviteInstCtrl.type_of_invite = '';
         }     
 
         function showToast(msg) {

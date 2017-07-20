@@ -51,10 +51,6 @@
             });
         };
 
-        var goHome = function goToHome() {      
-            $state.go('app.home');        
-        };
-
         submitInstCtrl.cancel = function cancel(event) {
             var confirm = $mdDialog.confirm()
                 .clickOutsideToClose(true)
@@ -81,6 +77,10 @@
             });
         };
 
+        var goHome = function goToHome() {      
+            $state.go('app.home');        
+        };
+
         function showToast(msg) {
             $mdToast.show(
                 $mdToast.simple()
@@ -103,5 +103,5 @@
                 submitInstCtrl.occupationAreas = response.data;
             });
         }
-    }); 
+    });
 })();

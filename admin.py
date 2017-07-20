@@ -52,11 +52,11 @@ def getGravatar(email):
 
 class BaseHandler(webapp2.RequestHandler):
     """Base Handler."""
-
-    def handle_exception(self, exception, debug):
-        """Exception."""
-        logging.error(str(exception))
-        self.response.write("oops! %s\n" % str(exception))
+    pass
+    # def handle_exception(self, exception, debug):
+    #     """Exception."""
+    #     logging.error(str(exception))
+    #     self.response.write("oops! %s\n" % str(exception))
 
 
 class ResetHandler(BaseHandler):
@@ -214,6 +214,13 @@ class ResetHandler(BaseHandler):
         admin.posts = []
         admin.put()
 
+        # Invites
+        invite = Invite()
+        invite.invitee = 'testeeciis@gmail.com'
+        invite.inviter = 'eciis@gmail.com'
+        invite.type_of_invite = 'institution'
+        invite.put()
+
         jsonList.append({"msg": "database initialized with a few users"})
 
         # new Institution CERTBIO with User Mayza like a member
@@ -229,6 +236,7 @@ class ResetHandler(BaseHandler):
             'image_url': 'https://pbs.twimg.com/profile_images/1782760873/Logo_do_site_400x400.jpg',
             'email': 'certbio@ufcg.edu.br',
             'phone_number': '83 33224455',
+            'invite': invite.key.urlsafe(),
         }
         certbio = Institution.create(data, admin)
         for user in [mayza.key, dalton.key, admin.key]:
@@ -250,6 +258,7 @@ class ResetHandler(BaseHandler):
             'image_url': 'http://amaurymedeiros.com/images/splab.png',
             'email': 'splab@ufcg.edu.br',
             'phone_number': '83 33227865',
+            'invite': invite.key.urlsafe(),
         }
         splab = Institution.create(data, admin)
         for user in [jorge.key, andre.key, admin.key]:
@@ -270,6 +279,7 @@ class ResetHandler(BaseHandler):
             'image_url': 'http://www.paho.org/bra/images/stories/BRA01A/logobireme.jpg',
             'email': 'eciis@ufcg.edu.br',
             'phone_number': '83 33227865',
+            'invite': invite.key.urlsafe(),
         }
         eciis = Institution.create(data, admin)
         for user in [dalton.key, andre.key, jorge.key, maiana.key,

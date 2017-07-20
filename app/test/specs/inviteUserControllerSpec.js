@@ -3,11 +3,11 @@
 (describe('Test InviteUserController', function() {
     var INSTITUTIONS_URI = "/api/institutions/";
 
-    var inviteUserCtrl, httpBackend, scope, inviteService, createCtrl, state;
+    var inviteUserCtrl, httpBackend, scope, inviteService, createCtrl, state, authService;
 
     var invite = new Invite({invitee: "mayzabeel@gmail.com"}, 'user', '987654321', 'tiago@gmail.com');
 
-    var otherInvite = new Invite({invitee: "pedro@gmail.com"}, 'user', '987654321', 'tiago@gmail.com');
+    var otherInvite = new Invite({invitee: "pedro@gmail.com"}, 'user', '987654321', 'maiana.brito@ccc.ufcg.edu.br');
 
     var splab = {
             name: 'SPLAB',
@@ -18,11 +18,17 @@
 
     var tiago = {
         name: 'Tiago',
+        cpf: '121.445.044-07', 
         email: 'tiago@gmail.com',
-        institutions: splab.key,
-        follows: splab.key,
-        invites:[]
+        institutions: [splab.key]
     };
+
+    var user = {
+         name: 'Maiana',                 
+         cpf: '121.445.044-07',             
+         email: 'maiana.brito@ccc.ufcg.edu.br',             
+         institutions: [splab.key]               
+     };         
 
     beforeEach(module('app'));
 
@@ -37,15 +43,24 @@
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', "home/home.html").respond(200);
         httpBackend.when('GET', 'auth/login.html').respond(200);
+        authService = AuthService;
+
+        authService.getCurrentUser = function() {
+            return new User(user);
+        };
+
         createCtrl = function() {
             return $controller('InviteUserController',
                 {
                     scope: scope,
                     inviteService: InviteService,
+                    authService: authService,
                     institutionService: InstitutionService
                 });
         };
         state.params.institutionKey = splab.key;
+        
+
         inviteUserCtrl = createCtrl();
         httpBackend.flush();
     }));

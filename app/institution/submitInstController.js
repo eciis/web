@@ -40,7 +40,9 @@
             $mdDialog.show(confirm).then(function() {
                 InstitutionService.createInstitution(submitInstCtrl.institution).then(
                     function success() {
-                       goHome();            
+                        AuthService.reload().then(function(){
+                            $state.go('app.home');         
+                        });   
                         showToast('Cadastro de instituição realizado com sucesso');                      
                     }, function error(response) {
                         showToast(response.data.msg);
@@ -66,7 +68,7 @@
             $mdDialog.show(confirm).then(function() {
                 InviteService.deleteInvite(submitInstCtrl.invite.key).then(
                     function success() {
-                        goHome();            
+                        $state.go('app.home');            
                         showToast('Cadastro de instituição cancelado');
                     }, function error(response) {
                         showToast(response.data.msg);
@@ -75,10 +77,6 @@
             }, function() {
                 showToast('Cancelado');
             });
-        };
-
-        var goHome = function goToHome() {
-            $state.go('app.home');
         };
 
         function showToast(msg) {
@@ -103,5 +101,6 @@
                 submitInstCtrl.occupationAreas = response.data;
             });
         }
-    });
+
+    }); 
 })();

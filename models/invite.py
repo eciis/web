@@ -33,7 +33,7 @@ class Invite(ndb.Model):
     suggestion_institution_name = ndb.StringProperty()
 
     """ Key of the institution who inviter is associate."""
-    institution_key = ndb.KeyProperty(kind="Institution", required=True)
+    institution_key = ndb.KeyProperty(kind="Institution")
 
     # Key of stub institution to wich the invite was send.
     # Value is None for invite the User

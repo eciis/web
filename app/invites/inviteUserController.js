@@ -15,11 +15,13 @@
         /*TODO: Change to AuthService.getCurrentUser()
                  @author: Mayza Nunes 14/07/2017
         */
-        Object.defineProperty(inviteController, 'user', {
-            get: function() {
-                return AuthService.user;
-            }
-        });
+        // Object.defineProperty(inviteController, 'user', {
+        //     get: function() {
+        //         return AuthService.user;
+        //     }
+        // });
+
+        inviteController.user = AuthService.getCurrentUser();
 
         inviteController.sendUserInvite = function sendInvite() {
             invite = new Invite(inviteController.invite, 'user', currentInstitutionKey, inviteController.user.email);

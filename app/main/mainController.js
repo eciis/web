@@ -61,7 +61,6 @@
         };
 
         (function main() {
-            console.log(mainCtrl.user);
             if (mainCtrl.user.institutions.length === 0 &&
               mainCtrl.user.invites.length === 0) {
                 $state.go("user_inactive");

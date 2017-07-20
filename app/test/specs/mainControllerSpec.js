@@ -24,10 +24,9 @@
     mayza.current_institution = certbio.key;
 
     beforeEach(module('app'));
-    
+
     beforeEach(inject(function($controller, $httpBackend, $rootScope, $state, AuthService, InstitutionService) {
         httpBackend = $httpBackend;
-        AuthService.user = new User(mayza);
         scope = $rootScope.$new();
         state = $state;
         instService = InstitutionService;
@@ -55,9 +54,8 @@
     });
 
     // TODO FIX
-    xdescribe('MainController functions', function() {
+    describe('MainController functions', function() {
         it('Should be active', function() {
-            console.log(mainCtrl.user)
             expect(mainCtrl.isActive(certbio.key)).toBe(true);
         });
         it('Should be not active', function() {
@@ -105,7 +103,7 @@
             expect(instService.searchInstitutions).toHaveBeenCalledWith(mainCtrl.finalSearch);
         });
         it('User should not be member e-cis', function(){
-            expect(mainCtrl.isAdmin()).toBe(false);  
+            expect(mainCtrl.isAdmin()).toBe(false);
         });
     });
 

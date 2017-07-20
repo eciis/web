@@ -40,7 +40,7 @@
             $mdDialog.show(confirm).then(function() {
                 InstitutionService.createInstitution(submitInstCtrl.institution).then(
                     function success() {
-                            goHome();         
+                            goHome();       
                             showToast('Cadastro de instituição realizado com sucesso');                      
                     }, function error(response) {
                         showToast(response.data.msg);
@@ -66,7 +66,7 @@
             $mdDialog.show(confirm).then(function() {
                 InviteService.deleteInvite(submitInstCtrl.invite.key).then(
                     function success() {
-                        $state.go('app.home');            
+                        goHome();           
                         showToast('Cadastro de instituição cancelado');
                     }, function error(response) {
                         showToast(response.data.msg);

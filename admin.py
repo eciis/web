@@ -10,6 +10,7 @@ from models.user import User
 from models.institution import Institution
 from models.post import Post
 from models.post import Comment
+from models.invite import Invite
 from google.appengine.ext import ndb
 
 
@@ -73,6 +74,9 @@ class ResetHandler(BaseHandler):
 
         institutions = Institution.query().fetch(keys_only=True)
         ndb.delete_multi(institutions)
+
+        invites = Invite.query().fetch(keys_only=True)
+        ndb.delete_multi(invites)
 
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
         response = {"msg": "Datastore Cleaned"}
@@ -197,81 +201,110 @@ class ResetHandler(BaseHandler):
         tiago.posts = []
         tiago.put()
 
+        # new User Admin
+        admin = User()
+        admin.name = 'Administrador do e-CIS'
+        admin.cpf = '089.675.908-65'
+        admin.email = 'testeeciis@gmail.com'
+        admin.photo_url = 'images/avatar.jpg'
+        admin.institutions = []
+        admin.follows = []
+        admin.institutions_admin = []
+        admin.notifications = []
+        admin.posts = []
+        admin.put()
+
+        # Invites
+        invite = Invite()
+        invite.invitee = 'testeeciis@gmail.com'
+        invite.inviter = 'eciis@gmail.com'
+        invite.type_of_invite = 'institution'
+        invite.put()
+
         jsonList.append({"msg": "database initialized with a few users"})
 
-        # new Institution CERTBIO with User Mayza like a member and User André like a follower
-        certbio = Institution()
-        certbio.name = 'CERTBIO'
-        certbio.cnpj = '18.104.068/0001-86'
-        certbio.legal_nature = 'public'
-        certbio.address = 'Universidade Federal de Campina Grande'
-        certbio.occupation_area = ''
-        certbio.description = 'Ensaio Químico - Determinação de Material Volátil por \
-            Gravimetria e Ensaio Biológico - Ensaio de Citotoxicidade'
-        certbio.image_url = 'https://pbs.twimg.com/profile_images/1782760873/Logo_do_site_400x400.jpg'
-        certbio.email = 'certbio@ufcg.edu.br'
-        certbio.phone_number = '(83) 3322 4455'
-        certbio.members = [mayza.key, dalton.key]
-        certbio.followers = [jorge.key, mayza.key, maiana.key, luiz.key, raoni.key, ruan.key, tiago.key]
-        certbio.posts = []
-        certbio.admin = mayza.key
-        certbio.put()
+        # new Institution CERTBIO with User Mayza like a member
+        # and User André like a follower
+        data = {
+            'name': 'CERTBIO',
+            'acronym': 'CTB',
+            'cnpj': '18.104.068/0001-86',
+            'legal_nature': 'public',
+            'address': 'Universidade Federal de Campina Grande',
+            'occupation_area': 'research institutes',
+            'description': 'Ensaio Químico - Determinação de Material Volátil por Gravimetria e Ensaio Biológico - Ensaio de Citotoxicidade',
+            'image_url': 'https://pbs.twimg.com/profile_images/1782760873/Logo_do_site_400x400.jpg',
+            'email': 'certbio@ufcg.edu.br',
+            'phone_number': '83 33224455',
+            'invite': invite.key.urlsafe(),
+        }
+        certbio = Institution.create(data, admin)
+        for user in [mayza.key, dalton.key, admin.key]:
+            certbio.add_member(user)
+        for user in [jorge.key, mayza.key, maiana.key, luiz.key,
+                     raoni.key, ruan.key, tiago.key, admin.key]:
+            certbio.follow(user)
 
-        # new Institution SPLAB with User André like a member and User Mayza like a follower
-        splab = Institution()
-        splab.name = 'SPLAB'
-        splab.cnpj = '18.104.068/0001-56'
-        splab.legal_nature = 'public'
-        splab.address = 'Universidade Federal de Campina Grande'
-        splab.occupation_area = ''
-        splab.description = 'The mission of the Software Practices Laboratory (SPLab) \
-            is to promote the development of the state-of-the-art in the \
-            theory and practice of Software Engineering.'
-        splab.image_url = 'http://amaurymedeiros.com/images/splab.png'
-        splab.email = 'splab@ufcg.edu.br'
-        splab.phone_number = '(83) 3322 7865'
-        splab.members = [jorge.key, andre.key]
-        splab.followers = [jorge.key, andre.key, maiana.key, luiz.key, raoni.key, ruan.key, tiago.key]
-        splab.posts = []
-        splab.admin = jorge.key
-        splab.put()
+        # new Institution SPLAB with User André like a member
+        # and User Mayza like a follower
+        data = {
+            'name': 'Software Practice Laboratory',
+            'acronym': 'SPLAB',
+            'cnpj': '18.104.068/0001-56',
+            'legal_nature': 'public',
+            'address': 'Universidade Federal de Campina Grande',
+            'occupation_area': 'college',
+            'description': """The mission of the Software Practices Laboratory (SPLab) is to promote the development of the state-of-the-art in the theory and practice of Software Engineering.""",
+            'image_url': 'http://amaurymedeiros.com/images/splab.png',
+            'email': 'splab@ufcg.edu.br',
+            'phone_number': '83 33227865',
+            'invite': invite.key.urlsafe(),
+        }
+        splab = Institution.create(data, admin)
+        for user in [jorge.key, andre.key, admin.key]:
+            splab.add_member(user)
+        for user in [jorge.key, andre.key, maiana.key, luiz.key,
+                     raoni.key, ruan.key, tiago.key, admin.key]:
+            splab.follow(user)
 
-        eciis = Institution()
-        eciis.name = 'e-ciis'
-        eciis.cnpj = '18.104.068/0001-30'
-        eciis.legal_nature = 'public'
-        eciis.address = 'Universidade Federal de Campina Grande'
-        eciis.occupation_area = ''
-        eciis.description = 'The mission of the e-CIIS \
-            is to promote the development of the state-of-the-art in the \
-            theory and practice of Software Engineering.'
-        eciis.image_url = 'http://www.paho.org/bra/images/stories/BRA01A/logobireme.jpg'
-        eciis.email = 'eciis@ufcg.edu.br'
-        eciis.phone_number = '(83) 3322 7865'
-        eciis.members = [dalton.key, andre.key, jorge.key, maiana.key, luiz.key, raoni.key, ruan.key, tiago.key, mayza.key]
-        eciis.followers = [mayza.key, andre.key, jorge.key, dalton.key, maiana.key, luiz.key, raoni.key, ruan.key, tiago.key]
-        eciis.posts = []
-        eciis.admin = dalton.key
-        eciis.put()
+        # new Institution eciis
+        data = {
+            'name': 'Complexo Industrial da Saúde',
+            'acronym': 'e-ciis',
+            'cnpj': '18.104.068/0001-30',
+            'legal_nature': 'public',
+            'address': 'Universidade Federal de Campina Grande',
+            'occupation_area': 'college',
+            'description': 'The mission of the e-CIIS is to promote the development of the state-of-the-art in the theory and practice of Software Engineering.',
+            'image_url': 'http://www.paho.org/bra/images/stories/BRA01A/logobireme.jpg',
+            'email': 'eciis@ufcg.edu.br',
+            'phone_number': '83 33227865',
+            'invite': invite.key.urlsafe(),
+        }
+        eciis = Institution.create(data, admin)
+        for user in [dalton.key, andre.key, jorge.key, maiana.key,
+                     luiz.key, raoni.key, ruan.key, tiago.key, mayza.key, admin.key]:
+            eciis.add_member(user)
+
+        for user in [mayza.key, andre.key, jorge.key, dalton.key,
+                     maiana.key, luiz.key, raoni.key,
+                     ruan.key, tiago.key, admin.key]:
+            eciis.follow(user)
 
         jsonList.append({"msg": "database initialized with a few institutions"})
-
 
         # Updating Institutions
         mayza.institutions = [certbio.key, eciis.key]
         mayza.follows = [splab.key, eciis.key, certbio.key]
-        mayza.institutions_admin = [certbio.key]
         mayza.put()
         andre.institutions = [splab.key, eciis.key]
         andre.follows = [splab.key, eciis.key]
         andre.put()
         jorge.institutions = [splab.key, eciis.key]
         jorge.follows = [certbio.key, splab.key, eciis.key]
-        jorge.institutions_admin = [splab.key]
         jorge.put()
         dalton.institutions = [eciis.key, certbio.key]
         dalton.follows = [splab.key, eciis.key]
-        dalton.institutions_admin = [eciis.key]
         dalton.put()
         maiana.institutions = [eciis.key]
         maiana.follows = [splab.key, eciis.key, certbio.key]
@@ -288,6 +321,9 @@ class ResetHandler(BaseHandler):
         tiago.institutions = [eciis.key]
         tiago.follows = [splab.key, eciis.key, certbio.key]
         tiago.put()
+
+        admin.institutions_admin = [certbio.key, eciis.key, splab.key]
+        admin.put()
 
         # POST of Mayza To Certbio Institution
         mayza_post = Post()
@@ -307,6 +343,7 @@ class ResetHandler(BaseHandler):
         aut perferendis doloribus asperiores repellat."
         mayza_post.author = mayza.key
         mayza_post.institution = certbio.key
+        mayza_post.last_modified_by = mayza.key
         mayza_post.put()
         add_comments_to_post(mayza, mayza_post, mayza.institutions[0], 2)
 
@@ -319,6 +356,7 @@ class ResetHandler(BaseHandler):
         libero, vulputate quis purus maximus, auctor tempus enim. Sed."
         mayza_post_comIMG.author = mayza.key
         mayza_post_comIMG.institution = certbio.key
+        mayza_post_comIMG.last_modified_by = mayza.key
         mayza_post_comIMG.put()
         add_comments_to_post(mayza, mayza_post_comIMG, mayza.institutions[0], 1)
 
@@ -340,10 +378,11 @@ class ResetHandler(BaseHandler):
         erendis doloribus asperiores repellat."
         andre_post.author = andre.key
         andre_post.institution = splab.key
+        andre_post.last_modified_by = andre.key
         andre_post.put()
         add_comments_to_post(andre, andre_post, andre.institutions[0], 3)
 
-        # POST of Dalton To e-CIIS Institution
+        # POST of Dalton To e-cis Institution
         dalton_post = Post()
         dalton_post.title = "Post de Dalton no SPLAB"
         dalton_post.text = "At vero eos et accusamus et iusto odio dignissimos \
@@ -362,6 +401,7 @@ class ResetHandler(BaseHandler):
         dalton_post.headerImage = "http://noticias.universia.com.br/net/images/consejos-profesionales/l/le/lei/leia-gratuitamente-livros-alcancar-sucesso-noticias.jpg"
         dalton_post.author = dalton.key
         dalton_post.institution = splab.key
+        dalton_post.last_modified_by = dalton.key
         dalton_post.put()
         add_comments_to_post(dalton, dalton_post, dalton.institutions[0], 2)
 
@@ -371,6 +411,7 @@ class ResetHandler(BaseHandler):
         dalton_postCertbio.text = "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat."
         dalton_postCertbio.author = dalton.key
         dalton_postCertbio.institution = certbio.key
+        dalton_postCertbio.last_modified_by = dalton.key
         dalton_postCertbio.put()
         add_comments_to_post(dalton, dalton_postCertbio, dalton.institutions[0], 1)
 
@@ -380,11 +421,12 @@ class ResetHandler(BaseHandler):
         jorge_post.text = "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat."
         jorge_post.author = jorge.key
         jorge_post.institution = splab.key
+        jorge_post.last_modified_by = jorge.key
         jorge_post.put()
 
-        # POST of Jorge To e-CIIS Institution
+        # POST of Jorge To e-cis Institution
         jorge_post_eCIIS = Post()
-        jorge_post_eCIIS.title = "Post de Jorge no e-CIIS"
+        jorge_post_eCIIS.title = "Post de Jorge no e-cis"
         jorge_post_eCIIS.text = "At vero eos et accusamus et iusto odio dignis\
         simos ducimus quiblanditiis praesentium voluptatum deleniti atque corr\
         pti quos dolores et quas molestias excepturi sint occaecati cupiditate\
@@ -401,6 +443,7 @@ class ResetHandler(BaseHandler):
         jorge_post_eCIIS.headerImage = "http://unef.edu.br/hotsite/wp-content/uploads/2016/04/EDITAL.jpg"
         jorge_post_eCIIS.author = jorge.key
         jorge_post_eCIIS.institution = eciis.key
+        jorge_post_eCIIS.last_modified_by = jorge.key
         jorge_post_eCIIS.put()
         add_comments_to_post(jorge, jorge_post_eCIIS, jorge.institutions[0], 3)
 

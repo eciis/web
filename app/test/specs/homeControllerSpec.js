@@ -3,6 +3,7 @@
 (describe('Test HomeController', function() {
 
     var homeCtrl, httpBackend, scope, createCtrl, mdDialog, state;
+
     var user = {
         name: 'Tiago'
     };
@@ -15,21 +16,28 @@
     var posts = [{
         author: 'Mayza Nunes',
         author_key: "111111",
+        title: 'Post de Mayza',
+        text: 'Lorem ipsum'
     }];
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, InstitutionService, PostService, $mdDialog, $state) {
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, InstitutionService, 
+            PostService, $mdDialog, $state, AuthService) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         mdDialog = $mdDialog;
         state = $state;
-        httpBackend.expect('GET', '/api/user').respond(user);
         httpBackend.expect('GET', '/api/user/timeline').respond(posts);
         httpBackend.expect('GET', '/api/institutions').respond(institutions);
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);
         httpBackend.when('GET', 'error/error.html').respond(200);
+
+        AuthService.getCurrentUser = function() {
+            return new User(user);
+        };
+
         createCtrl = function() {
             return $controller('HomeController', {
                 scope: scope
@@ -54,8 +62,13 @@
             expect(homeCtrl.posts.length).toBe(1);
         });
 
-        it('should exist a post with author and author_key equal Mayza Nunes and 111111, respectively', function() {
-            expect(homeCtrl.posts).toContain({author: 'Mayza Nunes', author_key: '111111'});
+        it('should exist a post', function() {
+            expect(homeCtrl.posts).toContain({
+                author: 'Mayza Nunes',
+                author_key: '111111',
+                title: 'Post de Mayza',
+                text: 'Lorem ipsum'
+            });
         });
 
         it('should exist an institution in institutions array', function() { 

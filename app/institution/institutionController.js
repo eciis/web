@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("InstitutionController", function InstitutionController($state, InstitutionService, AuthService, $interval, $mdToast, $q) {
+    app.controller("InstitutionController", function InstitutionController($state, InstitutionService, InviteService, AuthService, $interval, $mdToast) {
         var institutionCtrl = this;
 
         institutionCtrl.current_institution = null;
@@ -16,11 +16,7 @@
 
         var currentInstitutionKey = $state.params.institutionKey;
 
-        Object.defineProperty(institutionCtrl, 'user', {
-            get: function() {
-                return AuthService.user;
-            }
-        });
+        institutionCtrl.user = AuthService.getCurrentUser();
 
         function loadPosts() {
             InstitutionService.getTimeline(currentInstitutionKey).then(function success(response) {
@@ -98,6 +94,14 @@
                 });
                 return promise;
             }
+        };
+
+        institutionCtrl.goToManageMembers = function goToManageMembers(institutionKey){
+            $state.go('app.manage_institution.invite_user', {institutionKey: institutionKey});
+        };
+
+        institutionCtrl.goToEditInfo = function goToEditInfo(institutionKey){
+            $state.go('app.manage_institution.edit_info', {institutionKey: institutionKey});
         };
     });
 })();

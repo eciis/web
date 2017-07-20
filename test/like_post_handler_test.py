@@ -7,6 +7,8 @@ from models.user import User
 from models.institution import Institution
 from handlers.like_post_handler import LikePostHandler
 
+from mock import patch
+
 
 class LikePostHandlerTest(TestBaseHandler):
     """Test the handler like_post_handler."""
@@ -26,7 +28,8 @@ class LikePostHandlerTest(TestBaseHandler):
         cls.os.environ['REMOTE_USER'] = 'tiago.pereira@ccc.ufcg.edu.br'
         cls.os.environ['USER_EMAIL'] = 'tiago.pereira@ccc.ufcg.edu.br'
 
-    def test_get(self):
+    @patch('utils.verify_token', return_value={'email': 'tiago.pereira@ccc.ufcg.edu.br'})
+    def test_get(self, verify_token):
         """Test method get of LikePostHandler."""
         # Call the get method
         data = self.testapp.get(self.LIKE_URI % self.mayza_post.key.urlsafe())
@@ -56,8 +59,10 @@ class LikePostHandlerTest(TestBaseHandler):
         # Checks if the key of Tiago are in the authors
         self.assertIn(self.tiago.name, authors)
 
-    def test_post(self):
+    @patch('utils.verify_token')
+    def test_post(self, verify_token):
         """Test the like_post_handler's post method."""
+        verify_token.return_value={'email': 'tiago.pereira@ccc.ufcg.edu.br'}
         # Verify if before the like the number of likes at post is 0
         self.assertEqual(self.mayza_post.get_number_of_likes(), 0,
                          "The number of likes expected was 0, but was %d"
@@ -82,6 +87,7 @@ class LikePostHandlerTest(TestBaseHandler):
                          "The number of likes expected was 1, but was %d"
                          % self.mayza_post.get_number_of_likes())
         # Authentication with Mayza
+        verify_token.return_value={'email': 'mayzabeel@gmail.com'}
         self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
         self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
         # Call the post method
@@ -94,7 +100,8 @@ class LikePostHandlerTest(TestBaseHandler):
                          "The number of likes expected was 2, but was %d"
                          % self.mayza_post.get_number_of_likes())
 
-    def test_delete(self):
+    @patch('utils.verify_token', return_value={'email': 'tiago.pereira@ccc.ufcg.edu.br'})
+    def test_delete(self, verify_token):
         """Test the like_post_handler's delete method."""
         # Call the post method
         self.testapp.post(self.LIKE_URI % self.mayza_post.key.urlsafe())
@@ -157,6 +164,7 @@ def initModels(cls):
     # new Institution SPLAB
     cls.splab = Institution()
     cls.splab.name = 'SPLAB'
+    cls.splab.acronym = 'SPLAB'
     cls.splab.cnpj = '18.104.068/0001-56'
     cls.splab.legal_nature = 'public'
     cls.splab.address = 'Universidade Federal de Campina Grande'

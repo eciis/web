@@ -9,7 +9,7 @@
       <md-button disabled="true">
         <img src="images/oms.png" aria-label="OMS Logo" style="height: 80%;filter: brightness(10) grayscale(1);">
       </md-button>
-      <h2>e-CIIS</h2>
+      <h2>e-CIS</h2>
     </a>
 
     <span flex md-truncate></span>
@@ -31,6 +31,12 @@
             Notificações
           </md-button>
         </md-menu-item>
+        <md-menu-item ng-if="mainCtrl.isAdmin()">
+          <md-button ng-click="mainCtrl.goInvite()">
+            <md-icon>mail_outline</md-icon>
+            Convite
+          </md-button>
+        </md-menu-item>
         <md-menu-item>
           <md-button ui-sref="config_profile">
             <md-icon>dashboard</md-icon>
@@ -39,7 +45,7 @@
         </md-menu-item>
         <md-menu-divider></md-menu-divider>
         <md-menu-item>
-          <md-button onclick="location.href='/logout'">
+          <md-button ng-click="mainCtrl.logout()">
             <md-icon>exit_to_app</md-icon>
             Sair
           </md-button>

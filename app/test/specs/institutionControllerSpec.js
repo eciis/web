@@ -8,7 +8,7 @@
 
     var splab = {
             name: 'SPLAB',
-            key: '987654321' 
+            key: '987654321'
     };
 
     var certbio = {
@@ -35,12 +35,16 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, InstitutionService) {
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, InstitutionService, AuthService) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
         institutionService = InstitutionService;
-        httpBackend.expect('GET', '/api/user').respond(tiago);
+
+        AuthService.getCurrentUser = function() {
+            return new User(tiago);
+        };
+
         httpBackend.expect('GET', INSTITUTIONS_URI + splab.key + '/timeline').respond(posts);
         httpBackend.expect('GET', INSTITUTIONS_URI + splab.key).respond(splab);
         httpBackend.expect('GET', INSTITUTIONS_URI + splab.key + '/members').respond([tiago]);
@@ -87,7 +91,7 @@
             expect(institutionCtrl.current_institution).toEqual(splab);
         });
     });
-    
+
     describe('InstitutionController functions', function() {
 
         describe('follow()', function() {

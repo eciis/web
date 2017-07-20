@@ -8,8 +8,6 @@ import json
 from handlers.base_handler import BaseHandler
 import search_module
 
-INDEX_NAME = 'institution'
-
 
 class SearchHandler(BaseHandler):
     """Search Handler."""

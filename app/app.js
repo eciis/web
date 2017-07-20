@@ -156,8 +156,7 @@
         $locationProvider.html5Mode(false);
         $locationProvider.hashPrefix(''); // Uses # instead #!
 
-        // alternatively, register the interceptor via an anonymous factory
-        $httpProvider.interceptors.push('AuthInterceptor');
+        $httpProvider.interceptors.push('BearerAuthInterceptor');
 
         $sceDelegateProvider.resourceUrlWhitelist([
             // Allow same origin resource loads.
@@ -167,23 +166,19 @@
         ]);
     });
 
-    app.service('AuthInterceptor', function AuthInterceptor($q, $state) {
-        var service = this;
-
-        service.responseError = function(response) {
-            if (response.status >= 401 & response.status <= 403) {
-                $state.go("signin", {}, {
-                    reload: true
-                });
-            } else if (response.status > 403) {
-                $state.go("error", {
-                    msg: response.error,
-                    status: response.status
-                }, {
-                    reload: true
-                });
+    app.factory('BearerAuthInterceptor', function ($injector, $q, $state) {
+        return {
+            request: function(config) {
+                var AuthService = $injector.get('AuthService');
+                config.headers = config.headers || {};
+                if (AuthService.isLoggedIn()) {
+                    var token = AuthService.getUserToken();
+                    config.headers.Authorization = 'Bearer ' + token;
+                } else {
+                    $state.go("signin");
+                }
+                return config || $q.when(config);
             }
-            return $q.reject(response);
         };
     });
 })();

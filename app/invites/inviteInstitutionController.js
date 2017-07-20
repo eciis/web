@@ -10,11 +10,7 @@
 
         var invite;
 
-        Object.defineProperty(inviteController, 'user', {
-            get: function() {
-                return AuthService.user;
-            }
-        });
+        inviteController.user = AuthService.getCurrentUser();
 
         inviteController.cancelInvite = function cancelInvite() {
             $state.go("app.home");

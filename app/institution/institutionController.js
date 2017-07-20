@@ -16,11 +16,7 @@
 
         var currentInstitutionKey = $state.params.institutionKey;
 
-        Object.defineProperty(institutionCtrl, 'user', {
-            get: function() {
-                return AuthService.user;
-            }
-        });
+        institutionCtrl.user = AuthService.getCurrentUser();
 
         function loadPosts() {
             InstitutionService.getTimeline(currentInstitutionKey).then(function success(response) {

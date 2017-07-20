@@ -52,6 +52,7 @@ class Invite(ndb.Model):
         if userWithEmail.count() == 1:
             instmember = Institution.query(Institution.members.IN([userWithEmail.get().key]))
             return instmember.count() > 0
+        return False
 
     @staticmethod
     def inviteeIsInvited(invitee, institutionKey):

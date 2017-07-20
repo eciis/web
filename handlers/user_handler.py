@@ -19,7 +19,7 @@ def getInvites(user_email):
     """Query that return list of invites for this user."""
     invites = []
 
-    queryInvites = Invite.query(Invite.invitee == user_email)
+    queryInvites = Invite.query(Invite.invitee == user_email, Invite.status == 'sent')
 
     invites = [Invite.make(invite)for invite in queryInvites]
 

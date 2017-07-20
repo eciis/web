@@ -3,13 +3,14 @@
     var app = angular.module('app');
 
     app.controller("InviteInstitutionController", function InviteInstitutionController(
-        InviteService,$mdToast, $state, AuthService) {
+        InviteService, $mdToast, $state, AuthService) {
         var inviteController = this;
 
         inviteController.invite = {};
+        inviteController.sent_invitations = [];
 
         var invite;
-
+        
         inviteController.user = AuthService.getCurrentUser();
 
         inviteController.cancelInvite = function cancelInvite() {
@@ -18,14 +19,14 @@
 
         inviteController.sendInstInvite = function sendInvite() {
             var currentInstitutionKey = inviteController.user.current_institution.key;
-            invite = new Invite(inviteController.invite, 'institution', currentInstitutionKey);
+            invite = new Invite(inviteController.invite, 'institution', currentInstitutionKey, inviteController.user.email);
             if (!invite.isValid()) {
                 showToast('Convite inválido!');
             } else {
                 var promise = InviteService.sendInvite(invite);
                 promise.then(function success(response) {
+                    inviteController.sent_invitations.push(invite);
                     showToast('Convite enviado com sucesso!');
-                    $state.go("app.home");
                 }, function error(response) {
                     showToast(response.data.msg);
                 });
@@ -43,5 +44,16 @@
                     .position('bottom right')
             );
         }
+
+        function loadSentInvitations() {
+            InviteService.getSentInstitutionInvitations().then(function success(response) {
+                inviteController.sent_invitations = response.data;
+            }, function error(response) {
+                $state.go('app.home');
+                showToast(response.data.msg);
+            });
+        }
+
+        loadSentInvitations();
     });
 })();

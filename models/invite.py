@@ -173,3 +173,8 @@ class Invite(ndb.Model):
             'key': self.key.urlsafe(),
             'status': self.status
         }
+
+    def change_status(self, status):
+        """Change the invite state."""
+        self.status = status
+        self.put()

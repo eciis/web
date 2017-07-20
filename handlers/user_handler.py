@@ -55,11 +55,14 @@ class UserHandler(BaseHandler):
 
     @login_required
     @ndb.transactional(xg=True)
-    def put(self, user):
+    def put(self, user, invite_key):
         """Handler PATCH Requests."""
         data = json.loads(self.request.body)
 
         institution_key = ndb.Key(urlsafe=data['institutions'][-1])
+
+        invite = ndb.Key(urlsafe=invite_key).get()
+        invite.change_status('accepted')
 
         user.add_institution(institution_key)
         user.follow(institution_key)

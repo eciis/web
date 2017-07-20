@@ -17,10 +17,12 @@
 
         newInviteCtrl.acceptInvite = function acceptInvite(event) {
             var promise = UserService.addInstitution(newInviteCtrl.user,
-                newInviteCtrl.institution.key);
+                newInviteCtrl.institution.key, newInviteCtrl.inviteKey);
             promise.then(function success() {
-                deleteInvite();
-                showAlert(event, newInviteCtrl.institution.name);
+                AuthService.reload().then(function() {
+                    goHome();
+                    showAlert(event, newInviteCtrl.institution.name); 
+               });
             }, function error(response) {
                 showToast(response.data.msg);
             });

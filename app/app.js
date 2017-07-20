@@ -155,7 +155,6 @@
         $locationProvider.html5Mode(false);
         $locationProvider.hashPrefix(''); // Uses # instead #!
 
-        $httpProvider.interceptors.push('AuthInterceptor');
         $httpProvider.interceptors.push('BearerAuthInterceptor');
 
         $sceDelegateProvider.resourceUrlWhitelist([
@@ -164,28 +163,6 @@
             // Allow loading from our assets domain.  Notice the difference between * and **.
             'https://www.gravatar.com/**'
         ]);
-    });
-
-    app.service('AuthInterceptor', function AuthInterceptor($q, $state) {
-        var service = this;
-
-        service.responseError = function(response) {
-            // if (response.status >= 401 & response.status <= 403) {
-            //     $state.go("signin", {}, {
-            //         reload: true
-            //     });
-            // } 
-
-            // if (response.status > 403) {
-            //     $state.go("error", {
-            //         msg: response.error,
-            //         status: response.status
-            //     }, {
-            //         reload: true
-            //     });
-            // }
-            return $q.reject(response);
-        };
     });
 
     app.factory('BearerAuthInterceptor', function ($injector, $q, $state) {

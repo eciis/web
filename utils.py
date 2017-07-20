@@ -8,7 +8,6 @@ from google.appengine.api import users
 from google.appengine.ext import ndb
 from google.appengine.ext.ndb import Key
 
-
 from models.user import User
 from models.institution import Institution
 

@@ -3,11 +3,11 @@
 (describe('Test NewInviteController', function() {
 
     var newInviteCtrl, httpBackend, scope, institutionService, createCtrl, state, inviteService, userService,
-        mdDialog;
+        mdDialog, authService;
 
     var INSTITUTIONS_URI = "/api/institutions/";
 
-    var invite = new Invite({invitee: "mayzabeel@gmail.com", key: 'xyzcis'}, 'user', '123456789');
+    var invite = new Invite({invitee: "mayzabeel@gmail.com", key: 'xyzcis'}, 'user', '123456789', 'mayzabeel@gmail.com');
 
     var splab = {
             name: 'SPLAB',
@@ -25,12 +25,13 @@
         name: 'Tiago',
         institutions: [splab],
         follows: [splab.key],
-        invites: [invite]
+        invites: [invite],
+        accessToken: '00000'
     };
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, $mdDialog, InstitutionService, UserService, InviteService) {
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, $mdDialog, InstitutionService, UserService, InviteService, AuthService) {
         userService = UserService;
         inviteService = InviteService;
         httpBackend = $httpBackend;
@@ -38,10 +39,13 @@
         state = $state;
         mdDialog = $mdDialog;
         institutionService = InstitutionService;
-        httpBackend.expect('GET', '/api/user').respond(tiago);
+        authService = AuthService;
         httpBackend.expect('GET', INSTITUTIONS_URI + splab.key).respond(splab);
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', "home/home.html").respond(200);
+        AuthService.getCurrentUser = function() {
+            return new User(tiago);
+        };
         createCtrl = function() {
             return $controller('NewInviteController',
                 {
@@ -62,8 +66,7 @@
         httpBackend.verifyNoOutstandingRequest();
     });
 
-    // TODO FIX
-    xdescribe('NewInviteController properties', function() {
+    describe('NewInviteController properties', function() {
 
         it('should exist a user and his name is Tiago', function() {
             expect(newInviteCtrl.user.name).toEqual(tiago.name);
@@ -82,8 +85,7 @@
         });
     });
 
-    // TODO FIX
-    xdescribe('NewInviteController functions', function() {
+    describe('NewInviteController functions', function() {
 
         describe('acceptInvite()', function() {
 
@@ -98,15 +100,23 @@
                         }
                     };
                 });
-                spyOn(userService, 'addInstitution').and.callFake(function() {
+                spyOn(authService, 'reload').and.callFake(function() {
                     return {
                         then: function(callback) {
-                            return callback({
+                            return callback(newInviteCtrl.user = {
                                 name: 'Tiago',
                                 institutions: [splab, certbio],
                                 follows: [splab.key, certbio.key],
-                                invites: [invite]
+                                invites: [invite],
+                                accessToken: '00000'
                             });
+                        }
+                    };
+                });
+                spyOn(userService, 'addInstitution').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            return callback();
                         }
                     };
                 });
@@ -129,9 +139,9 @@
                 });
             });
 
-            it('should be call inviteService.deleteInvite()', function(done) {
+            it('should be call authService.reload()', function(done) {
                 promise.then(function() {
-                    expect(inviteService.deleteInvite).toHaveBeenCalledWith(invite.key);
+                    expect(authService.reload).toHaveBeenCalled();
                     done();
                 });
             });
@@ -164,6 +174,19 @@
                         }
                     };
                 });
+                spyOn(authService, 'reload').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            return callback(newInviteCtrl.user = {
+                                name: 'Tiago',
+                                institutions: [splab, certbio],
+                                follows: [splab.key, certbio.key],
+                                invites: [invite],
+                                accessToken: '00000'
+                            });
+                        }
+                    };
+                });
                 spyOn(mdDialog, 'show').and.callFake(function() {
                     return {
                         then: function(callback) {
@@ -185,6 +208,13 @@
             it('should be call inviteService.deleteInvite()', function(done) {
                 promise.then(function() {
                     expect(inviteService.deleteInvite).toHaveBeenCalledWith(invite.key);
+                    done();
+                });
+            });
+
+            it('should be call authService.reload()', function(done) {
+                promise.then(function() {
+                    expect(authService.reload).toHaveBeenCalled();
                     done();
                 });
             });

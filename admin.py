@@ -95,6 +95,7 @@ class ResetHandler(BaseHandler):
         mayza.institutions_admin = []
         mayza.notifications = []
         mayza.posts = []
+        mayza.state = 'active'
         mayza.put()
 
         # new User André
@@ -108,6 +109,7 @@ class ResetHandler(BaseHandler):
         andre.institutions_admin = []
         andre.notifications = []
         andre.posts = []
+        andre.state = 'active'
         andre.put()
 
         # new User Jorge
@@ -121,6 +123,7 @@ class ResetHandler(BaseHandler):
         jorge.institutions_admin = []
         jorge.notifications = []
         jorge.posts = []
+        jorge.state = 'active'
         jorge.put()
 
         # new User Dalton
@@ -134,6 +137,7 @@ class ResetHandler(BaseHandler):
         dalton.institutions_admin = []
         dalton.notifications = []
         dalton.posts = []
+        dalton.state = 'active'
         dalton.put()
 
         # new User Maiana
@@ -147,6 +151,7 @@ class ResetHandler(BaseHandler):
         maiana.institutions_admin = []
         maiana.notifications = []
         maiana.posts = []
+        maiana.state = 'active'
         maiana.put()
 
         # new User Raoni
@@ -160,6 +165,7 @@ class ResetHandler(BaseHandler):
         raoni.institutions_admin = []
         raoni.notifications = []
         raoni.posts = []
+        raoni.state = 'active'
         raoni.put()
 
         # new User Luiz
@@ -173,6 +179,7 @@ class ResetHandler(BaseHandler):
         luiz.institutions_admin = []
         luiz.notifications = []
         luiz.posts = []
+        luiz.state = 'active'
         luiz.put()
 
         # new User Ruan
@@ -186,6 +193,7 @@ class ResetHandler(BaseHandler):
         ruan.institutions_admin = []
         ruan.notifications = []
         ruan.posts = []
+        ruan.state = 'active'
         ruan.put()
 
         # new User Tiago
@@ -199,6 +207,7 @@ class ResetHandler(BaseHandler):
         tiago.institutions_admin = []
         tiago.notifications = []
         tiago.posts = []
+        tiago.state = 'active'
         tiago.put()
 
         # new User Admin
@@ -212,6 +221,7 @@ class ResetHandler(BaseHandler):
         admin.institutions_admin = []
         admin.notifications = []
         admin.posts = []
+        admin.state = 'active'
         admin.put()
 
         # Invites

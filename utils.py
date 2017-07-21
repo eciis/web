@@ -9,6 +9,15 @@ from google.appengine.ext import ndb
 from google.appengine.ext.ndb import Key
 
 from models.user import User
+from models.institution import Institution
+
+import google.auth.transport.requests
+import google.oauth2.id_token
+import requests_toolbelt.adapters.appengine
+
+requests_toolbelt.adapters.appengine.monkeypatch()
+HTTP_REQUEST = google.auth.transport.requests.Request()
+
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
 
@@ -137,36 +146,44 @@ class Utils():
         return str(hash_num)
 
 
+def verify_token(request):
+    """Verify Firebase auth."""
+    # [START verify_token]
+    try:
+        token = request.headers['Authorization']
+        if token:
+            token = token.split(' ').pop()
+            return google.oauth2.id_token.verify_token(
+                token, HTTP_REQUEST)
+    except Exception as exp:
+        raise NotAuthorizedException()
+    return
+
+
 def login_required(method):
     """Handle required login."""
     def login(self, *args):
-        current_user = users.get_current_user()
-        if current_user is None:
+        credential = verify_token(self.request)
+        if not credential:
             self.response.write(json.dumps({
                 'msg': 'Auth needed',
-                'login_url': 'http://%s/login' % self.request.host
+                'login_url': 'http://%s/#/signin' % self.request.host
             }))
             self.response.set_status(401)
             return
-        user = User.get_by_email(current_user.email())
+
+        user_email = credential.get('email', 'Unknown')
+        user_name = credential.get('name', 'Unknown')
+
+        user = User.get_by_email(user_email)
+
         if user is None:
             user = User()
-            user.email = current_user.email()
-            user.name = current_user.nickname()
+            user.email = user_email
+            user.name = user_name
             user.photo_url = "/images/avatar.jpg"
 
             user.put()
-            # TODO:
-            # Return this block of code when user sign up is created
-            # @author André L. Abrantes - 25-05-2017
-            #
-            # self.response.write(json.dumps({
-            #     'msg': 'Forbidden',
-            #     'login_url': 'http://%s/login' % self.request.host
-            # }))
-            # self.response.set_status(403)
-            # self.redirect("/logout")
-            # return
         method(self, user, *args)
     return login
 

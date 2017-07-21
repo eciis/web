@@ -25,9 +25,9 @@
             return promise;
         };
 
-        $rootScope.$on("user_loaded", function() {
+        (function main() {
             NotificationService.watchNotifications(controller.user.key, controller.notifications);
-        });
+        })();
     });
 
     app.directive("notification", function() {

@@ -13,11 +13,7 @@
         homeCtrl.newComment = '';
         homeCtrl.instMenuExpanded = false;
 
-        Object.defineProperty(homeCtrl, 'user', {
-            get: function() {
-                return AuthService.user;
-            }
-        });
+        homeCtrl.user = AuthService.getCurrentUser();
 
         function showToast(msg) {
             $mdToast.show(

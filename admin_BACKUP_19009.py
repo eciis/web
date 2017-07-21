@@ -236,8 +236,11 @@ class ResetHandler(BaseHandler):
             'image_url': 'https://pbs.twimg.com/profile_images/1782760873/Logo_do_site_400x400.jpg',
             'email': 'certbio@ufcg.edu.br',
             'phone_number': '83 33224455',
-            'state': 'active',
-            'invite': invite.key.urlsafe()
+<<<<<<< HEAD
+            'state': 'active'
+=======
+            'invite': invite.key.urlsafe(),
+>>>>>>> master
         }
         certbio = Institution.create(data, admin)
         for user in [mayza.key, dalton.key, admin.key]:
@@ -259,8 +262,11 @@ class ResetHandler(BaseHandler):
             'image_url': 'http://amaurymedeiros.com/images/splab.png',
             'email': 'splab@ufcg.edu.br',
             'phone_number': '83 33227865',
-            'state': 'active',
-            'invite': invite.key.urlsafe()
+<<<<<<< HEAD
+            'state': 'active'
+=======
+            'invite': invite.key.urlsafe(),
+>>>>>>> master
         }
         splab = Institution.create(data, admin)
         for user in [jorge.key, andre.key, admin.key]:
@@ -281,8 +287,11 @@ class ResetHandler(BaseHandler):
             'image_url': 'http://www.paho.org/bra/images/stories/BRA01A/logobireme.jpg',
             'email': 'eciis@ufcg.edu.br',
             'phone_number': '83 33227865',
-            'state': 'active',
-            'invite': invite.key.urlsafe()
+<<<<<<< HEAD
+            'state': 'active'
+=======
+            'invite': invite.key.urlsafe(),
+>>>>>>> master
         }
         eciis = Institution.create(data, admin)
         for user in [dalton.key, andre.key, jorge.key, maiana.key,

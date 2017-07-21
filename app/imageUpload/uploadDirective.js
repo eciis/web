@@ -3,9 +3,9 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller('UpladImageController', function (Upload, $mdToast) {
+    app.controller('UploadImageController', function (ImageService, $mdToast) {
         var uploadImgCtrl = this;
-        var URL_UPLOAD_IMAGE = '/api/images';
+        uploadImgCtrl.model = {};
 
         // upload on file select or drop
         uploadImgCtrl.upload = function (file, model) {
@@ -14,19 +14,22 @@
             var maximumSize = 5242880; // 5Mb in bytes
 
             if ((file.type === jpgType || file.type === pngType) && file.size <= maximumSize) {
-                Upload.upload({
-                    url: URL_UPLOAD_IMAGE,
-                    data: {image: file}
-                }).then(function (response) {
-                    model.photo_url = response.data.file_url;
-                    uploadImgCtrl.file = null;
-                }, function (response) {
-                    showToast("Problemas encontrados ao fazer upload da imagem" + response.config.data.image.name);
-                });
+                uploadImgCtrl.model = model;
+                ImageService.compress(file, saveImage);
             } else {
                 showToast("Imagem deve ser jpg ou png e menor que 5 Mb");
             }
         };
+
+        function saveImage(file) {
+            ImageService.saveImage(file).then(function success(response) {
+                uploadImgCtrl.model.photo_url = response.url;
+                uploadImgCtrl.model.uploaded_images.push(response.url);
+                uploadImgCtrl.file = null;
+            }, function error(response) {
+                showToast("Erro no upload da imagem: " + response.data);
+            });
+        }
 
         function showToast(msg) {
             $mdToast.show(
@@ -45,7 +48,7 @@
             restrict: 'E',
             templateUrl: "imageUpload/upload_image.html",
             controllerAs: "upImageCtrl",
-            controller: "UpladImageController",
+            controller: "UploadImageController",
             transclude: true,
             scope: {
                 model: '='

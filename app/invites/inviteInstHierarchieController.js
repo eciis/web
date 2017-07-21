@@ -6,6 +6,8 @@
         InviteService,$mdToast, $mdDialog, $state, AuthService, InstitutionService) {
         var inviteInstCtrl = this;
 
+        inviteInstCtrl.user = AuthService.getCurrentUser();
+
         inviteInstCtrl.invite = {};
         inviteInstCtrl.type_of_invite = '';
         inviteInstCtrl.sent_invitations = [];
@@ -20,15 +22,10 @@
 
         var invite;
 
-        Object.defineProperty(inviteInstCtrl, 'user', {
-            get: function() {
-                return AuthService.user;
-            }
-        });
-
         inviteInstCtrl.sendInstInvite = function sendInstInvite() {
             var currentInstitutionKey = inviteInstCtrl.user.current_institution.key;
-            invite = new Invite(inviteInstCtrl.invite, inviteInstCtrl.type_of_invite, currentInstitutionKey);
+            invite = new Invite(inviteInstCtrl.invite, inviteInstCtrl.type_of_invite, 
+                currentInstitutionKey, inviteInstCtrl.user.email);
             if (!invite.isValid()) {
                 showToast('Convite inválido!');
             } else {                

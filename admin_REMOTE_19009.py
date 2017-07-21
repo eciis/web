@@ -236,8 +236,7 @@ class ResetHandler(BaseHandler):
             'image_url': 'https://pbs.twimg.com/profile_images/1782760873/Logo_do_site_400x400.jpg',
             'email': 'certbio@ufcg.edu.br',
             'phone_number': '83 33224455',
-            'state': 'active',
-            'invite': invite.key.urlsafe()
+            'invite': invite.key.urlsafe(),
         }
         certbio = Institution.create(data, admin)
         for user in [mayza.key, dalton.key, admin.key]:
@@ -259,8 +258,7 @@ class ResetHandler(BaseHandler):
             'image_url': 'http://amaurymedeiros.com/images/splab.png',
             'email': 'splab@ufcg.edu.br',
             'phone_number': '83 33227865',
-            'state': 'active',
-            'invite': invite.key.urlsafe()
+            'invite': invite.key.urlsafe(),
         }
         splab = Institution.create(data, admin)
         for user in [jorge.key, andre.key, admin.key]:
@@ -281,8 +279,7 @@ class ResetHandler(BaseHandler):
             'image_url': 'http://www.paho.org/bra/images/stories/BRA01A/logobireme.jpg',
             'email': 'eciis@ufcg.edu.br',
             'phone_number': '83 33227865',
-            'state': 'active',
-            'invite': invite.key.urlsafe()
+            'invite': invite.key.urlsafe(),
         }
         eciis = Institution.create(data, admin)
         for user in [dalton.key, andre.key, jorge.key, maiana.key,
@@ -293,12 +290,6 @@ class ResetHandler(BaseHandler):
                      maiana.key, luiz.key, raoni.key,
                      ruan.key, tiago.key, admin.key]:
             eciis.follow(user)
-
-        eciis.parent_institution = splab.key
-        eciis.put()
-
-        splab.children_institutions = [eciis.key]
-        splab.put()
 
         jsonList.append({"msg": "database initialized with a few institutions"})
 

@@ -23,14 +23,25 @@ def is_admin(method):
             institutionisNotManagedByUser = institution.admin != user.key
 
             Utils._assert(userisNotAdminOfInstitution or institutionisNotManagedByUser,
-                          'User is not administrator', NotAuthorizedException)
+                          'User is not admin', NotAuthorizedException)
 
             method(self, user, *args)
         return check_authorization
 
-
 class InviteCollectionHandler(BaseHandler):
-    """Get user's invite."""
+    """Invite Collection Handler."""
+
+    @json_response
+    @login_required
+    def get(self, user):
+        """Get invites for new institutions make by Plataform"""
+        invites = []
+
+        queryInvites = Invite.query(Invite.type_of_invite == "institution")
+
+        invites = [Invite.make(invite)for invite in queryInvites]
+
+        self.response.write(json.dumps(invites))
 
     @json_response
     @login_required

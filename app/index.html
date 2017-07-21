@@ -4,12 +4,13 @@
 
   <base href="/" />
 
-  <title>e-CIIS</title>
+  <title>e-CIS</title>
 
   <!-- Angular Material style sheet -->
   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="custom.css">
+  <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.2.1/firebaseui.css" />
 </head>
 <body ng-app="app" ng-cloak layout="column">
 
@@ -58,16 +59,20 @@
   <script src="post/post.js"></script>
   <script src="invites/invite.js"></script>
 
+  <!--Utils-->
+  <script src="utils/utils.js"></script>
+
   <!-- Main Application Library -->
   <script src="app.js"></script>
   <script src="main/mainController.js"></script>
 
   <!-- Auth/Login Library -->
+  <script src="auth/userService.js"></script>
   <script src="auth/authService.js"></script>
   <script src="auth/loginController.js"></script>
   <script src="auth/chooseInstController.js"></script>
-  <script src="auth/userService.js"></script>
   <script src="auth/configProfileController.js"></script>
+  <script src="auth/newInviteController.js"></script>
 
   <!-- Error Library -->
   <script src="error/errorController.js"></script>
@@ -96,6 +101,7 @@
 
   <!-- Upload Image Library -->
   <script src="imageUpload/uploadDirective.js"></script>
+  <script src="imageUpload/imageService.js"></script>
 
   <!-- Notifications Library -->
   <script src="notification/notificationService.js"></script>

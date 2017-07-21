@@ -24,8 +24,8 @@
 
     var maiana = {
         name: 'Maiana',
-        institutions: splab.key,
-        follows: splab.key,
+        institutions: [splab.key],
+        follows: [splab.key],
         invites:[]
     };
 
@@ -36,13 +36,15 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $state, $mdToast, InviteService) {
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $state, $mdToast, InviteService, AuthService) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
         mdToast = $mdToast;
         inviteService = InviteService;
-        httpBackend.expect('GET', '/api/user').respond(maiana);
+        AuthService.getCurrentUser = function() {
+            return new User(maiana);
+        };
         httpBackend.expect('GET', '/api/institutions/' + splab.key).respond(splab);
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', "home/home.html").respond(200);

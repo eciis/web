@@ -8,7 +8,7 @@
 
     var splab = {
             name: 'SPLAB',
-            key: '987654321' 
+            key: '987654321'
     };
 
     var certbio = {
@@ -30,19 +30,21 @@
 
     var posts = [{
         author: 'Raoni',
-        author_key: "abcdefg",
-        title: 'Post de Raoni',
-        text: 'Lorem ipsum'
+        author_key: "abcdefg"
     }];
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, InstitutionService) {
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, InstitutionService, AuthService) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
         institutionService = InstitutionService;
-        httpBackend.expect('GET', '/api/user').respond(tiago);
+
+        AuthService.getCurrentUser = function() {
+            return new User(tiago);
+        };
+
         httpBackend.expect('GET', INSTITUTIONS_URI + splab.key + '/timeline').respond(posts);
         httpBackend.expect('GET', INSTITUTIONS_URI + splab.key).respond(splab);
         httpBackend.expect('GET', INSTITUTIONS_URI + splab.key + '/members').respond([tiago]);
@@ -89,7 +91,7 @@
             expect(institutionCtrl.current_institution).toEqual(splab);
         });
     });
-    
+
     describe('InstitutionController functions', function() {
 
         describe('follow()', function() {
@@ -195,15 +197,6 @@
                     done();
                 });
                 scope.$apply();
-            });
-        });
-
-        describe('goToManageMembers()', function() {
-
-            it('should call state.go(app.manage_institution.invite_user)', function() {
-                spyOn(state, 'go');
-                institutionCtrl.goToManageMembers('123456789');
-                expect(state.go).toHaveBeenCalledWith('app.manage_institution.invite_user', {institutionKey: '123456789'});
             });
         });
     });

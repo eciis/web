@@ -104,6 +104,7 @@ a:hover {
 }
 a:active {
     text-decoration: underline;
+}
 
 .resize {
     border-radius: 50%;

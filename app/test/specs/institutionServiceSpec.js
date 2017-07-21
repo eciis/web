@@ -96,4 +96,17 @@
             expect(result.data).toEqual(institutions[0]);
         });
 
+        it('Test searchInstitution', function() {
+            var documents = [{name: institutions[0].name, id: institutions[0].key}];
+            spyOn($http, 'get').and.callThrough();
+            httpBackend.expect('GET', "api/search/institution?name=" + institutions[0].name + "&state=active" ).respond(documents);
+            var result;
+            service.searchInstitutions(institutions[0].name).then(function(data){
+                result = data;
+            });
+            httpBackend.flush();
+            expect($http.get).toHaveBeenCalled();
+            expect(result.data).toEqual(documents);
+        });
+
 }));

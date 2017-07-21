@@ -17,6 +17,16 @@
             return deferred.promise;
         };
 
+        service.searchInstitutions = function searchInstitutions(name) {
+            var deferred = $q.defer();
+            $http.get("api/search/institution?name=" + name + "&state=active").then(function success(response) {
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+            return deferred.promise;
+        };
+
         service.follow = function follow(institution_key) {
             var deferred = $q.defer();
             $http.post(INSTITUTIONS_URI + "/" + institution_key + "/followers").then(function success(response) {

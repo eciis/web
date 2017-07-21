@@ -66,7 +66,8 @@
                 $state.go("new_invite", {institutionKey: institutionKey, inviteKey: inviteKey});
             }
 
-            if (mainCtrl.user.getPendingInvitationOf("institution")) {
+            if (mainCtrl.user.getPendingInvitationOf("institution") || 
+                mainCtrl.user.getPendingInvitationOf("institution_parent")) {
                 $state.go("submit_institution");
             }
         })();

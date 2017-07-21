@@ -10,24 +10,24 @@
                         <md-input-container class="md-block" flex-gt-xs flex="60">
                             <label>Nome</label>
                             <input type="text" name="name" required 
-                            ng-model="submitInstCtrl.institution.name">
+                            ng-model="submitInstCtrl.newInstitution.name">
                         </md-input-container>
                         <md-input-container class="md-block" flex-gt-xs flex="40">
                             <label>Sigla</label>
                             <input type="text" name="sigla" 
-                            ng-model="submitInstCtrl.institution.acronym">
+                            ng-model="submitInstCtrl.newInstitution.acronym">
                         </md-input-container> 
                     </div>
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Endereço</label>
                         <input type="text" name="Endereço" 
-                        ng-model="submitInstCtrl.institution.address">
+                        ng-model="submitInstCtrl.newInstitution.address">
                     </md-input-container>
                     <div layout="row">
                         <md-input-container class="md-block" flex-gt-xs>
                             <label>CNPJ</label>
                             <input type="text" name="cnpj"  
-                            ng-model="submitInstCtrl.institution.cnpj"
+                            ng-model="submitInstCtrl.newInstitution.cnpj"
                             ng-pattern=submitInstCtrl.cnpjRegex 
                             minlength="18" md-maxlength="18" 
                             placeholder="00.000.000/0000-00">
@@ -38,7 +38,7 @@
                         <md-input-container class="md-block" flex-gt-xs>
                             <label>Telefone</label>
                             <input type="text" name="phone"  
-                            ng-model="submitInstCtrl.institution.phone_number"
+                            ng-model="submitInstCtrl.newInstitution.phone_number"
                             ng-pattern=submitInstCtrl.phoneRegex
                             minlength="11" md-maxlength="11" 
                             placeholder="83 12345678">
@@ -47,7 +47,7 @@
                     <div layout="row">
                         <md-input-container class="md-block" flex-gt-sm>
                             <label>Área de Atuação</label>
-                            <md-select ng-model="submitInstCtrl.institution.occupation_area">
+                            <md-select ng-model="submitInstCtrl.newInstitution.occupation_area">
                               <md-option ng-repeat="area in submitInstCtrl.occupationAreas | orderBy: 'name'"
                                 ng-value="area.value">{{ area.name }}
                               </md-option>
@@ -55,30 +55,30 @@
                         </md-input-container>  
                         <md-input-container class="md-block" flex-gt-sm>
                             <label>Natureza Jurídica</label>
-                            <md-select ng-model="submitInstCtrl.institution.legal_nature"> 
+                            <md-select ng-model="submitInstCtrl.newInstitution.legal_nature"> 
                               <md-option ng-repeat="nature in submitInstCtrl.legalNatures | orderBy: 'name'"
                                 ng-value="nature.value">{{ nature.name }}
                               </md-option>
                             </md-select>
                         </md-input-container>
                     </div>
-                    <div ng-if="submitInstCtrl.institution.occupation_area == 'other'">
+                    <div ng-if="submitInstCtrl.newInstitution.occupation_area == 'other'">
                         <md-input-container class="md-block" flex-gt-xs>
                             <label>Informe outra área de atuação</label>
                             <input type="text" name="outra"
-                            ng-model="submitInstCtrl.institution.other_area">
+                            ng-model="submitInstCtrl.newInstitution.other_area">
                         </md-input-container>
                     </div>
                     <md-input-container class="md-block">
                         <label>Descrição</label>
-                          <textarea ng-model="submitInstCtrl.institution.description" md-maxlength="300" 
+                          <textarea ng-model="submitInstCtrl.newInstitution.description" md-maxlength="300" 
                           rows="1" md-select-on-focus>
                           </textarea>
                     </md-input-container>
                     <md-input-container class="md-block" flex-gt-xs>
                             <label>Logo da Instituição</label>
                             <input type="text" name="logo" disabled
-                            ng-model="submitInstCtrl.institution.image_url">
+                            ng-model="submitInstCtrl.newInstitution.image_url">
                     </md-input-container>
                     <!-- TODO: implement functionality to add institution image
                         author: Ruan Eloy , createdOn: 06/07/17
@@ -91,7 +91,7 @@
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Email</label>
                         <input type="text" name="Email" disabled 
-                        ng-model="submitInstCtrl.institution.email">
+                        ng-model="submitInstCtrl.newInstitution.email">
                     </md-input-container>
                 </form>
             </md-card-content>

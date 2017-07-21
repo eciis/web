@@ -11,6 +11,8 @@ from utils import login_required
 from utils import json_response
 
 from models.institution import Institution
+from util.json_patch import JsonPatch
+
 
 from handlers.base_handler import BaseHandler
 
@@ -42,3 +44,26 @@ class InstitutionHandler(BaseHandler):
         self.response.write(json.dumps(
             institution_json
         ))
+
+    @json_response
+    @login_required
+    def patch(self, user, institution_key, inviteKey):
+        """Handler PATCH Requests."""
+        data = self.request.body
+        print institution_key
+
+        institution = ndb.Key(urlsafe=institution_key).get()
+
+        print data
+
+        """Apply patch."""
+        JsonPatch.load(data, institution)
+        institution.update(user,inviteKey, institution_key)
+
+        """Update user."""
+        institution.put()
+
+        institution_json = Utils.toJson(institution)
+
+        self.response.write(json.dumps(
+            institution_json))

@@ -5,6 +5,8 @@
 
     app.controller("SubmitInstController", function SubmitInstController(AuthService, InstitutionService, $state, $mdToast, $mdDialog, $http, InviteService) {
         var submitInstCtrl = this;
+        var observer;
+        var institutionKey = $state.params.institutionKey;
 
         Object.defineProperty(submitInstCtrl, 'user', {
             get: function() {
@@ -13,14 +15,8 @@
         });
 
         submitInstCtrl.invite = submitInstCtrl.user.getPendingInvitationOf('institution');
-
-        submitInstCtrl.institution = {
-            name: submitInstCtrl.invite.suggestion_institution_name,
-            image_url: "",
-            email: submitInstCtrl.invite.invitee,
-            state: "active",
-            invite: submitInstCtrl.invite.key
-        };
+        submitInstCtrl.newInstitution = {};
+        
 
         getLegalNatures();
         getOccupationAreas();
@@ -37,23 +33,23 @@
                 .ok('Sim')
                 .cancel('Não');
             $mdDialog.show(confirm).then(function() {
-                InstitutionService.createInstitution(submitInstCtrl.institution).then(
-                    reloadUser(),                  
+                submitInstCtrl.newInstitution.state = "active";
+                var patch = jsonpatch.generate(observer);
+                InstitutionService.save(institutionKey,patch, submitInstCtrl.invite.key).then(
+                    function success(response) {
+                        AuthService.reload().then(function(){
+                            $state.go('app.home');         
+                            showToast('Cadastro de instituição realizado com sucesso');       
+                        });
+                    },               
                     function error(response) {
                         showToast(response.data.msg);
-                    }
-                );
+                    });
             }, function() {
                 showToast('Cancelado');
             });
         };
 
-        function reloadUser() {
-            AuthService.reload().then(function(){
-                $state.go('app.home');         
-                showToast('Cadastro de instituição realizado com sucesso');       
-            });                   
-        }
 
         submitInstCtrl.cancel = function cancel(event) {
             var confirm = $mdDialog.confirm()
@@ -70,7 +66,7 @@
             $mdDialog.show(confirm).then(function() {
                 InviteService.deleteInvite(submitInstCtrl.invite.key).then(
                     function success() {
-                        goHome();           
+                        $state.go('app.home');          
                         showToast('Cadastro de instituição cancelado');
                     }, function error(response) {
                         showToast(response.data.msg);
@@ -79,10 +75,6 @@
             }, function() {
                 showToast('Cancelado');
             });
-        };
-
-        var goHome = function goToHome() {      
-            $state.go('app.home');        
         };
 
         function showToast(msg) {
@@ -107,5 +99,21 @@
                 submitInstCtrl.occupationAreas = response.data;
             });
         }
+
+        function loadInstitution() {
+            InstitutionService.getInstitution(institutionKey).then(function success(response) {
+                submitInstCtrl.newInstitution = response.data;
+                console.log(submitInstCtrl.newInstitution);
+                observer = jsonpatch.observe(submitInstCtrl.newInstitution);
+            }, function error(response) {
+                showToast(response.data.msg);
+            });
+        }
+
+        (function main() {
+            loadInstitution();
+            //console.log(submitInstCtrl.newInstitution);
+            //observer = jsonpatch.observe(submitInstCtrl.newInstitution);
+        })();
     });
 })();

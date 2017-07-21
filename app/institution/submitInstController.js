@@ -19,7 +19,8 @@
             photo_url: "/images/institution.jpg",
             uploaded_images: [],
             email: submitInstCtrl.invite.invitee,
-            state: "active"
+            state: "active",
+            invite: submitInstCtrl.invite.key
         };
 
         getLegalNatures();
@@ -40,14 +41,8 @@
             $mdDialog.show(confirm).then(function() {
                 InstitutionService.createInstitution(submitInstCtrl.institution).then(
                     function success() {
-                        InviteService.deleteInvite(submitInstCtrl.invite.key).then(
-                            function success() {
-                                goHome();
-                                showToast('Cadastro de instituição realizado com sucesso');
-                            }, function error(response) {
-                                showToast(response.data.msg);
-                            }
-                        );
+                            goHome();       
+                            showToast('Cadastro de instituição realizado com sucesso');                      
                     }, function error(response) {
                         showToast(response.data.msg);
                     }
@@ -72,7 +67,7 @@
             $mdDialog.show(confirm).then(function() {
                 InviteService.deleteInvite(submitInstCtrl.invite.key).then(
                     function success() {
-                        goHome();
+                        goHome();           
                         showToast('Cadastro de instituição cancelado');
                     }, function error(response) {
                         showToast(response.data.msg);
@@ -83,8 +78,8 @@
             });
         };
 
-        var goHome = function goToHome() {
-            $state.go('app.home');
+        var goHome = function goToHome() {      
+            $state.go('app.home');        
         };
 
         function showToast(msg) {

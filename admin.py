@@ -201,6 +201,26 @@ class ResetHandler(BaseHandler):
         tiago.posts = []
         tiago.put()
 
+        # new User Admin
+        admin = User()
+        admin.name = 'Administrador do e-CIS'
+        admin.cpf = '089.675.908-65'
+        admin.email = 'testeeciis@gmail.com'
+        admin.photo_url = 'images/avatar.jpg'
+        admin.institutions = []
+        admin.follows = []
+        admin.institutions_admin = []
+        admin.notifications = []
+        admin.posts = []
+        admin.put()
+
+        # Invites
+        invite = Invite()
+        invite.invitee = 'testeeciis@gmail.com'
+        invite.inviter = 'eciis@gmail.com'
+        invite.type_of_invite = 'institution'
+        invite.put()
+
         jsonList.append({"msg": "database initialized with a few users"})
 
         # new Institution CERTBIO with User Mayza like a member
@@ -216,12 +236,13 @@ class ResetHandler(BaseHandler):
             'photo_url': 'https://pbs.twimg.com/profile_images/1782760873/Logo_do_site_400x400.jpg',
             'email': 'certbio@ufcg.edu.br',
             'phone_number': '83 33224455',
+            'invite': invite.key.urlsafe(),
         }
-        certbio = Institution.create(data, mayza)
-        for user in [mayza.key, dalton.key]:
+        certbio = Institution.create(data, admin)
+        for user in [mayza.key, dalton.key, admin.key]:
             certbio.add_member(user)
         for user in [jorge.key, mayza.key, maiana.key, luiz.key,
-                     raoni.key, ruan.key, tiago.key]:
+                     raoni.key, ruan.key, tiago.key, admin.key]:
             certbio.follow(user)
 
         # new Institution SPLAB with User André like a member
@@ -237,12 +258,13 @@ class ResetHandler(BaseHandler):
             'photo_url': 'http://amaurymedeiros.com/images/splab.png',
             'email': 'splab@ufcg.edu.br',
             'phone_number': '83 33227865',
+            'invite': invite.key.urlsafe(),
         }
-        splab = Institution.create(data, jorge)
-        for user in [jorge.key, andre.key]:
+        splab = Institution.create(data, admin)
+        for user in [jorge.key, andre.key, admin.key]:
             splab.add_member(user)
         for user in [jorge.key, andre.key, maiana.key, luiz.key,
-                     raoni.key, ruan.key, tiago.key]:
+                     raoni.key, ruan.key, tiago.key, admin.key]:
             splab.follow(user)
 
         # new Institution eciis
@@ -257,15 +279,16 @@ class ResetHandler(BaseHandler):
             'photo_url': 'http://www.paho.org/bra/images/stories/BRA01A/logobireme.jpg',
             'email': 'eciis@ufcg.edu.br',
             'phone_number': '83 33227865',
+            'invite': invite.key.urlsafe(),
         }
-        eciis = Institution.create(data, dalton)
+        eciis = Institution.create(data, admin)
         for user in [dalton.key, andre.key, jorge.key, maiana.key,
-                     luiz.key, raoni.key, ruan.key, tiago.key, mayza.key]:
+                     luiz.key, raoni.key, ruan.key, tiago.key, mayza.key, admin.key]:
             eciis.add_member(user)
 
         for user in [mayza.key, andre.key, jorge.key, dalton.key,
                      maiana.key, luiz.key, raoni.key,
-                     ruan.key, tiago.key]:
+                     ruan.key, tiago.key, admin.key]:
             eciis.follow(user)
 
         jsonList.append({"msg": "database initialized with a few institutions"})
@@ -273,18 +296,15 @@ class ResetHandler(BaseHandler):
         # Updating Institutions
         mayza.institutions = [certbio.key, eciis.key]
         mayza.follows = [splab.key, eciis.key, certbio.key]
-        mayza.institutions_admin = [certbio.key]
         mayza.put()
         andre.institutions = [splab.key, eciis.key]
         andre.follows = [splab.key, eciis.key]
         andre.put()
         jorge.institutions = [splab.key, eciis.key]
         jorge.follows = [certbio.key, splab.key, eciis.key]
-        jorge.institutions_admin = [splab.key]
         jorge.put()
         dalton.institutions = [eciis.key, certbio.key]
         dalton.follows = [splab.key, eciis.key]
-        dalton.institutions_admin = [eciis.key]
         dalton.put()
         maiana.institutions = [eciis.key]
         maiana.follows = [splab.key, eciis.key, certbio.key]
@@ -301,6 +321,9 @@ class ResetHandler(BaseHandler):
         tiago.institutions = [eciis.key]
         tiago.follows = [splab.key, eciis.key, certbio.key]
         tiago.put()
+
+        admin.institutions_admin = [certbio.key, eciis.key, splab.key]
+        admin.put()
 
         # POST of Mayza To Certbio Institution
         mayza_post = Post()
@@ -359,7 +382,7 @@ class ResetHandler(BaseHandler):
         andre_post.put()
         add_comments_to_post(andre, andre_post, andre.institutions[0], 3)
 
-        # POST of Dalton To e-CIIS Institution
+        # POST of Dalton To e-cis Institution
         dalton_post = Post()
         dalton_post.title = "Post de Dalton no SPLAB"
         dalton_post.text = "At vero eos et accusamus et iusto odio dignissimos \
@@ -401,9 +424,9 @@ class ResetHandler(BaseHandler):
         jorge_post.last_modified_by = jorge.key
         jorge_post.put()
 
-        # POST of Jorge To e-CIIS Institution
+        # POST of Jorge To e-cis Institution
         jorge_post_eCIIS = Post()
-        jorge_post_eCIIS.title = "Post de Jorge no e-CIIS"
+        jorge_post_eCIIS.title = "Post de Jorge no e-cis"
         jorge_post_eCIIS.text = "At vero eos et accusamus et iusto odio dignis\
         simos ducimus quiblanditiis praesentium voluptatum deleniti atque corr\
         pti quos dolores et quas molestias excepturi sint occaecati cupiditate\

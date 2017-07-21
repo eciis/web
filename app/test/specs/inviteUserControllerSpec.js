@@ -3,24 +3,32 @@
 (describe('Test InviteUserController', function() {
     var INSTITUTIONS_URI = "/api/institutions/";
 
-    var inviteUserCtrl, httpBackend, scope, inviteService, createCtrl, state;
+    var inviteUserCtrl, httpBackend, scope, inviteService, createCtrl, state, authService;
 
-    var invite = new Invite({invitee: "mayzabeel@gmail.com"}, 'user', '987654321');
+    var invite = new Invite({invitee: "mayzabeel@gmail.com"}, 'user', '987654321', 'tiago@gmail.com');
 
-    var otherInvite = new Invite({invitee: "pedro@gmail.com"}, 'user', '987654321');
+    var otherInvite = new Invite({invitee: "pedro@gmail.com"}, 'user', '987654321', 'maiana.brito@ccc.ufcg.edu.br');
 
     var splab = {
             name: 'SPLAB',
             key: '987654321',
-            sent_invitations: [invite]  
+            sent_invitations: [invite]  ,
+            members: [tiago]
     };
 
     var tiago = {
         name: 'Tiago',
-        institutions: splab.key,
-        follows: splab.key,
-        invites:[]
+        cpf: '121.445.044-07', 
+        email: 'tiago@gmail.com',
+        institutions: [splab.key]
     };
+
+    var user = {
+         name: 'Maiana',                 
+         cpf: '121.445.044-07',             
+         email: 'maiana.brito@ccc.ufcg.edu.br',             
+         institutions: [splab.key]               
+     };         
 
     beforeEach(module('app'));
 
@@ -29,17 +37,24 @@
         scope = $rootScope.$new();
         state = $state;
         inviteService = InviteService;
-        httpBackend.expect('GET', '/api/user').respond(tiago);
         httpBackend.when('GET', INSTITUTIONS_URI + splab.key).respond(splab);
         httpBackend.when('GET', INSTITUTIONS_URI + splab.key + '/members').respond([tiago]);
         httpBackend.when('GET', 'institution/institution_page.html').respond(200);
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', "home/home.html").respond(200);
+        httpBackend.when('GET', 'auth/login.html').respond(200);
+        authService = AuthService;
+
+        authService.getCurrentUser = function() {
+            return new User(user);
+        };
+
         createCtrl = function() {
             return $controller('InviteUserController',
                 {
                     scope: scope,
                     inviteService: InviteService,
+                    authService: authService,
                     institutionService: InstitutionService
                 });
         };
@@ -87,6 +102,24 @@
                     done();
                 });
                 scope.$apply();
+            });
+        });
+
+        describe('isUserInviteValid()', function() {
+            
+            it('should be true with new invite', function() {
+                var newInvite = new Invite({invitee: "pedro@gmail.com"}, 'user', '987654321', 'tiago@gmail.com');
+                expect(inviteUserCtrl.isUserInviteValid(newInvite)).toBe(true);
+            });
+
+            it('should be false when the invitee was already invited', function() {
+                var inviteInvited = new Invite({invitee: "mayzabeel@gmail.com"}, 'user', '987654321', 'tiago@gmail.com');
+                expect(inviteUserCtrl.isUserInviteValid(inviteInvited)).toBe(false);
+            });
+
+            it('should be false when the invitee was already member', function() {
+                var inviteMember = new Invite({invitee: "tiago@gmail.com"}, 'user', '987654321', 'tiago@gmail.com');
+                expect(inviteUserCtrl.isUserInviteValid(inviteMember)).toBe(false);
             });
         });
     });

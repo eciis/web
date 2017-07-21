@@ -38,7 +38,7 @@
                 .cancel('Não');
             $mdDialog.show(confirm).then(function() {
                 InstitutionService.createInstitution(submitInstCtrl.institution).then(
-                    afterCreateInst(),                  
+                    reloadUser(),                  
                     function error(response) {
                         showToast(response.data.msg);
                     }
@@ -47,8 +47,8 @@
                 showToast('Cancelado');
             });
         };
-        
-        function afterCreateInst() {
+
+        function reloadUser() {
             AuthService.reload().then(function(){
                 $state.go('app.home');         
                 showToast('Cadastro de instituição realizado com sucesso');       

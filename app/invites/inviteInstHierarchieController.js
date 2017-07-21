@@ -35,7 +35,7 @@
                 var promise = InviteService.sendInvite(invite);
                 promise.then(function success(response) {
                     showToast('Convite enviado com sucesso!');
-                    addInvite(response.data);
+                    addInvite(invite);
 
                 }, function error(response) {
                     showToast(response.data.msg);
@@ -45,11 +45,11 @@
         };
 
         inviteInstCtrl.createParentInstInvite = function createParentInstInvite(){
-            if(inviteInstCtrl.hasParent){
-                showToast("Já possue instituição superior");
-            }else {
+            if(_.isEmpty(inviteInstCtrl.inst_parent)){
                 inviteInstCtrl.type_of_invite = 'institution_parent';
                 inviteInstCtrl.showButton = false;
+            }else {
+                showToast("Já possue instituição superior");
             }            
         };
 
@@ -82,6 +82,7 @@
         function addInvite(invite) {
             inviteInstCtrl.invite = {};
             inviteInstCtrl.sent_invitations.push(invite);
+
             if(invite.type_of_invite == 'institution_parent'){
                 inviteInstCtrl.inst_parent = {
                     'name': invite.suggestion_institution_name,
@@ -90,6 +91,7 @@
                 inviteInstCtrl.hasParent = true;
             }
             inviteInstCtrl.type_of_invite = '';
+            inviteInstCtrl.showButton = true;
         }     
 
         function showToast(msg) {

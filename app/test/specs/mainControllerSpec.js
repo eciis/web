@@ -1,7 +1,7 @@
 'use strict';
 
 (describe('Test MainController', function() {
-    var mainCtrl, httpBackend, scope, createCtrl, state;
+    var mainCtrl, httpBackend, scope, createCtrl, state, instService;
     var mayza = {
         name: 'Mayza',
         key: 'user-key',
@@ -25,11 +25,11 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $state, AuthService) {
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $state, AuthService, InstitutionService) {
         httpBackend = $httpBackend;
-        AuthService.user = new User(mayza);
         scope = $rootScope.$new();
         state = $state;
+        instService = InstitutionService;
 
         AuthService.getCurrentUser = function() {
             return new User(mayza);
@@ -45,7 +45,7 @@
             });
         };
         mainCtrl = createCtrl();
-        httpBackend.flush();   
+        httpBackend.flush();
     }));
 
     afterEach(function() {
@@ -53,14 +53,12 @@
         httpBackend.verifyNoOutstandingRequest();
     });
 
-    // TODO FIX
-    xdescribe('MainController functions', function() {
+    describe('MainController functions', function() {
         it('Should be active', function() {
-            console.log(mainCtrl.user)
-            expect(mainCtrl.isActive(certbio.key)).toBe(true);            
+            expect(mainCtrl.isActive(certbio.key)).toBe(true);
         });
         it('Should be not active', function() {
-            expect(mainCtrl.isActive(splab.key)).toBe(false);            
+            expect(mainCtrl.isActive(splab.key)).toBe(false);
         });
         it('Should change active institution', function() {
             spyOn(mainCtrl.user, 'changeInstitution');
@@ -77,8 +75,34 @@
             mainCtrl.goToInstitution(splab.key);
             expect(state.go).toHaveBeenCalledWith('app.institution', {institutionKey: '1239'});
         });
+
+        it('Should call state.go() and InstitutionService.getInstitution() in function goToSearchedInstitution()', function(){
+            spyOn(state, 'go').and.callThrough();
+            spyOn(instService, 'getInstitution').and.callThrough();
+            httpBackend.expect('GET', "/api/institutions/" + splab.key).respond(splab);
+            mainCtrl.goToSearchedInstitution(splab.key);
+            httpBackend.flush();
+            expect(instService.getInstitution).toHaveBeenCalledWith(splab.key);
+            expect(state.go).toHaveBeenCalledWith('app.institution', {institutionKey: '1239'});
+        });
+
+        it('Should call makeSearch() in function submit()', function(){
+            var documents = [{name: splab.name, id: splab.key}];
+            mainCtrl.search = splab.name;
+            mainCtrl.finalSearch = mainCtrl.search;
+            spyOn(mainCtrl, 'makeSearch').and.callThrough();
+            spyOn(instService, 'searchInstitutions').and.callThrough();
+            httpBackend.expect('GET', "api/search/institution?name=" + splab.name + "&state=active").respond(documents);
+            mainCtrl.submit();
+            httpBackend.flush();
+            expect(mainCtrl.makeSearch).toHaveBeenCalled();
+            expect(mainCtrl.institutions).toEqual(documents);
+            expect(mainCtrl.showSearchMenu).toEqual(true);
+            expect(mainCtrl.search).toEqual('');
+            expect(instService.searchInstitutions).toHaveBeenCalledWith(mainCtrl.finalSearch);
+        });
         it('User should not be member e-cis', function(){
-            expect(mainCtrl.isAdmin()).toBe(false);  
+            expect(mainCtrl.isAdmin()).toBe(false);
         });
     });
 

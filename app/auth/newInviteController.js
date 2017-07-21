@@ -13,26 +13,16 @@
 
         var institutionKey = $state.params.institutionKey;
 
-        Object.defineProperty(newInviteCtrl, 'user', {
-            get: function() {
-                return AuthService.user;
-            },
-            // TODO AuthService User is read only. This set must be removed.
-            // @author André L. Abrantes
-            set: function set(newValue) {
-                AuthService.user = newValue;
-            }
-        });
+        newInviteCtrl.user = AuthService.getCurrentUser();
 
         newInviteCtrl.acceptInvite = function acceptInvite(event) {
-            var promise = UserService.addInstitution(newInviteCtrl.user, newInviteCtrl.institution.key);
-            promise.then(function success(response) {
-                // TODO AuthService User is read only. This set must be removed.
-                //      In case of need to reload user, use AuthService.reload().
-                // @author André L. Abrantes
-                newInviteCtrl.user = new User(response);
-                deleteInvite();
-                showAlert(event, newInviteCtrl.institution.name);
+            var promise = UserService.addInstitution(newInviteCtrl.user,
+                newInviteCtrl.institution.key, newInviteCtrl.inviteKey);
+            promise.then(function success() {
+                AuthService.reload().then(function() {
+                    goHome();
+                    showAlert(event, newInviteCtrl.institution.name); 
+               });
             }, function error(response) {
                 showToast(response.data.msg);
             });
@@ -40,16 +30,17 @@
         };
 
         newInviteCtrl.rejectInvite = function rejectInvite(event) {
-            var confirm = $mdDialog.confirm()
-                            .clickOutsideToClose(false)
-                            .title('Rejeitar convite')
-                            .textContent("Ao rejeitar o convite, você só poderá ser membro com um novo convite." +
-                                 " Deseja rejeitar?")
-                            .ariaLabel('Rejeitar convite')
-                            .targetEvent(event)
-                            .ok('Sim')
-                            .cancel('Não');
-            var promise = $mdDialog.show(confirm);
+            var confirm = $mdDialog.confirm();
+            confirm
+                .clickOutsideToClose(false)
+                .title('Rejeitar convite')
+                .textContent("Ao rejeitar o convite, você só poderá ser membro com um novo convite." +
+                     " Deseja rejeitar?")
+                .ariaLabel('Rejeitar convite')
+                .targetEvent(event)
+                .ok('Sim')
+                .cancel('Não');
+                var promise = $mdDialog.show(confirm);
             promise.then(function() {
                 deleteInvite();
             }, function() {
@@ -61,7 +52,9 @@
         function deleteInvite() {
             var promise = InviteService.deleteInvite(newInviteCtrl.inviteKey);
             promise.then(function success() {
-                goHome();            
+                AuthService.reload().then(function() {
+                    goHome();
+                });            
             }, function error(response) {
                 showToast(response.data.msg);
             });

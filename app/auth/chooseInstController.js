@@ -11,11 +11,7 @@
 
         chooseInstCtrl.selectedInstitution = null;
 
-        Object.defineProperty(chooseInstCtrl, 'user', {
-            get: function() {
-                return AuthService.user;
-            }
-        });
+        chooseInstCtrl.user = AuthService.getCurrentUser();
 
         chooseInstCtrl.getInstitutions = function getInstitutions() {
             var deferred = $q.defer();

@@ -66,7 +66,6 @@
         httpBackend.verifyNoOutstandingRequest();
     });
 
-    // TODO FIX
     describe('NewInviteController properties', function() {
 
         it('should exist a user and his name is Tiago', function() {

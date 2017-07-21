@@ -24,6 +24,7 @@
 
     var maiana = {
         name: 'Maiana',
+        email: 'maiana.brito@gmail.com',
         institutions: [splab.key],
         follows: [splab.key],
         invites:[]
@@ -31,8 +32,8 @@
 
     splab['children_institutions'] = [ecis];
 
-    var invite = new Invite({invitee: "mayzabeel@gmail.com", suggestion_institution_name : "Institution Parent"},
-                            'institution_parent', splab.key);
+    var invite = new Invite({invitee: "parent@gmail.com", suggestion_institution_name : "Institution Parent"},
+                            'institution_parent', splab.key, maiana.email);
 
     beforeEach(module('app'));
 
@@ -143,7 +144,7 @@
             });
             
             it('should call inviteService.sendInvite()', function(done) {
-                inviteInstCtrl.invite.invitee = "mayzabeel@gmail.com";
+                inviteInstCtrl.invite.invitee = "parent@gmail.com";
                 inviteInstCtrl.invite.suggestion_institution_name = "Institution Parent";
                 inviteInstCtrl.user.current_institution = splab;
                 inviteInstCtrl.type_of_invite = "institution_parent";

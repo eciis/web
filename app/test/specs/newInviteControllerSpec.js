@@ -12,7 +12,7 @@
     var splab = {
             name: 'SPLAB',
             key: '987654321',
-            sent_invitations: [] 
+            sent_invitations: []
     };
 
     var certbio = {

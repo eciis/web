@@ -54,6 +54,10 @@
             }
         };
 
+        mainCtrl.userIsActive = function userIsActive() {
+            return mainCtrl.user.state == 'active';
+        };
+
         mainCtrl.changeInstitution = function changeInstitution(name) {
             mainCtrl.user.changeInstitution(name);
         };

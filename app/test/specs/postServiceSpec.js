@@ -37,6 +37,7 @@
             httpBackend.when('GET', 'main/main.html').respond(200);
             httpBackend.when('GET', 'home/home.html').respond(200);
             httpBackend.when('GET', 'error/error.html').respond(200);
+            httpBackend.when('GET', 'auth/login.html').respond(200);
         }));
 
         it('Test get in success case', function() {

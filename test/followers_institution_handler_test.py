@@ -5,6 +5,8 @@ from models.user import User
 from models.institution import Institution
 from handlers.institution_followers_handler import InstitutionFollowersHandler
 
+from mock import patch
+
 
 class InstitutionFollowersHandlerTest(TestBaseHandler):
     """Test the institution_followers_handler class."""
@@ -20,7 +22,8 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
-    def test_post(self):
+    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
+    def test_post(self, verify_token):
         """Test the institution_follower_handler post method."""
         # Pretend an authentication
         self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
@@ -59,7 +62,8 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
         self.assertEquals(len(self.mayza.follows), 1,
                           "The number of follows expected was 1")
 
-    def test_delete(self):
+    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
+    def test_delete(self, verify_token):
         """Test the institution_follower_handler delete method."""
         # Pretend an authentication
         self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
@@ -99,7 +103,8 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
         self.assertEquals(len(self.certbio.followers), 0,
                           "Number of followers expected was 0")
 
-    def teste_delete_usermember(self):
+    @patch('utils.verify_token', return_value={'email': 'maiana.brito@ccc.ufcg.edu.br'})
+    def teste_delete_usermember(self, verify_token):
         """Test that user member try unfollow the institution."""
         # Pretend an authentication
         self.os.environ['REMOTE_USER'] = 'maiana.brito@ccc.ufcg.edu.br'

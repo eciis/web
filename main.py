@@ -20,6 +20,7 @@ from handlers.erro_handler import ErroHandler
 from handlers.get_key_handler import GetKeyHandler
 from handlers.post_comment_handler import PostCommentHandler
 from handlers.invite_collection_handler import InviteCollectionHandler
+from handlers.search_handler import SearchHandler
 from handlers.invite_handler import InviteHandler
 
 methods = set(webapp2.WSGIApplication.allowed_methods)
@@ -43,6 +44,7 @@ app = webapp2.WSGIApplication([
     ("/api/user", UserHandler),
     ("/api/user/invites/(.*)", UserHandler),
     ("/api/user/timeline", UserTimelineHandler),
+    ("/api/search/institution", SearchHandler),
     ("/login", LoginHandler),
     ("/logout", LogoutHandler),
     ("/api/.*", ErroHandler),

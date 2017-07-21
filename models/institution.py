@@ -152,6 +152,7 @@ class Institution(ndb.Model):
         institution.cnpj = data.get('cnpj')
         institution.legal_nature = data.get('legal_nature')
         institution.address = data.get('address')
+        institution.state = data.get('state')
         institution.occupation_area = get_occupation_area(data)
         institution.description = data.get('description')
         institution.phone_number = data.get('phone_number')

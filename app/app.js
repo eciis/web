@@ -15,6 +15,8 @@
 
         $mdIconProvider.fontSet('md', 'material-icons');
         $mdThemingProvider.theme('docs-dark');
+        $mdThemingProvider.theme('input')
+            .primaryPalette('green');
 
         $urlMatcherFactoryProvider.caseInsensitive(true);
 

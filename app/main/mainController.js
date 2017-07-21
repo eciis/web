@@ -2,13 +2,43 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("MainController", function MainController($mdSidenav, $mdDialog, $mdToast, $state, AuthService) {
+    app.controller("MainController", function MainController($mdSidenav, $mdDialog, $mdToast, $state, AuthService, $rootScope, InstitutionService) {
         var mainCtrl = this;
 
+        mainCtrl.search = "";
         mainCtrl.user = AuthService.getCurrentUser();
+        mainCtrl.showSearchMenu = false;
+
+        mainCtrl.submit = function submit() {
+            if(mainCtrl.search) {
+                mainCtrl.finalSearch = mainCtrl.search;
+                mainCtrl.makeSearch();
+                mainCtrl.search = '';
+                mainCtrl.showSearchMenu = true;
+            }
+            else {
+                mainCtrl.showSearchMenu = false;
+            }
+        };
+
+        mainCtrl.setShowSearchMenu = function setShowSearchMenu() {
+            mainCtrl.showSearchMenu = false;
+        };
 
         mainCtrl.toggle = function toggle() {
             $mdSidenav('leftNav').toggle();
+        };
+
+        mainCtrl.makeSearch = function () {
+            InstitutionService.searchInstitutions(mainCtrl.finalSearch).then(function success(response) {
+                mainCtrl.institutions = response.data;
+            });
+        };
+
+        mainCtrl.goToSearchedInstitution = function goToSearchedInstitution(institutionId) {
+            InstitutionService.getInstitution(institutionId).then(function success(response) {
+                $state.go('app.institution', {institutionKey: response.data.key});
+            });
         };
 
         mainCtrl.isActive = function isActive(inst) {

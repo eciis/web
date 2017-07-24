@@ -50,15 +50,12 @@ class InstitutionHandler(BaseHandler):
     def patch(self, user, institution_key, inviteKey):
         """Handler PATCH Requests."""
         data = self.request.body
-        print institution_key
 
         institution = ndb.Key(urlsafe=institution_key).get()
 
-        print data
-
         """Apply patch."""
         JsonPatch.load(data, institution)
-        institution.update(user,inviteKey, institution_key)
+        institution.update(user, inviteKey, institution_key)
 
         """Update user."""
         institution.put()

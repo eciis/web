@@ -5,8 +5,8 @@
 
     app.controller("SubmitInstController", function SubmitInstController(AuthService, InstitutionService, $state, $mdToast, $mdDialog, $http, InviteService) {
         var submitInstCtrl = this;
-        var observer;
         var institutionKey = $state.params.institutionKey;
+        var observer;
 
         Object.defineProperty(submitInstCtrl, 'user', {
             get: function() {
@@ -35,21 +35,22 @@
             $mdDialog.show(confirm).then(function() {
                 submitInstCtrl.newInstitution.state = "active";
                 var patch = jsonpatch.generate(observer);
-                InstitutionService.save(institutionKey,patch, submitInstCtrl.invite.key).then(
-                    function success(response) {
-                        AuthService.reload().then(function(){
-                            $state.go('app.home');         
-                            showToast('Cadastro de instituição realizado com sucesso');       
-                        });
-                    },               
+                InstitutionService.save(institutionKey, patch, submitInstCtrl.invite.key).then(
+                    reloadUser(),
                     function error(response) {
                         showToast(response.data.msg);
                     });
-            }, function() {
-                showToast('Cancelado');
-            });
+                }, function() {
+                    showToast('Cancelado');
+                });
         };
 
+        function reloadUser() {     
+            AuthService.reload().then(function(){   
+                $state.go('app.home');        
+                showToast('Cadastro de instituição realizado com sucesso');            
+            });                        
+        }
 
         submitInstCtrl.cancel = function cancel(event) {
             var confirm = $mdDialog.confirm()
@@ -103,17 +104,12 @@
         function loadInstitution() {
             InstitutionService.getInstitution(institutionKey).then(function success(response) {
                 submitInstCtrl.newInstitution = response.data;
-                console.log(submitInstCtrl.newInstitution);
                 observer = jsonpatch.observe(submitInstCtrl.newInstitution);
             }, function error(response) {
                 showToast(response.data.msg);
             });
         }
 
-        (function main() {
-            loadInstitution();
-            //console.log(submitInstCtrl.newInstitution);
-            //observer = jsonpatch.observe(submitInstCtrl.newInstitution);
-        })();
+        loadInstitution();
     });
 })();

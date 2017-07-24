@@ -175,13 +175,18 @@ class Institution(ndb.Model):
 
     def update(self, user, inviteKey, institutionKey):
         invite_key = ndb.Key(urlsafe=inviteKey)
-        institution_key = ndb.Key(urlsafe=institutionKey)
+        institution = ndb.Key(urlsafe=institutionKey).get()
 
         invite = invite_key.get()
         invite.status = 'accepted'
         invite.put()
 
-        user.institutions.append(institution_key)
-        user.institutions_admin.append(institution_key)
-        user.follows.append(institution_key)
+        user.institutions.append(institution.key)
+        user.institutions_admin.append(institution.key)
+        user.follows.append(institution.key)
         user.put()
+
+        institution.admin = user.key
+        institution.members.append(user.key)
+        institution.followers.append(user.key)
+        institution.put()

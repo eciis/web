@@ -48,10 +48,11 @@
             return false;
         };
 
-        mainCtrl.isAdmin = function isAdmin() {
-            if (mainCtrl.user){
-                return mainCtrl.user.isAdmin(mainCtrl.user.current_institution.key);
+        mainCtrl.isAdmin = function isAdmin(current_institution) {
+            if (mainCtrl.user && mainCtrl.user.isAdmin(current_institution)){
+                return true;
             }
+            return false;
         };
 
         mainCtrl.userIsActive = function userIsActive() {

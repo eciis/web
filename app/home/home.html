@@ -38,7 +38,7 @@
         </div>
         <div ng-if="homeCtrl.instMenuExpanded">
           <md-list-item ng-repeat="institution in homeCtrl.institutions" ng-click="homeCtrl.goToInstitution(institution.key)" class="noright">
-             <img alt="{{ institution.name }}" ng-src="{{ institution.image_url }}" class="md-avatar" />
+             <img alt="{{ institution.name }}" ng-src="{{ institution.photo_url }}" class="md-avatar" />
              <p>{{institution.name}}</p>
              <md-icon ng-if="!homeCtrl.user.isFollower(institution.key)">person_add</md-icon>
              <md-icon ng-if="homeCtrl.user.isFollower(institution.key)">person_outline</md-icon>

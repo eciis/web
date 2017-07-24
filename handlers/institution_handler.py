@@ -2,6 +2,7 @@
 """Institution Handler."""
 
 import json
+import search_module
 
 from google.appengine.ext import ndb
 
@@ -59,6 +60,8 @@ class InstitutionHandler(BaseHandler):
 
         """Update user."""
         institution.put()
+        search_module.createDocument(
+            institution.key.urlsafe(), institution.name, institution.state)
 
         institution_json = Utils.toJson(institution)
 

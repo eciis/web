@@ -87,17 +87,6 @@
             return deferred.promise;
         };
 
-        service.createInstitution = function createInstitution(institution) {
-            console.log("service create inst");
-            var deferred = $q.defer();
-            $http.post(INSTITUTIONS_URI, institution).then(function success(response) {
-                deferred.resolve(response);
-            }, function error(response) {
-                deferred.reject(response);
-            });
-            return deferred.promise;
-        };
-
         service.save = function save(institutionKey ,patch, inviteKey) {
             var deffered = $q.defer();
             $http.patch(INSTITUTIONS_URI + "/" + institutionKey + "/" + inviteKey, patch).then(function success(info) {

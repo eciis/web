@@ -11,11 +11,11 @@
                             <div style="height: 50px;">
                             </div>
                             <div class="avatar">
-                                <img style="border-radius: 50%; " ng-src="{{ submitInstCtrl.institution.photo_url }}" width="100px" height="100px" />
+                                <img style="border-radius: 50%; " ng-src="{{ submitInstCtrl.newInstitution.photo_url }}" width="100px" height="100px" />
                             </div>
                             <div class="info">
                                 <div class="title">
-                                    <upload-image model="submitInstCtrl.institution">Mudar imagem do instituição</upload-image>
+                                    <upload-image model="submitInstCtrl.newInstitution">Mudar imagem do instituição</upload-image>
                                 </div>
                             </div>
                         </div>
@@ -93,9 +93,6 @@
                           </textarea>
                     </md-input-container>
                     <md-input-container class="md-block" flex-gt-xs>
-                            <label>Logo da Instituição</label>
-                            <input type="text" name="logo" disabled
-                            ng-model="submitInstCtrl.newInstitution.image_url">
                         <label>Responsável</label>
                         <input type="text" name="Responsavel" disabled
                         ng-model="submitInstCtrl.user.name">
@@ -106,7 +103,6 @@
                         ng-model="submitInstCtrl.newInstitution.email">
                     </md-input-container>
                 </form>
-            </md-card-content>
             <md-card-actions layout="row" layout-align="end center">
                 <md-button ng-click="submitInstCtrl.cancel($event)" md-colors="{background: 'red-500'}">Cancelar</md-button>
                 <md-button ng-click="submitInstCtrl.submit($event)" md-colors="{background: institutionForm.$invalid? 'blue-grey-400':'green-900'}"

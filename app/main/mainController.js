@@ -50,7 +50,7 @@
 
         mainCtrl.isAdmin = function isAdmin() {
             if (mainCtrl.user){
-                return !_.isEmpty(mainCtrl.user.institutions_admin);
+                return mainCtrl.user.isAdmin(mainCtrl.user.current_institution.key);
             }
         };
 
@@ -87,17 +87,7 @@
             AuthService.logout();
         };
 
-        function isInactive() {
-            var notMember = mainCtrl.user.institutions.length === 0;
-            var notInvitee = mainCtrl.user.invites.length === 0;
-            var notActive = !mainCtrl.userIsActive();
-            
-            return ((notMember && notInvitee) || notActive);
-        }
-
         (function main() {
-                $state.go("user_inactive");
-            }
 
             var inviteOfUser = mainCtrl.user.getPendingInvitationOf("user");
             var inviteOfInstitution = mainCtrl.user.getPendingInvitationOf("institution");
@@ -108,9 +98,8 @@
                 $state.go("new_invite", {institutionKey: institutionKey, inviteKey: inviteKey});
             }
 
-            if (mainCtrl.user.getPendingInvitationOf("institution")) {
-            if (inviteInst) {
-                var institutionStubKey = inviteInst.stub_institution_key;
+            if (inviteOfInstitution) {
+                var institutionStubKey = inviteOfInstitution.stub_institution_key;
                 $state.go("submit_institution", {institutionKey: institutionStubKey});
             }
         })();

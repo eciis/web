@@ -184,12 +184,12 @@ class Institution(ndb.Model):
         invite.status = 'accepted'
         invite.put()
 
-        user.institutions.append(institution.key)
-        user.institutions_admin.append(institution.key)
-        user.follows.append(institution.key)
-        user.put()
-
         institution.admin = user.key
         institution.members.append(user.key)
         institution.followers.append(user.key)
         institution.put()
+
+        user.institutions.append(institution.key)
+        user.institutions_admin.append(institution.key)
+        user.follows.append(institution.key)
+        user.put()

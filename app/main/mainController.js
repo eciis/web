@@ -112,7 +112,6 @@
             if (inviteOfInstitution) {
                 $state.go("submit_institution");
             }
-
         })();
     });
 })();

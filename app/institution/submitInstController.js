@@ -40,16 +40,16 @@
                     function error(response) {
                         showToast(response.data.msg);
                     });
-                }, function() {
-                    showToast('Cancelado');
-                });
+            }, function() {
+                showToast('Cancelado');
+            });
         };
 
-        function reloadUser() {     
-            AuthService.reload().then(function(){     
+        function reloadUser() {
+            AuthService.reload().then(function(){
                 showToast('Cadastro de instituição realizado com sucesso');
-                AuthService.logout();  
-            });                        
+                AuthService.logout();
+            });        
         }
 
         submitInstCtrl.cancel = function cancel(event) {
@@ -110,6 +110,8 @@
             });
         }
 
-        loadInstitution();
+        (function main(){
+             loadInstitution();
+        })();  
     });
 })();

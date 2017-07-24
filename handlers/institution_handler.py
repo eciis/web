@@ -10,6 +10,7 @@ from utils import Utils
 from models.invite import Invite
 from utils import login_required
 from utils import json_response
+from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
 from models.institution import Institution
 from util.json_patch import JsonPatch
@@ -23,11 +24,27 @@ def getSentInvitations(institution_key):
     invites = []
 
     queryInvites = Invite.query(Invite.institution_key == institution_key,
-                                Invite.type_of_invite == 'user', Invite.status == 'sent')
+                                Invite.type_of_invite == 'user',
+                                Invite.status == 'sent')
 
     invites = [Invite.make(invite) for invite in queryInvites]
 
     return invites
+
+
+def isUserInvited(method):
+    """Check if the user is invitee to update the stub of institution."""
+    def check_authorization(self, user, institution_key, inviteKey):
+        invite = ndb.Key(urlsafe=inviteKey).get()
+
+        emailIsNotInvited = invite.invitee != user.email
+        institutionIsNotInvited = ndb.Key(urlsafe=institution_key) != invite.stub_institution_key
+
+        Utils._assert(emailIsNotInvited or institutionIsNotInvited,
+                      'User is not invitee to create this Institution', NotAuthorizedException)
+
+        method(self, user, institution_key, inviteKey)
+    return check_authorization
 
 
 class InstitutionHandler(BaseHandler):
@@ -48,6 +65,7 @@ class InstitutionHandler(BaseHandler):
 
     @json_response
     @login_required
+    @isUserInvited
     def patch(self, user, institution_key, inviteKey):
         """Handler PATCH Requests."""
         data = self.request.body
@@ -56,10 +74,8 @@ class InstitutionHandler(BaseHandler):
 
         """Apply patch."""
         JsonPatch.load(data, institution)
-        institution.update(user, inviteKey, institution_key)
+        institution.update(user, inviteKey, institution)
 
-        """Update user."""
-        institution.put()
         search_module.createDocument(
             institution.key.urlsafe(), institution.name, institution.state)
 

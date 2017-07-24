@@ -137,9 +137,8 @@ class Institution(ndb.Model):
 
         return institution_stub
 
-    def update(self, user, inviteKey, institutionKey):
+    def update(self, user, inviteKey, institution):
         invite = ndb.Key(urlsafe=inviteKey).get()
-        institution = ndb.Key(urlsafe=institutionKey).get()
 
         invite = invite
         invite.status = 'accepted'
@@ -148,6 +147,7 @@ class Institution(ndb.Model):
         institution.admin = user.key
         institution.members.append(user.key)
         institution.followers.append(user.key)
+        institution.state = 'active'
         if (institution.photo_url is None):
             institution.photo_url = "/images/institution.jpg"
         institution.put()
@@ -156,3 +156,5 @@ class Institution(ndb.Model):
         user.institutions_admin.append(institution.key)
         user.follows.append(institution.key)
         user.put()
+
+        return institution

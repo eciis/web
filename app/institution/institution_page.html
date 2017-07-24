@@ -7,7 +7,7 @@
             <div flex>
                 <md-card layout="column" class="green-background">
                     <center>
-                        <img ng-src="{{ institutionCtrl.current_institution.image_url }}" class="img-circle img-thumbnail" >
+                        <img ng-src="{{ institutionCtrl.current_institution.photo_url }}" class="img-circle img-thumbnail" >
                     </center>
                     <md-card-title>
                         <md-card-title-text>
@@ -25,7 +25,7 @@
                             <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}" ng-click="institutionCtrl.unfollow()" ng-if="institutionCtrl.user.isFollower(institutionCtrl.current_institution.key)">
                                 <md-icon>person_outline</md-icon>Deixar de seguir
                             </md-button>
-                            
+
                         </div>
                         <div layout="row">
                         <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}" ng-click="institutionCtrl.goToManageMembers(institutionCtrl.current_institution.key)" ng-if="institutionCtrl.user.isAdmin(institutionCtrl.current_institution.key)">

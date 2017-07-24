@@ -14,6 +14,24 @@
 
     <span flex md-truncate></span>
 
+    <div layout="row" md-theme="input" style="margin-top: 3.5%;">
+      <form ng-submit="mainCtrl.submit()" ng-click="mainCtrl.setShowSearchMenu()">
+        <md-input-container flex>
+          <md-icon class="material-icons">&#xE8B6;</md-icon>
+          <input class="form-control" ng-model="mainCtrl.search" placeholder="Busca de instituições" md-colors="{background: 'grey-A100'}">
+          <md-menu ng-if="mainCtrl.showSearchMenu">
+            <md-menu-content style="padding-top: 45%">
+              <md-menu-item ng-repeat="institution in mainCtrl.institutions">
+                <md-button ng-click="mainCtrl.goToSearchedInstitution(institution.id)">
+                  {{institution.name}}
+                </md-button>
+              </md-menu-item>
+            </md-menu-content>
+          </md-menu>
+        </md-input-container>
+      </form>
+    </div>
+
     <notification></notification>
 
     <md-button aria-label="inicio" class="md-icon-button" onclick="location.href='/'">
@@ -63,7 +81,7 @@
   <md-content flex >
     <md-list>
       <md-list-item class="md-3-line" ng-repeat="institution in mainCtrl.user.institutions" ng-click="mainCtrl.changeInstitution(institution.name)">
-        <img ng-src="{{ institution.image_url }}" alt="{{ institution.name }}" class="md-avatar" md-colors="{background: 'grey-200'}">
+        <img ng-src="{{ institution.photo_url }}" alt="{{ institution.name }}" class="md-avatar" md-colors="{background: 'grey-200'}">
         <p> {{ institution.name }} </p>
         <md-button class="md-warn md-hue-1 md-icon-button" ng-show="mainCtrl.isActive(institution)">
           <md-icon>check</md-icon>

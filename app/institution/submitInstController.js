@@ -17,6 +17,7 @@
         submitInstCtrl.invite = submitInstCtrl.user.getPendingInvitationOf('institution');
         submitInstCtrl.newInstitution = {};
         
+            uploaded_images: [],
 
         getLegalNatures();
         getOccupationAreas();

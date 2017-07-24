@@ -8,6 +8,7 @@ from utils import json_response
 
 from models.institution import Institution
 
+import search_module
 from handlers.base_handler import BaseHandler
 
 
@@ -33,6 +34,8 @@ class InstitutionCollectionHandler(BaseHandler):
         """Create a new institution."""
         data = json.loads(self.request.body)
         institution = Institution.create(data, user)
+        search_module.createDocument(
+            institution.key.urlsafe(), institution.name, institution.state)
 
         self.response.write(json.dumps(
             Utils.toJson(institution, host=self.request.host)

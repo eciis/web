@@ -15,6 +15,8 @@
 
         $mdIconProvider.fontSet('md', 'material-icons');
         $mdThemingProvider.theme('docs-dark');
+        $mdThemingProvider.theme('input')
+            .primaryPalette('green');
 
         $urlMatcherFactoryProvider.caseInsensitive(true);
 
@@ -132,7 +134,8 @@
                 url: "/userinactive",
                 views: {
                     main: {
-                      templateUrl: "error/user_inactive.html"
+                      templateUrl: "error/user_inactive.html",
+                      controller: "UserInactiveController as userInactiveCtrl"
                     }
                 }
             })

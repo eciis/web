@@ -28,7 +28,7 @@ class Institution(ndb.Model):
 
     description = ndb.TextProperty()
 
-    image_url = ndb.StringProperty()
+    photo_url = ndb.StringProperty()
 
     email = ndb.StringProperty()
 
@@ -73,6 +73,8 @@ class Institution(ndb.Model):
         'active',
         'inactive'
     ]), default='pending')
+
+    uploaded_images = ndb.StringProperty(repeated=True)
 
     def follow(self, user):
         """Add one user in collection of followers."""
@@ -144,7 +146,7 @@ class Institution(ndb.Model):
             if not data.get(field):
                 raise FieldException(field + " can not be empty")
 
-        omsImage = "http://eciis-splab.appspot.com/images/oms.png"
+        institutionImage = "http://eciis-splab.appspot.com/images/institution.jpg"
         institution = Institution()
         institution.name = data.get('name')
         institution.invite = ndb.Key(urlsafe=data.get('invite'))
@@ -152,11 +154,12 @@ class Institution(ndb.Model):
         institution.cnpj = data.get('cnpj')
         institution.legal_nature = data.get('legal_nature')
         institution.address = data.get('address')
+        institution.state = data.get('state')
         institution.occupation_area = get_occupation_area(data)
         institution.description = data.get('description')
         institution.phone_number = data.get('phone_number')
         institution.email = data.get('email')
-        institution.image_url = data.get('image_url') or omsImage
+        institution.photo_url = data.get('photo_url') or institutionImage
         institution.admin = user.key
         institution.members.append(user.key)
         institution.followers.append(user.key)

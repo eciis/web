@@ -50,7 +50,9 @@ class Invite(ndb.Model):
     def inviteeIsMember(inviteeEmail, institution):
         userWithEmail = User.query(User.email == inviteeEmail)
         if userWithEmail.count() == 1:
-            instmember = Institution.query(Institution.members.IN([userWithEmail.get().key]))
+            instmember = Institution.query(Institution.members.IN(
+                [userWithEmail.get().key]),
+                Institution.key == institution.key)
             return instmember.count() > 0
         return False
 
@@ -174,3 +176,8 @@ class Invite(ndb.Model):
             'key': self.key.urlsafe(),
             'status': self.status
         }
+
+    def change_status(self, status):
+        """Change the invite state."""
+        self.status = status
+        self.put()

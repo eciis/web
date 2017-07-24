@@ -20,7 +20,7 @@
               <span class="md-subhead">por {{ post.author }} em {{ post.publication_date | date: 'dd-MM-yyyy'}} às {{post.publication_date | date:'HH:mm:ss'}}</span>
             </md-card-header-text>
           </md-card-header>
-          <img ng-src="{{ post.headerImage }}" class="md-card-image">
+          <img ng-src="{{ post.photo_url }}" class="md-card-image">
           <md-card-title>
             <md-card-title-text>
                <span ng-if="!postDetailsCtrl.isDeleted(post)" class="md-headline" ng-bind-html="postDetailsCtrl.recognizeUrl(post).title">{{postDetailsCtrl.recognizeUrl(post).title}}</span>

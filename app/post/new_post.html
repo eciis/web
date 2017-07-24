@@ -18,6 +18,16 @@
       <textarea ng-model="postCtrl.post.text" rows="4" md-select-on-focus required="true">
       </textarea>
     </md-input-container>
+    <img ng-show="postCtrl.post.photo_url" style="border-radius: 5%; " ng-src="{{ postCtrl.post.photo_url }}" width="100px" height="100px" />
+    <md-button ng-show="postCtrl.post.title" ng-click="null" ng-model="postCtrl.file" ngf-pattern="'image/*'"
+                    ngf-accept="'image/*'" ngf-max-size="5MB"
+                    ngf-select="postCtrl.addImage(postCtrl.file)">
+        <span>
+            <b>
+                Adicionar imagem
+            </b>
+        </span>
+    </md-button>
   </md-card-content>
   <md-dialog-actions layout="row" ng-show="postCtrl.post.title">
     <span flex></span>

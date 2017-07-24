@@ -12,10 +12,11 @@
             var jpgType = "image/jpeg";
             var pngType = "image/png";
             var maximumSize = 5242880; // 5Mb in bytes
+            var newSize = 800;
 
             if ((file.type === jpgType || file.type === pngType) && file.size <= maximumSize) {
                 uploadImgCtrl.model = model;
-                ImageService.compress(file, saveImage);
+                ImageService.compress(file, saveImage, newSize);
             } else {
                 showToast("Imagem deve ser jpg ou png e menor que 5 Mb");
             }

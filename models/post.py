@@ -163,7 +163,7 @@ class Post(ndb.Model):
             'author': author.name,
             'author_img': author.photo_url,
             'institution_name': institution.name,
-            'institution_image': institution.image_url,
+            'institution_image': institution.photo_url,
             'likes': getLikesUri(post, host),
             'number_of_likes': post.get_number_of_likes(),
             'headerImage': post.headerImage,

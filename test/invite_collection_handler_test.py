@@ -13,6 +13,9 @@ from mock import patch
 
 class InviteCollectionHandlerTest(TestBaseHandler):
     """Invite Collection handler test."""
+    # TODO:
+    # Fix the post method, to check specific exceptions and error messages
+    # @author Mayza Nunes 07-07-2017
 
     @classmethod
     def setUp(cls):
@@ -26,22 +29,16 @@ class InviteCollectionHandlerTest(TestBaseHandler):
 
     @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
     def test_post_invite_institution(self, verify_token):
-        """Test the invite_collection_handler's post method."""
-        # Pretend an authentication
-        self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
-        self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
-        # Make the request and assign the answer to post
         invite = self.testapp.post_json("/api/invites", {
             'invitee': 'ana@gmail.com',
             'inviter': 'mayzabeel@gmail.com',
             'type_of_invite': 'institution',
             'suggestion_institution_name': 'New Institution',
             'institution_key': self.certbio.key.urlsafe()})
+
         # Retrieve the entities
         invite = json.loads(invite._app_iter[0])
-
         key_invite = ndb.Key(urlsafe=invite['key'])
-
         invite_obj = key_invite.get()
 
         # Check data of invite
@@ -56,12 +53,11 @@ class InviteCollectionHandlerTest(TestBaseHandler):
                          "The suggestion institution name of \
                           invite expected was New Institution")
 
+
+    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
+    def test_post_invite_institution_without_suggestion_name(self, verify_token):
         """ Check if raise exception when the invite is for
         institution and not specify the suggestion institution name."""
-        # TODO:
-        # Fix the post method.
-        # The try except block prevents that FieldException be raised
-        # @author Mayza Nunes 04-07-2017
         with self.assertRaises(Exception):
             self.testapp.post_json("/api/invites", {
                 'invitee': 'ana@gmail.com',
@@ -69,12 +65,84 @@ class InviteCollectionHandlerTest(TestBaseHandler):
                 'type_of_invite': 'institution'})
 
     @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
+    def test_post_invite_user(self, verify_token):
+        invite = self.testapp.post_json("/api/invites", {
+            'invitee': 'ana@gmail.com',
+            'inviter': 'mayzabeel@gmail.com',
+            'type_of_invite': 'user',
+            'institution_key': self.certbio.key.urlsafe()})
+        # Retrieve the entities
+        invite = json.loads(invite._app_iter[0])
+        key_invite = ndb.Key(urlsafe=invite['key'])
+        invite_obj = key_invite.get()
+
+        # Check data of invite
+        self.assertEqual(invite_obj.invitee, 'ana@gmail.com',
+                         "The email expected was ana@gmail.com")
+        self.assertEqual(invite_obj.inviter, 'mayzabeel@gmail.com',
+                         "The inviter expected was mayzabeel@gmail.com")
+        self.assertEqual(invite_obj.type_of_invite, 'user',
+                         "The type of invite expected was user")
+        self.assertEqual(invite_obj.institution_key, self.certbio.key,
+                         "The institution key expected was key of certbio")
+
+    @patch('utils.verify_token', return_value={'email': 'tiago.pereira@ccc.ufcg.edu.br'})
+    def test_post_invite_user_member_of_other_institution(self, verify_token):
+        invite = self.testapp.post_json("/api/invites", {
+            'invitee': 'adriana@ccc.ufcg.edu.br',
+            'inviter': 'tiago.pereira@ccc.ufcg.edu.br',
+            'type_of_invite': 'user',
+            'institution_key': self.splab.key.urlsafe()})
+        # Retrieve the entities
+        invite = json.loads(invite._app_iter[0])
+        key_invite = ndb.Key(urlsafe=invite['key'])
+        invite_obj = key_invite.get()
+
+        # Check data of invite
+        self.assertEqual(invite_obj.invitee, 'adriana@ccc.ufcg.edu.br',
+                         "The email expected was adriana@ccc.ufcg.edu.br")
+        self.assertEqual(invite_obj.inviter, 'tiago.pereira@ccc.ufcg.edu.br',
+                         "The inviter expected was tiago.pereira@ccc.ufcg.edu.br")
+        self.assertEqual(invite_obj.type_of_invite, 'user',
+                         "The type of invite expected was user")
+        self.assertEqual(invite_obj.institution_key, self.splab.key,
+                         "The institution key expected was key of splab")
+
+    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
+    def test_post_invite_user_already_member(self, verify_token):
+        """ Check if raise exception when the invite is
+        for user already member of institution."""
+        with self.assertRaises(Exception):
+            self.testapp.post_json("/api/invites", {
+                'invitee': 'tiago.pereira@ccc.ufcg.edu.br',
+                'inviter': 'mayzabeel@gmail.com',
+                'type_of_invite': 'user',
+                'institution_key': self.certbio.key.urlsafe()})
+
+    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
+    def test_post_invite_user_without_inst_key(self, verify_token):
+        """ Check if raise exception when the invite is
+        for user and not specify the institution key."""
+        with self.assertRaises(Exception):
+            self.testapp.post_json("/api/invites", {
+                'invitee': 'ana@gmail.com',
+                'inviter': 'mayzabeel@gmail.com',
+                'type_of_invite': 'user'})
+
+    @patch('utils.verify_token', return_value={'email': 'tiago.pereira@ccc.ufcg.edu.br'})
+    def test_post_invite_without_admin(self, verify_token):
+        """ Check if raise exception when the inviter is not admistrator."""
+        with self.assertRaises(Exception):
+            self.testapp.post_json("/api/invites", {
+                'invitee': 'ana@gmail.com',
+                'inviter': 'mayzabeel@gmail.com',
+                'type_of_invite': 'user',
+                'institution_key': self.certbio.key.urlsafe()})
+
+    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
     def test_post_invite_institution_parent(self, verify_token):
         """Test the invite_collection_handler's post method in case to parent institution."""
-        # Pretend an authentication
-        self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
-        self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
-        # Make the request and assign the answer to post
+
         invite = self.testapp.post_json("/api/invites", {
             'invitee': 'mayzabeel@gmail.com',
             'inviter': 'mayzabeel@gmail.com',
@@ -100,7 +168,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
                          "The suggestion institution name of \
                               invite expected was Institution Parent")
 
-        # Check data of stub
+        # Check data of stub parent Institution
         self.assertEqual(stub_institution_obj.name, 'Institution Parent',
                          "The name of stub expected was 'Institution Parent'")
         self.assertEqual(stub_institution_obj.state, 'pending',
@@ -119,78 +187,14 @@ class InviteCollectionHandlerTest(TestBaseHandler):
                          "The parent institution of stub\
                          was stub")
 
+    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
+    def test_post_invite_inst_parent_without_inst_key(self, verify_token):
         """ Check if raise exception when the invite is
         for user and not specify the institution key."""
         with self.assertRaises(Exception):
             self.testapp.post_json("/api/invites", {
                 'invitee': 'mayzabeel@gmail.com',
                 'type_of_invite': 'institution_parent'})
-
-        """Test the invite_collection_handler's post method."""
-        # Pretend an authentication
-        self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
-        self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
-        # Make the request and assign the answer to post
-        invite = self.testapp.post_json("/api/invites", {
-            'invitee': 'ana@gmail.com',
-            'inviter': 'mayzabeel@gmail.com',
-            'type_of_invite': 'user',
-            'institution_key': self.certbio.key.urlsafe()})
-        # Retrieve the entities
-        invite = json.loads(invite._app_iter[0])
-        key_invite = ndb.Key(urlsafe=invite['key'])
-        invite_obj = key_invite.get()
-
-        # Check data of invite
-        self.assertEqual(invite_obj.invitee, 'ana@gmail.com',
-                         "The email expected was ana@gmail.com")
-        self.assertEqual(invite_obj.inviter, 'mayzabeel@gmail.com',
-                         "The inviter expected was mayzabeel@gmail.com")
-        self.assertEqual(invite_obj.type_of_invite, 'user',
-                         "The type of invite expected was user")
-        self.assertEqual(invite_obj.institution_key, self.certbio.key,
-                         "The institution key expected was key of certbio")
-
-        """ Check if raise exception when the invite is
-        for user already member of institution."""
-        with self.assertRaises(Exception):
-            self.testapp.post_json("/api/invites", {
-                'invitee': 'tiago.pereira@ccc.ufcg.edu.br',
-                'inviter': 'mayzabeel@gmail.com',
-                'type_of_invite': 'user',
-                'institution_key': self.certbio.key.urlsafe()})
-
-        """ Check if raise exception when the invite is
-        for user and not specify the institution key."""
-        # TODO:
-        # Fix the post method.
-        # The try except block prevents that FieldException be raised
-        # @author Mayza Nunes 04-07-2017
-        with self.assertRaises(Exception):
-            self.testapp.post_json("/api/invites", {
-                'invitee': 'ana@gmail.com',
-                'inviter': 'mayzabeel@gmail.com',
-                'type_of_invite': 'user'})
-
-    @patch('utils.verify_token', return_value={'email': 'tiago.pereira@ccc.ufcg.edu.br'})
-    def test_post_invite_user_error(self, verify_token):
-        """Test the invite_collection_handler's post
-        method when the inviter is not a administrator."""
-        # Pretend an authentication
-        self.os.environ['REMOTE_USER'] = 'tiago.pereira@ccc.ufcg.edu.br'
-        self.os.environ['USER_EMAIL'] = 'tiago.pereira@ccc.ufcg.edu.br'
-
-        """ Check if raise exception when the inviter id not admistrator."""
-        # TODO:
-        # Fix the post method.
-        # The try except block prevents that NotAuthorizedException be raised
-        # @author Mayza Nunes 07-07-2017
-        with self.assertRaises(Exception):
-            self.testapp.post_json("/api/invites", {
-                'invitee': 'ana@gmail.com',
-                'inviter': 'mayzabeel@gmail.com',
-                'type_of_invite': 'user',
-                'institution_key': self.certbio.key.urlsafe()})
 
 
 def initModels(cls):
@@ -232,8 +236,36 @@ def initModels(cls):
     cls.tiago.notifications = []
     cls.tiago.posts = []
     cls.tiago.put()
+    # new User Adroana
+    cls.adriana = User()
+    cls.adriana.name = 'Adriana'
+    cls.adriana.cpf = '089.675.908-65'
+    cls.adriana.email = 'adriana@ccc.ufcg.edu.br'
+    cls.adriana.institutions = []
+    cls.adriana.follows = []
+    cls.adriana.institutions_admin = []
+    cls.adriana.notifications = []
+    cls.adriana.posts = []
+    cls.adriana.put()
+    # new Institution SPLAB
+    cls.splab = Institution()
+    cls.splab.name = 'SPLAB'
+    cls.splab.acronym = 'SPLAB'
+    cls.splab.cnpj = '18.104.068/0001-56'
+    cls.splab.legal_nature = 'public'
+    cls.splab.address = 'Universidade Federal de Campina Grande'
+    cls.splab.occupation_area = ''
+    cls.splab.description = 'The mission of the Software Practices Laboratory (SPLab)'
+    cls.splab.email = 'splab@ufcg.edu.br'
+    cls.splab.phone_number = '(83) 3322 7865'
+    cls.splab.members = [cls.mayza.key]
+    cls.splab.followers = [cls.adriana.key]
+    cls.splab.posts = []
+    cls.splab.admin = cls.tiago.key
+    cls.splab.put()
     # set Mayza to be admin of Certbio
     cls.certbio.admin = cls.mayza.key
-    cls.certbio.members = [cls.mayza.key, cls.tiago.key]
+    cls.certbio.members = [cls.mayza.key, cls.tiago.key, cls.adriana.key]
     cls.certbio.put()
-    
+    cls.tiago.institutions_admin = [cls.splab.key]
+    cls.tiago.put()

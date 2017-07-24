@@ -16,7 +16,8 @@
 
         submitInstCtrl.institution = {
             name: submitInstCtrl.invite.suggestion_institution_name,
-            image_url: "",
+            photo_url: "/images/institution.jpg",
+            uploaded_images: [],
             email: submitInstCtrl.invite.invitee,
             state: "active",
             invite: submitInstCtrl.invite.key
@@ -36,13 +37,10 @@
                 .targetEvent(event)
                 .ok('Sim')
                 .cancel('Não');
-
             $mdDialog.show(confirm).then(function() {
                 InstitutionService.createInstitution(submitInstCtrl.institution).then(
-                    function success() {
-                            goHome();       
-                            showToast('Cadastro de instituição realizado com sucesso');                      
-                    }, function error(response) {
+                    reloadUser(),                  
+                    function error(response) {
                         showToast(response.data.msg);
                     }
                 );
@@ -50,6 +48,13 @@
                 showToast('Cancelado');
             });
         };
+
+        function reloadUser() {
+            AuthService.reload().then(function(){
+                $state.go('app.home');         
+                showToast('Cadastro de instituição realizado com sucesso');       
+            });                   
+        }
 
         submitInstCtrl.cancel = function cancel(event) {
             var confirm = $mdDialog.confirm()

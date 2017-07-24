@@ -14,20 +14,12 @@
 
     <span flex md-truncate></span>
 
-    <div layout="row" md-theme="input" style="margin-top: 3.5%;">
-      <form ng-submit="mainCtrl.submit()" ng-click="mainCtrl.setShowSearchMenu()">
+    <div layout="row" md-theme="input" style="margin-top: 42px;">
+      <form ng-submit="mainCtrl.showMenu($event)">
         <md-input-container flex>
+          <label></label>
           <md-icon class="material-icons">&#xE8B6;</md-icon>
-          <input class="form-control" ng-model="mainCtrl.search" placeholder="Busca de instituições" md-colors="{background: 'grey-A100'}">
-          <md-menu ng-if="mainCtrl.showSearchMenu">
-            <md-menu-content style="padding-top: 45%">
-              <md-menu-item ng-repeat="institution in mainCtrl.institutions">
-                <md-button ng-click="mainCtrl.goToSearchedInstitution(institution.id)">
-                  {{institution.name}}
-                </md-button>
-              </md-menu-item>
-            </md-menu-content>
-          </md-menu>
+          <input class="form-control demo-menu-open-button" placeholder="Busca de instituições" ng-model="mainCtrl.search" md-colors="{background: 'grey-A100'}">
         </md-input-container>
       </form>
     </div>

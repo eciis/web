@@ -117,3 +117,29 @@ a:active {
     box-shadow: 0 0 2px 1px #cccacc;
     display: inline-flex;
 }
+
+.demo-md-panel {
+  min-height: 500px;
+}
+
+.demo-menu-example {
+  background: white;
+  border-radius: 4px;
+  width: 256px;
+}
+
+.demo-menu-item {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  height: 48px;
+  padding: 0 16px;
+  position: relative;
+  transition: background 0.15s linear;
+  width: auto;
+}
+
+.demo-menu-item:hover,
+.demo-menu-item:focus {
+  background-color: rgb(238, 238, 238);
+}

@@ -7,12 +7,10 @@
         var institutionCtrl = this;
 
         institutionCtrl.current_institution = null;
-
         institutionCtrl.posts = [];
-
         institutionCtrl.members = [];
-
         institutionCtrl.followers = [];
+        institutionCtrl.isUserFollower = false;
 
         var currentInstitutionKey = $state.params.institutionKey;
 
@@ -31,6 +29,7 @@
                 institutionCtrl.current_institution = response.data;
                 getMembers();
                 getFollowers();
+                verifyIfUserIsFollower();
             }, function error(response) {
                 $state.go("app.home");
                 showToast(response.data.msg);
@@ -53,6 +52,10 @@
             });
         }
 
+        function verifyIfUserIsFollower() {
+            institutionCtrl.isUserFollower = institutionCtrl.user.isFollower(institutionCtrl.current_institution.key);
+        }
+
         loadPosts();
         loadInstitution();
 
@@ -70,6 +73,7 @@
         institutionCtrl.follow = function follow(){
             var promise = InstitutionService.follow(currentInstitutionKey);
             promise.then(function success(){
+                institutionCtrl.isUserFollower = true;
                 showToast("Seguindo "+institutionCtrl.current_institution.name);
                 institutionCtrl.user.follow(currentInstitutionKey);
                 getFollowers();
@@ -86,6 +90,7 @@
             else{
                 var promise = InstitutionService.unfollow(currentInstitutionKey);
                 promise.then(function success(){
+                    institutionCtrl.isUserFollower = false;
                     showToast("Deixou de seguir "+institutionCtrl.current_institution.name);
                     institutionCtrl.user.unfollow(currentInstitutionKey);
                     getFollowers();

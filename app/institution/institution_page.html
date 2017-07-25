@@ -9,30 +9,27 @@
                         <img ng-src="{{ institutionCtrl.current_institution.photo_url }}" height="160" width="160" >
                     </div>
                     <div layout="column" flex="80">
-                        <span class="md-headline"><b>{{ institutionCtrl.current_institution.name }}</b></span>
+                        <span class="md-headline"><b>{{ institutionCtrl.current_institution.name }}</b>
+                            <md-icon class="clickable" ng-click="institutionCtrl.goToManageMembers(institutionCtrl.current_institution.key)" 
+                                ng-if="institutionCtrl.user.isAdmin(institutionCtrl.current_institution.key)">settings
+                            </md-icon>
+                        </span>
                         <span class="md-subhead">{{ institutionCtrl.current_institution.phone_number }}</span>
                         <p>{{ institutionCtrl.current_institution.address }}</p>
                         <p>{{ institutionCtrl.current_institution.description }}</p>
                     </div>
-                    <!-- <div layout="row">
-                        <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}" ng-click="institutionCtrl.follow()" ng-if="!institutionCtrl.user.isFollower(institutionCtrl.current_institution.key)">
-                            <md-icon>person_add</md-icon>Seguir
-                        </md-button>
-                        <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}" ng-click="institutionCtrl.unfollow()" ng-if="institutionCtrl.user.isFollower(institutionCtrl.current_institution.key)">
-                            <md-icon>person_outline</md-icon>Deixar de seguir
-                        </md-button>
-                    </div>
-                    <div layout="row">
-                        <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}" ng-click="institutionCtrl.goToManageMembers(institutionCtrl.current_institution.key)" ng-if="institutionCtrl.user.isAdmin(institutionCtrl.current_institution.key)">
-                            <md-icon>settings</md-icon>Configurações administrativas
-                        </md-button>
-                    </div> -->
-                </md-card-content>
-                <md-card-title>
-                    <md-card-title-text>
+                    <div layout="column" flex="20" layout-align="start end">
                         
-                    </md-card-title-text>
-                </md-card-title>
+                        <div>
+                            <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}" 
+                                ng-click="institutionCtrl.isUserFollower ? institutionCtrl.unfollow() : institutionCtrl.follow()">
+                                <md-icon>{{ institutionCtrl.isUserFollower ? 'person_outline':'person_add' }}</md-icon>
+                                {{ institutionCtrl.isUserFollower ? 'Deixar de seguir' : 'Seguir'}}
+                            </md-button>
+                        </div>
+                        
+                    </div>
+                </md-card-content>
             </md-card>
 
             <!-- MEMBERS OF INSTITUTION -->

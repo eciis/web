@@ -31,7 +31,6 @@ def getSentInvitations(institution_key):
 
     return invites
 
-
 def isUserInvited(method):
     """Check if the user is invitee to update the stub of institution."""
     def check_authorization(self, user, institution_key, inviteKey):
@@ -63,6 +62,11 @@ class InstitutionHandler(BaseHandler):
             institution_json
         ))
 
+    """TODO
+       @author Mayza Nunes 25/07/2017.
+       The decorator isUserInvited  is only used
+       when the patch is on pending institutions,
+       to update active institutions other verification is required """
     @json_response
     @login_required
     @isUserInvited
@@ -74,7 +78,7 @@ class InstitutionHandler(BaseHandler):
 
         """Apply patch."""
         JsonPatch.load(data, institution)
-        institution.update(user, inviteKey, institution)
+        institution.createInstitutionWithStub(user, inviteKey, institution)
 
         search_module.createDocument(
             institution.key.urlsafe(), institution.name, institution.state)

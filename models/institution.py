@@ -137,10 +137,9 @@ class Institution(ndb.Model):
 
         return institution_stub
 
-    def update(self, user, inviteKey, institution):
+    def createInstitutionWithStub(self, user, inviteKey, institution):
         invite = ndb.Key(urlsafe=inviteKey).get()
 
-        invite = invite
         invite.status = 'accepted'
         invite.put()
 

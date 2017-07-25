@@ -11,7 +11,11 @@
             var deferred = $q.defer();
 
             service.readFile(file, function(source_img_obj) {
-                deferred.resolve(compressImage(source_img_obj, file, newSize));
+                if (source_img_obj.width > newSize) {
+                    deferred.resolve(compressImage(source_img_obj, file, newSize));
+                } else {
+                    deferred.resolve(file);
+                }
             });
 
             return deferred.promise;

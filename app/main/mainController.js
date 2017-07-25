@@ -88,8 +88,15 @@
             AuthService.logout();
         };
 
-        (function main() {
+        function isInactive() {
+            var notMember = mainCtrl.user.institutions.length === 0;
+            var notInvitee = mainCtrl.user.invites.length === 0;
+            var notActive = !mainCtrl.userIsActive();
+            
+            return ((notMember && notInvitee) || notActive);
+        }
 
+        (function main() {
             var inviteOfUser = mainCtrl.user.getPendingInvitationOf("user");
             var inviteOfInstitution = mainCtrl.user.getPendingInvitationOf("institution");
             
@@ -103,7 +110,7 @@
             } else if (isInactive()) {
                 $state.go("user_inactive");
             } else if (mainCtrl.user.name === 'Unknown') {
-                $state.go("config_profile
+                $state.go("config_profile");
             }
         })();
     });

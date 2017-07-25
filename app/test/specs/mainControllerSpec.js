@@ -86,14 +86,27 @@
             spyOn(mainCtrl, 'openMenu');
             httpBackend.expect('GET', "api/search/institution?name=" + splab.name + "&state=active").respond(documents);
             mainCtrl.showMenu('$event').then(function success() {
-                expect(mainCtrl, 'openMenu').not.toHaveBeenCalled();
+                expect(mainCtrl, 'openMenu').toHaveBeenCalled();
                 expect(mainCtrl, 'makeSearch').toHaveBeenCalled();
                 expect(instService, 'searchInstitutions').toHaveBeenCalled();
             });
             httpBackend.flush();
         });
+
         it('User should not be member e-cis', function(){
             expect(mainCtrl.isAdmin()).toBe(false);
+        });
+
+        it('Should call searchInstitutions in makeSearch', function() {
+            var documents = [{name: splab.name, id: splab.key}];
+            mainCtrl.search = splab.name;
+            mainCtrl.finalSearch = mainCtrl.search;
+            spyOn(instService, 'searchInstitutions').and.callThrough();
+            httpBackend.expect('GET', "api/search/institution?name=" + splab.name + "&state=active").respond(documents);
+            mainCtrl.makeSearch();
+            httpBackend.flush();
+            expect(instService.searchInstitutions).toHaveBeenCalledWith(mainCtrl.finalSearch);
+            expect(mainCtrl.institutions).toEqual(documents);
         });
     });
 

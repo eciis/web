@@ -145,13 +145,17 @@
           });
 
         panelCtrl.goToSearchedInstitution = function goToSearchedInstitution(institutionId) {
+            panelCtrl.goToInstitution(institutionId);
+            panelCtrl.closePanel();
+        };
+
+        panelCtrl.goToInstitution = function goToInstitution(institutionId) {
             if(institutionId) {
                 InstitutionService.getInstitution(institutionId).then(function success(response) {
                     $state.go('app.institution', {institutionKey: response.data.key});
                 });
             }
-            panelCtrl.closePanel();
-        };
+        } ;
 
         panelCtrl.closePanel = function closePanel(){
             panelCtrl._mdPanelRef.close();

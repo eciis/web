@@ -96,9 +96,6 @@
         }
 
         (function main() {
-            if (isInactive()) {
-                $state.go("user_inactive");
-            }
 
             var inviteOfUser = mainCtrl.user.getPendingInvitationOf("user");
             var inviteOfInstitution = mainCtrl.user.getPendingInvitationOf("institution");
@@ -107,10 +104,12 @@
                 var institutionKey = inviteOfUser.institution_key;
                 var inviteKey = inviteOfUser.key;
                 $state.go("new_invite", {institutionKey: institutionKey, inviteKey: inviteKey});
-            }
-
-            if (inviteOfInstitution) {
+            } else if (inviteOfInstitution) {
                 $state.go("submit_institution");
+            } else if (isInactive()) {
+                $state.go("user_inactive");
+            } else if (mainCtrl.user.name === 'Unknown') {
+                $state.go("config_profile");
             }
         })();
     });

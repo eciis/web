@@ -17,11 +17,9 @@
                                 <md-button ng-show="!submitInstCtrl.loading" ng-click="null" ng-model="submitInstCtrl.file" ngf-pattern="'image/*'"
                                         ngf-accept="'image/*'" ngf-max-size="5MB"
                                         ngf-select="submitInstCtrl.addImage(submitInstCtrl.file)">
-                                    <span>
-                                        <b>
-                                            Adicionar imagem
-                                        </b>
-                                    </span>
+                                    <b>
+                                        Adicionar imagem
+                                    </b>
                                 </md-button>
                                 <md-progress-linear ng-show="submitInstCtrl.loading" md-mode="indeterminate" style="width: 14%; margin-left: auto; margin-right: auto"></md-progress-linear>
                             </div>

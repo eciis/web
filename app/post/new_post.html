@@ -24,11 +24,9 @@
       <md-button ng-show="postCtrl.post.title && !postCtrl.loading" ng-click="null" ng-model="postCtrl.file" ngf-pattern="'image/*'"
                     ngf-accept="'image/*'" ngf-max-size="5MB"
                     ngf-select="postCtrl.addImage(postCtrl.file)">
-          <span>
-              <b>
+            <b>
                   Adicionar imagem
-              </b>
-          </span>
+            </b>
       </md-button>
     </div>
     <md-progress-linear ng-show="postCtrl.loading" md-mode="indeterminate" style="width: 14%; margin-top: 5px"></md-progress-linear>

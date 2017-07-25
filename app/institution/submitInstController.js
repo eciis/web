@@ -3,8 +3,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.controller("SubmitInstController", function SubmitInstController(AuthService, InstitutionService, $state, $mdToast, $mdDialog, $http, InviteService,
-        ImageService, $rootScope) {
+    app.controller("SubmitInstController", function SubmitInstController(AuthService, InstitutionService, $state, $mdToast, $mdDialog, $http, InviteService, ImageService, $rootScope) {
         var submitInstCtrl = this;
         var institutionKey = $state.params.institutionKey;
         var observer;
@@ -58,20 +57,24 @@
                 .ok('Sim')
                 .cancel('Não');
             $mdDialog.show(confirm).then(function() {
-                if (submitInstCtrl.photo_instituicao) {
-                    submitInstCtrl.loading = true;
-                    ImageService.saveImage(submitInstCtrl.photo_instituicao).then(function(data) {
-                        submitInstCtrl.loading = false;
-                        submitInstCtrl.newInstitution.photo_url = data.url;
-                        saveInstitution();
-                    });
-                } else {
-                    saveInstitution();
-                }
+                saveImage();
             }, function() {
                 showToast('Cancelado');
             });
         };
+
+        function saveImage() {
+            if (submitInstCtrl.photo_instituicao) {
+                submitInstCtrl.loading = true;
+                ImageService.saveImage(submitInstCtrl.photo_instituicao).then(function(data) {
+                    submitInstCtrl.loading = false;
+                    submitInstCtrl.newInstitution.photo_url = data.url;
+                    saveInstitution();
+                });
+            } else {
+                saveInstitution();
+            }
+        }
 
         function saveInstitution() {
             var patch = jsonpatch.generate(observer);

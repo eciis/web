@@ -17,7 +17,6 @@
                     deferred.resolve(file);
                 }
             });
-
             return deferred.promise;
         };
 

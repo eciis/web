@@ -72,21 +72,8 @@
             expect(inviteInstCtrl.user.name).toEqual(maiana.name);
         });
 
-        it('should be empty the array sent_invitations', function() {
-            expect(inviteInstCtrl.sent_invitations).toEqual([]);
-        });
-
-        it('should be empty the object inst_parent', function() {
-            expect(inviteInstCtrl.inst_parent).toEqual({});
-        });
-
-        it('should be empty false', function() {
-            expect(inviteInstCtrl.hasParent).toEqual(false);
-        });
-
-        it('should be ecis children institution of splab', function() { 
-            expect(inviteInstCtrl.inst_children.length).toEqual(1);
-            expect(inviteInstCtrl.inst_children[0]).toEqual(ecis);
+        it('should be equal to splab', function() {
+            expect(inviteInstCtrl.institution).toEqual(splab);
         });
     });
     
@@ -94,7 +81,8 @@
 
         describe('createParentInstInvite()', function() {
             it('should show toast ', function() {
-                inviteInstCtrl.inst_parent =  ecis.key;
+                inviteInstCtrl.institution.parent_institution =  ecis.key;
+                inviteInstCtrl.hasParent =  true;
 
                 spyOn(mdToast, 'show');
                 inviteInstCtrl.createParentInstInvite();
@@ -153,8 +141,8 @@
 
                     // Verifying That Data Is Correctly Updated
                     expect(inviteInstCtrl.invite).toEqual({});
-                    expect(inviteInstCtrl.sent_invitations).toEqual([invite]);
-                    expect(inviteInstCtrl.inst_parent.name).toEqual(
+                    expect(inviteInstCtrl.institution.sent_invitations).toEqual([invite]);
+                    expect(inviteInstCtrl.institution.parent_institution.name).toEqual(
                         invite.suggestion_institution_name);
                     expect(inviteInstCtrl.type_of_invite).toEqual('');
                     expect(inviteInstCtrl.hasParent).toEqual(true);

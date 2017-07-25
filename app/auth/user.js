@@ -67,8 +67,6 @@ User.prototype.isValid = function isValid() {
 
 User.prototype.getPendingInvitationOf = function getPendingInvitationOf(invitationType){
 
-    console.log("entrou no getPending");
-
     var typeInviteInst = ['institution', 'institution_parent'];
 
     if(invitationType == 'user'){
@@ -78,8 +76,6 @@ User.prototype.getPendingInvitationOf = function getPendingInvitationOf(invitati
             }
         }
     } else{
-        console.log("não é usuário");
-
         for(var i = 0; i < this.invites.length; i++) {
             if(_.includes(typeInviteInst, this.invites[i].type_of_invite) &&
                 this.invites[i].status == 'sent'){

@@ -11,6 +11,7 @@
         var observer;
 
         configProfileCtrl.newUser = AuthService.getCurrentUser();
+        configProfileCtrl.loading = false;
 
         configProfileCtrl.addImage = function(image) {
             var jpgType = "image/jpeg";
@@ -37,10 +38,12 @@
 
         configProfileCtrl.finish = function finish() {
             if (configProfileCtrl.photo_user) {
+                configProfileCtrl.loading = true;
                 ImageService.saveImage(configProfileCtrl.photo_user).then(function(data) {
                     configProfileCtrl.newUser.photo_url = data.url;
                     configProfileCtrl.newUser.uploaded_images.push(data.url);
                     saveUser();
+                    configProfileCtrl.loading = false;
                 });
             } else {
                 return saveUser();

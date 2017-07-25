@@ -21,7 +21,7 @@
     </md-input-container>
     <img ng-show="postCtrl.post.photo_url" style="border-radius: 5%; " ng-src="{{ postCtrl.post.photo_url }}" width="100px" height="100px"/>
     <div>
-      <md-button ng-show="postCtrl.post.title" ng-click="null" ng-model="postCtrl.file" ngf-pattern="'image/*'"
+      <md-button ng-show="postCtrl.post.title && !postCtrl.loading" ng-click="null" ng-model="postCtrl.file" ngf-pattern="'image/*'"
                     ngf-accept="'image/*'" ngf-max-size="5MB"
                     ngf-select="postCtrl.addImage(postCtrl.file)">
           <span>
@@ -31,6 +31,7 @@
           </span>
       </md-button>
     </div>
+    <md-progress-linear ng-show="postCtrl.loading" md-mode="indeterminate" style="width: 14%; margin-top: 5px"></md-progress-linear>
   </md-card-content>
   <md-dialog-actions layout="row" ng-show="postCtrl.post.title">
     <span flex></span>

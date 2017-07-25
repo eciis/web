@@ -9,6 +9,7 @@
         var institutionKey = $state.params.institutionKey;
         var observer;
 
+        submitInstCtrl.loading = false;
         Object.defineProperty(submitInstCtrl, 'user', {
             get: function() {
                 return AuthService.user;
@@ -48,17 +49,6 @@
         submitInstCtrl.phoneRegex = "([0-9]{2}[\\s][0-9]{8})";
 
         submitInstCtrl.submit = function submit() {
-            if (submitInstCtrl.photo_instituicao) {
-                ImageService.saveImage(submitInstCtrl.photo_instituicao).then(function(data) {
-                    submitInstCtrl.newInstitution.photo_url = data.url;
-                    saveInstitution();
-                });
-            } else {
-                return saveInstitution();
-            }
-        };
-
-        function saveInstitution() {
             var confirm = $mdDialog.confirm(event)
                 .clickOutsideToClose(true)
                 .title('Confirmar Cadastro')
@@ -68,14 +58,27 @@
                 .ok('Sim')
                 .cancel('Não');
             $mdDialog.show(confirm).then(function() {
-                var patch = jsonpatch.generate(observer);
-                InstitutionService.save(institutionKey, patch, submitInstCtrl.invite.key).then(
-                    reloadUser(),
-                    function error(response) {
-                        showToast(response.data.msg);
+                if (submitInstCtrl.photo_instituicao) {
+                    submitInstCtrl.loading = true;
+                    ImageService.saveImage(submitInstCtrl.photo_instituicao).then(function(data) {
+                        submitInstCtrl.loading = false;
+                        submitInstCtrl.newInstitution.photo_url = data.url;
+                        saveInstitution();
                     });
+                } else {
+                    saveInstitution();
+                }
             }, function() {
                 showToast('Cancelado');
+            });
+        };
+
+        function saveInstitution() {
+            var patch = jsonpatch.generate(observer);
+            InstitutionService.save(institutionKey, patch, submitInstCtrl.invite.key).then(
+                reloadUser(),
+                function error(response) {
+                    showToast(response.data.msg);
             });
         }
 

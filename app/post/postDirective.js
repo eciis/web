@@ -8,6 +8,7 @@
         var postCtrl = this;
 
         postCtrl.post = {};
+        postCtrl.loading = false;
 
         postCtrl.addImage = function(image) {
             var jpgType = "image/jpeg";
@@ -43,7 +44,9 @@
 
         postCtrl.createPost = function createPost() {
             if (postCtrl.photo_post) {
+                postCtrl.loading = true;
                 ImageService.saveImage(postCtrl.photo_post).then(function success(data) {
+                    postCtrl.loading = false;
                     postCtrl.post.photo_url = data.url;
                     postCtrl.post.uploaded_images = [data.url];
                     savePost();

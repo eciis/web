@@ -11,9 +11,11 @@
         loginCtrl.newUser = {};
 
         loginCtrl.login = function login() {
-            AuthService.login().then(function success() {
+            var promise = AuthService.login();
+            promise.then(function success() {
                 $state.go("app.home");
             });
+            return promise;
         };
 
         loginCtrl.limpar = function limpar() {

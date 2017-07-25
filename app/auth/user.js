@@ -71,7 +71,7 @@ User.prototype.getPendingInvitationOf = function getPendingInvitationOf(invitati
 
     if(invitationType == 'user'){
         for(var i = 0; i < this.invites.length; i++) {
-            if(this.invites[i].type_of_invite == invitationType && this.invites[i].status == 'sent'){
+        if(this.invites[i].type_of_invite == invitationType && this.invites[i].status == 'sent') {
                 return this.invites[i];
             }
         }

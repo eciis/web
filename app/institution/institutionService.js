@@ -87,14 +87,14 @@
             return deferred.promise;
         };
 
-        service.createInstitution = function createInstitution(institution) {
-            var deferred = $q.defer();
-            $http.post(INSTITUTIONS_URI, institution).then(function success(response) {
-                deferred.resolve(response);
-            }, function error(response) {
-                deferred.reject(response);
+        service.save = function save(institutionKey ,patch, inviteKey) {
+            var deffered = $q.defer();
+            $http.patch(INSTITUTIONS_URI + "/" + institutionKey + "/invites/" + inviteKey, patch).then(function success(info) {
+                deffered.resolve(info.data);
+            }, function error(data) {
+                deffered.reject(data);
             });
-            return deferred.promise;
+            return deffered.promise;
         };
     });
 })();

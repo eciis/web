@@ -2,8 +2,8 @@ indexes:
 - kind: Post
   properties:
   - name: institution
-  - name: publication_date
+  - name: last_modified_date
 - kind: Post
   properties:
   - name: state
-  - name: publication_date
+  - name: last_modified_date

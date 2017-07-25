@@ -60,8 +60,6 @@ def parentToJson(obj):
     """Return json whith parent institution."""
     if(obj.parent_institution):
         return Utils.toJson(obj.parent_institution.get())
-    else:
-        None
 
 
 class InstitutionHandler(BaseHandler):
@@ -73,8 +71,6 @@ class InstitutionHandler(BaseHandler):
         """Handle GET Requests."""
         obj_key = ndb.Key(urlsafe=url_string)
         obj = obj_key.get()
-
-        print obj_key
 
         assert type(obj) is Institution, "Key is not an Institution"
         institution_json = Utils.toJson(obj, host=self.request.host)

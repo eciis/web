@@ -84,8 +84,7 @@
             expect(inviteInstCtrl.hasParent).toEqual(false);
         });
 
-        it('should be ecis children institution of splab', function() {
-            
+        it('should be ecis children institution of splab', function() { 
             expect(inviteInstCtrl.inst_children.length).toEqual(1);
             expect(inviteInstCtrl.inst_children[0]).toEqual(ecis);
         });

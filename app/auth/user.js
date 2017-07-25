@@ -82,7 +82,6 @@ User.prototype.getPendingInvitationOf = function getPendingInvitationOf(invitati
                 return this.invites[i];
             }
         }
-
     }    
 };
 

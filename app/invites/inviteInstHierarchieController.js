@@ -33,7 +33,6 @@
                 promise.then(function success(response) {
                     showToast('Convite enviado com sucesso!');
                     addInvite(invite);
-
                 }, function error(response) {
                     showToast(response.data.msg);
                 });
@@ -69,7 +68,6 @@
                 inviteInstCtrl.inst_parent = response.data.parent_institution;
                 inviteInstCtrl.inst_children = response.data.children_institutions;
                 inviteInstCtrl.hasParent = !_.isEmpty(inviteInstCtrl.inst_parent);
-
             }, function error(response) {
                 $state.go('app.institution', {institutionKey: currentInstitutionKey});
                 showToast(response.data.msg);

@@ -14,14 +14,17 @@
     };
     var certbio = {
         name: 'Certbio',
-        key: '123456789'
+        key: '123456789',
+        admin: mayza.key
+
     };
     var splab = {
         name: 'Splab',
         key: '1239'
     };
     mayza.institutions = [certbio.key, splab.key];
-    mayza.current_institution = certbio.key;
+    mayza.institutions_admin = [certbio.key];
+    mayza.current_institution = certbio;
 
     beforeEach(module('app'));
 
@@ -101,8 +104,8 @@
             expect(mainCtrl.search).toEqual('');
             expect(instService.searchInstitutions).toHaveBeenCalledWith(mainCtrl.finalSearch);
         });
-        it('User should not be member e-cis', function(){
-            expect(mainCtrl.isAdmin()).toBe(false);
+        it('User should not be admin of your current institution', function(){
+            expect(mainCtrl.isAdmin(mainCtrl.user.current_institution)).toBe(true);
         });
     });
 

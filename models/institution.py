@@ -137,41 +137,23 @@ class Institution(ndb.Model):
 
         return institution_stub
 
-    @staticmethod
-    @ndb.transactional(xg=True)
-    def create(data, user):
-        """Create a new Institution, who user was invited.
-           Update user to be admin and status of invite to accepted."""
-        for field in ['name']:
-            if not data.get(field):
-                raise FieldException(field + " can not be empty")
+    def createInstitutionWithStub(self, user, inviteKey, institution):
+        invite = ndb.Key(urlsafe=inviteKey).get()
 
-        institutionImage = "http://eciis-splab.appspot.com/images/institution.jpg"
-        institution = Institution()
-        institution.name = data.get('name')
-        institution.invite = ndb.Key(urlsafe=data.get('invite'))
-        institution.acronym = data.get('acronym')
-        institution.cnpj = data.get('cnpj')
-        institution.legal_nature = data.get('legal_nature')
-        institution.address = data.get('address')
-        institution.state = data.get('state')
-        institution.occupation_area = get_occupation_area(data)
-        institution.description = data.get('description')
-        institution.phone_number = data.get('phone_number')
-        institution.email = data.get('email')
-        institution.photo_url = data.get('photo_url') or institutionImage
+        invite.status = 'accepted'
+        invite.put()
+
         institution.admin = user.key
         institution.members.append(user.key)
         institution.followers.append(user.key)
+        institution.state = 'active'
+        if (institution.photo_url is None):
+            institution.photo_url = "/images/institution.jpg"
         institution.put()
 
         user.institutions.append(institution.key)
         user.institutions_admin.append(institution.key)
         user.follows.append(institution.key)
         user.put()
-
-        invite = institution.invite.get()
-        invite.status = 'accepted'
-        invite.put()
 
         return institution

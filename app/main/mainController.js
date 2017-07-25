@@ -48,10 +48,11 @@
             return false;
         };
 
-        mainCtrl.isAdmin = function isAdmin() {
-            if (mainCtrl.user){
-                return !_.isEmpty(mainCtrl.user.institutions_admin);
+        mainCtrl.isAdmin = function isAdmin(current_institution) {
+            if (mainCtrl.user && mainCtrl.user.isAdmin(current_institution)){
+                return true;
             }
+            return false;
         };
 
         mainCtrl.userIsActive = function userIsActive() {
@@ -87,14 +88,6 @@
             AuthService.logout();
         };
 
-        function isInactive() {
-            var notMember = mainCtrl.user.institutions.length === 0;
-            var notInvitee = mainCtrl.user.invites.length === 0;
-            var notActive = !mainCtrl.userIsActive();
-            
-            return ((notMember && notInvitee) || notActive);
-        }
-
         (function main() {
 
             var inviteOfUser = mainCtrl.user.getPendingInvitationOf("user");
@@ -105,11 +98,12 @@
                 var inviteKey = inviteOfUser.key;
                 $state.go("new_invite", {institutionKey: institutionKey, inviteKey: inviteKey});
             } else if (inviteOfInstitution) {
-                $state.go("submit_institution");
+                var institutionStubKey = inviteOfInstitution.stub_institution_key;
+                $state.go("submit_institution", {institutionKey: institutionStubKey});
             } else if (isInactive()) {
                 $state.go("user_inactive");
             } else if (mainCtrl.user.name === 'Unknown') {
-                $state.go("config_profile");
+                $state.go("config_profile
             }
         })();
     });

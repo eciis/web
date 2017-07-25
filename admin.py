@@ -50,6 +50,34 @@ def getGravatar(email):
     return gravatar_url
 
 
+def createInstitution(data, user):
+        """Create a new Institution."""
+
+        institutionImage = "http://eciis-splab.appspot.com/images/institution.jpg"
+        institution = Institution()
+        institution.name = data.get('name')
+        institution.acronym = data.get('acronym')
+        institution.cnpj = data.get('cnpj')
+        institution.legal_nature = data.get('legal_nature')
+        institution.address = data.get('address')
+        institution.state = data.get('state')
+        institution.description = data.get('description')
+        institution.phone_number = data.get('phone_number')
+        institution.email = data.get('email')
+        institution.photo_url = data.get('photo_url') or institutionImage
+        institution.admin = user.key
+        institution.members.append(user.key)
+        institution.followers.append(user.key)
+        institution.put()
+
+        user.institutions.append(institution.key)
+        user.institutions_admin.append(institution.key)
+        user.follows.append(institution.key)
+        user.put()
+
+        return institution
+
+
 class BaseHandler(webapp2.RequestHandler):
     """Base Handler."""
 
@@ -224,13 +252,6 @@ class ResetHandler(BaseHandler):
         admin.state = 'active'
         admin.put()
 
-        # Invites
-        invite = Invite()
-        invite.invitee = 'testeeciis@gmail.com'
-        invite.inviter = 'eciis@gmail.com'
-        invite.type_of_invite = 'institution'
-        invite.put()
-
         jsonList.append({"msg": "database initialized with a few users"})
 
         # new Institution CERTBIO with User Mayza like a member
@@ -245,10 +266,9 @@ class ResetHandler(BaseHandler):
             'description': 'Ensaio Químico - Determinação de Material Volátil por Gravimetria e Ensaio Biológico - Ensaio de Citotoxicidade',
             'photo_url': 'https://pbs.twimg.com/profile_images/1782760873/Logo_do_site_400x400.jpg',
             'email': 'certbio@ufcg.edu.br',
-            'phone_number': '83 33224455',
-            'invite': invite.key.urlsafe(),
+            'phone_number': '83 33224455'
         }
-        certbio = Institution.create(data, admin)
+        certbio = createInstitution(data, admin)
         for user in [mayza.key, dalton.key, admin.key]:
             certbio.add_member(user)
         for user in [jorge.key, mayza.key, maiana.key, luiz.key,
@@ -267,10 +287,9 @@ class ResetHandler(BaseHandler):
             'description': """The mission of the Software Practices Laboratory (SPLab) is to promote the development of the state-of-the-art in the theory and practice of Software Engineering.""",
             'photo_url': 'http://amaurymedeiros.com/images/splab.png',
             'email': 'splab@ufcg.edu.br',
-            'phone_number': '83 33227865',
-            'invite': invite.key.urlsafe(),
+            'phone_number': '83 33227865'
         }
-        splab = Institution.create(data, admin)
+        splab = createInstitution(data, admin)
         for user in [jorge.key, andre.key, admin.key]:
             splab.add_member(user)
         for user in [jorge.key, andre.key, maiana.key, luiz.key,
@@ -288,10 +307,9 @@ class ResetHandler(BaseHandler):
             'description': 'The mission of the e-CIIS is to promote the development of the state-of-the-art in the theory and practice of Software Engineering.',
             'photo_url': 'http://www.paho.org/bra/images/stories/BRA01A/logobireme.jpg',
             'email': 'eciis@ufcg.edu.br',
-            'phone_number': '83 33227865',
-            'invite': invite.key.urlsafe(),
+            'phone_number': '83 33227865'
         }
-        eciis = Institution.create(data, admin)
+        eciis = createInstitution(data, admin)
         for user in [dalton.key, andre.key, jorge.key, maiana.key,
                      luiz.key, raoni.key, ruan.key, tiago.key, mayza.key, admin.key]:
             eciis.add_member(user)

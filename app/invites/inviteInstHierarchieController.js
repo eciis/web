@@ -7,13 +7,10 @@
         var inviteInstCtrl = this;
 
         inviteInstCtrl.user = AuthService.getCurrentUser();
+        inviteInstCtrl.institution = {};
 
         inviteInstCtrl.invite = {};
         inviteInstCtrl.type_of_invite = '';
-        inviteInstCtrl.sent_invitations = [];
-
-        inviteInstCtrl.inst_parent = {};
-        inviteInstCtrl.inst_children = [];
 
         inviteInstCtrl.hasParent = false;
         inviteInstCtrl.showButton = true;
@@ -30,7 +27,7 @@
                 showToast('Convite inválido!');
             } else {                
                 var promise = InviteService.sendInvite(invite);
-                promise.then(function success(response) {
+                promise.then(function success() {
                     showToast('Convite enviado com sucesso!');
                     addInvite(invite);
                 }, function error(response) {
@@ -64,10 +61,8 @@
 
         function loadInstitution() {
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
-                inviteInstCtrl.sent_invitations = response.data.sent_invitations;
-                inviteInstCtrl.inst_parent = response.data.parent_institution;
-                inviteInstCtrl.inst_children = response.data.children_institutions;
-                inviteInstCtrl.hasParent = !_.isEmpty(inviteInstCtrl.inst_parent);
+                inviteInstCtrl.institution = response.data;
+                inviteInstCtrl.hasParent = !_.isEmpty(inviteInstCtrl.institution.parent_institution);
             }, function error(response) {
                 $state.go('app.institution', {institutionKey: currentInstitutionKey});
                 showToast(response.data.msg);
@@ -76,10 +71,10 @@
 
         function addInvite(invite) {
             inviteInstCtrl.invite = {};
-            inviteInstCtrl.sent_invitations.push(invite);
+            inviteInstCtrl.institution.sent_invitations.push(invite);
 
             if(invite.type_of_invite == 'institution_parent'){
-                inviteInstCtrl.inst_parent = {
+                inviteInstCtrl.institution.parent_institution = {
                     'name': invite.suggestion_institution_name,
                     'state': 'pending'
                 };

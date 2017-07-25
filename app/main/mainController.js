@@ -92,7 +92,7 @@
             
             var inviteOfUser = mainCtrl.user.getPendingInvitationOf("user");
             var inviteOfInstitution = mainCtrl.user.getPendingInvitationOf("institution");
-            
+           
             if (inviteOfUser) {
                 var institutionKey = inviteOfUser.institution_key;
                 var inviteKey = inviteOfUser.key;

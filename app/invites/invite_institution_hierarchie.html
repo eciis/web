@@ -32,12 +32,12 @@
             <md-list-item class="md-3-line" ng-if="inviteInstCtrl.hasParent">
               <md-icon class="md-avatar-icon" >account_balance</md-icon>
               <div class="md-list-item-text" layout="column">
-                <a href class="md-title hyperlink" ng-if="inviteInstCtrl.showLink(inviteInstCtrl.inst_parent)"
-                ng-click="inviteInstCtrl.goToInst(inviteInstCtrl.inst_parent.key)">
-                  {{ inviteInstCtrl.inst_parent.name }}
+                <a href class="md-title hyperlink" ng-if="inviteInstCtrl.showLink(inviteInstCtrl.institution.parent_institution)"
+                ng-click="inviteInstCtrl.goToInst(inviteInstCtrl.institution.parent_institution.key)">
+                  {{ inviteInstCtrl.institution.parent_institution.name }}
                 </a>
-                <div ng-if="!inviteInstCtrl.showLink(inviteInstCtrl.inst_parent)">
-                  <h3>{{ inviteInstCtrl.inst_parent.name }}</h3>
+                <div ng-if="!inviteInstCtrl.showLink(inviteInstCtrl.institution.parent_institution)">
+                  <h3>{{ inviteInstCtrl.institution.parent_institution.name }}</h3>
                   <h3 style="color: red">
                   Esta instituição ainda não está cadastrada na plataforma</h3>
                 </div>
@@ -45,7 +45,7 @@
             </md-list-item>
             <md-subheader class="md-no-sticky">Instituições filhas</md-subheader>
             <md-list-item class="md-3-line"
-            ng-repeat="institution in inviteInstCtrl.inst_children">
+            ng-repeat="institution in inviteInstCtrl.institution.children_institutions">
               <md-icon class="md-avatar-icon" >account_balance</md-icon>
               <div class="md-list-item-text" layout="column">
                 <a href class="md-title hyperlink" ng-if="inviteInstCtrl.showLink(institution)"
@@ -60,7 +60,7 @@
               </div>
             </md-list-item>
             <md-subheader class="md-no-sticky" >Convites enviados</md-subheader>
-            <md-list-item class="md-3-line" ng-repeat="invite in inviteInstCtrl.sent_invitations" ng-click="null"
+            <md-list-item class="md-3-line" ng-repeat="invite in inviteInstCtrl.institution.sent_invitations" ng-click="null"
               ng-if="invite.type_of_invite != 'user'">
               <md-icon class="md-avatar-icon" >account_balance</md-icon>
               <div class="md-list-item-text" layout="column">

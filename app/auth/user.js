@@ -67,23 +67,32 @@ User.prototype.isValid = function isValid() {
 
 User.prototype.getPendingInvitationOf = function getPendingInvitationOf(invitationType){
 
-    var typeInviteInst = ['institution', 'institution_parent'];
-
     if(invitationType == 'user'){
-        for(var i = 0; i < this.invites.length; i++) {
-        if(this.invites[i].type_of_invite == invitationType && this.invites[i].status == 'sent') {
-                return this.invites[i];
-            }
-        }
+        return this.getInviteUser();
     } else{
-        for(var i = 0; i < this.invites.length; i++) {
-            if(_.includes(typeInviteInst, this.invites[i].type_of_invite) &&
-                this.invites[i].status == 'sent'){
-                return this.invites[i];
-            }
-        }
+        return this.getInviteInst(this);
     }    
 };
+
+User.prototype.getInviteUser = function getInviteUser(){
+    for(var i = 0; i < this.invites.length; i++) {
+        if(this.invites[i].type_of_invite == 'user' && 
+            this.invites[i].status == 'sent') {
+             return this.invites[i];
+        }
+    }
+}
+
+User.prototype.getInviteInst = function getInviteInst(){
+    var typeInviteInst = ['institution', 'institution_parent'];
+
+    for(var i = 0; i < this.invites.length; i++) {
+        if(_.includes(typeInviteInst, this.invites[i].type_of_invite) &&
+            this.invites[i].status == 'sent'){
+                return this.invites[i];
+        }
+    }
+}
 
 function getKeyObj(obj) {
     if(obj.key){

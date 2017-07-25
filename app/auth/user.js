@@ -68,13 +68,13 @@ User.prototype.isValid = function isValid() {
 User.prototype.getPendingInvitationOf = function getPendingInvitationOf(invitationType){
 
     if(invitationType == 'user'){
-        return this.getInviteUser();
+        return this.getPendingInviteUser();
     } else{
-        return this.getInviteInst(this);
+        return this.getPendingInviteInst(this);
     }    
 };
 
-User.prototype.getInviteUser = function getInviteUser(){
+User.prototype.getPendingInviteUser = function getInviteUser(){
     for(var i = 0; i < this.invites.length; i++) {
         if(this.invites[i].type_of_invite == 'user' && 
             this.invites[i].status == 'sent') {
@@ -83,7 +83,7 @@ User.prototype.getInviteUser = function getInviteUser(){
     }
 }
 
-User.prototype.getInviteInst = function getInviteInst(){
+User.prototype.getPendingInviteInst = function getInviteInst(){
     var typeInviteInst = ['institution', 'institution_parent'];
 
     for(var i = 0; i < this.invites.length; i++) {

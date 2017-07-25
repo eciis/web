@@ -5,7 +5,10 @@
     var homeCtrl, httpBackend, scope, createCtrl, mdDialog, state;
 
     var user = {
-        name: 'Tiago'
+        name: 'Tiago',
+        follows: [
+            "http://localhost/api/key/123456789"
+        ]
     };
 
     var institutions = [{

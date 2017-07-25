@@ -34,6 +34,7 @@ app = webapp2.WSGIApplication([
     ("/api/institutions/(.*)/timeline", InstitutionTimelineHandler),
     ("/api/institutions/(.*)/members", InstitutionMembersHandler),
     ("/api/institutions/(.*)/followers", InstitutionFollowersHandler),
+    ("/api/institutions/(.*)/invites/(.*)", InstitutionHandler),
     ("/api/institutions/(.*)", InstitutionHandler),
     ("/api/key/(.*)", GetKeyHandler),
     ("/api/posts/(.*)/comments/(.*)", PostCommentHandler),

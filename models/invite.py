@@ -172,6 +172,7 @@ class Invite(ndb.Model):
             'inviter': self.inviter,
             'type_of_invite': self.type_of_invite,
             'suggestion_institution_name': self.suggestion_institution_name,
+            'stub_institution_key': self.stub_institution_key.urlsafe(),
             'key': self.key.urlsafe(),
             'status': self.status
         }

@@ -38,11 +38,12 @@
         };
 
         inviteInstCtrl.createParentInstInvite = function createParentInstInvite(){
-            if(_.isEmpty(inviteInstCtrl.inst_parent)){
+            if(inviteInstCtrl.hasParent){
+                showToast("Já possue instituição superior");
+            }else {
                 inviteInstCtrl.type_of_invite = 'institution_parent';
                 inviteInstCtrl.showButton = false;
-            }else {
-                showToast("Já possue instituição superior");
+                
             }            
         };
 

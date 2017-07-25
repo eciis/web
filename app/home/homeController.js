@@ -12,7 +12,6 @@
         homeCtrl.instMenuExpanded = false;
 
         homeCtrl.user = AuthService.getCurrentUser();
-        console.log(homeCtrl.user);
 
         function showToast(msg) {
             $mdToast.show(
@@ -48,11 +47,7 @@
 
         function getFollowingInstitutions(){
             InstitutionService.getInstitutions().then(function sucess(response){
-                var institutions = response.data;
-                var institutionsKeys = getInstKeys();
-                homeCtrl.institutions = _.filter(institutions, function(institution) {
-                    return _.includes(institutionsKeys, institution.key); 
-                });
+                homeCtrl.institutions = getFilteredInstitutions(response.data);
             });
         }
 
@@ -61,6 +56,14 @@
                 return instUri.split("/key/")[1];
             });
             return keys;
+        }
+
+        function getFilteredInstitutions(institutions) {
+            var institutionsKeys = getInstKeys();
+            var filteredInsts = _.filter(institutions, function(institution) {
+                return _.includes(institutionsKeys, institution.key); 
+            });
+            return filteredInsts;
         }
 
         var intervalPromise;

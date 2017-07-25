@@ -131,6 +131,9 @@ class Post(ndb.Model):
     # Likes of Post
     likes = ndb.LocalStructuredProperty(Like, repeated=True)
 
+    # Images uploaded
+    uploaded_images = ndb.StringProperty(repeated=True)
+
     @staticmethod
     def create(data, author_key, institution_key):
         """Create a post and check required fields."""

@@ -4,7 +4,7 @@
     var app = angular.module("app");
 
     app.controller("ConfigProfileController", function ConfigProfileController($state, InstitutionService,
-            AuthService, UserService, $rootScope, $mdToast, $q) {
+            AuthService, UserService, ImageService,$rootScope, $mdToast, $q) {
         var configProfileCtrl = this;
 
         // Variable used to observe the changes on the user model.
@@ -12,7 +12,42 @@
 
         configProfileCtrl.newUser = AuthService.getCurrentUser();
 
+        configProfileCtrl.addImage = function(image) {
+            var jpgType = "image/jpeg";
+            var pngType = "image/png";
+            var maximumSize = 5242880; // 5Mb in bytes
+            var newSize = 800;
+
+            if (image !== null && (image.type === jpgType || image.type === pngType) && image.size <= maximumSize) {
+                ImageService.compress(image, newSize).then(function success(data) {
+                    configProfileCtrl.photo_user = data;
+                    ImageService.readFile(data, setImage);
+                    configProfileCtrl.file = null;
+                });
+            } else {
+                showToast("Imagem deve ser jpg ou png e menor que 5 Mb");
+            }
+        };
+
+        function setImage(image) {
+            $rootScope.$apply(function() {
+                configProfileCtrl.newUser.photo_url = image.src;
+            });
+        }
+
         configProfileCtrl.finish = function finish() {
+            if (configProfileCtrl.photo_user) {
+                ImageService.saveImage(configProfileCtrl.photo_user).then(function(data) {
+                    configProfileCtrl.newUser.photo_url = data.url;
+                    configProfileCtrl.newUser.uploaded_images.push(data.url);
+                    saveUser();
+                });
+            } else {
+                return saveUser();
+            }
+        };
+
+        function saveUser() {
             var deffered = $q.defer();
             if (configProfileCtrl.newUser.isValid()) {
                 var patch = jsonpatch.generate(observer);
@@ -27,7 +62,7 @@
                 deffered.reject();
             }
             return deffered.promise;
-        };
+        }
 
         function showToast(msg) {
             $mdToast.show(

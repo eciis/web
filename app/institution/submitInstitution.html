@@ -15,7 +15,15 @@
                             </div>
                             <div class="info">
                                 <div class="title">
-                                    <upload-image model="submitInstCtrl.institution">Mudar imagem do instituição</upload-image>
+                                        <md-button ng-click="null" ng-model="submitInstCtrl.file" ngf-pattern="'image/*'"
+                                                ngf-accept="'image/*'" ngf-max-size="5MB"
+                                                ngf-select="submitInstCtrl.addImage(submitInstCtrl.file)">
+                                            <span>
+                                                <b>
+                                                    Adicionar imagem
+                                                </b>
+                                            </span>
+                                        </md-button>
                                 </div>
                             </div>
                         </div>

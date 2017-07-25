@@ -7,7 +7,17 @@
       <md-content layout-gt-sm="column">
         <div layout-gt-sm="column" layout-padding layout-align="center center">
           <img style="border-radius: 50%; " ng-src="{{ configProfileCtrl.newUser.photo_url }}" width="100px" height="100px" />
-          <upload-image layout-gt-sm="column" model="configProfileCtrl.newUser">Mudar imagem do perfil</upload-image>
+          <div>
+              <md-button ng-click="null" ng-model="configProfileCtrl.file" ngf-pattern="'image/*'"
+                    ngf-accept="'image/*'" ngf-max-size="5MB"
+                    ngf-select="configProfileCtrl.addImage(configProfileCtrl.file)">
+                  <span>
+                      <b>
+                          Adicionar imagem
+                      </b>
+                  </span>
+              </md-button>
+          </div>
           <div layout-gt-sm="row">
             <md-input-container flex-gt-sm>
               <label>Nome</label>

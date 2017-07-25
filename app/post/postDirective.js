@@ -15,7 +15,7 @@
             var maximumSize = 5242880; // 5Mb in bytes
             var newSize = 1024;
 
-            if ((image.type === jpgType || image.type === pngType) && image.size <= maximumSize) {
+            if (image !== null && (image.type === jpgType || image.type === pngType) && image.size <= maximumSize) {
                 ImageService.compress(image, newSize).then(function success(data) {
                     postCtrl.photo_post = data;
                     ImageService.readFile(data, setImage);
@@ -42,11 +42,16 @@
         };
 
         postCtrl.createPost = function createPost() {
-            ImageService.saveImage(postCtrl.photo_post).then(function(data) {
-                postCtrl.post.photo_url = data.url;
+            if (postCtrl.photo_post) {
+                ImageService.saveImage(postCtrl.photo_post).then(function success(data) {
+                    postCtrl.post.photo_url = data.url;
+                    postCtrl.post.uploaded_images = [data.url];
+                    savePost();
+                    postCtrl.post.photo_url = null;
+                });
+            } else {
                 savePost();
-                postCtrl.post.photo_url = null;
-            });
+            }
         };
 
         function savePost() {

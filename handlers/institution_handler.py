@@ -30,6 +30,7 @@ def getSentInvitations(institution_key):
 
     return invites
 
+
 def isUserInvited(method):
     """Check if the user is invitee to update the stub of institution."""
     def check_authorization(self, user, institution_key, inviteKey):
@@ -72,6 +73,9 @@ class InstitutionHandler(BaseHandler):
         """Handle GET Requests."""
         obj_key = ndb.Key(urlsafe=url_string)
         obj = obj_key.get()
+
+        print obj_key
+
         assert type(obj) is Institution, "Key is not an Institution"
         institution_json = Utils.toJson(obj, host=self.request.host)
         institution_json['sent_invitations'] = getSentInvitations(obj.key)

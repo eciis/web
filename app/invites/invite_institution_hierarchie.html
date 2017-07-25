@@ -44,11 +44,19 @@
               </div>
             </md-list-item>
             <md-subheader class="md-no-sticky">Instituições filhas</md-subheader>
-            <md-list-item class="md-3-line" ng-click="null"
+            <md-list-item class="md-3-line"
             ng-repeat="institution in inviteInstCtrl.inst_children">
               <md-icon class="md-avatar-icon" >account_balance</md-icon>
               <div class="md-list-item-text" layout="column">
-                <h3>{{ institution.name }}</h3>
+                <a href class="md-title hyperlink" ng-if="inviteInstCtrl.showLink(institution)"
+                ng-click="inviteInstCtrl.goToInst(institution.key)">
+                  {{ institution.name }}
+                </a>
+                <div ng-if="!inviteInstCtrl.showLink(institution)">
+                  <h3>{{ institution.name }}</h3>
+                  <h3 style="color: red">
+                  Esta instituição ainda não está cadastrada na plataforma</h3>
+                </div>
               </div>
             </md-list-item>
             <md-subheader class="md-no-sticky" >Convites enviados</md-subheader>

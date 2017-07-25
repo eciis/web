@@ -48,11 +48,10 @@
             return false;
         };
 
-        mainCtrl.isAdmin = function isAdmin(current_institution) {
-            if (mainCtrl.user && mainCtrl.user.isAdmin(current_institution)){
-                return true;
+        mainCtrl.isAdmin = function isAdmin() {
+            if (mainCtrl.user){
+                return !_.isEmpty(mainCtrl.user.institutions_admin);
             }
-            return false;
         };
 
         mainCtrl.userIsActive = function userIsActive() {
@@ -88,7 +87,18 @@
             AuthService.logout();
         };
 
+        function isInactive() {
+            var notMember = mainCtrl.user.institutions.length === 0;
+            var notInvitee = mainCtrl.user.invites.length === 0;
+            var notActive = !mainCtrl.userIsActive();
+            
+            return ((notMember && notInvitee) || notActive);
+        }
+
         (function main() {
+            if (isInactive()) {
+                $state.go("user_inactive");
+            }
 
             var inviteOfUser = mainCtrl.user.getPendingInvitationOf("user");
             var inviteOfInstitution = mainCtrl.user.getPendingInvitationOf("institution");
@@ -100,9 +110,9 @@
             }
             
             if (inviteOfInstitution) {
-                var institutionStubKey = inviteOfInstitution.stub_institution_key;
-                $state.go("submit_institution", {institutionKey: institutionStubKey});
+                $state.go("submit_institution");
             }
+
         })();
     });
 })();

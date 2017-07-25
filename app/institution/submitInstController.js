@@ -57,23 +57,23 @@
                 .ok('Sim')
                 .cancel('Não');
             $mdDialog.show(confirm).then(function() {
-                saveImage();
+                if (submitInstCtrl.photo_instituicao) {
+                    saveImage();
+                } else {
+                    saveInstitution();
+                }
             }, function() {
                 showToast('Cancelado');
             });
         };
 
         function saveImage() {
-            if (submitInstCtrl.photo_instituicao) {
-                submitInstCtrl.loading = true;
-                ImageService.saveImage(submitInstCtrl.photo_instituicao).then(function(data) {
-                    submitInstCtrl.loading = false;
-                    submitInstCtrl.newInstitution.photo_url = data.url;
-                    saveInstitution();
-                });
-            } else {
+            submitInstCtrl.loading = true;
+            ImageService.saveImage(submitInstCtrl.photo_instituicao).then(function(data) {
+                submitInstCtrl.loading = false;
+                submitInstCtrl.newInstitution.photo_url = data.url;
                 saveInstitution();
-            }
+            });
         }
 
         function saveInstitution() {

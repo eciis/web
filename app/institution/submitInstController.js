@@ -34,7 +34,7 @@
 
         function setImage(image) {
             $rootScope.$apply(function() {
-                submitInstCtrl.institution.photo_url = image.src;
+                submitInstCtrl.newInstitution.photo_url = image.src;
             });
         }
 
@@ -50,8 +50,7 @@
         submitInstCtrl.submit = function submit() {
             if (submitInstCtrl.photo_instituicao) {
                 ImageService.saveImage(submitInstCtrl.photo_instituicao).then(function(data) {
-                    submitInstCtrl.institution.photo_url = data.url;
-                    submitInstCtrl.institution.uploaded_images.push(data.url);
+                    submitInstCtrl.newInstitution.photo_url = data.url;
                     saveInstitution();
                 });
             } else {
@@ -69,7 +68,6 @@
                 .ok('Sim')
                 .cancel('Não');
             $mdDialog.show(confirm).then(function() {
-                submitInstCtrl.newInstitution.uploaded_images = [];
                 var patch = jsonpatch.generate(observer);
                 InstitutionService.save(institutionKey, patch, submitInstCtrl.invite.key).then(
                     reloadUser(),
@@ -148,6 +146,6 @@
 
         (function main(){
              loadInstitution();
-        })();  
+        })();
     });
 })();

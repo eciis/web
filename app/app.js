@@ -30,8 +30,16 @@
                     }
                 }
             })
-            .state("app.home", {
+            .state("landing_page", {
                 url: "/",
+                views: {
+                    main: {
+                        templateUrl: "landingPage/landing_page.html"
+                    }
+                }
+            })
+            .state("app.home", {
+                url: "/home",
                 views: {
                     content: {
                         templateUrl: "home/home.html",
@@ -177,7 +185,7 @@
                     var token = AuthService.getUserToken();
                     config.headers.Authorization = 'Bearer ' + token;
                 } else {
-                    $state.go("signin");
+                    // $state.go("signin");
                 }
                 return config || $q.when(config);
             }

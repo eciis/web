@@ -74,7 +74,7 @@
 
         authObj.$onAuthStateChanged(function(firebaseUser) {
             if (!firebaseUser) {
-                $state.go("signin");
+                $state.go("app.landingPage");
             }
         });
 

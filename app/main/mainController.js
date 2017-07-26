@@ -96,6 +96,10 @@
         }
 
         (function main() {
+            if (AuthService.isLoggedIn()) {
+                $state.go("app.home");
+            }
+            
             if (isInactive()) {
                 $state.go("user_inactive");
             }

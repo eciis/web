@@ -22,7 +22,7 @@
         name: 'Splab',
         key: '1239'
     };
-    mayza.institutions = [certbio.key, splab.key];
+    mayza.institutions = [certbio, splab];
     mayza.institutions_admin = [certbio.key];
     mayza.current_institution = certbio;
 
@@ -84,15 +84,33 @@
 
     describe('MainController functions', function() {
         it('Should be active', function() {
-            expect(mainCtrl.isActive(certbio.key)).toBe(true);
+            expect(mainCtrl.isActive(certbio)).toBe(true);
         });
         it('Should be not active', function() {
-            expect(mainCtrl.isActive(splab.key)).toBe(false);
+            expect(mainCtrl.isActive(splab)).toBe(false);
         });
         it('Should change active institution', function() {
             spyOn(mainCtrl.user, 'changeInstitution');
-            mainCtrl.changeInstitution(splab.key);
-            expect(mainCtrl.user.changeInstitution).toHaveBeenCalledWith(splab.key);
+
+            var user_inst = {
+                name: 'user_inst',
+                key: 'veqw56eqw7r89',
+                invites: [{
+                    'invitee': 'user@email.com',
+                    'suggestion_institution_name': "Suggested Name",
+                    'type_of_invite': "institution",
+                    'status': 'sent'
+                }]
+            };
+
+            user_inst.institutions = [splab, certbio];
+            mainCtrl.user = new User(user_inst);
+
+            expect(mainCtrl.user.current_institution).toBe(splab);
+
+            mainCtrl.user.changeInstitution(certbio);
+
+            expect(mainCtrl.user.current_institution).toBe(certbio);
         });
         it('Should call state.go() in function goTo()', function(){
             spyOn(state, 'go');

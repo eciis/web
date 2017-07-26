@@ -51,9 +51,6 @@
             mainCtrl._mdPanel.open(config);
         };
 
-
-
-
         mainCtrl.toggle = function toggle() {
             $mdSidenav('leftNav').toggle();
         };

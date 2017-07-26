@@ -9,23 +9,23 @@
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
                 </button>
-                <a class="navbar-brand" href="#page-top" ng-click="mainCtrl.goToId('')">e-CIS</a>
+                <a class="navbar-brand" href="#page-top" target="_self">e-CIS</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li class="hidden">
-                        <a href="#page-top"></a>
+                        <a href="#page-top" target="_self"></a>
                     </li>
                     <li class="page-scroll">
-                        <a href="#about">Sobre</a>
+                        <a href="#about" target="_self">Sobre</a>
                     </li>
                     <li class="page-scroll">
-                        <a href="#portfolio">Instituições</a>
+                        <a href="#portfolio" target="_self">Instituições</a>
                     </li>
                     <li class="page-scroll">
-                        <a href="#contact">Entrar</a>
+                        <a href="#contact" target="_self">Entrar</a>
                     </li>
                 </ul>
             </div>
@@ -144,7 +144,7 @@
             </div>
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 text-center">
-                    <a href="#" class="btn btn-success btn-lg">
+                    <a ui-sref="signin" class="btn btn-success btn-lg">
                         <i></i> Entrar
                     </a>
                 </div>

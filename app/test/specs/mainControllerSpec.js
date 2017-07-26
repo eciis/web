@@ -1,7 +1,7 @@
 'use strict';
 
 (describe('Test MainController', function() {
-    var mainCtrl, httpBackend, scope, createCtrl, state, instService;
+    var mainCtrl, httpBackend, scope, createCtrl, state, instService, authService;
     var mayza = {
         name: 'Mayza',
         key: 'user-key',
@@ -33,8 +33,9 @@
         scope = $rootScope.$new();
         state = $state;
         instService = InstitutionService;
+        authService = AuthService;
 
-        AuthService.getCurrentUser = function() {
+        authService.getCurrentUser = function() {
             return new User(mayza);
         };
 
@@ -45,7 +46,8 @@
         httpBackend.when('GET', "auth/login.html").respond(200);
         createCtrl = function() {
             return $controller('MainController', {
-                scope: scope
+                scope: scope,
+                AuthService: authService
             });
         };
         mainCtrl = createCtrl();
@@ -55,6 +57,29 @@
     afterEach(function() {
         httpBackend.verifyNoOutstandingExpectation();
         httpBackend.verifyNoOutstandingRequest();
+    });
+
+
+    describe('main()', function() {
+
+        it("should change state to config_profile if user name is Unknown", function() {
+            var unknownUser = {
+              name: 'Unknown',
+              invites: [],
+              institutions: [splab],
+              state: 'active'
+            };
+
+            authService.getCurrentUser = function() {
+                return new User(unknownUser);
+            };
+
+            spyOn(state, 'go');
+
+            mainCtrl = createCtrl();
+
+            expect(state.go).toHaveBeenCalledWith('config_profile');
+        });
     });
 
     describe('MainController functions', function() {

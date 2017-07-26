@@ -96,10 +96,6 @@
 
     describe('InstitutionController functions', function() {
 
-        fit('Should is admin', function(){
-            expect(institutionCtrl.isAdmin()).toEqual(true);
-        });
-
         describe('follow()', function() {
 
             beforeEach(function() {

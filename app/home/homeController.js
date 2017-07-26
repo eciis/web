@@ -8,7 +8,7 @@
         var homeCtrl = this;
 
         homeCtrl.posts = [];
-        homeCtrl.institutions = [];
+        homeCtrl.followingInstitutions = [];
         homeCtrl.instMenuExpanded = false;
 
         homeCtrl.user = AuthService.getCurrentUser();
@@ -46,24 +46,7 @@
         };
 
         function getFollowingInstitutions(){
-            InstitutionService.getInstitutions().then(function sucess(response){
-                homeCtrl.institutions = getFilteredInstitutions(response.data);
-            });
-        }
-
-        function getInstKeys() {
-            var keys = _.map(homeCtrl.user.follows, function(instUri) {
-                return instUri.split("/key/")[1];
-            });
-            return keys;
-        }
-
-        function getFilteredInstitutions(institutions) {
-            var institutionsKeys = getInstKeys();
-            var filteredInsts = _.filter(institutions, function(institution) {
-                return _.includes(institutionsKeys, institution.key); 
-            });
-            return filteredInsts;
+            homeCtrl.followingInstitutions = homeCtrl.user.follows;
         }
 
         var intervalPromise;

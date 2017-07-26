@@ -19,7 +19,7 @@ User.prototype.follow = function follow(keyInstitution) {
 
 User.prototype.unfollow = function unfollow(keyInstitution) {
     _.remove(this.follows, function(institution){
-    	return getKey(institution) == keyInstitution;
+    	return institution.key == keyInstitution;
     });
 };
 
@@ -27,8 +27,7 @@ User.prototype.isFollower = function isFollower(keyInstitution) {
 	var isFollower = false;
 
     _.forEach(this.follows, function(institution) {
-          var key = getKey(institution);
-          if(key === keyInstitution){
+          if(institution.key === keyInstitution){
           	isFollower = true;
           }
     });

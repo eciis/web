@@ -67,7 +67,7 @@ def createInstitution(data, user):
     institution.email = data.get('email')
     institution.photo_url = data.get('photo_url') or institutionImage
     institution.admin = user.key
-        institution.state = data.get('state')
+    institution.state = data.get('state')
     institution.members.append(user.key)
     institution.followers.append(user.key)
     institution.put()

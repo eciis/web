@@ -22,7 +22,7 @@
         name: 'Splab',
         key: '1239'
     };
-    mayza.institutions = [certbio.key, splab.key];
+    mayza.institutions = [certbio, splab];
     mayza.institutions_admin = [certbio.key];
     mayza.current_institution = certbio;
 
@@ -84,7 +84,7 @@
 
     describe('MainController functions', function() {
         it('Should be active', function() {
-            expect(mainCtrl.isActive(certbio.key)).toBe(true);
+            expect(mainCtrl.isActive(certbio)).toBe(true);
         });
         it('Should be not active', function() {
             expect(mainCtrl.isActive(splab.key)).toBe(false);

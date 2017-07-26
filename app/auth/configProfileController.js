@@ -20,7 +20,7 @@
                 configProfileCtrl.photo_user = data;
                 ImageService.readFile(data, setImage);
                 configProfileCtrl.file = null;
-            }, function err(error) {
+            }, function error(error) {
                 MessageService.showToast(error);
             });
         };

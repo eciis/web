@@ -22,7 +22,7 @@
                 submitInstCtrl.photo_instituicao = data;
                 ImageService.readFile(data, setImage);
                 submitInstCtrl.file = null;
-            }, function err(error) {
+            }, function error(error) {
                 MessageService.showToast(error);
             });
         };

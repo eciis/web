@@ -17,7 +17,7 @@
                 postCtrl.photo_post = data;
                 ImageService.readFile(data, setImage);
                 postCtrl.file = null;
-            }, function err(error) {
+            }, function error(error) {
                 MessageService.showToast(error);
             });
         };

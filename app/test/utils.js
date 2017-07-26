@@ -1,5 +1,11 @@
 "use strict";
 
+/**
+* Function of convert image from base 64 to Blob
+* @param {string} base64Data - receive base 64 image
+* @param {string} contentType - receive type of image
+* @return - return image in format blob
+*/
 function base64toBlob(base64Data, contentType) {
     contentType = contentType || '';
     var sliceSize = 1024;
@@ -21,6 +27,11 @@ function base64toBlob(base64Data, contentType) {
     return new Blob(byteArrays, { type: contentType });
 }
 
+/**
+* Function of create Image
+* @param {int} size - receive size of image
+* @return - returns the image with specified size
+*/
 function createImage(size) {
     /*Create new simple image for tests*/
 

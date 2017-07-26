@@ -82,6 +82,12 @@
             return deferred.promise;
         };
 
+        /**
+        * Function of convert image from base 64 to Blob
+        * @param {string} base64Data - receive base 64 image
+        * @param {string} contentType - receive type of image
+        * @return - return image in format blob
+        */
         function base64toBlob(base64Data, contentType) {
             contentType = contentType || '';
             var sliceSize = 1024;

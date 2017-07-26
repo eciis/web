@@ -80,6 +80,10 @@
 
         (function main() {
             observer = jsonpatch.observe(configProfileCtrl.newUser);
+
+            if (configProfileCtrl.newUser.name === 'Unknown') {
+                delete configProfileCtrl.newUser.name;
+            }
         })();
     });
 })();

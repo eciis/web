@@ -88,8 +88,15 @@
             AuthService.logout();
         };
 
-        (function main() {
+        function isInactive() {
+            var notMember = mainCtrl.user.institutions.length === 0;
+            var notInvitee = mainCtrl.user.invites.length === 0;
+            var notActive = !mainCtrl.userIsActive();
+            
+            return ((notMember && notInvitee) || notActive);
+        }
 
+        (function main() {
             var inviteOfUser = mainCtrl.user.getPendingInvitationOf("user");
             var inviteOfInstitution = mainCtrl.user.getPendingInvitationOf("institution");
             
@@ -97,11 +104,13 @@
                 var institutionKey = inviteOfUser.institution_key;
                 var inviteKey = inviteOfUser.key;
                 $state.go("new_invite", {institutionKey: institutionKey, inviteKey: inviteKey});
-            }
-
-            if (inviteOfInstitution) {
+            } else if (inviteOfInstitution) {
                 var institutionStubKey = inviteOfInstitution.stub_institution_key;
                 $state.go("submit_institution", {institutionKey: institutionStubKey});
+            } else if (isInactive()) {
+                $state.go("user_inactive");
+            } else if (mainCtrl.user.name === 'Unknown') {
+                $state.go("config_profile");
             }
         })();
     });

@@ -56,6 +56,25 @@
         httpBackend.verifyNoOutstandingRequest();
     });
 
+    describe('main()', function() {
+
+        it("should delete name from user if that is Unknown", function() {
+            var unknownUser = {
+              name: 'Unknown'
+            };
+
+            expect(unknownUser.name).not.toBeUndefined();
+
+            authService.getCurrentUser = function() {
+                return new User(unknownUser);
+            };
+
+            configCtrl = createCrtl();
+
+            expect(configCtrl.newUser.name).toBeUndefined();
+        });
+    });
+
     describe('finish()', function(){
 
         it("Should call mdToast.show", function(){
@@ -75,8 +94,7 @@
             expect(mdToast.show).toHaveBeenCalled(); 
         });
 
-        // TODO FIX
-        xit('Should change informations of user from system', function(done) {
+        it('Should change informations of user from system', function(done) {
             spyOn(state, 'go');
             spyOn(userService, 'save').and.callThrough();
 
@@ -88,9 +106,10 @@
                 };
             });
 
-            expect(configCtrl.user.name).toEqual(user.name);
-            expect(configCtrl.user.email).toEqual(user.email);
-            expect(configCtrl.user.cpf).toEqual(user.cpf);
+
+            expect(configCtrl.newUser.name).toEqual(user.name);
+            expect(configCtrl.newUser.email).toEqual(user.email);
+            expect(configCtrl.newUser.cpf).toEqual(user.cpf);
 
             httpBackend.expect('PATCH', '/api/user').respond(newUser);
 

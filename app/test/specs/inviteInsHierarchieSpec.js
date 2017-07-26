@@ -32,6 +32,8 @@
 
     splab['children_institutions'] = [ecis];
 
+    splab = new Institution(splab);
+
     var invite = new Invite({invitee: "parent@gmail.com", 
                         suggestion_institution_name : "Institution Parent"},
                             'institution_parent', splab.key, maiana.email);
@@ -74,7 +76,8 @@
         });
 
         it('should be equal to splab', function() {
-            expect(inviteInstCtrl.institution).toEqual(splab);
+            expect(inviteInstCtrl.institution.name).toEqual(splab.name);
+            expect(inviteInstCtrl.institution.key).toEqual(splab.key);
         });
     });
     
@@ -115,11 +118,11 @@
         });
 
         it('Should not show link', function(){
-            expect(inviteInstCtrl.showLink(splab)).toBe(true);
+            expect(inviteInstCtrl.isActive(splab)).toBe(true);
         });
 
         it('Should show link', function(){
-            expect(inviteInstCtrl.showLink(ecis)).toBe(false);
+            expect(inviteInstCtrl.isActive(ecis)).toBe(false);
         });
 
         describe('sendInstInvite()', function() {

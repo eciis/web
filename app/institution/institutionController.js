@@ -67,6 +67,14 @@
             );
         }
 
+        institutionCtrl.isAdmin = function isAdmin() {
+            var isAdmin = institutionCtrl.user.isAdmin(currentInstitutionKey);
+            var isloggedWithInstitution = (institutionCtrl.user.current_institution.key === currentInstitutionKey);
+
+            return isAdmin && isloggedWithInstitution;
+        };
+
+
         institutionCtrl.follow = function follow(){
             var promise = InstitutionService.follow(currentInstitutionKey);
             promise.then(function success(){

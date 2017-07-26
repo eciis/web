@@ -19,7 +19,8 @@
     var tiago = {
         name: 'Tiago',
         institutions: splab.key,
-        follows: certbio.key
+        follows: certbio.key,
+        current_institution: splab
     };
 
     var raoni = {
@@ -57,6 +58,7 @@
                 {
                     scope: scope,
                     institutionService: institutionService,
+                    current_institution: splab
                 });
         };
         state.params.institutionKey = splab.key;
@@ -93,6 +95,10 @@
     });
 
     describe('InstitutionController functions', function() {
+
+        fit('Should is admin', function(){
+            expect(institutionCtrl.isAdmin()).toEqual(true);
+        });
 
         describe('follow()', function() {
 

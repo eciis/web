@@ -12,16 +12,17 @@ from models.post import Post
 from models.post import Comment
 from models.invite import Invite
 from google.appengine.ext import ndb
+import search_module
 
 
 def add_comments_to_post(user, post, institution, comments_qnt=3):
-        """Add comments to post."""
-        text_A = {'text': 'Lorem ipsum dolor sit amet, at a. Mauris justo ipsum, \
+    """Add comments to post."""
+    text_A = {'text': 'Lorem ipsum dolor sit amet, at a. Mauris justo ipsum, \
         mauris justo eget, dolor justo. Aliquet amet, \
         mi tristique. Aliquam suspendisse at.', 'institution_key': institution.urlsafe()}
-        text_B = {'text': 'Lorem ipsum dolor sit amet, orci id. Eu qui, \
+    text_B = {'text': 'Lorem ipsum dolor sit amet, orci id. Eu qui, \
         dui eu curabitur, lacinia justo ante.', 'institution_key': institution.urlsafe()}
-        text_C = {'text': 'Lorem ipsum dolor sit amet, faucibus nunc neque ridiculus,\
+    text_C = {'text': 'Lorem ipsum dolor sit amet, faucibus nunc neque ridiculus,\
          platea penatibus fusce mattis. Consectetue ut eleifend ipsum,\
          sapien lacinia montes gravida urna, tortor diam aenean diam vel,\
          augue non lacus vivamus. Tempor sollicitudin adipiscing cras, \
@@ -29,14 +30,14 @@ def add_comments_to_post(user, post, institution, comments_qnt=3):
          Et ridiculus sapien in pede, senectus diamlorem in vitae, \
          nunc eget adipiscing vestibulum.', 'institution_key': institution.urlsafe()}
 
-        texts = []
-        texts.append(text_A)
-        texts.append(text_B)
-        texts.append(text_C)
-        comments_qnt = comments_qnt if comments_qnt <= 3 else 3
-        for i in range(comments_qnt):
-            comment = Comment.create(texts[i], user.key, post.key)
-            post.add_comment(comment)
+    texts = []
+    texts.append(text_A)
+    texts.append(text_B)
+    texts.append(text_C)
+    comments_qnt = comments_qnt if comments_qnt <= 3 else 3
+    for i in range(comments_qnt):
+        comment = Comment.create(texts[i], user.key, post.key)
+        post.add_comment(comment)
 
 
 def getGravatar(email):
@@ -48,6 +49,36 @@ def getGravatar(email):
         hashlib.md5(email.lower()).hexdigest() + "?"
     gravatar_url += urllib.urlencode({'d': default, 's': str(size)})
     return gravatar_url
+
+
+def createInstitution(data, user):
+    """Create a new Institution."""
+
+    institutionImage = "http://eciis-splab.appspot.com/images/institution.jpg"
+    institution = Institution()
+    institution.name = data.get('name')
+    institution.acronym = data.get('acronym')
+    institution.cnpj = data.get('cnpj')
+    institution.legal_nature = data.get('legal_nature')
+    institution.address = data.get('address')
+    institution.state = data.get('state')
+    institution.description = data.get('description')
+    institution.phone_number = data.get('phone_number')
+    institution.email = data.get('email')
+    institution.photo_url = data.get('photo_url') or institutionImage
+    institution.admin = user.key
+    institution.members.append(user.key)
+    institution.followers.append(user.key)
+    institution.put()
+
+    user.institutions.append(institution.key)
+    user.institutions_admin.append(institution.key)
+    user.follows.append(institution.key)
+    user.put()
+    search_module.createDocument(
+        institution.key.urlsafe(), institution.name, institution.state)
+
+    return institution
 
 
 class BaseHandler(webapp2.RequestHandler):
@@ -78,7 +109,8 @@ class ResetHandler(BaseHandler):
         invites = Invite.query().fetch(keys_only=True)
         ndb.delete_multi(invites)
 
-        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+        self.response.headers[
+            'Content-Type'] = 'application/json; charset=utf-8'
         response = {"msg": "Datastore Cleaned"}
         self.response.write(json.dumps(response))
 
@@ -224,13 +256,6 @@ class ResetHandler(BaseHandler):
         admin.state = 'active'
         admin.put()
 
-        # Invites
-        invite = Invite()
-        invite.invitee = 'testeeciis@gmail.com'
-        invite.inviter = 'eciis@gmail.com'
-        invite.type_of_invite = 'institution'
-        invite.put()
-
         jsonList.append({"msg": "database initialized with a few users"})
 
         # new Institution CERTBIO with User Mayza like a member
@@ -246,9 +271,9 @@ class ResetHandler(BaseHandler):
             'photo_url': 'https://pbs.twimg.com/profile_images/1782760873/Logo_do_site_400x400.jpg',
             'email': 'certbio@ufcg.edu.br',
             'phone_number': '83 33224455',
-            'invite': invite.key.urlsafe(),
+            'state': 'active'
         }
-        certbio = Institution.create(data, admin)
+        certbio = createInstitution(data, admin)
         for user in [mayza.key, dalton.key, admin.key]:
             certbio.add_member(user)
         for user in [jorge.key, mayza.key, maiana.key, luiz.key,
@@ -268,9 +293,9 @@ class ResetHandler(BaseHandler):
             'photo_url': 'http://amaurymedeiros.com/images/splab.png',
             'email': 'splab@ufcg.edu.br',
             'phone_number': '83 33227865',
-            'invite': invite.key.urlsafe(),
+            'state': 'active'
         }
-        splab = Institution.create(data, admin)
+        splab = createInstitution(data, admin)
         for user in [jorge.key, andre.key, admin.key]:
             splab.add_member(user)
         for user in [jorge.key, andre.key, maiana.key, luiz.key,
@@ -289,9 +314,9 @@ class ResetHandler(BaseHandler):
             'photo_url': 'http://www.paho.org/bra/images/stories/BRA01A/logobireme.jpg',
             'email': 'eciis@ufcg.edu.br',
             'phone_number': '83 33227865',
-            'invite': invite.key.urlsafe(),
+            'state': 'active'
         }
-        eciis = Institution.create(data, admin)
+        eciis = createInstitution(data, admin)
         for user in [dalton.key, andre.key, jorge.key, maiana.key,
                      luiz.key, raoni.key, ruan.key, tiago.key, mayza.key, admin.key]:
             eciis.add_member(user)
@@ -301,7 +326,8 @@ class ResetHandler(BaseHandler):
                      ruan.key, tiago.key, admin.key]:
             eciis.follow(user)
 
-        jsonList.append({"msg": "database initialized with a few institutions"})
+        jsonList.append(
+            {"msg": "database initialized with a few institutions"})
 
         # Updating Institutions
         mayza.institutions = [certbio.key, eciis.key]
@@ -368,7 +394,8 @@ class ResetHandler(BaseHandler):
         mayza_post_comIMG.institution = certbio.key
         mayza_post_comIMG.last_modified_by = mayza.key
         mayza_post_comIMG.put()
-        add_comments_to_post(mayza, mayza_post_comIMG, mayza.institutions[0], 1)
+        add_comments_to_post(mayza, mayza_post_comIMG,
+                             mayza.institutions[0], 1)
 
         # POST of André To SPLAB Institution
         andre_post = Post()
@@ -423,7 +450,8 @@ class ResetHandler(BaseHandler):
         dalton_postCertbio.institution = certbio.key
         dalton_postCertbio.last_modified_by = dalton.key
         dalton_postCertbio.put()
-        add_comments_to_post(dalton, dalton_postCertbio, dalton.institutions[0], 1)
+        add_comments_to_post(dalton, dalton_postCertbio,
+                             dalton.institutions[0], 1)
 
         # POST of Jorge To SPLAB Institution
         jorge_post = Post()
@@ -473,7 +501,8 @@ class ResetHandler(BaseHandler):
         eciis.posts = [jorge_post_eCIIS.key, dalton_post.key]
         eciis.put()
 
-        certbio.posts = [dalton_postCertbio.key, mayza_post.key, mayza_post_comIMG.key]
+        certbio.posts = [dalton_postCertbio.key,
+                         mayza_post.key, mayza_post_comIMG.key]
         certbio.put()
 
         splab.posts = [jorge_post.key, andre_post.key]

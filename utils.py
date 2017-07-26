@@ -148,16 +148,15 @@ class Utils():
 
 def verify_token(request):
     """Verify Firebase auth."""
-    # [START verify_token]
-    try:
-        token = request.headers['Authorization']
-        if token:
-            token = token.split(' ').pop()
+    token = request.headers['Authorization']
+    if token:
+        token = token.split(' ').pop()
+        try:
             return google.oauth2.id_token.verify_token(
                 token, HTTP_REQUEST)
-    except Exception as exp:
-        raise NotAuthorizedException()
-    return
+        except:
+            return google.oauth2.id_token.verify_firebase_token(
+                token, HTTP_REQUEST)
 
 
 def login_required(method):

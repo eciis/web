@@ -113,7 +113,7 @@
                 }
             })
             .state("submit_institution", {
-                url: "/submitinstitution",
+                url: "/:institutionKey/submitinstitution",
                 views: {
                     main: {
                         templateUrl:"institution/submitInstitution.html",

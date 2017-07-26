@@ -151,7 +151,7 @@
 
             expect(user.current_institution).toBe(splab);
 
-            user.changeInstitution(certbio.name);
+            user.changeInstitution(certbio);
 
             expect(JSON.stringify).toHaveBeenCalled();
             expect(user.current_institution).toBe(certbio);

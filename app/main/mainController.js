@@ -86,8 +86,8 @@
             return mainCtrl.user.state == 'active';
         };
 
-        mainCtrl.changeInstitution = function changeInstitution(name) {
-            mainCtrl.user.changeInstitution(name);
+        mainCtrl.changeInstitution = function changeInstitution(institution) {
+            mainCtrl.user.changeInstitution(institution);
         };
 
         mainCtrl.settings = [{

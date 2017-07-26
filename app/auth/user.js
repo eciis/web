@@ -9,8 +9,8 @@ function User(data) {
     }
 }
 
-User.prototype.changeInstitution = function changeInstitution(name) {
-    this.current_institution = _.find(this.institutions, {'name': name});
+User.prototype.changeInstitution = function changeInstitution(institution) {
+    this.current_institution = _.find(this.institutions, {'key': institution.key});
     window.sessionStorage.userInfo = JSON.stringify(this);
 };
 

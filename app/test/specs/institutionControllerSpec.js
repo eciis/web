@@ -7,13 +7,15 @@
     var INSTITUTIONS_URI = "/api/institutions/";
 
     var splab = {
-            name: 'SPLAB',
-            key: '987654321'
+        acronym: 'SPLAB',
+        key: '987654321',
+        photo_url: "photo_url"
     };
 
     var certbio = {
-        name: 'CERTBIO',
-        key: '123456789'
+        acronym: 'CERTBIO',
+        key: '123456789',
+        photo_url: "photo_url"
     };
 
     var tiago = {
@@ -135,7 +137,7 @@
             it('should call user.follow()', function(done) {
                 var promise = institutionCtrl.follow();
                 promise.then(function() {
-                    expect(institutionCtrl.user.follow).toHaveBeenCalledWith(splab.key);
+                    expect(institutionCtrl.user.follow).toHaveBeenCalledWith(splab);
                     done();
                 });
                 scope.$apply();

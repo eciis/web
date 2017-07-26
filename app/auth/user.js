@@ -13,8 +13,8 @@ User.prototype.changeInstitution = function changeInstitution(name) {
     this.current_institution = _.find(this.institutions, {'name': name});
 };
 
-User.prototype.follow = function follow(keyInstitution) {
-    this.follows.push(keyInstitution);
+User.prototype.follow = function follow(institution) {
+    this.follows.push(institution);
 };
 
 User.prototype.unfollow = function unfollow(keyInstitution) {

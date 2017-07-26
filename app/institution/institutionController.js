@@ -71,13 +71,23 @@
             var promise = InstitutionService.follow(currentInstitutionKey);
             promise.then(function success(){
                 showToast("Seguindo "+institutionCtrl.current_institution.name);
-                institutionCtrl.user.follow(currentInstitutionKey);
+                var institution = makeInstitution();
+                institutionCtrl.user.follow(institution);
                 getFollowers();
             }, function error() {
                 showToast('Erro ao seguir a instituição.');
             });
             return promise;
         };
+
+        function makeInstitution() {
+            var institution =  {
+                acronym: institutionCtrl.current_institution.acronym,
+                key: institutionCtrl.current_institution.key,
+                photo_url: institutionCtrl.current_institution.photo_url
+            };
+            return institution;
+        }
 
         institutionCtrl.unfollow = function unfollow() {
             if(institutionCtrl.user.isMember(institutionCtrl.current_institution.key)){

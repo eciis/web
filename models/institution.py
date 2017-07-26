@@ -153,6 +153,7 @@ class Institution(ndb.Model):
 
         user.institutions.append(institution.key)
         user.institutions_admin.append(institution.key)
+        user.state = "active"
         user.follows.append(institution.key)
         user.put()
 

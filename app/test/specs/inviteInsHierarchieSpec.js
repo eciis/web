@@ -117,11 +117,11 @@
             });
         });
 
-        it('Should not show link', function(){
+        it('Should not active institution', function(){
             expect(inviteInstCtrl.isActive(splab)).toBe(true);
         });
 
-        it('Should show link', function(){
+        it('Should active institution', function(){
             expect(inviteInstCtrl.isActive(ecis)).toBe(false);
         });
 

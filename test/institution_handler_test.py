@@ -51,6 +51,9 @@ class InstitutionHandlerTest(TestBaseHandler):
         self.assertEqual(self.userUpdated.institutions_admin, [self.inst_create.key],
                          "The institution admin by Raoni expected was Inst create")
 
+        self.assertEqual(self.userUpdated.state, "active",
+                         "The state of Raoni expected was active")
+
         self.inviteUpdate = self.invite.key.get()
 
         self.assertEqual(self.inviteUpdate.status, "accepted",
@@ -90,6 +93,7 @@ def initModels(cls):
     cls.raoni.name = 'Raoni Smaneoto'
     cls.raoni.cpf = '089.675.908-65'
     cls.raoni.email = 'raoni.smaneoto@ccc.ufcg.edu.br'
+    cls.raoni.state = "pending"
     cls.raoni.institutions = []
     cls.raoni.follows = []
     cls.raoni.institutions_admin = []

@@ -12,16 +12,17 @@ from models.post import Post
 from models.post import Comment
 from models.invite import Invite
 from google.appengine.ext import ndb
+import search_module
 
 
 def add_comments_to_post(user, post, institution, comments_qnt=3):
-        """Add comments to post."""
-        text_A = {'text': 'Lorem ipsum dolor sit amet, at a. Mauris justo ipsum, \
+    """Add comments to post."""
+    text_A = {'text': 'Lorem ipsum dolor sit amet, at a. Mauris justo ipsum, \
         mauris justo eget, dolor justo. Aliquet amet, \
         mi tristique. Aliquam suspendisse at.', 'institution_key': institution.urlsafe()}
-        text_B = {'text': 'Lorem ipsum dolor sit amet, orci id. Eu qui, \
+    text_B = {'text': 'Lorem ipsum dolor sit amet, orci id. Eu qui, \
         dui eu curabitur, lacinia justo ante.', 'institution_key': institution.urlsafe()}
-        text_C = {'text': 'Lorem ipsum dolor sit amet, faucibus nunc neque ridiculus,\
+    text_C = {'text': 'Lorem ipsum dolor sit amet, faucibus nunc neque ridiculus,\
          platea penatibus fusce mattis. Consectetue ut eleifend ipsum,\
          sapien lacinia montes gravida urna, tortor diam aenean diam vel,\
          augue non lacus vivamus. Tempor sollicitudin adipiscing cras, \
@@ -29,14 +30,14 @@ def add_comments_to_post(user, post, institution, comments_qnt=3):
          Et ridiculus sapien in pede, senectus diamlorem in vitae, \
          nunc eget adipiscing vestibulum.', 'institution_key': institution.urlsafe()}
 
-        texts = []
-        texts.append(text_A)
-        texts.append(text_B)
-        texts.append(text_C)
-        comments_qnt = comments_qnt if comments_qnt <= 3 else 3
-        for i in range(comments_qnt):
-            comment = Comment.create(texts[i], user.key, post.key)
-            post.add_comment(comment)
+    texts = []
+    texts.append(text_A)
+    texts.append(text_B)
+    texts.append(text_C)
+    comments_qnt = comments_qnt if comments_qnt <= 3 else 3
+    for i in range(comments_qnt):
+        comment = Comment.create(texts[i], user.key, post.key)
+        post.add_comment(comment)
 
 
 def getGravatar(email):
@@ -51,32 +52,34 @@ def getGravatar(email):
 
 
 def createInstitution(data, user):
-        """Create a new Institution."""
+    """Create a new Institution."""
 
-        institutionImage = "http://eciis-splab.appspot.com/images/institution.jpg"
-        institution = Institution()
-        institution.name = data.get('name')
-        institution.acronym = data.get('acronym')
-        institution.cnpj = data.get('cnpj')
-        institution.legal_nature = data.get('legal_nature')
-        institution.address = data.get('address')
+    institutionImage = "http://eciis-splab.appspot.com/images/institution.jpg"
+    institution = Institution()
+    institution.name = data.get('name')
+    institution.acronym = data.get('acronym')
+    institution.cnpj = data.get('cnpj')
+    institution.legal_nature = data.get('legal_nature')
+    institution.address = data.get('address')
+    institution.state = data.get('state')
+    institution.description = data.get('description')
+    institution.phone_number = data.get('phone_number')
+    institution.email = data.get('email')
+    institution.photo_url = data.get('photo_url') or institutionImage
+    institution.admin = user.key
         institution.state = data.get('state')
-        institution.description = data.get('description')
-        institution.phone_number = data.get('phone_number')
-        institution.email = data.get('email')
-        institution.photo_url = data.get('photo_url') or institutionImage
-        institution.admin = user.key
-        institution.state = data.get('state')
-        institution.members.append(user.key)
-        institution.followers.append(user.key)
-        institution.put()
+    institution.members.append(user.key)
+    institution.followers.append(user.key)
+    institution.put()
 
-        user.institutions.append(institution.key)
-        user.institutions_admin.append(institution.key)
-        user.follows.append(institution.key)
-        user.put()
+    user.institutions.append(institution.key)
+    user.institutions_admin.append(institution.key)
+    user.follows.append(institution.key)
+    user.put()
+    search_module.createDocument(
+        institution.key.urlsafe(), institution.name, institution.state)
 
-        return institution
+    return institution
 
 
 class BaseHandler(webapp2.RequestHandler):
@@ -107,7 +110,8 @@ class ResetHandler(BaseHandler):
         invites = Invite.query().fetch(keys_only=True)
         ndb.delete_multi(invites)
 
-        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+        self.response.headers[
+            'Content-Type'] = 'application/json; charset=utf-8'
         response = {"msg": "Datastore Cleaned"}
         self.response.write(json.dumps(response))
 
@@ -329,7 +333,8 @@ class ResetHandler(BaseHandler):
         splab.children_institutions = [eciis.key]
         splab.put()
 
-        jsonList.append({"msg": "database initialized with a few institutions"})
+        jsonList.append(
+            {"msg": "database initialized with a few institutions"})
 
         # Updating Institutions
         mayza.institutions = [certbio.key, eciis.key]
@@ -396,7 +401,8 @@ class ResetHandler(BaseHandler):
         mayza_post_comIMG.institution = certbio.key
         mayza_post_comIMG.last_modified_by = mayza.key
         mayza_post_comIMG.put()
-        add_comments_to_post(mayza, mayza_post_comIMG, mayza.institutions[0], 1)
+        add_comments_to_post(mayza, mayza_post_comIMG,
+                             mayza.institutions[0], 1)
 
         # POST of André To SPLAB Institution
         andre_post = Post()
@@ -451,7 +457,8 @@ class ResetHandler(BaseHandler):
         dalton_postCertbio.institution = certbio.key
         dalton_postCertbio.last_modified_by = dalton.key
         dalton_postCertbio.put()
-        add_comments_to_post(dalton, dalton_postCertbio, dalton.institutions[0], 1)
+        add_comments_to_post(dalton, dalton_postCertbio,
+                             dalton.institutions[0], 1)
 
         # POST of Jorge To SPLAB Institution
         jorge_post = Post()
@@ -501,7 +508,8 @@ class ResetHandler(BaseHandler):
         eciis.posts = [jorge_post_eCIIS.key, dalton_post.key]
         eciis.put()
 
-        certbio.posts = [dalton_postCertbio.key, mayza_post.key, mayza_post_comIMG.key]
+        certbio.posts = [dalton_postCertbio.key,
+                         mayza_post.key, mayza_post_comIMG.key]
         certbio.put()
 
         splab.posts = [jorge_post.key, andre_post.key]

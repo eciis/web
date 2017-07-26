@@ -69,7 +69,7 @@
         };
 
         mainCtrl.isActive = function isActive(inst) {
-            if (mainCtrl.user.current_institution == inst) {
+            if (mainCtrl.user.current_institution.key == inst.key) {
                 return true;
             }
             return false;

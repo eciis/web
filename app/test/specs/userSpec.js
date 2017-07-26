@@ -140,5 +140,15 @@
             expect(user.isValid()).toBe(false);
           });
         });
+
+        describe('changeInstitution', function() {
+          
+          fit('should call JSON stringify', function() {
+            spyOn(JSON, 'stringify').and.callThrough();
+            user = createUser();
+            user.changeInstitution({});
+            expect(JSON.stringify).toHaveBeenCalled();
+          });
+        });
    });    
 }));

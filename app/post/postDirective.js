@@ -76,6 +76,14 @@
         postCtrl.clearPost = function clearPost() {
             postCtrl.post = {};
         };
+
+        postCtrl.showButton = function() {
+            return postCtrl.post.title && !postCtrl.loading;
+        };
+
+        postCtrl.showImage = function() {
+            return postCtrl.post.photo_url;
+        };
     });
 
     app.directive("createPost", function() {

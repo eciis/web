@@ -62,6 +62,10 @@
             return deffered.promise;
         }
 
+        configProfileCtrl.showButton = function() {
+            return !configProfileCtrl.loading;
+        };
+
         (function main() {
             observer = jsonpatch.observe(configProfileCtrl.newUser);
 

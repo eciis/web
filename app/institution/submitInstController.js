@@ -113,6 +113,10 @@
             });
         };
 
+        submitInstCtrl.showButton = function() {
+            return !submitInstCtrl.loading;
+        };
+
         function getLegalNatures() {
             $http.get('institution/legal_nature.json').then(function success(response) {
                 submitInstCtrl.legalNatures = response.data;

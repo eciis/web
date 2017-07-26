@@ -33,11 +33,13 @@ def getSentInvitations(institution_key):
 
 def isUserInvited(method):
     """Check if the user is invitee to update the stub of institution."""
+
     def check_authorization(self, user, institution_key, inviteKey):
         invite = ndb.Key(urlsafe=inviteKey).get()
 
         emailIsNotInvited = invite.invitee != user.email
-        institutionIsNotInvited = ndb.Key(urlsafe=institution_key) != invite.stub_institution_key
+        institutionIsNotInvited = ndb.Key(
+            urlsafe=institution_key) != invite.stub_institution_key
 
         Utils._assert(emailIsNotInvited or institutionIsNotInvited,
                       'User is not invitee to create this Institution', NotAuthorizedException)
@@ -48,11 +50,8 @@ def isUserInvited(method):
 
 def childrenToJson(obj):
     """Return the array with json from institution that are obj children."""
-    json = []
-    for institution in obj.children_institutions:
-        json.append(
-            Utils.toJson(institution.get())
-        )
+    json = [Utils.toJson(institution.get())
+            for institution in obj.children_institutions]
     return json
 
 

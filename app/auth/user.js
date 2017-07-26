@@ -49,6 +49,7 @@ User.prototype.addInstitution = function addInstitution(institutionKey){
     this.institutions.push(institutionKey);
 };
 
+
 User.prototype.isValid = function isValid() {
     if (_.isUndefined(this.name) || _.isEmpty(this.name)) {
         return false;
@@ -66,7 +67,6 @@ User.prototype.isValid = function isValid() {
 };
 
 User.prototype.getPendingInvitationOf = function getPendingInvitationOf(invitationType){
-
     if(invitationType == 'user'){
         return this.getPendingInviteUser();
     } else{
@@ -81,7 +81,7 @@ User.prototype.getPendingInviteUser = function getInviteUser(){
              return this.invites[i];
         }
     }
-}
+};
 
 User.prototype.getPendingInviteInst = function getInviteInst(){
     var typeInviteInst = ['institution', 'institution_parent'];
@@ -92,7 +92,7 @@ User.prototype.getPendingInviteInst = function getInviteInst(){
                 return this.invites[i];
         }
     }
-}
+};
 
 function getKeyObj(obj) {
     if(obj.key){

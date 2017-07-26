@@ -32,12 +32,14 @@
 
     splab['children_institutions'] = [ecis];
 
-    var invite = new Invite({invitee: "parent@gmail.com", suggestion_institution_name : "Institution Parent"},
+    var invite = new Invite({invitee: "parent@gmail.com", 
+                        suggestion_institution_name : "Institution Parent"},
                             'institution_parent', splab.key, maiana.email);
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $state, $mdToast, InviteService, AuthService) {
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, 
+        $state, $mdToast, InviteService, AuthService) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
@@ -50,8 +52,7 @@
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', "home/home.html").respond(200);
         createCtrl = function() {
-            return $controller('InviteInstHierarchieController',
-                {
+            return $controller('InviteInstHierarchieController', {
                     scope: scope,
                     inviteService: InviteService,
                 });
@@ -68,7 +69,7 @@
 
     describe('InviteInstHierarchieController properties', function() {
 
-        it('should exist a user and his name is Maiana', function() {
+        it('should exist a user with name Maiana', function() {
             expect(inviteInstCtrl.user.name).toEqual(maiana.name);
         });
 
@@ -108,7 +109,8 @@
             it('should be call state.go ', function() {
                 spyOn(state, 'go');
                 inviteInstCtrl.goToInst(splab.key);
-                expect(state.go).toHaveBeenCalledWith('app.institution', Object({ institutionKey: '987654321' }));
+                expect(state.go).toHaveBeenCalledWith('app.institution', 
+                    Object({ institutionKey: '987654321' }));
             });
         });
 

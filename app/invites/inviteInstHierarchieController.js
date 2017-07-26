@@ -23,13 +23,14 @@
             var currentInstitutionKey = inviteInstCtrl.user.current_institution.key;
             invite = new Invite(inviteInstCtrl.invite, inviteInstCtrl.type_of_invite, 
                 currentInstitutionKey, inviteInstCtrl.user.email);
+
             if (!invite.isValid()) {
                 showToast('Convite inválido!');
             } else {                
                 var promise = InviteService.sendInvite(invite);
-                promise.then(function success() {
+                promise.then(function success(response) {
                     showToast('Convite enviado com sucesso!');
-                    addInvite(invite);
+                    addInvite(response.data);
                 }, function error(response) {
                     showToast(response.data.msg);
                 });
@@ -43,7 +44,6 @@
             }else {
                 inviteInstCtrl.type_of_invite = 'institution_parent';
                 inviteInstCtrl.showButton = false;
-                
             }            
         };
 
@@ -56,13 +56,13 @@
             $state.go('app.institution', {institutionKey: institutionKey});
         };
 
-        inviteInstCtrl.showLink = function showLink(institution) {
+        inviteInstCtrl.isActive = function isActive(institution) {
             return institution.state == 'active';
         };
 
         function loadInstitution() {
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
-                inviteInstCtrl.institution = response.data;
+                inviteInstCtrl.institution = new Institution(response.data);
                 inviteInstCtrl.hasParent = !_.isEmpty(inviteInstCtrl.institution.parent_institution);
             }, function error(response) {
                 $state.go('app.institution', {institutionKey: currentInstitutionKey});
@@ -72,13 +72,11 @@
 
         function addInvite(invite) {
             inviteInstCtrl.invite = {};
-            inviteInstCtrl.institution.sent_invitations.push(invite);
+            inviteInstCtrl.institution.addInvite(invite);
+            var stub = inviteInstCtrl.institution.createStub(invite);
 
             if(invite.type_of_invite == 'institution_parent'){
-                inviteInstCtrl.institution.parent_institution = {
-                    'name': invite.suggestion_institution_name,
-                    'state': 'pending'
-                };
+                inviteInstCtrl.institution.addParentInst(stub);
                 inviteInstCtrl.hasParent = true;
             }
             inviteInstCtrl.type_of_invite = '';

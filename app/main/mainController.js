@@ -89,7 +89,6 @@
         };
 
         (function main() {
-            
             var inviteOfUser = mainCtrl.user.getPendingInvitationOf("user");
             var inviteOfInstitution = mainCtrl.user.getPendingInvitationOf("institution");
            

@@ -80,7 +80,7 @@
             expect(state.go).toHaveBeenCalledWith('app.institution', {institutionKey: '1239'});
         });
 
-        it('Should call makeSearch() in function showMenu()', function(){
+        it('Should call makeSearch() in function showMenu()', function(done){
             var documents = [{name: splab.name, id: splab.key}];
             mainCtrl.search = splab.name;
             mainCtrl.finalSearch = mainCtrl.search;
@@ -88,24 +88,27 @@
             spyOn(instService, 'searchInstitutions').and.callThrough();
             spyOn(mainCtrl, 'openMenu');
             httpBackend.expect('GET', "api/search/institution?name=" + splab.name + "&state=active").respond(documents);
-            mainCtrl.showMenu('$event').then(function success() {
-                expect(mainCtrl, 'openMenu').toHaveBeenCalled();
-                expect(mainCtrl, 'makeSearch').toHaveBeenCalled();
-                expect(instService, 'searchInstitutions').toHaveBeenCalled();
+            mainCtrl.showMenu('$event').then(function() {
+                expect(mainCtrl.makeSearch).toHaveBeenCalled();
+                expect(mainCtrl.openMenu).toHaveBeenCalled();
+                expect(instService.searchInstitutions).toHaveBeenCalled();
+                done();
             });
             httpBackend.flush();
         });
 
-        it('Should call searchInstitutions in makeSearch', function() {
+        it('Should call searchInstitutions in makeSearch', function(done) {
             var documents = [{name: splab.name, id: splab.key}];
             mainCtrl.search = splab.name;
             mainCtrl.finalSearch = mainCtrl.search;
             spyOn(instService, 'searchInstitutions').and.callThrough();
             httpBackend.expect('GET', "api/search/institution?name=" + splab.name + "&state=active").respond(documents);
-            mainCtrl.makeSearch();
+            mainCtrl.makeSearch().then(function() {
+                 expect(instService.searchInstitutions).toHaveBeenCalledWith(mainCtrl.finalSearch);
+                 expect(mainCtrl.institutions).toEqual(documents);
+                 done();
+            });
             httpBackend.flush();
-            expect(instService.searchInstitutions).toHaveBeenCalledWith(mainCtrl.finalSearch);
-            expect(mainCtrl.institutions).toEqual(documents);
         });
 
         it('User should not be admin of your current institution', function(){

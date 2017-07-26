@@ -52,7 +52,7 @@
         httpBackend.verifyNoOutstandingRequest();
     });
 
-    describe('Test PanelMenuCtrl functions', function() {
+    describe('goToInstitution', function() {
 
         it('Should call getInstitution in goToInstitution', function() {
             spyOn(instService, 'getInstitution').and.callThrough();
@@ -63,6 +63,5 @@
             expect(state.go).toHaveBeenCalled();
             expect(instService.getInstitution).toHaveBeenCalledWith(splab.key);
         });
-
     });
 }));

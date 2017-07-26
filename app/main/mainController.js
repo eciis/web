@@ -19,17 +19,19 @@
             if(mainCtrl.search) {
                 mainCtrl.finalSearch = mainCtrl.search;
                 mainCtrl.makeSearch().then(function success() {
-                    mainCtrl.openMenu(ev, deferred);
+                    mainCtrl.openMenu(ev);
+                    deferred.resolve(mainCtrl.institutions);
                 });
             }
             return deferred.promise;
         };
 
-        mainCtrl.openMenu = function openMenu(ev, deferred){
+        mainCtrl.openMenu = function openMenu(ev){
             mainCtrl.search = '';
             var position = mainCtrl._mdPanel.newPanelPosition()
                     .relativeTo('.demo-menu-open-button')
-                    .addPanelPosition(mainCtrl._mdPanel.xPosition.ALIGN_START, mainCtrl._mdPanel.yPosition.BELOW);
+                    .addPanelPosition(mainCtrl._mdPanel.xPosition.ALIGN_START,
+                        mainCtrl._mdPanel.yPosition.BELOW);
 
             var config = {
                 attachTo: angular.element(document.body),
@@ -47,7 +49,6 @@
                 focusOnOpen: false,
                 zIndex: 2
             };
-            deferred.resolve(mainCtrl.institutions);
             mainCtrl._mdPanel.open(config);
         };
 
@@ -59,10 +60,10 @@
             var deferred = $q.defer();
             InstitutionService.searchInstitutions(mainCtrl.finalSearch).then(function success(response) {
                 mainCtrl.institutions = response.data;
-                deferred.resolve(response);
                 if(_.size(mainCtrl.institutions) === 0){
                     mainCtrl.institutions.push({name: 'Nenhuma instituição encontrada'});
                 }
+                deferred.resolve(response);
             });
             return deferred.promise;
         };
@@ -118,7 +119,7 @@
 
             var inviteOfUser = mainCtrl.user.getPendingInvitationOf("user");
             var inviteOfInstitution = mainCtrl.user.getPendingInvitationOf("institution");
-            
+
             if (inviteOfUser) {
                 var institutionKey = inviteOfUser.institution_key;
                 var inviteKey = inviteOfUser.key;
@@ -143,7 +144,7 @@
             } else {
               angular.element(document.querySelectorAll('.demo-menu-item')[0]).focus();
             }
-          });
+        });
 
         panelCtrl.goToSearchedInstitution = function goToSearchedInstitution(institutionId) {
             panelCtrl.goToInstitution(institutionId);

@@ -39,7 +39,7 @@
         
         service.logout = function logout() {
             authObj.$signOut();
-            $window.sessionStorage.userInfo = null;
+            delete $window.sessionStorage.userInfo;
             userInfo = undefined;
         };
 

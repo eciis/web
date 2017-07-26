@@ -81,6 +81,7 @@ class User(ndb.Model):
             self.put()
 
     def add_institution(self, institution_key):
+        """Add a institution to user."""
         if institution_key not in self.institutions:
             self.institutions.append(institution_key)
             self.put()
@@ -88,4 +89,9 @@ class User(ndb.Model):
     def add_image(self, url_image):
         """Add images in list of uploaded images."""
         self.uploaded_images.append(url_image)
+        self.put()
+
+    def change_state(self, state):
+        """Change the user state."""
+        self.state = state
         self.put()

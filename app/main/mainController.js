@@ -74,10 +74,15 @@
             return false;
         };
 
-        mainCtrl.isAdmin = function isAdmin() {
-            if (mainCtrl.user){
-                return !_.isEmpty(mainCtrl.user.institutions_admin);
+        mainCtrl.isAdmin = function isAdmin(current_institution) {
+            if (mainCtrl.user && mainCtrl.user.isAdmin(current_institution)){
+                return true;
             }
+            return false;
+        };
+
+        mainCtrl.userIsActive = function userIsActive() {
+            return mainCtrl.user.state == 'active';
         };
 
         mainCtrl.changeInstitution = function changeInstitution(name) {
@@ -110,20 +115,19 @@
         };
 
         (function main() {
-            if (mainCtrl.user.institutions.length === 0 &&
-              mainCtrl.user.invites.length === 0) {
-                $state.go("user_inactive");
-            }
 
-            var invite = mainCtrl.user.getPendingInvitationOf("user");
-            if (mainCtrl.user.institutions.length > 0 && invite) {
-                var institutionKey = invite.institution_key;
-                var inviteKey = invite.key;
+            var inviteOfUser = mainCtrl.user.getPendingInvitationOf("user");
+            var inviteOfInstitution = mainCtrl.user.getPendingInvitationOf("institution");
+            
+            if (inviteOfUser) {
+                var institutionKey = inviteOfUser.institution_key;
+                var inviteKey = inviteOfUser.key;
                 $state.go("new_invite", {institutionKey: institutionKey, inviteKey: inviteKey});
             }
 
-            if (mainCtrl.user.getPendingInvitationOf("institution")) {
-                $state.go("submit_institution");
+            if (inviteOfInstitution) {
+                var institutionStubKey = inviteOfInstitution.stub_institution_key;
+                $state.go("submit_institution", {institutionKey: institutionStubKey});
             }
         })();
     });

@@ -118,6 +118,10 @@ a:active {
     display: inline-flex;
 }
 
+.clickable {
+    cursor: pointer;
+}
+
 .demo-md-panel {
   min-height: 500px;
 }

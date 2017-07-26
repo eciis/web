@@ -22,12 +22,16 @@ function base64toBlob(base64Data, contentType) {
 }
 
 function createImage(size) {
+    /*Create new simple image for tests*/
+
+    // Create canvas of image
     var canvas = document.createElement('canvas');
     canvas.width = size;
     canvas.height = size;
     var context = canvas.getContext("2d");
     var imageData = context.createImageData(size, size);
 
+    // Set image byte colors
     for (var i = 0; i < imageData.data.length; i += 4) {
         imageData.data[i] = 255;
         imageData.data[i+1] = 100;
@@ -35,7 +39,9 @@ function createImage(size) {
         imageData.data[i+3] = 255;
     }
 
+    // Put image in cavas
     context.putImageData(imageData, 0, 0);
+    // Get base64 data of image
     imageData = canvas.toDataURL("image/jpeg", 1);
 
     var image = new File([base64toBlob(imageData.split(',')[1]),

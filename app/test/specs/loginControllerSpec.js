@@ -1,6 +1,6 @@
 'use strict';
 
-(fdescribe('Test LoginController', function() {
+(describe('Test LoginController', function() {
 
     var logginCtrl, httpBackend, scope, createCtrl, state, authService;
 

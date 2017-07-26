@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.controller("SubmitInstController", function SubmitInstController(AuthService, InstitutionService, $state, $mdToast, $mdDialog, $http, InviteService, ImageService, $rootScope) {
+    app.controller("SubmitInstController", function SubmitInstController(AuthService, InstitutionService, $state, $mdToast, $mdDialog, $http, InviteService, ImageService, $rootScope, MessageService) {
         var submitInstCtrl = this;
         var institutionKey = $state.params.institutionKey;
         var observer;
@@ -16,20 +16,15 @@
         });
 
         submitInstCtrl.addImage = function(image) {
-            var jpgType = "image/jpeg";
-            var pngType = "image/png";
-            var maximumSize = 5242880; // 5Mb in bytes
             var newSize = 800;
 
-            if (image !== null && (image.type === jpgType || image.type === pngType) && image.size <= maximumSize) {
-                ImageService.compress(image, newSize).then(function success(data) {
-                    submitInstCtrl.photo_instituicao = data;
-                    ImageService.readFile(data, setImage);
-                    submitInstCtrl.file = null;
-                });
-            } else {
-                showToast("Imagem deve ser jpg ou png e menor que 5 Mb");
-            }
+            ImageService.compress(image, newSize).then(function success(data) {
+                submitInstCtrl.photo_instituicao = data;
+                ImageService.readFile(data, setImage);
+                submitInstCtrl.file = null;
+            }, function err(error) {
+                MessageService.showToast(error);
+            });
         };
 
         function setImage(image) {
@@ -63,7 +58,7 @@
                     saveInstitution();
                 }
             }, function() {
-                showToast('Cancelado');
+                MessageService.showToast('Cancelado');
             });
         };
 
@@ -81,13 +76,13 @@
             InstitutionService.save(institutionKey, patch, submitInstCtrl.invite.key).then(
                 reloadUser(),
                 function error(response) {
-                    showToast(response.data.msg);
+                    MessageService.showToast(response.data.msg);
             });
         }
 
         function reloadUser() {
             AuthService.reload().then(function(){
-                showToast('Cadastro de instituição realizado com sucesso');
+                MessageService.showToast('Cadastro de instituição realizado com sucesso');
                 AuthService.logout();
             });
         }
@@ -107,27 +102,16 @@
             $mdDialog.show(confirm).then(function() {
                 InviteService.deleteInvite(submitInstCtrl.invite.key).then(
                     function success() {
-                        showToast('Cadastro de instituição cancelado');
+                        MessageService.showToast('Cadastro de instituição cancelado');
                         AuthService.logout();
                     }, function error(response) {
-                        showToast(response.data.msg);
+                        MessageService.showToast(response.data.msg);
                     }
                 );
             }, function() {
-                showToast('Cancelado');
+                MessageService.showToast('Cancelado');
             });
         };
-
-        function showToast(msg) {
-            $mdToast.show(
-                $mdToast.simple()
-                    .textContent(msg)
-                    .action('FECHAR')
-                    .highlightAction(true)
-                    .hideDelay(5000)
-                    .position('bottom right')
-            );
-        }
 
         function getLegalNatures() {
             $http.get('institution/legal_nature.json').then(function success(response) {
@@ -146,7 +130,7 @@
                 submitInstCtrl.newInstitution = response.data;
                 observer = jsonpatch.observe(submitInstCtrl.newInstitution);
             }, function error(response) {
-                showToast(response.data.msg);
+                MessageService.showToast(response.data.msg);
             });
         }
 

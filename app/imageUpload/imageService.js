@@ -10,15 +10,35 @@
         service.compress = function compress(file, newSize) {
             var deferred = $q.defer();
 
-            service.readFile(file, function(source_img_obj) {
-                if (source_img_obj.width > newSize) {
-                    deferred.resolve(compressImage(source_img_obj, file, newSize));
-                } else {
-                    deferred.resolve(file);
-                }
-            });
+            if (isValidImage(file)) {
+                service.readFile(file, function(source_img_obj) {
+                    if (source_img_obj.width > newSize) {
+                        deferred.resolve(compressImage(source_img_obj, file, newSize));
+                    } else {
+                        deferred.resolve(file);
+                    }
+                });
+            } else {
+                deferred.reject("Imagem deve ser jpg ou png e menor que 5 Mb");
+            }
             return deferred.promise;
         };
+
+        function isValidImage(image) {
+            var jpgType = "image/jpeg";
+            var pngType = "image/png";
+            var maximumSize = 5242880; // 5Mb in bytes
+            var imageNotNull = image !== null;
+
+            if (imageNotNull) {
+                var correctType = image.type === jpgType || image.type === pngType;
+                var isSizeAllowed = image.size <= maximumSize;
+
+                return correctType && isSizeAllowed;
+            } else {
+                return false;
+            }
+        }
 
         service.readFile = function(file, callback) {
             var fileReader = new FileReader();

@@ -4,7 +4,7 @@
     var app = angular.module("app");
 
     app.controller("ConfigProfileController", function ConfigProfileController($state, InstitutionService,
-            AuthService, UserService, ImageService,$rootScope, $mdToast, $q) {
+            AuthService, UserService, ImageService, $rootScope, $mdToast, $q, MessageService) {
         var configProfileCtrl = this;
 
         // Variable used to observe the changes on the user model.
@@ -14,20 +14,15 @@
         configProfileCtrl.loading = false;
 
         configProfileCtrl.addImage = function(image) {
-            var jpgType = "image/jpeg";
-            var pngType = "image/png";
-            var maximumSize = 5242880; // 5Mb in bytes
             var newSize = 800;
 
-            if (image !== null && (image.type === jpgType || image.type === pngType) && image.size <= maximumSize) {
-                ImageService.compress(image, newSize).then(function success(data) {
-                    configProfileCtrl.photo_user = data;
-                    ImageService.readFile(data, setImage);
-                    configProfileCtrl.file = null;
-                });
-            } else {
-                showToast("Imagem deve ser jpg ou png e menor que 5 Mb");
-            }
+            ImageService.compress(image, newSize).then(function success(data) {
+                configProfileCtrl.photo_user = data;
+                ImageService.readFile(data, setImage);
+                configProfileCtrl.file = null;
+            }, function err(error) {
+                MessageService.showToast(error);
+            });
         };
 
         function setImage(image) {
@@ -61,21 +56,10 @@
                     });
                 });
             } else {
-                showToast("Campos obrigatórios não preenchidos corretamente.");
+                MessageService.showToast("Campos obrigatórios não preenchidos corretamente.");
                 deffered.reject();
             }
             return deffered.promise;
-        }
-
-        function showToast(msg) {
-            $mdToast.show(
-                $mdToast.simple()
-                    .textContent(msg)
-                    .action('FECHAR')
-                    .highlightAction(true)
-                    .hideDelay(5000)
-                    .position('bottom right')
-            );
         }
 
         (function main() {

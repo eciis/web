@@ -40,6 +40,7 @@
         };
 
         httpBackend.when('GET', "main/main.html").respond(200);
+        httpBackend.when('GET', "search_panel.html").respond(200);
         httpBackend.when('GET', "error/user_inactive.html").respond(200);
         httpBackend.when('GET', "home/home.html").respond(200);
         httpBackend.when('GET', "auth/login.html").respond(200);
@@ -104,34 +105,39 @@
             expect(state.go).toHaveBeenCalledWith('app.institution', {institutionKey: '1239'});
         });
 
-        it('Should call state.go() and InstitutionService.getInstitution() in function goToSearchedInstitution()', function(){
-            spyOn(state, 'go').and.callThrough();
-            spyOn(instService, 'getInstitution').and.callThrough();
-            httpBackend.expect('GET', "/api/institutions/" + splab.key).respond(splab);
-            mainCtrl.goToSearchedInstitution(splab.key);
-            httpBackend.flush();
-            expect(instService.getInstitution).toHaveBeenCalledWith(splab.key);
-            expect(state.go).toHaveBeenCalledWith('app.institution', {institutionKey: '1239'});
-        });
-
-        it('Should call makeSearch() in function submit()', function(){
+        it('Should call makeSearch() in function showMenu()', function(done){
             var documents = [{name: splab.name, id: splab.key}];
             mainCtrl.search = splab.name;
             mainCtrl.finalSearch = mainCtrl.search;
             spyOn(mainCtrl, 'makeSearch').and.callThrough();
             spyOn(instService, 'searchInstitutions').and.callThrough();
+            spyOn(mainCtrl, 'openMenu');
             httpBackend.expect('GET', "api/search/institution?name=" + splab.name + "&state=active").respond(documents);
-            mainCtrl.submit();
+            mainCtrl.showMenu('$event').then(function() {
+                expect(mainCtrl.makeSearch).toHaveBeenCalled();
+                expect(mainCtrl.openMenu).toHaveBeenCalled();
+                expect(instService.searchInstitutions).toHaveBeenCalled();
+                done();
+            });
             httpBackend.flush();
-            expect(mainCtrl.makeSearch).toHaveBeenCalled();
-            expect(mainCtrl.institutions).toEqual(documents);
-            expect(mainCtrl.showSearchMenu).toEqual(true);
-            expect(mainCtrl.search).toEqual('');
-            expect(instService.searchInstitutions).toHaveBeenCalledWith(mainCtrl.finalSearch);
         });
+
+        it('Should call searchInstitutions in makeSearch', function(done) {
+            var documents = [{name: splab.name, id: splab.key}];
+            mainCtrl.search = splab.name;
+            mainCtrl.finalSearch = mainCtrl.search;
+            spyOn(instService, 'searchInstitutions').and.callThrough();
+            httpBackend.expect('GET', "api/search/institution?name=" + splab.name + "&state=active").respond(documents);
+            mainCtrl.makeSearch().then(function() {
+                 expect(instService.searchInstitutions).toHaveBeenCalledWith(mainCtrl.finalSearch);
+                 expect(mainCtrl.institutions).toEqual(documents);
+                 done();
+            });
+            httpBackend.flush();
+        });
+
         it('User should not be admin of your current institution', function(){
             expect(mainCtrl.isAdmin(mainCtrl.user.current_institution)).toBe(true);
         });
     });
-
 }));

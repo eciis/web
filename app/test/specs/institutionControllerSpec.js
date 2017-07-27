@@ -90,7 +90,7 @@
         });
 
         it('should exist currentInstitution', function() {
-            expect(institutionCtrl.current_institution).toEqual(splab);
+            expect(institutionCtrl.current_institution.make()).toEqual(splab);
         });
     });
 
@@ -195,7 +195,7 @@
             it('should call user.unfollow()', function(done) {
                 var promise = institutionCtrl.unfollow();
                 promise.then(function() {
-                    expect(institutionCtrl.user.unfollow).toHaveBeenCalledWith(splab);
+                    expect(institutionCtrl.user.unfollow).toHaveBeenCalledWith(institutionCtrl.current_institution);
                     done();
                 });
                 scope.$apply();

@@ -7,12 +7,9 @@
         var institutionCtrl = this;
 
         institutionCtrl.current_institution = null;
-
         institutionCtrl.posts = [];
-
-        institutionCtrl.members = [];
-
         institutionCtrl.followers = [];
+        institutionCtrl.isUserFollower = false;
 
         var currentInstitutionKey = $state.params.institutionKey;
 
@@ -28,9 +25,10 @@
 
         function loadInstitution() {
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
-                institutionCtrl.current_institution = response.data;
+                institutionCtrl.current_institution = new Institution(response.data);
                 getMembers();
                 getFollowers();
+                checkIfUserIsFollower();
             }, function error(response) {
                 $state.go("app.home");
                 showToast(response.data.msg);
@@ -71,23 +69,15 @@
             var promise = InstitutionService.follow(currentInstitutionKey);
             promise.then(function success(){
                 showToast("Seguindo "+institutionCtrl.current_institution.name);
-                var institution = makeInstitution();
+                var institution = institutionCtrl.current_institution.make();
                 institutionCtrl.user.follow(institution);
+                institutionCtrl.isUserFollower = true;
                 getFollowers();
             }, function error() {
                 showToast('Erro ao seguir a instituição.');
             });
             return promise;
         };
-
-        function makeInstitution() {
-            var institution =  {
-                acronym: institutionCtrl.current_institution.acronym,
-                key: institutionCtrl.current_institution.key,
-                photo_url: institutionCtrl.current_institution.photo_url
-            };
-            return institution;
-        }
 
         institutionCtrl.unfollow = function unfollow() {
             if(institutionCtrl.user.isMember(institutionCtrl.current_institution.key)){
@@ -98,6 +88,7 @@
                 promise.then(function success(){
                     showToast("Deixou de seguir "+institutionCtrl.current_institution.name);
                     institutionCtrl.user.unfollow(institutionCtrl.current_institution);
+                    institutionCtrl.isUserFollower = false;
                     getFollowers();
                 }, function error() {
                     showToast('Erro ao deixar de seguir instituição.');
@@ -113,5 +104,9 @@
         institutionCtrl.goToEditInfo = function goToEditInfo(institutionKey){
             $state.go('app.manage_institution.edit_info', {institutionKey: institutionKey});
         };
+
+        function checkIfUserIsFollower() {
+            institutionCtrl.isUserFollower = institutionCtrl.user.isFollower(institutionCtrl.current_institution);
+        }
     });
 })();

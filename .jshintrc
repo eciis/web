@@ -1,13 +1,28 @@
 {
     // Custom Globals
-    "globals"       : {
-        "angular": true,
-        "_": true,
-        "User": true,
-        "Post": true,
-        "console": true,
-        "jsonpatch": true,
-        "CryptoJS": true,
-        "firebase": true
-    }
+    "globals"       : [
+        // Karma Tests
+        "it", "fit", "xit", 
+        "describe", "xdescribe", "fdescribe",
+        "beforeEach", 
+        "afterEach",
+        "expect", 
+        "spyOn",
+        "inject",
+
+        // Default
+        "module",
+        "angular",
+        "console",
+
+        // Models
+        "User",
+        "Post",
+
+        // Libraries
+        "_",
+        "jsonpatch",
+        "CryptoJS",
+        "firebase"
+    ]
 }

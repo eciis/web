@@ -195,7 +195,7 @@
             it('should call user.unfollow()', function(done) {
                 var promise = institutionCtrl.unfollow();
                 promise.then(function() {
-                    expect(institutionCtrl.user.unfollow).toHaveBeenCalledWith(splab.key);
+                    expect(institutionCtrl.user.unfollow).toHaveBeenCalledWith(splab);
                     done();
                 });
                 scope.$apply();

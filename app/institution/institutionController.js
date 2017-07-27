@@ -97,7 +97,7 @@
                 var promise = InstitutionService.unfollow(currentInstitutionKey);
                 promise.then(function success(){
                     showToast("Deixou de seguir "+institutionCtrl.current_institution.name);
-                    institutionCtrl.user.unfollow(currentInstitutionKey);
+                    institutionCtrl.user.unfollow(institutionCtrl.current_institution);
                     getFollowers();
                 }, function error() {
                     showToast('Erro ao deixar de seguir instituição.');

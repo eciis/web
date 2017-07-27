@@ -61,12 +61,12 @@
 
           it('should be true', function() {
             user = createUser();
-            expect(user.isFollower(splab.key)).toBe(true);
+            expect(user.isFollower(splab)).toBe(true);
           });
 
           it('should be false', function() {
             user = createUser();
-            expect(user.isFollower(certbio.key)).toBe(false);
+            expect(user.isFollower(certbio)).toBe(false);
           });
         });
 
@@ -94,7 +94,7 @@
 
           it('follows should not contain certbio key after unfollow', function() {
             user = createUser();
-            user.unfollow(certbio.key);
+            user.unfollow(certbio);
             expect(user.follows).not.toContain(certbio);
           });
         });

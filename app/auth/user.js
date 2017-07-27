@@ -18,17 +18,17 @@ User.prototype.follow = function follow(institution) {
     this.follows.push(institution);
 };
 
-User.prototype.unfollow = function unfollow(keyInstitution) {
-    _.remove(this.follows, function(institution){
-    	return institution.key == keyInstitution;
+User.prototype.unfollow = function unfollow(institution) {
+    _.remove(this.follows, function(followingInst){
+    	return followingInst.key == institution.key;
     });
 };
 
-User.prototype.isFollower = function isFollower(keyInstitution) {
+User.prototype.isFollower = function isFollower(institution) {
 	var isFollower = false;
 
-    _.forEach(this.follows, function(institution) {
-          if(institution.key === keyInstitution){
+    _.forEach(this.follows, function(followingInst) {
+          if(followingInst.key === institution.key){
           	isFollower = true;
           }
     });

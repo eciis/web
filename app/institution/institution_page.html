@@ -19,10 +19,10 @@
                         <p>{{ institutionCtrl.current_institution.address }}</p>
                         <p>{{ institutionCtrl.current_institution.description }}</p>
                         <div layout="row">
-                            <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}" ng-click="institutionCtrl.follow()" ng-if="!institutionCtrl.user.isFollower(institutionCtrl.current_institution.key)">
+                            <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}" ng-click="institutionCtrl.follow()" ng-if="!institutionCtrl.user.isFollower(institutionCtrl.current_institution)">
                                 <md-icon>person_add</md-icon>Seguir
                             </md-button>
-                            <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}" ng-click="institutionCtrl.unfollow()" ng-if="institutionCtrl.user.isFollower(institutionCtrl.current_institution.key)">
+                            <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}" ng-click="institutionCtrl.unfollow()" ng-if="institutionCtrl.user.isFollower(institutionCtrl.current_institution)">
                                 <md-icon>person_outline</md-icon>Deixar de seguir
                             </md-button>
 

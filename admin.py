@@ -76,7 +76,8 @@ def createInstitution(data, user):
     user.follows.append(institution.key)
     user.put()
     search_module.createDocument(
-        institution.key.urlsafe(), institution.name, institution.state)
+        institution.key.urlsafe(), institution.name, institution.state,
+        institution.admin.get().email)
 
     return institution
 

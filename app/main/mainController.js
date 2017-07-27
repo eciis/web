@@ -58,8 +58,9 @@
 
         mainCtrl.makeSearch = function () {
             var deferred = $q.defer();
-            InstitutionService.searchInstitutions(mainCtrl.finalSearch).then(function success(response) {
+            InstitutionService.searchInstitutions(mainCtrl.finalSearch, "active").then(function success(response) {
                 mainCtrl.institutions = response.data;
+                console.log(mainCtrl.institutions);
                 if(_.size(mainCtrl.institutions) === 0){
                     mainCtrl.institutions.push({name: 'Nenhuma instituição encontrada'});
                 }
@@ -119,7 +120,7 @@
             var notMember = mainCtrl.user.institutions.length === 0;
             var notInvitee = mainCtrl.user.invites.length === 0;
             var notActive = !mainCtrl.userIsActive();
-            
+
             return ((notMember && notInvitee) || notActive);
         }
 

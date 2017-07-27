@@ -81,7 +81,8 @@ class InstitutionHandler(BaseHandler):
         institution.createInstitutionWithStub(user, inviteKey, institution)
 
         search_module.createDocument(
-            institution.key.urlsafe(), institution.name, institution.state)
+            institution.key.urlsafe(), institution.name, institution.state,
+            institution.admin.get().email)
 
         institution_json = Utils.toJson(institution)
 

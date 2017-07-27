@@ -1,0 +1,29 @@
+<md-dialog aria-label="instituições">
+
+    <div>
+        <md-dialog-content class="md-dialog-content" layout="column">
+            <h3>Já existem instituições com esse nome:</h3>
+            <md-list ng-repeat="institution in institutions" flex>
+                <md-list-item class="md-2-line" ng-if="isActive(institution.state)" ng-click="goToInstitution(institution.id)">
+                    <div class="md-list-item-text">
+                        {{institution.name}}
+                    </div>
+                    <md-icon style="color: #4CAF50;">check_box</md-icon>
+                </md-list-item>
+                <md-list-item ng-if="!isActive(institution.state)" ng-click="null" class="md-2-line">
+                    <div class="md-list-item-text">
+                        <h3>{{institution.name}}</h3>
+                        <p>{{institution.admin}}<p>
+                    </div>
+                    <md-icon style="color: #424242">error</md-icon>
+                </md-list-item>
+            </md-list>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row" layout-align="center center">
+            <md-button class="md-primary" ng-click="cancel()" layout-align="center">Cancelar</md-button>
+            <md-button class="md-primary" ng-click="sendInvite()">Enviar convite</md-button>
+        </md-dialog-actions>
+    </div>
+
+</md-dialog>

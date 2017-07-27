@@ -147,3 +147,8 @@ a:active {
 .demo-menu-item:focus {
   background-color: rgb(238, 238, 238);
 }
+
+.post-count {
+    left: -27px;
+    margin-right: -25px !important;
+}

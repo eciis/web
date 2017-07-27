@@ -75,8 +75,6 @@ class Institution(ndb.Model):
         'inactive'
     ]), default='pending')
 
-    uploaded_images = ndb.StringProperty(repeated=True)
-
     def follow(self, user):
         """Add one user in collection of followers."""
         if user not in self.followers:

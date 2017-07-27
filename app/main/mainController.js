@@ -70,14 +70,14 @@
         };
 
         mainCtrl.isActive = function isActive(inst) {
-            if (mainCtrl.user.current_institution == inst) {
+            if (mainCtrl.user.current_institution.key == inst.key) {
                 return true;
             }
             return false;
         };
 
         mainCtrl.isAdmin = function isAdmin(current_institution) {
-            if (mainCtrl.user && mainCtrl.user.isAdmin(current_institution)){
+            if (mainCtrl.user && mainCtrl.user.isAdmin(current_institution.key)){
                 return true;
             }
             return false;
@@ -87,8 +87,8 @@
             return mainCtrl.user.state == 'active';
         };
 
-        mainCtrl.changeInstitution = function changeInstitution(name) {
-            mainCtrl.user.changeInstitution(name);
+        mainCtrl.changeInstitution = function changeInstitution(institution) {
+            mainCtrl.user.changeInstitution(institution);
         };
 
         mainCtrl.settings = [{
@@ -127,7 +127,7 @@
         (function main() {
             var inviteOfUser = mainCtrl.user.getPendingInvitationOf("user");
             var inviteOfInstitution = mainCtrl.user.getPendingInvitationOf("institution");
-
+           
             if (inviteOfUser) {
                 var institutionKey = inviteOfUser.institution_key;
                 var inviteKey = inviteOfUser.key;

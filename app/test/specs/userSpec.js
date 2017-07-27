@@ -140,5 +140,26 @@
             expect(user.isValid()).toBe(false);
           });
         });
+
+        describe('changeInstitution', function() {
+          
+          it('should call JSON stringify', function() {
+            spyOn(JSON, 'stringify').and.callThrough();
+
+            userData.institutions = [splab, certbio];
+            user = createUser();
+
+            expect(user.current_institution).toBe(splab);
+
+            user.changeInstitution(certbio);
+
+            expect(JSON.stringify).toHaveBeenCalled();
+            expect(user.current_institution).toBe(certbio);
+
+            var cachedUser = JSON.parse(window.sessionStorage.userInfo);
+
+            expect(cachedUser.current_institution).toEqual(certbio);
+          });
+        });
    });    
 }));

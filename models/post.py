@@ -99,7 +99,7 @@ class Post(ndb.Model):
 
     title = ndb.StringProperty(required=True)
 
-    headerImage = ndb.StringProperty()
+    photo_url = ndb.StringProperty()
 
     text = ndb.TextProperty(required=True)
 
@@ -131,6 +131,9 @@ class Post(ndb.Model):
     # Likes of Post
     likes = ndb.LocalStructuredProperty(Like, repeated=True)
 
+    # Images uploaded
+    uploaded_images = ndb.StringProperty(repeated=True)
+
     @staticmethod
     def create(data, author_key, institution_key):
         """Create a post and check required fields."""
@@ -140,7 +143,7 @@ class Post(ndb.Model):
             raise FieldException("Text can not be empty")
         post = Post()
         post.title = data['title']
-        post.headerImage = data.get('headerImage')
+        post.photo_url = data.get('photo_url')
         post.text = data['text']
         post.last_modified_by = author_key
         post.author = author_key
@@ -166,7 +169,7 @@ class Post(ndb.Model):
             'institution_image': institution.photo_url,
             'likes': getLikesUri(post, host),
             'number_of_likes': post.get_number_of_likes(),
-            'headerImage': post.headerImage,
+            'photo_url': post.photo_url,
             'state': post.state,
             'comments': getCommentsUri(post, host),
             'number_of_comments': post.get_number_of_comment(),

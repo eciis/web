@@ -4,7 +4,7 @@ function User(data) {
     data = data || {};
     _.extend(this, data);
 
-    if (this.institutions) {
+    if (this.institutions && !this.current_institution) {
         this.current_institution = this.institutions[0];
     }
 }
@@ -15,8 +15,9 @@ var USER = "user";
 
 var INVITE_INSTITUTIONS_TYPE = ['institution', 'institution_parent'];
 
-User.prototype.changeInstitution = function changeInstitution(name) {
-    this.current_institution = _.find(this.institutions, {'name': name});
+User.prototype.changeInstitution = function changeInstitution(institution) {
+    this.current_institution = _.find(this.institutions, {'key': institution.key});
+    window.sessionStorage.userInfo = JSON.stringify(this);
 };
 
 User.prototype.follow = function follow(keyInstitution) {

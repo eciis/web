@@ -184,8 +184,9 @@
                 if (AuthService.isLoggedIn()) {
                     var token = AuthService.getUserToken();
                     config.headers.Authorization = 'Bearer ' + token;
-                } else {
-                    // $state.go("signin");
+                } else if (!($state.current.name == "signin" || $state.current.name == "landing_page")) {
+                    $state.go("signin");
+
                 }
                 return config || $q.when(config);
             }

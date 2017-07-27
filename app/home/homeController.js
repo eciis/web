@@ -1,4 +1,5 @@
 'use strict';
+const ACTIVE = "active";
 
 (function() {
     var app = angular.module("app");
@@ -49,7 +50,7 @@
         };
         
         homeCtrl.isActive = function isActive(institution) {
-            return institution.state == 'active';
+            return institution.state === ACTIVE;
         };
 
         function getInstitutions(){

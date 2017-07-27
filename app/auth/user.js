@@ -9,6 +9,12 @@ function User(data) {
     }
 }
 
+var SENT = "send";
+
+var USER = "user";
+
+var INVITE_INSTITUTIONS_TYPE = ['institution', 'institution_parent'];
+
 User.prototype.changeInstitution = function changeInstitution(name) {
     this.current_institution = _.find(this.institutions, {'name': name});
 };
@@ -67,7 +73,7 @@ User.prototype.isValid = function isValid() {
 };
 
 User.prototype.getPendingInvitationOf = function getPendingInvitationOf(invitationType){
-    if(invitationType == 'user'){
+    if(invitationType === USER){
         return this.getPendingInviteUser();
     } else{
         return this.getPendingInviteInst(this);
@@ -75,15 +81,13 @@ User.prototype.getPendingInvitationOf = function getPendingInvitationOf(invitati
 };
 
 User.prototype.getPendingInviteUser = function getInviteUser(){
-    return _.find(this.invites, {'type_of_invite': 'user', 'status': 'sent'});
+    return _.find(this.invites, {'type_of_invite': USER, 'status': SENT});
 };
 
 User.prototype.getPendingInviteInst = function getInviteInst(){
-    var typeInviteInst = ['institution', 'institution_parent'];
-
     return _.find(this.invites, function(invite) {
-           return (_.includes(typeInviteInst, invite.type_of_invite) &&
-                  invite.status == 'sent');
+           return _.includes(INVITE_INSTITUTIONS_TYPE, invite.type_of_invite) &&
+                  invite.status === SENT;
        });
 };
 

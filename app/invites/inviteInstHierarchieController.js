@@ -1,4 +1,5 @@
 'use strict';
+
 (function() {
     var app = angular.module('app');
 
@@ -6,18 +7,25 @@
         InviteService,$mdToast, $mdDialog, $state, AuthService, InstitutionService, MessageService) {
         var inviteInstCtrl = this;
 
+        var currentInstitutionKey = $state.params.institutionKey;
+
+        var invite;
+
+        var INSTITUTION_PARENT = "institution_parent";
+
+        var ACTIVE = "active";
+
+        var EMPTY_STRING = "";
+        
         inviteInstCtrl.user = AuthService.getCurrentUser();
         inviteInstCtrl.institution = {};
 
         inviteInstCtrl.invite = {};
-        inviteInstCtrl.type_of_invite = '';
+        inviteInstCtrl.type_of_invite = EMPTY_STRING;
 
         inviteInstCtrl.hasParent = false;
         inviteInstCtrl.showButton = true;
 
-        var currentInstitutionKey = $state.params.institutionKey;
-
-        var invite;
 
         inviteInstCtrl.sendInstInvite = function sendInstInvite() {
             var currentInstitutionKey = inviteInstCtrl.user.current_institution.key;
@@ -42,7 +50,7 @@
             if(inviteInstCtrl.hasParent){
                 MessageService.showToast("Já possue instituição superior");
             } else {
-                inviteInstCtrl.type_of_invite = 'institution_parent';
+                inviteInstCtrl.type_of_invite = INSTITUTION_PARENT;
                 inviteInstCtrl.showButton = false;
             }            
         };
@@ -57,7 +65,7 @@
         };
 
         inviteInstCtrl.isActive = function isActive(institution) {
-            return institution.state == 'active';
+            return institution.state === ACTIVE;
         };
 
         function loadInstitution() {
@@ -75,11 +83,11 @@
             inviteInstCtrl.institution.addInvite(invite);
             var stub = inviteInstCtrl.institution.createStub(invite);
 
-            if (invite.type_of_invite == 'institution_parent'){
+            if (invite.type_of_invite === INSTITUTION_PARENT){
                 inviteInstCtrl.institution.addParentInst(stub);
                 inviteInstCtrl.hasParent = true;
             }
-            inviteInstCtrl.type_of_invite = '';
+            inviteInstCtrl.type_of_invite = EMPTY_STRING;
             inviteInstCtrl.showButton = true;
         }
 

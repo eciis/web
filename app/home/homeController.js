@@ -47,6 +47,10 @@
         homeCtrl.expandInstMenu = function expandInstMenu(){
             homeCtrl.instMenuExpanded = !homeCtrl.instMenuExpanded;
         };
+        
+        homeCtrl.isActive = function isActive(institution) {
+            return institution.state == 'active';
+        };
 
         function getInstitutions(){
             InstitutionService.getInstitutions().then(function sucess(response){

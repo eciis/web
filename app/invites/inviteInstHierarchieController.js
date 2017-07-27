@@ -3,7 +3,7 @@
     var app = angular.module('app');
 
     app.controller("InviteInstHierarchieController", function InviteInstHierarchieController(
-        InviteService,$mdToast, $mdDialog, $state, AuthService, InstitutionService) {
+        InviteService,$mdToast, $mdDialog, $state, AuthService, InstitutionService, MessageService) {
         var inviteInstCtrl = this;
 
         inviteInstCtrl.user = AuthService.getCurrentUser();
@@ -25,14 +25,14 @@
                 currentInstitutionKey, inviteInstCtrl.user.email);
 
             if (!invite.isValid()) {
-                showToast('Convite inválido!');
+                MessageService.showToast('Convite inválido!');
             } else {                
                 var promise = InviteService.sendInvite(invite);
                 promise.then(function success() {
-                    showToast('Convite enviado com sucesso!');
+                    MessageService.showToast('Convite enviado com sucesso!');
                     addInvite(invite);
                 }, function error(response) {
-                    showToast(response.data.msg);
+                    MessageService.showToast(response.data.msg);
                 });
                 return promise;
             }
@@ -40,8 +40,8 @@
 
         inviteInstCtrl.createParentInstInvite = function createParentInstInvite(){
             if(inviteInstCtrl.hasParent){
-                showToast("Já possue instituição superior");
-            }else {
+                MessageService.showToast("Já possue instituição superior");
+            } else {
                 inviteInstCtrl.type_of_invite = 'institution_parent';
                 inviteInstCtrl.showButton = false;
             }            
@@ -66,7 +66,7 @@
                 inviteInstCtrl.hasParent = !_.isEmpty(inviteInstCtrl.institution.parent_institution);
             }, function error(response) {
                 $state.go('app.institution', {institutionKey: currentInstitutionKey});
-                showToast(response.data.msg);
+                MessageService.showToast(response.data.msg);
             });
         }
 
@@ -75,23 +75,12 @@
             inviteInstCtrl.institution.addInvite(invite);
             var stub = inviteInstCtrl.institution.createStub(invite);
 
-            if(invite.type_of_invite == 'institution_parent'){
+            if (invite.type_of_invite == 'institution_parent'){
                 inviteInstCtrl.institution.addParentInst(stub);
                 inviteInstCtrl.hasParent = true;
             }
             inviteInstCtrl.type_of_invite = '';
             inviteInstCtrl.showButton = true;
-        }     
-
-        function showToast(msg) {
-            $mdToast.show(
-                $mdToast.simple()
-                    .textContent(msg)
-                    .action('FECHAR')
-                    .highlightAction(true)
-                    .hideDelay(5000)
-                    .position('bottom right')
-            );
         }
 
         loadInstitution();

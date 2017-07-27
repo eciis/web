@@ -139,7 +139,6 @@
             } else if (mainCtrl.user.name === 'Unknown') {
                 $state.go("config_profile");
             }
-
         })();
     });
 

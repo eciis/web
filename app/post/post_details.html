@@ -71,8 +71,10 @@
               <md-list-item ng-repeat="comment in postDetailsCtrl.comments[post.key].data" class="md-3-line">
                 <img ng-src="{{comment.author_img}}" class="md-avatar" alt="{{comment.author_name}}" />
                 <div class="md-list-item-text">
-                  <h4><b>{{comment.author_name}} - {{comment.institution_name | uppercase}}</b></h4>
-                  <small class="md-caption">{{comment.publication_date | date: 'MMM d, y'}} às {{comment.publication_date | date: 'HH:mm'}}</small>
+                  <h4>{{comment.author_name}} - {{comment.institution_name | uppercase}}<small></h4>
+                  <small style="color: rgba(0,0,0,0.54);" class="md-caption">
+                    {{comment.publication_date | date: 'MMM d, y'}} às {{comment.publication_date | date: 'HH:mm'}}
+                  </small>
                   <p>{{comment.text}}</p>
                   <md-button class="md-secondary md-icon-button" aria-label="Share"
                     ng-if="postDetailsCtrl.canDeleteComment(comment)"

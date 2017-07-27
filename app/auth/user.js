@@ -75,23 +75,16 @@ User.prototype.getPendingInvitationOf = function getPendingInvitationOf(invitati
 };
 
 User.prototype.getPendingInviteUser = function getInviteUser(){
-    for(var i = 0; i < this.invites.length; i++) {
-        if(this.invites[i].type_of_invite == 'user' && 
-            this.invites[i].status == 'sent') {
-             return this.invites[i];
-        }
-    }
+    return _.find(this.invites, {'type_of_invite': 'user', 'status': 'sent'});
 };
 
 User.prototype.getPendingInviteInst = function getInviteInst(){
     var typeInviteInst = ['institution', 'institution_parent'];
 
-    for(var i = 0; i < this.invites.length; i++) {
-        if(_.includes(typeInviteInst, this.invites[i].type_of_invite) &&
-            this.invites[i].status == 'sent'){
-                return this.invites[i];
-        }
-    }
+    return _.find(this.invites, function(invite) {
+           return (_.includes(typeInviteInst, invite.type_of_invite) &&
+                  invite.status == 'sent');
+       });
 };
 
 function getKeyObj(obj) {

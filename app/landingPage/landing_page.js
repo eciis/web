@@ -1,32 +1,27 @@
-// Freelancer Theme JavaScript
+// "use strict"; 
 
-(function($) {
-    "use strict"; // Start of use strict
+// (function($) {
+    
+//     $('.page-scroll a').bind('click', function(event) {
+//         var $anchor = $(this);
+//         $('html, body').stop().animate({
+//             scrollTop: ($($anchor.attr('href')).offset().top - 50)
+//         }, 1250, 'easeInOutExpo');
+//         event.preventDefault();
+//     });
 
-    // jQuery for page scrolling feature - requires jQuery Easing plugin
-    $('.page-scroll a').bind('click', function(event) {
-        var $anchor = $(this);
-        $('html, body').stop().animate({
-            scrollTop: ($($anchor.attr('href')).offset().top - 50)
-        }, 1250, 'easeInOutExpo');
-        event.preventDefault();
-    });
+//     $('body').scrollspy({
+//         target: '.navbar-fixed-top',
+//         offset: 51
+//     });
 
-    // Highlight the top nav as scrolling occurs
-    $('body').scrollspy({
-        target: '.navbar-fixed-top',
-        offset: 51
-    });
+//     $('.navbar-collapse ul li a').click(function(){ 
+//             $('.navbar-toggle:visible').click();
+//     });
 
-    // Closes the Responsive Menu on Menu Item Click
-    $('.navbar-collapse ul li a').click(function(){ 
-            $('.navbar-toggle:visible').click();
-    });
-
-    // Offset for Main Navigation
-    $('#mainNav').affix({
-        offset: {
-            top: 100
-        }
-    });
-})(jQuery); // End of use strict
+//     $('#mainNav').affix({
+//         offset: {
+//             top: 100
+//         }
+//     });
+// })(jQuery);

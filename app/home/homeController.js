@@ -1,5 +1,4 @@
 'use strict';
-const ACTIVE = "active";
 
 (function() {
     var app = angular.module("app");
@@ -7,6 +6,8 @@ const ACTIVE = "active";
     app.controller("HomeController", function HomeController(PostService, AuthService,
             InstitutionService, CommentService, $interval, $mdToast, $mdDialog, $state, $rootScope) {
         var homeCtrl = this;
+
+        var ACTIVE = "active";
 
         homeCtrl.posts = [];
         homeCtrl.comments = {};

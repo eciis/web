@@ -44,14 +44,14 @@
               <md-button class="md-icon-button" aria-label="Comments" ng-click="postDetailsCtrl.getComments(post)">
                 <md-icon>comments</md-icon>
               </md-button>
-              <md-button class="md-icon-button md-primary md-hue-1" ng-click="postDetailsCtrl.getComments(post)">
+              <md-button class="post-count md-icon-button md-primary md-hue-1">
                 {{ post.number_of_comments }}
               </md-button>
               <md-button class="md-icon-button" aria-label="Favorite" ng-click="postDetailsCtrl.likeOrDislikePost(post)"
                  ng-disabled="postDetailsCtrl.disableButtonLike(post)" ng-class="postDetailsCtrl.isLikedByUser(post)?'md-warn':''">
                 <md-icon>grade</md-icon>
               </md-button>
-              <md-button class="md-icon-button md-primary md-hue-1" ng-click="postDetailsCtrl.showLikes(post)">
+              <md-button class="post-count md-icon-button md-primary md-hue-1" ng-click="postDetailsCtrl.showLikes(post)">
                 {{ post.number_of_likes }}
               </md-button>
               <md-button class="md-icon-button" aria-label="editar" ng-click="postDetailsCtrl.editPost(post, posts)"

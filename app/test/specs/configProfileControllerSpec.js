@@ -1,17 +1,18 @@
 'use strict';
 
 (describe('Test ConfigProfileController', function() {
-    var configCtrl, httpBackend, deffered, scope, userService, createCrtl, state, mdToast, authService;
+    var configCtrl, httpBackend, deffered, scope, userService, createCrtl, state, mdToast, authService, imageService;
     var splab = {
         name: 'SPLAB',
-        key: '987654321' 
+        key: '987654321'
     };
 
     var user = {
         name: 'Maiana',
         cpf: '121.445.044-07',
         email: 'maiana.brito@ccc.ufcg.edu.br',
-        institutions: [splab]
+        institutions: [splab],
+        uploaded_images: []
     };
 
     var newUser = {
@@ -23,13 +24,14 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, $mdToast, UserService, AuthService) {
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, $mdToast, UserService, AuthService, ImageService) {
         httpBackend = $httpBackend;
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);
         httpBackend.when('GET', 'auth/login.html').respond(200);
         scope = $rootScope.$new();
         state = $state;
+        imageService = ImageService;
         mdToast = $mdToast;
         deffered = $q.defer();
         userService = UserService;
@@ -44,7 +46,8 @@
             return $controller('ConfigProfileController', {
                     scope: scope,
                     authService: authService,
-                    userService: userService
+                    userService: userService,
+                    imageService: imageService
                 });
         };
         configCtrl = createCrtl();
@@ -54,6 +57,25 @@
     afterEach(function() {
         httpBackend.verifyNoOutstandingExpectation();
         httpBackend.verifyNoOutstandingRequest();
+    });
+
+    describe('main()', function() {
+
+        it("should delete name from user if that is Unknown", function() {
+            var unknownUser = {
+              name: 'Unknown'
+            };
+
+            expect(unknownUser.name).not.toBeUndefined();
+
+            authService.getCurrentUser = function() {
+                return new User(unknownUser);
+            };
+
+            configCtrl = createCrtl();
+
+            expect(configCtrl.newUser.name).toBeUndefined();
+        });
     });
 
     describe('finish()', function(){
@@ -72,11 +94,10 @@
             expect(configCtrl.newUser.isValid()).toEqual(false);
 
             configCtrl.finish().should.be.rejected;
-            expect(mdToast.show).toHaveBeenCalled(); 
+            expect(mdToast.show).toHaveBeenCalled();
         });
 
-        // TODO FIX
-        xit('Should change informations of user from system', function(done) {
+        it('Should change informations of user from system', function(done) {
             spyOn(state, 'go');
             spyOn(userService, 'save').and.callThrough();
 
@@ -88,9 +109,10 @@
                 };
             });
 
-            expect(configCtrl.user.name).toEqual(user.name);
-            expect(configCtrl.user.email).toEqual(user.email);
-            expect(configCtrl.user.cpf).toEqual(user.cpf);
+
+            expect(configCtrl.newUser.name).toEqual(user.name);
+            expect(configCtrl.newUser.email).toEqual(user.email);
+            expect(configCtrl.newUser.cpf).toEqual(user.cpf);
 
             httpBackend.expect('PATCH', '/api/user').respond(newUser);
 
@@ -105,5 +127,57 @@
             httpBackend.flush();
             scope.$apply();
         });
-    });  
+    });
+
+    describe('addImage()', function() {
+        beforeEach(function() {
+            var image = createImage(100);
+            spyOn(imageService, 'compress').and.callFake(function() {
+                return {
+                    then: function(callback) {
+                        return callback(image);
+                    }
+                };
+            });
+
+            spyOn(imageService, 'readFile').and.callFake(function() {
+                configCtrl.newUser.photo_url = "Base64 data of photo";
+            });
+
+            spyOn(imageService, 'saveImage').and.callFake(function() {
+                return {
+                    then: function(callback) {
+                        return callback({
+                            url : "imagens/test"
+                        });
+                    }
+                };
+            });
+        });
+
+        it('Should add new image in post', function() {
+            spyOn(userService, 'save').and.callThrough();
+
+            spyOn(authService, 'reload').and.callFake(function() {
+                return {
+                    then: function(callback) {
+                        return callback(newUser);
+                    }
+                };
+            });
+
+            httpBackend.expect('PATCH', '/api/user').respond(newUser);
+
+            var image = createImage(100);
+            configCtrl.addImage(image);
+            configCtrl.finish();
+
+            httpBackend.flush();
+            scope.$apply();
+
+            expect(imageService.compress).toHaveBeenCalled();
+            expect(imageService.readFile).toHaveBeenCalled();
+            expect(imageService.saveImage).toHaveBeenCalled();
+        });
+    });
 }));

@@ -1,29 +1,75 @@
-<div layout-fill md-colors="{background: 'teal-900'}" layout="column" layout-align="center">
+<div layout-fill md-colors="{background: 'grey-900'}" layout="column" layout-align="center">
    <div layout="row" layout-wrap layout-align="center">
-    <div class="padded" md-whiteframe>
-      <md-toolbar md-colors="{background: 'green-800'}" layout="row">
-        <h1 class="md-toolbar-tools">Escolha uma forma de Login:</h1>
-      </md-toolbar>
-      <md-content md-theme="docs-dark" layout-gt-sm="column" layout-padding>
-        <div id="firebaseui-container">
-           <div class="firebaseui-container firebaseui-page-provider-sign-in firebaseui-id-page-provider-sign-in">
-              <div class="firebaseui-card-content">
-                 <form onsubmit="return false;">
-                    <ul class="firebaseui-idp-list">
-                       <li class="firebaseui-list-item">
-                         <button class="firebaseui-idp-button mdl-button mdl-js-button mdl-button--raised firebaseui-idp-google firebaseui-id-idp-button" data-provider-id="google.com" data-upgraded=",MaterialButton" ng-click="loginCtrl.login()"><span class="firebaseui-idp-icon-wrapper"><img class="firebaseui-idp-icon" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"></span><span class="firebaseui-idp-text firebaseui-idp-text-long">Sign in with Google</span><span class="firebaseui-idp-text firebaseui-idp-text-short">Google</span>
-                         </button>
-                       </li>
-                       <li class="firebaseui-list-item"><button class="firebaseui-idp-button mdl-button mdl-js-button mdl-button--raised firebaseui-idp-facebook firebaseui-id-idp-button" data-provider-id="facebook.com" data-upgraded=",MaterialButton"><span class="firebaseui-idp-icon-wrapper"><img class="firebaseui-idp-icon" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/facebook.svg"></span><span class="firebaseui-idp-text firebaseui-idp-text-long">Sign in with Facebook</span><span class="firebaseui-idp-text firebaseui-idp-text-short">Facebook</span></button></li>
-                       <li class="firebaseui-list-item"><button class="firebaseui-idp-button mdl-button mdl-js-button mdl-button--raised firebaseui-idp-twitter firebaseui-id-idp-button" data-provider-id="twitter.com" data-upgraded=",MaterialButton"><span class="firebaseui-idp-icon-wrapper"><img class="firebaseui-idp-icon" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/twitter.svg"></span><span class="firebaseui-idp-text firebaseui-idp-text-long">Sign in with Twitter</span><span class="firebaseui-idp-text firebaseui-idp-text-short">Twitter</span></button></li>
-                       <li class="firebaseui-list-item"><button class="firebaseui-idp-button mdl-button mdl-js-button mdl-button--raised firebaseui-idp-github firebaseui-id-idp-button" data-provider-id="github.com" data-upgraded=",MaterialButton"><span class="firebaseui-idp-icon-wrapper"><img class="firebaseui-idp-icon" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/github.svg"></span><span class="firebaseui-idp-text firebaseui-idp-text-long">Sign in with Github</span><span class="firebaseui-idp-text firebaseui-idp-text-short">Github</span></button></li>
-                       <li class="firebaseui-list-item"><button class="firebaseui-idp-button mdl-button mdl-js-button mdl-button--raised firebaseui-idp-password firebaseui-id-idp-button" data-provider-id="password" data-upgraded=",MaterialButton"><span class="firebaseui-idp-icon-wrapper"><img class="firebaseui-idp-icon" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/mail.svg"></span><span class="firebaseui-idp-text firebaseui-idp-text-long">Sign in with email</span><span class="firebaseui-idp-text firebaseui-idp-text-short">Email</span></button></li>
-                       <li class="firebaseui-list-item"><button class="firebaseui-idp-button mdl-button mdl-js-button mdl-button--raised firebaseui-idp-phone firebaseui-id-idp-button" data-provider-id="phone" data-upgraded=",MaterialButton"><span class="firebaseui-idp-icon-wrapper"><img class="firebaseui-idp-icon" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/phone.svg"></span><span class="firebaseui-idp-text firebaseui-idp-text-long">Sign in with phone</span><span class="firebaseui-idp-text firebaseui-idp-text-short">Phone</span></button></li>
-                    </ul>
-                 </form>
+    <div class="padded" md-whiteframe style="border-radius: 5px 5px 0px 0px;">
+      <md-content style="border-radius: 5px 5px 0px 0px;">
+        <md-tabs md-dynamic-height md-border-bottom md-align-tabs="bottom" class="md-default md-hue-2" md-colors="{background: 'grey-300'}">
+          <md-tab label="Já tenho conta"> 
+            <md-content class="md-padding" layout-gt-sm="row" >
+              <div flex="47" layout="column" laytout-align="center center">
+                <div id="firebaseui-container">
+                   <div class="firebaseui-container firebaseui-page-provider-sign-in firebaseui-id-page-provider-sign-in">
+                      <div class="firebaseui-card-content">
+                         <form onsubmit="return false;">
+                            <ul class="firebaseui-idp-list">
+                               <li class="firebaseui-list-item">
+                                 <button class="firebaseui-idp-button mdl-button mdl-js-button mdl-button--raised firebaseui-idp-google firebaseui-id-idp-button" data-provider-id="google.com" data-upgraded=",MaterialButton" ng-click="loginCtrl.login()"><span class="firebaseui-idp-icon-wrapper"><img class="firebaseui-idp-icon" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"></span><span class="firebaseui-idp-text firebaseui-idp-text-long">Entrar com Google</span><span class="firebaseui-idp-text firebaseui-idp-text-short">Google</span>
+                                 </button>
+                               </li>
+                               <li class="firebaseui-list-item"><button disabled="true" class="firebaseui-idp-button mdl-button mdl-js-button mdl-button--raised firebaseui-idp-facebook firebaseui-id-idp-button" data-provider-id="facebook.com" data-upgraded=",MaterialButton"><span class="firebaseui-idp-icon-wrapper"><img class="firebaseui-idp-icon" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/facebook.svg"></span><span class="firebaseui-idp-text firebaseui-idp-text-long">Entrar com Facebook</span><span class="firebaseui-idp-text firebaseui-idp-text-short">Facebook</span></button></li>
+                               <li class="firebaseui-list-item"><button disabled="true" class="firebaseui-idp-button mdl-button mdl-js-button mdl-button--raised firebaseui-idp-twitter firebaseui-id-idp-button" data-provider-id="twitter.com" data-upgraded=",MaterialButton"><span class="firebaseui-idp-icon-wrapper"><img class="firebaseui-idp-icon" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/twitter.svg"></span><span class="firebaseui-idp-text firebaseui-idp-text-long">Entrar com Twitter</span><span class="firebaseui-idp-text firebaseui-idp-text-short">Twitter</span></button></li>
+                               <li class="firebaseui-list-item"><button disabled="true" class="firebaseui-idp-button mdl-button mdl-js-button mdl-button--raised firebaseui-idp-github firebaseui-id-idp-button" data-provider-id="github.com" data-upgraded=",MaterialButton"><span class="firebaseui-idp-icon-wrapper"><img class="firebaseui-idp-icon" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/github.svg"></span><span class="firebaseui-idp-text firebaseui-idp-text-long">Entrar com Github</span><span class="firebaseui-idp-text firebaseui-idp-text-short">Github</span></button></li>
+                               <li class="firebaseui-list-item"><button disabled="true" class="firebaseui-idp-button mdl-button mdl-js-button mdl-button--raised firebaseui-idp-password firebaseui-id-idp-button" data-provider-id="password" data-upgraded=",MaterialButton"><span class="firebaseui-idp-icon-wrapper"><img class="firebaseui-idp-icon" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/mail.svg"></span><span class="firebaseui-idp-text firebaseui-idp-text-long">Entrar com email</span><span class="firebaseui-idp-text firebaseui-idp-text-short">Email</span></button></li>
+                               <li class="firebaseui-list-item"><button disabled="true" class="firebaseui-idp-button mdl-button mdl-js-button mdl-button--raised firebaseui-idp-phone firebaseui-id-idp-button" data-provider-id="phone" data-upgraded=",MaterialButton"><span class="firebaseui-idp-icon-wrapper"><img class="firebaseui-idp-icon" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/phone.svg"></span><span class="firebaseui-idp-text firebaseui-idp-text-long">Entrar com Telefone</span><span class="firebaseui-idp-text firebaseui-idp-text-short">Telefone</span></button></li>
+                            </ul>
+                         </form>
+                      </div>
+                   </div>
+                </div>
               </div>
-           </div>
-        </div>
+              <div flex="6" layout="row">
+                <hr style="width:0px;" flex/>
+              </div>
+              <div flex="47" layout="column" layout-padding>
+                <small>Email</small>
+                <input type="email" name="name" ng-model="loginCtrl.user.email" aria-label="Nome"
+                  style="border:1px solid grey; padding: 5px; border-radius: 5px;">
+                <small>Senha</small>
+                <input type="password" name="password" ng-model="loginCtrl.user.password" aria-label="Senha"
+                  style="border:1px solid grey; padding: 5px; border-radius: 5px;">
+                <div layout="row" layout-align="end center">
+                  <md-button class="md-primary" ng-click="loginCtrl.loginWithEmailPassword()">Entrar</md-button>
+                </div>
+              </div>
+            </md-content>
+          </md-tab>
+          <md-tab label="Criar Conta">
+            <md-content layout="column" class="md-padding">
+                <md-input-container class="md-block">
+                  <small>Nome</small>
+                  <input type="text" name="name" ng-model="loginCtrl.newUser.name" required="true" aria-label="Nome">
+                </md-input-container>
+                <md-input-container class="md-block">
+                  <small>Email</small>
+                  <input type="email" name="email" ng-model="loginCtrl.newUser.email" required="true" aria-label="Email">
+                </md-input-container>
+              <div layout-gt-sm="row">
+                <md-input-container class="md-block">
+                  <small>Senha</small>
+                  <input type="password" name="password" ng-model="loginCtrl.newUser.password" required="true"  minlength="6"
+                    aria-label="Senha">
+                </md-input-container>
+                <md-input-container class="md-block">
+                  <small>Confirmar Senha</small>
+                  <input type="password" name="verifypassword" ng-model="loginCtrl.newUser.verifypassword" 
+                    required="true" minlength="6" aria-label="Confirmar Senha">
+                </md-input-container>
+              </div>
+              <div layout="row" layout-align="end center">
+                <md-button class="md-primary" ng-click="loginCtrl.signup()">Concluir</md-button>
+              </div>
+            </md-content>
+          </md-tab>
+        </md-tabs>
       </md-content>
     </div>
   </div>

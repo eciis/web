@@ -4,15 +4,48 @@
     var app = angular.module("app");
 
     app.controller("ConfigProfileController", function ConfigProfileController($state, InstitutionService,
-            AuthService, UserService, $rootScope, $mdToast, $q) {
+            AuthService, UserService, ImageService, $rootScope, $mdToast, $q, MessageService) {
         var configProfileCtrl = this;
 
         // Variable used to observe the changes on the user model.
         var observer;
 
         configProfileCtrl.newUser = AuthService.getCurrentUser();
+        configProfileCtrl.loading = false;
+
+        configProfileCtrl.addImage = function(image) {
+            var newSize = 800;
+
+            ImageService.compress(image, newSize).then(function success(data) {
+                configProfileCtrl.photo_user = data;
+                ImageService.readFile(data, setImage);
+                configProfileCtrl.file = null;
+            }, function error(error) {
+                MessageService.showToast(error);
+            });
+        };
+
+        function setImage(image) {
+            $rootScope.$apply(function() {
+                configProfileCtrl.newUser.photo_url = image.src;
+            });
+        }
 
         configProfileCtrl.finish = function finish() {
+            if (configProfileCtrl.photo_user) {
+                configProfileCtrl.loading = true;
+                ImageService.saveImage(configProfileCtrl.photo_user).then(function(data) {
+                    configProfileCtrl.newUser.photo_url = data.url;
+                    configProfileCtrl.newUser.uploaded_images.push(data.url);
+                    saveUser();
+                    configProfileCtrl.loading = false;
+                });
+            } else {
+                return saveUser();
+            }
+        };
+
+        function saveUser() {
             var deffered = $q.defer();
             if (configProfileCtrl.newUser.isValid()) {
                 var patch = jsonpatch.generate(observer);
@@ -23,25 +56,22 @@
                     });
                 });
             } else {
-                showToast("Campos obrigatórios não preenchidos corretamente.");
+                MessageService.showToast("Campos obrigatórios não preenchidos corretamente.");
                 deffered.reject();
             }
             return deffered.promise;
-        };
-
-        function showToast(msg) {
-            $mdToast.show(
-                $mdToast.simple()
-                    .textContent(msg)
-                    .action('FECHAR')
-                    .highlightAction(true)
-                    .hideDelay(5000)
-                    .position('bottom right')
-            );
         }
+
+        configProfileCtrl.showButton = function() {
+            return !configProfileCtrl.loading;
+        };
 
         (function main() {
             observer = jsonpatch.observe(configProfileCtrl.newUser);
+
+            if (configProfileCtrl.newUser.name === 'Unknown') {
+                delete configProfileCtrl.newUser.name;
+            }
         })();
     });
 })();

@@ -101,7 +101,7 @@
             spyOn($http, 'get').and.callThrough();
             httpBackend.expect('GET', "api/search/institution?name=" + institutions[0].name + "&state=active" ).respond(documents);
             var result;
-            service.searchInstitutions(institutions[0].name).then(function(data){
+            service.searchInstitutions(institutions[0].name, 'active').then(function(data){
                 result = data;
             });
             httpBackend.flush();

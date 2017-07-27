@@ -163,7 +163,7 @@
             spyOn(instService, 'searchInstitutions').and.callThrough();
             httpBackend.expect('GET', "api/search/institution?name=" + splab.name + "&state=active").respond(documents);
             mainCtrl.makeSearch().then(function() {
-                 expect(instService.searchInstitutions).toHaveBeenCalledWith(mainCtrl.finalSearch);
+                 expect(instService.searchInstitutions).toHaveBeenCalledWith(mainCtrl.finalSearch, 'active');
                  expect(mainCtrl.institutions).toEqual(documents);
                  done();
             });

@@ -7,7 +7,7 @@
     var splab = {
             name: 'SPLAB',
             key: '987654321',
-            sent_invitations: []  
+            sent_invitations: []
     };
 
     var tiago = {
@@ -59,7 +59,7 @@
             expect(inviteinstitutionCtrl.user.name).toEqual(tiago.name);
         });
     });
-    
+
     describe('InviteInstitutionController functions', function() {
 
         describe('cancelInvite()', function() {
@@ -80,13 +80,12 @@
                     };
                 });
             });
-            
+
             it('should call inviteService.sendInvite()', function(done) {
-                spyOn(state, 'go');
                 inviteinstitutionCtrl.invite.invitee = "mayzabeel@gmail.com";
                 inviteinstitutionCtrl.invite.suggestion_institution_name = "New Institution";
                 inviteinstitutionCtrl.user.current_institution = splab;
-                var promise = inviteinstitutionCtrl.sendInstInvite();
+                var promise = inviteinstitutionCtrl.sendInstInvite(invite);
                 promise.then(function() {
                     expect(inviteService.sendInvite).toHaveBeenCalledWith(invite);
                     done();

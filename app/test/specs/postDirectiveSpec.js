@@ -3,16 +3,17 @@
 (describe('Test PostDirective', function() {
     beforeEach(module('app'));
 
-    var postCtrl, post, httpBackend, scope, deffered, mdDialog, rootScope, postService, mdToast, http;
+    var postCtrl, post, httpBackend, scope, deffered, mdDialog, rootScope, postService, mdToast, http, imageService;
     var user = {
         name: 'name',
         current_institution: {key: "institutuion_key"}
     };
-   
-    beforeEach(inject(function($controller, $httpBackend, $http, $q, $mdDialog, 
-            PostService, AuthService, $mdToast, $rootScope) {
+
+    beforeEach(inject(function($controller, $httpBackend, $http, $q, $mdDialog,
+            PostService, AuthService, $mdToast, $rootScope, ImageService) {
+        imageService = ImageService;
         scope = $rootScope.$new();
-        postCtrl = $controller('PostController', {scope: scope});
+        postCtrl = $controller('PostController', {scope: scope, imageService : imageService, $rootScope: rootScope});
         httpBackend = $httpBackend;
         rootScope = $rootScope;
         deffered = $q.defer();
@@ -55,7 +56,7 @@
             postCtrl.post = new Post(post, {});
             expect(postCtrl.isPostValid()).toBeTruthy();
         });
-    });    
+    });
 
     describe('clearPost()', function() {
         it('should change the current post instance to an empty object', function() {
@@ -64,7 +65,7 @@
             expect(postCtrl.post).toEqual({});
         });
     });
-    
+
     describe('cancelDialog()', function() {
         it('should call mdDialog.hide()', function() {
             spyOn(mdDialog, 'hide');
@@ -72,7 +73,7 @@
             expect(mdDialog.hide).toHaveBeenCalled();
         });
     });
-    
+
     describe('createPost()', function() {
         it('should create a post', function() {
             spyOn(postService, 'createPost').and.returnValue(deffered.promise);
@@ -81,7 +82,7 @@
             postCtrl.post = post;
             var newPost = new Post(postCtrl.post, postCtrl.user.current_institution.key);
             deffered.resolve(newPost);
-            postCtrl.createPost();  
+            postCtrl.createPost();
             scope.$apply();
             expect(postService.createPost).toHaveBeenCalledWith(newPost);
             expect(postCtrl.clearPost).toHaveBeenCalled();
@@ -102,8 +103,55 @@
         it('should not create a post when it is invalid', function() {
             spyOn(postService, 'createPost');
             postCtrl.post = {};
-            postCtrl.createPost();  
+            postCtrl.createPost();
             expect(postService.createPost).not.toHaveBeenCalled();
         });
-    });   
+    });
+
+    describe('addImage()', function() {
+        beforeEach(function() {
+            var image = createImage(100);
+            spyOn(imageService, 'compress').and.callFake(function() {
+                return {
+                    then: function(callback) {
+                        return callback(image);
+                    }
+                };
+            });
+
+            spyOn(imageService, 'readFile').and.callFake(function() {
+                postCtrl.post.photo_url = "Base64 data of photo";
+            });
+
+            spyOn(imageService, 'saveImage').and.callFake(function() {
+                return {
+                    then: function(callback) {
+                        return callback({
+                            url : "imagens/test"
+                        });
+                    }
+                };
+            });
+        });
+
+        it(' Should add new image in post', function() {
+            spyOn(postService, 'createPost').and.returnValue(deffered.promise);
+            spyOn(postCtrl, 'clearPost');
+            spyOn(mdDialog, 'hide');
+
+            postCtrl.post = post;
+            var newPost = new Post(postCtrl.post, postCtrl.user.current_institution.key);
+            deffered.resolve(newPost);
+
+            var image = createImage(100);
+            postCtrl.addImage(image);
+            postCtrl.createPost();
+            scope.$apply();
+
+            expect(imageService.compress).toHaveBeenCalled();
+            expect(imageService.readFile).toHaveBeenCalled();
+            expect(postCtrl.clearPost).toHaveBeenCalled();
+            expect(mdDialog.hide).toHaveBeenCalled();
+        });
+    });
 }));

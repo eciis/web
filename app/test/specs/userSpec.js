@@ -13,12 +13,28 @@
         key: '123456789'
    };
 
+   var inviteUser = {
+        institution_key: "098745", 
+        type_of_invite: "user", 
+        invitee: "mayzabeel@gmail.com",
+        status: 'sent'
+    };
+    
+    var inviteInstitution = {
+        institution_key: "098745", 
+        type_of_invite: "institution", 
+        suggestion_institution_name: "New Institution", 
+        invitee: "mayzabeel@gmail.com",
+        status: 'sent'
+    };
+
    var userData = {
         name: 'Tiago Pereira',
         cpf: '111.111.111-11',
         email: 'tiago.pereira@ccc.ufcg.edu.br',
         institutions: [splab],
-        follows: [splab.key]
+        follows: [splab.key],
+        invites: [inviteUser, inviteInstitution]
    };
 
    beforeEach(inject(function() {
@@ -138,6 +154,40 @@
             user = createUser();
             user.name = '';
             expect(user.isValid()).toBe(false);
+          });
+        });
+
+        describe('changeInstitution', function() {
+          
+          it('should call JSON stringify', function() {
+            spyOn(JSON, 'stringify').and.callThrough();
+
+            userData.institutions = [splab, certbio];
+            user = createUser();
+
+            expect(user.current_institution).toBe(splab);
+
+            user.changeInstitution(certbio);
+
+            expect(JSON.stringify).toHaveBeenCalled();
+            expect(user.current_institution).toBe(certbio);
+
+            var cachedUser = JSON.parse(window.sessionStorage.userInfo);
+
+            expect(cachedUser.current_institution).toEqual(certbio);
+          });
+        });
+
+        describe('getPendingInvitationOf', function() {
+          
+          it('should return the invite_user', function() {
+            user = createUser();
+            expect(user.getPendingInvitationOf('user')).toEqual(inviteUser);
+          });
+
+          it('should return the invite_institution', function() {
+            user = createUser();
+            expect(user.getPendingInvitationOf('institution')).toEqual(inviteInstitution);
           });
         });
    });    

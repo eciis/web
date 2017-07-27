@@ -18,14 +18,16 @@
 
     var tiago = {
         name: 'Tiago',
-        institutions: splab.key,
-        follows: certbio.key
+        institutions: [splab],
+        follows: [certbio],
+        institutions_admin: splab,
+        current_institution: splab
     };
 
     var raoni = {
         name: 'Raoni',
-        institutions: certbio.key,
-        follows: splab.key
+        institutions: [certbio],
+        follows: [splab]
     };
 
     var posts = [{
@@ -56,7 +58,7 @@
             return $controller('InstitutionController',
                 {
                     scope: scope,
-                    institutionService: institutionService,
+                    institutionService: institutionService
                 });
         };
         state.params.institutionKey = splab.key;
@@ -93,6 +95,18 @@
     });
 
     describe('InstitutionController functions', function() {
+
+        it('Should is admin', function(){
+            spyOn(institutionCtrl.user, 'isAdmin').and.callThrough();
+            expect(institutionCtrl.isAdmin()).toEqual(true);
+        });
+
+        it('Should is not admin', function(){
+            institutionCtrl.user.current_institution = certbio;
+
+            spyOn(institutionCtrl.user, 'isAdmin').and.callThrough();
+            expect(institutionCtrl.isAdmin()).toEqual(false);
+        });
 
         describe('follow()', function() {
 

@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.service("AuthService", function AuthService($q, $state, $firebaseAuth, $window, UserService) {
+    app.service("AuthService", function AuthService($q, $state, $firebaseAuth, $window, UserService, MessageService) {
         var service = this;
 
         var authObj = $firebaseAuth();
@@ -16,24 +16,62 @@
             }
         });
 
+        service.setupUser = function setupUser(idToken) {
+            var deferred = $q.defer();
+            var userToken = {
+                accessToken : idToken
+            };
+
+            userInfo = userToken;
+
+            UserService.load().then(function success(userLoaded) {
+                configUser(userLoaded, userToken);
+                deferred.resolve(userInfo);
+            }, function error(error) {
+                MessageService.showToast(error);
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        };
+
         service.login = function login() {
             var deferred = $q.defer();
             authObj.$signInWithPopup("google").then(function(result) {
-                var userToken = {
-                    accessToken : result.credential.idToken
-                };
-
-                userInfo = userToken;
-
-                UserService.load().then(function success(userLoaded) {
-                    configUser(userLoaded, userToken);
+                service.setupUser(result.credential.idToken).then(function success(userInfo) {
                     deferred.resolve(userInfo);
                 });
             }).catch(function(error) {
-                console.error("Authentication failed:", error);
+                MessageService.showToast(error);
                 deferred.reject(error);
             });
+            return deferred.promise;
+        };
 
+        service.loginWithEmailAndPassword = function loginWithEmailAndPassword(email, password) {
+            var deferred = $q.defer();
+            authObj.$signInWithEmailAndPassword(email, password).then(function(result) {
+                var idToken = result.toJSON().stsTokenManager.accessToken;
+                service.setupUser(idToken).then(function success(userInfo) {
+                    deferred.resolve(userInfo);
+                });
+            }).catch(function(error) {
+                MessageService.showToast(error);
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        };
+
+        service.signupWithEmailAndPassword = function signupWithEmailAndPassword(email, password) {
+            var deferred = $q.defer();
+            authObj.$createUserWithEmailAndPassword(email, password).then(function(result) {
+                var idToken = result.toJSON().stsTokenManager.accessToken;
+                service.setupUser(idToken).then(function success(userInfo) {
+                    deferred.resolve(userInfo);
+                });
+            }).catch(function(error) {
+                MessageService.showToast(error);
+                deferred.reject(error);
+            });
             return deferred.promise;
         };
         
@@ -68,6 +106,7 @@
                 configUser(userLoaded, userToken);
                 deferred.resolve(userInfo);
             }, function error(error) {
+                MessageService.showToast(error);
                 deferred.reject(error);
             });
             return deferred.promise;

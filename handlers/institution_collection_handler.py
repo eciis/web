@@ -8,7 +8,6 @@ from utils import json_response
 
 from models.institution import Institution
 
-import search_module
 from handlers.base_handler import BaseHandler
 
 
@@ -22,21 +21,4 @@ class InstitutionCollectionHandler(BaseHandler):
         institution_collection = Institution.query().fetch()
         self.response.write(json.dumps(
             Utils.toJson(institution_collection, host=self.request.host)
-        ))
-
-    """
-    TODO: Create tests to post institution.
-    @author: Andre L Abrantes - 23-06-2017
-    """
-    @json_response
-    @login_required
-    def post(self, user):
-        """Create a new institution."""
-        data = json.loads(self.request.body)
-        institution = Institution.create(data, user)
-        search_module.createDocument(
-            institution.key.urlsafe(), institution.name, institution.state)
-
-        self.response.write(json.dumps(
-            Utils.toJson(institution, host=self.request.host)
         ))

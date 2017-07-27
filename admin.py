@@ -67,6 +67,7 @@ def createInstitution(data, user):
     institution.email = data.get('email')
     institution.photo_url = data.get('photo_url') or institutionImage
     institution.admin = user.key
+    institution.state = data.get('state')
     institution.members.append(user.key)
     institution.followers.append(user.key)
     institution.put()
@@ -325,6 +326,12 @@ class ResetHandler(BaseHandler):
                      maiana.key, luiz.key, raoni.key,
                      ruan.key, tiago.key, admin.key]:
             eciis.follow(user)
+
+        eciis.parent_institution = splab.key
+        eciis.put()
+
+        splab.children_institutions = [eciis.key]
+        splab.put()
 
         jsonList.append(
             {"msg": "database initialized with a few institutions"})

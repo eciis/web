@@ -35,7 +35,7 @@
             md-row-height="1:1"
             md-gutter="4px" md-gutter-gt-sm="4px">
             <md-grid-tile ng-repeat="institution in homeCtrl.institutions" ng-click="homeCtrl.goToInstitution(institution.key)" 
-              md-rowspan="1" md-colspan="1" md-colspan-sm="1" class="clickable">
+              md-rowspan="1" md-colspan="1" md-colspan-sm="1" class="clickable" ng-if="homeCtrl.isActive(institution)">
               <figure>
                 <img title="{{institution.acronym}}" ng-src="{{institution.photo_url}}" width="100%" height="100%"/>
               </figure>

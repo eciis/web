@@ -9,7 +9,7 @@ function User(data) {
     }
 }
 
-var SENT = "send";
+var SENT = "sent";
 
 var USER = "user";
 
@@ -87,9 +87,9 @@ User.prototype.getPendingInviteUser = function getInviteUser(){
 
 User.prototype.getPendingInviteInst = function getInviteInst(){
     return _.find(this.invites, function(invite) {
-           return _.includes(INVITE_INSTITUTIONS_TYPE, invite.type_of_invite) &&
-                  invite.status === SENT;
-       });
+        return _.includes(INVITE_INSTITUTIONS_TYPE, invite.type_of_invite) &&
+            invite.status === SENT;
+    });
 };
 
 function getKeyObj(obj) {

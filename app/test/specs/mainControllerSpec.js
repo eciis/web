@@ -9,7 +9,8 @@
             'invitee': 'user@email.com',
             'suggestion_institution_name': "Suggested Name",
             'type_of_invite': "institution",
-            'status': 'sent'
+            'status': 'sent',
+            'stub_institution_key': '00001'
         }]
     };
     var certbio = {
@@ -18,6 +19,13 @@
         admin: mayza.key
 
     };
+
+    var stub_inst = {
+        name: 'Stub',
+        key: '00001',
+        state: 'pending'
+    };
+
     var splab = {
         name: 'Splab',
         key: '1239'
@@ -79,6 +87,14 @@
             mainCtrl = createCtrl();
 
             expect(state.go).toHaveBeenCalledWith('config_profile');
+        });
+
+        it("should change state to submit_institution if user have pedding invates", function() {
+            spyOn(state, 'go');
+
+            mainCtrl = createCtrl();
+
+            expect(state.go).toHaveBeenCalledWith('submit_institution', {institutionKey: '00001'});
         });
     });
 

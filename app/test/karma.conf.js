@@ -27,6 +27,7 @@ module.exports = function (config) {
         'node_modules/firebase/firebase.js',
         'node_modules/angularfire/dist/angularfire.js',
         "node_modules/mockfirebase/browser/mockfirebase.js",
+        "node_modules/jquery/dist/jquery.min.js",
         '../*.js',
         '../*/*.js',
         'specs/*.js'
@@ -47,7 +48,7 @@ module.exports = function (config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['spec'],
+    reporters: ['spec', 'kjhtml'],
 
 
     // web server port

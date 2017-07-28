@@ -54,6 +54,11 @@
         httpBackend.when('GET', 'institution/institution_page.html').respond(200);
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', "home/home.html").respond(200);
+        httpBackend.when('GET', "/api/user").respond(tiago);
+
+        var idToken = "sdlkjakjfjlskjfkjsdfjkslxvnxmbxzm";
+        AuthService.setupUser(idToken);
+
         createCtrl = function() {
             return $controller('InstitutionController',
                 {
@@ -121,7 +126,11 @@
                 spyOn(institutionService, 'follow').and.callFake(function() {
                     return {
                         then: function(callback) {
-                            return callback();
+                            return callback({
+                                data: {
+                                    url_institution : "987654321"
+                                }
+                            });
                         }
                     };
                 });

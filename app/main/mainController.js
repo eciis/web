@@ -60,7 +60,6 @@
             var deferred = $q.defer();
             InstitutionService.searchInstitutions(mainCtrl.finalSearch, "active").then(function success(response) {
                 mainCtrl.institutions = response.data;
-                console.log(mainCtrl.institutions);
                 if(_.size(mainCtrl.institutions) === 0){
                     mainCtrl.institutions.push({name: 'Nenhuma instituição encontrada'});
                 }
@@ -127,7 +126,7 @@
         (function main() {
             var inviteOfUser = mainCtrl.user.getPendingInvitationOf("user");
             var inviteOfInstitution = mainCtrl.user.getPendingInvitationOf("institution");
-           
+
             if (inviteOfUser) {
                 var institutionKey = inviteOfUser.institution_key;
                 var inviteKey = inviteOfUser.key;

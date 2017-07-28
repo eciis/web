@@ -18,7 +18,6 @@
         name: 'Splab',
         key: '1239'
     };
-    mayza.institutions = [splab];
 
     beforeEach(module('app'));
 

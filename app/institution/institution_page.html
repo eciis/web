@@ -9,11 +9,12 @@
                         <img ng-src="{{ institutionCtrl.current_institution.photo_url }}" height="160" width="160" >
                     </div>
                     <div flex>
-                        <span class="md-headline"><b>{{ institutionCtrl.current_institution.name }}</b>
-                            <md-icon class="clickable" ng-click="institutionCtrl.goToManageMembers(institutionCtrl.current_institution.key)" 
+                        <div class="md-headline"><b>{{ institutionCtrl.current_institution.name }}</b>
+                            <md-icon title="Configurações" class="clickable" 
+                                ng-click="institutionCtrl.goToManageMembers(institutionCtrl.current_institution.key)" 
                                 ng-if="institutionCtrl.user.isAdmin(institutionCtrl.current_institution.key)">settings
                             </md-icon>
-                        </span>
+                        </div>
                         <p>{{ institutionCtrl.current_institution.phone_number }}</p>
                         <p>{{ institutionCtrl.current_institution.address }}</p>
                         <p>{{ institutionCtrl.current_institution.description }}</p>
@@ -21,13 +22,7 @@
                 </md-card-content>
                 <md-divider></md-divider>
                 <md-card-actions layout="row" layout-align="end center">
-                    <!-- <div >
-                        <md-button title="Portifólio" class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}" 
-                            ng-click="">
-                            <md-icon>business_center</md-icon> 
-                        </md-button>
-                    </div> -->
-                    <div >
+                    <div>
                         <md-button class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}" 
                             ng-click="institutionCtrl.isUserFollower ? institutionCtrl.unfollow() : institutionCtrl.follow()">
                             <md-icon>{{ institutionCtrl.isUserFollower ? 'person_outline':'person_add' }}</md-icon>

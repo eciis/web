@@ -41,6 +41,11 @@ class InstitutionFollowersHandler(BaseHandler):
         institution.follow(user.key)
         user.follow(institution_key)
 
+        url_institution = {'url_institution': "http://%s/api/key/%s"
+                           % (self.request.host, url_string)}
+        data = json.dumps(url_institution)
+        self.response.write(data)
+
     @json_response
     @login_required
     @ndb.transactional(xg=True)

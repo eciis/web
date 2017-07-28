@@ -77,9 +77,11 @@
 
         institutionCtrl.follow = function follow(){
             var promise = InstitutionService.follow(currentInstitutionKey);
-            promise.then(function success(){
+            promise.then(function success(response){
+                var institution_url = response.data.url_institution;
                 showToast("Seguindo "+institutionCtrl.current_institution.name);
-                institutionCtrl.user.follow(currentInstitutionKey);
+                institutionCtrl.user.follow(institution_url);
+                AuthService.save();
                 getFollowers();
             }, function error() {
                 showToast('Erro ao seguir a instituição.');
@@ -96,6 +98,7 @@
                 promise.then(function success(){
                     showToast("Deixou de seguir "+institutionCtrl.current_institution.name);
                     institutionCtrl.user.unfollow(currentInstitutionKey);
+                    AuthService.save();
                     getFollowers();
                 }, function error() {
                     showToast('Erro ao deixar de seguir instituição.');

@@ -16,7 +16,7 @@
         key: '123456789'
     };
 
-    var n_membro = {
+    var n_member = {
         name: 'Não é membro',
         key: '123'
     };
@@ -119,7 +119,7 @@
         });
 
         it('Should is not member', function(){
-            institutionCtrl.current_institution = n_membro.key;
+            institutionCtrl.current_institution = n_member.key;
 
             spyOn(institutionCtrl.user, 'isMember').and.callThrough();
             expect(institutionCtrl.isMember()).toEqual(false);

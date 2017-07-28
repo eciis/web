@@ -16,14 +16,9 @@
         key: '123456789'
     };
 
-    var institution = {
-        name: 'Institution',
-        key: '123'
-    };
-
     var tiago = {
         name: 'Tiago',
-        institutions: [splab, certbio],
+        institutions: [splab],
         follows: [certbio],
         institutions_admin: splab,
         current_institution: splab
@@ -119,7 +114,7 @@
         });
 
         it('Should isMember be false', function(){
-            institutionCtrl.current_institution = institution.key;
+            institutionCtrl.current_institution = certbio.key;
 
             spyOn(institutionCtrl.user, 'isMember').and.callThrough();
             expect(institutionCtrl.isMember()).toEqual(false);

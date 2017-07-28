@@ -17,7 +17,7 @@
     };
 
     var n_member = {
-        name: 'Não é membro',
+        name: 'Institution',
         key: '123'
     };
 
@@ -113,12 +113,12 @@
             expect(institutionCtrl.isAdmin()).toEqual(false);
         });
 
-        it('Should is member', function(){
+        it('Should isMember be true', function(){
             spyOn(institutionCtrl.user, 'isMember').and.callThrough();
             expect(institutionCtrl.isMember()).toEqual(true);
         });
 
-        it('Should is not member', function(){
+        it('Should isMember be false', function(){
             institutionCtrl.current_institution = n_member.key;
 
             spyOn(institutionCtrl.user, 'isMember').and.callThrough();

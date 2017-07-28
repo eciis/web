@@ -35,17 +35,27 @@
         author_key: "abcdefg"
     }];
 
+    function login(UserService, AuthService) {
+        var idToken = "sdlkjakjfjlskjfkjsdfjkslxvnxmbxzm";
+
+        UserService.load = function() {
+            return {
+                then : function(callback) {
+                    return callback(tiago);
+                }
+            };
+        };
+
+        AuthService.setupUser(idToken);
+    }
+
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, InstitutionService, AuthService) {
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, InstitutionService, AuthService, UserService) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
         institutionService = InstitutionService;
-
-        AuthService.getCurrentUser = function() {
-            return new User(tiago);
-        };
 
         httpBackend.expect('GET', INSTITUTIONS_URI + splab.key + '/timeline').respond(posts);
         httpBackend.expect('GET', INSTITUTIONS_URI + splab.key).respond(splab);
@@ -54,10 +64,8 @@
         httpBackend.when('GET', 'institution/institution_page.html').respond(200);
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', "home/home.html").respond(200);
-        httpBackend.when('GET', "/api/user").respond(tiago);
 
-        var idToken = "sdlkjakjfjlskjfkjsdfjkslxvnxmbxzm";
-        AuthService.setupUser(idToken);
+        login(UserService, AuthService);
 
         createCtrl = function() {
             return $controller('InstitutionController',

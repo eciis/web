@@ -24,26 +24,41 @@ def getSentInvitations(institution_key):
     invites = []
 
     queryInvites = Invite.query(Invite.institution_key == institution_key,
-                                Invite.type_of_invite == 'user',
                                 Invite.status == 'sent')
 
     invites = [Invite.make(invite) for invite in queryInvites]
 
     return invites
 
+
 def isUserInvited(method):
     """Check if the user is invitee to update the stub of institution."""
+
     def check_authorization(self, user, institution_key, inviteKey):
         invite = ndb.Key(urlsafe=inviteKey).get()
 
         emailIsNotInvited = invite.invitee != user.email
-        institutionIsNotInvited = ndb.Key(urlsafe=institution_key) != invite.stub_institution_key
+        institutionIsNotInvited = ndb.Key(
+            urlsafe=institution_key) != invite.stub_institution_key
 
         Utils._assert(emailIsNotInvited or institutionIsNotInvited,
                       'User is not invitee to create this Institution', NotAuthorizedException)
 
         method(self, user, institution_key, inviteKey)
     return check_authorization
+
+
+def childrenToJson(obj):
+    """Return the array with json from institution that are obj children."""
+    json = [Utils.toJson(institution.get())
+            for institution in obj.children_institutions]
+    return json
+
+
+def parentToJson(obj):
+    """Return json whith parent institution."""
+    if(obj.parent_institution):
+        return Utils.toJson(obj.parent_institution.get())
 
 
 class InstitutionHandler(BaseHandler):
@@ -55,9 +70,13 @@ class InstitutionHandler(BaseHandler):
         """Handle GET Requests."""
         obj_key = ndb.Key(urlsafe=url_string)
         obj = obj_key.get()
+
         assert type(obj) is Institution, "Key is not an Institution"
         institution_json = Utils.toJson(obj, host=self.request.host)
         institution_json['sent_invitations'] = getSentInvitations(obj.key)
+        institution_json['parent_institution'] = parentToJson(obj)
+        institution_json['children_institutions'] = childrenToJson(obj)
+
         self.response.write(json.dumps(
             institution_json
         ))

@@ -67,6 +67,7 @@ def createInstitution(data, user):
     institution.email = data.get('email')
     institution.photo_url = data.get('photo_url') or institutionImage
     institution.admin = user.key
+    institution.state = data.get('state')
     institution.members.append(user.key)
     institution.followers.append(user.key)
     institution.put()
@@ -326,6 +327,12 @@ class ResetHandler(BaseHandler):
                      ruan.key, tiago.key, admin.key]:
             eciis.follow(user)
 
+        eciis.parent_institution = splab.key
+        eciis.put()
+
+        splab.children_institutions = [eciis.key]
+        splab.put()
+
         jsonList.append(
             {"msg": "database initialized with a few institutions"})
 
@@ -386,7 +393,7 @@ class ResetHandler(BaseHandler):
         # POST of Mayza To Certbio Institution with image
         mayza_post_comIMG = Post()
         mayza_post_comIMG.title = "Post do CERTBIO com imagem"
-        mayza_post_comIMG.headerImage = "https://workingatbooking.com/content/uploads/2017/04/womenintech_heroimage.jpg"
+        mayza_post_comIMG.photo_url = "https://workingatbooking.com/content/uploads/2017/04/womenintech_heroimage.jpg"
         mayza_post_comIMG.text = "Lorem ipsum dolor sit amet, consectetur \
         adipiscing elit. Praesent maximus id est in dapibus. Fusce lorem \
         libero, vulputate quis purus maximus, auctor tempus enim. Sed."
@@ -435,7 +442,7 @@ class ResetHandler(BaseHandler):
         recusandae. Itaque earum rerum hic tenetur sapiente delectus, ut aut \
         reiciendis voluptatibus maiores alias consequatur aut perferendis dolo\
         ribus asperiores repellat."
-        dalton_post.headerImage = "http://noticias.universia.com.br/net/images/consejos-profesionales/l/le/lei/leia-gratuitamente-livros-alcancar-sucesso-noticias.jpg"
+        dalton_post.photo_url = "http://noticias.universia.com.br/net/images/consejos-profesionales/l/le/lei/leia-gratuitamente-livros-alcancar-sucesso-noticias.jpg"
         dalton_post.author = dalton.key
         dalton_post.institution = splab.key
         dalton_post.last_modified_by = dalton.key
@@ -478,7 +485,7 @@ class ResetHandler(BaseHandler):
         non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, \
         ut aut reiciendis voluptatibus maiores alias consequatur aut perferend\
         is doloribus asperiores repellat."
-        jorge_post_eCIIS.headerImage = "http://unef.edu.br/hotsite/wp-content/uploads/2016/04/EDITAL.jpg"
+        jorge_post_eCIIS.photo_url = "http://unef.edu.br/hotsite/wp-content/uploads/2016/04/EDITAL.jpg"
         jorge_post_eCIIS.author = jorge.key
         jorge_post_eCIIS.institution = eciis.key
         jorge_post_eCIIS.last_modified_by = jorge.key

@@ -75,8 +75,8 @@
             return false;
         };
 
-        mainCtrl.isAdmin = function isAdmin(current_institution) {
-            if (mainCtrl.user && mainCtrl.user.isAdmin(current_institution.key)){
+        mainCtrl.isAdmin = function isAdmin(keyInstitution) {
+            if (mainCtrl.user && mainCtrl.user.isAdmin(keyInstitution)){
                 return true;
             }
             return false;
@@ -126,7 +126,7 @@
         (function main() {
             var inviteOfUser = mainCtrl.user.getPendingInvitationOf("user");
             var inviteOfInstitution = mainCtrl.user.getPendingInvitationOf("institution");
-
+           
             if (inviteOfUser) {
                 var institutionKey = inviteOfUser.institution_key;
                 var inviteKey = inviteOfUser.key;

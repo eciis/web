@@ -18,7 +18,8 @@
         md-gutter="4px" md-gutter-gt-sm="4px">
         <md-subheader class="md-no-sticky" >Convites enviados</md-subheader>
 
-        <md-list-item ng-repeat="invite in inviteUserCtrl.sent_invitations" ng-click="null">
+        <md-list-item ng-repeat="invite in inviteUserCtrl.sent_invitations" ng-click="null"
+           ng-if="invite.type_of_invite == 'user'">
           <p> {{ invite.invitee }}</p>
         </md-list-item>
       </md-list>

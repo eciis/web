@@ -70,6 +70,18 @@
             );
         }
 
+        institutionCtrl.isAdmin = function isAdmin() {
+            var isAdmin = institutionCtrl.user.isAdmin(currentInstitutionKey);
+            var isloggedWithInstitution = (institutionCtrl.user.current_institution.key === currentInstitutionKey);
+
+            return isAdmin && isloggedWithInstitution;
+        };
+
+        institutionCtrl.isMember = function isMember() {
+            return institutionCtrl.user.isMember(institutionCtrl.current_institution.key);
+        };
+
+
         institutionCtrl.follow = function follow(){
             var promise = InstitutionService.follow(currentInstitutionKey);
             promise.then(function success(){
@@ -101,12 +113,16 @@
             }
         };
 
-        institutionCtrl.goToManageMembers = function goToManageMembers(institutionKey){
-            $state.go('app.manage_institution.invite_user', {institutionKey: institutionKey});
+        institutionCtrl.goToManageMembers = function goToManageMembers(){
+            $state.go('app.manage_institution.invite_user', {institutionKey: currentInstitutionKey});
         };
 
-        institutionCtrl.goToEditInfo = function goToEditInfo(institutionKey){
-            $state.go('app.manage_institution.edit_info', {institutionKey: institutionKey});
+        institutionCtrl.goToManageInstitutions = function goToManageInstitutions(){
+            $state.go('app.manage_institution.invite_inst', {institutionKey: currentInstitutionKey});
+        };
+
+        institutionCtrl.goToEditInfo = function goToEditInfo(){
+            $state.go('app.manage_institution.edit_info', {institutionKey: currentInstitutionKey});
         };
     });
 })();

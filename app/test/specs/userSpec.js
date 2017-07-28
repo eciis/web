@@ -13,12 +13,28 @@
         key: '123456789'
    };
 
+   var inviteUser = {
+        institution_key: "098745", 
+        type_of_invite: "user", 
+        invitee: "mayzabeel@gmail.com",
+        status: 'sent'
+    };
+    
+    var inviteInstitution = {
+        institution_key: "098745", 
+        type_of_invite: "institution", 
+        suggestion_institution_name: "New Institution", 
+        invitee: "mayzabeel@gmail.com",
+        status: 'sent'
+    };
+
    var userData = {
         name: 'Tiago Pereira',
         cpf: '111.111.111-11',
         email: 'tiago.pereira@ccc.ufcg.edu.br',
         institutions: [splab],
-        follows: [splab.key]
+        follows: [splab.key],
+        invites: [inviteUser, inviteInstitution]
    };
 
    beforeEach(inject(function() {
@@ -159,6 +175,19 @@
             var cachedUser = JSON.parse(window.sessionStorage.userInfo);
 
             expect(cachedUser.current_institution).toEqual(certbio);
+          });
+        });
+
+        describe('getPendingInvitationOf', function() {
+          
+          it('should return the invite_user', function() {
+            user = createUser();
+            expect(user.getPendingInvitationOf('user')).toEqual(inviteUser);
+          });
+
+          it('should return the invite_institution', function() {
+            user = createUser();
+            expect(user.getPendingInvitationOf('institution')).toEqual(inviteInstitution);
           });
         });
    });    

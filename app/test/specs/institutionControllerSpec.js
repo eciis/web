@@ -108,6 +108,18 @@
             expect(institutionCtrl.isAdmin()).toEqual(false);
         });
 
+        it('Should isMember be true', function(){
+            spyOn(institutionCtrl.user, 'isMember').and.callThrough();
+            expect(institutionCtrl.isMember()).toEqual(true);
+        });
+
+        it('Should isMember be false', function(){
+            institutionCtrl.current_institution = certbio.key;
+
+            spyOn(institutionCtrl.user, 'isMember').and.callThrough();
+            expect(institutionCtrl.isMember()).toEqual(false);
+        });
+
         describe('follow()', function() {
 
             beforeEach(function() {

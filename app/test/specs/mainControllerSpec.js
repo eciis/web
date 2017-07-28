@@ -172,7 +172,7 @@
         });
 
         it('User should not be admin of your current institution', function(){
-            expect(mainCtrl.isAdmin(mainCtrl.user.current_institution)).toBe(true);
+            expect(mainCtrl.isAdmin(mainCtrl.user.current_institution.key)).toBe(true);
         });
     });
 }));

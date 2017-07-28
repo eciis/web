@@ -116,7 +116,7 @@
                 url: "/:institutionKey/:inviteKey/new_invite",
                 views: {
                     main: {
-                        templateUrl: "auth/new_invite_page.html",
+                        templateUrl: "invites/new_invite_page.html",
                         controller: "NewInviteController as newInviteCtrl"
                     }
                 }

@@ -93,6 +93,10 @@
     font-weight:bold;
 }
 
+.post-deleted {
+    background-color:#F5F5F5;
+}
+
 a:link {
     text-decoration: none;
 }

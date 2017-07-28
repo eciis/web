@@ -7,12 +7,9 @@
         var institutionCtrl = this;
 
         institutionCtrl.current_institution = null;
-
         institutionCtrl.posts = [];
-
-        institutionCtrl.members = [];
-
         institutionCtrl.followers = [];
+        institutionCtrl.isUserFollower = false;
 
         var currentInstitutionKey = $state.params.institutionKey;
 
@@ -28,9 +25,10 @@
 
         function loadInstitution() {
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
-                institutionCtrl.current_institution = response.data;
+                institutionCtrl.current_institution = new Institution(response.data);
                 getMembers();
                 getFollowers();
+                checkIfUserIsFollower();
             }, function error(response) {
                 $state.go("app.home");
                 MessageService.showToast(response.data.msg);
@@ -63,13 +61,18 @@
             return isAdmin && isloggedWithInstitution;
         };
 
+        institutionCtrl.isMember = function isMember() {
+            return institutionCtrl.user.isMember(institutionCtrl.current_institution.key);
+        };
+
 
         institutionCtrl.follow = function follow(){
             var promise = InstitutionService.follow(currentInstitutionKey);
-            promise.then(function success(response){
-                var url_institution = response.data.url_institution;
+            promise.then(function success(){
                 MessageService.showToast("Seguindo "+institutionCtrl.current_institution.name);
-                institutionCtrl.user.follow(url_institution);
+                var institution = institutionCtrl.current_institution.make();
+                institutionCtrl.user.follow(institution);
+                institutionCtrl.isUserFollower = true;
                 AuthService.save();
                 getFollowers();
             }, function error() {
@@ -86,7 +89,8 @@
                 var promise = InstitutionService.unfollow(currentInstitutionKey);
                 promise.then(function success(){
                     MessageService.showToast("Deixou de seguir "+institutionCtrl.current_institution.name);
-                    institutionCtrl.user.unfollow(currentInstitutionKey);
+                    institutionCtrl.user.unfollow(institutionCtrl.current_institution);
+                    institutionCtrl.isUserFollower = false;
                     AuthService.save();
                     getFollowers();
                 }, function error() {
@@ -107,5 +111,9 @@
         institutionCtrl.goToEditInfo = function goToEditInfo(){
             $state.go('app.manage_institution.edit_info', {institutionKey: currentInstitutionKey});
         };
+
+        function checkIfUserIsFollower() {
+            institutionCtrl.isUserFollower = institutionCtrl.user.isFollower(institutionCtrl.current_institution);
+        }
     });
 })();

@@ -33,7 +33,7 @@
         cpf: '111.111.111-11',
         email: 'tiago.pereira@ccc.ufcg.edu.br',
         institutions: [splab],
-        follows: [splab.key],
+        follows: [splab],
         invites: [inviteUser, inviteInstitution]
    };
 
@@ -67,7 +67,7 @@
         });
 
         it('follows should contain splab key', function() {
-          expect(user.follows).toContain(splab.key);
+          expect(user.follows).toContain(splab);
         });
    });
 
@@ -77,12 +77,12 @@
 
           it('should be true', function() {
             user = createUser();
-            expect(user.isFollower(splab.key)).toBe(true);
+            expect(user.isFollower(splab)).toBe(true);
           });
 
           it('should be false', function() {
             user = createUser();
-            expect(user.isFollower(certbio.key)).toBe(false);
+            expect(user.isFollower(certbio)).toBe(false);
           });
         });
 
@@ -90,13 +90,13 @@
 
           it('follows should not contain certbio key before follow', function() {
             user = createUser();
-            expect(user.follows).not.toContain(certbio.key);
+            expect(user.follows).not.toContain(certbio);
           });
 
           it('follows should contain certbio key after follow', function() {
             user = createUser();
-            user.follow(certbio.key);
-            expect(user.follows).toContain(certbio.key);
+            user.follow(certbio);
+            expect(user.follows).toContain(certbio);
           });
         });
 
@@ -104,14 +104,14 @@
 
           it('follows should contain certbio key before unfollow', function() {
             user = createUser();
-            user.follow(certbio.key);
-            expect(user.follows).toContain(certbio.key);
+            user.follow(certbio);
+            expect(user.follows).toContain(certbio);
           });
 
           it('follows should not contain certbio key after unfollow', function() {
             user = createUser();
-            user.unfollow(certbio.key);
-            expect(user.follows).not.toContain(certbio.key);
+            user.unfollow(certbio);
+            expect(user.follows).not.toContain(certbio);
           });
         });
 

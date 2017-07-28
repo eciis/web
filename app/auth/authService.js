@@ -79,7 +79,6 @@
             authObj.$signOut();
             delete $window.sessionStorage.userInfo;
             userInfo = undefined;
-            $state.go("landing_page");
         };
 
         service.getCurrentUser = function getCurrentUser() {
@@ -114,7 +113,7 @@
 
         authObj.$onAuthStateChanged(function(firebaseUser) {
             if (!firebaseUser) {
-                $state.go("landing_page");
+                $state.go("signin");
             }
         });
 

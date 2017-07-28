@@ -30,16 +30,8 @@
                     }
                 }
             })
-            .state("landing_page", {
-                url: "/",
-                views: {
-                    main: {
-                        templateUrl: "landingPage/landing_page.html"
-                    }
-                }
-            })
             .state("app.home", {
-                url: "/home",
+                url: "/",
                 views: {
                     content: {
                         templateUrl: "home/home.html",
@@ -84,15 +76,6 @@
                     }
                 }
             })
-            .state("app.manage_institution.invite_inst", {
-                url: "/:institutionKey/inviteInstitution",
-                views: {
-                    content_manage_institution: {
-                        templateUrl: "invites/invite_institution_hierarchie.html",
-                        controller: "InviteInstHierarchieController as inviteInstCtrl"
-                    }
-                }
-            })
             .state("app.invite_inst", {
                 url: "/inviteInstitution",
                 views: {
@@ -130,7 +113,7 @@
                 }
             })
             .state("submit_institution", {
-                url: "/:institutionKey/submitinstitution",
+                url: "/submitinstitution",
                 views: {
                     main: {
                         templateUrl:"institution/submitInstitution.html",
@@ -193,9 +176,8 @@
                 if (AuthService.isLoggedIn()) {
                     var token = AuthService.getUserToken();
                     config.headers.Authorization = 'Bearer ' + token;
-                } else if (!($state.current.name == "signin" || $state.current.name == "landing_page")) {
+                } else {
                     $state.go("signin");
-
                 }
                 return config || $q.when(config);
             }

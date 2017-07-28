@@ -15,9 +15,13 @@ handlers:
   script: admin.app
   login: admin
 
-- url: (.*)/
+- url: /
+  static_files: app/landingPage/landing_page.html
+  upload: app/landingPage/landing_page.html
+
+- url: /!
   static_files: app/index.html
-  upload: app/index.html
+  upload: app/index.html  
 
 - url: (.*)
   static_files: app\1

@@ -7,6 +7,8 @@
             InstitutionService, $interval, $mdToast, $mdDialog, $state, $rootScope) {
         var homeCtrl = this;
 
+        var ACTIVE = "active";
+
         homeCtrl.posts = [];
         homeCtrl.followingInstitutions = [];
         homeCtrl.instMenuExpanded = false;
@@ -43,6 +45,10 @@
 
         homeCtrl.expandInstMenu = function expandInstMenu(){
             homeCtrl.instMenuExpanded = !homeCtrl.instMenuExpanded;
+        };
+        
+        homeCtrl.isActive = function isActive(institution) {
+            return institution.state === ACTIVE;
         };
 
         function getFollowingInstitutions(){

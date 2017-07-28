@@ -10,7 +10,7 @@ Institution.prototype.make = function make() {
         acronym: this.acronym,
         key: this.key,
         photo_url: this.photo_url
-    }
+    };
     return institution;
 };
         

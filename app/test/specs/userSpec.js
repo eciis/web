@@ -33,7 +33,7 @@
         cpf: '111.111.111-11',
         email: 'tiago.pereira@ccc.ufcg.edu.br',
         institutions: [splab],
-        follows: [splab]
+        follows: [splab],
         invites: [inviteUser, inviteInstitution]
    };
 

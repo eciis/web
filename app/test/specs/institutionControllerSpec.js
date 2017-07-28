@@ -16,9 +16,14 @@
         key: '123456789'
     };
 
+    var n_membro = {
+        name: 'Não é membro',
+        key: '123'
+    };
+
     var tiago = {
         name: 'Tiago',
-        institutions: [splab],
+        institutions: [splab, certbio],
         follows: [certbio],
         institutions_admin: splab,
         current_institution: splab
@@ -106,6 +111,18 @@
 
             spyOn(institutionCtrl.user, 'isAdmin').and.callThrough();
             expect(institutionCtrl.isAdmin()).toEqual(false);
+        });
+
+        it('Should is member', function(){
+            spyOn(institutionCtrl.user, 'isMember').and.callThrough();
+            expect(institutionCtrl.isMember()).toEqual(true);
+        });
+
+        it('Should is not member', function(){
+            institutionCtrl.current_institution = n_membro.key;
+
+            spyOn(institutionCtrl.user, 'isMember').and.callThrough();
+            expect(institutionCtrl.isMember()).toEqual(false);
         });
 
         describe('follow()', function() {

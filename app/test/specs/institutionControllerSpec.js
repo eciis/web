@@ -148,11 +148,7 @@
                 spyOn(institutionService, 'follow').and.callFake(function() {
                     return {
                         then: function(callback) {
-                            return callback({
-                                data: {
-                                    url_institution : "987654321"
-                                }
-                            });
+                            return callback();
                         }
                     };
                 });

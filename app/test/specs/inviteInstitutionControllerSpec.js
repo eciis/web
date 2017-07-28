@@ -2,7 +2,7 @@
 
 (describe('Test InviteInstitutionController', function() {
 
-    var inviteinstitutionCtrl, httpBackend, scope, inviteService, createCtrl, state;
+    var inviteinstitutionCtrl, httpBackend, scope, inviteService, createCtrl, state, instService;
 
     var splab = {
             name: 'SPLAB',
@@ -21,11 +21,12 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $state, InviteService, AuthService) {
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $state, InviteService, AuthService, InstitutionService) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
         inviteService = InviteService;
+        instService = InstitutionService;
 
         AuthService.getCurrentUser = function() {
             return new User(tiago);
@@ -91,6 +92,38 @@
                     done();
                 });
                 scope.$apply();
+            });
+
+            it('should call InviteinstitutionCtrl.sendInvite() and InstitutionService.searchInstitutions()',
+                function(done) {
+                    spyOn(instService, 'searchInstitutions').and.callThrough();
+                    spyOn(inviteinstitutionCtrl, 'sendInstInvite');
+                    inviteinstitutionCtrl.invite.invitee = "mayzabeel@gmail.com";
+                    inviteinstitutionCtrl.invite.suggestion_institution_name = "New Institution";
+                    inviteinstitutionCtrl.user.current_institution = splab;
+                    httpBackend.expect('GET', "api/search/institution?name=New Institution&state=(active OR pending)").respond({});
+                    inviteinstitutionCtrl.checkInstInvite().then(function() {
+                        expect(instService.searchInstitutions).toHaveBeenCalledWith(
+                            inviteinstitutionCtrl.invite.suggestion_institution_name,
+                            "(active OR pending)");
+                        expect(inviteinstitutionCtrl.sendInstInvite).toHaveBeenCalled();
+                        done();
+                    });
+                    httpBackend.flush();
+            });
+
+            it('should call InviteinstitutionCtrl.showDialog()', function(done) {
+                var documents = [{name: splab.name, id: splab.key}];
+                spyOn(inviteinstitutionCtrl, 'showDialog');
+                inviteinstitutionCtrl.invite.invitee = "mayzabeel@gmail.com";
+                inviteinstitutionCtrl.invite.suggestion_institution_name = "New Institution";
+                inviteinstitutionCtrl.user.current_institution = splab;
+                httpBackend.expect('GET', "api/search/institution?name=New Institution&state=(active OR pending)").respond(documents);
+                inviteinstitutionCtrl.checkInstInvite().then(function() {
+                    expect(inviteinstitutionCtrl.showDialog).toHaveBeenCalled();
+                    done();
+                });
+                httpBackend.flush();
             });
         });
     });

@@ -2,6 +2,8 @@
 (function() {
     var app = angular.module('app');
 
+    app.controller("DialogController", DialogController);
+
     app.controller("InviteInstitutionController", function InviteInstitutionController(
         InviteService, $mdToast, $state, AuthService, InstitutionService, $mdDialog) {
         var inviteController = this;
@@ -19,13 +21,14 @@
         };
 
         inviteController.checkInstInvite = function checkInstInvite(ev) {
+            var promise;
             var currentInstitutionKey = inviteController.user.current_institution.key;
             invite = new Invite(inviteController.invite, 'institution', currentInstitutionKey, inviteController.user.email);
             if (!invite.isValid()) {
                 showToast('Convite inválido!');
             } else {
-                InstitutionService.searchInstitutions(inviteController.invite.suggestion_institution_name, "(active OR pending)")
-                    .then(function success(response) {
+                promise = InstitutionService.searchInstitutions(inviteController.invite.suggestion_institution_name, "(active OR pending)");
+                promise.then(function success(response) {
                         inviteController.existing_institutions = response.data;
                         if(_.size(inviteController.existing_institutions) === 0) {
                             inviteController.sendInstInvite(invite);
@@ -34,6 +37,7 @@
                             inviteController.showDialog(ev, invite);
                         }
                     });
+                return promise;
             }
         };
 
@@ -45,6 +49,7 @@
                     'inviteController': inviteController
                 },
                 controller: DialogController,
+                controllerAs: 'dialogCtrl',
                 templateUrl: 'invites/existing_institutions.html',
                 parent: angular.element(document.body),
                 targetEvent: ev,
@@ -86,25 +91,26 @@
         loadSentInvitations();
     });
 
-    function DialogController($scope, $mdDialog, institutions, invite, inviteController, $state) {
-        $scope.institutions = institutions;
-        $scope.invite = invite;
+    function DialogController($mdDialog, institutions, invite, inviteController, $state) {
+        var dialogCtrl = this;
+        dialogCtrl.institutions = institutions;
+        dialogCtrl.invite = invite;
 
-        $scope.sendInvite = function sendInvite(){
+        dialogCtrl.sendInvite = function sendInvite(){
             inviteController.sendInstInvite(invite);
-            $scope.cancel();
+            dialogCtrl.cancel();
         };
 
-        $scope.goToInstitution = function goToInstitution(institutionKey) {
+        dialogCtrl.goToInstitution = function goToInstitution(institutionKey) {
             $state.go('app.institution', {institutionKey: institutionKey});
-            $scope.cancel();
+            dialogCtrl.cancel();
         };
 
-        $scope.cancel = function cancel() {
+        dialogCtrl.cancel = function cancel() {
             $mdDialog.cancel();
         };
 
-        $scope.isActive = function(state) {
+        dialogCtrl.isActive = function(state) {
             return state === 'active';
         };
     }

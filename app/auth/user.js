@@ -33,9 +33,9 @@ User.prototype.unfollow = function unfollow(institution) {
 User.prototype.isFollower = function isFollower(institution) {
 	var isFollower = false;
     _.forEach(this.follows, function(followingInst) {
-          if(followingInst.key == institution.key){
-          	isFollower = true;
-          }
+        if(followingInst.key == institution.key){
+            isFollower = true;
+        }
     });
     return isFollower;
 };

@@ -74,6 +74,10 @@
             return isAdmin && isloggedWithInstitution;
         };
 
+        institutionCtrl.isMember = function isMember() {
+            return institutionCtrl.user.isMember(institutionCtrl.current_institution.key);
+        };
+
 
         institutionCtrl.follow = function follow(){
             var promise = InstitutionService.follow(currentInstitutionKey);

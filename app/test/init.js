@@ -1,19 +1,5 @@
 'use strict';
 
-function login(UserService, AuthService, user) {
-    var idToken = 'jdsfkbcbmnweuiyeuiwyhdjskalhdjkhjk';
-
-    UserService.load = function() {
-        return {
-            then : function(callback) {
-                return callback(user);
-            }
-        };
-    };
-
-    AuthService.setupUser(idToken);
-}
-
 /*
 * File used to create perfect scenario before karma tests.
 */
@@ -29,6 +15,20 @@ function login(UserService, AuthService, user) {
 
     // Create mock of authentication
     angular.module('app').run(function (AuthService, UserService) {
-        login(UserService, AuthService, user);
+        var idToken = 'jdsfkbcbmnweuiyeuiwyhdjskalhdjkhjk';
+
+        AuthService.login = function(user) {
+            UserService.load = function() {
+                return {
+                    then : function(callback) {
+                        return callback(user);
+                    }
+                };
+            };
+
+            AuthService.setupUser(idToken);
+        };
+
+        AuthService.login(user);
     });
 })();

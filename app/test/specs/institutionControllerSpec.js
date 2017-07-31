@@ -53,7 +53,7 @@
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', "home/home.html").respond(200);
 
-        login(UserService, AuthService, tiago);
+        AuthService.login(tiago);
 
         createCtrl = function() {
             return $controller('InstitutionController',

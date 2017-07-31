@@ -53,9 +53,9 @@ def processDocuments(documents):
     return result
 
 
-def getDocuments(institution, state):
+def getDocuments(institution_name, state):
     """Retrieve the documents and return them processed."""
-    query_string = makeQueryStr(institution, state)
+    query_string = makeQueryStr(institution_name, state)
     index = search.Index(INDEX_NAME)
     query_options = search.QueryOptions(
         returned_fields=['name', 'state', 'admin']
@@ -65,8 +65,13 @@ def getDocuments(institution, state):
     return processDocuments(documents)
 
 
-def makeQueryStr(institution, state):
-    """Make the query string."""
+def makeQueryStr(institution_name, state):
+    """Make the query string.
+
+    Keyword arguments:
+    institution_name -- the institution's name
+    state -- represents the current institution's state.
+    """
     states = state.split(",")
     state_string = ""
     for i in xrange(0, len(states), 1):
@@ -74,4 +79,4 @@ def makeQueryStr(institution, state):
             state_string += states[i]
         else:
             state_string += " OR " + states[i]
-    return "name: %s AND state: %s" % (institution, state_string)
+    return "name: %s AND state: %s" % (institution_name, state_string)

@@ -11,6 +11,7 @@
         inviteController.invite = {};
         inviteController.sent_invitations = [];
         inviteController.existing_institutions = [];
+        var INSTITUTION_STATE = "active,pending";
 
         var invite;
 
@@ -23,11 +24,13 @@
         inviteController.checkInstInvite = function checkInstInvite(ev) {
             var promise;
             var currentInstitutionKey = inviteController.user.current_institution.key;
-            invite = new Invite(inviteController.invite, 'institution', currentInstitutionKey, inviteController.user.email);
+            invite = new Invite(inviteController.invite, 'institution',
+                currentInstitutionKey, inviteController.user.email);
             if (!invite.isValid()) {
                 MessageService.showToast('Convite inválido!');
             } else {
-                promise = InstitutionService.searchInstitutions(inviteController.invite.suggestion_institution_name, "active,pending");
+                var suggestionInstName = inviteController.invite.suggestion_institution_name;
+                promise = InstitutionService.searchInstitutions(suggestionInstName, INSTITUTION_STATE);
                 promise.then(function success(response) {
                         inviteController.setExistingInstitutionsAndSendInvite(response.data, ev);
                     });

@@ -13,6 +13,7 @@
         mainCtrl.showSearchMenu = false;
         mainCtrl.institutions = [];
         mainCtrl._mdPanel = $mdPanel;
+        var NO_INSTITUTION = 'Nenhuma instituição encontrada';
 
         mainCtrl.showMenu = function showMenu(ev) {
             var deferred = $q.defer();
@@ -60,8 +61,8 @@
             var deferred = $q.defer();
             InstitutionService.searchInstitutions(mainCtrl.finalSearch, "active").then(function success(response) {
                 mainCtrl.institutions = response.data;
-                if(_.size(mainCtrl.institutions) === 0){
-                    mainCtrl.institutions.push({name: 'Nenhuma instituição encontrada'});
+                if(_.isEmpty(mainCtrl.institutions)){
+                    mainCtrl.institutions.push({name: NO_INSTITUTION});
                 }
                 deferred.resolve(response);
             });

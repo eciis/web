@@ -80,11 +80,10 @@
                         }
                     };
                 });
+                inviteinstitutionCtrl.invite = invite;
             });
 
             it('should call inviteService.sendInvite()', function(done) {
-                inviteinstitutionCtrl.invite.invitee = "mayzabeel@gmail.com";
-                inviteinstitutionCtrl.invite.suggestion_institution_name = "New Institution";
                 inviteinstitutionCtrl.user.current_institution = splab;
                 var promise = inviteinstitutionCtrl.sendInstInvite(invite);
                 promise.then(function() {
@@ -97,15 +96,14 @@
             it('should call sendInvite() and searchInstitutions()', function(done) {
                 spyOn(instService, 'searchInstitutions').and.callThrough();
                 spyOn(inviteinstitutionCtrl, 'sendInstInvite');
-                inviteinstitutionCtrl.invite.invitee = "mayzabeel@gmail.com";
-                inviteinstitutionCtrl.invite.suggestion_institution_name = "New Institution";
                 inviteinstitutionCtrl.user.current_institution = splab;
                 httpBackend.expect('GET', "api/search/institution?name=New Institution&state=active,pending").respond({});
                 inviteinstitutionCtrl.checkInstInvite().then(function() {
                     expect(instService.searchInstitutions).toHaveBeenCalledWith(
                         inviteinstitutionCtrl.invite.suggestion_institution_name,
                         "active,pending");
-                    expect(inviteinstitutionCtrl.sendInstInvite).toHaveBeenCalledWith(invite);
+                    expect(inviteinstitutionCtrl.sendInstInvite).toHaveBeenCalledWith(
+                        new Invite(invite, 'institution', splab.key));
                     done();
                 });
                 httpBackend.flush();
@@ -114,9 +112,6 @@
             it('should call showDialog()', function(done) {
                 var documents = [{name: splab.name, id: splab.key}];
                 spyOn(inviteinstitutionCtrl, 'showDialog');
-                inviteinstitutionCtrl.invite.invitee = "mayzabeel@gmail.com";
-                inviteinstitutionCtrl.invite.suggestion_institution_name = "New Institution";
-                inviteinstitutionCtrl.user.current_institution = splab;
                 httpBackend.expect('GET', "api/search/institution?name=New Institution&state=active,pending").respond(documents);
                 inviteinstitutionCtrl.checkInstInvite().then(function() {
                     expect(inviteinstitutionCtrl.showDialog).toHaveBeenCalled();

@@ -42,7 +42,6 @@
         httpBackend.when('GET', 'error/error.html').respond(200);
         httpBackend.when('GET', 'auth/login.html').respond(200);
         httpBackend.when('GET', 'error/error.html').respond(200);
-        httpBackend.when('GET', 'landingPage/landing_page.html').respond(200);
 
         AuthService.getCurrentUser = function() {
             return new User(user);

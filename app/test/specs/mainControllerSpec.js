@@ -52,7 +52,6 @@
         httpBackend.when('GET', "error/user_inactive.html").respond(200);
         httpBackend.when('GET', "home/home.html").respond(200);
         httpBackend.when('GET', "auth/login.html").respond(200);
-        httpBackend.when('GET', 'landingPage/landing_page.html').respond(200);
         createCtrl = function() {
             return $controller('MainController', {
                 scope: scope,

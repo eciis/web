@@ -29,7 +29,6 @@
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);
         httpBackend.when('GET', 'auth/login.html').respond(200);
-        httpBackend.when('GET', 'landingPage/landing_page.html').respond(200);
         scope = $rootScope.$new();
         state = $state;
         imageService = ImageService;

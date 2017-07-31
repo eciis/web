@@ -105,7 +105,7 @@
                     expect(instService.searchInstitutions).toHaveBeenCalledWith(
                         inviteinstitutionCtrl.invite.suggestion_institution_name,
                         "active,pending");
-                    expect(inviteinstitutionCtrl.sendInstInvite).toHaveBeenCalled();
+                    expect(inviteinstitutionCtrl.sendInstInvite).toHaveBeenCalledWith(invite);
                     done();
                 });
                 httpBackend.flush();

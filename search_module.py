@@ -5,15 +5,17 @@ from google.appengine.api import search
 
 INDEX_NAME = 'institution'
 
-"""This method receives an id, which is the key.urlsafe() of the institution,
-    a name, which is the institution's name, a state, that represents the
-    current institution's state, and an admin that is the email of the
-    institution's admin, if it is an active one, or the email that the
-    invitation was sent to."""
-
 
 def createDocument(id, name, state, admin):
-    """Create a document."""
+    """Create a document.
+
+    Keyword arguments:
+    id -- the key.urlsafe() of the institution
+    name -- the institution's name
+    state -- represents the current institution's state
+    admin -- the email of the institution's admin,
+    if it is an active one, or the email that the invitation was sent to.
+    """
     content = {'id': id, 'name': name, 'state': state, 'admin': admin}
     # Make the structure of the document by setting the fields and its id.
     document = search.Document(

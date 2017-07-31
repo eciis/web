@@ -83,7 +83,7 @@
          it('should call state.go()', function() {
             spyOn(state, 'go');
             dialogCtrl.goToInstitution(splab.key);
-            expect(state.go).toHaveBeenCalled();
+            expect(state.go).toHaveBeenCalledWith('app.institution', {institutionKey: splab.key});
         });
     });
 }));

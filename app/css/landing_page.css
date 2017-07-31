@@ -100,6 +100,7 @@ header .intro-text .skills {
     font-size: 1.75em;
   }
 }
+
 .intro-header {
     padding-top: 200px; /* If you're making other pages, make sure there is 50px of padding to make sure the navbar doesn't overlap content! */
     padding-bottom: 100px;
@@ -111,7 +112,7 @@ header .intro-text .skills {
 
 .intro-message {
     margin: 0;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
+    -webkit-filter: drop-shadow(3px 3px 4px black);
     font-size: 5em;
 }
 
@@ -532,4 +533,7 @@ fieldset[disabled] .btn-success.active {
 }
 div#maincontent {
   outline: none;
+}
+.img-glow {
+  -webkit-filter: drop-shadow(2px 2px 2px white);
 }

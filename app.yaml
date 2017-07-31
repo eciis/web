@@ -19,7 +19,7 @@ handlers:
   static_files: app/landingPage/landing_page.html
   upload: app/landingPage/landing_page.html
 
-- url: /!
+- url: /app
   static_files: app/index.html
   upload: app/index.html  
 

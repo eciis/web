@@ -1,5 +1,19 @@
 'use strict';
 
+function login(UserService, AuthService, user) {
+    var idToken = 'jdsfkbcbmnweuiyeuiwyhdjskalhdjkhjk';
+
+    UserService.load = function() {
+        return {
+            then : function(callback) {
+                return callback(user);
+            }
+        };
+    };
+
+    AuthService.setupUser(idToken);
+}
+
 /*
 * File used to create perfect scenario before karma tests.
 */
@@ -18,17 +32,3 @@
         login(UserService, AuthService, user);
     });
 })();
-
-function login(UserService, AuthService, user) {
-    var idToken = 'jdsfkbcbmnweuiyeuiwyhdjskalhdjkhjk';
-
-    UserService.load = function() {
-        return {
-            then : function(callback) {
-                return callback(user);
-            }
-        };
-    };
-
-    AuthService.setupUser(idToken);
-}

@@ -28,7 +28,7 @@
           </md-card-title>
           <md-card-content>
             <div ng-if="postDetailsCtrl.isDeleted(post)" style='font-style:italic; text-align: center'>
-              <p>Esta publicação foi removida.</p>
+              <p>Esta publicação foi removida por</p>
               <p>
                 {{post.last_modified_by}} em {{post.last_modified_date | date: 'dd-MM-yyyy'}} às 
                 {{post.last_modified_date | date: 'HH:mm:ss'}}.

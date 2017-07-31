@@ -20,24 +20,22 @@ User.prototype.changeInstitution = function changeInstitution(institution) {
     window.sessionStorage.userInfo = JSON.stringify(this);
 };
 
-User.prototype.follow = function follow(keyInstitution) {
-    this.follows.push(keyInstitution);
+User.prototype.follow = function follow(institution) {
+    this.follows.push(institution);
 };
 
-User.prototype.unfollow = function unfollow(keyInstitution) {
-    _.remove(this.follows, function(institution){
-    	return getKey(institution) == keyInstitution;
+User.prototype.unfollow = function unfollow(institution) {
+    _.remove(this.follows, function(followingInst){
+    	return followingInst.key == institution.key;
     });
 };
 
-User.prototype.isFollower = function isFollower(keyInstitution) {
+User.prototype.isFollower = function isFollower(institution) {
 	var isFollower = false;
-
-    _.forEach(this.follows, function(institution) {
-          var key = getKey(institution);
-          if(key === keyInstitution){
-          	isFollower = true;
-          }
+    _.forEach(this.follows, function(followingInst) {
+        if(followingInst.key == institution.key){
+            isFollower = true;
+        }
     });
     return isFollower;
 };

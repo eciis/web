@@ -4,15 +4,13 @@
     var app = angular.module("app");
 
     app.controller("HomeController", function HomeController(PostService, AuthService,
-            InstitutionService, CommentService, $interval, $mdToast, $mdDialog, $state, $rootScope) {
+            InstitutionService, $interval, $mdToast, $mdDialog, $state, $rootScope) {
         var homeCtrl = this;
 
         var ACTIVE = "active";
 
         homeCtrl.posts = [];
-        homeCtrl.comments = {};
-        homeCtrl.institutions = [];
-        homeCtrl.newComment = '';
+        homeCtrl.followingInstitutions = [];
         homeCtrl.instMenuExpanded = false;
 
         homeCtrl.user = AuthService.getCurrentUser();
@@ -45,7 +43,6 @@
             });
         };
 
-
         homeCtrl.expandInstMenu = function expandInstMenu(){
             homeCtrl.instMenuExpanded = !homeCtrl.instMenuExpanded;
         };
@@ -54,10 +51,8 @@
             return institution.state === ACTIVE;
         };
 
-        function getInstitutions(){
-            InstitutionService.getInstitutions().then(function sucess(response){
-                homeCtrl.institutions = response.data;
-            });
+        function getFollowingInstitutions(){
+            homeCtrl.followingInstitutions = homeCtrl.user.follows;
         }
 
         var intervalPromise;
@@ -72,7 +67,7 @@
         };
 
         loadPosts();
-        getInstitutions();
+        getFollowingInstitutions();
 
         $rootScope.$on("reloadPosts", function(event, data) {
             var post = new Post(data);

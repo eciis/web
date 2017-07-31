@@ -160,3 +160,13 @@ class Institution(ndb.Model):
         user.put()
 
         return institution
+
+    def make(self, attributes):
+        """Create an institution dictionary with specific filds."""
+        institution = {}
+        for attribute in attributes:
+            attr_value = getattr(self, attribute)
+            if(isinstance(attr_value, ndb.Key)):
+                attr_value = self.key.urlsafe()
+            institution[attribute] = attr_value
+        return institution

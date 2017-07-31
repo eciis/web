@@ -76,8 +76,8 @@
             return false;
         };
 
-        mainCtrl.isAdmin = function isAdmin(current_institution) {
-            if (mainCtrl.user && mainCtrl.user.isAdmin(current_institution)){
+        mainCtrl.isAdmin = function isAdmin(keyInstitution) {
+            if (mainCtrl.user && mainCtrl.user.isAdmin(keyInstitution)){
                 return true;
             }
             return false;

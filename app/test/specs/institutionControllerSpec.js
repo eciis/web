@@ -7,13 +7,15 @@
     var INSTITUTIONS_URI = "/api/institutions/";
 
     var splab = {
-            name: 'SPLAB',
-            key: '987654321'
+        acronym: 'SPLAB',
+        key: '987654321',
+        photo_url: "photo_url"
     };
 
     var certbio = {
-        name: 'CERTBIO',
-        key: '123456789'
+        acronym: 'CERTBIO',
+        key: '123456789',
+        photo_url: "photo_url"
     };
 
     var tiago = {
@@ -90,7 +92,7 @@
         });
 
         it('should exist currentInstitution', function() {
-            expect(institutionCtrl.current_institution).toEqual(splab);
+            expect(institutionCtrl.current_institution.make()).toEqual(splab);
         });
     });
 
@@ -161,7 +163,7 @@
             it('should call user.follow()', function(done) {
                 var promise = institutionCtrl.follow();
                 promise.then(function() {
-                    expect(institutionCtrl.user.follow).toHaveBeenCalledWith(splab.key);
+                    expect(institutionCtrl.user.follow).toHaveBeenCalledWith(splab);
                     done();
                 });
                 scope.$apply();
@@ -219,7 +221,7 @@
             it('should call user.unfollow()', function(done) {
                 var promise = institutionCtrl.unfollow();
                 promise.then(function() {
-                    expect(institutionCtrl.user.unfollow).toHaveBeenCalledWith(splab.key);
+                    expect(institutionCtrl.user.unfollow).toHaveBeenCalledWith(institutionCtrl.current_institution);
                     done();
                 });
                 scope.$apply();

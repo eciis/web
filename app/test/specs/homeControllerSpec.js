@@ -4,14 +4,16 @@
 
     var homeCtrl, httpBackend, scope, createCtrl, mdDialog, state;
 
-    var user = {
-        name: 'Tiago'
-    };
-
     var institutions = [{
-        name: 'Certbio',
-        key: '123456789'
+        acronym: 'Certbio',
+        key: '123456789',
+        photo_url: "photo_url"
     }];
+
+    var user = {
+        name: 'Tiago',
+        follows: institutions
+    };
 
     var posts = [{
         author: 'Mayza Nunes',
@@ -29,7 +31,6 @@
         mdDialog = $mdDialog;
         state = $state;
         httpBackend.expect('GET', '/api/user/timeline').respond(posts);
-        httpBackend.expect('GET', '/api/institutions').respond(institutions);
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);
         httpBackend.when('GET', 'error/error.html').respond(200);
@@ -72,11 +73,12 @@
         });
 
         it('should exist an institution in institutions array', function() { 
-            expect(homeCtrl.institutions.length).toBe(1);
+            expect(homeCtrl.followingInstitutions.length).toBe(1);
         });
 
         it('should exist an institution with name and key equal Certbio and 123456789, respectively', function() {
-            expect(homeCtrl.institutions).toContain({name: 'Certbio', key: '123456789'});
+            expect(homeCtrl.followingInstitutions[0]).toEqual({
+                acronym: 'Certbio', key: '123456789', photo_url: 'photo_url'});
         });
 
         it('should be false the instMenuExpanded propertie', function() {

@@ -169,6 +169,7 @@ class Post(ndb.Model):
             'institution_image': institution.photo_url,
             'likes': getLikesUri(post, host),
             'number_of_likes': post.get_number_of_likes(),
+            'photo_url': post.photo_url,
             'state': post.state,
             'comments': getCommentsUri(post, host),
             'number_of_comments': post.get_number_of_comment(),
@@ -187,10 +188,6 @@ class Post(ndb.Model):
             post_dict['title'] = None
             post_dict['text'] = None
             post_dict['photo_url'] = None
-        else:
-            post_dict['title'] = post.title
-            post_dict['text'] = post.text
-            post_dict['photo_url'] = post.photo_url
 
         return post_dict
 

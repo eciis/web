@@ -9,18 +9,18 @@
         apiKey: "MOCK-API_KEY",
     });
 
-    var luiz = {
-        name : 'Luiz',
+    var user = {
+        name : 'User',
         accessToken: 'jdsfkbcbmnweuiyeuiwyhdjskalhdjkhjk'
     };
 
     function login(UserService, AuthService) {
-        var idToken = luiz.accessToken;
+        var idToken = user.accessToken;
 
         UserService.load = function() {
             return {
                 then : function(callback) {
-                    return callback(luiz);
+                    return callback(user);
                 }
             };
         };

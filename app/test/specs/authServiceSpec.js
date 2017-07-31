@@ -4,7 +4,7 @@
     var authService, userService;
 
     var luiz = {
-        name : 'Luiz',
+        name : 'User',
         accessToken: 'jdsfkbcbmnweuiyeuiwyhdjskalhdjkhjk'
     };
 

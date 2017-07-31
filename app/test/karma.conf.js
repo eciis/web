@@ -27,7 +27,6 @@ module.exports = function (config) {
         'node_modules/firebase/firebase.js',
         'node_modules/angularfire/dist/angularfire.js',
         "node_modules/mockfirebase/browser/mockfirebase.js",
-        "node_modules/jquery/dist/jquery.min.js",
         '../*.js',
         '../*/*.js',
         'specs/*.js'

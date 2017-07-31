@@ -63,20 +63,24 @@
         httpBackend.verifyNoOutstandingRequest();
     });
 
-    describe('dialogCtrl functions', function() {
-        it('should call ', function() {
+    describe('cancel()', function() {
+        it('should call mdDialog.cancel()', function() {
             spyOn(mdDialog, 'cancel');
             dialogCtrl.cancel();
             expect(mdDialog.cancel).toHaveBeenCalled();
         });
+    });
 
-        it('should call inviteController.sendInstInvite()', function() {
+    describe('sendInvite()', function() {
+        it('should call sendInstInvite()', function() {
             spyOn(inviteController, 'sendInstInvite');
             dialogCtrl.sendInvite(dialogCtrl.invite);
             expect(inviteController.sendInstInvite).toHaveBeenCalled();
         });
+    });
 
-        it('should call state.go()', function() {
+    describe('goToInstitution()', function() {
+         it('should call state.go()', function() {
             spyOn(state, 'go');
             dialogCtrl.goToInstitution(splab.key);
             expect(state.go).toHaveBeenCalled();

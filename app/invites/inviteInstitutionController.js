@@ -5,7 +5,7 @@
     app.controller("DialogController", DialogController);
 
     app.controller("InviteInstitutionController", function InviteInstitutionController(
-        InviteService, $mdToast, $state, AuthService, InstitutionService, $mdDialog) {
+        InviteService, $mdToast, $state, AuthService, InstitutionService, $mdDialog, MessageService) {
         var inviteController = this;
 
         inviteController.invite = {};
@@ -25,19 +25,23 @@
             var currentInstitutionKey = inviteController.user.current_institution.key;
             invite = new Invite(inviteController.invite, 'institution', currentInstitutionKey, inviteController.user.email);
             if (!invite.isValid()) {
-                showToast('Convite inválido!');
+                MessageService.showToast('Convite inválido!');
             } else {
-                promise = InstitutionService.searchInstitutions(inviteController.invite.suggestion_institution_name, "(active OR pending)");
+                promise = InstitutionService.searchInstitutions(inviteController.invite.suggestion_institution_name, "active,pending");
                 promise.then(function success(response) {
-                        inviteController.existing_institutions = response.data;
-                        if(_.size(inviteController.existing_institutions) === 0) {
-                            inviteController.sendInstInvite(invite);
-                        }
-                        else{
-                            inviteController.showDialog(ev, invite);
-                        }
+                        inviteController.setExistingInstitutionsAndSendInvite(response.data, ev);
                     });
                 return promise;
+            }
+        };
+
+        inviteController.setExistingInstitutionsAndSendInvite = function setExistingInstitutionsAndSendInvite(data, ev) {
+            inviteController.existing_institutions = data;
+            if(_.size(inviteController.existing_institutions) === 0) {
+                inviteController.sendInstInvite(invite);
+            }
+            else{
+                inviteController.showDialog(ev, invite);
             }
         };
 
@@ -61,30 +65,19 @@
             var promise = InviteService.sendInvite(invite);
             promise.then(function success(response) {
                     inviteController.sent_invitations.push(invite);
-                    showToast('Convite enviado com sucesso!');
+                    MessageService.showToast('Convite enviado com sucesso!');
                 }, function error(response) {
-                    showToast(response.data.msg);
+                    MessageService.showToast(response.data.msg);
                 });
             return promise;
         };
-
-        function showToast(msg) {
-            $mdToast.show(
-                $mdToast.simple()
-                    .textContent(msg)
-                    .action('FECHAR')
-                    .highlightAction(true)
-                    .hideDelay(5000)
-                    .position('bottom right')
-            );
-        }
 
         function loadSentInvitations() {
             InviteService.getSentInstitutionInvitations().then(function success(response) {
                 inviteController.sent_invitations = response.data;
             }, function error(response) {
                 $state.go('app.home');
-                showToast(response.data.msg);
+                MessageService.showToast(response.data.msg);
             });
         }
 

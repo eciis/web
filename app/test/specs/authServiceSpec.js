@@ -13,14 +13,6 @@
     beforeEach(inject(function(AuthService, UserService) {
         authService = AuthService;
         userService = UserService;
-
-        UserService.load = function() {
-            return {
-                then: function(callback) {
-                    return callback(luiz);
-                }
-            };
-        };
     }));
 
     describe('AuthService  setupUser', function() {

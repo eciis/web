@@ -10,26 +10,25 @@
     });
 
     var user = {
-        name : 'User',
-        accessToken: 'jdsfkbcbmnweuiyeuiwyhdjskalhdjkhjk'
+        name : 'User'
     };
-
-    function login(UserService, AuthService) {
-        var idToken = user.accessToken;
-
-        UserService.load = function() {
-            return {
-                then : function(callback) {
-                    return callback(user);
-                }
-            };
-        };
-
-        AuthService.setupUser(idToken);
-    }
 
     // Create mock of authentication
     angular.module('app').run(function (AuthService, UserService) {
-        login(UserService, AuthService);
+        login(UserService, AuthService, user);
     });
 })();
+
+function login(UserService, AuthService, user) {
+    var idToken = 'jdsfkbcbmnweuiyeuiwyhdjskalhdjkhjk';
+
+    UserService.load = function() {
+        return {
+            then : function(callback) {
+                return callback(user);
+            }
+        };
+    };
+
+    AuthService.setupUser(idToken);
+}

@@ -37,20 +37,6 @@
         author_key: "abcdefg"
     }];
 
-    function login(UserService, AuthService) {
-        var idToken = "sdlkjakjfjlskjfkjsdfjkslxvnxmbxzm";
-
-        UserService.load = function() {
-            return {
-                then : function(callback) {
-                    return callback(tiago);
-                }
-            };
-        };
-
-        AuthService.setupUser(idToken);
-    }
-
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, InstitutionService, AuthService, UserService) {
@@ -67,7 +53,7 @@
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', "home/home.html").respond(200);
 
-        login(UserService, AuthService);
+        login(UserService, AuthService, tiago);
 
         createCtrl = function() {
             return $controller('InstitutionController',

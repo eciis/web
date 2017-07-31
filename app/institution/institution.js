@@ -29,3 +29,7 @@ Institution.prototype.createStub = function createStub(invite){
 Institution.prototype.addParentInst = function addParentInst(institution){
     this.parent_institution = institution;
 };
+
+Institution.prototype.addChildrenInst = function addChildrenInst(institution){
+    this.children_institutions.push(institution);
+};

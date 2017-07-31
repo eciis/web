@@ -24,7 +24,6 @@
         inviteInstCtrl.type_of_invite = EMPTY_STRING;
 
         inviteInstCtrl.hasParent = false;
-        inviteInstCtrl.showButton = true;
 
 
         inviteInstCtrl.sendInstInvite = function sendInstInvite() {
@@ -34,6 +33,8 @@
 
             if (!invite.isValid()) {
                 MessageService.showToast('Convite inválido!');
+            } else if(inviteInstCtrl.hasParent && invite.type_of_invite === INSTITUTION_PARENT){
+                MessageService.showToast("Já possue instituição superior");
             } else {                
                 var promise = InviteService.sendInvite(invite);
                 promise.then(function success() {
@@ -46,18 +47,8 @@
             }
         };
 
-        inviteInstCtrl.createParentInstInvite = function createParentInstInvite(){
-            if(inviteInstCtrl.hasParent){
-                MessageService.showToast("Já possue instituição superior");
-            } else {
-                inviteInstCtrl.type_of_invite = INSTITUTION_PARENT;
-                inviteInstCtrl.showButton = false;
-            }            
-        };
-
         inviteInstCtrl.cancelInvite = function cancelInvite() {
             inviteInstCtrl.invite = {};
-            inviteInstCtrl.showButton = true;
         };
 
         inviteInstCtrl.goToInst = function goToInst(institutionKey) {
@@ -87,8 +78,10 @@
                 inviteInstCtrl.institution.addParentInst(stub);
                 inviteInstCtrl.hasParent = true;
             }
+            else {
+                inviteInstCtrl.institution.addChildrenInst(stub);
+            }
             inviteInstCtrl.type_of_invite = EMPTY_STRING;
-            inviteInstCtrl.showButton = true;
         }
 
         loadInstitution();

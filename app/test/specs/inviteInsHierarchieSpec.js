@@ -108,8 +108,9 @@
 
         describe('cancelInvite()', function() {
             it('should clear the object invite', function() {
-                inviteInstCtrl.invite.invitee = "parent@gmail.com";
-                inviteInstCtrl.invite.suggestion_institution_name = "Institution Parent";
+                inviteInstCtrl.invite = {
+                    invitee: "invitee@gmail.com", 
+                    suggestion_institution_name : "Institution Parent"};
                 inviteInstCtrl.cancelInvite();
                 expect(inviteInstCtrl.invite).toEqual({});
             });
@@ -126,10 +127,11 @@
             });
             
             it('should call inviteService.sendInvite()', function(done) {
-                inviteInstCtrl.invite.invitee = "parent@gmail.com";
-                inviteInstCtrl.invite.suggestion_institution_name = "Institution Parent";
+                inviteInstCtrl.invite = {
+                    invitee: "parent@gmail.com", 
+                    suggestion_institution_name : "Institution Parent",
+                    type_of_invite : "institution_parent"};
                 inviteInstCtrl.user.current_institution = splab;
-                inviteInstCtrl.type_of_invite = "institution_parent";
                 var promise = inviteInstCtrl.sendInstInvite();
                 promise.then(function() {
                     expect(inviteService.sendInvite).toHaveBeenCalledWith(invite);
@@ -139,7 +141,6 @@
                     expect(inviteInstCtrl.institution.sent_invitations).toEqual([invite]);
                     expect(inviteInstCtrl.institution.parent_institution.name).toEqual(
                         invite.suggestion_institution_name);
-                    expect(inviteInstCtrl.type_of_invite).toEqual('');
                     expect(inviteInstCtrl.hasParent).toEqual(true);
 
                     done();
@@ -159,10 +160,11 @@
             });
             
             it('should call inviteService.sendInvite()', function(done) {
-                inviteInstCtrl.invite.invitee = "children@gmail.com";
-                inviteInstCtrl.invite.suggestion_institution_name = "Children Institution";
+                inviteInstCtrl.invite = {
+                    invitee: "children@gmail.com", 
+                    suggestion_institution_name : "Children Institution",
+                    type_of_invite : "institution_children"};
                 inviteInstCtrl.user.current_institution = splab;
-                inviteInstCtrl.type_of_invite = "institution_children";
                 var promise = inviteInstCtrl.sendInstInvite();
                 promise.then(function() {
                     expect(inviteService.sendInvite).toHaveBeenCalledWith(inviteChildren);
@@ -171,7 +173,6 @@
                     expect(inviteInstCtrl.invite).toEqual({});
                     expect(inviteInstCtrl.institution.sent_invitations).toEqual([inviteChildren]);
                     expect(inviteInstCtrl.institution.children_institutions).toContain(childrenStub);
-                    expect(inviteInstCtrl.type_of_invite).toEqual('');
 
                     done();
                 });

@@ -14,7 +14,7 @@
             </md-input-container>
              <p>Qual a conexão da instituição convidada com  <b> {{inviteInstCtrl.institution.name}} </b> ?</p>
 
-              <md-radio-group ng-model="inviteInstCtrl.type_of_invite" required>
+              <md-radio-group ng-model="inviteInstCtrl.invite.type_of_invite" required>
 
               <md-radio-button value="institution_parent" class="md-primary">É a instituição superior</md-radio-button>
               <md-radio-button value="institution_children" class="md-primary">É uma sub-divisão de {{inviteInstCtrl.institution.name}}</md-radio-button>

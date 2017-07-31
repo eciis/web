@@ -14,21 +14,18 @@
         var INSTITUTION_PARENT = "institution_parent";
 
         var ACTIVE = "active";
-
-        var EMPTY_STRING = "";
         
         inviteInstCtrl.user = AuthService.getCurrentUser();
         inviteInstCtrl.institution = {};
 
         inviteInstCtrl.invite = {};
-        inviteInstCtrl.type_of_invite = EMPTY_STRING;
 
         inviteInstCtrl.hasParent = false;
 
 
         inviteInstCtrl.sendInstInvite = function sendInstInvite() {
             var currentInstitutionKey = inviteInstCtrl.user.current_institution.key;
-            invite = new Invite(inviteInstCtrl.invite, inviteInstCtrl.type_of_invite, 
+            invite = new Invite(inviteInstCtrl.invite, inviteInstCtrl.invite.type_of_invite, 
                 currentInstitutionKey, inviteInstCtrl.user.email);
 
             if (!invite.isValid()) {
@@ -81,7 +78,6 @@
             else {
                 inviteInstCtrl.institution.addChildrenInst(stub);
             }
-            inviteInstCtrl.type_of_invite = EMPTY_STRING;
         }
 
         loadInstitution();

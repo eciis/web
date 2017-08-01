@@ -18,28 +18,24 @@ class InviteInstitution(Invite):
     @staticmethod
     def create(data):
         """Create a post and check required fields."""
-        invite = Invite.create(data)
+        invite = InviteInstitution()
+        invite = Invite.create(data, invite)
 
-        if (invite.type_of_invite != 'user'):
-            InviteInstitution.checkIsInviteInstitutionValid(data)
-            invite.suggestion_institution_name = data['suggestion_institution_name']
-            institution = Institution.create_inst_stub(invite)
-            invite.stub_institution_key = institution.key
-        else:
-            Invite.checkIsInviteUserValid(data)
+        InviteInstitution.checkIsInviteInstitutionValid(data)
+        invite.suggestion_institution_name = data['suggestion_institution_name']
+        institution = Institution.create_inst_stub(invite)
+        invite.stub_institution_key = institution.key
 
         return invite
 
-    @staticmethod
-    def sendInvite(invite):
+    def sendInvite(self):
         """Send invite."""
-        InviteInstitution.sendInviteInstitution(invite)
+        self.sendInviteInstitution()
 
-    @staticmethod
-    def sendInviteInstitution(invite):
+    def sendInviteInstitution(self):
         """Send Invite for user create some Institution."""
         mail.send_mail(sender="e-CIS <eciis@splab.ufcg.edu.br>",
-                       to="<%s>" % invite.invitee,
+                       to="<%s>" % self.invitee,
                        subject="Convite plataforma e-CIS",
                        body="""
         Sua empresa %s foi convidada a se cadastrar na plataforma.
@@ -47,12 +43,11 @@ class InviteInstitution(Invite):
         http://eciis-splab.appspot.com  e proceda com o cadastro da sua empresa.
 
         Equipe e-CIS
-        """ % invite.suggestion_institution_name)
+        """ % self.suggestion_institution_name)
 
-    @staticmethod
-    def make(invite):
+    def make(self):
         """Create personalized json of invite."""
-        return invite.make_invite_institution()
+        return self.make_invite_institution()
 
     def make_invite_institution(self):
         """Create json of invite to parent institution."""

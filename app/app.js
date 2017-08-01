@@ -76,14 +76,14 @@
                     }
                 }
             })
-            .state("app.manage_institution.invite_inst", {      
-                url: "/:institutionKey/inviteInstitution",     
-                views: {       
-                    content_manage_institution: {      
-                        templateUrl: "invites/invite_institution_hierarchie.html",     
-                        controller: "InviteInstHierarchieController as inviteInstCtrl"     
-                    }      
-                }      
+            .state("app.manage_institution.invite_inst", {
+                url: "/:institutionKey/inviteInstitution",
+                views: {
+                    content_manage_institution: {
+                        templateUrl: "invites/invite_institution_hierarchie.html",
+                        controller: "InviteInstHierarchieController as inviteInstCtrl"
+                    }
+                }
             })
             .state("app.invite_inst", {
                 url: "/inviteInstitution",
@@ -116,7 +116,7 @@
                 url: "/:institutionKey/:inviteKey/new_invite",
                 views: {
                     main: {
-                        templateUrl: "auth/new_invite_page.html",
+                        templateUrl: "invites/new_invite_page.html",
                         controller: "NewInviteController as newInviteCtrl"
                     }
                 }

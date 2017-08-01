@@ -1,6 +1,6 @@
 """Institution Model."""
 from google.appengine.ext import ndb
-from custom_exceptions.fieldException import FieldException
+
 import search_module
 
 

@@ -29,10 +29,6 @@ class InviteInstitution(Invite):
         return invite
 
     def sendInvite(self):
-        """Send invite."""
-        self.sendInviteInstitution()
-
-    def sendInviteInstitution(self):
         """Send Invite for user create some Institution."""
         mail.send_mail(sender="e-CIS <eciis@splab.ufcg.edu.br>",
                        to="<%s>" % self.invitee,
@@ -46,10 +42,6 @@ class InviteInstitution(Invite):
         """ % self.suggestion_institution_name)
 
     def make(self):
-        """Create personalized json of invite."""
-        return self.make_invite_institution()
-
-    def make_invite_institution(self):
         """Create json of invite to parent institution."""
         return {
             'invitee': self.invitee,

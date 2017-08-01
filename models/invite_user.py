@@ -48,10 +48,6 @@ class InviteUser(Invite):
         return invite
 
     def sendInvite(self):
-        """Send invite."""
-        self.sendInviteUser()
-
-    def sendInviteUser(self):
         """Send Invite for user to be member of some Institution."""
         mail.send_mail(sender="e-CIS <eciis@splab.ufcg.edu.br>",
                        to=self.invitee,
@@ -65,10 +61,6 @@ class InviteUser(Invite):
         """)
 
     def make(self):
-        """Create personalized json of invite."""
-        return self.make_invite_user()
-
-    def make_invite_user(self):
         """Create json of invite to user."""
         return {
             'invitee': self.invitee,

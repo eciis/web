@@ -32,15 +32,15 @@
                 var suggestionInstName = inviteController.invite.suggestion_institution_name;
                 promise = InstitutionService.searchInstitutions(suggestionInstName, INSTITUTION_STATE);
                 promise.then(function success(response) {
-                    inviteController.setExistingInstitutionsAndSendInvite(response.data, ev);
+                    inviteController.showDialogOrSendInvite(response.data, ev);
                 });
                 return promise;
             }
         };
 
-        inviteController.setExistingInstitutionsAndSendInvite = function setExistingInstitutionsAndSendInvite(data, ev) {
+        inviteController.showDialogOrSendInvite = function showDialogOrSendInvite(data, ev) {
             inviteController.existing_institutions = data;
-            if(_.size(inviteController.existing_institutions) === 0) {
+            if(_.isEmpty(inviteController.existing_institutions)) {
                 inviteController.sendInstInvite(invite);
             }
             else{
@@ -91,6 +91,7 @@
         var dialogCtrl = this;
         dialogCtrl.institutions = institutions;
         dialogCtrl.invite = invite;
+         var ACTIVE_STATE = "active";
 
         dialogCtrl.sendInvite = function sendInvite(){
             inviteController.sendInstInvite(invite);
@@ -107,7 +108,7 @@
         };
 
         dialogCtrl.isActive = function(state) {
-            return state === 'active';
+            return state === ACTIVE_STATE;
         };
     }
 })();

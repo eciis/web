@@ -21,16 +21,16 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $state, InviteService, AuthService, InstitutionService) {
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $state,
+        InviteService, AuthService, InstitutionService) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
         inviteService = InviteService;
         instService = InstitutionService;
 
-        AuthService.getCurrentUser = function() {
-            return new User(tiago);
-        };
+        AuthService.login(tiago);
+
         httpBackend.expect('GET', '/api/invites').respond([]);
         httpBackend.when('GET', 'institution/institution_page.html').respond(200);
         httpBackend.when('GET', "main/main.html").respond(200);
@@ -99,11 +99,11 @@
                 inviteinstitutionCtrl.user.current_institution = splab;
                 httpBackend.expect('GET', "api/search/institution?name=New Institution&state=active,pending").respond({});
                 inviteinstitutionCtrl.checkInstInvite().then(function() {
+                    var testingInvite = new Invite(invite, 'institution', splab.key);
                     expect(instService.searchInstitutions).toHaveBeenCalledWith(
                         inviteinstitutionCtrl.invite.suggestion_institution_name,
                         "active,pending");
-                    expect(inviteinstitutionCtrl.sendInstInvite).toHaveBeenCalledWith(
-                        new Invite(invite, 'institution', splab.key));
+                    expect(inviteinstitutionCtrl.sendInstInvite).toHaveBeenCalledWith(testingInvite);
                     done();
                 });
                 httpBackend.flush();

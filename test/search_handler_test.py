@@ -30,7 +30,7 @@ class SearchHandlerTest(TestBaseHandler):
         self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
         # Call the createDocument method
         search_module.createDocument(
-            '123456', 'CERTBIO', 'active', 'smaneoto0@gmail.com')
+            '123456', 'CERTBIO', 'active', 'user@example.com')
         # Call the get method
         institutions = self.testapp.get(
             "/api/search/institution?name=%s&state=%s" % ('CERTBIO', 'active'))
@@ -41,7 +41,7 @@ class SearchHandlerTest(TestBaseHandler):
         self.assertTrue('CERTBIO' not in institutions)
         # Create a document with a pending institution
         search_module.createDocument('123456', 'SPLAB', 'pending',
-                                     'smaneoto0@gmail.com')
+                                     'user@example.com')
         # Make sure that there is no SPLAB with pending state.
         institutions = self.testapp.get(
             "/api/search/institution?name=%s&state=%s" % ('SPLAB', 'active'))

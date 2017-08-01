@@ -1,7 +1,8 @@
 'use strict';
 
 (describe('Test DialogController', function() {
-    var dialogCtrl, httpBackend, createCtrl, state, authService, mdDialog, scope, inviteController, scopeInvite;
+    var dialogCtrl, httpBackend, createCtrl, state, authService,
+        mdDialog, scope, inviteController, scopeInvite;
     var mayza = {
         name: 'Mayza',
         key: 'user-key',
@@ -21,7 +22,8 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $state, AuthService, $mdDialog, InviteService) {
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $state,
+        AuthService, $mdDialog, InviteService) {
         httpBackend = $httpBackend;
         state = $state;
         mdDialog = $mdDialog;
@@ -29,9 +31,7 @@
         scopeInvite = $rootScope.$new();
         authService = AuthService;
 
-        authService.getCurrentUser = function() {
-            return new User(mayza);
-        };
+        authService.login(mayza);
 
         inviteController = $controller('InviteInstitutionController', {
             scope: scopeInvite,

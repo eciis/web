@@ -3,8 +3,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("InstitutionController", function InstitutionController($state, InstitutionService, 
-        InviteService, AuthService, $interval, $mdToast, MessageService) {
+    app.controller("InstitutionController", function InstitutionController($state, InstitutionService, InviteService, AuthService, MessageService) {
         var institutionCtrl = this;
 
         institutionCtrl.current_institution = null;
@@ -75,6 +74,7 @@
                 var institution = institutionCtrl.current_institution.make();
                 institutionCtrl.user.follow(institution);
                 institutionCtrl.isUserFollower = true;
+                AuthService.save();
                 getFollowers();
             }, function error() {
                 MessageService.showToast('Erro ao seguir a instituição.');
@@ -92,6 +92,7 @@
                     MessageService.showToast("Deixou de seguir "+institutionCtrl.current_institution.name);
                     institutionCtrl.user.unfollow(institutionCtrl.current_institution);
                     institutionCtrl.isUserFollower = false;
+                    AuthService.save();
                     getFollowers();
                 }, function error() {
                     MessageService.showToast('Erro ao deixar de seguir instituição.');

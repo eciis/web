@@ -1,6 +1,5 @@
 """Institution Model."""
 from google.appengine.ext import ndb
-from custom_exceptions.fieldException import FieldException
 
 
 def get_occupation_area(data):

@@ -74,7 +74,7 @@
             });
             return deferred.promise;
         };
-        
+
         service.logout = function logout() {
             authObj.$signOut();
             delete $window.sessionStorage.userInfo;
@@ -94,6 +94,10 @@
                 return true;
             }
             return false;
+        };
+
+        service.save = function() {
+            $window.sessionStorage.userInfo = JSON.stringify(userInfo);
         };
 
         service.reload = function reload() {

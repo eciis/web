@@ -13,7 +13,7 @@ var SENT = "sent";
 
 var USER = "user";
 
-var INVITE_INSTITUTIONS_TYPE = ['institution', 'institution_parent'];
+var INVITE_INSTITUTIONS_TYPE = ['institution', 'institution_parent', 'institution_children'];
 
 User.prototype.changeInstitution = function changeInstitution(institution) {
     this.current_institution = _.find(this.institutions, {'key': institution.key});

@@ -9,14 +9,26 @@
         apiKey: "MOCK-API_KEY",
     });
 
+    var user = {
+        name : 'User'
+    };
+
     // Create mock of authentication
-    angular.module('app').run(function (AuthService) {
-        AuthService.isLoggedIn = function() {
-            return true;
+    angular.module('app').run(function (AuthService, UserService) {
+        var idToken = 'jdsfkbcbmnweuiyeuiwyhdjskalhdjkhjk';
+
+        AuthService.login = function(user) {
+            UserService.load = function() {
+                return {
+                    then : function(callback) {
+                        return callback(user);
+                    }
+                };
+            };
+
+            AuthService.setupUser(idToken);
         };
 
-        AuthService.getUserToken = function() {
-            return "MOCK-USER-TOKEN";
-        };
+        AuthService.login(user);
     });
 })();

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Post Handler."""
-
+import json
 from google.appengine.ext import ndb
 
 from utils import Utils
@@ -9,6 +9,7 @@ from utils import is_authorized
 from utils import NotAuthorizedException
 from utils import json_response
 from util.json_patch import JsonPatch
+from models.post import Post
 
 
 from handlers.base_handler import BaseHandler
@@ -28,6 +29,21 @@ def is_post_author(method):
 
 class PostHandler(BaseHandler):
     """Post Handler."""
+
+    @json_response
+    @login_required
+    def get(self, user, url_string):
+        """Handle GET Requests."""
+        obj_key = ndb.Key(urlsafe=url_string)
+        obj = obj_key.get()
+        print obj
+
+        assert type(obj) is Post, "Key is not an Post"
+        post_json = Post.make(obj, self.request.host)
+
+        self.response.write(json.dumps(
+            post_json
+        ))
 
     @login_required
     @is_authorized

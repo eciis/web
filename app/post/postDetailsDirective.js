@@ -13,6 +13,8 @@
 
         postDetailsCtrl.currentPost = null;
 
+        postDetailsCtrl.postToSee = $state.params.postToSee;
+
         postDetailsCtrl.savingComment = false;
         postDetailsCtrl.savingLike = false;
 
@@ -157,6 +159,10 @@
         postDetailsCtrl.goToInstitution = function goToInstitution(institutionKey) {
             $state.go('app.institution', {institutionKey: institutionKey});
         };
+
+        postDetailsCtrl.goToPost = function goToPost(postKey) {
+             $state.go('app.post', {postKey: postKey});
+         };
 
         postDetailsCtrl.getComments = function getComments(post) {
             var commentsUri = post.comments;
@@ -311,6 +317,19 @@
         }
     });
 
+    app.directive("timeline", function() {
+        return {
+            restrict: 'E',
+            templateUrl: "post/timeline.html",
+            controllerAs: "postDetailsCtrl",
+            controller: "PostDetailsController",
+            scope: {
+                posts: '=',
+                institution: '='
+            }
+        };
+    });
+
     app.directive("postDetails", function() {
         return {
             restrict: 'E',
@@ -318,7 +337,7 @@
             controllerAs: "postDetailsCtrl",
             controller: "PostDetailsController",
             scope: {
-                posts: '=',
+                post: '=',
                 institution: '='
             }
         };

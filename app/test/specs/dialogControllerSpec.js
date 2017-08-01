@@ -34,9 +34,9 @@
         };
 
         inviteController = $controller('InviteInstitutionController', {
-                    scope: scopeInvite,
-                    inviteService: InviteService,
-                });
+            scope: scopeInvite,
+            inviteService: InviteService,
+        });
 
         httpBackend.expect('GET', '/api/invites').respond([]);
         httpBackend.when('GET', "main/main.html").respond(200);

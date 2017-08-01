@@ -32,8 +32,8 @@
                 var suggestionInstName = inviteController.invite.suggestion_institution_name;
                 promise = InstitutionService.searchInstitutions(suggestionInstName, INSTITUTION_STATE);
                 promise.then(function success(response) {
-                        inviteController.setExistingInstitutionsAndSendInvite(response.data, ev);
-                    });
+                    inviteController.setExistingInstitutionsAndSendInvite(response.data, ev);
+                });
                 return promise;
             }
         };

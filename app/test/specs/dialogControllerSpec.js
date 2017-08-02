@@ -1,8 +1,10 @@
 'use strict';
 
 (describe('Test DialogController', function() {
-    var dialogCtrl, httpBackend, createCtrl, state, authService,
-        mdDialog, scope, inviteController, scopeInvite;
+    var dialogCtrl, httpBackend, createCtrl, state;
+
+    var mdDialog, scope, inviteController, scopeInvite;
+
     var mayza = {
         name: 'Mayza',
         key: 'user-key',
@@ -29,9 +31,8 @@
         mdDialog = $mdDialog;
         scope = $rootScope.$new();
         scopeInvite = $rootScope.$new();
-        authService = AuthService;
 
-        authService.login(mayza);
+        AuthService.login(mayza);
 
         inviteController = $controller('InviteInstitutionController', {
             scope: scopeInvite,

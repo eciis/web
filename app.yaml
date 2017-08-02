@@ -21,10 +21,10 @@ handlers:
 
 - url: /app
   script: main.app
-  
+
 - url: /app/
   static_files: app/index.html
-  upload: app/index.html  
+  upload: app/index.html
 
 - url: (.*)
   static_files: app\1

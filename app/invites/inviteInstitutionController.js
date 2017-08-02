@@ -42,8 +42,7 @@
             inviteController.existing_institutions = data;
             if(_.isEmpty(inviteController.existing_institutions)) {
                 inviteController.sendInstInvite(invite);
-            }
-            else{
+            } else {
                 inviteController.showDialog(ev, invite);
             }
         };
@@ -91,7 +90,8 @@
         var dialogCtrl = this;
         dialogCtrl.institutions = institutions;
         dialogCtrl.invite = invite;
-         var ACTIVE_STATE = "active";
+
+        var ACTIVE_STATE = "active";
 
         dialogCtrl.sendInvite = function sendInvite(){
             inviteController.sendInstInvite(invite);

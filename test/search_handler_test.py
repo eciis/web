@@ -25,9 +25,6 @@ class SearchHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
     def test_get(self, verify_token):
         """Test the search_handler's get method."""
-        # Pretend an authentication
-        self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
-        self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
         # Call the createDocument method
         search_module.createDocument(
             '123456', 'CERTBIO', 'active', 'user@example.com')

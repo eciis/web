@@ -25,11 +25,9 @@ class SearchHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
     def test_get(self, verify_token):
         """Test the search_handler's get method."""
-        # Pretend an authentication
-        self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
-        self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
         # Call the createDocument method
-        search_module.createDocument('123456', 'CERTBIO', 'active')
+        search_module.createDocument(
+            '123456', 'CERTBIO', 'active', 'user@example.com')
         # Call the get method
         institutions = self.testapp.get(
             "/api/search/institution?name=%s&state=%s" % ('CERTBIO', 'active'))
@@ -39,7 +37,8 @@ class SearchHandlerTest(TestBaseHandler):
             "/api/search/institution?name=%s&state=%s" % ('CERTBIO', 'pending'))
         self.assertTrue('CERTBIO' not in institutions)
         # Create a document with a pending institution
-        search_module.createDocument('123456', 'SPLAB', 'pending')
+        search_module.createDocument('123456', 'SPLAB', 'pending',
+                                     'user@example.com')
         # Make sure that there is no SPLAB with pending state.
         institutions = self.testapp.get(
             "/api/search/institution?name=%s&state=%s" % ('SPLAB', 'active'))

@@ -1,6 +1,8 @@
 """Institution Model."""
 from google.appengine.ext import ndb
 
+import search_module
+
 
 def get_occupation_area(data):
     """Get the institution occupation area."""
@@ -126,6 +128,9 @@ class Institution(ndb.Model):
         institution_stub.state = 'pending'
 
         institution_stub.put()
+        search_module.createDocument(
+            institution_stub.key.urlsafe(), institution_stub.name,
+            institution_stub.state, invite.invitee)
 
         if (invite.type_of_invite == 'institution_parent'):
             institution_stub = Institution.create_parent_connection(institution_stub, invite)

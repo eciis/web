@@ -13,6 +13,7 @@
         mainCtrl.showSearchMenu = false;
         mainCtrl.institutions = [];
         mainCtrl._mdPanel = $mdPanel;
+        var NO_INSTITUTION = 'Nenhuma instituição encontrada';
 
         mainCtrl.showMenu = function showMenu(ev) {
             var deferred = $q.defer();
@@ -58,10 +59,10 @@
 
         mainCtrl.makeSearch = function () {
             var deferred = $q.defer();
-            InstitutionService.searchInstitutions(mainCtrl.finalSearch).then(function success(response) {
+            InstitutionService.searchInstitutions(mainCtrl.finalSearch, "active").then(function success(response) {
                 mainCtrl.institutions = response.data;
-                if(_.size(mainCtrl.institutions) === 0){
-                    mainCtrl.institutions.push({name: 'Nenhuma instituição encontrada'});
+                if(_.isEmpty(mainCtrl.institutions)){
+                    mainCtrl.institutions.push({name: NO_INSTITUTION});
                 }
                 deferred.resolve(response);
             });
@@ -119,14 +120,14 @@
             var notMember = mainCtrl.user.institutions.length === 0;
             var notInvitee = mainCtrl.user.invites.length === 0;
             var notActive = !mainCtrl.userIsActive();
-            
+
             return ((notMember && notInvitee) || notActive);
         }
 
         (function main() {
             var inviteOfUser = mainCtrl.user.getPendingInvitationOf("user");
             var inviteOfInstitution = mainCtrl.user.getPendingInvitationOf("institution");
-           
+
             if (inviteOfUser) {
                 var institutionKey = inviteOfUser.institution_key;
                 var inviteKey = inviteOfUser.key;

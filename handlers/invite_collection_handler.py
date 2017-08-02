@@ -12,6 +12,8 @@ from handlers.base_handler import BaseHandler
 from models.invite import Invite
 from models.invite_user import InviteUser
 from models.invite_institution import InviteInstitution
+from models.invite_institution_parent import InviteInstitutionParent
+from models.invite_institution_children import InviteInstitutionChildren
 
 
 def is_admin(method):
@@ -55,11 +57,14 @@ class InviteCollectionHandler(BaseHandler):
 
         if data.get('type_of_invite') == 'user':
             invite = InviteUser.create(data)
-            invite.put()
+        elif data.get('type_of_invite') == 'institution_parent':
+            invite = InviteInstitutionParent.create(data)
+        elif data.get('type_of_invite') == 'institution_children':
+            invite = InviteInstitutionChildren.create(data)
         else:
             invite = InviteInstitution.create(data)
-            invite.put()
 
+        invite.put()
         invite.sendInvite()
         make_invite = invite.make()
 

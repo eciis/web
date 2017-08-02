@@ -132,11 +132,6 @@ class Institution(ndb.Model):
             institution_stub.key.urlsafe(), institution_stub.name,
             institution_stub.state, invite.invitee)
 
-        if (invite.type_of_invite == 'institution_parent'):
-            institution_stub = Institution.create_parent_connection(institution_stub, invite)
-        elif (invite.type_of_invite == 'institution_children'):
-            institution_stub = Institution.create_children_connection(institution_stub, invite)
-
         return institution_stub
 
     def createInstitutionWithStub(self, user, inviteKey, institution):

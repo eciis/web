@@ -16,17 +16,25 @@ class InviteInstitution(Invite):
                 "The invite for institution have to specify the suggestion institution name")
 
     @staticmethod
-    def create(data):
+    def create(data, invite=None):
         """Create a post and check required fields."""
-        invite = InviteInstitution()
+        if not invite:
+            invite = InviteInstitution()
+
         invite = Invite.create(data, invite)
 
         InviteInstitution.checkIsInviteInstitutionValid(data)
         invite.suggestion_institution_name = data['suggestion_institution_name']
         institution = Institution.create_inst_stub(invite)
+
+        invite.createConectionInstitution(institution)
         invite.stub_institution_key = institution.key
 
         return invite
+
+    def createConectionInstitution(self, institution):
+        """Method of creating connection between invitation and institution."""
+        pass
 
     def sendInvite(self):
         """Send Invite for user create some Institution."""

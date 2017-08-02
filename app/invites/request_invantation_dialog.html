@@ -1,21 +1,24 @@
 <md-dialog flex flex-gt-md="30">
 	<md-card>
-		<div layout="row" md-theme="input">
+		<p layout-margin> Procure pela a instituição a qual faz parte</p>
+		<div md-theme="input" class="search-field">
 		    <form ng-submit="resquestInvCtrl.showMenu($event)">
-		      	<md-input-container flex md-no-float>
+		      	<md-input-container class="md-block" flex-gt-sm>
+		          <input placeholder="Buscar instituições" ng-model="resquestInvCtrl.search" flex-gt-sm class="background-search">
 		          <md-icon class="material-icons">&#xE8B6;</md-icon>
-		          <input class="form-control demo-menu-open-button" placeholder="Busca de instituições" ng-model="resquestInvCtrl.search" md-colors="{background: 'grey-A100'}">
 		        </md-input-container>
 		    </form>
 		</div>
 		<md-list class="md-dense" flex>
-		    <md-list-item class="md-3-line" ng-repeat="institution in resquestInvCtrl.institutions" ng-click="resquestInvCtrl.selectInstitution(institution)">
-			    <div ng-if="!resquestInvCtrl.showFullInformation(institution)" style="text-align:center;">
-			    	<h3><b>{{ institution.name }}</b></h3>
+		    <md-list-item class="md-3-line" ng-repeat="institution in resquestInvCtrl.institutions" ng-click="resquestInvCtrl.selectInstitution(institution)"
+		    ng-style="resquestInvCtrl.showFullInformation(institution) && {'background-color':'#C8E6C9'}">
+			    <div ng-if="!resquestInvCtrl.showFullInformation(institution)" class="md-list-item-text" layout-align="center center" layout="column">
+		            {{ institution.name }}
 			    </div>
-			    <div ng-if="resquestInvCtrl.showFullInformation(institution)" class="md-list-item-text" layout="column">
-		            <h3><b>{{ resquestInvCtrl.institutionSelect.name }}</b> - {{ resquestInvCtrl.institutionSelect.email }}</h3>
-		            <h4>{{ resquestInvCtrl.institutionSelect.phone_number }} | {{ resquestInvCtrl.institutionSelect.address }}</h4>
+			    <div ng-if="resquestInvCtrl.showFullInformation(institution)" class="md-list-item-text" layout-align="center center" layout="column">
+		            <h3><b>{{ resquestInvCtrl.institutionSelect.name }}</b>
+		            <h3>{{ resquestInvCtrl.institutionSelect.email }}</h3>
+		            <h4>{{ resquestInvCtrl.institutionSelect.address }}</h4>
 		            <p>{{ resquestInvCtrl.institutionSelect.description }}</p>
 			    </div>
 		    </md-list-item>

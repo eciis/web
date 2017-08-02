@@ -33,7 +33,6 @@
 
         resquestInvCtrl.user = user;
         resquestInvCtrl.search = "";
-        resquestInvCtrl.wasFound = false;
         resquestInvCtrl.institutions = [];
         resquestInvCtrl.institutionSelect = {};
 
@@ -63,9 +62,6 @@
                 resquestInvCtrl.institutions = response.data;
                 if(_.size(resquestInvCtrl.institutions) === 0){
                     resquestInvCtrl.institutions.push({name: 'Nenhuma instituição encontrada'});
-                    resquestInvCtrl.wasFound = false;
-                } else{
-                    resquestInvCtrl.wasFound = true;
                 }
             });
             return deferred.promise;
@@ -80,7 +76,7 @@
         };
 
         resquestInvCtrl.showFullInformation = function showFullInformation(institution){
-            if(resquestInvCtrl.institutionSelect){
+            if(resquestInvCtrl.institutionSelect.expand){
                 return resquestInvCtrl.institutionSelect.key === institution.id && 
                     resquestInvCtrl.institutionSelect.expand;
                 } else {

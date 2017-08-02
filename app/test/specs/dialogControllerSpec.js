@@ -1,7 +1,7 @@
 'use strict';
 
 (describe('Test DialogController', function() {
-    var dialogCtrl, httpBackend, createCtrl, state;
+    var suggestInstCtrl, httpBackend, createCtrl, state;
 
     var mdDialog, scope, inviteController, scopeInvite;
 
@@ -47,7 +47,7 @@
         httpBackend.when('GET', "auth/login.html").respond(200);
 
         createCtrl = function() {
-            return $controller('DialogController', {
+            return $controller('SuggestInstitutionController', {
                 scope: scope,
                 institutions: {},
                 invite: mayza.invites[0],
@@ -55,7 +55,7 @@
             });
         };
 
-        dialogCtrl = createCtrl();
+        suggestInstCtrl = createCtrl();
         httpBackend.flush();
     }));
 
@@ -67,7 +67,7 @@
     describe('cancel()', function() {
         it('should call mdDialog.cancel()', function() {
             spyOn(mdDialog, 'cancel');
-            dialogCtrl.cancel();
+            suggestInstCtrl.cancel();
             expect(mdDialog.cancel).toHaveBeenCalled();
         });
     });
@@ -75,7 +75,7 @@
     describe('sendInvite()', function() {
         it('should call sendInstInvite()', function() {
             spyOn(inviteController, 'sendInstInvite');
-            dialogCtrl.sendInvite(dialogCtrl.invite);
+            suggestInstCtrl.sendInvite(suggestInstCtrl.invite);
             expect(inviteController.sendInstInvite).toHaveBeenCalled();
         });
     });
@@ -83,7 +83,7 @@
     describe('goToInstitution()', function() {
          it('should call state.go()', function() {
             spyOn(state, 'go');
-            dialogCtrl.goToInstitution(splab.key);
+            suggestInstCtrl.goToInstitution(splab.key);
             expect(state.go).toHaveBeenCalledWith('app.institution', {institutionKey: splab.key});
         });
     });

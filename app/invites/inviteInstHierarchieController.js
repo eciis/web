@@ -28,32 +28,10 @@
 
         var INSTITUTION_STATE = "active,pending";
 
-
-        /*inviteInstCtrl.sendInstInvite = function sendInstInvite() {
-            var currentInstitutionKey = inviteInstCtrl.user.current_institution.key;
-            invite = new Invite(inviteInstCtrl.invite, inviteInstCtrl.invite.type_of_invite,
-                currentInstitutionKey, inviteInstCtrl.user.email);
-
-            if (!invite.isValid()) {
-                MessageService.showToast('Convite inválido!');
-            } else if(inviteInstCtrl.hasParent && invite.type_of_invite === INSTITUTION_PARENT){
-                MessageService.showToast("Já possui instituição superior");
-            } else {
-                var promise = InviteService.sendInvite(invite);
-                promise.then(function success() {
-                    MessageService.showToast('Convite enviado com sucesso!');
-                    addInvite(invite);
-                }, function error(response) {
-                    MessageService.showToast(response.data.msg);
-                });
-                return promise;
-            }
-        };*/
-
         inviteInstCtrl.checkInstInvite = function checkInstInvite(ev) {
             var promise;
             var currentInstitutionKey = inviteInstCtrl.user.current_institution.key;
-            invite = new Invite(inviteInstCtrl.invite, 'institution',
+            invite = new Invite(inviteInstCtrl.invite, inviteInstCtrl.invite.type_of_invite,
                 currentInstitutionKey, inviteInstCtrl.user.email);
             if (!invite.isValid()) {
                 MessageService.showToast('Convite inválido!');
@@ -85,8 +63,8 @@
                     'invite': invite,
                     'inviteController': inviteInstCtrl
                 },
-                controller: 'DialogController',
-                controllerAs: 'dialogCtrl',
+                controller: 'SuggestInstitutionController',
+                controllerAs: 'suggestInstCtrl',
                 templateUrl: 'invites/existing_institutions.html',
                 parent: angular.element(document.body),
                 targetEvent: ev,

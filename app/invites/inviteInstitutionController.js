@@ -52,8 +52,8 @@
                     'invite': invite,
                     'inviteController': inviteController
                 },
-                controller: 'DialogController',
-                controllerAs: 'dialogCtrl',
+                controller: 'SuggestInstitutionController',
+                controllerAs: 'suggestInstCtrl',
                 templateUrl: 'invites/existing_institutions.html',
                 parent: angular.element(document.body),
                 targetEvent: ev,

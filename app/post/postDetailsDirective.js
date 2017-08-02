@@ -13,8 +13,6 @@
 
         postDetailsCtrl.currentPost = null;
 
-        postDetailsCtrl.postToSee = $state.params.postToSee;
-
         postDetailsCtrl.savingComment = false;
         postDetailsCtrl.savingLike = false;
 

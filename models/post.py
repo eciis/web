@@ -187,9 +187,7 @@ class Post(ndb.Model):
         if(post.state == 'deleted'):
             post_dict['title'] = None
             post_dict['text'] = None
-        else:
-            post_dict['title'] = post.title
-            post_dict['text'] = post.text
+            post_dict['photo_url'] = None
 
         return post_dict
 

@@ -10,7 +10,10 @@ function Invite(data, type_of_invite, institution_key, inviter_email) {
 }
 
 Invite.prototype.isValid = function isValid() {
-    if (_.isUndefined(this.invitee) || _.isEmpty(this.invitee)) {
+    var noHasInvitee = _.isUndefined(this.invitee) || _.isEmpty(this.invitee);
+    var noHasType = _.isUndefined(this.type_of_invite) || _.isEmpty(this.type_of_invite);
+
+    if (noHasInvitee || noHasType) {
         return false;
     }
     return true;

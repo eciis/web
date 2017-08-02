@@ -321,11 +321,10 @@
         return {
             restrict: 'E',
             templateUrl: "post/timeline.html",
-            controllerAs: "postDetailsCtrl",
-            controller: "PostDetailsController",
             scope: {
                 posts: '=',
-                institution: '='
+                institution: '=',
+                user: '='
             }
         };
     });

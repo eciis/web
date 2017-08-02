@@ -3,12 +3,12 @@
 
     var app = angular.module('app');
 
-    app.controller("PostPageController", function PostPageController($mdDialog, PostService, AuthService, $mdToast, $state, MessageService) {
+    app.controller("PostPageController", function PostPageController(PostService, $state, MessageService) {
         var postCtrl = this;
 
         postCtrl.post = null;
 
-        function getPost(postKey) {
+        function loadPost(postKey) {
             var promise = PostService.getPost(postKey);
             promise.then(function success(response) {
                 postCtrl.post = response;
@@ -18,8 +18,6 @@
             return promise;
         }
 
-        
-        getPost($state.params.postKey);
-        
+        loadPost($state.params.postKey);     
     });
 })();

@@ -28,6 +28,7 @@
             });
         };
     });
+
     app.controller("requestInvatationController", function RequestInvatationController(user, $mdDialog, $q, MessageService, InstitutionService) {
         var resquestInvCtrl = this;
 
@@ -37,7 +38,10 @@
         resquestInvCtrl.institutionSelect = {};
 
         resquestInvCtrl.request = function request() {
-            // ENVIAR O PEDIDO
+            /* TODO: Add behavior.
+                    Make request invitation.
+                @author: Maiana Brito
+            */
         };
 
         resquestInvCtrl.cancelDialog = function() {

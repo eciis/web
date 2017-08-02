@@ -21,7 +21,6 @@
             var deferred = $q.defer();
             $http.get("api/search/institution?name=" + name + "&state=active").then(function success(response) {
                 deferred.resolve(response);
-                console.log(response);
             }, function error(response) {
                 deferred.reject(response);
             });

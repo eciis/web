@@ -20,8 +20,7 @@ def getInvites(user_email):
     invites = []
 
     queryInvites = Invite.query(Invite.invitee == user_email, Invite.status == 'sent')
-
-    invites = [Invite.make(invite)for invite in queryInvites]
+    invites = [invite.make() for invite in queryInvites]
 
     return invites
 

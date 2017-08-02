@@ -2,8 +2,6 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("DialogController", DialogController);
-
     app.controller("InviteInstitutionController", function InviteInstitutionController(
         InviteService, $mdToast, $state, AuthService, InstitutionService, $mdDialog, MessageService) {
         var inviteController = this;
@@ -54,7 +52,7 @@
                     'invite': invite,
                     'inviteController': inviteController
                 },
-                controller: DialogController,
+                controller: 'DialogController',
                 controllerAs: 'dialogCtrl',
                 templateUrl: 'invites/existing_institutions.html',
                 parent: angular.element(document.body),
@@ -85,30 +83,4 @@
 
         loadSentInvitations();
     });
-
-    function DialogController($mdDialog, institutions, invite, inviteController, $state) {
-        var dialogCtrl = this;
-        dialogCtrl.institutions = institutions;
-        dialogCtrl.invite = invite;
-
-        var ACTIVE_STATE = "active";
-
-        dialogCtrl.sendInvite = function sendInvite(){
-            inviteController.sendInstInvite(invite);
-            dialogCtrl.cancel();
-        };
-
-        dialogCtrl.goToInstitution = function goToInstitution(institutionKey) {
-            $state.go('app.institution', {institutionKey: institutionKey});
-            dialogCtrl.cancel();
-        };
-
-        dialogCtrl.cancel = function cancel() {
-            $mdDialog.cancel();
-        };
-
-        dialogCtrl.isActive = function(state) {
-            return state === ACTIVE_STATE;
-        };
-    }
 })();

@@ -27,6 +27,5 @@
         suggestInstCtrl.isActive = function(state) {
             return state === ACTIVE_STATE;
         };
-
     });
 })();

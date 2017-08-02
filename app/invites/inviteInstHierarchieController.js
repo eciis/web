@@ -15,6 +15,8 @@
 
         var ACTIVE = "active";
 
+        var INSTITUTION_STATE = "active,pending";
+
         inviteInstCtrl.user = AuthService.getCurrentUser();
         inviteInstCtrl.institution = {};
 
@@ -26,7 +28,6 @@
 
         inviteInstCtrl.existing_institutions = [];
 
-        var INSTITUTION_STATE = "active,pending";
 
         inviteInstCtrl.checkInstInvite = function checkInstInvite(ev) {
             var promise;
@@ -41,13 +42,13 @@
                 var suggestionInstName = inviteInstCtrl.invite.suggestion_institution_name;
                 promise = InstitutionService.searchInstitutions(suggestionInstName, INSTITUTION_STATE);
                 promise.then(function success(response) {
-                    inviteInstCtrl.showDialogOrSendInvite(response.data, ev);
+                    inviteInstCtrl.processInvite(response.data, ev);
                 });
                 return promise;
             }
         };
 
-        inviteInstCtrl.showDialogOrSendInvite = function showDialogOrSendInvite(data, ev) {
+        inviteInstCtrl.processInvite = function processInvite(data, ev) {
             inviteInstCtrl.existing_institutions = data;
             if(_.isEmpty(inviteInstCtrl.existing_institutions)) {
                 inviteInstCtrl.sendInstInvite(invite);

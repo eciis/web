@@ -88,15 +88,18 @@ def createInstitution(data, user):
 
 def delete_all_in_index(index):
     """Delete all documents in index."""
-    while True:
-        document_ids = [
-            document.doc_id
-            for document
-            in index.get_range(ids_only=True)]
+    try:
+        while True:
+            document_ids = [
+                document.doc_id
+                for document
+                in index.get_range(ids_only=True)]
 
-        if not document_ids:
-            break
-        index.delete(document_ids)
+            if not document_ids:
+                break
+            index.delete(document_ids)
+    except search.DeleteError:
+        logging.exception("Error removing documents")
 
 
 class BaseHandler(webapp2.RequestHandler):

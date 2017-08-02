@@ -32,9 +32,9 @@
         editInstCtrl.submit = function submit() {
             var confirm = $mdDialog.confirm(event)
                 .clickOutsideToClose(true)
-                .title('Confirmar Cadastro')
-                .textContent('Confirmar o cadastro dessa instituição?')
-                .ariaLabel('Confirmar Cadastro')
+                .title('Confirmar Edição')
+                .textContent('Confirmar a edição dessa instituição?')
+                .ariaLabel('Confirmar Edição')
                 .targetEvent(event)
                 .ok('Sim')
                 .cancel('Não');
@@ -66,34 +66,11 @@
         }
         function reloadUser() {
             AuthService.reload().then(function(){
-                MessageService.showToast('Cadastro de instituição realizado com sucesso');
+                MessageService.showToast('Edição de instituição realizado com sucesso');
                 AuthService.logout();
             });
         }
-        editInstCtrl.cancel = function cancel(event) {
-            var confirm = $mdDialog.confirm()
-                .clickOutsideToClose(true)
-                .title('Cancelar Cadastro')
-                .textContent("Ao cancelar o cadastro, seu convite será removido e " +
-                    "a instituição não poderá ser criada posteriormente sem um novo convite. " +
-                    "Deseja cancelar mesmo assim?")
-                .ariaLabel('Cancelar Cadastro')
-                .targetEvent(event)
-                .ok('Sim')
-                .cancel('Não');
-            $mdDialog.show(confirm).then(function() {
-                InviteService.deleteInvite(editInstCtrl.invite.key).then(
-                    function success() {
-                        MessageService.showToast('Cadastro de instituição cancelado');
-                        AuthService.logout();
-                    }, function error(response) {
-                        MessageService.showToast(response.data.msg);
-                    }
-                );
-            }, function() {
-                MessageService.showToast('Cancelado');
-            });
-        };
+        
         editInstCtrl.showButton = function() {
             return !editInstCtrl.loading;
         };

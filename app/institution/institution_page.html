@@ -1,42 +1,48 @@
-<md-content layout="column" md-colors="{background: 'grey-200'}" layout-align="center">
+<md-content layout="column" layout-align="center" md-colors="{background: 'grey-200'}">
     <!-- CONTENT -->
-    <div flex-gt-lg="80" flex-lg="90" layout="column" layout-padding layout-align="center" >
-        <div flex="80" layout="row" layout-padding md-colors="{background: ''}">
-            <center class="md-media-lg" flex="20">
-                <img ng-src="{{ institutionCtrl.current_institution.photo_url }}" height="160" width="160">
-            </center>
-            <center flex>
-                <div>
-                    <b>{{ institutionCtrl.current_institution.name }}</b>
-                    <md-icon title="Configurações" class="clickable" 
-                        ng-click="institutionCtrl.goToManageMembers(institutionCtrl.current_institution.key)" 
-                        ng-if="institutionCtrl.user.isAdmin(institutionCtrl.current_institution.key)">settings
-                    </md-icon>
-                </div>
-                <p>{{ institutionCtrl.current_institution.phone_number }}</p>
-                <p>{{ institutionCtrl.current_institution.address }}</p>
-                <p>{{ institutionCtrl.current_institution.description }}</p>
-            </center>
-            <div layout="column" layout-align="space-around end" flex="10">
-                <md-button class="md-icon-button" md-colors="{background: 'green'}" 
-                    title="{{ institutionCtrl.isUserFollower ? 'Deixar de seguir' : 'Seguir' }}"
-                    ng-click="institutionCtrl.isUserFollower ? institutionCtrl.unfollow() : institutionCtrl.follow()">
-                    <md-icon>{{ institutionCtrl.isUserFollower ? 'person_outline':'person_add' }}</md-icon>
-                </md-button>
-                <md-button title="Portifólio" class="md-icon-button" md-colors="{background: 'green'}"
-                    ng-click="">
-                    <md-icon>business_center</md-icon> 
-                </md-button>
-                <md-button title="Saiba Mais" class="md-icon-button" md-colors="{background: 'green'}" 
-                    ng-click="">
-                    <md-icon>info_outline</md-icon> 
-                </md-button>
+<div flex-gt-lg="80" flex-lg="90" layout="row">
+    <div flex layout="column" >
+        <div layout="row" flex="50" layout-padding  md-colors="{background: 'grey-50'}">
+            <div flex="20">
+                <center>
+                    <img ng-src="{{ institutionCtrl.current_institution.photo_url }}" height="160">
+                </center>
+            </div>
+            <div flex>
+                <center>
+                    <div>
+                        <h2>{{ institutionCtrl.current_institution.name }}</h2>
+                        <md-icon title="Configurações" class="clickable" 
+                            ng-click="institutionCtrl.goToManageMembers(institutionCtrl.current_institution.key)" 
+                            ng-if="institutionCtrl.user.isAdmin(institutionCtrl.current_institution.key)">settings
+                        </md-icon>
+                    </div>
+                    <p>{{ institutionCtrl.current_institution.phone_number }}</p>
+                    <p>{{ institutionCtrl.current_institution.address }}</p>
+                    <p>{{ institutionCtrl.current_institution.description }}</p>
+                </center>
             </div>
         </div>
+        <!-- Buttons -->
+        <div layout="row" flex="10" layout-align="end center"  layout-padding md-colors="{background: 'grey-50'}">
+            <md-button class="md-icon-button" md-colors="{background:'green'}" 
+                ng-if="!institutionCtrl.isMember"
+                title="{{ institutionCtrl.isUserFollower ? 'Deixar de seguir' : 'Seguir' }}"
+                ng-click="institutionCtrl.isUserFollower ? institutionCtrl.unfollow() : institutionCtrl.follow()">
+                <md-icon>{{ institutionCtrl.isUserFollower ? 'person_outline':'person_add' }}</md-icon>
+            </md-button>
+            <md-button title="Portifólio" class="md-icon-button" md-colors="{background: 'green'}"
+                ng-click="">
+                <md-icon>business_center</md-icon> 
+            </md-button>
+            <md-button title="Saiba Mais" class="md-icon-button" md-colors="{background: 'green'}" 
+                ng-click="">
+                <md-icon>info_outline</md-icon> 
+            </md-button>
+        </div>
         <div flex layout="row">
-            <div flex="20"> 
+            <div flex="20" layout="column"> 
                 <!-- INSTITUTION MEMBERS -->
-
                 <md-card>
                     <md-subhead layout-padding class="md-primary" md-colors="{background: 'green-900'}">Membros</md-subhead>
                     <md-card-content>
@@ -72,7 +78,11 @@
             </div>
 
             <!-- INSTITUTION POSTS -->
-            <post-details flex layout="column" md-colors="{background: 'grey-200'}" posts="institutionCtrl.posts" institution="true"></post-details>
-        <div>
-    </div>
+            <div flex-gt-md="80" flex-md="75">
+                <post-details posts="institutionCtrl.posts" institution="true">
+                </post-details>
+            </div>
+        </div>
+    <div>
+</div>
 </md-content>

@@ -22,7 +22,7 @@ from handlers.post_comment_handler import PostCommentHandler
 from handlers.invite_collection_handler import InviteCollectionHandler
 from handlers.search_handler import SearchHandler
 from handlers.invite_handler import InviteHandler
-from handlers.redirect_handler import RedirectHandler
+from handlers.redirect_handler import AppRedirectHandler
 
 methods = set(webapp2.WSGIApplication.allowed_methods)
 methods.add('PATCH')
@@ -50,5 +50,5 @@ app = webapp2.WSGIApplication([
     ("/login", LoginHandler),
     ("/logout", LogoutHandler),
     ("/api/.*", ErroHandler),
-    ("/app", RedirectHandler),
+    ("/app", AppRedirectHandler),
 ], debug=True)

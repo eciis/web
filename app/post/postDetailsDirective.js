@@ -337,8 +337,7 @@
             controllerAs: "postDetailsCtrl",
             controller: "PostDetailsController",
             scope: {
-                post: '=',
-                institution: '='
+                post: '='
             }
         };
     });

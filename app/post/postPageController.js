@@ -11,16 +11,15 @@
         function getPost(postKey) {
             var promise = PostService.getPost(postKey);
             promise.then(function success(response) {
-                console.log(response);
                 postCtrl.post = response;
             }, function error(response) {
-                MessageService.showToast(response.data.msg);
+                MessageService.showToast(response.msg);
             });
             return promise;
         }
 
-        (function main() {
-            getPost($state.params.postKey);
-        })();
+        
+        getPost($state.params.postKey);
+        
     });
 })();

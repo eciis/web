@@ -34,12 +34,11 @@ class PostHandler(BaseHandler):
     @login_required
     def get(self, user, url_string):
         """Handle GET Requests."""
-        obj_key = ndb.Key(urlsafe=url_string)
-        obj = obj_key.get()
-        print obj
+        post_key = ndb.Key(urlsafe=url_string)
+        post = post_key.get()
 
-        assert type(obj) is Post, "Key is not an Post"
-        post_json = Post.make(obj, self.request.host)
+        assert type(post) is Post, "Key is not an Post"
+        post_json = Post.make(post, self.request.host)
 
         self.response.write(json.dumps(
             post_json

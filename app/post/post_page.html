@@ -1,7 +1,7 @@
 <md-content layout="row" md-colors="{background: 'grey-200'}" layout-align="center" class="body" layout-fill>
     <div flex-gt-lg="80" flex-lg="90" layout="row" layout-wrap layout-align="center">
         <div layout="column" flex>
-            <post-details post="postCtrl.post" institution="false"></post-details>   
+            <post-details ng-if="postCtrl.post" post="postCtrl.post"></post-details>   
         </div>
     </div>
 </md-content>

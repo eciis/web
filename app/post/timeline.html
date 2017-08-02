@@ -4,9 +4,11 @@
     <create-post flex user="postDetailsCtrl.user" is-dialog="false"></create-post>
   </div>
   <md-card ng-if="posts.length == 0">
-    <md-content layout-align="center center" layout="column"><h4>Esta instituição ainda não possui publicações.</h4></md-content>
+    <md-content layout-align="center center" layout="column">
+      <h4>Esta instituição ainda não possui publicações.</h4>
+    </md-content>
   </md-card>
   <div ng-repeat="post in posts | orderBy:'date':true" ng-if="posts.length > 0" ng-class="postDetailsCtrl.isDeleted(post)?'post-deleted':''">
-    <post-details post="post" institution="false"></post-details>
+    <post-details post="post"></post-details>
   </div>
 </div>

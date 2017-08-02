@@ -8,5 +8,5 @@ class AppRedirectHandler(BaseHandler):
     """Redirect Handler."""
 
     def get(self):
-        """Handle GET request to redirect of /app to /app/ route for client."""
+        """Handle GET request to redirect from /app route to /app/ for client."""
         self.redirect("/app/")

@@ -10,6 +10,8 @@ from utils import Utils
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from handlers.base_handler import BaseHandler
 from models.invite import Invite
+from models.invite_user import InviteUser
+from models.invite_institution import InviteInstitution
 
 
 def is_admin(method):
@@ -28,6 +30,7 @@ def is_admin(method):
             method(self, user, *args)
         return check_authorization
 
+
 class InviteCollectionHandler(BaseHandler):
     """Invite Collection Handler."""
 
@@ -39,7 +42,7 @@ class InviteCollectionHandler(BaseHandler):
 
         queryInvites = Invite.query(Invite.type_of_invite == "institution")
 
-        invites = [Invite.make(invite)for invite in queryInvites]
+        invites = [invite.make() for invite in queryInvites]
 
         self.response.write(json.dumps(invites))
 
@@ -50,9 +53,14 @@ class InviteCollectionHandler(BaseHandler):
         """Handle POST Requests."""
         data = json.loads(self.request.body)
 
-        invite = Invite.create(data)
-        invite.put()
+        if data.get('type_of_invite') == 'user':
+            invite = InviteUser.create(data)
+            invite.put()
+        else:
+            invite = InviteInstitution.create(data)
+            invite.put()
 
-        Invite.sendInvite(invite)
+        invite.sendInvite()
+        make_invite = invite.make()
 
-        self.response.write(json.dumps(Invite.make(invite)))
+        self.response.write(json.dumps(make_invite))

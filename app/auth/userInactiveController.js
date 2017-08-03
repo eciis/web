@@ -40,7 +40,7 @@
         resquestInvCtrl.request = function request() {
             /* TODO: Add behavior.
                     Make request invitation.
-                @author: Maiana Brito
+                @author: Maiana Brito 03/08/2017
             */
         };
 
@@ -48,7 +48,10 @@
             $mdDialog.cancel();
         };
 
-        resquestInvCtrl.showMenu = function showMenu() {
+        resquestInvCtrl.showMenu = function showMenu(event) {
+            if (event.keyCode == '13'){
+              $('#search').autocomplete('close');
+            }
             var deferred = $q.defer();
             if(resquestInvCtrl.search) {
                 resquestInvCtrl.finalSearch = resquestInvCtrl.search;
@@ -65,7 +68,7 @@
             InstitutionService.searchInstitutions(resquestInvCtrl.finalSearch).then(function success(response) {
                 resquestInvCtrl.institutions = response.data;
                 if(_.size(resquestInvCtrl.institutions) === 0){
-                    resquestInvCtrl.institutions.push({name: 'Nenhuma instituição encontrada'});
+                    resquestInvCtrl.institutions.push({name: 'Infelizmente sua instituição ainda não está cadastrada.'});
                 }
             });
             return deferred.promise;
@@ -86,6 +89,10 @@
                 } else {
                     return false;
                 }
+        };
+
+        resquestInvCtrl.closePanel = function closePanel(){
+            panelCtrl._mdPanelRef.close();
         };
     });    
 })();

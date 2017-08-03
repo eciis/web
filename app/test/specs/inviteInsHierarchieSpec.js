@@ -2,7 +2,7 @@
 
 (describe('Test InviteInstHierarchieController', function() {
 
-    var inviteInstCtrl, httpBackend, scope, inviteService, createCtrl, state, mdToast;
+    var inviteInstCtrl, httpBackend, scope, inviteService, createCtrl, state, mdToast, instService;
 
     var splab = {
             name: 'SPLAB',
@@ -47,12 +47,13 @@
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $httpBackend, $rootScope,
-        $state, $mdToast, InviteService, AuthService) {
+        $state, $mdToast, InviteService, AuthService, InstitutionService) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
         mdToast = $mdToast;
         inviteService = InviteService;
+        instService = InstitutionService;
         AuthService.getCurrentUser = function() {
             return new User(maiana);
         };
@@ -132,7 +133,7 @@
                     suggestion_institution_name : "Institution Parent",
                     type_of_invite : "INSTITUTION_PARENT"};
                 inviteInstCtrl.user.current_institution = splab;
-                var promise = inviteInstCtrl.sendInstInvite();
+                var promise = inviteInstCtrl.sendInstInvite(invite);
                 promise.then(function() {
                     expect(inviteService.sendInvite).toHaveBeenCalledWith(invite);
 
@@ -165,7 +166,7 @@
                     suggestion_institution_name : "Children Institution",
                     type_of_invite : "INSTITUTION_CHILDREN"};
                 inviteInstCtrl.user.current_institution = splab;
-                var promise = inviteInstCtrl.sendInstInvite();
+                var promise = inviteInstCtrl.sendInstInvite(inviteChildren);
                 promise.then(function() {
                     expect(inviteService.sendInvite).toHaveBeenCalledWith(inviteChildren);
 
@@ -177,6 +178,42 @@
                     done();
                 });
                 scope.$apply();
+            });
+        });
+
+        describe('checkInstInvite()', function() {
+            it('should call sendInvite() and searchInstitutions()', function(done) {
+                spyOn(instService, 'searchInstitutions').and.callThrough();
+                spyOn(inviteInstCtrl, 'sendInstInvite');
+                inviteInstCtrl.invite = {
+                    invitee: "parent@gmail.com",
+                    suggestion_institution_name : "Institution Parent",
+                    type_of_invite : "INSTITUTION_PARENT"};
+                inviteInstCtrl.user.current_institution = splab;
+                httpBackend.expect('GET', "api/search/institution?name=Institution Parent&state=active,pending").respond({});
+                inviteInstCtrl.checkInstInvite().then(function() {
+                    expect(instService.searchInstitutions).toHaveBeenCalledWith(
+                        inviteInstCtrl.invite.suggestion_institution_name,
+                        "active,pending");
+                    expect(inviteInstCtrl.sendInstInvite).toHaveBeenCalledWith(invite);
+                    done();
+                });
+                httpBackend.flush();
+            });
+
+            it('should call showDialog()', function(done) {
+                var documents = [{name: splab.name, id: splab.key}];
+                spyOn(inviteInstCtrl, 'showDialog');
+                inviteInstCtrl.invite = {
+                    invitee: "parent@gmail.com",
+                    suggestion_institution_name : "Institution Parent",
+                    type_of_invite : "institution_parent"};
+                httpBackend.expect('GET', "api/search/institution?name=Institution Parent&state=active,pending").respond(documents);
+                inviteInstCtrl.checkInstInvite().then(function() {
+                    expect(inviteInstCtrl.showDialog).toHaveBeenCalled();
+                    done();
+                });
+                httpBackend.flush();
             });
         });
     });

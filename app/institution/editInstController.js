@@ -2,6 +2,7 @@
 (function() {
     var app = angular.module("app");
     app.controller("EditInstController", function EditInstController(AuthService, InstitutionService, $state, $mdToast, $mdDialog, $http, InviteService, ImageService, $rootScope, MessageService) {
+
         var editInstCtrl = this;
         var institutionKey = $state.params.institutionKey;
         var observer;
@@ -42,7 +43,7 @@
                 if (editInstCtrl.photo_instituicao) {
                     saveImage();
                 } else {
-                    saveInstitution();
+                    updateInstitution();
                 }
             }, function() {
                 MessageService.showToast('Cancelado');
@@ -53,12 +54,12 @@
             ImageService.saveImage(editInstCtrl.photo_instituicao).then(function(data) {
                 editInstCtrl.loading = false;
                 editInstCtrl.newInstitution.photo_url = data.url;
-                saveInstitution();
+                updateInstitution();
             });
         }
-        function saveInstitution() {
+        function updateInstitution() {
             var patch = jsonpatch.generate(observer);
-            InstitutionService.save(institutionKey, patch, editInstCtrl.invite.key).then(
+            InstitutionService.update(institutionKey, patch).then(
                 reloadUser(),
                 function error(response) {
                     MessageService.showToast(response.data.msg);
@@ -67,7 +68,6 @@
         function reloadUser() {
             AuthService.reload().then(function(){
                 MessageService.showToast('Edição de instituição realizado com sucesso');
-                AuthService.logout();
             });
         }
         

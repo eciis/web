@@ -33,18 +33,32 @@ def getSentInvitations(institution_key):
 
 def isUserInvited(method):
     """Check if the user is invitee to update the stub of institution."""
+    def check_authorization(self, user, institution_key, *args):
+        if args:
+            inviteKey = args[0]
+            invite = ndb.Key(urlsafe=inviteKey).get()
 
-    def check_authorization(self, user, institution_key, inviteKey):
-        invite = ndb.Key(urlsafe=inviteKey).get()
+            emailIsNotInvited = invite.invitee != user.email
+            institutionIsNotInvited = ndb.Key(
+                urlsafe=institution_key) != invite.stub_institution_key
 
-        emailIsNotInvited = invite.invitee != user.email
-        institutionIsNotInvited = ndb.Key(
-            urlsafe=institution_key) != invite.stub_institution_key
+            Utils._assert(emailIsNotInvited or institutionIsNotInvited,
+                          'User is not invitee to create this Institution',
+                          NotAuthorizedException)
 
-        Utils._assert(emailIsNotInvited or institutionIsNotInvited,
-                      'User is not invitee to create this Institution', NotAuthorizedException)
+        method(self, user, institution_key, *args)
+    return check_authorization
 
-        method(self, user, institution_key, inviteKey)
+
+def is_admin(method):
+    """Check if the user is admin of institution."""
+    def check_authorization(self, user, institution_key, *args):
+        institution = ndb.Key(urlsafe=institution_key).get()
+        Utils._assert(institution.admin != user.key,
+                      'User is not allowed to edit this institution',
+                      NotAuthorizedException)
+
+        method(self, user, institution_key, *args)
     return check_authorization
 
 
@@ -89,19 +103,25 @@ class InstitutionHandler(BaseHandler):
     @json_response
     @login_required
     @isUserInvited
-    def patch(self, user, institution_key, inviteKey):
+    @is_admin
+    def patch(self, user, institution_key, *args):
         """Handler PATCH Requests."""
         data = self.request.body
 
         institution = ndb.Key(urlsafe=institution_key).get()
 
-        """Apply patch."""
-        JsonPatch.load(data, institution)
-        institution.createInstitutionWithStub(user, inviteKey, institution)
+        if args:
+            """Apply patch."""
+            inviteKey = args[0]
+            JsonPatch.load(data, institution)
+            institution.createInstitutionWithStub(user, inviteKey, institution)
 
-        search_module.createDocument(
-            institution.key.urlsafe(), institution.name, institution.state,
-            institution.admin.get().email)
+            search_module.createDocument(
+                institution.key.urlsafe(), institution.name, institution.state,
+                institution.admin.get().email)
+        else:
+            JsonPatch.load(data, institution)
+            institution.put()
 
         institution_json = Utils.toJson(institution)
 

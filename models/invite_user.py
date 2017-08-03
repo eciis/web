@@ -22,11 +22,10 @@ class InviteUser(Invite):
 
     @staticmethod
     def inviteeIsInvited(invitee, institutionKey):
-        invited = Invite.query(
-            Invite.institution_key == institutionKey,
-            Invite.type_of_invite == 'user',
-            Invite.status == 'sent',
-            Invite.invitee == invitee)
+        invited = InviteUser.query(
+            InviteUser.institution_key == institutionKey,
+            InviteUser.status == 'sent',
+            InviteUser.invitee == invitee)
 
         return invited.count() > 0
 
@@ -62,11 +61,7 @@ class InviteUser(Invite):
 
     def make(self):
         """Create json of invite to user."""
-        return {
-            'invitee': self.invitee,
-            'inviter': self.inviter,
-            'type_of_invite': self.type_of_invite,
-            'institution_key': self.institution_key.urlsafe(),
-            'key': self.key.urlsafe(),
-            'status': self.status
-        }
+        make = super(InviteUser, self).make()
+        make['institution_key'] = self.institution_key.urlsafe()
+        make['type_of_invite'] = 'USER'
+        return make

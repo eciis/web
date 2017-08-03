@@ -15,7 +15,7 @@
         inviteController.user = AuthService.getCurrentUser();
 
         inviteController.sendUserInvite = function sendInvite() {
-            invite = new Invite(inviteController.invite, 'user', currentInstitutionKey, inviteController.user.email);
+            invite = new Invite(inviteController.invite, 'USER', currentInstitutionKey, inviteController.user.email);
             if (inviteController.isUserInviteValid(invite)) {
                 var promise = InviteService.sendInvite(invite);
                 promise.then(function success(response) {
@@ -67,7 +67,7 @@
         }
 
         function inviteeIsInvited(invite) {
-            return _.some(inviteController.sent_invitations, invite);    
+            return _.some(inviteController.sent_invitations, invite);
         }
 
         inviteController.isUserInviteValid = function isUserInviteValid(invite) {
@@ -84,7 +84,7 @@
             }
             return isValid;
         };
-        
+
         loadInstitution();
     });
 })();

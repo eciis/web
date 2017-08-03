@@ -32,7 +32,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         invite = self.testapp.post_json("/api/invites", {
             'invitee': 'ana@gmail.com',
             'inviter': 'mayzabeel@gmail.com',
-            'type_of_invite': 'institution',
+            'type_of_invite': 'INSTITUTION',
             'suggestion_institution_name': 'New Institution',
             'institution_key': self.certbio.key.urlsafe()})
 
@@ -46,8 +46,6 @@ class InviteCollectionHandlerTest(TestBaseHandler):
                          "The email expected was ana@gmail.com")
         self.assertEqual(invite_obj.inviter, 'mayzabeel@gmail.com',
                          "The inviter expected was mayzabeel@gmail.com")
-        self.assertEqual(invite_obj.type_of_invite, 'institution',
-                         "The type of invite expected was institution")
         self.assertEqual(invite_obj.suggestion_institution_name,
                          'New Institution',
                          "The suggestion institution name of \
@@ -62,14 +60,14 @@ class InviteCollectionHandlerTest(TestBaseHandler):
             self.testapp.post_json("/api/invites", {
                 'invitee': 'ana@gmail.com',
                 'inviter': 'mayzabeel@gmail.com',
-                'type_of_invite': 'institution'})
+                'type_of_invite': 'INSTITUTION'})
 
     @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
     def test_post_invite_user(self, verify_token):
         invite = self.testapp.post_json("/api/invites", {
             'invitee': 'ana@gmail.com',
             'inviter': 'mayzabeel@gmail.com',
-            'type_of_invite': 'user',
+            'type_of_invite': 'USER',
             'institution_key': self.certbio.key.urlsafe()})
         # Retrieve the entities
         invite = json.loads(invite._app_iter[0])
@@ -81,8 +79,6 @@ class InviteCollectionHandlerTest(TestBaseHandler):
                          "The email expected was ana@gmail.com")
         self.assertEqual(invite_obj.inviter, 'mayzabeel@gmail.com',
                          "The inviter expected was mayzabeel@gmail.com")
-        self.assertEqual(invite_obj.type_of_invite, 'user',
-                         "The type of invite expected was user")
         self.assertEqual(invite_obj.institution_key, self.certbio.key,
                          "The institution key expected was key of certbio")
 
@@ -91,7 +87,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         invite = self.testapp.post_json("/api/invites", {
             'invitee': 'adriana@ccc.ufcg.edu.br',
             'inviter': 'tiago.pereira@ccc.ufcg.edu.br',
-            'type_of_invite': 'user',
+            'type_of_invite': 'USER',
             'institution_key': self.splab.key.urlsafe()})
         # Retrieve the entities
         invite = json.loads(invite._app_iter[0])
@@ -103,8 +99,6 @@ class InviteCollectionHandlerTest(TestBaseHandler):
                          "The email expected was adriana@ccc.ufcg.edu.br")
         self.assertEqual(invite_obj.inviter, 'tiago.pereira@ccc.ufcg.edu.br',
                          "The inviter expected was tiago.pereira@ccc.ufcg.edu.br")
-        self.assertEqual(invite_obj.type_of_invite, 'user',
-                         "The type of invite expected was user")
         self.assertEqual(invite_obj.institution_key, self.splab.key,
                          "The institution key expected was key of splab")
 
@@ -116,7 +110,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
             self.testapp.post_json("/api/invites", {
                 'invitee': 'tiago.pereira@ccc.ufcg.edu.br',
                 'inviter': 'mayzabeel@gmail.com',
-                'type_of_invite': 'user',
+                'type_of_invite': 'USER',
                 'institution_key': self.certbio.key.urlsafe()})
 
     @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
@@ -127,7 +121,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
             self.testapp.post_json("/api/invites", {
                 'invitee': 'ana@gmail.com',
                 'inviter': 'mayzabeel@gmail.com',
-                'type_of_invite': 'user'})
+                'type_of_invite': 'USER'})
 
     @patch('utils.verify_token', return_value={'email': 'tiago.pereira@ccc.ufcg.edu.br'})
     def test_post_invite_without_admin(self, verify_token):
@@ -136,7 +130,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
             self.testapp.post_json("/api/invites", {
                 'invitee': 'ana@gmail.com',
                 'inviter': 'mayzabeel@gmail.com',
-                'type_of_invite': 'user',
+                'type_of_invite': 'USER',
                 'institution_key': self.certbio.key.urlsafe()})
 
     @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
@@ -146,7 +140,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         invite = self.testapp.post_json("/api/invites", {
             'invitee': 'mayzabeel@gmail.com',
             'inviter': 'mayzabeel@gmail.com',
-            'type_of_invite': 'institution_parent',
+            'type_of_invite': 'INSTITUTION_PARENT',
             'suggestion_institution_name': 'Institution Parent',
             'institution_key': self.certbio.key.urlsafe()})
         # Retrieve the entities
@@ -161,8 +155,6 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         # Check data of invite
         self.assertEqual(invite_obj.invitee, 'mayzabeel@gmail.com',
                          "The email expected was mayzabeel@gmail.com")
-        self.assertEqual(invite_obj.type_of_invite, 'institution_parent',
-                         "The type of invite expected was institution_parent")
         self.assertEqual(invite_obj.suggestion_institution_name,
                          'Institution Parent',
                          "The suggestion institution name of \
@@ -194,7 +186,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         with self.assertRaises(Exception):
             self.testapp.post_json("/api/invites", {
                 'invitee': 'mayzabeel@gmail.com',
-                'type_of_invite': 'institution_parent'})
+                'type_of_invite': 'INSTITUTION_PARENT'})
 
 
 def initModels(cls):

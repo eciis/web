@@ -51,12 +51,8 @@ class InviteInstitution(Invite):
 
     def make(self):
         """Create json of invite to parent institution."""
-        return {
-            'invitee': self.invitee,
-            'inviter': self.inviter,
-            'type_of_invite': self.type_of_invite,
-            'suggestion_institution_name': self.suggestion_institution_name,
-            'stub_institution_key': self.stub_institution_key.urlsafe(),
-            'key': self.key.urlsafe(),
-            'status': self.status
-        }
+        make = super(InviteInstitution, self).make()
+        make['suggestion_institution_name'] = self.suggestion_institution_name
+        make['stub_institution_key'] = self.stub_institution_key.urlsafe()
+        make['type_of_invite'] = 'INSTITUTION'
+        return make

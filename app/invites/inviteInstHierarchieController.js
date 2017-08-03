@@ -11,10 +11,10 @@
 
         var invite;
 
-        var INSTITUTION_PARENT = "institution_parent";
+        var INSTITUTION_PARENT = "INSTITUTION_PARENT";
 
         var ACTIVE = "active";
-        
+
         inviteInstCtrl.user = AuthService.getCurrentUser();
         inviteInstCtrl.institution = {};
 
@@ -27,14 +27,14 @@
 
         inviteInstCtrl.sendInstInvite = function sendInstInvite() {
             var currentInstitutionKey = inviteInstCtrl.user.current_institution.key;
-            invite = new Invite(inviteInstCtrl.invite, inviteInstCtrl.invite.type_of_invite, 
+            invite = new Invite(inviteInstCtrl.invite, inviteInstCtrl.invite.type_of_invite,
                 currentInstitutionKey, inviteInstCtrl.user.email);
 
             if (!invite.isValid()) {
                 MessageService.showToast('Convite inválido!');
             } else if(inviteInstCtrl.hasParent && invite.type_of_invite === INSTITUTION_PARENT){
                 MessageService.showToast("Já possui instituição superior");
-            } else {                
+            } else {
                 var promise = InviteService.sendInvite(invite);
                 promise.then(function success() {
                     MessageService.showToast('Convite enviado com sucesso!');
@@ -74,7 +74,6 @@
             inviteInstCtrl.invite = {};
             inviteInstCtrl.institution.addInvite(invite);
             var stub = inviteInstCtrl.institution.createStub(invite);
-
             if (invite.type_of_invite === INSTITUTION_PARENT){
                 inviteInstCtrl.institution.addParentInst(stub);
                 inviteInstCtrl.hasParent = true;

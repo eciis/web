@@ -99,7 +99,7 @@
                 inviteinstitutionCtrl.user.current_institution = splab;
                 httpBackend.expect('GET', "api/search/institution?name=New Institution&state=active,pending").respond({});
                 inviteinstitutionCtrl.checkInstInvite().then(function() {
-                    var testingInvite = new Invite(invite, 'institution', splab.key);
+                    var testingInvite = new Invite(invite, 'INSTITUTION', splab.key);
                     expect(instService.searchInstitutions).toHaveBeenCalledWith(
                         inviteinstitutionCtrl.invite.suggestion_institution_name,
                         "active,pending");

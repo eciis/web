@@ -10,7 +10,7 @@
             sent_invitations: [],
             children_institutions: [],
             parent_institution: {},
-            state: 'active'  
+            state: 'active'
     };
 
     var ecis = {
@@ -19,7 +19,7 @@
         sent_invitations: [],
         children_institutions: [],
         parent_institution: {splab},
-        state: 'pending'  
+        state: 'pending'
     };
 
     var maiana = {
@@ -34,19 +34,19 @@
 
     splab = new Institution(splab);
 
-    var invite = new Invite({invitee: "parent@gmail.com", 
+    var invite = new Invite({invitee: "parent@gmail.com",
                         suggestion_institution_name : "Institution Parent"},
-                            'institution_parent', splab.key, maiana.email);
+                            'INSTITUTION_PARENT', splab.key, maiana.email);
 
-    var inviteChildren = new Invite({invitee: "children@gmail.com", 
+    var inviteChildren = new Invite({invitee: "children@gmail.com",
                         suggestion_institution_name : "Children Institution"},
-                            'institution_children', splab.key, maiana.email);
+                            'INSTITUTION_CHILDREN', splab.key, maiana.email);
 
     var childrenStub = new Institution({name: "Children Institution", state : "pending"});
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, 
+    beforeEach(inject(function($controller, $httpBackend, $rootScope,
         $state, $mdToast, InviteService, AuthService) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
@@ -86,14 +86,14 @@
             expect(inviteInstCtrl.institution.key).toEqual(splab.key);
         });
     });
-    
+
     describe('InviteInstHierarchieController functions', function() {
 
         describe('goToInst()', function() {
             it('should be call state.go ', function() {
                 spyOn(state, 'go');
                 inviteInstCtrl.goToInst(splab.key);
-                expect(state.go).toHaveBeenCalledWith('app.institution', 
+                expect(state.go).toHaveBeenCalledWith('app.institution',
                     Object({ institutionKey: '987654321' }));
             });
         });
@@ -109,7 +109,7 @@
         describe('cancelInvite()', function() {
             it('should clear the object invite', function() {
                 inviteInstCtrl.invite = {
-                    invitee: "invitee@gmail.com", 
+                    invitee: "invitee@gmail.com",
                     suggestion_institution_name : "Institution Parent"};
                 inviteInstCtrl.cancelInvite();
                 expect(inviteInstCtrl.invite).toEqual({});
@@ -125,12 +125,12 @@
                     };
                 });
             });
-            
+
             it('should call inviteService.sendInvite()', function(done) {
                 inviteInstCtrl.invite = {
-                    invitee: "parent@gmail.com", 
+                    invitee: "parent@gmail.com",
                     suggestion_institution_name : "Institution Parent",
-                    type_of_invite : "institution_parent"};
+                    type_of_invite : "INSTITUTION_PARENT"};
                 inviteInstCtrl.user.current_institution = splab;
                 var promise = inviteInstCtrl.sendInstInvite();
                 promise.then(function() {
@@ -158,12 +158,12 @@
                     };
                 });
             });
-            
+
             it('should call inviteService.sendInvite()', function(done) {
                 inviteInstCtrl.invite = {
-                    invitee: "children@gmail.com", 
+                    invitee: "children@gmail.com",
                     suggestion_institution_name : "Children Institution",
-                    type_of_invite : "institution_children"};
+                    type_of_invite : "INSTITUTION_CHILDREN"};
                 inviteInstCtrl.user.current_institution = splab;
                 var promise = inviteInstCtrl.sendInstInvite();
                 promise.then(function() {

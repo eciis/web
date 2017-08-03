@@ -1,6 +1,6 @@
 'use strict';
 
-(describe('Test DialogController', function() {
+(describe('Test SuggestInstitutionController', function() {
     var suggestInstCtrl, httpBackend, createCtrl, state;
 
     var mdDialog, scope, inviteController, scopeInvite;

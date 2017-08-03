@@ -1,47 +1,51 @@
 <md-content layout="column" layout-align="center" md-colors="{background: 'grey-200'}">
     <!-- CONTENT -->
-<div flex-gt-lg="80" flex-lg="90" layout="row">
-    <div flex layout="column" >
-        <div layout="row" flex="50" layout-padding  md-colors="{background: 'grey-50'}">
-            <div flex="20">
+<div flex-gt-lg="80" flex-lg="90">
+    <div flex layout="column">
+        <div layout="row" layout-xs="column" layout-padding flex="25" flex-sm="15" flex-gt-sm="30"
+            md-colors="{background: 'grey-50'}">
+            <!-- Institution image -->
+            <div flex="20" hide show-gt-sm>
                 <center>
-                    <img ng-src="{{ institutionCtrl.current_institution.photo_url }}" height="160">
+                    <img ng-src="{{ institutionCtrl.current_institution.photo_url }}" height="170">
                 </center>
             </div>
+
+            <!-- Institution information -->
             <div flex>
                 <center>
                     <div>
-                        <h2>{{ institutionCtrl.current_institution.name }}</h2>
-                        <md-icon title="Configurações" class="clickable" 
-                            ng-click="institutionCtrl.goToManageMembers(institutionCtrl.current_institution.key)" 
-                            ng-if="institutionCtrl.user.isAdmin(institutionCtrl.current_institution.key)">settings
-                        </md-icon>
+                        <h2>{{ institutionCtrl.current_institution.name }}
+                            <md-icon title="Configurações" class="clickable" 
+                                ng-click="institutionCtrl.goToManageMembers(institutionCtrl.current_institution.key)" 
+                                ng-if="institutionCtrl.user.isAdmin(institutionCtrl.current_institution.key)">settings
+                            </md-icon>
+                        </h2>
                     </div>
                     <p>{{ institutionCtrl.current_institution.phone_number }}</p>
                     <p>{{ institutionCtrl.current_institution.address }}</p>
-                    <p>{{ institutionCtrl.current_institution.description }}</p>
+                    <p hide show-gt-sm>{{ institutionCtrl.current_institution.description }}</p>
                 </center>
             </div>
         </div>
-        <!-- Buttons -->
-        <div layout="row" flex="10" layout-align="end center"  layout-padding md-colors="{background: 'grey-50'}">
-            <md-button class="md-icon-button" md-colors="{background:'green'}" 
-                ng-if="!institutionCtrl.isMember"
-                title="{{ institutionCtrl.isUserFollower ? 'Deixar de seguir' : 'Seguir' }}"
+        <div layout="row" flex="10" flex-gt-sm layout-align="start center" layout-align-xs="center center" layout-padding 
+            md-colors="{background: 'grey-50'}" hide show-xs>
+            <!-- Buttons -->
+            <md-button class="md-button" md-colors="{background:'green-900'}" ng-if="!institutionCtrl.isMember"
                 ng-click="institutionCtrl.isUserFollower ? institutionCtrl.unfollow() : institutionCtrl.follow()">
                 <md-icon>{{ institutionCtrl.isUserFollower ? 'person_outline':'person_add' }}</md-icon>
-            </md-button>
-            <md-button title="Portifólio" class="md-icon-button" md-colors="{background: 'green'}"
-                ng-click="">
-                <md-icon>business_center</md-icon> 
-            </md-button>
-            <md-button title="Saiba Mais" class="md-icon-button" md-colors="{background: 'green'}" 
-                ng-click="">
-                <md-icon>info_outline</md-icon> 
+                {{ institutionCtrl.isUserFollower ? 'Deixar de seguir' : 'Seguir' }}
             </md-button>
         </div>
-        <div flex layout="row">
-            <div flex="20" layout="column"> 
+        <div layout="row" flex="60" flex-gt-sm="40">
+            <div flex-gt-sm="20" layout="column" hide show-gt-sm>
+                <!-- Buttons -->
+                <md-button class="md-button" md-colors="{background:'green-900'}" ng-if="!institutionCtrl.isMember"
+                    ng-click="institutionCtrl.isUserFollower ? institutionCtrl.unfollow() : institutionCtrl.follow()">
+                    <md-icon>{{ institutionCtrl.isUserFollower ? 'person_outline':'person_add' }}</md-icon>
+                    {{ institutionCtrl.isUserFollower ? 'Deixar de seguir' : 'Seguir' }}
+                </md-button>
+
                 <!-- INSTITUTION MEMBERS -->
                 <md-card>
                     <md-subhead layout-padding class="md-primary" md-colors="{background: 'green-900'}">Membros</md-subhead>
@@ -77,10 +81,9 @@
                 </md-card>
             </div>
 
-            <!-- INSTITUTION POSTS -->
-            <div flex-gt-md="80" flex-md="75">
-                <post-details posts="institutionCtrl.posts" institution="true">
-                </post-details>
+            <!-- POSTS -->
+            <div flex-gt-md="90" flex-md="75">
+                <post-details posts="institutionCtrl.posts" institution="true"></post-details>
             </div>
         </div>
     <div>

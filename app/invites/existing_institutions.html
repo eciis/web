@@ -3,14 +3,14 @@
     <div>
         <md-dialog-content class="md-dialog-content" layout="column">
             <h3>Já existem instituições com esse nome:</h3>
-            <md-list ng-repeat="institution in dialogCtrl.institutions" flex>
-                <md-list-item class="md-2-line" ng-if="dialogCtrl.isActive(institution.state)" ng-click="dialogCtrl.goToInstitution(institution.id)">
+            <md-list ng-repeat="institution in suggestInstCtrl.institutions" flex>
+                <md-list-item class="md-2-line" ng-if="suggestInstCtrl.isActive(institution.state)" ng-click="suggestInstCtrl.goToInstitution(institution.id)">
                     <div class="md-list-item-text">
                         <span style="color: #000000">{{institution.name}}</span>
                     </div>
                     <md-icon style="color: #4CAF50;">done</md-icon>
                 </md-list-item>
-                <md-list-item ng-if="!dialogCtrl.isActive(institution.state)" ng-click="null" class="md-2-line">
+                <md-list-item ng-if="!suggestInstCtrl.isActive(institution.state)" ng-click="null" class="md-2-line">
                     <div class="md-list-item-text">
                         <h3 style="color: #616161">{{institution.name}}</h3>
                         <p style="color: #9E9E9E">Convite enviado para: {{institution.admin}}<p>
@@ -21,8 +21,8 @@
         </md-dialog-content>
 
         <md-dialog-actions layout="row" layout-align="center center">
-            <md-button class="md-warn" ng-click="dialogCtrl.cancel()" layout-align="center">Cancelar</md-button>
-            <md-button class="md-warn" ng-click="dialogCtrl.sendInvite()">Enviar mesmo assim</md-button>
+            <md-button class="md-warn" ng-click="suggestInstCtrl.cancel()" layout-align="center">Cancelar</md-button>
+            <md-button class="md-warn md-raised" ng-click="suggestInstCtrl.sendInvite()">Enviar mesmo assim</md-button>
         </md-dialog-actions>
     </div>
 

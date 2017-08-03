@@ -50,16 +50,10 @@ def isUserInvited(method):
     return check_authorization
 
 
-def is_admin(method):
+def is_admin(user, institution_key):
     """Check if the user is admin of institution."""
-    def check_authorization(self, user, institution_key, *args):
-        institution = ndb.Key(urlsafe=institution_key).get()
-        Utils._assert(institution.admin != user.key,
-                      'User is not allowed to edit this institution',
-                      NotAuthorizedException)
-
-        method(self, user, institution_key, *args)
-    return check_authorization
+    institution = ndb.Key(urlsafe=institution_key).get()
+    return institution.admin == user.key
 
 
 def childrenToJson(obj):
@@ -103,7 +97,6 @@ class InstitutionHandler(BaseHandler):
     @json_response
     @login_required
     @isUserInvited
-    @is_admin
     def patch(self, user, institution_key, *args):
         """Handler PATCH Requests."""
         data = self.request.body
@@ -119,7 +112,7 @@ class InstitutionHandler(BaseHandler):
             search_module.createDocument(
                 institution.key.urlsafe(), institution.name, institution.state,
                 institution.admin.get().email)
-        else:
+        elif is_admin(user, institution_key):
             JsonPatch.load(data, institution)
             institution.put()
 

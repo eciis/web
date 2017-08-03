@@ -21,8 +21,6 @@ def getInvites(user_email):
 
     queryInvites = Invite.query(Invite.invitee == user_email, Invite.status == 'sent')
     invites = [invite.make() for invite in queryInvites]
-    print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-    print invites
 
     return invites
 

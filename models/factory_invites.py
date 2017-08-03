@@ -6,8 +6,9 @@ from models.invite_institution_children import InviteInstitutionChildren
 
 
 class InviteFactory:
-    """Class os create invites."""
+    """Class of create invites."""
 
+    # Constants of invite types
     INVITE_TYPE = {
         'USER': InviteUser,
         'INSTITUTION_PARENT': InviteInstitutionParent,
@@ -17,7 +18,12 @@ class InviteFactory:
 
     @staticmethod
     def create(data, invite_type):
-        """Method of create invites."""
+        """
+        Method of create invites.
+
+        Receive the data and type of invite.
+        Return new instance of invite case exists type received.
+        """
         type_class = InviteFactory.INVITE_TYPE.get(invite_type)
         invite = type_class.create(data)
         return invite

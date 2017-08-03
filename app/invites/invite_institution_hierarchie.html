@@ -1,71 +1,73 @@
 <div flex-gt-lg="80" flex-lg="90" layout="row" layout-align="center" layout-fill>
-  <md-card flex layout="column">
-    <md-toolbar md-colors="{background: 'green-800'}" layout="row">
-      <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
-        <h1>Convidar Instituições</h1>
-        <span flex md-truncate></span>
-        <md-button aria-label="Convidar Nova Instituição" ng-if="inviteInstCtrl.showButton" ng-click="inviteInstCtrl.showButton = false;">
-          <md-icon>add</md-icon>Convidar
-        </md-button>
-      </div>
-    </md-toolbar>
-    <md-card-content>
-      <div layout-gt-sm="column" ng-if="!inviteInstCtrl.showButton">
-        <md-input-container class="md-block" flex-gt-sm>
-          <label>Nome da Instituição convidada</label>
-          <input ng-model="inviteInstCtrl.invite.suggestion_institution_name" required>
-        </md-input-container>
-        <md-input-container class="md-block">
-          <label>Email convite deve ser enviado para:</label>
-          <input ng-model="inviteInstCtrl.invite.invitee" type="email" required>
-        </md-input-container>
-        <p>Qual a conexão da instituição que você está convidando com  <b> {{inviteInstCtrl.institution.name}} </b> ?</p>
-
-        <md-radio-group ng-model="inviteInstCtrl.invite.type_of_invite" required>
-
-          <md-radio-button value="institution_parent" class="md-primary">É a instituição superior</md-radio-button>
-          <md-radio-button value="institution_children" class="md-primary">É uma sub-divisão de {{inviteInstCtrl.institution.name}}</md-radio-button>
-          <md-radio-button ng-disabled="true" value="suggestion_invite" class="md-primary">Nenhuma</md-radio-button>
-
-        </md-radio-group>
-        <section layout="row" layout="column" layout-align="end center" layout-wrap>
-          <md-button md-colors="{color: 'green-700'}" ng-click="inviteInstCtrl.cancelInvite()">Cancelar</md-button>
-          <md-button class="md-raised" md-colors="{background: 'green-900'}" ng-click="inviteInstCtrl.checkInstInvite($event)">Enviar Convite</md-button>
-        </section>
-      </div>
-      <md-list class="md-dense" flex>
-        <md-subheader class="md-no-sticky">Instituição superior</md-subheader>
-        <md-list-item class="md-3-line" ng-if="inviteInstCtrl.hasParent">
-          <md-icon class="md-avatar-icon" >account_balance</md-icon>
-          <div class="md-list-item-text" layout="column">
-            <a href class="md-title hyperlink" ng-if="inviteInstCtrl.isActive(inviteInstCtrl.institution.parent_institution)"
-            ng-click="inviteInstCtrl.goToInst(inviteInstCtrl.institution.parent_institution.key)">
-            {{ inviteInstCtrl.institution.parent_institution.name }}
-          </a>
-          <div ng-if="!inviteInstCtrl.isActive(inviteInstCtrl.institution.parent_institution)">
-            <h3>{{ inviteInstCtrl.institution.parent_institution.name }}</h3>
-            <h3 style="color: red">
-              Esta instituição ainda não está cadastrada na plataforma</h3>
-            </div>
-          </div>
-        </md-list-item>
-        <md-subheader class="md-no-sticky">Instituições filhas</md-subheader>
-        <md-list-item class="md-3-line"
-        ng-repeat="institution in inviteInstCtrl.institution.children_institutions">
-        <md-icon class="md-avatar-icon" >account_balance</md-icon>
-        <div class="md-list-item-text" layout="column">
-          <a href class="md-title hyperlink" ng-if="inviteInstCtrl.isActive(institution)"
-          ng-click="inviteInstCtrl.goToInst(institution.key)">
-          {{ institution.name }}
-        </a>
-        <div ng-if="!inviteInstCtrl.isActive(institution)">
-          <h3>{{ institution.name }}</h3>
-          <h3 style="color: red">
-            Esta instituição ainda não está cadastrada na plataforma</h3>
-          </div>
+  <md-item flex class="item">
+    <md-card flex layout="column">
+      <md-toolbar md-colors="{background: 'green-800'}" layout="row">
+        <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
+          <h1>Convidar Instituições</h1>
+          <span flex md-truncate></span>
+          <md-button aria-label="Convidar Nova Instituição" ng-if="inviteInstCtrl.showButton" ng-click="inviteInstCtrl.showButton = false;">
+            <md-icon>add</md-icon>Convidar
+          </md-button>
         </div>
-      </md-list-item>
-    </md-list>
-  </md-card-content>
-  </md-card>
+      </md-toolbar>
+      <md-card-content>
+        <div layout-gt-sm="column" ng-if="!inviteInstCtrl.showButton">
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>Nome da Instituição convidada</label>
+            <input ng-model="inviteInstCtrl.invite.suggestion_institution_name" required>
+          </md-input-container>
+          <md-input-container class="md-block">
+            <label>Email convite deve ser enviado para:</label>
+            <input ng-model="inviteInstCtrl.invite.invitee" type="email" required>
+          </md-input-container>
+          <p>Qual a conexão da instituição que você está convidando com  <b> {{inviteInstCtrl.institution.name}} </b> ?</p>
+
+          <md-radio-group ng-model="inviteInstCtrl.invite.type_of_invite" required>
+
+            <md-radio-button value="institution_parent" class="md-primary">É a instituição superior</md-radio-button>
+            <md-radio-button value="institution_children" class="md-primary">É uma sub-divisão de {{inviteInstCtrl.institution.name}}</md-radio-button>
+            <md-radio-button ng-disabled="true" value="suggestion_invite" class="md-primary">Nenhuma</md-radio-button>
+
+          </md-radio-group>
+          <section layout="row" layout="column" layout-align="end center" layout-wrap>
+            <md-button md-colors="{color: 'green-700'}" ng-click="inviteInstCtrl.cancelInvite()">Cancelar</md-button>
+            <md-button class="md-raised" md-colors="{background: 'green-900'}" ng-click="inviteInstCtrl.checkInstInvite($event)">Enviar Convite</md-button>
+          </section>
+        </div>
+        <md-list class="md-dense" flex>
+          <md-subheader class="md-no-sticky">Instituição superior</md-subheader>
+          <md-list-item class="md-3-line" ng-if="inviteInstCtrl.hasParent">
+            <md-icon class="md-avatar-icon" >account_balance</md-icon>
+            <div class="md-list-item-text" layout="column">
+              <a href class="md-title hyperlink" ng-if="inviteInstCtrl.isActive(inviteInstCtrl.institution.parent_institution)"
+              ng-click="inviteInstCtrl.goToInst(inviteInstCtrl.institution.parent_institution.key)">
+              {{ inviteInstCtrl.institution.parent_institution.name }}
+            </a>
+              <div ng-if="!inviteInstCtrl.isActive(inviteInstCtrl.institution.parent_institution)">
+                <h3>{{ inviteInstCtrl.institution.parent_institution.name }}</h3>
+                <h3 style="color: red">
+                  Esta instituição ainda não está cadastrada na plataforma</h3>
+              </div>
+            </div>
+          </md-list-item>
+          <md-subheader class="md-no-sticky">Instituições filhas</md-subheader>
+          <md-list-item class="md-3-line"
+          ng-repeat="institution in inviteInstCtrl.institution.children_institutions">
+            <md-icon class="md-avatar-icon" >account_balance</md-icon>
+            <div class="md-list-item-text" layout="column">
+              <a href class="md-title hyperlink" ng-if="inviteInstCtrl.isActive(institution)"
+              ng-click="inviteInstCtrl.goToInst(institution.key)">
+              {{ institution.name }}
+              </a>
+              <div ng-if="!inviteInstCtrl.isActive(institution)">
+                <h3>{{ institution.name }}</h3>
+                <h3 style="color: red">
+                Esta instituição ainda não está cadastrada na plataforma</h3>
+              </div>
+            </div>
+          </md-list-item>
+        </md-list>
+      </md-card-content>
+    </md-card>
+  <md-item>
 </div>

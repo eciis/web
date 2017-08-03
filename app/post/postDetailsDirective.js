@@ -11,14 +11,14 @@
 
         postDetailsCtrl.likes = {};
 
-        postDetailsCtrl.currentPost = null;
+        postDetailsCtrl.showLikes = false;
 
         postDetailsCtrl.savingComment = false;
         postDetailsCtrl.savingLike = false;
 
         postDetailsCtrl.user = AuthService.getCurrentUser();
 
-        postDetailsCtrl.deletePost = function deletePost(ev, post, posts) {
+        postDetailsCtrl.deletePost = function deletePost(ev, post) {
             var confirm = $mdDialog.confirm()
                 .clickOutsideToClose(true)
                 .title('Excluir Post')
@@ -30,7 +30,7 @@
 
             $mdDialog.show(confirm).then(function() {
                 PostService.deletePost(post).then(function success() {
-                    _.remove(posts, foundPost => foundPost.key === post.key);
+                    postDetailsCtrl.post.state = 'deleted';
                     showToast('Post excluído com sucesso');
                 }, function error(response) {
                     showToast(response.data.msg);
@@ -40,39 +40,39 @@
             });
         };
 
-        postDetailsCtrl.isAuthorized = function isAuthorized(post) {
-            return postDetailsCtrl.isPostAuthor(post) || isInstitutionAdmin(post);
+        postDetailsCtrl.isAuthorized = function isAuthorized() {
+            return postDetailsCtrl.isPostAuthor() || isInstitutionAdmin();
         };
 
-        postDetailsCtrl.isDeleted = function isDeleted(post) {
-            return post.state == 'deleted';
+        postDetailsCtrl.isDeleted = function isDeleted() {
+            return postDetailsCtrl.post.state == 'deleted';
         };
 
-         postDetailsCtrl.showButtonDelete = function showButtonDelete(post) {
-            return postDetailsCtrl.isAuthorized(post) &&
-                !postDetailsCtrl.isDeleted(post);
+         postDetailsCtrl.showButtonDelete = function showButtonDelete() {
+            return postDetailsCtrl.isAuthorized() &&
+                !postDetailsCtrl.isDeleted();
         };
 
-        postDetailsCtrl.disableButtonLike = function enableButtonLike(post) {
-            return postDetailsCtrl.savingLike || postDetailsCtrl.isDeleted(post);
+        postDetailsCtrl.disableButtonLike = function disableButtonLike() {
+            return postDetailsCtrl.savingLike || postDetailsCtrl.isDeleted();
         };
 
-        postDetailsCtrl.showButtonEdit = function showButtonDeleted(post) {
-            return postDetailsCtrl.isPostAuthor(post) &&
-                !postDetailsCtrl.isDeleted(post);
+        postDetailsCtrl.showButtonEdit = function showButtonDeleted() {
+            return postDetailsCtrl.isPostAuthor() &&
+                !postDetailsCtrl.isDeleted();
         };
 
-        postDetailsCtrl.likeOrDislikePost = function likeOrDislikePost(post) {
+        postDetailsCtrl.likeOrDislikePost = function likeOrDislikePost() {
             var promise;
-            if(!postDetailsCtrl.isLikedByUser(post)) {
-                promise = likePost(post);
+            if(!postDetailsCtrl.isLikedByUser()) {
+                promise = likePost();
             } else {
-                promise = dislikePost(post);
+                promise = dislikePost();
             }
             return promise;
         };
 
-        postDetailsCtrl.editPost = function editPost(post, posts, event) {
+        postDetailsCtrl.editPost = function editPost(post, event) {
             $mdDialog.show({
                 controller: "EditPostController",
                 controllerAs: "editPostCtrl",
@@ -85,20 +85,19 @@
                     post: post
                 }
             }).then(function success(editedPost) {
-                var post = _.find(posts, {key: editedPost.key});
-                post.title = editedPost.title;
-                post.text = editedPost.text;
+                postDetailsCtrl.post.title = editedPost.title;
+                postDetailsCtrl.post.text = editedPost.text;
             });
         };
 
-        function likePost(post) {
+        function likePost() {
             postDetailsCtrl.savingLike = true;
-            var promise = PostService.likePost(post);
+            var promise = PostService.likePost(postDetailsCtrl.post);
             promise.then(function success() {
-                addPostKeyToUser(post.key);
-                post.number_of_likes += 1;
+                addPostKeyToUser(postDetailsCtrl.post.key);
+                postDetailsCtrl.post.number_of_likes += 1;
                 postDetailsCtrl.savingLike = false;
-                postDetailsCtrl.getLikes(post);
+                postDetailsCtrl.getLikes(postDetailsCtrl.post);
             }, function error() {
                 $state.go('app.home');
                 postDetailsCtrl.savingLike = false;
@@ -106,14 +105,14 @@
             return promise;
         }
 
-        function dislikePost(post) {
+        function dislikePost() {
             postDetailsCtrl.savingLike = true;
-            var promise = PostService.dislikePost(post);
+            var promise = PostService.dislikePost(postDetailsCtrl.post);
             promise.then(function success() {
-                removePostKeyFromUser(post.key);
-                post.number_of_likes -= 1;
+                removePostKeyFromUser(postDetailsCtrl.post.key);
+                postDetailsCtrl.post.number_of_likes -= 1;
                 postDetailsCtrl.savingLike = false;
-                postDetailsCtrl.getLikes(post);
+                postDetailsCtrl.getLikes(postDetailsCtrl.post);
             }, function error() {
                 $state.go('app.home');
                 postDetailsCtrl.savingLike = false;
@@ -121,13 +120,15 @@
             return promise;
         }
 
-        postDetailsCtrl.isLikedByUser = function isLikedByUser(post) {
+        postDetailsCtrl.isLikedByUser = function isLikedByUser() {
             var likedPostsKeys = _.map(postDetailsCtrl.user.liked_posts, getKeyFromUrl);
-            return _.includes(likedPostsKeys, post.key);
+            return _.includes(likedPostsKeys, postDetailsCtrl.post.key);
         };
 
         function addPostKeyToUser(key) {
             postDetailsCtrl.user.liked_posts.push(key);
+            AuthService.save();
+
         }
 
         function removePostKeyFromUser(key) {
@@ -154,53 +155,39 @@
             );
         }
 
-        postDetailsCtrl.goToInstitution = function goToInstitution(institutionKey) {
-            $state.go('app.institution', {institutionKey: institutionKey});
+        postDetailsCtrl.goToInstitution = function goToInstitution() {
+            $state.go('app.institution', {institutionKey: postDetailsCtrl.post.institution_key});
         };
 
-        postDetailsCtrl.goToPost = function goToPost(postKey) {
-             $state.go('app.post', {postKey: postKey});
+        postDetailsCtrl.goToPost = function goToPost() {
+             $state.go('app.post', {postKey: postDetailsCtrl.post.key});
          };
 
-        postDetailsCtrl.getComments = function getComments(post) {
-            var commentsUri = post.comments;
+        postDetailsCtrl.getComments = function getComments() {
+            var commentsUri = postDetailsCtrl.post.comments;
             var promise  =  CommentService.getComments(commentsUri);
             promise.then(function success(response) {
-                var comments = postDetailsCtrl.comments[post.key];
+                var comments = postDetailsCtrl.comments[postDetailsCtrl.post.key];
                 if(comments) {
-                    postDetailsCtrl.comments[post.key].data = response.data;
-                    postDetailsCtrl.comments[post.key].show = !postDetailsCtrl.comments[post.key].show;
+                    postDetailsCtrl.comments[postDetailsCtrl.post.key].data = response.data;
+                    postDetailsCtrl.comments[postDetailsCtrl.post.key].show = !postDetailsCtrl.comments[postDetailsCtrl.post.key].show;
                 } else {
-                    postDetailsCtrl.comments[post.key] =  {'data': response.data, 'show': true, 'newComment': ''};
+                    postDetailsCtrl.comments[postDetailsCtrl.post.key] =  {'data': response.data, 'show': true, 'newComment': ''};
                 }
-                post.number_of_comments = _.size(postDetailsCtrl.comments[post.key].data);
+                postDetailsCtrl.post.number_of_comments = _.size(postDetailsCtrl.comments[postDetailsCtrl.post.key].data);
             }, function error(response) {
                 showToast(response.data.msg);
             });
             return promise;
         };
 
-        postDetailsCtrl.showLikes = function showLikes(post){
-            postDetailsCtrl.getLikes(post);
-            if(postDetailsCtrl.currentPost === post.key){
-                postDetailsCtrl.currentPost = null;
-            }
-            else {
-                postDetailsCtrl.currentPost = post.key;
-            }
-        };
-
-        postDetailsCtrl.checkCurrentPost = function checkCurrentPost(post){
-            return postDetailsCtrl.currentPost === post.key;
-        };
-
-        postDetailsCtrl.getLikes = function getLikes(post) {
-            var likesUri = post.likes;
+        postDetailsCtrl.getLikes = function getLikes() {
+            var likesUri = postDetailsCtrl.post.likes;
             var promise = PostService.getLikes(likesUri);
             promise.then(function success(response) {
-                postDetailsCtrl.likes[post.key]= response.data;
-                postDetailsCtrl.title = post.title;
-                post.number_of_likes = _.size(postDetailsCtrl.likes[post.key]);
+                postDetailsCtrl.likes[postDetailsCtrl.post.key]= response.data;
+                postDetailsCtrl.post.number_of_likes = _.size(postDetailsCtrl.likes[postDetailsCtrl.post.key]);
+                postDetailsCtrl.showLikes = !postDetailsCtrl.showLikes;
             }, function error(response) {
                 showToast(response.data.msg);
             });
@@ -213,16 +200,16 @@
             post.number_of_comments += 1;
         };
 
-        postDetailsCtrl.createComment = function createComment(post) {
-            var newComment = postDetailsCtrl.comments[post.key].newComment;
+        postDetailsCtrl.createComment = function createComment() {
+            var newComment = postDetailsCtrl.comments[postDetailsCtrl.post.key].newComment;
             var institutionKey = postDetailsCtrl.user.current_institution.key;
             var promise;
             if (!_.isEmpty(newComment)) {
                 postDetailsCtrl.savingComment = true;
-                promise = CommentService.createComment(post.key, newComment, institutionKey);
+                promise = CommentService.createComment(postDetailsCtrl.post.key, newComment, institutionKey);
                 promise.then(function success(response) {
-                    postDetailsCtrl.comments[post.key].newComment = '';
-                    addComment(post, response.data);
+                    postDetailsCtrl.comments[postDetailsCtrl.post.key].newComment = '';
+                    addComment(postDetailsCtrl.post, response.data);
                     postDetailsCtrl.savingComment = false;
                 }, function error(response) {
                     postDetailsCtrl.savingComment = false;
@@ -238,7 +225,7 @@
             return isCommentAuthor(comment);
         };
 
-        postDetailsCtrl.deleteComment = function deleteComment(event, post, comment) {
+        postDetailsCtrl.deleteComment = function deleteComment(event, comment) {
             var confirm = $mdDialog.confirm()
                 .clickOutsideToClose(true)
                 .title('Excluir Comentário')
@@ -249,10 +236,10 @@
                 .cancel('Cancelar');
 
             $mdDialog.show(confirm).then(function() {
-                CommentService.deleteComment(post.key, comment.id).then(function success(response) {
-                    removeCommentFromPost(post, response.data);
+                CommentService.deleteComment(postDetailsCtrl.post.key, comment.id).then(function success(response) {
+                    removeCommentFromPost(response.data);
                     showToast('Comentário excluído com sucesso');
-                    post.number_of_comments -= 1;
+                    postDetailsCtrl.post.number_of_comments -= 1;
                 }, function error(response) {
                     showToast(response.data.msg);
                 });
@@ -261,23 +248,23 @@
             });
         };
 
-        function removeCommentFromPost(post, comment) {
-            var postComments = postDetailsCtrl.comments[post.key].data;
+        function removeCommentFromPost(comment) {
+            var postComments = postDetailsCtrl.comments[postDetailsCtrl.post.key].data;
             _.remove(postComments, function(postComment) {
                 return postComment.id == comment.id;
             });
         }
 
-        postDetailsCtrl.isPostAuthor = function isPostAuthor(post) {
-            return post.author_key == postDetailsCtrl.user.key;
+        postDetailsCtrl.isPostAuthor = function isPostAuthor() {
+            return postDetailsCtrl.post.author_key == postDetailsCtrl.user.key;
         };
 
         function isCommentAuthor(comment) {
             return comment.author_key == postDetailsCtrl.user.key;
         }
 
-        function isInstitutionAdmin(post) {
-            return _.includes(_.map(postDetailsCtrl.user.institutions_admin, getKeyFromUrl), post.institution_key);
+        function isInstitutionAdmin() {
+            return _.includes(_.map(postDetailsCtrl.user.institutions_admin, getKeyFromUrl), postDetailsCtrl.post.institution_key);
         }
 
         var URL_PATTERN = /((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
@@ -335,7 +322,8 @@
             controller: "PostDetailsController",
             scope: {
                 post: '='
-            }
+            },
+            bindToController: true
         };
     });
 

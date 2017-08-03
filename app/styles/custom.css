@@ -156,3 +156,8 @@ a:active {
     left: -27px;
     margin-right: -25px !important;
 }
+
+.header {
+    margin-right: 7px;
+    margin-left: 7px;
+}

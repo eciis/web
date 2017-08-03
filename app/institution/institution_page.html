@@ -2,8 +2,8 @@
     <!-- CONTENT -->
 <div flex-gt-lg="80" flex-lg="90">
     <div flex layout="column">
-        <div layout="row" layout-xs="column" layout-padding flex="25" flex-sm="15" flex-gt-sm="30"
-            md-colors="{background: 'grey-50'}">
+        <div layout="row" layout-xs="column" layout-padding flex-xs="30" flex-sm="15" flex-gt-sm="30"
+            md-colors="{background: 'grey-50'}" class="header">
             <!-- Institution image -->
             <div flex="20" hide show-gt-sm>
                 <center>
@@ -28,33 +28,26 @@
                 </center>
             </div>
         </div>
-        <div layout="row" flex="10" flex-gt-sm layout-align="start center" layout-align-xs="center center" layout-padding 
-            md-colors="{background: 'grey-50'}" hide show-xs>
-            <!-- Buttons -->
-            <md-button class="md-button" md-colors="{background:'green-900'}" ng-if="!institutionCtrl.isMember"
-                ng-click="institutionCtrl.isUserFollower ? institutionCtrl.unfollow() : institutionCtrl.follow()">
-                <md-icon>{{ institutionCtrl.isUserFollower ? 'person_outline':'person_add' }}</md-icon>
-                {{ institutionCtrl.isUserFollower ? 'Deixar de seguir' : 'Seguir' }}
-            </md-button>
-        </div>
-        <div layout="row" flex="60" flex-gt-sm="40">
-            <div flex-gt-sm="20" layout="column" hide show-gt-sm>
+        <div layout="row" layout-xs="column" flex="60" flex-gt-sm="40">
+            <div flex-gt-sm="20" flex-xs="05" layout="column">
                 <!-- Buttons -->
-                <md-button class="md-button" md-colors="{background:'green-900'}" ng-if="!institutionCtrl.isMember"
+                <md-button flex-xs class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}"
+                    ng-if="!institutionCtrl.isMember"
                     ng-click="institutionCtrl.isUserFollower ? institutionCtrl.unfollow() : institutionCtrl.follow()">
                     <md-icon>{{ institutionCtrl.isUserFollower ? 'person_outline':'person_add' }}</md-icon>
                     {{ institutionCtrl.isUserFollower ? 'Deixar de seguir' : 'Seguir' }}
                 </md-button>
 
                 <!-- INSTITUTION MEMBERS -->
-                <md-card>
+                <md-card hide show-gt-xs>
                     <md-subhead layout-padding class="md-primary" md-colors="{background: 'green-900'}">Membros</md-subhead>
                     <md-card-content>
                         <md-grid-list
                                 md-cols="5" md-cols-gt-md="6"
                                 md-row-height="1:1"
                                 md-gutter="4px" md-gutter-gt-sm="4px">
-                            <md-grid-tile ng-repeat="member in institutionCtrl.members" ng-click="null" md-rowspan="1" md-colspan="1" md-colspan-sm="1">
+                            <md-grid-tile ng-repeat="member in institutionCtrl.members" ng-click="null" md-rowspan="1" 
+                                md-colspan="1" md-colspan-sm="1">
                                 <figure>
                                     <img title="{{member.name}}" ng-src="{{member.photo_url}}" width="100%" height="100%"/>
                                 </figure>
@@ -64,14 +57,15 @@
                 </md-card>
 
                 <!-- INSTITUTION FOLLOWERS -->
-                <md-card >
+                <md-card hide show-gt-xs>
                     <md-subhead layout-padding class="md-primary" md-colors="{background: 'green-900'}">Seguidores</md-subhead>
                     <md-card-content>
                         <md-grid-list
                                 md-cols="5" md-cols-gt-md="6"
                                 md-row-height="1:1"
                                 md-gutter="4px" md-gutter-gt-sm="4px">
-                            <md-grid-tile ng-repeat="follower in institutionCtrl.followers" ng-click="null" md-rowspan="1" md-colspan="1" md-colspan-sm="1">
+                            <md-grid-tile ng-repeat="follower in institutionCtrl.followers" ng-click="null" md-rowspan="1" 
+                                md-colspan="1" md-colspan-sm="1">
                                 <figure>
                                     <img title="{{follower.name}}" ng-src="{{follower.photo_url}}" width="100%" height="100%"/>
                                 </figure>
@@ -82,7 +76,7 @@
             </div>
 
             <!-- POSTS -->
-            <div flex-gt-md="90" flex-md="75">
+            <div flex-gt-md="90" flex-xs="50" flex-md="50">
                 <post-details posts="institutionCtrl.posts" institution="true"></post-details>
             </div>
         </div>

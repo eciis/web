@@ -254,7 +254,7 @@
         };
 
         function removeCommentFromPost(comment) {
-            var postComments = postDetailsCtrl.comments[postDetailsCtrl.post.key].data;
+            var postComments = postDetailsCtrl.post.data_comments;
             _.remove(postComments, function(postComment) {
                 return postComment.id == comment.id;
             });

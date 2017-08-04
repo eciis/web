@@ -196,7 +196,7 @@
            postDetailsCtrl.post = posts[0]; 
            spyOn(commentService, 'createComment').and.callThrough();
            postDetailsCtrl.comments = {};
-           postDetailsCtrl.comments[posts[0].key] = {newComment: "", data: []};
+           postDetailsCtrl.newComment = "";
            postDetailsCtrl.createComment();
            expect(commentService.createComment).not.toHaveBeenCalled();
         });
@@ -228,13 +228,12 @@
                 };
             });
             spyOn(commentService, 'deleteComment').and.callThrough();
-            postDetailsCtrl.comments = {};
-            postDetailsCtrl.comments[postDetailsCtrl.post.key] ={data: [{author_key: "1234", text: "testando", id:5}]};
+            postDetailsCtrl.post.data_comments = [{author_key: "1234", text: "testando", id:5}];
             httpBackend.expect('DELETE', POSTS_URI + '/' + posts[0].key + '/comments/' + "5").respond({author_key: "1234", text: "testando", id:5});
             postDetailsCtrl.deleteComment("$event", {author_key: "1234", text: "testando", id:5});
             httpBackend.flush();
             expect(commentService.deleteComment).toHaveBeenCalledWith(postDetailsCtrl.post.key, 5);
-            expect(postDetailsCtrl.comments[postDetailsCtrl.post.key].data).toEqual([]);
+            expect(postDetailsCtrl.post.data_comments).toEqual([]);
             expect(mdDialog.confirm).toHaveBeenCalled();
             expect(mdDialog.show).toHaveBeenCalled();
         });

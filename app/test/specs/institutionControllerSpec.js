@@ -111,14 +111,14 @@
 
         it('Should isMember be true', function(){
             spyOn(institutionCtrl.user, 'isMember').and.callThrough();
-            expect(institutionCtrl.isMember()).toEqual(true);
+            expect(institutionCtrl.isMember).toEqual(true);
         });
 
         it('Should isMember be false', function(){
-            institutionCtrl.current_institution = certbio.key;
-
+            institutionCtrl.user.institutions = [certbio];
             spyOn(institutionCtrl.user, 'isMember').and.callThrough();
-            expect(institutionCtrl.isMember()).toEqual(false);
+            institutionCtrl.checkIfUserIsMember();
+            expect(institutionCtrl.isMember).toEqual(false);
         });
 
         describe('follow()', function() {

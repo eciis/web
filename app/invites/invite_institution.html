@@ -1,41 +1,43 @@
 <md-content layout="row" md-colors="{background: 'grey-200'}" layout-align="center" class="body">
   <div flex-gt-lg="80" flex-lg="90" layout="row" layout-align="center" layout-fill>
-      <md-card flex layout="column">
-        <md-subhead layout-padding class="md-primary" md-colors="{background: 'green-900'}">Administração e-CIS</md-subhead>
-        <md-card-content>
-          <div layout-gt-sm="column" layout-padding>
-            <div layout-gt-sm="column">
-              <md-input-container class="md-block" flex-gt-sm>
-                <label>Nome da Instituição convidada</label>
-                <input ng-model="inviteInstCtrl.invite.suggestion_institution_name" required>
-              </md-input-container>
+    <div flex>
+        <md-card flex layout="column">
+          <md-subhead layout-padding class="md-primary" md-colors="{background: 'green-900'}">Administração e-CIS</md-subhead>
+          <md-card-content>
+            <div layout-gt-sm="column" layout-padding>
+              <div layout-gt-sm="column">
+                <md-input-container class="md-block" flex-gt-sm>
+                  <label>Nome da Instituição convidada</label>
+                  <input ng-model="inviteInstCtrl.invite.suggestion_institution_name" required>
+                </md-input-container>
 
-              <md-input-container class="md-block">
-                <label>Email convite deve ser enviado para:</label>
-                <input ng-model="inviteInstCtrl.invite.invitee" type="email"  required>
-              </md-input-container>
-            </div>
-            <section layout="row" layout="column" layout-align="end center" layout-wrap>
-              <md-button ng-click="inviteInstCtrl.checkInstInvite($event)" md-colors="{background: 'green-900'}">Enviar Convite</md-button>
-            </section>
-          </div>
-
-          <md-list class="md-dense" flex>
-            <md-subheader class="md-no-sticky">Convites requisitados: </md-subheader>
-          </md-list>
-
-          <md-list class="md-dense" flex>
-            <md-subheader class="md-no-sticky" >Convites enviados</md-subheader>
-            <md-list-item class="md-3-line" ng-repeat="invite in inviteInstCtrl.sent_invitations" ng-click="null">
-              <md-icon class="md-avatar-icon" >account_balance</md-icon>
-              <div class="md-list-item-text" layout="column">
-                <h3>{{ invite.suggestion_institution_name }}</h3>
-                <h4>{{ invite.invitee }}</h4>
-                <h4>Convidada por: {{ invite.inviter }}</h4>
+                <md-input-container class="md-block">
+                  <label>Email convite deve ser enviado para:</label>
+                  <input ng-model="inviteInstCtrl.invite.invitee" type="email"  required>
+                </md-input-container>
               </div>
-            </md-list-item>
-          </md-list>
-        </md-card-content>
-      </md-card>
+              <section layout="row" layout="column" layout-align="end center" layout-wrap>
+                <md-button ng-click="inviteInstCtrl.checkInstInvite($event)" md-colors="{background: 'green-900'}">Enviar Convite</md-button>
+              </section>
+            </div>
+
+            <md-list class="md-dense" flex>
+              <md-subheader class="md-no-sticky">Convites requisitados: </md-subheader>
+            </md-list>
+
+            <md-list class="md-dense" flex>
+              <md-subheader class="md-no-sticky" >Convites enviados</md-subheader>
+              <md-list-item class="md-3-line" ng-repeat="invite in inviteInstCtrl.sent_invitations" ng-click="null">
+                <md-icon class="md-avatar-icon" >account_balance</md-icon>
+                <div class="md-list-item-text" layout="column">
+                  <h3>{{ invite.suggestion_institution_name }}</h3>
+                  <h4>{{ invite.invitee }}</h4>
+                  <h4>Convidada por: {{ invite.inviter }}</h4>
+                </div>
+              </md-list-item>
+            </md-list>
+          </md-card-content>
+        </md-card>
+    </div>
   </div>
 </md-content>

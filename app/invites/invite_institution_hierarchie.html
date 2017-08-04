@@ -6,10 +6,10 @@
         <span flex md-truncate></span>
         <md-button aria-label="Convidar Nova Instituição" ng-if="inviteInstCtrl.showButton" ng-click="inviteInstCtrl.showButton = false;">
           <md-icon>add</md-icon>Convidar
-        </md-button> 
+        </md-button>
       </div>
     </md-toolbar>
-    <md-card-content>    
+    <md-card-content>
       <div layout-gt-sm="column" ng-if="!inviteInstCtrl.showButton">
         <md-input-container class="md-block" flex-gt-sm>
           <label>Nome da Instituição convidada</label>
@@ -30,9 +30,9 @@
         </md-radio-group>
         <section layout="row" layout="column" layout-align="end center" layout-wrap>
           <md-button md-colors="{color: 'green-700'}" ng-click="inviteInstCtrl.cancelInvite()">Cancelar</md-button>
-          <md-button md-colors="{color: 'green-700'}" ng-click="inviteInstCtrl.sendInstInvite()">Enviar Convite</md-button>
+          <md-button class="md-raised" md-colors="{background: 'green-900'}" ng-click="inviteInstCtrl.checkInstInvite($event)">Enviar Convite</md-button>
         </section>
-      </div>   
+      </div>
       <md-list class="md-dense" flex>
         <md-subheader class="md-no-sticky">Instituição superior</md-subheader>
         <md-list-item class="md-3-line" ng-if="inviteInstCtrl.hasParent">

@@ -14,7 +14,9 @@
         var INSTITUTION_PARENT = "institution_parent";
 
         var ACTIVE = "active";
-        
+
+        var INSTITUTION_STATE = "active,pending";
+
         inviteInstCtrl.user = AuthService.getCurrentUser();
         inviteInstCtrl.institution = {};
 
@@ -24,26 +26,62 @@
 
         inviteInstCtrl.showButton = true;
 
+        inviteInstCtrl.existing_institutions = [];
 
-        inviteInstCtrl.sendInstInvite = function sendInstInvite() {
+
+        inviteInstCtrl.checkInstInvite = function checkInstInvite(ev) {
+            var promise;
             var currentInstitutionKey = inviteInstCtrl.user.current_institution.key;
-            invite = new Invite(inviteInstCtrl.invite, inviteInstCtrl.invite.type_of_invite, 
+            invite = new Invite(inviteInstCtrl.invite, inviteInstCtrl.invite.type_of_invite,
                 currentInstitutionKey, inviteInstCtrl.user.email);
-
             if (!invite.isValid()) {
                 MessageService.showToast('Convite inválido!');
-            } else if(inviteInstCtrl.hasParent && invite.type_of_invite === INSTITUTION_PARENT){
+            } else if(inviteInstCtrl.hasParent && invite.type_of_invite === INSTITUTION_PARENT) {
                 MessageService.showToast("Já possui instituição superior");
-            } else {                
-                var promise = InviteService.sendInvite(invite);
-                promise.then(function success() {
+            } else {
+                var suggestionInstName = inviteInstCtrl.invite.suggestion_institution_name;
+                promise = InstitutionService.searchInstitutions(suggestionInstName, INSTITUTION_STATE);
+                promise.then(function success(response) {
+                    inviteInstCtrl.processInvite(response.data, ev);
+                });
+                return promise;
+            }
+        };
+
+        inviteInstCtrl.processInvite = function processInvite(data, ev) {
+            inviteInstCtrl.existing_institutions = data;
+            if(_.isEmpty(inviteInstCtrl.existing_institutions)) {
+                inviteInstCtrl.sendInstInvite(invite);
+            } else {
+                inviteInstCtrl.showDialog(ev, invite);
+            }
+        };
+
+        inviteInstCtrl.showDialog = function showDialog(ev, invite) {
+            $mdDialog.show({
+                locals: {
+                    'institutions': inviteInstCtrl.existing_institutions,
+                    'invite': invite,
+                    'inviteController': inviteInstCtrl
+                },
+                controller: 'SuggestInstitutionController',
+                controllerAs: 'suggestInstCtrl',
+                templateUrl: 'invites/existing_institutions.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose: true
+            });
+        };
+
+        inviteInstCtrl.sendInstInvite = function sendInstInvite(invite) {
+            var promise = InviteService.sendInvite(invite);
+            promise.then(function success(response) {
                     MessageService.showToast('Convite enviado com sucesso!');
                     addInvite(invite);
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
                 });
-                return promise;
-            }
+            return promise;
         };
 
         inviteInstCtrl.cancelInvite = function cancelInvite() {

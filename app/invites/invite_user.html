@@ -21,7 +21,7 @@
         <md-subheader class="md-no-sticky" >Convites enviados</md-subheader>
 
         <md-list-item ng-repeat="invite in inviteUserCtrl.sent_invitations" ng-click="null"
-           ng-if="invite.type_of_invite == 'user'">
+           ng-if="invite.type_of_invite == 'USER'">
           <p> {{ invite.invitee }}</p>
         </md-list-item>
       </md-list>

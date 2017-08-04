@@ -118,14 +118,14 @@
             httpBackend.expect('POST', POSTS_URI + '/' + posts[0].key + '/likes').respond();
             httpBackend.expect('GET', "/api/posts/123456/likes").respond();
             postDetailsCtrl.user.liked_posts = [];
-            expect(postDetailsCtrl.showLikes).toEqual(false);
+            expect(postDetailsCtrl.seeLikes).toEqual(false);
             postDetailsCtrl.likeOrDislikePost(posts[0]).then(function() {
                 expect(posts[0].number_of_likes).toEqual(1);
             });
             httpBackend.flush();
             expect(postDetailsCtrl.isLikedByUser).toHaveBeenCalledWith();
             expect(postDetailsCtrl.getLikes).toHaveBeenCalledWith(posts[0]);
-            expect(postDetailsCtrl.showLikes).toEqual(true);
+            expect(postDetailsCtrl.seeLikes).toEqual(true);
             expect(postService.likePost).toHaveBeenCalledWith(posts[0]);
         });
 
@@ -179,13 +179,14 @@
     describe('createComment()', function() {
         it('Should create a comment', function() {
            postDetailsCtrl.post = posts[0];
+           postDetailsCtrl.post.data_comments = [];
            spyOn(commentService, 'createComment').and.callThrough();
            httpBackend.expect('POST', POSTS_URI + '/' + posts[0].key + '/comments').respond();
-           postDetailsCtrl.comments = {};
-           postDetailsCtrl.comments[posts[0].key] = {newComment: "teste", data: []};
+           postDetailsCtrl.post.data_comments = [];
+           postDetailsCtrl.newComment = "teste";
            postDetailsCtrl.createComment().then(function() {
                 expect(posts[0].number_of_comments).toEqual(1);
-                expect(postDetailsCtrl.comments[posts[0].key].newComment).toEqual("");
+                expect(postDetailsCtrl.newComment).toEqual("");
            });
            httpBackend.flush();
            expect(commentService.createComment).toHaveBeenCalledWith(postDetailsCtrl.post.key, "teste", posts[0].institution_key);

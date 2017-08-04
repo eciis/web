@@ -64,7 +64,7 @@
 
   <!-- LIKES -->
   <div layout="row" layout-align="start center">
-    <md-list ng-repeat="like in postDetailsCtrl.likes[postDetailsCtrl.post.key]" ng-if="postDetailsCtrl.showLikes">
+    <md-list ng-repeat="like in postDetailsCtrl.post.data_likes" ng-if="postDetailsCtrl.seeLikes || postDetailsCtrl.pagepost">
       <md-list-item>
         <img class="resize" title="{{ like.author }}" ng-src="{{ like.author_img }}"/>
       </md-list-item>
@@ -73,8 +73,8 @@
 
   <!-- COMMENTS -->
   <md-list>
-    <div ng-if="postDetailsCtrl.comments[postDetailsCtrl.post.key].show">
-      <md-list-item ng-repeat="comment in postDetailsCtrl.comments[postDetailsCtrl.post.key].data" class="md-3-line">
+    <div ng-if="postDetailsCtrl.seeComments || postDetailsCtrl.pagepost">
+      <md-list-item ng-repeat="comment in postDetailsCtrl.post.data_comments" class="md-3-line">
         <img ng-src="{{comment.author_img}}" class="md-avatar" alt="{{comment.author_name}}" />
         <div class="md-list-item-text">
           <h4>{{comment.author_name}} - {{comment.institution_name | uppercase}}<small></h4>
@@ -89,17 +89,17 @@
           </md-button>
         </div>
       </md-list-item>
-      <md-list-item class="md-3-line" ng-if="!postDetailsCtrl.isDeleted()">
+      <md-list-item class="md-3-line" ng-if="postDetailsCtrl.seeComments && !postDetailsCtrl.isDeleted()">
         <img ng-src="{{postDetailsCtrl.user.photo_url}}" class="md-avatar" alt="{{postDetailsCtrl.user.name}}" />
         <div class="md-list-item-text">
           <h3>{{comment.author_name}}</h3>
           <md-input-container class="md-block">
             <form ng-submit="postDetailsCtrl.createComment()" layout="column">
               <label>{{postDetailsCtrl.user.name}}</label>
-              <textarea style="max-height: 400px;overflow-y:auto;resize:none;" ng-model="postDetailsCtrl.comments[postDetailsCtrl.post.key].newComment" rows="1" md-select-on-focus
+              <textarea style="max-height: 400px;overflow-y:auto;resize:none;" ng-model="postDetailsCtrl.newComment" rows="1" md-select-on-focus
               ng-disabled="postDetailsCtrl.savingComment"></textarea>
               <div layout="row" layout-align="end center">
-                <md-button ng-show="postDetailsCtrl.comments[postDetailsCtrl.post.key].newComment"
+                <md-button ng-show="postDetailsCtrl.newComment"
                 class="md-raised md-primary" aria-label="postar" type="submit">Escrever</md-button>
               </div>
             </form>

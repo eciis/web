@@ -7,11 +7,8 @@
         $mdDialog) {
         var postDetailsCtrl = this;
 
-        postDetailsCtrl.comments = {};
-
-        postDetailsCtrl.likes = {};
-
-        postDetailsCtrl.showLikes = false;
+        postDetailsCtrl.seeLikes = false;
+        postDetailsCtrl.seeComments = false;
 
         postDetailsCtrl.savingComment = false;
         postDetailsCtrl.savingLike = false;
@@ -165,50 +162,58 @@
 
         postDetailsCtrl.getComments = function getComments() {
             var commentsUri = postDetailsCtrl.post.comments;
-            var promise  =  CommentService.getComments(commentsUri);
-            promise.then(function success(response) {
-                var comments = postDetailsCtrl.comments[postDetailsCtrl.post.key];
-                if(comments) {
-                    postDetailsCtrl.comments[postDetailsCtrl.post.key].data = response.data;
-                    postDetailsCtrl.comments[postDetailsCtrl.post.key].show = !postDetailsCtrl.comments[postDetailsCtrl.post.key].show;
-                } else {
-                    postDetailsCtrl.comments[postDetailsCtrl.post.key] =  {'data': response.data, 'show': true, 'newComment': ''};
-                }
-                postDetailsCtrl.post.number_of_comments = _.size(postDetailsCtrl.comments[postDetailsCtrl.post.key].data);
-            }, function error(response) {
-                showToast(response.data.msg);
-            });
-            return promise;
+            postDetailsCtrl.seeComments = !postDetailsCtrl.seeComments;
+            if (postDetailsCtrl.seeComments){
+                var promise  =  CommentService.getComments(commentsUri);
+                promise.then(function success(response) {
+                    postDetailsCtrl.post.data_comments = response.data;
+                    
+                postDetailsCtrl.post.number_of_comments = _.size(postDetailsCtrl.post.data_comments);
+                }, function error(response) {
+                    showToast(response.data.msg);
+                });
+                return promise;
+            } else{
+                postDetailsCtrl.post.data_comments = [];
+            }
+            
         };
 
         postDetailsCtrl.getLikes = function getLikes() {
+            console.log("entra em get likes");
             var likesUri = postDetailsCtrl.post.likes;
-            var promise = PostService.getLikes(likesUri);
-            promise.then(function success(response) {
-                postDetailsCtrl.likes[postDetailsCtrl.post.key]= response.data;
-                postDetailsCtrl.post.number_of_likes = _.size(postDetailsCtrl.likes[postDetailsCtrl.post.key]);
-                postDetailsCtrl.showLikes = !postDetailsCtrl.showLikes;
-            }, function error(response) {
-                showToast(response.data.msg);
-            });
-            return promise;
+            postDetailsCtrl.seeLikes = !postDetailsCtrl.seeLikes;
+            if(postDetailsCtrl.seeLikes) {
+                var promise = PostService.getLikes(likesUri);
+                promise.then(function success(response) {
+                    postDetailsCtrl.post.data_likes = response.data;
+                    postDetailsCtrl.post.number_of_likes = _.size(postDetailsCtrl.post.data_likes);
+                    
+                }, function error(response) {
+                    showToast(response.data.msg);
+                });
+                return promise;
+            }else{
+                postDetailsCtrl.post.data_likes = [];
+            }
+            
         };
 
         var addComment = function addComment(post, comment) {
-            var postComments = postDetailsCtrl.comments[post.key].data;
+            var postComments = postDetailsCtrl.post.data_comments;
             postComments.push(comment);
             post.number_of_comments += 1;
         };
 
         postDetailsCtrl.createComment = function createComment() {
-            var newComment = postDetailsCtrl.comments[postDetailsCtrl.post.key].newComment;
+            var newComment = postDetailsCtrl.newComment;
             var institutionKey = postDetailsCtrl.user.current_institution.key;
             var promise;
             if (!_.isEmpty(newComment)) {
                 postDetailsCtrl.savingComment = true;
                 promise = CommentService.createComment(postDetailsCtrl.post.key, newComment, institutionKey);
                 promise.then(function success(response) {
-                    postDetailsCtrl.comments[postDetailsCtrl.post.key].newComment = '';
+                    postDetailsCtrl.newComment = '';
                     addComment(postDetailsCtrl.post, response.data);
                     postDetailsCtrl.savingComment = false;
                 }, function error(response) {
@@ -320,10 +325,11 @@
             templateUrl: "post/post_details.html",
             controllerAs: "postDetailsCtrl",
             controller: "PostDetailsController",
-            scope: {
-                post: '='
-            },
-            bindToController: true
+            scope: {},
+            bindToController: {
+                post: '=',
+                pagepost: '@'
+            }
         };
     });
 

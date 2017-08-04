@@ -2,12 +2,12 @@
 
 (describe('Test InviteInstitutionController', function() {
 
-    var inviteinstitutionCtrl, httpBackend, scope, inviteService, createCtrl, state;
+    var inviteinstitutionCtrl, httpBackend, scope, inviteService, createCtrl, state, instService;
 
     var splab = {
             name: 'SPLAB',
             key: '987654321',
-            sent_invitations: []  
+            sent_invitations: []
     };
 
     var tiago = {
@@ -21,15 +21,16 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $state, InviteService, AuthService) {
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $state,
+        InviteService, AuthService, InstitutionService) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
         inviteService = InviteService;
+        instService = InstitutionService;
 
-        AuthService.getCurrentUser = function() {
-            return new User(tiago);
-        };
+        AuthService.login(tiago);
+
         httpBackend.expect('GET', '/api/invites').respond([]);
         httpBackend.when('GET', 'institution/institution_page.html').respond(200);
         httpBackend.when('GET', "main/main.html").respond(200);
@@ -59,7 +60,7 @@
             expect(inviteinstitutionCtrl.user.name).toEqual(tiago.name);
         });
     });
-    
+
     describe('InviteInstitutionController functions', function() {
 
         describe('cancelInvite()', function() {
@@ -79,19 +80,44 @@
                         }
                     };
                 });
+                inviteinstitutionCtrl.invite = invite;
             });
-            
+
             it('should call inviteService.sendInvite()', function(done) {
-                spyOn(state, 'go');
-                inviteinstitutionCtrl.invite.invitee = "mayzabeel@gmail.com";
-                inviteinstitutionCtrl.invite.suggestion_institution_name = "New Institution";
                 inviteinstitutionCtrl.user.current_institution = splab;
-                var promise = inviteinstitutionCtrl.sendInstInvite();
+                var promise = inviteinstitutionCtrl.sendInstInvite(invite);
                 promise.then(function() {
                     expect(inviteService.sendInvite).toHaveBeenCalledWith(invite);
                     done();
                 });
                 scope.$apply();
+            });
+
+            it('should call sendInvite() and searchInstitutions()', function(done) {
+                spyOn(instService, 'searchInstitutions').and.callThrough();
+                spyOn(inviteinstitutionCtrl, 'sendInstInvite');
+                inviteinstitutionCtrl.user.current_institution = splab;
+                httpBackend.expect('GET', "api/search/institution?name=New Institution&state=active,pending").respond({});
+                inviteinstitutionCtrl.checkInstInvite().then(function() {
+                    var testingInvite = new Invite(invite, 'INSTITUTION', splab.key);
+                    expect(instService.searchInstitutions).toHaveBeenCalledWith(
+                        inviteinstitutionCtrl.invite.suggestion_institution_name,
+                        "active,pending");
+                    expect(inviteinstitutionCtrl.sendInstInvite).toHaveBeenCalledWith(testingInvite);
+                    done();
+                });
+                httpBackend.flush();
+            });
+
+            it('should call showDialog()', function(done) {
+                var documents = [{name: splab.name, id: splab.key}];
+                spyOn(inviteinstitutionCtrl, 'showDialog');
+                httpBackend.expect('GET', "api/search/institution?name=New Institution&state=active,pending").respond(documents);
+                inviteinstitutionCtrl.checkInstInvite().then(function() {
+                    expect(inviteinstitutionCtrl.showDialog).toHaveBeenCalled();
+                    done();
+                });
+                httpBackend.flush();
             });
         });
     });

@@ -5,9 +5,9 @@
 
     var inviteUserCtrl, httpBackend, scope, inviteService, createCtrl, state, authService;
 
-    var invite = new Invite({invitee: "mayzabeel@gmail.com"}, 'user', '987654321', 'tiago@gmail.com');
+    var invite = new Invite({invitee: "mayzabeel@gmail.com"}, 'USER', '987654321', 'tiago@gmail.com');
 
-    var otherInvite = new Invite({invitee: "pedro@gmail.com"}, 'user', '987654321', 'maiana.brito@ccc.ufcg.edu.br');
+    var otherInvite = new Invite({invitee: "pedro@gmail.com"}, 'USER', '987654321', 'maiana.brito@ccc.ufcg.edu.br');
 
     var splab = {
             name: 'SPLAB',
@@ -18,17 +18,17 @@
 
     var tiago = {
         name: 'Tiago',
-        cpf: '121.445.044-07', 
+        cpf: '121.445.044-07',
         email: 'tiago@gmail.com',
         institutions: [splab.key]
     };
 
     var user = {
-         name: 'Maiana',                 
-         cpf: '121.445.044-07',             
-         email: 'maiana.brito@ccc.ufcg.edu.br',             
-         institutions: [splab.key]               
-     };         
+         name: 'Maiana',
+         cpf: '121.445.044-07',
+         email: 'maiana.brito@ccc.ufcg.edu.br',
+         institutions: [splab.key]
+     };
 
     beforeEach(module('app'));
 
@@ -88,7 +88,7 @@
                     };
                 });
             });
-            
+
             it('should call inviteService.sendInvite()', function(done) {
                 inviteUserCtrl.invite.invitee = "pedro@gmail.com";
                 expect(inviteUserCtrl.sent_invitations.length).toBe(1);
@@ -106,19 +106,19 @@
         });
 
         describe('isUserInviteValid()', function() {
-            
+
             it('should be true with new invite', function() {
-                var newInvite = new Invite({invitee: "pedro@gmail.com"}, 'user', '987654321', 'tiago@gmail.com');
+                var newInvite = new Invite({invitee: "pedro@gmail.com"}, 'USER', '987654321', 'tiago@gmail.com');
                 expect(inviteUserCtrl.isUserInviteValid(newInvite)).toBe(true);
             });
 
             it('should be false when the invitee was already invited', function() {
-                var inviteInvited = new Invite({invitee: "mayzabeel@gmail.com"}, 'user', '987654321', 'tiago@gmail.com');
+                var inviteInvited = new Invite({invitee: "mayzabeel@gmail.com"}, 'USER', '987654321', 'tiago@gmail.com');
                 expect(inviteUserCtrl.isUserInviteValid(inviteInvited)).toBe(false);
             });
 
             it('should be false when the invitee was already member', function() {
-                var inviteMember = new Invite({invitee: "tiago@gmail.com"}, 'user', '987654321', 'tiago@gmail.com');
+                var inviteMember = new Invite({invitee: "tiago@gmail.com"}, 'USER', '987654321', 'tiago@gmail.com');
                 expect(inviteUserCtrl.isUserInviteValid(inviteMember)).toBe(false);
             });
         });

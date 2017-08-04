@@ -64,7 +64,7 @@
 
   <!-- LIKES -->
   <div layout="row" layout-align="start center">
-    <md-list ng-repeat="like in postDetailsCtrl.post.data_likes" ng-if="postDetailsCtrl.seeLikes || postDetailsCtrl.pagepost">
+    <md-list ng-repeat="like in postDetailsCtrl.post.data_likes" ng-if="postDetailsCtrl.showLikes || postDetailsCtrl.isPostPage">
       <md-list-item>
         <img class="resize" title="{{ like.author }}" ng-src="{{ like.author_img }}"/>
       </md-list-item>
@@ -73,7 +73,7 @@
 
   <!-- COMMENTS -->
   <md-list>
-    <div ng-if="postDetailsCtrl.seeComments || postDetailsCtrl.pagepost">
+    <div ng-if="postDetailsCtrl.showComments || postDetailsCtrl.isPostPage">
       <md-list-item ng-repeat="comment in postDetailsCtrl.post.data_comments" class="md-3-line">
         <img ng-src="{{comment.author_img}}" class="md-avatar" alt="{{comment.author_name}}" />
         <div class="md-list-item-text">
@@ -89,7 +89,7 @@
           </md-button>
         </div>
       </md-list-item>
-      <md-list-item class="md-3-line" ng-if="postDetailsCtrl.seeComments && !postDetailsCtrl.isDeleted()">
+      <md-list-item class="md-3-line" ng-if="postDetailsCtrl.showComments && !postDetailsCtrl.isDeleted()">
         <img ng-src="{{postDetailsCtrl.user.photo_url}}" class="md-avatar" alt="{{postDetailsCtrl.user.name}}" />
         <div class="md-list-item-text">
           <h3>{{comment.author_name}}</h3>

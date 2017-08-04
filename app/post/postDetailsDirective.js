@@ -4,11 +4,11 @@
     var app = angular.module('app');
 
     app.controller('PostDetailsController', function(PostService, AuthService, CommentService, $mdToast, $state,
-        $mdDialog) {
+        $mdDialog, MessageService) {
         var postDetailsCtrl = this;
 
-        postDetailsCtrl.seeLikes = false;
-        postDetailsCtrl.seeComments = false;
+        postDetailsCtrl.showLikes = false;
+        postDetailsCtrl.showComments = false;
 
         postDetailsCtrl.savingComment = false;
         postDetailsCtrl.savingLike = false;
@@ -28,12 +28,12 @@
             $mdDialog.show(confirm).then(function() {
                 PostService.deletePost(post).then(function success() {
                     postDetailsCtrl.post.state = 'deleted';
-                    showToast('Post excluído com sucesso');
+                    MessageService.showToast('Post excluído com sucesso');
                 }, function error(response) {
-                    showToast(response.data.msg);
+                    MessageService.showToast(response.data.msg);
                 });
             }, function() {
-                showToast('Cancelado');
+                MessageService.showToast('Cancelado');
             });
         };
 
@@ -140,17 +140,6 @@
             return key;
         }
 
-        function showToast(msg) {
-            $mdToast.show(
-                $mdToast.simple()
-                    .textContent(msg)
-                    .action('FECHAR')
-                    .highlightAction(true)
-                    .hideDelay(5000)
-                    .position('bottom right')
-            );
-        }
-
         postDetailsCtrl.goToInstitution = function goToInstitution() {
             $state.go('app.institution', {institutionKey: postDetailsCtrl.post.institution_key});
         };
@@ -161,15 +150,15 @@
 
         postDetailsCtrl.getComments = function getComments() {
             var commentsUri = postDetailsCtrl.post.comments;
-            postDetailsCtrl.seeComments = !postDetailsCtrl.seeComments;
-            if (postDetailsCtrl.seeComments){
+            postDetailsCtrl.showComments = !postDetailsCtrl.showComments;
+            if (postDetailsCtrl.showComments){
                 var promise  =  CommentService.getComments(commentsUri);
                 promise.then(function success(response) {
                     postDetailsCtrl.post.data_comments = response.data;
                     
                 postDetailsCtrl.post.number_of_comments = _.size(postDetailsCtrl.post.data_comments);
                 }, function error(response) {
-                    showToast(response.data.msg);
+                    MessageService.showToast(response.data.msg);
                 });
                 return promise;
             } else{
@@ -180,21 +169,20 @@
 
         postDetailsCtrl.getLikes = function getLikes() {
             var likesUri = postDetailsCtrl.post.likes;
-            postDetailsCtrl.seeLikes = !postDetailsCtrl.seeLikes;
-            if(postDetailsCtrl.seeLikes) {
+            postDetailsCtrl.showLikes = !postDetailsCtrl.showLikes;
+            if(postDetailsCtrl.showLikes) {
                 var promise = PostService.getLikes(likesUri);
                 promise.then(function success(response) {
                     postDetailsCtrl.post.data_likes = response.data;
                     postDetailsCtrl.post.number_of_likes = _.size(postDetailsCtrl.post.data_likes);
                     
                 }, function error(response) {
-                    showToast(response.data.msg);
+                    MessageService.showToast(response.data.msg);
                 });
                 return promise;
             }else{
                 postDetailsCtrl.post.data_likes = [];
-            }
-            
+            }     
         };
 
         var addComment = function addComment(post, comment) {
@@ -216,10 +204,10 @@
                     postDetailsCtrl.savingComment = false;
                 }, function error(response) {
                     postDetailsCtrl.savingComment = false;
-                    showToast(response.data.msg);
+                    MessageService.showToast(response.data.msg);
                 });
             } else {
-                showToast("Comentário não pode ser vazio.");
+                MessageService.showToast("Comentário não pode ser vazio.");
             }
             return promise;
         };
@@ -241,13 +229,13 @@
             $mdDialog.show(confirm).then(function() {
                 CommentService.deleteComment(postDetailsCtrl.post.key, comment.id).then(function success(response) {
                     removeCommentFromPost(response.data);
-                    showToast('Comentário excluído com sucesso');
+                    MessageService.showToast('Comentário excluído com sucesso');
                     postDetailsCtrl.post.number_of_comments -= 1;
                 }, function error(response) {
-                    showToast(response.data.msg);
+                    MessageService.showToast(response.data.msg);
                 });
             }, function() {
-                showToast('Cancelado');
+                MessageService.showToast('Cancelado');
             });
         };
 
@@ -326,12 +314,12 @@
             scope: {},
             bindToController: {
                 post: '=',
-                pagepost: '@'
+                isPostPage: '@'
             }
         };
     });
 
-    app.controller("EditPostController", function PostController(user, post, $mdDialog, PostService, AuthService, $mdToast) {
+    app.controller("EditPostController", function PostController(user, post, $mdDialog, PostService, AuthService, $mdToast, MessageService) {
         var postCtrl = this;
 
         postCtrl.user = user;
@@ -353,30 +341,19 @@
         postCtrl.editPost = function editPost() {
             if (postCtrl.newPost.isValid()) {
                 PostService.save(postCtrl.post, postCtrl.newPost).then(function success() {
-                    showToast('Publicação editada com sucesso!');
+                    MessageService.showToast('Publicação editada com sucesso!');
                     $mdDialog.hide(postCtrl.newPost);
                 }, function error(response) {
                     $mdDialog.cancel();
-                    showToast(response.data.msg);
+                    MessageService.showToast(response.data.msg);
                 });
             } else {
-                showToast('Edição inválida!');
+                MessageService.showToast('Edição inválida!');
             }
         };
 
         postCtrl.cancelDialog = function() {
             $mdDialog.cancel();
         };
-
-        function showToast(msg) {
-            $mdToast.show(
-                $mdToast.simple()
-                    .textContent(msg)
-                    .action('FECHAR')
-                    .highlightAction(true)
-                    .hideDelay(5000)
-                    .position('bottom right')
-            );
-        }
     });
 })();

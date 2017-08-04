@@ -1,4 +1,11 @@
 #!/bin/bash
+#---------------------------------------------------------------------------#
+# Backend requests to Firebase running on local server needs an file to     #
+# specify the credentials used to perform the request. The created script   #
+# creates a file on local_home, ecis-firebase-identity.json, which provides #
+# the necessarily information, and export an environment variable to point  #
+# the local file.                                                           #
+#---------------------------------------------------------------------------#
 
 JSON='{
 \n\t"type": "service_account",

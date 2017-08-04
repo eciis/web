@@ -8,8 +8,10 @@
 
         institutionCtrl.current_institution = null;
         institutionCtrl.posts = [];
+        institutionCtrl.members = [];
         institutionCtrl.followers = [];
         institutionCtrl.isUserFollower = false;
+        institutionCtrl.isMember = false;
 
         var currentInstitutionKey = $state.params.institutionKey;
 
@@ -29,6 +31,7 @@
                 getMembers();
                 getFollowers();
                 checkIfUserIsFollower();
+                institutionCtrl.checkIfUserIsMember();
             }, function error(response) {
                 $state.go("app.home");
                 MessageService.showToast(response.data.msg);
@@ -60,11 +63,6 @@
 
             return isAdmin && isloggedWithInstitution;
         };
-
-        institutionCtrl.isMember = function isMember() {
-            return institutionCtrl.user.isMember(institutionCtrl.current_institution.key);
-        };
-
 
         institutionCtrl.follow = function follow(){
             var promise = InstitutionService.follow(currentInstitutionKey);
@@ -115,5 +113,10 @@
         function checkIfUserIsFollower() {
             institutionCtrl.isUserFollower = institutionCtrl.user.isFollower(institutionCtrl.current_institution);
         }
+
+        institutionCtrl.checkIfUserIsMember = function checkIfUserIsMember() {
+            var institutionKey = institutionCtrl.current_institution.key;
+            institutionCtrl.isMember = institutionCtrl.user.isMember(institutionKey);
+        };
     });
 })();

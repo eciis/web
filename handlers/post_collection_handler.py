@@ -38,15 +38,15 @@ class PostCollectionHandler(BaseHandler):
             institution.posts.append(post.key)
             institution.put()
 
-            entity_type = 'Post'
-            message = {'type': 'Post', 'from': user.name.encode('utf8'), 'on': post.title.encode('utf8')}
-            for follower in institution.followers:
-                if follower != user.key:
-                    send_notification(follower.urlsafe(), message, entity_type, post.key.urlsafe())
-
             """ Update User."""
             user.posts.append(post.key)
             user.put()
+
+            entity_type = 'POST'
+            message = {'type': 'POST', 'from': user.name.encode('utf8'), 'on': post.title.encode('utf8')}
+            for follower in institution.followers:
+                if follower != user.key:
+                    send_notification(follower.urlsafe(), message, entity_type, post.key.urlsafe())
 
             self.response.write(json.dumps(Post.make(post, self.request.host)))
         except Exception as error:

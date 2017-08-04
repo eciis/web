@@ -53,8 +53,8 @@ class PostCommentHandler(BaseHandler):
         post.add_comment(comment)
 
         if (post.author != user.key):
-            entity_type = 'Comment'
-            message = {'type': 'Comment', 'from': user.name.encode('utf8'), 'on': post.title.encode('utf8')}
+            entity_type = 'COMMENT'
+            message = {'type': 'COMMENT', 'from': user.name.encode('utf8'), 'on': post.title.encode('utf8')}
             send_notification(post.author.urlsafe(), message, entity_type, post.key.urlsafe())
 
         self.response.write(json.dumps(Comment.make(comment)))

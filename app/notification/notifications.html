@@ -5,7 +5,7 @@
   <md-menu-content width="4">
     <md-menu-item ng-repeat="notification in controller.notifications" ng-click="controller.markAsRead(notification)">
       <md-button>
-        {{notification.from}} {{notification.type == 'Comment' ? 'comentou' : notification.type}} o seu post
+        {{notification.from}} {{notification.msg}}
       </md-button>
     </md-menu-item>
   </md-menu-content>

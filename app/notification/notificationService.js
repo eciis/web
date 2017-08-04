@@ -10,6 +10,12 @@
 
         var notifications;
 
+        var msg = {
+            'COMMENT': 'comentou o seu post',
+            'POST': 'publicou um novo post',
+            'INVITE': 'te enviou um novo convite'
+        };
+
         service.watchNotifications = function watchNotifications(userKey, notificationsList) {
             var notificationsRef = ref.child("notifications/"+userKey);
 
@@ -37,11 +43,15 @@
                     notificationsList.push(notification);
 
                     if (isNew(notification)) {
-                        notification.type = notification.type === 'Comment'? 'comentou' : notification.type;
+                        notification.msg = setNotificationMsg(notification);
                         showToast(format(notification));
                     }
                 }
             });
+        }
+
+        function setNotificationMsg(notification) {
+            return msg[notification.type];
         }
 
         function showToast(msg) {
@@ -60,7 +70,7 @@
         }
 
         function format(notification) {
-            return notification.from+" "+notification.type+" o seu post";
+            return notification.from+" "+notification.msg;
         }
     });
 })();

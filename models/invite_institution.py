@@ -16,17 +16,31 @@ class InviteInstitution(Invite):
                 "The invite for institution have to specify the suggestion institution name")
 
     @staticmethod
-    def create(data):
-        """Create a post and check required fields."""
-        invite = InviteInstitution()
+    def create(data, invite=None):
+        """
+        Create a post and check required fields.
+
+        Receive the data of invite.
+        can receive a pre-created invitation of type parent or children,
+        if not receive creates an invitation of type Institution.
+        """
+        if not invite:
+            invite = InviteInstitution()
+
         invite = Invite.create(data, invite)
 
         InviteInstitution.checkIsInviteInstitutionValid(data)
         invite.suggestion_institution_name = data['suggestion_institution_name']
         institution = Institution.create_inst_stub(invite)
+
+        invite.createConectionInstitution(institution)
         invite.stub_institution_key = institution.key
 
         return invite
+
+    def createConectionInstitution(self, institution):
+        """Method of creating connection between invitation and institution."""
+        pass
 
     def sendInvite(self):
         """Send Invite for user create some Institution."""
@@ -42,13 +56,9 @@ class InviteInstitution(Invite):
         """ % self.suggestion_institution_name)
 
     def make(self):
-        """Create json of invite to parent institution."""
-        return {
-            'invitee': self.invitee,
-            'inviter': self.inviter,
-            'type_of_invite': self.type_of_invite,
-            'suggestion_institution_name': self.suggestion_institution_name,
-            'stub_institution_key': self.stub_institution_key.urlsafe(),
-            'key': self.key.urlsafe(),
-            'status': self.status
-        }
+        """Create json of invite to institution."""
+        invite_inst_json = super(InviteInstitution, self).make()
+        invite_inst_json['suggestion_institution_name'] = self.suggestion_institution_name
+        invite_inst_json['stub_institution_key'] = self.stub_institution_key.urlsafe()
+        invite_inst_json['type_of_invite'] = 'INSTITUTION'
+        return invite_inst_json

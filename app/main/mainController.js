@@ -125,8 +125,8 @@
         }
 
         (function main() {
-            var inviteOfUser = mainCtrl.user.getPendingInvitationOf("user");
-            var inviteOfInstitution = mainCtrl.user.getPendingInvitationOf("institution");
+            var inviteOfUser = mainCtrl.user.getPendingInvitationOf("USER");
+            var inviteOfInstitution = mainCtrl.user.getPendingInvitationOf("INSTITUTION");
 
             if (inviteOfUser) {
                 var institutionKey = inviteOfUser.institution_key;

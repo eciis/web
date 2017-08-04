@@ -36,11 +36,11 @@
 
     var invite = new Invite({invitee: "parent@gmail.com",
                         suggestion_institution_name : "Institution Parent"},
-                            'institution_parent', splab.key, maiana.email);
+                            'INSTITUTION_PARENT', splab.key, maiana.email);
 
     var inviteChildren = new Invite({invitee: "children@gmail.com",
                         suggestion_institution_name : "Children Institution"},
-                            'institution_children', splab.key, maiana.email);
+                            'INSTITUTION_CHILDREN', splab.key, maiana.email);
 
     var childrenStub = new Institution({name: "Children Institution", state : "pending"});
 
@@ -131,7 +131,7 @@
                 inviteInstCtrl.invite = {
                     invitee: "parent@gmail.com",
                     suggestion_institution_name : "Institution Parent",
-                    type_of_invite : "institution_parent"};
+                    type_of_invite : "INSTITUTION_PARENT"};
                 inviteInstCtrl.user.current_institution = splab;
                 var promise = inviteInstCtrl.sendInstInvite(invite);
                 promise.then(function() {
@@ -164,7 +164,7 @@
                 inviteInstCtrl.invite = {
                     invitee: "children@gmail.com",
                     suggestion_institution_name : "Children Institution",
-                    type_of_invite : "institution_children"};
+                    type_of_invite : "INSTITUTION_CHILDREN"};
                 inviteInstCtrl.user.current_institution = splab;
                 var promise = inviteInstCtrl.sendInstInvite(inviteChildren);
                 promise.then(function() {
@@ -188,7 +188,7 @@
                 inviteInstCtrl.invite = {
                     invitee: "parent@gmail.com",
                     suggestion_institution_name : "Institution Parent",
-                    type_of_invite : "institution_parent"};
+                    type_of_invite : "INSTITUTION_PARENT"};
                 inviteInstCtrl.user.current_institution = splab;
                 httpBackend.expect('GET', "api/search/institution?name=Institution Parent&state=active,pending").respond({});
                 inviteInstCtrl.checkInstInvite().then(function() {

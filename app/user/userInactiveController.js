@@ -12,11 +12,11 @@
             AuthService.logout();
         };
 
-        userInactiveCtrl.resquestInvatation = function resquestInvatation(event) {
+        userInactiveCtrl.resquestInvitation = function resquestInvitation(event) {
             $mdDialog.show({
-                controller: "requestInvatationController",
+                controller: "RequestInvitationController",
                 controllerAs: "resquestInvCtrl",
-                templateUrl: 'invites/request_invantation_dialog.html',
+                templateUrl: 'invites/request_invitation_dialog.html',
                 parent: angular.element(document.body),
                 targetEvent: event,
                 clickOutsideToClose:true,
@@ -29,7 +29,7 @@
         };
     });
 
-    app.controller("requestInvatationController", function RequestInvatationController(user, $mdDialog, $q, MessageService, InstitutionService) {
+    app.controller("RequestInvitationController", function RequestInvitationController(user, $mdDialog, $q, MessageService, InstitutionService) {
         var resquestInvCtrl = this;
 
         resquestInvCtrl.user = user;
@@ -48,10 +48,7 @@
             $mdDialog.cancel();
         };
 
-        resquestInvCtrl.showMenu = function showMenu(event) {
-            if (event.keyCode == '13'){
-              $('#search').autocomplete('close');
-            }
+        resquestInvCtrl.showMenu = function showMenu() {
             var deferred = $q.defer();
             if(resquestInvCtrl.search) {
                 resquestInvCtrl.finalSearch = resquestInvCtrl.search;
@@ -67,7 +64,7 @@
             resquestInvCtrl.institutionSelect = '';
             InstitutionService.searchInstitutions(resquestInvCtrl.finalSearch).then(function success(response) {
                 resquestInvCtrl.institutions = response.data;
-                if(_.size(resquestInvCtrl.institutions) === 0){
+                if(_.isEmpty(resquestInvCtrl.institutions)){
                     resquestInvCtrl.institutions.push({name: 'Infelizmente sua instituição ainda não está cadastrada.'});
                 }
             });
@@ -89,10 +86,6 @@
                 } else {
                     return false;
                 }
-        };
-
-        resquestInvCtrl.closePanel = function closePanel(){
-            panelCtrl._mdPanelRef.close();
         };
     });    
 })();

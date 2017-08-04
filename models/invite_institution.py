@@ -21,12 +21,9 @@ class InviteInstitution(Invite):
         Create a post and check required fields.
 
         Receive the data of invite.
-        Can receive a pre-created invitation.
+        can receive a pre-created invitation of type parent or children,
+        if not receive creates an invitation of type Institution.
         """
-
-        # Checks whether the invitation was passed as a parameter
-        # If it is not passed
-        # it creates an Invite InviteInstitution
         if not invite:
             invite = InviteInstitution()
 

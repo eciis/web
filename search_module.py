@@ -65,6 +65,14 @@ def getDocuments(institution_name, state):
     return processDocuments(documents)
 
 
+def updateDocument(data, doc_id, name, state, admin):
+    """Update a Document."""
+    if [replace for replace in data if replace["path"] == "/name"]:
+        index = search.Index(INDEX_NAME)
+        index.delete(doc_id)
+        createDocument(doc_id, name, state, admin)
+
+
 def makeQueryStr(institution_name, state):
     """Make the query string.
 

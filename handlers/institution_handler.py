@@ -89,11 +89,6 @@ class InstitutionHandler(BaseHandler):
             institution_json
         ))
 
-    """TODO
-       @author Mayza Nunes 25/07/2017.
-       The decorator isUserInvited  is only used
-       when the patch is on pending institutions,
-       to update active institutions other verification is required """
     @json_response
     @login_required
     @isUserInvited
@@ -115,6 +110,10 @@ class InstitutionHandler(BaseHandler):
         elif is_admin(user, institution_key):
             JsonPatch.load(data, institution)
             institution.put()
+            data = json.loads(data)
+            search_module.updateDocument(
+                data, institution.key.urlsafe(), institution.name,
+                institution.state, institution.admin.get().email)
 
         institution_json = Utils.toJson(institution)
 

@@ -179,7 +179,6 @@
         };
 
         postDetailsCtrl.getLikes = function getLikes() {
-            console.log("entra em get likes");
             var likesUri = postDetailsCtrl.post.likes;
             postDetailsCtrl.seeLikes = !postDetailsCtrl.seeLikes;
             if(postDetailsCtrl.seeLikes) {

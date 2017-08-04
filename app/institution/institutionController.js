@@ -115,7 +115,8 @@
         }
 
         institutionCtrl.checkIfUserIsMember = function checkIfUserIsMember() {
-            institutionCtrl.isMember = institutionCtrl.user.isMember(institutionCtrl.current_institution.key);
+            var institutionKey = institutionCtrl.current_institution.key;
+            institutionCtrl.isMember = institutionCtrl.user.isMember(institutionKey);
         };
     });
 })();

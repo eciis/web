@@ -10,6 +10,7 @@ from utils import is_institution_member
 
 from handlers.base_handler import BaseHandler
 from models.post import Post
+from firebase import send_notification
 
 
 class PostCollectionHandler(BaseHandler):
@@ -36,6 +37,12 @@ class PostCollectionHandler(BaseHandler):
             """ Update Institution."""
             institution.posts.append(post.key)
             institution.put()
+
+            entity_type = 'Post'
+            message = {'type': 'Post', 'from': user.name.encode('utf8'), 'on': post.title.encode('utf8')}
+            for follower in institution.followers:
+                if follower != user.key:
+                    send_notification(follower.urlsafe(), message, entity_type, post.key.urlsafe())
 
             """ Update User."""
             user.posts.append(post.key)

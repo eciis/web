@@ -61,7 +61,7 @@ class InviteUser(Invite):
 
     def make(self):
         """Create json of invite to user."""
-        make = super(InviteUser, self).make()
-        make['institution_key'] = self.institution_key.urlsafe()
-        make['type_of_invite'] = 'USER'
-        return make
+        invite_user_json = super(InviteUser, self).make()
+        invite_user_json['institution_key'] = self.institution_key.urlsafe()
+        invite_user_json['type_of_invite'] = 'USER'
+        return invite_user_json

@@ -15,11 +15,11 @@ class InviteInstitutionParent(InviteInstitution):
         return invite
 
     def createConectionInstitution(self, institution):
-        """Method of creating connection between invitation and institution."""
+        """Method of creating connection between invitation and institution parent."""
         Institution.create_parent_connection(institution, self)
 
     def make(self):
         """Create json of invite to parent institution."""
-        make = super(InviteInstitutionParent, self).make()
-        make['type_of_invite'] = 'INSTITUTION_PARENT'
-        return make
+        invite_parent_json = super(InviteInstitutionParent, self).make()
+        invite_parent_json['type_of_invite'] = 'INSTITUTION_PARENT'
+        return invite_parent_json

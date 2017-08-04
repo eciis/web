@@ -17,7 +17,16 @@ class InviteInstitution(Invite):
 
     @staticmethod
     def create(data, invite=None):
-        """Create a post and check required fields."""
+        """
+        Create a post and check required fields.
+
+        Receive the data of invite.
+        Can receive a pre-created invitation.
+        """
+
+        # Checks whether the invitation was passed as a parameter
+        # If it is not passed
+        # it creates an Invite InviteInstitution
         if not invite:
             invite = InviteInstitution()
 
@@ -50,9 +59,9 @@ class InviteInstitution(Invite):
         """ % self.suggestion_institution_name)
 
     def make(self):
-        """Create json of invite to parent institution."""
-        make = super(InviteInstitution, self).make()
-        make['suggestion_institution_name'] = self.suggestion_institution_name
-        make['stub_institution_key'] = self.stub_institution_key.urlsafe()
-        make['type_of_invite'] = 'INSTITUTION'
-        return make
+        """Create json of invite to institution."""
+        invite_inst_json = super(InviteInstitution, self).make()
+        invite_inst_json['suggestion_institution_name'] = self.suggestion_institution_name
+        invite_inst_json['stub_institution_key'] = self.stub_institution_key.urlsafe()
+        invite_inst_json['type_of_invite'] = 'INSTITUTION'
+        return invite_inst_json

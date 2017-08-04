@@ -131,7 +131,6 @@
             if (inviteOfUser) {
                 var institutionKey = inviteOfUser.institution_key;
                 var inviteKey = inviteOfUser.key;
-                console.log(inviteOfUser);
                 $state.go("new_invite", {institutionKey: institutionKey, inviteKey: inviteKey});
             } else if (inviteOfInstitution) {
                 var institutionStubKey = inviteOfInstitution.stub_institution_key;

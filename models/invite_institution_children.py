@@ -1,10 +1,10 @@
-"""Invite institution parent model."""
+"""Invite institution children model."""
 from invite_institution import InviteInstitution
 from models.institution import Institution
 
 
 class InviteInstitutionChildren(InviteInstitution):
-    """Model of invite institution parent."""
+    """Model of invite institution children."""
 
     @staticmethod
     def create(data):
@@ -15,11 +15,11 @@ class InviteInstitutionChildren(InviteInstitution):
         return invite
 
     def createConectionInstitution(self, institution):
-        """Method of creating connection between invitation and institution."""
+        """Method of creating connection between invitation and institution children."""
         Institution.create_children_connection(institution, self)
 
     def make(self):
-        """Create json of invite to parent institution."""
-        make = super(InviteInstitutionChildren, self).make()
-        make['type_of_invite'] = 'INSTITUTION_CHILDREN'
-        return make
+        """Create json of invite to children institution."""
+        invite_children_json = super(InviteInstitutionChildren, self).make()
+        invite_children_json['type_of_invite'] = 'INSTITUTION_CHILDREN'
+        return invite_children_json

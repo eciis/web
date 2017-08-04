@@ -31,7 +31,7 @@
                 getMembers();
                 getFollowers();
                 checkIfUserIsFollower();
-                checkIfUserIsMember();
+                institutionCtrl.checkIfUserIsMember();
             }, function error(response) {
                 $state.go("app.home");
                 MessageService.showToast(response.data.msg);
@@ -114,7 +114,7 @@
             institutionCtrl.isUserFollower = institutionCtrl.user.isFollower(institutionCtrl.current_institution);
         }
 
-        function checkIfUserIsMember() {
+        institutionCtrl.checkIfUserIsMember = function checkIfUserIsMember() {
             institutionCtrl.isMember = institutionCtrl.user.isMember(institutionCtrl.current_institution.key);
         };
     });

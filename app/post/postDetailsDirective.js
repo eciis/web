@@ -125,7 +125,6 @@
         function addPostKeyToUser(key) {
             postDetailsCtrl.user.liked_posts.push(key);
             AuthService.save();
-
         }
 
         function removePostKeyFromUser(key) {

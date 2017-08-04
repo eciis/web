@@ -7,7 +7,7 @@ class User(ndb.Model):
 
     name = ndb.StringProperty(required=True)
     cpf = ndb.StringProperty()
-    photo_url = ndb.StringProperty()
+    photo_url = ndb.StringProperty(indexed=False)
     email = ndb.StringProperty()
 
     # The id of the institutions to which the user belongs
@@ -22,7 +22,7 @@ class User(ndb.Model):
     institutions_admin = ndb.KeyProperty(kind="Institution", repeated=True)
 
     # Notifications received by the user
-    notifications = ndb.JsonProperty(repeated=True)
+    notifications = ndb.JsonProperty(repeated=True, indexed=False)
 
     # The id of the posts authored by the user
     posts = ndb.KeyProperty(kind="Post", repeated=True)
@@ -42,7 +42,10 @@ class User(ndb.Model):
     liked_posts = ndb.KeyProperty(kind="Post", repeated=True)
 
     # Images uploaded
-    uploaded_images = ndb.StringProperty(repeated=True)
+    uploaded_images = ndb.StringProperty(repeated=True, indexed=False)
+
+    # The user permissions to access system resources
+    permissions = ndb.JsonProperty(indexed=False, default={})
 
     @staticmethod
     def get_by_email(email):
@@ -94,4 +97,10 @@ class User(ndb.Model):
     def change_state(self, state):
         """Change the user state."""
         self.state = state
+        self.put()
+
+    def add_permission(self, permission):
+        print ">>>>>>>>>>>>>>>>>>>.. "+self.email
+        print "-------- Grant: "+permission
+        self.permissions[permission] = True
         self.put()

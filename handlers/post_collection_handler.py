@@ -11,32 +11,7 @@ from utils import is_institution_member
 from handlers.base_handler import BaseHandler
 from models.post import Post
 
-
-def has_permission(permission):
-    def wrap_function(method):
-        """Check if user passed as parameter is member of an institution."""
-        def validate_permission(self, user, *args):
-            data = json.loads(self.request.body)
-            institution_key = data['institution']
-
-            permission_key = "%s:%s" % (permission, institution_key)
-
-            try:
-                print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>."
-                print user.permissions
-                print permission_key
-                print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-                user.permissions[permission_key]
-            except:
-                self.response.set_status(Utils.FORBIDDEN)
-                self.response.write(Utils.getJSONError(
-                    Utils.FORBIDDEN, "You don't have permission."))
-
-            institution_key = ndb.Key(urlsafe=data['institution'])
-
-            method(self, user, institution_key.get(), *args)
-        return validate_permission
-    return wrap_function
+from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
 
 class PostCollectionHandler(BaseHandler):
@@ -51,11 +26,17 @@ class PostCollectionHandler(BaseHandler):
 
     @json_response
     @login_required
-    @has_permission("publish_post")
     @ndb.transactional(xg=True)
-    def post(self, user, institution):
+    def post(self, user):
         """Handle POST Requests."""
         data = json.loads(self.request.body)
+        institution_key = data['institution']
+
+        Utils._assert(user.has_permission("publish_post", institution_key),
+                "You don't have permission to publish post.", NotAuthorizedException)
+
+        institution = ndb.Key(urlsafe=institution_key).get()
+
         try:
             post = Post.create(data, user.key, institution.key)
             post.put()

@@ -93,9 +93,7 @@ class Institution(ndb.Model):
             self.members.append(member.key)
             self.put()
 
-            member.add_permission('publish_post:'+self.key.urlsafe())
-        else:
-            print ">>>>>>>>>>>>>>>>>>>>>>>>>>> already in members "+member.email
+            member.add_permission("publish_post", self.key.urlsafe())
 
     @staticmethod
     @ndb.transactional(xg=True)

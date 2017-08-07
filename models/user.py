@@ -99,8 +99,12 @@ class User(ndb.Model):
         self.state = state
         self.put()
 
-    def add_permission(self, permission):
-        print ">>>>>>>>>>>>>>>>>>>.. "+self.email
-        print "-------- Grant: "+permission
-        self.permissions[permission] = True
+    def add_permission(self, permission_type, entity_key):
+        self.permissions[permission_type] = {entity_key: True}
         self.put()
+
+    def has_permission(self, permission_type, entity_key):
+        try:
+            return self.permissions[permission_type][entity_key]
+        except:
+            return False

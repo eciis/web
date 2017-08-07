@@ -75,7 +75,7 @@ def createInstitution(data, user):
     institution.followers.append(user.key)
     institution.put()
 
-    user.add_permission("publish_post:"+institution.key.urlsafe())
+    user.add_permission("publish_post", institution.key.urlsafe())
     user.institutions.append(institution.key)
     user.institutions_admin.append(institution.key)
     user.follows.append(institution.key)
@@ -298,11 +298,8 @@ class ResetHandler(BaseHandler):
             'state': 'active'
         }
         certbio = createInstitution(data, admin)
-        print ">>>>>>>>>>>>>>>>>>>>>>>>>>> certbio members"
         for user in [mayza, dalton, admin]:
-            print ">>>>>>>>>>>>> "+user.email
             certbio.add_member(user)
-        print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>. end members"
         for user in [jorge.key, mayza.key, maiana.key, luiz.key,
                      raoni.key, ruan.key, tiago.key, admin.key]:
             certbio.follow(user)

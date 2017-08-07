@@ -66,7 +66,12 @@ def getDocuments(institution_name, state):
 
 
 def updateDocument(data, doc_id, name, state, admin):
-    """Update a Document."""
+    """Update a Document.
+
+    When an institution changes name, this function
+    updates the document to search for the new name and deletes
+    the old.
+    """
     if [replace for replace in data if replace["path"] == "/name"]:
         index = search.Index(INDEX_NAME)
         index.delete(doc_id)

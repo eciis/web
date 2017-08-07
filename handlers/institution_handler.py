@@ -33,9 +33,8 @@ def getSentInvitations(institution_key):
 
 def isUserInvited(method):
     """Check if the user is invitee to update the stub of institution."""
-    def check_authorization(self, user, institution_key, *args):
-        if args:
-            inviteKey = args[0]
+    def check_authorization(self, user, institution_key, inviteKey=None):
+        if inviteKey:
             invite = ndb.Key(urlsafe=inviteKey).get()
 
             emailIsNotInvited = invite.invitee != user.email
@@ -46,7 +45,7 @@ def isUserInvited(method):
                           'User is not invitee to create this Institution',
                           NotAuthorizedException)
 
-        method(self, user, institution_key, *args)
+        method(self, user, institution_key, inviteKey)
     return check_authorization
 
 
@@ -92,28 +91,28 @@ class InstitutionHandler(BaseHandler):
     @json_response
     @login_required
     @isUserInvited
-    def patch(self, user, institution_key, *args):
+    def patch(self, user, institution_key, inviteKey=None):
         """Handler PATCH Requests."""
         data = self.request.body
 
         institution = ndb.Key(urlsafe=institution_key).get()
 
-        if args:
+        if inviteKey:
             """Apply patch."""
-            inviteKey = args[0]
             JsonPatch.load(data, institution)
             institution.createInstitutionWithStub(user, inviteKey, institution)
 
             search_module.createDocument(
                 institution.key.urlsafe(), institution.name, institution.state,
                 institution.admin.get().email)
-        elif is_admin(user, institution_key):
-            JsonPatch.load(data, institution)
-            institution.put()
-            data = json.loads(data)
-            search_module.updateDocument(
-                data, institution.key.urlsafe(), institution.name,
-                institution.state, institution.admin.get().email)
+        else:
+            if is_admin(user, institution_key):
+                JsonPatch.load(data, institution)
+                institution.put()
+                data = json.loads(data)
+                search_module.updateDocument(
+                    data, institution.key.urlsafe(), institution.name,
+                    institution.state, institution.admin.get().email)
 
         institution_json = Utils.toJson(institution)
 

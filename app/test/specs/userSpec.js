@@ -14,16 +14,16 @@
    };
 
    var inviteUser = {
-        institution_key: "098745", 
-        type_of_invite: "user", 
+        institution_key: "098745",
+        type_of_invite: "USER",
         invitee: "mayzabeel@gmail.com",
         status: 'sent'
     };
-    
+
     var inviteInstitution = {
-        institution_key: "098745", 
-        type_of_invite: "institution", 
-        suggestion_institution_name: "New Institution", 
+        institution_key: "098745",
+        type_of_invite: "INSTITUTION",
+        suggestion_institution_name: "New Institution",
         invitee: "mayzabeel@gmail.com",
         status: 'sent'
     };
@@ -158,7 +158,7 @@
         });
 
         describe('changeInstitution', function() {
-          
+
           it('should call JSON stringify', function() {
             spyOn(JSON, 'stringify').and.callThrough();
 
@@ -179,16 +179,16 @@
         });
 
         describe('getPendingInvitationOf', function() {
-          
+
           it('should return the invite_user', function() {
             user = createUser();
-            expect(user.getPendingInvitationOf('user')).toEqual(inviteUser);
+            expect(user.getPendingInvitationOf('USER')).toEqual(inviteUser);
           });
 
           it('should return the invite_institution', function() {
             user = createUser();
-            expect(user.getPendingInvitationOf('institution')).toEqual(inviteInstitution);
+            expect(user.getPendingInvitationOf('INSTITUTION')).toEqual(inviteInstitution);
           });
         });
-   });    
+   });
 }));

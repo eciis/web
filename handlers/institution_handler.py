@@ -26,7 +26,7 @@ def getSentInvitations(institution_key):
     queryInvites = Invite.query(Invite.institution_key == institution_key,
                                 Invite.status == 'sent')
 
-    invites = [Invite.make(invite) for invite in queryInvites]
+    invites = [invite.make() for invite in queryInvites]
 
     return invites
 
@@ -100,7 +100,8 @@ class InstitutionHandler(BaseHandler):
         institution.createInstitutionWithStub(user, inviteKey, institution)
 
         search_module.createDocument(
-            institution.key.urlsafe(), institution.name, institution.state)
+            institution.key.urlsafe(), institution.name, institution.state,
+            institution.admin.get().email)
 
         institution_json = Utils.toJson(institution)
 

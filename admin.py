@@ -13,6 +13,9 @@ from models.post import Comment
 from models.invite import Invite
 from google.appengine.ext import ndb
 import search_module
+from google.appengine.api import search
+
+INDEX_NAME = 'institution'
 
 
 def add_comments_to_post(user, post, institution, comments_qnt=3):
@@ -78,9 +81,26 @@ def createInstitution(data, user):
     user.follows.append(institution.key)
     user.put()
     search_module.createDocument(
-        institution.key.urlsafe(), institution.name, institution.state)
+        institution.key.urlsafe(), institution.name, institution.state,
+        institution.admin.get().email)
 
     return institution
+
+
+def delete_all_in_index(index):
+    """Delete all documents in index."""
+    try:
+        while True:
+            document_ids = [
+                document.doc_id
+                for document
+                in index.get_range(ids_only=True)]
+
+            if not document_ids:
+                break
+            index.delete(document_ids)
+    except search.DeleteError:
+        logging.exception("Error removing documents")
 
 
 class BaseHandler(webapp2.RequestHandler):
@@ -97,7 +117,6 @@ class ResetHandler(BaseHandler):
 
     def get(self):
         """Reset entities."""
-
         # Clean the Datastore
         users = User.query().fetch(keys_only=True)
         ndb.delete_multi(users)
@@ -110,6 +129,9 @@ class ResetHandler(BaseHandler):
 
         invites = Invite.query().fetch(keys_only=True)
         ndb.delete_multi(invites)
+
+        index = search.Index(name=INDEX_NAME)
+        delete_all_in_index(index)
 
         self.response.headers[
             'Content-Type'] = 'application/json; charset=utf-8'

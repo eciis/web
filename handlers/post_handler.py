@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Post Handler."""
-
+import json
 from google.appengine.ext import ndb
 
 from utils import Utils
@@ -9,7 +9,9 @@ from utils import is_authorized
 from utils import NotAuthorizedException
 from utils import json_response
 from util.json_patch import JsonPatch
-
+from models.post import Post
+from models.post import Comment
+from models.post import Like
 
 from handlers.base_handler import BaseHandler
 
@@ -26,8 +28,35 @@ def is_post_author(method):
     return check_authorization
 
 
+def getComments(post):
+    comments = [Comment.make(comment) for comment in post.comments]
+    return comments
+
+
+def getLikes(post, host):
+    likes = [Like.make(like, host) for like in post.likes]
+    return likes
+
+
 class PostHandler(BaseHandler):
     """Post Handler."""
+
+    @json_response
+    @login_required
+    def get(self, user, url_string):
+        """Handle GET Requests."""
+        """Handle GET Requests."""
+        post_key = ndb.Key(urlsafe=url_string)
+        post = post_key.get()
+
+        assert type(post) is Post, "Key is not an Post"
+        post_json = Post.make(post, self.request.host)
+        post_json['data_comments'] = getComments(post)
+        post_json['data_likes'] = getLikes(post, self.request.host)
+
+        self.response.write(json.dumps(
+            post_json
+        ))
 
     @login_required
     @is_authorized

@@ -8,6 +8,7 @@
         var observer;
         editInstCtrl.loading = false;
         editInstCtrl.user = AuthService.getCurrentUser();
+
         editInstCtrl.addImage = function(image) {
             var newSize = 800;
             ImageService.compress(image, newSize).then(function success(data) {
@@ -18,18 +19,23 @@
                 MessageService.showToast(error);
             });
         };
+
         function setImage(image) {
             $rootScope.$apply(function() {
                 editInstCtrl.newInstitution.photo_url = image.src;
             });
         }
+
         editInstCtrl.invite = editInstCtrl.user.getPendingInvitationOf('institution');
         editInstCtrl.newInstitution = {};
         editInstCtrl.newInstitution.photo_url = "/images/institution.jpg";
+
         getLegalNatures();
         getOccupationAreas();
+
         editInstCtrl.cnpjRegex = "[0-9]{2}[\.][0-9]{3}[\.][0-9]{3}[\/][0-9]{4}[-][0-9]{2}";
         editInstCtrl.phoneRegex = "([0-9]{2}[\\s][0-9]{8})";
+
         editInstCtrl.submit = function submit() {
             var confirm = $mdDialog.confirm(event)
                 .clickOutsideToClose(true)
@@ -49,6 +55,7 @@
                 MessageService.showToast('Cancelado');
             });
         };
+
         function saveImage() {
             editInstCtrl.loading = true;
             ImageService.saveImage(editInstCtrl.photo_instituicao).then(function(data) {
@@ -57,6 +64,7 @@
                 updateInstitution();
             });
         }
+
         function updateInstitution() {
             var patch = jsonpatch.generate(observer);
             InstitutionService.update(institutionKey, patch).then(
@@ -65,6 +73,7 @@
                     MessageService.showToast(response.data.msg);
             });
         }
+
         function reloadUser() {
             AuthService.reload().then(function(){
                 MessageService.showToast('Edição de instituição realizado com sucesso');
@@ -74,16 +83,19 @@
         editInstCtrl.showButton = function() {
             return !editInstCtrl.loading;
         };
+
         function getLegalNatures() {
             $http.get('institution/legal_nature.json').then(function success(response) {
                 editInstCtrl.legalNatures = response.data;
             });
         }
+
         function getOccupationAreas() {
             $http.get('institution/occupation_area.json').then(function success(response) {
                 editInstCtrl.occupationAreas = response.data;
             });
         }
+
         function loadInstitution() {
             InstitutionService.getInstitution(institutionKey).then(function success(response) {
                 editInstCtrl.newInstitution = response.data;
@@ -92,6 +104,7 @@
                 MessageService.showToast(response.data.msg);
             });
         }
+        
         (function main(){
              loadInstitution();
         })();

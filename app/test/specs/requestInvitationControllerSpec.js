@@ -66,7 +66,8 @@
             spyOn(institutionService, 'searchInstitutions').and.callThrough();
 
             requestInvCtrl.makeSearch().then(function() {
-                expect(institutionService.searchInstitutions).toHaveBeenCalledWith(requestInvCtrl.finalSearch);
+                expect(institutionService.searchInstitutions).toHaveBeenCalledWith(
+                    requestInvCtrl.finalSearch, 'active');
                 expect(requestInvCtrl.institutions).toEqual([splab]);
                 done();
             });

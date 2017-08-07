@@ -8,7 +8,7 @@
         invites: [{
             'invitee': 'user@email.com',
             'suggestion_institution_name': "Suggested Name",
-            'type_of_invite': "institution",
+            'type_of_invite': "INSTITUTION",
             'status': 'sent',
             'stub_institution_key': '00001'
         }]
@@ -18,12 +18,6 @@
         key: '123456789',
         admin: mayza.key
 
-    };
-
-    var stub_inst = {
-        name: 'Stub',
-        key: '00001',
-        state: 'pending'
     };
 
     var splab = {
@@ -163,7 +157,7 @@
             spyOn(instService, 'searchInstitutions').and.callThrough();
             httpBackend.expect('GET', "api/search/institution?name=" + splab.name + "&state=active").respond(documents);
             mainCtrl.makeSearch().then(function() {
-                 expect(instService.searchInstitutions).toHaveBeenCalledWith(mainCtrl.finalSearch);
+                 expect(instService.searchInstitutions).toHaveBeenCalledWith(mainCtrl.finalSearch, 'active');
                  expect(mainCtrl.institutions).toEqual(documents);
                  done();
             });

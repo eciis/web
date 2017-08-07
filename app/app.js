@@ -48,6 +48,15 @@
                     }
                 }
             })
+            .state("app.post", {
+                url: "/posts/:postKey",
+                views: {
+                    content: {
+                        templateUrl: "post/post_page.html",
+                        controller: "PostPageController as postCtrl",
+                    }
+                }
+            })
             .state("app.manage_institution", {
                 abstract: true,
                 url: "/institution/:institutionKey/details",

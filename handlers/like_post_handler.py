@@ -27,6 +27,7 @@ class LikePostHandler(BaseHandler):
         """Handler GET Requests."""
         post = ndb.Key(urlsafe=url_string).get()
         likes = [Like.make(like, self.request.host) for like in post.likes]
+
         self.response.write(json.dumps(likes))
 
     @login_required

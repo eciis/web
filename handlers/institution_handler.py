@@ -52,13 +52,14 @@ def isUserInvited(method):
 def is_admin(method):
         """Check if the user is admin of the institution."""
         def check_authorization(self, user, institution_key, inviteKey=None):
-            institution = ndb.Key(urlsafe=institution_key).get()
+            if not inviteKey:
+                institution = ndb.Key(urlsafe=institution_key).get()
 
-            userisNotAdminOfInstitution = institution.key not in user.institutions_admin
-            institutionisNotManagedByUser = institution.admin != user.key
+                userisNotAdminOfInstitution = institution.key not in user.institutions_admin
+                institutionisNotManagedByUser = institution.admin != user.key
 
-            Utils._assert(userisNotAdminOfInstitution or institutionisNotManagedByUser,
-                          'User is not admin', NotAuthorizedException)
+                Utils._assert(userisNotAdminOfInstitution or institutionisNotManagedByUser,
+                              'User is not admin', NotAuthorizedException)
 
             method(self, user, institution_key, inviteKey)
         return check_authorization

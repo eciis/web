@@ -3,7 +3,8 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("InstitutionController", function InstitutionController($state, InstitutionService, InviteService, AuthService, MessageService) {
+    app.controller("InstitutionController", function InstitutionController($state, InstitutionService, 
+            InviteService, AuthService, MessageService, PdfService) {
         var institutionCtrl = this;
 
         institutionCtrl.current_institution = null;
@@ -13,6 +14,7 @@
         institutionCtrl.isUserFollower = false;
         institutionCtrl.isMember = false;
         institutionCtrl.file = null;
+        institutionCtrl.portfolioUrl = null;
 
         var currentInstitutionKey = $state.params.institutionKey;
 
@@ -121,7 +123,13 @@
         };
 
         institutionCtrl.submitPortfolio = function submitPortfolio() {
-            console.log(institutionCtrl.file);
+            var promise = PdfService.save(institutionCtrl.file);
+            promise.then(function success(data) {
+                institutionCtrl.portfolioUrl = data.url;
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
+            });
+            return promise;
         };
     });
 })();

@@ -72,7 +72,6 @@
                 views: {
                     content_manage_institution: {
                         templateUrl: "institution/edit_info.html",
-                        controller: "EditInstController as editInstCtrl"
                     }
                 }
             })

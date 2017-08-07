@@ -96,4 +96,16 @@
              loadInstitution();
         })();
     });
+
+    app.directive("editInstitution", function() {
+        return {
+            restrict: 'E',
+            templateUrl: "institution/submit_form.html",
+            controller: "EditInstController",
+            controllerAs: "editInstCtrl",
+            scope: {
+                isSubmission: '=',
+            }
+        };
+    });
 })();

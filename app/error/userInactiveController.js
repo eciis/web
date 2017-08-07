@@ -60,7 +60,7 @@
 
         requestInvCtrl.makeSearch = function () {
             var deferred = $q.defer();
-            cleanProperties();
+            clearProperties();
             InstitutionService.searchInstitutions(requestInvCtrl.finalSearch).then(function success(response) {
                 requestInvCtrl.institutions = response.data;
                 deferred.resolve(response);
@@ -70,7 +70,6 @@
         };
 
         requestInvCtrl.selectInstitution = function selectInstitution(institution){
-
             var deferred = $q.defer();
 
             InstitutionService.getInstitution(institution.id).then(function success(response) {
@@ -98,11 +97,10 @@
             }
         };
 
-        function cleanProperties(){
+        function clearProperties(){
             requestInvCtrl.institutionSelect = {};
             requestInvCtrl.hasInstSelect = false;
             requestInvCtrl.wasSearched = true;
-
         }
     });    
 })();

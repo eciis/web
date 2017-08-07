@@ -143,7 +143,7 @@
                 url: "/userinactive",
                 views: {
                     main: {
-                      templateUrl: "user/user_inactive.html",
+                      templateUrl: "error/user_inactive.html",
                       controller: "UserInactiveController as userInactiveCtrl"
                     }
                 }

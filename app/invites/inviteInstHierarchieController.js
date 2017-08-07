@@ -11,7 +11,7 @@
 
         var invite;
 
-        var INSTITUTION_PARENT = "institution_parent";
+        var INSTITUTION_PARENT = "INSTITUTION_PARENT";
 
         var ACTIVE = "active";
 
@@ -112,7 +112,6 @@
             inviteInstCtrl.invite = {};
             inviteInstCtrl.institution.addInvite(invite);
             var stub = inviteInstCtrl.institution.createStub(invite);
-
             if (invite.type_of_invite === INSTITUTION_PARENT){
                 inviteInstCtrl.institution.addParentInst(stub);
                 inviteInstCtrl.hasParent = true;

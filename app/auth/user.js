@@ -11,9 +11,9 @@ function User(data) {
 
 var SENT = "sent";
 
-var USER = "user";
+var USER = "USER";
 
-var INVITE_INSTITUTIONS_TYPE = ['institution', 'institution_parent', 'institution_children'];
+var INVITE_INSTITUTIONS_TYPE = ['INSTITUTION', 'INSTITUTION_PARENT', 'INSTITUTION_CHILDREN'];
 
 User.prototype.changeInstitution = function changeInstitution(institution) {
     this.current_institution = _.find(this.institutions, {'key': institution.key});
@@ -76,7 +76,7 @@ User.prototype.getPendingInvitationOf = function getPendingInvitationOf(invitati
         return this.getPendingInviteUser();
     } else{
         return this.getPendingInviteInst(this);
-    }    
+    }
 };
 
 User.prototype.getPendingInviteUser = function getInviteUser(){

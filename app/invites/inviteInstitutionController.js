@@ -22,7 +22,7 @@
         inviteController.checkInstInvite = function checkInstInvite(ev) {
             var promise;
             var currentInstitutionKey = inviteController.user.current_institution.key;
-            invite = new Invite(inviteController.invite, 'institution',
+            invite = new Invite(inviteController.invite, 'INSTITUTION',
                 currentInstitutionKey, inviteController.user.email);
             if (!invite.isValid()) {
                 MessageService.showToast('Convite inválido!');

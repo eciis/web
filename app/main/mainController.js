@@ -117,6 +117,7 @@
         };
 
         function isInactive() {
+            console.log(mainCtrl.user);
             var notMember = mainCtrl.user.institutions.length === 0;
             var notInvitee = mainCtrl.user.invites.length === 0;
             var notActive = !mainCtrl.userIsActive();
@@ -125,21 +126,21 @@
         }
 
         (function main() {
-            var inviteOfUser = mainCtrl.user.getPendingInvitationOf("USER");
-            var inviteOfInstitution = mainCtrl.user.getPendingInvitationOf("INSTITUTION");
+                var inviteOfUser = mainCtrl.user.getPendingInvitationOf("USER");
+                var inviteOfInstitution = mainCtrl.user.getPendingInvitationOf("INSTITUTION");
 
-            if (inviteOfUser) {
-                var institutionKey = inviteOfUser.institution_key;
-                var inviteKey = inviteOfUser.key;
-                $state.go("new_invite", {institutionKey: institutionKey, inviteKey: inviteKey});
-            } else if (inviteOfInstitution) {
-                var institutionStubKey = inviteOfInstitution.stub_institution_key;
-                $state.go("submit_institution", {institutionKey: institutionStubKey});
-            } else if (isInactive()) {
-                $state.go("user_inactive");
-            } else if (mainCtrl.user.name === 'Unknown') {
-                $state.go("config_profile");
-            }
+                if (inviteOfUser) {
+                    var institutionKey = inviteOfUser.institution_key;
+                    var inviteKey = inviteOfUser.key;
+                    $state.go("new_invite", {institutionKey: institutionKey, inviteKey: inviteKey});
+                } else if (inviteOfInstitution && mainCtrl.user.name) {
+                    var institutionStubKey = inviteOfInstitution.stub_institution_key;
+                    $state.go("submit_institution", {institutionKey: institutionStubKey});
+                } else if (isInactive()) {
+                    $state.go("user_inactive");
+                } else if (mainCtrl.user.name === 'Unknown') {
+                    $state.go("config_profile");
+                }
         })();
     });
 

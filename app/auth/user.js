@@ -47,7 +47,7 @@ User.prototype.isAdmin = function isAdmin(keyInstitution) {
 };
 
 User.prototype.isMember = function isMember(institutionKey){
-      return _.includes(_.map(this.institutions, getKeyObj), institutionKey);
+    return _.includes(_.map(this.institutions, getKeyObj), institutionKey);
 };
 
 User.prototype.addInstitution = function addInstitution(institutionKey){
@@ -87,6 +87,12 @@ User.prototype.getPendingInviteInst = function getInviteInst(){
     return _.find(this.invites, function(invite) {
         return _.includes(INVITE_INSTITUTIONS_TYPE, invite.type_of_invite) &&
             invite.status === SENT;
+    });
+};
+
+User.prototype.removeInvite = function removeInvite(invite) {
+    _.remove(this.invites, function(foundinvite){
+        return invite.stub_institution_key == foundinvite.stub_institution_key;
     });
 };
 

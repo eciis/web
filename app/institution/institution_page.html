@@ -37,6 +37,12 @@
                         {{ institutionCtrl.isUserFollower ? 'Deixar de seguir' : 'Seguir' }}
                     </md-button>
 
+                    <md-button flex-xs class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}" 
+                        ng-click="null" ng-model="institutionCtrl.file" ngf-pattern="'application/pdf'" ngf-accept="'application/pdf'" 
+                        ngf-max-size="5MB" ngf-select="institutionCtrl.submitPortfolio()">
+                        submeter portfólio
+                    </md-button>
+
                     <!-- INSTITUTION MEMBERS -->
                     <md-card hide show-gt-xs>
                         <md-subhead layout-padding class="md-primary" md-colors="{background: 'green-900'}">Membros</md-subhead>

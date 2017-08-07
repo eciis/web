@@ -12,6 +12,7 @@
         institutionCtrl.followers = [];
         institutionCtrl.isUserFollower = false;
         institutionCtrl.isMember = false;
+        institutionCtrl.file = null;
 
         var currentInstitutionKey = $state.params.institutionKey;
 
@@ -117,6 +118,10 @@
         institutionCtrl.checkIfUserIsMember = function checkIfUserIsMember() {
             var institutionKey = institutionCtrl.current_institution.key;
             institutionCtrl.isMember = institutionCtrl.user.isMember(institutionKey);
+        };
+
+        institutionCtrl.submitPortfolio = function submitPortfolio() {
+            console.log(institutionCtrl.file);
         };
     });
 })();

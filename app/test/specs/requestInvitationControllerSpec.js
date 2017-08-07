@@ -29,7 +29,7 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, InstitutionService, AuthService) {
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, InstitutionService) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
@@ -38,8 +38,6 @@
         httpBackend.when('GET', 'institution/institution_page.html').respond(200);
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', "home/home.html").respond(200);
-
-        AuthService.login(maiana);
 
         createCtrl = function() {
             return $controller('RequestInvitationController',

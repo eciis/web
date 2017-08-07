@@ -49,10 +49,19 @@ def isUserInvited(method):
     return check_authorization
 
 
-def is_admin(user, institution_key):
-    """Check if the user is admin of institution."""
-    institution = ndb.Key(urlsafe=institution_key).get()
-    return institution.admin == user.key
+def is_admin(method):
+        """Check if the user is admin of the institution."""
+        def check_authorization(self, user, institution_key, inviteKey=None):
+            institution = ndb.Key(urlsafe=institution_key).get()
+
+            userisNotAdminOfInstitution = institution.key not in user.institutions_admin
+            institutionisNotManagedByUser = institution.admin != user.key
+
+            Utils._assert(userisNotAdminOfInstitution or institutionisNotManagedByUser,
+                          'User is not admin', NotAuthorizedException)
+
+            method(self, user, institution_key, inviteKey)
+        return check_authorization
 
 
 def childrenToJson(obj):
@@ -91,6 +100,7 @@ class InstitutionHandler(BaseHandler):
     @json_response
     @login_required
     @isUserInvited
+    @is_admin
     def patch(self, user, institution_key, inviteKey=None):
         """Handler PATCH Requests."""
         data = self.request.body
@@ -106,13 +116,12 @@ class InstitutionHandler(BaseHandler):
                 institution.key.urlsafe(), institution.name, institution.state,
                 institution.admin.get().email)
         else:
-            if is_admin(user, institution_key):
-                JsonPatch.load(data, institution)
-                institution.put()
-                data = json.loads(data)
-                search_module.updateDocument(
-                    data, institution.key.urlsafe(), institution.name,
-                    institution.state, institution.admin.get().email)
+            JsonPatch.load(data, institution)
+            institution.put()
+            data = json.loads(data)
+            search_module.updateDocument(
+                data, institution.key.urlsafe(), institution.name,
+                institution.state, institution.admin.get().email)
 
         institution_json = Utils.toJson(institution)
 

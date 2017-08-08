@@ -7,11 +7,13 @@
       <div flex>
         <md-card layout="column" class="green-background">
           <center>
-            <img ng-src="{{ institutionCtrl.current_institution.photo_url }}" class="img-circle img-thumbnail" >
+            <a href ng-click="institutionCtrl.goToInstitution()">
+              <img ng-src="{{ institutionCtrl.current_institution.photo_url }}" class="img-circle img-thumbnail" >
+            </a>
           </center>
           <md-card-title>
             <md-card-title-text>
-              <span class="md-headline"><b>{{ institutionCtrl.current_institution.name }}</b></span>
+              <a href class="md-title hyperlink" ng-click="institutionCtrl.goToInstitution()"><b>{{ institutionCtrl.current_institution.name }}</b></a>
             </md-card-title-text>
           </md-card-title>
           <md-card-content>

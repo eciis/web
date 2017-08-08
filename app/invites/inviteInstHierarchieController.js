@@ -31,7 +31,6 @@
 
         inviteInstCtrl.checkInstInvite = function checkInstInvite(ev) {
             var promise;
-            var currentInstitutionKey = inviteInstCtrl.user.current_institution.key;
             invite = new Invite(inviteInstCtrl.invite, inviteInstCtrl.invite.type_of_invite,
                 currentInstitutionKey, inviteInstCtrl.user.email);
             if (!invite.isValid()) {

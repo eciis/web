@@ -92,7 +92,6 @@ class Institution(ndb.Model):
         if member.key not in self.members:
             self.members.append(member.key)
             self.put()
-
             member.add_permission("publish_post", self.key.urlsafe())
 
     @staticmethod

@@ -87,6 +87,7 @@ class User(ndb.Model):
         """Add a institution to user."""
         if institution_key not in self.institutions:
             self.institutions.append(institution_key)
+            member.add_permission("publish_post", self.key.urlsafe())
             self.put()
 
     def add_image(self, url_image):
@@ -101,6 +102,10 @@ class User(ndb.Model):
 
     def add_permission(self, permission_type, entity_key):
         self.permissions[permission_type] = {entity_key: True}
+        self.put()
+
+    def remove_permission(self, permission_type, entity_key):
+        del self.permissions[permission_type][entity_key]
         self.put()
 
     def has_permission(self, permission_type, entity_key):

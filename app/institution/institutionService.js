@@ -96,5 +96,15 @@
             });
             return deffered.promise;
         };
+
+        service.update = function update(institutionKey, patch) {
+            var deffered = $q.defer();
+            $http.patch(INSTITUTIONS_URI + "/" + institutionKey, patch).then(function success(info) {
+                deffered.resolve(info.data);
+            }, function error(data) {
+                deffered.reject(data);
+            });
+            return deffered.promise;
+        };
     });
 })();

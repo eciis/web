@@ -71,23 +71,8 @@ User.prototype.isValid = function isValid() {
     return true;
 };
 
-User.prototype.getPendingInvitationOf = function getPendingInvitationOf(invitationType){
-    if(invitationType === USER){
-        return this.getPendingInviteUser();
-    } else{
-        return this.getPendingInviteInst(this);
-    }
-};
-
-User.prototype.getPendingInviteUser = function getInviteUser(){
-    return _.find(this.invites, {'type_of_invite': USER, 'status': SENT});
-};
-
-User.prototype.getPendingInviteInst = function getInviteInst(){
-    return _.find(this.invites, function(invite) {
-        return _.includes(INVITE_INSTITUTIONS_TYPE, invite.type_of_invite) &&
-            invite.status === SENT;
-    });
+User.prototype.getPendingInvitation = function getPendingInvitation(){
+    return _.find(this.invites, {'status': SENT});
 };
 
 User.prototype.removeInviteInst = function removeInviteInst(institutionKey) {

@@ -125,19 +125,13 @@
         }
 
         (function main() {
-                var inviteOfUser = mainCtrl.user.getPendingInvitationOf("USER");
-                var inviteOfInstitution = mainCtrl.user.getPendingInvitationOf("INSTITUTION");
+                var invitePending = mainCtrl.user.getPendingInvitation();
 
-                if (inviteOfUser) {
-                    console.log(inviteOfUser);
-                    var institutionKey = inviteOfUser.institution_key;
-                    var inviteKey = inviteOfUser.key;
-                    var type = inviteOfUser.type_of_invite;
+                if (invitePending) {
+                    var institutionKey = (invitePending.type_of_invite === "USER") ? invitePending.institution_key : invitePending.stub_institution_key;
+                    var inviteKey = invitePending.key;
+                    var type = invitePending.type_of_invite;
                     $state.go("new_invite", {institutionKey: institutionKey, inviteKey: inviteKey, typeInvite: type});
-                } else if (inviteOfInstitution) {
-                    var institutionStubKey = inviteOfInstitution.stub_institution_key;
-                    var inviteInstKey = inviteOfInstitution.key;
-                    $state.go("new_invite", {institutionKey: institutionStubKey, inviteKey: inviteInstKey, typeInvite: inviteOfInstitution.type_of_invite });
                 } else if (isInactive()) {
                     $state.go("user_inactive");
                 } else if (mainCtrl.user.name === 'Unknown') {

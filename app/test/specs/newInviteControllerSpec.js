@@ -9,6 +9,8 @@
 
     var invite = new Invite({invitee: "mayzabeel@gmail.com", key: 'xyzcis'}, 'user', '123456789', 'mayzabeel@gmail.com');
 
+    var inviteInst = new Invite({invitee: "mayzabeel@gmail.com", key: 'xyzcps', suggestion_institution_name : "New Institution"}, 'institution', '987654321');
+
     var splab = {
             name: 'SPLAB',
             key: '987654321',
@@ -87,7 +89,7 @@
 
     describe('NewInviteController functions', function() {
 
-        describe('acceptInvite()', function() {
+        describe('addInstitution()', function() {
 
             var promise;
 
@@ -122,7 +124,7 @@
                 });
                 spyOn(state, 'go');
                 spyOn(mdDialog, 'show');
-                promise = newInviteCtrl.acceptInvite('$event');
+                promise = newInviteCtrl.addInstitution('$event');
             });
 
             it('user institutions should be contain certbio after acceptInvite', function(done) {
@@ -195,7 +197,7 @@
                     };
                 });
                 spyOn(state, 'go');
-                promise = newInviteCtrl.rejectInvite('$event');
+                promise = newInviteCtrl.rejectUserInvite('$event');
             });
 
             it('should be call $mdDialog.show()', function(done) {

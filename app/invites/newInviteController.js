@@ -21,14 +21,14 @@
 
         newInviteCtrl.acceptInvite = function acceptInvite(event) {
             if (typeOfInvite === "USER") {
-                addInstitution(event);
+                newInviteCtrl.addInstitution(event);
             } else {
-                updateStubInstitution();
+                newInviteCtrl.updateStubInstitution();
             }
             
         };
 
-        function addInstitution(event) {
+        newInviteCtrl.addInstitution =  function addInstitution(event) {
             var promise = UserService.addInstitution(newInviteCtrl.user,
                 newInviteCtrl.institution.key, newInviteCtrl.inviteKey);
                 promise.then(function success() {
@@ -40,11 +40,12 @@
                     MessageService.showToast(response.data.msg);
                 });
             return promise;
-        }
+        };
 
-        function updateStubInstitution() {
+        newInviteCtrl.updateStubInstitution =function updateStubInstitution() {
             var patch = jsonpatch.generate(observer);
-                InstitutionService.save(institutionKey, patch, newInviteCtrl.inviteKey).then(
+            var promise = InstitutionService.save(institutionKey, patch, newInviteCtrl.inviteKey);
+            promise.then(
                 function success(response){
                     MessageService.showToast('Cadastro de instituição realizado com sucesso');
                     newInviteCtrl.user.removeInviteInst(newInviteCtrl.institution.key);
@@ -58,23 +59,22 @@
                 function error(response) {
                     MessageService.showToast(response.data.msg);
             });
-        }
+            return promise;
+        };
 
         newInviteCtrl.isInviteUser = function isInviteUser(){
             return typeOfInvite === "USER";
         };
 
         newInviteCtrl.rejectInvite = function rejectInvite(event) {
-            
             if (typeOfInvite === "USER"){
-                rejectUserInvite(event);
+                newInviteCtrl.rejectUserInvite(event);
             }else {
-                rejectInstitutionInvite(event);
-            }
-            
+                newInviteCtrl.rejectInstitutionInvite(event);
+            } 
         };
 
-        function rejectUserInvite(event){
+        newInviteCtrl.rejectUserInvite = function rejectUserInvite(event){
             var confirm = $mdDialog.confirm();
                 confirm
                     .clickOutsideToClose(false)
@@ -92,9 +92,9 @@
                     MessageService.showToast('Cancelado');
                 });
                 return promise;
-        }
+        };
 
-        function rejectInstitutionInvite(event){
+        newInviteCtrl.rejectInstitutionInvite = function rejectInstitutionInvite(event){
             var confirm = $mdDialog.confirm()
                 .clickOutsideToClose(true)
                 .title('Refeitar Convite')
@@ -118,7 +118,7 @@
                 }, function() {
                     MessageService.showToast('Cancelado');
                 });
-        }
+        };
         
 
         function deleteInvite() {

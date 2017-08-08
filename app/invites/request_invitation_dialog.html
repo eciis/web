@@ -1,0 +1,37 @@
+<md-dialog flex flex-gt-md="30">
+	<md-card>
+		<p layout-margin> Busque a instituição que você faz parte.</p>
+		<div md-theme="input" class="search-field">
+		    <form ng-submit="requestInvCtrl.showMenu($event)">
+		      	<md-input-container class="md-block" flex-gt-sm>
+		          <input placeholder="Buscar instituições" ng-model="requestInvCtrl.search" flex-gt-sm autocomplete="off">
+		          <md-icon class="material-icons">&#xE8B6;</md-icon>
+		        </md-input-container>
+		    </form>
+		</div>
+		<md-list class="md-dense" flex>
+		    <md-list-item class="md-3-line" ng-repeat="institution in requestInvCtrl.institutions" ng-click="requestInvCtrl.selectInstitution(institution)"
+		    ng-style="requestInvCtrl.showFullInformation(institution) && {'background-color':'#C8E6C9'}">
+			    <div ng-if="!requestInvCtrl.showFullInformation(institution)" class="md-list-item-text" layout-align="center center" layout="column" style='text-align: center'>
+		            {{ institution.name }}
+			    </div>
+			    <div ng-if="requestInvCtrl.showFullInformation(institution)" class="md-list-item-text" layout-align="center center" layout="column">
+		            <h3><b>{{ requestInvCtrl.institutionSelect.name }}</b></h3>
+		            <h3>{{ requestInvCtrl.institutionSelect.email }}</h3>
+		            <h4>{{ requestInvCtrl.institutionSelect.address }}</h4>
+		            <p align="center">{{ requestInvCtrl.institutionSelect.description }}</p>
+			    </div>
+		    </md-list-item>
+		    <md-list-item ng-if="requestInvCtrl.showMessage()" ng-click="null">
+		    	<div class="md-list-item-text" layout-align="center center" layout="column" 
+			    style='text-align: center'>
+		            <p>Infelizmente sua instituição ainda não está cadastrada.</p>
+			    </div>
+		    </md-list-item>
+		</md-list>
+		<md-card-actions layout="row" layout-align="end center">
+			<md-button ng-click="requestInvCtrl.cancelDialog()">Cancelar</md-button>
+			<md-button ng-click="requestInvCtrl.request()" ng-disabled="!requestInvCtrl.hasInstSelect">Solicitar Convite</md-button>
+	    </md-card-actions>
+	</md-card>
+</md-dialog>

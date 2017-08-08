@@ -72,6 +72,10 @@
             return promise;
         };
 
+        inviteController.goToInst = function goToInst(institutionKey) {
+            $state.go('app.institution', {institutionKey: institutionKey});
+        };
+
         function loadSentInvitations() {
             InviteService.getSentInstitutionInvitations().then(function success(response) {
                 inviteController.sent_invitations = response.data;

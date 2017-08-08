@@ -127,6 +127,7 @@ class Institution(ndb.Model):
         """Create a stub of institution."""
         institution_stub = Institution()
         institution_stub.name = invite.suggestion_institution_name
+        institution_stub.email = invite.invitee
         institution_stub.state = 'pending'
 
         institution_stub.put()

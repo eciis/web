@@ -81,7 +81,6 @@
                 views: {
                     content_manage_institution: {
                         templateUrl: "institution/edit_info.html",
-                        controller: "InstitutionController as institutionCtrl"
                     }
                 }
             })
@@ -152,7 +151,7 @@
                 url: "/userinactive",
                 views: {
                     main: {
-                      templateUrl: "error/user_inactive.html",
+                      templateUrl: "user/user_inactive.html",
                       controller: "UserInactiveController as userInactiveCtrl"
                     }
                 }

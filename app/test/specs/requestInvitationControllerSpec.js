@@ -57,67 +57,75 @@
 
     describe('RequestInvitationController functions', function() {
 
+        describe('makeSearch()', function(){
+            it('Should return splab', function(done){
+                httpBackend.expect('GET', SEARCH_INST_URI + "name=" + splab.name + "&state=active").respond([splab]);
+                requestInvCtrl.search = splab.name;
+                requestInvCtrl.finalSearch = splab.name;
 
-        it('Should return splab', function(done){
-            httpBackend.expect('GET', SEARCH_INST_URI + "name=" + splab.name + "&state=active").respond([splab]);
-            requestInvCtrl.search = splab.name;
-            requestInvCtrl.finalSearch = splab.name;
+                spyOn(institutionService, 'searchInstitutions').and.callThrough();
 
-            spyOn(institutionService, 'searchInstitutions').and.callThrough();
-
-            requestInvCtrl.makeSearch().then(function() {
-                expect(institutionService.searchInstitutions).toHaveBeenCalledWith(
-                    requestInvCtrl.finalSearch, 'active');
-                expect(requestInvCtrl.institutions).toEqual([splab]);
-                done();
+                requestInvCtrl.makeSearch().then(function() {
+                    expect(institutionService.searchInstitutions).toHaveBeenCalledWith(
+                        requestInvCtrl.finalSearch, 'active');
+                    expect(requestInvCtrl.institutions).toEqual([splab]);
+                    done();
+                });
+                httpBackend.flush();            
             });
-            httpBackend.flush();            
+
         });
 
-        it('Should select certbio', function(done){
-            httpBackend.expect('GET', INST_URI + certbio.id).respond(certbio);
-            spyOn(institutionService, 'getInstitution').and.callThrough();
-            expect(requestInvCtrl.institutionSelect).toEqual({});
+        describe('selectInstitution()', function(){
+            it('Should select certbio', function(done){
+                httpBackend.expect('GET', INST_URI + certbio.id).respond(certbio);
+                spyOn(institutionService, 'getInstitution').and.callThrough();
+                expect(requestInvCtrl.institutionSelect).toEqual({});
 
-            requestInvCtrl.selectInstitution(certbio).then(function() {
-                expect(requestInvCtrl.institutionSelect).toEqual(certbio);
-                expect(institutionService.getInstitution).toHaveBeenCalled();
-                done();
-            });      
-            httpBackend.flush();
+                requestInvCtrl.selectInstitution(certbio).then(function() {
+                    expect(requestInvCtrl.institutionSelect).toEqual(certbio);
+                    expect(institutionService.getInstitution).toHaveBeenCalled();
+                    done();
+                });      
+                httpBackend.flush();
+            });
         });
 
-        it('Should showFullInformation be true', function(){
-            requestInvCtrl.institutions = [certbio];
-            requestInvCtrl.institutionSelect = certbio;
-            
-            expect(requestInvCtrl.showFullInformation(certbio)).toEqual(true);
+        describe('showFullInformation()', function(){
+            it('Should showFullInformation be true', function(){
+                requestInvCtrl.institutions = [certbio];
+                requestInvCtrl.institutionSelect = certbio;
+                
+                expect(requestInvCtrl.showFullInformation(certbio)).toEqual(true);
+            });
+
+            it('Should showFullInformation be false', function(){
+                requestInvCtrl.institutions = [];
+                expect(requestInvCtrl.showFullInformation()).toEqual(false);
+
+                requestInvCtrl.institutions = [certbio, splab];
+                requestInvCtrl.institutionSelect = certbio;
+                expect(requestInvCtrl.showFullInformation(splab)).toEqual(false);
+            });
         });
 
-        it('Should showFullInformation be false', function(){
-            requestInvCtrl.institutions = [];
-            expect(requestInvCtrl.showFullInformation()).toEqual(false);
+        describe('showMessage()', function(){
+            it('Should showMessage be true', function(){
+                requestInvCtrl.institutions = [];
+                requestInvCtrl.wasSearched = true;
 
-            requestInvCtrl.institutions = [certbio, splab];
-            requestInvCtrl.institutionSelect = certbio;
-            expect(requestInvCtrl.showFullInformation(splab)).toEqual(false);
-        });
+                expect(requestInvCtrl.showMessage()).toEqual(true);
+            });
 
-        it('Should showMessage be true', function(){
-            requestInvCtrl.institutions = [];
-            requestInvCtrl.wasSearched = true;
+            it('Should showMessage be false', function(){
+                requestInvCtrl.institutions = [];
+                requestInvCtrl.wasSearched = false;
+                expect(requestInvCtrl.showMessage()).toEqual(false);
 
-            expect(requestInvCtrl.showMessage()).toEqual(true);
-        });
-
-        it('Should showMessage be false', function(){
-            requestInvCtrl.institutions = [];
-            requestInvCtrl.wasSearched = false;
-            expect(requestInvCtrl.showMessage()).toEqual(false);
-
-            requestInvCtrl.institutions = [certbio];
-            requestInvCtrl.wasSearched = true;
-            expect(requestInvCtrl.showMessage()).toEqual(false);
+                requestInvCtrl.institutions = [certbio];
+                requestInvCtrl.wasSearched = true;
+                expect(requestInvCtrl.showMessage()).toEqual(false);
+            });
         });
     });
 }));

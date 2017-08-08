@@ -14,7 +14,6 @@
         institutionCtrl.isUserFollower = false;
         institutionCtrl.isMember = false;
         institutionCtrl.file = null;
-        institutionCtrl.portfolioUrl = null;
 
         var currentInstitutionKey = $state.params.institutionKey;
 
@@ -125,7 +124,8 @@
         institutionCtrl.submitPortfolio = function submitPortfolio() {
             var promise = PdfService.save(institutionCtrl.file);
             promise.then(function success(data) {
-                institutionCtrl.portfolioUrl = data.url;
+                InstitutionService.save(); //change
+                institutionCtrl.current_institution.portfolio_url = data.url;
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });

@@ -129,6 +129,6 @@ def initModels(cls):
     cls.stub.name = 'Nova Inst'
     cls.stub.state = 'pending'
     cls.stub.put()
-    #update invite
+    # update invite
     cls.invite.stub_institution_key = cls.stub.key
     cls.invite.put()

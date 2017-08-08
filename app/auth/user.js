@@ -90,9 +90,9 @@ User.prototype.getPendingInviteInst = function getInviteInst(){
     });
 };
 
-User.prototype.removeInvite = function removeInvite(invite) {
-    _.remove(this.invites, function(foundinvite){
-        return invite.stub_institution_key == foundinvite.stub_institution_key;
+User.prototype.removeInviteInst = function removeInviteInst(institutionKey) {
+    _.remove(this.invites, function(invite){
+        return institutionKey == invite.stub_institution_key;
     });
 };
 

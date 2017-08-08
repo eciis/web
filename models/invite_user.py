@@ -48,16 +48,19 @@ class InviteUser(Invite):
 
     def sendInvite(self):
         """Send Invite for user to be member of some Institution."""
+        institution_key = self.institution_key.urlsafe()
+        invite_key = self.key.urlsafe()
+
         mail.send_mail(sender="e-CIS <eciis@splab.ufcg.edu.br>",
                        to=self.invitee,
                        subject="Convite plataforma e-CIS",
                        body="""Oi:
 
-        Para realizar o cadastro cria sua conta em:
-        http://eciis-splab.appspot.com a
-
-        Equipe e-CIS
-        """)
+        Para aceitar o convite acesse:
+        http://eciis-splab.appspot.com/app/#/institution/""" +
+        institution_key + "/" + invite_key + "/new_invite" +
+        """
+        Equipe e-CIS """)
 
     def make(self):
         """Create json of invite to user."""

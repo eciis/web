@@ -95,9 +95,6 @@ class InstitutionHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
     def test_get(self, verify_token):
         """Test the get method."""
-        # Pretend an authentication
-        self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
-        self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
         # Call the get method
         cert = self.testapp.get("/api/institutions/%s" %
                                 self.certbio.key.urlsafe()).json
@@ -126,9 +123,6 @@ class InstitutionHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
     def test_get_without_admin(self, verify_token):
         """Test the get method."""
-        # Pretend an authentication
-        self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
-        self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
         # Call the get method
         splab = self.testapp.get("/api/institutions/%s" %
                                  self.splab.key.urlsafe()).json

@@ -22,23 +22,44 @@ class InstitutionHandlerTest(TestBaseHandler):
         cls.webapp2.WSGIApplication.allowed_methods = frozenset(methods)
         app = cls.webapp2.WSGIApplication(
             [("/api/institutions/(.*)/invites/(.*)", InstitutionHandler),
+             ("/api/institutions/(.*)", InstitutionHandler),
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
-    @patch('utils.verify_token', return_value={'email': 'raoni.smaneoto@ccc.ufcg.edu.br'})
+    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
     def test_patch(self, verify_token):
         """Test the post_handler's patch method."""
         # Call the patch method and assert that  it raises an exception
-        self.testapp.patch_json("/api/institutions/%s/invites/%s"
-                                % (self.stub.key.urlsafe(), self.invite.key.urlsafe()),
+        self.testapp.patch_json("/api/institutions/%s"
+                                % (self.certbio.key.urlsafe()),
                                 [{"op": "replace", "path": "/name",
                                     "value": "Nova Inst update"}]
                                 )
 
-        self.inst_create = self.stub.key.get()
+        self.inst_create = self.certbio.key.get()
         self.assertEqual(self.inst_create.name, "Nova Inst update",
                          "The institution name expected was Nova Inst update")
+
+        # Pretend a new authentication
+        verify_token.return_value = {'email': 'raoni.smaneoto@ccc.ufcg.edu.br'}
+
+        # Check if raise Exception when the user who send patch is not the admin
+        with self.assertRaises(Exception):
+            self.testapp.patch_json("/api/institutions/%s"
+                                    % (self.certbio.key.urlsafe()),
+                                    [{"op": "replace", "path": "/name",
+                                      "value": "Nova Inst update"}]
+                                    )
+
+    @patch('utils.verify_token', return_value={'email': 'raoni.smaneoto@ccc.ufcg.edu.br'})
+    def test_post(self, verify_token):
+        """Test the post_handler's post method."""
+        # Call the patch method and assert that  it raises an exception
+        self.testapp.post("/api/institutions/%s/invites/%s"
+                          % (self.stub.key.urlsafe(), self.invite.key.urlsafe()))
+
+        self.inst_create = self.stub.key.get()
         self.assertEqual(self.inst_create.admin, self.raoni.key,
                          "The Admin of institution expected was Raoni")
         self.assertEqual(self.inst_create.followers, [self.raoni.key],
@@ -64,11 +85,11 @@ class InstitutionHandlerTest(TestBaseHandler):
 
         # Check if raise Exception when the user who send patch is not the invitee
         with self.assertRaises(Exception):
-            self.testapp.patch_json("/api/institutions/%s/invites/%s"
-                                    % (self.stub.key.urlsafe(), self.invite.key.urlsafe()),
-                                    [{"op": "replace", "path": "/name",
-                                      "value": "Nova Inst update"}]
-                                    )
+            self.testapp.post("/api/institutions/%s/invites/%s"
+                              % (self.stub.key.urlsafe(),
+                                 self.invite.key.urlsafe()),
+                              [{"op": "replace", "path": "/name",
+                                "value": "Nova Inst update"}])
 
     def tearDown(cls):
         """Deactivate the test."""
@@ -117,6 +138,7 @@ def initModels(cls):
     cls.certbio.admin = cls.mayza.key
     cls.certbio.put()
     cls.mayza.institutions_admin = [cls.certbio.key]
+    cls.mayza.put()
     # Invite for Raoni create new inst
     cls.invite = Invite()
     cls.invite.invitee = 'raoni.smaneoto@ccc.ufcg.edu.br'

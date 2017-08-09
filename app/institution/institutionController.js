@@ -110,6 +110,10 @@
             $state.go('app.manage_institution.edit_info', {institutionKey: currentInstitutionKey});
         };
 
+        institutionCtrl.goToInstitution = function goToInstitution() {
+            $state.go('app.institution', {institutionKey: currentInstitutionKey});
+        };
+
         function checkIfUserIsFollower() {
             institutionCtrl.isUserFollower = institutionCtrl.user.isFollower(institutionCtrl.current_institution);
         }

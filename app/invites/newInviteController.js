@@ -7,8 +7,6 @@
     $mdDialog, MessageService) {
         var newInviteCtrl = this;
 
-        var observer;
-
         newInviteCtrl.institution = null;
 
         newInviteCtrl.inviteKey = $state.params.inviteKey;
@@ -43,8 +41,7 @@
         };
 
         newInviteCtrl.updateStubInstitution =function updateStubInstitution() {
-            var patch = jsonpatch.generate(observer);
-            var promise = InstitutionService.save(institutionKey, patch, newInviteCtrl.inviteKey);
+            var promise = InstitutionService.save(institutionKey, newInviteCtrl.inviteKey);
             promise.then(
                 function success(response){
                     MessageService.showToast('Cadastro de instituição realizado com sucesso');
@@ -106,7 +103,6 @@
         function loadInstitution() {
             InstitutionService.getInstitution(institutionKey).then(function success(response) {
                 newInviteCtrl.institution = response.data;
-                observer = jsonpatch.observe(newInviteCtrl.institution);
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });

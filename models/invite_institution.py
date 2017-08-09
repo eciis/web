@@ -53,7 +53,7 @@ class InviteInstitution(Invite):
                        body="""
         Sua empresa %s foi convidada a se cadastrar na plataforma.
         Para realizar o cadastro crie sua conta pessoal em
-        http://%s/app/#/institution/%s/%s/new_invite
+        http://%s/app/#/institution/%s/%s/new_invite/INSTITUTION
         e proceda com o cadastro da sua empresa.
 
         Equipe e-CIS

@@ -105,11 +105,11 @@ def delete_all_in_index(index):
 
 class BaseHandler(webapp2.RequestHandler):
     """Base Handler."""
-    pass
-    # def handle_exception(self, exception, debug):
-    #     """Exception."""
-    #     logging.error(str(exception))
-    #     self.response.write("oops! %s\n" % str(exception))
+
+    def handle_exception(self, exception, debug):
+        """Exception."""
+        logging.error(str(exception))
+        self.response.write("oops! %s\n" % str(exception))
 
 
 class ResetHandler(BaseHandler):

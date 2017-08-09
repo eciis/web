@@ -33,6 +33,7 @@ def getSentInvitations(institution_key):
 
 def isUserInvited(method):
     """Check if the user is invitee to update the stub of institution."""
+
     def check_authorization(self, user, institution_key, inviteKey=None):
         if inviteKey:
             invite = ndb.Key(urlsafe=inviteKey).get()
@@ -50,19 +51,20 @@ def isUserInvited(method):
 
 
 def is_admin(method):
-        """Check if the user is admin of the institution."""
-        def check_authorization(self, user, institution_key, inviteKey=None):
-            if not inviteKey:
-                institution = ndb.Key(urlsafe=institution_key).get()
+    """Check if the user is admin of the institution."""
 
-                userisNotAdminOfInstitution = institution.key not in user.institutions_admin
-                institutionisNotManagedByUser = institution.admin != user.key
+    def check_authorization(self, user, institution_key, inviteKey=None):
+        if not inviteKey:
+            institution = ndb.Key(urlsafe=institution_key).get()
 
-                Utils._assert(userisNotAdminOfInstitution or institutionisNotManagedByUser,
-                              'User is not admin', NotAuthorizedException)
+            userisNotAdminOfInstitution = institution.key not in user.institutions_admin
+            institutionisNotManagedByUser = institution.admin != user.key
 
-            method(self, user, institution_key, inviteKey)
-        return check_authorization
+            Utils._assert(userisNotAdminOfInstitution or institutionisNotManagedByUser,
+                          'User is not admin', NotAuthorizedException)
+
+        method(self, user, institution_key, inviteKey)
+    return check_authorization
 
 
 def childrenToJson(obj):
@@ -80,7 +82,13 @@ def parentToJson(obj):
 
 def adminToJson(obj):
     """Return json with admin of institution."""
-    return Utils.toJson(obj.admin.get())
+    if(obj.admin):
+        adm = obj.admin.get()
+        adm_json = {
+            'name': adm.name,
+            'key': adm.key
+        }
+        return adm_json
 
 
 class InstitutionHandler(BaseHandler):

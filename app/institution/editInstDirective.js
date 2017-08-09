@@ -100,6 +100,7 @@
             InstitutionService.getInstitution(institutionKey).then(function success(response) {
                 editInstCtrl.newInstitution = response.data;
                 observer = jsonpatch.observe(editInstCtrl.newInstitution);
+                console.log(response.data);
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });

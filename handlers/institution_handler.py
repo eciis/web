@@ -73,9 +73,14 @@ def childrenToJson(obj):
 
 
 def parentToJson(obj):
-    """Return json whith parent institution."""
+    """Return json with parent institution."""
     if(obj.parent_institution):
         return Utils.toJson(obj.parent_institution.get())
+
+
+def adminToJson(obj):
+    """Return json with admin of institution."""
+    return Utils.toJson(obj.admin.get())
 
 
 class InstitutionHandler(BaseHandler):
@@ -90,6 +95,7 @@ class InstitutionHandler(BaseHandler):
 
         assert type(obj) is Institution, "Key is not an Institution"
         institution_json = Utils.toJson(obj, host=self.request.host)
+        institution_json['admin'] = adminToJson(obj)
         institution_json['sent_invitations'] = getSentInvitations(obj.key)
         institution_json['parent_institution'] = parentToJson(obj)
         institution_json['children_institutions'] = childrenToJson(obj)

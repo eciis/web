@@ -86,7 +86,7 @@ class User(ndb.Model):
         """Add a institution to user."""
         if institution_key not in self.institutions:
             self.institutions.append(institution_key)
-            member.add_permission("publish_post", self.key.urlsafe())
+            self.add_permission("publish_post", self.key.urlsafe())
             self.put()
 
     def add_image(self, url_image):

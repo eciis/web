@@ -6,7 +6,7 @@ from models.user import User
 
 
 class UserTest(TestBase):
-    """Test the post_handler class."""
+    """Test the user model class."""
 
     @classmethod
     def setUp(cls):

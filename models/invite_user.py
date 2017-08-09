@@ -46,7 +46,7 @@ class InviteUser(Invite):
         InviteUser.checkIsInviteUserValid(data)
         return invite
 
-    def sendInvite(self):
+    def sendInvite(self, host):
         """Send Invite for user to be member of some Institution."""
         institution_key = self.institution_key.urlsafe()
         invite_key = self.key.urlsafe()
@@ -56,8 +56,8 @@ class InviteUser(Invite):
                        subject="Convite plataforma e-CIS",
                        body="""Oi:
 
-        Para aceitar o convite acesse:
-        http://eciis-splab.appspot.com/app/#/institution/""" +
+        Você tem um novo convite. Acesse:
+        http://""" + host + "/app/#/institution/" +
         institution_key + "/" + invite_key + "/new_invite" +
         """
         Equipe e-CIS """)

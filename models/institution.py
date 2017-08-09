@@ -89,10 +89,10 @@ class Institution(ndb.Model):
             self.followers.remove(user)
             self.put()
 
-    def add_member(self, member_key):
+    def add_member(self, member):
         """Add a new member to the institution."""
-        if member_key not in self.members:
-            self.members.append(member_key)
+        if member.key not in self.members:
+            self.members.append(member.key)
             self.put()
 
     @staticmethod

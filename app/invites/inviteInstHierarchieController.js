@@ -7,7 +7,7 @@
         InviteService,$mdToast, $mdDialog, $state, AuthService, InstitutionService, MessageService) {
         var inviteInstCtrl = this;
 
-        var currentInstitutionKey = $state.params.institutionKey;
+        var institutionKey = $state.params.institutionKey;
 
         var invite;
 
@@ -31,9 +31,8 @@
 
         inviteInstCtrl.checkInstInvite = function checkInstInvite(ev) {
             var promise;
-            var currentInstitutionKey = inviteInstCtrl.user.current_institution.key;
             invite = new Invite(inviteInstCtrl.invite, inviteInstCtrl.invite.type_of_invite,
-                currentInstitutionKey, inviteInstCtrl.user.email);
+                institutionKey, inviteInstCtrl.user.email);
             if (!invite.isValid()) {
                 MessageService.showToast('Convite inválido!');
             } else if(inviteInstCtrl.hasParent && invite.type_of_invite === INSTITUTION_PARENT) {
@@ -99,11 +98,11 @@
         };
 
         function loadInstitution() {
-            InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
+            InstitutionService.getInstitution(institutionKey).then(function success(response) {
                 inviteInstCtrl.institution = new Institution(response.data);
                 inviteInstCtrl.hasParent = !_.isEmpty(inviteInstCtrl.institution.parent_institution);
             }, function error(response) {
-                $state.go('app.institution', {institutionKey: currentInstitutionKey});
+                $state.go('app.institution', {institutionKey: institutionKey});
                 MessageService.showToast(response.data.msg);
             });
         }

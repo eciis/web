@@ -71,7 +71,7 @@ class UserHandler(BaseHandler):
 
         institution = institution_key.get()
 
-        institution.add_member(user.key)
+        institution.add_member(user)
         institution.follow(user.key)
 
         self.response.write(json.dumps(makeUser(user, self.request)))

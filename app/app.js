@@ -121,20 +121,11 @@
                 }
             })
             .state("new_invite", {
-                url: "/:institutionKey/:inviteKey/new_invite",
+                url: "/:institutionKey/:inviteKey/new_invite/:typeInvite",
                 views: {
                     main: {
                         templateUrl: "invites/new_invite_page.html",
                         controller: "NewInviteController as newInviteCtrl"
-                    }
-                }
-            })
-            .state("submit_institution", {
-                url: "/:institutionKey/submitinstitution",
-                views: {
-                    main: {
-                        templateUrl:"institution/submitInstitution.html",
-                        controller: "SubmitInstController as submitInstCtrl"
                     }
                 }
             })

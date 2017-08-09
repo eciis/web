@@ -7,7 +7,7 @@
       <md-content layout-gt-sm="column" layout-padding>
         <div>
           <div>
-            <md-list flex>
+            <md-list flex ng-if="newInviteCtrl.isInviteUser()">
               <md-subheader class="md-no-sticky">Você tem um novo convite para ser membro de:</md-subheader>
               <md-list-item class="md-3-line">
                 <img ng-src="{{ newInviteCtrl.institution.photo_url }}" class="md-avatar" alt="{{newInviteCtrl.institution.name}}" />
@@ -15,6 +15,15 @@
                   <h3><b>{{ newInviteCtrl.institution.name }}</b> - {{ newInviteCtrl.institution.email }}</h3>
                   <h4>{{ newInviteCtrl.institution.phone_number }} | {{ newInviteCtrl.institution.address }}</h4>
                   <p>{{ newInviteCtrl.institution.description }}</p>
+                </div>
+              </md-list-item>
+            </md-list>
+
+            <md-list flex ng-if="!newInviteCtrl.isInviteUser()">
+              <md-subheader class="md-no-sticky">Você tem um convite para ser administrador da nova instituição:</md-subheader>
+              <md-list-item class="md-3-line">
+                <div class="md-list-item-text" layout="column">
+                  <h3><b>{{ newInviteCtrl.institution.name }}</b></h3>
                 </div>
               </md-list-item>
             </md-list>

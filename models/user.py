@@ -27,8 +27,7 @@ class User(ndb.Model):
     # The id of the posts authored by the user
     posts = ndb.KeyProperty(kind="Post", repeated=True)
 
-    # TODO: First version don't have timeline. Do After
-    # The id of the user timeline
+    # TODO: First version don't have timeline.
     # @author: Mayza Nunes 22/05/2017
     # timeline = ndb.KeyProperty(kind="Timeline")
 
@@ -101,14 +100,36 @@ class User(ndb.Model):
         self.put()
 
     def add_permission(self, permission_type, entity_key):
+        """Add new permission.key to the user permissions list.
+
+        Arguments:
+        permission_type -- permission name that will be used to verify authorization
+        entity_key -- ndb urlsafe of the object binded to the permission
+        """
         self.permissions[permission_type] = {entity_key: True}
         self.put()
 
     def remove_permission(self, permission_type, entity_key):
+        """Remove permission.key from the user permissions list.
+
+        Arguments:
+        permission_type -- permission name used to verify authorization
+        entity_key -- ndb urlsafe of the object binded to the permission
+        """
         del self.permissions[permission_type][entity_key]
         self.put()
 
     def has_permission(self, permission_type, entity_key):
+        """Verify existence of permission.key on user permissions list.
+
+        It trys to access the permission.key, if exist, returns the value,
+        otherwise, except and return False.
+
+
+        Arguments:
+        permission_type -- permission name that will be used to verify authorization
+        entity_key -- ndb urlsafe of the object binded to the permission
+        """
         try:
             return self.permissions[permission_type][entity_key]
         except:

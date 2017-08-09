@@ -15,7 +15,7 @@
 
     var ecis = {
         name: 'ECIS',
-        key: '987654321',
+        key: '987654',
         sent_invitations: [],
         children_institutions: [],
         parent_institution: {splab},
@@ -63,7 +63,7 @@
         createCtrl = function() {
             return $controller('InviteInstHierarchieController', {
                     scope: scope,
-                    inviteService: InviteService,
+                    inviteService: InviteService
                 });
         };
         state.params.institutionKey = splab.key;
@@ -99,11 +99,11 @@
             });
         });
 
-        it('Should not active institution', function(){
+        it('Should active institution', function(){
             expect(inviteInstCtrl.isActive(splab)).toBe(true);
         });
 
-        it('Should active institution', function(){
+        it('Should not active institution', function(){
             expect(inviteInstCtrl.isActive(ecis)).toBe(false);
         });
 
@@ -132,13 +132,18 @@
                     invitee: "parent@gmail.com",
                     suggestion_institution_name : "Institution Parent",
                     type_of_invite : "INSTITUTION_PARENT"};
-                inviteInstCtrl.user.current_institution = splab;
+
+                // Change current institution
+                inviteInstCtrl.user.current_institution = ecis;
+
                 var promise = inviteInstCtrl.sendInstInvite(invite);
                 promise.then(function() {
+
                     expect(inviteService.sendInvite).toHaveBeenCalledWith(invite);
 
                     // Verifying That Data Is Correctly Updated
                     expect(inviteInstCtrl.invite).toEqual({});
+                    expect(inviteInstCtrl.institution.key).toEqual(splab.key);
                     expect(inviteInstCtrl.institution.sent_invitations).toEqual([invite]);
                     expect(inviteInstCtrl.institution.parent_institution.name).toEqual(
                         invite.suggestion_institution_name);
@@ -165,13 +170,17 @@
                     invitee: "children@gmail.com",
                     suggestion_institution_name : "Children Institution",
                     type_of_invite : "INSTITUTION_CHILDREN"};
-                inviteInstCtrl.user.current_institution = splab;
+
+                // Change current institution
+                inviteInstCtrl.user.current_institution = ecis;
+
                 var promise = inviteInstCtrl.sendInstInvite(inviteChildren);
                 promise.then(function() {
                     expect(inviteService.sendInvite).toHaveBeenCalledWith(inviteChildren);
 
                     // Verifying That Data Is Correctly Updated
                     expect(inviteInstCtrl.invite).toEqual({});
+                    expect(inviteInstCtrl.institution.key).toEqual(splab.key);
                     expect(inviteInstCtrl.institution.sent_invitations).toEqual([inviteChildren]);
                     expect(inviteInstCtrl.institution.children_institutions).toContain(childrenStub);
 

@@ -4,14 +4,15 @@
     var app = angular.module('app');
 
     app.controller('PostDetailsController', function(PostService, AuthService, CommentService, $mdToast, $state,
-        $mdDialog) {
+        $mdDialog, NotificationService, $controller) {
         var postDetailsCtrl = this;
 
         postDetailsCtrl.comments = {};
 
         postDetailsCtrl.likes = {};
-
         postDetailsCtrl.currentPost = null;
+
+        postDetailsCtrl.postNotification = [];
 
         postDetailsCtrl.savingComment = false;
         postDetailsCtrl.savingLike = false;
@@ -37,6 +38,23 @@
                 });
             }, function() {
                 showToast('Cancelado');
+            });
+        };
+
+        postDetailsCtrl.showRefreshPostButton = function showRefreshPostButton() {
+            postDetailsCtrl.postNotification = NotificationService.getPostNotification(postDetailsCtrl.user.key);
+            return !_.isEmpty(postDetailsCtrl.postNotification);
+        };
+
+        postDetailsCtrl.load = function load(posts) {
+            PostService.get().then(function success(response) {
+                posts.splice(0, posts.length);
+                _.forEach(response.data, function(post) {
+                    posts.push(post);
+                });
+                NotificationService.markAsRefreshed();
+            }, function error(response) {
+                showToast(response.data.msg);
             });
         };
 

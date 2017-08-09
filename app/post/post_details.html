@@ -6,8 +6,11 @@
         <md-card ng-if="posts.length == 0">
           <md-content layout-align="center center" layout="column"><h4>Esta instituição ainda não possui publicações.</h4></md-content>
         </md-card>
-        <div layout="row" layout-align="center center">
-          <md-button md-colors="{color: 'blue-700'}">VOCÊ TEM NOVOS POSTS</md-button>
+        <div layout="row" layout-align="center center" ng-if="postDetailsCtrl.showRefreshPostButton()">
+          <md-button flex md-colors="{background: 'teal-700'}" ng-click="postDetailsCtrl.load(posts)">
+            VOCÊ TEM NOVOS POSTS
+            <md-icon md-colors="{color: 'grey-100'}">refresh</md-icon>
+          </md-button>
         </div>
         <md-card ng-repeat="post in posts | orderBy:'date':true" ng-if="posts.length > 0" ng-class="postDetailsCtrl.isDeleted(post)?'post-deleted':''">
           <md-card-header>

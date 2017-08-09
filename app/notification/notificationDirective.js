@@ -30,6 +30,8 @@
         })();
     });
 
+
+
     app.directive("notification", function() {
         return {
             restrict: 'E',

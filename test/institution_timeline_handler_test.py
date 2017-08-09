@@ -128,6 +128,7 @@ def initModels(cls):
         'text': "At vero eos et accusamus et iusto",
         'institution': cls.certbio.key.urlsafe()
     }
-    cls.mayza.institutions = [cls.certbio.key]
     cls.mayza.follows = [cls.certbio.key]
     cls.mayza.put()
+
+    cls.mayza.add_institution(cls.certbio.key)

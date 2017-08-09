@@ -120,8 +120,8 @@ class InstitutionHandler(BaseHandler):
     @json_response
     @login_required
     @isUserInvited
-    @ndb.transactional(xg=True)
     def post(self, user, institution_key, inviteKey):
+        """Handler POST Requests."""
         institution = ndb.Key(urlsafe=institution_key).get()
 
         institution.createInstitutionWithStub(user, inviteKey, institution)

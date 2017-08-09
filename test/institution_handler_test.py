@@ -21,8 +21,7 @@ class InstitutionHandlerTest(TestBaseHandler):
         methods.add('PATCH')
         cls.webapp2.WSGIApplication.allowed_methods = frozenset(methods)
         app = cls.webapp2.WSGIApplication(
-            [
-             ("/api/institutions/(.*)/invites/(.*)", InstitutionHandler),
+            [("/api/institutions/(.*)/invites/(.*)", InstitutionHandler),
              ("/api/institutions/(.*)", InstitutionHandler),
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
@@ -58,7 +57,7 @@ class InstitutionHandlerTest(TestBaseHandler):
         """Test the post_handler's post method."""
         # Call the patch method and assert that  it raises an exception
         self.testapp.post("/api/institutions/%s/invites/%s"
-                                % (self.stub.key.urlsafe(), self.invite.key.urlsafe()))
+                          % (self.stub.key.urlsafe(), self.invite.key.urlsafe()))
 
         self.inst_create = self.stub.key.get()
         self.assertEqual(self.inst_create.admin, self.raoni.key,
@@ -87,10 +86,10 @@ class InstitutionHandlerTest(TestBaseHandler):
         # Check if raise Exception when the user who send patch is not the invitee
         with self.assertRaises(Exception):
             self.testapp.post("/api/institutions/%s/invites/%s"
-                                    % (self.stub.key.urlsafe(), self.invite.key.urlsafe()),
-                                    [{"op": "replace", "path": "/name",
-                                      "value": "Nova Inst update"}]
-                                    )
+                              % (self.stub.key.urlsafe(),
+                                 self.invite.key.urlsafe()),
+                              [{"op": "replace", "path": "/name",
+                                "value": "Nova Inst update"}])
 
     def tearDown(cls):
         """Deactivate the test."""

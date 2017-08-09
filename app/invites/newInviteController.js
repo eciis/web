@@ -43,15 +43,14 @@
         newInviteCtrl.updateStubInstitution =function updateStubInstitution() {
             var promise = InstitutionService.save(institutionKey, newInviteCtrl.inviteKey);
             promise.then(
-                function success(response){
+                function success(institutionSaved){
                     MessageService.showToast('Cadastro de instituição realizado com sucesso');
                     newInviteCtrl.user.removeInviteInst(newInviteCtrl.institution.key);
-                    newInviteCtrl.user.follow(response);
-                    newInviteCtrl.user.institutions.push(response);
-                    newInviteCtrl.user.current_institution = response;
+                    newInviteCtrl.user.institutions.push(institutionSaved);
+                    newInviteCtrl.user.current_institution = institutionSaved;
                     newInviteCtrl.user.state = 'active';
                     AuthService.save();
-                    $state.go('app.manage_institution.edit_info', {institutionKey: response.key});
+                    $state.go('app.manage_institution.edit_info', {institutionKey: institutionSaved.key});
                 },
                 function error(response) {
                     MessageService.showToast(response.data.msg);

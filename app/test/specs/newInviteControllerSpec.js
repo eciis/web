@@ -9,8 +9,6 @@
 
     var invite = new Invite({invitee: "mayzabeel@gmail.com", key: 'xyzcis'}, 'user', '123456789', 'mayzabeel@gmail.com');
 
-    var inviteInst = new Invite({invitee: "mayzabeel@gmail.com", key: 'xyzcps', suggestion_institution_name : "New Institution"}, 'institution', '987654321');
-
     var splab = {
             name: 'SPLAB',
             key: '987654321',
@@ -158,6 +156,70 @@
             it('should be call $mdDialog.show()', function(done) {
                 promise.then(function() {
                     expect(mdDialog.show).toHaveBeenCalled();
+                    done();
+                });
+            });
+        });
+
+        describe('updateStubInstitution()', function() {
+
+            var promise;
+
+            beforeEach(function() {
+
+                spyOn(authService, 'save').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            return callback();
+                        }
+                    };
+                });
+                spyOn(institutionService, 'save').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            return callback(newInviteCtrl.user.current_institution = {
+                                            name: 'CERTBIO',
+                                            key: '123456789',
+                                            sent_invitations: [invite]
+                            });
+                        }
+                    };
+                });
+                spyOn(state, 'go');
+                promise = newInviteCtrl.updateStubInstitution();
+            });
+
+            it('user institutions should be contain certbio after acceptInvite', function(done) {
+                promise.then(function() {
+                    expect(newInviteCtrl.user.institutions).toContain(certbio);
+                    done();
+                });
+            });
+
+            it('user should active', function(done) {
+                promise.then(function() {
+                    expect(newInviteCtrl.user.state).toEqual("active");
+                    done();
+                });
+            });
+
+            it('current institution of user should be certbio', function(done) {
+                promise.then(function() {
+                    expect(newInviteCtrl.user.current_institution).toEqual(certbio);
+                    done();
+                });
+            });
+
+            it('should be call authService.reload()', function(done) {
+                promise.then(function() {
+                    expect(authService.save).toHaveBeenCalled();
+                    done();
+                });
+            });
+
+            it('should be call $state.go()', function(done) {
+                promise.then(function() {
+                    expect(state.go).toHaveBeenCalledWith('app.manage_institution.edit_info', {institutionKey: certbio.key});
                     done();
                 });
             });

@@ -56,7 +56,7 @@ class InviteUser(Invite):
                        subject="Convite plataforma e-CIS",
                        body="""Oi:
 
-        Você tem um novo convite. Acesse:
+        Voce tem um novo convite. Acesse:
         http://""" + host + "/app/#/institution/" +
         institution_key + "/" + invite_key + "/new_invite" +
         """

@@ -42,7 +42,7 @@ class InviteInstitution(Invite):
         """Method of creating connection between invitation and institution."""
         pass
 
-    def sendInvite(self):
+    def sendInvite(self, host):
         """Send Invite for user create some Institution."""
         mail.send_mail(sender="e-CIS <eciis@splab.ufcg.edu.br>",
                        to="<%s>" % self.invitee,

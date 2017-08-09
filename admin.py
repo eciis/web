@@ -297,9 +297,12 @@ class ResetHandler(BaseHandler):
             'phone_number': '83 33224455',
             'state': 'active'
         }
+
         certbio = createInstitution(data, admin)
         for user in [mayza, dalton, admin]:
             certbio.add_member(user)
+            user.add_institution(certbio.key)
+            user.follow(certbio.key)
         for user in [jorge.key, mayza.key, maiana.key, luiz.key,
                      raoni.key, ruan.key, tiago.key, admin.key]:
             certbio.follow(user)
@@ -319,16 +322,20 @@ class ResetHandler(BaseHandler):
             'phone_number': '83 33227865',
             'state': 'active'
         }
+
         splab = createInstitution(data, admin)
         for user in [jorge, andre, admin]:
             splab.add_member(user)
+            user.add_institution(splab.key)
+            user.follow(splab.key)
+
         for user in [jorge.key, andre.key, maiana.key, luiz.key,
                      raoni.key, ruan.key, tiago.key, admin.key]:
             splab.follow(user)
 
         # new Institution eciis
         data = {
-            'name': 'Complexo Industrial da Saúde',
+            'name': 'Complexo Industrial da Saude',
             'acronym': 'e-ciis',
             'cnpj': '18.104.068/0001-30',
             'legal_nature': 'public',
@@ -340,10 +347,13 @@ class ResetHandler(BaseHandler):
             'phone_number': '83 33227865',
             'state': 'active'
         }
+
         eciis = createInstitution(data, admin)
         for user in [dalton, andre, jorge, maiana,
                      luiz, raoni, ruan, tiago, mayza, admin]:
             eciis.add_member(user)
+            user.add_institution(eciis.key)
+            user.follow(eciis.key)
 
         for user in [mayza.key, andre.key, jorge.key, dalton.key,
                      maiana.key, luiz.key, raoni.key,
@@ -358,35 +368,6 @@ class ResetHandler(BaseHandler):
 
         jsonList.append(
             {"msg": "database initialized with a few institutions"})
-
-        # Updating Institutions
-        mayza.institutions = [certbio.key, eciis.key]
-        mayza.follows = [splab.key, eciis.key, certbio.key]
-        mayza.put()
-        andre.institutions = [splab.key, eciis.key]
-        andre.follows = [splab.key, eciis.key]
-        andre.put()
-        jorge.institutions = [splab.key, eciis.key]
-        jorge.follows = [certbio.key, splab.key, eciis.key]
-        jorge.put()
-        dalton.institutions = [eciis.key, certbio.key]
-        dalton.follows = [splab.key, eciis.key]
-        dalton.put()
-        maiana.institutions = [eciis.key]
-        maiana.follows = [splab.key, eciis.key, certbio.key]
-        maiana.put()
-        luiz.institutions = [eciis.key]
-        luiz.follows = [splab.key, eciis.key, certbio.key]
-        luiz.put()
-        raoni.institutions = [eciis.key]
-        raoni.follows = [splab.key, eciis.key, certbio.key]
-        raoni.put()
-        ruan.institutions = [eciis.key]
-        ruan.follows = [splab.key, eciis.key, certbio.key]
-        ruan.put()
-        tiago.institutions = [eciis.key]
-        tiago.follows = [splab.key, eciis.key, certbio.key]
-        tiago.put()
 
         admin.institutions_admin = [certbio.key, eciis.key, splab.key]
         admin.put()

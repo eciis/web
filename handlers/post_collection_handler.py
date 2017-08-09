@@ -32,7 +32,7 @@ class PostCollectionHandler(BaseHandler):
         data = json.loads(self.request.body)
         institution_key = data['institution']
 
-        Utils._assert(user.has_permission("publish_post", institution_key),
+        Utils._assert(not user.has_permission("publish_post", institution_key),
                 "You don't have permission to publish post.", NotAuthorizedException)
 
         institution = ndb.Key(urlsafe=institution_key).get()

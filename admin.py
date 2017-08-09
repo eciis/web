@@ -105,11 +105,11 @@ def delete_all_in_index(index):
 
 class BaseHandler(webapp2.RequestHandler):
     """Base Handler."""
-    pass
-    # def handle_exception(self, exception, debug):
-    #     """Exception."""
-    #     logging.error(str(exception))
-    #     self.response.write("oops! %s\n" % str(exception))
+
+    def handle_exception(self, exception, debug):
+        """Exception."""
+        logging.error(str(exception))
+        self.response.write("oops! %s\n" % str(exception))
 
 
 class ResetHandler(BaseHandler):
@@ -328,7 +328,7 @@ class ResetHandler(BaseHandler):
             splab.add_member(user)
             user.add_institution(splab.key)
             user.follow(splab.key)
-        print andre.permissions
+
         for user in [jorge.key, andre.key, maiana.key, luiz.key,
                      raoni.key, ruan.key, tiago.key, admin.key]:
             splab.follow(user)
@@ -355,7 +355,6 @@ class ResetHandler(BaseHandler):
             user.add_institution(eciis.key)
             user.follow(eciis.key)
 
-        print andre.permissions
         for user in [mayza.key, andre.key, jorge.key, dalton.key,
                      maiana.key, luiz.key, raoni.key,
                      ruan.key, tiago.key, admin.key]:

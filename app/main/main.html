@@ -74,7 +74,7 @@
       <md-list-item class="md-3-line" ng-repeat="institution in mainCtrl.user.institutions" ng-click="mainCtrl.changeInstitution(institution)">
         <img ng-src="{{ institution.photo_url }}" alt="{{ institution.name }}" class="md-avatar" md-colors="{background: 'grey-200'}">
         <p> {{ institution.name }} </p>
-        <md-button class="md-warn md-hue-1 md-icon-button">
+        <md-button class="md-warn md-hue-1 md-icon-button" ng-show="mainCtrl.isActive(institution)">
           <md-icon>check</md-icon>
         </md-button>
       </md-list-item>

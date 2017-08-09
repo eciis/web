@@ -31,7 +31,7 @@
                 promise.then(function success() {
                     AuthService.reload().then(function() {
                         goHome();
-                        MessageService.showAlert(event, newInviteCtrl.institution.name); 
+                        showAlert(event, newInviteCtrl.institution.name); 
                    });
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);

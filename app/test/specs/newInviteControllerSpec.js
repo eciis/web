@@ -197,7 +197,7 @@
                     };
                 });
                 spyOn(state, 'go');
-                promise = newInviteCtrl.rejectUserInvite('$event');
+                promise = newInviteCtrl.rejectInvite('$event');
             });
 
             it('should be call $mdDialog.show()', function(done) {

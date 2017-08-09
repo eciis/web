@@ -66,20 +66,12 @@
             return typeOfInvite === "USER";
         };
 
-        newInviteCtrl.rejectInvite = function rejectInvite(event) {
-            if (typeOfInvite === "USER"){
-                newInviteCtrl.rejectUserInvite(event);
-            }else {
-                newInviteCtrl.rejectInstitutionInvite(event);
-            } 
-        };
-
-        newInviteCtrl.rejectUserInvite = function rejectUserInvite(event){
+        newInviteCtrl.rejectInvite = function rejectInvite(event){
             var confirm = $mdDialog.confirm();
                 confirm
                     .clickOutsideToClose(false)
                     .title('Rejeitar convite')
-                    .textContent("Ao rejeitar o convite, você só poderá ser membro com um novo convite." +
+                    .textContent("Ao rejeitar o convite, seu convite será removido e não poderá ser aceito posteriormente." +
                          " Deseja rejeitar?")
                     .ariaLabel('Rejeitar convite')
                     .targetEvent(event)
@@ -92,32 +84,6 @@
                     MessageService.showToast('Cancelado');
                 });
                 return promise;
-        };
-
-        newInviteCtrl.rejectInstitutionInvite = function rejectInstitutionInvite(event){
-            var confirm = $mdDialog.confirm()
-                .clickOutsideToClose(true)
-                .title('Refeitar Convite')
-                .textContent("Ao rejeitar o convite, seu convite será removido e " +
-                    "a instituição não poderá ser criada no sistema. " +
-                    "Deseja rejeitar mesmo assim?")
-                .ariaLabel('Cancelar Cadastro')
-                .targetEvent(event)
-                .ok('Sim')
-                .cancel('Não');
-
-                $mdDialog.show(confirm).then(function() {
-                    InviteService.deleteInvite(newInviteCtrl.inviteKey).then(
-                        function success() {
-                            MessageService.showToast('Convite rejeitado');
-                            AuthService.logout();
-                        }, function error(response) {
-                            MessageService.showToast(response.data.msg);
-                        }
-                    );
-                }, function() {
-                    MessageService.showToast('Cancelado');
-                });
         };
         
 

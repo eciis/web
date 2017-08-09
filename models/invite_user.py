@@ -57,10 +57,9 @@ class InviteUser(Invite):
                        body="""Oi:
 
         Voce tem um novo convite. Acesse:
-        http://""" + host + "/app/#/institution/" +
-        institution_key + "/" + invite_key + "/new_invite" +
-        """
-        Equipe e-CIS """)
+        http://%s/app/#/institution/%s/%s/new_invite
+
+        Equipe e-CIS """ % (host, institution_key, invite_key))
 
     def make(self):
         """Create json of invite to user."""

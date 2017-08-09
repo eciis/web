@@ -96,6 +96,12 @@
         <input type="text" name="Email" disabled
             ng-model="editInstCtrl.newInstitution.email">
     </md-input-container>
+    <md-input-container class="md-block">
+        <md-button ng-click="null" ng-model="editInstCtrl.file" ngf-pattern="'application/pdf'" ngf-accept="'application/pdf'" 
+            ngf-max-size="5MB" ngf-select="editInstCtrl.submitPortfolio()">
+            Adicionar portfólio
+        </md-button>
+    </md-input-container>
     <div layout="row" layout-align="end center">
         <md-button ng-click="editInstCtrl.submit($event)" class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}" ng-disabled="institutionForm.$invalid">Confirmar</md-button>
     </div>

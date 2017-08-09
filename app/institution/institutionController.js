@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller("InstitutionController", function InstitutionController($state, InstitutionService, 
-            InviteService, AuthService, MessageService, PdfService) {
+            InviteService, AuthService, MessageService, $sce) {
         var institutionCtrl = this;
 
         institutionCtrl.current_institution = null;
@@ -34,6 +34,8 @@
                 getFollowers();
                 checkIfUserIsFollower();
                 institutionCtrl.checkIfUserIsMember();
+                var url = institutionCtrl.current_institution.portfolio_url;
+                institutionCtrl.portfolioUrl = $sce.trustAsResourceUrl(url);
             }, function error(response) {
                 $state.go("app.home");
                 MessageService.showToast(response.data.msg);
@@ -119,17 +121,6 @@
         institutionCtrl.checkIfUserIsMember = function checkIfUserIsMember() {
             var institutionKey = institutionCtrl.current_institution.key;
             institutionCtrl.isMember = institutionCtrl.user.isMember(institutionKey);
-        };
-
-        institutionCtrl.submitPortfolio = function submitPortfolio() {
-            var promise = PdfService.save(institutionCtrl.file);
-            promise.then(function success(data) {
-                InstitutionService.save(); //change
-                institutionCtrl.current_institution.portfolio_url = data.url;
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
-            });
-            return promise;
         };
     });
 })();

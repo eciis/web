@@ -3,7 +3,8 @@
 (function() {
     var app = angular.module("app");
 
-    app.controller("SubmitInstController", function SubmitInstController(AuthService, InstitutionService, $state, $mdToast, $mdDialog, $http, InviteService, ImageService, $rootScope, MessageService) {
+    app.controller("SubmitInstController", function SubmitInstController(AuthService, InstitutionService, $state, 
+        $mdToast, $mdDialog, $http, InviteService, ImageService, $rootScope, MessageService) {
         var submitInstCtrl = this;
         var institutionKey = $state.params.institutionKey;
         var observer;

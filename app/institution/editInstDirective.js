@@ -1,7 +1,8 @@
 'use strict';
 (function() {
     var app = angular.module("app");
-    app.controller("EditInstController", function EditInstController(AuthService, InstitutionService, $state, $mdToast, $mdDialog, $http, InviteService, ImageService, $rootScope, MessageService) {
+    app.controller("EditInstController", function EditInstController(AuthService, InstitutionService, $state, 
+            $mdToast, $mdDialog, $http, InviteService, ImageService, $rootScope, MessageService, PdfService) {
 
         var editInstCtrl = this;
         var institutionKey = $state.params.institutionKey;
@@ -95,6 +96,17 @@
                 editInstCtrl.occupationAreas = response.data;
             });
         }
+
+        editInstCtrl.submitPortfolio = function submitPortfolio() {
+            var promise = PdfService.save(editInstCtrl.file);
+            promise.then(function success(data) {
+                editInstCtrl.newInstitution.portfolio_url = data.url;
+                MessageService.showToast("Portfólio adicionado com sucesso");
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
+            });
+            return promise;
+        };
 
         function loadInstitution() {
             InstitutionService.getInstitution(institutionKey).then(function success(response) {

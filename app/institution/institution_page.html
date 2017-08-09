@@ -23,6 +23,7 @@
                         </div>
                         <p>{{ institutionCtrl.current_institution.phone_number }}</p>
                         <p>{{ institutionCtrl.current_institution.address }}</p>
+                        <a ng-href="{{ institutionCtrl.current_institution.portfolio_url }}" download>Portfólio</a>
                         <p hide show-gt-sm>{{ institutionCtrl.current_institution.description }}</p>
                     </center>
                 </div>
@@ -35,17 +36,6 @@
                         ng-click="institutionCtrl.isUserFollower ? institutionCtrl.unfollow() : institutionCtrl.follow()">
                         <md-icon>{{ institutionCtrl.isUserFollower ? 'person_outline':'person_add' }}</md-icon>
                         {{ institutionCtrl.isUserFollower ? 'Deixar de seguir' : 'Seguir' }}
-                    </md-button>
-
-                    <md-button flex-xs class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}" 
-                        ng-click="null" ng-model="institutionCtrl.file" ngf-pattern="'application/pdf'" ngf-accept="'application/pdf'" 
-                        ngf-max-size="5MB" ngf-select="institutionCtrl.submitPortfolio()">
-                        submeter portfólio
-                    </md-button>
-                    
-                    <md-button flex-xs class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}" 
-                        ng-click="null" ng-href="{{ institutionCtrl.current_institution.portfolio_url }}">
-                        portfólio
                     </md-button>
 
                     <!-- INSTITUTION MEMBERS -->
@@ -84,7 +74,14 @@
                         </md-card-content>
                     </md-card>
                 </div>
-                <timeline flex layout="column" md-colors="{background: 'grey-200'}" posts="institutionCtrl.posts" institution="true" user="institutionCtrl.user"></timeline>
+
+                <!-- <embed ng-src={{institutionCtrl.portfolioUrl}} style="width:200px;height:200px;"
+                    type='application/pdf'>
+                </embed> -->
+
+                <timeline flex layout="column" md-colors="{background: 'grey-200'}" posts="institutionCtrl.posts" 
+                    institution="true" user="institutionCtrl.user">
+                </timeline>
             </div>
         <div>
     </div>

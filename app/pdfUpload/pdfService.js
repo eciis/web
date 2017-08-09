@@ -15,16 +15,16 @@
                 return deferred.promise;
             }
 
-            var INDEX_FILENAME = 0;
-            var INDEX_TYPE_FILE = 1;
+            var INDEX_FILE_NAME = 0;
+            var INDEX_FILE_TYPE = 1;
             var fileProperties = file.name.split(".");
-            var filename = fileProperties[INDEX_FILENAME]  + "-" + (new Date()).getTime();
+            var filename = fileProperties[INDEX_FILE_NAME]  + "-" + (new Date()).getTime() + "." + fileProperties[INDEX_FILE_TYPE];
             var fileReference = firebase.storage().ref(fileFolder + filename);
 
             var metadata = {
-                contentType: 'file/' + fileProperties[INDEX_TYPE_FILE]
+                contentType: 'file/' + fileProperties[INDEX_FILE_TYPE]
             };
-
+            // TODO: delete current portfolio if exists before adding a new one
             var uploadTask = $firebaseStorage(fileReference).$put(file, metadata);
 
             uploadTask.$complete(function(snapshot) {

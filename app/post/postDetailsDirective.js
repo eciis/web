@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller('PostDetailsController', function(PostService, AuthService, CommentService, $mdToast, $state,
-        $mdDialog, NotificationService, $controller) {
+        $mdDialog, NotificationService) {
         var postDetailsCtrl = this;
 
         postDetailsCtrl.comments = {};

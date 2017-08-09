@@ -22,8 +22,7 @@
                 newInviteCtrl.addInstitution(event);
             } else {
                 newInviteCtrl.updateStubInstitution();
-            }
-            
+            }  
         };
 
         newInviteCtrl.addInstitution =  function addInstitution(event) {
@@ -32,7 +31,7 @@
                 promise.then(function success() {
                     AuthService.reload().then(function() {
                         goHome();
-                        showAlert(event, newInviteCtrl.institution.name); 
+                        MessageService.showAlert(event, newInviteCtrl.institution.name); 
                    });
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);

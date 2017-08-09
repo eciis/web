@@ -8,6 +8,7 @@
         invites: [{
             'invitee': 'user@email.com',
             'suggestion_institution_name': "Suggested Name",
+            'key': "inviteKey",
             'type_of_invite': "INSTITUTION",
             'status': 'sent',
             'stub_institution_key': '00001'
@@ -88,7 +89,7 @@
 
             mainCtrl = createCtrl();
 
-            expect(state.go).toHaveBeenCalledWith('submit_institution', {institutionKey: '00001'});
+            expect(state.go).toHaveBeenCalledWith('new_invite', {institutionKey: '00001', inviteKey: 'inviteKey', typeInvite: 'INSTITUTION' });
         });
     });
 

@@ -75,6 +75,7 @@ def createInstitution(data, user):
     institution.followers.append(user.key)
     institution.put()
 
+    user.add_permission("publish_post", institution.key.urlsafe())
     user.institutions.append(institution.key)
     user.institutions_admin.append(institution.key)
     user.follows.append(institution.key)
@@ -297,7 +298,7 @@ class ResetHandler(BaseHandler):
             'state': 'active'
         }
         certbio = createInstitution(data, admin)
-        for user in [mayza.key, dalton.key, admin.key]:
+        for user in [mayza, dalton, admin]:
             certbio.add_member(user)
         for user in [jorge.key, mayza.key, maiana.key, luiz.key,
                      raoni.key, ruan.key, tiago.key, admin.key]:
@@ -319,7 +320,7 @@ class ResetHandler(BaseHandler):
             'state': 'active'
         }
         splab = createInstitution(data, admin)
-        for user in [jorge.key, andre.key, admin.key]:
+        for user in [jorge, andre, admin]:
             splab.add_member(user)
         for user in [jorge.key, andre.key, maiana.key, luiz.key,
                      raoni.key, ruan.key, tiago.key, admin.key]:
@@ -340,8 +341,8 @@ class ResetHandler(BaseHandler):
             'state': 'active'
         }
         eciis = createInstitution(data, admin)
-        for user in [dalton.key, andre.key, jorge.key, maiana.key,
-                     luiz.key, raoni.key, ruan.key, tiago.key, mayza.key, admin.key]:
+        for user in [dalton, andre, jorge, maiana,
+                     luiz, raoni, ruan, tiago, mayza, admin]:
             eciis.add_member(user)
 
         for user in [mayza.key, andre.key, jorge.key, dalton.key,

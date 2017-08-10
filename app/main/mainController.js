@@ -125,21 +125,18 @@
         }
 
         (function main() {
-            var inviteOfUser = mainCtrl.user.getPendingInvitationOf("USER");
-            var inviteOfInstitution = mainCtrl.user.getPendingInvitationOf("INSTITUTION");
+                var invitePending = mainCtrl.user.getPendingInvitation();
 
-            if (inviteOfUser) {
-                var institutionKey = inviteOfUser.institution_key;
-                var inviteKey = inviteOfUser.key;
-                $state.go("new_invite", {institutionKey: institutionKey, inviteKey: inviteKey});
-            } else if (inviteOfInstitution) {
-                var institutionStubKey = inviteOfInstitution.stub_institution_key;
-                $state.go("submit_institution", {institutionKey: institutionStubKey});
-            } else if (isInactive()) {
-                $state.go("user_inactive");
-            } else if (mainCtrl.user.name === 'Unknown') {
-                $state.go("config_profile");
-            }
+                if (invitePending) {
+                    var institutionKey = (invitePending.type_of_invite === "USER") ? invitePending.institution_key : invitePending.stub_institution_key;
+                    var inviteKey = invitePending.key;
+                    var type = invitePending.type_of_invite;
+                    $state.go("new_invite", {institutionKey: institutionKey, inviteKey: inviteKey, typeInvite: type});
+                } else if (isInactive()) {
+                    $state.go("user_inactive");
+                } else if (mainCtrl.user.name === 'Unknown') {
+                    $state.go("config_profile");
+                }
         })();
     });
 

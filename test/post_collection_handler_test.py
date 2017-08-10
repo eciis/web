@@ -104,3 +104,5 @@ def initModels(cls):
     cls.certbio.posts = []
     cls.certbio.admin = cls.mayza.key
     cls.certbio.put()
+
+    cls.mayza.add_institution(cls.certbio.key)

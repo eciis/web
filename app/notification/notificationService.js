@@ -35,19 +35,31 @@
             });
         };
 
-        service.setPostNotification = function setPostNotification(notificationsList, notificationChanged) {
+        service.setPostNotification = function setPostNotification(notificationsList) {
            postNotification = _.map(notificationsList, function(notification) {
-                if(notification.type === POST_NOTIFICATION && isNew(notification)){
-                    return notification;
+                if(notification){
+                    var typePost = notification.type === POST_NOTIFICATION;
+                    var statusNew = notification.status === "NEW";
+                    var statusRead = notification.status === "READ";
+                    if(typePost && (statusNew || statusRead)){
+                        return notification;
+                    }
                 }
             });
-           if(!checkPostNotification() || notificationChanged){
+           if(!checkPostNotification()){
                 postNotification = [];
            }
         };
 
         function checkPostNotification() {
-            return _.find(postNotification, {status: "NEW", type: POST_NOTIFICATION});
+            return _.find(postNotification, function (notification) {
+                if(notification){
+                    var typePost = notification.type === POST_NOTIFICATION;
+                    var statusNew = notification.status === "NEW";
+                    var statusRead = notification.status === "READ";
+                    return typePost && (statusNew || statusRead);
+                }
+            });
         }
 
         service.markAsRefreshed = function markAsRefreshed() {
@@ -69,9 +81,11 @@
             }
             notifications.$watch(function(ev) {
                 if(ev.event === "child_added") {
-                    service.setPostNotification(notificationList, false);
-                } else if (ev.event === "child_changed") {
-                    service.setPostNotification(notificationList, true);
+                    service.setPostNotification(notificationList);
+                } else if(ev.event === "child_changed") {
+                    if(!checkPostNotification()){
+                        postNotification = [];
+                    }
                 }
             });
             return postNotification;

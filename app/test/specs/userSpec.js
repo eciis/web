@@ -178,16 +178,11 @@
           });
         });
 
-        describe('getPendingInvitationOf', function() {
+        describe('getPendingInvitation', function() {
 
-          it('should return the invite_user', function() {
+          it('should return some invite', function() {
             user = createUser();
-            expect(user.getPendingInvitationOf('USER')).toEqual(inviteUser);
-          });
-
-          it('should return the invite_institution', function() {
-            user = createUser();
-            expect(user.getPendingInvitationOf('INSTITUTION')).toEqual(inviteInstitution);
+            expect(user.getPendingInvitation().should.not.be.empty);
           });
         });
    });

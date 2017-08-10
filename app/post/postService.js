@@ -80,5 +80,15 @@
             });
             return deffered.promise;
         };
+
+        service.getPost = function getPost(postKey) {
+            var deffered = $q.defer();
+            $http.get(POSTS_URI + '/' + postKey).then(function success(info) {
+                deffered.resolve(info.data);
+            }, function error(data) {
+                deffered.reject(data);
+            });
+            return deffered.promise;
+        };
     });
 })();

@@ -48,6 +48,15 @@
                     }
                 }
             })
+            .state("app.post", {
+                url: "/posts/:postKey",
+                views: {
+                    content: {
+                        templateUrl: "post/post_page.html",
+                        controller: "PostPageController as postCtrl",
+                    }
+                }
+            })
             .state("app.manage_institution", {
                 abstract: true,
                 url: "/institution/:institutionKey/details",
@@ -72,7 +81,6 @@
                 views: {
                     content_manage_institution: {
                         templateUrl: "institution/edit_info.html",
-                        controller: "InstitutionController as institutionCtrl"
                     }
                 }
             })
@@ -113,20 +121,11 @@
                 }
             })
             .state("new_invite", {
-                url: "/:institutionKey/:inviteKey/new_invite",
+                url: "/:institutionKey/:inviteKey/new_invite/:typeInvite",
                 views: {
                     main: {
                         templateUrl: "invites/new_invite_page.html",
                         controller: "NewInviteController as newInviteCtrl"
-                    }
-                }
-            })
-            .state("submit_institution", {
-                url: "/:institutionKey/submitinstitution",
-                views: {
-                    main: {
-                        templateUrl:"institution/submitInstitution.html",
-                        controller: "SubmitInstController as submitInstCtrl"
                     }
                 }
             })
@@ -143,7 +142,7 @@
                 url: "/userinactive",
                 views: {
                     main: {
-                      templateUrl: "error/user_inactive.html",
+                      templateUrl: "user/user_inactive.html",
                       controller: "UserInactiveController as userInactiveCtrl"
                     }
                 }

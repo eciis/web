@@ -7,7 +7,7 @@ class User(ndb.Model):
 
     name = ndb.StringProperty(required=True)
     cpf = ndb.StringProperty()
-    photo_url = ndb.StringProperty()
+    photo_url = ndb.StringProperty(indexed=False)
     email = ndb.StringProperty()
 
     # The id of the institutions to which the user belongs
@@ -22,13 +22,12 @@ class User(ndb.Model):
     institutions_admin = ndb.KeyProperty(kind="Institution", repeated=True)
 
     # Notifications received by the user
-    notifications = ndb.JsonProperty(repeated=True)
+    notifications = ndb.JsonProperty(repeated=True, indexed=False)
 
     # The id of the posts authored by the user
     posts = ndb.KeyProperty(kind="Post", repeated=True)
 
-    # TODO: First version don't have timeline. Do After
-    # The id of the user timeline
+    # TODO: First version don't have timeline.
     # @author: Mayza Nunes 22/05/2017
     # timeline = ndb.KeyProperty(kind="Timeline")
 
@@ -42,7 +41,10 @@ class User(ndb.Model):
     liked_posts = ndb.KeyProperty(kind="Post", repeated=True)
 
     # Images uploaded
-    uploaded_images = ndb.StringProperty(repeated=True)
+    uploaded_images = ndb.StringProperty(repeated=True, indexed=False)
+
+    # The user permissions to access system resources
+    permissions = ndb.JsonProperty(indexed=False, default={})
 
     @staticmethod
     def get_by_email(email):
@@ -84,6 +86,7 @@ class User(ndb.Model):
         """Add a institution to user."""
         if institution_key not in self.institutions:
             self.institutions.append(institution_key)
+            self.add_permission("publish_post", institution_key.urlsafe())
             self.put()
 
     def add_image(self, url_image):
@@ -95,3 +98,42 @@ class User(ndb.Model):
         """Change the user state."""
         self.state = state
         self.put()
+
+    def add_permission(self, permission_type, entity_key):
+        """Add new permission.key to the user permissions list.
+
+        Arguments:
+        permission_type -- permission name that will be used to verify authorization
+        entity_key -- ndb urlsafe of the object binded to the permission
+        """
+        if self.permissions.get(permission_type, None):
+            self.permissions[permission_type][entity_key] = True
+        else:
+            self.permissions[permission_type] = {entity_key: True}
+        self.put()
+
+    def remove_permission(self, permission_type, entity_key):
+        """Remove permission.key from the user permissions list.
+
+        Arguments:
+        permission_type -- permission name used to verify authorization
+        entity_key -- ndb urlsafe of the object binded to the permission
+        """
+        del self.permissions[permission_type][entity_key]
+        self.put()
+
+    def has_permission(self, permission_type, entity_key):
+        """Verify existence of permission.key on user permissions list.
+
+        It trys to access the permission.key, if exist, returns the value,
+        otherwise, except and return False.
+
+
+        Arguments:
+        permission_type -- permission name that will be used to verify authorization
+        entity_key -- ndb urlsafe of the object binded to the permission
+        """
+        try:
+            return self.permissions[permission_type][entity_key]
+        except:
+            return False

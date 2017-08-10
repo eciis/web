@@ -97,6 +97,14 @@
     background-color:#F5F5F5;
 }
 
+.institution-select {
+    background-color:#F5F5F5;
+}
+
+.search-field{
+    height: 75px;
+}
+
 a:link {
     text-decoration: none;
 }

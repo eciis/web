@@ -12,6 +12,8 @@ from handlers.base_handler import BaseHandler
 from models.post import Post
 from firebase import send_notification
 
+from custom_exceptions.notAuthorizedException import NotAuthorizedException
+
 
 class PostCollectionHandler(BaseHandler):
     """Post  Collection Handler."""
@@ -25,11 +27,17 @@ class PostCollectionHandler(BaseHandler):
 
     @json_response
     @login_required
-    @is_institution_member
     @ndb.transactional(xg=True)
-    def post(self, user, institution):
+    def post(self, user):
         """Handle POST Requests."""
         data = json.loads(self.request.body)
+        institution_key = data['institution']
+
+        Utils._assert(not user.has_permission("publish_post", institution_key),
+                "You don't have permission to publish post.", NotAuthorizedException)
+
+        institution = ndb.Key(urlsafe=institution_key).get()
+
         try:
             post = Post.create(data, user.key, institution.key)
             post.put()

@@ -183,7 +183,6 @@
             } else{
                 postDetailsCtrl.post.data_comments = [];
             }
-
         };
 
         postDetailsCtrl.getLikes = function getLikes() {

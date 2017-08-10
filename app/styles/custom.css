@@ -165,28 +165,6 @@ a:active {
     margin-right: -25px !important;
 }
 
-div {
-
-}
-
-.box {
-  margin: 50px auto;
-  background: #5FCF80;
-  width: 150px;
-  height: 150px;
-}
-.box:hover {
-  transform: rotate(360deg);
-  background: #9351A6;
-  border-radius: 50%;
-}
-.rotate {
-  transition: all 0.5s ease-in-out;
-}
-.rotate:hover {
-  transition: all 1s ease-in-out;
-}
-
 .ng-if{
     animation:1.0s flipInX ease;
     animation-delay: 0s;

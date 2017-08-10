@@ -66,16 +66,17 @@
 
         function updateInstitution() {
             var patch = jsonpatch.generate(observer);
-            InstitutionService.update(institutionKey, patch).then(
-                reloadUser(),
-                function error(response) {
-                    MessageService.showToast(response.data.msg);
+            InstitutionService.update(institutionKey, patch).then(function success() {
+                reloadUser();
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
             });
         }
 
         function reloadUser() {
-            AuthService.reload().then(function(){
+            AuthService.reload().then(function success(){
                 MessageService.showToast('Edição de instituição realizado com sucesso');
+                $state.go('app.institution', {institutionKey: institutionKey});
             });
         }
         

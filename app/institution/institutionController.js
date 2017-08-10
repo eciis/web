@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller("InstitutionController", function InstitutionController($state, InstitutionService, 
-            InviteService, AuthService, MessageService, $sce) {
+            InviteService, AuthService, MessageService, $sce, $mdDialog) {
         var institutionCtrl = this;
 
         institutionCtrl.current_institution = null;
@@ -122,5 +122,35 @@
             var institutionKey = institutionCtrl.current_institution.key;
             institutionCtrl.isMember = institutionCtrl.user.isMember(institutionKey);
         };
+
+        institutionCtrl.portfolioDialog = function(ev) {
+            $mdDialog.show({
+             controller: DialogController,
+             templateUrl: 'institution/portfolioDialog.html',
+             // parent: angular.element(document.body),
+             targetEvent: ev,
+             clickOutsideToClose:true,
+             fullscreen: true // Only for -xs, -sm breakpoints.
+            })
+            .then(function() {
+
+            }, function() {
+
+            });
+        };
+
+        function DialogController($scope, $mdDialog) {
+            $scope.hide = function() {
+              $mdDialog.hide();
+            };
+
+            $scope.cancel = function() {
+              $mdDialog.cancel();
+            };
+
+            $scope.answer = function(answer) {
+              $mdDialog.hide(answer);
+            };
+        }
     });
 })();

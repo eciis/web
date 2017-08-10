@@ -23,7 +23,10 @@
                         </div>
                         <p>{{ institutionCtrl.current_institution.phone_number }}</p>
                         <p>{{ institutionCtrl.current_institution.address }}</p>
-                        <a ng-href="{{ institutionCtrl.current_institution.portfolio_url }}" download>Portfólio</a>
+                        <!-- <a ng-href="{{ institutionCtrl.current_institution.portfolio_url }}" download>Portfólio</a> -->
+                        <md-button ng-click="institutionCtrl.portfolioDialog($event)">
+                            Portfólio
+                        </md-button>
                         <p hide show-gt-sm>{{ institutionCtrl.current_institution.description }}</p>
                     </center>
                 </div>
@@ -74,10 +77,6 @@
                         </md-card-content>
                     </md-card>
                 </div>
-
-                <!-- <embed ng-src={{institutionCtrl.portfolioUrl}} style="width:200px;height:200px;"
-                    type='application/pdf'>
-                </embed> -->
 
                 <timeline flex layout="column" md-colors="{background: 'grey-200'}" posts="institutionCtrl.posts" 
                     institution="true" user="institutionCtrl.user">

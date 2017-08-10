@@ -76,7 +76,7 @@
         function updateUserInstutionAndFollow(institution) {
             editInstCtrl.user.updateInstitutionAndFollow(institution);
             AuthService.save();
-            editInstCtrl.user.changeInstitution(institution);
+            changeInstitution(institution);
             MessageService.showToast('Edição de instituição realizado com sucesso');
             $state.go('app.institution', {institutionKey: institutionKey});
         }
@@ -84,6 +84,13 @@
         editInstCtrl.showButton = function() {
             return !editInstCtrl.loading;
         };
+
+        function changeInstitution(institution) {
+            if(editInstCtrl.newInstitution &&
+                editInstCtrl.user.current_institution.key === editInstCtrl.newInstitution.key) {
+                editInstCtrl.user.changeInstitution(institution);
+            }
+        }
 
         function getLegalNatures() {
             $http.get('institution/legal_nature.json').then(function success(response) {

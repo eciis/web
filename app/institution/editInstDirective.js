@@ -67,17 +67,18 @@
         function updateInstitution() {
             var patch = jsonpatch.generate(observer);
             InstitutionService.update(institutionKey, patch).then(function success() {
-                reloadUser();
+                updateUserInstutionAndFollow(editInstCtrl.newInstitution);
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
         }
 
-        function reloadUser() {
-            AuthService.reload().then(function success(){
-                MessageService.showToast('Edição de instituição realizado com sucesso');
-                $state.go('app.institution', {institutionKey: institutionKey});
-            });
+        function updateUserInstutionAndFollow(institution) {
+            editInstCtrl.user.updateInstitutionAndFollow(institution);
+            AuthService.save();
+            editInstCtrl.user.changeInstitution(institution);
+            MessageService.showToast('Edição de instituição realizado com sucesso');
+            $state.go('app.institution', {institutionKey: institutionKey});
         }
         
         editInstCtrl.showButton = function() {

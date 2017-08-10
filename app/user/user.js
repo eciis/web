@@ -81,6 +81,22 @@ User.prototype.removeInviteInst = function removeInviteInst(institutionKey) {
     });
 };
 
+User.prototype.updateInstitutionAndFollow = function updateInstitutionAndFollow(institution){
+    updateInstitution(this.institutions, institution);
+    updateFollowInstitution(this.follows, institution);
+};
+
+function updateFollowInstitution(follows, institution) {
+    var index = _.findIndex(follows, ['key', institution.key]);
+    follows[index].acronym = institution.acronym;
+    follows[index].photo_url = institution.photo_url;
+}
+
+function updateInstitution(institutions, institution) {
+    var index = _.findIndex(institutions, ['key', institution.key]);
+    institutions[index] = institution;
+}
+
 function getKeyObj(obj) {
     if(obj.key){
       return obj.key;

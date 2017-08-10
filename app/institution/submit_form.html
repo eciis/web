@@ -89,7 +89,7 @@
     <md-input-container class="md-block" flex-gt-xs>
         <label>Responsável</label>
         <input type="text" name="Responsavel" disabled
-        ng-model="editInstCtrl.user.name">
+        ng-model="editInstCtrl.newInstitution.admin.name">
     </md-input-container>
     <md-input-container class="md-block" flex-gt-xs>
         <label>Email</label>
@@ -103,6 +103,6 @@
         </md-button>
     </md-input-container>
     <div layout="row" layout-align="end center">
-        <md-button ng-click="editInstCtrl.submit($event)" class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}" ng-disabled="institutionForm.$invalid">Confirmar</md-button>
+        <md-button ng-click="editInstCtrl.submit($event)" class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-900'}" ng-disabled="institutionForm.$invalid">Confirmar</md-button>
     </div>
 </form>

@@ -1,13 +1,13 @@
-<div layout-fill md-colors="{background: 'teal-900'}" layout="column" layout-align="center">
+<div layout-fill md-colors="{background: 'grey-900'}" layout="column" layout-align="center">
    <div layout="row" layout-wrap layout-align="center">
     <md-card flex-gt-xs="50">
-      <md-toolbar md-colors="{background: 'green-800'}" layout="row">
+      <md-toolbar md-colors="{background: 'teal-800'}" layout="row">
         <h1 class="md-toolbar-tools">Novo convite</h1>
       </md-toolbar>
       <md-content layout-gt-sm="column" layout-padding>
         <div>
           <div>
-            <md-list flex>
+            <md-list flex ng-if="newInviteCtrl.isInviteUser()">
               <md-subheader class="md-no-sticky">Você tem um novo convite para ser membro de:</md-subheader>
               <md-list-item class="md-3-line">
                 <img ng-src="{{ newInviteCtrl.institution.photo_url }}" class="md-avatar" alt="{{newInviteCtrl.institution.name}}" />
@@ -18,11 +18,20 @@
                 </div>
               </md-list-item>
             </md-list>
+
+            <md-list flex ng-if="!newInviteCtrl.isInviteUser()">
+              <md-subheader class="md-no-sticky">Você tem um convite para ser administrador da nova instituição:</md-subheader>
+              <md-list-item class="md-3-line">
+                <div class="md-list-item-text" layout="column">
+                  <h3><b>{{ newInviteCtrl.institution.name }}</b></h3>
+                </div>
+              </md-list-item>
+            </md-list>
           </div>
         </div>
         <section layout="row" layout="column" layout-align="end center" layout-wrap>
-           <md-button ng-click="newInviteCtrl.acceptInvite($event)" md-colors="{background: 'green-900'}">Aceitar</md-button>
-           <md-button ng-click="newInviteCtrl.rejectInvite($event)" md-colors="{background: 'green-900'}">Rejeitar</md-button>
+           <md-button ng-click="newInviteCtrl.acceptInvite($event)" md-colors="{background: 'teal-900'}">Aceitar</md-button>
+           <md-button ng-click="newInviteCtrl.rejectInvite($event)" md-colors="{background: 'teal-900'}">Rejeitar</md-button>
         </section>
       </md-content>
     </md-card>

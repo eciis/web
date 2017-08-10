@@ -27,7 +27,6 @@
             });
         }
 
-        editInstCtrl.invite = editInstCtrl.user.getPendingInvitationOf('institution');
         editInstCtrl.newInstitution = {};
         editInstCtrl.newInstitution.photo_url = "/images/institution.jpg";
 

@@ -7,32 +7,34 @@
       <div flex>
         <md-card layout="column" class="green-background">
           <center>
-            <img ng-src="{{ institutionCtrl.current_institution.photo_url }}" class="img-circle img-thumbnail" >
+            <a href ng-click="institutionCtrl.goToInstitution()">
+              <img ng-src="{{ institutionCtrl.current_institution.photo_url }}" class="img-circle img-thumbnail" >
+            </a>
           </center>
           <md-card-title>
             <md-card-title-text>
-              <span class="md-headline"><b>{{ institutionCtrl.current_institution.name }}</b></span>
+              <a href class="md-title hyperlink" ng-click="institutionCtrl.goToInstitution()"><b>{{ institutionCtrl.current_institution.name }}</b></a>
             </md-card-title-text>
           </md-card-title>
           <md-card-content>
             <div layout="row">
-              <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}" ng-click="institutionCtrl.goToEditInfo()">
+              <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-900'}" ng-click="institutionCtrl.goToEditInfo()">
                 <md-icon>edit</md-icon>Editar Informações
               </md-button>
             </div>
             <div layout="row">
-              <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}" ng-click="institutionCtrl.goToManageMembers()">
+              <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-900'}" ng-click="institutionCtrl.goToManageMembers()">
                 <md-icon>people</md-icon>Gerenciar membros
               </md-button>
             </div>
             <div layout="row">
-              <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}"
+              <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-900'}"
               ng-click="institutionCtrl.goToManageInstitutions()" >
                 <md-icon>account_balance</md-icon>Convidar
               </md-button>
             </div>
             <div layout="row">
-              <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}" ng-click="">
+              <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-900'}" ng-click="">
               </md-button>
             </div>
           </md-card-content>

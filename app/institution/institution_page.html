@@ -34,7 +34,7 @@
             <div layout="row" layout-xs="column" flex="60" flex-gt-sm="40">
                 <div flex-gt-sm="20" flex-xs="05" layout="column">
                     <!-- Buttons -->
-                    <md-button flex-xs class="md-primary md-raised md-hue-2" md-colors="{background: 'green-900'}"
+                    <md-button flex-xs class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-900'}"
                         ng-if="!institutionCtrl.isMember"
                         ng-click="institutionCtrl.isUserFollower ? institutionCtrl.unfollow() : institutionCtrl.follow()">
                         <md-icon>{{ institutionCtrl.isUserFollower ? 'person_outline':'person_add' }}</md-icon>
@@ -43,7 +43,7 @@
 
                     <!-- INSTITUTION MEMBERS -->
                     <md-card hide show-gt-xs>
-                        <md-subhead layout-padding class="md-primary" md-colors="{background: 'green-900'}">Membros</md-subhead>
+                        <md-subhead layout-padding class="md-primary" md-colors="{background: 'teal-900'}">Membros</md-subhead>
                         <md-card-content>
                             <md-grid-list
                                     md-cols="5" md-cols-gt-md="6"
@@ -61,7 +61,7 @@
 
                     <!-- INSTITUTION FOLLOWERS -->
                     <md-card hide show-gt-xs>
-                        <md-subhead layout-padding class="md-primary" md-colors="{background: 'green-900'}">Seguidores</md-subhead>
+                        <md-subhead layout-padding class="md-primary" md-colors="{background: 'teal-900'}">Seguidores</md-subhead>
                         <md-card-content>
                             <md-grid-list
                                     md-cols="5" md-cols-gt-md="6"

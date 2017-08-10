@@ -86,7 +86,7 @@ class User(ndb.Model):
         """Add a institution to user."""
         if institution_key not in self.institutions:
             self.institutions.append(institution_key)
-            self.add_permission("publish_post", self.key.urlsafe())
+            self.add_permission("publish_post", institution_key.urlsafe())
             self.put()
 
     def add_image(self, url_image):
@@ -106,7 +106,10 @@ class User(ndb.Model):
         permission_type -- permission name that will be used to verify authorization
         entity_key -- ndb urlsafe of the object binded to the permission
         """
-        self.permissions[permission_type] = {entity_key: True}
+        if self.permissions.get(permission_type, None):
+            self.permissions[permission_type][entity_key] = True
+        else:
+            self.permissions[permission_type] = {entity_key: True}
         self.put()
 
     def remove_permission(self, permission_type, entity_key):

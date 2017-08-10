@@ -137,6 +137,7 @@ class Institution(ndb.Model):
 
         return institution_stub
 
+    @ndb.transactional(xg=True)
     def createInstitutionWithStub(self, user, inviteKey, institution):
         invite = ndb.Key(urlsafe=inviteKey).get()
 

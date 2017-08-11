@@ -9,6 +9,7 @@
         inviteController.invite = {};
         inviteController.sent_invitations = [];
 
+        inviteController.showButton = true;
         var currentInstitutionKey = $state.params.institutionKey;
         var invite;
 
@@ -21,6 +22,7 @@
                 promise.then(function success(response) {
                     inviteController.sent_invitations.push(invite);
                     inviteController.invite = {};
+                    inviteController.showButton = true;
                     showToast('Convite enviado com sucesso!');
                 }, function error(response) {
                     showToast(response.data.msg);
@@ -30,6 +32,7 @@
         };
 
         function loadInstitution() {
+            console.log(inviteController.showButton);
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
                 inviteController.sent_invitations = response.data.sent_invitations;
                 getMembers();

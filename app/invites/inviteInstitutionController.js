@@ -9,6 +9,7 @@
         inviteController.invite = {};
         inviteController.sent_invitations = [];
         inviteController.existing_institutions = [];
+        inviteController.showButton = true;
         var INSTITUTION_STATE = "active,pending";
 
         var invite;
@@ -64,6 +65,7 @@
         inviteController.sendInstInvite = function sendInstInvite(invite) {
             var promise = InviteService.sendInvite(invite);
             promise.then(function success(response) {
+                    inviteController.showButton = true;
                     inviteController.sent_invitations.push(invite);
                     MessageService.showToast('Convite enviado com sucesso!');
                 }, function error(response) {

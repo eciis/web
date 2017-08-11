@@ -9,7 +9,6 @@
         inviteController.invite = {};
         inviteController.sent_invitations = [];
         inviteController.existing_institutions = [];
-        inviteController.showButton = true;
         var INSTITUTION_STATE = "active,pending";
 
         var invite;
@@ -17,8 +16,7 @@
         inviteController.user = AuthService.getCurrentUser();
 
         inviteController.cancelInvite = function cancelInvite() {
-            inviteController.invite = {};
-            inviteController.showButton = true;
+            $state.go("app.home");
         };
 
         inviteController.checkInstInvite = function checkInstInvite(ev) {
@@ -67,7 +65,6 @@
             var promise = InviteService.sendInvite(invite);
             promise.then(function success(response) {
                     inviteController.invite = {};
-                    inviteController.showButton = true;
                     invite.status = 'sent';
                     inviteController.sent_invitations.push(invite);
                     MessageService.showToast('Convite enviado com sucesso!');

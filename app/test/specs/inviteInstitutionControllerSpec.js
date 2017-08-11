@@ -119,6 +119,17 @@
                 });
                 httpBackend.flush();
             });
+
+            it('should change properties invite and sent_invitations', function(done){
+                var promise = inviteinstitutionCtrl.sendInstInvite(invite);
+                promise.then(function() {
+                    expect(inviteinstitutionCtrl.invite).toEqual({});
+                    expect(invite.status).toEqual('sent');
+                    expect(inviteinstitutionCtrl.sent_invitations).toEqual([invite]);
+                    done();
+                });
+                scope.$apply();
+            });
         });
     });
 }));

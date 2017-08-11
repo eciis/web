@@ -124,6 +124,7 @@
                 var promise = inviteinstitutionCtrl.sendInstInvite(invite);
                 promise.then(function() {
                     expect(inviteinstitutionCtrl.invite).toEqual({});
+                    expect(inviteinstitutionCtrl.showButton).toBe(true);
                     expect(invite.status).toEqual('sent');
                     expect(inviteinstitutionCtrl.sent_invitations).toEqual([invite]);
                     done();

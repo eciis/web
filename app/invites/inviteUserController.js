@@ -32,7 +32,6 @@
         };
 
         function loadInstitution() {
-            console.log(inviteController.showButton);
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
                 inviteController.sent_invitations = response.data.sent_invitations;
                 getMembers();

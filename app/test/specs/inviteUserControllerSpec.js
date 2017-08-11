@@ -96,6 +96,7 @@
                 promise.then(function() {
                     expect(inviteService.sendInvite).toHaveBeenCalledWith(otherInvite);
                     expect(inviteUserCtrl.invite).toEqual({});
+                    expect(inviteUserCtrl.showButton).toBe(true);
                     expect(inviteUserCtrl.sent_invitations).toContain(invite);
                     expect(inviteUserCtrl.sent_invitations).toContain(otherInvite);
                     expect(inviteUserCtrl.sent_invitations.length).toBe(2);

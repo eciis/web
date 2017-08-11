@@ -11,13 +11,16 @@
 
         editInstCtrl.addImage = function(image) {
             var newSize = 800;
-            ImageService.compress(image, newSize).then(function success(data) {
+            var promise = ImageService.compress(image, newSize);
+
+            promise.then(function success(data) {
                 editInstCtrl.photo_instituicao = data;
                 ImageService.readFile(data, setImage);
                 editInstCtrl.file = null;
             }, function error(error) {
                 MessageService.showToast(error);
             });
+            return promise;
         };
 
         function setImage(image) {
@@ -44,7 +47,8 @@
                 .targetEvent(event)
                 .ok('Sim')
                 .cancel('Não');
-            $mdDialog.show(confirm).then(function() {
+            var promise = $mdDialog.show(confirm);
+            promise.then(function() {
                 if (editInstCtrl.photo_instituicao) {
                     saveImage();
                 } else {
@@ -53,24 +57,29 @@
             }, function() {
                 MessageService.showToast('Cancelado');
             });
+            return promise;
         };
 
         function saveImage() {
             editInstCtrl.loading = true;
-            ImageService.saveImage(editInstCtrl.photo_instituicao).then(function(data) {
+            var promise = ImageService.saveImage(editInstCtrl.photo_instituicao);
+            promise.then(function(data) {
                 editInstCtrl.loading = false;
                 editInstCtrl.newInstitution.photo_url = data.url;
                 updateInstitution();
             });
+            return promise;
         }
 
         function updateInstitution() {
             var patch = jsonpatch.generate(observer);
-            InstitutionService.update(institutionKey, patch).then(function success() {
+            var promise = InstitutionService.update(institutionKey, patch);
+            promise.then(function success() {
                 updateUserInstutionAndFollow(editInstCtrl.newInstitution);
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
+            return promise;
         }
 
         function updateUserInstutionAndFollow(institution) {

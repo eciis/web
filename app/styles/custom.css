@@ -139,7 +139,6 @@ a:active {
 }
 
 .demo-menu-example {
-  background: white;
   border-radius: 4px;
   width: 256px;
 }
@@ -157,7 +156,7 @@ a:active {
 
 .demo-menu-item:hover,
 .demo-menu-item:focus {
-  background-color: rgb(238, 238, 238);
+  background-color: 004D40;
 }
 
 .post-count {

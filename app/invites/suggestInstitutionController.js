@@ -16,7 +16,8 @@
         };
 
         suggestInstCtrl.goToInstitution = function goToInstitution(institutionKey) {
-            $state.go('app.institution', {institutionKey: institutionKey});
+            var url = makeUrl(institutionKey);
+            window.open(url,'_blank');
             suggestInstCtrl.cancel();
         };
 
@@ -27,5 +28,11 @@
         suggestInstCtrl.isActive = function(state) {
             return state === ACTIVE_STATE;
         };
+
+        function makeUrl(institutionKey){
+            var url_atual = window.location.href;
+            url_atual = url_atual.split('#');
+            return url_atual[0] + $state.href('app.institution', {institutionKey: institutionKey});
+        }
     });
 })();

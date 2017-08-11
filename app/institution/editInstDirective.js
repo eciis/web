@@ -2,13 +2,22 @@
 (function() {
     var app = angular.module("app");
     app.controller("EditInstController", function EditInstController(AuthService, InstitutionService, $state, 
-            $mdToast, $mdDialog, $http, InviteService, ImageService, $rootScope, MessageService, PdfService) {
+            $mdToast, $mdDialog, $http, InviteService, ImageService, $rootScope, MessageService, PdfService, $q) {
 
         var editInstCtrl = this;
         var institutionKey = $state.params.institutionKey;
         var observer;
+
         editInstCtrl.loading = false;
         editInstCtrl.user = AuthService.getCurrentUser();
+        editInstCtrl.newInstitution = {};
+        editInstCtrl.newInstitution.photo_url = "/images/institution.jpg";
+        editInstCtrl.cnpjRegex = "[0-9]{2}[\.][0-9]{3}[\.][0-9]{3}[\/][0-9]{4}[-][0-9]{2}";
+        editInstCtrl.phoneRegex = "([0-9]{2}[\\s][0-9]{8})";
+        var currentPortfoliourl = null;
+
+        getLegalNatures();
+        getOccupationAreas();
 
         editInstCtrl.addImage = function(image) {
             var newSize = 800;
@@ -27,15 +36,6 @@
             });
         }
 
-        editInstCtrl.newInstitution = {};
-        editInstCtrl.newInstitution.photo_url = "/images/institution.jpg";
-
-        getLegalNatures();
-        getOccupationAreas();
-
-        editInstCtrl.cnpjRegex = "[0-9]{2}[\.][0-9]{3}[\.][0-9]{3}[\/][0-9]{4}[-][0-9]{2}";
-        editInstCtrl.phoneRegex = "([0-9]{2}[\\s][0-9]{8})";
-
         editInstCtrl.submit = function submit() {
             var confirm = $mdDialog.confirm(event)
                 .clickOutsideToClose(true)
@@ -46,31 +46,39 @@
                 .ok('Sim')
                 .cancel('Não');
             $mdDialog.show(confirm).then(function() {
-                if (editInstCtrl.photo_instituicao) {
-                    saveImage();
-                } else {
-                    updateInstitution();
-                }
+                updateInstitution();
             }, function() {
                 MessageService.showToast('Cancelado');
             });
         };
 
         function saveImage() {
-            editInstCtrl.loading = true;
-            ImageService.saveImage(editInstCtrl.photo_instituicao).then(function(data) {
-                editInstCtrl.loading = false;
-                editInstCtrl.newInstitution.photo_url = data.url;
-                updateInstitution();
-            });
+            var promise = $q.defer();
+            if(editInstCtrl.photo_instituicao) {
+                editInstCtrl.loading = true;
+                promise = ImageService.saveImage(editInstCtrl.photo_instituicao);
+                promise.then(function(data) {
+                    editInstCtrl.loading = false;
+                    editInstCtrl.newInstitution.photo_url = data.url;
+                });
+            } else {
+                $q.resolve(promise);
+            }
+            return promise;
         }
 
         function updateInstitution() {
-            var patch = jsonpatch.generate(observer);
-            InstitutionService.update(institutionKey, patch).then(
-                reloadUser(),
-                function error(response) {
-                    MessageService.showToast(response.data.msg);
+            var promises = [savePortfolio(), saveImage()];
+            $q.all(promises).then(function success() {
+                var patch = jsonpatch.generate(observer);
+                console.log(patch);
+                InstitutionService.update(institutionKey, patch).then(
+                    reloadUser(),
+                    function error(response) {
+                        MessageService.showToast(response.data.msg);
+                });                
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
             });
         }
 
@@ -96,20 +104,38 @@
             });
         }
 
-        editInstCtrl.submitPortfolio = function submitPortfolio() {
-            var promise = PdfService.save(editInstCtrl.file);
-            promise.then(function success(data) {
-                editInstCtrl.newInstitution.portfolio_url = data.url;
-                MessageService.showToast("Portfólio adicionado com sucesso");
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
-            });
-            return promise;
+        editInstCtrl.addPortfolio = function addPortfolio() {
+            MessageService.showToast("Portfólio adicionado");
         };
+
+        function savePortfolio() {
+            var promise = $q.defer();
+            if(editInstCtrl.file) {
+                promise = PdfService.save(editInstCtrl.file, currentPortfoliourl);
+                promise.then(function success(data) {
+                    editInstCtrl.newInstitution.portfolio_url = data.url;
+                    currentPortfoliourl = data.url;
+                }, function error(response) {
+                    MessageService.showToast(response.data.msg);
+                });
+            } else {
+                $q.resolve(promise);
+            }
+                    
+            return promise;
+        }
+
+        function setPortfolio(file) {
+            $rootScope.$apply(function() {
+                editInstCtrl.newInstitution.portfolio_url = file.url;
+            });
+        }
 
         function loadInstitution() {
             InstitutionService.getInstitution(institutionKey).then(function success(response) {
                 editInstCtrl.newInstitution = response.data;
+                currentPortfoliourl = editInstCtrl.newInstitution.portfolio_url;
+                console.log(currentPortfoliourl);
                 observer = jsonpatch.observe(editInstCtrl.newInstitution);
             }, function error(response) {
                 MessageService.showToast(response.data.msg);

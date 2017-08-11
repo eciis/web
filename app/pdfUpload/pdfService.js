@@ -7,7 +7,7 @@
         var service = this;
         var fileFolder = "files/";
 
-        service.save = function save(file) {
+        service.save = function save(file, currentUrl) {
             var deferred = $q.defer();
 
             if(!isValidPdf(file)) {
@@ -15,11 +15,20 @@
                 return deferred.promise;
             }
 
+            if(currentUrl) {
+                var currentFileRef = firebase.storage().refFromURL(currentUrl);
+                currentFileRef.delete().then(function success() {
+                }, function error() {
+                    return deferred.promise;
+                })
+            }
+
             var INDEX_FILE_NAME = 0;
             var INDEX_FILE_TYPE = 1;
             var fileProperties = file.name.split(".");
             var filename = fileProperties[INDEX_FILE_NAME]  + "-" + (new Date()).getTime() + "." + fileProperties[INDEX_FILE_TYPE];
-            var fileReference = firebase.storage().ref(fileFolder + filename);
+            var storageRef = firebase.storage().ref();
+            var fileReference = storageRef.child(fileFolder + filename);
 
             var metadata = {
                 contentType: 'file/' + fileProperties[INDEX_FILE_TYPE]
@@ -40,6 +49,20 @@
 
             return deferred.promise;
         };
+
+        service.readFile = function readFile(file, callback) {
+            var fileReader = new FileReader();
+
+            fileReader.onload = function createFile(event) {
+                var source_file_obj = new File([""], file.name);
+
+                source_file_obj.onload = function() {
+                    callback(source_file_obj);
+                }
+                source_file_obj.src = event.target.result;
+            }
+            fileReader.readAsDataURL(file);
+        }
 
         function isValidPdf(file) {
             var pdfType = "application/pdf";

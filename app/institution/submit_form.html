@@ -13,7 +13,9 @@
                             ngf-select="editInstCtrl.addImage(editInstCtrl.file)">
                         <b>Adicionar imagem</b>
                     </md-button>
-                    <md-progress-linear ng-show="editInstCtrl.loading" md-mode="indeterminate" style="width: 14%; margin-left: auto; margin-right: auto"></md-progress-linear>
+                    <md-progress-linear ng-show="editInstCtrl.loading" md-mode="indeterminate" 
+                        style="width: 14%; margin-left: auto; margin-right: auto">
+                    </md-progress-linear>
                 </div>
             </div>
         </div>
@@ -98,11 +100,13 @@
     </md-input-container>
     <md-input-container class="md-block">
         <md-button ng-click="null" ng-model="editInstCtrl.file" ngf-pattern="'application/pdf'" ngf-accept="'application/pdf'" 
-            ngf-max-size="5MB" ngf-select="editInstCtrl.submitPortfolio()">
+            ngf-max-size="5MB" ngf-select="editInstCtrl.addPortfolio()">
             Adicionar portfólio
         </md-button>
     </md-input-container>
     <div layout="row" layout-align="end center">
-        <md-button ng-click="editInstCtrl.submit($event)" class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-900'}" ng-disabled="institutionForm.$invalid">Confirmar</md-button>
+        <md-button ng-click="editInstCtrl.submit($event)" class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-900'}" 
+            ng-disabled="institutionForm.$invalid">Confirmar
+        </md-button>
     </div>
 </form>

@@ -34,12 +34,16 @@
                 getFollowers();
                 checkIfUserIsFollower();
                 institutionCtrl.checkIfUserIsMember();
-                var url = institutionCtrl.current_institution.portfolio_url;
-                institutionCtrl.portfolioUrl = $sce.trustAsResourceUrl(url);
+                getPortfolioUrl();
             }, function error(response) {
                 $state.go("app.home");
                 MessageService.showToast(response.data.msg);
             });
+        }
+
+        function getPortfolioUrl() {
+            institutionCtrl.portfolioUrl = institutionCtrl.current_institution.portfolio_url;
+            console.log("portfolioURL: " + institutionCtrl.portfolioUrl);
         }
 
         function getMembers() {
@@ -127,34 +131,25 @@
             institutionCtrl.isMember = institutionCtrl.user.isMember(institutionKey);
         };
 
+        // var url = "https://goo.gl/r2Pto3";
+        var url = institutionCtrl.portfolioUrl;
         institutionCtrl.portfolioDialog = function(ev) {
             $mdDialog.show({
-             controller: DialogController,
-             templateUrl: 'institution/portfolioDialog.html',
-             // parent: angular.element(document.body),
-             targetEvent: ev,
-             clickOutsideToClose:true,
-             fullscreen: true // Only for -xs, -sm breakpoints.
-            })
-            .then(function() {
-
-            }, function() {
-
+                templateUrl: 'institution/portfolioDialog.html',
+                targetEvent: ev,
+                clickOutsideToClose:true,
+                locals: {
+                    portfolioUrl: url
+                },
+                controller: DialogController,
+                controllerAs: 'ctrl'
             });
         };
 
-        function DialogController($scope, $mdDialog) {
-            $scope.hide = function() {
-              $mdDialog.hide();
-            };
-
-            $scope.cancel = function() {
-              $mdDialog.cancel();
-            };
-
-            $scope.answer = function(answer) {
-              $mdDialog.hide(answer);
-            };
+        function DialogController($mdDialog, portfolioUrl) {
+            var ctrl = this;
+            var trustedUrl = $sce.trustAsResourceUrl(portfolioUrl);
+            ctrl.portfolioUrl = trustedUrl;
         }
     });
 })();

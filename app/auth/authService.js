@@ -77,7 +77,7 @@
 
         service.logout = function logout() {
             authObj.$signOut();
-            delete $window.sessionStorage.userInfo;
+            delete $window.localStorage.userInfo;
             userInfo = undefined;
         };
 
@@ -97,7 +97,7 @@
         };
 
         service.save = function() {
-            $window.sessionStorage.userInfo = JSON.stringify(userInfo);
+            $window.localStorage.userInfo = JSON.stringify(userInfo);
         };
 
         service.reload = function reload() {
@@ -124,12 +124,12 @@
         function configUser(userLoaded, userToken) {
             userInfo = new User(userLoaded);
             _.extend(userInfo, userToken);
-            $window.sessionStorage.userInfo = JSON.stringify(userInfo);
+            $window.localStorage.userInfo = JSON.stringify(userInfo);
         }
 
         function init() {
-            if ($window.sessionStorage.userInfo) {
-                var parse = JSON.parse($window.sessionStorage.userInfo);
+            if ($window.localStorage.userInfo) {
+                var parse = JSON.parse($window.localStorage.userInfo);
                 userInfo = new User(parse);
             }
         }

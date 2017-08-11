@@ -51,9 +51,9 @@
         });
 
         it('should authService.save()', function() {
-            window.sessionStorage.userInfo = null;
+            window.localStorage.userInfo = null;
             authService.save();
-            var userCache = window.sessionStorage.userInfo;
+            var userCache = window.localStorage.userInfo;
             var luizCache = JSON.stringify(userTest);
 
             expect(userCache).toEqual(luizCache);

@@ -31,6 +31,11 @@
             }
         };
 
+        inviteController.cancelInvite = function cancelInvite() {
+            inviteController.invite = {};
+            inviteController.showButton = true;
+        };
+
         function loadInstitution() {
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
                 inviteController.sent_invitations = response.data.sent_invitations;

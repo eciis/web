@@ -17,7 +17,8 @@
         inviteController.user = AuthService.getCurrentUser();
 
         inviteController.cancelInvite = function cancelInvite() {
-            $state.go("app.home");
+            inviteController.invite = {};
+            inviteController.showButton = true;
         };
 
         inviteController.checkInstInvite = function checkInstInvite(ev) {

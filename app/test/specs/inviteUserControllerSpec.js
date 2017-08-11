@@ -123,5 +123,15 @@
                 expect(inviteUserCtrl.isUserInviteValid(inviteMember)).toBe(false);
             });
         });
+
+        describe('cancelInvite()', function() {
+            it('should clear the object invite', function() {
+                inviteUserCtrl.invite = invite;
+                inviteUserCtrl.cancelInvite();
+
+                expect(inviteUserCtrl.invite).toEqual({});
+                expect(inviteUserCtrl.showButton).toBe(true);
+            });
+        });
     });
 }));

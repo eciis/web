@@ -63,14 +63,6 @@
 
     describe('InviteInstitutionController functions', function() {
 
-        describe('cancelInvite()', function() {
-            it('should call state.go app.home ', function() {
-                spyOn(state, 'go');
-                inviteinstitutionCtrl.cancelInvite();
-                expect(state.go).toHaveBeenCalledWith('app.home');
-            });
-        });
-
         describe('sendInstInvite()', function() {
             beforeEach(function() {
                 spyOn(inviteService, 'sendInvite').and.callFake(function() {
@@ -130,6 +122,18 @@
                     done();
                 });
                 scope.$apply();
+            });
+        });
+
+        describe('cancelInvite()', function() {
+            it('should clear the object invite', function() {
+                inviteinstitutionCtrl.invite = {
+                    invitee: "invitee@gmail.com",
+                    suggestion_institution_name : "Institution"};
+                inviteinstitutionCtrl.cancelInvite();
+
+                expect(inviteinstitutionCtrl.invite).toEqual({});
+                expect(inviteinstitutionCtrl.showButton).toBe(true);
             });
         });
     });

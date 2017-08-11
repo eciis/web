@@ -86,7 +86,6 @@
         inviteInstCtrl.cancelInvite = function cancelInvite() {
             inviteInstCtrl.invite = {};
             inviteInstCtrl.showButton = true;
-
         };
 
         inviteInstCtrl.goToInst = function goToInst(institutionKey) {

@@ -158,7 +158,7 @@ describe('Test EditInstDirective', function() {
             spyOn(state, 'go');
 
             editInstCtrl.photo_instituicao = 'base64Test';
-            promise = editInstCtrl.submit();
+            promise = editInstCtrl.submit('$event');
         });
 
         it('Should be call mdDialog.show', function(done) {

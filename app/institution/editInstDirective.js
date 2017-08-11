@@ -38,7 +38,7 @@
         editInstCtrl.cnpjRegex = "[0-9]{2}[\.][0-9]{3}[\.][0-9]{3}[\/][0-9]{4}[-][0-9]{2}";
         editInstCtrl.phoneRegex = "([0-9]{2}[\\s][0-9]{8})";
 
-        editInstCtrl.submit = function submit() {
+        editInstCtrl.submit = function submit(event) {
             var confirm = $mdDialog.confirm(event)
                 .clickOutsideToClose(true)
                 .title('Confirmar Edição')

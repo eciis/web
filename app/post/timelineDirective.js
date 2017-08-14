@@ -8,6 +8,8 @@
 
         timelineCtrl.user = AuthService.getCurrentUser();
 
+        timelineCtrl.refreshPostButton = false;
+
         timelineCtrl.showRefreshPostButton = function showRefreshPostButton() {
            return timelineCtrl.refreshPostButton;
         };

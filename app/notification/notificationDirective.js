@@ -21,8 +21,8 @@
             return promise;
         };
 
-        controller.format = function format(n) {
-            return NotificationService.formatMessage(n);
+        controller.format = function format(notification) {
+            return NotificationService.formatMessage(notification);
         };
 
         (function main() {

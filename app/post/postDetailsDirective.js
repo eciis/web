@@ -10,8 +10,6 @@
         postDetailsCtrl.showLikes = false;
         postDetailsCtrl.showComments = false;
 
-        postDetailsCtrl.refreshPostButton = false;
-
         postDetailsCtrl.savingComment = false;
         postDetailsCtrl.savingLike = false;
 

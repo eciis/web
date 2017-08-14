@@ -47,7 +47,7 @@ class Invite(PolyModel):
         """Create personalized json of invite."""
         return {
             'invitee': self.invitee,
-            'inviter_key': self.inviter_key.get().name,
+            'inviter_name': self.inviter_key.get().name,
             'key': self.key.urlsafe(),
             'status': self.status,
             'institution_inviter': self.institution_key.get().make(['name'])

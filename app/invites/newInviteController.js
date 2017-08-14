@@ -46,6 +46,7 @@
                     MessageService.showToast('Cadastro de instituição realizado com sucesso');
                     newInviteCtrl.user.removeInviteInst(newInviteCtrl.institution.key);
                     newInviteCtrl.user.institutions.push(institutionSaved);
+                    newInviteCtrl.user.institutions_admin.push(institutionSaved.key);
                     newInviteCtrl.user.current_institution = institutionSaved;
                     newInviteCtrl.user.state = 'active';
                     AuthService.save();

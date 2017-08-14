@@ -96,6 +96,7 @@
                 promise.then(function() {
                     expect(inviteService.sendInvite).toHaveBeenCalledWith(otherInvite);
                     expect(inviteUserCtrl.invite).toEqual({});
+                    expect(inviteUserCtrl.showButton).toBe(true);
                     expect(inviteUserCtrl.sent_invitations).toContain(invite);
                     expect(inviteUserCtrl.sent_invitations).toContain(otherInvite);
                     expect(inviteUserCtrl.sent_invitations.length).toBe(2);
@@ -120,6 +121,16 @@
             it('should be false when the invitee was already member', function() {
                 var inviteMember = new Invite({invitee: "tiago@gmail.com"}, 'USER', '987654321', 'tiago@gmail.com');
                 expect(inviteUserCtrl.isUserInviteValid(inviteMember)).toBe(false);
+            });
+        });
+
+        describe('cancelInvite()', function() {
+            it('should clear the object invite', function() {
+                inviteUserCtrl.invite = invite;
+                inviteUserCtrl.cancelInvite();
+
+                expect(inviteUserCtrl.invite).toEqual({});
+                expect(inviteUserCtrl.showButton).toBe(true);
             });
         });
     });

@@ -22,7 +22,7 @@
         key: '1239'
     };
 
-    var url_splab = currentDomain() + "#/institution/"+ splab.key + "/details";
+    var url_splab = window.location.href + "#/institution/"+ splab.key + "/details";
 
     beforeEach(module('app'));
 
@@ -89,10 +89,4 @@
             expect(window.open).toHaveBeenCalledWith(url_splab, '_blank');
         });
     });
-
-    function currentDomain(){
-        var currentUrl = window.location.href;
-        currentUrl = currentUrl.split('#');
-        return currentUrl[0];
-    }
 }));

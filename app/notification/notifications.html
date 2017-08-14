@@ -4,7 +4,7 @@
   </md-button>
   <md-menu-content width="4">
     <md-menu-item ng-repeat="notification in controller.notifications" ng-click="controller.markAsRead(notification)">
-      <md-button>
+      <md-button ng-click="controller.goToPost(notification)">
         {{controller.format(notification)}}
       </md-button>
     </md-menu-item>

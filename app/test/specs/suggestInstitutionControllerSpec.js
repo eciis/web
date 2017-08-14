@@ -22,6 +22,8 @@
         key: '1239'
     };
 
+    var url_splab = "http://localhost:9876/context.html#/institution/"+ splab.key + "/details";
+
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $httpBackend, $rootScope, $state,
@@ -84,13 +86,7 @@
          it('should call state.go()', function() {
             spyOn(window, 'open');
             suggestInstCtrl.goToInstitution(splab.key);
-            expect(window.open).toHaveBeenCalledWith(makeUrl(splab.key), '_blank');
+            expect(window.open).toHaveBeenCalledWith(url_splab, '_blank');
         });
     });
-
-    function makeUrl(institutionKey){
-        var url_atual = window.location.href;
-        url_atual = url_atual.split('#');
-        return url_atual[0] + state.href('app.institution', {institutionKey: institutionKey});
-    }
 }));

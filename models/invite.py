@@ -39,7 +39,7 @@ class Invite(PolyModel):
 
         return invite
 
-    def sendInvite(self):
+    def sendInvite(self, host):
         """Send invite."""
         raise FieldException("sendInvite not implemented")
 

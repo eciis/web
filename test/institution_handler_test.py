@@ -83,13 +83,64 @@ class InstitutionHandlerTest(TestBaseHandler):
         # Pretend a new authentication
         verify_token.return_value = {'email': 'mayzabeel@gmail.com'}
 
-        # Check if raise Exception when the user who send patch is not the invitee
+        # Check if raise Exception when the user who send patch is not the
+        # invitee
         with self.assertRaises(Exception):
             self.testapp.post("/api/institutions/%s/invites/%s"
                               % (self.stub.key.urlsafe(),
                                  self.invite.key.urlsafe()),
                               [{"op": "replace", "path": "/name",
                                 "value": "Nova Inst update"}])
+
+    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
+    def test_get(self, verify_token):
+        """Test the get method."""
+        # Call the get method
+        cert = self.testapp.get("/api/institutions/%s" %
+                                self.certbio.key.urlsafe()).json
+        admin_certbio = cert["admin"]
+
+        # Verify if response is CERTBIO
+        self.assertEqual(cert["name"], 'CERTBIO',
+                         "The name expected was CERTBIO")
+        self.assertEqual(cert["cnpj"], "18.104.068/0001-86",
+                         "The cnpj expected was 18.104.068/0001-86")
+        self.assertEqual(cert["email"], 'certbio@ufcg.edu.br',
+                         "The email expected was certbio@ufcg.edu.br")
+        self.assertEqual(len(cert["members"]), 2,
+                         "The length of members should be 2")
+        self.assertEqual(len(cert["followers"]), 2,
+                         "The len of followers should be 2")
+        self.assertEqual(cert["posts"], [],
+                         "The posts should be empty")
+
+        # Verify if admin is Mayza
+        self.assertEqual(admin_certbio["name"], 'Mayza Nunes',
+                         "The name of admin should be Mayza Nunes")
+        self.assertEqual(admin_certbio["key"], self.mayza.key.urlsafe(),
+                         "The key of admin should be equal to key of obj mayza")
+
+    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
+    def test_get_without_admin(self, verify_token):
+        """Test the get method."""
+        # Call the get method
+        splab = self.testapp.get("/api/institutions/%s" %
+                                 self.splab.key.urlsafe()).json
+        admin_splab = splab["admin"]
+
+        # Verify if response is SPLAB
+        self.assertEqual(splab["name"], 'SPLAB',
+                         "The name expected was SPLAB")
+        self.assertEqual(splab["cnpj"], "18.104.068/0000-86",
+                         "The cnpj expected was 18.104.068/0000-86")
+        self.assertEqual(splab["email"], 'splab@ufcg.edu.br',
+                         "The email expected was splab@ufcg.edu.br")
+        self.assertEqual(splab["posts"], [],
+                         "The posts should be empty")
+
+        # Verify if admin is None
+        self.assertEqual(admin_splab, None,
+                         "The admin should be None")
 
     def tearDown(cls):
         """Deactivate the test."""
@@ -139,6 +190,21 @@ def initModels(cls):
     cls.certbio.put()
     cls.mayza.institutions_admin = [cls.certbio.key]
     cls.mayza.put()
+    # new Institution SPLAB
+    cls.splab = Institution()
+    cls.splab.name = 'SPLAB'
+    cls.splab.acronym = 'SPLAB'
+    cls.splab.cnpj = '18.104.068/0000-86'
+    cls.splab.legal_nature = 'public'
+    cls.splab.address = 'Universidade Federal de Campina Grande'
+    cls.splab.occupation_area = ''
+    cls.splab.email = 'splab@ufcg.edu.br'
+    cls.splab.phone_number = '(83) 3322 4455'
+    cls.splab.members = [cls.mayza.key, cls.raoni.key]
+    cls.splab.followers = [cls.mayza.key, cls.raoni.key]
+    cls.splab.posts = []
+    cls.splab.admin = None
+    cls.splab.put()
     # Invite for Raoni create new inst
     cls.invite = Invite()
     cls.invite.invitee = 'raoni.smaneoto@ccc.ufcg.edu.br'

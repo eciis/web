@@ -42,18 +42,22 @@ class InviteInstitution(Invite):
         """Method of creating connection between invitation and institution."""
         pass
 
-    def sendInvite(self):
+    def sendInvite(self, host):
         """Send Invite for user create some Institution."""
+        institution_key = self.institution_key.urlsafe()
+        invite_key = self.key.urlsafe()
+
         mail.send_mail(sender="e-CIS <eciis@splab.ufcg.edu.br>",
                        to="<%s>" % self.invitee,
                        subject="Convite plataforma e-CIS",
                        body="""
         Sua empresa %s foi convidada a se cadastrar na plataforma.
         Para realizar o cadastro crie sua conta pessoal em
-        http://eciis-splab.appspot.com  e proceda com o cadastro da sua empresa.
+        http://%s/app/#/institution/%s/%s/new_invite/INSTITUTION
+        e proceda com o cadastro da sua empresa.
 
         Equipe e-CIS
-        """ % self.suggestion_institution_name)
+        """ % (self.suggestion_institution_name, host, institution_key, invite_key))
 
     def make(self):
         """Create json of invite to institution."""

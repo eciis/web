@@ -1,102 +1,98 @@
-<div class="row">
-    <div class="col-lg-3 col-sm-6">
-        <div class="card hovercard" md-colors="{background: 'grey-100'}">
-            <div style="height: 50px;">
-            </div>
-            <div class="avatar">
-                <img style="border-radius: 50%; " ng-src="{{ editInstCtrl.newInstitution.photo_url }}" width="100px" height="100px" />
-            </div>
-            <div class="info">
-                <div class="title">
-                    <md-button ng-show="editInstCtrl.showButton()" ng-click="null" ng-model="editInstCtrl.file" ngf-pattern="'image/*'"
-                            ngf-accept="'image/*'" ngf-max-size="5MB"
-                            ngf-select="editInstCtrl.addImage(editInstCtrl.file)">
-                        <b>Adicionar imagem</b>
-                    </md-button>
-                    <md-progress-linear ng-show="editInstCtrl.loading" md-mode="indeterminate" style="width: 14%; margin-left: auto; margin-right: auto"></md-progress-linear>
-                </div>
+<div layout-padding>
+    <div class="row">
+        <div class="avatar" align="center">
+            <img style="border-radius: 50%; " ng-src="{{ editInstCtrl.newInstitution.photo_url }}" width="100px" height="100px" />
+        </div>
+        <div class="info" align="center">
+            <div class="title">
+                <md-button ng-show="editInstCtrl.showButton()" ng-click="null" ng-model="editInstCtrl.file" ngf-pattern="'image/*'"
+                           ngf-accept="'image/*'" ngf-max-size="5MB"
+                           ngf-select="editInstCtrl.addImage(editInstCtrl.file)">
+                    <b>Adicionar imagem</b>
+                </md-button>
+                <md-progress-linear ng-show="editInstCtrl.loading" md-mode="indeterminate" style="width: 14%; margin-left: auto; margin-right: auto"></md-progress-linear>
             </div>
         </div>
     </div>
+    <form>
+        <div layout="row">
+            <md-input-container class="md-block" flex-gt-xs flex="60">
+                <label>Nome</label>
+                <input type="text" name="name" required
+                    ng-model="editInstCtrl.newInstitution.name">
+            </md-input-container>
+            <md-input-container class="md-block" flex-gt-xs flex="40">
+                <label>Sigla</label>
+                <input type="text" name="sigla"
+                    ng-model="editInstCtrl.newInstitution.acronym">
+            </md-input-container>
+        </div>
+        <md-input-container class="md-block" flex-gt-xs>
+            <label>Endereço</label>
+            <input type="text" name="Endereço"
+                ng-model="editInstCtrl.newInstitution.address">
+        </md-input-container>
+        <div layout="row">
+            <md-input-container class="md-block" flex-gt-xs>
+                <label>CNPJ</label>
+                <input type="text" name="cnpj"
+                    ng-model="editInstCtrl.newInstitution.cnpj"
+                ng-pattern=editInstCtrl.cnpjRegex
+                minlength="18" md-maxlength="18"
+                placeholder="00.000.000/0000-00">
+            </md-input-container>
+            <md-input-container class="md-block" flex-gt-xs>
+                <label>Telefone</label>
+                <input type="text" name="phone"
+                    ng-model="editInstCtrl.newInstitution.phone_number"
+                ng-pattern=editInstCtrl.phoneRegex
+                minlength="11" md-maxlength="11"
+                placeholder="83 12345678">
+            </md-input-container>
+        </div>
+        <div layout="row">
+            <md-input-container class="md-block" flex-gt-sm>
+                <label>Área de Atuação</label>
+                    <md-select ng-model="editInstCtrl.newInstitution.occupation_area">
+                  <md-option ng-repeat="area in editInstCtrl.occupationAreas | orderBy: 'name'"
+                    ng-value="area.value">{{ area.name }}
+                  </md-option>
+                </md-select>
+            </md-input-container>
+            <md-input-container class="md-block" flex-gt-sm>
+                <label>Natureza Jurídica</label>
+                    <md-select ng-model="editInstCtrl.newInstitution.legal_nature">
+                  <md-option ng-repeat="nature in editInstCtrl.legalNatures | orderBy: 'name'"
+                    ng-value="nature.value">{{ nature.name }}
+                  </md-option>
+                </md-select>
+            </md-input-container>
+        </div>
+            <div ng-if="editInstCtrl.newInstitution.occupation_area == 'other'">
+            <md-input-container class="md-block" flex-gt-xs>
+                <label>Informe outra área de atuação</label>
+                <input type="text" name="outra"
+                    ng-model="editInstCtrl.newInstitution.other_area">
+            </md-input-container>
+        </div>
+        <md-input-container class="md-block">
+            <label>Descrição</label>
+                  <textarea ng-model="editInstCtrl.newInstitution.description" maxlength="300"
+              rows="3" md-select-on-focus>
+              </textarea>
+        </md-input-container>
+        <md-input-container class="md-block" flex-gt-xs>
+            <label>Responsável</label>
+            <input type="text" name="Responsavel" disabled
+            ng-model="editInstCtrl.newInstitution.admin.name">
+        </md-input-container>
+        <md-input-container class="md-block" flex-gt-xs>
+            <label>Email</label>
+            <input type="text" name="Email" disabled
+                ng-model="editInstCtrl.newInstitution.email">
+        </md-input-container>
+        <div layout="row" layout-align="end center">
+            <md-button ng-click="editInstCtrl.submit($event)" class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-900'}" ng-disabled="institutionForm.$invalid">Confirmar</md-button>
+        </div>
+    </form>
 </div>
-<form>
-    <div layout="row">
-        <md-input-container class="md-block" flex-gt-xs flex="60">
-            <label>Nome</label>
-            <input type="text" name="name" required
-                ng-model="editInstCtrl.newInstitution.name">
-        </md-input-container>
-        <md-input-container class="md-block" flex-gt-xs flex="40">
-            <label>Sigla</label>
-            <input type="text" name="sigla"
-                ng-model="editInstCtrl.newInstitution.acronym">
-        </md-input-container>
-    </div>
-    <md-input-container class="md-block" flex-gt-xs>
-        <label>Endereço</label>
-        <input type="text" name="Endereço"
-            ng-model="editInstCtrl.newInstitution.address">
-    </md-input-container>
-    <div layout="row">
-        <md-input-container class="md-block" flex-gt-xs>
-            <label>CNPJ</label>
-            <input type="text" name="cnpj"
-                ng-model="editInstCtrl.newInstitution.cnpj"
-            ng-pattern=editInstCtrl.cnpjRegex
-            minlength="18" md-maxlength="18"
-            placeholder="00.000.000/0000-00">
-        </md-input-container>
-        <md-input-container class="md-block" flex-gt-xs>
-            <label>Telefone</label>
-            <input type="text" name="phone"
-                ng-model="editInstCtrl.newInstitution.phone_number"
-            ng-pattern=editInstCtrl.phoneRegex
-            minlength="11" md-maxlength="11"
-            placeholder="83 12345678">
-        </md-input-container>
-    </div>
-    <div layout="row">
-        <md-input-container class="md-block" flex-gt-sm>
-            <label>Área de Atuação</label>
-                <md-select ng-model="editInstCtrl.newInstitution.occupation_area">
-              <md-option ng-repeat="area in editInstCtrl.occupationAreas | orderBy: 'name'"
-                ng-value="area.value">{{ area.name }}
-              </md-option>
-            </md-select>
-        </md-input-container>
-        <md-input-container class="md-block" flex-gt-sm>
-            <label>Natureza Jurídica</label>
-                <md-select ng-model="editInstCtrl.newInstitution.legal_nature">
-              <md-option ng-repeat="nature in editInstCtrl.legalNatures | orderBy: 'name'"
-                ng-value="nature.value">{{ nature.name }}
-              </md-option>
-            </md-select>
-        </md-input-container>
-    </div>
-        <div ng-if="editInstCtrl.newInstitution.occupation_area == 'other'">
-        <md-input-container class="md-block" flex-gt-xs>
-            <label>Informe outra área de atuação</label>
-            <input type="text" name="outra"
-                ng-model="editInstCtrl.newInstitution.other_area">
-        </md-input-container>
-    </div>
-    <md-input-container class="md-block">
-        <label>Descrição</label>
-              <textarea ng-model="editInstCtrl.newInstitution.description" maxlength="300"
-          rows="3" md-select-on-focus>
-          </textarea>
-    </md-input-container>
-    <md-input-container class="md-block" flex-gt-xs>
-        <label>Responsável</label>
-        <input type="text" name="Responsavel" disabled
-        ng-model="editInstCtrl.user.name">
-    </md-input-container>
-    <md-input-container class="md-block" flex-gt-xs>
-        <label>Email</label>
-        <input type="text" name="Email" disabled
-            ng-model="editInstCtrl.newInstitution.email">
-    </md-input-container>
-    <div layout="row" layout-align="end center">
-        <md-button ng-click="editInstCtrl.submit($event)" class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-900'}" ng-disabled="institutionForm.$invalid">Confirmar</md-button>
-    </div>
-</form>

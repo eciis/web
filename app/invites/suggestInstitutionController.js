@@ -16,8 +16,7 @@
         };
 
         suggestInstCtrl.goToInstitution = function goToInstitution(institutionKey) {
-            var url = makeUrl(institutionKey);
-            window.open(url,'_blank');
+            window.open(makeUrl(institutionKey), '_blank');
             suggestInstCtrl.cancel();
         };
 

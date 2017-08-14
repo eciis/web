@@ -82,9 +82,15 @@
 
     describe('goToInstitution()', function() {
          it('should call state.go()', function() {
-            spyOn(state, 'go');
+            spyOn(window, 'open');
             suggestInstCtrl.goToInstitution(splab.key);
-            expect(state.go).toHaveBeenCalledWith('app.institution', {institutionKey: splab.key});
+            expect(window.open).toHaveBeenCalledWith(makeUrl(splab.key), '_blank');
         });
     });
+
+    function makeUrl(institutionKey){
+        var url_atual = window.location.href;
+        url_atual = url_atual.split('#');
+        return url_atual[0] + state.href('app.institution', {institutionKey: institutionKey});
+    }
 }));

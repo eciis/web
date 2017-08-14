@@ -23,7 +23,7 @@
             var promise;
             var currentInstitutionKey = inviteController.user.current_institution.key;
             invite = new Invite(inviteController.invite, 'INSTITUTION',
-                currentInstitutionKey, inviteController.user.email);
+                currentInstitutionKey, inviteController.user.key);
             if (!invite.isValid()) {
                 MessageService.showToast('Convite inválido!');
             } else {

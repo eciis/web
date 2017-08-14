@@ -15,7 +15,7 @@
         inviteController.user = AuthService.getCurrentUser();
 
         inviteController.sendUserInvite = function sendInvite() {
-            invite = new Invite(inviteController.invite, 'USER', currentInstitutionKey, inviteController.user.email);
+            invite = new Invite(inviteController.invite, 'USER', currentInstitutionKey, inviteController.user.key);
             if (inviteController.isUserInviteValid(invite)) {
                 var promise = InviteService.sendInvite(invite);
                 promise.then(function success(response) {

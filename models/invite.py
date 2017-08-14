@@ -12,7 +12,7 @@ class Invite(PolyModel):
     invitee = ndb.StringProperty(required=True)
 
     # Inviter email
-    inviter = ndb.StringProperty(required=True)
+    inviter = ndb.KeyProperty(kind="User", required=True)
 
     # Status of Invite.
     status = ndb.StringProperty(choices=set([
@@ -34,7 +34,7 @@ class Invite(PolyModel):
     def create(data, invite):
         """Create a post and check required fields."""
         invite.invitee = data.get('invitee')
-        invite.inviter = data.get('inviter')
+        invite.inviter = ndb.Key(urlsafe=data.get('inviter'))
         invite.institution_key = ndb.Key(urlsafe=data.get('institution_key'))
 
         return invite
@@ -47,9 +47,10 @@ class Invite(PolyModel):
         """Create personalized json of invite."""
         return {
             'invitee': self.invitee,
-            'inviter': self.inviter,
+            'inviter': self.inviter.get().name,
             'key': self.key.urlsafe(),
-            'status': self.status
+            'status': self.status,
+            'institution_inviter': self.institution_key.get().make(['name'])
         }
 
     def change_status(self, status):

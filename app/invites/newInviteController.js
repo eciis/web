@@ -10,6 +10,7 @@
         newInviteCtrl.institution = null;
 
         newInviteCtrl.inviteKey = $state.params.inviteKey;
+    
 
         var institutionKey = $state.params.institutionKey;
 
@@ -101,6 +102,7 @@
         function loadInstitution() {
             InstitutionService.getInstitution(institutionKey).then(function success(response) {
                 newInviteCtrl.institution = response.data;
+                loadInvite();
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
@@ -117,6 +119,15 @@
                  .ok('Ok')
                  .targetEvent(event)
              );
+        }
+
+        function loadInvite(){
+            newInviteCtrl.invite = _.find(newInviteCtrl.user.invites, function(invite){
+                return invite.key === newInviteCtrl.inviteKey;
+            });
+            console.log(newInviteCtrl.user.invites);
+            console.log(newInviteCtrl.invite.institution_inviter);
+            console.log(newInviteCtrl.invite);
         }
 
         loadInstitution();

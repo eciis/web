@@ -8,14 +8,14 @@
 
         timelineCtrl.user = AuthService.getCurrentUser();
 
-        timelineCtrl.refreshPostButton = false;
+        timelineCtrl.refreshTimeline = false;
 
-        timelineCtrl.showRefreshPostButton = function showRefreshPostButton() {
-           return timelineCtrl.refreshPostButton;
+        timelineCtrl.showRefreshTimelineButton = function showRefreshTimelineButton() {
+           return timelineCtrl.refreshTimeline;
         };
 
-        timelineCtrl.setShowRefreshPostButton = function setShowRefreshPostButton() {
-            timelineCtrl.refreshPostButton = !timelineCtrl.refreshPostButton;
+        timelineCtrl.setRefreshTimelineButton = function setRefreshTimelineButton() {
+            timelineCtrl.refreshTimeline = !timelineCtrl.refreshTimeline;
         };
 
         timelineCtrl.load = function load(posts) {
@@ -24,14 +24,14 @@
                 _.forEach(response.data, function(post) {
                     posts.push(post);
                 });
-                timelineCtrl.setShowRefreshPostButton();
+                timelineCtrl.setRefreshTimelineButton();
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
         };
 
         (function main() {
-            NotificationService.watchPostNotification(timelineCtrl.user.key, timelineCtrl.setShowRefreshPostButton);
+            NotificationService.watchPostNotification(timelineCtrl.user.key, timelineCtrl.setRefreshTimelineButton);
         })();
     });
 

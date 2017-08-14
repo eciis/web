@@ -12,6 +12,7 @@
     var splab = {
             name: 'SPLAB',
             key: '987654321',
+            institutions_admin: [],
             sent_invitations: []
     };
 
@@ -24,6 +25,7 @@
     var tiago = {
         name: 'Tiago',
         institutions: [splab],
+        institutions_admin: [],
         follows: [splab.key],
         invites: [invite],
         accessToken: '00000'

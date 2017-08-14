@@ -29,9 +29,9 @@
         };
 
         function makeUrl(institutionKey){
-            var url_atual = window.location.href;
-            url_atual = url_atual.split('#');
-            return url_atual[0] + $state.href('app.institution', {institutionKey: institutionKey});
+            var currentUrl = window.location.href;
+            currentUrl = currentUrl.split('#');
+            return currentUrl[0] + $state.href('app.institution', {institutionKey: institutionKey});
         }
     });
 })();

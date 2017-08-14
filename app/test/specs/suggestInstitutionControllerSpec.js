@@ -22,6 +22,8 @@
         key: '1239'
     };
 
+    var url_splab = window.location.href + "#/institution/"+ splab.key + "/details";
+
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $httpBackend, $rootScope, $state,
@@ -82,9 +84,9 @@
 
     describe('goToInstitution()', function() {
          it('should call state.go()', function() {
-            spyOn(state, 'go');
+            spyOn(window, 'open');
             suggestInstCtrl.goToInstitution(splab.key);
-            expect(state.go).toHaveBeenCalledWith('app.institution', {institutionKey: splab.key});
+            expect(window.open).toHaveBeenCalledWith(url_splab, '_blank');
         });
     });
 }));

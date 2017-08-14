@@ -172,7 +172,7 @@
             expect(JSON.stringify).toHaveBeenCalled();
             expect(user.current_institution).toBe(certbio);
 
-            var cachedUser = JSON.parse(window.sessionStorage.userInfo);
+            var cachedUser = JSON.parse(window.localStorage.userInfo);
 
             expect(cachedUser.current_institution).toEqual(certbio);
           });

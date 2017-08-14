@@ -17,7 +17,7 @@ var INVITE_INSTITUTIONS_TYPE = ['INSTITUTION', 'INSTITUTION_PARENT', 'INSTITUTIO
 
 User.prototype.changeInstitution = function changeInstitution(institution) {
     this.current_institution = _.find(this.institutions, {'key': institution.key});
-    window.sessionStorage.userInfo = JSON.stringify(this);
+    window.localStorage.userInfo = JSON.stringify(this);
 };
 
 User.prototype.follow = function follow(institution) {

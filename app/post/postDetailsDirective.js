@@ -10,7 +10,6 @@
         postDetailsCtrl.showLikes = false;
         postDetailsCtrl.showComments = false;
 
-        postDetailsCtrl.postNotification = [];
         postDetailsCtrl.refreshPostButton = false;
 
         postDetailsCtrl.savingComment = false;
@@ -39,30 +38,6 @@
                 MessageService.showToast('Cancelado');
             });
         };
-
-        postDetailsCtrl.showRefreshPostButton = function showRefreshPostButton() {
-           return postDetailsCtrl.refreshPostButton;
-        };
-
-        postDetailsCtrl.setShowRefreshPostButton = function setShowRefreshPostButton() {
-            postDetailsCtrl.refreshPostButton = !postDetailsCtrl.refreshPostButton;
-        };
-
-        postDetailsCtrl.load = function load(posts) {
-            PostService.get().then(function success(response) {
-                posts.splice(0, posts.length);
-                _.forEach(response.data, function(post) {
-                    posts.push(post);
-                });
-                postDetailsCtrl.setShowRefreshPostButton();
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
-            });
-        };
-
-        (function main() {
-            NotificationService.getPostNotification(postDetailsCtrl.user.key, postDetailsCtrl.setShowRefreshPostButton);
-        })();
 
         postDetailsCtrl.isAuthorized = function isAuthorized() {
             return postDetailsCtrl.isPostAuthor() || isInstitutionAdmin();
@@ -317,20 +292,6 @@
             }
             return text;
         }
-    });
-
-    app.directive("timeline", function() {
-        return {
-            restrict: 'E',
-            templateUrl: "post/timeline.html",
-            controller: "PostDetailsController",
-            controllerAs: "postDetailsCtrl",
-            scope: {
-                posts: '=',
-                institution: '=',
-                user: '='
-            }
-        };
     });
 
     app.directive("postDetails", function() {

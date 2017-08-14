@@ -11,6 +11,7 @@
         postDetailsCtrl.showComments = false;
 
         postDetailsCtrl.postNotification = [];
+        postDetailsCtrl.refreshPostButton = false;
 
         postDetailsCtrl.savingComment = false;
         postDetailsCtrl.savingLike = false;
@@ -40,8 +41,11 @@
         };
 
         postDetailsCtrl.showRefreshPostButton = function showRefreshPostButton() {
-            postDetailsCtrl.postNotification = NotificationService.getPostNotification(postDetailsCtrl.user.key);
-            return !_.isEmpty(postDetailsCtrl.postNotification);
+           return postDetailsCtrl.refreshPostButton;
+        };
+
+        postDetailsCtrl.setShowRefreshPostButton = function setShowRefreshPostButton() {
+            postDetailsCtrl.refreshPostButton = !postDetailsCtrl.refreshPostButton;
         };
 
         postDetailsCtrl.load = function load(posts) {
@@ -50,11 +54,15 @@
                 _.forEach(response.data, function(post) {
                     posts.push(post);
                 });
-                NotificationService.markAsRefreshed();
+                postDetailsCtrl.setShowRefreshPostButton();
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
         };
+
+        (function main() {
+            NotificationService.getPostNotification(postDetailsCtrl.user.key, postDetailsCtrl.setShowRefreshPostButton);
+        })();
 
         postDetailsCtrl.isAuthorized = function isAuthorized() {
             return postDetailsCtrl.isPostAuthor() || isInstitutionAdmin();

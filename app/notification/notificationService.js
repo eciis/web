@@ -9,8 +9,8 @@
         var ref = firebase.database().ref();
 
         var notifications;
-        var notificationList = [];
-        var postNotification = [];
+        service.notificationList = [];
+        service.refreshed = false;
 
         var msg = {
             'COMMENT': 'comentou o seu post',
@@ -19,9 +19,9 @@
         };
 
         var POST_NOTIFICATION = 'POST';
-        var REFRESHED_NOTIFICATION = 'REFRESHED';
 
         service.watchNotifications = function watchNotifications(userKey, notificationsList) {
+            service.refreshed = false;
             var notificationsRef = ref.child("notifications/"+userKey);
             notifications = $firebaseArray(notificationsRef);
             notifications.$loaded().then(function() {
@@ -30,65 +30,27 @@
                         notificationsList.push(notification);
                     }
                 });
-                notificationList = notificationsList;
                 watch(notificationsList);
             });
         };
 
-        service.setPostNotification = function setPostNotification(notificationsList) {
-           postNotification = _.map(notificationsList, function(notification) {
-                if(notification){
-                    var typePost = notification.type === POST_NOTIFICATION;
-                    var statusNew = notification.status === "NEW";
-                    var statusRead = notification.status === "READ";
-                    if(typePost && (statusNew || statusRead)){
-                        return notification;
-                    }
-                }
-            });
-           if(!checkPostNotification()){
-                postNotification = [];
-           }
-        };
-
-        function checkPostNotification() {
-            return _.find(postNotification, function (notification) {
-                if(notification){
-                    var typePost = notification.type === POST_NOTIFICATION;
-                    var statusNew = notification.status === "NEW";
-                    var statusRead = notification.status === "READ";
-                    return typePost && (statusNew || statusRead);
-                }
-            });
-        }
-
-        service.markAsRefreshed = function markAsRefreshed() {
-            _.forEach(postNotification, function (notification) {
-                if(notification){
-                    if(notification.type === POST_NOTIFICATION){
-                        notification.status = REFRESHED_NOTIFICATION;
-                        notifications.$save(notification);
-                    }
-                }
-            });
-        };
-
-        service.getPostNotification = function getPostNotification(userKey) {
+        service.getPostNotification = function getPostNotification(userKey, showButton) {
             if(!notifications){
                 var notificationsRef = ref.child("notifications/"+userKey);
                 notifications = $firebaseArray(notificationsRef);
                 notifications.$loaded();
             }
             notifications.$watch(function(ev) {
-                if(ev.event === "child_added") {
-                    service.setPostNotification(notificationList);
-                } else if(ev.event === "child_changed") {
-                    if(!checkPostNotification()){
-                        postNotification = [];
-                    }
+                var notification = notifications.$getRecord(ev.key);
+                var typeCondition = false;
+                var eventCondition = ev.event === "child_added";
+                if(notification){
+                    typeCondition = notification.type === POST_NOTIFICATION;
+                }
+                if(eventCondition && service.refreshed && typeCondition) {
+                    showButton();
                 }
             });
-            return postNotification;
         };
 
         service.markAsRead = function markAsRead(notification) {
@@ -104,12 +66,12 @@
 
                     if (isNew(notification)) {
                         notification.msg = msg[notification.type];
-                        notificationList = notificationsList;
                         showToast(format(notification));
                     }
                 }
             });
             setNotificationMsg(notificationsList);
+            service.refreshed = true;
         }
 
         function setNotificationMsg(notificationsList) {

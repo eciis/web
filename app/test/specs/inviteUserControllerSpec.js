@@ -32,8 +32,6 @@
          institutions: [splab.key]
      };
 
-    
-
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $httpBackend, $rootScope, $state, InviteService, AuthService, InstitutionService) {

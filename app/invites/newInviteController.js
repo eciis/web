@@ -11,7 +11,6 @@
 
         newInviteCtrl.inviteKey = $state.params.inviteKey;
     
-
         var institutionKey = $state.params.institutionKey;
 
         var typeOfInvite = $state.params.typeInvite;
@@ -125,9 +124,6 @@
             newInviteCtrl.invite = _.find(newInviteCtrl.user.invites, function(invite){
                 return invite.key === newInviteCtrl.inviteKey;
             });
-            console.log(newInviteCtrl.user.invites);
-            console.log(newInviteCtrl.invite.institution_inviter);
-            console.log(newInviteCtrl.invite);
         }
 
         loadInstitution();

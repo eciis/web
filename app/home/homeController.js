@@ -46,7 +46,7 @@
         homeCtrl.expandInstMenu = function expandInstMenu(){
             homeCtrl.instMenuExpanded = !homeCtrl.instMenuExpanded;
         };
-        
+
         homeCtrl.isActive = function isActive(institution) {
             return institution.state === ACTIVE;
         };

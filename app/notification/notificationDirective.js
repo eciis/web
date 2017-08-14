@@ -4,14 +4,10 @@
 
     var app = angular.module("app");
 
-    app.controller("NotificationController", function NotificationController(NotificationService, AuthService, $rootScope) {
+    app.controller("NotificationController", function NotificationController(NotificationService, AuthService) {
         var controller = this;
 
-        Object.defineProperty(controller, 'user', {
-            get: function() {
-                return AuthService.user;
-            }
-        });
+        controller.user = AuthService.getCurrentUser();
 
         controller.notifications = [];
 
@@ -23,6 +19,10 @@
                 });
             });
             return promise;
+        };
+
+        controller.format = function format(notification) {
+            return NotificationService.formatMessage(notification);
         };
 
         (function main() {

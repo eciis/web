@@ -3,64 +3,78 @@
 (function() {
     var app = angular.module("app");
 
-    app.service("NotificationService", function NotificationService($firebaseArray, $mdToast) {
+    app.service("NotificationService", function NotificationService($firebaseArray,  MessageService) {
         var service = this;
 
         var ref = firebase.database().ref();
 
-        var notifications;
+        var firebaseArrayNotifications;
+
+        var TRANSLATE_MESSAGE = {
+            'COMMENT': 'comentou o seu post',
+            'POST': 'publicou um novo post',
+            'INVITE': 'te enviou um novo convite'
+        };
+
+        var POST_NOTIFICATION = 'POST';
+        var CHILD_ADDED = "child_added";
+
+        service.formatMessage = function formatMessage(notification) {
+            var message = TRANSLATE_MESSAGE[notification.type];
+            return notification.from+" "+message;
+        };
 
         service.watchNotifications = function watchNotifications(userKey, notificationsList) {
-            var notificationsRef = ref.child("notifications/"+userKey);
-
-            notifications = $firebaseArray(notificationsRef);
-
-            notifications.$loaded().then(function() {
-                _.forEach(notifications, function each(notification) {
+            setupNotifications(userKey, function() {
+                _.forEach(firebaseArrayNotifications, function each(notification) {
                     if (isNew(notification)) {
                         notificationsList.push(notification);
                     }
                 });
-                watch(notificationsList);
+
+                firebaseArrayNotifications.$watch(function(ev) {
+                    if (ev.event === CHILD_ADDED) {
+                        var notification = firebaseArrayNotifications.$getRecord(ev.key);
+                        notificationsList.push(notification);
+
+                        if (isNew(notification)) {
+                            MessageService.showToast(service.formatMessage(notification));
+                        }
+                    }
+                });
+            });
+        };
+
+        service.watchPostNotification = function watchPostNotification(userKey, callback) {
+            setupNotifications(userKey, function() {
+                firebaseArrayNotifications.$watch(function(ev) {
+                    if (ev.event === CHILD_ADDED) {
+                        var notification = firebaseArrayNotifications.$getRecord(ev.key);
+                        if (notification.type === POST_NOTIFICATION) {
+                            callback();
+                        }
+                    }
+                });
             });
         };
 
         service.markAsRead = function markAsRead(notification) {
             notification.status = "READ";
-            return notifications.$save(notification);
+            return firebaseArrayNotifications.$save(notification);
         };
 
-        function watch(notificationsList) {
-            notifications.$watch(function(ev) {
-                if (ev.event === "child_added") {
-                    var notification = notifications.$getRecord(ev.key);
-                    notificationsList.push(notification);
-
-                    if (isNew(notification)) {
-                        notification.type = notification.type === 'Comment'? 'comentou' : notification.type;
-                        showToast(format(notification));
-                    }
-                }
+        function setupNotifications(userKey, callback) {
+            if (!firebaseArrayNotifications) {
+                var notificationsRef = ref.child("notifications/"+userKey);
+                firebaseArrayNotifications = $firebaseArray(notificationsRef);
+            }
+            firebaseArrayNotifications.$loaded().then(function() {
+                callback();
             });
-        }
-
-        function showToast(msg) {
-            $mdToast.show(
-                $mdToast.simple()
-                    .textContent(msg)
-                    .action('FECHAR')
-                    .highlightAction(true)
-                    .hideDelay(5000)
-                    .position('bottom right')
-            );
         }
 
         function isNew(notification) {
             return notification.status === "NEW";
-        }
-
-        function format(notification) {
-            return notification.from+" "+notification.type+" o seu post";
         }
     });
 })();

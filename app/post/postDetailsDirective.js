@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller('PostDetailsController', function(PostService, AuthService, CommentService, $mdToast, $state,
-        $mdDialog, MessageService) {
+        $mdDialog, NotificationService, MessageService) {
         var postDetailsCtrl = this;
 
         postDetailsCtrl.showLikes = false;
@@ -155,7 +155,7 @@
                 var promise  =  CommentService.getComments(commentsUri);
                 promise.then(function success(response) {
                     postDetailsCtrl.post.data_comments = response.data;
-                    
+
                 postDetailsCtrl.post.number_of_comments = _.size(postDetailsCtrl.post.data_comments);
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
@@ -164,7 +164,6 @@
             } else{
                 postDetailsCtrl.post.data_comments = [];
             }
-            
         };
 
         postDetailsCtrl.getLikes = function getLikes() {
@@ -175,14 +174,14 @@
                 promise.then(function success(response) {
                     postDetailsCtrl.post.data_likes = response.data;
                     postDetailsCtrl.post.number_of_likes = _.size(postDetailsCtrl.post.data_likes);
-                    
+
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
                 });
                 return promise;
             }else{
                 postDetailsCtrl.post.data_likes = [];
-            }     
+            }
         };
 
         var addComment = function addComment(post, comment) {
@@ -291,18 +290,6 @@
             }
             return text;
         }
-    });
-
-    app.directive("timeline", function() {
-        return {
-            restrict: 'E',
-            templateUrl: "post/timeline.html",
-            scope: {
-                posts: '=',
-                institution: '=',
-                user: '='
-            }
-        };
     });
 
     app.directive("postDetails", function() {

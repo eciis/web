@@ -75,15 +75,15 @@
             var patch = jsonpatch.generate(observer);
             var promise = InstitutionService.update(institutionKey, patch);
             promise.then(function success() {
-                updateUserInstutionAndFollow(editInstCtrl.newInstitution);
+                updateUserInstitutions(editInstCtrl.newInstitution);
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
             return promise;
         }
 
-        function updateUserInstutionAndFollow(institution) {
-            editInstCtrl.user.updateInstitutionAndFollow(institution);
+        function updateUserInstitutions(institution) {
+            editInstCtrl.user.updateInstitutions(institution);
             AuthService.save();
             changeInstitution(institution);
             MessageService.showToast('Edição de instituição realizado com sucesso');

@@ -153,7 +153,7 @@ describe('Test EditInstDirective', function() {
                     }
                 };
             });
-            spyOn(editInstCtrl.user, 'updateInstitutionAndFollow');
+            spyOn(editInstCtrl.user, 'updateInstitutions');
             spyOn(authService, 'save');
             spyOn(state, 'go');
 
@@ -182,9 +182,9 @@ describe('Test EditInstDirective', function() {
             });
         });
 
-        it('Should be call user.updateInstitutionAndFollow', function(done) {
+        it('Should be call user.updateInstitutions', function(done) {
             promise.then(function() {
-                expect(editInstCtrl.user.updateInstitutionAndFollow).toHaveBeenCalled();
+                expect(editInstCtrl.user.updateInstitutions).toHaveBeenCalled();
                 done();
             });
         });

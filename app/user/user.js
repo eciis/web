@@ -81,7 +81,7 @@ User.prototype.removeInviteInst = function removeInviteInst(institutionKey) {
     });
 };
 
-User.prototype.updateInstitutionAndFollow = function updateInstitutionAndFollow(institution){
+User.prototype.updateInstitutions = function updateInstitutions(institution){
     updateInstitution(this.institutions, institution);
     updateFollowInstitution(this.follows, institution);
 };

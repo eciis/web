@@ -47,6 +47,7 @@
                     newInviteCtrl.user.removeInviteInst(newInviteCtrl.institution.key);
                     newInviteCtrl.user.institutions.push(institutionSaved);
                     newInviteCtrl.user.institutions_admin.push(institutionSaved.key);
+                    newInviteCtrl.user.follow(institutionSaved);
                     newInviteCtrl.user.current_institution = institutionSaved;
                     newInviteCtrl.user.state = 'active';
                     AuthService.save();

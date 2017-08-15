@@ -146,6 +146,9 @@ class Utils():
         return str(hash_num)
 
 
+_LOCAL_OAUTH2_CERTS_URL = "https://storage.googleapis.com/eciis-splab.appspot.com/certs.json"
+
+
 def verify_token(request):
     """Verify Firebase auth."""
     token = request.headers['Authorization']
@@ -153,10 +156,9 @@ def verify_token(request):
         token = token.split(' ').pop()
         try:
             return google.oauth2.id_token.verify_token(
-                token, HTTP_REQUEST)
+                token, HTTP_REQUEST, certs_url=_LOCAL_OAUTH2_CERTS_URL)
         except:
-            return google.oauth2.id_token.verify_firebase_token(
-                token, HTTP_REQUEST)
+            return None
 
 
 def login_required(method):

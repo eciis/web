@@ -188,6 +188,18 @@
                     $state.go("signin");
                 }
                 return config || $q.when(config);
+            },
+            responseError: function(rejection) {
+                var AuthService = $injector.get('AuthService');
+                if (rejection.status === 401) {
+                    if (AuthService.isLoggedIn()) {
+                        AuthService.logout();
+                        rejection.data.msg = "Sua sessão expirou!";
+                    } else {
+                        $state.go("signin");
+                    } 
+                }
+                return $q.reject(rejection);
             }
         };
     });

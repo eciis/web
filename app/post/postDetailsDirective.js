@@ -283,7 +283,7 @@
         postDetailsCtrl.showImage = function() {
             var imageEmpty = postDetailsCtrl.post.photo_url === "";
             var imageNull = postDetailsCtrl.post.photo_url === null;
-            return !(imageEmpty || imageNull);
+            return !imageEmpty && !imageNull;
         };
 
         function addHttpsToUrl(text, urls) {
@@ -425,7 +425,7 @@
         postCtrl.showImage = function() {
             var imageEmpty = postCtrl.post.photo_url === "";
             var imageNull = postCtrl.post.photo_url === null;
-            return !(imageEmpty || imageNull);
+            return !imageEmpty && !imageNull;
         };
     });
 })();

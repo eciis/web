@@ -37,3 +37,4 @@ class TestBase(unittest.TestCase):
         testbed_instance.activate()
         testbed_instance.init_app_identity_stub()
         testbed_instance.init_mail_stub()
+        testbed_instance.init_taskqueue_stub()

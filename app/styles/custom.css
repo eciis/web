@@ -206,8 +206,9 @@ a:active {
 
 .image-view{
     position:relative;
-    width: 100px;
+    max-width: 37%;
     margin-left: 10px;
+    height: 14%;
     filter: alpha(opacity:1);
     KHTMLOpacity: 1;
     MozOpacity: 1;
@@ -216,6 +217,11 @@ a:active {
     -moz-opacity:1;
     filter:alpha(opacity=100);
     opacity:1;
+}
+
+.image-view img {
+    max-height: 100%;
+    max-width: 100%
 }
 
 .image-view:hover img {
@@ -237,7 +243,7 @@ a:active {
     color: white;
     z-index:1;
     top:1%;
-    left:75%;
+    left:3%;
     width:20px;
     height:20px;
     padding:0;

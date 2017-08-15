@@ -22,7 +22,6 @@ class PostCommentHandlerTest(TestBaseHandler):
 
     URL_POST_COMMENT = "/api/posts/%s/comments"
     URL_DELETE_COMMENT = "/api/posts/%s/comments/%s"
-    URL_DELETE_POST = "/api/posts/%s"
 
 
     @classmethod

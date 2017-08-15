@@ -2,7 +2,7 @@
 
 
 class EntityException(Exception):
-    """Not Authorized Exception."""
+    """Entity Exception."""
 
     def __init__(self, message=None):
         """Init method."""

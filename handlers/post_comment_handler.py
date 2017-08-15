@@ -50,7 +50,7 @@ class PostCommentHandler(BaseHandler):
         """Handle Post Comments requests."""
         data = json.loads(self.request.body)
         post = ndb.Key(urlsafe=url_string).get()
-        Utils._assert(post.state == "deleted",
+        Utils._assert(post.state == 'deleted',
                       "This post has been deleted", EntityException)
         comment = Comment.create(data, user.key, post.key)
         post.add_comment(comment)

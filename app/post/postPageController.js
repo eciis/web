@@ -18,6 +18,6 @@
             return promise;
         }
 
-        loadPost($state.params.postKey);     
+        loadPost($state.params.postKey);
     });
 })();

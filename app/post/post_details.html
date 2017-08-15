@@ -15,7 +15,7 @@
   </md-card-header>
 
   <!-- BODY POST -->
-  <img ng-src="{{ postDetailsCtrl.post.photo_url }}" class="md-card-image">
+  <img ng-if="postDetailsCtrl.showImage()" ng-src="{{ postDetailsCtrl.post.photo_url }}" class="md-card-image">
   <md-card-title ng-if="!postDetailsCtrl.isDeleted()">
     <md-card-title-text>
       <a href class="md-title hyperlink" ng-click="postDetailsCtrl.goToPost()">

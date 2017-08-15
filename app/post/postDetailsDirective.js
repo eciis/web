@@ -84,6 +84,7 @@
             }).then(function success(editedPost) {
                 postDetailsCtrl.post.title = editedPost.title;
                 postDetailsCtrl.post.text = editedPost.text;
+                postDetailsCtrl.post.photo_url = editedPost.photo_url;
             });
         };
 
@@ -279,6 +280,12 @@
             return post;
         };
 
+        postDetailsCtrl.showImage = function() {
+            var imageEmpty = postDetailsCtrl.post.photo_url === "";
+            var imageNull = postDetailsCtrl.post.photo_url === null;
+            return !(imageEmpty || imageNull);
+        };
+
         function addHttpsToUrl(text, urls) {
             if(urls) {
                 var https = "https://";
@@ -306,10 +313,37 @@
         };
     });
 
-    app.controller("EditPostController", function PostController(user, post, $mdDialog, PostService, AuthService, $mdToast, MessageService) {
+    app.controller("EditPostController", function PostController(user, post, $mdDialog, PostService, AuthService, $mdToast, MessageService, ImageService, $rootScope, $q) {
         var postCtrl = this;
 
         postCtrl.user = user;
+        postCtrl.loading = false;
+        postCtrl.deletePreviousImage = false;
+
+        postCtrl.addImage = function(image) {
+            var newSize = 1024;
+
+            ImageService.compress(image, newSize).then(function success(data) {
+                postCtrl.photo_post = data;
+                ImageService.readFile(data, setImage);
+                postCtrl.deletePreviousImage = true;
+                postCtrl.file = null;
+            }, function error(error) {
+                MessageService.showToast(error);
+            });
+        };
+
+        postCtrl.hideImage = function() {
+            postCtrl.post.photo_url = "";
+            postCtrl.photo_post = null;
+            postCtrl.deletePreviousImage = true;
+        };
+
+        function setImage(image) {
+            $rootScope.$apply(function() {
+                postCtrl.post.photo_url = image.src;
+            });
+        }
 
         // Original post to compare and generate PATCH actions.
         postCtrl.post = new Post(post, postCtrl.user.current_institution.key);
@@ -325,7 +359,48 @@
             }
         };
 
+        function deleteImage() {
+            var deferred = $q.defer();
+
+            if(postCtrl.newPost.photo_url && postCtrl.deletePreviousImage) {
+                ImageService.deleteImage(postCtrl.newPost.photo_url).then(function success() {
+                        postCtrl.newPost.photo_url = "";
+                        deferred.resolve();
+                    }, function error(error) {
+                        deferred.reject(error);
+                    }
+                );
+            } else {
+                deferred.resolve();
+            }
+
+            return deferred.promise;
+        }
+
+
         postCtrl.editPost = function editPost() {
+            deleteImage().then(function success() {
+                if (postCtrl.photo_post) {
+                    savePostWithImage();
+                } else {
+                    savePost();
+                }
+            }, function error(error) {
+                MessageService.showToast(error);
+            });
+        };
+
+        function savePostWithImage() {
+            postCtrl.loading = true;
+            ImageService.saveImage(postCtrl.photo_post).then(function success(data) {
+                postCtrl.loading = false;
+                postCtrl.newPost.photo_url = data.url;
+                postCtrl.newPost.uploaded_images.push(data.url);
+                savePost();
+            });
+        }
+
+        function savePost() {
             if (postCtrl.newPost.isValid()) {
                 PostService.save(postCtrl.post, postCtrl.newPost).then(function success() {
                     MessageService.showToast('Publicação editada com sucesso!');
@@ -337,10 +412,20 @@
             } else {
                 MessageService.showToast('Edição inválida!');
             }
-        };
+        }
 
         postCtrl.cancelDialog = function() {
             $mdDialog.cancel();
+        };
+
+        postCtrl.showButton = function() {
+            return postCtrl.post.title && !postCtrl.loading;
+        };
+
+        postCtrl.showImage = function() {
+            var imageEmpty = postCtrl.post.photo_url === "";
+            var imageNull = postCtrl.post.photo_url === null;
+            return !(imageEmpty || imageNull);
         };
     });
 })();

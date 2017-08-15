@@ -4,6 +4,7 @@
 from test_base_handler import TestBaseHandler
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from handlers.post_comment_handler import PostCommentHandler
+from handlers.post_handler import PostHandler
 from handlers.post_comment_handler import check_permission
 from models.user import User
 from models.institution import Institution
@@ -21,6 +22,7 @@ class PostCommentHandlerTest(TestBaseHandler):
 
     URL_POST_COMMENT = "/api/posts/%s/comments"
     URL_DELETE_COMMENT = "/api/posts/%s/comments/%s"
+    URL_DELETE_POST = "/api/posts/%s"
 
 
     @classmethod
@@ -30,6 +32,7 @@ class PostCommentHandlerTest(TestBaseHandler):
         app = cls.webapp2.WSGIApplication(
             [("/api/posts/(.*)/comments/(.*)", PostCommentHandler),
              ("/api/posts/(.*)/comments", PostCommentHandler),
+             ("/api/posts/(.*)", PostHandler)
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
@@ -55,6 +58,22 @@ class PostCommentHandlerTest(TestBaseHandler):
         # Verify size of list
         self.assertEquals(len(self.mayza_post.comments), 1,
                           "Expected size of comment's list should be one")
+
+        # Verify that the post is published
+        self.assertEquals(self.mayza_post.state, "published")
+
+        # Pretending a new authentication
+        verify_token.return_value = {'email': MAYZA_EMAIL}
+
+        # Delete the post
+        self.testapp.delete(self.URL_DELETE_POST % self.mayza_post.key.urlsafe())
+
+        # Assert that Exception is raised when the user try
+        # to comment a deleted post
+        with self.assertRaises(Exception):
+            # Call the post method
+            self.testapp.post(self.URL_POST_COMMENT % self.mayza_post.key.urlsafe(),
+                              json.dumps(self.comment))
 
     @patch('utils.verify_token', return_value={'email': MAYZA_EMAIL})
     def test_post_ownerpost(self, verify_token):

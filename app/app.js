@@ -155,9 +155,9 @@
                         controller: "ErrorController as errorCtrl"
                     }
                 },
-                data: {
-                    msg: "Ocorreu um erro.",
-                    status: "500"
+                params: {
+                    "msg": "Desculpa! Ocorreu um erro.",
+                    "status": "500"
                 }
             });
 
@@ -198,6 +198,11 @@
                     } else {
                         $state.go("signin");
                     } 
+                } else {
+                    $state.go("error", {
+                        "msg": rejection.data.msg || "Desculpa! Ocorreu um erro.",
+                        "status": rejection.status
+                    });
                 }
                 return $q.reject(rejection);
             }

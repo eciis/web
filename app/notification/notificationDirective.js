@@ -11,7 +11,8 @@
 
         controller.notifications = [];
 
-        var TYPE_COMMENT = "COMMENT";
+        var COMMENT = "COMMENT";
+        var POST = "POST";
 
         controller.markAsRead = function markAsRead(notification) {
             var promise = NotificationService.markAsRead(notification);
@@ -23,9 +24,19 @@
             return promise;
         };
 
+        controller.getIcon = function getIcon(type) {
+            var ICONS = {
+                "COMMENT": "comment",
+                "POST": "inbox"
+            };
+            return ICONS[type];
+        };
+
         controller.goToPost = function goToPost(notification) {
-            if(notification.type === TYPE_COMMENT){
+            if(notification.type === COMMENT ||
+                    notification.type === POST) {
                 $state.go('app.post', {postKey: notification.entity_key});
+                controller.markAsRead(notification);
             }
         };
 

@@ -163,3 +163,55 @@ a:active {
     left: -27px;
     margin-right: -25px !important;
 }
+
+.btn-wrap{
+    position:relative;
+    width: 100px;
+    margin-left: 10px;
+    filter: alpha(opacity:1);
+    KHTMLOpacity: 1;
+    MozOpacity: 1;
+    -khtml-opacity:.1;
+    -ms-filter:"alpha(opacity=100)";
+    -moz-opacity:1;
+    filter:alpha(opacity=100);
+    opacity:1;
+}
+
+.btn-wrap:hover img {
+    filter: alpha(opacity:0.5);
+    KHTMLOpacity: 0.5;
+    MozOpacity: 0.5;
+    -khtml-opacity:.50;
+    -ms-filter:"alpha(opacity=50)";
+    -moz-opacity:.50;
+    filter:alpha(opacity=50);
+    opacity:.50;
+}
+
+.btn-wrap button{
+    position:absolute;
+    background-color: rgba(0,0,0,0);
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    z-index:1;
+    top:1%;
+    left:75%;
+    width:20px;               /* largura para o botão */
+    height:20px;              /* altura para o botão */
+    padding:0;
+    border:0 none;
+}
+
+.btn-wrap:hover button {
+    filter: alpha(opacity:1);
+    KHTMLOpacity: 1;
+    MozOpacity: 1;
+    -khtml-opacity:.1;
+    -ms-filter:"alpha(opacity=100)";
+    -moz-opacity:1;
+    filter:alpha(opacity=100);
+    opacity:1;
+    color: black;
+}

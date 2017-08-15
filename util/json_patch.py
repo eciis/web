@@ -79,7 +79,7 @@ class JsonPatch(object):
             dict_patch['path'],
             obj,
             entity_class,
-            dict_patch.get('value') or None
+            dict_patch.get('value')
         )
 
     @staticmethod

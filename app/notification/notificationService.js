@@ -28,7 +28,7 @@
             setupNotifications(userKey, function() {
                 _.forEach(firebaseArrayNotifications, function each(notification) {
                     if (isNew(notification)) {
-                        notificationsList.push(notification);
+                        notificationsList.splice(0, 0, notification);
                     }
                 });
 

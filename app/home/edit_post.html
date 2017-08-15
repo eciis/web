@@ -22,7 +22,7 @@
         <textarea ng-model="editPostCtrl.newPost.text" rows="4" md-select-on-focus required="true">
         </textarea>
       </md-input-container>
-      <div class="btn-wrap" ng-if="editPostCtrl.showImage()">
+      <div class="image-view" ng-if="editPostCtrl.showImage()">
         <img style="border-radius: 5%;" ng-src="{{ editPostCtrl.post.photo_url }}" width="100px" height="100px"/>
         <button ng-click="editPostCtrl.hideImage()">&times;</button>
       </div>

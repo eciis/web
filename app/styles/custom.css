@@ -204,7 +204,7 @@ a:active {
   }
 }
 
-.btn-wrap{
+.image-view{
     position:relative;
     width: 100px;
     margin-left: 10px;
@@ -218,7 +218,7 @@ a:active {
     opacity:1;
 }
 
-.btn-wrap:hover img {
+.image-view:hover img {
     filter: alpha(opacity:0.5);
     KHTMLOpacity: 0.5;
     MozOpacity: 0.5;
@@ -229,7 +229,7 @@ a:active {
     opacity:.50;
 }
 
-.btn-wrap button{
+.image-view button{
     position:absolute;
     background-color: rgba(0,0,0,0);
     font-size: 20px;
@@ -244,7 +244,7 @@ a:active {
     border:0 none;
 }
 
-.btn-wrap:hover button {
+.image-view:hover button {
     filter: alpha(opacity:1);
     KHTMLOpacity: 1;
     MozOpacity: 1;

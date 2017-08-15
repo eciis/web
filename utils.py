@@ -146,7 +146,7 @@ class Utils():
         return str(hash_num)
 
 
-_LOCAL_OAUTH2_CERTS_URL = "https://storage.googleapis.com/eciis-splab.appspot.com/certs.json"
+_LOCAL_OAUTH2_CERTS_URL = "https://storage.googleapis.com/eciis-splab.appspot.com/oauth2-certs.json"
 
 
 def verify_token(request):
@@ -157,8 +157,8 @@ def verify_token(request):
         try:
             return google.oauth2.id_token.verify_token(
                 token, HTTP_REQUEST, certs_url=_LOCAL_OAUTH2_CERTS_URL)
-        except:
-            return None
+        except ValueError as error:
+            raise NotAuthorizedException(error)
 
 
 def login_required(method):

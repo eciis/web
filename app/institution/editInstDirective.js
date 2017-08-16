@@ -71,7 +71,6 @@
             var promises = [savePortfolio(), saveImage()];
             $q.all(promises).then(function success() {
                 var patch = jsonpatch.generate(observer);
-                console.log(patch);
                 InstitutionService.update(institutionKey, patch).then(
                     reloadUser(),
                     function error(response) {
@@ -125,17 +124,10 @@
             return promise;
         }
 
-        function setPortfolio(file) {
-            $rootScope.$apply(function() {
-                editInstCtrl.newInstitution.portfolio_url = file.url;
-            });
-        }
-
         function loadInstitution() {
             InstitutionService.getInstitution(institutionKey).then(function success(response) {
                 editInstCtrl.newInstitution = response.data;
                 currentPortfoliourl = editInstCtrl.newInstitution.portfolio_url;
-                console.log(currentPortfoliourl);
                 observer = jsonpatch.observe(editInstCtrl.newInstitution);
             }, function error(response) {
                 MessageService.showToast(response.data.msg);

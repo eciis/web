@@ -23,12 +23,11 @@
                         </div>
                         <p>{{ institutionCtrl.current_institution.phone_number }}</p>
                         <p>{{ institutionCtrl.current_institution.address }}</p>
-                        <!-- <md-button ng-click="institutionCtrl.portfolioDialog($event)" ng-show="institutionCtrl.portfolioUrl">
+                        <!-- TODO: show pdf on dialog - Author: Ruan Eloy - 16/08/17 -->
+                        <!-- <md-button ng-click="institutionCtrl.portfolioDialog($event)" ng-show="true">
                             Portfólio
                         </md-button> -->
-                        <md-button ng-click="institutionCtrl.portfolioDialog($event)" ng-show="true">
-                            Portfólio
-                        </md-button>
+                        <a ng-href="{{ institutionCtrl.portfolioUrl }}" download>Portfólio</a>
                         <p hide show-gt-sm>{{ institutionCtrl.current_institution.description }}</p>
                     </center>
                 </div>

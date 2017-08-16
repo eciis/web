@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller("InstitutionController", function InstitutionController($state, InstitutionService, 
-            InviteService, AuthService, MessageService, $sce, $mdDialog) {
+            InviteService, AuthService, MessageService, $sce, $mdDialog, PdfService, $rootScope, $window) {
         var institutionCtrl = this;
 
         institutionCtrl.current_institution = null;
@@ -13,7 +13,7 @@
         institutionCtrl.followers = [];
         institutionCtrl.isUserFollower = false;
         institutionCtrl.isMember = false;
-        institutionCtrl.file = null;
+        institutionCtrl.portfolioUrl = null;
 
         var currentInstitutionKey = $state.params.institutionKey;
 
@@ -43,8 +43,22 @@
 
         function getPortfolioUrl() {
             institutionCtrl.portfolioUrl = institutionCtrl.current_institution.portfolio_url;
-            console.log("portfolioURL: " + institutionCtrl.portfolioUrl);
+            if(institutionCtrl.portfolioUrl) {
+                PdfService.getReadableURL(institutionCtrl.portfolioUrl, setPortifolioURL);
+            }
         }
+
+        function setPortifolioURL(url) {
+            $rootScope.$apply(function() {
+                institutionCtrl.portfolioUrl = url;
+            });
+        }
+
+        institutionCtrl.openPortfolio = function openPortfolio() {
+            if(institutionCtrl.portfolioUrl) {
+                $window.open(institutionCtrl.portfolioUrl, '_blank');
+            }
+        };
 
         function getMembers() {
             InstitutionService.getMembers(currentInstitutionKey).then(function success(response) {
@@ -131,15 +145,14 @@
             institutionCtrl.isMember = institutionCtrl.user.isMember(institutionKey);
         };
 
-        // var url = "https://goo.gl/r2Pto3";
-        var url = institutionCtrl.portfolioUrl;
+        // var testUrl = "https://goo.gl/r2Pto3";
         institutionCtrl.portfolioDialog = function(ev) {
             $mdDialog.show({
                 templateUrl: 'institution/portfolioDialog.html',
                 targetEvent: ev,
                 clickOutsideToClose:true,
                 locals: {
-                    portfolioUrl: url
+                    portfolioUrl: institutionCtrl.portfolioUrl
                 },
                 controller: DialogController,
                 controllerAs: 'ctrl'

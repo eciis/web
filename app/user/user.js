@@ -17,7 +17,7 @@ var INVITE_INSTITUTIONS_TYPE = ['INSTITUTION', 'INSTITUTION_PARENT', 'INSTITUTIO
 
 User.prototype.changeInstitution = function changeInstitution(institution) {
     this.current_institution = _.find(this.institutions, {'key': institution.key});
-    window.sessionStorage.userInfo = JSON.stringify(this);
+    window.localStorage.userInfo = JSON.stringify(this);
 };
 
 User.prototype.follow = function follow(institution) {
@@ -80,6 +80,22 @@ User.prototype.removeInviteInst = function removeInviteInst(institutionKey) {
         return institutionKey == invite.stub_institution_key;
     });
 };
+
+User.prototype.updateInstitutions = function updateInstitutions(institution){
+    updateInstitution(this.institutions, institution);
+    updateFollowInstitution(this.follows, institution);
+};
+
+function updateFollowInstitution(follows, institution) {
+    var index = _.findIndex(follows, ['key', institution.key]);
+    follows[index].acronym = institution.acronym;
+    follows[index].photo_url = institution.photo_url;
+}
+
+function updateInstitution(institutions, institution) {
+    var index = _.findIndex(institutions, ['key', institution.key]);
+    institutions[index] = institution;
+}
 
 function getKeyObj(obj) {
     if(obj.key){

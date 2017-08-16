@@ -3,30 +3,37 @@
     var app = angular.module('app');
 
     app.controller("InviteUserController", function InviteUserController(
-        InviteService, $mdToast, $state, InstitutionService, AuthService) {
+        InviteService, $mdToast, $state, InstitutionService, AuthService, MessageService) {
         var inviteController = this;
 
         inviteController.invite = {};
         inviteController.sent_invitations = [];
 
+        inviteController.showButton = true;
         var currentInstitutionKey = $state.params.institutionKey;
         var invite;
 
         inviteController.user = AuthService.getCurrentUser();
 
         inviteController.sendUserInvite = function sendInvite() {
-            invite = new Invite(inviteController.invite, 'USER', currentInstitutionKey, inviteController.user.email);
+            invite = new Invite(inviteController.invite, 'USER', currentInstitutionKey, inviteController.user.key);
             if (inviteController.isUserInviteValid(invite)) {
                 var promise = InviteService.sendInvite(invite);
                 promise.then(function success(response) {
                     inviteController.sent_invitations.push(invite);
                     inviteController.invite = {};
-                    showToast('Convite enviado com sucesso!');
+                    inviteController.showButton = true;
+                    MessageService.showToast('Convite enviado com sucesso!');
                 }, function error(response) {
-                    showToast(response.data.msg);
+                    MessageService.showToast(response.data.msg);
                 });
                 return promise;
             }
+        };
+
+        inviteController.cancelInvite = function cancelInvite() {
+            inviteController.invite = {};
+            inviteController.showButton = true;
         };
 
         function loadInstitution() {
@@ -35,7 +42,7 @@
                 getMembers();
             }, function error(response) {
                 $state.go('app.institution', {institutionKey: currentInstitutionKey});
-                showToast(response.data.msg);
+                MessageService.showToast(response.data.msg);
             });
         }
 
@@ -43,19 +50,8 @@
             InstitutionService.getMembers(currentInstitutionKey).then(function success(response) {
                 inviteController.members = response.data;
             }, function error(response) {
-                showToast(response.data.msg);
+                MessageService.showToast(response.data.msg);
             });
-        }
-
-        function showToast(msg) {
-            $mdToast.show(
-                $mdToast.simple()
-                    .textContent(msg)
-                    .action('FECHAR')
-                    .highlightAction(true)
-                    .hideDelay(5000)
-                    .position('bottom right')
-            );
         }
 
         function getEmail(user) {
@@ -74,13 +70,13 @@
             var isValid = true;
             if (! invite.isValid()) {
                 isValid = false;
-                showToast('Convite inválido!');
+                MessageService.showToast('Convite inválido!');
             } else if (inviteeIsMember(invite)) {
                 isValid = false;
-                showToast('O convidado já é um membro!');
+                MessageService.showToast('O convidado já é um membro!');
             } else if (inviteeIsInvited(invite)) {
                 isValid = false;
-                showToast('Este email já foi convidado');
+                MessageService.showToast('Este email já foi convidado');
             }
             return isValid;
         };

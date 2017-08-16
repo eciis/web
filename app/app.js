@@ -59,7 +59,7 @@
             })
             .state("app.manage_institution", {
                 abstract: true,
-                url: "/institution/:institutionKey/details",
+                url: "/institution/:institutionKey/",
                 views: {
                     content: {
                         templateUrl: "institution/management_institution_page.html",
@@ -68,7 +68,7 @@
                 }
             })
             .state("app.manage_institution.invite_user", {
-                url: "/:institutionKey/inviteMembers",
+                url: "/inviteMembers",
                 views: {
                     content_manage_institution: {
                         templateUrl: "invites/invite_user.html",
@@ -77,7 +77,7 @@
                 }
             })
             .state("app.manage_institution.edit_info", {
-                url: "/:institutionKey/edit",
+                url: "/edit",
                 views: {
                     content_manage_institution: {
                         templateUrl: "institution/edit_info.html",
@@ -85,7 +85,7 @@
                 }
             })
             .state("app.manage_institution.invite_inst", {
-                url: "/:institutionKey/inviteInstitution",
+                url: "/inviteInstitution",
                 views: {
                     content_manage_institution: {
                         templateUrl: "invites/invite_institution_hierarchie.html",
@@ -155,9 +155,9 @@
                         controller: "ErrorController as errorCtrl"
                     }
                 },
-                data: {
-                    msg: "Ocorreu um erro.",
-                    status: "500"
+                params: {
+                    "msg": "Desculpa! Ocorreu um erro.",
+                    "status": "500"
                 }
             });
 
@@ -188,6 +188,23 @@
                     $state.go("signin");
                 }
                 return config || $q.when(config);
+            },
+            responseError: function(rejection) {
+                var AuthService = $injector.get('AuthService');
+                if (rejection.status === 401) {
+                    if (AuthService.isLoggedIn()) {
+                        AuthService.logout();
+                        rejection.data.msg = "Sua sessão expirou!";
+                    } else {
+                        $state.go("signin");
+                    } 
+                } else {
+                    $state.go("error", {
+                        "msg": rejection.data.msg || "Desculpa! Ocorreu um erro.",
+                        "status": rejection.status
+                    });
+                }
+                return $q.reject(rejection);
             }
         };
     });

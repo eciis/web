@@ -8,6 +8,9 @@
         <span class="md-title">{{ editPostCtrl.user.current_institution.name }}</span>
         <span class="md-subhead">por {{ editPostCtrl.user.name }}</span>
       </md-card-header-text>
+      <md-button class="md-icon-button" ng-click="editPostCtrl.cancelDialog()">
+        <md-icon>close</md-icon>
+      </md-button>
     </md-card-header>
     <md-card-content layout="column">
       <md-input-container>
@@ -19,14 +22,22 @@
         <textarea ng-model="editPostCtrl.newPost.text" rows="4" md-select-on-focus required="true">
         </textarea>
       </md-input-container>
+      <div class="image-view" ng-if="editPostCtrl.showImage()">
+        <button ng-click="editPostCtrl.hideImage()">&times;</button>
+        <img style="border-radius: 5%;" ng-src="{{ editPostCtrl.post.photo_url }}"/>
+      </div>
+      <md-progress-linear ng-show="editPostCtrl.loading" md-mode="indeterminate" style="width: 19%; margin-top: 5px; margin-left: 10px;"></md-progress-linear>
     </md-card-content>
     <md-dialog-actions layout="row" ng-show="editPostCtrl.newPost.title">
       <span flex></span>
-      <md-button ng-click="editPostCtrl.editPost()" ng-disabled="!editPostCtrl.isPostValid()">
-        Enviar
+      <md-button class="md-icon-button" ng-show="editPostCtrl.showButton()" ng-click="null"
+                    ng-model="editPostCtrl.file" ngf-pattern="'image/*'"
+                    ngf-accept="'image/*'" ngf-max-size="5MB"
+                    ngf-select="editPostCtrl.addImage(editPostCtrl.file)">
+            <md-icon>add_a_photo</md-icon>
       </md-button>
-      <md-button ng-click="editPostCtrl.cancelDialog()" ng-if="editPostCtrl.isDialog">
-        Cancelar
+      <md-button class="md-icon-button" ng-click="editPostCtrl.editPost()" ng-disabled="!editPostCtrl.isPostValid()">
+        <md-icon>send</md-icon>
       </md-button>
     </md-dialog-actions>
   </md-card>

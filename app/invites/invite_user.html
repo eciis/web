@@ -3,16 +3,25 @@
   <div flex layout="column" md-colors="{background: 'grey-200'}">
     <md-card >
       <md-toolbar md-colors="{background: 'teal-800'}" layout="row">
-        <h1 class="md-toolbar-tools">Gerência de Membros</h1>
+        <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
+          <h1>Gerência de Membros</h1>
+          <span flex md-truncate></span>
+          <md-button aria-label="Convidar Novo Membro" ng-if="inviteUserCtrl.showButton" ng-click="inviteUserCtrl.showButton = false;">
+            <md-icon>add</md-icon>Convidar
+          </md-button>
+        </div>
       </md-toolbar>
       <md-card-content>
-        <md-input-container class="md-block">
-          <label>Email convite deve ser enviado para:</label>
-          <input ng-model="inviteUserCtrl.invite.invitee" type="email"  required>
-        </md-input-container>
-        <section layout="row" layout="column" layout-align="end center" layout-wrap>
-          <md-button ng-click="inviteUserCtrl.sendUserInvite()" md-colors="{background: 'teal-900'}">Enviar Convite</md-button>
-        </section>
+        <div ng-if="!inviteUserCtrl.showButton">
+          <md-input-container class="md-block">
+            <label>Email convite deve ser enviado para:</label>
+            <input ng-model="inviteUserCtrl.invite.invitee" type="email"  required>
+          </md-input-container>
+          <section layout="row" layout="column" layout-align="end center" layout-wrap>
+            <md-button md-colors="{color: 'teal-700'}" ng-click="inviteUserCtrl.cancelInvite()">Cancelar</md-button>
+            <md-button ng-click="inviteUserCtrl.sendUserInvite()" md-colors="{color: 'teal-700'}">Enviar Convite</md-button>
+          </section>
+        </div>
 
         <md-list
         md-cols="5" md-cols-gt-md="15"

@@ -152,7 +152,8 @@ class Institution(ndb.Model):
             institution.photo_url = "/images/institution.jpg"
         institution.put()
 
-        user.institutions.append(institution.key)
+        user.add_institution(institution.key)
+
         user.institutions_admin.append(institution.key)
         user.state = "active"
         user.follows.append(institution.key)

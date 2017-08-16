@@ -21,13 +21,15 @@
 
         editInstCtrl.addImage = function(image) {
             var newSize = 800;
-            ImageService.compress(image, newSize).then(function success(data) {
+            var promise = ImageService.compress(image, newSize);
+            promise.then(function success(data) {
                 editInstCtrl.photo_instituicao = data;
                 ImageService.readFile(data, setImage);
                 editInstCtrl.file = null;
             }, function error(error) {
                 MessageService.showToast(error);
             });
+            return promise;
         };
 
         function setImage(image) {
@@ -36,7 +38,8 @@
             });
         }
 
-        editInstCtrl.submit = function submit() {
+        editInstCtrl.submit = function submit(event) {
+
             var confirm = $mdDialog.confirm(event)
                 .clickOutsideToClose(true)
                 .title('Confirmar Edição')
@@ -45,11 +48,14 @@
                 .targetEvent(event)
                 .ok('Sim')
                 .cancel('Não');
-            $mdDialog.show(confirm).then(function() {
+
+            var promise = $mdDialog.show(confirm);
+            promise.then(function() {
                 updateInstitution();
             }, function() {
                 MessageService.showToast('Cancelado');
             });
+            return promise;
         };
 
         function saveImage() {
@@ -64,32 +70,45 @@
             } else {
                 $q.resolve(promise);
             }
+
             return promise;
         }
 
         function updateInstitution() {
             var promises = [savePortfolio(), saveImage()];
+            var updatePromise = null;
             $q.all(promises).then(function success() {
                 var patch = jsonpatch.generate(observer);
-                InstitutionService.update(institutionKey, patch).then(
-                    reloadUser(),
+                updatePromise = InstitutionService.update(institutionKey, patch);
+                updatePromise.then(
+                    updateUserInstitutions(editInstCtrl.newInstitution),
                     function error(response) {
                         MessageService.showToast(response.data.msg);
                 });                
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
+            return updatePromise;
         }
 
-        function reloadUser() {
-            AuthService.reload().then(function(){
-                MessageService.showToast('Edição de instituição realizado com sucesso');
-            });
+        function updateUserInstitutions(institution) {
+            editInstCtrl.user.updateInstitutions(institution);
+            AuthService.save();
+            changeInstitution(institution);
+            MessageService.showToast('Edição de instituição realizado com sucesso');
+            $state.go('app.institution', {institutionKey: institutionKey});
         }
         
         editInstCtrl.showButton = function() {
             return !editInstCtrl.loading;
         };
+
+        function changeInstitution(institution) {
+            if(editInstCtrl.newInstitution &&
+                editInstCtrl.user.current_institution.key === editInstCtrl.newInstitution.key) {
+                editInstCtrl.user.changeInstitution(institution);
+            }
+        }
 
         function getLegalNatures() {
             $http.get('institution/legal_nature.json').then(function success(response) {

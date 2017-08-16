@@ -63,14 +63,6 @@
 
     describe('InviteInstitutionController functions', function() {
 
-        describe('cancelInvite()', function() {
-            it('should call state.go app.home ', function() {
-                spyOn(state, 'go');
-                inviteinstitutionCtrl.cancelInvite();
-                expect(state.go).toHaveBeenCalledWith('app.home');
-            });
-        });
-
         describe('sendInstInvite()', function() {
             beforeEach(function() {
                 spyOn(inviteService, 'sendInvite').and.callFake(function() {
@@ -97,7 +89,7 @@
                 spyOn(instService, 'searchInstitutions').and.callThrough();
                 spyOn(inviteinstitutionCtrl, 'sendInstInvite');
                 inviteinstitutionCtrl.user.current_institution = splab;
-                httpBackend.expect('GET', "api/search/institution?name=New Institution&state=active,pending").respond({});
+                httpBackend.expect('GET', 'api/search/institution?name="New Institution"&state=active,pending').respond({});
                 inviteinstitutionCtrl.checkInstInvite().then(function() {
                     var testingInvite = new Invite(invite, 'INSTITUTION', splab.key);
                     expect(instService.searchInstitutions).toHaveBeenCalledWith(
@@ -112,12 +104,36 @@
             it('should call showDialog()', function(done) {
                 var documents = [{name: splab.name, id: splab.key}];
                 spyOn(inviteinstitutionCtrl, 'showDialog');
-                httpBackend.expect('GET', "api/search/institution?name=New Institution&state=active,pending").respond(documents);
+                httpBackend.expect('GET', 'api/search/institution?name="New Institution"&state=active,pending').respond(documents);
                 inviteinstitutionCtrl.checkInstInvite().then(function() {
                     expect(inviteinstitutionCtrl.showDialog).toHaveBeenCalled();
                     done();
                 });
                 httpBackend.flush();
+            });
+
+            it('should change properties invite and sent_invitations', function(done){
+                var promise = inviteinstitutionCtrl.sendInstInvite(invite);
+                promise.then(function() {
+                    expect(inviteinstitutionCtrl.invite).toEqual({});
+                    expect(inviteinstitutionCtrl.showButton).toBe(true);
+                    expect(invite.status).toEqual('sent');
+                    expect(inviteinstitutionCtrl.sent_invitations).toEqual([invite]);
+                    done();
+                });
+                scope.$apply();
+            });
+        });
+
+        describe('cancelInvite()', function() {
+            it('should clear the object invite', function() {
+                inviteinstitutionCtrl.invite = {
+                    invitee: "invitee@gmail.com",
+                    suggestion_institution_name : "Institution"};
+                inviteinstitutionCtrl.cancelInvite();
+
+                expect(inviteinstitutionCtrl.invite).toEqual({});
+                expect(inviteinstitutionCtrl.showButton).toBe(true);
             });
         });
     });

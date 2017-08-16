@@ -29,7 +29,7 @@ class PostCommentHandlerTest(TestBaseHandler):
         super(PostCommentHandlerTest, cls).setUp()
         app = cls.webapp2.WSGIApplication(
             [("/api/posts/(.*)/comments/(.*)", PostCommentHandler),
-             ("/api/posts/(.*)/comments", PostCommentHandler),
+             ("/api/posts/(.*)/comments", PostCommentHandler)
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
@@ -55,6 +55,22 @@ class PostCommentHandlerTest(TestBaseHandler):
         # Verify size of list
         self.assertEquals(len(self.mayza_post.comments), 1,
                           "Expected size of comment's list should be one")
+
+        # Verify that the post is published
+        self.assertEquals(self.mayza_post.state, "published")
+
+        # Delete the post
+        self.mayza_post.state = 'deleted'
+        self.mayza_post.put()
+
+        # Verify if the post is deleted
+        self.assertEquals(self.mayza_post.state, "deleted")
+
+        # Assert that Exception is raised when the user try
+        # to comment a deleted post
+        with self.assertRaises(Exception):
+            self.testapp.post(self.URL_POST_COMMENT % self.mayza_post.key.urlsafe(),
+                              json.dumps(self.other_comment))
 
     @patch('utils.verify_token', return_value={'email': MAYZA_EMAIL})
     def test_post_ownerpost(self, verify_token):

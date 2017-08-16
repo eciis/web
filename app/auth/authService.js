@@ -37,8 +37,10 @@
         service.login = function login() {
             var deferred = $q.defer();
             authObj.$signInWithPopup("google").then(function(result) {
-                service.setupUser(result.credential.idToken).then(function success(userInfo) {
-                    deferred.resolve(userInfo);
+                result.user.getIdToken(true).then(function(idToken) {
+                    service.setupUser(idToken).then(function success(userInfo) {
+                        deferred.resolve(userInfo);
+                    });
                 });
             }).catch(function(error) {
                 MessageService.showToast(error);
@@ -49,10 +51,11 @@
 
         service.loginWithEmailAndPassword = function loginWithEmailAndPassword(email, password) {
             var deferred = $q.defer();
-            authObj.$signInWithEmailAndPassword(email, password).then(function(result) {
-                var idToken = result.toJSON().stsTokenManager.accessToken;
-                service.setupUser(idToken).then(function success(userInfo) {
-                    deferred.resolve(userInfo);
+            authObj.$signInWithEmailAndPassword(email, password).then(function(user) {
+                user.getIdToken(true).then(function(idToken) {
+                    service.setupUser(idToken).then(function success(userInfo) {
+                        deferred.resolve(userInfo);
+                    });
                 });
             }).catch(function(error) {
                 MessageService.showToast(error);
@@ -77,7 +80,7 @@
 
         service.logout = function logout() {
             authObj.$signOut();
-            delete $window.sessionStorage.userInfo;
+            delete $window.localStorage.userInfo;
             userInfo = undefined;
         };
 
@@ -97,7 +100,7 @@
         };
 
         service.save = function() {
-            $window.sessionStorage.userInfo = JSON.stringify(userInfo);
+            $window.localStorage.userInfo = JSON.stringify(userInfo);
         };
 
         service.reload = function reload() {
@@ -124,12 +127,12 @@
         function configUser(userLoaded, userToken) {
             userInfo = new User(userLoaded);
             _.extend(userInfo, userToken);
-            $window.sessionStorage.userInfo = JSON.stringify(userInfo);
+            $window.localStorage.userInfo = JSON.stringify(userInfo);
         }
 
         function init() {
-            if ($window.sessionStorage.userInfo) {
-                var parse = JSON.parse($window.sessionStorage.userInfo);
+            if ($window.localStorage.userInfo) {
+                var parse = JSON.parse($window.localStorage.userInfo);
                 userInfo = new User(parse);
             }
         }

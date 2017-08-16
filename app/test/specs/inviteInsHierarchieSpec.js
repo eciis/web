@@ -25,6 +25,7 @@
     var maiana = {
         name: 'Maiana',
         email: 'maiana.brito@gmail.com',
+        key: '12345',
         institutions: [splab.key],
         follows: [splab.key],
         invites:[]
@@ -36,11 +37,11 @@
 
     var invite = new Invite({invitee: "parent@gmail.com",
                         suggestion_institution_name : "Institution Parent"},
-                            'INSTITUTION_PARENT', splab.key, maiana.email);
+                            'INSTITUTION_PARENT', splab.key, maiana.key);
 
     var inviteChildren = new Invite({invitee: "children@gmail.com",
                         suggestion_institution_name : "Children Institution"},
-                            'INSTITUTION_CHILDREN', splab.key, maiana.email);
+                            'INSTITUTION_CHILDREN', splab.key, maiana.key);
 
     var childrenStub = new Institution({name: "Children Institution", state : "pending"});
 
@@ -199,7 +200,7 @@
                     suggestion_institution_name : "Institution Parent",
                     type_of_invite : "INSTITUTION_PARENT"};
                 inviteInstCtrl.user.current_institution = splab;
-                httpBackend.expect('GET', "api/search/institution?name=Institution Parent&state=active,pending").respond({});
+                httpBackend.expect('GET', 'api/search/institution?name="Institution Parent"&state=active,pending').respond({});
                 inviteInstCtrl.checkInstInvite().then(function() {
                     expect(instService.searchInstitutions).toHaveBeenCalledWith(
                         inviteInstCtrl.invite.suggestion_institution_name,
@@ -217,7 +218,7 @@
                     invitee: "parent@gmail.com",
                     suggestion_institution_name : "Institution Parent",
                     type_of_invite : "institution_parent"};
-                httpBackend.expect('GET', "api/search/institution?name=Institution Parent&state=active,pending").respond(documents);
+                httpBackend.expect('GET', 'api/search/institution?name="Institution Parent"&state=active,pending').respond(documents);
                 inviteInstCtrl.checkInstInvite().then(function() {
                     expect(inviteInstCtrl.showDialog).toHaveBeenCalled();
                     done();

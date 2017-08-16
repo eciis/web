@@ -32,7 +32,7 @@
         inviteInstCtrl.checkInstInvite = function checkInstInvite(ev) {
             var promise;
             invite = new Invite(inviteInstCtrl.invite, inviteInstCtrl.invite.type_of_invite,
-                institutionKey, inviteInstCtrl.user.email);
+                institutionKey, inviteInstCtrl.user.key);
             if (!invite.isValid()) {
                 MessageService.showToast('Convite inválido!');
             } else if(inviteInstCtrl.hasParent && invite.type_of_invite === INSTITUTION_PARENT) {
@@ -86,7 +86,6 @@
         inviteInstCtrl.cancelInvite = function cancelInvite() {
             inviteInstCtrl.invite = {};
             inviteInstCtrl.showButton = true;
-
         };
 
         inviteInstCtrl.goToInst = function goToInst(institutionKey) {

@@ -51,12 +51,13 @@ class InviteCollectionHandler(BaseHandler):
     def post(self, user):
         """Handle POST Requests."""
         data = json.loads(self.request.body)
+        host = self.request.host
 
         type_of_invite = data.get('type_of_invite')
         invite = InviteFactory.create(data, type_of_invite)
 
         invite.put()
-        invite.sendInvite()
+        invite.sendInvite(host)
         make_invite = invite.make()
 
         self.response.write(json.dumps(make_invite))

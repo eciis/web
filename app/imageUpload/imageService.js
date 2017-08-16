@@ -82,6 +82,19 @@
             return deferred.promise;
         };
 
+        service.deleteImage = function(fileURL) {
+            var deferred = $q.defer();
+            var storage = firebase.storage().refFromURL(fileURL);
+
+            storage.delete().then(function success() {
+                deferred.resolve();
+            }, function error(error) {
+                deferred.reject(error);
+            });
+
+            return deferred.promise;
+        };
+
         /**
         * Function of convert image from base 64 to Blob
         * @param {string} base64Data - receive base 64 image

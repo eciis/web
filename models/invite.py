@@ -11,8 +11,8 @@ class Invite(PolyModel):
     # Email of the invitee.
     invitee = ndb.StringProperty(required=True)
 
-    # Inviter email
-    inviter = ndb.StringProperty(required=True)
+    # Key of user inviter
+    inviter_key = ndb.KeyProperty(kind="User", required=True)
 
     # Status of Invite.
     status = ndb.StringProperty(choices=set([
@@ -34,12 +34,12 @@ class Invite(PolyModel):
     def create(data, invite):
         """Create a post and check required fields."""
         invite.invitee = data.get('invitee')
-        invite.inviter = data.get('inviter')
+        invite.inviter_key = ndb.Key(urlsafe=data.get('inviter_key'))
         invite.institution_key = ndb.Key(urlsafe=data.get('institution_key'))
 
         return invite
 
-    def sendInvite(self):
+    def sendInvite(self, host):
         """Send invite."""
         raise FieldException("sendInvite not implemented")
 
@@ -47,9 +47,10 @@ class Invite(PolyModel):
         """Create personalized json of invite."""
         return {
             'invitee': self.invitee,
-            'inviter': self.inviter,
+            'inviter_name': self.inviter_key.get().name,
             'key': self.key.urlsafe(),
-            'status': self.status
+            'status': self.status,
+            'institution_inviter': self.institution_key.get().make(['name'])
         }
 
     def change_status(self, status):

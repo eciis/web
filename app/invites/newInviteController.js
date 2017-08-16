@@ -10,7 +10,7 @@
         newInviteCtrl.institution = null;
 
         newInviteCtrl.inviteKey = $state.params.inviteKey;
-
+    
         var institutionKey = $state.params.institutionKey;
 
         var typeOfInvite = $state.params.typeInvite;
@@ -46,6 +46,8 @@
                     MessageService.showToast('Cadastro de instituição realizado com sucesso');
                     newInviteCtrl.user.removeInviteInst(newInviteCtrl.institution.key);
                     newInviteCtrl.user.institutions.push(institutionSaved);
+                    newInviteCtrl.user.institutions_admin.push(institutionSaved.key);
+                    newInviteCtrl.user.follow(institutionSaved);
                     newInviteCtrl.user.current_institution = institutionSaved;
                     newInviteCtrl.user.state = 'active';
                     AuthService.save();
@@ -101,6 +103,7 @@
         function loadInstitution() {
             InstitutionService.getInstitution(institutionKey).then(function success(response) {
                 newInviteCtrl.institution = response.data;
+                loadInvite();
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
@@ -117,6 +120,12 @@
                  .ok('Ok')
                  .targetEvent(event)
              );
+        }
+
+        function loadInvite(){
+            newInviteCtrl.invite = _.find(newInviteCtrl.user.invites, function(invite){
+                return invite.key === newInviteCtrl.inviteKey;
+            });
         }
 
         loadInstitution();

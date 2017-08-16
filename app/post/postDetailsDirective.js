@@ -72,15 +72,11 @@
         postDetailsCtrl.editPost = function editPost(post, event) {
             $mdDialog.show({
                 controller: "EditPostController",
-                controllerAs: "editPostCtrl",
-                templateUrl: 'home/edit_post.html',
+                controllerAs: "postCtrl",
+                templateUrl: 'post/new_post.html',
                 parent: angular.element(document.body),
                 targetEvent: event,
-                clickOutsideToClose:true,
-                locals: {
-                    user : postDetailsCtrl.user,
-                    post: post
-                }
+                clickOutsideToClose:true
             }).then(function success(editedPost) {
                 postDetailsCtrl.post.title = editedPost.title;
                 postDetailsCtrl.post.text = editedPost.text;
@@ -313,12 +309,14 @@
         };
     });
 
-    app.controller("EditPostController", function PostController(user, post, $mdDialog, PostService, AuthService, $mdToast, MessageService, ImageService, $rootScope, $q) {
+    app.controller("EditPostController", function PostController(user, originalPost, $mdDialog, PostService, AuthService, $mdToast, MessageService, ImageService, $rootScope, $q) {
         var postCtrl = this;
 
         postCtrl.user = user;
         postCtrl.loading = false;
         postCtrl.deletePreviousImage = false;
+        postCtrl.isDialog = true;
+
 
         postCtrl.addImage = function(image) {
             var newSize = 1024;
@@ -334,7 +332,7 @@
         };
 
         postCtrl.hideImage = function() {
-            postCtrl.post.photo_url = "";
+            postCtrl.originalPost.photo_url = "";
             postCtrl.photo_post = null;
             postCtrl.deletePreviousImage = true;
         };
@@ -346,14 +344,14 @@
         }
 
         // Original post to compare and generate PATCH actions.
-        postCtrl.post = new Post(post, postCtrl.user.current_institution.key);
+        postCtrl.originalPost = new Post(originalPost, postCtrl.user.current_institution.key);
 
         // Copy of post to edit.
-        postCtrl.newPost = new Post(post, postCtrl.user.current_institution.key);
+        postCtrl.post = new Post(originalPost, postCtrl.user.current_institution.key);
 
         postCtrl.isPostValid = function isPostValid() {
             if (postCtrl.user) {
-                return postCtrl.newPost.isValid();
+                return postCtrl.post.isValid();
             } else {
                 return false;
             }
@@ -362,9 +360,9 @@
         function deleteImage() {
             var deferred = $q.defer();
 
-            if(postCtrl.newPost.photo_url && postCtrl.deletePreviousImage) {
-                ImageService.deleteImage(postCtrl.newPost.photo_url).then(function success() {
-                        postCtrl.newPost.photo_url = "";
+            if(postCtrl.post.photo_url && postCtrl.deletePreviousImage) {
+                ImageService.deleteImage(postCtrl.post.photo_url).then(function success() {
+                        postCtrl.post.photo_url = "";
                         deferred.resolve();
                     }, function error(error) {
                         deferred.reject(error);
@@ -378,7 +376,7 @@
         }
 
 
-        postCtrl.editPost = function editPost() {
+        postCtrl.actInPost = function actInPost() {
             deleteImage().then(function success() {
                 if (postCtrl.photo_post) {
                     savePostWithImage();
@@ -394,17 +392,17 @@
             postCtrl.loading = true;
             ImageService.saveImage(postCtrl.photo_post).then(function success(data) {
                 postCtrl.loading = false;
-                postCtrl.newPost.photo_url = data.url;
-                postCtrl.newPost.uploaded_images.push(data.url);
+                postCtrl.post.photo_url = data.url;
+                postCtrl.post.uploaded_images.push(data.url);
                 savePost();
             });
         }
 
         function savePost() {
-            if (postCtrl.newPost.isValid()) {
-                PostService.save(postCtrl.post, postCtrl.newPost).then(function success() {
+            if (postCtrl.post.isValid()) {
+                PostService.save(postCtrl.originalPost, postCtrl.post).then(function success() {
                     MessageService.showToast('Publicação editada com sucesso!');
-                    $mdDialog.hide(postCtrl.newPost);
+                    $mdDialog.hide(postCtrl.post);
                 }, function error(response) {
                     $mdDialog.cancel();
                     MessageService.showToast(response.data.msg);
@@ -419,12 +417,12 @@
         };
 
         postCtrl.showButton = function() {
-            return postCtrl.post.title && !postCtrl.loading;
+            return postCtrl.originalPost.title && !postCtrl.loading;
         };
 
         postCtrl.showImage = function() {
-            var imageEmpty = postCtrl.post.photo_url === "";
-            var imageNull = postCtrl.post.photo_url === null;
+            var imageEmpty = postCtrl.originalPost.photo_url === "";
+            var imageNull = postCtrl.originalPost.photo_url === null;
             return !imageEmpty && !imageNull;
         };
     });

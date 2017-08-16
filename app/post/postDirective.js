@@ -9,6 +9,8 @@
 
         postCtrl.post = {};
         postCtrl.loading = false;
+        postCtrl.deletePreviousImage = false;
+        postCtrl.title = postCtrl.post.title;
 
         postCtrl.addImage = function(image) {
             var newSize = 1024;
@@ -37,7 +39,7 @@
             }
         };
 
-        postCtrl.createPost = function createPost() {
+        postCtrl.actInPost = function actInPost() {
             if (postCtrl.photo_post) {
                 postCtrl.loading = true;
                 ImageService.saveImage(postCtrl.photo_post).then(function success(data) {
@@ -84,7 +86,15 @@
         postCtrl.showImage = function() {
             return postCtrl.post.photo_url;
         };
+
+        postCtrl.hideImage = function() {
+            postCtrl.post.photo_url = "";
+            postCtrl.photo_post = null;
+            postCtrl.deletePreviousImage = true;
+        };
     });
+
+
 
     app.directive("createPost", function() {
         return {

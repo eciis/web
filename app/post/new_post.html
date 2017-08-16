@@ -1,3 +1,4 @@
+<div flex>
 <md-card flex="100">
   <md-card-header>
     <md-card-avatar>
@@ -22,7 +23,10 @@
         required="true"></textarea>
       </textarea>
     </md-input-container>
-    <img ng-show="postCtrl.showImage()" style="border-radius: 5%; " ng-src="{{ postCtrl.post.photo_url }}" width="100px" height="100px"/>
+    <div class="image-view" ng-if="postCtrl.showImage()">
+        <button ng-click="postCtrl.hideImage()">&times;</button>
+        <img style="border-radius: 5%;" ng-src="{{ postCtrl.post.photo_url }}"/>
+    </div>
     <md-progress-linear ng-show="postCtrl.loading" md-mode="indeterminate" style="width: 14%; margin-top: 5px"></md-progress-linear>
   </md-card-content>
   <md-dialog-actions layout="row" ng-show="postCtrl.post.title">
@@ -32,7 +36,7 @@
                   ngf-select="postCtrl.addImage(postCtrl.file)">
           <md-icon>add_a_photo</md-icon>
     </md-button>
-    <md-button class="md-icon-button" ng-click="postCtrl.createPost(postCtrl.post)" ng-disabled="!postCtrl.isPostValid()">
+    <md-button class="md-icon-button" ng-click="postCtrl.actInPost(postCtrl.post)" ng-disabled="!postCtrl.isPostValid()">
      <md-icon>send</md-icon>
     </md-button>
     <md-button ng-click="postCtrl.cancelDialog()" ng-if="postCtrl.isDialog">
@@ -40,3 +44,4 @@
     </md-button>
   </md-dialog-actions>
 </md-card>
+</div>

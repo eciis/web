@@ -6,7 +6,11 @@ from google.appengine.api import mail
 
 
 class SendNotificationHandler(webapp2.RequestHandler):
-    """Class of send notifications."""
+    """
+    Handler of send notifications.
+
+    This handler resolves the tasks of sending notifications by firebase.
+    """
 
     def post(self):
         """Method of create new task for send notification."""
@@ -24,7 +28,11 @@ class SendNotificationHandler(webapp2.RequestHandler):
 
 
 class SendEmailHandler(webapp2.RequestHandler):
-    """Class of send emails."""
+    """
+    Handler of send emails.
+
+    This handler resolves the tasks of sending email.
+    """
 
     def post(self):
         """Method of send new email."""

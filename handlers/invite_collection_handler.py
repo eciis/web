@@ -57,7 +57,7 @@ class InviteCollectionHandler(BaseHandler):
         invite = InviteFactory.create(data, type_of_invite)
 
         invite.put()
-        invite.sendInvite(host)
+        invite.sendInvite(user, host)
         make_invite = invite.make()
 
         self.response.write(json.dumps(make_invite))

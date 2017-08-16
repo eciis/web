@@ -1,7 +1,6 @@
 """Invite user model."""
 from invite import Invite
 from google.appengine.ext import ndb
-from google.appengine.api import mail
 from custom_exceptions.fieldException import FieldException
 from models.user import User
 from models.institution import Institution
@@ -46,20 +45,22 @@ class InviteUser(Invite):
         InviteUser.checkIsInviteUserValid(data)
         return invite
 
-    def sendInvite(self, host):
-        """Send Invite for user to be member of some Institution."""
+    def send_email(self, host, body=None):
+        """Method of send email of invite user."""
         institution_key = self.institution_key.urlsafe()
         invite_key = self.key.urlsafe()
 
-        mail.send_mail(sender="e-CIS <eciis@splab.ufcg.edu.br>",
-                       to=self.invitee,
-                       subject="Convite plataforma e-CIS",
-                       body="""Oi:
-
+        body = body or """Oi:
         Voce tem um novo convite. Acesse:
         http://%s/app/#/institution/%s/%s/new_invite/USER
 
-        Equipe e-CIS """ % (host, institution_key, invite_key))
+        Equipe e-CIS """ % (host, institution_key, invite_key)
+        super(InviteUser, self).send_email(host, body)
+
+    def send_notification(self, user):
+        """Method of send notification of invite user."""
+        entity_type = 'USER'
+        super(InviteUser, self).send_notification(user, entity_type)
 
     def make(self):
         """Create json of invite to user."""

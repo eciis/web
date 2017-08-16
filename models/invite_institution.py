@@ -1,5 +1,4 @@
 """Invite institution model."""
-from google.appengine.api import mail
 from invite import Invite
 from models.institution import Institution
 from custom_exceptions.fieldException import FieldException
@@ -42,22 +41,24 @@ class InviteInstitution(Invite):
         """Method of creating connection between invitation and institution."""
         pass
 
-    def sendInvite(self, host):
-        """Send Invite for user create some Institution."""
+    def send_email(self, host, body=None):
+        """Method of send email of invite institution."""
         institution_key = self.institution_key.urlsafe()
         invite_key = self.key.urlsafe()
-
-        mail.send_mail(sender="e-CIS <eciis@splab.ufcg.edu.br>",
-                       to="<%s>" % self.invitee,
-                       subject="Convite plataforma e-CIS",
-                       body="""
+        body = body or """
         Sua empresa %s foi convidada a se cadastrar na plataforma.
         Para realizar o cadastro crie sua conta pessoal em
         http://%s/app/#/institution/%s/%s/new_invite/INSTITUTION
         e proceda com o cadastro da sua empresa.
-
         Equipe e-CIS
-        """ % (self.suggestion_institution_name, host, institution_key, invite_key))
+        """ % (self.suggestion_institution_name, host, institution_key, invite_key)
+
+        super(InviteInstitution, self).send_email(host, body)
+
+    def send_notification(self, user):
+        """Method of send notification of invite institution."""
+        entity_type = 'INSTITUTION'
+        super(InviteInstitution, self).send_notification(user, entity_type)
 
     def make(self):
         """Create json of invite to institution."""

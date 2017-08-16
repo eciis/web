@@ -2,7 +2,8 @@
 
 describe('Test EditInstDirective', function() {
     var editInstCtrl, scope, institutionService, state, deferred;
-    var mdToast, mdDialog, http, inviteService, httpBackend, imageService, authService, createCtrl;
+    var mdToast, mdDialog, http, inviteService, httpBackend, imageService;
+    var authService, createCtrl, pdfService;
     
     var institution = {
             name: "name",
@@ -15,6 +16,7 @@ describe('Test EditInstDirective', function() {
     var institutions = [{
         name: 'Splab',
         key: 'institutuion_key',
+        portfolio_url: '',
         followers: [],
         members: []
     }];
@@ -48,11 +50,11 @@ describe('Test EditInstDirective', function() {
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $httpBackend, $q, $state, $mdToast,
-        $rootScope, $mdDialog, $http, InstitutionService, InviteService, AuthService, ImageService) {
+        $rootScope, $mdDialog, $http, InstitutionService, InviteService, AuthService, PdfService, ImageService) {
         httpBackend = $httpBackend;
         httpBackend.expectGET('institution/legal_nature.json').respond(legal_nature);
         httpBackend.expectGET('institution/occupation_area.json').respond(occupation_area);
-        httpBackend.expect('GET', '/api/institutions/' + institution.key).respond(institution);
+        httpBackend.expectGET('/api/institutions/' + institution.key).respond(institution);
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);
         httpBackend.when('GET', 'auth/login.html').respond(200);
@@ -65,6 +67,7 @@ describe('Test EditInstDirective', function() {
         mdToast = $mdToast;
         imageService = ImageService;
         authService = AuthService;
+        pdfService = PdfService;
         http = $http;
 
         authService.getCurrentUser = function() {
@@ -146,13 +149,7 @@ describe('Test EditInstDirective', function() {
                     }
                 };
             });
-            spyOn(institutionService, 'update').and.callFake(function() {
-                return {
-                    then: function(callback) {
-                        return callback();
-                    }
-                };
-            });
+            spyOn(institutionService, 'update').and.returnValue(deferred.promise);
             spyOn(editInstCtrl.user, 'updateInstitutions');
             spyOn(authService, 'save');
             spyOn(state, 'go');
@@ -177,6 +174,8 @@ describe('Test EditInstDirective', function() {
 
         it('Should be call InstitutionService.update', function(done) {
             promise.then(function() {
+                deferred.resolve();
+                scope.$apply();
                 expect(institutionService.update).toHaveBeenCalled();
                 done();
             });
@@ -184,6 +183,8 @@ describe('Test EditInstDirective', function() {
 
         it('Should be call user.updateInstitutions', function(done) {
             promise.then(function() {
+                deferred.resolve();
+                scope.$apply();
                 expect(editInstCtrl.user.updateInstitutions).toHaveBeenCalled();
                 done();
             });
@@ -191,6 +192,8 @@ describe('Test EditInstDirective', function() {
 
         it('Should be call AuthService.save', function(done) {
             promise.then(function() {
+                deferred.resolve();
+                scope.$apply();
                 expect(authService.save).toHaveBeenCalled();
                 done();
             });

@@ -21,7 +21,7 @@
 
         homeCtrl.newPost = function newPost(event) {
             $mdDialog.show({
-                controller: function() {},
+                controller: function PostDialogController() {},
                 controllerAs: "controller",
                 templateUrl: 'home/post_dialog.html',
                 parent: angular.element(document.body),

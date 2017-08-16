@@ -4,6 +4,8 @@ import json
 import datetime
 import sys
 
+import logging
+
 from google.appengine.api import users
 from google.appengine.ext import ndb
 from google.appengine.ext.ndb import Key
@@ -14,6 +16,8 @@ from models.institution import Institution
 import google.auth.transport.requests
 import google.oauth2.id_token
 import requests_toolbelt.adapters.appengine
+
+from google.auth.exceptions import TransportError 
 
 requests_toolbelt.adapters.appengine.monkeypatch()
 HTTP_REQUEST = google.auth.transport.requests.Request()
@@ -157,8 +161,10 @@ def verify_token(request):
         try:
             return google.oauth2.id_token.verify_token(
                 token, HTTP_REQUEST, certs_url=_LOCAL_OAUTH2_CERTS_URL)
-        except ValueError as error:
-            raise NotAuthorizedException(error)
+        except (ValueError, TransportError) as error:
+            logging.exception(str(error))
+            return None
+
 
 
 def login_required(method):

@@ -93,8 +93,9 @@
         </md-input-container>
         <md-input-container class="md-block">
             <md-button ng-click="null" ng-model="editInstCtrl.file" ngf-pattern="'application/pdf'" ngf-accept="'application/pdf'" 
-                ngf-max-size="5MB" ngf-select="editInstCtrl.addPortfolio()">
-                Adicionar portfólio
+                ngf-max-size="5MB" ngf-select="editInstCtrl.addPortfolio()" class="">
+                <md-icon>{{editInstCtrl.file? 'insert_drive_file': 'attach_file'}}</md-icon>
+                {{editInstCtrl.file? 'Portfólio adicionado': 'Adicionar Portfólio'}}
             </md-button>
         </md-input-container>
         <div layout="row" layout-align="end center">

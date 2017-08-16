@@ -57,9 +57,9 @@
             if (post.isValid()) {
                 PostService.createPost(post).then(function success(response) {
                     postCtrl.clearPost();
+                    postCtrl.posts.push(new Post(response.data));
                     MessageService.showToast('Postado com sucesso!');
                     $mdDialog.hide();
-                    $rootScope.$broadcast("reloadPosts", response.data);
                 }, function error(response) {
                     $mdDialog.hide();
                     MessageService.showToast(response.data.msg);
@@ -94,7 +94,8 @@
             controller: "PostController",
             scope: {
                 user: '=',
-                isDialog: '='
+                isDialog: '=',
+                posts: '='
             },
             bindToController: true
         };

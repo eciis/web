@@ -21,14 +21,19 @@
 
         homeCtrl.newPost = function newPost(event) {
             $mdDialog.show({
-                controller: "HomeController",
-                controllerAs: "homeCtrl",
+                controller: function() {},
+                controllerAs: "controller",
                 templateUrl: 'home/post_dialog.html',
                 parent: angular.element(document.body),
                 targetEvent: event,
-                clickOutsideToClose:true,
+                clickOutsideToClose: true,
                 openFrom: '#fab-new-post',
-                closeTo: angular.element(document.querySelector('#fab-new-post'))
+                closeTo: angular.element(document.querySelector('#fab-new-post')),
+                locals: {
+                    user: homeCtrl.user,
+                    posts: homeCtrl.posts
+                },
+                bindToController: true
             });
         };
 

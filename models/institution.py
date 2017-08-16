@@ -94,6 +94,12 @@ class Institution(ndb.Model):
             self.members.append(member.key)
             self.put()
 
+    def addInvite(self, invite):
+        """Add invite in institution."""
+        self.invite = invite.key
+        self.put()
+
+
     @staticmethod
     @ndb.transactional(xg=True)
     def create_parent_connection(institution, invite):

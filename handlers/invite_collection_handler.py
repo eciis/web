@@ -30,13 +30,6 @@ def is_admin(method):
         return check_authorization
 
 
-def addInvite(invite):
-    """Add invite in stub of invite."""
-    stub = invite.stub_institution_key.get()
-    stub.invite = invite.key
-    stub.put()
-
-
 class InviteCollectionHandler(BaseHandler):
     """Invite Collection Handler."""
 
@@ -65,7 +58,7 @@ class InviteCollectionHandler(BaseHandler):
         invite.put()
 
         if(invite.stub_institution_key):
-            addInvite(invite)
+            invite.stub_institution_key.get().addInvite(invite)
 
         invite.sendInvite(user, host)
 

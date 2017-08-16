@@ -65,15 +65,16 @@ def is_admin(method):
 
 def childrenToJson(obj):
     """Return the array with json from institution that are obj children."""
-    json = [Utils.toJson(institution.get())
+    json = [Institution.make(institution.get(), ['name', 'key', 'state', 'invite'])
             for institution in obj.children_institutions]
+    print json
     return json
 
 
 def parentToJson(obj):
     """Return json with parent institution."""
     if(obj.parent_institution):
-        return Utils.toJson(obj.parent_institution.get())
+        return Institution.make(obj.parent_institution.get(), ['name', 'key', 'state', 'invite'])
 
 
 def adminToJson(admin):
@@ -99,6 +100,8 @@ class InstitutionHandler(BaseHandler):
         institution_json = Utils.toJson(obj, host=self.request.host)
         if(obj.admin):
             institution_json['admin'] = adminToJson(obj.admin.get())
+        if(obj.invite):
+            institution_json['invite'] = Institution.make(obj, ["invite"])
         institution_json['sent_invitations'] = getSentInvitations(obj.key)
         institution_json['parent_institution'] = parentToJson(obj)
         institution_json['children_institutions'] = childrenToJson(obj)

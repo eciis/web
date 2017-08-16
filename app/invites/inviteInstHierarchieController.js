@@ -100,6 +100,7 @@
             InstitutionService.getInstitution(institutionKey).then(function success(response) {
                 inviteInstCtrl.institution = new Institution(response.data);
                 inviteInstCtrl.hasParent = !_.isEmpty(inviteInstCtrl.institution.parent_institution);
+                console.log(inviteInstCtrl.institution);
             }, function error(response) {
                 $state.go('app.institution', {institutionKey: institutionKey});
                 MessageService.showToast(response.data.msg);

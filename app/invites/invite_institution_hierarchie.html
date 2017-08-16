@@ -41,8 +41,9 @@
             <div class="md-list-item-text" layout="column">
               <a href class="md-title hyperlink" ng-if="inviteInstCtrl.isActive(inviteInstCtrl.institution.parent_institution)"
               ng-click="inviteInstCtrl.goToInst(inviteInstCtrl.institution.parent_institution.key)">
-              {{ inviteInstCtrl.institution.parent_institution.name }}
-            </a>
+                {{ inviteInstCtrl.institution.parent_institution.name }}
+              </a>
+              <h4 ng-if="institution.invite">Nome Sugerido: {{ institution.invite.suggestion_institution_name }}</h4>
               <div ng-if="!inviteInstCtrl.isActive(inviteInstCtrl.institution.parent_institution)">
                 <h3>{{ inviteInstCtrl.institution.parent_institution.name }}</h3>
                 <h3 style="color: red">
@@ -55,10 +56,12 @@
           ng-repeat="institution in inviteInstCtrl.institution.children_institutions">
             <md-icon class="md-avatar-icon" >account_balance</md-icon>
             <div class="md-list-item-text" layout="column">
-              <a href class="md-title hyperlink" ng-if="inviteInstCtrl.isActive(institution)"
-              ng-click="inviteInstCtrl.goToInst(institution.key)">
-              {{ institution.name }}
-              </a>
+              <div ng-if="inviteInstCtrl.isActive(institution)">
+                <a href class="md-title hyperlink" ng-click="inviteInstCtrl.goToInst(institution.key)">
+                {{ institution.name }}
+                </a>
+                <h4 ng-if="institution.invite">Nome Sugerido: {{ institution.invite.suggestion_institution_name }}</h4>
+              </div>
               <div ng-if="!inviteInstCtrl.isActive(institution)">
                 <h3>{{ institution.name }}</h3>
                 <h3 style="color: red">

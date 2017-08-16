@@ -30,13 +30,20 @@ def is_admin(method):
         return check_authorization
 
 
+def addInvite(invite):
+    """Add invite in stub of invite."""
+    stub = invite.stub_institution_key.get()
+    stub.invite = invite.key
+    stub.put()
+
+
 class InviteCollectionHandler(BaseHandler):
     """Invite Collection Handler."""
 
     @json_response
     @login_required
     def get(self, user):
-        """Get invites for new institutions make by Plataform"""
+        """Get invites for new institutions make by Plataform."""
         invites = []
 
         queryInvites = InviteInstitution.query()
@@ -55,8 +62,11 @@ class InviteCollectionHandler(BaseHandler):
 
         type_of_invite = data.get('type_of_invite')
         invite = InviteFactory.create(data, type_of_invite)
-
         invite.put()
+
+        if(invite.stub_institution_key):
+            addInvite(invite)
+
         invite.sendInvite(host)
         make_invite = invite.make()
 

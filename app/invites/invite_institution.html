@@ -37,7 +37,7 @@
             <md-list class="md-dense" flex>
               <md-subheader class="md-no-sticky" >Convites pendentes</md-subheader>
               <md-list-item class="md-3-line" ng-repeat="invite in inviteInstCtrl.sent_invitations"
-              ng-if="invite.status == 'sent' && invite.type_of_invite=='INSTITUTION'" ng-click="null">
+              ng-if="invite.status === 'sent' && invite.type_of_invite === 'INSTITUTION'" ng-click="null">
                 <md-icon class="md-avatar-icon" >account_balance</md-icon>
                 <div class="md-list-item-text" layout="column">
                   <h3>{{ invite.suggestion_institution_name }}</h3>
@@ -49,7 +49,7 @@
 
             <md-list class="md-dense" flex>
               <md-subheader class="md-no-sticky" >Convites aceitos</md-subheader>
-              <md-list-item class="md-3-line" ng-repeat="invite in inviteInstCtrl.sent_invitations" ng-if="invite.status == 'accepted' && invite.type_of_invite=='INSTITUTION'">
+              <md-list-item class="md-3-line" ng-repeat="invite in inviteInstCtrl.sent_invitations" ng-if="invite.status === 'accepted' && invite.type_of_invite === 'INSTITUTION'">
                 <md-icon class="md-avatar-icon" >account_balance</md-icon>
                 <div class="md-list-item-text" layout="column">
                   <a href class="md-title hyperlink"

@@ -155,9 +155,9 @@
                         controller: "ErrorController as errorCtrl"
                     }
                 },
-                data: {
-                    msg: "Ocorreu um erro.",
-                    status: "500"
+                params: {
+                    "msg": "Desculpa! Ocorreu um erro.",
+                    "status": "500"
                 }
             });
 
@@ -188,6 +188,23 @@
                     $state.go("signin");
                 }
                 return config || $q.when(config);
+            },
+            responseError: function(rejection) {
+                var AuthService = $injector.get('AuthService');
+                if (rejection.status === 401) {
+                    if (AuthService.isLoggedIn()) {
+                        AuthService.logout();
+                        rejection.data.msg = "Sua sessão expirou!";
+                    } else {
+                        $state.go("signin");
+                    } 
+                } else {
+                    $state.go("error", {
+                        "msg": rejection.data.msg || "Desculpa! Ocorreu um erro.",
+                        "status": rejection.status
+                    });
+                }
+                return $q.reject(rejection);
             }
         };
     });

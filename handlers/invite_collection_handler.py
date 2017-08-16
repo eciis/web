@@ -67,7 +67,8 @@ class InviteCollectionHandler(BaseHandler):
         if(invite.stub_institution_key):
             addInvite(invite)
 
-        invite.sendInvite(host)
+        invite.sendInvite(user, host)
+
         make_invite = invite.make()
 
         self.response.write(json.dumps(make_invite))

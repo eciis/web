@@ -303,9 +303,10 @@ class ResetHandler(BaseHandler):
             certbio.add_member(user)
             user.add_institution(certbio.key)
             user.follow(certbio.key)
-        for user in [jorge.key, mayza.key, maiana.key, luiz.key,
-                     raoni.key, ruan.key, tiago.key, admin.key]:
-            certbio.follow(user)
+        for user in [jorge, mayza, maiana, luiz,
+                     raoni, ruan, tiago, admin]:
+            certbio.follow(user.key)
+            user.follow(certbio.key)
 
         # new Institution SPLAB with User André like a member
         # and User Mayza like a follower
@@ -329,9 +330,10 @@ class ResetHandler(BaseHandler):
             user.add_institution(splab.key)
             user.follow(splab.key)
 
-        for user in [jorge.key, andre.key, maiana.key, luiz.key,
-                     raoni.key, ruan.key, tiago.key, admin.key]:
-            splab.follow(user)
+        for user in [jorge, andre, maiana, luiz,
+                     raoni, ruan, tiago, admin]:
+            splab.follow(user.key)
+            user.follow(splab.key)
 
         # new Institution eciis
         data = {
@@ -355,10 +357,10 @@ class ResetHandler(BaseHandler):
             user.add_institution(eciis.key)
             user.follow(eciis.key)
 
-        for user in [mayza.key, andre.key, jorge.key, dalton.key,
-                     maiana.key, luiz.key, raoni.key,
-                     ruan.key, tiago.key, admin.key]:
-            eciis.follow(user)
+        for user in [mayza, andre, jorge, dalton,
+                     maiana, luiz, raoni,
+                     ruan, tiago, admin]:
+            eciis.follow(user.key)
 
         eciis.parent_institution = splab.key
         eciis.put()

@@ -13,11 +13,14 @@
             promise.then(function success(response) {
                 postCtrl.post = response;
             }, function error(response) {
-                MessageService.showToast(response.msg);
+                if (response.status === 500) {
+                    MessageService.showToast(response.data.msg);
+                }
+                $state.go("app.home");
             });
             return promise;
         }
 
-        loadPost($state.params.postKey);     
+        loadPost($state.params.postKey);
     });
 })();

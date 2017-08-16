@@ -170,6 +170,7 @@ class Post(ndb.Model):
             'likes': getLikesUri(post, host),
             'number_of_likes': post.get_number_of_likes(),
             'photo_url': post.photo_url,
+            'uploaded_images': post.uploaded_images,
             'state': post.state,
             'comments': getCommentsUri(post, host),
             'number_of_comments': post.get_number_of_comment(),

@@ -2,7 +2,10 @@
 """Invite Model."""
 from google.appengine.ext import ndb
 from google.appengine.ext.ndb.polymodel import PolyModel
-from custom_exceptions.fieldException import FieldException
+from models.user import User
+from service_messages import send_message_email
+from service_messages import send_message_notification
+import json
 
 
 class Invite(PolyModel):
@@ -39,9 +42,47 @@ class Invite(PolyModel):
 
         return invite
 
-    def sendInvite(self, host):
+    def sendInvite(self, user, host):
         """Send invite."""
-        raise FieldException("sendInvite not implemented")
+        self.send_email(host)
+        self.send_notification(user)
+
+    def send_email(self, host, body=None):
+        """Method of send email of invite user."""
+        body = body or """Você foi convidado a participar da plataforma e-CIS,
+        para realizar o cadastro acesse http://%s
+
+        Equipe e-CIS
+        """ % (host)
+
+        send_message_email(
+            self.invitee,
+            body
+        )
+
+    def send_notification(self, user, entity_type=None):
+        """Method of send notification of invite user.
+
+        Keyword arguments:
+        user -- user email that did the action.
+        entity_type -- type of notification.
+        Case not receive use invite type.
+        """
+        user_found = User.query(User.email == self.invitee).fetch(1)
+        entity_type = entity_type or 'INVITE'
+
+        if user_found:
+            invitee = user_found[0]
+            message = json.dumps({
+                'from': user.name, 'type': 'invite'
+            })
+
+            send_message_notification(
+                invitee.key.urlsafe(),
+                message,
+                entity_type,
+                self.key.urlsafe()
+            )
 
     def make(self):
         """Create personalized json of invite."""

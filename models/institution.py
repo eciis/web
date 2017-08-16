@@ -35,6 +35,8 @@ class Institution(ndb.Model):
 
     email = ndb.StringProperty()
 
+    homepage = ndb.StringProperty()
+
     phone_number = ndb.StringProperty()
 
     # The admin user of this institution

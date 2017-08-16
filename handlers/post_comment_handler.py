@@ -9,6 +9,7 @@ from utils import login_required
 from utils import json_response
 from utils import Utils
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
+from custom_exceptions.entityException import EntityException
 
 from handlers.base_handler import BaseHandler
 from models.post import Comment
@@ -49,6 +50,8 @@ class PostCommentHandler(BaseHandler):
         """Handle Post Comments requests."""
         data = json.loads(self.request.body)
         post = ndb.Key(urlsafe=url_string).get()
+        Utils._assert(post.state == 'deleted',
+                      "This post has been deleted", EntityException)
         comment = Comment.create(data, user.key, post.key)
         post.add_comment(comment)
 

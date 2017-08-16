@@ -54,7 +54,11 @@ class PostCollectionHandler(BaseHandler):
             message = {'type': 'POST', 'from': user.name.encode('utf8'), 'on': post.title.encode('utf8')}
             for follower in institution.followers:
                 if follower != user.key:
-                    send_message_notification(follower.urlsafe(), message, entity_type, post.key.urlsafe())
+                    send_message_notification(
+                        follower.urlsafe(),
+                        json.dumps(message),
+                        entity_type,
+                        post.key.urlsafe())
 
             self.response.write(json.dumps(Post.make(post, self.request.host)))
         except Exception as error:

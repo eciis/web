@@ -3,9 +3,24 @@ import webapp2
 import json
 from firebase import send_notification
 from google.appengine.api import mail
+import logging
 
 
-class SendNotificationHandler(webapp2.RequestHandler):
+class BaseHandler(webapp2.RequestHandler):
+    """Base Handler."""
+
+    def handle_exception(self, exception, debug):
+        """Handle exception."""
+        logging.exception(str(exception))
+        self.response.set_status(500)
+        self.response.headers[
+            'Content-Type'] = 'application/json; charset=utf-8'
+        self.response.write(json.dumps({
+            "msg": "Error! %s" % str(exception)
+        }))
+
+
+class SendNotificationHandler(BaseHandler):
     """
     Handler of send notifications.
 
@@ -27,7 +42,7 @@ class SendNotificationHandler(webapp2.RequestHandler):
         )
 
 
-class SendEmailHandler(webapp2.RequestHandler):
+class SendEmailHandler(BaseHandler):
     """
     Handler of send emails.
 

@@ -5,8 +5,11 @@ from google.appengine.api import taskqueue
 def send_message_notification(user_key, message, entity_type, entity_key):
     """Method of send notification.
 
-    It receives the key of the user that made the action, the message to be sent,
-    the notification type, and the notification key.
+    Keyword arguments:
+    user_key -- key of user that did the action.
+    messagem -- message of notification.
+    entity_type -- type of notification.
+    entity_key -- entity key of type invite.
     """
     taskqueue.add(
         url='/api/queue/send-notification',
@@ -23,7 +26,9 @@ def send_message_notification(user_key, message, entity_type, entity_key):
 def send_message_email(invitee, body):
     """Method of send email.
 
-    Receive the guest email and the message to be sent.
+    Keywords arguments:
+    invitee -- guest email.
+    body -- message to be sent.
     """
     taskqueue.add(
         url='/api/queue/send-email',

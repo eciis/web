@@ -63,14 +63,15 @@ class Invite(PolyModel):
     def send_notification(self, user, entity_type=None):
         """Method of send notification of invite user.
 
-        It receives the usurer who made the action, and the type of the
-        notification, if it does not receive the type, is used the type INVITE.
+        Keyword arguments:
+        user -- user email that did the action.
+        entity_type -- type of notification.
+        Case not receive use invite type.
         """
         user_found = User.query(User.email == self.invitee).fetch(1)
-        found_invitee = len(user_found) > 0
         entity_type = entity_type or 'INVITE'
 
-        if found_invitee:
+        if user_found:
             invitee = user_found[0]
             message = json.dumps({
                 'from': user.name, 'type': 'invite'

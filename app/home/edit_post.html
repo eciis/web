@@ -24,7 +24,7 @@
       </md-input-container>
       <div class="image-view" ng-if="editPostCtrl.showImage()">
         <button ng-click="editPostCtrl.hideImage()">&times;</button>
-        <img style="border-radius: 5%;" ng-src="{{ editPostCtrl.post.photo_url }}"/>
+        <img style="border-radius: 5%;" ng-src="{{ editPostCtrl.photoUrl }}"/>
       </div>
       <md-progress-linear ng-show="editPostCtrl.loading" md-mode="indeterminate" style="width: 19%; margin-top: 5px; margin-left: 10px;"></md-progress-linear>
     </md-card-content>

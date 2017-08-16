@@ -429,7 +429,7 @@
             return !imageEmpty && !imageNull;
         };
 
-        (function load() {
+        (function main() {
             postCtrl.photoUrl = postCtrl.post.photo_url;
         })();
     });

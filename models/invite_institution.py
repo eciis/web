@@ -65,6 +65,6 @@ class InviteInstitution(Invite):
         invite_inst_json = super(InviteInstitution, self).make()
         invite_inst_json['suggestion_institution_name'] = self.suggestion_institution_name
         invite_inst_json['stub_institution'] = Institution.make(self.stub_institution_key.get(),
-                                                                ['name', 'key'])
+                                                                ['name', 'key', 'state'])
         invite_inst_json['type_of_invite'] = 'INSTITUTION'
         return invite_inst_json

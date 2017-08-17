@@ -71,12 +71,17 @@
 
         postDetailsCtrl.editPost = function editPost(post, event) {
             $mdDialog.show({
-                controller: "EditPostController",
-                controllerAs: "postCtrl",
-                templateUrl: 'post/new_post.html',
+                controller: function PostDialogController() {},
+                controllerAs: "controller",
+                templateUrl: 'home/post_dialog.html',
                 parent: angular.element(document.body),
                 targetEvent: event,
-                clickOutsideToClose:true
+                clickOutsideToClose:true,
+                locals: {
+                    user: postDetailsCtrl.user,
+                    originalPost: post,
+                    isEditing: true
+                }
             }).then(function success(editedPost) {
                 postDetailsCtrl.post.title = editedPost.title;
                 postDetailsCtrl.post.text = editedPost.text;
@@ -315,14 +320,14 @@
         postCtrl.user = user;
         postCtrl.loading = false;
         postCtrl.deletePreviousImage = false;
-        postCtrl.isDialog = true;
+        postCtrl.photoUrl = "";
 
 
         postCtrl.addImage = function(image) {
             var newSize = 1024;
 
             ImageService.compress(image, newSize).then(function success(data) {
-                postCtrl.photo_post = data;
+                postCtrl.photoBase64Data = data;
                 ImageService.readFile(data, setImage);
                 postCtrl.deletePreviousImage = true;
                 postCtrl.file = null;
@@ -332,14 +337,14 @@
         };
 
         postCtrl.hideImage = function() {
-            postCtrl.originalPost.photo_url = "";
-            postCtrl.photo_post = null;
+            postCtrl.photoUrl = "";
+            postCtrl.photoBase64Data = null;
             postCtrl.deletePreviousImage = true;
         };
 
         function setImage(image) {
             $rootScope.$apply(function() {
-                postCtrl.post.photo_url = image.src;
+                postCtrl.photoUrl = image.src;
             });
         }
 
@@ -378,7 +383,7 @@
 
         postCtrl.actInPost = function actInPost() {
             deleteImage().then(function success() {
-                if (postCtrl.photo_post) {
+                if (postCtrl.photoBase64Data) {
                     savePostWithImage();
                 } else {
                     savePost();
@@ -390,7 +395,7 @@
 
         function savePostWithImage() {
             postCtrl.loading = true;
-            ImageService.saveImage(postCtrl.photo_post).then(function success(data) {
+            ImageService.saveImage(postCtrl.photoBase64Data).then(function success(data) {
                 postCtrl.loading = false;
                 postCtrl.post.photo_url = data.url;
                 postCtrl.post.uploaded_images.push(data.url);
@@ -421,9 +426,13 @@
         };
 
         postCtrl.showImage = function() {
-            var imageEmpty = postCtrl.originalPost.photo_url === "";
-            var imageNull = postCtrl.originalPost.photo_url === null;
+            var imageEmpty = postCtrl.photoUrl === "";
+            var imageNull = postCtrl.photoUrl === null;
             return !imageEmpty && !imageNull;
         };
+
+        (function main() {
+            postCtrl.photoUrl = postCtrl.post.photo_url;
+        })();
     });
 })();

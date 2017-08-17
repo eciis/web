@@ -3,7 +3,8 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("InstitutionController", function InstitutionController($state, InstitutionService, InviteService, AuthService, MessageService) {
+    app.controller("InstitutionController", function InstitutionController($state, InstitutionService, 
+            InviteService, AuthService, MessageService, $sce, $mdDialog, PdfService, $rootScope, $window) {
         var institutionCtrl = this;
 
         institutionCtrl.current_institution = null;
@@ -12,6 +13,7 @@
         institutionCtrl.followers = [];
         institutionCtrl.isUserFollower = false;
         institutionCtrl.isMember = false;
+        institutionCtrl.portfolioUrl = null;
         institutionCtrl.showFullDescription = false;
         
         institutionCtrl.legal_natures = { 
@@ -48,9 +50,24 @@
                 getFollowers();
                 checkIfUserIsFollower();
                 institutionCtrl.checkIfUserIsMember();
+                getPortfolioUrl();
             }, function error(response) {
                 $state.go("app.home");
                 MessageService.showToast(response.data.msg);
+            });
+        }
+
+        function getPortfolioUrl() {
+            institutionCtrl.portfolioUrl = institutionCtrl.current_institution.portfolio_url;
+            if(institutionCtrl.portfolioUrl) {
+                PdfService.getReadableURL(institutionCtrl.portfolioUrl, setPortifolioURL);
+            }
+        }
+
+        // TODO: Use this function to show pdf on dialog - Author: Ruan Eloy - 17/08/17
+        function setPortifolioURL(url) {
+            $rootScope.$apply(function() {
+                institutionCtrl.portfolioUrl = url;
             });
         }
 
@@ -146,5 +163,33 @@
             var institutionKey = institutionCtrl.current_institution.key;
             institutionCtrl.isMember = institutionCtrl.user.isMember(institutionKey);
         };
+
+        institutionCtrl.portfolioDialog = function(ev) {
+            $mdDialog.show({
+                templateUrl: 'institution/portfolioDialog.html',
+                targetEvent: ev,
+                clickOutsideToClose:true,
+                locals: {
+                    portfolioUrl: institutionCtrl.portfolioUrl
+                },
+                controller: DialogController,
+                controllerAs: 'ctrl'
+            });
+        };
+
+        institutionCtrl.openWebsite = function openWebsite() {
+            var website = institutionCtrl.current_institution.website_url;
+            $window.open(website);
+        }
+
+        institutionCtrl.downloadPortfolio = function downloadPortfolio() {
+            $window.open(institutionCtrl.portfolioUrl, '_self');
+        }
+
+        function DialogController($mdDialog, portfolioUrl) {
+            var ctrl = this;
+            var trustedUrl = $sce.trustAsResourceUrl(portfolioUrl);
+            ctrl.portfolioUrl = trustedUrl;
+        }
     });
 })();

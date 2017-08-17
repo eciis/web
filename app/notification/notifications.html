@@ -3,10 +3,17 @@
     <md-icon style="color:#81C784;">{{ controller.notifications.length === 0 ? 'notifications_none' : 'notifications'}}</md-icon>
   </md-button>
   <md-menu-content width="4">
-    <md-menu-item ng-repeat="notification in controller.notifications" ng-click="controller.markAsRead(notification)">
-      <md-button ng-click="controller.goToPost(notification)">
-        {{controller.format(notification)}}
-      </md-button>
-    </md-menu-item>
+    <md-list>
+      <md-list-item class="md-2-line" ng-repeat="notification in controller.notifications | orderBy:'-timestamp'" ng-click="controller.goToPost(notification)">
+        <md-icon>{{controller.getIcon(notification.type)}}</md-icon>
+        <div class="md-list-item-text">
+          <h3>{{controller.format(notification)}}</h3>
+          <p style="font-size: 10px;">{{notification.timestamp | date: 'd-MM-y'}} às {{notification.timestamp | date: 'HH:mm'}} hrs</p>
+        </div>
+        <md-button class="md-warn md-hue-1 md-icon-button" ng-click="controller.markAsRead(notification)">
+          <md-icon>markunread</md-icon>
+        </md-button>
+      </md-list-item>
+    </md-list>
   </md-menu-content>
 </md-menu>

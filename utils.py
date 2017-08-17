@@ -4,6 +4,8 @@ import json
 import datetime
 import sys
 
+import logging
+
 from google.appengine.api import users
 from google.appengine.ext import ndb
 from google.appengine.ext.ndb import Key
@@ -14,6 +16,8 @@ from models.institution import Institution
 import google.auth.transport.requests
 import google.oauth2.id_token
 import requests_toolbelt.adapters.appengine
+
+from google.auth.exceptions import TransportError 
 
 requests_toolbelt.adapters.appengine.monkeypatch()
 HTTP_REQUEST = google.auth.transport.requests.Request()
@@ -146,7 +150,15 @@ class Utils():
         return str(hash_num)
 
 
-_LOCAL_OAUTH2_CERTS_URL = "https://storage.googleapis.com/eciis-splab.appspot.com/oauth2-certs.json"
+# The URL that provides public certificates for verifying ID tokens issued
+# by Google's OAuth 2.0 authorization server.
+_GOOGLE_OAUTH2_CERTS_URL = 'https://www.googleapis.com/oauth2/v1/certs'
+
+# The URL that provides public certificates for verifying ID tokens issued
+# by Firebase and the Google APIs infrastructure
+_GOOGLE_APIS_CERTS_URL = (
+    'https://www.googleapis.com/robot/v1/metadata/x509'
+    '/securetoken@system.gserviceaccount.com')
 
 
 def verify_token(request):
@@ -156,9 +168,11 @@ def verify_token(request):
         token = token.split(' ').pop()
         try:
             return google.oauth2.id_token.verify_token(
-                token, HTTP_REQUEST, certs_url=_LOCAL_OAUTH2_CERTS_URL)
-        except ValueError as error:
-            raise NotAuthorizedException(error)
+                token, HTTP_REQUEST, certs_url=_GOOGLE_APIS_CERTS_URL)
+        except (ValueError, TransportError) as error:
+            logging.exception(str(error))
+            return None
+
 
 
 def login_required(method):

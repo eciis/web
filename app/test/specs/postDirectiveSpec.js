@@ -13,7 +13,6 @@
             PostService, AuthService, $mdToast, $rootScope, ImageService) {
         imageService = ImageService;
         scope = $rootScope.$new();
-        postCtrl = $controller('PostController', {scope: scope, imageService : imageService, $rootScope: rootScope});
         httpBackend = $httpBackend;
         rootScope = $rootScope;
         deffered = $q.defer();
@@ -21,12 +20,22 @@
         postService = PostService;
         mdToast = $mdToast;
         http = $http;
+
+        postCtrl = $controller('PostController', {
+            scope: scope, 
+            imageService : imageService, 
+            $rootScope: rootScope,
+        });
+
         postCtrl.user = user;
+        postCtrl.posts = [];
+
         post = {
             title: 'title',
             text: 'text',
             institution: {}
         };
+
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);
         httpBackend.when('GET', 'auth/login.html').respond(200);

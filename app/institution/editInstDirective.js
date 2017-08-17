@@ -10,8 +10,9 @@
 
         editInstCtrl.loading = false;
         editInstCtrl.user = AuthService.getCurrentUser();
-        editInstCtrl.newInstitution = {};
-        editInstCtrl.newInstitution.photo_url = "/images/institution.jpg";
+        editInstCtrl.newInstitution = {
+            photo_url: "/images/institution.jpg"
+        };
         editInstCtrl.cnpjRegex = "[0-9]{2}[\.][0-9]{3}[\.][0-9]{3}[\/][0-9]{4}[-][0-9]{2}";
         editInstCtrl.phoneRegex = "([0-9]{2}[\\s][0-9]{8})";
         var currentPortfoliourl = null;
@@ -62,33 +63,39 @@
             var promise = $q.defer();
             if(editInstCtrl.photo_instituicao) {
                 editInstCtrl.loading = true;
-                promise = ImageService.saveImage(editInstCtrl.photo_instituicao);
-                promise.then(function(data) {
-                    editInstCtrl.loading = false;
-                    editInstCtrl.newInstitution.photo_url = data.url;
+                ImageService.saveImage(editInstCtrl.photo_instituicao).then(
+                    function(data) {
+                        editInstCtrl.loading = false;
+                        editInstCtrl.newInstitution.photo_url = data.url;
+                        $q.resolve(promise);
+                    }, function error() {
+                        $q.reject(promise);
                 });
             } else {
                 $q.resolve(promise);
             }
-
             return promise;
         }
 
         function updateInstitution() {
-            var promises = [savePortfolio(), saveImage()];
-            var updatePromise = null;
-            $q.all(promises).then(function success() {
+            var savePromises = [savePortfolio(), saveImage()];
+            var promise = $q.defer();
+            $q.all(savePromises).then(function success() {
                 var patch = jsonpatch.generate(observer);
-                updatePromise = InstitutionService.update(institutionKey, patch);
-                updatePromise.then(
-                    updateUserInstitutions(editInstCtrl.newInstitution),
+                InstitutionService.update(institutionKey, patch).then(
+                    function success() {
+                        updateUserInstitutions(editInstCtrl.newInstitution);
+                        $q.resolve(promise);
+                    },
                     function error(response) {
                         MessageService.showToast(response.data.msg);
+                        $q.reject(promise);
                 });                
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
+                $q.reject(promise);
             });
-            return updatePromise;
+            return promise;
         }
 
         function updateUserInstitutions(institution) {
@@ -129,17 +136,19 @@
         function savePortfolio() {
             var promise = $q.defer();
             if(editInstCtrl.file) {
-                promise = PdfService.save(editInstCtrl.file, currentPortfoliourl);
-                promise.then(function success(data) {
-                    editInstCtrl.newInstitution.portfolio_url = data.url;
-                    currentPortfoliourl = data.url;
-                }, function error(response) {
-                    MessageService.showToast(response.data.msg);
+                PdfService.save(editInstCtrl.file, currentPortfoliourl).then(
+                    function success(data) {
+                        editInstCtrl.newInstitution.portfolio_url = data.url;
+                        currentPortfoliourl = data.url;
+                        console.log(data.url);
+                        $q.resolve(promise);
+                    }, function error(response) {
+                        MessageService.showToast(response.data.msg);
+                        $q.reject(promise);
                 });
             } else {
                 $q.resolve(promise);
             }
-                    
             return promise;
         }
 

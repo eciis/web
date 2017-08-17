@@ -6,6 +6,10 @@
     app.service("PdfService", function PdfService($q, $firebaseStorage, $http) {
         var service = this;
         var fileFolder = "files/";
+        var INDEX_FILE_NAME = 0;
+        var INDEX_FILE_TYPE = 1;
+        var PDF_TYPE = "application/pdf";
+        var MAXIMUM_SIZE = 5242880; // 5Mb in bytes
 
         service.save = function save(file, currentUrl) {
             var deferred = $q.defer();
@@ -22,18 +26,11 @@
                     return deferred.promise;
                 });
             }
-
-            var INDEX_FILE_NAME = 0;
-            var INDEX_FILE_TYPE = 1;
-            var fileProperties = file.name.split(".");
-            var filename = fileProperties[INDEX_FILE_NAME]  + "-" + (new Date()).getTime() + "." + fileProperties[INDEX_FILE_TYPE];
+            
+            var filename = createFileName(file);
             var storageRef = firebase.storage().ref();
             var fileReference = storageRef.child(fileFolder + filename);
-
-            var metadata = {
-                contentType: 'file/' + fileProperties[INDEX_FILE_TYPE]
-            };
-           
+            var metadata = { contentType: 'file/pdf' };
             var uploadTask = $firebaseStorage(fileReference).$put(file, metadata);
 
             uploadTask.$complete(function(snapshot) {
@@ -50,6 +47,13 @@
             return deferred.promise;
         };
 
+        function createFileName(file) {
+            var fileProperties = file.name.split(".");
+            var filename = fileProperties[INDEX_FILE_NAME]  + "-" + (new Date()).getTime() + "." + fileProperties[INDEX_FILE_TYPE];
+            return filename;
+        }
+
+        // TODO: Use this function to show pdf on dialog - Author: Ruan Eloy - 17/08/17
         service.getReadableURL = function getReadableURL(url, callback) {
             var file = null;
             var data = null;
@@ -61,6 +65,7 @@
             });
         };
 
+        // TODO: Use this function to show pdf on dialog - Author: Ruan Eloy - 17/08/17
         function readFile(file, data, callback) {
             var fileReader = new FileReader();
 
@@ -76,12 +81,9 @@
         }
 
         function isValidPdf(file) {
-            var pdfType = "application/pdf";
-            var maximumSize = 5242880; // 5Mb in bytes
-
             if(file) {
-                var correctType = file.type === pdfType;
-                var correctSize = file.size <= maximumSize;
+                var correctType = file.type === PDF_TYPE;
+                var correctSize = file.size <= MAXIMUM_SIZE;
                 return correctType && correctSize;
             }
             return false;

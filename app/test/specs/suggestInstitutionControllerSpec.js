@@ -13,7 +13,8 @@
             'suggestion_institution_name': "Suggested Name",
             'type_of_invite': "institution",
             'status': 'sent',
-            'stub_institution_key': '00001'
+            'stub_institution': { 'name': "Suggested Name",
+                                  'key': '00001'}
         }]
     };
 

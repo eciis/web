@@ -69,6 +69,7 @@
                     inviteController.invite = {};
                     inviteController.showButton = true;
                     invite.status = 'sent';
+                    invite.inviter_name = inviteController.user.name;
                     inviteController.sent_invitations.push(invite);
                     MessageService.showToast('Convite enviado com sucesso!');
                 }, function error(response) {

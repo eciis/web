@@ -8,7 +8,8 @@
     var INSTITUTIONS_URI = "/api/institutions/";
 
     var invite = new Invite({invitee: "mayzabeel@gmail.com", key: 'xyzcis'}, 'user', '123456789', 'mayzabeel@gmail.com');
-
+    invite.stub_institution = {'name': 'Suggested Name', 'key': '00001'};
+    
     var splab = {
             name: 'SPLAB',
             key: '987654321',

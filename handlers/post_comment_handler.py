@@ -8,13 +8,12 @@ from google.appengine.ext import ndb
 from utils import login_required
 from utils import json_response
 from utils import Utils
+from service_messages import send_message_notification
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from custom_exceptions.entityException import EntityException
 
 from handlers.base_handler import BaseHandler
 from models.post import Comment
-
-from firebase import send_notification
 
 
 def check_permission(user, post, comment_id):
@@ -58,7 +57,12 @@ class PostCommentHandler(BaseHandler):
         if (post.author != user.key):
             entity_type = 'COMMENT'
             message = {'type': 'COMMENT', 'from': user.name.encode('utf8'), 'on': post.title.encode('utf8')}
-            send_notification(post.author.urlsafe(), message, entity_type, post.key.urlsafe())
+            send_message_notification(
+                post.author.urlsafe(),
+                json.dumps(message),
+                entity_type,
+                post.key.urlsafe()
+            )
 
         self.response.write(json.dumps(Comment.make(comment)))
 

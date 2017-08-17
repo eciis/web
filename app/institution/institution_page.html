@@ -27,7 +27,7 @@
                         <p><b>Endereço:</b> {{ institutionCtrl.current_institution.address }}</p>
                         <div ng-if="!institutionCtrl.showFullDescription">
                             <div layout="column" layout-align="center center" class="ng-if">
-                              <md-button ng-if="!institutionCtrl.showFullDescription" flex md-colors="{background: 'teal-700'}" ng-click="institutionCtrl.showDescription()">
+                              <md-button ng-if="!institutionCtrl.showFullDescription" flex ng-click="institutionCtrl.showDescription()">
                                 <md-icon>arrow_drop_down</md-icon>
                               </md-button>
                             </div>
@@ -45,11 +45,11 @@
                             </div>
                             <div layout="row" flex>
                                 <div layout="column" flex>
-                                    <p><b>Área de Atuação:</b> {{ institutionCtrl.current_institution.occupation_area ? institutionCtrl.current_institution.occupation_area : 'Não informado' }}</p>
+                                    <p><b>Área de Atuação:</b> {{ institutionCtrl.current_institution.occupation_area ? institutionCtrl.occupation_areas[institutionCtrl.current_institution.occupation_area] : 'Não informado' }}</p>
                                 </div>
                                 <span flex md-truncate></span>
                                 <div layout="column" flex>
-                                    <p ><b>Natureza Jurídica:</b> {{ institutionCtrl.current_institution.legal_nature ? institutionCtrl.legal_natures.institutionCtrl.current_institution.legal_nature : 'Não informado' }}</p>
+                                    <p ><b>Natureza Jurídica:</b> {{ institutionCtrl.current_institution.legal_nature ? institutionCtrl.legal_natures[institutionCtrl.current_institution.legal_nature] : 'Não informado' }}</p>
                                 </div>
                             </div>
                             <div layout="row" flex>
@@ -63,7 +63,7 @@
                             </div>
                             <p align="justify"><b>Descrição:</b> {{ institutionCtrl.current_institution.description ? institutionCtrl.current_institution.description : 'Não informado' }}</p>
                             <div layout="column" layout-align="center center" class="ng-if">
-                                <md-button ng-if="institutionCtrl.showFullDescription" flex md-colors="{background: 'teal-700'}" ng-click="institutionCtrl.hideDescription()">
+                                <md-button ng-if="institutionCtrl.showFullDescription" flex ng-click="institutionCtrl.hideDescription()">
                                 <md-icon>arrow_drop_up</md-icon>
                                 </md-button>
                             </div>

@@ -1,17 +1,20 @@
 <md-content layout="row" md-colors="{background: 'grey-200'}" layout-align="center" >
-    <div flex-gt-lg="80" flex-lg="90" layout="row" layout-wrap layout-align="center" layout-fill>
+    <div layout="row" layout-wrap layout-align="center" layout-fill>
         <div flex layout="column">
-            <div layout="row" layout-xs="column" layout-padding flex-xs="30" flex-sm="15" flex-gt-sm="30"
+            <div layout="row" layout-xs="column" layout-padding flex-xs="30" flex-sm="15"
                 md-colors="{background: 'grey-50'}" style="margin: 0px 7px 0px 7px;">
                 <!-- Institution image -->
                 <div flex="20" hide show-gt-sm>
-                    <center style="margin: 0px 35px 0px 0px;">
+                    <center>
                         <img ng-src="{{ institutionCtrl.current_institution.photo_url }}" height="170">
                     </center>
                 </div>
 
                 <!-- Institution information -->
-                <div flex>
+<!--                 <md-content flex flex-gt-sm class="md-long-text">
+
+ -->            
+                <div flex>    
                     <center>
                         <div>
                             <h2>{{ institutionCtrl.current_institution.name }}
@@ -21,11 +24,53 @@
                                 </md-icon>
                             </h2>
                         </div>
-                        <p>{{ institutionCtrl.current_institution.phone_number }}</p>
-                        <p>{{ institutionCtrl.current_institution.address }}</p>
-                        <p hide show-gt-sm>{{ institutionCtrl.current_institution.description }}</p>
+                        <p><b>Endereço:</b> {{ institutionCtrl.current_institution.address }}</p>
+                        <div ng-if="!institutionCtrl.showFullDescription">
+                            <div layout="column" layout-align="center center" class="ng-if">
+                              <md-button ng-if="!institutionCtrl.showFullDescription" flex md-colors="{background: 'teal-700'}" ng-click="institutionCtrl.showDescription()">
+                                <md-icon>arrow_drop_down</md-icon>
+                              </md-button>
+                            </div>
+                        </div>
                     </center>
+                        <div layout="column" ng-if="institutionCtrl.showFullDescription">
+                            <div layout="row" flex>
+                                <div layout="column" flex>
+                                    <p ><b>Telefone:</b> {{ institutionCtrl.current_institution.phone_number ? institutionCtrl.current_institution.phone_number : 'Não informado' }}</p>
+                                </div>
+                                <span flex md-truncate></span>
+                                <div layout="column" flex>
+                                    <p><b>CNPJ:</b> {{ institutionCtrl.current_institution.cnpj ? institutionCtrl.current_institution.cnpj : 'Não informado'}}</p>
+                                </div>
+                            </div>
+                            <div layout="row" flex>
+                                <div layout="column" flex>
+                                    <p><b>Área de Atuação:</b> {{ institutionCtrl.current_institution.occupation_area ? institutionCtrl.current_institution.occupation_area : 'Não informado' }}</p>
+                                </div>
+                                <span flex md-truncate></span>
+                                <div layout="column" flex>
+                                    <p ><b>Natureza Jurídica:</b> {{ institutionCtrl.current_institution.legal_nature ? institutionCtrl.legal_natures.institutionCtrl.current_institution.legal_nature : 'Não informado' }}</p>
+                                </div>
+                            </div>
+                            <div layout="row" flex>
+                                <div layout="column" flex>
+                                    <p><b>Responsável:</b> {{ institutionCtrl.current_institution.admin.name ? institutionCtrl.current_institution.admin.name : 'Não informado'}} </p>
+                                </div>
+                                <span flex md-truncate></span>
+                                <div layout="column" flex>
+                                    <p><b>E-mail do Responsável: </b> {{ institutionCtrl.current_institution.email ? institutionCtrl.current_institution.email : 'Não informado'}}</p>
+                                </div>
+                            </div>
+                            <p align="justify"><b>Descrição:</b> {{ institutionCtrl.current_institution.description ? institutionCtrl.current_institution.description : 'Não informado' }}</p>
+                            <div layout="column" layout-align="center center" class="ng-if">
+                                <md-button ng-if="institutionCtrl.showFullDescription" flex md-colors="{background: 'teal-700'}" ng-click="institutionCtrl.hideDescription()">
+                                <md-icon>arrow_drop_up</md-icon>
+                                </md-button>
+                            </div>
+                        </div>
                 </div>
+<!--                 </md-content>
+ -->
             </div>
             <div layout="row" layout-xs="column" flex="60" flex-gt-sm="40">
                 <div flex-gt-sm="20" flex-xs="05" layout="column">
@@ -75,6 +120,6 @@
                 </div>
                 <timeline flex layout="column" md-colors="{background: 'grey-200'}" posts="institutionCtrl.posts" institution="true" user="institutionCtrl.user"></timeline>
             </div>
-        <div>
+        </div>
     </div>
 </md-content>

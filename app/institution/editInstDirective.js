@@ -6,16 +6,16 @@
 
         var editInstCtrl = this;
         var institutionKey = $state.params.institutionKey;
+        var currentPortfoliourl = null;
         var observer;
 
         editInstCtrl.loading = false;
         editInstCtrl.user = AuthService.getCurrentUser();
+        editInstCtrl.cnpjRegex = "[0-9]{2}[\.][0-9]{3}[\.][0-9]{3}[\/][0-9]{4}[-][0-9]{2}";
+        editInstCtrl.phoneRegex = "([0-9]{2}[\\s][0-9]{8})";
         editInstCtrl.newInstitution = {
             photo_url: "/images/institution.jpg"
         };
-        editInstCtrl.cnpjRegex = "[0-9]{2}[\.][0-9]{3}[\.][0-9]{3}[\/][0-9]{4}[-][0-9]{2}";
-        editInstCtrl.phoneRegex = "([0-9]{2}[\\s][0-9]{8})";
-        var currentPortfoliourl = null;
 
         getLegalNatures();
         getOccupationAreas();
@@ -60,21 +60,40 @@
         };
 
         function saveImage() {
-            var promise = $q.defer();
+            var defer = $q.defer();
             if(editInstCtrl.photo_instituicao) {
                 editInstCtrl.loading = true;
                 ImageService.saveImage(editInstCtrl.photo_instituicao).then(
                     function(data) {
                         editInstCtrl.loading = false;
                         editInstCtrl.newInstitution.photo_url = data.url;
-                        $q.resolve(promise);
-                    }, function error() {
-                        $q.reject(promise);
+                        defer.resolve();
+                    }, function error(response) {
+                        MessageService.showToast(response.data.msg);
+                        defer.reject();
                 });
             } else {
-                $q.resolve(promise);
+                defer.resolve();
             }
-            return promise;
+            return defer.promise;
+        }
+
+        function savePortfolio() {
+            var defer = $q.defer();
+            if(editInstCtrl.file) {
+                PdfService.save(editInstCtrl.file, currentPortfoliourl).then(
+                    function success(data) {
+                        editInstCtrl.newInstitution.portfolio_url = data.url;
+                        currentPortfoliourl = data.url;
+                        defer.resolve();
+                    }, function error(response) {
+                        MessageService.showToast(response.data.msg);
+                        defer.reject();
+                });
+            } else {
+                defer.resolve();
+            }
+            return defer.promise;
         }
 
         function updateInstitution() {
@@ -82,6 +101,7 @@
             var promise = $q.defer();
             $q.all(savePromises).then(function success() {
                 var patch = jsonpatch.generate(observer);
+                console.log(patch);
                 InstitutionService.update(institutionKey, patch).then(
                     function success() {
                         updateUserInstitutions(editInstCtrl.newInstitution);
@@ -127,29 +147,6 @@
             $http.get('institution/occupation_area.json').then(function success(response) {
                 editInstCtrl.occupationAreas = response.data;
             });
-        }
-
-        editInstCtrl.addPortfolio = function addPortfolio() {
-            MessageService.showToast("Portfólio adicionado");
-        };
-
-        function savePortfolio() {
-            var promise = $q.defer();
-            if(editInstCtrl.file) {
-                PdfService.save(editInstCtrl.file, currentPortfoliourl).then(
-                    function success(data) {
-                        editInstCtrl.newInstitution.portfolio_url = data.url;
-                        currentPortfoliourl = data.url;
-                        console.log(data.url);
-                        $q.resolve(promise);
-                    }, function error(response) {
-                        MessageService.showToast(response.data.msg);
-                        $q.reject(promise);
-                });
-            } else {
-                $q.resolve(promise);
-            }
-            return promise;
         }
 
         function loadInstitution() {

@@ -129,7 +129,7 @@
 
                 if (invitePending) {
                     var inviteKey = invitePending.key;
-                    $state.go("new_invite", {inviteKey: inviteKey});
+                    $state.go("new_invite", {key: inviteKey});
                 } else if (isInactive()) {
                     $state.go("user_inactive");
                 } else if (mainCtrl.user.name === 'Unknown') {

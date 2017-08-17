@@ -9,7 +9,7 @@
 
         newInviteCtrl.institution = null;
 
-        newInviteCtrl.inviteKey = $state.params.inviteKey;
+        newInviteCtrl.inviteKey = $state.params.key;
 
         newInviteCtrl.user = AuthService.getCurrentUser();
 
@@ -124,6 +124,7 @@
             newInviteCtrl.invite = _.find(newInviteCtrl.user.invites, function(invite){
                 return invite.key === newInviteCtrl.inviteKey;
             });
+            console.log(newInviteCtrl.inviteKey);
             institutionKey = (newInviteCtrl.inviteKey.type_of_invite === "USER") ? newInviteCtrl.invite.institution_key : newInviteCtrl.invite.stub_institution_key;
             loadInstitution(institutionKey);
         }

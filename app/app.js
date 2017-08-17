@@ -121,7 +121,7 @@
                 }
             })
             .state("new_invite", {
-                url: "/:inviteKey/new_invite",
+                url: "/:key/new_invite",
                 views: {
                     main: {
                         templateUrl: "invites/new_invite_page.html",

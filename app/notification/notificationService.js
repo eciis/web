@@ -64,10 +64,8 @@
         };
 
         function setupNotifications(userKey, callback) {
-            if (!firebaseArrayNotifications) {
-                var notificationsRef = ref.child("notifications/"+userKey);
-                firebaseArrayNotifications = $firebaseArray(notificationsRef);
-            }
+            var notificationsRef = ref.child("notifications/"+userKey);
+            firebaseArrayNotifications = $firebaseArray(notificationsRef);
             firebaseArrayNotifications.$loaded().then(function() {
                 callback();
             });

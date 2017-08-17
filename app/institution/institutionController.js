@@ -12,6 +12,22 @@
         institutionCtrl.followers = [];
         institutionCtrl.isUserFollower = false;
         institutionCtrl.isMember = false;
+        institutionCtrl.showFullDescription = false;
+        
+        institutionCtrl.legal_natures = { 
+            "public": "Pública", 
+            "private": "Privada",
+            "philanthropic": "Filantrópica"
+        };
+
+        institutionCtrl.occupation_areas = {
+            "official laboratories":"Laboratórios Oficiais", 
+            "government agencies":"Ministérios e outros Órgãos do Governo", 
+            "funding agencies":"Agências de Fomento", 
+            "research institutes":"Institutos de Pesquisa", 
+            "colleges":"Universidades",
+            "other":"Outra"
+        };
 
         var currentInstitutionKey = $state.params.institutionKey;
 
@@ -96,6 +112,14 @@
                 });
                 return promise;
             }
+        };
+
+        institutionCtrl.showDescription = function showDescription() {
+            institutionCtrl.showFullDescription = true;
+        };
+
+        institutionCtrl.hideDescription = function hideDescription() {
+            institutionCtrl.showFullDescription = false;
         };
 
         institutionCtrl.goToManageMembers = function goToManageMembers(){

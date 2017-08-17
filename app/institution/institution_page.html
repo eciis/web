@@ -21,12 +21,13 @@
                                 </md-icon>
                             </h2>
                         </div>
-                        <p>
-                            <a ng-href="{{ institutionCtrl.current_institution.website_url }}" 
-                                ng-if="institutionCtrl.current_institution.website_url"> Site                         
-                            </a>
-                        </p>
-                        <a ng-href="{{ institutionCtrl.portfolioUrl }}" ng-if="institutionCtrl.portfolioUrl" download>Portfólio</a>
+                        <md-button class="md-raised" ng-if="institutionCtrl.current_institution.website_url" 
+                            ng-click="institutionCtrl.openWebsite()">
+                            <md-icon>web</md-icon> Website
+                        </md-button>
+                        <md-button class="md-raised" ng-if="institutionCtrl.portfolioUrl" ng-click="institutionCtrl.downloadPortfolio()">
+                            <md-icon>insert_drive_file</md-icon> Portfólio
+                        </md-button>
                         <!-- TODO: show pdf on dialog - Author: Ruan Eloy - 16/08/17 -->
                         <!-- <md-button ng-click="institutionCtrl.portfolioDialog($event)" ng-show="true">
                             Portfólio

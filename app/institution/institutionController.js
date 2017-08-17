@@ -71,12 +71,6 @@
             });
         }
 
-        institutionCtrl.openPortfolio = function openPortfolio() {
-            if(institutionCtrl.portfolioUrl) {
-                $window.open(institutionCtrl.portfolioUrl, '_blank');
-            }
-        };
-
         function getMembers() {
             InstitutionService.getMembers(currentInstitutionKey).then(function success(response) {
                 institutionCtrl.members = response.data;
@@ -182,6 +176,15 @@
                 controllerAs: 'ctrl'
             });
         };
+
+        institutionCtrl.openWebsite = function openWebsite() {
+            var website = institutionCtrl.current_institution.website_url;
+            $window.open(website);
+        }
+
+        institutionCtrl.downloadPortfolio = function downloadPortfolio() {
+            $window.open(institutionCtrl.portfolioUrl, '_self');
+        }
 
         function DialogController($mdDialog, portfolioUrl) {
             var ctrl = this;

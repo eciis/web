@@ -1,18 +1,22 @@
-<div layout-fill md-colors="{background: 'grey-900'}" layout="column" layout-align="center">
-   <div layout="row" layout-wrap layout-align="center">
-    <md-card flex-gt-xs="50">
-      <md-toolbar md-colors="{background: 'teal-800'}" layout="row">
-        <h1 class="md-toolbar-tools">Dados do seu perfil</h1>
-      </md-toolbar>
-      <md-content layout-gt-sm="column">
-        <div layout-gt-sm="column" layout-padding layout-align="center center">
-          <img style="border-radius: 50%; " ng-src="{{ configProfileCtrl.newUser.photo_url }}" width="100px" height="100px" />
+<md-content layout="row" md-colors="{background: 'grey-200'}" layout-align="center" class="body">
+  <div flex-gt-lg="80" flex-lg="90" layout="row" layout-align="center" layout-fill>
+    <div flex>
+      <md-card flex layout="column">
+        <md-toolbar md-colors="{background: 'teal-800'}" layout="row">
+          <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
+            <h1>Dados pessoais</h1>
+            <span flex md-truncate></span>
+          </div>
+        </md-toolbar>
+        <md-content layout-gt-sm="column">
+          <div layout-gt-sm="column" layout-padding layout-align="center center">
+            <img style="border-radius: 50%; " ng-src="{{ configProfileCtrl.newUser.photo_url }}" width="100px" height="100px" />
           <div>
-              <md-button ng-show="configProfileCtrl.showButton()" ng-click="null" ng-model="configProfileCtrl.file" ngf-pattern="'image/*'"
-                    ngf-accept="'image/*'" ngf-max-size="5MB"
-                    ngf-select="configProfileCtrl.addImage(configProfileCtrl.file)">
-                  <b>Adicionar imagem</b>
-              </md-button>
+            <md-button ng-show="configProfileCtrl.showButton()" ng-click="null" ng-model="configProfileCtrl.file" ngf-pattern="'image/*'"
+            ngf-accept="'image/*'" ngf-max-size="5MB"
+            ngf-select="configProfileCtrl.addImage(configProfileCtrl.file)">
+            <b>Adicionar imagem</b>
+            </md-button>
           </div>
           <md-progress-linear ng-show="configProfileCtrl.loading" md-mode="indeterminate" style="width: 20%"></md-progress-linear>
           <div layout-gt-sm="row">
@@ -28,15 +32,34 @@
           </div>
 
           <md-input-container flex-gt-sm>
-            <label>CPF</label>
-            <input name="CPF" ng-model="configProfileCtrl.newUser.cpf" placeholder="123.456.789-00"
-                   ng-pattern="/^\d{3}\.\d{3}\.\d{3}\-\d{2}$/" required>
+          <label>CPF</label>
+          <input name="CPF" ng-model="configProfileCtrl.newUser.cpf" placeholder="123.456.789-00"
+          ng-pattern="/^\d{3}\.\d{3}\.\d{3}\-\d{2}$/" required>
           </md-input-container>
-        </div>
-        <section layout="row" layout="column" layout-align="end center" layout-wrap>
-          <md-button ng-click="configProfileCtrl.finish()" md-colors="{background: 'teal-900'}">Concluir</md-button>
-        </section>
-      </md-content>
-    </md-card>
+          </div>
+          <section layout="row" layout="column" layout-align="end center" layout-wrap>
+            <md-button ng-click="configProfileCtrl.finish()" md-colors="{background: 'teal-900'}">Concluir</md-button>
+          </section>
+        </md-content>
+      </md-card>
+      <md-card flex layout="column">
+        <md-toolbar md-colors="{background: 'teal-800'}" layout="row">
+          <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
+            <h1>Configurações de vínculos</h1>
+            <span flex md-truncate></span>
+          </div>
+        </md-toolbar>
+          <md-list class="md-dense" flex>
+            <md-subheader class="md-no-sticky">Seus vínculos institucionais:</md-subheader>
+            <md-list-item class="md-3-line" ng-repeat="institution in configProfileCtrl.newUser.institutions" ng-click="null">
+              <img style="border-radius: 50%; " ng-src="{{ institution.photo_url }}" width="50px" height="50px" />
+              <div style="margin-left: 10px;" class="md-list-item-text" layout="column">
+                <h3>{{ institution.acronym }}</h3>
+                <h4>{{ institution.name }}</h4>
+              </div>
+            </md-list-item>
+          </md-list>
+      </md-card>
+    </div>
   </div>
-</div>
+</md-content>

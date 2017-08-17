@@ -82,7 +82,7 @@
 
             mainCtrl = createCtrl();
 
-            expect(state.go).toHaveBeenCalledWith('config_profile');
+            expect(state.go).toHaveBeenCalledWith('app.config_profile');
         });
 
         it("should change state to submit_institution if user have pedding invates", function() {

@@ -146,7 +146,7 @@
         };
 
         postDetailsCtrl.goToPost = function goToPost() {
-             $state.go('app.post', {postKey: postDetailsCtrl.post.key});
+             $state.go('app.post', {key: postDetailsCtrl.post.key});
          };
 
         postDetailsCtrl.getComments = function getComments() {

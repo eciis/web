@@ -4,7 +4,7 @@
   </md-button>
   <md-menu-content width="4">
     <md-list>
-      <md-list-item class="md-2-line" ng-repeat="notification in controller.notifications" ng-click="controller.goToPost(notification)">
+      <md-list-item class="md-2-line" ng-repeat="notification in controller.notifications" ng-click="controller.goTo(notification)">
         <md-icon>{{controller.getIcon(notification.type)}}</md-icon>
         <div class="md-list-item-text">
           <h3>{{controller.format(notification)}}</h3>

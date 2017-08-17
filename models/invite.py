@@ -74,7 +74,7 @@ class Invite(PolyModel):
         if user_found:
             invitee = user_found[0]
             message = json.dumps({
-                'from': user.name, 'type': 'invite'
+                'from': user.name, 'type': 'INVITE'
             })
 
             send_message_notification(

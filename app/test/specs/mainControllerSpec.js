@@ -11,7 +11,8 @@
             'key': "inviteKey",
             'type_of_invite': "INSTITUTION",
             'status': 'sent',
-            'stub_institution_key': '00001'
+            'stub_institution': {'name': 'Suggested Name',
+                                 'key': '00001'}
         }]
     };
     var certbio = {

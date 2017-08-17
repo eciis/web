@@ -36,7 +36,7 @@ class InviteCollectionHandler(BaseHandler):
     @json_response
     @login_required
     def get(self, user):
-        """Get invites for new institutions make by Plataform"""
+        """Get invites for new institutions make by Plataform."""
         invites = []
 
         queryInvites = InviteInstitution.query()
@@ -55,9 +55,13 @@ class InviteCollectionHandler(BaseHandler):
 
         type_of_invite = data.get('type_of_invite')
         invite = InviteFactory.create(data, type_of_invite)
-
         invite.put()
+
+        if(invite.stub_institution_key):
+            invite.stub_institution_key.get().addInvite(invite)
+
         invite.sendInvite(user, host)
+
         make_invite = invite.make()
 
         self.response.write(json.dumps(make_invite))

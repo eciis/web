@@ -53,7 +53,8 @@ class Institution(ndb.Model):
 
     # The institutions are waiting to be accept as children
     # Value is None for institutions without children waiting accept
-    children_institutions_pedding = ndb.KeyProperty(kind="Institution", repeated=True)
+    children_institutions_pedding = ndb.KeyProperty(
+        kind="Institution", repeated=True)
 
     # Key of invite to create institution
     invite = ndb.KeyProperty(kind="Invite")
@@ -96,6 +97,12 @@ class Institution(ndb.Model):
         if member.key not in self.members:
             self.members.append(member.key)
             self.put()
+
+    def addInvite(self, invite):
+        """Add invite in institution."""
+        self.invite = invite.key
+        self.put()
+
 
     @staticmethod
     @ndb.transactional(xg=True)
@@ -170,5 +177,11 @@ class Institution(ndb.Model):
             attr_value = getattr(self, attribute)
             if(isinstance(attr_value, ndb.Key)):
                 attr_value = self.key.urlsafe()
+            if((attribute == "invite") and attr_value):
+                invite_key = self.key.get().invite
+                attr_value = {
+                    'suggestion_institution_name': invite_key.get().suggestion_institution_name,
+                    'key': invite_key.urlsafe()
+                }
             institution[attribute] = attr_value
         return institution

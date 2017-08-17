@@ -29,7 +29,8 @@ class InviteInstitution(Invite):
         invite = Invite.create(data, invite)
 
         InviteInstitution.checkIsInviteInstitutionValid(data)
-        invite.suggestion_institution_name = data['suggestion_institution_name']
+        invite.suggestion_institution_name = data[
+            'suggestion_institution_name']
         institution = Institution.create_inst_stub(invite)
 
         invite.createConectionInstitution(institution)
@@ -64,6 +65,7 @@ class InviteInstitution(Invite):
         """Create json of invite to institution."""
         invite_inst_json = super(InviteInstitution, self).make()
         invite_inst_json['suggestion_institution_name'] = self.suggestion_institution_name
-        invite_inst_json['stub_institution_key'] = self.stub_institution_key.urlsafe()
+        invite_inst_json['stub_institution'] = Institution.make(self.stub_institution_key.get(),
+                                                                ['name', 'key', 'state'])
         invite_inst_json['type_of_invite'] = 'INSTITUTION'
         return invite_inst_json

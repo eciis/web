@@ -47,7 +47,7 @@
         mdDialog = $mdDialog;
         institutionService = InstitutionService;
         authService = AuthService;
-        httpBackend.when('GET', INSTITUTIONS_URI + splab.key).respond(splab);
+        httpBackend.expect('GET', INSTITUTIONS_URI + splab.key).respond(splab);
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', INVITES_URI + '/xyzcis').respond(invite);
         httpBackend.when('GET', "home/home.html").respond(200);

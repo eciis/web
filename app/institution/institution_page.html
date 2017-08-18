@@ -21,6 +21,13 @@
                                 </md-icon>
                             </h2>
                         </div>
+                        <md-button class="md-raised" ng-if="institutionCtrl.current_institution.website_url" 
+                            ng-click="institutionCtrl.openWebsite()">
+                            <md-icon>web</md-icon> Website
+                        </md-button>
+                        <md-button class="md-raised" ng-if="institutionCtrl.portfolioUrl" ng-click="institutionCtrl.portfolioDialog($event)">
+                            <md-icon>insert_drive_file</md-icon> Portfólio
+                        </md-button>
                         <p><b>Endereço:</b> {{ institutionCtrl.current_institution.address }}</p>
                         <div ng-if="!institutionCtrl.showFullDescription">
                             <div layout="column" layout-align="center center" class="ng-if">
@@ -113,7 +120,10 @@
                         </md-card-content>
                     </md-card>
                 </div>
-                <timeline flex layout="column" md-colors="{background: 'grey-200'}" posts="institutionCtrl.posts" institution="true" user="institutionCtrl.user"></timeline>
+
+                <timeline flex layout="column" md-colors="{background: 'grey-200'}" posts="institutionCtrl.posts" 
+                    institution="true" user="institutionCtrl.user">
+                </timeline>
             </div>
         </div>
     </div>

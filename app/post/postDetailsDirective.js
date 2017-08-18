@@ -283,7 +283,8 @@
         postDetailsCtrl.showImage = function() {
             var imageEmpty = postDetailsCtrl.post.photo_url === "";
             var imageNull = postDetailsCtrl.post.photo_url === null;
-            return !imageEmpty && !imageNull;
+            var deletedPost = postDetailsCtrl.post.state === 'deleted';
+            return !imageEmpty && !imageNull && !deletedPost;
         };
 
         function addHttpsToUrl(text, urls) {

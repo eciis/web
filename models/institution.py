@@ -31,7 +31,11 @@ class Institution(ndb.Model):
 
     photo_url = ndb.StringProperty()
 
+    portfolio_url = ndb.StringProperty(indexed=False)
+
     email = ndb.StringProperty()
+
+    website_url = ndb.StringProperty(indexed=False)
 
     phone_number = ndb.StringProperty()
 

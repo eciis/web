@@ -1,18 +1,28 @@
 'use strict';
 (function() {
     var app = angular.module("app");
-    app.controller("EditInstController", function EditInstController(AuthService, InstitutionService, $state, $mdToast, $mdDialog, $http, InviteService, ImageService, $rootScope, MessageService) {
+    app.controller("EditInstController", function EditInstController(AuthService, InstitutionService, $state, 
+            $mdToast, $mdDialog, $http, InviteService, ImageService, $rootScope, MessageService, PdfService, $q) {
 
         var editInstCtrl = this;
         var institutionKey = $state.params.institutionKey;
+        var currentPortfoliourl = null;
         var observer;
+
         editInstCtrl.loading = false;
         editInstCtrl.user = AuthService.getCurrentUser();
+        editInstCtrl.cnpjRegex = "[0-9]{2}[\.][0-9]{3}[\.][0-9]{3}[\/][0-9]{4}[-][0-9]{2}";
+        editInstCtrl.phoneRegex = "([0-9]{2}[\\s][0-9]{8})";
+        editInstCtrl.newInstitution = {
+            photo_url: "/images/institution.jpg"
+        };
+
+        getLegalNatures();
+        getOccupationAreas();
 
         editInstCtrl.addImage = function(image) {
             var newSize = 800;
             var promise = ImageService.compress(image, newSize);
-
             promise.then(function success(data) {
                 editInstCtrl.photo_instituicao = data;
                 ImageService.readFile(data, setImage);
@@ -29,16 +39,8 @@
             });
         }
 
-        editInstCtrl.newInstitution = {};
-        editInstCtrl.newInstitution.photo_url = "/images/institution.jpg";
-
-        getLegalNatures();
-        getOccupationAreas();
-
-        editInstCtrl.cnpjRegex = "[0-9]{2}[\.][0-9]{3}[\.][0-9]{3}[\/][0-9]{4}[-][0-9]{2}";
-        editInstCtrl.phoneRegex = "([0-9]{2}[\\s][0-9]{8})";
-
         editInstCtrl.submit = function submit(event) {
+
             var confirm = $mdDialog.confirm(event)
                 .clickOutsideToClose(true)
                 .title('Confirmar Edição')
@@ -47,13 +49,10 @@
                 .targetEvent(event)
                 .ok('Sim')
                 .cancel('Não');
+
             var promise = $mdDialog.show(confirm);
             promise.then(function() {
-                if (editInstCtrl.photo_instituicao) {
-                    saveImage();
-                } else {
-                    updateInstitution();
-                }
+                updateInstitution();
             }, function() {
                 MessageService.showToast('Cancelado');
             });
@@ -61,23 +60,59 @@
         };
 
         function saveImage() {
-            editInstCtrl.loading = true;
-            var promise = ImageService.saveImage(editInstCtrl.photo_instituicao);
-            promise.then(function(data) {
-                editInstCtrl.loading = false;
-                editInstCtrl.newInstitution.photo_url = data.url;
-                updateInstitution();
-            });
-            return promise;
+            var defer = $q.defer();
+            if(editInstCtrl.photo_instituicao) {
+                editInstCtrl.loading = true;
+                ImageService.saveImage(editInstCtrl.photo_instituicao).then(
+                    function(data) {
+                        editInstCtrl.loading = false;
+                        editInstCtrl.newInstitution.photo_url = data.url;
+                        defer.resolve();
+                    }, function error(response) {
+                        MessageService.showToast(response.data.msg);
+                        defer.reject();
+                });
+            } else {
+                defer.resolve();
+            }
+            return defer.promise;
+        }
+
+        function savePortfolio() {
+            var defer = $q.defer();
+            if(editInstCtrl.file) {
+                PdfService.save(editInstCtrl.file, currentPortfoliourl).then(
+                    function success(data) {
+                        editInstCtrl.newInstitution.portfolio_url = data.url;
+                        currentPortfoliourl = data.url;
+                        defer.resolve();
+                    }, function error(response) {
+                        MessageService.showToast(response.data.msg);
+                        defer.reject();
+                });
+            } else {
+                defer.resolve();
+            }
+            return defer.promise;
         }
 
         function updateInstitution() {
-            var patch = jsonpatch.generate(observer);
-            var promise = InstitutionService.update(institutionKey, patch);
-            promise.then(function success() {
-                updateUserInstitutions(editInstCtrl.newInstitution);
+            var savePromises = [savePortfolio(), saveImage()];
+            var promise = $q.defer();
+            $q.all(savePromises).then(function success() {
+                var patch = jsonpatch.generate(observer);
+                InstitutionService.update(institutionKey, patch).then(
+                    function success() {
+                        updateUserInstitutions(editInstCtrl.newInstitution);
+                        $q.resolve(promise);
+                    },
+                    function error(response) {
+                        MessageService.showToast(response.data.msg);
+                        $q.reject(promise);
+                });                
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
+                $q.reject(promise);
             });
             return promise;
         }
@@ -116,6 +151,7 @@
         function loadInstitution() {
             InstitutionService.getInstitution(institutionKey).then(function success(response) {
                 editInstCtrl.newInstitution = response.data;
+                currentPortfoliourl = editInstCtrl.newInstitution.portfolio_url;
                 observer = jsonpatch.observe(editInstCtrl.newInstitution);
             }, function error(response) {
                 MessageService.showToast(response.data.msg);

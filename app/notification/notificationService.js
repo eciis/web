@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.service("NotificationService", function NotificationService($firebaseArray,  MessageService) {
+    app.service("NotificationService", function NotificationService($firebaseArray,  MessageService, AuthService) {
         var service = this;
 
         var ref = firebase.database().ref();
@@ -76,5 +76,15 @@
         function isNew(notification) {
             return notification.status === "NEW";
         }
+
+        /**
+        * Start watch AuthService event of user logout,
+        * then, destroy firebaseArray reference and cleanup
+        * service notifications.
+        */
+        AuthService.$onLogout(function destroy() {
+            firebaseArrayNotifications.$destroy();
+            firebaseArrayNotifications = undefined;
+        });
     });
 })();

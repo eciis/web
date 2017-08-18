@@ -13,8 +13,6 @@ var SENT = "sent";
 
 var USER = "USER";
 
-var INVITE_INSTITUTIONS_TYPE = ['INSTITUTION', 'INSTITUTION_PARENT', 'INSTITUTION_CHILDREN'];
-
 User.prototype.changeInstitution = function changeInstitution(institution) {
     this.current_institution = _.find(this.institutions, {'key': institution.key});
     window.localStorage.userInfo = JSON.stringify(this);
@@ -77,7 +75,9 @@ User.prototype.getPendingInvitation = function getPendingInvitation(){
 
 User.prototype.removeInviteInst = function removeInviteInst(institutionKey) {
     _.remove(this.invites, function(invite){
-        return institutionKey == invite.stub_institution.key;
+        var inviteTypeUser = invite.type_of_invite === USER;
+        var expectedInviteKey = institutionKey == invite.stub_institution.key;
+        return !inviteTypeUser && expectedInviteKey;
     });
 };
 

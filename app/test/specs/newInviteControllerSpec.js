@@ -1,15 +1,19 @@
 'use strict';
 
-(describe('Test NewInviteController', function() {
+(fdescribe('Test NewInviteController', function() {
 
     var newInviteCtrl, httpBackend, scope, institutionService, createCtrl, state, inviteService, userService,
         mdDialog, authService;
 
     var INSTITUTIONS_URI = "/api/institutions/";
+    var INVITES_URI = "/api/invites";
 
-    var invite = new Invite({invitee: "mayzabeel@gmail.com", key: 'xyzcis'}, 'user', '123456789', 'mayzabeel@gmail.com');
+    var invite = new Invite({invitee: "mayzabeel@gmail.com", key: 'xyzcis',
+                                            type_of_invite: 'USER',
+                                            institution_key: '123456789',
+                                            inviter_key: 'mayzabeel@gmail.com'});
     invite.stub_institution = {'name': 'Suggested Name', 'key': '00001'};
-    
+
     var splab = {
             name: 'SPLAB',
             key: '987654321',
@@ -45,6 +49,7 @@
         authService = AuthService;
         httpBackend.expect('GET', INSTITUTIONS_URI + splab.key).respond(splab);
         httpBackend.when('GET', "main/main.html").respond(200);
+        httpBackend.expect('GET', INVITES_URI + '/xyzcis').respond(invite);
         httpBackend.when('GET', "home/home.html").respond(200);
         AuthService.getCurrentUser = function() {
             return new User(tiago);
@@ -58,8 +63,7 @@
                     userService: UserService
                 });
         };
-        state.params.inviteKey = 'xyzcis';
-        state.params.institutionKey = splab.key;
+        state.params.key = 'xyzcis';
         newInviteCtrl = createCtrl();
         httpBackend.flush();
     }));
@@ -149,7 +153,7 @@
                 });
             });
 
-            it('should be call $state.go()', function(done) {
+            fit('should be call $state.go()', function(done) {
                 promise.then(function() {
                     expect(state.go).toHaveBeenCalledWith('app.home');
                     done();

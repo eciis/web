@@ -36,12 +36,16 @@
     splab = new Institution(splab);
 
     var invite = new Invite({invitee: "parent@gmail.com",
-                        suggestion_institution_name : "Institution Parent"},
-                            'INSTITUTION_PARENT', splab.key, maiana.key);
+                        suggestion_institution_name : "Institution Parent",
+                        type_of_invite: 'INSTITUTION_PARENT',
+                        institution_key: splab.key,
+                        inviter_key: maiana.key});
 
     var inviteChildren = new Invite({invitee: "children@gmail.com",
-                        suggestion_institution_name : "Children Institution"},
-                            'INSTITUTION_CHILDREN', splab.key, maiana.key);
+                        suggestion_institution_name : "Children Institution",
+                        type_of_invite: 'INSTITUTION_CHILDREN',
+                        institution_key: splab.key,
+                        inviter_key: maiana.key});
 
     var childrenStub = new Institution({name: "Children Institution", state : "pending"});
 

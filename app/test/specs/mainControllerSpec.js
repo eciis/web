@@ -90,7 +90,7 @@
 
             mainCtrl = createCtrl();
 
-            expect(state.go).toHaveBeenCalledWith('new_invite', {institutionKey: '00001', inviteKey: 'inviteKey', typeInvite: 'INSTITUTION' });
+            expect(state.go).toHaveBeenCalledWith('new_invite', {key: 'inviteKey'});
         });
     });
 

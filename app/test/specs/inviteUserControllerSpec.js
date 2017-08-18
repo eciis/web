@@ -5,9 +5,15 @@
 
     var inviteUserCtrl, httpBackend, scope, inviteService, createCtrl, state, authService;
 
-    var invite = new Invite({invitee: "mayzabeel@gmail.com"}, 'USER', '987654321', '12345');
+    var invite = new Invite({invitee: "mayzabeel@gmail.com",
+                        type_of_invite: 'USER',
+                        institution_key: '987654321',
+                        inviter_key: '12345'});
 
-    var otherInvite = new Invite({invitee: "pedro@gmail.com"}, 'USER', '987654321', '12345');
+    var otherInvite = new Invite({invitee: "pedro@gmail.com",
+                        type_of_invite: 'USER',
+                        institution_key: '987654321',
+                        inviter_key: '12345'});
 
     var splab = {
             name: 'SPLAB',
@@ -111,17 +117,26 @@
         describe('isUserInviteValid()', function() {
 
             it('should be true with new invite', function() {
-                var newInvite = new Invite({invitee: "pedro@gmail.com"}, 'USER', '987654321', '12345');
+                var newInvite = new Invite({invitee: "pedro@gmail.com",
+                                            type_of_invite: 'USER',
+                                            institution_key: '987654321',
+                                            inviter_key: '12345'});
                 expect(inviteUserCtrl.isUserInviteValid(newInvite)).toBe(true);
             });
 
             it('should be false when the invitee was already invited', function() {
-                var inviteInvited = new Invite({invitee: "mayzabeel@gmail.com"}, 'USER', '987654321', '12345');
+                var inviteInvited = new Invite({invitee: "mayzabeel@gmail.com",
+                                            type_of_invite: 'USER',
+                                            institution_key: '987654321',
+                                            inviter_key: '12345'});
                 expect(inviteUserCtrl.isUserInviteValid(inviteInvited)).toBe(false);
             });
 
             it('should be false when the invitee was already member', function() {
-                var inviteMember = new Invite({invitee: "tiago@gmail.com"}, 'USER', '987654321', '12345');
+                var inviteMember = new Invite({invitee: "tiago@gmail.com",
+                                            type_of_invite: 'USER',
+                                            institution_key: '987654321',
+                                            inviter_key: '12345'});
                 expect(inviteUserCtrl.isUserInviteValid(inviteMember)).toBe(false);
             });
         });

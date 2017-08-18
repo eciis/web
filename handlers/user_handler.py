@@ -57,7 +57,7 @@ class UserHandler(BaseHandler):
     @login_required
     @ndb.transactional(xg=True)
     def put(self, user, invite_key):
-        """Handler PATCH Requests."""
+        """Handler PUT Requests."""
         data = json.loads(self.request.body)
 
         institution_key = ndb.Key(urlsafe=data['institutions'][-1])
@@ -75,6 +75,11 @@ class UserHandler(BaseHandler):
         institution.follow(user.key)
 
         self.response.write(json.dumps(makeUser(user, self.request)))
+
+    @login_required
+    def delete(self, user, institution_key):
+        """Handler DELETE Requests."""
+        pass
 
     @json_response
     @login_required

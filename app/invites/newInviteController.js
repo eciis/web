@@ -101,7 +101,6 @@
         function loadInstitution(institutionKey) {
             InstitutionService.getInstitution(institutionKey).then(function success(response) {
                 newInviteCtrl.institution = response.data;
-                loadInvite();
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
@@ -121,12 +120,13 @@
         }
 
         function loadInvite(){
-            newInviteCtrl.invite = _.find(newInviteCtrl.user.invites, function(invite){
-                return invite.key === newInviteCtrl.inviteKey;
+            InviteService.getInvite(newInviteCtrl.inviteKey).then(function success(response) {
+                newInviteCtrl.invite = new Invite(response.data);
+                institutionKey = (newInviteCtrl.invite.type_of_invite === "USER") ? newInviteCtrl.invite.institution_key : newInviteCtrl.invite.stub_institution.key;
+                loadInstitution(institutionKey);
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
             });
-            console.log(newInviteCtrl.inviteKey);
-            institutionKey = (newInviteCtrl.inviteKey.type_of_invite === "USER") ? newInviteCtrl.invite.institution_key : newInviteCtrl.invite.stub_institution_key;
-            loadInstitution(institutionKey);
         }
 
         loadInvite();

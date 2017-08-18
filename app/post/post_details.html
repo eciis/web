@@ -31,9 +31,17 @@
         {{postDetailsCtrl.post.last_modified_date | date: 'HH:mm:ss'}}.
       </p>
     </div>
-    <p ng-if="!postDetailsCtrl.isDeleted()" ng-bind-html="postDetailsCtrl.recognizeUrl(postDetailsCtrl.post).text">
-      {{postDetailsCtrl.recognizeUrl(postDetailsCtrl.post).text}}
-    </p>
+    <div ng-if="!postDetailsCtrl.isDeleted()">
+        <p ng-bind-html="postDetailsCtrl.recognizeUrl(postDetailsCtrl.post).text">
+        {{postDetailsCtrl.recognizeUrl(postDetailsCtrl.post).text}}
+        </p>
+        <div layout="row" layout-align="end-center">
+            <a href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost()" ng-if="postDetailsCtrl.isLongPost()">
+              <span class="md-subhead" >continuar lendo</span>
+            </a>
+        </div>
+    </div>
+    
   </md-card-content>
   <md-divider></md-divider>
 

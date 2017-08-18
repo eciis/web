@@ -250,11 +250,6 @@
             };
         });
 
-        it('Should returns a post with https url in title', function() {
-            var newPost = postDetailsCtrl.recognizeUrl(post);
-            expect(newPost.title).toEqual("Post de Tiago em <a href='http://www.twitter.com' target='_blank'>http://www.twitter.com</a>");
-        });
-
         it('Should not change the original post title', function() {
             var newPost = postDetailsCtrl.recognizeUrl(post);
             expect(post.title).toEqual("Post de Tiago em www.twitter.com");

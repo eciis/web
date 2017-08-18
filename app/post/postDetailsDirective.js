@@ -275,7 +275,6 @@
             var post = new Post(receivedPost, receivedPost.institutionKey);
             var urlsInText = post.text.match(URL_PATTERN);
             post.text = addHttpsToUrl(post.text, urlsInText);
-            post.text = post.text.replace(URL_PATTERN,REPLACE_URL);
             post.text = adjustText(post.text);
             return post;
         };

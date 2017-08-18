@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.service("PdfService", function PdfService($q, $firebaseStorage, $http) {
+    app.service("PdfService", function PdfService($q, $firebaseStorage, $http, $window,  $sce) {
         var service = this;
         var fileFolder = "files/";
         var INDEX_FILE_NAME = 0;
@@ -53,32 +53,13 @@
             return filename;
         }
 
-        // TODO: Use this function to show pdf on dialog - Author: Ruan Eloy - 17/08/17
         service.getReadableURL = function getReadableURL(url, callback) {
-            var file = null;
-            var data = null;
-            $http.get(url).then(function success(response) {
-                data = response.data;
-                file = new File([data], 'portfolio.pdf', {
-                  type: "application/pdf"
-                });
+            $http.get(url, {responseType:'arraybuffer'}).then(function success(response) {
+                var blob = new Blob([response.data], {type:'application/pdf'});
+                var url = URL.createObjectURL(blob);
+                callback(url);
             });
         };
-
-        // TODO: Use this function to show pdf on dialog - Author: Ruan Eloy - 17/08/17
-        function readFile(file, data, callback) {
-            var fileReader = new FileReader();
-
-            fileReader.onload = function onload(event) {
-                var source_file_obj = new File([data], file.name);
-
-                source_file_obj.onload = function() {
-                    callback(source_file_obj);
-                };
-                source_file_obj.src = event.target.result;
-            };
-            fileReader.readAsDataURL(file);
-        }
 
         function isValidPdf(file) {
             if(file) {

@@ -25,13 +25,9 @@
                             ng-click="institutionCtrl.openWebsite()">
                             <md-icon>web</md-icon> Website
                         </md-button>
-                        <md-button class="md-raised" ng-if="institutionCtrl.portfolioUrl" ng-click="institutionCtrl.downloadPortfolio()">
+                        <md-button class="md-raised" ng-if="institutionCtrl.portfolioUrl" ng-click="institutionCtrl.portfolioDialog($event)">
                             <md-icon>insert_drive_file</md-icon> Portfólio
                         </md-button>
-                        <!-- TODO: show pdf on dialog - Author: Ruan Eloy - 16/08/17 -->
-                        <!-- <md-button ng-click="institutionCtrl.portfolioDialog($event)" ng-show="true">
-                            Portfólio
-                        </md-button> -->
                         <p><b>Endereço:</b> {{ institutionCtrl.current_institution.address }}</p>
                         <div ng-if="!institutionCtrl.showFullDescription">
                             <div layout="column" layout-align="center center" class="ng-if">

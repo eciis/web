@@ -101,7 +101,6 @@
             var promise = $q.defer();
             $q.all(savePromises).then(function success() {
                 var patch = jsonpatch.generate(observer);
-                console.log(patch);
                 InstitutionService.update(institutionKey, patch).then(
                     function success() {
                         updateUserInstitutions(editInstCtrl.newInstitution);

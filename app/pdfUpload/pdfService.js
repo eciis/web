@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.service("PdfService", function PdfService($q, $firebaseStorage, $http, $window,  $sce) {
+    app.service("PdfService", function PdfService($q, $firebaseStorage, $http) {
         var service = this;
         var fileFolder = "files/";
         var INDEX_FILE_NAME = 0;

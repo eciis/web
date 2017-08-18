@@ -13,6 +13,8 @@
         postDetailsCtrl.savingComment = false;
         postDetailsCtrl.savingLike = false;
 
+        var LIMIT_CHARACTERS_POST = 1000;
+
         postDetailsCtrl.user = AuthService.getCurrentUser();
 
         postDetailsCtrl.deletePost = function deletePost(ev, post) {
@@ -146,8 +148,8 @@
         };
 
         postDetailsCtrl.goToPost = function goToPost() {
-             $state.go('app.post', {postKey: postDetailsCtrl.post.key});
-         };
+            $state.go('app.post', {postKey: postDetailsCtrl.post.key});
+        };
 
         postDetailsCtrl.getComments = function getComments() {
             var commentsUri = postDetailsCtrl.post.comments;
@@ -274,6 +276,7 @@
             var urlsInText = post.text.match(URL_PATTERN);
             post.text = addHttpsToUrl(post.text, urlsInText);
             post.text = post.text.replace(URL_PATTERN,REPLACE_URL);
+            post.text = adjustText(post.text);
             return post;
         };
 
@@ -283,6 +286,18 @@
             var deletedPost = postDetailsCtrl.post.state === 'deleted';
             return !imageEmpty && !imageNull && !deletedPost;
         };
+
+        postDetailsCtrl.isLongPostTimeline = function(text){
+            var qtdChar = text.length;
+            return !postDetailsCtrl.isPostPage && qtdChar >= LIMIT_CHARACTERS_POST;        
+        };
+
+        function adjustText(text){
+            if(postDetailsCtrl.isLongPostTimeline(text)){
+                text = text.substring(0, LIMIT_CHARACTERS_POST) + "...";
+            }
+            return text.replace(URL_PATTERN,REPLACE_URL);
+        }
 
         function addHttpsToUrl(text, urls) {
             if(urls) {
@@ -306,7 +321,7 @@
             scope: {},
             bindToController: {
                 post: '=',
-                isPostPage: '@'
+                isPostPage: '='
             }
         };
     });

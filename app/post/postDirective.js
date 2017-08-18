@@ -32,8 +32,8 @@
             postCtrl.deletePreviousImage = true;
         };
 
-        postCtrl.createEditedPost = function createEditedPost(post) {
-            postCtrl.newPost = new Post(post, postCtrl.user.current_institution.key);
+        postCtrl.createEditedPost = function createEditedPost() {
+            /*postCtrl.newPost = new Post(post, postCtrl.user.current_institution.key);*/
         };
         //Perguntar pra luiz.
         function setImage(image) {
@@ -47,6 +47,15 @@
                 postCtrl.photoUrl = image.src;
             });
         }
+
+        postCtrl.isEditingPost = function isEditingPost(boolean, post) {
+            console.log(post);
+            if(boolean) {
+                postCtrl.photoUrl = post.photo_url;
+                postCtrl.createEditedPost(post);
+            }
+            return boolean;
+        };
 
         postCtrl.isPostValid = function isPostValid() {
             if (postCtrl.user) {
@@ -151,6 +160,12 @@
             });
         }
 
+        postCtrl.showMessage = function showMessage(isEditing) {
+            var firstCondition = postCtrl.post.title && !isEditing;
+            var secondCondition = postCtrl.newPost.title && isEditing;
+            return firstCondition || secondCondition;
+        };
+
         postCtrl.cancelDialog = function() {
             $mdDialog.hide();
         };
@@ -177,15 +192,10 @@
             return !imageEmpty && !imageNull;
         };
 
-        postCtrl.isEditing = function isEditing(boolean, post) {
-            postCtrl.photoUrl = post.photo_url;
-            postCtrl.createEditedPost(post);
-            return boolean;
-        };
-
-        /*(function main() {
-            postCtrl.photoUrl = postCtrl.post.photo_url;
-        })();*/
+        (function main() {
+          /* postCtrl.photoUrl = postCtrl.post.photo_url;
+            postCtrl.createEditedPost();*/
+        })();
 
         postCtrl.hideImage = function() {
             postCtrl.post.photo_url = "";
@@ -203,7 +213,6 @@
             controllerAs: "postCtrl",
             controller: "PostController",
             scope: {
-                user: '=',
                 isDialog: '=',
                 posts: '=',
                 originalPost: '=',

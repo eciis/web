@@ -71,17 +71,17 @@
 
         postDetailsCtrl.editPost = function editPost(post, event) {
             $mdDialog.show({
-                controller: function PostDialogController() {},
+                controller: function DialogController() {},
                 controllerAs: "controller",
                 templateUrl: 'home/post_dialog.html',
                 parent: angular.element(document.body),
                 targetEvent: event,
                 clickOutsideToClose:true,
                 locals: {
-                    user: postDetailsCtrl.user,
                     originalPost: post,
                     isEditing: true
-                }
+                },
+                bindToController: true
             }).then(function success(editedPost) {
                 postDetailsCtrl.post.title = editedPost.title;
                 postDetailsCtrl.post.text = editedPost.text;

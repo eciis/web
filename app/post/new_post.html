@@ -11,7 +11,7 @@
       <md-icon>close</md-icon>
     </md-button>
   </md-card-header>
-  <div ng-if="!postCtrl.isEditing(isEditing, post)">
+
     <md-card-content layout="column">
       <md-input-container>
         <label>Título</label>
@@ -40,35 +40,5 @@
         Cancelar
       </md-button>
     </md-dialog-actions>
-  </div>
-  <div ng-if="postCtrl.isEditing(isEditing, post)">
-    <md-card-content layout="column">
-        <md-input-container>
-          <label>Título</label>
-          <input ng-model="postCtrl.newPost.title" md-maxlength="100" maxlength="100" placeholder="Escreva aqui uma nova publicação">
-        </md-input-container>
-        <md-input-container ng-show="postCtrl.newPost.title">
-          <label>Mensagem</label>
-          <textarea ng-model="postCtrl.newPost.text" rows="4" md-select-on-focus required="true">
-          </textarea>
-        </md-input-container>
-        <div class="image-view" ng-if="postCtrl.showImageEdit()">
-          <button ng-click="postCtrl.hideImageEdit()">&times;</button>
-          <img style="border-radius: 5%;" ng-src="{{ postCtrl.photoUrl }}"/>
-        </div>
-        <md-progress-linear ng-show="post.loading" md-mode="indeterminate" style="width: 19%; margin-top: 5px; margin-left: 10px;"></md-progress-linear>
-      </md-card-content>
-      <md-dialog-actions layout="row" ng-show="postCtrl.newPost.title">
-        <span flex></span>
-        <md-button class="md-icon-button" ng-show="postCtrl.teste(post)" ng-click="null"
-                      ng-model="postCtrl.file" ngf-pattern="'image/*'"
-                      ngf-accept="'image/*'" ngf-max-size="5MB"
-                      ngf-select="postCtrl.addImage(postCtrl.file)">
-              <md-icon>add_a_photo</md-icon>
-        </md-button>
-        <md-button class="md-icon-button" ng-click="postCtrl.editPost(post)" ng-disabled="!postCtrl.isEditedPostValid()">
-          <md-icon>send</md-icon>
-        </md-button>
-      </md-dialog-actions>
-  </div>
+
 </md-card>

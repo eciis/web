@@ -36,7 +36,7 @@
         {{postDetailsCtrl.recognizeUrl(postDetailsCtrl.post).text}}
         </p>
         <div layout="row" layout-align="end-center">
-            <a href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost()" ng-if="postDetailsCtrl.isLongPost()">
+            <a href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost()" ng-if="postDetailsCtrl.isLongPostTimeline(postDetailsCtrl.post.text)">
               <span class="md-subhead" >continuar lendo</span>
             </a>
         </div>

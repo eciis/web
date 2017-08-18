@@ -13,7 +13,7 @@
         postDetailsCtrl.savingComment = false;
         postDetailsCtrl.savingLike = false;
 
-        var LIMIT_CHARACTERS_POST = 900;
+        var LIMIT_CHARACTERS_POST = 1000;
 
         postDetailsCtrl.user = AuthService.getCurrentUser();
 
@@ -289,13 +289,13 @@
             return !imageEmpty && !imageNull;
         };
 
-        postDetailsCtrl.isLongPost = function(){
-            var qtdChar = postDetailsCtrl.post.text.length;
+        postDetailsCtrl.isLongPostTimeline = function(text){
+            var qtdChar = text.length;
             return !postDetailsCtrl.isPostPage && qtdChar >= LIMIT_CHARACTERS_POST;        
         };
 
         function adjustText(text){
-            if(postDetailsCtrl.isLongPost()){
+            if(postDetailsCtrl.isLongPostTimeline(text)){
                 text = text.substring(0, LIMIT_CHARACTERS_POST) + "...";
             }
             return text.replace(URL_PATTERN,REPLACE_URL);

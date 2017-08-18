@@ -121,7 +121,7 @@
                 }
             })
             .state("new_invite", {
-                url: "/:institutionKey/:inviteKey/new_invite/:typeInvite",
+                url: "/institution/:institutionKey/:inviteKey/new_invite/:typeInvite",
                 views: {
                     main: {
                         templateUrl: "invites/new_invite_page.html",

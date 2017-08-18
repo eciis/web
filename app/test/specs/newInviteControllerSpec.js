@@ -1,6 +1,6 @@
 'use strict';
 
-(fdescribe('Test NewInviteController', function() {
+(describe('Test NewInviteController', function() {
 
     var newInviteCtrl, httpBackend, scope, institutionService, createCtrl, state, inviteService, userService,
         mdDialog, authService;
@@ -10,8 +10,8 @@
 
     var invite = new Invite({invitee: "mayzabeel@gmail.com", key: 'xyzcis',
                                             type_of_invite: 'USER',
-                                            institution_key: '123456789',
-                                            inviter_key: 'mayzabeel@gmail.com'});
+                                            institution_key: '987654321',
+                                            inviter_key: '21212121'});
     invite.stub_institution = {'name': 'Suggested Name', 'key': '00001'};
 
     var splab = {
@@ -47,9 +47,9 @@
         mdDialog = $mdDialog;
         institutionService = InstitutionService;
         authService = AuthService;
-        httpBackend.expect('GET', INSTITUTIONS_URI + splab.key).respond(splab);
+        httpBackend.when('GET', INSTITUTIONS_URI + splab.key).respond(splab);
         httpBackend.when('GET', "main/main.html").respond(200);
-        httpBackend.expect('GET', INVITES_URI + '/xyzcis').respond(invite);
+        httpBackend.when('GET', INVITES_URI + '/xyzcis').respond(invite);
         httpBackend.when('GET', "home/home.html").respond(200);
         AuthService.getCurrentUser = function() {
             return new User(tiago);
@@ -153,7 +153,7 @@
                 });
             });
 
-            fit('should be call $state.go()', function(done) {
+            it('should be call $state.go()', function(done) {
                 promise.then(function() {
                     expect(state.go).toHaveBeenCalledWith('app.home');
                     done();

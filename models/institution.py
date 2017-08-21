@@ -94,6 +94,12 @@ class Institution(ndb.Model):
             self.members.append(member.key)
             self.put()
 
+    def remove_member(self, member):
+        """Remove a member from institution."""
+        if member.key in self.members:
+            self.members.remove(member.key)
+            self.put()
+
     def addInvite(self, invite):
         """Add invite in institution."""
         self.invite = invite.key

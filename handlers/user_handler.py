@@ -79,7 +79,14 @@ class UserHandler(BaseHandler):
     @login_required
     def delete(self, user, institution_key):
         """Handler DELETE Requests."""
-        pass
+        institution_key = ndb.Key(urlsafe=institution_key)
+        institution = institution_key.get()
+
+        user.remove_institution(institution_key)
+        user.unfollow(institution_key)
+
+        institution.remove_member(user)
+        institution.unfollow(user.key)
 
     @json_response
     @login_required

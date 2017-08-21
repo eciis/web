@@ -76,23 +76,35 @@
         };
 
         configProfileCtrl.removeInstitution = function removeInstitution(institution) {
-            var confirm = $mdDialog.confirm();
-                confirm
-                    .clickOutsideToClose(false)
-                    .title('Remover vínculo com ' + institution.name)
-                    .textContent(configProfileCtrl.newUser.institutions.length > 1 ? HAVE_MORE_THAN_ONE_INSTITUTION_MSG : HAVE_ONLY_ONE_INSTITUTION_MSG)
-                    .ariaLabel('Rejeitar convite')
-                    .targetEvent(event)
-                    .ok('Sim')
-                    .cancel('Não');
-                    var promise = $mdDialog.show(confirm);
-                promise.then(function() {
-                    deleteInstitution(institution.key);
-                }, function() {
-                    MessageService.showToast('Cancelado');
-                });
-                return promise;
+            if (!isAdmin(institution.key)) {
+                var confirm = $mdDialog.confirm();
+                    confirm
+                        .clickOutsideToClose(false)
+                        .title('Remover vínculo com ' + institution.name)
+                        .textContent(haveMoreThanOneInstitution() ? HAVE_MORE_THAN_ONE_INSTITUTION_MSG : HAVE_ONLY_ONE_INSTITUTION_MSG)
+                        .ariaLabel('Remover instituicao')
+                        .targetEvent(event)
+                        .ok('Sim')
+                        .cancel('Não');
+                        var promise = $mdDialog.show(confirm);
+                    promise.then(function() {
+                        deleteInstitution(institution.key);
+                    }, function() {
+                        MessageService.showToast('Cancelado');
+                    });
+                    return promise;
+            } else {
+                MessageService.showToast('Desvínculo não permitido. Você é administrador dessa instituição.');
+            }
         };
+
+        function isAdmin(institution_key) {
+            return configProfileCtrl.newUser.isAdmin(institution_key);
+        }
+
+        function haveMoreThanOneInstitution() {
+            return configProfileCtrl.newUser.institutions.length > 1;
+        }
 
         function deleteInstitution(institution_key) {
             var promise = UserService.deleteInstitution(institution_key);
@@ -104,9 +116,45 @@
             return promise;
         }
 
-        configProfileCtrl.deleteAccount = function deleteAccount() {
+        function isAdminOfAnyInstitution() {
+            return configProfileCtrl.newUser.institutions_admin.length > 0;
+        }
 
+        configProfileCtrl.deleteAccount = function deleteAccount() {
+            if (!isAdminOfAnyInstitution()) {
+                var confirm = $mdDialog.confirm();
+                    confirm
+                        .clickOutsideToClose(false)
+                        .title('Excluir conta')
+                        .textContent('Ao excluir sua conta você não poderá mais acessar o sistema, exceto por meio de novo convite.' +
+                                ' Deseja realmente excluir sua conta?')
+                        .ariaLabel('Excluir conta')
+                        .targetEvent(event)
+                        .ok('Sim')
+                        .cancel('Não');
+                        var promise = $mdDialog.show(confirm);
+                    promise.then(function() {
+                        configProfileCtrl.newUser.state = 'inactive';
+                        deleteUser();
+                    }, function() {
+                        MessageService.showToast('Cancelado');
+                    });
+                return promise;
+            } else {
+                MessageService.showToast('Não é possível excluir sua conta enquanto você for administrador de uma instituição.');
+            }
         };
+
+        function deleteUser() {
+            var patch = jsonpatch.generate(observer);
+            var promise = UserService.save(patch);
+            promise.then(function success() {
+                AuthService.logout();
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
+            });
+            return promise;
+        }
 
         (function main() {
             observer = jsonpatch.observe(configProfileCtrl.newUser);

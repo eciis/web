@@ -250,11 +250,6 @@
             };
         });
 
-        it('Should returns a post with https url in title', function() {
-            var newPost = postDetailsCtrl.recognizeUrl(post);
-            expect(newPost.title).toEqual("Post de Tiago em <a href='https://www.twitter.com' target='_blank'>https://www.twitter.com</a>");
-        });
-
         it('Should not change the original post title', function() {
             var newPost = postDetailsCtrl.recognizeUrl(post);
             expect(post.title).toEqual("Post de Tiago em www.twitter.com");
@@ -262,7 +257,7 @@
 
         it('Should returns a post with https url in text', function() {
             var newPost = postDetailsCtrl.recognizeUrl(post);
-            expect(newPost.text).toEqual("Acessem: <a href='https://www.google.com' target='_blank'>https://www.google.com</a>");
+            expect(newPost.text).toEqual("Acessem: <a href='http://www.google.com' target='_blank'>http://www.google.com</a>");
         });
 
         it('Should not change the original post text', function() {

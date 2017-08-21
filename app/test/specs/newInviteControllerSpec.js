@@ -11,7 +11,8 @@
     var invite = new Invite({invitee: "mayzabeel@gmail.com", key: 'xyzcis',
                                             type_of_invite: 'USER',
                                             institution_key: '987654321',
-                                            inviter_key: '21212121'});
+                                            inviter_key: '21212121',
+                                            status: 'sent'});
     invite.stub_institution = {'name': 'Suggested Name', 'key': '00001'};
 
     var splab = {

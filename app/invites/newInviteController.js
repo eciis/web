@@ -3,8 +3,8 @@
 (function() {
    var app = angular.module('app');
 
-   app.controller('NewInviteController', function NewInviteController(InstitutionService, AuthService, UserService, InviteService, $state, $mdToast,
-    $mdDialog, MessageService) {
+   app.controller('NewInviteController', function NewInviteController(InstitutionService, AuthService, UserService, InviteService, $mdToast,
+    $mdDialog, MessageService, $state) {
         var newInviteCtrl = this;
 
         newInviteCtrl.institution = null;
@@ -122,8 +122,13 @@
         function loadInvite(){
             InviteService.getInvite(newInviteCtrl.inviteKey).then(function success(response) {
                 newInviteCtrl.invite = new Invite(response.data);
-                institutionKey = (newInviteCtrl.invite.type_of_invite === "USER") ? newInviteCtrl.invite.institution_key : newInviteCtrl.invite.stub_institution.key;
-                loadInstitution(institutionKey);
+                if(newInviteCtrl.invite.status === 'sent') {
+                    institutionKey = (newInviteCtrl.invite.type_of_invite === "USER") ? newInviteCtrl.invite.institution_key : newInviteCtrl.invite.stub_institution.key;
+                    loadInstitution(institutionKey);
+                } else {
+                    $state.go("app.home");
+                    MessageService.showToast("Esse convite já foi processado.");
+                }
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });

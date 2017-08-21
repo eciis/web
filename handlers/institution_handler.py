@@ -115,16 +115,11 @@ class InstitutionHandler(BaseHandler):
     def patch(self, user, institution_key):
         """Handler PATCH Requests."""
         data = self.request.body
-
         institution = ndb.Key(urlsafe=institution_key).get()
 
         JsonPatch.load(data, institution)
         institution.put()
-        data = json.loads(data)
-        search_module.updateDocument(
-            data, institution.key.urlsafe(), institution.name,
-            institution.state, institution.admin.get().email)
-
+        search_module.updateDocument(institution)
         institution_json = Utils.toJson(institution)
 
         self.response.write(json.dumps(
@@ -139,9 +134,7 @@ class InstitutionHandler(BaseHandler):
 
         institution.createInstitutionWithStub(user, inviteKey, institution)
 
-        search_module.createDocument(
-            institution.key.urlsafe(), institution.name, institution.state,
-            institution.admin.get().email)
+        search_module.createDocument(institution)
         institution_json = Utils.toJson(institution)
         self.response.write(json.dumps(
             institution_json))

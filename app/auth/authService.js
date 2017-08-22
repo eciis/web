@@ -10,6 +10,11 @@
 
         var userInfo;
 
+        /**
+        * Store listeners to be executed when user logout is called.
+        */
+        var onLogoutListeners = [];
+
         Object.defineProperty(service, 'user', {
             get: function() {
                 return userInfo;
@@ -82,6 +87,8 @@
             authObj.$signOut();
             delete $window.localStorage.userInfo;
             userInfo = undefined;
+
+            executeLogoutListeners();
         };
 
         service.getCurrentUser = function getCurrentUser() {
@@ -118,11 +125,25 @@
             return deferred.promise;
         };
 
+        service.$onLogout = function $onLogout(callback) {
+            onLogoutListeners.push(callback);
+        };
+
         authObj.$onAuthStateChanged(function(firebaseUser) {
             if (!firebaseUser) {
                 $state.go("signin");
             }
         });
+
+        /**
+        * Execute each function stored to be thriggered when user logout
+        * is called.
+        */
+        function executeLogoutListeners() {
+            _.each(onLogoutListeners, function(callback) {
+                callback();
+            });
+        }
 
         function configUser(userLoaded, userToken) {
             userInfo = new User(userLoaded);

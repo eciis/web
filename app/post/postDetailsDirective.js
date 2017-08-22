@@ -13,6 +13,8 @@
         postDetailsCtrl.savingComment = false;
         postDetailsCtrl.savingLike = false;
 
+        var LIMIT_CHARACTERS_POST = 1000;
+
         postDetailsCtrl.user = AuthService.getCurrentUser();
 
         postDetailsCtrl.deletePost = function deletePost(ev, post) {
@@ -146,8 +148,8 @@
         };
 
         postDetailsCtrl.goToPost = function goToPost() {
-             $state.go('app.post', {postKey: postDetailsCtrl.post.key});
-         };
+            $state.go('app.post', {postKey: postDetailsCtrl.post.key});
+        };
 
         postDetailsCtrl.getComments = function getComments() {
             var commentsUri = postDetailsCtrl.post.comments;
@@ -258,7 +260,7 @@
             return _.includes(_.map(postDetailsCtrl.user.institutions_admin, getKeyFromUrl), postDetailsCtrl.post.institution_key);
         }
 
-        var URL_PATTERN = /((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
+        var URL_PATTERN = /(((www.)|(http(s)?:\/\/))[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
         var REPLACE_URL = "<a href=\'$1\' target='_blank'>$1</a>";
 
         /**
@@ -271,27 +273,37 @@
         */
         postDetailsCtrl.recognizeUrl =  function recognizeUrl(receivedPost) {
             var post = new Post(receivedPost, receivedPost.institutionKey);
-            var urlsInTitle = post.title.match(URL_PATTERN);
             var urlsInText = post.text.match(URL_PATTERN);
-            post.title = addHttpsToUrl(post.title, urlsInTitle);
             post.text = addHttpsToUrl(post.text, urlsInText);
-            post.title = post.title.replace(URL_PATTERN, REPLACE_URL);
-            post.text = post.text.replace(URL_PATTERN,REPLACE_URL);
+            post.text = adjustText(post.text);
             return post;
         };
 
         postDetailsCtrl.showImage = function() {
             var imageEmpty = postDetailsCtrl.post.photo_url === "";
             var imageNull = postDetailsCtrl.post.photo_url === null;
-            return !imageEmpty && !imageNull;
+            var deletedPost = postDetailsCtrl.post.state === 'deleted';
+            return !imageEmpty && !imageNull && !deletedPost;
         };
+
+        postDetailsCtrl.isLongPostTimeline = function(text){
+            var qtdChar = text.length;
+            return !postDetailsCtrl.isPostPage && qtdChar >= LIMIT_CHARACTERS_POST;        
+        };
+
+        function adjustText(text){
+            if(postDetailsCtrl.isLongPostTimeline(text)){
+                text = text.substring(0, LIMIT_CHARACTERS_POST) + "...";
+            }
+            return text.replace(URL_PATTERN,REPLACE_URL);
+        }
 
         function addHttpsToUrl(text, urls) {
             if(urls) {
-                var https = "https://";
+                var http = "http://";
                 for (var i = 0; i < urls.length; i++) {
-                    if(urls[i].slice(0, 4) != "http") {
-                        text = text.replace(urls[i], https + urls[i]);
+                    if(urls[i].slice(0, 4) !== "http") {
+                        text = text.replace(urls[i], http + urls[i]);
                     }
                 }
             }
@@ -308,7 +320,7 @@
             scope: {},
             bindToController: {
                 post: '=',
-                isPostPage: '@'
+                isPostPage: '='
             }
         };
     });

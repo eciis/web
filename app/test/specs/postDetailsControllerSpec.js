@@ -250,11 +250,6 @@
             };
         });
 
-        it('Should returns a post with https url in title', function() {
-            var newPost = postDetailsCtrl.recognizeUrl(post);
-            expect(newPost.title).toEqual("Post de Tiago em <a href='https://www.twitter.com' target='_blank'>https://www.twitter.com</a>");
-        });
-
         it('Should not change the original post title', function() {
             var newPost = postDetailsCtrl.recognizeUrl(post);
             expect(post.title).toEqual("Post de Tiago em www.twitter.com");
@@ -262,12 +257,50 @@
 
         it('Should returns a post with https url in text', function() {
             var newPost = postDetailsCtrl.recognizeUrl(post);
-            expect(newPost.text).toEqual("Acessem: <a href='https://www.google.com' target='_blank'>https://www.google.com</a>");
+            expect(newPost.text).toEqual("Acessem: <a href='http://www.google.com' target='_blank'>http://www.google.com</a>");
         });
 
         it('Should not change the original post text', function() {
             var newPost = postDetailsCtrl.recognizeUrl(post);
             expect(post.text).toEqual("Acessem: www.google.com");
+        });
+    });
+
+    describe('isLongPostTimeline()', function() {
+        var post;
+        var long_post;
+
+        beforeEach(function() {
+            post = {
+                title: 'Post de Tiago em www.twitter.com',
+                text: 'Acessem: www.google.com',
+                institutionKey: '54321'
+            };
+
+            long_post = { 
+                title: "Post muito longo",
+                text: "Acessem: www.google.com aAt vero et accusamus et iusto odio dignis\
+                    simos ducimus quiblanditiis praesentium voluptatum deleniti atque corr\
+                    pti quos dolores et quas molestias excepturi sint occaecati cupiditate\
+                    non provident, similique sunt in culpa qui officia deserunt mollitia \
+                    animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis e\
+                    et expedita distinctio. Nam libero tempore, cum soluta nobis est elige\
+                    ndi optio cumque nihil impedit quo minus id quod maxime placeat facere\
+                    possimus, omnis voluptas assumenda est, omnis dolor repellendus. \
+                    Temporibus autem quibusdam et aut officiis debitis aut rerum necessit\
+                    atibus saepe eveniet ut et voluptates repudiandae sint et molestiae \
+                    non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, \
+                    ut aut reiciendis voluptatibus Acessem: www.google.com.",
+                institutionKey: '54321'
+            };
+        });
+
+        it('Should be true', function() {
+            expect(postDetailsCtrl.isLongPostTimeline(long_post.text)).toBe(true);
+        });
+
+        it('Should be false', function() {
+            expect(postDetailsCtrl.isLongPostTimeline(post.text)).toBe(false);
         });
     });
 }));

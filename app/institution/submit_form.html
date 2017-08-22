@@ -6,7 +6,7 @@
         <div class="info" align="center">
             <div class="title">
                 <md-button ng-show="editInstCtrl.showButton()" ng-click="null" ng-model="editInstCtrl.file" ngf-pattern="'image/*'"
-                           ngf-accept="'image/*'" ngf-max-size="5MB"
+                           ngf-accept="'image/*'" ngf-max-size="5MB" class="md-raised"
                            ngf-select="editInstCtrl.addImage(editInstCtrl.file)">
                     <b>Adicionar imagem</b>
                 </md-button>
@@ -81,6 +81,10 @@
                   md-select-on-focus>
               </textarea>
         </md-input-container>
+        <md-input-container class="md-block">
+            <label>Site Institucional</label>
+            <input type="text" ng-model="editInstCtrl.newInstitution.website_url">
+        </md-input-container>
         <md-input-container class="md-block" flex-gt-xs>
             <label>Responsável</label>
             <input type="text" name="Responsavel" disabled
@@ -91,8 +95,16 @@
             <input type="text" name="Email" disabled
                 ng-model="editInstCtrl.newInstitution.email">
         </md-input-container>
+        <md-input-container class="md-block">
+            <md-button ng-click="null" ng-model="editInstCtrl.file" ngf-pattern="'application/pdf'" ngf-accept="'application/pdf'" 
+                ngf-max-size="5MB" ngf-select="null" class="md-raised">
+                <md-icon>{{editInstCtrl.file? 'insert_drive_file': 'attach_file'}}</md-icon>
+                {{editInstCtrl.file? 'Portfólio adicionado': 'Adicionar Portfólio'}}
+            </md-button>
+        </md-input-container>
         <div layout="row" layout-align="end center">
             <md-button ng-click="editInstCtrl.submit($event)" class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-900'}" ng-disabled="institutionForm.$invalid">Confirmar</md-button>
         </div>
     </form>
 </div>
+

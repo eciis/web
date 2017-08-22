@@ -7,7 +7,8 @@
         'ngAnimate',
         'ngFileUpload',
         'firebase',
-        'ngSanitize'
+        'ngSanitize',
+        'ngImgCrop'
     ]);
 
     app.config(function($mdIconProvider, $mdThemingProvider, $stateProvider, $urlMatcherFactoryProvider,
@@ -197,7 +198,7 @@
                         rejection.data.msg = "Sua sessão expirou!";
                     } else {
                         $state.go("signin");
-                    } 
+                    }
                 } else {
                     $state.go("error", {
                         "msg": rejection.data.msg || "Desculpa! Ocorreu um erro.",

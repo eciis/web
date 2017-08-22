@@ -52,15 +52,13 @@
             $mdDialog.cancel();
         };
 
-        function main() {
+        (function main() {
             if(ImageService.isValidImage(image_file)) {
                 readImage(image_file);
             } else {
                 MessageService.showToast("Imagem deve ser jpg ou png e menor que 5 Mb");
                 cropImgCtrl.cancelCrop();
             }
-        }
-
-        main();
+        })();
     });
 })();

@@ -101,8 +101,8 @@
             var TYPE_IMAGE = file.type;
 
             var cvs = document.createElement('canvas');
-            cvs.width = height;
-            cvs.height = width;
+            cvs.width = width;
+            cvs.height = height;
             cvs.getContext(DIMENSION_IMAGE).drawImage(
                 source_img_obj,
                 positionImage,

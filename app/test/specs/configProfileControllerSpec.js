@@ -215,7 +215,7 @@
                 };
             });
 
-            promise = configCtrl.removeInstitution(splab);
+            promise = configCtrl.removeInstitution('$event', splab);
         });
 
         it('Should call user.isAdmin()', function(done) {

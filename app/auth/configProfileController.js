@@ -75,7 +75,7 @@
             return !configProfileCtrl.loading;
         };
 
-        configProfileCtrl.removeInstitution = function removeInstitution(institution) {
+        configProfileCtrl.removeInstitution = function removeInstitution(event, institution) {
             if (!isAdmin(institution.key)) {
                 var confirm = $mdDialog.confirm();
                     confirm
@@ -120,7 +120,7 @@
             return configProfileCtrl.newUser.institutions_admin.length > 0;
         }
 
-        configProfileCtrl.deleteAccount = function deleteAccount() {
+        configProfileCtrl.deleteAccount = function deleteAccount(event) {
             if (!isAdminOfAnyInstitution()) {
                 var confirm = $mdDialog.confirm();
                     confirm

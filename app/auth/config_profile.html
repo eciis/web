@@ -52,7 +52,7 @@
           <md-list class="md-dense" flex>
             <md-subheader class="md-no-sticky">Seus vínculos institucionais:</md-subheader>
             <md-list-item class="md-3-line" ng-repeat="institution in configProfileCtrl.newUser.institutions">
-              <md-button ng-click="configProfileCtrl.removeInstitution(institution)" md-colors="{background: 'teal-900'}">Remover</md-button>
+              <md-button ng-click="configProfileCtrl.removeInstitution($event, institution)" md-colors="{background: 'teal-900'}">Remover</md-button>
               <img style="border-radius: 50%; " ng-src="{{ institution.photo_url }}" width="50px" height="50px" />
               <div style="margin-left: 10px;" class="md-list-item-text" layout="column">
                 <h3>{{ institution.acronym }}</h3>
@@ -61,7 +61,7 @@
             </md-list-item>
             <md-subheader class="md-no-sticky">Conta do usuário:</md-subheader>
             <md-list-item>
-              <md-button ng-click="configProfileCtrl.deleteAccount()" md-colors="{background: 'red-900'}">Excluir conta</md-button>
+              <md-button ng-click="configProfileCtrl.deleteAccount($event)" md-colors="{background: 'red-900'}">Excluir conta</md-button>
             </md-list-item>
           </md-list>
       </md-card>

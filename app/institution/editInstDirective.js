@@ -1,7 +1,7 @@
 'use strict';
 (function() {
     var app = angular.module("app");
-    app.controller("EditInstController", function EditInstController(AuthService, InstitutionService, $state, 
+    app.controller("EditInstController", function EditInstController(AuthService, InstitutionService, $state,
             $mdToast, $mdDialog, $http, InviteService, ImageService, $rootScope, MessageService, PdfService, $q) {
 
         var editInstCtrl = this;
@@ -32,6 +32,22 @@
             });
             return promise;
         };
+
+        function cropImage(image_file) {
+            $mdDialog.show({
+                controller: "EditPostController",
+                controllerAs: "editPostCtrl",
+                templateUrl: 'home/edit_post.html',
+                parent: angular.element(document.body),
+                targetEvent: event,
+                clickOutsideToClose:true,
+                locals: {
+                    image_file : image_file,
+                }
+            }).then(function success(croppedImage) {
+
+            });
+        }
 
         function setImage(image) {
             $rootScope.$apply(function() {
@@ -109,7 +125,7 @@
                     function error(response) {
                         MessageService.showToast(response.data.msg);
                         $q.reject(promise);
-                });                
+                });
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
                 $q.reject(promise);
@@ -124,7 +140,7 @@
             MessageService.showToast('Edição de instituição realizado com sucesso');
             $state.go('app.institution', {institutionKey: institutionKey});
         }
-        
+
         editInstCtrl.showButton = function() {
             return !editInstCtrl.loading;
         };
@@ -157,7 +173,7 @@
                 MessageService.showToast(response.data.msg);
             });
         }
-        
+
         (function main(){
              loadInstitution();
         })();

@@ -4,6 +4,7 @@
 from test_base_handler import TestBaseHandler
 from models.user import User
 import search_module
+from models.institution import Institution
 from handlers.search_handler import SearchHandler
 
 from mock import patch
@@ -26,26 +27,24 @@ class SearchHandlerTest(TestBaseHandler):
     def test_get(self, verify_token):
         """Test the search_handler's get method."""
         # Call the createDocument method
-        search_module.createDocument(
-            '123456', 'CERTBIO', 'active', 'user@example.com')
+        search_module.createDocument(self.certbio)
         # Call the get method
         institutions = self.testapp.get(
-            "/api/search/institution?name=%s&state=%s" % ('CERTBIO', 'active'))
+            "/api/search/institution?value=%s&state=%s" % ('CERTBIO', 'active'))
         self.assertTrue('CERTBIO' in institutions)
         # Make sure that there is no institution CERTBIO with pending state.
         institutions = self.testapp.get(
-            "/api/search/institution?name=%s&state=%s" % ('CERTBIO', 'pending'))
+            "/api/search/institution?value=%s&state=%s" % ('CERTBIO', 'pending'))
         self.assertTrue('CERTBIO' not in institutions)
         # Create a document with a pending institution
-        search_module.createDocument('123456', 'SPLAB', 'pending',
-                                     'user@example.com')
+        search_module.createDocument(self.splab)
         # Make sure that there is no SPLAB with pending state.
         institutions = self.testapp.get(
-            "/api/search/institution?name=%s&state=%s" % ('SPLAB', 'active'))
+            "/api/search/institution?value=%s&state=%s" % ('SPLAB', 'active'))
         self.assertTrue('SPLAB' not in institutions)
         # Assert that SPLAB has a pending state
         institutions = self.testapp.get(
-            "/api/search/institution?name=%s&state=%s" % ('SPLAB', 'pending'))
+            "/api/search/institution?value=%s&state=%s" % ('SPLAB', 'pending'))
         self.assertTrue('SPLAB' in institutions)
 
     def tearDown(cls):
@@ -65,4 +64,25 @@ def initModels(cls):
     cls.mayza.institutions_admin = []
     cls.mayza.notifications = []
     cls.mayza.posts = []
+    cls.mayza.put()
+    # new Institution CERTBIO
+    cls.certbio = Institution()
+    cls.certbio.name = 'CERTBIO'
+    cls.certbio.acronym = 'CERTBIO'
+    cls.certbio.state = 'active'
+    cls.certbio.members = [cls.mayza.key]
+    cls.certbio.followers = [cls.mayza.key]
+    cls.certbio.admin = cls.mayza.key
+    cls.certbio.put()
+    # new Institution SPLAB
+    cls.splab = Institution()
+    cls.splab.name = 'SPLAB'
+    cls.splab.acronym = 'SPLAB'
+    cls.splab.state = 'pending'
+    cls.splab.members = [cls.mayza.key]
+    cls.splab.followers = [cls.mayza.key]
+    cls.splab.admin = cls.mayza.key
+    cls.splab.put()
+    # updating user institutions admin
+    cls.mayza.institutions_admin = [cls.certbio.key, cls.splab.key]
     cls.mayza.put()

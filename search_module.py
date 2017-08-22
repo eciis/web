@@ -17,11 +17,15 @@ def createDocument(institution):
     acronym -- the institution's name acronym
     if it is an active one, or the email that the invitation was sent to.
     """
+    admin = institution.email
+    if institution.admin:
+        admin = institution.admin.get().email
+
     content = {
         'id': institution.key.urlsafe(),
         'name': institution.name,
         'state': institution.state,
-        'admin': institution.admin.get().email,
+        'admin': admin,
         'acronym': institution.acronym
     }
     # Make the structure of the document by setting the fields and its id.

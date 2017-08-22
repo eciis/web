@@ -1,7 +1,7 @@
 'use strict';
 
 (describe('Test ConfigProfileController', function() {
-    var configCtrl, httpBackend, deffered, scope, userService, createCrtl, state, mdToast, authService, imageService;
+    var configCtrl, httpBackend, deffered, scope, userService, createCrtl, state, mdToast, authService, imageService, mdDialog;
     var splab = {
         name: 'SPLAB',
         key: '987654321'
@@ -12,19 +12,21 @@
         cpf: '121.445.044-07',
         email: 'maiana.brito@ccc.ufcg.edu.br',
         institutions: [splab],
-        uploaded_images: []
+        uploaded_images: [],
+        institutions_admin: []
     };
 
     var newUser = {
         name: 'Maiana Brito',
         cpf: '121.115.044-07',
         email: 'maiana.brito@ccc.ufcg.edu.br',
-        institutions: [splab]
+        institutions: [splab],
+        institutions_admin: []
     };
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, $mdToast, UserService, AuthService, ImageService) {
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, $mdToast, $mdDialog, UserService, AuthService, ImageService) {
         httpBackend = $httpBackend;
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);
@@ -33,6 +35,7 @@
         state = $state;
         imageService = ImageService;
         mdToast = $mdToast;
+        mdDialog = $mdDialog;
         deffered = $q.defer();
         userService = UserService;
 
@@ -178,6 +181,123 @@
             expect(imageService.compress).toHaveBeenCalled();
             expect(imageService.readFile).toHaveBeenCalled();
             expect(imageService.saveImage).toHaveBeenCalled();
+        });
+    });
+
+    describe('removeInstitution()', function() {
+
+        var promise;
+
+        beforeEach(function() {
+            spyOn(configCtrl.newUser, 'isAdmin');
+
+            spyOn(mdDialog, 'show').and.callFake(function() {
+                return {
+                    then: function(callback) {
+                        return callback();
+                    }
+                };
+            });
+
+            spyOn(userService, 'deleteInstitution').and.callFake(function() {
+                return {
+                    then: function(callback) {
+                        return callback();
+                    }
+                };
+            });
+
+            spyOn(authService, 'logout').and.callFake(function() {
+                return {
+                    then: function(callback) {
+                        return callback();
+                    }
+                };
+            });
+
+            promise = configCtrl.removeInstitution(splab);
+        });
+
+        it('Should call user.isAdmin()', function(done) {
+            promise.then(function() {
+                expect(configCtrl.newUser.isAdmin).toHaveBeenCalled();
+                done();
+            });
+        });
+
+        it('Should call mdDialog.show()', function(done) {
+            promise.then(function() {
+                expect(mdDialog.show).toHaveBeenCalled();
+                done();
+            });
+        });
+
+        it('Should call userService.deleteInstitution()', function(done) {
+            promise.then(function() {
+                expect(userService.deleteInstitution).toHaveBeenCalledWith(splab.key);
+                done();
+            });
+        });
+
+        it('Should call authService.logout()', function(done) {
+            promise.then(function() {
+                expect(authService.logout).toHaveBeenCalled();
+                done();
+            });
+        });
+    });
+
+    describe('deleteAccount()', function() {
+
+        var promise;
+
+        beforeEach(function() {
+            spyOn(mdDialog, 'show').and.callFake(function() {
+                return {
+                    then: function(callback) {
+                        return callback();
+                    }
+                };
+            });
+
+            spyOn(userService, 'save').and.callFake(function() {
+                return {
+                    then: function(callback) {
+                        return callback();
+                    }
+                };
+            });
+
+            spyOn(authService, 'logout').and.callFake(function() {
+                return {
+                    then: function(callback) {
+                        return callback();
+                    }
+                };
+            });
+
+            promise = configCtrl.deleteAccount();
+        });
+
+        it('Should call mdDialog.show()', function(done) {
+            promise.then(function() {
+                expect(mdDialog.show).toHaveBeenCalled();
+                done();
+            });
+        });
+
+        it('Should call userService.save()', function(done) {
+            promise.then(function() {
+                expect(userService.save).toHaveBeenCalled();
+                done();
+            });
+        });
+
+        it('Should call authService.logout()', function(done) {
+            promise.then(function() {
+                expect(authService.logout).toHaveBeenCalled();
+                done();
+            });
         });
     });
 }));

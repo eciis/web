@@ -64,11 +64,8 @@
             }
         }
 
-        // TODO: Use this function to show pdf on dialog - Author: Ruan Eloy - 17/08/17
         function setPortifolioURL(url) {
-            $rootScope.$apply(function() {
-                institutionCtrl.portfolioUrl = url;
-            });
+            institutionCtrl.portfolioUrl = url;
         }
 
         function getMembers() {
@@ -180,11 +177,7 @@
         institutionCtrl.openWebsite = function openWebsite() {
             var website = institutionCtrl.current_institution.website_url;
             $window.open(website);
-        }
-
-        institutionCtrl.downloadPortfolio = function downloadPortfolio() {
-            $window.open(institutionCtrl.portfolioUrl, '_self');
-        }
+        };
 
         function DialogController($mdDialog, portfolioUrl) {
             var ctrl = this;

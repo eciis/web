@@ -1,17 +1,17 @@
 <md-content layout="row" md-colors="{background: 'grey-200'}" layout-align="center" >
-    <div flex-gt-lg="80" flex-lg="90"layout="row" layout-wrap layout-align="center" layout-fill>
+    <div flex-gt-lg="80" flex-lg="90" layout="row" layout-wrap layout-align="center" layout-fill>
         <div flex layout="column">
             <div layout="row" layout-xs="column" layout-padding flex-xs="30" flex-sm="15"
                 md-colors="{background: 'grey-50'}" style="margin: 0px 7px 0px 7px;">
                 <!-- Institution image -->
-                <div flex="20" hide show-gt-sm>
+                <div flex="20" hide show-gt-sm layout-wrap>
                     <center>
                         <img ng-src="{{ institutionCtrl.current_institution.photo_url }}" height="170">
                     </center>
                 </div>
 
                 <!-- Institution information -->          
-                <div flex>    
+                <div flex layout-wrap>
                     <center>
                         <div>
                             <h2>{{ institutionCtrl.current_institution.name }}
@@ -25,13 +25,9 @@
                             ng-click="institutionCtrl.openWebsite()">
                             <md-icon>web</md-icon> Website
                         </md-button>
-                        <md-button class="md-raised" ng-if="institutionCtrl.portfolioUrl" ng-click="institutionCtrl.downloadPortfolio()">
+                        <md-button class="md-raised" ng-if="institutionCtrl.portfolioUrl" ng-click="institutionCtrl.portfolioDialog($event)">
                             <md-icon>insert_drive_file</md-icon> Portfólio
                         </md-button>
-                        <!-- TODO: show pdf on dialog - Author: Ruan Eloy - 16/08/17 -->
-                        <!-- <md-button ng-click="institutionCtrl.portfolioDialog($event)" ng-show="true">
-                            Portfólio
-                        </md-button> -->
                         <p><b>Endereço:</b> {{ institutionCtrl.current_institution.address }}</p>
                         <div ng-if="!institutionCtrl.showFullDescription">
                             <div layout="column" layout-align="center center" class="ng-if">
@@ -41,7 +37,7 @@
                             </div>
                         </div>
                     </center>
-                        <div layout="column" ng-if="institutionCtrl.showFullDescription">
+                        <div layout="column" ng-if="institutionCtrl.showFullDescription" layout-wrap>
                             <div layout="row" flex>
                                 <div layout="column" flex>
                                     <p ><b>Telefone:</b> {{ institutionCtrl.current_institution.phone_number ? institutionCtrl.current_institution.phone_number : 'Não informado' }}</p>
@@ -79,7 +75,7 @@
                 </div>
             </div>
             <div layout="row" layout-xs="column" flex="60" flex-gt-sm="40">
-                <div flex-gt-sm="20" flex-xs="05" layout="column">
+                <div flex-gt-sm="20" flex-xs="05" layout="column" layout-fill hide show-gt-sm>
                     <!-- Buttons -->
                     <md-button flex-xs class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-900'}"
                         ng-if="!institutionCtrl.isMember"

@@ -10,24 +10,22 @@
         cropImgCtrl.croppedImage = '';
 
         function readImage(image_file) {
-            readProperties(image_file);
-            var reader = new FileReader();
-            reader.onload = function (evt) {
-                    $rootScope.$apply(function(){
-                        cropImgCtrl.image=evt.target.result;
-                    });
-            };
-            reader.readAsDataURL(image_file);
+            ImageService.readFile(image_file, function (image) {
+                readProperties(image_file, image);
+                $rootScope.$apply(function(){
+                    cropImgCtrl.image = image.src;
+                });
+            });
         }
 
-        function readProperties(image_file) {
+        function readProperties(image_file, image) {
             var MAX_SIZE = 1024;
             cropImgCtrl.resultImgFormat = image_file.type;
 
-            if(image_file.size > MAX_SIZE) {
+            if(image.width > MAX_SIZE) {
                 cropImgCtrl.resultImgSize = MAX_SIZE;
             } else {
-                cropImgCtrl.resultImgSize = image_file.size;
+                cropImgCtrl.resultImgSize = image.width;
             }
         }
 

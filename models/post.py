@@ -134,8 +134,12 @@ class Post(ndb.Model):
     # Images uploaded
     uploaded_images = ndb.StringProperty(repeated=True)
 
+    # When post is shared post
+    shared_post = ndb.KeyProperty(kind="Post")
+
     @staticmethod
     def create(data, author_key, institution_key):
+        """Verify  how type of post and create."""
         """Create a post and check required fields."""
         if not data['title']:
             raise FieldException("Title can not be empty")
@@ -149,6 +153,8 @@ class Post(ndb.Model):
         post.author = author_key
         post.institution = institution_key
         post.comments = []
+        if data.get('shared_post'):
+            post.shared_post = ndb.Key(urlsafe=data["shared_post"])
 
         return post
 
@@ -181,14 +187,16 @@ class Post(ndb.Model):
             'institution_key': institution.key.urlsafe(),
             'key': post.key.urlsafe()
         }
-        return post.modify_post(post_dict)
+        return post.modify_post(post_dict, host)
 
-    def modify_post(post, post_dict):
-        """Create personalized json if post was deleted."""
+    def modify_post(post, post_dict, host):
+        """Create personalized json if post was deleted or is sharing."""
         if(post.state == 'deleted'):
             post_dict['title'] = None
             post_dict['text'] = None
-            post_dict['photo_url'] = None
+
+        if(post.shared_post is not None):
+            post_dict['shared_post'] = Post.make(post.shared_post.get(), host)
 
         return post_dict
 

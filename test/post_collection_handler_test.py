@@ -4,6 +4,7 @@
 from test_base_handler import TestBaseHandler
 from models.user import User
 from models.institution import Institution
+from models.post import Post
 from handlers.post_collection_handler import PostCollectionHandler
 from google.appengine.ext import ndb
 import json
@@ -73,6 +74,50 @@ class PostCollectionHandlerTest(TestBaseHandler):
                                                   'title':
                                                   'testing another post'})
 
+    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
+    def test_post_sharing(self, verify_token):
+        """Test the post_collection_handler's post method."""
+        # Pretend an authentication
+        self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
+        self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
+
+        # Make the request and assign the answer to post
+        post = self.testapp.post_json("/api/posts", {'title': 'Sharing',
+                                                     'text': 'testing new post',
+                                                     'institution':
+                                                     self.certbio.key.urlsafe(),
+                                                     'shared_post':
+                                                     self.mayza_post.key.urlsafe()}).json
+        # Retrieve the entities
+        key_post = ndb.Key(urlsafe=post['key'])
+        post_obj = key_post.get()
+        self.certbio = self.certbio.key.get()
+        self.mayza = self.mayza.key.get()
+        # Check if the post's key is in institution and user
+        self.assertTrue(key_post in self.mayza.posts,
+                        "The post is not in user.posts")
+        self.assertTrue(key_post in self.certbio.posts,
+                        "The post is not in institution.posts")
+        # Check if the post's attributes are the expected
+        self.assertEqual(post_obj.title, "Sharing",
+                         "The title expected was new post")
+        self.assertEqual(post_obj.institution, self.certbio.key,
+                         "The post's institution is not the expected one")
+        self.assertEqual(post_obj.text,
+                         "testing new post",
+                         "The post's text is not the expected one")
+
+        shared_post_obj = post['shared_post']
+
+        # Check if the shared_post's attributes are the expected
+        self.assertEqual(shared_post_obj['title'], "Post existente",
+                         "The post's title expected is Post existente")
+        # self.assertEqual(shared_post_obj.institution, self.certbio.key,
+        #                  "The post's institution expected is certbio")
+        self.assertEqual(shared_post_obj['text'],
+                         "Post inicial que quero compartilhar",
+                         "The post's text expected is Post inicial que quero compartilhar")
+
 
 def initModels(cls):
     """Init the models."""
@@ -104,5 +149,20 @@ def initModels(cls):
     cls.certbio.posts = []
     cls.certbio.admin = cls.mayza.key
     cls.certbio.put()
+    # POST of Mayza To Certbio Institution
+    cls.mayza_post = Post()
+    cls.mayza_post.title = "Post existente"
+    cls.mayza_post.text = "Post inicial que quero compartilhar"
+    cls.mayza_post.author = cls.mayza.key
+    cls.mayza_post.last_modified_by = cls.mayza.key
+    cls.mayza_post.institution = cls.certbio.key
+    cls.mayza_post.put()
 
+    """ Update Institution."""
+    cls.certbio.posts.append(cls.mayza_post.key)
+    cls.certbio.put()
+
+    """ Update User."""
+    cls.mayza.posts.append(cls.mayza_post.key)
     cls.mayza.add_institution(cls.certbio.key)
+    cls.mayza_post.put()

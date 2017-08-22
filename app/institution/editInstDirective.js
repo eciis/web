@@ -20,7 +20,7 @@
         getLegalNatures();
         getOccupationAreas();
 
-        function addImage(image) {
+        editInstCtrl.addImage = function addImage(image) {
             var newSize = 800;
             var promise = ImageService.compress(image, newSize);
             promise.then(function success(data) {
@@ -31,7 +31,7 @@
                 MessageService.showToast(error);
             });
             return promise;
-        }
+        };
 
         editInstCtrl.cropImage = function cropImage(image_file) {
             $mdDialog.show({
@@ -45,7 +45,7 @@
                     image_file : image_file
                 }
             }).then(function success(croppedImage) {
-                addImage(croppedImage);
+                editInstCtrl.addImage(croppedImage);
             });
         };
 

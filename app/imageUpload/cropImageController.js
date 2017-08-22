@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.controller('CropImageController', function CropImageController(image_file, $rootScope, $mdDialog, ImageService) {
+    app.controller('CropImageController', function CropImageController(image_file, $rootScope, $mdDialog, ImageService, MessageService) {
         var cropImgCtrl = this;
 
         cropImgCtrl.image = '';
@@ -53,7 +53,12 @@
         };
 
         function main() {
-            readImage(image_file);
+            if(ImageService.isValidImage(image_file)) {
+                readImage(image_file);
+            } else {
+                MessageService.showToast("Imagem deve ser jpg ou png e menor que 5 Mb");
+                cropImgCtrl.cancelCrop();
+            }
         }
 
         main();

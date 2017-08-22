@@ -10,7 +10,7 @@
         service.compress = function compress(file, newSize) {
             var deferred = $q.defer();
 
-            if (isValidImage(file)) {
+            if (service.isValidImage(file)) {
                 service.readFile(file, function(source_img_obj) {
                     if (source_img_obj.width > newSize) {
                         deferred.resolve(compressImage(source_img_obj, file, newSize));
@@ -24,7 +24,7 @@
             return deferred.promise;
         };
 
-        function isValidImage(image) {
+        service.isValidImage = function isValidImage(image) {
             var jpgType = "image/jpeg";
             var pngType = "image/png";
             var maximumSize = 5242880; // 5Mb in bytes
@@ -38,7 +38,7 @@
             } else {
                 return false;
             }
-        }
+        };
 
         service.readFile = function(file, callback) {
             var fileReader = new FileReader();

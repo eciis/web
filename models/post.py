@@ -139,7 +139,6 @@ class Post(ndb.Model):
 
     @staticmethod
     def create(data, author_key, institution_key):
-        """Verify  how type of post and create."""
         """Create a post and check required fields."""
         if not data['title']:
             raise FieldException("Title can not be empty")

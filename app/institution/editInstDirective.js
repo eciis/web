@@ -20,7 +20,7 @@
         getLegalNatures();
         getOccupationAreas();
 
-        editInstCtrl.addImage = function(image) {
+        function addImage(image) {
             var newSize = 800;
             var promise = ImageService.compress(image, newSize);
             promise.then(function success(data) {
@@ -31,23 +31,23 @@
                 MessageService.showToast(error);
             });
             return promise;
-        };
+        }
 
-        function cropImage(image_file) {
+        editInstCtrl.cropImage = function cropImage(image_file) {
             $mdDialog.show({
-                controller: "EditPostController",
-                controllerAs: "editPostCtrl",
-                templateUrl: 'home/edit_post.html',
+                controller: "CropImageController",
+                controllerAs: "cropImgCtrl",
+                templateUrl: 'imageUpload/crop_image.html',
                 parent: angular.element(document.body),
                 targetEvent: event,
                 clickOutsideToClose:true,
                 locals: {
-                    image_file : image_file,
+                    image_file : image_file
                 }
             }).then(function success(croppedImage) {
-
+                addImage(croppedImage);
             });
-        }
+        };
 
         function setImage(image) {
             $rootScope.$apply(function() {

@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.controller('CropImageController', function CropImageController(image_file, new_size,$rootScope, $mdDialog, ImageService) {
+    app.controller('CropImageController', function CropImageController(image_file, $rootScope, $mdDialog, ImageService) {
         var cropImgCtrl = this;
 
         cropImgCtrl.image = '';
@@ -14,27 +14,48 @@
             var reader = new FileReader();
             reader.onload = function (evt) {
                     $rootScope.$apply(function(){
-                        cropImgCtrl.Image=evt.target.result;
+                        cropImgCtrl.image=evt.target.result;
                     });
             };
             reader.readAsDataURL(image_file);
         }
 
         function readProperties(image_file) {
-            cropImgCtrl.resultImgSize = image_file.size;
+            var MAX_SIZE = 1024;
             cropImgCtrl.resultImgFormat = image_file.type;
+
+            if(image_file.size > MAX_SIZE) {
+                cropImgCtrl.resultImgSize = MAX_SIZE;
+            } else {
+                cropImgCtrl.resultImgSize = image_file.size;
+            }
         }
 
         cropImgCtrl.confirmCrop = function confirmCrop() {
-            $mdDialog.hide(cropImgCtrl.croppedImage);
+            var image = new Image();
+            image.onload = function() {
+                cropImage(image);
+            };
+            image.src = cropImgCtrl.croppedImage;
         };
+
+        function cropImage(image) {
+            var height = image.height;
+            var width = image.width;
+            var qualityImage = 1;
+
+            image_file = ImageService.createImageFile(image, image_file, height, width, qualityImage);
+            $mdDialog.hide(image_file);
+        }
 
         cropImgCtrl.cancelCrop = function cancelCrop() {
             $mdDialog.cancel();
+        };
+
+        function main() {
+            readImage(image_file);
         }
 
-        (function main() {
-            readImage(image_file);
-        })();
+        main();
     });
 })();

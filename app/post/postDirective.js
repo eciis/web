@@ -161,10 +161,10 @@
         };
 
         postCtrl.showImage = function() {
-            var imageEmpty = postCtrl.photoUrl === "";
-            var imageNull = postCtrl.photoUrl === null;
+            var isImageEmpty = postCtrl.photoUrl === "";
+            var isImageNull = postCtrl.photoUrl === null;
             var hasTitle = postCtrl.post.title;
-            return !imageEmpty && !imageNull && hasTitle;
+            return !isImageEmpty && !isImageNull && hasTitle;
         };
 
         (function main() {

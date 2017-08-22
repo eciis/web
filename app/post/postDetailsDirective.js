@@ -90,6 +90,25 @@
             });
         };
 
+        postDetailsCtrl.share = function share(post, event) {
+            $mdDialog.show({
+                controller: "SharePostController",
+                controllerAs: "sharePostCtrl",
+                templateUrl: 'post/share_post_dialog.html',
+                parent: angular.element(document.body),
+                targetEvent: event,
+                clickOutsideToClose:true,
+                locals: {
+                    user : postDetailsCtrl.user,
+                    post: post
+                }
+            })/*.then(function success(editedPost) {
+                postDetailsCtrl.post.title = editedPost.title;
+                postDetailsCtrl.post.text = editedPost.text;
+                postDetailsCtrl.post.photo_url = editedPost.photo_url;
+            })*/;
+        };
+
         function likePost() {
             postDetailsCtrl.savingLike = true;
             var promise = PostService.likePost(postDetailsCtrl.post);
@@ -445,4 +464,46 @@
             postCtrl.photoUrl = postCtrl.post.photo_url;
         })();
     });
+    
+    app.controller("SharePostController", function SharePostController(user, post, $mdDialog, PostService, AuthService, $mdToast, MessageService, ImageService, $rootScope, $q) {
+        var shareCtrl = this;
+
+        shareCtrl.user = user;
+        shareCtrl.loading = false;
+        shareCtrl.photoUrl = "";
+
+
+        // Original post to compare and generate PATCH actions.
+        shareCtrl.post = new Post(post, shareCtrl.user.current_institution.key);
+        shareCtrl.post.text = post.text.substring(0, 200) + "...";
+
+        // Copy of post to edit.
+        shareCtrl.newPost = new Post({}, shareCtrl.user.current_institution.key);
+
+        shareCtrl.isPostValid = function isPostValid() {
+            if (shareCtrl.user) {
+                return shareCtrl.newPost.isValid();
+            } else {
+                return false;
+            }
+        };
+
+        shareCtrl.cancelDialog = function() {
+            $mdDialog.cancel();
+        };
+
+        shareCtrl.showButton = function() {
+            return shareCtrl.post.title && !shareCtrl.loading;
+        };
+
+        shareCtrl.showImage = function() {
+            var imageEmpty = shareCtrl.photoUrl === "";
+            var imageNull = shareCtrl.photoUrl === null;
+            return !imageEmpty && !imageNull;
+        };
+
+        (function main() {
+            shareCtrl.photoUrl = shareCtrl.post.photo_url;
+        })();
+    });    
 })();

@@ -28,9 +28,6 @@ class PostCollectionHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
     def test_post(self, verify_token):
         """Test the post_collection_handler's post method."""
-        # Pretend an authentication
-        self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
-        self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
 
         # Make the request and assign the answer to post
         post = self.testapp.post_json("/api/posts", {'title': 'new post',
@@ -77,9 +74,6 @@ class PostCollectionHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
     def test_post_sharing(self, verify_token):
         """Test the post_collection_handler's post method."""
-        # Pretend an authentication
-        self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
-        self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
 
         # Make the request and assign the answer to post
         post = self.testapp.post_json("/api/posts", {'title': 'Sharing',

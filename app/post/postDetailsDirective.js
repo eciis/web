@@ -465,7 +465,7 @@
         })();
     });
     
-    app.controller("SharePostController", function SharePostController(user, post, $mdDialog, PostService, AuthService, $mdToast, MessageService, ImageService, $rootScope, $q) {
+    app.controller("SharePostController", function SharePostController(user, post, $mdDialog) {
         var shareCtrl = this;
 
         shareCtrl.user = user;

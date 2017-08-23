@@ -3,7 +3,8 @@
 (function() {
     var app = angular.module("app");
 
-    app.controller('CropImageController', function CropImageController(image_file, $rootScope, $mdDialog, ImageService, MessageService) {
+    app.controller('CropImageController', function CropImageController(image_file, $rootScope,
+        $mdDialog, ImageService, MessageService) {
         var cropImgCtrl = this;
 
         cropImgCtrl.image = '';
@@ -12,7 +13,7 @@
         function readImage(image_file) {
             ImageService.readFile(image_file, function (image) {
                 readProperties(image_file, image);
-                $rootScope.$apply(function(){
+                $rootScope.$apply(function() {
                     cropImgCtrl.image = image.src;
                 });
             });

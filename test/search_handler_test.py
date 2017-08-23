@@ -28,13 +28,26 @@ class SearchHandlerTest(TestBaseHandler):
         """Test the search_handler's get method."""
         # Call the createDocument method
         search_module.createDocument(self.certbio)
-        # Call the get method
+        # Search for the institution by its full name
+        certbio_name = 'Lab. de Desenvolvimento de Biomateriais do Nordeste'
         institutions = self.testapp.get(
-            "/api/search/institution?value=%s&state=%s" % ('CERTBIO', 'active'))
+            "/api/search/institution?value=%s&state=%s"
+            % (certbio_name, 'active'))
+        self.assertTrue('CERTBIO' in institutions)
+        # Search for the institution by part of its name
+        institutions = self.testapp.get(
+            "/api/search/institution?value=%s&state=%s"
+            % ('Biomateriais', 'active'))
+        self.assertTrue('CERTBIO' in institutions)
+        # Search for the institution by its acronym
+        institutions = self.testapp.get(
+            "/api/search/institution?value=%s&state=%s"
+            % ('CERTBIO', 'active'))
         self.assertTrue('CERTBIO' in institutions)
         # Make sure that there is no institution CERTBIO with pending state.
         institutions = self.testapp.get(
-            "/api/search/institution?value=%s&state=%s" % ('CERTBIO', 'pending'))
+            "/api/search/institution?value=%s&state=%s"
+            % ('CERTBIO', 'pending'))
         self.assertTrue('CERTBIO' not in institutions)
         # Create a document with a pending institution
         search_module.createDocument(self.splab)
@@ -67,7 +80,7 @@ def initModels(cls):
     cls.mayza.put()
     # new Institution CERTBIO
     cls.certbio = Institution()
-    cls.certbio.name = 'CERTBIO'
+    cls.certbio.name = 'Lab. de Desenvolvimento de Biomateriais do Nordeste'
     cls.certbio.acronym = 'CERTBIO'
     cls.certbio.state = 'active'
     cls.certbio.members = [cls.mayza.key]
@@ -76,7 +89,7 @@ def initModels(cls):
     cls.certbio.put()
     # new Institution SPLAB
     cls.splab = Institution()
-    cls.splab.name = 'SPLAB'
+    cls.splab.name = 'Software Practice Laboratory'
     cls.splab.acronym = 'SPLAB'
     cls.splab.state = 'pending'
     cls.splab.members = [cls.mayza.key]

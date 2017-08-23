@@ -102,11 +102,7 @@
                     user : postDetailsCtrl.user,
                     post: post
                 }
-            })/*.then(function success(editedPost) {
-                postDetailsCtrl.post.title = editedPost.title;
-                postDetailsCtrl.post.text = editedPost.text;
-                postDetailsCtrl.post.photo_url = editedPost.photo_url;
-            })*/;
+            });
         };
 
         function likePost() {

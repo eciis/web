@@ -469,15 +469,13 @@
         var shareCtrl = this;
 
         shareCtrl.user = user;
-        shareCtrl.loading = false;
         shareCtrl.photoUrl = "";
 
+        var LIMIT_CHARACTERS = 200;
 
-        // Original post to compare and generate PATCH actions.
-        shareCtrl.post = new Post(post, shareCtrl.user.current_institution.key);
-        shareCtrl.post.text = post.text.substring(0, 200) + "...";
+        shareCtrl.post = new Post(post, post.institution_key);
+        shareCtrl.post.text = post.text.substring(0, LIMIT_CHARACTERS) + "...";
 
-        // Copy of post to edit.
         shareCtrl.newPost = new Post({}, shareCtrl.user.current_institution.key);
 
         shareCtrl.isPostValid = function isPostValid() {

@@ -11,6 +11,7 @@ from models.invite import Invite
 from utils import login_required
 from utils import json_response
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
+from custom_exceptions.entityException import EntityException
 
 from models.institution import Institution
 from util.json_patch import JsonPatch
@@ -145,3 +146,13 @@ class InstitutionHandler(BaseHandler):
         institution_json = Utils.toJson(institution)
         self.response.write(json.dumps(
             institution_json))
+
+    @login_required
+    @is_admin
+    def delete(self, user, institution_key):
+        """Handle DELETE Requests."""
+        remove_hierarchy = self.request.get('removeHierarchy')
+        institution = ndb.Key(urlsafe=institution_key).get()
+        Utils._assert(not type(institution) is Institution,
+                      "Key is not an institution", EntityException)
+        institution.remove_institution(remove_hierarchy)

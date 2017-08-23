@@ -93,3 +93,9 @@ def makeQueryStr(institution_name, state):
         else:
             state_string += " OR " + states[i]
     return "name: %s AND state: %s" % (institution_name, state_string)
+
+
+def deleteDocument(doc_id):
+    """Delete a document."""
+    index = search.Index(INDEX_NAME)
+    index.delete(doc_id)

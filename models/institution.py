@@ -170,6 +170,23 @@ class Institution(ndb.Model):
 
         return institution
 
+    @ndb.transactional(xg=True)
+    def remove_institution(self, remove_hierarchy):
+        """Remove an institution."""
+        self.state = "inactive"
+        search_module.deleteDocument(self.key.urlsafe())
+        for follower in self.followers:
+            follower = follower.get()
+            follower.unfollow(self.key)
+        for member in self.members:
+            member = member.get()
+            member.remove_institution(self.key)
+        if remove_hierarchy == "true":
+            for child in self.children_institutions:
+                child = child.get()
+                child.remove_institution(remove_hierarchy)
+        self.put()
+
     def make(self, attributes):
         """Create an institution dictionary with specific filds."""
         institution = {}

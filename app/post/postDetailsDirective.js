@@ -461,16 +461,18 @@
         })();
     });
     
-    app.controller("SharePostController", function SharePostController(user, post, $mdDialog) {
+    app.controller("SharePostController", function SharePostController(user, post, $mdDialog, PostService, MessageService) {
         var shareCtrl = this;
 
         shareCtrl.user = user;
         shareCtrl.photoUrl = "";
 
         var LIMIT_CHARACTERS = 200;
+        var URL_PATTERN = /(((www.)|(http(s)?:\/\/))[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
+        var REPLACE_URL = "<a href=\'$1\' target='_blank'>$1</a>";
 
         shareCtrl.post = new Post(post, post.institution_key);
-        shareCtrl.post.text = post.text.substring(0, LIMIT_CHARACTERS) + "...";
+        shareCtrl.post.text = adjustText(post.text);
 
         shareCtrl.newPost = new Post({}, shareCtrl.user.current_institution.key);
 
@@ -495,6 +497,36 @@
             var imageNull = shareCtrl.photoUrl === null;
             return !imageEmpty && !imageNull;
         };
+
+        shareCtrl.share = function() {
+            shareCtrl.newPost.sharedPost = shareCtrl.post;
+            if (shareCtrl.newPost.isValid()) {
+                PostService.createPost(shareCtrl.newPost).then(function success() {
+                    MessageService.showToast('Compartilhado com sucesso!');
+                    $mdDialog.hide();
+                }, function error(response) {
+                    $mdDialog.hide();
+                    MessageService.showToast(response.data.msg);
+                });
+            } else {
+                MessageService.showToast('Post inválido!');
+            }
+        };
+
+        shareCtrl.recognizeUrl =  function recognizeUrl(receivedPost) {
+            var post = new Post(receivedPost, receivedPost.institutionKey);
+            var urlsInText = post.text.match(URL_PATTERN);
+            post.text = addHttpsToUrl(post.text, urlsInText);
+            post.text = adjustText(post.text);
+            return post;
+        };
+
+        function adjustText(text){
+            if(text.length > LIMIT_CHARACTERS){
+                text = text.substring(0, LIMIT_CHARACTERS) + "...";
+            }
+            return text;
+        }
 
         (function main() {
             shareCtrl.photoUrl = shareCtrl.post.photo_url;

@@ -46,6 +46,8 @@
                 }
             }).then(function success(croppedImage) {
                 editInstCtrl.addImage(croppedImage);
+            }, function error() {
+                editInstCtrl.file = null;
             });
         };
 

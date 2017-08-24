@@ -473,8 +473,6 @@
         shareCtrl.post = new Post(post, post.institution_key);
         shareCtrl.post.text = adjustText(post.text);
 
-        console.log(shareCtrl.post);
-
         shareCtrl.newPost = new Post({}, shareCtrl.user.current_institution.key);
 
         shareCtrl.isPostValid = function isPostValid() {

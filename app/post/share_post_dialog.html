@@ -17,12 +17,14 @@
         <label>Título</label>
         <input ng-model="sharePostCtrl.newPost.title" md-maxlength="100" maxlength="100" placeholder="Escreva aqui uma nova publicação">
       </md-input-container>
+
       <md-input-container ng-show="sharePostCtrl.newPost.title">
         <label>Mensagem</label>
         <textarea style="max-height: 180px;overflow-y:auto;resize:none;" ng-model="sharePostCtrl.newPost.text" rows="4" md-select-on-focus required="true">
         </textarea>
       </md-input-container>
-      <md-card>
+
+      <md-card md-colors="{background: 'default-grey-100'}">
         <md-card-header>
           <md-card-avatar>
             <img ng-src="{{ sharePostCtrl.post.institution_image }}" class="md-user-avatar"/>
@@ -34,14 +36,14 @@
         </md-card-header>
         <md-card-content layout="column">
           <div class="image-view" ng-if="sharePostCtrl.showImage()">
-            <img class="md-card-image" style="border-radius: 3%;" ng-src="{{ sharePostCtrl.photoUrl }}"/>
+            <img class="md-card-image" style="border-radius: 3%;" ng-src="{{ sharePostCtrl.post.photo_url }}"/>
           </div>
           <p></p>
           <span class="md-text hyperlink">{{ sharePostCtrl.post.title }}</span>
           <span class="md-subhead" ng-bind-html="sharePostCtrl.post.text"></span>
         </md-card-content>
       </md-card>
-      <md-progress-linear ng-show="sharePostCtrl.loading" md-mode="indeterminate" style="width: 19%; margin-top: 5px; margin-left: 10px;"></md-progress-linear>
+
     </md-card-content>
     <md-dialog-actions layout="row" ng-show="sharePostCtrl.newPost.title">
       <span flex></span>

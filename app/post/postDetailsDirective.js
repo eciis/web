@@ -314,16 +314,16 @@
         }
 
         function addHttpsToUrl(text, urls) {
-            if(urls) {
-                var http = "http://";
-                for (var i = 0; i < urls.length; i++) {
-                    if(urls[i].slice(0, 4) !== "http") {
-                        text = text.replace(urls[i], http + urls[i]);
-                    }
+        if(urls) {
+            var http = "http://";
+            for (var i = 0; i < urls.length; i++) {
+                if(urls[i].slice(0, 4) !== "http") {
+                    text = text.replace(urls[i], http + urls[i]);
                 }
             }
-            return text;
         }
+        return text;
+    }
     });
 
     app.directive("postDetails", function() {
@@ -464,15 +464,16 @@
     app.controller("SharePostController", function SharePostController(user, post, $mdDialog, PostService, MessageService) {
         var shareCtrl = this;
 
-        shareCtrl.user = user;
-        shareCtrl.photoUrl = "";
-
-        var LIMIT_CHARACTERS = 200;
+        var LIMIT_CHARACTERS_POST = 200;
         var URL_PATTERN = /(((www.)|(http(s)?:\/\/))[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
         var REPLACE_URL = "<a href=\'$1\' target='_blank'>$1</a>";
 
+        shareCtrl.user = user;
+
         shareCtrl.post = new Post(post, post.institution_key);
         shareCtrl.post.text = adjustText(post.text);
+
+        console.log(shareCtrl.post);
 
         shareCtrl.newPost = new Post({}, shareCtrl.user.current_institution.key);
 
@@ -488,18 +489,14 @@
             $mdDialog.cancel();
         };
 
-        shareCtrl.showButton = function() {
-            return shareCtrl.post.title && !shareCtrl.loading;
-        };
-
         shareCtrl.showImage = function() {
-            var imageEmpty = shareCtrl.photoUrl === "";
-            var imageNull = shareCtrl.photoUrl === null;
+            var imageEmpty = shareCtrl.post.photo_url === "";
+            var imageNull = shareCtrl.post.photo_url === null;
             return !imageEmpty && !imageNull;
         };
 
         shareCtrl.share = function() {
-            shareCtrl.newPost.sharedPost = shareCtrl.post;
+            shareCtrl.newPost.sharedPost = shareCtrl.post.key;
             if (shareCtrl.newPost.isValid()) {
                 PostService.createPost(shareCtrl.newPost).then(function success() {
                     MessageService.showToast('Compartilhado com sucesso!');
@@ -513,23 +510,11 @@
             }
         };
 
-        shareCtrl.recognizeUrl =  function recognizeUrl(receivedPost) {
-            var post = new Post(receivedPost, receivedPost.institutionKey);
-            var urlsInText = post.text.match(URL_PATTERN);
-            post.text = addHttpsToUrl(post.text, urlsInText);
-            post.text = adjustText(post.text);
-            return post;
-        };
-
         function adjustText(text){
-            if(text.length > LIMIT_CHARACTERS){
-                text = text.substring(0, LIMIT_CHARACTERS) + "...";
+            if(text.length > LIMIT_CHARACTERS_POST){
+                text = text.substring(0, LIMIT_CHARACTERS_POST) + "...";
             }
-            return text;
+            return text.replace(URL_PATTERN,REPLACE_URL);
         }
-
-        (function main() {
-            shareCtrl.photoUrl = shareCtrl.post.photo_url;
-        })();
-    });    
+    });
 })();

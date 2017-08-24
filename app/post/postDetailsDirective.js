@@ -314,16 +314,16 @@
         }
 
         function addHttpsToUrl(text, urls) {
-        if(urls) {
-            var http = "http://";
-            for (var i = 0; i < urls.length; i++) {
-                if(urls[i].slice(0, 4) !== "http") {
-                    text = text.replace(urls[i], http + urls[i]);
+            if(urls) {
+                var http = "http://";
+                for (var i = 0; i < urls.length; i++) {
+                    if(urls[i].slice(0, 4) !== "http") {
+                        text = text.replace(urls[i], http + urls[i]);
+                    }
                 }
             }
+            return text;
         }
-        return text;
-    }
     });
 
     app.directive("postDetails", function() {

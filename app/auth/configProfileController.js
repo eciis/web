@@ -12,12 +12,13 @@
 
         configProfileCtrl.newUser = AuthService.getCurrentUser();
         configProfileCtrl.loading = false;
+        configProfileCtrl.cpfRegex = /^\d{3}\.\d{3}\.\d{3}\-\d{2}$/;
 
-        var HAVE_ONLY_ONE_INSTITUTION_MSG = "Esta é a única instituição ao qual você é vinculado." +
+        var HAS_ONLY_ONE_INSTITUTION_MSG = "Esta é a única instituição ao qual você é vinculado." +
                 " Ao remover o vínculo você não poderá mais acessar o sistema," +
                 " exceto por meio de novo convite. Deseja remover?";
 
-        var HAVE_MORE_THAN_ONE_INSTITUTION_MSG = "Ao remover o vínculo com esta instituição," +
+        var HAS_MORE_THAN_ONE_INSTITUTION_MSG = "Ao remover o vínculo com esta instituição," +
             " você deixará de ser membro" +
             " e não poderá mais publicar na mesma," +
             " no entanto seus posts existentes serão mantidos. Deseja remover?";
@@ -81,7 +82,7 @@
                     confirm
                         .clickOutsideToClose(false)
                         .title('Remover vínculo com ' + institution.name)
-                        .textContent(haveMoreThanOneInstitution() ? HAVE_MORE_THAN_ONE_INSTITUTION_MSG : HAVE_ONLY_ONE_INSTITUTION_MSG)
+                        .textContent(hasMoreThanOneInstitution() ? HAS_MORE_THAN_ONE_INSTITUTION_MSG : HAS_ONLY_ONE_INSTITUTION_MSG)
                         .ariaLabel('Remover instituicao')
                         .targetEvent(event)
                         .ok('Sim')
@@ -102,7 +103,7 @@
             return configProfileCtrl.newUser.isAdmin(institution_key);
         }
 
-        function haveMoreThanOneInstitution() {
+        function hasMoreThanOneInstitution() {
             return configProfileCtrl.newUser.institutions.length > 1;
         }
 

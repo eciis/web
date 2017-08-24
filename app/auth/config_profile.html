@@ -34,7 +34,7 @@
           <md-input-container flex-gt-sm>
           <label>CPF</label>
           <input name="CPF" ng-model="configProfileCtrl.newUser.cpf" placeholder="123.456.789-00"
-          ng-pattern="/^\d{3}\.\d{3}\.\d{3}\-\d{2}$/" required>
+          ng-pattern="configProfileCtrl.cpfRegex" required>
           </md-input-container>
           </div>
           <section layout="row" layout="column" layout-align="end center" layout-wrap>
@@ -52,7 +52,8 @@
           <md-list class="md-dense" flex>
             <md-subheader class="md-no-sticky">Seus vínculos institucionais:</md-subheader>
             <md-list-item class="md-3-line" ng-repeat="institution in configProfileCtrl.newUser.institutions">
-              <md-button ng-click="configProfileCtrl.removeInstitution($event, institution)" md-colors="{background: 'teal-900'}">Remover</md-button>
+              <md-button ng-click="configProfileCtrl.removeInstitution($event, institution)"
+              md-colors="{background: 'teal-900'}">Remover</md-button>
               <img style="border-radius: 50%; " ng-src="{{ institution.photo_url }}" width="50px" height="50px" />
               <div style="margin-left: 10px;" class="md-list-item-text" layout="column">
                 <h3>{{ institution.acronym }}</h3>

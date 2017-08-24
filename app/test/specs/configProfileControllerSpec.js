@@ -1,7 +1,9 @@
 'use strict';
 
 (describe('Test ConfigProfileController', function() {
-    var configCtrl, httpBackend, deffered, scope, userService, createCrtl, state, mdToast, authService, imageService, mdDialog;
+    var configCtrl, httpBackend, deffered, scope, userService, createCrtl, state,
+    mdToast, authService, imageService, mdDialog;
+    
     var splab = {
         name: 'SPLAB',
         key: '987654321'
@@ -26,7 +28,9 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, $mdToast, $mdDialog, UserService, AuthService, ImageService) {
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, 
+        $mdToast, $mdDialog, UserService, AuthService, ImageService) {
+        
         httpBackend = $httpBackend;
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);

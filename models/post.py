@@ -97,11 +97,11 @@ class Like(ndb.Model):
 class Post(ndb.Model):
     """Model of a post."""
 
-    title = ndb.StringProperty(required=True)
+    title = ndb.StringProperty()
 
     photo_url = ndb.StringProperty()
 
-    text = ndb.TextProperty(required=True)
+    text = ndb.TextProperty()
 
     # user who is the author
     author = ndb.KeyProperty(kind="User", required=True)
@@ -140,20 +140,23 @@ class Post(ndb.Model):
     @staticmethod
     def create(data, author_key, institution_key):
         """Create a post and check required fields."""
-        if not data['title']:
-            raise FieldException("Title can not be empty")
-        if not data['text']:
-            raise FieldException("Text can not be empty")
         post = Post()
-        post.title = data['title']
+
+        if data.get('shared_post') is None:
+            if not data['title']:
+                raise FieldException("Title can not be empty")
+            if not data['text']:
+                raise FieldException("Text can not be empty")
+       else:
+            post.shared_post = ndb.Key(urlsafe=data["shared_post"])
+
+        post.title = data.get('title')
         post.photo_url = data.get('photo_url')
-        post.text = data['text']
+        post.text = data.get('text')
         post.last_modified_by = author_key
         post.author = author_key
         post.institution = institution_key
         post.comments = []
-        if data.get('shared_post'):
-            post.shared_post = ndb.Key(urlsafe=data["shared_post"])
 
         return post
 

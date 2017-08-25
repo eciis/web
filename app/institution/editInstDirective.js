@@ -1,7 +1,7 @@
 'use strict';
 (function() {
     var app = angular.module("app");
-    app.controller("EditInstController", function EditInstController(AuthService, InstitutionService, $state, 
+    app.controller("EditInstController", function EditInstController(AuthService, InstitutionService, CropImageService,$state,
             $mdToast, $mdDialog, $http, InviteService, ImageService, $rootScope, MessageService, PdfService, $q) {
 
         var editInstCtrl = this;
@@ -20,7 +20,7 @@
         getLegalNatures();
         getOccupationAreas();
 
-        editInstCtrl.addImage = function(image) {
+        editInstCtrl.addImage = function addImage(image) {
             var newSize = 800;
             var promise = ImageService.compress(image, newSize);
             promise.then(function success(data) {
@@ -31,6 +31,14 @@
                 MessageService.showToast(error);
             });
             return promise;
+        };
+
+        editInstCtrl.cropImage = function cropImage(image_file) {
+            CropImageService.crop(image_file).then(function success(croppedImage) {
+                editInstCtrl.addImage(croppedImage);
+            }, function error() {
+                editInstCtrl.file = null;
+            });
         };
 
         function setImage(image) {
@@ -109,7 +117,7 @@
                     function error(response) {
                         MessageService.showToast(response.data.msg);
                         $q.reject(promise);
-                });                
+                });
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
                 $q.reject(promise);
@@ -124,7 +132,7 @@
             MessageService.showToast('Edição de instituição realizado com sucesso');
             $state.go('app.institution', {institutionKey: institutionKey});
         }
-        
+
         editInstCtrl.showButton = function() {
             return !editInstCtrl.loading;
         };
@@ -157,7 +165,7 @@
                 MessageService.showToast(response.data.msg);
             });
         }
-        
+
         (function main(){
              loadInstitution();
         })();

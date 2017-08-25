@@ -30,8 +30,8 @@
                 openFrom: '#fab-new-post',
                 closeTo: angular.element(document.querySelector('#fab-new-post')),
                 locals: {
-                    user: homeCtrl.user,
-                    posts: homeCtrl.posts
+                    posts: homeCtrl.posts,
+                    isEditing: false
                 },
                 bindToController: true
             });

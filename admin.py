@@ -80,9 +80,7 @@ def createInstitution(data, user):
     user.institutions_admin.append(institution.key)
     user.follows.append(institution.key)
     user.put()
-    search_module.createDocument(
-        institution.key.urlsafe(), institution.name, institution.state,
-        institution.admin.get().email)
+    search_module.createDocument(institution)
 
     return institution
 
@@ -285,8 +283,8 @@ class ResetHandler(BaseHandler):
         # new Institution CERTBIO with User Mayza like a member
         # and User André like a follower
         data = {
-            'name': 'CERTBIO',
-            'acronym': 'CTB',
+            'name': 'Laboratório de Avaliação e Desenvolvimento de Biomateriais do Nordeste',
+            'acronym': 'CERTBIO',
             'cnpj': '18.104.068/0001-86',
             'legal_nature': 'public',
             'address': 'Universidade Federal de Campina Grande',

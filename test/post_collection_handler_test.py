@@ -74,11 +74,8 @@ class PostCollectionHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
     def test_post_sharing(self, verify_token):
         """Test the post_collection_handler's post method."""
-
         # Make the request and assign the answer to post
-        post = self.testapp.post_json("/api/posts", {'title': 'Sharing',
-                                                     'text': 'testing new post',
-                                                     'institution':
+        post = self.testapp.post_json("/api/posts", {'institution':
                                                      self.certbio.key.urlsafe(),
                                                      'shared_post':
                                                      self.mayza_post.key.urlsafe()}).json
@@ -93,13 +90,8 @@ class PostCollectionHandlerTest(TestBaseHandler):
         self.assertTrue(key_post in self.certbio.posts,
                         "The post is not in institution.posts")
         # Check if the post's attributes are the expected
-        self.assertEqual(post_obj.title, "Sharing",
-                         "The title expected was new post")
         self.assertEqual(post_obj.institution, self.certbio.key,
                          "The post's institution is not the expected one")
-        self.assertEqual(post_obj.text,
-                         "testing new post",
-                         "The post's text is not the expected one")
 
         shared_post_obj = post['shared_post']
 

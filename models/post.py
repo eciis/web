@@ -147,7 +147,7 @@ class Post(ndb.Model):
                 raise FieldException("Title can not be empty")
             if not data['text']:
                 raise FieldException("Text can not be empty")
-       else:
+        else:
             post.shared_post = ndb.Key(urlsafe=data["shared_post"])
 
         post.title = data.get('title')

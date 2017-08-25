@@ -90,7 +90,7 @@
 
             mainCtrl = createCtrl();
 
-            expect(state.go).toHaveBeenCalledWith('new_invite', {institutionKey: '00001', inviteKey: 'inviteKey', typeInvite: 'INSTITUTION' });
+            expect(state.go).toHaveBeenCalledWith('new_invite', {key: 'inviteKey'});
         });
     });
 
@@ -142,7 +142,7 @@
             spyOn(mainCtrl, 'makeSearch').and.callThrough();
             spyOn(instService, 'searchInstitutions').and.callThrough();
             spyOn(mainCtrl, 'openMenu');
-            httpBackend.expect('GET', "api/search/institution?name=" + '"' + splab.name + '"' + "&state=active").respond(documents);
+            httpBackend.expect('GET', "api/search/institution?value=" + '"' + splab.name + '"' + "&state=active").respond(documents);
             mainCtrl.showMenu('$event').then(function() {
                 expect(mainCtrl.makeSearch).toHaveBeenCalled();
                 expect(mainCtrl.openMenu).toHaveBeenCalled();
@@ -157,7 +157,7 @@
             mainCtrl.search = splab.name;
             mainCtrl.finalSearch = mainCtrl.search;
             spyOn(instService, 'searchInstitutions').and.callThrough();
-            httpBackend.expect('GET', "api/search/institution?name=" + '"' + splab.name + '"' + "&state=active").respond(documents);
+            httpBackend.expect('GET', "api/search/institution?value=" + '"' + splab.name + '"' + "&state=active").respond(documents);
             mainCtrl.makeSearch().then(function() {
                  expect(instService.searchInstitutions).toHaveBeenCalledWith(mainCtrl.finalSearch, 'active');
                  expect(mainCtrl.institutions).toEqual(documents);

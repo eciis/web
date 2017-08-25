@@ -6,10 +6,15 @@
         mdDialog, authService;
 
     var INSTITUTIONS_URI = "/api/institutions/";
+    var INVITES_URI = "/api/invites/";
 
-    var invite = new Invite({invitee: "mayzabeel@gmail.com", key: 'xyzcis'}, 'user', '123456789', 'mayzabeel@gmail.com');
+    var invite = new Invite({invitee: "mayzabeel@gmail.com", key: 'xyzcis',
+                                            type_of_invite: 'USER',
+                                            institution_key: '987654321',
+                                            inviter_key: '21212121',
+                                            status: 'sent'});
     invite.stub_institution = {'name': 'Suggested Name', 'key': '00001'};
-    
+
     var splab = {
             name: 'SPLAB',
             key: '987654321',
@@ -45,6 +50,7 @@
         authService = AuthService;
         httpBackend.expect('GET', INSTITUTIONS_URI + splab.key).respond(splab);
         httpBackend.when('GET', "main/main.html").respond(200);
+        httpBackend.when('GET', INVITES_URI + invite.key).respond(invite);
         httpBackend.when('GET', "home/home.html").respond(200);
         AuthService.getCurrentUser = function() {
             return new User(tiago);
@@ -58,8 +64,7 @@
                     userService: UserService
                 });
         };
-        state.params.inviteKey = 'xyzcis';
-        state.params.institutionKey = splab.key;
+        state.params.key = 'xyzcis';
         newInviteCtrl = createCtrl();
         httpBackend.flush();
     }));

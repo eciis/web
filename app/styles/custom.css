@@ -269,3 +269,7 @@ a:active {
     max-width:100%;
     height: 50%;
 }
+
+.break {
+    word-break: break-all;
+}

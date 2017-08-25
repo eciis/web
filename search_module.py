@@ -6,7 +6,7 @@ from google.appengine.api import search
 INDEX_NAME = 'institution'
 
 
-def createDocument(id, name, state, admin):
+def createDocument(institution):
     """Create a document.
 
     Keyword arguments:
@@ -14,17 +14,30 @@ def createDocument(id, name, state, admin):
     name -- the institution's name
     state -- represents the current institution's state
     admin -- the email of the institution's admin,
+    acronym -- the institution's name acronym
     if it is an active one, or the email that the invitation was sent to.
     """
-    content = {'id': id, 'name': name, 'state': state, 'admin': admin}
+    admin = institution.email
+    if institution.admin:
+        admin = institution.admin.get().email
+
+    content = {
+        'id': institution.key.urlsafe(),
+        'name': institution.name,
+        'state': institution.state,
+        'admin': admin,
+        'acronym': institution.acronym
+    }
     # Make the structure of the document by setting the fields and its id.
     document = search.Document(
-        # The document's id is the same of the institution's one, what makes the search easier.
+        # The document's id is the same of the institution's one,
+        # what makes the search easier.
         doc_id=content['id'],
         fields=[
             search.TextField(name='name', value=content['name']),
             search.TextField(name='state', value=content['state']),
-            search.TextField(name='admin', value=content['admin'])
+            search.TextField(name='admin', value=content['admin']),
+            search.TextField(name='acronym', value=content['acronym'])
         ]
     )
     saveDocument(document)
@@ -53,36 +66,34 @@ def processDocuments(documents):
     return result
 
 
-def getDocuments(institution_name, state):
+def getDocuments(value, state):
     """Retrieve the documents and return them processed."""
-    query_string = makeQueryStr(institution_name, state)
+    query_string = makeQueryStr(value, state)
     index = search.Index(INDEX_NAME)
     query_options = search.QueryOptions(
-        returned_fields=['name', 'state', 'admin']
+        returned_fields=['name', 'state', 'admin', 'acronym']
     )
     query = search.Query(query_string=query_string, options=query_options)
     documents = index.search(query)
     return processDocuments(documents)
 
 
-def updateDocument(data, doc_id, name, state, admin):
+def updateDocument(institution):
     """Update a Document.
 
-    When an institution changes name, this function
-    updates the document to search for the new name and deletes
-    the old.
+    When an institution changes its name or acronym, this function
+    updates the previous document.
     """
-    if [replace for replace in data if replace["path"] == "/name"]:
-        index = search.Index(INDEX_NAME)
-        index.delete(doc_id)
-        createDocument(doc_id, name, state, admin)
+    index = search.Index(INDEX_NAME)
+    index.delete(institution.key.urlsafe())
+    createDocument(institution)
 
 
-def makeQueryStr(institution_name, state):
+def makeQueryStr(value, state):
     """Make the query string.
 
     Keyword arguments:
-    institution_name -- the institution's name
+    value -- value to be searched
     state -- represents the current institution's state.
     """
     states = state.split(",")
@@ -92,4 +103,4 @@ def makeQueryStr(institution_name, state):
             state_string += states[i]
         else:
             state_string += " OR " + states[i]
-    return "name: %s AND state: %s" % (institution_name, state_string)
+    return "%s AND state: %s" % (value, state_string)

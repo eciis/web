@@ -36,12 +36,16 @@
     splab = new Institution(splab);
 
     var invite = new Invite({invitee: "parent@gmail.com",
-                        suggestion_institution_name : "Institution Parent"},
-                            'INSTITUTION_PARENT', splab.key, maiana.key);
+                        suggestion_institution_name : "Institution Parent",
+                        type_of_invite: 'INSTITUTION_PARENT',
+                        institution_key: splab.key,
+                        inviter_key: maiana.key});
 
     var inviteChildren = new Invite({invitee: "children@gmail.com",
-                        suggestion_institution_name : "Children Institution"},
-                            'INSTITUTION_CHILDREN', splab.key, maiana.key);
+                        suggestion_institution_name : "Children Institution",
+                        type_of_invite: 'INSTITUTION_CHILDREN',
+                        institution_key: splab.key,
+                        inviter_key: maiana.key});
 
     var childrenStub = new Institution({name: "Children Institution", state : "pending"});
 
@@ -200,7 +204,7 @@
                     suggestion_institution_name : "Institution Parent",
                     type_of_invite : "INSTITUTION_PARENT"};
                 inviteInstCtrl.user.current_institution = splab;
-                httpBackend.expect('GET', 'api/search/institution?name="Institution Parent"&state=active,pending').respond({});
+                httpBackend.expect('GET', 'api/search/institution?value="Institution Parent"&state=active,pending').respond({});
                 inviteInstCtrl.checkInstInvite().then(function() {
                     expect(instService.searchInstitutions).toHaveBeenCalledWith(
                         inviteInstCtrl.invite.suggestion_institution_name,
@@ -218,7 +222,7 @@
                     invitee: "parent@gmail.com",
                     suggestion_institution_name : "Institution Parent",
                     type_of_invite : "institution_parent"};
-                httpBackend.expect('GET', 'api/search/institution?name="Institution Parent"&state=active,pending').respond(documents);
+                httpBackend.expect('GET', 'api/search/institution?value="Institution Parent"&state=active,pending').respond(documents);
                 inviteInstCtrl.checkInstInvite().then(function() {
                     expect(inviteInstCtrl.showDialog).toHaveBeenCalled();
                     done();

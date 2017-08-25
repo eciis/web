@@ -132,6 +132,7 @@
 
         function removePostKeyFromUser(key) {
             _.remove(postDetailsCtrl.user.liked_posts, foundPost => getKeyFromUrl(foundPost) === key);
+            AuthService.save();
         }
 
         function getKeyFromUrl(url) {
@@ -148,7 +149,7 @@
         };
 
         postDetailsCtrl.goToPost = function goToPost() {
-            $state.go('app.post', {postKey: postDetailsCtrl.post.key});
+             $state.go('app.post', {key: postDetailsCtrl.post.key});
         };
 
         postDetailsCtrl.getComments = function getComments() {
@@ -288,7 +289,7 @@
 
         postDetailsCtrl.isLongPostTimeline = function(text){
             var qtdChar = text.length;
-            return !postDetailsCtrl.isPostPage && qtdChar >= LIMIT_CHARACTERS_POST;        
+            return !postDetailsCtrl.isPostPage && qtdChar >= LIMIT_CHARACTERS_POST;
         };
 
         function adjustText(text){

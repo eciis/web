@@ -2,6 +2,7 @@
 """Invite Handler."""
 
 from google.appengine.ext import ndb
+import json
 
 from utils import login_required
 from handlers.base_handler import BaseHandler
@@ -12,6 +13,16 @@ from util.json_patch import JsonPatch
 
 class InviteHandler(BaseHandler):
     """Invite Handler."""
+
+    @json_response
+    @login_required
+    def get(self, user, key):
+        """Get invite of key passed."""
+        invite_key = ndb.Key(urlsafe=key)
+        invite = invite_key.get()
+        invite = invite.make()
+
+        self.response.write(json.dumps(invite))
 
     @login_required
     def delete(self, user, key):

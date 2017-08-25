@@ -7,7 +7,8 @@
         'ngAnimate',
         'ngFileUpload',
         'firebase',
-        'ngSanitize'
+        'ngSanitize',
+        'ngImgCrop'
     ]);
 
     app.config(function($mdIconProvider, $mdThemingProvider, $stateProvider, $urlMatcherFactoryProvider,

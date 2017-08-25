@@ -1,3 +1,5 @@
 <md-dialog flex flex-gt-md="40" layout="row">
-  <create-post flex user="controller.user" is-dialog="true" posts="controller.posts"></create-post>
+  <save-post flex is-dialog="true" posts="controller.posts" is-editing="controller.isEditing"
+    original-post="controller.originalPost">
+  </save-post>
 </md-dialog>

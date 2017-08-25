@@ -10,7 +10,7 @@
         service.compress = function compress(file, newSize) {
             var deferred = $q.defer();
 
-            if (isValidImage(file)) {
+            if (service.isValidImage(file)) {
                 service.readFile(file, function(source_img_obj) {
                     if (source_img_obj.width > newSize) {
                         deferred.resolve(compressImage(source_img_obj, file, newSize));
@@ -24,7 +24,7 @@
             return deferred.promise;
         };
 
-        function isValidImage(image) {
+        service.isValidImage = function isValidImage(image) {
             var jpgType = "image/jpeg";
             var pngType = "image/png";
             var maximumSize = 5242880; // 5Mb in bytes
@@ -38,7 +38,7 @@
             } else {
                 return false;
             }
-        }
+        };
 
         service.readFile = function(file, callback) {
             var fileReader = new FileReader();
@@ -95,6 +95,29 @@
             return deferred.promise;
         };
 
+        service.createImageFile = function createImageFile(source_img_obj, file, height, width, qualityImage) {
+            var DIMENSION_IMAGE = '2d';
+            var positionImage = 0;
+            var TYPE_IMAGE = file.type;
+
+            var cvs = document.createElement('canvas');
+            cvs.width = width;
+            cvs.height = height;
+            cvs.getContext(DIMENSION_IMAGE).drawImage(
+                source_img_obj,
+                positionImage,
+                positionImage,
+                cvs.width,
+                cvs.height);
+            var newImageData = cvs.toDataURL(TYPE_IMAGE, qualityImage);
+            var imageFile = new File([base64toBlob(
+                newImageData.split(',')[1],
+                TYPE_IMAGE)],
+                file.name, {type: TYPE_IMAGE});
+
+            return imageFile;
+        };
+
         /**
         * Function of convert image from base 64 to Blob
         * @param {string} base64Data - receive base 64 image
@@ -125,28 +148,12 @@
         function compressImage(source_img_obj, file, newSize) {
             var height = source_img_obj.height;
             var width = source_img_obj.width;
-            var fileProperties = file.name.split(".");
-            var INDEX_TYPE_IMAGE = 1;
-            var TYPE_IMAGE = 'image/' + fileProperties[INDEX_TYPE_IMAGE];
-            var DIMENSION_IMAGE = "2d";
             var sizeNewImage = newSize;
-            var positionImage = 0;
             var qualityImage = 0.7;
 
-            var cvs = document.createElement('canvas');
-            cvs.width = sizeNewImage;
-            cvs.height = sizeNewImage * (height / width);
-            cvs.getContext(DIMENSION_IMAGE).drawImage(
-                source_img_obj,
-                positionImage,
-                positionImage,
-                cvs.width,
-                cvs.height);
-            var newImageData = cvs.toDataURL(TYPE_IMAGE, qualityImage);
-            var compressedFile = new File([base64toBlob(
-                newImageData.split(',')[1],
-                TYPE_IMAGE)],
-                file.name, {type: TYPE_IMAGE});
+            var compressWidth = sizeNewImage;
+            var compressHeight = sizeNewImage * (height / width);
+            var compressedFile = service.createImageFile(source_img_obj, file, compressHeight, compressWidth, qualityImage);
 
             return compressedFile;
         }

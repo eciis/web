@@ -22,9 +22,10 @@
         http = $http;
 
         postCtrl = $controller('PostController', {
-            scope: scope, 
-            imageService : imageService, 
+            scope: scope,
+            imageService : imageService,
             $rootScope: rootScope,
+            $scope: scope
         });
 
         postCtrl.user = user;
@@ -90,7 +91,7 @@
             postCtrl.post = post;
             var newPost = new Post(postCtrl.post, postCtrl.user.current_institution.key);
             deffered.resolve(newPost);
-            postCtrl.createPost();
+            postCtrl.createPost([]);
             scope.$apply();
             expect(postService.createPost).toHaveBeenCalledWith(newPost);
             expect(postCtrl.clearPost).toHaveBeenCalled();
@@ -153,7 +154,7 @@
 
             var image = createImage(100);
             postCtrl.addImage(image);
-            postCtrl.createPost();
+            postCtrl.createPost([]);
             scope.$apply();
 
             expect(imageService.compress).toHaveBeenCalled();

@@ -7,7 +7,7 @@
             <div class="title">
                 <md-button ng-show="editInstCtrl.showButton()" ng-click="null" ng-model="editInstCtrl.file" ngf-pattern="'image/*'"
                            ngf-accept="'image/*'" ngf-max-size="5MB" class="md-raised"
-                           ngf-select="editInstCtrl.addImage(editInstCtrl.file)">
+                           ngf-select="editInstCtrl.cropImage(editInstCtrl.file)">
                     <b>Adicionar imagem</b>
                 </md-button>
                 <md-progress-linear ng-show="editInstCtrl.loading" md-mode="indeterminate" style="width: 14%; margin-left: auto; margin-right: auto"></md-progress-linear>
@@ -96,7 +96,7 @@
                 ng-model="editInstCtrl.newInstitution.email">
         </md-input-container>
         <md-input-container class="md-block">
-            <md-button ng-click="null" ng-model="editInstCtrl.file" ngf-pattern="'application/pdf'" ngf-accept="'application/pdf'" 
+            <md-button ng-click="null" ng-model="editInstCtrl.file" ngf-pattern="'application/pdf'" ngf-accept="'application/pdf'"
                 ngf-max-size="5MB" ngf-select="null" class="md-raised">
                 <md-icon>{{editInstCtrl.file? 'insert_drive_file': 'attach_file'}}</md-icon>
                 {{editInstCtrl.file? 'Portfólio adicionado': 'Adicionar Portfólio'}}

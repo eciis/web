@@ -1,7 +1,7 @@
 <!-- TIMELINE -->
 <div flex>
   <div ng-if="!institution">
-    <create-post flex user="user" is-dialog="false" posts="posts"></create-post>
+    <save-post flex is-dialog="false" posts="posts"></save-post>
   </div>
   <div layout="row" layout-align="center center" ng-if="timelineCtrl.showRefreshTimelineButton() && !institution" class="ng-if">
     <md-button flex md-colors="{background: 'teal-700'}" ng-click="timelineCtrl.load(posts)">

@@ -1,7 +1,7 @@
 'use strict';
 (function() {
     var app = angular.module("app");
-    app.controller("EditInstController", function EditInstController(AuthService, InstitutionService, $state,
+    app.controller("EditInstController", function EditInstController(AuthService, InstitutionService, CropImageService,$state,
             $mdToast, $mdDialog, $http, InviteService, ImageService, $rootScope, MessageService, PdfService, $q) {
 
         var editInstCtrl = this;
@@ -34,17 +34,7 @@
         };
 
         editInstCtrl.cropImage = function cropImage(image_file) {
-            $mdDialog.show({
-                controller: "CropImageController",
-                controllerAs: "cropImgCtrl",
-                templateUrl: 'imageUpload/crop_image.html',
-                parent: angular.element(document.body),
-                targetEvent: event,
-                clickOutsideToClose:true,
-                locals: {
-                    image_file : image_file
-                }
-            }).then(function success(croppedImage) {
+            CropImageService.cropImage(image_file).then(function success(croppedImage) {
                 editInstCtrl.addImage(croppedImage);
             }, function error() {
                 editInstCtrl.file = null;

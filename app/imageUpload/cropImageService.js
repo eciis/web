@@ -6,7 +6,7 @@
     app.service("CropImageService", function CropImageService($mdDialog, $q) {
         var service = this;
 
-        service.cropImage = function cropImage(image_file) {
+        service.crop = function crop(image_file) {
             var deferred = $q.defer();
 
             $mdDialog.show({

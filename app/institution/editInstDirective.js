@@ -34,7 +34,7 @@
         };
 
         editInstCtrl.cropImage = function cropImage(image_file) {
-            CropImageService.cropImage(image_file).then(function success(croppedImage) {
+            CropImageService.crop(image_file).then(function success(croppedImage) {
                 editInstCtrl.addImage(croppedImage);
             }, function error() {
                 editInstCtrl.file = null;

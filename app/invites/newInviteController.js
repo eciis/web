@@ -127,7 +127,7 @@
                     loadInstitution(institutionKey);
                 } else {
                     $state.go("app.home");
-                    MessageService.showToast("Esse já utilizou este convite.");
+                    MessageService.showToast("Você já utilizou este convite.");
                 }
             }, function error(response) {
                 MessageService.showToast(response.data.msg);

@@ -192,12 +192,12 @@ class Post(ndb.Model):
         return post.modify_post(post_dict, host)
 
     def modify_post(post, post_dict, host):
-        """Create personalized json if post was deleted or is sharing."""
+        """Create personalized json if post was deleted or is shared."""
         if(post.state == 'deleted'):
             post_dict['title'] = None
             post_dict['text'] = None
 
-        if(post.shared_post is not None):
+        if(post.shared_post):
             post_dict['shared_post'] = Post.make(post.shared_post.get(), host)
 
         return post_dict

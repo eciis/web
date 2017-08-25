@@ -60,7 +60,7 @@ class PostCollectionHandler(BaseHandler):
                         entity_type,
                         post.key.urlsafe())
 
-            if(post.shared_post is not None):
+            if(post.shared_post):
                 shared_post = ndb.Key(urlsafe=data['shared_post']).get()
 
                 entity_type = 'SHARED_POST'

@@ -1,7 +1,7 @@
 'use strict';
 
 (describe('Test ConfigProfileController', function() {
-    var configCtrl, httpBackend, deffered, scope, userService, createCrtl, state, mdToast, authService, imageService;
+    var configCtrl, httpBackend, deffered, scope, userService, createCrtl, state, mdToast, authService, imageService, mdDialog;
     var splab = {
         name: 'SPLAB',
         key: '987654321'
@@ -24,7 +24,8 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, $mdToast, UserService, AuthService, ImageService) {
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, $mdToast, $mdDialog,
+        UserService, AuthService, ImageService) {
         httpBackend = $httpBackend;
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);
@@ -33,6 +34,7 @@
         state = $state;
         imageService = ImageService;
         mdToast = $mdToast;
+        mdDialog = $mdDialog;
         deffered = $q.defer();
         userService = UserService;
 
@@ -178,6 +180,28 @@
             expect(imageService.compress).toHaveBeenCalled();
             expect(imageService.readFile).toHaveBeenCalled();
             expect(imageService.saveImage).toHaveBeenCalled();
+        });
+    });
+
+    describe('cropImage()', function() {
+        beforeEach(function() {
+            spyOn(mdDialog, 'show').and.callFake(function() {
+                return {
+                    then : function() {
+                        return "Image";
+                    }
+                };
+            });
+
+            spyOn(configCtrl, 'addImage').and.callFake(function(imageFile) {
+                return imageFile;
+            });
+        });
+
+        it('should crop image in config user', function() {
+            var image = createImage(100);
+            configCtrl.cropImage(image);
+            expect(mdDialog.show).toHaveBeenCalled();
         });
     });
 }));

@@ -49,7 +49,7 @@
                 }
             })
             .state("app.post", {
-                url: "/posts/:postKey",
+                url: "/posts/:key",
                 views: {
                     content: {
                         templateUrl: "post/post_page.html",
@@ -59,7 +59,7 @@
             })
             .state("app.manage_institution", {
                 abstract: true,
-                url: "/institution/:institutionKey/",
+                url: "/institution/:institutionKey",
                 views: {
                     content: {
                         templateUrl: "institution/management_institution_page.html",
@@ -121,7 +121,7 @@
                 }
             })
             .state("new_invite", {
-                url: "/institution/:institutionKey/:inviteKey/new_invite/:typeInvite",
+                url: "/:key/new_invite",
                 views: {
                     main: {
                         templateUrl: "invites/new_invite_page.html",
@@ -197,7 +197,7 @@
                         rejection.data.msg = "Sua sessão expirou!";
                     } else {
                         $state.go("signin");
-                    } 
+                    }
                 } else {
                     $state.go("error", {
                         "msg": rejection.data.msg || "Desculpa! Ocorreu um erro.",

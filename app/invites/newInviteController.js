@@ -3,26 +3,24 @@
 (function() {
    var app = angular.module('app');
 
-   app.controller('NewInviteController', function NewInviteController(InstitutionService, AuthService, UserService, InviteService, $state, $mdToast,
-    $mdDialog, MessageService) {
+   app.controller('NewInviteController', function NewInviteController(InstitutionService, AuthService, UserService, InviteService, $mdToast,
+    $mdDialog, MessageService, $state) {
         var newInviteCtrl = this;
 
         newInviteCtrl.institution = null;
 
-        newInviteCtrl.inviteKey = $state.params.inviteKey;
-    
-        var institutionKey = $state.params.institutionKey;
-
-        var typeOfInvite = $state.params.typeInvite;
+        newInviteCtrl.inviteKey = $state.params.key;
 
         newInviteCtrl.user = AuthService.getCurrentUser();
 
+        var institutionKey;
+
         newInviteCtrl.acceptInvite = function acceptInvite(event) {
-            if (typeOfInvite === "USER") {
+            if (newInviteCtrl.invite.type_of_invite === "USER") {
                 newInviteCtrl.addInstitution(event);
             } else {
                 newInviteCtrl.updateStubInstitution();
-            }  
+            }
         };
 
         newInviteCtrl.addInstitution =  function addInstitution(event) {
@@ -31,7 +29,7 @@
                 promise.then(function success() {
                     AuthService.reload().then(function() {
                         goHome();
-                        showAlert(event, newInviteCtrl.institution.name); 
+                        showAlert(event, newInviteCtrl.institution.name);
                    });
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
@@ -60,7 +58,7 @@
         };
 
         newInviteCtrl.isInviteUser = function isInviteUser(){
-            return typeOfInvite === "USER";
+            return newInviteCtrl.invite.type_of_invite === "USER";
         };
 
         newInviteCtrl.rejectInvite = function rejectInvite(event){
@@ -82,14 +80,14 @@
                 });
                 return promise;
         };
-        
+
 
         function deleteInvite() {
             var promise = InviteService.deleteInvite(newInviteCtrl.inviteKey);
             promise.then(function success() {
                 AuthService.reload().then(function() {
                     goHome();
-                });            
+                });
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
@@ -100,10 +98,9 @@
             $state.go("app.home");
         }
 
-        function loadInstitution() {
+        function loadInstitution(institutionKey) {
             InstitutionService.getInstitution(institutionKey).then(function success(response) {
                 newInviteCtrl.institution = response.data;
-                loadInvite();
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
@@ -123,11 +120,20 @@
         }
 
         function loadInvite(){
-            newInviteCtrl.invite = _.find(newInviteCtrl.user.invites, function(invite){
-                return invite.key === newInviteCtrl.inviteKey;
+            InviteService.getInvite(newInviteCtrl.inviteKey).then(function success(response) {
+                newInviteCtrl.invite = new Invite(response.data);
+                if(newInviteCtrl.invite.status === 'sent') {
+                    institutionKey = (newInviteCtrl.invite.type_of_invite === "USER") ? newInviteCtrl.invite.institution_key : newInviteCtrl.invite.stub_institution.key;
+                    loadInstitution(institutionKey);
+                } else {
+                    $state.go("app.home");
+                    MessageService.showToast("Você já utilizou este convite.");
+                }
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
             });
         }
 
-        loadInstitution();
+        loadInvite();
    });
 })();

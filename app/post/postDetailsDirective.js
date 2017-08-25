@@ -461,7 +461,7 @@
         })();
     });
     
-    app.controller("SharePostController", function SharePostController(user, post, $mdDialog, PostService, MessageService) {
+    app.controller("SharePostController", function SharePostController(user, post, $mdDialog, PostService, MessageService, $state) {
         var shareCtrl = this;
 
         var LIMIT_CHARACTERS_POST = 200;
@@ -475,14 +475,6 @@
 
         shareCtrl.newPost = new Post({}, shareCtrl.user.current_institution.key);
 
-        shareCtrl.isPostValid = function isPostValid() {
-            if (shareCtrl.user) {
-                return shareCtrl.newPost.isValid();
-            } else {
-                return false;
-            }
-        };
-
         shareCtrl.cancelDialog = function() {
             $mdDialog.cancel();
         };
@@ -494,19 +486,29 @@
         };
 
         shareCtrl.share = function() {
-            shareCtrl.newPost.sharedPost = shareCtrl.post.key;
-            if (shareCtrl.newPost.isValid()) {
-                PostService.createPost(shareCtrl.newPost).then(function success() {
-                    MessageService.showToast('Compartilhado com sucesso!');
-                    $mdDialog.hide();
-                }, function error(response) {
-                    $mdDialog.hide();
-                    MessageService.showToast(response.data.msg);
-                });
-            } else {
-                MessageService.showToast('Post inválido!');
-            }
+            shareCtrl.newPost.sharedPost = getOriginalPost(shareCtrl.post);
+            PostService.createPost(shareCtrl.newPost).then(function success() {
+                MessageService.showToast('Compartilhado com sucesso!');
+                $mdDialog.hide();
+            }, function error(response) {
+                $mdDialog.hide();
+                MessageService.showToast(response.data.msg);
+            });
+            
         };
+
+        shareCtrl.goToPost = function goToPost() {
+            $mdDialog.cancel();
+            $state.go('app.post', {postKey: shareCtrl.post.key});
+        };
+
+        function getOriginalPost(post){
+            if(post.share_post){
+                return post.share_post.key;
+            }
+            return post.key;
+            
+        }
 
         function adjustText(text){
             if(text.length > LIMIT_CHARACTERS_POST){

@@ -13,18 +13,6 @@
       </md-button>
     </md-card-header>
     <md-card-content layout="column">
-      <md-input-container>
-        <label>Título</label>
-        <input ng-model="sharePostCtrl.newPost.title" md-maxlength="100" maxlength="100" 
-        placeholder="Escreva aqui uma nova publicação">
-      </md-input-container>
-      <md-input-container ng-show="sharePostCtrl.newPost.title">
-        <label>Mensagem</label>
-        <textarea style="max-height: 180px;overflow-y:auto;resize:none;" ng-model="sharePostCtrl.newPost.text" 
-        rows="4" md-select-on-focus required="true">
-        </textarea>
-      </md-input-container>
-
       <md-card md-colors="{background: 'default-grey-100'}">
         <md-card-header>
           <md-card-avatar>
@@ -40,16 +28,16 @@
             <img class="md-card-image" style="border-radius: 3%;" ng-src="{{ sharePostCtrl.post.photo_url }}"/>
           </div>
           <p></p>
-          <span class="md-text hyperlink">{{ sharePostCtrl.post.title }}</span>
+          <a href class="md-text hyperlink" ng-click="sharePostCtrl.goToPost()">
+            <span>{{ sharePostCtrl.post.title }}</span>
+          </a>          
           <span class="md-subhead" ng-bind-html="sharePostCtrl.post.text"></span>
         </md-card-content>
       </md-card>
-
     </md-card-content>
-    <md-dialog-actions layout="row" ng-show="sharePostCtrl.newPost.title">
+    <md-dialog-actions layout="row">
       <span flex></span>
-      <md-button class="md-icon-button" ng-click="sharePostCtrl.share()" 
-       ng-disabled="!sharePostCtrl.isPostValid()">
+      <md-button class="md-icon-button" ng-click="sharePostCtrl.share()">
         <md-icon>send</md-icon>
       </md-button>
     </md-dialog-actions>

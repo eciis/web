@@ -31,8 +31,8 @@
             });
         }
 
-        configProfileCtrl.cropImage = function cropImage(image_file) {
-            CropImageService.crop(image_file).then(function success(croppedImage) {
+        configProfileCtrl.cropImage = function cropImage(imageFile) {
+            CropImageService.crop(imageFile).then(function success(croppedImage) {
                 configProfileCtrl.addImage(croppedImage);
             }, function error() {
                 configProfileCtrl.file = null;

@@ -4,16 +4,15 @@
     var app = angular.module('app');
 
     app.controller('PostDetailsController', function(PostService, AuthService, CommentService, $mdToast, $state,
-        $mdDialog, NotificationService, MessageService) {
+        $mdDialog, NotificationService, MessageService, $q) {
         var postDetailsCtrl = this;
+
+        var LIMIT_CHARACTERS_POST = 1000;
 
         postDetailsCtrl.showLikes = false;
         postDetailsCtrl.showComments = false;
-
         postDetailsCtrl.savingComment = false;
         postDetailsCtrl.savingLike = false;
-
-        var LIMIT_CHARACTERS_POST = 1000;
 
         postDetailsCtrl.user = AuthService.getCurrentUser();
 
@@ -71,7 +70,15 @@
             return promise;
         };
 
-        postDetailsCtrl.editPost = function editPost(post, event) {
+        postDetailsCtrl.editPost = function editPost(event) {
+            tryEditPost().then(function success() {
+                editPostDialog(event);
+            }, function error() {
+                MessageService.showToast("Não é possível editar o post atualmente");
+            });
+        };
+
+        function editPostDialog(event) {
             $mdDialog.show({
                 controller: "EditPostController",
                 controllerAs: "editPostCtrl",
@@ -81,14 +88,35 @@
                 clickOutsideToClose:true,
                 locals: {
                     user : postDetailsCtrl.user,
-                    post: post
+                    post: postDetailsCtrl.post
                 }
             }).then(function success(editedPost) {
                 postDetailsCtrl.post.title = editedPost.title;
                 postDetailsCtrl.post.text = editedPost.text;
                 postDetailsCtrl.post.photo_url = editedPost.photo_url;
             });
-        };
+        }
+
+        function tryEditPost() {
+            var deferred = $q.defer();
+            PostService.getPost(postDetailsCtrl.post.key).then(function success(post) {
+                postDetailsCtrl.post = post;
+                if(isPostDirty()){
+                    deferred.reject();
+                } else {
+                    deferred.resolve();
+                }
+            }, function error(response) {
+                deferred.reject(response);
+            });
+            return deferred.promise;
+        }
+
+        function isPostDirty() {
+            var hasComments = postDetailsCtrl.post.number_of_comments > 0;
+            var hasLikes = postDetailsCtrl.post.number_of_likes > 0;
+            return hasComments || hasLikes;
+        }
 
         function likePost() {
             postDetailsCtrl.savingLike = true;
@@ -326,7 +354,8 @@
         };
     });
 
-    app.controller("EditPostController", function PostController(user, post, $mdDialog, PostService, AuthService, $mdToast, MessageService, ImageService, $rootScope, $q) {
+    app.controller("EditPostController", function PostController(user, post, $mdDialog, PostService, AuthService, 
+        $mdToast, MessageService, ImageService, $rootScope, $q) {
         var postCtrl = this;
 
         postCtrl.user = user;

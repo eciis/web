@@ -64,8 +64,9 @@
     <md-button class="post-count md-icon-button md-primary md-hue-1" ng-click="postDetailsCtrl.getLikes()">
       {{ postDetailsCtrl.post.number_of_likes }}
     </md-button>
-    <md-button class="md-icon-button" aria-label="editar" ng-click="postDetailsCtrl.editPost(postDetailsCtrl.post)"
-    ng-if="postDetailsCtrl.showButtonEdit(postDetailsCtrl.post)">
+    <md-button class="md-icon-button" aria-label="editar" ng-click="postDetailsCtrl.editPost()"
+      ng-if="postDetailsCtrl.showButtonEdit(postDetailsCtrl.post)" 
+      ng-disabled="postDetailsCtrl.post.number_of_comments || postDetailsCtrl.post.number_of_likes">
       <md-icon>edit</md-icon>
     </md-button>
   </md-card-actions>

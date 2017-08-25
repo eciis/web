@@ -15,6 +15,7 @@ from custom_exceptions.entityException import EntityException
 
 from models.institution import Institution
 from util.json_patch import JsonPatch
+from service_entities import remove_institution_from_users
 
 
 from handlers.base_handler import BaseHandler
@@ -149,10 +150,12 @@ class InstitutionHandler(BaseHandler):
 
     @login_required
     @is_admin
+    @ndb.transactional(xg=True)
     def delete(self, user, institution_key):
         """Handle DELETE Requests."""
         remove_hierarchy = self.request.get('removeHierarchy')
         institution = ndb.Key(urlsafe=institution_key).get()
         Utils._assert(not type(institution) is Institution,
                       "Key is not an institution", EntityException)
-        institution.remove_institution(remove_hierarchy)
+        institution.remove_institution(remove_hierarchy, user)
+        remove_institution_from_users(remove_hierarchy, institution_key)

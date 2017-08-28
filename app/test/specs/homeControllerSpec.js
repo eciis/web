@@ -24,7 +24,7 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, InstitutionService, 
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, InstitutionService,
             PostService, $mdDialog, $state, AuthService) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
@@ -45,7 +45,7 @@
             });
         };
         homeCtrl = createCtrl();
-        httpBackend.flush();   
+        httpBackend.flush();
     }));
 
     afterEach(function() {
@@ -55,7 +55,7 @@
 
     describe('HomeController properties', function() {
 
-        it('should exist a user and his name is Tiago', function() {        
+        it('should exist a user and his name is Tiago', function() {
             expect(homeCtrl.user.name).toEqual('Tiago');
         });
 
@@ -72,7 +72,7 @@
             });
         });
 
-        it('should exist an institution in institutions array', function() { 
+        it('should exist an institution in institutions array', function() {
             expect(homeCtrl.followingInstitutions.length).toBe(1);
         });
 
@@ -96,7 +96,7 @@
                 expect(state.go).toHaveBeenCalledWith('app.institution', {institutionKey: '123456789'});
             });
         });
-        
+
         describe('newPost()', function() {
 
             it('should call mdDialog.show()', function() {

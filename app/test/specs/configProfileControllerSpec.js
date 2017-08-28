@@ -187,8 +187,8 @@
         beforeEach(function() {
             spyOn(mdDialog, 'show').and.callFake(function() {
                 return {
-                    then : function() {
-                        return "Image";
+                    then : function(callback) {
+                        return callback("Image");
                     }
                 };
             });

@@ -341,9 +341,9 @@
             }
         };
     });
-    });
     
-    app.controller("SharePostController", function SharePostController(user, post, $mdDialog, PostService, MessageService, $state) {
+    app.controller("SharePostController", function SharePostController(user, post, $mdDialog, PostService,
+     MessageService, $state) {
         var shareCtrl = this;
 
         var LIMIT_CHARACTERS_POST = 200;
@@ -368,7 +368,7 @@
         };
 
         shareCtrl.share = function() {
-            shareCtrl.newPost.sharedPost = getOriginalPost(shareCtrl.post);
+            shareCtrl.newPost.shared_post = getOriginalPost(shareCtrl.post);
             PostService.createPost(shareCtrl.newPost).then(function success() {
                 MessageService.showToast('Compartilhado com sucesso!');
                 $mdDialog.hide();
@@ -380,7 +380,7 @@
         };
 
         shareCtrl.goToPost = function goToPost() {
-            $mdDialog.cancel();
+            shareCtrl.cancelDialog();
             $state.go('app.post', {postKey: shareCtrl.post.key});
         };
 
@@ -398,4 +398,5 @@
             }
             return text.replace(URL_PATTERN,REPLACE_URL);
         }
+    });
 })();

@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller('PostDetailsController', function(PostService, AuthService, CommentService, $mdToast, $state,
-        $mdDialog, NotificationService, MessageService, $q) {
+        $mdDialog, NotificationService, MessageService) {
         var postDetailsCtrl = this;
 
         var LIMIT_CHARACTERS_POST = 1000;
@@ -56,8 +56,11 @@
         };
 
         postDetailsCtrl.showButtonEdit = function showButtonDeleted() {
-            return postDetailsCtrl.isPostAuthor() &&
-                !postDetailsCtrl.isDeleted();
+            var hasNoComments = postDetailsCtrl.post.number_of_comments === 0;
+            var hasNoLikes = postDetailsCtrl.post.number_of_likes === 0;
+
+            return postDetailsCtrl.isPostAuthor() && !postDetailsCtrl.isDeleted() &&
+                hasNoComments && hasNoLikes;
         };
 
         postDetailsCtrl.likeOrDislikePost = function likeOrDislikePost() {
@@ -71,14 +74,6 @@
         };
 
         postDetailsCtrl.editPost = function editPost(event) {
-            tryEditPost().then(function success() {
-                editPostDialog(event);
-            }, function error() {
-                MessageService.showToast("Não é possível editar o post atualmente");
-            });
-        };
-
-        function editPostDialog(event) {
             $mdDialog.show({
                 controller: function DialogController() {},
                 controllerAs: "controller",
@@ -96,28 +91,7 @@
                 postDetailsCtrl.post.text = editedPost.text;
                 postDetailsCtrl.post.photo_url = editedPost.photo_url;
             }, function error() {});
-        }
-
-        function tryEditPost() {
-            var deferred = $q.defer();
-            PostService.getPost(postDetailsCtrl.post.key).then(function success(post) {
-                postDetailsCtrl.post = post;
-                if(isPostDirty()){
-                    deferred.reject();
-                } else {
-                    deferred.resolve();
-                }
-            }, function error(response) {
-                deferred.reject(response);
-            });
-            return deferred.promise;
-        }
-
-        function isPostDirty() {
-            var hasComments = postDetailsCtrl.post.number_of_comments > 0;
-            var hasLikes = postDetailsCtrl.post.number_of_likes > 0;
-            return hasComments || hasLikes;
-        }
+        };
 
         function likePost() {
             postDetailsCtrl.savingLike = true;
@@ -217,11 +191,11 @@
             }
         };
 
-        var addComment = function addComment(post, comment) {
+        function addComment(post, comment) {
             var postComments = postDetailsCtrl.post.data_comments;
             postComments.push(comment);
             post.number_of_comments += 1;
-        };
+        }
 
         postDetailsCtrl.createComment = function createComment() {
             var newComment = postDetailsCtrl.newComment;

@@ -93,8 +93,8 @@ class Utils():
         return entity
 
     @staticmethod
-    def getJSONError(status_error, mensage):
-        error = {'status_error': status_error, 'mensage': mensage}
+    def getJSONError(status_error, message):
+        error = {'status_error': status_error, 'message': message}
         return json.dumps(error)
 
     @staticmethod

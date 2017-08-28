@@ -79,6 +79,10 @@ class PostHandler(BaseHandler):
         try:
             post = ndb.Key(urlsafe=url_string).get()
 
+            Utils._assert(post.is_dirty(),
+                          "The user can not update this post",
+                          NotAuthorizedException)
+
             """Apply patch."""
             JsonPatch.load(data, post)
 

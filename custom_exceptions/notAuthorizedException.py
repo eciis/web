@@ -4,7 +4,7 @@
 class NotAuthorizedException(Exception):
     """Not Authorized Exception."""
 
-    def __init__(self, message=None):
+    def __init__(self, msg=None):
         """Init method."""
         super(NotAuthorizedException, self).__init__(
-            message or 'The user is not authorized to do this procedure.')
+            msg or 'The user is not authorized to do this procedure.')

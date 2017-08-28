@@ -22,12 +22,14 @@
     // Post of e-CIS by Maiana
     var post = new Post({'title': 'Shared Post',
                          'text': 'This post will be shared',
-                         'photo_url': null
+                         'photo_url': null,
+                         'key': '12300'
                         },
                         institutions[1].institution_key);
 
     // Post of Splab by Maiana
-    var newPost = new Post( {'share_post': post}, maiana.current_institution.key);
+    var newPost = new Post( {}, maiana.current_institution.key);
+    newPost.shared_post = post.key;
 
     beforeEach(module('app'));
 
@@ -38,14 +40,16 @@
         rootScope = $rootScope;
         mdDialog = $mdDialog;
         state = $state;
-        deffered = $q;
+        deffered = $q.defer();
         postService = PostService;
-
+        httpBackend.when('GET', "main/main.html").respond(200);
+        httpBackend.when('GET', "home/home.html").respond(200);
         AuthService.login(maiana);
 
         shareCtrl = $controller('SharePostController', {scope: scope, 
                                                         user: maiana,
                                                         post: post});
+        httpBackend.flush();
     }));
 
     afterEach(function() {
@@ -79,6 +83,18 @@
             spyOn(state, 'go').and.callThrough();
             shareCtrl.goToPost();
             expect(state.go).toHaveBeenCalledWith('app.post', Object({postKey: shareCtrl.post.key}));
+        });
+    });
+
+    describe('share()', function() {
+        it('Should call state.go', function() {
+            spyOn(postService, 'createPost').and.returnValue(deffered.promise);
+            spyOn(mdDialog, 'hide');
+            deffered.resolve(newPost);
+            shareCtrl.share();
+            scope.$apply();
+            expect(postService.createPost).toHaveBeenCalledWith(newPost);
+            expect(mdDialog.hide).toHaveBeenCalled();
         });
     });
 }));

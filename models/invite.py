@@ -33,6 +33,11 @@ class Invite(PolyModel):
     # Value is None for invite the User
     stub_institution_key = ndb.KeyProperty(kind="Institution")
 
+    invite_type = ndb.StringProperty(choices=set([
+        'invite',
+        'request'
+    ]))
+
     @staticmethod
     def create(data, invite):
         """Create a post and check required fields."""
@@ -68,7 +73,11 @@ class Invite(PolyModel):
         entity_type -- type of notification.
         Case not receive use invite type.
         """
-        user_found = User.query(User.email == self.invitee).fetch(1)
+        if self.invite_type == 'invite':
+            user_found = User.query(User.email == self.invitee).fetch(1)
+        else:
+            user_found = [ndb.key(User, self.invitee).get()]
+
         entity_type = entity_type or 'INVITE'
 
         if user_found:

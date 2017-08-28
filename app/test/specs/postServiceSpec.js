@@ -125,6 +125,6 @@
             expect($http.patch).toHaveBeenCalled();
             expect($http.patch).toHaveBeenCalledWith(POSTS_URI + '/' + posts[0].key, patch);
             expect(result.status).toEqual(400);
-            expect(result.data.msg).toEqual("Operation invalid");
+            expect(result.data.msg).toEqual("Você não tem permissão para realizar esta operação!");
         });
 }));

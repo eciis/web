@@ -10,7 +10,7 @@
             "auth/email-already-in-use": "Email informado já está cadastrado.",
             "auth/wrong-password": "Senha incorreta ou usuário não possui senha.",
             "auth/user-not-found": "Usuário não existe.",
-            "Error! The institution has been deleted": "A instituição foi deletada."
+            "Error! The institution has been deleted": "A instituição foi removida."
         };
 
         service.showToast = function showToast(message) {

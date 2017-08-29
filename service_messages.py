@@ -6,7 +6,7 @@ def send_message_notification(user_key, message, entity_type, entity_key):
     """Method of send notification.
 
     Keyword arguments:
-    user_key -- key of user that did the action.
+    user_key -- key of user that will receive notification.
     messagem -- message of notification.
     entity_type -- type of notification.
     entity_key -- entity key of type invite.
@@ -21,7 +21,6 @@ def send_message_notification(user_key, message, entity_type, entity_key):
             'entity_key': entity_key
         }
     )
-
 
 def send_message_email(invitee, body):
     """Method of send email.

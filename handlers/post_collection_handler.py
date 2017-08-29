@@ -34,7 +34,7 @@ class PostCollectionHandler(BaseHandler):
         institution_key = data['institution']
 
         Utils._assert(not user.has_permission("publish_post", institution_key),
-                "You don't have permission to publish post.", NotAuthorizedException)
+                      "You don't have permission to publish post.", NotAuthorizedException)
 
         institution = ndb.Key(urlsafe=institution_key).get()
 
@@ -51,7 +51,7 @@ class PostCollectionHandler(BaseHandler):
             user.put()
 
             entity_type = 'POST'
-            message = {'type': 'POST', 'from': user.name.encode('utf8'), 'on': post.title.encode('utf8')}
+            message = {'type': 'POST', 'from': user.name.encode('utf8')}
             for follower in institution.followers:
                 if follower != user.key:
                     send_message_notification(
@@ -59,6 +59,17 @@ class PostCollectionHandler(BaseHandler):
                         json.dumps(message),
                         entity_type,
                         post.key.urlsafe())
+
+            if(post.shared_post):
+                shared_post = ndb.Key(urlsafe=data['shared_post']).get()
+
+                entity_type = 'SHARED_POST'
+                message = {'type': entity_type,
+                           'from': user.name.encode('utf8')}
+                send_message_notification(shared_post.author.urlsafe(),
+                                          json.dumps(message),
+                                          entity_type,
+                                          post.key.urlsafe())
 
             self.response.write(json.dumps(Post.make(post, self.request.host)))
         except Exception as error:

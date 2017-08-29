@@ -97,11 +97,11 @@ class Like(ndb.Model):
 class Post(ndb.Model):
     """Model of a post."""
 
-    title = ndb.StringProperty(required=True)
+    title = ndb.StringProperty()
 
     photo_url = ndb.StringProperty()
 
-    text = ndb.TextProperty(required=True)
+    text = ndb.TextProperty()
 
     # user who is the author
     author = ndb.KeyProperty(kind="User", required=True)
@@ -134,17 +134,25 @@ class Post(ndb.Model):
     # Images uploaded
     uploaded_images = ndb.StringProperty(repeated=True)
 
+    # When post is shared post
+    shared_post = ndb.KeyProperty(kind="Post")
+
     @staticmethod
     def create(data, author_key, institution_key):
         """Create a post and check required fields."""
-        if not data['title']:
-            raise FieldException("Title can not be empty")
-        if not data['text']:
-            raise FieldException("Text can not be empty")
         post = Post()
-        post.title = data['title']
+
+        if data.get('shared_post') is None:
+            if not data['title']:
+                raise FieldException("Title can not be empty")
+            if not data['text']:
+                raise FieldException("Text can not be empty")
+        else:
+            post.shared_post = ndb.Key(urlsafe=data["shared_post"])
+
+        post.title = data.get('title')
         post.photo_url = data.get('photo_url')
-        post.text = data['text']
+        post.text = data.get('text')
         post.last_modified_by = author_key
         post.author = author_key
         post.institution = institution_key
@@ -181,14 +189,16 @@ class Post(ndb.Model):
             'institution_key': institution.key.urlsafe(),
             'key': post.key.urlsafe()
         }
-        return post.modify_post(post_dict)
+        return post.modify_post(post_dict, host)
 
-    def modify_post(post, post_dict):
-        """Create personalized json if post was deleted."""
+    def modify_post(post, post_dict, host):
+        """Create personalized json if post was deleted or is shared."""
         if(post.state == 'deleted'):
             post_dict['title'] = None
             post_dict['text'] = None
-            post_dict['photo_url'] = None
+
+        if(post.shared_post):
+            post_dict['shared_post'] = Post.make(post.shared_post.get(), host)
 
         return post_dict
 

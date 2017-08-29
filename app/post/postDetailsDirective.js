@@ -174,8 +174,8 @@
             return key;
         }
 
-        postDetailsCtrl.goToInstitution = function goToInstitution() {
-            $state.go('app.institution', {institutionKey: postDetailsCtrl.post.institution_key});
+        postDetailsCtrl.goToInstitution = function goToInstitution(institutionKey) {
+            $state.go('app.institution', {institutionKey: institutionKey});
         };
 
         postDetailsCtrl.goToPost = function goToPost(post) {

@@ -79,21 +79,21 @@
         configProfileCtrl.removeInstitution = function removeInstitution(event, institution) {
             if (!isAdmin(institution.key)) {
                 var confirm = $mdDialog.confirm();
-                    confirm
-                        .clickOutsideToClose(false)
-                        .title('Remover vínculo com ' + institution.name)
-                        .textContent(hasMoreThanOneInstitution() ? HAS_MORE_THAN_ONE_INSTITUTION_MSG : HAS_ONLY_ONE_INSTITUTION_MSG)
-                        .ariaLabel('Remover instituicao')
-                        .targetEvent(event)
-                        .ok('Sim')
-                        .cancel('Não');
-                        var promise = $mdDialog.show(confirm);
-                    promise.then(function() {
-                        deleteInstitution(institution.key);
-                    }, function() {
-                        MessageService.showToast('Cancelado');
-                    });
-                    return promise;
+                confirm
+                    .clickOutsideToClose(false)
+                    .title('Remover vínculo com ' + institution.name)
+                    .textContent(hasMoreThanOneInstitution() ? HAS_MORE_THAN_ONE_INSTITUTION_MSG : HAS_ONLY_ONE_INSTITUTION_MSG)
+                    .ariaLabel('Remover instituicao')
+                    .targetEvent(event)
+                    .ok('Sim')
+                    .cancel('Não');
+                var promise = $mdDialog.show(confirm);
+                promise.then(function() {
+                    deleteInstitution(institution.key);
+                }, function() {
+                    MessageService.showToast('Cancelado');
+                });
+                return promise;
             } else {
                 MessageService.showToast('Desvínculo não permitido. Você é administrador dessa instituição.');
             }
@@ -124,22 +124,22 @@
         configProfileCtrl.deleteAccount = function deleteAccount(event) {
             if (!isAdminOfAnyInstitution()) {
                 var confirm = $mdDialog.confirm();
-                    confirm
-                        .clickOutsideToClose(false)
-                        .title('Excluir conta')
-                        .textContent('Ao excluir sua conta você não poderá mais acessar o sistema, exceto por meio de novo convite.' +
-                                ' Deseja realmente excluir sua conta?')
-                        .ariaLabel('Excluir conta')
-                        .targetEvent(event)
-                        .ok('Sim')
-                        .cancel('Não');
-                        var promise = $mdDialog.show(confirm);
-                    promise.then(function() {
-                        configProfileCtrl.newUser.state = 'inactive';
-                        deleteUser();
-                    }, function() {
-                        MessageService.showToast('Cancelado');
-                    });
+                confirm
+                    .clickOutsideToClose(false)
+                    .title('Excluir conta')
+                    .textContent('Ao excluir sua conta você não poderá mais acessar o sistema, exceto por meio de novo convite.' +
+                            ' Deseja realmente excluir sua conta?')
+                    .ariaLabel('Excluir conta')
+                    .targetEvent(event)
+                    .ok('Sim')
+                    .cancel('Não');
+                var promise = $mdDialog.show(confirm);
+                promise.then(function() {
+                    configProfileCtrl.newUser.state = 'inactive';
+                    deleteUser();
+                }, function() {
+                    MessageService.showToast('Cancelado');
+                });
                 return promise;
             } else {
                 MessageService.showToast('Não é possível excluir sua conta enquanto você for administrador de uma instituição.');

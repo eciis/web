@@ -43,6 +43,14 @@ def makeUser(user, request):
     return user_json
 
 
+def remove_user_from_institutions(user):
+    """Remove user from all your institutions."""
+    for institution_key in user.institutions:
+        institution = institution_key.get()
+        institution.remove_member(user)
+        institution.unfollow(user.key)
+
+
 class UserHandler(BaseHandler):
     """User Handler."""
 
@@ -96,6 +104,10 @@ class UserHandler(BaseHandler):
 
         """Apply patch."""
         JsonPatch.load(data, user)
+
+        if(user.state == 'inactive'):
+            remove_user_from_institutions(user)
+            user.disable_account()
 
         """Update user."""
         user.put()

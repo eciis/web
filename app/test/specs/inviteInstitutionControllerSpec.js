@@ -89,7 +89,7 @@
                 spyOn(instService, 'searchInstitutions').and.callThrough();
                 spyOn(inviteinstitutionCtrl, 'sendInstInvite');
                 inviteinstitutionCtrl.user.current_institution = splab;
-                httpBackend.expect('GET', 'api/search/institution?name="New Institution"&state=active,pending').respond({});
+                httpBackend.expect('GET', 'api/search/institution?value="New Institution"&state=active,pending').respond({});
                 inviteinstitutionCtrl.checkInstInvite().then(function() {
                     var testingInvite = new Invite(invite, 'INSTITUTION', splab.key);
                     expect(instService.searchInstitutions).toHaveBeenCalledWith(
@@ -104,7 +104,7 @@
             it('should call showDialog()', function(done) {
                 var documents = [{name: splab.name, id: splab.key}];
                 spyOn(inviteinstitutionCtrl, 'showDialog');
-                httpBackend.expect('GET', 'api/search/institution?name="New Institution"&state=active,pending').respond(documents);
+                httpBackend.expect('GET', 'api/search/institution?value="New Institution"&state=active,pending').respond(documents);
                 inviteinstitutionCtrl.checkInstInvite().then(function() {
                     expect(inviteinstitutionCtrl.showDialog).toHaveBeenCalled();
                     done();

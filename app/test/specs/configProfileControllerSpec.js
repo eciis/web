@@ -2,7 +2,7 @@
 
 (describe('Test ConfigProfileController', function() {
     var configCtrl, httpBackend, deffered, scope, userService, createCrtl, state,
-    mdToast, authService, imageService, mdDialog;
+    mdToast, authService, imageService, mdDialog, cropImageService;
     
     var splab = {
         name: 'SPLAB',
@@ -29,7 +29,7 @@
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, 
-        $mdToast, $mdDialog, UserService, AuthService, ImageService) {
+        $mdToast, $mdDialog, UserService, AuthService, ImageService, CropImageService) {
         
         httpBackend = $httpBackend;
         httpBackend.when('GET', 'main/main.html').respond(200);
@@ -42,6 +42,7 @@
         mdDialog = $mdDialog;
         deffered = $q.defer();
         userService = UserService;
+        cropImageService = CropImageService;
 
         authService = AuthService;
 
@@ -54,7 +55,8 @@
                     scope: scope,
                     authService: authService,
                     userService: userService,
-                    imageService: imageService
+                    imageService: imageService,
+                    cropImageService : cropImageService
                 });
         };
         configCtrl = createCrtl();
@@ -185,6 +187,40 @@
             expect(imageService.compress).toHaveBeenCalled();
             expect(imageService.readFile).toHaveBeenCalled();
             expect(imageService.saveImage).toHaveBeenCalled();
+        });
+    });
+
+    describe('cropImage()', function() {
+        beforeEach(function() {
+            var image = createImage(100);
+
+            spyOn(cropImageService, 'crop').and.callFake(function() {
+                return {
+                    then : function(callback) {
+                        return callback("Image");
+                    }
+                };
+            });
+
+            spyOn(imageService, 'compress').and.callFake(function() {
+                return {
+                    then: function(callback) {
+                        return callback(image);
+                    }
+                };
+            });
+
+            spyOn(imageService, 'readFile').and.callFake(function() {
+                configCtrl.newUser.photo_url = "Base64 data of photo";
+            });
+        });
+
+        it('should crop image in config user', function() {
+            spyOn(configCtrl, 'addImage');
+            var image = createImage(100);
+            configCtrl.cropImage(image);
+            expect(cropImageService.crop).toHaveBeenCalled();
+            expect(configCtrl.addImage).toHaveBeenCalled();
         });
     });
 

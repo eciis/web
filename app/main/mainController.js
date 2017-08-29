@@ -128,10 +128,8 @@
                 var invitePending = mainCtrl.user.getPendingInvitation();
 
                 if (invitePending) {
-                    var institutionKey = (invitePending.type_of_invite === "USER") ? invitePending.institution_key : invitePending.stub_institution.key;
                     var inviteKey = invitePending.key;
-                    var type = invitePending.type_of_invite;
-                    $state.go("new_invite", {institutionKey: institutionKey, inviteKey: inviteKey, typeInvite: type});
+                    $state.go("new_invite", {key: inviteKey});
                 } else if (isInactive()) {
                     $state.go("user_inactive");
                 } else if (mainCtrl.user.name === 'Unknown') {

@@ -12,11 +12,11 @@
           <div layout-gt-sm="column" layout-padding layout-align="center center">
             <img style="border-radius: 50%; " ng-src="{{ configProfileCtrl.newUser.photo_url }}" width="100px" height="100px" />
           <div>
-            <md-button ng-show="configProfileCtrl.showButton()" ng-click="null" ng-model="configProfileCtrl.file" ngf-pattern="'image/*'"
-            ngf-accept="'image/*'" ngf-max-size="5MB"
-            ngf-select="configProfileCtrl.addImage(configProfileCtrl.file)">
-            <b>Adicionar imagem</b>
-            </md-button>
+              <md-button ng-show="configProfileCtrl.showButton()" ng-click="null" ng-model="configProfileCtrl.file" ngf-pattern="'image/*'"
+                    ngf-accept="'image/*'" ngf-max-size="5MB"
+                    ngf-select="configProfileCtrl.cropImage(configProfileCtrl.file)">
+                  <b>Adicionar imagem</b>
+              </md-button>
           </div>
           <md-progress-linear ng-show="configProfileCtrl.loading" md-mode="indeterminate" style="width: 20%"></md-progress-linear>
           <div layout-gt-sm="row">

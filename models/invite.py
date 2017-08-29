@@ -45,10 +45,7 @@ class Invite(PolyModel):
     def sendInvite(self, user, host):
         """Send invite."""
         self.send_email(host)
-        """TODO: 17/08/2017 @author:Mayza Nunes
-        Send notifications of invite, only when the
-        client part of invites be done"""
-        #self.send_notification(user)
+        self.send_notification(user)
 
     def send_email(self, host, body=None):
         """Method of send email of invite user."""
@@ -77,7 +74,7 @@ class Invite(PolyModel):
         if user_found:
             invitee = user_found[0]
             message = json.dumps({
-                'from': user.name, 'type': 'invite'
+                'from': user.name, 'type': 'INVITE'
             })
 
             send_message_notification(

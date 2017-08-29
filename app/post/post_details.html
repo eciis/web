@@ -19,7 +19,7 @@
   <md-card-title ng-if="!postDetailsCtrl.isDeleted()">
     <md-card-title-text>
       <a href class="md-title hyperlink" ng-click="postDetailsCtrl.goToPost()">
-        <span class="md-headline">{{postDetailsCtrl.post.title}}</span>
+        <span class="md-headline break">{{postDetailsCtrl.post.title}}</span>
       </a>
     </md-card-title-text>
   </md-card-title>
@@ -32,7 +32,7 @@
       </p>
     </div>
     <div ng-if="!postDetailsCtrl.isDeleted()">
-        <p ng-bind-html="postDetailsCtrl.recognizeUrl(postDetailsCtrl.post).text">
+        <p ng-bind-html="postDetailsCtrl.recognizeUrl(postDetailsCtrl.post).text" class="break">
         {{postDetailsCtrl.recognizeUrl(postDetailsCtrl.post).text}}
         </p>
         <div layout="row" layout-align="end-center">

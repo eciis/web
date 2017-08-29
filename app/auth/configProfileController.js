@@ -4,7 +4,8 @@
     var app = angular.module("app");
 
     app.controller("ConfigProfileController", function ConfigProfileController($state, InstitutionService,
-            AuthService, UserService, ImageService, $rootScope, $mdToast, $q, MessageService, $mdDialog) {
+        CropImageService, AuthService, UserService, ImageService, $rootScope, $mdToast, $q, MessageService, $mdDialog) {
+
         var configProfileCtrl = this;
 
         // Variable used to observe the changes on the user model.
@@ -40,6 +41,14 @@
                 configProfileCtrl.newUser.photo_url = image.src;
             });
         }
+
+        configProfileCtrl.cropImage = function cropImage(imageFile) {
+            CropImageService.crop(imageFile).then(function success(croppedImage) {
+                configProfileCtrl.addImage(croppedImage);
+            }, function error() {
+                configProfileCtrl.file = null;
+            });
+        };
 
         configProfileCtrl.finish = function finish() {
             if (configProfileCtrl.photo_user) {

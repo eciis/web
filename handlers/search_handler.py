@@ -16,8 +16,8 @@ class SearchHandler(BaseHandler):
     @login_required
     def get(self, user):
         """Handle GET Requests."""
-        institution = self.request.get('name')
+        value = self.request.get('value')
         state = self.request.get('state')
         self.response.write(
-            json.dumps(search_module.getDocuments(institution, state))
+            json.dumps(search_module.getDocuments(value, state))
         )

@@ -99,7 +99,8 @@
                 postDetailsCtrl.post.number_of_likes += 1;
                 postDetailsCtrl.savingLike = false;
                 postDetailsCtrl.getLikes(postDetailsCtrl.post);
-            }, function error() {
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
                 $state.go('app.home');
                 postDetailsCtrl.savingLike = false;
             });

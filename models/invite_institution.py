@@ -2,6 +2,7 @@
 from invite import Invite
 from models.institution import Institution
 from custom_exceptions.fieldException import FieldException
+from models.user import User
 
 
 class InviteInstitution(Invite):
@@ -60,7 +61,12 @@ class InviteInstitution(Invite):
     def send_notification(self, user):
         """Method of send notification of invite institution."""
         entity_type = 'INSTITUTION'
-        super(InviteInstitution, self).send_notification(user, entity_type)
+
+        user_found = User.query(User.email == self.invitee).fetch(1)
+
+        if user_found:
+            invitee = user_found[0]
+            super(InviteInstitution, self).send_notification(user, invitee.key.urlsafe(), entity_type)
 
     def make(self):
         """Create json of invite to institution."""

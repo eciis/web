@@ -65,7 +65,7 @@ class Invite(PolyModel):
             body
         )
 
-    def send_notification(self, user, entity_type=None):
+    def send_notification(self, user, receiver_key, entity_type=None):
         """Method of send notification of invite user.
 
         Keyword arguments:
@@ -73,22 +73,18 @@ class Invite(PolyModel):
         entity_type -- type of notification.
         Case not receive use invite type.
         """
-        user_found = User.query(User.email == self.invitee).fetch(1)
-
         entity_type = entity_type or 'INVITE'
 
-        if user_found:
-            invitee = user_found[0]
-            message = json.dumps({
-                'from': user.name, 'type': 'INVITE'
-            })
+        message = json.dumps({
+            'from': user.name, 'type': 'INVITE'
+        })
 
-            send_message_notification(
-                invitee.key.urlsafe(),
-                message,
-                entity_type,
-                self.key.urlsafe()
-            )
+        send_message_notification(
+            receiver_key,
+            message,
+            entity_type,
+            self.key.urlsafe()
+        )
 
     def make(self):
         """Create personalized json of invite."""

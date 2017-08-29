@@ -18,14 +18,14 @@ class RequestHandler(BaseHandler):
         host = self.request.host
 
         type_of_invite = data.get('type_of_invite')
-        invite = InviteFactory.create(data, type_of_invite)
-        invite.put()
+        request = InviteFactory.create(data, type_of_invite)
+        request.put()
 
-        if(invite.stub_institution_key):
-            invite.stub_institution_key.get().addInvite(invite)
+        if(request.stub_institution_key):
+            request.stub_institution_key.get().addInvite(request)
 
-        invite.sendInvite(user, host)
+        request.sendInvite(user, host)
 
-        make_invite = invite.make()
+        make_invite = request.make()
 
         self.response.write(json.dumps(make_invite))

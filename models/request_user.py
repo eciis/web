@@ -34,9 +34,9 @@ class RequestUser(Invite):
         institution = ndb.Key(urlsafe=data.get('institution_key')).get()
         invitee = data.get('invitee')
         if RequestUser.senderIsMember(invitee, institution):
-            raise FieldException("The invitee is already a member")
+            raise FieldException("The sender is already a member")
         if RequestUser.senderIsInvited(invitee, institution.key):
-            raise FieldException("The invitee is already invited")
+            raise FieldException("The sender is already invited")
 
     @staticmethod
     def create(data):

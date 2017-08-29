@@ -27,7 +27,7 @@
             var invite = new Invite(dataInvite);
             var promise = InviteService.sendInvite(invite);
             promise.then(function success() {
-                console.log("Deu certo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                MessageService.showToast("Pedido enviado com sucesso!");
             });
         };
 

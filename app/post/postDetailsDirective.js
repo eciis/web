@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller('PostDetailsController', function(PostService, AuthService, CommentService, $mdToast, $state,
-        $mdDialog, NotificationService, MessageService) {
+        $mdDialog, NotificationService, MessageService, ngClipboard) {
         var postDetailsCtrl = this;
 
         postDetailsCtrl.showLikes = false;
@@ -14,6 +14,7 @@
         postDetailsCtrl.savingLike = false;
 
         var LIMIT_CHARACTERS_POST = 1000;
+        var URL_POST = '#/posts/';
 
         postDetailsCtrl.user = AuthService.getCurrentUser();
 
@@ -43,23 +44,33 @@
             return postDetailsCtrl.isPostAuthor() || isInstitutionAdmin();
         };
 
-        postDetailsCtrl.isDeleted = function isDeleted() {
-            return postDetailsCtrl.post.state == 'deleted';
+        postDetailsCtrl.isDeleted = function isDeleted(post) {
+            return post.state == 'deleted';
         };
 
          postDetailsCtrl.showButtonDelete = function showButtonDelete() {
             return postDetailsCtrl.isAuthorized() &&
-                !postDetailsCtrl.isDeleted();
+                !postDetailsCtrl.isDeleted(postDetailsCtrl.post);
         };
 
         postDetailsCtrl.disableButtonLike = function disableButtonLike() {
-            return postDetailsCtrl.savingLike || postDetailsCtrl.isDeleted();
+            return postDetailsCtrl.savingLike || 
+                postDetailsCtrl.isDeleted(postDetailsCtrl.post);
         };
 
         postDetailsCtrl.showButtonEdit = function showButtonDeleted() {
             return postDetailsCtrl.isPostAuthor() &&
-                !postDetailsCtrl.isDeleted();
+                !postDetailsCtrl.isDeleted(postDetailsCtrl.post) && 
+                !postDetailsCtrl.post.shared_post;
         };
+
+        postDetailsCtrl.generateLink = function generateLink(){
+            var currentUrl = (window.location.href).split('#');
+            var url = currentUrl[0] + URL_POST + postDetailsCtrl.post.key;
+            ngClipboard.toClipboard(url);
+            MessageService.showToast("O link foi copiado.");
+        };
+
 
         postDetailsCtrl.likeOrDislikePost = function likeOrDislikePost() {
             var promise;
@@ -92,6 +103,9 @@
         };
 
         postDetailsCtrl.share = function share(post, event) {
+            if(postDetailsCtrl.post.shared_post){
+                post = postDetailsCtrl.post.shared_post;
+            }
             $mdDialog.show({
                 controller: "SharePostController",
                 controllerAs: "sharePostCtrl",
@@ -164,8 +178,8 @@
             $state.go('app.institution', {institutionKey: postDetailsCtrl.post.institution_key});
         };
 
-        postDetailsCtrl.goToPost = function goToPost() {
-             $state.go('app.post', {key: postDetailsCtrl.post.key});
+        postDetailsCtrl.goToPost = function goToPost(post) {
+             $state.go('app.post', {key: post.key});
         };
 
         postDetailsCtrl.getComments = function getComments() {
@@ -296,10 +310,10 @@
             return post;
         };
 
-        postDetailsCtrl.showImage = function() {
-            var imageEmpty = postDetailsCtrl.post.photo_url === "";
-            var imageNull = postDetailsCtrl.post.photo_url === null;
-            var deletedPost = postDetailsCtrl.post.state === 'deleted';
+        postDetailsCtrl.showImage = function(post) {
+            var imageEmpty = post.photo_url === "";
+            var imageNull = post.photo_url === null;
+            var deletedPost = post.state === 'deleted';
             return !imageEmpty && !imageNull && !deletedPost;
         };
 

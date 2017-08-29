@@ -24,8 +24,12 @@
         inviteController.checkInstInvite = function checkInstInvite(ev) {
             var promise;
             var currentInstitutionKey = inviteController.user.current_institution.key;
-            invite = new Invite(inviteController.invite, 'INSTITUTION',
-                currentInstitutionKey, inviteController.user.key);
+
+            inviteController.invite.institution_key = currentInstitutionKey;
+            inviteController.invite.inviter_key = inviteController.user.key;
+            inviteController.invite.type_of_invite = 'INSTITUTION';
+            invite = new Invite(inviteController.invite);
+
             if (!invite.isValid()) {
                 MessageService.showToast('Convite inválido!');
             } else {

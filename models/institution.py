@@ -140,9 +140,7 @@ class Institution(ndb.Model):
         institution_stub.state = 'pending'
 
         institution_stub.put()
-        search_module.createDocument(
-            institution_stub.key.urlsafe(), institution_stub.name,
-            institution_stub.state, invite.invitee)
+        search_module.createDocument(institution_stub)
 
         return institution_stub
 

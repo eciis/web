@@ -1,12 +1,8 @@
 "use strict";
 
-function Invite(data, type_of_invite, institution_key, inviter_key) {
+function Invite(data) {
     data = data || {};
     _.extend(this, data);
-
-    this.type_of_invite = type_of_invite;
-    this.institution_key = institution_key;
-    this.inviter_key = inviter_key;
 }
 
 Invite.prototype.isValid = function isValid() {

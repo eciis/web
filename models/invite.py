@@ -12,10 +12,13 @@ class Invite(PolyModel):
     """Model of Invite."""
 
     # Email of the invitee.
-    invitee = ndb.StringProperty(required=True)
+    invitee = ndb.StringProperty()
 
     # Key of user inviter
-    inviter_key = ndb.KeyProperty(kind="User", required=True)
+    admin_key = ndb.KeyProperty(kind="User", required=True)
+
+    # Key of user sender
+    sender_key = ndb.KeyProperty(kind="User")
 
     # Status of Invite.
     status = ndb.StringProperty(choices=set([
@@ -33,16 +36,13 @@ class Invite(PolyModel):
     # Value is None for invite the User
     stub_institution_key = ndb.KeyProperty(kind="Institution")
 
-    invite_type = ndb.StringProperty(choices=set([
-        'invite',
-        'request'
-    ]))
+    is_request = ndb.BooleanProperty(default=False)
 
     @staticmethod
     def create(data, invite):
         """Create a post and check required fields."""
-        invite.invitee = data.get('invitee')
-        invite.inviter_key = ndb.Key(urlsafe=data.get('inviter_key'))
+        invite.is_request = data.get('is_request') or False
+        invite.admin_key = ndb.Key(urlsafe=data.get('inviter_key'))
         invite.institution_key = ndb.Key(urlsafe=data.get('institution_key'))
 
         return invite
@@ -73,10 +73,7 @@ class Invite(PolyModel):
         entity_type -- type of notification.
         Case not receive use invite type.
         """
-        if self.invite_type == 'invite':
-            user_found = User.query(User.email == self.invitee).fetch(1)
-        else:
-            user_found = [ndb.key(User, self.invitee).get()]
+        user_found = User.query(User.email == self.invitee).fetch(1)
 
         entity_type = entity_type or 'INVITE'
 
@@ -96,11 +93,10 @@ class Invite(PolyModel):
     def make(self):
         """Create personalized json of invite."""
         return {
-            'invitee': self.invitee,
-            'inviter_name': self.inviter_key.get().name,
+            'admin_name': self.admin_key.get().name,
             'key': self.key.urlsafe(),
             'status': self.status,
-            'institution_inviter': self.institution_key.get().make(['name'])
+            'institution_admin': self.institution_key.get().make(['name'])
         }
 
     def change_status(self, status):

@@ -23,6 +23,7 @@ from handlers.invite_collection_handler import InviteCollectionHandler
 from handlers.search_handler import SearchHandler
 from handlers.invite_handler import InviteHandler
 from handlers.redirect_handler import AppRedirectHandler
+from handlers.request_handler import RequestHandler
 
 methods = set(webapp2.WSGIApplication.allowed_methods)
 methods.add('PATCH')
@@ -45,6 +46,7 @@ app = webapp2.WSGIApplication([
     ("/api/posts", PostCollectionHandler),
     ("/api/user", UserHandler),
     ("/api/user/invites/(.*)", UserHandler),
+    ("/api/user/requests/(.*)", RequestHandler),
     ("/api/user/timeline", UserTimelineHandler),
     ("/api/search/institution", SearchHandler),
     ("/login", LoginHandler),

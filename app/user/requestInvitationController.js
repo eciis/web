@@ -18,8 +18,9 @@
         requestInvCtrl.request = function request() {
             var dataInvite = {
                 institution_key : requestInvCtrl.institutionSelect.key,
-                invitee : requestInvCtrl.institutionSelect.admin.key,
-                inviter_key : requestInvCtrl.currentUser.key,
+                invitee : requestInvCtrl.currentUser.email,
+                inviter_key : requestInvCtrl.institutionSelect.admin.key,
+                is_request : true,
                 type_of_invite : 'USER'
             };
 

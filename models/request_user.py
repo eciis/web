@@ -1,4 +1,5 @@
-"""Invite user model."""
+"""Request user model."""
+
 from invite import Invite
 from google.appengine.ext import ndb
 from custom_exceptions.fieldException import FieldException
@@ -6,12 +7,12 @@ from models.user import User
 from models.institution import Institution
 
 
-class InviteUser(Invite):
-    """Model of invite user."""
+class RequestUser(Invite):
+    """Model of request user."""
 
     @staticmethod
-    def inviteeIsMember(inviteeEmail, institution):
-        userWithEmail = User.query(User.email == inviteeEmail)
+    def senderIsMember(sender_key, institution):
+        userWithEmail = User.query(User.Key == sender_key)
         if userWithEmail.count() == 1:
             instmember = Institution.query(Institution.members.IN(
                 [userWithEmail.get().key]),
@@ -20,30 +21,30 @@ class InviteUser(Invite):
         return False
 
     @staticmethod
-    def inviteeIsInvited(invitee, institutionKey):
-        invited = InviteUser.query(
-            InviteUser.institution_key == institutionKey,
-            InviteUser.status == 'sent',
-            InviteUser.invitee == invitee)
+    def senderIsInvited(sender_key, institutionKey):
+        request = RequestUser.query(
+            RequestUser.institution_key == institutionKey,
+            RequestUser.status == 'sent',
+            RequestUser.sender_key == sender_key)
 
-        return invited.count() > 0
+        return request.count() > 0
 
     @staticmethod
-    def checkIsInviteUserValid(data):
+    def checkIsRequestUserValid(data):
         institution = ndb.Key(urlsafe=data.get('institution_key')).get()
         invitee = data.get('invitee')
-        if InviteUser.inviteeIsMember(invitee, institution):
+        if RequestUser.senderIsMember(invitee, institution):
             raise FieldException("The invitee is already a member")
-        if InviteUser.inviteeIsInvited(invitee, institution.key):
+        if RequestUser.senderIsInvited(invitee, institution.key):
             raise FieldException("The invitee is already invited")
 
     @staticmethod
     def create(data):
         """Create a post and check required fields."""
-        invite = InviteUser()
-        invite.invitee = data.get('invitee')
+        invite = RequestUser()
+        invite.sender_key = ndb.Key(urlsafe=data.get('sender_key'))
         invite = Invite.create(data, invite)
-        InviteUser.checkIsInviteUserValid(data)
+        RequestUser.checkIsRequestUserValid(data)
         return invite
 
     def send_email(self, host, body=None):
@@ -56,17 +57,17 @@ class InviteUser(Invite):
         http://%s/app/#/institution/%s/%s/new_invite/USER
 
         Equipe e-CIS """ % (host, institution_key, invite_key)
-        super(InviteUser, self).send_email(host, body)
+        super(RequestUser, self).send_email(host, body)
 
     def send_notification(self, user):
         """Method of send notification of invite user."""
-        entity_type = 'USER'
-        super(InviteUser, self).send_notification(user, entity_type)
+        entity_type = 'REQUEST_USER'
+        super(RequestUser, self).send_notification(user, entity_type)
 
     def make(self):
         """Create json of invite to user."""
-        invite_user_json = super(InviteUser, self).make()
-        invite_user_json['invitee'] = self.invitee
+        invite_user_json = super(RequestUser, self).make()
+        invite_user_json['sender'] = self.sender_key.get().email,
         invite_user_json['institution_key'] = self.institution_key.urlsafe()
-        invite_user_json['type_of_invite'] = 'USER'
+        invite_user_json['type_of_invite'] = 'REQUEST_USER'
         return invite_user_json

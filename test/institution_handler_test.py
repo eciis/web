@@ -201,8 +201,11 @@ class InstitutionHandlerTest(TestBaseHandler):
         # Retrieve the entities
         self.splab = self.splab.key.get()
         self.mayza = self.mayza.key.get()
+        self.ecis = self.ecis.key.get()
         # Assert that the delete worked as expected to the admin
         self.assertEqual(self.splab.state, "inactive",
+                         "The state wasn't the expected one.")
+        self.assertEqual(self.ecis.state, "inactive",
                          "The state wasn't the expected one.")
         self.assertTrue(self.splab.key not in self.mayza.institutions_admin)
         self.assertTrue(self.splab.key not in self.mayza.institutions)

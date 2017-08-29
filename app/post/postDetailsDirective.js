@@ -71,7 +71,6 @@
             MessageService.showToast("O link foi copiado.");
         };
 
-
         postDetailsCtrl.likeOrDislikePost = function likeOrDislikePost() {
             var promise;
             if(!postDetailsCtrl.isLikedByUser()) {

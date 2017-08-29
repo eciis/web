@@ -79,7 +79,7 @@ class PostHandler(BaseHandler):
         try:
             post = ndb.Key(urlsafe=url_string).get()
 
-            Utils._assert(post.is_dirty(),
+            Utils._assert(post.has_activity(),
                           "The user can not update this post",
                           NotAuthorizedException)
 

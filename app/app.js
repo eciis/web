@@ -199,15 +199,13 @@
                     } else {
                         $state.go("signin");
                     }
+                } else if(rejection.status === 400){
+                    rejection.data.msg = "Você não tem permissão para realizar esta operação!";
                 } else {
-                    if(rejection.status === 400) {
-                        rejection.data.msg = "Você não tem permissão para realizar esta operação!";
-                    } else {
-                        $state.go("error", {
-                            "msg": rejection.data.msg || "Desculpa! Ocorreu um erro.",
-                            "status": rejection.status
-                        });
-                    }
+                    $state.go("error", {
+                        "msg": rejection.data.msg || "Desculpa! Ocorreu um erro.",
+                        "status": rejection.status
+                    });
                 }
                 return $q.reject(rejection);
             }

@@ -13,14 +13,7 @@ from google.appengine.ext.ndb import Key
 from models.user import User
 from models.institution import Institution
 
-import google.auth.transport.requests
-import google.oauth2.id_token
-import requests_toolbelt.adapters.appengine
-
-from google.auth.exceptions import TransportError 
-
-requests_toolbelt.adapters.appengine.monkeypatch()
-HTTP_REQUEST = google.auth.transport.requests.Request()
+from oauth2client import client, crypt
 
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
@@ -149,11 +142,6 @@ class Utils():
         hash_num = hash(tuple(obj.items())) % (sys.maxint)
         return str(hash_num)
 
-
-# The URL that provides public certificates for verifying ID tokens issued
-# by Google's OAuth 2.0 authorization server.
-_GOOGLE_OAUTH2_CERTS_URL = 'https://www.googleapis.com/oauth2/v1/certs'
-
 # The URL that provides public certificates for verifying ID tokens issued
 # by Firebase and the Google APIs infrastructure
 _GOOGLE_APIS_CERTS_URL = (
@@ -167,12 +155,11 @@ def verify_token(request):
     if token:
         token = token.split(' ').pop()
         try:
-            return google.oauth2.id_token.verify_token(
-                token, HTTP_REQUEST, certs_url=_GOOGLE_APIS_CERTS_URL)
+            credential = client.verify_id_token(token, None, cert_uri=_GOOGLE_APIS_CERTS_URL)
+            return credential
         except (ValueError, TransportError) as error:
             logging.exception(str(error))
             return None
-
 
 
 def login_required(method):

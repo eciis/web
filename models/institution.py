@@ -183,26 +183,38 @@ class Institution(ndb.Model):
         user.remove_institution(self.key)
         # Remove the hierarchy
         if remove_hierarchy == "true":
-            for child in self.children_institutions:
-                child = child.get()
-                child.remove_institution(remove_hierarchy, user)
+            self.remove_institution_hierarchy(remove_hierarchy, user)
         # Change the parent's and children's pointers
         elif self.parent_institution:
-            parent = self.parent_institution.get()
-            parent.children_institutions.remove(self.key)
-            for child in self.children_institutions:
-                parent.children_institutions.append(child)
-                child = child.get()
-                child.parent_institution = parent.key
-                child.put()
-            parent.put()
+            self.remove_parent_connection()
         # Change the children's pointers if there is no parent
         else:
-            for child in self.children_institutions:
-                child = child.get()
-                child.parent_institution = None
-                child.put()
+            self.set_parent_for_none()
         self.put()
+
+    def remove_institution_hierarchy(self, remove_hierarchy, user):
+        """Remove institution's hierarchy."""
+        for child in self.children_institutions:
+                child = child.get()
+                child.remove_institution(remove_hierarchy, user)
+
+    def remove_parent_connection(self):
+        """Change parent connection when remove an institution."""
+        parent = self.parent_institution.get()
+        parent.children_institutions.remove(self.key)
+        for child in self.children_institutions:
+            parent.children_institutions.append(child)
+            child = child.get()
+            child.parent_institution = parent.key
+            child.put()
+        parent.put()
+
+    def set_parent_for_none(self):
+        """Set parent of the children institutions for none when remove an institution."""
+        for child in self.children_institutions:
+            child = child.get()
+            child.parent_institution = None
+            child.put()
 
     @ndb.transactional(xg=True)
     def remove_institution_from_users(self, remove_hierarchy):

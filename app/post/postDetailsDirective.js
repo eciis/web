@@ -205,8 +205,11 @@
                     addComment(postDetailsCtrl.post, response.data);
                     postDetailsCtrl.savingComment = false;
                 }, function error(response) {
-                    postDetailsCtrl.savingComment = false;
-                    MessageService.showToast(response.data.msg);
+                    AuthService.reload().then(function success() {
+                        postDetailsCtrl.savingComment = false;
+                        MessageService.showToast(response.data.msg);
+                        $state.go('app.home');
+                    });
                 });
             } else {
                 MessageService.showToast("Comentário não pode ser vazio.");
@@ -288,7 +291,7 @@
 
         postDetailsCtrl.isLongPostTimeline = function(text){
             var qtdChar = text.length;
-            return !postDetailsCtrl.isPostPage && qtdChar >= LIMIT_CHARACTERS_POST;        
+            return !postDetailsCtrl.isPostPage && qtdChar >= LIMIT_CHARACTERS_POST;
         };
 
         function adjustText(text){

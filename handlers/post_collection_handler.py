@@ -32,11 +32,14 @@ class PostCollectionHandler(BaseHandler):
         """Handle POST Requests."""
         data = json.loads(self.request.body)
         institution_key = data['institution']
+        institution = ndb.Key(urlsafe=institution_key).get()
+
+        Utils._assert(institution.state == 'inactive',
+                      "The institution has been deleted", NotAuthorizedException)
 
         Utils._assert(not user.has_permission("publish_post", institution_key),
                 "You don't have permission to publish post.", NotAuthorizedException)
 
-        institution = ndb.Key(urlsafe=institution_key).get()
 
         try:
             post = Post.create(data, user.key, institution.key)

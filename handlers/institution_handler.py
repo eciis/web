@@ -120,6 +120,9 @@ class InstitutionHandler(BaseHandler):
 
         institution = ndb.Key(urlsafe=institution_key).get()
 
+        Utils._assert(institution.state == 'inactive',
+                      "The institution has been deleted", NotAuthorizedException)
+
         JsonPatch.load(data, institution)
         institution.put()
         data = json.loads(data)

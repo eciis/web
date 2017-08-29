@@ -172,15 +172,23 @@ class Institution(ndb.Model):
 
     @ndb.transactional(xg=True)
     def remove_institution(self, remove_hierarchy, user):
-        """Remove an institution."""
+        """Remove an institution.
+
+        Keyword arguments:
+        remove_hierarchy -- string the represents if the institution's hiearchy
+        will be removed
+        user -- the admin of the institution.
+        """
         self.state = "inactive"
         search_module.deleteDocument(self.key.urlsafe())
         user.unfollow(self.key)
         user.remove_institution(self.key)
+        # Remove the hierarchy
         if remove_hierarchy == "true":
             for child in self.children_institutions:
                 child = child.get()
-                child.remove_institution(remove_hierarchy)
+                child.remove_institution(remove_hierarchy, user)
+        # Change the parent's and children's pointers
         elif self.parent_institution:
             parent = self.parent_institution.get()
             parent.children_institutions.remove(self.key)
@@ -190,6 +198,7 @@ class Institution(ndb.Model):
                 child.parent_institution = parent.key
                 child.put()
             parent.put()
+        # Change the children's pointers if there is no parent
         else:
             for child in self.children_institutions:
                 child = child.get()
@@ -199,7 +208,10 @@ class Institution(ndb.Model):
 
     @ndb.transactional(xg=True)
     def remove_institution_from_users(self, remove_hierarchy):
-        """Remove institution from members/followers list."""
+        """Remove institution from members/followers list.
+
+        This method allows this procedure to be done in a queue.
+        """
         for follower in self.followers:
             follower = follower.get()
             follower.unfollow(self.key)

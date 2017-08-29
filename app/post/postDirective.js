@@ -4,7 +4,7 @@
 
     var app = angular.module("app");
 
-    app.controller("PostController", function PostController($mdDialog, PostService, AuthService, $mdToast, $rootScope, ImageService, MessageService) {
+    app.controller("PostController", function PostController($mdDialog, PostService, AuthService, $mdToast, $rootScope, ImageService, MessageService, $state) {
         var postCtrl = this;
 
         postCtrl.post = {};
@@ -61,8 +61,11 @@
                     MessageService.showToast('Postado com sucesso!');
                     $mdDialog.hide();
                 }, function error(response) {
-                    $mdDialog.hide();
-                    MessageService.showToast(response.data.msg);
+                    AuthService.reload().then(function success() {
+                        $mdDialog.hide();
+                        MessageService.showToast(response.data.msg);
+                        $state.go('app.home');
+                    });
                 });
             } else {
                 MessageService.showToast('Post inválido!');

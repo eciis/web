@@ -7,6 +7,7 @@ from models.user import User
 from models.institution import Institution
 from handlers.institution_handler import InstitutionHandler
 
+import mock
 from mock import patch
 
 
@@ -143,7 +144,7 @@ class InstitutionHandlerTest(TestBaseHandler):
                          "The admin should be None")
 
     @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
-    def test_delete(self, verify_token):
+    def test_delete_without_remove_hierarchy(self, verify_token):
         """Test delete method."""
         # Set the cerbio's state to active
         self.certbio.state = "active"
@@ -169,6 +170,10 @@ class InstitutionHandlerTest(TestBaseHandler):
         self.assertTrue(self.certbio.key not in self.mayza.institutions_admin)
         self.assertTrue(self.certbio.key not in self.mayza.institutions)
 
+    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
+    @mock.patch('service_entities.remove_institution_from_users')
+    def test_delete_with_remove_hierarchy(self, verify_token, mock_method):
+        """Test delete removing hierarchy."""
         # Setting up the remove hierarchy test
         self.splab.state = "active"
         self.splab.admin = self.mayza.key
@@ -191,22 +196,17 @@ class InstitutionHandlerTest(TestBaseHandler):
         # Call the delete method
         self.testapp.delete("/api/institutions/%s?removeHierarchy=true" %
                             self.splab.key.urlsafe())
-        # Update entities
+        # Assert that remove_institutions_from_users has been called
+        self.assertTrue(mock_method.called)
+        # Retrieve the entities
         self.splab = self.splab.key.get()
-        self.ecis = self.ecis.key.get()
         self.mayza = self.mayza.key.get()
-        self.raoni = self.raoni.key.get()
-        # Assert that the delete worked as expected
+        # Assert that the delete worked as expected to the admin
         self.assertEqual(self.splab.state, "inactive",
-                         "The state wasn't the expected one.")
-        self.assertEqual(self.ecis.state, "inactive",
                          "The state wasn't the expected one.")
         self.assertTrue(self.splab.key not in self.mayza.institutions_admin)
         self.assertTrue(self.splab.key not in self.mayza.institutions)
         self.assertTrue(self.ecis.key not in self.mayza.institutions)
-        self.assertTrue(self.ecis.key not in self.raoni.institutions)
-        self.assertTrue(self.ecis.key not in self.raoni.institutions_admin)
-
 
     def tearDown(cls):
         """Deactivate the test."""

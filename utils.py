@@ -14,6 +14,7 @@ from models.user import User
 from models.institution import Institution
 
 from oauth2client import client, crypt
+from oauth2client.crypt import AppIdentityError
 
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
@@ -157,7 +158,7 @@ def verify_token(request):
         try:
             credential = client.verify_id_token(token, None, cert_uri=_GOOGLE_APIS_CERTS_URL)
             return credential
-        except (ValueError, TransportError) as error:
+        except (ValueError, AppIdentityError) as error:
             logging.exception(str(error))
             return None
 

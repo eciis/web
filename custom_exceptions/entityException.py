@@ -4,7 +4,7 @@
 class EntityException(Exception):
     """Entity Exception."""
 
-    def __init__(self, message=None):
+    def __init__(self, msg=None):
         """Init method."""
         super(EntityException, self).__init__(
-            message or 'The user can not do this procedure in this entity.')
+            msg or 'The user can not do this procedure in this entity.')

@@ -133,7 +133,7 @@
                 } else if (isInactive()) {
                     $state.go("user_inactive");
                 } else if (mainCtrl.user.name === 'Unknown') {
-                    $state.go("config_profile");
+                    $state.go("app.config_profile");
                 }
         })();
     });

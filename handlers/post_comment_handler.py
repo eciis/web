@@ -49,6 +49,9 @@ class PostCommentHandler(BaseHandler):
         """Handle Post Comments requests."""
         data = json.loads(self.request.body)
         post = ndb.Key(urlsafe=url_string).get()
+        institution = post.institution.get()
+        Utils._assert(institution.state == 'inactive',
+                      "The institution has been deleted", NotAuthorizedException)
         Utils._assert(post.state == 'deleted',
                       "This post has been deleted", EntityException)
         comment = Comment.create(data, user.key, post.key)
@@ -72,6 +75,9 @@ class PostCommentHandler(BaseHandler):
     def delete(self, user, url_string, comment_id):
         """Handle Delete Comments requests."""
         post = ndb.Key(urlsafe=url_string).get()
+        institution = post.institution.get()
+        Utils._assert(institution.state == 'inactive',
+                      "The institution has been deleted", NotAuthorizedException)
         comment = post.get_comment(comment_id)
         check_permission(user, post, comment_id)
         post.remove_comment(comment_id)

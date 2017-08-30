@@ -79,12 +79,16 @@ class PostHandler(BaseHandler):
         try:
             post = ndb.Key(urlsafe=url_string).get()
 
+            Utils._assert(post.has_activity(),
+                          "The user can not update this post",
+                          NotAuthorizedException)
+
             """Apply patch."""
             JsonPatch.load(data, post)
 
             """Update post."""
             post.put()
         except Exception as error:
-            self.response.set_status(Utils.BAD_REQUEST)
+            self.response.set_status(Utils.FORBIDDEN)
             self.response.write(Utils.getJSONError(
-                Utils.BAD_REQUEST, error.message))
+                Utils.FORBIDDEN, error.message))

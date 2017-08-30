@@ -44,7 +44,7 @@
                     .ok('Finalizar')
                     .targetEvent(ev)
                 ).then(function ok() {
-                    $state.go("config_profile");
+                    $state.go("app.config_profile");
                 });
         }
 

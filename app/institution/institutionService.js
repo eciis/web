@@ -106,5 +106,15 @@
             });
             return deffered.promise;
         };
+
+        service.removeInstitution = function removeInstitution(institutionKey, removeHierarchy) {
+            var deffered = $q.defer();
+            $http.delete(INSTITUTIONS_URI + "/" + institutionKey + "?removeHierarchy=" + removeHierarchy).then(function success(info) {
+                deffered.resolve(info.data);
+            }, function error(data) {
+                deffered.reject(data);
+            });
+            return deffered.promise;
+        };
     });
 })();

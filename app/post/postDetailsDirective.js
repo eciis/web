@@ -7,13 +7,12 @@
         $mdDialog, NotificationService, MessageService) {
         var postDetailsCtrl = this;
 
+        var LIMIT_CHARACTERS_POST = 1000;
+
         postDetailsCtrl.showLikes = false;
         postDetailsCtrl.showComments = false;
-
         postDetailsCtrl.savingComment = false;
         postDetailsCtrl.savingLike = false;
-
-        var LIMIT_CHARACTERS_POST = 1000;
 
         postDetailsCtrl.user = AuthService.getCurrentUser();
 
@@ -57,8 +56,11 @@
         };
 
         postDetailsCtrl.showButtonEdit = function showButtonDeleted() {
-            return postDetailsCtrl.isPostAuthor() &&
-                !postDetailsCtrl.isDeleted();
+            var hasNoComments = postDetailsCtrl.post.number_of_comments === 0;
+            var hasNoLikes = postDetailsCtrl.post.number_of_likes === 0;
+
+            return postDetailsCtrl.isPostAuthor() && !postDetailsCtrl.isDeleted() &&
+                hasNoComments && hasNoLikes;
         };
 
         postDetailsCtrl.likeOrDislikePost = function likeOrDislikePost() {
@@ -71,7 +73,7 @@
             return promise;
         };
 
-        postDetailsCtrl.editPost = function editPost(post, event) {
+        postDetailsCtrl.editPost = function editPost(event) {
             $mdDialog.show({
                 controller: function DialogController() {},
                 controllerAs: "controller",
@@ -80,7 +82,7 @@
                 targetEvent: event,
                 clickOutsideToClose:true,
                 locals: {
-                    originalPost: post,
+                    originalPost: postDetailsCtrl.post,
                     isEditing: true
                 },
                 bindToController: true
@@ -88,7 +90,7 @@
                 postDetailsCtrl.post.title = editedPost.title;
                 postDetailsCtrl.post.text = editedPost.text;
                 postDetailsCtrl.post.photo_url = editedPost.photo_url;
-            });
+            }, function error() {});
         };
 
         function likePost() {
@@ -99,7 +101,8 @@
                 postDetailsCtrl.post.number_of_likes += 1;
                 postDetailsCtrl.savingLike = false;
                 postDetailsCtrl.getLikes(postDetailsCtrl.post);
-            }, function error() {
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
                 $state.go('app.home');
                 postDetailsCtrl.savingLike = false;
             });
@@ -189,11 +192,11 @@
             }
         };
 
-        var addComment = function addComment(post, comment) {
+        function addComment(post, comment) {
             var postComments = postDetailsCtrl.post.data_comments;
             postComments.push(comment);
             post.number_of_comments += 1;
-        };
+        }
 
         postDetailsCtrl.createComment = function createComment() {
             var newComment = postDetailsCtrl.newComment;
@@ -207,8 +210,11 @@
                     addComment(postDetailsCtrl.post, response.data);
                     postDetailsCtrl.savingComment = false;
                 }, function error(response) {
-                    postDetailsCtrl.savingComment = false;
-                    MessageService.showToast(response.data.msg);
+                    AuthService.reload().then(function success() {
+                        postDetailsCtrl.savingComment = false;
+                        MessageService.showToast(response.data.msg);
+                        $state.go('app.home');
+                    });
                 });
             } else {
                 MessageService.showToast("Comentário não pode ser vazio.");

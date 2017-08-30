@@ -4,6 +4,9 @@ import json
 from firebase import send_notification
 from google.appengine.api import mail
 import logging
+from google.appengine.ext import ndb
+from models.institution import Institution
+from models.user import User
 
 
 class BaseHandler(webapp2.RequestHandler):
@@ -60,7 +63,22 @@ class SendEmailHandler(BaseHandler):
                        subject=subject,
                        body=body)
 
+
+class RemoveInstitutionHandler(BaseHandler):
+    """Handler that resolves tasks relationated with remove an institution."""
+
+    def post(self):
+        """Remove the institution from users's list."""
+        # Retrieving the params
+        institution = self.request.get('institution_key')
+        remove_hierarchy = self.request.get('remove_hierarchy')
+        # Retrieving the institution
+        institution = ndb.Key(urlsafe=institution).get()
+
+        institution.remove_institution_from_users(remove_hierarchy)
+
 app = webapp2.WSGIApplication([
     ('/api/queue/send-notification', SendNotificationHandler),
-    ('/api/queue/send-email', SendEmailHandler)
+    ('/api/queue/send-email', SendEmailHandler),
+    ('/api/queue/remove-inst', RemoveInstitutionHandler)
 ], debug=True)

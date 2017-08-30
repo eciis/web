@@ -109,4 +109,11 @@
             expect(result.data).toEqual(documents);
         });
 
+        it('Should call http.delete()', function() {
+            spyOn($http, 'delete').and.callThrough();
+            httpBackend.expect('DELETE', INSTITUTIONS_URI + "/" + institutions[0].key + "?removeHierarchy=true");
+            service.removeInstitution(institutions[0].key, "true");
+            expect($http.delete).toHaveBeenCalled();
+        });
+
 }));

@@ -91,7 +91,6 @@ class UserHandler(BaseHandler):
         institution = institution_key.get()
 
         user.remove_institution(institution_key)
-        user.unfollow(institution_key)
 
         institution.remove_member(user)
         institution.unfollow(user.key)

@@ -101,15 +101,6 @@ class User(ndb.Model):
             self.add_permission("publish_post", institution_key.urlsafe())
             self.put()
 
-    def remove_institution(self, institution_key):
-        """Remove a institution from user."""
-        if institution_key in self.institutions:
-            self.institutions.remove(institution_key)
-            self.remove_permission("publish_post", institution_key.urlsafe())
-            if len(self.institutions) == 0:
-                self.change_state('inactive')
-            self.put()
-
     def add_image(self, url_image):
         """Add images in list of uploaded images."""
         self.uploaded_images.append(url_image)

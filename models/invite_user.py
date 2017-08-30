@@ -64,7 +64,7 @@ class InviteUser(Invite):
 
         user_found = User.query(User.email == self.invitee).fetch(1)
 
-        if user_found:
+        if user_found and user_found[0].state == 'active':
             invitee = user_found[0]
             super(InviteUser, self).send_notification(user, invitee.key.urlsafe(), entity_type)
 

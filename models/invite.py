@@ -2,7 +2,6 @@
 """Invite Model."""
 from google.appengine.ext import ndb
 from google.appengine.ext.ndb.polymodel import PolyModel
-from models.user import User
 from service_messages import send_message_email
 from service_messages import send_message_notification
 import json
@@ -14,10 +13,13 @@ class Invite(PolyModel):
     # Email of the invitee.
     invitee = ndb.StringProperty()
 
-    # Key of user inviter
+    # Key of user admin
+    # In the invitations, he sends the invitation.
+    # In requests, he receives the request.
     admin_key = ndb.KeyProperty(kind="User", required=True)
 
     # Key of user sender
+    # This property is used in requests
     sender_key = ndb.KeyProperty(kind="User")
 
     # Status of Invite.
@@ -36,6 +38,7 @@ class Invite(PolyModel):
     # Value is None for invite the User
     stub_institution_key = ndb.KeyProperty(kind="Institution")
 
+    #  Indicates whether the operation is of the requested type
     is_request = ndb.BooleanProperty(default=False)
 
     @staticmethod

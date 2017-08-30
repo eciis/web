@@ -48,6 +48,7 @@
 
         shareCtrl = $controller('SharePostController', {scope: scope, 
                                                         user: maiana,
+                                                        posts: [post],
                                                         post: post});
         httpBackend.flush();
     }));

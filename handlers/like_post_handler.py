@@ -7,6 +7,8 @@ from utils import login_required
 from utils import json_response
 from handlers.base_handler import BaseHandler
 from models.post import Like
+from custom_exceptions.notAuthorizedException import NotAuthorizedException
+from utils import Utils
 
 
 class LikeException(Exception):
@@ -36,6 +38,9 @@ class LikePostHandler(BaseHandler):
         """Handle POST Requests."""
         """This method is only meant to give like in post."""
         post = ndb.Key(urlsafe=url_string).get()
+        institution = post.institution.get()
+        Utils._assert(institution.state == 'inactive',
+                      "The institution has been deleted", NotAuthorizedException)
         if not user.is_liked_post(post.key):
             user.like_post(post.key)
             post.like(user.key)
@@ -48,6 +53,9 @@ class LikePostHandler(BaseHandler):
         """Handle DELETE Requests."""
         """This method is only meant to dislike in post."""
         post = ndb.Key(urlsafe=url_string).get()
+        institution = post.institution.get()
+        Utils._assert(institution.state == 'inactive',
+                      "The institution has been deleted", NotAuthorizedException)
         if user.is_liked_post(post.key):
             user.dislike_post(post.key)
             post.dislike(user.key)

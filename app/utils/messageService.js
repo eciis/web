@@ -6,6 +6,13 @@
     app.service("MessageService", function MessageService($mdToast) {
         var service = this;
 
+        var msg = {
+            "auth/email-already-in-use": "Email informado já está cadastrado.",
+            "auth/wrong-password": "Senha incorreta ou usuário não possui senha.",
+            "auth/user-not-found": "Usuário não existe.",
+            "Error! The institution has been deleted": "A instituição foi removida."
+        };
+
         service.showToast = function showToast(message) {
             message = customMessage(message);
             $mdToast.show(
@@ -19,16 +26,7 @@
         };
 
         function customMessage(message) {
-            if (message.code && message.code === "auth/email-already-in-use") {
-                return "Email informado já está cadastrado.";
-            }
-            if (message.code && message.code === "auth/wrong-password") {
-                return "Senha incorreta ou usuário não possui senha.";
-            }
-            if (message.code && message.code === "auth/user-not-found") {
-                return "Usuário não existe.";
-            }
-            return message;
+            return msg[message.code] || msg[message] || message;
         }
     });
 })();

@@ -10,6 +10,8 @@ from utils import json_response
 
 from models.institution import Institution
 
+from custom_exceptions.notAuthorizedException import NotAuthorizedException
+
 from handlers.base_handler import BaseHandler
 
 
@@ -35,6 +37,9 @@ class InstitutionFollowersHandler(BaseHandler):
         institution_key = ndb.Key(urlsafe=url_string)
         institution = institution_key.get()
 
+        Utils._assert(institution.state == 'inactive',
+                      "The institution has been deleted", NotAuthorizedException)
+
         if(not type(institution) is Institution):
             raise Exception("Key is not an Institution")
 
@@ -48,6 +53,9 @@ class InstitutionFollowersHandler(BaseHandler):
         """Remove follower in the institution."""
         institution_key = ndb.Key(urlsafe=url_string)
         institution = institution_key.get()
+
+        Utils._assert(institution.state == 'inactive',
+                      "The institution has been deleted", NotAuthorizedException)
 
         if(not type(institution) is Institution):
             raise Exception("Key is not an Institution")

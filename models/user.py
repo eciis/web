@@ -66,6 +66,18 @@ class User(ndb.Model):
             self.follows.remove(institution)
             self.put()
 
+    def remove_institution(self, institution):
+        """Remove an institution from institutions."""
+        if institution in self.institutions:
+            if institution in self.institutions_admin:
+                self.institutions_admin.remove(institution)
+            self.institutions.remove(institution)
+            self.unfollow(institution)
+            self.remove_permission('publish_post', institution.urlsafe())
+            if len(self.institutions) == 0:
+                self.change_state('inactive')
+            self.put()
+
     def is_liked_post(self, postKey):
         """Verify if post is liked."""
         return postKey in self.liked_posts

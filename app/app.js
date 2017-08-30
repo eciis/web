@@ -199,6 +199,8 @@
                     } else {
                         $state.go("signin");
                     }
+                } else if(rejection.status === 403) {
+                    rejection.data.msg = "Você não tem permissão para realizar esta operação!";
                 } else {
                     $state.go("error", {
                         "msg": rejection.data.msg || "Desculpa! Ocorreu um erro.",

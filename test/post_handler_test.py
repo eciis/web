@@ -5,6 +5,7 @@ from test_base_handler import TestBaseHandler
 from models.post import Post
 from models.user import User
 from models.institution import Institution
+from models.post import Comment
 from handlers.post_handler import PostHandler
 
 from mock import patch
@@ -29,9 +30,6 @@ class PostHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
     def test_delete(self, verify_token):
         """Test the post_handler's delete method."""
-        # Pretend an authentication
-        self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
-        self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
         # Verify if before the delete the post's state is published
         self.assertEqual(self.mayza_post.state, 'published',
                          "The post's state must be published")
@@ -44,10 +42,8 @@ class PostHandlerTest(TestBaseHandler):
                          "The post's state must be deleted")
 
         # Pretend an authentication
-        verify_token.return_value={'email': 'raoni.smaneoto@ccc.ufcg.edu.br'}
+        verify_token.return_value = {'email': 'raoni.smaneoto@ccc.ufcg.edu.br'}
 
-        self.os.environ['REMOTE_USER'] = 'raoni.smaneoto@ccc.ufcg.edu.br'
-        self.os.environ['USER_EMAIL'] = 'raoni.smaneoto@ccc.ufcg.edu.br'
         # Verify if before the delete the post's state is published
         self.assertEqual(self.raoni_post.state, 'published',
                          "The post's state must be published")
@@ -62,9 +58,6 @@ class PostHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
     def test_patch(self, verify_token):
         """Test the post_handler's patch method."""
-        # Pretend an authentication
-        self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
-        self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
         # Call the patch method and assert that  it raises an exception
         with self.assertRaises(Exception):
             self.testapp.patch_json("/api/posts/%s"
@@ -75,19 +68,19 @@ class PostHandlerTest(TestBaseHandler):
         # Call the patch method and assert that it works
         self.testapp.patch_json("/api/posts/%s"
                                 % self.mayza_post.key.urlsafe(),
-                                [{"op": "replace", "path": "/text", "value": "testando"}]
+                                [{"op": "replace", "path": "/text",
+                                    "value": "testando"}]
                                 )
         self.mayza_post = self.mayza_post.key.get()
         self.assertEqual(self.mayza_post.text, "testando")
         # Pretend a new authentication
-        verify_token.return_value={'email': 'raoni.smaneoto@ccc.ufcg.edu.br'}
+        verify_token.return_value = {'email': 'raoni.smaneoto@ccc.ufcg.edu.br'}
 
-        self.os.environ['REMOTE_USER'] = 'raoni.smaneoto@ccc.ufcg.edu.br'
-        self.os.environ['USER_EMAIL'] = 'raoni.smaneoto@ccc.ufcg.edu.br'
         # Call the patch method and assert that it works
         self.testapp.patch_json("/api/posts/%s"
                                 % self.raoni_post.key.urlsafe(),
-                                [{"op": "replace", "path": "/text", "value": "testando"}]
+                                [{"op": "replace", "path": "/text",
+                                    "value": "testando"}]
                                 )
         self.raoni_post = self.raoni_post.key.get()
         self.assertEqual(self.raoni_post.text, "testando")
@@ -97,6 +90,25 @@ class PostHandlerTest(TestBaseHandler):
                                     % self.mayza_post.key.urlsafe(),
                                     [{"op": "replace", "path": "/text",
                                       "value": "testando"}]
+                                    )
+        # test the case when the post has a like, so it can not be updated
+        self.mayza_post.like(self.raoni.key)
+        self.mayza_post = self.mayza_post.key.get()
+        with self.assertRaises(Exception):
+            self.testapp.patch_json("/api/posts/%s"
+                                    % self.mayza_post.key.urlsafe(),
+                                    [{"op": "replace", "path": "/text",
+                                        "value": "testando"}]
+                                    )
+
+        # test the case when the post has a comment, so it can not be updated
+        self.mayza_post.add_comment(self.raoni_comment)
+        self.mayza_post = self.mayza_post.key.get()
+        with self.assertRaises(Exception):
+            self.testapp.patch_json("/api/posts/%s"
+                                    % self.mayza_post.key.urlsafe(),
+                                    [{"op": "replace", "path": "/text",
+                                        "value": "testando"}]
                                     )
 
     def tearDown(cls):
@@ -165,3 +177,9 @@ def initModels(cls):
     cls.raoni_post.author = cls.raoni.key
     cls.raoni_post.institution = cls.certbio.key
     cls.raoni_post.put()
+    # comment
+    data_comment = {"text": "hello",
+                    "institution_key": cls.certbio.key.urlsafe()}
+    cls.raoni_comment = Comment.create(data_comment,
+                                       cls.raoni.key, cls.mayza_post.key)
+    cls.raoni_comment.put()

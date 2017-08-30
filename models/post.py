@@ -257,3 +257,9 @@ class Post(ndb.Model):
 
         """Update the post in datastore."""
         self.put()
+
+    def has_activity(self):
+        """Check if the post has comments or likes."""
+        has_comments = len(self.comments) > 0
+        has_likes = len(self.likes) > 0
+        return has_comments or has_likes

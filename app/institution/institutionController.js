@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("InstitutionController", function InstitutionController($state, InstitutionService, 
+    app.controller("InstitutionController", function InstitutionController($state, InstitutionService,
             InviteService, AuthService, MessageService, $sce, $mdDialog, PdfService, $rootScope, $window) {
         var institutionCtrl = this;
 
@@ -15,18 +15,18 @@
         institutionCtrl.isMember = false;
         institutionCtrl.portfolioUrl = null;
         institutionCtrl.showFullDescription = false;
-        
-        institutionCtrl.legal_natures = { 
-            "public": "Pública", 
+
+        institutionCtrl.legal_natures = {
+            "public": "Pública",
             "private": "Privada",
             "philanthropic": "Filantrópica"
         };
 
         institutionCtrl.occupation_areas = {
-            "official laboratories":"Laboratórios Oficiais", 
-            "government agencies":"Ministérios e outros Órgãos do Governo", 
-            "funding agencies":"Agências de Fomento", 
-            "research institutes":"Institutos de Pesquisa", 
+            "official laboratories":"Laboratórios Oficiais",
+            "government agencies":"Ministérios e outros Órgãos do Governo",
+            "funding agencies":"Agências de Fomento",
+            "research institutes":"Institutos de Pesquisa",
             "colleges":"Universidades",
             "other":"Outra"
         };
@@ -161,6 +161,19 @@
             institutionCtrl.isMember = institutionCtrl.user.isMember(institutionKey);
         };
 
+        institutionCtrl.removeInstitution = function removeInstitution(ev) {
+            $mdDialog.show({
+                templateUrl: 'institution/removeInstDialog.html',
+                targetEvent: ev,
+                clickOutsideToClose:true,
+                locals: {
+                    institutionKey: institutionCtrl.current_institution.key
+                },
+                controller: RemoveInstController,
+                controllerAs: 'ctrl'
+            });
+        };
+
         institutionCtrl.portfolioDialog = function(ev) {
             $mdDialog.show({
                 templateUrl: 'institution/portfolioDialog.html',
@@ -183,6 +196,28 @@
             var ctrl = this;
             var trustedUrl = $sce.trustAsResourceUrl(portfolioUrl);
             ctrl.portfolioUrl = trustedUrl;
+        }
+
+        function RemoveInstController($mdDialog, institutionKey, InstitutionService, $state) {
+            var ctrl = this;
+
+            ctrl.closeDialog = function() {
+                $mdDialog.cancel();
+            };
+
+            ctrl.removeInst = function removeInst() {
+                if(!ctrl.removeHierarchy) {
+                    MessageService.showToast("Você deve marcar uma das opções.");
+                } else {
+                    InstitutionService.removeInstitution(institutionKey, ctrl.removeHierarchy).then(function success() {
+                        AuthService.reload().then(function success() {
+                            ctrl.closeDialog();
+                            $state.go('app.home');
+                            MessageService.showToast("Instituição removida com sucesso.");
+                        });
+                    });
+                }
+            };
         }
     });
 })();

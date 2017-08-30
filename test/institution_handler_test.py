@@ -7,6 +7,7 @@ from models.user import User
 from models.institution import Institution
 from handlers.institution_handler import InstitutionHandler
 
+import mock
 from mock import patch
 
 
@@ -142,6 +143,74 @@ class InstitutionHandlerTest(TestBaseHandler):
         self.assertEqual(admin_splab, None,
                          "The admin should be None")
 
+    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
+    def test_delete_without_remove_hierarchy(self, verify_token):
+        """Test delete method."""
+        # Set the cerbio's state to active
+        self.certbio.state = "active"
+        self.certbio.put()
+        # Assert that the certbio's state is active
+        self.assertEqual(self.certbio.state, "active",
+                         "The state wasn't the expected one.")
+        # Add the institution and the permission to mayza
+        self.mayza.institutions = [self.certbio.key]
+        self.mayza.add_permission("publish_post", self.certbio.key.urlsafe())
+        self.mayza.put()
+        # Assert that certbio is in mayza.institutions.admin
+        self.assertTrue(self.certbio.key in self.mayza.institutions_admin)
+        # Call the delete method
+        self.testapp.delete("/api/institutions/%s?removeHierarchy=false" %
+                            self.certbio.key.urlsafe())
+        # Update certbio and mayza
+        self.certbio = self.certbio.key.get()
+        self.mayza = self.mayza.key.get()
+        # Assert that the delete worked as expected
+        self.assertEqual(self.certbio.state, "inactive",
+                         "The state wasn't the expected one.")
+        self.assertTrue(self.certbio.key not in self.mayza.institutions_admin)
+        self.assertTrue(self.certbio.key not in self.mayza.institutions)
+
+    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
+    @mock.patch('service_entities.remove_institution_from_users')
+    def test_delete_with_remove_hierarchy(self, verify_token, mock_method):
+        """Test delete removing hierarchy."""
+        # Setting up the remove hierarchy test
+        self.splab.state = "active"
+        self.splab.admin = self.mayza.key
+        self.splab.children_institutions = [self.ecis.key]
+        self.splab.put()
+        self.ecis.state = "active"
+        self.ecis.put()
+        self.mayza.institutions.append(self.ecis.key)
+        self.mayza.institutions.append(self.splab.key)
+        self.mayza.institutions_admin.append(self.splab.key)
+        self.mayza.add_permission("publish_post", self.ecis.key.urlsafe())
+        self.mayza.add_permission("publish_post", self.splab.key.urlsafe())
+        self.mayza.put()
+        self.raoni.institutions_admin.append(self.ecis.key)
+        self.raoni.institutions.append(self.ecis.key)
+        self.raoni.institutions.append(self.splab.key)
+        self.raoni.add_permission("publish_post", self.ecis.key.urlsafe())
+        self.raoni.add_permission("publish_post", self.splab.key.urlsafe())
+        self.raoni.put()
+        # Call the delete method
+        self.testapp.delete("/api/institutions/%s?removeHierarchy=true" %
+                            self.splab.key.urlsafe())
+        # Assert that remove_institutions_from_users has been called
+        self.assertTrue(mock_method.called)
+        # Retrieve the entities
+        self.splab = self.splab.key.get()
+        self.mayza = self.mayza.key.get()
+        self.ecis = self.ecis.key.get()
+        # Assert that the delete worked as expected to the admin
+        self.assertEqual(self.splab.state, "inactive",
+                         "The state wasn't the expected one.")
+        self.assertEqual(self.ecis.state, "inactive",
+                         "The state wasn't the expected one.")
+        self.assertTrue(self.splab.key not in self.mayza.institutions_admin)
+        self.assertTrue(self.splab.key not in self.mayza.institutions)
+        self.assertTrue(self.ecis.key not in self.mayza.institutions)
+
     def tearDown(cls):
         """Deactivate the test."""
         cls.test.deactivate()
@@ -220,3 +289,19 @@ def initModels(cls):
     # update invite
     cls.invite.stub_institution_key = cls.stub.key
     cls.invite.put()
+    # new Institution ECIS
+    cls.ecis = Institution()
+    cls.ecis.name = 'Ecis'
+    cls.ecis.acronym = 'Ecis'
+    cls.ecis.cnpj = '18.104.068/0000-86'
+    cls.ecis.legal_nature = 'public'
+    cls.ecis.address = 'Universidade Federal de Campina Grande'
+    cls.ecis.occupation_area = ''
+    cls.ecis.email = 'ecis@ufcg.edu.br'
+    cls.ecis.phone_number = '(83) 3322 4455'
+    cls.ecis.members = [cls.mayza.key, cls.raoni.key]
+    cls.ecis.followers = [cls.mayza.key, cls.raoni.key]
+    cls.ecis.posts = []
+    cls.ecis.admin = cls.raoni.key
+    cls.ecis.parent_institution = cls.splab.key
+    cls.ecis.put()

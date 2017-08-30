@@ -2,7 +2,7 @@
 
 (describe('Test InstitutionController', function() {
 
-    var institutionCtrl, httpBackend, scope, institutionService, createCtrl, state;
+    var institutionCtrl, httpBackend, scope, institutionService, createCtrl, state, mdDialog;
 
     var INSTITUTIONS_URI = "/api/institutions/";
 
@@ -39,10 +39,11 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, InstitutionService, AuthService, UserService) {
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, InstitutionService, AuthService, UserService, $mdDialog) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
+        mdDialog = $mdDialog;
         institutionService = InstitutionService;
 
         httpBackend.expect('GET', INSTITUTIONS_URI + splab.key + '/timeline').respond(posts);
@@ -50,6 +51,7 @@
         httpBackend.expect('GET', INSTITUTIONS_URI + splab.key + '/members').respond([tiago]);
         httpBackend.expect('GET', INSTITUTIONS_URI + splab.key + '/followers').respond([raoni]);
         httpBackend.when('GET', 'institution/institution_page.html').respond(200);
+        httpBackend.when('GET', 'institution/removeInstDialog.html').respond(200);
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', "home/home.html").respond(200);
 
@@ -225,6 +227,17 @@
                 });
                 scope.$apply();
             });
+        });
+
+        describe('removeInstitution()', function() {
+
+            it('should call $mdDialog.show()', function() {
+                spyOn(mdDialog, 'show').and.callThrough();
+                institutionCtrl.removeInstitution('$event');
+                httpBackend.flush();
+                expect(mdDialog.show).toHaveBeenCalled();
+            });
+
         });
     });
 }));

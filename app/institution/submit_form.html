@@ -14,15 +14,13 @@
             </div>
         </div>
     </div>
-    <form name="instForm" novalidate ng-submit="userForm.$valid">
+    <form name="instForm" ng-submit="submitForm(instForm.$valid)" novalidate>
         <div layout="row">
             <md-input-container class="md-block" flex-gt-xs flex="60">
                 <label>Nome</label>
                 <input type="text" name="name" required
                     ng-model="editInstCtrl.newInstitution.name">
-                <div ng-messages="instForm.name.$error">
-                    <div ng-message="required">This is required!</div>
-                </div>
+                <div ng-if='instForm.name.$error.required' ng-message="required">Este campo é obrigatório!</div>
             </md-input-container>
             <md-input-container class="md-block" flex-gt-xs flex="40">
                 <label>Sigla</label>
@@ -32,8 +30,9 @@
         </div>
         <md-input-container class="md-block" flex-gt-xs>
             <label>Endereço</label>
-            <input type="text" name="Endereço" required
+            <input type="text" name="address" required
                 ng-model="editInstCtrl.newInstitution.address">
+            <div ng-if='instForm.address.$error.required' ng-message="required">Este campo é obrigatório!</div>
         </md-input-container>
         <div layout="row">
             <md-input-container class="md-block" flex-gt-xs>
@@ -43,6 +42,7 @@
                 ng-pattern=editInstCtrl.cnpjRegex
                 minlength="18" md-maxlength="18"
                 placeholder="00.000.000/0000-00">
+               <div ng-message="required" ng-if='instForm.cnpj.$error.required'>Este campo é obrigatório!</div>
             </md-input-container>
             <md-input-container class="md-block" flex-gt-xs>
                 <label>Telefone</label>
@@ -51,33 +51,27 @@
                 ng-pattern=editInstCtrl.phoneRegex
                 minlength="11" md-maxlength="11"
                 placeholder="83 12345678">
+                <div ng-if='instForm.phone.$error.required' ng-message="required">Este campo é obrigatório!</div>
             </md-input-container>
         </div>
         <div layout="row">
             <md-input-container class="md-block" flex-gt-sm>
                 <label>Área de Atuação</label>
-                    <md-select ng-model="editInstCtrl.newInstitution.occupation_area" required>
-                  <md-option ng-repeat="area in editInstCtrl.occupationAreas | orderBy: 'name'"
+                <md-select  name="occupation_area" ng-model="editInstCtrl.newInstitution.occupation_area" required>
+                  <md-option  ng-repeat="area in editInstCtrl.occupationAreas | orderBy: 'name'"
                     ng-value="area.value">{{ area.name }}
                   </md-option>
                 </md-select>
+                <div ng-if='instForm.occupation_area.$error.required' ng-message="required">Este campo é obrigatório!</div>
             </md-input-container>
             <md-input-container class="md-block" flex-gt-sm>
                 <label>Natureza Jurídica</label>
-                    <md-select ng-model="editInstCtrl.newInstitution.legal_nature" required>
+                  <md-select  name="legalNatures"ng-model="editInstCtrl.newInstitution.legal_nature" required>
                   <md-option ng-repeat="nature in editInstCtrl.legalNatures | orderBy: 'name'"
                     ng-value="nature.value">{{ nature.name }}
                   </md-option>
                 </md-select>
-              <div ng-messages="userForm.postalCode.$error" role="alert" multiple>
-              <div ng-message="required" class="my-message">You must supply a postal code.</div>
-              <div ng-message="pattern" class="my-message">That doesn't look like a valid postal
-                code.
-              </div>
-              <div ng-message="md-maxlength" class="my-message">
-                Don't use the long version silly...we don't need to be that specific...
-              </div>
-            </div>
+              <div ng-if='instForm.legalNatures.$error.required&&$instForm.legalNatures.$pristine' ng-message="required">Este campo é obrigatório!</div>
             </md-input-container>
         </div>
             <div ng-if="editInstCtrl.newInstitution.occupation_area == 'other'">
@@ -99,8 +93,15 @@
         </md-input-container>
         <md-input-container class="md-block" flex-gt-xs>
             <label>Atual Dirigente máximo</label>
-            <input type="text" name="Dirigente máximo" disabled
+            <input type="text" name="leader" required
             ng-model="editInstCtrl.newInstitution.leader">
+            <div ng-if='instForm.leader.$error.required&&$instForm.leader.$dirty' ng-message="required">Este campo é obrigatório!</div>
+        </md-input-container>
+        <md-input-container class="md-block" flex-gt-xs>
+            <label>Email Institucional</label>
+            <input type="email" name="institutional_email" required="" 
+            ng-model="editInstCtrl.newInstitution.institutional_email">
+            <div ng-if='instForm.institutional_email.$error.required' ng-message="required">Este campo é obrigatório!</div>
         </md-input-container>
         <md-input-container class="md-block" flex-gt-xs>
             <label>Responsável</label>
@@ -108,7 +109,7 @@
             ng-model="editInstCtrl.newInstitution.admin.name">
         </md-input-container>
         <md-input-container class="md-block" flex-gt-xs>
-            <label>Email Institucional</label>
+            <label>Email do responsável</label>
             <input type="text" name="Email" disabled
                 ng-model="editInstCtrl.newInstitution.email">
         </md-input-container>

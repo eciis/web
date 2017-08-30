@@ -47,7 +47,17 @@
             return post.state == 'deleted';
         };
 
-         postDetailsCtrl.showButtonDelete = function showButtonDelete() {
+        postDetailsCtrl.showSharedPost = function showSharedPost() {
+            return postDetailsCtrl.post.shared_post && 
+                !postDetailsCtrl.isDeleted(postDetailsCtrl.post);
+        };
+
+        postDetailsCtrl.showTextPost = function showTextPost(){
+            return !postDetailsCtrl.isDeleted(postDetailsCtrl.post) && 
+                !postDetailsCtrl.post.shared_post;
+        };
+
+        postDetailsCtrl.showButtonDelete = function showButtonDelete() {
             return postDetailsCtrl.isAuthorized() &&
                 !postDetailsCtrl.isDeleted(postDetailsCtrl.post);
         };
@@ -61,7 +71,7 @@
             var hasNoComments = postDetailsCtrl.post.number_of_comments === 0;
             var hasNoLikes = postDetailsCtrl.post.number_of_likes === 0;
 
-            return postDetailsCtrl.isPostAuthor() && !postDetailsCtrl.isDeleted() &&
+            return postDetailsCtrl.isPostAuthor() && !postDetailsCtrl.isDeleted(postDetailsCtrl.post) &&
                 hasNoComments && hasNoLikes && !postDetailsCtrl.post.shared_post;
         };
 
@@ -323,8 +333,11 @@
         };
 
         postDetailsCtrl.isLongPostTimeline = function(text){
-            var qtdChar = text.length;
-            return !postDetailsCtrl.isPostPage && qtdChar >= LIMIT_CHARACTERS_POST;
+            if(text){
+                var qtdChar = text.length;
+                return !postDetailsCtrl.isPostPage && 
+                    qtdChar >= LIMIT_CHARACTERS_POST;
+            }
         };
 
         function adjustText(text){

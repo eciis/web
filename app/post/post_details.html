@@ -8,14 +8,14 @@
     </md-card-avatar>
     <md-card-header-text>
       <div>
-        <a href class="md-title hyperlink" ng-click="postDetailsCtrl.goToInstitution(postDetailsCtrl.post.institution_key)">{{ postDetailsCtrl.post.institution_name }}</a>
+        <a  href class="md-title hyperlink" ng-click="postDetailsCtrl.goToInstitution(postDetailsCtrl.post.institution_key)">{{ postDetailsCtrl.post.institution_name }}</a>
       </div>
       <span class="md-subhead">por {{ postDetailsCtrl.post.author }} em {{ postDetailsCtrl.post.publication_date | date: 'dd-MM-yyyy'}} às {{postDetailsCtrl.post.publication_date | date:'HH:mm:ss'}}</span>
     </md-card-header-text>
   </md-card-header>
 
   <!-- BODY SHARED POST -->
-  <md-card md-colors="{background: 'default-grey-100'}" ng-if="postDetailsCtrl.post.shared_post">
+  <md-card md-colors="{background: 'default-grey-100'}" ng-if="postDetailsCtrl.showSharedPost()">
     <md-card-header>
       <md-card-avatar>
         <img ng-src="{{ postDetailsCtrl.post.shared_post.institution_image }}" class="md-card-image"/>
@@ -43,7 +43,7 @@
       <a href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post.shared_post)">
         <span>{{ postDetailsCtrl.post.shared_post.title }}</span>
       </a>
-      <p class="break" 
+      <p class="break" ng-if="!postDetailsCtrl.isDeleted(postDetailsCtrl.post.shared_post)"
         ng-bind-html="postDetailsCtrl.recognizeUrl(postDetailsCtrl.post.shared_post).text" ></p>
       <div layout="row" layout-align="end-center">
         <a href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post.shared_post)" ng-if="postDetailsCtrl.isLongPostTimeline(postDetailsCtrl.post.shared_post.text)">
@@ -71,7 +71,7 @@
         {{postDetailsCtrl.post.last_modified_date | date: 'HH:mm:ss'}}.
       </p>
     </div>
-    <div ng-if="!postDetailsCtrl.isDeleted(postDetailsCtrl.post) && !postDetailsCtrl.post.shared_post">
+    <div ng-if="postDetailsCtrl.showTextPost()">
         <p ng-bind-html="postDetailsCtrl.recognizeUrl(postDetailsCtrl.post).text" class="break">
         {{postDetailsCtrl.recognizeUrl(postDetailsCtrl.post).text}}
         </p>

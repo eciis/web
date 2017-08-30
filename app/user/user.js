@@ -73,10 +73,9 @@ User.prototype.getPendingInvitation = function getPendingInvitation(){
     return _.find(this.invites, {'status': SENT});
 };
 
-User.prototype.removeInviteInst = function removeInviteInst(institutionKey) {
+User.prototype.removeInvite = function removeInvite(inviteKey) {
     _.remove(this.invites, function(invite){
-        var inviteTypeUser = invite.type_of_invite === USER;
-        return !inviteTypeUser && institutionKey == invite.stub_institution.key;
+        return inviteKey == invite.key;
     });
 };
 

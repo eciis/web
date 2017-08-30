@@ -37,15 +37,12 @@
           ng-pattern="configProfileCtrl.cpfRegex" required>
           </md-input-container>
           </div>
-          <section layout="row" layout="column" layout-align="begin center" layout-wrap>
+          <section layout="row" layout="column" layout-align="end center" layout-wrap>
+            <md-button ng-click="configProfileCtrl.deleteAccount($event)" md-colors="{background: 'red-900'}">Excluir conta</md-button>
             <md-button ng-click="configProfileCtrl.finish()" md-colors="{background: 'teal-900'}">Concluir edição</md-button>
           </section>
         </md-content>
           <md-divider></md-divider>
-          <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
-            <h1>Configurações de conta</h1>
-            <span flex md-truncate></span>
-          </div>
           <md-list class="md-dense" flex>
             <md-subheader class="md-no-sticky">Seus vínculos institucionais:</md-subheader>
             <md-list-item class="md-3-line" ng-repeat="institution in configProfileCtrl.newUser.institutions">
@@ -57,10 +54,6 @@
               <md-button class="md-secondary" ng-click="configProfileCtrl.removeInstitution($event, institution)">
                 <md-icon>delete</md-icon>
               </md-button>
-            </md-list-item>
-            <md-subheader class="md-no-sticky">Conta do usuário:</md-subheader>
-            <md-list-item>
-              <md-button ng-click="configProfileCtrl.deleteAccount($event)" md-colors="{background: 'red-900'}">Excluir conta</md-button>
             </md-list-item>
           </md-list>
       </md-card>

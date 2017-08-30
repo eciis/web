@@ -52,6 +52,7 @@ class RequestUser(Invite):
         institution_key = self.institution_key.urlsafe()
         invite_key = self.key.urlsafe()
 
+        # TODO Set this message
         body = body or """Oi:
         Voce tem um novo convite. Acesse:
         http://%s/app/#/institution/%s/%s/new_invite/USER

@@ -114,6 +114,7 @@
                 clickOutsideToClose:true,
                 locals: {
                     user : postDetailsCtrl.user,
+                    posts: postDetailsCtrl.posts,
                     post: post
                 }
             });
@@ -349,13 +350,14 @@
             controller: "PostDetailsController",
             scope: {},
             bindToController: {
+                posts: '=',
                 post: '=',
                 isPostPage: '='
             }
         };
     });
     
-    app.controller("SharePostController", function SharePostController(user, post, $mdDialog, PostService,
+    app.controller("SharePostController", function SharePostController(user, posts, post, $mdDialog, PostService,
      MessageService, $state) {
         var shareCtrl = this;
 
@@ -382,9 +384,10 @@
 
         shareCtrl.share = function() {
             shareCtrl.newPost.shared_post = getOriginalPost(shareCtrl.post);
-            PostService.createPost(shareCtrl.newPost).then(function success() {
+            PostService.createPost(shareCtrl.newPost).then(function success(response) {
                 MessageService.showToast('Compartilhado com sucesso!');
                 $mdDialog.hide();
+                posts.push(response.data);
             }, function error(response) {
                 $mdDialog.hide();
                 MessageService.showToast(response.data.msg);

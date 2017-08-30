@@ -8,7 +8,7 @@ from handlers.base_handler import BaseHandler
 from models.factory_invites import InviteFactory
 
 
-class RequestHandler(BaseHandler):
+class UserRequestHandler(BaseHandler):
     """Request Handler."""
 
     @login_required

@@ -24,6 +24,9 @@
             " e não poderá mais publicar na mesma," +
             " no entanto seus posts existentes serão mantidos. Deseja remover?";
 
+        var DELETE_ACCOUNT_ALERT = "Ao excluir sua conta você não poderá mais acessar o sistema," +
+            "exceto por meio de novo convite. Deseja realmente excluir sua conta?";
+
         configProfileCtrl.addImage = function(image) {
             var newSize = 800;
 
@@ -136,8 +139,7 @@
                 confirm
                     .clickOutsideToClose(false)
                     .title('Excluir conta')
-                    .textContent('Ao excluir sua conta você não poderá mais acessar o sistema, exceto por meio de novo convite.' +
-                            ' Deseja realmente excluir sua conta?')
+                    .textContent(DELETE_ACCOUNT_ALERT)
                     .ariaLabel('Excluir conta')
                     .targetEvent(event)
                     .ok('Sim')

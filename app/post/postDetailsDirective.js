@@ -28,7 +28,11 @@
 
             $mdDialog.show(confirm).then(function() {
                 PostService.deletePost(post).then(function success() {
-                    postDetailsCtrl.post.state = 'deleted';
+                    if(post.hasActivity()) {
+                        postDetailsCtrl.post.state = 'deleted';
+                    } else {
+                        postDetailsCtrl.post.state = 'removed';
+                    }
                     MessageService.showToast('Post excluído com sucesso');
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
@@ -46,7 +50,11 @@
             return postDetailsCtrl.post.state == 'deleted';
         };
 
-         postDetailsCtrl.showButtonDelete = function showButtonDelete() {
+        postDetailsCtrl.isRemoved = function isDeleted() {
+            return postDetailsCtrl.post.state == 'removed';
+        };
+
+        postDetailsCtrl.showButtonDelete = function showButtonDelete() {
             return postDetailsCtrl.isAuthorized() &&
                 !postDetailsCtrl.isDeleted();
         };

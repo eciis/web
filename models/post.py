@@ -255,11 +255,14 @@ class Post(ndb.Model):
 
     def delete(self, user):
         """Change the state and add the information about this."""
-        self.last_modified_by = user.key
-        self.state = 'deleted'
+        if self.has_activity():
+            self.last_modified_by = user.key
+            self.state = 'deleted'
 
-        """Update the post in datastore."""
-        self.put()
+            """Update the post in datastore."""
+            self.put()
+        else:
+            self.key.delete()
 
     def has_activity(self):
         """Check if the post has comments or likes."""

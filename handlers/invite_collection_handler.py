@@ -55,6 +55,11 @@ class InviteCollectionHandler(BaseHandler):
 
         type_of_invite = data.get('type_of_invite')
         invite = InviteFactory.create(data, type_of_invite)
+
+        institution = invite.institution_key.get()
+        Utils._assert(institution.state == 'inactive',
+                      "The institution has been deleted", NotAuthorizedException)
+
         invite.put()
 
         if(invite.stub_institution_key):

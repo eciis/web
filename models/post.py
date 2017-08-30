@@ -2,6 +2,7 @@
 """Post Model."""
 from google.appengine.ext import ndb
 from custom_exceptions.fieldException import FieldException
+from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
 from utils import Utils
 
@@ -49,6 +50,8 @@ class Comment(ndb.Model):
             raise FieldException("Institution can not be empty")
 
         institution = ndb.Key(urlsafe=data['institution_key']).get()
+        Utils._assert(institution.state == 'inactive',
+                      "The institution has been deleted", NotAuthorizedException)
         comment = Comment()
         comment.text = data['text']
         comment.author = author_key

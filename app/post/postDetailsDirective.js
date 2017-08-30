@@ -101,7 +101,8 @@
                 postDetailsCtrl.post.number_of_likes += 1;
                 postDetailsCtrl.savingLike = false;
                 postDetailsCtrl.getLikes(postDetailsCtrl.post);
-            }, function error() {
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
                 $state.go('app.home');
                 postDetailsCtrl.savingLike = false;
             });
@@ -209,8 +210,11 @@
                     addComment(postDetailsCtrl.post, response.data);
                     postDetailsCtrl.savingComment = false;
                 }, function error(response) {
-                    postDetailsCtrl.savingComment = false;
-                    MessageService.showToast(response.data.msg);
+                    AuthService.reload().then(function success() {
+                        postDetailsCtrl.savingComment = false;
+                        MessageService.showToast(response.data.msg);
+                        $state.go('app.home');
+                    });
                 });
             } else {
                 MessageService.showToast("Comentário não pode ser vazio.");

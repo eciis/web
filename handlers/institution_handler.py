@@ -11,9 +11,11 @@ from models.invite import Invite
 from utils import login_required
 from utils import json_response
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
+from custom_exceptions.entityException import EntityException
 
 from models.institution import Institution
 from util.json_patch import JsonPatch
+from service_entities import remove_institution_from_users
 
 
 from handlers.base_handler import BaseHandler
@@ -94,7 +96,8 @@ class InstitutionHandler(BaseHandler):
         """Handle GET Requests."""
         obj_key = ndb.Key(urlsafe=url_string)
         obj = obj_key.get()
-
+        Utils._assert(obj.state == 'inactive',
+                      "The institution has been deleted", NotAuthorizedException)
         assert type(obj) is Institution, "Key is not an Institution"
         institution_json = Utils.toJson(obj, host=self.request.host)
         if(obj.admin):
@@ -117,6 +120,9 @@ class InstitutionHandler(BaseHandler):
         data = self.request.body
         institution = ndb.Key(urlsafe=institution_key).get()
 
+        Utils._assert(institution.state == 'inactive',
+                      "The institution has been deleted", NotAuthorizedException)
+
         JsonPatch.load(data, institution)
         institution.put()
         search_module.updateDocument(institution)
@@ -138,3 +144,15 @@ class InstitutionHandler(BaseHandler):
         institution_json = Utils.toJson(institution)
         self.response.write(json.dumps(
             institution_json))
+
+    @login_required
+    @is_admin
+    @ndb.transactional(xg=True)
+    def delete(self, user, institution_key):
+        """Handle DELETE Requests."""
+        remove_hierarchy = self.request.get('removeHierarchy')
+        institution = ndb.Key(urlsafe=institution_key).get()
+        Utils._assert(not type(institution) is Institution,
+                      "Key is not an institution", EntityException)
+        institution.remove_institution(remove_hierarchy, user)
+        remove_institution_from_users(remove_hierarchy, institution_key)

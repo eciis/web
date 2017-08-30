@@ -39,6 +39,11 @@ class Institution(ndb.Model):
 
     phone_number = ndb.StringProperty()
 
+    empowered = ndb.BooleanProperty(indexed=False, default=False)
+
+    # Name of the leader
+    leader = ndb.StringProperty()
+
     # The admin user of this institution
     admin = ndb.KeyProperty(kind="User")
 

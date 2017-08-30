@@ -14,28 +14,31 @@
             </div>
         </div>
     </div>
-    <form>
+    <form name="instForm" novalidate ng-submit="userForm.$valid">
         <div layout="row">
             <md-input-container class="md-block" flex-gt-xs flex="60">
                 <label>Nome</label>
                 <input type="text" name="name" required
                     ng-model="editInstCtrl.newInstitution.name">
+                <div ng-messages="instForm.name.$error">
+                    <div ng-message="required">This is required!</div>
+                </div>
             </md-input-container>
             <md-input-container class="md-block" flex-gt-xs flex="40">
                 <label>Sigla</label>
-                <input type="text" name="sigla"
+                <input type="text" name="sigla" required
                     ng-model="editInstCtrl.newInstitution.acronym">
             </md-input-container>
         </div>
         <md-input-container class="md-block" flex-gt-xs>
             <label>Endereço</label>
-            <input type="text" name="Endereço"
+            <input type="text" name="Endereço" required
                 ng-model="editInstCtrl.newInstitution.address">
         </md-input-container>
         <div layout="row">
             <md-input-container class="md-block" flex-gt-xs>
                 <label>CNPJ</label>
-                <input type="text" name="cnpj"
+                <input type="text" name="cnpj" required
                     ng-model="editInstCtrl.newInstitution.cnpj"
                 ng-pattern=editInstCtrl.cnpjRegex
                 minlength="18" md-maxlength="18"
@@ -43,7 +46,7 @@
             </md-input-container>
             <md-input-container class="md-block" flex-gt-xs>
                 <label>Telefone</label>
-                <input type="text" name="phone"
+                <input type="text" name="phone" required
                     ng-model="editInstCtrl.newInstitution.phone_number"
                 ng-pattern=editInstCtrl.phoneRegex
                 minlength="11" md-maxlength="11"
@@ -53,7 +56,7 @@
         <div layout="row">
             <md-input-container class="md-block" flex-gt-sm>
                 <label>Área de Atuação</label>
-                    <md-select ng-model="editInstCtrl.newInstitution.occupation_area">
+                    <md-select ng-model="editInstCtrl.newInstitution.occupation_area" required>
                   <md-option ng-repeat="area in editInstCtrl.occupationAreas | orderBy: 'name'"
                     ng-value="area.value">{{ area.name }}
                   </md-option>
@@ -61,11 +64,20 @@
             </md-input-container>
             <md-input-container class="md-block" flex-gt-sm>
                 <label>Natureza Jurídica</label>
-                    <md-select ng-model="editInstCtrl.newInstitution.legal_nature">
+                    <md-select ng-model="editInstCtrl.newInstitution.legal_nature" required>
                   <md-option ng-repeat="nature in editInstCtrl.legalNatures | orderBy: 'name'"
                     ng-value="nature.value">{{ nature.name }}
                   </md-option>
                 </md-select>
+              <div ng-messages="userForm.postalCode.$error" role="alert" multiple>
+              <div ng-message="required" class="my-message">You must supply a postal code.</div>
+              <div ng-message="pattern" class="my-message">That doesn't look like a valid postal
+                code.
+              </div>
+              <div ng-message="md-maxlength" class="my-message">
+                Don't use the long version silly...we don't need to be that specific...
+              </div>
+            </div>
             </md-input-container>
         </div>
             <div ng-if="editInstCtrl.newInstitution.occupation_area == 'other'">
@@ -86,12 +98,17 @@
             <input type="text" ng-model="editInstCtrl.newInstitution.website_url">
         </md-input-container>
         <md-input-container class="md-block" flex-gt-xs>
+            <label>Atual Dirigente máximo</label>
+            <input type="text" name="Dirigente máximo" disabled
+            ng-model="editInstCtrl.newInstitution.leader">
+        </md-input-container>
+        <md-input-container class="md-block" flex-gt-xs>
             <label>Responsável</label>
             <input type="text" name="Responsavel" disabled
             ng-model="editInstCtrl.newInstitution.admin.name">
         </md-input-container>
         <md-input-container class="md-block" flex-gt-xs>
-            <label>Email</label>
+            <label>Email Institucional</label>
             <input type="text" name="Email" disabled
                 ng-model="editInstCtrl.newInstitution.email">
         </md-input-container>
@@ -103,7 +120,7 @@
             </md-button>
         </md-input-container>
         <div layout="row" layout-align="end center">
-            <md-button ng-click="editInstCtrl.submit($event)" class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-900'}" ng-disabled="institutionForm.$invalid">Confirmar</md-button>
+            <md-button ng-click="editInstCtrl.submit($event)" class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-900'}">Confirmar</md-button>
         </div>
     </form>
 </div>

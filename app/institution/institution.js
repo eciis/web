@@ -13,6 +13,38 @@ Institution.prototype.make = function make() {
     };
     return institution;
 };
+
+Institution.prototype.isValid = function isValid() {
+    if (_.isUndefined(this.name) || _.isEmpty(this.name)) {
+        return false;
+    }
+
+    if (_.isUndefined(this.email) || _.isEmpty(this.email)) {
+        return false;
+    }
+
+    if (_.isUndefined(this.cnpj) || _.isEmpty(this.cnpj)) {
+        return false;
+    }
+
+    if (_.isUndefined(this.legal_nature) || _.isEmpty(this.legal_nature)) {
+        return false;
+    }
+
+    if (_.isUndefined(this.address) || _.isEmpty(this.address)) {
+        return false;
+    }
+
+    if (_.isUndefined(this.occupation_area) || _.isEmpty(this.occupation_area)) {
+        return false;
+    }
+
+    if (_.isUndefined(this.occupation_area) || _.isEmpty(this.occupation_area)) {
+        return false;
+    }
+
+    return true;
+};
         
 Institution.prototype.addInvite = function addInvite(invite){
     this.sent_invitations.push(invite); 

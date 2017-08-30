@@ -153,15 +153,5 @@ class User(ndb.Model):
         When user is patched to inactive state, this function is called
         to remove all his institutions.
         """
-        self.clear_institutions()
-        self.clear_follows()
-
-    def clear_institutions(self):
-        """Clear the list of user institutions."""
-        for i in range(len(self.institutions) - 1, -1, -1):
-            self.institutions.remove(self.institutions[i])
-
-    def clear_follows(self):
-        """Clear the list of institutions followed by user."""
-        for i in range(len(self.follows) - 1, -1, -1):
-            self.follows.remove(self.follows[i])
+        self.institutions = []
+        self.follows = []

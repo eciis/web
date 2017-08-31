@@ -44,11 +44,6 @@ class InstitutionHierarchieHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': 'raoni.smaneoto@ccc.ufcg.edu.br'})
     def test_delete_parent_connection(self, verify_token):
         """Test delete method with isParent=true."""
-        # Set the institutions' state to active
-        self.certbio.state = "active"
-        self.splab.state = "active"
-        self.splab.put()
-        self.certbio.put()
         # Assert the initial conditions
         self.assertTrue(self.splab.key in self.certbio.children_institutions)
         self.assertTrue(self.splab.parent_institution == self.certbio.key)

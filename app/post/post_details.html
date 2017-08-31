@@ -58,7 +58,7 @@
   class="md-card-image">
   <md-card-title ng-if="!postDetailsCtrl.isDeleted(postDetailsCtrl.post)">
     <md-card-title-text>
-      <a href class="md-title hyperlink" ng-click="postDetailsCtrl.goToPost()">
+      <a href class="md-title hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post)">
         <span class="md-headline break">{{postDetailsCtrl.post.title}}</span>
       </a>
     </md-card-title-text>

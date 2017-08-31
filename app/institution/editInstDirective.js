@@ -50,26 +50,26 @@
         editInstCtrl.submit = function submit(event) {
             var newInstitution = new Institution(editInstCtrl.newInstitution);
             var promise;
-                if (newInstitution.isValid()){
-                    var confirm = $mdDialog.confirm(event)
-                        .clickOutsideToClose(true)
-                        .title('Confirmar Edição')
-                        .textContent('Confirmar a edição dessa instituição?')
-                        .ariaLabel('Confirmar Edição')
-                        .targetEvent(event)
-                        .ok('Sim')
-                        .cancel('Não');
+            if (newInstitution.isValid()){
+                var confirm = $mdDialog.confirm(event)
+                    .clickOutsideToClose(true)
+                    .title('Confirmar Edição')
+                    .textContent('Confirmar a edição dessa instituição?')
+                    .ariaLabel('Confirmar Edição')
+                    .targetEvent(event)
+                    .ok('Sim')
+                    .cancel('Não');
 
-                    promise = $mdDialog.show(confirm);
-                    promise.then(function() {
-                        updateInstitution();
-                    }, function() {
-                        MessageService.showToast('Cancelado');
-                    });
-                } else {
-                    MessageService.showToast("Campos obrigatórios não preenchidos corretamente.");
-                }  
-                return promise;
+                promise = $mdDialog.show(confirm);
+                promise.then(function() {
+                    updateInstitution();
+                }, function() {
+                    MessageService.showToast('Cancelado');
+                });
+            } else {
+                MessageService.showToast("Campos obrigatórios não preenchidos corretamente.");
+            }  
+            return promise;
         };
 
         function saveImage() {

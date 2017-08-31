@@ -187,6 +187,8 @@
             });
         };
 
+        console.log(this.user.follows);
+
         institutionCtrl.openWebsite = function openWebsite() {
             var website = institutionCtrl.current_institution.website_url;
             $window.open(website);
@@ -210,7 +212,7 @@
                     MessageService.showToast("Você deve marcar uma das opções.");
                 } else {
                     InstitutionService.removeInstitution(institutionKey, ctrl.removeHierarchy).then(function success() {
-                        institutionCtrl.user.removeInstitution(institutionKey);
+                        institutionCtrl.user.removeInstitution(institutionKey, ctrl.removeHierarchy);
                         AuthService.save();
                         ctrl.closeDialog();
                         $state.go('app.home');

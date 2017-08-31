@@ -202,7 +202,6 @@
               user.removeInstitution(splab.key);
               expect(user.follows).toEqual([]);
               expect(user.institutions).toEqual([]);
-              expect(user.current_institution).toBe(undefined);
           });
         });
    });

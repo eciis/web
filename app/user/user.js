@@ -79,14 +79,19 @@ User.prototype.removeInvite = function removeInvite(inviteKey) {
     });
 };
 
-User.prototype.removeInstitution = function removeInstitution(institutionKey) {
+User.prototype.removeInstitution = function removeInstitution(institutionKey, removeHierarchy) {
+    removeHierarchy = removeHierarchy === 'true';
     _.remove(this.institutions, function(institution) {
-        return institution.key === institutionKey;
+        var childToRemove = (institution.parent_institution && institution.parent_institution === institutionKey && removeHierarchy);
+        return (institution.key === institutionKey) || childToRemove;
     });
     _.remove(this.follows, function(institution) {
-        return institution.key === institutionKey;
+        var childToRemove = (institution.parent_institution && institution.parent_institution === institutionKey && removeHierarchy);
+        return (institution.key === institutionKey) || childToRemove;
     });
-    this.current_institution = this.institutions[0];
+    if(!_.isEmpty(this.institutions)){
+        this.current_institution = this.institutions[0];
+    }
 };
 
 User.prototype.updateInstitutions = function updateInstitutions(institution){

@@ -244,11 +244,11 @@ class Institution(ndb.Model):
         institution = {}
         for attribute in attributes:
             attr_value = getattr(self, attribute)
-            if(attribute == 'parent_institution'):
-                if(self.parent_institution):
+            if(isinstance(attr_value, ndb.Key)):
+                if attribute != 'parent_institution':
+                    attr_value = self.key.urlsafe()
+                elif self.parent_institution:
                     attr_value = self.parent_institution.urlsafe()
-            elif(isinstance(attr_value, ndb.Key)):
-                attr_value = self.key.urlsafe()
             if((attribute == "invite") and attr_value):
                 invite_key = self.key.get().invite
                 attr_value = {

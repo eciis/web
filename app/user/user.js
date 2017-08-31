@@ -80,7 +80,6 @@ User.prototype.removeInvite = function removeInvite(inviteKey) {
 };
 
 User.prototype.removeInstitution = function removeInstitution(institutionKey, removeHierarchy) {
-    removeHierarchy = removeHierarchy === 'true';
     _.remove(this.institutions, function(institution) {
         var childToRemove = (institution.parent_institution && institution.parent_institution === institutionKey && removeHierarchy);
         return (institution.key === institutionKey) || childToRemove;

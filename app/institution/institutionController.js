@@ -187,8 +187,6 @@
             });
         };
 
-        console.log(this.user.follows);
-
         institutionCtrl.openWebsite = function openWebsite() {
             var website = institutionCtrl.current_institution.website_url;
             $window.open(website);
@@ -208,14 +206,18 @@
             };
 
             ctrl.removeInst = function removeInst() {
-                if(!ctrl.removeHierarchy) {
+                if(ctrl.removeHierarchy === undefined) {
                     MessageService.showToast("Você deve marcar uma das opções.");
                 } else {
                     InstitutionService.removeInstitution(institutionKey, ctrl.removeHierarchy).then(function success() {
                         institutionCtrl.user.removeInstitution(institutionKey, ctrl.removeHierarchy);
                         AuthService.save();
                         ctrl.closeDialog();
-                        $state.go('app.home');
+                        if(_.isEmpty(institutionCtrl.user.institutions)) {
+                            $state.go('user_inactive');
+                        } else {
+                            $state.go('app.home');
+                        }
                         MessageService.showToast("Instituição removida com sucesso.");
                     });
                 }

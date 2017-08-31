@@ -30,9 +30,9 @@
 
     var tiago = {
         name: 'Tiago',
-        institutions: [splab],
+        institutions: [splab, certbio],
         institutions_admin: [],
-        follows: [splab.key],
+        follows: [splab.key, certbio.key],
         invites: [invite],
         accessToken: '00000'
     };
@@ -112,13 +112,7 @@
                 spyOn(userService, 'addInstitution').and.callFake(function() {
                     return {
                         then: function(callback) {
-                            return callback({
-                                name: 'Tiago',
-                                institutions: [splab, certbio],
-                                follows: [splab.key, certbio.key],
-                                invites: [invite],
-                                accessToken: '00000'
-                            });
+                            return callback(tiago);
                         }
                     };
                 });
@@ -151,6 +145,13 @@
             it('should be call $mdDialog.show()', function(done) {
                 promise.then(function() {
                     expect(mdDialog.show).toHaveBeenCalled();
+                    done();
+                });
+            });
+
+            it('should user state active', function(done) {
+                promise.then(function() {
+                    expect(newInviteCtrl.user.state).toEqual('active');
                     done();
                 });
             });

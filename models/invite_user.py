@@ -62,11 +62,10 @@ class InviteUser(Invite):
         """Method of send notification of invite user."""
         entity_type = 'USER'
 
-        user_found = User.query(User.email == self.invitee).fetch(1)
+        user_found = User.get_active_user(self.invitee)
 
-        if user_found and user_found[0].state == 'active':
-            invitee = user_found[0]
-            super(InviteUser, self).send_notification(user, invitee.key.urlsafe(), entity_type)
+        if user_found:
+            super(InviteUser, self).send_notification(user, user_found.key.urlsafe(), entity_type)
 
     def make(self):
         """Create json of invite to user."""

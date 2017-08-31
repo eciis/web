@@ -20,6 +20,10 @@
                 icon: "inbox",
                 state: "app.post"
             },
+            "SHARED_POST": {
+                icon: "inbox",
+                state: "app.post"
+            },
             "INVITE": {
                 icon: "people",
                 state: "new_invite"

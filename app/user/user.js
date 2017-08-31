@@ -79,6 +79,16 @@ User.prototype.removeInvite = function removeInvite(inviteKey) {
     });
 };
 
+User.prototype.removeInstitution = function removeInstitution(institutionKey) {
+    _.remove(this.institutions, function(institution) {
+        return institution.key === institutionKey;
+    });
+    _.remove(this.follows, function(institution) {
+        return institution.key === institutionKey;
+    });
+    this.current_institution = this.institutions[0];
+};
+
 User.prototype.updateInstitutions = function updateInstitutions(institution){
     updateInstitution(this.institutions, institution);
     updateFollowInstitution(this.follows, institution);

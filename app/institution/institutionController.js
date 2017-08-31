@@ -210,11 +210,11 @@
                     MessageService.showToast("Você deve marcar uma das opções.");
                 } else {
                     InstitutionService.removeInstitution(institutionKey, ctrl.removeHierarchy).then(function success() {
-                        AuthService.reload().then(function success() {
-                            ctrl.closeDialog();
-                            $state.go('app.home');
-                            MessageService.showToast("Instituição removida com sucesso.");
-                        });
+                        institutionCtrl.user.removeInstitution(institutionKey);
+                        AuthService.save();
+                        ctrl.closeDialog();
+                        $state.go('app.home');
+                        MessageService.showToast("Instituição removida com sucesso.");
                     });
                 }
             };

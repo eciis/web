@@ -13,6 +13,7 @@
         postCtrl.deletePreviousImage = false;
         postCtrl.user = AuthService.getCurrentUser();
         postCtrl.photoUrl = "";
+        postCtrl.pdfs = [];
 
         postCtrl.addImage = function(image) {
             var newSize = 1024;
@@ -25,6 +26,11 @@
             }, function error(error) {
                 MessageService.showToast(error);
             });
+        };
+
+        postCtrl.addPdf = function addPdf(files) {
+            postCtrl.pdfs = postCtrl.pdfs.concat(files);
+
         };
 
         postCtrl.createEditedPost = function createEditedPost(post) {
@@ -168,6 +174,15 @@
             var isImageNull = postCtrl.photoUrl === null;
             var hasTitle = postCtrl.post.title;
             return !isImageEmpty && !isImageNull && hasTitle;
+        };
+
+        postCtrl.showFiles = function() {
+            var noFiles = postCtrl.pdfs.length > 0;
+            return noFiles;
+        };
+
+        postCtrl.hideFile = function(index) {
+            postCtrl.pdfs.splice(index, 1);
         };
 
         (function main() {

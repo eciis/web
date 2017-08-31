@@ -79,7 +79,7 @@
             var currentUrl = (window.location.href).split('#');
             var url = currentUrl[0] + URL_POST + postDetailsCtrl.post.key;
             ngClipboard.toClipboard(url);
-            MessageService.showToast("O link foi copiado.");
+            MessageService.showToast("O link foi copiado");
         };
 
         postDetailsCtrl.likeOrDislikePost = function likeOrDislikePost() {
@@ -423,7 +423,6 @@
                 return post.share_post.key;
             }
             return post.key;
-            
         }
 
         function adjustText(text){

@@ -46,10 +46,12 @@
         httpBackend.when('GET', "home/home.html").respond(200);
         AuthService.login(maiana);
 
-        shareCtrl = $controller('SharePostController', {scope: scope, 
-                                                        user: maiana,
-                                                        posts: [post],
-                                                        post: post});
+        shareCtrl = $controller('SharePostController', {
+            scope: scope,
+            user: maiana,
+            posts: [post],
+            post: post
+        });
         httpBackend.flush();
     }));
 

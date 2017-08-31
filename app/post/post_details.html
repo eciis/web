@@ -86,7 +86,7 @@
 
   <!-- BUTTONS -->
   <md-card-actions layout="row" layout-align="end-center">
-    <md-button class="md-icon-button" ng-click="postDetailsCtrl.generateLink()">
+    <md-button class="md-icon-button" ng-click="postDetailsCtrl.generateLink()" title="Copiar link">
       <md-icon>link</md-icon>
     </md-button>
     <md-button  ng-if="postDetailsCtrl.showButtonDelete()" class="md-icon-button" arial-label="Delete"
@@ -110,7 +110,8 @@
       ng-if="postDetailsCtrl.showButtonEdit()">
       <md-icon>edit</md-icon>
     </md-button>
-    <md-button class="md-icon-button" ng-if="postDetailsCtrl.post.state != 'deleted'" aria-label="editar" ng-click="postDetailsCtrl.share(postDetailsCtrl.post)">
+    <md-button class="md-icon-button" ng-if="postDetailsCtrl.post.state != 'deleted'" aria-label="editar" 
+      ng-click="postDetailsCtrl.share(postDetailsCtrl.post)" title="Compartilhar">
       <md-icon>share</md-icon>
     </md-button>
   </md-card-actions>

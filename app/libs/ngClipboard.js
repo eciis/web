@@ -21,8 +21,8 @@ angular.module('ngClipboard', [])
             window.getSelection().removeAllRanges();
 
             copyElement.remove();
+            }
         }
-    }
     })
 
     .directive('ngCopyable', function() {
@@ -42,5 +42,4 @@ angular.module('ngClipboard', [])
                 window.getSelection().removeAllRanges();
             });
         }
-
     });

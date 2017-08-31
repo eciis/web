@@ -5,7 +5,7 @@
     var app = angular.module("app");
 
     app.controller("PostController", function PostController($mdDialog, PostService, AuthService,
-            $mdToast, $rootScope, ImageService, MessageService, $q, $scope, $state) {
+            $mdToast, $rootScope, ImageService, MessageService, $q, $scope, $state, PdfService) {
         var postCtrl = this;
 
         postCtrl.post = {};
@@ -13,7 +13,8 @@
         postCtrl.deletePreviousImage = false;
         postCtrl.user = AuthService.getCurrentUser();
         postCtrl.photoUrl = "";
-        postCtrl.pdfs = [];
+        postCtrl.pdfFiles = [];
+        var pdfUrlFiles = null;
 
         postCtrl.addImage = function(image) {
             var newSize = 1024;
@@ -29,7 +30,7 @@
         };
 
         postCtrl.addPdf = function addPdf(files) {
-            postCtrl.pdfs = postCtrl.pdfs.concat(files);
+            postCtrl.pdfFiles = postCtrl.pdfFiles.concat(files);
 
         };
 
@@ -67,19 +68,60 @@
         };
 
         postCtrl.createPost = function createPost(posts) {
+            saveCreatedPost(posts);
+        };
+
+        function saveImage() {
+            var deferred = $q.defer();
             if (postCtrl.photoBase64Data) {
                 postCtrl.loading = true;
                 ImageService.saveImage(postCtrl.photoBase64Data).then(function success(data) {
                     postCtrl.loading = false;
                     postCtrl.post.photo_url = data.url;
                     postCtrl.post.uploaded_images = [data.url];
-                    saveCreatedPost(posts);
-                    postCtrl.post.photo_url = null;
+                    deferred.resolve();
+                }, function error() {
+                    deferred.reject();
                 });
             } else {
-                saveCreatedPost(posts);
+                deferred.resolve();
             }
-        };
+            return deferred.promise;
+        }
+
+        function savePdf() {
+            var deferred = $q.defer();
+            if(postCtrl.files) {
+                PdfService.save(postCtrl.files[0], pdfUrlFiles).then(
+                    function success(data) {
+                        postCtrl.post.pdf_files = [].concat(data.url);
+                        deferred.resolve();
+                    }, function error(response) {
+                        MessageService.showToast(response.data.msg);
+                        deferred.reject();
+                });
+            } else {
+                deferred.resolve();
+            }
+            return deferred.promise;
+        }
+
+        function saveFiles() {
+            var deferred = $q.defer();
+            if(postCtrl.files) {
+                PdfService.save(postCtrl.file).then(
+                    function success(data) {
+                        postCtrl.post.pdfFiles = data.url;
+                        deferred.resolve();
+                    }, function error(response) {
+                        MessageService.showToast(response.data.msg);
+                        deferred.reject();
+                });
+            } else {
+                deferred.resolve();
+            }
+            return deferred.promise;
+        }
 
         postCtrl.editPost = function editPost(originalPost) {
             deleteImage(postCtrl.post).then(function success() {
@@ -112,23 +154,26 @@
         }
 
         function saveCreatedPost(posts) {
-            var post = new Post(postCtrl.post, postCtrl.user.current_institution.key);
-            if (post.isValid()) {
-                PostService.createPost(post).then(function success(response) {
-                    postCtrl.clearPost();
-                    posts.push(new Post(response.data));
-                    MessageService.showToast('Postado com sucesso!');
-                    $mdDialog.hide();
-                }, function error(response) {
-                    AuthService.reload().then(function success() {
+            var savePromises = [savePdf(), saveImage()];
+            $q.all(savePromises).then(function success() {
+                var post = new Post(postCtrl.post, postCtrl.user.current_institution.key);
+                if (post.isValid()) {
+                    PostService.createPost(post).then(function success(response) {
+                        postCtrl.clearPost();
+                        posts.push(new Post(response.data));
+                        MessageService.showToast('Postado com sucesso!');
                         $mdDialog.hide();
-                        MessageService.showToast(response.data.msg);
-                        $state.go('app.home');
+                    }, function error(response) {
+                        AuthService.reload().then(function success() {
+                            $mdDialog.hide();
+                            MessageService.showToast(response.data.msg);
+                            $state.go('app.home');
+                        });
                     });
-                });
-            } else {
-                MessageService.showToast('Post inválido!');
-            }
+                } else {
+                    MessageService.showToast('Post inválido!');
+                }
+            });
         }
 
         postCtrl.clearPost = function clearPost() {
@@ -177,12 +222,12 @@
         };
 
         postCtrl.showFiles = function() {
-            var noFiles = postCtrl.pdfs.length > 0;
+            var noFiles = postCtrl.pdfFiles.length > 0;
             return noFiles;
         };
 
         postCtrl.hideFile = function(index) {
-            postCtrl.pdfs.splice(index, 1);
+            postCtrl.pdfFiles.splice(index, 1);
         };
 
         (function main() {

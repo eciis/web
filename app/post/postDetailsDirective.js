@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller('PostDetailsController', function(PostService, AuthService, CommentService, $mdToast, $state,
-        $mdDialog, NotificationService, MessageService) {
+        $mdDialog, NotificationService, MessageService, PdfService) {
         var postDetailsCtrl = this;
 
         var LIMIT_CHARACTERS_POST = 1000;
@@ -13,6 +13,7 @@
         postDetailsCtrl.showComments = false;
         postDetailsCtrl.savingComment = false;
         postDetailsCtrl.savingLike = false;
+        postDetailsCtrl.pdfFile = null;
 
         postDetailsCtrl.user = AuthService.getCurrentUser();
 
@@ -37,6 +38,19 @@
                 MessageService.showToast('Cancelado');
             });
         };
+
+        function getPdfUrl() {
+            postDetailsCtrl.pdfFile = postDetailsCtrl.post.pdf_files[0];
+            if(postDetailsCtrl.pdfFile) {
+                PdfService.getReadableURL(postDetailsCtrl.pdfFile, setPdfURL);
+            }
+        }
+
+        getPdfUrl();
+
+        function setPdfURL(url) {
+            postDetailsCtrl.pdfFile = url;
+        }
 
         postDetailsCtrl.isAuthorized = function isAuthorized() {
             return postDetailsCtrl.isPostAuthor() || isInstitutionAdmin();

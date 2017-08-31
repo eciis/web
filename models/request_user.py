@@ -12,16 +12,17 @@ class RequestUser(Invite):
 
     @staticmethod
     def senderIsMember(sender_key, institution):
-        userWithEmail = User.query(User.Key == sender_key)
-        if userWithEmail.count() == 1:
+        user = ndb.Key(urlsafe=sender_key).get()
+        if user:
             instmember = Institution.query(Institution.members.IN(
-                [userWithEmail.get().key]),
+                [user.key]),
                 Institution.key == institution.key)
             return instmember.count() > 0
         return False
 
     @staticmethod
     def senderIsInvited(sender_key, institutionKey):
+        sender_key = ndb.Key(urlsafe=sender_key)
         request = RequestUser.query(
             RequestUser.institution_key == institutionKey,
             RequestUser.status == 'sent',
@@ -32,20 +33,20 @@ class RequestUser(Invite):
     @staticmethod
     def checkIsRequestUserValid(data):
         institution = ndb.Key(urlsafe=data.get('institution_key')).get()
-        invitee = data.get('invitee')
-        if RequestUser.senderIsMember(invitee, institution):
+        sender = data.get('sender_key')
+        if RequestUser.senderIsMember(sender, institution):
             raise FieldException("The sender is already a member")
-        if RequestUser.senderIsInvited(invitee, institution.key):
+        if RequestUser.senderIsInvited(sender, institution.key):
             raise FieldException("The sender is already invited")
 
     @staticmethod
     def create(data):
         """Create a post and check required fields."""
-        invite = RequestUser()
-        invite.sender_key = ndb.Key(urlsafe=data.get('sender_key'))
-        invite = Invite.create(data, invite)
+        request = RequestUser()
+        request.sender_key = ndb.Key(urlsafe=data.get('sender_key'))
+        request = Invite.create(data, request)
         RequestUser.checkIsRequestUserValid(data)
-        return invite
+        return request
 
     def send_email(self, host, body=None):
         """Method of send email of invite user."""
@@ -68,7 +69,7 @@ class RequestUser(Invite):
     def make(self):
         """Create json of invite to user."""
         invite_user_json = super(RequestUser, self).make()
-        invite_user_json['sender'] = self.sender_key.get().email,
+        invite_user_json['sender'] = self.sender_key.get().email
         invite_user_json['institution_key'] = self.institution_key.urlsafe()
         invite_user_json['type_of_invite'] = 'REQUEST_USER'
         return invite_user_json

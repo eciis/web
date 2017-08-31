@@ -16,7 +16,9 @@ describe('Test EditInstDirective', function() {
             occupation_area: "government agencies",
             phone_number: "phone",
             cnpj: "cnpj",
-            address: "address"
+            address: "address",
+            leader: "leader name",
+            institutional_email: "email@institutional.com"
     };
 
     var institutions = [{

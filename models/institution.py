@@ -33,12 +33,17 @@ class Institution(ndb.Model):
 
     portfolio_url = ndb.StringProperty(indexed=False)
 
+    # Email of the admin
     email = ndb.StringProperty()
+
+    # Institutional email
+    institutional_email = ndb.StringProperty()
 
     website_url = ndb.StringProperty(indexed=False)
 
     phone_number = ndb.StringProperty()
 
+    # Bollean that represents if the institution is empowered or not.
     empowered = ndb.BooleanProperty(indexed=False, default=False)
 
     # Name of the leader
@@ -55,11 +60,6 @@ class Institution(ndb.Model):
     # The children institutions
     # Value is None for institutions without children
     children_institutions = ndb.KeyProperty(kind="Institution", repeated=True)
-
-    # The institutions are waiting to be accept as children
-    # Value is None for institutions without children waiting accept
-    children_institutions_pedding = ndb.KeyProperty(
-        kind="Institution", repeated=True)
 
     # Key of invite to create institution
     invite = ndb.KeyProperty(kind="Invite")

@@ -43,6 +43,14 @@ Institution.prototype.isValid = function isValid() {
         return false;
     }
 
+    if (_.isUndefined(this.leader) || _.isEmpty(this.leader)) {
+        return false;
+    }
+
+    if (_.isUndefined(this.institutional_email) || _.isEmpty(this.institutional_email)) {
+        return false;
+    }
+
     return true;
 };
         

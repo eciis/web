@@ -17,7 +17,7 @@
     <form name="instForm" ng-submit="submitForm(instForm.$valid)" novalidate>
         <div layout="row">
             <md-input-container class="md-block" flex-gt-xs flex="60">
-                <label>Nome</label>
+                <label>Nome </label>
                 <input type="text" name="name" required
                     ng-model="editInstCtrl.newInstitution.name">
                 <div ng-if='instForm.name.$error.required' ng-message="required">Este campo é obrigatório!</div>
@@ -62,7 +62,7 @@
                     ng-value="area.value">{{ area.name }}
                   </md-option>
                 </md-select>
-                <div ng-if='instForm.occupation_area.$error.required' ng-message="required">Este campo é obrigatório!</div>
+                <div ng-if='instForm.occupation_area.$error.required&&$instForm.occupation_area.$dirty' ng-message="required">Este campo é obrigatório!</div>
             </md-input-container>
             <md-input-container class="md-block" flex-gt-sm>
                 <label>Natureza Jurídica</label>
@@ -95,13 +95,17 @@
             <label>Atual Dirigente máximo</label>
             <input type="text" name="leader" required
             ng-model="editInstCtrl.newInstitution.leader">
-            <div ng-if='instForm.leader.$error.required&&$instForm.leader.$dirty' ng-message="required">Este campo é obrigatório!</div>
+             <div ng-messages="userForm.leader.$error" >
+                <div  ng-message="required">Este campo é obrigatório!</div>
+            </div>
         </md-input-container>
         <md-input-container class="md-block" flex-gt-xs>
             <label>Email Institucional</label>
-            <input type="email" name="institutional_email" required="" 
+            <input type="email" name="institutional_email" required 
             ng-model="editInstCtrl.newInstitution.institutional_email">
-            <div ng-if='instForm.institutional_email.$error.required' ng-message="required">Este campo é obrigatório!</div>
+            <div ng-messages="userForm.institutional_email.$error" >
+                <div  ng-message="required">Este campo é obrigatório!</div>
+            </div>
         </md-input-container>
         <md-input-container class="md-block" flex-gt-xs>
             <label>Responsável</label>
@@ -121,7 +125,7 @@
             </md-button>
         </md-input-container>
         <div layout="row" layout-align="end center">
-            <md-button ng-click="editInstCtrl.submit($event)" class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-900'}">Confirmar</md-button>
+            <md-button ng-click="editInstCtrl.submit($event)"  md-colors="{background: 'teal-900'}">Confirmar</md-button>
         </div>
     </form>
 </div>

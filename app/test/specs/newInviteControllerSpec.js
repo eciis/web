@@ -52,9 +52,7 @@
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', INVITES_URI + invite.key).respond(invite);
         httpBackend.when('GET', "home/home.html").respond(200);
-        AuthService.getCurrentUser = function() {
-            return new User(tiago);
-        };
+        AuthService.login(tiago);
         createCtrl = function() {
             return $controller('NewInviteController',
                 {

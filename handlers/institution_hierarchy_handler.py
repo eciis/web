@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Institution Hierarchie Handler."""
+"""Institution Hierarchy Handler."""
 
 from google.appengine.ext import ndb
 
@@ -17,8 +17,8 @@ from handlers.base_handler import BaseHandler
 from handlers.institution_handler import is_admin
 
 
-class InstitutionHierarchieHandler(BaseHandler):
-    """Institution Hierarchie Handler."""
+class InstitutionHierarchyHandler(BaseHandler):
+    """Institution Hierarchy Handler."""
 
     @login_required
     @is_admin

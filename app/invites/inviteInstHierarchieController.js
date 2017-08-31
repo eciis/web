@@ -112,14 +112,6 @@
         }
 
         inviteInstCtrl.removeLink = function removeLink(institution, isParent) {
-            var designOptions = function designOptions() {
-                var $dialog = angular.element(document.querySelector('md-dialog'));
-                var $actionsSection = $dialog.find('md-dialog-actions');
-                var $cancelButton = $actionsSection.children()[0];
-                var $confirmButton = $actionsSection.children()[1];
-                angular.element($confirmButton).addClass('md-raised md-warn');
-                angular.element($cancelButton).addClass('md-primary');
-            };
             var confirm = $mdDialog.confirm({onComplete: designOptions})
                 .clickOutsideToClose(true)
                 .title('Confirmar Remoção')
@@ -153,6 +145,15 @@
                 inviteInstCtrl.institution.addChildrenInst(stub);
             }
             inviteInstCtrl.showButton = true;
+        }
+
+        function designOptions() {
+                var $dialog = angular.element(document.querySelector('md-dialog'));
+                var $actionsSection = $dialog.find('md-dialog-actions');
+                var $cancelButton = $actionsSection.children()[0];
+                var $confirmButton = $actionsSection.children()[1];
+                angular.element($confirmButton).addClass('md-raised md-warn');
+                angular.element($cancelButton).addClass('md-primary');
         }
 
         loadInstitution();

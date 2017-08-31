@@ -1,25 +1,25 @@
 # -*- coding: utf-8 -*-
-"""Institution hierarchie handler test."""
+"""Institution hierarchy handler test."""
 
 from test_base_handler import TestBaseHandler
 from models.user import User
 from models.institution import Institution
-from handlers.institution_hierarchie_handler import InstitutionHierarchieHandler
+from handlers.institution_hierarchy_handler import InstitutionHierarchyHandler
 from mock import patch
 
 
-class InstitutionHierarchieHandlerTest(TestBaseHandler):
+class InstitutionHierarchyHandlerTest(TestBaseHandler):
     """Test Institution Hierarchie Handler class."""
 
     @classmethod
     def setUp(cls):
         """Provide the base for the tests."""
-        super(InstitutionHierarchieHandlerTest, cls).setUp()
+        super(InstitutionHierarchyHandlerTest, cls).setUp()
         methods = set(cls.webapp2.WSGIApplication.allowed_methods)
         methods.add('PATCH')
         cls.webapp2.WSGIApplication.allowed_methods = frozenset(methods)
         app = cls.webapp2.WSGIApplication(
-            [("/api/institutions/(.*)/hierarchie/(.*)", InstitutionHierarchieHandler)
+            [("/api/institutions/(.*)/hierarchy/(.*)", InstitutionHierarchyHandler)
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
@@ -31,7 +31,7 @@ class InstitutionHierarchieHandlerTest(TestBaseHandler):
         self.assertTrue(self.splab.key in self.certbio.children_institutions)
         self.assertTrue(self.splab.parent_institution == self.certbio.key)
         # Call the delete method
-        self.testapp.delete("/api/institutions/%s/hierarchie/%s?isParent=false" %
+        self.testapp.delete("/api/institutions/%s/hierarchy/%s?isParent=false" %
                             (self.certbio.key.urlsafe(), self.splab.key.urlsafe()))
         # Update the institutions
         self.certbio = self.certbio.key.get()
@@ -48,7 +48,7 @@ class InstitutionHierarchieHandlerTest(TestBaseHandler):
         self.assertTrue(self.splab.key in self.certbio.children_institutions)
         self.assertTrue(self.splab.parent_institution == self.certbio.key)
         # Call the delete method
-        self.testapp.delete("/api/institutions/%s/hierarchie/%s?isParent=true" %
+        self.testapp.delete("/api/institutions/%s/hierarchy/%s?isParent=true" %
                             (self.splab.key.urlsafe(), self.certbio.key.urlsafe()))
         # Update the institutions
         self.certbio = self.certbio.key.get()

@@ -27,11 +27,6 @@ class InstitutionHierarchieHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
     def test_delete_child_connection(self, verify_token):
         """Test delete method with isParent=false."""
-        # Set the institutions' state to active
-        self.certbio.state = "active"
-        self.splab.state = "active"
-        self.splab.put()
-        self.certbio.put()
         # Assert the initial conditions
         self.assertTrue(self.splab.key in self.certbio.children_institutions)
         self.assertTrue(self.splab.parent_institution == self.certbio.key)
@@ -101,6 +96,7 @@ def initModels(cls):
     # new Institution CERTBIO
     cls.certbio = Institution()
     cls.certbio.name = 'CERTBIO'
+    cls.certbio.state = "active"
     cls.certbio.acronym = 'CERTBIO'
     cls.certbio.cnpj = '18.104.068/0001-86'
     cls.certbio.legal_nature = 'public'
@@ -124,6 +120,7 @@ def initModels(cls):
     cls.splab.legal_nature = 'public'
     cls.splab.address = 'Universidade Federal de Campina Grande'
     cls.splab.occupation_area = ''
+    cls.splab.state = "active"
     cls.splab.email = 'splab@ufcg.edu.br'
     cls.splab.phone_number = '(83) 3322 4455'
     cls.splab.members = [cls.mayza.key, cls.raoni.key]

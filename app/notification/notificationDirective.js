@@ -45,8 +45,6 @@
         };
 
         controller.goTo = function goTo(notification) {
-            // Isso porque o state quando vai para uma instituição
-            // recebe institutionKey e não somente key
             if(notification.type !== 'INSTITUTION') {
                 var state = type_data[notification.type].state;
                 $state.go(state, {key: notification.entity_key});

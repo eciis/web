@@ -72,17 +72,17 @@
         requestInvCtrl.showFullInformation = function showFullInformation(institution){
            if(!_.isEmpty(requestInvCtrl.institutions)){
                 return requestInvCtrl.institutionSelect.key === institution.id;
-            } else {
-                return false;
             }
+
+            return false;
         };
 
         requestInvCtrl.showMessage = function showMessage(){
             if(_.isEmpty(requestInvCtrl.institutions)){
                 return requestInvCtrl.wasSearched;
-            } else {
-                return false;
             }
+
+            return false;
         };
 
         function clearProperties(){

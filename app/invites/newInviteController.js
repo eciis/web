@@ -30,6 +30,8 @@
                     newInviteCtrl.user.removeInvite(newInviteCtrl.inviteKey);
                     newInviteCtrl.user.institutions = userSaved.institutions;
                     newInviteCtrl.user.follows = userSaved.follows;
+                    newInviteCtrl.user.state = 'active';
+                    newInviteCtrl.user.current_institution = newInviteCtrl.institution;
                     AuthService.save();
                     goHome();
                     showAlert(event, newInviteCtrl.institution.name);

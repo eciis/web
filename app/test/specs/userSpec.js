@@ -185,5 +185,25 @@
             expect(user.getPendingInvitation().should.not.be.empty);
           });
         });
+
+        describe('removeInstitution', function() {
+
+          it('should remove the institution from user.institutions and user.follows',
+            function() {
+              userData = {
+                name: 'Tiago Pereira',
+                cpf: '111.111.111-11',
+                email: 'tiago.pereira@ccc.ufcg.edu.br',
+                institutions: [splab],
+                follows: [splab],
+                invites: [inviteUser, inviteInstitution]
+              };
+              user = createUser();
+              user.removeInstitution(splab.key);
+              expect(user.follows).toEqual([]);
+              expect(user.institutions).toEqual([]);
+              expect(user.current_institution).toBe(undefined);
+          });
+        });
    });
 }));

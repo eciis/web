@@ -14,44 +14,18 @@ Institution.prototype.make = function make() {
     return institution;
 };
 
+
 Institution.prototype.isValid = function isValid() {
-    if (_.isUndefined(this.name) || _.isEmpty(this.name)) {
-        return false;
-    }
-
-    if (_.isUndefined(this.email) || _.isEmpty(this.email)) {
-        return false;
-    }
-
-    if (_.isUndefined(this.cnpj) || _.isEmpty(this.cnpj)) {
-        return false;
-    }
-
-    if (_.isUndefined(this.legal_nature) || _.isEmpty(this.legal_nature)) {
-        return false;
-    }
-
-    if (_.isUndefined(this.address) || _.isEmpty(this.address)) {
-        return false;
-    }
-
-    if (_.isUndefined(this.occupation_area) || _.isEmpty(this.occupation_area)) {
-        return false;
-    }
-
-    if (_.isUndefined(this.occupation_area) || _.isEmpty(this.occupation_area)) {
-        return false;
-    }
-
-    if (_.isUndefined(this.leader) || _.isEmpty(this.leader)) {
-        return false;
-    }
-
-    if (_.isUndefined(this.institutional_email) || _.isEmpty(this.institutional_email)) {
-        return false;
-    }
-
-    return true;
+    var required_fields = [this.name, this.email,this.cnpj, this.legal_nature, this.address,
+                           this.occupation_area, this.leader, this.institutional_email];
+    var isValid = true;
+    
+    _.forEach(required_fields, function(field) {
+        if (_.isUndefined(field) || _.isEmpty(field)) {
+            isValid = false;
+        }
+    });  
+    return isValid;
 };
         
 Institution.prototype.addInvite = function addInvite(invite){

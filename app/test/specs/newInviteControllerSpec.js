@@ -108,23 +108,17 @@
                         }
                     };
                 });
-                spyOn(authService, 'reload').and.callFake(function() {
+
+                spyOn(userService, 'addInstitution').and.callFake(function() {
                     return {
                         then: function(callback) {
-                            return callback(newInviteCtrl.user = {
+                            return callback({
                                 name: 'Tiago',
                                 institutions: [splab, certbio],
                                 follows: [splab.key, certbio.key],
                                 invites: [invite],
                                 accessToken: '00000'
                             });
-                        }
-                    };
-                });
-                spyOn(userService, 'addInstitution').and.callFake(function() {
-                    return {
-                        then: function(callback) {
-                            return callback();
                         }
                     };
                 });
@@ -143,13 +137,6 @@
             it('user should be follow certbio after acceptInvite', function(done) {
                 promise.then(function() {
                     expect(newInviteCtrl.user.follows).toContain(certbio.key);
-                    done();
-                });
-            });
-
-            it('should be call authService.reload()', function(done) {
-                promise.then(function() {
-                    expect(authService.reload).toHaveBeenCalled();
                     done();
                 });
             });

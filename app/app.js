@@ -103,10 +103,10 @@
                     }
                 }
             })
-            .state("config_profile", {
+            .state("app.config_profile", {
                 url: "/config_profile",
                 views: {
-                    main: {
+                    content: {
                         templateUrl: "auth/config_profile.html",
                         controller: "ConfigProfileController as configProfileCtrl"
                     }

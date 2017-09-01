@@ -39,7 +39,7 @@ def makeUser(user, request):
             Utils.toJson(institution.get())
         )
     user_json['follows'] = [institution_key.get().make(
-        ['acronym', 'photo_url', 'key']) for institution_key in user.follows]
+        ['acronym', 'photo_url', 'key', 'parent_institution']) for institution_key in user.follows]
     return user_json
 
 

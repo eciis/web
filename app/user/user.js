@@ -79,6 +79,21 @@ User.prototype.removeInvite = function removeInvite(inviteKey) {
     });
 };
 
+User.prototype.removeInstitution = function removeInstitution(institutionKey, removeHierarchy) {
+    var toRemove = function toRemove(institution) {
+        var childToRemove = (institution.parent_institution &&
+                institution.parent_institution === institutionKey && removeHierarchy);
+        return (institution.key === institutionKey) || childToRemove;
+    };
+
+    _.remove(this.institutions, toRemove);
+    _.remove(this.follows, toRemove);
+
+    if(!_.isEmpty(this.institutions)) {
+        this.current_institution = this.institutions[0];
+    }
+};
+
 User.prototype.updateInstitutions = function updateInstitutions(institution){
     updateInstitution(this.institutions, institution);
     updateFollowInstitution(this.follows, institution);

@@ -11,12 +11,14 @@ def get_occupation_area(data):
     return data.get('occupation_area')
 
 
-# House Number, Street Name, City, State, Zip, Country
 class Address(ndb.Model):
     """Address model."""
+
     number = ndb.StringProperty()
 
     street = ndb.StringProperty()
+
+    neighbourhood = ndb.StringProperty()
 
     city = ndb.StringProperty()
 
@@ -26,6 +28,13 @@ class Address(ndb.Model):
 
     country = ndb.StringProperty()
 
+    # House Number, Street Name, City, State, Zip, Country
+    def get_full_address(self):
+        """Get the full address."""
+        full_address = "%s %s, %s, %s, %s, %s" % (self.number, self.street,
+                                                  self.city, self.state,
+                                                  self.zip, self.country)
+        return full_address
 
 
 class Institution(ndb.Model):
@@ -40,9 +49,9 @@ class Institution(ndb.Model):
     legal_nature = ndb.StringProperty(
         choices=set(["public", "private", "philanthropic"]))
 
-    address = ndb.StringProperty()
+    address = ndb.StructuredProperty(Address)
 
-    occupation_area = ndb.StringProperty()
+    occupation_area = ndb.StringProperty() 
 
     description = ndb.TextProperty()
 

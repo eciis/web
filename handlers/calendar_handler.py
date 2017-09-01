@@ -19,11 +19,15 @@ class CalendarHandler(BaseHandler):
     @login_required
     @json_response
     def get(self, user):
-        """Get all events."""
-        events_collection = Event.query().fetch()
-        self.response.write(json.dumps(
-            Utils.toJson(events_collection, host=self.request.host)
-        ))
+        """Get events of all institutions that user follow."""
+        array = []
+        if len(user.follows) > 0:
+            queryEvents = Event.query(Event.institution_key.IN(
+                user.follows))
+
+            array = [Event.make(event) for event in queryEvents]
+
+        self.response.write(json.dumps(array))
 
     @json_response
     @login_required

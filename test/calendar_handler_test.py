@@ -72,6 +72,7 @@ class CalendarHandlerTest(TestBaseHandler):
                 'end_time': '20271220102548',
                 'local': 'local do evento'})
 
+
 def initModels(cls):
     """Init the models."""
     # new User user
@@ -79,27 +80,12 @@ def initModels(cls):
     cls.user.name = 'user name'
     cls.user.cpf = '089.675.908-90'
     cls.user.email = 'user@gmail.com'
-    cls.user.institutions = []
-    cls.user.follows = []
-    cls.user.institutions_admin = []
-    cls.user.notifications = []
-    cls.user.posts = []
     cls.user.put()
     # new Institution CERTBIO
     cls.certbio = Institution()
     cls.certbio.name = 'CERTBIO'
-    cls.certbio.acronym = 'CERTBIO'
-    cls.certbio.cnpj = '18.104.068/0001-86'
-    cls.certbio.legal_nature = 'public'
-    cls.certbio.address = 'Universidade Federal de Campina Grande'
-    cls.certbio.occupation_area = ''
-    cls.certbio.description = 'Ensaio Químico - Determinação de Material Volátil por \
-            Gravimetria e Ensaio Biológico - Ensaio de Citotoxicidade'
-    cls.certbio.email = 'certbio@ufcg.edu.br'
-    cls.certbio.phone_number = '(83) 3322 4455'
     cls.certbio.members = [cls.user.key]
     cls.certbio.followers = [cls.user.key]
-    cls.certbio.posts = []
     cls.certbio.admin = cls.user.key
     cls.certbio.put()
 

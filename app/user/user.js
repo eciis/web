@@ -80,15 +80,16 @@ User.prototype.removeInvite = function removeInvite(inviteKey) {
 };
 
 User.prototype.removeInstitution = function removeInstitution(institutionKey, removeHierarchy) {
-    _.remove(this.institutions, function(institution) {
-        var childToRemove = (institution.parent_institution && institution.parent_institution === institutionKey && removeHierarchy);
+    var toRemove = function toRemove(institution) {
+        var childToRemove = (institution.parent_institution &&
+                institution.parent_institution === institutionKey && removeHierarchy);
         return (institution.key === institutionKey) || childToRemove;
-    });
-    _.remove(this.follows, function(institution) {
-        var childToRemove = (institution.parent_institution && institution.parent_institution === institutionKey && removeHierarchy);
-        return (institution.key === institutionKey) || childToRemove;
-    });
-    if(!_.isEmpty(this.institutions)){
+    };
+
+    _.remove(this.institutions, toRemove);
+    _.remove(this.follows, toRemove);
+
+    if(!_.isEmpty(this.institutions)) {
         this.current_institution = this.institutions[0];
     }
 };

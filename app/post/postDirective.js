@@ -91,10 +91,11 @@
 
         function savePdf() {
             var deferred = $q.defer();
-            if(postCtrl.files) {
-                PdfService.save(postCtrl.files[0], pdfUrlFiles).then(
+            if(postCtrl.pdfFiles.length > 0) {
+                PdfService.save(postCtrl.pdfFiles[0], pdfUrlFiles).then(
                     function success(data) {
                         postCtrl.post.pdf_files = [].concat(data.url);
+                        pdfUrlFiles = data.url;
                         deferred.resolve();
                     }, function error(response) {
                         MessageService.showToast(response.data.msg);
@@ -174,10 +175,14 @@
                     MessageService.showToast('Post inválido!');
                 }
             });
+            postCtrl.post.photo_url = null;
+            postCtrl.post.pdf_files = [];
+
         }
 
         postCtrl.clearPost = function clearPost() {
             postCtrl.post = {};
+            postCtrl.pdfFiles = [];
         };
 
         function saveEditedPost(originalPost) {

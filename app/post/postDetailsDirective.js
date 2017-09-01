@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller('PostDetailsController', function(PostService, AuthService, CommentService, $mdToast, $state,
-        $mdDialog, NotificationService, MessageService, PdfService) {
+        $mdDialog, NotificationService, MessageService, PdfService, $sce, $scope) {
         var postDetailsCtrl = this;
 
         var LIMIT_CHARACTERS_POST = 1000;
@@ -13,7 +13,9 @@
         postDetailsCtrl.showComments = false;
         postDetailsCtrl.savingComment = false;
         postDetailsCtrl.savingLike = false;
-        postDetailsCtrl.pdfFile = null;
+        postDetailsCtrl.portfolioUrl = null;
+        postDetailsCtrl.post = null;
+        postDetailsCtrl.isPostPage = null;
 
         postDetailsCtrl.user = AuthService.getCurrentUser();
 
@@ -39,17 +41,16 @@
             });
         };
 
-        function getPdfUrl() {
-            postDetailsCtrl.pdfFile = postDetailsCtrl.post.pdf_files[0];
-            if(postDetailsCtrl.pdfFile) {
-                PdfService.getReadableURL(postDetailsCtrl.pdfFile, setPdfURL);
+        function getPortfolioUrl() {
+            postDetailsCtrl.portfolioUrl = postDetailsCtrl.post.pdf_files[0];
+            if(postDetailsCtrl.portfolioUrl) {
+                PdfService.getReadableURL(postDetailsCtrl.portfolioUrl, setPortifolioURL);
+
             }
         }
 
-        getPdfUrl();
-
-        function setPdfURL(url) {
-            postDetailsCtrl.pdfFile = url;
+        function setPortifolioURL(url) {
+            postDetailsCtrl.portfolioUrl = url;
         }
 
         postDetailsCtrl.isAuthorized = function isAuthorized() {
@@ -331,6 +332,33 @@
             }
             return text;
         }
+
+        postDetailsCtrl.portfolioDialog = function(ev) {
+            $mdDialog.show({
+                templateUrl: 'post/pdfDialog.html',
+                targetEvent: ev,
+                clickOutsideToClose:true,
+                locals: {
+                    portfolioUrl: postDetailsCtrl.portfolioUrl
+                },
+                controller: DialogController,
+                controllerAs: 'ctrl'
+            });
+        };
+
+        function DialogController($mdDialog, portfolioUrl) {
+            var ctrl = this;
+            var trustedUrl = $sce.trustAsResourceUrl(portfolioUrl);
+            ctrl.portfolioUrl = trustedUrl;
+        }
+
+        (function main() {
+            if($scope.post && ($scope.isPostPage !== undefined)) {
+                postDetailsCtrl.post = $scope.post;
+                postDetailsCtrl.isPostPage = $scope.isPostPage;
+                getPortfolioUrl();
+            }
+        })();
     });
 
     app.directive("postDetails", function() {
@@ -339,8 +367,7 @@
             templateUrl: "post/post_details.html",
             controllerAs: "postDetailsCtrl",
             controller: "PostDetailsController",
-            scope: {},
-            bindToController: {
+            scope: {
                 post: '=',
                 isPostPage: '='
             }

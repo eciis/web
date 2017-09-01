@@ -158,6 +158,7 @@ class Post(ndb.Model):
         post.title = data.get('title')
         post.photo_url = data.get('photo_url')
         post.text = data.get('text')
+        post.pdf_files = data.get('pdf_files')
         post.last_modified_by = author_key
         post.author = author_key
         post.institution = institution_key

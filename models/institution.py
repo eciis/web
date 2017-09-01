@@ -11,6 +11,23 @@ def get_occupation_area(data):
     return data.get('occupation_area')
 
 
+# House Number, Street Name, City, State, Zip, Country
+class Address(ndb.Model):
+    """Address model."""
+    number = ndb.StringProperty()
+
+    street = ndb.StringProperty()
+
+    city = ndb.StringProperty()
+
+    state = ndb.StringProperty()
+
+    cep = ndb.StringProperty()
+
+    country = ndb.StringProperty()
+
+
+
 class Institution(ndb.Model):
     """Model of Institution."""
 

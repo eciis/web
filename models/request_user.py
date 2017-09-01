@@ -3,7 +3,6 @@
 from invite import Invite
 from google.appengine.ext import ndb
 from custom_exceptions.fieldException import FieldException
-from models.user import User
 from models.institution import Institution
 
 

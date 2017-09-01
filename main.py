@@ -23,6 +23,7 @@ from handlers.search_handler import SearchHandler
 from handlers.invite_handler import InviteHandler
 from handlers.redirect_handler import AppRedirectHandler
 from handlers.user_request_handler import UserRequestHandler
+from handlers.institution_hierarchy_handler import InstitutionHierarchyHandler
 
 methods = set(webapp2.WSGIApplication.allowed_methods)
 methods.add('PATCH')
@@ -35,6 +36,7 @@ app = webapp2.WSGIApplication([
     ("/api/institutions/(.*)/timeline", InstitutionTimelineHandler),
     ("/api/institutions/(.*)/members", InstitutionMembersHandler),
     ("/api/institutions/(.*)/followers", InstitutionFollowersHandler),
+    ("/api/institutions/(.*)/hierarchy/(.*)", InstitutionHierarchyHandler),
     ("/api/institutions/(.*)/invites/(.*)", InstitutionHandler),
     ("/api/institutions/(.*)", InstitutionHandler),
     ("/api/key/(.*)", GetKeyHandler),

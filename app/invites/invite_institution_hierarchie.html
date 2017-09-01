@@ -3,7 +3,7 @@
     <md-card flex layout="column">
       <md-toolbar md-colors="{background: 'teal-800'}" layout="row">
         <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
-          <h1>Convidar Instituições</h1>
+          <h1>Gerenciar Hierarquia</h1>
           <span flex md-truncate></span>
           <md-button aria-label="Convidar Nova Instituição" ng-if="inviteInstCtrl.showButton" ng-click="inviteInstCtrl.showButton = false;">
             <md-icon>add</md-icon>Convidar
@@ -52,6 +52,11 @@
                   Esta instituição ainda não está cadastrada na plataforma</h3>
               </div>
             </div>
+            <div ng-if="inviteInstCtrl.isActive(inviteInstCtrl.institution.parent_institution)">
+              <md-button ng-click="inviteInstCtrl.removeLink(inviteInstCtrl.institution.parent_institution, true)">
+                <md-icon md-colors="{color: 'red-700'}">link</md-icon>
+              </md-button>
+            </div>
           </md-list-item>
           <md-subheader class="md-no-sticky">Instituições filhas</md-subheader>
           <md-list-item class="md-3-line"
@@ -69,6 +74,11 @@
                 <h3 style="color: red">
                 Esta instituição ainda não está cadastrada na plataforma</h3>
               </div>
+            </div>
+            <div ng-if="inviteInstCtrl.isActive(institution)">
+              <md-button ng-click="inviteInstCtrl.removeLink(institution, false)">
+                <md-icon md-colors="{color: 'red-700'}">link</md-icon>
+              </md-button>
             </div>
           </md-list-item>
         </md-list>

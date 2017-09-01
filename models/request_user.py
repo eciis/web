@@ -34,6 +34,8 @@ class RequestUser(Invite):
     def checkIsRequestUserValid(data):
         institution = ndb.Key(urlsafe=data.get('institution_key')).get()
         sender = data.get('sender_key')
+        if not sender:
+            raise FieldException("The request require sender_key")
         if RequestUser.senderIsMember(sender, institution):
             raise FieldException("The sender is already a member")
         if RequestUser.senderIsInvited(sender, institution.key):

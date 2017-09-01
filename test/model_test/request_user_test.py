@@ -53,6 +53,77 @@ class RequestUserTest(TestBase):
             self.certbio.key,
             'The key of institution expected was CERTBIO')
 
+    def test_create_invalid_request(self):
+        """Test cretae invalid request."""
+        data = {
+            'sender_key': self.luiz.key.urlsafe(),
+            'is_request': True,
+            'admin_key': self.mayza.key.urlsafe(),
+            'institution_key': self.certbio.key.urlsafe()
+        }
+
+        request = RequestUser.create(data)
+        request.put()
+
+        with self.assertRaises(FieldException) as ex:
+            data = {
+                'sender_key': self.luiz.key.urlsafe(),
+                'is_request': True,
+                'admin_key': self.mayza.key.urlsafe(),
+                'institution_key': self.certbio.key.urlsafe()
+            }
+
+            RequestUser.create(data)
+
+        self.assertEqual(
+            'The sender is already invited',
+            str(ex.exception),
+            'Expected message is The sender is already invited')
+
+        with self.assertRaises(FieldException) as ex:
+            data = {
+                'sender_key': self.mayza.key.urlsafe(),
+                'is_request': True,
+                'admin_key': self.luiz.key.urlsafe(),
+                'institution_key': self.certbio.key.urlsafe()
+            }
+
+            RequestUser.create(data)
+
+        self.assertEqual(
+            'The sender is already a member',
+            str(ex.exception),
+            'Expected message is The sender is already a member')
+
+    def test_make(self):
+        data = {
+            'sender_key': self.luiz.key.urlsafe(),
+            'is_request': True,
+            'admin_key': self.mayza.key.urlsafe(),
+            'institution_key': self.certbio.key.urlsafe()
+        }
+
+        request = RequestUser.create(data)
+        request.put()
+
+        make = {
+            'status': 'sent',
+            'institution_admin': {
+                'name': self.certbio.name
+            },
+            'sender': self.luiz.email,
+            'admin_name': self.mayza.name,
+            'key': request.key.urlsafe(),
+            'type_of_invite': 'REQUEST_USER',
+            'institution_key': self.certbio.key.urlsafe()
+        }
+
+        self.assertEqual(
+            make,
+            request.make(),
+            "The make object must be equal to variable make"
+        )
+
 
 def initModels(cls):
     """Init the models."""
@@ -82,6 +153,9 @@ def initModels(cls):
     cls.mayza.notifications = []
     cls.mayza.posts = []
     cls.mayza.put()
+
+    cls.certbio.members.append(cls.mayza.key)
+    cls.certbio.put()
 
     # new User inactive Luiz
     cls.luiz = User()

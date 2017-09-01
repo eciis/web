@@ -28,14 +28,14 @@
         http = $http;
         state = $state;
         commentService = CommentService;
-        posts = [
-            {
+        posts = [ 
+            new Post({
                     title: 'post principal', author_key: user.key, institution_key: institutions[0].key,
                     key: "123456", comments: "/api/posts/123456/comments",
                     likes: "/api/posts/123456/likes", number_of_likes: 0, number_of_comments: 0
-            },
-            {title: 'post secundário', author_key: "", institution: institutions[0], key: "123412356"},
-            {title: 'post', author: user, institution: institutions[0], key: "123454356", number_of_likes: 1}
+            }),
+            new Post({title: 'post secundário', author_key: "", institution: institutions[0], key: "123412356"}),
+            new Post({title: 'post', author: user, institution: institutions[0], key: "123454356", number_of_likes: 1})
         ];
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);
@@ -57,7 +57,7 @@
     });
 
    describe('deletePost()', function(){
-        it('Should delete the post', function() {
+        beforeEach(function() {
             postDetailsCtrl.post = posts[0];
             spyOn(mdDialog, 'confirm').and.callThrough();
             spyOn(mdDialog, 'show').and.callFake(function(){
@@ -68,12 +68,25 @@
                 };
             });
             spyOn(postService, 'deletePost').and.callThrough();
+        });
+
+        it('Should delete the post when it has activity', function() {
+            postDetailsCtrl.post.number_of_likes = 1;
             httpBackend.expect('DELETE', POSTS_URI + '/' + posts[0].key).respond();
-            var post = posts[0];
-            postDetailsCtrl.deletePost("$event", post);
+            postDetailsCtrl.deletePost("$event");
             httpBackend.flush();
-            expect(post.state).toBe("deleted");
-            expect(postService.deletePost).toHaveBeenCalledWith(post);
+            expect(postDetailsCtrl.post.state).toBe("deleted");
+            expect(postService.deletePost).toHaveBeenCalledWith(postDetailsCtrl.post);
+            expect(mdDialog.confirm).toHaveBeenCalled();
+            expect(mdDialog.show).toHaveBeenCalled();
+        });
+
+        it('Should remove the post when it has no activity', function() {
+            httpBackend.expect('DELETE', POSTS_URI + '/' + posts[0].key).respond();
+            postDetailsCtrl.deletePost("$event");
+            httpBackend.flush();
+            expect(postDetailsCtrl.post.state).toBe("removed");
+            expect(postService.deletePost).toHaveBeenCalledWith(postDetailsCtrl.post);
             expect(mdDialog.confirm).toHaveBeenCalled();
             expect(mdDialog.show).toHaveBeenCalled();
         });

@@ -16,7 +16,7 @@
 
         postDetailsCtrl.user = AuthService.getCurrentUser();
 
-        postDetailsCtrl.deletePost = function deletePost(ev, post) {
+        postDetailsCtrl.deletePost = function deletePost(ev) {
             var confirm = $mdDialog.confirm()
                 .clickOutsideToClose(true)
                 .title('Excluir Post')
@@ -27,8 +27,9 @@
                 .cancel('Cancelar');
 
             $mdDialog.show(confirm).then(function() {
-                PostService.deletePost(post).then(function success() {
-                    if(post.hasActivity()) {
+                postDetailsCtrl.post = new Post(postDetailsCtrl.post);
+                PostService.deletePost(postDetailsCtrl.post).then(function success() {
+                    if(postDetailsCtrl.post.hasActivity()) {
                         postDetailsCtrl.post.state = 'deleted';
                     } else {
                         postDetailsCtrl.post.state = 'removed';
@@ -171,8 +172,7 @@
                 var promise  =  CommentService.getComments(commentsUri);
                 promise.then(function success(response) {
                     postDetailsCtrl.post.data_comments = response.data;
-
-                postDetailsCtrl.post.number_of_comments = _.size(postDetailsCtrl.post.data_comments);
+                    postDetailsCtrl.post.number_of_comments = _.size(postDetailsCtrl.post.data_comments);
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
                 });
@@ -190,7 +190,6 @@
                 promise.then(function success(response) {
                     postDetailsCtrl.post.data_likes = response.data;
                     postDetailsCtrl.post.number_of_likes = _.size(postDetailsCtrl.post.data_likes);
-
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
                 });

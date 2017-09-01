@@ -258,10 +258,10 @@ class Post(ndb.Model):
         if self.has_activity():
             self.last_modified_by = user.key
             self.state = 'deleted'
-
-            """Update the post in datastore."""
             self.put()
         else:
+            institution = self.institution.get()
+            institution.remove_post(self.key)
             self.key.delete()
 
     def has_activity(self):

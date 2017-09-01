@@ -30,9 +30,6 @@ class UserTimelineHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
     def test_get(self, verify_token):
         """Test the user_timeline_handler get method."""
-        # Pretend an authentication
-        self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
-        self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
         # Added a post in datastore
         self.testapp.post_json("/api/posts", self.post_mayza)
         self.testapp.post_json("/api/posts", self.post_aux)
@@ -62,7 +59,8 @@ class UserTimelineHandlerTest(TestBaseHandler):
         self.assertEqual(post_last_obj.state, 'published',
                          "The state of post should be published")
 
-        # Call the delete method
+        # Call the delete method for a post that has activity
+        post_last_obj.like(self.mayza.key)
         self.testapp.delete("/api/posts/%s" % post_last_obj.key.urlsafe())
 
         # Call the get method
@@ -94,12 +92,8 @@ def initModels(cls):
     cls.mayza.name = 'Mayza Nunes'
     cls.mayza.cpf = '089.675.908-90'
     cls.mayza.email = 'mayzabeel@gmail.com'
-    cls.mayza.institutions = []
-    cls.mayza.follows = []
-    cls.mayza.institutions_admin = []
-    cls.mayza.notifications = []
-    cls.mayza.posts = []
     cls.mayza.put()
+
     # new Institution CERTBIO
     cls.certbio = Institution()
     cls.certbio.name = 'CERTBIO'
@@ -113,9 +107,9 @@ def initModels(cls):
     cls.certbio.phone_number = '(83) 3322 4455'
     cls.certbio.members = [cls.mayza.key]
     cls.certbio.followers = [cls.mayza.key]
-    cls.certbio.posts = []
     cls.certbio.admin = cls.mayza.key
     cls.certbio.put()
+
     # POST of Mayza To Certbio Institution
     cls.post_mayza = {
         'title': "Novo edital do CERTBIO",

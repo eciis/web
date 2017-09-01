@@ -30,10 +30,11 @@ class PostHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
     def test_delete(self, verify_token):
         """Test the post_handler's delete method."""
+        # test delete post when the post has a comment
         # Verify if before the delete the post's state is published
         self.assertEqual(self.mayza_post.state, 'published',
                          "The post's state must be published")
-        # Call the delete method
+        self.mayza_post.add_comment(self.raoni_comment)
         self.testapp.delete("/api/posts/%s" % self.mayza_post.key.urlsafe())
         # Retrieve the post from the datastore, once it has been changed
         self.mayza_post = self.mayza_post.key.get()
@@ -41,19 +42,36 @@ class PostHandlerTest(TestBaseHandler):
         self.assertEqual(self.mayza_post.state, 'deleted',
                          "The post's state must be deleted")
 
+        # test delete post when the post has a like
+        # Verify if before the delete the post's state is published
+        self.assertEqual(self.mayza_other_post.state, 'published',
+                         "The post's state must be published")
+        self.mayza_other_post.like(self.raoni.key)
+        self.testapp.delete("/api/posts/%s"
+                            % self.mayza_other_post.key.urlsafe())
+        # Retrieve the post from the datastore, once it has been changed
+        self.mayza_other_post = self.mayza_other_post.key.get()
+        # Make sure the post's state is deleted
+        self.assertEqual(self.mayza_other_post.state, 'deleted',
+                         "The post's state must be deleted")
+
         # Pretend an authentication
         verify_token.return_value = {'email': 'raoni.smaneoto@ccc.ufcg.edu.br'}
 
+        # test delete post when the post has no activity
         # Verify if before the delete the post's state is published
         self.assertEqual(self.raoni_post.state, 'published',
                          "The post's state must be published")
+        # Verify if certbio has only one post
+        self.assertEqual(len(self.certbio.posts), 3,
+                         "certbio should have only one post")
         # Call the delete method
         self.testapp.delete("/api/posts/%s" % self.raoni_post.key.urlsafe())
-        # Retrieve the post from the datastore, once it has been changed
-        self.raoni_post = self.raoni_post.key.get()
-        # Make sure the post's state is deleted
-        self.assertEqual(self.raoni_post.state, 'deleted',
-                         "The post's state must be deleted")
+        # update certbio
+        self.certbio = self.certbio.key.get()
+        # Make sure the post was deleted from certbio
+        self.assertEqual(len(self.certbio.posts), 2,
+                         "certbio should have no posts")
 
     @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
     def test_patch(self, verify_token):
@@ -123,23 +141,15 @@ def initModels(cls):
     cls.mayza.name = 'Mayza Nunes'
     cls.mayza.cpf = '089.675.908-90'
     cls.mayza.email = 'mayzabeel@gmail.com'
-    cls.mayza.institutions = []
-    cls.mayza.follows = []
-    cls.mayza.institutions_admin = []
-    cls.mayza.notifications = []
-    cls.mayza.posts = []
     cls.mayza.put()
+
     # new User Raoni
     cls.raoni = User()
     cls.raoni.name = 'Raoni Smaneoto'
     cls.raoni.cpf = '089.675.908-65'
     cls.raoni.email = 'raoni.smaneoto@ccc.ufcg.edu.br'
-    cls.raoni.institutions = []
-    cls.raoni.follows = []
-    cls.raoni.institutions_admin = []
-    cls.raoni.notifications = []
-    cls.raoni.posts = []
     cls.raoni.put()
+
     # new Institution CERTBIO
     cls.certbio = Institution()
     cls.certbio.name = 'CERTBIO'
@@ -154,9 +164,9 @@ def initModels(cls):
     cls.certbio.phone_number = '(83) 3322 4455'
     cls.certbio.members = [cls.mayza.key, cls.raoni.key]
     cls.certbio.followers = [cls.mayza.key, cls.raoni.key]
-    cls.certbio.posts = []
     cls.certbio.admin = cls.mayza.key
     cls.certbio.put()
+
     # POST of Mayza To Certbio Institution
     cls.mayza_post = Post()
     cls.mayza_post.title = "Novo edital do CERTBIO"
@@ -167,6 +177,15 @@ def initModels(cls):
     cls.mayza_post.author = cls.mayza.key
     cls.mayza_post.institution = cls.certbio.key
     cls.mayza_post.put()
+
+    # POST of Mayza To Certbio Institution
+    cls.mayza_other_post = Post()
+    cls.mayza_other_post.title = "Outro edital do CERTBIO"
+    cls.mayza_other_post.text = "Text"
+    cls.mayza_other_post.author = cls.mayza.key
+    cls.mayza_other_post.institution = cls.certbio.key
+    cls.mayza_other_post.put()
+
     # Post of Raoni
     cls.raoni_post = Post()
     cls.raoni_post.title = "Novwdfsadsssdo edital do CERTBIO"
@@ -177,6 +196,12 @@ def initModels(cls):
     cls.raoni_post.author = cls.raoni.key
     cls.raoni_post.institution = cls.certbio.key
     cls.raoni_post.put()
+
+    # update certbio's posts
+    cls.certbio.posts = [cls.raoni_post.key, cls.mayza_post.key,
+                         cls.mayza_other_post.key]
+    cls.certbio.put()
+
     # comment
     data_comment = {"text": "hello",
                     "institution_key": cls.certbio.key.urlsafe()}

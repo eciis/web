@@ -52,7 +52,7 @@
   <!-- BUTTONS -->
   <md-card-actions layout="row" layout-align="end-center">
     <md-button  ng-if="postDetailsCtrl.showButtonDelete()" class="md-icon-button" arial-label="Delete"
-    ng-click="postDetailsCtrl.deletePost($event, postDetailsCtrl.post)">
+    ng-click="postDetailsCtrl.deletePost($event)">
       <md-icon>delete</md-icon>
     </md-button>
     <md-button class="md-icon-button" aria-label="Comments" ng-click="postDetailsCtrl.getComments()">

@@ -162,7 +162,9 @@ class User(ndb.Model):
     @staticmethod
     def get_active_user(user_email):
         """Get active user if exists."""
-        user_found = User.query(User.email == user_email).fetch(1)
+        user_found = User.query(User.email == user_email).iter()
 
-        if user_found and user_found[0].state == 'active':
-            return user_found[0]
+        if user_found.has_next():
+            user_found = user_found.next()
+            if user_found.state == 'active':
+                return user_found

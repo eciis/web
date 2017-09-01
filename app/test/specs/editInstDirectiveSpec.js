@@ -11,8 +11,16 @@ describe('Test EditInstDirective', function() {
             email: "email",
             state: "active",
             key: "inst-key",
-            acronym: "INST"
+            acronym: "INST",
+            legal_nature: "public",
+            occupation_area: "government agencies",
+            phone_number: "phone",
+            cnpj: "cnpj",
+            address: "address",
+            leader: "leader name",
+            institutional_email: "email@institutional.com"
     };
+
     var institutions = [{
         name: 'Splab',
         key: 'institutuion_key',

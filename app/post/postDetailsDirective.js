@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller('PostDetailsController', function(PostService, AuthService, CommentService, $mdToast, $state,
-        $mdDialog, NotificationService, MessageService) {
+        $mdDialog, NotificationService, MessageService, ngClipboard) {
         var postDetailsCtrl = this;
 
         var LIMIT_CHARACTERS_POST = 1000;
@@ -14,6 +14,7 @@
         postDetailsCtrl.savingComment = false;
         postDetailsCtrl.savingLike = false;
 
+        var URL_POST = '#/posts/';
         postDetailsCtrl.user = AuthService.getCurrentUser();
 
         postDetailsCtrl.deletePost = function deletePost(ev) {
@@ -51,8 +52,18 @@
             return postDetailsCtrl.post.state == 'deleted';
         };
 
-        postDetailsCtrl.isRemoved = function isDeleted() {
+        postDetailsCtrl.isRemoved = function isRemoved() {
             return postDetailsCtrl.post.state == 'removed';
+        };
+
+        postDetailsCtrl.showSharedPost = function showSharedPost() {
+            return postDetailsCtrl.post.shared_post && 
+                !postDetailsCtrl.isDeleted();
+        };
+
+        postDetailsCtrl.showTextPost = function showTextPost(){
+            return !postDetailsCtrl.isDeleted() && 
+                !postDetailsCtrl.post.shared_post;
         };
 
         postDetailsCtrl.showButtonDelete = function showButtonDelete() {
@@ -61,7 +72,8 @@
         };
 
         postDetailsCtrl.disableButtonLike = function disableButtonLike() {
-            return postDetailsCtrl.savingLike || postDetailsCtrl.isDeleted();
+            return postDetailsCtrl.savingLike || 
+                postDetailsCtrl.isDeleted();
         };
 
         postDetailsCtrl.showButtonEdit = function showButtonDeleted() {
@@ -69,7 +81,14 @@
             var hasNoLikes = postDetailsCtrl.post.number_of_likes === 0;
 
             return postDetailsCtrl.isPostAuthor() && !postDetailsCtrl.isDeleted() &&
-                hasNoComments && hasNoLikes;
+                hasNoComments && hasNoLikes && !postDetailsCtrl.post.shared_post;
+        };
+
+        postDetailsCtrl.generateLink = function generateLink(){
+            var currentUrl = (window.location.href).split('#');
+            var url = currentUrl[0] + URL_POST + postDetailsCtrl.post.key;
+            ngClipboard.toClipboard(url);
+            MessageService.showToast("O link foi copiado");
         };
 
         postDetailsCtrl.likeOrDislikePost = function likeOrDislikePost() {
@@ -100,6 +119,25 @@
                 postDetailsCtrl.post.text = editedPost.text;
                 postDetailsCtrl.post.photo_url = editedPost.photo_url;
             }, function error() {});
+        };
+
+        postDetailsCtrl.share = function share(post, event) {
+            if(postDetailsCtrl.post.shared_post){
+                post = postDetailsCtrl.post.shared_post;
+            }
+            $mdDialog.show({
+                controller: "SharePostController",
+                controllerAs: "sharePostCtrl",
+                templateUrl: 'post/share_post_dialog.html',
+                parent: angular.element(document.body),
+                targetEvent: event,
+                clickOutsideToClose:true,
+                locals: {
+                    user : postDetailsCtrl.user,
+                    posts: postDetailsCtrl.posts,
+                    post: post
+                }
+            });
         };
 
         function likePost() {
@@ -157,12 +195,12 @@
             return key;
         }
 
-        postDetailsCtrl.goToInstitution = function goToInstitution() {
-            $state.go('app.institution', {institutionKey: postDetailsCtrl.post.institution_key});
+        postDetailsCtrl.goToInstitution = function goToInstitution(institutionKey) {
+            $state.go('app.institution', {institutionKey: institutionKey});
         };
 
-        postDetailsCtrl.goToPost = function goToPost() {
-             $state.go('app.post', {key: postDetailsCtrl.post.key});
+        postDetailsCtrl.goToPost = function goToPost(post) {
+             $state.go('app.post', {key: post.key});
         };
 
         postDetailsCtrl.getComments = function getComments() {
@@ -294,16 +332,19 @@
             return post;
         };
 
-        postDetailsCtrl.showImage = function() {
-            var imageEmpty = postDetailsCtrl.post.photo_url === "";
-            var imageNull = postDetailsCtrl.post.photo_url === null;
-            var deletedPost = postDetailsCtrl.post.state === 'deleted';
+        postDetailsCtrl.showImage = function(post) {
+            var imageEmpty = post.photo_url === "";
+            var imageNull = post.photo_url === null;
+            var deletedPost = post.state === 'deleted';
             return !imageEmpty && !imageNull && !deletedPost;
         };
 
         postDetailsCtrl.isLongPostTimeline = function(text){
-            var qtdChar = text.length;
-            return !postDetailsCtrl.isPostPage && qtdChar >= LIMIT_CHARACTERS_POST;
+            if(text){
+                var qtdChar = text.length;
+                return !postDetailsCtrl.isPostPage && 
+                    qtdChar >= LIMIT_CHARACTERS_POST;
+            }
         };
 
         function adjustText(text){
@@ -334,9 +375,68 @@
             controller: "PostDetailsController",
             scope: {},
             bindToController: {
+                posts: '=',
                 post: '=',
                 isPostPage: '='
             }
         };
+    });
+    
+    app.controller("SharePostController", function SharePostController(user, posts, post, $mdDialog, PostService,
+     MessageService, $state) {
+        var shareCtrl = this;
+
+        var LIMIT_CHARACTERS_POST = 200;
+        var URL_PATTERN = /(((www.)|(http(s)?:\/\/))[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
+        var REPLACE_URL = "<a href=\'$1\' target='_blank'>$1</a>";
+
+        shareCtrl.user = user;
+
+        shareCtrl.post = new Post(post, post.institution_key);
+        shareCtrl.post.text = adjustText(post.text);
+
+        shareCtrl.newPost = new Post({}, shareCtrl.user.current_institution.key);
+
+        shareCtrl.cancelDialog = function() {
+            $mdDialog.cancel();
+        };
+
+        shareCtrl.showImage = function() {
+            var imageEmpty = shareCtrl.post.photo_url === "";
+            var imageNull = shareCtrl.post.photo_url === null;
+            return !imageEmpty && !imageNull;
+        };
+
+        shareCtrl.share = function() {
+            shareCtrl.newPost.shared_post = getOriginalPost(shareCtrl.post);
+            PostService.createPost(shareCtrl.newPost).then(function success(response) {
+                MessageService.showToast('Compartilhado com sucesso!');
+                $mdDialog.hide();
+                posts.push(response.data);
+            }, function error(response) {
+                $mdDialog.hide();
+                MessageService.showToast(response.data.msg);
+            });
+            
+        };
+
+        shareCtrl.goToPost = function goToPost() {
+            shareCtrl.cancelDialog();
+            $state.go('app.post', {postKey: shareCtrl.post.key});
+        };
+
+        function getOriginalPost(post){
+            if(post.share_post){
+                return post.share_post.key;
+            }
+            return post.key;
+        }
+
+        function adjustText(text){
+            if(text.length > LIMIT_CHARACTERS_POST){
+                text = text.substring(0, LIMIT_CHARACTERS_POST) + "...";
+            }
+            return text.replace(URL_PATTERN,REPLACE_URL);
+        }
     });
 })();

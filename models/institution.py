@@ -33,11 +33,21 @@ class Institution(ndb.Model):
 
     portfolio_url = ndb.StringProperty(indexed=False)
 
+    # Email of the admin
     email = ndb.StringProperty()
+
+    # Institutional email
+    institutional_email = ndb.StringProperty()
 
     website_url = ndb.StringProperty(indexed=False)
 
     phone_number = ndb.StringProperty()
+
+    # Bollean that represents if the institution is empowered or not.
+    empowered = ndb.BooleanProperty(indexed=False, default=False)
+
+    # Name of the leader
+    leader = ndb.StringProperty()
 
     # The admin user of this institution
     admin = ndb.KeyProperty(kind="User")
@@ -50,11 +60,6 @@ class Institution(ndb.Model):
     # The children institutions
     # Value is None for institutions without children
     children_institutions = ndb.KeyProperty(kind="Institution", repeated=True)
-
-    # The institutions are waiting to be accept as children
-    # Value is None for institutions without children waiting accept
-    children_institutions_pedding = ndb.KeyProperty(
-        kind="Institution", repeated=True)
 
     # Key of invite to create institution
     invite = ndb.KeyProperty(kind="Invite")
@@ -96,6 +101,12 @@ class Institution(ndb.Model):
         """Add a new member to the institution."""
         if member.key not in self.members:
             self.members.append(member.key)
+            self.put()
+
+    def remove_member(self, member):
+        """Remove a member from institution."""
+        if member.key in self.members:
+            self.members.remove(member.key)
             self.put()
 
     def addInvite(self, invite):
@@ -192,6 +203,14 @@ class Institution(ndb.Model):
             self.set_parent_for_none()
         self.put()
 
+    def remove_link(self, institution_link, is_parent):
+        """Remove the connection between self and institution_link."""
+        if is_parent == "true":
+            self.parent_institution = None
+        else:
+            self.children_institutions.remove(institution_link.key)
+        self.put()
+
     def remove_institution_hierarchy(self, remove_hierarchy, user):
         """Remove institution's hierarchy."""
         for child in self.children_institutions:
@@ -244,7 +263,10 @@ class Institution(ndb.Model):
         for attribute in attributes:
             attr_value = getattr(self, attribute)
             if(isinstance(attr_value, ndb.Key)):
-                attr_value = self.key.urlsafe()
+                if attribute != 'parent_institution':
+                    attr_value = self.key.urlsafe()
+                elif self.parent_institution:
+                    attr_value = self.parent_institution.urlsafe()
             if((attribute == "invite") and attr_value):
                 invite_key = self.key.get().invite
                 attr_value = {

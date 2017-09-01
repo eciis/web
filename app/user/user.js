@@ -73,11 +73,25 @@ User.prototype.getPendingInvitation = function getPendingInvitation(){
     return _.find(this.invites, {'status': SENT});
 };
 
-User.prototype.removeInviteInst = function removeInviteInst(institutionKey) {
+User.prototype.removeInvite = function removeInvite(inviteKey) {
     _.remove(this.invites, function(invite){
-        var inviteTypeUser = invite.type_of_invite === USER;
-        return !inviteTypeUser && institutionKey == invite.stub_institution.key;
+        return inviteKey == invite.key;
     });
+};
+
+User.prototype.removeInstitution = function removeInstitution(institutionKey, removeHierarchy) {
+    var toRemove = function toRemove(institution) {
+        var childToRemove = (institution.parent_institution &&
+                institution.parent_institution === institutionKey && removeHierarchy);
+        return (institution.key === institutionKey) || childToRemove;
+    };
+
+    _.remove(this.institutions, toRemove);
+    _.remove(this.follows, toRemove);
+
+    if(!_.isEmpty(this.institutions)) {
+        this.current_institution = this.institutions[0];
+    }
 };
 
 User.prototype.updateInstitutions = function updateInstitutions(institution){

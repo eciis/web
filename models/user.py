@@ -149,3 +149,12 @@ class User(ndb.Model):
             return self.permissions[permission_type][entity_key]
         except:
             return False
+
+    def disable_account(self):
+        """Desable user account.
+
+        When user is patched to inactive state, this function is called
+        to remove all his institutions.
+        """
+        self.institutions = []
+        self.follows = []

@@ -51,7 +51,7 @@ class Event(ndb.Model):
         event = Event()
         event.text = data['text']
         event.title = data['title']
-        event.photo_url = data['photo_url']
+        event.photo_url = data.get('photo_url')
         event.author_key = author_key
         event.institution_key = institution_key
         event.local = data['local']

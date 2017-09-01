@@ -13,6 +13,20 @@ Institution.prototype.make = function make() {
     };
     return institution;
 };
+
+
+Institution.prototype.isValid = function isValid() {
+    var required_fields = [this.name, this.email,this.cnpj, this.legal_nature, this.address,
+                           this.occupation_area, this.leader, this.institutional_email];
+    var isValid = true;
+    
+    _.forEach(required_fields, function(field) {
+        if (_.isUndefined(field) || _.isEmpty(field)) {
+            isValid = false;
+        }
+    });  
+    return isValid;
+};
         
 Institution.prototype.addInvite = function addInvite(invite){
     this.sent_invitations.push(invite); 

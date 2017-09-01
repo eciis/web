@@ -14,7 +14,8 @@
             'COMMENT': 'comentou o seu post',
             'POST': 'publicou um novo post',
             'SHARED_POST': 'compartilhou seu post',
-            'INVITE': 'te enviou um novo convite'
+            'INVITE': 'te enviou um novo convite',
+            'INSTITUTION': 'removeu a conexão entre suas instituições'
         };
 
         var POST_NOTIFICATION = 'POST';

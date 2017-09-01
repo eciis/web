@@ -3,7 +3,6 @@
 
 import webapp2
 
-from handlers.main_handler import MainHandler
 from handlers.institution_handler import InstitutionHandler
 from handlers.institution_members_handler import InstitutionMembersHandler
 from handlers.institution_followers_handler import InstitutionFollowersHandler
@@ -22,6 +21,7 @@ from handlers.post_comment_handler import PostCommentHandler
 from handlers.invite_collection_handler import InviteCollectionHandler
 from handlers.search_handler import SearchHandler
 from handlers.invite_handler import InviteHandler
+from handlers.calendar_handler import CalendarHandler
 from handlers.redirect_handler import AppRedirectHandler
 from handlers.institution_hierarchy_handler import InstitutionHierarchyHandler
 
@@ -32,6 +32,7 @@ webapp2.WSGIApplication.allowed_methods = frozenset(methods)
 app = webapp2.WSGIApplication([
     ("/api/invites", InviteCollectionHandler),
     ("/api/invites/(.*)", InviteHandler),
+    ("/api/calendar", CalendarHandler),
     ("/api/institutions", InstitutionCollectionHandler),
     ("/api/institutions/(.*)/timeline", InstitutionTimelineHandler),
     ("/api/institutions/(.*)/members", InstitutionMembersHandler),

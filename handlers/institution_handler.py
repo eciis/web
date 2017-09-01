@@ -145,6 +145,8 @@ class InstitutionHandler(BaseHandler):
         self.response.write(json.dumps(
             institution_json))
 
+    # TODO: Set all posts to deleted state.
+    # @author: Andre L. Abrantes - 31-08-2017
     @login_required
     @is_admin
     @ndb.transactional(xg=True)

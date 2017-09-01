@@ -156,6 +156,10 @@
              $state.go('app.post', {key: postDetailsCtrl.post.key});
         };
 
+        postDetailsCtrl.getValues = function getValues(object) {
+            return _.values(object);
+        };
+
         postDetailsCtrl.getComments = function getComments() {
             var commentsUri = postDetailsCtrl.post.comments;
             postDetailsCtrl.showComments = !postDetailsCtrl.showComments;
@@ -163,13 +167,12 @@
                 var promise  =  CommentService.getComments(commentsUri);
                 promise.then(function success(response) {
                     postDetailsCtrl.post.data_comments = response.data;
-
-                postDetailsCtrl.post.number_of_comments = _.size(postDetailsCtrl.post.data_comments);
+                    postDetailsCtrl.post.number_of_comments = _.size(postDetailsCtrl.post.data_comments);
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
                 });
                 return promise;
-            } else{
+            } else {
                 postDetailsCtrl.post.data_comments = [];
             }
         };
@@ -182,7 +185,6 @@
                 promise.then(function success(response) {
                     postDetailsCtrl.post.data_likes = response.data;
                     postDetailsCtrl.post.number_of_likes = _.size(postDetailsCtrl.post.data_likes);
-
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
                 });
@@ -194,7 +196,7 @@
 
         function addComment(post, comment) {
             var postComments = postDetailsCtrl.post.data_comments;
-            postComments.push(comment);
+            postComments[comment.id] = comment;
             post.number_of_comments += 1;
         }
 
@@ -222,11 +224,26 @@
             return promise;
         };
 
-        postDetailsCtrl.canDeleteComment = function canDeleteComment(comment) {
-            return isCommentAuthor(comment);
+        postDetailsCtrl.replyComment = function replyComment(comment, reply, showReply) {
+            var institutionKey = postDetailsCtrl.user.current_institution.key;
+            var promise = CommentService.replyComment(
+                postDetailsCtrl.post.key, reply, institutionKey, comment.id
+            );
+
+            promise.then(function success(response) {
+                showReply = false;
+                reply = response.data;
+                comment.replies[reply.id] = reply;
+            },function error(error) {
+                MessageService.showToast(error.data.msg);
+            });
         };
 
-        postDetailsCtrl.deleteComment = function deleteComment(event, comment) {
+        postDetailsCtrl.canDeleteComment = function canDeleteComment(comment) {
+            return isCommentAuthor(comment) && _.isEmpty(comment.replies);
+        };
+
+        function showDeleteDialog() {
             var confirm = $mdDialog.confirm()
                 .clickOutsideToClose(true)
                 .title('Excluir Comentário')
@@ -236,14 +253,35 @@
                 .ok('Excluir')
                 .cancel('Cancelar');
 
-            $mdDialog.show(confirm).then(function() {
-                CommentService.deleteComment(postDetailsCtrl.post.key, comment.id).then(function success(response) {
-                    removeCommentFromPost(response.data);
-                    MessageService.showToast('Comentário excluído com sucesso');
-                    postDetailsCtrl.post.number_of_comments -= 1;
-                }, function error(response) {
-                    MessageService.showToast(response.data.msg);
-                });
+            return $mdDialog.show(confirm);
+        }
+
+        postDetailsCtrl.deleteComment = function deleteComment(event, comment) {
+            showDeleteDialog().then(function() {
+                CommentService.deleteComment(postDetailsCtrl.post.key, comment.id).then(
+                    function success(response) {
+                        removeCommentFromPost(response.data);
+                        MessageService.showToast('Comentário excluído com sucesso');
+                        postDetailsCtrl.post.number_of_comments -= 1;
+                    }, function error(response) {
+                        MessageService.showToast(response.data.msg);
+                    }
+                );
+            }, function() {
+                MessageService.showToast('Cancelado');
+            });
+        };
+
+        postDetailsCtrl.deleteReply = function postDetailsCtrl(event, post, comment, reply) {
+            showDeleteDialog().then(function() {
+                CommentService.deleteReply(post.key, comment.id, reply.id).then(
+                    function success() {
+                        delete comment.replies[reply.id];
+                        MessageService.showToast('Comentário excluído com sucesso');
+                    }, function error(response) {
+                        MessageService.showToast(response.data.msg);
+                    }
+                );
             }, function() {
                 MessageService.showToast('Cancelado');
             });
@@ -251,9 +289,7 @@
 
         function removeCommentFromPost(comment) {
             var postComments = postDetailsCtrl.post.data_comments;
-            _.remove(postComments, function(postComment) {
-                return postComment.id == comment.id;
-            });
+            delete postComments[comment.id];
         }
 
         postDetailsCtrl.isPostAuthor = function isPostAuthor() {

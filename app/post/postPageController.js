@@ -12,6 +12,7 @@
             var promise = PostService.getPost(postKey);
             promise.then(function success(response) {
                 postCtrl.post = response;
+                postCtrl.post.data_comments = _.values(postCtrl.post.data_comments);
             }, function error(response) {
                 if (response.status === 500) {
                     MessageService.showToast(response.data.msg);

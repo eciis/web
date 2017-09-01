@@ -51,6 +51,12 @@
             return NotificationService.formatMessage(notification);
         };
 
+        controller.clearAll = function clearAll() {
+            _.forEach(controller.notifications, function(notification) {
+                controller.markAsRead(notification);
+            });
+        };
+
         (function main() {
             NotificationService.watchNotifications(controller.user.key, controller.notifications);
         })();

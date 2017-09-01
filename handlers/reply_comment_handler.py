@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Post Comment Handler."""
+"""Reply Comment Handler."""
 
 import json
 
@@ -27,28 +27,35 @@ def check_permission(user, institution, post, comment):
                   "User not allowed to remove comment", NotAuthorizedException)
 
 
-class PostCommentHandler(BaseHandler):
+class ReplyCommentHandler(BaseHandler):
     """Post Comment Handler."""
 
     @json_response
     @login_required
-    def get(self, user, post_key):
+    def get(self, user, post_key, comment_id):
         """Handle Get Comments requests."""
         post = ndb.Key(urlsafe=post_key).get()
-
-        self.response.write(json.dumps(post.comments))
+        replies = [Comment.make(reply)
+                    for reply in post.get_comment(comment_id).replies]
+        self.response.write(json.dumps(replies))
 
     @json_response
     @login_required
     @ndb.transactional(xg=True)
-    def post(self, user, post_key):
+    def post(self, user, post_key, comment_id):
         """Handle Post Comments requests."""
         data = json.loads(self.request.body)
         post = ndb.Key(urlsafe=post_key).get()
+        institution = post.institution.get()
+        Utils._assert(institution.state == 'inactive',
+                      "The institution has been deleted", NotAuthorizedException)
         Utils._assert(post.state == 'deleted',
                       "This post has been deleted", EntityException)
-        comment = Comment.create(data, user)
-        post.add_comment(comment)
+        reply = Comment.create(data, user)
+
+        post.reply_comment(reply, comment_id)
+
+        post.put()
 
         if (post.author != user.key):
             entity_type = 'COMMENT'
@@ -60,19 +67,24 @@ class PostCommentHandler(BaseHandler):
                 post.key.urlsafe()
             )
 
-        self.response.write(json.dumps(Utils.toJson(comment)))
+        self.response.write(json.dumps(Utils.toJson(reply)))
 
     @json_response
     @login_required
     @ndb.transactional(xg=True)
-    def delete(self, user, post_key, comment_id):
+    def delete(self, user, post_key, comment_id, reply_id):
         """Handle Delete Comments requests."""
         post = ndb.Key(urlsafe=post_key).get()
         institution = post.institution.get()
         Utils._assert(institution.state == 'inactive',
                       "The institution has been deleted", NotAuthorizedException)
         comment = post.get_comment(comment_id)
-        check_permission(user, institution, post, comment)
-        post.remove_comment(comment)
+        replies = comment.get('replies')
 
-        self.response.write(json.dumps(comment))
+        check_permission(user, institution, post, replies.get(reply_id))
+        
+        del replies[reply_id]
+
+        post.put()
+
+        self.response.write(json.dumps(replies.get(reply_id)))

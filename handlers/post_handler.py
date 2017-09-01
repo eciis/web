@@ -28,11 +28,6 @@ def is_post_author(method):
     return check_authorization
 
 
-def getComments(post):
-    comments = [Comment.make(comment) for comment in post.comments]
-    return comments
-
-
 def getLikes(post, host):
     likes = [Like.make(like, host) for like in post.likes]
     return likes
@@ -51,7 +46,7 @@ class PostHandler(BaseHandler):
 
         assert type(post) is Post, "Key is not an Post"
         post_json = Post.make(post, self.request.host)
-        post_json['data_comments'] = getComments(post)
+        post_json['data_comments'] = post.comments
         post_json['data_likes'] = getLikes(post, self.request.host)
 
         self.response.write(json.dumps(

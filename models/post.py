@@ -115,7 +115,8 @@ class Post(ndb.Model):
     state = ndb.StringProperty(choices=set([
         'draft',
         'published',
-        'deleted'
+        'deleted',
+        'hidden'
     ]), default='published')
 
     # Comments of the post
@@ -258,11 +259,9 @@ class Post(ndb.Model):
         if self.has_activity():
             self.last_modified_by = user.key
             self.state = 'deleted'
-            self.put()
         else:
-            institution = self.institution.get()
-            institution.remove_post(self.key)
-            self.key.delete()
+            self.state = 'hidden'
+        self.put()
 
     def has_activity(self):
         """Check if the post has comments or likes."""

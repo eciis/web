@@ -85,7 +85,7 @@
             httpBackend.expect('DELETE', POSTS_URI + '/' + posts[0].key).respond();
             postDetailsCtrl.deletePost("$event");
             httpBackend.flush();
-            expect(postDetailsCtrl.post.state).toBe("removed");
+            expect(postDetailsCtrl.post.state).toBe("hidden");
             expect(postService.deletePost).toHaveBeenCalledWith(postDetailsCtrl.post);
             expect(mdDialog.confirm).toHaveBeenCalled();
             expect(mdDialog.show).toHaveBeenCalled();

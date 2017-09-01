@@ -33,7 +33,7 @@
                     if(postDetailsCtrl.post.hasActivity()) {
                         postDetailsCtrl.post.state = 'deleted';
                     } else {
-                        postDetailsCtrl.post.state = 'removed';
+                        postDetailsCtrl.post.state = 'hidden';
                     }
                     MessageService.showToast('Post excluído com sucesso');
                 }, function error(response) {
@@ -52,8 +52,8 @@
             return postDetailsCtrl.post.state == 'deleted';
         };
 
-        postDetailsCtrl.isRemoved = function isRemoved() {
-            return postDetailsCtrl.post.state == 'removed';
+        postDetailsCtrl.isHidden = function isHidden() {
+            return postDetailsCtrl.post.state == 'hidden';
         };
 
         postDetailsCtrl.showSharedPost = function showSharedPost() {

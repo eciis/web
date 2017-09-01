@@ -252,11 +252,6 @@ class Institution(ndb.Model):
                 child = child.get()
                 child.remove_institution_from_users(remove_hierarchy)
 
-    def remove_post(self, post_key):
-        """Remove a post from posts list."""
-        self.posts.remove(post_key)
-        self.put()
-
     def make(self, attributes):
         """Create an institution dictionary with specific filds."""
         institution = {}

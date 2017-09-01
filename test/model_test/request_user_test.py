@@ -96,6 +96,7 @@ class RequestUserTest(TestBase):
             'Expected message is The sender is already a member')
 
     def test_make(self):
+        """Test method make."""
         data = {
             'sender_key': self.luiz.key.urlsafe(),
             'is_request': True,

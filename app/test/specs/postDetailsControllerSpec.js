@@ -3,7 +3,8 @@
 (describe('Test postDetailsController', function() {
     beforeEach(module('app'));
 
-    var postDetailsCtrl, scope, httpBackend, rootScope, mdDialog, postService, mdToast, http, commentService, state, posts;
+    var postDetailsCtrl, scope, httpBackend, rootScope, mdDialog, postService, mdToast, http,
+    commentService, state, posts, rootscope;
     var user = {
         name: 'name',
         key: 'asd234jk2l'
@@ -20,6 +21,7 @@
     beforeEach(inject(function($controller, $httpBackend, $http, $mdDialog,
             PostService, AuthService, $mdToast, $rootScope, CommentService, $state) {
         scope = $rootScope.$new();
+        rootscope = $rootScope;
         httpBackend = $httpBackend;
         rootScope = $rootScope;
         mdDialog = $mdDialog;
@@ -47,7 +49,11 @@
             return new User(user);
         };
 
-        postDetailsCtrl = $controller('PostDetailsController', {scope: scope});
+        postDetailsCtrl = $controller('PostDetailsController',{
+            scope: scope,
+            $rootScope: rootscope,
+            $scope: scope
+        });
         httpBackend.flush();
     }));
 

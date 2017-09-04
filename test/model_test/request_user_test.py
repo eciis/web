@@ -25,10 +25,10 @@ class RequestUserTest(TestBase):
     def test_create_request(self):
         """Test create new request."""
         data = {
-            'sender_key': self.luiz.key.urlsafe(),
+            'sender_key': self.other_user.key.urlsafe(),
             'is_request': True,
-            'admin_key': self.mayza.key.urlsafe(),
-            'institution_key': self.certbio.key.urlsafe()
+            'admin_key': self.admin_user.key.urlsafe(),
+            'institution_key': self.inst_test.key.urlsafe()
         }
 
         request = RequestUser.create(data)
@@ -36,8 +36,8 @@ class RequestUserTest(TestBase):
 
         self.assertEqual(
             request.sender_key,
-            self.luiz.key,
-            'The sender of request expected was Luiz')
+            self.other_user.key,
+            'The sender of request expected was other user')
 
         self.assertTrue(
             request.is_request,
@@ -45,21 +45,21 @@ class RequestUserTest(TestBase):
 
         self.assertEqual(
             request.admin_key,
-            self.mayza.key,
-            'The admin of institution expected was Mayza')
+            self.admin_user.key,
+            'The admin of institution expected was Admin User')
 
         self.assertEqual(
             request.institution_key,
-            self.certbio.key,
-            'The key of institution expected was CERTBIO')
+            self.inst_test.key,
+            'The key of institution expected was inst test')
 
     def test_create_invalid_request(self):
         """Test cretae invalid request."""
         data = {
-            'sender_key': self.luiz.key.urlsafe(),
+            'sender_key': self.other_user.key.urlsafe(),
             'is_request': True,
-            'admin_key': self.mayza.key.urlsafe(),
-            'institution_key': self.certbio.key.urlsafe()
+            'admin_key': self.admin_user.key.urlsafe(),
+            'institution_key': self.inst_test.key.urlsafe()
         }
 
         request = RequestUser.create(data)
@@ -67,10 +67,10 @@ class RequestUserTest(TestBase):
 
         with self.assertRaises(FieldException) as ex:
             data = {
-                'sender_key': self.luiz.key.urlsafe(),
+                'sender_key': self.other_user.key.urlsafe(),
                 'is_request': True,
-                'admin_key': self.mayza.key.urlsafe(),
-                'institution_key': self.certbio.key.urlsafe()
+                'admin_key': self.admin_user.key.urlsafe(),
+                'institution_key': self.inst_test.key.urlsafe()
             }
 
             RequestUser.create(data)
@@ -82,10 +82,10 @@ class RequestUserTest(TestBase):
 
         with self.assertRaises(FieldException) as ex:
             data = {
-                'sender_key': self.mayza.key.urlsafe(),
+                'sender_key': self.admin_user.key.urlsafe(),
                 'is_request': True,
-                'admin_key': self.luiz.key.urlsafe(),
-                'institution_key': self.certbio.key.urlsafe()
+                'admin_key': self.other_user.key.urlsafe(),
+                'institution_key': self.inst_test.key.urlsafe()
             }
 
             RequestUser.create(data)
@@ -98,10 +98,10 @@ class RequestUserTest(TestBase):
     def test_make(self):
         """Test method make."""
         data = {
-            'sender_key': self.luiz.key.urlsafe(),
+            'sender_key': self.other_user.key.urlsafe(),
             'is_request': True,
-            'admin_key': self.mayza.key.urlsafe(),
-            'institution_key': self.certbio.key.urlsafe()
+            'admin_key': self.admin_user.key.urlsafe(),
+            'institution_key': self.inst_test.key.urlsafe()
         }
 
         request = RequestUser.create(data)
@@ -110,13 +110,13 @@ class RequestUserTest(TestBase):
         make = {
             'status': 'sent',
             'institution_admin': {
-                'name': self.certbio.name
+                'name': self.inst_test.name
             },
-            'sender': self.luiz.email,
-            'admin_name': self.mayza.name,
+            'sender': self.other_user.email,
+            'admin_name': self.admin_user.name,
             'key': request.key.urlsafe(),
             'type_of_invite': 'REQUEST_USER',
-            'institution_key': self.certbio.key.urlsafe()
+            'institution_key': self.inst_test.key.urlsafe()
         }
 
         self.assertEqual(
@@ -128,44 +128,23 @@ class RequestUserTest(TestBase):
 
 def initModels(cls):
     """Init the models."""
-    # new Institution CERTBIO
-    cls.certbio = Institution()
-    cls.certbio.name = 'CERTBIO'
-    cls.certbio.acronym = 'CERTBIO'
-    cls.certbio.cnpj = '18.104.068/0001-86'
-    cls.certbio.legal_nature = 'public'
-    cls.certbio.address = 'Universidade Federal de Campina Grande'
-    cls.certbio.occupation_area = ''
-    cls.certbio.description = 'Ensaio Químico'
-    cls.certbio.email = 'certbio@ufcg.edu.br'
-    cls.certbio.phone_number = '(83) 3322 4455'
-    cls.certbio.members = []
-    cls.certbio.followers = []
-    cls.certbio.posts = []
-    cls.certbio.put()
-    # new User Mayza
-    cls.mayza = User()
-    cls.mayza.name = 'Mayza Nunes'
-    cls.mayza.cpf = '089.675.908-90'
-    cls.mayza.email = 'mayzabeel@gmail.com'
-    cls.mayza.institutions = [cls.certbio.key]
-    cls.mayza.follows = []
-    cls.mayza.institutions_admin = [cls.certbio.key]
-    cls.mayza.notifications = []
-    cls.mayza.posts = []
-    cls.mayza.put()
+    # new Institution inst test
+    cls.inst_test = Institution()
+    cls.inst_test.name = 'inst test'
+    cls.inst_test.put()
+    # new User admin user
+    cls.admin_user = User()
+    cls.admin_user.name = 'Admin User'
+    cls.admin_user.email = 'adminuser@test.com'
+    cls.admin_user.institutions = [cls.inst_test.key]
+    cls.admin_user.institutions_admin = [cls.inst_test.key]
+    cls.admin_user.put()
 
-    cls.certbio.members.append(cls.mayza.key)
-    cls.certbio.put()
+    cls.inst_test.members.append(cls.admin_user.key)
+    cls.inst_test.put()
 
-    # new User inactive Luiz
-    cls.luiz = User()
-    cls.luiz.name = 'Luiz'
-    cls.luiz.cpf = '089.675.908-65'
-    cls.luiz.email = 'luiz@ccc.ufcg.edu.br'
-    cls.luiz.institutions = []
-    cls.luiz.follows = []
-    cls.luiz.institutions_admin = []
-    cls.luiz.notifications = []
-    cls.luiz.posts = []
-    cls.luiz.put()
+    # new User inactive other user
+    cls.other_user = User()
+    cls.other_user.name = 'other user'
+    cls.other_user.email = 'otheruser@test.com'
+    cls.other_user.put()

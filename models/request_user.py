@@ -9,8 +9,7 @@ from models.institution import Institution
 class RequestUser(Invite):
     """Model of request user."""
 
-    @staticmethod
-    def senderIsMember(sender_key, institution):
+    def senderIsMember(self, sender_key, institution):
         user = ndb.Key(urlsafe=sender_key).get()
         if user:
             instmember = Institution.query(Institution.members.IN(
@@ -19,8 +18,7 @@ class RequestUser(Invite):
             return instmember.count() > 0
         return False
 
-    @staticmethod
-    def senderIsInvited(sender_key, institutionKey):
+    def senderIsInvited(self, sender_key, institutionKey):
         sender_key = ndb.Key(urlsafe=sender_key)
         request = RequestUser.query(
             RequestUser.institution_key == institutionKey,
@@ -29,15 +27,14 @@ class RequestUser(Invite):
 
         return request.count() > 0
 
-    @staticmethod
-    def checkIsRequestUserValid(data):
+    def isValid(self, data):
         institution = ndb.Key(urlsafe=data.get('institution_key')).get()
         sender = data.get('sender_key')
         if not sender:
             raise FieldException("The request require sender_key")
-        if RequestUser.senderIsMember(sender, institution):
+        if self.senderIsMember(sender, institution):
             raise FieldException("The sender is already a member")
-        if RequestUser.senderIsInvited(sender, institution.key):
+        if self.senderIsInvited(sender, institution.key):
             raise FieldException("The sender is already invited")
 
     @staticmethod
@@ -46,7 +43,7 @@ class RequestUser(Invite):
         request = RequestUser()
         request.sender_key = ndb.Key(urlsafe=data.get('sender_key'))
         request = Invite.create(data, request)
-        RequestUser.checkIsRequestUserValid(data)
+        request.isValid(data)
         return request
 
     def send_email(self, host, body=None):

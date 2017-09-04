@@ -39,8 +39,16 @@ def makeUser(user, request):
             Utils.toJson(institution.get())
         )
     user_json['follows'] = [institution_key.get().make(
-        ['acronym', 'photo_url', 'key']) for institution_key in user.follows]
+        ['acronym', 'photo_url', 'key', 'parent_institution']) for institution_key in user.follows]
     return user_json
+
+
+def remove_user_from_institutions(user):
+    """Remove user from all your institutions."""
+    for institution_key in user.institutions:
+        institution = institution_key.get()
+        institution.remove_member(user)
+        institution.unfollow(user.key)
 
 
 class UserHandler(BaseHandler):
@@ -57,7 +65,7 @@ class UserHandler(BaseHandler):
     @login_required
     @ndb.transactional(xg=True)
     def put(self, user, invite_key):
-        """Handler PATCH Requests."""
+        """Handler PUT Requests."""
         data = json.loads(self.request.body)
 
         institution_key = ndb.Key(urlsafe=data['institutions'][-1])
@@ -76,6 +84,17 @@ class UserHandler(BaseHandler):
 
         self.response.write(json.dumps(makeUser(user, self.request)))
 
+    @login_required
+    def delete(self, user, institution_key):
+        """Handler DELETE Requests."""
+        institution_key = ndb.Key(urlsafe=institution_key)
+        institution = institution_key.get()
+
+        user.remove_institution(institution_key)
+
+        institution.remove_member(user)
+        institution.unfollow(user.key)
+
     @json_response
     @login_required
     def patch(self, user):
@@ -84,6 +103,10 @@ class UserHandler(BaseHandler):
 
         """Apply patch."""
         JsonPatch.load(data, user)
+
+        if(user.state == 'inactive'):
+            remove_user_from_institutions(user)
+            user.disable_account()
 
         """Update user."""
         user.put()

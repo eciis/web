@@ -20,9 +20,16 @@
                 icon: "inbox",
                 state: "app.post"
             },
+            "SHARED_POST": {
+                icon: "inbox",
+                state: "app.post"
+            },
             "INVITE": {
                 icon: "people",
                 state: "new_invite"
+            },
+            "INSTITUTION": {
+                icon: "account_balance"
             }
         };
 
@@ -42,8 +49,10 @@
         };
 
         controller.goTo = function goTo(notification) {
-            var state = type_data[notification.type].state;
-            $state.go(state, {key: notification.entity_key});
+            if(notification.type !== 'INSTITUTION') {
+                var state = type_data[notification.type].state;
+                $state.go(state, {key: notification.entity_key});
+            }
             controller.markAsRead(notification);
         };
 

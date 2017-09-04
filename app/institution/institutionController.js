@@ -206,15 +206,19 @@
             };
 
             ctrl.removeInst = function removeInst() {
-                if(!ctrl.removeHierarchy) {
+                if(ctrl.removeHierarchy === undefined) {
                     MessageService.showToast("Você deve marcar uma das opções.");
                 } else {
                     InstitutionService.removeInstitution(institutionKey, ctrl.removeHierarchy).then(function success() {
-                        AuthService.reload().then(function success() {
-                            ctrl.closeDialog();
+                        institutionCtrl.user.removeInstitution(institutionKey, ctrl.removeHierarchy);
+                        AuthService.save();
+                        ctrl.closeDialog();
+                        if(_.isEmpty(institutionCtrl.user.institutions)) {
+                            $state.go('user_inactive');
+                        } else {
                             $state.go('app.home');
-                            MessageService.showToast("Instituição removida com sucesso.");
-                        });
+                        }
+                        MessageService.showToast("Instituição removida com sucesso.");
                     });
                 }
             };

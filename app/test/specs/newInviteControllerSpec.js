@@ -30,9 +30,9 @@
 
     var tiago = {
         name: 'Tiago',
-        institutions: [splab],
+        institutions: [splab, certbio],
         institutions_admin: [],
-        follows: [splab.key],
+        follows: [splab.key, certbio.key],
         invites: [invite],
         accessToken: '00000'
     };
@@ -52,9 +52,7 @@
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', INVITES_URI + invite.key).respond(invite);
         httpBackend.when('GET', "home/home.html").respond(200);
-        AuthService.getCurrentUser = function() {
-            return new User(tiago);
-        };
+        AuthService.login(tiago);
         createCtrl = function() {
             return $controller('NewInviteController',
                 {
@@ -108,23 +106,11 @@
                         }
                     };
                 });
-                spyOn(authService, 'reload').and.callFake(function() {
-                    return {
-                        then: function(callback) {
-                            return callback(newInviteCtrl.user = {
-                                name: 'Tiago',
-                                institutions: [splab, certbio],
-                                follows: [splab.key, certbio.key],
-                                invites: [invite],
-                                accessToken: '00000'
-                            });
-                        }
-                    };
-                });
+
                 spyOn(userService, 'addInstitution').and.callFake(function() {
                     return {
                         then: function(callback) {
-                            return callback();
+                            return callback(tiago);
                         }
                     };
                 });
@@ -147,13 +133,6 @@
                 });
             });
 
-            it('should be call authService.reload()', function(done) {
-                promise.then(function() {
-                    expect(authService.reload).toHaveBeenCalled();
-                    done();
-                });
-            });
-
             it('should be call $state.go()', function(done) {
                 promise.then(function() {
                     expect(state.go).toHaveBeenCalledWith('app.home');
@@ -164,6 +143,13 @@
             it('should be call $mdDialog.show()', function(done) {
                 promise.then(function() {
                     expect(mdDialog.show).toHaveBeenCalled();
+                    done();
+                });
+            });
+
+            it('should user state active', function(done) {
+                promise.then(function() {
+                    expect(newInviteCtrl.user.state).toEqual('active');
                     done();
                 });
             });

@@ -29,7 +29,7 @@
                 state: "new_invite"
             },
             "INSTITUTION": {
-                icon: "account_balance"
+                icon: "account_balance",
                 state: "app.post"
             },
             "REPLY_COMMENT": {

@@ -43,8 +43,8 @@
             return postDetailsCtrl.isPostAuthor() || isInstitutionAdmin();
         };
 
-        postDetailsCtrl.isDeleted = function isDeleted(post) {
-            return post.state == 'deleted';
+        postDetailsCtrl.isDeleted = function isDeleted() {
+            return postDetailsCtrl.post.state == 'deleted';
         };
 
         postDetailsCtrl.showSharedPost = function showSharedPost() {

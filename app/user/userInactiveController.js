@@ -16,7 +16,7 @@
             $mdDialog.show({
                 controller: "RequestInvitationController",
                 controllerAs: "requestInvCtrl",
-                templateUrl: 'user/request_invitation_dialog.html',
+                templateUrl: 'requests/request_invitation_dialog.html',
                 parent: angular.element(document.body),
                 targetEvent: event,
                 clickOutsideToClose:true,

@@ -30,6 +30,9 @@
             },
             "INSTITUTION": {
                 icon: "account_balance"
+            },
+            "REQUEST_USER": {
+               icon: "account_balance"
             }
         };
 

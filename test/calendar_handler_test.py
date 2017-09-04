@@ -4,15 +4,17 @@
 from test_base_handler import TestBaseHandler
 from models.user import User
 from models.institution import Institution
+from models.event import Event
 from handlers.calendar_handler import CalendarHandler
 from google.appengine.ext import ndb
 import json
+import datetime
 
 from mock import patch
 
 
 class CalendarHandlerTest(TestBaseHandler):
-    """Post Collection handler test."""
+    """Calendar handler test."""
 
     @classmethod
     def setUp(cls):
@@ -72,6 +74,28 @@ class CalendarHandlerTest(TestBaseHandler):
                 'end_time': '20271220102548',
                 'local': 'local do evento'})
 
+    @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
+    def test_get(self, verify_token):
+        """Test the calendar_handler's post event method."""
+
+        # Call the get method
+        events = self.testapp.get("/api/calendar")
+
+        # Retrieve the entities
+        event = (events.json)[0]
+        key_event = ndb.Key(urlsafe=event['key'])
+        event_obj = key_event.get()
+        self.certbio = self.certbio.key.get()
+        self.user = self.user.key.get()
+
+        # Check if the event's attributes are the expected
+        self.assertEqual(event_obj.title, 'New Event',
+                         "The title expected was new event")
+        self.assertEqual(event_obj.institution_key, self.certbio.key,
+                         "The post's institution is not the expected one")
+        self.assertEqual(event_obj.local,
+                         'Event location',
+                         "The event's local is not the expected one")
 
 def initModels(cls):
     """Init the models."""
@@ -91,4 +115,15 @@ def initModels(cls):
 
     """ Update User."""
     cls.user.add_institution(cls.certbio.key)
+    cls.user.follows = [cls.certbio.key]
     cls.user.put()
+
+    # Events
+    cls.event = Event()
+    cls.event.title = "New Event"
+    cls.event.author_key = cls.user.key
+    cls.event.institution_key = cls.certbio.key
+    cls.event.start_time = datetime.datetime.now()
+    cls.event.end_time = datetime.datetime.now()
+    cls.event.local = "Event location"
+    cls.event.put()

@@ -23,7 +23,7 @@ class CalendarHandler(BaseHandler):
         array = []
         if len(user.follows) > 0:
             queryEvents = Event.query(Event.institution_key.IN(
-                user.follows))
+                user.follows)).order(Event.start_time)
 
             array = [Event.make(event) for event in queryEvents]
 

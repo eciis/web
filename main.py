@@ -33,6 +33,7 @@ app = webapp2.WSGIApplication([
     ("/api/invites", InviteCollectionHandler),
     ("/api/invites/(.*)", InviteHandler),
     ("/api/calendar", CalendarHandler),
+    ("/api/calendar/event/(.*)", EventHandler),
     ("/api/institutions", InstitutionCollectionHandler),
     ("/api/institutions/(.*)/timeline", InstitutionTimelineHandler),
     ("/api/institutions/(.*)/members", InstitutionMembersHandler),

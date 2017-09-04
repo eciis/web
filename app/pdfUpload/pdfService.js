@@ -53,11 +53,11 @@
             return filename;
         }
 
-        service.getReadableURL = function getReadableURL(url, callback) {
+        service.getReadableURL = function getReadableURL(url, callback, pdf) {
             $http.get(url, {responseType:'arraybuffer'}).then(function success(response) {
                 var blob = new Blob([response.data], {type:'application/pdf'});
                 var url = URL.createObjectURL(blob);
-                callback(url);
+                callback(url, pdf);
             });
         };
 

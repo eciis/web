@@ -104,7 +104,7 @@ class Post(ndb.Model):
 
     photo_url = ndb.StringProperty()
 
-    pdf_files = ndb.StringProperty(repeated=True)
+    pdf_files = ndb.JsonProperty(repeated=True)
 
     text = ndb.TextProperty()
 

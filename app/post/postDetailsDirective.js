@@ -13,7 +13,7 @@
         postDetailsCtrl.showComments = false;
         postDetailsCtrl.savingComment = false;
         postDetailsCtrl.savingLike = false;
-        postDetailsCtrl.portfolioUrl = null;
+        postDetailsCtrl.pdfFiles = null;
         postDetailsCtrl.post = null;
         postDetailsCtrl.isPostPage = null;
 
@@ -41,16 +41,17 @@
             });
         };
 
-        function getPortfolioUrl() {
-            postDetailsCtrl.portfolioUrl = postDetailsCtrl.post.pdf_files[0];
-            if(postDetailsCtrl.portfolioUrl) {
-                PdfService.getReadableURL(postDetailsCtrl.portfolioUrl, setPortifolioURL);
-
+        function getPdfUrl() {
+            postDetailsCtrl.pdfFiles = postDetailsCtrl.post.pdf_files;
+            if(postDetailsCtrl.pdfFiles) {
+                _.forEach(postDetailsCtrl.pdfFiles, function(pdf) {
+                    PdfService.getReadableURL(pdf.url, setPdfURL, pdf);
+                });
             }
         }
 
-        function setPortifolioURL(url) {
-            postDetailsCtrl.portfolioUrl = url;
+        function setPdfURL(url, pdf) {
+            pdf.url = url;
         }
 
         postDetailsCtrl.isAuthorized = function isAuthorized() {
@@ -333,30 +334,30 @@
             return text;
         }
 
-        postDetailsCtrl.portfolioDialog = function(ev) {
+        postDetailsCtrl.pdfDialog = function(ev, pdf) {
             $mdDialog.show({
                 templateUrl: 'post/pdfDialog.html',
                 targetEvent: ev,
                 clickOutsideToClose:true,
                 locals: {
-                    portfolioUrl: postDetailsCtrl.portfolioUrl
+                    pdfUrl: pdf.url
                 },
                 controller: DialogController,
                 controllerAs: 'ctrl'
             });
         };
 
-        function DialogController($mdDialog, portfolioUrl) {
+        function DialogController($mdDialog, pdfUrl) {
             var ctrl = this;
-            var trustedUrl = $sce.trustAsResourceUrl(portfolioUrl);
-            ctrl.portfolioUrl = trustedUrl;
+            var trustedUrl = $sce.trustAsResourceUrl(pdfUrl);
+            ctrl.pdfUrl = trustedUrl;
         }
 
         (function main() {
             if($scope.post && ($scope.isPostPage !== undefined)) {
                 postDetailsCtrl.post = $scope.post;
                 postDetailsCtrl.isPostPage = $scope.isPostPage;
-                getPortfolioUrl();
+                getPdfUrl();
             }
         })();
     });

@@ -89,12 +89,18 @@
             return deferred.promise;
         }
 
-        function savePdf() {
+        function savePdf(pdfFile) {
             var deferred = $q.defer();
-            if(postCtrl.pdfFiles.length > 0) {
-                PdfService.save(postCtrl.pdfFiles[0], pdfUrlFiles).then(
+            if(pdfFile) {
+                PdfService.save(pdfFile, pdfUrlFiles).then(
                     function success(data) {
-                        postCtrl.post.pdf_files = [].concat(data.url);
+                        if(postCtrl.post.pdf_files) {
+                            var pdf = {
+                                name: pdfFile.name,
+                                url: data.url
+                            };
+                            postCtrl.post.pdf_files = postCtrl.post.pdf_files.concat(pdf);
+                        }
                         pdfUrlFiles = data.url;
                         deferred.resolve();
                     }, function error(response) {
@@ -109,14 +115,12 @@
 
         function saveFiles() {
             var deferred = $q.defer();
-            if(postCtrl.files) {
-                PdfService.save(postCtrl.file).then(
-                    function success(data) {
-                        postCtrl.post.pdfFiles = data.url;
-                        deferred.resolve();
-                    }, function error(response) {
-                        MessageService.showToast(response.data.msg);
-                        deferred.reject();
+            if(postCtrl.pdfFiles.length > 0) {
+                var promises = _.map(postCtrl.pdfFiles, savePdf);
+                $q.all(promises).then(function success() {
+                    deferred.resolve();
+                }, function error() {
+                    deferred.reject();
                 });
             } else {
                 deferred.resolve();
@@ -155,7 +159,7 @@
         }
 
         function saveCreatedPost(posts) {
-            var savePromises = [savePdf(), saveImage()];
+            var savePromises = [saveFiles(), saveImage()];
             $q.all(savePromises).then(function success() {
                 var post = new Post(postCtrl.post, postCtrl.user.current_institution.key);
                 if (post.isValid()) {

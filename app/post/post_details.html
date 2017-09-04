@@ -40,9 +40,11 @@
               <span class="md-subhead" >continuar lendo</span>
             </a>
         </div>
-        <md-button class="md-raised" ng-if="postDetailsCtrl.portfolioUrl" ng-click="postDetailsCtrl.portfolioDialog($event)">
-            <md-icon>description</md-icon> Portfólio
-        </md-button>
+        <div ng-repeat="pdf in postDetailsCtrl.pdfFiles" ng-if="postDetailsCtrl.pdfFiles">
+          <md-button class="md-raised" ng-click="postDetailsCtrl.pdfDialog($event, pdf)">
+              <md-icon>description</md-icon> {{pdf.name}}
+          </md-button>
+        </div>
     </div>
     
   </md-card-content>

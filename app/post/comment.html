@@ -28,8 +28,8 @@
         </md-button>
       </div>
       <!-- Replies -->
-      <md-list-item class="md-3-line" style="margin-left: 50px;"
-          ng-repeat="reply in commentCtrl.getReplies() | orderBy:'publication_date'">
+      <md-list-item class="md-3-line" style="margin-left: 50px;" ng-if="showReply"
+          ng-repeat="reply in commentCtrl.getReplies() | orderBy:'publication_date'" id="{{reply.id}}">
         <img ng-src="{{reply.author_img}}" class="md-avatar" alt="{{reply.author_name}}" />
         <div class="md-list-item-text">
           <h4>{{reply.author_name}} - {{reply.institution_name | uppercase}}<small></h4>

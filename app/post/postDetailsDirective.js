@@ -160,18 +160,21 @@
             return _.values(object);
         };
 
+        postDetailsCtrl.loadComments = function refreshComments() {
+            var promise  =  CommentService.getComments(postDetailsCtrl.post.comments);
+            promise.then(function success(response) {
+                postDetailsCtrl.post.data_comments = response.data;
+                postDetailsCtrl.post.number_of_comments = _.size(postDetailsCtrl.post.data_comments);
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
+            });
+            return promise;
+        };
+
         postDetailsCtrl.getComments = function getComments() {
-            var commentsUri = postDetailsCtrl.post.comments;
             postDetailsCtrl.showComments = !postDetailsCtrl.showComments;
             if (postDetailsCtrl.showComments){
-                var promise  =  CommentService.getComments(commentsUri);
-                promise.then(function success(response) {
-                    postDetailsCtrl.post.data_comments = response.data;
-                    postDetailsCtrl.post.number_of_comments = _.size(postDetailsCtrl.post.data_comments);
-                }, function error(response) {
-                    MessageService.showToast(response.data.msg);
-                });
-                return promise;
+                return postDetailsCtrl.loadComments();
             } else {
                 postDetailsCtrl.post.data_comments = [];
             }

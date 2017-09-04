@@ -67,6 +67,18 @@ class ReplyCommentHandler(BaseHandler):
                 post.key.urlsafe()
             )
 
+        comment = post.get_comment(comment_id)
+
+        if (comment.get('author_key') != user.key.urlsafe()):
+            entity_type = 'COMMENT'
+            message = {'type': 'REPLY_COMMENT', 'from': user.name.encode('utf8'), 'on': post.title.encode('utf8')}
+            send_message_notification(
+                comment.get('author_key'),
+                json.dumps(message),
+                entity_type,
+                post.key.urlsafe()
+            )
+
         self.response.write(json.dumps(Utils.toJson(reply)))
 
     @json_response

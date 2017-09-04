@@ -23,6 +23,10 @@
             "INVITE": {
                 icon: "people",
                 state: "new_invite"
+            },
+            "REPLY_COMMENT": {
+                icon: "reply",
+                state: "app.post"
             }
         };
 

@@ -153,7 +153,6 @@ class Post(ndb.Model):
         post.last_modified_by = author_key
         post.author = author_key
         post.institution = institution_key
-        post.comments = []
 
         return post
 

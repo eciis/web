@@ -42,8 +42,7 @@ def add_comments_to_post(user, user_reply, post, institution, comments_qnt=3):
     comments_qnt = comments_qnt if comments_qnt <= 3 else 3
     for i in range(comments_qnt):
         comment = Comment.create(texts[i], user)
-        reply = Comment.create(
-            {
+        reply = Comment.create({
                 'text': 'Comentario', 
                 'institution_key': institution.urlsafe()
             }, 
@@ -113,10 +112,10 @@ def delete_all_in_index(index):
 class BaseHandler(webapp2.RequestHandler):
     """Base Handler."""
 
-    # def handle_exception(self, exception, debug):
-    #     """Exception."""
-    #     logging.error(str(exception))
-    #     self.response.write("oops! %s\n" % str(exception))
+    def handle_exception(self, exception, debug):
+        """Exception."""
+        logging.error(str(exception))
+        self.response.write("oops! %s\n" % str(exception))
 
 
 class ResetHandler(BaseHandler):

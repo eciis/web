@@ -28,13 +28,8 @@
                 .cancel('Cancelar');
 
             $mdDialog.show(confirm).then(function() {
-                postDetailsCtrl.post = new Post(postDetailsCtrl.post);
                 PostService.deletePost(postDetailsCtrl.post).then(function success() {
-                    if(postDetailsCtrl.post.hasActivity()) {
-                        postDetailsCtrl.post.state = 'deleted';
-                    } else {
-                        postDetailsCtrl.post.state = 'hidden';
-                    }
+                    postDetailsCtrl.post.state = 'deleted';
                     MessageService.showToast('Post excluído com sucesso');
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
@@ -53,7 +48,10 @@
         };
 
         postDetailsCtrl.isHidden = function isHidden() {
-            return postDetailsCtrl.post.state == 'hidden';
+            var hasNoComments = postDetailsCtrl.post.number_of_comments === 0;
+            var hasNoLikes = postDetailsCtrl.post.number_of_likes === 0;
+            var isDeleted = postDetailsCtrl.post.state === "deleted";
+            return isDeleted && hasNoComments && hasNoLikes;
         };
 
         postDetailsCtrl.showSharedPost = function showSharedPost() {

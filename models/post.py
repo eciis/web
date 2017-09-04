@@ -51,7 +51,8 @@ class Comment(ndb.Model):
 
         institution = ndb.Key(urlsafe=data['institution_key']).get()
         Utils._assert(institution.state == 'inactive',
-                      "The institution has been deleted", NotAuthorizedException)
+                      "The institution has been deleted",
+                      NotAuthorizedException)
         comment = Comment()
         comment.text = data['text']
         comment.author = author_key
@@ -115,8 +116,7 @@ class Post(ndb.Model):
     state = ndb.StringProperty(choices=set([
         'draft',
         'published',
-        'deleted',
-        'hidden'
+        'deleted'
     ]), default='published')
 
     # Comments of the post
@@ -256,11 +256,8 @@ class Post(ndb.Model):
 
     def delete(self, user):
         """Change the state and add the information about this."""
-        if self.has_activity():
-            self.last_modified_by = user.key
-            self.state = 'deleted'
-        else:
-            self.state = 'hidden'
+        self.last_modified_by = user.key
+        self.state = 'deleted'
         self.put()
 
     def has_activity(self):
@@ -268,3 +265,11 @@ class Post(ndb.Model):
         has_comments = len(self.comments) > 0
         has_likes = len(self.likes) > 0
         return has_comments or has_likes
+
+    @staticmethod
+    def is_hidden(post):
+        """Check if the post is deleted and has no activity."""
+        has_no_comments = post.get('number_of_comments') == 0
+        has_no_likes = post.get('number_of_likes') == 0
+        is_deleted = post.get('state') == 'deleted'
+        return is_deleted and has_no_comments and has_no_likes

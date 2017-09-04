@@ -21,9 +21,3 @@ Post.prototype.isValid = function isValid() {
     }
     return true;
 };
-
-Post.prototype.hasActivity = function hasActivity() {
-    var hasComments = this.number_of_comments > 0;
-    var hasLikes = this.number_of_likes > 0;
-    return hasComments || hasLikes;
-};

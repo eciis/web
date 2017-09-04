@@ -74,8 +74,8 @@ class PostHandlerTest(TestBaseHandler):
                          "certbio should have the same number of posts")
         # Update post
         self.raoni_post = self.raoni_post.key.get()
-        self.assertEqual(self.raoni_post.state, 'hidden',
-                         "After delete the post state should be 'hidden'")
+        self.assertEqual(self.raoni_post.state, 'deleted',
+                         "After delete the post state should be 'deleted'")
 
     @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
     def test_patch(self, verify_token):

@@ -50,7 +50,7 @@
     ng-click="postDetailsCtrl.deletePost($event, postDetailsCtrl.post)">
       <md-icon>delete</md-icon>
     </md-button>
-    <md-button class="md-icon-button" aria-label="Comments" ng-click="postDetailsCtrl.getComments()">
+    <md-button class="md-icon-button" aria-label="Comments" ng-click="postDetailsCtrl.getComments()" ng-disabled="postDetailsCtrl.isPostPage">
       <md-icon>comments</md-icon>
     </md-button>
     <md-button class="post-count md-icon-button md-primary md-hue-1">
@@ -79,67 +79,13 @@
   </div>
 
   <!-- COMMENTS -->
-  <md-list ng-if="postDetailsCtrl.showComments || postDetailsCtrl.isPostPage" 
-    ng-repeat="comment in postDetailsCtrl.getValues(postDetailsCtrl.post.data_comments) | orderBy:'publication_date'" >
-      <md-list-item class="md-3-line">
-        <img ng-src="{{comment.author_img}}" class="md-avatar" alt="{{comment.author_name}}" />
-        <div class="md-list-item-text">
-          <h4>{{comment.author_name}} - {{comment.institution_name | uppercase}}<small></h4>
-          <small style="color: #7f7f7f;" class="md-caption">
-            {{comment.publication_date | amUtc | amLocal | amCalendar:referenceTime:formats}}
-          </small>
-          <p>{{comment.text}}</p>
-          <md-button class="md-secondary md-icon-button" aria-label="Share"
-          ng-if="postDetailsCtrl.canDeleteComment(comment)"
-          ng-click="postDetailsCtrl.deleteComment($event, comment)">
-            <md-icon>delete</md-icon>
-          </md-button>
-        </div>
-      </md-list-item>
-      <div layout="row" layout-align="start center" style="margin-left: 55px;"">
-        <md-button class="md-icon-button" aria-label="Favorite" ng-click="null"
-            ng-disabled="postDetailsCtrl.disableButtonLike()">
-          <md-icon>grade</md-icon>
-        </md-button>
-        <md-button class="md-secondary md-icon-button" aria-label="Reply" ng-click="showReply = !showReply"
-            title="Comentar">
-          <md-icon>reply</md-icon>
-        </md-button>
-      </div>
-      <!-- Replies -->
-      <md-list-item class="md-3-line" style="margin-left: 50px;"
-          ng-repeat="reply in postDetailsCtrl.getValues(comment.replies) | orderBy:'publication_date'">
-        <img ng-src="{{reply.author_img}}" class="md-avatar" alt="{{reply.author_name}}" />
-        <div class="md-list-item-text">
-          <h4>{{reply.author_name}} - {{reply.institution_name | uppercase}}<small></h4>
-          <small style="color: #7f7f7f;" class="md-caption">
-            {{reply.publication_date | amUtc | amLocal | amCalendar:referenceTime:formats}}
-          </small>
-          <p>{{reply.text}}</p>
-          <md-button class="md-secondary md-icon-button" aria-label="Share"
-              ng-if="postDetailsCtrl.canDeleteComment(reply)"
-              ng-click="postDetailsCtrl.deleteReply($event, postDetailsCtrl.post, comment, reply)">
-            <md-icon>delete</md-icon>
-          </md-button>
-        </div>
-      </md-list-item>
-      <!-- Reply input -->
-      <md-list-item class="md-3-line" ng-if="showReply" style="margin-left: 50px;">
-        <img ng-src="{{postDetailsCtrl.user.photo_url}}" class="md-avatar" alt="{{postDetailsCtrl.user.name}}" />
-        <div class="md-list-item-text" layout="row" layout-align="center center">
-          <md-input-container flex>
-            <label>{{postDetailsCtrl.user.name}}</label>
-            <textarea style="max-height: 400px;overflow-y:auto;resize:none;" ng-model="reply" rows="1" md-select-on-focus
-              ng-disabled="postDetailsCtrl.savingComment"></textarea>
-          </md-input-container>
-          <md-button ng-if="reply" class="md-icon-button" ng-click="postDetailsCtrl.replyComment(comment, reply, showReply);">
-            <md-icon>send</md-icon>
-          </md-button>
-        </div>
-      </md-list-item>
-  </md-list>
+  
+  <comment ng-if="postDetailsCtrl.showComments || postDetailsCtrl.isPostPage" 
+    ng-repeat="comment in postDetailsCtrl.getValues(postDetailsCtrl.post.data_comments) | orderBy:'publication_date'"
+    comment="comment" user="postDetailsCtrl.user" post="postDetailsCtrl.post"></comment>
+
   <md-list>
-    <md-list-item class="md-3-line" ng-if="postDetailsCtrl.isPostPage && !postDetailsCtrl.isDeleted()">
+    <md-list-item class="md-3-line" ng-if="(postDetailsCtrl.showComments || postDetailsCtrl.isPostPage) && !postDetailsCtrl.isDeleted()">
       <img ng-src="{{postDetailsCtrl.user.photo_url}}" class="md-avatar" alt="{{postDetailsCtrl.user.name}}" />
       <div class="md-list-item-text">
         <h2>{{comment.author_name}}</h2>

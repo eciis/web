@@ -2,7 +2,6 @@
 """Invite Model."""
 from google.appengine.ext import ndb
 from google.appengine.ext.ndb.polymodel import PolyModel
-from models.user import User
 from service_messages import send_message_email
 from service_messages import send_message_notification
 import json
@@ -12,10 +11,16 @@ class Invite(PolyModel):
     """Model of Invite."""
 
     # Email of the invitee.
-    invitee = ndb.StringProperty(required=True)
+    invitee = ndb.StringProperty()
 
-    # Key of user inviter
-    inviter_key = ndb.KeyProperty(kind="User", required=True)
+    # Key of user admin
+    # In the invitations, he sends the invitation.
+    # In requests, he receives the request.
+    admin_key = ndb.KeyProperty(kind="User", required=True)
+
+    # Key of user sender
+    # This property is used in requests
+    sender_key = ndb.KeyProperty(kind="User")
 
     # Status of Invite.
     status = ndb.StringProperty(choices=set([
@@ -33,11 +38,14 @@ class Invite(PolyModel):
     # Value is None for invite the User
     stub_institution_key = ndb.KeyProperty(kind="Institution")
 
+    #  Indicates whether the operation is of the requested type
+    is_request = ndb.BooleanProperty(default=False)
+
     @staticmethod
     def create(data, invite):
         """Create a post and check required fields."""
-        invite.invitee = data.get('invitee')
-        invite.inviter_key = ndb.Key(urlsafe=data.get('inviter_key'))
+        invite.is_request = data.get('is_request') or False
+        invite.admin_key = ndb.Key(urlsafe=data.get('admin_key'))
         invite.institution_key = ndb.Key(urlsafe=data.get('institution_key'))
 
         return invite
@@ -47,7 +55,7 @@ class Invite(PolyModel):
         self.send_email(host)
         self.send_notification(user)
 
-    def send_email(self, host, body=None):
+    def send_email(self, host, receiver_email, body=None):
         """Method of send email of invite user."""
         body = body or """Você foi convidado a participar da plataforma e-CIS,
         para realizar o cadastro acesse http://%s
@@ -56,11 +64,11 @@ class Invite(PolyModel):
         """ % (host)
 
         send_message_email(
-            self.invitee,
+            receiver_email,
             body
         )
 
-    def send_notification(self, user, entity_type=None):
+    def send_notification(self, user, receiver_key, entity_type=None):
         """Method of send notification of invite user.
 
         Keyword arguments:
@@ -68,30 +76,26 @@ class Invite(PolyModel):
         entity_type -- type of notification.
         Case not receive use invite type.
         """
-        user_found = User.query(User.email == self.invitee).fetch(1)
         entity_type = entity_type or 'INVITE'
 
-        if user_found:
-            invitee = user_found[0]
-            message = json.dumps({
-                'from': user.name, 'type': 'INVITE'
-            })
+        message = json.dumps({
+            'from': user.name, 'type': 'INVITE'
+        })
 
-            send_message_notification(
-                invitee.key.urlsafe(),
-                message,
-                entity_type,
-                self.key.urlsafe()
-            )
+        send_message_notification(
+            receiver_key,
+            message,
+            entity_type,
+            self.key.urlsafe()
+        )
 
     def make(self):
         """Create personalized json of invite."""
         return {
-            'invitee': self.invitee,
-            'inviter_name': self.inviter_key.get().name,
+            'admin_name': self.admin_key.get().name,
             'key': self.key.urlsafe(),
             'status': self.status,
-            'institution_inviter': self.institution_key.get().make(['name'])
+            'institution_admin': self.institution_key.get().make(['name'])
         }
 
     def change_status(self, status):

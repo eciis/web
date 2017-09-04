@@ -55,7 +55,7 @@ class Invite(PolyModel):
         self.send_email(host)
         self.send_notification(user)
 
-    def send_email(self, host, body=None):
+    def send_email(self, host, receiver_email, body=None):
         """Method of send email of invite user."""
         body = body or """Você foi convidado a participar da plataforma e-CIS,
         para realizar o cadastro acesse http://%s
@@ -64,7 +64,7 @@ class Invite(PolyModel):
         """ % (host)
 
         send_message_email(
-            self.invitee,
+            receiver_email,
             body
         )
 

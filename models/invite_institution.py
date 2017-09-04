@@ -56,7 +56,7 @@ class InviteInstitution(Invite):
         Equipe e-CIS
         """ % (self.suggestion_institution_name, host, institution_key, invite_key)
 
-        super(InviteInstitution, self).send_email(host, body)
+        super(InviteInstitution, self).send_email(host, self.invitee, body)
 
     def send_notification(self, user):
         """Method of send notification of invite institution."""

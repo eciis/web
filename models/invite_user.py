@@ -56,7 +56,7 @@ class InviteUser(Invite):
         http://%s/app/#/institution/%s/%s/new_invite/USER
 
         Equipe e-CIS """ % (host, institution_key, invite_key)
-        super(InviteUser, self).send_email(host, body)
+        super(InviteUser, self).send_email(host, self.invitee, body)
 
     def send_notification(self, user):
         """Method of send notification of invite user."""

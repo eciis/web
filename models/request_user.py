@@ -53,6 +53,7 @@ class RequestUser(Invite):
         """Method of send email of invite user."""
         institution_key = self.institution_key.urlsafe()
         invite_key = self.key.urlsafe()
+        admin_email = self.admin_key.get().email
 
         # TODO Set this message
         body = body or """Oi:
@@ -60,7 +61,7 @@ class RequestUser(Invite):
         http://%s/app/#/institution/%s/%s/new_invite/USER
 
         Equipe e-CIS """ % (host, institution_key, invite_key)
-        super(RequestUser, self).send_email(host, body)
+        super(RequestUser, self).send_email(host, admin_email, body)
 
     def send_notification(self, user):
         """Method of send notification of invite user."""

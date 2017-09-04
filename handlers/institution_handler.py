@@ -52,7 +52,7 @@ def isUserInvited(method):
 
 def is_admin(method):
     """Check if the user is admin of the institution."""
-    def check_authorization(self, user, institution_key):
+    def check_authorization(self, user, institution_key, *args):
         institution = ndb.Key(urlsafe=institution_key).get()
 
         userisNotAdminOfInstitution = institution.key not in user.institutions_admin
@@ -61,7 +61,7 @@ def is_admin(method):
         Utils._assert(userisNotAdminOfInstitution or institutionisNotManagedByUser,
                       'User is not admin', NotAuthorizedException)
 
-        method(self, user, institution_key)
+        method(self, user, institution_key, *args)
     return check_authorization
 
 

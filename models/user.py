@@ -149,3 +149,22 @@ class User(ndb.Model):
             return self.permissions[permission_type][entity_key]
         except:
             return False
+
+    def disable_account(self):
+        """Desable user account.
+
+        When user is patched to inactive state, this function is called
+        to remove all his institutions.
+        """
+        self.institutions = []
+        self.follows = []
+
+    @staticmethod
+    def get_active_user(user_email):
+        """Get active user if exists."""
+        user_found = User.query(User.email == user_email).iter()
+
+        if user_found.has_next():
+            user_found = user_found.next()
+            if user_found.state == 'active':
+                return user_found

@@ -17,7 +17,7 @@
 
         inviteController.sendUserInvite = function sendInvite() {
             inviteController.invite.institution_key = currentInstitutionKey;
-            inviteController.invite.inviter_key = inviteController.user.key;
+            inviteController.invite.admin_key = inviteController.user.key;
             inviteController.invite.type_of_invite = 'USER';
             invite = new Invite(inviteController.invite);
 

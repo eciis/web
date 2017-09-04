@@ -39,13 +39,13 @@
                         suggestion_institution_name : "Institution Parent",
                         type_of_invite: 'INSTITUTION_PARENT',
                         institution_key: splab.key,
-                        inviter_key: maiana.key});
+                        admin_key: maiana.key});
 
     var inviteChildren = new Invite({invitee: "children@gmail.com",
                         suggestion_institution_name : "Children Institution",
                         type_of_invite: 'INSTITUTION_CHILDREN',
                         institution_key: splab.key,
-                        inviter_key: maiana.key});
+                        admin_key: maiana.key});
 
     var childrenStub = new Institution({name: "Children Institution", state : "pending"});
 

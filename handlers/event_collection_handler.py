@@ -13,7 +13,7 @@ from utils import json_response
 from utils import NotAuthorizedException
 
 
-class CalendarHandler(BaseHandler):
+class EventCollectionHandler(BaseHandler):
     """Event  Collection Handler."""
 
     @login_required
@@ -25,7 +25,13 @@ class CalendarHandler(BaseHandler):
             queryEvents = Event.query(Event.institution_key.IN(
                 user.follows)).order(Event.start_time)
 
-            array = [Event.make(event) for event in queryEvents]
+            for event in queryEvents:
+                institution = event.institution_key.get()
+                author = event.author_key.get()
+
+                array.append(Event.make(event, institution.name,
+                                        institution.photo_url, author.name,
+                                        author.photo_url))
 
         self.response.write(json.dumps(array))
 
@@ -44,4 +50,5 @@ class CalendarHandler(BaseHandler):
         event.author_key = user.key
         event.put()
 
-        self.response.write(json.dumps(Event.make(event)))
+        self.response.write(json.dumps(Event.make(
+            event, institution.name, institution.photo_url, user.name, user.photo_url)))

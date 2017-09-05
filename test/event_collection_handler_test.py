@@ -5,7 +5,7 @@ from test_base_handler import TestBaseHandler
 from models.user import User
 from models.institution import Institution
 from models.event import Event
-from handlers.calendar_handler import CalendarHandler
+from handlers.event_collection_handler import EventCollectionHandler
 from google.appengine.ext import ndb
 import json
 import datetime
@@ -13,15 +13,15 @@ import datetime
 from mock import patch
 
 
-class CalendarHandlerTest(TestBaseHandler):
+class EventCollectionHandlerTest(TestBaseHandler):
     """Calendar handler test."""
 
     @classmethod
     def setUp(cls):
         """Provide the base for the tests."""
-        super(CalendarHandlerTest, cls).setUp()
+        super(EventCollectionHandlerTest, cls).setUp()
         app = cls.webapp2.WSGIApplication(
-            [("/api/calendar", CalendarHandler),
+            [("/api/events", EventCollectionHandler),
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
@@ -31,7 +31,7 @@ class CalendarHandlerTest(TestBaseHandler):
         """Test the calendar_handler's post event method."""
 
         # Make the request and assign the answer to post
-        event = self.testapp.post_json("/api/calendar", {
+        event = self.testapp.post_json("/api/events", {
             'title': 'new event',
             'institution_key': self.certbio.key.urlsafe(),
             'text': 'testing new event',
@@ -79,7 +79,7 @@ class CalendarHandlerTest(TestBaseHandler):
         """Test the calendar_handler's post event method."""
 
         # Call the get method
-        events = self.testapp.get("/api/calendar")
+        events = self.testapp.get("/api/events")
 
         # Retrieve the entities
         event = (events.json)[0]

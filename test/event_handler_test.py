@@ -11,21 +11,18 @@ from mock import patch
 import datetime
 
 
-class LikePostHandlerTest(TestBaseHandler):
+class EventHandlerTest(TestBaseHandler):
     """Test the handler event_handler."""
-
-    LIKE_URI = "/api/posts/%s/likes"
 
     @classmethod
     def setUp(cls):
         """Provide the base for the tests."""
-        super(LikePostHandlerTest, cls).setUp()
+        super(EventHandlerTest, cls).setUp()
         app = cls.webapp2.WSGIApplication(
             [("/api/calendar/event/(.*)", EventHandler),
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
-
 
     @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
     def test_delete(self, verify_token):
@@ -36,7 +33,7 @@ class LikePostHandlerTest(TestBaseHandler):
         # Refresh mayza_post
         self.event = self.event.key.get()
         # Verify if after delete the state of event is deleted
-        self.assertEqual(self.event.state, "deleted" ,
+        self.assertEqual(self.event.state, "deleted",
                          "The state expected was deleted.")
 
     def tearDown(cls):

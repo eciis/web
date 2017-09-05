@@ -10,7 +10,7 @@ class Event(ndb.Model):
     title = ndb.StringProperty(required=True)
 
     # Image uploaded
-    photo_url = ndb.StringProperty()
+    photo_url = ndb.StringProperty(indexed=False)
 
     # Text about the event
     text = ndb.TextProperty()
@@ -36,17 +36,19 @@ class Event(ndb.Model):
     # Local of the event
     local = ndb.StringProperty(required=True)
 
+    def isValid(self):
+        today = datetime.datetime.now()
+        # start_time = datetime.datetime.strptime(self.start_time, "%Y%m%d%H%M%S")
+        # end_time = datetime.datetime.strptime(self.end_time, "%Y%m%d%H%M%S")
+
+        if self.end_time < self.start_time:
+            raise FieldException("The end time can not be before the start time")
+        if self.start_time < today:
+            raise FieldException("The start time can not be before now")
+
     @staticmethod
     def create(data, author_key, institution_key):
         """Create an event."""
-        today = datetime.datetime.now()
-        start_time = datetime.datetime.strptime(data['start_time'], "%Y%m%d%H%M%S")
-        end_time = datetime.datetime.strptime(data['end_time'], "%Y%m%d%H%M%S")
-
-        if end_time < start_time:
-            raise FieldException("The end time can not be before the start time")
-        if start_time < today:
-            raise FieldException("The start time can not be before now")
 
         event = Event()
         event.text = data['text']
@@ -55,25 +57,29 @@ class Event(ndb.Model):
         event.author_key = author_key
         event.institution_key = institution_key
         event.local = data['local']
-        event.start_time = datetime.datetime.strptime(data['start_time'], "%Y%m%d%H%M%S")
-        event.end_time = datetime.datetime.strptime(data['end_time'], "%Y%m%d%H%M%S")
+        event.start_time = datetime.datetime.strptime(
+            data['start_time'], "%Y%m%d%H%M%S")
+        event.end_time = datetime.datetime.strptime(
+            data['end_time'], "%Y%m%d%H%M%S")
+
+        event.isValid()
 
         return event
 
     @staticmethod
-    def make(event):
+    def make(event, institution_name, institution_photo, user_name, user_photo):
         """Create personalized json of comment."""
-        author = event.author_key.get()
-        institution = event.institution_key.get()
         return {
             'text': event.text,
             'title': event.title,
             'photo_url': event.photo_url,
             'author': event.author_key.urlsafe(),
-            'author_name': author.name,
-            'institution_name': institution.name,
-            'institution_name': institution.name,
-            'local': author.photo_url,
+            'author_photo': user_photo,
+            'institution': event.institution_key.urlsafe(),
+            'author_name': user_name,
+            'institution_name': institution_name,
+            'institution_photo': institution_photo,
+            'local': event.local,
             'start_time': event.start_time.isoformat(),
             'end_time': event.end_time.isoformat(),
             'key': event.key.urlsafe()

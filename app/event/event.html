@@ -52,7 +52,7 @@
                       ngf-select="eventCtrl.addImage(eventCtrl.file)">
               <md-icon>add_a_photo</md-icon>
         </md-button>
-        <md-button class="md-icon-button" ng-click="eventCtrl.save()">
+        <md-button class="md-icon-button" ng-click="eventCtrl.save()" ng-if="eventCtrl.showButton()">
           <md-icon>send</md-icon>
         </md-button>
       </md-card-actions>

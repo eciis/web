@@ -41,13 +41,13 @@
 
         eventCtrl.save = function save() {
             if(eventCtrl.isEventValid()){
-                create();
+                loadImage();
             }else{
                 MessageService.showToast("Evento é inválido");
             }
         };
 
-        function create(){
+        function loadImage(){
             if (eventCtrl.photoBase64Data) {
                 eventCtrl.loading = true;
                 ImageService.saveImage(eventCtrl.photoBase64Data).then(function success(data) {

@@ -190,23 +190,14 @@ class PostCommentHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': MAYZA_EMAIL})
     def test_check_permission(self, verify_token):
         """Test method check_permission in post_comment_handler."""
-        # Pretend an authentication
-        self.os.environ['REMOTE_USER'] = self.mayza.email
-        self.os.environ['USER_EMAIL'] = self.mayza.email
-
         # Added comment
         self.response = self.testapp.post(self.URL_POST_COMMENT %
                                           self.mayza_post.key.urlsafe(),
                                           json.dumps(self.comment)).json
-        # ID of comment
-        self.id_comment = self.response["id"]
-
-        # Update post
-        self.mayza_post = self.mayza_post.key.get()
 
         # When a user(Maiana) try delete comment of other user(Mayza).
         with self.assertRaises(NotAuthorizedException):
-            check_permission(self.maiana, self.mayza_post, self.id_comment)
+            check_permission(self.maiana, self.certbio, self.mayza_post, self.comment)
 
 
 def initModels(cls):

@@ -27,86 +27,108 @@ class PostHandlerTest(TestBaseHandler):
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
-    @patch('utils.verify_token', return_value={'email': 'user@example.com'})
+    @patch('utils.verify_token', return_value={'email': 'firstUser@gmail.com'})
     def test_delete(self, verify_token):
         """Test the post_handler's delete method."""
+        # test delete post when the post has a comment
         # Verify if before the delete the post's state is published
-        self.assertEqual(self.user_post.state, 'published',
+        self.assertEqual(self.firstUser_post.state, 'published',
                          "The post's state must be published")
-        # Call the delete method
-        self.testapp.delete("/api/posts/%s" % self.user_post.key.urlsafe())
+        self.firstUser_post.add_comment(self.secondUser_comment)
+        self.testapp.delete("/api/posts/%s" % self.firstUser_post.key.urlsafe())
         # Retrieve the post from the datastore, once it has been changed
-        self.user_post = self.user_post.key.get()
+        self.firstUser_post = self.firstUser_post.key.get()
         # Make sure the post's state is deleted
-        self.assertEqual(self.user_post.state, 'deleted',
+        self.assertEqual(self.firstUser_post.state, 'deleted',
+                         "The post's state must be deleted")
+
+        # test delete post when the post has a like
+        # Verify if before the delete the post's state is published
+        self.assertEqual(self.firstUser_other_post.state, 'published',
+                         "The post's state must be published")
+        self.firstUser_other_post.like(self.secondUser.key)
+        self.testapp.delete("/api/posts/%s"
+                            % self.firstUser_other_post.key.urlsafe())
+        # Retrieve the post from the datastore, once it has been changed
+        self.firstUser_other_post = self.firstUser_other_post.key.get()
+        # Make sure the post's state is deleted
+        self.assertEqual(self.firstUser_other_post.state, 'deleted',
                          "The post's state must be deleted")
 
         # Pretend an authentication
-        verify_token.return_value = {'email': 'testuser@example.com'}
+        verify_token.return_value = {'email': 'secondUser@ccc.ufcg.edu.br'}
 
+        # test delete post when the post has no activity
         # Verify if before the delete the post's state is published
-        self.assertEqual(self.test_user_post.state, 'published',
+        self.assertEqual(self.secondUser_post.state, 'published',
                          "The post's state must be published")
+        # Verify if institution has only one post
+        self.assertEqual(len(self.institution.posts), 3,
+                         "institution should have only one post")
         # Call the delete method
-        self.testapp.delete("/api/posts/%s" % self.test_user_post.key.urlsafe())
-        # Retrieve the post from the datastore, once it has been changed
-        self.test_user_post = self.test_user_post.key.get()
-        # Make sure the post's state is deleted
-        self.assertEqual(self.test_user_post.state, 'deleted',
-                         "The post's state must be deleted")
+        self.testapp.delete("/api/posts/%s" % self.secondUser_post.key.urlsafe())
+        # update institution
+        self.institution = self.institution.key.get()
+        # Make sure the post was deleted from institution
+        self.assertEqual(len(self.institution.posts), 3,
+                         "institution should have the same number of posts")
+        # Update post
+        self.secondUser_post = self.secondUser_post.key.get()
+        self.assertEqual(self.secondUser_post.state, 'deleted',
+                         "After delete the post state should be 'deleted'")
 
-    @patch('utils.verify_token', return_value={'email': 'user@example.com'})
+    @patch('utils.verify_token', return_value={'email': 'firstUser@gmail.com'})
     def test_patch(self, verify_token):
         """Test the post_handler's patch method."""
         # Call the patch method and assert that  it raises an exception
         with self.assertRaises(Exception):
             self.testapp.patch_json("/api/posts/%s"
-                                    % self.test_user_post.key.urlsafe(),
+                                    % self.secondUser_post.key.urlsafe(),
                                     [{"op": "replace", "path": "/text",
                                       "value": "testando"}]
                                     )
         # Call the patch method and assert that it works
         self.testapp.patch_json("/api/posts/%s"
-                                % self.user_post.key.urlsafe(),
+                                % self.firstUser_post.key.urlsafe(),
                                 [{"op": "replace", "path": "/text",
                                     "value": "testando"}]
                                 )
-        self.user_post = self.user_post.key.get()
-        self.assertEqual(self.user_post.text, "testando")
+        self.firstUser_post = self.firstUser_post.key.get()
+        self.assertEqual(self.firstUser_post.text, "testando")
         # Pretend a new authentication
-        verify_token.return_value = {'email': 'testuser@example.com'}
+        verify_token.return_value = {'email': 'secondUser@ccc.ufcg.edu.br'}
 
         # Call the patch method and assert that it works
         self.testapp.patch_json("/api/posts/%s"
-                                % self.test_user_post.key.urlsafe(),
+                                % self.secondUser_post.key.urlsafe(),
                                 [{"op": "replace", "path": "/text",
                                     "value": "testando"}]
                                 )
-        self.test_user_post = self.test_user_post.key.get()
-        self.assertEqual(self.test_user_post.text, "testando")
+        self.secondUser_post = self.secondUser_post.key.get()
+        self.assertEqual(self.secondUser_post.text, "testando")
         # Call the patch method and assert that  it raises an exception
         with self.assertRaises(Exception):
             self.testapp.patch_json("/api/posts/%s"
-                                    % self.user_post.key.urlsafe(),
+                                    % self.firstUser_post.key.urlsafe(),
                                     [{"op": "replace", "path": "/text",
                                       "value": "testando"}]
                                     )
         # test the case when the post has a like, so it can not be updated
-        self.user_post.like(self.test_user.key)
-        self.user_post = self.user_post.key.get()
+        self.firstUser_post.like(self.secondUser.key)
+        self.firstUser_post = self.firstUser_post.key.get()
         with self.assertRaises(Exception):
             self.testapp.patch_json("/api/posts/%s"
-                                    % self.user_post.key.urlsafe(),
+                                    % self.firstUser_post.key.urlsafe(),
                                     [{"op": "replace", "path": "/text",
                                         "value": "testando"}]
                                     )
 
         # test the case when the post has a comment, so it can not be updated
-        self.user_post.add_comment(self.test_user_comment)
-        self.user_post = self.user_post.key.get()
+        self.firstUser_post.add_comment(self.secondUser_comment)
+        self.firstUser_post = self.firstUser_post.key.get()
         with self.assertRaises(Exception):
             self.testapp.patch_json("/api/posts/%s"
-                                    % self.user_post.key.urlsafe(),
+                                    % self.firstUser_post.key.urlsafe(),
                                     [{"op": "replace", "path": "/text",
                                         "value": "testando"}]
                                     )
@@ -118,33 +140,52 @@ class PostHandlerTest(TestBaseHandler):
 
 def initModels(cls):
     """Init the models."""
-    # new User User
-    cls.user = User()
-    cls.user.name = 'User'
-    cls.user.email = 'user@example.com'
-    cls.user.put()
-    # new User Test User
-    cls.test_user = User()
-    cls.test_user.name = 'Test User'
-    cls.test_user.email = 'testuser@example.com'
-    cls.test_user.photo_url = '/image.jpg'
-    cls.test_user.put()
-    # new Institution CERTBIO
+    # new User firstUser
+    cls.firstUser = User()
+    cls.firstUser.name = 'firstUser'
+    cls.firstUser.email = 'firstUser@gmail.com'
+    cls.firstUser.put()
+
+    # new User secondUser
+    cls.secondUser = User()
+    cls.secondUser.name = 'secondUser'
+    cls.secondUser.email = 'secondUser@ccc.ufcg.edu.br'
+    cls.secondUser.put()
+
+    # new Institution
     cls.institution = Institution()
-    cls.institution.name = 'Institution'
+    cls.institution.name = 'institution'
+    cls.institution.members = [cls.firstUser.key, cls.secondUser.key]
+    cls.institution.followers = [cls.firstUser.key, cls.secondUser.key]
+    cls.institution.admin = cls.firstUser.key
     cls.institution.put()
-    # POST of User To Certbio Institution
-    cls.user_post = Post()
-    cls.user_post.author = cls.user.key
-    cls.user_post.institution = cls.institution.key
-    cls.user_post.put()
-    # Post of Test User
-    cls.test_user_post = Post()
-    cls.test_user_post.author = cls.test_user.key
-    cls.test_user_post.institution = cls.institution.key
-    cls.test_user_post.put()
+
+    # POST of firstUser To Institution
+    cls.firstUser_post = Post()
+    cls.firstUser_post.author = cls.firstUser.key
+    cls.firstUser_post.institution = cls.institution.key
+    cls.firstUser_post.put()
+
+    # POST of firstUser To institution
+    cls.firstUser_other_post = Post()
+    cls.firstUser_other_post.author = cls.firstUser.key
+    cls.firstUser_other_post.institution = cls.institution.key
+    cls.firstUser_other_post.put()
+
+    # Post of secondUser
+    cls.secondUser_post = Post()
+    cls.secondUser_post.author = cls.secondUser.key
+    cls.secondUser_post.institution = cls.institution.key
+    cls.secondUser_post.put()
+
+    # update institution's posts
+    cls.institution.posts = [cls.secondUser_post.key, cls.firstUser_post.key,
+                             cls.firstUser_other_post.key]
+    cls.institution.put()
+
     # comment
-    data_comment = {"text": "comment",
+    data_comment = {"text": "hello",
                     "institution_key": cls.institution.key.urlsafe()}
-    cls.test_user_comment = Comment.create(data_comment, cls.test_user)
-    cls.test_user_comment.put()
+    cls.secondUser_comment = Comment.create(data_comment, cls.secondUser.key,
+                                            cls.firstUser_post.key)
+    cls.secondUser_comment.put()

@@ -192,6 +192,15 @@
             $window.open(website);
         };
 
+        institutionCtrl.getFullAddress = function getFullAddress() {
+            if(institutionCtrl.current_institution) {
+                var address = institutionCtrl.current_institution.address;
+                var fullAddress = address.number + ", " + address.street + ", " + address.neighbourhood + 
+                                 ", " + address.city + ", " + address.state;
+                return fullAddress;
+            }
+        };
+
         function DialogController($mdDialog, portfolioUrl) {
             var ctrl = this;
             var trustedUrl = $sce.trustAsResourceUrl(portfolioUrl);

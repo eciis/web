@@ -28,13 +28,26 @@ class Address(ndb.Model):
 
     country = ndb.StringProperty()
 
-    # House Number, Street Name, City, State, Zip, Country
     def get_full_address(self):
         """Get the full address."""
         full_address = "%s %s, %s, %s, %s, %s" % (self.number, self.street,
                                                   self.city, self.state,
                                                   self.zip, self.country)
         return full_address
+
+    @staticmethod
+    def create(data):
+        """Create an address model instance."""
+        address = Address()
+        address.number = data.get('number')
+        address.street = data.get('street')
+        address.neighbourhood = data.get('neighbourhood')
+        address.city = data.get('city')
+        address.state = data.get('state')
+        address.cep = data.get('cep')
+        address.country = data.get('country')
+
+        return address
 
 
 class Institution(ndb.Model):
@@ -51,7 +64,7 @@ class Institution(ndb.Model):
 
     address = ndb.StructuredProperty(Address)
 
-    occupation_area = ndb.StringProperty() 
+    occupation_area = ndb.StringProperty()
 
     description = ndb.TextProperty()
 
@@ -140,11 +153,10 @@ class Institution(ndb.Model):
         self.invite = invite.key
         self.put()
 
-
     @staticmethod
     @ndb.transactional(xg=True)
     def create_parent_connection(institution, invite):
-        """Makes connections between parent and daughter institution."""
+        """Make connections between parent and daughter institution."""
         institution.children_institutions = [invite.institution_key]
         institution.put()
 
@@ -157,7 +169,7 @@ class Institution(ndb.Model):
     @staticmethod
     @ndb.transactional(xg=True)
     def create_children_connection(institution, invite):
-        """Makes connections between daughter and parent institution."""
+        """Make connections between daughter and parent institution."""
         institution.parent_institution = invite.institution_key
         institution.put()
 
@@ -294,5 +306,8 @@ class Institution(ndb.Model):
                     'suggestion_institution_name': invite_key.get().suggestion_institution_name,
                     'key': invite_key.urlsafe()
                 }
+            if(attribute == 'address'):
+                attr_value = self.address.get_full_address()
+
             institution[attribute] = attr_value
         return institution

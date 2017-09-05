@@ -205,43 +205,6 @@
         });
     });
 
-    xdescribe('canDeleteComment()', function() {
-        it('Should return true', function() {
-            var comment = {author_key: postDetailsCtrl.user.key, text: "testando"};
-            var result = postDetailsCtrl.canDeleteComment(comment);
-            expect(result).toBeTruthy();
-        });
-
-        it('Should return false', function() {
-            var comment = {author_key: "1234", text: "testando"};
-            var result = postDetailsCtrl.canDeleteComment(comment);
-            expect(result).toBeFalsy();
-        });
-    });
-
-    xdescribe('deleteComment()', function(){
-        it('Should delete the comment', function() {
-            postDetailsCtrl.post = posts[0];
-            spyOn(mdDialog, 'confirm').and.callThrough();
-            spyOn(mdDialog, 'show').and.callFake(function(){
-                return {
-                    then: function(callback) {
-                        return callback();
-                    }
-                };
-            });
-            spyOn(commentService, 'deleteComment').and.callThrough();
-            postDetailsCtrl.post.data_comments = [{author_key: "1234", text: "testando", id:5}];
-            httpBackend.expect('DELETE', POSTS_URI + '/' + posts[0].key + '/comments/' + "5").respond({author_key: "1234", text: "testando", id:5});
-            postDetailsCtrl.deleteComment("$event", {author_key: "1234", text: "testando", id:5});
-            httpBackend.flush();
-            expect(commentService.deleteComment).toHaveBeenCalledWith(postDetailsCtrl.post.key, 5);
-            expect(postDetailsCtrl.post.data_comments).toEqual([]);
-            expect(mdDialog.confirm).toHaveBeenCalled();
-            expect(mdDialog.show).toHaveBeenCalled();
-        });
-    });
-
     describe('recognizeUrl()', function() {
         var post;
 
@@ -254,7 +217,7 @@
         });
 
         it('Should not change the original post title', function() {
-            var newPost = postDetailsCtrl.recognizeUrl(post);
+            postDetailsCtrl.recognizeUrl(post);
             expect(post.title).toEqual("Post de Tiago em www.twitter.com");
         });
 
@@ -264,7 +227,7 @@
         });
 
         it('Should not change the original post text', function() {
-            var newPost = postDetailsCtrl.recognizeUrl(post);
+            postDetailsCtrl.recognizeUrl(post);
             expect(post.text).toEqual("Acessem: www.google.com");
         });
     });

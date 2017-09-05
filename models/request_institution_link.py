@@ -15,32 +15,38 @@ class RequestInstitutionParent(Invite):
         return institution.admin == sender_key and institution.key in user.institutions_admin
 
     @staticmethod
-    def senderIsInvited(sender_key, institutionKey):
-        sender_key = ndb.Key(urlsafe=sender_key)
-        request = RequestInstitutionLink.query(
-            RequestInstitutionLink.institution_key == institutionKey,
-            RequestInstitutionLink.status == 'sent',
-            RequestInstitutionLink.sender_key == sender_key)
+    def isLinked(institution, institution_requested):
+        isParent = institution.key == institution_requested.parent_institution
+        isChildren = institution.key in institution_requested.children_institutions
+
+        return isParent or isChildren
+
+    @staticmethod
+    def IsRequested(sender, institution_requested_key):
+        request = RequestInstitutionParent.query(
+            RequestInstitutionParent.institution_key == institution_requested_key,
+            RequestInstitutionParent.status == 'sent',
+            RequestInstitutionParent.sender_key == sender)
 
         return request.count() > 0
 
     def isValid(self):
-        institution = self.institution_key.get()
+        institution_key = self.institution_key
         sender = self.sender_key.urlsafe()
         institution_requested = self.institution_key_requested.get()
         if not sender:
             raise FieldException("The request require sender_key")
         if not institution_requested:
             raise FieldException("The request require institution_requested")
-        if RequestInstitutionLink.requestedIsLinked(institution, institution_requested):
+        if RequestInstitutionParent.isLinked(institution_key, institution_requested):
             raise FieldException("The institutions is already a linked")
-        if RequestInstitutionLink.senderIsInvited(sender, institution.key):
+        if RequestInstitutionParent.IsRequested(sender, institution_key):
             raise FieldException("The sender is already invited")
 
     @staticmethod
     def create(data):
         """Create a post and check required fields."""
-        request = RequestInstitutionLink()
+        request = RequestInstitutionParent()
         request.sender_key = ndb.Key(urlsafe=data.get('sender_key'))
         request = Invite.create(data, request)
         request.isValid()
@@ -48,12 +54,12 @@ class RequestInstitutionParent(Invite):
 
     def send_notification(self, user):
         """Method of send notification of invite user."""
-        entity_type = 'REQUEST_INSTITUTION_LINK'
-        super(RequestInstitutionLink, self).send_notification(user, entity_type)
+        entity_type = 'REQUEST_INSTITUTION_PARENT'
+        super(RequestInstitutionParent, self).send_notification(user, entity_type)
 
     def make(self):
         """Create json of invite to user."""
-        invite_user_json = super(RequestInstitutionLink, self).make()
+        invite_user_json = super(RequestInstitutionParent, self).make()
         invite_user_json['sender'] = self.sender_key.get().email
         invite_user_json['institution_key'] = self.institution_key.urlsafe()
         invite_user_json['type_of_invite'] = 'REQUEST_USER'

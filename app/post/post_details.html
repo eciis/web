@@ -1,4 +1,4 @@
-<md-card ng-class="postDetailsCtrl.isDeleted(postDetailsCtrl.post)?'post-deleted':''">
+<md-card ng-class="postDetailsCtrl.isDeleted()?'post-deleted':''" ng-hide="postDetailsCtrl.isHidden()">
   <!-- HEADER -->
   <md-card-header>
     <md-card-avatar>
@@ -10,7 +10,8 @@
       <div>
         <a  href class="md-title hyperlink" ng-click="postDetailsCtrl.goToInstitution(postDetailsCtrl.post.institution_key)">{{ postDetailsCtrl.post.institution_name }}</a>
       </div>
-      <span class="md-subhead">por {{ postDetailsCtrl.post.author }} em {{ postDetailsCtrl.post.publication_date | date: 'dd-MM-yyyy'}} às {{postDetailsCtrl.post.publication_date | date:'HH:mm:ss'}}</span>
+      <span class="md-subhead">por {{ postDetailsCtrl.post.author }} em {{ postDetailsCtrl.post.publication_date | date: 'dd-MM-yyyy'}} às {{postDetailsCtrl.post.publication_date | date:'HH:mm:ss'}}
+      </span>
     </md-card-header-text>
   </md-card-header>
 
@@ -76,7 +77,8 @@
         {{postDetailsCtrl.recognizeUrl(postDetailsCtrl.post).text}}
         </p>
         <div layout="row" layout-align="end-center">
-            <a href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post)" ng-if="postDetailsCtrl.isLongPostTimeline(postDetailsCtrl.post.text)">
+            <a href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost()" 
+              ng-if="postDetailsCtrl.isLongPostTimeline(postDetailsCtrl.post.text)">
               <span class="md-subhead" >continuar lendo</span>
             </a>
         </div>
@@ -90,7 +92,7 @@
       <md-icon>link</md-icon>
     </md-button>
     <md-button  ng-if="postDetailsCtrl.showButtonDelete()" class="md-icon-button" arial-label="Delete"
-    ng-click="postDetailsCtrl.deletePost($event, postDetailsCtrl.post)">
+    ng-click="postDetailsCtrl.deletePost($event)">
       <md-icon>delete</md-icon>
     </md-button>
     <md-button class="md-icon-button" aria-label="Comments" ng-click="postDetailsCtrl.getComments()">
@@ -100,7 +102,7 @@
       {{ postDetailsCtrl.post.number_of_comments }}
     </md-button>
     <md-button class="md-icon-button" aria-label="Favorite" ng-click="postDetailsCtrl.likeOrDislikePost()"
-    ng-disabled="postDetailsCtrl.disableButtonLike()" ng-class="postDetailsCtrl.isLikedByUser()?'md-warn':''">
+      ng-disabled="postDetailsCtrl.disableButtonLike()" ng-class="postDetailsCtrl.isLikedByUser()?'md-warn':''">
       <md-icon>grade</md-icon>
     </md-button>
     <md-button class="post-count md-icon-button md-primary md-hue-1" ng-click="postDetailsCtrl.getLikes()">

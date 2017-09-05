@@ -17,7 +17,7 @@
         var URL_POST = '#/posts/';
         postDetailsCtrl.user = AuthService.getCurrentUser();
 
-        postDetailsCtrl.deletePost = function deletePost(ev, post) {
+        postDetailsCtrl.deletePost = function deletePost(ev) {
             var confirm = $mdDialog.confirm()
                 .clickOutsideToClose(true)
                 .title('Excluir Post')
@@ -28,7 +28,7 @@
                 .cancel('Cancelar');
 
             $mdDialog.show(confirm).then(function() {
-                PostService.deletePost(post).then(function success() {
+                PostService.deletePost(postDetailsCtrl.post).then(function success() {
                     postDetailsCtrl.post.state = 'deleted';
                     MessageService.showToast('Post excluído com sucesso');
                 }, function error(response) {
@@ -43,35 +43,42 @@
             return postDetailsCtrl.isPostAuthor() || isInstitutionAdmin();
         };
 
-        postDetailsCtrl.isDeleted = function isDeleted(post) {
-            return post.state == 'deleted';
+        postDetailsCtrl.isDeleted = function isDeleted() {
+            return postDetailsCtrl.post.state == 'deleted';
+        };
+
+        postDetailsCtrl.isHidden = function isHidden() {
+            var hasNoComments = postDetailsCtrl.post.number_of_comments === 0;
+            var hasNoLikes = postDetailsCtrl.post.number_of_likes === 0;
+            var isDeleted = postDetailsCtrl.post.state === "deleted";
+            return isDeleted && hasNoComments && hasNoLikes;
         };
 
         postDetailsCtrl.showSharedPost = function showSharedPost() {
             return postDetailsCtrl.post.shared_post && 
-                !postDetailsCtrl.isDeleted(postDetailsCtrl.post);
+                !postDetailsCtrl.isDeleted();
         };
 
         postDetailsCtrl.showTextPost = function showTextPost(){
-            return !postDetailsCtrl.isDeleted(postDetailsCtrl.post) && 
+            return !postDetailsCtrl.isDeleted() && 
                 !postDetailsCtrl.post.shared_post;
         };
 
         postDetailsCtrl.showButtonDelete = function showButtonDelete() {
             return postDetailsCtrl.isAuthorized() &&
-                !postDetailsCtrl.isDeleted(postDetailsCtrl.post);
+                !postDetailsCtrl.isDeleted();
         };
 
         postDetailsCtrl.disableButtonLike = function disableButtonLike() {
             return postDetailsCtrl.savingLike || 
-                postDetailsCtrl.isDeleted(postDetailsCtrl.post);
+                postDetailsCtrl.isDeleted();
         };
 
         postDetailsCtrl.showButtonEdit = function showButtonDeleted() {
             var hasNoComments = postDetailsCtrl.post.number_of_comments === 0;
             var hasNoLikes = postDetailsCtrl.post.number_of_likes === 0;
 
-            return postDetailsCtrl.isPostAuthor() && !postDetailsCtrl.isDeleted(postDetailsCtrl.post) &&
+            return postDetailsCtrl.isPostAuthor() && !postDetailsCtrl.isDeleted() &&
                 hasNoComments && hasNoLikes && !postDetailsCtrl.post.shared_post;
         };
 
@@ -201,8 +208,7 @@
                 var promise  =  CommentService.getComments(commentsUri);
                 promise.then(function success(response) {
                     postDetailsCtrl.post.data_comments = response.data;
-
-                postDetailsCtrl.post.number_of_comments = _.size(postDetailsCtrl.post.data_comments);
+                    postDetailsCtrl.post.number_of_comments = _.size(postDetailsCtrl.post.data_comments);
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
                 });
@@ -220,7 +226,6 @@
                 promise.then(function success(response) {
                     postDetailsCtrl.post.data_likes = response.data;
                     postDetailsCtrl.post.number_of_likes = _.size(postDetailsCtrl.post.data_likes);
-
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
                 });

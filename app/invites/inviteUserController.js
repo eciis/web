@@ -3,7 +3,7 @@
     var app = angular.module('app');
 
     app.controller("InviteUserController", function InviteUserController(
-        InviteService, $mdToast, $state, InstitutionService, AuthService, MessageService) {
+        InviteService, $mdToast, $state, InstitutionService, AuthService, MessageService, RequestInvitationService) {
         var inviteController = this;
 
         inviteController.invite = {};
@@ -35,6 +35,19 @@
             }
         };
 
+        inviteController.acceptRequest = function acceptRequest(request) {
+            var promise = RequestInvitationService.acceptRequest(request.key);
+
+            promise.then(function success(response) {
+                inviteController.members.push(response.data);
+                request.status = 'accepted';
+                MessageService.showToast("Pedido aceito!");
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
+            });
+            return promise;
+        };
+
         inviteController.cancelInvite = function cancelInvite() {
             inviteController.invite = {};
             inviteController.showButton = true;
@@ -44,6 +57,7 @@
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
                 inviteController.sent_invitations = response.data.sent_invitations;
                 getMembers();
+                getRequests();
             }, function error(response) {
                 $state.go('app.institution', {institutionKey: currentInstitutionKey});
                 MessageService.showToast(response.data.msg);
@@ -53,6 +67,14 @@
         function getMembers() {
             InstitutionService.getMembers(currentInstitutionKey).then(function success(response) {
                 inviteController.members = response.data;
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
+            });
+        }
+
+        function getRequests() {
+            RequestInvitationService.getRequests(currentInstitutionKey).then(function success(response) {
+                inviteController.requests = response.data;
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });

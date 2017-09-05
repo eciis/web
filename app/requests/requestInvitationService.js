@@ -18,5 +18,29 @@
 
             return deferred.promise;
         };
+
+        service.getRequests = function getRequests(institution_key) {
+            var deferred = $q.defer();
+
+            $http.get(REQUESTS_URI + institution_key + "/requests/user").then(function success(response) {
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+
+            return deferred.promise;
+        };
+
+        service.acceptRequest = function acceptRequest(request_key) {
+            var deferred = $q.defer();
+
+            $http.put("/api/requests/" + request_key).then(function success(response) {
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+
+            return deferred. promise;
+        };
     });
 })();

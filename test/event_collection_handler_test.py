@@ -102,12 +102,14 @@ def initModels(cls):
     # new User user
     cls.user = User()
     cls.user.name = 'user name'
+    cls.user.photo_url = 'urlphoto'
     cls.user.cpf = '089.675.908-90'
     cls.user.email = 'user@gmail.com'
     cls.user.put()
     # new Institution CERTBIO
     cls.certbio = Institution()
     cls.certbio.name = 'CERTBIO'
+    cls.certbio.photo_url = 'urlphoto'
     cls.certbio.members = [cls.user.key]
     cls.certbio.followers = [cls.user.key]
     cls.certbio.admin = cls.user.key
@@ -122,7 +124,11 @@ def initModels(cls):
     cls.event = Event()
     cls.event.title = "New Event"
     cls.event.author_key = cls.user.key
+    cls.event.author_name = cls.user.name
+    cls.event.author_photo = cls.user.photo_url
     cls.event.institution_key = cls.certbio.key
+    cls.event.institution_name = cls.certbio.name
+    cls.event.institution_photo = cls.certbio.photo_url
     cls.event.start_time = datetime.datetime.now()
     cls.event.end_time = datetime.datetime.now()
     cls.event.local = "Event location"

@@ -41,6 +41,7 @@ class InviteUser(Invite):
     def create(data):
         """Create a post and check required fields."""
         invite = InviteUser()
+        invite.invitee = data.get('invitee')
         invite = Invite.create(data, invite)
         InviteUser.checkIsInviteUserValid(data)
         return invite
@@ -55,16 +56,21 @@ class InviteUser(Invite):
         http://%s/app/#/institution/%s/%s/new_invite/USER
 
         Equipe e-CIS """ % (host, institution_key, invite_key)
-        super(InviteUser, self).send_email(host, body)
+        super(InviteUser, self).send_email(host, self.invitee, body)
 
     def send_notification(self, user):
         """Method of send notification of invite user."""
         entity_type = 'USER'
-        super(InviteUser, self).send_notification(user, entity_type)
+
+        user_found = User.get_active_user(self.invitee)
+
+        if user_found:
+            super(InviteUser, self).send_notification(user, user_found.key.urlsafe(), entity_type)
 
     def make(self):
         """Create json of invite to user."""
         invite_user_json = super(InviteUser, self).make()
+        invite_user_json['invitee'] = self.invitee
         invite_user_json['institution_key'] = self.institution_key.urlsafe()
         invite_user_json['type_of_invite'] = 'USER'
         return invite_user_json

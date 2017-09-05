@@ -3,7 +3,6 @@
 
 import webapp2
 
-from handlers.main_handler import MainHandler
 from handlers.institution_handler import InstitutionHandler
 from handlers.institution_members_handler import InstitutionMembersHandler
 from handlers.institution_followers_handler import InstitutionFollowersHandler
@@ -23,6 +22,7 @@ from handlers.invite_collection_handler import InviteCollectionHandler
 from handlers.search_handler import SearchHandler
 from handlers.invite_handler import InviteHandler
 from handlers.redirect_handler import AppRedirectHandler
+from handlers.user_request_handler import UserRequestHandler
 from handlers.institution_hierarchy_handler import InstitutionHierarchyHandler
 
 methods = set(webapp2.WSGIApplication.allowed_methods)
@@ -38,6 +38,7 @@ app = webapp2.WSGIApplication([
     ("/api/institutions/(.*)/followers", InstitutionFollowersHandler),
     ("/api/institutions/(.*)/hierarchy/(.*)", InstitutionHierarchyHandler),
     ("/api/institutions/(.*)/invites/(.*)", InstitutionHandler),
+    ("/api/institutions/(.*)/requests/user", UserRequestHandler),
     ("/api/institutions/(.*)", InstitutionHandler),
     ("/api/key/(.*)", GetKeyHandler),
     ("/api/posts/(.*)/comments/(.*)", PostCommentHandler),

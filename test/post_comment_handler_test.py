@@ -125,10 +125,6 @@ class PostCommentHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': MAYZA_EMAIL})
     def test_delete_simpleuser(self, verify_token):
         """An simple user can't delete comments by other users in Post."""
-        # Pretend an authentication
-        self.os.environ['REMOTE_USER'] = self.mayza.email
-        self.os.environ['USER_EMAIL'] = self.mayza.email
-
         # Added comment of Mayza
         self.response = self.testapp.post(self.URL_POST_COMMENT %
                                           self.mayza_post.key.urlsafe(),
@@ -141,9 +137,6 @@ class PostCommentHandlerTest(TestBaseHandler):
 
         # Pretend an authentication
         verify_token.return_value={'email': MAIANA_EMAIL}
-
-        self.os.environ['REMOTE_USER'] = self.maiana.email
-        self.os.environ['USER_EMAIL'] = self.maiana.email
 
         # User Maiana call the delete method
         with self.assertRaises(Exception) as ex:

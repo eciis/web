@@ -72,6 +72,8 @@ class PostCommentHandler(BaseHandler):
         Utils._assert(institution.state == 'inactive',
                       "The institution has been deleted", NotAuthorizedException)
         comment = post.get_comment(comment_id)
+        Utils._assert(len(comment.get('replies')) > 0,
+                      "Comment with activity can't be removed", NotAuthorizedException)
         check_permission(user, institution, post, comment)
         post.remove_comment(comment)
 

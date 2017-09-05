@@ -6,7 +6,7 @@ from custom_exceptions.fieldException import FieldException
 from models.institution import Institution
 
 
-class RequestInstitutionLink(Invite):
+class RequestInstitutionParent(Invite):
     """Model of request user."""
 
     @staticmethod
@@ -27,10 +27,13 @@ class RequestInstitutionLink(Invite):
     def isValid(self):
         institution = self.institution_key.get()
         sender = self.sender_key.urlsafe()
+        institution_requested = self.institution_key_requested.get()
         if not sender:
             raise FieldException("The request require sender_key")
-        if RequestInstitutionLink.senderIsMember(sender, institution):
-            raise FieldException("The sender is already a member")
+        if not institution_requested:
+            raise FieldException("The request require institution_requested")
+        if RequestInstitutionLink.requestedIsLinked(institution, institution_requested):
+            raise FieldException("The institutions is already a linked")
         if RequestInstitutionLink.senderIsInvited(sender, institution.key):
             raise FieldException("The sender is already invited")
 

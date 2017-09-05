@@ -3,7 +3,6 @@
 function Event(data, institution) {
     data = data || {};
     _.extend(this, data);
-    this.convertDate();
 
     this.institution = institution;
 }

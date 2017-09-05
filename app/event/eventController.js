@@ -65,6 +65,7 @@
 
         function saveEvent() {
             var event = new Event(eventCtrl.event, eventCtrl.user.current_institution.key);
+            event.convertDate();
             if (event.isValid()) {
                 EventService.createEvent(event).then(function success() {
                     eventCtrl.event = {};

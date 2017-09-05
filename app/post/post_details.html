@@ -10,9 +10,7 @@
       <div>
         <a  href class="md-title hyperlink" ng-click="postDetailsCtrl.goToInstitution(postDetailsCtrl.post.institution_key)">{{ postDetailsCtrl.post.institution_name }}</a>
       </div>
-      <span class="md-subhead">por {{ postDetailsCtrl.post.author }} em 
-        {{ postDetailsCtrl.post.publication_date | date: 'dd-MM-yyyy'}} às 
-        {{postDetailsCtrl.post.publication_date | date:'HH:mm:ss'}}
+      <span class="md-subhead">por {{ postDetailsCtrl.post.author }} em {{ postDetailsCtrl.post.publication_date | date: 'dd-MM-yyyy'}} às {{postDetailsCtrl.post.publication_date | date:'HH:mm:ss'}}
       </span>
     </md-card-header-text>
   </md-card-header>

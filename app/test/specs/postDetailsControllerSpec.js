@@ -28,15 +28,14 @@
         http = $http;
         state = $state;
         commentService = CommentService;
-        posts = [ 
-            new Post({
-                    title: 'post principal', author_key: user.key, institution_key: institutions[0].key,
+        var mainPost = new Post({
+                    title: 'main post', author_key: user.key, institution_key: institutions[0].key,
                     key: "123456", comments: "/api/posts/123456/comments",
                     likes: "/api/posts/123456/likes", number_of_likes: 0, number_of_comments: 0
-            }),
-            new Post({title: 'post secundário', author_key: "", institution: institutions[0], key: "123412356"}),
-            new Post({title: 'post', author: user, institution: institutions[0], key: "123454356", number_of_likes: 1})
-        ];
+        });
+        var secondaryPost = new Post({title: 'secondary post', author_key: "", institution: institutions[0], key: "123412356"});
+        var otherPost = new Post({title: 'other ost', author: user, institution: institutions[0], key: "123454356", number_of_likes: 1});
+        posts = [mainPost, secondaryPost, otherPost];
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);
         httpBackend.when('GET', 'error/error.html').respond(200);

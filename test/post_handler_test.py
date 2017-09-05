@@ -27,108 +27,108 @@ class PostHandlerTest(TestBaseHandler):
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
-    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
+    @patch('utils.verify_token', return_value={'email': 'firstUser@gmail.com'})
     def test_delete(self, verify_token):
         """Test the post_handler's delete method."""
         # test delete post when the post has a comment
         # Verify if before the delete the post's state is published
-        self.assertEqual(self.mayza_post.state, 'published',
+        self.assertEqual(self.firstUser_post.state, 'published',
                          "The post's state must be published")
-        self.mayza_post.add_comment(self.raoni_comment)
-        self.testapp.delete("/api/posts/%s" % self.mayza_post.key.urlsafe())
+        self.firstUser_post.add_comment(self.secondUser_comment)
+        self.testapp.delete("/api/posts/%s" % self.firstUser_post.key.urlsafe())
         # Retrieve the post from the datastore, once it has been changed
-        self.mayza_post = self.mayza_post.key.get()
+        self.firstUser_post = self.firstUser_post.key.get()
         # Make sure the post's state is deleted
-        self.assertEqual(self.mayza_post.state, 'deleted',
+        self.assertEqual(self.firstUser_post.state, 'deleted',
                          "The post's state must be deleted")
 
         # test delete post when the post has a like
         # Verify if before the delete the post's state is published
-        self.assertEqual(self.mayza_other_post.state, 'published',
+        self.assertEqual(self.firstUser_other_post.state, 'published',
                          "The post's state must be published")
-        self.mayza_other_post.like(self.raoni.key)
+        self.firstUser_other_post.like(self.secondUser.key)
         self.testapp.delete("/api/posts/%s"
-                            % self.mayza_other_post.key.urlsafe())
+                            % self.firstUser_other_post.key.urlsafe())
         # Retrieve the post from the datastore, once it has been changed
-        self.mayza_other_post = self.mayza_other_post.key.get()
+        self.firstUser_other_post = self.firstUser_other_post.key.get()
         # Make sure the post's state is deleted
-        self.assertEqual(self.mayza_other_post.state, 'deleted',
+        self.assertEqual(self.firstUser_other_post.state, 'deleted',
                          "The post's state must be deleted")
 
         # Pretend an authentication
-        verify_token.return_value = {'email': 'raoni.smaneoto@ccc.ufcg.edu.br'}
+        verify_token.return_value = {'email': 'secondUser@ccc.ufcg.edu.br'}
 
         # test delete post when the post has no activity
         # Verify if before the delete the post's state is published
-        self.assertEqual(self.raoni_post.state, 'published',
+        self.assertEqual(self.secondUser_post.state, 'published',
                          "The post's state must be published")
-        # Verify if certbio has only one post
-        self.assertEqual(len(self.certbio.posts), 3,
-                         "certbio should have only one post")
+        # Verify if institution has only one post
+        self.assertEqual(len(self.institution.posts), 3,
+                         "institution should have only one post")
         # Call the delete method
-        self.testapp.delete("/api/posts/%s" % self.raoni_post.key.urlsafe())
-        # update certbio
-        self.certbio = self.certbio.key.get()
-        # Make sure the post was deleted from certbio
-        self.assertEqual(len(self.certbio.posts), 3,
-                         "certbio should have the same number of posts")
+        self.testapp.delete("/api/posts/%s" % self.secondUser_post.key.urlsafe())
+        # update institution
+        self.institution = self.institution.key.get()
+        # Make sure the post was deleted from institution
+        self.assertEqual(len(self.institution.posts), 3,
+                         "institution should have the same number of posts")
         # Update post
-        self.raoni_post = self.raoni_post.key.get()
-        self.assertEqual(self.raoni_post.state, 'deleted',
+        self.secondUser_post = self.secondUser_post.key.get()
+        self.assertEqual(self.secondUser_post.state, 'deleted',
                          "After delete the post state should be 'deleted'")
 
-    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
+    @patch('utils.verify_token', return_value={'email': 'firstUser@gmail.com'})
     def test_patch(self, verify_token):
         """Test the post_handler's patch method."""
         # Call the patch method and assert that  it raises an exception
         with self.assertRaises(Exception):
             self.testapp.patch_json("/api/posts/%s"
-                                    % self.raoni_post.key.urlsafe(),
+                                    % self.secondUser_post.key.urlsafe(),
                                     [{"op": "replace", "path": "/text",
                                       "value": "testando"}]
                                     )
         # Call the patch method and assert that it works
         self.testapp.patch_json("/api/posts/%s"
-                                % self.mayza_post.key.urlsafe(),
+                                % self.firstUser_post.key.urlsafe(),
                                 [{"op": "replace", "path": "/text",
                                     "value": "testando"}]
                                 )
-        self.mayza_post = self.mayza_post.key.get()
-        self.assertEqual(self.mayza_post.text, "testando")
+        self.firstUser_post = self.firstUser_post.key.get()
+        self.assertEqual(self.firstUser_post.text, "testando")
         # Pretend a new authentication
-        verify_token.return_value = {'email': 'raoni.smaneoto@ccc.ufcg.edu.br'}
+        verify_token.return_value = {'email': 'secondUser@ccc.ufcg.edu.br'}
 
         # Call the patch method and assert that it works
         self.testapp.patch_json("/api/posts/%s"
-                                % self.raoni_post.key.urlsafe(),
+                                % self.secondUser_post.key.urlsafe(),
                                 [{"op": "replace", "path": "/text",
                                     "value": "testando"}]
                                 )
-        self.raoni_post = self.raoni_post.key.get()
-        self.assertEqual(self.raoni_post.text, "testando")
+        self.secondUser_post = self.secondUser_post.key.get()
+        self.assertEqual(self.secondUser_post.text, "testando")
         # Call the patch method and assert that  it raises an exception
         with self.assertRaises(Exception):
             self.testapp.patch_json("/api/posts/%s"
-                                    % self.mayza_post.key.urlsafe(),
+                                    % self.firstUser_post.key.urlsafe(),
                                     [{"op": "replace", "path": "/text",
                                       "value": "testando"}]
                                     )
         # test the case when the post has a like, so it can not be updated
-        self.mayza_post.like(self.raoni.key)
-        self.mayza_post = self.mayza_post.key.get()
+        self.firstUser_post.like(self.secondUser.key)
+        self.firstUser_post = self.firstUser_post.key.get()
         with self.assertRaises(Exception):
             self.testapp.patch_json("/api/posts/%s"
-                                    % self.mayza_post.key.urlsafe(),
+                                    % self.firstUser_post.key.urlsafe(),
                                     [{"op": "replace", "path": "/text",
                                         "value": "testando"}]
                                     )
 
         # test the case when the post has a comment, so it can not be updated
-        self.mayza_post.add_comment(self.raoni_comment)
-        self.mayza_post = self.mayza_post.key.get()
+        self.firstUser_post.add_comment(self.secondUser_comment)
+        self.firstUser_post = self.firstUser_post.key.get()
         with self.assertRaises(Exception):
             self.testapp.patch_json("/api/posts/%s"
-                                    % self.mayza_post.key.urlsafe(),
+                                    % self.firstUser_post.key.urlsafe(),
                                     [{"op": "replace", "path": "/text",
                                         "value": "testando"}]
                                     )
@@ -140,75 +140,52 @@ class PostHandlerTest(TestBaseHandler):
 
 def initModels(cls):
     """Init the models."""
-    # new User Mayza
-    cls.mayza = User()
-    cls.mayza.name = 'Mayza Nunes'
-    cls.mayza.cpf = '089.675.908-90'
-    cls.mayza.email = 'mayzabeel@gmail.com'
-    cls.mayza.put()
+    # new User firstUser
+    cls.firstUser = User()
+    cls.firstUser.name = 'firstUser'
+    cls.firstUser.email = 'firstUser@gmail.com'
+    cls.firstUser.put()
 
-    # new User Raoni
-    cls.raoni = User()
-    cls.raoni.name = 'Raoni Smaneoto'
-    cls.raoni.cpf = '089.675.908-65'
-    cls.raoni.email = 'raoni.smaneoto@ccc.ufcg.edu.br'
-    cls.raoni.put()
+    # new User secondUser
+    cls.secondUser = User()
+    cls.secondUser.name = 'secondUser'
+    cls.secondUser.email = 'secondUser@ccc.ufcg.edu.br'
+    cls.secondUser.put()
 
-    # new Institution CERTBIO
-    cls.certbio = Institution()
-    cls.certbio.name = 'CERTBIO'
-    cls.certbio.acronym = 'CERTBIO'
-    cls.certbio.cnpj = '18.104.068/0001-86'
-    cls.certbio.legal_nature = 'public'
-    cls.certbio.address = 'Universidade Federal de Campina Grande'
-    cls.certbio.occupation_area = ''
-    cls.certbio.description = 'Ensaio Químico - Determinação de Material Volátil por \
-            Gravimetria e Ensaio Biológico - Ensaio de Citotoxicidade'
-    cls.certbio.email = 'certbio@ufcg.edu.br'
-    cls.certbio.phone_number = '(83) 3322 4455'
-    cls.certbio.members = [cls.mayza.key, cls.raoni.key]
-    cls.certbio.followers = [cls.mayza.key, cls.raoni.key]
-    cls.certbio.admin = cls.mayza.key
-    cls.certbio.put()
+    # new Institution
+    cls.institution = Institution()
+    cls.institution.name = 'institution'
+    cls.institution.members = [cls.firstUser.key, cls.secondUser.key]
+    cls.institution.followers = [cls.firstUser.key, cls.secondUser.key]
+    cls.institution.admin = cls.firstUser.key
+    cls.institution.put()
 
-    # POST of Mayza To Certbio Institution
-    cls.mayza_post = Post()
-    cls.mayza_post.title = "Novo edital do CERTBIO"
-    cls.mayza_post.text = "At vero eos et accusamus et iusto odio dignissimos \
-        ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti \
-        quos dolores et quas molestias excepturi sint occaecati cupiditate \
-        aut perferendis doloribus asperiores repellat."
-    cls.mayza_post.author = cls.mayza.key
-    cls.mayza_post.institution = cls.certbio.key
-    cls.mayza_post.put()
+    # POST of firstUser To Institution
+    cls.firstUser_post = Post()
+    cls.firstUser_post.author = cls.firstUser.key
+    cls.firstUser_post.institution = cls.institution.key
+    cls.firstUser_post.put()
 
-    # POST of Mayza To Certbio Institution
-    cls.mayza_other_post = Post()
-    cls.mayza_other_post.title = "Outro edital do CERTBIO"
-    cls.mayza_other_post.text = "Text"
-    cls.mayza_other_post.author = cls.mayza.key
-    cls.mayza_other_post.institution = cls.certbio.key
-    cls.mayza_other_post.put()
+    # POST of firstUser To institution
+    cls.firstUser_other_post = Post()
+    cls.firstUser_other_post.author = cls.firstUser.key
+    cls.firstUser_other_post.institution = cls.institution.key
+    cls.firstUser_other_post.put()
 
-    # Post of Raoni
-    cls.raoni_post = Post()
-    cls.raoni_post.title = "Novwdfsadsssdo edital do CERTBIO"
-    cls.raoni_post.text = "At vero eos et accusamus et iusto odio dignissimos \
-        ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti \
-        delectus, ut aut reiciendis voluptatibus maiores alias consequatur \
-        aut perferendis doloribus asperiores repellat."
-    cls.raoni_post.author = cls.raoni.key
-    cls.raoni_post.institution = cls.certbio.key
-    cls.raoni_post.put()
+    # Post of secondUser
+    cls.secondUser_post = Post()
+    cls.secondUser_post.author = cls.secondUser.key
+    cls.secondUser_post.institution = cls.institution.key
+    cls.secondUser_post.put()
 
-    # update certbio's posts
-    cls.certbio.posts = [cls.raoni_post.key, cls.mayza_post.key,
-                         cls.mayza_other_post.key]
-    cls.certbio.put()
+    # update institution's posts
+    cls.institution.posts = [cls.secondUser_post.key, cls.firstUser_post.key,
+                             cls.firstUser_other_post.key]
+    cls.institution.put()
 
     # comment
     data_comment = {"text": "hello",
-                    "institution_key": cls.certbio.key.urlsafe()}
-    cls.raoni_comment = Comment.create(data_comment,
-                                       cls.raoni.key, cls.mayza_post.key)
-    cls.raoni_comment.put()
+                    "institution_key": cls.institution.key.urlsafe()}
+    cls.secondUser_comment = Comment.create(data_comment, cls.secondUser.key,
+                                            cls.firstUser_post.key)
+    cls.secondUser_comment.put()

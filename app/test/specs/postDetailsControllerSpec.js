@@ -34,7 +34,7 @@
                     likes: "/api/posts/123456/likes", number_of_likes: 0, number_of_comments: 0
         });
         var secondaryPost = new Post({title: 'secondary post', author_key: "", institution: institutions[0], key: "123412356"});
-        var otherPost = new Post({title: 'other ost', author: user, institution: institutions[0], key: "123454356", number_of_likes: 1});
+        var otherPost = new Post({title: 'other post', author: user, institution: institutions[0], key: "123454356", number_of_likes: 1});
         posts = [mainPost, secondaryPost, otherPost];
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);

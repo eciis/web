@@ -21,7 +21,7 @@
                 state: "app.post"
             },
             "SHARED_POST": {
-                icon: "inbox",
+                icon: "share",
                 state: "app.post"
             },
             "INVITE": {

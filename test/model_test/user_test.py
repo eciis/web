@@ -28,7 +28,7 @@ class UserTest(TestBase):
         self.assertEquals(len(self.user.permissions), 1,
                         "Permission list size should be zero.")
 
-        self.assertTrue(self.user.permissions[permission_type][entity_key], 
+        self.assertTrue(self.user.permissions[permission_type][entity_key],
                         "Permission publish_post should be granted to the user.")
 
     def test_remove_permission(self):
@@ -39,7 +39,7 @@ class UserTest(TestBase):
         self.user.add_permission(permission_type, entity_key)
         self.assertEquals(len(self.user.permissions), 1,
                         "Permission list size should be zero.")
-        self.assertTrue(self.user.permissions[permission_type][entity_key], 
+        self.assertTrue(self.user.permissions[permission_type][entity_key],
                         "Permission publish_post should be granted to the user.")
         self.user.remove_permission(permission_type, entity_key)
 
@@ -55,12 +55,12 @@ class UserTest(TestBase):
         self.assertEquals(len(self.user.permissions), 1,
                         "Permission list size should be zero.")
 
-        self.assertTrue(self.user.permissions[permission_type][entity_key], 
+        self.assertTrue(self.user.permissions[permission_type][entity_key],
                         "Permission publish_post should be granted to the user.")
 
         has_permission = self.user.has_permission(permission_type, entity_key)
 
-        self.assertTrue(has_permission, 
+        self.assertTrue(has_permission,
                 "User should be granted with publish_post permission on post %s" % entity_key)
 
     def test_dont_have_permission(self):
@@ -71,7 +71,7 @@ class UserTest(TestBase):
 
         has_permission = self.user.has_permission(permission_type, entity_key)
 
-        self.assertFalse(has_permission, 
+        self.assertFalse(has_permission,
                 "User should not be granted with publish_post permission on post %s" % entity_key)
 
 

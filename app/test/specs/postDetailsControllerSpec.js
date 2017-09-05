@@ -161,7 +161,7 @@
 
             httpBackend.when('GET', 'institution/institution_page.html').respond(200);
 
-            postDetailsCtrl.goToInstitution();
+            postDetailsCtrl.goToInstitution(institutions[0].key);
 
             httpBackend.flush();
             

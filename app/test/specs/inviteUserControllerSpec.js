@@ -8,12 +8,12 @@
     var invite = new Invite({invitee: "mayzabeel@gmail.com",
                         type_of_invite: 'USER',
                         institution_key: '987654321',
-                        inviter_key: '12345'});
+                        admin_key: '12345'});
 
     var otherInvite = new Invite({invitee: "pedro@gmail.com",
                         type_of_invite: 'USER',
                         institution_key: '987654321',
-                        inviter_key: '12345'});
+                        admin_key: '12345'});
 
     var splab = {
             name: 'SPLAB',
@@ -120,7 +120,7 @@
                 var newInvite = new Invite({invitee: "pedro@gmail.com",
                                             type_of_invite: 'USER',
                                             institution_key: '987654321',
-                                            inviter_key: '12345'});
+                                            admin_key: '12345'});
                 expect(inviteUserCtrl.isUserInviteValid(newInvite)).toBe(true);
             });
 
@@ -128,7 +128,7 @@
                 var inviteInvited = new Invite({invitee: "mayzabeel@gmail.com",
                                             type_of_invite: 'USER',
                                             institution_key: '987654321',
-                                            inviter_key: '12345'});
+                                            admin_key: '12345'});
                 expect(inviteUserCtrl.isUserInviteValid(inviteInvited)).toBe(false);
             });
 
@@ -136,7 +136,7 @@
                 var inviteMember = new Invite({invitee: "tiago@gmail.com",
                                             type_of_invite: 'USER',
                                             institution_key: '987654321',
-                                            inviter_key: '12345'});
+                                            admin_key: '12345'});
                 expect(inviteUserCtrl.isUserInviteValid(inviteMember)).toBe(false);
             });
         });

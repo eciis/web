@@ -26,11 +26,15 @@
         newInviteCtrl.addInstitution =  function addInstitution(event) {
             var promise = UserService.addInstitution(newInviteCtrl.user,
                 newInviteCtrl.institution.key, newInviteCtrl.inviteKey);
-                promise.then(function success() {
-                    AuthService.reload().then(function() {
-                        goHome();
-                        showAlert(event, newInviteCtrl.institution.name);
-                   });
+                promise.then(function success(userSaved) {
+                    newInviteCtrl.user.removeInvite(newInviteCtrl.inviteKey);
+                    newInviteCtrl.user.institutions = userSaved.institutions;
+                    newInviteCtrl.user.follows = userSaved.follows;
+                    newInviteCtrl.user.state = 'active';
+                    newInviteCtrl.user.current_institution = newInviteCtrl.institution;
+                    AuthService.save();
+                    goHome();
+                    showAlert(event, newInviteCtrl.institution.name);
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
                 });
@@ -42,7 +46,7 @@
             promise.then(
                 function success(institutionSaved){
                     MessageService.showToast('Cadastro de instituição realizado com sucesso');
-                    newInviteCtrl.user.removeInviteInst(newInviteCtrl.institution.key);
+                    newInviteCtrl.user.removeInvite(newInviteCtrl.inviteKey);
                     newInviteCtrl.user.institutions.push(institutionSaved);
                     newInviteCtrl.user.institutions_admin.push(institutionSaved.key);
                     newInviteCtrl.user.follow(institutionSaved);

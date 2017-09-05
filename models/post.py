@@ -51,9 +51,9 @@ class Comment(ndb.Model):
     @staticmethod
     def create(data, author):
         """Create a comment and check required fields."""
-        if not data['text']:
+        if not data.get('text'):
             raise FieldException("Text can not be empty")
-        if not data['institution_key']:
+        if not data.get('institution_key'):
             raise FieldException("Institution can not be empty")
 
         institution = ndb.Key(urlsafe=data['institution_key']).get()

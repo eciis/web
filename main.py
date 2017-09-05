@@ -22,7 +22,7 @@ from handlers.reply_comment_handler import ReplyCommentHandler
 from handlers.invite_collection_handler import InviteCollectionHandler
 from handlers.search_handler import SearchHandler
 from handlers.invite_handler import InviteHandler
-from handlers.event import EventHandler
+from handlers.event_handler import EventHandler
 from handlers.event_collection_handler import EventCollectionHandler
 from handlers.redirect_handler import AppRedirectHandler
 from handlers.user_request_handler import UserRequestHandler

@@ -9,7 +9,8 @@
         'firebase',
         'ngSanitize',
         'ngImgCrop',
-        'ngClipboard'
+        'ngClipboard',
+        'ngMaterialDatePicker'
     ]);
 
     app.config(function($mdIconProvider, $mdThemingProvider, $stateProvider, $urlMatcherFactoryProvider,
@@ -75,6 +76,15 @@
                     content_manage_institution: {
                         templateUrl: "invites/invite_user.html",
                         controller: "InviteUserController as inviteUserCtrl"
+                    }
+                }
+            })
+            .state("app.event", {
+                url: "/event",
+                views: {
+                    content: {
+                        templateUrl: "event/event.html",
+                        controller: "EventController as eventCtrl",
                     }
                 }
             })

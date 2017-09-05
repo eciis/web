@@ -7,6 +7,7 @@ from utils import Utils
 from models.invite import Invite
 from utils import login_required
 from utils import json_response
+from models.user import InstitutionProfile
 
 from util.json_patch import JsonPatch
 
@@ -51,6 +52,21 @@ def remove_user_from_institutions(user):
         institution.unfollow(user.key)
 
 
+def verify_institution_profile(user, institution):
+    """Verify the user profile."""
+    for profile in user.institution_profiles:
+        if profile.institution_key == institution.key:
+            return verify_institution_profile_fields(profile)
+    return False
+
+
+def verify_institution_profile_fields(profile):
+    """Verify the profile fiels."""
+    if profile.office:
+        return True
+    return False
+
+
 class UserHandler(BaseHandler):
     """User Handler."""
 
@@ -69,6 +85,7 @@ class UserHandler(BaseHandler):
         data = json.loads(self.request.body)
 
         institution_key = ndb.Key(urlsafe=data['institutions'][-1])
+        institution = institution_key.get()
 
         invite = ndb.Key(urlsafe=invite_key).get()
         invite.change_status('accepted')
@@ -76,8 +93,6 @@ class UserHandler(BaseHandler):
         user.add_institution(institution_key)
         user.follow(institution_key)
         user.change_state('active')
-
-        institution = institution_key.get()
 
         institution.add_member(user)
         institution.follow(user.key)
@@ -102,7 +117,16 @@ class UserHandler(BaseHandler):
         data = self.request.body
 
         """Apply patch."""
-        JsonPatch.load(data, user)
+        try:
+            JsonPatch.load(data, user)
+        except:
+            data_without_key = json.loads(data)
+            key = ndb.Key(urlsafe=data_without_key[0]['value']['institution_key'])
+            del data_without_key[0]['value']['institution_key']
+            data = json.dumps(data_without_key)
+            JsonPatch.load(data, user, InstitutionProfile)
+            user.institution_profiles[-1].institution_key = key
+            user.put()
 
         if(user.state == 'inactive'):
             remove_user_from_institutions(user)

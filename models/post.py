@@ -93,7 +93,8 @@ class Like(ndb.Model):
         return {
             'author': author.name,
             'author_img': author.photo_url,
-            'id': like.id
+            'id': like.id,
+            'author_key': author.key.urlsafe()
         }
 
 

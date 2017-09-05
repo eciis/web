@@ -13,14 +13,33 @@
 
         newInviteCtrl.user = AuthService.getCurrentUser();
 
+        newInviteCtrl.phoneRegex = /^(\([0-9]{2}\))\s([9]{1})?([0-9]{4})-([0-9]{4})$/;
+
+        var observer;
+
         var institutionKey;
 
         newInviteCtrl.acceptInvite = function acceptInvite(event) {
             if (newInviteCtrl.invite.type_of_invite === "USER") {
-                newInviteCtrl.addInstitution(event);
+                if(verifyInstProfile()) {
+                    newInviteCtrl.configInstProfile().then(function success() {
+                        newInviteCtrl.addInstitution(event);
+                    });
+                }
             } else {
                 newInviteCtrl.updateStubInstitution();
             }
+        };
+
+        newInviteCtrl.configInstProfile = function configInstProfile() {
+            var profile = {phone: newInviteCtrl.phone, email: newInviteCtrl.email,
+                office: newInviteCtrl.office, institution_key: newInviteCtrl.institution.key};
+            newInviteCtrl.user.institution_profiles.push(profile);
+            AuthService.save();
+            var patch = jsonpatch.generate(observer);
+            var promise;
+            promise = UserService.save(patch);
+            return promise;
         };
 
         newInviteCtrl.addInstitution =  function addInstitution(event) {
@@ -124,6 +143,7 @@
         }
 
         function loadInvite(){
+            observer = jsonpatch.observe(newInviteCtrl.user);
             InviteService.getInvite(newInviteCtrl.inviteKey).then(function success(response) {
                 newInviteCtrl.invite = new Invite(response.data);
                 if(newInviteCtrl.invite.status === 'sent') {
@@ -136,6 +156,14 @@
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
+        }
+
+        function verifyInstProfile() {
+            if(!newInviteCtrl.office) {
+                MessageService.showToast("Cargo institucional deve ser preenchido.");
+                return false;
+            }
+            return true;
         }
 
         loadInvite();

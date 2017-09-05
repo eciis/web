@@ -2,6 +2,25 @@
 from google.appengine.ext import ndb
 
 
+class InstitutionProfile(ndb.Model):
+    """Model of InstitutionProfile."""
+
+    office = ndb.StringProperty(required=True)
+    email = ndb.StringProperty()
+    phone = ndb.StringProperty()
+    institution_key = ndb.KeyProperty(kind="Institution", required=True)
+
+    def make(self):
+        """Make the Institution Profile json."""
+        profile = {}
+        profile['office'] = self.office
+        profile['email'] = self.email
+        profile['phone'] = self.phone
+        institution = self.institution_key.get()
+        profile['institution'] = {'name': institution.name, 'photo_url': institution.photo_url}
+        return profile
+
+
 class User(ndb.Model):
     """Model of User."""
 
@@ -45,6 +64,9 @@ class User(ndb.Model):
 
     # The user permissions to access system resources
     permissions = ndb.JsonProperty(indexed=False, default={})
+
+    # The user's profiles
+    institution_profiles = ndb.StructuredProperty(InstitutionProfile, repeated=True)
 
     @staticmethod
     def get_by_email(email):

@@ -11,6 +11,7 @@ from handlers.institution_collection_handler import InstitutionCollectionHandler
 from handlers.login_logout_handler import LoginHandler
 from handlers.login_logout_handler import LogoutHandler
 from handlers.user_handler import UserHandler
+from handlers.user_profile_handler import UserProfileHandler
 from handlers.post_collection_handler import PostCollectionHandler
 from handlers.post_handler import PostHandler
 from handlers.like_post_handler import LikePostHandler
@@ -46,6 +47,7 @@ app = webapp2.WSGIApplication([
     ("/api/posts/(.*)", PostHandler),
     ("/api/posts", PostCollectionHandler),
     ("/api/user", UserHandler),
+    ("/api/user/(.*)/profile", UserProfileHandler),
     ("/api/user/institutions/(.*)", UserHandler),
     ("/api/user/invites/(.*)", UserHandler),
     ("/api/user/timeline", UserTimelineHandler),

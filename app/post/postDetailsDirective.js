@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller('PostDetailsController', function(PostService, AuthService, CommentService, $mdToast, $state,
-        $mdDialog, NotificationService, MessageService, ngClipboard) {
+        $mdDialog, NotificationService, MessageService, ngClipboard, ProfileService) {
         var postDetailsCtrl = this;
 
         var LIMIT_CHARACTERS_POST = 1000;
@@ -48,12 +48,12 @@
         };
 
         postDetailsCtrl.showSharedPost = function showSharedPost() {
-            return postDetailsCtrl.post.shared_post && 
+            return postDetailsCtrl.post.shared_post &&
                 !postDetailsCtrl.isDeleted(postDetailsCtrl.post);
         };
 
         postDetailsCtrl.showTextPost = function showTextPost(){
-            return !postDetailsCtrl.isDeleted(postDetailsCtrl.post) && 
+            return !postDetailsCtrl.isDeleted(postDetailsCtrl.post) &&
                 !postDetailsCtrl.post.shared_post;
         };
 
@@ -63,7 +63,7 @@
         };
 
         postDetailsCtrl.disableButtonLike = function disableButtonLike() {
-            return postDetailsCtrl.savingLike || 
+            return postDetailsCtrl.savingLike ||
                 postDetailsCtrl.isDeleted(postDetailsCtrl.post);
         };
 
@@ -219,6 +219,7 @@
                 var promise = PostService.getLikes(likesUri);
                 promise.then(function success(response) {
                     postDetailsCtrl.post.data_likes = response.data;
+                    console.log(response.data);
                     postDetailsCtrl.post.number_of_likes = _.size(postDetailsCtrl.post.data_likes);
 
                 }, function error(response) {
@@ -335,9 +336,13 @@
         postDetailsCtrl.isLongPostTimeline = function(text){
             if(text){
                 var qtdChar = text.length;
-                return !postDetailsCtrl.isPostPage && 
+                return !postDetailsCtrl.isPostPage &&
                     qtdChar >= LIMIT_CHARACTERS_POST;
             }
+        };
+
+        postDetailsCtrl.showUserProfile = function showUserProfile(userKey, ev) {
+            ProfileService.showProfile(userKey, ev);
         };
 
         function adjustText(text){
@@ -374,7 +379,7 @@
             }
         };
     });
-    
+
     app.controller("SharePostController", function SharePostController(user, posts, post, $mdDialog, PostService,
      MessageService, $state) {
         var shareCtrl = this;
@@ -410,7 +415,7 @@
                 $mdDialog.hide();
                 MessageService.showToast(response.data.msg);
             });
-            
+
         };
 
         shareCtrl.goToPost = function goToPost() {

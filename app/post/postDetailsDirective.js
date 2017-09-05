@@ -201,19 +201,26 @@
              $state.go('app.post', {key: post.key});
         };
 
+        postDetailsCtrl.getValues = function getValues(object) {
+            return _.values(object);
+        };
+
+        postDetailsCtrl.loadComments = function refreshComments() {
+            var promise  =  CommentService.getComments(postDetailsCtrl.post.comments);
+            promise.then(function success(response) {
+                postDetailsCtrl.post.data_comments = response.data;
+                postDetailsCtrl.post.number_of_comments = _.size(postDetailsCtrl.post.data_comments);
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
+            });
+            return promise;
+        };
+
         postDetailsCtrl.getComments = function getComments() {
-            var commentsUri = postDetailsCtrl.post.comments;
             postDetailsCtrl.showComments = !postDetailsCtrl.showComments;
             if (postDetailsCtrl.showComments){
-                var promise  =  CommentService.getComments(commentsUri);
-                promise.then(function success(response) {
-                    postDetailsCtrl.post.data_comments = response.data;
-                    postDetailsCtrl.post.number_of_comments = _.size(postDetailsCtrl.post.data_comments);
-                }, function error(response) {
-                    MessageService.showToast(response.data.msg);
-                });
-                return promise;
-            } else{
+                return postDetailsCtrl.loadComments();
+            } else {
                 postDetailsCtrl.post.data_comments = [];
             }
         };
@@ -237,7 +244,7 @@
 
         function addComment(post, comment) {
             var postComments = postDetailsCtrl.post.data_comments;
-            postComments.push(comment);
+            postComments[comment.id] = comment;
             post.number_of_comments += 1;
         }
 
@@ -265,47 +272,9 @@
             return promise;
         };
 
-        postDetailsCtrl.canDeleteComment = function canDeleteComment(comment) {
-            return isCommentAuthor(comment);
-        };
-
-        postDetailsCtrl.deleteComment = function deleteComment(event, comment) {
-            var confirm = $mdDialog.confirm()
-                .clickOutsideToClose(true)
-                .title('Excluir Comentário')
-                .textContent('Este comentário será excluído e desaparecerá do referente post.')
-                .ariaLabel('Deletar comentário')
-                .targetEvent(event)
-                .ok('Excluir')
-                .cancel('Cancelar');
-
-            $mdDialog.show(confirm).then(function() {
-                CommentService.deleteComment(postDetailsCtrl.post.key, comment.id).then(function success(response) {
-                    removeCommentFromPost(response.data);
-                    MessageService.showToast('Comentário excluído com sucesso');
-                    postDetailsCtrl.post.number_of_comments -= 1;
-                }, function error(response) {
-                    MessageService.showToast(response.data.msg);
-                });
-            }, function() {
-                MessageService.showToast('Cancelado');
-            });
-        };
-
-        function removeCommentFromPost(comment) {
-            var postComments = postDetailsCtrl.post.data_comments;
-            _.remove(postComments, function(postComment) {
-                return postComment.id == comment.id;
-            });
-        }
-
         postDetailsCtrl.isPostAuthor = function isPostAuthor() {
             return postDetailsCtrl.post.author_key == postDetailsCtrl.user.key;
         };
-
-        function isCommentAuthor(comment) {
-            return comment.author_key == postDetailsCtrl.user.key;
-        }
 
         function isInstitutionAdmin() {
             return _.includes(_.map(postDetailsCtrl.user.institutions_admin, getKeyFromUrl), postDetailsCtrl.post.institution_key);
@@ -376,6 +345,113 @@
                 posts: '=',
                 post: '=',
                 isPostPage: '='
+            }
+        };
+    });
+
+    app.controller('CommentController', function CommentController(CommentService, MessageService) {
+        var commentCtrl = this;
+
+        // Model to store data of a new reply on a comment
+        commentCtrl.newReply = null;
+
+        // Controll the disablement of actions
+        commentCtrl.saving = false;
+
+        commentCtrl.getReplies = function getReplies() {
+            return _.values(commentCtrl.comment.replies);
+        };
+
+        commentCtrl.numberOfReplies = function numberOfReplies() {
+            return _.size(commentCtrl.comment.replies);
+        };
+
+        commentCtrl.replyComment = function replyComment() {
+            if (commentCtrl.newReply) {
+                commentCtrl.saving = true;
+                var institutionKey = commentCtrl.user.current_institution.key;
+                var promise = CommentService.replyComment(
+                    commentCtrl.post.key,
+                    commentCtrl.newReply,
+                    institutionKey,
+                    commentCtrl.comment.id
+                );
+
+                promise.then(function success(response) {
+                    var data = response.data;
+                    commentCtrl.comment.replies[data.id] = data;
+
+                    commentCtrl.newReply = null;
+                    commentCtrl.saving = false;
+                },function error(error) {
+                    MessageService.showToast(error.data.msg);
+                });
+            }
+        };
+
+        commentCtrl.deleteReply = function deleteReply(reply) {
+            CommentService.deleteReply(commentCtrl.post.key, commentCtrl.comment.id, reply.id).then(
+                function success() {
+                    delete commentCtrl.comment.replies[reply.id];
+                    MessageService.showToast('Comentário excluído com sucesso');
+                }, function error(response) {
+                    MessageService.showToast(response.data.msg);
+                }
+            );
+        };
+
+        commentCtrl.deleteComment = function deleteComment() {
+            CommentService.deleteComment(commentCtrl.post.key, commentCtrl.comment.id).then(
+                function success() {
+                    delete commentCtrl.post.data_comments[commentCtrl.comment.id];
+                    commentCtrl.post.number_of_comments--;
+                    MessageService.showToast('Comentário excluído com sucesso');
+                }, function error(response) {
+                    MessageService.showToast(response.data.msg);
+                }
+            );
+        };
+
+        commentCtrl.confirmCommentDeletion = function confirmCommentDeletion(event, reply) {
+            MessageService.showConfirmationDialog(event, 'Excluir Comentário',
+                'Este comentário será excluído e desaparecerá do referente post.'
+            ).then(function() {
+                if (reply) {
+                    commentCtrl.deleteReply(reply);
+                } else {
+                    commentCtrl.deleteComment();
+                }
+            }, function() {
+                MessageService.showToast('Cancelado');
+            });
+        };
+
+        commentCtrl.canDeleteComment = function canDeleteComment(reply) {
+            var commentHasActivity = commentCtrl.numberOfReplies() > 0;
+            if (reply) {
+                return reply.author_key == commentCtrl.user.key;
+            }
+            return !commentHasActivity && 
+                commentCtrl.comment.author_key == commentCtrl.user.key;
+        };
+
+        commentCtrl.disableButton = function disableButton() {
+            var postDeleted = commentCtrl.post.state === 'deleted';
+            return commentCtrl.saving || postDeleted;
+        };
+    });
+
+    app.directive("comment", function() {
+        return {
+            restrict: 'E',
+            templateUrl: "post/comment.html",
+            controllerAs: "commentCtrl",
+            controller: "CommentController",
+            scope: {},
+            bindToController: {
+                comment: '=',
+                post: '=',
+                user: '='
             }
         };
     });

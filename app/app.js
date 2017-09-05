@@ -9,6 +9,7 @@
         'firebase',
         'ngSanitize',
         'ngImgCrop',
+        'angularMoment',
         'ngClipboard'
     ]);
 

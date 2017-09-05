@@ -29,7 +29,7 @@
             return msg[message.code] || msg[message] || message;
         }
 
-        service.showConfirmationDialog = function showConfirmationDialog(title, textContent) {
+        service.showConfirmationDialog = function showConfirmationDialog(event, title, textContent) {
             var confirm = $mdDialog.confirm()
                 .clickOutsideToClose(true)
                 .title(title)

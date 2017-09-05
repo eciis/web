@@ -413,7 +413,7 @@
         };
 
         commentCtrl.confirmCommentDeletion = function confirmCommentDeletion(event, reply) {
-            MessageService.showConfirmationDialog('Excluir Comentário',
+            MessageService.showConfirmationDialog(event, 'Excluir Comentário',
                 'Este comentário será excluído e desaparecerá do referente post.'
             ).then(function() {
                 if (reply) {

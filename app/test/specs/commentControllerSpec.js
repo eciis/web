@@ -91,7 +91,7 @@
             spyOn(commentService, 'deleteComment').and.callThrough();
             commentCtrl.post.data_comments = {5: comment};
             httpBackend.expect('DELETE', POSTS_URI + '/' + posts[0].key + '/comments/' + "5").respond(comment);
-            commentCtrl.confirmCommentDeletion();
+            commentCtrl.confirmCommentDeletion("$event");
             httpBackend.flush();
             expect(commentService.deleteComment).toHaveBeenCalledWith(commentCtrl.post.key, 5);
             expect(commentCtrl.post.data_comments).toEqual({});
@@ -111,7 +111,7 @@
             });
             spyOn(commentService, 'deleteReply').and.callThrough();
             httpBackend.expect('DELETE', POSTS_URI + '/' + posts[0].key + '/comments/5/replies/1').respond(reply);
-            commentCtrl.confirmCommentDeletion(null, reply);
+            commentCtrl.confirmCommentDeletion("$event", reply);
             httpBackend.flush();
             expect(commentService.deleteReply).toHaveBeenCalledWith(commentCtrl.post.key, 5, 1);
             expect(commentCtrl.comment.replies).toEqual({});

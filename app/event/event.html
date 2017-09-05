@@ -11,7 +11,12 @@
           <span class="md-subhead">por {{ eventCtrl.user.name }}</span>
         </md-card-header-text>
       </md-card-header>
-      <md-card-content layout="column">
+      <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
+        <md-button aria-label="Convidar Nova Instituição" ng-if="eventCtrl.showButton" ng-click="eventCtrl.showButton = false;">
+          Criar novo evento
+        </md-button>
+      </div>
+      <md-card-content layout="column" ng-if="!eventCtrl.showButton">
         <md-input-container>
           <label>Título</label>
           <input ng-model="eventCtrl.event.title" placeholder="Escreva aqui o nome do evento" required="true">
@@ -48,11 +53,11 @@
       <md-card-actions layout="row">
         <span flex></span>
         <md-button class="md-icon-button" ng-click="null" ng-model="eventCtrl.file" ngf-pattern="'image/*'"
-                      ngf-accept="'image/*'" ngf-max-size="5MB"
+                      ngf-accept="'image/*'" ngf-max-size="5MB" ng-if="!eventCtrl.showButton"
                       ngf-select="eventCtrl.addImage(eventCtrl.file)">
               <md-icon>add_a_photo</md-icon>
         </md-button>
-        <md-button class="md-icon-button" ng-click="eventCtrl.save()" ng-if="eventCtrl.showButton()">
+        <md-button class="md-icon-button" ng-click="eventCtrl.save()" ng-if="eventCtrl.showButtonSend()">
           <md-icon>send</md-icon>
         </md-button>
       </md-card-actions>

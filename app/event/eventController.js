@@ -7,8 +7,11 @@
         var eventCtrl = this;
 
         eventCtrl.event = {};
+
         eventCtrl.loading = false;
         eventCtrl.deletePreviousImage = false;
+        eventCtrl.showButton = true;
+
         eventCtrl.user = AuthService.getCurrentUser();
         eventCtrl.photoUrl = "";
         eventCtrl.date = "";
@@ -52,10 +55,10 @@
                 eventCtrl.loading = true;
                 ImageService.saveImage(eventCtrl.photoBase64Data).then(function success(data) {
                     eventCtrl.loading = false;
-                    eventCtrl.post.photo_url = data.url;
-                    eventCtrl.post.uploaded_images = [data.url];
+                    eventCtrl.event.photo_url = data.url;
+                    eventCtrl.event.uploaded_images = [data.url];
                     saveEvent(event);
-                    eventCtrl.post.photo_url = null;
+                    eventCtrl.event.photo_url = null;
                 });
             } else {
                 saveEvent();
@@ -69,6 +72,7 @@
             if (event.isValid()) {
                 EventService.createEvent(event).then(function success() {
                     eventCtrl.event = {};
+                    eventCtrl.showButton = true;
                     MessageService.showToast('Evento criado com sucesso, esperando aprovação!');
                 }, function error(response) {
                     AuthService.reload().then(function success() {
@@ -81,7 +85,7 @@
             }
         }
 
-        eventCtrl.showButton = function() {
+        eventCtrl.showButtonSend = function() {
             return eventCtrl.isEventValid();
         };
 

@@ -30,6 +30,12 @@ class RequestHandler(BaseHandler):
     """Request Handler."""
 
     @login_required
+    def get(self, user, request_key):
+        """Handler GET Requests."""
+        request = ndb.Key(urlsafe=request_key).get()
+        self.response.write(json.dumps(request.make()))
+
+    @login_required
     @ndb.transactional(xg=True)
     def put(self, user, request_key):
         """Handler PUT Requests."""

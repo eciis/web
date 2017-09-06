@@ -32,7 +32,8 @@
                 icon: "account_balance"
             },
             "REQUEST_USER": {
-               icon: "account_balance"
+               icon: "account_balance",
+               state: "process_request"
             }
         };
 

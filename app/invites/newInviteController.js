@@ -85,6 +85,15 @@
                 return promise;
         };
 
+        newInviteCtrl.getFullAddress = function getFullAddress() {
+            if(newInviteCtrl.institution) {
+                var address = newInviteCtrl.institution.address;
+                var fullAddress = address.street + ", " + address.number + ", " + address.neighbourhood + 
+                                 ", " + address.city + ", " + address.state + ", " + address.country;
+                return fullAddress;
+            }
+        };
+
 
         function deleteInvite() {
             var promise = InviteService.deleteInvite(newInviteCtrl.inviteKey);

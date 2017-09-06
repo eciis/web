@@ -28,7 +28,7 @@
                         <md-button class="md-raised" ng-if="institutionCtrl.portfolioUrl" ng-click="institutionCtrl.portfolioDialog($event)">
                             <md-icon>insert_drive_file</md-icon> Portfólio
                         </md-button>
-                        <p><b>Endereço:</b> {{ institutionCtrl.current_institution.address }}</p>
+                        <p><b>Endereço:</b> {{ institutionCtrl.getFullAddress() }}</p>
                         <div ng-if="!institutionCtrl.showFullDescription">
                             <div layout="column" layout-align="center center" class="ng-if">
                               <md-button ng-if="!institutionCtrl.showFullDescription" flex ng-click="institutionCtrl.showDescription()">

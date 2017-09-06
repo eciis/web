@@ -123,4 +123,74 @@
             httpBackend.flush();
         });
     });
+
+    describe('replyComment()', function() {
+        var text = 'reply of comment';
+        var institutionKey = 'institution-Key';
+        var postKey = 'post-key';
+        var data = {text: text, institution_key: institutionKey};
+        var comment = {text: text, post_key: postKey, id: 'new-comment-id'};
+
+        var replyUri = postCommentsUri+"/"+comment.id+"/replies";
+
+        beforeEach(function() {
+            spyOn(http, 'post').and.returnValue(deferred.promise);
+            commentService.replyComment(postKey, text, institutionKey, comment.id).then(
+                function success(response) {
+                    answer = response;
+                }, function err(response) {
+                    error = response;
+                }
+            );
+        });
+
+        it('should call http.post()', function() {
+            deferred.resolve(comment);
+            scope.$apply();
+            expect(http.post).toHaveBeenCalledWith(replyUri, data);
+            expect(error).toBeUndefined();
+            httpBackend.flush();
+        });
+
+        it('should call http.post() and occur an error', function() {
+            deferred.reject({status: 400, data: {msg: 'Erro'}});
+            scope.$apply();
+            expect(http.post).toHaveBeenCalledWith(replyUri, data);
+            expect(answer).toBeUndefined();
+            expect(error.status).toEqual(400);
+            httpBackend.flush();
+        });
+    });
+
+    describe('deleteReply()', function() {
+        var replyUri = postCommentsUri+"/"+comment.id+"/replies/reply-id";
+        beforeEach(function() {
+            spyOn(http, 'delete').and.returnValue(deferred.promise);
+            commentService.deleteReply('post-key', 'comment-id', 'reply-id').then(
+                function success(response) {
+                    answer = response;
+                }, function err(response) {
+                    error = response;
+                }
+            );
+        });
+
+        it('should call http.delete()', function() {
+            deferred.resolve(comment);
+            scope.$apply();
+            expect(http.delete).toHaveBeenCalledWith(replyUri);
+            expect(answer).toEqual(comment);
+            expect(error).toBeUndefined();
+            httpBackend.flush();
+        });
+
+        it('should call http.delete() and occur an error', function() {
+            deferred.reject({status: 400, data: {msg: 'Erro'}});
+            scope.$apply();
+            expect(http.delete).toHaveBeenCalledWith(replyUri);
+            expect(answer).toBeUndefined();
+            expect(error.status).toEqual(400);
+            httpBackend.flush();
+        });
+    });
 }));

@@ -9,7 +9,9 @@
         'firebase',
         'ngSanitize',
         'ngImgCrop',
-        'ngClipboard'
+        'angularMoment',
+        'ngClipboard',
+        'ngMessages'
     ]);
 
     app.config(function($mdIconProvider, $mdThemingProvider, $stateProvider, $urlMatcherFactoryProvider,

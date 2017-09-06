@@ -125,7 +125,8 @@ class Utils():
                     return entity.urlsafe()
         if isinstance(entity, ndb.Model):
             out = entity.to_dict()
-            out['key'] = entity.key.urlsafe()
+            if (entity.key):
+                out['key'] = entity.key.urlsafe()
             return Utils.toJson(out, loadkey=loadkey, host=host)
         return entity
 

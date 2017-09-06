@@ -167,7 +167,6 @@ def initModels(cls):
     cls.splab.acronym = 'SPLAB'
     cls.splab.cnpj = '18.104.068/0001-56'
     cls.splab.legal_nature = 'public'
-    cls.splab.address = 'Universidade Federal de Campina Grande'
     cls.splab.occupation_area = ''
     cls.splab.description = 'The mission of the Software Practices Laboratory (SPLab) \
             is to promote the development of the state-of-the-art in the \

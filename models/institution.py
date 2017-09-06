@@ -11,6 +11,45 @@ def get_occupation_area(data):
     return data.get('occupation_area')
 
 
+class Address(ndb.Model):
+    """Address model."""
+
+    number = ndb.StringProperty()
+
+    street = ndb.StringProperty()
+
+    neighbourhood = ndb.StringProperty()
+
+    city = ndb.StringProperty()
+
+    state = ndb.StringProperty()
+
+    cep = ndb.StringProperty()
+
+    country = ndb.StringProperty()
+
+    def get_full_address(self):
+        """Get the full address."""
+        full_address = "%s %s, %s, %s, %s, %s" % (self.number, self.street,
+                                                  self.city, self.state,
+                                                  self.zip, self.country)
+        return full_address
+
+    @staticmethod
+    def create(data):
+        """Create an address model instance."""
+        address = Address()
+        address.number = data.get('number')
+        address.street = data.get('street')
+        address.neighbourhood = data.get('neighbourhood')
+        address.city = data.get('city')
+        address.state = data.get('state')
+        address.cep = data.get('cep')
+        address.country = data.get('country')
+
+        return address
+
+
 class Institution(ndb.Model):
     """Model of Institution."""
 
@@ -23,7 +62,7 @@ class Institution(ndb.Model):
     legal_nature = ndb.StringProperty(
         choices=set(["public", "private", "philanthropic"]))
 
-    address = ndb.StringProperty()
+    address = ndb.StructuredProperty(Address)
 
     occupation_area = ndb.StringProperty()
 
@@ -114,11 +153,10 @@ class Institution(ndb.Model):
         self.invite = invite.key
         self.put()
 
-
     @staticmethod
     @ndb.transactional(xg=True)
     def create_parent_connection(institution, invite):
-        """Makes connections between parent and daughter institution."""
+        """Make connections between parent and daughter institution."""
         institution.children_institutions = [invite.institution_key]
         institution.put()
 
@@ -131,7 +169,7 @@ class Institution(ndb.Model):
     @staticmethod
     @ndb.transactional(xg=True)
     def create_children_connection(institution, invite):
-        """Makes connections between daughter and parent institution."""
+        """Make connections between daughter and parent institution."""
         institution.parent_institution = invite.institution_key
         institution.put()
 
@@ -258,12 +296,18 @@ class Institution(ndb.Model):
         for attribute in attributes:
             attr_value = getattr(self, attribute)
             if(isinstance(attr_value, ndb.Key)):
-                attr_value = self.key.urlsafe()
+                if attribute != 'parent_institution':
+                    attr_value = self.key.urlsafe()
+                elif self.parent_institution:
+                    attr_value = self.parent_institution.urlsafe()
             if((attribute == "invite") and attr_value):
                 invite_key = self.key.get().invite
                 attr_value = {
                     'suggestion_institution_name': invite_key.get().suggestion_institution_name,
                     'key': invite_key.urlsafe()
                 }
+            if(attribute == 'address'):
+                attr_value = self.address.get_full_address()
+
             institution[attribute] = attr_value
         return institution

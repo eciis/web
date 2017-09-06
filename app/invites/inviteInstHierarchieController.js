@@ -33,7 +33,7 @@
             var promise;
 
             inviteInstCtrl.invite.institution_key = institutionKey;
-            inviteInstCtrl.invite.inviter_key = inviteInstCtrl.user.key;
+            inviteInstCtrl.invite.admin_key = inviteInstCtrl.user.key;
             invite = new Invite(inviteInstCtrl.invite);
 
             if (!invite.isValid()) {

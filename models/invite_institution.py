@@ -2,6 +2,7 @@
 from invite import Invite
 from models.institution import Institution
 from custom_exceptions.fieldException import FieldException
+from models.user import User
 
 
 class InviteInstitution(Invite):
@@ -27,6 +28,7 @@ class InviteInstitution(Invite):
             invite = InviteInstitution()
 
         invite = Invite.create(data, invite)
+        invite.invitee = data.get('invitee')
 
         InviteInstitution.checkIsInviteInstitutionValid(data)
         invite.suggestion_institution_name = data[
@@ -54,16 +56,21 @@ class InviteInstitution(Invite):
         Equipe e-CIS
         """ % (self.suggestion_institution_name, host, institution_key, invite_key)
 
-        super(InviteInstitution, self).send_email(host, body)
+        super(InviteInstitution, self).send_email(host, self.invitee, body)
 
     def send_notification(self, user):
         """Method of send notification of invite institution."""
         entity_type = 'INSTITUTION'
-        super(InviteInstitution, self).send_notification(user, entity_type)
+
+        user_found = User.get_active_user(self.invitee)
+
+        if user_found:
+            super(InviteInstitution, self).send_notification(user, user_found.key.urlsafe(), entity_type)
 
     def make(self):
         """Create json of invite to institution."""
         invite_inst_json = super(InviteInstitution, self).make()
+        invite_inst_json['invitee'] = self.invitee
         invite_inst_json['suggestion_institution_name'] = self.suggestion_institution_name
         invite_inst_json['stub_institution'] = Institution.make(self.stub_institution_key.get(),
                                                                 ['name', 'key', 'state'])

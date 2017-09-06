@@ -2,8 +2,13 @@
   <md-button aria-label="menu" class="md-icon-button" ng-click="$mdMenu.open(ev)" ng-disabled="controller.notifications.length === 0">
     <md-icon style="color:#81C784;">{{ controller.notifications.length === 0 ? 'notifications_none' : 'notifications'}}</md-icon>
   </md-button>
-  <md-menu-content width="4">
+  <md-menu-content width="5">
     <md-list>
+      <div layout="row" layout-align="end center">
+      <md-button aria-label="done all" class="md-icon-button" ng-click="controller.clearAll()">
+        <md-icon>clear_all</md-icon>
+      </md-button>
+      </div>
       <md-list-item class="md-2-line" ng-repeat="notification in controller.notifications | orderBy:'-timestamp'" ng-click="controller.goTo(notification)">
         <md-icon>{{controller.getIcon(notification.type)}}</md-icon>
         <div class="md-list-item-text">

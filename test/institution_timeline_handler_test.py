@@ -62,7 +62,8 @@ class InstitutionTimelineHandlerTest(TestBaseHandler):
         self.assertEqual(post_last_obj.state, 'published',
                          "The state of post should be published")
 
-        # Call the delete method
+        # Call the delete method for a post that has activity
+        post_last_obj.like(self.mayza.key)
         self.testapp.delete("/api/posts/%s" % post_last_obj.key.urlsafe())
 
         # Call the get method
@@ -107,7 +108,6 @@ def initModels(cls):
     cls.certbio.acronym = 'CERTBIO'
     cls.certbio.cnpj = '18.104.068/0001-86'
     cls.certbio.legal_nature = 'public'
-    cls.certbio.address = 'Universidade Federal de Campina Grande'
     cls.certbio.occupation_area = ''
     cls.certbio.description = 'Ensaio Químico'
     cls.certbio.email = 'certbio@ufcg.edu.br'

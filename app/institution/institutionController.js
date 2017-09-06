@@ -192,6 +192,15 @@
             $window.open(website);
         };
 
+        institutionCtrl.getFullAddress = function getFullAddress() {
+            if(institutionCtrl.current_institution) {
+                var address = institutionCtrl.current_institution.address;
+                var fullAddress = address.street + ", " + address.number + ", " + address.neighbourhood + 
+                                 ", " + address.city + ", " + address.state + ", " + address.country;
+                return fullAddress;
+            }
+        };
+
         function DialogController($mdDialog, portfolioUrl) {
             var ctrl = this;
             var trustedUrl = $sce.trustAsResourceUrl(portfolioUrl);
@@ -206,15 +215,19 @@
             };
 
             ctrl.removeInst = function removeInst() {
-                if(!ctrl.removeHierarchy) {
+                if(ctrl.removeHierarchy === undefined) {
                     MessageService.showToast("Você deve marcar uma das opções.");
                 } else {
                     InstitutionService.removeInstitution(institutionKey, ctrl.removeHierarchy).then(function success() {
-                        AuthService.reload().then(function success() {
-                            ctrl.closeDialog();
+                        institutionCtrl.user.removeInstitution(institutionKey, ctrl.removeHierarchy);
+                        AuthService.save();
+                        ctrl.closeDialog();
+                        if(_.isEmpty(institutionCtrl.user.institutions)) {
+                            $state.go('user_inactive');
+                        } else {
                             $state.go('app.home');
-                            MessageService.showToast("Instituição removida com sucesso.");
-                        });
+                        }
+                        MessageService.showToast("Instituição removida com sucesso.");
                     });
                 }
             };

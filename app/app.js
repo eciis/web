@@ -9,8 +9,10 @@
         'firebase',
         'ngSanitize',
         'ngImgCrop',
+        'angularMoment',
         'ngClipboard',
-        'ngMaterialDatePicker'
+        'ngMaterialDatePicker',
+        'ngMessages'
     ]);
 
     app.config(function($mdIconProvider, $mdThemingProvider, $stateProvider, $urlMatcherFactoryProvider,

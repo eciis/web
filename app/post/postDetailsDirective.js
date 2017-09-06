@@ -45,7 +45,8 @@
         };
 
         function getPdfUrl() {
-            postDetailsCtrl.pdfFiles = postDetailsCtrl.post.shared_post ? postDetailsCtrl.post.shared_post.pdf_files : postDetailsCtrl.post.pdf_files;
+            postDetailsCtrl.pdfFiles = postDetailsCtrl.post.shared_post ?
+                        postDetailsCtrl.post.shared_post.pdf_files.slice() : postDetailsCtrl.post.pdf_files.slice();
             if(postDetailsCtrl.pdfFiles) {
                 _.forEach(postDetailsCtrl.pdfFiles, function(pdf) {
                     PdfService.getReadableURL(pdf.url, setPdfURL, pdf);

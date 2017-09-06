@@ -23,10 +23,12 @@ def _assert(condition, msg):
 def create_entity(entity_class, properties_values):
     """Create new entity of class specified."""
     entity = entity_class()
-
-    for property in properties_values:
-        setattr(entity, property, properties_values[property])
-    return entity
+    if not isinstance(entity, dict):
+        for property in properties_values:
+            setattr(entity, property, properties_values[property])
+        return entity
+    else:
+        return properties_values
 
 
 def list_insert(list, value, index):

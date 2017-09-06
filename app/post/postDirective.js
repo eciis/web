@@ -1,5 +1,4 @@
-   "use strict";
-
+"use strict";
 (function() {
 
     var app = angular.module("app");
@@ -36,6 +35,7 @@
 
         postCtrl.createEditedPost = function createEditedPost(post) {
             postCtrl.photoUrl = post.photo_url;
+            postCtrl.pdfFiles = post.pdf_files.slice();
             postCtrl.post = new Post(post, postCtrl.user.current_institution.key);
         };
 
@@ -65,10 +65,6 @@
             } else {
                 postCtrl.createPost(posts);
             }
-        };
-
-        postCtrl.createPost = function createPost(posts) {
-            saveCreatedPost(posts);
         };
 
         function saveImage() {
@@ -115,8 +111,9 @@
 
         function saveFiles() {
             var deferred = $q.defer();
+            var files = _.filter(postCtrl.pdfFiles, {'type': 'application/pdf'});
             if(postCtrl.pdfFiles.length > 0) {
-                var promises = _.map(postCtrl.pdfFiles, savePdf);
+                var promises = _.map(files, savePdf);
                 $q.all(promises).then(function success() {
                     deferred.resolve();
                 }, function error() {
@@ -130,11 +127,7 @@
 
         postCtrl.editPost = function editPost(originalPost) {
             deleteImage(postCtrl.post).then(function success() {
-                if (postCtrl.photoBase64Data) {
-                    savePostWithImage(originalPost);
-                } else {
-                    saveEditedPost(originalPost);
-                }
+                saveEditedPost(originalPost);
             }, function error(error) {
                 MessageService.showToast(error);
             });
@@ -158,7 +151,7 @@
             return deferred.promise;
         }
 
-        function saveCreatedPost(posts) {
+        postCtrl.createPost = function createPost(posts) {
             var savePromises = [saveFiles(), saveImage()];
             $q.all(savePromises).then(function success() {
                 var post = new Post(postCtrl.post, postCtrl.user.current_institution.key);
@@ -182,7 +175,7 @@
             postCtrl.post.photo_url = null;
             postCtrl.post.pdf_files = [];
 
-        }
+        };
 
         postCtrl.clearPost = function clearPost() {
             postCtrl.post = {};
@@ -190,27 +183,20 @@
         };
 
         function saveEditedPost(originalPost) {
-            var post = new Post(originalPost, postCtrl.user.current_institution.key);
-            if (postCtrl.post.isValid()) {
-                PostService.save(post, postCtrl.post).then(function success() {
-                    MessageService.showToast('Publicação editada com sucesso!');
-                    $mdDialog.hide(postCtrl.post);
-                }, function error(response) {
-                    $mdDialog.cancel();
-                    MessageService.showToast(response.data.msg);
-                });
-            } else {
-                MessageService.showToast('Edição inválida!');
-            }
-        }
-
-        function savePostWithImage(post) {
-            postCtrl.loading = true;
-            ImageService.saveImage(postCtrl.photoBase64Data).then(function success(data) {
-                postCtrl.loading = false;
-                postCtrl.post.photo_url = data.url;
-                postCtrl.post.uploaded_images.push(data.url);
-                saveEditedPost(post);
+            var savePromises = [saveFiles(), saveImage()];
+            $q.all(savePromises).then(function success() {
+                var post = new Post(originalPost, postCtrl.user.current_institution.key);
+                if (postCtrl.post.isValid()) {
+                    PostService.save(post, postCtrl.post).then(function success() {
+                        MessageService.showToast('Publicação editada com sucesso!');
+                        $mdDialog.hide(postCtrl.post);
+                    }, function error(response) {
+                        $mdDialog.cancel();
+                        MessageService.showToast(response.data.msg);
+                    });
+                } else {
+                    MessageService.showToast('Edição inválida!');
+                }
             });
         }
 

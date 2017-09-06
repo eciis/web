@@ -16,7 +16,7 @@
         requestController.acceptRequest = function acceptRequest() {
             var promise = RequestInvitationService.acceptRequest(requestController.request.key);
 
-            promise.then(function success(response) {
+            promise.then(function success() {
                 MessageService.showToast("Pedido aceito!");
                 goHome();
             }, function error(response) {
@@ -25,25 +25,27 @@
             return promise;
         };
 
-        requestController.rejectInvite = function rejectInvite(event){
-            var confirm = $mdDialog.confirm();
-                confirm
-                    .clickOutsideToClose(false)
-                    .title('Rejeitar convite')
-                    .textContent("Ao rejeitar o convite, seu convite será removido e não poderá ser aceito posteriormente." +
-                         " Deseja rejeitar?")
-                    .ariaLabel('Rejeitar convite')
-                    .targetEvent(event)
-                    .ok('Sim')
-                    .cancel('Não');
-                    var promise = $mdDialog.show(confirm);
+        requestController.rejectRequest = function rejectInvite(event){
+            var promise = RequestInvitationService.showRejectDialog(event);
+
                 promise.then(function() {
-                    //deleteInvite();
+                    deleteRequest();
                 }, function() {
                     MessageService.showToast('Cancelado');
                 });
                 return promise;
         };
+
+        function deleteRequest() {
+            var promise = RequestInvitationService.rejectRequest(requestController.requestKey);
+            promise.then(function success() {
+                MessageService.showToast("Pedido rejeitado!");
+                goHome();
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
+            });
+            return promise;
+        }
 
 
         function goHome() {

@@ -49,7 +49,7 @@
     <md-subheader class="md-no-sticky">Convites requisitados</md-subheader>
     <md-list-item ng-repeat="request in inviteUserCtrl.requests" ng-if="request.status == 'sent'" ng-click="null" class="noright">
       <p>{{ request.sender }}</p>
-      <md-icon class="md-secondary md-hue-3" >close</md-icon>
+      <md-icon class="md-secondary md-hue-3" ng-click="inviteUserCtrl.rejectRequest(request, $event)">close</md-icon>
       <md-icon class="md-secondary" ng-click="inviteUserCtrl.acceptRequest(request)" style="margin-left: 30%">send</md-icon>
     </md-list-item>
   </md-card-content>

@@ -3,7 +3,7 @@
     var app = angular.module('app');
 
     app.controller("InviteUserController", function InviteUserController(
-        InviteService, $mdToast, $state, InstitutionService, AuthService, MessageService, RequestInvitationService) {
+        InviteService, $mdToast, $state, $mdDialog, InstitutionService, AuthService, MessageService, RequestInvitationService) {
         var inviteController = this;
 
         inviteController.invite = {};
@@ -47,6 +47,28 @@
             });
             return promise;
         };
+
+        inviteController.rejectRequest = function rejectInvite(request, event){
+                var promise = RequestInvitationService.showRejectDialog(event);
+
+                promise.then(function() {
+                    deleteRequest(request);
+                }, function() {
+                    MessageService.showToast('Cancelado');
+                });
+                return promise;
+        };
+
+        function deleteRequest(request) {
+            var promise = RequestInvitationService.rejectRequest(request.key);
+            promise.then(function success() {
+                request.status = 'rejected';
+                MessageService.showToast("Pedido rejeitado!");
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
+            });
+            return promise;
+        }
 
         inviteController.cancelInvite = function cancelInvite() {
             inviteController.invite = {};

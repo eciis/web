@@ -55,3 +55,11 @@ class RequestHandler(BaseHandler):
         institution.follow(user.key)
 
         self.response.write(json.dumps(makeUser(user, self.request)))
+
+    @login_required
+    def delete(self, user, request_key):
+        """Change invite status from 'sent' to 'resolved'."""
+        request_key = ndb.Key(urlsafe=request_key)
+        request = request_key.get()
+        request.change_status('rejected')
+        request.put()

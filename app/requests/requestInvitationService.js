@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.service("RequestInvitationService", function RequestInvitationService($http, $q) {
+    app.service("RequestInvitationService", function RequestInvitationService($http, $q, $mdDialog) {
         var service = this;
         var REQUESTS_URI = "/api/institutions/";
 
@@ -53,6 +53,33 @@
             });
 
             return deferred. promise;
+        };
+
+        service.rejectRequest = function rejectRequest(request_key) {
+            var deferred = $q.defer();
+
+            $http.delete("/api/requests/" + request_key).then(function success(response) {
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+
+            return deferred. promise;
+        };
+
+        service.showRejectDialog = function showRejectDialog(event) {
+            var confirm = $mdDialog.confirm();
+                confirm
+                    .clickOutsideToClose(false)
+                    .title('Rejeitar pedido')
+                    .textContent("Ao rejeitar o pedido, o pedido será removido e não poderá ser aceito posteriormente." +
+                         " Deseja rejeitar?")
+                    .ariaLabel('Rejeitar pedido')
+                    .targetEvent(event)
+                    .ok('Sim')
+                    .cancel('Não');
+            var promise = $mdDialog.show(confirm);
+            return promise;
         };
     });
 })();

@@ -219,7 +219,6 @@
                 var promise = PostService.getLikes(likesUri);
                 promise.then(function success(response) {
                     postDetailsCtrl.post.data_likes = response.data;
-                    console.log(response.data);
                     postDetailsCtrl.post.number_of_likes = _.size(postDetailsCtrl.post.data_likes);
 
                 }, function error(response) {

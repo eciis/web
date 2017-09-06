@@ -120,12 +120,14 @@ class UserHandler(BaseHandler):
         try:
             JsonPatch.load(data, user)
         except:
-            data_without_key = json.loads(data)
-            key = ndb.Key(urlsafe=data_without_key[0]['value']['institution_key'])
-            del data_without_key[0]['value']['institution_key']
-            data = json.dumps(data_without_key)
+            # data_without_key = json.loads(data)
+            # key = ndb.Key(urlsafe=data_without_key[0]['value']['institution_key'])
+            # del data_without_key[0]['value']['institution_key']
+            # data = json.dumps(data_without_key)
+            # JsonPatch.load(data, user, InstitutionProfile)
+            # user.institution_profiles[-1].institution_key = key
+            # user.put()
             JsonPatch.load(data, user, InstitutionProfile)
-            user.institution_profiles[-1].institution_key = key
             user.put()
 
         if(user.state == 'inactive'):

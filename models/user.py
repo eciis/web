@@ -8,7 +8,7 @@ class InstitutionProfile(ndb.Model):
     office = ndb.StringProperty(required=True)
     email = ndb.StringProperty()
     phone = ndb.StringProperty()
-    institution_key = ndb.KeyProperty(kind="Institution", required=True)
+    institution_key = ndb.StringProperty(required=True)
 
     def make(self):
         """Make the Institution Profile json."""
@@ -16,7 +16,8 @@ class InstitutionProfile(ndb.Model):
         profile['office'] = self.office
         profile['email'] = self.email
         profile['phone'] = self.phone
-        institution = self.institution_key.get()
+        # institution = self.institution_key.get()
+        institution = ndb.Key(urlsafe=self.institution_key).get()
         profile['institution'] = {'name': institution.name, 'photo_url': institution.photo_url}
         return profile
 

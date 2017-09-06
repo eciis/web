@@ -7,7 +7,7 @@
             <div style="margin-top: -20px;" layout="row" layout-align="center center">
                 <h2>{{profileCtrl.user.name}}</h2>
             </div>
-            <h2>Instituições: </h2>
+            <h3>Instituições: </h3>
             <md-list ng-repeat="profile in profileCtrl.user.institution_profiles">
                 <md-list-item class="md-3-line">
                     <img ng-src="{{ profile.institution.photo_url }}" class="md-avatar" alt="{{profile.institution.name}}" />

@@ -7,6 +7,7 @@ import urllib
 import hashlib
 
 from models.user import User
+from models.user import InstitutionProfile
 from models.institution import Institution
 from models.post import Post
 from models.post import Comment
@@ -99,6 +100,18 @@ def delete_all_in_index(index):
             index.delete(document_ids)
     except search.DeleteError:
         logging.exception("Error removing documents")
+
+
+def create_profile(data, user):
+    """Create a profile."""
+    profile = InstitutionProfile()
+    profile.email = data['email']
+    profile.phone = data['phone']
+    profile.institution_key = data['institution_key']
+    profile.office = data['office']
+    user.institution_profiles.append(profile)
+    user.put()
+
 
 
 class BaseHandler(webapp2.RequestHandler):
@@ -305,6 +318,12 @@ class ResetHandler(BaseHandler):
                      raoni, ruan, tiago, admin]:
             certbio.follow(user.key)
             user.follow(certbio.key)
+        data_mayza = {'email': mayza.email, 'phone': '(83) 99999-9999', 'institution_key': certbio.key.urlsafe(), 'office': 'Developer'}
+        data_dalton = {'email': dalton.email, 'phone': '(83) 99999-9999', 'institution_key': certbio.key.urlsafe(), 'office': 'Developer'}
+        data_admin = {'email': admin.email, 'phone': '(83) 99999-9999', 'institution_key': certbio.key.urlsafe(), 'office': 'Developer'}
+        create_profile(data_mayza, mayza)
+        create_profile(data_dalton, dalton)
+        create_profile(data_admin, admin)
 
         # new Institution SPLAB with User André like a member
         # and User Mayza like a follower
@@ -332,6 +351,12 @@ class ResetHandler(BaseHandler):
                      raoni, ruan, tiago, admin]:
             splab.follow(user.key)
             user.follow(splab.key)
+        data_jorge = {'email': jorge.email, 'phone': '(83) 99999-9999', 'institution_key': splab.key.urlsafe(), 'office': 'Developer'}
+        data_andre = {'email': andre.email, 'phone': '(83) 99999-9999', 'institution_key': splab.key.urlsafe(), 'office': 'Developer'}
+        data_admin['institution_key'] = splab.key.urlsafe()
+        create_profile(data_jorge, jorge)
+        create_profile(data_andre, andre)
+        create_profile(data_admin, admin)
 
         # new Institution eciis
         data = {
@@ -359,6 +384,26 @@ class ResetHandler(BaseHandler):
                      maiana, luiz, raoni,
                      ruan, tiago, admin]:
             eciis.follow(user.key)
+        data_dalton['institution_key'] = eciis.key.urlsafe()
+        data_andre['institution_key'] = eciis.key.urlsafe()
+        data_jorge['institution_key'] = eciis.key.urlsafe()
+        data_mayza['institution_key'] = eciis.key.urlsafe()
+        data_admin['institution_key'] = eciis.key.urlsafe()
+        data_maiana = {'email': maiana.email, 'phone': '(83) 99999-9999', 'institution_key': eciis.key.urlsafe(), 'office': 'Developer'}
+        data_luiz = {'email': luiz.email, 'phone': '(83) 99999-9999', 'institution_key': eciis.key.urlsafe(), 'office': 'Developer'}
+        data_raoni = {'email': raoni.email, 'phone': '(83) 99999-9999', 'institution_key': eciis.key.urlsafe(), 'office': 'Developer'}
+        data_ruan = {'email': ruan.email, 'phone': '(83) 99999-9999', 'institution_key': eciis.key.urlsafe(), 'office': 'Developer'}
+        data_tiago = {'email': tiago.email, 'phone': '(83) 99999-9999', 'institution_key': eciis.key.urlsafe(), 'office': 'Developer'}
+        create_profile(data_dalton, dalton)
+        create_profile(data_andre, andre)
+        create_profile(data_jorge, jorge)
+        create_profile(data_maiana, maiana)
+        create_profile(data_luiz, luiz)
+        create_profile(data_raoni, raoni)
+        create_profile(data_ruan, ruan)
+        create_profile(data_tiago, tiago)
+        create_profile(data_admin, admin)
+        create_profile(data_mayza, mayza)
 
         eciis.parent_institution = splab.key
         eciis.put()

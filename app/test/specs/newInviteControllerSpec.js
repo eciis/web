@@ -34,7 +34,8 @@
         institutions_admin: [],
         follows: [splab.key, certbio.key],
         invites: [invite],
-        accessToken: '00000'
+        accessToken: '00000',
+        institution_profiles: []
     };
 
     beforeEach(module('app'));
@@ -204,14 +205,14 @@
                 });
             });
 
-            it('should be call authService.reload()', function(done) {
+            it('should call authService.reload()', function(done) {
                 promise.then(function() {
                     expect(authService.save).toHaveBeenCalled();
                     done();
                 });
             });
 
-            it('should be call $state.go()', function(done) {
+            it('should call $state.go()', function(done) {
                 promise.then(function() {
                     expect(state.go).toHaveBeenCalledWith('app.manage_institution.edit_info', {institutionKey: certbio.key});
                     done();
@@ -256,32 +257,42 @@
                 promise = newInviteCtrl.rejectInvite('$event');
             });
 
-            it('should be call $mdDialog.show()', function(done) {
+            it('should call $mdDialog.show()', function(done) {
                 promise.then(function() {
                     expect(mdDialog.show).toHaveBeenCalled();
                     done();
                 });
             });
 
-            it('should be call inviteService.deleteInvite()', function(done) {
+            it('should call inviteService.deleteInvite()', function(done) {
                 promise.then(function() {
                     expect(inviteService.deleteInvite).toHaveBeenCalledWith(invite.key);
                     done();
                 });
             });
 
-            it('should be call authService.reload()', function(done) {
+            it('should call authService.reload()', function(done) {
                 promise.then(function() {
                     expect(authService.reload).toHaveBeenCalled();
                     done();
                 });
             });
 
-            it('should be call $state.go()', function(done) {
+            it('should call $state.go()', function(done) {
                 promise.then(function() {
                     expect(state.go).toHaveBeenCalledWith('app.home');
                     done();
                 });
+            });
+        });
+
+        describe('configInstProfile()', function() {
+            it('should call save()', function() {
+                spyOn(authService, 'save');
+                spyOn(userService, 'save');
+                newInviteCtrl.configInstProfile();
+                expect(authService.save).toHaveBeenCalled();
+                expect(userService.save).toHaveBeenCalled();
             });
         });
     });

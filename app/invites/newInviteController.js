@@ -32,8 +32,12 @@
         };
 
         newInviteCtrl.configInstProfile = function configInstProfile() {
+            /*var institutionProfilesSize = _.size(newInviteCtrl.user.institution_profiles);*/
+            jsonpatch.unobserve(newInviteCtrl.user.current_institution, observer);
+            observer = jsonpatch.observe(newInviteCtrl.user);
             var profile = {phone: newInviteCtrl.phone, email: newInviteCtrl.email,
                 office: newInviteCtrl.office, institution_key: newInviteCtrl.institution.key};
+            /*var patch = [{op: "add", path: "/institution_profiles/" + institutionProfilesSize, value: profile}];*/
             newInviteCtrl.user.institution_profiles.push(profile);
             AuthService.save();
             var patch = jsonpatch.generate(observer);
@@ -42,7 +46,7 @@
             return promise;
         };
 
-        newInviteCtrl.addInstitution =  function addInstitution(event) {
+        newInviteCtrl.addInstitution =  function addInstitution() {
             var promise = UserService.addInstitution(newInviteCtrl.user,
                 newInviteCtrl.institution.key, newInviteCtrl.inviteKey);
                 promise.then(function success(userSaved) {

@@ -8,6 +8,8 @@ class InstitutionProfile(ndb.Model):
     office = ndb.StringProperty(required=True)
     email = ndb.StringProperty()
     phone = ndb.StringProperty()
+    institution_name = ndb.StringProperty(required=True)
+    institution_photo_url = ndb.StringProperty(required=True)
     institution_key = ndb.StringProperty(required=True)
 
     def make(self):
@@ -16,9 +18,7 @@ class InstitutionProfile(ndb.Model):
         profile['office'] = self.office
         profile['email'] = self.email
         profile['phone'] = self.phone
-        # institution = self.institution_key.get()
-        institution = ndb.Key(urlsafe=self.institution_key).get()
-        profile['institution'] = {'name': institution.name, 'photo_url': institution.photo_url}
+        profile['institution'] = {'name': self.institution_name, 'photo_url': self.institution_photo_url}
         return profile
 
 

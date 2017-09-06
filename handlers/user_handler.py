@@ -8,6 +8,7 @@ from models.invite import Invite
 from utils import login_required
 from utils import json_response
 from models.user import InstitutionProfile
+from custom_exceptions.fieldException import FieldException
 
 from util.json_patch import JsonPatch
 
@@ -52,10 +53,10 @@ def remove_user_from_institutions(user):
         institution.unfollow(user.key)
 
 
-def verify_institution_profile(user, institution):
+def verify_institution_profile(profiles, institution_key):
     """Verify the user profile."""
-    for profile in user.institution_profiles:
-        if profile.institution_key == institution.key:
+    for profile in profiles:
+        if profile.institution_key == institution_key:
             return verify_institution_profile_fields(profile)
     return False
 
@@ -127,7 +128,11 @@ class UserHandler(BaseHandler):
             # JsonPatch.load(data, user, InstitutionProfile)
             # user.institution_profiles[-1].institution_key = key
             # user.put()
+            institution_key = json.loads(data)[0]['value']['institution_key']
             JsonPatch.load(data, user, InstitutionProfile)
+            Utils._assert(
+                not verify_institution_profile(user.institution_profiles, institution_key),
+                "The profile is invalid.", FieldException)
             user.put()
 
         if(user.state == 'inactive'):

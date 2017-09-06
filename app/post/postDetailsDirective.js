@@ -366,7 +366,6 @@
             ProfileService.showProfile(userKey, ev);
         };
 
-
         commentCtrl.getReplies = function getReplies() {
             return _.values(commentCtrl.comment.replies);
         };
@@ -500,7 +499,6 @@
                 $mdDialog.hide();
                 MessageService.showToast(response.data.msg);
             });
-
         };
 
         shareCtrl.goToPost = function goToPost() {

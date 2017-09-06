@@ -36,7 +36,9 @@
             jsonpatch.unobserve(newInviteCtrl.user.current_institution, observer);
             observer = jsonpatch.observe(newInviteCtrl.user);
             var profile = {phone: newInviteCtrl.phone, email: newInviteCtrl.email,
-                office: newInviteCtrl.office, institution_key: newInviteCtrl.institution.key};
+                    office: newInviteCtrl.office, institution_key: newInviteCtrl.institution.key,
+                    institution_name: newInviteCtrl.institution.name,
+                    institution_photo_url: newInviteCtrl.institution.photo_url};
             /*var patch = [{op: "add", path: "/institution_profiles/" + institutionProfilesSize, value: profile}];*/
             newInviteCtrl.user.institution_profiles.push(profile);
             AuthService.save();

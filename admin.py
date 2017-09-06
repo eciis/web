@@ -117,10 +117,11 @@ def create_profile(data, user):
     profile.email = data['email']
     profile.phone = data['phone']
     profile.institution_key = data['institution_key']
+    profile.institution_name = data['institution_name']
+    profile.institution_photo_url = data['institution_photo_url']
     profile.office = data['office']
     user.institution_profiles.append(profile)
     user.put()
-
 
 
 class BaseHandler(webapp2.RequestHandler):
@@ -338,9 +339,12 @@ class ResetHandler(BaseHandler):
                      raoni, ruan, tiago, admin]:
             certbio.follow(user.key)
             user.follow(certbio.key)
-        data_mayza = {'email': mayza.email, 'phone': '(83) 99999-9999', 'institution_key': certbio.key.urlsafe(), 'office': 'Developer'}
-        data_dalton = {'email': dalton.email, 'phone': '(83) 99999-9999', 'institution_key': certbio.key.urlsafe(), 'office': 'Professor'}
-        data_admin = {'email': admin.email, 'phone': '(83) 99999-9999', 'institution_key': certbio.key.urlsafe(), 'office': 'Developer'}
+        data_mayza = {'email': mayza.email, 'phone': '(83) 99999-9999', 'institution_key': certbio.key.urlsafe(),
+                      'office': 'Developer', 'institution_name': certbio.name, 'institution_photo_url': certbio.photo_url}
+        data_dalton = {'email': dalton.email, 'phone': '(83) 99999-9999', 'institution_key': certbio.key.urlsafe(),
+                       'office': 'Professor', 'institution_name': certbio.name, 'institution_photo_url': certbio.photo_url}
+        data_admin = {'email': admin.email, 'phone': '(83) 99999-9999', 'institution_key': certbio.key.urlsafe(),
+                      'office': 'Developer', 'institution_name': certbio.name, 'institution_photo_url': certbio.photo_url}
         create_profile(data_mayza, mayza)
         create_profile(data_dalton, dalton)
         create_profile(data_admin, admin)
@@ -382,9 +386,13 @@ class ResetHandler(BaseHandler):
                      raoni, ruan, tiago, admin]:
             splab.follow(user.key)
             user.follow(splab.key)
-        data_jorge = {'email': jorge.email, 'phone': '(83) 99999-9999', 'institution_key': splab.key.urlsafe(), 'office': 'Professor'}
-        data_andre = {'email': andre.email, 'phone': '(83) 99999-9999', 'institution_key': splab.key.urlsafe(), 'office': 'Developer'}
+        data_jorge = {'email': jorge.email, 'phone': '(83) 99999-9999', 'institution_key': splab.key.urlsafe(),
+                      'office': 'Professor', 'institution_name': splab.name, 'institution_photo_url': splab.photo_url}
+        data_andre = {'email': andre.email, 'phone': '(83) 99999-9999', 'institution_key': splab.key.urlsafe(),
+                      'office': 'Developer', 'institution_name': splab.name, 'institution_photo_url': splab.photo_url}
         data_admin['institution_key'] = splab.key.urlsafe()
+        data_admin['institution_name'] = splab.name
+        data_admin['institution_photo_url'] = splab.photo_url
         create_profile(data_jorge, jorge)
         create_profile(data_andre, andre)
         create_profile(data_admin, admin)
@@ -427,15 +435,30 @@ class ResetHandler(BaseHandler):
                      ruan, tiago, admin]:
             eciis.follow(user.key)
         data_dalton['institution_key'] = eciis.key.urlsafe()
+        data_dalton['institution_name'] = eciis.name
+        data_dalton['institution_photo_url'] = eciis.photo_url
         data_andre['institution_key'] = eciis.key.urlsafe()
+        data_andre['institution_name'] = eciis.name
+        data_andre['institution_photo_url'] = eciis.photo_url
         data_jorge['institution_key'] = eciis.key.urlsafe()
+        data_jorge['institution_name'] = eciis.name
+        data_jorge['institution_photo_url'] = eciis.photo_url
         data_mayza['institution_key'] = eciis.key.urlsafe()
+        data_mayza['institution_name'] = eciis.name
+        data_mayza['institution_photo_url'] = eciis.photo_url
         data_admin['institution_key'] = eciis.key.urlsafe()
-        data_maiana = {'email': maiana.email, 'phone': '(83) 99999-9999', 'institution_key': eciis.key.urlsafe(), 'office': 'Developer'}
-        data_luiz = {'email': luiz.email, 'phone': '(83) 99999-9999', 'institution_key': eciis.key.urlsafe(), 'office': 'Developer'}
-        data_raoni = {'email': raoni.email, 'phone': '(83) 99999-9999', 'institution_key': eciis.key.urlsafe(), 'office': 'Developer'}
-        data_ruan = {'email': ruan.email, 'phone': '(83) 99999-9999', 'institution_key': eciis.key.urlsafe(), 'office': 'Developer'}
-        data_tiago = {'email': tiago.email, 'phone': '(83) 99999-9999', 'institution_key': eciis.key.urlsafe(), 'office': 'Developer'}
+        data_admin['institution_name'] = eciis.name
+        data_admin['institution_photo_url'] = eciis.photo_url
+        data_maiana = {'email': maiana.email, 'phone': '(83) 99999-9999', 'institution_key': eciis.key.urlsafe(),
+                       'office': 'Developer', 'institution_name': eciis.name, 'institution_photo_url': eciis.photo_url}
+        data_luiz = {'email': luiz.email, 'phone': '(83) 99999-9999', 'institution_key': eciis.key.urlsafe(),
+                     'office': 'Developer', 'institution_name': eciis.name, 'institution_photo_url': eciis.photo_url}
+        data_raoni = {'email': raoni.email, 'phone': '(83) 99999-9999', 'institution_key': eciis.key.urlsafe(),
+                      'office': 'Developer', 'institution_name': eciis.name, 'institution_photo_url': eciis.photo_url}
+        data_ruan = {'email': ruan.email, 'phone': '(83) 99999-9999', 'institution_key': eciis.key.urlsafe(),
+                     'office': 'Developer', 'institution_name': eciis.name, 'institution_photo_url': eciis.photo_url}
+        data_tiago = {'email': tiago.email, 'phone': '(83) 99999-9999', 'institution_key': eciis.key.urlsafe(),
+                      'office': 'Developer', 'institution_name': eciis.name, 'institution_photo_url': eciis.photo_url}
         create_profile(data_dalton, dalton)
         create_profile(data_andre, andre)
         create_profile(data_jorge, jorge)

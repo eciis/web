@@ -196,6 +196,15 @@
             ProfileService.showProfile(userKey, ev);
         };
 
+        institutionCtrl.getFullAddress = function getFullAddress() {
+            if(institutionCtrl.current_institution) {
+                var address = institutionCtrl.current_institution.address;
+                var fullAddress = address.street + ", " + address.number + ", " + address.neighbourhood + 
+                                 ", " + address.city + ", " + address.state + ", " + address.country;
+                return fullAddress;
+            }
+        };
+
         function DialogController($mdDialog, portfolioUrl) {
             var ctrl = this;
             var trustedUrl = $sce.trustAsResourceUrl(portfolioUrl);

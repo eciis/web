@@ -6,7 +6,6 @@ import json
 from utils import Utils
 from utils import login_required
 from utils import json_response
-from utils import is_institution_member
 
 from handlers.base_handler import BaseHandler
 from models.post import Post
@@ -35,11 +34,12 @@ class PostCollectionHandler(BaseHandler):
         institution = ndb.Key(urlsafe=institution_key).get()
 
         Utils._assert(institution.state == 'inactive',
-                      "The institution has been deleted", NotAuthorizedException)
+                      "The institution has been deleted",
+                      NotAuthorizedException)
 
         Utils._assert(not user.has_permission("publish_post", institution_key),
-                      "You don't have permission to publish post.", NotAuthorizedException)
-
+                      "You don't have permission to publish post.",
+                      NotAuthorizedException)
 
         try:
             post = Post.create(data, user.key, institution.key)

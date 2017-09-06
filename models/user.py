@@ -181,3 +181,13 @@ class User(ndb.Model):
         """
         self.institutions = []
         self.follows = []
+
+    @staticmethod
+    def get_active_user(user_email):
+        """Get active user if exists."""
+        user_found = User.query(User.email == user_email).iter()
+
+        if user_found.has_next():
+            user_found = user_found.next()
+            if user_found.state == 'active':
+                return user_found

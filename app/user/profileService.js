@@ -33,12 +33,8 @@
                 return false;
             };
 
-            profileCtrl.phone = function phone(profilePhone) {
-                return profilePhone || 'Não informado';
-            };
-
-            profileCtrl.email = function email(profileEmail) {
-                return profileEmail || 'Não informado';
+            profileCtrl.showProperty = function getProperty(property) {
+                return property || 'Não informado';
             };
         }
     });

@@ -4,7 +4,6 @@
 
     var httpBackend, mdDialog, profileService;
 
-
     beforeEach(module('app'));
 
     beforeEach(inject(function($mdDialog, $httpBackend, ProfileService) {

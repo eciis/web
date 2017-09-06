@@ -21,7 +21,7 @@
 
         newInviteCtrl.acceptInvite = function acceptInvite(event) {
             if (newInviteCtrl.invite.type_of_invite === "USER") {
-                if(verifyInstProfile()) {
+                if(isValidProfile()) {
                     newInviteCtrl.configInstProfile().then(function success() {
                         newInviteCtrl.addInstitution(event);
                     });
@@ -32,14 +32,14 @@
         };
 
         newInviteCtrl.configInstProfile = function configInstProfile() {
-            /*var institutionProfilesSize = _.size(newInviteCtrl.user.institution_profiles);*/
             jsonpatch.unobserve(newInviteCtrl.user.current_institution, observer);
             observer = jsonpatch.observe(newInviteCtrl.user);
-            var profile = {phone: newInviteCtrl.phone, email: newInviteCtrl.email,
-                    office: newInviteCtrl.office, institution_key: newInviteCtrl.institution.key,
+            var profile = {phone: newInviteCtrl.phone,
+                    email: newInviteCtrl.email,
+                    office: newInviteCtrl.office,
+                    institution_key: newInviteCtrl.institution.key,
                     institution_name: newInviteCtrl.institution.name,
                     institution_photo_url: newInviteCtrl.institution.photo_url};
-            /*var patch = [{op: "add", path: "/institution_profiles/" + institutionProfilesSize, value: profile}];*/
             newInviteCtrl.user.institution_profiles.push(profile);
             AuthService.save();
             var patch = jsonpatch.generate(observer);
@@ -164,7 +164,7 @@
             });
         }
 
-        function verifyInstProfile() {
+        function isValidProfile() {
             if(!newInviteCtrl.office) {
                 MessageService.showToast("Cargo institucional deve ser preenchido.");
                 return false;

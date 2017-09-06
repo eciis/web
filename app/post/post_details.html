@@ -32,8 +32,8 @@
         <p>Esta publicação foi removida por</p>
         <p>
           {{postDetailsCtrl.post.shared_post.last_modified_by}} em
-          {{postDetailsCtrl.post.shared_post.last_modified_date | date: 'dd-MM-yyyy'}} às
-          {{postDetailsCtrl.post.shared_post.last_modified_date | date: 'HH:mm:ss'}}.
+          {{postDetailsCtrl.post.shared_post.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats}} às
+          {{postDetailsCtrl.post.shared_post.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats}}.
         </p>
       </div>
       <div class="image-view" ng-if="postDetailsCtrl.showImage(postDetailsCtrl.post.shared_post)">

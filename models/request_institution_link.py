@@ -1,4 +1,4 @@
-"""Request user model."""
+"""Request institution link model."""
 
 from invite import Invite
 from google.appengine.ext import ndb
@@ -22,7 +22,7 @@ class RequestInstitutionParent(Invite):
         return isParent or isChildren
 
     @staticmethod
-    def IsRequested(sender, institution_requested_key):
+    def isRequested(sender, institution_requested_key):
         request = RequestInstitutionParent.query(
             RequestInstitutionParent.institution_key == institution_requested_key,
             RequestInstitutionParent.status == 'sent',
@@ -40,7 +40,7 @@ class RequestInstitutionParent(Invite):
             raise FieldException("The request require institution_requested")
         if RequestInstitutionParent.isLinked(institution_key, institution_requested):
             raise FieldException("The institutions is already a linked")
-        if RequestInstitutionParent.IsRequested(sender, institution_key):
+        if RequestInstitutionParent.isRequested(sender, institution_key):
             raise FieldException("The sender is already invited")
 
     @staticmethod

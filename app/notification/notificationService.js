@@ -15,7 +15,8 @@
             'POST': 'publicou um novo post',
             'SHARED_POST': 'compartilhou seu post',
             'INVITE': 'te enviou um novo convite',
-            'INSTITUTION': 'removeu a conexão entre suas instituições'
+            'INSTITUTION': 'removeu a conexão entre suas instituições',
+            'REPLY_COMMENT': 'respondeu o seu comentário'
         };
 
         var POST_NOTIFICATION = 'POST';

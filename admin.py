@@ -6,6 +6,8 @@ import json
 import urllib
 import hashlib
 
+from utils import Utils
+
 from models.user import User
 from models.institution import Institution
 from models.institution import Address
@@ -19,7 +21,7 @@ from google.appengine.api import search
 INDEX_NAME = 'institution'
 
 
-def add_comments_to_post(user, post, institution, comments_qnt=3):
+def add_comments_to_post(user, user_reply, post, institution, comments_qnt=3):
     """Add comments to post."""
     text_A = {'text': 'Lorem ipsum dolor sit amet, at a. Mauris justo ipsum, \
         mauris justo eget, dolor justo. Aliquet amet, \
@@ -40,7 +42,13 @@ def add_comments_to_post(user, post, institution, comments_qnt=3):
     texts.append(text_C)
     comments_qnt = comments_qnt if comments_qnt <= 3 else 3
     for i in range(comments_qnt):
-        comment = Comment.create(texts[i], user.key, post.key)
+        comment = Comment.create(texts[i], user)
+        reply = Comment.create({
+                'text': 'Comentario', 
+                'institution_key': institution.urlsafe()
+            }, 
+            user_reply)
+        comment.replies[reply.id] = Utils.toJson(reply)
         post.add_comment(comment)
 
 
@@ -426,7 +434,7 @@ class ResetHandler(BaseHandler):
         mayza_post.institution = certbio.key
         mayza_post.last_modified_by = mayza.key
         mayza_post.put()
-        add_comments_to_post(mayza, mayza_post, mayza.institutions[0], 2)
+        add_comments_to_post(mayza, andre, mayza_post, mayza.institutions[0], 2)
 
         # POST of Mayza To Certbio Institution with image
         mayza_post_comIMG = Post()
@@ -439,7 +447,7 @@ class ResetHandler(BaseHandler):
         mayza_post_comIMG.institution = certbio.key
         mayza_post_comIMG.last_modified_by = mayza.key
         mayza_post_comIMG.put()
-        add_comments_to_post(mayza, mayza_post_comIMG,
+        add_comments_to_post(mayza, jorge, mayza_post_comIMG,
                              mayza.institutions[0], 1)
 
         # POST of André To SPLAB Institution
@@ -462,7 +470,7 @@ class ResetHandler(BaseHandler):
         andre_post.institution = splab.key
         andre_post.last_modified_by = andre.key
         andre_post.put()
-        add_comments_to_post(andre, andre_post, andre.institutions[0], 3)
+        add_comments_to_post(andre, mayza, andre_post, andre.institutions[0], 3)
 
         # POST of Dalton To e-cis Institution
         dalton_post = Post()
@@ -485,7 +493,7 @@ class ResetHandler(BaseHandler):
         dalton_post.institution = splab.key
         dalton_post.last_modified_by = dalton.key
         dalton_post.put()
-        add_comments_to_post(dalton, dalton_post, dalton.institutions[0], 2)
+        add_comments_to_post(dalton, jorge, dalton_post, dalton.institutions[0], 2)
 
         # POST of Dalton To CERTBIO Institution
         dalton_postCertbio = Post()
@@ -495,7 +503,7 @@ class ResetHandler(BaseHandler):
         dalton_postCertbio.institution = certbio.key
         dalton_postCertbio.last_modified_by = dalton.key
         dalton_postCertbio.put()
-        add_comments_to_post(dalton, dalton_postCertbio,
+        add_comments_to_post(dalton, jorge, dalton_postCertbio,
                              dalton.institutions[0], 1)
 
         # POST of Jorge To SPLAB Institution
@@ -528,7 +536,7 @@ class ResetHandler(BaseHandler):
         jorge_post_eCIIS.institution = eciis.key
         jorge_post_eCIIS.last_modified_by = jorge.key
         jorge_post_eCIIS.put()
-        add_comments_to_post(jorge, jorge_post_eCIIS, jorge.institutions[0], 3)
+        add_comments_to_post(jorge, mayza, jorge_post_eCIIS, jorge.institutions[0], 3)
 
         # Side efect of a post
         jorge.posts = [jorge_post.key, jorge_post_eCIIS.key]

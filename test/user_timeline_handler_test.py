@@ -27,14 +27,11 @@ class UserTimelineHandlerTest(TestBaseHandler):
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
-    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
+    @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
     def test_get(self, verify_token):
         """Test the user_timeline_handler get method."""
-        # Pretend an authentication
-        self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
-        self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
         # Added a post in datastore
-        self.testapp.post_json("/api/posts", self.post_mayza)
+        self.testapp.post_json("/api/posts", self.post_user)
         self.testapp.post_json("/api/posts", self.post_aux)
 
         # Call the get method
@@ -55,14 +52,15 @@ class UserTimelineHandlerTest(TestBaseHandler):
                          "The text expected was new post")
         self.assertEqual(post_top_obj.state, 'published',
                          "The state of post should be published")
-        self.assertEqual(post_last_obj.title, 'Novo edital do CERTBIO',
+        self.assertEqual(post_last_obj.title, 'Novo edital do institution',
                          "The title expected was new post")
         self.assertEqual(post_last_obj.text, "At vero eos et accusamus et iusto odio",
                          "The text expected was new post")
         self.assertEqual(post_last_obj.state, 'published',
                          "The state of post should be published")
 
-        # Call the delete method
+        # Call the delete method for a post that has activity
+        post_last_obj.like(self.user.key)
         self.testapp.delete("/api/posts/%s" % post_last_obj.key.urlsafe())
 
         # Call the get method
@@ -89,44 +87,32 @@ class UserTimelineHandlerTest(TestBaseHandler):
 
 def initModels(cls):
     """Init the models."""
-    # new User Mayza
-    cls.mayza = User()
-    cls.mayza.name = 'Mayza Nunes'
-    cls.mayza.cpf = '089.675.908-90'
-    cls.mayza.email = 'mayzabeel@gmail.com'
-    cls.mayza.institutions = []
-    cls.mayza.follows = []
-    cls.mayza.institutions_admin = []
-    cls.mayza.notifications = []
-    cls.mayza.posts = []
-    cls.mayza.put()
-    # new Institution CERTBIO
-    cls.certbio = Institution()
-    cls.certbio.name = 'CERTBIO'
-    cls.certbio.cnpj = '18.104.068/0001-86'
-    cls.certbio.acronym = '18.104.068/0001-86'
-    cls.certbio.legal_nature = 'public'
-    cls.certbio.occupation_area = ''
-    cls.certbio.description = 'Ensaio Químico'
-    cls.certbio.email = 'certbio@ufcg.edu.br'
-    cls.certbio.phone_number = '(83) 3322 4455'
-    cls.certbio.members = [cls.mayza.key]
-    cls.certbio.followers = [cls.mayza.key]
-    cls.certbio.posts = []
-    cls.certbio.admin = cls.mayza.key
-    cls.certbio.put()
-    # POST of Mayza To Certbio Institution
-    cls.post_mayza = {
-        'title': "Novo edital do CERTBIO",
+    # new User user
+    cls.user = User()
+    cls.user.name = 'user'
+    cls.user.email = 'user@gmail.com'
+    cls.user.put()
+
+    # new Institution
+    cls.institution = Institution()
+    cls.institution.name = 'institution'
+    cls.institution.members = [cls.user.key]
+    cls.institution.followers = [cls.user.key]
+    cls.institution.admin = cls.user.key
+    cls.institution.put()
+
+    # POST of user To institution
+    cls.post_user = {
+        'title': "Novo edital do institution",
         'text': "At vero eos et accusamus et iusto odio",
-        'institution': cls.certbio.key.urlsafe()
+        'institution': cls.institution.key.urlsafe()
     }
     cls.post_aux = {
         'title': "Post Auxiliar",
         'text': "At vero eos et accusamus et iusto",
-        'institution': cls.certbio.key.urlsafe()
+        'institution': cls.institution.key.urlsafe()
     }
-    cls.mayza.follows = [cls.certbio.key]
-    cls.mayza.put()
+    cls.user.follows = [cls.institution.key]
+    cls.user.put()
 
-    cls.mayza.add_institution(cls.certbio.key)
+    cls.user.add_institution(cls.institution.key)

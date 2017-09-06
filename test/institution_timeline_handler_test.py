@@ -62,7 +62,8 @@ class InstitutionTimelineHandlerTest(TestBaseHandler):
         self.assertEqual(post_last_obj.state, 'published',
                          "The state of post should be published")
 
-        # Call the delete method
+        # Call the delete method for a post that has activity
+        post_last_obj.like(self.mayza.key)
         self.testapp.delete("/api/posts/%s" % post_last_obj.key.urlsafe())
 
         # Call the get method

@@ -275,7 +275,7 @@ def initModels(cls):
     # Invite for Raoni create new inst
     cls.invite = Invite()
     cls.invite.invitee = 'raoni.smaneoto@ccc.ufcg.edu.br'
-    cls.invite.inviter_key = cls.mayza.key
+    cls.invite.admin_key = cls.mayza.key
     cls.invite.type_of_invite = 'institution'
     cls.invite.suggestion_institution_name = "Nova Inst"
     cls.invite.put()

@@ -152,7 +152,6 @@ def initModels(cls):
     cls.certbio.acronym = 'CERTBIO'
     cls.certbio.cnpj = '18.104.068/0001-86'
     cls.certbio.legal_nature = 'public'
-    cls.certbio.address = 'Universidade Federal de Campina Grande'
     cls.certbio.occupation_area = ''
     cls.certbio.description = 'Ensaio Químico - Determinação de Material Volátil por \
             Gravimetria e Ensaio Biológico - Ensaio de Citotoxicidade'
@@ -179,7 +178,6 @@ def initModels(cls):
     cls.splab.acronym = 'SPLAB'
     cls.splab.cnpj = '18.104.068/0001-56'
     cls.splab.legal_nature = 'public'
-    cls.splab.address = 'Universidade Federal de Campina Grande'
     cls.splab.occupation_area = ''
     cls.splab.description = 'The mission of the Software Practices Laboratory (SPLab) \
             is to promote the development of the state-of-the-art in the \

@@ -108,7 +108,6 @@ def initModels(cls):
     cls.certbio.acronym = 'CERTBIO'
     cls.certbio.cnpj = '18.104.068/0001-86'
     cls.certbio.legal_nature = 'public'
-    cls.certbio.address = 'Universidade Federal de Campina Grande'
     cls.certbio.occupation_area = ''
     cls.certbio.description = 'Ensaio Químico'
     cls.certbio.email = 'certbio@ufcg.edu.br'

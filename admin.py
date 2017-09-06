@@ -10,6 +10,7 @@ from utils import Utils
 
 from models.user import User
 from models.institution import Institution
+from models.institution import Address
 from models.post import Post
 from models.post import Comment
 from models.invite import Invite
@@ -290,12 +291,23 @@ class ResetHandler(BaseHandler):
 
         # new Institution CERTBIO with User Mayza like a member
         # and User André like a follower
+        address_data = {
+            'number': '882',
+            'street': 'Avenida Aprígio Veloso',
+            'neighbourhood': 'Universitário',
+            'city': 'Campina Grande',
+            'state': 'Paraíba',
+            'cep': '58428-830',
+            'country': 'Brasil'
+        }
+        address_key = Address.create(address_data)
+
         data = {
             'name': 'Laboratório de Avaliação e Desenvolvimento de Biomateriais do Nordeste',
             'acronym': 'CERTBIO',
             'cnpj': '18.104.068/0001-86',
             'legal_nature': 'public',
-            'address': 'Universidade Federal de Campina Grande',
+            'address': address_key,
             'occupation_area': 'research institutes',
             'description': 'Ensaio Químico - Determinação de Material Volátil por Gravimetria e Ensaio Biológico - Ensaio de Citotoxicidade',
             'photo_url': 'https://pbs.twimg.com/profile_images/1782760873/Logo_do_site_400x400.jpg',
@@ -316,12 +328,23 @@ class ResetHandler(BaseHandler):
 
         # new Institution SPLAB with User André like a member
         # and User Mayza like a follower
+        address_data = {
+            'number': '1445',
+            'street': 'Rua Dom Pedro II',
+            'neighbourhood': 'Prata',
+            'city': 'Campina Grande',
+            'cep': '58400-565',
+            'state': 'Paraíba',
+            'country': 'Brasil'
+        }
+        address_key = Address.create(address_data)
+
         data = {
             'name': 'Software Practice Laboratory',
             'acronym': 'SPLAB',
             'cnpj': '18.104.068/0001-56',
             'legal_nature': 'public',
-            'address': 'Universidade Federal de Campina Grande',
+            'address': address_key,
             'occupation_area': 'college',
             'description': """The mission of the Software Practices Laboratory (SPLab) is to promote the development of the state-of-the-art in the theory and practice of Software Engineering.""",
             'photo_url': 'http://amaurymedeiros.com/images/splab.png',
@@ -342,12 +365,23 @@ class ResetHandler(BaseHandler):
             user.follow(splab.key)
 
         # new Institution eciis
+        address_data = {
+            'number': '456',
+            'street': 'Rua Francisco Lopes',
+            'neighbourhood': 'Centenário',
+            'city': 'Campina Grande',
+            'cep': '58428-080',
+            'state': 'Paraíba',
+            'country': 'Brasil'
+        }
+        address_key = Address.create(address_data)
+
         data = {
             'name': 'Complexo Industrial da Saude',
             'acronym': 'e-ciis',
             'cnpj': '18.104.068/0001-30',
             'legal_nature': 'public',
-            'address': 'Universidade Federal de Campina Grande',
+            'address': address_key,
             'occupation_area': 'college',
             'description': 'The mission of the e-CIIS is to promote the development of the state-of-the-art in the theory and practice of Software Engineering.',
             'photo_url': 'http://www.paho.org/bra/images/stories/BRA01A/logobireme.jpg',

@@ -46,7 +46,7 @@
             return promise;
         };
 
-        newInviteCtrl.addInstitution =  function addInstitution() {
+        newInviteCtrl.addInstitution =  function addInstitution(event) {
             var promise = UserService.addInstitution(newInviteCtrl.user,
                 newInviteCtrl.institution.key, newInviteCtrl.inviteKey);
                 promise.then(function success(userSaved) {

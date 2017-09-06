@@ -11,8 +11,8 @@
           <span class="md-subhead">por {{ eventCtrl.user.name }}</span>
         </md-card-header-text>
       </md-card-header>
-      <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
-        <md-button ng-if="eventCtrl.showButton" ng-click="eventCtrl.showButton = false;">
+      <div class="md-toolbar-tools" layout-align="center center"  ng-if="eventCtrl.showButton">
+        <md-button ng-click="eventCtrl.showButton = false;">
           Criar novo evento
         </md-button>
       </div>
@@ -30,27 +30,29 @@
           <label>Local</label>
           <input ng-model="eventCtrl.event.local" placeholder="Escreva aqui o local do evento">
         </md-input-container>
-        <md-input-container class="md-input-has-placeholder">
-          <label>Start Date/Time</label>
-          <input mdc-datetime-picker="" date="true" time="true" type="text"
-          placeholder="Date" ng-model="eventCtrl.event.start_time" class=" md-input"
-          readonly="readonly">
-          <div class="md-errors-spacer"></div>
-        </md-input-container>
-        <md-input-container class="md-input-has-placeholder">
-          <label>End Date/Time</label>
-          <input mdc-datetime-picker="" date="true" time="true" type="text"
-          placeholder="Date" min-date="eventCtrl.event.start_time"="eventCtrl.event.end_time" class=" md-input" readonly="readonly"
-          id="input_1" ng-model="eventCtrl.event.end_time">
-          <div class="md-errors-spacer"></div>
-        </md-input-container>
+        <div layout="row">
+          <md-input-container class="md-input-has-placeholder">
+            <label>Start Date/Time</label>
+            <input mdc-datetime-picker="" date="true" time="true" type="text"
+            placeholder="Date" ng-model="eventCtrl.event.start_time" class=" md-input"
+            readonly="readonly">
+            <div class="md-errors-spacer"></div>
+          </md-input-container>
+          <md-input-container class="md-input-has-placeholder">
+            <label>End Date/Time</label>
+            <input mdc-datetime-picker="" date="true" time="true" type="text"
+            placeholder="Date" min-date="eventCtrl.event.start_time"="eventCtrl.event.end_time" class=" md-input" readonly="readonly"
+            id="input_1" ng-model="eventCtrl.event.end_time">
+            <div class="md-errors-spacer"></div>
+          </md-input-container>
+        </div>
         <div class="image-view" ng-if="eventCtrl.showImage()">
           <button ng-click="eventCtrl.hideImage()">&times;</button>
           <img style="border-radius: 5%;" ng-src="{{ eventCtrl.photoUrl }}"/>
         </div>
         <md-progress-linear ng-show="eventCtrl.loading" md-mode="indeterminate" style="width: 14%; margin-top: 5px"></md-progress-linear>
       </md-card-content>
-      <md-card-actions layout="row">
+      <div layout="row">
         <span flex></span>
         <md-button class="md-icon-button" ng-click="null" ng-model="eventCtrl.file" ngf-pattern="'image/*'"
                       ngf-accept="'image/*'" ngf-max-size="5MB" ng-if="!eventCtrl.showButton"

@@ -36,6 +36,7 @@
         }
 
         eventCtrl.isEventValid = function isEventValid() {
+            console.log(eventCtrl.event);
             var isTitleUndefined = eventCtrl.event.title === undefined;
             var dateValid = eventCtrl.event.start_time <= 
                 eventCtrl.event.end_time;
@@ -57,16 +58,16 @@
                     eventCtrl.loading = false;
                     eventCtrl.event.photo_url = data.url;
                     eventCtrl.event.uploaded_images = [data.url];
-                    saveEvent(event);
+                    create();
                     eventCtrl.event.photo_url = null;
                 });
             } else {
-                saveEvent();
+                create();
             }
 
         }
 
-        function saveEvent() {
+        function create() {
             var event = new Event(eventCtrl.event, eventCtrl.user.current_institution.key);
             event.convertDate();
             if (event.isValid()) {

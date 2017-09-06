@@ -1,4 +1,4 @@
-<md-card ng-class="postDetailsCtrl.isDeleted(postDetailsCtrl.post)?'post-deleted':''">
+<md-card ng-class="postDetailsCtrl.isDeleted()?'post-deleted':''" ng-hide="postDetailsCtrl.isHidden()">
   <!-- HEADER -->
   <md-card-header>
     <md-card-avatar>
@@ -10,7 +10,7 @@
       <div>
         <a  href class="md-title hyperlink" ng-click="postDetailsCtrl.goToInstitution(postDetailsCtrl.post.institution_key)">{{ postDetailsCtrl.post.institution_name }}</a>
       </div>
-      <span class="md-subhead">por {{ postDetailsCtrl.post.author }} em {{ postDetailsCtrl.post.publication_date | date: 'dd-MM-yyyy'}} às {{postDetailsCtrl.post.publication_date | date:'HH:mm:ss'}}</span>
+      <span class="md-subhead">por {{ postDetailsCtrl.post.author }} {{ postDetailsCtrl.post.publication_date | amUtc | amLocal | amCalendar:referenceTime:formats }}</span>
     </md-card-header-text>
   </md-card-header>
 
@@ -72,16 +72,16 @@
     <div ng-if="postDetailsCtrl.isDeleted(postDetailsCtrl.post)" style='font-style:italic; text-align: center'>
       <p>Esta publicação foi removida por</p>
       <p>
-        {{postDetailsCtrl.post.last_modified_by}} em {{postDetailsCtrl.post.last_modified_date | date: 'dd-MM-yyyy'}} às
-        {{postDetailsCtrl.post.last_modified_date | date: 'HH:mm:ss'}}.
+        {{postDetailsCtrl.post.last_modified_by}} {{postDetailsCtrl.post.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats }}.
       </p>
     </div>
     <div ng-if="postDetailsCtrl.showTextPost()">
         <p ng-bind-html="postDetailsCtrl.recognizeUrl(postDetailsCtrl.post).text" class="break">
-        {{postDetailsCtrl.recognizeUrl(postDetailsCtrl.post).text}}
+          {{postDetailsCtrl.recognizeUrl(postDetailsCtrl.post).text}}
         </p>
         <div layout="row" layout-align="end-center">
-            <a href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post)" ng-if="postDetailsCtrl.isLongPostTimeline(postDetailsCtrl.post.text)">
+            <a href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost()" 
+              ng-if="postDetailsCtrl.isLongPostTimeline(postDetailsCtrl.post.text)">
               <span class="md-subhead" >continuar lendo</span>
             </a>
         </div>
@@ -96,32 +96,42 @@
 
   <!-- BUTTONS -->
   <md-card-actions layout="row" layout-align="end-center">
+    <md-button class="md-icon-button" arial-label="Atualizar" title="Atualizar comentários"
+        ng-click="postDetailsCtrl.loadComments()">
+      <md-icon>refresh</md-icon>
+    </md-button>
     <md-button class="md-icon-button" ng-click="postDetailsCtrl.generateLink()" title="Copiar link">
       <md-icon>link</md-icon>
     </md-button>
     <md-button  ng-if="postDetailsCtrl.showButtonDelete()" class="md-icon-button" arial-label="Delete"
-    ng-click="postDetailsCtrl.deletePost($event, postDetailsCtrl.post)">
+        ng-click="postDetailsCtrl.deletePost($event, postDetailsCtrl.post)" title="Apagar o post">
       <md-icon>delete</md-icon>
     </md-button>
-    <md-button class="md-icon-button" aria-label="Comments" ng-click="postDetailsCtrl.getComments()">
+    <md-button class="md-icon-button" aria-label="Comments" ng-click="postDetailsCtrl.getComments()" 
+        ng-disabled="postDetailsCtrl.isPostPage" title="Mostrar comentários">
       <md-icon>comments</md-icon>
     </md-button>
-    <md-button class="post-count md-icon-button md-primary md-hue-1">
+    <md-button class="post-count md-icon-button md-primary md-hue-1" 
+        title="{{ postDetailsCtrl.post.number_of_comments }} pessoas comentaram">
       {{ postDetailsCtrl.post.number_of_comments }}
     </md-button>
     <md-button class="md-icon-button" aria-label="Favorite" ng-click="postDetailsCtrl.likeOrDislikePost()"
-    ng-disabled="postDetailsCtrl.disableButtonLike()" ng-class="postDetailsCtrl.isLikedByUser()?'md-warn':''">
+        ng-disabled="postDetailsCtrl.disableButtonLike()" ng-class="postDetailsCtrl.isLikedByUser()?'md-warn':''"
+        title="Curtir">
       <md-icon>grade</md-icon>
     </md-button>
-    <md-button class="post-count md-icon-button md-primary md-hue-1" ng-click="postDetailsCtrl.getLikes()">
+    <md-button class="post-count md-icon-button md-primary md-hue-1" ng-click="postDetailsCtrl.getLikes()"
+        title="{{ postDetailsCtrl.post.number_of_likes === 0? 'Ainda ninguém curtiu' : 
+                    postDetailsCtrl.post.number_of_likes === 1? '1 pessoa curtiu' : 
+                      postDetailsCtrl.post.number_of_likes + ' pessoas curtiram' }}">
       {{ postDetailsCtrl.post.number_of_likes }}
     </md-button>
     <md-button class="md-icon-button" aria-label="editar" ng-click="postDetailsCtrl.editPost()"
-      ng-if="postDetailsCtrl.showButtonEdit()">
+        ng-if="postDetailsCtrl.showButtonEdit()" title="Editar o post">
       <md-icon>edit</md-icon>
     </md-button>
-    <md-button class="md-icon-button" ng-if="postDetailsCtrl.post.state != 'deleted'" aria-label="editar" 
-      ng-click="postDetailsCtrl.share(postDetailsCtrl.post)" title="Compartilhar">
+    <md-button class="md-icon-button" ng-if="postDetailsCtrl.post.state != 'deleted'" aria-label="compartilhar" 
+      ng-click="postDetailsCtrl.share(postDetailsCtrl.post)" title="Compartilhar o post">
       <md-icon>share</md-icon>
     </md-button>
   </md-card-actions>
@@ -136,41 +146,28 @@
   </div>
 
   <!-- COMMENTS -->
+  
+  <comment ng-if="postDetailsCtrl.showComments || postDetailsCtrl.isPostPage" 
+    ng-repeat="comment in postDetailsCtrl.getValues(postDetailsCtrl.post.data_comments) | orderBy:'publication_date'"
+    comment="comment" user="postDetailsCtrl.user" post="postDetailsCtrl.post"></comment>
+
   <md-list>
-    <div ng-if="postDetailsCtrl.showComments || postDetailsCtrl.isPostPage">
-      <md-list-item ng-repeat="comment in postDetailsCtrl.post.data_comments" class="md-3-line">
-        <img ng-src="{{comment.author_img}}" class="md-avatar" alt="{{comment.author_name}}" />
-        <div class="md-list-item-text">
-          <h4>{{comment.author_name}} - {{comment.institution_name | uppercase}}<small></h4>
-          <small style="color: #7f7f7f;" class="md-caption">
-            {{comment.publication_date | date: 'MMM d, y'}} às {{comment.publication_date | date: 'HH:mm'}}
-          </small>
-          <p>{{comment.text}}</p>
-          <md-button class="md-secondary md-icon-button" aria-label="Share"
-          ng-if="postDetailsCtrl.canDeleteComment(comment)"
-          ng-click="postDetailsCtrl.deleteComment($event, comment)">
-            <md-icon>delete</md-icon>
-          </md-button>
-        </div>
-      </md-list-item>
-      <md-list-item class="md-3-line" ng-if="postDetailsCtrl.showComments && 
-      !postDetailsCtrl.isDeleted(postDetailsCtrl.post)">
-        <img ng-src="{{postDetailsCtrl.user.photo_url}}" class="md-avatar" alt="{{postDetailsCtrl.user.name}}" />
-        <div class="md-list-item-text">
-          <h3>{{comment.author_name}}</h3>
-          <md-input-container class="md-block">
-            <form ng-submit="postDetailsCtrl.createComment()" layout="column">
-              <label>{{postDetailsCtrl.user.name}}</label>
-              <textarea style="max-height: 400px;overflow-y:auto;resize:none;" ng-model="postDetailsCtrl.newComment" rows="1" md-select-on-focus
-              ng-disabled="postDetailsCtrl.savingComment"></textarea>
-              <div layout="row" layout-align="end center">
-                <md-button ng-show="postDetailsCtrl.newComment"
-                class="md-raised md-primary" aria-label="postar" type="submit">Escrever</md-button>
-              </div>
-            </form>
-          </md-input-container>
-        </div>
-      </md-list-item>
-    </div>
+    <md-list-item class="md-3-line" ng-if="(postDetailsCtrl.showComments || postDetailsCtrl.isPostPage) && !postDetailsCtrl.isDeleted()">
+      <img ng-src="{{postDetailsCtrl.user.photo_url}}" class="md-avatar" alt="{{postDetailsCtrl.user.name}}" />
+      <div class="md-list-item-text">
+        <h2>{{comment.author_name}}</h2>
+        <md-input-container class="md-block">
+          <form ng-submit="postDetailsCtrl.createComment()" layout="column">
+            <label>{{postDetailsCtrl.user.name}}</label>
+            <textarea style="max-height: 400px;overflow-y:auto;resize:none;" ng-model="postDetailsCtrl.newComment" rows="1" md-select-on-focus
+            ng-disabled="postDetailsCtrl.savingComment"></textarea>
+            <div layout="row" layout-align="end center">
+              <md-button ng-show="postDetailsCtrl.newComment"
+              class="md-raised md-primary" aria-label="postar" type="submit">Escrever</md-button>
+            </div>
+          </form>
+        </md-input-container>
+      </div>
+    </md-list-item>
   </md-list>
 </md-card

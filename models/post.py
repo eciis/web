@@ -6,6 +6,7 @@ from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
 from utils import Utils
 
+import json
 
 import datetime
 
@@ -27,56 +28,50 @@ class Comment(ndb.Model):
     text = ndb.TextProperty(required=True)
 
     # date and time of the comment creation
-    publication_date = ndb.DateTimeProperty(auto_now_add=True)
+    publication_date = ndb.StringProperty()
 
     # user who is the author
-    author = ndb.KeyProperty(kind="User", required=True)
+    author_key = ndb.StringProperty(required=True)
+
+    author_name = ndb.StringProperty(required=True)
+
+    author_img = ndb.StringProperty(required=True)
 
     # institution which the author is representing
     institution_name = ndb.StringProperty(required=True)
 
-    # Post from which the comment belongs
-    post = ndb.KeyProperty(kind="Post", required=True)
+    replies = ndb.JsonProperty()
 
     # comment's id
     id = ndb.StringProperty(required=True)
 
+    def add_reply(self, reply):
+        self.replies[reply.id] = reply
+
     @staticmethod
-    def create(data, author_key, post_key):
+    def create(data, author):
         """Create a comment and check required fields."""
-        if not data['text']:
+        if not data.get('text'):
             raise FieldException("Text can not be empty")
-        if not data['institution_key']:
+        if not data.get('institution_key'):
             raise FieldException("Institution can not be empty")
 
         institution = ndb.Key(urlsafe=data['institution_key']).get()
         Utils._assert(institution.state == 'inactive',
-                      "The institution has been deleted", NotAuthorizedException)
+                      "The institution has been deleted",
+                      NotAuthorizedException)
         comment = Comment()
         comment.text = data['text']
-        comment.author = author_key
-        comment.post = post_key
-        comment.publication_date = datetime.datetime.now()
+        comment.author_key = author.key.urlsafe()
+        comment.author_name = author.name
+        comment.author_img = author.photo_url
+        comment.publication_date = datetime.datetime.now().isoformat()
         comment.institution_name = institution.name
         comment.id = Utils.getHash(comment)
 
-        return comment
+        comment.replies = {}
 
-    @staticmethod
-    def make(comment):
-        """Create personalized json of comment."""
-        publication_date = comment.publication_date.isoformat()
-        author = comment.author.get()
-        return {
-            'text': comment.text,
-            'author_name': author.name,
-            'institution_name': comment.institution_name,
-            'author_img': author.photo_url,
-            'author_key': author.key.urlsafe(),
-            'post_key': comment.post.urlsafe(),
-            'publication_date': publication_date,
-            'id': comment.id
-        }
+        return comment
 
 
 class Like(ndb.Model):
@@ -122,7 +117,7 @@ class Post(ndb.Model):
 
     # Comments of the post
     # Concurrency controlled by Transactions
-    comments = ndb.LocalStructuredProperty(Comment, repeated=True)
+    comments = ndb.JsonProperty(default={})
 
     # Date and time of a creation of a post
     publication_date = ndb.DateTimeProperty(auto_now_add=True)
@@ -162,7 +157,6 @@ class Post(ndb.Model):
         post.last_modified_by = author_key
         post.author = author_key
         post.institution = institution_key
-        post.comments = []
 
         return post
 
@@ -211,10 +205,7 @@ class Post(ndb.Model):
 
     def get_comment(self, comment_id):
         """Get a comment by id."""
-        for comment in self.comments:
-            if comment.id == comment_id:
-                return comment
-        return None
+        return self.comments.get(comment_id)
 
     def get_number_of_comment(self):
         """Get number of comments."""
@@ -222,14 +213,18 @@ class Post(ndb.Model):
 
     def add_comment(self, comment):
         """Add a comment to the post."""
-        self.comments.append(comment)
+        self.comments[comment.id] = Utils.toJson(comment)
         self.put()
 
-    def remove_comment(self, comment_id):
+    def remove_comment(self, comment):
         """Remove a commet from post."""
-        self.comments = [comment for comment in self.comments
-                         if comment.id != comment_id]
+        del self.comments[comment.get('id')]
         self.put()
+
+    def reply_comment(self, reply, comment_id):
+        comment = self.comments.get(comment_id)
+        replies = comment.get('replies')
+        replies[reply.id] = Utils.toJson(reply)
 
     def get_like(self, author_key):
         """Get a like by author key."""
@@ -261,8 +256,6 @@ class Post(ndb.Model):
         """Change the state and add the information about this."""
         self.last_modified_by = user.key
         self.state = 'deleted'
-
-        """Update the post in datastore."""
         self.put()
 
     def has_activity(self):
@@ -270,3 +263,11 @@ class Post(ndb.Model):
         has_comments = len(self.comments) > 0
         has_likes = len(self.likes) > 0
         return has_comments or has_likes
+
+    @staticmethod
+    def is_hidden(post):
+        """Check if the post is deleted and has no activity."""
+        has_no_comments = post.get('number_of_comments') == 0
+        has_no_likes = post.get('number_of_likes') == 0
+        is_deleted = post.get('state') == 'deleted'
+        return is_deleted and has_no_comments and has_no_likes

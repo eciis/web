@@ -100,5 +100,39 @@
                 expect(eventCtrl.showImage()).toBe(true);
             });
         });
+
+        describe('save()', function() {
+
+            it('should be true', function() {
+                expect(eventCtrl.isEventValid()).toBe(true);
+                expect(eventCtrl.showButtonSend()).toBe(true);
+            });
+
+             it('should be false', function() {
+                eventCtrl.event = new Event({
+                         'text': 'Inaugurar o projeto E-CIS',
+                         'photo_url': null,
+                         'start_time': new Date(), 
+                         'end_time': new Date(),
+                         'key': '12300'
+                        },
+                        splab.key);
+                expect(eventCtrl.isEventValid()).toBe(false);
+                expect(eventCtrl.showButtonSend()).toBe(false);
+            });
+
+              it('should be false', function() {
+                eventCtrl.event = new Event({
+                         'title': 'Inauguração',
+                         'photo_url': null,
+                         'start_time': new Date("October 13, 2014 11:13:00"), 
+                         'end_time': new Date("October 3, 2014 11:13:00"),
+                         'key': '12300'
+                        },
+                        splab.key);
+                expect(eventCtrl.isEventValid()).toBe(false);
+                expect(eventCtrl.showButtonSend()).toBe(false);
+            });
+        });
     });
 }));

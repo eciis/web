@@ -49,12 +49,8 @@ class Event(ndb.Model):
     local = ndb.StringProperty(required=True)
 
     def isValid(self):
-        today = datetime.datetime.now()
-
         if self.end_time < self.start_time:
             raise FieldException("The end time can not be before the start time")
-        if self.start_time < today:
-            raise FieldException("The start time can not be before now")
 
     @staticmethod
     def create(data, author_key, author_name, author_photo,
@@ -73,9 +69,9 @@ class Event(ndb.Model):
         event.institution_photo = institution_photo
         event.local = data.get('local')
         event.start_time = datetime.datetime.strptime(
-            data.get('start_time'), "%Y%m%d%H%M%S")
+            data.get('start_time'), "%Y-%m-%dT%H:%M:%S")
         event.end_time = datetime.datetime.strptime(
-            data.get('end_time'), "%Y%m%d%H%M%S")
+            data.get('end_time'), "%Y-%m-%dT%H:%M:%S")
 
         event.isValid()
 

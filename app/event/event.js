@@ -4,7 +4,7 @@ function Event(data, institution) {
     data = data || {};
     _.extend(this, data);
 
-    this.institution = institution;
+    this.institution_key = institution;
 }
 
 Event.prototype.isValid = function isValid() {
@@ -12,13 +12,15 @@ Event.prototype.isValid = function isValid() {
         return false; 
     }
 
-    if (_.isUndefined(this.institution)) {
+    if (_.isUndefined(this.institution_key)) {
         return false; 
     }
     return true;
 };
 
 Event.prototype.convertDate = function(){
-    this.start_time = this.start_time.toISOString();
-    this.end_time = this.end_time.toISOString();
+    var size_date = 19;
+    this.start_time = (this.start_time.toISOString()).substring(0, size_date);
+    this.end_time = (this.end_time.toISOString()).substring(0, size_date);
 };
+

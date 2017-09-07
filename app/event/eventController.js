@@ -7,6 +7,7 @@
         var eventCtrl = this;
 
         eventCtrl.event = {};
+        eventCtrl.events = [];
 
         eventCtrl.loading = false;
         eventCtrl.deletePreviousImage = false;
@@ -36,11 +37,21 @@
         }
 
         eventCtrl.isEventValid = function isEventValid() {
-            console.log(eventCtrl.event);
             var isTitleUndefined = eventCtrl.event.title === undefined;
             var dateValid = eventCtrl.event.start_time <= 
                 eventCtrl.event.end_time;
             return !isTitleUndefined && dateValid;
+        };
+
+        eventCtrl.loadEvents = function loadEvents() {
+            EventService.getEvents().then(function success(response) {
+                eventCtrl.events = response.data;
+            }, function error(response) {
+                AuthService.reload().then(function success() {
+                    MessageService.showToast(response.data.msg);
+                    $state.go('app.home');
+                });
+            });
         };
 
         eventCtrl.save = function save() {
@@ -101,5 +112,7 @@
            eventCtrl.photoBase64Data = null;
            eventCtrl.deletePreviousImage = true;
         };
+
+        eventCtrl.loadEvents();
     });
 })();

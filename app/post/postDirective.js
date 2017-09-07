@@ -201,7 +201,7 @@
         }
 
         postCtrl.cancelDialog = function() {
-            postCtrl.post = {};
+            postCtrl.clearPost();
             $mdDialog.hide();
         };
 
@@ -217,8 +217,8 @@
         };
 
         postCtrl.showFiles = function() {
-            var noFiles = postCtrl.pdfFiles.length > 0;
-            return noFiles;
+            var hasFiles = postCtrl.pdfFiles.length > 0;
+            return hasFiles;
         };
 
         postCtrl.hideFile = function(index) {

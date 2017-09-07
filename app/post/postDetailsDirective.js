@@ -93,7 +93,7 @@
                 postDetailsCtrl.isDeleted();
         };
 
-        postDetailsCtrl.showButtonEdit = function showButtonDeleted() {
+        postDetailsCtrl.showButtonEdit = function showButtonEdit() {
             var hasNoComments = postDetailsCtrl.post.number_of_comments === 0;
             var hasNoLikes = postDetailsCtrl.post.number_of_likes === 0;
 

@@ -25,27 +25,39 @@ class LikePostHandler(BaseHandler):
 
     @json_response
     @login_required
-    def get(self, user, url_string):
+    def get(self, user, post_key, comment_id=None):
         """Handler GET Requests."""
-        post = ndb.Key(urlsafe=url_string).get()
-        likes = [Like.make(like, self.request.host) for like in post.likes]
+        post = ndb.Key(urlsafe=post_key).get()
+        if comment_id:
+            comment = post.get_comment(comment_id)
+            likes = comment.get('likes')
+        else:
+            likes = [Like.make(like, self.request.host) for like in post.likes]
 
         self.response.write(json.dumps(likes))
 
     @login_required
     @ndb.transactional(xg=True)
-    def post(self, user, url_string):
+    def post(self, user, post_key, comment_id=None):
         """Handle POST Requests."""
         """This method is only meant to give like in post."""
-        post = ndb.Key(urlsafe=url_string).get()
+        post = ndb.Key(urlsafe=post_key).get()
         institution = post.institution.get()
         Utils._assert(institution.state == 'inactive',
                       "The institution has been deleted", NotAuthorizedException)
-        if not user.is_liked_post(post.key):
+        if comment_id:
+            comment = post.get_comment(comment_id)
+            likes = comment.get('likes')
+            Utils._assert(user.key.urlsafe() in likes,
+                      "User already liked this comment", NotAuthorizedException)
+            likes.append(user.key.urlsafe())
+            post.put();
+        else:
+            Utils._assert(user.is_liked_post(post.key),
+                      "User already liked this publication", NotAuthorizedException)
             user.like_post(post.key)
             post.like(user.key)
-        else:
-            raise LikeException('User already liked the publication.')
+
 
     @login_required
     @ndb.transactional(xg=True)

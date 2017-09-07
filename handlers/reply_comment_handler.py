@@ -35,8 +35,7 @@ class ReplyCommentHandler(BaseHandler):
     def get(self, user, post_key, comment_id):
         """Handle Get Comments requests."""
         post = ndb.Key(urlsafe=post_key).get()
-        replies = [Comment.make(reply)
-                    for reply in post.get_comment(comment_id).replies]
+        replies = post.get_comment(comment_id).get('replies')
         self.response.write(json.dumps(replies))
 
     @json_response

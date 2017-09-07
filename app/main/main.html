@@ -55,6 +55,12 @@
         </md-menu-item>
         <md-menu-divider></md-menu-divider>
         <md-menu-item>
+          <md-button ng-click="mainCtrl.tokenToClipboard()">
+            <md-icon>security</md-icon>
+            Copiar Token
+          </md-button>
+        </md-menu-item>
+        <md-menu-item>
           <md-button ng-click="mainCtrl.logout()">
             <md-icon>exit_to_app</md-icon>
             Sair

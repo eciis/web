@@ -46,6 +46,7 @@ app = webapp2.WSGIApplication([
     ("/api/institutions/(.*)/requests/user", UserRequestHandler),
     ("/api/institutions/(.*)", InstitutionHandler),
     ("/api/key/(.*)", GetKeyHandler),
+    ("/api/posts/(.*)/comments/(.*)/likes", LikePostHandler),
     ("/api/posts/(.*)/comments/(.*)/replies", ReplyCommentHandler),
     ("/api/posts/(.*)/comments/(.*)/replies/(.*)", ReplyCommentHandler),
     ("/api/posts/(.*)/comments", PostCommentHandler),

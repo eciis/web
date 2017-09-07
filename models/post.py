@@ -42,6 +42,8 @@ class Comment(ndb.Model):
 
     replies = ndb.JsonProperty()
 
+    likes = ndb.JsonProperty()
+
     # comment's id
     id = ndb.StringProperty(required=True)
 
@@ -70,6 +72,7 @@ class Comment(ndb.Model):
         comment.id = Utils.getHash(comment)
 
         comment.replies = {}
+        comment.likes = []
 
         return comment
 

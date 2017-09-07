@@ -1,6 +1,6 @@
 <md-content layout="row" md-colors="{background: 'grey-200'}" layout-align="center" class="body">
-  <div flex-gt-lg="80" flex-lg="90" layout="row" layout-align="center" layout-fill>
-    <div flex>
+  <div flex-gt-lg="80" flex-lg="90" layout-align="center" layout-fill>
+    <div flex layout="column">
       <md-card flex layout="column">
       <md-card-header>
         <md-card-avatar>
@@ -41,7 +41,7 @@
           <md-input-container class="md-input-has-placeholder">
             <label>End Date/Time</label>
             <input mdc-datetime-picker="" date="true" time="true" type="text"
-            placeholder="Date" min-date="eventCtrl.event.start_time"="eventCtrl.event.end_time" class=" md-input" readonly="readonly"
+            placeholder="Date" class=" md-input" readonly="readonly"
             id="input_1" ng-model="eventCtrl.event.end_time">
             <div class="md-errors-spacer"></div>
           </md-input-container>
@@ -54,6 +54,9 @@
       </md-card-content>
       <div layout="row">
         <span flex></span>
+        <md-button class="md-icon-button" ng-click="eventCtrl.cancel()" ng-if="!eventCtrl.showButton">
+          <md-icon>cancel</md-icon>
+        </md-button>
         <md-button class="md-icon-button" ng-click="null" ng-model="eventCtrl.file" ngf-pattern="'image/*'"
                       ngf-accept="'image/*'" ngf-max-size="5MB" ng-if="!eventCtrl.showButton"
                       ngf-select="eventCtrl.addImage(eventCtrl.file)">
@@ -62,21 +65,22 @@
         <md-button class="md-icon-button" ng-click="eventCtrl.save()" ng-if="eventCtrl.showButtonSend()">
           <md-icon>send</md-icon>
         </md-button>
-      </md-card-actions>
     </md-card>
     </div>
+
   </div>
+  <md-card flex layout="column">
+        <md-list class="md-dense" flex>
+          <md-subheader class="md-no-sticky">Eventos</md-subheader>
+            <md-list-item class="md-3-line"
+                ng-repeat="event in eventCtrl.events" ng-click="null">
+              <div class="md-list-item-text" layout="column">
+                <h3>{{ event.title }}</h3>
+                <h3>{{ event.text }}</h3>
+                <h3>{{ event.local }}</h3>
+              </div>
+            </md-list-item>
+        </md-list>
+      </md-card>
 </md-content>
-<md-card>
-    <md-list class="md-dense" flex>
-      <md-subheader class="md-no-sticky">Eventos</md-subheader>
-        <md-list-item class="md-3-line"
-            ng-repeat="event in eventCtrl.events">
-          <div class="md-list-item-text" layout="column">
-            <h3>{{ event.title }}</h3>
-            <h3>{{ event.text }}</h3>
-            <h3>{{ event.local }}</h3>
-          </div>
-        </md-list-item>
-    </md-list>
-  </md-card>
+

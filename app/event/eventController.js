@@ -43,7 +43,15 @@
             return !isTitleUndefined && dateValid;
         };
 
-        eventCtrl.loadEvents = function loadEvents() {
+        eventCtrl.save = function save() {
+            if(eventCtrl.isEventValid()){
+                loadImage();
+            }else{
+                MessageService.showToast("Evento é inválido");
+            }
+        };
+
+        function loadEvents() {
             EventService.getEvents().then(function success(response) {
                 eventCtrl.events = response.data;
             }, function error(response) {
@@ -52,15 +60,7 @@
                     $state.go('app.home');
                 });
             });
-        };
-
-        eventCtrl.save = function save() {
-            if(eventCtrl.isEventValid()){
-                loadImage();
-            }else{
-                MessageService.showToast("Evento é inválido");
-            }
-        };
+        }
 
         function loadImage(){
             if (eventCtrl.photoBase64Data) {
@@ -79,12 +79,14 @@
         }
 
         function create() {
+            console.log(eventCtrl.user);
             var event = new Event(eventCtrl.event, eventCtrl.user.current_institution.key);
             event.convertDate();
             if (event.isValid()) {
                 EventService.createEvent(event).then(function success() {
                     eventCtrl.event = {};
                     eventCtrl.showButton = true;
+                    eventCtrl.events.push(event);
                     MessageService.showToast('Evento criado com sucesso, esperando aprovação!');
                 }, function error(response) {
                     AuthService.reload().then(function success() {
@@ -96,6 +98,11 @@
                 MessageService.showToast('Evento inválido!');
             }
         }
+
+        eventCtrl.cancel = function() {
+             eventCtrl.event = {};
+             eventCtrl.showButton = true;
+        };
 
         eventCtrl.showButtonSend = function() {
             return eventCtrl.isEventValid();
@@ -113,6 +120,6 @@
            eventCtrl.deletePreviousImage = true;
         };
 
-        eventCtrl.loadEvents();
+        loadEvents();
     });
 })();

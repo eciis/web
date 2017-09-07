@@ -12,6 +12,10 @@ Event.prototype.isValid = function isValid() {
         return false; 
     }
 
+    if (_.isUndefined(this.local) || _.isEmpty(this.local)) {
+        return false; 
+    }
+
     if (_.isUndefined(this.institution_key)) {
         return false; 
     }

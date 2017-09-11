@@ -111,16 +111,15 @@ def delete_all_in_index(index):
         logging.exception("Error removing documents")
 
 
-def create_profile(user):
+def create_profile(user, institution):
     """Create a profile."""
-    institution = user.institutions[len(user.institution_profiles)].get()
     profile = InstitutionProfile()
     profile.email = user.email
     profile.phone = '(83) 99999-9999'
     profile.institution_key = institution.key.urlsafe()
     profile.institution_name = institution.name
     profile.institution_photo_url = institution.photo_url
-    profile.office = 'Developer'
+    profile.office = 'Employee'
     user.institution_profiles.append(profile)
     user.put()
 
@@ -336,7 +335,7 @@ class ResetHandler(BaseHandler):
             certbio.add_member(user)
             user.add_institution(certbio.key)
             user.follow(certbio.key)
-            create_profile(user)
+            create_profile(user, certbio)
         for user in [jorge, mayza, maiana, luiz,
                      raoni, ruan, tiago, admin]:
             certbio.follow(user.key)
@@ -374,7 +373,7 @@ class ResetHandler(BaseHandler):
             splab.add_member(user)
             user.add_institution(splab.key)
             user.follow(splab.key)
-            create_profile(user)
+            create_profile(user, splab)
 
         for user in [jorge, andre, maiana, luiz,
                      raoni, ruan, tiago, admin]:
@@ -413,7 +412,7 @@ class ResetHandler(BaseHandler):
             eciis.add_member(user)
             user.add_institution(eciis.key)
             user.follow(eciis.key)
-            create_profile(user)
+            create_profile(user, eciis)
 
         for user in [mayza, andre, jorge, dalton,
                      maiana, luiz, raoni,

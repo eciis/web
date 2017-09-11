@@ -22,18 +22,11 @@ class InstitutionProfile(ndb.Model):
         return profile
 
     @staticmethod
-    def is_valid_profile(profiles, institution_key):
+    def is_valid(profiles, institution_key):
         """Verify the user profile."""
         for profile in profiles:
             if profile.institution_key == institution_key:
-                return InstitutionProfile.is_valid_profile_fields(profile)
-        return False
-
-    @staticmethod
-    def is_valid_profile_fields(profile):
-        """Verify the profile fiels."""
-        if profile.office:
-            return True
+                return profile.office is not None
         return False
 
 

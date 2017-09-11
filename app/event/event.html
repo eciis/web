@@ -75,6 +75,9 @@
             <md-list-item class="md-3-line"
                 ng-repeat="event in eventCtrl.events" ng-click="null">
               <div class="md-list-item-text" layout="column">
+                <div class="image-view">
+                  <img class="md-card-image" style="border-radius: 3%;" ng-src="{{ event.photo_url }}"/>
+                </div>
                 <h3>{{ event.title }}</h3>
                 <h3>{{ event.text }}</h3>
                 <h3>{{ event.local }}</h3>

@@ -84,6 +84,7 @@
                 EventService.createEvent(event).then(function success() {
                     eventCtrl.event = {};
                     eventCtrl.showButton = true;
+                    eventCtrl.photoUrl = "";
                     eventCtrl.events.push(event);
                     MessageService.showToast('Evento criado com sucesso, esperando aprovação!');
                 }, function error(response) {
@@ -96,12 +97,13 @@
         }
 
         eventCtrl.cancel = function() {
-             eventCtrl.event = {};
-             eventCtrl.showButton = true;
+            eventCtrl.event = {};
+            eventCtrl.photoUrl = "";
+            eventCtrl.showButton = true;
         };
 
         eventCtrl.showButtonSend = function() {
-            return eventCtrl.isEventValid();
+            return eventCtrl.isValidEvent();
         };
 
         eventCtrl.showImage = function() {

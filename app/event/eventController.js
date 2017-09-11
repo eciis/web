@@ -36,17 +36,17 @@
             });
         }
 
-        eventCtrl.isEventValid = function isEventValid() {
+        eventCtrl.isValidEvent = function isValidEvent() {
             var isTitleUndefined = eventCtrl.event.title === undefined;
-            var dateValid = eventCtrl.event.start_time <= 
+            var isValidDate = eventCtrl.event.start_time <= 
                 eventCtrl.event.end_time;
-            return !isTitleUndefined && dateValid;
+            return !isTitleUndefined && isValidDate;
         };
 
         eventCtrl.save = function save() {
-            if(eventCtrl.isEventValid()){
+            if (eventCtrl.isValidEvent()) {
                 loadImage();
-            }else{
+            } else {
                 MessageService.showToast("Evento é inválido");
             }
         };
@@ -75,7 +75,6 @@
             } else {
                 create();
             }
-
         }
 
         function create() {
@@ -88,10 +87,8 @@
                     eventCtrl.events.push(event);
                     MessageService.showToast('Evento criado com sucesso, esperando aprovação!');
                 }, function error(response) {
-                    AuthService.reload().then(function success() {
-                        MessageService.showToast(response.data.msg);
-                        $state.go('app.home');
-                    });
+                    MessageService.showToast(response.data.msg);
+                    $state.go('app.home');
                 });
             } else {
                 MessageService.showToast('Evento inválido!');

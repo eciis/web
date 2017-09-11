@@ -3,7 +3,7 @@
     var app = angular.module('app');
 
     app.controller("EventController", function EventController(MessageService, AuthService, ImageService,
-                     $rootScope, mdcDateTimeDialog, mdcDatetimePickerDefaultLocale, EventService, $state) {
+                     $rootScope, mdcDateTimeDialog, EventService, $state) {
         var eventCtrl = this;
 
         eventCtrl.event = {};

@@ -4,7 +4,7 @@
 
     var app = angular.module("app");
 
-    app.controller("NotificationController", function NotificationController(NotificationService, AuthService, $state) {
+    app.controller("NotificationController", function NotificationController(NotificationService, AuthService, $state, $mdDialog) {
         var controller = this;
 
         controller.user = AuthService.getCurrentUser();
@@ -38,7 +38,13 @@
             },
             "REQUEST_USER": {
                icon: "account_balance",
-               state: "process_request"
+               state: "process_request",
+               isDialog: true,
+               dialogProperties: {
+                    templateUrl: "requests/request_processing.html",
+                    controller: "RequestPrecessingController",
+                    controllerAs: "requestCtrl"
+               }
             }
         };
 
@@ -63,6 +69,29 @@
                 $state.go(state, {key: notification.entity_key});
             }
             controller.markAsRead(notification);
+        };
+
+        controller.action = function action(notification) {
+            var notificationProperties = type_data[notification.type];
+
+            if (notificationProperties.isDialog) {
+                controller.showDialog(notificationProperties.dialogProperties);
+            } else {
+                controller.goTo(notification);
+            }
+        };
+
+        controller.showDialog = function showDialog(dialogProperties) {
+            $mdDialog.show({
+                controller: dialogProperties.controller,
+                controllerAs: dialogProperties.controllerAs,
+                templateUrl: dialogProperties.templateUrl ,
+                parent: angular.element(document.body),
+                targetEvent: event,
+                clickOutsideToClose:true,
+                openFrom: '#fab-new-post',
+                closeTo: angular.element(document.querySelector('#fab-new-post'))
+            });
         };
 
         controller.format = function format(notification) {

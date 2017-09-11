@@ -62,10 +62,10 @@
 
   describe('EventController functions', function() {
 
-    describe('isEventValid() and showButtonSend()', function() {
+    describe('isValidEvent() and showButtonSend()', function() {
 
       it('should be true', function() {
-        expect(eventCtrl.isEventValid()).toBe(true);
+        expect(eventCtrl.isValidEvent()).toBe(true);
         expect(eventCtrl.showButtonSend()).toBe(true);
       });
 
@@ -78,7 +78,7 @@
                          'key': '12300'
                 },
               splab.key);
-        expect(eventCtrl.isEventValid()).toBe(false);
+        expect(eventCtrl.isValidEvent()).toBe(false);
         expect(eventCtrl.showButtonSend()).toBe(false);
       });
 
@@ -91,7 +91,7 @@
                         'key': '12300'
                        },
                        splab.key);
-        expect(eventCtrl.isEventValid()).toBe(false);
+        expect(eventCtrl.isValidEvent()).toBe(false);
         expect(eventCtrl.showButtonSend()).toBe(false);
       });
     });

@@ -109,7 +109,7 @@ class UserHandler(BaseHandler):
             institution_key = json.loads(data)[0]['value']['institution_key']
             JsonPatch.load(data, user, InstitutionProfile)
             Utils._assert(
-                not InstitutionProfile.is_valid_profile(user.institution_profiles, institution_key),
+                not InstitutionProfile.is_valid(user.institution_profiles, institution_key),
                 "The profile is invalid.", FieldException)
             user.put()
 

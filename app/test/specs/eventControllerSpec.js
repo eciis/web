@@ -2,9 +2,11 @@
 
 (describe('Test EventController', function() {
 
-  var eventCtrl, scope, httpBackend, rootScope, deffered, imageService, eventService;
+  var eventCtrl, scope, httpBackend, rootScope, deffered, imageService, eventService, message;
 
   var splab = {name: 'Splab', key: '098745'};
+
+  var date_now = new Date();
 
   var maiana = {
       name: 'Maiana',
@@ -13,33 +15,23 @@
       institutions_admin: splab,
       current_institution: splab,
       key: '123'
-  };
+  };  
 
   // Event of SPLAB by Maiana
-  var event = new Event({'title': 'Inauguração',
-                         'text': 'Inaugurar o projeto E-CIS',
-                         'local': 'Brasília',
-                         'photo_url': null,
-                         'start_time': new Date(), 
-                         'end_time': new Date(),
-                         'key': '12300'
-                        },
-                        splab.key);
+  var event = {'title': 'Inauguração',
+                'text': 'Inaugurar o projeto E-CIS',
+                'local': 'Brasília',
+                'photo_url': null,
+                'start_time': date_now, 
+                'end_time': date_now,
+                };
 
-  // Event of SPLAB by Maiana
-  var exist_event = new Event({'title': 'Existent',
-                         'local': 'CG',
-                         'start_time': new Date(), 
-                         'end_time': new Date(),
-                         'key': '1230'
-                        },
-                        splab.key);
-
-  var all_events = [exist_event];
+  var event_convert_date = new Event(event, splab.key);
+  event_convert_date.convertDate();
 
   beforeEach(module('app'));
 
-  beforeEach(inject(function($controller, $httpBackend, $http, $q, AuthService, $rootScope, ImageService, EventService) {
+  beforeEach(inject(function($controller, $httpBackend, $http, $q, AuthService, $rootScope, ImageService, EventService, MessageService) {
       imageService = ImageService;
       scope = $rootScope.$new();
       httpBackend = $httpBackend;
@@ -51,12 +43,12 @@
             scope: scope,
             imageService : imageService,
             $rootScope: rootScope,
-            eventService: eventService
+            eventService: eventService,
+            message : MessageService
         });
       eventCtrl.event = event;
-      eventCtrl.events = all_events;
 
-      httpBackend.when('GET', "/api/events").respond(all_events);
+      httpBackend.when('GET', "/api/events").respond([]);
       httpBackend.when('GET', 'main/main.html').respond(200);
       httpBackend.when('GET', 'home/home.html').respond(200);
       httpBackend.when('GET', 'auth/login.html').respond(200);
@@ -118,13 +110,13 @@
 
     describe('save()', function() {
 
-      /*it('should eventService.createEvent was called', function() {
+      it('should eventService.createEvent was called', function() {
         spyOn(eventService, 'createEvent').and.returnValue(deffered.promise);
         deffered.resolve(event);
         eventCtrl.save();
         scope.$apply();
-        expect(eventService.createEvent).toHaveBeenCalledWith(event);
-      });*/
+        expect(eventService.createEvent).toHaveBeenCalledWith(event_convert_date);
+      });
     });
   });
 }));

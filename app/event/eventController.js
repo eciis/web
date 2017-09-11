@@ -79,7 +79,6 @@
         }
 
         function create() {
-            console.log(eventCtrl.user);
             var event = new Event(eventCtrl.event, eventCtrl.user.current_institution.key);
             event.convertDate();
             if (event.isValid()) {

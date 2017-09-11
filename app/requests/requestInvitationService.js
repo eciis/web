@@ -34,7 +34,7 @@
         service.getRequest = function getRequest(request_key) {
             var deferred = $q.defer();
 
-            $http.get("/api/requests/" + request_key).then(function success(response) {
+            $http.get("/api/requests/" + request_key + "/user").then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);
@@ -46,7 +46,7 @@
         service.acceptRequest = function acceptRequest(request_key) {
             var deferred = $q.defer();
 
-            $http.put("/api/requests/" + request_key).then(function success(response) {
+            $http.put("/api/requests/" + request_key + "/user").then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);
@@ -58,7 +58,7 @@
         service.rejectRequest = function rejectRequest(request_key) {
             var deferred = $q.defer();
 
-            $http.delete("/api/requests/" + request_key).then(function success(response) {
+            $http.delete("/api/requests/" + request_key + "/user").then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);

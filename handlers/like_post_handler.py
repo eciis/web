@@ -38,7 +38,7 @@ class LikePostHandler(BaseHandler):
 
     @login_required
     @ndb.transactional(xg=True)
-    def post(self, user, post_key, comment_id=None):
+    def post(self, user, post_key, comment_id=None, reply_id=None):
         """Handle POST Requests."""
         """This method is only meant to give like in post."""
         post = ndb.Key(urlsafe=post_key).get()
@@ -47,7 +47,11 @@ class LikePostHandler(BaseHandler):
                       "The institution has been deleted", NotAuthorizedException)
         if comment_id:
             comment = post.get_comment(comment_id)
+            if reply_id:
+                comment = comment.get('replies').get(reply_id)
+
             likes = comment.get('likes')
+
             Utils._assert(user.key.urlsafe() in likes,
                       "User already liked this comment", NotAuthorizedException)
             likes.append(user.key.urlsafe())
@@ -61,15 +65,26 @@ class LikePostHandler(BaseHandler):
 
     @login_required
     @ndb.transactional(xg=True)
-    def delete(self, user, url_string):
+    def delete(self, user, post_key, comment_id=None, reply_id=None):
         """Handle DELETE Requests."""
         """This method is only meant to dislike in post."""
-        post = ndb.Key(urlsafe=url_string).get()
+        post = ndb.Key(urlsafe=post_key).get()
         institution = post.institution.get()
         Utils._assert(institution.state == 'inactive',
                       "The institution has been deleted", NotAuthorizedException)
-        if user.is_liked_post(post.key):
+        if comment_id:
+            comment = post.get_comment(comment_id)
+            if reply_id:
+                comment = comment.get('replies').get(reply_id)
+
+            likes = comment.get('likes')
+
+            Utils._assert(user.key.urlsafe() not in likes,
+                      "User hasn't liked this comment", LikeException)
+            likes.remove(user.key.urlsafe())
+            post.put();
+        else:
+            Utils._assert(not user.is_liked_post(post.key),
+                      "User hasn't liked this publication.", LikeException)
             user.dislike_post(post.key)
             post.dislike(user.key)
-        else:
-            raise LikeException("User hasn't like in this publication.")

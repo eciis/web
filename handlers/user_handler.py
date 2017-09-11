@@ -53,21 +53,6 @@ def remove_user_from_institutions(user):
         institution.unfollow(user.key)
 
 
-def verify_institution_profile(profiles, institution_key):
-    """Verify the user profile."""
-    for profile in profiles:
-        if profile.institution_key == institution_key:
-            return verify_institution_profile_fields(profile)
-    return False
-
-
-def verify_institution_profile_fields(profile):
-    """Verify the profile fiels."""
-    if profile.office:
-        return True
-    return False
-
-
 class UserHandler(BaseHandler):
     """User Handler."""
 
@@ -124,7 +109,7 @@ class UserHandler(BaseHandler):
             institution_key = json.loads(data)[0]['value']['institution_key']
             JsonPatch.load(data, user, InstitutionProfile)
             Utils._assert(
-                not verify_institution_profile(user.institution_profiles, institution_key),
+                not InstitutionProfile.is_valid_profile(user.institution_profiles, institution_key),
                 "The profile is invalid.", FieldException)
             user.put()
 

@@ -99,6 +99,10 @@ User.prototype.updateInstitutions = function updateInstitutions(institution){
     updateFollowInstitution(this.follows, institution);
 };
 
+User.prototype.addProfile = function addProfile(profile){
+    this.institution_profiles.push(profile);
+};
+
 function updateFollowInstitution(follows, institution) {
     var index = _.findIndex(follows, ['key', institution.key]);
     follows[index].acronym = institution.acronym;

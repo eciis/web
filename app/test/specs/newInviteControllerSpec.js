@@ -286,11 +286,13 @@
             });
         });
 
-        describe('configInstProfile()', function() {
+        describe('saveInstProfile()', function() {
             it('should call save()', function() {
                 spyOn(authService, 'save');
                 spyOn(userService, 'save');
-                newInviteCtrl.configInstProfile();
+                spyOn(newInviteCtrl.user, 'addProfile');
+                newInviteCtrl.saveInstProfile();
+                expect(newInviteCtrl.user.addProfile).toHaveBeenCalled();
                 expect(authService.save).toHaveBeenCalled();
                 expect(userService.save).toHaveBeenCalled();
             });

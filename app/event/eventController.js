@@ -35,34 +35,7 @@
             });
         }
 
-        eventCtrl.isValidEvent = function isValidEvent() {
-            var isTitleUndefined = eventCtrl.event.title === undefined;
-            var isLocalUndefined = eventCtrl.event.local === undefined;
-            var isValidDate = eventCtrl.event.start_time <= 
-                eventCtrl.event.end_time;
-            return !isTitleUndefined && isValidDate && !isLocalUndefined;
-        };
-
         eventCtrl.save = function save() {
-            if (eventCtrl.isValidEvent()) {
-                loadImage();
-            } else {
-                MessageService.showToast("Evento é inválido");
-            }
-        };
-
-        function loadEvents() {
-            EventService.getEvents().then(function success(response) {
-                eventCtrl.events = response.data;
-            }, function error(response) {
-                AuthService.reload().then(function success() {
-                    MessageService.showToast(response.data.msg);
-                    $state.go('app.home');
-                });
-            });
-        }
-
-        function loadImage(){
             if (eventCtrl.photoBase64Data) {
                 eventCtrl.loading = true;
                 ImageService.saveImage(eventCtrl.photoBase64Data).then(function success(data) {
@@ -75,14 +48,13 @@
             } else {
                 create();
             }
-        }
+        };
 
         function create() {
             var event = new Event(eventCtrl.event, eventCtrl.user.current_institution.key);
-            event.convertDate();
             if (event.isValid()) {
                 EventService.createEvent(event).then(function success(response) {
-                    eventCtrl.clear();
+                    eventCtrl.clean();
                     eventCtrl.events.push(response.data);
                     MessageService.showToast('Evento criado com sucesso, esperando aprovação!');
                 }, function error(response) {
@@ -94,7 +66,16 @@
             }
         }
 
-        eventCtrl.clear = function() {
+        function loadEvents() {
+            EventService.getEvents().then(function success(response) {
+                eventCtrl.events = response.data;
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
+                    $state.go('app.home');
+            });
+        }
+
+        eventCtrl.clean = function() {
             eventCtrl.event = {};
             eventCtrl.photoUrl = "";
             eventCtrl.showButton = true;
@@ -102,7 +83,11 @@
         };
 
         eventCtrl.showButtonSend = function() {
-            return eventCtrl.isValidEvent();
+            var isTitleUndefined = eventCtrl.event.title === undefined;
+            var isLocalUndefined = eventCtrl.event.local === undefined;
+            var isValidDate = eventCtrl.event.start_time <= 
+                eventCtrl.event.end_time;
+            return !isTitleUndefined && isValidDate && !isLocalUndefined;
         };
 
         eventCtrl.showImage = function() {

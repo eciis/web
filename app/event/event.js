@@ -5,6 +5,7 @@ function Event(data, institution) {
     _.extend(this, data);
 
     this.institution_key = institution;
+    this.convertDate();
 }
 
 Event.prototype.isValid = function isValid() {
@@ -19,6 +20,7 @@ Event.prototype.isValid = function isValid() {
     if (_.isUndefined(this.institution_key)) {
         return false; 
     }
+    
     return true;
 };
 

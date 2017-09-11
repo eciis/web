@@ -27,7 +27,6 @@
                 };
 
   var event_convert_date = new Event(event, splab.key);
-  event_convert_date.convertDate();
 
   beforeEach(module('app'));
 
@@ -62,10 +61,9 @@
 
   describe('EventController functions', function() {
 
-    describe('isValidEvent() and showButtonSend()', function() {
+    describe('showButtonSend()', function() {
 
       it('should be true', function() {
-        expect(eventCtrl.isValidEvent()).toBe(true);
         expect(eventCtrl.showButtonSend()).toBe(true);
       });
 
@@ -78,7 +76,6 @@
                          'key': '12300'
                 },
               splab.key);
-        expect(eventCtrl.isValidEvent()).toBe(false);
         expect(eventCtrl.showButtonSend()).toBe(false);
       });
 
@@ -91,7 +88,6 @@
                         'key': '12300'
                        },
                        splab.key);
-        expect(eventCtrl.isValidEvent()).toBe(false);
         expect(eventCtrl.showButtonSend()).toBe(false);
       });
     });

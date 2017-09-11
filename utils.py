@@ -110,7 +110,7 @@ class Utils():
                     entity[item], loadkey=loadkey, host=host)
             return out
         if isinstance(entity, datetime.datetime):
-            return (entity.isoformat())
+            return entity.isoformat()
         if isinstance(entity, ndb.Key):
             if loadkey:
                 entity = entity.get()

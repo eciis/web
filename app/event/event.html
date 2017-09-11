@@ -47,7 +47,7 @@
           </md-input-container>
         </div>
         <div class="image-view" ng-if="eventCtrl.showImage()">
-          <button ng-click="eventCtrl.hideImage()">&times;</button>
+          <button ng-click="eventCtrl.cleanImage()">&times;</button>
           <img style="border-radius: 5%;" ng-src="{{ eventCtrl.photoUrl }}"/>
         </div>
         <md-progress-linear ng-show="eventCtrl.loading" md-mode="indeterminate" style="width: 14%; margin-top: 5px"></md-progress-linear>
@@ -73,16 +73,15 @@
         <md-list class="md-dense" flex>
           <md-subheader class="md-no-sticky">Eventos</md-subheader>
             <md-list-item class="md-3-line"
-                ng-repeat="event in eventCtrl.events" ng-click="null">
+                ng-repeat="event in eventCtrl.events | orderBy : eventCtrl.events.start_time" ng-click="null">
               <div class="image-view" ng-if="event.photo_url" layout="row">
                 <img class="md-card-image" style="border-radius: 3%;" ng-src="{{ event.photo_url }}"/>
               </div>
               <div class="md-list-item-text" style="padding: 2%;">
+                <label>{{ event.title }}</label>
                 <h3>Horário</h3>
                 <p>De {{ event.start_time | date: 'dd-MM-yyyy'}} às {{ event.start_time | date: 'HH:mm:ss'}} até 
                    {{ event.end_time | date: 'dd-MM-yyyy'}} às {{ event.end_time | date: 'HH:mm:ss'}}</p>
-                <h3>Título</h3>
-                <p>{{ event.title }}</p>
                 <h3 ng-if="event.text">Descrição</h3>
                 <p ng-if="event.text">{{ event.text }}</p>
                 <h3>Local</h3>

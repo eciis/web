@@ -20,7 +20,6 @@ Event.prototype.isValid = function isValid() {
     if (_.isUndefined(this.institution_key)) {
         return false; 
     }
-    
     return true;
 };
 

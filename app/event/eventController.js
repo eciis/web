@@ -77,9 +77,8 @@
 
         eventCtrl.clean = function() {
             eventCtrl.event = {};
-            eventCtrl.photoUrl = "";
             eventCtrl.showButton = true;
-            eventCtrl.photoBase64Data = undefined;
+            eventCtrl.cleanImage();
         };
 
         eventCtrl.showButtonSend = function() {
@@ -96,7 +95,7 @@
             return !isImageEmpty && !isImageNull;
         };
 
-        eventCtrl.hideImage = function() {
+        eventCtrl.cleanImage = function() {
            eventCtrl.photoUrl = "";
            eventCtrl.photoBase64Data = null;
            eventCtrl.deletePreviousImage = true;

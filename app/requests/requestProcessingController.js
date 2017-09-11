@@ -28,12 +28,12 @@
         requestController.rejectRequest = function rejectInvite(event){
             var promise = RequestInvitationService.showRejectDialog(event);
 
-                promise.then(function() {
-                    deleteRequest();
-                }, function() {
-                    MessageService.showToast('Cancelado');
-                });
-                return promise;
+            promise.then(function() {
+                deleteRequest();
+            }, function() {
+                MessageService.showToast('Cancelado');
+            });
+            return promise;
         };
 
         function deleteRequest() {
@@ -74,6 +74,8 @@
             });
         }
 
-        loadRequest();
+        (function main () {
+            loadRequest();
+        })();
     });
 })();

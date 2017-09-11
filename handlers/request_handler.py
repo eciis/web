@@ -9,10 +9,7 @@ from handlers.base_handler import BaseHandler
 
 
 def makeUser(user, request):
-    """TODO: Move this method to User when utils.py is refactored.
-
-    @author Andre L Abrantes - 20-06-2017
-    """
+    """Method of make user."""
     user_json = Utils.toJson(user, host=request.host)
     user_json['logout'] = 'http://%s/logout?redirect=%s' %\
         (request.host, request.path)

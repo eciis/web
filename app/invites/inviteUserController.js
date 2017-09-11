@@ -54,7 +54,7 @@
                 promise.then(function() {
                     deleteRequest(request);
                 }, function() {
-                    MessageService.showToast('Cancelado');
+                    MessageService.showToast('Rejeição de pedido cancelada!');
                 });
                 return promise;
         };
@@ -63,7 +63,7 @@
             var promise = RequestInvitationService.rejectRequest(request.key);
             promise.then(function success() {
                 request.status = 'rejected';
-                MessageService.showToast("Pedido rejeitado!");
+                MessageService.showToast("O pedido foi rejeitado!");
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });

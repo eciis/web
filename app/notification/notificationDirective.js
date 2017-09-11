@@ -37,7 +37,7 @@
                 state: "app.post"
             },
             "REQUEST_USER": {
-               icon: "account_balance",
+               icon: "person_add",
                state: "process_request",
                isDialog: true,
                dialogProperties: {

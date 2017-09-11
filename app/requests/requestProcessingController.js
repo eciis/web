@@ -4,12 +4,12 @@
     var app = angular.module('app');
 
     app.controller('RequestProcessingController', function RequestProcessingController(AuthService, RequestInvitationService,
-        MessageService, InstitutionService, $state, $mdDialog) {
+        MessageService, InstitutionService, key, $state, $mdDialog) {
         var requestController = this;
 
         requestController.institution = null;
 
-        requestController.requestKey = $state.params.key;
+        requestController.requestKey = key;
 
         requestController.user = AuthService.getCurrentUser();
 
@@ -18,7 +18,7 @@
 
             promise.then(function success() {
                 MessageService.showToast("Pedido aceito!");
-                goHome();
+                hideDialog();
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
@@ -40,7 +40,7 @@
             var promise = RequestInvitationService.rejectRequest(requestController.requestKey);
             promise.then(function success() {
                 MessageService.showToast("Pedido rejeitado!");
-                goHome();
+                hideDialog();
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
@@ -48,8 +48,8 @@
         }
 
 
-        function goHome() {
-            $state.go("app.home");
+        function hideDialog() {
+            $mdDialog.hide();
         }
 
         function loadInstitution(institutionKey) {
@@ -66,7 +66,7 @@
                 if(requestController.request.status === 'sent') {
                     loadInstitution(requestController.request.institution_key);
                 } else {
-                    $state.go("app.home");
+                    hideDialog();
                     MessageService.showToast("Você já utilizou este pedido.");
                 }
             }, function error(response) {

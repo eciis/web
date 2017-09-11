@@ -42,8 +42,11 @@
                isDialog: true,
                dialogProperties: {
                     templateUrl: "requests/request_processing.html",
-                    controller: "RequestPrecessingController",
-                    controllerAs: "requestCtrl"
+                    controller: "RequestProcessingController",
+                    controllerAs: "requestCtrl",
+                    locals: {
+                        key: ""
+                    }
                }
             }
         };
@@ -68,17 +71,19 @@
                 var state = type_data[notification.type].state;
                 $state.go(state, {key: notification.entity_key});
             }
-            controller.markAsRead(notification);
         };
 
         controller.action = function action(notification) {
             var notificationProperties = type_data[notification.type];
 
             if (notificationProperties.isDialog) {
+                notificationProperties.dialogProperties.locals.key = notification.entity_key;
                 controller.showDialog(notificationProperties.dialogProperties);
             } else {
                 controller.goTo(notification);
             }
+
+            controller.markAsRead(notification);
         };
 
         controller.showDialog = function showDialog(dialogProperties) {
@@ -89,6 +94,7 @@
                 parent: angular.element(document.body),
                 targetEvent: event,
                 clickOutsideToClose:true,
+                locals: dialogProperties.locals,
                 openFrom: '#fab-new-post',
                 closeTo: angular.element(document.querySelector('#fab-new-post'))
             });

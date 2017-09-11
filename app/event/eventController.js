@@ -81,9 +81,9 @@
             var event = new Event(eventCtrl.event, eventCtrl.user.current_institution.key);
             event.convertDate();
             if (event.isValid()) {
-                EventService.createEvent(event).then(function success() {
+                EventService.createEvent(event).then(function success(response) {
                     eventCtrl.clear();
-                    eventCtrl.events.push(event);
+                    eventCtrl.events.push(response.data);
                     MessageService.showToast('Evento criado com sucesso, esperando aprovação!');
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);

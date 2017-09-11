@@ -74,15 +74,21 @@
           <md-subheader class="md-no-sticky">Eventos</md-subheader>
             <md-list-item class="md-3-line"
                 ng-repeat="event in eventCtrl.events" ng-click="null">
-              <div class="md-list-item-text" layout="column">
-                <div class="image-view" ng-if="event.photo_url">
-                  <img class="md-card-image" style="border-radius: 3%;" ng-src="{{ event.photo_url }}"/>
-                </div>
-                <h3>{{ event.start_time }}</h3>
-                <h3>{{ event.end_time }}</h3>
-                <h3>{{ event.title }}</h3>
-                <h3>{{ event.text }}</h3>
-                <h3>{{ event.local }}</h3>
+              <div class="image-view" ng-if="event.photo_url" layout="row">
+                <img class="md-card-image" style="border-radius: 3%;" ng-src="{{ event.photo_url }}"/>
+              </div>
+              <div class="md-list-item-text" style="padding: 2%;">
+                <h3>Horário</h3>
+                <p>De {{ event.start_time | date: 'dd-MM-yyyy'}} às {{ event.start_time | date: 'HH:mm:ss'}} até 
+                   {{ event.end_time | date: 'dd-MM-yyyy'}} às {{ event.end_time | date: 'HH:mm:ss'}}</p>
+                <h3>Título</h3>
+                <p>{{ event.title }}</p>
+                <h3 ng-if="event.text">Descrição</h3>
+                <p ng-if="event.text">{{ event.text }}</p>
+                <h3>Local</h3>
+                <p>{{ event.local }}</p>
+                <h3>Autor/Instituição</h3>
+                <p>{{ event.author_name }} por {{ event.institution_name}}</p>
               </div>
             </md-list-item>
         </md-list>

@@ -40,7 +40,7 @@ class Event(ndb.Model):
     ]), default='published')
 
     # Date and time of a initial time of a event
-    start_time = ndb.DateTimeProperty(required=True)    
+    start_time = ndb.DateTimeProperty(required=True)
 
     # Date and time of a end time of a event
     end_time = ndb.DateTimeProperty(required=True)

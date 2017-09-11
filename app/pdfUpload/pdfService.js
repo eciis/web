@@ -54,11 +54,16 @@
         }
 
         service.getReadableURL = function getReadableURL(url, callback, pdf) {
+            var deferred = $q.defer();
             $http.get(url, {responseType:'arraybuffer'}).then(function success(response) {
                 var blob = new Blob([response.data], {type:'application/pdf'});
                 var url = URL.createObjectURL(blob);
                 callback(url, pdf);
+                deferred.resolve(response);
+            }, function error() {
+                deferred.reject();
             });
+            return deferred.promise;
         };
 
         function isValidPdf(file) {

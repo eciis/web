@@ -48,7 +48,7 @@
                   ngf-select="postCtrl.addImage(postCtrl.file)">
           <md-icon>add_a_photo</md-icon>
     </md-button>
-    <md-button title="Enviar" class="md-icon-button" ng-click="postCtrl.save(isEditing, originalPost, posts)" ng-disabled="!postCtrl.isPostValid()">
+    <md-button title="Enviar" class="md-icon-button" ng-click="postCtrl.save(isEditing, posts)" ng-disabled="!postCtrl.isPostValid()">
       <md-icon>send</md-icon>
     </md-button>
   </md-dialog-actions>

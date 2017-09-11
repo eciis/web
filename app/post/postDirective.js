@@ -13,7 +13,8 @@
         postCtrl.user = AuthService.getCurrentUser();
         postCtrl.photoUrl = "";
         postCtrl.pdfFiles = [];
-        var pdfUrlFiles = null;
+
+        var observer;
 
         postCtrl.addImage = function(image) {
             var newSize = 1024;
@@ -59,9 +60,9 @@
             }
         };
 
-        postCtrl.save = function save(isEditing, originalPost, posts) {
+        postCtrl.save = function save(isEditing, posts) {
             if(isEditing) {
-                postCtrl.editPost(originalPost);
+                postCtrl.editPost();
             } else {
                 postCtrl.createPost(posts);
             }
@@ -88,7 +89,7 @@
         function savePdf(pdfFile) {
             var deferred = $q.defer();
             if(pdfFile) {
-                PdfService.save(pdfFile, pdfUrlFiles).then(
+                PdfService.save(pdfFile).then(
                     function success(data) {
                         if(postCtrl.post.pdf_files) {
                             var pdf = {
@@ -97,7 +98,6 @@
                             };
                             postCtrl.post.pdf_files = postCtrl.post.pdf_files.concat(pdf);
                         }
-                        pdfUrlFiles = data.url;
                         deferred.resolve();
                     }, function error(response) {
                         MessageService.showToast(response.data.msg);
@@ -111,6 +111,7 @@
 
         function saveFiles() {
             var deferred = $q.defer();
+            postCtrl.post.pdf_files = _.intersectionWith(postCtrl.pdfFiles, postCtrl.post.pdf_files, _.isEqual);
             var files = _.filter(postCtrl.pdfFiles, {'type': 'application/pdf'});
             if(postCtrl.pdfFiles.length > 0) {
                 var promises = _.map(files, savePdf);
@@ -125,9 +126,9 @@
             return deferred.promise;
         }
 
-        postCtrl.editPost = function editPost(originalPost) {
+        postCtrl.editPost = function editPost() {
             deleteImage(postCtrl.post).then(function success() {
-                saveEditedPost(originalPost);
+                saveEditedPost();
             }, function error(error) {
                 MessageService.showToast(error);
             });
@@ -135,7 +136,6 @@
 
         function deleteImage() {
             var deferred = $q.defer();
-
             if(postCtrl.post.photo_url && postCtrl.deletePreviousImage) {
                 ImageService.deleteImage(postCtrl.post.photo_url).then(function success() {
                         postCtrl.post.photo_url = "";
@@ -147,7 +147,6 @@
             } else {
                 deferred.resolve();
             }
-
             return deferred.promise;
         }
 
@@ -182,12 +181,13 @@
             postCtrl.pdfFiles = [];
         };
 
-        function saveEditedPost(originalPost) {
+        function saveEditedPost() {
             var savePromises = [saveFiles(), saveImage()];
             $q.all(savePromises).then(function success() {
-                var post = new Post(originalPost, postCtrl.user.current_institution.key);
                 if (postCtrl.post.isValid()) {
-                    PostService.save(post, postCtrl.post).then(function success() {
+                    var patch = jsonpatch.generate(observer);
+                    patch = removeHashKeyFromPatch(patch);
+                    PostService.save(postCtrl.post.key, patch).then(function success() {
                         MessageService.showToast('Publicação editada com sucesso!');
                         $mdDialog.hide(postCtrl.post);
                     }, function error(response) {
@@ -198,6 +198,18 @@
                     MessageService.showToast('Edição inválida!');
                 }
             });
+        }
+
+        function removeHashKeyFromPatch(patch) {
+            var filteredPatch = [];
+            _.forEach(patch, function(obj) {
+                var path = obj.path.split('/');
+                path = path[path.length - 1];
+                if (path !== '$$hashKey') {
+                    filteredPatch.push(obj);
+                }
+            });
+            return filteredPatch;
         }
 
         postCtrl.cancelDialog = function() {
@@ -228,6 +240,8 @@
         (function main() {
             if($scope.isEditing) {
                 postCtrl.createEditedPost($scope.originalPost);
+                observer = jsonpatch.observe(postCtrl.post);
+
             }
         })();
 
@@ -237,7 +251,6 @@
            postCtrl.deletePreviousImage = true;
         };
     });
-
 
     app.directive("savePost", function() {
         return {

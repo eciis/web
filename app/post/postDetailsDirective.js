@@ -14,10 +14,6 @@
         postDetailsCtrl.showComments = false;
         postDetailsCtrl.savingComment = false;
         postDetailsCtrl.savingLike = false;
-        postDetailsCtrl.pdfFiles = null;
-        postDetailsCtrl.post = null;
-        postDetailsCtrl.posts = null;
-        postDetailsCtrl.isPostPage = null;
 
         var URL_POST = '#/posts/';
         postDetailsCtrl.user = AuthService.getCurrentUser();
@@ -43,20 +39,6 @@
                 MessageService.showToast('Cancelado');
             });
         };
-
-        function getPdfUrl() {
-            postDetailsCtrl.pdfFiles = postDetailsCtrl.post.shared_post ?
-                        postDetailsCtrl.post.shared_post.pdf_files.slice() : postDetailsCtrl.post.pdf_files.slice();
-            if(postDetailsCtrl.pdfFiles) {
-                _.forEach(postDetailsCtrl.pdfFiles, function(pdf) {
-                    PdfService.getReadableURL(pdf.url, setPdfURL, pdf);
-                });
-            }
-        }
-
-        function setPdfURL(url, pdf) {
-            pdf.url = url;
-        }
 
         postDetailsCtrl.isAuthorized = function isAuthorized() {
             return postDetailsCtrl.isPostAuthor() || isInstitutionAdmin();
@@ -353,32 +335,31 @@
         }
 
         postDetailsCtrl.pdfDialog = function(ev, pdf) {
-            $mdDialog.show({
-                templateUrl: 'post/pdfDialog.html',
-                targetEvent: ev,
-                clickOutsideToClose:true,
-                locals: {
-                    pdfUrl: pdf.url
-                },
-                controller: DialogController,
-                controllerAs: 'ctrl'
-            });
+            var readablePdf = {url: ''};
+            PdfService.getReadableURL(pdf.url, setPdfURL, readablePdf).then(
+                function success() {
+                    $mdDialog.show({
+                        templateUrl: 'post/pdfDialog.html',
+                        targetEvent: ev,
+                        clickOutsideToClose:true,
+                        locals: {
+                            pdfUrl: readablePdf.url
+                        },
+                        controller: DialogController,
+                        controllerAs: 'ctrl'
+                    });
+                });
         };
+
+        function setPdfURL(url, pdf) {
+            pdf.url = url;
+        }
 
         function DialogController($mdDialog, pdfUrl) {
             var ctrl = this;
             var trustedUrl = $sce.trustAsResourceUrl(pdfUrl);
             ctrl.pdfUrl = trustedUrl;
         }
-
-        (function main() {
-            if($scope.post && ($scope.isPostPage !== undefined)) {
-                postDetailsCtrl.posts = $scope.posts;
-                postDetailsCtrl.post = $scope.post;
-                postDetailsCtrl.isPostPage = $scope.isPostPage;
-                getPdfUrl();
-            }
-        })();
     });
 
     app.directive("postDetails", function() {
@@ -387,7 +368,8 @@
             templateUrl: "post/post_details.html",
             controllerAs: "postDetailsCtrl",
             controller: "PostDetailsController",
-            scope: {
+            scope: {},
+            bindToController: {
                 posts: '=',
                 post: '=',
                 isPostPage: '='

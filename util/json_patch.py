@@ -141,13 +141,16 @@ class Operation(object):
             return obj
 
         attribute_path = path_list.pop(0)
+
         _assert(
             not hasattr(obj, attribute_path),
             "Attribute %s not found" % attribute_path
         )
-        attribute = getattr(obj, attribute_path)
+        if len(path_list) > 0:
+            index = int(path_list[-1])
+            return getattr(obj, attribute_path)[index]
 
-        return Operation.go_through_path(self, attribute, path_list)
+        return getattr(obj, attribute_path)
 
     def operation_in_list(self, value, entity_class, attribute_list, index):
         """Execute operation in list."""
@@ -208,13 +211,20 @@ class Replace(Operation):
     @verify_entity
     def operation_in_attribute(self, value, entity_class, obj, attribute):
         """Execute Operation replace in attribute."""
-        _assert(
-            not hasattr(obj, attribute),
-            "Attribute %s not found" % attribute
-        )
         _assert(value is None, "Value can not be None")
 
-        obj.__setattr__(attribute, value)
+        if not isinstance(obj, dict):
+            _assert(
+                not hasattr(obj, attribute),
+                "Attribute %s not found" % attribute
+            )
+            obj.__setattr__(attribute, value)
+        else:
+            _assert(
+                attribute not in obj,
+                "Attribute %s not found" % attribute
+            )
+            obj[attribute] = value
 
 
 class Test(Operation):

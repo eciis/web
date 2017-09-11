@@ -23,7 +23,8 @@ from handlers.search_handler import SearchHandler
 from handlers.invite_handler import InviteHandler
 from handlers.redirect_handler import AppRedirectHandler
 from handlers.user_request_handler import UserRequestHandler
-from handlers.institution_parent_request_handler import InstitutionParentRequestHandler
+from handlers.institution_parent_request_collection_handler import InstitutionParentRequestCollectionHandler
+from handlers.institution_parent_request_collection_handler import InstitutionChildrenCollectionRequestHandler
 from handlers.institution_hierarchy_handler import InstitutionHierarchyHandler
 
 methods = set(webapp2.WSGIApplication.allowed_methods)
@@ -33,6 +34,8 @@ webapp2.WSGIApplication.allowed_methods = frozenset(methods)
 app = webapp2.WSGIApplication([
     ("/api/invites", InviteCollectionHandler),
     ("/api/invites/(.*)", InviteHandler),
+    ("/api/requests/(.*)/institution_parent", InstitutionParentRequestHandler),
+    ("/api/requests/(.*)/institution_children", InstitutionChildrenRequestHandler),
     ("/api/institutions", InstitutionCollectionHandler),
     ("/api/institutions/(.*)/timeline", InstitutionTimelineHandler),
     ("/api/institutions/(.*)/members", InstitutionMembersHandler),
@@ -40,8 +43,8 @@ app = webapp2.WSGIApplication([
     ("/api/institutions/(.*)/hierarchy/(.*)", InstitutionHierarchyHandler),
     ("/api/institutions/(.*)/invites/(.*)", InstitutionHandler),
     ("/api/institutions/(.*)/requests/user", UserRequestHandler),
-    ("/api/institutions/(.*)/requests/institution_parent", InstitutionParentRequestHandler),
-    ("/api/institutions/(.*)/requests/institution_children", InstitutionChildrenRequestHandler),
+    ("/api/institutions/(.*)/requests/institution_parent", InstitutionParentRequestCollectionHandler),
+    ("/api/institutions/(.*)/requests/institution_children", InstitutionChildrenCollectionRequestHandler),
     ("/api/institutions/(.*)", InstitutionHandler),
     ("/api/key/(.*)", GetKeyHandler),
     ("/api/posts/(.*)/comments/(.*)", PostCommentHandler),

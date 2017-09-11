@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Institution Parent RequestHandler."""
+"""Institution Parent Collectcion Request Handler."""
 
 import json
 from utils import login_required
@@ -8,14 +8,28 @@ from utils import Utils
 from custom_exceptions.entityException import EntityException
 from handlers.base_handler import BaseHandler
 from models.factory_invites import InviteFactory
+from models.request_institution_parent import RequestInstitutionParent
 
 
-class InstitutionParentRequestHandler(BaseHandler):
-    """Request Handler."""
+class InstitutionParentRequestCollectionHandler(BaseHandler):
+    """Institution Parent Collectcion Request Handler."""
+
+    @json_response
+    @login_required
+    def get(self, user, institution_key):
+        """Get requests for parent links."""
+        queryRequests = RequestInstitutionParent.query(
+            RequestInstitutionParent.institution_key == ndb.Key(urlsafe=institution_key),
+            RequestInstitutionParent.status == 'sent'
+        )
+
+        requests = [request.make() for request in queryRequests]
+
+        self.response.write(json.dumps(requests))
 
     @login_required
     @json_response
-    def post(self, user):
+    def post(self, user, institution_key):
         """Handler of post requests."""
         data = json.loads(self.request.body)
         host = self.request.host

@@ -6,6 +6,7 @@ import json
 from utils import Utils
 from models.invite import Invite
 from utils import login_required
+from utils import create_user
 from utils import json_response
 
 from util.json_patch import JsonPatch

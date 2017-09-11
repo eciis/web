@@ -17,7 +17,7 @@ from oauth2client import client, crypt
 from oauth2client.crypt import AppIdentityError
 
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
-
+import time
 
 class Utils():
 
@@ -176,20 +176,30 @@ def login_required(method):
             self.response.set_status(401)
             return
 
-        user_email = credential.get('email', 'Unknown')
         user_name = credential.get('name', 'Unknown')
-
+        user_email = credential.get('email', 'Unknown')
         user = User.get_by_email(user_email)
 
         if user is None:
-            user = User()
-            user.email = user_email
-            user.name = user_name
-            user.photo_url = "/images/avatar.jpg"
+            time.sleep(0.1)
+            user = User.get_by_email(user_email)
 
-            user.put()
+        if user is None:
+            user = create_user(user_name, user_email)
+
         method(self, user, *args)
     return login
+
+
+def create_user(user_name, user_email):
+    """Create user."""
+    user = User()
+    user.email = user_email
+    user.name = user_name
+    user.photo_url = "/images/avatar.jpg"
+    user.put()
+
+    return user
 
 
 def json_response(method):

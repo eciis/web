@@ -3,7 +3,7 @@
     var app = angular.module('app');
 
     app.controller("EventController", function EventController(MessageService, AuthService, ImageService,
-                     $rootScope, mdcDateTimeDialog, EventService, $state) {
+                     $rootScope, mdcDateTimeDialog, mdcDatetimePickerDefaultLocale, EventService, $state) {
         var eventCtrl = this;
 
         eventCtrl.event = {};
@@ -15,7 +15,6 @@
 
         eventCtrl.user = AuthService.getCurrentUser();
         eventCtrl.photoUrl = "";
-        eventCtrl.date = "";
 
         eventCtrl.addImage = function(image) {
             var newSize = 1024;
@@ -38,9 +37,10 @@
 
         eventCtrl.isValidEvent = function isValidEvent() {
             var isTitleUndefined = eventCtrl.event.title === undefined;
+            var isLocalUndefined = eventCtrl.event.local === undefined;
             var isValidDate = eventCtrl.event.start_time <= 
                 eventCtrl.event.end_time;
-            return !isTitleUndefined && isValidDate;
+            return !isTitleUndefined && isValidDate && !isLocalUndefined;
         };
 
         eventCtrl.save = function save() {
@@ -82,9 +82,7 @@
             event.convertDate();
             if (event.isValid()) {
                 EventService.createEvent(event).then(function success() {
-                    eventCtrl.event = {};
-                    eventCtrl.showButton = true;
-                    eventCtrl.photoUrl = "";
+                    eventCtrl.clear();
                     eventCtrl.events.push(event);
                     MessageService.showToast('Evento criado com sucesso, esperando aprovação!');
                 }, function error(response) {
@@ -96,10 +94,11 @@
             }
         }
 
-        eventCtrl.cancel = function() {
+        eventCtrl.clear = function() {
             eventCtrl.event = {};
             eventCtrl.photoUrl = "";
             eventCtrl.showButton = true;
+            eventCtrl.photoBase64Data = undefined;
         };
 
         eventCtrl.showButtonSend = function() {

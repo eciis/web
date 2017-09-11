@@ -32,17 +32,17 @@
         </md-input-container>
         <div layout="row">
           <md-input-container class="md-input-has-placeholder">
-            <label>Start Date/Time</label>
-            <input mdc-datetime-picker="" date="true" time="true" type="text"
-            placeholder="Date" ng-model="eventCtrl.event.start_time" class=" md-input"
-            readonly="readonly">
+            <label>Início</label>
+            <input mdc-datetime-picker="" date="true" time="true" type="text" format="DD-MM-YYYY HH:mm" lang="pt-BR"
+            placeholder="Data/Horário" ng-model="eventCtrl.event.start_time" class=" md-input" today-text="Hoje"
+            readonly="readonly" cancel-text="Cancelar">
             <div class="md-errors-spacer"></div>
           </md-input-container>
           <md-input-container class="md-input-has-placeholder">
-            <label>End Date/Time</label>
-            <input mdc-datetime-picker="" date="true" time="true" type="text"
-            placeholder="Date" class=" md-input" readonly="readonly"
-            id="input_1" ng-model="eventCtrl.event.end_time">
+            <label>Fim</label>
+            <input mdc-datetime-picker="" date="true" time="true" type="text" lang="pt-BR" today-text="Hoje"
+            placeholder="Data/Horário" class=" md-input" readonly="readonly" format="DD-MM-YYYY HH:mm"
+            id="input_1" ng-model="eventCtrl.event.end_time" cancel-text="Cancelar">
             <div class="md-errors-spacer"></div>
           </md-input-container>
         </div>
@@ -54,7 +54,7 @@
       </md-card-content>
       <div layout="row">
         <span flex></span>
-        <md-button class="md-icon-button" ng-click="eventCtrl.cancel()" ng-if="!eventCtrl.showButton">
+        <md-button class="md-icon-button" ng-click="eventCtrl.clear()" ng-if="!eventCtrl.showButton">
           <md-icon>cancel</md-icon>
         </md-button>
         <md-button class="md-icon-button" ng-click="null" ng-model="eventCtrl.file" ngf-pattern="'image/*'"
@@ -75,9 +75,11 @@
             <md-list-item class="md-3-line"
                 ng-repeat="event in eventCtrl.events" ng-click="null">
               <div class="md-list-item-text" layout="column">
-                <div class="image-view">
+                <div class="image-view" ng-if="event.photo_url">
                   <img class="md-card-image" style="border-radius: 3%;" ng-src="{{ event.photo_url }}"/>
                 </div>
+                <h3>{{ event.start_time }}</h3>
+                <h3>{{ event.end_time }}</h3>
                 <h3>{{ event.title }}</h3>
                 <h3>{{ event.text }}</h3>
                 <h3>{{ event.local }}</h3>

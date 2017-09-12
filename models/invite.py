@@ -79,7 +79,7 @@ class Invite(PolyModel):
         entity_type = entity_type or 'INVITE'
 
         message = json.dumps({
-            'from': user.name, 'type': 'INVITE'
+            'from': user.name, 'type': entity_type
         })
 
         send_message_notification(

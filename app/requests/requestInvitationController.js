@@ -3,7 +3,7 @@
 (function () {
     var app = angular.module('app');
 
-    app.controller("RequestInvitationController", function RequestInvitationController($mdDialog, $q, MessageService, InstitutionService, AuthService, InviteService) {
+    app.controller("RequestInvitationController", function RequestInvitationController($mdDialog, $q, MessageService, InstitutionService, AuthService, RequestInvitationService) {
         var requestInvCtrl = this;
 
         requestInvCtrl.search = "";
@@ -18,16 +18,19 @@
         requestInvCtrl.request = function request() {
             var dataInvite = {
                 institution_key : requestInvCtrl.institutionSelect.key,
-                invitee : requestInvCtrl.currentUser.email,
-                inviter_key : requestInvCtrl.institutionSelect.admin.key,
+                sender_key : requestInvCtrl.currentUser.key,
+                admin_key : requestInvCtrl.institutionSelect.admin.key,
                 is_request : true,
-                type_of_invite : 'USER'
+                type_of_invite : 'REQUEST_USER'
             };
 
-            var invite = new Invite(dataInvite);
-            var promise = InviteService.sendInvite(invite);
+            var request = new Invite(dataInvite);
+            var promise = RequestInvitationService.sendRequest(request, requestInvCtrl.institutionSelect.key);
             promise.then(function success() {
+                $mdDialog.hide();
                 MessageService.showToast("Pedido enviado com sucesso!");
+            }, function error() {
+                requestInvCtrl.cancelDialog();
             });
         };
 

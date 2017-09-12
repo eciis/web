@@ -27,5 +27,7 @@ class UserTimelineHandler(BaseHandler):
                 user.follows)).order(Post.last_modified_date)
 
             array = [Post.make(post, self.request.host) for post in queryPosts]
+            visible_posts = [post for post in array
+                             if not Post.is_hidden(post)]
 
-        self.response.write(json.dumps(array))
+        self.response.write(json.dumps(visible_posts))

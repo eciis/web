@@ -21,7 +21,7 @@
                 state: "app.post"
             },
             "SHARED_POST": {
-                icon: "inbox",
+                icon: "share",
                 state: "app.post"
             },
             "INVITE": {
@@ -29,7 +29,12 @@
                 state: "new_invite"
             },
             "INSTITUTION": {
-                icon: "account_balance"
+                icon: "account_balance",
+                state: "app.post"
+            },
+            "REPLY_COMMENT": {
+                icon: "reply",
+                state: "app.post"
             }
         };
 
@@ -58,6 +63,12 @@
 
         controller.format = function format(notification) {
             return NotificationService.formatMessage(notification);
+        };
+
+        controller.clearAll = function clearAll() {
+            _.forEach(controller.notifications, function(notification) {
+                controller.markAsRead(notification);
+            });
         };
 
         (function main() {

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Institution Children Request Handler."""
+"""Institution Parent Request Handler."""
 
 import json
 from utils import login_required
@@ -9,7 +9,7 @@ from handlers.base_handler import BaseHandler
 from google.appengine.ext import ndb
 
 
-class InstitutionChildrenRequestHandler(BaseHandler):
+class InstitutionParentRequestHandler(BaseHandler):
     """Institution Children Request Handler."""
 
     @login_required
@@ -28,9 +28,9 @@ class InstitutionChildrenRequestHandler(BaseHandler):
         request.change_status('accepted')
         request.put()
 
-        institution_children = request.institution_key.get()
-        institution_children.parent_institution = request.institution_requested_key
-        institution_children.put()
+        parent_institution = request.institution_key.get()
+        parent_institution.children_institutions.append(request.institution_requested_key)
+        parent_institution.put()
 
         self.response.write(json.dumps(Utils.toJson(institution_children)))
 

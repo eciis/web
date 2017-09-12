@@ -1,26 +1,26 @@
 # -*- coding: utf-8 -*-
-"""User request handler test."""
+"""User request handler collection test."""
 
 import json
 from test_base_handler import TestBaseHandler
 from models.user import User
 from models.institution import Institution
-from handlers.user_request_handler import UserRequestHandler
+from handlers.user_request_collection_handler import UserRequestCollectionHandler
 
 from mock import patch
 
 
-class UserRequestHandlerTest(TestBaseHandler):
-    """Test the handler UserRequestHandler."""
+class UserRequestCollectionHandlerTest(TestBaseHandler):
+    """Test the handler UserRequestCollectionHandler."""
 
     REQUEST_URI = "/api/institutions/(.*)/requests/user"
 
     @classmethod
     def setUp(cls):
         """Provide the base for the tests."""
-        super(UserRequestHandlerTest, cls).setUp()
+        super(UserRequestCollectionHandlerTest, cls).setUp()
         app = cls.webapp2.WSGIApplication(
-            [(UserRequestHandlerTest.REQUEST_URI, UserRequestHandler),
+            [(UserRequestCollectionHandlerTest.REQUEST_URI, UserRequestCollectionHandler),
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)

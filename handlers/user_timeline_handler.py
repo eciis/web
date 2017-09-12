@@ -21,6 +21,7 @@ class UserTimelineHandler(BaseHandler):
         @author: Mayza Nunes 18/05/2017
         """
         array = []
+        visible_posts = []
 
         if len(user.follows) > 0:
             queryPosts = Post.query(Post.institution.IN(

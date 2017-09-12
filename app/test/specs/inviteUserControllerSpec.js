@@ -2,6 +2,7 @@
 
 (describe('Test InviteUserController', function() {
     var INSTITUTIONS_URI = "/api/institutions/";
+    var REQUESTS_URI = "/api/institutions/";
 
     var inviteUserCtrl, httpBackend, scope, inviteService, createCtrl, state, authService;
 
@@ -46,6 +47,7 @@
         state = $state;
         inviteService = InviteService;
         httpBackend.when('GET', INSTITUTIONS_URI + splab.key).respond(splab);
+        httpBackend.when('GET', REQUESTS_URI + splab.key + "/requests/user").respond([]);
         httpBackend.when('GET', INSTITUTIONS_URI + splab.key + '/members').respond([tiago]);
         httpBackend.when('GET', 'institution/institution_page.html').respond(200);
         httpBackend.when('GET', "main/main.html").respond(200);

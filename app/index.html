@@ -11,6 +11,7 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.2.1/firebaseui.css" />
   <link rel="stylesheet" type="text/css" href="styles/custom.css">
+  <link rel="stylesheet" type="text/css" href="styles/material-datetimepicker.min.css">
   <link rel="stylesheet" type="text/css" href="libs/ng-img-crop.min.css">
 </head>
 <body ng-app="app" ng-cloak layout="column">
@@ -55,6 +56,7 @@
   <script src="libs/ng-file-upload.min.js"></script>
   <script src="libs/ng-img-crop.min.js"></script>
   <script src="libs/ngClipboard.js"></script>
+  <script src="libs/angular-material-datetimepicker.min.js"></script>
 
   <!-- Models -->
   <script src="user/user.js"></script>
@@ -79,9 +81,13 @@
   <!-- User -->
   <script src="user/userService.js"></script>
   <script src="user/userInactiveController.js"></script>
+  <script src="user/profileService.js"></script>
+
 
   <!-- Requests -->
+  <script src="requests/requestInvitationService.js"></script>
   <script src="requests/requestInvitationController.js"></script>
+  <script src="requests/requestProcessingController.js"></script>
 
   <!-- Error Library -->
   <script src="error/errorController.js"></script>
@@ -96,6 +102,10 @@
   <script src="post/postPageController.js"></script>
   <script src="post/timelineDirective.js"></script>
 
+    <!-- Event Library -->
+  <script src="event/event.js"></script>
+  <script src="event/eventService.js"></script>
+  <script src="event/eventController.js"></script>
 
   <!-- Institution Library -->
   <script src="institution/institutionController.js"></script>

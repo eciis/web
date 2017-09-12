@@ -3,7 +3,7 @@
         <img ng-src="{{commentCtrl.comment.author_img}}" class="md-avatar" alt="{{commentCtrl.comment.author_name}}" />
         <div class="md-list-item-text" layout="column">
           <div layout="column">
-            <h4>{{commentCtrl.comment.author_name}} - {{commentCtrl.comment.institution_name | uppercase}}<small></h4>
+            <h4><a href class="hyperlink" ng-click="commentCtrl.showUserProfile(commentCtrl.comment.author_key, $event)">{{commentCtrl.comment.author_name}}</a> - {{commentCtrl.comment.institution_name | uppercase}}<small></h4>
             <small style="color: #7f7f7f;" class="md-caption">
               {{commentCtrl.comment.publication_date | amUtc | amLocal | amCalendar:referenceTime:formats}}
             </small>
@@ -41,7 +41,7 @@
         <img ng-src="{{reply.author_img}}" class="md-avatar" alt="{{reply.author_name}}" />
         <div class="md-list-item-text" layout="column">
           <div layout="column">
-            <h4>{{reply.author_name}} - {{reply.institution_name | uppercase}}<small></h4>
+            <h4><a href class="hyperlink" ng-click="commentCtrl.showUserProfile(reply.author_key, $event)">{{reply.author_name}}</a> - {{reply.institution_name | uppercase}}<small></h4>
             <small style="color: #7f7f7f;" class="md-caption">
               {{reply.publication_date | amUtc | amLocal | amCalendar:referenceTime:formats}}
             </small>

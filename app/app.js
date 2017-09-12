@@ -11,6 +11,7 @@
         'ngImgCrop',
         'angularMoment',
         'ngClipboard',
+        'ngMaterialDatePicker',
         'ngMessages'
     ]);
 
@@ -80,6 +81,15 @@
                     }
                 }
             })
+            .state("app.event", {
+                url: "/event",
+                views: {
+                    content: {
+                        templateUrl: "event/event.html",
+                        controller: "EventController as eventCtrl",
+                    }
+                }
+            })
             .state("app.manage_institution.edit_info", {
                 url: "/edit",
                 views: {
@@ -130,6 +140,15 @@
                     main: {
                         templateUrl: "invites/new_invite_page.html",
                         controller: "NewInviteController as newInviteCtrl"
+                    }
+                }
+            })
+            .state("process_request", {
+                url: "/:key/process_request",
+                views: {
+                    main: {
+                        templateUrl: "requests/request_processing.html",
+                        controller: "RequestProcessingController as requestCtrl"
                     }
                 }
             })

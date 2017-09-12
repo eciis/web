@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller('PostDetailsController', function(PostService, AuthService, CommentService, $mdToast, $state,
-        $mdDialog, NotificationService, MessageService, ngClipboard) {
+        $mdDialog, NotificationService, MessageService, ngClipboard, ProfileService) {
         var postDetailsCtrl = this;
 
         var LIMIT_CHARACTERS_POST = 1000;
@@ -55,12 +55,12 @@
         };
 
         postDetailsCtrl.showSharedPost = function showSharedPost() {
-            return postDetailsCtrl.post.shared_post && 
+            return postDetailsCtrl.post.shared_post &&
                 !postDetailsCtrl.isDeleted();
         };
 
         postDetailsCtrl.showTextPost = function showTextPost(){
-            return !postDetailsCtrl.isDeleted() && 
+            return !postDetailsCtrl.isDeleted() &&
                 !postDetailsCtrl.post.shared_post;
         };
 
@@ -70,7 +70,7 @@
         };
 
         postDetailsCtrl.disableButtonLike = function disableButtonLike() {
-            return postDetailsCtrl.savingLike || 
+            return postDetailsCtrl.savingLike ||
                 postDetailsCtrl.isDeleted();
         };
 
@@ -309,9 +309,13 @@
         postDetailsCtrl.isLongPostTimeline = function(text){
             if(text){
                 var qtdChar = text.length;
-                return !postDetailsCtrl.isPostPage && 
+                return !postDetailsCtrl.isPostPage &&
                     qtdChar >= LIMIT_CHARACTERS_POST;
             }
+        };
+
+        postDetailsCtrl.showUserProfile = function showUserProfile(userKey, ev) {
+            ProfileService.showProfile(userKey, ev);
         };
 
         function adjustText(text){
@@ -349,7 +353,7 @@
         };
     });
 
-    app.controller('CommentController', function CommentController(CommentService, MessageService) {
+    app.controller('CommentController', function CommentController(CommentService, MessageService, ProfileService) {
         var commentCtrl = this;
 
         // Model to store data of a new reply on a comment
@@ -392,6 +396,10 @@
                 return _.includes(reply.likes, commentCtrl.user.key);
             }
             return _.includes(commentCtrl.comment.likes, commentCtrl.user.key);
+        };
+
+        commentCtrl.showUserProfile = function showUserProfile(userKey, ev) {
+            ProfileService.showProfile(userKey, ev);
         };
 
         commentCtrl.getReplies = function getReplies() {
@@ -477,7 +485,7 @@
             }
             var commentHasActivity = commentCtrl.numberOfReplies() > 0 || 
                 commentCtrl.numberOfLikes() > 0;
-            return !commentHasActivity && 
+            return !commentHasActivity &&
                 commentCtrl.comment.author_key == commentCtrl.user.key;
         };
 
@@ -501,7 +509,7 @@
             }
         };
     });
-    
+
     app.controller("SharePostController", function SharePostController(user, posts, post, $mdDialog, PostService,
      MessageService, $state) {
         var shareCtrl = this;
@@ -537,7 +545,6 @@
                 $mdDialog.hide();
                 MessageService.showToast(response.data.msg);
             });
-            
         };
 
         shareCtrl.goToPost = function goToPost() {

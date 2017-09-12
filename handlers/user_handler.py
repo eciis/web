@@ -7,6 +7,8 @@ from utils import Utils
 from models.invite import Invite
 from utils import login_required
 from utils import json_response
+from models.user import InstitutionProfile
+from custom_exceptions.fieldException import FieldException
 
 from util.json_patch import JsonPatch
 
@@ -69,6 +71,7 @@ class UserHandler(BaseHandler):
         data = json.loads(self.request.body)
 
         institution_key = ndb.Key(urlsafe=data['institutions'][-1])
+        institution = institution_key.get()
 
         invite = ndb.Key(urlsafe=invite_key).get()
         invite.change_status('accepted')
@@ -76,8 +79,6 @@ class UserHandler(BaseHandler):
         user.add_institution(institution_key)
         user.follow(institution_key)
         user.change_state('active')
-
-        institution = institution_key.get()
 
         institution.add_member(user)
         institution.follow(user.key)
@@ -102,7 +103,15 @@ class UserHandler(BaseHandler):
         data = self.request.body
 
         """Apply patch."""
-        JsonPatch.load(data, user)
+        try:
+            JsonPatch.load(data, user)
+        except TypeError:
+            JsonPatch.load(data, user, InstitutionProfile)
+            Utils._assert(
+                not InstitutionProfile.is_valid(user.institution_profiles,
+                                                len(user.institutions)),
+                "The profile is invalid.", FieldException)
+        user.put()
 
         if(user.state == 'inactive'):
             remove_user_from_institutions(user)

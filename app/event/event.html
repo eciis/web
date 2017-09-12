@@ -89,6 +89,9 @@
                 <p>Autor/Instituição</p>
                 <h3>{{ event.author_name }} por {{ event.institution_name}}</h3>
               </div>
+              <md-button class="md-icon-button" ng-click="eventCtrl.share(event)">
+                <md-icon>share</md-icon>
+              </md-button>
             </md-list-item>
         </md-list>
       </md-card>

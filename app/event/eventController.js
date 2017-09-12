@@ -3,7 +3,7 @@
     var app = angular.module('app');
 
     app.controller("EventController", function EventController(MessageService, AuthService, ImageService,
-                     $rootScope, mdcDateTimeDialog, EventService, $state) {
+                     $rootScope, mdcDateTimeDialog, EventService, $state, PostService) {
         var eventCtrl = this;
 
         eventCtrl.event = {};
@@ -34,6 +34,17 @@
                 eventCtrl.photoUrl = image.src;
             });
         }
+
+        eventCtrl.share = function share(event) {
+            var post = new Post({}, eventCtrl.user.current_institution.key);
+            post.shared_event = event.key;
+            PostService.createPost(post).then(function success() {
+                MessageService.showToast('Evento compartilhado com sucesso!');
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
+            });
+
+        };
 
         eventCtrl.save = function save() {
             if (eventCtrl.photoBase64Data) {

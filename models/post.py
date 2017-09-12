@@ -144,7 +144,7 @@ class Post(ndb.Model):
         post = Post()
 
         if data.get('shared_event') is not None:
-            post.shared_post = ndb.Key(urlsafe=data["shared_event"])
+            post.shared_event = ndb.Key(urlsafe=data["shared_event"])
         elif data.get('shared_post') is not None:
             post.shared_post = ndb.Key(urlsafe=data["shared_post"])
         else:

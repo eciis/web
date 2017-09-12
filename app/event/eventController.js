@@ -84,9 +84,10 @@
         eventCtrl.showButtonSend = function() {
             var isTitleUndefined = eventCtrl.event.title === undefined;
             var isLocalUndefined = eventCtrl.event.local === undefined;
-            var isValidDate = eventCtrl.event.start_time <= 
-                eventCtrl.event.end_time;
-            return !isTitleUndefined && isValidDate && !isLocalUndefined;
+            var isDateStartUndefined = eventCtrl.event.start_time === undefined;
+            var isDateEndUndefined = eventCtrl.event.end_time === undefined;
+            return !isTitleUndefined && !isLocalUndefined &&
+                    !isDateStartUndefined && !isDateEndUndefined;
         };
 
         eventCtrl.showImage = function() {

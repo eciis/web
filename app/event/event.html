@@ -33,16 +33,16 @@
         <div layout="row">
           <md-input-container class="md-input-has-placeholder">
             <label>Início</label>
-            <input mdc-datetime-picker="" date="true" time="true" type="text" format="DD-MM-YYYY HH:mm" lang="pt-BR"
-            placeholder="Data/Horário" ng-model="eventCtrl.event.start_time" class=" md-input" today-text="Hoje"
-            readonly="readonly" cancel-text="Cancelar">
+            <input mdc-datetime-picker="" date="true" time="true" type="text" format="DD-MM-YYYY HH:mm" lang="pt-BR" required="true"
+            placeholder="Data/Horário" ng-model="eventCtrl.event.start_time" class=" md-input" today-text="Hoje" min-date="null"
+            max-date="eventCtrl.event.end_time" readonly="readonly" cancel-text="Cancelar">
             <div class="md-errors-spacer"></div>
           </md-input-container>
           <md-input-container class="md-input-has-placeholder">
             <label>Fim</label>
-            <input mdc-datetime-picker="" date="true" time="true" type="text" lang="pt-BR" today-text="Hoje"
-            placeholder="Data/Horário" class=" md-input" readonly="readonly" format="DD-MM-YYYY HH:mm"
-            id="input_1" ng-model="eventCtrl.event.end_time" cancel-text="Cancelar">
+            <input mdc-datetime-picker="" date="true" time="true" type="text" lang="pt-BR" today-text="Hoje" required="true"
+            placeholder="Data/Horário" class=" md-input" readonly="readonly" format="DD-MM-YYYY HH:mm" max-date="null"
+            ng-model="eventCtrl.event.end_time" cancel-text="Cancelar" min-date="eventCtrl.event.start_time">
             <div class="md-errors-spacer"></div>
           </md-input-container>
         </div>
@@ -54,7 +54,7 @@
       </md-card-content>
       <div layout="row">
         <span flex></span>
-        <md-button class="md-icon-button" ng-click="eventCtrl.clear()" ng-if="!eventCtrl.showButton">
+        <md-button class="md-icon-button" ng-click="eventCtrl.clean()" ng-if="!eventCtrl.showButton">
           <md-icon>cancel</md-icon>
         </md-button>
         <md-button class="md-icon-button" ng-click="null" ng-model="eventCtrl.file" ngf-pattern="'image/*'"
@@ -79,15 +79,15 @@
               </div>
               <div class="md-list-item-text" style="padding: 2%;">
                 <label>{{ event.title }}</label>
-                <h3>Horário</h3>
-                <p>De {{ event.start_time | date: 'dd-MM-yyyy'}} às {{ event.start_time | date: 'HH:mm:ss'}} até 
-                   {{ event.end_time | date: 'dd-MM-yyyy'}} às {{ event.end_time | date: 'HH:mm:ss'}}</p>
-                <h3 ng-if="event.text">Descrição</h3>
-                <p ng-if="event.text">{{ event.text }}</p>
-                <h3>Local</h3>
-                <p>{{ event.local }}</p>
-                <h3>Autor/Instituição</h3>
-                <p>{{ event.author_name }} por {{ event.institution_name}}</p>
+                <p>Horário</p>
+                <h3>De {{ event.start_time | amUtc | amLocal | amCalendar:referenceTime:formats}} até 
+                   {{ event.end_time | amUtc | amLocal | amCalendar:referenceTime:formats }}</h3>
+                <p ng-if="event.text">Descrição</p>
+                <h3 ng-if="event.text">{{ event.text }}</h3>
+                <p>Local</p>
+                <h3>{{ event.local }}</h3>
+                <p>Autor/Instituição</p>
+                <h3>{{ event.author_name }} por {{ event.institution_name}}</h3>
               </div>
             </md-list-item>
         </md-list>

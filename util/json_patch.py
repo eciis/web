@@ -137,20 +137,25 @@ class Operation(object):
 
     def go_through_path(self, obj, path_list):
         """Traverse the paths and returns the last accessed object."""
+        integer_signals = "-+"
+
         if len(path_list) == 0:
             return obj
 
         attribute_path = path_list.pop(0)
 
+        if len(path_list) > 0 and path_list[0].lstrip(integer_signals).isdigit():
+            index = int(path_list[0])
+            return getattr(obj, attribute_path)[index]
+
         _assert(
             not hasattr(obj, attribute_path),
             "Attribute %s not found" % attribute_path
         )
-        if len(path_list) > 0:
-            index = int(path_list[-1])
-            return getattr(obj, attribute_path)[index]
 
-        return getattr(obj, attribute_path)
+        attribute = getattr(obj, attribute_path)
+
+        return Operation.go_through_path(self, attribute, path_list)
 
     def operation_in_list(self, value, entity_class, attribute_list, index):
         """Execute operation in list."""

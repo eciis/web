@@ -53,6 +53,21 @@
             return filename;
         }
 
+        service.deleteFile = function deleteFile(fileURL) {
+            var deferred = $q.defer();
+            var storage = firebase.storage().refFromURL(fileURL);
+            if (storage) {
+                storage.delete().then(function success() {
+                    deferred.resolve();
+                }, function error() {
+                    deferred.reject();
+                });
+            } else {
+                deferred.reject();
+            }
+            return deferred.promise;
+        };
+
         service.getReadableURL = function getReadableURL(url, callback, pdf) {
             var deferred = $q.defer();
             $http.get(url, {responseType:'arraybuffer'}).then(function success(response) {

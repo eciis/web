@@ -117,6 +117,7 @@
                 postDetailsCtrl.post.title = editedPost.title;
                 postDetailsCtrl.post.text = editedPost.text;
                 postDetailsCtrl.post.photo_url = editedPost.photo_url;
+                postDetailsCtrl.post.pdf_files = editedPost.pdf_files;
             }, function error() {});
         };
 

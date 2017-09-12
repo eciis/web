@@ -13,6 +13,7 @@
         postCtrl.user = AuthService.getCurrentUser();
         postCtrl.photoUrl = "";
         postCtrl.pdfFiles = [];
+        postCtrl.deletedFiles = [];
 
         var observer;
 
@@ -114,12 +115,43 @@
             postCtrl.post.pdf_files = _.intersectionWith(postCtrl.pdfFiles, postCtrl.post.pdf_files, _.isEqual);
             var files = _.filter(postCtrl.pdfFiles, {'type': 'application/pdf'});
             if(postCtrl.pdfFiles.length > 0) {
+                postCtrl.loading = true;
                 var promises = _.map(files, savePdf);
                 $q.all(promises).then(function success() {
+                    postCtrl.loading = false;
                     deferred.resolve();
                 }, function error() {
                     deferred.reject();
                 });
+            } else {
+                deferred.resolve();
+            }
+            return deferred.promise;
+        }
+
+        function deletePdf(pdf) {
+            var deferred = $q.defer();
+            if(pdf) {
+                PdfService.deleteFile(pdf.url).then(function success() {
+                    deferred.resolve();
+                }, function error() {
+                    deferred.reject();
+                });
+            } else {
+                deferred.resolve();
+            }
+            return deferred.promise;
+        }
+
+        function deleteFiles() {
+            var deferred = $q.defer();
+            if (postCtrl.deletedFiles.length > 0) {
+                var promises = _.map(postCtrl.deletedFiles, deletePdf);
+                    $q.all(promises).then(function success() {
+                        deferred.resolve();
+                    }, function error() {
+                        deferred.reject();
+                    });
             } else {
                 deferred.resolve();
             }
@@ -186,13 +218,16 @@
             $q.all(savePromises).then(function success() {
                 if (postCtrl.post.isValid()) {
                     var patch = jsonpatch.generate(observer);
-                    patch = removeHashKeyFromPatch(patch);
+                    patch = removeUnnecessaryFromPatch(patch);
                     PostService.save(postCtrl.post.key, patch).then(function success() {
-                        MessageService.showToast('Publicação editada com sucesso!');
-                        $mdDialog.hide(postCtrl.post);
-                    }, function error(response) {
-                        $mdDialog.cancel();
-                        MessageService.showToast(response.data.msg);
+                        deleteFiles().then(function success() {
+                            postCtrl.deletedFiles = [];
+                            MessageService.showToast('Publicação editada com sucesso!');
+                            $mdDialog.hide(postCtrl.post);
+                        }, function error(response) {
+                            $mdDialog.cancel();
+                            MessageService.showToast(response.data.msg);
+                        });
                     });
                 } else {
                     MessageService.showToast('Edição inválida!');
@@ -200,12 +235,12 @@
             });
         }
 
-        function removeHashKeyFromPatch(patch) {
+        function removeUnnecessaryFromPatch(patch) {
             var filteredPatch = [];
             _.forEach(patch, function(obj) {
                 var path = obj.path.split('/');
                 path = path[path.length - 1];
-                if (path !== '$$hashKey') {
+                if (path !== '$$hashKey' && path !== 'isValid') {
                     filteredPatch.push(obj);
                 }
             });
@@ -234,6 +269,9 @@
         };
 
         postCtrl.hideFile = function(index) {
+            if (_.includes(postCtrl.post.pdf_files, postCtrl.pdfFiles[index])) {
+                postCtrl.deletedFiles.push(postCtrl.pdfFiles[index]);
+            }
             postCtrl.pdfFiles.splice(index, 1);
         };
 

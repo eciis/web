@@ -62,7 +62,7 @@ class RequestHandler(BaseHandler):
 
     @login_required
     def delete(self, user, request_key):
-        """Change request status from 'sent' to 'resolved'."""
+        """Change request status from 'sent' to 'rejected'."""
         request_key = ndb.Key(urlsafe=request_key)
         request = request_key.get()
         request.change_status('rejected')

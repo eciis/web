@@ -6,6 +6,7 @@ from utils import Utils
 from google.appengine.ext import ndb
 from utils import login_required
 from handlers.base_handler import BaseHandler
+from custom_exceptions.entityException import EntityException
 
 
 def makeUser(user, request):
@@ -37,6 +38,12 @@ class RequestHandler(BaseHandler):
     def put(self, user, request_key):
         """Handler PUT Requests."""
         request = ndb.Key(urlsafe=request_key).get()
+
+        Utils._assert(
+            request.status != 'sent',
+            "this request has already been processed",
+            EntityException)
+
         request.change_status('accepted')
 
         institution_key = request.institution_key
@@ -55,7 +62,7 @@ class RequestHandler(BaseHandler):
 
     @login_required
     def delete(self, user, request_key):
-        """Change invite status from 'sent' to 'resolved'."""
+        """Change request status from 'sent' to 'resolved'."""
         request_key = ndb.Key(urlsafe=request_key)
         request = request_key.get()
         request.change_status('rejected')

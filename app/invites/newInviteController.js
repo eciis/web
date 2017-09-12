@@ -41,6 +41,7 @@
                     institution_name: newInviteCtrl.institution.name,
                     institution_photo_url: newInviteCtrl.institution.photo_url};
             newInviteCtrl.user.addProfile(profile);
+            newInviteCtrl.user.setName(newInviteCtrl.name);
             AuthService.save();
             var patch = jsonpatch.generate(observer);
             var promise;
@@ -108,6 +109,10 @@
                     MessageService.showToast('Cancelado');
                 });
                 return promise;
+        };
+
+        newInviteCtrl.showInputName = function showInputName() {
+            return newInviteCtrl.user.name === 'unknown';
         };
 
 

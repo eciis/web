@@ -106,10 +106,10 @@ class UserHandler(BaseHandler):
         try:
             JsonPatch.load(data, user)
         except TypeError:
-            institution_key = json.loads(data)[0]['value']['institution_key']
             JsonPatch.load(data, user, InstitutionProfile)
             Utils._assert(
-                not InstitutionProfile.is_valid(user.institution_profiles, institution_key),
+                not InstitutionProfile.is_valid(user.institution_profiles,
+                                                len(user.institutions)),
                 "The profile is invalid.", FieldException)
         user.put()
 

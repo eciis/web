@@ -29,6 +29,11 @@
               </md-list-item>
             </md-list>
             <div layout="column" layout-align="center">
+            <md-input-container flex-gt-sm ng-if="newInviteCtrl.showInputName">
+              <label >Nome</label>
+              <input ng-model="newInviteCtrl.name">
+            </md-input-container>
+
             <md-input-container flex-gt-sm >
               <label >Telefone institucional</label>
               <input ng-pattern="newInviteCtrl.phoneRegex" ng-model="newInviteCtrl.phone" placeholder="(DDD) 99999-9999">

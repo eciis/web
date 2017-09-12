@@ -22,12 +22,14 @@ class InstitutionProfile(ndb.Model):
         return profile
 
     @staticmethod
-    def is_valid(profiles, institution_key):
+    def is_valid(profiles, institutions_size):
         """Verify the user profile."""
+        if len(profiles) != institutions_size + 1:
+            return False
         for profile in profiles:
-            if profile.institution_key == institution_key:
-                return profile.office is not None
-        return False
+            if not profile.office:
+                return False
+        return True
 
 
 class User(ndb.Model):

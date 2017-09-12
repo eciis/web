@@ -4,7 +4,6 @@
 import json
 from utils import login_required
 from utils import json_response
-from utils import Utils
 from handlers.base_handler import BaseHandler
 from google.appengine.ext import ndb
 
@@ -32,7 +31,7 @@ class InstitutionChildrenRequestHandler(BaseHandler):
         institution_children.parent_institution = request.institution_requested_key
         institution_children.put()
 
-        self.response.write(json.dumps(Utils.toJson(institution_children)))
+        self.response.write(json.dumps(request.make()))
 
     @login_required
     def delete(self, user, request_key):

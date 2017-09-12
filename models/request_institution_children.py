@@ -76,6 +76,7 @@ class RequestInstitutionChildren(Invite):
         """Create json of invite to user."""
         request_inst_children_json = super(RequestInstitutionChildren, self).make()
         request_inst_children_json['sender'] = self.sender_key.get().email
+        request_inst_children_json['status'] = self.status
         request_inst_children_json['institution_key'] = self.institution_key.urlsafe()
         request_inst_children_json['type_of_invite'] = 'REQUEST_INSTITUTION_CHILDREN'
         request_inst_children_json['institution_requested_key'] = self.institution_requested_key.urlsafe()

@@ -92,6 +92,9 @@ class ReplyCommentHandler(BaseHandler):
         comment = post.get_comment(comment_id)
         replies = comment.get('replies')
 
+        Utils._assert(len(replies.get(reply_id).get('likes')) > 0,
+                      "Comment with activity can't be removed", NotAuthorizedException)
+
         check_permission(user, institution, post, replies.get(reply_id))
         
         del replies[reply_id]

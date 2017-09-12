@@ -69,24 +69,14 @@
         };
 
         service.like = function like(postKey, commentId, replyId) {
-            var deferred = $q.defer();
-            var URI = POST_URI + postKey + '/comments/' + commentId;
-            if (replyId) {
-                URI = URI + "/replies/" + replyId + "/likes";
-            } else {
-                URI = URI + "/likes";
-            }
-            $http.post(URI).then(
-                function success(response) {
-                    deferred.resolve(response);
-                }, function error(response) {
-                    deferred.reject(response);
-                }
-            );
-            return deferred.promise;
+            return likeOrDeslike(postKey, commentId, replyId, $http.post);
         };
 
         service.dislike = function like(postKey, commentId, replyId) {
+            return likeOrDeslike(postKey, commentId, replyId, $http.delete);
+        };
+
+        function likeOrDeslike(postKey, commentId, replyId, method) {
             var deferred = $q.defer();
             var URI = POST_URI + postKey + '/comments/' + commentId;
             if (replyId) {
@@ -94,7 +84,7 @@
             } else {
                 URI = URI + "/likes";
             }
-            $http.delete(URI).then(
+            method(URI).then(
                 function success(response) {
                     deferred.resolve(response);
                 }, function error(response) {
@@ -102,6 +92,6 @@
                 }
             );
             return deferred.promise;
-        };
+        }
     });
 })();

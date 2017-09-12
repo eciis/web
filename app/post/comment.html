@@ -19,14 +19,14 @@
                 ng-disabled="commentCtrl.disableButton()" ng-class="commentCtrl.isLikedByUser()?'md-warn':''">
               <md-icon>grade</md-icon>
             </md-button>
-            <md-button class="post-count md-icon-button md-primary md-hue-1" ng-click="postDetailsCtrl.getLikes()"
+            <md-button class="post-count md-icon-button md-primary md-hue-1"
                 title="{{ commentCtrl.numberOfLikes() === 0? 'Ainda ninguém curtiu' : 
                             commentCtrl.numberOfLikes() === 1? '1 pessoa curtiu' : 
                               commentCtrl.numberOfLikes() + ' pessoas curtiram' }}">
               {{ commentCtrl.numberOfLikes() }}
             </md-button>
             <md-button class="md-icon-button" aria-label="Reply" ng-click="showReply = !showReply"
-                title="Comentar">
+                title="Comentar" ng-disabled="commentCtrl.disableButton()">
               <md-icon>reply</md-icon>
             </md-button>
             <md-button class="post-count md-icon-button md-primary md-hue-1">
@@ -57,10 +57,10 @@
                 ng-disabled="commentCtrl.disableButton()" ng-class="commentCtrl.isLikedByUser(reply)?'md-warn':''">
               <md-icon>grade</md-icon>
             </md-button>
-            <md-button class="post-count md-icon-button md-primary md-hue-1" ng-click="postDetailsCtrl.getLikes()"
-                title="{{ commentCtrl.numberOfLikes() === 0? 'Ainda ninguém curtiu' : 
-                            commentCtrl.numberOfLikes() === 1? '1 pessoa curtiu' : 
-                              commentCtrl.numberOfLikes() + ' pessoas curtiram' }}">
+            <md-button class="post-count md-icon-button md-primary md-hue-1"
+                title="{{ commentCtrl.numberOfLikes(reply) === 0? 'Ainda ninguém curtiu' : 
+                            commentCtrl.numberOfLikes(reply) === 1? '1 pessoa curtiu' : 
+                              commentCtrl.numberOfLikes(reply) + ' pessoas curtiram' }}">
               {{ commentCtrl.numberOfLikes(reply) }}
             </md-button>
           </div>

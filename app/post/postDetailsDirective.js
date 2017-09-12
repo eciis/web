@@ -470,10 +470,13 @@
         };
 
         commentCtrl.canDeleteComment = function canDeleteComment(reply) {
-            var commentHasActivity = commentCtrl.numberOfReplies() > 0;
             if (reply) {
-                return reply.author_key == commentCtrl.user.key;
+                var replyHasActivity = commentCtrl.numberOfLikes(reply) > 0;
+                return !replyHasActivity && 
+                    reply.author_key == commentCtrl.user.key;
             }
+            var commentHasActivity = commentCtrl.numberOfReplies() > 0 || 
+                commentCtrl.numberOfLikes() > 0;
             return !commentHasActivity && 
                 commentCtrl.comment.author_key == commentCtrl.user.key;
         };

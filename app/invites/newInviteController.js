@@ -112,7 +112,7 @@
         };
 
         newInviteCtrl.showInputName = function showInputName() {
-            return newInviteCtrl.user.name === 'unknown';
+            return newInviteCtrl.user.name === 'Unknown';
         };
 
 

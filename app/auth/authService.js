@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.service("AuthService", function AuthService($q, $state, $firebaseAuth, $window, UserService, MessageService, ngClipboard) {
+    app.service("AuthService", function AuthService($q, $state, $firebaseAuth, $window, UserService, MessageService) {
         var service = this;
 
         var authObj = $firebaseAuth();
@@ -97,10 +97,6 @@
 
         service.getUserToken = function getUserToken() {
             return userInfo.accessToken;
-        };
-
-        service.tokenToClipboard = function tokenToClipboard() {
-            ngClipboard.toClipboard(userInfo.accessToken);
         };
 
         service.isLoggedIn = function isLoggedIn() {

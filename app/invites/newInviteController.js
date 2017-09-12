@@ -41,7 +41,7 @@
                     institution_name: newInviteCtrl.institution.name,
                     institution_photo_url: newInviteCtrl.institution.photo_url};
             newInviteCtrl.user.addProfile(profile);
-            newInviteCtrl.user.setName(newInviteCtrl.name);
+            newInviteCtrl.user.name = newInviteCtrl.name;
             AuthService.save();
             var patch = jsonpatch.generate(observer);
             var promise;

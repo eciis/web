@@ -1,0 +1,27 @@
+<md-dialog aria-label="Profiles" layout-padding>
+    <div layout-padding>
+        <md-dialog-content class="md-dialog-content" layout="column" ng-if="profileCtrl.isToShow()">
+            <div layout="row" layout-align="center center">
+                <img style="border-radius: 50%; width: 80px;" ng-src="{{ profileCtrl.user.photo_url }}" alt="{{profileCtrl.user.name}}" />
+            </div>
+            <div style="margin-top: -20px;" layout="row" layout-align="center center">
+                <h2>{{profileCtrl.user.name}}</h2>
+            </div>
+            <md-subheader><h3>Perfis Institucionais: </h3></md-subheader>
+            <md-list ng-repeat="profile in profileCtrl.user.institution_profiles">
+                <md-list-item class="md-3-line">
+                    <img ng-src="{{ profile.institution.photo_url }}" class="md-avatar" alt="{{profile.institution.name}}" />
+                    <div class="md-list-item-text" layout="column">
+                      <h3><b>{{ profile.institution.name }}</b> </h3>
+                      <h4><b>Cargo: {{profile.office}}</b></h4>
+                      <h4><b>Telefone institucional: {{profileCtrl.showProperty(profile.phone)}}</b></h4>
+                      <h4><b>Email institucional: {{profileCtrl.showProperty(profile.email)}}</b></h4>
+                    </div>
+                </md-list-item>
+            </md-list>
+        </md-dialog-content>
+        <md-dialog-content ng-if="!profileCtrl.isToShow()">
+            <h2>O usuário não possui instituições.</h2>
+        </md-dialog-content>
+    </div>
+</md-dialog>

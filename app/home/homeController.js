@@ -4,7 +4,7 @@
     var app = angular.module("app");
 
     app.controller("HomeController", function HomeController(PostService, AuthService,
-            InstitutionService, $interval, $mdToast, $mdDialog, $state, MessageService) {
+            InstitutionService, $interval, $mdToast, $mdDialog, $state, MessageService, ProfileService) {
         var homeCtrl = this;
 
         var ACTIVE = "active";
@@ -17,6 +17,10 @@
 
         homeCtrl.goToInstitution = function goToInstitution(institutionKey) {
             $state.go('app.institution', {institutionKey: institutionKey});
+        };
+
+        homeCtrl.showUserProfile = function showUserProfile(userKey, ev) {
+            ProfileService.showProfile(userKey, ev);
         };
 
         homeCtrl.newPost = function newPost(event) {

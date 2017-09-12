@@ -5,8 +5,10 @@ import json
 from utils import Utils
 from google.appengine.ext import ndb
 from utils import login_required
+from utils import json_response
 from handlers.base_handler import BaseHandler
 from custom_exceptions.entityException import EntityException
+from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
 
 def makeUser(user, request):
@@ -24,21 +26,38 @@ def makeUser(user, request):
     return user_json
 
 
+def checkIsAdmin(method):
+    """Method of check if user is admin of institution."""
+    def params(self, user, request_key, *args):
+        request = ndb.Key(urlsafe=request_key).get()
+        institution = request.institution_key.get()
+
+        Utils._assert(
+            institution.admin != user.key,
+            "User is not admin!",
+            NotAuthorizedException)
+
+        return method(self, user, request, *args)
+
+    return params
+
+
 class RequestHandler(BaseHandler):
     """Request Handler."""
 
     @login_required
-    def get(self, user, request_key):
+    @checkIsAdmin
+    @json_response
+    def get(self, user, request):
         """Handler GET Requests."""
-        request = ndb.Key(urlsafe=request_key).get()
         self.response.write(json.dumps(request.make()))
 
     @login_required
+    @json_response
+    @checkIsAdmin
     @ndb.transactional(xg=True)
-    def put(self, user, request_key):
+    def put(self, user, request):
         """Handler PUT Requests."""
-        request = ndb.Key(urlsafe=request_key).get()
-
         Utils._assert(
             request.status != 'sent',
             "this request has already been processed",
@@ -61,9 +80,9 @@ class RequestHandler(BaseHandler):
         self.response.write(json.dumps(makeUser(user, self.request)))
 
     @login_required
-    def delete(self, user, request_key):
+    @checkIsAdmin
+    @json_response
+    def delete(self, user, request):
         """Change request status from 'sent' to 'rejected'."""
-        request_key = ndb.Key(urlsafe=request_key)
-        request = request_key.get()
         request.change_status('rejected')
         request.put()

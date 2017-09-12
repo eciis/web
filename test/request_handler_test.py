@@ -26,10 +26,10 @@ class RequestHandlerTest(TestBaseHandler):
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
-    @patch('utils.verify_token', return_value={'email': 'other_user@test.com'})
+    @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
     def test_get(self, verify_token):
         """Test method get of RequestHandler."""
-        response = self.testapp.get('/api/requests/' + self.request.key.urlsafe() +'/user')
+        response = self.testapp.get('/api/requests/' + self.request.key.urlsafe() + '/user')
         request = json.loads(response._app_iter[0])
 
         self.assertEqual(
@@ -52,7 +52,19 @@ class RequestHandlerTest(TestBaseHandler):
             'REQUEST_USER',
             "expected type_of_invite must be equal to  REQUEST_USER")
 
-    @patch('utils.verify_token', return_value={'email': 'other_user@test.com'})
+    @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
+    def test_get_user_not_admin(self, verify_token):
+        """Test get request with user is not admin."""
+        with self.assertRaises(Exception) as ex:
+            self.testapp.get('/api/requests/' + self.request.key.urlsafe() + '/user')
+
+        exception_message = get_message_exception(self, ex.exception.message)
+        self.assertEqual(
+            "Error! User is not admin!",
+            exception_message,
+            "Expected error message is Error! User is not admin!")
+
+    @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
     def test_put(self, verify_token):
         """Test method put of RequestHandler."""
         self.testapp.put('/api/requests/' + self.request.key.urlsafe() + '/user')
@@ -80,7 +92,7 @@ class RequestHandlerTest(TestBaseHandler):
             user.key in institution.followers,
             "key of user must be in institution followers")
 
-    @patch('utils.verify_token', return_value={'email': 'other_user@test.com'})
+    @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
     def test_put_request_accepted(self, verify_token):
         """Test put request accepted."""
         self.testapp.put('/api/requests/' + self.request.key.urlsafe() + '/user')
@@ -94,13 +106,37 @@ class RequestHandlerTest(TestBaseHandler):
             exception_message,
             "Expected error message is Error! this request has already been processed")
 
-    @patch('utils.verify_token', return_value={'email': 'other_user@test.com'})
+    @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
+    def test_put_user_not_admin(self, verify_token):
+        """Test put request with user is not admin."""
+        with self.assertRaises(Exception) as ex:
+            self.testapp.put('/api/requests/' + self.request.key.urlsafe() + '/user')
+
+        exception_message = get_message_exception(self, ex.exception.message)
+        self.assertEqual(
+            "Error! User is not admin!",
+            exception_message,
+            "Expected error message is Error! User is not admin!")
+
+    @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
     def test_delete(self, verify_token):
         """Test method delete of RequestHandler."""
         self.testapp.delete('/api/requests/' + self.request.key.urlsafe() + '/user')
         request = self.request.key.get()
 
         self.assertEqual(request.status, 'rejected')
+
+    @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
+    def test_delete_user_not_admin(self, verify_token):
+        """Test delete request with user is not admin."""
+        with self.assertRaises(Exception) as ex:
+            self.testapp.delete('/api/requests/' + self.request.key.urlsafe() + '/user')
+
+        exception_message = get_message_exception(self, ex.exception.message)
+        self.assertEqual(
+            "Error! User is not admin!",
+            exception_message,
+            "Expected error message is Error! User is not admin!")
 
 
 def initModels(cls):

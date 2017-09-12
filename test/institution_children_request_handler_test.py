@@ -34,15 +34,15 @@ class InstitutionChildrenRequestHandlerTest(TestBaseHandler):
 
         request = json.loads(request._app_iter[0])
 
-        institution = self.inst_test.key.get()
+        institution = self.inst_requested.key.get()
 
         self.assertEqual(
             request['status'],
             'accepted',
             'Expected status from request must be accepted')
         self.assertEqual(
-            institution.children_institutions[0], self.inst_requested.key,
-            "The children institution of inst test must be update to inst_requested")
+            institution.parent_institution, self.inst_test.key,
+            "The parent institution of inst requested must be update to inst test")
 
 
 def initModels(cls):

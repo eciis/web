@@ -9,11 +9,6 @@ class RequestInstitutionChildren(Invite):
     """Model of request children institution."""
 
     @staticmethod
-    def senderIsAdmin(sender_key, institution):
-        user = ndb.Key(urlsafe=sender_key).get()
-        return institution.admin == sender_key and institution.key in user.institutions_admin
-
-    @staticmethod
     def isLinked(institution, institution_requested):
         isParent = institution == institution_requested.parent_institution
         isChildren = institution in institution_requested.children_institutions

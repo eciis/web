@@ -27,8 +27,8 @@ class InstitutionChildrenRequestHandler(BaseHandler):
         request.change_status('accepted')
         request.put()
 
-        institution_children = request.institution_key.get()
-        institution_children.parent_institution = request.institution_requested_key
+        institution_children = request.institution_requested_key.get()
+        institution_children.parent_institution = request.institution_key
         institution_children.put()
 
         self.response.write(json.dumps(request.make()))

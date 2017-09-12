@@ -1,0 +1,30 @@
+<md-dialog>
+        <md-toolbar style="background-color: #00695C" layout="row">
+          <div class="md-toolbar-tools">
+            <h1 class="md-toolbar-tools">Novo pedido</h1>
+          </div>
+        </md-toolbar>
+
+        <md-dialog-content class="md-dialog-content" layout-gt-sm="column" layout-padding>
+          <div>
+            <div>
+              <md-list flex>
+                <md-subheader class="md-no-sticky">{{requestCtrl.request.sender}} pediu para ser membro de:</md-subheader>
+                <md-list-item class="md-3-line">
+                  <img ng-src="{{ requestCtrl.institution.photo_url }}" class="md-avatar" alt="{{requestCtrl.institution.name}}" />
+                  <div class="md-list-item-text" layout="column">
+                    <h3><b>{{ requestCtrl.institution.name }}</b> - {{ requestCtrl.institution.email }}</h3>
+                    <h4>{{ requestCtrl.institution.phone_number }} | {{ requestCtrl.institution.address }}</h4>
+                    <p>{{ requestCtrl.institution.description }}</p>
+                  </div>
+                </md-list-item>
+              </md-list>
+            </div>
+          </div>
+          </md-dialog-content>
+
+          <md-dialog-actions layout="row" layout="column" layout-align="end center" layout-wrap>
+             <md-button ng-click="requestCtrl.acceptRequest($event)" md-colors="{background: 'teal-900'}">Aceitar</md-button>
+             <md-button ng-click="requestCtrl.rejectRequest($event)" md-colors="{background: 'teal-900'}">Rejeitar</md-button>
+          </md-dialog-actions>
+</md-dialog>

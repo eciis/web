@@ -60,7 +60,7 @@ class InviteInstitution(Invite):
 
     def send_notification(self, user):
         """Method of send notification of invite institution."""
-        entity_type = 'INSTITUTION'
+        entity_type = 'INVITE'
 
         user_found = User.get_active_user(self.invitee)
 

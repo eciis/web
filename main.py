@@ -26,14 +26,16 @@ from handlers.invite_handler import InviteHandler
 from handlers.event_handler import EventHandler
 from handlers.event_collection_handler import EventCollectionHandler
 from handlers.redirect_handler import AppRedirectHandler
-from handlers.user_request_handler import UserRequestHandler
+from handlers.user_request_collection_handler import UserRequestCollectionHandler
 from handlers.institution_hierarchy_handler import InstitutionHierarchyHandler
+from handlers.request_handler import RequestHandler
 
 methods = set(webapp2.WSGIApplication.allowed_methods)
 methods.add('PATCH')
 webapp2.WSGIApplication.allowed_methods = frozenset(methods)
 
 app = webapp2.WSGIApplication([
+    ("/api/requests/(.*)/user", RequestHandler),
     ("/api/invites", InviteCollectionHandler),
     ("/api/invites/(.*)", InviteHandler),
     ("/api/events", EventCollectionHandler),
@@ -44,7 +46,7 @@ app = webapp2.WSGIApplication([
     ("/api/institutions/(.*)/followers", InstitutionFollowersHandler),
     ("/api/institutions/(.*)/hierarchy/(.*)", InstitutionHierarchyHandler),
     ("/api/institutions/(.*)/invites/(.*)", InstitutionHandler),
-    ("/api/institutions/(.*)/requests/user", UserRequestHandler),
+    ("/api/institutions/(.*)/requests/user", UserRequestCollectionHandler),
     ("/api/institutions/(.*)", InstitutionHandler),
     ("/api/key/(.*)", GetKeyHandler),
     ("/api/posts/(.*)/comments/(.*)/replies", ReplyCommentHandler),

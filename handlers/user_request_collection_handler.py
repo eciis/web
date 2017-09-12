@@ -1,17 +1,32 @@
 # -*- coding: utf-8 -*-
-"""Request Handler."""
+"""User Request Collection Handler."""
 
 import json
+from google.appengine.ext import ndb
 from utils import login_required
 from utils import json_response
 from utils import Utils
+from models.request_user import RequestUser
 from custom_exceptions.entityException import EntityException
 from handlers.base_handler import BaseHandler
 from models.factory_invites import InviteFactory
 
 
-class UserRequestHandler(BaseHandler):
-    """Request Handler."""
+class UserRequestCollectionHandler(BaseHandler):
+    """User Request Collection Handler."""
+
+    @json_response
+    @login_required
+    def get(self, user, institution_key):
+        """Get invites for new institutions make by Plataform."""
+        queryRequests = RequestUser.query(
+            RequestUser.institution_key == ndb.Key(urlsafe=institution_key),
+            RequestUser.status == 'sent'
+        )
+
+        requests = [request.make() for request in queryRequests]
+
+        self.response.write(json.dumps(requests))
 
     @login_required
     @json_response

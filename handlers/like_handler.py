@@ -20,7 +20,7 @@ class LikeException(Exception):
             message or 'User already made this action in publication.')
 
 
-class LikePostHandler(BaseHandler):
+class LikeHandler(BaseHandler):
     """Like Handler."""
 
     @json_response

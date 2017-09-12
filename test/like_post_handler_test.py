@@ -5,12 +5,12 @@ from test_base_handler import TestBaseHandler
 from models.post import Post
 from models.user import User
 from models.institution import Institution
-from handlers.like_post_handler import LikePostHandler
+from handlers.like_handler import LikeHandler
 
 from mock import patch
 
 
-class LikePostHandlerTest(TestBaseHandler):
+class LikeHandlerTest(TestBaseHandler):
     """Test the handler like_post_handler."""
 
     LIKE_URI = "/api/posts/%s/likes"
@@ -18,16 +18,16 @@ class LikePostHandlerTest(TestBaseHandler):
     @classmethod
     def setUp(cls):
         """Provide the base for the tests."""
-        super(LikePostHandlerTest, cls).setUp()
+        super(LikeHandlerTest, cls).setUp()
         app = cls.webapp2.WSGIApplication(
-            [("/api/posts/(.*)/likes", LikePostHandler),
+            [("/api/posts/(.*)/likes", LikeHandler),
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
     @patch('utils.verify_token', return_value={'email': 'otheruser@example.com'})
     def test_get(self, verify_token):
-        """Test method get of LikePostHandler."""
+        """Test method get of LikeHandler."""
         # Call the get method
         data = self.testapp.get(self.LIKE_URI % self.user_post.key.urlsafe())
         # Verify the status of request

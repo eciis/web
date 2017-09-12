@@ -12,7 +12,7 @@ from handlers.login_logout_handler import LogoutHandler
 from handlers.user_handler import UserHandler
 from handlers.post_collection_handler import PostCollectionHandler
 from handlers.post_handler import PostHandler
-from handlers.like_post_handler import LikePostHandler
+from handlers.like_handler import LikeHandler
 from handlers.institution_timeline_handler import InstitutionTimelineHandler
 from handlers.user_timeline_handler import UserTimelineHandler
 from handlers.erro_handler import ErroHandler
@@ -47,12 +47,12 @@ app = webapp2.WSGIApplication([
     ("/api/institutions/(.*)", InstitutionHandler),
     ("/api/key/(.*)", GetKeyHandler),
     ("/api/posts/(.*)/comments/(.*)/replies", ReplyCommentHandler),
-    ("/api/posts/(.*)/comments/(.*)/replies/(.*)/likes", LikePostHandler),
+    ("/api/posts/(.*)/comments/(.*)/replies/(.*)/likes", LikeHandler),
     ("/api/posts/(.*)/comments/(.*)/replies/(.*)", ReplyCommentHandler),
-    ("/api/posts/(.*)/comments/(.*)/likes", LikePostHandler),
+    ("/api/posts/(.*)/comments/(.*)/likes", LikeHandler),
     ("/api/posts/(.*)/comments", PostCommentHandler),
     ("/api/posts/(.*)/comments/(.*)", PostCommentHandler),
-    ("/api/posts/(.*)/likes", LikePostHandler),
+    ("/api/posts/(.*)/likes", LikeHandler),
     ("/api/posts/(.*)", PostHandler),
     ("/api/posts", PostCollectionHandler),
     ("/api/user", UserHandler),

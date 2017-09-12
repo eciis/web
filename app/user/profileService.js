@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.service("ProfileService", function UserService($mdDialog) {
+    app.service("ProfileService", function UserService($mdDialog, $http, $q) {
         var service = this;
 
         service.showProfile  = function showProfile(userKey, ev) {
@@ -17,6 +17,16 @@
                 targetEvent: ev,
                 clickOutsideToClose: true
             });
+        };
+
+        service.editProfile = function editProfile(data) {
+            var deffered = $q.defer();
+            $http.patch('/api/user', data).then(function success(info) {
+                deffered.resolve(info);
+            }, function error(info) {
+                deffered.reject(info);
+            });
+            return deffered.promise;
         };
 
         function ProfileController(user, UserService) {

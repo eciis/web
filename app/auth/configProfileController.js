@@ -15,6 +15,7 @@
         configProfileCtrl.loading = false;
         configProfileCtrl.cpfRegex = /^\d{3}\.\d{3}\.\d{3}\-\d{2}$/;
 
+
         var HAS_ONLY_ONE_INSTITUTION_MSG = "Esta é a única instituição ao qual você é vinculado." +
                 " Ao remover o vínculo você não poderá mais acessar o sistema," +
                 " exceto por meio de novo convite. Deseja remover?";
@@ -111,6 +112,20 @@
             }
         };
 
+        configProfileCtrl.editProfile = function editProfile(institutionKey, ev) {
+            $mdDialog.show({
+                templateUrl: 'user/edit_profile.html',
+                controller: EditProfileController,
+                controllerAs: "editProfileCtrl",
+                locals: {
+                    institution: institutionKey,
+                    user: configProfileCtrl.newUser
+                },
+                targetEvent: ev,
+                clickOutsideToClose: true
+            });
+        };
+
         function isAdmin(institution_key) {
             return configProfileCtrl.newUser.isAdmin(institution_key);
         }
@@ -166,6 +181,29 @@
                 MessageService.showToast(response.data.msg);
             });
             return promise;
+        }
+
+        function EditProfileController(institution, user, ProfileService) {
+            var editProfileCtrl = this;
+            editProfileCtrl.phoneRegex = /^(\([0-9]{2}\))\s([9]{1})?([0-9]{4})-([0-9]{4})$/;
+            var profileObserver;
+
+            editProfileCtrl.edit = function edit() {
+               var patch = jsonpatch.generate(profileObserver);
+               ProfileService.editProfile(patch).then(function success() {
+                    MessageService.showToast('Perfil editado com sucesso');
+                    AuthService.save();
+               }, function error(response) {
+                    MessageService.showToast(response.msg);
+               });
+            };
+
+            (function main() {
+                editProfileCtrl.profile = _.find(user.institution_profiles, function(profile) {
+                    return profile.institution_key === institution;
+                });
+                profileObserver = jsonpatch.observe(user);
+            })();
         }
 
         (function main() {

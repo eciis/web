@@ -190,12 +190,19 @@
 
             editProfileCtrl.edit = function edit() {
                var patch = jsonpatch.generate(profileObserver);
-               ProfileService.editProfile(patch).then(function success() {
-                    MessageService.showToast('Perfil editado com sucesso');
-                    AuthService.save();
-               }, function error(response) {
-                    MessageService.showToast(response.msg);
-               });
+               if(!_.isEmpty(patch)) {
+                    ProfileService.editProfile(patch).then(function success() {
+                        MessageService.showToast('Perfil editado com sucesso');
+                        AuthService.save();
+                    }, function error(response) {
+                        MessageService.showToast(response.msg);
+                    });
+               }
+               editProfileCtrl.closeDialog();
+            };
+
+            editProfileCtrl.closeDialog = function closeDialog() {
+                $mdDialog.hide();
             };
 
             (function main() {

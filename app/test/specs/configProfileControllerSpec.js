@@ -3,7 +3,7 @@
 (describe('Test ConfigProfileController', function() {
     var configCtrl, httpBackend, deffered, scope, userService, createCrtl, state,
     mdToast, authService, imageService, mdDialog, cropImageService;
-    
+
     var splab = {
         name: 'SPLAB',
         key: '987654321'
@@ -28,9 +28,9 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, 
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state,
         $mdToast, $mdDialog, UserService, AuthService, ImageService, CropImageService) {
-        
+
         httpBackend = $httpBackend;
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);
@@ -338,6 +338,14 @@
                 expect(authService.logout).toHaveBeenCalled();
                 done();
             });
+        });
+    });
+
+    describe('editProfile', function() {
+        it('should call mdDialog.show', function() {
+            spyOn(mdDialog, 'show');
+            configCtrl.editProfile(splab.key, '$event');
+            expect(mdDialog.show).toHaveBeenCalled();
         });
     });
 }));

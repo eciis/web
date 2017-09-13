@@ -1,21 +1,29 @@
-<md-dialog layout-padding>
-    <div flex>
-    <md-dialog-content class="md-dialog-content" layout="column" layout-align="center">
-        <md-input-container>
-            <label>Telefone institucional</label>
-            <input ng-model="editProfileCtrl.profile.phone" placeholder="(99) 99999-9999" ng-pattern="editProfileCtrl.phoneRegex">
-        </md-input-container>
-        <md-input-container>
-            <label>Email institucional</label>
-            <input ng-model="editProfileCtrl.profile.email" type="email">
-        </md-input-container>
-        <md-input-container>
-            <label>Cargo</label>
-            <input ng-model="editProfileCtrl.profile.office">
-        </md-input-container>
-    </md-dialog-content>
-    <md-dialog-actions layout="row" layout-align="end center">
-        <md-button class="md-raised md-warn" ng-click="editProfileCtrl.edit()">Editar</md-button>
-    </md-dialog-actions>
+<md-dialog layout-padding flex-md="30" flex-gt-sm="40" flex-sm="50" flex-xs="70">
+    <section layout="column" layout-align="end end">
+        <md-button class="md-icon-button" ng-click="editProfileCtrl.closeDialog()">
+            <md-icon>close</md-icon>
+        </md-button>
+    </section>
+    <section layout="row" layout-align="center center">
+        <h3 class="md-title">Editar perfil</h3>
+    </section>
+    <div>
+        <md-dialog-content class="md-dialog-content" layout="column" layout-align="center">
+            <md-input-container>
+                <label>Telefone institucional</label>
+                <input ng-model="editProfileCtrl.profile.phone" placeholder="(99) 99999-9999" ng-pattern="editProfileCtrl.phoneRegex">
+            </md-input-container>
+            <md-input-container>
+                <label>Email institucional</label>
+                <input ng-model="editProfileCtrl.profile.email" type="email">
+            </md-input-container>
+            <md-input-container>
+                <label>Cargo</label>
+                <input ng-model="editProfileCtrl.profile.office">
+            </md-input-container>
+        </md-dialog-content>
+        <md-dialog-actions layout="row" layout-align="end center">
+            <md-button class="md-raised" md-colors="::{background: 'dialogTheme-primary-900'}" ng-click="editProfileCtrl.edit()">Editar</md-button>
+        </md-dialog-actions>
     </div>
 </md-dialog>

@@ -27,6 +27,11 @@ def getInvites(user_email):
     return invites
 
 
+def define_entity(dictionary):
+    """Method of return entity class for create object in JasonPacth."""
+    return InstitutionProfile
+
+
 def makeUser(user, request):
     """TODO: Move this method to User when utils.py is refactored.
 
@@ -104,9 +109,9 @@ class UserHandler(BaseHandler):
 
         """Apply patch."""
         try:
-            JsonPatch.load(data, user)
+            JsonPatch.load(data, user, define_entity)
         except TypeError:
-            JsonPatch.load(data, user, InstitutionProfile)
+            JsonPatch.load(data, user, define_entity)
             Utils._assert(
                 not InstitutionProfile.is_valid(user.institution_profiles,
                                                 len(user.institutions)),

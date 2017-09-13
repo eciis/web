@@ -20,6 +20,15 @@ def create_json_patch(operation, path, value=None):
     return json_patch
 
 
+class Vehicle(object):
+    """Class Vehicle for using in tests."""
+
+    def __init__(self, num_wheels=None, brand=None):
+        """Constructor of class Vehicle."""
+        self.num_wheels = num_wheels
+        self.brand = brand
+
+
 class User(object):
     """Class for using in tests."""
 
@@ -27,9 +36,33 @@ class User(object):
         """Constructor of class User."""
         self.name = name
         self.age = age
-        self.emails = []
         self.parents = []
+        self.emails = []
         self.description = description
+
+
+def define_entity(dictionary):
+    """Return class of user."""
+    if isUser(dictionary):
+        return User
+    elif isVehicle(dictionary):
+        return Vehicle
+
+
+def isVehicle(dictionary):
+    """Verify if the dictionary matches an instance of a vehicle."""
+    num_wheels = dictionary.get('num_wheels', None)
+    brand = dictionary.get('brand', None)
+
+    return num_wheels and brand
+
+
+def isUser(dictionary):
+    """Verify if the dictionary matches an instance of a user."""
+    name = dictionary.get('name', None)
+    age = dictionary.get('age', None)
+
+    return name and age
 
 
 class TestJsonPatch(unittest.TestCase):
@@ -76,7 +109,7 @@ class TestOperationAdd(TestJsonPatch):
             "The attribute other_user must not exist"
         )
         json = '[{"op": "add", "path": "/other_user", "value": {"age": 23, "name": "Mayza"}}]'
-        self.json_patch.load(json, self.user, User)
+        self.json_patch.load(json, self.user, define_entity)
         self.assertTrue(
             hasattr(self.user, 'other_user'),
             "The attribute other_user must exist"
@@ -184,6 +217,37 @@ class TestOperationAdd(TestJsonPatch):
             "Luiz",
             "Name must be equal to Luiz")
 
+    def test_add_multiples_objects(self):
+        """Test add multiples objects."""
+        obj = '{"name": "Luiz", "age": 20, "vehicle": {"num_wheels": 4, "brand": "Test"}}'
+        json = '[{"op": "add", "path": "/parents/-", "value":' + obj + '}]'
+        self.json_patch.load(json, self.user, define_entity)
+
+        parent = self.user.parents[-1]
+
+        self.assertTrue(isinstance(parent, User))
+        self.assertTrue(isinstance(parent.vehicle, Vehicle))
+
+        self.assertEqual(
+            parent.name,
+            "Luiz",
+            "Name must be equal to Luiz")
+
+        self.assertEqual(
+            parent.age,
+            20,
+            "Age must be equal to 20")
+
+        self.assertEqual(
+            parent.vehicle.num_wheels,
+            4,
+            "num_wheels must be equal to 4")
+
+        self.assertEqual(
+            parent.vehicle.brand,
+            "Test",
+            "Brand must be equal to Test")
+
 
 class TestOperantionReplace(TestJsonPatch):
     """Class of test operation Replace."""
@@ -201,14 +265,14 @@ class TestOperantionReplace(TestJsonPatch):
     def test_replace_object(self):
         """Replace attribute other_user in user."""
         json = '[{"op": "add", "path": "/other_user", "value": {"age": 23, "name": "Mayza"}}]'
-        self.json_patch.load(json, self.user, User)
+        self.json_patch.load(json, self.user, define_entity)
 
         self.assertEqual(
             self.user.other_user.name, "Mayza",
             "Name must be equal to Mayza")
         self.assertEqual(self.user.other_user.age, 23, "Age must be equal to 23")
         json = '[{"op": "replace", "path": "/other_user", "value": {"age": 19, "name": "Luiz"}}]'
-        self.json_patch.load(json, self.user, User)
+        self.json_patch.load(json, self.user, define_entity)
         self.assertNotEqual(
             self.user.other_user.name, "Mayza",
             "Name must not be equal to Mayza")
@@ -259,7 +323,7 @@ class TestOperantionReplace(TestJsonPatch):
     def test_replace_object_in_list(self):
         """Replace object in list."""
         json = '[{"op": "add", "path": "/parents/-", "value": {"age": 19, "name": "Luiz"}}]'
-        self.json_patch.load(json, self.user, User)
+        self.json_patch.load(json, self.user, define_entity)
 
         parent = self.user.parents[-1]
         self.assertEqual(
@@ -326,13 +390,13 @@ class TestOperationRemove(TestJsonPatch):
     def test_rm_object(self):
         """Remove attribute other_user in user."""
         json = '[{"op": "add", "path": "/other_user", "value": {"age": 23, "name": "Mayza"}}]'
-        self.json_patch.load(json, self.user, User)
+        self.json_patch.load(json, self.user, define_entity)
 
         self.assertTrue(
             hasattr(self.user, 'other_user'),
             "The other_user attribute must exist")
         json = create_json_patch("remove", "/other_user")
-        self.json_patch.load(json, self.user, User)
+        self.json_patch.load(json, self.user, define_entity)
         self.assertFalse(
             hasattr(self.user, 'other_user'),
             "The other_user attribute must not exist")

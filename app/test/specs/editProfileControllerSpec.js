@@ -11,7 +11,6 @@
 
     var user = {
         name: 'User',
-        cpf: '121.445.044-07',
         email: 'maiana.brito@ccc.ufcg.edu.br',
         institutions: [splab],
         institution_profiles: [{office: 'developer', phone: '(99) 99999-9999', email: 'teste@gmail.com'}]

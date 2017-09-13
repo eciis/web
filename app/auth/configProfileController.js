@@ -71,6 +71,7 @@
             var deffered = $q.defer();
             if (configProfileCtrl.newUser.isValid()) {
                 var patch = jsonpatch.generate(observer);
+                patch = JSON.parse(angular.toJson(patch));
                 UserService.save(patch).then(function success() {
                     AuthService.reload().then(function success() {
                         $state.go("app.home");
@@ -173,6 +174,7 @@
 
         function deleteUser() {
             var patch = jsonpatch.generate(observer);
+            patch = JSON.parse(angular.toJson(patch));
             var promise = UserService.save(patch);
             promise.then(function success() {
                 AuthService.logout();
@@ -184,6 +186,7 @@
 
         (function main() {
             observer = jsonpatch.observe(configProfileCtrl.newUser);
+            jsonpatch.unobserve(configProfileCtrl.newUser.current_institution, observer);
 
             if (configProfileCtrl.newUser.name === 'Unknown') {
                 delete configProfileCtrl.newUser.name;
@@ -200,6 +203,7 @@
 
             editProfileCtrl.edit = function edit() {
                var patch = jsonpatch.generate(profileObserver);
+               patch = JSON.parse(angular.toJson(patch));
                if(!_.isEmpty(patch)) {
                     ProfileService.editProfile(patch).then(function success() {
                         MessageService.showToast('Perfil editado com sucesso');

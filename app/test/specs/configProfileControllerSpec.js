@@ -344,7 +344,7 @@
     describe('editProfile', function() {
         it('should call mdDialog.show', function() {
             spyOn(mdDialog, 'show');
-            configCtrl.editProfile(splab.key, '$event');
+            configCtrl.editProfile(splab, '$event');
             expect(mdDialog.show).toHaveBeenCalled();
         });
     });

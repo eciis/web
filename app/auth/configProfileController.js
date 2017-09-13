@@ -112,13 +112,13 @@
             }
         };
 
-        configProfileCtrl.editProfile = function editProfile(institutionKey, ev) {
+        configProfileCtrl.editProfile = function editProfile(inst, ev) {
             $mdDialog.show({
                 templateUrl: 'user/edit_profile.html',
                 controller: EditProfileController,
                 controllerAs: "editProfileCtrl",
                 locals: {
-                    institution: institutionKey,
+                    institution: inst,
                     user: configProfileCtrl.newUser
                 },
                 targetEvent: ev,
@@ -186,16 +186,18 @@
         function EditProfileController(institution, user, ProfileService) {
             var editProfileCtrl = this;
             editProfileCtrl.phoneRegex = /^(\([0-9]{2}\))\s([9]{1})?([0-9]{4})-([0-9]{4})$/;
+            editProfileCtrl.institution = institution;
             var profileObserver;
 
             editProfileCtrl.edit = function edit() {
                var patch = jsonpatch.generate(profileObserver);
+               console.log(patch);
                if(!_.isEmpty(patch)) {
                     ProfileService.editProfile(patch).then(function success() {
                         MessageService.showToast('Perfil editado com sucesso');
                         AuthService.save();
                     }, function error(response) {
-                        MessageService.showToast(response.msg);
+                        MessageService.showToast(response.data.msg);
                     });
                }
                editProfileCtrl.closeDialog();
@@ -207,7 +209,7 @@
 
             (function main() {
                 editProfileCtrl.profile = _.find(user.institution_profiles, function(profile) {
-                    return profile.institution_key === institution;
+                    return profile.institution_key === editProfileCtrl.institution.key;
                 });
                 profileObserver = jsonpatch.observe(user);
             })();

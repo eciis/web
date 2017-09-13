@@ -35,8 +35,8 @@ class EventCollectionHandlerTest(TestBaseHandler):
             'title': 'new event',
             'institution_key': self.certbio.key.urlsafe(),
             'text': 'testing new event',
-            'start_time': '20271224102548',
-            'end_time': '20271225102548',
+            'start_time': '2027-12-24T10:25:48',
+            'end_time': '2027-12-25T10:25:48',
             'local': 'local do evento'})
         # Retrieve the entities
         event = json.loads(event._app_iter[0])
@@ -60,8 +60,8 @@ class EventCollectionHandlerTest(TestBaseHandler):
                 'title': 'new event',
                 'institution_key': self.certbio.key.urlsafe(),
                 'text': 'testing new event',
-                'start_time': '20271224102548',
-                'end_time': '20271220102548',
+                'start_time': '2027-12-24T10:25:48',
+                'end_time': '2027-12-20T10:25:48',
                 'local': 'local do evento'})
 
         # Check if raise exception when the end time of event is before today
@@ -70,8 +70,8 @@ class EventCollectionHandlerTest(TestBaseHandler):
                 'title': 'new event',
                 'institution_key': self.certbio.key.urlsafe(),
                 'text': 'testing new event',
-                'start_time': '20101224102548',
-                'end_time': '20271220102548',
+                'start_time': '2010-12-24T10:25:48',
+                'end_time': '2027-12-20T10:25:48',
                 'local': 'local do evento'})
 
     @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})

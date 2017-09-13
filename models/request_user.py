@@ -65,7 +65,7 @@ class RequestUser(Invite):
     def send_notification(self, user):
         """Method of send notification of invite user."""
         entity_type = 'REQUEST_USER'
-        super(RequestUser, self).send_notification(user, entity_type)
+        super(RequestUser, self).send_notification(user, self.admin_key.urlsafe(), entity_type)
 
     def make(self):
         """Create json of invite to user."""

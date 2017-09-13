@@ -5,7 +5,6 @@ import json
 
 from utils import login_required
 from utils import json_response
-from utils import create_user
 
 from handlers.base_handler import BaseHandler
 from models.post import Post

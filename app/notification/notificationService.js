@@ -16,6 +16,7 @@
             'SHARED_POST': 'compartilhou seu post',
             'INVITE': 'te enviou um novo convite',
             'INSTITUTION': 'removeu a conexão entre suas instituições',
+            'REQUEST_USER': 'pediu para ser membro de sua instituição',
             'REPLY_COMMENT': 'respondeu o seu comentário'
         };
 

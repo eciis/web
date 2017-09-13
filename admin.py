@@ -9,6 +9,7 @@ import hashlib
 from utils import Utils
 
 from models.user import User
+from models.user import InstitutionProfile
 from models.institution import Institution
 from models.institution import Address
 from models.post import Post
@@ -44,9 +45,9 @@ def add_comments_to_post(user, user_reply, post, institution, comments_qnt=3):
     for i in range(comments_qnt):
         comment = Comment.create(texts[i], user)
         reply = Comment.create({
-                'text': 'Comentario', 
+                'text': 'Comentario',
                 'institution_key': institution.urlsafe()
-            }, 
+            },
             user_reply)
         comment.replies[reply.id] = Utils.toJson(reply)
         post.add_comment(comment)
@@ -108,6 +109,19 @@ def delete_all_in_index(index):
             index.delete(document_ids)
     except search.DeleteError:
         logging.exception("Error removing documents")
+
+
+def create_profile(user, institution):
+    """Create a profile."""
+    profile = InstitutionProfile()
+    profile.email = user.email
+    profile.phone = '(83) 99999-9999'
+    profile.institution_key = institution.key.urlsafe()
+    profile.institution_name = institution.name
+    profile.institution_photo_url = institution.photo_url
+    profile.office = 'Employee'
+    user.institution_profiles.append(profile)
+    user.put()
 
 
 class BaseHandler(webapp2.RequestHandler):
@@ -321,6 +335,7 @@ class ResetHandler(BaseHandler):
             certbio.add_member(user)
             user.add_institution(certbio.key)
             user.follow(certbio.key)
+            create_profile(user, certbio)
         for user in [jorge, mayza, maiana, luiz,
                      raoni, ruan, tiago, admin]:
             certbio.follow(user.key)
@@ -358,6 +373,7 @@ class ResetHandler(BaseHandler):
             splab.add_member(user)
             user.add_institution(splab.key)
             user.follow(splab.key)
+            create_profile(user, splab)
 
         for user in [jorge, andre, maiana, luiz,
                      raoni, ruan, tiago, admin]:
@@ -396,6 +412,7 @@ class ResetHandler(BaseHandler):
             eciis.add_member(user)
             user.add_institution(eciis.key)
             user.follow(eciis.key)
+            create_profile(user, eciis)
 
         for user in [mayza, andre, jorge, dalton,
                      maiana, luiz, raoni,

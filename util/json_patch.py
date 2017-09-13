@@ -20,10 +20,10 @@ def _assert(condition, msg):
         raise PatchException(msg)
 
 
-def create_entity(entity_class, properties_values):
+def create_entity(properties_values, entity_class=None):
     """Create new entity of class specified."""
-    entity = entity_class()
-    if not isinstance(entity, dict):
+    if entity_class:
+        entity = entity_class()
         for property in properties_values:
             setattr(entity, property, properties_values[property])
         return entity
@@ -49,7 +49,7 @@ def verify_entity(func):
     def params(self, value, entity_class, *args):
         """Receive params of function."""
         if isinstance(value, dict):
-            value = create_entity(entity_class, value)
+            value = create_entity(value, entity_class)
         return func(self, value, entity_class, *args)
     return params
 

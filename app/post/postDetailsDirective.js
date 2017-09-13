@@ -336,7 +336,7 @@
         }
 
         postDetailsCtrl.pdfDialog = function(ev, pdf) {
-            var readablePdf = {url: ''};
+            var readablePdf = {};
             PdfService.getReadableURL(pdf.url, setPdfURL, readablePdf).then(
                 function success() {
                     $mdDialog.show({

@@ -79,7 +79,7 @@ class PostHandler(BaseHandler):
                           NotAuthorizedException)
 
             """Apply patch."""
-            JsonPatch.load(data, post, dict)
+            JsonPatch.load(data, post)
 
             """Update post."""
             post.put()

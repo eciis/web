@@ -56,15 +56,11 @@
         service.deleteFile = function deleteFile(fileURL) {
             var deferred = $q.defer();
             var storage = firebase.storage().refFromURL(fileURL);
-            if (storage) {
-                storage.delete().then(function success() {
-                    deferred.resolve();
-                }, function error() {
-                    deferred.reject();
-                });
-            } else {
-                deferred.reject();
-            }
+            storage.delete().then(function success() {
+                deferred.resolve();
+            }, function error(error) {
+                deferred.reject(error);
+            });
             return deferred.promise;
         };
 

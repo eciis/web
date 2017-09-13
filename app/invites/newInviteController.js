@@ -13,14 +13,40 @@
 
         newInviteCtrl.user = AuthService.getCurrentUser();
 
+        newInviteCtrl.phoneRegex = /^(\([0-9]{2}\))\s([9]{1})?([0-9]{4})-([0-9]{4})$/;
+
+        var observer;
+
         var institutionKey;
 
         newInviteCtrl.acceptInvite = function acceptInvite(event) {
             if (newInviteCtrl.invite.type_of_invite === "USER") {
-                newInviteCtrl.addInstitution(event);
+                if(isValidProfile()) {
+                    newInviteCtrl.saveInstProfile().then(function success() {
+                        newInviteCtrl.addInstitution(event);
+                    });
+                }
             } else {
                 newInviteCtrl.updateStubInstitution();
             }
+        };
+
+        newInviteCtrl.saveInstProfile = function configInstProfile() {
+            jsonpatch.unobserve(newInviteCtrl.user.current_institution, observer);
+            observer = jsonpatch.observe(newInviteCtrl.user);
+            var profile = {phone: newInviteCtrl.phone,
+                    email: newInviteCtrl.email,
+                    office: newInviteCtrl.office,
+                    institution_key: newInviteCtrl.institution.key,
+                    institution_name: newInviteCtrl.institution.name,
+                    institution_photo_url: newInviteCtrl.institution.photo_url};
+            newInviteCtrl.user.addProfile(profile);
+            newInviteCtrl.user.name = newInviteCtrl.name;
+            AuthService.save();
+            var patch = jsonpatch.generate(observer);
+            var promise;
+            promise = UserService.save(patch);
+            return promise;
         };
 
         newInviteCtrl.addInstitution =  function addInstitution(event) {
@@ -85,6 +111,10 @@
                 return promise;
         };
 
+        newInviteCtrl.showInputName = function showInputName() {
+            return newInviteCtrl.user.name === 'Unknown';
+        };
+
 
         function deleteInvite() {
             var promise = InviteService.deleteInvite(newInviteCtrl.inviteKey);
@@ -124,6 +154,7 @@
         }
 
         function loadInvite(){
+            observer = jsonpatch.observe(newInviteCtrl.user);
             InviteService.getInvite(newInviteCtrl.inviteKey).then(function success(response) {
                 newInviteCtrl.invite = new Invite(response.data);
                 if(newInviteCtrl.invite.status === 'sent') {
@@ -136,6 +167,14 @@
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
+        }
+
+        function isValidProfile() {
+            if(!newInviteCtrl.office) {
+                MessageService.showToast("Cargo institucional deve ser preenchido.");
+                return false;
+            }
+            return true;
         }
 
         loadInvite();

@@ -28,6 +28,7 @@ class User(object):
         self.name = name
         self.age = age
         self.emails = []
+        self.parents = []
         self.description = description
 
 
@@ -167,6 +168,22 @@ class TestOperationAdd(TestJsonPatch):
             str(ex.exception), "Value can not be None",
             "Expected message to be equal to 'Value can not be None'")
 
+    def test_add_dict(self):
+        """Test add dict."""
+        json = '[{"op": "add", "path": "/parents/-", "value": {"age": 19, "name": "Luiz"}}]'
+        self.json_patch.load(json, self.user)
+        parent = self.user.parents[-1]
+
+        self.assertTrue(isinstance(parent, dict))
+        self.assertEqual(
+            parent['age'],
+            19,
+            "Age must be equal to 19")
+        self.assertEqual(
+            parent['name'],
+            "Luiz",
+            "Name must be equal to Luiz")
+
 
 class TestOperantionReplace(TestJsonPatch):
     """Class of test operation Replace."""
@@ -201,7 +218,7 @@ class TestOperantionReplace(TestJsonPatch):
         self.assertEqual(
             self.user.other_user.name, "Luiz",
             "Name must be equal to Luiz")
-        self.assertEqual(self.user.other_user.age, 19, "Age must be equal to Luiz")
+        self.assertEqual(self.user.other_user.age, 19, "Age must be equal to 19")
 
     def test_replace_in_list(self):
         """Replace email in list of emails."""
@@ -238,6 +255,58 @@ class TestOperantionReplace(TestJsonPatch):
         self.assertEqual(
             str(ex.exception), "Attribute registration not found",
             "Expected message to be equal to 'Attribute registration not found'")
+
+    def test_replace_object_in_list(self):
+        """Replace object in list."""
+        json = '[{"op": "add", "path": "/parents/-", "value": {"age": 19, "name": "Luiz"}}]'
+        self.json_patch.load(json, self.user, User)
+
+        parent = self.user.parents[-1]
+        self.assertEqual(
+            parent.age,
+            19,
+            "Age must be equal to 19")
+        self.assertEqual(
+            parent.name,
+            "Luiz",
+            "Name must be equal to Luiz")
+
+        json = '[{"op": "replace", "path": "/parents/-/age", "value": 90}]'
+        self.json_patch.load(json, self.user)
+        self.assertEqual(
+            parent.age,
+            90,
+            "Age must be equal to 90")
+        self.assertEqual(
+            parent.name,
+            "Luiz",
+            "Name must be equal to Luiz")
+
+    def test_dict_object_in_list(self):
+        """Replace dict in list."""
+        json = '[{"op": "add", "path": "/parents/-", "value": {"age": 30, "name": "Test user"}}]'
+        self.json_patch.load(json, self.user)
+
+        parent = self.user.parents[-1]
+        self.assertEqual(
+            parent['age'],
+            30,
+            "Age must be equal to 30")
+        self.assertEqual(
+            parent['name'],
+            "Test user",
+            "Name must be equal to Test user")
+
+        json = '[{"op": "replace", "path": "/parents/-/age", "value": 33}]'
+        self.json_patch.load(json, self.user)
+        self.assertEqual(
+            parent['age'],
+            33,
+            "Age must be equal to 33")
+        self.assertEqual(
+            parent['name'],
+            "Test user",
+            "Name must be equal to Test user")
 
 
 class TestOperationRemove(TestJsonPatch):
@@ -291,6 +360,30 @@ class TestOperationRemove(TestJsonPatch):
         self.assertEqual(
             str(ex.exception), "Attribute registration not found",
             "Expected message to be equal to 'Attribute registration not found'")
+
+    def test_rm_attr_in_dict(self):
+        """Remove attribute in dict."""
+        json = '[{"op": "add", "path": "/parents/-", "value": {"age": 25, "name": "Test"}}]'
+        self.json_patch.load(json, self.user)
+
+        parent = self.user.parents[-1]
+        self.assertEqual(
+            parent['age'],
+            25,
+            "Age must be equal to 25")
+        self.assertEqual(
+            parent['name'],
+            "Test",
+            "Name must be equal to Test")
+
+        json = '[{"op": "remove", "path": "/parents/-/age"}]'
+        self.json_patch.load(json, self.user)
+
+        self.assertEqual(
+            parent['name'],
+            "Test",
+            "Name must be equal to Test")
+        self.assertFalse('age' in parent)
 
 
 class TestOperationTest(TestJsonPatch):

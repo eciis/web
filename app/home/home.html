@@ -16,7 +16,7 @@
                 </div>
                 <div class="info">
                   <div class="title">
-                    <span target="_blank" >{{homeCtrl.user.name}}</span>
+                    <a href class="hyperlink" ng-click="homeCtrl.showUserProfile(homeCtrl.user.key, $event)">{{homeCtrl.user.name}}</a>
                   </div>
                   <div class="desc">{{homeCtrl.user.current_institution.name}}</div>
                 </div>

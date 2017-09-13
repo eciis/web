@@ -2,6 +2,36 @@
 from google.appengine.ext import ndb
 
 
+class InstitutionProfile(ndb.Model):
+    """Model of InstitutionProfile."""
+
+    office = ndb.StringProperty(required=True)
+    email = ndb.StringProperty()
+    phone = ndb.StringProperty()
+    institution_name = ndb.StringProperty(required=True)
+    institution_photo_url = ndb.StringProperty(required=True)
+    institution_key = ndb.StringProperty(required=True)
+
+    def make(self):
+        """Make the Institution Profile json."""
+        profile = {}
+        profile['office'] = self.office
+        profile['email'] = self.email
+        profile['phone'] = self.phone
+        profile['institution'] = {'name': self.institution_name, 'photo_url': self.institution_photo_url}
+        return profile
+
+    @staticmethod
+    def is_valid(profiles, institutions_size):
+        """Verify the user profile."""
+        if len(profiles) != institutions_size + 1:
+            return False
+        for profile in profiles:
+            if not profile.office:
+                return False
+        return True
+
+
 class User(ndb.Model):
     """Model of User."""
 
@@ -46,6 +76,9 @@ class User(ndb.Model):
     # The user permissions to access system resources
     permissions = ndb.JsonProperty(indexed=False, default={})
 
+    # The user's profiles
+    institution_profiles = ndb.StructuredProperty(InstitutionProfile, repeated=True)
+
     @staticmethod
     def get_by_email(email):
         """Get user by email."""
@@ -74,9 +107,17 @@ class User(ndb.Model):
             self.institutions.remove(institution)
             self.unfollow(institution)
             self.remove_permission('publish_post', institution.urlsafe())
+            self.remove_profile(institution.urlsafe())
             if len(self.institutions) == 0:
                 self.change_state('inactive')
             self.put()
+
+    def remove_profile(self, institution):
+        """Remove a profile."""
+        for profile in self.institution_profiles:
+            if profile.institution_key == institution:
+                self.institution_profiles.remove(profile)
+                break
 
     def is_liked_post(self, postKey):
         """Verify if post is liked."""

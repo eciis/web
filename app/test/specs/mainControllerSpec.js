@@ -84,14 +84,6 @@
 
             expect(state.go).toHaveBeenCalledWith('app.config_profile');
         });
-
-        it("should change state to submit_institution if user have pedding invates", function() {
-            spyOn(state, 'go');
-
-            mainCtrl = createCtrl();
-
-            expect(state.go).toHaveBeenCalledWith('new_invite', {key: 'inviteKey'});
-        });
     });
 
     describe('MainController functions', function() {

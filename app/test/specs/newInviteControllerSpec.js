@@ -4,16 +4,7 @@
 
     var newInviteCtrl, httpBackend, scope, institutionService, createCtrl, state, inviteService, userService,
         mdDialog, authService;
-
-    var INSTITUTIONS_URI = "/api/institutions/";
     var INVITES_URI = "/api/invites/";
-
-    var invite = new Invite({invitee: "mayzabeel@gmail.com", key: 'xyzcis',
-                                            type_of_invite: 'USER',
-                                            institution_key: '987654321',
-                                            inviter_key: '21212121',
-                                            status: 'sent'});
-    invite.stub_institution = {'name': 'Suggested Name', 'key': '00001'};
 
     var splab = {
             name: 'SPLAB',
@@ -21,12 +12,22 @@
             institutions_admin: [],
             sent_invitations: []
     };
-
     var certbio = {
         name: 'CERTBIO',
         key: '123456789',
-        sent_invitations: [invite]
+        sent_invitations: []
     };
+    var inviteData = {
+        invitee: "mayzabeel@gmail.com", 
+        key: 'xyzcis',
+        type_of_invite: 'USER',
+        institution_key: '987654321',
+        inviter_key: '21212121',
+        status: 'sent',
+        institution: certbio
+    };
+    var invite = new Invite(inviteData);
+    invite.stub_institution = {'name': 'Suggested Name', 'key': '00001'};
 
     var tiago = {
         name: 'Tiago',
@@ -49,7 +50,6 @@
         mdDialog = $mdDialog;
         institutionService = InstitutionService;
         authService = AuthService;
-        httpBackend.expect('GET', INSTITUTIONS_URI + splab.key).respond(splab);
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', INVITES_URI + invite.key).respond(invite);
         httpBackend.when('GET', "home/home.html").respond(200);
@@ -80,7 +80,7 @@
         });
 
         it('should exist institution', function() {
-            expect(newInviteCtrl.institution).toEqual(splab);
+            expect(newInviteCtrl.institution).toEqual(certbio);
         });
 
         it('inviteKey should be "xyzcis"', function() {
@@ -200,7 +200,7 @@
 
             it('current institution of user should be certbio', function(done) {
                 promise.then(function() {
-                    expect(newInviteCtrl.user.current_institution).toEqual(certbio);
+                    expect(newInviteCtrl.user.current_institution.name).toEqual(certbio.name);
                     done();
                 });
             });

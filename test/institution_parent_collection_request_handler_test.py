@@ -5,6 +5,7 @@ import json
 from test_base_handler import TestBaseHandler
 from models.user import User
 from models.institution import Institution
+from utils import get_message_exception
 from handlers.institution_parent_request_collection_handler import InstitutionParentRequestCollectionHandler
 
 from mock import patch
@@ -60,6 +61,31 @@ class InstitutionParentRequestCollectionHandlerTest(TestBaseHandler):
         self.assertEqual(
             institution.parent_institution, self.inst_requested.key,
             "The parent institution of inst test must be update to inst_requested")
+
+    @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
+    def test_post_user_not_admin(self, verify_token):
+        """Test post request with user is not admin."""
+
+        data = {
+            'sender_key': self.other_user.key.urlsafe(),
+            'is_request': True,
+            'admin_key': self.user_admin.key.urlsafe(),
+            'institution_key': self.inst_test.key.urlsafe(),
+            'institution_requested_key': self.inst_requested.key.urlsafe(),
+            'type_of_invite': 'REQUEST_INSTITUTION_PARENT'
+        }
+
+        with self.assertRaises(Exception) as ex:
+            self.testapp.post_json(
+                "/api/institutions/" + self.inst_test.key.urlsafe() + "/requests/institution_parent",
+                data)
+
+        exception_message = get_message_exception(self, ex.exception.message)
+        self.assertEqual(
+            "Error! User is not admin",
+            exception_message,
+            "Expected error message is Error! User is not admin")
+
 
 
 def initModels(cls):

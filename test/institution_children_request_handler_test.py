@@ -6,6 +6,7 @@ from test_base_handler import TestBaseHandler
 from models.user import User
 from models.institution import Institution
 from models.request_institution_children import RequestInstitutionChildren
+from utils import get_message_exception
 from handlers.institution_children_request_handler import InstitutionChildrenRequestHandler
 
 from mock import patch
@@ -43,6 +44,18 @@ class InstitutionChildrenRequestHandlerTest(TestBaseHandler):
         self.assertEqual(
             institution.parent_institution, self.inst_test.key,
             "The parent institution of inst requested must be update to inst test")
+
+    @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
+    def test_put_user_not_admin(self, verify_token):
+        """Test put request with user is not admin."""
+        with self.assertRaises(Exception) as ex:
+            self.testapp.put('/api/requests/' + self.request.key.urlsafe() + "/institution_children")
+
+        exception_message = get_message_exception(self, ex.exception.message)
+        self.assertEqual(
+            "Error! User is not admin",
+            exception_message,
+            "Expected error message is Error! User is not admin")
 
 
 def initModels(cls):

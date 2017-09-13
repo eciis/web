@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Request institution link model."""
 
 from invite import Invite
@@ -48,18 +49,17 @@ class RequestInstitutionParent(Invite):
         return request
 
     def send_email(self, host, body=None):
-        """Method of send email of invite user."""
-        institution_key = self.institution_key.urlsafe()
-        invite_key = self.key.urlsafe()
-        admin_email = self.admin_key.get().email
+        """Method of send email of request institution link."""
+        request_key = self.key.urlsafe()
+        requested_email = self.admin_key.get().email
 
         # TODO Set this message
-        body = body or """Oi:
-        Voce tem um novo convite. Acesse:
-        http://%s/app/#/institution/%s/%s/new_invite/USER
+        body = body or """Olá
+        Sua instituição recebeu um novo pedido. Acesse:
+        http://%s/app/#/requests/%s/institution_children para analisar o mesmo.
 
-        Equipe e-CIS """ % (host, institution_key, invite_key)
-        super(RequestInstitutionParent, self).send_email(host, admin_email, body)
+        Equipe e-CIS """ % (host, request_key)
+        super(RequestInstitutionParent, self).send_email(host, requested_email, body)
 
 
     def send_notification(self, user):
@@ -72,6 +72,7 @@ class RequestInstitutionParent(Invite):
         request_inst_parent_json = super(RequestInstitutionParent, self).make()
         request_inst_parent_json['sender'] = self.sender_key.get().email
         request_inst_parent_json['status'] = self.status
+        request_inst_parent_json['invitee'] = self.invitee
         request_inst_parent_json['institution_key'] = self.institution_key.urlsafe()
         request_inst_parent_json['institution_requested_key'] = self.institution_requested_key.urlsafe()
         request_inst_parent_json['type_of_invite'] = 'REQUEST_INSTITUTION_PARENT'

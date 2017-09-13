@@ -68,11 +68,23 @@
 
         function loadEvents() {
             EventService.getEvents().then(function success(response) {
-                homeCtrl.events = response.data;
+                homeCtrl.events = activeEvents(response.data);
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
                     $state.go('app.home');
             });
+        }
+
+        function activeEvents(allEvents){
+            var now = new Date();
+            var actualEvents = [];
+            for (var i = 0; i < allEvents.length - 1; i++) {
+                var end = new Date(allEvents[i].end_time);
+                if(end >= now){
+                    actualEvents.push(allEvents[i]);
+                }
+            }
+            return actualEvents;
         }
 
         loadEvents();

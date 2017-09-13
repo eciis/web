@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller("InstitutionController", function InstitutionController($state, InstitutionService,
-            InviteService, AuthService, MessageService, $sce, $mdDialog, PdfService, $rootScope, $window) {
+            InviteService, AuthService, MessageService, $sce, $mdDialog, PdfService, $rootScope, $window, ProfileService) {
         var institutionCtrl = this;
 
         institutionCtrl.current_institution = null;
@@ -195,6 +195,10 @@
         institutionCtrl.openWebsite = function openWebsite() {
             var website = institutionCtrl.current_institution.website_url;
             $window.open(website);
+        };
+
+        institutionCtrl.showUserProfile = function showUserProfile(userKey, ev) {
+            ProfileService.showProfile(userKey, ev);
         };
 
         institutionCtrl.getFullAddress = function getFullAddress() {

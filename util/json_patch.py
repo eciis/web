@@ -58,9 +58,16 @@ class JsonPatch(object):
     """Class to interpret and apply JSONPatch."""
 
     @staticmethod
-    def load(json1, obj, entity_class=None):
-        """It loads jsonPatch and apply all operations contained therein."""
-        list_patchs = json.loads(json1, encoding="utf-8")
+    def load(json_patch, obj, entity_class=None):
+        """It loads jsonPatch and apply all operations contained therein.
+
+        Keyword arguments:
+        json_pacth -- Json of operations to be performed
+        obj -- Object to be modified
+        entity_class -- Optional entity class of new object to be add.
+        if it does not pass the object will be considered a dict
+        """
+        list_patchs = json.loads(json_patch, encoding="utf-8")
 
         for dict_patch in list_patchs:
             if dict_patch['op'] == 'test':
@@ -137,23 +144,25 @@ class Operation(object):
 
     def go_through_path(self, obj, path_list):
         """Traverse the paths and returns the last accessed object."""
-        integer_signals = "-+"
+        flag_index_top = "-"
+        index_top = "-1"
 
         if len(path_list) == 0:
             return obj
 
         attribute_path = path_list.pop(0)
 
-        if len(path_list) > 0 and path_list[0].lstrip(integer_signals).isdigit():
-            index = int(path_list[0])
-            return getattr(obj, attribute_path)[index]
+        if attribute_path == flag_index_top:
+            attribute_path = index_top
 
-        _assert(
-            not hasattr(obj, attribute_path),
-            "Attribute %s not found" % attribute_path
-        )
-
-        attribute = getattr(obj, attribute_path)
+        if isinstance(obj, list):
+            attribute = obj[int(attribute_path)]
+        else:
+            _assert(
+                not hasattr(obj, attribute_path),
+                "Attribute %s not found" % attribute_path
+            )
+            attribute = getattr(obj, attribute_path)
 
         return Operation.go_through_path(self, attribute, path_list)
 
@@ -178,12 +187,20 @@ class Add(Operation):
     @verify_entity
     def operation_in_attribute(self, value, entity_class, obj, attribute):
         """Execute Operation add in attribute."""
-        _assert(
-            hasattr(obj, attribute),
-            "Attribute %s already exists" % attribute
-        )
         _assert(value is None, "Value can not be None")
-        obj.__setattr__(attribute, value)
+
+        if isinstance(obj, dict):
+            _assert(
+                attribute in obj,
+                "Attribute %s already exists" % attribute
+            )
+            obj[attribute] = value
+        else:
+            _assert(
+                hasattr(obj, attribute),
+                "Attribute %s already exists" % attribute
+            )
+            obj.__setattr__(attribute, value)
 
 
 class Remove(Operation):
@@ -195,12 +212,19 @@ class Remove(Operation):
 
     def operation_in_attribute(self, value, entity_class, obj, attribute):
         """Execute Operation remove in attribute."""
-        _assert(
-            not hasattr(obj, attribute),
-            "Attribute %s not found" % attribute
-        )
+        if isinstance(obj, dict):
+            _assert(
+                attribute not in obj,
+                "Attribute %s not found" % attribute
+            )
+            del obj[attribute]
+        else:
+            _assert(
+                not hasattr(obj, attribute),
+                "Attribute %s not found" % attribute
+            )
 
-        obj.__delattr__(attribute)
+            obj.__delattr__(attribute)
 
 
 class Replace(Operation):
@@ -216,20 +240,20 @@ class Replace(Operation):
     @verify_entity
     def operation_in_attribute(self, value, entity_class, obj, attribute):
         """Execute Operation replace in attribute."""
-        _assert(value is None, "Value can not be None")
-
-        if not isinstance(obj, dict):
-            _assert(
-                not hasattr(obj, attribute),
-                "Attribute %s not found" % attribute
-            )
-            obj.__setattr__(attribute, value)
-        else:
+        if isinstance(obj, dict):
             _assert(
                 attribute not in obj,
                 "Attribute %s not found" % attribute
             )
             obj[attribute] = value
+        else:
+            _assert(
+                not hasattr(obj, attribute),
+                "Attribute %s not found" % attribute
+            )
+            _assert(value is None, "Value can not be None")
+
+            obj.__setattr__(attribute, value)
 
 
 class Test(Operation):

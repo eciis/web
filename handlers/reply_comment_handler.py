@@ -35,8 +35,7 @@ class ReplyCommentHandler(BaseHandler):
     def get(self, user, post_key, comment_id):
         """Handle Get Comments requests."""
         post = ndb.Key(urlsafe=post_key).get()
-        replies = [Comment.make(reply)
-                    for reply in post.get_comment(comment_id).replies]
+        replies = post.get_comment(comment_id).get('replies')
         self.response.write(json.dumps(replies))
 
     @json_response
@@ -92,6 +91,9 @@ class ReplyCommentHandler(BaseHandler):
                       "The institution has been deleted", NotAuthorizedException)
         comment = post.get_comment(comment_id)
         replies = comment.get('replies')
+
+        Utils._assert(len(replies.get(reply_id).get('likes')) > 0,
+                      "Comment with activity can't be removed", NotAuthorizedException)
 
         check_permission(user, institution, post, replies.get(reply_id))
         

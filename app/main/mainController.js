@@ -112,6 +112,10 @@
             mainCtrl.toggle();
         };
 
+        mainCtrl.goEvents = function goEvents(){
+            $state.go('app.event');
+        };
+
         mainCtrl.logout = function logout() {
             AuthService.logout();
         };

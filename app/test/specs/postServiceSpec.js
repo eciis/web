@@ -15,9 +15,9 @@
         user.institutions = [institutions[0]];
 
         var posts = [
-            {title: 'teste', text: 'post de teste principal', institution: institutions[0].key, key: '1'},
-            {title: 'teste2', text: 'post de teste secundário', institution: institutions[0].key, key: '2'},
-            {title: 'teste3', text: 'post de teste auxiliar', institution: institutions[1].key, key: '3'}
+            {title: 'test', text: 'main post test', institution: institutions[0].key, key: '1'},
+            {title: 'test2', text: 'secondary post test', institution: institutions[0].key, key: '2'},
+            {title: 'test3', text: 'auxiliar post test', institution: institutions[1].key, key: '3'}
         ];
 
         institutions[0].posts = [posts[0], posts[1]];

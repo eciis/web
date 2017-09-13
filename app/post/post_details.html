@@ -50,7 +50,7 @@
           <span class="md-subhead" >continuar lendo</span>
         </a>
       </div>
-      <div ng-repeat="pdf in postDetailsCtrl.pdf_files" ng-if="postDetailsCtrl.post.pdf_files">
+      <div ng-repeat="pdf in postDetailsCtrl.post.shared_post.pdf_files" ng-if="postDetailsCtrl.post.shared_post.pdf_files">
         <md-button class="md-raised" ng-click="postDetailsCtrl.pdfDialog($event, pdf)">
             <md-icon>description</md-icon> {{pdf.name}}
         </md-button>

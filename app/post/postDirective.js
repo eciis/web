@@ -1,4 +1,5 @@
 "use strict";
+
 (function() {
 
     var app = angular.module("app");
@@ -32,7 +33,6 @@
 
         postCtrl.addPdf = function addPdf(files) {
             postCtrl.pdfFiles = postCtrl.pdfFiles.concat(files);
-
         };
 
         postCtrl.createEditedPost = function createEditedPost(post) {
@@ -61,9 +61,9 @@
             }
         };
 
-        postCtrl.save = function save(isEditing, posts) {
+        postCtrl.save = function save(isEditing, originalPost, posts) {
             if(isEditing) {
-                postCtrl.editPost();
+                postCtrl.editPost(originalPost);
             } else {
                 postCtrl.createPost(posts);
             }
@@ -158,9 +158,9 @@
             return deferred.promise;
         }
 
-        postCtrl.editPost = function editPost() {
+        postCtrl.editPost = function editPost(originalPost) {
             deleteImage(postCtrl.post).then(function success() {
-                saveEditedPost();
+                saveEditedPost(originalPost);
             }, function error(error) {
                 MessageService.showToast(error);
             });
@@ -205,7 +205,6 @@
             });
             postCtrl.post.photo_url = null;
             postCtrl.post.pdf_files = [];
-
         };
 
         postCtrl.clearPost = function clearPost() {
@@ -213,12 +212,12 @@
             postCtrl.pdfFiles = [];
         };
 
-        function saveEditedPost() {
+        function saveEditedPost(originalPost) {
             var savePromises = [saveFiles(), saveImage()];
             $q.all(savePromises).then(function success() {
-                if (postCtrl.post.isValid()) {
-                    var patch = jsonpatch.generate(observer);
-                    patch = removeUnnecessaryFromPatch(patch);
+                var post = new Post(originalPost, postCtrl.user.current_institution.key);
+                if (post.isValid()) {
+                    var patch = generatePatch(post, postCtrl.post);
                     PostService.save(postCtrl.post.key, patch).then(function success() {
                         deleteFiles().then(function success() {
                             postCtrl.deletedFiles = [];
@@ -235,16 +234,10 @@
             });
         }
 
-        function removeUnnecessaryFromPatch(patch) {
-            var filteredPatch = [];
-            _.forEach(patch, function(obj) {
-                var path = obj.path.split('/');
-                path = path[path.length - 1];
-                if (path !== '$$hashKey' && path !== 'isValid') {
-                    filteredPatch.push(obj);
-                }
-            });
-            return filteredPatch;
+        function generatePatch(post, newPost) {
+            post = JSON.parse(angular.toJson(post));
+            newPost = JSON.parse(angular.toJson(newPost));
+            return jsonpatch.compare(post, newPost);
         }
 
         postCtrl.cancelDialog = function() {

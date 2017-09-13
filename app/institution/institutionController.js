@@ -60,8 +60,11 @@
         function getPortfolioUrl() {
             institutionCtrl.portfolioUrl = institutionCtrl.current_institution.portfolio_url;
             if(institutionCtrl.portfolioUrl) {
-                PdfService.getReadableURL(institutionCtrl.portfolioUrl, setPortifolioURL).then(function error(response) {
+                PdfService.getReadableURL(institutionCtrl.portfolioUrl, setPortifolioURL)
+                    .then(function success() {
+                }, function error(response) {
                     MessageService.showToast(response.data.msg);
+
                 });
             }
         }

@@ -22,6 +22,15 @@
         text: 'Lorem ipsum'
     }];
 
+    // Event of SPLAB by Maiana
+    var event = {'title': 'Inauguration',
+                'text': 'Inauguration of system E-CIS',
+                'local': 'Brasília',
+                'photo_url': null,
+                'start_time': new Date(), 
+                'end_time': new Date(),
+                };
+
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, InstitutionService,
@@ -31,6 +40,7 @@
         mdDialog = $mdDialog;
         state = $state;
         httpBackend.expect('GET', '/api/user/timeline').respond(posts);
+        httpBackend.when('GET', "/api/events").respond([event]);
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);
         httpBackend.when('GET', 'error/error.html').respond(200);

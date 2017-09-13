@@ -5,6 +5,7 @@ import json
 from test_base_handler import TestBaseHandler
 from models.user import User
 from models.institution import Institution
+from models.institution import Address
 from handlers.user_request_collection_handler import UserRequestCollectionHandler
 
 from mock import patch
@@ -20,8 +21,8 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
         """Provide the base for the tests."""
         super(UserRequestCollectionHandlerTest, cls).setUp()
         app = cls.webapp2.WSGIApplication(
-            [(UserRequestCollectionHandlerTest.REQUEST_URI, UserRequestCollectionHandler),
-             ], debug=True)
+            [(UserRequestCollectionHandlerTest.REQUEST_URI,
+             UserRequestCollectionHandler)], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
@@ -36,9 +37,9 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
             'type_of_invite': 'REQUEST_USER'
         }
 
-        request = self.testapp.post_json(
-            "/api/institutions/" + self.inst_test.key.urlsafe() + "/requests/user",
-            data)
+        request = self.testapp.post_json("/api/institutions/" +
+                                         self.inst_test.key.urlsafe() +
+                                         "/requests/user", data)
 
         request = json.loads(request._app_iter[0])
 
@@ -68,8 +69,8 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
 
         with self.assertRaises(Exception) as ex:
             self.testapp.post_json(
-                "/api/institutions/" + self.inst_test.key.urlsafe() + "/requests/user",
-                data)
+                "/api/institutions/" + self.inst_test.key.urlsafe() +
+                "/requests/user", data)
 
         exception_message = get_message_exception(self, ex.exception.message)
         self.assertEqual(
@@ -88,11 +89,15 @@ def initModels(cls):
     # Other user
     cls.other_user = User()
     cls.other_user.name = 'Other User'
-    cls.other_user.email = 'otheruser@test.com'
+    cls.other_user.email = 'other_user@test.com'
     cls.other_user.put()
+    # new institution address
+    cls.address = Address()
+    cls.address.street = "street"
     # new Institution inst test
     cls.inst_test = Institution()
     cls.inst_test.name = 'inst test'
+    cls.inst_test.address = cls.address
     cls.inst_test.members = [cls.user_admin.key]
     cls.inst_test.followers = [cls.user_admin.key]
     cls.inst_test.admin = cls.user_admin.key

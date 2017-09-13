@@ -5,6 +5,7 @@ import json
 from test_base_handler import TestBaseHandler
 from models.user import User
 from models.institution import Institution
+from models.institution import Address
 from models.request_user import RequestUser
 from handlers.request_handler import RequestHandler
 
@@ -151,9 +152,14 @@ def initModels(cls):
     cls.other_user.name = 'Other User'
     cls.other_user.email = 'otheruser@test.com'
     cls.other_user.put()
+    # new Institution Address
+    cls.address = Address()
+    cls.address.number = '01'
+    cls.address.street = 'street'
     # new Institution inst test
     cls.inst_test = Institution()
     cls.inst_test.name = 'inst test'
+    cls.inst_test.address = cls.address
     cls.inst_test.members = [cls.user_admin.key]
     cls.inst_test.followers = [cls.user_admin.key]
     cls.inst_test.admin = cls.user_admin.key

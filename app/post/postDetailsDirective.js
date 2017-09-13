@@ -85,7 +85,8 @@
             var hasNoLikes = postDetailsCtrl.post.number_of_likes === 0;
 
             return postDetailsCtrl.isPostAuthor() && !postDetailsCtrl.isDeleted() &&
-                hasNoComments && hasNoLikes && !postDetailsCtrl.post.shared_post;
+                hasNoComments && hasNoLikes && !postDetailsCtrl.post.shared_post && 
+                !postDetailsCtrl.post.shared_event;
         };
 
         postDetailsCtrl.generateLink = function generateLink(){

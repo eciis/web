@@ -50,8 +50,8 @@
       <div layout="column" hide show-gt-sm layout-fill>
         <md-card>
           <md-toolbar md-colors="{background: 'teal-800'}" layout="row">
-            <md-icon>event</md-icon>
-            <div class="md-toolbar-tools" flex layout="row" layout-align="start center">
+            <md-icon style="margin-left: 7%;">event</md-icon>
+            <div class="md-toolbar-tools" flex layout="row">
               Eventos
             </div>
           </md-toolbar>
@@ -67,6 +67,11 @@
                 </div>
               </md-list-item>
             </md-list>
+            <md-card-actions layout="row" layout-align="end-center">
+              <md-button class="md-icon-button" title="Ver mais eventos" ng-click="homeCtrl.goToEvents()">
+                <md-icon>more_horiz</md-icon>
+              </md-button>
+            </md-card-actions>
           </md-card-content>
         </md-card>
         <div class="padded">

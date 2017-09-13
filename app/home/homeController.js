@@ -20,6 +20,10 @@
             $state.go('app.institution', {institutionKey: institutionKey});
         };
 
+        homeCtrl.goToEvents = function goToEvents() {
+            $state.go('app.event');
+        };
+
         homeCtrl.newPost = function newPost(event) {
             $mdDialog.show({
                 controller: function PostDialogController() {},

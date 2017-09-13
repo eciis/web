@@ -17,21 +17,24 @@
   <!-- BODY SHARED EVENT -->
   <div ng-if="postDetailsCtrl.showSharedEvent()">
     <md-card-content layout="column">
-      <img  ng-if="postDetailsCtrl.showImage(postDetailsCtrl.post.shared_event)" ng-src="{{ postDetailsCtrl.post.shared_event.photo_url }}">
-      <p></p>
-      <div></div>
-      <section>
+      <img  ng-if="postDetailsCtrl.showImage(postDetailsCtrl.post.shared_event)" ng-src="{{ postDetailsCtrl.post.shared_event.photo_url }}" class="md-card-image">
+      <md-toolbar class="md-hue-2" md-colors="{background: 'teal-100'}">
+        <h4 style="margin: 1%; text-align:center">{{ postDetailsCtrl.post.shared_event.title | uppercase}}</h4>
         <div></div>
-        <div>{{ postDetailsCtrl.post.title}}</div>
-      </section>
-      <div layout="row">
-        <p>Em {{ postDetailsCtrl.post.shared_event.local }}, {{postDetailsCtrl.post.shared_even.start_time | amUtc | amLocal | amCalendar:referenceTime:formats }} até 
-            {{postDetailsCtrl.post.shared_event.end_time | amUtc | amLocal | amCalendar:referenceTime:formats }}</p>    
-      </div>
-      <!-- <p ng-bind-html="postDetailsCtrl.recognizeText(postDetailsCtrl.post.shared_event.text)" class="break">
-        {{postDetailsCtrl.recognizeUrl(postDetailsCtrl.post).text}}
-      </p> -->
-        
+        <div layout="row" layout-align="space-around center">
+          <div layout="row">    
+            <md-icon>place</md-icon> 
+            <p>Em {{ postDetailsCtrl.post.shared_event.local }}</p>
+          </div>
+          <div layout="row">
+            <md-icon>event</md-icon>
+            <p>{{postDetailsCtrl.post.shared_even.start_time | amUtc | amLocal | amCalendar:referenceTime:formats }} até {{postDetailsCtrl.post.shared_event.end_time | amUtc | amLocal | amCalendar:referenceTime:formats }}</p>
+          </div>
+        </div>
+      </md-toolbar>
+      <p style='font-style:italic' class="break" 
+      ng-bind-html="postDetailsCtrl.recognizeText(postDetailsCtrl.post.shared_event.text)" >
+      </p>
     </md-card-content>
   </div>
 

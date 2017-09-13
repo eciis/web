@@ -83,7 +83,8 @@
                 <h3>De {{ event.start_time | amUtc | amLocal | amCalendar:referenceTime:formats}} até 
                    {{ event.end_time | amUtc | amLocal | amCalendar:referenceTime:formats }}</h3>
                 <p ng-if="event.text">Descrição</p>
-                <h3 ng-if="event.text">{{ event.text }}</h3>
+                <h3 ng-if="event.text" ng-bind-html="eventCtrl.recognizeText(event.text)" class="break">
+                </h3>
                 <p>Local</p>
                 <h3>{{ event.local }}</h3>
                 <p>Autor/Instituição</p>

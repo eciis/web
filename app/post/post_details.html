@@ -14,6 +14,27 @@
     </md-card-header-text>
   </md-card-header>
 
+  <!-- BODY SHARED EVENT -->
+  <div ng-if="postDetailsCtrl.showSharedEvent()">
+    <md-card-content layout="column">
+      <img  ng-if="postDetailsCtrl.showImage(postDetailsCtrl.post.shared_event)" ng-src="{{ postDetailsCtrl.post.shared_event.photo_url }}">
+      <p></p>
+      <div></div>
+      <section>
+        <div></div>
+        <div>{{ postDetailsCtrl.post.title}}</div>
+      </section>
+      <div layout="row">
+        <p>Em {{ postDetailsCtrl.post.shared_event.local }}, {{postDetailsCtrl.post.shared_even.start_time | amUtc | amLocal | amCalendar:referenceTime:formats }} até 
+            {{postDetailsCtrl.post.shared_event.end_time | amUtc | amLocal | amCalendar:referenceTime:formats }}</p>    
+      </div>
+      <!-- <p ng-bind-html="postDetailsCtrl.recognizeText(postDetailsCtrl.post.shared_event.text)" class="break">
+        {{postDetailsCtrl.recognizeUrl(postDetailsCtrl.post).text}}
+      </p> -->
+        
+    </md-card-content>
+  </div>
+
   <!-- BODY SHARED POST -->
   <md-card md-colors="{background: 'default-grey-100'}" ng-if="postDetailsCtrl.showSharedPost()">
     <md-card-header>

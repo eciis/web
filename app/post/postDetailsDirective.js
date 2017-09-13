@@ -59,9 +59,15 @@
                 !postDetailsCtrl.isDeleted();
         };
 
+        postDetailsCtrl.showSharedEvent = function showSharedEvent() {
+            return postDetailsCtrl.post.shared_event && 
+                !postDetailsCtrl.isDeleted();
+        };
+
         postDetailsCtrl.showTextPost = function showTextPost(){
             return !postDetailsCtrl.isDeleted() && 
-                !postDetailsCtrl.post.shared_post;
+                !postDetailsCtrl.post.shared_post && 
+                    !postDetailsCtrl.post.shared_event;
         };
 
         postDetailsCtrl.showButtonDelete = function showButtonDelete() {
@@ -297,6 +303,13 @@
             post.text = addHttpsToUrl(post.text, urlsInText);
             post.text = adjustText(post.text);
             return post;
+        };
+
+        postDetailsCtrl.recognizeText =  function recognizeText(text) {
+            var urlsInText = text.match(URL_PATTERN);
+            text = addHttpsToUrl(text, urlsInText);
+            text = adjustText(text);
+            return text;
         };
 
         postDetailsCtrl.showImage = function(post) {

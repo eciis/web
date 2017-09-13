@@ -4,12 +4,13 @@
     var app = angular.module("app");
 
     app.controller("HomeController", function HomeController(PostService, AuthService,
-            InstitutionService, $interval, $mdToast, $mdDialog, $state, MessageService) {
+            InstitutionService, $interval, $mdToast, $mdDialog, $state, MessageService, EventService) {
         var homeCtrl = this;
 
         var ACTIVE = "active";
 
         homeCtrl.posts = [];
+        homeCtrl.events = [];
         homeCtrl.followingInstitutions = [];
         homeCtrl.instMenuExpanded = false;
 
@@ -57,6 +58,16 @@
             });
         };
 
+        function loadEvents() {
+            EventService.getEvents().then(function success(response) {
+                homeCtrl.events = response.data;
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
+                    $state.go('app.home');
+            });
+        }
+
+        loadEvents();
         loadPosts();
         getFollowingInstitutions();
     });

@@ -113,6 +113,51 @@
            eventCtrl.deletePreviousImage = true;
         };
 
+        var URL_PATTERN = /(((www.)|(http(s)?:\/\/))[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
+        var REPLACE_URL = "<a href=\'$1\' target='_blank'>$1</a>";
+        var LIMIT_CHARACTERS = 150;
+
+        /**
+        * replace urls in a string with links to make the urls clickable.
+        * If urls don't containing http or https, this function add the https.
+        * @param {object} receivedPost - The post to be recognized.
+        * @return {object} The post with clickable urls.
+        * OBS: This function returns a new Post because this result is only for show in view.
+        * It is not necessary to change the original Post.
+        */
+        eventCtrl.recognizeText =  function recognizeText(text) {
+            var urlsInText = text.match(URL_PATTERN);
+            text = addHttpsToUrl(text, urlsInText);
+            text = adjustText(text);
+            return text;
+        };
+
+        eventCtrl.isLongText = function(text){
+            if(text){
+                var qtdChar = text.length;
+                return qtdChar >= LIMIT_CHARACTERS;
+            }
+        };
+
+        function adjustText(text){
+            if(eventCtrl.isLongText(text)){
+                text = text.substring(0, LIMIT_CHARACTERS) + "...";
+            }
+            return text.replace(URL_PATTERN,REPLACE_URL);
+        }
+
+        function addHttpsToUrl(text, urls) {
+            if(urls) {
+                var http = "http://";
+                for (var i = 0; i < urls.length; i++) {
+                    if(urls[i].slice(0, 4) !== "http") {
+                        text = text.replace(urls[i], http + urls[i]);
+                    }
+                }
+            }
+            return text;
+        }
+
         loadEvents();
     });
 })();

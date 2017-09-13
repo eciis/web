@@ -67,5 +67,31 @@
             );
             return deferred.promise;
         };
+
+        service.like = function like(postKey, commentId, replyId) {
+            return likeOrDeslike(postKey, commentId, replyId, $http.post);
+        };
+
+        service.dislike = function like(postKey, commentId, replyId) {
+            return likeOrDeslike(postKey, commentId, replyId, $http.delete);
+        };
+
+        function likeOrDeslike(postKey, commentId, replyId, method) {
+            var deferred = $q.defer();
+            var URI = POST_URI + postKey + '/comments/' + commentId;
+            if (replyId) {
+                URI = URI + "/replies/" + replyId + "/likes";
+            } else {
+                URI = URI + "/likes";
+            }
+            method(URI).then(
+                function success(response) {
+                    deferred.resolve(response);
+                }, function error(response) {
+                    deferred.reject(response);
+                }
+            );
+            return deferred.promise;
+        }
     });
 })();

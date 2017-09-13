@@ -42,11 +42,13 @@ class User(object):
 
 
 def define_entity(dictionary):
-    """Return class of user."""
+    """Return the corresponding class."""
     if isUser(dictionary):
         return User
     elif isVehicle(dictionary):
         return Vehicle
+    else:
+        return dict
 
 
 def isVehicle(dictionary):

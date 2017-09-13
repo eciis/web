@@ -76,7 +76,7 @@ class JsonPatch(object):
     """Class to interpret and apply JSONPatch."""
 
     @staticmethod
-    def load(json1, obj, method_define_entity=None):
+    def load(json_patch, obj, method_define_entity=None):
         """It loads jsonPatch and apply all operations contained therein.
 
         Keyword arguments:
@@ -85,7 +85,7 @@ class JsonPatch(object):
         method_define_entity -- Optional method of return instance of object
         to be created. if it does not pass the object will be considered a dict
         """
-        list_patchs = json.loads(json1, encoding="utf-8")
+        list_patchs = json.loads(json_patch, encoding="utf-8")
 
         for dict_patch in list_patchs:
             if dict_patch['op'] == 'test':

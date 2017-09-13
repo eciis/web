@@ -2,41 +2,13 @@
 """Request institution link model."""
 
 from invite import Invite
+from request import Request
 from google.appengine.ext import ndb
 from custom_exceptions.fieldException import FieldException
 
 
-class RequestInstitutionParent(Invite):
+class RequestInstitutionParent(Request):
     """Model of request parent institution."""
-
-    @staticmethod
-    def isLinked(institution_key, institution_requested):
-        isParent = institution_key == institution_requested.parent_institution
-        isChildren = institution_key in institution_requested.children_institutions
-
-        return isParent or isChildren
-
-    @staticmethod
-    def isRequested(sender, institution_requested_key):
-        request = RequestInstitutionParent.query(
-            RequestInstitutionParent.institution_key == institution_requested_key,
-            RequestInstitutionParent.status == 'sent',
-            RequestInstitutionParent.sender_key == sender)
-
-        return request.count() > 0
-
-    def isValid(self):
-        institution_key = self.institution_key
-        sender = self.sender_key
-        institution_requested = self.institution_requested_key.get()
-        if not sender:
-            raise FieldException("The request require sender_key")
-        if not institution_requested:
-            raise FieldException("The request require institution_requested")
-        if RequestInstitutionParent.isLinked(institution_key, institution_requested):
-            raise FieldException("The institutions is already a linked")
-        if RequestInstitutionParent.isRequested(sender, institution_key):
-            raise FieldException("The sender is already invited")
 
     @staticmethod
     def create(data):
@@ -56,7 +28,7 @@ class RequestInstitutionParent(Invite):
         # TODO Set this message
         body = body or """Olá
         Sua instituição recebeu um novo pedido. Acesse:
-        http://%s/app/#/requests/%s/institution_children para analisar o mesmo.
+        http://%s/app/#/requests/%s/institution_parent para analisar o mesmo.
 
         Equipe e-CIS """ % (host, request_key)
         super(RequestInstitutionParent, self).send_email(host, requested_email, body)
@@ -68,12 +40,7 @@ class RequestInstitutionParent(Invite):
         super(RequestInstitutionParent, self).send_notification(user, entity_type)
 
     def make(self):
-        """Create json of invite to user."""
+        """Create json of request to parent institution."""
         request_inst_parent_json = super(RequestInstitutionParent, self).make()
-        request_inst_parent_json['sender'] = self.sender_key.get().email
-        request_inst_parent_json['status'] = self.status
-        request_inst_parent_json['invitee'] = self.invitee
-        request_inst_parent_json['institution_key'] = self.institution_key.urlsafe()
-        request_inst_parent_json['institution_requested_key'] = self.institution_requested_key.urlsafe()
         request_inst_parent_json['type_of_invite'] = 'REQUEST_INSTITUTION_PARENT'
         return request_inst_parent_json

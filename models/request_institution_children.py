@@ -2,41 +2,12 @@
 """Request institution link model."""
 
 from invite import Invite
+from request import Request
 from google.appengine.ext import ndb
-from custom_exceptions.fieldException import FieldException
 
 
-class RequestInstitutionChildren(Invite):
+class RequestInstitutionChildren(Request):
     """Model of request children institution."""
-
-    @staticmethod
-    def isLinked(institution, institution_requested):
-        isParent = institution == institution_requested.parent_institution
-        isChildren = institution in institution_requested.children_institutions
-
-        return isParent or isChildren
-
-    @staticmethod
-    def isRequested(sender, institution_requested_key):
-        request = RequestInstitutionChildren.query(
-            RequestInstitutionChildren.institution_key == institution_requested_key,
-            RequestInstitutionChildren.status == 'sent',
-            RequestInstitutionChildren.sender_key == sender)
-
-        return request.count() > 0
-
-    def isValid(self):
-        institution_key = self.institution_key
-        sender = self.sender_key
-        institution_requested = self.institution_requested_key.get()
-        if not sender:
-            raise FieldException("The request require sender_key")
-        if not institution_requested:
-            raise FieldException("The request require institution_requested")
-        if RequestInstitutionChildren.isLinked(institution_key, institution_requested):
-            raise FieldException("The institutions is already a linked")
-        if RequestInstitutionChildren.isRequested(sender, institution_key):
-            raise FieldException("The sender is already invited")
 
     @staticmethod
     def create(data):
@@ -47,7 +18,6 @@ class RequestInstitutionChildren(Invite):
         request = Invite.create(data, request)
         request.isValid()
         return request
-
 
     def send_email(self, host, body=None):
         """Method of send email of request institution link."""
@@ -68,12 +38,7 @@ class RequestInstitutionChildren(Invite):
         super(RequestInstitutionChildren, self).send_notification(user, entity_type)
 
     def make(self):
-        """Create json of invite to user."""
+        """Create json of request to institution children."""
         request_inst_children_json = super(RequestInstitutionChildren, self).make()
-        request_inst_children_json['sender'] = self.sender_key.get().email
-        request_inst_children_json['status'] = self.status
-        request_inst_children_json['invitee'] = self.invitee
-        request_inst_children_json['institution_key'] = self.institution_key.urlsafe()
         request_inst_children_json['type_of_invite'] = 'REQUEST_INSTITUTION_CHILDREN'
-        request_inst_children_json['institution_requested_key'] = self.institution_requested_key.urlsafe()
         return request_inst_children_json

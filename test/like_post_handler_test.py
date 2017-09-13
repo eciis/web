@@ -5,6 +5,7 @@ from test_base_handler import TestBaseHandler
 from models.post import Post
 from models.user import User
 from models.institution import Institution
+from utils import get_message_exception
 from handlers.like_post_handler import LikePostHandler
 
 from mock import patch
@@ -185,10 +186,3 @@ def initModels(cls):
     cls.mayza_post.author = cls.mayza.key
     cls.mayza_post.institution = cls.splab.key
     cls.mayza_post.put()
-
-
-def get_message_exception(cls, exception):
-    """Return only message of string exception."""
-    cls.list_args = exception.split("\n")
-    cls.dict = eval(cls.list_args[1])
-    return cls.dict["msg"]

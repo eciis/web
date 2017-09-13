@@ -4,6 +4,7 @@
 import json
 from utils import login_required
 from utils import json_response
+from utils import is_admin
 from utils import Utils
 from custom_exceptions.entityException import EntityException
 from handlers.base_handler import BaseHandler
@@ -29,6 +30,7 @@ class InstitutionChildrenRequestCollectionHandler(BaseHandler):
 
     @login_required
     @json_response
+    @is_admin
     def post(self, user, institution_key):
         """Handler of post requests."""
         data = json.loads(self.request.body)

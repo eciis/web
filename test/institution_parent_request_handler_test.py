@@ -26,7 +26,7 @@ class InstitutionParentRequestHandlerTest(TestBaseHandler):
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
-    @patch('utils.verify_token', return_value={'email': 'other_user@test.com'})
+    @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_put(self, verify_token):
         """Test method post of InstitutionParentRequestHandler."""
         request = self.testapp.put_json(
@@ -69,8 +69,11 @@ def initModels(cls):
     cls.inst_requested.name = 'inst requested'
     cls.inst_requested.members = [cls.user_admin.key]
     cls.inst_requested.followers = [cls.user_admin.key]
-    cls.inst_requested.admin = cls.user_admin.key
+    cls.inst_requested.admin = cls.other_user.key
     cls.inst_requested.put()
+    # Update Institutions admin by other user
+    cls.other_user.institutions_admin = [cls.inst_requested.key]
+    cls.other_user.put()
     # new Request
     cls.request = RequestInstitutionParent()
     cls.request.sender_key = cls.other_user.key

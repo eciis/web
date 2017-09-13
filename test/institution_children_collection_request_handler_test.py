@@ -25,7 +25,7 @@ class InstitutionChildrenRequestCollectionHandlerTest(TestBaseHandler):
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
-    @patch('utils.verify_token', return_value={'email': 'other_user@test.com'})
+    @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
     def test_post(self, verify_token):
         """Test method post of InstitutionParentRequestCollectionHandler."""
         data = {
@@ -81,6 +81,9 @@ def initModels(cls):
     cls.inst_test.followers = [cls.user_admin.key]
     cls.inst_test.admin = cls.user_admin.key
     cls.inst_test.put()
+    # Update institutions admin from User admin
+    cls.user_admin.institutions_admin = [cls.inst_test.key]
+    cls.user_admin.put()
     # new Institution inst requested to be parent of inst test
     cls.inst_requested = Institution()
     cls.inst_requested.name = 'inst requested'

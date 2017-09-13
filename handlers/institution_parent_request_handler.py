@@ -4,6 +4,7 @@
 import json
 from utils import login_required
 from utils import json_response
+from utils import is_admin_of_requested_inst
 from handlers.base_handler import BaseHandler
 from google.appengine.ext import ndb
 
@@ -20,6 +21,7 @@ class InstitutionParentRequestHandler(BaseHandler):
 
     @login_required
     @json_response
+    @is_admin_of_requested_inst
     @ndb.transactional(xg=True)
     def put(self, user, request_key):
         """Handler PUT Requests."""
@@ -34,6 +36,7 @@ class InstitutionParentRequestHandler(BaseHandler):
         self.response.write(json.dumps(request.make()))
 
     @login_required
+    @is_admin_of_requested_inst
     def delete(self, user, request_key):
         """Change request status from 'sent' to 'rejected'."""
         request_key = ndb.Key(urlsafe=request_key)

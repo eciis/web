@@ -3,6 +3,8 @@
 (function() {
     var app = angular.module("app");
 
+    var USER_URI = '/api/user';
+
     app.service("ProfileService", function UserService($mdDialog, $http, $q) {
         var service = this;
 
@@ -21,7 +23,7 @@
 
         service.editProfile = function editProfile(data) {
             var deffered = $q.defer();
-            $http.patch('/api/user', data).then(function success(info) {
+            $http.patch(USER_URI, data).then(function success(info) {
                 deffered.resolve(info);
             }, function error(info) {
                 deffered.reject(info);

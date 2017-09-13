@@ -91,11 +91,18 @@ class Invite(PolyModel):
 
     def make(self):
         """Create personalized json of invite."""
+        institution_admin = self.institution_key.get()
+        institution_admin = institution_admin.make(['name'])
+        institution = self.institution_key.get()
+        institution = institution.make(['name', 'address', 'description',
+                                        'key', 'photo_url', 'email',
+                                        'phone_number'])
         return {
             'admin_name': self.admin_key.get().name,
             'key': self.key.urlsafe(),
             'status': self.status,
-            'institution_admin': self.institution_key.get().make(['name'])
+            'institution_admin': institution_admin,
+            'institution': institution
         }
 
     def change_status(self, status):

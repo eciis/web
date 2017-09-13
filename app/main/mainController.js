@@ -82,11 +82,7 @@
             }
             return false;
         };
-
-        mainCtrl.userIsActive = function userIsActive() {
-            return mainCtrl.user.state == 'active';
-        };
-
+        
         mainCtrl.changeInstitution = function changeInstitution(institution) {
             mainCtrl.user.changeInstitution(institution);
         };
@@ -116,25 +112,10 @@
             AuthService.logout();
         };
 
-        function isInactive() {
-            var notMember = mainCtrl.user.institutions.length === 0;
-            var notInvitee = mainCtrl.user.invites.length === 0;
-            var notActive = !mainCtrl.userIsActive();
-
-            return ((notMember && notInvitee) || notActive);
-        }
-
         (function main() {
-                var invitePending = mainCtrl.user.getPendingInvitation();
-
-                if (invitePending) {
-                    var inviteKey = invitePending.key;
-                    $state.go("new_invite", {key: inviteKey});
-                } else if (isInactive()) {
-                    $state.go("user_inactive");
-                } else if (mainCtrl.user.name === 'Unknown') {
-                    $state.go("app.config_profile");
-                }
+            if (mainCtrl.user.name === 'Unknown') {
+                $state.go("app.config_profile");
+            }
         })();
     });
 

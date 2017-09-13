@@ -85,16 +85,6 @@
                 return promise;
         };
 
-        newInviteCtrl.getFullAddress = function getFullAddress() {
-            if(newInviteCtrl.institution) {
-                var address = newInviteCtrl.institution.address;
-                var fullAddress = address.street + ", " + address.number + ", " + address.neighbourhood + 
-                                 ", " + address.city + ", " + address.state + ", " + address.country;
-                return fullAddress;
-            }
-        };
-
-
         function deleteInvite() {
             var promise = InviteService.deleteInvite(newInviteCtrl.inviteKey);
             promise.then(function success() {
@@ -109,14 +99,6 @@
 
         function goHome() {
             $state.go("app.home");
-        }
-
-        function loadInstitution(institutionKey) {
-            InstitutionService.getInstitution(institutionKey).then(function success(response) {
-                newInviteCtrl.institution = response.data;
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
-            });
         }
 
         function showAlert(event, institutionName) {
@@ -137,7 +119,7 @@
                 newInviteCtrl.invite = new Invite(response.data);
                 if(newInviteCtrl.invite.status === 'sent') {
                     institutionKey = (newInviteCtrl.invite.type_of_invite === "USER") ? newInviteCtrl.invite.institution_key : newInviteCtrl.invite.stub_institution.key;
-                    loadInstitution(institutionKey);
+                    newInviteCtrl.institution = newInviteCtrl.invite.institution;
                 } else {
                     $state.go("app.home");
                     MessageService.showToast("Você já utilizou este convite.");
@@ -146,7 +128,7 @@
                 MessageService.showToast(response.data.msg);
             });
         }
-
+        
         loadInvite();
    });
 })();

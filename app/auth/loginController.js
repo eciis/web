@@ -30,14 +30,27 @@
             );
         };
 
+        function isInactive(user) {
+            var notMember = user.institutions.length === 0;
+            var notInvitee = user.invites.length === 0;
+            var notActive = user.state != 'active';
+            return ((notMember && notInvitee) || notActive);
+        }
+
         loginCtrl.signup = function signup() {
             var newUser = loginCtrl.newUser;
             if (newUser.password !== newUser.verifypassword) {
                 MessageService.showToast("Senhas incompatíveis");
                 return;
             }
-            AuthService.signupWithEmailAndPassword(newUser.email, newUser.password).then(function success() {
-                $state.go("app.home");
+            AuthService.signupWithEmailAndPassword(newUser.email, newUser.password).then(function success(user) {
+                var pendingInvite = user.getPendingInvitation();
+                if (pendingInvite) {
+                    var inviteKey = pendingInvite.key;
+                    $state.go("new_invite", {key: inviteKey});
+                } else if (isInactive(user)) {
+                    $state.go("user_inactive");
+                } 
             });
         };
 

@@ -3,8 +3,8 @@
 
 import json
 
-from utils import Utils
 from models.invite import Invite
+from utils import Utils
 from utils import login_required
 from utils import create_user
 from utils import json_response
@@ -59,6 +59,9 @@ class UserHandler(BaseHandler):
     @login_required
     def get(self, user):
         """Handle GET Requests."""
+        if user is None:
+            user = create_user(self.request)
+
         user_json = makeUser(user, self.request)
         user_json['invites'] = getInvites(user.email)
         self.response.write(json.dumps(user_json))

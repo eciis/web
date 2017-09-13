@@ -54,6 +54,11 @@
             return isDeleted && hasNoComments && hasNoLikes;
         };
 
+        postDetailsCtrl.isCommonPost = function isCommonPost() {
+            return !postDetailsCtrl.post.shared_post && 
+                !postDetailsCtrl.post.shared_event;
+        };
+
         postDetailsCtrl.showSharedPost = function showSharedPost() {
             return postDetailsCtrl.post.shared_post &&
                 !postDetailsCtrl.isDeleted();
@@ -80,13 +85,12 @@
                 postDetailsCtrl.isDeleted();
         };
 
-        postDetailsCtrl.showButtonEdit = function showButtonDeleted() {
+        postDetailsCtrl.showButtonEdit = function showButtonEdit() {
             var hasNoComments = postDetailsCtrl.post.number_of_comments === 0;
             var hasNoLikes = postDetailsCtrl.post.number_of_likes === 0;
 
             return postDetailsCtrl.isPostAuthor() && !postDetailsCtrl.isDeleted() &&
-                hasNoComments && hasNoLikes && !postDetailsCtrl.post.shared_post && 
-                !postDetailsCtrl.post.shared_event;
+                hasNoComments && hasNoLikes && postDetailsCtrl.isCommonPost();
         };
 
         postDetailsCtrl.generateLink = function generateLink(){
@@ -298,15 +302,13 @@
         * OBS: This function returns a new Post because this result is only for show in view.
         * It is not necessary to change the original Post.
         */
-        postDetailsCtrl.recognizeUrl =  function recognizeUrl(receivedPost) {
+        postDetailsCtrl.modifyPost =  function modifyPost(receivedPost) {
             var post = new Post(receivedPost, receivedPost.institutionKey);
-            var urlsInText = post.text.match(URL_PATTERN);
-            post.text = addHttpsToUrl(post.text, urlsInText);
-            post.text = adjustText(post.text);
+            post.text = postDetailsCtrl.recognizeUrl(post.text);
             return post;
         };
 
-        postDetailsCtrl.recognizeText =  function recognizeText(text) {
+        postDetailsCtrl.recognizeUrl =  function recognizeUrl(text) {
             var urlsInText = text.match(URL_PATTERN);
             text = addHttpsToUrl(text, urlsInText);
             text = adjustText(text);
@@ -322,9 +324,9 @@
 
         postDetailsCtrl.isLongPostTimeline = function(text){
             if(text){
-                var qtdChar = text.length;
+                var numberOfChar = text.length;
                 return !postDetailsCtrl.isPostPage &&
-                    qtdChar >= LIMIT_CHARACTERS_POST;
+                    numberOfChar >= LIMIT_CHARACTERS_POST;
             }
         };
 

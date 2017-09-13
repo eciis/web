@@ -33,7 +33,7 @@
         </div>
       </md-toolbar>
       <p style='font-style:italic' class="break" 
-      ng-bind-html="postDetailsCtrl.recognizeText(postDetailsCtrl.post.shared_event.text)" >
+      ng-bind-html="postDetailsCtrl.recognizeUrl(postDetailsCtrl.post.shared_event.text)" >
       </p>
     </md-card-content>
   </div>
@@ -68,7 +68,7 @@
         <span>{{ postDetailsCtrl.post.shared_post.title }}</span>
       </a>
       <p class="break" ng-if="!postDetailsCtrl.isDeleted(postDetailsCtrl.post.shared_post)"
-        ng-bind-html="postDetailsCtrl.recognizeUrl(postDetailsCtrl.post.shared_post).text" ></p>
+        ng-bind-html="postDetailsCtrl.modifyPost(postDetailsCtrl.post.shared_post).text" ></p>
       <div layout="row" layout-align="end-center">
         <a href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post.shared_post)" ng-if="postDetailsCtrl.isLongPostTimeline(postDetailsCtrl.post.shared_post.text)">
           <span class="md-subhead" >continuar lendo</span>
@@ -95,8 +95,8 @@
       </p>
     </div>
     <div ng-if="postDetailsCtrl.showTextPost()">
-        <p ng-bind-html="postDetailsCtrl.recognizeUrl(postDetailsCtrl.post).text" class="break">
-          {{postDetailsCtrl.recognizeUrl(postDetailsCtrl.post).text}}
+        <p ng-bind-html="postDetailsCtrl.modifyPost(postDetailsCtrl.post).text" class="break">
+          {{postDetailsCtrl.modifyPost(postDetailsCtrl.post).text}}
         </p>
         <div layout="row" layout-align="end-center">
             <a href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost()"

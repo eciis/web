@@ -117,15 +117,7 @@
         var REPLACE_URL = "<a href=\'$1\' target='_blank'>$1</a>";
         var LIMIT_CHARACTERS = 150;
 
-        /**
-        * replace urls in a string with links to make the urls clickable.
-        * If urls don't containing http or https, this function add the https.
-        * @param {object} receivedPost - The post to be recognized.
-        * @return {object} The post with clickable urls.
-        * OBS: This function returns a new Post because this result is only for show in view.
-        * It is not necessary to change the original Post.
-        */
-        eventCtrl.recognizeText =  function recognizeText(text) {
+        eventCtrl.recognizeUrl =  function recognizeUrl(text) {
             var urlsInText = text.match(URL_PATTERN);
             text = addHttpsToUrl(text, urlsInText);
             text = adjustText(text);
@@ -134,8 +126,8 @@
 
         eventCtrl.isLongText = function(text){
             if(text){
-                var qtdChar = text.length;
-                return qtdChar >= LIMIT_CHARACTERS;
+                var numberOfChar = text.length;
+                return numberOfChar >= LIMIT_CHARACTERS;
             }
         };
 

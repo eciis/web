@@ -24,12 +24,12 @@
 
     // Event of SPLAB by Maiana
     var event = {'title': 'Inauguration',
-                'text': 'Inauguration of system E-CIS',
-                'local': 'Brasília',
-                'photo_url': null,
-                'start_time': new Date(), 
-                'end_time': new Date(),
-                };
+        'text': 'Inauguration of system E-CIS',
+        'local': 'Brasília',
+        'photo_url': null,
+        'start_time': new Date(), 
+        'end_time': new Date(),
+    };
 
     beforeEach(module('app'));
 

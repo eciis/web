@@ -147,9 +147,9 @@ class Post(ndb.Model):
         """Create a post and check required fields."""
         post = Post()
 
-        if data.get('shared_event') is not None:
+        if data.get('shared_event'):
             post.shared_event = ndb.Key(urlsafe=data["shared_event"])
-        elif data.get('shared_post') is not None:
+        elif data.get('shared_post'):
             post.shared_post = ndb.Key(urlsafe=data["shared_post"])
         else:
             if not data['title']:

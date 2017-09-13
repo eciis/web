@@ -10,18 +10,18 @@
                     </center>
                 </div>
 
-                <!-- Institution information -->          
+                <!-- Institution information -->
                 <div flex layout-wrap>
                     <center>
                         <div>
                             <h2>{{ institutionCtrl.current_institution.name }}
-                                <md-icon title="Configurações" class="clickable" 
-                                    ng-click="institutionCtrl.goToManageMembers(institutionCtrl.current_institution.key)" 
+                                <md-icon title="Configurações" class="clickable"
+                                    ng-click="institutionCtrl.goToManageMembers(institutionCtrl.current_institution.key)"
                                     ng-if="institutionCtrl.user.isAdmin(institutionCtrl.current_institution.key)">settings
                                 </md-icon>
                             </h2>
                         </div>
-                        <md-button class="md-raised" ng-if="institutionCtrl.current_institution.website_url" 
+                        <md-button class="md-raised" ng-if="institutionCtrl.current_institution.website_url"
                             ng-click="institutionCtrl.openWebsite()">
                             <md-icon>web</md-icon> Website
                         </md-button>
@@ -92,10 +92,12 @@
                                     md-cols="5" md-cols-gt-md="6"
                                     md-row-height="1:1"
                                     md-gutter="4px" md-gutter-gt-sm="4px">
-                                <md-grid-tile ng-repeat="member in institutionCtrl.members" ng-click="null" md-rowspan="1" 
+                                <md-grid-tile ng-repeat="member in institutionCtrl.members" ng-click="null" md-rowspan="1"
                                     md-colspan="1" md-colspan-sm="1">
                                     <figure>
-                                        <img title="{{member.name}}" ng-src="{{member.photo_url}}" width="100%" height="100%"/>
+                                        <a href class="hyperlink" ng-click="institutionCtrl.showUserProfile(member.key, $event)">
+                                            <img title="{{member.name}}" ng-src="{{member.photo_url}}" width="100%" height="100%"/>
+                                        </a>
                                     </figure>
                                 </md-grid-tile>
                             </md-grid-list>
@@ -110,10 +112,12 @@
                                     md-cols="5" md-cols-gt-md="6"
                                     md-row-height="1:1"
                                     md-gutter="4px" md-gutter-gt-sm="4px">
-                                <md-grid-tile ng-repeat="follower in institutionCtrl.followers" ng-click="null" md-rowspan="1" 
+                                <md-grid-tile ng-repeat="follower in institutionCtrl.followers" ng-click="null" md-rowspan="1"
                                     md-colspan="1" md-colspan-sm="1">
                                     <figure>
-                                        <img title="{{follower.name}}" ng-src="{{follower.photo_url}}" width="100%" height="100%"/>
+                                        <a href class="hyperlink" ng-click="institutionCtrl.showUserProfile(follower.key, $event)">
+                                            <img title="{{follower.name}}" ng-src="{{follower.photo_url}}" width="100%" height="100%"/>
+                                        </a>
                                     </figure>
                                 </md-grid-tile>
                             </md-grid-list>
@@ -121,7 +125,7 @@
                     </md-card>
                 </div>
 
-                <timeline flex layout="column" md-colors="{background: 'grey-200'}" posts="institutionCtrl.posts" 
+                <timeline flex layout="column" md-colors="{background: 'grey-200'}" posts="institutionCtrl.posts"
                     institution="true" user="institutionCtrl.user">
                 </timeline>
             </div>

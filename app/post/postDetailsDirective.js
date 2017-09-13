@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller('PostDetailsController', function(PostService, AuthService, CommentService, $mdToast, $state,
-        $mdDialog, NotificationService, MessageService, ngClipboard) {
+        $mdDialog, NotificationService, MessageService, ngClipboard, ProfileService) {
         var postDetailsCtrl = this;
 
         var LIMIT_CHARACTERS_POST = 1000;
@@ -55,12 +55,12 @@
         };
 
         postDetailsCtrl.showSharedPost = function showSharedPost() {
-            return postDetailsCtrl.post.shared_post && 
+            return postDetailsCtrl.post.shared_post &&
                 !postDetailsCtrl.isDeleted();
         };
 
         postDetailsCtrl.showTextPost = function showTextPost(){
-            return !postDetailsCtrl.isDeleted() && 
+            return !postDetailsCtrl.isDeleted() &&
                 !postDetailsCtrl.post.shared_post;
         };
 
@@ -70,7 +70,7 @@
         };
 
         postDetailsCtrl.disableButtonLike = function disableButtonLike() {
-            return postDetailsCtrl.savingLike || 
+            return postDetailsCtrl.savingLike ||
                 postDetailsCtrl.isDeleted();
         };
 
@@ -309,9 +309,13 @@
         postDetailsCtrl.isLongPostTimeline = function(text){
             if(text){
                 var qtdChar = text.length;
-                return !postDetailsCtrl.isPostPage && 
+                return !postDetailsCtrl.isPostPage &&
                     qtdChar >= LIMIT_CHARACTERS_POST;
             }
+        };
+
+        postDetailsCtrl.showUserProfile = function showUserProfile(userKey, ev) {
+            ProfileService.showProfile(userKey, ev);
         };
 
         function adjustText(text){
@@ -349,7 +353,7 @@
         };
     });
 
-    app.controller('CommentController', function CommentController(CommentService, MessageService) {
+    app.controller('CommentController', function CommentController(CommentService, MessageService, ProfileService) {
         var commentCtrl = this;
 
         // Model to store data of a new reply on a comment
@@ -358,8 +362,55 @@
         // Controll the disablement of actions
         commentCtrl.saving = false;
 
+        commentCtrl.likeOrDislike = function likeOrDislike(reply) {
+            var replyId = reply ? reply.id : undefined;
+            if (commentCtrl.isLikedByUser(reply)) {
+                CommentService.dislike(commentCtrl.post.key, commentCtrl.comment.id, replyId).then(
+                    function sucess() {
+                        if (reply) {
+                            _.remove(reply.likes, function(key) {
+                                return commentCtrl.user.key === key;
+                            });
+                        } else {
+                            _.remove(commentCtrl.comment.likes, function(key) {
+                                return commentCtrl.user.key === key;
+                            });
+                        }
+                    }
+                );
+            } else {
+                CommentService.like(commentCtrl.post.key, commentCtrl.comment.id, replyId).then(
+                    function sucess() {
+                        if (reply) {
+                            reply.likes.push(commentCtrl.user.key);
+                        } else {
+                            commentCtrl.comment.likes.push(commentCtrl.user.key);
+                        }
+                    }
+                );
+            }
+        };
+
+        commentCtrl.isLikedByUser = function isLikedByUser(reply) {
+            if (reply) {
+                return _.includes(reply.likes, commentCtrl.user.key);
+            }
+            return _.includes(commentCtrl.comment.likes, commentCtrl.user.key);
+        };
+
+        commentCtrl.showUserProfile = function showUserProfile(userKey, ev) {
+            ProfileService.showProfile(userKey, ev);
+        };
+
         commentCtrl.getReplies = function getReplies() {
             return _.values(commentCtrl.comment.replies);
+        };
+
+        commentCtrl.numberOfLikes = function numberOfLikes(reply) {
+            if (reply) {
+                return _.size(reply.likes);
+            }
+            return _.size(commentCtrl.comment.likes);
         };
 
         commentCtrl.numberOfReplies = function numberOfReplies() {
@@ -427,11 +478,14 @@
         };
 
         commentCtrl.canDeleteComment = function canDeleteComment(reply) {
-            var commentHasActivity = commentCtrl.numberOfReplies() > 0;
             if (reply) {
-                return reply.author_key == commentCtrl.user.key;
+                var replyHasActivity = commentCtrl.numberOfLikes(reply) > 0;
+                return !replyHasActivity && 
+                    reply.author_key == commentCtrl.user.key;
             }
-            return !commentHasActivity && 
+            var commentHasActivity = commentCtrl.numberOfReplies() > 0 || 
+                commentCtrl.numberOfLikes() > 0;
+            return !commentHasActivity &&
                 commentCtrl.comment.author_key == commentCtrl.user.key;
         };
 
@@ -455,7 +509,7 @@
             }
         };
     });
-    
+
     app.controller("SharePostController", function SharePostController(user, posts, post, $mdDialog, PostService,
      MessageService, $state) {
         var shareCtrl = this;
@@ -491,7 +545,6 @@
                 $mdDialog.hide();
                 MessageService.showToast(response.data.msg);
             });
-            
         };
 
         shareCtrl.goToPost = function goToPost() {

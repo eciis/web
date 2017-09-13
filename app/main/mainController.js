@@ -53,10 +53,6 @@
             mainCtrl._mdPanel.open(config);
         };
 
-        mainCtrl.tokenToClipboard = function tokenToClipboard() {
-            AuthService.tokenToClipboard();
-        };
-
         mainCtrl.toggle = function toggle() {
             $mdSidenav('leftNav').toggle();
         };

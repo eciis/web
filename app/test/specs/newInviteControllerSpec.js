@@ -6,36 +6,37 @@
         mdDialog, authService;
     var INVITES_URI = "/api/invites/";
 
-    var splab = {
-            name: 'SPLAB',
+    var institution = {
+            name: 'institution',
             key: '987654321',
             institutions_admin: [],
             sent_invitations: []
     };
-    var certbio = {
-        name: 'CERTBIO',
+    var otherInstitution = {
+        name: 'otherInstitution',
         key: '123456789',
         sent_invitations: []
     };
     var inviteData = {
-        invitee: "mayzabeel@gmail.com", 
+        invitee: "user@gmail.com", 
         key: 'xyzcis',
         type_of_invite: 'USER',
         institution_key: '987654321',
         inviter_key: '21212121',
         status: 'sent',
-        institution: certbio
+        institution: otherInstitution
     };
     var invite = new Invite(inviteData);
     invite.stub_institution = {'name': 'Suggested Name', 'key': '00001'};
 
-    var tiago = {
-        name: 'Tiago',
-        institutions: [splab, certbio],
+    var otherUser = {
+        name: 'otherUser',
+        institutions: [institution, otherInstitution],
         institutions_admin: [],
-        follows: [splab.key, certbio.key],
+        follows: [institution.key, otherInstitution.key],
         invites: [invite],
         accessToken: '00000',
+        state: 'active',
         institution_profiles: []
     };
 
@@ -53,7 +54,7 @@
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', INVITES_URI + invite.key).respond(invite);
         httpBackend.when('GET', "home/home.html").respond(200);
-        AuthService.login(tiago);
+        AuthService.login(otherUser);
         createCtrl = function() {
             return $controller('NewInviteController',
                 {
@@ -75,12 +76,12 @@
 
     describe('NewInviteController properties', function() {
 
-        it('should exist a user and his name is Tiago', function() {
-            expect(newInviteCtrl.user.name).toEqual(tiago.name);
+        it('should exist a user and his name is otherUser', function() {
+            expect(newInviteCtrl.user.name).toEqual(otherUser.name);
         });
 
         it('should exist institution', function() {
-            expect(newInviteCtrl.institution).toEqual(certbio);
+            expect(newInviteCtrl.institution).toEqual(otherInstitution);
         });
 
         it('inviteKey should be "xyzcis"', function() {
@@ -111,7 +112,7 @@
                 spyOn(userService, 'addInstitution').and.callFake(function() {
                     return {
                         then: function(callback) {
-                            return callback(tiago);
+                            return callback(otherUser);
                         }
                     };
                 });
@@ -120,16 +121,16 @@
                 promise = newInviteCtrl.addInstitution('$event');
             });
 
-            it('user institutions should be contain certbio after acceptInvite', function(done) {
+            it('user institutions should be contain otherInstitution after acceptInvite', function(done) {
                 promise.then(function() {
-                    expect(newInviteCtrl.user.institutions).toContain(certbio);
+                    expect(newInviteCtrl.user.institutions).toContain(otherInstitution);
                     done();
                 });
             });
 
-            it('user should be follow certbio after acceptInvite', function(done) {
+            it('user should be follow otherInstitution after acceptInvite', function(done) {
                 promise.then(function() {
-                    expect(newInviteCtrl.user.follows).toContain(certbio.key);
+                    expect(newInviteCtrl.user.follows).toContain(otherInstitution.key);
                     done();
                 });
             });
@@ -173,7 +174,7 @@
                     return {
                         then: function(callback) {
                             return callback(newInviteCtrl.user.current_institution = {
-                                            name: 'CERTBIO',
+                                            name: 'otherInstitution',
                                             key: '123456789',
                                             sent_invitations: [invite]
                             });
@@ -184,9 +185,9 @@
                 promise = newInviteCtrl.updateStubInstitution();
             });
 
-            it('user institutions should be contain certbio after acceptInvite', function(done) {
+            it('user institutions should be contain otherInstitution after acceptInvite', function(done) {
                 promise.then(function() {
-                    expect(newInviteCtrl.user.institutions).toContain(certbio);
+                    expect(newInviteCtrl.user.institutions).toContain(otherInstitution);
                     done();
                 });
             });
@@ -198,9 +199,9 @@
                 });
             });
 
-            it('current institution of user should be certbio', function(done) {
+            it('current institution of user should be otherInstitution', function(done) {
                 promise.then(function() {
-                    expect(newInviteCtrl.user.current_institution.name).toEqual(certbio.name);
+                    expect(newInviteCtrl.user.current_institution.name).toEqual(otherInstitution.name);
                     done();
                 });
             });
@@ -214,7 +215,7 @@
 
             it('should call $state.go()', function(done) {
                 promise.then(function() {
-                    expect(state.go).toHaveBeenCalledWith('app.manage_institution.edit_info', {institutionKey: certbio.key});
+                    expect(state.go).toHaveBeenCalledWith('app.manage_institution.edit_info', {institutionKey: otherInstitution.key});
                     done();
                 });
             });
@@ -223,9 +224,7 @@
         describe('rejectInvite()', function() {
 
             var promise;
-
             beforeEach(function() {
-
                 spyOn(inviteService, 'deleteInvite').and.callFake(function() {
                     return {
                         then: function(callback) {
@@ -236,13 +235,7 @@
                 spyOn(authService, 'reload').and.callFake(function() {
                     return {
                         then: function(callback) {
-                            return callback(newInviteCtrl.user = {
-                                name: 'Tiago',
-                                institutions: [splab, certbio],
-                                follows: [splab.key, certbio.key],
-                                invites: [invite],
-                                accessToken: '00000'
-                            });
+                            return callback(newInviteCtrl.user = new User(otherUser));
                         }
                     };
                 });

@@ -2,8 +2,8 @@
 
 (describe('Test MainController', function() {
     var mainCtrl, httpBackend, scope, createCtrl, state, instService, authService;
-    var mayza = {
-        name: 'Mayza',
+    var user = {
+        name: 'user',
         key: 'user-key',
         invites: [{
             'invitee': 'user@email.com',
@@ -15,20 +15,20 @@
                                  'key': '00001'}
         }]
     };
-    var certbio = {
-        name: 'Certbio',
+    var institution = {
+        name: 'institution',
         key: '123456789',
-        admin: mayza.key
+        admin: user.key
 
     };
 
-    var splab = {
-        name: 'Splab',
+    var otherInstitution = {
+        name: 'otherInstitution',
         key: '1239'
     };
-    mayza.institutions = [certbio, splab];
-    mayza.institutions_admin = [certbio.key];
-    mayza.current_institution = certbio;
+    user.institutions = [institution, otherInstitution];
+    user.institutions_admin = [institution.key];
+    user.current_institution = institution;
 
     beforeEach(module('app'));
 
@@ -40,7 +40,7 @@
         authService = AuthService;
 
         authService.getCurrentUser = function() {
-            return new User(mayza);
+            return new User(user);
         };
 
         httpBackend.when('GET', "main/main.html").respond(200);
@@ -70,7 +70,7 @@
             var unknownUser = {
               name: 'Unknown',
               invites: [],
-              institutions: [splab],
+              institutions: [otherInstitution],
               state: 'active'
             };
 
@@ -88,10 +88,10 @@
 
     describe('MainController functions', function() {
         it('Should be active', function() {
-            expect(mainCtrl.isActive(certbio)).toBe(true);
+            expect(mainCtrl.isActive(institution)).toBe(true);
         });
         it('Should be not active', function() {
-            expect(mainCtrl.isActive(splab)).toBe(false);
+            expect(mainCtrl.isActive(otherInstitution)).toBe(false);
         });
         it('Should change active institution', function() {
             spyOn(mainCtrl.user, 'changeInstitution');
@@ -107,14 +107,14 @@
                 }]
             };
 
-            user_inst.institutions = [splab, certbio];
+            user_inst.institutions = [otherInstitution, institution];
             mainCtrl.user = new User(user_inst);
 
-            expect(mainCtrl.user.current_institution).toBe(splab);
+            expect(mainCtrl.user.current_institution).toBe(otherInstitution);
 
-            mainCtrl.user.changeInstitution(certbio);
+            mainCtrl.user.changeInstitution(institution);
 
-            expect(mainCtrl.user.current_institution).toBe(certbio);
+            expect(mainCtrl.user.current_institution).toBe(institution);
         });
         it('Should call state.go() in function goTo()', function(){
             spyOn(state, 'go');
@@ -123,18 +123,18 @@
         });
         it('Should call state.go() in function goToInstitution()', function(){
             spyOn(state, 'go');
-            mainCtrl.goToInstitution(splab.key);
+            mainCtrl.goToInstitution(otherInstitution.key);
             expect(state.go).toHaveBeenCalledWith('app.institution', {institutionKey: '1239'});
         });
 
         it('Should call makeSearch() in function showMenu()', function(done){
-            var documents = [{name: splab.name, id: splab.key}];
-            mainCtrl.search = splab.name;
+            var documents = [{name: otherInstitution.name, id: otherInstitution.key}];
+            mainCtrl.search = otherInstitution.name;
             mainCtrl.finalSearch = mainCtrl.search;
             spyOn(mainCtrl, 'makeSearch').and.callThrough();
             spyOn(instService, 'searchInstitutions').and.callThrough();
             spyOn(mainCtrl, 'openMenu');
-            httpBackend.expect('GET', "api/search/institution?value=" + '"' + splab.name + '"' + "&state=active").respond(documents);
+            httpBackend.expect('GET', "api/search/institution?value=" + '"' + otherInstitution.name + '"' + "&state=active").respond(documents);
             mainCtrl.showMenu('$event').then(function() {
                 expect(mainCtrl.makeSearch).toHaveBeenCalled();
                 expect(mainCtrl.openMenu).toHaveBeenCalled();
@@ -145,11 +145,11 @@
         });
 
         it('Should call searchInstitutions in makeSearch', function(done) {
-            var documents = [{name: splab.name, id: splab.key}];
-            mainCtrl.search = splab.name;
+            var documents = [{name: otherInstitution.name, id: otherInstitution.key}];
+            mainCtrl.search = otherInstitution.name;
             mainCtrl.finalSearch = mainCtrl.search;
             spyOn(instService, 'searchInstitutions').and.callThrough();
-            httpBackend.expect('GET', "api/search/institution?value=" + '"' + splab.name + '"' + "&state=active").respond(documents);
+            httpBackend.expect('GET', "api/search/institution?value=" + '"' + otherInstitution.name + '"' + "&state=active").respond(documents);
             mainCtrl.makeSearch().then(function() {
                  expect(instService.searchInstitutions).toHaveBeenCalledWith(mainCtrl.finalSearch, 'active');
                  expect(mainCtrl.institutions).toEqual(documents);

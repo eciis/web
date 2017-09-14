@@ -30,13 +30,6 @@
             );
         };
 
-        function isInactive(user) {
-            var notMember = user.institutions.length === 0;
-            var notInvitee = user.invites.length === 0;
-            var notActive = user.state != 'active';
-            return ((notMember && notInvitee) || notActive);
-        }
-
         loginCtrl.signup = function signup() {
             var newUser = loginCtrl.newUser;
             if (newUser.password !== newUser.verifypassword) {
@@ -48,7 +41,7 @@
                 if (pendingInvite) {
                     var inviteKey = pendingInvite.key;
                     $state.go("new_invite", {key: inviteKey});
-                } else if (isInactive(user)) {
+                } else if (user.isInactive()) {
                     $state.go("user_inactive");
                 } 
             });

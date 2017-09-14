@@ -37,9 +37,11 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
             'type_of_invite': 'REQUEST_USER'
         }
 
-        request = self.testapp.post_json("/api/institutions/" +
-                                         self.inst_test.key.urlsafe() +
-                                         "/requests/user", data)
+        request = self.testapp.post_json(
+            "/api/institutions/" +
+            self.inst_test.key.urlsafe() +
+            "/requests/user", data
+        )
 
         request = json.loads(request._app_iter[0])
 

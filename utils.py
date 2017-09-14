@@ -180,12 +180,8 @@ def login_required(method):
     return login
 
 
-def create_user(request):
+def create_user(user_name, user_email):
     """Create user."""
-    credential = verify_token(request)
-    user_name = credential.get('name', 'Unknown')
-    user_email = credential.get('email', 'Unknown')
-
     user = User()
     user.email = user_email
     user.name = user_name

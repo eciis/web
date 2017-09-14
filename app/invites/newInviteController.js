@@ -59,7 +59,7 @@
                     newInviteCtrl.user.state = 'active';
                     newInviteCtrl.user.current_institution = newInviteCtrl.institution;
                     AuthService.save();
-                    goHome();
+                    $state.go("app.home");
                     showAlert(event, newInviteCtrl.institution.name);
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
@@ -119,16 +119,16 @@
             var promise = InviteService.deleteInvite(newInviteCtrl.inviteKey);
             promise.then(function success() {
                 AuthService.reload().then(function() {
-                    goHome();
+                    if(newInviteCtrl.user.isInactive()) {
+                        $state.go("user_inactive");
+                    } else {
+                        $state.go("app.home");
+                    }
                 });
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
             return promise;
-        }
-
-        function goHome() {
-            $state.go("app.home");
         }
 
         function showAlert(event, institutionName) {

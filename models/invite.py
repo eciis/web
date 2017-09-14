@@ -34,6 +34,9 @@ class Invite(PolyModel):
     """ Key of the institution who inviter is associate."""
     institution_key = ndb.KeyProperty(kind="Institution")
 
+    """ Key of the institution requested. Is used only in requests for institutions"""
+    institution_requested_key = ndb.KeyProperty(kind="Institution")
+
     # Key of stub institution to wich the invite was send.
     # Value is None for invite the User
     stub_institution_key = ndb.KeyProperty(kind="Institution")

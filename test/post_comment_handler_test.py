@@ -8,6 +8,7 @@ from handlers.post_comment_handler import check_permission
 from models.user import User
 from models.institution import Institution
 from models.post import Post
+from utils import get_message_exception
 import json
 
 from mock import patch
@@ -244,10 +245,3 @@ def initModels(cls):
     # Comments
     cls.comment = {'text': 'Frist comment. Using in Test', 'institution_key': cls.certbio.key.urlsafe()}
     cls.other_comment = {'text': 'Second comment. Using in Test', 'institution_key': cls.certbio.key.urlsafe()}
-
-
-def get_message_exception(cls, exception):
-    """Return only message of string exception."""
-    cls.list_args = exception.split("\n")
-    cls.dict = eval(cls.list_args[1])
-    return cls.dict["msg"]

@@ -2,32 +2,15 @@
 """Invite Collection Handler."""
 
 import json
-from google.appengine.ext import ndb
 
 from utils import login_required
 from utils import json_response
+from utils import is_admin
 from utils import Utils
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from handlers.base_handler import BaseHandler
 from models.invite_institution import InviteInstitution
 from models.factory_invites import InviteFactory
-
-
-def is_admin(method):
-        """Check if the user is admin of the institution."""
-        def check_authorization(self, user, *args):
-            data = json.loads(self.request.body)
-            institution_key = ndb.Key(urlsafe=data['institution_key'])
-            institution = institution_key.get()
-
-            userisNotAdminOfInstitution = institution.key not in user.institutions_admin
-            institutionisNotManagedByUser = institution.admin != user.key
-
-            Utils._assert(userisNotAdminOfInstitution or institutionisNotManagedByUser,
-                          'User is not admin', NotAuthorizedException)
-
-            method(self, user, *args)
-        return check_authorization
 
 
 class InviteCollectionHandler(BaseHandler):

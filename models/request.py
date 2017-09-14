@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
-"""REquest Model."""
-from google.appengine.ext import ndb
+"""Request Model."""
 from models.invite import Invite
-from google.appengine.ext.ndb.polymodel import PolyModel
 from custom_exceptions.fieldException import FieldException
 
 
@@ -25,6 +23,11 @@ class Request(Invite):
 
         return request.count() > 0
 
+    @staticmethod
+    def checkHasParent(institution_requested):
+        if institution_requested.parent_institution is not None:
+            raise FieldException("The institution invited has already parent")
+
     def isValid(self):
         institution_key = self.institution_key
         sender = self.sender_key
@@ -37,6 +40,8 @@ class Request(Invite):
             raise FieldException("The institutions is already a linked")
         if Request.isRequested(sender, institution_key):
             raise FieldException("The sender is already invited")
+        if (self.__class__.__name__ == 'RequestInstitutionParent'):
+            Request.checkHasParent(institution_requested)
 
     def make(self):
         """Create json of request to institution."""

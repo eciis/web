@@ -3,6 +3,7 @@
 
 from ..test_base import TestBase
 from models.request_institution_parent import RequestInstitutionParent
+from models.request_institution_children import RequestInstitutionChildren
 from models.institution import Institution
 from custom_exceptions.fieldException import FieldException
 from models.user import User
@@ -72,7 +73,7 @@ class RequestInstitutionParentTest(TestBase):
             str(ex.exception),
             'The sender is already invited')
 
-    def test_create_invalid_request(self):
+    def test_create_request_for_institution_linked(self):
         """Test cretae invalid request."""
         with self.assertRaises(FieldException) as ex:
             data = {
@@ -91,13 +92,32 @@ class RequestInstitutionParentTest(TestBase):
             str(ex.exception),
             'Expected message is The institutions is already a linked')
 
-    def test_make(self):
-        """Test method make."""
-        data = {'sender_key': self.other_user.key.urlsafe(),
+    def test_create_request_for_institution_with_parent(self):
+        """Test cretae invalid request."""
+        with self.assertRaises(FieldException) as ex:
+            data = {
+                'sender_key': self.other_user.key.urlsafe(),
                 'is_request': True,
                 'admin_key': self.user_admin.key.urlsafe(),
                 'institution_key': self.inst_test.key.urlsafe(),
                 'institution_requested_key': self.inst_requested_children.key.urlsafe(),
+                'type_of_invite': 'REQUEST_INSTITUTION_PARENT'
+            }
+
+            RequestInstitutionParent.create(data)
+
+        self.assertEqual(
+            'The institution invited has already parent',
+            str(ex.exception),
+            'The institution invited has already parent')
+
+    def test_make_request_parent_institution(self):
+        """Test method make por parent institution request."""
+        data = {'sender_key': self.other_user.key.urlsafe(),
+                'is_request': True,
+                'admin_key': self.user_admin.key.urlsafe(),
+                'institution_key': self.inst_test.key.urlsafe(),
+                'institution_requested_key': self.inst_requested.key.urlsafe(),
                 'type_of_invite': 'REQUEST_INSTITUTION_PARENT'
                 }
 
@@ -110,10 +130,42 @@ class RequestInstitutionParentTest(TestBase):
                 'name': self.inst_test.name
             },
             'sender': self.other_user.email,
-            'institution_requested_key': self.inst_requested_children.key.urlsafe(),
+            'institution_requested_key': self.inst_requested.key.urlsafe(),
             'admin_name': self.user_admin.name,
             'key': request.key.urlsafe(),
             'type_of_invite': 'REQUEST_INSTITUTION_PARENT',
+            'institution_key': self.inst_test.key.urlsafe()
+        }
+
+        self.assertEqual(
+            make,
+            request.make(),
+            "The make object must be equal to variable make"
+        )
+
+    def test_make_request_children_institution(self):
+        """Test method make for children institution request."""
+        data = {'sender_key': self.other_user.key.urlsafe(),
+                'is_request': True,
+                'admin_key': self.user_admin.key.urlsafe(),
+                'institution_key': self.inst_test.key.urlsafe(),
+                'institution_requested_key': self.inst_requested.key.urlsafe(),
+                'type_of_invite': 'REQUEST_INSTITUTION_CHILDREN'
+                }
+
+        request = RequestInstitutionChildren.create(data)
+        request.put()
+
+        make = {
+            'status': 'sent',
+            'institution_admin': {
+                'name': self.inst_test.name
+            },
+            'sender': self.other_user.email,
+            'institution_requested_key': self.inst_requested.key.urlsafe(),
+            'admin_name': self.user_admin.name,
+            'key': request.key.urlsafe(),
+            'type_of_invite': 'REQUEST_INSTITUTION_CHILDREN',
             'institution_key': self.inst_test.key.urlsafe()
         }
 

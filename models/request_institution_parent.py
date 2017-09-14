@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Request institution link model."""
+"""Request institution parent link model."""
 
 from invite import Invite
 from request import Request

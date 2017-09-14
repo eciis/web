@@ -5,7 +5,8 @@
         </md-button>
     </section>
     <section layout="row" layout-align="center center">
-        <img style="border-radius: 50%; width: 80px;" ng-src="{{ editProfileCtrl.institution.photo_url }}" alt="{{editProfileCtrl.institution.name}}" />
+        <img style="border-radius: 50%; width: 80px;" ng-src="{{ editProfileCtrl.institution.photo_url }}"
+        alt="{{editProfileCtrl.institution.name}}" />
     </section>
     <section style="margin-top: -20px;" layout="row" layout-align="center center">
         <h3 class="md-title">Editar perfil</h3>
@@ -22,11 +23,14 @@
             </md-input-container>
             <md-input-container>
                 <label>Cargo</label>
-                <input ng-model="editProfileCtrl.profile.office">
+                <input ng-model="editProfileCtrl.profile.office" required>
             </md-input-container>
         </md-dialog-content>
         <md-dialog-actions layout="row" layout-align="end center">
-            <md-button class="md-raised" md-colors="::{background: 'dialogTheme-primary-900'}" ng-click="editProfileCtrl.edit()">Salvar</md-button>
+            <md-button class="md-raised" md-colors="::{background: 'dialogTheme-primary-900'}"
+            ng-click="editProfileCtrl.edit()">
+                Salvar
+            </md-button>
         </md-dialog-actions>
     </div>
 </md-dialog>

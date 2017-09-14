@@ -4,16 +4,21 @@
 
     var httpBackend, scope, mdDialog, authService, profileService, editProfileCtrl, createCrtl, userToEdit;
 
-    var splab = {
-        name: 'SPLAB',
+    var institution = {
+        name: 'INSTITUTION',
         key: '987654321'
     };
 
     var user = {
         name: 'User',
-        email: 'maiana.brito@ccc.ufcg.edu.br',
-        institutions: [splab],
-        institution_profiles: [{office: 'developer', phone: '(99) 99999-9999', email: 'teste@gmail.com'}]
+        email: 'teste@gmail',
+        institutions: [institution],
+        institution_profiles: [{
+                office: 'developer',
+                phone: '(99) 99999-9999',
+                email: 'teste@gmail.com',
+                institution_key: institution.key
+            }]
     };
 
     beforeEach(module('app'));
@@ -40,7 +45,7 @@
         createCrtl = function() {
             return $controller('EditProfileController', {
                     scope: scope,
-                    institution: splab,
+                    institution: institution,
                     user: userToEdit,
                     profileService: profileService,
                     authService: authService,

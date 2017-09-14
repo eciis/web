@@ -103,15 +103,7 @@ class UserHandler(BaseHandler):
         data = self.request.body
 
         """Apply patch."""
-        try:
-            JsonPatch.load(data, user)
-        except TypeError:
-            JsonPatch.load(data, user, InstitutionProfile)
-            Utils._assert(
-                not InstitutionProfile.is_valid(user.institution_profiles,
-                                                len(user.institutions)),
-                "The profile is invalid.", FieldException)
-        user.put()
+        JsonPatch.load(data, user)
 
         if(user.state == 'inactive'):
             remove_user_from_institutions(user)

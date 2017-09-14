@@ -24,8 +24,6 @@ class InstitutionProfile(ndb.Model):
     @staticmethod
     def is_valid(profiles, institutions_size):
         """Verify the user profile."""
-        if len(profiles) != institutions_size + 1:
-            return False
         for profile in profiles:
             if not profile.office:
                 return False

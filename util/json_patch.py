@@ -197,6 +197,8 @@ class Operation(object):
 
         if isinstance(obj, list):
             attribute = obj[int(attribute_path)]
+        elif isinstance(obj, dict):
+            attribute = obj[attribute_path]
         else:
             _assert(
                 not hasattr(obj, attribute_path),

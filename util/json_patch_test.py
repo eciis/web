@@ -209,7 +209,9 @@ class TestOperationAdd(TestJsonPatch):
         self.json_patch.load(json, self.user)
         parent = self.user.parents[-1]
 
-        self.assertTrue(isinstance(parent, dict))
+        self.assertTrue(
+            isinstance(parent, dict),
+            "Expected instance must be equal to dict")
         self.assertEqual(
             parent['age'],
             19,
@@ -227,8 +229,12 @@ class TestOperationAdd(TestJsonPatch):
 
         parent = self.user.parents[-1]
 
-        self.assertTrue(isinstance(parent, User))
-        self.assertTrue(isinstance(parent.vehicle, Vehicle))
+        self.assertTrue(
+            isinstance(parent, User),
+            "Expected instance must be equal to User")
+        self.assertTrue(
+            isinstance(parent.vehicle, Vehicle),
+            "Expected instance must be equal to Vehicle")
 
         self.assertEqual(
             parent.name,

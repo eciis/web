@@ -23,30 +23,52 @@ def _assert(condition, msg):
 def create_entity(properties_values, method_define_entity=None):
     """Create new entity of class specified."""
     if method_define_entity:
+        search_for_dict(properties_values, method_define_entity)
 
         if isinstance(properties_values, dict):
-            for prop in properties_values:
-                property = properties_values[prop]
-                if isinstance(property, dict):
-                    properties_values[prop] = create_entity(property, method_define_entity)
-
             entity_class = method_define_entity(properties_values)
 
-        elif isinstance(properties_values, list):
-            for index in range(len(properties_values)):
-                property = properties_values[index]
-                if isinstance(property, dict):
-                    properties_values[index] = create_entity(property, method_define_entity)
-
-        if entity_class and entity_class.__name__ != 'dict':
-            entity = entity_class()
-
-            for property in properties_values:
-                setattr(entity, property, properties_values[property])
-
-            return entity
+        if is_valid_entity_class(entity_class):
+            return create_and_set_entity_properties(properties_values, entity_class)
 
     return properties_values
+
+
+def is_valid_entity_class(entity_class):
+    """Verify if is validd entity class."""
+    return entity_class and entity_class.__name__ != 'dict'
+
+
+def create_and_set_entity_properties(properties_values, entity_class):
+    """Method of creat and set properties of entitys."""
+    entity = entity_class()
+
+    for property in properties_values:
+        setattr(entity, property, properties_values[property])
+
+    return entity
+
+
+def search_for_dict(dict_or_list, method_define_entity):
+    """
+    Method of search dictionary in object passed.
+
+    This method searches for dictionaries in the past object to
+    transform them into objects of specific types.
+
+    Keyword arguments:
+    dict_or_list -- object of the type dictionary or list.
+    method_define_entity -- method of define type of difctionary found.
+    """
+    elements = dict_or_list
+
+    if isinstance(dict_or_list, list):
+        elements = range(len(dict_or_list))
+
+    for prop in elements:
+        property = dict_or_list[prop]
+        if isinstance(property, dict):
+            dict_or_list[prop] = create_entity(property, method_define_entity)
 
 
 def list_insert(list, value, index):

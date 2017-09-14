@@ -115,7 +115,6 @@
             return _.isEmpty(newInviteCtrl.user.name);
         };
 
-
         function deleteInvite() {
             var promise = InviteService.deleteInvite(newInviteCtrl.inviteKey);
             promise.then(function success() {

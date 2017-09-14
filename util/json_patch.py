@@ -57,7 +57,7 @@ def is_valid_entity_class(entity_class):
 
 
 def create_and_set_entity_properties(properties_values, entity_class):
-    """Method of creat and set properties of entitys."""
+    """Create and set properties of entities."""
     entity = entity_class()
 
     for property in properties_values:

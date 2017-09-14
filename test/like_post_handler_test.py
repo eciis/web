@@ -7,7 +7,6 @@ from models.user import User
 from models.institution import Institution
 from utils import get_message_exception
 from handlers.like_handler import LikeHandler
-from handlers.like_post_handler import LikePostHandler
 
 from mock import patch
 

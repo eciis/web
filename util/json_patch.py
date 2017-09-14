@@ -20,6 +20,23 @@ def _assert(condition, msg):
         raise PatchException(msg)
 
 
+def get_attribute_of_object(obj, attribute_or_index):
+    """Method of get attribute of object passed."""
+    integer_signals = "-+"
+
+    if attribute_or_index.lstrip(integer_signals).isdigit():
+        attribute_or_index = int(attribute_or_index)
+
+    if isinstance(obj, list) or isinstance(obj, dict):
+        return obj[attribute_or_index]
+    else:
+        _assert(
+            not hasattr(obj, attribute_or_index),
+            "Attribute %s not found" % attribute_or_index
+        )
+        return getattr(obj, attribute_or_index)
+
+
 def create_entity(properties_values, method_define_entity=None):
     """Create new entity of class specified."""
     if method_define_entity:
@@ -195,18 +212,9 @@ class Operation(object):
         if attribute_path == flag_index_top:
             attribute_path = index_top
 
-        if isinstance(obj, list):
-            attribute = obj[int(attribute_path)]
-        elif isinstance(obj, dict):
-            attribute = obj[attribute_path]
-        else:
-            _assert(
-                not hasattr(obj, attribute_path),
-                "Attribute %s not found" % attribute_path
-            )
-            attribute = getattr(obj, attribute_path)
+        attribute = get_attribute_of_object(obj, attribute_path)
 
-        return Operation.go_through_path(self, attribute, path_list)
+        return self.go_through_path(attribute, path_list)
 
     def operation_in_list(self, value, method_define_entity, attribute_list, index):
         """Execute operation in list."""

@@ -104,11 +104,9 @@ User.prototype.addProfile = function addProfile(profile){
 };
 
 User.prototype.isInactive = function isInactive() {
-    var notMember = this.institutions.length === 0;
-    var notInvitee = this.invites.length === 0;
     var notActive = this.state != 'active';
-    return ((notMember && notInvitee) || notActive);
-}
+    return notActive;
+};
 
 function updateFollowInstitution(follows, institution) {
     var index = _.findIndex(follows, ['key', institution.key]);

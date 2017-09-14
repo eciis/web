@@ -19,7 +19,6 @@
         name: 'institution',
         key: '123456789',
         admin: user.key
-
     };
 
     var otherInstitution = {

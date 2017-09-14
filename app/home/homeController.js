@@ -8,6 +8,7 @@
         var homeCtrl = this;
 
         var ACTIVE = "active";
+        var LIMITE_EVENTS = 5;
 
         homeCtrl.posts = [];
         homeCtrl.events = [];
@@ -69,6 +70,7 @@
         function loadEvents() {
             EventService.getEvents().then(function success(response) {
                 homeCtrl.events = activeEvents(response.data);
+                homeCtrl.events = _.take(homeCtrl.events, LIMITE_EVENTS);
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
                     $state.go('app.home');
@@ -77,13 +79,12 @@
 
         function activeEvents(allEvents){
             var now = new Date();
-            var actualEvents = [];
-            for (var i = 0; i < allEvents.length - 1; i++) {
-                var end = new Date(allEvents[i].end_time);
+            var actualEvents = _.remove(allEvents, function(event) {
+                var end = new Date(event.end_time);
                 if(end >= now){
-                    actualEvents.push(allEvents[i]);
+                    return event;
                 }
-            }
+            });
             return actualEvents;
         }
 

@@ -7,7 +7,7 @@
         $mdDialog, NotificationService, MessageService, ngClipboard, ProfileService) {
         var postDetailsCtrl = this;
 
-        var LIMIT_CHARACTERS_POST = 1000;
+        var LIMIT_POST_CHARACTERS = 1000;
 
         postDetailsCtrl.showLikes = false;
         postDetailsCtrl.showComments = false;
@@ -43,58 +43,59 @@
             return postDetailsCtrl.isPostAuthor() || isInstitutionAdmin();
         };
 
-        postDetailsCtrl.isDeleted = function isDeleted() {
-            return postDetailsCtrl.post.state == 'deleted';
+        postDetailsCtrl.isDeleted = function isDeleted(post) {
+            return post.state == 'deleted';
         };
 
         postDetailsCtrl.isHidden = function isHidden() {
-            var hasNoComments = postDetailsCtrl.post.number_of_comments === 0;
-            var hasNoLikes = postDetailsCtrl.post.number_of_likes === 0;
             var isDeleted = postDetailsCtrl.post.state === "deleted";
-            return isDeleted && hasNoComments && hasNoLikes;
+            return isDeleted && !postDetailsCtrl.postHasActivity();
         };
 
-        postDetailsCtrl.isCommonPost = function isCommonPost() {
-            return !postDetailsCtrl.post.shared_post && 
-                !postDetailsCtrl.post.shared_event;
+        postDetailsCtrl.isShared = function isShared() {
+            return postDetailsCtrl.post.shared_post || 
+                postDetailsCtrl.post.shared_event;
+        };
+
+        postDetailsCtrl.postHasActivity = function postHasActivity() {
+            var hasNoComments = postDetailsCtrl.post.number_of_comments === 0;
+            var hasNoLikes = postDetailsCtrl.post.number_of_likes === 0;
+
+            return !hasNoComments || !hasNoLikes;
         };
 
         postDetailsCtrl.showSharedPost = function showSharedPost() {
             return postDetailsCtrl.post.shared_post &&
-                !postDetailsCtrl.isDeleted();
+                !postDetailsCtrl.isDeleted(postDetailsCtrl.post);
         };
 
         postDetailsCtrl.showSharedEvent = function showSharedEvent() {
             return postDetailsCtrl.post.shared_event && 
-                !postDetailsCtrl.isDeleted();
+                !postDetailsCtrl.isDeleted(postDetailsCtrl.post);
         };
 
         postDetailsCtrl.showTextPost = function showTextPost(){
-            return !postDetailsCtrl.isDeleted() &&
-                !postDetailsCtrl.post.shared_post && 
-                    !postDetailsCtrl.post.shared_event;
+            return !postDetailsCtrl.isDeleted(postDetailsCtrl.post) && 
+                     !postDetailsCtrl.isShared();
         };
 
         postDetailsCtrl.showButtonDelete = function showButtonDelete() {
             return postDetailsCtrl.isAuthorized() &&
-                !postDetailsCtrl.isDeleted();
+                !postDetailsCtrl.isDeleted(postDetailsCtrl.post);
         };
 
         postDetailsCtrl.disableButtonLike = function disableButtonLike() {
             return postDetailsCtrl.savingLike ||
-                postDetailsCtrl.isDeleted();
+                postDetailsCtrl.isDeleted(postDetailsCtrl.post);
         };
 
         postDetailsCtrl.showButtonEdit = function showButtonEdit() {
-            var hasNoComments = postDetailsCtrl.post.number_of_comments === 0;
-            var hasNoLikes = postDetailsCtrl.post.number_of_likes === 0;
-
-            return postDetailsCtrl.isPostAuthor() && !postDetailsCtrl.isDeleted() &&
-                hasNoComments && hasNoLikes && postDetailsCtrl.isCommonPost();
+            return postDetailsCtrl.isPostAuthor() && !postDetailsCtrl.isDeleted(postDetailsCtrl.post) &&
+                    !postDetailsCtrl.postHasActivity() && !postDetailsCtrl.isShared();
         };
 
         postDetailsCtrl.showButtonShare = function showButtonShare(){
-            return !postDetailsCtrl.isDeleted() && !postDetailsCtrl.post.shared_event;
+            return !postDetailsCtrl.isDeleted(postDetailsCtrl.post) && !postDetailsCtrl.post.shared_event;
         };
 
         postDetailsCtrl.generateLink = function generateLink(){
@@ -330,7 +331,7 @@
             if(text){
                 var numberOfChar = text.length;
                 return !postDetailsCtrl.isPostPage &&
-                    numberOfChar >= LIMIT_CHARACTERS_POST;
+                    numberOfChar >= LIMIT_POST_CHARACTERS;
             }
         };
 
@@ -340,7 +341,7 @@
 
         function adjustText(text){
             if(postDetailsCtrl.isLongPostTimeline(text)){
-                text = text.substring(0, LIMIT_CHARACTERS_POST) + "...";
+                text = text.substring(0, LIMIT_POST_CHARACTERS) + "...";
             }
             return text.replace(URL_PATTERN,REPLACE_URL);
         }
@@ -534,7 +535,7 @@
      MessageService, $state) {
         var shareCtrl = this;
 
-        var LIMIT_CHARACTERS_POST = 200;
+        var LIMIT_POST_CHARACTERS = 200;
         var URL_PATTERN = /(((www.)|(http(s)?:\/\/))[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
         var REPLACE_URL = "<a href=\'$1\' target='_blank'>$1</a>";
 
@@ -580,8 +581,8 @@
         }
 
         function adjustText(text){
-            if(text.length > LIMIT_CHARACTERS_POST){
-                text = text.substring(0, LIMIT_CHARACTERS_POST) + "...";
+            if(text.length > LIMIT_POST_CHARACTERS){
+                text = text.substring(0, LIMIT_POST_CHARACTERS) + "...";
             }
             return text.replace(URL_PATTERN,REPLACE_URL);
         }

@@ -25,7 +25,7 @@
     // Event of Splab by Maiana
     var event = {'title': 'Inauguration',
         'text': 'Inauguration of system E-CIS',
-        'local': 'Brasília',
+        'local': 'Brasilia',
         'photo_url': null,
         'start_time': new Date(), 
         'end_time': new Date(),

@@ -1,4 +1,4 @@
-<md-card ng-class="postDetailsCtrl.isDeleted()?'post-deleted':''" ng-hide="postDetailsCtrl.isHidden()">
+<md-card ng-class="postDetailsCtrl.isDeleted(postDetailsCtrl.post)?'post-deleted':''" ng-hide="postDetailsCtrl.isHidden()">
   <!-- HEADER -->
   <md-card-header>
     <md-card-avatar>
@@ -99,7 +99,7 @@
           {{postDetailsCtrl.postToURL(postDetailsCtrl.post).text}}
         </p>
         <div layout="row" layout-align="end-center">
-            <a href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost()"
+            <a href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post)"
               ng-if="postDetailsCtrl.isLongPostTimeline(postDetailsCtrl.post.text)">
               <span class="md-subhead" >continuar lendo</span>
             </a>
@@ -168,7 +168,7 @@
     comment="comment" user="postDetailsCtrl.user" post="postDetailsCtrl.post"></comment>
 
   <md-list>
-    <md-list-item class="md-3-line" ng-if="(postDetailsCtrl.showComments || postDetailsCtrl.isPostPage) && !postDetailsCtrl.isDeleted()">
+    <md-list-item class="md-3-line" ng-if="(postDetailsCtrl.showComments || postDetailsCtrl.isPostPage) && !postDetailsCtrl.isDeleted(postDetailsCtrl.post)">
       <img ng-src="{{postDetailsCtrl.user.photo_url}}" class="md-avatar" alt="{{postDetailsCtrl.user.name}}" />
       <div class="md-list-item-text">
         <h2>{{comment.author_name}}</h2>

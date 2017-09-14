@@ -110,13 +110,7 @@
             spyOn(state, 'go');
             spyOn(userService, 'save').and.callThrough();
 
-            spyOn(authService, 'reload').and.callFake(function() {
-                return {
-                    then: function(callback) {
-                        return callback(newUser);
-                    }
-                };
-            });
+            spyOn(authService, 'save');
 
 
             expect(configCtrl.newUser.name).toEqual(user.name);
@@ -130,7 +124,7 @@
             promise.should.be.fulfilled.then(function() {
                 expect(state.go).toHaveBeenCalledWith('app.home');
                 expect(userService.save).toHaveBeenCalled();
-                expect(authService.reload).toHaveBeenCalled();
+                expect(authService.save).toHaveBeenCalled();
             }).should.notify(done);
 
             httpBackend.flush();

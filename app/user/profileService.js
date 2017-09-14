@@ -22,6 +22,7 @@
         };
 
         service.editProfile = function editProfile(data) {
+            data = JSON.parse(angular.toJson(data));
             var deffered = $q.defer();
             $http.patch(USER_URI, data).then(function success(info) {
                 deffered.resolve(info);

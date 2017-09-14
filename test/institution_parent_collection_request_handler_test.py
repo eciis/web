@@ -5,6 +5,7 @@ import json
 from test_base_handler import TestBaseHandler
 from models.user import User
 from models.institution import Institution
+from models.institution import Address
 from utils import get_message_exception
 from handlers.institution_parent_request_collection_handler import InstitutionParentRequestCollectionHandler
 
@@ -100,12 +101,16 @@ def initModels(cls):
     cls.other_user.name = 'Other User'
     cls.other_user.email = 'otheruser@test.com'
     cls.other_user.put()
+    # new institution address
+    cls.address = Address()
+    cls.address.street = "street"
     # new Institution inst test
     cls.inst_test = Institution()
     cls.inst_test.name = 'inst test'
     cls.inst_test.members = [cls.user_admin.key]
     cls.inst_test.followers = [cls.user_admin.key]
     cls.inst_test.admin = cls.user_admin.key
+    cls.inst_test.address = cls.address
     cls.inst_test.put()
     # Update institutions admin from User admin
     cls.user_admin.institutions_admin = [cls.inst_test.key]
@@ -116,4 +121,5 @@ def initModels(cls):
     cls.inst_requested.members = [cls.user_admin.key]
     cls.inst_requested.followers = [cls.user_admin.key]
     cls.inst_requested.admin = cls.user_admin.key
+    cls.inst_requested.address = cls.address
     cls.inst_requested.put()

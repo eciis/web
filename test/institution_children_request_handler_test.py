@@ -5,6 +5,7 @@ import json
 from test_base_handler import TestBaseHandler
 from models.user import User
 from models.institution import Institution
+from models.institution import Address
 from models.request_institution_children import RequestInstitutionChildren
 from utils import get_message_exception
 from handlers.institution_children_request_handler import InstitutionChildrenRequestHandler
@@ -70,12 +71,16 @@ def initModels(cls):
     cls.other_user.name = 'Other User'
     cls.other_user.email = 'otheruser@test.com'
     cls.other_user.put()
+    # new institution address
+    cls.address = Address()
+    cls.address.street = "street"
     # new Institution inst test
     cls.inst_test = Institution()
     cls.inst_test.name = 'inst test'
     cls.inst_test.members = [cls.user_admin.key]
     cls.inst_test.followers = [cls.user_admin.key]
     cls.inst_test.admin = cls.user_admin.key
+    cls.inst_test.address = cls.address
     cls.inst_test.put()
     # new Institution inst requested to be parent of inst test
     cls.inst_requested = Institution()
@@ -83,6 +88,7 @@ def initModels(cls):
     cls.inst_requested.members = [cls.user_admin.key]
     cls.inst_requested.followers = [cls.user_admin.key]
     cls.inst_requested.admin = cls.other_user.key
+    cls.inst_requested.address = cls.address
     cls.inst_requested.put()
     # Update Institutions admin by other user
     cls.other_user.institutions_admin = [cls.inst_requested.key]

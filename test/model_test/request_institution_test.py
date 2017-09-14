@@ -5,6 +5,7 @@ from ..test_base import TestBase
 from models.request_institution_parent import RequestInstitutionParent
 from models.request_institution_children import RequestInstitutionChildren
 from models.institution import Institution
+from models.institution import Address
 from custom_exceptions.fieldException import FieldException
 from models.user import User
 
@@ -134,14 +135,36 @@ class RequestInstitutionParentTest(TestBase):
             'admin_name': self.user_admin.name,
             'key': request.key.urlsafe(),
             'type_of_invite': 'REQUEST_INSTITUTION_PARENT',
-            'institution_key': self.inst_test.key.urlsafe()
+            'institution_key': self.inst_test.key.urlsafe(),
+            'institution': {
+                'phone_number': None,
+                'description': None,
+                'name': 'inst test',
+                'key': self.inst_test.key.urlsafe(),
+                'address': 'street 01, neighbourhood, ' +
+                'city, state, 000, country',
+                'email': None,
+                'photo_url': None
+            },
         }
 
-        self.assertEqual(
-            make,
-            request.make(),
-            "The make object must be equal to variable make"
-        )
+        request_make = request.make()
+        for key in make.keys():
+            if key == "institution":
+                make_institution = make[key]
+                request_institution = request_make[key]
+                for inst_key in make_institution.keys():
+                    self.assertEqual(
+                        str(make_institution[inst_key]).encode('utf-8'),
+                        str(request_institution[inst_key]).encode('utf-8'),
+                        "The make object must be equal to variable make"
+                    )
+            else:
+                self.assertEqual(
+                    str(make[key]).encode('utf-8'),
+                    str(request_make[key]).encode('utf-8'),
+                    "The make object must be equal to variable make"
+                )
 
     def test_make_request_children_institution(self):
         """Test method make for children institution request."""
@@ -166,14 +189,37 @@ class RequestInstitutionParentTest(TestBase):
             'admin_name': self.user_admin.name,
             'key': request.key.urlsafe(),
             'type_of_invite': 'REQUEST_INSTITUTION_CHILDREN',
-            'institution_key': self.inst_test.key.urlsafe()
+            'institution_key': self.inst_test.key.urlsafe(),
+            'institution': {
+                'phone_number': None,
+                'description': None,
+                'name': 'inst test',
+                'key': self.inst_test.key.urlsafe(),
+                'address': 'street 01, neighbourhood, ' +
+                'city, state, 000, country',
+                'email': None,
+                'photo_url': None
+            },
         }
 
-        self.assertEqual(
-            make,
-            request.make(),
-            "The make object must be equal to variable make"
-        )
+        request_make = request.make()
+        for key in make.keys():
+            if key == "institution":
+                make_institution = make[key]
+                request_institution = request_make[key]
+                for inst_key in make_institution.keys():
+                    self.assertEqual(
+                        str(make_institution[inst_key]).encode('utf-8'),
+                        str(request_institution[inst_key]).encode('utf-8'),
+                        "The make object must be equal to variable make"
+                    )
+            else:
+                self.assertEqual(
+                    str(make[key]).encode('utf-8'),
+                    str(request_make[key]).encode('utf-8'),
+                    "The make object must be equal to variable make"
+                )
+
 
 def initModels(cls):
     """Init the models."""
@@ -187,12 +233,23 @@ def initModels(cls):
     cls.other_user.name = 'Other User'
     cls.other_user.email = 'otheruser@test.com'
     cls.other_user.put()
+    # new institution address
+    cls.address = Address()
+    cls.address.number = '01'
+    cls.address.street = 'street'
+    cls.address.neighbourhood = 'neighbourhood'
+    cls.address.city = 'city'
+    cls.address.state = 'state'
+    cls.address.city = 'city'
+    cls.address.cep = '000'
+    cls.address.country = 'country'
     # new Institution inst test
     cls.inst_test = Institution()
     cls.inst_test.name = 'inst test'
     cls.inst_test.members = [cls.user_admin.key]
     cls.inst_test.followers = [cls.user_admin.key]
     cls.inst_test.admin = cls.user_admin.key
+    cls.inst_test.address = cls.address
     cls.inst_test.put()
     # new Institution inst requested to be parent of inst test
     cls.inst_requested = Institution()
@@ -200,6 +257,7 @@ def initModels(cls):
     cls.inst_requested.members = [cls.user_admin.key]
     cls.inst_requested.followers = [cls.user_admin.key]
     cls.inst_requested.admin = cls.user_admin.key
+    cls.inst_requested.address = cls.address
     cls.inst_requested.put()
     # new Institution children of inst requested
     cls.inst_requested_children = Institution()
@@ -208,6 +266,7 @@ def initModels(cls):
     cls.inst_requested_children.followers = [cls.user_admin.key]
     cls.inst_requested_children.admin = cls.user_admin.key
     cls.inst_requested_children.parent_institution = cls.inst_requested.key
+    cls.inst_requested_children.address = cls.address
     cls.inst_requested_children.put()
     # new Institution inst requested update with children institutions
     cls.inst_requested.children_institutions = [cls.inst_requested_children.key]

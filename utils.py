@@ -215,6 +215,37 @@ def is_institution_member(method):
                 Utils.FORBIDDEN, "User is not a member of this Institution"))
     return check_members
 
+def is_admin(method):
+        """Check if the user is admin of the institution."""
+        def check_authorization(self, user, *args):
+            data = json.loads(self.request.body)
+            institution_key = ndb.Key(urlsafe=data['institution_key'])
+            institution = institution_key.get()
+
+            userisNotAdminOfInstitution = institution.key not in user.institutions_admin
+            institutionisNotManagedByUser = institution.admin != user.key
+
+            Utils._assert(userisNotAdminOfInstitution or institutionisNotManagedByUser,
+                          'User is not admin', NotAuthorizedException)
+
+            method(self, user, *args)
+        return check_authorization
+
+def is_admin_of_requested_inst(method):
+        """Check if the user is admin of the institution requested in requests for institution link."""
+        def check_authorization(self, user, request_key, *args):
+            request = ndb.Key(urlsafe=request_key).get()
+            institution = request.institution_requested_key.get()
+
+            userisNotAdminOfInstitution = institution.key not in user.institutions_admin
+            institutionisNotManagedByUser = institution.admin != user.key
+
+            Utils._assert(userisNotAdminOfInstitution or institutionisNotManagedByUser,
+                          'User is not admin', NotAuthorizedException)
+
+            method(self, user, request_key, *args)
+        return check_authorization
+
 
 def is_authorized(method):
     """Check if the user is the author of the post or admin of institution."""
@@ -231,3 +262,10 @@ def is_authorized(method):
 
         method(self, user, url_string, *args)
     return check_authorization
+
+
+def get_message_exception(cls, exception):
+    """Return only message of string exception for tests."""
+    cls.list_args = exception.split("\n")
+    cls.dict = eval(cls.list_args[1])
+    return cls.dict["msg"]

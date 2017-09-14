@@ -4,6 +4,7 @@
 import json
 from test_base_handler import TestBaseHandler
 from models.user import User
+from utils import get_message_exception
 from models.institution import Institution
 from models.institution import Address
 from handlers.user_request_collection_handler import UserRequestCollectionHandler
@@ -104,10 +105,3 @@ def initModels(cls):
     cls.inst_test.followers = [cls.user_admin.key]
     cls.inst_test.admin = cls.user_admin.key
     cls.inst_test.put()
-
-
-def get_message_exception(cls, exception):
-    """Return only message of string exception."""
-    cls.list_args = exception.split("\n")
-    cls.dict = eval(cls.list_args[1])
-    return cls.dict["msg"]

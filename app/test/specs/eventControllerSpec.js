@@ -143,7 +143,7 @@
     describe('isLongText()', function() {
 
       it('Should be false', function() {
-        expect(eventCtrl.isLongText()).toBe(false);
+        expect(eventCtrl.isLongText(eventCtrl.event.text)).toBe(false);
       });
 
       it('Should be true', function() {
@@ -151,7 +151,7 @@
                     simos ducimus quiblanditiis praesentium voluptatum deleniti atque corr\
                     pti quos dolores et quas molestias excepturi sint occaecati cupiditate\
                     non provident, similique sunt in culpa qui officia deserunt mollitia"
-        expect(eventCtrl.isLongText()).toBe(true);
+        expect(eventCtrl.isLongText(eventCtrl.event.text)).toBe(true);
       });
     });
 

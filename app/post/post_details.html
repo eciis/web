@@ -28,7 +28,7 @@
           </div>
           <div layout="row">
             <md-icon>event</md-icon>
-            <p>{{postDetailsCtrl.post.shared_even.start_time | amUtc | amLocal | amCalendar:referenceTime:formats }} até {{postDetailsCtrl.post.shared_event.end_time | amUtc | amLocal | amCalendar:referenceTime:formats }}</p>
+            <p>De {{postDetailsCtrl.post.shared_event.start_time | amUtc | amLocal | amCalendar:referenceTime:formats }} até {{postDetailsCtrl.post.shared_event.end_time | amUtc | amLocal | amCalendar:referenceTime:formats }}</p>
           </div>
         </div>
       </md-toolbar>

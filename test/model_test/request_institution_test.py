@@ -101,10 +101,10 @@ class RequestInstitutionParentTest(TestBase):
                 'admin_key': self.user_admin.key.urlsafe(),
                 'institution_key': self.inst_test.key.urlsafe(),
                 'institution_requested_key': self.inst_requested_children.key.urlsafe(),
-                'type_of_invite': 'REQUEST_INSTITUTION_PARENT'
+                'type_of_invite': 'REQUEST_INSTITUTION_CHILDREN'
             }
 
-            RequestInstitutionParent.create(data)
+            RequestInstitutionChildren.create(data)
 
         self.assertEqual(
             'The institution invited has already parent',

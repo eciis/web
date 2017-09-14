@@ -40,7 +40,7 @@ class Request(Invite):
             raise FieldException("The institutions is already a linked")
         if Request.isRequested(sender, institution_key):
             raise FieldException("The sender is already invited")
-        if (self.__class__.__name__ == 'RequestInstitutionParent'):
+        if (self.__class__.__name__ == 'RequestInstitutionChildren'):
             Request.checkHasParent(institution_requested)
 
     def make(self):

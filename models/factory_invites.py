@@ -3,6 +3,8 @@ from models.invite_user import InviteUser
 from models.invite_institution import InviteInstitution
 from models.invite_institution_parent import InviteInstitutionParent
 from models.invite_institution_children import InviteInstitutionChildren
+from models.request_institution_parent import RequestInstitutionParent
+from models.request_institution_children import RequestInstitutionChildren
 from models.request_user import RequestUser
 
 
@@ -15,7 +17,9 @@ class InviteFactory:
         'INSTITUTION_PARENT': InviteInstitutionParent,
         'INSTITUTION_CHILDREN': InviteInstitutionChildren,
         'INSTITUTION': InviteInstitution,
-        'REQUEST_USER': RequestUser
+        'REQUEST_USER': RequestUser,
+        'REQUEST_INSTITUTION_PARENT': RequestInstitutionParent,
+        'REQUEST_INSTITUTION_CHILDREN': RequestInstitutionChildren
     }
 
     @staticmethod

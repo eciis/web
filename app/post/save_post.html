@@ -23,19 +23,32 @@
       </textarea>
     </md-input-container>
     <div class="image-view" ng-if="postCtrl.showImage()">
-        <button ng-click="postCtrl.hideImage()">&times;</button>
-        <img style="border-radius: 5%;" ng-src="{{ postCtrl.photoUrl }}"/>
-      </div>
+      <button ng-click="postCtrl.hideImage()">&times;</button>
+      <img style="border-radius: 5%;" ng-src="{{ postCtrl.photoUrl }}"/>
+    </div>
+    <div ng-if="postCtrl.showFiles()" ng-repeat="pdf in postCtrl.pdfFiles">
+      <md-button ng-click="postCtrl.hideFile($index)">&times;</md-button>
+      <md-icon>description</md-icon>
+      <span>{{pdf.name}}</span>
+    </div>
     <md-progress-linear ng-show="postCtrl.loading" md-mode="indeterminate" style="width: 14%; margin-top: 5px"></md-progress-linear>
   </md-card-content>
   <md-dialog-actions layout="row" ng-show="postCtrl.post.title">
     <span flex></span>
+    <md-button class="md-icon-button" ng-show="postCtrl.showButton()" ng-click="null" ng-file-model="postCtrl.files" ngf-pattern="'application/pdf'"
+                  title="Adicionar pdf"
+                  ngf-accept="'application/pdf'" ngf-max-size="5MB"
+                  ngf-max-files="10"
+                  ngf-select="postCtrl.addPdf($files)"  multiple>
+          <md-icon>note_add</md-icon>
+    </md-button>
     <md-button class="md-icon-button" ng-show="postCtrl.showButton()" ng-click="null" ng-model="postCtrl.file" ngf-pattern="'image/*'"
+                  title="Adicionar imagem"
                   ngf-accept="'image/*'" ngf-max-size="5MB"
                   ngf-select="postCtrl.addImage(postCtrl.file)">
           <md-icon>add_a_photo</md-icon>
     </md-button>
-    <md-button class="md-icon-button" ng-click="postCtrl.save(isEditing, originalPost, posts)" ng-disabled="!postCtrl.isPostValid()">
+    <md-button title="Enviar" class="md-icon-button" ng-click="postCtrl.save(isEditing, originalPost, posts)" ng-disabled="!postCtrl.isPostValid()">
       <md-icon>send</md-icon>
     </md-button>
   </md-dialog-actions>

@@ -4,7 +4,8 @@
     var app = angular.module('app');
 
     app.controller('PostDetailsController', function(PostService, AuthService, CommentService, $mdToast, $state,
-        $mdDialog, NotificationService, MessageService, ngClipboard, ProfileService) {
+        $mdDialog, NotificationService, MessageService, ngClipboard, ProfileService, PdfService, $sce) {
+
         var postDetailsCtrl = this;
 
         var LIMIT_POST_CHARACTERS = 1000;
@@ -132,6 +133,7 @@
                 postDetailsCtrl.post.title = editedPost.title;
                 postDetailsCtrl.post.text = editedPost.text;
                 postDetailsCtrl.post.photo_url = editedPost.photo_url;
+                postDetailsCtrl.post.pdf_files = editedPost.pdf_files;
             }, function error() {});
         };
 
@@ -357,6 +359,33 @@
             }
             return text;
         }
+
+        postDetailsCtrl.pdfDialog = function(ev, pdf) {
+            var readablePdf = {};
+            PdfService.getReadableURL(pdf.url, setPdfURL, readablePdf).then(
+                function success() {
+                    $mdDialog.show({
+                        templateUrl: 'post/pdfDialog.html',
+                        targetEvent: ev,
+                        clickOutsideToClose:true,
+                        locals: {
+                            pdfUrl: readablePdf.url
+                        },
+                        controller: DialogController,
+                        controllerAs: 'ctrl'
+                    });
+                });
+        };
+
+        function setPdfURL(url, pdf) {
+            pdf.url = url;
+        }
+
+        function DialogController($mdDialog, pdfUrl) {
+            var ctrl = this;
+            var trustedUrl = $sce.trustAsResourceUrl(pdfUrl);
+            ctrl.pdfUrl = trustedUrl;
+        }
     });
 
     app.directive("postDetails", function() {
@@ -558,6 +587,7 @@
 
         shareCtrl.share = function() {
             shareCtrl.newPost.shared_post = getOriginalPost(shareCtrl.post);
+            shareCtrl.newPost.pdf_files = [];
             PostService.createPost(shareCtrl.newPost).then(function success(response) {
                 MessageService.showToast('Compartilhado com sucesso!');
                 $mdDialog.hide();

@@ -103,6 +103,8 @@ class Post(ndb.Model):
 
     photo_url = ndb.StringProperty()
 
+    pdf_files = ndb.JsonProperty()
+
     text = ndb.TextProperty()
 
     # user who is the author
@@ -157,6 +159,7 @@ class Post(ndb.Model):
         post.title = data.get('title')
         post.photo_url = data.get('photo_url')
         post.text = data.get('text')
+        post.pdf_files = Utils.toJson(data.get('pdf_files'))
         post.last_modified_by = author_key
         post.author = author_key
         post.institution = institution_key
@@ -199,7 +202,8 @@ class Post(ndb.Model):
             'author_key': author.key.urlsafe(),
             'last_modified_by': last_modified_by.name,
             'institution_key': institution.key.urlsafe(),
-            'key': post.key.urlsafe()
+            'key': post.key.urlsafe(),
+            'pdf_files': post.pdf_files if post.pdf_files else []
         }
         return post.modify_post(post_dict, host)
 

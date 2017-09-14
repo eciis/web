@@ -91,12 +91,14 @@
 
     describe('share()', function() {
         it('Should call state.go', function() {
+            var post = newPost;
+            newPost.pdf_files = [];
             spyOn(postService, 'createPost').and.returnValue(deffered.promise);
             spyOn(mdDialog, 'hide');
             deffered.resolve(newPost);
             shareCtrl.share();
             scope.$apply();
-            expect(postService.createPost).toHaveBeenCalledWith(newPost);
+            expect(postService.createPost).toHaveBeenCalledWith(post);
             expect(mdDialog.hide).toHaveBeenCalled();
         });
     });

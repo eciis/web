@@ -53,12 +53,28 @@
             return filename;
         }
 
-        service.getReadableURL = function getReadableURL(url, callback) {
+        service.deleteFile = function deleteFile(fileURL) {
+            var deferred = $q.defer();
+            var storage = firebase.storage().refFromURL(fileURL);
+            storage.delete().then(function success() {
+                deferred.resolve();
+            }, function error(error) {
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        };
+
+        service.getReadableURL = function getReadableURL(url, callback, pdf) {
+            var deferred = $q.defer();
             $http.get(url, {responseType:'arraybuffer'}).then(function success(response) {
                 var blob = new Blob([response.data], {type:'application/pdf'});
                 var url = URL.createObjectURL(blob);
-                callback(url);
+                callback(url, pdf);
+                deferred.resolve(response);
+            }, function error() {
+                deferred.reject();
             });
+            return deferred.promise;
         };
 
         function isValidPdf(file) {

@@ -39,7 +39,7 @@
             var post = new Post({}, eventCtrl.user.current_institution.key);
             post.shared_event = event.key;
             PostService.createPost(post).then(function success() {
-                MessageService.showToast('Ev-ento compartilhado com sucesso!');
+                MessageService.showToast('Evento compartilhado com sucesso!');
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
@@ -115,24 +115,24 @@
 
         var URL_PATTERN = /(((www.)|(http(s)?:\/\/))[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
         var REPLACE_URL = "<a href=\'$1\' target='_blank'>$1</a>";
-        var LIMIT_CHARACTERS = 150;
+        var LIMIT_CHARACTERS = 100;
 
         eventCtrl.recognizeUrl =  function recognizeUrl(text) {
-            var urlsInText = text.match(URL_PATTERN);
-            text = addHttpsToUrl(text, urlsInText);
-            text = adjustText(text);
-            return text;
-        };
-
-        eventCtrl.isLongText = function(){
-            if(eventCtrl.event.text){
-                var numberOfChar = eventCtrl.event.text.length;
-                return numberOfChar >= LIMIT_CHARACTERS;
+            if(text){
+                var urlsInText = text.match(URL_PATTERN);
+                text = addHttpsToUrl(text, urlsInText);
+                text = adjustText(text);
+                return text;
             }
         };
 
+        eventCtrl.isLongText = function isLongText(text){
+            var numberOfChar = text.length;
+            return numberOfChar >= LIMIT_CHARACTERS;
+        };
+
         function adjustText(text){
-            if(eventCtrl.isLongText()){
+            if(eventCtrl.isLongText(text)){
                 text = text.substring(0, LIMIT_CHARACTERS) + "...";
             }
             return text.replace(URL_PATTERN,REPLACE_URL);

@@ -93,6 +93,10 @@
                 hasNoComments && hasNoLikes && postDetailsCtrl.isCommonPost();
         };
 
+        postDetailsCtrl.showButtonShare = function showButtonShare(){
+            return !postDetailsCtrl.isDeleted() && !postDetailsCtrl.post.shared_event;
+        };
+
         postDetailsCtrl.generateLink = function generateLink(){
             var currentUrl = (window.location.href).split('#');
             var url = currentUrl[0] + URL_POST + postDetailsCtrl.post.key;
@@ -302,7 +306,7 @@
         * OBS: This function returns a new Post because this result is only for show in view.
         * It is not necessary to change the original Post.
         */
-        postDetailsCtrl.modifyPost =  function modifyPost(receivedPost) {
+        postDetailsCtrl.postToURL =  function postToURL(receivedPost) {
             var post = new Post(receivedPost, receivedPost.institutionKey);
             post.text = postDetailsCtrl.recognizeUrl(post.text);
             return post;

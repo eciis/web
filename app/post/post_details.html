@@ -68,7 +68,7 @@
         <span>{{ postDetailsCtrl.post.shared_post.title }}</span>
       </a>
       <p class="break" ng-if="!postDetailsCtrl.isDeleted(postDetailsCtrl.post.shared_post)"
-        ng-bind-html="postDetailsCtrl.modifyPost(postDetailsCtrl.post.shared_post).text" ></p>
+        ng-bind-html="postDetailsCtrl.postToURL(postDetailsCtrl.post.shared_post).text" ></p>
       <div layout="row" layout-align="end-center">
         <a href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post.shared_post)" ng-if="postDetailsCtrl.isLongPostTimeline(postDetailsCtrl.post.shared_post.text)">
           <span class="md-subhead" >continuar lendo</span>
@@ -95,8 +95,8 @@
       </p>
     </div>
     <div ng-if="postDetailsCtrl.showTextPost()">
-        <p ng-bind-html="postDetailsCtrl.modifyPost(postDetailsCtrl.post).text" class="break">
-          {{postDetailsCtrl.modifyPost(postDetailsCtrl.post).text}}
+        <p ng-bind-html="postDetailsCtrl.postToURL(postDetailsCtrl.post).text" class="break">
+          {{postDetailsCtrl.postToURL(postDetailsCtrl.post).text}}
         </p>
         <div layout="row" layout-align="end-center">
             <a href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost()"
@@ -144,7 +144,7 @@
         ng-if="postDetailsCtrl.showButtonEdit()" title="Editar o post">
       <md-icon>edit</md-icon>
     </md-button>
-    <md-button class="md-icon-button" ng-if="postDetailsCtrl.post.state != 'deleted'" aria-label="compartilhar"
+    <md-button class="md-icon-button" ng-if="postDetailsCtrl.showButtonShare()" aria-label="compartilhar"
       ng-click="postDetailsCtrl.share(postDetailsCtrl.post)" title="Compartilhar o post">
       <md-icon>share</md-icon>
     </md-button>

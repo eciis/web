@@ -146,12 +146,9 @@ class Post(ndb.Model):
     def create(data, author_key, institution_key):
         """Create a post and check required fields."""
         post = Post()
+        post = post.createSharing(data)
 
-        if data.get('shared_event'):
-            post.shared_event = ndb.Key(urlsafe=data["shared_event"])
-        elif data.get('shared_post'):
-            post.shared_post = ndb.Key(urlsafe=data["shared_post"])
-        else:
+        if post.shared_event is None and post.shared_post is None:
             if not data['title']:
                 raise FieldException("Title can not be empty")
             if not data['text']:
@@ -165,6 +162,15 @@ class Post(ndb.Model):
         post.institution = institution_key
 
         return post
+
+    def createSharing(self, data):
+        """Create different type of post, can be shared post or shared event."""
+        if data.get('shared_event'):
+            self.shared_event = ndb.Key(urlsafe=data["shared_event"])
+        elif data.get('shared_post'):
+            self.shared_post = ndb.Key(urlsafe=data["shared_post"])
+
+        return self
 
     @staticmethod
     def make(post, host):

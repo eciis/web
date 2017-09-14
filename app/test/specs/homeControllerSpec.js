@@ -22,7 +22,7 @@
         text: 'Lorem ipsum'
     }];
 
-    // Event of SPLAB by Maiana
+    // Event of Splab by Maiana
     var event = {'title': 'Inauguration',
         'text': 'Inauguration of system E-CIS',
         'local': 'Brasília',

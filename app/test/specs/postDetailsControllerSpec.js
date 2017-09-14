@@ -217,7 +217,7 @@
         });
     });
 
-    describe('recognizeUrl()', function() {
+    describe('postToUrl()', function() {
         var post;
 
         beforeEach(function() {

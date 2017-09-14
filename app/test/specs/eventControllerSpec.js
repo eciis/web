@@ -2,7 +2,7 @@
 
 (describe('Test EventController', function() {
 
-  var eventCtrl, scope, httpBackend, rootScope, deffered, imageService, eventService, message;
+  var eventCtrl, scope, httpBackend, rootScope, deffered, imageService, eventService, postService;
 
   var splab = {name: 'Splab', key: '098745'};
 
@@ -24,26 +24,32 @@
                 'photo_url': null,
                 'start_time': date_now, 
                 'end_time': date_now,
+                'key': '15964'
                 };
+
+  var post = new Post({}, splab.key);
+  post.shared_event = event.key;
 
   var event_convert_date = new Event(event, splab.key);
 
   beforeEach(module('app'));
 
-  beforeEach(inject(function($controller, $httpBackend, $http, $q, AuthService, $rootScope, ImageService, EventService, MessageService) {
+  beforeEach(inject(function($controller, $httpBackend, $http, $q, AuthService, 
+        $rootScope, ImageService, EventService, PostService) {
       imageService = ImageService;
       scope = $rootScope.$new();
       httpBackend = $httpBackend;
       rootScope = $rootScope;
       deffered = $q.defer();
       eventService = EventService;
+      postService = PostService;
       AuthService.login(maiana);
       eventCtrl = $controller('EventController', {
             scope: scope,
             imageService : imageService,
             $rootScope: rootScope,
             eventService: eventService,
-            message : MessageService
+            postService : postService
         });
       eventCtrl.event = event;
 
@@ -110,6 +116,53 @@
         eventCtrl.save();
         scope.$apply();
         expect(eventService.createEvent).toHaveBeenCalledWith(event_convert_date);
+      });
+    });
+
+    describe('share()', function() {
+
+      it('should eventService.createPost be called', function() {
+        spyOn(postService, 'createPost').and.returnValue(deffered.promise);
+        deffered.resolve(post);
+        eventCtrl.share(event);
+        scope.$apply();
+        expect(postService.createPost).toHaveBeenCalledWith(post);
+      });
+    });
+
+    describe('recognizeUrl()', function() {
+
+      it('Should returns a event with https url in text', function() {
+        eventCtrl.event.text = "Acessem: http://www.google.com";
+        eventCtrl.event.text = eventCtrl.recognizeUrl(eventCtrl.event.text);
+        expect(eventCtrl.event.text)
+          .toEqual("Acessem: <a href='http://www.google.com' target='_blank'>http://www.google.com</a>");
+      });
+    });
+
+    describe('isLongText()', function() {
+
+      it('Should be false', function() {
+        expect(eventCtrl.isLongText()).toBe(false);
+      });
+
+      it('Should be true', function() {
+        eventCtrl.event.text = "Acessem: www.google.com aAt vero et accusamus et iusto odio dignis\
+                    simos ducimus quiblanditiis praesentium voluptatum deleniti atque corr\
+                    pti quos dolores et quas molestias excepturi sint occaecati cupiditate\
+                    non provident, similique sunt in culpa qui officia deserunt mollitia"
+        expect(eventCtrl.isLongText()).toBe(true);
+      });
+    });
+
+    describe('clean()', function() {
+
+      it('Must clear attributes of controller', function() {
+        spyOn(eventCtrl, 'cleanImage');
+        eventCtrl.clean();
+        expect(eventCtrl.event).toEqual({});
+        expect(eventCtrl.showButton).toBe(true);
+        expect(eventCtrl.cleanImage).toHaveBeenCalled();
       });
     });
   });

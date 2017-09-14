@@ -39,7 +39,7 @@
             var post = new Post({}, eventCtrl.user.current_institution.key);
             post.shared_event = event.key;
             PostService.createPost(post).then(function success() {
-                MessageService.showToast('Evento compartilhado com sucesso!');
+                MessageService.showToast('Ev-ento compartilhado com sucesso!');
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
@@ -124,15 +124,15 @@
             return text;
         };
 
-        eventCtrl.isLongText = function(text){
-            if(text){
-                var numberOfChar = text.length;
+        eventCtrl.isLongText = function(){
+            if(eventCtrl.event.text){
+                var numberOfChar = eventCtrl.event.text.length;
                 return numberOfChar >= LIMIT_CHARACTERS;
             }
         };
 
         function adjustText(text){
-            if(eventCtrl.isLongText(text)){
+            if(eventCtrl.isLongText()){
                 text = text.substring(0, LIMIT_CHARACTERS) + "...";
             }
             return text.replace(URL_PATTERN,REPLACE_URL);

@@ -34,7 +34,9 @@
         post = {
             title: 'title',
             text: 'text',
-            institution: {}
+            institution: {},
+            photo_url: null,
+            pdf_files: []
         };
 
         httpBackend.when('GET', 'main/main.html').respond(200);

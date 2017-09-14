@@ -24,7 +24,6 @@ def create_entity(properties_values, entity_class=None):
     """Create new entity of class specified."""
     if entity_class:
         entity = entity_class()
-
         for property in properties_values:
             setattr(entity, property, properties_values[property])
         return entity

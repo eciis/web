@@ -2,7 +2,8 @@
 
 (describe('Test EventController', function() {
 
-  var eventCtrl, scope, httpBackend, rootScope, deffered, imageService, eventService, postService;
+  var eventCtrl, scope, httpBackend, rootScope, deffered, imageService,
+        eventService, postService, messageService;
 
   var splab = {name: 'Splab', key: '098745'};
 
@@ -35,7 +36,7 @@
   beforeEach(module('app'));
 
   beforeEach(inject(function($controller, $httpBackend, $http, $q, AuthService, 
-        $rootScope, ImageService, EventService, PostService) {
+        $rootScope, ImageService, EventService, PostService, MessageService) {
       imageService = ImageService;
       scope = $rootScope.$new();
       httpBackend = $httpBackend;
@@ -43,13 +44,15 @@
       deffered = $q.defer();
       eventService = EventService;
       postService = PostService;
+      messageService = MessageService;
       AuthService.login(maiana);
       eventCtrl = $controller('EventController', {
             scope: scope,
             imageService : imageService,
             $rootScope: rootScope,
             eventService: eventService,
-            postService : postService
+            postService : postService,
+            messageService : messageService
         });
       eventCtrl.event = event;
 
@@ -116,6 +119,25 @@
         eventCtrl.save();
         scope.$apply();
         expect(eventService.createEvent).toHaveBeenCalledWith(event_convert_date);
+      });
+
+      describe('MessageService.showToast()', function(){
+
+        it('should be invalid', function() {
+          eventCtrl.event.title = undefined; 
+          spyOn(messageService, 'showToast');
+          eventCtrl.save();
+          scope.$apply();
+          expect(messageService.showToast).toHaveBeenCalledWith('Evento inválido!');
+        });
+
+        it('should be invalid', function() {
+          eventCtrl.event.text = undefined; 
+          spyOn(messageService, 'showToast');
+          eventCtrl.save();
+          scope.$apply();
+          expect(messageService.showToast).toHaveBeenCalledWith('Evento inválido!');
+        });
       });
     });
 

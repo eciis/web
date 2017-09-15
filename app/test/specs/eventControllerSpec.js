@@ -20,8 +20,7 @@
 
   // Event of SPLAB by Maiana
   var event = {'title': 'Inauguration',
-                'text': 'Inauguration of system E-CIS',
-                'local': 'Brasília',
+                'local': 'Brasilia',
                 'photo_url': null,
                 'start_time': date_now, 
                 'end_time': date_now,
@@ -78,7 +77,7 @@
 
       it('should be false', function() {
         eventCtrl.event = new Event({
-              'text': 'Inaugurar o projeto E-CIS',
+              'text': 'Inauguration of system E-CIS',
               'photo_url': null,
               'start_time': new Date(), 
               'end_time': new Date(),
@@ -89,7 +88,7 @@
 
       it('should be false', function() {
         eventCtrl.event = new Event({
-              'title': 'Inauguração',
+              'title': 'Inauguration',
               'photo_url': null,
               'start_time': new Date("October 13, 2014 11:13:00"), 
               'end_time': new Date("October 3, 2014 11:13:00"),
@@ -132,7 +131,8 @@
         });
 
         it('should be invalid', function() {
-          eventCtrl.event.text = undefined; 
+          eventCtrl.event.title = "Inauguration"; 
+          eventCtrl.event.local = undefined; 
           spyOn(messageService, 'showToast');
           eventCtrl.save();
           scope.$apply();
@@ -155,10 +155,10 @@
     describe('recognizeUrl()', function() {
 
       it('Should returns a event with https url in text', function() {
-        eventCtrl.event.text = "Acessem: http://www.google.com";
+        eventCtrl.event.text = "Access: http://www.google.com";
         eventCtrl.event.text = eventCtrl.recognizeUrl(eventCtrl.event.text);
         expect(eventCtrl.event.text)
-          .toEqual("Acessem: <a href='http://www.google.com' target='_blank'>http://www.google.com</a>");
+          .toEqual("Access: <a href='http://www.google.com' target='_blank'>http://www.google.com</a>");
       });
     });
 
@@ -169,7 +169,7 @@
       });
 
       it('Should be true', function() {
-        eventCtrl.event.text = "Acessem: www.google.com aAt vero et accusamus et iusto odio dignis\
+        eventCtrl.event.text = "Access: www.google.com aAt vero et accusamus et iusto odio dignis\
                     simos ducimus quiblanditiis praesentium voluptatum deleniti atque corr\
                     pti quos dolores et quas molestias excepturi sint occaecati cupiditate\
                     non provident, similique sunt in culpa qui officia deserunt mollitia"

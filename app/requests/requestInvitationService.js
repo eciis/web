@@ -19,6 +19,28 @@
             return deferred.promise;
         };
 
+        service.sendRequestToParentInst = function(invite, institution_requested_key) {
+            var deferred = $q.defer();
+            $http.post(REQUESTS_URI + institution_requested_key + "/requests/institution_parent", invite)
+                .then(function success(response) {
+                    deferred.resolve(response);
+            }, function error(response) {
+                    deferred.reject(response);
+            });
+            return deferred.promise;
+        };
+
+        service.sendRequestToChildrenInst = function(invite, institution_requested_key) {
+            var deferred = $q.defer();
+            $http.post(REQUESTS_URI + institution_requested_key + "/requests/institution_children", invite)
+                .then(function success(response) {
+                    deferred.resolve(response);
+            }, function error(response) {
+                    deferred.reject(response);
+            });
+            return deferred.promise;
+        };
+
         service.getRequests = function getRequests(institution_key) {
             var deferred = $q.defer();
 

@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller("InviteInstHierarchieController", function InviteInstHierarchieController(
-        InviteService,$mdToast, $mdDialog, $state, AuthService, InstitutionService, MessageService) {
+        InviteService,$mdToast, $mdDialog, $state, AuthService, InstitutionService, MessageService, RequestInvitationService) {
         var inviteInstCtrl = this;
 
         var institutionKey = $state.params.institutionKey;
@@ -77,12 +77,31 @@
 
         inviteInstCtrl.sendInstInvite = function sendInstInvite(invite) {
             var promise = InviteService.sendInvite(invite);
-            promise.then(function success(response) {
+            promise.then(function success() {
                     MessageService.showToast('Convite enviado com sucesso!');
                     addInvite(invite);
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
                 });
+            return promise;
+        };
+
+        inviteInstCtrl.sendInviteToExistingInst = function sendInviteToExistingInst(invite, institution_requested_key) {
+            invite.institution_requested_key = institution_requested_key;
+            invite.sender_key = inviteInstCtrl.user.key;
+            var promise;
+            if (invite.type_of_invite === INSTITUTION_PARENT) {
+                invite.type_of_invite = "REQUEST_INSTITUTION_PARENT";
+                promise = RequestInvitationService.sendRequestToParentInst(invite, institution_requested_key);
+            } else {
+                invite.type_of_invite = "REQUEST_INSTITUTION_CHILDREN";
+                promise = RequestInvitationService.sendRequestToChildrenInst(invite, institution_requested_key);
+            }
+            promise.then(function success() {
+                MessageService.showToast('Convite enviado com sucesso!');
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
+            });
             return promise;
         };
 

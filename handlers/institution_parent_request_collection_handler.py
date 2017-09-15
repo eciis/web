@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Institution Parent Collectcion Request Handler."""
 
+from google.appengine.ext import ndb
 import json
 from utils import login_required
 from utils import json_response

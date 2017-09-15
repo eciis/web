@@ -7,11 +7,16 @@
         var suggestInstCtrl = this;
         suggestInstCtrl.institutions = institutions;
         suggestInstCtrl.invite = invite;
+        suggestInstCtrl.chosen_institution = null;
 
         var ACTIVE_STATE = "active";
 
         suggestInstCtrl.sendInvite = function sendInvite(){
-            inviteController.sendInstInvite(invite);
+            if(suggestInstCtrl.chosen_institution) {
+                inviteController.sendInviteToExistingInst(invite, suggestInstCtrl.chosen_institution);
+            } else {
+                inviteController.sendInstInvite(invite);
+            }
             suggestInstCtrl.cancel();
         };
 

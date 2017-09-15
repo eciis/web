@@ -72,10 +72,9 @@
             if (configProfileCtrl.newUser.isValid()) {
                 var patch = jsonpatch.generate(observer);
                 UserService.save(patch).then(function success() {
-                    AuthService.reload().then(function success() {
-                        $state.go("app.home");
-                        deffered.resolve();
-                    });
+                    AuthService.save();
+                    $state.go("app.home");
+                    deffered.resolve();
                 });
             } else {
                 MessageService.showToast("Campos obrigatórios não preenchidos corretamente.");
@@ -109,6 +108,20 @@
             } else {
                 MessageService.showToast('Desvínculo não permitido. Você é administrador dessa instituição.');
             }
+        };
+
+        configProfileCtrl.editProfile = function editProfile(inst, ev) {
+            $mdDialog.show({
+                templateUrl: 'user/edit_profile.html',
+                controller: 'EditProfileController',
+                controllerAs: "editProfileCtrl",
+                locals: {
+                    institution: inst,
+                    user: configProfileCtrl.newUser
+                },
+                targetEvent: ev,
+                clickOutsideToClose: true
+            });
         };
 
         function isAdmin(institution_key) {
@@ -176,4 +189,45 @@
             }
         })();
     });
+
+
+    app.controller("EditProfileController", function EditProfileController(institution, user, ProfileService,
+        AuthService, $mdDialog, MessageService) {
+            var editProfileCtrl = this;
+            editProfileCtrl.phoneRegex = /^(\([0-9]{2}\))\s([9]{1})?([0-9]{4})-([0-9]{4})$/;
+            editProfileCtrl.institution = institution;
+            var profileObserver;
+
+            editProfileCtrl.edit = function edit() {
+                if(isValidProfile()) {
+                    var patch = jsonpatch.generate(profileObserver);
+                   if(!_.isEmpty(patch)) {
+                        ProfileService.editProfile(patch).then(function success() {
+                            MessageService.showToast('Perfil editado com sucesso');
+                            AuthService.save();
+                        }, function error(response) {
+                            MessageService.showToast(response.data.msg);
+                        });
+                   }
+                   editProfileCtrl.closeDialog();
+                } else {
+                    MessageService.showToast('O cargo é obrigatório.');
+                }
+            };
+
+            editProfileCtrl.closeDialog = function closeDialog() {
+                $mdDialog.hide();
+            };
+
+            function isValidProfile() {
+                return !_.isEmpty(editProfileCtrl.profile.office);
+            }
+
+            (function main() {
+                editProfileCtrl.profile = _.find(user.institution_profiles, function(profile) {
+                    return profile.institution_key === editProfileCtrl.institution.key;
+                });
+                profileObserver = jsonpatch.observe(user);
+            })();
+        });
 })();

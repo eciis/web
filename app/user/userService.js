@@ -8,18 +8,6 @@
 
         var USER_URI = "/api/user";
 
-        service.addInstitution = function addInstitution(user, institutionKey, inviteKey) {
-            var deffered = $q.defer();
-            user.addInstitution(institutionKey);
-
-            $http.put(USER_URI + '/invites/' + inviteKey, user).then(function success(info) {
-                deffered.resolve(info.data);
-            }, function error(data) {
-                deffered.reject(data);
-            });
-            return deffered.promise;
-        };
-
         service.deleteInstitution = function deleteInstitution(institutionKey) {
             var deffered = $q.defer();
             $http.delete(USER_URI + '/institutions/' + institutionKey).then(function success(info) {
@@ -31,6 +19,7 @@
         };
 
         service.save = function save(patch) {
+            patch = JSON.parse(angular.toJson(patch));
             var deffered = $q.defer();
             $http.patch(USER_URI, patch).then(function success(info) {
                 deffered.resolve(info.data);

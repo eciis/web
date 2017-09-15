@@ -58,7 +58,7 @@ class RequestHandlerTest(TestBaseHandler):
         with self.assertRaises(Exception) as ex:
             self.testapp.get('/api/requests/' + self.request.key.urlsafe() + '/user')
 
-        exception_message = get_message_exception(self, ex.exception.message)
+        exception_message = self.get_message_exception(ex.exception.message)
         self.assertEqual(
             "Error! User is not admin!",
             exception_message,
@@ -100,7 +100,7 @@ class RequestHandlerTest(TestBaseHandler):
         with self.assertRaises(Exception) as ex:
             self.testapp.put('/api/requests/' + self.request.key.urlsafe() + '/user')
 
-        exception_message = get_message_exception(self, ex.exception.message)
+        exception_message = self.get_message_exception(ex.exception.message)
         self.assertEqual(
             "Error! this request has already been processed",
             exception_message,
@@ -112,7 +112,7 @@ class RequestHandlerTest(TestBaseHandler):
         with self.assertRaises(Exception) as ex:
             self.testapp.put('/api/requests/' + self.request.key.urlsafe() + '/user')
 
-        exception_message = get_message_exception(self, ex.exception.message)
+        exception_message = self.get_message_exception(ex.exception.message)
         self.assertEqual(
             "Error! User is not admin!",
             exception_message,
@@ -132,7 +132,7 @@ class RequestHandlerTest(TestBaseHandler):
         with self.assertRaises(Exception) as ex:
             self.testapp.delete('/api/requests/' + self.request.key.urlsafe() + '/user')
 
-        exception_message = get_message_exception(self, ex.exception.message)
+        exception_message = self.get_message_exception(ex.exception.message)
         self.assertEqual(
             "Error! User is not admin!",
             exception_message,
@@ -170,10 +170,3 @@ def initModels(cls):
 
     cls.request = RequestUser.create(data)
     cls.request.put()
-
-
-def get_message_exception(cls, exception):
-    """Return only message of string exception."""
-    cls.list_args = exception.split("\n")
-    cls.dict = eval(cls.list_args[1])
-    return cls.dict["msg"]

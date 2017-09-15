@@ -143,7 +143,7 @@ class PostCommentHandlerTest(TestBaseHandler):
             self.testapp.delete(self.URL_DELETE_COMMENT %
                                 (self.mayza_post.key.urlsafe(), self.id_comment))
 
-        ex = get_message_exception(self, ex.exception.message)
+        ex = self.get_message_exception(ex.exception.message)
         self.assertEquals(ex, "Error! User not allowed to remove comment")
         self.assertEquals(len(self.mayza_post.comments), 1,
                           "Expected size of comment's list should be one")
@@ -244,10 +244,3 @@ def initModels(cls):
     # Comments
     cls.comment = {'text': 'Frist comment. Using in Test', 'institution_key': cls.certbio.key.urlsafe()}
     cls.other_comment = {'text': 'Second comment. Using in Test', 'institution_key': cls.certbio.key.urlsafe()}
-
-
-def get_message_exception(cls, exception):
-    """Return only message of string exception."""
-    cls.list_args = exception.split("\n")
-    cls.dict = eval(cls.list_args[1])
-    return cls.dict["msg"]

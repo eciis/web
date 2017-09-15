@@ -71,7 +71,7 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
                 "/api/institutions/" + self.inst_test.key.urlsafe() + "/requests/user",
                 data)
 
-        exception_message = get_message_exception(self, ex.exception.message)
+        exception_message = self.get_message_exception(ex.exception.message)
         self.assertEqual(
             'Error! The type must be REQUEST_USER',
             exception_message,
@@ -97,10 +97,3 @@ def initModels(cls):
     cls.inst_test.followers = [cls.user_admin.key]
     cls.inst_test.admin = cls.user_admin.key
     cls.inst_test.put()
-
-
-def get_message_exception(cls, exception):
-    """Return only message of string exception."""
-    cls.list_args = exception.split("\n")
-    cls.dict = eval(cls.list_args[1])
-    return cls.dict["msg"]

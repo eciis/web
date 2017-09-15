@@ -3,7 +3,8 @@
 (describe('Test postDetailsController', function() {
     beforeEach(module('app'));
 
-    var postDetailsCtrl, scope, httpBackend, rootScope, mdDialog, postService, mdToast, http, commentService, state, posts;
+    var postDetailsCtrl, scope, httpBackend, rootScope, mdDialog, postService, mdToast, http,
+    commentService, state, posts, rootscope;
     var user = {
         name: 'name',
         key: 'asd234jk2l'
@@ -20,6 +21,7 @@
     beforeEach(inject(function($controller, $httpBackend, $http, $mdDialog,
             PostService, AuthService, $mdToast, $rootScope, CommentService, $state) {
         scope = $rootScope.$new();
+        rootscope = $rootScope;
         httpBackend = $httpBackend;
         rootScope = $rootScope;
         mdDialog = $mdDialog;
@@ -46,7 +48,11 @@
             return new User(user);
         };
 
-        postDetailsCtrl = $controller('PostDetailsController', {scope: scope});
+        postDetailsCtrl = $controller('PostDetailsController',{
+            scope: scope,
+            $rootScope: rootscope,
+            $scope: scope
+        });
         httpBackend.flush();
     }));
 
@@ -217,7 +223,7 @@
         });
     });
 
-    describe('recognizeUrl()', function() {
+    describe('postToUrl()', function() {
         var post;
 
         beforeEach(function() {
@@ -229,17 +235,17 @@
         });
 
         it('Should not change the original post title', function() {
-            postDetailsCtrl.recognizeUrl(post);
+            postDetailsCtrl.postToURL(post);
             expect(post.title).toEqual("Post de Tiago em www.twitter.com");
         });
 
         it('Should returns a post with https url in text', function() {
-            var newPost = postDetailsCtrl.recognizeUrl(post);
+            var newPost = postDetailsCtrl.postToURL(post);
             expect(newPost.text).toEqual("Acessem: <a href='http://www.google.com' target='_blank'>http://www.google.com</a>");
         });
 
         it('Should not change the original post text', function() {
-            postDetailsCtrl.recognizeUrl(post);
+            postDetailsCtrl.postToURL(post);
             expect(post.text).toEqual("Acessem: www.google.com");
         });
     });

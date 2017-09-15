@@ -41,6 +41,33 @@
       </timeline-event>
     </timeline>
   </div>
+  <md-card flex layout="column">
+        <md-list class="md-dense" flex>
+          <md-subheader class="md-no-sticky">Eventos</md-subheader>
+            <md-list-item class="md-3-line"
+                ng-repeat="event in eventCtrl.events | orderBy : eventCtrl.events.start_time" ng-click="null">
+              <div class="image-view" ng-if="event.photo_url" layout="row">
+                <img class="md-card-image" style="border-radius: 3%;" ng-src="{{ event.photo_url }}"/>
+              </div>
+              <div class="md-list-item-text" style="padding: 2%;">
+                <label>{{ event.title }}</label>
+                <p>Horário</p>
+                <h3>De {{ event.start_time | amUtc | amLocal | amCalendar:referenceTime:formats}} até 
+                   {{ event.end_time | amUtc | amLocal | amCalendar:referenceTime:formats }}</h3>
+                <p ng-if="event.text">Descrição</p>
+                <h3 ng-if="event.text" ng-bind-html="eventCtrl.recognizeUrl(event.text)" class="break">
+                </h3>
+                <p>Local</p>
+                <h3>{{ event.local }}</h3>
+                <p>Autor/Instituição</p>
+                <h3>{{ event.author_name }} por {{ event.institution_name}}</h3>
+              </div>
+              <md-button class="md-icon-button" ng-click="eventCtrl.share(event)">
+                <md-icon>share</md-icon>
+              </md-button>
+            </md-list-item>
+        </md-list>
+      </md-card>
 </md-content>
 
 <md-fab-speed-dial id="fab-new-event" class="md-fab-bottom-right">

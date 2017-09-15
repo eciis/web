@@ -70,10 +70,9 @@
             return deferred.promise;
         };
 
-        service.save = function save(post, newPost) {
+        service.save = function save(post_key, patch) {
             var deffered = $q.defer();
-            var patch = jsonpatch.compare(post, newPost);
-            $http.patch(POSTS_URI + '/' + post.key, patch).then(function success(info) {
+            $http.patch(POSTS_URI + '/' + post_key, patch).then(function success(info) {
                 deffered.resolve(info.data);
             }, function error(data) {
                 deffered.reject(data);

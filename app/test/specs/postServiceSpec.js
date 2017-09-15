@@ -1,7 +1,7 @@
 'use strict';
 
 (describe('Test PostService', function () {
-        var httpBackend, service, $http;
+        var httpBackend, service, $http, scope;
         var POSTS_URI = "/api/posts";
 
         var user = {name: 'Raoni', key: 12345};
@@ -15,9 +15,9 @@
         user.institutions = [institutions[0]];
 
         var posts = [
-            {title: 'teste', text: 'post de teste principal', institution: institutions[0].key},
-            {title: 'teste2', text: 'post de teste secundário', institution: institutions[0].key},
-            {title: 'teste3', text: 'post de teste auxiliar', institution: institutions[1].key}
+            {title: 'test', text: 'main post test', institution: institutions[0].key, key: '1'},
+            {title: 'test2', text: 'secondary post test', institution: institutions[0].key, key: '2'},
+            {title: 'test3', text: 'auxiliar post test', institution: institutions[1].key, key: '3'}
         ];
 
         institutions[0].posts = [posts[0], posts[1]];
@@ -30,15 +30,21 @@
 
         beforeEach(module('app'));
 
-        beforeEach(inject(function($httpBackend, PostService, _$http_) {
+        beforeEach(inject(function($httpBackend, PostService, _$http_, $rootScope) {
             httpBackend = $httpBackend;
             $http = _$http_;
+            scope = $rootScope.$new();
             service = PostService;
             httpBackend.when('GET', 'main/main.html').respond(200);
             httpBackend.when('GET', 'home/home.html').respond(200);
             httpBackend.when('GET', 'error/error.html').respond(200);
             httpBackend.when('GET', 'auth/login.html').respond(200);
         }));
+
+        afterEach(function() {
+            httpBackend.verifyNoOutstandingExpectation();
+            httpBackend.verifyNoOutstandingRequest();
+        });
 
         it('Test get in success case', function() {
             spyOn($http, 'get').and.callThrough();
@@ -100,31 +106,16 @@
             expect(result.data).toEqual([like]);
         });
 
-        it('Test save in success case', function() {
+        it('Test save()', function() {
             spyOn($http, 'patch').and.callThrough();
-            httpBackend.expect('PATCH', POSTS_URI + '/' + posts[0].key).respond();
-            var newPost = {title: 'test', text: 'post de teste', institution: institutions[0].key};
-            var patch = jsonpatch.compare(posts[0], newPost);
-            service.save(posts[0], newPost);
-            httpBackend.flush();
-            expect($http.patch).toHaveBeenCalled();
-            expect($http.patch).toHaveBeenCalledWith(POSTS_URI + '/' + posts[0].key, patch);
-        });
-
-        it('Test save in fail case', function() {
-            spyOn($http, 'patch').and.callThrough();
-            httpBackend.expect('PATCH', POSTS_URI + '/' + posts[0].key)
-                                    .respond(403, {status: 403, msg: "Operation invalid"});
-            var newPost = {title: 'test', institution: institutions[0].key};
+            httpBackend.when('PATCH', POSTS_URI + '/' + posts[0].key)
+                                    .respond(200, {status: 200, msg: "success"});
+            var patch = [{op: 'remove', path: 'propertie/1', value: 'test patch'}];
             var result;
-            var patch = jsonpatch.compare(posts[0], newPost);
-            service.save(posts[0], newPost).catch(function(data) {
+            service.save(posts[0], patch).catch(function(data) {
                 result = data;
             });
             httpBackend.flush();
             expect($http.patch).toHaveBeenCalled();
-            expect($http.patch).toHaveBeenCalledWith(POSTS_URI + '/' + posts[0].key, patch);
-            expect(result.status).toEqual(403);
-            expect(result.data.msg).toEqual("Você não tem permissão para realizar esta operação!");
         });
 }));

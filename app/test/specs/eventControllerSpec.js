@@ -122,7 +122,7 @@
 
       describe('MessageService.showToast()', function(){
 
-        it('should be invalid', function() {
+        it('should be invalid, because title is undefined', function() {
           eventCtrl.event.title = undefined; 
           spyOn(messageService, 'showToast');
           eventCtrl.save();
@@ -130,7 +130,7 @@
           expect(messageService.showToast).toHaveBeenCalledWith('Evento inválido!');
         });
 
-        it('should be invalid', function() {
+        it('should be invalid, because local is undefined', function() {
           eventCtrl.event.title = "Inauguration"; 
           eventCtrl.event.local = undefined; 
           spyOn(messageService, 'showToast');

@@ -31,6 +31,7 @@
         };
 
         service.save = function save(patch) {
+            patch = JSON.parse(angular.toJson(patch));
             var deffered = $q.defer();
             $http.patch(USER_URI, patch).then(function success(info) {
                 deffered.resolve(info.data);

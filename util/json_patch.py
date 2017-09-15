@@ -191,13 +191,13 @@ class Add(Operation):
 
         if isinstance(obj, dict):
             _assert(
-                attribute in obj,
+                attribute in obj and obj[attribute] != None,
                 "Attribute %s already exists" % attribute
             )
             obj[attribute] = value
         else:
             _assert(
-                hasattr(obj, attribute),
+                hasattr(obj, attribute) and getattr(obj, attribute) != None,
                 "Attribute %s already exists" % attribute
             )
             obj.__setattr__(attribute, value)

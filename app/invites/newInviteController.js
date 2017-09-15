@@ -32,8 +32,6 @@
         };
 
         newInviteCtrl.saveInstProfile = function configInstProfile() {
-            jsonpatch.unobserve(newInviteCtrl.user.current_institution, observer);
-            observer = jsonpatch.observe(newInviteCtrl.user);
             var profile = {phone: newInviteCtrl.phone,
                     email: newInviteCtrl.email,
                     office: newInviteCtrl.office,
@@ -41,7 +39,6 @@
                     institution_name: newInviteCtrl.institution.name,
                     institution_photo_url: newInviteCtrl.institution.photo_url};
             newInviteCtrl.user.addProfile(profile);
-            newInviteCtrl.user.name = newInviteCtrl.name;
             AuthService.save();
             var patch = jsonpatch.generate(observer);
             var promise;
@@ -111,10 +108,12 @@
                 return promise;
         };
 
-        newInviteCtrl.showInputName = function showInputName() {
-            return newInviteCtrl.user.name === 'Unknown';
+        newInviteCtrl.checkUserName = function checkUserName() {
+            if(newInviteCtrl.user.name === 'Unknown') {
+                newInviteCtrl.user.name = '';
+            }
+            return _.isEmpty(newInviteCtrl.user.name);
         };
-
 
         function deleteInvite() {
             var promise = InviteService.deleteInvite(newInviteCtrl.inviteKey);
@@ -155,6 +154,8 @@
 
         function loadInvite(){
             observer = jsonpatch.observe(newInviteCtrl.user);
+            jsonpatch.unobserve(newInviteCtrl.user.current_institution, observer);
+            newInviteCtrl.checkUserName();
             InviteService.getInvite(newInviteCtrl.inviteKey).then(function success(response) {
                 newInviteCtrl.invite = new Invite(response.data);
                 if(newInviteCtrl.invite.status === 'sent') {
@@ -172,6 +173,9 @@
         function isValidProfile() {
             if(!newInviteCtrl.office) {
                 MessageService.showToast("Cargo institucional deve ser preenchido.");
+                return false;
+            } else if(newInviteCtrl.checkUserName()) {
+                MessageService.showToast("O nome deve ser preenchido.");
                 return false;
             }
             return true;

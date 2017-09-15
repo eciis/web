@@ -22,6 +22,8 @@
         $mdThemingProvider.theme('docs-dark');
         $mdThemingProvider.theme('input')
             .primaryPalette('green');
+        $mdThemingProvider.theme('dialogTheme')
+            .primaryPalette('teal');
 
         $urlMatcherFactoryProvider.caseInsensitive(true);
 

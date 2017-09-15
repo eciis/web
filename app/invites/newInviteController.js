@@ -22,9 +22,7 @@
         newInviteCtrl.acceptInvite = function acceptInvite(event) {
             if (newInviteCtrl.invite.type_of_invite === "USER") {
                 if(isValidProfile()) {
-                    newInviteCtrl.saveInstProfile().then(function success() {
-                        newInviteCtrl.addInstitution(event);
-                    });
+                    newInviteCtrl.addInstitution(event);
                 }
             } else {
                 newInviteCtrl.updateStubInstitution();
@@ -41,14 +39,14 @@
             newInviteCtrl.user.addProfile(profile);
             AuthService.save();
             var patch = jsonpatch.generate(observer);
-            var promise;
-            promise = UserService.save(patch);
-            return promise;
+            return patch;
         };
 
         newInviteCtrl.addInstitution =  function addInstitution(event) {
-            var promise = UserService.addInstitution(newInviteCtrl.user,
-                newInviteCtrl.institution.key, newInviteCtrl.inviteKey);
+            var patch = newInviteCtrl.saveInstProfile();
+            newInviteCtrl.user.addInstitution(newInviteCtrl.institution.key);
+
+            var promise = InviteService.acceptInvite(patch, newInviteCtrl.inviteKey);
                 promise.then(function success(userSaved) {
                     newInviteCtrl.user.removeInvite(newInviteCtrl.inviteKey);
                     newInviteCtrl.user.institutions = userSaved.institutions;

@@ -127,15 +127,6 @@
                     }
                 }
             })
-            .state("choose_institution", {
-                url: "/chooseinstitution",
-                views: {
-                    main: {
-                        templateUrl: "auth/choose_institution.html",
-                        controller: "ChooseInstController as chooseInstCtrl"
-                    }
-                }
-            })
             .state("new_invite", {
                 url: "/:key/new_invite",
                 views: {

@@ -65,27 +65,6 @@ class UserHandler(BaseHandler):
         self.response.write(json.dumps(user_json))
 
     @login_required
-    @ndb.transactional(xg=True)
-    def put(self, user, invite_key):
-        """Handler PUT Requests."""
-        data = json.loads(self.request.body)
-
-        institution_key = ndb.Key(urlsafe=data['institutions'][-1])
-        institution = institution_key.get()
-
-        invite = ndb.Key(urlsafe=invite_key).get()
-        invite.change_status('accepted')
-
-        user.add_institution(institution_key)
-        user.follow(institution_key)
-        user.change_state('active')
-
-        institution.add_member(user)
-        institution.follow(user.key)
-
-        self.response.write(json.dumps(makeUser(user, self.request)))
-
-    @login_required
     def delete(self, user, institution_key):
         """Handler DELETE Requests."""
         institution_key = ndb.Key(urlsafe=institution_key)

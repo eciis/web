@@ -51,9 +51,10 @@ class InviteHandler(BaseHandler):
 
     @json_response
     @login_required
+    @ndb.transactional(xg=True)
     def patch(self, user, invite_key):
         """Handler PATCH Requests."""
-        data = json.loads(self.request.body)
+        data = self.request.body
 
         invite = ndb.Key(urlsafe=invite_key).get()
         invite.change_status('accepted')

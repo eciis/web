@@ -178,11 +178,16 @@ def login_required(method):
 
         user_email = credential.get('email', 'Unknown')
         user_name = credential.get('name', 'Unknown')
-        print "-------------------------------------"
-        print user_email
 
         user = User.get_by_email(user_email)
 
+        if user is None:
+            user = User()
+            user.email = user_email
+            user.name = user_name
+            user.photo_url = "/images/avatar.jpg"
+
+            user.put()
         method(self, user, *args)
     return login
 

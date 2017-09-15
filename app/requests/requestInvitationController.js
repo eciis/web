@@ -22,7 +22,9 @@
                 admin_key : requestInvCtrl.institutionSelect.admin.key,
                 is_request : true,
                 type_of_invite : 'REQUEST_USER',
-                
+                sender_name : requestInvCtrl.sender_name ,
+                office : requestInvCtrl.office ,
+                institutional_email : requestInvCtrl.institutional_email 
             };
 
             var request = new Invite(dataInvite);

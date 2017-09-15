@@ -26,7 +26,7 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
-    @patch('utils.verify_token', return_value={'email': 'other_user@test.com'})
+    @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_post(self, verify_token):
         """Test method post of UserRequestHandler."""
         data = {
@@ -40,14 +40,6 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
             'institutional_email': 'other@ceo.com'
         }
 
-        user_BEFORE = self.other_user.key.get()
-        print "NO TESTE ANTES DO REQUEST"
-        print user_BEFORE
-
-        print "all users &&&&&&&"
-        users = User.query().fetch()
-        print users
-
         request = self.testapp.post_json(
             "/api/institutions/" + self.inst_test.key.urlsafe() + "/requests/user",
             data)
@@ -55,14 +47,11 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
         request = json.loads(request._app_iter[0])
 
         user_updated = self.other_user.key.get()
-        print "NO TESTE DEPOIS DE ATUALIZAR"
-        print user_updated
-
 
         self.assertEqual(
             request['sender'],
             self.other_user.email,
-            'Expected sender email is other_user@test.com')
+            'Expected sender email is otheruser@test.com')
         self.assertEqual(
             request['admin_name'],
             self.user_admin.name,
@@ -75,30 +64,30 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
             len(user_updated.institution_profiles),
             1)
 
-    # @patch('utils.verify_token', return_value={'email': 'other_user@test.com'})
-    # def test_post_invalid_request_type(self, verify_token):
-    #     """Test if an exception is thrown by passing an invalid request."""
-    #     data = {
-    #         'sender_key': self.other_user.key.urlsafe(),
-    #         'is_request': True,
-    #         'admin_key': self.user_admin.key.urlsafe(),
-    #         'institution_key': self.inst_test.key.urlsafe(),
-    #         'type_of_invite': 'INVITE',
-    #         'sender_name': self.other_user.name,
-    #         'office': 'CEO',
-    #         'institutional_email': 'other@ceo.com'
-    #     }
+    @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
+    def test_post_invalid_request_type(self, verify_token):
+        """Test if an exception is thrown by passing an invalid request."""
+        data = {
+            'sender_key': self.other_user.key.urlsafe(),
+            'is_request': True,
+            'admin_key': self.user_admin.key.urlsafe(),
+            'institution_key': self.inst_test.key.urlsafe(),
+            'type_of_invite': 'INVITE',
+            'sender_name': self.other_user.name,
+            'office': 'CEO',
+            'institutional_email': 'other@ceo.com'
+        }
 
-    #     with self.assertRaises(Exception) as ex:
-    #         self.testapp.post_json(
-    #             "/api/institutions/" + self.inst_test.key.urlsafe() + "/requests/user",
-    #             data)
+        with self.assertRaises(Exception) as ex:
+            self.testapp.post_json(
+                "/api/institutions/" + self.inst_test.key.urlsafe() + "/requests/user",
+                data)
 
-    #     exception_message = get_message_exception(self, ex.exception.message)
-    #     self.assertEqual(
-    #         'Error! The type must be REQUEST_USER',
-    #         exception_message,
-    #         "Expected error message is Error! The type must be REQUEST_USER")
+        exception_message = get_message_exception(self, ex.exception.message)
+        self.assertEqual(
+            'Error! The type must be REQUEST_USER',
+            exception_message,
+            "Expected error message is Error! The type must be REQUEST_USER")
 
 
 def initModels(cls):
@@ -113,7 +102,6 @@ def initModels(cls):
     cls.other_user.name = 'Other User'
     cls.other_user.email = 'otheruser@test.com'
     cls.other_user.put()
-    print "NO INIT"
     # new Institution inst test
     cls.inst_test = Institution()
     cls.inst_test.name = 'inst test'

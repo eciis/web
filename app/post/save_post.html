@@ -22,6 +22,11 @@
         required="true"></textarea>
       </textarea>
     </md-input-container>
+    <md-input-container ng-show="postCtrl.post.title">
+      <label>Video Url</label>
+      <textarea style="max-height: 400px;overflow-y:auto;resize:none;" ng-model="postCtrl.post.video_url" md-select-on-focus>
+      </textarea>
+    </md-input-container>
     <div class="image-view" ng-if="postCtrl.showImage()">
       <button ng-click="postCtrl.hideImage()">&times;</button>
       <img style="border-radius: 5%;" ng-src="{{ postCtrl.photoUrl }}"/>

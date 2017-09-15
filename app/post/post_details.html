@@ -91,11 +91,10 @@
           </md-button>
         </div>
     </div>
-    <div class="youtube-player">
-    <iframe src="https://www.youtube.com/watch?v=Ex7YsQ_YH2U">
-    </iframe>
+    <div class="youtube-player" ng-if="postDetailsCtrl.post.video_url">
+      <iframe ng-src="{{postDetailsCtrl.getVideoUrl()}}">
+      </iframe>
     </div>
-
   </md-card-content>
   <md-divider></md-divider>
 

@@ -186,6 +186,8 @@
             var savePromises = [saveFiles(), saveImage()];
             $q.all(savePromises).then(function success() {
                 var post = new Post(postCtrl.post, postCtrl.user.current_institution.key);
+                console.log(post);
+                console.log(postCtrl.post);
                 if (post.isValid()) {
                     PostService.createPost(post).then(function success(response) {
                         postCtrl.clearPost();
@@ -210,6 +212,20 @@
         postCtrl.clearPost = function clearPost() {
             postCtrl.post = {};
             postCtrl.pdfFiles = [];
+        };
+
+        postCtrl.showVideo = function showVideo() {
+            return postCtrl.post.title && postCtrl.post.video_url;
+        };
+
+        postCtrl.getVideoUrl = function getVideoUrl() {
+            var params = _.split(postCtrl.post.video_url, '/');
+            var id = _.split(params[_.size(params) - 1], '=');
+            id = id[_.size(id) - 1];
+            postCtrl.post.video_url = 'https://www.youtube.com/embed/' + id;
+            console.log(typeof(postCtrl.post.video_url));
+            console.log(postCtrl.post.video_url);
+            return true;
         };
 
         function saveEditedPost(originalPost) {
@@ -274,6 +290,7 @@
                 observer = jsonpatch.observe(postCtrl.post);
 
             }
+
         })();
 
         postCtrl.hideImage = function() {

@@ -141,6 +141,9 @@ class Post(ndb.Model):
     # When post is shared post
     shared_post = ndb.KeyProperty(kind="Post")
 
+    # Video url
+    video_url = ndb.StringProperty()
+
     @staticmethod
     def create(data, author_key, institution_key):
         """Create a post and check required fields."""
@@ -161,6 +164,7 @@ class Post(ndb.Model):
         post.last_modified_by = author_key
         post.author = author_key
         post.institution = institution_key
+        post.video_url = data.get('video_url')
 
         return post
 
@@ -182,6 +186,7 @@ class Post(ndb.Model):
             'likes': getLikesUri(post, host),
             'number_of_likes': post.get_number_of_likes(),
             'photo_url': post.photo_url,
+            'video_url': post.video_url,
             'uploaded_images': post.uploaded_images,
             'state': post.state,
             'comments': getCommentsUri(post, host),

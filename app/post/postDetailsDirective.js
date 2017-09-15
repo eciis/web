@@ -140,6 +140,13 @@
             });
         };
 
+        postDetailsCtrl.getVideoUrl = function getVideoUrl() {
+            var params = _.split(postDetailsCtrl.post.video_url, '/');
+            var id = _.split(params[_.size(params) - 1], '=');
+            id = id[_.size(id) - 1];
+            return 'https://www.youtube.com/embed/' + id;
+        };
+
         function likePost() {
             postDetailsCtrl.savingLike = true;
             var promise = PostService.likePost(postDetailsCtrl.post);
@@ -509,10 +516,10 @@
         commentCtrl.canDeleteComment = function canDeleteComment(reply) {
             if (reply) {
                 var replyHasActivity = commentCtrl.numberOfLikes(reply) > 0;
-                return !replyHasActivity && 
+                return !replyHasActivity &&
                     reply.author_key == commentCtrl.user.key;
             }
-            var commentHasActivity = commentCtrl.numberOfReplies() > 0 || 
+            var commentHasActivity = commentCtrl.numberOfReplies() > 0 ||
                 commentCtrl.numberOfLikes() > 0;
             return !commentHasActivity &&
                 commentCtrl.comment.author_key == commentCtrl.user.key;

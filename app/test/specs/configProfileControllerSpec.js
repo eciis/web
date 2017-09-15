@@ -4,25 +4,25 @@
     var configCtrl, httpBackend, deffered, scope, userService, createCrtl, state,
     mdToast, authService, imageService, mdDialog, cropImageService;
 
-    var splab = {
-        name: 'SPLAB',
+    var institution = {
+        name: 'institution',
         key: '987654321'
     };
 
     var user = {
-        name: 'Maiana',
+        name: 'User',
         cpf: '121.445.044-07',
-        email: 'maiana.brito@ccc.ufcg.edu.br',
-        institutions: [splab],
+        email: 'teste@gmail.com',
+        institutions: [institution],
         uploaded_images: [],
         institutions_admin: []
     };
 
     var newUser = {
-        name: 'Maiana Brito',
+        name: 'newUser',
         cpf: '121.115.044-07',
-        email: 'maiana.brito@ccc.ufcg.edu.br',
-        institutions: [splab],
+        email: 'teste@gmail.com',
+        institutions: [institution],
         institutions_admin: []
     };
 
@@ -93,10 +93,10 @@
             spyOn(mdToast, 'show');
 
             var userInvalid = {
-                name: 'Maiana Brito',
+                name: 'Invalid User',
                 cpf: '',
-                email: 'maiana.brito@ccc.ufcg.edu.br',
-                institutions: [splab]
+                email: 'invalidUser@gmail',
+                institutions: [institution]
             };
 
             configCtrl.newUser = new User(userInvalid);
@@ -249,7 +249,7 @@
                 };
             });
 
-            promise = configCtrl.removeInstitution('$event', splab);
+            promise = configCtrl.removeInstitution('$event', institution);
         });
 
         it('Should call user.isAdmin()', function(done) {
@@ -268,7 +268,7 @@
 
         it('Should call userService.deleteInstitution()', function(done) {
             promise.then(function() {
-                expect(userService.deleteInstitution).toHaveBeenCalledWith(splab.key);
+                expect(userService.deleteInstitution).toHaveBeenCalledWith(institution.key);
                 done();
             });
         });
@@ -338,7 +338,7 @@
     describe('editProfile', function() {
         it('should call mdDialog.show', function() {
             spyOn(mdDialog, 'show');
-            configCtrl.editProfile(splab, '$event');
+            configCtrl.editProfile(institution, '$event');
             expect(mdDialog.show).toHaveBeenCalled();
         });
     });

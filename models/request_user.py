@@ -44,6 +44,9 @@ class RequestUser(Invite):
         """Create a post and check required fields."""
         request = RequestUser()
         request.sender_key = ndb.Key(urlsafe=data.get('sender_key'))
+        request.sender_name = data.get('sender_name')
+        request.office = data.get('office')
+        request.institutional_email = data.get('institutional_email')
         request = Invite.create(data, request)
         request.isValid()
         return request

@@ -34,14 +34,30 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
             'is_request': True,
             'admin_key': self.user_admin.key.urlsafe(),
             'institution_key': self.inst_test.key.urlsafe(),
-            'type_of_invite': 'REQUEST_USER'
+            'type_of_invite': 'REQUEST_USER',
+            'sender_name': "nome novisssimos",
+            'office': 'CEO',
+            'institutional_email': 'other@ceo.com'
         }
+
+        user_BEFORE = self.other_user.key.get()
+        print "NO TESTE ANTES DO REQUEST"
+        print user_BEFORE
+
+        print "all users &&&&&&&"
+        users = User.query().fetch()
+        print users
 
         request = self.testapp.post_json(
             "/api/institutions/" + self.inst_test.key.urlsafe() + "/requests/user",
             data)
 
         request = json.loads(request._app_iter[0])
+
+        user_updated = self.other_user.key.get()
+        print "NO TESTE DEPOIS DE ATUALIZAR"
+        print user_updated
+
 
         self.assertEqual(
             request['sender'],
@@ -52,31 +68,37 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
             self.user_admin.name,
             'Expected sender admin_name is User Admin')
         self.assertEqual(
-            request['type_of_invite'],
-            'REQUEST_USER',
-            'Expected sender type_of_invite is REQUEST_USER')
-
-    @patch('utils.verify_token', return_value={'email': 'other_user@test.com'})
-    def test_post_invalid_request_type(self, verify_token):
-        """Test if an exception is thrown by passing an invalid request."""
-        data = {
-            'sender_key': self.other_user.key.urlsafe(),
-            'is_request': True,
-            'admin_key': self.user_admin.key.urlsafe(),
-            'institution_key': self.inst_test.key.urlsafe(),
-            'type_of_invite': 'INVITE'
-        }
-
-        with self.assertRaises(Exception) as ex:
-            self.testapp.post_json(
-                "/api/institutions/" + self.inst_test.key.urlsafe() + "/requests/user",
-                data)
-
-        exception_message = get_message_exception(self, ex.exception.message)
+            request['admin_name'],
+            self.user_admin.name,
+            'Expected sender admin_name is User Admin')
         self.assertEqual(
-            'Error! The type must be REQUEST_USER',
-            exception_message,
-            "Expected error message is Error! The type must be REQUEST_USER")
+            len(user_updated.institution_profiles),
+            1)
+
+    # @patch('utils.verify_token', return_value={'email': 'other_user@test.com'})
+    # def test_post_invalid_request_type(self, verify_token):
+    #     """Test if an exception is thrown by passing an invalid request."""
+    #     data = {
+    #         'sender_key': self.other_user.key.urlsafe(),
+    #         'is_request': True,
+    #         'admin_key': self.user_admin.key.urlsafe(),
+    #         'institution_key': self.inst_test.key.urlsafe(),
+    #         'type_of_invite': 'INVITE',
+    #         'sender_name': self.other_user.name,
+    #         'office': 'CEO',
+    #         'institutional_email': 'other@ceo.com'
+    #     }
+
+    #     with self.assertRaises(Exception) as ex:
+    #         self.testapp.post_json(
+    #             "/api/institutions/" + self.inst_test.key.urlsafe() + "/requests/user",
+    #             data)
+
+    #     exception_message = get_message_exception(self, ex.exception.message)
+    #     self.assertEqual(
+    #         'Error! The type must be REQUEST_USER',
+    #         exception_message,
+    #         "Expected error message is Error! The type must be REQUEST_USER")
 
 
 def initModels(cls):
@@ -91,6 +113,7 @@ def initModels(cls):
     cls.other_user.name = 'Other User'
     cls.other_user.email = 'otheruser@test.com'
     cls.other_user.put()
+    print "NO INIT"
     # new Institution inst test
     cls.inst_test = Institution()
     cls.inst_test.name = 'inst test'

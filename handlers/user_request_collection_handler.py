@@ -10,6 +10,7 @@ from models.request_user import RequestUser
 from custom_exceptions.entityException import EntityException
 from handlers.base_handler import BaseHandler
 from models.factory_invites import InviteFactory
+from models.user import InstitutionProfile
 
 
 class UserRequestCollectionHandler(BaseHandler):
@@ -46,6 +47,24 @@ class UserRequestCollectionHandler(BaseHandler):
 
         request = InviteFactory.create(data, type_of_invite)
         request.put()
+        print "recebido no handler"
+        print user 
+
+        user.name = data.get('sender_name')
+        user_profile = InstitutionProfile()
+        user_profile.email = data.get('institutional_email')
+        user_profile.institution_key = data.get('institution_key')
+        user_profile.office = data.get('office')
+        user_profile.name = data.get('sender_name')
+        user.institution_profiles.append(user_profile)
+
+        print "com alterações"
+        print user
+
+        user.put()
+
+        print "depois do put"
+        print user
 
         if(request.stub_institution_key):
             request.stub_institution_key.get().addInvite(request)

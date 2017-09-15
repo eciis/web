@@ -21,7 +21,8 @@
                 sender_key : requestInvCtrl.currentUser.key,
                 admin_key : requestInvCtrl.institutionSelect.admin.key,
                 is_request : true,
-                type_of_invite : 'REQUEST_USER'
+                type_of_invite : 'REQUEST_USER',
+                
             };
 
             var request = new Invite(dataInvite);

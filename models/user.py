@@ -8,8 +8,8 @@ class InstitutionProfile(ndb.Model):
     office = ndb.StringProperty(required=True)
     email = ndb.StringProperty()
     phone = ndb.StringProperty()
-    institution_name = ndb.StringProperty(required=True)
-    institution_photo_url = ndb.StringProperty(required=True)
+    institution_name = ndb.StringProperty()
+    institution_photo_url = ndb.StringProperty()
     institution_key = ndb.StringProperty(required=True)
 
     def make(self):

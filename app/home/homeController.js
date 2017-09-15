@@ -4,12 +4,14 @@
     var app = angular.module("app");
 
     app.controller("HomeController", function HomeController(PostService, AuthService,
-            InstitutionService, $interval, $mdToast, $mdDialog, $state, MessageService, ProfileService) {
+            InstitutionService, $interval, $mdToast, $mdDialog, $state, MessageService, ProfileService, EventService) {
         var homeCtrl = this;
 
         var ACTIVE = "active";
+        var LIMITE_EVENTS = 5;
 
         homeCtrl.posts = [];
+        homeCtrl.events = [];
         homeCtrl.followingInstitutions = [];
         homeCtrl.instMenuExpanded = false;
 
@@ -21,6 +23,10 @@
 
         homeCtrl.showUserProfile = function showUserProfile(userKey, ev) {
             ProfileService.showProfile(userKey, ev);
+        };
+
+        homeCtrl.goToEvents = function goToEvents() {
+            $state.go('app.event');
         };
 
         homeCtrl.newPost = function newPost(event) {
@@ -61,6 +67,28 @@
             });
         };
 
+        function loadEvents() {
+            EventService.getEvents().then(function success(response) {
+                homeCtrl.events = activeEvents(response.data);
+                homeCtrl.events = _.take(homeCtrl.events, LIMITE_EVENTS);
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
+                    $state.go('app.home');
+            });
+        }
+
+        function activeEvents(allEvents){
+            var now = new Date();
+            var actualEvents = _.remove(allEvents, function(event) {
+                var end = new Date(event.end_time);
+                if(end >= now){
+                    return event;
+                }
+            });
+            return actualEvents;
+        }
+
+        loadEvents();
         loadPosts();
         getFollowingInstitutions();
     });

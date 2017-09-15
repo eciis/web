@@ -3,7 +3,7 @@
 from google.appengine.ext import ndb
 from custom_exceptions.fieldException import FieldException
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
-
+from models.event import Event
 from utils import Utils
 
 import json
@@ -141,18 +141,20 @@ class Post(ndb.Model):
     # When post is shared post
     shared_post = ndb.KeyProperty(kind="Post")
 
+    # When post is shared event
+    shared_event = ndb.KeyProperty(kind="Event")
+
     @staticmethod
     def create(data, author_key, institution_key):
         """Create a post and check required fields."""
         post = Post()
+        post = post.createSharing(data)
 
-        if data.get('shared_post') is None:
+        if post.shared_event is None and post.shared_post is None:
             if not data['title']:
                 raise FieldException("Title can not be empty")
             if not data['text']:
                 raise FieldException("Text can not be empty")
-        else:
-            post.shared_post = ndb.Key(urlsafe=data["shared_post"])
 
         post.title = data.get('title')
         post.photo_url = data.get('photo_url')
@@ -163,6 +165,15 @@ class Post(ndb.Model):
         post.institution = institution_key
 
         return post
+
+    def createSharing(self, data):
+        """Create different type of post, can be shared post or shared event."""
+        if data.get('shared_event'):
+            self.shared_event = ndb.Key(urlsafe=data["shared_event"])
+        elif data.get('shared_post'):
+            self.shared_post = ndb.Key(urlsafe=data["shared_post"])
+
+        return self
 
     @staticmethod
     def make(post, host):
@@ -197,13 +208,16 @@ class Post(ndb.Model):
         return post.modify_post(post_dict, host)
 
     def modify_post(post, post_dict, host):
-        """Create personalized json if post was deleted or is shared."""
+        """Create personalized json if post was deleted is shared."""
         if(post.state == 'deleted'):
             post_dict['title'] = None
             post_dict['text'] = None
 
         if(post.shared_post):
             post_dict['shared_post'] = Post.make(post.shared_post.get(), host)
+
+        if(post.shared_event):
+            post_dict['shared_event'] = Event.make(post.shared_event.get())
 
         return post_dict
 

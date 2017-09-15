@@ -80,7 +80,7 @@ class PostCollectionHandlerTest(TestBaseHandler):
         post = self.testapp.post_json("/api/posts", {'institution':
                                                      self.institution.key.urlsafe(),
                                                      'shared_post':
-                                                     self.mayza_post.key.urlsafe()}).json
+                                                     self.user_post.key.urlsafe()}).json
         # Retrieve the entities
         key_post = ndb.Key(urlsafe=post['key'])
         post_obj = key_post.get()
@@ -164,22 +164,22 @@ def initModels(cls):
     cls.institution.admin = cls.user.key
     cls.institution.put()
     # POST of Mayza To Certbio Institution
-    cls.mayza_post = Post()
-    cls.mayza_post.title = "Post existente"
-    cls.mayza_post.text = "Post inicial que quero compartilhar"
-    cls.mayza_post.author = cls.user.key
-    cls.mayza_post.last_modified_by = cls.user.key
-    cls.mayza_post.institution = cls.institution.key
-    cls.mayza_post.put()
+    cls.user_post = Post()
+    cls.user_post.title = "Post existente"
+    cls.user_post.text = "Post inicial que quero compartilhar"
+    cls.user_post.author = cls.user.key
+    cls.user_post.last_modified_by = cls.user.key
+    cls.user_post.institution = cls.institution.key
+    cls.user_post.put()
 
     """ Update Institution."""
-    cls.institution.posts.append(cls.mayza_post.key)
+    cls.institution.posts.append(cls.user_post.key)
     cls.institution.put()
 
     """ Update User."""
-    cls.user.posts.append(cls.mayza_post.key)
+    cls.user.posts.append(cls.user_post.key)
     cls.user.add_institution(cls.institution.key)
-    cls.mayza_post.put()
+    cls.user_post.put()
 
     # Events
     cls.event = Event()

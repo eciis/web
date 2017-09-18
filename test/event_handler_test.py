@@ -9,6 +9,7 @@ from handlers.event_handler import EventHandler
 
 from mock import patch
 import datetime
+import json
 
 
 class EventHandlerTest(TestBaseHandler):
@@ -18,8 +19,12 @@ class EventHandlerTest(TestBaseHandler):
     def setUp(cls):
         """Provide the base for the tests."""
         super(EventHandlerTest, cls).setUp()
+        methods = set(cls.webapp2.WSGIApplication.allowed_methods)
+        methods.add('PATCH')
+        cls.webapp2.WSGIApplication.allowed_methods = frozenset(methods)
         app = cls.webapp2.WSGIApplication(
             [("/api/calendar/event/(.*)", EventHandler),
+             ("/api/events/(.*)", EventHandler)
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
@@ -27,7 +32,6 @@ class EventHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
     def test_delete(self, verify_token):
         """Test the event_handler's delete method."""
-
         # Call the delete method
         self.testapp.delete("/api/calendar/event/%s" %
                             self.event.key.urlsafe())
@@ -41,56 +45,57 @@ class EventHandlerTest(TestBaseHandler):
     def test_patch(self, verify_token):
         """Test the post_handler's patch method."""
         # Call the patch method and assert that it works
-        self.testapp.patch_json("/api/events/%s"
-                                % self.event.key.urlsafe(),
-                                [{"op": "replace", "path": "/title",
-                                    "value": "Edit Event"},
-                                 {"op": "replace", "path": "/text",
-                                    "value": "Edit Text Event"},
-                                 {"op": "replace", "path": "/local",
-                                     "value": "New Local"}
-                                 ])
-    #     self.event = self.event.key.get()
-    #     self.assertEqual(self.event.title, "Edit Event")
-    #     self.assertEqual(self.event.text, "Edit Text Event")
-    #     self.assertEqual(self.event.local, "New Local")
-        # # Pretend a new authentication
-        # verify_token.return_value = {'email': 'usersd@ccc.ufcg.edu.br'}
+        json_edit = json.dumps([{"op": "replace", "path": "/title",
+                                 "value": "Edit Event"},
+                                {"op": "replace", "path": "/text",
+                                 "value": "Edit Text Event"},
+                                {"op": "replace", "path": "/local",
+                                 "value": "New Local"},
+                                {"op": "replace", "path": "/start_time",
+                                 "value": '2018-07-14T12:30:15'},
+                                {"op": "replace", "path": "/end_time",
+                                 "value": '2018-07-25T12:30:15'}
+                                ])
 
-        # # Call the patch method and assert that it works
-        # self.testapp.patch_json("/api/events/%s"
-        #                         % self.event.key.urlsafe(),
-        #                         [{"op": "replace", "path": "/local",
-        #                             "value": "New Local"}]
-        #                         )
-        # self.second_user_post = self.second_user_post.key.get()
-        # self.assertEqual(self.second_user_post.text, "testando")
-        # # Call the patch method and assert that  it raises an exception
-        # with self.assertRaises(Exception):
-        #     self.testapp.patch_json("/api/posts/%s"
-        #                             % self.first_user_post.key.urlsafe(),
-        #                             [{"op": "replace", "path": "/text",
-        #                               "value": "testando"}]
-        #                             )
-        # # test the case when the post has a like, so it can not be updated
-        # self.first_user_post.like(self.second_user.key)
-        # self.first_user_post = self.first_user_post.key.get()
-        # with self.assertRaises(Exception):
-        #     self.testapp.patch_json("/api/posts/%s"
-        #                             % self.first_user_post.key.urlsafe(),
-        #                             [{"op": "replace", "path": "/text",
-        #                                 "value": "testando"}]
-        #                             )
+        self.testapp.patch("/api/events/" +
+                           self.event.key.urlsafe(),
+                           json_edit)
 
-        # # test the case when the post has a comment, so it can not be updated
-        # self.first_user_post.add_comment(self.second_user_comment)
-        # self.first_user_post = self.first_user_post.key.get()
-        # with self.assertRaises(Exception):
-        #     self.testapp.patch_json("/api/posts/%s"
-        #                             % self.first_user_post.key.urlsafe(),
-        #                             [{"op": "replace", "path": "/text",
-        #                                 "value": "testando"}]
-        #                             )
+        self.event = self.event.key.get()
+        self.assertEqual(self.event.title, "Edit Event")
+        self.assertEqual(self.event.text, "Edit Text Event")
+        self.assertEqual(self.event.local, "New Local")
+        self.assertEqual(self.event.start_time.isoformat(), '2018-07-14T12:30:15')
+        self.assertEqual(self.event.end_time.isoformat(), '2018-07-25T12:30:15')
+
+        # test the case when the start_time is after end_time
+        with self.assertRaises(Exception):
+            self.testapp.patch_json("/api/events/" +
+                                    self.event.key.urlsafe(),
+                                    [{"op": "replace", "path": "/start_time",
+                                      "value": '2018-07-27T12:30:15'}
+                                     ]
+                                    )
+
+        # test the case when the end_time is before start_time
+        with self.assertRaises(Exception):
+            self.testapp.patch_json("/api/events/" +
+                                    self.event.key.urlsafe(),
+                                    [{"op": "replace", "path": "/end_time",
+                                      "value": '2018-07-07T12:30:15'}
+                                     ]
+                                    )
+
+        # Pretend a new authentication
+        verify_token.return_value = {'email': 'usersd@ccc.ufcg.edu.br'}
+
+        # Call the patch method and assert that  it raises an exception
+        with self.assertRaises(Exception):
+            self.testapp.patch_json("/api/events/%s"
+                                    % self.event.key.urlsafe(),
+                                    [{"op": "replace", "path": "/local",
+                                      "value": "New Local"}]
+                                    )
 
     def tearDown(cls):
         """Deactivate the test."""

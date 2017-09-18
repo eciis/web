@@ -41,6 +41,7 @@ def create_entity(properties_values, method_define_entity=None):
     """Create new entity of class specified."""
     if method_define_entity:
         search_for_dict(properties_values, method_define_entity)
+        entity_class = None
 
         if isinstance(properties_values, dict):
             entity_class = method_define_entity(properties_values)

@@ -1,5 +1,13 @@
 <md-content layout="row" md-colors="{background: 'grey-200'}" layout-align="center" class="body">
   <div flex-gt-lg="80" flex-lg="90" layout="row" layout-align="center" layout-fill>
+    <div layout="column" layout-align="center center" ng-if="eventCtrl.events.length === 0"> 
+      <p>
+        <span class="md-subhead">Seja o primeiro a criar um evento.</span>
+      </p>
+      <md-button aria-label="menu" class="md-button" ng-click="eventCtrl.newEvent()" md-colors="{background: 'teal-900'}">
+        Criar evento
+      </md-button>
+    </div>
     <timeline>
       <timeline-event ng-repeat="event in eventCtrl.events | orderBy:'start_time'">
         <timeline-badge class="primary">

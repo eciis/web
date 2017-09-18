@@ -27,6 +27,11 @@ def getInvites(user_email):
     return invites
 
 
+def define_entity(dictionary):
+    """Method of return entity class for create object in JasonPacth."""
+    return InstitutionProfile
+
+
 def makeUser(user, request):
     """TODO: Move this method to User when utils.py is refactored.
 

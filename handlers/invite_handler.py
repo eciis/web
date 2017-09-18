@@ -28,6 +28,11 @@ def makeUser(user, request):
     return user_json
 
 
+def define_entity(dictionary):
+    """Method of return instance of InstitutionProfile for using in jsonPacth."""
+    return InstitutionProfile
+
+
 class InviteHandler(BaseHandler):
     """Invite Handler."""
 
@@ -69,7 +74,7 @@ class InviteHandler(BaseHandler):
         institution.add_member(user)
         institution.follow(user.key)
 
-        JsonPatch.load(data, user, InstitutionProfile)
+        JsonPatch.load(data, user, define_entity)
         Utils._assert(
             not InstitutionProfile.is_valid(user.institution_profiles,
                                             len(user.institutions)),

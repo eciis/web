@@ -103,6 +103,11 @@ User.prototype.addProfile = function addProfile(profile){
     this.institution_profiles.push(profile);
 };
 
+User.prototype.isInactive = function isInactive() {
+    var notActive = this.state != 'active';
+    return notActive;
+};
+
 function updateFollowInstitution(follows, institution) {
     var index = _.findIndex(follows, ['key', institution.key]);
     follows[index].acronym = institution.acronym;

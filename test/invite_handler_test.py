@@ -5,6 +5,7 @@ import json
 from test_base_handler import TestBaseHandler
 from models.user import User
 from models.institution import Institution
+from models.institution import Address
 from models.invite_user import InviteUser
 from handlers.invite_handler import InviteHandler
 
@@ -112,9 +113,12 @@ def initModels(cls):
     cls.other_user.name = 'Other User'
     cls.other_user.email = 'otheruser@test.com'
     cls.other_user.put()
+    # isntitution address
+    cls.address = Address()
     # new Institution inst test
     cls.inst_test = Institution()
     cls.inst_test.name = 'inst test'
+    cls.inst_test.address = cls.address
     cls.inst_test.members = [cls.user_admin.key]
     cls.inst_test.followers = [cls.user_admin.key]
     cls.inst_test.admin = cls.user_admin.key

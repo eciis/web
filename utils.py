@@ -3,17 +3,14 @@
 import json
 import datetime
 import sys
-
 import logging
 
-from google.appengine.api import users
 from google.appengine.ext import ndb
 from google.appengine.ext.ndb import Key
 
 from models.user import User
-from models.institution import Institution
 
-from oauth2client import client, crypt
+from oauth2client import client
 from oauth2client.crypt import AppIdentityError
 
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
@@ -176,20 +173,29 @@ def login_required(method):
             self.response.set_status(401)
             return
 
-        user_email = credential.get('email', 'Unknown')
         user_name = credential.get('name', 'Unknown')
-
+        user_email = credential.get('email', 'Unknown')
         user = User.get_by_email(user_email)
 
         if user is None:
-            user = User()
-            user.email = user_email
-            user.name = user_name
-            user.photo_url = "/images/avatar.jpg"
+            user = {
+                "name": user_name,
+                "email": user_email
+            }
 
-            user.put()
         method(self, user, *args)
     return login
+
+
+def create_user(name, email):
+    """Create user."""
+    user = User()
+    user.email = email
+    user.name = name
+    user.photo_url = "/images/avatar.jpg"
+    user.put()
+
+    return user
 
 
 def json_response(method):

@@ -3,9 +3,10 @@
 
 import json
 
-from utils import Utils
 from models.invite import Invite
+from utils import Utils
 from utils import login_required
+from utils import create_user
 from utils import json_response
 from models.user import InstitutionProfile
 from custom_exceptions.fieldException import FieldException
@@ -65,6 +66,13 @@ class UserHandler(BaseHandler):
     @login_required
     def get(self, user):
         """Handle GET Requests."""
+        """ TODO/FIXME: Remove the user creation from this handler.
+            This was done to solve the duplicate user creation bug.
+            Author: Ruan Eloy - 18/09/17
+        """
+        if isinstance(user, dict):
+            user = create_user(user.get('name'), user.get('email'))
+
         user_json = makeUser(user, self.request)
         user_json['invites'] = getInvites(user.email)
         self.response.write(json.dumps(user_json))

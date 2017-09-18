@@ -5,8 +5,8 @@ import json
 from test_base_handler import TestBaseHandler
 from models.user import User
 from models.institution import Institution
+from models.institution import Address
 from models.request_user import RequestUser
-from utils import get_message_exception
 from handlers.request_handler import RequestHandler
 
 from mock import patch
@@ -59,7 +59,7 @@ class RequestHandlerTest(TestBaseHandler):
         with self.assertRaises(Exception) as ex:
             self.testapp.get('/api/requests/' + self.request.key.urlsafe() + '/user')
 
-        exception_message = get_message_exception(self, ex.exception.message)
+        exception_message = self.get_message_exception(ex.exception.message)
         self.assertEqual(
             "Error! User is not admin!",
             exception_message,
@@ -101,7 +101,7 @@ class RequestHandlerTest(TestBaseHandler):
         with self.assertRaises(Exception) as ex:
             self.testapp.put('/api/requests/' + self.request.key.urlsafe() + '/user')
 
-        exception_message = get_message_exception(self, ex.exception.message)
+        exception_message = self.get_message_exception(ex.exception.message)
         self.assertEqual(
             "Error! this request has already been processed",
             exception_message,
@@ -113,7 +113,7 @@ class RequestHandlerTest(TestBaseHandler):
         with self.assertRaises(Exception) as ex:
             self.testapp.put('/api/requests/' + self.request.key.urlsafe() + '/user')
 
-        exception_message = get_message_exception(self, ex.exception.message)
+        exception_message = self.get_message_exception(ex.exception.message)
         self.assertEqual(
             "Error! User is not admin!",
             exception_message,
@@ -133,7 +133,7 @@ class RequestHandlerTest(TestBaseHandler):
         with self.assertRaises(Exception) as ex:
             self.testapp.delete('/api/requests/' + self.request.key.urlsafe() + '/user')
 
-        exception_message = get_message_exception(self, ex.exception.message)
+        exception_message = self.get_message_exception(ex.exception.message)
         self.assertEqual(
             "Error! User is not admin!",
             exception_message,
@@ -152,9 +152,14 @@ def initModels(cls):
     cls.other_user.name = 'Other User'
     cls.other_user.email = 'otheruser@test.com'
     cls.other_user.put()
+    # new Institution Address
+    cls.address = Address()
+    cls.address.number = '01'
+    cls.address.street = 'street'
     # new Institution inst test
     cls.inst_test = Institution()
     cls.inst_test.name = 'inst test'
+    cls.inst_test.address = cls.address
     cls.inst_test.members = [cls.user_admin.key]
     cls.inst_test.followers = [cls.user_admin.key]
     cls.inst_test.admin = cls.user_admin.key

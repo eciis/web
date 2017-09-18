@@ -43,7 +43,7 @@
       </md-card>
     </div>
 
-    <timeline flex-gt-md="60" flex-md="75" layout="column" md-colors="{background: 'grey-200'}" posts="homeCtrl.posts" institution="false" user="homeCtrl.user"></timeline>
+    <post-timeline flex-gt-md="60" flex-md="75" layout="column" md-colors="{background: 'grey-200'}" posts="homeCtrl.posts" institution="false" user="homeCtrl.user"></post-timeline>
 
     <!-- RIGHT SIDE PANEL -->
     <div flex-gt-md="20" layout="row" hide show-gt-md>
@@ -57,7 +57,10 @@
           </md-toolbar>
           <md-card-content>
             <md-list class="md-dense" flex>
-              <md-list-item class="md-3-line" ng-repeat="event in homeCtrl.events">
+              <md-list-item class="md-1-line" ng-if="homeCtrl.events.length === 0">
+                <span>Nenhum evento próximo</span>
+              </md-list-item>
+              <md-list-item class="md-3-line" ng-repeat="event in homeCtrl.events" ng-if="homeCtrl.events.length > 0">
                 <img ng-src="{{event.institution_photo}}" class="md-avatar"/>
                 <div class="md-list-item-text" layout="column">
                   <h3>{{ event.title | limitTo: 20 }}{{ event.title.length > 20 ? '...' : ''}}</h3>
@@ -67,7 +70,7 @@
                 </div>
               </md-list-item>
             </md-list>
-            <md-card-actions layout="row" layout-align="end-center">
+            <md-card-actions layout="row" layout-align="end-center" ng-if="homeCtrl.events.length > 0">
               <md-button class="md-icon-button" title="Ver mais eventos" ng-click="homeCtrl.goToEvents()">
                 <md-icon>more_horiz</md-icon>
               </md-button>

@@ -41,7 +41,7 @@ class RequestUser(Invite):
 
     @staticmethod
     def create(data):
-        """Create a post and check required fields."""
+        """Create a request user."""
         request = RequestUser()
         request.sender_key = ndb.Key(urlsafe=data.get('sender_key'))
         request.sender_name = data.get('sender_name')

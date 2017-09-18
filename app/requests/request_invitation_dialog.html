@@ -11,16 +11,37 @@
 		</div>
 		<md-list class="md-dense" flex>
 		    <md-list-item class="md-3-line" ng-repeat="institution in requestInvCtrl.institutions" ng-click="requestInvCtrl.selectInstitution(institution)"
-		    ng-style="requestInvCtrl.showFullInformation(institution) && {'background-color':'#C8E6C9'}">
+		    ng-style="requestInvCtrl.showFullInformation(institution) ">
 			    <div ng-if="!requestInvCtrl.showFullInformation(institution)" class="md-list-item-text" layout-align="center center" layout="column" style='text-align: center'>
 		            {{ institution.name }}
 			    </div>
-			    <div ng-if="requestInvCtrl.showFullInformation(institution)" class="md-list-item-text" layout-align="center center" layout="column">
-		            <h3><b>{{ requestInvCtrl.institutionSelect.name }}</b></h3>
-		            <h3>{{ requestInvCtrl.institutionSelect.email }}</h3>
-		            <h4>{{ requestInvCtrl.institutionSelect.address }}</h4>
-		            <p align="center">{{ requestInvCtrl.institutionSelect.description }}</p>
+			    <div ng-if="requestInvCtrl.showFullInformation(institution)">
+			    	<div  class="md-list-item-text" layout-align="center center" layout="column">
+			            <h3><b>{{ requestInvCtrl.institutionSelect.name }}</b></h3>
+			            <h3>{{ requestInvCtrl.institutionSelect.email }}</h3>
+			            <h4>
+			            {{requestInvCtrl.institutionSelect.address.street + ", " + requestInvCtrl.institutionSelect.address.number + ", " + requestInvCtrl.institutionSelect.address.neighbourhood + 
+                        ", " + requestInvCtrl.institutionSelect.address.city + ", " + requestInvCtrl.institutionSelect.address.state + ", " + requestInvCtrl.institutionSelect.address.country}}</h4>
+			            <p align="center">{{ requestInvCtrl.institutionSelect.description }}</p>
+			    	</div>
+			    	<div>
+			    		<md-input-container class="md-block">
+			              <label>Nome</label>
+			              <input ng-model="requestInvCtrl.user.name" required>
+			            </md-input-container>
+
+			            <md-input-container class="md-block">
+			              <label>Email institucional</label>
+			              <input ng-model="requestInvCtrl.email" type="email" required>
+			            </md-input-container>
+
+			          	<md-input-container class="md-block">
+			          	<label>Cargo institucional</label>
+			          	<input name="cargo" ng-model="requestInvCtrl.office" required>
+			          	</md-input-container>
+			    	</div>	
 			    </div>
+			    
 		    </md-list-item>
 		    <md-list-item ng-if="requestInvCtrl.showMessage()" ng-click="null">
 		    	<div class="md-list-item-text" layout-align="center center" layout="column"

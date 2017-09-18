@@ -6,7 +6,6 @@ from test_base_handler import TestBaseHandler
 from models.user import User
 from models.institution import Institution
 from models.request_user import RequestUser
-from utils import get_message_exception
 from handlers.request_handler import RequestHandler
 
 from mock import patch
@@ -59,7 +58,7 @@ class RequestHandlerTest(TestBaseHandler):
         with self.assertRaises(Exception) as ex:
             self.testapp.get('/api/requests/' + self.request.key.urlsafe() + '/user')
 
-        exception_message = get_message_exception(self, ex.exception.message)
+        exception_message = self.get_message_exception(ex.exception.message)
         self.assertEqual(
             "Error! User is not admin!",
             exception_message,
@@ -101,7 +100,7 @@ class RequestHandlerTest(TestBaseHandler):
         with self.assertRaises(Exception) as ex:
             self.testapp.put('/api/requests/' + self.request.key.urlsafe() + '/user')
 
-        exception_message = get_message_exception(self, ex.exception.message)
+        exception_message = self.get_message_exception(ex.exception.message)
         self.assertEqual(
             "Error! this request has already been processed",
             exception_message,
@@ -113,7 +112,7 @@ class RequestHandlerTest(TestBaseHandler):
         with self.assertRaises(Exception) as ex:
             self.testapp.put('/api/requests/' + self.request.key.urlsafe() + '/user')
 
-        exception_message = get_message_exception(self, ex.exception.message)
+        exception_message = self.get_message_exception(ex.exception.message)
         self.assertEqual(
             "Error! User is not admin!",
             exception_message,
@@ -133,7 +132,7 @@ class RequestHandlerTest(TestBaseHandler):
         with self.assertRaises(Exception) as ex:
             self.testapp.delete('/api/requests/' + self.request.key.urlsafe() + '/user')
 
-        exception_message = get_message_exception(self, ex.exception.message)
+        exception_message = self.get_message_exception(ex.exception.message)
         self.assertEqual(
             "Error! User is not admin!",
             exception_message,

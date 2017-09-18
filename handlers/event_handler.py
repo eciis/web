@@ -12,7 +12,6 @@ from handlers.base_handler import BaseHandler
 import datetime
 import json
 
-
 def is_event_author(method):
     """Check if the user is the author of the event."""
 
@@ -26,6 +25,8 @@ def is_event_author(method):
     return check_authorization
 
 
+# TODO: Remove this method and treat this in JsonPatch
+# @author: Maiana Brito
 def treats_date(event, data):
     """Changes the date attributes in the event and removes these operations from the data."""
     data = json.loads(data)
@@ -34,8 +35,7 @@ def treats_date(event, data):
         operation = data[i]
         attribute = operation["path"][1:]
         if attribute == "start_time" or attribute == "end_time":
-            value = datetime.datetime.strptime(operation["value"],
-                                               "%Y-%m-%dT%H:%M:%S")
+            value = datetime.datetime.strptime(operation["value"], "%Y-%m-%dT%H:%M:%S")
             event.__setattr__(attribute, value)
             data.remove(operation)
 
@@ -62,6 +62,7 @@ class EventHandler(BaseHandler):
 
         try:
             event = ndb.Key(urlsafe=key).get()
+
             """Apply patch."""
             data = treats_date(event, data)
             JsonPatch.load(data, event)

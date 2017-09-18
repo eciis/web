@@ -17,7 +17,9 @@
             'INVITE': 'te enviou um novo convite',
             'INSTITUTION': 'removeu a conexão entre suas instituições',
             'REQUEST_USER': 'pediu para ser membro de sua instituição',
-            'REPLY_COMMENT': 'respondeu o seu comentário'
+            'REPLY_COMMENT': 'respondeu o seu comentário',
+            'LIKE_COMMENT': 'curtiu seu comentário',
+            'LIKE_POST': 'curtiu seu post'
         };
 
         var POST_NOTIFICATION = 'POST';

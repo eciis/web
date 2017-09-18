@@ -6,9 +6,31 @@ import json
 
 from utils import login_required
 from handlers.base_handler import BaseHandler
+from models.user import InstitutionProfile
+from custom_exceptions.fieldException import FieldException
 from utils import json_response
 from utils import Utils
 from util.json_patch import JsonPatch
+
+
+def makeUser(user, request):
+    """Make User."""
+    user_json = Utils.toJson(user, host=request.host)
+    user_json['logout'] = 'http://%s/logout?redirect=%s' %\
+        (request.host, request.path)
+    user_json['institutions'] = []
+    for institution in user.institutions:
+        user_json['institutions'].append(
+            Utils.toJson(institution.get())
+        )
+    user_json['follows'] = [institution_key.get().make(
+        ['acronym', 'photo_url', 'key', 'parent_institution']) for institution_key in user.follows]
+    return user_json
+
+
+def define_entity(dictionary):
+    """Method of return instance of InstitutionProfile for using in jsonPacth."""
+    return InstitutionProfile
 
 
 class InviteHandler(BaseHandler):
@@ -34,18 +56,29 @@ class InviteHandler(BaseHandler):
 
     @json_response
     @login_required
-    def patch(self, user, url_string):
+    @ndb.transactional(xg=True)
+    def patch(self, user, invite_key):
         """Handler PATCH Requests."""
         data = self.request.body
-        try:
-            invite = ndb.Key(urlsafe=url_string).get()
 
-            """Apply patch."""
-            JsonPatch.load(data, invite)
+        invite = ndb.Key(urlsafe=invite_key).get()
+        invite.change_status('accepted')
 
-            """Update invite."""
-            invite.put()
-        except Exception as error:
-            self.response.set_status(Utils.BAD_REQUEST)
-            self.response.write(Utils.getJSONError(
-                Utils.BAD_REQUEST, error.message))
+        institution_key = invite.institution_key
+        institution = institution_key.get()
+
+        user.add_institution(institution_key)
+        user.follow(institution_key)
+        user.change_state('active')
+
+        institution.add_member(user)
+        institution.follow(user.key)
+
+        JsonPatch.load(data, user, define_entity)
+        Utils._assert(
+            not InstitutionProfile.is_valid(user.institution_profiles,
+                                            len(user.institutions)),
+            "The profile is invalid.", FieldException)
+        user.put()
+
+        self.response.write(json.dumps(makeUser(user, self.request)))

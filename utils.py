@@ -269,10 +269,3 @@ def is_authorized(method):
 
         method(self, user, url_string, *args)
     return check_authorization
-
-
-def get_message_exception(cls, exception):
-    """Return only message of string exception for tests."""
-    cls.list_args = exception.split("\n")
-    cls.dict = eval(cls.list_args[1])
-    return cls.dict["msg"]

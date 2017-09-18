@@ -4,7 +4,6 @@
 import json
 from test_base_handler import TestBaseHandler
 from models.user import User
-from utils import get_message_exception
 from models.institution import Institution
 from models.institution import Address
 from handlers.user_request_collection_handler import UserRequestCollectionHandler
@@ -75,7 +74,7 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
                 "/api/institutions/" + self.inst_test.key.urlsafe() +
                 "/requests/user", data)
 
-        exception_message = get_message_exception(self, ex.exception.message)
+        exception_message = self.get_message_exception(ex.exception.message)
         self.assertEqual(
             'Error! The type must be REQUEST_USER',
             exception_message,

@@ -109,7 +109,7 @@
                     };
                 });
 
-                spyOn(userService, 'addInstitution').and.callFake(function() {
+                spyOn(inviteService, 'acceptInvite').and.callFake(function() {
                     return {
                         then: function(callback) {
                             return callback(otherUser);
@@ -282,12 +282,10 @@
         describe('saveInstProfile()', function() {
             it('should call save()', function() {
                 spyOn(authService, 'save');
-                spyOn(userService, 'save');
                 spyOn(newInviteCtrl.user, 'addProfile');
                 newInviteCtrl.saveInstProfile();
                 expect(newInviteCtrl.user.addProfile).toHaveBeenCalled();
                 expect(authService.save).toHaveBeenCalled();
-                expect(userService.save).toHaveBeenCalled();
             });
         });
     });

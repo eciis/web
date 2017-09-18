@@ -3,7 +3,7 @@
     var app = angular.module('app');
 
     app.controller("EventController", function EventController(MessageService, AuthService, ImageService,
-                     $rootScope, mdcDateTimeDialog, EventService, $state) {
+                     $rootScope, mdcDateTimeDialog, EventService, $state, PostService) {
         var eventCtrl = this;
 
         eventCtrl.event = {};
@@ -34,6 +34,17 @@
                 eventCtrl.photoUrl = image.src;
             });
         }
+
+        eventCtrl.share = function share(event) {
+            var post = new Post({}, eventCtrl.user.current_institution.key);
+            post.shared_event = event.key;
+            PostService.createPost(post).then(function success() {
+                MessageService.showToast('Evento compartilhado com sucesso!');
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
+            });
+
+        };
 
         eventCtrl.save = function save() {
             if (eventCtrl.photoBase64Data) {
@@ -101,6 +112,43 @@
            eventCtrl.photoBase64Data = null;
            eventCtrl.deletePreviousImage = true;
         };
+
+        var URL_PATTERN = /(((www.)|(http(s)?:\/\/))[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
+        var REPLACE_URL = "<a href=\'$1\' target='_blank'>$1</a>";
+        var LIMIT_CHARACTERS = 100;
+
+        eventCtrl.recognizeUrl =  function recognizeUrl(text) {
+            if(text){
+                var urlsInText = text.match(URL_PATTERN);
+                text = addHttpsToUrl(text, urlsInText);
+                text = adjustText(text);
+                return text;
+            }
+        };
+
+        eventCtrl.isLongText = function isLongText(text){
+            var numberOfChar = text.length;
+            return numberOfChar >= LIMIT_CHARACTERS;
+        };
+
+        function adjustText(text){
+            if(eventCtrl.isLongText(text)){
+                text = text.substring(0, LIMIT_CHARACTERS) + "...";
+            }
+            return text.replace(URL_PATTERN,REPLACE_URL);
+        }
+
+        function addHttpsToUrl(text, urls) {
+            if(urls) {
+                var http = "http://";
+                for (var i = 0; i < urls.length; i++) {
+                    if(urls[i].slice(0, 4) !== "http") {
+                        text = text.replace(urls[i], http + urls[i]);
+                    }
+                }
+            }
+            return text;
+        }
 
         loadEvents();
     });

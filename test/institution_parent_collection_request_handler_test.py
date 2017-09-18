@@ -6,7 +6,6 @@ from test_base_handler import TestBaseHandler
 from models.user import User
 from models.institution import Institution
 from models.institution import Address
-from utils import get_message_exception
 from handlers.institution_parent_request_collection_handler import InstitutionParentRequestCollectionHandler
 
 from mock import patch
@@ -81,7 +80,7 @@ class InstitutionParentRequestCollectionHandlerTest(TestBaseHandler):
                 "/api/institutions/" + self.inst_test.key.urlsafe() + "/requests/institution_parent",
                 data)
 
-        exception_message = get_message_exception(self, ex.exception.message)
+        exception_message = self.get_message_exception(ex.exception.message)
         self.assertEqual(
             "Error! User is not admin",
             exception_message,

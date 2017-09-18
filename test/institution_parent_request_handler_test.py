@@ -7,7 +7,6 @@ from models.user import User
 from models.institution import Institution
 from models.institution import Address
 from models.request_institution_parent import RequestInstitutionParent
-from utils import get_message_exception
 from handlers.institution_parent_request_handler import InstitutionParentRequestHandler
 
 from mock import patch
@@ -52,7 +51,7 @@ class InstitutionParentRequestHandlerTest(TestBaseHandler):
         with self.assertRaises(Exception) as ex:
             self.testapp.put('/api/requests/' + self.request.key.urlsafe() + "/institution_parent")
 
-        exception_message = get_message_exception(self, ex.exception.message)
+        exception_message = self.get_message_exception(ex.exception.message)
         self.assertEqual(
             "Error! User is not admin",
             exception_message,

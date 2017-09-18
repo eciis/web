@@ -20,16 +20,72 @@ def _assert(condition, msg):
         raise PatchException(msg)
 
 
-def create_entity(properties_values, entity_class=None):
-    """Create new entity of class specified."""
-    if entity_class:
-        entity = entity_class()
+def get_attribute_of_object(obj, attribute_or_index):
+    """Method of get attribute of object passed."""
+    integer_signals = "-+"
 
-        for property in properties_values:
-            setattr(entity, property, properties_values[property])
-        return entity
+    if attribute_or_index.lstrip(integer_signals).isdigit():
+        attribute_or_index = int(attribute_or_index)
+
+    if isinstance(obj, list) or isinstance(obj, dict):
+        return obj[attribute_or_index]
     else:
-        return properties_values
+        _assert(
+            not hasattr(obj, attribute_or_index),
+            "Attribute %s not found" % attribute_or_index
+        )
+        return getattr(obj, attribute_or_index)
+
+
+def create_entity(properties_values, method_define_entity=None):
+    """Create new entity of class specified."""
+    if method_define_entity:
+        search_for_dict(properties_values, method_define_entity)
+        entity_class = None
+
+        if isinstance(properties_values, dict):
+            entity_class = method_define_entity(properties_values)
+
+        if is_valid_entity_class(entity_class):
+            return create_and_set_entity_properties(properties_values, entity_class)
+
+    return properties_values
+
+
+def is_valid_entity_class(entity_class):
+    """Verify if is validd entity class."""
+    return entity_class and entity_class.__name__ != 'dict'
+
+
+def create_and_set_entity_properties(properties_values, entity_class):
+    """Create and set properties of entities."""
+    entity = entity_class()
+    for property in properties_values:
+        setattr(entity, property, properties_values[property])
+
+    return entity
+
+
+def search_for_dict(dict_or_list, method_define_entity):
+    """
+    Method of search dictionary in object passed.
+
+    This method searches for dictionaries in the past object to
+    transform them into objects of specific types.
+
+    Keyword arguments:
+    dict_or_list -- object of the type dictionary or list.
+    method_define_entity -- method of define type of difctionary found.
+    """
+    elements = dict_or_list
+
+    if isinstance(dict_or_list, list):
+        elements = range(len(dict_or_list))
+
+    for prop in elements:
+        property = dict_or_list[prop]
+        if isinstance(property, dict):
+            dict_or_list[prop] = create_entity(property, method_define_entity)
 
 
 def list_insert(list, value, index):
@@ -47,11 +103,11 @@ def verify_entity(func):
     If it is, create an object with the dict and pass it as a
     parameter in place of the value.
     """
-    def params(self, value, entity_class, *args):
+    def params(self, value, method_define_entity, *args):
         """Receive params of function."""
-        if isinstance(value, dict):
-            value = create_entity(value, entity_class)
-        return func(self, value, entity_class, *args)
+        if isinstance(value, dict) or isinstance(value, list):
+            value = create_entity(value, method_define_entity)
+        return func(self, value, method_define_entity, *args)
     return params
 
 
@@ -59,27 +115,27 @@ class JsonPatch(object):
     """Class to interpret and apply JSONPatch."""
 
     @staticmethod
-    def load(json_patch, obj, entity_class=None):
+    def load(json_patch, obj, method_define_entity=None):
         """It loads jsonPatch and apply all operations contained therein.
 
         Keyword arguments:
         json_pacth -- Json of operations to be performed
         obj -- Object to be modified
-        entity_class -- Optional entity class of new object to be add.
-        if it does not pass the object will be considered a dict
+        method_define_entity -- Optional method of return instance of object
+        to be created. if it does not pass the object will be considered a dict
         """
         list_patchs = json.loads(json_patch, encoding="utf-8")
 
         for dict_patch in list_patchs:
             if dict_patch['op'] == 'test':
-                JsonPatch.decode_patch(dict_patch, obj, entity_class)
+                JsonPatch.decode_patch(dict_patch, obj, method_define_entity)
 
         for dict_patch in list_patchs:
             if dict_patch['op'] != 'test':
-                JsonPatch.decode_patch(dict_patch, obj, entity_class)
+                JsonPatch.decode_patch(dict_patch, obj, method_define_entity)
 
     @staticmethod
-    def decode_patch(dict_patch, obj, entity_class):
+    def decode_patch(dict_patch, obj, method_define_entity):
         """Decode the received patch operation."""
         op = dict_patch['op']
 
@@ -88,7 +144,7 @@ class JsonPatch(object):
         operation.aply_patch(
             dict_patch['path'],
             obj,
-            entity_class,
+            method_define_entity,
             dict_patch.get('value')
         )
 
@@ -116,7 +172,7 @@ class JsonPatch(object):
 class Operation(object):
     """Class of operations in patch."""
 
-    def aply_patch(self, path, obj, entity_class, value=None):
+    def aply_patch(self, path, obj, method_define_entity, value=None):
         """Apply operation to received path."""
         path_list = path[1:].split('/')
         final_path = path_list.pop(-1)
@@ -131,14 +187,14 @@ class Operation(object):
         if final_path.lstrip(integer_signals).isdigit():
             self.operation_in_list(
                 value,
-                entity_class,
+                method_define_entity,
                 obj,
                 int(final_path),
             )
         else:
             self.operation_in_attribute(
                 value,
-                entity_class,
+                method_define_entity,
                 obj,
                 final_path,
             )
@@ -156,22 +212,15 @@ class Operation(object):
         if attribute_path == flag_index_top:
             attribute_path = index_top
 
-        if isinstance(obj, list):
-            attribute = obj[int(attribute_path)]
-        else:
-            _assert(
-                not hasattr(obj, attribute_path),
-                "Attribute %s not found" % attribute_path
-            )
-            attribute = getattr(obj, attribute_path)
+        attribute = get_attribute_of_object(obj, attribute_path)
 
-        return Operation.go_through_path(self, attribute, path_list)
+        return self.go_through_path(attribute, path_list)
 
-    def operation_in_list(self, value, entity_class, attribute_list, index):
+    def operation_in_list(self, value, method_define_entity, attribute_list, index):
         """Execute operation in list."""
         raise PatchException("Operation not implemented")
 
-    def operation_in_attribute(self, value, entity_class, obj, attribute):
+    def operation_in_attribute(self, value, method_define_entity, obj, attribute):
         """Execute Operation in attribute."""
         raise PatchException("Operation not implemented")
 
@@ -180,25 +229,25 @@ class Add(Operation):
     """Class of operation add."""
 
     @verify_entity
-    def operation_in_list(self, value, entity_class, attribute_list, index):
+    def operation_in_list(self, value, method_define_entity, attribute_list, index):
         """Execute operation add in list."""
         _assert(value is None, "Value can not be None")
         list_insert(attribute_list, value, index)
 
     @verify_entity
-    def operation_in_attribute(self, value, entity_class, obj, attribute):
+    def operation_in_attribute(self, value, method_define_entity, obj, attribute):
         """Execute Operation add in attribute."""
         _assert(value is None, "Value can not be None")
 
         if isinstance(obj, dict):
             _assert(
-                attribute in obj,
+                attribute in obj and obj[attribute] != None,
                 "Attribute %s already exists" % attribute
             )
             obj[attribute] = value
         else:
             _assert(
-                hasattr(obj, attribute),
+                hasattr(obj, attribute) and getattr(obj, attribute) != None,
                 "Attribute %s already exists" % attribute
             )
             obj.__setattr__(attribute, value)
@@ -207,11 +256,11 @@ class Add(Operation):
 class Remove(Operation):
     """Class of operation remove."""
 
-    def operation_in_list(self, value, entity_class, attribute_list, index):
+    def operation_in_list(self, value, method_define_entity, attribute_list, index):
         """Execute operation remove in list."""
         attribute_list.pop(index)
 
-    def operation_in_attribute(self, value, entity_class, obj, attribute):
+    def operation_in_attribute(self, value, method_define_entity, obj, attribute):
         """Execute Operation remove in attribute."""
         if isinstance(obj, dict):
             _assert(
@@ -232,14 +281,14 @@ class Replace(Operation):
     """Class of operation replace."""
 
     @verify_entity
-    def operation_in_list(self, value, entity_class, attribute_list, index):
+    def operation_in_list(self, value, method_define_entity, attribute_list, index):
         """Execute operation replace in list."""
         _assert(value is None, "Value can not be None")
         attribute_list.pop(index)
         list_insert(attribute_list, value, index)
 
     @verify_entity
-    def operation_in_attribute(self, value, entity_class, obj, attribute):
+    def operation_in_attribute(self, value, method_define_entity, obj, attribute):
         """Execute Operation replace in attribute."""
         if isinstance(obj, dict):
             _assert(
@@ -261,14 +310,14 @@ class Test(Operation):
     """Class of operation test."""
 
     @verify_entity
-    def operation_in_list(self, value, entity_class, attribute_list, index):
+    def operation_in_list(self, value, method_define_entity, attribute_list, index):
         """Execute operation test in list."""
         _assert(attribute_list[index] != value, "Test fail, object %s "
                 "does not correspond to what was passed %s"
                 % (attribute_list[index], value))
 
     @verify_entity
-    def operation_in_attribute(self, value, entity_class, obj, attribute):
+    def operation_in_attribute(self, value, method_define_entity, obj, attribute):
         """Execute Operation test in attribute."""
         _assert(getattr(obj, attribute) != value, "Test fail, object "
                 "%s does not correspond to what was passed %s"

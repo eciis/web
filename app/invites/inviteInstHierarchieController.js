@@ -5,28 +5,22 @@
 
     app.controller("InviteInstHierarchieController", function InviteInstHierarchieController(
         InviteService,$mdToast, $mdDialog, $state, AuthService, InstitutionService, MessageService, RequestInvitationService) {
+
         var inviteInstCtrl = this;
-
         var institutionKey = $state.params.institutionKey;
-
         var invite;
-
         var INSTITUTION_PARENT = "INSTITUTION_PARENT";
-
         var ACTIVE = "active";
-
         var INSTITUTION_STATE = "active,pending";
 
         inviteInstCtrl.user = AuthService.getCurrentUser();
+
         inviteInstCtrl.institution = {};
-
         inviteInstCtrl.invite = {};
-
         inviteInstCtrl.hasParent = false;
-
         inviteInstCtrl.showButton = true;
-
         inviteInstCtrl.existing_institutions = [];
+        inviteInstCtrl.requested_invites = [];
 
 
         inviteInstCtrl.checkInstInvite = function checkInstInvite(ev) {
@@ -73,6 +67,7 @@
                 targetEvent: ev,
                 clickOutsideToClose: true
             });
+            inviteInstCtrl.showButton = true;
         };
 
         inviteInstCtrl.sendInstInvite = function sendInstInvite(invite) {
@@ -123,11 +118,33 @@
             promise = InstitutionService.getInstitution(institutionKey).then(function success(response) {
                 inviteInstCtrl.institution = new Institution(response.data);
                 inviteInstCtrl.hasParent = !_.isEmpty(inviteInstCtrl.institution.parent_institution);
+                getRequests();
             }, function error(response) {
                 $state.go('app.institution', {institutionKey: institutionKey});
                 MessageService.showToast(response.data.msg);
             });
             return promise;
+        }
+
+        function getRequests() {
+            getParentRequests();
+            getChildrenRequests();
+        }
+
+        function getParentRequests() {
+            RequestInvitationService.getParentRequests(institutionKey).then(function success(response) {
+                inviteInstCtrl.requested_invites = inviteInstCtrl.requested_invites.concat(response.data);
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
+            });
+        }
+
+        function getChildrenRequests() {
+            RequestInvitationService.getChildrenRequests(institutionKey).then(function success(response) {
+                inviteInstCtrl.requested_invites = inviteInstCtrl.requested_invites.concat(response.data);
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
+            });
         }
 
         inviteInstCtrl.removeLink = function removeLink(institution, isParent) {

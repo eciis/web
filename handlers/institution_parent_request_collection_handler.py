@@ -21,7 +21,7 @@ class InstitutionParentRequestCollectionHandler(BaseHandler):
     def get(self, user, institution_key):
         """Get requests for parent links."""
         queryRequests = RequestInstitutionParent.query(
-            RequestInstitutionParent.institution_key == ndb.Key(urlsafe=institution_key),
+            RequestInstitutionParent.institution_requested_key == ndb.Key(urlsafe=institution_key),
             RequestInstitutionParent.status == 'sent'
         )
 

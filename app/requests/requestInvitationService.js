@@ -41,6 +41,26 @@
             return deferred.promise;
         };
 
+        service.getParentRequests = function(institution_key) {
+            var deferred = $q.defer();
+            $http.get(REQUESTS_URI + institution_key + "/requests/institution_parent").then(function success(response) {
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+            return deferred.promise;
+        };
+
+        service.getChildrenRequests = function(institution_key) {
+            var deferred = $q.defer();
+            $http.get(REQUESTS_URI + institution_key + "/requests/institution_children").then(function success(response) {
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+            return deferred.promise;
+        };
+
         service.getRequests = function getRequests(institution_key) {
             var deferred = $q.defer();
 

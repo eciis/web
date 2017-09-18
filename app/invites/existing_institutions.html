@@ -9,7 +9,7 @@
                     <md-list-item class="md-2-line" ng-if="suggestInstCtrl.isActive(institution.state)">
                         <md-radio-button ng-value="institution.id" class="md-primary">{{institution.name}}</md-radio-button>
                         <md-button title="Página da instituição" ng-click="suggestInstCtrl.goToInstitution(institution.id)">
-                            <md-icon>link</md-icon>
+                            <md-icon>forward</md-icon>
                         </md-button>
                     </md-list-item>
                     <md-list-item ng-if="!suggestInstCtrl.isActive(institution.state)" ng-click="null" class="md-2-line">

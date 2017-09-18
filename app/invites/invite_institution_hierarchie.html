@@ -81,6 +81,16 @@
               </md-button>
             </div>
           </md-list-item>
+          <md-subheader class="md-no-sticky">Convites requisitados</md-subheader>
+            <md-list-item class="md-line" ng-repeat="request in inviteInstCtrl.requested_invites">
+              <div class="md-list-item-text" layout="column">
+                <div>
+                  <a href class="md-title hyperlink" ng-click="inviteInstCtrl.goToInst(request.institution_key)">
+                  {{ request.institution_admin.name }}
+                  </a>
+                </div>
+              </div>
+            </md-list-item>
         </md-list>
       </md-card-content>
     </md-card>

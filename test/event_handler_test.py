@@ -29,12 +29,68 @@ class EventHandlerTest(TestBaseHandler):
         """Test the event_handler's delete method."""
 
         # Call the delete method
-        self.testapp.delete("/api/calendar/event/%s" % self.event.key.urlsafe())
+        self.testapp.delete("/api/calendar/event/%s" %
+                            self.event.key.urlsafe())
         # Refresh mayza_post
         self.event = self.event.key.get()
         # Verify if after delete the state of event is deleted
         self.assertEqual(self.event.state, "deleted",
                          "The state expected was deleted.")
+
+    @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
+    def test_patch(self, verify_token):
+        """Test the post_handler's patch method."""
+        # Call the patch method and assert that it works
+        self.testapp.patch_json("/api/events/%s"
+                                % self.event.key.urlsafe(),
+                                [{"op": "replace", "path": "/title",
+                                    "value": "Edit Event"},
+                                 {"op": "replace", "path": "/text",
+                                    "value": "Edit Text Event"},
+                                 {"op": "replace", "path": "/local",
+                                     "value": "New Local"}
+                                 ])
+    #     self.event = self.event.key.get()
+    #     self.assertEqual(self.event.title, "Edit Event")
+    #     self.assertEqual(self.event.text, "Edit Text Event")
+    #     self.assertEqual(self.event.local, "New Local")
+        # # Pretend a new authentication
+        # verify_token.return_value = {'email': 'usersd@ccc.ufcg.edu.br'}
+
+        # # Call the patch method and assert that it works
+        # self.testapp.patch_json("/api/events/%s"
+        #                         % self.event.key.urlsafe(),
+        #                         [{"op": "replace", "path": "/local",
+        #                             "value": "New Local"}]
+        #                         )
+        # self.second_user_post = self.second_user_post.key.get()
+        # self.assertEqual(self.second_user_post.text, "testando")
+        # # Call the patch method and assert that  it raises an exception
+        # with self.assertRaises(Exception):
+        #     self.testapp.patch_json("/api/posts/%s"
+        #                             % self.first_user_post.key.urlsafe(),
+        #                             [{"op": "replace", "path": "/text",
+        #                               "value": "testando"}]
+        #                             )
+        # # test the case when the post has a like, so it can not be updated
+        # self.first_user_post.like(self.second_user.key)
+        # self.first_user_post = self.first_user_post.key.get()
+        # with self.assertRaises(Exception):
+        #     self.testapp.patch_json("/api/posts/%s"
+        #                             % self.first_user_post.key.urlsafe(),
+        #                             [{"op": "replace", "path": "/text",
+        #                                 "value": "testando"}]
+        #                             )
+
+        # # test the case when the post has a comment, so it can not be updated
+        # self.first_user_post.add_comment(self.second_user_comment)
+        # self.first_user_post = self.first_user_post.key.get()
+        # with self.assertRaises(Exception):
+        #     self.testapp.patch_json("/api/posts/%s"
+        #                             % self.first_user_post.key.urlsafe(),
+        #                             [{"op": "replace", "path": "/text",
+        #                                 "value": "testando"}]
+        #                             )
 
     def tearDown(cls):
         """Deactivate the test."""
@@ -50,6 +106,13 @@ def initModels(cls):
     cls.user.cpf = '089.675.908-90'
     cls.user.email = 'user@gmail.com'
     cls.user.put()
+    # new User user
+    cls.second_user = User()
+    cls.second_user.name = 'second'
+    cls.second_user.photo_url = 'urlphoto'
+    cls.second_user.cpf = '089.675.908-09'
+    cls.second_user.email = 'usersd@gmail.com'
+    cls.second_user.put()
     # new Institution CERTBIO
     cls.certbio = Institution()
     cls.certbio.name = 'CERTBIO'

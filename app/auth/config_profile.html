@@ -51,7 +51,10 @@
                 <h3>{{ institution.acronym }}</h3>
                 <h4>{{ institution.name }}</h4>
               </div>
-              <md-button class="md-secondary" ng-click="configProfileCtrl.removeInstitution($event, institution)">
+              <md-button class="md-secondary md-icon-button" title="Editar perfil institucional" ng-click="configProfileCtrl.editProfile(institution, $event)" class="md-icon-button md-secondary">
+                <md-icon>edit</md-icon>
+              </md-button>
+              <md-button class="md-secondary md-icon-button" ng-click="configProfileCtrl.removeInstitution($event, institution)">
                 <md-icon>delete</md-icon>
               </md-button>
             </md-list-item>

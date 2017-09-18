@@ -75,7 +75,7 @@ class LikeHandlerTest(TestBaseHandler):
         with self.assertRaises(Exception) as exc:
             self.testapp.post(self.LIKE_URI % self.user_post.key.urlsafe())
         # Verify if message exception
-        exc = get_message_exception(self, exc.exception.message)
+        exc = self.get_message_exception(exc.exception.message)
         self.assertEquals(exc, "Error! User already liked this publication")
         # Refresh user_post
         self.user_post = self.user_post.key.get()
@@ -118,7 +118,7 @@ class LikeHandlerTest(TestBaseHandler):
         with self.assertRaises(Exception) as ex:
             self.testapp.delete(self.LIKE_URI % self.user_post.key.urlsafe())
         # Verify if message exception
-        ex = get_message_exception(self, ex.exception.message)
+        ex = self.get_message_exception(ex.exception.message)
         self.assertEquals(ex, "Error! User hasn't liked this publication.")
         # Refresh user_post
         self.user_post = self.user_post.key.get()
@@ -158,9 +158,3 @@ def initModels(cls):
     cls.user_post.institution = cls.institution.key
     cls.user_post.put()
 
-
-def get_message_exception(cls, exception):
-    """Return only message of string exception."""
-    cls.list_args = exception.split("\n")
-    cls.dict = eval(cls.list_args[1])
-    return cls.dict["msg"]

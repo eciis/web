@@ -50,11 +50,28 @@
       <div layout="column" hide show-gt-sm layout-fill>
         <md-card>
           <md-toolbar md-colors="{background: 'teal-800'}" layout="row">
-            <div class="md-toolbar-tools" flex layout="row" layout-align="start center">
+            <md-icon style="margin-left: 7%;">event</md-icon>
+            <div class="md-toolbar-tools" flex layout="row">
               Eventos
             </div>
           </md-toolbar>
           <md-card-content>
+            <md-list class="md-dense" flex>
+              <md-list-item class="md-3-line" ng-repeat="event in homeCtrl.events">
+                <img ng-src="{{event.institution_photo}}" class="md-avatar"/>
+                <div class="md-list-item-text" layout="column">
+                  <h3>{{ event.title | limitTo: 20 }}{{ event.title.length > 20 ? '...' : ''}}</h3>
+                  <p>De {{ event.start_time | amUtc | amLocal | amCalendar:referenceTime:formats}} até 
+                   {{ event.end_time | amUtc | amLocal | amCalendar:referenceTime:formats }}</p>
+                  <p>por {{ event.author_name }}</p>
+                </div>
+              </md-list-item>
+            </md-list>
+            <md-card-actions layout="row" layout-align="end-center">
+              <md-button class="md-icon-button" title="Ver mais eventos" ng-click="homeCtrl.goToEvents()">
+                <md-icon>more_horiz</md-icon>
+              </md-button>
+            </md-card-actions>
           </md-card-content>
         </md-card>
         <div class="padded">

@@ -83,12 +83,16 @@
                 <h3>De {{ event.start_time | amUtc | amLocal | amCalendar:referenceTime:formats}} até 
                    {{ event.end_time | amUtc | amLocal | amCalendar:referenceTime:formats }}</h3>
                 <p ng-if="event.text">Descrição</p>
-                <h3 ng-if="event.text">{{ event.text }}</h3>
+                <h3 ng-if="event.text" ng-bind-html="eventCtrl.recognizeUrl(event.text)" class="break">
+                </h3>
                 <p>Local</p>
                 <h3>{{ event.local }}</h3>
                 <p>Autor/Instituição</p>
                 <h3>{{ event.author_name }} por {{ event.institution_name}}</h3>
               </div>
+              <md-button class="md-icon-button" ng-click="eventCtrl.share(event)">
+                <md-icon>share</md-icon>
+              </md-button>
             </md-list-item>
         </md-list>
       </md-card>

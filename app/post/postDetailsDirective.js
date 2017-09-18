@@ -4,10 +4,11 @@
     var app = angular.module('app');
 
     app.controller('PostDetailsController', function(PostService, AuthService, CommentService, $mdToast, $state,
-        $mdDialog, NotificationService, MessageService, ngClipboard, ProfileService) {
+        $mdDialog, NotificationService, MessageService, ngClipboard, ProfileService, PdfService, $sce) {
+
         var postDetailsCtrl = this;
 
-        var LIMIT_CHARACTERS_POST = 1000;
+        var LIMIT_POST_CHARACTERS = 1000;
 
         postDetailsCtrl.showLikes = false;
         postDetailsCtrl.showComments = false;
@@ -43,43 +44,59 @@
             return postDetailsCtrl.isPostAuthor() || isInstitutionAdmin();
         };
 
-        postDetailsCtrl.isDeleted = function isDeleted() {
-            return postDetailsCtrl.post.state == 'deleted';
+        postDetailsCtrl.isDeleted = function isDeleted(post) {
+            return post.state == 'deleted';
         };
 
         postDetailsCtrl.isHidden = function isHidden() {
+            var isDeleted = postDetailsCtrl.post.state === "deleted";
+            return isDeleted && !postDetailsCtrl.postHasActivity();
+        };
+
+        postDetailsCtrl.isShared = function isShared() {
+            return postDetailsCtrl.post.shared_post || 
+                postDetailsCtrl.post.shared_event;
+        };
+
+        postDetailsCtrl.postHasActivity = function postHasActivity() {
             var hasNoComments = postDetailsCtrl.post.number_of_comments === 0;
             var hasNoLikes = postDetailsCtrl.post.number_of_likes === 0;
-            var isDeleted = postDetailsCtrl.post.state === "deleted";
-            return isDeleted && hasNoComments && hasNoLikes;
+
+            return !hasNoComments || !hasNoLikes;
         };
 
         postDetailsCtrl.showSharedPost = function showSharedPost() {
             return postDetailsCtrl.post.shared_post &&
-                !postDetailsCtrl.isDeleted();
+                !postDetailsCtrl.isDeleted(postDetailsCtrl.post);
+        };
+
+        postDetailsCtrl.showSharedEvent = function showSharedEvent() {
+            return postDetailsCtrl.post.shared_event && 
+                !postDetailsCtrl.isDeleted(postDetailsCtrl.post);
         };
 
         postDetailsCtrl.showTextPost = function showTextPost(){
-            return !postDetailsCtrl.isDeleted() &&
-                !postDetailsCtrl.post.shared_post;
+            return !postDetailsCtrl.isDeleted(postDetailsCtrl.post) && 
+                     !postDetailsCtrl.isShared();
         };
 
         postDetailsCtrl.showButtonDelete = function showButtonDelete() {
             return postDetailsCtrl.isAuthorized() &&
-                !postDetailsCtrl.isDeleted();
+                !postDetailsCtrl.isDeleted(postDetailsCtrl.post);
         };
 
         postDetailsCtrl.disableButtonLike = function disableButtonLike() {
             return postDetailsCtrl.savingLike ||
-                postDetailsCtrl.isDeleted();
+                postDetailsCtrl.isDeleted(postDetailsCtrl.post);
         };
 
-        postDetailsCtrl.showButtonEdit = function showButtonDeleted() {
-            var hasNoComments = postDetailsCtrl.post.number_of_comments === 0;
-            var hasNoLikes = postDetailsCtrl.post.number_of_likes === 0;
+        postDetailsCtrl.showButtonEdit = function showButtonEdit() {
+            return postDetailsCtrl.isPostAuthor() && !postDetailsCtrl.isDeleted(postDetailsCtrl.post) &&
+                    !postDetailsCtrl.postHasActivity() && !postDetailsCtrl.isShared();
+        };
 
-            return postDetailsCtrl.isPostAuthor() && !postDetailsCtrl.isDeleted() &&
-                hasNoComments && hasNoLikes && !postDetailsCtrl.post.shared_post;
+        postDetailsCtrl.showButtonShare = function showButtonShare(){
+            return !postDetailsCtrl.isDeleted(postDetailsCtrl.post) && !postDetailsCtrl.post.shared_event;
         };
 
         postDetailsCtrl.generateLink = function generateLink(){
@@ -116,6 +133,7 @@
                 postDetailsCtrl.post.title = editedPost.title;
                 postDetailsCtrl.post.text = editedPost.text;
                 postDetailsCtrl.post.photo_url = editedPost.photo_url;
+                postDetailsCtrl.post.pdf_files = editedPost.pdf_files;
             }, function error() {});
         };
 
@@ -291,12 +309,17 @@
         * OBS: This function returns a new Post because this result is only for show in view.
         * It is not necessary to change the original Post.
         */
-        postDetailsCtrl.recognizeUrl =  function recognizeUrl(receivedPost) {
+        postDetailsCtrl.postToURL =  function postToURL(receivedPost) {
             var post = new Post(receivedPost, receivedPost.institutionKey);
-            var urlsInText = post.text.match(URL_PATTERN);
-            post.text = addHttpsToUrl(post.text, urlsInText);
-            post.text = adjustText(post.text);
+            post.text = postDetailsCtrl.recognizeUrl(post.text);
             return post;
+        };
+
+        postDetailsCtrl.recognizeUrl =  function recognizeUrl(text) {
+            var urlsInText = text.match(URL_PATTERN);
+            text = addHttpsToUrl(text, urlsInText);
+            text = adjustText(text);
+            return text;
         };
 
         postDetailsCtrl.showImage = function(post) {
@@ -308,9 +331,9 @@
 
         postDetailsCtrl.isLongPostTimeline = function(text){
             if(text){
-                var qtdChar = text.length;
+                var numberOfChar = text.length;
                 return !postDetailsCtrl.isPostPage &&
-                    qtdChar >= LIMIT_CHARACTERS_POST;
+                    numberOfChar >= LIMIT_POST_CHARACTERS;
             }
         };
 
@@ -320,7 +343,7 @@
 
         function adjustText(text){
             if(postDetailsCtrl.isLongPostTimeline(text)){
-                text = text.substring(0, LIMIT_CHARACTERS_POST) + "...";
+                text = text.substring(0, LIMIT_POST_CHARACTERS) + "...";
             }
             return text.replace(URL_PATTERN,REPLACE_URL);
         }
@@ -335,6 +358,33 @@
                 }
             }
             return text;
+        }
+
+        postDetailsCtrl.pdfDialog = function(ev, pdf) {
+            var readablePdf = {};
+            PdfService.getReadableURL(pdf.url, setPdfURL, readablePdf).then(
+                function success() {
+                    $mdDialog.show({
+                        templateUrl: 'post/pdfDialog.html',
+                        targetEvent: ev,
+                        clickOutsideToClose:true,
+                        locals: {
+                            pdfUrl: readablePdf.url
+                        },
+                        controller: DialogController,
+                        controllerAs: 'ctrl'
+                    });
+                });
+        };
+
+        function setPdfURL(url, pdf) {
+            pdf.url = url;
+        }
+
+        function DialogController($mdDialog, pdfUrl) {
+            var ctrl = this;
+            var trustedUrl = $sce.trustAsResourceUrl(pdfUrl);
+            ctrl.pdfUrl = trustedUrl;
         }
     });
 
@@ -514,7 +564,7 @@
      MessageService, $state) {
         var shareCtrl = this;
 
-        var LIMIT_CHARACTERS_POST = 200;
+        var LIMIT_POST_CHARACTERS = 200;
         var URL_PATTERN = /(((www.)|(http(s)?:\/\/))[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
         var REPLACE_URL = "<a href=\'$1\' target='_blank'>$1</a>";
 
@@ -537,6 +587,7 @@
 
         shareCtrl.share = function() {
             shareCtrl.newPost.shared_post = getOriginalPost(shareCtrl.post);
+            shareCtrl.newPost.pdf_files = [];
             PostService.createPost(shareCtrl.newPost).then(function success(response) {
                 MessageService.showToast('Compartilhado com sucesso!');
                 $mdDialog.hide();
@@ -560,8 +611,8 @@
         }
 
         function adjustText(text){
-            if(text.length > LIMIT_CHARACTERS_POST){
-                text = text.substring(0, LIMIT_CHARACTERS_POST) + "...";
+            if(text.length > LIMIT_POST_CHARACTERS){
+                text = text.substring(0, LIMIT_POST_CHARACTERS) + "...";
             }
             return text.replace(URL_PATTERN,REPLACE_URL);
         }

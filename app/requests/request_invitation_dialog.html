@@ -24,29 +24,39 @@
                         ", " + requestInvCtrl.institutionSelect.address.city + ", " + requestInvCtrl.institutionSelect.address.state + ", " + requestInvCtrl.institutionSelect.address.country}}</h4>
 			            <p align="center">{{ requestInvCtrl.institutionSelect.description }}</p>
 			    	</div>
-			    	<div>
+			    	<form name="requestuser">
 			    		<md-input-container class="md-block">
 			              <label>Nome</label>
-			              <input ng-model="requestInvCtrl.user.name" required>
+			              <input ng-model="requestInvCtrl.user.name" name="name" required>
+			              <div ng-messages='requestuser.name.$error'>
+                    		<div ng-message="required">Este campo é obrigatório!</div>
+                		  </div> 
 			            </md-input-container>
-
+			            
 			            <md-input-container class="md-block">
 			              <label>Email institucional</label>
-			              <input ng-model="requestInvCtrl.email" type="email" required>
+			              <input ng-model="requestInvCtrl.email" type="email" name="email" required>
+			              <div ng-messages='requestuser.email.$error'>
+                    		<div ng-message="required">Este campo é obrigatório!</div>
+                		  </div> 
 			            </md-input-container>
 
 			          	<md-input-container class="md-block">
 			          	<label>Cargo institucional</label>
-			          	<input name="cargo" ng-model="requestInvCtrl.office" required>
+			          	<input name="cargo" ng-model="requestInvCtrl.office" name="office" required>
+			          	<div ng-messages='requestuser.office.$error'>
+                    		<div ng-message="required">Este campo é obrigatório!</div>
+                		  </div> 
 			          	</md-input-container>
-			    	</div>	
+			    	</form>	
 			    </div>
 			    
 		    </md-list-item>
 		    <md-list-item ng-if="requestInvCtrl.showMessage()" ng-click="null">
 		    	<div class="md-list-item-text" layout-align="center center" layout="column"
 			    style='text-align: center'>
-		            <p>Infelizmente sua instituição ainda não está cadastrada.</p>
+		            <p>Infelizmente sua instituição ainda não está cadastrada. 
+		            Converse com o responsável para criar nesse mesmo link.</p>
 			    </div>
 		    </md-list-item>
 		</md-list>

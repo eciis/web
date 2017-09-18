@@ -43,8 +43,11 @@
       <p class="break" 
         ng-bind-html="postDetailsCtrl.recognizeUrl(postDetailsCtrl.post.shared_event.text)" >
       </p>
-      <img  ng-if="postDetailsCtrl.showImage(postDetailsCtrl.post.shared_event)" ng-src="{{ postDetailsCtrl.post.shared_event.photo_url }}" class="md-card-image">
     </md-card-content>
+    <md-card>
+      <img class="md-card-image" ng-if="postDetailsCtrl.showImage(postDetailsCtrl.post.shared_event)" 
+        ng-src="{{ postDetailsCtrl.post.shared_event.photo_url }}"/>
+    </md-card>
   </md-card>
 
   <!-- BODY SHARED POST -->

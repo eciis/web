@@ -24,8 +24,12 @@
 
         loginCtrl.loginWithEmailPassword = function loginWithEmailPassword() {
             AuthService.loginWithEmailAndPassword(loginCtrl.user.email, loginCtrl.user.password).then(
-                function success() {
-                    $state.go("app.home");
+                function success(user) {
+                    if(user.isInactive()) {
+                        $state.go("user_inactive");
+                    } else {
+                        $state.go("app.home");
+                    }
                 }
             );
         };

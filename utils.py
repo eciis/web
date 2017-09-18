@@ -173,18 +173,25 @@ def login_required(method):
             self.response.set_status(401)
             return
 
+        user_name = credential.get('name', 'Unknown')
         user_email = credential.get('email', 'Unknown')
         user = User.get_by_email(user_email)
+
+        if user is None:
+            user = {
+                "name": user_name,
+                "email": user_email
+            }
 
         method(self, user, *args)
     return login
 
 
-def create_user(user_name, user_email):
+def create_user(name, email):
     """Create user."""
     user = User()
-    user.email = user_email
-    user.name = user_name
+    user.email = email
+    user.name = name
     user.photo_url = "/images/avatar.jpg"
     user.put()
 

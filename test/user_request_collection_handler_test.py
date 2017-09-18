@@ -35,7 +35,7 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
             'admin_key': self.user_admin.key.urlsafe(),
             'institution_key': self.inst_test.key.urlsafe(),
             'type_of_invite': 'REQUEST_USER',
-            'sender_name': "nome novisssimos",
+            'sender_name': "user name",
             'office': 'CEO',
             'institutional_email': 'other@ceo.com'
         }
@@ -62,7 +62,7 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
             'Expected sender admin_name is User Admin')
         self.assertEqual(
             len(user_updated.institution_profiles),
-            1)
+            1, 'Expected one profile in user profiles')
 
     @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_post_invalid_request_type(self, verify_token):

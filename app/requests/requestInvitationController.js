@@ -91,6 +91,14 @@
             return false;
         };
 
+        requestInvCtrl.getFullAddress = function getFullAddress(institution) {
+                var address = institution.address;
+                var fullAddress = address.street + ", " + address.number + ", " + address.neighbourhood + 
+                                 ", " + address.city + ", " + address.state + ", " + address.country;
+                return fullAddress;
+        };
+
+
         function clearProperties(){
             requestInvCtrl.institutionSelect = {};
             requestInvCtrl.hasInstSelect = false;

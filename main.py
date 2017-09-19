@@ -29,6 +29,8 @@ from handlers.redirect_handler import AppRedirectHandler
 from handlers.user_request_collection_handler import UserRequestCollectionHandler
 from handlers.institution_parent_request_collection_handler import InstitutionParentRequestCollectionHandler
 from handlers.institution_children_request_collection_handler import InstitutionChildrenRequestCollectionHandler
+from handlers.institution_request_collection_handler import InstitutionRequestCollectionHandler
+from handlers.institution_request_handler import InstitutionRequestHandler
 from handlers.institution_parent_request_handler import InstitutionParentRequestHandler
 from handlers.institution_children_request_handler import InstitutionChildrenRequestHandler
 from handlers.institution_hierarchy_handler import InstitutionHierarchyHandler
@@ -42,6 +44,7 @@ app = webapp2.WSGIApplication([
     ("/api/requests/(.*)/user", RequestHandler),
     ("/api/invites", InviteCollectionHandler),
     ("/api/invites/(.*)", InviteHandler),
+    ("/api/requests/(.*)/institution", InstitutionRequestHandler),
     ("/api/requests/(.*)/institution_parent", InstitutionParentRequestHandler),
     ("/api/requests/(.*)/institution_children", InstitutionChildrenRequestHandler),
     ("/api/events", EventCollectionHandler),
@@ -53,6 +56,7 @@ app = webapp2.WSGIApplication([
     ("/api/institutions/(.*)/hierarchy/(.*)", InstitutionHierarchyHandler),
     ("/api/institutions/(.*)/invites/(.*)", InstitutionHandler),
     ("/api/institutions/(.*)/requests/user", UserRequestCollectionHandler),
+    ("/api/institutions/(.*)/requests/institution", InstitutionRequestCollectionHandler),
     ("/api/institutions/(.*)/requests/institution_parent", InstitutionParentRequestCollectionHandler),
     ("/api/institutions/(.*)/requests/institution_children", InstitutionChildrenRequestCollectionHandler),
     ("/api/institutions/(.*)", InstitutionHandler),

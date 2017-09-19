@@ -2,14 +2,15 @@
 
 (describe('Test EventController', function() {
 
-  var eventCtrl, scope, httpBackend, rootScope, deffered, imageService, eventService, message;
+  var eventCtrl, scope, httpBackend, rootScope, deffered, imageService, eventService, 
+    postService, messageService;
 
   var splab = {name: 'Splab', key: '098745'};
 
   var date_now = new Date();
 
-  var maiana = {
-      name: 'Maiana',
+  var user = {
+      name: 'User',
       institutions: [splab],
       follows: splab,
       institutions_admin: splab,
@@ -17,35 +18,44 @@
       key: '123'
   };  
 
-  // Event of SPLAB by Maiana
-  var event = {'title': 'Inauguration',
-                'text': 'Inauguration of system E-CIS',
-                'local': 'Brasília',
-                'photo_url': null,
-                'start_time': date_now, 
-                'end_time': date_now,
-                };
+  // Event of SPLAB by User
+  var event = {
+    'title': 'Title',
+    'text': 'Text',
+    'local': 'Local',
+    'photo_url': null,
+    'start_time': date_now, 
+    'end_time': date_now,
+  };
+
+  var post = new Post({}, splab.key);
+  post.shared_event = event.key;
 
   var event_convert_date = new Event(event, splab.key);
 
   beforeEach(module('app'));
 
-  beforeEach(inject(function($controller, $httpBackend, $http, $q, AuthService, $rootScope, ImageService, EventService, MessageService) {
+  beforeEach(inject(function($controller, $httpBackend, $http, $q, AuthService, 
+        $rootScope, ImageService, EventService, PostService, MessageService) {
       imageService = ImageService;
       scope = $rootScope.$new();
       httpBackend = $httpBackend;
       rootScope = $rootScope;
       deffered = $q.defer();
       eventService = EventService;
-      AuthService.login(maiana);
+      postService = PostService;
+      messageService = MessageService;
+      AuthService.login(user);
       eventCtrl = $controller('EventController', {
             scope: scope,
             imageService : imageService,
             $rootScope: rootScope,
             eventService: eventService,
-            message : MessageService
+            postService : postService,
+            messageService : messageService
         });
       eventCtrl.event = event;
+      eventCtrl.events = [];
 
       httpBackend.when('GET', "/api/events").respond([]);
       httpBackend.when('GET', 'main/main.html').respond(200);
@@ -59,58 +69,39 @@
       httpBackend.verifyNoOutstandingRequest();
   });
 
-  describe('EventController functions', function() {
+  describe('share()', function() {
 
-    describe('showButtonSend()', function() {
+    it('should eventService.createPost be called', function() {
+      spyOn(postService, 'createPost').and.returnValue(deffered.promise);
+      deffered.resolve(post);
+      eventCtrl.share(event);
+      scope.$apply();
+      expect(postService.createPost).toHaveBeenCalledWith(post);
+    });
+  });
 
-      it('should be true', function() {
-        expect(eventCtrl.showButtonSend()).toBe(true);
-      });
+  describe('recognizeUrl()', function() {
 
-      it('should be false', function() {
-        eventCtrl.event = new Event({
-              'text': 'Inaugurar o projeto E-CIS',
-              'photo_url': null,
-              'start_time': new Date(), 
-              'end_time': new Date(),
-              'key': '12300'
-        }, splab.key);
-        expect(eventCtrl.showButtonSend()).toBe(false);
-      });
+    it('Should returns a event with https url in text', function() {
+      eventCtrl.event.text = "Access: http://www.google.com";
+      eventCtrl.event.text = eventCtrl.recognizeUrl(eventCtrl.event.text);
+      expect(eventCtrl.event.text)
+        .toEqual("Access: <a href='http://www.google.com' target='_blank'>http://www.google.com</a>");
+    });
+  });
 
-      it('should be false', function() {
-        eventCtrl.event = new Event({
-              'title': 'Inauguração',
-              'photo_url': null,
-              'start_time': new Date("October 13, 2014 11:13:00"), 
-              'end_time': new Date("October 3, 2014 11:13:00"),
-              'key': '12300'
-              }, splab.key);
-        expect(eventCtrl.showButtonSend()).toBe(false);
-      });
+  describe('isLongText()', function() {
+
+    it('Should be false', function() {
+      expect(eventCtrl.isLongText(eventCtrl.event.text)).toBe(false);
     });
 
-    describe('showImage()', function() {
-
-      it('should be false', function() {
-        expect(eventCtrl.showImage()).toBe(false);
-      });
-
-      it('should be true', function() {
-        eventCtrl.photoUrl = 'image';
-        expect(eventCtrl.showImage()).toBe(true);
-       });
-      });
-
-    describe('save()', function() {
-
-      it('should eventService.createEvent be called', function() {
-        spyOn(eventService, 'createEvent').and.returnValue(deffered.promise);
-        deffered.resolve(event);
-        eventCtrl.save();
-        scope.$apply();
-        expect(eventService.createEvent).toHaveBeenCalledWith(event_convert_date);
-      });
+    it('Should be true', function() {
+      eventCtrl.event.text = "Access: www.google.com aAt vero et accusamus et iusto odio dignis\
+                  simos ducimus quiblanditiis praesentium voluptatum deleniti atque corr\
+                  pti quos dolores et quas molestias excepturi sint occaecati cupiditate\
+                  non provident, similique sunt in culpa qui officia deserunt mollitia"
+      expect(eventCtrl.isLongText(eventCtrl.event.text)).toBe(true);
     });
   });
 }));

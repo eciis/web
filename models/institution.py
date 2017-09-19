@@ -30,9 +30,10 @@ class Address(ndb.Model):
 
     def get_full_address(self):
         """Get the full address."""
-        full_address = "%s %s, %s, %s, %s, %s" % (self.number, self.street,
-                                                  self.city, self.state,
-                                                  self.zip, self.country)
+        full_address = "%s %s, %s, %s, %s, %s, %s" % (self.street, self.number,
+                                                      self.neighbourhood,
+                                                      self.city, self.state,
+                                                      self.cep, self.country)
         return full_address
 
     @staticmethod

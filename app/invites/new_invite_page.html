@@ -29,9 +29,9 @@
               </md-list-item>
             </md-list>
             <div layout="column" layout-align="center">
-            <md-input-container flex-gt-sm ng-if="newInviteCtrl.showInputName()">
+            <md-input-container flex-gt-sm>
               <label>Nome</label>
-              <input ng-model="newInviteCtrl.name">
+              <input ng-model="newInviteCtrl.user.name" required>
             </md-input-container>
 
             <md-input-container flex-gt-sm >

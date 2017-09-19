@@ -5,7 +5,6 @@ from test_base_handler import TestBaseHandler
 from models.post import Post
 from models.user import User
 from models.institution import Institution
-from utils import get_message_exception
 from handlers.like_handler import LikeHandler
 
 from mock import patch
@@ -76,7 +75,7 @@ class LikeHandlerTest(TestBaseHandler):
         with self.assertRaises(Exception) as exc:
             self.testapp.post(self.LIKE_URI % self.user_post.key.urlsafe())
         # Verify if message exception
-        exc = get_message_exception(self, exc.exception.message)
+        exc = self.get_message_exception(exc.exception.message)
         self.assertEquals(exc, "Error! User already liked this publication")
         # Refresh user_post
         self.user_post = self.user_post.key.get()
@@ -119,7 +118,7 @@ class LikeHandlerTest(TestBaseHandler):
         with self.assertRaises(Exception) as ex:
             self.testapp.delete(self.LIKE_URI % self.user_post.key.urlsafe())
         # Verify if message exception
-        ex = get_message_exception(self, ex.exception.message)
+        ex = self.get_message_exception(ex.exception.message)
         self.assertEquals(ex, "Error! User hasn't liked this publication.")
         # Refresh user_post
         self.user_post = self.user_post.key.get()

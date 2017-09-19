@@ -8,7 +8,6 @@ from handlers.post_comment_handler import check_permission
 from models.user import User
 from models.institution import Institution
 from models.post import Post
-from utils import get_message_exception
 import json
 
 from mock import patch
@@ -144,7 +143,7 @@ class PostCommentHandlerTest(TestBaseHandler):
             self.testapp.delete(self.URL_DELETE_COMMENT %
                                 (self.mayza_post.key.urlsafe(), self.id_comment))
 
-        ex = get_message_exception(self, ex.exception.message)
+        ex = self.get_message_exception(ex.exception.message)
         self.assertEquals(ex, "Error! User not allowed to remove comment")
         self.assertEquals(len(self.mayza_post.comments), 1,
                           "Expected size of comment's list should be one")

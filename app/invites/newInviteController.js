@@ -22,9 +22,7 @@
         newInviteCtrl.acceptInvite = function acceptInvite(event) {
             if (newInviteCtrl.invite.type_of_invite === "USER") {
                 if(isValidProfile()) {
-                    newInviteCtrl.saveInstProfile().then(function success() {
-                        newInviteCtrl.addInstitution(event);
-                    });
+                    newInviteCtrl.addInstitution(event);
                 }
             } else {
                 newInviteCtrl.updateStubInstitution();
@@ -32,8 +30,6 @@
         };
 
         newInviteCtrl.saveInstProfile = function configInstProfile() {
-            jsonpatch.unobserve(newInviteCtrl.user.current_institution, observer);
-            observer = jsonpatch.observe(newInviteCtrl.user);
             var profile = {phone: newInviteCtrl.phone,
                     email: newInviteCtrl.email,
                     office: newInviteCtrl.office,
@@ -41,17 +37,16 @@
                     institution_name: newInviteCtrl.institution.name,
                     institution_photo_url: newInviteCtrl.institution.photo_url};
             newInviteCtrl.user.addProfile(profile);
-            newInviteCtrl.user.name = newInviteCtrl.name;
             AuthService.save();
             var patch = jsonpatch.generate(observer);
-            var promise;
-            promise = UserService.save(patch);
-            return promise;
+            return patch;
         };
 
         newInviteCtrl.addInstitution =  function addInstitution(event) {
-            var promise = UserService.addInstitution(newInviteCtrl.user,
-                newInviteCtrl.institution.key, newInviteCtrl.inviteKey);
+            var patch = newInviteCtrl.saveInstProfile();
+            newInviteCtrl.user.addInstitution(newInviteCtrl.institution.key);
+
+            var promise = InviteService.acceptInvite(patch, newInviteCtrl.inviteKey);
                 promise.then(function success(userSaved) {
                     newInviteCtrl.user.removeInvite(newInviteCtrl.inviteKey);
                     newInviteCtrl.user.institutions = userSaved.institutions;
@@ -59,7 +54,7 @@
                     newInviteCtrl.user.state = 'active';
                     newInviteCtrl.user.current_institution = newInviteCtrl.institution;
                     AuthService.save();
-                    goHome();
+                    $state.go("app.home");
                     showAlert(event, newInviteCtrl.institution.name);
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
@@ -111,33 +106,27 @@
                 return promise;
         };
 
-        newInviteCtrl.showInputName = function showInputName() {
-            return newInviteCtrl.user.name === 'Unknown';
+        newInviteCtrl.checkUserName = function checkUserName() {
+            if(newInviteCtrl.user.name === 'Unknown') {
+                newInviteCtrl.user.name = '';
+            }
+            return _.isEmpty(newInviteCtrl.user.name);
         };
-
 
         function deleteInvite() {
             var promise = InviteService.deleteInvite(newInviteCtrl.inviteKey);
             promise.then(function success() {
                 AuthService.reload().then(function() {
-                    goHome();
+                    if(newInviteCtrl.user.isInactive()) {
+                        $state.go("user_inactive");
+                    } else {
+                        $state.go("app.home");
+                    }
                 });
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
             return promise;
-        }
-
-        function goHome() {
-            $state.go("app.home");
-        }
-
-        function loadInstitution(institutionKey) {
-            InstitutionService.getInstitution(institutionKey).then(function success(response) {
-                newInviteCtrl.institution = response.data;
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
-            });
         }
 
         function showAlert(event, institutionName) {
@@ -155,11 +144,13 @@
 
         function loadInvite(){
             observer = jsonpatch.observe(newInviteCtrl.user);
+            jsonpatch.unobserve(newInviteCtrl.user.current_institution, observer);
+            newInviteCtrl.checkUserName();
             InviteService.getInvite(newInviteCtrl.inviteKey).then(function success(response) {
                 newInviteCtrl.invite = new Invite(response.data);
                 if(newInviteCtrl.invite.status === 'sent') {
                     institutionKey = (newInviteCtrl.invite.type_of_invite === "USER") ? newInviteCtrl.invite.institution_key : newInviteCtrl.invite.stub_institution.key;
-                    loadInstitution(institutionKey);
+                    newInviteCtrl.institution = newInviteCtrl.invite.institution;
                 } else {
                     $state.go("app.home");
                     MessageService.showToast("Você já utilizou este convite.");
@@ -172,6 +163,9 @@
         function isValidProfile() {
             if(!newInviteCtrl.office) {
                 MessageService.showToast("Cargo institucional deve ser preenchido.");
+                return false;
+            } else if(newInviteCtrl.checkUserName()) {
+                MessageService.showToast("O nome deve ser preenchido.");
                 return false;
             }
             return true;

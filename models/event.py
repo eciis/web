@@ -21,7 +21,7 @@ class Event(ndb.Model):
     # URL photo of author
     author_photo = ndb.StringProperty(required=True)
 
-     # Name of Author
+    # Name of Author
     author_name = ndb.StringProperty(required=True)
 
     # Institution to which this event belongs
@@ -76,3 +76,39 @@ class Event(ndb.Model):
         event.isValid()
 
         return event
+
+    @staticmethod
+    def make(event):
+        """Create personalized json of event."""
+        start_time = event.start_time.isoformat()
+        end_time = event.end_time.isoformat()
+        return {
+            'title': event.title,
+            'text': event.text,
+            'local': event.local,
+            'start_time': start_time,
+            'end_time': end_time,
+            'state': event.state,
+            'author': event.author_name,
+            'author_img': event.author_photo,
+            'institution_name': event.institution_name,
+            'institution_image': event.institution_photo,
+            'photo_url': event.photo_url,
+            'author_key': event.author_key.urlsafe(),
+            'institution_key': event.institution_key.urlsafe(),
+            'key': event.key.urlsafe()
+        }
+
+    def __setattr__(self, attr, value):
+        """
+        Method of set attributes.
+
+        if the attribute is of type date and the value passed is a string,
+        it converts to type datetime.
+        """
+        is_value_datetime = isinstance(value, datetime.datetime)
+        is_attr_data = attr == 'start_time' or attr == 'end_time'
+
+        if is_attr_data and not is_value_datetime:
+            value = datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S")
+        super(Event, self).__setattr__(attr, value)

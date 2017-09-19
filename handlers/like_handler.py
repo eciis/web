@@ -8,6 +8,7 @@ from utils import json_response
 from handlers.base_handler import BaseHandler
 from models.post import Like
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
+from service_messages import send_message_notification
 from utils import Utils
 
 
@@ -18,6 +19,16 @@ class LikeException(Exception):
         """Init method."""
         super(LikeException, self).__init__(
             message or 'User already made this action in publication.')
+
+
+def send_like_notification(sender, receiver_key, entity_type, entity_key):
+    """Send notification of like comments or post."""
+    message = {'type': entity_type, 'from': sender.name.encode('utf8')}
+    send_message_notification(
+        receiver_key,
+        json.dumps(message),
+        entity_type,
+        entity_key)
 
 
 class LikeHandler(BaseHandler):
@@ -45,8 +56,11 @@ class LikeHandler(BaseHandler):
         institution = post.institution.get()
         Utils._assert(institution.state == 'inactive',
                       "The institution has been deleted", NotAuthorizedException)
+        entity_type = 'LIKE_POST'
+
         if comment_id:
             comment = post.get_comment(comment_id)
+            entity_type = 'LIKE_COMMENT'
             if reply_id:
                 comment = comment.get('replies').get(reply_id)
 
@@ -55,12 +69,20 @@ class LikeHandler(BaseHandler):
             Utils._assert(user.key.urlsafe() in likes,
                       "User already liked this comment", NotAuthorizedException)
             likes.append(user.key.urlsafe())
-            post.put();
+            post.put()
+
+            isAuthorComment = comment['author_key'] != user.key.urlsafe()
+            if comment and isAuthorComment:
+                send_like_notification(user, comment['author_key'], entity_type, post.key.urlsafe())
         else:
             Utils._assert(user.is_liked_post(post.key),
                       "User already liked this publication", NotAuthorizedException)
             user.like_post(post.key)
             post.like(user.key)
+
+            isAuthorPost = post.author.urlsafe() != user.key.urlsafe()
+            if isAuthorPost:
+                send_like_notification(user, post.author.urlsafe(), entity_type, post.key.urlsafe())
 
 
     @login_required

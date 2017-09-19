@@ -1,4 +1,4 @@
-<md-card ng-class="postDetailsCtrl.isDeleted()?'post-deleted':''" ng-hide="postDetailsCtrl.isHidden()">
+<md-card ng-class="postDetailsCtrl.isDeleted(postDetailsCtrl.post)?'post-deleted':''" ng-hide="postDetailsCtrl.isHidden()">
   <!-- HEADER -->
   <md-card-header>
     <md-card-avatar>
@@ -14,6 +14,42 @@
     </md-card-header-text>
   </md-card-header>
 
+  <!-- BODY SHARED EVENT -->
+  <md-card ng-if="postDetailsCtrl.showSharedEvent()">
+    <md-card-content layout="column">
+      <md-card layout="row" md-colors="{background: 'teal-50'}">
+        <div layout="column">
+          <div layout="row" layout-align="center end" md-colors="{background: 'teal-100'}">
+            <h1 class="md-display-1" md-colors="{color:'teal-900'}">{{postDetailsCtrl.post.shared_event.start_time | amUtc | amLocal | amDateFormat:'DD'}}</h1>
+          </div>
+          <div layout="row" layout-align="center start" md-colors="{background: 'teal-200'}" style="padding: 0 10px 0 10px">
+            <h3 md-colors="{color:'teal-800'}">{{postDetailsCtrl.post.shared_event.start_time | amUtc | amLocal | amDateFormat:'MMMM'}}</h3>
+          </div>
+        </div>
+        <div layout="column" layout-align="center start" style="padding-left: 10px">
+          <a href class="md-subhead hyperlink">
+            <span>{{ postDetailsCtrl.post.shared_event.title | uppercase}}</span>
+          </a>
+          <div layout="row">    
+            <md-icon>place</md-icon> 
+            <p>Em {{ postDetailsCtrl.post.shared_event.local }}</p>
+          </div>
+          <div layout="row">
+            <md-icon>event</md-icon>
+            <p>De {{postDetailsCtrl.post.shared_event.start_time | amUtc | amLocal | amCalendar:referenceTime:formats }} até {{postDetailsCtrl.post.shared_event.end_time | amUtc | amLocal | amCalendar:referenceTime:formats }}</p>
+          </div>
+        </div>
+      </md-card>
+      <p class="break" 
+        ng-bind-html="postDetailsCtrl.recognizeUrl(postDetailsCtrl.post.shared_event.text)" >
+      </p>
+    </md-card-content>
+    <md-card>
+      <img class="md-card-image" ng-if="postDetailsCtrl.showImage(postDetailsCtrl.post.shared_event)" 
+        ng-src="{{ postDetailsCtrl.post.shared_event.photo_url }}"/>
+    </md-card>
+  </md-card>
+
   <!-- BODY SHARED POST -->
   <md-card md-colors="{background: 'default-grey-100'}" ng-if="postDetailsCtrl.showSharedPost()">
     <md-card-header>
@@ -27,7 +63,7 @@
       </md-card-header-text>
     </md-card-header>
     <md-card-content layout="column">
-      <div ng-if="postDetailsCtrl.isDeleted()"
+      <div ng-if="postDetailsCtrl.isDeleted(postDetailsCtrl.post.shared_post)"
       style='font-style:italic; text-align: center'>
         <p>Esta publicação foi removida por</p>
         <p>
@@ -43,8 +79,8 @@
       <a href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post.shared_post)">
         <span>{{ postDetailsCtrl.post.shared_post.title }}</span>
       </a>
-      <p class="break" ng-if="!postDetailsCtrl.isDeleted()"
-        ng-bind-html="postDetailsCtrl.recognizeUrl(postDetailsCtrl.post.shared_post).text" ></p>
+      <p class="break" ng-if="!postDetailsCtrl.isDeleted(postDetailsCtrl.post.shared_post)"
+        ng-bind-html="postDetailsCtrl.postToURL(postDetailsCtrl.post.shared_post).text" ></p>
       <div layout="row" layout-align="end-center">
         <a href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post.shared_post)" ng-if="postDetailsCtrl.isLongPostTimeline(postDetailsCtrl.post.shared_post.text)">
           <span class="md-subhead" >continuar lendo</span>
@@ -61,7 +97,7 @@
   <!-- BODY POST -->
   <img ng-if="postDetailsCtrl.showImage(postDetailsCtrl.post)" ng-src="{{ postDetailsCtrl.post.photo_url }}"
   class="md-card-image">
-  <md-card-title ng-if="!postDetailsCtrl.isDeleted()">
+  <md-card-title ng-if="!postDetailsCtrl.isDeleted(postDetailsCtrl.post)">
     <md-card-title-text>
       <a href class="md-title hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post)">
         <span class="md-headline break">{{postDetailsCtrl.post.title}}</span>
@@ -69,18 +105,18 @@
     </md-card-title-text>
   </md-card-title>
   <md-card-content>
-    <div ng-if="postDetailsCtrl.isDeleted()" style='font-style:italic; text-align: center'>
+    <div ng-if="postDetailsCtrl.isDeleted(postDetailsCtrl.post)" style='font-style:italic; text-align: center'>
       <p>Esta publicação foi removida por</p>
       <p>
         {{postDetailsCtrl.post.last_modified_by}} {{postDetailsCtrl.post.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats }}.
       </p>
     </div>
     <div ng-if="postDetailsCtrl.showTextPost()">
-        <p ng-bind-html="postDetailsCtrl.recognizeUrl(postDetailsCtrl.post).text" class="break">
-          {{postDetailsCtrl.recognizeUrl(postDetailsCtrl.post).text}}
+        <p ng-bind-html="postDetailsCtrl.postToURL(postDetailsCtrl.post).text" class="break">
+          {{postDetailsCtrl.postToURL(postDetailsCtrl.post).text}}
         </p>
         <div layout="row" layout-align="end-center">
-            <a href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost()"
+            <a href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post)"
               ng-if="postDetailsCtrl.isLongPostTimeline(postDetailsCtrl.post.text)">
               <span class="md-subhead" >continuar lendo</span>
             </a>
@@ -91,7 +127,7 @@
           </md-button>
         </div>
     </div>
-    <div class="youtube-player" ng-if="postDetailsCtrl.post.video_url && !postDetailsCtrl.isDeleted()">
+    <div class="youtube-player" ng-if="postDetailsCtrl.post.video_url && !postDetailsCtrl.isDeleted(postDetailsCtrl.post)">
       <iframe ng-src="{{postDetailsCtrl.getVideoUrl()}}">
       </iframe>
     </div>
@@ -134,7 +170,7 @@
         ng-if="postDetailsCtrl.showButtonEdit()" title="Editar o post">
       <md-icon>edit</md-icon>
     </md-button>
-    <md-button class="md-icon-button" ng-if="postDetailsCtrl.post.state != 'deleted'" aria-label="compartilhar"
+    <md-button class="md-icon-button" ng-if="postDetailsCtrl.showButtonShare()" aria-label="compartilhar"
       ng-click="postDetailsCtrl.share(postDetailsCtrl.post)" title="Compartilhar o post">
       <md-icon>share</md-icon>
     </md-button>
@@ -152,13 +188,12 @@
   </div>
 
   <!-- COMMENTS -->
-
   <comment ng-if="postDetailsCtrl.showComments || postDetailsCtrl.isPostPage"
     ng-repeat="comment in postDetailsCtrl.getValues(postDetailsCtrl.post.data_comments) | orderBy:'publication_date'"
     comment="comment" user="postDetailsCtrl.user" post="postDetailsCtrl.post"></comment>
 
   <md-list>
-    <md-list-item class="md-3-line" ng-if="(postDetailsCtrl.showComments || postDetailsCtrl.isPostPage) && !postDetailsCtrl.isDeleted()">
+    <md-list-item class="md-3-line" ng-if="(postDetailsCtrl.showComments || postDetailsCtrl.isPostPage) && !postDetailsCtrl.isDeleted(postDetailsCtrl.post)">
       <img ng-src="{{postDetailsCtrl.user.photo_url}}" class="md-avatar" alt="{{postDetailsCtrl.user.name}}" />
       <div class="md-list-item-text">
         <h2>{{comment.author_name}}</h2>

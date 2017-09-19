@@ -98,3 +98,12 @@ class Event(ndb.Model):
             'institution_key': event.institution_key.urlsafe(),
             'key': event.key.urlsafe()
         }
+
+    def __setattr__(self, attr, value):
+        """Method of set invite attributes."""
+        is_value_datetime = isinstance(value, datetime.datetime)
+        is_attr_data = attr == 'start_time' or attr == 'end_time'
+
+        if is_attr_data and not is_value_datetime:
+            value = datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S")
+        super(Event, self).__setattr__(attr, value)

@@ -9,7 +9,7 @@
       </md-button>
     </div>
     <timeline>
-      <timeline-event ng-repeat="event in eventCtrl.events | orderBy:'start_time'" ng-if="event.state === 'published'">
+      <timeline-event ng-repeat="event in eventCtrl.events | orderBy:'start_time'">
         <timeline-badge class="primary">
           <md-icon style="margin-top: 14px; color: white;">event</md-icon>
         </timeline-badge>
@@ -23,10 +23,6 @@
                 <div layout="row" layout-align="start center">
                   <span md-colors="{color: 'teal-900'}" class="md-title">{{ event.title }}</span>
                   <span flex md-truncate></span>
-                  <md-button class="md-icon-button" aria-label="edit" title="Editar este evento"
-                    ng-if="eventCtrl.isAuthorized(event)">
-                    <md-icon>edit</md-icon>
-                  </md-button>
                 </div>
                 <span class="md-subhead">por {{ event.institution_name }} | {{ event.author_name }}</span>
               </md-card-header-text>

@@ -87,12 +87,13 @@
     it('Should remove event of events', function() {
       var event = eventCtrl.events[0];
       httpBackend.expect('DELETE', EVENTS_URI + '/' + event.key).respond();
-        eventCtrl.deleteEvent("$event", event);
-        httpBackend.flush();
-        expect(eventCtrl.events).not.toContain(event_convert_date);
-        expect(eventService.deleteEvent).toHaveBeenCalledWith(event);
-        expect(mdDialog.confirm).toHaveBeenCalled();
-        expect(mdDialog.show).toHaveBeenCalled();
+      eventCtrl.deleteEvent("$event", event);
+      httpBackend.flush();
+
+      expect(eventCtrl.events).not.toContain(event_convert_date);
+      expect(eventService.deleteEvent).toHaveBeenCalledWith(event);
+      expect(mdDialog.confirm).toHaveBeenCalled();
+      expect(mdDialog.show).toHaveBeenCalled();
     });
   });  
 

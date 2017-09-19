@@ -49,16 +49,8 @@
         };
 
         eventCtrl.deleteEvent = function deleteEvent(ev, event) {
-            var confirm = $mdDialog.confirm()
-                .clickOutsideToClose(true)
-                .title('Excluir Evento')
-                .textContent('Este evento será removido.')
-                .ariaLabel('Deletar evento')
-                .targetEvent(ev)
-                .ok('Excluir')
-                .cancel('Cancelar');
-
-            $mdDialog.show(confirm).then(function() {
+            var dialog = MessageService.showConfirmationDialog(ev, 'Excluir Evento', 'Este evento será removido.');
+            dialog.then(function() {
                 EventService.deleteEvent(event).then(function success() {
                 _.remove(eventCtrl.events, function(ev){
                     return ev === event;
@@ -86,7 +78,7 @@
             return numberOfChar >= LIMIT_CHARACTERS;
         };
 
-        eventCtrl.isAuthorized = function isAuthorized(event) {
+        eventCtrl.canDelete = function canDelete(event) {
             return eventCtrl.isEventAuthor(event) || isInstitutionAdmin(event);
         };
 
@@ -95,7 +87,8 @@
         };
 
         function isInstitutionAdmin(event) {
-            return _.includes(_.map(eventCtrl.user.institutions_admin, getKeyFromUrl), event.institution_key);
+            return _.includes(_.map(eventCtrl.user.institutions_admin, getKeyFromUrl),
+                getKeyFromUrl(event.institution_key));
         }
 
         function adjustText(text){

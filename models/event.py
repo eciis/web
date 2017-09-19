@@ -3,6 +3,7 @@ from google.appengine.ext import ndb
 import datetime
 from custom_exceptions.fieldException import FieldException
 
+
 class Event(ndb.Model):
     """Model of a event."""
 
@@ -33,10 +34,10 @@ class Event(ndb.Model):
     # Name of Institution
     institution_name = ndb.StringProperty(required=True)
 
-    # User who deleted the event
+    # User who modified the event
     last_modified_by = ndb.KeyProperty(kind="User")
 
-    # Name of user who deleted
+    # Name of user who modified
     last_modified_by_name = ndb.StringProperty()
 
     # Date and time of last modified
@@ -76,6 +77,8 @@ class Event(ndb.Model):
         event.institution_key = institution_key
         event.institution_name = institution_name
         event.institution_photo = institution_photo
+        event.last_modified_by = author_key
+        event.last_modified_by_name = author_name
         event.local = data.get('local')
         event.start_time = datetime.datetime.strptime(
             data.get('start_time'), "%Y-%m-%dT%H:%M:%S")

@@ -41,7 +41,7 @@
               </p>
               <div layout="row" layout-align="end center">
                 <md-button class="md-icon-button" aria-label="compartilhar" title="Excluir este evento"
-                  ng-if="eventCtrl.isAuthorized(event)" ng-click="eventCtrl.deleteEvent($event, event)">
+                  ng-if="eventCtrl.canDelete(event)" ng-click="eventCtrl.deleteEvent($event, event)">
                   <md-icon>delete</md-icon>
                 </md-button>
                 <md-button class="md-icon-button" aria-label="compartilhar" title="Compartilhar este evento"

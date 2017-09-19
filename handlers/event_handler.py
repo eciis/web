@@ -45,6 +45,7 @@ def treats_date(event, data):
 class EventHandler(BaseHandler):
     """Event Handler."""
 
+    @is_event_author
     @login_required
     def delete(self, user, key):
         """Change event state from 'published' to 'deleted'."""

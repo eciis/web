@@ -14,6 +14,7 @@ class RequestInstitution(Request):
         """Create a post and check required fields."""
         request = RequestInstitution()
         request.sender_key = ndb.Key(urlsafe=data.get('sender_key'))
+        request.stub_institution_key = data.get('stub_institution_key')
         request = Invite.create(data, request)
         request.isValid()
         return request

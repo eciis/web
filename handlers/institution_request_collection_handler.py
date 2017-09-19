@@ -74,10 +74,6 @@ class InstitutionCollectionRequestHandler(BaseHandler):
         request = InviteFactory.create(data, type_of_invite)
         request.put()
 
-        user.add_institution(inst_stub.key)
-        user.follow(inst_stub.key)
-        user.institutions_admin.append(inst_stub.key)
-
         request.sendInvite(user, host)
 
         self.response.write(json.dumps(request.make()))

@@ -11,6 +11,7 @@ from handlers.base_handler import BaseHandler
 from models.institution import Institution
 from models.factory_invites import InviteFactory
 from models.request_institution import RequestInstitution
+from util import has_analyze_request_permission
 
 
 def createInstitution(user, data):
@@ -37,13 +38,14 @@ def createInstitution(user, data):
     return inst_stub
 
 
-class InstitutionCollectionRequestHandler(BaseHandler):
-    """Institution Children Request Handler."""
+class InstitutionRequestCollectionHandler(BaseHandler):
+    """Institution Request Handler."""
 
     @json_response
     @login_required
+    @has_analyze_request_permission
     def get(self, user, institution_key):
-        """Get requests for parent links."""
+        """Get requests for new institutions."""
         queryRequests = RequestInstitution.query(
             RequestInstitution.institution_key == ndb.Key(urlsafe=institution_key),
             RequestInstitution.status == 'sent'
@@ -54,6 +56,7 @@ class InstitutionCollectionRequestHandler(BaseHandler):
 
     @login_required
     @json_response
+    @has_analyze_request_permission
     def post(self, user, institution_key):
         """Handler of post requests."""
         data = json.loads(self.request.body)

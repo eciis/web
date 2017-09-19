@@ -273,12 +273,23 @@ def is_authorized(method):
 
 
 #  SEE HOW GET POWER USERS IDEA
-def getPowerUsers():
+def getSuperUsers():
     userswithpermission = []
     institutionsEmpowered = Institution.query(Institution.empowered == True)
     for institution in institutionsEmpowered:
         for userKey in institution.members:
             user = userKey.get()
-            if user.has_permission('analyze_request_inst', eciis_key):
+            if user.has_permission('analyze_request_inst', institution.key):
                 userswithpermission.push(user)
     return userswithpermission
+
+
+def has_analyze_request_permission(method):
+    """Check user permission."""
+    def check_permission(self, user, *args):
+        superUsers = getSuperUsers()
+        Utils._assert(
+            user not in superUsers,
+            'User is not allowed to do this operation')
+        return method(self, user, *args)
+    return check_permission

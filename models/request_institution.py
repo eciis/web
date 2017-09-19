@@ -4,7 +4,7 @@
 from invite import Invite
 from request import Request
 from google.appengine.ext import ndb
-from utils import getPowerUsers
+from utils import getSuperUsers
 
 
 class RequestInstitution(Request):
@@ -31,19 +31,19 @@ class RequestInstitution(Request):
 
         Equipe e-CIS """ % (host, request_key)
 
-        power_users = getPowerUsers()
+        super_users = getSuperUsers()
 
-        for power_user in power_users:
-            super(RequestInstitution, self).send_email(host, power_user, body)
+        for super_user in super_users:
+            super(RequestInstitution, self).send_email(host, super_user, body)
 
     def send_notification(self, user):
         """Method of send notification of request intitution."""
         entity_type = 'REQUEST_INSTITUTION'
 
-        power_users = getPowerUsers()
+        super_users = getPowerUsers()
 
-        for power_user in power_users:
-            super(RequestInstitution, self).send_notification(power_user, entity_type)
+        for super_user in super_users:
+            super(RequestInstitution, self).send_notification(super_user, entity_type)
 
     def make(self):
         """Create json of request to institution."""

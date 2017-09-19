@@ -97,6 +97,27 @@ class EventHandlerTest(TestBaseHandler):
                                       "value": "New Local"}]
                                     )
 
+    @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
+    def test_pacth_datetime(self, verify_token):
+        """Test pacth datetimes in event handler."""
+        json_edit = json.dumps([
+            {"op": "replace", "path": "/start_time",
+                "value": '2018-07-14T12:30:15'},
+            {"op": "replace", "path": "/end_time",
+                "value": '2018-07-25T12:30:15'}
+        ])
+
+        self.testapp.patch("/api/events/" +
+                           self.event.key.urlsafe(),
+                           json_edit)
+
+        self.event = self.event.key.get()
+
+        self.assertTrue(isinstance(self.event.start_time, datetime.datetime))
+        self.assertTrue(isinstance(self.event.end_time, datetime.datetime))
+        self.assertEqual(self.event.start_time.isoformat(), '2018-07-14T12:30:15')
+        self.assertEqual(self.event.end_time.isoformat(), '2018-07-25T12:30:15')
+
     def tearDown(cls):
         """Deactivate the test."""
         cls.test.deactivate()

@@ -59,7 +59,7 @@ def getGravatar(email):
     size = 40
     # construct the url
     gravatar_url = "https://www.gravatar.com/avatar/" + \
-        hashlib.md5(email.lower()).hexdigest() + "?"
+        hashlib.md5(email[0].lower()).hexdigest() + "?"
     gravatar_url += urllib.urlencode({'d': default, 's': str(size)})
     return gravatar_url
 
@@ -114,7 +114,7 @@ def delete_all_in_index(index):
 def create_profile(user, institution):
     """Create a profile."""
     profile = InstitutionProfile()
-    profile.email = user.email
+    profile.email = user.email[0]
     profile.phone = '(83) 99999-9999'
     profile.institution_key = institution.key.urlsafe()
     profile.institution_name = institution.name
@@ -129,7 +129,7 @@ class BaseHandler(webapp2.RequestHandler):
 
     def handle_exception(self, exception, debug):
         """Exception."""
-        logging.error(str(exception))
+        logging.exception(str(exception))
         self.response.write("oops! %s\n" % str(exception))
 
 
@@ -165,7 +165,7 @@ class ResetHandler(BaseHandler):
         mayza = User()
         mayza.name = 'Mayza Nunes'
         mayza.cpf = '089.675.908-90'
-        mayza.email = 'mayzabeel@gmail.com'
+        mayza.email = ['mayzabeel@gmail.com']
         mayza.photo_url = getGravatar(mayza.email)
         mayza.institutions = []
         mayza.follows = []
@@ -179,7 +179,10 @@ class ResetHandler(BaseHandler):
         andre = User()
         andre.name = 'André Abrantes'
         andre.cpf = '089.675.908-89'
-        andre.email = 'andredossantosabrantes@gmail.com'
+        andre.email = [
+            'andredossantosabrantes@gmail.com',
+            'andre.abrantes@ccc.ufcg.edu.br'
+        ]
         andre.photo_url = getGravatar(andre.email)
         andre.institutions = []
         andre.follows = []
@@ -193,7 +196,7 @@ class ResetHandler(BaseHandler):
         jorge = User()
         jorge.name = 'Jorge Abrantes'
         jorge.cpf = '089.675.908-10'
-        jorge.email = 'jcafigueiredo@gmail.com'
+        jorge.email = ['jcafigueiredo@gmail.com']
         jorge.photo_url = getGravatar(jorge.email)
         jorge.institutions = []
         jorge.follows = []
@@ -207,7 +210,10 @@ class ResetHandler(BaseHandler):
         dalton = User()
         dalton.name = 'Dalton Serey'
         dalton.cpf = '089.675.908-20'
-        dalton.email = 'dalton@splab.ufcg.edu.br'
+        dalton.email = [
+            'dalton@splab.ufcg.edu.br',
+            'daltonserey@gmail.com'
+        ]
         dalton.photo_url = getGravatar(dalton.email)
         dalton.institutions = []
         dalton.follows = []
@@ -221,7 +227,7 @@ class ResetHandler(BaseHandler):
         maiana = User()
         maiana.name = 'Maiana Brito'
         maiana.cpf = '089.675.908-65'
-        maiana.email = 'maiana.brito@ccc.ufcg.edu.br'
+        maiana.email = ['maiana.brito@ccc.ufcg.edu.br']
         maiana.photo_url = getGravatar(maiana.email)
         maiana.institutions = []
         maiana.follows = []
@@ -235,7 +241,7 @@ class ResetHandler(BaseHandler):
         raoni = User()
         raoni.name = 'Raoni Smaneoto'
         raoni.cpf = '089.675.908-65'
-        raoni.email = 'raoni.smaneoto@ccc.ufcg.edu.br'
+        raoni.email = ['raoni.smaneoto@ccc.ufcg.edu.br']
         raoni.photo_url = getGravatar(raoni.email)
         raoni.institutions = []
         raoni.follows = []
@@ -249,7 +255,7 @@ class ResetHandler(BaseHandler):
         luiz = User()
         luiz.name = 'Luiz Silva'
         luiz.cpf = '089.675.908-65'
-        luiz.email = 'luiz.silva@ccc.ufcg.edu.br'
+        luiz.email = ['luiz.silva@ccc.ufcg.edu.br']
         luiz.photo_url = getGravatar(luiz.email)
         luiz.institutions = []
         luiz.follows = []
@@ -263,7 +269,7 @@ class ResetHandler(BaseHandler):
         ruan = User()
         ruan.name = 'Ruan Silveira'
         ruan.cpf = '089.675.908-65'
-        ruan.email = 'ruan.silveira@ccc.ufcg.edu.br'
+        ruan.email = ['ruan.silveira@ccc.ufcg.edu.br']
         ruan.photo_url = getGravatar(ruan.email)
         ruan.institutions = []
         ruan.follows = []
@@ -277,7 +283,7 @@ class ResetHandler(BaseHandler):
         tiago = User()
         tiago.name = 'Tiago Pereira'
         tiago.cpf = '089.675.908-65'
-        tiago.email = 'tiago.pereira@ccc.ufcg.edu.br'
+        tiago.email = ['tiago.pereira@ccc.ufcg.edu.br']
         tiago.photo_url = getGravatar(tiago.email)
         tiago.institutions = []
         tiago.follows = []
@@ -291,7 +297,7 @@ class ResetHandler(BaseHandler):
         admin = User()
         admin.name = 'Administrador do e-CIS'
         admin.cpf = '089.675.908-65'
-        admin.email = 'testeeciis@gmail.com'
+        admin.email = ['testeeciis@gmail.com']
         admin.photo_url = 'images/avatar.jpg'
         admin.institutions = []
         admin.follows = []

@@ -9,8 +9,7 @@ from utils import NotAuthorizedException
 from utils import json_response
 from util.json_patch import JsonPatch
 from handlers.base_handler import BaseHandler
-import datetime
-import json
+
 
 def is_event_author(method):
     """Check if the user is the author of the event."""
@@ -23,23 +22,6 @@ def is_event_author(method):
                       NotAuthorizedException)
         method(self, user, url_string, *args)
     return check_authorization
-
-
-# TODO: Remove this method and treat this in JsonPatch
-# @author: Maiana Brito
-def treats_date(event, data):
-    """Changes the date attributes in the event and removes these operations from the data."""
-    data = json.loads(data)
-
-    for i in range(len(data) - 1, -1, -1):
-        operation = data[i]
-        attribute = operation["path"][1:]
-        if attribute == "start_time" or attribute == "end_time":
-            value = datetime.datetime.strptime(operation["value"], "%Y-%m-%dT%H:%M:%S")
-            event.__setattr__(attribute, value)
-            data.remove(operation)
-
-    return json.dumps(data)
 
 
 class EventHandler(BaseHandler):
@@ -67,7 +49,6 @@ class EventHandler(BaseHandler):
             event = ndb.Key(urlsafe=key).get()
 
             """Apply patch."""
-            data = treats_date(event, data)
             JsonPatch.load(data, event)
 
             event.isValid()

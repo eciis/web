@@ -13,22 +13,23 @@ from handlers.base_handler import BaseHandler
 
 def is_event_author(method):
     """Check if the user is the author of the event."""
-
-    def check_authorization(self, user, url_string, *args):
-        obj_key = ndb.Key(urlsafe=url_string)
+    def check_authorization(self, user, key, *args):
+        obj_key = ndb.Key(urlsafe=key)
         event = obj_key.get()
-        Utils._assert(event.author_key != user.key,
+        institution = event.institution_key.get()
+        Utils._assert(event.author_key != user.key and
+                      institution.admin != user.key,
                       'User is not allowed to edit this post',
                       NotAuthorizedException)
-        method(self, user, url_string, *args)
+        method(self, user, key, *args)
     return check_authorization
 
 
 class EventHandler(BaseHandler):
     """Event Handler."""
 
-    @is_event_author
     @login_required
+    @is_event_author
     def delete(self, user, key):
         """Change event state from 'published' to 'deleted'."""
         event_key = ndb.Key(urlsafe=key)

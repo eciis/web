@@ -23,8 +23,7 @@ class EventHandlerTest(TestBaseHandler):
         methods.add('PATCH')
         cls.webapp2.WSGIApplication.allowed_methods = frozenset(methods)
         app = cls.webapp2.WSGIApplication(
-            [("/api/calendar/event/(.*)", EventHandler),
-             ("/api/events/(.*)", EventHandler)
+            [("/api/events/(.*)", EventHandler)
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
@@ -33,13 +32,21 @@ class EventHandlerTest(TestBaseHandler):
     def test_delete(self, verify_token):
         """Test the event_handler's delete method."""
         # Call the delete method
-        self.testapp.delete("/api/calendar/event/%s" %
+        self.testapp.delete("/api/events/%s" %
                             self.event.key.urlsafe())
-        # Refresh mayza_post
+        # Refresh event
         self.event = self.event.key.get()
         # Verify if after delete the state of event is deleted
         self.assertEqual(self.event.state, "deleted",
                          "The state expected was deleted.")
+
+        # Pretend a new authentication
+        verify_token.return_value = {'email': 'usersd@gmail.com'}
+
+        # Call the patch method and assert that  it raises an exception
+        with self.assertRaises(Exception):
+            self.testapp.delete("/api/events/%s" %
+                                self.event.key.urlsafe())
 
     @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
     def test_patch(self, verify_token):
@@ -65,8 +72,10 @@ class EventHandlerTest(TestBaseHandler):
         self.assertEqual(self.event.title, "Edit Event")
         self.assertEqual(self.event.text, "Edit Text Event")
         self.assertEqual(self.event.local, "New Local")
-        self.assertEqual(self.event.start_time.isoformat(), '2018-07-14T12:30:15')
-        self.assertEqual(self.event.end_time.isoformat(), '2018-07-25T12:30:15')
+        self.assertEqual(self.event.start_time.isoformat(),
+                         '2018-07-14T12:30:15')
+        self.assertEqual(self.event.end_time.isoformat(),
+                         '2018-07-25T12:30:15')
 
         # test the case when the start_time is after end_time
         with self.assertRaises(Exception):
@@ -87,7 +96,7 @@ class EventHandlerTest(TestBaseHandler):
                                     )
 
         # Pretend a new authentication
-        verify_token.return_value = {'email': 'usersd@ccc.ufcg.edu.br'}
+        verify_token.return_value = {'email': 'usersd@gmail.com'}
 
         # Call the patch method and assert that  it raises an exception
         with self.assertRaises(Exception):
@@ -115,8 +124,10 @@ class EventHandlerTest(TestBaseHandler):
 
         self.assertTrue(isinstance(self.event.start_time, datetime.datetime))
         self.assertTrue(isinstance(self.event.end_time, datetime.datetime))
-        self.assertEqual(self.event.start_time.isoformat(), '2018-07-14T12:30:15')
-        self.assertEqual(self.event.end_time.isoformat(), '2018-07-25T12:30:15')
+        self.assertEqual(self.event.start_time.isoformat(),
+                         '2018-07-14T12:30:15')
+        self.assertEqual(self.event.end_time.isoformat(),
+                         '2018-07-25T12:30:15')
 
     def tearDown(cls):
         """Deactivate the test."""

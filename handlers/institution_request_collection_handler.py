@@ -11,7 +11,7 @@ from handlers.base_handler import BaseHandler
 from models.institution import Institution
 from models.factory_invites import InviteFactory
 from models.request_institution import RequestInstitution
-from util import has_analyze_request_permission
+from utils import has_analyze_request_permission
 
 
 def createInstitution(user, data):

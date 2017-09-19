@@ -32,12 +32,12 @@ class RequestInstitution(Request):
         super(RequestInstitution, self).send_email(host, requested_email, body)
 
     def send_notification(self, user):
-        """Method of send notification of invite user."""
+        """Method of send notification of request intitution."""
         entity_type = 'REQUEST_INSTITUTION'
         super(RequestInstitution, self).send_notification(user, entity_type)
 
     def make(self):
-        """Create json of request to institution children."""
+        """Create json of request to institution."""
         request_inst_children_json = super(RequestInstitution, self).make()
         request_inst_children_json['type_of_invite'] = 'REQUEST_INSTITUTION'
         return request_inst_children_json

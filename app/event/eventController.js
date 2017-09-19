@@ -48,6 +48,30 @@
 
         };
 
+        eventCtrl.deleteEvent = function deleteEvent(ev, event) {
+            var confirm = $mdDialog.confirm()
+                .clickOutsideToClose(true)
+                .title('Excluir Evento')
+                .textContent('Este evento será removido.')
+                .ariaLabel('Deletar evento')
+                .targetEvent(ev)
+                .ok('Excluir')
+                .cancel('Cancelar');
+
+            $mdDialog.show(confirm).then(function() {
+                EventService.deleteEvent(event).then(function success() {
+                _.remove(eventCtrl.events, function(ev){
+                    return ev === event;
+                });
+                MessageService.showToast('Evento removido com sucesso!');
+                }, function error(response) {
+                    MessageService.showToast(response.data.msg);
+                });
+            }, function() {
+                MessageService.showToast('Cancelado');
+            });
+        };
+
         eventCtrl.recognizeUrl =  function recognizeUrl(text) {
             if(text){
                 var urlsInText = text.match(URL_PATTERN);
@@ -61,6 +85,18 @@
             var numberOfChar = text.length;
             return numberOfChar >= LIMIT_CHARACTERS;
         };
+
+        eventCtrl.isAuthorized = function isAuthorized(event) {
+            return eventCtrl.isEventAuthor(event) || isInstitutionAdmin(event);
+        };
+
+        eventCtrl.isEventAuthor = function isEventAuthor(event) {
+            return getKeyFromUrl(event.author_key) === eventCtrl.user.key;
+        };
+
+        function isInstitutionAdmin(event) {
+            return _.includes(_.map(eventCtrl.user.institutions_admin, getKeyFromUrl), event.institution_key);
+        }
 
         function adjustText(text){
             if(eventCtrl.isLongText(text)){
@@ -79,6 +115,15 @@
                 }
             }
             return text;
+        }
+
+        function getKeyFromUrl(url) {
+            var key = url;
+            if(url.indexOf("/api/key/") != -1) {
+                var splitedUrl = url.split("/api/key/");
+                key = splitedUrl[1];
+            }
+            return key;
         }
 
         (function main() {

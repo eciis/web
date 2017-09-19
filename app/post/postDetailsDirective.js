@@ -44,8 +44,14 @@
             return postDetailsCtrl.isPostAuthor() || isInstitutionAdmin();
         };
 
-        postDetailsCtrl.isDeleted = function isDeleted(post) {
-            return post.state == 'deleted';
+        postDetailsCtrl.isDeleted = function isDeleted(object) {
+            return object.state == 'deleted';
+        };
+
+        postDetailsCtrl.isDeletedEvent = function isDeletedEvent(post) {
+            if(post.shared_event){
+                return postDetailsCtrl.isDeleted(post.shared_event);
+            }
         };
 
         postDetailsCtrl.isHidden = function isHidden() {
@@ -72,7 +78,8 @@
 
         postDetailsCtrl.showSharedEvent = function showSharedEvent() {
             return postDetailsCtrl.post.shared_event && 
-                !postDetailsCtrl.isDeleted(postDetailsCtrl.post);
+                !postDetailsCtrl.isDeleted(postDetailsCtrl.post) && 
+                !postDetailsCtrl.isDeleted(postDetailsCtrl.post.shared_event);
         };
 
         postDetailsCtrl.showTextPost = function showTextPost(){

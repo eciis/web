@@ -33,6 +33,15 @@ class Event(ndb.Model):
     # Name of Institution
     institution_name = ndb.StringProperty(required=True)
 
+    # User who deleted the event
+    last_modified_by = ndb.KeyProperty(kind="User")
+
+    # Name of user who deleted
+    last_modified_by_name = ndb.StringProperty()
+
+    # Date and time of last modified
+    last_modified_date = ndb.DateTimeProperty(auto_now=True)
+
     state = ndb.StringProperty(choices=set([
         'draft',
         'published',
@@ -82,15 +91,18 @@ class Event(ndb.Model):
         """Create personalized json of event."""
         start_time = event.start_time.isoformat()
         end_time = event.end_time.isoformat()
+        last_modified_date = event.last_modified_date.isoformat()
         return {
             'title': event.title,
             'text': event.text,
             'local': event.local,
             'start_time': start_time,
             'end_time': end_time,
+            'last_modified_date': last_modified_date,
             'state': event.state,
             'author': event.author_name,
             'author_img': event.author_photo,
+            'last_modified_by': event.last_modified_by_name,
             'institution_name': event.institution_name,
             'institution_image': event.institution_photo,
             'photo_url': event.photo_url,

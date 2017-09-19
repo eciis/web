@@ -16,4 +16,6 @@ class EventHandler(BaseHandler):
         event_key = ndb.Key(urlsafe=key)
         event = event_key.get()
         event.state = 'deleted'
+        event.last_modified_by = user.key
+        event.last_modified_by_name = user.name
         event.put()

@@ -34,7 +34,10 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
             'is_request': True,
             'admin_key': self.user_admin.key.urlsafe(),
             'institution_key': self.inst_test.key.urlsafe(),
-            'type_of_invite': 'REQUEST_USER'
+            'type_of_invite': 'REQUEST_USER',
+            'sender_name': "user name updated",
+            'office': 'CEO',
+            'institutional_email': 'other@ceo.com'
         }
 
         request = self.testapp.post_json(
@@ -45,6 +48,8 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
 
         request = json.loads(request._app_iter[0])
 
+        user_updated = self.other_user.key.get()
+
         self.assertEqual(
             request['sender'],
             self.other_user.email,
@@ -54,9 +59,15 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
             self.user_admin.name,
             'Expected sender admin_name is User Admin')
         self.assertEqual(
-            request['type_of_invite'],
-            'REQUEST_USER',
-            'Expected sender type_of_invite is REQUEST_USER')
+            request['admin_name'],
+            self.user_admin.name,
+            'Expected sender admin_name is User Admin')
+        self.assertEqual(
+            len(user_updated.institution_profiles),
+            1, 'Expected one profile in user profiles')
+        self.assertEqual(
+            user_updated.name, 'user name updated',
+            'Expected new user name is user name updated')
 
     @patch('utils.verify_token', return_value={'email': 'other_user@test.com'})
     def test_post_invalid_request_type(self, verify_token):
@@ -66,7 +77,10 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
             'is_request': True,
             'admin_key': self.user_admin.key.urlsafe(),
             'institution_key': self.inst_test.key.urlsafe(),
-            'type_of_invite': 'INVITE'
+            'type_of_invite': 'INVITE',
+            'sender_name': self.other_user.name,
+            'office': 'CEO',
+            'institutional_email': 'other@ceo.com'
         }
 
         with self.assertRaises(Exception) as ex:

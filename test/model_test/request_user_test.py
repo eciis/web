@@ -102,7 +102,10 @@ class RequestUserTest(TestBase):
             'sender_key': self.other_user.key.urlsafe(),
             'is_request': True,
             'admin_key': self.admin_user.key.urlsafe(),
-            'institution_key': self.inst_test.key.urlsafe()
+            'institution_key': self.inst_test.key.urlsafe(),
+            'office': 'teacher',
+            'sender_name': 'other_user',
+            'institutional_email': 'otheruser@inst_test.com'
         }
 
         request = RequestUser.create(data)
@@ -127,7 +130,10 @@ class RequestUserTest(TestBase):
                 'photo_url': None
             },
             'type_of_invite': 'REQUEST_USER',
-            'institution_key': self.inst_test.key.urlsafe()
+            'institution_key': self.inst_test.key.urlsafe(),
+            'office': 'teacher',
+            'sender_name': 'other_user',
+            'institutional_email': 'otheruser@inst_test.com'
         }
 
         request_make = request.make()

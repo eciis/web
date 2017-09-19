@@ -46,12 +46,19 @@
         </figure>
       </md-grid-tile>
     </md-grid-list>
+
+    <md-list flex> 
     <md-subheader class="md-no-sticky">Convites requisitados</md-subheader>
-    <md-list-item ng-repeat="request in inviteUserCtrl.requests" ng-if="request.status == 'sent'" ng-click="null" class="noright">
-      <p>{{ request.sender }}</p>
-      <md-icon class="md-secondary md-hue-3" ng-click="inviteUserCtrl.rejectRequest(request, $event)">close</md-icon>
-      <md-icon class="md-secondary" ng-click="inviteUserCtrl.acceptRequest(request)" style="margin-left: 30%">send</md-icon>
+    <md-list-item ng-repeat="request in inviteUserCtrl.requests" ng-if="request.status == 'sent'" ng-click="null" class="md-3-line">
+      <div class="md-list-item-text" layout="column">
+        <p>Nome do requisitante: {{ request.sender_name}}</p>
+        <p>Cargo atual: {{ request.office}}</p>
+        <p>Email institucional: {{ request.institutional_email}}</p>
+      </div>
+      <md-icon class="md-secondary md-hue-3" title="Rejeitar" ng-click="inviteUserCtrl.rejectRequest(request, $event)">close</md-icon>
+      <md-icon class="md-secondary" title="Aceitar membro" ng-click="inviteUserCtrl.acceptRequest(request)" style="margin-left: 30%">send</md-icon>
     </md-list-item>
+    </md-list>
   </md-card-content>
 </md-card>
 </div>

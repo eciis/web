@@ -8,8 +8,8 @@ class InstitutionProfile(ndb.Model):
     office = ndb.StringProperty(required=True)
     email = ndb.StringProperty()
     phone = ndb.StringProperty()
-    institution_name = ndb.StringProperty(required=True)
-    institution_photo_url = ndb.StringProperty(required=True)
+    institution_name = ndb.StringProperty()
+    institution_photo_url = ndb.StringProperty()
     institution_key = ndb.StringProperty(required=True)
 
     def make(self):
@@ -22,10 +22,8 @@ class InstitutionProfile(ndb.Model):
         return profile
 
     @staticmethod
-    def is_valid(profiles, institutions_size):
+    def is_valid(profiles):
         """Verify the user profile."""
-        if len(profiles) != institutions_size:
-            return False
         for profile in profiles:
             if not profile.office:
                 return False

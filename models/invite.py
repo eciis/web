@@ -44,6 +44,11 @@ class Invite(PolyModel):
     #  Indicates whether the operation is of the requested type
     is_request = ndb.BooleanProperty(default=False)
 
+    # Data to create InstitutionProfile for user requests
+    sender_name = ndb.StringProperty()
+    office = ndb.StringProperty()
+    institutional_email = ndb.StringProperty()
+
     @staticmethod
     def create(data, invite):
         """Create a post and check required fields."""

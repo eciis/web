@@ -26,7 +26,7 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
-    @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
+    @patch('utils.verify_token', return_value={'email': 'other_user@test.com'})
     def test_post(self, verify_token):
         """Test method post of UserRequestHandler."""
         data = {
@@ -35,7 +35,7 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
             'admin_key': self.user_admin.key.urlsafe(),
             'institution_key': self.inst_test.key.urlsafe(),
             'type_of_invite': 'REQUEST_USER',
-            'sender_name': "user name",
+            'sender_name': "user name updated",
             'office': 'CEO',
             'institutional_email': 'other@ceo.com'
         }
@@ -53,7 +53,7 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
         self.assertEqual(
             request['sender'],
             self.other_user.email,
-            'Expected sender email is otheruser@test.com')
+            'Expected sender email is other_user@test.com')
         self.assertEqual(
             request['admin_name'],
             self.user_admin.name,
@@ -65,8 +65,11 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
         self.assertEqual(
             len(user_updated.institution_profiles),
             1, 'Expected one profile in user profiles')
+        self.assertEqual(
+            user_updated.name, 'user name updated',
+            'Expected new user name is user name updated')
 
-    @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
+    @patch('utils.verify_token', return_value={'email': 'other_user@test.com'})
     def test_post_invalid_request_type(self, verify_token):
         """Test if an exception is thrown by passing an invalid request."""
         data = {

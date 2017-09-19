@@ -93,11 +93,14 @@
 
         requestInvCtrl.getFullAddress = function getFullAddress(institution) {
                 var address = institution.address;
-                var fullAddress = address.street + ", " + address.number + ", " + address.neighbourhood + 
+                var fullAddress;
+                if (address){
+                    fullAddress  = address.street + ", " + address.number + ", " + address.neighbourhood + 
                                  ", " + address.city + ", " + address.state + ", " + address.country;
+                }
                 return fullAddress;
+                
         };
-
 
         function clearProperties(){
             requestInvCtrl.institutionSelect = {};

@@ -75,9 +75,11 @@ class InviteHandler(BaseHandler):
         institution.follow(user.key)
 
         JsonPatch.load(data, user, define_entity)
+        # TODO: Change the method is valid to check only
+        # the new institution profile of this patch
+        # @author: Mayza Nunes 19/09/2017
         Utils._assert(
-            not InstitutionProfile.is_valid(user.institution_profiles,
-                                            len(user.institutions)),
+            not InstitutionProfile.is_valid(user.institution_profiles),
             "The profile is invalid.", FieldException)
         user.put()
 

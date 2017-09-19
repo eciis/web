@@ -25,7 +25,11 @@
         loginCtrl.loginWithEmailPassword = function loginWithEmailPassword() {
             AuthService.loginWithEmailAndPassword(loginCtrl.user.email, loginCtrl.user.password).then(
                 function success(user) {
-                    if(user.isInactive()) {
+                    var pendingInvite = user.getPendingInvitation();
+                    if (pendingInvite) {
+                        var inviteKey = pendingInvite.key;
+                        $state.go("new_invite", {key: inviteKey});
+                    } else if (user.isInactive()) {
                         $state.go("user_inactive");
                     } else {
                         $state.go("app.home");

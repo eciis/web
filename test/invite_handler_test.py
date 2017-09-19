@@ -85,10 +85,9 @@ class InviteHandlerTest(TestBaseHandler):
 
     @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_patch_fail(self, verify_token):
-        """Test patch fail in InviteHandler."""
-        profile = '{"email": "otheruser@test.com", "office": "Developer"}'
+        """Test patch fail in InviteHandler because the profile has not office."""
+        profile = '{"email": "otheruser@test.com"}'
         json_patch = '[{"op": "add", "path": "/institution_profiles/-", "value": ' + profile + '}]'
-        self.testapp.patch('/api/invites/' + self.invite.key.urlsafe(), json_patch)
 
         with self.assertRaises(Exception) as ex:
             self.testapp.patch('/api/invites/' + self.invite.key.urlsafe(), json_patch)

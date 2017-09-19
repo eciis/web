@@ -4,6 +4,7 @@
 from invite import Invite
 from request import Request
 from google.appengine.ext import ndb
+from utils import getPowerUsers
 
 
 class RequestInstitution(Request):
@@ -22,7 +23,6 @@ class RequestInstitution(Request):
     def send_email(self, host, body=None):
         """Method of send email of request institution link."""
         request_key = self.key.urlsafe()
-        requested_email = self.admin_key.get().email
 
         # TODO Set this message
         body = body or """Olá
@@ -30,12 +30,20 @@ class RequestInstitution(Request):
         http://%s/app/#/requests/%s/institution_children para analisar o mesmo.
 
         Equipe e-CIS """ % (host, request_key)
-        super(RequestInstitution, self).send_email(host, requested_email, body)
+
+        power_users = getPowerUsers()
+
+        for power_user in power_users:
+            super(RequestInstitution, self).send_email(host, power_user, body)
 
     def send_notification(self, user):
         """Method of send notification of request intitution."""
         entity_type = 'REQUEST_INSTITUTION'
-        super(RequestInstitution, self).send_notification(user, entity_type)
+
+        power_users = getPowerUsers()
+
+        for power_user in power_users:
+            super(RequestInstitution, self).send_notification(power_user, entity_type)
 
     def make(self):
         """Create json of request to institution."""

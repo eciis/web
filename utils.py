@@ -9,6 +9,7 @@ from google.appengine.ext import ndb
 from google.appengine.ext.ndb import Key
 
 from models.user import User
+from models.institution import Institution
 
 from oauth2client import client
 from oauth2client.crypt import AppIdentityError
@@ -269,3 +270,15 @@ def is_authorized(method):
 
         method(self, user, url_string, *args)
     return check_authorization
+
+
+#  SEE HOW GET POWER USERS IDEA
+def getPowerUsers():
+    userswithpermission = []
+    institutionsEmpowered = Institution.query(Institution.empowered == True)
+    for institution in institutionsEmpowered:
+        for userKey in institution.members:
+            user = userKey.get()
+            if user.has_permission('analyze_request_inst', eciis_key):
+                userswithpermission.push(user)
+    return userswithpermission

@@ -39,6 +39,9 @@ class EventHandlerTest(TestBaseHandler):
         # Verify if after delete the state of event is deleted
         self.assertEqual(self.event.state, "deleted",
                          "The state expected was deleted.")
+        # Verify if after delete the last_modified
+        self.assertEqual(self.event.last_modified_by, self.user.key,
+                         "The last_modified_by expected was user.")
 
         # Pretend a new authentication
         verify_token.return_value = {'email': 'usersd@gmail.com'}

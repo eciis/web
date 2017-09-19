@@ -56,6 +56,7 @@
         inviteInstCtrl.showDialog = function showDialog(ev, invite) {
             $mdDialog.show({
                 locals: {
+                    'institution': inviteInstCtrl.institution,
                     'institutions': inviteInstCtrl.existing_institutions,
                     'invite': invite,
                     'inviteController': inviteInstCtrl
@@ -168,6 +169,50 @@
             });
             return promise;
         };
+
+        inviteInstCtrl.acceptRequest = function acceptRequest(request_key, type_of_invite) {
+            var confirm = customDialog('accept');
+            var promise = $mdDialog.show(confirm);
+            promise.then(function() {
+                console.log(type_of_invite);
+                var accept = type_of_invite === "REQUEST_INSTITUTION_PARENT" ?
+                    RequestInvitationService.acceptInstParentRequest(request_key) : RequestInvitationService.acceptInstChildrenRequest(request_key);
+                accept.then(function success() {
+                    MessageService.showToast('Requisição aceita com sucesso');
+                });
+            }, function() {
+                MessageService.showToast('Cancelado');
+            });
+            return promise;
+        };
+
+        inviteInstCtrl.rejectRequest = function rejectRequest(request_key, type_of_invite) {
+            var confirm = customDialog('reject');
+            var promise = $mdDialog.show(confirm);
+            promise.then(function() {
+                var reject = type_of_invite === "REQUEST_INSTITUTION_PARENT" ?
+                    RequestInvitationService.rejectInstParentRequest(request_key) : RequestInvitationService.rejectInstChildrenRequest(request_key);
+                reject.then(function success() {
+                    MessageService.showToast('Requisição rejeitada com sucesso');
+                });
+            }, function() {
+                MessageService.showToast('Cancelado');
+            });
+            return promise;
+        };
+
+        function customDialog(operation) {
+            var confirm = $mdDialog.confirm({onComplete: designOptions})
+                .clickOutsideToClose(true)
+                .title(operation === 'accept' ? 'Aceitar requisição' : 'Rejeitar requisição')
+                .textContent(operation === 'accept' ? 'Confirmar aceitação?' : 'Confirmar rejeição?')
+                .ariaLabel('Aceitar ou rejeitar requisição')
+                .targetEvent(event)
+                .ok('Sim')
+                .cancel('Não');
+
+            return confirm;
+        }
 
         function addInvite(invite) {
             inviteInstCtrl.invite = {};

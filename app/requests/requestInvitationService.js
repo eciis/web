@@ -109,6 +109,46 @@
             return deferred. promise;
         };
 
+        service.acceptInstParentRequest = function acceptRequest(request_key) {
+            var deferred = $q.defer();
+            $http.put("/api/requests/" + request_key + "/institution_parent").then(function success(response) {
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+            return deferred. promise;
+        };
+
+        service.rejectInstParentRequest = function rejectRequest(request_key) {
+            var deferred = $q.defer();
+            $http.delete("/api/requests/" + request_key + "/institution_parent").then(function success(response) {
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+            return deferred. promise;
+        };
+
+        service.acceptInstChildrenRequest = function acceptRequest(request_key) {
+            var deferred = $q.defer();
+            $http.put("/api/requests/" + request_key + "/institution_children").then(function success(response) {
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+            return deferred. promise;
+        };
+
+        service.rejectInstChildrenRequest = function rejectRequest(request_key) {
+            var deferred = $q.defer();
+            $http.delete("/api/requests/" + request_key + "/institution_children").then(function success(response) {
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+            return deferred. promise;
+        };
+
         service.showRejectDialog = function showRejectDialog(event) {
             var title = 'Rejeitar pedido';
             var textContent = "Ao rejeitar o pedido, o pedido será removido e não poderá ser aceito posteriormente." +

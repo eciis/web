@@ -3,9 +3,10 @@
 (describe('Test EventController', function() {
 
   var eventCtrl, scope, httpBackend, rootScope, deffered, imageService, eventService, 
-    postService, messageService;
+    postService, messageService, mdDialog;
 
   var splab = {name: 'Splab', key: '098745'};
+  var EVENTS_URI = '/api/events';
 
   var date_now = new Date();
 
@@ -36,7 +37,7 @@
   beforeEach(module('app'));
 
   beforeEach(inject(function($controller, $httpBackend, $http, $q, AuthService, 
-        $rootScope, ImageService, EventService, PostService, MessageService) {
+        $rootScope, ImageService, EventService, PostService, MessageService, $mdDialog) {
       imageService = ImageService;
       scope = $rootScope.$new();
       httpBackend = $httpBackend;
@@ -45,6 +46,7 @@
       eventService = EventService;
       postService = PostService;
       messageService = MessageService;
+      mdDialog = $mdDialog;
       AuthService.login(user);
       eventCtrl = $controller('EventController', {
             scope: scope,
@@ -52,12 +54,12 @@
             $rootScope: rootScope,
             eventService: eventService,
             postService : postService,
-            messageService : messageService
+            messageService : messageService,
+            mdDialog: mdDialog
         });
-      eventCtrl.event = event;
-      eventCtrl.events = [];
+      eventCtrl.events = [event_convert_date];
 
-      httpBackend.when('GET', "/api/events").respond([]);
+      httpBackend.when('GET', "/api/events").respond([event_convert_date]);
       httpBackend.when('GET', 'main/main.html').respond(200);
       httpBackend.when('GET', 'home/home.html').respond(200);
       httpBackend.when('GET', 'auth/login.html').respond(200);
@@ -68,6 +70,32 @@
       httpBackend.verifyNoOutstandingExpectation();
       httpBackend.verifyNoOutstandingRequest();
   });
+
+  describe('deleteEvent()', function(){
+    beforeEach(function() {
+      spyOn(mdDialog, 'confirm').and.callThrough();
+      spyOn(mdDialog, 'show').and.callFake(function(){
+        return {
+          then: function(callback) {
+            return callback();
+          }
+        };
+      });
+      spyOn(eventService, 'deleteEvent').and.callThrough();
+    });
+
+    it('Should remove event of events', function() {
+      var event = eventCtrl.events[0];
+      httpBackend.expect('DELETE', EVENTS_URI + '/' + event.key).respond();
+      eventCtrl.deleteEvent("$event", event);
+      httpBackend.flush();
+
+      expect(eventCtrl.events).not.toContain(event_convert_date);
+      expect(eventService.deleteEvent).toHaveBeenCalledWith(event);
+      expect(mdDialog.confirm).toHaveBeenCalled();
+      expect(mdDialog.show).toHaveBeenCalled();
+    });
+  });  
 
   describe('share()', function() {
 
@@ -83,9 +111,9 @@
   describe('recognizeUrl()', function() {
 
     it('Should returns a event with https url in text', function() {
-      eventCtrl.event.text = "Access: http://www.google.com";
-      eventCtrl.event.text = eventCtrl.recognizeUrl(eventCtrl.event.text);
-      expect(eventCtrl.event.text)
+      event_convert_date.text = "Access: http://www.google.com";
+      event_convert_date.text = eventCtrl.recognizeUrl(event_convert_date.text);
+      expect(event_convert_date.text)
         .toEqual("Access: <a href='http://www.google.com' target='_blank'>http://www.google.com</a>");
     });
   });
@@ -93,15 +121,15 @@
   describe('isLongText()', function() {
 
     it('Should be false', function() {
-      expect(eventCtrl.isLongText(eventCtrl.event.text)).toBe(false);
+      expect(eventCtrl.isLongText(event_convert_date.text)).toBe(false);
     });
 
     it('Should be true', function() {
-      eventCtrl.event.text = "Access: www.google.com aAt vero et accusamus et iusto odio dignis\
+      event_convert_date.text = "Access: www.google.com aAt vero et accusamus et iusto odio dignis\
                   simos ducimus quiblanditiis praesentium voluptatum deleniti atque corr\
                   pti quos dolores et quas molestias excepturi sint occaecati cupiditate\
                   non provident, similique sunt in culpa qui officia deserunt mollitia"
-      expect(eventCtrl.isLongText(eventCtrl.event.text)).toBe(true);
+      expect(eventCtrl.isLongText(event_convert_date.text)).toBe(true);
     });
   });
 }));

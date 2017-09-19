@@ -25,7 +25,7 @@
           <md-radio-group ng-model="inviteInstCtrl.invite.type_of_invite" required>
 
             <md-radio-button value="INSTITUTION_PARENT" class="md-primary">É a instituição superior</md-radio-button>
-            <md-radio-button value="INSTITUTION_CHILDREN" class="md-primary">É uma sub-divisão de {{inviteInstCtrl.institution.name}}</md-radio-button>
+            <md-radio-button value="INSTITUTION_CHILDREN" class="md-primary">É uma subordinada de {{inviteInstCtrl.institution.name}}</md-radio-button>
             <md-radio-button ng-disabled="true" value="suggestion_invite" class="md-primary">Nenhuma</md-radio-button>
 
           </md-radio-group>
@@ -58,7 +58,7 @@
               </md-button>
             </div>
           </md-list-item>
-          <md-subheader class="md-no-sticky">Instituições filhas</md-subheader>
+          <md-subheader class="md-no-sticky">Instituições subordinadas</md-subheader>
           <md-list-item class="md-3-line"
           ng-repeat="institution in inviteInstCtrl.institution.children_institutions">
             <md-icon class="md-avatar-icon" >account_balance</md-icon>

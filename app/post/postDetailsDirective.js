@@ -118,6 +118,7 @@
                 postDetailsCtrl.post.text = editedPost.text;
                 postDetailsCtrl.post.photo_url = editedPost.photo_url;
                 postDetailsCtrl.post.pdf_files = editedPost.pdf_files;
+                postDetailsCtrl.post.video_url = editedPost.video_url;
             }, function error() {});
         };
 
@@ -141,9 +142,8 @@
         };
 
         postDetailsCtrl.getVideoUrl = function getVideoUrl() {
-            var params = _.split(postDetailsCtrl.post.video_url, '/');
-            var id = _.split(params[_.size(params) - 1], '=');
-            id = id[_.size(id) - 1];
+            var params = _.split(postDetailsCtrl.post.video_url, '=');
+            var id = params[params.length - 1];
             return 'https://www.youtube.com/embed/' + id;
         };
 

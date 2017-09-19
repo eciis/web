@@ -15,6 +15,7 @@
         postCtrl.photoUrl = "";
         postCtrl.pdfFiles = [];
         postCtrl.deletedFiles = [];
+        postCtrl.addVideo = false;
 
         var observer;
 
@@ -186,8 +187,6 @@
             var savePromises = [saveFiles(), saveImage()];
             $q.all(savePromises).then(function success() {
                 var post = new Post(postCtrl.post, postCtrl.user.current_institution.key);
-                console.log(post);
-                console.log(postCtrl.post);
                 if (post.isValid()) {
                     PostService.createPost(post).then(function success(response) {
                         postCtrl.clearPost();
@@ -218,13 +217,24 @@
             return postCtrl.post.title && postCtrl.post.video_url;
         };
 
+        postCtrl.showVideoUrlField = function showVideoUrlField() {
+            var showField = postCtrl.post.title && (postCtrl.addVideo || postCtrl.post.video_url);
+            return showField;
+        };
+
+        postCtrl.setAddVideo = function setAddVideo() {
+            if(postCtrl.post.video_url || postCtrl.addVideo) {
+                postCtrl.addVideo = false;
+                postCtrl.post.video_url = "";
+            } else {
+                postCtrl.addVideo = true;
+            }
+        };
+
         postCtrl.getVideoUrl = function getVideoUrl() {
-            var params = _.split(postCtrl.post.video_url, '/');
-            var id = _.split(params[_.size(params) - 1], '=');
-            id = id[_.size(id) - 1];
+            var params = _.split(postCtrl.post.video_url, '=');
+            var id = params[params.length - 1];
             postCtrl.post.video_url = 'https://www.youtube.com/embed/' + id;
-            console.log(typeof(postCtrl.post.video_url));
-            console.log(postCtrl.post.video_url);
             return true;
         };
 
@@ -288,7 +298,6 @@
             if($scope.isEditing) {
                 postCtrl.createEditedPost($scope.originalPost);
                 observer = jsonpatch.observe(postCtrl.post);
-
             }
 
         })();

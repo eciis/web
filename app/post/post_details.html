@@ -8,7 +8,7 @@
     </md-card-avatar>
     <md-card-header-text>
       <div>
-        <a  href class="md-title hyperlink" ng-click="postDetailsCtrl.goToInstitution(postDetailsCtrl.post.institution_key)">{{ postDetailsCtrl.post.institution_name }}</a>
+        <a href class="md-title hyperlink" ng-click="postDetailsCtrl.goToInstitution(postDetailsCtrl.post.institution_key)">{{ postDetailsCtrl.post.institution_name }}</a>
       </div>
       <span class="md-subhead">por {{ postDetailsCtrl.post.author }} {{ postDetailsCtrl.post.publication_date | amUtc | amLocal | amCalendar:referenceTime:formats }}</span>
     </md-card-header-text>
@@ -27,7 +27,7 @@
       </md-card-header-text>
     </md-card-header>
     <md-card-content layout="column">
-      <div ng-if="postDetailsCtrl.isDeleted(postDetailsCtrl.post.shared_post)"
+      <div ng-if="postDetailsCtrl.isDeleted()"
       style='font-style:italic; text-align: center'>
         <p>Esta publicação foi removida por</p>
         <p>
@@ -43,7 +43,7 @@
       <a href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post.shared_post)">
         <span>{{ postDetailsCtrl.post.shared_post.title }}</span>
       </a>
-      <p class="break" ng-if="!postDetailsCtrl.isDeleted(postDetailsCtrl.post.shared_post)"
+      <p class="break" ng-if="!postDetailsCtrl.isDeleted()"
         ng-bind-html="postDetailsCtrl.recognizeUrl(postDetailsCtrl.post.shared_post).text" ></p>
       <div layout="row" layout-align="end-center">
         <a href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post.shared_post)" ng-if="postDetailsCtrl.isLongPostTimeline(postDetailsCtrl.post.shared_post.text)">
@@ -61,7 +61,7 @@
   <!-- BODY POST -->
   <img ng-if="postDetailsCtrl.showImage(postDetailsCtrl.post)" ng-src="{{ postDetailsCtrl.post.photo_url }}"
   class="md-card-image">
-  <md-card-title ng-if="!postDetailsCtrl.isDeleted(postDetailsCtrl.post)">
+  <md-card-title ng-if="!postDetailsCtrl.isDeleted()">
     <md-card-title-text>
       <a href class="md-title hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post)">
         <span class="md-headline break">{{postDetailsCtrl.post.title}}</span>
@@ -69,7 +69,7 @@
     </md-card-title-text>
   </md-card-title>
   <md-card-content>
-    <div ng-if="postDetailsCtrl.isDeleted(postDetailsCtrl.post)" style='font-style:italic; text-align: center'>
+    <div ng-if="postDetailsCtrl.isDeleted()" style='font-style:italic; text-align: center'>
       <p>Esta publicação foi removida por</p>
       <p>
         {{postDetailsCtrl.post.last_modified_by}} {{postDetailsCtrl.post.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats }}.
@@ -91,7 +91,7 @@
           </md-button>
         </div>
     </div>
-    <div class="youtube-player" ng-if="postDetailsCtrl.post.video_url">
+    <div class="youtube-player" ng-if="postDetailsCtrl.post.video_url && !postDetailsCtrl.isDeleted()">
       <iframe ng-src="{{postDetailsCtrl.getVideoUrl()}}">
       </iframe>
     </div>

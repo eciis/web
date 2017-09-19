@@ -22,7 +22,7 @@
         required="true"></textarea>
       </textarea>
     </md-input-container>
-    <md-input-container ng-show="postCtrl.post.title">
+    <md-input-container ng-show="postCtrl.showVideoUrlField()">
       <label>Video Url</label>
       <textarea style="max-height: 400px;overflow-y:auto;resize:none;" ng-model="postCtrl.post.video_url" md-select-on-focus>
       </textarea>
@@ -52,6 +52,10 @@
                   ngf-accept="'image/*'" ngf-max-size="5MB"
                   ngf-select="postCtrl.addImage(postCtrl.file)">
           <md-icon>add_a_photo</md-icon>
+    </md-button>
+    <md-button class="md-icon-button" ng-show="postCtrl.showButton()" ng-click="postCtrl.setAddVideo()" 
+      title="{{postCtrl.post.video_url? 'Remover video link':'Adicionar video link'}}">
+      <md-icon>movie</md-icon>
     </md-button>
     <md-button title="Enviar" class="md-icon-button" ng-click="postCtrl.save(isEditing, originalPost, posts)" ng-disabled="!postCtrl.isPostValid()">
       <md-icon>send</md-icon>

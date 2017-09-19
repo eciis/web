@@ -100,7 +100,12 @@ class Event(ndb.Model):
         }
 
     def __setattr__(self, attr, value):
-        """Method of set invite attributes."""
+        """
+        Method of set attributes.
+
+        if the attribute is of type date and the value passed is a string,
+        it converts to type datetime.
+        """
         is_value_datetime = isinstance(value, datetime.datetime)
         is_attr_data = attr == 'start_time' or attr == 'end_time'
 

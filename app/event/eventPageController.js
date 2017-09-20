@@ -49,6 +49,10 @@
             });
         };
 
+        eventCtrl.goToInstitution = function goToInstitution(institutionKey) {
+            $state.go('app.institution', {institutionKey: institutionKey});
+        };
+
         eventCtrl.recognizeUrl =  function recognizeUrl(text) {
             if(text){
                 var urlsInText = text.match(URL_PATTERN);
@@ -69,10 +73,13 @@
         };
 
         eventCtrl.showImage = function() {
-            var imageEmpty = eventCtrl.event.photo_url === "";
-            var imageNull = eventCtrl.event.photo_url === null;
-            var deletedPost = eventCtrl.event.state === 'deleted';
-            return !imageEmpty && !imageNull && !deletedPost;
+            if(eventCtrl.event){
+                console.log(eventCtrl.event);
+                var imageEmpty = eventCtrl.event.photo_url === "";
+                var imageNull = eventCtrl.event.photo_url === null;
+                var deletedPost = eventCtrl.event.state === 'deleted';
+                return !imageEmpty && !imageNull && !deletedPost;
+            }
         };
 
         function isInstitutionAdmin() {

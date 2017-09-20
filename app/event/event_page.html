@@ -1,62 +1,72 @@
-<md-card>
-  <!-- HEADER -->
-  <md-card-header>
-    <md-card-avatar>
-      <a href ng-click="eventCtrl.goToInstitution()">
-        <img ng-src="{{ eventCtrl.event.institution_image }}" role="button" class="md-user-avatar"/>
-      </a>
-    </md-card-avatar>
-    <md-card-header-text>
-      <div>
-        <a  href class="md-title hyperlink" ng-click="eventCtrl.goToInstitution(eventCtrl.event.institution_key)">{{ eventCtrl.event.institution_name }}</a>
-      </div>
-      <span class="md-subhead">por {{ eventCtrl.event.author }}</span>
-    </md-card-header-text>
-  </md-card-header>
-
-  <!-- BODY SHARED EVENT -->
-  <md-card>
-    <md-card-content layout="column">
-      <md-card layout="row" md-colors="{background: 'teal-50'}" ng-if="!eventCtrl.isDeleted()">
-        <div layout="column">
-          <div layout="row" layout-align="center end" md-colors="{background: 'teal-100'}">
-            <h1 class="md-display-1" md-colors="{color:'teal-900'}">{{eventCtrl.event.start_time | amUtc | amLocal | amDateFormat:'DD'}}</h1>
-          </div>
-          <div layout="row" layout-align="center start" md-colors="{background: 'teal-200'}" style="padding: 0 10px 0 10px">
-            <h3 md-colors="{color:'teal-800'}">{{eventCtrl.event.start_time | amUtc | amLocal | amDateFormat:'MMMM'}}</h3>
-          </div>
-        </div>
-        <div layout="column" layout-align="center start" style="padding-left: 10px">
-          <a href class="md-subhead hyperlink">
-            <span>{{ eventCtrl.event.title | uppercase}}</span>
-          </a>
-          <div layout="row">    
-            <md-icon>place</md-icon> 
-            <p>Em {{ eventCtrl.event.local }}</p>
-          </div>
-          <div layout="row">
-            <md-icon>event</md-icon>
-            <p>De {{eventCtrl.event.start_time | amUtc | amLocal | amCalendar:referenceTime:formats }} até {{ eventCtrl.event.end_time | amUtc | amLocal | amCalendar:referenceTime:formats }}</p>
-          </div>
-        </div>
-      </md-card>
-      <p class="break" ng-if="!eventCtrl.isDeleted()"
-        ng-bind-html="eventCtrl.recognizeUrl(eventCtrl.event.text)" >
-      </p>
-    </md-card-content>
-  </md-card>
-  <md-card-actions layout="row" layout-align="end-center">
-    <md-button ng-if="eventCtrl.canDelete()" class="md-icon-button" arial-label="Delete"
-        ng-click="eventCtrl.deletePost($event)" title="Apagar o post">
-      <md-icon>delete</md-icon>
-    </md-button>
-    <md-button class="md-icon-button" aria-label="editar" ng-click="eventCtrl.editPost()"
-        ng-if="eventCtrl.showButtonEdit()" title="Editar o post">
-      <md-icon>edit</md-icon>
-    </md-button>
-    <md-button class="md-icon-button" aria-label="compartilhar"
-      ng-click="eventCtrl.share()" title="Compartilhar o post">
-      <md-icon>share</md-icon>
-    </md-button>
-  </md-card-actions>
-</md-card>
+<md-content layout="row" md-colors="{background: 'grey-200'}" layout-align="center">
+    <div flex-gt-lg="60" flex-lg="60" layout="row" layout-wrap layout-align="center" layout-fill>
+        <div layout="column" flex>
+			<md-card>
+				<md-card-header>
+					<md-card-avatar>
+					    <a href ng-click="eventCtrl.goToInstitution()">
+					    	<img ng-src="{{ eventCtrl.event.institution_image }}" role="button" class="md-user-avatar"/>
+					    </a>
+					</md-card-avatar>
+					<md-card-header-text>
+					<div>
+				    	<a  href class="md-title hyperlink" ng-click="eventCtrl.goToInstitution(eventCtrl.event.institution_key)">{{ eventCtrl.event.institution_name }}</a>
+				    </div>
+				    <span class="md-subhead">por {{ eventCtrl.event.author }}</span>
+				    </md-card-header-text>
+				</md-card-header>
+				<md-card-content>
+				<div style='font-style:italic; text-align: center' ng-if="eventCtrl.isDeleted()">
+					<p>Este evento foi removido por</p>
+					<p>
+					    {{eventCtrl.event.last_modified_by}}
+					    {{eventCtrl.event.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats}}.
+					</p>
+				</div>
+				<div ng-if="!eventCtrl.isDeleted(eventCtrl.event)" >
+					<md-card layout="row" md-colors="{background: 'teal-50'}" ng-if="!eventCtrl.isDeleted()">
+					    <div layout="column">
+					        <div layout="row" layout-align="center end" md-colors="{background: 'teal-100'}">
+					            <h1 class="md-display-1" md-colors="{color:'teal-900'}">{{eventCtrl.event.start_time | amUtc | amLocal | amDateFormat:'DD'}}</h1>
+					        </div>
+					        <div layout="row" layout-align="center start" md-colors="{background: 'teal-200'}" style="padding: 0 10px 0 10px">
+					            <h3 md-colors="{color:'teal-800'}">{{eventCtrl.event.start_time | amUtc | amLocal | amDateFormat:'MMMM'}}</h3>
+					        </div>
+					    </div>
+					    <div layout="column" layout-align="center start" style="padding-left: 10px">
+					        <a href class="md-subhead hyperlink">
+					            <span>{{ eventCtrl.event.title | uppercase}}</span>
+					        </a>
+					        <div layout="row">    
+					          	<md-icon>place</md-icon> 
+					            <p>Em {{ eventCtrl.event.local }}</p>
+					        </div>
+					        <div layout="row">
+					            <md-icon>event</md-icon>
+					            <p>De {{eventCtrl.event.start_time | amUtc | amLocal | amCalendar:referenceTime:formats }} até {{eventCtrl.event.end_time | amUtc | amLocal | amCalendar:referenceTime:formats }}</p>
+					        </div>
+					    </div>
+					</md-card>
+				</div>
+				<p class="break" ng-if="!eventCtrl.isDeleted()"
+					        ng-bind-html="eventCtrl.recognizeUrl(eventCtrl.event.text)" >
+				</p>
+				</md-card-content>
+				<img class="md-card-image" ng-if="eventCtrl.showImage()" 
+						        ng-src="{{ eventCtrl.event.photo_url }}"/>
+				<md-divider></md-divider>
+				<!-- BUTTONS -->
+				<md-card-actions layout="row" layout-align="end-center">
+				    <md-button  ng-if="eventCtrl.canDelete()" class="md-icon-button" arial-label="Delete"
+				        ng-click="eventCtrl.deleteEvent($event, eventCtrl.event)" title="Apagar o evento">
+				      <md-icon>delete</md-icon>
+				    </md-button>
+				    <md-button class="md-icon-button" aria-label="compartilhar"
+				      ng-click="eventCtrl.share(eventCtrl.event)" title="Compartilhar o evento">
+				      <md-icon>share</md-icon>
+				    </md-button>
+				</md-card-actions>
+			</md-card>
+		</div>
+	</div>
+</md-content>

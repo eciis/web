@@ -28,6 +28,10 @@
         homeCtrl.goToEvents = function goToEvents() {
             $state.go('app.events');
         };
+        
+        homeCtrl.goToEvent = function goToEvent(event) {
+            $state.go('app.event', {eventKey: event.key});
+        };
 
         homeCtrl.newPost = function newPost(event) {
             $mdDialog.show({

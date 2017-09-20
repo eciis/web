@@ -63,7 +63,7 @@
               <md-list-item class="md-3-line" ng-repeat="event in homeCtrl.events" ng-if="homeCtrl.events.length > 0">
                 <img ng-src="{{event.institution_photo}}" class="md-avatar"/>
                 <div class="md-list-item-text" layout="column">
-                  <h3>{{ event.title | limitTo: 20 }}{{ event.title.length > 20 ? '...' : ''}}</h3>
+                  <a href class="md-text hyperlink" ng-click="homeCtrl.goToEvent(event)">{{ event.title | limitTo: 20 }}{{ event.title.length > 20 ? '...' : ''}}</a>
                   <p>De {{ event.start_time | amUtc | amLocal | amCalendar:referenceTime:formats}} até 
                    {{ event.end_time | amUtc | amLocal | amCalendar:referenceTime:formats }}</p>
                   <p>por {{ event.author_name }}</p>

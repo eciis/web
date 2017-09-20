@@ -28,11 +28,11 @@
       </md-input-container>
       <md-input-container ng-show="postCtrl.showVideoUrlField()" class="md-block">
         <label>Link do Video</label>
-        <input type="text" style="max-height: 400px;overflow-y:auto;resize:none;" ng-model="postCtrl.post.video_url" 
+        <textarea style="max-height: 400px;overflow-y:auto;resize:none;" ng-model="postCtrl.post.video_url"
           md-select-on-focus ng-pattern=postCtrl.videoRegex name="video">
-        </input>
+        </textarea>
         <div ng-messages="saveForm.video.$error">
-          <div ng-message="pattern">O link do vídeo deve ser válido e do YouTube!</div>
+          <div ng-message="pattern">Link do Youtube inválido.</div>
         </div>
       </md-input-container>
     </form>
@@ -63,7 +63,7 @@
       <md-icon>add_a_photo</md-icon>
     </md-button>
     <md-button class="md-icon-button" ng-show="postCtrl.showButton()" ng-click="postCtrl.setAddVideo()" 
-      title="{{postCtrl.post.video_url? 'Remover video link':'Adicionar video link'}}">
+      title="{{postCtrl.addVideo || postCtrl.post.video_url? 'Remover link':'Adicionar link'}}">
       <md-icon>movie</md-icon>
     </md-button>
     <md-button title="Enviar" class="md-icon-button" ng-click="postCtrl.save(isEditing, originalPost, posts)" 

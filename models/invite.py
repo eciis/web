@@ -84,9 +84,6 @@ class Invite(PolyModel):
         entity_type -- type of notification.
         Case not receive use invite type.
         """
-        # print user
-        # print 'AA' + ' ' + receiver_key
-        # print 'BB ' + entity_type
         entity_type = entity_type or 'INVITE'
 
         message = json.dumps({

@@ -2,8 +2,7 @@
 
     <div>
         <md-dialog-content class="md-dialog-content" layout="column">
-            <h3 ng-if="suggestInstCtrl.institutions.length === 1">Já existe uma instituição com esse nome. Deseja convidá-la?</h3>
-            <h3 ng-if="suggestInstCtrl.institutions.length > 1">Já existem instituições com esse nome. Deseja convidar alguma delas?</h3>
+            <h3>{{suggestInstCtrl.showMessage()}}</h3>
             <md-radio-group ng-model="suggestInstCtrl.chosen_institution" required flex>
                 <md-list ng-repeat="institution in suggestInstCtrl.institutions" flex>
                     <md-list-item class="md-2-line" ng-if="suggestInstCtrl.showSuggestion(institution.state)">

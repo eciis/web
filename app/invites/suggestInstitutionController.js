@@ -48,6 +48,16 @@
             }
         };
 
+        suggestInstCtrl.showMessage = function() {
+            var message;
+            if(suggestInstCtrl.institutions.length === 1) {
+                message = 'Já existe uma instituição com esse nome. Deseja convidá-la?';
+            } else {
+                message = 'Já existem instituições com esse nome. Deseja convidar alguma delas?';
+            }
+            return message;
+        };
+
         function sendInviteToExistingInst() {
             if (!(isLinked() || isSelf() || isPedingRequest() || isInvited())) {
                 inviteController.sendInviteToExistingInst(invite, suggestInstCtrl.chosen_institution).then(function() {

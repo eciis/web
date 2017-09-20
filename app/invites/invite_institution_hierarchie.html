@@ -87,8 +87,7 @@
                   <a href class="md-title hyperlink" ng-click="inviteInstCtrl.goToInst(request.institution_key)">
                   {{ request.institution_admin.name }}
                   </a>
-                  <h3 ng-if="request.type_of_invite === 'REQUEST_INSTITUTION_CHILDREN'" style="color: red">Requisito para ser a instituição superior</h3>
-                  <h3 ng-if="request.type_of_invite === 'REQUEST_INSTITUTION_PARENT'" style="color: red">Requisito para ser uma instituição filha</h3>
+                  <h3 style="color: red">{{inviteInstCtrl.showMessage(request.type_of_invite)}}</h3>
               </div>
               <md-button ng-click="inviteInstCtrl.rejectRequest(request, request.type_of_invite, $event)" title="Rejeitar">
                 <md-icon style="color: red">clear</md-icon>

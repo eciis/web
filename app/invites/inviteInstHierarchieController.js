@@ -208,8 +208,7 @@
         };
 
         inviteInstCtrl.acceptRequest = function acceptRequest(request, type_of_invite, event) {
-            var confirm = customDialog('accept', event);
-            var promise = $mdDialog.show(confirm);
+            var promise = MessageService.showConfirmationDialog(event, 'Aceitar requisição', isOvewritingParent('accept'));
             promise.then(function() {
                 var accept = type_of_invite === "REQUEST_INSTITUTION_PARENT" ?
                     RequestInvitationService.acceptInstParentRequest(request.key) : RequestInvitationService.acceptInstChildrenRequest(request.key);
@@ -225,8 +224,7 @@
         };
 
         inviteInstCtrl.rejectRequest = function rejectRequest(request, type_of_invite, event) {
-            var confirm = customDialog('reject', event);
-            var promise = $mdDialog.show(confirm);
+            var promise = MessageService.showConfirmationDialog(event, 'Rejeitar requisição', isOvewritingParent('reject'));
             promise.then(function() {
                 var reject = type_of_invite === "REQUEST_INSTITUTION_PARENT" ?
                     RequestInvitationService.rejectInstParentRequest(request.key) : RequestInvitationService.rejectInstChildrenRequest(request.key);
@@ -239,20 +237,6 @@
             });
             return promise;
         };
-
-        function customDialog(operation, event) {
-            var message = isOvewritingParent(operation);
-            var confirm = $mdDialog.confirm({onComplete: designOptions})
-                .clickOutsideToClose(true)
-                .title(operation === 'accept' ? 'Aceitar requisição' : 'Rejeitar requisição')
-                .textContent(message)
-                .ariaLabel('Aceitar ou rejeitar requisição')
-                .targetEvent(event)
-                .ok('Sim')
-                .cancel('Não');
-
-            return confirm;
-        }
 
         function isOvewritingParent(operation) {
             var message;
@@ -279,6 +263,16 @@
             }
             inviteInstCtrl.showButton = true;
         }
+
+        inviteInstCtrl.showMessage = function(type_of_invite) {
+            var message;
+            if(type_of_invite === REQUEST_CHILDREN) {
+                message = 'Requisito para ser a instituição superior';
+            } else {
+                message = 'Requisito para ser uma instituição filha';
+            }
+            return message;
+        };
 
         function designOptions() {
                 var $dialog = angular.element(document.querySelector('md-dialog'));

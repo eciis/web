@@ -29,7 +29,45 @@ class InstitutionRequestHandlerTest(TestBaseHandler):
 
     @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
     def test_get(self, verify_token):
-        pass
+        """Test handler get."""
+        response = self.testapp.get('/api/requests/' + self.request.key.urlsafe() + '/institution')
+        request = json.loads(response._app_iter[0])
+
+        self.assertEqual(request, self.request.make())
+
+    @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
+    def test_get_fail(self, verify_token):
+        """Test fail get."""
+        with self.assertRaises(Exception) as ex:
+            self.testapp.get('/api/requests/' + self.request.key.urlsafe() + '/institution')
+
+        message = self.get_message_exception(str(ex.exception))
+        self.assertEqual(message, 'Error! User is not allowed to do this operation')
+
+    @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
+    def test_put(self, verify_token):
+        """Test handler put."""
+        self.testapp.put('/api/requests/' + self.request.key.urlsafe() + '/institution')
+        new_inst = self.new_inst.key.get()
+        user = self.other_user.key.get()
+
+        self.assertEqual(new_inst.state, 'active')
+        self.assertEqual(user.state, 'active')
+        self.assertEqual(user.key, new_inst.admin)
+
+        self.assertTrue(new_inst.key in user.institutions)
+        self.assertTrue(new_inst.key in user.follows)
+        self.assertTrue(new_inst.key in user.institutions_admin)
+        self.assertTrue(user.key in new_inst.followers)
+        self.assertTrue(user.key in new_inst.members)
+
+    @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
+    def teste_delete(self, verify_token):
+        """Test handler delete."""
+        self.testapp.delete('/api/requests/' + self.request.key.urlsafe() + '/institution')
+        new_inst = self.new_inst.key.get()
+
+        self.assertEqual(new_inst.state, 'inactive')
 
 
 def initModels(cls):
@@ -56,22 +94,21 @@ def initModels(cls):
     cls.inst_test.address = cls.address
     cls.inst_test.put()
     # new Institution inst requested to be parent of inst test
-    cls.inst_requested = Institution()
-    cls.inst_requested.name = 'inst requested'
-    cls.inst_requested.members = [cls.user_admin.key]
-    cls.inst_requested.followers = [cls.user_admin.key]
-    cls.inst_requested.admin = cls.other_user.key
-    cls.inst_requested.address = cls.address
-    cls.inst_requested.put()
+    cls.new_inst = Institution()
+    cls.new_inst.name = 'new_inst'
+    cls.new_inst.address = cls.address
+    cls.new_inst.put()
     # Update Institutions admin by other user
-    cls.other_user.institutions_admin = [cls.inst_requested.key]
+    cls.other_user.institutions_admin = [cls.new_inst.key]
     cls.other_user.put()
+
+    cls.user_admin.permissions['analyze_request_inst'] = cls.inst_test.key.urlsafe()
+    cls.user_admin.put()
     # new Request
     cls.request = RequestInstitution()
     cls.request.sender_key = cls.other_user.key
     cls.request.is_request = True
-    cls.request.admin_key = cls.user_admin.key
-    cls.request.institution_key = cls.inst_test.key
-    cls.request.institution_requested_key = cls.inst_requested.key
+    cls.request.admin_key = cls.other_user.key
+    cls.request.institution_key = cls.new_inst.key
     cls.request.type_of_invite = 'REQUEST_INSTITUTION'
     cls.request.put()

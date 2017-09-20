@@ -22,9 +22,6 @@ def createInstitution(user, data):
             setattr(inst_stub, property, data[property])
 
     inst_stub.address = Address.create(data.get('address'))
-    inst_stub.admin = user.key
-    inst_stub.members.append(user.key)
-    inst_stub.followers.append(user.key)
     inst_stub.state = 'pending'
     inst_stub.put()
 

@@ -14,6 +14,7 @@ class InstitutionRequestHandler(BaseHandler):
 
     @login_required
     @json_response
+    @has_analyze_request_permission
     def get(self, user, request_key):
         """Handler GET Requests."""
         request = ndb.Key(urlsafe=request_key).get()
@@ -29,15 +30,19 @@ class InstitutionRequestHandler(BaseHandler):
         request.change_status('accepted')
         request.put()
 
-        institution = request.stub_institution_key.get()
+        institution = request.institution_key.get()
         institution.state = 'active'
-        institution.put()
 
         sender = request.sender_key.get()
         sender.add_institution(institution.key)
         sender.follow(institution.key)
         sender.institutions_admin.append(institution.key)
         sender.change_state('active')
+
+        institution.admin = sender.key
+        institution.members.append(sender.key)
+        institution.followers.append(sender.key)
+        institution.put()
 
         self.response.write(json.dumps(request.make()))
 
@@ -49,3 +54,7 @@ class InstitutionRequestHandler(BaseHandler):
         request = request_key.get()
         request.change_status('rejected')
         request.put()
+
+        institution = request.institution_key.get()
+        institution.state = 'inactive'
+        institution.put()

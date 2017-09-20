@@ -2,7 +2,6 @@
 """Institution Collection Request Handler."""
 
 import json
-from google.appengine.ext import ndb
 from utils import login_required
 from utils import json_response
 from utils import Utils

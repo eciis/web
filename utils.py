@@ -290,6 +290,7 @@ def has_analyze_request_permission(method):
         superUsers = getSuperUsers()
         Utils._assert(
             user not in superUsers,
-            'User is not allowed to do this operation')
+            'User is not allowed to do this operation',
+            NotAuthorizedException)
         return method(self, user, *args)
     return check_permission

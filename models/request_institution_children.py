@@ -40,5 +40,6 @@ class RequestInstitutionChildren(Request):
     def make(self):
         """Create json of request to institution children."""
         request_inst_children_json = super(RequestInstitutionChildren, self).make()
+        request_inst_children_json['institution_requested_key'] = self.institution_requested_key.urlsafe()
         request_inst_children_json['type_of_invite'] = 'REQUEST_INSTITUTION_CHILDREN'
         return request_inst_children_json

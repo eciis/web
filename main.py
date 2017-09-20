@@ -56,7 +56,7 @@ app = webapp2.WSGIApplication([
     ("/api/institutions/(.*)/hierarchy/(.*)", InstitutionHierarchyHandler),
     ("/api/institutions/(.*)/invites/(.*)", InstitutionHandler),
     ("/api/institutions/(.*)/requests/user", UserRequestCollectionHandler),
-    ("/api/institutions/(.*)/requests/institution", InstitutionRequestCollectionHandler),
+    ("/api/institutions/requests/institution", InstitutionRequestCollectionHandler),
     ("/api/institutions/(.*)/requests/institution_parent", InstitutionParentRequestCollectionHandler),
     ("/api/institutions/(.*)/requests/institution_children", InstitutionChildrenRequestCollectionHandler),
     ("/api/institutions/(.*)", InstitutionHandler),

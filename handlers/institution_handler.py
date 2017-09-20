@@ -8,6 +8,7 @@ from google.appengine.ext import ndb
 
 from utils import Utils
 from models.invite import Invite
+from models.user import InstitutionProfile
 from utils import login_required
 from utils import json_response
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
@@ -139,6 +140,16 @@ class InstitutionHandler(BaseHandler):
         institution = ndb.Key(urlsafe=institution_key).get()
 
         institution.createInstitutionWithStub(user, inviteKey, institution)
+
+        """FIXME: Resolved for active users,
+         but if the user is new,the name of the user must be send."""
+        user_profile = InstitutionProfile()
+        user_profile.office = "Administrador"
+        user_profile.institution_name = institution.name
+        user_profile.institution_photo_url = institution.photo_url
+        user.institution_profiles.append(user_profile)
+
+        user.put()
 
         search_module.createDocument(institution)
         institution_json = Utils.toJson(institution)

@@ -66,6 +66,18 @@
                                 </div>
                             </div>
                             <p align="justify"><b>Descrição:</b> {{ institutionCtrl.current_institution.description ? institutionCtrl.current_institution.description : 'Não informado' }}</p>
+                            
+                            <p ng-if="institutionCtrl.hasParentActive(institutionCtrl.current_institution)" align="justify"><b>Instituição superior:</b> 
+                            <a href class="hyperlink" ng-click="institutionCtrl.goToInstitution(institutionCtrl.current_institution.parent_institution.key)">
+                                {{ institutionCtrl.current_institution.parent_institution.name}}</p>
+                            </a>
+                            <p ng-if="institutionCtrl.hasChildrenActive(institutionCtrl.current_institution)"
+                            align="justify"><b>Instituições subordinadas:</b>
+                            <spam ng-repeat="institution in institutionCtrl.current_institution.children_institutions | filter : {state : 'active'}">
+                                <a href class="hyperlink" ng-click="institutionCtrl.goToInstitution(institution.key)">
+                                    {{ institution.name }}
+                                </a>{{$last ? '' : ', '}}
+                            </spam></p>
                             <div layout="column" layout-align="center center" class="ng-if">
                                 <md-button ng-if="institutionCtrl.showFullDescription" flex ng-click="institutionCtrl.hideDescription()">
                                 <md-icon>arrow_drop_up</md-icon>

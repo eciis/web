@@ -15,18 +15,13 @@ class Request(Invite):
         return isParent or isChildren
 
     @staticmethod
-    def isRequested(sender, institution_requested_key):
+    def isRequested(sender_inst_key, institution_requested_key):
         request = Request.query(
-            Request.institution_key == institution_requested_key,
-            Request.status == 'sent',
-            Request.sender_key == sender)
+            Request.institution_requested_key == institution_requested_key,
+            Request.institution_key == sender_inst_key,
+            Request.status == 'sent')
 
         return request.count() > 0
-
-    @staticmethod
-    def checkHasParent(institution_requested):
-        if institution_requested.parent_institution is not None:
-            raise FieldException("The institution invited has already parent")
 
     def isValid(self):
         institution_key = self.institution_key
@@ -38,10 +33,8 @@ class Request(Invite):
             raise FieldException("The request require institution_requested")
         if Request.isLinked(institution_key, institution_requested):
             raise FieldException("The institutions is already a linked")
-        if Request.isRequested(sender, institution_key):
+        if Request.isRequested(institution_key, institution_requested.key):
             raise FieldException("The sender is already invited")
-        if (self.__class__.__name__ == 'RequestInstitutionChildren'):
-            Request.checkHasParent(institution_requested)
 
     def make(self):
         """Create json of request to institution."""

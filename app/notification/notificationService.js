@@ -17,6 +17,8 @@
             'INVITE': 'te enviou um novo convite',
             'INSTITUTION': 'removeu a conexão entre suas instituições',
             'REQUEST_USER': 'pediu para ser membro de sua instituição',
+            'REQUEST_INSTITUTION_CHILDREN': 'pediu para ser a instituição superior',
+            'REQUEST_INSTITUTION_PARENT': 'pediu para ser uma instituição filha',
             'REPLY_COMMENT': 'respondeu o seu comentário'
         };
 

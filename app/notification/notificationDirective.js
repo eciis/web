@@ -48,6 +48,14 @@
                         key: ""
                     }
                }
+            },
+            "REQUEST_INSTITUTION_CHILDREN": {
+                icon: "account_balance",
+                state: "app.manage_institution.invite_inst"
+            },
+            "REQUEST_INSTITUTION_PARENT": {
+                icon: "account_balance",
+                state: "app.manage_institution.invite_inst"
             }
         };
 

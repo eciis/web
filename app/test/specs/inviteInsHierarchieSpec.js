@@ -2,7 +2,7 @@
 
 (describe('Test InviteInstHierarchieController', function() {
 
-    var inviteInstCtrl, httpBackend, scope, inviteService, createCtrl, state, mdToast, instService;
+    var inviteInstCtrl, httpBackend, scope, inviteService, createCtrl, state, mdToast, instService, requestInvitationService, mdDialog;
 
     var splab = {
             name: 'SPLAB',
@@ -21,6 +21,15 @@
         parent_institution: {splab},
         state: 'pending'
     };
+
+    var certbio = {
+        name: 'CERTBIO',
+        key: '111111',
+        sent_invitations: [],
+        children_institutions: [],
+        parent_institution: {},
+        state: 'active'
+    }
 
     var maiana = {
         name: 'Maiana',
@@ -49,20 +58,33 @@
 
     var childrenStub = new Institution({name: "Children Institution", state : "pending"});
 
+    var request = {
+        admin_name: 'example',
+        institution_key: certbio.key,
+        institution_requested_key: splab.key,
+        key: '000000',
+        sender: 'certbio_admin',
+        status: 'sent',
+    }
+
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $httpBackend, $rootScope,
-        $state, $mdToast, InviteService, AuthService, InstitutionService) {
+        $state, $mdToast, InviteService, AuthService, InstitutionService, RequestInvitationService, $mdDialog) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
         mdToast = $mdToast;
         inviteService = InviteService;
         instService = InstitutionService;
+        requestInvitationService = RequestInvitationService;
+        mdDialog = $mdDialog;
         AuthService.getCurrentUser = function() {
             return new User(maiana);
         };
         httpBackend.expect('GET', '/api/institutions/' + splab.key).respond(splab);
+        httpBackend.expect('GET', '/api/institutions/' + splab.key + '/requests/institution_parent').respond(certbio);
+        httpBackend.expect('GET', '/api/institutions/' + splab.key + '/requests/institution_children').respond([]);
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', "home/home.html").respond(200);
         createCtrl = function() {
@@ -228,6 +250,112 @@
                     done();
                 });
                 httpBackend.flush();
+            });
+        });
+
+        describe('acceptRequest()', function() {
+            it('should call accept parent request', function(done) {
+                spyOn(mdDialog, 'show').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            return callback();
+                        }
+                    };
+                });
+                spyOn(requestInvitationService, 'acceptInstParentRequest').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            return callback();
+                        }
+                    };
+                });
+                spyOn(instService, 'getInstitution').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            return callback({data: certbio, msg: 'success'});
+                        }
+                    };
+                });
+                var promise = inviteInstCtrl.acceptRequest(request, 'REQUEST_INSTITUTION_PARENT');
+                promise.then(function() {
+                    expect(requestInvitationService.acceptInstParentRequest).toHaveBeenCalledWith(request.key);
+                    done();
+                });
+            });
+
+            it('should call accept children request', function(done) {
+                spyOn(mdDialog, 'show').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            return callback();
+                        }
+                    };
+                });
+                spyOn(requestInvitationService, 'acceptInstChildrenRequest').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            return callback();
+                        }
+                    };
+                });
+                spyOn(instService, 'getInstitution').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            return callback({data: certbio, msg: 'success'});
+                        }
+                    };
+                });
+                var promise = inviteInstCtrl.acceptRequest(request, 'REQUEST_INSTITUTION_CHILDREN');
+                promise.then(function() {
+                    expect(requestInvitationService.acceptInstChildrenRequest).toHaveBeenCalledWith(request.key);
+                    done();
+                });
+            });
+        });
+
+        describe('rejectRequest()', function() {
+            it('should call reject parent request', function(done) {
+                spyOn(mdDialog, 'show').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            return callback();
+                        }
+                    };
+                });
+                spyOn(requestInvitationService, 'rejectInstParentRequest').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            return callback();
+                        }
+                    };
+                });
+                var promise = inviteInstCtrl.rejectRequest(request, 'REQUEST_INSTITUTION_PARENT');
+                promise.then(function() {
+                    expect(requestInvitationService.rejectInstParentRequest).toHaveBeenCalledWith(request.key);
+                    done();
+                });
+            });
+
+            it('should call reject children request', function(done) {
+                spyOn(mdDialog, 'show').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            return callback();
+                        }
+                    };
+                });
+                spyOn(requestInvitationService, 'rejectInstChildrenRequest').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            return callback();
+                        }
+                    };
+                });
+                var promise = inviteInstCtrl.rejectRequest(request, 'REQUEST_INSTITUTION_CHILDREN');
+                promise.then(function() {
+                    expect(requestInvitationService.rejectInstChildrenRequest).toHaveBeenCalledWith(request.key);
+                    done();
+                });
             });
         });
     });

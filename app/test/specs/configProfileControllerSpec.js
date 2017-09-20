@@ -30,7 +30,7 @@
 
     beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, 
         $mdToast, $mdDialog, UserService, AuthService, ImageService, CropImageService) {
-        
+
         httpBackend = $httpBackend;
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);

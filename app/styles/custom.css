@@ -273,3 +273,7 @@ a:active {
 .break {
     word-break: break-all;
 }
+
+.align-top {
+    margin-top: 13px;
+}

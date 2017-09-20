@@ -3,12 +3,15 @@
     var app = angular.module('app');
 
     app.controller("SuggestInstitutionController", function SuggestInstitutionController(
-        $mdDialog, institution, institutions, invite, inviteController, $state, MessageService, InstitutionService){
+        $mdDialog, institution, institutions, invite, requested_invites, isHierarchy, inviteController, $state,
+        MessageService){
         var suggestInstCtrl = this;
         suggestInstCtrl.institution = institution;
         suggestInstCtrl.institutions = institutions;
         suggestInstCtrl.invite = invite;
         suggestInstCtrl.chosen_institution = null;
+        suggestInstCtrl.requested_invites = requested_invites;
+        suggestInstCtrl.isHierarchy = isHierarchy;
         var ACTIVE_STATE = "active";
 
         suggestInstCtrl.goToInstitution = function goToInstitution(institutionKey) {
@@ -18,6 +21,11 @@
 
         suggestInstCtrl.cancel = function cancel() {
             $mdDialog.cancel();
+        };
+
+        suggestInstCtrl.showSuggestion = function(state) {
+            var isActive = state === ACTIVE_STATE;
+            return isActive && suggestInstCtrl.isHierarchy;
         };
 
         suggestInstCtrl.isActive = function(state) {
@@ -30,26 +38,22 @@
             return currentUrl[0] + $state.href('app.institution', {institutionKey: institutionKey});
         }
 
-        suggestInstCtrl.checkInvite = function checkInvite() {
+        suggestInstCtrl.checkAndSendInvite = function checkAndSendInvite() {
             if (suggestInstCtrl.chosen_institution) {
-                InstitutionService.getInstitution(suggestInstCtrl.chosen_institution).then(function(response) {
-                    if (!(hasParent(response.data) || isLinked() || isRequested() || isSelf())) {
-                        inviteController.sendInviteToExistingInst(invite, suggestInstCtrl.chosen_institution);
-                        suggestInstCtrl.cancel();
-                    }
-                });
+                sendInviteToExistingInst();
             } else {
-                inviteController.sendInstInvite(invite);
-                suggestInstCtrl.cancel();
+                inviteController.sendInstInvite(invite).then(function() {
+                    suggestInstCtrl.cancel();
+                });
             }
         };
 
-        function hasParent(requested_institution) {
-            if (suggestInstCtrl.invite.type_of_invite === "REQUEST_INSTITUTION_CHILDREN" && requested_institution.parent_institution !== null) {
-                MessageService.showToast('A instituição convidada já possui instituição superior');
-                return true;
+        function sendInviteToExistingInst() {
+            if (!(isLinked() || isSelf() || isPedingRequest() || isInvited())) {
+                inviteController.sendInviteToExistingInst(invite, suggestInstCtrl.chosen_institution).then(function() {
+                    suggestInstCtrl.cancel();
+                });
             }
-            return false;
         }
 
         function isLinked() {
@@ -63,6 +67,14 @@
             return false;
         }
 
+        function isPedingRequest() {
+            if (_.includes(_.map(suggestInstCtrl.requested_invites, getInstKeyFromInvite), suggestInstCtrl.chosen_institution)) {
+                MessageService.showToast('Esta instituição tem uma requisição de vínculo pendente. Aceite ou rejeite a requisição');
+                return true;
+            }
+            return false;
+        }
+
         function isSelf() {
             if (suggestInstCtrl.institution.key === suggestInstCtrl.chosen_institution) {
                 MessageService.showToast('A instituição convidada não pode ser ela mesma');
@@ -71,8 +83,24 @@
             return false;
         }
 
+        function isInvited() {
+            var result = false;
+            _.forEach(suggestInstCtrl.institution.sent_invitations, function(invite) {
+                if ((invite.type_of_invite === "REQUEST_INSTITUTION_PARENT" || invite.type_of_invite === "REQUEST_INSTITUTION_CHILDREN") &&
+                    invite.institution_requested_key === suggestInstCtrl.chosen_institution && invite.status === "sent") {
+                    MessageService.showToast('Esta instituição já foi convidada e seu convite está pendente');
+                    result = true;
+                }
+            });
+            return result;
+        }
+
         function getKeyFromInst(institution) {
             return institution.key;
+        }
+
+        function getInstKeyFromInvite(invite) {
+            return invite.institution_key;
         }
     });
 })();

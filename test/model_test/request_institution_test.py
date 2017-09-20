@@ -62,7 +62,7 @@ class RequestInstitutionParentTest(TestBase):
                 'is_request': True,
                 'admin_key': self.user_admin.key.urlsafe(),
                 'institution_key': self.inst_test.key.urlsafe(),
-                'institution_requested_key': self.inst_requested_children.key.urlsafe(),
+                'institution_requested_key': self.inst_requested.key.urlsafe(),
                 'type_of_invite': 'REQUEST_INSTITUTION_PARENT'
             }
 
@@ -91,25 +91,6 @@ class RequestInstitutionParentTest(TestBase):
             'The institutions is already a linked',
             str(ex.exception),
             'Expected message is The institutions is already a linked')
-
-    def test_create_request_for_institution_with_parent(self):
-        """Test cretae invalid request."""
-        with self.assertRaises(FieldException) as ex:
-            data = {
-                'sender_key': self.other_user.key.urlsafe(),
-                'is_request': True,
-                'admin_key': self.user_admin.key.urlsafe(),
-                'institution_key': self.inst_test.key.urlsafe(),
-                'institution_requested_key': self.inst_requested_children.key.urlsafe(),
-                'type_of_invite': 'REQUEST_INSTITUTION_CHILDREN'
-            }
-
-            RequestInstitutionChildren.create(data)
-
-        self.assertEqual(
-            'The institution invited has already parent',
-            str(ex.exception),
-            'The institution invited has already parent')
 
     def test_make_request_parent_institution(self):
         """Test method make por parent institution request."""

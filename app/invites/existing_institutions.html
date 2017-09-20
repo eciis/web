@@ -6,11 +6,13 @@
             <h3 ng-if="suggestInstCtrl.institutions.length > 1">Já existem instituições com esse nome. Deseja convidar alguma delas?</h3>
             <md-radio-group ng-model="suggestInstCtrl.chosen_institution" required flex>
                 <md-list ng-repeat="institution in suggestInstCtrl.institutions" flex>
-                    <md-list-item class="md-2-line" ng-if="suggestInstCtrl.isActive(institution.state)">
-                        <md-radio-button ng-value="institution.id" class="md-primary">{{institution.name}}</md-radio-button>
-                        <md-button title="Página da instituição" ng-click="suggestInstCtrl.goToInstitution(institution.id)">
-                            <md-icon>forward</md-icon>
-                        </md-button>
+                    <md-list-item class="md-2-line" ng-if="suggestInstCtrl.showSuggestion(institution.state)">
+                        <div layout="row">
+                            <md-radio-button ng-value="institution.id" class="md-primary align-top">{{institution.name}}</md-radio-button>
+                            <md-button title="Página da instituição" ng-click="suggestInstCtrl.goToInstitution(institution.id)">
+                                <md-icon>forward</md-icon>
+                            </md-button>
+                        </div>
                     </md-list-item>
                     <md-list-item ng-if="!suggestInstCtrl.isActive(institution.state)" ng-click="null" class="md-2-line">
                         <div class="md-list-item-text">
@@ -20,13 +22,17 @@
                         <md-icon style="color: #424242">error</md-icon>
                     </md-list-item>
                 </md-list>
-                <md-radio-button ng-value="null" class="md-primary" flex>Não, desejo convidar outra instituição</md-radio-button>
+                <md-list>
+                    <md-list-item>
+                        <md-radio-button ng-value="null" class="md-primary" flex>Não, desejo convidar outra instituição</md-radio-button>
+                    </md-list-item>
+                </md-list>
             </md-radio-group>
         </md-dialog-content>
 
         <md-dialog-actions layout="row" layout-align="center center">
             <md-button class="md-warn" ng-click="suggestInstCtrl.cancel()" layout-align="center">Cancelar</md-button>
-            <md-button class="md-warn md-raised" ng-click="suggestInstCtrl.checkInvite()">Enviar</md-button>
+            <md-button class="md-warn md-raised" ng-click="suggestInstCtrl.checkAndSendInvite()">Enviar</md-button>
         </md-dialog-actions>
     </div>
 

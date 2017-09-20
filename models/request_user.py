@@ -41,9 +41,12 @@ class RequestUser(Invite):
 
     @staticmethod
     def create(data):
-        """Create a post and check required fields."""
+        """Create a request user."""
         request = RequestUser()
         request.sender_key = ndb.Key(urlsafe=data.get('sender_key'))
+        request.sender_name = data.get('sender_name')
+        request.office = data.get('office')
+        request.institutional_email = data.get('institutional_email')
         request = Invite.create(data, request)
         request.isValid()
         return request
@@ -71,6 +74,9 @@ class RequestUser(Invite):
         """Create json of invite to user."""
         invite_user_json = super(RequestUser, self).make()
         invite_user_json['sender'] = self.sender_key.get().email
+        invite_user_json['sender_name'] = self.sender_name
+        invite_user_json['office'] = self.office
+        invite_user_json['institutional_email'] = self.institutional_email
         invite_user_json['institution_key'] = self.institution_key.urlsafe()
         invite_user_json['type_of_invite'] = 'REQUEST_USER'
         return invite_user_json

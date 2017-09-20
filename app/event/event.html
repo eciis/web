@@ -1,96 +1,66 @@
 <md-content layout="row" md-colors="{background: 'grey-200'}" layout-align="center" class="body">
-  <div flex-gt-lg="80" flex-lg="90" layout-align="center" layout-fill>
-    <div flex layout="column">
-      <md-card flex layout="column">
-      <md-card-header>
-        <md-card-avatar>
-          <img ng-src="{{ eventCtrl.user.current_institution.photo_url }}" class="md-user-avatar"/>
-        </md-card-avatar>
-        <md-card-header-text>
-          <span class="md-title">{{ eventCtrl.user.current_institution.name }}</span>
-          <span class="md-subhead">por {{ eventCtrl.user.name }}</span>
-        </md-card-header-text>
-      </md-card-header>
-      <div class="md-toolbar-tools" layout-align="center center"  ng-if="eventCtrl.showButton">
-        <md-button ng-click="eventCtrl.showButton = false;">
-          Criar novo evento
-        </md-button>
-      </div>
-      <md-card-content layout="column" ng-if="!eventCtrl.showButton">
-        <md-input-container>
-          <label>Título</label>
-          <input ng-model="eventCtrl.event.title" placeholder="Escreva aqui o nome do evento" required="true">
-        </md-input-container>
-        <md-input-container>
-          <label>Descrição</label>
-          <textarea style="max-height: 400px;overflow-y:auto;resize:none;" ng-model="eventCtrl.event.text" md-select-on-focus placeholder="Escreva aqui a descrição do evento"></textarea>
-          </textarea>
-        </md-input-container>
-        <md-input-container>
-          <label>Local</label>
-          <input ng-model="eventCtrl.event.local" placeholder="Escreva aqui o local do evento" required="true">
-        </md-input-container>
-        <div layout="row">
-          <md-input-container class="md-input-has-placeholder">
-            <label>Início</label>
-            <input mdc-datetime-picker="" date="true" time="true" type="text" format="DD-MM-YYYY HH:mm" lang="pt-BR" required="true"
-            placeholder="Data/Horário" ng-model="eventCtrl.event.start_time" class=" md-input" today-text="Hoje" min-date="null"
-            max-date="eventCtrl.event.end_time" readonly="readonly" cancel-text="Cancelar">
-            <div class="md-errors-spacer"></div>
-          </md-input-container>
-          <md-input-container class="md-input-has-placeholder">
-            <label>Fim</label>
-            <input mdc-datetime-picker="" date="true" time="true" type="text" lang="pt-BR" today-text="Hoje" required="true"
-            placeholder="Data/Horário" class=" md-input" readonly="readonly" format="DD-MM-YYYY HH:mm" max-date="null"
-            ng-model="eventCtrl.event.end_time" cancel-text="Cancelar" min-date="eventCtrl.event.start_time">
-            <div class="md-errors-spacer"></div>
-          </md-input-container>
-        </div>
-        <div class="image-view" ng-if="eventCtrl.showImage()">
-          <button ng-click="eventCtrl.cleanImage()">&times;</button>
-          <img style="border-radius: 5%;" ng-src="{{ eventCtrl.photoUrl }}"/>
-        </div>
-        <md-progress-linear ng-show="eventCtrl.loading" md-mode="indeterminate" style="width: 14%; margin-top: 5px"></md-progress-linear>
-      </md-card-content>
-      <div layout="row">
-        <span flex></span>
-        <md-button class="md-icon-button" ng-click="eventCtrl.clean()" ng-if="!eventCtrl.showButton">
-          <md-icon>cancel</md-icon>
-        </md-button>
-        <md-button class="md-icon-button" ng-click="null" ng-model="eventCtrl.file" ngf-pattern="'image/*'"
-                      ngf-accept="'image/*'" ngf-max-size="5MB" ng-if="!eventCtrl.showButton"
-                      ngf-select="eventCtrl.addImage(eventCtrl.file)">
-              <md-icon>add_a_photo</md-icon>
-        </md-button>
-        <md-button class="md-icon-button" ng-click="eventCtrl.save()" ng-if="eventCtrl.showButtonSend()">
-          <md-icon>send</md-icon>
-        </md-button>
-    </md-card>
+  <div flex-gt-lg="80" flex-lg="90" layout="row" layout-align="center" layout-fill>
+    <div layout="column" layout-align="center center" ng-if="eventCtrl.events.length === 0"> 
+      <p>
+        <span class="md-subhead">Seja o primeiro a criar um evento.</span>
+      </p>
+      <md-button aria-label="menu" class="md-button" ng-click="eventCtrl.newEvent()" md-colors="{background: 'teal-900'}">
+        Criar evento
+      </md-button>
     </div>
-
+    <timeline>
+      <timeline-event ng-repeat="event in eventCtrl.events | orderBy:'start_time'">
+        <timeline-badge class="primary">
+          <md-icon style="margin-top: 14px; color: white;">event</md-icon>
+        </timeline-badge>
+        <timeline-panel>
+          <md-card>
+            <img class="md-card-image" ng-src="{{event.photo_url}}"/>
+          </md-card>
+          <md-card>
+            <md-card-header>
+              <md-card-header-text>
+                <div layout="row" layout-align="start center">
+                  <span md-colors="{color: 'teal-900'}" class="md-title">{{ event.title }}</span>
+                  <span flex md-truncate></span>
+                </div>
+                <span class="md-subhead">por {{ event.institution_name }} | {{ event.author_name }}</span>
+              </md-card-header-text>
+            </md-card-header>
+            <md-card-content layout="column">
+              <p ng-if="event.text" ng-bind-html="eventCtrl.recognizeUrl(event.text)" class="break">
+              </p>
+              <p>
+                <span class="md-caption">Local:</span> <span md-colors="{color: 'teal-900'}">{{ event.local }}</span> | 
+                <b md-colors="{color: 'teal-900'}">
+                  {{ event.start_time | amUtc | amLocal | amCalendar:referenceTime:formats }}
+                </b> até
+                <b md-colors="{color: 'teal-900'}">
+                  {{ event.end_time | amUtc | amLocal | amCalendar:referenceTime:formats }}
+                </b>
+              </p>
+              <div layout="row" layout-align="end center">
+                <md-button class="md-icon-button" aria-label="compartilhar" title="Excluir este evento"
+                  ng-if="eventCtrl.canDelete(event)" ng-click="eventCtrl.deleteEvent($event, event)">
+                  <md-icon>delete</md-icon>
+                </md-button>
+                <md-button class="md-icon-button" aria-label="compartilhar" title="Compartilhar este evento"
+                  ng-click="eventCtrl.share(event)">
+                  <md-icon>share</md-icon>
+                </md-button>
+              </div>
+            </md-card-content>
+          </md-card>
+        </timeline-panel>
+      </timeline-event>
+    </timeline>
   </div>
-  <md-card flex layout="column">
-        <md-list class="md-dense" flex>
-          <md-subheader class="md-no-sticky">Eventos</md-subheader>
-            <md-list-item class="md-3-line"
-                ng-repeat="event in eventCtrl.events | orderBy : eventCtrl.events.start_time" ng-click="null">
-              <div class="image-view" ng-if="event.photo_url" layout="row">
-                <img class="md-card-image" style="border-radius: 3%;" ng-src="{{ event.photo_url }}"/>
-              </div>
-              <div class="md-list-item-text" style="padding: 2%;">
-                <label>{{ event.title }}</label>
-                <p>Horário</p>
-                <h3>De {{ event.start_time | amUtc | amLocal | amCalendar:referenceTime:formats}} até 
-                   {{ event.end_time | amUtc | amLocal | amCalendar:referenceTime:formats }}</h3>
-                <p ng-if="event.text">Descrição</p>
-                <h3 ng-if="event.text">{{ event.text }}</h3>
-                <p>Local</p>
-                <h3>{{ event.local }}</h3>
-                <p>Autor/Instituição</p>
-                <h3>{{ event.author_name }} por {{ event.institution_name}}</h3>
-              </div>
-            </md-list-item>
-        </md-list>
-      </md-card>
 </md-content>
 
+<md-fab-speed-dial id="fab-new-event" class="md-fab-bottom-right">
+  <md-fab-trigger>
+    <md-button aria-label="menu" class="md-fab md-primary" ng-click="eventCtrl.newEvent()" md-colors="{background: 'teal-900'}">
+      <md-icon>add</md-icon>
+    </md-button>
+  </md-fab-trigger>
+</md-fab-speed-dial>

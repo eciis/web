@@ -21,7 +21,10 @@
                 sender_key : requestInvCtrl.currentUser.key,
                 admin_key : requestInvCtrl.institutionSelect.admin.key,
                 is_request : true,
-                type_of_invite : 'REQUEST_USER'
+                type_of_invite : 'REQUEST_USER',
+                sender_name : requestInvCtrl.user.name,
+                office : requestInvCtrl.office,
+                institutional_email : requestInvCtrl.email 
             };
 
             var request = new Invite(dataInvite);
@@ -86,6 +89,17 @@
             }
 
             return false;
+        };
+
+        requestInvCtrl.getFullAddress = function getFullAddress(institution) {
+                var address = institution.address;
+                var fullAddress;
+                if (address){
+                    fullAddress  = address.street + ", " + address.number + ", " + address.neighbourhood + 
+                                 ", " + address.city + ", " + address.state + ", " + address.country;
+                }
+                return fullAddress;
+                
         };
 
         function clearProperties(){

@@ -4,8 +4,8 @@
 import json
 from test_base_handler import TestBaseHandler
 from models.user import User
-from utils import get_message_exception
 from models.institution import Institution
+from models.institution import Address
 from handlers.user_request_collection_handler import UserRequestCollectionHandler
 
 from mock import patch
@@ -21,8 +21,8 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
         """Provide the base for the tests."""
         super(UserRequestCollectionHandlerTest, cls).setUp()
         app = cls.webapp2.WSGIApplication(
-            [(UserRequestCollectionHandlerTest.REQUEST_URI, UserRequestCollectionHandler),
-             ], debug=True)
+            [(UserRequestCollectionHandlerTest.REQUEST_URI,
+             UserRequestCollectionHandler)], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
@@ -34,14 +34,21 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
             'is_request': True,
             'admin_key': self.user_admin.key.urlsafe(),
             'institution_key': self.inst_test.key.urlsafe(),
-            'type_of_invite': 'REQUEST_USER'
+            'type_of_invite': 'REQUEST_USER',
+            'sender_name': "user name updated",
+            'office': 'CEO',
+            'institutional_email': 'other@ceo.com'
         }
 
         request = self.testapp.post_json(
-            "/api/institutions/" + self.inst_test.key.urlsafe() + "/requests/user",
-            data)
+            "/api/institutions/" +
+            self.inst_test.key.urlsafe() +
+            "/requests/user", data
+        )
 
         request = json.loads(request._app_iter[0])
+
+        user_updated = self.other_user.key.get()
 
         self.assertEqual(
             request['sender'],
@@ -52,9 +59,15 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
             self.user_admin.name,
             'Expected sender admin_name is User Admin')
         self.assertEqual(
-            request['type_of_invite'],
-            'REQUEST_USER',
-            'Expected sender type_of_invite is REQUEST_USER')
+            request['admin_name'],
+            self.user_admin.name,
+            'Expected sender admin_name is User Admin')
+        self.assertEqual(
+            len(user_updated.institution_profiles),
+            1, 'Expected one profile in user profiles')
+        self.assertEqual(
+            user_updated.name, 'user name updated',
+            'Expected new user name is user name updated')
 
     @patch('utils.verify_token', return_value={'email': 'other_user@test.com'})
     def test_post_invalid_request_type(self, verify_token):
@@ -64,15 +77,18 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
             'is_request': True,
             'admin_key': self.user_admin.key.urlsafe(),
             'institution_key': self.inst_test.key.urlsafe(),
-            'type_of_invite': 'INVITE'
+            'type_of_invite': 'INVITE',
+            'sender_name': self.other_user.name,
+            'office': 'CEO',
+            'institutional_email': 'other@ceo.com'
         }
 
         with self.assertRaises(Exception) as ex:
             self.testapp.post_json(
-                "/api/institutions/" + self.inst_test.key.urlsafe() + "/requests/user",
-                data)
+                "/api/institutions/" + self.inst_test.key.urlsafe() +
+                "/requests/user", data)
 
-        exception_message = get_message_exception(self, ex.exception.message)
+        exception_message = self.get_message_exception(ex.exception.message)
         self.assertEqual(
             'Error! The type must be REQUEST_USER',
             exception_message,
@@ -89,11 +105,15 @@ def initModels(cls):
     # Other user
     cls.other_user = User()
     cls.other_user.name = 'Other User'
-    cls.other_user.email = 'otheruser@test.com'
+    cls.other_user.email = 'other_user@test.com'
     cls.other_user.put()
+    # new institution address
+    cls.address = Address()
+    cls.address.street = "street"
     # new Institution inst test
     cls.inst_test = Institution()
     cls.inst_test.name = 'inst test'
+    cls.inst_test.address = cls.address
     cls.inst_test.members = [cls.user_admin.key]
     cls.inst_test.followers = [cls.user_admin.key]
     cls.inst_test.admin = cls.user_admin.key

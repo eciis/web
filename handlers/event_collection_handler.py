@@ -23,8 +23,7 @@ class EventCollectionHandler(BaseHandler):
         array = []
         if len(user.follows) > 0:
             queryEvents = Event.query(Event.institution_key.IN(
-                user.follows)).order(Event.start_time)
-
+                user.follows), Event.state == 'published').order(Event.start_time)
             array = [Utils.toJson(event, host=self.request.host) for event in queryEvents]
 
         self.response.write(json.dumps(array))
@@ -40,7 +39,7 @@ class EventCollectionHandler(BaseHandler):
         Utils._assert(institution.state == 'inactive',
                       "The institution has been deleted", NotAuthorizedException)
 
-        event = Event.create(data, user.key, user.name, user.photo_url, 
+        event = Event.create(data, user.key, user.name, user.photo_url,
                              institution_key, institution.name, institution.photo_url)
         event.put()
 

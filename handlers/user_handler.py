@@ -3,9 +3,10 @@
 
 import json
 
-from utils import Utils
 from models.invite import Invite
+from utils import Utils
 from utils import login_required
+from utils import create_user
 from utils import json_response
 from models.user import InstitutionProfile
 from custom_exceptions.fieldException import FieldException
@@ -25,6 +26,11 @@ def getInvites(user_email):
     invites = [invite.make() for invite in queryInvites]
 
     return invites
+
+
+def define_entity(dictionary):
+    """Method of return entity class for create object in JasonPacth."""
+    return InstitutionProfile
 
 
 def makeUser(user, request):
@@ -60,30 +66,17 @@ class UserHandler(BaseHandler):
     @login_required
     def get(self, user):
         """Handle GET Requests."""
+        """ TODO/FIXME: Remove the user creation from this handler.
+            This was done to solve the duplicate user creation bug.
+            Author: Ruan Eloy - 18/09/17
+        """
+        if isinstance(user, dict):
+            user = create_user(user.get('name'), user.get('email'))
+
         user_json = makeUser(user, self.request)
         user_json['invites'] = getInvites(user.email)
+
         self.response.write(json.dumps(user_json))
-
-    @login_required
-    @ndb.transactional(xg=True)
-    def put(self, user, invite_key):
-        """Handler PUT Requests."""
-        data = json.loads(self.request.body)
-
-        institution_key = ndb.Key(urlsafe=data['institutions'][-1])
-        institution = institution_key.get()
-
-        invite = ndb.Key(urlsafe=invite_key).get()
-        invite.change_status('accepted')
-
-        user.add_institution(institution_key)
-        user.follow(institution_key)
-        user.change_state('active')
-
-        institution.add_member(user)
-        institution.follow(user.key)
-
-        self.response.write(json.dumps(makeUser(user, self.request)))
 
     @login_required
     def delete(self, user, institution_key):
@@ -103,15 +96,7 @@ class UserHandler(BaseHandler):
         data = self.request.body
 
         """Apply patch."""
-        try:
-            JsonPatch.load(data, user)
-        except TypeError:
-            JsonPatch.load(data, user, InstitutionProfile)
-            Utils._assert(
-                not InstitutionProfile.is_valid(user.institution_profiles,
-                                                len(user.institutions)),
-                "The profile is invalid.", FieldException)
-        user.put()
+        JsonPatch.load(data, user)
 
         if(user.state == 'inactive'):
             remove_user_from_institutions(user)

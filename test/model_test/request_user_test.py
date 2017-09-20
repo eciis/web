@@ -4,6 +4,7 @@
 from ..test_base import TestBase
 from models.request_user import RequestUser
 from models.institution import Institution
+from models.institution import Address
 from custom_exceptions.fieldException import FieldException
 from models.user import User
 
@@ -101,7 +102,10 @@ class RequestUserTest(TestBase):
             'sender_key': self.other_user.key.urlsafe(),
             'is_request': True,
             'admin_key': self.admin_user.key.urlsafe(),
-            'institution_key': self.inst_test.key.urlsafe()
+            'institution_key': self.inst_test.key.urlsafe(),
+            'office': 'teacher',
+            'sender_name': 'other_user',
+            'institutional_email': 'otheruser@inst_test.com'
         }
 
         request = RequestUser.create(data)
@@ -115,22 +119,58 @@ class RequestUserTest(TestBase):
             'sender': self.other_user.email,
             'admin_name': self.admin_user.name,
             'key': request.key.urlsafe(),
+            'institution': {
+                'phone_number': None,
+                'description': None,
+                'name': 'inst test',
+                'key': self.inst_test.key.urlsafe(),
+                'address': 'street 01, neighbourhood, ' +
+                'city, state, 000, country',
+                'email': None,
+                'photo_url': None
+            },
             'type_of_invite': 'REQUEST_USER',
-            'institution_key': self.inst_test.key.urlsafe()
+            'institution_key': self.inst_test.key.urlsafe(),
+            'office': 'teacher',
+            'sender_name': 'other_user',
+            'institutional_email': 'otheruser@inst_test.com'
         }
 
-        self.assertEqual(
-            make,
-            request.make(),
-            "The make object must be equal to variable make"
-        )
+        request_make = request.make()
+        for key in make.keys():
+            if key == "institution":
+                make_institution = make[key]
+                request_institution = request_make[key]
+                for inst_key in make_institution.keys():
+                    self.assertEqual(
+                        str(make_institution[inst_key]).encode('utf-8'),
+                        str(request_institution[inst_key]).encode('utf-8'),
+                        "The make object must be equal to variable make"
+                    )
+            else:
+                self.assertEqual(
+                    str(make[key]).encode('utf-8'),
+                    str(request_make[key]).encode('utf-8'),
+                    "The make object must be equal to variable make"
+                )
 
 
 def initModels(cls):
     """Init the models."""
+    # new Institution Address
+    cls.address = Address()
+    cls.address.number = '01'
+    cls.address.street = 'street'
+    cls.address.neighbourhood = 'neighbourhood'
+    cls.address.city = 'city'
+    cls.address.state = 'state'
+    cls.address.city = 'city'
+    cls.address.cep = '000'
+    cls.address.country = 'country'
     # new Institution inst test
     cls.inst_test = Institution()
     cls.inst_test.name = 'inst test'
+    cls.inst_test.address = cls.address
     cls.inst_test.put()
     # new User admin user
     cls.admin_user = User()
@@ -139,10 +179,9 @@ def initModels(cls):
     cls.admin_user.institutions = [cls.inst_test.key]
     cls.admin_user.institutions_admin = [cls.inst_test.key]
     cls.admin_user.put()
-
+    # update institution
     cls.inst_test.members.append(cls.admin_user.key)
     cls.inst_test.put()
-
     # new User inactive other user
     cls.other_user = User()
     cls.other_user.name = 'other user'

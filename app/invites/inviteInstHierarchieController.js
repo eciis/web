@@ -207,8 +207,8 @@
             return promise;
         };
 
-        inviteInstCtrl.acceptRequest = function acceptRequest(request, type_of_invite) {
-            var confirm = customDialog('accept');
+        inviteInstCtrl.acceptRequest = function acceptRequest(request, type_of_invite, event) {
+            var confirm = customDialog('accept', event);
             var promise = $mdDialog.show(confirm);
             promise.then(function() {
                 var accept = type_of_invite === "REQUEST_INSTITUTION_PARENT" ?
@@ -224,8 +224,8 @@
             return promise;
         };
 
-        inviteInstCtrl.rejectRequest = function rejectRequest(request, type_of_invite) {
-            var confirm = customDialog('reject');
+        inviteInstCtrl.rejectRequest = function rejectRequest(request, type_of_invite, event) {
+            var confirm = customDialog('reject', event);
             var promise = $mdDialog.show(confirm);
             promise.then(function() {
                 var reject = type_of_invite === "REQUEST_INSTITUTION_PARENT" ?
@@ -240,7 +240,7 @@
             return promise;
         };
 
-        function customDialog(operation) {
+        function customDialog(operation, event) {
             var message = isOvewritingParent(operation);
             var confirm = $mdDialog.confirm({onComplete: designOptions})
                 .clickOutsideToClose(true)

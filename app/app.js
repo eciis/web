@@ -12,7 +12,8 @@
         'angularMoment',
         'ngClipboard',
         'ngMaterialDatePicker',
-        'ngMessages'
+        'ngMessages',
+        'angular-timeline'
     ]);
 
     app.config(function($mdIconProvider, $mdThemingProvider, $stateProvider, $urlMatcherFactoryProvider,
@@ -22,6 +23,8 @@
         $mdThemingProvider.theme('docs-dark');
         $mdThemingProvider.theme('input')
             .primaryPalette('green');
+        $mdThemingProvider.theme('dialogTheme')
+            .primaryPalette('teal');
 
         $urlMatcherFactoryProvider.caseInsensitive(true);
 
@@ -122,15 +125,6 @@
                     content: {
                         templateUrl: "auth/config_profile.html",
                         controller: "ConfigProfileController as configProfileCtrl"
-                    }
-                }
-            })
-            .state("choose_institution", {
-                url: "/chooseinstitution",
-                views: {
-                    main: {
-                        templateUrl: "auth/choose_institution.html",
-                        controller: "ChooseInstController as chooseInstCtrl"
                     }
                 }
             })

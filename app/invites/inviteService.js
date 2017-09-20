@@ -49,10 +49,9 @@
             return deferred.promise;
         };
 
-        service.updateInvite = function updateInvite(invite, newInvite) {
+        service.acceptInvite = function acceptInvite(patch, invite_key) {
             var deffered = $q.defer();
-            var patch = jsonpatch.compare(invite, newInvite);
-            $http.patch(INVITES_URI + '/' + invite.key, patch).then(function success(info) {
+            $http.patch(INVITES_URI + '/' + invite_key, patch).then(function success(info) {
                 deffered.resolve(info.data);
             }, function error(data) {
                 deffered.reject(data);

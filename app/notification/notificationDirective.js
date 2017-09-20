@@ -36,6 +36,14 @@
                 icon: "reply",
                 state: "app.post"
             },
+            "LIKE_COMMENT": {
+                icon: "grade",
+                state: "app.post"
+            },
+            "LIKE_POST": {
+                icon: "grade",
+                state: "app.post"
+            },
             "REQUEST_USER": {
                icon: "person_add",
                state: "process_request",

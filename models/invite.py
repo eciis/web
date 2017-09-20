@@ -44,6 +44,11 @@ class Invite(PolyModel):
     #  Indicates whether the operation is of the requested type
     is_request = ndb.BooleanProperty(default=False)
 
+    # Data to create InstitutionProfile for user requests
+    sender_name = ndb.StringProperty()
+    office = ndb.StringProperty()
+    institutional_email = ndb.StringProperty()
+
     @staticmethod
     def create(data, invite):
         """Create a post and check required fields."""
@@ -97,11 +102,19 @@ class Invite(PolyModel):
 
     def make(self):
         """Create personalized json of invite."""
+        REQUIRED_PROPERTIES = ['name', 'address', 'description',
+                               'key', 'photo_url', 'email',
+                               'phone_number']
+        institution_admin = self.institution_key.get()
+        institution_admin = institution_admin.make(['name'])
+        institution = self.institution_key.get()
+        institution = institution.make(REQUIRED_PROPERTIES)
         return {
             'admin_name': self.admin_key.get().name,
             'key': self.key.urlsafe(),
             'status': self.status,
-            'institution_admin': self.institution_key.get().make(['name'])
+            'institution_admin': institution_admin,
+            'institution': institution
         }
 
     def change_status(self, status):

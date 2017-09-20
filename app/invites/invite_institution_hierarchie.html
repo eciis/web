@@ -3,7 +3,7 @@
     <md-card flex layout="column">
       <md-toolbar md-colors="{background: 'teal-800'}" layout="row">
         <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
-          <h1>Gerenciar Hierarquia</h1>
+          <h1>Convidar Instituições</h1>
           <span flex md-truncate></span>
           <md-button aria-label="Convidar Nova Instituição" ng-if="inviteInstCtrl.showButton" ng-click="inviteInstCtrl.showButton = false;">
             <md-icon>add</md-icon>Convidar
@@ -20,12 +20,12 @@
             <label>Email convite deve ser enviado para:</label>
             <input ng-model="inviteInstCtrl.invite.invitee" type="email" required>
           </md-input-container>
-          <p>Qual a conexão da instituição que você está convidando com  <b> {{inviteInstCtrl.institution.name}} </b> ?</p>
+          <p>Qual a conexão da instituição <b>{{inviteInstCtrl.invite.suggestion_institution_name}} </b> com  <b> {{inviteInstCtrl.institution.name}} </b> ?</p>
 
           <md-radio-group ng-model="inviteInstCtrl.invite.type_of_invite" required>
 
             <md-radio-button value="INSTITUTION_PARENT" class="md-primary">É a instituição superior</md-radio-button>
-            <md-radio-button value="INSTITUTION_CHILDREN" class="md-primary">É uma sub-divisão de {{inviteInstCtrl.institution.name}}</md-radio-button>
+            <md-radio-button value="INSTITUTION_CHILDREN" class="md-primary">É uma subordinada de {{inviteInstCtrl.institution.name}}</md-radio-button>
             <md-radio-button ng-disabled="true" value="suggestion_invite" class="md-primary">Nenhuma</md-radio-button>
 
           </md-radio-group>
@@ -54,11 +54,11 @@
             </div>
             <div ng-if="inviteInstCtrl.isActive(inviteInstCtrl.institution.parent_institution)">
               <md-button ng-click="inviteInstCtrl.removeLink(inviteInstCtrl.institution.parent_institution, true)">
-                <md-icon md-colors="{color: 'red-700'}">link</md-icon>
+                <md-icon md-colors="{color: 'red-700'}" title="Remover conexão">link</md-icon>
               </md-button>
             </div>
           </md-list-item>
-          <md-subheader class="md-no-sticky">Instituições filhas</md-subheader>
+          <md-subheader class="md-no-sticky">Instituições subordinadas</md-subheader>
           <md-list-item class="md-3-line"
           ng-repeat="institution in inviteInstCtrl.institution.children_institutions">
             <md-icon class="md-avatar-icon" >account_balance</md-icon>
@@ -77,7 +77,7 @@
             </div>
             <div ng-if="inviteInstCtrl.isActive(institution)">
               <md-button ng-click="inviteInstCtrl.removeLink(institution, false)">
-                <md-icon md-colors="{color: 'red-700'}">link</md-icon>
+                <md-icon md-colors="{color: 'red-700'}" title="Remover conexão">link</md-icon>
               </md-button>
             </div>
           </md-list-item>
@@ -90,10 +90,10 @@
                   <h3 ng-if="request.type_of_invite === 'REQUEST_INSTITUTION_CHILDREN'" style="color: red">Requisito para ser a instituição superior</h3>
                   <h3 ng-if="request.type_of_invite === 'REQUEST_INSTITUTION_PARENT'" style="color: red">Requisito para ser uma instituição filha</h3>
               </div>
-              <md-button ng-click="inviteInstCtrl.rejectRequest(request, request.type_of_invite)" title="Rejeitar">
+              <md-button ng-click="inviteInstCtrl.rejectRequest(request, request.type_of_invite, $event)" title="Rejeitar">
                 <md-icon style="color: red">clear</md-icon>
               </md-button>
-              <md-button ng-click="inviteInstCtrl.acceptRequest(request, request.type_of_invite)" title="Aceitar">
+              <md-button ng-click="inviteInstCtrl.acceptRequest(request, request.type_of_invite, $event)" title="Aceitar">
                 <md-icon style="color: green">add</md-icon>
               </md-button>
             </md-list-item>

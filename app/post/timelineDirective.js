@@ -35,7 +35,7 @@
         })();
     });
 
-    app.directive("timeline", function() {
+    app.directive("postTimeline", function() {
         return {
             restrict: 'E',
             templateUrl: "post/timeline.html",

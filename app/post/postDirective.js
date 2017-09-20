@@ -16,6 +16,7 @@
         postCtrl.pdfFiles = [];
         postCtrl.deletedFiles = [];
         postCtrl.addVideo = false;
+        postCtrl.videoRegex = '(?:http(s)?:\/\/)?(www\.)?youtube\.com\/watch\\?v=.+';
 
         var observer;
 
@@ -229,13 +230,6 @@
             } else {
                 postCtrl.addVideo = true;
             }
-        };
-
-        postCtrl.getVideoUrl = function getVideoUrl() {
-            var params = _.split(postCtrl.post.video_url, '=');
-            var id = params[params.length - 1];
-            postCtrl.post.video_url = 'https://www.youtube.com/embed/' + id;
-            return true;
         };
 
         function saveEditedPost(originalPost) {

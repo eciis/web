@@ -293,7 +293,6 @@
                 postCtrl.createEditedPost($scope.originalPost);
                 observer = jsonpatch.observe(postCtrl.post);
             }
-
         })();
 
         postCtrl.hideImage = function() {

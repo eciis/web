@@ -26,7 +26,7 @@
         };
 
         homeCtrl.goToEvents = function goToEvents() {
-            $state.go('app.event');
+            $state.go('app.events');
         };
 
         homeCtrl.newPost = function newPost(event) {

@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 """Event Handler."""
-
+import json
 from google.appengine.ext import ndb
 
+from models.event import Event
 from utils import Utils
 from utils import login_required
 from utils import NotAuthorizedException
@@ -27,6 +28,20 @@ def is_event_author(method):
 
 class EventHandler(BaseHandler):
     """Event Handler."""
+
+    @json_response
+    @login_required
+    def get(self, user, url_string):
+        """Handle GET Requests."""
+        event_key = ndb.Key(urlsafe=url_string)
+        event = event_key.get()
+
+        assert type(event) is Event, "Key is not an Event"
+        event_json = Event.make(event)
+
+        self.response.write(json.dumps(
+            event_json
+        ))
 
     @login_required
     @is_event_author

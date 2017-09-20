@@ -33,7 +33,10 @@ class InstitutionRequestHandlerTest(TestBaseHandler):
         response = self.testapp.get('/api/requests/' + self.request.key.urlsafe() + '/institution')
         request = json.loads(response._app_iter[0])
 
-        self.assertEqual(request, self.request.make())
+        self.assertEqual(
+            request,
+            self.request.make(),
+            "Expected make must be equal to make of request")
 
     @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_get_fail(self, verify_token):
@@ -42,7 +45,10 @@ class InstitutionRequestHandlerTest(TestBaseHandler):
             self.testapp.get('/api/requests/' + self.request.key.urlsafe() + '/institution')
 
         message = self.get_message_exception(str(ex.exception))
-        self.assertEqual(message, 'Error! User is not allowed to do this operation')
+        self.assertEqual(
+            message,
+            'Error! User is not allowed to do this operation',
+            "Expected message must be equal to Error! User is not allowed to do this operation")
 
     @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
     def test_put(self, verify_token):
@@ -51,15 +57,40 @@ class InstitutionRequestHandlerTest(TestBaseHandler):
         new_inst = self.new_inst.key.get()
         user = self.other_user.key.get()
 
-        self.assertEqual(new_inst.state, 'active')
-        self.assertEqual(user.state, 'active')
-        self.assertEqual(user.key, new_inst.admin)
+        self.assertEqual(
+            new_inst.state,
+            'active',
+            "Expected state must be equal to active")
 
-        self.assertTrue(new_inst.key in user.institutions)
-        self.assertTrue(new_inst.key in user.follows)
-        self.assertTrue(new_inst.key in user.institutions_admin)
-        self.assertTrue(user.key in new_inst.followers)
-        self.assertTrue(user.key in new_inst.members)
+        self.assertEqual(
+            user.state,
+            'active',
+            "Expected state must be equal to active")
+
+        self.assertEqual(
+            user.key,
+            new_inst.admin,
+            "Expected admin must be equal to Other User")
+
+        self.assertTrue(
+            new_inst.key in user.institutions,
+            "Expected new_ins in user institutions")
+
+        self.assertTrue(
+            new_inst.key in user.follows,
+            "Expected new_ins in user follows")
+
+        self.assertTrue(
+            new_inst.key in user.institutions_admin,
+            "Expected new_ins in user institutions_admin")
+
+        self.assertTrue(
+            user.key in new_inst.followers,
+            "Expected Other User in user institution followers")
+
+        self.assertTrue(
+            user.key in new_inst.members,
+            "Expected Other User in user institution members")
 
     @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
     def teste_delete(self, verify_token):
@@ -67,7 +98,10 @@ class InstitutionRequestHandlerTest(TestBaseHandler):
         self.testapp.delete('/api/requests/' + self.request.key.urlsafe() + '/institution')
         new_inst = self.new_inst.key.get()
 
-        self.assertEqual(new_inst.state, 'inactive')
+        self.assertEqual(
+            new_inst.state,
+            'inactive',
+            "Expected state must be equal to inactive")
 
 
 def initModels(cls):

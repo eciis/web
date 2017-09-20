@@ -9,7 +9,6 @@ from utils import login_required
 from utils import create_user
 from utils import json_response
 from models.user import InstitutionProfile
-from custom_exceptions.fieldException import FieldException
 
 from util.json_patch import JsonPatch
 
@@ -22,7 +21,8 @@ def getInvites(user_email):
     """Query that return list of invites for this user."""
     invites = []
 
-    queryInvites = Invite.query(Invite.invitee == user_email, Invite.status == 'sent')
+    queryInvites = Invite.query(Invite.invitee.IN(user_email),
+                                Invite.status == 'sent')
     invites = [invite.make() for invite in queryInvites]
 
     return invites
@@ -47,7 +47,8 @@ def makeUser(user, request):
             Utils.toJson(institution.get())
         )
     user_json['follows'] = [institution_key.get().make(
-        ['acronym', 'photo_url', 'key', 'parent_institution']) for institution_key in user.follows]
+        ['acronym', 'photo_url', 'key', 'parent_institution'])
+        for institution_key in user.follows]
     return user_json
 
 
@@ -70,8 +71,8 @@ class UserHandler(BaseHandler):
             This was done to solve the duplicate user creation bug.
             Author: Ruan Eloy - 18/09/17
         """
-        if isinstance(user, dict):
-            user = create_user(user.get('name'), user.get('email'))
+        if not user.key:
+            user = create_user(user.name, user.email)
 
         user_json = makeUser(user, self.request)
         user_json['invites'] = getInvites(user.email)

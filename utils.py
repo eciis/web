@@ -178,10 +178,9 @@ def login_required(method):
         user = User.get_by_email(user_email)
 
         if user is None:
-            user = {
-                "name": user_name,
-                "email": user_email
-            }
+            user = User()
+            user.name = user_name
+            user.email = [user_email]
 
         method(self, user, *args)
     return login

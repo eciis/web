@@ -143,13 +143,13 @@ def initModels(cls):
     # new User first_user
     cls.first_user = User()
     cls.first_user.name = 'first_user'
-    cls.first_user.email = 'first_user@gmail.com'
+    cls.first_user.email = ['first_user@gmail.com']
     cls.first_user.put()
 
     # new User second_user
     cls.second_user = User()
     cls.second_user.name = 'second_user'
-    cls.second_user.email = 'second_user@ccc.ufcg.edu.br'
+    cls.second_user.email = ['second_user@ccc.ufcg.edu.br']
     cls.second_user.photo_url = '/img.jpg'
     cls.second_user.put()
 

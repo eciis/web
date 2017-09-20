@@ -275,8 +275,8 @@ def is_authorized(method):
 #  SEE HOW GET POWER USERS IDEA
 def getSuperUsers():
     userswithpermission = []
-    institutionsEmpowered = Institution.query(Institution.empowered == True)
-    for institution in institutionsEmpowered:
+    institutionsTrusted = Institution.query(Institution.trusted == True)
+    for institution in institutionsTrusted:
         for userKey in institution.members:
             user = userKey.get()
             if user.has_permission('analyze_request_inst', institution.key):

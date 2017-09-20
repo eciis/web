@@ -420,7 +420,7 @@ class ResetHandler(BaseHandler):
             eciis.follow(user.key)
 
         eciis.parent_institution = splab.key
-        eciis.empowered = True
+        eciis.trusted = True
         eciis.put()
 
         splab.children_institutions = [eciis.key]

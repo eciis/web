@@ -55,7 +55,7 @@ class RequestUser(Invite):
         """Method of send email of invite user."""
         institution_key = self.institution_key.urlsafe()
         invite_key = self.key.urlsafe()
-        admin_email = self.admin_key.get().email
+        admin_email = self.admin_key.get().email[0]
 
         # TODO Set this message
         body = body or """Oi:

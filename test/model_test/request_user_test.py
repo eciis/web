@@ -175,7 +175,7 @@ def initModels(cls):
     # new User admin user
     cls.admin_user = User()
     cls.admin_user.name = 'Admin User'
-    cls.admin_user.email = 'adminuser@test.com'
+    cls.admin_user.email = ['adminuser@test.com']
     cls.admin_user.institutions = [cls.inst_test.key]
     cls.admin_user.institutions_admin = [cls.inst_test.key]
     cls.admin_user.put()
@@ -185,5 +185,5 @@ def initModels(cls):
     # new User inactive other user
     cls.other_user = User()
     cls.other_user.name = 'other user'
-    cls.other_user.email = 'otheruser@test.com'
+    cls.other_user.email = ['otheruser@test.com']
     cls.other_user.put()

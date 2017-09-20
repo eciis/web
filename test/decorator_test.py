@@ -117,7 +117,7 @@ def initModels(cls):
     cls.mayza = User()
     cls.mayza.name = 'Mayza Nunes'
     cls.mayza.cpf = '089.675.908-90'
-    cls.mayza.email = 'mayzabeel@gmail.com'
+    cls.mayza.email = ['mayzabeel@gmail.com']
     cls.mayza.institutions = []
     cls.mayza.follows = []
     cls.mayza.institutions_admin = []
@@ -128,7 +128,7 @@ def initModels(cls):
     cls.raoni = User()
     cls.raoni.name = 'Raoni Smaneoto'
     cls.raoni.cpf = '089.675.908-65'
-    cls.raoni.email = 'raoni.smaneoto@ccc.ufcg.edu.br'
+    cls.raoni.email = ['raoni.smaneoto@ccc.ufcg.edu.br']
     cls.raoni.institutions = []
     cls.raoni.follows = []
     cls.raoni.institutions_admin = []
@@ -139,7 +139,7 @@ def initModels(cls):
     cls.ruan = User()
     cls.ruan.name = 'Ruan'
     cls.ruan.cpf = '089.675.908-65'
-    cls.ruan.email = 'ruan@gmail.com'
+    cls.ruan.email = ['ruan@gmail.com']
     cls.ruan.institutions = []
     cls.ruan.follows = []
     cls.ruan.institutions_admin = []

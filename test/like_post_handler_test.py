@@ -137,12 +137,12 @@ def initModels(cls):
     # new User User
     cls.user = User()
     cls.user.name = 'User'
-    cls.user.email = 'user@example.com'
+    cls.user.email = ['user@example.com']
     cls.user.put()
     # new User Other User
     cls.other_user = User()
     cls.other_user.name = 'Other User'
-    cls.other_user.email = 'otheruser@example.com'
+    cls.other_user.email = ['otheruser@example.com']
     cls.other_user.put()
     # new Institution SPLAB
     cls.institution = Institution()

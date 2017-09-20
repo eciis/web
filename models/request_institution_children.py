@@ -22,7 +22,7 @@ class RequestInstitutionChildren(Request):
     def send_email(self, host, body=None):
         """Method of send email of request institution link."""
         request_key = self.key.urlsafe()
-        requested_email = self.admin_key.get().email
+        requested_email = self.admin_key.get().email[0]
 
         # TODO Set this message
         body = body or """Olá

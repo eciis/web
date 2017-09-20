@@ -17,22 +17,12 @@ from utils import has_analyze_request_permission
 
 def createInstitution(user, data):
     """Cretate a new institution stub."""
-    address = Address.create(data.get('address'))
-
     inst_stub = Institution()
-    inst_stub.name = data.get('name')
-    inst_stub.acronym = data.get('acronym')
-    inst_stub.cnpj = data.get('cnpj')
-    inst_stub.legal_nature = data.get('legal_nature')
-    inst_stub.address = address
-    inst_stub.occupation_area = data.get('occupation_area')
-    inst_stub.description = data.get('description')
-    inst_stub.email = data.get('email')
-    inst_stub.institutional_email = data.get('institutional_email')
-    inst_stub.website_url = data.get('website_url')
-    inst_stub.photo_url = data.get('photo_url', "/images/institution.jpg")
-    inst_stub.phone_number = data.get('phone_number')
-    inst_stub.leader = data.get('leader')
+
+    for property in data:
+            setattr(inst_stub, property, data[property])
+
+    inst_stub.address = Address.create(data.get('address'))
     inst_stub.admin = user.key
     inst_stub.members.append(user.key)
     inst_stub.followers.append(user.key)

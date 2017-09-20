@@ -27,6 +27,10 @@ class InstitutionRequestHandlerTest(TestBaseHandler):
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
+    @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
+    def test_get(self, verify_token):
+        pass
+
 
 def initModels(cls):
     """Init the models."""
@@ -69,5 +73,5 @@ def initModels(cls):
     cls.request.admin_key = cls.user_admin.key
     cls.request.institution_key = cls.inst_test.key
     cls.request.institution_requested_key = cls.inst_requested.key
-    cls.request.type_of_invite = 'REQUEST_INSTITUTION_PARENT'
+    cls.request.type_of_invite = 'REQUEST_INSTITUTION'
     cls.request.put()

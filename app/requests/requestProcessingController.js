@@ -85,6 +85,9 @@
         }
 
         function hideDialog() {
+            if($state.current.name === "app.manage_institution.invite_inst") {
+                $state.go('app.home');
+            }
             $mdDialog.hide();
         }
 

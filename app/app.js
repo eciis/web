@@ -208,6 +208,20 @@
                 }
                 return config || $q.when(config);
             },
+            response: function(config) {
+                var AuthService = $injector.get('AuthService');
+                var user = AuthService.getCurrentUser();
+                if (user && user.key) {
+                    var pendingInvite = user.getPendingInvitation();
+                    if (pendingInvite) {
+                        var inviteKey = pendingInvite.key;
+                        $state.go("new_invite", {key: inviteKey});
+                    } else if (user.isInactive()) {
+                        $state.go("user_inactive");
+                    }
+                }
+                return config || $q.when(config);
+            },
             responseError: function(rejection) {
                 var AuthService = $injector.get('AuthService');
                 if (rejection.status === 401) {

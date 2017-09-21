@@ -118,12 +118,12 @@ def initModels(cls):
     # new User User
     cls.user = User()
     cls.user.name = 'User'
-    cls.user.email = 'user@example.com'
+    cls.user.email = ['user@example.com']
     cls.user.put()
     # new User Test User
     cls.test_user = User()
     cls.test_user.name = 'Test User'
-    cls.test_user.email = 'testuser@example.com'
+    cls.test_user.email = ['testuser@example.com']
     cls.test_user.photo_url = '/image.jpg'
     cls.test_user.put()
     # new Institution CERTBIO

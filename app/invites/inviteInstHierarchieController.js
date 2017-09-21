@@ -281,9 +281,9 @@
         inviteInstCtrl.showMessage = function(type_of_invite) {
             var message;
             if(type_of_invite === REQUEST_CHILDREN) {
-                message = 'Requisito para ser a instituição superior';
+                message = 'Solicitação para ser a instituição superior';
             } else {
-                message = 'Requisito para ser uma instituição subordinada';
+                message = 'Solicitação para ser uma instituição subordinada';
             }
             return message;
         };

@@ -36,7 +36,7 @@ class User(ndb.Model):
     name = ndb.StringProperty(required=True)
     cpf = ndb.StringProperty()
     photo_url = ndb.StringProperty(indexed=False)
-    email = ndb.StringProperty()
+    email = ndb.StringProperty(repeated=True)
 
     # The id of the institutions to which the user belongs
     # minimum = 1

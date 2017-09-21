@@ -144,14 +144,14 @@ def initModels(cls):
     cls.user.name = 'user name'
     cls.user.photo_url = 'urlphoto'
     cls.user.cpf = '089.675.908-90'
-    cls.user.email = 'user@gmail.com'
+    cls.user.email = ['user@gmail.com']
     cls.user.put()
     # new User user
     cls.second_user = User()
     cls.second_user.name = 'second'
     cls.second_user.photo_url = 'urlphoto'
     cls.second_user.cpf = '089.675.908-09'
-    cls.second_user.email = 'usersd@gmail.com'
+    cls.second_user.email = ['usersd@gmail.com']
     cls.second_user.put()
     # new Institution CERTBIO
     cls.certbio = Institution()

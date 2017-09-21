@@ -95,7 +95,7 @@ def initModels(cls):
     cls.mayza = User()
     cls.mayza.name = 'Mayza Nunes'
     cls.mayza.cpf = '089.675.908-90'
-    cls.mayza.email = 'mayzabeel@gmail.com'
+    cls.mayza.email = ['mayzabeel@gmail.com']
     cls.mayza.institutions = []
     cls.mayza.follows = []
     cls.mayza.institutions_admin = []

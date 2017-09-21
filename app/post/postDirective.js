@@ -15,6 +15,8 @@
         postCtrl.photoUrl = "";
         postCtrl.pdfFiles = [];
         postCtrl.deletedFiles = [];
+        postCtrl.addVideo = false;
+        postCtrl.videoRegex = '(?:http(s)?:\/\/)?(www\.)?youtube\.com\/watch\\?v=.+';
 
         var observer;
 
@@ -212,6 +214,24 @@
             postCtrl.pdfFiles = [];
         };
 
+        postCtrl.showVideo = function showVideo() {
+            return postCtrl.post.title && postCtrl.post.video_url;
+        };
+
+        postCtrl.showVideoUrlField = function showVideoUrlField() {
+            var showField = postCtrl.post.title && (postCtrl.addVideo || postCtrl.post.video_url);
+            return showField;
+        };
+
+        postCtrl.setAddVideo = function setAddVideo() {
+            if(postCtrl.post.video_url || postCtrl.addVideo) {
+                postCtrl.addVideo = false;
+                postCtrl.post.video_url = "";
+            } else {
+                postCtrl.addVideo = true;
+            }
+        };
+
         function saveEditedPost(originalPost) {
             var savePromises = [saveFiles(), saveImage()];
             $q.all(savePromises).then(function success() {
@@ -272,7 +292,6 @@
             if($scope.isEditing) {
                 postCtrl.createEditedPost($scope.originalPost);
                 observer = jsonpatch.observe(postCtrl.post);
-
             }
         })();
 

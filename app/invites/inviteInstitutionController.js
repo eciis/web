@@ -54,8 +54,11 @@
         inviteController.showDialog = function showDialog(ev, invite) {
             $mdDialog.show({
                 locals: {
+                    'institution': {},
                     'institutions': inviteController.existing_institutions,
                     'invite': invite,
+                    'requested_invites': [],
+                    'isHierarchy': false,
                     'inviteController': inviteController
                 },
                 controller: 'SuggestInstitutionController',

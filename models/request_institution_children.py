@@ -35,7 +35,7 @@ class RequestInstitutionChildren(Request):
     def send_notification(self, user):
         """Method of send notification of invite user."""
         entity_type = 'REQUEST_INSTITUTION_CHILDREN'
-        super(RequestInstitutionChildren, self).send_notification(user, entity_type)
+        super(RequestInstitutionChildren, self).send_notification(user, self.admin_key.urlsafe(), entity_type)
 
     def make(self):
         """Create json of request to institution children."""

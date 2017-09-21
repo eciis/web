@@ -1,7 +1,7 @@
 <md-dialog>
         <md-toolbar style="background-color: #00695C" layout="row">
           <div class="md-toolbar-tools">
-            <h1 class="md-toolbar-tools">Novo pedido</h1>
+            <h1 class="md-toolbar-tools">Nova solicitação</h1>
           </div>
         </md-toolbar>
 
@@ -9,7 +9,11 @@
           <div>
             <div>
               <md-list flex>
-                <md-subheader class="md-no-sticky">{{requestCtrl.request.sender}} pediu para ser membro de:</md-subheader>
+                <md-subheader class="md-no-sticky" ng-if="!requestCtrl.isInstRequest()">{{requestCtrl.showMessage()}}</md-subheader>
+                <md-subheader class="md-no-sticky" ng-if="requestCtrl.isInstRequest()">
+                  <a href class="hyperlink" ng-click="requestCtrl.goToInstitution(requestCtrl.request.institution.key)">{{requestCtrl.request.institution.name}}</a>
+                  {{requestCtrl.showMessage()}}
+                </md-subheader>
                 <md-list-item class="md-3-line">
                   <img ng-src="{{ requestCtrl.institution.photo_url }}" class="md-avatar" alt="{{requestCtrl.institution.name}}" />
                   <div class="md-list-item-text" layout="column">

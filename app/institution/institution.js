@@ -54,4 +54,4 @@ Institution.prototype.getFullAddress = function getFullAddress() {
                          ", " + this.address.city + ", " + this.address.state + ", " + this.address.country;
         return fullAddress;
     }
-}
+};

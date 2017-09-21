@@ -278,6 +278,10 @@ a:active {
     word-break: break-all;
 }
 
+.align-top {
+    margin-top: 13px;
+}
+
 .youtube-player {
     position: relative;
     /* Use 75% for 4:3 videos */

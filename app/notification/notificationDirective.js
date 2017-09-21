@@ -59,11 +59,29 @@
             },
             "REQUEST_INSTITUTION_CHILDREN": {
                 icon: "account_balance",
-                state: "app.manage_institution.invite_inst"
+                state: "process_request",
+                isDialog: true,
+                dialogProperties: {
+                     templateUrl: "requests/request_processing.html",
+                     controller: "RequestProcessingController",
+                     controllerAs: "requestCtrl",
+                     locals: {
+                         key: ""
+                     }
+                }
             },
             "REQUEST_INSTITUTION_PARENT": {
                 icon: "account_balance",
-                state: "app.manage_institution.invite_inst"
+                state: "process_request",
+                isDialog: true,
+                dialogProperties: {
+                     templateUrl: "requests/request_processing.html",
+                     controller: "RequestProcessingController",
+                     controllerAs: "requestCtrl",
+                     locals: {
+                         key: ""
+                     }
+                }
             }
         };
 

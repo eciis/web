@@ -222,14 +222,14 @@
         };
 
         inviteInstCtrl.acceptRequest = function acceptRequest(request, type_of_invite, event) {
-            var promise = MessageService.showConfirmationDialog(event, 'Aceitar requisição', isOvewritingParent('accept'));
+            var promise = MessageService.showConfirmationDialog(event, 'Aceitar Solicitação', isOvewritingParent('accept'));
             promise.then(function() {
                 var accept = type_of_invite === "REQUEST_INSTITUTION_PARENT" ?
                     RequestInvitationService.acceptInstParentRequest(request.key) : RequestInvitationService.acceptInstChildrenRequest(request.key);
                 accept.then(function success() {
                     addAcceptedInstitution(type_of_invite, request.institution_key);
                     request.status = 'accepted';
-                    MessageService.showToast('Requisição aceita com sucesso');
+                    MessageService.showToast('Solicitação aceita com sucesso');
                 });
             }, function() {
                 MessageService.showToast('Cancelado');
@@ -238,13 +238,13 @@
         };
 
         inviteInstCtrl.rejectRequest = function rejectRequest(request, type_of_invite, event) {
-            var promise = MessageService.showConfirmationDialog(event, 'Rejeitar requisição', isOvewritingParent('reject'));
+            var promise = MessageService.showConfirmationDialog(event, 'Rejeitar Solicitação', isOvewritingParent('reject'));
             promise.then(function() {
                 var reject = type_of_invite === "REQUEST_INSTITUTION_PARENT" ?
                     RequestInvitationService.rejectInstParentRequest(request.key) : RequestInvitationService.rejectInstChildrenRequest(request.key);
                 reject.then(function success() {
                     request.status = 'rejected';
-                    MessageService.showToast('Requisição rejeitada com sucesso');
+                    MessageService.showToast('Solicitação rejeitada com sucesso');
                 });
             }, function() {
                 MessageService.showToast('Cancelado');

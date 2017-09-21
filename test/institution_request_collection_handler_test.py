@@ -46,7 +46,7 @@ class InstitutionRequestCollectionHandlerTest(TestBaseHandler):
             "Expected status muste be equal to sent")
 
         self.assertEqual(
-            request['sender'],
+            request['sender'][0],
             'otheruser@test.com',
             "Expected sender email muste be equal to otheruser@test.com")
 
@@ -71,5 +71,5 @@ def initModels(cls):
     # Other user
     cls.other_user = User()
     cls.other_user.name = 'Other User'
-    cls.other_user.email = 'otheruser@test.com'
+    cls.other_user.email = ['otheruser@test.com']
     cls.other_user.put()

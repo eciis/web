@@ -109,12 +109,12 @@ def initModels(cls):
     # new User
     cls.user_admin = User()
     cls.user_admin.name = 'User Admin'
-    cls.user_admin.email = 'useradmin@test.com'
+    cls.user_admin.email = ['useradmin@test.com']
     cls.user_admin.put()
     # Other user
     cls.other_user = User()
     cls.other_user.name = 'Other User'
-    cls.other_user.email = 'otheruser@test.com'
+    cls.other_user.email = ['otheruser@test.com']
     cls.other_user.put()
     # new institution address
     cls.address = Address()

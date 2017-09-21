@@ -36,15 +36,11 @@
                 MessageService.showToast("Senhas incompatíveis");
                 return;
             }
-            AuthService.signupWithEmailAndPassword(newUser.email, newUser.password).then(function success(user) {
-                var pendingInvite = user.getPendingInvitation();
-                if (pendingInvite) {
-                    var inviteKey = pendingInvite.key;
-                    $state.go("new_invite", {key: inviteKey});
-                } else if (user.isInactive()) {
+            AuthService.signupWithEmailAndPassword(newUser.email, newUser.password).then(
+                function success() {
                     $state.go("user_inactive");
-                } 
-            });
+                }
+            );
         };
 
         (function main() {

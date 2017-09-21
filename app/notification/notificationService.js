@@ -17,8 +17,8 @@
             'INVITE': 'te enviou um novo convite',
             'INSTITUTION': 'removeu a conexão entre suas instituições',
             'REQUEST_USER': 'pediu para ser membro de sua instituição',
-            'REQUEST_INSTITUTION_CHILDREN': 'pediu para ser a instituição superior',
-            'REQUEST_INSTITUTION_PARENT': 'pediu para ser uma instituição filha',
+            'REQUEST_INSTITUTION_CHILDREN': 'pediu para ter a sua instituição como superior a dele',
+            'REQUEST_INSTITUTION_PARENT': 'pediu para ter a sua instituição como subordinada a dele',
             'REPLY_COMMENT': 'respondeu o seu comentário',
             'LIKE_COMMENT': 'curtiu seu comentário',
             'LIKE_POST': 'curtiu seu post'

@@ -89,7 +89,7 @@
             return deferred.promise;
         };
 
-        inviteInstCtrl.sendInviteToExistingInst = function sendInviteToExistingInst(invite, institution_requested_key) {
+        inviteInstCtrl.sendRequestToExistingInst = function sendRequestToExistingInst(invite, institution_requested_key) {
             invite.institution_requested_key = institution_requested_key;
             invite.sender_key = inviteInstCtrl.user.key;
             var deferred = $q.defer();
@@ -112,6 +112,13 @@
             return deferred.promise;
         };
 
+        /*
+        * For the institution that is sending the request, 'REQUEST_INSTITUTION_PARENT'
+        * means that it wants to have requested institution as a parent
+        * @param type_of_invite - can be REQUEST_INSTITUTION_PARENT or REQUEST_INSTITUTION_CHILDREN
+        * @param institution_requested_key - key of institution that receiving the request
+        * @return - promise
+        */
         function addInstitution(type_of_invite, institution_requested_key) {
             var promise = InstitutionService.getInstitution(institution_requested_key);
             promise.then(function(response) {
@@ -125,14 +132,21 @@
             return promise;
         }
 
-        function addAcceptedInstitution(type_of_invite, institution_requested_key) {
-            var promise = InstitutionService.getInstitution(institution_requested_key);
+        /*
+        * For the institution that is receiving the request, 'REQUEST_INSTITUTION_PARENT'
+        * means that it wants to have institution that sending the request as a children
+        * @param type_of_invite - can be REQUEST_INSTITUTION_PARENT or REQUEST_INSTITUTION_CHILDREN
+        * @param seding_inst_key - key of institution that sending the request
+        * @return - promise
+        */
+        function addAcceptedInstitution(type_of_invite, sending_inst_key) {
+            var promise = InstitutionService.getInstitution(sending_inst_key);
             promise.then(function(response) {
-               if (type_of_invite === REQUEST_CHILDREN) {
-                   inviteInstCtrl.institution.addParentInst(response.data);
-                   inviteInstCtrl.hasParent = true;
-               } else {
+               if (type_of_invite === REQUEST_PARENT) {
                     inviteInstCtrl.institution.addChildrenInst(response.data);
+               } else {
+                    inviteInstCtrl.institution.addParentInst(response.data);
+                    inviteInstCtrl.hasParent = true;
                }
             });
             return promise;
@@ -269,7 +283,7 @@
             if(type_of_invite === REQUEST_CHILDREN) {
                 message = 'Requisito para ser a instituição superior';
             } else {
-                message = 'Requisito para ser uma instituição filha';
+                message = 'Requisito para ser uma instituição subordinada';
             }
             return message;
         };

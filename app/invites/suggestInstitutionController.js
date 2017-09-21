@@ -60,7 +60,7 @@
 
         function sendInviteToExistingInst() {
             if (!(isLinked() || isSelf() || isPedingRequest() || isInvited())) {
-                inviteController.sendInviteToExistingInst(invite, suggestInstCtrl.chosen_institution).then(function() {
+                inviteController.sendRequestToExistingInst(invite, suggestInstCtrl.chosen_institution).then(function() {
                     suggestInstCtrl.cancel();
                 });
             }

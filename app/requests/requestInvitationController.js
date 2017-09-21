@@ -92,14 +92,8 @@
         };
 
         requestInvCtrl.getFullAddress = function getFullAddress(institution) {
-                var address = institution.address;
-                var fullAddress;
-                if (address){
-                    fullAddress  = address.street + ", " + address.number + ", " + address.neighbourhood + 
-                                 ", " + address.city + ", " + address.state + ", " + address.country;
-                }
-                return fullAddress;
-                
+                var instObject = new Institution(institution);
+                return instObject.getFullAddress();
         };
 
         function clearProperties(){

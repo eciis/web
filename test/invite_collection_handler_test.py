@@ -204,19 +204,19 @@ def initModels(cls):
     # new User
     cls.first_user = User()
     cls.first_user.name = 'first_user'
-    cls.first_user.email = 'first_user@gmail.com'
+    cls.first_user.email = ['first_user@gmail.com']
     cls.first_user.institutions = [cls.institution.key]
     cls.first_user.institutions_admin = [cls.institution.key]
     cls.first_user.put()
     # new User
     cls.second_user = User()
     cls.second_user.name = 'second_user'
-    cls.second_user.email = 'second_user@ccc.ufcg.edu.br'
+    cls.second_user.email = ['second_user@ccc.ufcg.edu.br']
     cls.second_user.put()
     # new User
     cls.third_user = User()
     cls.third_user.name = 'third_user'
-    cls.third_user.email = 'third_user@ccc.ufcg.edu.br'
+    cls.third_user.email = ['third_user@ccc.ufcg.edu.br']
     cls.third_user.put()
     # new Institution other_institution
     cls.other_institution = Institution()

@@ -37,10 +37,6 @@ class PostCommentHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': MAIANA_EMAIL})
     def test_post(self, verify_token):
         """Another user comment in Post of Mayza."""
-        # Pretend an authentication
-        self.os.environ['REMOTE_USER'] = self.maiana.email
-        self.os.environ['USER_EMAIL'] = self.maiana.email
-
         # Verify size of list
         self.assertEquals(len(self.mayza_post.comments), 0,
                           "Expected size of comment's list should be zero")
@@ -75,10 +71,6 @@ class PostCommentHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': MAYZA_EMAIL})
     def test_post_ownerpost(self, verify_token):
         """Owner user comment in Post."""
-        # Pretend an authentication
-        self.os.environ['REMOTE_USER'] = self.mayza.email
-        self.os.environ['USER_EMAIL'] = self.mayza.email
-
         # Verify size of list
         self.assertEquals(len(self.mayza_post.comments), 0,
                           "Expected size of comment's list should be zero")
@@ -97,10 +89,6 @@ class PostCommentHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': MAIANA_EMAIL})
     def test_delete(self, verify_token):
         """User can delete your comment in Post."""
-        # Pretend an authentication
-        self.os.environ['REMOTE_USER'] = self.maiana.email
-        self.os.environ['USER_EMAIL'] = self.maiana.email
-
         # Added comment
         self.response = self.testapp.post(self.URL_POST_COMMENT %
                                           self.mayza_post.key.urlsafe(),
@@ -151,10 +139,6 @@ class PostCommentHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': MAIANA_EMAIL})
     def test_delete_ownerpost(self, verify_token):
         """Owner user can delete comment from other user in Post."""
-        # Pretend an authentication
-        self.os.environ['REMOTE_USER'] = self.maiana.email
-        self.os.environ['USER_EMAIL'] = self.maiana.email
-
         # Added comment user Maiana
         self.response = self.testapp.post(self.URL_POST_COMMENT %
                                           self.mayza_post.key.urlsafe(),
@@ -164,10 +148,6 @@ class PostCommentHandlerTest(TestBaseHandler):
         self.mayza_post = self.mayza_post.key.get()
         self.assertEquals(len(self.mayza_post.comments), 1,
                           "Expected size of comment's list should be one")
-
-        # Pretend an authentication
-        self.os.environ['REMOTE_USER'] = self.mayza.email
-        self.os.environ['USER_EMAIL'] = self.mayza.email
 
         # Call the delete method
         self.testapp.delete(self.URL_DELETE_COMMENT %
@@ -199,7 +179,7 @@ def initModels(cls):
     cls.mayza = User()
     cls.mayza.name = 'Mayza Nunes'
     cls.mayza.cpf = '089.675.908-90'
-    cls.mayza.email = MAYZA_EMAIL
+    cls.mayza.email = [MAYZA_EMAIL]
     cls.mayza.institutions = []
     cls.mayza.follows = []
     cls.mayza.institutions_admin = []
@@ -210,7 +190,7 @@ def initModels(cls):
     cls.maiana = User()
     cls.maiana.name = 'Maiana Brito'
     cls.maiana.cpf = '089.675.908-91'
-    cls.maiana.email = MAIANA_EMAIL
+    cls.maiana.email = [MAIANA_EMAIL]
     cls.maiana.institutions = []
     cls.maiana.follows = []
     cls.maiana.institutions_admin = []

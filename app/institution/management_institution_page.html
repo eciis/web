@@ -7,13 +7,13 @@
       <div flex>
         <md-card layout="column" class="green-background">
           <center>
-            <a href ng-click="institutionCtrl.goToInstitution()">
+            <a href ng-click="institutionCtrl.goToInstitution(institutionCtrl.current_institution.key)">
               <img ng-src="{{ institutionCtrl.current_institution.photo_url }}" class="img-circle img-thumbnail" >
             </a>
           </center>
           <md-card-title>
             <md-card-title-text>
-              <a href class="md-title hyperlink" ng-click="institutionCtrl.goToInstitution()"><b>{{ institutionCtrl.current_institution.name }}</b></a>
+              <a href class="md-title hyperlink" ng-click="institutionCtrl.current_institution(institutionCtrl.current_institution.key)"><b>{{ institutionCtrl.current_institution.name }}</b></a>
             </md-card-title-text>
           </md-card-title>
           <md-card-content>
@@ -30,7 +30,7 @@
             <div layout="row">
               <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-900'}"
               ng-click="institutionCtrl.goToManageInstitutions()" >
-                <md-icon>account_balance</md-icon>Gerenciar Hierarquia
+                <md-icon>account_balance</md-icon>Convidar Instituições
               </md-button>
             </div>
             <div layout="row">

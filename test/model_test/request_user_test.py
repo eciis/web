@@ -102,7 +102,10 @@ class RequestUserTest(TestBase):
             'sender_key': self.other_user.key.urlsafe(),
             'is_request': True,
             'admin_key': self.admin_user.key.urlsafe(),
-            'institution_key': self.inst_test.key.urlsafe()
+            'institution_key': self.inst_test.key.urlsafe(),
+            'office': 'teacher',
+            'sender_name': 'other_user',
+            'institutional_email': 'otheruser@inst_test.com'
         }
 
         request = RequestUser.create(data)
@@ -127,7 +130,10 @@ class RequestUserTest(TestBase):
                 'photo_url': None
             },
             'type_of_invite': 'REQUEST_USER',
-            'institution_key': self.inst_test.key.urlsafe()
+            'institution_key': self.inst_test.key.urlsafe(),
+            'office': 'teacher',
+            'sender_name': 'other_user',
+            'institutional_email': 'otheruser@inst_test.com'
         }
 
         request_make = request.make()
@@ -169,7 +175,7 @@ def initModels(cls):
     # new User admin user
     cls.admin_user = User()
     cls.admin_user.name = 'Admin User'
-    cls.admin_user.email = 'adminuser@test.com'
+    cls.admin_user.email = ['adminuser@test.com']
     cls.admin_user.institutions = [cls.inst_test.key]
     cls.admin_user.institutions_admin = [cls.inst_test.key]
     cls.admin_user.put()
@@ -179,5 +185,5 @@ def initModels(cls):
     # new User inactive other user
     cls.other_user = User()
     cls.other_user.name = 'other user'
-    cls.other_user.email = 'otheruser@test.com'
+    cls.other_user.email = ['otheruser@test.com']
     cls.other_user.put()

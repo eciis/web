@@ -23,10 +23,6 @@
                 <div layout="row" layout-align="start center">
                   <span md-colors="{color: 'teal-900'}" class="md-title">{{ event.title }}</span>
                   <span flex md-truncate></span>
-                  <md-button class="md-icon-button" aria-label="compartilhar" title="Compartilhar este evento"
-                      ng-click="eventCtrl.share(event)">
-                    <md-icon>share</md-icon>
-                  </md-button>
                 </div>
                 <span class="md-subhead">por {{ event.institution_name }} | {{ event.author_name }}</span>
               </md-card-header-text>
@@ -43,6 +39,16 @@
                   {{ event.end_time | amUtc | amLocal | amCalendar:referenceTime:formats }}
                 </b>
               </p>
+              <div layout="row" layout-align="end center">
+                <md-button class="md-icon-button" aria-label="compartilhar" title="Excluir este evento"
+                  ng-if="eventCtrl.canDelete(event)" ng-click="eventCtrl.deleteEvent($event, event)">
+                  <md-icon>delete</md-icon>
+                </md-button>
+                <md-button class="md-icon-button" aria-label="compartilhar" title="Compartilhar este evento"
+                  ng-click="eventCtrl.share(event)">
+                  <md-icon>share</md-icon>
+                </md-button>
+              </div>
             </md-card-content>
           </md-card>
         </timeline-panel>

@@ -85,10 +85,9 @@ class InviteHandlerTest(TestBaseHandler):
 
     @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_patch_fail(self, verify_token):
-        """Test patch fail in InviteHandler."""
-        profile = '{"email": "otheruser@test.com", "office": "Developer"}'
+        """Test patch fail in InviteHandler because the profile has not office."""
+        profile = '{"email": "otheruser@test.com"}'
         json_patch = '[{"op": "add", "path": "/institution_profiles/-", "value": ' + profile + '}]'
-        self.testapp.patch('/api/invites/' + self.invite.key.urlsafe(), json_patch)
 
         with self.assertRaises(Exception) as ex:
             self.testapp.patch('/api/invites/' + self.invite.key.urlsafe(), json_patch)
@@ -106,12 +105,12 @@ def initModels(cls):
     # new User
     cls.user_admin = User()
     cls.user_admin.name = 'User Admin'
-    cls.user_admin.email = 'useradmin@test.com'
+    cls.user_admin.email = ['useradmin@test.com']
     cls.user_admin.put()
     # Other user
     cls.other_user = User()
     cls.other_user.name = 'Other User'
-    cls.other_user.email = 'otheruser@test.com'
+    cls.other_user.email = ['otheruser@test.com']
     cls.other_user.put()
     # isntitution address
     cls.address = Address()

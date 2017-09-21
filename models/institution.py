@@ -28,13 +28,15 @@ class Address(ndb.Model):
 
     country = ndb.StringProperty()
 
-    def get_full_address(self):
-        """Get the full address."""
-        full_address = "%s %s, %s, %s, %s, %s, %s" % (self.street, self.number,
-                                                      self.neighbourhood,
-                                                      self.city, self.state,
-                                                      self.cep, self.country)
-        return full_address
+    def __iter__(self):
+        """Make this object iterable."""
+        yield 'number', self.number
+        yield 'street', self.street
+        yield 'neighbourhood', self.neighbourhood
+        yield 'city', self.city
+        yield 'state', self.state
+        yield 'cep', self.cep
+        yield 'country', self.country
 
     @staticmethod
     def create(data):
@@ -308,7 +310,7 @@ class Institution(ndb.Model):
                     'key': invite_key.urlsafe()
                 }
             if(attribute == 'address'):
-                attr_value = self.address.get_full_address()
+                attr_value = dict(self.address)
 
             institution[attribute] = attr_value
         return institution

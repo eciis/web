@@ -211,10 +211,7 @@
 
         institutionCtrl.getFullAddress = function getFullAddress() {
             if(institutionCtrl.current_institution) {
-                var address = institutionCtrl.current_institution.address;
-                var fullAddress = address.street + ", " + address.number + ", " + address.neighbourhood + 
-                                 ", " + address.city + ", " + address.state + ", " + address.country;
-                return fullAddress;
+                return institutionCtrl.current_institution.getFullAddress();
             }
         };
 

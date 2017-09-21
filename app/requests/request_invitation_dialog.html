@@ -10,9 +10,10 @@
 		    </form>
 		</div>
 		<md-list class="md-dense" flex>
-		    <md-list-item class="md-3-line" ng-repeat="institution in requestInvCtrl.institutions" ng-click="requestInvCtrl.selectInstitution(institution)"
-		    ng-style="requestInvCtrl.showFullInformation(institution) ">
-			    <div ng-if="!requestInvCtrl.showFullInformation(institution)" class="md-list-item-text" layout-align="center center" layout="column" style='text-align: center'>
+		    <md-list-item ng-repeat="institution in requestInvCtrl.institutions" ng-click="requestInvCtrl.selectInstitution(institution)"
+		    	ng-class="requestInvCtrl.showFullInformation(institution)? 'md-3-line': ''">
+			    <div ng-if="!requestInvCtrl.showFullInformation(institution)" class="md-list-item-text" layout-align="center center" 
+			    	layout="column" style='text-align: center'>
 		            {{ institution.name }}
 			    </div>
 			    <div ng-if="requestInvCtrl.showFullInformation(institution)">

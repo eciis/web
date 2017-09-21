@@ -36,6 +36,11 @@
             return promise;
         };
 
+        requestController.getFullAddress = function getFullAddress() {
+            var instObj = new Institution(requestController.institution);
+            return instObj.getFullAddress();
+        }
+
         function deleteRequest() {
             var promise = RequestInvitationService.rejectRequest(requestController.requestKey);
             promise.then(function success() {

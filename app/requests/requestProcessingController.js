@@ -8,7 +8,6 @@
         var requestController = this;
 
         requestController.institution = null;
-        requestController.address = "";
         requestController.requestKey = key;
 
         var REQUEST_PARENT = "REQUEST_INSTITUTION_PARENT";
@@ -57,6 +56,7 @@
             return promise;
         };
 
+
         function isOvewritingParent() {
             var message;
             if (requestController.institution.parent_institution) {
@@ -66,6 +66,13 @@
             }
             return message;
         }
+
+        requestController.getFullAddress = function getFullAddress() {
+            if(requestController.institution) {
+                var instObj = new Institution(requestController.institution);
+                return instObj.getFullAddress();
+            }
+        };
 
         function deleteRequest() {
             if (requestController.request.type_of_invite === REQUEST_PARENT) {
@@ -83,8 +90,7 @@
 
         function loadInstitution(institutionKey) {
             InstitutionService.getInstitution(institutionKey).then(function success(response) {
-                requestController.institution = new Institution(response.data);
-                requestController.address = requestController.institution.getFullAddress();
+                requestController.institution = response.data;
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });

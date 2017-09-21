@@ -122,10 +122,7 @@ class RequestInstitutionParentTest(TestBase):
                 'description': None,
                 'name': 'inst test',
                 'key': self.inst_test.key.urlsafe(),
-                'address': 'street 01, neighbourhood, ' +
-                'city, state, 000, country',
-                'email': None,
-                'photo_url': None
+                'address': dict(self.address)
             },
         }
 
@@ -172,14 +169,9 @@ class RequestInstitutionParentTest(TestBase):
             'type_of_invite': 'REQUEST_INSTITUTION_CHILDREN',
             'institution_key': self.inst_test.key.urlsafe(),
             'institution': {
-                'phone_number': None,
-                'description': None,
                 'name': 'inst test',
                 'key': self.inst_test.key.urlsafe(),
-                'address': 'street 01, neighbourhood, ' +
-                'city, state, 000, country',
-                'email': None,
-                'photo_url': None
+                'address': dict(self.address)
             },
         }
 

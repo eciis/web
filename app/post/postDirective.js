@@ -288,18 +288,34 @@
             postCtrl.pdfFiles.splice(index, 1);
         };
 
+        postCtrl.hideImage = function() {
+           postCtrl.photoUrl = "";
+           postCtrl.photoBase64Data = null;
+           postCtrl.deletePreviousImage = true;
+        };
+
+        postCtrl.getInstPhotoUrl = function getInstPhotoUrl() {
+            var photoUrl = postCtrl.user.current_institution.photo_url;
+            if($scope.isEditing) {
+                photoUrl = postCtrl.post.institution_image;
+            }
+            return photoUrl;
+        };
+
+        postCtrl.getInstName = function getInstName() {            
+            var instName = postCtrl.user.current_institution.name;
+            if($scope.isEditing) {
+                instName = postCtrl.post.institution_name;
+            }
+            return instName;
+        };
+
         (function main() {
             if($scope.isEditing) {
                 postCtrl.createEditedPost($scope.originalPost);
                 observer = jsonpatch.observe(postCtrl.post);
             }
         })();
-
-        postCtrl.hideImage = function() {
-           postCtrl.photoUrl = "";
-           postCtrl.photoBase64Data = null;
-           postCtrl.deletePreviousImage = true;
-        };
     });
 
     app.directive("savePost", function() {

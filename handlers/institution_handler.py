@@ -8,7 +8,6 @@ from google.appengine.ext import ndb
 
 from utils import Utils
 from models.invite import Invite
-from models.user import InstitutionProfile
 from utils import login_required
 from utils import json_response
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
@@ -138,19 +137,18 @@ class InstitutionHandler(BaseHandler):
     def post(self, user, institution_key, inviteKey):
         """Handler POST Requests."""
         data = json.loads(self.request.body)
-        print data.get('sender_name')
 
         institution = ndb.Key(urlsafe=institution_key).get()
 
         institution.createInstitutionWithStub(user, inviteKey, institution)
 
         user.name = data.get('sender_name')
-        user_profile = InstitutionProfile()
-        user_profile.office = "Administrador"
-        user_profile.institution_name = institution.name
-        user_profile.institution_photo_url = institution.photo_url
-        user.institution_profiles.append(user_profile)
-
+        data_profile = {
+            'office': 'Administrador',
+            'institution_name': institution.name,
+            'institution_photo_url': institution.photo_url
+        }
+        user.create_and_add_profile(data_profile)
         user.put()
 
         search_module.createDocument(institution)

@@ -37,7 +37,7 @@
                     institution_name: newInviteCtrl.institution.name,
                     institution_photo_url: newInviteCtrl.institution.photo_url};
             newInviteCtrl.user.addProfile(profile);
-            newInviteCtrl.user.name = newInviteCtrl.user_name ? newInviteCtrl.user_name : newInviteCtrl.user.name;
+            newInviteCtrl.user.name = getCurrentName();
             AuthService.save();
             var patch = jsonpatch.generate(observer);
             return patch;
@@ -65,7 +65,7 @@
 
         newInviteCtrl.updateStubInstitution =function updateStubInstitution() {
             var dataProfile = {
-                sender_name : newInviteCtrl.user_name ? newInviteCtrl.user_name : newInviteCtrl.user.name
+                sender_name : getCurrentName()
             };
             var promise = InstitutionService.save(dataProfile, institutionKey, newInviteCtrl.inviteKey);
             promise.then(
@@ -77,7 +77,7 @@
                     newInviteCtrl.user.follow(institutionSaved);
                     newInviteCtrl.user.current_institution = institutionSaved;
                     newInviteCtrl.user.state = 'active';
-                    newInviteCtrl.user.name = newInviteCtrl.user_name ? newInviteCtrl.user_name : newInviteCtrl.user.name;
+                    newInviteCtrl.user.name = getCurrentName();
                     AuthService.save();
                     $state.go('app.manage_institution.edit_info', {institutionKey: institutionSaved.key});
                 },
@@ -176,6 +176,10 @@
                 return false;
             }
             return true;
+        }
+
+        function getCurrentName() {
+            return newInviteCtrl.user_name ? newInviteCtrl.user_name : newInviteCtrl.user.name;
         }
 
         loadInvite();

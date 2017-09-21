@@ -78,6 +78,12 @@ class InstitutionHandlerTest(TestBaseHandler):
         self.assertEqual(self.userUpdated.state, "active",
                          "The state of Raoni expected was active")
 
+        self.assertEqual(self.userUpdated.institution_profiles[0].office, "Administrador",
+                         "The office of Raoni institution profile expected was Administrador")
+
+        self.assertEqual(self.userUpdated.name, "user name updated",
+                         "The name of Raoni  expected was user name updated")
+
         self.inviteUpdate = self.invite.key.get()
 
         self.assertEqual(self.inviteUpdate.status, "accepted",

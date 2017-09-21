@@ -38,7 +38,7 @@
             }
             AuthService.signupWithEmailAndPassword(newUser.email, newUser.password).then(
                 function success() {
-                    $state.go("user_inactive");
+                    $state.go("app.home");
                 }
             );
         };

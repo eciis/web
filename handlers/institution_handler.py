@@ -138,12 +138,11 @@ class InstitutionHandler(BaseHandler):
     def post(self, user, institution_key, inviteKey):
         """Handler POST Requests."""
         data = json.loads(self.request.body)
+        print data.get('sender_name')
 
         institution = ndb.Key(urlsafe=institution_key).get()
 
         institution.createInstitutionWithStub(user, inviteKey, institution)
-        print "------------------------------------------------"
-        print data
 
         user.name = data.get('sender_name')
         user_profile = InstitutionProfile()
@@ -151,8 +150,6 @@ class InstitutionHandler(BaseHandler):
         user_profile.institution_name = institution.name
         user_profile.institution_photo_url = institution.photo_url
         user.institution_profiles.append(user_profile)
-
-        print user
 
         user.put()
 

@@ -57,8 +57,10 @@ class InstitutionHandlerTest(TestBaseHandler):
     def test_post(self, verify_token):
         """Test the post_handler's post method."""
         # Call the patch method and assert that  it raises an exception
-        self.testapp.post("/api/institutions/%s/invites/%s"
-                          % (self.stub.key.urlsafe(), self.invite.key.urlsafe()))
+        data = {'sender_name': 'user name updated'}
+
+        self.testapp.post_json("/api/institutions/%s/invites/%s"
+                          % (self.stub.key.urlsafe(), self.invite.key.urlsafe()), data)
 
         self.inst_create = self.stub.key.get()
         self.assertEqual(self.inst_create.admin, self.raoni.key,

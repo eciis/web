@@ -37,6 +37,7 @@
                     institution_name: newInviteCtrl.institution.name,
                     institution_photo_url: newInviteCtrl.institution.photo_url};
             newInviteCtrl.user.addProfile(profile);
+            newInviteCtrl.user.name = newInviteCtrl.user_name ? newInviteCtrl.user_name : newInviteCtrl.user.name;
             AuthService.save();
             var patch = jsonpatch.generate(observer);
             return patch;
@@ -76,6 +77,7 @@
                     newInviteCtrl.user.follow(institutionSaved);
                     newInviteCtrl.user.current_institution = institutionSaved;
                     newInviteCtrl.user.state = 'active';
+                    newInviteCtrl.user.name = newInviteCtrl.user_name ? newInviteCtrl.user_name : newInviteCtrl.user.name;
                     AuthService.save();
                     $state.go('app.manage_institution.edit_info', {institutionKey: institutionSaved.key});
                 },
@@ -166,9 +168,6 @@
         function isValidProfile() {
             if(!newInviteCtrl.office) {
                 MessageService.showToast("Cargo institucional deve ser preenchido.");
-                return false;
-            } else if(newInviteCtrl.checkUserName()) {
-                MessageService.showToast("O nome deve ser preenchido.");
                 return false;
             }
             return true;

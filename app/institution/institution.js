@@ -47,3 +47,11 @@ Institution.prototype.addParentInst = function addParentInst(institution){
 Institution.prototype.addChildrenInst = function addChildrenInst(institution){
     this.children_institutions.push(institution);
 };
+
+Institution.prototype.getFullAddress = function getFullAddress() {
+    if(this.address) {
+        var fullAddress = this.address.street + ", " + this.address.number + ", " + this.address.neighbourhood + 
+                         ", " + this.address.city + ", " + this.address.state + ", " + this.address.country;
+        return fullAddress;
+    }
+}

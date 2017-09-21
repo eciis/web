@@ -47,7 +47,7 @@ def initModels(cls):
     # new User Raoni
     cls.user = User()
     cls.user.name = 'Raoni Smaneoto'
-    cls.user.email = 'raoni.smaneoto@ccc.ufcg.edu.br'
+    cls.user.email = ['raoni.smaneoto@ccc.ufcg.edu.br']
     cls.user.institutions = []
     cls.user.put()
     # new Institution CERTBIO

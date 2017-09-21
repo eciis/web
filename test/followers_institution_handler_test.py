@@ -25,9 +25,6 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
     def test_post(self, verify_token):
         """Test the institution_follower_handler post method."""
-        # Pretend an authentication
-        self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
-        self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
         # Verified objects, are empty
         self.assertEquals(len(self.certbio.followers), 0,
                           "The number of followers expected was 0")
@@ -65,10 +62,6 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
     def test_delete(self, verify_token):
         """Test the institution_follower_handler delete method."""
-        # Pretend an authentication
-        self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
-        self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
-
         # Verified objects
         self.assertEquals(len(self.certbio.followers), 0,
                           "The number of followers expected was 0")
@@ -106,10 +99,6 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': 'maiana.brito@ccc.ufcg.edu.br'})
     def teste_delete_usermember(self, verify_token):
         """Test that user member try unfollow the institution."""
-        # Pretend an authentication
-        self.os.environ['REMOTE_USER'] = 'maiana.brito@ccc.ufcg.edu.br'
-        self.os.environ['USER_EMAIL'] = 'maiana.brito@ccc.ufcg.edu.br'
-
         # Verified objects
         self.assertEquals(len(self.certbio.followers), 0,
                           "The number of followers expected was 0")
@@ -155,7 +144,7 @@ def initModels(cls):
     cls.mayza = User()
     cls.mayza.name = 'Mayza Nunes'
     cls.mayza.cpf = '089.675.908-90'
-    cls.mayza.email = 'mayzabeel@gmail.com'
+    cls.mayza.email = ['mayzabeel@gmail.com']
     cls.mayza.institutions = []
     cls.mayza.follows = []
     cls.mayza.institutions_admin = []
@@ -166,7 +155,7 @@ def initModels(cls):
     cls.maiana = User()
     cls.maiana.name = 'Maiana Brito'
     cls.maiana.cpf = '089.675.908-91'
-    cls.maiana.email = 'maiana.brito@ccc.ufcg.edu.br'
+    cls.maiana.email = ['maiana.brito@ccc.ufcg.edu.br']
     cls.maiana.institutions = []
     cls.maiana.follows = []
     cls.maiana.institutions_admin = []

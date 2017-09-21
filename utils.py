@@ -9,6 +9,7 @@ from google.appengine.ext import ndb
 from google.appengine.ext.ndb import Key
 
 from models.user import User
+from models.institution import Institution
 
 from oauth2client import client
 from oauth2client.crypt import AppIdentityError
@@ -178,10 +179,9 @@ def login_required(method):
         user = User.get_by_email(user_email)
 
         if user is None:
-            user = {
-                "name": user_name,
-                "email": user_email
-            }
+            user = User()
+            user.name = user_name
+            user.email = [user_email]
 
         method(self, user, *args)
     return login
@@ -269,3 +269,26 @@ def is_authorized(method):
 
         method(self, user, url_string, *args)
     return check_authorization
+
+
+def getSuperUsers():
+    """Get users of institutions trusted that has permission to analize resquests for new institutions."""
+    userswithpermission = []
+    institutionsTrusted = Institution.query(Institution.trusted == True)
+    for institution in institutionsTrusted:
+        for userKey in institution.members:
+            user = userKey.get()
+            if user.has_permission('analyze_request_inst', institution.key):
+                userswithpermission.push(user)
+    return userswithpermission
+
+
+def has_analyze_request_permission(method):
+    """Check user permission."""
+    def check_permission(self, user, *args):
+        Utils._assert(
+            not ('analyze_request_inst' in user.permissions),
+            'User is not allowed to do this operation',
+            NotAuthorizedException)
+        return method(self, user, *args)
+    return check_permission

@@ -6,8 +6,6 @@ from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from models.event import Event
 from utils import Utils
 
-import json
-
 import datetime
 
 
@@ -141,6 +139,9 @@ class Post(ndb.Model):
     # When post is shared post
     shared_post = ndb.KeyProperty(kind="Post")
 
+    # Video url
+    video_url = ndb.StringProperty()
+
     # When post is shared event
     shared_event = ndb.KeyProperty(kind="Event")
 
@@ -163,6 +164,7 @@ class Post(ndb.Model):
         post.last_modified_by = author_key
         post.author = author_key
         post.institution = institution_key
+        post.video_url = data.get('video_url')
 
         return post
 
@@ -193,6 +195,7 @@ class Post(ndb.Model):
             'likes': getLikesUri(post, host),
             'number_of_likes': post.get_number_of_likes(),
             'photo_url': post.photo_url,
+            'video_url': post.video_url,
             'uploaded_images': post.uploaded_images,
             'state': post.state,
             'comments': getCommentsUri(post, host),

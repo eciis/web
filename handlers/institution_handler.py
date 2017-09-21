@@ -39,7 +39,7 @@ def isUserInvited(method):
     def check_authorization(self, user, institution_key, inviteKey):
         invite = ndb.Key(urlsafe=inviteKey).get()
 
-        emailIsNotInvited = invite.invitee != user.email
+        emailIsNotInvited = invite.invitee not in user.email
         institutionIsNotInvited = ndb.Key(
             urlsafe=institution_key) != invite.stub_institution_key
 

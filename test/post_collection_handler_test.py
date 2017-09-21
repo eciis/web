@@ -150,7 +150,7 @@ def initModels(cls):
     cls.user = User()
     cls.user.name = 'Mayza Nunes'
     cls.user.cpf = '089.675.908-90'
-    cls.user.email = 'mayzabeel@gmail.com'
+    cls.user.email = ['mayzabeel@gmail.com']
     cls.user.photo_url = 'urlphoto'
     cls.user.institutions_admin = []
     cls.user.posts = []

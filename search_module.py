@@ -19,7 +19,7 @@ def createDocument(institution):
     """
     admin = institution.email
     if institution.admin:
-        admin = institution.admin.get().email
+        admin = institution.admin.get().email[0]
 
     content = {
         'id': institution.key.urlsafe(),

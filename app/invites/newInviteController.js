@@ -118,6 +118,11 @@
             return _.isEmpty(newInviteCtrl.user.name);
         };
 
+        newInviteCtrl.getFullAddress = function getFullAddress() {
+            var instObj = new Institution(newInviteCtrl.institution);
+            return instObj.getFullAddress();
+        };
+
         function deleteInvite() {
             var promise = InviteService.deleteInvite(newInviteCtrl.inviteKey);
             promise.then(function success() {

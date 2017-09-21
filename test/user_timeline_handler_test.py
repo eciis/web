@@ -90,7 +90,7 @@ def initModels(cls):
     # new User user
     cls.user = User()
     cls.user.name = 'user'
-    cls.user.email = 'user@gmail.com'
+    cls.user.email = ['user@gmail.com']
     cls.user.put()
 
     # new Institution

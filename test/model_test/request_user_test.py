@@ -120,14 +120,9 @@ class RequestUserTest(TestBase):
             'admin_name': self.admin_user.name,
             'key': request.key.urlsafe(),
             'institution': {
-                'phone_number': None,
-                'description': None,
                 'name': 'inst test',
                 'key': self.inst_test.key.urlsafe(),
-                'address': 'street 01, neighbourhood, ' +
-                'city, state, 000, country',
-                'email': None,
-                'photo_url': None
+                'address': dict(self.address)
             },
             'type_of_invite': 'REQUEST_USER',
             'institution_key': self.inst_test.key.urlsafe(),
@@ -175,7 +170,7 @@ def initModels(cls):
     # new User admin user
     cls.admin_user = User()
     cls.admin_user.name = 'Admin User'
-    cls.admin_user.email = 'adminuser@test.com'
+    cls.admin_user.email = ['adminuser@test.com']
     cls.admin_user.institutions = [cls.inst_test.key]
     cls.admin_user.institutions_admin = [cls.inst_test.key]
     cls.admin_user.put()
@@ -185,5 +180,5 @@ def initModels(cls):
     # new User inactive other user
     cls.other_user = User()
     cls.other_user.name = 'other user'
-    cls.other_user.email = 'otheruser@test.com'
+    cls.other_user.email = ['otheruser@test.com']
     cls.other_user.put()

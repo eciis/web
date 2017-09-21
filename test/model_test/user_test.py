@@ -81,7 +81,7 @@ def initModels(cls):
     cls.user = User()
     cls.user.name = 'User'
     cls.user.cpf = '089.675.908-90'
-    cls.user.email = 'user@gmail.com'
+    cls.user.email = ['user@gmail.com']
     cls.user.institutions = []
     cls.user.follows = []
     cls.user.institutions_admin = []

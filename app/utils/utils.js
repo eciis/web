@@ -1,7 +1,6 @@
 "use strict";
 
 var utils = {
-
     deepClone : function deepClone(initalObj, finalObj) {
         var obj = finalObj || {};
         for (var i in initalObj) {

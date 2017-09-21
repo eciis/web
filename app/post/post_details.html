@@ -2,7 +2,7 @@
   <!-- HEADER -->
   <md-card-header>
     <md-card-avatar>
-      <a href ng-click="postDetailsCtrl.goToInstitution()">
+      <a href ng-click="postDetailsCtrl.goToInstitution(postDetailsCtrl.post.institution_key)">
         <img ng-src="{{ postDetailsCtrl.post.institution_image }}" role="button" class="md-user-avatar"/>
       </a>
     </md-card-avatar>

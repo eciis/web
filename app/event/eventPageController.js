@@ -52,6 +52,10 @@
             }
         };
 
+        eventCtrl.showButtonDelete = function(){
+            return eventCtrl.canDelete() && !eventCtrl.isDeleted();
+        };
+
         eventCtrl.canDelete = function canDelete() {
             if(eventCtrl.event){
                 return eventCtrl.isEventAuthor() || isInstitutionAdmin();

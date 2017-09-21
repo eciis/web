@@ -8,7 +8,7 @@
         var requestController = this;
 
         requestController.institution = null;
-
+        requestController.address = "";
         requestController.requestKey = key;
 
         var REQUEST_PARENT = "REQUEST_INSTITUTION_PARENT";
@@ -19,7 +19,12 @@
         requestController.acceptRequest = function acceptRequest(event) {
             var promise = MessageService.showConfirmationDialog(event, 'Aceitar solicitação', isOvewritingParent());
             promise.then(function() {
-                resolveRequest();
+                resolveRequest().then(function success() {
+                    MessageService.showToast("Solicitação aceita!");
+                    hideDialog();
+                }, function error(response) {
+                    MessageService.showToast(response.data.msg);
+                });
             }, function() {
                 MessageService.showToast('Cancelado');
             });
@@ -27,28 +32,25 @@
         };
 
         function resolveRequest() {
-            var promise;
             if (requestController.request.type_of_invite === REQUEST_PARENT) {
-                promise = RequestInvitationService.acceptInstParentRequest(requestController.request.key);
+                return RequestInvitationService.acceptInstParentRequest(requestController.request.key);
             } else if (requestController.request.type_of_invite === REQUEST_CHILDREN) {
-                RequestInvitationService.acceptInstChildrenRequest(requestController.request.key);
+                return RequestInvitationService.acceptInstChildrenRequest(requestController.request.key);
             } else {
-                promise = RequestInvitationService.acceptRequest(requestController.request.key);
+                return RequestInvitationService.acceptRequest(requestController.request.key);
             }
-            promise.then(function success() {
-                MessageService.showToast("Solicitação aceita!");
-                hideDialog();
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
-            });
-            return promise;
         }
 
         requestController.rejectRequest = function rejectInvite(event){
             var promise = RequestInvitationService.showRejectDialog(event);
 
             promise.then(function() {
-                deleteRequest();
+                deleteRequest().then(function success() {
+                    MessageService.showToast("Solicitação rejeitada!");
+                    hideDialog();
+                }, function error(response) {
+                    MessageService.showToast(response.data.msg);
+                });
             }, function() {
                 MessageService.showToast('Cancelado');
             });
@@ -66,21 +68,13 @@
         }
 
         function deleteRequest() {
-            var promise;
             if (requestController.request.type_of_invite === REQUEST_PARENT) {
-                promise = RequestInvitationService.rejectInstParentRequest(requestController.request.key);
+                return RequestInvitationService.rejectInstParentRequest(requestController.request.key);
             } else if (requestController.request.type_of_invite === REQUEST_CHILDREN) {
-                promise = RequestInvitationService.rejectInstChildrenRequest(requestController.request.key);
+                return RequestInvitationService.rejectInstChildrenRequest(requestController.request.key);
             } else {
-                promise = RequestInvitationService.rejectRequest(requestController.requestKey);
+                return RequestInvitationService.rejectRequest(requestController.requestKey);
             }
-            promise.then(function success() {
-                MessageService.showToast("Solicitação rejeitada!");
-                hideDialog();
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
-            });
-            return promise;
         }
 
         function hideDialog() {
@@ -89,7 +83,8 @@
 
         function loadInstitution(institutionKey) {
             InstitutionService.getInstitution(institutionKey).then(function success(response) {
-                requestController.institution = response.data;
+                requestController.institution = new Institution(response.data);
+                requestController.address = requestController.institution.getFullAddress();
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
@@ -98,9 +93,9 @@
         function loadRequest(){
             RequestInvitationService.getRequest(requestController.requestKey).then(function success(response) {
                 requestController.request = new Invite(response.data);
-                if (requestController.request.status === 'sent' && isInstRequest(requestController.request)) {
+                if (requestController.request.status === 'sent' && requestController.isInstRequest()) {
                     loadInstitution(requestController.request.institution_requested_key);
-                } else if (requestController.request.status === 'sent' && !isInstRequest(requestController.request)) {
+                } else if (requestController.request.status === 'sent' && !requestController.isInstRequest(requestController.request)) {
                     loadInstitution(requestController.request.institution_key);
                 } else {
                     hideDialog();
@@ -113,20 +108,33 @@
 
         requestController.showMessage = function() {
             var message;
-            if(requestController.request.type_of_invite === REQUEST_CHILDREN) {
-                message = requestController.request.institution.name + ' solicitou ser a instituição superior de:';
-            } else if(requestController.request.type_of_invite === REQUEST_PARENT) {
-                message = requestController.request.institution.name + ' solicitou ser uma instituição subordinada de:';
+            if(requestController.request && requestController.request.type_of_invite === REQUEST_CHILDREN) {
+                message = ' solicitou ser a instituição superior da seguinte instituição que você administra:';
+            } else if(requestController.request && requestController.request.type_of_invite === REQUEST_PARENT) {
+                message = ' solicitou ser uma instituição subordinada da seguinte instituição que você administra:';
             } else {
-                message = requestController.request.sender + '  solicitou ser membro de:';
+                message = '  solicitou ser membro de:';
             }
             return message;
         };
 
-        function isInstRequest(request) {
-            var isParentRequest = request.type_of_invite === REQUEST_PARENT;
-            var isChildrenRequest = request.type_of_invite === REQUEST_CHILDREN;
-            return isParentRequest || isChildrenRequest;
+        requestController.isInstRequest = function() {
+            if(requestController.request) {
+                var isParentRequest = requestController.request.type_of_invite === REQUEST_PARENT;
+                var isChildrenRequest = requestController.request.type_of_invite === REQUEST_CHILDREN;
+                return isParentRequest || isChildrenRequest;
+            }
+            return false;
+        };
+
+        requestController.goToInstitution = function goToInstitution(institutionKey) {
+            window.open(makeUrl(institutionKey), '_blank');
+        };
+
+        function makeUrl(institutionKey){
+            var currentUrl = window.location.href;
+            currentUrl = currentUrl.split('#');
+            return currentUrl[0] + $state.href('app.institution', {institutionKey: institutionKey});
         }
 
         (function main () {

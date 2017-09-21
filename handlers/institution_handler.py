@@ -136,9 +136,20 @@ class InstitutionHandler(BaseHandler):
     @isUserInvited
     def post(self, user, institution_key, inviteKey):
         """Handler POST Requests."""
+        data = json.loads(self.request.body)
+
         institution = ndb.Key(urlsafe=institution_key).get()
 
         institution.createInstitutionWithStub(user, inviteKey, institution)
+
+        user.name = data.get('sender_name')
+        data_profile = {
+            'office': 'Administrador',
+            'institution_name': institution.name,
+            'institution_photo_url': institution.photo_url
+        }
+        user.create_and_add_profile(data_profile)
+        user.put()
 
         search_module.createDocument(institution)
         institution_json = Utils.toJson(institution)

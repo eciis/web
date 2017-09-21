@@ -137,17 +137,22 @@ class InstitutionHandler(BaseHandler):
     @isUserInvited
     def post(self, user, institution_key, inviteKey):
         """Handler POST Requests."""
+        data = json.loads(self.request.body)
+
         institution = ndb.Key(urlsafe=institution_key).get()
 
         institution.createInstitutionWithStub(user, inviteKey, institution)
+        print "------------------------------------------------"
+        print data
 
-        """FIXME: Resolved for active users,
-         but if the user is new,the name of the user must be send."""
+        user.name = data.get('sender_name')
         user_profile = InstitutionProfile()
         user_profile.office = "Administrador"
         user_profile.institution_name = institution.name
         user_profile.institution_photo_url = institution.photo_url
         user.institution_profiles.append(user_profile)
+
+        print user
 
         user.put()
 

@@ -63,7 +63,10 @@
         };
 
         newInviteCtrl.updateStubInstitution =function updateStubInstitution() {
-            var promise = InstitutionService.save(institutionKey, newInviteCtrl.inviteKey);
+            var dataProfile = {
+                sender_name : newInviteCtrl.user_name ? newInviteCtrl.user_name : newInviteCtrl.user.name
+            };
+            var promise = InstitutionService.save(dataProfile, institutionKey, newInviteCtrl.inviteKey);
             promise.then(
                 function success(institutionSaved){
                     MessageService.showToast('Cadastro de instituição realizado com sucesso');

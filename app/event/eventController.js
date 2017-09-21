@@ -9,9 +9,7 @@
         eventCtrl.events = [];
 
         eventCtrl.user = AuthService.getCurrentUser();
-
-        var URL_PATTERN = /(((www.)|(http(s)?:\/\/))[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
-        var REPLACE_URL = "<a href=\'$1\' target='_blank'>$1</a>";
+        
         var LIMIT_CHARACTERS = 100;
 
         function loadEvents() {
@@ -65,8 +63,7 @@
 
         eventCtrl.recognizeUrl =  function recognizeUrl(event) {
             if(event.text){
-                var urlsInText = event.text.match(URL_PATTERN);
-                var text = addHttpsToUrl(event.text, urlsInText);
+                var text = utils.recognizeUrl(event.text);
                 text = adjustText(text, event);
                 return text;
             }
@@ -74,7 +71,7 @@
 
         eventCtrl.isLongText = function isLongText(event){
             var numberOfChar = event.text.length;
-            return numberOfChar >= LIMIT_CHARACTERS && !event.allDescription;
+            return numberOfChar >= LIMIT_CHARACTERS;
         };
 
         eventCtrl.canDelete = function canDelete(event) {
@@ -82,7 +79,7 @@
         };
 
         eventCtrl.isEventAuthor = function isEventAuthor(event) {
-            return getKeyFromUrl(event.author_key) === eventCtrl.user.key;
+            return utils.getKeyFromUrl(event.author_key) === eventCtrl.user.key;
         };
 
         eventCtrl.goToEvent = function goToEvent(event) {
@@ -90,36 +87,15 @@
         };
 
         function isInstitutionAdmin(event) {
-            return _.includes(_.map(eventCtrl.user.institutions_admin, getKeyFromUrl),
-                getKeyFromUrl(event.institution_key));
+            return _.includes(_.map(eventCtrl.user.institutions_admin, utils.getKeyFromUrl),
+                utils.getKeyFromUrl(event.institution_key));
         }
 
         function adjustText(text, event){
             if(eventCtrl.isLongText(event)){
                 text = text.substring(0, LIMIT_CHARACTERS) + "...";
             }
-            return text.replace(URL_PATTERN,REPLACE_URL);
-        }
-
-        function addHttpsToUrl(text, urls) {
-            if(urls) {
-                var http = "http://";
-                for (var i = 0; i < urls.length; i++) {
-                    if(urls[i].slice(0, 4) !== "http") {
-                        text = text.replace(urls[i], http + urls[i]);
-                    }
-                }
-            }
             return text;
-        }
-
-        function getKeyFromUrl(url) {
-            var key = url;
-            if(url.indexOf("/api/key/") != -1) {
-                var splitedUrl = url.split("/api/key/");
-                key = splitedUrl[1];
-            }
-            return key;
         }
 
         (function main() {

@@ -426,6 +426,7 @@ class ResetHandler(BaseHandler):
             eciis.follow(user.key)
 
         eciis.parent_institution = splab.key
+        eciis.trusted = True
         eciis.put()
 
         splab.children_institutions = [eciis.key]
@@ -435,6 +436,7 @@ class ResetHandler(BaseHandler):
             {"msg": "database initialized with a few institutions"})
 
         admin.institutions_admin = [certbio.key, eciis.key, splab.key]
+        admin.add_permission("analyze_request_inst", eciis.key.urlsafe())
         admin.put()
 
         # POST of Mayza To Certbio Institution

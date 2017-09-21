@@ -83,8 +83,8 @@ class Institution(ndb.Model):
 
     phone_number = ndb.StringProperty()
 
-    # Bollean that represents if the institution is empowered or not.
-    empowered = ndb.BooleanProperty(indexed=False, default=False)
+    # Bollean that represents if the institution is Trusted or not.
+    trusted = ndb.BooleanProperty(default=False)
 
     # Name of the leader
     leader = ndb.StringProperty()

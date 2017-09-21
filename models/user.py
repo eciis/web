@@ -29,6 +29,19 @@ class InstitutionProfile(ndb.Model):
                 return False
         return True
 
+    @staticmethod
+    def create(data):
+        """Create an institution profile model instance."""
+        profile = InstitutionProfile()
+        profile.office = data.get('office')
+        profile.email = data.get('email')
+        profile.phone = data.get('phone')
+        profile.institution_name = data.get('institution_name')
+        profile.institution_photo_url = data.get('institution_photo_url')
+        profile.institution_key = data.get('institution_key')
+
+        return profile
+
 
 class User(ndb.Model):
     """Model of User."""
@@ -36,7 +49,7 @@ class User(ndb.Model):
     name = ndb.StringProperty(required=True)
     cpf = ndb.StringProperty()
     photo_url = ndb.StringProperty(indexed=False)
-    email = ndb.StringProperty()
+    email = ndb.StringProperty(repeated=True)
 
     # The id of the institutions to which the user belongs
     # minimum = 1
@@ -116,6 +129,13 @@ class User(ndb.Model):
             if profile.institution_key == institution:
                 self.institution_profiles.remove(profile)
                 break
+
+    def create_and_add_profile(self, data):
+        """Create and add profile."""
+        user_profile = InstitutionProfile.create(data)
+        self.institution_profiles.append(user_profile)
+
+        self.put()
 
     def is_liked_post(self, postKey):
         """Verify if post is liked."""

@@ -57,8 +57,10 @@ class InstitutionHandlerTest(TestBaseHandler):
     def test_post(self, verify_token):
         """Test the post_handler's post method."""
         # Call the patch method and assert that  it raises an exception
-        self.testapp.post("/api/institutions/%s/invites/%s"
-                          % (self.stub.key.urlsafe(), self.invite.key.urlsafe()))
+        data = {'sender_name': 'user name updated'}
+
+        self.testapp.post_json("/api/institutions/%s/invites/%s"
+                          % (self.stub.key.urlsafe(), self.invite.key.urlsafe()), data)
 
         self.inst_create = self.stub.key.get()
         self.assertEqual(self.inst_create.admin, self.raoni.key,
@@ -75,6 +77,12 @@ class InstitutionHandlerTest(TestBaseHandler):
 
         self.assertEqual(self.userUpdated.state, "active",
                          "The state of Raoni expected was active")
+
+        self.assertEqual(self.userUpdated.institution_profiles[0].office, "Administrador",
+                         "The office of Raoni institution profile expected was Administrador")
+
+        self.assertEqual(self.userUpdated.name, "user name updated",
+                         "The name of Raoni  expected was user name updated")
 
         self.inviteUpdate = self.invite.key.get()
 
@@ -222,7 +230,7 @@ def initModels(cls):
     cls.mayza = User()
     cls.mayza.name = 'Mayza Nunes'
     cls.mayza.cpf = '089.675.908-90'
-    cls.mayza.email = 'mayzabeel@gmail.com'
+    cls.mayza.email = ['mayzabeel@gmail.com']
     cls.mayza.institutions = []
     cls.mayza.follows = []
     cls.mayza.institutions_admin = []
@@ -233,7 +241,7 @@ def initModels(cls):
     cls.raoni = User()
     cls.raoni.name = 'Raoni Smaneoto'
     cls.raoni.cpf = '089.675.908-65'
-    cls.raoni.email = 'raoni.smaneoto@ccc.ufcg.edu.br'
+    cls.raoni.email = ['raoni.smaneoto@ccc.ufcg.edu.br']
     cls.raoni.state = "pending"
     cls.raoni.institutions = []
     cls.raoni.follows = []

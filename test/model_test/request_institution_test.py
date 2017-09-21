@@ -63,7 +63,7 @@ class RequestInstitutionParentTest(TestBase):
                 'is_request': True,
                 'admin_key': self.user_admin.key.urlsafe(),
                 'institution_key': self.inst_test.key.urlsafe(),
-                'institution_requested_key': self.inst_requested_children.key.urlsafe(),
+                'institution_requested_key': self.inst_requested.key.urlsafe(),
                 'type_of_invite': 'REQUEST_INSTITUTION_PARENT'
             }
 
@@ -92,25 +92,6 @@ class RequestInstitutionParentTest(TestBase):
             'The institutions is already a linked',
             str(ex.exception),
             'Expected message is The institutions is already a linked')
-
-    def test_create_request_for_institution_with_parent(self):
-        """Test cretae invalid request."""
-        with self.assertRaises(FieldException) as ex:
-            data = {
-                'sender_key': self.other_user.key.urlsafe(),
-                'is_request': True,
-                'admin_key': self.user_admin.key.urlsafe(),
-                'institution_key': self.inst_test.key.urlsafe(),
-                'institution_requested_key': self.inst_requested_children.key.urlsafe(),
-                'type_of_invite': 'REQUEST_INSTITUTION_CHILDREN'
-            }
-
-            RequestInstitutionChildren.create(data)
-
-        self.assertEqual(
-            'The institution invited has already parent',
-            str(ex.exception),
-            'The institution invited has already parent')
 
     def test_make_request_parent_institution(self):
         """Test method make por parent institution request."""
@@ -141,10 +122,7 @@ class RequestInstitutionParentTest(TestBase):
                 'description': None,
                 'name': 'inst test',
                 'key': self.inst_test.key.urlsafe(),
-                'address': 'street 01, neighbourhood, ' +
-                'city, state, 000, country',
-                'email': None,
-                'photo_url': None
+                'address': dict(self.address)
             },
         }
 
@@ -191,14 +169,9 @@ class RequestInstitutionParentTest(TestBase):
             'type_of_invite': 'REQUEST_INSTITUTION_CHILDREN',
             'institution_key': self.inst_test.key.urlsafe(),
             'institution': {
-                'phone_number': None,
-                'description': None,
                 'name': 'inst test',
                 'key': self.inst_test.key.urlsafe(),
-                'address': 'street 01, neighbourhood, ' +
-                'city, state, 000, country',
-                'email': None,
-                'photo_url': None
+                'address': dict(self.address)
             },
         }
 
@@ -226,12 +199,12 @@ def initModels(cls):
     # new User
     cls.user_admin = User()
     cls.user_admin.name = 'User Admin'
-    cls.user_admin.email = 'useradmin@test.com'
+    cls.user_admin.email = ['useradmin@test.com']
     cls.user_admin.put()
     # Other user
     cls.other_user = User()
     cls.other_user.name = 'Other User'
-    cls.other_user.email = 'otheruser@test.com'
+    cls.other_user.email = ['otheruser@test.com']
     cls.other_user.put()
     # new institution address
     cls.address = Address()

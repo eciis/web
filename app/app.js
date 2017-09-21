@@ -198,7 +198,9 @@
             // Allow same origin resource loads.
             'self',
             // Allow loading from our assets domain.  Notice the difference between * and **.
-            'https://www.gravatar.com/**'
+            'https://www.gravatar.com/**',
+
+            'https://www.youtube.com/**'
         ]);
     });
 
@@ -212,6 +214,20 @@
                     config.headers.Authorization = 'Bearer ' + token;
                 } else {
                     $state.go("signin");
+                }
+                return config || $q.when(config);
+            },
+            response: function(config) {
+                var AuthService = $injector.get('AuthService');
+                var user = AuthService.getCurrentUser();
+                if (user && user.key) {
+                    var pendingInvite = user.getPendingInvitation();
+                    if (pendingInvite) {
+                        var inviteKey = pendingInvite.key;
+                        $state.go("new_invite", {key: inviteKey});
+                    } else if (user.isInactive()) {
+                        $state.go("user_inactive");
+                    }
                 }
                 return config || $q.when(config);
             },

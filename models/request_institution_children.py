@@ -22,7 +22,7 @@ class RequestInstitutionChildren(Request):
     def send_email(self, host, body=None):
         """Method of send email of request institution link."""
         request_key = self.key.urlsafe()
-        requested_email = self.admin_key.get().email
+        requested_email = self.admin_key.get().email[0]
 
         # TODO Set this message
         body = body or """Olá
@@ -35,10 +35,11 @@ class RequestInstitutionChildren(Request):
     def send_notification(self, user):
         """Method of send notification of invite user."""
         entity_type = 'REQUEST_INSTITUTION_CHILDREN'
-        super(RequestInstitutionChildren, self).send_notification(user, entity_type)
+        super(RequestInstitutionChildren, self).send_notification(user, self.admin_key.urlsafe(), entity_type)
 
     def make(self):
         """Create json of request to institution children."""
         request_inst_children_json = super(RequestInstitutionChildren, self).make()
+        request_inst_children_json['institution_requested_key'] = self.institution_requested_key.urlsafe()
         request_inst_children_json['type_of_invite'] = 'REQUEST_INSTITUTION_CHILDREN'
         return request_inst_children_json

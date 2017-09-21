@@ -19,6 +19,48 @@
             return deferred.promise;
         };
 
+        service.sendRequestToParentInst = function(invite, institution_requested_key) {
+            var deferred = $q.defer();
+            $http.post(REQUESTS_URI + institution_requested_key + "/requests/institution_parent", invite)
+                .then(function success(response) {
+                    deferred.resolve(response);
+            }, function error(response) {
+                    deferred.reject(response);
+            });
+            return deferred.promise;
+        };
+
+        service.sendRequestToChildrenInst = function(invite, institution_requested_key) {
+            var deferred = $q.defer();
+            $http.post(REQUESTS_URI + institution_requested_key + "/requests/institution_children", invite)
+                .then(function success(response) {
+                    deferred.resolve(response);
+            }, function error(response) {
+                    deferred.reject(response);
+            });
+            return deferred.promise;
+        };
+
+        service.getParentRequests = function(institution_key) {
+            var deferred = $q.defer();
+            $http.get(REQUESTS_URI + institution_key + "/requests/institution_parent").then(function success(response) {
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+            return deferred.promise;
+        };
+
+        service.getChildrenRequests = function(institution_key) {
+            var deferred = $q.defer();
+            $http.get(REQUESTS_URI + institution_key + "/requests/institution_children").then(function success(response) {
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+            return deferred.promise;
+        };
+
         service.getRequests = function getRequests(institution_key) {
             var deferred = $q.defer();
 
@@ -64,6 +106,46 @@
                 deferred.reject(response);
             });
 
+            return deferred. promise;
+        };
+
+        service.acceptInstParentRequest = function acceptRequest(request_key) {
+            var deferred = $q.defer();
+            $http.put("/api/requests/" + request_key + "/institution_parent").then(function success(response) {
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+            return deferred. promise;
+        };
+
+        service.rejectInstParentRequest = function rejectRequest(request_key) {
+            var deferred = $q.defer();
+            $http.delete("/api/requests/" + request_key + "/institution_parent").then(function success(response) {
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+            return deferred. promise;
+        };
+
+        service.acceptInstChildrenRequest = function acceptRequest(request_key) {
+            var deferred = $q.defer();
+            $http.put("/api/requests/" + request_key + "/institution_children").then(function success(response) {
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+            return deferred. promise;
+        };
+
+        service.rejectInstChildrenRequest = function rejectRequest(request_key) {
+            var deferred = $q.defer();
+            $http.delete("/api/requests/" + request_key + "/institution_children").then(function success(response) {
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
             return deferred. promise;
         };
 

@@ -8,7 +8,7 @@
     </md-card-avatar>
     <md-card-header-text>
       <div>
-        <a  href class="md-title hyperlink" ng-click="postDetailsCtrl.goToInstitution(postDetailsCtrl.post.institution_key)">{{ postDetailsCtrl.post.institution_name }}</a>
+        <a href class="md-title hyperlink" ng-click="postDetailsCtrl.goToInstitution(postDetailsCtrl.post.institution_key)">{{ postDetailsCtrl.post.institution_name }}</a>
       </div>
       <span class="md-subhead">por {{ postDetailsCtrl.post.author }} {{ postDetailsCtrl.post.publication_date | amUtc | amLocal | amCalendar:referenceTime:formats }}</span>
     </md-card-header-text>
@@ -97,7 +97,7 @@
         <md-button class="md-raised" ng-click="postDetailsCtrl.pdfDialog($event, pdf)">
             <md-icon>description</md-icon> {{pdf.name}}
         </md-button>
-      </div>          
+      </div>
     </md-card-content>
   </md-card>
 
@@ -133,7 +133,11 @@
               <md-icon>description</md-icon> {{pdf.name}}
           </md-button>
         </div>
-    </div>   
+    </div>
+    <div class="youtube-player" ng-if="postDetailsCtrl.post.video_url && !postDetailsCtrl.isDeleted(postDetailsCtrl.post)">
+      <iframe ng-src="{{postDetailsCtrl.getVideoUrl()}}">
+      </iframe>
+    </div>
   </md-card-content>
   <md-divider></md-divider>
 
@@ -191,7 +195,6 @@
   </div>
 
   <!-- COMMENTS -->
-
   <comment ng-if="postDetailsCtrl.showComments || postDetailsCtrl.isPostPage"
     ng-repeat="comment in postDetailsCtrl.getValues(postDetailsCtrl.post.data_comments) | orderBy:'publication_date'"
     comment="comment" user="postDetailsCtrl.user" post="postDetailsCtrl.post"></comment>

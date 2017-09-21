@@ -52,8 +52,11 @@
         createCtrl = function() {
             return $controller('SuggestInstitutionController', {
                 scope: scope,
+                institution: {},
                 institutions: {},
                 invite: mayza.invites[0],
+                requested_invites: [],
+                isHierarchy: false,
                 inviteController: inviteController
             });
         };
@@ -77,8 +80,14 @@
 
     describe('sendInvite()', function() {
         it('should call sendInstInvite()', function() {
-            spyOn(inviteController, 'sendInstInvite');
-            suggestInstCtrl.sendInvite(suggestInstCtrl.invite);
+            spyOn(inviteController, 'sendInstInvite').and.callFake(function() {
+                return {
+                    then: function(callback) {
+                        return callback();
+                    }
+                };
+            });
+            suggestInstCtrl.checkAndSendInvite(suggestInstCtrl.invite);
             expect(inviteController.sendInstInvite).toHaveBeenCalled();
         });
     });

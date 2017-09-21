@@ -153,8 +153,16 @@
             $state.go('app.manage_institution.edit_info', {institutionKey: currentInstitutionKey});
         };
 
-        institutionCtrl.goToInstitution = function goToInstitution() {
-            $state.go('app.institution', {institutionKey: currentInstitutionKey});
+        institutionCtrl.goToInstitution = function goToInstitution(institutionKey) {
+            $state.go('app.institution', {institutionKey: institutionKey});
+        };
+
+        institutionCtrl.hasChildrenActive = function hasChildrenActive(institution) {
+            return !_.isEmpty(institution.children_institutions) && _.some(institution.children_institutions, {'state' :'active'});
+        };
+
+        institutionCtrl.hasParentActive = function hasParentActive(institution) {
+            return (institution.parent_institution && institution.parent_institution.state === 'active');
         };
 
         function checkIfUserIsFollower() {
@@ -203,10 +211,7 @@
 
         institutionCtrl.getFullAddress = function getFullAddress() {
             if(institutionCtrl.current_institution) {
-                var address = institutionCtrl.current_institution.address;
-                var fullAddress = address.street + ", " + address.number + ", " + address.neighbourhood + 
-                                 ", " + address.city + ", " + address.state + ", " + address.country;
-                return fullAddress;
+                return institutionCtrl.current_institution.getFullAddress();
             }
         };
 

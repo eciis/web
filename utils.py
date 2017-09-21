@@ -271,8 +271,8 @@ def is_authorized(method):
     return check_authorization
 
 
-#  SEE HOW GET POWER USERS IDEA
 def getSuperUsers():
+    """Get users of institutions trusted that has permission to analize resquests for new institutions."""
     userswithpermission = []
     institutionsTrusted = Institution.query(Institution.trusted == True)
     for institution in institutionsTrusted:

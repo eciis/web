@@ -37,6 +37,7 @@
                     institution_name: newInviteCtrl.institution.name,
                     institution_photo_url: newInviteCtrl.institution.photo_url};
             newInviteCtrl.user.addProfile(profile);
+            newInviteCtrl.user.name = getCurrentName();
             AuthService.save();
             var patch = jsonpatch.generate(observer);
             return patch;
@@ -63,7 +64,10 @@
         };
 
         newInviteCtrl.updateStubInstitution =function updateStubInstitution() {
-            var promise = InstitutionService.save(institutionKey, newInviteCtrl.inviteKey);
+            var dataProfile = {
+                sender_name : getCurrentName()
+            };
+            var promise = InstitutionService.save(dataProfile, institutionKey, newInviteCtrl.inviteKey);
             promise.then(
                 function success(institutionSaved){
                     MessageService.showToast('Cadastro de instituição realizado com sucesso');
@@ -73,6 +77,7 @@
                     newInviteCtrl.user.follow(institutionSaved);
                     newInviteCtrl.user.current_institution = institutionSaved;
                     newInviteCtrl.user.state = 'active';
+                    newInviteCtrl.user.name = getCurrentName();
                     AuthService.save();
                     $state.go('app.manage_institution.edit_info', {institutionKey: institutionSaved.key});
                 },
@@ -169,11 +174,12 @@
             if(!newInviteCtrl.office) {
                 MessageService.showToast("Cargo institucional deve ser preenchido.");
                 return false;
-            } else if(newInviteCtrl.checkUserName()) {
-                MessageService.showToast("O nome deve ser preenchido.");
-                return false;
             }
             return true;
+        }
+
+        function getCurrentName() {
+            return newInviteCtrl.user_name ? newInviteCtrl.user_name : newInviteCtrl.user.name;
         }
 
         loadInvite();

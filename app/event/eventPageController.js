@@ -48,7 +48,7 @@
 
         eventCtrl.recognizeUrl =  function recognizeUrl(text) {
             if(text){
-                return utils.recognizeUrl(text);
+                return Utils.recognizeUrl(text);
             }
         };
 
@@ -78,12 +78,12 @@
         };
 
         function isEventAuthor() {
-            return utils.getKeyFromUrl(eventCtrl.event.author_key) === eventCtrl.user.key;
+            return Utils.getKeyFromUrl(eventCtrl.event.author_key) === eventCtrl.user.key;
         }
 
         function isInstitutionAdmin() {
-            return _.includes(_.map(eventCtrl.user.institutions_admin, utils.getKeyFromUrl),
-                utils.getKeyFromUrl(eventCtrl.event.institution_key));
+            return _.includes(_.map(eventCtrl.user.institutions_admin, Utils.getKeyFromUrl),
+                Utils.getKeyFromUrl(eventCtrl.event.institution_key));
         }
 
         (function main() {

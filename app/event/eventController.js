@@ -63,7 +63,7 @@
 
         eventCtrl.recognizeUrl =  function recognizeUrl(event) {
             if(event.text){
-                var text = utils.recognizeUrl(event.text);
+                var text = Utils.recognizeUrl(event.text);
                 text = adjustText(text, event);
                 return text;
             }
@@ -79,7 +79,7 @@
         };
 
         eventCtrl.isEventAuthor = function isEventAuthor(event) {
-            return utils.getKeyFromUrl(event.author_key) === eventCtrl.user.key;
+            return Utils.getKeyFromUrl(event.author_key) === eventCtrl.user.key;
         };
 
         eventCtrl.goToEvent = function goToEvent(event) {
@@ -87,8 +87,8 @@
         };
 
         function isInstitutionAdmin(event) {
-            return _.includes(_.map(eventCtrl.user.institutions_admin, utils.getKeyFromUrl),
-                utils.getKeyFromUrl(event.institution_key));
+            return _.includes(_.map(eventCtrl.user.institutions_admin, Utils.getKeyFromUrl),
+                Utils.getKeyFromUrl(event.institution_key));
         }
 
         function adjustText(text, event){

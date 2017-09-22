@@ -132,7 +132,7 @@
         });
     });
 
-    xdescribe('showVideo()', function() {
+    describe('showVideo()', function() {
         var post;
 
         beforeEach(function() {
@@ -161,7 +161,7 @@
         });
     });
 
-    xdescribe('getVideoUrl()', function() {
+    describe('getVideoUrl()', function() {
         var post;
 
         beforeEach(function() {

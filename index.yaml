@@ -7,3 +7,8 @@ indexes:
   properties:
   - name: state
   - name: last_modified_date
+- kind: Event 
+  properties: 
+  - name: institution_key 
+  - name: state 
+  - name: start_time

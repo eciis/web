@@ -21,3 +21,27 @@ Post.prototype.isValid = function isValid() {
     }
     return true;
 };
+
+Post.prototype.getVideoUrl = function getVideoUrl() {
+    if(this.video_url) {
+        var params = _.split(this.video_url, '=');
+        var id = params[params.length - 1];
+        return 'https://www.youtube.com/embed/' + id;
+    }
+};
+
+Post.prototype.hasVideo = function hasVideo() {
+    var videoUrlNotNull = this.video_url !== null;
+    var videoUrlNotEmpty = this.video_url !== "";
+    return videoUrlNotNull && videoUrlNotEmpty;
+};
+
+Post.prototype.hasImage = function hasImage() {
+    var imageNotEmpty = this.photo_url !== "";
+    var imageNotNull = this.photo_url !== null;
+    return imageNotEmpty && imageNotNull;
+};
+
+Post.prototype.isDeleted = function isDeleted() {
+    return this.state === 'deleted';
+};

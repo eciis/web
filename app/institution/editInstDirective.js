@@ -69,7 +69,7 @@
                 });
             } else {
                 MessageService.showToast("Campos obrigatórios não preenchidos corretamente.");
-            }  
+            }
             return promise;
         };
 
@@ -173,7 +173,9 @@
         }
 
         (function main(){
-             loadInstitution();
+            if (institutionKey) {
+                loadInstitution();
+            }
         })();
     });
 
@@ -183,8 +185,9 @@
             templateUrl: "institution/submit_form.html",
             controller: "EditInstController",
             controllerAs: "editInstCtrl",
-            scope: {
-                isSubmission: '=',
+            scope: {},
+            bindToController: {
+                isSubmission: '='
             }
         };
     });

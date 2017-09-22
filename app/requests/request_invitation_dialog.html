@@ -29,15 +29,15 @@
 			              <input ng-model="requestInvCtrl.user.name" name="name" required>
 			              <div ng-messages='requestuser.name.$error'>
                     		<div ng-message="required">Este campo é obrigatório!</div>
-                		  </div> 
+                		  </div>
 			            </md-input-container>
-			            
+
 			            <md-input-container class="md-block">
 			              <label>Email institucional</label>
 			              <input ng-model="requestInvCtrl.email" type="email" name="email" required>
 			              <div ng-messages='requestuser.email.$error'>
                     		<div ng-message="required">Este campo é obrigatório!</div>
-                		  </div> 
+                		  </div>
 			            </md-input-container>
 
 			          	<md-input-container class="md-block">
@@ -45,18 +45,19 @@
 			          	<input name="cargo" ng-model="requestInvCtrl.office" name="office" required>
 			          	<div ng-messages='requestuser.office.$error'>
                     		<div ng-message="required">Este campo é obrigatório!</div>
-                		  </div> 
+                		  </div>
 			          	</md-input-container>
-			    	</form>	
+			    	</form>
 			    </div>
-			    
+
 		    </md-list-item>
 		    <md-list-item ng-if="requestInvCtrl.showMessage()" ng-click="null">
 		    	<div class="md-list-item-text" layout-align="center center" layout="column"
 			    style='text-align: center'>
-		            <p>Infelizmente sua instituição ainda não está cadastrada. 
-		            Converse com o responsável para criar nesse mesmo link.</p>
-			    </div>
+		            		<p>Infelizmente sua instituição ainda não está cadastrada.
+		            		Deseja cria uma nova?</p>
+		            		<md-button class="md-raised" ng-click="requestInvCtrl.createInst()">Criar instituição</md-button>
+			</div>
 		    </md-list-item>
 		</md-list>
 		<md-card-actions layout="row" layout-align="end center">

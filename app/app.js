@@ -155,6 +155,14 @@
                     }
                 }
             })
+            .state("create_institution", {
+                url: "/create_institution",
+                views: {
+                    main: {
+                        templateUrl: "institution/create_inst.html"
+                    }
+                }
+            })
             .state("user_inactive", {
                 url: "/userinactive",
                 views: {

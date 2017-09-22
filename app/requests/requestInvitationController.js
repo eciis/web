@@ -3,7 +3,8 @@
 (function () {
     var app = angular.module('app');
 
-    app.controller("RequestInvitationController", function RequestInvitationController($mdDialog, $q, MessageService, InstitutionService, AuthService, RequestInvitationService) {
+    app.controller("RequestInvitationController", function RequestInvitationController($mdDialog, $q, MessageService, InstitutionService,
+        AuthService, RequestInvitationService, $state) {
         var requestInvCtrl = this;
 
         requestInvCtrl.search = "";
@@ -24,7 +25,7 @@
                 type_of_invite : 'REQUEST_USER',
                 sender_name : requestInvCtrl.user.name,
                 office : requestInvCtrl.office,
-                institutional_email : requestInvCtrl.email 
+                institutional_email : requestInvCtrl.email
             };
 
             var request = new Invite(dataInvite);
@@ -35,6 +36,11 @@
             }, function error() {
                 requestInvCtrl.cancelDialog();
             });
+        };
+
+        requestInvCtrl.createInst = function createInst() {
+            $state.go("create_institution");
+            $mdDialog.hide();
         };
 
         requestInvCtrl.cancelDialog = function() {

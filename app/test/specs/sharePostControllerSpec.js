@@ -102,4 +102,83 @@
             expect(mdDialog.hide).toHaveBeenCalled();
         });
     });
+
+    describe('showImage()', function() {
+        var post;
+
+        beforeEach(function() {
+            post = new Post();
+            post.photo_url = "www.photo-url.com";
+            post.state = "published";
+            shareCtrl.post = post;
+        });
+
+        it('should return True when the post has a photo_url', function() {
+            expect(shareCtrl.showImage()).toBe(true);
+        });
+
+        it('should return false when the post is deleted', function() {
+            shareCtrl.post.state = "deleted";
+            expect(shareCtrl.showImage()).toBe(false);
+        });
+
+        it('should return false when the post does not have a photo_url', function() {
+            shareCtrl.post.photo_url = null;
+            expect(shareCtrl.showImage()).toBe(false);
+            shareCtrl.post.photo_url = "";
+            expect(shareCtrl.showImage()).toBe(false);
+            shareCtrl.post.photo_url = undefined;
+            expect(shareCtrl.showImage()).toBe(false);
+        });
+    });
+
+    xdescribe('showVideo()', function() {
+        var post;
+
+        beforeEach(function() {
+            post = new Post();
+            post.video_url = "www.photo-url.com";
+            post.state = "published";
+            shareCtrl.post = post;
+        });
+
+        it('should return True when the post has a video_url', function() {
+            expect(shareCtrl.showVideo()).toBe(true);
+        });
+
+        it('should return false when the post is deleted', function() {
+            shareCtrl.post.state = "deleted";
+            expect(shareCtrl.showVideo()).toBe(false);
+        });
+
+        it('should return false when the post does not have a video_url', function() {
+            shareCtrl.post.video_url = null;
+            expect(shareCtrl.showVideo()).toBe(false);
+            shareCtrl.post.video_url = "";
+            expect(shareCtrl.showVideo()).toBe(false);
+            shareCtrl.post.video_url = undefined;
+            expect(shareCtrl.showVideo()).toBe(false);
+        });
+    });
+
+    xdescribe('getVideoUrl()', function() {
+        var post;
+
+        beforeEach(function() {
+            post = new Post();
+            post.video_url = "www.photo-url.com";
+            post.state = "published";
+            shareCtrl.post = post;
+        });
+
+        it('should return undefined', function() {
+            shareCtrl.post.video_url = undefined;
+            expect(shareCtrl.getVideoUrl()).toBe(undefined);
+        });
+        
+        it('should return the embed Youtube url', function() {
+            shareCtrl.post.video_url = 'https://www.youtube.com/watch?v=3T3g8rV-5GU';
+            expect(shareCtrl.getVideoUrl()).toBe('https://www.youtube.com/embed/3T3g8rV-5GU');
+        });
+    });
 }));

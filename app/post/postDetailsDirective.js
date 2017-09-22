@@ -597,7 +597,7 @@
 
         shareCtrl.showImage = function showImage() {
             var postObj = new Post(shareCtrl.post);
-            return postObj.hasImage();
+            return postObj.hasImage() && !postObj.isDeleted();
         };
 
         shareCtrl.showVideo = function showVideo() {

@@ -31,15 +31,17 @@ Post.prototype.getVideoUrl = function getVideoUrl() {
 };
 
 Post.prototype.hasVideo = function hasVideo() {
-    var videoUrlNotNull = this.video_url !== null;
-    var videoUrlNotEmpty = this.video_url !== "";
-    return videoUrlNotNull && videoUrlNotEmpty;
+    var isNotNull = this.video_url !== null;
+    var isNotUndefined = this.video_url !== undefined;
+    var isNotEmpty = this.video_url !== "";
+    return isNotNull && isNotEmpty && isNotUndefined;
 };
 
 Post.prototype.hasImage = function hasImage() {
-    var imageNotEmpty = this.photo_url !== "";
-    var imageNotNull = this.photo_url !== null;
-    return imageNotEmpty && imageNotNull;
+    var isNotEmpty = this.photo_url !== "";
+    var isNotNull = this.photo_url !== null;
+    var isNotUndefined = this.photo_url !== undefined;
+    return isNotEmpty && isNotNull && isNotUndefined;
 };
 
 Post.prototype.isDeleted = function isDeleted() {

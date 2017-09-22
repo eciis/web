@@ -9,8 +9,8 @@
         eventCtrl.event = null;
         eventCtrl.user = AuthService.getCurrentUser();
 
-        function loadEvent() {
-            EventService.getEvent($state.params.eventKey).then(function success(response) {
+        function loadEvent(eventKey) {
+            EventService.getEvent(eventKey).then(function success(response) {
                 eventCtrl.event = response.data;
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
@@ -58,12 +58,8 @@
 
         eventCtrl.canDelete = function canDelete() {
             if(eventCtrl.event){
-                return eventCtrl.isEventAuthor() || isInstitutionAdmin();
+                return isEventAuthor() || isInstitutionAdmin();
             }
-        };
-
-        eventCtrl.isEventAuthor = function isEventAuthor() {
-            return utils.getKeyFromUrl(eventCtrl.event.author_key) === eventCtrl.user.key;
         };
 
         eventCtrl.showImage = function() {
@@ -81,13 +77,17 @@
             }
         };
 
+        function isEventAuthor() {
+            return utils.getKeyFromUrl(eventCtrl.event.author_key) === eventCtrl.user.key;
+        }
+
         function isInstitutionAdmin() {
             return _.includes(_.map(eventCtrl.user.institutions_admin, utils.getKeyFromUrl),
                 utils.getKeyFromUrl(eventCtrl.event.institution_key));
         }
 
         (function main() {
-            loadEvent();
+            loadEvent($state.params.eventKey);
         })();
     });
 })();

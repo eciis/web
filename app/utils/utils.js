@@ -27,6 +27,7 @@ var utils = {
         return text;
     },
     getKeyFromUrl : function getKeyFromUrl(url) {
+        console.log(url);
         var key = url;
         if(url.indexOf("/api/key/") != -1) {
             var splitedUrl = url.split("/api/key/");

@@ -1,34 +1,57 @@
 <md-dialog>
-        <md-toolbar style="background-color: #00695C" layout="row">
-          <div class="md-toolbar-tools">
-            <h1 class="md-toolbar-tools">Nova solicitação</h1>
+  <md-toolbar style="background-color: #00695C" layout="row">
+    <div class="md-toolbar-tools">
+      <h1 class="md-toolbar-tools">Confirmar Vínculo</h1>
+    </div>
+    <section layout="column" layout-align="center center">
+        <md-button class="md-icon-button" ng-click="requestCtrl.hideDialog()">
+            <md-icon>close</md-icon>
+        </md-button>
+    </section>
+  </md-toolbar>
+  <md-dialog-content class="md-dialog-content" layout-gt-sm="column" layout-padding>
+    <div>
+      <md-list flex>
+        <md-list-item class="md-3-line">
+          <img ng-src="{{ requestCtrl.parent.photo_url }}" class="md-avatar" alt="{{requestCtrl.parent.name}}" />
+          <div class="md-list-item-text" layout="column">
+            <h3><b>{{ requestCtrl.parent.name }}</b> - {{ requestCtrl.parent.email }}</h3>
+            <h4>{{ requestCtrl.parent.phone_number }} | {{ requestCtrl.getFullAddress(requestCtrl.parent) }}</h4>
+            <p>{{ requestCtrl.parent.description }}</p>
           </div>
-        </md-toolbar>
-
-        <md-dialog-content class="md-dialog-content" layout-gt-sm="column" layout-padding>
-          <div>
-            <div>
-              <md-list flex>
-                <md-subheader class="md-no-sticky" ng-if="!requestCtrl.isInstRequest()">{{requestCtrl.showMessage()}}</md-subheader>
-                <md-subheader class="md-no-sticky" ng-if="requestCtrl.isInstRequest()">
-                  <a href class="hyperlink" ng-click="requestCtrl.goToInstitution(requestCtrl.request.institution.key)">{{requestCtrl.request.institution.name}}</a>
-                  {{requestCtrl.showMessage()}}
-                </md-subheader>
-                <md-list-item class="md-3-line">
-                  <img ng-src="{{ requestCtrl.institution.photo_url }}" class="md-avatar" alt="{{requestCtrl.institution.name}}" />
-                  <div class="md-list-item-text" layout="column">
-                    <h3><b>{{ requestCtrl.institution.name }}</b> - {{ requestCtrl.institution.email }}</h3>
-                    <h4>{{ requestCtrl.institution.phone_number }} | {{ requestCtrl.getFullAddress() }}</h4>
-                    <p>{{ requestCtrl.institution.description }}</p>
-                  </div>
-                </md-list-item>
-              </md-list>
-            </div>
+        </md-list-item>
+        <div layout="row" style="margin-left: 25px;">
+          <div layout="column" style="margin-bottom: 20px;" layout-align="start start">
+            <md-icon>subdirectory_arrow_right</md-icon>
           </div>
-          </md-dialog-content>
-
-          <md-dialog-actions layout="row" layout="column" layout-align="end center" layout-wrap>
-             <md-button ng-click="requestCtrl.acceptRequest($event)" md-colors="{background: 'teal-900'}">Aceitar</md-button>
-             <md-button ng-click="requestCtrl.rejectRequest($event)" md-colors="{background: 'teal-900'}">Rejeitar</md-button>
-          </md-dialog-actions>
+          <div layout="column" flex layout-align="end start">
+            <md-list-item ng-class="requestCtrl.children.name? 'md-3-line' : 'md-2-line'">
+              <img ng-src="{{ requestCtrl.children.photo_url || 'images/avatar.jpg'}}" class="md-avatar" 
+                alt="{{ requestCtrl.children.name }}" />
+              <div class="md-list-item-text" layout="column">
+                <h3>
+                  <b>{{ requestCtrl.children.name || requestCtrl.children.sender_name}}</b> - 
+                  {{ requestCtrl.children.email || requestCtrl.children.office }}
+                </h3>
+                <h4 ng-if="requestCtrl.children.institutional_email">{{ requestCtrl.children.institutional_email }}</h4>
+                <div ng-if="requestCtrl.children.name">
+                  <h4>{{ requestCtrl.children.phone_number }} | {{ requestCtrl.getFullAddress(requestCtrl.children) }}</h4>
+                  <p>{{ requestCtrl.children.description }}</p>
+                </div>
+              </div>
+            </md-list-item>
+          </div>
+        </div>
+      </md-list>
+    </div>
+  </md-dialog-content>
+  <md-dialog-actions layout="row" layout-align="end center" layout-wrap>
+    <md-button ng-click="requestCtrl.rejectRequest($event)" class="md-primary">
+      Não Confirmar
+    </md-button>
+    <md-button ng-click="requestCtrl.acceptRequest()"
+        class="md-warn md-raised md-hue-2">
+      Confirmar
+    </md-button>
+  </md-dialog-actions>
 </md-dialog>

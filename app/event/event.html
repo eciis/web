@@ -21,15 +21,21 @@
             <md-card-header>
               <md-card-header-text>
                 <div layout="row" layout-align="start center">
-                  <span md-colors="{color: 'teal-900'}" class="md-title">{{ event.title }}</span>
+                  <a href md-colors="{color: 'teal-900'}" class="md-title hyperlink" ng-click="eventCtrl.goToEvent(event)" >
+                    {{ event.title }}</a>
                   <span flex md-truncate></span>
                 </div>
                 <span class="md-subhead">por {{ event.institution_name }} | {{ event.author_name }}</span>
               </md-card-header-text>
             </md-card-header>
             <md-card-content layout="column">
-              <p ng-if="event.text" ng-bind-html="eventCtrl.recognizeUrl(event.text)" class="break">
+              <p ng-if="event.text" ng-bind-html="eventCtrl.recognizeUrl(event)" class="break">
               </p>
+              <div layout="row" layout-align="end-center">
+                <a href class="md-text hyperlink" ng-click="eventCtrl.goToEvent(event)" ng-if="eventCtrl.isLongText(event)">
+                  <span class="md-subhead" >continuar lendo</span>
+                </a>      
+              </div>
               <p>
                 <span class="md-caption">Local:</span> <span md-colors="{color: 'teal-900'}">{{ event.local }}</span> | 
                 <b md-colors="{color: 'teal-900'}">

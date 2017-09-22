@@ -9,9 +9,7 @@
         eventCtrl.events = [];
 
         eventCtrl.user = AuthService.getCurrentUser();
-
-        var URL_PATTERN = /(((www.)|(http(s)?:\/\/))[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
-        var REPLACE_URL = "<a href=\'$1\' target='_blank'>$1</a>";
+        
         var LIMIT_CHARACTERS = 100;
 
         function loadEvents() {
@@ -45,7 +43,6 @@
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
-
         };
 
         eventCtrl.deleteEvent = function deleteEvent(ev, event) {
@@ -64,17 +61,16 @@
             });
         };
 
-        eventCtrl.recognizeUrl =  function recognizeUrl(text) {
-            if(text){
-                var urlsInText = text.match(URL_PATTERN);
-                text = addHttpsToUrl(text, urlsInText);
-                text = adjustText(text);
+        eventCtrl.recognizeUrl =  function recognizeUrl(event) {
+            if(event.text){
+                var text = Utils.recognizeUrl(event.text);
+                text = adjustText(text, event);
                 return text;
             }
         };
 
-        eventCtrl.isLongText = function isLongText(text){
-            var numberOfChar = text.length;
+        eventCtrl.isLongText = function isLongText(event){
+            var numberOfChar = event.text.length;
             return numberOfChar >= LIMIT_CHARACTERS;
         };
 
@@ -83,40 +79,23 @@
         };
 
         eventCtrl.isEventAuthor = function isEventAuthor(event) {
-            return getKeyFromUrl(event.author_key) === eventCtrl.user.key;
+            return Utils.getKeyFromUrl(event.author_key) === eventCtrl.user.key;
+        };
+
+        eventCtrl.goToEvent = function goToEvent(event) {
+            $state.go('app.event', {eventKey: event.key});
         };
 
         function isInstitutionAdmin(event) {
-            return _.includes(_.map(eventCtrl.user.institutions_admin, getKeyFromUrl),
-                getKeyFromUrl(event.institution_key));
+            return _.includes(_.map(eventCtrl.user.institutions_admin, Utils.getKeyFromUrl),
+                Utils.getKeyFromUrl(event.institution_key));
         }
 
-        function adjustText(text){
-            if(eventCtrl.isLongText(text)){
+        function adjustText(text, event){
+            if(eventCtrl.isLongText(event)){
                 text = text.substring(0, LIMIT_CHARACTERS) + "...";
             }
-            return text.replace(URL_PATTERN,REPLACE_URL);
-        }
-
-        function addHttpsToUrl(text, urls) {
-            if(urls) {
-                var http = "http://";
-                for (var i = 0; i < urls.length; i++) {
-                    if(urls[i].slice(0, 4) !== "http") {
-                        text = text.replace(urls[i], http + urls[i]);
-                    }
-                }
-            }
             return text;
-        }
-
-        function getKeyFromUrl(url) {
-            var key = url;
-            if(url.indexOf("/api/key/") != -1) {
-                var splitedUrl = url.split("/api/key/");
-                key = splitedUrl[1];
-            }
-            return key;
         }
 
         (function main() {

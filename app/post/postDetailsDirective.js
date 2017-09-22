@@ -233,6 +233,10 @@
              $state.go('app.post', {key: post.key});
         };
 
+        postDetailsCtrl.goToEvent = function goToEvent(event) {
+            $state.go('app.event', {eventKey: event.key});
+        };
+
         postDetailsCtrl.getValues = function getValues(object) {
             return _.values(object);
         };

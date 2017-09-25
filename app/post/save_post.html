@@ -41,7 +41,7 @@
       <img style="border-radius: 5%;" ng-src="{{ postCtrl.photoUrl }}"/>
     </div>
     <div ng-if="postCtrl.showFiles()" ng-repeat="pdf in postCtrl.pdfFiles">
-      <md-button ng-click="postCtrl.hideFile($index)">&times;</md-button>
+      <md-button class="md-icon-button" ng-click="postCtrl.hideFile($index)" title="remover">&times;</md-button>
       <md-icon>description</md-icon>
       <span>{{pdf.name}}</span>
     </div>

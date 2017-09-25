@@ -140,7 +140,6 @@
         }
 
         function saveRequestInst() {
-            delete editInstCtrl.newInstitution.admin;
             RequestInvitationService.sendRequestInst(editInstCtrl.newInstitution);
         }
 

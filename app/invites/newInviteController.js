@@ -88,11 +88,7 @@
         };
 
         newInviteCtrl.isInviteUser = function isInviteUser(){
-            if(newInviteCtrl.invite) {
-                return newInviteCtrl.invite.type_of_invite === "USER";
-            } else {
-                return false;
-            }
+            return newInviteCtrl.invite && newInviteCtrl.invite.type_of_invite === "USER";
         };
 
         newInviteCtrl.isUserInfoImcomplete = function isUserInfoImcomplete() {

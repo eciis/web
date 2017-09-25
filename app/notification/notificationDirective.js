@@ -82,6 +82,19 @@
                          key: ""
                      }
                 }
+            },
+            "REQUEST_INSTITUTION": {
+                icon: "account_balance",
+                state: "process_request",
+                isDialog: true,
+                dialogProperties: {
+                     templateUrl: "requests/request_processing.html",
+                     controller: "RequestProcessingController",
+                     controllerAs: "requestCtrl",
+                     locals: {
+                         key: ""
+                     }
+                }
             }
         };
 
@@ -121,6 +134,7 @@
         };
 
         controller.showDialog = function showDialog(dialogProperties) {
+            console.log("Passou Aqui!!!!!!!!!!!!!!!!!!!!!!");
             $mdDialog.show({
                 controller: dialogProperties.controller,
                 controllerAs: dialogProperties.controllerAs,

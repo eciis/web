@@ -6,6 +6,7 @@ from utils import Utils
 from google.appengine.ext import ndb
 from utils import login_required
 from utils import json_response
+from utils import getSuperUsers
 from handlers.base_handler import BaseHandler
 from custom_exceptions.entityException import EntityException
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
@@ -31,9 +32,11 @@ def checkIsAdmin(method):
     def params(self, user, request_key, *args):
         request = ndb.Key(urlsafe=request_key).get()
         institution = request.institution_key.get()
+        super_users = getSuperUsers()
+        is_super_user = user in super_users
 
         Utils._assert(
-            institution.admin != user.key,
+            institution.admin != user.key and not is_super_user,
             "User is not admin!",
             NotAuthorizedException)
 

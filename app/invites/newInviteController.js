@@ -88,7 +88,16 @@
         };
 
         newInviteCtrl.isInviteUser = function isInviteUser(){
-            return newInviteCtrl.invite.type_of_invite === "USER";
+            if(newInviteCtrl.invite) {
+                return newInviteCtrl.invite.type_of_invite === "USER";
+            } else {
+                return false;
+            }
+        };
+
+        newInviteCtrl.isUserInfoImcomplete = function isUserInfoImcomplete() {
+            var isNewUser = newInviteCtrl.user.name === "";
+            return newInviteCtrl.isInviteUser() || isNewUser;
         };
 
         newInviteCtrl.rejectInvite = function rejectInvite(event){

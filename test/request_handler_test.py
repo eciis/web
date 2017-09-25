@@ -61,9 +61,9 @@ class RequestHandlerTest(TestBaseHandler):
 
         exception_message = self.get_message_exception(ex.exception.message)
         self.assertEqual(
-            "Error! User is not admin!",
+            "Error! User is not admin",
             exception_message,
-            "Expected error message is Error! User is not admin!")
+            "Expected error message is Error! User is not admin")
 
     @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
     def test_put(self, verify_token):
@@ -115,9 +115,9 @@ class RequestHandlerTest(TestBaseHandler):
 
         exception_message = self.get_message_exception(ex.exception.message)
         self.assertEqual(
-            "Error! User is not admin!",
+            "Error! User is not admin",
             exception_message,
-            "Expected error message is Error! User is not admin!")
+            "Expected error message is Error! User is not admin")
 
     @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
     def test_delete(self, verify_token):
@@ -135,9 +135,9 @@ class RequestHandlerTest(TestBaseHandler):
 
         exception_message = self.get_message_exception(ex.exception.message)
         self.assertEqual(
-            "Error! User is not admin!",
+            "Error! User is not admin",
             exception_message,
-            "Expected error message is Error! User is not admin!")
+            "Expected error message is Error! User is not admin")
 
 
 def initModels(cls):
@@ -164,6 +164,9 @@ def initModels(cls):
     cls.inst_test.followers = [cls.user_admin.key]
     cls.inst_test.admin = cls.user_admin.key
     cls.inst_test.put()
+    # institutions admin by user_admin
+    cls.user_admin.institutions_admin = [cls.inst_test.key]
+    cls.user_admin.put()
 
     # New request user
     data = {

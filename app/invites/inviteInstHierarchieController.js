@@ -92,6 +92,7 @@
         inviteInstCtrl.sendRequestToExistingInst = function sendRequestToExistingInst(invite, institution_requested_key) {
             invite.institution_requested_key = institution_requested_key;
             invite.sender_key = inviteInstCtrl.user.key;
+            console.log(invite);
             var deferred = $q.defer();
             var promise;
             if (invite.type_of_invite === INSTITUTION_PARENT) {

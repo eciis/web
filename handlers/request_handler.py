@@ -42,11 +42,31 @@ def checkIsAdmin(method):
     return params
 
 
+"""TODO: Remove this method.
+
+@author Raoni M Smaneoto - 25-09-2017
+"""
+def checkIsAdminOfRequestedInstitution(method):
+    """Method of check if user is admin of institution."""
+    def params(self, user, request_key, *args):
+        request = ndb.Key(urlsafe=request_key).get()
+        institution = request.institution_requested_key.get()
+
+        Utils._assert(
+            institution.admin != user.key,
+            "User is not admin!",
+            NotAuthorizedException)
+
+        return method(self, user, request, *args)
+
+    return params
+
+
 class RequestHandler(BaseHandler):
     """Request Handler."""
 
     @login_required
-    @checkIsAdmin
+    @checkIsAdminOfRequestedInstitution
     @json_response
     def get(self, user, request):
         """Handler GET Requests."""

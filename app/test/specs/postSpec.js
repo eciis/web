@@ -13,7 +13,7 @@ describe('Test Post Model:', function() {
         };
     });
 
-    describe('Test isValid', function() {
+    describe('isValid()', function() {
         it('should be invalid because of empty title', function() {
             data.title = "";
             post = new Post(data, {});
@@ -46,6 +46,83 @@ describe('Test Post Model:', function() {
         it('should be valid', function() {
             post = new Post(data, {});
             expect(post.isValid()).toBeTruthy();
+        });
+    });
+
+    describe('getVideoUrl()', function() {
+        it('should return undefined', function() {
+            post = new Post(data);
+            expect(post.getVideoUrl()).toBe(undefined);
+        });
+        
+        it('should behave...', function() {
+            data.video_url = 'https://www.youtube.com/watch?v=3T3g8rV-5GU';
+            post = new Post(data);
+            expect(post.getVideoUrl()).toBe('https://www.youtube.com/embed/3T3g8rV-5GU');
+        });
+    });
+
+    describe('hasVideo()', function() {
+        it('should be false when the video_url is undefined', function() {
+            post = new Post(data);
+            expect(post.hasVideo()).toBe(false);
+        });
+
+        it('should be false when the video_url is null', function() {
+            data.video_url = null;
+            post = new Post(data);
+            expect(post.hasVideo()).toBe(false);
+        });
+
+        it('should be false when the video_url is empty', function() {
+            data.video_url = "";
+            post = new Post(data);
+            expect(post.hasVideo()).toBe(false);
+        });
+
+        it('should be true when the video_url is valid', function() {
+            data.video_url = "https://www.youtube.com/watch?v=3T3g8rV-5GU";
+            post = new Post(data);
+            expect(post.hasVideo()).toBe(true);
+        });
+    });
+
+    describe('hasImage()', function() {
+        it('should be false when the photo_url is undefined', function() {
+            post = new Post(data);
+            expect(post.hasImage()).toBe(false);
+        });
+
+        it('should be false when the photo_url is null', function() {
+            data.photo_url = null;
+            post = new Post(data);
+            expect(post.hasImage()).toBe(false);
+        });
+
+        it('should be false when the photo_url is empty', function() {
+            data.photo_url = "";
+            post = new Post(data);
+            expect(post.hasImage()).toBe(false);
+        });
+
+        it('should be true when the photo_url is valid', function() {
+            data.photo_url = "www.photo-url.com";
+            post = new Post(data);
+            expect(post.hasImage()).toBe(true);
+        });
+    });
+
+    describe('isDeleted()', function() {
+        it('should be false when the state is deleted', function() {
+            data.state = "deleted";
+            post = new Post(data);
+            expect(post.hasImage()).toBe(false);
+        });
+
+        it('should be true when the state is not deleted', function() {
+            data.state = "published";
+            post = new Post(data);
+            expect(post.hasImage()).toBe(false);
         });
     });
 });

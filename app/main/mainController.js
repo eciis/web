@@ -109,7 +109,7 @@
         };
 
         mainCtrl.goEvents = function goEvents(){
-            $state.go('app.event');
+            $state.go('app.events');
         };
 
         mainCtrl.logout = function logout() {

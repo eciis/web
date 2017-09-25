@@ -37,5 +37,15 @@
             });
             return deferred.promise;
         };
+
+        service.getEvent = function getEvent(eventKey) {
+            var deferred = $q.defer();
+            $http.get(EVENT_URI + '/' + eventKey).then(function success(response) {
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+            return deferred.promise;
+        };
     });
 })();

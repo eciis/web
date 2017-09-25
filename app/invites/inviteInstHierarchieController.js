@@ -222,9 +222,9 @@
         };
 
         inviteInstCtrl.acceptRequest = function acceptRequest(request, type_of_invite, event) {
-            var promise = MessageService.showConfirmationDialog(event, 'Aceitar Solicitação', isOvewritingParent('accept'));
+            var promise = MessageService.showConfirmationDialog(event, 'Aceitar Solicitação', isOvewritingParent(type_of_invite));
             promise.then(function() {
-                var accept = type_of_invite === "REQUEST_INSTITUTION_PARENT" ?
+                var accept = type_of_invite === REQUEST_PARENT ?
                     RequestInvitationService.acceptInstParentRequest(request.key) : RequestInvitationService.acceptInstChildrenRequest(request.key);
                 accept.then(function success() {
                     addAcceptedInstitution(type_of_invite, request.institution_key);
@@ -238,9 +238,9 @@
         };
 
         inviteInstCtrl.rejectRequest = function rejectRequest(request, type_of_invite, event) {
-            var promise = MessageService.showConfirmationDialog(event, 'Rejeitar Solicitação', isOvewritingParent('reject'));
+            var promise = MessageService.showConfirmationDialog(event, 'Rejeitar Solicitação', 'Confirmar rejeição da solicitação?');
             promise.then(function() {
-                var reject = type_of_invite === "REQUEST_INSTITUTION_PARENT" ?
+                var reject = type_of_invite === REQUEST_PARENT ?
                     RequestInvitationService.rejectInstParentRequest(request.key) : RequestInvitationService.rejectInstChildrenRequest(request.key);
                 reject.then(function success() {
                     request.status = 'rejected';
@@ -252,14 +252,12 @@
             return promise;
         };
 
-        function isOvewritingParent(operation) {
+        function isOvewritingParent(type_of_invite) {
             var message;
-            if (operation === 'accept' && inviteInstCtrl.institution.parent_institution) {
+            if (inviteInstCtrl.institution.parent_institution && type_of_invite === REQUEST_CHILDREN) {
                 message = 'Atenção: sua instituição já possui uma superior, deseja substituir?';
-            } else if (operation === 'accept' && !inviteInstCtrl.institution.parent_institution) {
-                message = 'Confirmar aceitação?';
             } else {
-                message = 'Confirmar rejeição?';
+                message = 'Confirmar aceitação de solicitação?';
             }
             return message;
         }

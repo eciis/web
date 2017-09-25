@@ -164,12 +164,6 @@
             });
         };
 
-        postDetailsCtrl.getVideoUrl = function getVideoUrl() {
-            var params = _.split(postDetailsCtrl.post.video_url, '=');
-            var id = params[params.length - 1];
-            return 'https://www.youtube.com/embed/' + id;
-        };
-
         function likePost() {
             postDetailsCtrl.savingLike = true;
             var promise = PostService.likePost(postDetailsCtrl.post);
@@ -231,6 +225,10 @@
 
         postDetailsCtrl.goToPost = function goToPost(post) {
              $state.go('app.post', {key: post.key});
+        };
+
+        postDetailsCtrl.goToEvent = function goToEvent(event) {
+            $state.go('app.event', {eventKey: event.key});
         };
 
         postDetailsCtrl.getValues = function getValues(object) {
@@ -336,14 +334,22 @@
             return text;
         };
 
-        postDetailsCtrl.showImage = function(post) {
-            var imageEmpty = post.photo_url === "";
-            var imageNull = post.photo_url === null;
-            var deletedPost = post.state === 'deleted';
-            return !imageEmpty && !imageNull && !deletedPost;
+        postDetailsCtrl.showImage = function showImage(post) {
+            var postObj = new Post(post);
+            return postObj.hasImage() && !postObj.isDeleted();
         };
 
-        postDetailsCtrl.isLongPostTimeline = function(text){
+        postDetailsCtrl.showVideo = function showVideo(post) {
+            var postObj = new Post(post);
+            return postObj.hasVideo() && !postObj.isDeleted();
+        };
+
+        postDetailsCtrl.getVideoUrl = function getVideoUrl(post) {
+            var postObj = new Post(post);
+            return postObj.getVideoUrl();
+        };
+
+        postDetailsCtrl.isLongPostTimeline = function isLongPostTimeline(text){
             if(text){
                 var numberOfChar = text.length;
                 return !postDetailsCtrl.isPostPage &&
@@ -589,17 +595,26 @@
 
         shareCtrl.newPost = new Post({}, shareCtrl.user.current_institution.key);
 
-        shareCtrl.cancelDialog = function() {
+        shareCtrl.cancelDialog = function cancelDialog() {
             $mdDialog.cancel();
         };
 
-        shareCtrl.showImage = function() {
-            var imageEmpty = shareCtrl.post.photo_url === "";
-            var imageNull = shareCtrl.post.photo_url === null;
-            return !imageEmpty && !imageNull;
+        shareCtrl.showImage = function showImage() {
+            var postObj = new Post(shareCtrl.post);
+            return postObj.hasImage() && !postObj.isDeleted();
         };
 
-        shareCtrl.share = function() {
+        shareCtrl.showVideo = function showVideo() {
+            var postObj = new Post(shareCtrl.post);
+            return postObj.hasVideo() && !postObj.isDeleted();
+        };
+
+        shareCtrl.getVideoUrl = function getVideoUrl() {
+            var postObj = new Post(shareCtrl.post);
+            return postObj.getVideoUrl();
+        };
+
+        shareCtrl.share = function share() {
             shareCtrl.newPost.shared_post = getOriginalPost(shareCtrl.post);
             shareCtrl.newPost.pdf_files = [];
             PostService.createPost(shareCtrl.newPost).then(function success(response) {

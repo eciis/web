@@ -16,7 +16,6 @@
 
         suggestInstCtrl.goToInstitution = function goToInstitution(institutionKey) {
             window.open(makeUrl(institutionKey), '_blank');
-            suggestInstCtrl.cancel();
         };
 
         suggestInstCtrl.cancel = function cancel() {
@@ -51,9 +50,9 @@
         suggestInstCtrl.showMessage = function() {
             var message;
             if(suggestInstCtrl.institutions.length === 1) {
-                message = 'Já existe uma instituição com esse nome. Deseja convidá-la?';
+                message = 'A instituição que você quer convidar é essa?';
             } else {
-                message = 'Já existem instituições com esse nome. Deseja convidar alguma delas?';
+                message = 'A instituição que você quer convidar é alguma dessas?';
             }
             return message;
         };

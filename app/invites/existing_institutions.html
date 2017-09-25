@@ -8,8 +8,9 @@
                     <md-list-item class="md-2-line" ng-if="suggestInstCtrl.showSuggestion(institution.state)">
                         <div layout="row">
                             <md-radio-button ng-value="institution.id" class="md-primary align-top">{{institution.name}}</md-radio-button>
-                            <md-button class="md-icon-button" title="Página da instituição" ng-click="suggestInstCtrl.goToInstitution(institution.id)">
-                                <md-icon>forward</md-icon>
+                            <md-button style="color: green; font-size: 0.8em" title="Página da instituição"
+                            ng-click="suggestInstCtrl.goToInstitution(institution.id)">
+                                ver detalhes
                             </md-button>
                         </div>
                     </md-list-item>

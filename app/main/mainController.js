@@ -5,7 +5,8 @@
     app.controller('PanelMenuCtrl', PanelMenuCtrl);
 
     app.controller("MainController", function MainController($mdSidenav, $mdDialog, $mdToast, $state,
-            AuthService, $rootScope, InstitutionService, $mdPanel, $q) {
+            AuthService, $rootScope, InstitutionService, $mdPanel, $q, RequestInvitationService,
+            InviteService, $mdMenu) {
         var mainCtrl = this;
 
         mainCtrl.search = "";
@@ -14,6 +15,9 @@
         mainCtrl.institutions = [];
         mainCtrl._mdPanel = $mdPanel;
         var NO_INSTITUTION = 'Nenhuma instituição encontrada';
+
+        mainCtrl.pending_manager_member = 0;
+        mainCtrl.pending_inst_invitations = 0;
 
         mainCtrl.showMenu = function showMenu(ev) {
             var deferred = $q.defer();
@@ -85,6 +89,7 @@
         
         mainCtrl.changeInstitution = function changeInstitution(institution) {
             mainCtrl.user.changeInstitution(institution);
+            mainCtrl.getPendingTasks();
         };
 
         mainCtrl.settings = [{
@@ -116,10 +121,45 @@
             AuthService.logout();
         };
 
+        mainCtrl.goToManageMembers = function goToManageMembers(){
+            $state.go('app.manage_institution.invite_user', {
+                institutionKey: mainCtrl.user.current_institution.key
+            });
+        };
+
+        mainCtrl.goToManageInstitutions = function goToManageInstitutions(){
+            $state.go('app.manage_institution.invite_inst', {
+                institutionKey: mainCtrl.user.current_institution.key
+            });
+        };
+
+        mainCtrl.goToEditInfo = function goToEditInfo(){
+            $state.go('app.manage_institution.edit_info', {
+                institutionKey: mainCtrl.user.current_institution.key
+            });
+        };
+
+        mainCtrl.openConfigMenu = function openConfigMenu(ev) {
+            $mdMenu.open(ev);
+        };
+
+        mainCtrl.getPendingTasks = function getPendingTasks() {
+            RequestInvitationService.getRequests(mainCtrl.user.current_institution.key).then(
+            function success(response) {
+                mainCtrl.pending_manager_member = response.data.length;
+            });
+            InviteService.getSentInstitutionInvitations().then(
+            function success(response) {
+                mainCtrl.pending_inst_invitations = response.data.length;
+            });
+        };
+
         (function main() {
             if (mainCtrl.user.name === 'Unknown') {
                 $state.go("app.config_profile");
             }
+
+            mainCtrl.getPendingTasks();
         })();
     });
 

@@ -332,3 +332,21 @@ a:active {
     background: url("//i.imgur.com/TxzC70f.png") no-repeat;
     cursor: pointer;
 }
+
+.notification-badge {
+   position:relative;
+}
+.notification-badge[data-badge]:after {
+   content:attr(data-badge);
+   position:absolute;
+   top:-3px;
+   right:-2px;
+   font-size:.7em;
+   background:#FF6F00;
+   color:white;
+   width:12px;height:12px;
+   text-align:center;
+   line-height:18px;
+   border-radius:50%;
+   border: 2px solid #EFEBE9;
+}

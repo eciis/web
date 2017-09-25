@@ -14,23 +14,56 @@
 
     <span flex md-truncate></span>
 
-    <md-button ng-click="mainCtrl.goEvents()" class="md-icon-button">
+    <md-menu md-position-mode="target-right target">
+      <md-button aria-label="menu" class="md-icon-button" ng-click="$mdMenu.open(ev); mainCtrl.getPendingTasks();" title="Configurações Administrativas">
+        <md-icon ng-class="mainCtrl.pending_inst_invitations || 
+            mainCtrl.pending_manager_member? 'notification-badge': ''" data-badge>
+          settings
+        </md-icon>
+      </md-button>
+      <md-menu-content width="4">
+        <md-menu-item>
+          <md-button ng-click="mainCtrl.goToEditInfo()">
+            <md-icon>edit</md-icon>
+            Editar Informações
+          </md-button>
+        </md-menu-item>
+        <md-menu-item>
+          <md-button  ng-click="mainCtrl.goToManageMembers()">
+            <md-icon ng-class="mainCtrl.pending_manager_member? 'notification-badge': ''" 
+              data-badge>people</md-icon>
+            Gerenciar Membros
+        </md-menu-item>
+        <md-menu-item>
+          <md-button ng-click="mainCtrl.goToManageInstitutions()">
+            <md-icon ng-class="mainCtrl.pending_inst_invitations? 'notification-badge': ''" 
+              data-badge>account_balance</md-icon>
+            Vínculos Institucionais
+          </md-button>
+        </md-menu-item>
+      </md-menu-content>
+    </md-menu>
+
+    <md-button ng-click="mainCtrl.goEvents()" class="md-icon-button" title="Eventos">
       <md-icon>event</md-icon>
     </md-button>
 
     <div layout="row" md-theme="input" style="margin-top: 42px;">
-      <form ng-submit="mainCtrl.showMenu($event)">
+      <form ng-submit="mainCtrl.showMenu($event);">
         <md-input-container flex md-no-float>
-          <md-icon class="material-icons">&#xE8B6;</md-icon>
-          <input aria-label="Pesquisar por instituições" class="form-control demo-menu-open-button" ng-model="mainCtrl.search"
-          md-colors="{background: 'teal-800'}">
+          <input aria-label="Pesquisar por instituições" class="form-control demo-menu-open-button" 
+            ng-model="mainCtrl.search" md-colors="{background: 'teal-800'}"
+            ng-show="search">
         </md-input-container>
       </form>
     </div>
+    <md-button ng-click="search = !search" class="md-icon-button" title="Buscar">
+      <md-icon>search</md-icon>
+    </md-button>
 
     <notification></notification>
 
-    <md-button aria-label="inicio" class="md-icon-button" ui-sref="app.home">
+    <md-button aria-label="inicio" class="md-icon-button" ui-sref="app.home" title="Página Inicial">
       <md-icon>home</md-icon>
     </md-button>
 
@@ -54,7 +87,7 @@
         <md-menu-item>
           <md-button ui-sref="app.config_profile">
             <md-icon>dashboard</md-icon>
-            Configurações
+            Minhas Configurações
           </md-button>
         </md-menu-item>
         <md-menu-divider></md-menu-divider>

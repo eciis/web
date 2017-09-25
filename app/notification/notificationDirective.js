@@ -65,9 +65,7 @@
                      templateUrl: "requests/request_processing.html",
                      controller: "RequestProcessingController",
                      controllerAs: "requestCtrl",
-                     locals: {
-                         key: ""
-                     }
+                     locals: {}
                 }
             },
             "REQUEST_INSTITUTION_PARENT": {
@@ -78,9 +76,7 @@
                      templateUrl: "requests/request_processing.html",
                      controller: "RequestProcessingController",
                      controllerAs: "requestCtrl",
-                     locals: {
-                         key: ""
-                     }
+                     locals: {}
                 }
             }
         };

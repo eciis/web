@@ -88,9 +88,8 @@
           {{postDetailsCtrl.post.shared_post.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats}}.
         </p>
       </div>
-      <div class="image-view" ng-if="postDetailsCtrl.showImage(postDetailsCtrl.post.shared_post)">
-        <img class="md-card-image" style="border-radius: 3%;" ng-src="{{ postDetailsCtrl.post.shared_post.photo_url }}"/>
-      </div>
+      <img class="md-card-image" ng-if="postDetailsCtrl.showImage(postDetailsCtrl.post.shared_post)" 
+        style="width: 100%; height: auto;" ng-src="{{ postDetailsCtrl.post.shared_post.photo_url }}"/>
       <div class="youtube-player" ng-if="postDetailsCtrl.showVideo(postDetailsCtrl.post.shared_post)">
         <iframe ng-src="{{ postDetailsCtrl.getVideoUrl(postDetailsCtrl.post.shared_post) }}"></iframe>
       </div>

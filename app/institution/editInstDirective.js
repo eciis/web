@@ -2,7 +2,7 @@
 (function() {
     var app = angular.module("app");
     app.controller("EditInstController", function EditInstController(AuthService, InstitutionService, CropImageService,$state,
-            $mdToast, $mdDialog, $http, InviteService, ImageService, $rootScope, MessageService, PdfService, $q) {
+            $mdToast, $mdDialog, $http, InviteService, ImageService, $rootScope, MessageService, PdfService, $q, RequestInvitationService) {
 
         var editInstCtrl = this;
         var institutionKey = $state.params.institutionKey;
@@ -114,21 +114,34 @@
             var savePromises = [savePortfolio(), saveImage()];
             var promise = $q.defer();
             $q.all(savePromises).then(function success() {
-                var patch = jsonpatch.generate(observer);
-                InstitutionService.update(institutionKey, patch).then(
-                    function success() {
-                        updateUserInstitutions(editInstCtrl.newInstitution);
-                        $q.resolve(promise);
-                    },
-                    function error(response) {
-                        MessageService.showToast(response.data.msg);
-                        $q.reject(promise);
-                });
+                if(editInstCtrl.isSubmission) {
+                    saveRequestInst();
+                } else {
+                    patchIntitution();
+                }
+                $q.resolve(promise);
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
                 $q.reject(promise);
             });
             return promise;
+        }
+
+
+        function patchIntitution() {
+            var patch = jsonpatch.generate(observer);
+            InstitutionService.update(institutionKey, patch).then(
+                function success() {
+                    updateUserInstitutions(editInstCtrl.newInstitution);
+                },
+                function error(response) {
+                    MessageService.showToast(response.data.msg);
+            });
+        }
+
+        function saveRequestInst() {
+            delete editInstCtrl.newInstitution.admin;
+            RequestInvitationService.sendRequestInst(editInstCtrl.newInstitution);
         }
 
         function updateUserInstitutions(institution) {

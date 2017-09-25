@@ -19,6 +19,19 @@
             return deferred.promise;
         };
 
+        service.sendRequestInst = function sendRequestInst(request) {
+            request.type_of_invite = "REQUEST_INSTITUTION";
+            var deferred = $q.defer();
+
+            $http.post(REQUESTS_URI + "requests/institution", request).then(function success(response) {
+                deferred.resolve(response);
+            }, function erro(response) {
+                deferred.reject(response);
+            });
+
+            return deferred.promise;
+        };
+
         service.sendRequestToParentInst = function(invite, institution_requested_key) {
             var deferred = $q.defer();
             $http.post(REQUESTS_URI + institution_requested_key + "/requests/institution_parent", invite)

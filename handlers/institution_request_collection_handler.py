@@ -60,6 +60,7 @@ class InstitutionRequestCollectionHandler(BaseHandler):
         )
 
         inst_stub = createInstitution(user, data)
+        data['sender_key'] = user.key.urlsafe()
         data['institution_key'] = inst_stub.key.urlsafe()
         data['admin_key'] = user.key.urlsafe()
 

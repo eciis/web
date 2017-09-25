@@ -1,0 +1,12 @@
+{
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "ngMask": "angular-mask#^3.1.1"
+  }
+}

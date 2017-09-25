@@ -29,6 +29,7 @@ module.exports = function (config) {
         "node_modules/mockfirebase/browser/mockfirebase.js",
         "node_modules/moment-js/moment.js",
         "node_modules/angular-moment/angular-moment.js",
+        "bower_components/ngMask/dist/ngMask.js",
         '../*.js',
         '../*/*.js',
         'specs/*.js'

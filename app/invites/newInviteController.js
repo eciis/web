@@ -75,6 +75,7 @@
                     newInviteCtrl.user.institutions.push(institutionSaved);
                     newInviteCtrl.user.institutions_admin.push(institutionSaved.key);
                     newInviteCtrl.user.follow(institutionSaved);
+                    newInviteCtrl.user.addProfile(createNewProfile(institutionSaved));
                     newInviteCtrl.user.current_institution = institutionSaved;
                     newInviteCtrl.user.state = 'active';
                     newInviteCtrl.user.name = getCurrentName();
@@ -86,6 +87,17 @@
             });
             return promise;
         };
+
+        function createNewProfile(new_institution) {
+            return {
+                email: null,
+                institution_key: new_institution.key,
+                institution_name: new_institution.name,
+                institution_photo_url: new_institution.photo_url,
+                office: 'Administrador',
+                phone: null
+            };
+        }
 
         newInviteCtrl.isInviteUser = function isInviteUser(){
             return newInviteCtrl.invite && newInviteCtrl.invite.type_of_invite === "USER";

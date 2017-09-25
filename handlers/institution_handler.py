@@ -145,6 +145,7 @@ class InstitutionHandler(BaseHandler):
         user.name = data.get('sender_name')
         data_profile = {
             'office': 'Administrador',
+            'institution_key': institution.key.urlsafe(),
             'institution_name': institution.name,
             'institution_photo_url': institution.photo_url
         }

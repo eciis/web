@@ -75,7 +75,7 @@
                     newInviteCtrl.user.institutions.push(institutionSaved);
                     newInviteCtrl.user.institutions_admin.push(institutionSaved.key);
                     newInviteCtrl.user.follow(institutionSaved);
-                    newInviteCtrl.user.addProfile(createNewProfile(institutionSaved));
+                    newInviteCtrl.user.addProfile(createProfile(institutionSaved));
                     newInviteCtrl.user.current_institution = institutionSaved;
                     newInviteCtrl.user.state = 'active';
                     newInviteCtrl.user.name = getCurrentName();
@@ -88,7 +88,7 @@
             return promise;
         };
 
-        function createNewProfile(new_institution) {
+        function createProfile(new_institution) {
             return {
                 email: null,
                 institution_key: new_institution.key,

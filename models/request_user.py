@@ -47,6 +47,7 @@ class RequestUser(Invite):
         request.sender_name = data.get('sender_name')
         request.office = data.get('office')
         request.institutional_email = data.get('institutional_email')
+        request.institution_requested_key = ndb.Key(urlsafe=data.get('institution_key'))
         request = Invite.create(data, request)
         request.isValid()
         return request

@@ -38,7 +38,8 @@
               <div layout="column" layout-align="center" ng-if="newInviteCtrl.isInviteUser()">
                 <md-input-container flex-gt-sm >
                   <label>Telefone institucional</label>
-                  <input ng-pattern="newInviteCtrl.phoneRegex" ng-model="newInviteCtrl.phone" placeholder="(DDD) 99999-9999">
+                  <input ng-pattern="newInviteCtrl.phoneRegex" ng-model="newInviteCtrl.phone" 
+                    placeholder="99 9999-99999" mask="99 9999-99999" mask-validate='false'>
                 </md-input-container>
 
                 <md-input-container>

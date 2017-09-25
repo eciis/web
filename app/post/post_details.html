@@ -115,7 +115,10 @@
 
   <!-- BODY POST -->
   <img ng-if="postDetailsCtrl.showImage(postDetailsCtrl.post)" ng-src="{{ postDetailsCtrl.post.photo_url }}"
-  class="md-card-image">
+    class="md-card-image">
+  <div class="youtube-player" ng-if="postDetailsCtrl.showVideo(postDetailsCtrl.post)">
+    <iframe ng-src="{{postDetailsCtrl.getVideoUrl(postDetailsCtrl.post)}}"></iframe>
+  </div>
   <md-card-title ng-if="!postDetailsCtrl.isDeleted(postDetailsCtrl.post)">
     <md-card-title-text>
       <a href class="md-title hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post)">
@@ -145,9 +148,6 @@
               <md-icon>description</md-icon> {{pdf.name}}
           </md-button>
         </div>
-    </div>
-    <div class="youtube-player" ng-if="postDetailsCtrl.showVideo(postDetailsCtrl.post)">
-      <iframe ng-src="{{postDetailsCtrl.getVideoUrl(postDetailsCtrl.post)}}"></iframe>
     </div>
   </md-card-content>
   <md-divider></md-divider>

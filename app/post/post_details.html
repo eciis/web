@@ -88,9 +88,8 @@
           {{postDetailsCtrl.post.shared_post.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats}}.
         </p>
       </div>
-      <div class="image-view" ng-if="postDetailsCtrl.showImage(postDetailsCtrl.post.shared_post)">
-        <img class="md-card-image" style="border-radius: 3%;" ng-src="{{ postDetailsCtrl.post.shared_post.photo_url }}"/>
-      </div>
+      <img class="md-card-image" ng-if="postDetailsCtrl.showImage(postDetailsCtrl.post.shared_post)" 
+        style="width: 100%; height: auto;" ng-src="{{ postDetailsCtrl.post.shared_post.photo_url }}"/>
       <div class="youtube-player" ng-if="postDetailsCtrl.showVideo(postDetailsCtrl.post.shared_post)">
         <iframe ng-src="{{ postDetailsCtrl.getVideoUrl(postDetailsCtrl.post.shared_post) }}"></iframe>
       </div>
@@ -116,7 +115,10 @@
 
   <!-- BODY POST -->
   <img ng-if="postDetailsCtrl.showImage(postDetailsCtrl.post)" ng-src="{{ postDetailsCtrl.post.photo_url }}"
-  class="md-card-image">
+    class="md-card-image">
+  <div class="youtube-player" ng-if="postDetailsCtrl.showVideo(postDetailsCtrl.post)">
+    <iframe ng-src="{{postDetailsCtrl.getVideoUrl(postDetailsCtrl.post)}}"></iframe>
+  </div>
   <md-card-title ng-if="!postDetailsCtrl.isDeleted(postDetailsCtrl.post)">
     <md-card-title-text>
       <a href class="md-title hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post)">
@@ -146,9 +148,6 @@
               <md-icon>description</md-icon> {{pdf.name}}
           </md-button>
         </div>
-    </div>
-    <div class="youtube-player" ng-if="postDetailsCtrl.showVideo(postDetailsCtrl.post)">
-      <iframe ng-src="{{postDetailsCtrl.getVideoUrl(postDetailsCtrl.post)}}"></iframe>
     </div>
   </md-card-content>
   <md-divider></md-divider>

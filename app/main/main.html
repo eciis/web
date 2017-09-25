@@ -14,7 +14,7 @@
 
     <span flex md-truncate></span>
 
-    <md-menu md-position-mode="target-right target">
+    <md-menu md-position-mode="target-right target" ng-if="mainCtrl.isAdmin(mainCtrl.user.current_institution.key)">
       <md-button aria-label="menu" class="md-icon-button" ng-click="$mdMenu.open(ev); mainCtrl.getPendingTasks();" title="Configurações Administrativas">
         <md-icon ng-class="mainCtrl.pending_inst_invitations || 
             mainCtrl.pending_manager_member? 'notification-badge': ''" data-badge>

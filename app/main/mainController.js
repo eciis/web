@@ -145,13 +145,15 @@
 
         mainCtrl.getPendingTasks = function getPendingTasks() {
             RequestInvitationService.getRequests(mainCtrl.user.current_institution.key).then(
-            function success(response) {
-                mainCtrl.pending_manager_member = response.data.length;
-            });
+                function success(response) {
+                    mainCtrl.pending_manager_member = response.data.length;
+                }, function error() {}
+            );
             InviteService.getSentInstitutionInvitations().then(
-            function success(response) {
-                mainCtrl.pending_inst_invitations = response.data.length;
-            });
+                function success(response) {
+                    mainCtrl.pending_inst_invitations = response.data.length;
+                }, function error() {}
+            );
         };
 
         (function main() {

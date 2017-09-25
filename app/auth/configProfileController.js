@@ -111,7 +111,6 @@
         };
 
         configProfileCtrl.editProfile = function editProfile(inst, ev) {
-            console.log(configProfileCtrl.newUser.institutions);
             $mdDialog.show({
                 templateUrl: 'user/edit_profile.html',
                 controller: 'EditProfileController',

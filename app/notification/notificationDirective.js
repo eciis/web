@@ -88,8 +88,8 @@
                 state: "process_request",
                 isDialog: true,
                 dialogProperties: {
-                     templateUrl: "requests/request_processing.html",
-                     controller: "RequestProcessingController",
+                     templateUrl: "requests/request_institution_processing.html",
+                     controller: "RequestInstitutionProcessingController",
                      controllerAs: "requestCtrl",
                      locals: {
                          key: ""
@@ -130,11 +130,10 @@
                 controller.goTo(notification);
             }
 
-            controller.markAsRead(notification);
+            //controller.markAsRead(notification);
         };
 
         controller.showDialog = function showDialog(dialogProperties) {
-            console.log("Passou Aqui!!!!!!!!!!!!!!!!!!!!!!");
             $mdDialog.show({
                 controller: dialogProperties.controller,
                 controllerAs: dialogProperties.controllerAs,

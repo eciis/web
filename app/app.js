@@ -234,7 +234,7 @@
                         var inviteKey = pendingInvite.key;
                         $state.go("new_invite", {key: inviteKey});
                     } else if (user.isInactive()) {
-                        $state.go("user_inactive");
+                        //$state.go("user_inactive");
                     }
                 }
                 return config || $q.when(config);

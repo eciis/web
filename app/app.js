@@ -84,12 +84,21 @@
                     }
                 }
             })
-            .state("app.event", {
-                url: "/event",
+            .state("app.events", {
+                url: "/events",
                 views: {
                     content: {
                         templateUrl: "event/event.html",
                         controller: "EventController as eventCtrl",
+                    }
+                }
+            })
+            .state("app.event", {
+                url: "/event/:eventKey/details",
+                views: {
+                    content: {
+                        templateUrl: "event/event_page.html",
+                        controller: "EventPageController as eventCtrl",
                     }
                 }
             })

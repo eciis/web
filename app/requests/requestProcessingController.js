@@ -15,19 +15,16 @@
 
         requestController.user = AuthService.getCurrentUser();
 
-        requestController.acceptRequest = function acceptRequest(event) {
-            var promise = MessageService.showConfirmationDialog(event, 'Aceitar solicitação', isOvewritingParent());
-            promise.then(function() {
-                resolveRequest().then(function success() {
-                    MessageService.showToast("Solicitação aceita!");
-                    hideDialog();
-                }, function error(response) {
-                    MessageService.showToast(response.data.msg);
-                });
-            }, function() {
-                MessageService.showToast('Cancelado');
+        requestController.parent = null;
+        requestController.children = null;
+
+        requestController.acceptRequest = function acceptRequest() {
+            resolveRequest().then(function success() {
+                MessageService.showToast("Solicitação aceita!");
+                requestController.hideDialog();
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
             });
-            return promise;
         };
 
         function resolveRequest() {
@@ -46,7 +43,7 @@
             promise.then(function() {
                 deleteRequest().then(function success() {
                     MessageService.showToast("Solicitação rejeitada!");
-                    hideDialog();
+                    requestController.hideDialog();
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
                 });
@@ -56,22 +53,9 @@
             return promise;
         };
 
-
-        function isOvewritingParent() {
-            var message;
-            if (requestController.institution.parent_institution) {
-                message = 'Atenção: sua instituição já possui uma superior, deseja substituir?';
-            } else {
-                message = 'Confirmar aceitação?';
-            }
-            return message;
-        }
-
-        requestController.getFullAddress = function getFullAddress() {
-            if(requestController.institution) {
-                var instObj = new Institution(requestController.institution);
-                return instObj.getFullAddress();
-            }
+        requestController.getFullAddress = function getFullAddress(institution) {
+            var instObj = new Institution(institution);
+            return instObj.getFullAddress();
         };
 
         function deleteRequest() {
@@ -84,16 +68,30 @@
             }
         }
 
-        function hideDialog() {
+        requestController.hideDialog = function hideDialog() {
             $mdDialog.hide();
-        }
+        };
 
         function loadInstitution(institutionKey) {
             InstitutionService.getInstitution(institutionKey).then(function success(response) {
                 requestController.institution = response.data;
+                formatPositions();
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
+        }
+
+        function formatPositions() {
+            if (requestController.request.type_of_invite === REQUEST_PARENT) {
+                requestController.parent = requestController.institution;
+                requestController.children = requestController.request.institution;
+            } else if (requestController.request.type_of_invite === REQUEST_CHILDREN) {
+                requestController.children = requestController.institution;
+                requestController.parent = requestController.request.institution;
+            } else {
+                requestController.parent = requestController.institution;
+                requestController.children = requestController.request;
+            }
         }
 
         function loadRequest(){
@@ -104,7 +102,7 @@
                 } else if (requestController.request.status === 'sent' && !requestController.isInstRequest(requestController.request)) {
                     loadInstitution(requestController.request.institution_key);
                 } else {
-                    hideDialog();
+                    requestController.hideDialog();
                     MessageService.showToast("Você já resolveu esta solicitação.");
                 }
             }, function error(response) {

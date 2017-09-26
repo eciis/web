@@ -123,8 +123,8 @@
             var promise = InstitutionService.getInstitution(institution_requested_key);
             promise.then(function(response) {
                if (type_of_invite === REQUEST_PARENT) {
-                    inviteInstCtrl.institution.addParentInst(response.data);
-                    inviteInstCtrl.hasParent = true;
+                   inviteInstCtrl.institution.addParentInst(response.data);
+                   inviteInstCtrl.hasParent = true;
                } else {
                     inviteInstCtrl.institution.addChildrenInst(response.data);
                }
@@ -284,12 +284,6 @@
                 message = 'Solicitação para ser uma instituição subordinada';
             }
             return message;
-        };
-
-        inviteInstCtrl.showSugestParentName = function showSugestParentName() {
-            var parentInvite = inviteInstCtrl.institution.parent_institution.invite;
-            var hasInvite = parentInvite !== null;
-            return hasInvite && inviteInstCtrl.user.key === parentInvite.admin_key;
         };
 
         function designOptions() {

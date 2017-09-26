@@ -305,10 +305,8 @@ class Institution(ndb.Model):
                     attr_value = self.parent_institution.urlsafe()
             if((attribute == "invite") and attr_value):
                 invite_key = self.key.get().invite
-                invite = invite_key.get()
                 attr_value = {
-                    'suggestion_institution_name': invite.suggestion_institution_name,
-                    'admin_key': invite.admin_key.urlsafe(),
+                    'suggestion_institution_name': invite_key.get().suggestion_institution_name,
                     'key': invite_key.urlsafe()
                 }
             if(attribute == 'address'):

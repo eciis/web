@@ -9,7 +9,7 @@ from utils import json_response
 from utils import getSuperUsers
 from handlers.base_handler import BaseHandler
 from custom_exceptions.entityException import EntityException
-from custom_exceptions.notAuthorizedException import NotAuthorizedException
+from utils import is_admin_of_requested_inst
 
 
 def makeUser(user, request):
@@ -27,40 +27,26 @@ def makeUser(user, request):
     return user_json
 
 
-def checkIsAdmin(method):
-    """Method of check if user is admin of institution."""
-    def params(self, user, request_key, *args):
-        request = ndb.Key(urlsafe=request_key).get()
-        institution = request.institution_key.get()
         super_users = getSuperUsers()
         is_super_user = user in super_users
-
-        Utils._assert(
-            institution.admin != user.key and not is_super_user,
-            "User is not admin!",
-            NotAuthorizedException)
-
-        return method(self, user, request, *args)
-
-    return params
-
-
 class RequestHandler(BaseHandler):
     """Request Handler."""
 
     @login_required
-    @checkIsAdmin
+    @is_admin_of_requested_inst
     @json_response
-    def get(self, user, request):
+    def get(self, user, request_key):
         """Handler GET Requests."""
+        request = ndb.Key(urlsafe=request_key).get()
         self.response.write(json.dumps(request.make()))
 
     @login_required
     @json_response
-    @checkIsAdmin
+    @is_admin_of_requested_inst
     @ndb.transactional(xg=True)
-    def put(self, user, request):
+    def put(self, user, request_key):
         """Handler PUT Requests."""
+        request = ndb.Key(urlsafe=request_key).get()
         Utils._assert(
             request.status != 'sent',
             "this request has already been processed",
@@ -83,9 +69,10 @@ class RequestHandler(BaseHandler):
         self.response.write(json.dumps(makeUser(user, self.request)))
 
     @login_required
-    @checkIsAdmin
+    @is_admin_of_requested_inst
     @json_response
-    def delete(self, user, request):
+    def delete(self, user, request_key):
         """Change request status from 'sent' to 'rejected'."""
+        request = ndb.Key(urlsafe=request_key).get()
         request.change_status('rejected')
         request.put()

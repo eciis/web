@@ -4,7 +4,7 @@
 
     app.controller("SuggestInstitutionController", function SuggestInstitutionController(
         $mdDialog, institution, institutions, invite, requested_invites, isHierarchy, inviteController, $state,
-        MessageService){
+        MessageService, InstitutionService){
         var suggestInstCtrl = this;
         suggestInstCtrl.institution = institution;
         suggestInstCtrl.institutions = institutions;
@@ -16,7 +16,6 @@
 
         suggestInstCtrl.goToInstitution = function goToInstitution(institutionKey) {
             window.open(makeUrl(institutionKey), '_blank');
-            suggestInstCtrl.cancel();
         };
 
         suggestInstCtrl.cancel = function cancel() {
@@ -51,26 +50,31 @@
         suggestInstCtrl.showMessage = function() {
             var message;
             if(suggestInstCtrl.institutions.length === 1) {
-                message = 'Já existe uma instituição com esse nome. Deseja convidá-la?';
+                message = 'A instituição que você quer convidar é essa?';
             } else {
-                message = 'Já existem instituições com esse nome. Deseja convidar alguma delas?';
+                message = 'A instituição que você quer convidar é alguma dessas?';
             }
             return message;
         };
 
         function sendInviteToExistingInst() {
-            if (!(isLinked() || isSelf() || isPedingRequest() || isInvited())) {
-                inviteController.sendRequestToExistingInst(invite, suggestInstCtrl.chosen_institution).then(function() {
-                    suggestInstCtrl.cancel();
-                });
-            }
+            InstitutionService.getInstitution(suggestInstCtrl.chosen_institution).then(function(response) {
+                if (!(isLinked(response.data) || isSelf() || isPedingRequest() || isInvited())) {
+                    inviteController.sendRequestToExistingInst(invite, suggestInstCtrl.chosen_institution).then(function() {
+                        suggestInstCtrl.cancel();
+                    });
+                }
+            });
         }
 
-        function isLinked() {
+        function isLinked(institution_requested) {
             var isParent = _.includes(_.map(suggestInstCtrl.institution.children_institutions, getKeyFromInst), suggestInstCtrl.chosen_institution);
             var isChildren = (suggestInstCtrl.institution.parent_institution !== null &&
                     suggestInstCtrl.institution.parent_institution.key === suggestInstCtrl.chosen_institution);
-            if (isParent || isChildren) {
+            var selfIsParent = (institution_requested.parent_institution !== null &&
+                    institution_requested.parent_institution.key === suggestInstCtrl.institution.key);
+            var selfIsChildren = _.includes(_.map(institution_requested.children_institutions, getKeyFromInst), suggestInstCtrl.institution.key);
+            if (isParent || isChildren || selfIsParent || selfIsChildren) {
                 MessageService.showToast('As instituições já estão conectadas');
                 return true;
             }

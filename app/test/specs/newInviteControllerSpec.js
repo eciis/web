@@ -181,6 +181,7 @@
                         }
                     };
                 });
+                spyOn(newInviteCtrl.user, 'addProfile');
                 spyOn(state, 'go');
                 promise = newInviteCtrl.updateStubInstitution();
             });
@@ -202,6 +203,13 @@
             it('current institution of user should be otherInstitution', function(done) {
                 promise.then(function() {
                     expect(newInviteCtrl.user.current_institution.name).toEqual(otherInstitution.name);
+                    done();
+                });
+            });
+
+            it('should call addProfile()', function(done) {
+                promise.then(function() {
+                    expect(newInviteCtrl.user.addProfile).toHaveBeenCalled();
                     done();
                 });
             });

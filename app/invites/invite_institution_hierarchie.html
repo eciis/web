@@ -43,7 +43,7 @@
               ng-click="inviteInstCtrl.goToInst(inviteInstCtrl.institution.parent_institution.key)">
                 {{ inviteInstCtrl.institution.parent_institution.name }}
               </a>
-              <h4 ng-if="inviteInstCtrl.institution.parent_institution.invite">
+              <h4 ng-if="inviteInstCtrl.showSugestParentName()">
                 Nome Sugerido: {{ inviteInstCtrl.institution.parent_institution.invite.suggestion_institution_name }}
               </h4>
               <div ng-if="!inviteInstCtrl.isActive(inviteInstCtrl.institution.parent_institution)">

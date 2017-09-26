@@ -43,7 +43,12 @@
       </md-card>
     </div>
 
-    <post-timeline flex-gt-md="60" flex-md="75" layout="column" md-colors="{background: 'grey-200'}" posts="homeCtrl.posts" institution="false" user="homeCtrl.user"></post-timeline>
+    <post-timeline ng-if="!homeCtrl.isLoadingPosts" flex-gt-md="60" flex-md="75" layout="column" md-colors="{background: 'grey-200'}" posts="homeCtrl.posts" institution="false" user="homeCtrl.user"></post-timeline>
+    <div flex>
+      <md-card layout-align="center center" layout="row">
+        <md-progress-circular ng-show="homeCtrl.isLoadingPosts" md-mode="indeterminate" style="width: 13%"></md-progress-circular>
+      </md-card>
+    </div>
 
     <!-- RIGHT SIDE PANEL -->
     <div flex-gt-md="20" layout="row" hide show-gt-md>

@@ -15,6 +15,7 @@
         institutionCtrl.isMember = false;
         institutionCtrl.portfolioUrl = null;
         institutionCtrl.showFullDescription = false;
+        institutionCtrl.isLoadingPosts = true;
 
         institutionCtrl.legal_natures = {
             "public": "Pública",
@@ -38,6 +39,7 @@
         function loadPosts() {
             InstitutionService.getTimeline(currentInstitutionKey).then(function success(response) {
                 institutionCtrl.posts = response.data;
+                institutionCtrl.isLoadingPosts = false;
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });

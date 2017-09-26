@@ -15,7 +15,7 @@
         requestController.parent = null;
 
         requestController.acceptRequest = function acceptRequest() {
-            resolveRequest().then(function success() {
+            RequestInvitationService.acceptRequestInst(requestController.request.key).then(function success() {
                 MessageService.showToast("Solicitação aceita!");
                 requestController.hideDialog();
             }, function error(response) {
@@ -23,21 +23,11 @@
             });
         };
 
-        function resolveRequest() {
-            if (requestController.request.type_of_invite === REQUEST_PARENT) {
-                return RequestInvitationService.acceptInstParentRequest(requestController.request.key);
-            } else if (requestController.request.type_of_invite === REQUEST_CHILDREN) {
-                return RequestInvitationService.acceptInstChildrenRequest(requestController.request.key);
-            } else {
-                return RequestInvitationService.acceptRequest(requestController.request.key);
-            }
-        }
-
         requestController.rejectRequest = function rejectInvite(event){
             var promise = RequestInvitationService.showRejectDialog(event);
 
             promise.then(function() {
-                deleteRequest().then(function success() {
+                RequestInvitationService.rejectRequestInst(requestController.request.key).then(function success() {
                     MessageService.showToast("Solicitação rejeitada!");
                     requestController.hideDialog();
                 }, function error(response) {
@@ -53,16 +43,6 @@
             var instObj = new Institution(institution);
             return instObj.getFullAddress();
         };
-
-        function deleteRequest() {
-            if (requestController.request.type_of_invite === REQUEST_PARENT) {
-                return RequestInvitationService.rejectInstParentRequest(requestController.request.key);
-            } else if (requestController.request.type_of_invite === REQUEST_CHILDREN) {
-                return RequestInvitationService.rejectInstChildrenRequest(requestController.request.key);
-            } else {
-                return RequestInvitationService.rejectRequest(requestController.requestKey);
-            }
-        }
 
         requestController.hideDialog = function hideDialog() {
             $mdDialog.hide();

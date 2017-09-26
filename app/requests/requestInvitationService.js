@@ -122,6 +122,26 @@
             return deferred. promise;
         };
 
+        service.acceptRequestInst = function acceptRequestInst(request_key) {
+            var deferred = $q.defer();
+            $http.put("/api/requests/" + request_key + "/institution").then(function success(response) {
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+            return deferred. promise;
+        };
+
+        service.rejectRequestInst = function rejectRequest(request_key) {
+            var deferred = $q.defer();
+            $http.delete("/api/requests/" + request_key + "/institution").then(function success(response) {
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+            return deferred. promise;
+        };
+
         service.acceptInstParentRequest = function acceptRequest(request_key) {
             var deferred = $q.defer();
             $http.put("/api/requests/" + request_key + "/institution_parent").then(function success(response) {

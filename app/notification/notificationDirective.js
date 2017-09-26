@@ -130,7 +130,7 @@
                 controller.goTo(notification);
             }
 
-            //controller.markAsRead(notification);
+            controller.markAsRead(notification);
         };
 
         controller.showDialog = function showDialog(dialogProperties) {

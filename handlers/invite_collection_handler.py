@@ -22,7 +22,7 @@ class InviteCollectionHandler(BaseHandler):
         """Get invites for new institutions make by Plataform."""
         invites = []
 
-        queryInvites = InviteInstitution.query(InviteInstitution.status == 'sent')
+        queryInvites = InviteInstitution.query()
 
         invites = [invite.make() for invite in queryInvites]
 

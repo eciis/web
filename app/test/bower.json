@@ -1,4 +1,5 @@
 {
+  "name": "eciis",
   "ignore": [
     "**/.*",
     "node_modules",

@@ -10,7 +10,7 @@
         </md-toolbar>
         <md-content layout-gt-sm="column">
           <div layout-gt-sm="column" layout-padding layout-align="center center">
-            <img style="border-radius: 50%; " ng-src="{{ configProfileCtrl.newUser.photo_url }}" width="100px" height="100px" />
+            <img style="border-radius: 50%; " ng-src="{{ configProfileCtrl.photo_url }}" width="100px" height="100px" />
           <div>
               <md-button ng-show="configProfileCtrl.showButton()" ng-click="null" ng-model="configProfileCtrl.file" ngf-pattern="'image/*'"
                     ngf-accept="'image/*'" ngf-max-size="5MB"

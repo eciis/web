@@ -14,6 +14,7 @@
         configProfileCtrl.newUser = AuthService.getCurrentUser();
         configProfileCtrl.loading = false;
         configProfileCtrl.cpfRegex = /^\d{3}\.\d{3}\.\d{3}\-\d{2}$/;
+        configProfileCtrl.photo_url = configProfileCtrl.newUser.photo_url;
 
         var HAS_ONLY_ONE_INSTITUTION_MSG = "Esta é a única instituição ao qual você é vinculado." +
                 " Ao remover o vínculo você não poderá mais acessar o sistema," +
@@ -41,7 +42,7 @@
 
         function setImage(image) {
             $rootScope.$apply(function() {
-                configProfileCtrl.newUser.photo_url = image.src;
+                configProfileCtrl.photo_url = image.src;
             });
         }
 

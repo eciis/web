@@ -59,7 +59,8 @@
                 <input type="text" name="cep" required
                     ng-model="editInstCtrl.newInstitution.address.cep"
                     minlength="9" md-maxlength="9" placeholder="00000-000"
-                    ng-pattern="editInstCtrl.cepRegex">
+                    ng-pattern="editInstCtrl.cepRegex"
+                    mask="99999-999">
                 <div ng-messages="instForm.cep.$error">
                     <div ng-message="required" >Este campo é obrigatório!</div>
                     <div ng-message="pattern" >O CEP deve ser válido!</div>
@@ -107,7 +108,8 @@
                     ng-model="editInstCtrl.newInstitution.cnpj"
                     ng-pattern=editInstCtrl.cnpjRegex
                     minlength="18" md-maxlength="18"
-                    placeholder="00.000.000/0000-00">
+                    placeholder="00.000.000/0000-00"
+                    mask="99.999.999/9999-99">
                <div ng-messages="instForm.cnpj.$error">
                     <div ng-message="required" >Este campo é obrigatório!</div>
                     <div ng-message="pattern" >O CNPJ deve ser válido!</div>
@@ -118,8 +120,10 @@
                 <input type="text" name="phone" required
                     ng-model="editInstCtrl.newInstitution.phone_number"
                 ng-pattern=editInstCtrl.phoneRegex
-                minlength="11" md-maxlength="11"
-                placeholder="83 12345678">
+                minlength="12" md-maxlength="13"
+                placeholder="99 9999-99999"
+                mask="99 9999-99999"
+                mask-validate='false'>
                 <div ng-messages="instForm.phone.$error">
                     <div ng-message="required" >Este campo é obrigatório!</div>
                     <div ng-message="pattern" >O número de telefone deve ser válido!</div>

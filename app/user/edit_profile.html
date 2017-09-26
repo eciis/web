@@ -15,7 +15,8 @@
         <md-dialog-content class="md-dialog-content" layout="column" layout-align="center">
             <md-input-container>
                 <label>Telefone institucional</label>
-                <input ng-model="editProfileCtrl.profile.phone" placeholder="(99) 99999-9999" ng-pattern="editProfileCtrl.phoneRegex">
+                <input ng-model="editProfileCtrl.profile.phone" placeholder="99 9999-99999" 
+                    mask="99 9999-99999" mask-validate='false' ng-pattern="editProfileCtrl.phoneRegex">
             </md-input-container>
             <md-input-container>
                 <label>Email institucional</label>

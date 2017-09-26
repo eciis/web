@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.service("RequestInvitationService", function RequestInvitationService(MessageService, $http, $q, $mdDialog) {
+    app.service("RequestInvitationService", function RequestInvitationService(MessageService, $http, $q) {
         var service = this;
         var REQUESTS_URI = "/api/institutions/";
 

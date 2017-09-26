@@ -13,7 +13,8 @@
         'ngClipboard',
         'ngMaterialDatePicker',
         'ngMessages',
-        'angular-timeline'
+        'angular-timeline',
+        'ngMask'
     ]);
 
     app.config(function($mdIconProvider, $mdThemingProvider, $stateProvider, $urlMatcherFactoryProvider,

@@ -143,16 +143,24 @@
             $mdMenu.open(ev);
         };
 
+        function increaseInstInvitationsNumber(response) {
+            mainCtrl.pending_inst_invitations += response.data.length;
+        }
+
         mainCtrl.getPendingTasks = function getPendingTasks() {
+            mainCtrl.pending_manager_member = 0;
+            mainCtrl.pending_inst_invitations = 0;
+
             RequestInvitationService.getRequests(mainCtrl.user.current_institution.key).then(
                 function success(response) {
                     mainCtrl.pending_manager_member = response.data.length;
                 }, function error() {}
             );
-            InviteService.getSentInstitutionInvitations().then(
-                function success(response) {
-                    mainCtrl.pending_inst_invitations = response.data.length;
-                }, function error() {}
+            RequestInvitationService.getParentRequests(mainCtrl.user.current_institution.key).then(
+                increaseInstInvitationsNumber, function error() {}
+            );
+            RequestInvitationService.getChildrenRequests(mainCtrl.user.current_institution.key).then(
+                increaseInstInvitationsNumber, function error() {}
             );
         };
 

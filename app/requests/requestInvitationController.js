@@ -16,16 +16,16 @@
         requestInvCtrl.currentUser = AuthService.getCurrentUser();
         var ACTIVE = 'active';
 
-        requestInvCtrl.request = function request() {
+        requestInvCtrl.sendRequest = function sendRequest() {
             var dataInvite = {
                 institution_key : requestInvCtrl.institutionSelect.key,
                 sender_key : requestInvCtrl.currentUser.key,
                 admin_key : requestInvCtrl.institutionSelect.admin.key,
                 is_request : true,
                 type_of_invite : 'REQUEST_USER',
-                sender_name : requestInvCtrl.user.name,
-                office : requestInvCtrl.office,
-                institutional_email : requestInvCtrl.email
+                sender_name : requestInvCtrl.request.name,
+                office : requestInvCtrl.request.office,
+                institutional_email : requestInvCtrl.request.email
             };
 
             var request = new Invite(dataInvite);
@@ -76,6 +76,11 @@
                 requestInvCtrl.institutionSelect = response.data;
                 requestInvCtrl.hasInstSelect = true;
                 requestInvCtrl.showFullInformation(institution);
+
+                requestInvCtrl.request = {
+                    institution_name: institution.name
+                };
+
                 deferred.resolve(response);
             });
             return deferred.promise;
@@ -102,7 +107,12 @@
                 return instObject.getFullAddress();
         };
 
+        requestInvCtrl.cancelRequest = function cancelRequest() {
+            requestInvCtrl.request = null;
+        };
+
         function clearProperties(){
+            requestInvCtrl.request = null;
             requestInvCtrl.institutionSelect = {};
             requestInvCtrl.hasInstSelect = false;
             requestInvCtrl.wasSearched = true;

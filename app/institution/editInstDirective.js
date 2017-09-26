@@ -140,7 +140,13 @@
         }
 
         function saveRequestInst() {
-            RequestInvitationService.sendRequestInst(editInstCtrl.newInstitution);
+            RequestInvitationService.sendRequestInst(editInstCtrl.newInstitution).then(
+                function success() {
+                    MessageService.showToast("Pedido enviado com sucesso!");
+                    $state.go('user_inactive');
+                }, function error(response) {
+                    MessageService.showToast(response.data.msg);
+                });
         }
 
         function updateUserInstitutions(institution) {

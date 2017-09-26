@@ -62,7 +62,7 @@
         }
 
         function loadRequest(){
-            RequestInvitationService.getRequest(requestController.requestKey).then(function success(response) {
+            RequestInvitationService.getRequestInst(requestController.requestKey).then(function success(response) {
                 requestController.request = new Invite(response.data);
                 if (requestController.request.status === 'sent') {
                     loadInstitution(requestController.request.institution_key);

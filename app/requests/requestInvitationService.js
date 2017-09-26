@@ -86,6 +86,16 @@
             return deferred.promise;
         };
 
+        service.getRequestInst = function getRequestInst(request_key) {
+            var deferred = $q.defer();
+            $http.get("/api/requests/" + request_key + "/institution").then(function success(response) {
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+            return deferred. promise;
+        };
+
         service.getRequest = function getRequest(request_key) {
             var deferred = $q.defer();
 

@@ -27,8 +27,6 @@ def makeUser(user, request):
     return user_json
 
 
-        super_users = getSuperUsers()
-        is_super_user = user in super_users
 class RequestHandler(BaseHandler):
     """Request Handler."""
 

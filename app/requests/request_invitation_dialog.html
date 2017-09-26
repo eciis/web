@@ -1,67 +1,89 @@
-<md-dialog flex flex-gt-md="30">
-	<md-card>
-		<p layout-margin> Busque a instituição que você faz parte.</p>
-		<div md-theme="input" class="search-field">
-		    <form ng-submit="requestInvCtrl.showMenu($event)">
-		      	<md-input-container class="md-block" flex-gt-sm>
-		          <input placeholder="Buscar instituições" ng-model="requestInvCtrl.search" flex-gt-sm autocomplete="off">
-		          <md-icon class="material-icons">&#xE8B6;</md-icon>
-		        </md-input-container>
-		    </form>
-		</div>
-		<md-list class="md-dense" flex>
-		    <md-list-item ng-repeat="institution in requestInvCtrl.institutions" ng-click="requestInvCtrl.selectInstitution(institution)"
-		    	ng-class="requestInvCtrl.showFullInformation(institution)? 'md-3-line': ''">
-			    <div ng-if="!requestInvCtrl.showFullInformation(institution)" class="md-list-item-text" layout-align="center center" 
-			    	layout="column" style='text-align: center'>
-		            {{ institution.name }}
-			    </div>
-			    <div ng-if="requestInvCtrl.showFullInformation(institution)">
-			    	<div  class="md-list-item-text" layout-align="center center" layout="column">
-			            <h3><b>{{ requestInvCtrl.institutionSelect.name }}</b></h3>
-			            <h3>{{ requestInvCtrl.institutionSelect.email }}</h3>
-			            <h4> {{ requestInvCtrl.getFullAddress(requestInvCtrl.institutionSelect) }}</h4>
-			            <p align="center">{{ requestInvCtrl.institutionSelect.description }}</p>
-			    	</div>
-			    	<form name="requestuser">
-			    		<md-input-container class="md-block">
-			              <label>Nome</label>
-			              <input ng-model="requestInvCtrl.user.name" name="name" required>
-			              <div ng-messages='requestuser.name.$error'>
-                    		<div ng-message="required">Este campo é obrigatório!</div>
-                		  </div> 
-			            </md-input-container>
-			            
-			            <md-input-container class="md-block">
-			              <label>Email institucional</label>
-			              <input ng-model="requestInvCtrl.email" type="email" name="email" required>
-			              <div ng-messages='requestuser.email.$error'>
-                    		<div ng-message="required">Este campo é obrigatório!</div>
-                		  </div> 
-			            </md-input-container>
+<md-dialog>
+	<div layout="row">
+		<md-card flex layout="column">
+			<md-card-header layout="row" layout-align="center center">
+				<md-card-header-text><span class="md-title">Busque a instituição que você faz parte.</span></md-card-header-text>
+			    <md-button class="md-icon-button" ng-click="requestInvCtrl.cancelDialog()">
+			        <md-icon>close</md-icon>
+			    </md-button>
+			</md-card-header>
+			<md-card-content>
+				<div md-theme="input" class="search-field">
+				    <form ng-submit="requestInvCtrl.showMenu($event)">
+				      	<md-input-container class="md-block" flex-gt-sm>
+				          <input placeholder="Nome da instituição" ng-model="requestInvCtrl.search" flex-gt-sm autocomplete="off">
+				          <md-icon class="material-icons">&#xE8B6;</md-icon>
+				        </md-input-container>
+				    </form>
+				</div>
+				<md-list flex>
+				    <md-list-item ng-repeat="institution in requestInvCtrl.institutions" ng-click="requestInvCtrl.selectInstitution(institution)"
+					    	ng-class="requestInvCtrl.showFullInformation(institution)? 'md-3-line': ''" 
+					    	ng-disabled="requestInvCtrl.showFullInformation(institution)">
+					    <div ng-if="!requestInvCtrl.showFullInformation(institution)" class="md-list-item-text" layout-align="center center" 
+					    		layout="column" style='text-align: center'>
+				            {{ institution.name }}
+					    </div>
+					    <div class="md-list-item-text" ng-if="requestInvCtrl.showFullInformation(institution)">
+					    	<div layout-align="center center" layout="column" layout-padding>
+						            <h3><b>{{ requestInvCtrl.institutionSelect.name }}</b></h3>
+						            <h4>{{ requestInvCtrl.institutionSelect.email }}</h4>
+						            <h4>{{ requestInvCtrl.getFullAddress(requestInvCtrl.institutionSelect) }}</h4>
+					            <p align="center">
+						            {{ requestInvCtrl.institutionSelect.description }}
+					            </p>
+					    	</div>
+					    </div>
+				    </md-list-item>
+				    <md-list-item ng-if="requestInvCtrl.showMessage()">
+				    	<div class="md-list-item-text" layout-align="center center" layout="column"
+					    style='text-align: center'>
+				            <p>Infelizmente sua instituição ainda não está cadastrada.</p>
+					    </div>
+				    </md-list-item>
+				</md-list>
+			</md-card-content>
+		</md-card>
+		<md-card flex ng-if="requestInvCtrl.request">
+			<md-card-header layout="row" layout-align="center center">
+				<md-card-header-text>
+					<span class="md-title">Solicitar Cadastro</span>
+					<span class="md-subheader">{{requestInvCtrl.request.institution_name}}</span>
+				</md-card-header-text>
+			</md-card-header>
+			<md-card-content>
+				<form name="requestuser">
+					<md-input-container class="md-block">
+			          <label>Nome</label>
+			          <input ng-model="requestInvCtrl.request.name" name="name" required>
+			          <div ng-messages='requestuser.request.name.$error'>
+			    		<div ng-message="required">Este campo é obrigatório!</div>
+					  </div> 
+			        </md-input-container>
+			        
+			        <md-input-container class="md-block">
+			          <label>Email institucional</label>
+			          <input ng-model="requestInvCtrl.request.email" type="email" name="email" required>
+			          <div ng-messages='requestuser.request.email.$error'>
+			    		<div ng-message="required">Este campo é obrigatório!</div>
+					  </div> 
+			        </md-input-container>
 
-			          	<md-input-container class="md-block">
-			          	<label>Cargo institucional</label>
-			          	<input name="cargo" ng-model="requestInvCtrl.office" name="office" required>
-			          	<div ng-messages='requestuser.office.$error'>
-                    		<div ng-message="required">Este campo é obrigatório!</div>
-                		  </div> 
-			          	</md-input-container>
-			    	</form>	
-			    </div>
-			    
-		    </md-list-item>
-		    <md-list-item ng-if="requestInvCtrl.showMessage()" ng-click="null">
-		    	<div class="md-list-item-text" layout-align="center center" layout="column"
-			    style='text-align: center'>
-		            <p>Infelizmente sua instituição ainda não está cadastrada. 
-		            Converse com o responsável para criar nesse mesmo link.</p>
-			    </div>
-		    </md-list-item>
-		</md-list>
-		<md-card-actions layout="row" layout-align="end center">
-			<md-button ng-click="requestInvCtrl.cancelDialog()">Cancelar</md-button>
-			<md-button ng-click="requestInvCtrl.request()" ng-disabled="!requestInvCtrl.hasInstSelect">Solicitar Convite</md-button>
-	    </md-card-actions>
-	</md-card>
+			      	<md-input-container class="md-block">
+			      	<label>Cargo institucional</label>
+			      	<input name="cargo" ng-model="requestInvCtrl.request.office" name="office" required>
+			      	<div ng-messages='requestuser.request.office.$error'>
+			    		<div ng-message="required">Este campo é obrigatório!</div>
+					  </div> 
+			      	</md-input-container>
+				</form>	
+				<div layout="row" layout-align="end">
+					<md-button ng-click="requestInvCtrl.sendRequest()" ng-disabled="!requestInvCtrl.hasInstSelect"
+							class="md-button md-warn md-raised">
+						Solicitar Cadastro
+					</md-button>
+				</div>
+			</md-card-content>
+		</md-card>
+	</div>
 </md-dialog>

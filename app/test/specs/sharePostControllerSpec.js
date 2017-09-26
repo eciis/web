@@ -51,7 +51,7 @@
             user: maiana,
             posts: [post],
             post: post,
-            institution: undefined
+            institution: null
         });
         httpBackend.flush();
     }));

@@ -50,7 +50,8 @@
             scope: scope,
             user: maiana,
             posts: [post],
-            post: post
+            post: post,
+            institutions: 'false'
         });
         httpBackend.flush();
     }));

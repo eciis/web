@@ -15,7 +15,7 @@
         requestInvCtrl.currentUser = AuthService.getCurrentUser();
         var ACTIVE = 'active';
 
-        requestInvCtrl.save = function save() {
+        requestInvCtrl.sendRequest = function sendRequest() {
             var dataInvite = {
                 institution_key : requestInvCtrl.institutionSelect.key,
                 sender_key : requestInvCtrl.currentUser.key,

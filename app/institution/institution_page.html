@@ -137,11 +137,11 @@
                     </md-card>
                 </div>
 
-                <div flex>
-                    <post-timeline ng-if="!institutionCtrl.isLoadingPosts" layout="column" md-colors="{background: 'grey-200'}" posts="institutionCtrl.posts"
-                        institution="true" user="institutionCtrl.user">
-                    </post-timeline>
-                    <md-progress-circular class="inst-timeline-center" ng-show="institutionCtrl.isLoadingPosts" md-mode="indeterminate" style="width: 13%"></md-progress-circular>
+                <post-timeline flex ng-if="!institutionCtrl.isLoadingPosts" layout="column" md-colors="{background: 'grey-200'}" posts="institutionCtrl.posts"
+                    institution="true" user="institutionCtrl.user">
+                </post-timeline>
+                <div flex ng-if="institutionCtrl.isLoadingPosts" layout="row" layout-align="center center">
+                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
                 </div>
 
             </div>

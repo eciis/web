@@ -48,6 +48,10 @@
             $mdDialog.hide();
         };
 
+        requestController.cancelDialog = function cancelDialog() {
+            $mdDialog.cancel();
+        };
+
         function loadInstitution(institutionKey) {
             InstitutionService.getInstitution(institutionKey).then(function success(response) {
                 requestController.institution = response.data;

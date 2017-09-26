@@ -159,7 +159,8 @@
                 locals: {
                     user : postDetailsCtrl.user,
                     posts: postDetailsCtrl.posts,
-                    post: post
+                    post: post,
+                    institution: postDetailsCtrl.institution,
                 }
             });
         };
@@ -418,7 +419,8 @@
             bindToController: {
                 posts: '=',
                 post: '=',
-                isPostPage: '='
+                isPostPage: '=',
+                institution: '='
             }
         };
     });
@@ -581,7 +583,7 @@
     });
 
     app.controller("SharePostController", function SharePostController(user, posts, post, $mdDialog, PostService,
-     MessageService, $state) {
+        MessageService, $state, institution) {
         var shareCtrl = this;
 
         var LIMIT_POST_CHARACTERS = 200;
@@ -620,11 +622,17 @@
             PostService.createPost(shareCtrl.newPost).then(function success(response) {
                 MessageService.showToast('Compartilhado com sucesso!');
                 $mdDialog.hide();
-                posts.push(response.data);
+                shareCtrl.addPostTimeline(response.data);
             }, function error(response) {
                 $mdDialog.hide();
                 MessageService.showToast(response.data.msg);
             });
+        };
+
+        shareCtrl.addPostTimeline = function addPostTimeline(post) {
+            if(!institution){
+                posts.push(post);
+            }
         };
 
         shareCtrl.goToPost = function goToPost() {

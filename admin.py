@@ -115,7 +115,7 @@ def create_profile(user, institution):
     """Create a profile."""
     profile = InstitutionProfile()
     profile.email = user.email[0]
-    profile.phone = '(83) 99999-9999'
+    profile.phone = '83 9999-99999'
     profile.institution_key = institution.key.urlsafe()
     profile.institution_name = institution.name
     profile.institution_photo_url = institution.photo_url
@@ -332,7 +332,7 @@ class ResetHandler(BaseHandler):
             'description': 'Ensaio Químico - Determinação de Material Volátil por Gravimetria e Ensaio Biológico - Ensaio de Citotoxicidade',
             'photo_url': 'https://pbs.twimg.com/profile_images/1782760873/Logo_do_site_400x400.jpg',
             'email': 'certbio@ufcg.edu.br',
-            'phone_number': '83 33224455',
+            'phone_number': '83 3322-4455',
             'state': 'active'
         }
 
@@ -370,7 +370,7 @@ class ResetHandler(BaseHandler):
             'description': """The mission of the Software Practices Laboratory (SPLab) is to promote the development of the state-of-the-art in the theory and practice of Software Engineering.""",
             'photo_url': 'http://amaurymedeiros.com/images/splab.png',
             'email': 'splab@ufcg.edu.br',
-            'phone_number': '83 33227865',
+            'phone_number': '83 3322-7865',
             'state': 'active'
         }
 
@@ -408,7 +408,7 @@ class ResetHandler(BaseHandler):
             'description': 'The mission of the e-CIIS is to promote the development of the state-of-the-art in the theory and practice of Software Engineering.',
             'photo_url': 'http://www.paho.org/bra/images/stories/BRA01A/logobireme.jpg',
             'email': 'eciis@ufcg.edu.br',
-            'phone_number': '83 33227865',
+            'phone_number': '83 3322-7865',
             'state': 'active'
         }
 

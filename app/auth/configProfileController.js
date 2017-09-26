@@ -194,22 +194,22 @@
     app.controller("EditProfileController", function EditProfileController(institution, user, ProfileService,
         AuthService, $mdDialog, MessageService) {
             var editProfileCtrl = this;
-            editProfileCtrl.phoneRegex = /^(\([0-9]{2}\))\s([9]{1})?([0-9]{4})-([0-9]{4})$/;
+            editProfileCtrl.phoneRegex = "[0-9]{2}[\\s][0-9]{4,5}[-][0-9]{4,5}";
             editProfileCtrl.institution = institution;
             var profileObserver;
 
             editProfileCtrl.edit = function edit() {
                 if(isValidProfile()) {
                     var patch = jsonpatch.generate(profileObserver);
-                   if(!_.isEmpty(patch)) {
+                    if(!_.isEmpty(patch)) {
                         ProfileService.editProfile(patch).then(function success() {
                             MessageService.showToast('Perfil editado com sucesso');
                             AuthService.save();
                         }, function error(response) {
                             MessageService.showToast(response.data.msg);
                         });
-                   }
-                   editProfileCtrl.closeDialog();
+                    }
+                    editProfileCtrl.closeDialog();
                 } else {
                     MessageService.showToast('O cargo é obrigatório.');
                 }

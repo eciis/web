@@ -14,6 +14,7 @@
         homeCtrl.events = [];
         homeCtrl.followingInstitutions = [];
         homeCtrl.instMenuExpanded = false;
+        homeCtrl.isLoadingPosts = true;
 
         homeCtrl.user = AuthService.getCurrentUser();
 
@@ -66,6 +67,7 @@
         var loadPosts = function loadPosts() {
             PostService.get().then(function success(response) {
                 homeCtrl.posts = response.data;
+                homeCtrl.isLoadingPosts = false;
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });

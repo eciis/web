@@ -20,8 +20,9 @@
                 </md-list-item>
             </md-list>
         </md-dialog-content>
-        <md-dialog-content ng-if="!profileCtrl.isToShow()">
+        <md-dialog-content ng-if="!profileCtrl.loading && !profileCtrl.isToShow()">
             <h2>O usuário não possui instituições.</h2>
         </md-dialog-content>
     </div>
+    <md-progress-circular ng-show="profileCtrl.loading" md-mode="indeterminate"></md-progress-circular>
 </md-dialog>

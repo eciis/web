@@ -350,3 +350,7 @@ a:active {
    border-radius:50%;
    border: 2px solid #EFEBE9;
 }
+
+.inst-timeline-center {
+    margin-left: 46%;
+}

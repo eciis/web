@@ -12,7 +12,6 @@ class RequestInstitution(Request):
     """Request Institution Model."""
 
     def isValid(self):
-        institution_key = self.institution_key
         sender = self.sender_key
         if not sender:
             raise FieldException("The request require sender_key")
@@ -56,4 +55,5 @@ class RequestInstitution(Request):
         """Create json of request to institution."""
         request_inst_json = super(RequestInstitution, self).make()
         request_inst_json['type_of_invite'] = 'REQUEST_INSTITUTION'
+        request_inst_json['institution_name'] = self.institution_key.get().name
         return request_inst_json

@@ -25,17 +25,13 @@
                 </md-input-container>
               </div>
               <section layout="row" layout="column" layout-align="end center" layout-wrap>
-                <md-button md-colors="{color: 'teal-700'}" ng-click="inviteInstCtrl.cancelInvite()">Cancelar</md-button> 
+                <md-button md-colors="{color: 'teal-700'}" ng-click="inviteInstCtrl.cancelInvite()">Cancelar</md-button>
                 <md-button ng-click="inviteInstCtrl.checkInstInvite($event)" md-colors="{color: 'teal-700'}">Enviar Convite</md-button>
               </section>
             </div>
 
             <md-list class="md-dense" flex>
-              <md-subheader class="md-no-sticky">Convites pendentes: </md-subheader>
-            </md-list>
-
-            <md-list class="md-dense" flex>
-              <md-subheader class="md-no-sticky" >Convites pendentes</md-subheader>
+              <md-subheader class="md-no-sticky">Convites enviados: </md-subheader>
               <md-list-item class="md-3-line" ng-repeat="invite in inviteInstCtrl.sent_invitations"
               ng-if="invite.status === 'sent' && invite.type_of_invite === 'INSTITUTION'" ng-click="null">
                 <md-icon class="md-avatar-icon" >account_balance</md-icon>
@@ -48,14 +44,27 @@
             </md-list>
 
             <md-list class="md-dense" flex>
-              <md-subheader class="md-no-sticky" >Convites aceitos</md-subheader>
+              <md-subheader class="md-no-sticky" >Convites requisitados:</md-subheader>
+              <md-list-item class="md-3-line" ng-repeat="request in inviteInstCtrl.sent_requests"
+              ng-if="request.status === 'sent' && request.type_of_invite === 'REQUEST_INSTITUTION'"
+              ng-click="inviteInstCtrl.showProcessingRequestDialog(request)">
+                <md-icon class="md-avatar-icon" >account_balance</md-icon>
+                <div class="md-list-item-text" layout="column">
+                  <h3>{{ request.institution_name }}</h3>
+                  <p>{{ request.sender }}</p>
+                </div>
+              </md-list-item>
+            </md-list>
+
+            <md-list class="md-dense" flex>
+              <md-subheader class="md-no-sticky" >Convites aceitos:</md-subheader>
               <md-list-item class="md-3-line" ng-repeat="invite in inviteInstCtrl.sent_invitations" ng-if="invite.status === 'accepted' && invite.type_of_invite === 'INSTITUTION'">
                 <md-icon class="md-avatar-icon" >account_balance</md-icon>
                 <div class="md-list-item-text" layout="column">
                   <a href class="md-title hyperlink"
                   ng-click="inviteInstCtrl.goToInst(invite.stub_institution.key)">
                   {{ invite.stub_institution.name }} </a>
-                  <h4>Nome Sugerido: {{ invite.suggestion_institution_name }}</h4> 
+                  <h4>Nome Sugerido: {{ invite.suggestion_institution_name }}</h4>
                 </div>
               </md-list-item>
             </md-list>

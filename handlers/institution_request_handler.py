@@ -2,6 +2,7 @@
 """Institution Request Handler."""
 
 import json
+import search_module
 from utils import login_required
 from utils import json_response
 from utils import has_analyze_request_permission
@@ -39,11 +40,20 @@ class InstitutionRequestHandler(BaseHandler):
         sender.institutions_admin.append(institution.key)
         sender.change_state('active')
 
+        data_profile = {
+            'office': 'Administrador',
+            'institution_key': institution.key.urlsafe(),
+            'institution_name': institution.name,
+            'institution_photo_url': institution.photo_url
+        }
+        sender.create_and_add_profile(data_profile)
+
         institution.admin = sender.key
         institution.members.append(sender.key)
         institution.followers.append(sender.key)
         institution.put()
 
+        search_module.createDocument(institution)
         self.response.write(json.dumps(request.make()))
 
     @login_required

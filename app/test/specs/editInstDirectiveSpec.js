@@ -4,7 +4,7 @@ describe('Test EditInstDirective', function() {
     var editInstCtrl, scope, institutionService, state, deferred;
     var mdToast, mdDialog, http, inviteService, httpBackend, imageService;
     var authService, createCtrl, pdfService;
-    
+
     var institution = {
             name: "name",
             photo_url: "",
@@ -47,6 +47,7 @@ describe('Test EditInstDirective', function() {
         key: 'user-key',
         current_institution: {key: "institutuion_key"},
         institutions: institutions,
+        email: ['test@test.com'],
         invites: [{
             'invitee': 'user@email.com',
             'suggestion_institution_name': "Suggested Name",
@@ -78,9 +79,7 @@ describe('Test EditInstDirective', function() {
         pdfService = PdfService;
         http = $http;
 
-        authService.getCurrentUser = function() {
-            return new User(userData);
-        };
+        authService.login(userData);
 
         createCtrl = function() {
             return $controller('EditInstController', {

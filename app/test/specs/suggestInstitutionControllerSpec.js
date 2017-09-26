@@ -43,6 +43,7 @@
         });
 
         httpBackend.expect('GET', '/api/invites').respond([]);
+        httpBackend.expect('GET', '/api/institutions/requests/institution').respond([]);
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', "error/user_inactive.html").respond(200);
         httpBackend.when('GET', 'invites/existing_institutions.html').respond(200);

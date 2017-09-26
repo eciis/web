@@ -630,7 +630,7 @@
         };
 
         shareCtrl.addPostTimeline = function addPostTimeline(post) {
-            if(!institution){
+            if(!institution || institution.key == user.current_institution.key){
                 posts.push(post);
             }
         };

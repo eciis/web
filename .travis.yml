@@ -20,7 +20,7 @@ install:
 - wget $SDK_URL -nv
 - unzip -q google_appengine_$SDK_VERSION.zip
 
-# Install dependencies to backend
+# Install dependencies to backend                                                 
 - mkdir lib
 - pip install -t lib google-auth
 - mv lib/google/* google_appengine/google
@@ -32,6 +32,7 @@ before_script:
 # Install dev-dependencies to frontEnd tests
 - cd app/test/
 - npm install
+- npm install -g bower
 - bower install
 - cd ../../
 

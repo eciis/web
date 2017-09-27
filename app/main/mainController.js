@@ -86,7 +86,11 @@
             }
             return false;
         };
-        
+
+        mainCtrl.isSuperUser = function isSuperUser() {
+            return mainCtrl.user.permissions.analyze_request_inst;
+        };
+
         mainCtrl.changeInstitution = function changeInstitution(institution) {
             mainCtrl.user.changeInstitution(institution);
             mainCtrl.getPendingTasks();

@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Test EditInstDirective', function() {
+describe('Test ConfigInstDirective', function() {
     var editInstCtrl, scope, institutionService, state, deferred;
     var mdToast, mdDialog, http, inviteService, httpBackend, imageService;
     var authService, createCtrl, pdfService;
@@ -82,7 +82,7 @@ describe('Test EditInstDirective', function() {
         authService.login(userData);
 
         createCtrl = function() {
-            return $controller('EditInstController', {
+            return $controller('ConfigInstController', {
                     scope: scope,
                     authService: authService,
                     institutionService: institutionService,

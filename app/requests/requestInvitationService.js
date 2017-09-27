@@ -94,7 +94,7 @@
                 data: data
             }).then(function success(response) {
                 deferred.resolve(response);
-            }, function erro(response) {
+            }, function error(response) {
                 deferred.reject(response);
             });
 

@@ -12,7 +12,7 @@
         editInstCtrl.loading = false;
         editInstCtrl.user = AuthService.getCurrentUser();
         editInstCtrl.cnpjRegex = "[0-9]{2}[\.][0-9]{3}[\.][0-9]{3}[\/][0-9]{4}[-][0-9]{2}";
-        editInstCtrl.phoneRegex = "([0-9]{2}[\\s][0-9]{8})";
+        editInstCtrl.phoneRegex = "[0-9]{2}[\\s][0-9]{4,5}[-][0-9]{4,5}";
         editInstCtrl.cepRegex = "([0-9]{5}[-][0-9]{3})";
         editInstCtrl.newInstitution = {
             photo_url: "/images/institution.jpg"

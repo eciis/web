@@ -81,7 +81,7 @@
               </md-button>
             </div>
           </md-list-item>
-          <md-subheader class="md-no-sticky">Vinculos requisitados</md-subheader>
+          <md-subheader class="md-no-sticky">Vinculos pendentes</md-subheader>
             <md-list-item class="md-3-line" ng-repeat="request in inviteInstCtrl.requested_invites" ng-if="request.status === 'sent'">
               <div class="md-list-item-text" layout="row">
                 <div layout="column">
@@ -90,12 +90,12 @@
                   </a>
                   <h3 style="color: red">{{inviteInstCtrl.showMessage(request.type_of_invite)}}</h3>
                 </div>
-              <md-button class="md-icon-button" ng-click="inviteInstCtrl.rejectRequest(request, request.type_of_invite, $event)" title="Rejeitar">
-                <md-icon style="color: red">clear</md-icon>
-              </md-button>
-              <md-button class="md-icon-button" ng-click="inviteInstCtrl.acceptRequest(request, request.type_of_invite, $event)" title="Aceitar">
-                <md-icon style="color: green">add</md-icon>
-              </md-button>
+                <md-button class="md-icon-button" ng-click="inviteInstCtrl.rejectRequest(request, request.type_of_invite, $event)" title="Rejeitar">
+                  <md-icon style="color: red">clear</md-icon>
+                </md-button>
+                <md-button class="md-icon-button" ng-click="inviteInstCtrl.acceptRequest(request, request.type_of_invite, $event)" title="Aceitar">
+                  <md-icon style="color: green">check</md-icon>
+                </md-button>
               </div>
             </md-list-item>
         </md-list>

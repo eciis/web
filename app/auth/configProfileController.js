@@ -14,6 +14,7 @@
         configProfileCtrl.newUser = AuthService.getCurrentUser();
         configProfileCtrl.loading = false;
         configProfileCtrl.cpfRegex = /^\d{3}\.\d{3}\.\d{3}\-\d{2}$/;
+        configProfileCtrl.photo_url = configProfileCtrl.newUser.photo_url;
 
         var HAS_ONLY_ONE_INSTITUTION_MSG = "Esta é a única instituição ao qual você é vinculado." +
                 " Ao remover o vínculo você não poderá mais acessar o sistema," +
@@ -41,7 +42,7 @@
 
         function setImage(image) {
             $rootScope.$apply(function() {
-                configProfileCtrl.newUser.photo_url = image.src;
+                configProfileCtrl.photo_url = image.src;
             });
         }
 
@@ -194,22 +195,22 @@
     app.controller("EditProfileController", function EditProfileController(institution, user, ProfileService,
         AuthService, $mdDialog, MessageService) {
             var editProfileCtrl = this;
-            editProfileCtrl.phoneRegex = /^(\([0-9]{2}\))\s([9]{1})?([0-9]{4})-([0-9]{4})$/;
+            editProfileCtrl.phoneRegex = "[0-9]{2}[\\s][0-9]{4,5}[-][0-9]{4,5}";
             editProfileCtrl.institution = institution;
             var profileObserver;
 
             editProfileCtrl.edit = function edit() {
                 if(isValidProfile()) {
                     var patch = jsonpatch.generate(profileObserver);
-                   if(!_.isEmpty(patch)) {
+                    if(!_.isEmpty(patch)) {
                         ProfileService.editProfile(patch).then(function success() {
                             MessageService.showToast('Perfil editado com sucesso');
                             AuthService.save();
                         }, function error(response) {
                             MessageService.showToast(response.data.msg);
                         });
-                   }
-                   editProfileCtrl.closeDialog();
+                    }
+                    editProfileCtrl.closeDialog();
                 } else {
                     MessageService.showToast('O cargo é obrigatório.');
                 }

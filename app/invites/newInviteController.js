@@ -13,7 +13,7 @@
 
         newInviteCtrl.user = AuthService.getCurrentUser();
 
-        newInviteCtrl.phoneRegex = /^(\([0-9]{2}\))\s([9]{1})?([0-9]{4})-([0-9]{4})$/;
+        newInviteCtrl.phoneRegex = "[0-9]{2}[\\s][0-9]{4,5}[-][0-9]{4,5}";
 
         var observer;
 

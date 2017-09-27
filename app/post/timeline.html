@@ -3,7 +3,6 @@
   <div ng-if="!institution">
     <save-post flex is-dialog="false" posts="posts"></save-post>
   </div>
-  {{addpost}} ---- {{institution}}
   <div layout="row" layout-align="center center" ng-if="timelineCtrl.showRefreshTimelineButton() && !institution" class="ng-if">
     <md-button flex md-colors="{background: 'teal-700'}" ng-click="timelineCtrl.load(posts)">
       VOCÊ TEM NOVOS POSTS

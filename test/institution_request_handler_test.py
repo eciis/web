@@ -131,6 +131,7 @@ def initModels(cls):
     # new Institution inst requested to be parent of inst test
     cls.new_inst = Institution()
     cls.new_inst.name = 'new_inst'
+    cls.new_inst.photo_url = 'images/photo.jpg'
     cls.new_inst.address = cls.address
     cls.new_inst.put()
     # Update Institutions admin by other user

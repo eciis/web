@@ -187,7 +187,6 @@
 
         it('should add post in posts', function() {
             expect(shareCtrl.posts).not.toContain(newPost);
-
             shareCtrl.addPostTimeline(newPost);
 
             expect(shareCtrl.posts).toContain(newPost);
@@ -196,11 +195,9 @@
         it("shouldn't add post in posts", function() {
             shareCtrl.addPost = false;
             expect(shareCtrl.posts).not.toContain(newPost);
-
             shareCtrl.addPostTimeline(newPost);
-
-            expect(shareCtrl.posts).not.toContain(newPost);
             
+            expect(shareCtrl.posts).not.toContain(newPost);
         });
     });
 }));

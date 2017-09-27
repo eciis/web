@@ -10,6 +10,7 @@ from handlers.post_collection_handler import PostCollectionHandler
 from google.appengine.ext import ndb
 import json
 
+import mock
 from mock import patch
 import datetime
 
@@ -74,7 +75,8 @@ class PostCollectionHandlerTest(TestBaseHandler):
                                                   'testing another post'})
 
     @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
-    def test_post_sharing(self, verify_token):
+    @mock.patch('service_messages.send_message_notification')
+    def test_post_sharing(self, verify_token, mock_method):
         """Test the post_collection_handler's post method."""
         # Make the request and assign the answer to post
         post = self.testapp.post_json("/api/posts", {'institution':
@@ -105,6 +107,9 @@ class PostCollectionHandlerTest(TestBaseHandler):
         self.assertEqual(shared_post_obj['text'],
                          "Post inicial que quero compartilhar",
                          "The post's text expected is Post inicial que quero compartilhar")
+        # check if the notification to author is called
+        self.assertTrue(mock_method.send_message_notification.assert_not_called,
+                        'send_message_notification is not called')
 
     @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
     def test_post_shared_event(self, verify_token):
@@ -161,6 +166,7 @@ def initModels(cls):
     cls.institution.email = 'certbio@ufcg.edu.br'
     cls.institution.photo_url = 'urlphoto'
     cls.institution.posts = []
+    cls.institution.followers = []
     cls.institution.admin = cls.user.key
     cls.institution.put()
     # POST of Mayza To Certbio Institution
@@ -174,6 +180,7 @@ def initModels(cls):
 
     """ Update Institution."""
     cls.institution.posts.append(cls.user_post.key)
+    cls.institution.followers.append(cls.user.key)
     cls.institution.put()
 
     """ Update User."""

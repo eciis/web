@@ -52,13 +52,12 @@ class RequestHandler(BaseHandler):
         request.change_status('accepted')
 
         institution_key = request.institution_key
+        institution = institution_key.get()
         user = request.sender_key.get()
 
         user.add_institution(institution_key)
         user.follow(institution_key)
         user.change_state('active')
-
-        institution = institution_key.get()
 
         institution.add_member(user)
         institution.follow(user.key)

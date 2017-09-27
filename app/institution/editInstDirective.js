@@ -128,7 +128,6 @@
             return promise;
         }
 
-
         function patchIntitution() {
             var patch = jsonpatch.generate(observer);
             InstitutionService.update(institutionKey, patch).then(

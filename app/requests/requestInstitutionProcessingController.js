@@ -23,7 +23,7 @@
             });
         };
 
-        requestController.rejectRequest = function rejectInvite(event){
+        requestController.rejectRequest = function rejectRequest(event){
             var promise = RequestInvitationService.showRejectDialog(event);
 
             promise.then(function() {

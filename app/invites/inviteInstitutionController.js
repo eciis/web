@@ -3,7 +3,7 @@
     var app = angular.module('app');
 
     app.controller("InviteInstitutionController", function InviteInstitutionController(
-        InviteService, $mdToast, $state, AuthService, InstitutionService, RequestInvitationService,$mdDialog, MessageService) {
+        InviteService, $mdToast, $state, AuthService, InstitutionService, RequestInvitationService, $mdDialog, MessageService) {
         var inviteController = this;
 
         inviteController.invite = {};
@@ -86,7 +86,7 @@
             return promise;
         };
 
-        inviteController.showProcessingRequestDialog = function showProcessingRequestDialog(request) {
+        inviteController.showPendingRequestDialog = function showPendingRequestDialog(request) {
             $mdDialog.show({
                 templateUrl: "requests/request_institution_processing.html",
                 controller: "RequestInstitutionProcessingController",

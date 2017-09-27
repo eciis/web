@@ -160,7 +160,7 @@
                     user : postDetailsCtrl.user,
                     posts: postDetailsCtrl.posts,
                     post: post,
-                    institution: postDetailsCtrl.institution,
+                    addpost: postDetailsCtrl.addpost
                 }
             });
         };
@@ -420,7 +420,7 @@
                 posts: '=',
                 post: '=',
                 isPostPage: '=',
-                institution: '='
+                addpost: '='
             }
         };
     });
@@ -583,7 +583,7 @@
     });
 
     app.controller("SharePostController", function SharePostController(user, posts, post, $mdDialog, PostService,
-        MessageService, $state, institution) {
+        MessageService, $state, addpost) {
         var shareCtrl = this;
 
         var LIMIT_POST_CHARACTERS = 200;
@@ -629,10 +629,8 @@
             });
         };
 
-        shareCtrl.addPostTimeline = function addPostTimeline(post) {
-            var timelineUser = !institution;
-            var timelineCurrentInstitution = institution.key == user.current_institution.key;
-            if (timelineUser || timelineCurrentInstitution){
+        shareCtrl.addPostTimeline = function addPostTimeline(post) {       
+            if (addpost){
                 posts.push(post);
             }
         };

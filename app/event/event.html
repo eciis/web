@@ -1,6 +1,6 @@
 <md-content layout="row" md-colors="{background: 'grey-200'}" layout-align="center" class="body">
   <div flex-gt-lg="80" flex-lg="90" layout="row" layout-align="center" layout-fill>
-    <div layout="column" layout-align="center center" ng-if="eventCtrl.events.length === 0"> 
+    <div layout="column" layout-align="center center" ng-if="eventCtrl.events.length === 0">
       <p>
         <span class="md-subhead">Seja o primeiro a criar um evento.</span>
       </p>
@@ -34,10 +34,10 @@
               <div layout="row" layout-align="end-center">
                 <a href class="md-text hyperlink" ng-click="eventCtrl.goToEvent(event)" ng-if="eventCtrl.isLongText(event)">
                   <span class="md-subhead" >continuar lendo</span>
-                </a>      
+                </a>
               </div>
               <p>
-                <span class="md-caption">Local:</span> <span md-colors="{color: 'teal-900'}">{{ event.local }}</span> | 
+                <span class="md-caption">Local:</span> <span md-colors="{color: 'teal-900'}">{{ event.local }}</span> |
                 <b md-colors="{color: 'teal-900'}">
                   {{ event.start_time | amUtc | amLocal | amCalendar:referenceTime:formats }}
                 </b> até
@@ -46,6 +46,10 @@
                 </b>
               </p>
               <div layout="row" layout-align="end center">
+               <md-button class="md-icon-button" aria-label="editar" title="Editar este evento"
+                  ng-if="eventCtrl.canEdit(event)" ng-click="eventCtrl.editEvent($event, event)">
+                  <md-icon>edit</md-icon>
+                </md-button>
                 <md-button class="md-icon-button" aria-label="compartilhar" title="Excluir este evento"
                   ng-if="eventCtrl.canDelete(event)" ng-click="eventCtrl.deleteEvent($event, event)">
                   <md-icon>delete</md-icon>

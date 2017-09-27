@@ -2,14 +2,14 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("EventController", function EventController(MessageService, EventService, 
+    app.controller("EventController", function EventController(MessageService, EventService,
             $state, $mdDialog, AuthService, PostService) {
         var eventCtrl = this;
 
         eventCtrl.events = [];
 
         eventCtrl.user = AuthService.getCurrentUser();
-        
+
         var LIMIT_CHARACTERS = 100;
 
         function loadEvents() {
@@ -78,6 +78,25 @@
             return eventCtrl.isEventAuthor(event) || isInstitutionAdmin(event);
         };
 
+        eventCtrl.canEdit = function canEdit(event) {
+            return eventCtrl.isEventAuthor(event);
+        };
+
+        eventCtrl.editEvent = function editEvent(ev, event) {
+            event = _.clone(event);
+            $mdDialog.show({
+                controller: 'EventDialogController',
+                controllerAs: "controller",
+                templateUrl: 'event/event_dialog.html',
+                targetEvent: ev,
+                clickOutsideToClose: true,
+                locals: {
+                    event: event
+                },
+                bindToController: true
+            });
+        };
+
         eventCtrl.isEventAuthor = function isEventAuthor(event) {
             return Utils.getKeyFromUrl(event.author_key) === eventCtrl.user.key;
         };
@@ -103,17 +122,27 @@
         })();
     });
 
-    app.controller('EventDialogController', function EventDialogController(MessageService, 
+    app.controller('EventDialogController', function EventDialogController(MessageService,
             ImageService, AuthService, EventService, $state, $rootScope, $mdDialog) {
         var dialogCtrl = this;
 
-        dialogCtrl.event = {};
         dialogCtrl.loading = false;
         dialogCtrl.user = AuthService.getCurrentUser();
         dialogCtrl.deletePreviousImage = false;
         dialogCtrl.photoUrl = "";
+        var observer;
+        var isEditing = false;
 
         dialogCtrl.save = function save() {
+            if(!isEditing) {
+                newEvent();
+            } else {
+                updateEvent();
+            }
+
+        };
+
+        function newEvent() {
             if (dialogCtrl.photoBase64Data) {
                 dialogCtrl.loading = true;
                 ImageService.saveImage(dialogCtrl.photoBase64Data).then(function success(data) {
@@ -126,7 +155,23 @@
             } else {
                 create();
             }
-        };
+        }
+
+        function updateEvent() {
+            /*if(dialogCtrl.event.isValid()) {*/
+                var patch = jsonpatch.generate(observer);
+                console.log(patch);
+                EventService.editEvent(dialogCtrl.event.key, patch).then(function success() {
+                    dialogCtrl.closeDialog();
+                    MessageService.showToast('Evento editado com sucesso.');
+                }, function error(response) {
+                    MessageService.showToast(response.data.msg);
+                    $state.go('app.home');
+                });
+            /*} else {
+                MessageService.showToast('Evento inválido');
+            }*/
+        }
 
         dialogCtrl.addImage = function(image) {
             var newSize = 1024;
@@ -187,5 +232,17 @@
                 MessageService.showToast('Evento inválido!');
             }
         }
+
+        (function main() {
+            if(dialogCtrl.event) {
+                dialogCtrl.event.start_time = new Date(dialogCtrl.event.start_time);
+                dialogCtrl.event.end_time = new Date(dialogCtrl.event.end_time);
+                dialogCtrl.event = new Event(dialogCtrl.event, dialogCtrl.user.current_institution.key);
+                observer = jsonpatch.observe(dialogCtrl.event);
+                isEditing = true;
+            } else {
+                dialogCtrl.event = {};
+            }
+        })();
     });
 })();

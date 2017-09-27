@@ -45,7 +45,7 @@
                 posts: '=',
                 institution: '=',
                 user: '=',
-                addpost: '='
+                addPost: '='
             }
         };
     });

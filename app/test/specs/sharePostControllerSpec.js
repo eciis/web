@@ -49,9 +49,9 @@
         shareCtrl = $controller('SharePostController', {
             scope: scope,
             user: maiana,
-            posts: [post],
             post: post,
-            addpost: true
+            posts:[post],
+            addPost: true
         });
         httpBackend.flush();
     }));
@@ -180,6 +180,27 @@
         it('should return the embed Youtube url', function() {
             shareCtrl.post.video_url = 'https://www.youtube.com/watch?v=3T3g8rV-5GU';
             expect(shareCtrl.getVideoUrl()).toBe('https://www.youtube.com/embed/3T3g8rV-5GU');
+        });
+    });
+
+    describe('addPostTimeline()', function() {
+
+        it('should add post in posts', function() {
+            expect(shareCtrl.posts).not.toContain(newPost);
+
+            shareCtrl.addPostTimeline(newPost);
+
+            expect(shareCtrl.posts).toContain(newPost);
+        });
+        
+        it("shouldn't add post in posts", function() {
+            shareCtrl.addPost = false;
+            expect(shareCtrl.posts).not.toContain(newPost);
+
+            shareCtrl.addPostTimeline(newPost);
+
+            expect(shareCtrl.posts).not.toContain(newPost);
+            
         });
     });
 }));

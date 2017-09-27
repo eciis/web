@@ -297,7 +297,10 @@ class ResetHandler(BaseHandler):
         admin = User()
         admin.name = 'Administrador do e-CIS'
         admin.cpf = '089.675.908-65'
-        admin.email = ['testeeciis@gmail.com']
+        admin.email = [
+            'testeeciis@gmail.com',
+            'teste@eciis.com'
+        ]
         admin.photo_url = 'images/avatar.jpg'
         admin.institutions = []
         admin.follows = []

@@ -30,8 +30,6 @@
                 RequestInvitationService.rejectRequestInst(requestController.request.key).then(function success() {
                     MessageService.showToast("Solicitação rejeitada!");
                     requestController.hideDialog();
-                }, function error(response) {
-                    MessageService.showToast(response.data.msg);
                 });
             }, function() {
                 MessageService.showToast('Cancelado');
@@ -67,15 +65,13 @@
 
         function loadRequest(){
             RequestInvitationService.getRequestInst(requestController.requestKey).then(function success(response) {
-                requestController.request = new Invite(response.data);
+                requestController.request = new Invite(response);
                 if (requestController.request.status === 'sent') {
                     loadInstitution(requestController.request.institution_key);
                 } else {
                     requestController.hideDialog();
                     MessageService.showToast("Você já resolveu esta solicitação.");
                 }
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
             });
         }
 

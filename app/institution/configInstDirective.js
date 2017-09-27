@@ -144,8 +144,6 @@
                 function success() {
                     MessageService.showToast("Pedido enviado com sucesso!");
                     $state.go('user_inactive');
-                }, function error(response) {
-                    MessageService.showToast(response.data.msg);
                 });
         }
 

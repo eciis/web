@@ -15,7 +15,8 @@
             return request(GET, url);
         };
 
-        service.post = function postMethod(url, data) {return request(POST, url, data);
+        service.post = function postMethod(url, data) {
+            return request(POST, url, data);
         };
 
         service.put = function putMethod(url, data) {

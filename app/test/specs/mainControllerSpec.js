@@ -1,7 +1,7 @@
 'use strict';
 
 (describe('Test MainController', function() {
-    var mainCtrl, httpBackend, scope, createCtrl, state, instService, authService;
+    var mainCtrl, httpBackend, scope, createCtrl, state, instService, authService, requestInvitationService;
     var user = {
         name: 'user',
         key: 'user-key',
@@ -31,12 +31,26 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $state, AuthService, InstitutionService) {
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $state, AuthService, InstitutionService,
+            RequestInvitationService) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
         instService = InstitutionService;
         authService = AuthService;
+        requestInvitationService = RequestInvitationService;
+
+        var callFake = function() {
+            return {
+                then: function(callback) {
+                    return callback([]);
+                }
+            };
+        };
+
+        spyOn(requestInvitationService, 'getRequests').and.callFake(callFake);
+        spyOn(requestInvitationService, 'getParentRequests').and.callFake(callFake);
+        spyOn(requestInvitationService, 'getChildrenRequests').and.callFake(callFake);
 
         authService.getCurrentUser = function() {
             return new User(user);

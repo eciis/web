@@ -52,13 +52,12 @@ class RequestHandler(BaseHandler):
         request.change_status('accepted')
 
         institution_key = request.institution_key
+        institution = institution_key.get()
         user = request.sender_key.get()
 
         user.add_institution(institution_key)
         user.follow(institution_key)
         user.change_state('active')
-
-        institution = institution_key.get()
 
         institution.add_member(user)
         institution.follow(user.key)
@@ -72,4 +71,10 @@ class RequestHandler(BaseHandler):
         """Change request status from 'sent' to 'rejected'."""
         request = ndb.Key(urlsafe=request_key).get()
         request.change_status('rejected')
+
+        institution_key = request.institution_requested_key.urlsafe()
+        sender_user = request.sender_key.get()
+        sender_user.remove_profile(institution_key)
+
+        sender_user.put()
         request.put()

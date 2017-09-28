@@ -110,6 +110,31 @@ class PostCommentHandlerTest(TestBaseHandler):
         self.assertEquals(len(self.mayza_post.comments), 0,
                           "Expected size of comment's list should be zero")
 
+    @patch('utils.verify_token', return_value={'email': MAIANA_EMAIL})
+    def test_delete_in_deleted_post(self, verify_token):
+        """User can not delete comment in deleted Post."""
+        # Added comment
+        self.response = self.testapp.post(self.URL_POST_COMMENT %
+                                          self.mayza_post.key.urlsafe(),
+                                          json.dumps(self.comment)).json
+        # ID of comment
+        self.id_comment = self.response["id"]
+        self.mayza_post = self.mayza_post.key.get()
+        self.assertEquals(len(self.mayza_post.comments), 1,
+                          "Expected size of comment's list should be one")
+        # Set state of posto to deleted
+        self.mayza_post.state = 'deleted'
+        self.mayza_post.put()
+        # Call delete method with post on deleted state
+        with self.assertRaises(Exception) as ex:
+            self.testapp.delete(self.URL_DELETE_COMMENT %
+                                (self.mayza_post.key.urlsafe(), self.id_comment))
+
+        ex = self.get_message_exception(ex.exception.message)
+        self.assertEquals(ex, "Error! Can not delete comment in deleted post")
+        self.assertEquals(len(self.mayza_post.comments), 1,
+                          "Expected size of comment's list should be one")
+
     @patch('utils.verify_token', return_value={'email': MAYZA_EMAIL})
     def test_delete_simpleuser(self, verify_token):
         """An simple user can't delete comments by other users in Post."""

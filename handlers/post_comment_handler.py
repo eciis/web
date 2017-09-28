@@ -71,6 +71,8 @@ class PostCommentHandler(BaseHandler):
         institution = post.institution.get()
         Utils._assert(institution.state == 'inactive',
                       "The institution has been deleted", NotAuthorizedException)
+        Utils._assert(post.state == 'deleted',
+                      "Can not delete comment in deleted post", NotAuthorizedException)
         comment = post.get_comment(comment_id)
 
         hasActivity = len(comment.get('replies')) > 0 or len(comment.get('likes')) > 0

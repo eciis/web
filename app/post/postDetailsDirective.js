@@ -534,29 +534,44 @@
         };
 
         commentCtrl.confirmCommentDeletion = function confirmCommentDeletion(event, reply) {
-            MessageService.showConfirmationDialog(event, 'Excluir Comentário',
-                'Este comentário será excluído e desaparecerá do referente post.'
-            ).then(function() {
-                if (reply) {
-                    commentCtrl.deleteReply(reply);
-                } else {
-                    commentCtrl.deleteComment();
-                }
-            }, function() {
-                MessageService.showToast('Cancelado');
-            });
+            if(commentCtrl.post.state !== 'deleted') {
+                MessageService.showConfirmationDialog(event, 'Excluir Comentário',
+                    'Este comentário será excluído e desaparecerá do referente post.'
+                ).then(function() {
+                    if (reply) {
+                        commentCtrl.deleteReply(reply);
+                    } else {
+                        commentCtrl.deleteComment();
+                    }
+                }, function() {
+                    MessageService.showToast('Cancelado');
+                });
+            }
         };
 
         commentCtrl.canDeleteComment = function canDeleteComment(reply) {
+            var deletedPost = commentCtrl.post.state === 'deleted';
             if (reply) {
                 var replyHasActivity = commentCtrl.numberOfLikes(reply) > 0;
                 return !replyHasActivity &&
-                    reply.author_key == commentCtrl.user.key;
+                    reply.author_key == commentCtrl.user.key && !deletedPost;
             }
             var commentHasActivity = commentCtrl.numberOfReplies() > 0 ||
                 commentCtrl.numberOfLikes() > 0;
             return !commentHasActivity &&
-                commentCtrl.comment.author_key == commentCtrl.user.key;
+                commentCtrl.comment.author_key == commentCtrl.user.key && !deletedPost;
+        };
+
+        commentCtrl.canReply = function canReply() {
+            return commentCtrl.post.state === 'deleted';
+        };
+
+        commentCtrl.showReplies = function showReplies() {
+            if(commentCtrl.post.state === 'deleted') {
+                var noReplies = commentCtrl.numberOfReplies() === 0;
+                return commentCtrl.saving || noReplies;
+            }
+            return commentCtrl.saving;
         };
 
         commentCtrl.disableButton = function disableButton() {

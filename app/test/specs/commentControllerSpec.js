@@ -25,7 +25,8 @@
     posts = [{
                 title: 'post principal', author_key: user.key,
                 key: "123456", comments: "/api/posts/123456/comments",
-                likes: "/api/posts/123456/likes", number_of_likes: 0, number_of_comments: 0
+                likes: "/api/posts/123456/likes", number_of_likes: 0, number_of_comments: 0,
+                state: 'published'
         }];
 
     beforeEach(inject(function($controller, $httpBackend, $http, $mdDialog,
@@ -71,6 +72,14 @@
         });
 
         it('Should return false', function() {
+            var comment = {author_key: "1234", text: "testando"};
+            var result = commentCtrl.canDeleteComment(comment);
+            expect(result).toBeFalsy();
+        });
+
+        it('Should not delete the comment in deleted post', function() {
+            commentCtrl.post = posts[0];
+            commentCtrl.post.state = 'deleted';
             var comment = {author_key: "1234", text: "testando"};
             var result = commentCtrl.canDeleteComment(comment);
             expect(result).toBeFalsy();

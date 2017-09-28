@@ -102,10 +102,6 @@
                     !postDetailsCtrl.postHasActivity() && !postDetailsCtrl.isShared();
         };
 
-        postDetailsCtrl.showButtonShare = function showButtonShare(){
-            return !postDetailsCtrl.isDeleted(postDetailsCtrl.post) && !postDetailsCtrl.post.shared_event;
-        };
-
         postDetailsCtrl.generateLink = function generateLink(){
             var currentUrl = (window.location.href).split('#');
             var url = currentUrl[0] + URL_POST + postDetailsCtrl.post.key;
@@ -146,9 +142,7 @@
         };
 
         postDetailsCtrl.share = function share(post, event) {
-            if(postDetailsCtrl.post.shared_post){
-                post = postDetailsCtrl.post.shared_post;
-            }
+            post = getOriginalPost(postDetailsCtrl.post);
             $mdDialog.show({
                 controller: "SharePostController",
                 controllerAs: "sharePostCtrl",
@@ -163,6 +157,15 @@
                 }
             });
         };
+
+        function getOriginalPost(post){
+            if(post.shared_post){
+                return post.shared_post;
+            } else if(post.shared_event){
+                return post.shared_event;
+            }
+            return post;
+        }
 
         function likePost() {
             postDetailsCtrl.savingLike = true;
@@ -630,8 +633,7 @@
         };
 
         shareCtrl.share = function share() {
-            shareCtrl.newPost.shared_post = getOriginalPost(shareCtrl.post);
-            shareCtrl.newPost.pdf_files = [];
+            makePost(shareCtrl.post);
             PostService.createPost(shareCtrl.newPost).then(function success(response) {
                 MessageService.showToast('Compartilhado com sucesso!');
                 $mdDialog.hide();
@@ -642,23 +644,37 @@
             });
         };
 
-        shareCtrl.goToPost = function goToPost() {
+        shareCtrl.isEvent = function isEvent(){
+            var hasLocal = !_.isUndefined(shareCtrl.post.local);
+            var hasStartTime = !_.isUndefined(shareCtrl.post.start_time);
+            var hasEndTime = !_.isUndefined(shareCtrl.post.end_time);
+            return hasLocal && hasStartTime && hasEndTime;
+        };
+
+        shareCtrl.goTo = function goTo(){
             shareCtrl.cancelDialog();
+            if(shareCtrl.isEvent()){
+                $state.go('app.event', {eventKey: shareCtrl.post.key});
+            }
             $state.go('app.post', {postKey: shareCtrl.post.key});
         };
 
-        function getOriginalPost(post){
-            if(post.share_post){
-                return post.share_post.key;
+        function makePost(post){
+            if(shareCtrl.isEvent()){
+                shareCtrl.newPost.shared_event = post.key;
+            } else {
+                shareCtrl.newPost.shared_post = post.key;
             }
-            return post.key;
+            shareCtrl.newPost.pdf_files = [];
         }
 
         function adjustText(text){
-            if(text.length > LIMIT_POST_CHARACTERS){
-                text = text.substring(0, LIMIT_POST_CHARACTERS) + "...";
-            }
-            return text.replace(URL_PATTERN,REPLACE_URL);
+            if(text){
+                if(text.length > LIMIT_POST_CHARACTERS){
+                    text = text.substring(0, LIMIT_POST_CHARACTERS) + "...";
+                }
+                return text.replace(URL_PATTERN,REPLACE_URL);
+            }            
         }
     });
 })();

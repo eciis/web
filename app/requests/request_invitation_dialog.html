@@ -18,9 +18,9 @@
 				</div>
 				<md-list flex>
 				    <md-list-item ng-repeat="institution in requestInvCtrl.institutions" ng-click="requestInvCtrl.selectInstitution(institution)"
-					    	ng-class="requestInvCtrl.showFullInformation(institution)? 'md-3-line': ''" 
+					    	ng-class="requestInvCtrl.showFullInformation(institution)? 'md-3-line': ''"
 					    	ng-disabled="requestInvCtrl.showFullInformation(institution)">
-					    <div ng-if="!requestInvCtrl.showFullInformation(institution)" class="md-list-item-text" layout-align="center center" 
+					    <div ng-if="!requestInvCtrl.showFullInformation(institution)" class="md-list-item-text" layout-align="center center"
 					    		layout="column" style='text-align: center'>
 				            {{ institution.name }}
 					    </div>
@@ -39,7 +39,7 @@
 				    	<div class="md-list-item-text" layout-align="center center" layout="column"
 					    style='text-align: center'>
 				            <p>Infelizmente sua instituição ainda não está cadastrada.</p>
-                    <md-button ng-click="requestInvCtrl.createInst()">Quero criar minha instituição</md-button>
+                    				<md-button ng-click="requestInvCtrl.createInst()">Quero criar minha instituição</md-button>
 					    </div>
 				    </md-list-item>
 				</md-list>
@@ -59,15 +59,15 @@
 			          <input ng-model="requestInvCtrl.request.name" name="name" required>
 			          <div ng-messages='requestuser.request.name.$error'>
 			    		<div ng-message="required">Este campo é obrigatório!</div>
-					  </div> 
+					  </div>
 			        </md-input-container>
-			        
+
 			        <md-input-container class="md-block">
 			          <label>Email institucional</label>
 			          <input ng-model="requestInvCtrl.request.email" type="email" name="email" required>
 			          <div ng-messages='requestuser.request.email.$error'>
 			    		<div ng-message="required">Este campo é obrigatório!</div>
-					  </div> 
+					  </div>
 			        </md-input-container>
 
 			      	<md-input-container class="md-block">
@@ -75,9 +75,9 @@
 			      	<input name="cargo" ng-model="requestInvCtrl.request.office" name="office" required>
 			      	<div ng-messages='requestuser.request.office.$error'>
 			    		<div ng-message="required">Este campo é obrigatório!</div>
-					  </div> 
+					  </div>
 			      	</md-input-container>
-				</form>	
+				</form>
 				<div layout="row" layout-align="end">
 					<md-button ng-click="requestInvCtrl.sendRequest()" ng-disabled="!requestInvCtrl.hasInstSelect"
 							class="md-button md-warn md-raised">

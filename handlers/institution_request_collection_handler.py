@@ -19,8 +19,8 @@ def createInstitution(user, data):
     inst_stub = Institution()
 
     for property in data:
-            if property != 'admin':
-                setattr(inst_stub, property, data[property])
+        if property != 'admin':
+            setattr(inst_stub, property, data[property])
 
     inst_stub.address = Address.create(data.get('address'))
     inst_stub.state = 'pending'

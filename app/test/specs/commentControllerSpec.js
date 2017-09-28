@@ -66,12 +66,14 @@
 
     describe('canDeleteComment()', function() {
         it('Should return true', function() {
+            commentCtrl.post = posts[0];
             var comment = {author_key: commentCtrl.user.key, text: "testando"};
             var result = commentCtrl.canDeleteComment(comment);
             expect(result).toBeTruthy();
         });
 
         it('Should return false', function() {
+            commentCtrl.post = posts[0];
             var comment = {author_key: "1234", text: "testando"};
             var result = commentCtrl.canDeleteComment(comment);
             expect(result).toBeFalsy();
@@ -87,6 +89,10 @@
     });
 
     describe('confirmCommentDeletion()', function(){
+        beforeEach(function() {
+            posts[0].state = 'published';
+        });
+
         it('Should delete the comment', function() {
             commentCtrl.post = posts[0];
             spyOn(mdDialog, 'confirm').and.callThrough();

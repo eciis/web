@@ -75,21 +75,6 @@
             });
         }
 
-        requestController.showMessage = function() {
-            var message = '  solicitou ser membro de:';
-            return message;
-        };
-
-        requestController.goToInstitution = function goToInstitution(institutionKey) {
-            window.open(makeUrl(institutionKey), '_blank');
-        };
-
-        function makeUrl(institutionKey){
-            var currentUrl = window.location.href;
-            currentUrl = currentUrl.split('#');
-            return currentUrl[0] + $state.href('app.institution', {institutionKey: institutionKey});
-        }
-
         (function main () {
             loadRequest();
         })();

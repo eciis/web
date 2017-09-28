@@ -77,7 +77,7 @@
         });
     });
 
-    describe('getFullAddress', function() {
+    describe('getFullAddress()', function() {
         it('Should getFullAddress', function() {
             var instTest = new Institution(institution);
             var addressInstTest = instTest.getFullAddress();

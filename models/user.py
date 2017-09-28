@@ -135,10 +135,10 @@ class User(ndb.Model):
                 self.change_state('inactive')
             self.put()
 
-    def remove_profile(self, institution):
+    def remove_profile(self, institution_key):
         """Remove a profile."""
         for profile in self.institution_profiles:
-            if profile.institution_key == institution:
+            if profile.institution_key == institution_key:
                 self.institution_profiles.remove(profile)
                 break
 

@@ -71,4 +71,10 @@ class RequestHandler(BaseHandler):
         """Change request status from 'sent' to 'rejected'."""
         request = ndb.Key(urlsafe=request_key).get()
         request.change_status('rejected')
+
+        institution_key = request.institution_requested_key.urlsafe()
+        sender_user = request.sender_key.get()
+        sender_user.remove_profile(institution_key)
+
+        sender_user.put()
         request.put()

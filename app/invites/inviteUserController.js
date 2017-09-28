@@ -50,7 +50,6 @@
 
         inviteController.rejectRequest = function rejectInvite(request, event){
                 var promise = RequestInvitationService.showRejectDialog(event);
-
                 promise.then(function() {
                     deleteRequest(request);
                 }, function() {

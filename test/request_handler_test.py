@@ -122,10 +122,21 @@ class RequestHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
     def test_delete(self, verify_token):
         """Test method delete of RequestHandler."""
-        self.testapp.delete('/api/requests/' + self.request.key.urlsafe() + '/user')
-        request = self.request.key.get()
+        self.assertEquals(
+            len(self.other_user.institution_profiles),
+            1, 'The other_user should have only one profile')
 
-        self.assertEqual(request.status, 'rejected')
+        self.testapp.delete('/api/requests/' +
+                            self.request.key.urlsafe() + '/user')
+
+        # update request and other_user
+        self.request = self.request.key.get()
+        self.other_user = self.other_user.key.get()
+
+        self.assertEqual(self.request.status, 'rejected')
+        self.assertEquals(
+            len(self.other_user.institution_profiles),
+            0, 'The other_user should have no profile')
 
     @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_delete_user_not_admin(self, verify_token):
@@ -167,7 +178,15 @@ def initModels(cls):
     # institutions admin by user_admin
     cls.user_admin.institutions_admin = [cls.inst_test.key]
     cls.user_admin.put()
-
+    # institution profile
+    profile_data = {
+        'office': "member",
+        'institution_name': cls.inst_test.name,
+        'institution_photo_url': "photo-url.com",
+        'institution_key': cls.inst_test.key.urlsafe()
+    }
+    # update user profiles
+    cls.other_user.create_and_add_profile(profile_data)
     # New request user
     data = {
         'sender_key': cls.other_user.key.urlsafe(),

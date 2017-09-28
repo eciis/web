@@ -48,13 +48,15 @@ class InviteHandler(BaseHandler):
 
     @login_required
     def delete(self, user, key):
-        """Change invite status from 'sent' to 'resolved'."""
+        """Change invite status from 'sent' to 'rejected'."""
         invite_key = ndb.Key(urlsafe=key)
         invite = invite_key.get()
         invite.change_status('rejected')
+        invite.put()
 
-        stub_institution = invite.stub_institution_key.get()
-        stub_institution.change_state('inactive')
+        if invite.stub_institution_key:
+            stub_institution = invite.stub_institution_key.get()
+            stub_institution.change_state('inactive')
 
     @json_response
     @login_required

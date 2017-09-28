@@ -13,4 +13,4 @@
     beforeEach(inject(function($controller, AuthService, RequestInvitationService){
         AuthService.login(user);
     }));
-}))();
+}));

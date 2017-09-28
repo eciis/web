@@ -52,7 +52,9 @@ class InviteHandler(BaseHandler):
         invite_key = ndb.Key(urlsafe=key)
         invite = invite_key.get()
         invite.change_status('rejected')
-        invite.put()
+
+        stub_institution = invite.stub_institution_key.get()
+        stub_institution.change_state('inactive')
 
     @json_response
     @login_required

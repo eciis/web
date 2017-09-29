@@ -43,4 +43,4 @@ class EventCollectionHandler(BaseHandler):
                              institution_key, institution.name, institution.photo_url)
         event.put()
 
-        self.response.write(json.dumps(Utils.toJson(event, host=self.request.host)))
+        self.response.write(json.dumps(Utils.toJson(Event.make(event), host=self.request.host)))

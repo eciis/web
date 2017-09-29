@@ -20,12 +20,7 @@
             </md-list>
 
             <md-list flex ng-if="!newInviteCtrl.isInviteUser()">
-              <md-subheader class="md-no-sticky">{{newInviteCtrl.invite.admin_name}} da Instituição {{newInviteCtrl.invite.institution.name}}  te enviou um convite para ser administrador da nova instituição:</md-subheader>
-              <md-list-item class="md-3-line">
-                <div class="md-list-item-text" layout="column" style="text-align: center;">
-                  <h3><b>{{ newInviteCtrl.invite.suggestion_institution_name}}</b></h3>
-                </div>
-              </md-list-item>
+              <p>{{newInviteCtrl.invite.admin_name}} da Instituição {{newInviteCtrl.invite.institution.name}} te enviou um convite para ser administrador da instituição <b>{{ newInviteCtrl.invite.suggestion_institution_name | uppercase}}</b></p>
             </md-list>
             <div layout="column" layout-align="center" ng-if="newInviteCtrl.isUserInfoImcomplete()">
               <p>Informe seus dados pessoais abaixo para essa instituição:</p>

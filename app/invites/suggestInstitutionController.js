@@ -24,8 +24,7 @@
         };
 
         suggestInstCtrl.showSuggestion = function showSuggestion(state) {
-            var isActive = state === ACTIVE_STATE;
-            return isActive && suggestInstCtrl.isHierarchy;
+            return suggestInstCtrl.isActive(state) && suggestInstCtrl.isHierarchy;
         };
 
         suggestInstCtrl.isActive = function isActive(state) {

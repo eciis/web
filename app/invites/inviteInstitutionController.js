@@ -72,11 +72,11 @@
 
         inviteController.sendInstInvite = function sendInstInvite(invite) {
             var promise = InviteService.sendInvite(invite);
-            promise.then(function success(response) {
+            promise.then(function success() {
                     inviteController.invite = {};
                     inviteController.showButton = true;
                     invite.status = 'sent';
-                    invite.inviter_name = inviteController.user.name;
+                    invite.sender_name = inviteController.user.name;
                     inviteController.sent_invitations.push(invite);
                     MessageService.showToast('Convite enviado com sucesso!');
                 }, function error(response) {

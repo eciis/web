@@ -13,6 +13,7 @@
         suggestInstCtrl.requested_invites = requested_invites;
         suggestInstCtrl.isHierarchy = isHierarchy;
         var ACTIVE_STATE = "active";
+        var PENDING_STATE = "pending";
 
         suggestInstCtrl.goToInstitution = function goToInstitution(institutionKey) {
             window.open(makeUrl(institutionKey), '_blank');
@@ -22,13 +23,16 @@
             $mdDialog.cancel();
         };
 
-        suggestInstCtrl.showSuggestion = function(state) {
-            var isActive = state === ACTIVE_STATE;
-            return isActive && suggestInstCtrl.isHierarchy;
+        suggestInstCtrl.showSuggestion = function showSuggestion(state) {
+            return suggestInstCtrl.isActive(state) && suggestInstCtrl.isHierarchy;
         };
 
-        suggestInstCtrl.isActive = function(state) {
+        suggestInstCtrl.isActive = function isActive(state) {
             return state === ACTIVE_STATE;
+        };
+
+        suggestInstCtrl.isPending = function isPending(state) {
+            return state === PENDING_STATE;
         };
 
         function makeUrl(institutionKey){

@@ -71,7 +71,7 @@
                   <a href class="md-text hyperlink" ng-click="homeCtrl.goToEvent(event)">{{ event.title | limitTo: 20 }}{{ event.title.length > 20 ? '...' : ''}}</a>
                   <p>De {{ event.start_time | amUtc | amLocal | amCalendar:referenceTime:formats}} até 
                    {{ event.end_time | amUtc | amLocal | amCalendar:referenceTime:formats }}</p>
-                  <p>por {{ event.author_name }}</p>
+                  <p>por {{ event.author }}</p>
                 </div>
               </md-list-item>
             </md-list>

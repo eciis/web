@@ -179,6 +179,6 @@ def initModels(cls):
     cls.inst_test.put()
     # new User inactive other user
     cls.other_user = User()
-    cls.other_user.name = 'other user'
+    cls.other_user.name = 'other_user'
     cls.other_user.email = ['otheruser@test.com']
     cls.other_user.put()

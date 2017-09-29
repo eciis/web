@@ -27,6 +27,7 @@
 
             inviteController.invite.institution_key = currentInstitutionKey;
             inviteController.invite.admin_key = inviteController.user.key;
+            inviteController.invite.sender_key = inviteController.user.key;
             inviteController.invite.type_of_invite = 'INSTITUTION';
             invite = new Invite(inviteController.invite);
 

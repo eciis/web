@@ -266,7 +266,7 @@
     * @param {service} AuthService - Service of user authentication
     * @param {service} $transitions - Service of transitions states
     */
-    app.run(function(AuthService, $transitions) {
+    app.run(function userInactiveListener(AuthService, $transitions) {
         var ignored_routes = [
             'create_institution',
             'error',

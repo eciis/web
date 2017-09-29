@@ -12,7 +12,8 @@
             'suggestion_institution_name': "Suggested Name",
             'type_of_invite': "institution",
             'status': 'sent'
-        }]
+        }],
+        state: 'active'
     };
 
     var splab = {
@@ -28,9 +29,7 @@
         state = $state;
         instService = InstitutionService;
 
-        AuthService.getCurrentUser = function() {
-            return new User(mayza);
-        };
+        AuthService.login(mayza);
 
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', "search_panel.html").respond(200);

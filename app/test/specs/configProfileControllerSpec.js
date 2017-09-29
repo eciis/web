@@ -15,7 +15,8 @@
         email: 'teste@gmail.com',
         institutions: [institution],
         uploaded_images: [],
-        institutions_admin: []
+        institutions_admin: [],
+        state: 'active'
     };
 
     var newUser = {
@@ -46,9 +47,7 @@
 
         authService = AuthService;
 
-        authService.getCurrentUser = function() {
-            return new User(user);
-        };
+        authService.login(user);
 
         createCrtl = function() {
             return $controller('ConfigProfileController', {

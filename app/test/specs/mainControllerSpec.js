@@ -13,7 +13,8 @@
             'status': 'sent',
             'stub_institution': {'name': 'Suggested Name',
                                  'key': '00001'}
-        }]
+        }],
+        state: 'active'
     };
     var institution = {
         name: 'institution',
@@ -52,9 +53,7 @@
         spyOn(requestInvitationService, 'getParentRequests').and.callFake(callFake);
         spyOn(requestInvitationService, 'getChildrenRequests').and.callFake(callFake);
 
-        authService.getCurrentUser = function() {
-            return new User(user);
-        };
+        authService.login(user);
 
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', "search_panel.html").respond(200);

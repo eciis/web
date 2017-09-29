@@ -6,7 +6,8 @@
     var postCtrl, post, httpBackend, scope, deffered, mdDialog, rootScope, postService, mdToast, http, imageService;
     var user = {
         name: 'name',
-        current_institution: {key: "institutuion_key"}
+        current_institution: {key: "institutuion_key"},
+        state: 'active'
     };
 
     beforeEach(inject(function($controller, $httpBackend, $http, $q, $mdDialog,
@@ -20,6 +21,7 @@
         postService = PostService;
         mdToast = $mdToast;
         http = $http;
+        AuthService.login(user);
 
         postCtrl = $controller('PostController', {
             scope: scope,

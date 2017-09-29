@@ -14,7 +14,8 @@
         institutions: institutions,
         follows: institutions,
         institutions_admin: institutions[0],
-        current_institution: institutions[0]
+        current_institution: institutions[0],
+        state: 'active'
     };
 
     maiana.current_institution = institutions[0];
@@ -61,7 +62,7 @@
     });
 
     describe('cancelDialog()', function() {
-        
+
         it('Should call mdDialog.cancel', function() {
             spyOn(mdDialog, 'cancel');
             shareCtrl.cancelDialog();
@@ -70,7 +71,7 @@
     });
 
     describe('showImage()', function() {
-        
+
         it('Should be false', function() {
             expect(shareCtrl.showImage()).toBe(false);
         });
@@ -175,7 +176,7 @@
             shareCtrl.post.video_url = undefined;
             expect(shareCtrl.getVideoUrl()).toBe(undefined);
         });
-        
+
         it('should return the embed Youtube url', function() {
             shareCtrl.post.video_url = 'https://www.youtube.com/watch?v=3T3g8rV-5GU';
             expect(shareCtrl.getVideoUrl()).toBe('https://www.youtube.com/embed/3T3g8rV-5GU');

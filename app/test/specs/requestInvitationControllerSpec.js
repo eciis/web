@@ -24,12 +24,13 @@
     var maiana = {
         name: 'Maiana',
         key: '12107',
-        email: 'maiana.brito@ccc.ufcg.edu.br'
+        email: 'maiana.brito@ccc.ufcg.edu.br',
+        state: 'active'
     };
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, InstitutionService) {
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, InstitutionService, AuthService) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
@@ -38,6 +39,8 @@
         httpBackend.when('GET', 'institution/institution_page.html').respond(200);
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', "home/home.html").respond(200);
+
+        AuthService.login(maiana);
 
         createCtrl = function() {
             return $controller('RequestInvitationController',
@@ -71,7 +74,7 @@
                     expect(requestInvCtrl.institutions).toEqual([splab]);
                     done();
                 });
-                httpBackend.flush();            
+                httpBackend.flush();
             });
 
         });
@@ -86,7 +89,7 @@
                     expect(requestInvCtrl.institutionSelect).toEqual(certbio);
                     expect(institutionService.getInstitution).toHaveBeenCalled();
                     done();
-                });      
+                });
                 httpBackend.flush();
             });
         });
@@ -95,7 +98,7 @@
             it('Should showFullInformation be true', function(){
                 requestInvCtrl.institutions = [certbio];
                 requestInvCtrl.institutionSelect = certbio;
-                
+
                 expect(requestInvCtrl.showFullInformation(certbio)).toEqual(true);
             });
 

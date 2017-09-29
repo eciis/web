@@ -8,7 +8,8 @@
     };
 
     var user = {
-        key: '38972'
+        key: '38972',
+        state: 'active'
     };
 
     var institution = {

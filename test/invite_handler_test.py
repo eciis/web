@@ -2,11 +2,13 @@
 """Invite Handler Test."""
 
 import json
+import search_module
 from test_base_handler import TestBaseHandler
 from models.user import User
 from models.institution import Institution
 from models.institution import Address
 from models.invite_user import InviteUser
+from models.invite_institution import InviteInstitution
 from handlers.invite_handler import InviteHandler
 
 from mock import patch
@@ -35,23 +37,75 @@ class InviteHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_get(self, verify_token):
         """Test method get of InviteHandler."""
-        response = self.testapp.get('/api/invites/' + self.invite.key.urlsafe())
+        response = self.testapp.get('/api/invites/' +
+                                    self.invite.key.urlsafe())
         invite = json.loads(response._app_iter[0])
 
         self.assertEqual(
             invite,
             self.invite.make(),
-            "Expected invite muste be equal to make")
+            "Expected invite should be equal to make")
 
     @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_delete(self, verify_token):
         """Test method delete of InviteHandler."""
-        self.testapp.delete('/api/invites/' + self.invite.key.urlsafe())
-        invite = self.invite.key.get()
+        stub_institution = self.invite_institution.stub_institution_key.get()
+        stub_inst_document = search_module.getDocuments(
+            stub_institution.name,
+            'pending'
+        )
+        searched_inst = stub_inst_document[0]
+
         self.assertEqual(
-            invite.status,
+            stub_institution.state,
+            'pending', 'The stub institution state should be pending'
+        )
+
+        self.assertEqual(
+            searched_inst.get('name'),
+            stub_institution.name,
+            "The searched institution should have \
+            the same name as the stub institution"
+        )
+
+        self.assertEqual(
+            searched_inst.get('state'),
+            'pending', "The searched institution state should be pending"
+        )
+
+        self.testapp.delete('/api/invites/' +
+                            self.invite_institution.key.urlsafe())
+
+        # update invite_institution, stub_institution and stub_inst_document
+        invite_institution = self.invite_institution.key.get()
+        stub_institution = invite_institution.stub_institution_key.get()
+        stub_inst_document = search_module.getDocuments(
+            stub_institution.name,
+            'inactive'
+        )
+        searched_inst = stub_inst_document[0]
+
+        self.assertEqual(
+            invite_institution.status,
             'rejected',
-            "Expected status muste be equal to rejected")
+            "Expected status should be equal to rejected")
+
+        self.assertEqual(
+            stub_institution.state,
+            'inactive', 'The stub institution state should be inactive'
+        )
+
+        self.assertEqual(
+            searched_inst.get('name'),
+            stub_institution.name,
+            "The searched institution should have \
+            the same name as the stub institution"
+        )
+
+        self.assertEqual(
+            searched_inst.get('state'),
+            'inactive', "The searched institution state should be inactive"
+        )
 
     @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_patch(self, verify_token):
@@ -64,24 +118,24 @@ class InviteHandlerTest(TestBaseHandler):
         self.assertEqual(
             invite.status,
             'accepted',
-            "Expected status muste be equal to accepted")
+            "Expected status should be equal to accepted")
 
         user = self.other_user.key.get()
 
         self.assertEqual(
             user.institutions[0],
             self.inst_test.key,
-            "Expected institutions muste be equal to inst_test")
+            "Expected institutions should be equal to inst_test")
 
         self.assertEqual(
             len(user.institution_profiles),
             1,
-            "Expected len of institutions_profiles muste be equal to 1")
+            "Expected len of institutions_profiles should be equal to 1")
 
         self.assertEqual(
             user.state,
             'active',
-            "Expected state muste be equal to active")
+            "Expected state should be equal to active")
 
     @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_patch_fail(self, verify_token):
@@ -97,7 +151,7 @@ class InviteHandlerTest(TestBaseHandler):
         self.assertEqual(
             exception_message,
             'Error! The profile is invalid.',
-            "Expected exception_message muste be equal to 'Error! The profile is invalid.'")
+            "Expected exception_message should be equal to 'Error! The profile is invalid.'")
 
 
 def initModels(cls):
@@ -133,3 +187,10 @@ def initModels(cls):
 
     cls.invite = InviteUser.create(data)
     cls.invite.put()
+
+    # New invite institution
+    data['suggestion_institution_name'] = 'new Institution'
+    data['type_of_invite'] = 'INSTITUTION'
+
+    cls.invite_institution = InviteInstitution.create(data)
+    cls.invite_institution.put()

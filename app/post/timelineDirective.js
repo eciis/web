@@ -44,7 +44,8 @@
             scope: {
                 posts: '=',
                 institution: '=',
-                user: '='
+                user: '=',
+                addPost: '='
             }
         };
     });

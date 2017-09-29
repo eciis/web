@@ -78,6 +78,24 @@
                      controllerAs: "requestCtrl",
                      locals: {}
                 }
+            },
+            "ACCEPT_INSTITUTION_LINK": {
+                icon: "account_balance",
+            },
+            "REJECT_INSTITUTION_LINK": {
+                icon: "account_balance",
+            },
+            "ACCEPT_INVITE_USER": {
+                icon: "person"
+            },
+            "REJECT_INVITE_USER": {
+                icon: "person"
+            },
+            "ACCEPT_INVITE_INSTITUION": {
+                icon: "account_balance"
+            },
+            "REJECT_INVITE_INSTITUTION": {
+                icon: "account_balance"
             }
         };
 

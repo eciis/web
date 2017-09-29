@@ -262,7 +262,7 @@
 
 
     /**
-    * Function of create listner for check routes that require active user
+    * Application listener to filter routes that require active user.
     * @param {service} AuthService - Service of user authentication
     * @param {service} $transitions - Service of transitions states
     */
@@ -274,20 +274,17 @@
             'user_inactive'
         ];
 
-        $transitions.onStart({to: function(state) {
-            return !(_.includes(ignored_routes, state.name));
-        }}, function(transition) {
-            verifyIfUserActive(
-                AuthService.getCurrentUser(),
-                transition.router.stateService
-            );
+        $transitions.onStart({
+            to: function(state) {
+                return !(_.includes(ignored_routes, state.name));
+            }
+        }, function(transition) {
+            var user = AuthService.getCurrentUser();
+            var isInactive = user && user.isInactive();
+
+            if (isInactive) {
+                transition.router.stateService.transitionTo('user_inactive');
+            }
         });
     });
-
-    function verifyIfUserActive(user, $state) {
-        var isInactive = user && user.isInactive();
-        if (isInactive) {
-            $state.transitionTo('user_inactive');
-        }
-    }
 })();

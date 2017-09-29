@@ -17,6 +17,17 @@
         'ngMask'
     ]);
 
+    app.run(function(){
+      const dateFormats = {
+        calendar: {
+          sameDay: '[Hoje às] LT',
+          lastWeek: 'DD MMM, YYYY [às] LT',
+          sameElse: 'DD MMM, YYYY [às] LT'
+        }
+      };
+      moment.updateLocale('pt-br', dateFormats);
+    });
+
     app.config(function($mdIconProvider, $mdThemingProvider, $stateProvider, $urlMatcherFactoryProvider,
         $urlRouterProvider, $locationProvider, $httpProvider, $sceDelegateProvider) {
 

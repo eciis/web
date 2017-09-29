@@ -8,6 +8,7 @@
     "tests"
   ],
   "dependencies": {
-    "ngMask": "angular-mask#^3.1.1"
+    "ngMask": "angular-mask#^3.1.1",
+    "moment": "^2.18.1"
   }
 }

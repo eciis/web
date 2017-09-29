@@ -234,8 +234,6 @@
                     if (pendingInvite) {
                         var inviteKey = pendingInvite.key;
                         $state.go("new_invite", {key: inviteKey});
-                    } else if (user.isInactive()) {
-                        $state.go("user_inactive");
                     }
                 }
                 return config || $q.when(config);
@@ -261,4 +259,35 @@
             }
         };
     });
+
+
+    /**
+    * Function of create listner for check routes that require active user
+    * @param {service} AuthService - Service of user authentication
+    * @param {service} $transitions - Service of transitions states
+    */
+    app.run(function(AuthService, $transitions) {
+        var ignored_routes = [
+            'create_institution',
+            'error',
+            'signin',
+            'user_inactive'
+        ];
+
+        $transitions.onStart({to: function(state) {
+            return !(_.includes(ignored_routes, state.name));
+        }}, function(transition) {
+            verifyIfUserActive(
+                AuthService.getCurrentUser(),
+                transition.router.stateService
+            );
+        });
+    });
+
+    function verifyIfUserActive(user, $state) {
+        var isInactive = user && user.isInactive();
+        if (isInactive) {
+            $state.transitionTo('user_inactive');
+        }
+    }
 })();

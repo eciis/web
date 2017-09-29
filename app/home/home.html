@@ -66,7 +66,7 @@
                 <span>Nenhum evento próximo</span>
               </md-list-item>
               <md-list-item class="md-3-line" ng-repeat="event in homeCtrl.events" ng-if="homeCtrl.events.length > 0">
-                <img ng-src="{{event.institution_photo}}" class="md-avatar"/>
+                <img ng-src="{{event.institution_image}}" class="md-avatar"/>
                 <div class="md-list-item-text" layout="column">
                   <a href class="md-text hyperlink" ng-click="homeCtrl.goToEvent(event)">{{ event.title | limitTo: 20 }}{{ event.title.length > 20 ? '...' : ''}}</a>
                   <p>De {{ event.start_time | amUtc | amLocal | amCalendar:referenceTime:formats}} até 

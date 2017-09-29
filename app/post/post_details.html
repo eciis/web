@@ -188,7 +188,7 @@
         ng-if="postDetailsCtrl.showButtonEdit()" title="Editar o post">
       <md-icon>edit</md-icon>
     </md-button>
-    <md-button class="md-icon-button" ng-if="postDetailsCtrl.showButtonShare()" aria-label="compartilhar"
+    <md-button class="md-icon-button" ng-if="!postDetailsCtrl.isDeleted(postDetailsCtrl.post)" aria-label="compartilhar"
       ng-click="postDetailsCtrl.share(postDetailsCtrl.post)" title="Compartilhar o post">
       <md-icon>share</md-icon>
     </md-button>

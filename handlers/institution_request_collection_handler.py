@@ -19,6 +19,7 @@ def createInstitution(user, data):
     inst_stub = Institution()
 
     for property in data:
+        if property != 'admin':
             setattr(inst_stub, property, data[property])
 
     inst_stub.address = Address.create(data.get('address'))
@@ -59,7 +60,11 @@ class InstitutionRequestCollectionHandler(BaseHandler):
             EntityException
         )
 
+        user.name = data['admin']['name']
+        user.put()
+
         inst_stub = createInstitution(user, data)
+        data['sender_key'] = user.key.urlsafe()
         data['institution_key'] = inst_stub.key.urlsafe()
         data['admin_key'] = user.key.urlsafe()
 

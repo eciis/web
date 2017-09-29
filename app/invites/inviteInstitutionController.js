@@ -3,11 +3,12 @@
     var app = angular.module('app');
 
     app.controller("InviteInstitutionController", function InviteInstitutionController(
-        InviteService, $mdToast, $state, AuthService, InstitutionService, $mdDialog, MessageService) {
+        InviteService, $mdToast, $state, AuthService, InstitutionService, RequestInvitationService, $mdDialog, MessageService) {
         var inviteController = this;
 
         inviteController.invite = {};
         inviteController.sent_invitations = [];
+        inviteController.sent_requests = [];
         inviteController.existing_institutions = [];
         inviteController.showButton = true;
         var INSTITUTION_STATE = "active,pending";
@@ -86,9 +87,36 @@
             return promise;
         };
 
+        inviteController.showPendingRequestDialog = function showPendingRequestDialog(request) {
+            $mdDialog.show({
+                templateUrl: "requests/request_institution_processing.html",
+                controller: "RequestInstitutionProcessingController",
+                controllerAs: "requestCtrl",
+                parent: angular.element(document.body),
+                targetEvent: event,
+                clickOutsideToClose:true,
+                locals: {
+                    "key": request.key
+                },
+                openFrom: '#fab-new-post',
+                closeTo: angular.element(document.querySelector('#fab-new-post'))
+            }).then(function success() {
+                request.status = 'accepted';
+            });
+        };
+
         inviteController.goToInst = function goToInst(institutionKey) {
             $state.go('app.institution', {institutionKey: institutionKey});
         };
+
+        function loadSentRequests() {
+            RequestInvitationService.getRequestsInst().then(function success(response) {
+                inviteController.sent_requests = response.data;
+            }, function error(response) {
+                $state.go('app.home');
+                MessageService.showToast(response.data.msg);
+            });
+        }
 
         function loadSentInvitations() {
             InviteService.getSentInstitutionInvitations().then(function success(response) {
@@ -99,6 +127,9 @@
             });
         }
 
-        loadSentInvitations();
+        (function main() {
+            loadSentInvitations();
+            loadSentRequests();
+        })();
     });
 })();

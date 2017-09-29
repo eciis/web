@@ -4,7 +4,17 @@
         var httpBackend, service, $http, scope;
         var POSTS_URI = "/api/posts";
 
-        var user = {name: 'Raoni', key: 12345};
+        var user = {
+            name: 'Raoni',
+            key: 12345,
+            state: 'active'
+        };
+
+        var login_user = {
+            name: 'login_user',
+            key: 12345,
+            state: 'active'
+        };
 
         var institutions = [
             {name: 'Splab',key: '098745', followers: [user], members: [user]},
@@ -30,7 +40,7 @@
 
         beforeEach(module('app'));
 
-        beforeEach(inject(function($httpBackend, PostService, _$http_, $rootScope) {
+        beforeEach(inject(function($httpBackend, PostService, _$http_, $rootScope, AuthService) {
             httpBackend = $httpBackend;
             $http = _$http_;
             scope = $rootScope.$new();
@@ -39,6 +49,8 @@
             httpBackend.when('GET', 'home/home.html').respond(200);
             httpBackend.when('GET', 'error/error.html').respond(200);
             httpBackend.when('GET', 'auth/login.html').respond(200);
+
+            AuthService.login(login_user);
         }));
 
         afterEach(function() {

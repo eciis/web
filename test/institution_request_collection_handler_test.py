@@ -30,6 +30,9 @@ class InstitutionRequestCollectionHandlerTest(TestBaseHandler):
         data = {
             'sender_key': self.other_user.key.urlsafe(),
             'name': 'new_inst',
+            'admin': {
+                'name': 'Other User'
+            },
             'acronym': 'ni',
             'address': {
                 'street': 'street'

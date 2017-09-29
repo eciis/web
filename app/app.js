@@ -165,6 +165,14 @@
                     }
                 }
             })
+            .state("create_institution", {
+                url: "/create_institution",
+                views: {
+                    main: {
+                        templateUrl: "institution/create_inst.html"
+                    }
+                }
+            })
             .state("user_inactive", {
                 url: "/userinactive",
                 views: {
@@ -226,8 +234,6 @@
                     if (pendingInvite) {
                         var inviteKey = pendingInvite.key;
                         $state.go("new_invite", {key: inviteKey});
-                    } else if (user.isInactive()) {
-                        $state.go("user_inactive");
                     }
                 }
                 return config || $q.when(config);
@@ -252,5 +258,33 @@
                 return $q.reject(rejection);
             }
         };
+    });
+
+
+    /**
+    * Application listener to filter routes that require active user.
+    * @param {service} AuthService - Service of user authentication
+    * @param {service} $transitions - Service of transitions states
+    */
+    app.run(function userInactiveListener(AuthService, $transitions) {
+        var ignored_routes = [
+            'create_institution',
+            'error',
+            'signin',
+            'user_inactive'
+        ];
+
+        $transitions.onStart({
+            to: function(state) {
+                return !(_.includes(ignored_routes, state.name));
+            }
+        }, function(transition) {
+            var user = AuthService.getCurrentUser();
+            var isInactive = user && user.isInactive();
+
+            if (isInactive) {
+                transition.router.stateService.transitionTo('user_inactive');
+            }
+        });
     });
 })();

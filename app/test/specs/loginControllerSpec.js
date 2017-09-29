@@ -5,7 +5,8 @@
     var logginCtrl, httpBackend, scope, createCtrl, state, authService;
 
     var user = {
-        name: 'Tiago'
+        name: 'Tiago',
+        state: 'active'
     };
 
     var institutions = [{
@@ -32,9 +33,7 @@
 
         httpBackend.when('GET', "home/home.html").respond(200);
 
-        authService.getCurrentUser = function() {
-            return new User(user);
-        };
+        authService.login(user);
 
         spyOn(authService, 'isLoggedIn').and.callThrough();
         spyOn(state, 'go').and.callThrough();

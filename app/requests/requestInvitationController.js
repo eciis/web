@@ -3,7 +3,8 @@
 (function () {
     var app = angular.module('app');
 
-    app.controller("RequestInvitationController", function RequestInvitationController($mdDialog, $q, MessageService, InstitutionService, AuthService, RequestInvitationService) {
+    app.controller("RequestInvitationController", function RequestInvitationController($mdDialog, $q, MessageService, InstitutionService,
+        AuthService, RequestInvitationService, $state) {
         var requestInvCtrl = this;
 
         requestInvCtrl.search = "";
@@ -35,6 +36,11 @@
             }, function error() {
                 requestInvCtrl.cancelDialog();
             });
+        };
+
+        requestInvCtrl.createInst = function createInst() {
+            $state.go("create_institution");
+            $mdDialog.hide();
         };
 
         requestInvCtrl.cancelDialog = function() {

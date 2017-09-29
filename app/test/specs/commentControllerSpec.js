@@ -6,7 +6,8 @@
     var commentCtrl, scope, httpBackend, mdDialog, http, commentService, posts;
     var user = {
         name: 'name',
-        key: 'asd234jk2l'
+        key: 'asd234jk2l',
+        state: 'active'
     };
 
     var reply = {"text": "reply", "id": 1};
@@ -36,19 +37,17 @@
         mdDialog = $mdDialog;
         http = $http;
         commentService = CommentService;
-        
+
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);
         httpBackend.when('GET', 'error/error.html').respond(200);
         httpBackend.when('GET', 'auth/login.html').respond(200);
         httpBackend.when('GET', 'error/error.html').respond(200);
 
-        AuthService.getCurrentUser = function() {
-            return new User(user);
-        };
+        AuthService.login(user);
 
         commentCtrl = $controller('CommentController', {
-            scope: scope            
+            scope: scope
         });
 
         commentCtrl.user = AuthService.getCurrentUser();

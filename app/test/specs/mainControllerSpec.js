@@ -1,7 +1,7 @@
 'use strict';
 
 (describe('Test MainController', function() {
-    var mainCtrl, httpBackend, scope, createCtrl, state, instService, authService;
+    var mainCtrl, httpBackend, scope, createCtrl, state, instService, authService, requestInvitationService;
     var user = {
         name: 'user',
         key: 'user-key',
@@ -13,7 +13,8 @@
             'status': 'sent',
             'stub_institution': {'name': 'Suggested Name',
                                  'key': '00001'}
-        }]
+        }],
+        state: 'active'
     };
     var institution = {
         name: 'institution',
@@ -31,16 +32,28 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $state, AuthService, InstitutionService) {
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $state, AuthService, InstitutionService,
+            RequestInvitationService) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
         instService = InstitutionService;
         authService = AuthService;
+        requestInvitationService = RequestInvitationService;
 
-        authService.getCurrentUser = function() {
-            return new User(user);
+        var callFake = function() {
+            return {
+                then: function(callback) {
+                    return callback([]);
+                }
+            };
         };
+
+        spyOn(requestInvitationService, 'getRequests').and.callFake(callFake);
+        spyOn(requestInvitationService, 'getParentRequests').and.callFake(callFake);
+        spyOn(requestInvitationService, 'getChildrenRequests').and.callFake(callFake);
+
+        authService.login(user);
 
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', "search_panel.html").respond(200);

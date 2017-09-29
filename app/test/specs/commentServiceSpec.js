@@ -5,18 +5,23 @@
     var postCommentsUri = '/api/posts/post-key/comments';
     comment = {text: 'text', post_key: 'post-key', id: 'comment-id'};
 
+    var user = {
+        state: 'active'
+    };
+
     beforeEach(module('app'));
 
-    beforeEach(inject(function($http, $httpBackend, $q, $rootScope, CommentService) {
+    beforeEach(inject(function($http, $httpBackend, $q, $rootScope, CommentService, AuthService) {
         http = $http;
         httpBackend = $httpBackend;
         deferred = $q.defer();
         scope = $rootScope.$new();
         commentService = CommentService;
         comments = [comment];
-        httpBackend.when('GET', 'main/main.html').respond(200);        
+        AuthService.login(user);
+        httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);
-        httpBackend.when('GET', 'error/error.html').respond(200); 
+        httpBackend.when('GET', 'error/error.html').respond(200);
     }));
 
     afterEach(function() {
@@ -26,7 +31,7 @@
         httpBackend.verifyNoOutstandingRequest();
     });
 
-    describe('getComments()', function() { 
+    describe('getComments()', function() {
         beforeEach(function() {
             spyOn(http, 'get').and.returnValue(deferred.promise);
             commentService.getComments(postCommentsUri).then(

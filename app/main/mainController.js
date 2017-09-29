@@ -86,7 +86,11 @@
             }
             return false;
         };
-        
+
+        mainCtrl.isSuperUser = function isSuperUser() {
+            return mainCtrl.user.permissions.analyze_request_inst;
+        };
+
         mainCtrl.changeInstitution = function changeInstitution(institution) {
             mainCtrl.user.changeInstitution(institution);
             mainCtrl.getPendingTasks();
@@ -144,7 +148,7 @@
         };
 
         function increaseInstInvitationsNumber(response) {
-            mainCtrl.pending_inst_invitations += response.data.length;
+            mainCtrl.pending_inst_invitations += response.length;
         }
 
         mainCtrl.getPendingTasks = function getPendingTasks() {
@@ -153,7 +157,7 @@
 
             RequestInvitationService.getRequests(mainCtrl.user.current_institution.key).then(
                 function success(response) {
-                    mainCtrl.pending_manager_member = response.data.length;
+                    mainCtrl.pending_manager_member = response.length;
                 }, function error() {}
             );
             RequestInvitationService.getParentRequests(mainCtrl.user.current_institution.key).then(

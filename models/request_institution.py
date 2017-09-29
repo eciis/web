@@ -12,7 +12,6 @@ class RequestInstitution(Request):
     """Request Institution Model."""
 
     def isValid(self):
-        institution_key = self.institution_key
         sender = self.sender_key
         if not sender:
             raise FieldException("The request require sender_key")
@@ -42,19 +41,19 @@ class RequestInstitution(Request):
         super_users = getSuperUsers()
 
         for super_user in super_users:
-            super(RequestInstitution, self).send_email(host, super_user, body)
+            super(RequestInstitution, self).send_email(host, super_user.email, body)
 
     def send_notification(self, user):
         """Method of send notification of request intitution."""
         entity_type = 'REQUEST_INSTITUTION'
-
         super_users = getSuperUsers()
 
         for super_user in super_users:
-            super(RequestInstitution, self).send_notification(super_user, entity_type)
+            super(RequestInstitution, self).send_notification(user, super_user.key.urlsafe(), entity_type)
 
     def make(self):
         """Create json of request to institution."""
         request_inst_json = super(RequestInstitution, self).make()
         request_inst_json['type_of_invite'] = 'REQUEST_INSTITUTION'
+        request_inst_json['institution_name'] = self.institution_key.get().name
         return request_inst_json

@@ -278,8 +278,8 @@ def getSuperUsers():
     for institution in institutionsTrusted:
         for userKey in institution.members:
             user = userKey.get()
-            if user.has_permission('analyze_request_inst', institution.key):
-                userswithpermission.push(user)
+            if user.has_permission('analyze_request_inst', institution.key.urlsafe()):
+                userswithpermission.append(user)
     return userswithpermission
 
 

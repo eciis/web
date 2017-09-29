@@ -128,7 +128,7 @@ def initModels(cls):
     cls.event.author_photo = cls.user.photo_url
     cls.event.institution_key = cls.certbio.key
     cls.event.institution_name = cls.certbio.name
-    cls.event.institution_photo = cls.certbio.photo_url
+    cls.event.institution_image = cls.certbio.photo_url
     cls.event.start_time = datetime.datetime.now()
     cls.event.end_time = datetime.datetime.now()
     cls.event.local = "Event location"

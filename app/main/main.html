@@ -16,7 +16,7 @@
 
     <md-menu md-position-mode="target-right target" ng-if="mainCtrl.isAdmin(mainCtrl.user.current_institution.key)">
       <md-button aria-label="menu" class="md-icon-button" ng-click="$mdMenu.open(ev); mainCtrl.getPendingTasks();" title="Configurações Administrativas">
-        <md-icon ng-class="mainCtrl.pending_inst_invitations || 
+        <md-icon ng-class="mainCtrl.pending_inst_invitations ||
             mainCtrl.pending_manager_member? 'notification-badge': ''" data-badge>
           settings
         </md-icon>
@@ -30,13 +30,13 @@
         </md-menu-item>
         <md-menu-item>
           <md-button  ng-click="mainCtrl.goToManageMembers()">
-            <md-icon ng-class="mainCtrl.pending_manager_member? 'notification-badge': ''" 
+            <md-icon ng-class="mainCtrl.pending_manager_member? 'notification-badge': ''"
               data-badge>people</md-icon>
             Gerenciar Membros
         </md-menu-item>
         <md-menu-item>
           <md-button ng-click="mainCtrl.goToManageInstitutions()">
-            <md-icon ng-class="mainCtrl.pending_inst_invitations? 'notification-badge': ''" 
+            <md-icon ng-class="mainCtrl.pending_inst_invitations? 'notification-badge': ''"
               data-badge>account_balance</md-icon>
             Vínculos Institucionais
           </md-button>
@@ -51,7 +51,7 @@
     <div layout="row" md-theme="input" style="margin-top: 42px;">
       <form ng-submit="mainCtrl.showMenu($event);">
         <md-input-container flex md-no-float>
-          <input aria-label="Pesquisar por instituições" class="form-control demo-menu-open-button" 
+          <input aria-label="Pesquisar por instituições" class="form-control demo-menu-open-button"
             ng-model="mainCtrl.search" md-colors="{background: 'teal-800'}"
             ng-show="search">
         </md-input-container>
@@ -78,7 +78,7 @@
             Notificações
           </md-button>
         </md-menu-item>
-        <md-menu-item ng-if="mainCtrl.isAdmin(mainCtrl.user.current_institution.key)">
+        <md-menu-item ng-if="mainCtrl.isSuperUser()">
           <md-button ng-click="mainCtrl.goInvite()">
             <md-icon>mail_outline</md-icon>
             Convite

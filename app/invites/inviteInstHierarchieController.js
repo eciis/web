@@ -105,8 +105,7 @@
                 MessageService.showToast('Convite enviado com sucesso!');
                 addInstitution(invite.type_of_invite, institution_requested_key);
                 deferred.resolve();
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
+            }, function error() {
                 deferred.reject();
             });
             return deferred.promise;
@@ -185,17 +184,13 @@
 
         function getParentRequests() {
             RequestInvitationService.getParentRequests(institutionKey).then(function success(response) {
-                inviteInstCtrl.requested_invites = inviteInstCtrl.requested_invites.concat(response.data);
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
+                inviteInstCtrl.requested_invites = inviteInstCtrl.requested_invites.concat(response);
             });
         }
 
         function getChildrenRequests() {
             RequestInvitationService.getChildrenRequests(institutionKey).then(function success(response) {
-                inviteInstCtrl.requested_invites = inviteInstCtrl.requested_invites.concat(response.data);
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
+                inviteInstCtrl.requested_invites = inviteInstCtrl.requested_invites.concat(response);
             });
         }
 

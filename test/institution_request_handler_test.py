@@ -122,6 +122,7 @@ def initModels(cls):
     # new Institution inst test
     cls.inst_test = Institution()
     cls.inst_test.name = 'inst test'
+    cls.inst_test.photo_url = 'images/photo.jpg'
     cls.inst_test.members = [cls.user_admin.key]
     cls.inst_test.followers = [cls.user_admin.key]
     cls.inst_test.admin = cls.user_admin.key
@@ -130,6 +131,7 @@ def initModels(cls):
     # new Institution inst requested to be parent of inst test
     cls.new_inst = Institution()
     cls.new_inst.name = 'new_inst'
+    cls.new_inst.photo_url = 'images/photo.jpg'
     cls.new_inst.address = cls.address
     cls.new_inst.put()
     # Update Institutions admin by other user

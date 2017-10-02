@@ -295,6 +295,12 @@ class Institution(ndb.Model):
                 child = child.get()
                 child.remove_institution_from_users(remove_hierarchy)
 
+    def change_state(self, state):
+        """Change the institution state."""
+        self.state = state
+        self.put()
+        search_module.updateDocument(self)
+
     def make(self, attributes):
         """Create an institution dictionary with specific filds."""
         institution = {}

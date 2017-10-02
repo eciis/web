@@ -3,150 +3,81 @@
 (function() {
     var app = angular.module("app");
 
-    app.service("RequestInvitationService", function RequestInvitationService(MessageService, $http, $q) {
+    app.service("RequestInvitationService", function RequestInvitationService(MessageService, HttpService) {
         var service = this;
         var REQUESTS_URI = "/api/institutions/";
 
         service.sendRequest = function sendRequest(request, institution_key) {
-            var deferred = $q.defer();
+            return HttpService.post(REQUESTS_URI + institution_key + "/requests/user", request);
+        };
 
-            $http.post(REQUESTS_URI + institution_key + "/requests/user", request).then(function success(response) {
-                deferred.resolve(response);
-            }, function error(response) {
-                deferred.reject(response);
-            });
-
-            return deferred.promise;
+        service.sendRequestInst = function sendRequestInst(request) {
+            request.type_of_invite = "REQUEST_INSTITUTION";
+            return HttpService.post(REQUESTS_URI + "requests/institution", request);
         };
 
         service.sendRequestToParentInst = function(invite, institution_requested_key) {
-            var deferred = $q.defer();
-            $http.post(REQUESTS_URI + institution_requested_key + "/requests/institution_parent", invite)
-                .then(function success(response) {
-                    deferred.resolve(response);
-            }, function error(response) {
-                    deferred.reject(response);
-            });
-            return deferred.promise;
+            return HttpService.post(REQUESTS_URI + institution_requested_key + "/requests/institution_parent", invite);
         };
 
         service.sendRequestToChildrenInst = function(invite, institution_requested_key) {
-            var deferred = $q.defer();
-            $http.post(REQUESTS_URI + institution_requested_key + "/requests/institution_children", invite)
-                .then(function success(response) {
-                    deferred.resolve(response);
-            }, function error(response) {
-                    deferred.reject(response);
-            });
-            return deferred.promise;
+            return HttpService.post(REQUESTS_URI + institution_requested_key + "/requests/institution_children", invite);
         };
 
         service.getParentRequests = function(institution_key) {
-            var deferred = $q.defer();
-            $http.get(REQUESTS_URI + institution_key + "/requests/institution_parent").then(function success(response) {
-                deferred.resolve(response);
-            }, function error(response) {
-                deferred.reject(response);
-            });
-            return deferred.promise;
+            return HttpService.get(REQUESTS_URI + institution_key + "/requests/institution_parent");
         };
 
         service.getChildrenRequests = function(institution_key) {
-            var deferred = $q.defer();
-            $http.get(REQUESTS_URI + institution_key + "/requests/institution_children").then(function success(response) {
-                deferred.resolve(response);
-            }, function error(response) {
-                deferred.reject(response);
-            });
-            return deferred.promise;
+            return HttpService.get(REQUESTS_URI + institution_key + "/requests/institution_children");
         };
 
         service.getRequests = function getRequests(institution_key) {
-            var deferred = $q.defer();
+            return HttpService.get(REQUESTS_URI + institution_key + "/requests/user");
+        };
 
-            $http.get(REQUESTS_URI + institution_key + "/requests/user").then(function success(response) {
-                deferred.resolve(response);
-            }, function error(response) {
-                deferred.reject(response);
-            });
+        service.getRequestsInst = function getRequestsInst() {
+            return HttpService.get(REQUESTS_URI + "requests/institution");
+        };
 
-            return deferred.promise;
+        service.getRequestInst = function getRequestInst(request_key) {
+            return HttpService.get("/api/requests/" + request_key + "/institution");
         };
 
         service.getRequest = function getRequest(request_key) {
-            var deferred = $q.defer();
-
-            $http.get("/api/requests/" + request_key + "/user").then(function success(response) {
-                deferred.resolve(response);
-            }, function error(response) {
-                deferred.reject(response);
-            });
-
-            return deferred. promise;
+            return HttpService.get("/api/requests/" + request_key + "/user");
         };
 
         service.acceptRequest = function acceptRequest(request_key) {
-            var deferred = $q.defer();
-
-            $http.put("/api/requests/" + request_key + "/user").then(function success(response) {
-                deferred.resolve(response);
-            }, function error(response) {
-                deferred.reject(response);
-            });
-
-            return deferred. promise;
+            return HttpService.put("/api/requests/" + request_key + "/user");
         };
 
         service.rejectRequest = function rejectRequest(request_key) {
-            var deferred = $q.defer();
+            return HttpService.delete("/api/requests/" + request_key + "/user");
+        };
 
-            $http.delete("/api/requests/" + request_key + "/user").then(function success(response) {
-                deferred.resolve(response);
-            }, function error(response) {
-                deferred.reject(response);
-            });
+        service.acceptRequestInst = function acceptRequestInst(request_key) {
+            return HttpService.put("/api/requests/" + request_key + "/institution");
+        };
 
-            return deferred. promise;
+        service.rejectRequestInst = function rejectRequest(request_key) {
+            return HttpService.delete("/api/requests/" + request_key + "/institution");
         };
 
         service.acceptInstParentRequest = function acceptRequest(request_key) {
-            var deferred = $q.defer();
-            $http.put("/api/requests/" + request_key + "/institution_parent").then(function success(response) {
-                deferred.resolve(response);
-            }, function error(response) {
-                deferred.reject(response);
-            });
-            return deferred. promise;
+            return HttpService.put("/api/requests/" + request_key + "/institution_parent");
         };
 
         service.rejectInstParentRequest = function rejectRequest(request_key) {
-            var deferred = $q.defer();
-            $http.delete("/api/requests/" + request_key + "/institution_parent").then(function success(response) {
-                deferred.resolve(response);
-            }, function error(response) {
-                deferred.reject(response);
-            });
-            return deferred. promise;
+            return HttpService.delete("/api/requests/" + request_key + "/institution_parent");
         };
 
         service.acceptInstChildrenRequest = function acceptRequest(request_key) {
-            var deferred = $q.defer();
-            $http.put("/api/requests/" + request_key + "/institution_children").then(function success(response) {
-                deferred.resolve(response);
-            }, function error(response) {
-                deferred.reject(response);
-            });
-            return deferred. promise;
+            return HttpService.put("/api/requests/" + request_key + "/institution_children");
         };
 
         service.rejectInstChildrenRequest = function rejectRequest(request_key) {
-            var deferred = $q.defer();
-            $http.delete("/api/requests/" + request_key + "/institution_children").then(function success(response) {
-                deferred.resolve(response);
-            }, function error(response) {
-                deferred.reject(response);
-            });
-            return deferred. promise;
+            return HttpService.delete("/api/requests/" + request_key + "/institution_children");
         };
 
         service.showRejectDialog = function showRejectDialog(event) {

@@ -39,11 +39,9 @@
             var promise = RequestInvitationService.acceptRequest(request.key);
 
             promise.then(function success(response) {
-                inviteController.members.push(response.data);
+                inviteController.members.push(response);
                 request.status = 'accepted';
                 MessageService.showToast("Pedido aceito!");
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
             });
             return promise;
         };
@@ -95,9 +93,7 @@
 
         function getRequests() {
             RequestInvitationService.getRequests(currentInstitutionKey).then(function success(response) {
-                inviteController.requests = response.data;
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
+                inviteController.requests = response;
             });
         }
 

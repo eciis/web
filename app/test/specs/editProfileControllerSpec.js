@@ -18,7 +18,8 @@
                 phone: '(99) 99999-9999',
                 email: 'teste@gmail.com',
                 institution_key: institution.key
-            }]
+            }],
+        state: 'active'
     };
 
     beforeEach(module('app'));
@@ -36,9 +37,7 @@
         mdDialog = $mdDialog;
         authService = AuthService;
 
-        authService.getCurrentUser = function() {
-            return new User(user);
-        };
+        authService.login(user);
 
         userToEdit = authService.getCurrentUser();
 

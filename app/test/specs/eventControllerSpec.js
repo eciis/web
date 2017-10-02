@@ -95,17 +95,6 @@
       expect(mdDialog.confirm).toHaveBeenCalled();
       expect(mdDialog.show).toHaveBeenCalled();
     });
-  });  
-
-  describe('share()', function() {
-
-    it('should eventService.createPost be called', function() {
-      spyOn(postService, 'createPost').and.returnValue(deffered.promise);
-      deffered.resolve(post);
-      eventCtrl.share(event);
-      scope.$apply();
-      expect(postService.createPost).toHaveBeenCalledWith(post);
-    });
   });
 
   describe('recognizeUrl()', function() {

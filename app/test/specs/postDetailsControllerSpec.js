@@ -7,8 +7,10 @@
     commentService, state, posts, rootscope;
     var user = {
         name: 'name',
-        key: 'asd234jk2l'
+        key: 'asd234jk2l',
+        state: 'active'
     };
+
     var institutions = [
             {name: 'Splab',key: '098745', followers: [user], members: [user], admin: user},
             {name: 'e-CIS', key: '456879', followers: [user], members: [user]}
@@ -112,10 +114,10 @@
     });
 
     describe('isAuthorized()', function() {
-        
+
         var retorno;
         it('Should return true', function() {
-           postDetailsCtrl.post = posts[0]; 
+           postDetailsCtrl.post = posts[0];
            retorno = postDetailsCtrl.isAuthorized();
            expect(retorno).toEqual(true);
         });
@@ -176,7 +178,7 @@
             postDetailsCtrl.goToInstitution(institutions[0].key);
 
             httpBackend.flush();
-            
+
             expect(state.go).toHaveBeenCalledWith('app.institution', Object({ institutionKey: institutions[0].key }));
         });
     });
@@ -193,7 +195,7 @@
             expect(commentService.getComments).toHaveBeenCalled();
         });
     });
-    
+
     describe('createComment()', function() {
         it('Should create a comment', function() {
            postDetailsCtrl.post = posts[0];
@@ -214,7 +216,7 @@
       });
 
         it('Should not create a comment', function() {
-           postDetailsCtrl.post = posts[0]; 
+           postDetailsCtrl.post = posts[0];
            spyOn(commentService, 'createComment').and.callThrough();
            postDetailsCtrl.comments = {};
            postDetailsCtrl.newComment = "";
@@ -261,7 +263,7 @@
                 institutionKey: '54321'
             };
 
-            long_post = { 
+            long_post = {
                 title: "Post muito longo",
                 text: "Acessem: www.google.com aAt vero et accusamus et iusto odio dignis\
                     simos ducimus quiblanditiis praesentium voluptatum deleniti atque corr\
@@ -357,7 +359,7 @@
             post.video_url = undefined;
             expect(postDetailsCtrl.getVideoUrl(post)).toBe(undefined);
         });
-        
+
         it('should return the embed Youtube url', function() {
             post.video_url = 'https://www.youtube.com/watch?v=3T3g8rV-5GU';
             expect(postDetailsCtrl.getVideoUrl(post)).toBe('https://www.youtube.com/embed/3T3g8rV-5GU');

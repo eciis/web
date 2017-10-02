@@ -24,7 +24,7 @@ class EventCollectionHandler(BaseHandler):
         if len(user.follows) > 0:
             queryEvents = Event.query(Event.institution_key.IN(
                 user.follows), Event.state == 'published').order(Event.start_time)
-            array = [Utils.toJson(event, host=self.request.host) for event in queryEvents]
+            array = [Utils.toJson(Event.make(event), host=self.request.host) for event in queryEvents]
 
         self.response.write(json.dumps(array))
 
@@ -43,4 +43,4 @@ class EventCollectionHandler(BaseHandler):
                              institution_key, institution.name, institution.photo_url)
         event.put()
 
-        self.response.write(json.dumps(Utils.toJson(event, host=self.request.host)))
+        self.response.write(json.dumps(Utils.toJson(Event.make(event), host=self.request.host)))

@@ -19,6 +19,7 @@
             'REQUEST_USER': 'solicitou ser membro de sua instituição',
             'REQUEST_INSTITUTION_PARENT': 'solicitou um novo vínculo entre sua instituição e a dele',
             'REQUEST_INSTITUTION_CHILDREN': 'solicitou um novo vínculo entre sua instituição e a dele',
+            'REQUEST_INSTITUTION': 'deseja criar uma nova institutição',
             'REPLY_COMMENT': 'respondeu o seu comentário',
             'LIKE_COMMENT': 'curtiu seu comentário',
             'LIKE_POST': 'curtiu seu post',

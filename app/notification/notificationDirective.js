@@ -96,6 +96,19 @@
             },
             "REJECT_INVITE_INSTITUTION": {
                 icon: "account_balance"
+            },
+            "REQUEST_INSTITUTION": {
+                icon: "account_balance",
+                state: "process_request",
+                isDialog: true,
+                dialogProperties: {
+                     templateUrl: "requests/request_institution_processing.html",
+                     controller: "RequestInstitutionProcessingController",
+                     controllerAs: "requestCtrl",
+                     locals: {
+                         key: ""
+                     }
+                }
             }
         };
 

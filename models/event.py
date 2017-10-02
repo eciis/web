@@ -29,7 +29,7 @@ class Event(ndb.Model):
     institution_key = ndb.KeyProperty(kind="Institution", required=True)
 
     # URL photo of institution
-    institution_photo = ndb.StringProperty(required=True)
+    institution_image = ndb.StringProperty(required=True)
 
     # Name of Institution
     institution_name = ndb.StringProperty(required=True)
@@ -64,7 +64,7 @@ class Event(ndb.Model):
 
     @staticmethod
     def create(data, author_key, author_name, author_photo,
-               institution_key, institution_name, institution_photo):
+               institution_key, institution_name, institution_image):
         """Create an event."""
 
         event = Event()
@@ -76,7 +76,7 @@ class Event(ndb.Model):
         event.author_name = author_name
         event.institution_key = institution_key
         event.institution_name = institution_name
-        event.institution_photo = institution_photo
+        event.institution_image = institution_image
         event.last_modified_by = author_key
         event.last_modified_by_name = author_name
         event.local = data.get('local')
@@ -107,7 +107,7 @@ class Event(ndb.Model):
             'author_img': event.author_photo,
             'last_modified_by': event.last_modified_by_name,
             'institution_name': event.institution_name,
-            'institution_image': event.institution_photo,
+            'institution_image': event.institution_image,
             'photo_url': event.photo_url,
             'author_key': event.author_key.urlsafe(),
             'institution_key': event.institution_key.urlsafe(),

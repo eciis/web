@@ -130,6 +130,7 @@
         dialogCtrl.user = AuthService.getCurrentUser();
         dialogCtrl.deletePreviousImage = false;
         dialogCtrl.photoUrl = "";
+        dialogCtrl.dateToChange = {};
 
         dialogCtrl.save = function save() {
             if(!dialogCtrl.isEditing) {
@@ -155,13 +156,17 @@
         }
 
         function updateEvent() {
-            var event = _.clone(dialogCtrl.auxEvent);
+            var event = _.clone(dialogCtrl.dateChangeEvent);
             event = new Event(event, dialogCtrl.user.current_institution.key);
             if(event.isValid()) {
                 var patch = generatePatch(event);
                 EventService.editEvent(dialogCtrl.event.key, patch).then(function success() {
-                    dialogCtrl.event.start_time = event.start_time;
-                    dialogCtrl.event.end_time = event.end_time;
+                    if(dialogCtrl.dateToChange.startTime) {
+                        dialogCtrl.event.start_time = event.start_time;
+                    }
+                    if(dialogCtrl.dateToChange.endTime) {
+                        dialogCtrl.event.end_time = event.end_time;
+                    }
                     dialogCtrl.closeDialog();
                     MessageService.showToast('Evento editado com sucesso.');
                 }, function error(response) {
@@ -172,6 +177,10 @@
                 MessageService.showToast('Evento inválido');
             }
         }
+
+        dialogCtrl.changeDate = function changeDate(typeOfDate) {
+            dialogCtrl.dateToChange[typeOfDate] = true;
+        };
 
         dialogCtrl.addImage = function(image) {
             var newSize = 1024;
@@ -213,11 +222,15 @@
 
         function generatePatch(data) {
             var patch = [];
-            patch.push({op: 'replace', path: "/text", value: data.text});
-            patch.push({op: 'replace', path: "/local", value: data.local});
-            patch.push({op: 'replace', path: "/title", value: data.title});
-            patch.push({op: 'replace', path: "/start_time", value: data.start_time});
-            patch.push({op: 'replace', path: "/end_time", value: data.end_time});
+            patch.push({op: 'replace', path: "/text", value: dialogCtrl.event.text});
+            patch.push({op: 'replace', path: "/local", value: dialogCtrl.event.local});
+            patch.push({op: 'replace', path: "/title", value: dialogCtrl.event.title});
+            if(dialogCtrl.dateToChange.startTime) {
+                patch.push({op: 'replace', path: "/start_time", value: data.start_time});
+            }
+            if(dialogCtrl.dateToChange.endTime) {
+                patch.push({op: 'replace', path: "/end_time", value: data.end_time});
+            }
             return patch;
         }
 
@@ -245,10 +258,10 @@
 
         (function main() {
             if(dialogCtrl.event) {
-                dialogCtrl.auxEvent = _.clone(dialogCtrl.event);
-                dialogCtrl.auxEvent.start_time = new Date(dialogCtrl.auxEvent.start_time);
-                dialogCtrl.auxEvent.end_time = new Date(dialogCtrl.auxEvent.end_time);
-                dialogCtrl.auxEvent = new Event(dialogCtrl.auxEvent, dialogCtrl.user.current_institution.key);
+                dialogCtrl.dateChangeEvent = _.clone(dialogCtrl.event);
+                dialogCtrl.dateChangeEvent.start_time = new Date(dialogCtrl.dateChangeEvent.start_time);
+                dialogCtrl.dateChangeEvent.end_time = new Date(dialogCtrl.dateChangeEvent.end_time);
+                dialogCtrl.dateChangeEvent = new Event(dialogCtrl.dateChangeEvent, dialogCtrl.user.current_institution.key);
             } else {
                 dialogCtrl.event = {};
             }

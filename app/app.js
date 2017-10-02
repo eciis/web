@@ -17,17 +17,6 @@
         'ngMask'
     ]);
 
-    app.run(function(){
-      const dateFormats = {
-        calendar: {
-          sameDay: '[Hoje às] LT',
-          lastWeek: 'DD MMM, YYYY [às] LT',
-          sameElse: 'DD MMM, YYYY [às] LT'
-        }
-      };
-      moment.updateLocale('pt-br', dateFormats);
-    });
-
     app.config(function($mdIconProvider, $mdThemingProvider, $stateProvider, $urlMatcherFactoryProvider,
         $urlRouterProvider, $locationProvider, $httpProvider, $sceDelegateProvider) {
 
@@ -263,5 +252,19 @@
                 return $q.reject(rejection);
             }
         };
+    });
+
+    /**
+    * Set up amCalendar filter configurations
+    */
+    app.run(function() {
+        const dateFormats = {
+            calendar: {
+                sameDay: '[Hoje às] LT',
+                lastWeek: 'DD MMMM [de] YYYY [às] LT',
+                sameElse: 'DD MMMM [de] YYYY [às] LT'
+            }
+        };
+        moment.updateLocale('pt-br', dateFormats);
     });
 })();

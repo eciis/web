@@ -2,8 +2,10 @@
 
 (describe('Test EventDialogController', function() {
 
-  var controller, scope, httpBackend, rootScope, deffered, imageService, eventService, 
-    postService, messageService;
+  var controller, scope, httpBackend, rootScope, deffered, imageService, eventService,
+    postService, messageService, newCtrl;
+
+  var EVENT_URI = "/api/events";
 
   var splab = {name: 'Splab', key: '098745'};
 
@@ -16,7 +18,7 @@
       institutions_admin: splab,
       current_institution: splab,
       key: '123'
-  };  
+  };
 
   // Event of SPLAB by User
   var event = {
@@ -24,7 +26,7 @@
     'text': 'Text',
     'local': 'Local',
     'photo_url': null,
-    'start_time': date_now, 
+    'start_time': date_now,
     'end_time': date_now,
   };
 
@@ -35,7 +37,7 @@
 
   beforeEach(module('app'));
 
-  beforeEach(inject(function($controller, $httpBackend, $http, $q, AuthService, 
+  beforeEach(inject(function($controller, $httpBackend, $http, $q, AuthService,
         $rootScope, ImageService, EventService, PostService, MessageService) {
       imageService = ImageService;
       scope = $rootScope.$new();
@@ -45,8 +47,9 @@
       eventService = EventService;
       postService = PostService;
       messageService = MessageService;
+      newCtrl = $controller;
       AuthService.login(user);
-      controller = $controller('EventDialogController', {
+      controller = newCtrl('EventDialogController', {
             scope: scope,
             imageService : imageService,
             $rootScope: rootScope,
@@ -79,7 +82,7 @@
         controller.event = new Event({
               'text': 'Text',
               'photo_url': null,
-              'start_time': new Date(), 
+              'start_time': new Date(),
               'end_time': new Date(),
               'key': '12300'
         }, splab.key);
@@ -90,7 +93,7 @@
         controller.event = new Event({
               'title': 'Title',
               'photo_url': null,
-              'start_time': new Date("October 13, 2014 11:13:00"), 
+              'start_time': new Date("October 13, 2014 11:13:00"),
               'end_time': new Date("October 3, 2014 11:13:00"),
               'key': '12300'
               }, splab.key);
@@ -120,10 +123,26 @@
         expect(eventService.createEvent).toHaveBeenCalledWith(event_convert_date);
       });
 
+      it('should call eventService.editEvent', function() {
+        spyOn(eventService, 'editEvent').and.callFake(function() {
+          return {
+            then: function(callback) {
+              return callback();
+            }
+          };
+        });
+        controller.isEditing = true;
+        controller.dateChangeEvent = new Event(event, user.current_institution.key);
+        controller.dateChangeEvent.start_time = new Date();
+        controller.dateChangeEvent.end_time = new Date();
+        controller.save();
+        expect(eventService.editEvent).toHaveBeenCalled();
+      });
+
       describe('MessageService.showToast()', function(){
 
         it('should be invalid, because title is undefined', function() {
-          controller.event.title = undefined; 
+          controller.event.title = undefined;
           spyOn(messageService, 'showToast');
           controller.save();
           scope.$apply();
@@ -131,8 +150,8 @@
         });
 
         it('should be invalid, because local is undefined', function() {
-          controller.event.title = "Inauguration"; 
-          controller.event.local = undefined; 
+          controller.event.title = "Inauguration";
+          controller.event.local = undefined;
           spyOn(messageService, 'showToast');
           controller.save();
           scope.$apply();

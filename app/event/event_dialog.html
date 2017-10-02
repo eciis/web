@@ -49,16 +49,16 @@
           <div layout="row" ng-if="controller.isEditing">
             <md-input-container class="md-input-has-placeholder">
               <label>Início</label>
-              <input mdc-datetime-picker="" short-time="false" date="true" time="true" type="text" format="DD-MM-YYYY HH:mm" lang="pt-BR" required="true"
-              placeholder="Data/Horário" ng-model="controller.auxEvent.start_time" class=" md-input" today-text="Hoje" min-date="null"
-              max-date="controller.auxEvent.end_time" readonly="readonly" cancel-text="Cancelar">
+              <input mdc-datetime-picker="" ng-change="controller.changeDate('startTime')" short-time="false" date="true" time="true" type="text" format="YYYY-MM-DD HH:mm" lang="pt-BR" required="true"
+              placeholder="Data/Horário" ng-model="controller.dateChangeEvent.start_time" class=" md-input" today-text="Hoje" min-date="null"
+              max-date="controller.event.end_time" readonly="readonly" cancel-text="Cancelar">
               <div class="md-errors-spacer"></div>
             </md-input-container>
             <md-input-container class="md-input-has-placeholder">
               <label>Fim</label>
-              <input mdc-datetime-picker="" date="true" time="true" type="text" lang="pt-BR" today-text="Hoje" required="true"
-              placeholder="Data/Horário" class=" md-input" readonly="readonly" format="DD-MM-YYYY HH:mm" max-date="null"
-              ng-model="controller.auxEvent.end_time" cancel-text="Cancelar" min-date="controller.auxEvent.start_time">
+              <input mdc-datetime-picker="" ng-change="controller.changeDate('endTime')" date="true" time="true" type="text" lang="pt-BR" today-text="Hoje" required="true"
+              placeholder="Data/Horário" class=" md-input" readonly="readonly" format="YYYY-MM-DD HH:mm" max-date="null"
+              ng-model="controller.dateChangeEvent.end_time" cancel-text="Cancelar" min-date="controller.event.start_time">
               <div class="md-errors-spacer"></div>
             </md-input-container>
           </div>

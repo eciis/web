@@ -13,6 +13,7 @@
 
         requestInvCtrl.hasInstSelect = false;
         requestInvCtrl.wasSearched = false;
+        requestInvCtrl.canCreate = false;
         requestInvCtrl.currentUser = AuthService.getCurrentUser();
         var ACTIVE = 'active';
 

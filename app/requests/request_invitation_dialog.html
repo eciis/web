@@ -38,8 +38,11 @@
 				    <md-list-item ng-if="requestInvCtrl.showMessage()">
 				    	<div class="md-list-item-text" layout-align="center center" layout="column"
 					    style='text-align: center'>
-				            <p>Infelizmente sua instituição ainda não está cadastrada.</p>
-                    				<md-button ng-click="requestInvCtrl.createInst()">Quero criar minha instituição</md-button>
+				            <p>Infelizmente sua instituição não está cadastrada. Para cadastrar pressione o botão abaixo:</p>
+				            <md-checkbox ng-model="requestInvCtrl.canCreate" class="md-primary" aria-label="Checkbox 1">
+						        Manifesto que tenho autonomia para cadastrar a  instituição
+						    </md-checkbox>
+                    		<md-button ng-disabled="!requestInvCtrl.canCreate" ng-click="requestInvCtrl.createInst()">Quero criar minha instituição</md-button>
 					    </div>
 				    </md-list-item>
 				</md-list>

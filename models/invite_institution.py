@@ -67,6 +67,11 @@ class InviteInstitution(Invite):
         if user_found:
             super(InviteInstitution, self).send_notification(user, user_found.key.urlsafe(), entity_type)
 
+    def send_response_notification(self, user, receiver_key, operation):
+        """Send notification to sender of invite when invite is accepted or rejected."""
+        response_type = 'ACCEPT_INVITE_INSTITUTION' if operation == 'ACCEPT' else 'REJECT_INVITE_INSTITUTION'
+        super(InviteInstitution, self).send_notification(user, receiver_key, response_type)
+
     def make(self):
         """Create json of invite to institution."""
         invite_inst_json = super(InviteInstitution, self).make()

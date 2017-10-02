@@ -11,6 +11,7 @@ from models.invite_user import InviteUser
 from models.invite_institution import InviteInstitution
 from handlers.invite_handler import InviteHandler
 
+import mock
 from mock import patch
 
 
@@ -47,7 +48,8 @@ class InviteHandlerTest(TestBaseHandler):
             "Expected invite should be equal to make")
 
     @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
-    def test_delete(self, verify_token):
+    @mock.patch('service_messages.send_message_notification')
+    def test_delete(self, verify_token, mock_method):
         """Test method delete of InviteHandler."""
         stub_institution = self.invite_institution.stub_institution_key.get()
         stub_inst_document = search_module.getDocuments(
@@ -107,8 +109,12 @@ class InviteHandlerTest(TestBaseHandler):
             'inactive', "The searched institution state should be inactive"
         )
 
+        self.assertTrue(mock_method.assert_called,
+                        "Should call the send_message_notification")
+
     @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
-    def test_patch(self, verify_token):
+    @mock.patch('service_messages.send_message_notification')
+    def test_patch(self, verify_token, mock_method):
         """Test method patch of InviteHandler."""
         profile = '{"email": "otheruser@test.com", "office": "Developer"}'
         json_patch = '[{"op": "add", "path": "/institution_profiles/-", "value": ' + profile + '}]'
@@ -136,6 +142,9 @@ class InviteHandlerTest(TestBaseHandler):
             user.state,
             'active',
             "Expected state should be equal to active")
+
+        self.assertTrue(mock_method.assert_called,
+                        "Should call the send_message_notification")
 
     @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_patch_fail(self, verify_token):

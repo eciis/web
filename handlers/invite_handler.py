@@ -53,6 +53,7 @@ class InviteHandler(BaseHandler):
         invite = invite_key.get()
         invite.change_status('rejected')
         invite.put()
+        invite.send_response_notification(user, invite.admin_key.urlsafe(), 'REJECT')
 
         if invite.stub_institution_key:
             stub_institution = invite.stub_institution_key.get()
@@ -79,6 +80,8 @@ class InviteHandler(BaseHandler):
         institution.follow(user.key)
 
         JsonPatch.load(data, user, define_entity)
+
+        invite.send_response_notification(user, invite.admin_key.urlsafe(), 'ACCEPT')
         # TODO: Change the method is valid to check only
         # the new institution profile of this patch
         # @author: Mayza Nunes 19/09/2017

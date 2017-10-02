@@ -22,7 +22,13 @@
             'REQUEST_INSTITUTION': 'deseja criar uma nova institutição',
             'REPLY_COMMENT': 'respondeu o seu comentário',
             'LIKE_COMMENT': 'curtiu seu comentário',
-            'LIKE_POST': 'curtiu seu post'
+            'LIKE_POST': 'curtiu seu post',
+            'REJECT_INSTITUTION_LINK': 'rejeitou sua solicitação de vínculo entre instituições',
+            'ACCEPT_INSTITUTION_LINK': 'aceitou sua solicitação de vínculo entre instituições',
+            'REJECT_INVITE_USER': 'rejeitou o convite para ser membro de sua instituição',
+            'ACCEPT_INVITE_USER': 'aceitou o convite para ser membro de sua instituição',
+            'REJECT_INVITE_INSTITUTION': 'rejeitou o seu convite para ser administrador',
+            'ACCEPT_INVITE_INSTITUTION': 'aceitou o seu convite para ser administrador'
         };
 
         var POST_NOTIFICATION = 'POST';

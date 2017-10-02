@@ -209,9 +209,7 @@
             // Allow loading from our assets domain.  Notice the difference between * and **.
             'https://www.gravatar.com/**',
 
-            'https://www.youtube.com/**',
-
-            'http://localhost:8081/**'
+            'https://www.youtube.com/**'
         ]);
     });
 

@@ -301,7 +301,7 @@ class ResetHandler(BaseHandler):
             'testeeciis@gmail.com',
             'teste@eciis.com'
         ]
-        admin.photo_url = 'images/avatar.jpg'
+        admin.photo_url = 'app/images/avatar.jpg'
         admin.institutions = []
         admin.follows = []
         admin.institutions_admin = []

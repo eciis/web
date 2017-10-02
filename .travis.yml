@@ -44,8 +44,8 @@ before_script:
 
 # command to run tests
 script: 
-    - python -m unittest discover -v -p "*test.py"
-    - cd frontend/app/test && ./node_modules/.bin/karma start --browsers Firefox --single-run
+    - cd backend && python -m unittest discover -v -p "*test.py"
+    - cd frontend/test && ./node_modules/.bin/karma start --browsers Firefox --single-run
 
 notifications:
     slack: e-cis:5ttYSzVNz0z5XwYRaWBHExyW

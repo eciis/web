@@ -42,7 +42,7 @@
 				            <md-checkbox ng-model="requestInvCtrl.canCreate" class="md-primary" aria-label="Checkbox 1">
 						        Manifesto que tenho autonomia para cadastrar a  instituição
 						    </md-checkbox>
-                    		<md-button ng-disabled="!requestInvCtrl.canCreate" ng-click="requestInvCtrl.createInst()">Quero criar minha instituição</md-button>
+                    		<md-button ng-class="requestInvCtrl.canCreate?'green-button':''" ng-disabled="!requestInvCtrl.canCreate" ng-click="requestInvCtrl.createInst()">Quero criar minha instituição</md-button>
 					    </div>
 				    </md-list-item>
 				</md-list>

@@ -32,8 +32,8 @@ def createInstitution(user, data):
 class InstitutionRequestCollectionHandler(BaseHandler):
     """Institution Request Handler."""
 
-    # @json_response
-    # @login_required
+    @json_response
+    @login_required
     @has_super_user_permission('analyze_request_inst')
     def get(self, user):
         """Get requests for new institutions."""

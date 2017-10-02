@@ -73,7 +73,7 @@
         };
 
         inviteController.sendInstInvite = function sendInstInvite(invite) {
-            var promise = InviteService.sendInvite(invite);
+            var promise = InviteService.sendInviteInst(invite);
             promise.then(function success() {
                     inviteController.invite = {};
                     inviteController.showButton = true;

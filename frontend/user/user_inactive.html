@@ -1,0 +1,14 @@
+<div layout-fill md-colors="{background: 'teal-900'}" layout="column" layout-align="center center">
+	<div layout-align="center" layout="column">
+		<md-button disabled="true">
+	        <img src="app/images/oms.png" aria-label="OMS Logo" style="height: 20%;filter: brightness(10) grayscale(1);">
+	    </md-button>
+	   	<div layout="row" layout-wrap layout-align="center"> 
+	   	   Você precisa ter um convite ou ser membro de uma instituição para acessar a plataforma.
+	    </div>
+        <div layout-align="center" layout="column">
+            <md-button ng-click="userInactiveCtrl.resquestInvitation()" md-colors="{background: 'green-900'}">Solicitar convite</md-button>
+            <md-button ng-click="userInactiveCtrl.logout()" md-colors="{background: 'green-900'}">Sair</md-button>
+        </div>
+ 	</div>
+</div> 

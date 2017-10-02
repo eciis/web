@@ -37,6 +37,10 @@ class RequestInstitutionChildren(Request):
         entity_type = 'REQUEST_INSTITUTION_CHILDREN'
         super(RequestInstitutionChildren, self).send_notification(user, self.institution_requested_key.get().admin.urlsafe(), entity_type)
 
+    def send_response_notification(self, user, receiver_key, entity_type):
+        """Send notification to sender of invite when invite is accepted or rejected."""
+        super(RequestInstitutionChildren, self).send_notification(user, receiver_key, entity_type)
+
     def make(self):
         """Create json of request to institution children."""
         request_inst_children_json = super(RequestInstitutionChildren, self).make()

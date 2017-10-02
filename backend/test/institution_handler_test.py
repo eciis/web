@@ -2,7 +2,7 @@
 """Post handler test."""
 
 from test_base_handler import TestBaseHandler
-from models.invite import Invite
+from models.invite_institution import InviteInstitution
 from models.user import User
 from models.institution import Institution
 from handlers.institution_handler import InstitutionHandler
@@ -281,7 +281,7 @@ def initModels(cls):
     cls.splab.admin = None
     cls.splab.put()
     # Invite for Raoni create new inst
-    cls.invite = Invite()
+    cls.invite = InviteInstitution()
     cls.invite.invitee = 'raoni.smaneoto@ccc.ufcg.edu.br'
     cls.invite.admin_key = cls.mayza.key
     cls.invite.type_of_invite = 'institution'

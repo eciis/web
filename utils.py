@@ -283,12 +283,14 @@ def getSuperUsers():
     return userswithpermission
 
 
-def has_analyze_request_permission(method):
+def has_super_user_permission(type_permission):
     """Check user permission."""
-    def check_permission(self, user, *args):
-        Utils._assert(
-            not ('analyze_request_inst' in user.permissions),
-            'User is not allowed to do this operation',
-            NotAuthorizedException)
-        return method(self, user, *args)
-    return check_permission
+    def has_permission(method):
+        def check_permission(self, user, *args):
+            Utils._assert(
+                not (type_permission in user.permissions),
+                'User is not allowed to do this operation',
+                NotAuthorizedException)
+            return method(self, user, *args)
+        return check_permission
+    return has_permission

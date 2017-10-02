@@ -440,6 +440,7 @@ class ResetHandler(BaseHandler):
 
         admin.institutions_admin = [certbio.key, eciis.key, splab.key]
         admin.add_permission("analyze_request_inst", eciis.key.urlsafe())
+        admin.add_permission("send_invite_inst", eciis.key.urlsafe())
         admin.put()
 
         # POST of Mayza To Certbio Institution

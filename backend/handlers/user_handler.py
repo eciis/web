@@ -77,10 +77,6 @@ class UserHandler(BaseHandler):
         user_json = makeUser(user, self.request)
         user_json['invites'] = getInvites(user.email)
 
-
-        print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>."
-        print user_json
-        print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>."
         self.response.write(json.dumps(user_json))
 
     @login_required

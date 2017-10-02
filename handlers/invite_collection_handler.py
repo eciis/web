@@ -37,6 +37,8 @@ class InviteCollectionHandler(BaseHandler):
         host = self.request.host
 
         type_of_invite = data.get('type_of_invite')
+        Utils._assert(type_of_invite == 'INSTITUTION',
+                      "invitation type not allowed", NotAuthorizedException)
         invite = InviteFactory.create(data, type_of_invite)
 
         institution = invite.institution_key.get()

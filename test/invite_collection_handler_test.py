@@ -33,7 +33,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         invite = self.testapp.post_json("/api/invites", {
             'invitee': 'ana@gmail.com',
             'admin_key': self.first_user.key.urlsafe(),
-            'type_of_invite': 'INSTITUTION',
+            'type_of_invite': 'INSTITUTION_PARENT',
             'suggestion_institution_name': 'New Institution',
             'institution_key': self.institution.key.urlsafe()})
 

@@ -31,9 +31,19 @@
             <iframe ng-src="{{ sharePostCtrl.getVideoUrl() }}"></iframe>
           </div>
           <p></p>
-          <a href class="md-text hyperlink" ng-click="sharePostCtrl.goToPost()">
+          <a href class="md-text hyperlink" ng-click="sharePostCtrl.goTo()">
             <span>{{ sharePostCtrl.post.title }}</span>
-          </a>          
+          </a>
+          <p ng-if="sharePostCtrl.isEvent()">
+            <span class="md-caption">Local:</span> 
+            <span md-colors="{color: 'default-teal-900'}">{{ sharePostCtrl.post.local }}</span> | 
+            <b md-colors="{color: 'default-teal-900'}">
+              {{ sharePostCtrl.post.start_time | amUtc | amLocal | amCalendar:referenceTime:formats }}
+            </b> até
+            <b md-colors="{color: 'default-teal-900'}">
+              {{ sharePostCtrl.post.end_time | amUtc | amLocal | amCalendar:referenceTime:formats }}
+            </b>
+          </p>         
           <span class="md-subhead" ng-bind-html="sharePostCtrl.post.text"></span>
           <div ng-repeat="pdf in sharePostCtrl.post.pdf_files">
             <md-icon>description</md-icon>

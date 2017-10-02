@@ -17,7 +17,8 @@
       follows: splab,
       institutions_admin: splab,
       current_institution: splab,
-      key: '123'
+      key: '123',
+      state: 'active'
   };
 
   // Event of SPLAB by User

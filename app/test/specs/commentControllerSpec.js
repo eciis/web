@@ -6,7 +6,8 @@
     var commentCtrl, scope, httpBackend, mdDialog, http, commentService, posts;
     var user = {
         name: 'name',
-        key: 'asd234jk2l'
+        key: 'asd234jk2l',
+        state: 'active'
     };
 
     var reply = {"text": "reply", "id": 1};
@@ -25,7 +26,8 @@
     posts = [{
                 title: 'post principal', author_key: user.key,
                 key: "123456", comments: "/api/posts/123456/comments",
-                likes: "/api/posts/123456/likes", number_of_likes: 0, number_of_comments: 0
+                likes: "/api/posts/123456/likes", number_of_likes: 0, number_of_comments: 0,
+                state: 'published'
         }];
 
     beforeEach(inject(function($controller, $httpBackend, $http, $mdDialog,
@@ -35,19 +37,17 @@
         mdDialog = $mdDialog;
         http = $http;
         commentService = CommentService;
-        
+
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);
         httpBackend.when('GET', 'error/error.html').respond(200);
         httpBackend.when('GET', 'auth/login.html').respond(200);
         httpBackend.when('GET', 'error/error.html').respond(200);
 
-        AuthService.getCurrentUser = function() {
-            return new User(user);
-        };
+        AuthService.login(user);
 
         commentCtrl = $controller('CommentController', {
-            scope: scope            
+            scope: scope
         });
 
         commentCtrl.user = AuthService.getCurrentUser();
@@ -65,12 +65,22 @@
 
     describe('canDeleteComment()', function() {
         it('Should return true', function() {
+            commentCtrl.post = posts[0];
             var comment = {author_key: commentCtrl.user.key, text: "testando"};
             var result = commentCtrl.canDeleteComment(comment);
             expect(result).toBeTruthy();
         });
 
         it('Should return false', function() {
+            commentCtrl.post = posts[0];
+            var comment = {author_key: "1234", text: "testando"};
+            var result = commentCtrl.canDeleteComment(comment);
+            expect(result).toBeFalsy();
+        });
+
+        it('Should not delete the comment in deleted post', function() {
+            commentCtrl.post = posts[0];
+            commentCtrl.post.state = 'deleted';
             var comment = {author_key: "1234", text: "testando"};
             var result = commentCtrl.canDeleteComment(comment);
             expect(result).toBeFalsy();
@@ -78,6 +88,10 @@
     });
 
     describe('confirmCommentDeletion()', function(){
+        beforeEach(function() {
+            posts[0].state = 'published';
+        });
+
         it('Should delete the comment', function() {
             commentCtrl.post = posts[0];
             spyOn(mdDialog, 'confirm').and.callThrough();

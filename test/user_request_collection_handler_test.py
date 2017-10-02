@@ -80,7 +80,9 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
             'type_of_invite': 'INVITE',
             'sender_name': self.other_user.name,
             'office': 'CEO',
-            'institutional_email': 'other@ceo.com'
+            'institutional_email': 'other@ceo.com',
+            'institution_name': self.inst_test.name,
+            'institution_photo_url': self.inst_test.photo_url
         }
 
         with self.assertRaises(Exception) as ex:
@@ -113,6 +115,7 @@ def initModels(cls):
     # new Institution inst test
     cls.inst_test = Institution()
     cls.inst_test.name = 'inst test'
+    cls.inst_test.photo_url = 'www.photo.com'
     cls.inst_test.address = cls.address
     cls.inst_test.members = [cls.user_admin.key]
     cls.inst_test.followers = [cls.user_admin.key]

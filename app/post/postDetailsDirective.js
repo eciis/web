@@ -102,10 +102,6 @@
                     !postDetailsCtrl.postHasActivity() && !postDetailsCtrl.isShared();
         };
 
-        postDetailsCtrl.showButtonShare = function showButtonShare(){
-            return !postDetailsCtrl.isDeleted(postDetailsCtrl.post) && !postDetailsCtrl.post.shared_event;
-        };
-
         postDetailsCtrl.generateLink = function generateLink(){
             var currentUrl = (window.location.href).split('#');
             var url = currentUrl[0] + URL_POST + postDetailsCtrl.post.key;
@@ -146,9 +142,7 @@
         };
 
         postDetailsCtrl.share = function share(post, event) {
-            if(postDetailsCtrl.post.shared_post){
-                post = postDetailsCtrl.post.shared_post;
-            }
+            post = getOriginalPost(postDetailsCtrl.post);
             $mdDialog.show({
                 controller: "SharePostController",
                 controllerAs: "sharePostCtrl",
@@ -159,10 +153,20 @@
                 locals: {
                     user : postDetailsCtrl.user,
                     posts: postDetailsCtrl.posts,
-                    post: post
+                    post: post,
+                    addPost: postDetailsCtrl.addPost
                 }
             });
         };
+
+        function getOriginalPost(post){
+            if(post.shared_post){
+                return post.shared_post;
+            } else if(post.shared_event){
+                return post.shared_event;
+            }
+            return post;
+        }
 
         function likePost() {
             postDetailsCtrl.savingLike = true;
@@ -418,7 +422,8 @@
             bindToController: {
                 posts: '=',
                 post: '=',
-                isPostPage: '='
+                isPostPage: '=',
+                addPost: '='
             }
         };
     });
@@ -534,29 +539,44 @@
         };
 
         commentCtrl.confirmCommentDeletion = function confirmCommentDeletion(event, reply) {
-            MessageService.showConfirmationDialog(event, 'Excluir Comentário',
-                'Este comentário será excluído e desaparecerá do referente post.'
-            ).then(function() {
-                if (reply) {
-                    commentCtrl.deleteReply(reply);
-                } else {
-                    commentCtrl.deleteComment();
-                }
-            }, function() {
-                MessageService.showToast('Cancelado');
-            });
+            if(commentCtrl.post.state !== 'deleted') {
+                MessageService.showConfirmationDialog(event, 'Excluir Comentário',
+                    'Este comentário será excluído e desaparecerá do referente post.'
+                ).then(function() {
+                    if (reply) {
+                        commentCtrl.deleteReply(reply);
+                    } else {
+                        commentCtrl.deleteComment();
+                    }
+                }, function() {
+                    MessageService.showToast('Cancelado');
+                });
+            }
         };
 
         commentCtrl.canDeleteComment = function canDeleteComment(reply) {
+            var deletedPost = commentCtrl.post.state === 'deleted';
             if (reply) {
                 var replyHasActivity = commentCtrl.numberOfLikes(reply) > 0;
                 return !replyHasActivity &&
-                    reply.author_key == commentCtrl.user.key;
+                    reply.author_key == commentCtrl.user.key && !deletedPost;
             }
             var commentHasActivity = commentCtrl.numberOfReplies() > 0 ||
                 commentCtrl.numberOfLikes() > 0;
             return !commentHasActivity &&
-                commentCtrl.comment.author_key == commentCtrl.user.key;
+                commentCtrl.comment.author_key == commentCtrl.user.key && !deletedPost;
+        };
+
+        commentCtrl.canReply = function canReply() {
+            return commentCtrl.post.state === 'deleted';
+        };
+
+        commentCtrl.showReplies = function showReplies() {
+            if(commentCtrl.post.state === 'deleted') {
+                var noReplies = commentCtrl.numberOfReplies() === 0;
+                return commentCtrl.saving || noReplies;
+            }
+            return commentCtrl.saving;
         };
 
         commentCtrl.disableButton = function disableButton() {
@@ -580,8 +600,8 @@
         };
     });
 
-    app.controller("SharePostController", function SharePostController(user, posts, post, $mdDialog, PostService,
-     MessageService, $state) {
+    app.controller("SharePostController", function SharePostController(user, posts, post, addPost, $mdDialog, PostService,
+        MessageService, $state) {
         var shareCtrl = this;
 
         var LIMIT_POST_CHARACTERS = 200;
@@ -592,6 +612,8 @@
 
         shareCtrl.post = new Post(post, post.institution_key);
         shareCtrl.post.text = adjustText(post.text);
+        shareCtrl.posts = posts;
+        shareCtrl.addPost = addPost;
 
         shareCtrl.newPost = new Post({}, shareCtrl.user.current_institution.key);
 
@@ -615,35 +637,54 @@
         };
 
         shareCtrl.share = function share() {
-            shareCtrl.newPost.shared_post = getOriginalPost(shareCtrl.post);
-            shareCtrl.newPost.pdf_files = [];
+            makePost(shareCtrl.post);
             PostService.createPost(shareCtrl.newPost).then(function success(response) {
                 MessageService.showToast('Compartilhado com sucesso!');
                 $mdDialog.hide();
-                posts.push(response.data);
+                shareCtrl.addPostTimeline(response.data);
             }, function error(response) {
                 $mdDialog.hide();
                 MessageService.showToast(response.data.msg);
             });
         };
 
-        shareCtrl.goToPost = function goToPost() {
+        shareCtrl.addPostTimeline = function addPostTimeline(post) {     
+            if (shareCtrl.addPost){
+                shareCtrl.posts.push(post);
+            }
+        };
+
+        shareCtrl.isEvent = function isEvent(){
+            var hasLocal = !_.isUndefined(shareCtrl.post.local);
+            var hasStartTime = !_.isUndefined(shareCtrl.post.start_time);
+            var hasEndTime = !_.isUndefined(shareCtrl.post.end_time);
+            return hasLocal && hasStartTime && hasEndTime;
+        };
+
+        shareCtrl.goTo = function goTo(){
             shareCtrl.cancelDialog();
+            if(shareCtrl.isEvent()){
+                $state.go('app.event', {eventKey: shareCtrl.post.key});
+            }
             $state.go('app.post', {postKey: shareCtrl.post.key});
         };
 
-        function getOriginalPost(post){
-            if(post.share_post){
-                return post.share_post.key;
+        function makePost(post){
+            if(shareCtrl.isEvent()){
+                shareCtrl.newPost.shared_event = post.key;
+            } else {
+                shareCtrl.newPost.shared_post = post.key;
             }
-            return post.key;
+            shareCtrl.newPost.pdf_files = [];
         }
 
         function adjustText(text){
-            if(text.length > LIMIT_POST_CHARACTERS){
-                text = text.substring(0, LIMIT_POST_CHARACTERS) + "...";
-            }
-            return text.replace(URL_PATTERN,REPLACE_URL);
+            if(text){
+                if(text.length > LIMIT_POST_CHARACTERS){
+                    text = text.substring(0, LIMIT_POST_CHARACTERS) + "...";
+                }
+                return text.replace(URL_PATTERN,REPLACE_URL);
+            }            
         }
     });
 })();

@@ -35,13 +35,20 @@
             });
         };
 
-        eventCtrl.share = function share(event) {
-            var post = new Post({}, eventCtrl.user.current_institution.key);
-            post.shared_event = event.key;
-            PostService.createPost(post).then(function success() {
-                MessageService.showToast('Evento compartilhado com sucesso!');
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
+        eventCtrl.share = function share(ev, event) {
+            $mdDialog.show({
+                controller: "SharePostController",
+                controllerAs: "sharePostCtrl",
+                templateUrl: 'post/share_post_dialog.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose:true,
+                locals: {
+                    user : eventCtrl.user,
+                    posts: [],
+                    post: event,
+                    addPost: false
+                }
             });
         };
 
@@ -134,24 +141,23 @@
 
         dialogCtrl.save = function save() {
             if(!dialogCtrl.isEditing) {
-                newEvent();
+                saveImageAndCallEventFunction(create);
             } else {
-                updateEvent();
+                saveImageAndCallEventFunction(updateEvent);
             }
         };
 
-        function newEvent() {
+        function saveImageAndCallEventFunction(callback) {
             if (dialogCtrl.photoBase64Data) {
                 dialogCtrl.loading = true;
                 ImageService.saveImage(dialogCtrl.photoBase64Data).then(function success(data) {
                     dialogCtrl.loading = false;
                     dialogCtrl.event.photo_url = data.url;
                     dialogCtrl.event.uploaded_images = [data.url];
-                    create();
-                    dialogCtrl.event.photo_url = null;
+                    callback();
                 });
             } else {
-                create();
+                callback();
             }
         }
 
@@ -225,6 +231,7 @@
             patch.push({op: 'replace', path: "/text", value: dialogCtrl.event.text});
             patch.push({op: 'replace', path: "/local", value: dialogCtrl.event.local});
             patch.push({op: 'replace', path: "/title", value: dialogCtrl.event.title});
+            patch.push({op: 'replace', path: "/photo_url", value: dialogCtrl.event.photo_url});
             if(dialogCtrl.dateToChange.startTime) {
                 patch.push({op: 'replace', path: "/start_time", value: data.start_time});
             }

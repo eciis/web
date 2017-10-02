@@ -43,7 +43,7 @@
       </md-card>
     </div>
 
-    <post-timeline ng-if="!homeCtrl.isLoadingPosts" flex-gt-md="60" flex-md="75" layout="column" md-colors="{background: 'grey-200'}" posts="homeCtrl.posts" institution="false" user="homeCtrl.user"></post-timeline>
+    <post-timeline ng-if="!homeCtrl.isLoadingPosts" flex-gt-md="60" flex-md="75" layout="column" md-colors="{background: 'grey-200'}" posts="homeCtrl.posts" institution="false" user="homeCtrl.user" add-post="true" ></post-timeline>
 
     <!-- LOADING CIRCLE -->
     <div flex layout-align="center center" layout="row">
@@ -66,12 +66,12 @@
                 <span>Nenhum evento próximo</span>
               </md-list-item>
               <md-list-item class="md-3-line" ng-repeat="event in homeCtrl.events" ng-if="homeCtrl.events.length > 0">
-                <img ng-src="{{event.institution_photo}}" class="md-avatar"/>
+                <img ng-src="{{event.institution_image}}" class="md-avatar"/>
                 <div class="md-list-item-text" layout="column">
                   <a href class="md-text hyperlink" ng-click="homeCtrl.goToEvent(event)">{{ event.title | limitTo: 20 }}{{ event.title.length > 20 ? '...' : ''}}</a>
                   <p>De {{ event.start_time | amUtc | amLocal | amCalendar:referenceTime:formats}} até 
                    {{ event.end_time | amUtc | amLocal | amCalendar:referenceTime:formats }}</p>
-                  <p>por {{ event.author_name }}</p>
+                  <p>por {{ event.author }}</p>
                 </div>
               </md-list-item>
             </md-list>

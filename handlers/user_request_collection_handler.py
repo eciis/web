@@ -10,7 +10,6 @@ from models.request_user import RequestUser
 from custom_exceptions.entityException import EntityException
 from handlers.base_handler import BaseHandler
 from models.factory_invites import InviteFactory
-from models.user import InstitutionProfile
 
 
 class UserRequestCollectionHandler(BaseHandler):
@@ -48,15 +47,17 @@ class UserRequestCollectionHandler(BaseHandler):
         request = InviteFactory.create(data, type_of_invite)
         request.put()
 
+        institution = ndb.Key(urlsafe=institution_key).get()
         user.name = data.get('sender_name')
-        user_profile = InstitutionProfile()
-        user_profile.email = data.get('institutional_email')
-        user_profile.institution_key = data.get('institution_key')
-        user_profile.office = data.get('office')
-        user_profile.name = data.get('sender_name')
-        user.institution_profiles.append(user_profile)
 
-        user.put()
+        data_profile = {
+            'office': request.office,
+            'email': request.institutional_email,
+            'institution_key': institution_key,
+            'institution_name': institution.name,
+            'institution_photo_url': institution.photo_url
+        }
+        user.create_and_add_profile(data_profile)
 
         if(request.stub_institution_key):
             request.stub_institution_key.get().addInvite(request)

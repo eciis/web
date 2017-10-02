@@ -9,17 +9,24 @@
         {name: 'e-CIS', key: '456879'}
     ];
 
-    var maiana = {
-        name: 'Maiana',
+    var event = new Event({'title': 'Event',
+                           'local': 'Brazil',
+                           'start_time': new Date(),
+                           'end_time': new Date()
+                          }, institutions[1].institution_key);
+
+    var user = {
+        name: 'user',
         institutions: institutions,
         follows: institutions,
         institutions_admin: institutions[0],
-        current_institution: institutions[0]
+        current_institution: institutions[0],
+        state: 'active'
     };
 
-    maiana.current_institution = institutions[0];
+    user.current_institution = institutions[0];
 
-    // Post of e-CIS by Maiana
+    // Post of e-CIS by user
     var post = new Post({'title': 'Shared Post',
                          'text': 'This post will be shared',
                          'photo_url': null,
@@ -27,9 +34,8 @@
                         },
                         institutions[1].institution_key);
 
-    // Post of Splab by Maiana
-    var newPost = new Post( {}, maiana.current_institution.key);
-    newPost.shared_post = post.key;
+    // Post of Splab by user
+    var newPost = new Post( {}, user.current_institution.key);
 
     beforeEach(module('app'));
 
@@ -44,13 +50,14 @@
         postService = PostService;
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', "home/home.html").respond(200);
-        AuthService.login(maiana);
+        AuthService.login(user);
 
         shareCtrl = $controller('SharePostController', {
             scope: scope,
-            user: maiana,
-            posts: [post],
-            post: post
+            user: user,
+            post: post,
+            posts:[post],
+            addPost: true
         });
         httpBackend.flush();
     }));
@@ -61,7 +68,7 @@
     });
 
     describe('cancelDialog()', function() {
-        
+
         it('Should call mdDialog.cancel', function() {
             spyOn(mdDialog, 'cancel');
             shareCtrl.cancelDialog();
@@ -70,7 +77,7 @@
     });
 
     describe('showImage()', function() {
-        
+
         it('Should be false', function() {
             expect(shareCtrl.showImage()).toBe(false);
         });
@@ -81,24 +88,67 @@
         });
     });
 
-    describe('goToPost()', function() {
-        it('Should call state.go', function() {
+    describe('goTo()', function() {
+
+        it('Should call state.go to post', function() {
             spyOn(state, 'go').and.callThrough();
-            shareCtrl.goToPost();
+            shareCtrl.goTo();
             expect(state.go).toHaveBeenCalledWith('app.post', Object({postKey: shareCtrl.post.key}));
+        });
+
+        it('Should call state.go to event', function() {
+            shareCtrl.post = event;
+            spyOn(state, 'go').and.callThrough();
+            shareCtrl.goTo();
+            expect(state.go).toHaveBeenCalledWith('app.event', Object({eventKey: shareCtrl.post.key}));
+        });
+    });
+
+    describe('isEvent()', function() {
+
+        it('Should be true', function() {
+            shareCtrl.post = event;            
+            expect(shareCtrl.isEvent()).toBe(true);
+        });
+
+        it('Should be false', function() {
+            expect(shareCtrl.isEvent()).toBe(false);
         });
     });
 
     describe('share()', function() {
-        it('Should call state.go', function() {
-            var post = newPost;
-            newPost.pdf_files = [];
+
+        it('Should call postService.createPost, in case that share event', function() {
+            shareCtrl.post = event;
+            var response = new Post( {}, user.current_institution.key);
+            response.shared_event = event.key;
+            response.pdf_files = [];
+
             spyOn(postService, 'createPost').and.returnValue(deffered.promise);
             spyOn(mdDialog, 'hide');
             deffered.resolve(newPost);
+
             shareCtrl.share();
             scope.$apply();
-            expect(postService.createPost).toHaveBeenCalledWith(post);
+
+            expect(postService.createPost).toHaveBeenCalledWith(response);
+            expect(mdDialog.hide).toHaveBeenCalled();
+        });
+
+        it('Should call postService.createPost, in case that share post', function() {
+            shareCtrl.post = post;
+            var response_post = new Post( {}, user.current_institution.key);
+            response_post.shared_post = post.key;
+            response_post.pdf_files = [];
+
+            spyOn(postService, 'createPost').and.returnValue(deffered.promise);
+            spyOn(mdDialog, 'hide');
+            deffered.resolve(newPost);
+
+            shareCtrl.share();
+            scope.$apply();
+
+            expect(postService.createPost).toHaveBeenCalledWith(response_post);
             expect(mdDialog.hide).toHaveBeenCalled();
         });
     });
@@ -175,10 +225,28 @@
             shareCtrl.post.video_url = undefined;
             expect(shareCtrl.getVideoUrl()).toBe(undefined);
         });
-        
+
         it('should return the embed Youtube url', function() {
             shareCtrl.post.video_url = 'https://www.youtube.com/watch?v=3T3g8rV-5GU';
             expect(shareCtrl.getVideoUrl()).toBe('https://www.youtube.com/embed/3T3g8rV-5GU');
+        });
+    });
+
+    describe('addPostTimeline()', function() {
+
+        it('should add post in posts', function() {
+            expect(shareCtrl.posts).not.toContain(newPost);
+            shareCtrl.addPostTimeline(newPost);
+
+            expect(shareCtrl.posts).toContain(newPost);
+        });
+        
+        it("shouldn't add post in posts", function() {
+            shareCtrl.addPost = false;
+            expect(shareCtrl.posts).not.toContain(newPost);
+            shareCtrl.addPostTimeline(newPost);
+            
+            expect(shareCtrl.posts).not.toContain(newPost);
         });
     });
 }));

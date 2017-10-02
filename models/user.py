@@ -1,6 +1,8 @@
 """User Model."""
 from google.appengine.ext import ndb
 
+from custom_exceptions.fieldException import FieldException
+
 
 class InstitutionProfile(ndb.Model):
     """Model of InstitutionProfile."""
@@ -18,7 +20,10 @@ class InstitutionProfile(ndb.Model):
         profile['office'] = self.office
         profile['email'] = self.email
         profile['phone'] = self.phone
-        profile['institution'] = {'name': self.institution_name, 'photo_url': self.institution_photo_url}
+        profile['institution'] = {
+            'name': self.institution_name,
+            'photo_url': self.institution_photo_url
+        }
         return profile
 
     @staticmethod
@@ -32,6 +37,13 @@ class InstitutionProfile(ndb.Model):
     @staticmethod
     def create(data):
         """Create an institution profile model instance."""
+        for prop in ['office', 'institution_name',
+                     'institution_key', 'institution_photo_url']:
+            if(not data.get(prop)):
+                raise FieldException(
+                    "The %s property is missing in data profile" % prop
+                )
+
         profile = InstitutionProfile()
         profile.office = data.get('office')
         profile.email = data.get('email')
@@ -123,10 +135,10 @@ class User(ndb.Model):
                 self.change_state('inactive')
             self.put()
 
-    def remove_profile(self, institution):
+    def remove_profile(self, institution_key):
         """Remove a profile."""
         for profile in self.institution_profiles:
-            if profile.institution_key == institution:
+            if profile.institution_key == institution_key:
                 self.institution_profiles.remove(profile)
                 break
 

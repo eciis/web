@@ -26,7 +26,7 @@
               {{ commentCtrl.numberOfLikes() }}
             </md-button>
             <md-button class="md-icon-button" aria-label="Reply" ng-click="showReply = !showReply"
-                title="Comentar" ng-disabled="commentCtrl.disableButton()">
+                title="Comentar" ng-disabled="commentCtrl.showReplies()">
               <md-icon>reply</md-icon>
             </md-button>
             <md-button class="post-count md-icon-button md-primary md-hue-1">
@@ -67,7 +67,7 @@
         </div>
       </md-list-item>
       <!-- Reply input -->
-      <md-list-item class="md-3-line" ng-if="showReply" style="margin-left: 50px;">
+      <md-list-item class="md-3-line" ng-if="showReply && !commentCtrl.canReply()" style="margin-left: 50px;">
         <img ng-src="{{commentCtrl.user.photo_url}}" class="md-avatar" alt="{{commentCtrl.user.name}}" />
         <div class="md-list-item-text" layout="row" layout-align="center center">
           <md-input-container flex>

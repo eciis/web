@@ -66,7 +66,7 @@
 
         describe('sendInstInvite()', function() {
             beforeEach(function() {
-                spyOn(inviteService, 'sendInvite').and.callFake(function() {
+                spyOn(inviteService, 'sendInviteInst').and.callFake(function() {
                     return {
                         then: function(callback) {
                             return callback();
@@ -80,7 +80,7 @@
                 inviteinstitutionCtrl.user.current_institution = splab;
                 var promise = inviteinstitutionCtrl.sendInstInvite(invite);
                 promise.then(function() {
-                    expect(inviteService.sendInvite).toHaveBeenCalledWith(invite);
+                    expect(inviteService.sendInviteInst).toHaveBeenCalledWith(invite);
                     done();
                 });
                 scope.$apply();

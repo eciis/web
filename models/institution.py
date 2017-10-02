@@ -218,6 +218,8 @@ class Institution(ndb.Model):
         user.follows.append(institution.key)
         user.put()
 
+        invite.send_response_notification(user, invite.admin_key.urlsafe(), 'ACCEPT')
+
         return institution
 
     @ndb.transactional(xg=True)

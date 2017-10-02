@@ -91,7 +91,7 @@
             "REJECT_INVITE_USER": {
                 icon: "person"
             },
-            "ACCEPT_INVITE_INSTITUION": {
+            "ACCEPT_INVITE_INSTITUTION": {
                 icon: "account_balance"
             },
             "REJECT_INVITE_INSTITUTION": {

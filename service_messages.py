@@ -1,5 +1,10 @@
+# -*- coding: utf-8 -*-
 """Service of send messages."""
+import sys
 from google.appengine.api import taskqueue
+
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 
 def send_message_notification(user_key, message, entity_type, entity_key):

@@ -5,7 +5,7 @@ import json
 import search_module
 from utils import login_required
 from utils import json_response
-from utils import has_super_user_permission
+from utils import has_permission
 from handlers.base_handler import BaseHandler
 from google.appengine.ext import ndb
 
@@ -15,7 +15,7 @@ class InstitutionRequestHandler(BaseHandler):
 
     @login_required
     @json_response
-    @has_super_user_permission(permission_type='analyze_request_inst')
+    @has_permission(permission_type='analyze_request_inst')
     def get(self, user, request_key):
         """Handler GET Requests."""
         request = ndb.Key(urlsafe=request_key).get()
@@ -24,7 +24,7 @@ class InstitutionRequestHandler(BaseHandler):
     @login_required
     @json_response
     @ndb.transactional(xg=True)
-    @has_super_user_permission(permission_type='analyze_request_inst')
+    @has_permission(permission_type='analyze_request_inst')
     def put(self, user, request_key):
         """Handler PUT Requests."""
         request = ndb.Key(urlsafe=request_key).get()
@@ -57,7 +57,7 @@ class InstitutionRequestHandler(BaseHandler):
         self.response.write(json.dumps(request.make()))
 
     @login_required
-    @has_super_user_permission(permission_type='analyze_request_inst')
+    @has_permission(permission_type='analyze_request_inst')
     def delete(self, user, request_key):
         """Change request status from 'sent' to 'rejected'."""
         request_key = ndb.Key(urlsafe=request_key)

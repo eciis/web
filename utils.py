@@ -283,9 +283,9 @@ def getSuperUsers():
     return userswithpermission
 
 
-def has_super_user_permission(permission_type):
+def has_permission(permission_type):
     """Check user permission."""
-    def has_permission(method):
+    def method_for_verification(method):
         def check_permission(self, user, *args):
             Utils._assert(
                 not (permission_type in user.permissions),
@@ -293,4 +293,4 @@ def has_super_user_permission(permission_type):
                 NotAuthorizedException)
             return method(self, user, *args)
         return check_permission
-    return has_permission
+    return method_for_verification

@@ -1,0 +1,26 @@
+#!/bin/bash
+SYS_URL='http://localhost:8080'
+
+if [ $1 = 'run' ]; then
+    if which xdg-open > /dev/null
+    then
+      xdg-open $SYS_URL
+    elif which gnome-open > /dev/null
+    then
+      gnome-open $SYS_URL
+    fi
+
+    dev_appserver.py landing/landing.yaml frontend/frontend.yaml backend/backend.yaml backend/worker.yaml
+fi
+
+if [ $1 = 'test' ]; then
+    if [ $2 = 'client' ]; then
+        echo "=========== Iniciando Testes do Frontend ==========="
+        cd frontend/test && karma start $3
+    fi
+    if [ $2 = 'server' ]; then
+        echo "=========== Iniciando Testes do Backend ==========="
+        cd backend
+        python -m unittest discover -v -p "*test.py"
+    fi
+fi

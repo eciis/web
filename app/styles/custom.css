@@ -354,3 +354,8 @@ a:active {
 .inst-timeline-center {
     margin-left: 46%;
 }
+
+.green-button {
+    background-color: #8BC34A;
+    color: #FFFFFF;
+}

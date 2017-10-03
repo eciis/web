@@ -66,6 +66,10 @@
             <button ng-click="controller.cleanImage()">&times;</button>
             <img style="border-radius: 5%;" ng-src="{{ controller.photoUrl }}"/>
           </div>
+          <div class="image-view" ng-if="controller.showEventImage()">
+            <button ng-click="controller.cleanImage()">&times;</button>
+            <img style="border-radius: 5%;" ng-src="{{ controller.event.photo_url }}"/>
+          </div>
           <md-progress-linear ng-show="controller.loading" md-mode="indeterminate" style="width: 14%; margin-top: 5px"></md-progress-linear>
         </md-card-content>
         <div layout="row">

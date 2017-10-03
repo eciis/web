@@ -138,6 +138,7 @@
         dialogCtrl.deletePreviousImage = false;
         dialogCtrl.photoUrl = "";
         dialogCtrl.dateToChange = {};
+        dialogCtrl.observer = {};
 
         dialogCtrl.save = function save() {
             if(!dialogCtrl.isEditing) {
@@ -153,7 +154,6 @@
                 ImageService.saveImage(dialogCtrl.photoBase64Data).then(function success(data) {
                     dialogCtrl.loading = false;
                     dialogCtrl.event.photo_url = data.url;
-                    dialogCtrl.event.uploaded_images = [data.url];
                     callback();
                 });
             } else {
@@ -165,7 +165,7 @@
             var event = _.clone(dialogCtrl.dateChangeEvent);
             event = new Event(event, dialogCtrl.user.current_institution.key);
             if(event.isValid()) {
-                var patch = generatePatch(event);
+                var patch = generatePatch(jsonpatch.generate(dialogCtrl.observer), event);
                 EventService.editEvent(dialogCtrl.event.key, patch).then(function success() {
                     if(dialogCtrl.dateToChange.startTime) {
                         dialogCtrl.event.start_time = event.start_time;
@@ -220,18 +220,26 @@
             return !isImageEmpty && !isImageNull;
         };
 
+        dialogCtrl.showEventImage = function() {
+            var isImageEmpty = dialogCtrl.event.photo_url === "";
+            var isImageNull = dialogCtrl.event.photo_url === null;
+            var isImageUndefined = dialogCtrl.event.photo_url === undefined;
+            return !isImageEmpty && !isImageNull && !isImageUndefined;
+        };
+
         dialogCtrl.cleanImage = function() {
            dialogCtrl.photoUrl = "";
            dialogCtrl.photoBase64Data = null;
            dialogCtrl.deletePreviousImage = true;
+           delete dialogCtrl.event.photo_url;
         };
 
-        function generatePatch(data) {
-            var patch = [];
-            patch.push({op: 'replace', path: "/text", value: dialogCtrl.event.text});
-            patch.push({op: 'replace', path: "/local", value: dialogCtrl.event.local});
-            patch.push({op: 'replace', path: "/title", value: dialogCtrl.event.title});
-            patch.push({op: 'replace', path: "/photo_url", value: dialogCtrl.event.photo_url});
+        function generatePatch(patch, data) {
+            _.remove(patch, function(op) {
+                var startTimeCondition = op.path === "/start_time";
+                var endTimeCondition = op.path === "/end_time";
+                return startTimeCondition || endTimeCondition;
+            });
             if(dialogCtrl.dateToChange.startTime) {
                 patch.push({op: 'replace', path: "/start_time", value: data.start_time});
             }
@@ -269,6 +277,7 @@
                 dialogCtrl.dateChangeEvent.start_time = new Date(dialogCtrl.dateChangeEvent.start_time);
                 dialogCtrl.dateChangeEvent.end_time = new Date(dialogCtrl.dateChangeEvent.end_time);
                 dialogCtrl.dateChangeEvent = new Event(dialogCtrl.dateChangeEvent, dialogCtrl.user.current_institution.key);
+                dialogCtrl.observer = jsonpatch.observe(dialogCtrl.event);
             } else {
                 dialogCtrl.event = {};
             }

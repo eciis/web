@@ -14,7 +14,7 @@
           <md-icon style="margin-top: 14px; color: white;">event</md-icon>
         </timeline-badge>
         <timeline-panel>
-          <md-card>
+          <md-card ng-if="event.photo_url">
             <img class="md-card-image" ng-src="{{event.photo_url}}"/>
           </md-card>
           <md-card>

@@ -55,6 +55,8 @@
             imageService : imageService,
             $rootScope: rootScope,
             eventService: eventService
+        }, {
+          event: event
         });
       controller.event = event;
       controller.events = [];
@@ -132,6 +134,7 @@
             }
           };
         });
+        controller.observer = jsonpatch.observe(controller.event);
         controller.isEditing = true;
         controller.dateChangeEvent = new Event(event, user.current_institution.key);
         controller.dateChangeEvent.start_time = new Date();

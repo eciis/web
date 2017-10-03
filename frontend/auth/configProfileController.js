@@ -113,7 +113,7 @@
 
         configProfileCtrl.editProfile = function editProfile(inst, ev) {
             $mdDialog.show({
-                templateUrl: 'user/edit_profile.html',
+                templateUrl: 'app/user/edit_profile.html',
                 controller: 'EditProfileController',
                 controllerAs: "editProfileCtrl",
                 locals: {

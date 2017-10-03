@@ -123,7 +123,7 @@
             $mdDialog.show({
                 controller: function DialogController() {},
                 controllerAs: "controller",
-                templateUrl: 'home/post_dialog.html',
+                templateUrl: 'app/home/post_dialog.html',
                 parent: angular.element(document.body),
                 targetEvent: event,
                 clickOutsideToClose:true,
@@ -146,7 +146,7 @@
             $mdDialog.show({
                 controller: "SharePostController",
                 controllerAs: "sharePostCtrl",
-                templateUrl: 'post/share_post_dialog.html',
+                templateUrl: 'app/post/share_post_dialog.html',
                 parent: angular.element(document.body),
                 targetEvent: event,
                 clickOutsideToClose:true,
@@ -389,7 +389,7 @@
             PdfService.getReadableURL(pdf.url, setPdfURL, readablePdf).then(
                 function success() {
                     $mdDialog.show({
-                        templateUrl: 'post/pdfDialog.html',
+                        templateUrl: 'app/post/pdfDialog.html',
                         targetEvent: ev,
                         clickOutsideToClose:true,
                         locals: {

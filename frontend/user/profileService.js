@@ -10,7 +10,7 @@
 
         service.showProfile  = function showProfile(userKey, ev) {
              $mdDialog.show({
-                templateUrl: 'user/profile.html',
+                templateUrl: 'app/user/profile.html',
                 controller: ProfileController,
                 controllerAs: "profileCtrl",
                 locals: {

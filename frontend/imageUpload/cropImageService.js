@@ -12,7 +12,7 @@
             $mdDialog.show({
                 controller: "CropImageController",
                 controllerAs: "cropImgCtrl",
-                templateUrl: 'imageUpload/crop_image.html',
+                templateUrl: 'app/imageUpload/crop_image.html',
                 parent: angular.element(document.body),
                 targetEvent: event,
                 clickOutsideToClose:true,

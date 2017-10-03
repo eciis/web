@@ -42,7 +42,7 @@
                 attachTo: angular.element(document.body),
                 controller: PanelMenuCtrl,
                 controllerAs: 'PanelCtrl',
-                templateUrl: 'search_panel.html',
+                templateUrl: 'app/search_panel.html',
                 panelClass: 'demo-menu-example',
                 position: position,
                 locals: {

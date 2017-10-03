@@ -38,7 +38,7 @@
             $mdDialog.show({
                 controller: function PostDialogController() {},
                 controllerAs: "controller",
-                templateUrl: 'home/post_dialog.html',
+                templateUrl: 'app/home/post_dialog.html',
                 parent: angular.element(document.body),
                 targetEvent: event,
                 clickOutsideToClose: true,

@@ -25,7 +25,7 @@
             $mdDialog.show({
                 controller: 'EventDialogController',
                 controllerAs: "controller",
-                templateUrl: 'event/event_dialog.html',
+                templateUrl: 'app/event/event_dialog.html',
                 targetEvent: event,
                 clickOutsideToClose: true,
                 locals: {
@@ -39,7 +39,7 @@
             $mdDialog.show({
                 controller: "SharePostController",
                 controllerAs: "sharePostCtrl",
-                templateUrl: 'post/share_post_dialog.html',
+                templateUrl: 'app/post/share_post_dialog.html',
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose:true,

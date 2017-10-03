@@ -179,7 +179,7 @@
 
         institutionCtrl.removeInstitution = function removeInstitution(ev) {
             $mdDialog.show({
-                templateUrl: 'institution/removeInstDialog.html',
+                templateUrl: 'app/institution/removeInstDialog.html',
                 targetEvent: ev,
                 clickOutsideToClose:true,
                 locals: {
@@ -192,7 +192,7 @@
 
         institutionCtrl.portfolioDialog = function(ev) {
             $mdDialog.show({
-                templateUrl: 'institution/portfolioDialog.html',
+                templateUrl: 'app/institution/portfolioDialog.html',
                 targetEvent: ev,
                 clickOutsideToClose:true,
                 locals: {

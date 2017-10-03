@@ -67,7 +67,7 @@
                 },
                 controller: 'SuggestInstitutionController',
                 controllerAs: 'suggestInstCtrl',
-                templateUrl: 'invites/existing_institutions.html',
+                templateUrl: 'app/invites/existing_institutions.html',
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose: true

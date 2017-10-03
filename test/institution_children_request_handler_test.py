@@ -9,6 +9,7 @@ from models.institution import Address
 from models.request_institution_children import RequestInstitutionChildren
 from handlers.institution_children_request_handler import InstitutionChildrenRequestHandler
 
+import mock
 from mock import patch
 
 
@@ -28,7 +29,8 @@ class InstitutionChildrenRequestHandlerTest(TestBaseHandler):
         initModels(cls)
 
     @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
-    def test_put(self, verify_token):
+    @mock.patch('service_messages.send_message_notification')
+    def test_put(self, verify_token, mock_method):
         """Test method post of InstitutionChildrenRequestHandler."""
         request = self.testapp.put_json(
             "/api/requests/" + self.request.key.urlsafe() + "/institution_children")
@@ -45,6 +47,9 @@ class InstitutionChildrenRequestHandlerTest(TestBaseHandler):
             institution.parent_institution, self.inst_test.key,
             "The parent institution of inst requested must be update to inst test")
 
+        self.assertTrue(mock_method.assert_called,
+                        "Should call the send_message_notification")
+
     @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
     def test_put_user_not_admin(self, verify_token):
         """Test put request with user is not admin."""
@@ -56,6 +61,28 @@ class InstitutionChildrenRequestHandlerTest(TestBaseHandler):
             "Error! User is not admin",
             exception_message,
             "Expected error message is Error! User is not admin")
+
+    @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
+    @mock.patch('service_messages.send_message_notification')
+    def test_delete(self, verify_token, mock_method):
+        """Test method post of InstitutionChildrenRequestHandler."""
+        self.testapp.delete(
+            "/api/requests/" + self.request.key.urlsafe() + "/institution_children")
+
+        institution = self.inst_requested.key.get()
+
+        self.request = self.request.key.get()
+
+        self.assertEqual(
+            self.request.status,
+            'rejected',
+            'Expected status from request must be rejected')
+        self.assertEqual(
+            institution.parent_institution, None,
+            "The parent institution of inst requested is None")
+
+        self.assertTrue(mock_method.assert_called,
+                        "Should call the send_message_notification")
 
 
 def initModels(cls):

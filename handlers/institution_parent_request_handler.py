@@ -33,6 +33,8 @@ class InstitutionParentRequestHandler(BaseHandler):
         parent_institution.children_institutions.append(request.institution_key)
         parent_institution.put()
 
+        request.send_response_notification(user, request.admin_key.urlsafe(), 'ACCEPT_INSTITUTION_LINK')
+
         self.response.write(json.dumps(request.make()))
 
     @login_required
@@ -43,3 +45,5 @@ class InstitutionParentRequestHandler(BaseHandler):
         request = request_key.get()
         request.change_status('rejected')
         request.put()
+
+        request.send_response_notification(user, request.admin_key.urlsafe(), 'REJECT_INSTITUTION_LINK')

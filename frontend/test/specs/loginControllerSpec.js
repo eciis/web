@@ -45,7 +45,6 @@
             });
         };
         logginCtrl = createCtrl();
-        httpBackend.flush();
     }));
 
     afterEach(function() {

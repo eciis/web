@@ -127,7 +127,6 @@
             service.save(posts[0], patch).catch(function(data) {
                 result = data;
             });
-            httpBackend.flush();
             expect($http.patch).toHaveBeenCalled();
         });
 }));

@@ -33,5 +33,7 @@
         };
 
         AuthService.login(user);
+
+        Config.BACKEND_URL = '';
     });
 })();

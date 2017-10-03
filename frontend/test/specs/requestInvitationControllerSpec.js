@@ -4,7 +4,7 @@
 
     var requestInvCtrl, httpBackend, scope, institutionService, createCtrl, state;
 
-    var SEARCH_INST_URI = "api/search/institution?";
+    var SEARCH_INST_URI = "/api/search/institution?";
     var INST_URI = "/api/institutions/";
 
     var splab = {
@@ -50,7 +50,6 @@
                 });
         };
         requestInvCtrl = createCtrl();
-        httpBackend.flush();
     }));
 
     afterEach(function() {

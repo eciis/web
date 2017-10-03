@@ -59,7 +59,6 @@
             posts:[post],
             addPost: true
         });
-        httpBackend.flush();
     }));
 
     afterEach(function() {

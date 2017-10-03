@@ -55,7 +55,6 @@
             $rootScope: rootscope,
             $scope: scope
         });
-        httpBackend.flush();
     }));
 
     afterEach(function() {
@@ -176,8 +175,6 @@
             httpBackend.when('GET', 'institution/institution_page.html').respond(200);
 
             postDetailsCtrl.goToInstitution(institutions[0].key);
-
-            httpBackend.flush();
 
             expect(state.go).toHaveBeenCalledWith('app.institution', Object({ institutionKey: institutions[0].key }));
         });

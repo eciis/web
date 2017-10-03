@@ -43,7 +43,6 @@
             });
         };
         panelCtrl = createCtrl();
-        httpBackend.flush();
     }));
 
     afterEach(function() {

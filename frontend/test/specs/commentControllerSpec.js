@@ -52,9 +52,6 @@
 
         commentCtrl.user = AuthService.getCurrentUser();
         commentCtrl.comment = comment;
-
-
-        httpBackend.flush();
     }));
 
     afterEach(function() {

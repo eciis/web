@@ -53,7 +53,6 @@
                 });
         };
         editProfileCtrl = createCrtl();
-        httpBackend.flush();
     }));
 
     describe('edit', function() {

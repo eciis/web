@@ -59,7 +59,6 @@
                 });
         };
         configCtrl = createCrtl();
-        httpBackend.flush();
     }));
 
     afterEach(function() {

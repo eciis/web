@@ -45,6 +45,7 @@ before_script:
 # command to run tests
 script: 
     - cd backend && python -m unittest discover -v -p "*test.py"
+    - cd ../
     - cd frontend/test && ./node_modules/.bin/karma start --browsers Firefox --single-run
 
 notifications:

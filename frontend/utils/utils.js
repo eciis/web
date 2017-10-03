@@ -44,7 +44,7 @@ var Utils = {
         return text;
     },
     updateBackendUrl : function updateBackendUrl(config) {
-        var restApiUrl = 'http://localhost:8081';
+        var restApiUrl = Config.BACKEND_URL;
 
         var restApiRegex = new RegExp('^.*?/api/(.*)$');
         

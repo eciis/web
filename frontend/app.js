@@ -225,11 +225,7 @@
                     $state.go("signin");
                 }
 
-                var rest_srvr = 'http://localhost:8082';
-
-                var rest_request_regex = new RegExp('^.*?/api/(.*)$');
-                
-                config.url = config.url.replace(rest_request_regex,rest_srvr+'/api/$1');
+                Utils.updateBackendUrl(config);
 
                 return config || $q.when(config);
             },

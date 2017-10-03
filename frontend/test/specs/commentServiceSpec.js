@@ -19,9 +19,9 @@
         commentService = CommentService;
         comments = [comment];
         AuthService.login(user);
-        httpBackend.when('GET', 'main/main.html').respond(200);
-        httpBackend.when('GET', 'home/home.html').respond(200);
-        httpBackend.when('GET', 'error/error.html').respond(200);
+        httpBackend.when('GET', 'app/main/main.html').respond(200);
+        httpBackend.when('GET', 'app/home/home.html').respond(200);
+        httpBackend.when('GET', 'app/error/error.html').respond(200);
     }));
 
     afterEach(function() {
@@ -242,35 +242,25 @@
             spyOn(http, 'delete').and.returnValue(deferred.promise);
         });
 
-        it('should call http.delete()', function() {
+        it('should call http.delete()', function(done) {
             var URI = postCommentsUri+'/'+comment.id+'/likes';
-            commentService.dislike('post-key', 'comment-id').then(
-                function success(response) {
-                    answer = response;
-                }, function err(response) {
-                    error = response;
-                }
-            );
+            commentService.dislike('post-key', 'comment-id').then(function() {
+                expect(http.delete).toHaveBeenCalledWith(URI);
+                expect(answer).toBeUndefined();
+                done();
+            });
             deferred.resolve();
-            scope.$apply();
-            expect(http.delete).toHaveBeenCalledWith(URI);
-            expect(answer).toBeUndefined();
             httpBackend.flush();
         });
 
-        it('should call http.delete() when pass replyId as parameter', function() {
+        it('should call http.delete() when pass replyId as parameter', function(done) {
             var URI = postCommentsUri+'/'+comment.id+'/replies/reply-id/likes';
-            commentService.dislike('post-key', 'comment-id', 'reply-id').then(
-                function success(response) {
-                    answer = response;
-                }, function err(response) {
-                    error = response;
-                }
-            );
+            commentService.dislike('post-key', 'comment-id', 'reply-id').then(function() {
+                expect(http.delete).toHaveBeenCalledWith(URI);
+                expect(answer).toBeUndefined();
+                done();
+            });
             deferred.resolve();
-            scope.$apply();
-            expect(http.delete).toHaveBeenCalledWith(URI);
-            expect(answer).toBeUndefined();
             httpBackend.flush();
         });
     });

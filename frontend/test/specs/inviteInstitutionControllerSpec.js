@@ -17,6 +17,8 @@
         invites:[]
     };
 
+    var INSTITUTION_SEARCH_URI = '/api/search/institution?value=';
+
     var invite = new Invite({invitee: "mayzabeel@gmail.com", suggestion_institution_name : "New Institution"}, 'institution', splab.key);
 
     beforeEach(module('app'));
@@ -47,7 +49,6 @@
         };
         state.params.institutionKey = splab.key;
         inviteinstitutionCtrl = createCtrl();
-        httpBackend.flush();
     }));
 
     afterEach(function() {
@@ -59,6 +60,7 @@
 
         it('should exist a user and his name is Tiago', function() {
             expect(inviteinstitutionCtrl.user.name).toEqual(tiago.name);
+            httpBackend.flush();
         });
     });
 
@@ -83,14 +85,14 @@
                     expect(inviteService.sendInvite).toHaveBeenCalledWith(invite);
                     done();
                 });
-                scope.$apply();
+                httpBackend.flush();
             });
 
             it('should call sendInvite() and searchInstitutions()', function(done) {
                 spyOn(instService, 'searchInstitutions').and.callThrough();
                 spyOn(inviteinstitutionCtrl, 'sendInstInvite');
                 inviteinstitutionCtrl.user.current_institution = splab;
-                httpBackend.expect('GET', 'api/search/institution?value="New Institution"&state=active,pending').respond({});
+                httpBackend.expect('GET', INSTITUTION_SEARCH_URI+'"New Institution"&state=active,pending').respond({});
                 inviteinstitutionCtrl.checkInstInvite().then(function() {
                     var testingInvite = new Invite(invite, 'INSTITUTION', splab.key);
                     expect(instService.searchInstitutions).toHaveBeenCalledWith(
@@ -105,7 +107,7 @@
             it('should call showDialog()', function(done) {
                 var documents = [{name: splab.name, id: splab.key}];
                 spyOn(inviteinstitutionCtrl, 'showDialog');
-                httpBackend.expect('GET', 'api/search/institution?value="New Institution"&state=active,pending').respond(documents);
+                httpBackend.expect('GET', INSTITUTION_SEARCH_URI+'"New Institution"&state=active,pending').respond(documents);
                 inviteinstitutionCtrl.checkInstInvite().then(function() {
                     expect(inviteinstitutionCtrl.showDialog).toHaveBeenCalled();
                     done();
@@ -122,7 +124,7 @@
                     expect(inviteinstitutionCtrl.sent_invitations).toEqual([invite]);
                     done();
                 });
-                scope.$apply();
+                httpBackend.flush();
             });
         });
 
@@ -132,6 +134,8 @@
                     invitee: "invitee@gmail.com",
                     suggestion_institution_name : "Institution"};
                 inviteinstitutionCtrl.cancelInvite();
+
+                httpBackend.flush();
 
                 expect(inviteinstitutionCtrl.invite).toEqual({});
                 expect(inviteinstitutionCtrl.showButton).toBe(true);

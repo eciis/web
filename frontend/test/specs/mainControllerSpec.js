@@ -26,6 +26,8 @@
         name: 'otherInstitution',
         key: '1239'
     };
+
+    var INSTITUTION_SEARCH_URI = "/api/search/institution?value=";
     user.institutions = [institution, otherInstitution];
     user.institutions_admin = [institution.key];
     user.current_institution = institution;
@@ -67,7 +69,6 @@
             });
         };
         mainCtrl = createCtrl();
-        httpBackend.flush();
     }));
 
     afterEach(function() {
@@ -146,7 +147,7 @@
             spyOn(mainCtrl, 'makeSearch').and.callThrough();
             spyOn(instService, 'searchInstitutions').and.callThrough();
             spyOn(mainCtrl, 'openMenu');
-            httpBackend.expect('GET', "api/search/institution?value=" + '"' + otherInstitution.name + '"' + "&state=active").respond(documents);
+            httpBackend.expect('GET', INSTITUTION_SEARCH_URI + '"' + otherInstitution.name + '"' + "&state=active").respond(documents);
             mainCtrl.showMenu('$event').then(function() {
                 expect(mainCtrl.makeSearch).toHaveBeenCalled();
                 expect(mainCtrl.openMenu).toHaveBeenCalled();
@@ -161,7 +162,7 @@
             mainCtrl.search = otherInstitution.name;
             mainCtrl.finalSearch = mainCtrl.search;
             spyOn(instService, 'searchInstitutions').and.callThrough();
-            httpBackend.expect('GET', "api/search/institution?value=" + '"' + otherInstitution.name + '"' + "&state=active").respond(documents);
+            httpBackend.expect('GET', INSTITUTION_SEARCH_URI + '"' + otherInstitution.name + '"' + "&state=active").respond(documents);
             mainCtrl.makeSearch().then(function() {
                  expect(instService.searchInstitutions).toHaveBeenCalledWith(mainCtrl.finalSearch, 'active');
                  expect(mainCtrl.institutions).toEqual(documents);

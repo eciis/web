@@ -60,9 +60,11 @@ class RequestHandler(BaseHandler):
         user.add_institution(institution_key)
         user.follow(institution_key)
         user.change_state('active')
+        user.put()
 
         institution.add_member(user)
         institution.follow(user.key)
+        institution.put()
 
         host = self.request.host
         request.send_response_email(host, "ACCEPT")

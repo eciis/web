@@ -235,11 +235,6 @@
         };
 
         function generatePatch(patch, data) {
-            _.remove(patch, function(op) {
-                var startTimeCondition = op.path === "/start_time";
-                var endTimeCondition = op.path === "/end_time";
-                return startTimeCondition || endTimeCondition;
-            });
             if(dialogCtrl.dateToChange.startTime) {
                 patch.push({op: 'replace', path: "/start_time", value: data.start_time});
             }

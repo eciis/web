@@ -15,7 +15,7 @@ class InstitutionRequestHandler(BaseHandler):
 
     @login_required
     @json_response
-    @has_super_user_permission('analyze_request_inst')
+    @has_super_user_permission(permission_type='analyze_request_inst')
     def get(self, user, request_key):
         """Handler GET Requests."""
         request = ndb.Key(urlsafe=request_key).get()
@@ -24,7 +24,7 @@ class InstitutionRequestHandler(BaseHandler):
     @login_required
     @json_response
     @ndb.transactional(xg=True)
-    @has_super_user_permission(type_permission='analyze_request_inst')
+    @has_super_user_permission(permission_type='analyze_request_inst')
     def put(self, user, request_key):
         """Handler PUT Requests."""
         request = ndb.Key(urlsafe=request_key).get()
@@ -57,7 +57,7 @@ class InstitutionRequestHandler(BaseHandler):
         self.response.write(json.dumps(request.make()))
 
     @login_required
-    @has_super_user_permission(type_permission='analyze_request_inst')
+    @has_super_user_permission(permission_type='analyze_request_inst')
     def delete(self, user, request_key):
         """Change request status from 'sent' to 'rejected'."""
         request_key = ndb.Key(urlsafe=request_key)

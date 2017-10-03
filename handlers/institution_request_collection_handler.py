@@ -34,7 +34,7 @@ class InstitutionRequestCollectionHandler(BaseHandler):
 
     @json_response
     @login_required
-    @has_super_user_permission('analyze_request_inst')
+    @has_super_user_permission(permission_type='analyze_request_inst')
     def get(self, user):
         """Get requests for new institutions."""
         queryRequests = RequestInstitution.query(

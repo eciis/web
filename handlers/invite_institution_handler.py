@@ -18,7 +18,7 @@ class InviteInstitutionHandler(BaseHandler):
 
     @json_response
     @login_required
-    @has_super_user_permission(type_permission='send_invite_inst')
+    @has_super_user_permission(permission_type='send_invite_inst')
     @is_admin
     def post(self, user):
         """Handle POST Requests."""

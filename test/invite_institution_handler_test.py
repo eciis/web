@@ -24,6 +24,7 @@ class InviteInstitutionHandlerTest(TestBaseHandler):
 
     @patch('utils.verify_token', return_value={'email': 'first_user@gmail.com'})
     def test_post_invite_institution(self, verify_token):
+        """Test post invite institution."""
         self.testapp.post_json("/api/invites/institution", {
             'invitee': 'ana@gmail.com',
             'admin_key': self.first_user.key.urlsafe(),
@@ -33,6 +34,7 @@ class InviteInstitutionHandlerTest(TestBaseHandler):
 
     @patch('utils.verify_token', return_value={'email': 'first_user@gmail.com'})
     def test_post_invite_institution_fail(self, verify_token):
+        """Test post invite institution fail."""
         with self.assertRaises(Exception) as ex:
             self.testapp.post_json("/api/invites/institution", {
                 'invitee': 'ana@gmail.com',
@@ -46,6 +48,23 @@ class InviteInstitutionHandlerTest(TestBaseHandler):
             message,
             'Error! invitation type not allowed',
             'Expected exception message muste be equal to Error! invitation type not allowed')
+
+    @patch('utils.verify_token', return_value={'email': 'second_user@ccc.ufcg.edu.br'})
+    def test_post_user_not_allowed(self, verify_token):
+        """Test post user not allowed."""
+        with self.assertRaises(Exception) as ex:
+            self.testapp.post_json("/api/invites/institution", {
+                'invitee': 'ana@gmail.com',
+                'admin_key': self.second_user.key.urlsafe(),
+                'type_of_invite': 'INSTITUTION',
+                'suggestion_institution_name': 'New Institution',
+                'institution_key': self.other_institution.key.urlsafe()})
+
+        message = self.get_message_exception(ex.exception.message)
+        self.assertEqual(
+            message,
+            'Error! User is not allowed to do this operation',
+            'Expected exception message muste be equal to Error! User is not allowed to do this operation')
 
 
 def initModels(cls):
@@ -63,7 +82,6 @@ def initModels(cls):
     cls.first_user = User()
     cls.first_user.name = 'first_user'
     cls.first_user.email = ['first_user@gmail.com']
-    cls.first_user.permissions['send_invite_inst'] = 'sdgjhagdjhgsjg'
     cls.first_user.institutions = [cls.institution.key]
     cls.first_user.institutions_admin = [cls.institution.key]
     cls.first_user.put()
@@ -72,22 +90,20 @@ def initModels(cls):
     cls.second_user.name = 'second_user'
     cls.second_user.email = ['second_user@ccc.ufcg.edu.br']
     cls.second_user.put()
-    # new User
-    cls.third_user = User()
-    cls.third_user.name = 'third_user'
-    cls.third_user.email = ['third_user@ccc.ufcg.edu.br']
-    cls.third_user.put()
+
     # new Institution other_institution
     cls.other_institution = Institution()
     cls.other_institution.name = 'other_institution'
     cls.other_institution.address = cls.address
     cls.other_institution.members = [cls.first_user.key]
-    cls.other_institution.followers = [cls.third_user.key]
     cls.other_institution.admin = cls.second_user.key
     cls.other_institution.put()
     # set first_user to be admin of institution
     cls.institution.admin = cls.first_user.key
-    cls.institution.members = [cls.first_user.key, cls.second_user.key, cls.third_user.key]
+    cls.institution.members = [cls.first_user.key, cls.second_user.key]
     cls.institution.put()
     cls.second_user.institutions_admin = [cls.other_institution.key]
     cls.second_user.put()
+
+    cls.first_user.permissions['send_invite_inst'] = 'sdgjhagdjhgsjg'
+    cls.first_user.put()

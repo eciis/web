@@ -232,12 +232,10 @@
         describe('removeInstitution()', function() {
 
             it('should call $mdDialog.show()', function() {
-                spyOn(mdDialog, 'show').and.callThrough();
+                spyOn(mdDialog, 'show');
                 institutionCtrl.removeInstitution('$event');
-                httpBackend.flush();
                 expect(mdDialog.show).toHaveBeenCalled();
             });
-
         });
     });
 }));

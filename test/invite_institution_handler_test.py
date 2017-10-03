@@ -47,7 +47,7 @@ class InviteInstitutionHandlerTest(TestBaseHandler):
         self.assertEqual(
             message,
             'Error! invitation type not allowed',
-            'Expected exception message muste be equal to Error! invitation type not allowed')
+            'Expected exception message must be equal to Error! invitation type not allowed')
 
     @patch('utils.verify_token', return_value={'email': 'second_user@ccc.ufcg.edu.br'})
     def test_post_user_not_allowed(self, verify_token):
@@ -64,7 +64,7 @@ class InviteInstitutionHandlerTest(TestBaseHandler):
         self.assertEqual(
             message,
             'Error! User is not allowed to do this operation',
-            'Expected exception message muste be equal to Error! User is not allowed to do this operation')
+            'Expected exception message must be equal to Error! User is not allowed to do this operation')
 
 
 def initModels(cls):

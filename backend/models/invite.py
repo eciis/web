@@ -55,10 +55,8 @@ class Invite(PolyModel):
         invite.admin_key = ndb.Key(urlsafe=data.get('admin_key'))
         invite.is_request = data.get('is_request') or False
         invite.institution_key = ndb.Key(urlsafe=data.get('institution_key'))
-        invite.sender_key = invite.admin_key
-        if data.get('sender_key'):
-            invite.sender_key = ndb.Key(urlsafe=data.get('sender_key'))
-        invite.sender_name = invite.sender_key.get().name
+        invite.sender_name = data.get('sender_name') if data.get('sender_name') else invite.sender_key.get().name
+        invite.sender_key = ndb.Key(urlsafe=data.get('sender_key')) if data.get('sender_key') else invite.admin_key
 
         return invite
 

@@ -26,6 +26,7 @@ class InstitutionFollowersHandler(BaseHandler):
         institution = institution_key.get()
 
         array = [member.get() for member in institution.followers]
+        array = [member for member in array if member.state == 'active']
 
         self.response.write(json.dumps(Utils.toJson(array)))
 

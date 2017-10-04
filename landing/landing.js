@@ -20,7 +20,7 @@
                 views: {
                     main: {
                         templateUrl: "main.html",
-                        controller: "MainController as mainCtrl"
+                        controller: "MainController as ctrl"
                     }
                 }
             })
@@ -29,7 +29,16 @@
                 views: {
                     content: {
                         templateUrl: "home.html",
-                        controller: "MainController as mainCtrl"
+                        controller: "MainController as ctrl"
+                    }
+                }
+            })
+            .state("landing.precadastro", {
+                url: "/home-pre-cadastro",
+                views: {
+                    content: {
+                        templateUrl: "pre_cadastro.html",
+                        controller: "MainController as ctrl"
                     }
                 }
             });

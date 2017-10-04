@@ -205,7 +205,7 @@ class User(ndb.Model):
         del self.permissions[permission_type][entity_key]
         self.put()
 
-    def has_permission(self, permission_type, entity_key):
+    def has_permission(self, permission_type, entity_key=None):
         """Verify existence of permission.key on user permissions list.
 
         It trys to access the permission.key, if exist, returns the value,
@@ -217,7 +217,10 @@ class User(ndb.Model):
         entity_key -- ndb urlsafe of the object binded to the permission
         """
         try:
-            return self.permissions[permission_type][entity_key]
+            if entity_key:
+                return self.permissions[permission_type][entity_key]
+            else:
+                return self.permissions[permission_type]
         except:
             return False
 

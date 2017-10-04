@@ -204,8 +204,7 @@ def json_response(method):
         self.response.headers['Access-Control-Allow-Origin'] = '*'
         self.response.headers['Access-Control-Allow-Headers'] = 'X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Authorization'
         self.response.headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE'
-        self.response.headers[
-            'Content-Type'] = 'application/json; charset=utf-8'
+        self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
         method(self, *args)
     return response
 
@@ -291,7 +290,7 @@ def has_permission(permission_type):
     def method_for_verification(method):
         def check_permission(self, user, *args):
             Utils._assert(
-                not (permission_type in user.permissions),
+                not (user.has_permission(permission_type)),
                 'User is not allowed to do this operation',
                 NotAuthorizedException)
             return method(self, user, *args)

@@ -72,10 +72,6 @@
             inviteController.showButton = true;
         };
 
-        inviteController.removeMember = function removeMember($event, member) {
-            console.log(inviteController.members);
-        };
-
         function loadInstitution() {
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
                 inviteController.sent_invitations = response.data.sent_invitations;

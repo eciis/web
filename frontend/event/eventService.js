@@ -47,5 +47,15 @@
             });
             return deferred.promise;
         };
+
+        service.editEvent = function editEvent(eventKey, patch) {
+            var deferred = $q.defer();
+            $http.patch(EVENT_URI + '/' + eventKey, patch).then(function success(response) {
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+            return deferred.promise;
+        };
     });
 })();

@@ -3,7 +3,9 @@
 (describe('Test EventDialogController', function() {
 
   var controller, scope, httpBackend, rootScope, deffered, imageService, eventService,
-    postService, messageService;
+    postService, messageService, newCtrl;
+
+  var EVENT_URI = "/api/events";
 
   var splab = {name: 'Splab', key: '098745'};
 
@@ -46,12 +48,15 @@
       eventService = EventService;
       postService = PostService;
       messageService = MessageService;
+      newCtrl = $controller;
       AuthService.login(user);
-      controller = $controller('EventDialogController', {
+      controller = newCtrl('EventDialogController', {
             scope: scope,
             imageService : imageService,
             $rootScope: rootScope,
             eventService: eventService
+        }, {
+          event: event
         });
       controller.event = event;
       controller.events = [];
@@ -118,6 +123,23 @@
         controller.save();
         scope.$apply();
         expect(eventService.createEvent).toHaveBeenCalledWith(event_convert_date);
+      });
+
+      it('should call eventService.editEvent', function() {
+        spyOn(eventService, 'editEvent').and.callFake(function() {
+          return {
+            then: function(callback) {
+              return callback();
+            }
+          };
+        });
+        controller.observer = jsonpatch.observe(controller.event);
+        controller.isEditing = true;
+        controller.dateChangeEvent = new Event(event, user.current_institution.key);
+        controller.dateChangeEvent.start_time = new Date();
+        controller.dateChangeEvent.end_time = new Date();
+        controller.save();
+        expect(eventService.editEvent).toHaveBeenCalled();
       });
 
       describe('MessageService.showToast()', function(){

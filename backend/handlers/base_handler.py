@@ -15,7 +15,7 @@ class BaseHandler(webapp2.RequestHandler):
         """Decorates headers for the current request."""
         self.response.headers['Access-Control-Allow-Origin'] = '*'
         self.response.headers['Access-Control-Allow-Headers'] = 'X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Authorization'
-        self.response.headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE'
+        self.response.headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE, PATCH'
 
     def options(self, *args):
         """Default OPTIONS handler for the entire app."""

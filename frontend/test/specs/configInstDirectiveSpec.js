@@ -61,8 +61,8 @@ describe('Test ConfigInstDirective', function() {
     beforeEach(inject(function($controller, $httpBackend, $q, $state, $mdToast,
         $rootScope, $mdDialog, $http, InstitutionService, InviteService, AuthService, PdfService, ImageService) {
         httpBackend = $httpBackend;
-        httpBackend.expectGET('institution/legal_nature.json').respond(legal_nature);
-        httpBackend.expectGET('institution/occupation_area.json').respond(occupation_area);
+        httpBackend.expectGET('app/institution/legal_nature.json').respond(legal_nature);
+        httpBackend.expectGET('app/institution/occupation_area.json').respond(occupation_area);
         httpBackend.expectGET('/api/institutions/' + institution.key).respond(institution);
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);

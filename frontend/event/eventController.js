@@ -93,7 +93,7 @@
             $mdDialog.show({
                 controller: 'EventDialogController',
                 controllerAs: "controller",
-                templateUrl: 'event/event_dialog.html',
+                templateUrl: 'app/event/event_dialog.html',
                 targetEvent: ev,
                 clickOutsideToClose: true,
                 locals: {

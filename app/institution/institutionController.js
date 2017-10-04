@@ -190,6 +190,24 @@
             });
         };
 
+        institutionCtrl.removeMember = function removeMember(ev, member_obj) {
+            var title = 'Remover Membro';
+            var text= "Você deseja remover esse membro";
+            var dialog = MessageService.showConfirmationDialog(ev, title, text);
+            dialog.then(function() {
+                InstitutionService.removeMember(institutionCtrl.current_institution.key, member_obj).then(function success() {
+                    MessageService.showToast("Membro removido com sucesso.");
+                    _.remove(institutionCtrl.members, function(member) {
+                        return member.key == member_obj.key;
+                    });
+                }, function error(response) {
+                    MessageService.showToast(response.data.msg);
+                });
+            }, function() {
+                MessageService.showToast('Cancelado');
+            });
+        };
+
         institutionCtrl.portfolioDialog = function(ev) {
             $mdDialog.show({
                 templateUrl: 'institution/portfolioDialog.html',

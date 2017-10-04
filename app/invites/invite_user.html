@@ -1,7 +1,7 @@
 <!-- CONTENT -->
-<div flex-gt-lg="80" flex-lg="90" layout="row" layout-align="center" layout-fill>
-  <div flex layout="column" md-colors="{background: 'grey-200'}">
-    <md-card >
+<div flex-gt-lg="80" flex-lg="90" layout-align="center" layout-fill>
+  <div flex md-colors="{background: 'grey-200'}">
+    <md-card>
       <md-toolbar md-colors="{background: 'teal-800'}" layout="row">
         <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
           <h1>Gerenciar Membros</h1>
@@ -35,17 +35,28 @@
         </md-list-item>
       </md-list>
 
-      <md-grid-list
+      <md-list
       md-cols="5" md-cols-gt-md="15"
       md-row-height="1:1"
       md-gutter="4px" md-gutter-gt-sm="4px">
       <md-subheader class="md-no-sticky">Membros Atuais</md-subheader>
-      <md-grid-tile ng-repeat="member in inviteUserCtrl.members" ng-click="null" md-rowspan="1" md-colspan="1" md-colspan-sm="1">
-        <figure>
-          <img  href class="hyperlink" ng-click="institutionCtrl.showUserProfile(member.key, $event)" title="{{member.name}}" ng-src="{{member.photo_url}}" width="100%" height="100%"/>
-        </figure>
-      </md-grid-tile>
-    </md-grid-list>
+      <md-list-item class="md-2-line" ng-repeat="member in inviteUserCtrl.members" md-rowspan="1" md-colspan="1" md-colspan-sm="1">
+        <img class="md-avatar" title="{{member.name}}" ng-src="{{member.photo_url}}" width="100%" height="100%"/>
+        <div class="md-list-item-text">
+            <h3> {{ member.name }} </h3>
+            <p class="md-subheader"> {{ member.email[0]}} </p>
+        </div>
+        <div>
+          <md-button class="md-icon-button md-secondary" title="Remover usuário" ng-click="institutionCtrl.removeMember($event, member)" layout-align="center center">
+            <md-icon>delete</md-icon>
+          </md-button>
+          <md-button ng-click="institutionCtrl.showUserProfile(member.key, $event)" class="md-icon-button md-secondary"
+            title="Ver perfil" layout-align="center center">
+            <md-icon>more_horizontal</md-icon>
+          </md-button>
+        </div>
+      </md-list-item>
+    </md-list>
 
     <md-list flex> 
     <md-subheader class="md-no-sticky">Convites requisitados</md-subheader>

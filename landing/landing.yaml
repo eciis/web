@@ -1,0 +1,15 @@
+runtime: python27
+api_version: 1
+threadsafe: yes
+service: default
+
+default_expiration: "1s"
+
+handlers:
+- url: /
+  static_files: landing_page.html
+  upload: landing_page.html
+
+- url: /(.*)
+  static_files: \1
+  upload: (.*)

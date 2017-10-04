@@ -29,6 +29,16 @@
             return deferred.promise;
         };
 
+        service.sendInviteInst = function sendInviteInst(invite) {
+            var deferred = $q.defer();
+            $http.post(INVITES_URI + '/institution', invite).then(function success(response) {
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+            return deferred.promise;
+        };
+
         service.deleteInvite = function deleteInvite(inviteKey) {
             var deferred = $q.defer();
             $http.delete(INVITES_URI + '/' + inviteKey).then(function sucess(response) {

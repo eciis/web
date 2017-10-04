@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Invite Collection Handler."""
+"""Invite Institution Handler."""
 
 import json
 
@@ -9,27 +9,16 @@ from utils import is_admin
 from utils import Utils
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from handlers.base_handler import BaseHandler
-from models.invite_institution import InviteInstitution
 from models.factory_invites import InviteFactory
+from utils import has_permission
 
 
-class InviteCollectionHandler(BaseHandler):
-    """Invite Collection Handler."""
-
-    @json_response
-    @login_required
-    def get(self, user):
-        """Get invites for new institutions make by Plataform."""
-        invites = []
-
-        queryInvites = InviteInstitution.query()
-
-        invites = [invite.make() for invite in queryInvites]
-
-        self.response.write(json.dumps(invites))
+class InviteInstitutionHandler(BaseHandler):
+    """Invite Institution Handler."""
 
     @json_response
     @login_required
+    @has_permission(permission_type='send_invite_inst')
     @is_admin
     def post(self, user):
         """Handle POST Requests."""
@@ -37,7 +26,7 @@ class InviteCollectionHandler(BaseHandler):
         host = self.request.host
 
         type_of_invite = data.get('type_of_invite')
-        Utils._assert(type_of_invite == 'INSTITUTION',
+        Utils._assert(type_of_invite != 'INSTITUTION',
                       "invitation type not allowed", NotAuthorizedException)
         invite = InviteFactory.create(data, type_of_invite)
 

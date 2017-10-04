@@ -23,6 +23,7 @@ from handlers.reply_comment_handler import ReplyCommentHandler
 from handlers.invite_collection_handler import InviteCollectionHandler
 from handlers.search_handler import SearchHandler
 from handlers.invite_handler import InviteHandler
+from handlers.invite_institution_handler import InviteInstitutionHandler
 from handlers.event_handler import EventHandler
 from handlers.event_collection_handler import EventCollectionHandler
 from handlers.redirect_handler import AppRedirectHandler
@@ -43,6 +44,7 @@ webapp2.WSGIApplication.allowed_methods = frozenset(methods)
 app = webapp2.WSGIApplication([
     ("/api/requests/(.*)/user", RequestHandler),
     ("/api/invites", InviteCollectionHandler),
+    ("/api/invites/institution", InviteInstitutionHandler),
     ("/api/invites/(.*)", InviteHandler),
     ("/api/requests/(.*)/institution", InstitutionRequestHandler),
     ("/api/requests/(.*)/institution_parent", InstitutionParentRequestHandler),

@@ -220,7 +220,7 @@ class User(ndb.Model):
             if entity_key:
                 return self.permissions[permission_type][entity_key]
             else:
-                return self.permissions[permission_type]
+                return permission_type in self.permissions
         except:
             return False
 

@@ -208,7 +208,7 @@ class Institution(ndb.Model):
         institution.followers.append(user.key)
         institution.state = 'active'
         if (institution.photo_url is None):
-            institution.photo_url = "/images/institution.jpg"
+            institution.photo_url = "app/images/institution.jpg"
         institution.put()
 
         user.add_institution(institution.key)

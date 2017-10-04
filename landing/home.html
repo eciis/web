@@ -1,12 +1,14 @@
 <md-content>
-    <div flex md-colors="{background: 'grey-100'}" layout="row" layout-wrap layout-fill>
+    <div flex md-colors="{background: 'grey-100'}" layout="row" layout-wrap>
         <div id="header" md-whiteframe layout="row" 
                 style="background-image: url('images/background01.jpg');
-                    height: 100%;
+
                     background-attachment: fixed;
                     background-repeat: no-repeat;
                     background-size: cover; 
-                    background-position: center;"
+                    background-position: center;
+
+                    padding-bottom: 4em;"
                 layout-align="center center" flex="100" layout-fill>
             <div flex="75" layout="column" layout-align="center center">
                 <div layout="row">
@@ -279,13 +281,13 @@
             <div flex="30" layout="row" layout-align="center start">
                 <span md-colors="{color: 'grey-800'}"
                     style="font-size: 0.7em;">
-                    Copyright 2017 Plataforma E-CIS - Ministério da Saúde. Todos os direitos reservados
+                    Copyright © 2017 Plataforma E-CIS - Ministério da Saúde. Todos os direitos reservados
                 </span>
             </div>
         </div>
     </div>
 </md-content>
-<md-fab-speed-dial class="md-fab-bottom-right" style="margin: 0 2em 1em 0;">
+<md-fab-speed-dial class="md-fab-bottom-right" style="margin: 0 2em 1em 0; position: fixed;">
   <md-fab-trigger>
     <md-button aria-label="menu" class="md-fab md-primary" md-colors="{background: 'light-green-600'}"
         ng-click="mainCtrl.scroll('header')">

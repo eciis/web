@@ -6,16 +6,7 @@
             $firebaseArray) {
         var ctrl = this;
 
-        var ref = firebase.database().ref();
-
-        ctrl.scroll = function scroll(section) {
-            if ($location.path() === "/") {
-                $location.hash(section);
-                $anchorScroll();
-            } else {
-                $state.go("landing.home", {'#': section});
-            }
-        };
+        var firebaseRef = firebase.database().ref();
 
         ctrl.areas = [
             "Outros Órgãos de Governo",
@@ -51,10 +42,19 @@
         ctrl.submitForm = function submitForm(user) {
             user.timestamp = Date.now();
 
-            var notificationsRef = ref.child("precadastro/");
-            var firebaseArray = $firebaseArray(notificationsRef);
+            var formBase = firebaseRef.child("precadastro/");
+            var firebaseArray = $firebaseArray(formBase);
 
             firebaseArray.$add(user);
+        };
+
+        ctrl.scroll = function scroll(section) {
+            if ($location.path() === "/") {
+                $location.hash(section);
+                $anchorScroll();
+            } else {
+                $state.go("landing.home", {'#': section});
+            }
         };
     });
 })();

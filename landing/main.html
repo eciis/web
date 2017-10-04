@@ -1,5 +1,6 @@
 <!-- TOOLBAR -->
-<md-toolbar md-colors="{background: 'grey-100'}" layout-wrap layout-align="center center" layout="row">
+<md-toolbar md-colors="{background: 'grey-100'}" layout-wrap layout-align="center center" layout="row"
+    class="navbar-fixed-top">
   <div class="md-toolbar-tools" flex layout="row" layout-align="center center" style="padding-right: 0px; height: 100%;">
     <div layout="row" layout-align="center center" style="margin-left: 1em;">
       <img src="images/ecis.png" aria-label="e-CIS Logo">
@@ -7,34 +8,44 @@
 
     <span flex md-truncate></span>
 
-    <md-button aria-label="Inicial" class="md-button" ui-sref="landing.home" title="Página Inicial"
+    <md-button aria-label="Inicial" class="md-button" ng-click="mainCtrl.scroll('header')" title="Página Inicial"
         md-colors="{color: 'teal-600'}">
       INICIAL
     </md-button>
 
-    <md-button aria-label="Conheça o e-CIS" class="md-button" ui-sref="landing.home" title="Conheça o e-CIS"
+    <md-button aria-label="O que é o CIS" class="md-button" ng-click="mainCtrl.scroll('cis')" title="O que é o CIS"
+        md-colors="{color: 'teal-600'}">
+      O QUE É O CIS
+    </md-button>
+
+    <md-button aria-label="Conheça o e-CIS" class="md-button" ng-click="mainCtrl.scroll('conheca')" title="Conheça o e-CIS"
         md-colors="{color: 'teal-600'}">
       CONHEÇA O E-CIS
     </md-button>
 
-    <md-button aria-label="Funcionalidades" class="md-button" ui-sref="landing.home" title="Funcionalidades"
+    <md-button aria-label="Funcionalidades" class="md-button" ng-click="mainCtrl.scroll('funcionalidades')" title="Funcionalidades"
         md-colors="{color: 'teal-600'}">
       FUNCIONALIDADES
     </md-button>
 
-    <md-button aria-label="Contato" class="md-button" ui-sref="landing.home" title="Contato"
+    <md-button aria-label="Contato" class="md-button" ui-sref="landing.contato" title="Contato"
         md-colors="{color: 'teal-600'}">
       CONTATO
     </md-button>
 
+
     <div md-colors="{background: 'light-green-600'}" style="height: 100%;" 
             layout="row" layout-align="center center" layout-wrap>
-        <md-button aria-label="Login" class="md-button" title="Login"
-             md-colors="{background: 'light-green-600', color: 'grey-100'}"
-             style="margin: 4em;" ng-click="mainCtrl.login()">
-          <md-icon>account_circle</md-icon>
-          LOGIN
-        </md-button>
+      <md-button aria-label="Contato" class="md-button" ng-click="mainCtrl.scroll('interesse')" title="Contato"
+          md-colors="{background: 'light-green-600', color: 'grey-100'}">
+        TENHO INTERESSE
+      </md-button>
+      <!-- <md-button aria-label="Login" class="md-button" title="Login"
+           md-colors="{background: 'light-green-600', color: 'grey-100'}"
+           style="margin: 4em;" ng-click="mainCtrl.login()">
+        <md-icon>account_circle</md-icon>
+        LOGIN
+      </md-button> -->
     </div>
   </div>
 </md-toolbar>

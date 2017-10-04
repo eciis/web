@@ -29,7 +29,7 @@
                 views: {
                     content: {
                         templateUrl: "home.html",
-                        controller: "HomeController as homeCtrl"
+                        controller: "MainController as mainCtrl"
                     }
                 }
             });

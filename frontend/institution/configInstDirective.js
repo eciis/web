@@ -167,13 +167,13 @@
         }
 
         function getLegalNatures() {
-            $http.get('institution/legal_nature.json').then(function success(response) {
+            $http.get('app/institution/legal_nature.json').then(function success(response) {
                 configInstCtrl.legalNatures = response.data;
             });
         }
 
         function getOccupationAreas() {
-            $http.get('institution/occupation_area.json').then(function success(response) {
+            $http.get('app/institution/occupation_area.json').then(function success(response) {
                 configInstCtrl.occupationAreas = response.data;
             });
         }

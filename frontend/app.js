@@ -273,7 +273,8 @@
             'create_institution',
             'error',
             'signin',
-            'user_inactive'
+            'user_inactive',
+            'new_invite'
         ];
 
         $transitions.onStart({

@@ -1,0 +1,215 @@
+<div layout-padding>
+    <div class="row">
+        <div class="avatar" align="center">
+            <img style="border-radius: 50%;" ng-src="{{ configInstCtrl.newInstitution.photo_url }}"
+                width="100px" height="100px"/>
+        </div>
+        <div class="info" align="center">
+            <div class="title">
+                <md-button ng-show="configInstCtrl.showButton()" ng-click="null"
+                    ng-model="configInstCtrl.file" ngf-pattern="'image/*'"
+                    ngf-accept="'image/*'" ngf-max-size="5MB" class="md-raised"
+                    ngf-select="configInstCtrl.cropImage(configInstCtrl.file)">
+                    <b>Adicionar imagem</b>
+                </md-button>
+                <md-progress-linear ng-show="configInstCtrl.loading" md-mode="indeterminate"
+                    style="width: 14%; margin-left: auto; margin-right: auto">
+                </md-progress-linear>
+            </div>
+        </div>
+    </div>
+    <form name="instForm">
+        <div layout="row">
+            <md-input-container class="md-block" flex-gt-xs flex="60">
+                <label>Nome </label>
+                <input type="text" name="name" required md-maxlength="90"
+                    ng-model="configInstCtrl.newInstitution.name">
+                <div ng-messages='instForm.name.$error'>
+                    <div ng-message="required">Este campo é obrigatório!</div>
+                </div>
+            </md-input-container>
+            <md-input-container class="md-block" flex-gt-xs flex="40">
+                <label>Sigla</label>
+                <input type="text" name="acronym" required
+                    ng-model="configInstCtrl.newInstitution.acronym">
+                <div ng-messages='instForm.acronym.$error'>
+                    <div ng-message="required">Este campo é obrigatório!</div>
+                </div>
+            </md-input-container>
+        </div>
+        <div layout="row">
+            <md-input-container class="md-block" flex-gt-xs>
+                <label>Rua</label>
+                <input type="text" name="street" required
+                    ng-model="configInstCtrl.newInstitution.address.street">
+                <div ng-messages='instForm.street.$error'>
+                    <div ng-message="required">Este campo é obrigatório!</div>
+                </div>
+            </md-input-container>
+            <md-input-container class="md-block" flex-gt-xs  flex="20">
+                <label>Número</label>
+                <input type="text" name="number" required
+                    ng-model="configInstCtrl.newInstitution.address.number">
+                <div ng-messages='instForm.number.$error'>
+                    <div ng-message="required">Este campo é obrigatório!</div>
+                </div>
+            </md-input-container>
+            <md-input-container class="md-block" flex-gt-xs  flex="20">
+                <label>CEP</label>
+                <input type="text" name="cep" required
+                    ng-model="configInstCtrl.newInstitution.address.cep"
+                    minlength="9" md-maxlength="9" placeholder="00000-000"
+                    ng-pattern="configInstCtrl.cepRegex"
+                    mask="99999-999">
+                <div ng-messages="instForm.cep.$error">
+                    <div ng-message="required" >Este campo é obrigatório!</div>
+                    <div ng-message="pattern" >O CEP deve ser válido!</div>
+                </div>
+            </md-input-container>
+        </div>
+        <div layout="row">
+            <md-input-container class="md-block" flex-gt-xs>
+                <label>Bairro</label>
+                <input type="text" name="neighbourhood" required
+                    ng-model="configInstCtrl.newInstitution.address.neighbourhood">
+                <div ng-messages='instForm.neighbourhood.$error'>
+                    <div ng-message="required">Este campo é obrigatório!</div>
+                </div>
+            </md-input-container>
+            <md-input-container class="md-block" flex-gt-xs>
+                <label>Cidade</label>
+                <input type="text" name="city" required
+                    ng-model="configInstCtrl.newInstitution.address.city">
+                <div ng-messages='instForm.city.$error'>
+                    <div ng-message="required">Este campo é obrigatório!</div>
+                </div>
+            </md-input-container>
+            <md-input-container class="md-block" flex-gt-xs>
+                <label>Estado</label>
+                <input type="text" name="state" required
+                    ng-model="configInstCtrl.newInstitution.address.state">
+                <div ng-messages='instForm.state.$error'>
+                    <div ng-message="required">Este campo é obrigatório!</div>
+                </div>
+            </md-input-container>
+            <md-input-container class="md-block" flex-gt-xs>
+                <label>País</label>
+                <input type="text" name="country" required
+                    ng-model="configInstCtrl.newInstitution.address.country">
+                <div ng-messages='instForm.country.$error'>
+                    <div ng-message="required">Este campo é obrigatório!</div>
+                </div>
+            </md-input-container>
+        </div>
+        <div layout="row">
+            <md-input-container class="md-block" flex-gt-xs>
+                <label>CNPJ</label>
+                <input type="text" name="cnpj"
+                    ng-model="configInstCtrl.newInstitution.cnpj"
+                    ng-pattern=configInstCtrl.cnpjRegex
+                    minlength="18" md-maxlength="18"
+                    placeholder="00.000.000/0000-00"
+                    mask="99.999.999/9999-99">
+               <div ng-messages="instForm.cnpj.$error">
+                    <div ng-message="required" >Este campo é obrigatório!</div>
+                    <div ng-message="pattern" >O CNPJ deve ser válido!</div>
+                </div>
+            </md-input-container>
+            <md-input-container class="md-block" flex-gt-xs>
+                <label>Telefone</label>
+                <input type="text" name="phone" required
+                    ng-model="configInstCtrl.newInstitution.phone_number"
+                ng-pattern=configInstCtrl.phoneRegex
+                minlength="12" md-maxlength="13"
+                placeholder="99 9999-99999"
+                mask="99 9999-99999"
+                mask-validate='false'>
+                <div ng-messages="instForm.phone.$error">
+                    <div ng-message="required" >Este campo é obrigatório!</div>
+                    <div ng-message="pattern" >O número de telefone deve ser válido!</div>
+                </div>
+            </md-input-container>
+        </div>
+        <div layout="row">
+            <md-input-container class="md-block" flex-gt-sm>
+                <label>Área de Atuação</label>
+                <md-select  name="occupationArea" ng-model="configInstCtrl.newInstitution.occupation_area" required>
+                  <md-option  ng-repeat="area in configInstCtrl.occupationAreas | orderBy: 'name'"
+                    ng-value="area.value">{{ area.name }}
+                  </md-option>
+                </md-select>
+                <div ng-messages="instForm.occupationArea.$error">
+                    <div ng-message="required" >Este campo é obrigatório!</div>
+                </div>
+            </md-input-container>
+            <md-input-container class="md-block" flex-gt-sm>
+                <label>Natureza Jurídica</label>
+                  <md-select  name="legalNatures" ng-model="configInstCtrl.newInstitution.legal_nature" required>
+                  <md-option ng-repeat="nature in configInstCtrl.legalNatures | orderBy: 'name'"
+                    ng-value="nature.value">{{ nature.name }}
+                  </md-option>
+                </md-select>
+                <div ng-messages="instForm.legalNatures.$error">
+                    <div ng-message="required" >Este campo é obrigatório!</div>
+                </div>
+            </md-input-container>
+        </div>
+            <div ng-if="configInstCtrl.newInstitution.occupation_area == 'other'">
+            <md-input-container class="md-block" flex-gt-xs>
+                <label>Informe outra área de atuação</label>
+                <input type="text" name="other" ng-model="configInstCtrl.newInstitution.other_area">
+            </md-input-container>
+        </div>
+        <md-input-container class="md-block">
+            <label>Descrição</label>
+            <textarea ng-model="configInstCtrl.newInstitution.description" maxlength="1100"
+                md-select-on-focus>
+            </textarea>
+        </md-input-container>
+        <md-input-container class="md-block">
+            <label>Site Institucional</label>
+            <input type="text" ng-model="configInstCtrl.newInstitution.website_url">
+        </md-input-container>
+        <md-input-container class="md-block" flex-gt-xs>
+            <label>Atual Dirigente máximo</label>
+            <input type="text" name="leader" required ng-model="configInstCtrl.newInstitution.leader">
+            <div ng-messages="instForm.leader.$error">
+                <div ng-message="required">Este campo é obrigatório!</div>
+            </div>
+        </md-input-container>
+        <md-input-container class="md-block" flex-gt-xs>
+            <label>Email Institucional</label>
+            <input type="email" name="institutionalEmail" required
+            ng-model="configInstCtrl.newInstitution.institutional_email">
+            <div ng-messages="instForm.institutionalEmail.$error">
+                <div ng-message="required">Este campo é obrigatório!</div>
+                <div ng-message="email">O email deve ser válido!</div>
+            </div>
+        </md-input-container>
+        <md-input-container class="md-block" flex-gt-xs>
+            <label>Responsável</label>
+            <input type="text" name="Responsavel" ng-disabled="!configInstCtrl.isSubmission"
+            ng-model="configInstCtrl.newInstitution.admin.name" required>
+            <div ng-messages="instForm.Responsavel.$error">
+                <div ng-message="required">Este campo é obrigatório!</div>
+                <div ng-message="email">O nome deve ser válido!</div>
+            </div>
+        </md-input-container>
+        <md-input-container class="md-block" flex-gt-xs>
+            <label>Email do responsável</label>
+            <input type="email" name="EmailResponsavel" disabled
+                ng-model="configInstCtrl.newInstitution.email">
+        </md-input-container>
+        <md-input-container class="md-block">
+            <md-button ng-click="null" ng-model="configInstCtrl.file" ngf-pattern="'application/pdf'"
+                ngf-accept="'application/pdf'" ngf-max-size="5MB"
+                ngf-select="null" class="md-raised">
+                <md-icon>{{configInstCtrl.file? 'insert_drive_file': 'attach_file'}}</md-icon>
+                {{configInstCtrl.file? 'Portfólio adicionado': 'Adicionar Portfólio'}}
+            </md-button>
+        </md-input-container>
+        <div layout="row" layout-align="end center">
+            <md-button ng-click="configInstCtrl.submit($event)" md-colors="{background: 'teal-900'}">Confirmar</md-button>
+        </div>
+    </form>
+</div>

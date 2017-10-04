@@ -180,8 +180,6 @@ class User(ndb.Model):
     def change_state(self, state):
         """Change the user state."""
         self.state = state
-        print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-        print self.follows
         self.put()
 
     def add_permission(self, permission_type, entity_key):

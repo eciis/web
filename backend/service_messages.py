@@ -3,6 +3,9 @@
 import sys
 from google.appengine.api import taskqueue
 
+# TODO: remove this when the portugueses texts
+# in emails are extracted from the code
+# @author: Tiago Pereira
 reload(sys)
 sys.setdefaultencoding('utf8')
 

@@ -59,6 +59,15 @@
                         controller: "MainController as ctrl"
                     }
                 }
+            })
+            .state("landing.cisdetails", {
+                url: "/home-cis",
+                views: {
+                    content: {
+                        templateUrl: "cisdetails.html",
+                        controller: "MainController as ctrl"
+                    }
+                }
             });
 
 

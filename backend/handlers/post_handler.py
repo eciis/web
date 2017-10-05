@@ -53,6 +53,7 @@ class PostHandler(BaseHandler):
             post_json
         ))
 
+    @json_response
     @login_required
     @is_authorized
     def delete(self, user, key):

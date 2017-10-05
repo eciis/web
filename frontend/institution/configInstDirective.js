@@ -15,7 +15,7 @@
         configInstCtrl.phoneRegex = "[0-9]{2}[\\s][0-9]{4,5}[-][0-9]{4,5}";
         configInstCtrl.cepRegex = "([0-9]{5}[-][0-9]{3})";
         configInstCtrl.newInstitution = {
-            photo_url: "/images/institution.jpg",
+            photo_url: "app/images/institution.jpg",
             email: configInstCtrl.user.email[0]
         };
 

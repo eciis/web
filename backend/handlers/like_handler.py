@@ -47,6 +47,7 @@ class LikeHandler(BaseHandler):
 
         self.response.write(json.dumps(likes))
 
+    @json_response
     @login_required
     @ndb.transactional(xg=True)
     def post(self, user, post_key, comment_id=None, reply_id=None):
@@ -84,7 +85,7 @@ class LikeHandler(BaseHandler):
             if isAuthorPost:
                 send_like_notification(user, post.author.urlsafe(), entity_type, post.key.urlsafe())
 
-
+    @json_response
     @login_required
     @ndb.transactional(xg=True)
     def delete(self, user, post_key, comment_id=None, reply_id=None):

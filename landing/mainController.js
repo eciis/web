@@ -3,8 +3,10 @@
     var landing = angular.module('landing');
     
     landing.controller("MainController", function MainController($state, $location, $anchorScroll, $q,
-            $firebaseArray, $mdDialog, $mdSidenav) {
+            $firebaseArray, $mdDialog, $mdSidenav, $mdMedia) {
         var ctrl = this;
+
+        ctrl.mdMedia = $mdMedia;
 
         var firebaseRef = firebase.database().ref();
 

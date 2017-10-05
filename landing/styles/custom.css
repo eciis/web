@@ -1,0 +1,15 @@
+.section {
+    padding: 50px 0 50px 0;
+}
+
+.section-title {
+    font-size: 4vmin;
+    font-weight: bold;
+}
+
+.parallax {
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover; 
+    background-position: center
+}

@@ -68,6 +68,15 @@
                         controller: "MainController as ctrl"
                     }
                 }
+            })
+            .state("landing.supportinstitutions", {
+                url: "/home-instituicoes-mantenedoras",
+                views: {
+                    content: {
+                        templateUrl: "support_institutions.html",
+                        controller: "MainController as ctrl"
+                    }
+                }
             });
 
 

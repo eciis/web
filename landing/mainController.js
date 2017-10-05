@@ -3,10 +3,12 @@
     var landing = angular.module('landing');
     
     landing.controller("MainController", function MainController($state, $location, $anchorScroll, $q,
-            $firebaseArray) {
+            $firebaseArray, $mdDialog) {
         var ctrl = this;
 
         var firebaseRef = firebase.database().ref();
+
+        ctrl.user = {};
 
         ctrl.areas = [
             "Outros Órgãos de Governo",
@@ -39,13 +41,33 @@
             return deferred.promise;
         };
 
-        ctrl.submitForm = function submitForm(user) {
-            user.timestamp = Date.now();
+        ctrl.processSubmition = function processSubmition(answer) {
+            ctrl.user.timestamp = Date.now();
+            ctrl.user.answer = answer;
 
             var formBase = firebaseRef.child("precadastro/");
             var firebaseArray = $firebaseArray(formBase);
 
-            firebaseArray.$add(user);
+            firebaseArray.$add(ctrl.user).then(function success() {
+                $state.go('landing.success');
+                ctrl.user = {};
+            }, function error(error) {
+                console.error(error);
+                $state.go('landing.home');
+            });
+        };
+
+        ctrl.submitForm = function submitForm(ev) {
+            $mdDialog.show({
+              contentElement: '#myDialog',
+              parent: angular.element(document.body),
+              targetEvent: ev,
+              clickOutsideToClose: true
+            });
+        };
+
+        ctrl.cancel = function() {
+          $mdDialog.cancel();
         };
 
         ctrl.scroll = function scroll(section) {

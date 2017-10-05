@@ -26,6 +26,9 @@ class InstitutionFollowersHandler(BaseHandler):
         institution = institution_key.get()
 
         array = [member.get() for member in institution.followers]
+        # TODO: This process is unnecessary,
+        # need to optimized
+        # @author: Tiago Pereira
         array = [member for member in array if member.state == 'active']
 
         self.response.write(json.dumps(Utils.toJson(array)))

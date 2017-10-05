@@ -77,6 +77,15 @@
                         controller: "MainController as ctrl"
                     }
                 }
+            })
+            .state("landing.terms", {
+                url: "/home-termos-de-uso",
+                views: {
+                    content: {
+                        templateUrl: "terms.html",
+                        controller: "MainController as ctrl"
+                    }
+                }
             });
 
 

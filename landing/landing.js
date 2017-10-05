@@ -94,8 +94,16 @@
                         controller: "MainController as ctrl"
                     }
                 }
+            })
+            .state("landing.privacy", {
+                url: "/home-privacidade",
+                views: {
+                    content: {
+                        templateUrl: "privacy.html",
+                        controller: "MainController as ctrl"
+                    }
+                }
             });
-
 
         $urlRouterProvider.otherwise("/");
 

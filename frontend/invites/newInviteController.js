@@ -143,14 +143,15 @@
         function deleteInvite() {
             var promise = InviteService.deleteInvite(newInviteCtrl.inviteKey);
             promise.then(function success() {
-                AuthService.reload().then(function() {
-                    if(newInviteCtrl.user.isInactive()) {
-                        $state.go("user_inactive");
-                    } else {
+                if (newInviteCtrl.isInviteUser()) {
+                    AuthService.reload().then(function() {
                         $state.go("app.home");
-                    }
-                });
+                    });
+                } else {
+                    AuthService.logout();
+                }
             }, function error(response) {
+                AuthService.logout();
                 MessageService.showToast(response.data.msg);
             });
             return promise;

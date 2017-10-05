@@ -11,7 +11,7 @@ from models.institution import Institution
 from models.institution import Address
 from models.factory_invites import InviteFactory
 from models.request_institution import RequestInstitution
-from utils import has_analyze_request_permission
+from utils import has_permission
 
 
 def createInstitution(user, data):
@@ -34,7 +34,7 @@ class InstitutionRequestCollectionHandler(BaseHandler):
 
     @json_response
     @login_required
-    @has_analyze_request_permission
+    @has_permission(permission_type='analyze_request_inst')
     def get(self, user):
         """Get requests for new institutions."""
         queryRequests = RequestInstitution.query(

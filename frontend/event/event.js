@@ -11,15 +11,15 @@ function Event(data, institution) {
 
 Event.prototype.isValid = function isValid() {
     if (_.isUndefined(this.title) || _.isEmpty(this.title)) {
-        return false; 
+        return false;
     }
 
     if (_.isUndefined(this.local) || _.isEmpty(this.local)) {
-        return false; 
+        return false;
     }
 
     if (_.isUndefined(this.institution_key)) {
-        return false; 
+        return false;
     }
 
     return true;

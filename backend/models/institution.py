@@ -208,7 +208,7 @@ class Institution(ndb.Model):
         institution.followers.append(user.key)
         institution.state = 'active'
         if (institution.photo_url is None):
-            institution.photo_url = "/images/institution.jpg"
+            institution.photo_url = "app/images/institution.jpg"
         institution.put()
 
         user.add_institution(institution.key)
@@ -317,7 +317,7 @@ class Institution(ndb.Model):
                     'suggestion_institution_name': invite_key.get().suggestion_institution_name,
                     'key': invite_key.urlsafe()
                 }
-            if(attribute == 'address'):
+            if(attribute == 'address' and attr_value):
                 attr_value = dict(self.address)
 
             institution[attribute] = attr_value

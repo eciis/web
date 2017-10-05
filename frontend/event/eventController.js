@@ -2,14 +2,14 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("EventController", function EventController(MessageService, EventService, 
+    app.controller("EventController", function EventController(MessageService, EventService,
             $state, $mdDialog, AuthService, PostService) {
         var eventCtrl = this;
 
         eventCtrl.events = [];
 
         eventCtrl.user = AuthService.getCurrentUser();
-        
+
         var LIMIT_CHARACTERS = 100;
 
         function loadEvents() {
@@ -85,6 +85,25 @@
             return eventCtrl.isEventAuthor(event) || isInstitutionAdmin(event);
         };
 
+        eventCtrl.canEdit = function canEdit(event) {
+            return eventCtrl.isEventAuthor(event);
+        };
+
+        eventCtrl.editEvent = function editEvent(ev, event) {
+            $mdDialog.show({
+                controller: 'EventDialogController',
+                controllerAs: "controller",
+                templateUrl: 'app/event/event_dialog.html',
+                targetEvent: ev,
+                clickOutsideToClose: true,
+                locals: {
+                    event: event,
+                    isEditing: true
+                },
+                bindToController: true
+            });
+        };
+
         eventCtrl.isEventAuthor = function isEventAuthor(event) {
             return Utils.getKeyFromUrl(event.author_key) === eventCtrl.user.key;
         };
@@ -110,29 +129,63 @@
         })();
     });
 
-    app.controller('EventDialogController', function EventDialogController(MessageService, 
+    app.controller('EventDialogController', function EventDialogController(MessageService,
             ImageService, AuthService, EventService, $state, $rootScope, $mdDialog) {
         var dialogCtrl = this;
 
-        dialogCtrl.event = {};
         dialogCtrl.loading = false;
         dialogCtrl.user = AuthService.getCurrentUser();
         dialogCtrl.deletePreviousImage = false;
         dialogCtrl.photoUrl = "";
+        dialogCtrl.dateToChange = {};
+        dialogCtrl.observer = {};
 
         dialogCtrl.save = function save() {
+            if(!dialogCtrl.isEditing) {
+                saveImageAndCallEventFunction(create);
+            } else {
+                saveImageAndCallEventFunction(updateEvent);
+            }
+        };
+
+        function saveImageAndCallEventFunction(callback) {
             if (dialogCtrl.photoBase64Data) {
                 dialogCtrl.loading = true;
                 ImageService.saveImage(dialogCtrl.photoBase64Data).then(function success(data) {
                     dialogCtrl.loading = false;
                     dialogCtrl.event.photo_url = data.url;
-                    dialogCtrl.event.uploaded_images = [data.url];
-                    create();
-                    dialogCtrl.event.photo_url = null;
+                    callback();
                 });
             } else {
-                create();
+                callback();
             }
+        }
+
+        function updateEvent() {
+            var event = _.clone(dialogCtrl.dateChangeEvent);
+            event = new Event(event, dialogCtrl.user.current_institution.key);
+            if(event.isValid()) {
+                var patch = generatePatch(jsonpatch.generate(dialogCtrl.observer), event);
+                EventService.editEvent(dialogCtrl.event.key, patch).then(function success() {
+                    if(dialogCtrl.dateToChange.startTime) {
+                        dialogCtrl.event.start_time = event.start_time;
+                    }
+                    if(dialogCtrl.dateToChange.endTime) {
+                        dialogCtrl.event.end_time = event.end_time;
+                    }
+                    dialogCtrl.closeDialog();
+                    MessageService.showToast('Evento editado com sucesso.');
+                }, function error(response) {
+                    MessageService.showToast(response.data.msg);
+                    $state.go('app.home');
+                });
+            } else {
+                MessageService.showToast('Evento inválido');
+            }
+        }
+
+        dialogCtrl.changeDate = function changeDate(typeOfDate) {
+            dialogCtrl.dateToChange[typeOfDate] = true;
         };
 
         dialogCtrl.addImage = function(image) {
@@ -167,11 +220,29 @@
             return !isImageEmpty && !isImageNull;
         };
 
+        dialogCtrl.showEventImage = function() {
+            var isImageEmpty = dialogCtrl.event.photo_url === "";
+            var isImageNull = dialogCtrl.event.photo_url === null;
+            var isImageUndefined = dialogCtrl.event.photo_url === undefined;
+            return !isImageEmpty && !isImageNull && !isImageUndefined;
+        };
+
         dialogCtrl.cleanImage = function() {
            dialogCtrl.photoUrl = "";
            dialogCtrl.photoBase64Data = null;
            dialogCtrl.deletePreviousImage = true;
+           delete dialogCtrl.event.photo_url;
         };
+
+        function generatePatch(patch, data) {
+            if(dialogCtrl.dateToChange.startTime) {
+                patch.push({op: 'replace', path: "/start_time", value: data.start_time});
+            }
+            if(dialogCtrl.dateToChange.endTime) {
+                patch.push({op: 'replace', path: "/end_time", value: data.end_time});
+            }
+            return patch;
+        }
 
         function setImage(image) {
             $rootScope.$apply(function() {
@@ -194,5 +265,17 @@
                 MessageService.showToast('Evento inválido!');
             }
         }
+
+        (function main() {
+            if(dialogCtrl.event) {
+                dialogCtrl.dateChangeEvent = _.clone(dialogCtrl.event);
+                dialogCtrl.dateChangeEvent.start_time = new Date(dialogCtrl.dateChangeEvent.start_time);
+                dialogCtrl.dateChangeEvent.end_time = new Date(dialogCtrl.dateChangeEvent.end_time);
+                dialogCtrl.dateChangeEvent = new Event(dialogCtrl.dateChangeEvent, dialogCtrl.user.current_institution.key);
+                dialogCtrl.observer = jsonpatch.observe(dialogCtrl.event);
+            } else {
+                dialogCtrl.event = {};
+            }
+        })();
     });
 })();

@@ -1,5 +1,13 @@
+# -*- coding: utf-8 -*-
 """Service of send messages."""
+import sys
 from google.appengine.api import taskqueue
+
+# TODO: remove this when the portugueses texts
+# in emails are extracted from the code
+# @author: Tiago Pereira
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 
 def send_message_notification(user_key, message, entity_type, entity_key):

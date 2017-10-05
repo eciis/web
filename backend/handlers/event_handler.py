@@ -61,17 +61,12 @@ class EventHandler(BaseHandler):
         """Handler PATCH Requests."""
         data = self.request.body
 
-        try:
-            event = ndb.Key(urlsafe=key).get()
+        event = ndb.Key(urlsafe=key).get()
 
-            """Apply patch."""
-            JsonPatch.load(data, event)
+        """Apply patch."""
+        JsonPatch.load(data, event)
 
-            event.isValid()
+        event.isValid()
 
-            """Update event."""
-            event.put()
-        except Exception as error:
-            self.response.set_status(Utils.FORBIDDEN)
-            self.response.write(Utils.getJSONError(
-                Utils.FORBIDDEN, error.message))
+        """Update event."""
+        event.put()

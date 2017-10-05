@@ -264,7 +264,7 @@
     });
 
     /**
-    * Application listener to filter routes that require active user.
+    * Application listener to filter routes that require active user and set up amCalendar filter configurations.
     * @param {service} AuthService - Service of user authentication
     * @param {service} $transitions - Service of transitions states
     */
@@ -273,7 +273,8 @@
             'create_institution',
             'error',
             'signin',
-            'user_inactive'
+            'user_inactive',
+            'new_invite'
         ];
 
         $transitions.onStart({
@@ -288,5 +289,14 @@
                 transition.router.stateService.transitionTo('user_inactive');
             }
         });
+
+        const dateFormats = {
+            calendar: {
+                sameDay: '[Hoje às] LT',
+                lastWeek: 'DD MMMM [de] YYYY [às] LT',
+                sameElse: 'DD MMMM [de] YYYY [às] LT'
+            }
+        };
+        moment.updateLocale('pt-br', dateFormats);
     });
 })();

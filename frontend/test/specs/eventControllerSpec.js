@@ -2,7 +2,7 @@
 
 (describe('Test EventController', function() {
 
-  var eventCtrl, scope, httpBackend, rootScope, deffered, imageService, eventService, 
+  var eventCtrl, scope, httpBackend, rootScope, deffered, imageService, eventService,
     postService, messageService, mdDialog;
 
   var splab = {name: 'Splab', key: '098745'};
@@ -17,7 +17,7 @@
       institutions_admin: splab,
       current_institution: splab,
       key: '123'
-  };  
+  };
 
   // Event of SPLAB by User
   var event = {
@@ -25,7 +25,7 @@
     'text': 'Text',
     'local': 'Local',
     'photo_url': null,
-    'start_time': date_now, 
+    'start_time': date_now,
     'end_time': date_now,
   };
 
@@ -36,7 +36,7 @@
 
   beforeEach(module('app'));
 
-  beforeEach(inject(function($controller, $httpBackend, $http, $q, AuthService, 
+  beforeEach(inject(function($controller, $httpBackend, $http, $q, AuthService,
         $rootScope, ImageService, EventService, PostService, MessageService, $mdDialog) {
       imageService = ImageService;
       scope = $rootScope.$new();
@@ -119,6 +119,15 @@
                   pti quos dolores et quas molestias excepturi sint occaecati cupiditate\
                   non provident, similique sunt in culpa qui officia deserunt mollitia"
       expect(eventCtrl.isLongText(event_convert_date)).toBe(true);
+    });
+  });
+
+  describe('editEvent', function() {
+
+    it('should call $mdDialog.show', function() {
+      spyOn(mdDialog, 'show');
+      eventCtrl.editEvent('$event', event);
+      expect(mdDialog.show).toHaveBeenCalled();
     });
   });
 }));

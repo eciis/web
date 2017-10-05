@@ -1,5 +1,5 @@
+# -*- coding: utf-8 -*-
 """Request user model."""
-
 from invite import Invite
 from google.appengine.ext import ndb
 from custom_exceptions.fieldException import FieldException
@@ -65,6 +65,27 @@ class RequestUser(Invite):
 
         Equipe e-CIS """ % (host, institution_key, invite_key)
         super(RequestUser, self).send_email(host, admin_email, body)
+
+    def send_response_email(self, host, operation):
+        """Method to send email of sender user when invite is accepted or rejected."""
+        institution_name = self.institution_key.get().name
+        rejectMessage = """Olá,
+        Lamentamos informar mas o seu pedido não foi aceito pela instituição %s.
+        Sugerimos que fale com o seu superior para que seja enviado um convite.
+
+        Equipe e-CIS""" % (institution_name)
+
+        acceptMessage = """Olá,
+        Você foi aceito na plataforma como membro da instituição
+        %s, seja bem vindo ao e-CIS.
+        Realize seu login no link abaixo:
+        http://%s/app/#/signin
+
+        Equipe e-CIS""" % (institution_name, host)
+
+        sender_email = self.sender_key.get().email[0]
+        body = acceptMessage if operation == "ACCEPT" else rejectMessage
+        super(RequestUser, self).send_email(host, sender_email, body)
 
     def send_notification(self, user):
         """Method of send notification of invite user."""

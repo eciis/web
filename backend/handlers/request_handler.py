@@ -51,6 +51,7 @@ class RequestHandler(BaseHandler):
             EntityException)
 
         request.change_status('accepted')
+        request.put()
 
         institution_key = request.institution_key
         institution = institution_key.get()
@@ -59,9 +60,14 @@ class RequestHandler(BaseHandler):
         user.add_institution(institution_key)
         user.follow(institution_key)
         user.change_state('active')
+        user.put()
 
         institution.add_member(user)
         institution.follow(user.key)
+        institution.put()
+
+        host = self.request.host
+        request.send_response_email(host, "ACCEPT")
 
         self.response.write(json.dumps(makeUser(user, self.request)))
 
@@ -71,6 +77,11 @@ class RequestHandler(BaseHandler):
     def delete(self, user, request_key):
         """Change request status from 'sent' to 'rejected'."""
         request = ndb.Key(urlsafe=request_key).get()
+        Utils._assert(
+            request.status != 'sent',
+            "this request has already been processed",
+            EntityException)
+
         request.change_status('rejected')
 
         institution_key = request.institution_requested_key.urlsafe()
@@ -79,3 +90,6 @@ class RequestHandler(BaseHandler):
 
         sender_user.put()
         request.put()
+
+        host = self.request.host
+        request.send_response_email(host, "REJECT")

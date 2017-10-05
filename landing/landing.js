@@ -41,6 +41,14 @@
                         controller: "MainController as ctrl"
                     }
                 }
+            })
+            .state("landing.success", {
+                url: "/home-sucesso",
+                views: {
+                    content: {
+                        templateUrl: "success.html"
+                    }
+                }
             });
 
         $urlRouterProvider.otherwise("/");

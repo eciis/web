@@ -46,6 +46,7 @@ class InviteHandler(BaseHandler):
 
         self.response.write(json.dumps(invite))
 
+    @json_response
     @login_required
     def delete(self, user, key):
         """Change invite status from 'sent' to 'rejected'."""

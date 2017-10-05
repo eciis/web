@@ -41,7 +41,17 @@
                         controller: "MainController as ctrl"
                     }
                 }
+            })
+            .state("landing.comingsoon", {
+                url: "/home-em-breve",
+                views: {
+                    content: {
+                        templateUrl: "coming_soon.html",
+                        controller: "MainController as ctrl"
+                    }
+                }
             });
+
 
         $urlRouterProvider.otherwise("/");
 

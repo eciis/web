@@ -50,6 +50,15 @@
                         controller: "MainController as ctrl"
                     }
                 }
+            })
+            .state("landing.ecisdetails", {
+                url: "/home-e-CIS",
+                views: {
+                    content: {
+                        templateUrl: "ecisdetails.html",
+                        controller: "MainController as ctrl"
+                    }
+                }
             });
 
 

@@ -4,6 +4,7 @@
 from google.appengine.ext import ndb
 import json
 
+from handlers.institution_handler import is_admin
 from utils import login_required
 from utils import Utils
 from utils import json_response
@@ -25,7 +26,10 @@ class InstitutionMembersHandler(BaseHandler):
 
         self.response.write(json.dumps(Utils.toJson(array)))
 
+    @json_response
     @login_required
+    @is_admin
+    @ndb.transactional(xg=True)
     def delete(self, user, url_string):
         """Get members of specific institution."""
         institution_key = ndb.Key(urlsafe=url_string)

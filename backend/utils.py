@@ -227,9 +227,15 @@ def is_institution_member(method):
 def is_admin(method):
         """Check if the user is admin of the institution."""
         def check_authorization(self, user, *args):
+            print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>."
             data = json.loads(self.request.body)
+
+            print data
+
             institution_key = ndb.Key(urlsafe=data['institution_key'])
             institution = institution_key.get()
+
+
 
             userisNotAdminOfInstitution = institution.key not in user.institutions_admin
             institutionisNotManagedByUser = institution.admin != user.key

@@ -23,21 +23,49 @@ class InstitutionHierarchyHandlerTest(TestBaseHandler):
 
     @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
     def test_delete(self, verify_token):
-        """Test delete method"""
+        """Test delete method with user admin"""
         # Assert the initial conditions
         self.assertTrue(self.second_user.key in self.institution.members)
         self.assertTrue(self.institution.key in self.second_user.institutions)
         # Call the delete method
         self.testapp.delete("/api/institutions/%s/members?removeMember=%s" %
                             (self.institution.key.urlsafe(), self.second_user.key.urlsafe()))
+
         # Update the institutions
         self.institution = self.institution.key.get()
-        self.splab = self.splab.key.get()
+        self.second_user = self.second_user.key.get()
         # Assert the final conditions
-        self.assertTrue(
-            self.splab.key not in self.institution.children_institutions)
-        self.assertTrue(self.splab.parent_institution == self.institution.key)
+        self.assertTrue(self.user.key in self.institution.members)
 
+        self.assertTrue(self.second_user.key not in self.institution.members)
+        self.assertTrue(
+            self.institution.key not in self.second_user.institutions)
+        # In case that user has one institution, he turn of .
+        self.assertEqual(self.second_user.state, "inactive")
+
+    @patch('utils.verify_token', return_value={'email': 'second_user@gmail.com'})
+    def test_delete_not_admin(self, verify_token):
+        """Test delete method with user not admin"""
+        # Assert the initial conditions
+        self.assertTrue(self.second_user.key in self.institution.members)
+        self.assertTrue(self.institution.key in self.second_user.institutions)
+        # Call the delete method
+        with self.assertRaises(Exception) as ex:
+            self.testapp.delete("/api/institutions/%s/members?removeMember=%s" %
+                                (self.institution.key.urlsafe(), self.second_user.key.urlsafe()))
+
+        exception_message = self.get_message_exception(ex.exception.message)
+        self.assertEqual(
+            "Error! User is not admin",
+            exception_message,
+            "Expected error message is Error! User is not admin")
+
+        # Update the institutions
+        self.institution = self.institution.key.get()
+        self.second_user = self.second_user.key.get()
+        # Assert the final conditions
+        self.assertTrue(self.second_user.key in self.institution.members)
+        self.assertTrue(self.institution.key in self.second_user.institutions)
 
     def tearDown(cls):
         """Deactivate the test."""
@@ -78,6 +106,9 @@ def initModels(cls):
     cls.institution.put()
 
     cls.user.institutions_admin = [cls.institution.key]
+    cls.user.add_permission("publish_post", cls.institution.key.urlsafe())
     cls.user.put()
     cls.second_user.institutions = [cls.institution.key]
+    cls.second_user.add_permission(
+        "publish_post", cls.institution.key.urlsafe())
     cls.second_user.put()

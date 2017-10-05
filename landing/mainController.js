@@ -3,7 +3,7 @@
     var landing = angular.module('landing');
     
     landing.controller("MainController", function MainController($state, $location, $anchorScroll, $q,
-            $firebaseArray, $mdDialog) {
+            $firebaseArray, $mdDialog, $mdSidenav) {
         var ctrl = this;
 
         var firebaseRef = firebase.database().ref();
@@ -34,6 +34,10 @@
             "Órgão vinculado a Ministério (Secretarias, Departamentos e Coordenações)",
             "Universidade"
         ];
+
+        ctrl.toggle = function toggle() {
+            $mdSidenav('leftNav').toggle();
+        };
 
         ctrl.loadAreas = function loadAreas() {
             var deferred = $q.defer();

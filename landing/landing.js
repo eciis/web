@@ -33,11 +33,11 @@
                     }
                 }
             })
-            .state("landing.precadastro", {
+            .state("landing.presignup", {
                 url: "/home-pre-cadastro",
                 views: {
                     content: {
-                        templateUrl: "pre_cadastro.html",
+                        templateUrl: "pre_signup.html",
                         controller: "MainController as ctrl"
                     }
                 }

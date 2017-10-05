@@ -128,7 +128,7 @@ class User(ndb.Model):
             if institution in self.institutions_admin:
                 self.institutions_admin.remove(institution)
             self.institutions.remove(institution)
-            self.unfollow(institution)
+            #self.unfollow(institution)
             self.remove_permission('publish_post', institution.urlsafe())
             self.remove_profile(institution.urlsafe())
             if len(self.institutions) == 0:

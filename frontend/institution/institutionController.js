@@ -145,7 +145,7 @@
         };
 
         institutionCtrl.goToManageMembers = function goToManageMembers(){
-            $state.go('app.manage_institution.invite_user', {institutionKey: currentInstitutionKey});
+            $state.go('app.manage_institution.members', {institutionKey: currentInstitutionKey});
         };
 
         institutionCtrl.goToManageInstitutions = function goToManageInstitutions(){
@@ -187,24 +187,6 @@
                 },
                 controller: RemoveInstController,
                 controllerAs: 'ctrl'
-            });
-        };
-
-        institutionCtrl.removeMember = function removeMember(ev, member_obj) {
-            var title = 'Remover Membro';
-            var text= "Você deseja remover esse membro";
-            var dialog = MessageService.showConfirmationDialog(ev, title, text);
-            dialog.then(function() {
-                InstitutionService.removeMember(institutionCtrl.current_institution.key, member_obj).then(function success() {
-                    MessageService.showToast("Membro removido com sucesso.");
-                    _.remove(institutionCtrl.members, function(member) {
-                        return member.key == member_obj.key;
-                    });
-                }, function error(response) {
-                    MessageService.showToast(response.data.msg);
-                });
-            }, function() {
-                MessageService.showToast('Cancelado');
             });
         };
 

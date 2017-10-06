@@ -70,7 +70,7 @@
       <md-list-item class="md-3-line" ng-if="showReply && !commentCtrl.canReply() && !commentCtrl.isInstInactive()" style="margin-left: 50px;">
         <img ng-src="{{commentCtrl.user.photo_url}}" class="md-avatar" alt="{{commentCtrl.user.name}}" />
         <div class="md-list-item-text" layout="row" layout-align="center center">
-          <md-input-container flex>
+          <md-input-container style="font-size: 16px" flex>
             <label>{{commentCtrl.user.name}}</label>
             <textarea style="max-height: 400px;overflow-y:auto;resize:none;" ng-model="commentCtrl.newReply" rows="1" md-select-on-focus
               ng-disabled="commentCtrl.saving"></textarea>

@@ -145,7 +145,6 @@ class Institution(ndb.Model):
             self.members.append(member.key)
             self.put()
 
-    @ndb.transactional(xg=True)
     def remove_member(self, member):
         """Remove a member from institution."""
         member.remove_institution(self.key)

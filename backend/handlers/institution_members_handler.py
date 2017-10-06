@@ -31,7 +31,7 @@ class InstitutionMembersHandler(BaseHandler):
     @is_admin
     @ndb.transactional(xg=True)
     def delete(self, user, url_string):
-        """Get members of specific institution."""
+        """Delete member of specific institution."""
         institution_key = ndb.Key(urlsafe=url_string)
         institution = institution_key.get()
 

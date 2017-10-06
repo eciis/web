@@ -18,14 +18,14 @@
 
         manageMemberCtrl.removeMember = function removeMember(ev, member_obj) {
             var title = 'Remover Membro';
-            var text= "Você deseja remover esse membro";
+            var text= "Você deseja remover esse membro?";
             var dialog = MessageService.showConfirmationDialog(ev, title, text);
 
             dialog.then(function() {
                 InstitutionService.removeMember(currentInstitutionKey, member_obj).then(function success() {
                     MessageService.showToast("Membro removido com sucesso.");
                     _.remove(manageMemberCtrl.members, function(member) {
-                        return member.key == member_obj.key;
+                        return member.key === member_obj.key;
                     });
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);

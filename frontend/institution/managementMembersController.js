@@ -2,31 +2,55 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("InviteUserController", function InviteUserController(
-        InviteService, $mdToast, $state, $mdDialog, InstitutionService, AuthService, MessageService, RequestInvitationService) {
-        var inviteController = this;
+    app.controller("ManagementMembersController", function InviteUserController(
+        InviteService, $mdToast, $state, $mdDialog, InstitutionService, AuthService, MessageService, 
+        RequestInvitationService, ProfileService) {
+        var manageMemberCtrl = this;
 
-        inviteController.invite = {};
-        inviteController.sent_invitations = [];
+        manageMemberCtrl.invite = {};
+        manageMemberCtrl.sent_invitations = [];
 
-        inviteController.showButton = true;
+        manageMemberCtrl.showButton = true;
         var currentInstitutionKey = $state.params.institutionKey;
         var invite;
 
-        inviteController.user = AuthService.getCurrentUser();
+        manageMemberCtrl.user = AuthService.getCurrentUser();
 
-        inviteController.sendUserInvite = function sendInvite() {
-            inviteController.invite.institution_key = currentInstitutionKey;
-            inviteController.invite.admin_key = inviteController.user.key;
-            inviteController.invite.type_of_invite = 'USER';
-            invite = new Invite(inviteController.invite);
+        manageMemberCtrl.removeMember = function removeMember(ev, member_obj) {
+            var title = 'Remover Membro';
+            var text= "Você deseja remover esse membro?";
+            var dialog = MessageService.showConfirmationDialog(ev, title, text);
 
-            if (inviteController.isUserInviteValid(invite)) {
+            dialog.then(function() {
+                InstitutionService.removeMember(currentInstitutionKey, member_obj).then(function success() {
+                    MessageService.showToast("Membro removido com sucesso.");
+                    _.remove(manageMemberCtrl.members, function(member) {
+                        return member.key === member_obj.key;
+                    });
+                }, function error(response) {
+                    MessageService.showToast(response.data.msg);
+                });
+            }, function() {
+                MessageService.showToast('Cancelado');
+            });
+        };
+
+        manageMemberCtrl.showUserProfile = function showUserProfile(userKey, ev) {
+            ProfileService.showProfile(userKey, ev);
+        };
+
+        manageMemberCtrl.sendUserInvite = function sendInvite() {
+            manageMemberCtrl.invite.institution_key = currentInstitutionKey;
+            manageMemberCtrl.invite.admin_key = manageMemberCtrl.user.key;
+            manageMemberCtrl.invite.type_of_invite = 'USER';
+            invite = new Invite(manageMemberCtrl.invite);
+
+            if (manageMemberCtrl.isUserInviteValid(invite)) {
                 var promise = InviteService.sendInvite(invite);
-                promise.then(function success(response) {
-                    inviteController.sent_invitations.push(invite);
-                    inviteController.invite = {};
-                    inviteController.showButton = true;
+                promise.then(function success() {
+                    manageMemberCtrl.sent_invitations.push(invite);
+                    manageMemberCtrl.invite = {};
+                    manageMemberCtrl.showButton = true;
                     MessageService.showToast('Convite enviado com sucesso!');
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
@@ -35,18 +59,18 @@
             }
         };
 
-        inviteController.acceptRequest = function acceptRequest(request) {
+        manageMemberCtrl.acceptRequest = function acceptRequest(request) {
             var promise = RequestInvitationService.acceptRequest(request.key);
 
             promise.then(function success(response) {
-                inviteController.members.push(response);
+                manageMemberCtrl.members.push(response);
                 request.status = 'accepted';
                 MessageService.showToast("Pedido aceito!");
             });
             return promise;
         };
 
-        inviteController.rejectRequest = function rejectInvite(request, event){
+        manageMemberCtrl.rejectRequest = function rejectInvite(request, event){
                 var promise = RequestInvitationService.showRejectDialog(event);
                 promise.then(function() {
                     deleteRequest(request);
@@ -67,14 +91,18 @@
             return promise;
         }
 
-        inviteController.cancelInvite = function cancelInvite() {
-            inviteController.invite = {};
-            inviteController.showButton = true;
+        manageMemberCtrl.cancelInvite = function cancelInvite() {
+            manageMemberCtrl.invite = {};
+            manageMemberCtrl.showButton = true;
+        };
+
+        manageMemberCtrl.isAdmin = function isAdmin(member) {
+            return member.key === manageMemberCtrl.user.key;
         };
 
         function loadInstitution() {
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
-                inviteController.sent_invitations = response.data.sent_invitations;
+                manageMemberCtrl.sent_invitations = response.data.sent_invitations;
                 getMembers();
                 getRequests();
             }, function error(response) {
@@ -85,7 +113,7 @@
 
         function getMembers() {
             InstitutionService.getMembers(currentInstitutionKey).then(function success(response) {
-                inviteController.members = response.data;
+                manageMemberCtrl.members = response.data;
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
@@ -93,7 +121,7 @@
 
         function getRequests() {
             RequestInvitationService.getRequests(currentInstitutionKey).then(function success(response) {
-                inviteController.requests = response;
+                manageMemberCtrl.requests = response;
             });
         }
 
@@ -102,14 +130,14 @@
         }
 
         function inviteeIsMember(invite) {
-            return _.includes(_.map(inviteController.members, getEmail), invite.invitee);
+            return _.includes(_.map(manageMemberCtrl.members, getEmail), invite.invitee);
         }
 
         function inviteeIsInvited(invite) {
-            return _.some(inviteController.sent_invitations, invite);
+            return _.some(manageMemberCtrl.sent_invitations, invite);
         }
 
-        inviteController.isUserInviteValid = function isUserInviteValid(invite) {
+        manageMemberCtrl.isUserInviteValid = function isUserInviteValid(invite) {
             var isValid = true;
             if (! invite.isValid()) {
                 isValid = false;

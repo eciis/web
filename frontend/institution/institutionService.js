@@ -67,6 +67,16 @@
             return deferred.promise;
         };
 
+        service.removeMember = function removeMember(institutionKey, member) {
+            var deffered = $q.defer();
+            $http.delete(INSTITUTIONS_URI + "/" + institutionKey + "/members?removeMember=" + member.key).then(function success(info) {
+                deffered.resolve(info.data);
+            }, function error(data) {
+                deffered.reject(data);
+            });
+            return deffered.promise;
+        };
+
         service.getFollowers = function getFollowers(institution_key) {
             var deferred = $q.defer();
             $http.get(INSTITUTIONS_URI + "/" + institution_key + "/followers").then(function success(response) {

@@ -1,5 +1,6 @@
 """Institution Model."""
 from google.appengine.ext import ndb
+from custom_exceptions.fieldException import FieldException
 
 import search_module
 
@@ -148,7 +149,11 @@ class Institution(ndb.Model):
     def remove_member(self, member):
         """Remove a member from institution."""
         if member.key in self.members:
+            if self.key in member.institutions_admin:
+                raise Exception("Admin can not be removed")
+            member.remove_institution(self.key)
             self.members.remove(member.key)
+            self.followers.remove(member.key)
             self.put()
 
     def addInvite(self, invite):
@@ -218,6 +223,7 @@ class Institution(ndb.Model):
         user.follows.append(institution.key)
         user.put()
 
+
         return institution
 
     @ndb.transactional(xg=True)
@@ -254,8 +260,8 @@ class Institution(ndb.Model):
     def remove_institution_hierarchy(self, remove_hierarchy, user):
         """Remove institution's hierarchy."""
         for child in self.children_institutions:
-                child = child.get()
-                child.remove_institution(remove_hierarchy, user)
+            child = child.get()
+            child.remove_institution(remove_hierarchy, user)
 
     def remove_parent_connection(self):
         """Change parent connection when remove an institution."""

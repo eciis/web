@@ -49,7 +49,7 @@ class InstitutionMemberHandlerTest(TestBaseHandler):
         self.assertEqual(self.second_user.state, "inactive",
                          "Second_user should be inactive")
 
-        ### Admin try remove yourself
+        ### Admin try remove herself
         # Assert the initial conditions
         self.assertTrue(self.user.key in self.institution.members,
                         "User should be member of institution")

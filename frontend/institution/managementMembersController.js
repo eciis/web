@@ -96,6 +96,10 @@
             manageMemberCtrl.showButton = true;
         };
 
+        manageMemberCtrl.isAdmin = function isAdmin(member) {
+            return member.key === manageMemberCtrl.user.key;
+        };
+
         function loadInstitution() {
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
                 manageMemberCtrl.sent_invitations = response.data.sent_invitations;

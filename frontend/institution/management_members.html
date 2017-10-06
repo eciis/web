@@ -47,7 +47,7 @@
             <p class="md-subheader"> {{ member.email[0]}} </p>
         </div>
         <div>
-          <md-button class="md-icon-button md-secondary" title="Remover usuário" ng-click="manageMemberCtrl.removeMember($event, member)" layout-align="center center">
+          <md-button class="md-icon-button md-secondary" title="Remover usuário" ng-click="manageMemberCtrl.removeMember($event, member)" layout-align="center center" ng-if="!manageMemberCtrl.isAdmin(member)">
             <md-icon>delete</md-icon>
           </md-button>
           <md-button ng-click="manageMemberCtrl.showUserProfile(member.key, $event)" class="md-icon-button md-secondary"

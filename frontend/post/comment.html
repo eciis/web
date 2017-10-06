@@ -20,8 +20,8 @@
               <md-icon>grade</md-icon>
             </md-button>
             <md-button class="post-count md-icon-button md-primary md-hue-1"
-                title="{{ commentCtrl.numberOfLikes() === 0? 'Ainda ninguém curtiu' : 
-                            commentCtrl.numberOfLikes() === 1? '1 pessoa curtiu' : 
+                title="{{ commentCtrl.numberOfLikes() === 0? 'Ainda ninguém curtiu' :
+                            commentCtrl.numberOfLikes() === 1? '1 pessoa curtiu' :
                               commentCtrl.numberOfLikes() + ' pessoas curtiram' }}">
               {{ commentCtrl.numberOfLikes() }}
             </md-button>
@@ -58,8 +58,8 @@
               <md-icon>grade</md-icon>
             </md-button>
             <md-button class="post-count md-icon-button md-primary md-hue-1"
-                title="{{ commentCtrl.numberOfLikes(reply) === 0? 'Ainda ninguém curtiu' : 
-                            commentCtrl.numberOfLikes(reply) === 1? '1 pessoa curtiu' : 
+                title="{{ commentCtrl.numberOfLikes(reply) === 0? 'Ainda ninguém curtiu' :
+                            commentCtrl.numberOfLikes(reply) === 1? '1 pessoa curtiu' :
                               commentCtrl.numberOfLikes(reply) + ' pessoas curtiram' }}">
               {{ commentCtrl.numberOfLikes(reply) }}
             </md-button>
@@ -67,7 +67,7 @@
         </div>
       </md-list-item>
       <!-- Reply input -->
-      <md-list-item class="md-3-line" ng-if="showReply && !commentCtrl.canReply()" style="margin-left: 50px;">
+      <md-list-item class="md-3-line" ng-if="showReply && !commentCtrl.canReply() && !commentCtrl.isInstInactive()" style="margin-left: 50px;">
         <img ng-src="{{commentCtrl.user.photo_url}}" class="md-avatar" alt="{{commentCtrl.user.name}}" />
         <div class="md-list-item-text" layout="row" layout-align="center center">
           <md-input-container flex>

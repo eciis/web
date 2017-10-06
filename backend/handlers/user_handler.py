@@ -48,7 +48,8 @@ def makeUser(user, request):
         )
     user_json['follows'] = [institution_key.get().make(
         ['acronym', 'photo_url', 'key', 'parent_institution'])
-        for institution_key in user.follows]
+        for institution_key in user.follows
+        if institution_key.get().state != 'inactive']
     return user_json
 
 

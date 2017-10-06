@@ -60,7 +60,7 @@
         };
 
         postDetailsCtrl.isShared = function isShared() {
-            return postDetailsCtrl.post.shared_post || 
+            return postDetailsCtrl.post.shared_post ||
                 postDetailsCtrl.post.shared_event;
         };
 
@@ -77,13 +77,13 @@
         };
 
         postDetailsCtrl.showSharedEvent = function showSharedEvent() {
-            return postDetailsCtrl.post.shared_event && 
-                !postDetailsCtrl.isDeleted(postDetailsCtrl.post) && 
+            return postDetailsCtrl.post.shared_event &&
+                !postDetailsCtrl.isDeleted(postDetailsCtrl.post) &&
                 !postDetailsCtrl.isDeleted(postDetailsCtrl.post.shared_event);
         };
 
         postDetailsCtrl.showTextPost = function showTextPost(){
-            return !postDetailsCtrl.isDeleted(postDetailsCtrl.post) && 
+            return !postDetailsCtrl.isDeleted(postDetailsCtrl.post) &&
                      !postDetailsCtrl.isShared();
         };
 
@@ -94,7 +94,7 @@
 
         postDetailsCtrl.disableButtonLike = function disableButtonLike() {
             return postDetailsCtrl.savingLike ||
-                postDetailsCtrl.isDeleted(postDetailsCtrl.post);
+                postDetailsCtrl.isDeleted(postDetailsCtrl.post) || postDetailsCtrl.isInstInactive();
         };
 
         postDetailsCtrl.showButtonEdit = function showButtonEdit() {
@@ -365,6 +365,10 @@
             ProfileService.showProfile(userKey, ev);
         };
 
+        postDetailsCtrl.isInstInactive = function isInstInactive() {
+            return postDetailsCtrl.post.institution_state === 'inactive';
+        };
+
         function adjustText(text){
             if(postDetailsCtrl.isLongPostTimeline(text)){
                 text = text.substring(0, LIMIT_POST_CHARACTERS) + "...";
@@ -581,7 +585,11 @@
 
         commentCtrl.disableButton = function disableButton() {
             var postDeleted = commentCtrl.post.state === 'deleted';
-            return commentCtrl.saving || postDeleted;
+            return commentCtrl.saving || postDeleted || commentCtrl.isInstInactive();
+        };
+
+        commentCtrl.isInstInactive = function isInstInactive() {
+            return commentCtrl.post.institution_state === 'inactive';
         };
     });
 
@@ -648,7 +656,7 @@
             });
         };
 
-        shareCtrl.addPostTimeline = function addPostTimeline(post) {     
+        shareCtrl.addPostTimeline = function addPostTimeline(post) {
             if (shareCtrl.addPost){
                 shareCtrl.posts.push(post);
             }
@@ -684,7 +692,7 @@
                     text = text.substring(0, LIMIT_POST_CHARACTERS) + "...";
                 }
                 return text.replace(URL_PATTERN,REPLACE_URL);
-            }            
+            }
         }
     });
 })();

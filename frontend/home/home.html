@@ -69,7 +69,7 @@
                 <img ng-src="{{event.institution_image}}" class="md-avatar"/>
                 <div class="md-list-item-text" layout="column">
                   <a href class="md-text hyperlink" ng-click="homeCtrl.goToEvent(event)">{{ event.title | limitTo: 20 }}{{ event.title.length > 20 ? '...' : ''}}</a>
-                  <p>De {{ event.start_time | amUtc | amLocal | amCalendar:referenceTime:formats}} até 
+                  <p>De {{ event.start_time | amUtc | amLocal | amCalendar:referenceTime:formats}} até
                    {{ event.end_time | amUtc | amLocal | amCalendar:referenceTime:formats }}</p>
                   <p>por {{ event.author }}</p>
                 </div>

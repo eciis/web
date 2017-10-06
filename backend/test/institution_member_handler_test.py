@@ -49,6 +49,33 @@ class InstitutionMemberHandlerTest(TestBaseHandler):
         self.assertEqual(self.second_user.state, "inactive",
                          "Second_user should be inactive")
 
+        ### Admin try remove yourself
+        # Assert the initial conditions
+        self.assertTrue(self.user.key in self.institution.members,
+                        "User should be member of institution")
+        self.assertTrue(self.institution.key in self.user.institutions,
+                        "Institution should be in institutions of user")
+        # Call the delete method
+        with self.assertRaises(Exception) as ex:
+            self.testapp.delete("/api/institutions/%s/members?removeMember=%s"
+                                % (self.institution.key.urlsafe(), self.user.key.urlsafe()))
+
+        exception_message = self.get_message_exception(ex.exception.message)
+        self.assertEqual(
+            "Error! Admin can not be removed",
+            exception_message,
+            "Expected error message is Error! Admin can not be removed")
+
+        # Update the institutions
+        self.institution = self.institution.key.get()
+        self.user = self.user.key.get()
+
+        # Assert the final conditions
+        self.assertTrue(self.user.key in self.institution.members,
+                        "User should be member of institution")
+        self.assertTrue(self.institution.key in self.user.institutions,
+                        "Institution shouldn't be in institutions of second_user")
+
     @patch('utils.verify_token', return_value={'email': 'second_user@gmail.com'})
     def test_delete_not_admin(self, verify_token):
         """Test delete method with user not admin"""
@@ -115,6 +142,7 @@ def initModels(cls):
     cls.institution.admin = cls.user.key
     cls.institution.put()
 
+    cls.user.institutions = [cls.institution.key]
     cls.user.institutions_admin = [cls.institution.key]
     cls.user.add_permission("publish_post", cls.institution.key.urlsafe())
     cls.user.put()

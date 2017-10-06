@@ -103,7 +103,7 @@ def makeQueryStr(value, state):
             state_string += states[i]
         else:
             state_string += " OR " + states[i]
-    return "%s AND state: %s" % (value, state_string)
+    return "(name: %s OR acronym: %s) AND state: %s" % (value, value, state_string)
 
 
 def deleteDocument(doc_id):

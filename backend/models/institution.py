@@ -223,8 +223,6 @@ class Institution(ndb.Model):
         user.follows.append(institution.key)
         user.put()
 
-        invite.send_response_notification(
-            user, invite.admin_key.urlsafe(), 'ACCEPT')
 
         return institution
 
@@ -239,7 +237,6 @@ class Institution(ndb.Model):
         """
         self.state = "inactive"
         search_module.deleteDocument(self.key.urlsafe())
-        user.unfollow(self.key)
         user.remove_institution(self.key)
         # Remove the hierarchy
         if remove_hierarchy == "true":
@@ -290,9 +287,6 @@ class Institution(ndb.Model):
 
         This method allows this procedure to be done in a queue.
         """
-        for follower in self.followers:
-            follower = follower.get()
-            follower.unfollow(self.key)
         for member in self.members:
             member = member.get()
             member.remove_institution(self.key)

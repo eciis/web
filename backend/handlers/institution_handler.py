@@ -152,6 +152,9 @@ class InstitutionHandler(BaseHandler):
         user.create_and_add_profile(data_profile)
         user.put()
 
+        invite = ndb.Key(urlsafe=inviteKey).get()
+        invite.send_response_notification(user, invite.admin_key.urlsafe(), 'ACCEPT')
+
         search_module.createDocument(institution)
         institution_json = Utils.toJson(institution)
         self.response.write(json.dumps(

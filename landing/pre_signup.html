@@ -1,0 +1,86 @@
+<div flex md-colors="{background: 'grey-100'}" layout="row" layout-wrap>
+    <div md-whiteframe layout="row" layout-align="center center" flex="100"
+            md-colors="{background: 'teal-500'}" style="padding: 7em 0 4em 0;">
+        <div flex="75" layout="column" layout-align="center center">
+            <h1 style="font-weight: bold;" md-colors="{color: 'grey-100'}">
+                PRÉ-CADASTRO
+            </h1>
+        </div>
+    </div>
+
+    <div layout="row" layout-align="center start" flex="100"
+            layout-padding>
+        <div layout="column" flex="50">
+            <div layout="column">
+                <div layout="column" layout-align="center center">
+                    <h1 md-colors="{color: 'grey-500'}" class="md-display-1">
+                        Queremos você no e-CIS
+                    </h1>
+                    <p align="center" class="md-subhead">
+                        Demonstre seu interesse em participar da plataforma. Preencha os campos abaixo informando os seus dados e da Instituição que você faz parte. Em breve entraremos em contato.
+                    </p>
+                </div>
+            </div>
+            <div layout="row" layout-align="center center">
+                <div flex="50" layout="column">
+                    <form name="form" ng-submit="form.$valid && ctrl.submitForm(ev)">
+                        <md-input-container class="md-block">
+                            <label>Seu nome</label>
+                            <input ng-model="ctrl.user.name" required="true">
+                        </md-input-container>
+                        <md-input-container class="md-block">
+                            <label>Seu e-mail</label>
+                            <input type="email" ng-model="ctrl.user.email" required="true">
+                        </md-input-container>
+                        <md-input-container class="md-block" >
+                            <label>Instituição</label>
+                            <input ng-model="ctrl.user.institution" required="true">
+                        </md-input-container>
+                        <md-input-container class="md-block">
+                            <label>Telefone</label>
+                            <input ng-model="ctrl.user.phone" required="true">
+                        </md-input-container>
+                        <md-input-container class="md-block">
+                            <md-select placeholder="Áreas de atuação" ng-model="ctrl.user.area" md-on-open="ctrl.loadAreas()" 
+                                    style="min-width: 200px;" ng-required="true">
+                                <md-option ng-value="area" ng-repeat="area in ctrl.areas">{{area}}</md-option>
+                            </md-select>
+                        </md-input-container>
+                        <div layout="column" layout-align="center center">
+                            <md-button type="submit" aria-label="Enviar" class="md-button" title="Enviar"
+                                md-colors="{background: 'light-green-600', color: 'grey-100'}">
+                              Enviar
+                            </md-button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="visibility: hidden">
+  <div class="md-dialog-container" id="myDialog">
+    <md-dialog layout-padding>
+        <div layout="row" layout-align="start center">
+            <h2>Seja um dos pioneiros no e-CIS</h2>
+            <span flex md-truncate></span>
+
+            <md-button class="md-icon-button" ng-click="ctrl.cancel()">
+              <md-icon>close</md-icon>
+            </md-button>
+        </div>
+        <p>
+        Estamos selecionando usuários para experimentar uma versão antecipada da plataforma. Você gostaria de participar?
+        </p>
+        <div layout="row" layout-align="end center">
+            <md-button class="md-icon-button" ng-click="ctrl.processSubmition('Não')">
+              Não
+            </md-button>
+            <md-button class="md-icon-button" ng-click="ctrl.processSubmition('Sim')">
+              Sim
+            </md-button>
+        </div>
+    </md-dialog>
+  </div>
+</div>

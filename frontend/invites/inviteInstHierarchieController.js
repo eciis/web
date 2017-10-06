@@ -208,7 +208,14 @@
             promise.then(function() {
                 InstitutionService.removeLink(inviteInstCtrl.institution.key, institution.key, isParent).then(function success() {
                     MessageService.showToast('Conexão removida com sucesso');
-                    $state.go('app.home');
+                    if(isParent) {
+                        inviteInstCtrl.hasParent = false;
+                        inviteInstCtrl.institution.parent_institution = {};
+                    } else {
+                        _.remove(inviteInstCtrl.institution.children_institutions, function(inst) {
+                            return institution.key === inst.key;
+                        });
+                    }
                 });
             }, function() {
                 MessageService.showToast('Cancelado');

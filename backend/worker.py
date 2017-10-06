@@ -7,6 +7,7 @@ import logging
 from google.appengine.ext import ndb
 from models.institution import Institution
 from models.user import User
+from utils import json_response
 
 
 class BaseHandler(webapp2.RequestHandler):
@@ -30,6 +31,7 @@ class SendNotificationHandler(BaseHandler):
     This handler resolves the tasks of sending notifications by firebase.
     """
 
+    @json_response
     def post(self):
         """Method of create new task for send notification."""
         user_key = self.request.get("user_key")

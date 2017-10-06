@@ -35,7 +35,7 @@
           </section>
         </div>
         <md-list class="md-dense" flex>
-          <md-subheader class="md-no-sticky">Instituição superior</md-subheader>
+          <md-subheader class="md-no-sticky">Instituição hierarquicamente superior</md-subheader>
           <md-list-item class="md-3-line" ng-if="inviteInstCtrl.hasParent">
             <md-icon class="md-avatar-icon" >account_balance</md-icon>
             <div class="md-list-item-text" layout="column">
@@ -58,7 +58,7 @@
               </md-button>
             </div>
           </md-list-item>
-          <md-subheader class="md-no-sticky">Instituições subordinadas</md-subheader>
+          <md-subheader class="md-no-sticky">Instituições hierarquicamente subordinadas</md-subheader>
           <md-list-item class="md-3-line"
           ng-repeat="institution in inviteInstCtrl.institution.children_institutions">
             <md-icon class="md-avatar-icon" >account_balance</md-icon>

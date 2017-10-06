@@ -5,6 +5,7 @@ from google.appengine.ext import ndb
 
 from utils import Utils
 from utils import login_required
+from utils import json_response
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from custom_exceptions.entityException import EntityException
 
@@ -20,6 +21,7 @@ from handlers.institution_handler import is_admin
 class InstitutionHierarchyHandler(BaseHandler):
     """Institution Hierarchy Handler."""
 
+    @json_response
     @login_required
     @is_admin
     @ndb.transactional(xg=True)

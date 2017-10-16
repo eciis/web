@@ -85,7 +85,7 @@
 
     describe('ManagementMembersController properties', function() {
 
-        it('should exist one sent sent invitations', function() {
+        it('should exist two sent sent invitations', function() {
             expect(manageMemberCtrl.sent_invitations).toEqual([invite, otherInvite]);
             expect(manageMemberCtrl.sent_invitations.length).toBe(2);
         });

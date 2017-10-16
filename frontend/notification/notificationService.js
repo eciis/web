@@ -28,7 +28,8 @@
             'REJECT_INVITE_USER': 'rejeitou o convite para ser membro de sua instituição',
             'ACCEPT_INVITE_USER': 'aceitou o convite para ser membro de sua instituição',
             'REJECT_INVITE_INSTITUTION': 'rejeitou o seu convite para ser administrador',
-            'ACCEPT_INVITE_INSTITUTION': 'aceitou o seu convite para ser administrador'
+            'ACCEPT_INVITE_INSTITUTION': 'aceitou o seu convite para ser administrador',
+            'DELETE_MEMBER': 'removeu você de sua instituição'
         };
 
         var POST_NOTIFICATION = 'POST';

@@ -8,6 +8,7 @@ from handlers.institution_handler import is_admin
 from utils import login_required
 from utils import Utils
 from utils import json_response
+from service_messages import send_message_notification
 
 from handlers.base_handler import BaseHandler
 
@@ -40,3 +41,12 @@ class InstitutionMembersHandler(BaseHandler):
         member = member.get()
 
         institution.remove_member(member)
+
+        if member.state != 'inactive':
+            entity_type = 'DELETE_MEMBER'
+            message = {'type': 'DELETE_MEMBER', 'from': user.name.encode('utf8')}
+            send_message_notification(
+                member.key.urlsafe(),
+                json.dumps(message),
+                entity_type,
+                institution.key.urlsafe())

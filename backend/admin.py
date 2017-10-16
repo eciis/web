@@ -346,7 +346,7 @@ class ResetHandler(BaseHandler):
             user.follow(certbio.key)
             create_profile(user, certbio)
         for user in [jorge, mayza, maiana, luiz,
-                     raoni, ruan, tiago, admin]:
+                     raoni, ruan, tiago, admin, dalton]:
             certbio.follow(user.key)
             user.follow(certbio.key)
 

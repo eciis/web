@@ -4,7 +4,7 @@
     var INSTITUTIONS_URI = "/api/institutions/";
     var REQUESTS_URI = "/api/institutions/";
 
-    var manageMemberCtrl, httpBackend, scope, inviteService, createCtrl, state, authService, 
+    var manageMemberCtrl, httpBackend, scope, inviteService, createCtrl, state, authService,
         mdDialog, institutionService;
 
     var invite = new Invite({invitee: "mayzabeel@gmail.com",
@@ -20,7 +20,7 @@
     var institution = {
             name: 'institution',
             key: '987654321',
-            sent_invitations: [invite]  ,
+            sent_invitations: [invite, otherInvite]  ,
             members: [member]
     };
 
@@ -42,7 +42,7 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $mdDialog, $httpBackend, $rootScope, $state, InviteService, AuthService, 
+    beforeEach(inject(function($controller, $mdDialog, $httpBackend, $rootScope, $state, InviteService, AuthService,
         InstitutionService) {
         httpBackend = $httpBackend;
         mdDialog = $mdDialog;
@@ -52,7 +52,7 @@
         institutionService = InstitutionService;
         httpBackend.when('GET', INSTITUTIONS_URI + institution.key).respond(institution);
         httpBackend.when('GET', REQUESTS_URI + institution.key + "/requests/user").respond([]);
-        httpBackend.when('GET', INSTITUTIONS_URI + institution.key + '/members').respond([member]);
+        httpBackend.when('GET', INSTITUTIONS_URI + institution.key + '/members').respond([member, user]);
         httpBackend.when('GET', 'app/institution/institution_page.html').respond(200);
         httpBackend.when('GET', "app/main/main.html").respond(200);
         httpBackend.when('GET', "app/home/home.html").respond(200);
@@ -85,9 +85,9 @@
 
     describe('ManagementMembersController properties', function() {
 
-        it('should exist one sent sent invitations', function() {
-            expect(manageMemberCtrl.sent_invitations).toEqual([invite]);
-            expect(manageMemberCtrl.sent_invitations.length).toBe(1);
+        it('should exist two sent sent invitations', function() {
+            expect(manageMemberCtrl.sent_invitations).toEqual([invite, otherInvite]);
+            expect(manageMemberCtrl.sent_invitations.length).toBe(2);
         });
     });
 
@@ -107,7 +107,7 @@
             });
 
             it('Should remove event of events', function() {
-                httpBackend.expect('DELETE', INSTITUTIONS_URI + institution.key + 
+                httpBackend.expect('DELETE', INSTITUTIONS_URI + institution.key +
                         "/members?removeMember=" + member.key).respond(200);
                 manageMemberCtrl.removeMember("$event", member);
 
@@ -131,16 +131,20 @@
             });
 
             it('should call inviteService.sendInvite()', function(done) {
-                manageMemberCtrl.invite.invitee = "pedro@gmail.com";
-                expect(manageMemberCtrl.sent_invitations.length).toBe(1);
+                manageMemberCtrl.invite = {invitee: "teste@gmail.com",
+                                            type_of_invite: 'USER',
+                                            institution_key: '987654321',
+                                            admin_key: '12345'};
+                var newInvite = new Invite(manageMemberCtrl.invite);
+                expect(manageMemberCtrl.sent_invitations.length).toBe(2);
                 var promise = manageMemberCtrl.sendUserInvite();
                 promise.then(function() {
-                    expect(inviteService.sendInvite).toHaveBeenCalledWith(otherInvite);
+                    expect(inviteService.sendInvite).toHaveBeenCalledWith(newInvite);
                     expect(manageMemberCtrl.invite).toEqual({});
                     expect(manageMemberCtrl.showButton).toBe(true);
                     expect(manageMemberCtrl.sent_invitations).toContain(invite);
-                    expect(manageMemberCtrl.sent_invitations).toContain(otherInvite);
-                    expect(manageMemberCtrl.sent_invitations.length).toBe(2);
+                    expect(manageMemberCtrl.sent_invitations).toContain(newInvite);
+                    expect(manageMemberCtrl.sent_invitations.length).toBe(3);
                     done();
                 });
                 scope.$apply();
@@ -150,7 +154,7 @@
         describe('isUserInviteValid()', function() {
 
             it('should be true with new invite', function() {
-                var newInvite = new Invite({invitee: "pedro@gmail.com",
+                var newInvite = new Invite({invitee: "teste@gmail.com",
                                             type_of_invite: 'USER',
                                             institution_key: '987654321',
                                             admin_key: '12345'});

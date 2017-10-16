@@ -3,7 +3,7 @@
     var app = angular.module('app');
 
     app.controller("ManagementMembersController", function InviteUserController(
-        InviteService, $mdToast, $state, $mdDialog, InstitutionService, AuthService, MessageService, 
+        InviteService, $mdToast, $state, $mdDialog, InstitutionService, AuthService, MessageService,
         RequestInvitationService, ProfileService) {
         var manageMemberCtrl = this;
 
@@ -130,11 +130,15 @@
         }
 
         function inviteeIsMember(invite) {
-            return _.includes(_.map(manageMemberCtrl.members, getEmail), invite.invitee);
+            return _.find(_.map(manageMemberCtrl.members, getEmail), function(emails) {
+                return _.includes(emails, invite.invitee);
+            });
         }
 
         function inviteeIsInvited(invite) {
-            return _.some(manageMemberCtrl.sent_invitations, invite);
+            return _.find(manageMemberCtrl.sent_invitations, function(sentInvitation) {
+                return sentInvitation.invitee === invite.invitee;
+            });
         }
 
         manageMemberCtrl.isUserInviteValid = function isUserInviteValid(invite) {

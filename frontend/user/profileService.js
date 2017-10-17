@@ -5,7 +5,7 @@
 
     var USER_URI = '/api/user';
 
-    app.service("ProfileService", function UserService($mdDialog, $http, $q) {
+    app.service("ProfileService", function UserService($mdDialog, $http, $q, AuthService, $state) {
         var service = this;
 
         service.showProfile  = function showProfile(userKey, ev) {
@@ -14,7 +14,8 @@
                 controller: ProfileController,
                 controllerAs: "profileCtrl",
                 locals: {
-                    user: userKey
+                    user: userKey,
+                    currentUserKey: AuthService.getCurrentUser().key
                 },
                 targetEvent: ev,
                 clickOutsideToClose: true
@@ -32,7 +33,7 @@
             return deffered.promise;
         };
 
-        function ProfileController(user, UserService) {
+        function ProfileController(user, currentUserKey, UserService) {
             var profileCtrl = this;
 
             profileCtrl.loading = true;
@@ -51,6 +52,15 @@
 
             profileCtrl.showProperty = function getProperty(property) {
                 return property || 'Não informado';
+            };
+
+            profileCtrl.goToConfigProfile = function goToConfigProfile() {
+                $state.go("app.config_profile");
+                $mdDialog.cancel();
+            };
+
+            profileCtrl.isOwnProfile = function isOwnProfile() {
+                return user === currentUserKey;
             };
         }
     });

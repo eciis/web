@@ -49,7 +49,7 @@
                             </div>
                             <div layout="row" flex>
                                 <div layout="column" flex>
-                                    <p><b>Área de Atuação:</b> {{ institutionCtrl.current_institution.occupation_area ? institutionCtrl.occupation_areas[institutionCtrl.current_institution.occupation_area] : 'Não informado' }}</p>
+                                    <p><b>Área de Atuação:</b> {{ institutionCtrl.current_institution.occupation_area ? institutionCtrl.current_institution.occupation_area : 'Não informado' }}</p>
                                 </div>
                                 <span flex md-truncate></span>
                                 <div layout="column" flex>
@@ -66,8 +66,8 @@
                                 </div>
                             </div>
                             <p align="justify"><b>Descrição:</b> {{ institutionCtrl.current_institution.description ? institutionCtrl.current_institution.description : 'Não informado' }}</p>
-                            
-                            <p ng-if="institutionCtrl.hasParentActive(institutionCtrl.current_institution)" align="justify"><b>Instituição hierarquicamente superior:</b> 
+
+                            <p ng-if="institutionCtrl.hasParentActive(institutionCtrl.current_institution)" align="justify"><b>Instituição hierarquicamente superior:</b>
                             <a href class="hyperlink" ng-click="institutionCtrl.goToInstitution(institutionCtrl.current_institution.parent_institution.key)">
                                 {{ institutionCtrl.current_institution.parent_institution.name}}</p>
                             </a>

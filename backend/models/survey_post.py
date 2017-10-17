@@ -31,21 +31,46 @@ class SurveyPost(Post):
 
         return survey_post
 
-    def add_vote(self, author_key, option):
+    def add_vote(self, author_key, option_id):
         """Add a vote to the survey post."""
+        option = self.options[option_id]
+
+        if(self.isValid(author_key, option)):
+            option = self.options[option_id]
+            option.number_votes += 1
+            option.voters.append(author_key)
+
+            self.options[option_id] = Utils.toJson(option)
+            self.put()
+
+    def remove_vote(self, author_key, option_id):
+        """Remove a vote from survey post."""
+        option = self.options[option_id]
+
+        if(author_key not in option.voters):
+            raise Exception("The user didn't vote for this option")
+
+        option = self.options[option_id]
+        option.number_votes -= 1
+        option.voters.remove(author_key)
+
+        self.options[option.id] = Utils.toJson(option)
+        self.put()
+
+    def isValid(self, author_key, option):
+        """Verify if survey post is valid."""
         if(datetime.today() > self.deadline):
             raise Exception("Deadline for receive answers has passed.")
 
         if(author_key in option.voters):
             raise Exception("The user already voted for this option")
 
-        self.options[option.id] = Utils.toJson(option)
-        self.put()
+        return True
 
-    def remove_vote(self, author_key, option):
-        """Remove a vote from survey post."""
-        if(author_key not in option.voters):
-            raise Exception("The user didn't vote for this option")
-
-        self.options[option.id] = Utils.toJson(option)
-        self.put()
+    def vote(self, author_key, all_options):
+        """Added all votes of user from survey post."""
+        if(self.type_survey == "binary"):
+            self.add_vote(author_key, all_options)
+        else:
+            for option in all_options:
+                self.add_vote(author_key, option)

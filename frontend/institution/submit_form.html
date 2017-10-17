@@ -135,7 +135,7 @@
                 <label>Área de Atuação</label>
                 <md-select  name="occupationArea" ng-model="configInstCtrl.newInstitution.occupation_area" required>
                   <md-option  ng-repeat="area in configInstCtrl.occupationAreas | orderBy: 'name'"
-                    ng-value="area.value">{{ area.name }}
+                    ng-value="area.name">{{ area.name }}
                   </md-option>
                 </md-select>
                 <div ng-messages="instForm.occupationArea.$error">

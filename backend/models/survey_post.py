@@ -15,9 +15,6 @@ class SurveyPost(Post):
         'multiple_choice',
         'binary']))
 
-    # The users that voted in this survey
-    voters = ndb.KeyProperty(kind="User")
-
     # Date and time limit that survey will receive answers
     deadline = ndb.DateTimeProperty(required=True)
 
@@ -38,15 +35,10 @@ class SurveyPost(Post):
         """Add a vote to the survey post."""
         if(datetime.today() > self.deadline):
             raise Exception("Deadline for receive answers has passed.")
-        # When survey is 'binary' the user can vote only one option
-        if(author_key in self.voters and
-           self.type_survey == 'binary'):
-            raise Exception("The user already voted.")
 
         option = self.options[option_id]
         if(author_key in option.voters):
             raise Exception("The user already voted for this option")
-
         option.number_votes += 1
         option.voters.append(author_key)
         self.voters.append(author_key)

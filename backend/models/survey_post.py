@@ -22,6 +22,7 @@ class SurveyPost(Post):
     def create(data, author_key, institution_key):
         """Create a post and check required fields."""
         survey_post = SurveyPost()
+        survey_post.type_survey = data.get("type_survey")
         survey_post.options = Utils.toJson(data.get("options"))
         survey_post.deadline = datetime.datetime.strptime(
             data.get('deadline'), "%Y-%m-%dT%H:%M:%S")
@@ -35,8 +36,7 @@ class SurveyPost(Post):
         """Add a vote to the survey post."""
         option = self.options[option_id]
 
-        if(self.isValid(author_key, option)):
-            option = self.options[option_id]
+        if(self.is_vote_valid(author_key, option)):
             option.number_votes += 1
             option.voters.append(author_key)
 
@@ -50,27 +50,27 @@ class SurveyPost(Post):
         if(author_key not in option.voters):
             raise Exception("The user didn't vote for this option")
 
-        option = self.options[option_id]
         option.number_votes -= 1
         option.voters.remove(author_key)
 
         self.options[option.id] = Utils.toJson(option)
         self.put()
 
-    def isValid(self, author_key, option):
-        """Verify if survey post is valid."""
-        if(datetime.today() > self.deadline):
+    def is_vote_valid(self, author_key, option):
+        """Verify if vote is valid."""
+        if(datetime.datetime.now() > self.deadline):
             raise Exception("Deadline for receive answers has passed.")
 
-        if(author_key in option.voters):
+        if(author_key in option["voters"]):
             raise Exception("The user already voted for this option")
 
         return True
 
-    def vote(self, author_key, all_options):
+    def vote(self, author_key, all_options_selected):
         """Added all votes of user from survey post."""
-        if(self.type_survey == "binary"):
-            self.add_vote(author_key, all_options)
+        if(self.type_survey == "binary" and
+                len(all_options_selected) == 1):
+            self.add_vote(author_key, all_options_selected)
         else:
-            for option in all_options:
+            for option in all_options_selected:
                 self.add_vote(author_key, option)

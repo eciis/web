@@ -62,8 +62,8 @@ class SearchHandlerTest(TestBaseHandler):
         # Search for institutions by its occupation area
         institutions = self.testapp.get(
             "/api/search/institution?value=%s&state=%s"
-            % ('Universidades', 'active'))
-        self.assertTrue('CERTBIO' in institutions)
+            % ('Universidades', 'active, pending'))
+        self.assertTrue('CERTBIO' and 'SPLAB' in institutions)
 
     def tearDown(cls):
         """Deactivate the test."""

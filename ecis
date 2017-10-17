@@ -1,26 +1,73 @@
 #!/bin/bash
 SYS_URL='http://localhost:8080'
 
-if [ $1 = 'run' ]; then
-    if which xdg-open > /dev/null
-    then
-      xdg-open $SYS_URL
-    elif which gnome-open > /dev/null
-    then
-      gnome-open $SYS_URL
-    fi
+LANDING_YAML=landing/landing.yaml
+FRONTEND_YAML=frontend/frontend.yaml
+BACKEND_YAML=backend/backend.yaml
+WORKER_YAML=backend/worker.yaml
 
-    dev_appserver.py landing/landing.yaml frontend/frontend.yaml backend/backend.yaml backend/worker.yaml
-fi
+BACKEND_DOMAIN="backend.eciis-splab.appspot.com"
 
-if [ $1 = 'test' ]; then
-    if [ $2 = 'client' ]; then
-        echo "=========== Iniciando Testes do Frontend ==========="
-        cd frontend/test && karma start $3
+FRONTEND_CONFIG_FILE="frontend/config.js"
+
+bold=$(tput bold)
+_bold=$(tput sgr0)
+
+function set_backend_url {
+    if [ -z $1 ]; then
+        url="http://$BACKEND_DOMAIN"
+    else
+        url="http://"$1"."$BACKEND_DOMAIN
     fi
-    if [ $2 = 'server' ]; then
-        echo "=========== Iniciando Testes do Backend ==========="
-        cd backend
-        python -m unittest discover -v -p "*test.py"
-    fi
-fi
+    sed -i "4s|.*|    BACKEND_URL: '$url'|" $FRONTEND_CONFIG_FILE
+    echo ">> Frontend will use ${bold}$url${_bold} as backend."
+}
+
+case "$1" in
+    run)
+        if which xdg-open > /dev/null
+        then
+          xdg-open $SYS_URL
+        elif which gnome-open > /dev/null
+        then
+          gnome-open $SYS_URL
+        fi
+
+        dev_appserver.py $LANDING_YAML $FRONTEND_YAML $BACKEND_YAML $WORKER_YAML
+    ;;
+
+    test)
+        case "$2" in
+            client)
+                echo "=========== Iniciando Testes do Frontend ==========="
+                cd frontend/test && karma start $3
+            ;;
+        
+            server)
+                echo "=========== Iniciando Testes do Backend ==========="
+                cd backend
+                python -m unittest discover -v -p "*test.py"
+        esac
+    ;;
+
+    deploy)
+        echo "=========== Iniciando deploy no App Engine ==========="
+
+        if [ ! -z $2 ]; then
+            version=$2
+            set_backend_url $version
+            gcloud app deploy --version $version --no-promote $LANDING_YAML $FRONTEND_YAML $BACKEND_YAML $WORKER_YAML
+        else
+            set_backend_url
+            gcloud app deploy $LANDING_YAML $FRONTEND_YAML $BACKEND_YAML $WORKER_YAML
+        fi
+
+        
+        exit 0
+        ;;
+
+    *)
+        echo "$1 is not a ecis command."
+        echo "Usage: $0 {run|test|deploy}"
+        exit 1
+esac

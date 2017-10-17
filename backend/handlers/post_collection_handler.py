@@ -42,7 +42,8 @@ class PostCollectionHandler(BaseHandler):
                       NotAuthorizedException)
 
         try:
-            post = Post.create(data, user.key, institution.key)
+            post = Post()
+            post = Post.create(data, post, user.key, institution.key)
             post.put()
 
             """ Update Institution."""

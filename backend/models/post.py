@@ -145,27 +145,26 @@ class Post(ndb.Model):
     # When post is shared event
     shared_event = ndb.KeyProperty(kind="Event")
 
-    @staticmethod
-    def create(data, post, author_key, institution_key):
+    def create(self, data, author_key, institution_key):
         """Create a post and check required fields."""
-        post = post.createSharing(data)
+        self = self.createSharing(data)
 
-        if post.shared_event is None and post.shared_post is None:
+        if self.shared_event is None and self.shared_post is None:
             if not data['title']:
                 raise FieldException("Title can not be empty")
             if not data['text']:
                 raise FieldException("Text can not be empty")
 
-        post.title = data.get('title')
-        post.photo_url = data.get('photo_url')
-        post.text = data.get('text')
-        post.pdf_files = Utils.toJson(data.get('pdf_files'))
-        post.last_modified_by = author_key
-        post.author = author_key
-        post.institution = institution_key
-        post.video_url = data.get('video_url')
+        self.title = data.get('title')
+        self.photo_url = data.get('photo_url')
+        self.text = data.get('text')
+        self.pdf_files = Utils.toJson(data.get('pdf_files'))
+        self.last_modified_by = author_key
+        self.author = author_key
+        self.institution = institution_key
+        self.video_url = data.get('video_url')
 
-        return post
+        return self
 
     def createSharing(self, data):
         """Create different type of post, can be shared post or shared event."""

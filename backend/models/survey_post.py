@@ -26,35 +26,26 @@ class SurveyPost(Post):
         survey_post.deadline = datetime.datetime.strptime(
             data.get('deadline'), "%Y-%m-%dT%H:%M:%S")
 
-        survey_post = Post.create(
-            data, survey_post, author_key, institution_key)
+        survey_post = super(SurveyPost, survey_post).create(
+            data, author_key, institution_key)
 
         return survey_post
 
-    def add_vote(self, author_key, option_id):
+    def add_vote(self, author_key, option):
         """Add a vote to the survey post."""
         if(datetime.today() > self.deadline):
             raise Exception("Deadline for receive answers has passed.")
 
-        option = self.options[option_id]
         if(author_key in option.voters):
             raise Exception("The user already voted for this option")
-        option.number_votes += 1
-        option.voters.append(author_key)
-        self.voters.append(author_key)
 
-        self.options[option_id] = Utils.toJson(option)
+        self.options[option.id] = Utils.toJson(option)
         self.put()
 
-    def remove_vote(self, author_key, option_id):
+    def remove_vote(self, author_key, option):
         """Remove a vote from survey post."""
-        option = self.options[option_id]
-
         if(author_key not in option.voters):
             raise Exception("The user didn't vote for this option")
 
-        option.number_votes -= 1
-        option.voters.remove(author_key)
-
-        self.options[option_id] = Utils.toJson(option)
+        self.options[option.id] = Utils.toJson(option)
         self.put()

@@ -43,7 +43,7 @@ class PostCollectionHandler(BaseHandler):
 
         try:
             post = Post()
-            post = Post.create(data, post, user.key, institution.key)
+            post.create(data, user.key, institution.key)
             post.put()
 
             """ Update Institution."""

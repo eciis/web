@@ -1,15 +1,93 @@
+body {
+    min-height: 600px;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.toolbar {
+    box-shadow: 0 1px 1px 0px #757575;
+}
+
 .section {
-    padding: 50px 0 50px 0;
+    padding-bottom: 5%;
+    min-height: 95%;
+    text-align: center;
 }
 
 .section-title {
-    font-size: 4vmin;
+    font-size: 7.5vw;
     font-weight: bold;
 }
 
+.section-text {
+    font-size: 3.5vw;
+}
+
+.section-subheader {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+    font-size: 6.5vw;
+}
+
+.section-image {
+    width: 70%;
+    height: auto;
+}
+
 .parallax {
-    background-attachment: fixed;
+    background-attachment: scroll;
     background-repeat: no-repeat;
     background-size: cover; 
-    background-position: center
+    background-position: center;
+}
+
+.title {
+    text-align: center;
+    font-size: 7vw;
+}
+
+.header-image {
+    width: 50%;
+    height: auto;
+}
+
+@media screen and (min-width: 960px) {
+
+    #header {
+        min-height: 95%;
+    }
+
+    .header-image {
+        width: 70%;
+    }
+
+    .title {
+        font-size: 4vw;
+        text-align: left;
+    }
+
+    .parallax {
+        background-attachment: fixed;
+    }
+
+    .section {
+        min-height: auto;
+        text-align: left;
+    }
+
+    .section-title {
+        font-size: 3vw;
+    }
+
+    .section-subheader {
+        font-size: 2vw;
+    }
+
+    .section-text {
+        font-size: 1vw;
+    }
+
+    .section-image {
+        width: auto;
+        max-width: 80%;
+    }
 }

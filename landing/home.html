@@ -1,14 +1,13 @@
-<div flex md-colors="{background: 'grey-100'}" layout="row" layout-wrap>
-    <div id="header" md-whiteframe layout="row" class="section parallax"
-            style="background-image: url('images/background01.jpg');"
-            layout-align="center center" flex="100" layout-fill-gt-sm>
-        <div flex="75" layout="column" layout-align="center center">
+<div flex md-colors="{background: 'grey-100'}" layout="column">
+    <div id="header" md-whiteframe layout="row" class="header section parallax"
+            style="background-image: url('images/background01.jpg'); background-color: black;"
+            layout-align="center center" layout-fill-gt-sm>
+        <div flex="90" flex-gt-sm="75" layout="column" layout-align="center center">
             <div layout="column" layout-gt-sm="row">
                 <div layout="row" layout-align="center center" flex-gt-sm="65">
-                    <img src="images/logo.png" aria-label="e-CIS Logo" style="width: 48vw;">
+                    <img src="images/logo.png" aria-label="e-CIS Logo" class="header-image">
                 </div>
-                <h1 md-colors="{color: 'grey-100'}"
-                        style="font-weight: bold; font-size: 5.5vw;">
+                <h1 md-colors="{color: 'grey-100'}" class="title">
                     Plataforma Virtual do Complexo Industrial da Saúde (e-CIS)
                 </h1>
             </div>
@@ -23,19 +22,18 @@
     </div>
 
     <div id="cis" md-whiteframe layout="row" md-colors="{background: 'teal-500'}"
-            layout-align="center center" flex="100" class="section">
-        <div flex="60" layout="column" layout-align="center center">
+            layout-align="center center" class="section">
+        <div flex="90" flex-gt-sm="70" layout="column" layout-align="center center">
             <h1 class="section-title" md-colors="{color: 'grey-100'}">
                 O QUE É O CIS?
             </h1>
-            <div layout="column" layout-gt-sm="row" layout-align="center start">
-                <div layout="row" layout-align="center center" flex-gt-sm="40" 
-                        style="margin: 20px;">
-                    <img src="images/image02.png" aria-label="e-CIS Logo">
+            <div layout="column" layout-gt-sm="row" layout-align="center center">
+                <div layout="row" layout-align="center center" flex-gt-sm="40">
+                    <img src="images/image02.png" aria-label="e-CIS Logo" class="section-image">
                 </div>
-                <div flex-gt-sm="50" layout="column">
-                    <span>Complexo Industrial da Saúde</span>
-                    <p flex>
+                <div flex-gt-sm="40" layout="column">
+                    <span class="section-subheader">Complexo Industrial da Saúde</span>
+                    <p flex class="section-text">
                         De fundamental importância para o desenvolvimento
                         científico, tecnológico, econômico e social do Brasil,
                         o CIS abrange iniciativas que em seu conjuto visam, 
@@ -43,7 +41,7 @@
                         desenvolvimento e a produção de tecnologias
                         sanitárias de interesse para o país.
                     </p>
-                    <div layout="row">
+                    <div layout="row" layout-align="center" layout-align-gt-sm="start">
                         <md-button aria-label="Ver mais" class="md-button md-raised" title="Ver mais"
                              md-colors="{background: 'light-green-600', color: 'grey-100'}" ui-sref="landing.cisdetails">
                           VER MAIS
@@ -54,33 +52,31 @@
         </div>
     </div>
 
-    <div id="conheca" id="" md-whiteframe layout="row" layout-align="center center" 
-            flex="100" class="section">
-        <div flex="60" layout="column" layout-align="center center">
+    <div id="conheca" md-whiteframe layout="row" layout-align="center center" class="section">
+        <div flex="90" flex-md="80" flex-gt-md="70" layout="column" layout-align="center center">
             <h1 class="section-title" md-colors="{color: 'teal-800'}">
                 CONHEÇA O e-CIS
             </h1>
-            <div layout="column" layout-gt-sm="row" layout-align="center start">
-                <div layout="row" layout-align="center center" flex-gt-sm="40" style="margin: 20px;">
-                    <img src="images/logo.png" aria-label="e-CIS Logo">
+            <div layout="column" layout-gt-sm="row" layout-align="center center">
+                <div layout="row" layout-align="center center" flex-gt-sm="40">
+                    <img src="images/logo.png" aria-label="e-CIS Logo" class="section-image">
                 </div>
                 <div flex-gt-sm="40" layout="column">
-                    <span>
-                        Plataforma Virtual do Complexo Indústrial
-                        da Saúde
+                    <span class="section-subheader">
+                        Plataforma Virtual do Complexo Indústrial da Saúde
                     </span>
-                    <p>
-                        De fundamental importância para o desenvolvimento<br>
-                        científico, tecnológico, econômico e social do Brasil,<br> 
-                        o CIS abrange iniciativas que em seu conjuto visam,<br> 
-                        principalmente, promover a pesquisa, o<br>
-                        desenvolvimento e a produção de tecnologias<br>
+                    <p flex class="section-text">
+                        De fundamental importância para o desenvolvimento
+                        científico, tecnológico, econômico e social do Brasil,
+                        o CIS abrange iniciativas que em seu conjuto visam, 
+                        principalmente, promover a pesquisa, o
+                        desenvolvimento e a produção de tecnologias
                         sanitárias de interesse para o país.
                     </p>
-                    <div layout="row">
+                    <div layout="row" layout-align="center" layout-align-gt-sm="start">
                         <md-button aria-label="Ver mais" class="md-button md-raised" title="Ver mais"
-                             md-colors="{background: 'light-green-600', color: 'grey-100'}" ui-sref="landing.ecisdetails">
-                          VER MAIS
+                            md-colors="{background: 'light-green-600', color: 'grey-100'}" ui-sref="landing.cisdetails">
+                        VER MAIS
                         </md-button>
                     </div>
                 </div>
@@ -88,35 +84,33 @@
         </div>
     </div>
 
-    <div layout="row" flex="100" class="parallax"
+    <div layout="row" class="parallax"
         style="background-image: url(images/background02.jpg); height: 30%;">
     </div>
 
-    <div id="funcionalidades" layout="row" layout-align="center start" 
-            flex="100" class="section" hide show-gt-sm>
-        <div flex="50" layout="column" layout-align="start center">
+    <div id="funcionalidades" layout="row" layout-align="center start" class="section">
+        <div flex="90" flex-gt-sm="50" layout="column" layout-align="start center">
             <h1 class="section-title" md-colors="{color: 'teal-800'}">
                 Funcionalidades
             </h1>
-            <div layout="row" layout-align="center start">
-                <div layout="row" layout-align="center center" flex="40">
+            <div layout="column" layout-gt-sm="row" layout-align="center center">
+                <div layout="row" layout-align="center center" flex-gt-sm="40">
                     <img src="images/image03.png" aria-label="e-CIS Logo">
                 </div>
-                <div flex=40" layout="column">
-                    <span style="font-size: 3.5em;">
+                <div flex-gt-sm="40" layout="column">
+                    <span>
                         Troque informações e interaja com os atores do CIS
                     </span>
-                    <p style="font-size: 1em;">
+                    <p>
                         Ambiente para interface entre as instituições, possibilitando a construção de parceiros
                 </div>
             </div>
         </div>
     </div>
 
-    <div layout="row" layout-align="center center" 
-            flex="100" class="section" hide show-gt-sm>
+    <div layout="row" layout-align="center center" class="section" hide show-gt-sm>
         <div flex="50" layout="column" layout-align="center center">
-            <div layout="row" layout-align="center start" style="padding-top: 2em;">
+            <div layout="column" layout-gt-sm="row" layout-align="center start" style="padding-top: 2em;">
                 <div flex="40" layout="column">
                     <span style="font-size: 3.5em;">
                         Saiba em primeira mão as novidades do CIS
@@ -132,10 +126,9 @@
         </div>
     </div>
 
-    <div layout="row" layout-align="center center" 
-            flex="100" class="section" hide show-gt-sm>
+    <div layout="row" layout-align="center center" class="section" hide show-gt-sm>
         <div flex="50" layout="column" layout-align="center center">
-            <div layout="row" layout-align="center start" style="padding-top: 2em;">
+            <div layout="column" layout-gt-sm="row" layout-align="center start" style="padding-top: 2em;">
                 <div layout="row" layout-align="center center" flex="40">
                     <img src="images/image05.png" aria-label="e-CIS Logo">
                 </div>
@@ -151,8 +144,7 @@
         </div>
     </div>
 
-    <div layout="row" layout-align="center center" 
-            flex="100" class="section" hide show-gt-sm>
+    <div layout="row" layout-align="center center" class="section" hide show-gt-sm>
         <div flex="50" layout="column" layout-align="center center">
             <div layout="row" layout-align="center start" style="padding-top: 2em;">
                 <div flex="40" layout="column">
@@ -170,8 +162,7 @@
         </div>
     </div>
 
-    <div layout="row" layout-align="center center" 
-            flex="100" class="section" hide show-gt-sm>
+    <div layout="row" layout-align="center center" class="section" hide show-gt-sm>
         <div flex="50" layout="column" layout-align="center center">
             <div layout="row" layout-align="center start" style="padding-top: 2em;">
                 <div layout="row" layout-align="center center" flex="40">
@@ -190,7 +181,7 @@
     </div>
 
     <div id="interesse" layout="row" layout-align="center start" class="section"
-            flex="100" style="box-shadow: -1px 0px 10px 0px #888888;">
+            style="box-shadow: -1px 0px 10px 0px #888888;">
         <div flex="40" layout="column" layout-align="start center">
             <div layout="row" layout-align="start center" flex="40">
                 <img src="images/logo.png" aria-label="e-CIS Logo">
@@ -198,7 +189,7 @@
             <p align="center" style="font-size: 4vmin;" md-colors="{color: 'grey-800'}">
                 Manifeste seu interesse de ser usuário da plataforma e-CIS
             </p>
-            <div layout="row">
+            <div layout="row" layout-align="center">
                 <md-button aria-label="Ver mais" class="md-button md-raised" title="Ver mais"
                      md-colors="{background: 'light-green-600', color: 'grey-100'}"
                      ui-sref="landing.presignup">

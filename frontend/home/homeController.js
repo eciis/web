@@ -67,8 +67,6 @@
             var deferred = $q.defer();
 
             if (morePosts) {
-                homeCtrl.isLoadingPosts = true;
-
                 PostService.getNextPosts(actualPage).then(function success(response) {
                     actualPage += 1;
                     morePosts = response.data.next;

@@ -52,7 +52,7 @@ app = webapp2.WSGIApplication([
     ("/api/events", EventCollectionHandler),
     ("/api/events/(.*)", EventHandler),
     ("/api/institutions", InstitutionCollectionHandler),
-    ("/api/institutions/(.*)/timeline", InstitutionTimelineHandler),
+    ("/api/institutions/(.*)/timeline.*", InstitutionTimelineHandler),
     ("/api/institutions/(.*)/members", InstitutionMembersHandler),
     ("/api/institutions/(.*)/followers", InstitutionFollowersHandler),
     ("/api/institutions/(.*)/hierarchy/(.*)", InstitutionHierarchyHandler),

@@ -57,6 +57,17 @@
             return deferred.promise;
         };
 
+        service.getNextPosts = function getNextPosts(institution_key, page) {
+            var deferred = $q.defer();
+            $http.get(INSTITUTIONS_URI + "/" + institution_key + "/timeline?page=" + page).then(function success(response) {
+                service.posts = response.data;
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+            return deferred.promise;
+        };
+
         service.getMembers = function getMembers(institution_key) {
             var deferred = $q.defer();
             $http.get(INSTITUTIONS_URI + "/" + institution_key + "/members").then(function success(response) {

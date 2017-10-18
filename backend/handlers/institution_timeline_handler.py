@@ -14,17 +14,32 @@ from models.post import Post
 class InstitutionTimelineHandler(BaseHandler):
     """Get posts of specific institution."""
 
+    number_fetchs = 3
+
     @json_response
     @login_required
     def get(self, user, url_string):
-        """TODO: Change to get a timeline without query and paginated.
+        """Handler of get posts."""
+        page = self.request.get('page', 0)
 
-        @author: Mayza Nunes 15/06/2017
-        """
+        try:
+            offset = int(page) * InstitutionTimelineHandler.number_fetchs
+        except ValueError:
+            offset = 0
+
         institution_key = ndb.Key(urlsafe=url_string)
         queryPosts = Post.query(Post.institution == institution_key).order(
-            Post.last_modified_date)
+            -Post.last_modified_date)
+
+        queryPosts, next_cursor, more = queryPosts.fetch_page(
+            InstitutionTimelineHandler.number_fetchs,
+            offset=offset)
 
         array = [Post.make(post, self.request.host) for post in queryPosts]
 
-        self.response.write(json.dumps(array))
+        data = {
+            'posts': array,
+            'next': more
+        }
+
+        self.response.write(json.dumps(data))

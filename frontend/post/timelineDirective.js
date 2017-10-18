@@ -8,25 +8,27 @@
         var content = document.getElementById("content");
         var alreadyRequested = false;
 
+        timelineCtrl.user = AuthService.getCurrentUser();
+        timelineCtrl.refreshTimeline = false;
+        timelineCtrl.isLoadingPosts = false;
+
         content.onscroll = function onscroll() {
             var screenPosition = content.scrollTop + content.offsetHeight;
             var maxHeight = content.scrollHeight;
-            var quant = screenPosition/maxHeight;
+            var proportion = screenPosition/maxHeight;
 
-            if (quant >= 0.75 && !alreadyRequested) {
+            if (proportion >= 0.75 && !alreadyRequested) {
                 alreadyRequested = true;
+                timelineCtrl.isLoadingPosts = true;
 
                 timelineCtrl.loadMorePosts().then(function success() {
                     alreadyRequested = false;
+                    timelineCtrl.isLoadingPosts = false;
                 }, function error() {
                     alreadyRequested = false;
                 });
             }
         };
-
-        timelineCtrl.user = AuthService.getCurrentUser();
-
-        timelineCtrl.refreshTimeline = false;
 
         timelineCtrl.showRefreshTimelineButton = function showRefreshTimelineButton() {
            return timelineCtrl.refreshTimeline;

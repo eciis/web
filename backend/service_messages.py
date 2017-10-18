@@ -30,7 +30,7 @@ def send_message_notification(user_key, message, entity_type, entity_key):
         }
     )
 
-def send_message_email(invitee, body):
+def send_message_email(invitee, body, subject=None):
     """Method of send email.
 
     Keywords arguments:
@@ -42,7 +42,7 @@ def send_message_email(invitee, body):
         target='worker',
         params={
             'invitee': invitee,
-            'subject': "Convite plataforma e-CIS",
+            'subject': subject or "Convite plataforma e-CIS",
             'body': body
         }
     )

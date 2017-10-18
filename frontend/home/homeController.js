@@ -4,13 +4,14 @@
     var app = angular.module("app");
 
     app.controller("HomeController", function HomeController(PostService, AuthService,
-            InstitutionService, $interval, $mdToast, $mdDialog, $state, MessageService, ProfileService, EventService) {
+            InstitutionService, $interval, $mdToast, $mdDialog, $state, MessageService, ProfileService, EventService, $q) {
         var homeCtrl = this;
 
         var ACTIVE = "active";
         var LIMITE_EVENTS = 5;
 
-        var next_offset = 0;
+        var morePosts = true;
+        var actualPage = 0;
 
         homeCtrl.posts = [];
         homeCtrl.events = [];
@@ -63,19 +64,27 @@
         };
 
         homeCtrl.loadMorePosts = function loadMorePosts() {
-            var promise = PostService.getNextPosts(next_offset);
+            var deferred = $q.defer();
 
-            promise.then(function success(response) {
-                next_offset = response.data.next_offset;
+            if (morePosts) {
+                PostService.getNextPosts(actualPage).then(function success(response) {
+                    actualPage += 1;
+                    morePosts = response.data.next;
 
-                _.forEach(response.data.posts, function(post) {
-                    homeCtrl.posts.push(post);
+                    _.forEach(response.data.posts, function(post) {
+                        homeCtrl.posts.push(post);
+                    });
+
+                    deferred.resolve();
+                }, function error(response) {
+                    MessageService.showToast(response.data.msg);
+                    deferred.reject();
                 });
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
-            });
+            } else {
+                deferred.resolve();
+            }
 
-            return promise;
+            return deferred.promise;
         };
 
         function getFollowingInstitutions(){
@@ -84,7 +93,7 @@
 
         var loadPosts = function loadPosts() {
             PostService.get().then(function success(response) {
-                next_offset = response.data.next_offset;
+                actualPage += 1;
                 homeCtrl.posts = response.data.posts;
                 homeCtrl.isLoadingPosts = false;
             }, function error(response) {

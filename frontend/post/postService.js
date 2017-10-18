@@ -20,9 +20,9 @@
             return deferred.promise;
         };
 
-        service.getNextPosts = function getNextPosts(offset) {
+        service.getNextPosts = function getNextPosts(page) {
             var deferred = $q.defer();
-            $http.get("/api/user/timeline?offset=" + offset).then(function success(response) {
+            $http.get("/api/user/timeline?page=" + page).then(function success(response) {
                 service.posts = response.data;
                 deferred.resolve(response);
             }, function error(response) {

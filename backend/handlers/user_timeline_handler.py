@@ -19,10 +19,10 @@ class UserTimelineHandler(BaseHandler):
     @login_required
     def get(self, user):
         """Handler of get posts."""
-        offset = self.request.get('offset', 0)
+        page = self.request.get('page', 0)
 
         try:
-            offset = int(offset)
+            offset = int(page) * UserTimelineHandler.number_fetchs
         except ValueError:
             offset = 0
 
@@ -41,16 +41,9 @@ class UserTimelineHandler(BaseHandler):
             visible_posts = [post for post in array
                              if not Post.is_hidden(post)]
 
-        next_offset = ''
-        if more:
-            next_offset = offset + UserTimelineHandler.number_fetchs
-
         data = {
             'posts': visible_posts,
-            'next': more,
-            'next_offset': next_offset
+            'next': more
         }
-
-        print data
 
         self.response.write(json.dumps(data))

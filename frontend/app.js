@@ -76,12 +76,12 @@
                     }
                 }
             })
-            .state("app.manage_institution.invite_user", {
-                url: "/inviteMembers",
+            .state("app.manage_institution.members", {
+                url: "/managementMembers",
                 views: {
                     content_manage_institution: {
-                        templateUrl: "app/invites/invite_user.html",
-                        controller: "InviteUserController as inviteUserCtrl"
+                        templateUrl: "app/institution/management_members.html",
+                        controller: "ManagementMembersController as manageMemberCtrl"
                     }
                 }
             })

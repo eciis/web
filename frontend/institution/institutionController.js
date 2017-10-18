@@ -23,7 +23,7 @@
             "philanthropic": "Filantrópica"
         };
 
-        institutionCtrl.occupation_areas = {
+        institutionCtrl.actuation_areas = {
             "official laboratories":"Laboratórios Oficiais",
             "government agencies":"Ministérios e outros Órgãos do Governo",
             "funding agencies":"Agências de Fomento",
@@ -145,7 +145,7 @@
         };
 
         institutionCtrl.goToManageMembers = function goToManageMembers(){
-            $state.go('app.manage_institution.invite_user', {institutionKey: currentInstitutionKey});
+            $state.go('app.manage_institution.members', {institutionKey: currentInstitutionKey});
         };
 
         institutionCtrl.goToManageInstitutions = function goToManageInstitutions(){

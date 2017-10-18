@@ -126,7 +126,7 @@
         };
 
         mainCtrl.goToManageMembers = function goToManageMembers(){
-            $state.go('app.manage_institution.invite_user', {
+            $state.go('app.manage_institution.members', {
                 institutionKey: mainCtrl.user.current_institution.key
             });
         };

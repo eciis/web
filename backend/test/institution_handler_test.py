@@ -255,7 +255,7 @@ def initModels(cls):
     cls.certbio.acronym = 'CERTBIO'
     cls.certbio.cnpj = '18.104.068/0001-86'
     cls.certbio.legal_nature = 'public'
-    cls.certbio.occupation_area = ''
+    cls.certbio.actuation_area = ''
     cls.certbio.description = 'Ensaio Químico'
     cls.certbio.email = 'certbio@ufcg.edu.br'
     cls.certbio.phone_number = '(83) 3322 4455'
@@ -272,7 +272,7 @@ def initModels(cls):
     cls.splab.acronym = 'SPLAB'
     cls.splab.cnpj = '18.104.068/0000-86'
     cls.splab.legal_nature = 'public'
-    cls.splab.occupation_area = ''
+    cls.splab.actuation_area = ''
     cls.splab.email = 'splab@ufcg.edu.br'
     cls.splab.phone_number = '(83) 3322 4455'
     cls.splab.members = [cls.mayza.key, cls.raoni.key]
@@ -301,7 +301,7 @@ def initModels(cls):
     cls.ecis.acronym = 'Ecis'
     cls.ecis.cnpj = '18.104.068/0000-86'
     cls.ecis.legal_nature = 'public'
-    cls.ecis.occupation_area = ''
+    cls.ecis.actuation_area = ''
     cls.ecis.email = 'ecis@ufcg.edu.br'
     cls.ecis.phone_number = '(83) 3322 4455'
     cls.ecis.members = [cls.mayza.key, cls.raoni.key]

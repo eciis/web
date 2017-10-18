@@ -133,12 +133,12 @@
         <div layout="row">
             <md-input-container class="md-block" flex-gt-sm>
                 <label>Área de Atuação</label>
-                <md-select  name="occupationArea" ng-model="configInstCtrl.newInstitution.occupation_area" required>
-                  <md-option  ng-repeat="area in configInstCtrl.occupationAreas | orderBy: 'name'"
-                    ng-value="area.value">{{ area.name }}
+                <md-select  name="actuationArea" ng-model="configInstCtrl.newInstitution.actuation_area" required>
+                  <md-option  ng-repeat="area in configInstCtrl.actuationArea | orderBy: 'name'"
+                    ng-value="area.name">{{ area.name }}
                   </md-option>
                 </md-select>
-                <div ng-messages="instForm.occupationArea.$error">
+                <div ng-messages="instForm.actuationArea.$error">
                     <div ng-message="required" >Este campo é obrigatório!</div>
                 </div>
             </md-input-container>
@@ -154,7 +154,7 @@
                 </div>
             </md-input-container>
         </div>
-            <div ng-if="configInstCtrl.newInstitution.occupation_area == 'other'">
+            <div ng-if="configInstCtrl.newInstitution.actuation_area == 'other'">
             <md-input-container class="md-block" flex-gt-xs>
                 <label>Informe outra área de atuação</label>
                 <input type="text" name="other" ng-model="configInstCtrl.newInstitution.other_area">

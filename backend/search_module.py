@@ -26,7 +26,8 @@ def createDocument(institution):
         'name': institution.name,
         'state': institution.state,
         'admin': admin,
-        'acronym': institution.acronym
+        'acronym': institution.acronym,
+        'actuation_area': institution.actuation_area
     }
     # Make the structure of the document by setting the fields and its id.
     document = search.Document(
@@ -37,7 +38,8 @@ def createDocument(institution):
             search.TextField(name='name', value=content['name']),
             search.TextField(name='state', value=content['state']),
             search.TextField(name='admin', value=content['admin']),
-            search.TextField(name='acronym', value=content['acronym'])
+            search.TextField(name='acronym', value=content['acronym']),
+            search.TextField(name='actuation_area', value=content['actuation_area'])
         ]
     )
     saveDocument(document)
@@ -71,7 +73,7 @@ def getDocuments(value, state):
     query_string = makeQueryStr(value, state)
     index = search.Index(INDEX_NAME)
     query_options = search.QueryOptions(
-        returned_fields=['name', 'state', 'admin', 'acronym']
+        returned_fields=['name', 'state', 'admin', 'acronym', 'actuation_area']
     )
     query = search.Query(query_string=query_string, options=query_options)
     documents = index.search(query)
@@ -103,7 +105,7 @@ def makeQueryStr(value, state):
             state_string += states[i]
         else:
             state_string += " OR " + states[i]
-    return "%s AND state: %s" % (value, state_string)
+    return "(name: %s OR acronym: %s OR actuation_area: %s) AND state: %s" % (value, value, value, state_string)
 
 
 def deleteDocument(doc_id):

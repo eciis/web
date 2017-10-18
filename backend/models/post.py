@@ -205,6 +205,7 @@ class Post(ndb.Model):
             'author_key': author.key.urlsafe(),
             'last_modified_by': last_modified_by.name,
             'institution_key': institution.key.urlsafe(),
+            'institution_state': institution.state,
             'key': post.key.urlsafe(),
             'pdf_files': post.pdf_files if post.pdf_files else []
         }

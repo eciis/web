@@ -1,14 +1,15 @@
 """Institution Model."""
 from google.appengine.ext import ndb
+from custom_exceptions.fieldException import FieldException
 
 import search_module
 
 
-def get_occupation_area(data):
-    """Get the institution occupation area."""
-    if data.get('occupation_area') == 'other':
+def get_actuation_area(data):
+    """Get the institution actuation area."""
+    if data.get('actuation_area') == 'other':
         return data.get('other_area')
-    return data.get('occupation_area')
+    return data.get('actuation_area')
 
 
 class Address(ndb.Model):
@@ -67,7 +68,7 @@ class Institution(ndb.Model):
 
     address = ndb.StructuredProperty(Address)
 
-    occupation_area = ndb.StringProperty()
+    actuation_area = ndb.StringProperty()
 
     description = ndb.TextProperty()
 
@@ -148,7 +149,11 @@ class Institution(ndb.Model):
     def remove_member(self, member):
         """Remove a member from institution."""
         if member.key in self.members:
+            if self.key in member.institutions_admin:
+                raise Exception("Admin can not be removed")
+            member.remove_institution(self.key)
             self.members.remove(member.key)
+            self.followers.remove(member.key)
             self.put()
 
     def addInvite(self, invite):
@@ -218,7 +223,6 @@ class Institution(ndb.Model):
         user.follows.append(institution.key)
         user.put()
 
-        invite.send_response_notification(user, invite.admin_key.urlsafe(), 'ACCEPT')
 
         return institution
 
@@ -233,7 +237,6 @@ class Institution(ndb.Model):
         """
         self.state = "inactive"
         search_module.deleteDocument(self.key.urlsafe())
-        user.unfollow(self.key)
         user.remove_institution(self.key)
         # Remove the hierarchy
         if remove_hierarchy == "true":
@@ -257,8 +260,8 @@ class Institution(ndb.Model):
     def remove_institution_hierarchy(self, remove_hierarchy, user):
         """Remove institution's hierarchy."""
         for child in self.children_institutions:
-                child = child.get()
-                child.remove_institution(remove_hierarchy, user)
+            child = child.get()
+            child.remove_institution(remove_hierarchy, user)
 
     def remove_parent_connection(self):
         """Change parent connection when remove an institution."""
@@ -284,9 +287,6 @@ class Institution(ndb.Model):
 
         This method allows this procedure to be done in a queue.
         """
-        for follower in self.followers:
-            follower = follower.get()
-            follower.unfollow(self.key)
         for member in self.members:
             member = member.get()
             member.remove_institution(self.key)

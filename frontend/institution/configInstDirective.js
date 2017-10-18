@@ -20,7 +20,7 @@
         };
 
         getLegalNatures();
-        getOccupationAreas();
+        getActuationAreas();
 
         configInstCtrl.addImage = function addImage(image) {
             var newSize = 800;
@@ -172,9 +172,9 @@
             });
         }
 
-        function getOccupationAreas() {
-            $http.get('app/institution/occupation_area.json').then(function success(response) {
-                configInstCtrl.occupationAreas = response.data;
+        function getActuationAreas() {
+            $http.get('app/institution/actuation_area.json').then(function success(response) {
+                configInstCtrl.actuationArea = response.data;
             });
         }
 

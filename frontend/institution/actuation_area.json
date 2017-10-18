@@ -1,0 +1,23 @@
+[
+    {"value":"official laboratories", "name":"Laboratórios Oficiais"},
+    {"value":"government agencies", "name":"Ministérios e outros Órgãos do Governo"},
+    {"value":"funding agencies", "name":"Agências de Fomento"},
+    {"value":"research institutes", "name":"Institutos de Pesquisa"},
+    {"value":"colleges", "name":"Universidades"},
+    {"value":"regulatory agency", "name": "Agência reguladora"},
+    {"value":"official bank", "name": "Banco Oficial"},
+    {"value":"commission", "name": "Comissão"},
+    {"value":"council", "name": "Conselho"},
+    {"value":"private company", "name": "Empresa privada"},
+    {"value":"public company", "name": "Empresa Pública"},
+    {"value":"representation entity", "name": "Entidade de representação"},
+    {"value":"union entity", "name": "Entidade sindical"},
+    {"value":"foundation", "name": "Fundação"},
+    {"value":"equipment industry", "name": "Indústria de equipamentos e materiais de uso em saúde"},
+    {"value":"pharmaceutical industry", "name": "Indústria farmacêutica"},
+    {"value":"private laboratory", "name": "Laboratório privado"},
+    {"value":"international body", "name": "Organismo Internacional"},
+    {"value":"state government body", "name": "Órgão de Governo Estadual"},
+    {"value":"municipal government body", "name": "Órgão de Governo Municipal"},
+    {"value":"agency linked to ministry", "name": "Órgão vinculado a Ministério (Secretarias, Departamentos e Coordenações)"}
+]

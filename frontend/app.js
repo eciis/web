@@ -138,6 +138,15 @@
                     }
                 }
             })
+            .state("app.search_page", {
+                url: "/search_page",
+                views: {
+                    content: {
+                        templateUrl: "app/search/search_page.html",
+                        controller: "SearchController as searchCtrl"
+                    }
+                }
+            })
             .state("new_invite", {
                 url: "/:key/new_invite",
                 views: {

@@ -31,6 +31,10 @@
             return deferred.promise;
         };
 
+        mainCtrl.goSearch = function goSearch() {
+            $state.go('app.search_page');
+        };
+
         mainCtrl.openMenu = function openMenu(ev){
             mainCtrl.search = '';
             var position = mainCtrl._mdPanel.newPanelPosition()

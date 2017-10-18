@@ -5,6 +5,7 @@ from test_base_handler import TestBaseHandler
 from models.user import User
 from models.institution import Institution
 from handlers.institution_members_handler import InstitutionMembersHandler
+import mock
 from mock import patch
 
 
@@ -20,6 +21,35 @@ class InstitutionMemberHandlerTest(TestBaseHandler):
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
+
+    @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
+    @mock.patch('service_messages.send_message_notification')
+    def test_delete_with_notification(self, verify_token, mock_method):
+        """Test if a notification is sent when the member is deleted."""
+        # Set up the second_user
+        self.second_user.institutions = [self.institution.key, self.other_institution.key]
+        self.institution.members.append(self.second_user.key)
+        self.other_institution.members.append(self.second_user.key)
+        self.second_user.put()
+        self.institution.put()
+        self.other_institution.put()
+        # Call the delete method
+        self.testapp.delete("/api/institutions/%s/members?removeMember=%s" %
+                            (self.institution.key.urlsafe(), self.second_user.key.urlsafe()))
+
+        # Assert that mock_method has been called
+        self.assertTrue(mock_method.called, "send_message_notification should've been called.")
+
+    @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
+    @mock.patch('service_messages.send_message_email')
+    def test_delete_with_email(self, verify_token, mock_method):
+        """Test if a notification is sent when the member is deleted."""
+        # Call the delete method
+        self.testapp.delete("/api/institutions/%s/members?removeMember=%s" %
+                            (self.institution.key.urlsafe(), self.second_user.key.urlsafe()))
+
+        # Assert that mock_method has been called
+        self.assertTrue(mock_method.called, "send_message_email should've been called.")
 
     @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
     def test_delete(self, verify_token):
@@ -141,10 +171,21 @@ def initModels(cls):
     cls.institution.posts = []
     cls.institution.admin = cls.user.key
     cls.institution.put()
+    # another institution
+    cls.other_institution = Institution()
+    cls.other_institution.name = 'other_institution'
+    cls.other_institution.state = 'active'
+    cls.other_institution.email = 'other_institution@email.com'
+    cls.other_institution.members = [cls.user.key]
+    cls.other_institution.followers = [cls.user.key, cls.second_user.key]
+    cls.other_institution.posts = []
+    cls.other_institution.admin = cls.user.key
+    cls.other_institution.put()
 
-    cls.user.institutions = [cls.institution.key]
-    cls.user.institutions_admin = [cls.institution.key]
+    cls.user.institutions = [cls.institution.key, cls.other_institution.key]
+    cls.user.institutions_admin = [cls.institution.key, cls.other_institution.key]
     cls.user.add_permission("publish_post", cls.institution.key.urlsafe())
+    cls.user.add_permission("publish_post", cls.other_institution.key.urlsafe())
     cls.user.put()
     cls.second_user.institutions = [cls.institution.key]
     cls.second_user.add_permission(

@@ -53,10 +53,11 @@ class InstitutionMembersHandler(BaseHandler):
                 institution.key.urlsafe())
 
         subject = "Remoção de vínculo"
-        body = """Você foi removido por %s da instituição %s.
+        body = """Lamentamos informar que seu vínculo com a instituição %s
+        foi removido pelo administrador %s.
 
         Equipe e-CIS
-        """ % (user.name, institution.name)
+        """ % (institution.name, user.name)
         send_message_email(
             member.email,
             body,

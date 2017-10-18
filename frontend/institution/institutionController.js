@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller("InstitutionController", function InstitutionController($state, InstitutionService,
-            InviteService, AuthService, MessageService, $sce, $mdDialog, PdfService, $rootScope, $window, ProfileService) {
+            InviteService, AuthService, MessageService, $sce, $mdDialog, PdfService, $rootScope, $window, ProfileService, $scope) {
         var institutionCtrl = this;
 
         institutionCtrl.current_institution = null;
@@ -216,6 +216,23 @@
             if(institutionCtrl.current_institution) {
                 return institutionCtrl.current_institution.getFullAddress();
             }
+        };
+
+        institutionCtrl.requestInvitation = function requestInvitation(event) {
+            $mdDialog.show({
+                controller: "RequestInvitationController",
+                controllerAs: "requestInvCtrl",
+                templateUrl: 'app/requests/request_invitation_dialog.html',
+                parent: angular.element(document.body),
+                targetEvent: event,
+                locals: {
+                    institution: institutionCtrl.current_institution
+                },
+                bindToController: true,
+                clickOutsideToClose:true,
+                openFrom: '#fab-new-post',
+                closeTo: angular.element(document.querySelector('#fab-new-post'))
+            });
         };
 
         function DialogController($mdDialog, portfolioUrl) {

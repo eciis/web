@@ -4,7 +4,7 @@
 
     var app = angular.module("app");
 
-    app.controller("NotificationController", function NotificationController(NotificationService, AuthService, $state, $mdDialog) {
+    app.controller("NotificationController", function NotificationController(NotificationService, AuthService, $state, $mdDialog, InstitutionService) {
         var controller = this;
 
         controller.user = AuthService.getCurrentUser();
@@ -85,6 +85,9 @@
             "ACCEPT_INSTITUTION_LINK": {
                 icon: "account_balance",
             },
+            "ACCEPT_LINK": {
+                icon: "link",
+            },
             "REJECT_INSTITUTION_LINK": {
                 icon: "account_balance",
             },
@@ -143,6 +146,12 @@
             if (notificationProperties.isDialog) {
                 notificationProperties.dialogProperties.locals.key = notification.entity_key;
                 controller.showDialog(notificationProperties.dialogProperties);
+            } else if (notification.type === 'ACCEPT_LINK'){
+                InstitutionService.getInstitution(notification.entity_key).then(function success(response) {
+                    controller.user.institutions.push(response.data);
+                    AuthService.save();
+                    controller.goTo(notification);
+                });
             } else {
                 controller.goTo(notification);
             }

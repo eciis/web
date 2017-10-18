@@ -1,6 +1,6 @@
-<md-dialog>
+<md-dialog flex-gt-lg="50" flex-lg="50">
 	<div layout="row">
-		<md-card flex layout="column">
+		<md-card flex layout="column" ng-if="!requestInvCtrl.institution">
 			<md-card-header layout="row" layout-align="center center">
 				<md-card-header-text><span class="md-title">Busque a instituição que você faz parte.</span></md-card-header-text>
 			    <md-button class="md-icon-button" ng-click="requestInvCtrl.cancelDialog()">
@@ -48,7 +48,7 @@
 				</md-list>
 			</md-card-content>
 		</md-card>
-		<md-card flex ng-if="requestInvCtrl.request">
+		<md-card flex ng-if="requestInvCtrl.request || requestInvCtrl.institution">
 			<md-card-header layout="row" layout-align="center center">
 				<md-card-header-text>
 					<span class="md-title">Solicitar Cadastro</span>
@@ -57,7 +57,7 @@
 			</md-card-header>
 			<md-card-content>
 				<form name="requestuser">
-					<md-input-container class="md-block">
+					<md-input-container class="md-block" ng-if="!requestInvCtrl.doNotShowNameInput()">
 			          <label>Nome</label>
 			          <input ng-model="requestInvCtrl.request.name" name="name" required>
 			          <div ng-messages='requestuser.request.name.$error'>

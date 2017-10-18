@@ -5,11 +5,11 @@ from custom_exceptions.fieldException import FieldException
 import search_module
 
 
-def get_occupation_area(data):
-    """Get the institution occupation area."""
-    if data.get('occupation_area') == 'other':
+def get_actuation_area(data):
+    """Get the institution actuation area."""
+    if data.get('actuation_area') == 'other':
         return data.get('other_area')
-    return data.get('occupation_area')
+    return data.get('actuation_area')
 
 
 class Address(ndb.Model):
@@ -68,7 +68,7 @@ class Institution(ndb.Model):
 
     address = ndb.StructuredProperty(Address)
 
-    occupation_area = ndb.StringProperty()
+    actuation_area = ndb.StringProperty()
 
     description = ndb.TextProperty()
 

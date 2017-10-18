@@ -13,7 +13,7 @@ describe('Test ConfigInstDirective', function() {
             key: "inst-key",
             acronym: "INST",
             legal_nature: "public",
-            occupation_area: "government agencies",
+            actuation_area: "government agencies",
             phone_number: "phone",
             cnpj: "cnpj",
             address: "address",
@@ -34,7 +34,7 @@ describe('Test ConfigInstDirective', function() {
         {"value":"private", "name":"Privada"},
         {"value":"philanthropic", "name":"Filantrópica"}
     ];
-    var occupation_area = [
+    var actuation_area = [
         {"value":"official laboratories", "name":"Laboratórios Oficiais"},
         {"value":"government agencies", "name":"Ministérios e outros Órgãos do Governo"},
         {"value":"funding agencies", "name":"Agências de Fomento"},
@@ -62,7 +62,7 @@ describe('Test ConfigInstDirective', function() {
         $rootScope, $mdDialog, $http, InstitutionService, InviteService, AuthService, PdfService, ImageService) {
         httpBackend = $httpBackend;
         httpBackend.expectGET('app/institution/legal_nature.json').respond(legal_nature);
-        httpBackend.expectGET('app/institution/occupation_area.json').respond(occupation_area);
+        httpBackend.expectGET('app/institution/actuation_area.json').respond(actuation_area);
         httpBackend.expectGET('/api/institutions/' + institution.key).respond(institution);
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);

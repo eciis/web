@@ -75,7 +75,7 @@ app = webapp2.WSGIApplication([
     ("/api/user", UserHandler),
     ("/api/user/(.*)/profile", UserProfileHandler),
     ("/api/user/institutions/(.*)", UserHandler),
-    ("/api/user/timeline", UserTimelineHandler),
+    ("/api/user/timeline.*", UserTimelineHandler),
     ("/api/search/institution", SearchHandler),
     ("/login", LoginHandler),
     ("/logout", LogoutHandler),

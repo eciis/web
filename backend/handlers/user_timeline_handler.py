@@ -14,22 +14,17 @@ from models.post import Post
 class UserTimelineHandler(BaseHandler):
     """Get posts of all institutions that the user follow."""
 
-    cursor = None
-    number_fetchs = 12
+    offset = 0
+    number_fetchs = 3
 
     @json_response
     @login_required
     def get(self, user):
-        """TODO: Change to get a timeline without query.
-
-        @author: Mayza Nunes 18/05/2017
-        """
+        """Handler of get posts."""
         array = []
         visible_posts = []
 
-        cursor = None
-        if UserTimelineHandler.cursor:
-            cursor = ndb.Cursor.from_websafe_string(UserTimelineHandler.cursor)
+        offset = UserTimelineHandler.offset
 
         if len(user.follows) > 0:
             queryPosts = Post.query(Post.institution.IN(
@@ -37,13 +32,23 @@ class UserTimelineHandler(BaseHandler):
 
             queryPosts, next_cursor, more = queryPosts.fetch_page(
                 UserTimelineHandler.number_fetchs,
-                start_cursor=cursor)
+                offset=offset)
 
             array = [Post.make(post, self.request.host) for post in queryPosts]
             visible_posts = [post for post in array
                              if not Post.is_hidden(post)]
 
+        next_offset = ''
         if more:
-            UserTimelineHandler.cursor = next_cursor.to_websafe_string()
+            UserTimelineHandler.offset = UserTimelineHandler.offset + UserTimelineHandler.number_fetchs
+            next_offset = UserTimelineHandler.offset + UserTimelineHandler.number_fetchs
+
+        data = {
+            'posts': visible_posts,
+            'next': more,
+            'next_offset': next_offset
+        }
+
+        print data
 
         self.response.write(json.dumps(visible_posts))

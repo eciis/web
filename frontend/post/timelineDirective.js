@@ -5,6 +5,29 @@
 
     app.controller('TimelineController', function(AuthService, MessageService, NotificationService, PostService) {
         var timelineCtrl = this;
+        var content = document.getElementById("content");
+        var alreadyRequested = false;
+
+        content.onscroll = function onscroll() {
+            var screenPosition = content.scrollTop + content.offsetHeight;
+            var maxHeight = content.scrollHeight;
+            var quant = screenPosition/maxHeight;
+
+            if (quant >= 0.75 && !alreadyRequested) {
+                alreadyRequested = true;
+
+                PostService.getNextPosts().then(function success(response) {
+                    alreadyRequested = false;
+
+                    _.forEach(response.data, function(post) {
+                        timelineCtrl.posts.push(post);
+                    }, function error(response) {
+                        MessageService.showToast(response.data.msg);
+                        alreadyRequested = false;
+                    });
+                });
+            }
+        };
 
         timelineCtrl.user = AuthService.getCurrentUser();
 
@@ -42,10 +65,12 @@
             controller: "TimelineController",
             controllerAs: "timelineCtrl",
             scope: {
-                posts: '=',
                 institution: '=',
                 user: '=',
                 addPost: '='
+            },
+            bindToController: {
+                posts: '='
             }
         };
     });

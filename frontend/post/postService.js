@@ -20,6 +20,17 @@
             return deferred.promise;
         };
 
+        service.getNextPosts = function getNextPosts(offset) {
+            var deferred = $q.defer();
+            $http.get("/api/user/timeline").then(function success(response) {
+                service.posts = response.data;
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+            return deferred.promise;
+        };
+
         service.createPost = function createPost(post) {
             var deferred = $q.defer();
             $http.post(POSTS_URI, post).then(function success(response) {

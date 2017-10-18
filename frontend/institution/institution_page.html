@@ -1,4 +1,4 @@
-<md-content layout="row" md-colors="{background: 'grey-200'}" layout-align="center" >
+<md-content id="content" layout="row" md-colors="{background: 'grey-200'}" layout-align="center" >
     <div flex-gt-lg="80" flex-lg="90" layout="row" layout-wrap layout-align="center" layout-fill>
         <div flex layout="column">
             <div layout="row" layout-xs="column" layout-padding flex-xs="30" flex-sm="15"
@@ -66,8 +66,8 @@
                                 </div>
                             </div>
                             <p align="justify"><b>Descrição:</b> {{ institutionCtrl.current_institution.description ? institutionCtrl.current_institution.description : 'Não informado' }}</p>
-                            
-                            <p ng-if="institutionCtrl.hasParentActive(institutionCtrl.current_institution)" align="justify"><b>Instituição hierarquicamente superior:</b> 
+
+                            <p ng-if="institutionCtrl.hasParentActive(institutionCtrl.current_institution)" align="justify"><b>Instituição hierarquicamente superior:</b>
                             <a href class="hyperlink" ng-click="institutionCtrl.goToInstitution(institutionCtrl.current_institution.parent_institution.key)">
                                 {{ institutionCtrl.current_institution.parent_institution.name}}</p>
                             </a>

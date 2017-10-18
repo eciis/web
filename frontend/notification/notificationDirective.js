@@ -17,7 +17,7 @@
                 state: "app.post"
             },
             "DELETE_MEMBER": {
-                icon: "delete"
+                icon: "clear"
             },
             "POST": {
                 icon: "inbox",

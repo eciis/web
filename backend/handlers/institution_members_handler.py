@@ -62,5 +62,4 @@ class InstitutionMembersHandler(BaseHandler):
             member.email,
             body,
             subject
-
         )

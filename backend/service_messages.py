@@ -30,6 +30,9 @@ def send_message_notification(user_key, message, entity_type, entity_key):
         }
     )
 
+# TODO: Change the method to receive the subject dynamically
+# And change its calls
+# @author: Raoni Smaneoto
 def send_message_email(invitee, body, subject=None):
     """Method of send email.
 

@@ -67,6 +67,8 @@
             var deferred = $q.defer();
 
             if (morePosts) {
+                homeCtrl.isLoadingPosts = true;
+
                 PostService.getNextPosts(actualPage).then(function success(response) {
                     actualPage += 1;
                     morePosts = response.data.next;
@@ -75,6 +77,7 @@
                         homeCtrl.posts.push(post);
                     });
 
+                    homeCtrl.isLoadingPosts = false;
                     deferred.resolve();
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
@@ -123,7 +126,7 @@
         }
 
         loadEvents();
-        loadPosts();
+        homeCtrl.loadMorePosts();
         getFollowingInstitutions();
     });
 })();

@@ -27,7 +27,7 @@
         'text': 'Inauguration of system E-CIS',
         'local': 'Brasilia',
         'photo_url': null,
-        'start_time': new Date(), 
+        'start_time': new Date(),
         'end_time': new Date(),
     };
 
@@ -39,7 +39,7 @@
         scope = $rootScope.$new();
         mdDialog = $mdDialog;
         state = $state;
-        httpBackend.expect('GET', '/api/user/timeline').respond(posts);
+        httpBackend.expect('GET', '/api/user/timeline?page=0').respond({posts: posts});
         httpBackend.when('GET', "/api/events").respond([event]);
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);

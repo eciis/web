@@ -9,6 +9,7 @@ from utils import login_required
 from utils import Utils
 from utils import json_response
 from service_messages import send_message_notification
+from service_messages import send_message_email
 
 from handlers.base_handler import BaseHandler
 
@@ -50,3 +51,12 @@ class InstitutionMembersHandler(BaseHandler):
                 json.dumps(message),
                 entity_type,
                 institution.key.urlsafe())
+
+        body = """Você foi removido por %s da instituição %s.
+
+        Equipe e-CIS
+        """ % (user.name, institution.name)
+        send_message_email(
+            member.email,
+            body
+        )

@@ -41,6 +41,17 @@ class InstitutionMemberHandlerTest(TestBaseHandler):
         self.assertTrue(mock_method.called, "send_message_notification should've been called.")
 
     @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
+    @mock.patch('service_messages.send_message_email')
+    def test_delete_with_email(self, verify_token, mock_method):
+        """Test if a notification is sent when the member is deleted."""
+        # Call the delete method
+        self.testapp.delete("/api/institutions/%s/members?removeMember=%s" %
+                            (self.institution.key.urlsafe(), self.second_user.key.urlsafe()))
+
+        # Assert that mock_method has been called
+        self.assertTrue(mock_method.called, "send_message_email should've been called.")
+
+    @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
     def test_delete(self, verify_token):
         """Test delete method with an user that is not admin"""
         # Assert the initial conditions

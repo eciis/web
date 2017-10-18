@@ -2,7 +2,6 @@
 """User Timeline Handler."""
 
 import json
-from google.appengine.ext import ndb
 
 from utils import login_required
 from utils import json_response
@@ -14,17 +13,21 @@ from models.post import Post
 class UserTimelineHandler(BaseHandler):
     """Get posts of all institutions that the user follow."""
 
-    offset = 0
     number_fetchs = 3
 
     @json_response
     @login_required
     def get(self, user):
         """Handler of get posts."""
+        offset = self.request.get('offset', 0)
+
+        try:
+            offset = int(offset)
+        except ValueError:
+            offset = 0
+
         array = []
         visible_posts = []
-
-        offset = UserTimelineHandler.offset
 
         if len(user.follows) > 0:
             queryPosts = Post.query(Post.institution.IN(
@@ -40,8 +43,7 @@ class UserTimelineHandler(BaseHandler):
 
         next_offset = ''
         if more:
-            UserTimelineHandler.offset = UserTimelineHandler.offset + UserTimelineHandler.number_fetchs
-            next_offset = UserTimelineHandler.offset + UserTimelineHandler.number_fetchs
+            next_offset = offset + UserTimelineHandler.number_fetchs
 
         data = {
             'posts': visible_posts,
@@ -51,4 +53,4 @@ class UserTimelineHandler(BaseHandler):
 
         print data
 
-        self.response.write(json.dumps(visible_posts))
+        self.response.write(json.dumps(data))

@@ -16,15 +16,10 @@
             if (quant >= 0.75 && !alreadyRequested) {
                 alreadyRequested = true;
 
-                PostService.getNextPosts().then(function success(response) {
+                timelineCtrl.loadMorePosts().then(function success() {
                     alreadyRequested = false;
-
-                    _.forEach(response.data, function(post) {
-                        timelineCtrl.posts.push(post);
-                    }, function error(response) {
-                        MessageService.showToast(response.data.msg);
-                        alreadyRequested = false;
-                    });
+                }, function error() {
+                    alreadyRequested = false;
                 });
             }
         };
@@ -70,7 +65,8 @@
                 addPost: '='
             },
             bindToController: {
-                posts: '='
+                posts: '=',
+                loadMorePosts: '='
             }
         };
     });

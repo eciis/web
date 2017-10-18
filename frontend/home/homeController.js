@@ -10,6 +10,8 @@
         var ACTIVE = "active";
         var LIMITE_EVENTS = 5;
 
+        var next_offset = 0;
+
         homeCtrl.posts = [];
         homeCtrl.events = [];
         homeCtrl.followingInstitutions = [];
@@ -60,13 +62,30 @@
             return institution.state === ACTIVE;
         };
 
+        homeCtrl.loadMorePosts = function loadMorePosts() {
+            var promise = PostService.getNextPosts(next_offset);
+
+            promise.then(function success(response) {
+                next_offset = response.data.next_offset;
+
+                _.forEach(response.data.posts, function(post) {
+                    homeCtrl.posts.push(post);
+                });
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
+            });
+
+            return promise;
+        };
+
         function getFollowingInstitutions(){
             homeCtrl.followingInstitutions = homeCtrl.user.follows;
         }
 
         var loadPosts = function loadPosts() {
             PostService.get().then(function success(response) {
-                homeCtrl.posts = response.data;
+                next_offset = response.data.next_offset;
+                homeCtrl.posts = response.data.posts;
                 homeCtrl.isLoadingPosts = false;
             }, function error(response) {
                 MessageService.showToast(response.data.msg);

@@ -5,13 +5,13 @@
 
     var USER_URI = '/api/user';
 
-    app.service("ProfileService", function UserService($mdDialog, $http, $q, AuthService, $state) {
+    app.service("ProfileService", function UserService($mdDialog, $http, $q, AuthService) {
         var service = this;
 
         service.showProfile  = function showProfile(userKey, ev) {
              $mdDialog.show({
                 templateUrl: 'app/user/profile.html',
-                controller: ProfileController,
+                controller: "ProfileController",
                 controllerAs: "profileCtrl",
                 locals: {
                     user: userKey,
@@ -33,35 +33,36 @@
             return deffered.promise;
         };
 
-        function ProfileController(user, currentUserKey, UserService) {
-            var profileCtrl = this;
+    });
 
-            profileCtrl.loading = true;
+    app.controller("ProfileController", function ProfileController(user, currentUserKey, UserService, $state, $mdDialog) {
+        var profileCtrl = this;
 
-            UserService.getUser(user).then(function success(response) {
-                    profileCtrl.user = response;
-                    profileCtrl.loading = false;
-            });
+        profileCtrl.loading = true;
 
-            profileCtrl.isToShow = function() {
-                if(profileCtrl.user) {
-                    return !_.isEmpty(profileCtrl.user.institution_profiles);
-                }
-                return false;
-            };
+        UserService.getUser(user).then(function success(response) {
+                profileCtrl.user = response;
+                profileCtrl.loading = false;
+        });
 
-            profileCtrl.showProperty = function getProperty(property) {
-                return property || 'Não informado';
-            };
+        profileCtrl.isToShow = function() {
+            if(profileCtrl.user) {
+                return !_.isEmpty(profileCtrl.user.institution_profiles);
+            }
+            return false;
+        };
 
-            profileCtrl.goToConfigProfile = function goToConfigProfile() {
-                $state.go("app.config_profile");
-                $mdDialog.cancel();
-            };
+        profileCtrl.showProperty = function getProperty(property) {
+            return property || 'Não informado';
+        };
 
-            profileCtrl.isOwnProfile = function isOwnProfile() {
-                return user === currentUserKey;
-            };
-        }
+        profileCtrl.goToConfigProfile = function goToConfigProfile() {
+            $state.go("app.config_profile");
+            $mdDialog.cancel();
+        };
+
+        profileCtrl.isOwnProfile = function isOwnProfile() {
+            return user === currentUserKey;
+        };
     });
 })();

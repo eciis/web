@@ -288,6 +288,10 @@
             return message;
         };
 
+        inviteInstCtrl.getSuggestedName = function getSuggestedName(institution) {
+            return institution.invite.suggestion_institution_name || institution.name;
+        };
+
         function designOptions() {
                 var $dialog = angular.element(document.querySelector('md-dialog'));
                 var $actionsSection = $dialog.find('md-dialog-actions');

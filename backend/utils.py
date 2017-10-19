@@ -230,7 +230,6 @@ def is_admin(method):
             data = json.loads(self.request.body)
             institution_key = ndb.Key(urlsafe=data['institution_key'])
             institution = institution_key.get()
-
             userisNotAdminOfInstitution = institution.key not in user.institutions_admin
             institutionisNotManagedByUser = institution.admin != user.key
 

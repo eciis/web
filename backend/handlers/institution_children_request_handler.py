@@ -38,6 +38,7 @@ class InstitutionChildrenRequestHandler(BaseHandler):
         self.response.write(json.dumps(request.make()))
 
     @login_required
+    @json_response
     @is_admin_of_requested_inst
     def delete(self, user, request_key):
         """Change request status from 'sent' to 'rejected'."""

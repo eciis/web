@@ -5,7 +5,14 @@
                 <img style="border-radius: 50%; width: 80px;" ng-src="{{ profileCtrl.user.photo_url }}" alt="{{profileCtrl.user.name}}" />
             </div>
             <div style="margin-top: -20px;" layout="row" layout-align="center center">
-                <h2>{{profileCtrl.user.name}}</h2>
+                <h2>{{profileCtrl.user.name}}
+                    <md-icon title="Configurações de perfil" class="clickable"
+                        ng-click="profileCtrl.goToConfigProfile()"
+                        ng-if="profileCtrl.isOwnProfile()">
+                        settings
+                    </md-icon>
+                </h2>
+
             </div>
             <md-subheader><h3>Perfis Institucionais: </h3></md-subheader>
             <md-list ng-repeat="profile in profileCtrl.user.institution_profiles">

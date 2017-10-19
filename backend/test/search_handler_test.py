@@ -59,6 +59,11 @@ class SearchHandlerTest(TestBaseHandler):
         institutions = self.testapp.get(
             "/api/search/institution?value=%s&state=%s" % ('SPLAB', 'pending'))
         self.assertTrue('SPLAB' in institutions)
+        # Search for institutions by its actuation area
+        institutions = self.testapp.get(
+            "/api/search/institution?value=%s&state=%s"
+            % ('Universidades', 'active, pending'))
+        self.assertTrue('CERTBIO' and 'SPLAB' in institutions)
 
     def tearDown(cls):
         """Deactivate the test."""
@@ -83,6 +88,7 @@ def initModels(cls):
     cls.certbio.name = 'Lab. de Desenvolvimento de Biomateriais do Nordeste'
     cls.certbio.acronym = 'CERTBIO'
     cls.certbio.state = 'active'
+    cls.certbio.actuation_area = 'Universidades'
     cls.certbio.members = [cls.mayza.key]
     cls.certbio.followers = [cls.mayza.key]
     cls.certbio.admin = cls.mayza.key
@@ -92,6 +98,7 @@ def initModels(cls):
     cls.splab.name = 'Software Practice Laboratory'
     cls.splab.acronym = 'SPLAB'
     cls.splab.state = 'pending'
+    cls.splab.actuation_area = 'Universidades'
     cls.splab.members = [cls.mayza.key]
     cls.splab.followers = [cls.mayza.key]
     cls.splab.admin = cls.mayza.key

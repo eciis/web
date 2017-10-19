@@ -76,10 +76,12 @@ class Invite(PolyModel):
 
         Equipe e-CIS
         """ % (host)
+        subject = "Convite plataforma e-CIS"
 
         send_message_email(
             receiver_email,
-            body
+            body,
+            subject
         )
 
     def send_notification(self, user, receiver_key, entity_type=None):

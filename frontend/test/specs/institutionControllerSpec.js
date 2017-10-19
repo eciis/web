@@ -46,7 +46,7 @@
         mdDialog = $mdDialog;
         institutionService = InstitutionService;
 
-        httpBackend.expect('GET', INSTITUTIONS_URI + splab.key + '/timeline?page=0&&fetchs=3').respond({posts: posts});
+        httpBackend.expect('GET', INSTITUTIONS_URI + splab.key + '/timeline?page=0&&fetchs=3').respond({posts: posts, next: true});
         httpBackend.expect('GET', INSTITUTIONS_URI + splab.key).respond(splab);
         httpBackend.expect('GET', INSTITUTIONS_URI + splab.key + '/members').respond([tiago]);
         httpBackend.expect('GET', INSTITUTIONS_URI + splab.key + '/followers').respond([raoni]);
@@ -235,6 +235,30 @@
                 spyOn(mdDialog, 'show');
                 institutionCtrl.removeInstitution('$event');
                 expect(mdDialog.show).toHaveBeenCalled();
+            });
+        });
+
+        describe('loadMorePosts()', function() {
+            beforeEach(function() {
+                spyOn(institutionService, 'getNextPosts').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            callback({data: {posts: posts, next: false}});
+                        }
+                    };
+                });
+            });
+
+            it('Should call institutionService.getNextPosts()', function(done) {
+                var promise = institutionCtrl.loadMorePosts();
+                var actualPage = 1;
+
+                promise.then(function success() {
+                    expect(institutionService.getNextPosts).toHaveBeenCalledWith(splab.key, actualPage);
+                    done();
+                });
+
+                scope.$apply();
             });
         });
     });

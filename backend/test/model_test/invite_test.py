@@ -57,7 +57,7 @@ class InviteTest(TestBase):
         self.assertEquals(
             created_invite,
             expected_invite,
-            created_invite
+            "The created invite should be iqual to the expected one"
         )
 
     def test_change_status(self):

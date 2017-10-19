@@ -5,6 +5,7 @@ import json
 
 from utils import login_required
 from utils import json_response
+from utils import offset_pagination
 
 from handlers.base_handler import BaseHandler
 from models.post import Post
@@ -21,11 +22,6 @@ class UserTimelineHandler(BaseHandler):
         """Handler of get posts."""
         page = self.request.get('page', 0)
 
-        try:
-            offset = int(page) * UserTimelineHandler.number_fetchs
-        except ValueError:
-            offset = 0
-
         array = []
         visible_posts = []
 
@@ -33,9 +29,10 @@ class UserTimelineHandler(BaseHandler):
             queryPosts = Post.query(Post.institution.IN(
                 user.follows)).order(-Post.last_modified_date, Post.key)
 
-            queryPosts, next_cursor, more = queryPosts.fetch_page(
+            queryPosts, more = offset_pagination(
+                page,
                 UserTimelineHandler.number_fetchs,
-                offset=offset)
+                queryPosts)
 
             array = [Post.make(post, self.request.host) for post in queryPosts]
             visible_posts = [post for post in array

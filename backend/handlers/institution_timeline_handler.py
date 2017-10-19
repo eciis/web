@@ -6,6 +6,7 @@ import json
 
 from utils import login_required
 from utils import json_response
+from utils import offset_pagination
 
 from handlers.base_handler import BaseHandler
 from models.post import Post
@@ -22,18 +23,14 @@ class InstitutionTimelineHandler(BaseHandler):
         """Handler of get posts."""
         page = self.request.get('page', 0)
 
-        try:
-            offset = int(page) * InstitutionTimelineHandler.number_fetchs
-        except ValueError:
-            offset = 0
-
         institution_key = ndb.Key(urlsafe=url_string)
         queryPosts = Post.query(Post.institution == institution_key).order(
             -Post.last_modified_date)
 
-        queryPosts, next_cursor, more = queryPosts.fetch_page(
+        queryPosts, more = offset_pagination(
+            page,
             InstitutionTimelineHandler.number_fetchs,
-            offset=offset)
+            queryPosts)
 
         array = [Post.make(post, self.request.host) for post in queryPosts]
 

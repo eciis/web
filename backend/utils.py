@@ -296,3 +296,17 @@ def has_permission(permission_type):
             return method(self, user, *args)
         return check_permission
     return method_for_verification
+
+
+def offset_pagination(page, number_fetchs, query):
+    """Modify query for get entities using offset pagination."""
+    try:
+        offset = int(page) * number_fetchs
+    except ValueError:
+        offset = 0
+
+    query, next_cursor, more = query.fetch_page(
+        number_fetchs,
+        offset=offset)
+
+    return [query, more]

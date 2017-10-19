@@ -44,6 +44,9 @@ class PostCollectionHandlerTest(TestBaseHandler):
         post_obj = key_post.get()
         self.institution = self.institution.key.get()
         self.user = self.user.key.get()
+        # Check class object
+        self.assertEqual(post_obj._class_name(), 'Post',
+                         "The class of post is 'Post'")
         # Check if the post's key is in institution and user
         self.assertTrue(key_post in self.user.posts,
                         "The post is not in user.posts")
@@ -88,6 +91,9 @@ class PostCollectionHandlerTest(TestBaseHandler):
         post_obj = key_post.get()
         self.institution = self.institution.key.get()
         self.user = self.user.key.get()
+        # Check class object
+        self.assertEqual(post_obj._class_name(), 'Post',
+                         "The class of post is 'Post'")
         # Check if the post's key is in institution and user
         self.assertTrue(key_post in self.user.posts,
                         "The post is not in user.posts")
@@ -124,6 +130,9 @@ class PostCollectionHandlerTest(TestBaseHandler):
         post_obj = key_post.get()
         self.institution = self.institution.key.get()
         self.user = self.user.key.get()
+        # Check class object
+        self.assertEqual(post_obj._class_name(), 'Post',
+                         "The class of post is 'Post'")
         # Check if the post's key is in institution and user
         self.assertTrue(key_post in self.user.posts,
                         "The post is not in user.posts")
@@ -147,6 +156,38 @@ class PostCollectionHandlerTest(TestBaseHandler):
         self.assertEqual(shared_event_obj['text'],
                          "Description of new Event",
                          "The post's text expected is Post inicial que quero compartilhar")
+
+    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
+    def test_post_survey(self, verify_token):
+        """Test post method."""
+        # Make the request and assign the answer to post method
+        survey = self.testapp.post_json("/api/posts", self.survey_post)
+        # Retrieve the entities
+        survey = json.loads(survey._app_iter[0])
+        key_survey = ndb.Key(urlsafe=survey['key'])
+        survey_obj = key_survey.get()
+        self.institution = self.institution.key.get()
+        self.user = self.user.key.get()
+
+        # Check class object
+        self.assertEqual(survey_obj._class_name(), 'SurveyPost',
+                         "The class of post is 'SurveyPost'")
+        # Check if the survey post's key is in institution and user
+        self.assertTrue(key_survey in self.user.posts,
+                        "The post is not in user.posts")
+        self.assertTrue(key_survey in self.institution.posts,
+                        "The post is not in institution.posts")
+        # Check if the survey post's attributes are the expected
+        self.assertEqual(survey_obj.title, 'Survey with Multiple choice',
+                         "The title expected was 'Survey with Multiple choice'")
+        self.assertEqual(survey_obj.institution, self.institution.key,
+                         "The survey_obj's institution is institution")
+        self.assertEqual(survey_obj.text, 'Description of survey',
+                         "The post's text is 'Description of survey'")
+        self.assertEqual(survey_obj.type_survey, 'multiple_choice',
+                         "The post's type is 'multiple_choice'")
+        self.assertEqual(survey_obj.state, 'published',
+                         "The post's state is 'published'")
 
 
 def initModels(cls):
@@ -202,3 +243,24 @@ def initModels(cls):
     cls.event.end_time = datetime.datetime.now()
     cls.event.local = "Event location"
     cls.event.put()
+
+    # Survey post
+    cls.options = [
+        {'id': 0,
+         'text': 'frist option',
+         'number_votes': 0,
+         'voters': []
+         },
+        {'id': 1,
+         'text': 'second option',
+         'number_votes': 0,
+         'voters': []
+         }]
+    cls.survey_post = {
+        'institution': cls.institution.key.urlsafe(),
+        'title': 'Survey with Multiple choice',
+        'text': 'Description of survey',
+        'type_survey': 'multiple_choice',
+        'deadline': '2020-07-25T12:30:15',
+        'options': cls.options
+    }

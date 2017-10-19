@@ -30,10 +30,3 @@ class PostFactory:
         else:
             return 'POST'
 
-    @staticmethod
-    def get_permission(data):
-        """Return permission according type of data has."""
-        if(PostFactory.get_type(data) == 'SURVEY_POST'):
-            return 'publish_survey_post'
-        else:
-            return 'publish_post'

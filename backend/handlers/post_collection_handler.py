@@ -15,6 +15,14 @@ from service_messages import send_message_notification
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
 
+def get_permission(data):
+        """Return permission according to the type of data."""
+        if(PostFactory.get_type(data) == 'SURVEY_POST'):
+            return 'publish_survey'
+        else:
+            return 'publish_post'
+
+
 class PostCollectionHandler(BaseHandler):
     """Post  Collection Handler."""
 
@@ -38,7 +46,7 @@ class PostCollectionHandler(BaseHandler):
                       "The institution has been deleted",
                       NotAuthorizedException)
 
-        permission = PostFactory.get_permission(data)
+        permission = get_permission(data)
         Utils._assert(not user.has_permission(permission, institution_key),
                       "You don't have permission to publish post.",
                       NotAuthorizedException)

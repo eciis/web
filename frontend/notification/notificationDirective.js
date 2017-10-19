@@ -24,7 +24,7 @@
                 state: "app.post"
             },
             "SURVEY_POST": {
-                icon: "inbox",
+                icon: "poll",
                 state: "app.post"
             },
             "SHARED_POST": {

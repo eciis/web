@@ -2,79 +2,27 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller('PanelMenuCtrl', PanelMenuCtrl);
-
     app.controller("MainController", function MainController($mdSidenav, $mdDialog, $mdToast, $state,
-            AuthService, $rootScope, InstitutionService, $mdPanel, $q, RequestInvitationService,
+            AuthService, $rootScope, $q, RequestInvitationService,
             InviteService, $mdMenu) {
         var mainCtrl = this;
 
         mainCtrl.search = "";
         mainCtrl.user = AuthService.getCurrentUser();
-        mainCtrl.showSearchMenu = false;
-        mainCtrl.institutions = [];
-        mainCtrl._mdPanel = $mdPanel;
-        var NO_INSTITUTION = 'Nenhuma instituição encontrada';
 
         mainCtrl.pending_manager_member = 0;
         mainCtrl.pending_inst_invitations = 0;
 
-        mainCtrl.showMenu = function showMenu(ev) {
-            var deferred = $q.defer();
-            if(mainCtrl.search) {
-                mainCtrl.finalSearch = mainCtrl.search;
-                mainCtrl.makeSearch().then(function success() {
-                    mainCtrl.openMenu(ev);
-                    deferred.resolve(mainCtrl.institutions);
-                });
-            }
-            return deferred.promise;
-        };
-
         mainCtrl.goSearch = function goSearch() {
-            $state.go('app.search_page');
-        };
-
-        mainCtrl.openMenu = function openMenu(ev){
-            mainCtrl.search = '';
-            var position = mainCtrl._mdPanel.newPanelPosition()
-                    .relativeTo('.demo-menu-open-button')
-                    .addPanelPosition(mainCtrl._mdPanel.xPosition.ALIGN_START,
-                        mainCtrl._mdPanel.yPosition.BELOW);
-
-            var config = {
-                attachTo: angular.element(document.body),
-                controller: PanelMenuCtrl,
-                controllerAs: 'PanelCtrl',
-                templateUrl: 'app/search_panel.html',
-                panelClass: 'demo-menu-example',
-                position: position,
-                locals: {
-                    'institutions': mainCtrl.institutions
-                },
-                openFrom: ev,
-                clickOutsideToClose: true,
-                escapeToClose: true,
-                focusOnOpen: false,
-                zIndex: 2
-            };
-            mainCtrl._mdPanel.open(config);
+            if(mainCtrl.search) {
+                var search = mainCtrl.search;
+                mainCtrl.search = '';
+                $state.go('app.search_page', {finalSearch: search});
+            }
         };
 
         mainCtrl.toggle = function toggle() {
             $mdSidenav('leftNav').toggle();
-        };
-
-        mainCtrl.makeSearch = function () {
-            var deferred = $q.defer();
-            InstitutionService.searchInstitutions(mainCtrl.finalSearch, "active").then(function success(response) {
-                mainCtrl.institutions = response.data;
-                if(_.isEmpty(mainCtrl.institutions)){
-                    mainCtrl.institutions.push({name: NO_INSTITUTION});
-                }
-                deferred.resolve(response);
-            });
-            return deferred.promise;
         };
 
         mainCtrl.isActive = function isActive(inst) {
@@ -180,35 +128,4 @@
             mainCtrl.getPendingTasks();
         })();
     });
-
-    function PanelMenuCtrl (mdPanelRef, InstitutionService, $state, $timeout) {
-        var panelCtrl = this;
-        panelCtrl._mdPanelRef = mdPanelRef;
-
-        $timeout(function() {
-            var selected = document.querySelector('.demo-menu-item.selected');
-            if (selected) {
-              angular.element(selected).focus();
-            } else {
-              angular.element(document.querySelectorAll('.demo-menu-item')[0]).focus();
-            }
-        });
-
-        panelCtrl.goToSearchedInstitution = function goToSearchedInstitution(institutionId) {
-            panelCtrl.goToInstitution(institutionId);
-            panelCtrl.closePanel();
-        };
-
-        panelCtrl.goToInstitution = function goToInstitution(institutionId) {
-            if(institutionId) {
-                InstitutionService.getInstitution(institutionId).then(function success(response) {
-                    $state.go('app.institution', {institutionKey: response.data.key});
-                });
-            }
-        } ;
-
-        panelCtrl.closePanel = function closePanel(){
-            panelCtrl._mdPanelRef.close();
-        };
-    }
 })();

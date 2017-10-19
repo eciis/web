@@ -139,7 +139,7 @@
                 }
             })
             .state("app.search_page", {
-                url: "/search_page",
+                url: "/search_page/:finalSearch",
                 views: {
                     content: {
                         templateUrl: "app/search/search_page.html",

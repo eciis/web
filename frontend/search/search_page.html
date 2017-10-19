@@ -8,10 +8,30 @@
                     </md-card-header-text>
                 </md-card-header>
                 <md-card-content layout="column">
-                    <md-input-container class="md-block">
-                      <input ng-model="postCtrl.post.title" md-maxlength="100" maxlength="100" placeholder="Digite aqui sua pesquisa...">
-                    </md-input-container>
+                    <form ng-submit="searchCtrl.search()">
+                      <md-input-container class="md-block">
+                        <input placeholder="Digite aqui sua pesquisa..."
+                          ng-model="searchCtrl.keyWord">
+                      </md-input-container>
+                    </form>
                 </md-card-content>
+                <md-list class="md-dense" ng-if="searchCtrl.load" flex>
+                    <md-subheader class="md-no-sticky">Resultado da pesquisa:</md-subheader>
+                    <md-list-item class="md-3-line" ng-repeat="institution in searchCtrl.institutions">
+                        <div class="md-title">
+                            &bull;
+                            <a href class="hyperlink" ng-click="searchCtrl.goToInstitution(institution.id)">
+                            {{ institution.name | limitTo: 90}}{{institution.name.length > 90 ? '...' : ''}}
+                            </a>
+                        </div>
+                    </md-list-item>
+                    <md-list-item class="md-3-line" ng-if="searchCtrl.notHasInstitutions()">
+                        <b>&bull; Nenhuma instituição encontrada</b>
+                    </md-list-item>
+                </md-list>
+                <div flex layout-align="center center" layout="row">
+                  <md-progress-circular ng-show="!searchCtrl.load" md-mode="indeterminate"></md-progress-circular>
+                </div>
             </md-card>  
         </div>
     </div>

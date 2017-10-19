@@ -7,7 +7,7 @@
         var service = this;
 
         var POSTS_URI = "/api/posts";
-        var fetchs = 3;
+        var fetchs = 10;
         service.posts = [];
 
         service.get = function getPosts() {

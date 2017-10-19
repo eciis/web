@@ -6,7 +6,7 @@
         var service = this;
 
         var INSTITUTIONS_URI = "/api/institutions";
-        var fetchs = 3;
+        var fetchs = 10;
 
         service.getInstitutions = function getInstitutions() {
             var deferred = $q.defer();

@@ -57,7 +57,7 @@
 			</md-card-header>
 			<md-card-content>
 				<form name="requestuser">
-					<md-input-container class="md-block" ng-if="!requestInvCtrl.doNotShowNameInput()">
+					<md-input-container class="md-block" ng-if="requestInvCtrl.showNameInput()">
 			          <label>Nome</label>
 			          <input ng-model="requestInvCtrl.request.name" name="name" required>
 			          <div ng-messages='requestuser.request.name.$error'>

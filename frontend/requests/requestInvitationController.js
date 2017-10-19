@@ -118,8 +118,8 @@
             requestInvCtrl.request = null;
         };
 
-        requestInvCtrl.doNotShowNameInput = function doNotShowNameInput() {
-            return requestInvCtrl.currentUser.name !== 'Unknown' && requestInvCtrl.currentUser.name;
+        requestInvCtrl.showNameInput = function showNameInput() {
+            return requestInvCtrl.currentUser.name === 'Unknown' || !requestInvCtrl.currentUser.name;
         };
 
         function clearProperties(){

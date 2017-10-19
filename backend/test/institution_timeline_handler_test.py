@@ -20,7 +20,7 @@ class InstitutionTimelineHandlerTest(TestBaseHandler):
         """Provide the base for the tests."""
         super(InstitutionTimelineHandlerTest, cls).setUp()
         app = cls.webapp2.WSGIApplication(
-            [("/api/institutions/(.*)/timeline", InstitutionTimelineHandler),
+            [("/api/institutions/(.*)/timeline.*", InstitutionTimelineHandler),
              ("/api/posts/(.*)", PostHandler),
              ("/api/posts", PostCollectionHandler)
              ], debug=True)
@@ -38,7 +38,7 @@ class InstitutionTimelineHandlerTest(TestBaseHandler):
         self.testapp.post_json("/api/posts", self.post_aux)
 
         # Call the get method
-        posts = self.testapp.get("/api/institutions/%s/timeline" %
+        posts = self.testapp.get("/api/institutions/%s/timeline?page=0&&fetchs=2" %
                                  self.certbio.key.urlsafe())
         # Update the objects
         post_top = (posts.json['posts'])[0]
@@ -67,7 +67,7 @@ class InstitutionTimelineHandlerTest(TestBaseHandler):
         self.testapp.delete("/api/posts/%s" % post_last_obj.key.urlsafe())
 
         # Call the get method
-        posts = self.testapp.get("/api/institutions/%s/timeline" %
+        posts = self.testapp.get("/api/institutions/%s/timeline?page=0&&fetchs=2" %
                                  self.certbio.key.urlsafe())
 
         # Update the objects

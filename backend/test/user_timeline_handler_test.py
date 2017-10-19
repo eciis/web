@@ -20,7 +20,7 @@ class UserTimelineHandlerTest(TestBaseHandler):
         """Provide the base for the tests."""
         super(UserTimelineHandlerTest, cls).setUp()
         app = cls.webapp2.WSGIApplication(
-            [("/api/user/timeline", UserTimelineHandler),
+            [("/api/user/timeline.*", UserTimelineHandler),
              ("/api/posts/(.*)", PostHandler),
              ("/api/posts", PostCollectionHandler)
              ], debug=True)
@@ -35,7 +35,7 @@ class UserTimelineHandlerTest(TestBaseHandler):
         self.testapp.post_json("/api/posts", self.post_aux)
 
         # Call the get method
-        posts = self.testapp.get("/api/user/timeline")
+        posts = self.testapp.get("/api/user/timeline?page=0&&fetchs=2")
 
         # Update the objects
         post_top = (posts.json['posts'])[0]
@@ -64,7 +64,7 @@ class UserTimelineHandlerTest(TestBaseHandler):
         self.testapp.delete("/api/posts/%s" % post_last_obj.key.urlsafe())
 
         # Call the get method
-        posts = self.testapp.get("/api/user/timeline")
+        posts = self.testapp.get("/api/user/timeline?page=0&&fetchs=2")
 
         # Update the objects
         post_top = (posts.json['posts'])[0]

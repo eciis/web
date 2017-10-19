@@ -46,7 +46,7 @@
         mdDialog = $mdDialog;
         institutionService = InstitutionService;
 
-        httpBackend.expect('GET', INSTITUTIONS_URI + splab.key + '/timeline?page=0').respond({posts: posts});
+        httpBackend.expect('GET', INSTITUTIONS_URI + splab.key + '/timeline?page=0&&fetchs=3').respond({posts: posts});
         httpBackend.expect('GET', INSTITUTIONS_URI + splab.key).respond(splab);
         httpBackend.expect('GET', INSTITUTIONS_URI + splab.key + '/members').respond([tiago]);
         httpBackend.expect('GET', INSTITUTIONS_URI + splab.key + '/followers').respond([raoni]);

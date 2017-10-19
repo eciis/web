@@ -39,7 +39,7 @@
         scope = $rootScope.$new();
         mdDialog = $mdDialog;
         state = $state;
-        httpBackend.expect('GET', '/api/user/timeline?page=0').respond({posts: posts});
+        httpBackend.expect('GET', '/api/user/timeline?page=0&&fetchs=3').respond({posts: posts});
         httpBackend.when('GET', "/api/events").respond([event]);
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);

@@ -220,7 +220,7 @@ def initModels(cls):
         {'id': 0,
          'text': 'frist option',
          'number_votes': 0,
-         'voters': [],
+         'voters': []
          },
         {'id': 1,
          'text': 'second option',

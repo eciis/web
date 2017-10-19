@@ -3,7 +3,7 @@
 
     var app = angular.module('app');
 
-    app.controller('TimelineController', function(AuthService, MessageService, NotificationService, PostService) {
+    app.controller('TimelineController', function(AuthService, MessageService, NotificationService) {
         var timelineCtrl = this;
         var content = document.getElementById("content");
 
@@ -32,12 +32,9 @@
             timelineCtrl.refreshTimeline = !timelineCtrl.refreshTimeline;
         };
 
-        timelineCtrl.load = function load(posts) {
-            PostService.get().then(function success(response) {
-                posts.splice(0, posts.length);
-                _.forEach(response.data, function(post) {
-                    posts.push(post);
-                });
+        timelineCtrl.load = function load() {
+            var reload = true;
+            timelineCtrl.loadMorePosts(reload).then(function success() {
                 timelineCtrl.setRefreshTimelineButton();
             }, function error(response) {
                 MessageService.showToast(response.data.msg);

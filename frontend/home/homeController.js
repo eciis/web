@@ -63,30 +63,41 @@
             return institution.state === ACTIVE;
         };
 
-        homeCtrl.loadMorePosts = function loadMorePosts() {
+        homeCtrl.loadMorePosts = function loadMorePosts(reload) {
             var deferred = $q.defer();
 
+            if (reload) {
+                actualPage = 0;
+                morePosts = true;
+                homeCtrl.posts.splice(0, homeCtrl.posts.length);
+                homeCtrl.isLoadingPosts = true;
+            }
+
             if (morePosts) {
-                PostService.getNextPosts(actualPage).then(function success(response) {
-                    actualPage += 1;
-                    morePosts = response.data.next;
-
-                    _.forEach(response.data.posts, function(post) {
-                        homeCtrl.posts.push(post);
-                    });
-
-                    homeCtrl.isLoadingPosts = false;
-                    deferred.resolve();
-                }, function error(response) {
-                    MessageService.showToast(response.data.msg);
-                    deferred.reject();
-                });
+                loadPosts(deferred);
             } else {
                 deferred.resolve();
             }
 
             return deferred.promise;
         };
+
+        function loadPosts(deferred) {
+            PostService.getNextPosts(actualPage).then(function success(response) {
+                actualPage += 1;
+                morePosts = response.data.next;
+
+                _.forEach(response.data.posts, function(post) {
+                    homeCtrl.posts.push(post);
+                });
+
+                homeCtrl.isLoadingPosts = false;
+                deferred.resolve();
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
+                deferred.reject();
+            });
+        }
 
         function getFollowingInstitutions(){
             homeCtrl.followingInstitutions = homeCtrl.user.follows;

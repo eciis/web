@@ -8,8 +8,19 @@ body {
 }
 
 .section {
-    padding-bottom: 5%;
-    min-height: 95%;
+    height: 100%;
+    text-align: center;
+}
+
+.small-section {
+    height: 30%;
+}
+
+.inner-section {
+    padding: 2vh 0 5vh 0;
+}
+
+.inner-section .section-subheader, .inner-section .section-text {
     text-align: center;
 }
 
@@ -31,6 +42,7 @@ body {
 .section-image {
     width: 70%;
     height: auto;
+    margin-bottom: 2vh;
 }
 
 .parallax {
@@ -50,12 +62,21 @@ body {
     height: auto;
 }
 
-@media screen and (min-width: 960px) {
-
-    #header {
-        min-height: 95%;
+@-moz-document url-prefix() { 
+    .section {
+        height: 50vw;
     }
 
+    .small-section {
+        height: 15vw;
+    }
+
+    .section-image {
+        width: 10vw;
+    }
+}
+
+@media screen and (min-width: 960px) {
     .header-image {
         width: 70%;
     }
@@ -70,7 +91,6 @@ body {
     }
 
     .section {
-        min-height: auto;
         text-align: left;
     }
 
@@ -89,5 +109,9 @@ body {
     .section-image {
         width: auto;
         max-width: 80%;
+    }
+
+    .inner-section .section-subheader, .inner-section .section-text {
+        text-align: left;
     }
 }

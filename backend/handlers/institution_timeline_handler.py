@@ -15,13 +15,12 @@ from models.post import Post
 class InstitutionTimelineHandler(BaseHandler):
     """Get posts of specific institution."""
 
-    number_fetchs = 3
-
     @json_response
     @login_required
     def get(self, user, url_string):
         """Handler of get posts."""
         page = self.request.get('page', 0)
+        fetchs = self.request.get('fetchs', 0)
 
         institution_key = ndb.Key(urlsafe=url_string)
         queryPosts = Post.query(Post.institution == institution_key).order(
@@ -29,7 +28,7 @@ class InstitutionTimelineHandler(BaseHandler):
 
         queryPosts, more = offset_pagination(
             page,
-            InstitutionTimelineHandler.number_fetchs,
+            fetchs,
             queryPosts)
 
         array = [Post.make(post, self.request.host) for post in queryPosts]

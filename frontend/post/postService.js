@@ -7,6 +7,7 @@
         var service = this;
 
         var POSTS_URI = "/api/posts";
+        var fetchs = 3;
         service.posts = [];
 
         service.get = function getPosts() {
@@ -22,7 +23,7 @@
 
         service.getNextPosts = function getNextPosts(page) {
             var deferred = $q.defer();
-            $http.get("/api/user/timeline?page=" + page).then(function success(response) {
+            $http.get("/api/user/timeline?page=" + page + "&&fetchs=" + fetchs).then(function success(response) {
                 service.posts = response.data;
                 deferred.resolve(response);
             }, function error(response) {

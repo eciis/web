@@ -14,13 +14,12 @@ from models.post import Post
 class UserTimelineHandler(BaseHandler):
     """Get posts of all institutions that the user follow."""
 
-    number_fetchs = 3
-
     @json_response
     @login_required
     def get(self, user):
         """Handler of get posts."""
         page = self.request.get('page', 0)
+        fetchs = self.request.get('fetchs', 0)
 
         array = []
         visible_posts = []
@@ -31,7 +30,7 @@ class UserTimelineHandler(BaseHandler):
 
             queryPosts, more = offset_pagination(
                 page,
-                UserTimelineHandler.number_fetchs,
+                fetchs,
                 queryPosts)
 
             array = [Post.make(post, self.request.host) for post in queryPosts]

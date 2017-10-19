@@ -15,6 +15,7 @@ from oauth2client import client
 from oauth2client.crypt import AppIdentityError
 
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
+from custom_exceptions.fieldException import FieldException
 
 
 class Utils():
@@ -299,6 +300,11 @@ def has_permission(permission_type):
 
 def offset_pagination(page, number_fetchs, query):
     """Modify query for get entities using offset pagination."""
+    try:
+        number_fetchs = int(number_fetchs)
+    except ValueError:
+        raise FieldException("Invalid number of fetchs")
+
     try:
         offset = int(page) * number_fetchs
     except ValueError:

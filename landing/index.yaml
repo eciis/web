@@ -20,9 +20,4 @@ indexes:
   properties:
   - name: institution
   - name: last_modified_date
-
-- kind: Post
-  properties:
-  - name: institution
-  - name: last_modified_date
     direction: desc

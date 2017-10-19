@@ -1,38 +1,46 @@
 <md-content layout="row" md-colors="{background: 'grey-200'}" layout-align="center">
     <div flex-gt-lg="60" flex-lg="60" layout="row" layout-wrap layout-align="center" layout-fill>
-        <div layout="column" flex>
-            <md-card>
-                <md-card-header>
-                    <md-card-header-text>
-                        <span class="md-title">Pesquisa</span>
-                    </md-card-header-text>
-                </md-card-header>
-                <md-card-content layout="column">
-                    <form ng-submit="searchCtrl.search()">
-                      <md-input-container class="md-block">
-                        <input placeholder="Digite aqui sua pesquisa..."
-                          ng-model="searchCtrl.keyWord">
-                      </md-input-container>
-                    </form>
-                </md-card-content>
-                <md-list class="md-dense" ng-if="searchCtrl.load" flex>
-                    <md-subheader class="md-no-sticky">Resultado da pesquisa:</md-subheader>
-                    <md-list-item class="md-3-line" ng-repeat="institution in searchCtrl.institutions">
-                        <div class="md-title">
-                            &bull;
-                            <a href class="hyperlink" ng-click="searchCtrl.goToInstitution(institution.id)">
-                            {{ institution.name | limitTo: 90}}{{institution.name.length > 90 ? '...' : ''}}
-                            </a>
+        <div layout-align="center" layout-fill>
+            <div flex>
+                <md-card>
+                    <md-card-header>
+                        <md-card-header-text>
+                            <span class="md-title">Pesquisa</span>
+                        </md-card-header-text>
+                    </md-card-header>
+                    <md-card-content>
+                        <div>
+                            <form ng-submit="searchCtrl.search()">
+                              <md-input-container class="md-block">
+                                <input placeholder="Digite aqui sua pesquisa..."
+                                  ng-model="searchCtrl.keyWord">
+                              </md-input-container>
+                            </form>
                         </div>
-                    </md-list-item>
-                    <md-list-item class="md-3-line" ng-if="searchCtrl.notHasInstitutions()">
-                        <b>&bull; Nenhuma instituição encontrada</b>
-                    </md-list-item>
-                </md-list>
-                <div flex layout-align="center center" layout="row">
-                  <md-progress-circular ng-show="!searchCtrl.load" md-mode="indeterminate"></md-progress-circular>
-                </div>
-            </md-card>  
+                        <md-list
+                        md-cols="5" md-cols-gt-md="15"
+                        md-row-height="1:1"
+                        md-gutter="4px" md-gutter-gt-sm="4px"
+                        ng-if="searchCtrl.load">
+                            <md-subheader class="md-no-sticky">Resultado da pesquisa:</md-subheader>
+                            <md-list-item lass="md-2-line" md-rowspan="1" md-colspan="1" md-colspan-sm="1" ng-repeat="institution in searchCtrl.institutions">
+                                <div>
+                                    &bull;
+                                    <a href class="md-title hyperlink" ng-click="searchCtrl.goToInstitution(institution.id)">
+                                    {{ institution.name | limitTo: 90}}{{institution.name.length > 90 ? '...' : ''}}
+                                    </a>
+                                </div>
+                            </md-list-item>
+                            <md-list-item class="md-3-line" ng-if="searchCtrl.notHasInstitutions()">
+                                <b>&bull; Nenhuma instituição encontrada</b>
+                            </md-list-item>
+                        </md-list>
+                        <div layout-align="center center" layout="row">
+                          <md-progress-circular ng-show="!searchCtrl.load" md-mode="indeterminate"></md-progress-circular>
+                        </div>
+                    </md-card-content>
+                </md-card>
+            </div>
         </div>
     </div>
 </md-content>

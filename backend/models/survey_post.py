@@ -73,3 +73,13 @@ class SurveyPost(Post):
         else:
             for option in all_options_selected:
                 self.add_vote(author_key, option)
+
+    @staticmethod
+    def make(post, host):
+        """Create personalized json of post."""
+        post_dict = Post.make(post, host)
+        post_dict["deadline"] = post.deadline.isoformat()
+        post_dict["type_survey"] = post.type_survey
+        post_dict["options"] = post.options if post.options else []
+
+        return post_dict

@@ -129,6 +129,8 @@
         };
 
         controller.getIcon = function getIcon(type) {
+            console.log(type);
+            console.log(type_data);
             var icon = type_data[type].icon;
             return icon;
         };

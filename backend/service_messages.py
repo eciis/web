@@ -30,10 +30,8 @@ def send_message_notification(user_key, message, entity_type, entity_key):
         }
     )
 
-# TODO: Change the method to receive the subject dynamically
-# And change its calls
-# @author: Raoni Smaneoto
-def send_message_email(invitee, body, subject=None):
+
+def send_message_email(invitee, body, subject):
     """Method of send email.
 
     Keywords arguments:
@@ -45,7 +43,7 @@ def send_message_email(invitee, body, subject=None):
         target='worker',
         params={
             'invitee': invitee,
-            'subject': subject or "Convite plataforma e-CIS",
+            'subject': subject,
             'body': body
         }
     )

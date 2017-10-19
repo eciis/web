@@ -14,7 +14,7 @@ class PostFactory:
         Receive the data.
         Return new instance of post according type.
         """
-        type_class = data.get_type()
+        type_class = PostFactory.get_type(data)
         if(type_class == 'SURVEY_POST'):
             obj = SurveyPost.create(data, user_key, institution_key)
         else:
@@ -22,16 +22,18 @@ class PostFactory:
             obj.create(data, user_key, institution_key)
         return obj
 
+    @staticmethod
     def get_type(data):
         """Return type of post according attributes that data has."""
-        if(data.type_survey):
+        if(data.get("type_survey")):
             return 'SURVEY_POST'
         else:
             return 'POST'
 
+    @staticmethod
     def get_permission(data):
         """Return permission according type of data has."""
-        if(data.get_type() == 'SURVEY_POST'):
+        if(PostFactory.get_type(data) == 'SURVEY_POST'):
             return 'publish_survey_post'
         else:
             return 'publish_post'

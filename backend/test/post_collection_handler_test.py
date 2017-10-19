@@ -247,7 +247,7 @@ def initModels(cls):
     # Survey post
     cls.options = [
         {'id': 0,
-         'text': 'frist option',
+         'text': 'first option',
          'number_votes': 0,
          'voters': []
          },

@@ -29,4 +29,3 @@ class PostFactory:
             return 'SURVEY_POST'
         else:
             return 'POST'
-

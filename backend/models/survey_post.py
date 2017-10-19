@@ -37,9 +37,8 @@ class SurveyPost(Post):
         option = self.options[option_id]
 
         if(self.is_vote_valid(author_key, option)):
-            option.number_votes += 1
-            option.voters.append(author_key)
-
+            option["number_votes"] += 1
+            option["voters"].append(author_key)
             self.options[option_id] = Utils.toJson(option)
             self.put()
 
@@ -47,13 +46,13 @@ class SurveyPost(Post):
         """Remove a vote from survey post."""
         option = self.options[option_id]
 
-        if(author_key not in option.voters):
+        if(author_key not in option["voters"]):
             raise Exception("The user didn't vote for this option")
 
-        option.number_votes -= 1
-        option.voters.remove(author_key)
+        option["number_votes"] -= 1
+        option["voters"].remove(author_key)
 
-        self.options[option.id] = Utils.toJson(option)
+        self.options[option_id] = Utils.toJson(option)
         self.put()
 
     def is_vote_valid(self, author_key, option):
@@ -70,7 +69,7 @@ class SurveyPost(Post):
         """Added all votes of user from survey post."""
         if(self.type_survey == "binary" and
                 len(all_options_selected) == 1):
-            self.add_vote(author_key, all_options_selected)
+            self.add_vote(author_key, all_options_selected[0])
         else:
             for option in all_options_selected:
                 self.add_vote(author_key, option)

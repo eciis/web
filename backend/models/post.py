@@ -145,10 +145,8 @@ class Post(ndb.Model):
     # When post is shared event
     shared_event = ndb.KeyProperty(kind="Event")
 
-    @staticmethod
-    def create(data, author_key, institution_key):
+    def create(post, data, author_key, institution_key):
         """Create a post and check required fields."""
-        post = Post()
         post = post.createSharing(data)
 
         if post.shared_event is None and post.shared_post is None:
@@ -212,7 +210,7 @@ class Post(ndb.Model):
         return post.modify_post(post_dict, host)
 
     def modify_post(post, post_dict, host):
-        """Create personalized json if post was deleted is shared."""
+        """Create personalized json if post was deleted or shared."""
         if(post.state == 'deleted'):
             post_dict['title'] = None
             post_dict['text'] = None

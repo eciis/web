@@ -40,6 +40,16 @@
         institutionCtrl.user = AuthService.getCurrentUser();
         institutionCtrl.addPost = institutionCtrl.user.current_institution.key === currentInstitutionKey;
 
+        function loadPosts() {
+            InstitutionService.getTimeline(currentInstitutionKey).then(function success(response) {
+                institutionCtrl.posts = response.data.posts;
+                morePosts = response.data.next;
+                institutionCtrl.isLoadingPosts = false;
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
+            });
+        }
+
         function loadInstitution() {
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
                 institutionCtrl.current_institution = new Institution(response.data);

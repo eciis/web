@@ -41,10 +41,10 @@ class InstitutionTimelineHandlerTest(TestBaseHandler):
         posts = self.testapp.get("/api/institutions/%s/timeline" %
                                  self.certbio.key.urlsafe())
         # Update the objects
-        post_top = (posts.json)[1]
+        post_top = (posts.json['posts'])[0]
         key_post_top = ndb.Key(urlsafe=post_top['key'])
         post_top_obj = key_post_top.get()
-        post_last = (posts.json)[0]
+        post_last = (posts.json['posts'])[1]
         key_post_last = ndb.Key(urlsafe=post_last['key'])
         post_last_obj = key_post_last.get()
 
@@ -71,8 +71,8 @@ class InstitutionTimelineHandlerTest(TestBaseHandler):
                                  self.certbio.key.urlsafe())
 
         # Update the objects
-        post_top = (posts.json)[1]
-        post_last = (posts.json)[0]
+        post_top = (posts.json['posts'])[0]
+        post_last = (posts.json['posts'])[1]
 
         # Verify if the post was deleted and your informations
         self.assertEqual(post_top["title"], None,

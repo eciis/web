@@ -85,7 +85,7 @@
             "ACCEPT_INSTITUTION_LINK": {
                 icon: "account_balance",
             },
-            "ACCEPT_LINK": {
+            "ACCEPTED_LINK": {
                 icon: "link",
             },
             "REJECT_INSTITUTION_LINK": {
@@ -146,7 +146,7 @@
             if (notificationProperties.isDialog) {
                 notificationProperties.dialogProperties.locals.key = notification.entity_key;
                 controller.showDialog(notificationProperties.dialogProperties);
-            } else if (notification.type === 'ACCEPT_LINK'){
+            } else if (notification.type === 'ACCEPTED_LINK'){
                 InstitutionService.getInstitution(notification.entity_key).then(function success(response) {
                     controller.user.institutions.push(response.data);
                     AuthService.save();

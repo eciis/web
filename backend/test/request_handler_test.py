@@ -10,6 +10,7 @@ from models.request_user import RequestUser
 from handlers.request_handler import RequestHandler
 
 from mock import patch
+import mock
 
 
 class RequestHandlerTest(TestBaseHandler):
@@ -65,13 +66,14 @@ class RequestHandlerTest(TestBaseHandler):
             exception_message,
             "Expected error message is Error! User is not admin")
 
+    @mock.patch('handlers.request_handler.send_message_notification')
     @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
-    def test_put(self, verify_token):
+    def test_put(self, verify_token, mock_method):
         """Test method put of RequestHandler."""
         self.testapp.put('/api/requests/' + self.request.key.urlsafe() + '/user')
         user = self.other_user.key.get()
         institution = self.inst_test.key.get()
-
+        self.assertTrue(mock_method.called)
         self.assertEqual(
             self.request.key.get().status,
             'accepted',

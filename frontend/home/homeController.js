@@ -92,16 +92,6 @@
             homeCtrl.followingInstitutions = homeCtrl.user.follows;
         }
 
-        var loadPosts = function loadPosts() {
-            PostService.get().then(function success(response) {
-                actualPage += 1;
-                homeCtrl.posts = response.data.posts;
-                homeCtrl.isLoadingPosts = false;
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
-            });
-        };
-
         function loadEvents() {
             EventService.getEvents().then(function success(response) {
                 homeCtrl.events = activeEvents(response.data);

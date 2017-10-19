@@ -47,16 +47,6 @@
             return deferred.promise;
         };
 
-        service.getTimeline = function getInstitutions(institution_key) {
-            var deferred = $q.defer();
-            $http.get(INSTITUTIONS_URI + "/" + institution_key + "/timeline").then(function success(response) {
-                deferred.resolve(response);
-            }, function error(response) {
-                deferred.reject(response);
-            });
-            return deferred.promise;
-        };
-
         service.getNextPosts = function getNextPosts(institution_key, page) {
             var deferred = $q.defer();
             $http.get(INSTITUTIONS_URI + "/" + institution_key + "/timeline?page=" + page).then(function success(response) {

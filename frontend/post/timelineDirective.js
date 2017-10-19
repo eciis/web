@@ -6,29 +6,23 @@
     app.controller('TimelineController', function(AuthService, MessageService, NotificationService, PostService) {
         var timelineCtrl = this;
         var content = document.getElementById("content");
-        var alreadyRequested = false;
 
         timelineCtrl.user = AuthService.getCurrentUser();
         timelineCtrl.refreshTimeline = false;
         timelineCtrl.isLoadingPosts = false;
 
-        content.onscroll = function onscroll() {
-            var screenPosition = content.scrollTop + content.offsetHeight;
-            var maxHeight = content.scrollHeight;
-            var proportion = screenPosition/maxHeight;
+        function loadMorePosts() {
+            timelineCtrl.isLoadingPosts = true;
+            var promise = timelineCtrl.loadMorePosts();
 
-            if (proportion >= 0.75 && !alreadyRequested) {
-                alreadyRequested = true;
-                timelineCtrl.isLoadingPosts = true;
+            promise.then(function success() {
+                timelineCtrl.isLoadingPosts = false;
+            });
 
-                timelineCtrl.loadMorePosts().then(function success() {
-                    alreadyRequested = false;
-                    timelineCtrl.isLoadingPosts = false;
-                }, function error() {
-                    alreadyRequested = false;
-                });
-            }
-        };
+            return promise;
+        }
+
+        Utils.setScrollListener(content, loadMorePosts);
 
         timelineCtrl.showRefreshTimelineButton = function showRefreshTimelineButton() {
            return timelineCtrl.refreshTimeline;

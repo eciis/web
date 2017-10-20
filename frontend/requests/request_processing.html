@@ -26,11 +26,11 @@
           </div>
           <div layout="column" flex layout-align="end start">
             <md-list-item ng-class="requestCtrl.children.name? 'md-3-line' : 'md-2-line'">
-              <img ng-src="{{ requestCtrl.children.photo_url || 'app/images/avatar.jpg'}}" class="md-avatar" 
+              <img ng-src="{{ requestCtrl.children.photo_url || 'app/images/avatar.jpg'}}" class="md-avatar"
                 alt="{{ requestCtrl.children.name }}" />
               <div class="md-list-item-text" layout="column">
                 <h3>
-                  <b>{{ requestCtrl.children.name || requestCtrl.children.sender_name}}</b> - 
+                  <b>{{ requestCtrl.children.name || requestCtrl.children.sender_name}}</b> -
                   {{ requestCtrl.children.email || requestCtrl.children.office }}
                 </h3>
                 <h4 ng-if="requestCtrl.children.institutional_email">{{ requestCtrl.children.institutional_email }}</h4>

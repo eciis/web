@@ -1,4 +1,33 @@
 <md-content layout="row" md-colors="{background: 'grey-200'}" layout-align="center">
+    <!-- LEFT SIDE PANEL -->
+    <div flex-gt-md="20" flex-md="25" layout="row" layout-wrap layout-align="center" layout-fill>
+        <div layout-align="center" layout-fill>
+          <md-card>
+            <md-subhead layout-padding class="md-primary" md-colors="{background: 'teal-900'}">Filtrar pesquisa</md-subhead>
+            <md-card-content>
+                <md-radio-group flex>
+                    <md-list
+                    md-cols="5" md-cols-gt-md="15"
+                    md-row-height="1:1"
+                    md-gutter="4px" md-gutter-gt-sm="4px">
+                        <md-list-item md-rowspan="1" md-colspan="1" md-colspan-sm="1">
+                            <div class="column">
+                                <md-radio-button class="md-primary" ng-value="'*'" ng-click="searchCtrl.teste('*')"><b>Pesquisar em todas as áreas</b></md-radio-button>
+                            </div>
+                        </md-list-item>
+                        <md-list-item md-rowspan="1" md-colspan="1" md-colspan-sm="1"
+                        ng-repeat="occupation_area in searchCtrl.occupationAreas | orderBy: 'name'">
+                            <div class="column">
+                                <md-radio-button class="md-primary" ng-value="occupation_area.name" ng-click="searchCtrl.teste(occupation_area.name)">{{occupation_area.name}}</md-radio-button>
+                            </div>
+                        </md-list-item>
+                    </md-list>
+                </md-radio-group>
+            </md-card-content>
+          </md-card>
+        </div>
+    </div>
+
     <div flex-gt-lg="60" flex-lg="60" layout="row" layout-wrap layout-align="center" layout-fill>
         <div layout-align="center" layout-fill>
             <div flex>
@@ -22,8 +51,8 @@
                         md-row-height="1:1"
                         md-gutter="4px" md-gutter-gt-sm="4px"
                         ng-if="searchCtrl.load">
-                            <md-subheader class="md-no-sticky">Resultado da pesquisa:</md-subheader>
-                            <md-list-item lass="md-2-line" md-rowspan="1" md-colspan="1" md-colspan-sm="1" ng-repeat="institution in searchCtrl.institutions">
+                            <md-subheader class="md-no-sticky">Instituições encontradas:</md-subheader>
+                            <md-list-item md-rowspan="1" md-colspan="1" md-colspan-sm="1" ng-repeat="institution in searchCtrl.institutions">
                                 <div>
                                     &bull;
                                     <a href class="md-title hyperlink" ng-click="searchCtrl.goToInstitution(institution.id)">

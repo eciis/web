@@ -1,19 +1,21 @@
 'use strict';
+
 (function() {
     var app = angular.module('app');
 
-    app.controller("SearchController", function SearchController($state, InstitutionService, MessageService) {
+    app.controller("SearchController", function SearchController($state, InstitutionService, MessageService, $http) {
 
         var searchCtrl = this;
 
         searchCtrl.keyWord = '';
         searchCtrl.finalSearch = $state.params.finalSearch;
         searchCtrl.institutions = [];
+        searchCtrl.occupationAreas = [];
         searchCtrl.load = false;
 
-        searchCtrl.makeSearch = function makeSearch() {
+        searchCtrl.makeSearch = function makeSearch(value) {
             searchCtrl.load = false;
-            var promise = InstitutionService.searchInstitutions(searchCtrl.finalSearch, "active");
+            var promise = InstitutionService.searchInstitutions(value ? value : searchCtrl.finalSearch, "active");
             promise.then(function success(response) {
                 searchCtrl.institutions = response.data;
                 searchCtrl.load = true;
@@ -42,12 +44,23 @@
             }
         };
 
+        searchCtrl.teste = function(value) {
+            searchCtrl.makeSearch(value);
+        };
+
+        function getOccupationAreas() {
+            $http.get('app/institution/occupation_area.json').then(function success(response) {
+                searchCtrl.occupationAreas = response.data;
+            });
+        }
+
         function loadSearch() {
             if (searchCtrl.finalSearch) {
                 searchCtrl.makeSearch();
             }
         }
 
+        getOccupationAreas();
         loadSearch();
     });
 })();

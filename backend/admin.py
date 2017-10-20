@@ -581,13 +581,16 @@ class ResetHandler(BaseHandler):
         mayza.put()
 
         eciis.posts = [jorge_post_eCIIS.key, dalton_post.key]
+        eciis.occupation_area = "Órgão vinculado a Ministério (Secretarias, Departamentos e Coordenações)"
         eciis.put()
 
         certbio.posts = [dalton_postCertbio.key,
                          mayza_post.key, mayza_post_comIMG.key]
+        certbio.occupation_area = "Laboratórios Oficiais"
         certbio.put()
 
         splab.posts = [jorge_post.key, andre_post.key]
+        splab.occupation_area = "Institutos de Pesquisa"
         splab.put()
 
         jsonList.append({"msg": "database initialized with a few posts"})

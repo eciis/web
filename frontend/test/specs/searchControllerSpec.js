@@ -15,6 +15,15 @@
         key: '1239'
     };
 
+    var occupation_area = [
+        {"value":"official laboratories", "name":"Laboratórios Oficiais"},
+        {"value":"government agencies", "name":"Ministérios e outros Órgãos do Governo"},
+        {"value":"funding agencies", "name":"Agências de Fomento"},
+        {"value":"research institutes", "name":"Institutos de Pesquisa"},
+        {"value":"colleges", "name":"Universidades"},
+        {"value":"other", "name":"Outra"}
+    ];
+
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $httpBackend, $rootScope, $state, AuthService, InstitutionService) {
@@ -24,7 +33,7 @@
         instService = InstitutionService;
 
         AuthService.login(user);
-
+        httpBackend.expectGET('app/institution/occupation_area.json').respond(occupation_area);
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', "error/user_inactive.html").respond(200);
         httpBackend.when('GET', "home/home.html").respond(200);
@@ -35,6 +44,7 @@
             });
         };
         searchCtrl = createCtrl();
+        httpBackend.flush();
     }));
 
     afterEach(function() {

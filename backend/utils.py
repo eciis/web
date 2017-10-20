@@ -303,7 +303,7 @@ def offset_pagination(page, number_fetchs, query):
     try:
         number_fetchs = int(number_fetchs)
     except ValueError:
-        raise FieldException("Invalid number of fetchs")
+        number_fetchs = 5
 
     try:
         offset = int(page) * number_fetchs

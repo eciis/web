@@ -19,8 +19,8 @@ class InstitutionTimelineHandler(BaseHandler):
     @login_required
     def get(self, user, url_string):
         """Handler of get posts."""
-        page = self.request.get('page', 0)
-        fetchs = self.request.get('fetchs', 0)
+        page = self.request.get('page', None)
+        fetchs = self.request.get('limit', None)
 
         institution_key = ndb.Key(urlsafe=url_string)
         queryPosts = Post.query(Post.institution == institution_key).order(

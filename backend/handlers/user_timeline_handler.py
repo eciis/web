@@ -18,8 +18,8 @@ class UserTimelineHandler(BaseHandler):
     @login_required
     def get(self, user):
         """Handler of get posts."""
-        page = self.request.get('page', 0)
-        fetchs = self.request.get('fetchs', 0)
+        page = self.request.get('page', None)
+        fetchs = self.request.get('limit', None)
 
         array = []
         visible_posts = []

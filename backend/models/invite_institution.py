@@ -18,7 +18,7 @@ class InviteInstitution(Invite):
     @staticmethod
     def create(data, invite=None):
         """
-        Create a post and check required fields.
+        Create an invite and check required fields.
 
         Receive the data of invite.
         can receive a pre-created invitation of type parent or children,

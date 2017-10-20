@@ -24,6 +24,8 @@ class Utils():
     NOT_FOUND = 404
     FORBIDDEN = 403
     BAD_REQUEST = 400
+    DEFAULT_PAGINATION_LIMIT = 10
+    DEFAULT_PAGINATION_OFFSET = 0
 
     @staticmethod
     def createEntity(EntityClass, propertiesValue):
@@ -303,12 +305,12 @@ def offset_pagination(page, number_fetchs, query):
     try:
         number_fetchs = int(number_fetchs)
     except Exception:
-        number_fetchs = 5
+        number_fetchs = Utils.DEFAULT_PAGINATION_LIMIT
 
     try:
         offset = int(page) * number_fetchs
     except Exception:
-        offset = 0
+        offset = Utils.DEFAULT_PAGINATION_OFFSET
 
     query, next_cursor, more = query.fetch_page(
         number_fetchs,

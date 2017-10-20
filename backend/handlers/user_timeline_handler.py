@@ -6,6 +6,7 @@ import json
 from utils import login_required
 from utils import json_response
 from utils import offset_pagination
+from utils import Utils
 
 from handlers.base_handler import BaseHandler
 from models.post import Post
@@ -18,8 +19,8 @@ class UserTimelineHandler(BaseHandler):
     @login_required
     def get(self, user):
         """Handler of get posts."""
-        page = self.request.get('page', None)
-        fetchs = self.request.get('limit', None)
+        page = self.request.get('page', Utils.DEFAULT_PAGINATION_OFFSET)
+        fetchs = self.request.get('limit', Utils.DEFAULT_PAGINATION_LIMIT)
 
         array = []
         visible_posts = []

@@ -7,7 +7,7 @@
         var service = this;
 
         var POSTS_URI = "/api/posts";
-        var limit = 10;
+        var LIMIT = 10;
         service.posts = [];
 
         service.get = function getPosts() {
@@ -23,7 +23,7 @@
 
         service.getNextPosts = function getNextPosts(page) {
             var deferred = $q.defer();
-            $http.get("/api/user/timeline?page=" + page + "&&limit=" + limit).then(function success(response) {
+            $http.get("/api/user/timeline?page=" + page + "&&limit=" + LIMIT).then(function success(response) {
                 service.posts = response.data;
                 deferred.resolve(response);
             }, function error(response) {

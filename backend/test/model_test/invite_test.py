@@ -96,7 +96,7 @@ class InviteTest(TestBase):
         self.assertEquals(
             maked_invite,
             expected_maked_invite,
-            "The invited maked should be iqual to the expected one"
+            "The invited maked should be equal to the expected one"
         )
 
 

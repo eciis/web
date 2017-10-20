@@ -82,7 +82,11 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
 
     @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
     def test_delete_with_a_member(self, verify_token):
-        """Test delete method."""
+        """Test delete when the user is a member
+
+        The user can't unfollow the institution because he is a member
+        That's what the test expect
+        """
         # Assert initials conditions
         self.assertTrue(self.user.key in self.institution.followers)
         self.assertTrue(self.institution.key in self.user.follows)
@@ -148,12 +152,7 @@ def initModels(cls):
     cls.user.institutions = [cls.institution.key, cls.other_institution.key]
     cls.user.institutions_admin = [
         cls.institution.key, cls.other_institution.key]
-    cls.user.add_permission("publish_post", cls.institution.key.urlsafe())
-    cls.user.add_permission(
-        "publish_post", cls.other_institution.key.urlsafe())
     cls.user.follows = [cls.other_institution.key, cls.institution.key]
     cls.user.put()
     cls.second_user.follows = [cls.institution.key]
-    cls.second_user.add_permission(
-        "publish_post", cls.institution.key.urlsafe())
     cls.second_user.put()

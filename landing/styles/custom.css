@@ -1,0 +1,117 @@
+body {
+    min-height: 600px;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.toolbar {
+    box-shadow: 0 1px 1px 0px #757575;
+}
+
+.section {
+    height: 100%;
+    text-align: center;
+}
+
+.small-section {
+    height: 30%;
+}
+
+.inner-section {
+    padding: 2vh 0 5vh 0;
+}
+
+.inner-section .section-subheader, .inner-section .section-text {
+    text-align: center;
+}
+
+.section-title {
+    font-size: 7.5vw;
+    font-weight: bold;
+}
+
+.section-text {
+    font-size: 3.5vw;
+}
+
+.section-subheader {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+    font-size: 6.5vw;
+}
+
+.section-image {
+    width: 70%;
+    height: auto;
+    margin-bottom: 2vh;
+}
+
+.parallax {
+    background-attachment: scroll;
+    background-repeat: no-repeat;
+    background-size: cover; 
+    background-position: center;
+}
+
+.title {
+    text-align: center;
+    font-size: 7vw;
+}
+
+.header-image {
+    width: 50%;
+    height: auto;
+}
+
+@-moz-document url-prefix() { 
+    .section {
+        height: 50vw;
+    }
+
+    .small-section {
+        height: 15vw;
+    }
+
+    .section-image {
+        width: 10vw;
+    }
+}
+
+@media screen and (min-width: 960px) {
+    .header-image {
+        width: 70%;
+    }
+
+    .title {
+        font-size: 4vw;
+        text-align: left;
+    }
+
+    .parallax {
+        background-attachment: fixed;
+    }
+
+    .section {
+        text-align: left;
+    }
+
+    .section-title {
+        font-size: 3vw;
+    }
+
+    .section-subheader {
+        font-size: 2vw;
+    }
+
+    .section-text {
+        font-size: 1vw;
+    }
+
+    .section-image {
+        width: auto;
+        max-width: 80%;
+    }
+
+    .inner-section .section-subheader, .inner-section .section-text {
+        text-align: left;
+    }
+}

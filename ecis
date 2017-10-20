@@ -56,13 +56,17 @@ case "$1" in
         if [ ! -z $2 ]; then
             version=$2
             set_backend_url $version
-            gcloud app deploy --version $version --no-promote $LANDING_YAML $FRONTEND_YAML $BACKEND_YAML $WORKER_YAML
+
+            if [ ! -z $3 ]; then # Especified one or more yaml configuration files
+                gcloud app deploy --version $version --no-promote $3
+            else
+                gcloud app deploy --version $version --no-promote $LANDING_YAML $FRONTEND_YAML $BACKEND_YAML $WORKER_YAML
+            fi
         else
             set_backend_url
             gcloud app deploy $LANDING_YAML $FRONTEND_YAML $BACKEND_YAML $WORKER_YAML
         fi
 
-        
         exit 0
         ;;
 

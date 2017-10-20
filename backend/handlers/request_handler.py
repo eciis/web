@@ -10,6 +10,7 @@ from utils import getSuperUsers
 from handlers.base_handler import BaseHandler
 from custom_exceptions.entityException import EntityException
 from utils import is_admin_of_requested_inst
+from service_messages import send_message_notification
 
 
 def makeUser(user, request):
@@ -55,21 +56,29 @@ class RequestHandler(BaseHandler):
 
         institution_key = request.institution_key
         institution = institution_key.get()
-        user = request.sender_key.get()
+        sender = request.sender_key.get()
 
-        user.add_institution(institution_key)
-        user.follow(institution_key)
-        user.change_state('active')
-        user.put()
+        sender.add_institution(institution_key)
+        sender.follow(institution_key)
+        sender.change_state('active')
+        sender.put()
 
-        institution.add_member(user)
-        institution.follow(user.key)
+        institution.add_member(sender)
+        institution.follow(sender.key)
         institution.put()
 
         host = self.request.host
         request.send_response_email(host, "ACCEPT")
 
-        self.response.write(json.dumps(makeUser(user, self.request)))
+        entity_type = 'ACCEPTED_LINK'
+        message = {'type': 'ACCEPTED_LINK', 'from': user.name.encode('utf8')}
+        send_message_notification(
+            request.sender_key.urlsafe(),
+            json.dumps(message),
+            entity_type,
+            institution.key.urlsafe())
+
+        self.response.write(json.dumps(makeUser(sender, self.request)))
 
     @login_required
     @is_admin_of_requested_inst

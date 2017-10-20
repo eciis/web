@@ -218,6 +218,23 @@
             }
         };
 
+        institutionCtrl.requestInvitation = function requestInvitation(event) {
+            $mdDialog.show({
+                controller: "RequestInvitationController",
+                controllerAs: "requestInvCtrl",
+                templateUrl: 'app/requests/request_invitation_dialog.html',
+                parent: angular.element(document.body),
+                targetEvent: event,
+                locals: {
+                    institution: institutionCtrl.current_institution
+                },
+                bindToController: true,
+                clickOutsideToClose:true,
+                openFrom: '#fab-new-post',
+                closeTo: angular.element(document.querySelector('#fab-new-post'))
+            });
+        };
+
         function DialogController($mdDialog, portfolioUrl) {
             var ctrl = this;
             var trustedUrl = $sce.trustAsResourceUrl(portfolioUrl);

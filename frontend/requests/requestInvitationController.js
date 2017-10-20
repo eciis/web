@@ -10,7 +10,6 @@
         requestInvCtrl.search = "";
         requestInvCtrl.institutions = [];
         requestInvCtrl.institutionSelect = {};
-
         requestInvCtrl.hasInstSelect = false;
         requestInvCtrl.wasSearched = false;
         requestInvCtrl.canCreate = false;
@@ -24,7 +23,7 @@
                 admin_key : requestInvCtrl.institutionSelect.admin.key,
                 is_request : true,
                 type_of_invite : 'REQUEST_USER',
-                sender_name : requestInvCtrl.request.name,
+                sender_name : requestInvCtrl.request.name || requestInvCtrl.currentUser.name,
                 office : requestInvCtrl.request.office,
                 institutional_email : requestInvCtrl.request.email
             };
@@ -38,6 +37,13 @@
                 requestInvCtrl.cancelDialog();
             });
         };
+
+        (function main(){
+            if(requestInvCtrl.institution) {
+                requestInvCtrl.hasInstSelect = true;
+                requestInvCtrl.institutionSelect = requestInvCtrl.institution;
+            }
+        })();
 
         requestInvCtrl.createInst = function createInst() {
             $state.go("create_institution");
@@ -110,6 +116,10 @@
 
         requestInvCtrl.cancelRequest = function cancelRequest() {
             requestInvCtrl.request = null;
+        };
+
+        requestInvCtrl.showNameInput = function showNameInput() {
+            return requestInvCtrl.currentUser.name === 'Unknown' || !requestInvCtrl.currentUser.name;
         };
 
         function clearProperties(){

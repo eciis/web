@@ -14,6 +14,7 @@ from handlers.user_profile_handler import UserProfileHandler
 from handlers.post_collection_handler import PostCollectionHandler
 from handlers.post_handler import PostHandler
 from handlers.like_handler import LikeHandler
+from handlers.vote_handler import VoteHandler
 from handlers.institution_timeline_handler import InstitutionTimelineHandler
 from handlers.user_timeline_handler import UserTimelineHandler
 from handlers.erro_handler import ErroHandler
@@ -72,6 +73,7 @@ app = webapp2.WSGIApplication([
     ("/api/posts/(.*)/likes", LikeHandler),
     ("/api/posts/(.*)", PostHandler),
     ("/api/posts", PostCollectionHandler),
+    ("/api/surveyposts/(.*)/votes", VoteHandler),
     ("/api/user", UserHandler),
     ("/api/user/(.*)/profile", UserProfileHandler),
     ("/api/user/institutions/(.*)", UserHandler),

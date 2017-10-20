@@ -9,6 +9,7 @@ from utils import json_response
 from utils import offset_pagination
 from utils import Utils
 from utils import to_int
+from custom_exceptions.queryException import QueryException
 
 from handlers.base_handler import BaseHandler
 from models.post import Post
@@ -21,11 +22,14 @@ class InstitutionTimelineHandler(BaseHandler):
     @login_required
     def get(self, user, url_string):
         """Handler of get posts."""
-        page = self.request.get('page', Utils.DEFAULT_PAGINATION_OFFSET)
-        limit = self.request.get('limit', Utils.DEFAULT_PAGINATION_LIMIT)
-
-        page = to_int(page, "Query param page muste be integer")
-        limit = to_int(limit, "Query param limit muste be integer")
+        page = to_int(
+            self.request.get('page', Utils.DEFAULT_PAGINATION_OFFSET),
+            QueryException,
+            "Query param page muste be an integer")
+        limit = to_int(
+            self.request.get('limit', Utils.DEFAULT_PAGINATION_LIMIT),
+            QueryException,
+            "Query param limit muste be an integer")
 
         institution_key = ndb.Key(urlsafe=url_string)
         queryPosts = Post.query(Post.institution == institution_key).order(

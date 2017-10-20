@@ -25,11 +25,11 @@ class InstitutionTimelineHandler(BaseHandler):
         page = to_int(
             self.request.get('page', Utils.DEFAULT_PAGINATION_OFFSET),
             QueryException,
-            "Query param page muste be an integer")
+            "Query param page must be an integer")
         limit = to_int(
             self.request.get('limit', Utils.DEFAULT_PAGINATION_LIMIT),
             QueryException,
-            "Query param limit muste be an integer")
+            "Query param limit must be an integer")
 
         institution_key = ndb.Key(urlsafe=url_string)
         queryPosts = Post.query(Post.institution == institution_key).order(

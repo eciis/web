@@ -101,4 +101,5 @@ class RequestUser(Invite):
         invite_user_json['institutional_email'] = self.institutional_email
         invite_user_json['institution_key'] = self.institution_key.urlsafe()
         invite_user_json['type_of_invite'] = 'REQUEST_USER'
+        invite_user_json['photo_url'] = self.sender_key.get().photo_url
         return invite_user_json

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Like Post handler test."""
+"""Event handler test."""
 
 from test_base_handler import TestBaseHandler
 from models.user import User

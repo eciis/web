@@ -1,115 +1,182 @@
 <!-- TOOLBAR -->
 <md-toolbar md-colors="{background: 'grey-100'}" layout-align="center center" layout="row"
-    style="position: fixed;">
+    class="toolbar">
   <div class="md-toolbar-tools" flex layout="row" layout-align="center center" 
-      style="padding-right: 0px; height: 100%; position: fixed;">
-    <div layout="row" layout-align="center center" style="margin-left: 1em;">
-      <img src="images/ecis.png" aria-label="e-CIS Logo">
-    </div>
+    style="padding-right: 0px; height: 100%; position: fixed;" hide show-gt-sm>
+  <div layout="row" layout-align="center center" style="margin-left: 1em;">
+    <img src="images/ecis.png" aria-label="e-CIS Logo" style="height: 50%">
+  </div>
 
-    <span flex md-truncate></span>
+  <span flex md-truncate></span>
 
+  <md-button aria-label="Inicial" class="md-button" ng-click="ctrl.scroll('header')" title="Página Inicial"
+      md-colors="{color: 'teal-600'}">
+    INICIAL
+  </md-button>
+
+  <md-button aria-label="O que é o CIS" class="md-button" ng-click="ctrl.scroll('cis')" title="O que é o CIS"
+      md-colors="{color: 'teal-600'}">
+    O QUE É O CIS
+  </md-button>
+
+  <md-button aria-label="Conheça o e-CIS" class="md-button" ng-click="ctrl.scroll('conheca')" title="Conheça o e-CIS"
+      md-colors="{color: 'teal-600'}">
+    CONHEÇA O E-CIS
+  </md-button>
+
+  <md-button aria-label="Funcionalidades" class="md-button" ng-click="ctrl.scroll('funcionalidades')" title="Funcionalidades"
+      md-colors="{color: 'teal-600'}">
+    FUNCIONALIDADES
+  </md-button>
+
+  <div md-colors="{background: 'light-green-600'}" style="height: 100%;" 
+          layout="row" layout-align="center center" layout-wrap>
+    <md-button aria-label="Contato" class="md-button" ng-click="ctrl.scroll('interesse')" title="Contato"
+        md-colors="{background: 'light-green-600', color: 'grey-100'}">
+      TENHO INTERESSE
+    </md-button>
+    <!-- <md-button aria-label="Login" class="md-button" title="Login"
+        md-colors="{background: 'light-green-600', color: 'grey-100'}"
+        style="margin: 4em;" ng-click="ctrl.login()">
+      <md-icon>account_circle</md-icon>
+      LOGIN
+    </md-button> -->
+  </div>
+  </div>
+  <div class="md-toolbar-tools" flex layout="row" layout-align="center center"
+    style="padding-right: 0px; height: 100%; position: fixed;" hide show-xs show-sm>
+  <div layout="row" layout-align="center center">
+    <img src="images/ecis.png" aria-label="e-CIS Logo" style="height: 50%">
+  </div>
+  <span flex md-truncate></span>
+
+  <div md-colors="{background: 'light-green-600'}" style="height: 100%; padding: 20px;" 
+          layout="row" layout-align="center center" layout-wrap>
+    </md-button>
+    <md-button md-colors="{color: 'grey-800'}" class="md-icon-button" aria-label="Settings" ng-click="ctrl.toggle()">
+      <md-icon>menu</md-icon>
+    </md-button>
+  </div>
+  </div>
+  </md-toolbar>
+
+<md-sidenav class="md-sidenav-right" md-component-id="leftNav" md-whiteframe="4">
+
+<md-toolbar md-colors="{background: 'light-green-600', color: 'grey-50'}" layout="row" layout-align="start center">
+  <md-button md-colors="{color: 'grey-800'}" class="md-icon-button" aria-label="Settings" ng-click="ctrl.toggle()">
+    <md-icon>menu</md-icon>
+  </md-button>
+  Menu
+</md-toolbar>
+
+<div layout="column" layout-align="start start">
+
+<md-menu-content width="6">
+  <md-menu-item ng-click="ctrl.toggle()">
     <md-button aria-label="Inicial" class="md-button" ng-click="ctrl.scroll('header')" title="Página Inicial"
         md-colors="{color: 'teal-600'}">
       INICIAL
     </md-button>
+  </md-menu-item>
 
+  <md-menu-item ng-click="ctrl.toggle()">
     <md-button aria-label="O que é o CIS" class="md-button" ng-click="ctrl.scroll('cis')" title="O que é o CIS"
         md-colors="{color: 'teal-600'}">
       O QUE É O CIS
     </md-button>
+  </md-menu-item>
 
+  <md-menu-item ng-click="ctrl.toggle()">
     <md-button aria-label="Conheça o e-CIS" class="md-button" ng-click="ctrl.scroll('conheca')" title="Conheça o e-CIS"
         md-colors="{color: 'teal-600'}">
       CONHEÇA O E-CIS
     </md-button>
+  </md-menu-item>
 
+  <md-menu-item ng-click="ctrl.toggle()">
     <md-button aria-label="Funcionalidades" class="md-button" ng-click="ctrl.scroll('funcionalidades')" title="Funcionalidades"
         md-colors="{color: 'teal-600'}">
       FUNCIONALIDADES
     </md-button>
+  </md-menu-item>
 
+  <!-- <md-menu-item ng-click="ctrl.toggle()">
     <md-button aria-label="Contato" class="md-button" ui-sref="landing.contato" title="Contato"
         md-colors="{color: 'teal-600'}">
       CONTATO
     </md-button>
+  </md-menu-item> -->
 
-
-    <div md-colors="{background: 'light-green-600'}" style="height: 100%;" 
-            layout="row" layout-align="center center" layout-wrap>
-      <md-button aria-label="Contato" class="md-button" ng-click="ctrl.scroll('interesse')" title="Contato"
-          md-colors="{background: 'light-green-600', color: 'grey-100'}">
-        TENHO INTERESSE
-      </md-button>
-      <!-- <md-button aria-label="Login" class="md-button" title="Login"
-           md-colors="{background: 'light-green-600', color: 'grey-100'}"
-           style="margin: 4em;" ng-click="ctrl.login()">
-        <md-icon>account_circle</md-icon>
-        LOGIN
-      </md-button> -->
-    </div>
-  </div>
-</md-toolbar>
+  <md-menu-item ng-click="ctrl.toggle()">
+    <md-button aria-label="Contato" class="md-button" ng-click="ctrl.scroll('interesse')" title="Contato"
+        md-colors="{background: 'light-green-600', color: 'grey-100'}">
+      TENHO INTERESSE
+    </md-button>
+  </md-menu-item>
+</md-menu-content>
+</div>
+</md-sidenav>
 
 <md-content>
-  <div ui-view="content" layout="column"></div>
+<div ui-view="content" layout="column"></div>
 
-  <div md-whiteframe="10" layout="row" layout-align="center center" 
-          flex="100" style="padding: 2em 0 2em 0;">
-      <div flex="70" layout="row" layout-align="center center">
-          <div layout="row" layout-align="center center" flex="20">
-              <img src="images/ufcg.png" aria-label="e-CIS Logo">
-          </div>
-          <div layout="row" layout-align="center center" flex="20">
-              <img src="images/cis.png" aria-label="e-CIS Logo">
-          </div>
-          <div layout="row" layout-align="center center" flex="20">
-              <img src="images/opas_oms.png" aria-label="e-CIS Logo">
-          </div>
-          <div layout="row" layout-align="center center" flex="30">
-              <img src="images/governo.png" aria-label="e-CIS Logo">
-          </div>
+<div md-whiteframe="10" layout="row" layout-align="center center" 
+      flex="100" style="padding: 2em 0 2em 0;">
+  <div flex="70" layout="column" layout-gt-sm="row" layout-align="center center">
+      <div layout="row" layout-align="center center" flex="20">
+          <img src="images/ufcg.png" aria-label="e-CIS Logo">
+      </div>
+      <div layout="row" layout-align="center center" flex="20">
+          <img src="images/cis.png" aria-label="e-CIS Logo">
+      </div>
+      <div layout="row" layout-align="center center" flex="20">
+          <img src="images/opas_oms.png" aria-label="e-CIS Logo">
+      </div>
+      <div layout="row" layout-align="center center" flex-gt-sm="30" flex="20">
+          <img src="images/governo.png" aria-label="e-CIS Logo">
       </div>
   </div>
+</div>
 
-  <div layout="row" layout-align="center start" 
-          flex="100" style="padding: 2em 0 2em 0;">
-      <div flex="30" layout="row" layout-align="center start">
-          <div flex="30" layout="column" layout-align="space-around start">
-              <span md-colors="{color: 'teal-500'}"
-                  style="font-weight: bold; font-size: 0.8em;">
-                  Sobre o E-CIS
-              </span>
-              <span style="font-size: 0.8em; cursor: pointer;" ui-sref="landing.ecisdetails">Conheça o e-CIS</span>
-              <span style="font-size: 0.8em; cursor: pointer;" ui-sref="landing.comingsoon">Como se cadastrar</span>
-              <span style="font-size: 0.8em; cursor: pointer;" ui-sref="landing.comingsoon">Primeiros passos</span>
-              <span style="font-size: 0.8em; cursor: pointer;" ui-sref="landing.supportinstitutions">Instituições mantenedoras</span>
-          </div>
-          <div flex="30" layout="column" layout-align="space-around start">
-              <span md-colors="{color: 'teal-500'}"
-                  style="font-weight: bold; font-size: 0.8em;">
-                  Suporte
-              </span>
-              <span style="font-size: 0.8em; cursor: pointer;" ui-sref="landing.comingsoon">Dúvidas frequentes</span>
-          </div>
-          <div flex="30" layout="column" layout-align="start start">
-              <span md-colors="{color: 'teal-500'}"
-                  style="font-weight: bold; font-size: 0.8em; cursor: pointer;">
-                  Políticas de uso
-              </span>
-              <span style="font-size: 0.8em; cursor: pointer;" ui-sref="landing.privacy">Privacidade</span>
-              <span style="font-size: 0.8em; cursor: pointer;" ui-sref="landing.terms">Termos de uso</span>
-          </div>
-      </div>
-  </div>
-
-  <div layout="row" layout-align="center start" md-colors="{background: 'grey-200'}"
-          flex="100" style="padding: 1em 0 1em 0;">
-      <div flex="30" layout="row" layout-align="center start">
-          <span md-colors="{color: 'grey-800'}"
-              style="font-size: 0.7em;">
-              Copyright © 2017 Plataforma E-CIS - Ministério da Saúde. Todos os direitos reservados
+<div layout="row" layout-align="center start" 
+      flex="100" style="padding: 2em 0 2em 0;">
+  <div flex-sm="90" flex-md="60" flex-gt-sm="40" layout="column" layout-align="start start" layout-gt-xs="row" 
+        layout-align-gt-xs="center start">
+      <div flex-gt-sm="30" flex="20" layout="column" layout-align="start start">
+          <span md-colors="{color: 'teal-500'}"
+              style="font-weight: bold; font-size: 0.8em;">
+              Sobre o E-CIS
           </span>
+          <span style="font-size: 0.8em; cursor: pointer;" ui-sref="landing.ecisdetails">Conheça o e-CIS</span>
+          <span style="font-size: 0.8em; cursor: pointer;" ui-sref="landing.comingsoon">Como se cadastrar</span>
+          <span style="font-size: 0.8em; cursor: pointer;" ui-sref="landing.comingsoon">Primeiros passos</span>
+          <span style="font-size: 0.8em; cursor: pointer;" ui-sref="landing.supportinstitutions">Instituições mantenedoras</span>
+      </div>
+      <div flex-gt-sm="30" flex="10" layout="column" layout-align="start start">
+          <span md-colors="{color: 'teal-500'}"
+              style="font-weight: bold; font-size: 0.8em;">
+              Suporte
+          </span>
+          <span style="font-size: 0.8em; cursor: pointer;" ui-sref="landing.comingsoon">Dúvidas frequentes</span>
+      </div>
+      <div flex-gt-sm="30" flex="20" layout="column" layout-align="start start">
+          <span md-colors="{color: 'teal-500'}"
+              style="font-weight: bold; font-size: 0.8em; cursor: pointer;">
+              Políticas de uso
+          </span>
+          <span style="font-size: 0.8em; cursor: pointer;" ui-sref="landing.privacy">Privacidade</span>
+          <span style="font-size: 0.8em; cursor: pointer;" ui-sref="landing.terms">Termos de uso</span>
       </div>
   </div>
+</div>
+
+<div layout="row" layout-align="center start" md-colors="{background: 'grey-200'}"
+      flex="100" style="padding: 1em 0 1em 0;">
+  <div flex="80" flex-gt-sm="30" layout="row" layout-align="center start">
+      <span md-colors="{color: 'grey-800'}"
+          style="font-size: 0.7em;">
+          Copyright © 2017 Plataforma E-CIS - Ministério da Saúde. Todos os direitos reservados
+      </span>
+  </div>
+</div>
 </md-content>

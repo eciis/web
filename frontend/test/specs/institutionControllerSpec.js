@@ -261,5 +261,14 @@
                 scope.$apply();
             });
         });
+
+        describe('requestInvitation()', function() {
+
+            it('should call $mdDialog.show()', function() {
+                spyOn(mdDialog, 'show');
+                institutionCtrl.requestInvitation('$event');
+                expect(mdDialog.show).toHaveBeenCalled();
+            });
+        });
     });
 }));

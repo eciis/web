@@ -91,6 +91,12 @@
                     <!-- Buttons -->
                     <md-button flex-xs class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-900'}"
                         ng-if="!institutionCtrl.isMember"
+                        ng-click="institutionCtrl.requestInvitation($event)">
+                        <md-icon>add</md-icon>
+                        Solicitar vínculo
+                    </md-button>
+                    <md-button flex-xs class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-900'}"
+                        ng-if="!institutionCtrl.isMember"
                         ng-click="institutionCtrl.isUserFollower ? institutionCtrl.unfollow() : institutionCtrl.follow()">
                         <md-icon>{{ institutionCtrl.isUserFollower ? 'person_outline':'person_add' }}</md-icon>
                         {{ institutionCtrl.isUserFollower ? 'Deixar de seguir' : 'Seguir' }}

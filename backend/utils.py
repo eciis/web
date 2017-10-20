@@ -302,12 +302,12 @@ def offset_pagination(page, number_fetchs, query):
     """Modify query for get entities using offset pagination."""
     try:
         number_fetchs = int(number_fetchs)
-    except ValueError:
+    except Exception:
         number_fetchs = 5
 
     try:
         offset = int(page) * number_fetchs
-    except ValueError:
+    except Exception:
         offset = 0
 
     query, next_cursor, more = query.fetch_page(

@@ -6,6 +6,7 @@ import json
 from utils import login_required
 from utils import json_response
 from utils import offset_pagination
+from utils import to_int
 from utils import Utils
 
 from handlers.base_handler import BaseHandler
@@ -20,7 +21,10 @@ class UserTimelineHandler(BaseHandler):
     def get(self, user):
         """Handler of get posts."""
         page = self.request.get('page', Utils.DEFAULT_PAGINATION_OFFSET)
-        fetchs = self.request.get('limit', Utils.DEFAULT_PAGINATION_LIMIT)
+        limit = self.request.get('limit', Utils.DEFAULT_PAGINATION_LIMIT)
+
+        page = to_int(page, "Query param page muste be integer")
+        limit = to_int(limit, "Query param limit muste be integer")
 
         array = []
         visible_posts = []
@@ -31,7 +35,7 @@ class UserTimelineHandler(BaseHandler):
 
             queryPosts, more = offset_pagination(
                 page,
-                fetchs,
+                limit,
                 queryPosts)
 
             array = [Post.make(post, self.request.host) for post in queryPosts]

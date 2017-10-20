@@ -302,18 +302,24 @@ def has_permission(permission_type):
 
 def offset_pagination(page, number_fetchs, query):
     """Modify query for get entities using offset pagination."""
-    try:
-        number_fetchs = int(number_fetchs)
-    except Exception:
-        number_fetchs = Utils.DEFAULT_PAGINATION_LIMIT
-
-    try:
-        offset = int(page) * number_fetchs
-    except Exception:
-        offset = Utils.DEFAULT_PAGINATION_OFFSET
+    offset = page * number_fetchs
 
     query, next_cursor, more = query.fetch_page(
         number_fetchs,
         offset=offset)
 
     return [query, more]
+
+
+def to_int(value, message_exception):
+    """
+    Convert string value to integer.
+
+    Otherwise it generates an exception with the specified message.
+    """
+    try:
+        value = int(value)
+    except ValueError:
+        raise FieldException(message_exception)
+
+    return value

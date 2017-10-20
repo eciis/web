@@ -48,18 +48,6 @@
             expect($http.delete).toHaveBeenCalled();
         });
 
-        it('Test getTimeline in success case', function() {
-            spyOn($http, 'get').and.callThrough();
-            httpBackend.when('GET', INSTITUTIONS_URI + "/" + institutions[0].key + "/timeline").respond(post);
-            var result;
-            service.getTimeline(institutions[0].key).then(function(data){
-                result = data;
-            });
-            httpBackend.flush();
-            expect($http.get).toHaveBeenCalled();
-            expect(result.data).toEqual(post);
-        });
-
         it('Test getMembers in success case', function() {
             spyOn($http, 'get').and.callThrough();
             httpBackend.when('GET', INSTITUTIONS_URI + "/" + institutions[0].key + "/members").respond(institutions[0].members[0]);

@@ -3,12 +3,26 @@
 
     var app = angular.module('app');
 
-    app.controller('TimelineController', function(AuthService, MessageService, NotificationService, PostService) {
+    app.controller('TimelineController', function(AuthService, MessageService, NotificationService) {
         var timelineCtrl = this;
+        var content = document.getElementById("content");
 
         timelineCtrl.user = AuthService.getCurrentUser();
-
         timelineCtrl.refreshTimeline = false;
+        timelineCtrl.isLoadingPosts = false;
+
+        function loadMorePosts() {
+            timelineCtrl.isLoadingPosts = true;
+            var promise = timelineCtrl.loadMorePosts();
+
+            promise.then(function success() {
+                timelineCtrl.isLoadingPosts = false;
+            });
+
+            return promise;
+        }
+
+        Utils.setScrollListener(content, loadMorePosts);
 
         timelineCtrl.showRefreshTimelineButton = function showRefreshTimelineButton() {
            return timelineCtrl.refreshTimeline;
@@ -18,12 +32,9 @@
             timelineCtrl.refreshTimeline = !timelineCtrl.refreshTimeline;
         };
 
-        timelineCtrl.load = function load(posts) {
-            PostService.get().then(function success(response) {
-                posts.splice(0, posts.length);
-                _.forEach(response.data, function(post) {
-                    posts.push(post);
-                });
+        timelineCtrl.load = function load() {
+            var reload = true;
+            timelineCtrl.loadMorePosts(reload).then(function success() {
                 timelineCtrl.setRefreshTimelineButton();
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
@@ -42,10 +53,13 @@
             controller: "TimelineController",
             controllerAs: "timelineCtrl",
             scope: {
-                posts: '=',
                 institution: '=',
                 user: '=',
                 addPost: '='
+            },
+            bindToController: {
+                posts: '=',
+                loadMorePosts: '='
             }
         };
     });

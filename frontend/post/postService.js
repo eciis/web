@@ -7,11 +7,23 @@
         var service = this;
 
         var POSTS_URI = "/api/posts";
+        var LIMIT = 10;
         service.posts = [];
 
         service.get = function getPosts() {
             var deferred = $q.defer();
             $http.get("/api/user/timeline").then(function success(response) {
+                service.posts = response.data;
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+            return deferred.promise;
+        };
+
+        service.getNextPosts = function getNextPosts(page) {
+            var deferred = $q.defer();
+            $http.get("/api/user/timeline?page=" + page + "&&limit=" + LIMIT).then(function success(response) {
                 service.posts = response.data;
                 deferred.resolve(response);
             }, function error(response) {

@@ -1,4 +1,4 @@
-<md-content layout="row" md-colors="{background: 'grey-200'}" layout-align="center" >
+<md-content id="content" layout="row" md-colors="{background: 'grey-200'}" layout-align="center" >
     <div flex-gt-lg="80" flex-lg="90" layout="row" layout-wrap layout-align="center" layout-fill>
         <div flex layout="column">
             <div layout="row" layout-xs="column" layout-padding flex-xs="30" flex-sm="15"
@@ -143,7 +143,7 @@
                     </md-card>
                 </div>
                 <post-timeline flex ng-if="!institutionCtrl.isLoadingPosts" layout="column" md-colors="{background: 'grey-200'}" posts="institutionCtrl.posts"
-                    institution="true" user="institutionCtrl.user" add-post="institutionCtrl.addPost">
+                    institution="true" user="institutionCtrl.user" add-post="institutionCtrl.addPost" load-more-posts="institutionCtrl.loadMorePosts">
                 </post-timeline>
                 <div flex ng-if="institutionCtrl.isLoadingPosts" layout="row" layout-align="center center">
                     <md-progress-circular md-mode="indeterminate"></md-progress-circular>

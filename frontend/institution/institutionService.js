@@ -6,6 +6,7 @@
         var service = this;
 
         var INSTITUTIONS_URI = "/api/institutions";
+        var LIMIT = 10;
 
         service.getInstitutions = function getInstitutions() {
             var deferred = $q.defer();
@@ -47,9 +48,10 @@
             return deferred.promise;
         };
 
-        service.getTimeline = function getInstitutions(institution_key) {
+        service.getNextPosts = function getNextPosts(institution_key, page) {
             var deferred = $q.defer();
-            $http.get(INSTITUTIONS_URI + "/" + institution_key + "/timeline").then(function success(response) {
+            $http.get(INSTITUTIONS_URI + "/" + institution_key + "/timeline?page=" + page + "&&limit=" + LIMIT).then(function success(response) {
+                service.posts = response.data;
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);

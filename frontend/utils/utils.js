@@ -47,7 +47,28 @@ var Utils = {
         var restApiUrl = Config.BACKEND_URL;
 
         var restApiRegex = new RegExp('^.*?/api/(.*)$');
-        
+
         config.url = config.url.replace(restApiRegex, restApiUrl + '/api/$1');
+    },
+
+    setScrollListener: function setScrollListener(content, callback) {
+        var alreadyRequested = false;
+
+        content.onscroll = function onscroll() {
+            var screenPosition = content.scrollTop + content.offsetHeight;
+            var maxHeight = content.scrollHeight;
+            var proportion = screenPosition/maxHeight;
+            var scrollRatio = 0.75;
+
+            if (proportion >= scrollRatio && !alreadyRequested) {
+                alreadyRequested = true;
+
+                callback().then(function success() {
+                    alreadyRequested = false;
+                }, function error() {
+                    alreadyRequested = false;
+                });
+            }
+        };
     }
 };

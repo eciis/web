@@ -5,6 +5,10 @@ import json
 
 from utils import login_required
 from utils import json_response
+from utils import offset_pagination
+from utils import to_int
+from utils import Utils
+from custom_exceptions.queryException import QueryException
 
 from handlers.base_handler import BaseHandler
 from models.post import Post
@@ -16,18 +20,35 @@ class UserTimelineHandler(BaseHandler):
     @json_response
     @login_required
     def get(self, user):
-        """TODO: Change to get a timeline without query.
+        """Handler of get posts."""
+        page = to_int(
+            self.request.get('page', Utils.DEFAULT_PAGINATION_OFFSET),
+            QueryException,
+            "Query param page must be an integer")
+        limit = to_int(
+            self.request.get('limit', Utils.DEFAULT_PAGINATION_LIMIT),
+            QueryException,
+            "Query param limit must be an integer")
 
-        @author: Mayza Nunes 18/05/2017
-        """
         array = []
         visible_posts = []
+
         if len(user.follows) > 0:
             queryPosts = Post.query(Post.institution.IN(
-                user.follows)).order(Post.last_modified_date)
+                user.follows)).order(-Post.last_modified_date, Post.key)
+
+            queryPosts, more = offset_pagination(
+                page,
+                limit,
+                queryPosts)
 
             array = [Post.make(post, self.request.host) for post in queryPosts]
             visible_posts = [post for post in array
                              if not Post.is_hidden(post)]
 
-        self.response.write(json.dumps(visible_posts))
+        data = {
+            'posts': visible_posts,
+            'next': more
+        }
+
+        self.response.write(json.dumps(data))

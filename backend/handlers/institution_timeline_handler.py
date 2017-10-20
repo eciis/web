@@ -6,6 +6,10 @@ import json
 
 from utils import login_required
 from utils import json_response
+from utils import offset_pagination
+from utils import Utils
+from utils import to_int
+from custom_exceptions.queryException import QueryException
 
 from handlers.base_handler import BaseHandler
 from models.post import Post
@@ -17,14 +21,30 @@ class InstitutionTimelineHandler(BaseHandler):
     @json_response
     @login_required
     def get(self, user, url_string):
-        """TODO: Change to get a timeline without query and paginated.
+        """Handler of get posts."""
+        page = to_int(
+            self.request.get('page', Utils.DEFAULT_PAGINATION_OFFSET),
+            QueryException,
+            "Query param page must be an integer")
+        limit = to_int(
+            self.request.get('limit', Utils.DEFAULT_PAGINATION_LIMIT),
+            QueryException,
+            "Query param limit must be an integer")
 
-        @author: Mayza Nunes 15/06/2017
-        """
         institution_key = ndb.Key(urlsafe=url_string)
         queryPosts = Post.query(Post.institution == institution_key).order(
-            Post.last_modified_date)
+            -Post.last_modified_date)
+
+        queryPosts, more = offset_pagination(
+            page,
+            limit,
+            queryPosts)
 
         array = [Post.make(post, self.request.host) for post in queryPosts]
 
-        self.response.write(json.dumps(array))
+        data = {
+            'posts': array,
+            'next': more
+        }
+
+        self.response.write(json.dumps(data))

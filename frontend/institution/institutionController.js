@@ -4,8 +4,10 @@
     var app = angular.module('app');
 
     app.controller("InstitutionController", function InstitutionController($state, InstitutionService,
-            InviteService, AuthService, MessageService, $sce, $mdDialog, PdfService, $rootScope, $window, ProfileService) {
+            InviteService, AuthService, MessageService, $sce, $mdDialog, PdfService, $rootScope, $window, ProfileService, $q) {
         var institutionCtrl = this;
+        var morePosts = true;
+        var actualPage = 0;
 
         institutionCtrl.current_institution = null;
         institutionCtrl.posts = [];
@@ -15,6 +17,7 @@
         institutionCtrl.isMember = false;
         institutionCtrl.portfolioUrl = null;
         institutionCtrl.showFullDescription = false;
+        institutionCtrl.isLoadingPosts = true;
         institutionCtrl.isLoadingPosts = true;
 
         institutionCtrl.legal_natures = {
@@ -36,15 +39,6 @@
 
         institutionCtrl.user = AuthService.getCurrentUser();
         institutionCtrl.addPost = institutionCtrl.user.current_institution.key === currentInstitutionKey;
-
-        function loadPosts() {
-            InstitutionService.getTimeline(currentInstitutionKey).then(function success(response) {
-                institutionCtrl.posts = response.data;
-                institutionCtrl.isLoadingPosts = false;
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
-            });
-        }
 
         function loadInstitution() {
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
@@ -92,7 +86,32 @@
             });
         }
 
-        loadPosts();
+        institutionCtrl.loadMorePosts = function loadMorePosts() {
+            var deferred = $q.defer();
+
+            if (morePosts) {
+                InstitutionService.getNextPosts(currentInstitutionKey, actualPage).then(function success(response) {
+                    actualPage += 1;
+                    morePosts = response.data.next;
+
+                    _.forEach(response.data.posts, function(post) {
+                        institutionCtrl.posts.push(post);
+                    });
+
+                    institutionCtrl.isLoadingPosts = false;
+                    deferred.resolve();
+                }, function error(response) {
+                    MessageService.showToast(response.data.msg);
+                    deferred.reject();
+                });
+            } else {
+                deferred.resolve();
+            }
+
+            return deferred.promise;
+        };
+
+        institutionCtrl.loadMorePosts();
         loadInstitution();
 
         institutionCtrl.isAdmin = function isAdmin() {

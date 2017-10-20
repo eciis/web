@@ -1,20 +1,24 @@
 <!-- TIMELINE -->
 <div flex>
   <div ng-if="!institution">
-    <save-post flex is-dialog="false" posts="posts"></save-post>
+    <save-post flex is-dialog="false" posts="timelineCtrl.posts"></save-post>
   </div>
   <div layout="row" layout-align="center center" ng-if="timelineCtrl.showRefreshTimelineButton() && !institution" class="ng-if">
-    <md-button flex md-colors="{background: 'teal-700'}" ng-click="timelineCtrl.load(posts)">
+    <md-button flex md-colors="{background: 'teal-700'}" ng-click="timelineCtrl.load(timelineCtrl.posts)">
       VOCÊ TEM NOVOS POSTS
       <md-icon md-colors="{color: 'grey-100'}">refresh</md-icon>
     </md-button>
   </div>
-  <md-card ng-if="posts.length == 0">
+  <md-card ng-if="timelineCtrl.posts.length == 0">
     <md-content layout-align="center center" layout="column">
       <h4>Esta instituição ainda não possui publicações.</h4>
     </md-content>
   </md-card>
-  <div ng-repeat="post in posts | orderBy:'date':true" ng-if="posts.length > 0">
-    <post-details posts="posts" post="post" is-post-page=false add-post="addPost"></post-details>
+  <div ng-repeat="post in timelineCtrl.posts | orderBy:'last_modified_date':true" ng-if="timelineCtrl.posts.length > 0">
+    <post-details posts="timelineCtrl.posts" post="post" is-post-page=false add-post="addPost"></post-details>
+  </div>
+  <!-- LOADING CIRCLE -->
+  <div flex layout-align="center center" layout="row">
+    <md-progress-circular ng-show="timelineCtrl.isLoadingPosts" md-mode="indeterminate"></md-progress-circular>
   </div>
 </div>

@@ -15,6 +15,7 @@ from oauth2client import client
 from oauth2client.crypt import AppIdentityError
 
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
+from custom_exceptions.fieldException import FieldException
 
 
 class Utils():
@@ -23,6 +24,8 @@ class Utils():
     NOT_FOUND = 404
     FORBIDDEN = 403
     BAD_REQUEST = 400
+    DEFAULT_PAGINATION_LIMIT = 10
+    DEFAULT_PAGINATION_OFFSET = 0
 
     @staticmethod
     def createEntity(EntityClass, propertiesValue):
@@ -295,3 +298,28 @@ def has_permission(permission_type):
             return method(self, user, *args)
         return check_permission
     return method_for_verification
+
+
+def offset_pagination(page, number_fetchs, query):
+    """Modify query for get entities using offset pagination."""
+    offset = page * number_fetchs
+
+    query, next_cursor, more = query.fetch_page(
+        number_fetchs,
+        offset=offset)
+
+    return [query, more]
+
+
+def to_int(value, exception, message_exception):
+    """
+    Convert string value to integer.
+
+    Otherwise it generates an exception with the specified message.
+    """
+    try:
+        value = int(value)
+    except ValueError:
+        raise exception(message_exception)
+
+    return value

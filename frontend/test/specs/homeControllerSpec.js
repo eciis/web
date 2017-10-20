@@ -2,7 +2,7 @@
 
 (describe('Test HomeController', function() {
 
-    var homeCtrl, httpBackend, scope, createCtrl, mdDialog, state;
+    var homeCtrl, httpBackend, scope, createCtrl, mdDialog, state, postService;
 
     var institutions = [{
         acronym: 'Certbio',
@@ -27,7 +27,7 @@
         'text': 'Inauguration of system E-CIS',
         'local': 'Brasilia',
         'photo_url': null,
-        'start_time': new Date(), 
+        'start_time': new Date(),
         'end_time': new Date(),
     };
 
@@ -39,7 +39,8 @@
         scope = $rootScope.$new();
         mdDialog = $mdDialog;
         state = $state;
-        httpBackend.expect('GET', '/api/user/timeline').respond(posts);
+        postService = PostService;
+        httpBackend.expect('GET', '/api/user/timeline?page=0&&limit=10').respond({posts: posts, next: true});
         httpBackend.when('GET', "/api/events").respond([event]);
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);
@@ -121,6 +122,30 @@
             it('should be true the instMenuExpanded propertie', function() {
                 homeCtrl.expandInstMenu();
                 expect(homeCtrl.instMenuExpanded).toBe(true);
+            });
+        });
+
+        describe('loadMorePosts()', function() {
+            beforeEach(function() {
+                spyOn(postService, 'getNextPosts').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            callback({data: {posts: posts, next: false}});
+                        }
+                    };
+                });
+            });
+
+            it('Should call institutionService.getNextPosts()', function(done) {
+                var promise = homeCtrl.loadMorePosts();
+                var actualPage = 1;
+
+                promise.then(function success() {
+                    expect(postService.getNextPosts).toHaveBeenCalledWith(actualPage);
+                    done();
+                });
+
+                scope.$apply();
             });
         });
     });

@@ -54,6 +54,17 @@ class RequestUserTest(TestBase):
         self.assertEqual(event_json.get('author'), self.user.name)
         self.assertEqual(event_json.get('institution_name'), self.certbio.name)
 
+    def test_is_valid(self):
+        """Test isValid method."""
+        # Checking if the event is valid
+        self.event.isValid()
+        # Making the start_time be after the end_time
+        self.event.start_time = datetime.datetime(2017, 10, 21)
+        self.event.put()
+        # Checking if the event is not valid
+        with self.assertRaises(Exception):
+            self.event.isValid()
+
 
 def initModels(cls):
     """Init the models."""
@@ -85,7 +96,7 @@ def initModels(cls):
     cls.event.institution_key = cls.certbio.key
     cls.event.institution_name = cls.certbio.name
     cls.event.institution_image = cls.certbio.photo_url
-    cls.event.start_time = datetime.datetime.now()
-    cls.event.end_time = datetime.datetime.now()
+    cls.event.start_time = datetime.datetime(2017, 10, 20)
+    cls.event.end_time = datetime.datetime(2017, 10, 20)
     cls.event.local = "Event location"
     cls.event.put()

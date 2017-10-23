@@ -522,3 +522,5 @@ paket-files/
 *.xsd.cs
 
 # End of https://www.gitignore.io/api/vim,git,bower,grunt,python,intellij,appengine,sublimetext,visualstudio
+
+frontend/config.js

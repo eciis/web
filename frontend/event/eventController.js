@@ -7,7 +7,7 @@
         var eventCtrl = this;
         var content = document.getElementById("content");
 
-        var morePosts = true;
+        var moreEvents = true;
         var actualPage = 0;
 
         eventCtrl.events = [];
@@ -20,7 +20,7 @@
         eventCtrl.loadMoreEvents = function loadMoreEvents() {
             var deferred = $q.defer();
 
-            if (morePosts) {
+            if (moreEvents) {
                 loadEvents(deferred);
             } else {
                 deferred.resolve();

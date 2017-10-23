@@ -198,8 +198,7 @@
 
         $urlRouterProvider.otherwise("/");
 
-        $locationProvider.html5Mode(false);
-        $locationProvider.hashPrefix(''); // Uses # instead #!
+        $locationProvider.html5Mode(true);
 
         $httpProvider.interceptors.push('BearerAuthInterceptor');
 

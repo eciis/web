@@ -7,17 +7,17 @@
             InviteService, $mdMenu) {
         var mainCtrl = this;
 
-        mainCtrl.search = "";
+        mainCtrl.search_keyword = "";
         mainCtrl.user = AuthService.getCurrentUser();
 
         mainCtrl.pending_manager_member = 0;
         mainCtrl.pending_inst_invitations = 0;
 
-        mainCtrl.goSearch = function goSearch() {
-            if(mainCtrl.search) {
-                var search = mainCtrl.search;
-                mainCtrl.search = '';
-                $state.go('app.search_page', {finalSearch: search});
+        mainCtrl.search = function search() {
+            if(mainCtrl.search_keyword) {
+                var search = mainCtrl.search_keyword;
+                mainCtrl.search_keyword = '';
+                $state.go('app.search', {search_keyword: search});
             }
         };
 

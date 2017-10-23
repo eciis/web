@@ -7,18 +7,17 @@
 
         var searchCtrl = this;
 
-        searchCtrl.keyWord = '';
-        searchCtrl.finalSearch = $state.params.finalSearch;
+        searchCtrl.search_keyword = $state.params.search_keyword;
         searchCtrl.institutions = [];
         searchCtrl.occupationAreas = [];
-        searchCtrl.load = false;
+        searchCtrl.isLoading = false;
 
         searchCtrl.makeSearch = function makeSearch(value) {
-            searchCtrl.load = false;
-            var promise = InstitutionService.searchInstitutions(value ? value : searchCtrl.finalSearch, "active");
+            searchCtrl.isLoading = true;
+            var promise = InstitutionService.searchInstitutions(value ? value : searchCtrl.search_keyword, "active");
             promise.then(function success(response) {
                 searchCtrl.institutions = response.data;
-                searchCtrl.load = true;
+                searchCtrl.isLoading = false;
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
@@ -26,8 +25,7 @@
         };
 
         searchCtrl.search = function search() {
-            if (searchCtrl.keyWord) {
-                searchCtrl.finalSearch = searchCtrl.keyWord;
+            if (searchCtrl.search_keyword) {
                 searchCtrl.makeSearch();
             }
         };
@@ -44,8 +42,8 @@
             }
         };
 
-        searchCtrl.teste = function(value) {
-            searchCtrl.makeSearch(value);
+        searchCtrl.searchByOccupationArea = function searchByOccupationArea(chosen_area) {
+            searchCtrl.makeSearch(chosen_area);
         };
 
         function getOccupationAreas() {
@@ -55,12 +53,14 @@
         }
 
         function loadSearch() {
-            if (searchCtrl.finalSearch) {
+            if (searchCtrl.search_keyword) {
                 searchCtrl.makeSearch();
             }
         }
 
-        getOccupationAreas();
-        loadSearch();
+        (function main() {
+            getOccupationAreas();
+            loadSearch();
+        })();
     });
 })();

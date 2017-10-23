@@ -12,13 +12,13 @@
                     md-gutter="4px" md-gutter-gt-sm="4px">
                         <md-list-item md-rowspan="1" md-colspan="1" md-colspan-sm="1">
                             <div class="column">
-                                <md-radio-button class="md-primary" ng-value="'*'" ng-click="searchCtrl.teste('*')"><b>Pesquisar em todas as áreas</b></md-radio-button>
+                                <md-radio-button class="md-primary" ng-value="'*'" ng-click="searchCtrl.searchByOccupationArea('*')"><b>Pesquisar em todas as áreas</b></md-radio-button>
                             </div>
                         </md-list-item>
                         <md-list-item md-rowspan="1" md-colspan="1" md-colspan-sm="1"
                         ng-repeat="occupation_area in searchCtrl.occupationAreas | orderBy: 'name'">
                             <div class="column">
-                                <md-radio-button class="md-primary" ng-value="occupation_area.name" ng-click="searchCtrl.teste(occupation_area.name)">{{occupation_area.name}}</md-radio-button>
+                                <md-radio-button class="md-primary" ng-value="occupation_area.name" ng-click="searchCtrl.searchByOccupationArea(occupation_area.name)">{{occupation_area.name}}</md-radio-button>
                             </div>
                         </md-list-item>
                     </md-list>
@@ -42,7 +42,7 @@
                             <form ng-submit="searchCtrl.search()">
                               <md-input-container class="md-block">
                                 <input placeholder="Digite aqui sua pesquisa..."
-                                  ng-model="searchCtrl.keyWord">
+                                  ng-model="searchCtrl.search_keyword">
                               </md-input-container>
                             </form>
                         </div>
@@ -65,7 +65,7 @@
                             </md-list-item>
                         </md-list>
                         <div layout-align="center center" layout="row">
-                          <md-progress-circular ng-show="!searchCtrl.load" md-mode="indeterminate"></md-progress-circular>
+                          <md-progress-circular ng-show="searchCtrl.isLoading" md-mode="indeterminate"></md-progress-circular>
                         </div>
                     </md-card-content>
                 </md-card>

@@ -138,11 +138,11 @@
                     }
                 }
             })
-            .state("app.search_page", {
-                url: "/search_page/:finalSearch",
+            .state("app.search", {
+                url: "/search/:search_keyword",
                 views: {
                     content: {
-                        templateUrl: "app/search/search_page.html",
+                        templateUrl: "app/search/search.html",
                         controller: "SearchController as searchCtrl"
                     }
                 }

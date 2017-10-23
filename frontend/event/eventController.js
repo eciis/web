@@ -5,6 +5,7 @@
     app.controller("EventController", function EventController(MessageService, EventService,
             $state, $mdDialog, AuthService, $q) {
         var eventCtrl = this;
+        var content = document.getElementById("content");
 
         var moreEvents = true;
         var actualPage = 0;
@@ -28,7 +29,7 @@
             return deferred.promise;
         };
 
-        Utils.setScrollListener(eventCtrl.loadMoreEvents);
+        Utils.setScrollListener(content, eventCtrl.loadMoreEvents);
 
 
         function loadEvents(deferred) {

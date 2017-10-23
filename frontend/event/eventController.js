@@ -3,20 +3,51 @@
     var app = angular.module('app');
 
     app.controller("EventController", function EventController(MessageService, EventService,
-            $state, $mdDialog, AuthService, PostService) {
+            $state, $mdDialog, AuthService, $q) {
         var eventCtrl = this;
+        var content = document.getElementById("content");
+
+        var morePosts = true;
+        var actualPage = 0;
 
         eventCtrl.events = [];
 
         eventCtrl.user = AuthService.getCurrentUser();
+        eventCtrl.isLoadingEvents = false;
 
         var LIMIT_CHARACTERS = 100;
 
-        function loadEvents() {
-            EventService.getEvents().then(function success(response) {
-                eventCtrl.events = response.data;
+        eventCtrl.loadMoreEvents = function loadMoreEvents() {
+            var deferred = $q.defer();
+
+            if (morePosts) {
+                loadEvents(deferred);
+            } else {
+                deferred.resolve();
+            }
+
+            return deferred.promise;
+        };
+
+        Utils.setScrollListener(content, eventCtrl.loadMoreEvents);
+
+
+        function loadEvents(deferred) {
+            eventCtrl.isLoadingEvents = true;
+
+            EventService.getEvents(actualPage).then(function success(response) {
+                actualPage += 1;
+                morePosts = response.data.next;
+
+                _.forEach(response.data.events, function(event) {
+                    eventCtrl.events.push(event);
+                });
+
+                eventCtrl.isLoadingEvents = false;
+                deferred.resolve();
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
+                deferred.reject();
                 $state.go('app.home');
             });
         }
@@ -125,7 +156,7 @@
         }
 
         (function main() {
-            loadEvents();
+            eventCtrl.loadMoreEvents();
         })();
     });
 

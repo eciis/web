@@ -37,7 +37,7 @@ class EventCollectionHandler(BaseHandler):
 
         if len(user.follows) > 0:
             queryEvents = Event.query(Event.institution_key.IN(
-                user.follows), Event.state == 'published').order(Event.start_time)
+                user.follows), Event.state == 'published').order(Event.start_time, Event.key)
             queryEvents, more = offset_pagination(
                 page,
                 limit,
@@ -46,7 +46,7 @@ class EventCollectionHandler(BaseHandler):
             array = [Utils.toJson(Event.make(event), host=self.request.host) for event in queryEvents]
 
         data = {
-            'posts': array,
+            'events': array,
             'next': more
         }
 

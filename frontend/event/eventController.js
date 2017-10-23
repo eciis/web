@@ -37,7 +37,7 @@
 
             EventService.getEvents(actualPage).then(function success(response) {
                 actualPage += 1;
-                morePosts = response.data.next;
+                moreEvents = response.data.next;
 
                 _.forEach(response.data.events, function(event) {
                     eventCtrl.events.push(event);

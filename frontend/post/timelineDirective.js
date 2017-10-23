@@ -5,7 +5,6 @@
 
     app.controller('TimelineController', function(AuthService, MessageService, NotificationService) {
         var timelineCtrl = this;
-        var content = document.getElementById("content");
 
         timelineCtrl.user = AuthService.getCurrentUser();
         timelineCtrl.refreshTimeline = false;
@@ -22,7 +21,7 @@
             return promise;
         }
 
-        Utils.setScrollListener(content, loadMorePosts);
+        Utils.setScrollListener(loadMorePosts);
 
         timelineCtrl.showRefreshTimelineButton = function showRefreshTimelineButton() {
            return timelineCtrl.refreshTimeline;

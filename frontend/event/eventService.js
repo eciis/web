@@ -7,7 +7,7 @@
         var service = this;
 
         var EVENT_URI = "/api/events";
-        const LIMIT = "5";
+        var LIMIT = "5";
 
         service.createEvent = function createEvent(event) {
             var deferred = $q.defer();

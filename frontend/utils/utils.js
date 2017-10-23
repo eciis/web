@@ -51,7 +51,8 @@ var Utils = {
         config.url = config.url.replace(restApiRegex, restApiUrl + '/api/$1');
     },
 
-    setScrollListener: function setScrollListener(content, callback) {
+    setScrollListener: function setScrollListener(callback) {
+        var content = document.getElementById("content");
         var alreadyRequested = false;
 
         content.onscroll = function onscroll() {

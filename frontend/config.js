@@ -1,5 +1,5 @@
 "use strict";
 
 var Config = {
-    BACKEND_URL: 'http://alpha.backend.eciis-splab.appspot.com'
+    BACKEND_URL: 'http://localhost:8082'
 };

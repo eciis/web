@@ -111,5 +111,17 @@
                 expect(searchCtrl.makeSearch).toHaveBeenCalledWith('Universidades');
             });
         });
+
+        describe('isLoading()', function() {
+            it('Should be false if search_keyword is empty', function() {
+                searchCtrl.search_keyword = "";
+                expect(searchCtrl.isLoading()).toBeFalsy();
+            });
+
+            it('Should be true if search_keyword is not empty', function() {
+                searchCtrl.search_keyword = "splab";
+                expect(searchCtrl.isLoading()).toBeTruthy();
+            });
+        });
     });
 }));

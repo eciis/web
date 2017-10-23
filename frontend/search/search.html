@@ -50,7 +50,7 @@
                         md-cols="5" md-cols-gt-md="15"
                         md-row-height="1:1"
                         md-gutter="4px" md-gutter-gt-sm="4px"
-                        ng-if="searchCtrl.load">
+                        ng-if="searchCtrl.loading">
                             <md-subheader class="md-no-sticky">Instituições encontradas:</md-subheader>
                             <md-list-item md-rowspan="1" md-colspan="1" md-colspan-sm="1" ng-repeat="institution in searchCtrl.institutions">
                                 <div>
@@ -65,7 +65,7 @@
                             </md-list-item>
                         </md-list>
                         <div layout-align="center center" layout="row">
-                          <md-progress-circular ng-show="searchCtrl.isLoading" md-mode="indeterminate"></md-progress-circular>
+                          <md-progress-circular ng-show="searchCtrl.isLoading()" md-mode="indeterminate"></md-progress-circular>
                         </div>
                     </md-card-content>
                 </md-card>

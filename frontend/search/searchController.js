@@ -10,14 +10,14 @@
         searchCtrl.search_keyword = $state.params.search_keyword;
         searchCtrl.institutions = [];
         searchCtrl.occupationAreas = [];
-        searchCtrl.isLoading = false;
+        searchCtrl.loading = false;
 
         searchCtrl.makeSearch = function makeSearch(value) {
-            searchCtrl.isLoading = true;
+            searchCtrl.loading = false;
             var promise = InstitutionService.searchInstitutions(value ? value : searchCtrl.search_keyword, "active");
             promise.then(function success(response) {
                 searchCtrl.institutions = response.data;
-                searchCtrl.isLoading = false;
+                searchCtrl.loading = true;
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
@@ -44,6 +44,10 @@
 
         searchCtrl.searchByOccupationArea = function searchByOccupationArea(chosen_area) {
             searchCtrl.makeSearch(chosen_area);
+        };
+
+        searchCtrl.isLoading = function isLoading() {
+            return !searchCtrl.loading && searchCtrl.search_keyword;
         };
 
         function getOccupationAreas() {

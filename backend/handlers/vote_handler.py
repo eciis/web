@@ -21,10 +21,11 @@ class VoteHandler(BaseHandler):
         survey = ndb.Key(urlsafe=survey_key).get()
         # The array contains id's options
         options_selected = json.loads(self.request.body)
+        options_selected = options_selected.get("options")
 
         institution = survey.institution.get()
         Utils._assert(institution.state == 'inactive',
                       "The institution has been deleted", NotAuthorizedException)
 
-        survey.vote(self, user.key, options_selected)
+        survey.vote(user.key.urlsafe(), options_selected)
         survey.put()

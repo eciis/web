@@ -23,7 +23,7 @@
 
         service.getNextPosts = function getNextPosts(page) {
             var deferred = $q.defer();
-            $http.get("/api/user/timeline?page=" + page + "&&limit=" + LIMIT).then(function success(response) {
+            $http.get("/api/user/timeline?page=" + page + "&limit=" + LIMIT).then(function success(response) {
                 service.posts = response.data;
                 deferred.resolve(response);
             }, function error(response) {

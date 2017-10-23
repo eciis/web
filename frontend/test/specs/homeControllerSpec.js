@@ -40,8 +40,8 @@
         mdDialog = $mdDialog;
         state = $state;
         postService = PostService;
-        httpBackend.expect('GET', '/api/user/timeline?page=0&&limit=10').respond({posts: posts, next: true});
-        httpBackend.when('GET', "/api/events").respond([event]);
+        httpBackend.expect('GET', '/api/user/timeline?page=0&limit=10').respond({posts: posts, next: true});
+        httpBackend.when('GET', "/api/events?page=0&limit=5").respond([event]);
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);
         httpBackend.when('GET', 'error/error.html').respond(200);

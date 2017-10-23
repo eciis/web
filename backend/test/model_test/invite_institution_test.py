@@ -7,6 +7,8 @@ from models.institution import Institution
 from models.invite_institution import InviteInstitution
 from models.user import User
 
+from custom_exceptions.fieldException import FieldException
+
 
 class InviteInstitutionTest(TestBase):
     """Test invite model."""
@@ -24,7 +26,7 @@ class InviteInstitutionTest(TestBase):
 
     def test_checkIsInviteInstitutionValid(self):
         """Test checkIsInviteInstitutionValid method."""
-        with self.assertRaises(Exception):
+        with self.assertRaises(FieldException):
             data = {"suggestion_institution_name": None}
             InviteInstitution.checkIsInviteInstitutionValid(data)
 
@@ -75,14 +77,6 @@ class InviteInstitutionTest(TestBase):
             ]),
             'type_of_invite': 'INSTITUTION'
         }
-
-        for k in maked_invite.keys():
-            if maked_invite[k] != expected_maked_invite[k]:
-                print "\n"
-                print k
-                print maked_invite[k]
-                print "====="
-                print expected_maked_invite[k]
 
         self.assertEquals(
             maked_invite,

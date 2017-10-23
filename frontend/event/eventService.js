@@ -7,6 +7,7 @@
         var service = this;
 
         var EVENT_URI = "/api/events";
+        var LIMIT = "5";
 
         service.createEvent = function createEvent(event) {
             var deferred = $q.defer();
@@ -18,9 +19,9 @@
             return deferred.promise;
         };
 
-        service.getEvents = function getEvents() {
+        service.getEvents = function getEvents(page) {
             var deferred = $q.defer();
-            $http.get(EVENT_URI).then(function success(response) {
+            $http.get(EVENT_URI + '?page=' + page + "&limit=" + LIMIT).then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);

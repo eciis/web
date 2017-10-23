@@ -10,7 +10,8 @@ class InviteUser(Invite):
     """Model of invite user."""
 
     @staticmethod
-    def inviteeIsMember(inviteeEmail, institution):
+    def invitee_is_member(inviteeEmail, institution):
+        """Check if the invitee is already a member."""
         userWithEmail = User.query(User.email == inviteeEmail)
         if userWithEmail.count() == 1:
             instmember = Institution.query(Institution.members.IN(
@@ -20,7 +21,8 @@ class InviteUser(Invite):
         return False
 
     @staticmethod
-    def inviteeIsInvited(invitee, institutionKey):
+    def invitee_is_invited(invitee, institutionKey):
+        """Check if the invitee has already been invited."""
         invited = InviteUser.query(
             InviteUser.institution_key == institutionKey,
             InviteUser.status == 'sent',
@@ -29,12 +31,13 @@ class InviteUser(Invite):
         return invited.count() > 0
 
     @staticmethod
-    def checkIsInviteUserValid(data):
+    def check_is_invite_user_valid(data):
+        """Check if the invite user is valid."""
         institution = ndb.Key(urlsafe=data.get('institution_key')).get()
         invitee = data.get('invitee')
-        if InviteUser.inviteeIsMember(invitee, institution):
+        if InviteUser.invitee_is_member(invitee, institution):
             raise FieldException("The invitee is already a member")
-        if InviteUser.inviteeIsInvited(invitee, institution.key):
+        if InviteUser.invitee_is_invited(invitee, institution.key):
             raise FieldException("The invitee is already invited")
 
     @staticmethod
@@ -43,7 +46,7 @@ class InviteUser(Invite):
         invite = InviteUser()
         invite.invitee = data.get('invitee')
         invite = Invite.create(data, invite)
-        InviteUser.checkIsInviteUserValid(data)
+        InviteUser.check_is_invite_user_valid(data)
         return invite
 
     def send_email(self, host, body=None):

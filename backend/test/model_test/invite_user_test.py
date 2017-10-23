@@ -23,13 +23,13 @@ class InviteInstitutionTest(TestBase):
         cls.test.init_memcache_stub()
         initModels(cls)
 
-    def test_inviteeIsMember(self):
-        """Test inviteeIsMember method."""
-        is_admin_member = InviteUser.inviteeIsMember(
+    def invitee_is_member(self):
+        """Test invitee_is_member method."""
+        is_admin_member = InviteUser.invitee_is_member(
             self.admin.email[0], self.institution
         )
 
-        is_user_member = InviteUser.inviteeIsMember(
+        is_user_member = InviteUser.invitee_is_member(
             self.user.email[0], self.institution
         )
 
@@ -45,13 +45,13 @@ class InviteInstitutionTest(TestBase):
             "The user should not be a member of this institution"
         )
 
-    def test_inviteeIsInvited(self):
-        """Test inviteeIsInvited method."""
-        is_user_invited = InviteUser.inviteeIsInvited(
+    def test_invitee_is_invited(self):
+        """Test invitee_is_invited method."""
+        is_user_invited = InviteUser.invitee_is_invited(
             self.user.email[0], self.institution.key
         )
 
-        is_user_not_invited = InviteUser.inviteeIsInvited(
+        is_user_not_invited = InviteUser.invitee_is_invited(
             "not_invited@email", self.institution.key
         )
 
@@ -67,16 +67,16 @@ class InviteInstitutionTest(TestBase):
             "The user should not have invites"
         )
 
-    def test_checkIsInviteUserValid(self):
-        """Test checkIsInviteUserValid method."""
-        # Test case in which the invitee has already been invited
+    def test_check_is_invite_user_valid_when_invitee_already_invited(self):
+        """Test check_is_invite_user_valid when invitee has already been invited."""
         with self.assertRaises(FieldException):
-            InviteUser.checkIsInviteUserValid(self.data)
+            InviteUser.check_is_invite_user_valid(self.data)
 
-        # Test case in which the invitee is already a member
+    def test_check_is_invite_user_valid_when_invitee_already_member(self):
+        """Test check_is_invite_user_valid when the invitee is already a member."""
         self.data["invitee"] = self.admin.email[0]
         with self.assertRaises(FieldException):
-            InviteUser.checkIsInviteUserValid(self.data)
+            InviteUser.check_is_invite_user_valid(self.data)
 
     def test_create(self):
         """Test create method."""

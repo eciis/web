@@ -24,11 +24,11 @@ class InviteInstitutionTest(TestBase):
         cls.test.init_memcache_stub()
         initModels(cls)
 
-    def test_checkIsInviteInstitutionValid(self):
-        """Test checkIsInviteInstitutionValid method."""
+    def test_check_is_invite_institution_valid(self):
+        """Test check_is_invite_institution_valid method."""
         with self.assertRaises(FieldException):
             data = {"suggestion_institution_name": None}
-            InviteInstitution.checkIsInviteInstitutionValid(data)
+            InviteInstitution.check_is_invite_institution_valid(data)
 
     def test_create(self):
         """Test create method."""

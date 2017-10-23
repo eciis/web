@@ -21,42 +21,29 @@ class InviteTest(TestBase):
         cls.test.init_memcache_stub()
         initModels(cls)
 
-    def test_create(self):
+    def test_create_getting_sender_key_from_data(self):
         """Test invite create method."""
-        data = {
-            "admin_key": self.admin.key.urlsafe(),
-            "is_request": False,
-            "institution_key": self.institution.key.urlsafe(),
-            "sender_key": self.admin.key.urlsafe(),
-            "sender_name": self.admin.name
-        }
-
         # test the case in which the data has the sender key and name
         invite = Invite()
-        created_invite = Invite.create(data, invite)
-
-        expected_invite = Invite()
-        expected_invite.admin_key = self.admin.key
-        expected_invite.is_request = False
-        expected_invite.institution_key = self.institution.key
-        expected_invite.sender_key = self.admin.key
-        expected_invite.sender_name = self.admin.name
+        created_invite = Invite.create(self.data, invite)
 
         self.assertEquals(
             created_invite,
-            expected_invite,
+            self.expected_invite,
             "The created invite should be iqual to the expected one"
         )
 
-        # test the case in which the sender key is get from the invite
-        data["sender_key"] = None
-        data["sender_name"] = None
+    def test_create_getting_sender_key_from_invite(self):
+        """Test the case in which the sender key is get from the invite."""
+        self.data["sender_key"] = None
+        self.data["sender_name"] = None
+        invite = Invite()
         invite.admin_key = self.admin.key
-        created_invite = Invite.create(data, invite)
+        created_invite = Invite.create(self.data, invite)
 
         self.assertEquals(
             created_invite,
-            expected_invite,
+            self.expected_invite,
             "The created invite should be iqual to the expected one"
         )
 
@@ -135,3 +122,18 @@ def initModels(cls):
     cls.invite.status = "sent"
     cls.invite.institution_key = cls.institution.key
     cls.invite.put()
+
+    cls.data = {
+        "admin_key": cls.admin.key.urlsafe(),
+        "is_request": False,
+        "institution_key": cls.institution.key.urlsafe(),
+        "sender_key": cls.admin.key.urlsafe(),
+        "sender_name": cls.admin.name
+    }
+
+    cls.expected_invite = Invite()
+    cls.expected_invite.admin_key = cls.admin.key
+    cls.expected_invite.is_request = False
+    cls.expected_invite.institution_key = cls.institution.key
+    cls.expected_invite.sender_key = cls.admin.key
+    cls.expected_invite.sender_name = cls.admin.name

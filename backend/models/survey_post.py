@@ -10,6 +10,8 @@ class SurveyPost(Post):
 
     options = ndb.JsonProperty()
 
+    number_votes = ndb.IntegerProperty()
+
     # Type of survey.
     type_survey = ndb.StringProperty(choices=set([
         'multiple_choice',
@@ -26,6 +28,7 @@ class SurveyPost(Post):
         survey_post.options = Utils.toJson(data.get("options"))
         survey_post.deadline = datetime.datetime.strptime(
             data.get('deadline'), "%Y-%m-%dT%H:%M:%S")
+        survey_post.number_votes = 0
 
         survey_post = super(SurveyPost, survey_post).create(
             data, author_key, institution_key)
@@ -39,6 +42,7 @@ class SurveyPost(Post):
         if(self.is_vote_valid(author_key, option)):
             option["number_votes"] += 1
             option["voters"].append(author_key)
+            self.number_votes += 1
             self.options[option_id] = Utils.toJson(option)
             self.put()
 
@@ -73,3 +77,13 @@ class SurveyPost(Post):
         else:
             for option in all_options_selected:
                 self.add_vote(author_key, option)
+
+    @staticmethod
+    def make(post, host):
+        """Create personalized json of post."""
+        post_dict = Post.make(post, host)
+        post_dict["deadline"] = post.deadline.isoformat()
+        post_dict["type_survey"] = post.type_survey
+        post_dict["options"] = post.options if post.options else []
+
+        return post_dict

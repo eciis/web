@@ -13,6 +13,7 @@
         var TRANSLATE_MESSAGE = {
             'COMMENT': 'comentou o seu post',
             'POST': 'publicou um novo post',
+            'SURVEY_POST': 'publicou uma nova enquete',
             'SHARED_POST': 'compartilhou seu post',
             'INVITE': 'te enviou um novo convite',
             'INSTITUTION': 'removeu a conexão entre suas instituições',

@@ -11,9 +11,9 @@
         var firebaseArrayNotifications;
 
         var TRANSLATE_MESSAGE = {
-            'COMMENT': 'comentou o seu post',
+            'COMMENT': 'comentou em um post de seu interesse',
             'POST': 'publicou um novo post',
-            'SHARED_POST': 'compartilhou seu post',
+            'SHARED_POST': 'compartilhou um post de seu interesse',
             'INVITE': 'te enviou um novo convite',
             'INSTITUTION': 'removeu a conexão entre suas instituições',
             'REQUEST_USER': 'solicitou ser membro de sua instituição',
@@ -22,7 +22,7 @@
             'REQUEST_INSTITUTION': 'deseja criar uma nova institutição',
             'REPLY_COMMENT': 'respondeu o seu comentário',
             'LIKE_COMMENT': 'curtiu seu comentário',
-            'LIKE_POST': 'curtiu seu post',
+            'LIKE_POST': 'curtiu um post de seu interesse',
             'REJECT_INSTITUTION_LINK': 'rejeitou sua solicitação de vínculo entre instituições',
             'ACCEPT_INSTITUTION_LINK': 'aceitou sua solicitação de vínculo entre instituições',
             'REJECT_INVITE_USER': 'rejeitou o convite para ser membro de sua instituição',

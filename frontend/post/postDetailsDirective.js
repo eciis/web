@@ -159,6 +159,39 @@
             });
         };
 
+        postDetailsCtrl.addInterest = function addInterest() {
+            PostService.addInterest(postDetailsCtrl.post.key).then(function success() {
+                MessageService.showToast('Esse post foi marcado como de seu interesse.');
+                postDetailsCtrl.post.interested_users.push(postDetailsCtrl.user.key);
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
+            });
+        };
+
+        postDetailsCtrl.removeInterest = function removeInterest() {
+            PostService.removeInterest(postDetailsCtrl.post.key).then(function success() {
+                MessageService.showToast('Esse post foi removido dos posts de seu interesse.');
+                _.remove(postDetailsCtrl.post.interested_users, function(userKey) {
+                    return userKey === postDetailsCtrl.user.key;
+                });
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
+                $state.go($state.current);
+            });
+        };
+
+        postDetailsCtrl.isUserInterested = function isUserInterested() {
+            return _.includes(postDetailsCtrl.post.interested_users, postDetailsCtrl.user.key);
+        };
+
+        postDetailsCtrl.AddOrRemoveInterest = function isInterested() {
+            if (!postDetailsCtrl.isUserInterested()) {
+                postDetailsCtrl.addInterest();
+            } else {
+                postDetailsCtrl.removeInterest();
+            }
+        };
+
         function getOriginalPost(post){
             if(post.shared_post){
                 return post.shared_post;

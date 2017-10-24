@@ -101,5 +101,25 @@
             });
             return deffered.promise;
         };
+
+        service.addInterest = function addInterest(postKey) {
+            var deffered = $q.defer();
+            $http.post(POSTS_URI + '/' + postKey + '/interest').then(function success(info) {
+                deffered.resolve(info.data);
+            }, function error(data) {
+                deffered.reject(data);
+            });
+            return deffered.promise;
+        };
+
+        service.removeInterest = function addInterest(postKey) {
+            var deffered = $q.defer();
+            $http.delete(POSTS_URI + '/' + postKey + '/interest').then(function success(info) {
+                deffered.resolve(info.data);
+            }, function error(data) {
+                deffered.reject(data);
+            });
+            return deffered.promise;
+        };
     });
 })();

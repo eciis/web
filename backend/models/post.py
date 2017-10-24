@@ -145,6 +145,9 @@ class Post(ndb.Model):
     # When post is shared event
     shared_event = ndb.KeyProperty(kind="Event")
 
+    # Users that are interested in the post
+    interested_users = ndb.KeyProperty(kind="User", repeated=True)
+
     def create(post, data, author_key, institution_key):
         """Create a post and check required fields."""
         post = post.createSharing(data)
@@ -163,6 +166,7 @@ class Post(ndb.Model):
         post.author = author_key
         post.institution = institution_key
         post.video_url = data.get('video_url')
+        post.interested_users = [author_key]
 
         return post
 
@@ -205,7 +209,8 @@ class Post(ndb.Model):
             'institution_key': institution.key.urlsafe(),
             'institution_state': institution.state,
             'key': post.key.urlsafe(),
-            'pdf_files': post.pdf_files if post.pdf_files else []
+            'pdf_files': post.pdf_files if post.pdf_files else [],
+            'interested_users': [interested.urlsafe() for interested in post.interested_users]
         }
         return post.modify_post(post_dict, host)
 
@@ -283,6 +288,16 @@ class Post(ndb.Model):
         has_comments = len(self.comments) > 0
         has_likes = len(self.likes) > 0
         return has_comments or has_likes
+
+    def add_interested_user(self, user):
+        """Add an interested user."""
+        if user.state == 'active':
+            self.interested_users.append(user.key)
+
+    def remove_interested_user(self, user):
+        """Remove an interested user."""
+        if user.key in self.interested_users and self.author != user.key:
+            self.interested_users.remove(user.key)
 
     @staticmethod
     def is_hidden(post):

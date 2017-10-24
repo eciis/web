@@ -50,15 +50,18 @@ class PostCommentHandler(BaseHandler):
         comment = Comment.create(data, user)
         post.add_comment(comment)
 
-        if (post.author != user.key):
-            entity_type = 'COMMENT'
-            message = {'type': 'COMMENT', 'from': user.name.encode('utf8')}
-            send_message_notification(
-                post.author.urlsafe(),
-                json.dumps(message),
-                entity_type,
-                post.key.urlsafe()
-            )
+        entity_type = 'COMMENT'
+        message = {'type': 'COMMENT', 'from': user.name.encode('utf8')}
+        for interested in post.interested_users:
+            userIsAuthor = post.author == user.key
+            interestedIsUser = interested == user.key
+            if not (userIsAuthor and interestedIsUser) and not interestedIsUser:
+                send_message_notification(
+                    interested.urlsafe(),
+                    json.dumps(message),
+                    entity_type,
+                    post.key.urlsafe()
+                )
 
         self.response.write(json.dumps(Utils.toJson(comment)))
 

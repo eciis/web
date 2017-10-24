@@ -81,9 +81,11 @@ class LikeHandler(BaseHandler):
             user.like_post(post.key)
             post.like(user.key)
 
-            isAuthorPost = post.author.urlsafe() != user.key.urlsafe()
-            if isAuthorPost:
-                send_like_notification(user, post.author.urlsafe(), entity_type, post.key.urlsafe())
+            for interested in post.interested_users:
+                userIsAuthor = post.author == user.key
+                interestedIsUser = interested == user.key
+                if not (userIsAuthor and interestedIsUser) and not interestedIsUser:
+                    send_like_notification(user, interested.urlsafe(), entity_type, post.key.urlsafe())
 
     @json_response
     @login_required

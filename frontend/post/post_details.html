@@ -155,6 +155,11 @@
 
   <!-- BUTTONS -->
   <md-card-actions layout="row" layout-align="end-center">
+   <md-button class="md-icon-button" aria-label="Favorite" ng-click="postDetailsCtrl.AddOrRemoveInterest()"
+        ng-disabled="postDetailsCtrl.disableButtonLike()" ng-class="postDetailsCtrl.isUserInterested()?'md-warn':''"
+        title="Marcar interesse e receber notificações">
+      <md-icon>notifications</md-icon>
+    </md-button>
     <md-button class="md-icon-button" arial-label="Atualizar" title="Atualizar comentários"
         ng-click="postDetailsCtrl.loadComments()" ng-if="!postDetailsCtrl.isInstInactive()">
       <md-icon>refresh</md-icon>

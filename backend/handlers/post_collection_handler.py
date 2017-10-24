@@ -64,16 +64,20 @@ class PostCollectionHandler(BaseHandler):
                         entity_type,
                         post.key.urlsafe())
 
-            if(post.shared_post and user.key != post.shared_post.get().author):
+            if(post.shared_post):
                 shared_post = ndb.Key(urlsafe=data['shared_post']).get()
 
                 entity_type = 'SHARED_POST'
                 message = {'type': entity_type,
                            'from': user.name.encode('utf8')}
-                send_message_notification(shared_post.author.urlsafe(),
-                                          json.dumps(message),
-                                          entity_type,
-                                          post.key.urlsafe())
+                for interested in shared_post.interested_users:
+                    userIsAuthor = shared_post.author == user.key
+                    interestedIsUser = interested == user.key
+                    if not (userIsAuthor and interestedIsUser) and not interestedIsUser:
+                        send_message_notification(interested.urlsafe(),
+                                                  json.dumps(message),
+                                                  entity_type,
+                                                  post.key.urlsafe())
 
             self.response.write(json.dumps(Post.make(post, self.request.host)))
         except Exception as error:

@@ -6,10 +6,6 @@ service: frontend
 default_expiration: "1s"
 
 handlers:
-- url: /
-  static_files: index.html
-  upload: index.html
-
 - url: /app/(.*)
   static_files: \1
   upload: (.*)

@@ -1,0 +1,75 @@
+<md-content layout="row" md-colors="{background: 'grey-200'}" layout-align="center">
+    <!-- LEFT SIDE PANEL -->
+    <div flex-gt-md="20" flex-md="25" layout="row" layout-wrap layout-align="center" layout-fill>
+        <div layout-align="center" layout-fill>
+          <md-card>
+            <md-subhead layout-padding class="md-primary" md-colors="{background: 'teal-900'}">Filtrar pesquisa</md-subhead>
+            <md-card-content>
+                <md-radio-group flex>
+                    <md-list
+                    md-cols="5" md-cols-gt-md="15"
+                    md-row-height="1:1"
+                    md-gutter="4px" md-gutter-gt-sm="4px">
+                        <md-list-item md-rowspan="1" md-colspan="1" md-colspan-sm="1">
+                            <div class="column">
+                                <md-radio-button class="md-primary" ng-value="'*'" ng-click="searchCtrl.searchByOccupationArea('*')"><b>Pesquisar em todas as áreas</b></md-radio-button>
+                            </div>
+                        </md-list-item>
+                        <md-list-item md-rowspan="1" md-colspan="1" md-colspan-sm="1"
+                        ng-repeat="occupation_area in searchCtrl.occupationAreas | orderBy: 'name'">
+                            <div class="column">
+                                <md-radio-button class="md-primary" ng-value="occupation_area.name" ng-click="searchCtrl.searchByOccupationArea(occupation_area.name)">{{occupation_area.name}}</md-radio-button>
+                            </div>
+                        </md-list-item>
+                    </md-list>
+                </md-radio-group>
+            </md-card-content>
+          </md-card>
+        </div>
+    </div>
+
+    <div flex-gt-lg="60" flex-lg="60" layout="row" layout-wrap layout-align="center" layout-fill>
+        <div layout-align="center" layout-fill>
+            <div flex>
+                <md-card>
+                    <md-card-header>
+                        <md-card-header-text>
+                            <span class="md-title">Pesquisa</span>
+                        </md-card-header-text>
+                    </md-card-header>
+                    <md-card-content>
+                        <div>
+                            <form ng-submit="searchCtrl.search()">
+                              <md-input-container class="md-block">
+                                <input placeholder="Digite aqui sua pesquisa..."
+                                  ng-model="searchCtrl.search_keyword">
+                              </md-input-container>
+                            </form>
+                        </div>
+                        <md-list
+                        md-cols="5" md-cols-gt-md="15"
+                        md-row-height="1:1"
+                        md-gutter="4px" md-gutter-gt-sm="4px"
+                        ng-if="searchCtrl.loading">
+                            <md-subheader class="md-no-sticky">Instituições encontradas:</md-subheader>
+                            <md-list-item md-rowspan="1" md-colspan="1" md-colspan-sm="1" ng-repeat="institution in searchCtrl.institutions">
+                                <div>
+                                    &bull;
+                                    <a href class="md-title hyperlink" ng-click="searchCtrl.goToInstitution(institution.id)">
+                                    {{ institution.name | limitTo: 90}}{{institution.name.length > 90 ? '...' : ''}}
+                                    </a>
+                                </div>
+                            </md-list-item>
+                            <md-list-item class="md-3-line" ng-if="searchCtrl.notHasInstitutions()">
+                                <b>&bull; Nenhuma instituição encontrada</b>
+                            </md-list-item>
+                        </md-list>
+                        <div layout-align="center center" layout="row">
+                          <md-progress-circular ng-show="searchCtrl.isLoading()" md-mode="indeterminate"></md-progress-circular>
+                        </div>
+                    </md-card-content>
+                </md-card>
+            </div>
+        </div>
+    </div>
+</md-content>

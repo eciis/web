@@ -9,6 +9,7 @@
         var postCtrl = this;
 
         postCtrl.post = {};
+        postCtrl.survey = false;
         postCtrl.loading = false;
         postCtrl.deletePreviousImage = false;
         postCtrl.user = AuthService.getCurrentUser();
@@ -17,8 +18,15 @@
         postCtrl.deletedFiles = [];
         postCtrl.addVideo = false;
         postCtrl.videoRegex = '(?:http(s)?:\/\/)?(www\.)?youtube\.com\/watch\\?v=.+';
+        postCtrl.options = [];
+
+        var option_empty = {'text': '',
+                            'number_votes': 0,
+                            'voters': []
+                            };
 
         var observer;
+        
 
         postCtrl.addImage = function(image) {
             var newSize = 1024;
@@ -32,6 +40,36 @@
                 MessageService.showToast(error);
             });
         };
+
+        postCtrl.addOption = function() {
+            postCtrl.options.push(option_empty);
+        };
+
+        postCtrl.removeOption = function(opt) {
+             _.remove(postCtrl.options, function(option) {
+              return option === opt;
+            });    
+        };
+
+        postCtrl.hasOptionEmpty = function(){
+            return _.includes(postCtrl.options, option_empty);
+        };
+
+        postCtrl.createSurvey = function() {
+            postCtrl.survey = true;
+            postCtrl.addOption();
+        };
+
+        postCtrl.save = function() {
+            var id = 0;
+            _.forEach(postCtrl.options, function(option) {
+              option.id = id;
+              id += 1;
+            });
+            postCtrl.post.options = postCtrl.options;
+        };
+
+
 
         postCtrl.addPdf = function addPdf(files) {
             postCtrl.pdfFiles = postCtrl.pdfFiles.concat(files);

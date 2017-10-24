@@ -21,7 +21,7 @@ class EventCollectionHandlerTest(TestBaseHandler):
         """Provide the base for the tests."""
         super(EventCollectionHandlerTest, cls).setUp()
         app = cls.webapp2.WSGIApplication(
-            [("/api/events", EventCollectionHandler),
+            [("/api/events.*", EventCollectionHandler),
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
@@ -79,10 +79,10 @@ class EventCollectionHandlerTest(TestBaseHandler):
         """Test the calendar_handler's post event method."""
 
         # Call the get method
-        events = self.testapp.get("/api/events")
+        events = self.testapp.get("/api/events?page=0&limit=1")
 
         # Retrieve the entities
-        event = (events.json)[0]
+        event = (events.json['events'])[0]
         key_event = ndb.Key(urlsafe=event['key'])
         event_obj = key_event.get()
         self.certbio = self.certbio.key.get()

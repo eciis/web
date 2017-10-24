@@ -14,7 +14,7 @@ class InviteInstitutionChildren(InviteInstitution):
 
         return invite
 
-    def createConectionInstitution(self, institution):
+    def create_conection_institution(self, institution):
         """Method of creating connection between invitation and institution children."""
         Institution.create_children_connection(institution, self)
 

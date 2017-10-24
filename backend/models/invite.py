@@ -51,7 +51,7 @@ class Invite(PolyModel):
 
     @staticmethod
     def create(data, invite):
-        """Create a post and check required fields."""
+        """Create an invite and check required fields."""
         invite.admin_key = ndb.Key(urlsafe=data.get('admin_key'))
         invite.is_request = data.get('is_request') or False
         invite.institution_key = ndb.Key(urlsafe=data.get('institution_key'))

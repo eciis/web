@@ -13,14 +13,14 @@
   </md-card-header>
   <md-card-content layout="column">
     <div>
-      <md-button ng-click="postCtrl.survey=false">
+      <md-button ng-click="postCtrl.isSurvey=false">
         <md-icon>edit</md-icon> Iniciar um post 
       </md-button>|
       <md-button ng-click="postCtrl.createSurvey()">
         <md-icon>poll</md-icon>Enquete
       </md-button>
     </div>
-    <div ng-if="!postCtrl.survey">
+    <div ng-if="!postCtrl.isSurvey">
       <form name="saveForm">
         <md-input-container class="md-block">
           <label>Título</label>
@@ -46,7 +46,7 @@
         </md-input-container>
       </form>
     </div>
-    <div ng-if="postCtrl.survey">
+    <div ng-if="postCtrl.isSurvey">
       <form>
         <md-input-container class="md-block">
           <label>Pergunte algo</label>
@@ -62,6 +62,9 @@
           <md-input-container>
             <label>Opção {{option.id}}</label>
             <input ng-model="option.text"/>
+            <md-button ng-click="postCtrl.removeOption(option)" class="md-icon-button">
+              <md-icon>delete</md-icon>
+            </md-button>
           </md-input-container>
           </md-list-item>
         </md-list>
@@ -107,7 +110,7 @@
       <md-icon>movie</md-icon>
     </md-button>
     <md-button title="Enviar" class="md-icon-button" ng-click="postCtrl.save(isEditing, originalPost, posts)" 
-      ng-disabled="!postCtrl.isPostValid() || saveForm.$invalid">
+      ng-disabled="!postCtrl.canSend(saveForm.$invalid)">
       <md-icon>send</md-icon>
     </md-button>
   </md-dialog-actions>

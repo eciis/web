@@ -9,7 +9,7 @@
         var postCtrl = this;
 
         postCtrl.post = {};
-        postCtrl.survey = false;
+        postCtrl.isSurvey = false;
         postCtrl.loading = false;
         postCtrl.deletePreviousImage = false;
         postCtrl.user = AuthService.getCurrentUser();
@@ -42,7 +42,7 @@
         };
 
         postCtrl.addOption = function() {
-            postCtrl.options.push(option_empty);
+            postCtrl.options.push(angular.copy(option_empty));
         };
 
         postCtrl.removeOption = function(opt) {
@@ -52,24 +52,36 @@
         };
 
         postCtrl.hasOptionEmpty = function(){
-            return _.includes(postCtrl.options, option_empty);
+            return _.find(postCtrl.options, option_empty);
         };
 
         postCtrl.createSurvey = function() {
-            postCtrl.survey = true;
+            postCtrl.isSurvey = true;
             postCtrl.addOption();
         };
 
-        postCtrl.save = function() {
+        postCtrl.saveSurvey = function() {
             var id = 0;
             _.forEach(postCtrl.options, function(option) {
               option.id = id;
               id += 1;
             });
             postCtrl.post.options = postCtrl.options;
+            var survey = new Post(postCtrl.post, postCtrl.user.current_institution.key);
+
+            PostService.createPost(survey).then(function success(response) {
+                postCtrl.clearPost();
+                posts.push(new Post(response.data));
+                MessageService.showToast('Postado com sucesso!');
+                $mdDialog.hide();
+            }, function error(response) {
+                AuthService.reload().then(function success() {
+                    $mdDialog.hide();
+                    MessageService.showToast(response.data.msg);
+                    $state.go('app.home');
+                });
+            });
         };
-
-
 
         postCtrl.addPdf = function addPdf(files) {
             postCtrl.pdfFiles = postCtrl.pdfFiles.concat(files);
@@ -250,6 +262,7 @@
         postCtrl.clearPost = function clearPost() {
             postCtrl.post = {};
             postCtrl.pdfFiles = [];
+            postCtrl.options = [];
         };
 
         postCtrl.showVideo = function showVideo() {
@@ -346,6 +359,14 @@
                 instName = postCtrl.post.institution_name;
             }
             return instName;
+        };
+
+        postCtrl.canSend = function canSend(formInvalid){
+            if(postCtrl.isSurvey){
+                return postCtrl.post.title && !postCtrl.hasOptionEmpty;
+            } else {
+                return postCtrl.isPostValid() && !formInvalid;
+            }
         };
 
         (function main() {

@@ -56,7 +56,7 @@ class InviteUser(Invite):
 
         body = body or """Oi:
         Voce tem um novo convite. Acesse:
-        http://%s/app/#/institution/%s/%s/new_invite/USER
+        http://%s/institution/%s/%s/new_invite/USER
 
         Equipe e-CIS """ % (host, institution_key, invite_key)
         super(InviteUser, self).send_email(host, self.invitee, body)

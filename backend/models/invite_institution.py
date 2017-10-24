@@ -51,7 +51,7 @@ class InviteInstitution(Invite):
         body = body or """
         Sua empresa %s foi convidada a se cadastrar na plataforma.
         Para realizar o cadastro crie sua conta pessoal em
-        http://%s/app/#/institution/%s/%s/new_invite/INSTITUTION
+        http://%s/institution/%s/%s/new_invite/INSTITUTION
         e proceda com o cadastro da sua empresa.
         Equipe e-CIS
         """ % (self.suggestion_institution_name, host, institution_key, invite_key)

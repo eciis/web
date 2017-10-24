@@ -327,11 +327,8 @@
                     addComment(postDetailsCtrl.post, response.data);
                     postDetailsCtrl.savingComment = false;
                 }, function error(response) {
-                    AuthService.reload().then(function success() {
-                        postDetailsCtrl.savingComment = false;
-                        MessageService.showToast(response.data.msg);
-                        $state.go('app.home');
-                    });
+                    MessageService.showToast(response.data.msg);
+                    $state.go('app.home');
                 });
             } else {
                 MessageService.showToast("Comentário não pode ser vazio.");

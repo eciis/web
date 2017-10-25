@@ -19,12 +19,10 @@
         manageMemberCtrl.openRemoveMemberDialog = function openRemoveMemberDialog(ev, member_obj) {
              $mdDialog.show({
                 templateUrl: 'app/institution/removeMemberDialog.html',
-                controller: "RemoveMemberController",
+                controller: RemoveMemberController,
                 controllerAs: "removeMemberCtrl",
                 locals: {
                     member_obj: member_obj,
-                    currentInstitutionKey: currentInstitutionKey,
-                    memberCtrl: manageMemberCtrl
                 },
                 targetEvent: ev,
                 clickOutsideToClose: true
@@ -160,26 +158,24 @@
         };
 
         loadInstitution();
-    });
 
-    app.controller("RemoveMemberController", function RemoveMemberController(member_obj, currentInstitutionKey, memberCtrl,
-        InstitutionService, MessageService, $mdDialog) {
+        function RemoveMemberController(member_obj) {
+            var removeMemberCtrl = this;
 
-        var removeMemberCtrl = this;
+            removeMemberCtrl.reasonToRemove = "";
 
-        removeMemberCtrl.reasonToRemove = "";
+            removeMemberCtrl.removeMember = function removeMember() {
+                InstitutionService.removeMember(currentInstitutionKey, member_obj, removeMemberCtrl.reasonToRemove).then(function success() {
+                    manageMemberCtrl.removeMember(member_obj);
+                    $mdDialog.cancel();
+                }, function error(response) {
+                    MessageService.showToast(response.data.msg);
+                });
+            };
 
-        removeMemberCtrl.removeMember = function removeMember() {
-            InstitutionService.removeMember(currentInstitutionKey, member_obj, removeMemberCtrl.reasonToRemove).then(function success() {
-                memberCtrl.removeMember(member_obj);
+            removeMemberCtrl.cancel = function cancel() {
                 $mdDialog.cancel();
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
-            });
-        };
-
-        removeMemberCtrl.cancel = function cancel() {
-            $mdDialog.cancel();
-        };
+            };
+        }
     });
 })();

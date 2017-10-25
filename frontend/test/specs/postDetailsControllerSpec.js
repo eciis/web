@@ -398,9 +398,6 @@
         });
 
         it('should return true', function() {
-            console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>..");
-            console.log(postDetailsCtrl.post.subscribers[0].key);
-            console.log(postDetailsCtrl.user.key);
             var result = postDetailsCtrl.isSubscriber();
             expect(result).toBe(true);
         });

@@ -169,6 +169,7 @@ class User(ndb.Model):
         if institution_key not in self.institutions:
             self.institutions.append(institution_key)
             self.add_permission("publish_post", institution_key.urlsafe())
+            self.add_permission("publish_survey", institution_key.urlsafe())
             self.put()
 
     def add_image(self, url_image):

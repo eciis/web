@@ -86,6 +86,7 @@ def createInstitution(data, user):
     institution.put()
 
     user.add_permission("publish_post", institution.key.urlsafe())
+    user.add_permission("publish_survey_post", institution.key.urlsafe())
     user.institutions.append(institution.key)
     user.institutions_admin.append(institution.key)
     user.follows.append(institution.key)

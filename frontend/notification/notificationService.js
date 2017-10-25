@@ -13,6 +13,7 @@
         var TRANSLATE_MESSAGE = {
             'COMMENT': 'comentou em um post de seu interesse',
             'POST': 'publicou um novo post',
+            'SURVEY_POST': 'publicou uma nova enquete',
             'SHARED_POST': 'compartilhou um post de seu interesse',
             'INVITE': 'te enviou um novo convite',
             'INSTITUTION': 'removeu a conexão entre suas instituições',
@@ -28,7 +29,7 @@
             'REJECT_INVITE_USER': 'rejeitou o convite para ser membro de sua instituição',
             'ACCEPT_INVITE_USER': 'aceitou o convite para ser membro de sua instituição',
             'REJECT_INVITE_INSTITUTION': 'rejeitou o seu convite para ser administrador',
-            'ACCEPTED_INVITE_INSTITUTION': 'aceitou o seu convite para ser administrador',
+            'ACCEPT_INVITE_INSTITUTION': 'aceitou o seu convite para ser administrador',
             'DELETE_MEMBER': 'removeu você de sua instituição',
             'ACCEPTED_LINK': 'aceitou sua solicitação de vínculo'
         };

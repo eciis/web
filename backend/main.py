@@ -19,7 +19,7 @@ from handlers.user_timeline_handler import UserTimelineHandler
 from handlers.erro_handler import ErroHandler
 from handlers.get_key_handler import GetKeyHandler
 from handlers.post_comment_handler import PostCommentHandler
-from handlers.post_interest_handler import PostInterestHandler
+from handlers.post_followers_handler import PostFollowersHandler
 from handlers.reply_comment_handler import ReplyCommentHandler
 from handlers.invite_collection_handler import InviteCollectionHandler
 from handlers.search_handler import SearchHandler
@@ -71,7 +71,7 @@ app = webapp2.WSGIApplication([
     ("/api/posts/(.*)/comments", PostCommentHandler),
     ("/api/posts/(.*)/comments/(.*)", PostCommentHandler),
     ("/api/posts/(.*)/likes", LikeHandler),
-    ("/api/posts/(.*)/interest", PostInterestHandler),
+    ("/api/posts/(.*)/followers", PostFollowersHandler),
     ("/api/posts/(.*)", PostHandler),
     ("/api/posts", PostCollectionHandler),
     ("/api/user", UserHandler),

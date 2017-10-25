@@ -146,7 +146,7 @@ class Post(ndb.Model):
     shared_event = ndb.KeyProperty(kind="Event")
 
     # Users that are interested in the post
-    interested_users = ndb.KeyProperty(kind="User", repeated=True)
+    followers = ndb.KeyProperty(kind="User", repeated=True)
 
     def create(post, data, author_key, institution_key):
         """Create a post and check required fields."""
@@ -166,7 +166,7 @@ class Post(ndb.Model):
         post.author = author_key
         post.institution = institution_key
         post.video_url = data.get('video_url')
-        post.interested_users = [author_key]
+        post.followers = [author_key]
 
         return post
 
@@ -210,7 +210,7 @@ class Post(ndb.Model):
             'institution_state': institution.state,
             'key': post.key.urlsafe(),
             'pdf_files': post.pdf_files if post.pdf_files else [],
-            'interested_users': [interested.urlsafe() for interested in post.interested_users]
+            'followers': [follower.urlsafe() for follower in post.followers]
         }
         return post.modify_post(post_dict, host)
 
@@ -289,15 +289,15 @@ class Post(ndb.Model):
         has_likes = len(self.likes) > 0
         return has_comments or has_likes
 
-    def add_interested_user(self, user):
+    def add_follower(self, user):
         """Add an interested user."""
         if user.state == 'active':
-            self.interested_users.append(user.key)
+            self.followers.append(user.key)
 
-    def remove_interested_user(self, user):
+    def remove_follower(self, user):
         """Remove an interested user."""
-        if user.key in self.interested_users and self.author != user.key:
-            self.interested_users.remove(user.key)
+        if user.key in self.followers and self.author != user.key:
+            self.followers.remove(user.key)
 
     @staticmethod
     def is_hidden(post):

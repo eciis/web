@@ -11,7 +11,7 @@ from handlers.base_handler import BaseHandler
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
 
-class PostInterestHandler(BaseHandler):
+class PostFollowersHandler(BaseHandler):
     """Post  Interest Handler."""
 
     @json_response
@@ -25,14 +25,14 @@ class PostInterestHandler(BaseHandler):
                       'The post is unavailable to this procedure',
                       NotAuthorizedException)
 
-        post.add_interested_user(user)
+        post.add_follower(user)
         post.put()
 
     @json_response
     @login_required
     @ndb.transactional(xg=True)
     def delete(self, user, post_key):
-        """Handle POST Requests."""
+        """Handle Delete Requests."""
         post = ndb.Key(urlsafe=post_key).get()
 
         Utils._assert(post.state != 'published',
@@ -42,5 +42,5 @@ class PostInterestHandler(BaseHandler):
                       'The user must be interested at his post',
                       NotAuthorizedException)
 
-        post.remove_interested_user(user)
+        post.remove_follower(user)
         post.put()

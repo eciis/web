@@ -159,19 +159,19 @@
             });
         };
 
-        postDetailsCtrl.addInterest = function addInterest() {
-            PostService.addInterest(postDetailsCtrl.post.key).then(function success() {
+        postDetailsCtrl.addFollower = function addFollower() {
+            PostService.addFollower(postDetailsCtrl.post.key).then(function success() {
                 MessageService.showToast('Esse post foi marcado como de seu interesse.');
-                postDetailsCtrl.post.interested_users.push(postDetailsCtrl.user.key);
+                postDetailsCtrl.post.followers.push(postDetailsCtrl.user.key);
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
         };
 
-        postDetailsCtrl.removeInterest = function removeInterest() {
-            PostService.removeInterest(postDetailsCtrl.post.key).then(function success() {
+        postDetailsCtrl.removeFollower = function removeFollower() {
+            PostService.removeFollower(postDetailsCtrl.post.key).then(function success() {
                 MessageService.showToast('Esse post foi removido dos posts de seu interesse.');
-                _.remove(postDetailsCtrl.post.interested_users, function(userKey) {
+                _.remove(postDetailsCtrl.post.followers, function(userKey) {
                     return userKey === postDetailsCtrl.user.key;
                 });
             }, function error(response) {
@@ -180,15 +180,15 @@
             });
         };
 
-        postDetailsCtrl.isUserInterested = function isUserInterested() {
-            return _.includes(postDetailsCtrl.post.interested_users, postDetailsCtrl.user.key);
+        postDetailsCtrl.isFollower = function isFollower() {
+            return _.includes(postDetailsCtrl.post.followers, postDetailsCtrl.user.key);
         };
 
-        postDetailsCtrl.AddOrRemoveInterest = function isInterested() {
-            if (!postDetailsCtrl.isUserInterested()) {
-                postDetailsCtrl.addInterest();
+        postDetailsCtrl.AddOrRemoveFollower = function AddOrRemoveFollower() {
+            if (!postDetailsCtrl.isFollower()) {
+                postDetailsCtrl.addFollower();
             } else {
-                postDetailsCtrl.removeInterest();
+                postDetailsCtrl.removeFollower();
             }
         };
 

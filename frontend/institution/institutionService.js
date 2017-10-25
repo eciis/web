@@ -71,7 +71,7 @@
 
         service.removeMember = function removeMember(institutionKey, member, justification) {
             var deffered = $q.defer();
-            $http.delete(INSTITUTIONS_URI + "/" + institutionKey + "/members?removeMember=" + member.key + "&&justification=" + justification)
+            $http.delete(INSTITUTIONS_URI + "/" + institutionKey + "/members?removeMember=" + member.key + "&justification=" + justification)
             .then(function success(info) {
                 deffered.resolve(info.data);
             }, function error(data) {

@@ -67,8 +67,8 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         self.assertEqual(
             message_exception,
             "Error! The invite for institution have to specify the suggestion institution name",
-            "Expected message exception must be equal to\
-             Error! The invite for institution have to specify the suggestion institution name")
+            "Expected exception message must be equal to " +
+            "Error! The invite for institution have to specify the suggestion institution name")
 
     @patch('utils.verify_token', return_value={'email': 'first_user@gmail.com'})
     def test_post_invite_user(self, verify_token):
@@ -126,8 +126,8 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         self.assertEqual(
             message_exception,
             "Error! The invitee is already a member",
-            "Expected message exception must be equal to \
-            Error! The invitee is already a member")
+            "Expected exception message must be equal to " +
+            "Error! The invitee is already a member")
 
     @patch('utils.verify_token', return_value={'email': 'first_user@gmail.com'})
     def test_post_invite_user_without_inst_key(self, verify_token):
@@ -144,7 +144,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         self.assertEqual(
             message_exception,
             "Error! 'institution_key'",
-            "Excpect message exception muste be equal Error! 'institution_key'")
+            "Expected exception message must be equal to Error! 'institution_key'")
 
     @patch('utils.verify_token', return_value={'email': 'second_user@ccc.ufcg.edu.br'})
     def test_post_invite_without_admin(self, verify_token):
@@ -161,7 +161,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         self.assertEqual(
             message_exception,
             "Error! User is not admin",
-            "Excpect message exception muste be equal Error! User is not admin")
+            "Expected exception message must be equal to Error! User is not admin")
 
     @patch('utils.verify_token', return_value={'email': 'first_user@gmail.com'})
     def test_post_invite_institution_parent(self, verify_token):
@@ -223,7 +223,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         self.assertEqual(
             message_exception,
             "Error! 'institution_key'",
-            "Excpect message exception muste be equal Error! 'institution_key'")
+            "Expected exception message must be equal to Error! 'institution_key'")
 
 
 def initModels(cls):

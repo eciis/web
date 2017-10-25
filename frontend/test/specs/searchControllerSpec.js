@@ -24,7 +24,7 @@
         instService = InstitutionService;
 
         AuthService.login(user);
-        httpBackend.expectGET('app/institution/occupation_area.json').respond([{}]);
+        httpBackend.expectGET('app/institution/actuation_area.json').respond([{}]);
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', "error/user_inactive.html").respond(200);
         httpBackend.when('GET', "home/home.html").respond(200);
@@ -104,10 +104,10 @@
             });
         });
 
-        describe('searchByOccupationArea()', function() {
+        describe('searchByActuationArea()', function() {
             it('Should call makeSearch()', function() {
                 spyOn(searchCtrl, 'makeSearch');
-                searchCtrl.searchByOccupationArea('Universidades');
+                searchCtrl.searchByActuationArea('Universidades');
                 expect(searchCtrl.makeSearch).toHaveBeenCalledWith('Universidades');
             });
         });

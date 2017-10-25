@@ -9,7 +9,7 @@
 
         searchCtrl.search_keyword = $state.params.search_keyword;
         searchCtrl.institutions = [];
-        searchCtrl.occupationAreas = [];
+        searchCtrl.actuationAreas = [];
         searchCtrl.loading = false;
 
         searchCtrl.makeSearch = function makeSearch(value) {
@@ -42,7 +42,7 @@
             }
         };
 
-        searchCtrl.searchByOccupationArea = function searchByOccupationArea(chosen_area) {
+        searchCtrl.searchByActuationArea = function searchByActuationArea(chosen_area) {
             searchCtrl.makeSearch(chosen_area);
         };
 
@@ -50,9 +50,9 @@
             return !searchCtrl.loading && searchCtrl.search_keyword;
         };
 
-        function getOccupationAreas() {
-            $http.get('app/institution/occupation_area.json').then(function success(response) {
-                searchCtrl.occupationAreas = response.data;
+        function getActuationAreas() {
+            $http.get('app/institution/actuation_area.json').then(function success(response) {
+                searchCtrl.actuationAreas = response.data;
             });
         }
 
@@ -63,7 +63,7 @@
         }
 
         (function main() {
-            getOccupationAreas();
+            getActuationAreas();
             loadSearch();
         })();
     });

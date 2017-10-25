@@ -59,7 +59,7 @@ case "$1" in
 
         if [ ! -z $2 ]; then
             version=$2
-            url=$version"."BACKEND_DOMAIN
+            url=$version"."$BACKEND_DOMAIN
             set_backend_url $url
 
             if [ ! -z $3 ]; then # Especified one or more yaml configuration files

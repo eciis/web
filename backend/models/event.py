@@ -61,6 +61,9 @@ class Event(ndb.Model):
     def isValid(self):
         """Check if is valid event."""
         date_now = datetime.datetime.today()
+
+        if (self.end_time is None) or (self.start_time is None):
+            raise FieldException("Event must contains start time and end time")
         if self.end_time < self.start_time:
             raise FieldException("The end time can not be before the start time")
         if self.end_time < date_now:

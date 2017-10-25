@@ -184,7 +184,7 @@
             return _.includes(postDetailsCtrl.post.subscribers, postDetailsCtrl.user.key);
         };
 
-        postDetailsCtrl.AddOrRemoveSubscriber = function AddOrRemoveSubscriber() {
+        postDetailsCtrl.addOrRemoveSubscriber = function addOrRemoveSubscriber() {
             if (!postDetailsCtrl.isSubscriber()) {
                 postDetailsCtrl.addSubscriber();
             } else {

@@ -1,0 +1,17 @@
+<md-dialog arial-label="Remoção de instituição filha" flex="40">
+    <md-dialog-content class="md-dialog-content" layout="column">
+        <h3>Remoção de instituição</h3>
+        <md-input-container class="md-block">
+            <label>Por qual motivo você está removendo esta instituição?</label>
+            <textarea ng-model="ctrl.cause"></textarea>
+        </md-input-container>
+    </md-dialog-content>
+    <md-dialog-actions layout="row" layout-align="center center">
+        <md-button class="md-warn" ng-click="ctrl.closeDialog()">
+            Cancelar
+        </md-button>
+        <md-button class="md-warn md-raised" ng-click="ctrl.removeChildInst()">
+            Continuar
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

@@ -212,9 +212,7 @@
                         inviteInstCtrl.hasParent = false;
                         inviteInstCtrl.institution.parent_institution = {};
                     } else {
-                        _.remove(inviteInstCtrl.institution.children_institutions, function(inst) {
-                            return institution.key === inst.key;
-                        });
+                        removeInstFromChildren(institution);
                     }
                 });
             }, function() {
@@ -222,6 +220,12 @@
             });
             return promise;
         };
+
+        function removeInstFromChildren(institution) {
+            _.remove(inviteInstCtrl.institution.children_institutions, function(child) {
+                return child.key === institution.key;
+            });
+        }
 
         inviteInstCtrl.acceptRequest = function acceptRequest(request, type_of_invite, event) {
             var promise = MessageService.showConfirmationDialog(event, 'Aceitar Solicitação', isOvewritingParent(type_of_invite));
@@ -299,6 +303,44 @@
                 var $confirmButton = $actionsSection.children()[1];
                 angular.element($confirmButton).addClass('md-raised md-warn');
                 angular.element($cancelButton).addClass('md-primary');
+        }
+
+        inviteInstCtrl.removeChild = function removeChild(institution, ev) {
+            $mdDialog.show({
+                templateUrl: "app/invites/removeChildDialog.html",
+                targetEvent: ev,
+                clickOutsideToClose: true,
+                controller: RemoveChildController,
+                controllerAs: 'ctrl',
+                locals: {
+                    child: institution,
+                    user: inviteInstCtrl.user,
+                    removeInstFromChildren: removeInstFromChildren
+                }
+            });
+        };
+
+        function RemoveChildController($mdDialog, child, user, InstitutionService, AuthService, removeInstFromChildren) {
+            var ctrl = this;
+            var removeHierarchy = "false";
+
+            ctrl.closeDialog = function closeDialog() {
+                $mdDialog.cancel();
+            };
+
+            ctrl.removeChildInst = function removeChildInst() {
+                InstitutionService.removeInstitution(child.key, removeHierarchy).then(
+                    function success() {
+                        user.removeInstitution(child.key, removeHierarchy);
+                        AuthService.save();
+                        removeInstFromChildren(child);
+                        ctrl.closeDialog();
+                        MessageService.showToast("Instituição removida com sucesso.");
+                    }, function error(response) {
+                        MessageService.showToast(response.data.msg);
+                    }
+                )
+            };
         }
 
         loadInstitution();

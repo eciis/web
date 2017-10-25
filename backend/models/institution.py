@@ -223,7 +223,6 @@ class Institution(ndb.Model):
         user.follows.append(institution.key)
         user.put()
 
-
         return institution
 
     @ndb.transactional(xg=True)

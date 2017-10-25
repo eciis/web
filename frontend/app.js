@@ -138,6 +138,15 @@
                     }
                 }
             })
+            .state("app.search", {
+                url: "/search/:search_keyword",
+                views: {
+                    content: {
+                        templateUrl: "app/search/search.html",
+                        controller: "SearchController as searchCtrl"
+                    }
+                }
+            })
             .state("new_invite", {
                 url: "/:key/new_invite",
                 views: {
@@ -198,8 +207,7 @@
 
         $urlRouterProvider.otherwise("/");
 
-        $locationProvider.html5Mode(false);
-        $locationProvider.hashPrefix(''); // Uses # instead #!
+        $locationProvider.html5Mode(true);
 
         $httpProvider.interceptors.push('BearerAuthInterceptor');
 

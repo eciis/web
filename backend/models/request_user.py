@@ -61,7 +61,7 @@ class RequestUser(Invite):
         # TODO Set this message
         body = body or """Oi:
         Voce tem um novo convite. Acesse:
-        http://%s/app/#/institution/%s/%s/new_invite/USER
+        http://%s/institution/%s/%s/new_invite/USER
 
         Equipe e-CIS """ % (host, institution_key, invite_key)
         super(RequestUser, self).send_email(host, admin_email, body)
@@ -79,7 +79,7 @@ class RequestUser(Invite):
         Você foi aceito na plataforma como membro da instituição
         %s, seja bem vindo ao e-CIS.
         Realize seu login no link abaixo:
-        http://%s/app/#/signin
+        http://%s/signin
 
         Equipe e-CIS""" % (institution_name, host)
 

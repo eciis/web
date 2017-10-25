@@ -27,7 +27,7 @@ class RequestInstitutionChildren(Request):
         # TODO Set this message
         body = body or """Olá
         Sua instituição recebeu um novo pedido. Acesse:
-        http://%s/app/#/requests/%s/institution_children para analisar o mesmo.
+        http://%s/requests/%s/institution_children para analisar o mesmo.
 
         Equipe e-CIS """ % (host, request_key)
         super(RequestInstitutionChildren, self).send_email(host, requested_email, body)

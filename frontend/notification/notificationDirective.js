@@ -23,6 +23,10 @@
                 icon: "inbox",
                 state: "app.post"
             },
+            "SURVEY_POST": {
+                icon: "poll",
+                state: "app.post"
+            },
             "SHARED_POST": {
                 icon: "share",
                 state: "app.post"

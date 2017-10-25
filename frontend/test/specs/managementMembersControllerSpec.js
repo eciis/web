@@ -95,11 +95,11 @@
 
         describe('removeMember()', function(){
 
-            it('should contain two members before removeMember', function() {
+            it('should contains two members before removeMember', function() {
                 expect(manageMemberCtrl.members).toEqual([member, user]);
             });
 
-            it('Should contain one mamber after removeMember', function() {
+            it('Should contains one member after removeMember', function() {
                 manageMemberCtrl.removeMember(user);
                 expect(manageMemberCtrl.members).toEqual([member]);
                 manageMemberCtrl.members.push(user);

@@ -162,10 +162,10 @@
         function RemoveMemberController(member_obj) {
             var removeMemberCtrl = this;
 
-            removeMemberCtrl.reasonToRemove = "";
+            removeMemberCtrl.justification = "";
 
             removeMemberCtrl.removeMember = function removeMember() {
-                InstitutionService.removeMember(currentInstitutionKey, member_obj, removeMemberCtrl.reasonToRemove).then(function success() {
+                InstitutionService.removeMember(currentInstitutionKey, member_obj, removeMemberCtrl.justification).then(function success() {
                     manageMemberCtrl.removeMember(member_obj);
                     $mdDialog.cancel();
                 }, function error(response) {

@@ -57,12 +57,12 @@ class InstitutionMembersHandler(BaseHandler):
         foi removido pelo administrador %s
         """ % (institution.name, user.name)
 
-        reasonToRemove = self.request.get('reasonToRemove')
+        justification = self.request.get('justification')
 
-        if reasonToRemove:
+        if justification:
             message = message + """pelo seguinte motivo:
             '%s'
-            """ % (reasonToRemove)
+            """ % (justification)
 
         body = message + """
 

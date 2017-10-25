@@ -104,8 +104,9 @@
         }
 
         function loadEvents() {
-            EventService.getEvents().then(function success(response) {
-                homeCtrl.events = activeEvents(response.data);
+            var page = 0;
+            EventService.getEvents(page).then(function success(response) {
+                homeCtrl.events = activeEvents(response.data.events);
                 homeCtrl.events = _.take(homeCtrl.events, LIMITE_EVENTS);
             }, function error(response) {
                 MessageService.showToast(response.data.msg);

@@ -9,9 +9,18 @@ from utils import json_response
 
 from handlers.base_handler import BaseHandler
 from models.post import Post
+from models.factory_post import PostFactory
 from service_messages import send_message_notification
 
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
+
+
+def get_permission(data):
+        """Return permission according to the type of data."""
+        if(PostFactory.get_type(data) == 'SURVEY_POST'):
+            return 'publish_survey'
+        else:
+            return 'publish_post'
 
 
 class PostCollectionHandler(BaseHandler):
@@ -37,13 +46,13 @@ class PostCollectionHandler(BaseHandler):
                       "The institution has been deleted",
                       NotAuthorizedException)
 
-        Utils._assert(not user.has_permission("publish_post", institution_key),
+        permission = get_permission(data)
+        Utils._assert(not user.has_permission(permission, institution_key),
                       "You don't have permission to publish post.",
                       NotAuthorizedException)
 
         try:
-            post = Post()
-            post.create(data, user.key, institution.key)
+            post = PostFactory.create(data, user.key, institution.key)
             post.put()
 
             """ Update Institution."""
@@ -54,8 +63,8 @@ class PostCollectionHandler(BaseHandler):
             user.posts.append(post.key)
             user.put()
 
-            entity_type = 'POST'
-            message = {'type': 'POST', 'from': user.name.encode('utf8')}
+            entity_type = PostFactory.get_type(data)
+            message = {'type': entity_type, 'from': user.name.encode('utf8')}
             for follower in institution.followers:
                 if follower != user.key:
                     send_message_notification(

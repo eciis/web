@@ -8,6 +8,8 @@ WORKER_YAML=backend/worker.yaml
 
 BACKEND_DOMAIN="backend.eciis-splab.appspot.com"
 
+BACKEND_LOCAL="localhost:8082"
+
 FRONTEND_CONFIG_FILE="frontend/config.js"
 
 bold=$(tput bold)
@@ -17,7 +19,7 @@ function set_backend_url {
     if [ -z $1 ]; then
         url="http://$BACKEND_DOMAIN"
     else
-        url="http://"$1"."$BACKEND_DOMAIN
+        url="http://"$1
     fi
     sed -i "4s|.*|    BACKEND_URL: '$url'|" $FRONTEND_CONFIG_FILE
     echo ">> Frontend will use ${bold}$url${_bold} as backend."
@@ -32,6 +34,8 @@ case "$1" in
         then
           gnome-open $SYS_URL
         fi
+
+        set_backend_url $BACKEND_LOCAL
 
         dev_appserver.py $LANDING_YAML $FRONTEND_YAML $BACKEND_YAML $WORKER_YAML
     ;;
@@ -55,7 +59,8 @@ case "$1" in
 
         if [ ! -z $2 ]; then
             version=$2
-            set_backend_url $version
+            url=$version"."$BACKEND_DOMAIN
+            set_backend_url $url
 
             if [ ! -z $3 ]; then # Especified one or more yaml configuration files
                 gcloud app deploy --version $version --no-promote $3

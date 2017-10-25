@@ -48,6 +48,9 @@
       messageService = MessageService;
       mdDialog = $mdDialog;
       AuthService.login(user);
+
+      spyOn(Utils, 'setScrollListener').and.callFake(function() {});
+
       eventCtrl = $controller('EventController', {
             scope: scope,
             imageService : imageService,
@@ -57,9 +60,8 @@
             messageService : messageService,
             mdDialog: mdDialog
         });
-      eventCtrl.events = [event_convert_date];
 
-      httpBackend.when('GET', "/api/events").respond([event_convert_date]);
+      httpBackend.when('GET', "/api/events?page=0&limit=5").respond({events: [event_convert_date], next: false});
       httpBackend.when('GET', 'main/main.html').respond(200);
       httpBackend.when('GET', 'home/home.html').respond(200);
       httpBackend.when('GET', 'auth/login.html').respond(200);

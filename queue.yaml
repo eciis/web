@@ -1,5 +1,5 @@
 queue:
-- name: comput-engine
+- name: compute-engine
   rate: 1/s
 - name: notifications
   rate: 1/s

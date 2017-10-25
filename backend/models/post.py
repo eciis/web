@@ -295,7 +295,7 @@ class Post(PolyModel):
         if user.state == 'active':
             self.subscribers.append(user.key)
 
-    def remove_follower(self, user):
+    def remove_subscriber(self, user):
         """Remove a subscriber."""
         if user.key in self.subscribers and self.author != user.key:
             self.subscribers.remove(user.key)

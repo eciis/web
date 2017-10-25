@@ -62,10 +62,10 @@ class RequestUserTest(TestBase):
         self.event.start_time = datetime.datetime(2018, 10, 21)
         self.event.put()
         # Checking if the event is not valid
-        with self.assertRaises(Exception) as ex:
+        with self.assertRaises(Exception) as raises_context:
             self.event.isValid()
 
-        message_exception = str(ex.exception)
+        message_exception = str(raises_context.exception)
 
         self.assertEqual(
             message_exception,

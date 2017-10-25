@@ -55,7 +55,7 @@ class EventCollectionHandlerTest(TestBaseHandler):
                          "The post's text is not the expected one")
 
         # Check if raise exception when the end time of event is before the start time
-        with self.assertRaises(Exception) as ex:
+        with self.assertRaises(Exception) as raises_context:
             self.testapp.post_json("/api/events", {
                 'title': 'new event',
                 'institution_key': self.certbio.key.urlsafe(),
@@ -64,7 +64,7 @@ class EventCollectionHandlerTest(TestBaseHandler):
                 'end_time': '2027-12-20T10:25:48',
                 'local': 'local do evento'})
 
-        message_exception = self.get_message_exception(str(ex.exception))
+        message_exception = self.get_message_exception(str(raises_context.exception))
 
         self.assertEqual(
             message_exception,
@@ -73,7 +73,7 @@ class EventCollectionHandlerTest(TestBaseHandler):
             "Error! The end time can not be before the start time")
 
         # Check if raise exception when the end time of event is before today
-        with self.assertRaises(Exception) as ex:
+        with self.assertRaises(Exception) as raises_context:
             self.testapp.post_json("/api/events", {
                 'title': 'new event',
                 'institution_key': self.certbio.key.urlsafe(),
@@ -82,7 +82,7 @@ class EventCollectionHandlerTest(TestBaseHandler):
                 'end_time': '2010-12-25T10:25:48',
                 'local': 'local do evento'})
 
-        message_exception = self.get_message_exception(str(ex.exception))
+        message_exception = self.get_message_exception(str(raises_context.exception))
 
         self.assertEqual(
             message_exception,

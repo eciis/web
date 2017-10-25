@@ -56,14 +56,14 @@ class InviteCollectionHandlerTest(TestBaseHandler):
     def test_post_invite_institution_without_suggestion_name(self, verify_token):
         """ Check if raise exception when the invite is for
         institution and not specify the suggestion institution name."""
-        with self.assertRaises(Exception) as ex:
+        with self.assertRaises(Exception) as raises_context:
             self.testapp.post_json("/api/invites", {
                 'invitee': 'ana@gmail.com',
                 'admin_key': self.first_user.key.urlsafe(),
                 'institution_key': self.institution.key.urlsafe(),
                 'type_of_invite': 'INSTITUTION_PARENT'})
 
-        message_exception = self.get_message_exception(str(ex.exception))
+        message_exception = self.get_message_exception(str(raises_context.exception))
         self.assertEqual(
             message_exception,
             "Error! The invite for institution have to specify the suggestion institution name",
@@ -114,14 +114,14 @@ class InviteCollectionHandlerTest(TestBaseHandler):
     def test_post_invite_user_already_member(self, verify_token):
         """ Check if raise exception when the invite is
         for user already member of institution."""
-        with self.assertRaises(Exception) as ex:
+        with self.assertRaises(Exception) as raises_context:
             self.testapp.post_json("/api/invites", {
                 'invitee': 'second_user@ccc.ufcg.edu.br',
                 'admin_key': self.first_user.key.urlsafe(),
                 'type_of_invite': 'USER',
                 'institution_key': self.institution.key.urlsafe()})
 
-        message_exception = self.get_message_exception(str(ex.exception))
+        message_exception = self.get_message_exception(str(raises_context.exception))
 
         self.assertEqual(
             message_exception,
@@ -133,13 +133,13 @@ class InviteCollectionHandlerTest(TestBaseHandler):
     def test_post_invite_user_without_inst_key(self, verify_token):
         """ Check if raise exception when the invite is
         for user and not specify the institution key."""
-        with self.assertRaises(Exception) as ex:
+        with self.assertRaises(Exception) as raises_context:
             self.testapp.post_json("/api/invites", {
                 'invitee': 'ana@gmail.com',
                 'admin_key': self.first_user.key.urlsafe(),
                 'type_of_invite': 'USER'})
 
-        message_exception = self.get_message_exception(str(ex.exception))
+        message_exception = self.get_message_exception(str(raises_context.exception))
 
         self.assertEqual(
             message_exception,
@@ -149,14 +149,14 @@ class InviteCollectionHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': 'second_user@ccc.ufcg.edu.br'})
     def test_post_invite_without_admin(self, verify_token):
         """ Check if raise exception when the admin_key is not admistrator."""
-        with self.assertRaises(Exception) as ex:
+        with self.assertRaises(Exception) as raises_context:
             self.testapp.post_json("/api/invites", {
                 'invitee': 'ana@gmail.com',
                 'admin_key': self.first_user.key.urlsafe(),
                 'type_of_invite': 'USER',
                 'institution_key': self.institution.key.urlsafe()})
 
-        message_exception = self.get_message_exception(str(ex.exception))
+        message_exception = self.get_message_exception(str(raises_context.exception))
 
         self.assertEqual(
             message_exception,
@@ -213,12 +213,12 @@ class InviteCollectionHandlerTest(TestBaseHandler):
     def test_post_invite_inst_parent_without_inst_key(self, verify_token):
         """ Check if raise exception when the invite is
         for user and not specify the institution key."""
-        with self.assertRaises(Exception) as ex:
+        with self.assertRaises(Exception) as raises_context:
             self.testapp.post_json("/api/invites", {
                 'invitee': 'first_user@gmail.com',
                 'type_of_invite': 'INSTITUTION_PARENT'})
 
-        message_exception = self.get_message_exception(str(ex.exception))
+        message_exception = self.get_message_exception(str(raises_context.exception))
 
         self.assertEqual(
             message_exception,

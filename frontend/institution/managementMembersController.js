@@ -170,7 +170,7 @@
         removeMemberCtrl.reasonToRemove = "";
 
         removeMemberCtrl.removeMember = function removeMember() {
-            InstitutionService.removeMember(currentInstitutionKey, member_obj).then(function success() {
+            InstitutionService.removeMember(currentInstitutionKey, member_obj, removeMemberCtrl.reasonToRemove).then(function success() {
                 memberCtrl.removeMember(member_obj);
                 $mdDialog.cancel();
             }, function error(response) {

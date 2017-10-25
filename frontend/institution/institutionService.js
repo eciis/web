@@ -69,9 +69,10 @@
             return deferred.promise;
         };
 
-        service.removeMember = function removeMember(institutionKey, member) {
+        service.removeMember = function removeMember(institutionKey, member, reasonToRemove) {
             var deffered = $q.defer();
-            $http.delete(INSTITUTIONS_URI + "/" + institutionKey + "/members?removeMember=" + member.key).then(function success(info) {
+            $http.delete(INSTITUTIONS_URI + "/" + institutionKey + "/members?removeMember=" + member.key + "&&reasonToRemove=" + reasonToRemove)
+            .then(function success(info) {
                 deffered.resolve(info.data);
             }, function error(data) {
                 deffered.reject(data);

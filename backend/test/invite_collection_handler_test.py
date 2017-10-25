@@ -52,16 +52,23 @@ class InviteCollectionHandlerTest(TestBaseHandler):
                          "The suggestion institution name of \
                           invite expected was New Institution")
 
-
     @patch('utils.verify_token', return_value={'email': 'first_user@gmail.com'})
     def test_post_invite_institution_without_suggestion_name(self, verify_token):
         """ Check if raise exception when the invite is for
         institution and not specify the suggestion institution name."""
-        with self.assertRaises(Exception):
+        with self.assertRaises(Exception) as ex:
             self.testapp.post_json("/api/invites", {
                 'invitee': 'ana@gmail.com',
                 'admin_key': self.first_user.key.urlsafe(),
-                'type_of_invite': 'INSTITUTION'})
+                'institution_key': self.institution.key.urlsafe(),
+                'type_of_invite': 'INSTITUTION_PARENT'})
+
+        message_exception = self.get_message_exception(str(ex.exception))
+        self.assertEqual(
+            message_exception,
+            "Error! The invite for institution have to specify the suggestion institution name",
+            "Expected message exception must be equal to\
+             Error! The invite for institution have to specify the suggestion institution name")
 
     @patch('utils.verify_token', return_value={'email': 'first_user@gmail.com'})
     def test_post_invite_user(self, verify_token):
@@ -107,32 +114,54 @@ class InviteCollectionHandlerTest(TestBaseHandler):
     def test_post_invite_user_already_member(self, verify_token):
         """ Check if raise exception when the invite is
         for user already member of institution."""
-        with self.assertRaises(Exception):
+        with self.assertRaises(Exception) as ex:
             self.testapp.post_json("/api/invites", {
                 'invitee': 'second_user@ccc.ufcg.edu.br',
                 'admin_key': self.first_user.key.urlsafe(),
                 'type_of_invite': 'USER',
                 'institution_key': self.institution.key.urlsafe()})
 
+        message_exception = self.get_message_exception(str(ex.exception))
+
+        self.assertEqual(
+            message_exception,
+            "Error! The invitee is already a member",
+            "Expected message exception must be equal to \
+            Error! The invitee is already a member")
+
     @patch('utils.verify_token', return_value={'email': 'first_user@gmail.com'})
     def test_post_invite_user_without_inst_key(self, verify_token):
         """ Check if raise exception when the invite is
         for user and not specify the institution key."""
-        with self.assertRaises(Exception):
+        with self.assertRaises(Exception) as ex:
             self.testapp.post_json("/api/invites", {
                 'invitee': 'ana@gmail.com',
                 'admin_key': self.first_user.key.urlsafe(),
                 'type_of_invite': 'USER'})
 
+        message_exception = self.get_message_exception(str(ex.exception))
+
+        self.assertEqual(
+            message_exception,
+            "Error! 'institution_key'",
+            "Excpect message exception muste be equal Error! 'institution_key'")
+
     @patch('utils.verify_token', return_value={'email': 'second_user@ccc.ufcg.edu.br'})
     def test_post_invite_without_admin(self, verify_token):
         """ Check if raise exception when the admin_key is not admistrator."""
-        with self.assertRaises(Exception):
+        with self.assertRaises(Exception) as ex:
             self.testapp.post_json("/api/invites", {
                 'invitee': 'ana@gmail.com',
                 'admin_key': self.first_user.key.urlsafe(),
                 'type_of_invite': 'USER',
                 'institution_key': self.institution.key.urlsafe()})
+
+        message_exception = self.get_message_exception(str(ex.exception))
+
+        self.assertEqual(
+            message_exception,
+            "Error! User is not admin",
+            "Excpect message exception muste be equal Error! User is not admin")
 
     @patch('utils.verify_token', return_value={'email': 'first_user@gmail.com'})
     def test_post_invite_institution_parent(self, verify_token):
@@ -184,10 +213,17 @@ class InviteCollectionHandlerTest(TestBaseHandler):
     def test_post_invite_inst_parent_without_inst_key(self, verify_token):
         """ Check if raise exception when the invite is
         for user and not specify the institution key."""
-        with self.assertRaises(Exception):
+        with self.assertRaises(Exception) as ex:
             self.testapp.post_json("/api/invites", {
                 'invitee': 'first_user@gmail.com',
                 'type_of_invite': 'INSTITUTION_PARENT'})
+
+        message_exception = self.get_message_exception(str(ex.exception))
+
+        self.assertEqual(
+            message_exception,
+            "Error! 'institution_key'",
+            "Excpect message exception muste be equal Error! 'institution_key'")
 
 
 def initModels(cls):

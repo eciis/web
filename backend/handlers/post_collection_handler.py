@@ -71,10 +71,8 @@ class PostCollectionHandler(BaseHandler):
                 entity_type = 'SHARED_POST'
 
                 send_post_notification(
-                    shared_post.author.urlsafe(),
-                    user.key.urlsafe(),
-                    user.name,
-                    shared_post.key.urlsafe(),
+                    shared_post,
+                    user,
                     entity_type
                 )
 

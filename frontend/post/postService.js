@@ -102,9 +102,9 @@
             return deffered.promise;
         };
 
-        service.addFollower = function addFollower(postKey) {
+        service.addSubscriber = function addSubscriber(postKey) {
             var deffered = $q.defer();
-            $http.post(POSTS_URI + '/' + postKey + '/followers').then(function success(info) {
+            $http.post(POSTS_URI + '/' + postKey + '/subscribers').then(function success(info) {
                 deffered.resolve(info.data);
             }, function error(data) {
                 deffered.reject(data);
@@ -112,9 +112,9 @@
             return deffered.promise;
         };
 
-        service.removeFollower = function removeFollower(postKey) {
+        service.removeSubscriber = function removeSubscriber(postKey) {
             var deffered = $q.defer();
-            $http.delete(POSTS_URI + '/' + postKey + '/followers').then(function success(info) {
+            $http.delete(POSTS_URI + '/' + postKey + '/subscribers').then(function success(info) {
                 deffered.resolve(info.data);
             }, function error(data) {
                 deffered.reject(data);

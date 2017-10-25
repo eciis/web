@@ -53,10 +53,8 @@ class PostCommentHandler(BaseHandler):
         entity_type = 'COMMENT'
 
         send_post_notification(
-            post.author.urlsafe(),
-            user.key.urlsafe(),
-            user.name,
-            post.key.urlsafe(),
+            post,
+            user,
             entity_type
         )
 

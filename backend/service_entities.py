@@ -14,17 +14,17 @@ def remove_institution_from_users(remove_hierarchy, institution_key):
     )
 
 
-def send_post_notification(author_key, user_key, user_name, post_key, entity_type):
+def send_post_notification(post, user, entity_type):
     """Send post notification."""
     taskqueue.add(
         url='/api/queue/post-notification',
         target='worker',
-        queue_name='comput-queue',
+        queue_name='comput-engine',
         params={
-            'author_key': author_key,
-            'user_key': user_key,
-            'user_name': user_name,
-            'post_key': post_key,
+            'author_key': post.author.urlsafe(),
+            'user_key': user.key.urlsafe(),
+            'user_name': user.name,
+            'post_key': post.key.urlsafe(),
             'entity_type': entity_type
         }
     )

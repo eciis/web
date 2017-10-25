@@ -90,16 +90,16 @@ class PostNotificationHandler(BaseHandler):
         current_user_key = self.request.get('user_key')
         user_name = self.request.get('user_name')
         post_key = self.request.get('post_key')
-        followers = ndb.Key(urlsafe=post_key).get().followers
+        subscribers = ndb.Key(urlsafe=post_key).get().subscribers
 
         entity_type = self.request.get('entity_type')
         message = {'type': entity_type, 'from': user_name.encode('utf8')}
         userIsAuthor = post_author_key == current_user_key
-        for follower in followers:
-            followerIsCurrentUser = follower.urlsafe() == current_user_key
-            if not (userIsAuthor and followerIsCurrentUser) and not followerIsCurrentUser:
+        for subscriber in subscribers:
+            subscriberIsCurrentUser = subscriber.urlsafe() == current_user_key
+            if not (userIsAuthor and subscriberIsCurrentUser) and not subscriberIsCurrentUser:
                 send_message_notification(
-                    follower.urlsafe(),
+                    subscriber.urlsafe(),
                     json.dumps(message),
                     entity_type,
                     post_key

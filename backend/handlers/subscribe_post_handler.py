@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Post  Interest Handler."""
+"""Subscribe Post Handler."""
 
 from google.appengine.ext import ndb
 from utils import Utils
@@ -11,8 +11,8 @@ from handlers.base_handler import BaseHandler
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
 
-class PostFollowersHandler(BaseHandler):
-    """Post  Interest Handler."""
+class SubscribePostHandler(BaseHandler):
+    """Subscribe Post Handler."""
 
     @json_response
     @login_required
@@ -25,7 +25,7 @@ class PostFollowersHandler(BaseHandler):
                       'The post is unavailable to this procedure',
                       NotAuthorizedException)
 
-        post.add_follower(user)
+        post.add_subscriber(user)
         post.put()
 
     @json_response
@@ -42,5 +42,5 @@ class PostFollowersHandler(BaseHandler):
                       'The user must be interested at his post',
                       NotAuthorizedException)
 
-        post.remove_follower(user)
+        post.remove_subscriber(user)
         post.put()

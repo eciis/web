@@ -92,7 +92,7 @@
                 !postDetailsCtrl.isDeleted(postDetailsCtrl.post);
         };
 
-        postDetailsCtrl.disableButtonLike = function disableButtonLike() {
+        postDetailsCtrl.disableButton = function disableButton() {
             return postDetailsCtrl.savingLike ||
                 postDetailsCtrl.isDeleted(postDetailsCtrl.post) || postDetailsCtrl.isInstInactive();
         };
@@ -159,19 +159,19 @@
             });
         };
 
-        postDetailsCtrl.addFollower = function addFollower() {
-            PostService.addFollower(postDetailsCtrl.post.key).then(function success() {
+        postDetailsCtrl.addSubscriber = function addSubscriber() {
+            PostService.addSubscriber(postDetailsCtrl.post.key).then(function success() {
                 MessageService.showToast('Esse post foi marcado como de seu interesse.');
-                postDetailsCtrl.post.followers.push(postDetailsCtrl.user.key);
+                postDetailsCtrl.post.subscribers.push(postDetailsCtrl.user.key);
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
         };
 
-        postDetailsCtrl.removeFollower = function removeFollower() {
-            PostService.removeFollower(postDetailsCtrl.post.key).then(function success() {
+        postDetailsCtrl.removeSubscriber = function removeSubscriber() {
+            PostService.removeSubscriber(postDetailsCtrl.post.key).then(function success() {
                 MessageService.showToast('Esse post foi removido dos posts de seu interesse.');
-                _.remove(postDetailsCtrl.post.followers, function(userKey) {
+                _.remove(postDetailsCtrl.post.subscribers, function(userKey) {
                     return userKey === postDetailsCtrl.user.key;
                 });
             }, function error(response) {
@@ -180,15 +180,15 @@
             });
         };
 
-        postDetailsCtrl.isFollower = function isFollower() {
-            return _.includes(postDetailsCtrl.post.followers, postDetailsCtrl.user.key);
+        postDetailsCtrl.isSubscriber = function isSubscriber() {
+            return _.includes(postDetailsCtrl.post.subscribers, postDetailsCtrl.user.key);
         };
 
-        postDetailsCtrl.AddOrRemoveFollower = function AddOrRemoveFollower() {
-            if (!postDetailsCtrl.isFollower()) {
-                postDetailsCtrl.addFollower();
+        postDetailsCtrl.AddOrRemoveSubscriber = function AddOrRemoveSubscriber() {
+            if (!postDetailsCtrl.isSubscriber()) {
+                postDetailsCtrl.addSubscriber();
             } else {
-                postDetailsCtrl.removeFollower();
+                postDetailsCtrl.removeSubscriber();
             }
         };
 

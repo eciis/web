@@ -55,8 +55,8 @@ class EventCollectionHandlerTest(TestBaseHandler):
                          "The post's text is not the expected one")
 
         # Check if raise exception when the end time of event is before the start time
-        with self.assertRaises(Exception):
-            self.testapp.post_json("/api/calendar", {
+        with self.assertRaises(Exception) as ex:
+            self.testapp.post_json("/api/events", {
                 'title': 'new event',
                 'institution_key': self.certbio.key.urlsafe(),
                 'text': 'testing new event',
@@ -64,15 +64,31 @@ class EventCollectionHandlerTest(TestBaseHandler):
                 'end_time': '2027-12-20T10:25:48',
                 'local': 'local do evento'})
 
+        message_exception = self.get_message_exception(str(ex.exception))
+
+        self.assertEqual(
+            message_exception,
+            "Error! The end time can not be before the start time",
+            "Expected exception message must be equal to " +
+            "Error! The end time can not be before the start time")
+
         # Check if raise exception when the end time of event is before today
-        with self.assertRaises(Exception):
-            self.testapp.post_json("/api/calendar", {
+        with self.assertRaises(Exception) as ex:
+            self.testapp.post_json("/api/events", {
                 'title': 'new event',
                 'institution_key': self.certbio.key.urlsafe(),
                 'text': 'testing new event',
                 'start_time': '2010-12-24T10:25:48',
-                'end_time': '2027-12-20T10:25:48',
+                'end_time': '2010-12-25T10:25:48',
                 'local': 'local do evento'})
+
+        message_exception = self.get_message_exception(str(ex.exception))
+
+        self.assertEqual(
+            message_exception,
+            "Error! The end time must be after the current time",
+            "Excpected exception message must be equal to " +
+            "Error! The end time must be after the current time")
 
     @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
     def test_get(self, verify_token):
@@ -96,6 +112,7 @@ class EventCollectionHandlerTest(TestBaseHandler):
         self.assertEqual(event_obj.local,
                          'Event location',
                          "The event's local is not the expected one")
+
 
 def initModels(cls):
     """Init the models."""

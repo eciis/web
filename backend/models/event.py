@@ -59,26 +59,28 @@ class Event(ndb.Model):
     local = ndb.StringProperty(required=True)
 
     def isValid(self):
+        """Check if is valid event."""
+        date_now = datetime.datetime.today()
         if self.end_time < self.start_time:
             raise FieldException("The end time can not be before the start time")
+        if self.end_time < date_now:
+            raise FieldException("The end time must be after the current time")
 
     @staticmethod
-    def create(data, author_key, author_name, author_photo,
-               institution_key, institution_name, institution_image):
+    def create(data, author, institution):
         """Create an event."""
-
         event = Event()
         event.text = data.get('text')
         event.title = data.get('title')
         event.photo_url = data.get('photo_url')
-        event.author_key = author_key
-        event.author_photo = author_photo
-        event.author_name = author_name
-        event.institution_key = institution_key
-        event.institution_name = institution_name
-        event.institution_image = institution_image
-        event.last_modified_by = author_key
-        event.last_modified_by_name = author_name
+        event.author_key = author.key
+        event.author_photo = author.photo_url
+        event.author_name = author.name
+        event.institution_key = institution.key
+        event.institution_name = institution.name
+        event.institution_image = institution.photo_url
+        event.last_modified_by = author.key
+        event.last_modified_by_name = author.name
         event.local = data.get('local')
         event.start_time = datetime.datetime.strptime(
             data.get('start_time'), "%Y-%m-%dT%H:%M:%S")

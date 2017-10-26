@@ -14,6 +14,7 @@ from utils import Utils
 
 import json
 
+
 class ReplyCommentHandlerTest(TestBaseHandler):
     """Test the post_handler class."""
 
@@ -47,7 +48,7 @@ class ReplyCommentHandlerTest(TestBaseHandler):
         # Call the post method
         data_reply = {"text": "reply of comment",
                         "institution_key": self.institution.key.urlsafe()}
-        self.testapp.post(self.URL_REPLY_COMMENT % 
+        self.testapp.post(self.URL_REPLY_COMMENT %
             (self.user_post.key.urlsafe(), self.comment.id),
                           json.dumps(data_reply))
 
@@ -71,9 +72,17 @@ class ReplyCommentHandlerTest(TestBaseHandler):
 
         # Assert that Exception is raised when the user try
         # to comment a deleted post
-        with self.assertRaises(Exception):
-            self.testapp.post(self.URL_REPLY_COMMENT % self.user_post.key.urlsafe(),
+        with self.assertRaises(Exception) as raises_context:
+            comment_id = 21456
+            self.testapp.post(self.URL_REPLY_COMMENT % (self.user_post.key.urlsafe(), comment_id),
                               json.dumps(data_reply))
+
+        exception_message = self.get_message_exception(str(raises_context.exception))
+        self.assertEqual(
+            exception_message,
+            "Error! This post has been deleted",
+            "Expected exception message must be equal to " +
+            "Error! This post has been deleted")
 
     @patch('utils.verify_token', return_value=USER_DATA)
     def test_delete(self, verify_token):
@@ -106,7 +115,6 @@ class ReplyCommentHandlerTest(TestBaseHandler):
         user_comment = self.user_post.key.get().get_comment(self.comment.id)
         self.assertEquals(len(user_comment.get('replies')), 0,
                           "Expected size of replies list should be zero")
-        
 
     def tearDown(cls):
         """Deactivate the test."""

@@ -78,7 +78,10 @@ class ReplyCommentHandler(BaseHandler):
                 post.key.urlsafe()
             )
 
+        print "passou aqui>>>>>>>>>>>>>>>>>>>>>>>"
         self.response.write(json.dumps(Utils.toJson(reply)))
+        print "passou aqui>>>>>>>>>>>>>>>>>>>>>>>"
+
 
     @json_response
     @login_required
@@ -96,7 +99,7 @@ class ReplyCommentHandler(BaseHandler):
                       "Comment with activity can't be removed", NotAuthorizedException)
 
         check_permission(user, institution, post, replies.get(reply_id))
-        
+
         del replies[reply_id]
 
         post.put()

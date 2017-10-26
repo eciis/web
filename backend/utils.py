@@ -27,7 +27,7 @@ class Utils():
 
     @staticmethod
     def getJSONError(status_error, message):
-        error = {'status_error': status_error, 'message': message}
+        error = {'status_error': status_error, 'msg': message}
         return json.dumps(error)
 
     @staticmethod

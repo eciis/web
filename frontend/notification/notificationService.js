@@ -17,6 +17,7 @@
             'SHARED_POST': 'compartilhou seu post',
             'INVITE': 'te enviou um novo convite',
             'INSTITUTION': 'removeu a conexão entre suas instituições',
+            'DELETED_INSTITUTION': 'removeu a conexão entre suas instituições',
             'REQUEST_USER': 'solicitou ser membro de sua instituição',
             'REQUEST_INSTITUTION_PARENT': 'solicitou um novo vínculo entre sua instituição e a dele',
             'REQUEST_INSTITUTION_CHILDREN': 'solicitou um novo vínculo entre sua instituição e a dele',

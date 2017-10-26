@@ -168,7 +168,20 @@ class InstitutionHandler(BaseHandler):
         """Handle DELETE Requests."""
         remove_hierarchy = self.request.get('removeHierarchy')
         institution = ndb.Key(urlsafe=institution_key).get()
+
         Utils._assert(not type(institution) is Institution,
                       "Key is not an institution", EntityException)
+
         institution.remove_institution(remove_hierarchy, user)
         remove_institution_from_users(remove_hierarchy, institution_key)
+
+        justification = self.request.get('justification')
+        entity_type = "DELETED_INSTITUTION"
+        message_notification = {'type': entity_type, 'from': user.name.encode('utf8')}
+        message_email = ""
+        subject = "Remoção de instituição"
+
+        institution.notify_followers(message_notification, entity_type)
+        institution.send_email_to_members(message_email, justification, subject)
+       
+

@@ -323,13 +323,14 @@
         function RemoveChildController($mdDialog, child, user, InstitutionService, AuthService, removeInstFromChildren) {
             var ctrl = this;
             var removeHierarchy = "false";
+            ctrl.justification = "";
 
             ctrl.closeDialog = function closeDialog() {
                 $mdDialog.cancel();
             };
 
             ctrl.removeChildInst = function removeChildInst() {
-                InstitutionService.removeInstitution(child.key, removeHierarchy).then(
+                InstitutionService.removeInstitution(child.key, removeHierarchy, ctrl.justification).then(
                     function success() {
                         user.removeInstitution(child.key, removeHierarchy);
                         AuthService.save();

@@ -1,7 +1,13 @@
 """Institution Model."""
+
 from google.appengine.ext import ndb
+
 from custom_exceptions.fieldException import FieldException
 
+from service_messages import send_message_notification
+from service_messages import send_message_email
+
+import json
 import search_module
 
 
@@ -293,6 +299,35 @@ class Institution(ndb.Model):
             for child in self.children_institutions:
                 child = child.get()
                 child.remove_institution_from_users(remove_hierarchy)
+
+    def notify_followers(self, message, entity_type):
+        """Notify all institution followers."""
+        for follower_key in self.followers:
+            follower = follower_key.get()
+            is_active = follower.status == "active"
+            if is_active:
+                send_message_notification(
+                    follower.key.urlsafe(),
+                    json.dumps(message),
+                    entity_type,
+                    self.key.urlsafe()
+                )
+    
+    def send_email_to_members(self, message, justification, subject):
+        """Send email to all institution members."""
+        for member_key in self.members:
+            member = member_key.get()
+            is_admin = member_key == self.admin
+            if(is_admin && justification):
+                message = message + """pelo seguinte motivo:
+                '%s'
+                """ % justification
+            
+            send_message_email(
+                member.email,
+                message,
+                subject
+            )
 
     def change_state(self, state):
         """Change the institution state."""

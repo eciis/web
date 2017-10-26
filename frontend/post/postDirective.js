@@ -91,11 +91,12 @@
             modifyOptions();
             postCtrl.post.deadline && formateDate();
             postCtrl.post.options = postCtrl.options;
+            
+            return new Post(postCtrl.post, postCtrl.user.current_institution.key);
         }
 
         postCtrl.saveSurvey = function(posts) {
-            createSurvey();
-            var survey = new Post(postCtrl.post, postCtrl.user.current_institution.key);
+            var survey = createSurvey();
             PostService.createPost(survey).then(function success(response) {
                 postCtrl.clearPost();
                 posts.push(new Post(response.data));

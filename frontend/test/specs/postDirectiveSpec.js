@@ -9,6 +9,24 @@
         current_institution: {key: "institutuion_key"},
         state: 'active'
     };
+    var option_empty = {'text': '',
+                        'number_votes': 0,
+                        'voters': []
+                        };
+
+    var options = [{'id' : 0,
+                    'text': 'Option number 1',
+                    'number_votes': 0,
+                    'voters': [] },
+                    {'id': 1,
+                    'text': 'Option number 2',
+                    'number_votes': 0,
+                    'voters': [] }];
+
+    var survey = { 'title' : 'The Survey',
+                    'type_survey' : 'multiple_choice',
+                    'options' : options
+                    };
 
     beforeEach(inject(function($controller, $httpBackend, $http, $q, $mdDialog,
             PostService, AuthService, $mdToast, $rootScope, ImageService) {
@@ -54,6 +72,34 @@
     describe('Initial post', function() {
         it('should not have properties', function() {
             expect(postCtrl.post).toEqual({});
+        });
+    });
+
+    describe('Choice survey', function() {
+        it('should be survey post', function() {
+            expect(postCtrl.isSurvey).toBe(false);
+            expect(postCtrl.options.length).toEqual(0);
+            postCtrl.choiceSurvey();
+
+            expect(postCtrl.isSurvey).toBe(true);
+            expect(postCtrl.options.length).toEqual(2);
+        });
+    });
+
+    describe('Save survey', function() {
+        it('should be survey post', function() {
+            spyOn(postService, 'createPost').and.returnValue(deffered.promise);
+            spyOn(postCtrl, 'clearPost');
+            spyOn(mdDialog, 'hide');
+            postCtrl.post = survey;
+            postCtrl.options = options;
+            var survey_obj = new Post(postCtrl.post, postCtrl.user.current_institution.key);
+            deffered.resolve(survey_obj);
+            postCtrl.saveSurvey([]);
+            scope.$apply();
+            expect(postService.createPost).toHaveBeenCalledWith(survey_obj);
+            expect(postCtrl.clearPost).toHaveBeenCalled();
+            expect(mdDialog.hide).toHaveBeenCalled();
         });
     });
 

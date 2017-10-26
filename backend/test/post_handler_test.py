@@ -85,18 +85,18 @@ class PostHandlerTest(TestBaseHandler):
         expected_alert = "Expected: " + exception_message + ". But got: "
 
         # Call the patch method and assert that  it raises an exception
-        with self.assertRaises(Exception) as ex:
+        with self.assertRaises(Exception) as raises_context:
             self.testapp.patch_json("/api/posts/%s"
                                     % self.second_user_post.key.urlsafe(),
                                     [{"op": "replace", "path": "/text",
                                       "value": "testando"}]
                                     )
 
-        ex = self.get_message_exception(str(ex.exception))
+        raises_context_message = self.get_message_exception(str(raises_context.exception))
         self.assertEqual(
-            ex,
+            raises_context_message,
             exception_message,
-            expected_alert + ex)
+            expected_alert + raises_context_message)
 
         # Call the patch method and assert that it works
         self.testapp.patch_json("/api/posts/%s"
@@ -118,50 +118,52 @@ class PostHandlerTest(TestBaseHandler):
         self.second_user_post = self.second_user_post.key.get()
         self.assertEqual(self.second_user_post.text, "testando")
         # Call the patch method and assert that  it raises an exception
-        with self.assertRaises(Exception) as ex:
+        with self.assertRaises(Exception) as raises_context:
             self.testapp.patch_json("/api/posts/%s"
                                     % self.first_user_post.key.urlsafe(),
                                     [{"op": "replace", "path": "/text",
                                       "value": "testando"}]
                                     )
 
-        ex = self.get_message_exception(str(ex.exception))
+        raises_context_message = self.get_message_exception(str(raises_context.exception))
         self.assertEqual(
-            ex,
+            raises_context_message,
             exception_message,
-            expected_alert + ex)
+            expected_alert + raises_context_message)
 
         # test the case when the post has a like, so it can not be updated
         self.first_user_post.like(self.second_user.key)
         self.first_user_post = self.first_user_post.key.get()
-        with self.assertRaises(Exception) as ex:
+
+        with self.assertRaises(Exception) as raises_context:
             self.testapp.patch_json("/api/posts/%s"
                                     % self.first_user_post.key.urlsafe(),
                                     [{"op": "replace", "path": "/text",
                                         "value": "testando"}]
                                     )
 
-        ex = self.get_message_exception(str(ex.exception))
+        raises_context_message = self.get_message_exception(str(raises_context.exception))
         self.assertEqual(
-            ex,
+            raises_context_message,
             exception_message,
-            expected_alert + ex)
+            expected_alert + raises_context_message)
 
         # test the case when the post has a comment, so it can not be updated
         self.first_user_post.add_comment(self.second_user_comment)
         self.first_user_post = self.first_user_post.key.get()
-        with self.assertRaises(Exception) as ex:
+
+        with self.assertRaises(Exception) as raises_context:
             self.testapp.patch_json("/api/posts/%s"
                                     % self.first_user_post.key.urlsafe(),
                                     [{"op": "replace", "path": "/text",
                                         "value": "testando"}]
                                     )
 
-        ex = self.get_message_exception(str(ex.exception))
+        raises_context_message = self.get_message_exception(str(raises_context.exception))
         self.assertEqual(
-            ex,
+            raises_context_message,
             exception_message,
-            expected_alert + ex)
+            expected_alert + raises_context_message)
 
     def tearDown(cls):
         """Deactivate the test."""

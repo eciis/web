@@ -86,11 +86,15 @@
             postCtrl.post.deadline = _.split(date, '.')[0];
         }
 
-        postCtrl.saveSurvey = function(posts) {
+        function createSurvey(){
             defineTypeSurvey();
             modifyOptions();
             postCtrl.post.deadline && formateDate();
             postCtrl.post.options = postCtrl.options;
+        }
+
+        postCtrl.saveSurvey = function(posts) {
+            createSurvey();
             var survey = new Post(postCtrl.post, postCtrl.user.current_institution.key);
             PostService.createPost(survey).then(function success(response) {
                 postCtrl.clearPost();

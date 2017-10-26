@@ -68,7 +68,7 @@ class PostCommentHandlerTest(TestBaseHandler):
         with self.assertRaises(Exception) as raises_context:
             self.testapp.post(self.URL_POST_COMMENT % self.mayza_post.key.urlsafe(),
                               json.dumps(self.other_comment))
-        raises_context_message = self.get_message_exception(raises_context.exception)
+        raises_context_message = self.get_message_exception(raises_context.exception.message)
         self.assertEquals(
             raises_context_message,
             exception_message,
@@ -137,7 +137,7 @@ class PostCommentHandlerTest(TestBaseHandler):
             self.testapp.delete(self.URL_DELETE_COMMENT %
                                 (self.mayza_post.key.urlsafe(), self.id_comment))
 
-        raises_context_message = self.get_message_exception(raises_context.exception)
+        raises_context_message = self.get_message_exception(raises_context.exception.message)
         self.assertEquals(
             raises_context_message,
             exception_message,
@@ -167,7 +167,7 @@ class PostCommentHandlerTest(TestBaseHandler):
             self.testapp.delete(self.URL_DELETE_COMMENT %
                                 (self.mayza_post.key.urlsafe(), self.id_comment))
 
-        raises_context_message = self.get_message_exception(raises_context.exception)
+        raises_context_message = self.get_message_exception(raises_context.exception.message)
         self.assertEquals(
             raises_context_message,
             exception_message,

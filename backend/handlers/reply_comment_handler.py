@@ -78,10 +78,7 @@ class ReplyCommentHandler(BaseHandler):
                 post.key.urlsafe()
             )
 
-        print "passou aqui>>>>>>>>>>>>>>>>>>>>>>>"
         self.response.write(json.dumps(Utils.toJson(reply)))
-        print "passou aqui>>>>>>>>>>>>>>>>>>>>>>>"
-
 
     @json_response
     @login_required

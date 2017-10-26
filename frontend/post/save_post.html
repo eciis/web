@@ -16,7 +16,7 @@
       <md-button ng-click="postCtrl.isSurvey=false">
         <md-icon>edit</md-icon> Iniciar um post 
       </md-button>|
-      <md-button ng-click="postCtrl.createSurvey()">
+      <md-button ng-click="postCtrl.choiceSurvey()">
         <md-icon>poll</md-icon>Enquete
       </md-button>
     </div>
@@ -53,7 +53,7 @@
           <textarea ng-model="postCtrl.post.title" placeholder="Pergunte algo aqui" style="max-height: 300px"></textarea>
         </md-input-container>
         Opções
-        <md-button ng-click="postCtrl.addOption()" ng-if="!postCtrl.hasOptionEmpty()" class="md-icon-button">
+        <md-button ng-click="postCtrl.addOption()" ng-if="!postCtrl.getOptionEmpty()" class="md-icon-button">
           <md-icon>add</md-icon> 
         </md-button>
         <md-divider>
@@ -63,11 +63,15 @@
             <label>Opção {{option.id}}</label>
             <input ng-model="option.text"/>
             <md-button ng-click="postCtrl.removeOption(option)" class="md-icon-button">
-              <md-icon>delete</md-icon>
+              <md-icon>clear</md-icon>
             </md-button>
           </md-input-container>
           </md-list-item>
         </md-list>
+        <md-switch class="md-primary" ng-model="postCtrl.isBinary" required> Binário
+        </md-switch>
+        {{postCtrl.post.deadline}}
+        <md-datepicker ng-model="postCtrl.post.deadline" md-placeholder="Prazo para enquete"></md-datepicker>
         <md-input-container ng-show="postCtrl.showVideoUrlField()" class="md-block">
           <label>Link do Video</label>
           <textarea style="max-height: 400px;overflow-y:auto;resize:none;" ng-model="postCtrl.post.video_url"

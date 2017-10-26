@@ -19,7 +19,7 @@
         postCtrl.addVideo = false;
         postCtrl.videoRegex = '(?:http(s)?:\/\/)?(www\.)?youtube\.com\/watch\\?v=.+';
         postCtrl.options = [];
-
+        postCtrl.isBinary = false;
         var option_empty = {'text': '',
                             'number_votes': 0,
                             'voters': []
@@ -51,24 +51,47 @@
             });    
         };
 
-        postCtrl.hasOptionEmpty = function(){
+        postCtrl.getOptionEmpty = function(){
             return _.find(postCtrl.options, option_empty);
         };
 
-        postCtrl.createSurvey = function() {
+        postCtrl.choiceSurvey = function() {
             postCtrl.isSurvey = true;
+            postCtrl.addOption();
             postCtrl.addOption();
         };
 
-        postCtrl.saveSurvey = function() {
+        function modifyOptions(){
             var id = 0;
             _.forEach(postCtrl.options, function(option) {
-              option.id = id;
-              id += 1;
+              if(option.title !== ''){
+                option.id = id;
+                id += 1;
+              }else{
+                postCtrl.removeOption(option);
+              }
             });
+        }
+
+        function defineTypeSurvey(){
+            if(postCtrl.isBinary){
+                postCtrl.post.type_survey = 'binary';
+            } else {
+                postCtrl.post.type_survey = 'multiple_choice';
+            }
+        }
+
+        function formateDate(){
+            var date = postCtrl.post.deadline.toISOString();
+            postCtrl.post.deadline = _.split(date, '.')[0];
+        }
+
+        postCtrl.saveSurvey = function(posts) {
+            defineTypeSurvey();
+            modifyOptions();
+            postCtrl.post.deadline && formateDate();
             postCtrl.post.options = postCtrl.options;
             var survey = new Post(postCtrl.post, postCtrl.user.current_institution.key);
-
             PostService.createPost(survey).then(function success(response) {
                 postCtrl.clearPost();
                 posts.push(new Post(response.data));
@@ -116,6 +139,8 @@
         postCtrl.save = function save(isEditing, originalPost, posts) {
             if(isEditing) {
                 postCtrl.editPost(originalPost);
+            } else if(postCtrl.isSurvey){
+                postCtrl.saveSurvey(posts);
             } else {
                 postCtrl.createPost(posts);
             }
@@ -263,6 +288,8 @@
             postCtrl.post = {};
             postCtrl.pdfFiles = [];
             postCtrl.options = [];
+            postCtrl.isSurvey = false;
+            postCtrl.isBinary = false;
         };
 
         postCtrl.showVideo = function showVideo() {

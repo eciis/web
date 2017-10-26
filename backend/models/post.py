@@ -150,10 +150,10 @@ class Post(PolyModel):
         """Create a post and check required fields."""
         post = post.createSharing(data)
 
-        if post.shared_event is None and post.shared_post is None:
-            if not data['title']:
+        if post.shared_event is None and post.shared_post is None and post.type_survey is None:
+            if not data.get('title'):
                 raise FieldException("Title can not be empty")
-            if not data['text']:
+            if not data.get('text'):
                 raise FieldException("Text can not be empty")
 
         post.title = data.get('title')

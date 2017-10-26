@@ -80,13 +80,24 @@ class PostHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': 'first_user@gmail.com'})
     def test_patch(self, verify_token):
         """Test the post_handler's patch method."""
+
+        exception_message = "Error! User is not allowed to edit this post"
+        expected_alert = "Expected: " + exception_message + ". But got: "
+
         # Call the patch method and assert that  it raises an exception
-        with self.assertRaises(Exception):
+        with self.assertRaises(Exception) as ex:
             self.testapp.patch_json("/api/posts/%s"
                                     % self.second_user_post.key.urlsafe(),
                                     [{"op": "replace", "path": "/text",
                                       "value": "testando"}]
                                     )
+
+        ex = self.get_message_exception(str(ex.exception))
+        self.assertEqual(
+            ex,
+            exception_message,
+            expected_alert + ex)
+
         # Call the patch method and assert that it works
         self.testapp.patch_json("/api/posts/%s"
                                 % self.first_user_post.key.urlsafe(),
@@ -107,31 +118,50 @@ class PostHandlerTest(TestBaseHandler):
         self.second_user_post = self.second_user_post.key.get()
         self.assertEqual(self.second_user_post.text, "testando")
         # Call the patch method and assert that  it raises an exception
-        with self.assertRaises(Exception):
+        with self.assertRaises(Exception) as ex:
             self.testapp.patch_json("/api/posts/%s"
                                     % self.first_user_post.key.urlsafe(),
                                     [{"op": "replace", "path": "/text",
                                       "value": "testando"}]
                                     )
+
+        ex = self.get_message_exception(str(ex.exception))
+        self.assertEqual(
+            ex,
+            exception_message,
+            expected_alert + ex)
+
         # test the case when the post has a like, so it can not be updated
         self.first_user_post.like(self.second_user.key)
         self.first_user_post = self.first_user_post.key.get()
-        with self.assertRaises(Exception):
+        with self.assertRaises(Exception) as ex:
             self.testapp.patch_json("/api/posts/%s"
                                     % self.first_user_post.key.urlsafe(),
                                     [{"op": "replace", "path": "/text",
                                         "value": "testando"}]
                                     )
 
+        ex = self.get_message_exception(str(ex.exception))
+        self.assertEqual(
+            ex,
+            exception_message,
+            expected_alert + ex)
+
         # test the case when the post has a comment, so it can not be updated
         self.first_user_post.add_comment(self.second_user_comment)
         self.first_user_post = self.first_user_post.key.get()
-        with self.assertRaises(Exception):
+        with self.assertRaises(Exception) as ex:
             self.testapp.patch_json("/api/posts/%s"
                                     % self.first_user_post.key.urlsafe(),
                                     [{"op": "replace", "path": "/text",
                                         "value": "testando"}]
                                     )
+
+        ex = self.get_message_exception(str(ex.exception))
+        self.assertEqual(
+            ex,
+            exception_message,
+            expected_alert + ex)
 
     def tearDown(cls):
         """Deactivate the test."""

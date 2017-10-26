@@ -96,7 +96,7 @@ class ReplyCommentHandler(BaseHandler):
                       "Comment with activity can't be removed", NotAuthorizedException)
 
         check_permission(user, institution, post, replies.get(reply_id))
-        
+
         del replies[reply_id]
 
         post.put()

@@ -18,6 +18,48 @@
       </span>
     </md-card-header-text>
     <md-subheader ng-if="postDetailsCtrl.isInstInactive()">Instituição inativa</md-subheader>
+    <md-menu md-offset="-200 45">
+      <md-button class="md-icon-button" style="margin-right: -20px; margin-top: -15px" ng-click="$mdMenu.open(ev)">
+        <md-icon>more_vert</md-icon>
+      </md-button>
+      <md-menu-content width="4">
+        <md-menu-item>
+          <md-button ng-click="postDetailsCtrl.generateLink()" title="Copiar link">
+            <md-icon>link</md-icon>
+            Obter link
+          </md-button>
+        </md-menu-item>
+        <md-menu-item ng-if="!postDetailsCtrl.isInstInactive()">
+          <md-button arial-label="Atualizar" title="Atualizar comentários"
+            ng-click="postDetailsCtrl.loadComments()">
+            <md-icon>refresh</md-icon>
+            Atualizar post
+          </md-button>
+        </md-menu-item>
+        <md-menu-item ng-if="!postDetailsCtrl.isDeleted(postDetailsCtrl.post) && !postDetailsCtrl.isInstInactive()">
+          <md-button aria-label="compartilhar" ng-click="postDetailsCtrl.share(postDetailsCtrl.post)"
+            title="Compartilhar o post">
+            <md-icon>share</md-icon>
+            Compartilhar
+          </md-button>
+        </md-menu-item>
+        <md-menu-item>
+          <md-button aria-label="Favorite" ng-click="postDetailsCtrl.addOrRemoveSubscriber()"
+            ng-disabled="postDetailsCtrl.disableButton()" ng-class="postDetailsCtrl.isSubscriber()?'md-warn':''"
+            title="Marcar interesse e receber notificações">
+            <md-icon>bookmark</md-icon>
+            Receber atualizações
+          </md-button>
+        </md-menu-item>
+        <md-menu-item ng-if="!postDetailsCtrl.isInstInactive() && postDetailsCtrl.showButtonEdit()">
+          <md-button aria-label="editar" ng-click="postDetailsCtrl.editPost()"
+            title="Editar o post">
+            <md-icon>edit</md-icon>
+            Editar postagem
+          </md-button>
+        </md-menu-item>
+      </md-menu-content>
+    </md-menu>
   </md-card-header>
 
   <!-- BODY SHARED EVENT -->
@@ -155,18 +197,6 @@
 
   <!-- BUTTONS -->
   <md-card-actions layout="row" layout-align="end-center">
-   <md-button class="md-icon-button" aria-label="Favorite" ng-click="postDetailsCtrl.addOrRemoveSubscriber()"
-        ng-disabled="postDetailsCtrl.disableButton()" ng-class="postDetailsCtrl.isSubscriber()?'md-warn':''"
-        title="Marcar interesse e receber notificações">
-      <md-icon>notifications</md-icon>
-    </md-button>
-    <md-button class="md-icon-button" arial-label="Atualizar" title="Atualizar comentários"
-        ng-click="postDetailsCtrl.loadComments()" ng-if="!postDetailsCtrl.isInstInactive()">
-      <md-icon>refresh</md-icon>
-    </md-button>
-    <md-button class="md-icon-button" ng-click="postDetailsCtrl.generateLink()" title="Copiar link">
-      <md-icon>link</md-icon>
-    </md-button>
     <md-button  ng-if="postDetailsCtrl.showButtonDelete() && !postDetailsCtrl.isInstInactive()" class="md-icon-button" arial-label="Delete"
         ng-click="postDetailsCtrl.deletePost($event, postDetailsCtrl.post)" title="Apagar o post">
       <md-icon>delete</md-icon>
@@ -189,14 +219,6 @@
                     postDetailsCtrl.post.number_of_likes === 1? '1 pessoa curtiu' :
                       postDetailsCtrl.post.number_of_likes + ' pessoas curtiram' }}">
       {{ postDetailsCtrl.post.number_of_likes }}
-    </md-button>
-    <md-button class="md-icon-button" aria-label="editar" ng-click="postDetailsCtrl.editPost()"
-        ng-if="postDetailsCtrl.showButtonEdit()" title="Editar o post" ng-if="!postDetailsCtrl.isInstInactive()">
-      <md-icon>edit</md-icon>
-    </md-button>
-    <md-button class="md-icon-button" ng-if="!postDetailsCtrl.isDeleted(postDetailsCtrl.post) && !postDetailsCtrl.isInstInactive()" aria-label="compartilhar"
-      ng-click="postDetailsCtrl.share(postDetailsCtrl.post)" title="Compartilhar o post">
-      <md-icon>share</md-icon>
     </md-button>
   </md-card-actions>
 

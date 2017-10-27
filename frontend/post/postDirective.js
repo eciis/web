@@ -9,7 +9,7 @@
         var postCtrl = this;
 
         postCtrl.post = {};
-        postCtrl.isSurvey = false;
+        postCtrl.type_post = 'Common';
         postCtrl.loading = false;
         postCtrl.deletePreviousImage = false;
         postCtrl.user = AuthService.getCurrentUser();
@@ -19,7 +19,7 @@
         postCtrl.addVideo = false;
         postCtrl.videoRegex = '(?:http(s)?:\/\/)?(www\.)?youtube\.com\/watch\\?v=.+';
         postCtrl.options = [];
-        postCtrl.isBinary = false;
+        postCtrl.multipleChoice = false;
         var option_empty = {'text': '',
                             'number_votes': 0,
                             'voters': []
@@ -56,11 +56,14 @@
         };
 
         postCtrl.choiceSurvey = function() {
-            postCtrl.isSurvey = true;
-            postCtrl.addOption();
-            postCtrl.addOption();
+            if(postCtrl.type_post === "Common"){
+                postCtrl.type_post = "Survey";
+                postCtrl.addOption();
+                postCtrl.addOption();
+            }
         };
 
+        /* This method add ids in each option and remove the options that are empty.*/
         function modifyOptions(){
             var id = 0;
             _.forEach(postCtrl.options, function(option) {
@@ -74,10 +77,10 @@
         }
 
         function defineTypeSurvey(){
-            if(postCtrl.isBinary){
-                postCtrl.post.type_survey = 'binary';
-            } else {
+            if(postCtrl.multipleChoice){
                 postCtrl.post.type_survey = 'multiple_choice';
+            } else {
+                postCtrl.post.type_survey = 'binary';
             }
         }
 
@@ -91,13 +94,13 @@
             modifyOptions();
             postCtrl.post.deadline && formateDate();
             postCtrl.post.options = postCtrl.options;
-            
+
             return new Post(postCtrl.post, postCtrl.user.current_institution.key);
         }
 
         postCtrl.saveSurvey = function(posts) {
             var survey = createSurvey();
-            PostService.createPost(survey).then(function success(response) {
+            var promisse = PostService.createPost(survey).then(function success(response) {
                 postCtrl.clearPost();
                 posts.push(new Post(response.data));
                 MessageService.showToast('Postado com sucesso!');
@@ -109,6 +112,7 @@
                     $state.go('app.home');
                 });
             });
+            return promisse;
         };
 
         postCtrl.addPdf = function addPdf(files) {
@@ -127,7 +131,7 @@
             });
         }
 
-        postCtrl.isPostValid = function isPostValid() {
+        postCtrl.isCommonPostValid = function isCommonPostValid(formInvalid) {
             if (postCtrl.user) {
                 var post;
                 if(!postCtrl.isEditing) {
@@ -135,7 +139,7 @@
                 } else {
                     post = postCtrl.post;
                 }
-                return post.isValid();
+                return post.isValid() && !formInvalid;
             } else {
                 return false;
             }
@@ -144,7 +148,7 @@
         postCtrl.save = function save(isEditing, originalPost, posts) {
             if(isEditing) {
                 postCtrl.editPost(originalPost);
-            } else if(postCtrl.isSurvey){
+            } else if(postCtrl.type_post === 'Survey'){
                 postCtrl.saveSurvey(posts);
             } else {
                 postCtrl.createPost(posts);
@@ -293,8 +297,8 @@
             postCtrl.post = {};
             postCtrl.pdfFiles = [];
             postCtrl.options = [];
-            postCtrl.isSurvey = false;
-            postCtrl.isBinary = false;
+            postCtrl.type_post = "Common";
+            postCtrl.multipleChoice = false;
         };
 
         postCtrl.showVideo = function showVideo() {
@@ -393,11 +397,11 @@
             return instName;
         };
 
-        postCtrl.canSend = function canSend(formInvalid){
-            if(postCtrl.isSurvey){
+        postCtrl.isValid = function isValid(formInvalid){
+            if(postCtrl.type_post === "Survey"){
                 return postCtrl.post.title && !postCtrl.hasOptionEmpty;
             } else {
-                return postCtrl.isPostValid() && !formInvalid;
+                return postCtrl.isCommonPostValid(formInvalid);
             }
         };
 

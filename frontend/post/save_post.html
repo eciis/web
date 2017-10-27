@@ -13,14 +13,14 @@
   </md-card-header>
   <md-card-content layout="column">
     <div>
-      <md-button ng-click="postCtrl.isSurvey=false">
+      <md-button ng-click="postCtrl.type_post = 'Common'">
         <md-icon>edit</md-icon> Iniciar um post 
       </md-button>|
       <md-button ng-click="postCtrl.choiceSurvey()">
         <md-icon>poll</md-icon>Enquete
       </md-button>
     </div>
-    <div ng-if="!postCtrl.isSurvey">
+    <div ng-if="postCtrl.type_post === 'Common'">
       <form name="saveForm">
         <md-input-container class="md-block">
           <label>Título</label>
@@ -46,7 +46,7 @@
         </md-input-container>
       </form>
     </div>
-    <div ng-if="postCtrl.isSurvey">
+    <div ng-if="postCtrl.type_post === 'Survey'">
       <form>
         <md-input-container class="md-block">
           <label>Pergunte algo</label>
@@ -68,7 +68,7 @@
           </md-input-container>
           </md-list-item>
         </md-list>
-        <md-switch class="md-primary" ng-model="postCtrl.isBinary" required> Binário
+        <md-switch class="md-primary" ng-model="postCtrl.multipleChoice" required> Multipla Escolha
         </md-switch>
         {{postCtrl.post.deadline}}
         <md-datepicker ng-model="postCtrl.post.deadline" md-placeholder="Prazo para enquete"></md-datepicker>
@@ -114,7 +114,7 @@
       <md-icon>movie</md-icon>
     </md-button>
     <md-button title="Enviar" class="md-icon-button" ng-click="postCtrl.save(isEditing, originalPost, posts)" 
-      ng-disabled="!postCtrl.canSend(saveForm.$invalid)">
+      ng-disabled="!postCtrl.isValid(saveForm.$invalid)">
       <md-icon>send</md-icon>
     </md-button>
   </md-dialog-actions>

@@ -3,6 +3,31 @@ from google.appengine.ext import ndb
 
 from custom_exceptions.fieldException import FieldException
 
+import random
+
+
+def pick_color():
+    colors = [
+        'red',
+        'pink',
+        'purple',
+        'deep-purple',
+        'indigo',
+        'blue',
+        'light-blue',
+        'cyan',
+        'teal',
+        'green',
+        'light-green',
+        'lime',
+        'orange',
+        'deep-orange',
+        'brown',
+        'grey',
+        'blue-grey'
+    ]
+    return colors[random.randint(0,17)]
+
 
 class InstitutionProfile(ndb.Model):
     """Model of InstitutionProfile."""
@@ -13,6 +38,7 @@ class InstitutionProfile(ndb.Model):
     institution_name = ndb.StringProperty()
     institution_photo_url = ndb.StringProperty()
     institution_key = ndb.StringProperty(required=True)
+    color = ndb.StringProperty()
 
     def make(self):
         """Make the Institution Profile json."""
@@ -24,6 +50,9 @@ class InstitutionProfile(ndb.Model):
             'name': self.institution_name,
             'photo_url': self.institution_photo_url
         }
+        
+        profile['color'] = self.color or pick_color()
+        profile['key'] = self.institution_key
         return profile
 
     @staticmethod

@@ -1,19 +1,18 @@
 <!-- TOOLBAR -->
 <md-toolbar md-colors="{background: 'teal-900'}" layout-wrap layout-align="center" layout="row">
-  <div class="md-toolbar-tools" flex-lg="90" flex-gt-lg="80" layout="row" layout-align="center center">
-    <md-button class="md-icon-button" aria-label="Settings" ng-click="mainCtrl.toggle()">
+  <div class="md-toolbar-tools" flex-lg="90" flex-gt-lg="70" layout="row" layout-align="center center">
+    <!-- <md-button class="md-icon-button" aria-label="Settings" ng-click="mainCtrl.toggle()">
       <md-icon>menu</md-icon>
-    </md-button>
+    </md-button> -->
 
     <a ui-sref="app.home"layout="row" layout-align="center center">
       <md-button disabled="true">
-        <img src="app/images/oms.png" aria-label="OMS Logo" style="height: 80%;filter: brightness(10) grayscale(1);">
+        <img src="app/images/logo.png" aria-label="OMS Logo" style="height: 50%;">
       </md-button>
-      <h2>e-CIS</h2>
     </a>
 
     <span flex md-truncate></span>
-
+<!-- 
     <md-menu md-position-mode="target-right target" ng-if="mainCtrl.isAdmin(mainCtrl.user.current_institution.key)">
       <md-button aria-label="menu" class="md-icon-button" ng-click="$mdMenu.open(ev); mainCtrl.getPendingTasks();" title="Configurações Administrativas">
         <md-icon ng-class="mainCtrl.pending_inst_invitations ||
@@ -46,7 +45,9 @@
 
     <md-button ng-click="mainCtrl.goEvents()" class="md-icon-button" title="Eventos">
       <md-icon>event</md-icon>
-    </md-button>
+    </md-button> -->
+    
+    <notification></notification>
 
     <div layout="row" md-theme="input" style="margin-top: 42px;">
       <form ng-submit="mainCtrl.search()">
@@ -61,13 +62,12 @@
       <md-icon>search</md-icon>
     </md-button>
 
-    <notification></notification>
 
-    <md-button aria-label="inicio" class="md-icon-button" ui-sref="app.home" title="Página Inicial">
+    <!-- <md-button aria-label="inicio" class="md-icon-button" ui-sref="app.home" title="Página Inicial">
       <md-icon>home</md-icon>
-    </md-button>
+    </md-button> -->
 
-    <md-menu md-position-mode="target-right target">
+    <!-- <md-menu md-position-mode="target-right target">
       <md-button aria-label="menu" class="md-icon-button" ng-click="$mdMenu.open(ev)">
         <md-icon>more_vert</md-icon>
       </md-button>
@@ -98,7 +98,7 @@
           </md-button>
         </md-menu-item>
       </md-menu-content>
-    </md-menu>
+    </md-menu> -->
   </div>
 </md-toolbar>
 
@@ -120,4 +120,4 @@
   </md-content>
 </md-sidenav>
 
-<div ui-view="content" layout="column"></div>
+<div ui-view="content" layout="column" md-colors="{background: 'grey-200'}"></div>

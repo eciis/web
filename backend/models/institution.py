@@ -304,7 +304,7 @@ class Institution(ndb.Model):
         """Notify all institution followers."""
         for follower_key in self.followers:
             follower = follower_key.get()
-            is_active = follower.status == "active"
+            is_active = follower.state == "active"
             if is_active:
                 send_message_notification(
                     follower.key.urlsafe(),
@@ -318,7 +318,7 @@ class Institution(ndb.Model):
         for member_key in self.members:
             member = member_key.get()
             is_admin = member_key == self.admin
-            if(is_admin && justification):
+            if(is_admin and justification):
                 message = message + """pelo seguinte motivo:
                 '%s'
                 """ % justification

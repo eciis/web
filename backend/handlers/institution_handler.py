@@ -178,7 +178,8 @@ class InstitutionHandler(BaseHandler):
         justification = self.request.get('justification')
         entity_type = "DELETED_INSTITUTION"
         message_notification = {'type': entity_type, 'from': user.name.encode('utf8')}
-        message_email = ""
+        message_email = """Lamentamos informar que a instituição %s foi removida
+        pelo administrador %s """ % (institution.name, user.name)
         subject = "Remoção de instituição"
 
         institution.notify_followers(message_notification, entity_type)

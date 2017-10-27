@@ -41,30 +41,30 @@
               <md-menu>
                   <md-menu-content width="4" md-colors="{background: 'grey-100'}">
                     <md-menu-item>
-                      <md-button ng-click="mainCtrl.goToEditInfo()">
+                      <md-button ui-sref="app.home">
                         <md-icon>home</md-icon>
                         Início
                       </md-button>
                     </md-menu-item>
                     <md-menu-item>
-                      <md-button  ng-click="mainCtrl.goToManageMembers()">
+                      <md-button ui-sref="app.config_profile">
                         <md-icon>account_box</md-icon>
                         Meu Perfil
                     </md-menu-item>
                     <md-menu-item>
-                      <md-button ng-click="mainCtrl.goToManageInstitutions()">
+                      <md-button ng-click="homeCtrl.goToEvents()">
                         <md-icon>date_range</md-icon>
                         Eventos
                       </md-button>
                     </md-menu-item>
                     <md-menu-item>
-                      <md-button ng-click="mainCtrl.goToManageInstitutions()">
+                      <md-button>
                         <md-icon>mail_outline</md-icon>
                         Convites
                       </md-button>
                     </md-menu-item>
                     <md-menu-item>
-                      <md-button ng-click="mainCtrl.goToManageInstitutions()">
+                      <md-button>
                         <md-icon>settings</md-icon>
                         Minhas Configurações
                       </md-button>
@@ -106,7 +106,7 @@
               <md-menu>
                 <md-menu-content width="4" md-colors="{background: 'grey-100'}">
                   <md-menu-item>
-                    <md-button ng-click="mainCtrl.goToManageInstitutions()">
+                    <md-button ng-click="mainCtrl.logout()">
                       <md-icon>exit_to_app</md-icon>
                       Sair
                     </md-button>
@@ -185,8 +185,8 @@
                   </a>
                 </div>
               </div>
-              <md-card-actions layout="row" layout-align="center" ng-if="homeCtrl.events.length > 0">
-                <md-button class="md-fab md-primary" title="Ver mais eventos" ng-click="homeCtrl.goToEvents()"
+              <md-card-actions layout="row" layout-align="center" ng-if="homeCtrl.followingInstitutions.length > 0">
+                <md-button class="md-fab md-primary" title="Ver mais"
                     md-colors="{background: 'light-green-600'}"
                     style="margin-bottom: -52px;">
                   <md-icon>more_horiz</md-icon>

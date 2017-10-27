@@ -5,10 +5,8 @@ function User(data) {
     _.extend(this, data);
 
     if (this.institutions && !this.current_institution) {
-        this.current_institution = this.institution_profiles[0];
+        this.changeInstitution(this.institutions[0]);
     }
-
-    console.log(this.institution_profiles);
 }
 
 var SENT = "sent";
@@ -17,7 +15,12 @@ var USER = "USER";
 
 User.prototype.changeInstitution = function changeInstitution(institution) {
     this.current_institution = _.find(this.institutions, {'key': institution.key});
-    this.current_institution.color = institution.color;
+    if (!institution.color) {
+        var profile = _.find(this.institution_profiles, {'key': institution.key});
+        this.current_institution.color = profile.color;
+    } else {
+        this.current_institution.color = institution.color;
+    }
     window.localStorage.userInfo = JSON.stringify(this);
 };
 

@@ -40,10 +40,22 @@
       <button ng-click="postCtrl.hideImage()">&times;</button>
       <img style="border-radius: 5%;" ng-src="{{ postCtrl.photoUrl }}"/>
     </div>
-    <div ng-if="postCtrl.showFiles()" ng-repeat="pdf in postCtrl.pdfFiles">
-      <md-button class="md-icon-button" ng-click="postCtrl.hideFile($index)" title="remover">&times;</md-button>
-      <md-icon>description</md-icon>
-      <span>{{pdf.name}}</span>
+    <div ng-if="postCtrl.showFiles()" ng-repeat="pdf in postCtrl.pdfFiles" layout-padding>
+      <div layout="row" ng-click="postDetailsCtrl.pdfDialog($event, pdf)">
+        <div layout="column" flex="10" md-colors="{background: 'light-green'}">
+          <md-icon class="big-icon" layout-padding>
+            picture_as_pdf
+          </md-icon> </div>
+        <div layout="column" layout-padding  flex="80" md-colors="{background: 'teal'}" layout-align="center">
+            {{pdf.name}}
+        </div>  
+        <div layout="column" layout-padding  flex="10" md-colors="{background: 'teal'}" layout-align="end start">
+          
+          <md-icon ng-click="postCtrl.hideFile($index)" style="color:white;font:bold;" title="Remover" layout-align="end start" layout-padding>
+            close
+          </md-icon> </div>
+        </div>  
+      </div>
     </div>
     <md-progress-linear ng-show="postCtrl.loading" md-mode="indeterminate" style="width: 14%; margin-top: 5px"></md-progress-linear>
   </md-card-content>

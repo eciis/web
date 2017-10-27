@@ -106,10 +106,16 @@
           <span class="md-subhead" >continuar lendo</span>
         </a>
       </div>
-      <div ng-repeat="pdf in postDetailsCtrl.post.shared_post.pdf_files" ng-if="postDetailsCtrl.post.shared_post.pdf_files">
-        <md-button class="md-raised" ng-click="postDetailsCtrl.pdfDialog($event, pdf)">
-            <md-icon>picture_as_pdf</md-icon> {{pdf.name}}
-        </md-button>
+      <div ng-repeat="pdf in postDetailsCtrl.post.shared_post.pdf_files" ng-if="postDetailsCtrl.post.shared_post.pdf_files" layout-padding>
+        <div class="clickable" layout="row" ng-click="postDetailsCtrl.pdfDialog($event, pdf)">
+          <div layout="column" flex="10" md-colors="{background: 'light-green'}">
+            <md-icon class="big-icon" layout-padding>
+              picture_as_pdf
+            </md-icon> </div>
+          <div layout="column" layout-padding  flex="90" md-colors="{background: 'teal'}" layout-align="center">
+            {{pdf.name}}
+          </div>  
+    </div>
       </div>
     </md-card-content>
   </md-card>
@@ -120,8 +126,7 @@
   <div class="youtube-player" ng-if="postDetailsCtrl.showVideo(postDetailsCtrl.post)">
     <iframe ng-src="{{postDetailsCtrl.getVideoUrl(postDetailsCtrl.post)}}"></iframe>
   </div>
-  <div ng-repeat="pdf in postDetailsCtrl.post.pdf_files" class="button"
-  ng-if="postDetailsCtrl.post.pdf_files" layout-padding>
+  <div ng-repeat="pdf in postDetailsCtrl.post.pdf_files" ng-if="postDetailsCtrl.post.pdf_files" layout-padding>
     <div class="clickable" layout="row" ng-click="postDetailsCtrl.pdfDialog($event, pdf)">
       <div layout="column" flex="10" md-colors="{background: 'light-green'}">
         <md-icon class="big-icon" layout-padding>

@@ -22,6 +22,7 @@ def send_message_notification(user_key, message, entity_type, entity_key):
     taskqueue.add(
         url='/api/queue/send-notification',
         target='worker',
+        queue_name='notifications',
         params={
             'user_key': user_key,
             'message': message,
@@ -41,6 +42,7 @@ def send_message_email(invitee, body, subject):
     taskqueue.add(
         url='/api/queue/send-email',
         target='worker',
+        queue_name='notifications',
         params={
             'invitee': invitee,
             'subject': subject,

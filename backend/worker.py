@@ -6,8 +6,9 @@ from google.appengine.api import mail
 import logging
 from google.appengine.ext import ndb
 from models.institution import Institution
-from models.user import User
+from models.post import Post
 from utils import json_response
+from service_messages import send_message_notification
 
 
 class BaseHandler(webapp2.RequestHandler):
@@ -79,8 +80,35 @@ class RemoveInstitutionHandler(BaseHandler):
 
         institution.remove_institution_from_users(remove_hierarchy)
 
+
+class PostNotificationHandler(BaseHandler):
+    """Handler that sends post's notifications to another queue."""
+
+    def post(self):
+        """Handle post requests."""
+        post_author_key = self.request.get('author_key')
+        current_user_key = self.request.get('user_key')
+        user_name = self.request.get('user_name')
+        post_key = self.request.get('post_key')
+        subscribers = ndb.Key(urlsafe=post_key).get().subscribers
+
+        entity_type = self.request.get('entity_type')
+        message = {'type': entity_type, 'from': user_name.encode('utf8')}
+        userIsAuthor = post_author_key == current_user_key
+        for subscriber in subscribers:
+            subscriberIsCurrentUser = subscriber.urlsafe() == current_user_key
+            if not (userIsAuthor and subscriberIsCurrentUser) and not subscriberIsCurrentUser:
+                send_message_notification(
+                    subscriber.urlsafe(),
+                    json.dumps(message),
+                    entity_type,
+                    post_key
+                )
+
+
 app = webapp2.WSGIApplication([
     ('/api/queue/send-notification', SendNotificationHandler),
     ('/api/queue/send-email', SendEmailHandler),
-    ('/api/queue/remove-inst', RemoveInstitutionHandler)
+    ('/api/queue/remove-inst', RemoveInstitutionHandler),
+    ('/api/queue/post-notification', PostNotificationHandler)
 ], debug=True)

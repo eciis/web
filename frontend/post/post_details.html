@@ -155,6 +155,11 @@
 
   <!-- BUTTONS -->
   <md-card-actions layout="row" layout-align="end-center">
+   <md-button class="md-icon-button" aria-label="Favorite" ng-click="postDetailsCtrl.addOrRemoveSubscriber()"
+        ng-disabled="postDetailsCtrl.disableButton()" ng-class="postDetailsCtrl.isSubscriber()?'md-warn':''"
+        title="Marcar interesse e receber notificações">
+      <md-icon>notifications</md-icon>
+    </md-button>
     <md-button class="md-icon-button" arial-label="Atualizar" title="Atualizar comentários"
         ng-click="postDetailsCtrl.loadComments()" ng-if="!postDetailsCtrl.isInstInactive()">
       <md-icon>refresh</md-icon>
@@ -175,7 +180,7 @@
       {{ postDetailsCtrl.post.number_of_comments }}
     </md-button>
     <md-button class="md-icon-button" aria-label="Favorite" ng-click="postDetailsCtrl.likeOrDislikePost()"
-        ng-disabled="postDetailsCtrl.disableButtonLike()" ng-class="postDetailsCtrl.isLikedByUser()?'md-warn':''"
+        ng-disabled="postDetailsCtrl.disableButton()" ng-class="postDetailsCtrl.isLikedByUser()?'md-warn':''"
         title="Curtir">
       <md-icon>grade</md-icon>
     </md-button>

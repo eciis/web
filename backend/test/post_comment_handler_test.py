@@ -64,9 +64,15 @@ class PostCommentHandlerTest(TestBaseHandler):
 
         # Assert that Exception is raised when the user try
         # to comment a deleted post
-        with self.assertRaises(Exception):
+        exception_message = "Error! This post has been deleted"
+        with self.assertRaises(Exception) as raises_context:
             self.testapp.post(self.URL_POST_COMMENT % self.mayza_post.key.urlsafe(),
                               json.dumps(self.other_comment))
+        raises_context_message = self.get_message_exception(raises_context.exception.message)
+        self.assertEquals(
+            raises_context_message,
+            exception_message,
+            "Expected: " + exception_message + ". But got: " + raises_context_message)
 
     @patch('utils.verify_token', return_value={'email': MAYZA_EMAIL})
     def test_post_ownerpost(self, verify_token):
@@ -126,12 +132,16 @@ class PostCommentHandlerTest(TestBaseHandler):
         self.mayza_post.state = 'deleted'
         self.mayza_post.put()
         # Call delete method with post on deleted state
-        with self.assertRaises(Exception) as ex:
+        exception_message = "Error! Can not delete comment in deleted post"
+        with self.assertRaises(Exception) as raises_context:
             self.testapp.delete(self.URL_DELETE_COMMENT %
                                 (self.mayza_post.key.urlsafe(), self.id_comment))
 
-        ex = self.get_message_exception(ex.exception.message)
-        self.assertEquals(ex, "Error! Can not delete comment in deleted post")
+        raises_context_message = self.get_message_exception(raises_context.exception.message)
+        self.assertEquals(
+            raises_context_message,
+            exception_message,
+            "Expected: " + exception_message + ". But got: " + raises_context_message)
         self.assertEquals(len(self.mayza_post.comments), 1,
                           "Expected size of comment's list should be one")
 
@@ -152,12 +162,16 @@ class PostCommentHandlerTest(TestBaseHandler):
         verify_token.return_value={'email': MAIANA_EMAIL}
 
         # User Maiana call the delete method
-        with self.assertRaises(Exception) as ex:
+        exception_message = "Error! User not allowed to remove comment"
+        with self.assertRaises(Exception) as raises_context:
             self.testapp.delete(self.URL_DELETE_COMMENT %
                                 (self.mayza_post.key.urlsafe(), self.id_comment))
 
-        ex = self.get_message_exception(ex.exception.message)
-        self.assertEquals(ex, "Error! User not allowed to remove comment")
+        raises_context_message = self.get_message_exception(raises_context.exception.message)
+        self.assertEquals(
+            raises_context_message,
+            exception_message,
+            "Expected: " + exception_message + ". But got: " + raises_context_message)
         self.assertEquals(len(self.mayza_post.comments), 1,
                           "Expected size of comment's list should be one")
 

@@ -134,8 +134,19 @@ a:active {
     display: inline-flex;
 }
 
+.big-icon {
+    font-size:48px;
+    width: 48px;
+    height: 48px; 
+    color: #FFFFFF
+}
+
 .clickable {
     cursor: pointer;
+}
+
+.clickable:hover {
+    opacity:.50;
 }
 
 .demo-md-panel {

@@ -13,8 +13,11 @@
           {{ postDetailsCtrl.post.institution_name }}
         </a>
       </div>
-      <span class="md-subhead">
+      <span layout="row" class="md-subhead">
         por {{ postDetailsCtrl.post.author }} {{ postDetailsCtrl.post.publication_date | amUtc | amLocal | amCalendar:referenceTime:formats }}
+        <div class="md-small">
+          <md-icon style="font-size:17px; min-height: 1px; color: #FFFFFF;" ng-click="postDetailsCtrl.editPost()">edit</md-icon>
+        </div>
       </span>
     </md-card-header-text>
     <md-subheader ng-if="postDetailsCtrl.isInstInactive()">Instituição inativa</md-subheader>
@@ -145,7 +148,7 @@
       <div layout="row" layout-align="end-center">
         <a href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post.shared_post)"
           ng-if="postDetailsCtrl.isLongPostTimeline(postDetailsCtrl.post.shared_post.text)">
-          <span class="md-subhead" >continuar lendo</span>
+          <md-icon>more_horiz</md-icon>
         </a>
       </div>
       <div ng-repeat="pdf in postDetailsCtrl.post.shared_post.pdf_files" ng-if="postDetailsCtrl.post.shared_post.pdf_files">
@@ -180,10 +183,10 @@
         <p ng-bind-html="postDetailsCtrl.postToURL(postDetailsCtrl.post).text" class="break">
           {{postDetailsCtrl.postToURL(postDetailsCtrl.post).text}}
         </p>
-        <div layout="row" layout-align="end-center">
+        <div layout="row" layout-align="end-center" style="margin-top: -15px;">
             <a href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post)"
               ng-if="postDetailsCtrl.isLongPostTimeline(postDetailsCtrl.post.text)">
-              <span class="md-subhead" >continuar lendo</span>
+              <md-icon style="margin-right: -10px;" md-colors="{color: 'light-green'}">more_horiz</md-icon>
             </a>
         </div>
         <div ng-repeat="pdf in postDetailsCtrl.post.pdf_files" ng-if="postDetailsCtrl.post.pdf_files">
@@ -196,31 +199,37 @@
   <md-divider></md-divider>
 
   <!-- BUTTONS -->
-  <md-card-actions layout="row" layout-align="end-center">
-    <md-button  ng-if="postDetailsCtrl.showButtonDelete() && !postDetailsCtrl.isInstInactive()" class="md-icon-button" arial-label="Delete"
-        ng-click="postDetailsCtrl.deletePost($event, postDetailsCtrl.post)" title="Apagar o post">
-      <md-icon>delete</md-icon>
-    </md-button>
-    <md-button class="md-icon-button" aria-label="Comments" ng-click="postDetailsCtrl.getComments()"
-        ng-disabled="postDetailsCtrl.isPostPage" title="Mostrar comentários">
-      <md-icon>comments</md-icon>
-    </md-button>
-    <md-button class="post-count md-icon-button md-primary md-hue-1"
-        title="{{ postDetailsCtrl.post.number_of_comments }} pessoas comentaram">
-      {{ postDetailsCtrl.post.number_of_comments }}
-    </md-button>
-    <md-button class="md-icon-button" aria-label="Favorite" ng-click="postDetailsCtrl.likeOrDislikePost()"
-        ng-disabled="postDetailsCtrl.disableButton()" ng-class="postDetailsCtrl.isLikedByUser()?'md-warn':''"
-        title="Curtir">
-      <md-icon>grade</md-icon>
-    </md-button>
-    <md-button class="post-count md-icon-button md-primary md-hue-1" ng-click="postDetailsCtrl.getLikes()"
-        title="{{ postDetailsCtrl.post.number_of_likes === 0? 'Ainda ninguém curtiu' :
-                    postDetailsCtrl.post.number_of_likes === 1? '1 pessoa curtiu' :
-                      postDetailsCtrl.post.number_of_likes + ' pessoas curtiram' }}">
-      {{ postDetailsCtrl.post.number_of_likes }}
-    </md-button>
+  <md-card-actions style="margin-top: 20px;" layout="row" layout-align="space-between center">
+    <div layout="row" layout-align="start center">
+      <md-button md-colors="{background: 'light-green'}" ng-if="postDetailsCtrl.showButtonDelete() && !postDetailsCtrl.isInstInactive()" class="md-icon-button" arial-label="Delete"
+          ng-click="postDetailsCtrl.deletePost($event, postDetailsCtrl.post)" title="Apagar o post">
+        <md-icon style="color: white;">delete</md-icon>
+      </md-button>
+      <b style="font-size: 12px;">EXCLUIR POST</b>
+    </div>
+    <div layout-align="center">
+      <md-button class="md-icon-button" aria-label="Favorite" ng-click="postDetailsCtrl.likeOrDislikePost()"
+          ng-disabled="postDetailsCtrl.disableButton()" ng-class="postDetailsCtrl.isLikedByUser()?'md-warn':''"
+          title="Curtir">
+        <md-icon>grade</md-icon>
+      </md-button>
+      <md-button class="post-count md-icon-button md-primary md-hue-1" ng-click="postDetailsCtrl.getLikes()"
+          title="{{ postDetailsCtrl.post.number_of_likes === 0? 'Ainda ninguém curtiu' :
+                      postDetailsCtrl.post.number_of_likes === 1? '1 pessoa curtiu' :
+                        postDetailsCtrl.post.number_of_likes + ' pessoas curtiram' }}">
+        {{ postDetailsCtrl.post.number_of_likes }}
+      </md-button>
+      <md-button class="md-icon-button" aria-label="Comments" ng-click="postDetailsCtrl.getComments()"
+          ng-disabled="postDetailsCtrl.isPostPage" title="Mostrar comentários">
+        <md-icon>comments</md-icon>
+      </md-button>
+      <md-button class="post-count md-icon-button md-primary md-hue-1"
+          title="{{ postDetailsCtrl.post.number_of_comments }} pessoas comentaram">
+        {{ postDetailsCtrl.post.number_of_comments }}
+      </md-button>
+    </div>
   </md-card-actions>
+
 
   <!-- LIKES -->
   <div layout="row" layout-align="start center">

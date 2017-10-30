@@ -52,16 +52,13 @@
           <label>Pergunte algo</label>
           <textarea ng-model="postCtrl.post.title" placeholder="Pergunte algo aqui" style="max-height: 300px"></textarea>
         </md-input-container>
-        Opções
-        <md-button ng-click="postCtrl.addOption()" ng-if="!postCtrl.getOptionEmpty()" class="md-icon-button">
-          <md-icon>add</md-icon> 
-        </md-button>
         <md-divider>
+        Opções
         <md-list ng-repeat="option in postCtrl.options">
           <md-list-item>
           <md-input-container>
             <label>Opção {{option.id}}</label>
-            <input ng-model="option.text"/>
+            <input ng-model="option.text" ng-change="postCtrl.addOption()"/>
             <md-button ng-click="postCtrl.removeOption(option)" class="md-icon-button">
               <md-icon>clear</md-icon>
             </md-button>

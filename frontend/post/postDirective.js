@@ -41,14 +41,17 @@
             });
         };
 
-        postCtrl.addOption = function() {
-            postCtrl.options.push(angular.copy(option_empty));
-        };
-
         postCtrl.removeOption = function(opt) {
              _.remove(postCtrl.options, function(option) {
               return option === opt;
             });    
+        };
+
+        postCtrl.addOption = function(){
+            const hasOptionEmpty = postCtrl.getOptionEmpty() !== undefined;
+            if(!hasOptionEmpty){
+                postCtrl.options.push(angular.copy(option_empty));
+            }
         };
 
         postCtrl.getOptionEmpty = function(){
@@ -58,8 +61,8 @@
         postCtrl.choiceSurvey = function() {
             if(postCtrl.type_post === "Common"){
                 postCtrl.type_post = "Survey";
-                postCtrl.addOption();
-                postCtrl.addOption();
+                postCtrl.options.push(angular.copy(option_empty));
+                postCtrl.options.push(angular.copy(option_empty));
             }
         };
 
@@ -116,7 +119,9 @@
         };
 
         postCtrl.addPdf = function addPdf(files) {
-            postCtrl.pdfFiles = postCtrl.pdfFiles.concat(files);
+            if(!postCtrl.getOptionEmpty){
+                postCtrl.pdfFiles = postCtrl.pdfFiles.concat(files);
+            }
         };
 
         postCtrl.createEditedPost = function createEditedPost(post) {
@@ -399,7 +404,8 @@
 
         postCtrl.isValid = function isValid(formInvalid){
             if(postCtrl.type_post === "Survey"){
-                return postCtrl.post.title && !postCtrl.hasOptionEmpty;
+                const hasOptionEmpty = postCtrl.getOptionEmpty() === undefined;
+                return postCtrl.post.title && !hasOptionEmpty;
             } else {
                 return postCtrl.isCommonPostValid(formInvalid);
             }

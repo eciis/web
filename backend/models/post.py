@@ -169,7 +169,7 @@ class Post(PolyModel):
 
     def isCommonPost(post, data):
         """The post not is sharing or event."""
-        return post.shared_event and post.shared_post and data.get('type_survey')
+        return post.shared_event is None and post.shared_post is None and data.get('type_survey') is None
 
     def createSharing(self, data):
         """Create different type of post, can be shared post or shared event."""

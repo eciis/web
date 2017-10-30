@@ -12,13 +12,13 @@
                     md-gutter="4px" md-gutter-gt-sm="4px">
                         <md-list-item md-rowspan="1" md-colspan="1" md-colspan-sm="1">
                             <div class="column">
-                                <md-radio-button class="md-primary" ng-value="'*'" ng-click="searchCtrl.searchByOccupationArea('*')"><b>Pesquisar em todas as áreas</b></md-radio-button>
+                                <md-radio-button class="md-primary" ng-value="'*'" ng-click="searchCtrl.searchByActuationArea('*')"><b>Pesquisar em todas as áreas</b></md-radio-button>
                             </div>
                         </md-list-item>
                         <md-list-item md-rowspan="1" md-colspan="1" md-colspan-sm="1"
-                        ng-repeat="occupation_area in searchCtrl.occupationAreas | orderBy: 'name'">
+                        ng-repeat="actuation_area in searchCtrl.actuationAreas | orderBy: 'name'">
                             <div class="column">
-                                <md-radio-button class="md-primary" ng-value="occupation_area.name" ng-click="searchCtrl.searchByOccupationArea(occupation_area.name)">{{occupation_area.name}}</md-radio-button>
+                                <md-radio-button class="md-primary" ng-value="actuation_area.name" ng-click="searchCtrl.searchByActuationArea(actuation_area.name)">{{actuation_area.name}}</md-radio-button>
                             </div>
                         </md-list-item>
                     </md-list>

@@ -16,23 +16,24 @@
 
         manageMemberCtrl.user = AuthService.getCurrentUser();
 
-        manageMemberCtrl.removeMember = function removeMember(ev, member_obj) {
-            var title = 'Remover Membro';
-            var text= "Você deseja remover esse membro?";
-            var dialog = MessageService.showConfirmationDialog(ev, title, text);
-
-            dialog.then(function() {
-                InstitutionService.removeMember(currentInstitutionKey, member_obj).then(function success() {
-                    MessageService.showToast("Membro removido com sucesso.");
-                    _.remove(manageMemberCtrl.members, function(member) {
-                        return member.key === member_obj.key;
-                    });
-                }, function error(response) {
-                    MessageService.showToast(response.data.msg);
-                });
-            }, function() {
-                MessageService.showToast('Cancelado');
+        manageMemberCtrl.openRemoveMemberDialog = function openRemoveMemberDialog(ev, member_obj) {
+             $mdDialog.show({
+                templateUrl: 'app/institution/removeMemberDialog.html',
+                controller: RemoveMemberController,
+                controllerAs: "removeMemberCtrl",
+                locals: {
+                    member_obj: member_obj,
+                },
+                targetEvent: ev,
+                clickOutsideToClose: true
             });
+        };
+
+        manageMemberCtrl.removeMember = function removeMember(member_obj) {
+            _.remove(manageMemberCtrl.members, function(member) {
+                return member.key === member_obj.key;
+            });
+            MessageService.showToast("Membro removido com sucesso.");
         };
 
         manageMemberCtrl.showUserProfile = function showUserProfile(userKey, ev) {
@@ -157,5 +158,24 @@
         };
 
         loadInstitution();
+
+        function RemoveMemberController(member_obj) {
+            var removeMemberCtrl = this;
+
+            removeMemberCtrl.justification = "";
+
+            removeMemberCtrl.removeMember = function removeMember() {
+                InstitutionService.removeMember(currentInstitutionKey, member_obj, removeMemberCtrl.justification).then(function success() {
+                    manageMemberCtrl.removeMember(member_obj);
+                    $mdDialog.cancel();
+                }, function error(response) {
+                    MessageService.showToast(response.data.msg);
+                });
+            };
+
+            removeMemberCtrl.cancel = function cancel() {
+                $mdDialog.cancel();
+            };
+        }
     });
 })();

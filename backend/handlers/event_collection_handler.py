@@ -63,8 +63,7 @@ class EventCollectionHandler(BaseHandler):
         Utils._assert(institution.state == 'inactive',
                       "The institution has been deleted", NotAuthorizedException)
 
-        event = Event.create(data, user.key, user.name, user.photo_url,
-                             institution_key, institution.name, institution.photo_url)
+        event = Event.create(data, user, institution)
         event.put()
 
         self.response.write(json.dumps(Utils.toJson(Event.make(event), host=self.request.host)))

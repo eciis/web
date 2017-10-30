@@ -1,7 +1,7 @@
 #!/bin/bash
 SYS_URL='http://localhost:8080'
 
-LANDING_YAML=landing/landing.yaml
+APP_YAML=app.yaml
 FRONTEND_YAML=frontend/frontend.yaml
 BACKEND_YAML=backend/backend.yaml
 WORKER_YAML=backend/worker.yaml
@@ -37,7 +37,7 @@ case "$1" in
 
         set_backend_url $BACKEND_LOCAL
 
-        dev_appserver.py $LANDING_YAML $FRONTEND_YAML $BACKEND_YAML $WORKER_YAML
+        dev_appserver.py $APP_YAML $FRONTEND_YAML $BACKEND_YAML $WORKER_YAML
     ;;
 
     test)
@@ -46,7 +46,7 @@ case "$1" in
                 echo "=========== Iniciando Testes do Frontend ==========="
                 cd frontend/test && karma start $3
             ;;
-        
+
             server)
                 echo "=========== Iniciando Testes do Backend ==========="
                 cd backend
@@ -59,17 +59,17 @@ case "$1" in
 
         if [ ! -z $2 ]; then
             version=$2
-            url=$version"."BACKEND_DOMAIN
+            url=$version"."$BACKEND_DOMAIN
             set_backend_url $url
 
             if [ ! -z $3 ]; then # Especified one or more yaml configuration files
                 gcloud app deploy --version $version --no-promote $3
             else
-                gcloud app deploy --version $version --no-promote $LANDING_YAML $FRONTEND_YAML $BACKEND_YAML $WORKER_YAML
+                gcloud app deploy --version $version --no-promote $APP_YAML $FRONTEND_YAML $BACKEND_YAML $WORKER_YAML
             fi
         else
             set_backend_url
-            gcloud app deploy $LANDING_YAML $FRONTEND_YAML $BACKEND_YAML $WORKER_YAML
+            gcloud app deploy $APP_YAML $FRONTEND_YAML $BACKEND_YAML $WORKER_YAML
         fi
 
         exit 0

@@ -362,4 +362,44 @@
             expect(postDetailsCtrl.getVideoUrl(post)).toBe('https://www.youtube.com/embed/3T3g8rV-5GU');
         });
     });
+
+    describe('subscribe()', function() {
+
+        var post;
+
+        beforeEach(function() {
+            post = posts[0];
+            post.subscribers = [user.key];
+            postDetailsCtrl.post = post;
+        });
+
+        it('should call addSubscriber', function() {
+            spyOn(postService, 'addSubscriber').and.callFake(function() {
+                return {
+                    then: function(callback) {
+                        return callback();
+                    }
+                };
+            });
+            postDetailsCtrl.addSubscriber();
+            expect(postService.addSubscriber).toHaveBeenCalled();
+        });
+
+        it('should call removeSubscriber', function() {
+            spyOn(postService, 'removeSubscriber').and.callFake(function() {
+                return {
+                    then: function(callback) {
+                        return callback();
+                    }
+                };
+            });
+            postDetailsCtrl.removeSubscriber();
+            expect(postService.removeSubscriber).toHaveBeenCalled();
+        });
+
+        it('should return true', function() {
+            var result = postDetailsCtrl.isSubscriber();
+            expect(result).toBe(true);
+        });
+    });
 }));

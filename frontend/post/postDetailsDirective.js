@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller('PostDetailsController', function(PostService, AuthService, CommentService, $mdToast, $state,
-        $mdDialog, NotificationService, MessageService, ngClipboard, ProfileService, PdfService, $sce) {
+        $mdDialog, NotificationService, MessageService, ngClipboard, ProfileService) {
 
         var postDetailsCtrl = this;
 
@@ -92,7 +92,7 @@
                 !postDetailsCtrl.isDeleted(postDetailsCtrl.post);
         };
 
-        postDetailsCtrl.disableButtonLike = function disableButtonLike() {
+        postDetailsCtrl.disableButton = function disableButton() {
             return postDetailsCtrl.savingLike ||
                 postDetailsCtrl.isDeleted(postDetailsCtrl.post) || postDetailsCtrl.isInstInactive();
         };
@@ -157,6 +157,39 @@
                     addPost: postDetailsCtrl.addPost
                 }
             });
+        };
+
+        postDetailsCtrl.addSubscriber = function addSubscriber() {
+            PostService.addSubscriber(postDetailsCtrl.post.key).then(function success() {
+                MessageService.showToast('Esse post foi marcado como de seu interesse.');
+                postDetailsCtrl.post.subscribers.push(postDetailsCtrl.user.key);
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
+            });
+        };
+
+        postDetailsCtrl.removeSubscriber = function removeSubscriber() {
+            PostService.removeSubscriber(postDetailsCtrl.post.key).then(function success() {
+                MessageService.showToast('Esse post foi removido dos posts de seu interesse.');
+                _.remove(postDetailsCtrl.post.subscribers, function(userKey) {
+                    return userKey === postDetailsCtrl.user.key;
+                });
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
+                $state.go($state.current);
+            });
+        };
+
+        postDetailsCtrl.isSubscriber = function isSubscriber() {
+            return _.includes(postDetailsCtrl.post.subscribers, postDetailsCtrl.user.key);
+        };
+
+        postDetailsCtrl.addOrRemoveSubscriber = function addOrRemoveSubscriber() {
+            if (!postDetailsCtrl.isSubscriber()) {
+                postDetailsCtrl.addSubscriber();
+            } else {
+                postDetailsCtrl.removeSubscriber();
+            }
         };
 
         function getOriginalPost(post){
@@ -294,11 +327,8 @@
                     addComment(postDetailsCtrl.post, response.data);
                     postDetailsCtrl.savingComment = false;
                 }, function error(response) {
-                    AuthService.reload().then(function success() {
-                        postDetailsCtrl.savingComment = false;
-                        MessageService.showToast(response.data.msg);
-                        $state.go('app.home');
-                    });
+                    MessageService.showToast(response.data.msg);
+                    $state.go('app.home');
                 });
             } else {
                 MessageService.showToast("Comentário não pode ser vazio.");
@@ -386,34 +416,7 @@
                 }
             }
             return text;
-        }
-
-        postDetailsCtrl.pdfDialog = function(ev, pdf) {
-            var readablePdf = {};
-            PdfService.getReadableURL(pdf.url, setPdfURL, readablePdf).then(
-                function success() {
-                    $mdDialog.show({
-                        templateUrl: 'app/post/pdfDialog.html',
-                        targetEvent: ev,
-                        clickOutsideToClose:true,
-                        locals: {
-                            pdfUrl: readablePdf.url
-                        },
-                        controller: DialogController,
-                        controllerAs: 'ctrl'
-                    });
-                });
-        };
-
-        function setPdfURL(url, pdf) {
-            pdf.url = url;
-        }
-
-        function DialogController($mdDialog, pdfUrl) {
-            var ctrl = this;
-            var trustedUrl = $sce.trustAsResourceUrl(pdfUrl);
-            ctrl.pdfUrl = trustedUrl;
-        }
+        }    
     });
 
     app.directive("postDetails", function() {

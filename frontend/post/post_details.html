@@ -106,17 +106,7 @@
           <span class="md-subhead" >continuar lendo</span>
         </a>
       </div>
-      <div ng-repeat="pdf in postDetailsCtrl.post.shared_post.pdf_files" ng-if="postDetailsCtrl.post.shared_post.pdf_files" layout-padding>
-        <div class="clickable" layout="row" ng-click="postDetailsCtrl.pdfDialog($event, pdf)">
-          <div layout="column" flex="10" md-colors="{background: 'light-green'}">
-            <md-icon class="big-icon" layout-padding>
-              picture_as_pdf
-            </md-icon> </div>
-          <div layout="column" layout-padding  flex="90" md-colors="{background: 'teal'}" layout-align="center">
-            {{pdf.name}}
-          </div>  
-    </div>
-      </div>
+      <pdf-view pdf-files='postDetailsCtrl.post.shared_post.pdf_files' is-editing="false"></pdf-view>
     </md-card-content>
   </md-card>
 
@@ -126,17 +116,7 @@
   <div class="youtube-player" ng-if="postDetailsCtrl.showVideo(postDetailsCtrl.post)">
     <iframe ng-src="{{postDetailsCtrl.getVideoUrl(postDetailsCtrl.post)}}"></iframe>
   </div>
-  <div ng-repeat="pdf in postDetailsCtrl.post.pdf_files" ng-if="postDetailsCtrl.post.pdf_files" layout-padding>
-    <div class="clickable" layout="row" ng-click="postDetailsCtrl.pdfDialog($event, pdf)">
-      <div layout="column" flex="10" md-colors="{background: 'light-green'}">
-        <md-icon class="big-icon" layout-padding>
-          picture_as_pdf
-        </md-icon> </div>
-      <div layout="column" layout-padding  flex="90" md-colors="{background: 'teal'}" layout-align="center">
-        {{pdf.name}}
-      </div>  
-    </div>
-  </div>
+  <pdf-view pdf-files='postDetailsCtrl.post.pdf_files' is-editing="false"></pdf-view>
   <md-card-title ng-if="!postDetailsCtrl.isDeleted(postDetailsCtrl.post)">
     <md-card-title-text>
       <a href class="md-title hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post)">
@@ -146,7 +126,7 @@
   </md-card-title>
   <md-card-content>
     <div ng-if="postDetailsCtrl.isDeleted(postDetailsCtrl.post)" style='font-style:italic; text-align: center'>
-      <p>Esta publicação foi removida por</p>
+      <p>Esta publicação foi removida por </p>
       <p>
         {{postDetailsCtrl.post.last_modified_by}} {{postDetailsCtrl.post.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats }}.
       </p>

@@ -70,13 +70,15 @@
         function modifyOptions(){
             var id = 0;
             _.forEach(postCtrl.options, function(option) {
-              if(option.title !== ''){
+              if(option.text !== ''){
                 option.id = id;
                 id += 1;
               }else{
                 postCtrl.removeOption(option);
               }
             });
+
+            console.log(postCtrl.options);
         }
 
         function defineTypeSurvey(){

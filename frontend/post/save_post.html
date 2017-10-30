@@ -52,23 +52,22 @@
           <label>Pergunte algo</label>
           <textarea ng-model="postCtrl.post.title" placeholder="Pergunte algo aqui" style="max-height: 300px"></textarea>
         </md-input-container>
-        <md-divider>
-        Opções
+        Alternativas
         <md-list ng-repeat="option in postCtrl.options">
           <md-list-item>
           <md-input-container>
-            <label>Opção {{option.id}}</label>
+            <label>+ Adicionar uma opção...</label>
             <input ng-model="option.text" ng-change="postCtrl.addOption()"/>
-            <md-button ng-click="postCtrl.removeOption(option)" class="md-icon-button">
-              <md-icon>clear</md-icon>
-            </md-button>
           </md-input-container>
           </md-list-item>
         </md-list>
-        <md-switch class="md-primary" ng-model="postCtrl.multipleChoice" required> Multipla Escolha
-        </md-switch>
-        {{postCtrl.post.deadline}}
-        <md-datepicker ng-model="postCtrl.post.deadline" md-placeholder="Prazo para enquete"></md-datepicker>
+        <md-input-container class="md-input-has-placeholder">
+          <label>Data limite</label>
+          <input mdc-datetime-picker="" ng-change="controller.changeDate('startTime')" short-time="false" 
+            date="true" time="true" type="text" format="YYYY-MM-DD HH:mm" lang="pt-BR" placeholder="Receber respostas até..." 
+            ng-model="controller.post.deadline" class=" md-input" today-text="Hoje" min-date="null" 
+            readonly="readonly" cancel-text="Cancelar">
+        </md-input-container>
         <md-input-container ng-show="postCtrl.showVideoUrlField()" class="md-block">
           <label>Link do Video</label>
           <textarea style="max-height: 400px;overflow-y:auto;resize:none;" ng-model="postCtrl.post.video_url"
@@ -79,6 +78,8 @@
           </div>
         </md-input-container>
       </form>
+      <md-switch class="md-primary" ng-model="postCtrl.multipleChoice" required> Multipla Escolha
+      </md-switch>
     </div>
     <div class="image-view" ng-if="postCtrl.showImage()">
       <button ng-click="postCtrl.hideImage()">&times;</button>

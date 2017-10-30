@@ -1,55 +1,57 @@
 <md-card flex="100">
-  <md-card-header>
-    <md-card-avatar>
-      <img ng-src="{{ postCtrl.getInstPhotoUrl()}}" class="md-user-avatar"/>
-    </md-card-avatar>
-    <md-card-header-text>
-      <span class="md-title">{{ postCtrl.getInstName() }}</span>
-      <span class="md-subhead">por {{ postCtrl.user.name }}</span>
-    </md-card-header-text>
-    <md-button class="md-icon-button" ng-click="postCtrl.cancelDialog()" ng-if="postCtrl.post.title">
-      <md-icon>close</md-icon>
-    </md-button>
-  </md-card-header>
-  <md-card-content layout="column">
-    <form name="saveForm">
-      <md-input-container class="md-block">
-        <label>Título</label>
-        <input ng-model="postCtrl.post.title" md-maxlength="100" maxlength="100" placeholder="Escreva aqui uma nova publicação">
-      </md-input-container>
-      <md-input-container ng-show="postCtrl.post.title" class="md-block">
-        <label>Mensagem</label>
-        <textarea name="message" style="max-height: 400px;overflow-y:auto;resize:none;" ng-model="postCtrl.post.text" 
-          md-select-on-focus required> 
-        </textarea>
-        <div ng-messages='saveForm.message.$error'>
-            <div ng-message="required">O post deve conter uma mensagem!</div>
-        </div>
-      </md-input-container>
-      <md-input-container ng-show="postCtrl.showVideoUrlField()" class="md-block">
-        <label>Link do Video</label>
-        <textarea style="max-height: 400px;overflow-y:auto;resize:none;" ng-model="postCtrl.post.video_url"
-          md-select-on-focus ng-pattern=postCtrl.videoRegex name="video">
-        </textarea>
-        <div ng-messages="saveForm.video.$error">
-          <div ng-message="pattern">Link do Youtube inválido.</div>
-        </div>
-      </md-input-container>
-    </form>
-    <div class="image-view" ng-if="postCtrl.showImage()">
-      <button ng-click="postCtrl.hideImage()">&times;</button>
-      <img style="border-radius: 5%;" ng-src="{{ postCtrl.photoUrl }}"/>
+  <div layout="row">
+    <div layout="column">
+      <span></span>
+      <md-list>
+        <md-list-item>
+          <img ng-src="{{ postCtrl.getInstPhotoUrl()}}" class="md-avatar"/>
+        </md-list-item>
+      </md-list>
+
+<!--       <md-card-header>
+        <md-card-avatar>
+          <img ng-src="{{ postCtrl.getInstPhotoUrl()}}" class="md-user-avatar"/>
+        </md-card-avatar>
+      </md-card-header> -->
     </div>
-    <div ng-if="postCtrl.showFiles()" ng-repeat="pdf in postCtrl.pdfFiles">
-      <md-button class="md-icon-button" ng-click="postCtrl.hideFile($index)" title="remover">&times;</md-button>
-      <md-icon>description</md-icon>
-      <span>{{pdf.name}}</span>
-    </div>
-    <md-progress-linear ng-show="postCtrl.loading" md-mode="indeterminate" style="width: 14%; margin-top: 5px"></md-progress-linear>
-  </md-card-content>
+    <md-card-content>
+      <form name="saveForm" layout="column">
+        <md-input-container md-no-float>
+          <input ng-model="postCtrl.post.title" maxlength="100" placeholder="Escreva aqui uma nova publicação"
+          style="border: 0;resize:none;">
+        </md-input-container>
+        <md-input-container ng-show="postCtrl.post.title" md-no-float>
+          <textarea name="message" style="border: 0; max-height: 400px;resize:none;" ng-model="postCtrl.post.text" placeholder="Texto"> 
+          </textarea>
+          <div ng-messages='saveForm.message.$error'>
+              <div ng-message="required">O post deve conter uma mensagem!</div>
+          </div>
+        </md-input-container>
+        <!-- <md-input-container ng-show="postCtrl.showVideoUrlField()" class="md-block">
+          <label>Link do Video</label>
+          <textarea style="max-height: 400px;overflow-y:auto;resize:none;" ng-model="postCtrl.post.video_url"
+            md-select-on-focus ng-pattern=postCtrl.videoRegex name="video">
+          </textarea>
+          <div ng-messages="saveForm.video.$error">
+            <div ng-message="pattern">Link do Youtube inválido.</div>
+          </div>
+        </md-input-container> -->
+      </form>
+      <div class="image-view" ng-if="postCtrl.showImage()">
+        <button ng-click="postCtrl.hideImage()">&times;</button>
+        <img style="border-radius: 5%;" ng-src="{{ postCtrl.photoUrl }}"/>
+      </div>
+      <div ng-if="postCtrl.showFiles()" ng-repeat="pdf in postCtrl.pdfFiles">
+        <md-button class="md-icon-button" ng-click="postCtrl.hideFile($index)" title="remover">&times;</md-button>
+        <md-icon>description</md-icon>
+        <span>{{pdf.name}}</span>
+      </div>
+      <md-progress-linear ng-show="postCtrl.loading" md-mode="indeterminate" style="width: 14%; margin-top: 5px"></md-progress-linear>
+    </md-card-content>
+  </div>
   <md-dialog-actions layout="row" ng-show="postCtrl.post.title">
     <span flex></span>
-    <md-button class="md-icon-button" ng-show="postCtrl.showButton()" ng-click="null" ng-file-model="postCtrl.files" 
+<!--     <md-button class="md-icon-button" ng-show="postCtrl.showButton()" ng-click="null" ng-file-model="postCtrl.files" 
       ngf-pattern="'application/pdf'" title="Adicionar pdf"
       ngf-accept="'application/pdf'" ngf-max-size="5MB"
       ngf-max-files="10"
@@ -65,10 +67,13 @@
     <md-button class="md-icon-button" ng-show="postCtrl.showButton()" ng-click="postCtrl.setAddVideo()" 
       title="{{postCtrl.addVideo || postCtrl.post.video_url? 'Remover link':'Adicionar link'}}">
       <md-icon>movie</md-icon>
+    </md-button> -->
+    <md-button style="color: #009688" ng-click="postCtrl.cancelDialog()" ng-if="postCtrl.post.title">
+      Cancelar
     </md-button>
-    <md-button title="Enviar" class="md-icon-button" ng-click="postCtrl.save(isEditing, originalPost, posts)" 
+    <md-button class="md-raised" md-colors="{background: 'teal-500'}" title="Enviar" ng-click="postCtrl.save(isEditing, originalPost, posts)" 
       ng-disabled="!postCtrl.isPostValid() || saveForm.$invalid">
-      <md-icon>send</md-icon>
+      Postar
     </md-button>
   </md-dialog-actions>
 </md-card>

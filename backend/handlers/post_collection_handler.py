@@ -11,6 +11,7 @@ from handlers.base_handler import BaseHandler
 from models.post import Post
 from models.factory_post import PostFactory
 from service_messages import send_message_notification
+from service_entities import send_post_notification
 
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
@@ -73,16 +74,16 @@ class PostCollectionHandler(BaseHandler):
                         entity_type,
                         post.key.urlsafe())
 
-            if(post.shared_post and user.key != post.shared_post.get().author):
+            if(post.shared_post):
                 shared_post = ndb.Key(urlsafe=data['shared_post']).get()
 
                 entity_type = 'SHARED_POST'
-                message = {'type': entity_type,
-                           'from': user.name.encode('utf8')}
-                send_message_notification(shared_post.author.urlsafe(),
-                                          json.dumps(message),
-                                          entity_type,
-                                          post.key.urlsafe())
+
+                send_post_notification(
+                    shared_post,
+                    user,
+                    entity_type
+                )
 
             self.response.write(json.dumps(Post.make(post, self.request.host)))
         except Exception as error:

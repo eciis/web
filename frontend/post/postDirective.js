@@ -77,8 +77,6 @@
                 postCtrl.removeOption(option);
               }
             });
-
-            console.log(postCtrl.options);
         }
 
         function defineTypeSurvey(){

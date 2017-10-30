@@ -8,11 +8,10 @@
     <div layout="column" layout-padding  flex="80" md-colors="{background: 'default-teal'}" layout-align="center">
       {{pdf.name}}
     </div>  
-    <div layout="column" ng-if="pdfCtrl.isEditing" layout-padding  flex="10" md-colors="{background: 'default-teal'}" layout-align="end start">
-      <md-icon ng-click="pdfCtrl.hideFile($index)" style="color:white;font:bold;" title="Remover" layout-padding>
+    <div layout="column" layout-padding  flex="10" md-colors="{background: 'default-teal'}" layout-align="end start">
+      <md-icon ng-if="pdfCtrl.isEditing" ng-click="pdfCtrl.hideFile($index)" style="color:white;font:bold;" title="Remover" layout-padding>
         close
       </md-icon> 
     </div>
   </div>  
 </div>
-     

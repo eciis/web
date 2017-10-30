@@ -35,7 +35,6 @@
             pdfCtrl.pdfFiles.splice(index, 1);
         };
 
-
         function setPdfURL(url, pdf) {
             pdf.url = url;
         }
@@ -48,16 +47,16 @@
     });
 
     app.directive("pdfView", function() {
-            return {
-                restrict: 'E',
-                templateUrl: "app/post/pdf_view.html",
-                controllerAs: "pdfCtrl",
-                controller: "PdfController",
-                scope: {},
-                bindToController: {
-                    pdfFiles: '=',
-                    isEditing: '='
-                }
-            };
-        });
+        return {
+            restrict: 'E',
+            templateUrl: "app/post/pdf_view.html",
+            controllerAs: "pdfCtrl",
+            controller: "PdfController",
+            scope: {},
+            bindToController: {
+                pdfFiles: '=',
+                isEditing: '='
+            }
+        };
+    });
 })();

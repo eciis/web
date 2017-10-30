@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller('PostDetailsController', function(PostService, AuthService, CommentService, $mdToast, $state,
-        $mdDialog, NotificationService, MessageService, ngClipboard, ProfileService, PdfService, $sce) {
+        $mdDialog, NotificationService, MessageService, ngClipboard, ProfileService) {
 
         var postDetailsCtrl = this;
 
@@ -386,34 +386,7 @@
                 }
             }
             return text;
-        }
-
-        postDetailsCtrl.pdfDialog = function(ev, pdf) {
-            var readablePdf = {};
-            PdfService.getReadableURL(pdf.url, setPdfURL, readablePdf).then(
-                function success() {
-                    $mdDialog.show({
-                        templateUrl: 'app/post/pdfDialog.html',
-                        targetEvent: ev,
-                        clickOutsideToClose:true,
-                        locals: {
-                            pdfUrl: readablePdf.url
-                        },
-                        controller: DialogController,
-                        controllerAs: 'ctrl'
-                    });
-                });
-        };
-
-        function setPdfURL(url, pdf) {
-            pdf.url = url;
-        }
-
-        function DialogController($mdDialog, pdfUrl) {
-            var ctrl = this;
-            var trustedUrl = $sce.trustAsResourceUrl(pdfUrl);
-            ctrl.pdfUrl = trustedUrl;
-        }
+        }    
     });
 
     app.directive("postDetails", function() {

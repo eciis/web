@@ -1,0 +1,27 @@
+<md-dialog flex flex-gt-md="40" layout="row">
+    <md-card flex="100">
+      <md-card-header>
+        <md-card-header-text>
+          <span class="md-title">Você deseja remover esse membro?</span>
+        </md-card-header-text>
+      </md-card-header>
+      <md-card-content layout="column">
+        <form name="saveForm">
+          <md-input-container class="md-block">
+            <label>Insira o motivo da remoção (opcional)</label>
+            <textarea name="message" style="max-height: 400px;overflow-y:auto;resize:none;" ng-model="removeMemberCtrl.justification">
+            </textarea>
+          </md-input-container>
+        </form>
+      </md-card-content>
+      <md-dialog-actions layout="row">
+        <span flex></span>
+        <md-button ng-click="removeMemberCtrl.cancel()">
+            Cancelar
+        </md-button>
+        <md-button class="md-raised" md-colors="::{background: 'dialogTheme-primary-900'}" ng-click="removeMemberCtrl.removeMember()">
+            Confirmar
+        </md-button>
+      </md-dialog-actions>
+    </md-card>
+</md-dialog>

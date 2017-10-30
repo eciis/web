@@ -9,6 +9,7 @@ from utils import login_required
 from utils import json_response
 from utils import Utils
 from service_messages import send_message_notification
+from service_entities import send_post_notification
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from custom_exceptions.entityException import EntityException
 
@@ -49,16 +50,13 @@ class PostCommentHandler(BaseHandler):
                       "This post has been deleted", EntityException)
         comment = Comment.create(data, user)
         post.add_comment(comment)
+        entity_type = 'COMMENT'
 
-        if (post.author != user.key):
-            entity_type = 'COMMENT'
-            message = {'type': 'COMMENT', 'from': user.name.encode('utf8')}
-            send_message_notification(
-                post.author.urlsafe(),
-                json.dumps(message),
-                entity_type,
-                post.key.urlsafe()
-            )
+        send_post_notification(
+            post,
+            user,
+            entity_type
+        )
 
         self.response.write(json.dumps(Utils.toJson(comment)))
 

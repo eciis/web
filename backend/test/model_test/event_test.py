@@ -29,9 +29,9 @@ class RequestUserTest(TestBase):
                 'photo_url': 'photo_url',
                 'local': 'splab',
                 'start_time': str(datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S")),
-                'end_time': str(datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"))}
-        new_event = Event.create(data, self.user.key, self.user.name, self.user.photo_url,
-                                 self.certbio.key, self.certbio.name, self.certbio.photo_url)
+                'end_time': str(datetime.datetime(2018, 10, 20).strftime("%Y-%m-%dT%H:%M:%S"))}
+        new_event = Event.create(data, self.user, self.certbio)
+
         self.assertEqual(new_event.title, data.get('title'))
         self.assertEqual(new_event.text, data.get('text'))
         self.assertEqual(new_event.photo_url, data.get('photo_url'))
@@ -59,11 +59,19 @@ class RequestUserTest(TestBase):
         # Checking if the event is valid
         self.event.isValid()
         # Making the start_time be after the end_time
-        self.event.start_time = datetime.datetime(2017, 10, 21)
+        self.event.start_time = datetime.datetime(2018, 10, 21)
         self.event.put()
         # Checking if the event is not valid
-        with self.assertRaises(Exception):
+        with self.assertRaises(Exception) as raises_context:
             self.event.isValid()
+
+        message_exception = str(raises_context.exception)
+
+        self.assertEqual(
+            message_exception,
+            "The end time can not be before the start time",
+            "Expected exception message must be equal to " +
+            "The end time can not be before the start time")
 
 
 def initModels(cls):
@@ -97,6 +105,6 @@ def initModels(cls):
     cls.event.institution_name = cls.certbio.name
     cls.event.institution_image = cls.certbio.photo_url
     cls.event.start_time = datetime.datetime(2017, 10, 20)
-    cls.event.end_time = datetime.datetime(2017, 10, 20)
+    cls.event.end_time = datetime.datetime(2018, 10, 20)
     cls.event.local = "Event location"
     cls.event.put()

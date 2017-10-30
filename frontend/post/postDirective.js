@@ -281,13 +281,6 @@
             return hasFiles;
         };
 
-        postCtrl.hideFile = function(index) {
-            if (_.includes(postCtrl.post.pdf_files, postCtrl.pdfFiles[index])) {
-                postCtrl.deletedFiles.push(postCtrl.pdfFiles[index]);
-            }
-            postCtrl.pdfFiles.splice(index, 1);
-        };
-
         postCtrl.hideImage = function() {
            postCtrl.photoUrl = "";
            postCtrl.photoBase64Data = null;

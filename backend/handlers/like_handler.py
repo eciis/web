@@ -8,6 +8,7 @@ from utils import json_response
 from handlers.base_handler import BaseHandler
 from models.post import Like
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
+from service_entities import send_post_notification
 from service_messages import send_message_notification
 from utils import Utils
 
@@ -81,9 +82,11 @@ class LikeHandler(BaseHandler):
             user.like_post(post.key)
             post.like(user.key)
 
-            isAuthorPost = post.author.urlsafe() != user.key.urlsafe()
-            if isAuthorPost:
-                send_like_notification(user, post.author.urlsafe(), entity_type, post.key.urlsafe())
+            send_post_notification(
+                post,
+                user,
+                entity_type
+            )
 
     @json_response
     @login_required

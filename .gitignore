@@ -524,3 +524,6 @@ paket-files/
 # End of https://www.gitignore.io/api/vim,git,bower,grunt,python,intellij,appengine,sublimetext,visualstudio
 
 frontend/config.js
+
+# remove index.yaml
+index.yaml

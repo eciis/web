@@ -308,7 +308,9 @@ a:active {
 }
 
 .youtube-player img:hover {
+    
     -webkit-filter: brightness(75%);
+    filter: brightness(75%);
 }
 
 .youtube-player .play {

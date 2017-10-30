@@ -26,7 +26,7 @@ def pick_color():
         'grey',
         'blue-grey'
     ]
-    return colors[random.randint(0,17)]
+    return colors[random.randint(0,16)]
 
 
 class InstitutionProfile(ndb.Model):

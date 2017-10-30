@@ -71,49 +71,51 @@
 
 <div layout="column" layout-align="start start">
 
-<md-menu-content width="6">
-  <md-menu-item ng-click="ctrl.toggle()">
-    <md-button aria-label="Inicial" class="md-button" ng-click="ctrl.scroll('header')" title="Página Inicial"
-        md-colors="{color: 'teal-600'}">
-      INICIAL
-    </md-button>
-  </md-menu-item>
-
-  <md-menu-item ng-click="ctrl.toggle()">
-    <md-button aria-label="O que é o CIS" class="md-button" ng-click="ctrl.scroll('cis')" title="O que é o CIS"
-        md-colors="{color: 'teal-600'}">
-      O QUE É O CIS
-    </md-button>
-  </md-menu-item>
-
-  <md-menu-item ng-click="ctrl.toggle()">
-    <md-button aria-label="Conheça o e-CIS" class="md-button" ng-click="ctrl.scroll('conheca')" title="Conheça o e-CIS"
-        md-colors="{color: 'teal-600'}">
-      CONHEÇA O E-CIS
-    </md-button>
-  </md-menu-item>
-
-  <md-menu-item ng-click="ctrl.toggle()">
-    <md-button aria-label="Funcionalidades" class="md-button" ng-click="ctrl.scroll('funcionalidades')" title="Funcionalidades"
-        md-colors="{color: 'teal-600'}">
-      FUNCIONALIDADES
-    </md-button>
-  </md-menu-item>
-
-  <!-- <md-menu-item ng-click="ctrl.toggle()">
-    <md-button aria-label="Contato" class="md-button" ui-sref="landing.contato" title="Contato"
-        md-colors="{color: 'teal-600'}">
-      CONTATO
-    </md-button>
-  </md-menu-item> -->
-
-  <md-menu-item ng-click="ctrl.toggle()">
-    <md-button aria-label="Contato" class="md-button" ng-click="ctrl.scroll('interesse')" title="Contato"
-        md-colors="{background: 'light-green-600', color: 'grey-100'}">
-      TENHO INTERESSE
-    </md-button>
-  </md-menu-item>
-</md-menu-content>
+<md-menu>
+  <md-menu-content width="6">
+    <md-menu-item ng-click="ctrl.toggle()">
+      <md-button aria-label="Inicial" class="md-button" ng-click="ctrl.scroll('header')" title="Página Inicial"
+          md-colors="{color: 'teal-600'}">
+        INICIAL
+      </md-button>
+    </md-menu-item>
+  
+    <md-menu-item ng-click="ctrl.toggle()">
+      <md-button aria-label="O que é o CIS" class="md-button" ng-click="ctrl.scroll('cis')" title="O que é o CIS"
+          md-colors="{color: 'teal-600'}">
+        O QUE É O CIS
+      </md-button>
+    </md-menu-item>
+  
+    <md-menu-item ng-click="ctrl.toggle()">
+      <md-button aria-label="Conheça o e-CIS" class="md-button" ng-click="ctrl.scroll('conheca')" title="Conheça o e-CIS"
+          md-colors="{color: 'teal-600'}">
+        CONHEÇA O E-CIS
+      </md-button>
+    </md-menu-item>
+  
+    <md-menu-item ng-click="ctrl.toggle()">
+      <md-button aria-label="Funcionalidades" class="md-button" ng-click="ctrl.scroll('funcionalidades')" title="Funcionalidades"
+          md-colors="{color: 'teal-600'}">
+        FUNCIONALIDADES
+      </md-button>
+    </md-menu-item>
+  
+    <!-- <md-menu-item ng-click="ctrl.toggle()">
+      <md-button aria-label="Contato" class="md-button" ui-sref="landing.contato" title="Contato"
+          md-colors="{color: 'teal-600'}">
+        CONTATO
+      </md-button>
+    </md-menu-item> -->
+  
+    <md-menu-item ng-click="ctrl.toggle()">
+      <md-button aria-label="Contato" class="md-button" ng-click="ctrl.scroll('interesse')" title="Contato"
+          md-colors="{background: 'light-green-600', color: 'grey-100'}">
+        TENHO INTERESSE
+      </md-button>
+    </md-menu-item>
+  </md-menu-content>
+</md-menu>
 </div>
 </md-sidenav>
 

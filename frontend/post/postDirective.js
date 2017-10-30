@@ -24,10 +24,8 @@
                             'number_votes': 0,
                             'voters': []
                             };
-
         var observer;
         
-
         postCtrl.addImage = function(image) {
             var newSize = 1024;
 

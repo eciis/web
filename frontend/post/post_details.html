@@ -15,9 +15,11 @@
       </div>
       <span layout="row" class="md-subhead">
         por {{ postDetailsCtrl.post.author }} {{ postDetailsCtrl.post.publication_date | amUtc | amLocal | amCalendar:referenceTime:formats }}
-        <div class="md-small">
-          <md-icon style="font-size:17px; min-height: 1px; color: #FFFFFF;" ng-click="postDetailsCtrl.editPost()">edit</md-icon>
-        </div>
+        <md-button class="md-icon-button" style="margin-top: -9px; margin-right: 10px;" ng-click="postDetailsCtrl.editPost()">
+          <div class="small-edit-button">
+            <md-icon style="font-size:16px; color: #FFFFFF;">edit</md-icon>
+          </div>
+        </md-button>
       </span>
     </md-card-header-text>
     <md-subheader ng-if="postDetailsCtrl.isInstInactive()">Instituição inativa</md-subheader>
@@ -183,10 +185,10 @@
         <p ng-bind-html="postDetailsCtrl.postToURL(postDetailsCtrl.post).text" class="break">
           {{postDetailsCtrl.postToURL(postDetailsCtrl.post).text}}
         </p>
-        <div layout="row" layout-align="end-center" style="margin-top: -15px;">
+        <div layout="row" layout-align="end-center">
             <a href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post)"
               ng-if="postDetailsCtrl.isLongPostTimeline(postDetailsCtrl.post.text)">
-              <md-icon style="margin-right: -10px;" md-colors="{color: 'light-green'}">more_horiz</md-icon>
+              <md-icon style="margin-bottom: -15px; margin-right: -12px;" md-colors="{color: 'light-green'}">more_horiz</md-icon>
             </a>
         </div>
         <div ng-repeat="pdf in postDetailsCtrl.post.pdf_files" ng-if="postDetailsCtrl.post.pdf_files">

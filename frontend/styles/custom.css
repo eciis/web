@@ -360,11 +360,9 @@ a:active {
     color: #FFFFFF;
 }
 
-.md-small {
+.small-edit-button {
    background-color: #8BC34A;
-   padding-left: 2px;
-   margin-left: 3px;
-   width: 20px;
-   height: 18px;
-   border-radius: 100%;
+   width: 22px;
+   height: 17px;
+   border-radius: 50%;
 }

@@ -15,12 +15,7 @@ var USER = "USER";
 
 User.prototype.changeInstitution = function changeInstitution(institution) {
     this.current_institution = _.find(this.institutions, {'key': institution.key});
-    if (!institution.color) {
-        var profile = _.find(this.institution_profiles, {'key': institution.key});
-        this.current_institution.color = profile.color;
-    } else {
-        this.current_institution.color = institution.color;
-    }
+    changeProfileColor(this, institution);
     window.localStorage.userInfo = JSON.stringify(this);
 };
 
@@ -113,6 +108,13 @@ User.prototype.isInactive = function isInactive() {
     var notActive = this.state != 'active';
     return notActive;
 };
+
+function changeProfileColor(user, institution) {
+    var profile = _.find(user.institution_profiles, {
+        'institution_key': institution.key
+    });
+    user.current_institution.color = profile.color;
+}
 
 function updateFollowInstitution(follows, institution) {
     var index = _.findIndex(follows, ['key', institution.key]);

@@ -141,7 +141,7 @@ a:active {
 
 .lg-width-height {
     width: 48px;
-    height: 48px; 
+    height: 48px;
 }
 
 .clickable {
@@ -372,4 +372,11 @@ a:active {
 .green-button {
     background-color: #8BC34A;
     color: #FFFFFF;
+}
+
+.sm-fab-button {
+   background-color: #8BC34A;
+   width: 22px;
+   height: 17px;
+   border-radius: 50%;
 }

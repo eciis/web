@@ -40,10 +40,7 @@
       <button ng-click="postCtrl.hideImage()">&times;</button>
       <img style="border-radius: 5%;" ng-src="{{ postCtrl.photoUrl }}"/>
     </div>
-    <div ng-if="postCtrl.showFiles()" ng-repeat="pdf in postCtrl.pdfFiles">
-      <md-button class="md-icon-button" ng-click="postCtrl.hideFile($index)" title="remover">&times;</md-button>
-      <md-icon>description</md-icon>
-      <span>{{pdf.name}}</span>
+    <pdf-view pdf-files='postCtrl.pdfFiles' is-editing="true"></pdf-view>
     </div>
     <md-progress-linear ng-show="postCtrl.loading" md-mode="indeterminate" style="width: 14%; margin-top: 5px"></md-progress-linear>
   </md-card-content>

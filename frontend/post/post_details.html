@@ -152,11 +152,7 @@
           <span class="md-subhead" >continuar lendo</span>
         </a>
       </div>
-      <div ng-repeat="pdf in postDetailsCtrl.post.shared_post.pdf_files" ng-if="postDetailsCtrl.post.shared_post.pdf_files">
-        <md-button class="md-raised" ng-click="postDetailsCtrl.pdfDialog($event, pdf)">
-            <md-icon>description</md-icon> {{pdf.name}}
-        </md-button>
-      </div>
+      <pdf-view pdf-files='postDetailsCtrl.post.shared_post.pdf_files' is-editing="false"></pdf-view>
     </md-card-content>
   </md-card>
 
@@ -166,6 +162,7 @@
   <div class="youtube-player" ng-if="postDetailsCtrl.showVideo(postDetailsCtrl.post)">
     <iframe ng-src="{{postDetailsCtrl.getVideoUrl(postDetailsCtrl.post)}}"></iframe>
   </div>
+  <pdf-view pdf-files='postDetailsCtrl.post.pdf_files' is-editing="false"></pdf-view>
   <md-card-title ng-if="!postDetailsCtrl.isDeleted(postDetailsCtrl.post)">
     <md-card-title-text>
       <a href class="md-title hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post)">
@@ -193,11 +190,6 @@
               ng-if="postDetailsCtrl.isLongPostTimeline(postDetailsCtrl.post.text)">
               <span class="md-subhead" >continuar lendo</span>
             </a>
-        </div>
-        <div ng-repeat="pdf in postDetailsCtrl.post.pdf_files" ng-if="postDetailsCtrl.post.pdf_files">
-          <md-button class="md-raised" ng-click="postDetailsCtrl.pdfDialog($event, pdf)">
-              <md-icon>description</md-icon> {{pdf.name}}
-          </md-button>
         </div>
     </div>
   </md-card-content>

@@ -20,6 +20,10 @@
 
         var observer;
 
+        postCtrl.hasMedia = function hasMedia() {
+            return postCtrl.photoBase64Data || postCtrl.pdfFiles.length > 0 || postCtrl.addVideo;
+        };
+
         postCtrl.addImage = function(image) {
             var newSize = 1024;
 
@@ -34,7 +38,7 @@
         };
 
         postCtrl.addPdf = function addPdf(files) {
-            postCtrl.pdfFiles = postCtrl.pdfFiles.concat(files);
+            postCtrl.pdfFiles = files;
         };
 
         postCtrl.createEditedPost = function createEditedPost(post) {
@@ -212,6 +216,7 @@
         postCtrl.clearPost = function clearPost() {
             postCtrl.post = {};
             postCtrl.pdfFiles = [];
+            postCtrl.hideImage();
         };
 
         postCtrl.showVideo = function showVideo() {

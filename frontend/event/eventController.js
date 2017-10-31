@@ -289,12 +289,8 @@
                     dialogCtrl.events.push(response.data);
                     MessageService.showToast('Evento criado com sucesso, esperando aprovação!');
                 }, function error(response) {
-                    if (response.data.msg === "Error! The end time must be after the current time") {
-                        MessageService.showToast("A data final do evento deve ser posterior a inicial!");
-                        $state.go("app.events");
-                    } else {
-                        MessageService.showToast(response.data.msg);
-                    }
+                    MessageService.showToast(response.data.msg);
+                    $state.go("app.events");
                 });
             } else {
                 MessageService.showToast('Evento inválido!');

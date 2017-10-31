@@ -32,10 +32,6 @@ class SurveyPostTest(TestBase):
             "It should be 'Survey with Binary choice'"
         )
         self.assertEquals(
-            survey_binary.text, 'Description of survey',
-            "It should be 'Description of survey'"
-        )
-        self.assertEquals(
             survey_binary.type_survey, 'binary',
             "It should be 'binary'"
         )
@@ -230,7 +226,6 @@ def initModels(cls):
 
     cls.data_binary = {
         'title': 'Survey with Binary choice',
-        'text': 'Description of survey',
         'type_survey': 'binary',
         'deadline': '2020-07-25T12:30:15',
         'options': cls.options
@@ -238,7 +233,6 @@ def initModels(cls):
 
     cls.data_multiple = {
         'title': 'Survey with Multiple choice',
-        'text': 'Description of survey',
         'type_survey': 'multiple_choice',
         'deadline': '2020-07-25T12:30:15',
         'options': cls.options

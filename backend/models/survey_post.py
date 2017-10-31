@@ -18,7 +18,7 @@ class SurveyPost(Post):
         'binary']))
 
     # Date and time limit that survey will receive answers
-    deadline = ndb.DateTimeProperty(required=True)
+    deadline = ndb.DateTimeProperty()
 
     @staticmethod
     def create(data, author_key, institution_key):
@@ -26,13 +26,12 @@ class SurveyPost(Post):
         survey_post = SurveyPost()
         survey_post.type_survey = data.get("type_survey")
         survey_post.options = Utils.toJson(data.get("options"))
-        survey_post.deadline = datetime.datetime.strptime(
-            data.get('deadline'), "%Y-%m-%dT%H:%M:%S")
         survey_post.number_votes = 0
+        survey_post.deadline = datetime.datetime.strptime(
+            data.get('deadline'), "%Y-%m-%dT%H:%M:%S") if data.get('deadline') else None
 
         survey_post = super(SurveyPost, survey_post).create(
             data, author_key, institution_key)
-
         return survey_post
 
     def add_vote(self, author_key, option_id):

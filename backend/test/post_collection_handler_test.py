@@ -70,7 +70,7 @@ class PostCollectionHandlerTest(TestBaseHandler):
         exception_message = self.get_message_exception(str(raises_context.exception))
         self.assertEqual(
             exception_message,
-            "title",
+            "Title can not be empty",
             "Excpected exception message must be equal to title"
         )
 
@@ -81,10 +81,9 @@ class PostCollectionHandlerTest(TestBaseHandler):
                                                   'testing another post'})
 
         exception_message = self.get_message_exception(str(raises_context.exception))
-        print exception_message
         self.assertEqual(
             exception_message,
-            "text",
+            "Text can not be empty",
             "Excpected exception message must be equal to text"
         )
 

@@ -1,0 +1,34 @@
+<div>
+  <div style="padding-left: 40px; padding-right: 40px;">
+      <form>
+        <md-input-container md-no-float class="md-block" style="margin: 0px;">
+          <input type="" name="" class="title_post" ng-model="surveyCtrl.post.title" placeholder="Pergunte algo" 
+          style="font-weight: bold; color: #00695C ; margin: 0px; border: 0;resize:none; max-height: 300px;"/>
+        </md-input-container>
+        <p class="md-subheader"> Alternativas</p>
+        <md-list ng-repeat="option in surveyCtrl.options">
+          <md-input-container md-no-float class="md-block option">
+            <input class=" md-input" ng-model="option.text" ng-change="surveyCtrl.addOption()" placeholder="+ Adicionar uma opção..." />
+          </md-input-container>
+        </md-list>
+        <md-input-container class="md-block" style="margin-top: 60px;">
+          <label>Data limite</label>
+          <input mdc-datetime-picker="" short-time="false" date="true" time="true" type="text" 
+            format="YYYY-MM-DD HH:mm" lang="pt-BR" placeholder="Receber respostas até..." 
+            ng-model="surveyCtrl.post.deadline" class=" md-input" today-text="Hoje" min-date="null" 
+            readonly="readonly" cancel-text="Cancelar">
+        </md-input-container>
+      </form>      
+      <md-actions layout="row" layout-align="space-between-center">
+          <md-switch class="md-primary" ng-model="surveyCtrl.multipleChoice" required> MULTIPLAESCOLHA
+          </md-switch>
+          <div>
+            <md-button title="Cancelar" ng-click="surveyCtrl.resetSurvey()" md-colors="{color: 'teal-500'}">CANCELAR
+            </md-button>
+            <md-button title="Enviar" ng-click="surveyCtrl.saveSurvey()" md-colors="{background: 'teal-500'}"
+              ng-disabled="!surveyCtrl.isValid()" >POSTAR
+            </md-button>
+          </div>
+      </md-actions>
+  </div>
+</div>

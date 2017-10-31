@@ -85,7 +85,7 @@ class PostCollectionHandler(BaseHandler):
                     entity_type
                 )
 
-            self.response.write(json.dumps(Post.make(post, self.request.host)))
+            self.response.write(json.dumps(post.make(self.request.host)))
         except Exception as error:
             self.response.set_status(Utils.BAD_REQUEST)
             self.response.write(Utils.getJSONError(

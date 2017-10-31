@@ -373,3 +373,8 @@ a:active {
     background-color: #8BC34A;
     color: #FFFFFF;
 }
+
+.option{
+    height: 25px;
+    margin: 0px;
+}

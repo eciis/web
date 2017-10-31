@@ -62,6 +62,9 @@
     </md-menu>
   </md-card-header>
 
+  <!-- SURVEY -->
+  <survey-directive ng-if="postDetailsCtrl.isSurvey()" post="postDetailsCtrl.post" posts="posts" user="postDetailsCtrl.user"></survey-directive>
+
   <!-- BODY SHARED EVENT -->
   <div style='font-style:italic; text-align: center' ng-if="postDetailsCtrl.isDeletedEvent(postDetailsCtrl.post)">
     <p>Este evento foi removido por</p>

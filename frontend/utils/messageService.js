@@ -10,7 +10,9 @@
             "auth/email-already-in-use": "Email informado já está cadastrado.",
             "auth/wrong-password": "Senha incorreta ou usuário não possui senha.",
             "auth/user-not-found": "Usuário não existe.",
-            "Error! The institution has been deleted": "A instituição está inativa."
+            "Error! The institution has been deleted": "A instituição está inativa.",
+            "Error! The user must be interested at his post": "O autor deve ser interessado em seu post.",
+            "Error! The end time must be after the current time": "A data final do evento deve ser posterior a inicial!"
         };
 
         service.showToast = function showToast(message) {

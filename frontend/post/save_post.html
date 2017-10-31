@@ -12,38 +12,80 @@
     </md-button>
   </md-card-header>
   <md-card-content layout="column">
-    <form name="saveForm">
-      <md-input-container class="md-block">
-        <label>Título</label>
-        <input ng-model="postCtrl.post.title" md-maxlength="100" maxlength="100" placeholder="Escreva aqui uma nova publicação">
-      </md-input-container>
-      <md-input-container ng-show="postCtrl.post.title" class="md-block">
-        <label>Mensagem</label>
-        <textarea name="message" style="max-height: 400px;overflow-y:auto;resize:none;" ng-model="postCtrl.post.text" 
-          md-select-on-focus required> 
-        </textarea>
-        <div ng-messages='saveForm.message.$error'>
-            <div ng-message="required">O post deve conter uma mensagem!</div>
-        </div>
-      </md-input-container>
-      <md-input-container ng-show="postCtrl.showVideoUrlField()" class="md-block">
-        <label>Link do Video</label>
-        <textarea style="max-height: 400px;overflow-y:auto;resize:none;" ng-model="postCtrl.post.video_url"
-          md-select-on-focus ng-pattern=postCtrl.videoRegex name="video">
-        </textarea>
-        <div ng-messages="saveForm.video.$error">
-          <div ng-message="pattern">Link do Youtube inválido.</div>
-        </div>
-      </md-input-container>
-    </form>
+    <div>
+      <md-button ng-click="postCtrl.type_post = 'Common'">
+        <md-icon>edit</md-icon> Iniciar um post 
+      </md-button>|
+      <md-button ng-click="postCtrl.choiceSurvey()">
+        <md-icon>poll</md-icon>Enquete
+      </md-button>
+    </div>
+    <div ng-if="postCtrl.type_post === 'Common'">
+      <form name="saveForm">
+        <md-input-container class="md-block">
+          <label>Título</label>
+          <input ng-model="postCtrl.post.title" md-maxlength="100" maxlength="100" placeholder="Escreva aqui uma nova publicação">
+        </md-input-container>
+        <md-input-container ng-show="postCtrl.post.title" class="md-block">
+          <label>Mensagem</label>
+          <textarea name="message" style="max-height: 400px;overflow-y:auto;resize:none;" ng-model="postCtrl.post.text" 
+            md-select-on-focus required> 
+          </textarea>
+          <div ng-messages='saveForm.message.$error'>
+              <div ng-message="required">O post deve conter uma mensagem!</div>
+          </div>
+        </md-input-container>
+        <md-input-container ng-show="postCtrl.showVideoUrlField()" class="md-block">
+          <label>Link do Video</label>
+          <textarea style="max-height: 400px;overflow-y:auto;resize:none;" ng-model="postCtrl.post.video_url"
+            md-select-on-focus ng-pattern=postCtrl.videoRegex name="video">
+          </textarea>
+          <div ng-messages="saveForm.video.$error">
+            <div ng-message="pattern">Link do Youtube inválido.</div>
+          </div>
+        </md-input-container>
+      </form>
+    </div>
+    <div ng-if="postCtrl.type_post === 'Survey'">
+      <form>
+        <md-input-container class="md-block">
+          <label>Pergunte algo</label>
+          <textarea ng-model="postCtrl.post.title" placeholder="Pergunte algo aqui" style="max-height: 300px"></textarea>
+        </md-input-container>
+        Alternativas
+        <md-list ng-repeat="option in postCtrl.options">
+          <md-list-item>
+          <md-input-container>
+            <label>+ Adicionar uma opção...</label>
+            <input ng-model="option.text" ng-change="postCtrl.addOption()"/>
+          </md-input-container>
+          </md-list-item>
+        </md-list>
+        <md-input-container class="md-input-has-placeholder">
+          <label>Data limite</label>
+          <input mdc-datetime-picker="" ng-change="controller.changeDate('startTime')" short-time="false" 
+            date="true" time="true" type="text" format="YYYY-MM-DD HH:mm" lang="pt-BR" placeholder="Receber respostas até..." 
+            ng-model="controller.post.deadline" class=" md-input" today-text="Hoje" min-date="null" 
+            readonly="readonly" cancel-text="Cancelar">
+        </md-input-container>
+        <md-input-container ng-show="postCtrl.showVideoUrlField()" class="md-block">
+          <label>Link do Video</label>
+          <textarea style="max-height: 400px;overflow-y:auto;resize:none;" ng-model="postCtrl.post.video_url"
+            md-select-on-focus ng-pattern=postCtrl.videoRegex name="video">
+          </textarea>
+          <div ng-messages="saveForm.video.$error">
+            <div ng-message="pattern">Link do Youtube inválido.</div>
+          </div>
+        </md-input-container>
+      </form>
+      <md-switch class="md-primary" ng-model="postCtrl.multipleChoice" required> Multipla Escolha
+      </md-switch>
+    </div>
     <div class="image-view" ng-if="postCtrl.showImage()">
       <button ng-click="postCtrl.hideImage()">&times;</button>
       <img style="border-radius: 5%;" ng-src="{{ postCtrl.photoUrl }}"/>
     </div>
-    <div ng-if="postCtrl.showFiles()" ng-repeat="pdf in postCtrl.pdfFiles">
-      <md-button class="md-icon-button" ng-click="postCtrl.hideFile($index)" title="remover">&times;</md-button>
-      <md-icon>description</md-icon>
-      <span>{{pdf.name}}</span>
+    <pdf-view pdf-files='postCtrl.pdfFiles' is-editing="true"></pdf-view>
     </div>
     <md-progress-linear ng-show="postCtrl.loading" md-mode="indeterminate" style="width: 14%; margin-top: 5px"></md-progress-linear>
   </md-card-content>
@@ -67,7 +109,7 @@
       <md-icon>movie</md-icon>
     </md-button>
     <md-button title="Enviar" class="md-icon-button" ng-click="postCtrl.save(isEditing, originalPost, posts)" 
-      ng-disabled="!postCtrl.isPostValid() || saveForm.$invalid">
+      ng-disabled="!postCtrl.isValid(saveForm.$invalid)">
       <md-icon>send</md-icon>
     </md-button>
   </md-dialog-actions>

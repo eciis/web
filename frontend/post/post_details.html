@@ -13,20 +13,70 @@
           {{ postDetailsCtrl.post.institution_name }}
         </a>
       </div>
-      <span class="md-subhead">
+      <span layout="row" class="md-subhead">
         por {{ postDetailsCtrl.post.author }} {{ postDetailsCtrl.post.publication_date | amUtc | amLocal | amCalendar:referenceTime:formats }}
+        <md-button class="md-icon-button" style="margin-top: -9px; margin-right: 10px;" ng-click="postDetailsCtrl.editPost()">
+          <div class="sm-fab-button">
+            <md-icon style="font-size:16px; color: #FFFFFF;">edit</md-icon>
+          </div>
+        </md-button>
       </span>
     </md-card-header-text>
     <md-subheader ng-if="postDetailsCtrl.isInstInactive()">Instituição inativa</md-subheader>
+    <md-menu md-offset="-200 45">
+      <md-button class="md-icon-button" style="margin-right: -20px; margin-top: -15px" ng-click="$mdMenu.open(ev)">
+        <md-icon>more_vert</md-icon>
+      </md-button>
+      <md-menu-content width="4">
+        <md-menu-item>
+          <md-button ng-click="postDetailsCtrl.generateLink()" title="Copiar link">
+            <md-icon>link</md-icon>
+            Obter link
+          </md-button>
+        </md-menu-item>
+        <md-menu-item ng-if="!postDetailsCtrl.isInstInactive()">
+          <md-button arial-label="Atualizar" title="Atualizar comentários"
+            ng-click="postDetailsCtrl.loadComments()">
+            <md-icon>refresh</md-icon>
+            Atualizar post
+          </md-button>
+        </md-menu-item>
+        <md-menu-item ng-if="!postDetailsCtrl.isDeleted(postDetailsCtrl.post) && !postDetailsCtrl.isInstInactive()">
+          <md-button aria-label="compartilhar" ng-click="postDetailsCtrl.share(postDetailsCtrl.post)"
+            title="Compartilhar o post">
+            <md-icon>share</md-icon>
+            Compartilhar
+          </md-button>
+        </md-menu-item>
+        <md-menu-item>
+          <md-button aria-label="Favorite" ng-click="postDetailsCtrl.addOrRemoveSubscriber()"
+            ng-disabled="postDetailsCtrl.disableButton()" ng-class="postDetailsCtrl.isSubscriber()?'md-warn':''"
+            title="Marcar interesse e receber notificações">
+            <md-icon>bookmark</md-icon>
+            Receber atualizações
+          </md-button>
+        </md-menu-item>
+        <md-menu-item ng-if="!postDetailsCtrl.isInstInactive() && postDetailsCtrl.showButtonEdit()">
+          <md-button aria-label="editar" ng-click="postDetailsCtrl.editPost()"
+            title="Editar o post">
+            <md-icon>edit</md-icon>
+            Editar postagem
+          </md-button>
+        </md-menu-item>
+      </md-menu-content>
+    </md-menu>
   </md-card-header>
 
   <!-- BODY SHARED EVENT -->
-  <div style='font-style:italic; text-align: center' ng-if="postDetailsCtrl.isDeletedEvent(postDetailsCtrl.post)">
-    <p>Este evento foi removido por</p>
-    <p>
-      {{postDetailsCtrl.post.shared_event.last_modified_by}}
-      {{postDetailsCtrl.post.shared_event.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats}}.
-    </p>
+  <div md-colors="{background: 'teal-500'}" ng-if="postDetailsCtrl.isDeletedEvent(postDetailsCtrl.post) && !postDetailsCtrl.isDeleted(postDetailsCtrl.post)"
+    style='margin: 0 9px 0 9px; height: 130px' layout-gt-xs="row" layout-xs="column" layout-align="center center">
+    <div style="height: 70px; width: 70px;">
+      <md-icon style="font-size:  70px; color: white">delete_forever</md-icon>
+    </div>
+    <div layout="column" layout-align-xs="center center">
+      <span style="font-size: 19px">ESTE EVENTO FOI REMOVIDO</span>
+      <span>por {{postDetailsCtrl.post.shared_event.last_modified_by}} {{postDetailsCtrl.post.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats }}.</span>
+    </div>
   </div>
   <md-card ng-if="postDetailsCtrl.showSharedEvent()">
     <md-card-content layout="column">
@@ -79,16 +129,17 @@
         <span class="md-subhead">por {{ postDetailsCtrl.post.shared_post.author }}</span>
       </md-card-header-text>
     </md-card-header>
-    <md-card-content layout="column">
-      <div ng-if="postDetailsCtrl.isDeleted(postDetailsCtrl.post.shared_post)"
-      style='font-style:italic; text-align: center'>
-        <p>Esta publicação foi removida por</p>
-        <p>
-          {{postDetailsCtrl.post.shared_post.last_modified_by}} em
-          {{postDetailsCtrl.post.shared_post.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats}} às
-          {{postDetailsCtrl.post.shared_post.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats}}.
-        </p>
+    <div md-colors="{background: 'teal-500'}" ng-if="postDetailsCtrl.isDeleted(postDetailsCtrl.post.shared_post)"
+      style='margin: 0 9px 0 9px; height: 130px' layout-gt-xs="row" layout-xs="column" layout-align="center center">
+      <div style="height: 70px; width: 70px;">
+        <md-icon style="font-size:  70px; color: white">delete_forever</md-icon>
       </div>
+      <div layout="column" layout-align-xs="center center">
+        <span style="font-size: 19px">ESTA PUBLICAÇÃO FOI REMOVIDA</span>
+        <span>por {{postDetailsCtrl.post.last_modified_by}} {{postDetailsCtrl.post.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats }}.</span>
+      </div>
+    </div>
+    <md-card-content layout="column">
       <img class="md-card-image" ng-if="postDetailsCtrl.showImage(postDetailsCtrl.post.shared_post)"
         style="width: 100%; height: auto;" ng-src="{{ postDetailsCtrl.post.shared_post.photo_url }}"/>
       <div class="youtube-player" ng-if="postDetailsCtrl.showVideo(postDetailsCtrl.post.shared_post)">
@@ -103,14 +154,10 @@
       <div layout="row" layout-align="end-center">
         <a href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post.shared_post)"
           ng-if="postDetailsCtrl.isLongPostTimeline(postDetailsCtrl.post.shared_post.text)">
-          <span class="md-subhead" >continuar lendo</span>
+          <md-icon>more_horiz</md-icon>
         </a>
       </div>
-      <div ng-repeat="pdf in postDetailsCtrl.post.shared_post.pdf_files" ng-if="postDetailsCtrl.post.shared_post.pdf_files">
-        <md-button class="md-raised" ng-click="postDetailsCtrl.pdfDialog($event, pdf)">
-            <md-icon>description</md-icon> {{pdf.name}}
-        </md-button>
-      </div>
+      <pdf-view pdf-files='postDetailsCtrl.post.shared_post.pdf_files' is-editing="false"></pdf-view>
     </md-card-content>
   </md-card>
 
@@ -120,6 +167,7 @@
   <div class="youtube-player" ng-if="postDetailsCtrl.showVideo(postDetailsCtrl.post)">
     <iframe ng-src="{{postDetailsCtrl.getVideoUrl(postDetailsCtrl.post)}}"></iframe>
   </div>
+  <pdf-view pdf-files='postDetailsCtrl.post.pdf_files' is-editing="false"></pdf-view>
   <md-card-title ng-if="!postDetailsCtrl.isDeleted(postDetailsCtrl.post)">
     <md-card-title-text>
       <a href class="md-title hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post)">
@@ -127,73 +175,62 @@
       </a>
     </md-card-title-text>
   </md-card-title>
-  <md-card-content>
-    <div ng-if="postDetailsCtrl.isDeleted(postDetailsCtrl.post)" style='font-style:italic; text-align: center'>
-      <p>Esta publicação foi removida por</p>
-      <p>
-        {{postDetailsCtrl.post.last_modified_by}} {{postDetailsCtrl.post.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats }}.
-      </p>
+  <div md-colors="{background: 'teal-500'}" ng-if="postDetailsCtrl.isDeleted(postDetailsCtrl.post)"
+    style='margin: 0 9px 0 9px; height: 130px' layout-gt-xs="row" layout-xs="column" layout-align="center center">
+    <div style="height: 70px; width: 70px;">
+      <md-icon style="font-size:  70px; color: white">delete_forever</md-icon>
     </div>
+    <div layout="column" layout-align-xs="center center">
+      <span style="font-size: 19px">ESTA PUBLICAÇÃO FOI REMOVIDA</span>
+      <span>por {{postDetailsCtrl.post.last_modified_by}} {{postDetailsCtrl.post.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats }}.</span>
+    </div>
+  </div>
+  <md-card-content>
     <div ng-if="postDetailsCtrl.showTextPost()">
         <p ng-bind-html="postDetailsCtrl.postToURL(postDetailsCtrl.post).text" class="break">
           {{postDetailsCtrl.postToURL(postDetailsCtrl.post).text}}
         </p>
         <div layout="row" layout-align="end-center">
-            <a href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post)"
-              ng-if="postDetailsCtrl.isLongPostTimeline(postDetailsCtrl.post.text)">
-              <span class="md-subhead" >continuar lendo</span>
+            <a href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post)">
+              <md-icon style="margin-bottom: -15px; margin-right: -12px;" md-colors="{color: 'light-green'}">more_horiz</md-icon>
             </a>
-        </div>
-        <div ng-repeat="pdf in postDetailsCtrl.post.pdf_files" ng-if="postDetailsCtrl.post.pdf_files">
-          <md-button class="md-raised" ng-click="postDetailsCtrl.pdfDialog($event, pdf)">
-              <md-icon>description</md-icon> {{pdf.name}}
-          </md-button>
         </div>
     </div>
   </md-card-content>
   <md-divider></md-divider>
 
   <!-- BUTTONS -->
-  <md-card-actions layout="row" layout-align="end-center">
-    <md-button class="md-icon-button" arial-label="Atualizar" title="Atualizar comentários"
-        ng-click="postDetailsCtrl.loadComments()" ng-if="!postDetailsCtrl.isInstInactive()">
-      <md-icon>refresh</md-icon>
-    </md-button>
-    <md-button class="md-icon-button" ng-click="postDetailsCtrl.generateLink()" title="Copiar link">
-      <md-icon>link</md-icon>
-    </md-button>
-    <md-button  ng-if="postDetailsCtrl.showButtonDelete() && !postDetailsCtrl.isInstInactive()" class="md-icon-button" arial-label="Delete"
-        ng-click="postDetailsCtrl.deletePost($event, postDetailsCtrl.post)" title="Apagar o post">
-      <md-icon>delete</md-icon>
-    </md-button>
-    <md-button class="md-icon-button" aria-label="Comments" ng-click="postDetailsCtrl.getComments()"
-        ng-disabled="postDetailsCtrl.isPostPage" title="Mostrar comentários">
-      <md-icon>comments</md-icon>
-    </md-button>
-    <md-button class="post-count md-icon-button md-primary md-hue-1"
-        title="{{ postDetailsCtrl.post.number_of_comments }} pessoas comentaram">
-      {{ postDetailsCtrl.post.number_of_comments }}
-    </md-button>
-    <md-button class="md-icon-button" aria-label="Favorite" ng-click="postDetailsCtrl.likeOrDislikePost()"
-        ng-disabled="postDetailsCtrl.disableButtonLike()" ng-class="postDetailsCtrl.isLikedByUser()?'md-warn':''"
-        title="Curtir">
-      <md-icon>grade</md-icon>
-    </md-button>
-    <md-button class="post-count md-icon-button md-primary md-hue-1" ng-click="postDetailsCtrl.getLikes()"
-        title="{{ postDetailsCtrl.post.number_of_likes === 0? 'Ainda ninguém curtiu' :
-                    postDetailsCtrl.post.number_of_likes === 1? '1 pessoa curtiu' :
-                      postDetailsCtrl.post.number_of_likes + ' pessoas curtiram' }}">
-      {{ postDetailsCtrl.post.number_of_likes }}
-    </md-button>
-    <md-button class="md-icon-button" aria-label="editar" ng-click="postDetailsCtrl.editPost()"
-        ng-if="postDetailsCtrl.showButtonEdit()" title="Editar o post" ng-if="!postDetailsCtrl.isInstInactive()">
-      <md-icon>edit</md-icon>
-    </md-button>
-    <md-button class="md-icon-button" ng-if="!postDetailsCtrl.isDeleted(postDetailsCtrl.post) && !postDetailsCtrl.isInstInactive()" aria-label="compartilhar"
-      ng-click="postDetailsCtrl.share(postDetailsCtrl.post)" title="Compartilhar o post">
-      <md-icon>share</md-icon>
-    </md-button>
+  <md-card-actions style="margin-top: 20px;" layout="row" layout-align="space-between center">
+    <div layout="row" layout-align="start center">
+      <md-button md-colors="{background: 'light-green'}" ng-if="postDetailsCtrl.showButtonDelete() && !postDetailsCtrl.isInstInactive()" class="md-icon-button" arial-label="Delete"
+          ng-click="postDetailsCtrl.deletePost($event, postDetailsCtrl.post)" title="Apagar o post">
+        <md-icon style="color: white;">delete</md-icon>
+      </md-button>
+      <b style="font-size: 12px;">EXCLUIR POST</b>
+    </div>
+    <div layout-align="center">
+      <md-button class="md-icon-button" aria-label="Favorite" ng-click="postDetailsCtrl.likeOrDislikePost()"
+          ng-disabled="postDetailsCtrl.disableButton()" ng-class="postDetailsCtrl.isLikedByUser()?'md-warn':''"
+          title="Curtir">
+        <md-icon>grade</md-icon>
+      </md-button>
+      <md-button class="post-count md-icon-button md-primary md-hue-1" ng-click="postDetailsCtrl.getLikes()"
+          title="{{ postDetailsCtrl.post.number_of_likes === 0? 'Ainda ninguém curtiu' :
+                      postDetailsCtrl.post.number_of_likes === 1? '1 pessoa curtiu' :
+                        postDetailsCtrl.post.number_of_likes + ' pessoas curtiram' }}">
+        {{ postDetailsCtrl.post.number_of_likes }}
+      </md-button>
+      <md-button class="md-icon-button" aria-label="Comments" ng-click="postDetailsCtrl.getComments()"
+          ng-disabled="postDetailsCtrl.isPostPage" title="Mostrar comentários">
+        <md-icon>comments</md-icon>
+      </md-button>
+      <md-button class="post-count md-icon-button md-primary md-hue-1"
+          title="{{ postDetailsCtrl.post.number_of_comments }} pessoas comentaram">
+        {{ postDetailsCtrl.post.number_of_comments }}
+      </md-button>
+    </div>
   </md-card-actions>
+
 
   <!-- LIKES -->
   <div layout="row" layout-align="start center">

@@ -35,7 +35,7 @@
     var user = {
          name: 'Maiana',
          cpf: '121.445.044-07',
-         key: '12345',
+         key: '54321',
          email: 'maiana.brito@ccc.ufcg.edu.br',
          institutions: [institution]
      };
@@ -93,31 +93,27 @@
 
     describe('ManagementMembersController functions', function() {
 
-        describe('deleteMember()', function(){
-            beforeEach(function() {
-              spyOn(mdDialog, 'confirm').and.callThrough();
-              spyOn(mdDialog, 'show').and.callFake(function(){
-                return {
-                  then: function(callback) {
-                    return callback();
-                  }
-                };
-              });
-              spyOn(institutionService, 'removeMember').and.callThrough();
+        describe('removeMember()', function(){
+
+            it('should contains two members before removeMember', function() {
+                expect(manageMemberCtrl.members).toEqual([member, user]);
             });
 
-            it('Should remove event of events', function() {
-                httpBackend.expect('DELETE', INSTITUTIONS_URI + institution.key +
-                        "/members?removeMember=" + member.key).respond(200);
-                manageMemberCtrl.removeMember("$event", member);
-
-                httpBackend.flush();
-
-                expect(institutionService.removeMember).toHaveBeenCalled();
-                expect(mdDialog.confirm).toHaveBeenCalled();
-                expect(mdDialog.show).toHaveBeenCalled();
+            it('Should contains one member after removeMember', function() {
+                manageMemberCtrl.removeMember(user);
+                expect(manageMemberCtrl.members).toEqual([member]);
+                manageMemberCtrl.members.push(user);
             });
           });
+
+        describe('openRemoveMemberDialog()', function() {
+
+            it('Should call mdDialog.show()', function() {
+                spyOn(mdDialog, 'show');
+                manageMemberCtrl.openRemoveMemberDialog();
+                expect(mdDialog.show).toHaveBeenCalled();
+            });
+        });
 
         describe('sendUserInvite()', function() {
             beforeEach(function() {
@@ -134,7 +130,7 @@
                 manageMemberCtrl.invite = {invitee: "teste@gmail.com",
                                             type_of_invite: 'USER',
                                             institution_key: '987654321',
-                                            admin_key: '12345'};
+                                            admin_key: '54321'};
                 var newInvite = new Invite(manageMemberCtrl.invite);
                 expect(manageMemberCtrl.sent_invitations.length).toBe(2);
                 var promise = manageMemberCtrl.sendUserInvite();

@@ -1,0 +1,19 @@
+runtime: python27
+api_version: 1
+threadsafe: yes
+service: default
+
+default_expiration: "1s"
+
+handlers:
+- url: /
+  static_files: landing/index.html
+  upload: landing/index.html
+
+- url: /home-(.*)
+  static_files: landing/index.html
+  upload: landing/index.html
+
+- url: /(.*)
+  static_files: landing/\1
+  upload: landing/(.*)

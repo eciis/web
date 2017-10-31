@@ -46,12 +46,20 @@ class InstitutionHandlerTest(TestBaseHandler):
         verify_token.return_value = {'email': 'raoni.smaneoto@ccc.ufcg.edu.br'}
 
         # Check if raise Exception when the user who send patch is not the admin
-        with self.assertRaises(Exception):
+        with self.assertRaises(Exception) as raises_context:
             self.testapp.patch_json("/api/institutions/%s"
                                     % (self.certbio.key.urlsafe()),
                                     [{"op": "replace", "path": "/name",
                                       "value": "Nova Inst update"}]
                                     )
+
+        message_exception = self.get_message_exception(str(raises_context.exception))
+
+        self.assertEqual(
+            message_exception,
+            "Error! User is not admin",
+            "Expected exception message must be equal to " +
+            "Error! User is not admin")
 
     @patch('utils.verify_token', return_value={'email': 'raoni.smaneoto@ccc.ufcg.edu.br'})
     def test_post(self, verify_token):
@@ -94,12 +102,18 @@ class InstitutionHandlerTest(TestBaseHandler):
 
         # Check if raise Exception when the user who send patch is not the
         # invitee
-        with self.assertRaises(Exception):
-            self.testapp.post("/api/institutions/%s/invites/%s"
-                              % (self.stub.key.urlsafe(),
-                                 self.invite.key.urlsafe()),
-                              [{"op": "replace", "path": "/name",
-                                "value": "Nova Inst update"}])
+        with self.assertRaises(Exception) as raises_context:
+            self.testapp.post_json(
+                "/api/institutions/%s/invites/%s" % (self.stub.key.urlsafe(), self.invite.key.urlsafe()),
+                [{"op": "replace", "path": "/name", "value": "Nova Inst update"}]
+            )
+
+        message_exception = self.get_message_exception(str(raises_context.exception))
+        self.assertEqual(
+            message_exception,
+            "Error! User is not invitee to create this Institution",
+            "Expected exception message must be equal to " +
+            "Error! User is not invitee to create this Institution")
 
     @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
     def test_get(self, verify_token):

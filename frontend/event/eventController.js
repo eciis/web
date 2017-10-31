@@ -290,7 +290,7 @@
                     MessageService.showToast('Evento criado com sucesso, esperando aprovação!');
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
-                    $state.go('app.home');
+                    $state.go("app.events");
                 });
             } else {
                 MessageService.showToast('Evento inválido!');

@@ -146,14 +146,17 @@ class Post(PolyModel):
     # When post is shared event
     shared_event = ndb.KeyProperty(kind="Event")
 
+    # Users that are interested in the post
+    subscribers = ndb.KeyProperty(kind="User", repeated=True)
+
     def create(post, data, author_key, institution_key):
         """Create a post and check required fields."""
         post = post.createSharing(data)
 
-        if post.shared_event is None and post.shared_post is None:
-            if not data['title']:
+        if (post.isCommonPost(data)):
+            if not data.get('title'):
                 raise FieldException("Title can not be empty")
-            if not data['text']:
+            if not data.get('text'):
                 raise FieldException("Text can not be empty")
 
         post.title = data.get('title')
@@ -164,8 +167,13 @@ class Post(PolyModel):
         post.author = author_key
         post.institution = institution_key
         post.video_url = data.get('video_url')
+        post.subscribers = [author_key]
 
         return post
+
+    def isCommonPost(post, data):
+        """The post not is sharing or event."""
+        return post.shared_event is None and post.shared_post is None and data.get('type_survey') is None
 
     def createSharing(self, data):
         """Create different type of post, can be shared post or shared event."""
@@ -206,7 +214,8 @@ class Post(PolyModel):
             'institution_key': institution.key.urlsafe(),
             'institution_state': institution.state,
             'key': post.key.urlsafe(),
-            'pdf_files': post.pdf_files if post.pdf_files else []
+            'pdf_files': post.pdf_files if post.pdf_files else [],
+            'subscribers': [subscriber.urlsafe() for subscriber in post.subscribers]
         }
         return post.modify_post(post_dict, host)
 
@@ -284,6 +293,16 @@ class Post(PolyModel):
         has_comments = len(self.comments) > 0
         has_likes = len(self.likes) > 0
         return has_comments or has_likes
+
+    def add_subscriber(self, user):
+        """Add a subscriber."""
+        if user.state == 'active':
+            self.subscribers.append(user.key)
+
+    def remove_subscriber(self, user):
+        """Remove a subscriber."""
+        if user.key in self.subscribers and self.author != user.key:
+            self.subscribers.remove(user.key)
 
     @staticmethod
     def is_hidden(post):

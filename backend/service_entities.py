@@ -7,8 +7,25 @@ def remove_institution_from_users(remove_hierarchy, institution_key):
     taskqueue.add(
         url='/api/queue/remove-inst',
         target='worker',
+        queue_name='compute-engine',
         params={
             'institution_key': institution_key,
             'remove_hierarchy': remove_hierarchy
+        }
+    )
+
+
+def send_post_notification(post, user, entity_type):
+    """Send post notification."""
+    taskqueue.add(
+        url='/api/queue/post-notification',
+        target='worker',
+        queue_name='compute-engine',
+        params={
+            'author_key': post.author.urlsafe(),
+            'user_key': user.key.urlsafe(),
+            'user_name': user.name,
+            'post_key': post.key.urlsafe(),
+            'entity_type': entity_type
         }
     )

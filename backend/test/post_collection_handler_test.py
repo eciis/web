@@ -61,21 +61,31 @@ class PostCollectionHandlerTest(TestBaseHandler):
                          'testing new post',
                          "The post's text is not the expected one")
 
-        # TODO:
-        # Fix the post method.
-        # The try except block prevents that FieldException be raised
-        # @author Raoni Smaneoto 11-06-2017
-        with self.assertRaises(Exception):
+        with self.assertRaises(Exception) as raises_context:
             self.testapp.post_json("/api/posts", {'institution':
                                                   self.institution.key.urlsafe(),
                                                   'text':
                                                   'testing another post'})
 
-        with self.assertRaises(Exception):
+        exception_message = self.get_message_exception(str(raises_context.exception))
+        self.assertEqual(
+            exception_message,
+            "Title can not be empty",
+            "Excpected exception message must be equal to title"
+        )
+
+        with self.assertRaises(Exception) as raises_context:
             self.testapp.post_json("/api/posts", {'institution':
                                                   self.institution.key.urlsafe(),
                                                   'title':
                                                   'testing another post'})
+
+        exception_message = self.get_message_exception(str(raises_context.exception))
+        self.assertEqual(
+            exception_message,
+            "Text can not be empty",
+            "Excpected exception message must be equal to text"
+        )
 
     @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
     @mock.patch('service_messages.send_message_notification')

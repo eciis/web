@@ -19,6 +19,7 @@
                   <div class="info" 
                       md-colors="{background: homeCtrl.user.current_institution.color+'-600'}">
                     <div class="desc">
+                      <div class="md-title">{{ homeCtrl.user.name }}</div>
                       <span>{{ homeCtrl.user.current_institution.name }}</span>
                       <md-menu>
                         <md-button aria-label="Open phone interactions menu" 
@@ -58,8 +59,8 @@
                     Eventos
                   </md-button>
                 </md-menu-item>
-                <md-menu-item>
-                  <md-button>
+                <md-menu-item ng-if="mainCtrl.isSuperUser()">
+                  <md-button ng-click="mainCtrl.goInvite()">
                     <md-icon>mail_outline</md-icon>
                     Convites
                   </md-button>

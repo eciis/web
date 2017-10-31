@@ -15,7 +15,7 @@
         postDetailsCtrl.savingComment = false;
         postDetailsCtrl.savingLike = false;
 
-        var URL_POST = '#/posts/';
+        var URL_POST = '/posts/';
         postDetailsCtrl.user = AuthService.getCurrentUser();
 
         postDetailsCtrl.deletePost = function deletePost(ev) {
@@ -103,8 +103,8 @@
         };
 
         postDetailsCtrl.generateLink = function generateLink(){
-            var currentUrl = (window.location.href).split('#');
-            var url = currentUrl[0] + URL_POST + postDetailsCtrl.post.key;
+            var currentUrl = (window.location.host);
+            var url = currentUrl + URL_POST + postDetailsCtrl.post.key;
             ngClipboard.toClipboard(url);
             MessageService.showToast("O link foi copiado");
         };

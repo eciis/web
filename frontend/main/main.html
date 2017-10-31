@@ -1,52 +1,19 @@
 <!-- TOOLBAR -->
 <md-toolbar md-colors="{background: 'teal-900'}" layout-wrap layout-align="center" layout="row">
-  <div class="md-toolbar-tools" flex-lg="90" flex-gt-lg="80" layout="row" layout-align="center center">
-    <md-button class="md-icon-button" aria-label="Settings" ng-click="mainCtrl.toggle()">
+  <div class="md-toolbar-tools" flex-lg="90" flex-gt-lg="70" layout="row" layout-align="center center">
+    <md-button class="md-icon-button hide-gt-sm" aria-label="Meu menu" ng-click="mainCtrl.toggle()" hide-gt-sm>
       <md-icon>menu</md-icon>
     </md-button>
 
     <a ui-sref="app.home"layout="row" layout-align="center center">
       <md-button disabled="true">
-        <img src="app/images/oms.png" aria-label="OMS Logo" style="height: 80%;filter: brightness(10) grayscale(1);">
+        <img src="app/images/logo.png" aria-label="OMS Logo" style="height: 50%;">
       </md-button>
-      <h2>e-CIS</h2>
     </a>
 
     <span flex md-truncate></span>
-
-    <md-menu md-position-mode="target-right target" ng-if="mainCtrl.isAdmin(mainCtrl.user.current_institution.key)">
-      <md-button aria-label="menu" class="md-icon-button" ng-click="$mdMenu.open(ev); mainCtrl.getPendingTasks();" title="Configurações Administrativas">
-        <md-icon ng-class="mainCtrl.pending_inst_invitations ||
-            mainCtrl.pending_manager_member? 'notification-badge': ''" data-badge>
-          settings
-        </md-icon>
-      </md-button>
-      <md-menu-content width="4">
-        <md-menu-item>
-          <md-button ng-click="mainCtrl.goToEditInfo()">
-            <md-icon>edit</md-icon>
-            Editar Informações
-          </md-button>
-        </md-menu-item>
-        <md-menu-item>
-          <md-button  ng-click="mainCtrl.goToManageMembers()">
-            <md-icon ng-class="mainCtrl.pending_manager_member? 'notification-badge': ''"
-              data-badge>people</md-icon>
-            Gerenciar Membros
-        </md-menu-item>
-        <md-menu-item>
-          <md-button ng-click="mainCtrl.goToManageInstitutions()">
-            <md-icon ng-class="mainCtrl.pending_inst_invitations? 'notification-badge': ''"
-              data-badge>account_balance</md-icon>
-            Vínculos Institucionais
-          </md-button>
-        </md-menu-item>
-      </md-menu-content>
-    </md-menu>
-
-    <md-button ng-click="mainCtrl.goEvents()" class="md-icon-button" title="Eventos">
-      <md-icon>event</md-icon>
-    </md-button>
+    
+    <notification></notification>
 
     <div layout="row" md-theme="input" style="margin-top: 42px;">
       <form ng-submit="mainCtrl.search()">
@@ -60,64 +27,7 @@
     <md-button ng-click="search = !search" class="md-icon-button" title="Buscar">
       <md-icon>search</md-icon>
     </md-button>
-
-    <notification></notification>
-
-    <md-button aria-label="inicio" class="md-icon-button" ui-sref="app.home" title="Página Inicial">
-      <md-icon>home</md-icon>
-    </md-button>
-
-    <md-menu md-position-mode="target-right target">
-      <md-button aria-label="menu" class="md-icon-button" ng-click="$mdMenu.open(ev)">
-        <md-icon>more_vert</md-icon>
-      </md-button>
-      <md-menu-content width="4">
-        <md-menu-item>
-          <md-button>
-            <md-icon>notifications</md-icon>
-            Notificações
-          </md-button>
-        </md-menu-item>
-        <md-menu-item ng-if="mainCtrl.isSuperUser()">
-          <md-button ng-click="mainCtrl.goInvite()">
-            <md-icon>mail_outline</md-icon>
-            Convite
-          </md-button>
-        </md-menu-item>
-        <md-menu-item>
-          <md-button ui-sref="app.config_profile">
-            <md-icon>dashboard</md-icon>
-            Minhas Configurações
-          </md-button>
-        </md-menu-item>
-        <md-menu-divider></md-menu-divider>
-        <md-menu-item>
-          <md-button ng-click="mainCtrl.logout()">
-            <md-icon>exit_to_app</md-icon>
-            Sair
-          </md-button>
-        </md-menu-item>
-      </md-menu-content>
-    </md-menu>
   </div>
 </md-toolbar>
 
-<!-- SIDENAV -->
-<md-sidenav class="md-sidenav-left" md-component-id="leftNav" md-whiteframe="4" layout="column">
-  <md-toolbar md-colors="{background: 'teal-700' }" layout="row" layout-align="center center">
-    <h1 class="md-toolbar-tools">Instituição Atual</h1>
-  </md-toolbar>
-  <md-content flex >
-    <md-list>
-      <md-list-item class="md-3-line" ng-repeat="institution in mainCtrl.user.institutions" ng-click="mainCtrl.changeInstitution(institution)">
-        <img ng-src="{{ institution.photo_url }}" alt="{{ institution.name }}" class="md-avatar" md-colors="{background: 'grey-200'}">
-        <p> {{ institution.name }} </p>
-        <md-button class="md-warn md-hue-1 md-icon-button" ng-show="mainCtrl.isActive(institution)">
-          <md-icon>check</md-icon>
-        </md-button>
-      </md-list-item>
-    </md-list>
-  </md-content>
-</md-sidenav>
-
-<div ui-view="content" layout="column"></div>
+<div ui-view="content" layout="column" md-colors="{background: 'grey-200'}"></div>

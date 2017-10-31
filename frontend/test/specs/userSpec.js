@@ -4,11 +4,13 @@
    var user, createUser;
 
    var splab = {
+        color: 'blue',
         name: 'SPLAB',
         key: '987654321'
    };
 
    var certbio = {
+        color: 'grey',
         name: 'Certbio',
         key: '123456789'
    };

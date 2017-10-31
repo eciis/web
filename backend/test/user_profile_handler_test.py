@@ -64,5 +64,6 @@ def initModels(cls):
     cls.certbio_profile.office = "developer"
     cls.certbio_profile.name = cls.certbio.name
     cls.certbio_profile.photo_url = 'photourl'
+    cls.certbio_profile.color = 'green'
     cls.user.institution_profiles.append(cls.certbio_profile)
     cls.user.put()

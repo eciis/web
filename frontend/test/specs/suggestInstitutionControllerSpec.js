@@ -49,6 +49,7 @@
         httpBackend.when('GET', 'invites/existing_institutions.html').respond(200);
         httpBackend.when('GET', "home/home.html").respond(200);
         httpBackend.when('GET', "auth/login.html").respond(200);
+        httpBackend.when('GET', "app/user/user_inactive.html").respond(200);
 
         createCtrl = function() {
             return $controller('SuggestInstitutionController', {

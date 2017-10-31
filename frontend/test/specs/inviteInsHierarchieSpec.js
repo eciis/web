@@ -35,7 +35,7 @@
         name: 'Maiana',
         email: 'maiana.brito@gmail.com',
         key: '12345',
-        institutions: [splab.key],
+        institutions: [certbio],
         follows: [splab.key],
         invites:[]
     };

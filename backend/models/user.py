@@ -52,7 +52,7 @@ class InstitutionProfile(ndb.Model):
         }
         
         profile['color'] = self.color or pick_color()
-        profile['key'] = self.institution_key
+        profile['institution_key'] = self.institution_key
         return profile
 
     @staticmethod

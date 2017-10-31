@@ -141,7 +141,7 @@ a:active {
 
 .lg-width-height {
     width: 48px;
-    height: 48px; 
+    height: 48px;
 }
 
 .clickable {
@@ -374,7 +374,7 @@ a:active {
     color: #FFFFFF;
 }
 
-.small-edit-button {
+.sm-fab-button {
    background-color: #8BC34A;
    width: 22px;
    height: 17px;

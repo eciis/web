@@ -12,7 +12,7 @@
 
     var tiago = {
         name: 'Tiago',
-        institutions: splab.key,
+        institutions: [splab],
         follows: splab.key,
         invites:[]
     };

@@ -121,7 +121,7 @@
             <post-timeline ng-if="!homeCtrl.isLoadingPosts" layout="column" posts="homeCtrl.posts" institution="false" 
             user="homeCtrl.user" add-post="true"  load-more-posts='homeCtrl.loadMorePosts'></post-timeline>
           <!-- LOADING CIRCLE -->
-          <div flex layout-align="center center" layout="row" layout-fill>
+          <div flex layout-align="center center" layout="row" layout-fill ng-if="homeCtrl.isLoadingPosts">
             <md-progress-circular md-mode="indeterminate"></md-progress-circular>
           </div>
         </div>

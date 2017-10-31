@@ -112,8 +112,9 @@ User.prototype.isInactive = function isInactive() {
 function changeProfileColor(user, institution) {
     var profile = _.find(user.institution_profiles, {
         'institution_key': institution.key
-    }) || {'color': 'grey'};
-    user.current_institution.color = profile.color;
+    });
+    const color = profile ? profile.color : 'grey';
+    user.current_institution.color = color;
 }
 
 function updateFollowInstitution(follows, institution) {

@@ -70,7 +70,7 @@ class SearchHandlerTest(TestBaseHandler):
     def test_get_user(self, verify_token):
         """Test the search_handler's get method with type=user."""
         # Call the createDocument method
-        search_user_module.createDocument(self.mayza)
+        search_user_module.createUserDocument(self.mayza)
         # Call the get method with the user's full name
         users = self.testapp.get(
             "/api/search/institution?value=%s&state=%s&type=user"

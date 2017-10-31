@@ -104,7 +104,7 @@ class UserHandler(BaseHandler):
         if(user.state == 'inactive'):
             remove_user_from_institutions(user)
             user.disable_account()
-        search_user_module.updateDocument(user)
+        search_user_module.updateUserDocument(user)
 
         """Update user."""
         user.put()

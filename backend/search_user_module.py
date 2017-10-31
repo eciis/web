@@ -6,7 +6,7 @@ from google.appengine.api import search
 INDEX_NAME = 'user'
 
 
-def createDocument(user):
+def createUserDocument(user):
     """Create a document.
 
     Keyword arguments:
@@ -29,19 +29,16 @@ def createDocument(user):
             search.TextField(name='state', value=content['state']),
         ]
     )
-    print document
-    saveDocument(document)
+    saveUserDocument(document)
 
 
-def saveDocument(document):
+def saveUserDocument(document):
     """Save Document."""
-    print document
     index = search.Index(name=INDEX_NAME)
-    print index
     index.put(document)
 
 
-def processDocuments(documents):
+def processUserDocuments(documents):
     """Process the documents."""
     users = [doc.fields for doc in documents]
     doc_ids = [doc.doc_id for doc in documents]
@@ -58,20 +55,19 @@ def processDocuments(documents):
     return result
 
 
-def getDocuments(value, state):
+def getUserDocuments(value, state):
     """Retrieve the documents and return them processed."""
-    query_string = makeQueryStr(value, state)
-    print query_string
+    query_string = makeUserQueryStr(value, state)
     index = search.Index(INDEX_NAME)
     query_options = search.QueryOptions(
         returned_fields=['name', 'state']
     )
     query = search.Query(query_string=query_string, options=query_options)
     documents = index.search(query)
-    return processDocuments(documents)
+    return processUserDocuments(documents)
 
 
-def updateDocument(user):
+def updateUserDocument(user):
     """Update a Document.
 
     When an user changes its name, this function
@@ -79,10 +75,10 @@ def updateDocument(user):
     """
     index = search.Index(INDEX_NAME)
     index.delete(user.key.urlsafe())
-    createDocument(user)
+    createUserDocument(user)
 
 
-def makeQueryStr(value, state):
+def makeUserQueryStr(value, state):
     """Make the query string.
 
     Keyword arguments:
@@ -99,7 +95,7 @@ def makeQueryStr(value, state):
     return "name: %s AND state: %s" % (value, state_string)
 
 
-def deleteDocument(doc_id):
+def deleteUserDocument(doc_id):
     """Delete a document."""
     index = search.Index(INDEX_NAME)
     index.delete(doc_id)

@@ -7,7 +7,7 @@ import json
 
 from handlers.base_handler import BaseHandler
 import search_module
-from search_user_module import getDocuments
+from search_user_module import getUserDocuments
 
 
 class SearchHandler(BaseHandler):
@@ -26,5 +26,5 @@ class SearchHandler(BaseHandler):
             )
         else:
             self.response.write(
-                json.dumps(getDocuments(value, state))
+                json.dumps(getUserDocuments(value, state))
             )

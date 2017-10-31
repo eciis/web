@@ -56,7 +56,7 @@ def add_comments_to_post(user, user_reply, post, institution, comments_qnt=3):
 def getGravatar(email):
     """Get Gravatar url."""
     default = "https://www.example.com/default.jpg"
-    size = 40
+    size = 320
     # construct the url
     gravatar_url = "https://www.gravatar.com/avatar/" + \
         hashlib.md5(email[0].lower()).hexdigest() + "?"

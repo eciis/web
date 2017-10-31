@@ -18,6 +18,19 @@
         var URL_POST = '/posts/';
         postDetailsCtrl.user = AuthService.getCurrentUser();
 
+        postDetailsCtrl.getTypePost = function getTypePost() {
+            if(postDetailsCtrl.post.shared_post){
+                return 'SHARED_POST';
+            } else if(postDetailsCtrl.post.shared_event){
+                return 'SHARED_EVENT';
+            } else if(postDetailsCtrl.post.type_survey){
+                return 'SURVEY';
+            } else {
+                return 'COMMON';
+            }
+            return postDetailsCtrl.post.type_survey;
+        };
+
         postDetailsCtrl.deletePost = function deletePost(ev) {
             var confirm = $mdDialog.confirm()
                 .clickOutsideToClose(true)
@@ -64,10 +77,6 @@
                 postDetailsCtrl.post.shared_event;
         };
 
-        postDetailsCtrl.isSurvey = function isSurvey() {
-            return postDetailsCtrl.post.type_survey;
-        };
-
         postDetailsCtrl.postHasActivity = function postHasActivity() {
             var hasNoComments = postDetailsCtrl.post.number_of_comments === 0;
             var hasNoLikes = postDetailsCtrl.post.number_of_likes === 0;
@@ -87,8 +96,9 @@
         };
 
         postDetailsCtrl.showTextPost = function showTextPost(){
+            const isCommon = postDetailsCtrl.getTypePost() === "COMMON";
             return !postDetailsCtrl.isDeleted(postDetailsCtrl.post) &&
-                     !postDetailsCtrl.isShared();
+                     isCommon;
         };
 
         postDetailsCtrl.showButtonDelete = function showButtonDelete() {

@@ -63,7 +63,7 @@
   </md-card-header>
 
   <!-- SURVEY -->
-  <survey-directive ng-if="postDetailsCtrl.isSurvey()" post="postDetailsCtrl.post" posts="posts" user="postDetailsCtrl.user"></survey-directive>
+  <survey-details ng-if="postDetailsCtrl.getTypePost() === 'SURVEY'" post="postDetailsCtrl.post" posts="posts" user="postDetailsCtrl.user"></survey-details>
 
   <!-- BODY SHARED EVENT -->
   <div style='font-style:italic; text-align: center' ng-if="postDetailsCtrl.isDeletedEvent(postDetailsCtrl.post)">
@@ -156,38 +156,40 @@
   </md-card>
 
   <!-- BODY POST -->
-  <img ng-if="postDetailsCtrl.showImage(postDetailsCtrl.post)" ng-src="{{ postDetailsCtrl.post.photo_url }}"
-    class="md-card-image">
-  <div class="youtube-player" ng-if="postDetailsCtrl.showVideo(postDetailsCtrl.post)">
-    <iframe ng-src="{{postDetailsCtrl.getVideoUrl(postDetailsCtrl.post)}}"></iframe>
-  </div>
-  <pdf-view pdf-files='postDetailsCtrl.post.pdf_files' is-editing="false"></pdf-view>
-  <md-card-title ng-if="!postDetailsCtrl.isDeleted(postDetailsCtrl.post)">
-    <md-card-title-text>
-      <a href class="md-title hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post)">
-        <span class="md-headline break">{{postDetailsCtrl.post.title}}</span>
-      </a>
-    </md-card-title-text>
-  </md-card-title>
-  <md-card-content>
-    <div ng-if="postDetailsCtrl.isDeleted(postDetailsCtrl.post)" style='font-style:italic; text-align: center'>
-      <p>Esta publicação foi removida por </p>
-      <p>
-        {{postDetailsCtrl.post.last_modified_by}} {{postDetailsCtrl.post.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats }}.
-      </p>
+  <div ng-if="postDetailsCtrl.getTypePost() === 'COMMON'">
+    <img ng-if="postDetailsCtrl.showImage(postDetailsCtrl.post)" ng-src="{{ postDetailsCtrl.post.photo_url }}"
+      class="md-card-image">
+    <div class="youtube-player" ng-if="postDetailsCtrl.showVideo(postDetailsCtrl.post)">
+      <iframe ng-src="{{postDetailsCtrl.getVideoUrl(postDetailsCtrl.post)}}"></iframe>
     </div>
-    <div ng-if="postDetailsCtrl.showTextPost()">
-        <p ng-bind-html="postDetailsCtrl.postToURL(postDetailsCtrl.post).text" class="break">
-          {{postDetailsCtrl.postToURL(postDetailsCtrl.post).text}}
+    <pdf-view pdf-files='postDetailsCtrl.post.pdf_files' is-editing="false"></pdf-view>
+    <md-card-title ng-if="!postDetailsCtrl.isDeleted(postDetailsCtrl.post)">
+      <md-card-title-text>
+        <a href class="md-title hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post)">
+          <span class="md-headline break">{{postDetailsCtrl.post.title}}</span>
+        </a>
+      </md-card-title-text>
+    </md-card-title>
+    <md-card-content>
+      <div ng-if="postDetailsCtrl.isDeleted(postDetailsCtrl.post)" style='font-style:italic; text-align: center'>
+        <p>Esta publicação foi removida por </p>
+        <p>
+          {{postDetailsCtrl.post.last_modified_by}} {{postDetailsCtrl.post.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats }}.
         </p>
-        <div layout="row" layout-align="end-center">
-            <a href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post)"
-              ng-if="postDetailsCtrl.isLongPostTimeline(postDetailsCtrl.post.text)">
-              <span class="md-subhead" >continuar lendo</span>
-            </a>
-        </div>
-    </div>
-  </md-card-content>
+      </div>
+      <div ng-if="postDetailsCtrl.showTextPost()">
+          <p ng-bind-html="postDetailsCtrl.postToURL(postDetailsCtrl.post).text" class="break">
+            {{postDetailsCtrl.postToURL(postDetailsCtrl.post).text}}
+          </p>
+          <div layout="row" layout-align="end-center">
+              <a href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post)"
+                ng-if="postDetailsCtrl.isLongPostTimeline(postDetailsCtrl.post.text)">
+                <span class="md-subhead" >continuar lendo</span>
+              </a>
+          </div>
+      </div>
+    </md-card-content>
+  </div>
   <md-divider></md-divider>
 
   <!-- BUTTONS -->

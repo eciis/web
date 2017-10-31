@@ -1,1 +1,15 @@
-TESTANDO AQUI
+<md-card-title>
+    <md-card-title-text>
+      <a href class="md-title hyperlink" ng-click="surveyCtrl.goToPost(postDetailsCtrl.post)">
+        <span class="md-headline break">{{surveyCtrl.post.title}}</span>
+      </a>
+    </md-card-title-text>
+  </md-card-title>
+  <md-card-content>
+    <div ng-if="surveyCtrl.isDeleted()" style='font-style:italic; text-align: center'>
+      <p>Esta publicação foi removida por </p>
+      <p>
+        {{surveyCtrl.post.last_modified_by}} {{surveyCtrl.post.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats }}.
+      </p>
+    </div>
+  </md-card-content>

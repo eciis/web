@@ -1,8 +1,7 @@
-<div>
-  <div style="padding-left: 40px; padding-right: 40px;">
+<div style="padding-left: 40px; padding-right: 40px;" layout-wrap>
       <form>
         <md-input-container md-no-float class="md-block" style="margin: 0px;">
-          <input type="" name="" class="title_post" ng-model="surveyCtrl.post.title" placeholder="Pergunte algo" 
+          <input ng-model="surveyCtrl.post.title" placeholder="Pergunte algo" 
           style="font-weight: bold; color: #00695C ; margin: 0px; border: 0;resize:none; max-height: 300px;"/>
         </md-input-container>
         <p class="md-subheader"> Alternativas</p>
@@ -14,7 +13,7 @@
         <md-input-container class="md-block" style="margin-top: 60px;">
           <label>Data limite</label>
           <input mdc-datetime-picker="" short-time="false" date="true" time="true" type="text" 
-            format="YYYY-MM-DD HH:mm" lang="pt-BR" placeholder="Receber respostas até..." 
+            format="DD/MM/YYYY HH:mm" lang="pt-BR" placeholder="Receber respostas até..." 
             ng-model="surveyCtrl.post.deadline" class=" md-input" today-text="Hoje" min-date="null" 
             readonly="readonly" cancel-text="Cancelar">
         </md-input-container>
@@ -31,4 +30,3 @@
           </div>
       </md-actions>
   </div>
-</div>

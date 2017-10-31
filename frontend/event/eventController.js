@@ -288,9 +288,8 @@
                     dialogCtrl.closeDialog();
                     dialogCtrl.events.push(response.data);
                     MessageService.showToast('Evento criado com sucesso, esperando aprovação!');
-                }, function error(response) {
-                    MessageService.showToast(response.data.msg);
-                    $mdDialog.cancel();
+                }, function error() {
+                    MessageService.showToast("A data final do evento deve ser posterior a inicial!");
                     $state.go("app.events");
                 });
             } else {

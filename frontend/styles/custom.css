@@ -134,8 +134,22 @@ a:active {
     display: inline-flex;
 }
 
+.lg-icon {
+    font-size:48px;
+    color: #FFFFFF;
+}
+
+.lg-width-height {
+    width: 48px;
+    height: 48px; 
+}
+
 .clickable {
     cursor: pointer;
+}
+
+.clickable:hover {
+    opacity:.50;
 }
 
 .demo-md-panel {

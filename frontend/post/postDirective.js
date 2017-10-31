@@ -9,6 +9,7 @@
         var postCtrl = this;
 
         postCtrl.post = {};
+        postCtrl.type_post = 'Common';
         postCtrl.loading = false;
         postCtrl.deletePreviousImage = false;
         postCtrl.user = AuthService.getCurrentUser();
@@ -17,9 +18,14 @@
         postCtrl.deletedFiles = [];
         postCtrl.addVideo = false;
         postCtrl.videoRegex = '(?:http(s)?:\/\/)?(www\.)?youtube\.com\/watch\\?v=.+';
-
+        postCtrl.options = [];
+        postCtrl.multipleChoice = false;
+        var option_empty = {'text': '',
+                            'number_votes': 0,
+                            'voters': []
+                            };
         var observer;
-
+        
         postCtrl.addImage = function(image) {
             var newSize = 1024;
 
@@ -33,8 +39,89 @@
             });
         };
 
+        postCtrl.removeOption = function(opt) {
+             _.remove(postCtrl.options, function(option) {
+              return option === opt;
+            });    
+        };
+
+        // TODO: Change interface according design suggested
+        // @author: Maiana Brito
+        postCtrl.addOption = function(){
+            const hasOptionEmpty = postCtrl.getOptionEmpty() !== undefined;
+            if(!hasOptionEmpty){
+                postCtrl.options.push(angular.copy(option_empty));
+            }
+        };
+
+        postCtrl.getOptionEmpty = function(){
+            return _.find(postCtrl.options, option_empty);
+        };
+
+        postCtrl.choiceSurvey = function() {
+            if(postCtrl.type_post === "Common"){
+                postCtrl.type_post = "Survey";
+                postCtrl.options.push(angular.copy(option_empty));
+                postCtrl.options.push(angular.copy(option_empty));
+            }
+        };
+
+        /* This method add ids in each option and remove the options that are empty.*/
+        function modifyOptions(){
+            var id = 0;
+            _.forEach(postCtrl.options, function(option) {
+              if(option.text !== ''){
+                option.id = id;
+                id += 1;
+              }else{
+                postCtrl.removeOption(option);
+              }
+            });
+        }
+
+        function defineTypeSurvey(){
+            if(postCtrl.multipleChoice){
+                postCtrl.post.type_survey = 'multiple_choice';
+            } else {
+                postCtrl.post.type_survey = 'binary';
+            }
+        }
+
+        function formateDate(){
+            var date = postCtrl.post.deadline.toISOString();
+            postCtrl.post.deadline = _.split(date, '.')[0];
+        }
+
+        function createSurvey(){
+            defineTypeSurvey();
+            modifyOptions();
+            postCtrl.post.deadline && formateDate();
+            postCtrl.post.options = postCtrl.options;
+
+            return new Post(postCtrl.post, postCtrl.user.current_institution.key);
+        }
+
+        postCtrl.saveSurvey = function(posts) {
+            var survey = createSurvey();
+            var promisse = PostService.createPost(survey).then(function success(response) {
+                postCtrl.clearPost();
+                posts.push(new Post(response.data));
+                MessageService.showToast('Postado com sucesso!');
+                $mdDialog.hide();
+            }, function error(response) {
+                AuthService.reload().then(function success() {
+                    $mdDialog.hide();
+                    MessageService.showToast(response.data.msg);
+                    $state.go('app.home');
+                });
+            });
+            return promisse;
+        };
+
         postCtrl.addPdf = function addPdf(files) {
-            postCtrl.pdfFiles = postCtrl.pdfFiles.concat(files);
+            if(!postCtrl.getOptionEmpty){
+                postCtrl.pdfFiles = postCtrl.pdfFiles.concat(files);
+            }
         };
 
         postCtrl.createEditedPost = function createEditedPost(post) {
@@ -49,7 +136,7 @@
             });
         }
 
-        postCtrl.isPostValid = function isPostValid() {
+        postCtrl.isCommonPostValid = function isCommonPostValid(formInvalid) {
             if (postCtrl.user) {
                 var post;
                 if(!postCtrl.isEditing) {
@@ -57,7 +144,7 @@
                 } else {
                     post = postCtrl.post;
                 }
-                return post.isValid();
+                return post.isValid() && !formInvalid;
             } else {
                 return false;
             }
@@ -66,6 +153,8 @@
         postCtrl.save = function save(isEditing, originalPost, posts) {
             if(isEditing) {
                 postCtrl.editPost(originalPost);
+            } else if(postCtrl.type_post === 'Survey'){
+                postCtrl.saveSurvey(posts);
             } else {
                 postCtrl.createPost(posts);
             }
@@ -212,6 +301,9 @@
         postCtrl.clearPost = function clearPost() {
             postCtrl.post = {};
             postCtrl.pdfFiles = [];
+            postCtrl.options = [];
+            postCtrl.type_post = "Common";
+            postCtrl.multipleChoice = false;
         };
 
         postCtrl.showVideo = function showVideo() {
@@ -281,13 +373,6 @@
             return hasFiles;
         };
 
-        postCtrl.hideFile = function(index) {
-            if (_.includes(postCtrl.post.pdf_files, postCtrl.pdfFiles[index])) {
-                postCtrl.deletedFiles.push(postCtrl.pdfFiles[index]);
-            }
-            postCtrl.pdfFiles.splice(index, 1);
-        };
-
         postCtrl.hideImage = function() {
            postCtrl.photoUrl = "";
            postCtrl.photoBase64Data = null;
@@ -308,6 +393,15 @@
                 instName = postCtrl.post.institution_name;
             }
             return instName;
+        };
+
+        postCtrl.isValid = function isValid(formInvalid){
+            if(postCtrl.type_post === "Survey"){
+                const hasOptionEmpty = postCtrl.getOptionEmpty() === undefined;
+                return postCtrl.post.title && !hasOptionEmpty;
+            } else {
+                return postCtrl.isCommonPostValid(formInvalid);
+            }
         };
 
         (function main() {

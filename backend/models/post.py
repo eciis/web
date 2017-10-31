@@ -153,10 +153,10 @@ class Post(PolyModel):
         """Create a post and check required fields."""
         post = post.createSharing(data)
 
-        if post.shared_event is None and post.shared_post is None:
-            if not data['title']:
+        if (post.isCommonPost(data)):
+            if not data.get('title'):
                 raise FieldException("Title can not be empty")
-            if not data['text']:
+            if not data.get('text'):
                 raise FieldException("Text can not be empty")
 
         post.title = data.get('title')
@@ -170,6 +170,10 @@ class Post(PolyModel):
         post.subscribers = [author_key]
 
         return post
+
+    def isCommonPost(post, data):
+        """The post not is sharing or event."""
+        return post.shared_event is None and post.shared_post is None and data.get('type_survey') is None
 
     def createSharing(self, data):
         """Create different type of post, can be shared post or shared event."""

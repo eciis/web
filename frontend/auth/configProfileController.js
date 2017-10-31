@@ -226,7 +226,7 @@
 
             (function main() {
                 editProfileCtrl.profile = _.find(user.institution_profiles, function(profile) {
-                    return profile.institution_key === editProfileCtrl.institution.key;
+                    return profile.key === editProfileCtrl.institution.key;
                 });
                 profileObserver = jsonpatch.observe(user);
             })();

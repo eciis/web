@@ -81,7 +81,7 @@
     });
 
     describe('sendInvite()', function() {
-        fit('should call sendInstInvite()', function() {
+        it('should call sendInstInvite()', function() {
             spyOn(inviteController, 'sendInstInvite').and.callFake(function() {
                 return {
                     then: function(callback) {

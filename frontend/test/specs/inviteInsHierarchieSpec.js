@@ -228,11 +228,11 @@
                     suggestion_institution_name : "Institution Parent",
                     type_of_invite : "INSTITUTION_PARENT"};
                 inviteInstCtrl.user.current_institution = splab;
-                httpBackend.expect('GET', INSTITUTION_SEARCH_URI+'"Institution Parent"&state=active,pending').respond({});
+                httpBackend.expect('GET', INSTITUTION_SEARCH_URI+"Institution Parent" + '&state=active,pending&type=institution').respond({});
                 inviteInstCtrl.checkInstInvite().then(function() {
                     expect(instService.searchInstitutions).toHaveBeenCalledWith(
                         inviteInstCtrl.invite.suggestion_institution_name,
-                        "active,pending");
+                        "active,pending", 'institution');
                     expect(inviteInstCtrl.sendInstInvite).toHaveBeenCalledWith(invite);
                     done();
                 });
@@ -246,7 +246,7 @@
                     invitee: "parent@gmail.com",
                     suggestion_institution_name : "Institution Parent",
                     type_of_invite : "institution_parent"};
-                httpBackend.expect('GET', INSTITUTION_SEARCH_URI+'"Institution Parent"&state=active,pending').respond(documents);
+                httpBackend.expect('GET', INSTITUTION_SEARCH_URI+ "Institution Parent" + '&state=active,pending&type=institution').respond(documents);
                 inviteInstCtrl.checkInstInvite().then(function() {
                     expect(inviteInstCtrl.showDialog).toHaveBeenCalled();
                     done();

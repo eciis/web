@@ -11,6 +11,7 @@ from custom_exceptions.fieldException import FieldException
 from utils import json_response
 from utils import Utils
 from util.json_patch import JsonPatch
+from search_user_module import createDocument
 
 
 def makeUser(user, request):
@@ -76,6 +77,7 @@ class InviteHandler(BaseHandler):
         user.add_institution(institution_key)
         user.follow(institution_key)
         user.change_state('active')
+        createDocument(user)
 
         institution.add_member(user)
         institution.follow(user.key)

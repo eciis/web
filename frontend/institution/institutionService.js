@@ -18,9 +18,9 @@
             return deferred.promise;
         };
 
-        service.searchInstitutions = function searchInstitutions(value, state) {
+        service.searchInstitutions = function searchInstitutions(value, state, type) {
             var deferred = $q.defer();
-            $http.get("/api/search/institution?value=" + '"' + value + '"' + "&state=" + state).then(function success(response) {
+            $http.get("/api/search/institution?value=" + value + "&state=" + state + "&type=" + type).then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);

@@ -2,6 +2,7 @@
 """User Handler."""
 
 import json
+import search_user_module
 
 from models.invite import Invite
 from utils import Utils
@@ -103,6 +104,7 @@ class UserHandler(BaseHandler):
         if(user.state == 'inactive'):
             remove_user_from_institutions(user)
             user.disable_account()
+        search_user_module.updateDocument(user)
 
         """Update user."""
         user.put()

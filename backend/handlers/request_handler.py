@@ -11,6 +11,7 @@ from handlers.base_handler import BaseHandler
 from custom_exceptions.entityException import EntityException
 from utils import is_admin_of_requested_inst
 from service_messages import send_message_notification
+from search_user_module import createDocument
 
 
 def makeUser(user, request):
@@ -62,6 +63,7 @@ class RequestHandler(BaseHandler):
         sender.follow(institution_key)
         sender.change_state('active')
         sender.put()
+        createDocument(sender)
 
         institution.add_member(sender)
         institution.follow(sender.key)

@@ -4,6 +4,7 @@
 from test_base_handler import TestBaseHandler
 from models.user import User
 import search_module
+import search_user_module
 from models.institution import Institution
 from handlers.search_handler import SearchHandler
 
@@ -24,46 +25,62 @@ class SearchHandlerTest(TestBaseHandler):
         initModels(cls)
 
     @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
-    def test_get(self, verify_token):
+    def test_get_institution(self, verify_token):
         """Test the search_handler's get method."""
         # Call the createDocument method
         search_module.createDocument(self.certbio)
         # Search for the institution by its full name
         certbio_name = 'Lab. de Desenvolvimento de Biomateriais do Nordeste'
         institutions = self.testapp.get(
-            "/api/search/institution?value=%s&state=%s"
+            "/api/search/institution?value=%s&state=%s&type=institution"
             % (certbio_name, 'active'))
         self.assertTrue('CERTBIO' in institutions)
         # Search for the institution by part of its name
         institutions = self.testapp.get(
-            "/api/search/institution?value=%s&state=%s"
+            "/api/search/institution?value=%s&state=%s&type=institution"
             % ('Biomateriais', 'active'))
         self.assertTrue('CERTBIO' in institutions)
         # Search for the institution by its acronym
         institutions = self.testapp.get(
-            "/api/search/institution?value=%s&state=%s"
+            "/api/search/institution?value=%s&state=%s&type=institution"
             % ('CERTBIO', 'active'))
         self.assertTrue('CERTBIO' in institutions)
         # Make sure that there is no institution CERTBIO with pending state.
         institutions = self.testapp.get(
-            "/api/search/institution?value=%s&state=%s"
+            "/api/search/institution?value=%s&state=%s&type=institution"
             % ('CERTBIO', 'pending'))
         self.assertTrue('CERTBIO' not in institutions)
         # Create a document with a pending institution
         search_module.createDocument(self.splab)
         # Make sure that there is no SPLAB with pending state.
         institutions = self.testapp.get(
-            "/api/search/institution?value=%s&state=%s" % ('SPLAB', 'active'))
+            "/api/search/institution?value=%s&state=%s&type=institution" % ('SPLAB', 'active'))
         self.assertTrue('SPLAB' not in institutions)
         # Assert that SPLAB has a pending state
         institutions = self.testapp.get(
-            "/api/search/institution?value=%s&state=%s" % ('SPLAB', 'pending'))
+            "/api/search/institution?value=%s&state=%s&type=institution" % ('SPLAB', 'pending'))
         self.assertTrue('SPLAB' in institutions)
         # Search for institutions by its actuation area
         institutions = self.testapp.get(
-            "/api/search/institution?value=%s&state=%s"
+            "/api/search/institution?value=%s&state=%s&type=institution"
             % ('Universidades', 'active, pending'))
         self.assertTrue('CERTBIO' and 'SPLAB' in institutions)
+
+    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
+    def test_get_user(self, verify_token):
+        """Test the search_handler's get method with type=user."""
+        # Call the createDocument method
+        search_user_module.createDocument(self.mayza)
+        # Call the get method with the user's full name
+        users = self.testapp.get(
+            "/api/search/institution?value=%s&state=%s&type=user"
+            % (self.mayza.name, self.mayza.state))
+        self.assertTrue("Mayza Nunes" in users)
+        # Call the get method with part of the user's name
+        users = self.testapp.get(
+            "/api/search/institution?value=%s&state=%s&type=user"
+            % ("Mayza", self.mayza.state))
+        self.assertTrue("Mayza Nunes" in users)
 
     def tearDown(cls):
         """Deactivate the test."""

@@ -12,9 +12,9 @@
         searchCtrl.actuationAreas = [];
         searchCtrl.loading = false;
 
-        searchCtrl.makeSearch = function makeSearch(value) {
+        searchCtrl.makeSearch = function makeSearch(value, type) {
             searchCtrl.loading = false;
-            var promise = InstitutionService.searchInstitutions(value ? value : searchCtrl.search_keyword, "active");
+            var promise = InstitutionService.searchInstitutions(value ? value : searchCtrl.search_keyword, "active", type);
             promise.then(function success(response) {
                 searchCtrl.institutions = response.data;
                 searchCtrl.loading = true;
@@ -26,7 +26,7 @@
 
         searchCtrl.search = function search() {
             if (searchCtrl.search_keyword) {
-                searchCtrl.makeSearch();
+                searchCtrl.makeSearch(searchCtrl.search_keyword, 'institution');
             }
         };
 
@@ -43,7 +43,7 @@
         };
 
         searchCtrl.searchByActuationArea = function searchByActuationArea(chosen_area) {
-            searchCtrl.makeSearch(chosen_area);
+            searchCtrl.makeSearch(chosen_area, 'institution');
         };
 
         searchCtrl.isLoading = function isLoading() {
@@ -58,7 +58,7 @@
 
         function loadSearch() {
             if (searchCtrl.search_keyword) {
-                searchCtrl.makeSearch();
+                searchCtrl.makeSearch(searchCtrl.search_keyword, 'institution');
             }
         }
 

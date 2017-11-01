@@ -1,9 +1,9 @@
-<div layout-fill md-colors="{background: 'grey-900'}" layout="column" layout-align="center">
+<!-- <div layout-fill md-colors="{background: 'teal-500'}" layout="column" layout-align="center center">
    <div layout="row" layout-wrap layout-align="center">
     <div class="padded" md-whiteframe style="border-radius: 5px 5px 0px 0px;">
       <md-content style="border-radius: 5px 5px 0px 0px;">
         <md-tabs md-dynamic-height md-border-bottom md-align-tabs="bottom" class="md-default md-hue-2" md-colors="{background: 'grey-300'}">
-          <md-tab label="Já tenho conta"> 
+          <md-tab label="Já tenho conta">
             <md-content class="md-padding" layout-gt-sm="row" >
               <div flex="47" layout="column" laytout-align="center center">
                 <div id="firebaseui-container">
@@ -56,7 +56,7 @@
                 </md-input-container>
                 <md-input-container class="md-block">
                   <small>Confirmar Senha</small>
-                  <input type="password" name="verifypassword" ng-model="loginCtrl.newUser.verifypassword" 
+                  <input type="password" name="verifypassword" ng-model="loginCtrl.newUser.verifypassword"
                     required="true" minlength="6" aria-label="Confirmar Senha">
                 </md-input-container>
               </div>
@@ -69,4 +69,63 @@
       </md-content>
     </div>
   </div>
-</div>
+</div> -->
+
+<md-content layout-fill md-colors="{background: 'teal-500'}" layout-align="center center" layout="row">
+  <div class="padded" md-whiteframe="12" style="border-radius: 2px; background-color: white;" flex="55" layout="column">
+    <div layout="row" layout-align="space-around center">
+      <div layout="column" flex="40">
+        <img src="/app/images/LOGO-E-CIS.png" style="width: 300px; margin-bottom: 10px;"/>
+        <div layout="column">
+          <md-input-container class="md-block" style="margin: 0;">
+            <label>Email</label>
+            <input type="email" name="email" ng-model="loginCtrl.user.email" required="true" aria-label="Email">
+          </md-input-container>
+          <md-input-container class="md-block" style="margin: 0;">
+            <label>Senha</label>
+            <input type="password" name="password" ng-model="loginCtrl.user.password" required="true"  minlength="6"
+              aria-label="Senha">
+          </md-input-container>
+          <div layout="row" layout-align="end center">
+            <md-button class="md-raised md-primary" md-colors="{background: 'teal-500'}"
+              ng-click="loginCtrl.loginWithEmailPassword()" style="margin-bottom: 20px">Entrar</md-button>
+          </div>
+        </div>
+      </div>
+      <div flex="2" layout="column">
+        <hr style="width:0px;" flex="40"/>
+      </div>
+      <div style="color: black;" flex="40" layout="column">
+        <p>
+          <strong>Se você ainda não possue uma conta no e-CIS solicite abaixo um convite.</strong>
+        </p>
+        <div layout="row">
+          <hr style="width:0px;" flex="50"/>
+          <span>OU</span>
+          <hr style="width:0px;" flex="50"/>
+        </div>
+        <div id="firebaseui-container" layou="row">
+           <div class="firebaseui-container firebaseui-page-provider-sign-in firebaseui-id-page-provider-sign-in">
+              <div class="firebaseui-card-content">
+                 <form onsubmit="return false;">
+                    <ul class="firebaseui-idp-list">
+                       <li class="firebaseui-list-item">
+                         <button class="firebaseui-idp-button mdl-button mdl-js-button mdl-button--raised firebaseui-idp-google firebaseui-id-idp-button" data-provider-id="google.com" data-upgraded=",MaterialButton" ng-click="loginCtrl.login()"><span class="firebaseui-idp-icon-wrapper"><img class="firebaseui-idp-icon" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"></span><span class="firebaseui-idp-text firebaseui-idp-text-long">Entrar com Google</span><span class="firebaseui-idp-text firebaseui-idp-text-short">Google</span>
+                         </button>
+                       </li>
+                       <li class="firebaseui-list-item"><button class="firebaseui-idp-button mdl-button mdl-js-button mdl-button--raised firebaseui-idp-facebook firebaseui-id-idp-button" data-provider-id="facebook.com" data-upgraded=",MaterialButton"><span class="firebaseui-idp-icon-wrapper"><img class="firebaseui-idp-icon" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/facebook.svg"></span><span class="firebaseui-idp-text firebaseui-idp-text-long">Entrar com Facebook</span><span class="firebaseui-idp-text firebaseui-idp-text-short">Facebook</span></button></li>
+                       <li class="firebaseui-list-item"><button class="firebaseui-idp-button mdl-button mdl-js-button mdl-button--raised firebaseui-idp-twitter firebaseui-id-idp-button" data-provider-id="twitter.com" data-upgraded=",MaterialButton"><span class="firebaseui-idp-icon-wrapper"><img class="firebaseui-idp-icon" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/twitter.svg"></span><span class="firebaseui-idp-text firebaseui-idp-text-long">Entrar com Twitter</span><span class="firebaseui-idp-text firebaseui-idp-text-short">Twitter</span></button></li>
+                    </ul>
+                 </form>
+              </div>
+           </div>
+        </div>
+      </div>
+    </div>
+    <div layout-padding md-colors="{background: 'grey-200'}">
+      <a>
+        <strong md-colors="{color: 'teal-900'}">Esqueceu a senha?</strong>
+      </a>
+    </div>
+  </div>
+</md-content>

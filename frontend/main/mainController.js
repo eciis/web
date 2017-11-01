@@ -43,8 +43,8 @@
             return mainCtrl.user.permissions.analyze_request_inst;
         };
 
-        mainCtrl.changeInstitution = function changeInstitution(institution) {
-            mainCtrl.user.changeInstitution(institution);
+        mainCtrl.changeInstitution = function changeInstitution(profile) {
+            mainCtrl.user.changeInstitution({'key': profile.institution_key});
             mainCtrl.getPendingTasks();
         };
 

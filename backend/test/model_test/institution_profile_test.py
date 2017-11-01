@@ -22,8 +22,11 @@ class InstitutionProfileTest(TestBase):
     def test_make(self):
         """Test the make method."""
         profile = InstitutionProfile.create(self.data_profile)
+        profile.color = "grey";
         maked_profile = {
             'office': 'member',
+            'color': 'grey',
+            'institution_key': 'institution_key',
             'email': 'institutional_email',
             'phone': '88 8888-88888',
             'institution': {

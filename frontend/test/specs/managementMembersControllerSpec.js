@@ -29,7 +29,7 @@
         cpf: '121.445.044-07',
         key: '12345',
         email: 'member@gmail.com',
-        institutions: [institution.key]
+        institutions: [institution]
     };
 
     var user = {
@@ -37,7 +37,7 @@
          cpf: '121.445.044-07',
          key: '54321',
          email: 'maiana.brito@ccc.ufcg.edu.br',
-         institutions: [institution.key]
+         institutions: [institution]
      };
 
     beforeEach(module('app'));

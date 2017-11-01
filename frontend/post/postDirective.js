@@ -9,6 +9,7 @@
         var postCtrl = this;
 
         postCtrl.post = {};
+        postCtrl.type_post = 'Common';
         postCtrl.loading = false;
         postCtrl.deletePreviousImage = false;
         postCtrl.user = AuthService.getCurrentUser();
@@ -17,7 +18,12 @@
         postCtrl.deletedFiles = [];
         postCtrl.addVideo = false;
         postCtrl.videoRegex = '(?:http(s)?:\/\/)?(www\.)?youtube\.com\/watch\\?v=.+';
-
+        postCtrl.options = [];
+        postCtrl.multipleChoice = false;
+        var option_empty = {'text': '',
+                            'number_votes': 0,
+                            'voters': []
+                            };
         var observer;
 
         postCtrl.hasMedia = function hasMedia() {
@@ -37,8 +43,100 @@
             });
         };
 
+        postCtrl.removeOption = function(opt) {
+             _.remove(postCtrl.options, function(option) {
+              return option === opt;
+            });    
+        };
+
+        // TODO: Change interface according design suggested
+        // @author: Maiana Brito
+        postCtrl.addOption = function(){
+            const hasOptionEmpty = postCtrl.getOptionEmpty() !== undefined;
+            if(!hasOptionEmpty){
+                postCtrl.options.push(angular.copy(option_empty));
+            }
+        };
+
+        postCtrl.getOptionEmpty = function(){
+            return _.find(postCtrl.options, option_empty);
+        };
+
+        postCtrl.setTypeOfPost = function() {
+            postCtrl.type_post === "Common" ? postCtrl.choiceSurvey() : postCtrl.choiceCommon();
+        };
+
+        postCtrl.choiceCommon = function() {
+            if(postCtrl.type_post === "Survey") {
+                postCtrl.type_post = "Common";
+                postCtrl.clearPost();
+            }
+        };
+
+        postCtrl.choiceSurvey = function() {
+            if(postCtrl.type_post === "Common"){
+                postCtrl.type_post = "Survey";
+                postCtrl.options.push(angular.copy(option_empty));
+                postCtrl.options.push(angular.copy(option_empty));
+            }
+        };
+
+        /* This method add ids in each option and remove the options that are empty.*/
+        function modifyOptions(){
+            var id = 0;
+            _.forEach(postCtrl.options, function(option) {
+              if(option.text !== ''){
+                option.id = id;
+                id += 1;
+              }else{
+                postCtrl.removeOption(option);
+              }
+            });
+        }
+
+        function defineTypeSurvey(){
+            if(postCtrl.multipleChoice){
+                postCtrl.post.type_survey = 'multiple_choice';
+            } else {
+                postCtrl.post.type_survey = 'binary';
+            }
+        }
+
+        function formateDate(){
+            var date = postCtrl.post.deadline.toISOString();
+            postCtrl.post.deadline = _.split(date, '.')[0];
+        }
+
+        function createSurvey(){
+            defineTypeSurvey();
+            modifyOptions();
+            postCtrl.post.deadline && formateDate();
+            postCtrl.post.options = postCtrl.options;
+
+            return new Post(postCtrl.post, postCtrl.user.current_institution.key);
+        }
+
+        postCtrl.saveSurvey = function(posts) {
+            var survey = createSurvey();
+            var promisse = PostService.createPost(survey).then(function success(response) {
+                postCtrl.clearPost();
+                posts.push(new Post(response.data));
+                MessageService.showToast('Postado com sucesso!');
+                $mdDialog.hide();
+            }, function error(response) {
+                AuthService.reload().then(function success() {
+                    $mdDialog.hide();
+                    MessageService.showToast(response.data.msg);
+                    $state.go('app.home');
+                });
+            });
+            return promisse;
+        };
+
         postCtrl.addPdf = function addPdf(files) {
-            postCtrl.pdfFiles = files;
+            if(!postCtrl.getOptionEmpty()){
+                postCtrl.pdfFiles = files;
+            }
         };
 
         postCtrl.createEditedPost = function createEditedPost(post) {
@@ -53,7 +151,7 @@
             });
         }
 
-        postCtrl.isPostValid = function isPostValid() {
+        postCtrl.isCommonPostValid = function isCommonPostValid(formInvalid) {
             if (postCtrl.user) {
                 var post;
                 if(!postCtrl.isEditing) {
@@ -61,7 +159,7 @@
                 } else {
                     post = postCtrl.post;
                 }
-                return post.isValid();
+                return post.isValid() && !formInvalid;
             } else {
                 return false;
             }
@@ -70,6 +168,8 @@
         postCtrl.save = function save(isEditing, originalPost, posts) {
             if(isEditing) {
                 postCtrl.editPost(originalPost);
+            } else if(postCtrl.type_post === 'Survey'){
+                postCtrl.saveSurvey(posts);
             } else {
                 postCtrl.createPost(posts);
             }
@@ -192,6 +292,7 @@
             var savePromises = [saveFiles(), saveImage()];
             $q.all(savePromises).then(function success() {
                 var post = new Post(postCtrl.post, postCtrl.user.current_institution.key);
+                console.log(post);
                 if (post.isValid()) {
                     PostService.createPost(post).then(function success(response) {
                         postCtrl.clearPost();
@@ -217,6 +318,9 @@
             postCtrl.post = {};
             postCtrl.pdfFiles = [];
             postCtrl.hideImage();
+            postCtrl.options = [];
+            postCtrl.type_post = "Common";
+            postCtrl.multipleChoice = false;
         };
 
         postCtrl.showVideo = function showVideo() {
@@ -224,7 +328,7 @@
         };
 
         postCtrl.showVideoUrlField = function showVideoUrlField() {
-            var showField = postCtrl.post.title && (postCtrl.addVideo || postCtrl.post.video_url);
+            var showField = postCtrl.addVideo || postCtrl.post.video_url;
             return showField;
         };
 
@@ -277,20 +381,12 @@
         postCtrl.showImage = function() {
             var isImageEmpty = postCtrl.photoUrl === "";
             var isImageNull = postCtrl.photoUrl === null;
-            var hasTitle = postCtrl.post.title;
-            return !isImageEmpty && !isImageNull && hasTitle;
+            return !isImageEmpty && !isImageNull;
         };
 
         postCtrl.showFiles = function() {
             var hasFiles = postCtrl.pdfFiles.length > 0;
             return hasFiles;
-        };
-
-        postCtrl.hideFile = function(index) {
-            if (_.includes(postCtrl.post.pdf_files, postCtrl.pdfFiles[index])) {
-                postCtrl.deletedFiles.push(postCtrl.pdfFiles[index]);
-            }
-            postCtrl.pdfFiles.splice(index, 1);
         };
 
         postCtrl.hideImage = function() {
@@ -313,6 +409,23 @@
                 instName = postCtrl.post.institution_name;
             }
             return instName;
+        };
+
+        postCtrl.isValid = function isValid(formInvalid){
+            if(postCtrl.type_post === "Survey"){
+                const hasOptionEmpty = postCtrl.getOptionEmpty() === undefined;
+                return postCtrl.post.title && !hasOptionEmpty;
+            } else {
+                return postCtrl.isCommonPostValid(formInvalid);
+            }
+        };
+
+        postCtrl.isTyping = function() {
+            return postCtrl.post.title || postCtrl.post.text || postCtrl.hasMedia();
+        };
+
+        postCtrl.showPlaceholderMsg = function() {
+            return postCtrl.isTyping() ? "Título" : "Escreva aqui uma nova publicação";
         };
 
         (function main() {

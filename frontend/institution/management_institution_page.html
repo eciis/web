@@ -1,52 +1,65 @@
 <md-content layout="row" md-colors="{background: 'grey-200'}" layout-align="center">
   <!-- CONTENT -->
-  <div flex-gt-lg="80" flex-lg="90" layout="row" layout-align="center" layout-fill>
+  <div flex-lg="90" flex-gt-lg="70" layout="row" layout-align="space-between"
+  md-colors="{background: 'grey-50'}">
 
-    <!-- LEFT SIDE PANEL -->
-    <div flex flex-gt-xs="25" layout="column" hide show-gt-sm >
-      <div flex>
-        <md-card layout="column" class="green-background">
-          <center>
-            <a href ng-click="institutionCtrl.goToInstitution(institutionCtrl.current_institution.key)">
-              <img ng-src="{{ institutionCtrl.current_institution.photo_url }}" class="img-circle img-thumbnail" >
-            </a>
-          </center>
-          <md-card-title>
-            <md-card-title-text>
-              <a href class="md-title hyperlink" ng-click="institutionCtrl.goToInstitution(institutionCtrl.current_institution.key)"><b>{{ institutionCtrl.current_institution.name }}</b></a>
-            </md-card-title-text>
-          </md-card-title>
-          <md-card-content>
-            <div layout="row">
-              <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-900'}" ng-click="institutionCtrl.goToEditInfo()">
-                <md-icon>edit</md-icon>Editar Informações
-              </md-button>
+  <!-- LEFT SIDE PANEL -->
+    <md-sidenav class="md-sidenav-left" md-component-id="leftNav" md-whiteframe="4" layout="row"
+    md-is-locked-open="$mdMedia('gt-sm')" flex-gt-md="25">
+      <md-content class="hide-scrollbar" layout="column" hide show-gt-sm
+      md-colors="{background: 'grey-100'}" flex>
+        <div class="container">
+          <div class="row">
+            <div class="card hovercard" 
+            md-colors="{background: institutionCtrl.user.current_institution.color+'-800'}">
+              <div class="cardheader">
+                <div class="avatar">
+                  <img alt="Foto da Instituição" ng-src="{{ institutionCtrl.current_institution.photo_url }}">
+                </div>
+              </div>
+              <div class="info" 
+              md-colors="{background: institutionCtrl.user.current_institution.color+'-600'}">
+                <div class="desc">
+                  <div class="md-title">{{ institutionCtrl.current_institution.name }}</div>
+                </div>
+              </div>
             </div>
-            <div layout="row">
-              <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-900'}" ng-click="institutionCtrl.goToManageMembers()">
-                <md-icon>people</md-icon>Gerenciar membros
-              </md-button>
+          </div>
+
+          <div class="row section-menu">
+              <md-menu-content width="4" md-colors="{background: 'grey-100'}">
+                <md-menu-item>
+                  <md-button ng-click="institutionCtrl.goToEditInfo()">
+                    <md-icon>edit</md-icon>
+                    Editar Informações
+                  </md-button>
+                </md-menu-item>
+                <md-menu-item>
+                  <md-button ng-click="institutionCtrl.goToManageMembers()">
+                    <md-icon>people</md-icon>
+                    Gerenciar membros
+                </md-menu-item>
+                <md-menu-item>
+                  <md-button ng-click="institutionCtrl.goToManageInstitutions()">
+                    <md-icon>account_balance</md-icon>
+                    Vínculos Institucionais
+                  </md-button>
+                </md-menu-item>
+                <md-menu-item>
+                  <md-button ng-click="institutionCtrl.removeInstitution()">
+                    <md-icon>delete</md-icon>
+                    Remover Instituição
+                  </md-button>
+                </md-menu-item>
+              </md-menu-content>
             </div>
-            <div layout="row">
-              <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-900'}"
-              ng-click="institutionCtrl.goToManageInstitutions()" >
-                <md-icon>account_balance</md-icon>Vínculos Institucionais
-              </md-button>
-            </div>
-            <div layout="row">
-              <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-900'}"
-              ng-click="institutionCtrl.removeInstitution()" >
-                <md-icon>delete</md-icon>Remover Instituição
-              </md-button>
-            </div>
-            <div layout="row">
-              <md-button flex="100" class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-900'}" ng-click="">
-              </md-button>
-            </div>
-          </md-card-content>
-        </md-card>
-      </div>
-    </div>
-  <div ui-view="content_manage_institution" flex layout="column" md-colors="{background: 'grey-200'}"></div>
+        </div>
+      </md-content>
+    </md-sidenav>
+
+    <!-- CONTENT -->
+    <md-content id="content"  flex-gt-md="70" class="body hide-scrollbar">
+      <div ui-view="content_manage_institution" flex layout="column"></div>
+    </md-content>
   <div>
-  </md-content>
+</md-content>

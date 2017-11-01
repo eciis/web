@@ -29,7 +29,7 @@
         cpf: '121.445.044-07',
         key: '12345',
         email: 'member@gmail.com',
-        institutions: [institution.key]
+        institutions: [institution]
     };
 
     var user = {
@@ -37,7 +37,7 @@
          cpf: '121.445.044-07',
          key: '54321',
          email: 'maiana.brito@ccc.ufcg.edu.br',
-         institutions: [institution.key]
+         institutions: [institution]
      };
 
     beforeEach(module('app'));
@@ -137,7 +137,6 @@
                 promise.then(function() {
                     expect(inviteService.sendInvite).toHaveBeenCalledWith(newInvite);
                     expect(manageMemberCtrl.invite).toEqual({});
-                    expect(manageMemberCtrl.showButton).toBe(true);
                     expect(manageMemberCtrl.sent_invitations).toContain(invite);
                     expect(manageMemberCtrl.sent_invitations).toContain(newInvite);
                     expect(manageMemberCtrl.sent_invitations.length).toBe(3);
@@ -180,7 +179,6 @@
                 manageMemberCtrl.cancelInvite();
 
                 expect(manageMemberCtrl.invite).toEqual({});
-                expect(manageMemberCtrl.showButton).toBe(true);
             });
         });
     });

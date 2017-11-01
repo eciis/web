@@ -15,7 +15,6 @@ from custom_exceptions.entityException import EntityException
 
 from models.institution import Institution
 from util.json_patch import JsonPatch
-from service_entities import remove_institution_from_users
 from service_entities import enqueue_task
 
 
@@ -174,7 +173,13 @@ class InstitutionHandler(BaseHandler):
                       "Key is not an institution", EntityException)
 
         institution.remove_institution(remove_hierarchy, user)
-        remove_institution_from_users(remove_hierarchy, institution_key)
+
+        params = {
+            'institution_key': institution_key,
+            'remove_hierarchy': remove_hierarchy
+        }
+
+        enqueue_task('remove-inst', params)
 
         email_params = {
             "justification": self.request.get('justification'),
@@ -184,6 +189,8 @@ class InstitutionHandler(BaseHandler):
             "institution_key": institution_key
         }
 
+        enqueue_task('email-members', email_params)                    
+
         notification_params = {
             "entity_type": "DELETED_INSTITUTION",
             "message": json.dumps({
@@ -192,6 +199,4 @@ class InstitutionHandler(BaseHandler):
             }),
             "institution_key": institution_key
         }
-
-        enqueue_task('email-members', email_params)                    
         enqueue_task('notify-followers', notification_params)                     

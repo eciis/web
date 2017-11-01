@@ -116,16 +116,23 @@
     </md-sidenav>
 
     <!-- CONTENT -->
-    <md-content id="content" flex-md="75" flex-gt-md="50" layout-align="center center" class="body hide-scrollbar">
-        <div layout="row">
-            <post-timeline ng-if="!homeCtrl.isLoadingPosts" layout="column" posts="homeCtrl.posts" institution="false" 
-            user="homeCtrl.user" add-post="true"  load-more-posts='homeCtrl.loadMorePosts'></post-timeline>
-          <!-- LOADING CIRCLE -->
-          <div flex layout-align="center center" layout="row" layout-fill ng-if="homeCtrl.isLoadingPosts">
-            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-          </div>
+    <div flex-md="75" flex-gt-md="50" layout-align="center center">
+      <div flex-md="100" flex-gt-md="100" layout="column">
+        <div>
+          <save-post flex is-dialog="false" posts="homeCtrl.posts"></save-post>
         </div>
-    </md-content>
+        <md-content id="content" class="body hide-scrollbar">         
+            <div layout="row">
+                <post-timeline flex ng-if="!homeCtrl.isLoadingPosts" layout="column" posts="homeCtrl.posts" institution="false" 
+                user="homeCtrl.user" add-post="true" load-more-posts='homeCtrl.loadMorePosts'></post-timeline>
+              <!-- LOADING CIRCLE -->
+              <div flex layout-align="center center" layout="row" layout-fill ng-if="homeCtrl.isLoadingPosts">
+                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+              </div>
+            </div>
+        </md-content>
+      </div>
+    </div>
 
     <!-- RIGHT SIDE PANEL -->
     <md-content class="hide-scrollbar" flex-gt-md="20" hide show-gt-md>

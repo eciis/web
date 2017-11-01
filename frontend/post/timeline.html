@@ -1,8 +1,5 @@
 <!-- TIMELINE -->
 <div flex>
-  <div ng-if="!institution">
-    <save-post flex is-dialog="false" posts="timelineCtrl.posts"></save-post>
-  </div>
   <div layout="row" layout-align="center center" ng-if="timelineCtrl.showRefreshTimelineButton() && !institution" class="ng-if">
     <md-button flex md-colors="{background: 'teal-700'}" ng-click="timelineCtrl.load(timelineCtrl.posts)">
       VOCÊ TEM NOVOS POSTS

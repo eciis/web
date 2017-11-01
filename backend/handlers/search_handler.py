@@ -6,8 +6,12 @@ from utils import json_response
 import json
 
 from handlers.base_handler import BaseHandler
-import search_module
-from search_user_module import getUserDocuments
+from search_document.search_user import SearchUser
+from search_document.search_institution import SearchInstitution
+
+types = {'institution': SearchInstitution,
+         'user': SearchUser
+         }
 
 
 class SearchHandler(BaseHandler):
@@ -20,11 +24,7 @@ class SearchHandler(BaseHandler):
         value = self.request.get('value')
         state = self.request.get('state')
         search_type = self.request.get('type')
-        if search_type == 'institution':
-            self.response.write(
-                json.dumps(search_module.getDocuments(value, state))
-            )
-        else:
-            self.response.write(
-                json.dumps(getUserDocuments(value, state))
-            )
+        search_entity = types[search_type]()
+        self.response.write(
+            json.dumps(search_entity.getDocuments(value, state))
+        )

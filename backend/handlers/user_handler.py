@@ -2,7 +2,6 @@
 """User Handler."""
 
 import json
-import search_user_module
 
 from models.invite import Invite
 from utils import Utils
@@ -51,7 +50,7 @@ def makeUser(user, request):
         ['acronym', 'photo_url', 'key', 'parent_institution'])
         for institution_key in user.follows
         if institution_key.get().state != 'inactive']
-    user_json['institution_profiles'] = [profile.make() 
+    user_json['institution_profiles'] = [profile.make()
         for profile in user.institution_profiles]
     return user_json
 
@@ -106,7 +105,7 @@ class UserHandler(BaseHandler):
         if(user.state == 'inactive'):
             remove_user_from_institutions(user)
             user.disable_account()
-        search_user_module.updateUserDocument(user)
+        # search_user_module.updateUserDocument(user)
 
         """Update user."""
         user.put()

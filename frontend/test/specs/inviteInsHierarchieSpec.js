@@ -228,7 +228,7 @@
                     suggestion_institution_name : "Institution Parent",
                     type_of_invite : "INSTITUTION_PARENT"};
                 inviteInstCtrl.user.current_institution = splab;
-                httpBackend.expect('GET', INSTITUTION_SEARCH_URI+"Institution Parent" + '&state=active,pending&type=institution').respond({});
+                httpBackend.expect('GET', '/api/search/institution', {value: "Institution Parent", state: 'active,pending', type: 'institution'}).respond({});
                 inviteInstCtrl.checkInstInvite().then(function() {
                     expect(instService.searchInstitutions).toHaveBeenCalledWith(
                         inviteInstCtrl.invite.suggestion_institution_name,

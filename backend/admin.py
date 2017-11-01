@@ -16,8 +16,9 @@ from models.post import Post
 from models.post import Comment
 from models.invite import Invite
 from google.appengine.ext import ndb
-import search_module
 from google.appengine.api import search
+
+from search_module.search_institution import SearchInstitution
 
 INDEX_NAME = 'institution'
 
@@ -91,7 +92,8 @@ def createInstitution(data, user):
     user.institutions_admin.append(institution.key)
     user.follows.append(institution.key)
     user.put()
-    search_module.createDocument(institution)
+    search_institution = SearchInstitution()
+    search_institution.createDocument(institution)
 
     return institution
 

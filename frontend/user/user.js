@@ -4,7 +4,7 @@ function User(data) {
     data = data || {};
     _.extend(this, data);
 
-    if (this.institutions.length && !this.current_institution) {
+    if (this.institutions && !this.current_institution) {
         this.changeInstitution(this.institutions[0]);
     }
 }

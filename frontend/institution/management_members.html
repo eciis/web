@@ -83,7 +83,7 @@
         <md-list>
           <md-list-item class="md-2-line" ng-repeat="invite in manageMemberCtrl.sent_invitations" ng-click="null"
           ng-if="invite.type_of_invite == 'USER'">
-            <md-button md-colors="{background: 'light-green'}" class="md-icon-button" >
+            <md-button md-colors="{background: 'light-green'}" class="md-icon-button" style="margin: 0 10px 0 0;">
               <md-icon style="color: white;">account_box</md-icon>
             </md-button>
             <div class="md-list-item-text" style="">
@@ -114,9 +114,12 @@
       <md-card-content ng-if="manageMemberCtrl.showRequests">
         <md-list flex>
           <md-list-item ng-repeat="request in manageMemberCtrl.requests" ng-if="request.status == 'sent'" ng-click="null" class="md-3-line">
+            <md-button md-colors="{background: 'light-green'}" class="md-icon-button" style="margin: 0 10px 0 0;">
+              <md-icon style="color: white;">account_box</md-icon>
+            </md-button>
             <div class="md-list-item-text" layout="column">
-              <p>Nome do requisitante: {{ request.sender_name}}</p>
-              <p>Cargo atual: {{ request.office}}</p>
+              <h3>{{ request.sender_name}}</h3>
+              <h4>Cargo atual: {{ request.office}}</h4>
               <p>Email institucional: {{ request.institutional_email}}</p>
             </div>
             <md-icon class="md-secondary md-hue-3" title="Rejeitar" ng-click="manageMemberCtrl.rejectRequest(request, $event)">close</md-icon>

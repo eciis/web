@@ -292,7 +292,6 @@
             var savePromises = [saveFiles(), saveImage()];
             $q.all(savePromises).then(function success() {
                 var post = new Post(postCtrl.post, postCtrl.user.current_institution.key);
-                console.log(post);
                 if (post.isValid()) {
                     PostService.createPost(post).then(function success(response) {
                         postCtrl.clearPost();

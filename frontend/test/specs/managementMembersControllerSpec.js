@@ -137,7 +137,6 @@
                 promise.then(function() {
                     expect(inviteService.sendInvite).toHaveBeenCalledWith(newInvite);
                     expect(manageMemberCtrl.invite).toEqual({});
-                    expect(manageMemberCtrl.showButton).toBe(true);
                     expect(manageMemberCtrl.sent_invitations).toContain(invite);
                     expect(manageMemberCtrl.sent_invitations).toContain(newInvite);
                     expect(manageMemberCtrl.sent_invitations.length).toBe(3);
@@ -180,7 +179,6 @@
                 manageMemberCtrl.cancelInvite();
 
                 expect(manageMemberCtrl.invite).toEqual({});
-                expect(manageMemberCtrl.showButton).toBe(true);
             });
         });
     });

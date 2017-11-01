@@ -1,6 +1,7 @@
 <!-- CONTENT -->
 <div flex-gt-lg="80" flex-lg="90" layout-align="center" layout-fill>
   <div flex md-colors="{background: 'grey-200'}">
+    <!-- SEND INVITE -->
     <md-card>
       <md-toolbar md-colors="{background: 'teal-500'}" layout="row">
         <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
@@ -18,13 +19,13 @@
             <input ng-model="manageMemberCtrl.invite.invitee" type="email"  required>
           </md-input-container>
           <section layout="row" layout="column" layout-align="end center" layout-wrap>
-            <md-button md-colors="{color: 'teal-700'}" ng-click="manageMemberCtrl.cancelInvite()">Cancelar</md-button>
-            <md-button ng-click="manageMemberCtrl.sendUserInvite()" md-colors="{color: 'teal-700'}">Enviar Convite</md-button>
+            <md-button md-colors="{background: 'teal-500'}" ng-click="manageMemberCtrl.cancelInvite()">Cancelar</md-button>
+            <md-button ng-click="manageMemberCtrl.sendUserInvite()" md-colors="{background: 'teal-500'}">Enviar Convite</md-button>
           </section>
         </div>
       </md-card-content>
     </md-card>
-
+    <!-- MANAGE MEMBERS -->
     <md-card>
       <md-toolbar md-colors="{background: 'teal-500'}" layout="row">
         <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
@@ -62,7 +63,7 @@
         </md-list>
       </md-card-content>
     </md-card>
-
+    <!-- INVITATIONS SENT -->
     <md-card>
       <md-toolbar md-colors="{background: 'teal-500'}" layout="row">
         <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
@@ -93,7 +94,7 @@
         </md-list>
       </md-card-content>
     </md-card>
-
+    <!-- REQUIRED INVITATIONS -->
     <md-card>
       <md-toolbar md-colors="{background: 'teal-500'}" layout="row">
         <div class="md-toolbar-tools" flex layout="row" layout-align="center center">

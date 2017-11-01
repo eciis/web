@@ -9,6 +9,7 @@ from models.institution import Institution
 from models.post import Post
 from utils import json_response
 from service_messages import send_message_notification
+from service_messages import send_message_email
 
 
 class BaseHandler(webapp2.RequestHandler):
@@ -105,10 +106,62 @@ class PostNotificationHandler(BaseHandler):
                     post_key
                 )
 
+class EmailMembersHandler(BaseHandler):
+    """Handle requests to send emails to institution members."""
+
+    def post(self):
+        """Send emails to institution members."""
+        inst_key = self.request.get('institution_key')
+        justification = self.request.get('justification')
+        message = self.request.get('message')
+        subject = self.request.get('subject')
+
+        institution = ndb.Key(urlsafe=inst_key).get()
+
+        for member_key in institution.members:
+            member = member_key.get()
+            is_admin = member_key == institution.admin
+            if(is_admin and justification):
+                message = message + """pelo seguinte motivo:
+                '%s'
+                """ % justification
+            
+            send_message_email(
+                member.email,
+                message,
+                subject
+            )
+
+
+class NotifyFollowersHandler(BaseHandler):
+    """Handle requests to notify institution followers."""
+
+    def post(self):
+        """Send notifications to institution followers."""
+        inst_key = self.request.get('institution_key')
+        message = self.request.get('message')
+        entity_type = self.request.get('entity_type')
+
+        institution = ndb.Key(urlsafe=inst_key).get()
+
+        for follower_key in institution.followers:
+            follower = follower_key.get()
+            is_active = follower.state == "active"
+            if is_active:
+                send_message_notification(
+                    follower.key.urlsafe(),
+                    message,
+                    entity_type,
+                    institution.key.urlsafe()
+                )
+
+
 
 app = webapp2.WSGIApplication([
     ('/api/queue/send-notification', SendNotificationHandler),
     ('/api/queue/send-email', SendEmailHandler),
     ('/api/queue/remove-inst', RemoveInstitutionHandler),
-    ('/api/queue/post-notification', PostNotificationHandler)
+    ('/api/queue/post-notification', PostNotificationHandler),
+    ('/api/queue/email-members', EmailMembersHandler),
+    ('/api/queue/notify-followers', NotifyFollowersHandler)
 ], debug=True)

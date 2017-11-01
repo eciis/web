@@ -300,35 +300,6 @@ class Institution(ndb.Model):
                 child = child.get()
                 child.remove_institution_from_users(remove_hierarchy)
 
-    def notify_followers(self, message, entity_type):
-        """Notify all institution followers."""
-        for follower_key in self.followers:
-            follower = follower_key.get()
-            is_active = follower.state == "active"
-            if is_active:
-                send_message_notification(
-                    follower.key.urlsafe(),
-                    json.dumps(message),
-                    entity_type,
-                    self.key.urlsafe()
-                )
-    
-    def send_email_to_members(self, message, justification, subject):
-        """Send email to all institution members."""
-        for member_key in self.members:
-            member = member_key.get()
-            is_admin = member_key == self.admin
-            if(is_admin and justification):
-                message = message + """pelo seguinte motivo:
-                '%s'
-                """ % justification
-            
-            send_message_email(
-                member.email,
-                message,
-                subject
-            )
-
     def change_state(self, state):
         """Change the institution state."""
         self.state = state

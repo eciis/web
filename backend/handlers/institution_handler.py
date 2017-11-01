@@ -16,6 +16,7 @@ from custom_exceptions.entityException import EntityException
 from models.institution import Institution
 from util.json_patch import JsonPatch
 from service_entities import remove_institution_from_users
+from service_entities import enqueue_task
 
 
 from handlers.base_handler import BaseHandler
@@ -175,14 +176,22 @@ class InstitutionHandler(BaseHandler):
         institution.remove_institution(remove_hierarchy, user)
         remove_institution_from_users(remove_hierarchy, institution_key)
 
-        justification = self.request.get('justification')
-        entity_type = "DELETED_INSTITUTION"
-        message_notification = {'type': entity_type, 'from': user.name.encode('utf8')}
-        message_email = """Lamentamos informar que a instituição %s foi removida
-        pelo administrador %s """ % (institution.name, user.name)
-        subject = "Remoção de instituição"
+        email_params = {
+            "justification": self.request.get('justification'),
+            "message": """Lamentamos informar que a instituição %s foi removida
+            pelo administrador %s """ % (institution.name, user.name),
+            "subject": "Remoção de instituição",
+            "institution_key": institution_key
+        }
 
-        institution.notify_followers(message_notification, entity_type)
-        institution.send_email_to_members(message_email, justification, subject)
-       
+        notification_params = {
+            "entity_type": "DELETED_INSTITUTION",
+            "message": json.dumps({
+                "type": "DELETED_INSTITUTION",
+                "from": user.name.encode('utf8')
+            }),
+            "institution_key": institution_key
+        }
 
+        enqueue_task('email-members', email_params)                    
+        enqueue_task('notify-followers', notification_params)                     

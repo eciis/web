@@ -80,7 +80,11 @@ class SurveyPost(Post):
     def make(post, host):
         """Create personalized json of post."""
         post_dict = super(SurveyPost, post).make(host)
+<<<<<<< HEAD
         post_dict["deadline"] = post.deadline.isoformat()
+=======
+        post_dict["deadline"] = post.deadline.isoformat() if post.deadline else ''
+>>>>>>> bc105c67d3ac13b1a873a368f99000f001b6c6be
         post_dict["type_survey"] = post.type_survey
         post_dict["options"] = post.options if post.options else []
 

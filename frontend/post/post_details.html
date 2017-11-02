@@ -67,6 +67,9 @@
     </md-menu>
   </md-card-header>
 
+  <!-- SURVEY -->
+  <survey-details ng-if="postDetailsCtrl.getTypePost() === 'SURVEY'" post="postDetailsCtrl.post" posts="posts" user="postDetailsCtrl.user"></survey-details>
+
   <!-- BODY SHARED EVENT -->
   <div md-colors="{background: 'teal-500'}" ng-if="postDetailsCtrl.isDeletedEvent(postDetailsCtrl.post) && !postDetailsCtrl.isDeleted(postDetailsCtrl.post)"
     style='margin: 0 9px 0 9px; height: 130px' layout-gt-xs="row" layout-xs="column" layout-align="center center">
@@ -162,19 +165,20 @@
   </md-card>
 
   <!-- BODY POST -->
-  <img ng-if="postDetailsCtrl.showImage(postDetailsCtrl.post)" ng-src="{{ postDetailsCtrl.post.photo_url }}"
-    class="md-card-image">
-  <div class="youtube-player" ng-if="postDetailsCtrl.showVideo(postDetailsCtrl.post)">
-    <iframe ng-src="{{postDetailsCtrl.getVideoUrl(postDetailsCtrl.post)}}"></iframe>
-  </div>
-  <pdf-view pdf-files='postDetailsCtrl.post.pdf_files' is-editing="false"></pdf-view>
-  <md-card-title ng-if="!postDetailsCtrl.isDeleted(postDetailsCtrl.post)">
-    <md-card-title-text>
-      <a href class="md-title hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post)">
-        <span class="md-headline break">{{postDetailsCtrl.post.title}}</span>
-      </a>
-    </md-card-title-text>
-  </md-card-title>
+  <div ng-if="postDetailsCtrl.getTypePost() === 'COMMON'">
+    <img ng-if="postDetailsCtrl.showImage(postDetailsCtrl.post)" ng-src="{{ postDetailsCtrl.post.photo_url }}"
+      class="md-card-image">
+    <div class="youtube-player" ng-if="postDetailsCtrl.showVideo(postDetailsCtrl.post)">
+      <iframe ng-src="{{postDetailsCtrl.getVideoUrl(postDetailsCtrl.post)}}"></iframe>
+    </div>
+    <pdf-view pdf-files='postDetailsCtrl.post.pdf_files' is-editing="false"></pdf-view>
+    <md-card-title ng-if="!postDetailsCtrl.isDeleted(postDetailsCtrl.post)">
+      <md-card-title-text>
+        <a href class="md-title hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post)">
+          <span class="md-headline break">{{postDetailsCtrl.post.title}}</span>
+        </a>
+      </md-card-title-text>
+    </md-card-title>
   <div md-colors="{background: 'teal-500'}" ng-if="postDetailsCtrl.isDeleted(postDetailsCtrl.post)"
     style='margin: 0 9px 0 9px; height: 130px' layout-gt-xs="row" layout-xs="column" layout-align="center center">
     <div style="height: 70px; width: 70px;">
@@ -186,17 +190,18 @@
     </div>
   </div>
   <md-card-content>
-    <div ng-if="postDetailsCtrl.showTextPost()">
-        <p ng-bind-html="postDetailsCtrl.postToURL(postDetailsCtrl.post).text" class="break">
-          {{postDetailsCtrl.postToURL(postDetailsCtrl.post).text}}
-        </p>
-        <div layout="row" layout-align="end-center">
+      <div ng-if="postDetailsCtrl.showTextPost()">
+          <p ng-bind-html="postDetailsCtrl.postToURL(postDetailsCtrl.post).text" class="break">
+            {{postDetailsCtrl.postToURL(postDetailsCtrl.post).text}}
+          </p>
+          <div layout="row" layout-align="end-center">
             <a href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post)">
               <md-icon style="margin-bottom: -15px; margin-right: -12px;" md-colors="{color: 'light-green'}">more_horiz</md-icon>
-            </a>
-        </div>
-    </div>
-  </md-card-content>
+              </a>
+          </div>
+      </div>
+    </md-card-content>
+  </div>
   <md-divider></md-divider>
 
   <!-- BUTTONS -->

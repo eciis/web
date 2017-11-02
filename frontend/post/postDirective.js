@@ -343,7 +343,6 @@
         };
 
         postCtrl.showButton = function() {
-            console.log(postCtrl.typePost === 'Common');
             return postCtrl.typePost === 'Common' && postCtrl.isTyping();
         };
 

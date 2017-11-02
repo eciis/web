@@ -1,13 +1,14 @@
-
-<form>
+<form layout="column">
   <md-input-container md-no-float class="md-block" style="margin: 0px;">
     <input ng-model="surveyCtrl.post.title" placeholder="Pergunte algo" 
     style="font-weight: bold; color: #00695C ; margin: 0px; border: 0;resize:none;"/>
   </md-input-container>
   <p class="md-subheader"> Alternativas</p>
-  <md-input-container ng-repeat="option in surveyCtrl.options" md-no-float class="md-block option">
-    <input class=" md-input" ng-model="option.text" ng-change="surveyCtrl.addOption()" placeholder="+ Adicionar uma opção..." />
-  </md-input-container>
+  <md-content flex style="max-height: 400px;" class="hide-scrollbar">
+    <md-input-container ng-repeat="option in surveyCtrl.options" md-no-float class="md-block option">
+      <input class=" md-input" ng-model="option.text" ng-change="surveyCtrl.addOption()" placeholder="+ Adicionar uma opção..." />
+    </md-input-container>
+  </md-content>
   <md-input-container class="md-block" >
     <label>Data limite</label>
     <input mdc-datetime-picker="" short-time="false" date="true" time="true" type="text" 

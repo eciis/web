@@ -1,15 +1,16 @@
-<md-card-title>
+<div ng-if="!surveyCtrl.isDeleted()">
+  <md-card-title>
     <md-card-title-text>
       <a href class="md-title hyperlink" ng-click="surveyCtrl.goToPost(postDetailsCtrl.post)">
         <span class="md-headline break">{{surveyCtrl.post.title}}</span>
       </a>
     </md-card-title-text>
   </md-card-title>
-  <md-card-content>
-    <div ng-if="surveyCtrl.isDeleted()" style='font-style:italic; text-align: center'>
-      <p>Esta publicação foi removida por </p>
-      <p>
-        {{surveyCtrl.post.last_modified_by}} {{surveyCtrl.post.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats }}.
-      </p>
-    </div>
-  </md-card-content>
+  <md-list>
+    <md-list-item ng-repeat="option in surveyCtrl.post.options">
+      <md-checkbox ng-model="option.selected" ng-click="surveyCtrl.vote(option)"></md-checkbox>
+      <p>{{option.text}}</p>
+      <p class="md-secondary"> {{option.percentage}} </p>
+    </md-list-item>
+  </md-list>
+</div>

@@ -10,7 +10,6 @@
         manageMemberCtrl.invite = {};
         manageMemberCtrl.sent_invitations = [];
 
-        manageMemberCtrl.showButton = true;
         var currentInstitutionKey = $state.params.institutionKey;
         var invite;
 
@@ -51,7 +50,6 @@
                 promise.then(function success() {
                     manageMemberCtrl.sent_invitations.push(invite);
                     manageMemberCtrl.invite = {};
-                    manageMemberCtrl.showButton = true;
                     MessageService.showToast('Convite enviado com sucesso!');
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
@@ -94,7 +92,6 @@
 
         manageMemberCtrl.cancelInvite = function cancelInvite() {
             manageMemberCtrl.invite = {};
-            manageMemberCtrl.showButton = true;
         };
 
         manageMemberCtrl.isAdmin = function isAdmin(member) {

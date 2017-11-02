@@ -24,7 +24,11 @@
                             'voters': []
                             };
         var observer;
-        
+
+        postCtrl.hasMedia = function hasMedia() {
+            return postCtrl.photoBase64Data || postCtrl.pdfFiles.length > 0 || postCtrl.addVideo;
+        };
+
         postCtrl.addImage = function(image) {
             var newSize = 1024;
 
@@ -38,6 +42,17 @@
             });
         };
 
+        postCtrl.setTypeOfPost = function() {
+            postCtrl.typePost === "Common" ? postCtrl.choiceSurvey() : postCtrl.choiceCommon();
+        };
+
+        postCtrl.choiceCommon = function() {
+            if(postCtrl.typePost === "Survey") {
+                postCtrl.typePost = "Common";
+                postCtrl.clearPost();
+            }
+        };
+
         postCtrl.choiceSurvey = function() {
             if(postCtrl.typePost === "Common"){
                 postCtrl.typePost = "Survey";
@@ -48,8 +63,8 @@
         };
 
         postCtrl.addPdf = function addPdf(files) {
-            if(!postCtrl.getOptionEmpty){
-                postCtrl.pdfFiles = postCtrl.pdfFiles.concat(files);
+            if(!postCtrl.getOptionEmpty()){
+                postCtrl.pdfFiles = files;
             }
         };
 
@@ -230,6 +245,7 @@
         postCtrl.clearPost = function clearPost() {
             postCtrl.post = {};
             postCtrl.pdfFiles = [];
+            postCtrl.hideImage();
             postCtrl.options = [];
             postCtrl.typePost = "Common";
         };
@@ -239,7 +255,7 @@
         };
 
         postCtrl.showVideoUrlField = function showVideoUrlField() {
-            var showField = postCtrl.post.title && (postCtrl.addVideo || postCtrl.post.video_url);
+            var showField = postCtrl.addVideo || postCtrl.post.video_url;
             return showField;
         };
 
@@ -292,8 +308,7 @@
         postCtrl.showImage = function() {
             var isImageEmpty = postCtrl.photoUrl === "";
             var isImageNull = postCtrl.photoUrl === null;
-            var hasTitle = postCtrl.post.title;
-            return !isImageEmpty && !isImageNull && hasTitle;
+            return !isImageEmpty && !isImageNull;
         };
 
         postCtrl.showFiles = function() {
@@ -321,6 +336,15 @@
                 instName = postCtrl.post.institution_name;
             }
             return instName;
+        };
+
+        postCtrl.isTyping = function() {
+            return postCtrl.post.title || postCtrl.post.text || postCtrl.hasMedia();
+        };
+
+        postCtrl.showPlaceholderMsg = function() {
+            console.log(postCtrl.isTyping());
+            return postCtrl.isTyping() ? "Título" : "Escreva aqui uma nova publicação";
         };
 
         (function main() {

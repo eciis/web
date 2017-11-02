@@ -526,4 +526,4 @@ paket-files/
 frontend/config.js
 
 # remove index.yaml
-index.yaml  
+**/*index.yaml  

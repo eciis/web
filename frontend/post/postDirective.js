@@ -25,7 +25,11 @@
                             'voters': []
                             };
         var observer;
-        
+
+        postCtrl.hasMedia = function hasMedia() {
+            return postCtrl.photoBase64Data || postCtrl.pdfFiles.length > 0 || postCtrl.addVideo;
+        };
+
         postCtrl.addImage = function(image) {
             var newSize = 1024;
 
@@ -56,6 +60,17 @@
 
         postCtrl.getOptionEmpty = function(){
             return _.find(postCtrl.options, option_empty);
+        };
+
+        postCtrl.setTypeOfPost = function() {
+            postCtrl.type_post === "Common" ? postCtrl.choiceSurvey() : postCtrl.choiceCommon();
+        };
+
+        postCtrl.choiceCommon = function() {
+            if(postCtrl.type_post === "Survey") {
+                postCtrl.type_post = "Common";
+                postCtrl.clearPost();
+            }
         };
 
         postCtrl.choiceSurvey = function() {
@@ -119,8 +134,8 @@
         };
 
         postCtrl.addPdf = function addPdf(files) {
-            if(!postCtrl.getOptionEmpty){
-                postCtrl.pdfFiles = postCtrl.pdfFiles.concat(files);
+            if(!postCtrl.getOptionEmpty()){
+                postCtrl.pdfFiles = files;
             }
         };
 
@@ -301,6 +316,7 @@
         postCtrl.clearPost = function clearPost() {
             postCtrl.post = {};
             postCtrl.pdfFiles = [];
+            postCtrl.hideImage();
             postCtrl.options = [];
             postCtrl.type_post = "Common";
             postCtrl.multipleChoice = false;
@@ -311,7 +327,7 @@
         };
 
         postCtrl.showVideoUrlField = function showVideoUrlField() {
-            var showField = postCtrl.post.title && (postCtrl.addVideo || postCtrl.post.video_url);
+            var showField = postCtrl.addVideo || postCtrl.post.video_url;
             return showField;
         };
 
@@ -364,8 +380,7 @@
         postCtrl.showImage = function() {
             var isImageEmpty = postCtrl.photoUrl === "";
             var isImageNull = postCtrl.photoUrl === null;
-            var hasTitle = postCtrl.post.title;
-            return !isImageEmpty && !isImageNull && hasTitle;
+            return !isImageEmpty && !isImageNull;
         };
 
         postCtrl.showFiles = function() {
@@ -402,6 +417,14 @@
             } else {
                 return postCtrl.isCommonPostValid(formInvalid);
             }
+        };
+
+        postCtrl.isTyping = function() {
+            return postCtrl.post.title || postCtrl.post.text || postCtrl.hasMedia();
+        };
+
+        postCtrl.showPlaceholderMsg = function() {
+            return postCtrl.isTyping() ? "Título" : "Escreva aqui uma nova publicação";
         };
 
         (function main() {

@@ -4,8 +4,8 @@ function User(data) {
     data = data || {};
     _.extend(this, data);
 
-    if (this.institutions && !this.current_institution) {
-        this.changeInstitution(this.institutions[0]);
+    if (!this.current_institution) {
+        this.changeInstitution();
     }
 }
 
@@ -14,9 +14,12 @@ var SENT = "sent";
 var USER = "USER";
 
 User.prototype.changeInstitution = function changeInstitution(institution) {
-    this.current_institution = _.find(this.institutions, {'key': institution.key});
-    changeProfileColor(this, institution);
-    window.localStorage.userInfo = JSON.stringify(this);
+    if (this.institutions && this.institutions.length > 0) {
+        institution = institution || this.institutions[0];
+        this.current_institution = _.find(this.institutions, {'key': institution.key});
+        changeProfileColor(this, institution);
+        window.localStorage.userInfo = JSON.stringify(this);
+    }
 };
 
 User.prototype.follow = function follow(institution) {

@@ -342,8 +342,12 @@
             return postCtrl.post.title || postCtrl.post.text || postCtrl.hasMedia();
         };
 
+        postCtrl.showButton = function() {
+            console.log(postCtrl.typePost === 'Common');
+            return postCtrl.typePost === 'Common' && postCtrl.isTyping();
+        };
+
         postCtrl.showPlaceholderMsg = function() {
-            console.log(postCtrl.isTyping());
             return postCtrl.isTyping() ? "Título" : "Escreva aqui uma nova publicação";
         };
 

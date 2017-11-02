@@ -72,6 +72,11 @@
             return isDeleted && !postDetailsCtrl.postHasActivity();
         };
 
+        postDetailsCtrl.isShowTitle = function isShowTitle(post) {
+            return !postDetailsCtrl.isDeleted(post) && 
+                    postDetailsCtrl.getTypePost() === 'COMMON';
+        };
+
         postDetailsCtrl.isShared = function isShared() {
             return postDetailsCtrl.post.shared_post ||
                 postDetailsCtrl.post.shared_event;

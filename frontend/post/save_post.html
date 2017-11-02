@@ -45,7 +45,7 @@
             <md-icon>add</md-icon>
           </md-button>
           <md-menu-content width="4">
-            <md-menu-item>
+            <md-menu-item ng-if="postCtrl.typePost === 'Common'">
               <md-button ng-click="null" ng-model="postCtrl.file"
                 ngf-pattern="'image/*'" title="Adicionar imagem"
                 ngf-accept="'image/*'" ngf-max-size="5MB"
@@ -54,8 +54,8 @@
                 <md-icon>add_a_photo</md-icon>
                 {{!postCtrl.showImage() ? 'Inserir imagem' : 'Trocar imagem'}}
               </md-button>
-            </md-menu-item>
-            <md-menu-item>
+            </md-menu-item ng-if="postCtrl.typePost === 'Common'">
+            <md-menu-item ng-if="postCtrl.typePost === 'Common'">
               <md-button ng-click="postCtrl.setAddVideo()"
                 title="{{postCtrl.addVideo || postCtrl.post.video_url? 'Remover link':'Adicionar link'}}"
                 ng-disabled="postCtrl.hasMedia() && !postCtrl.addVideo">
@@ -63,7 +63,7 @@
                 {{!postCtrl.addVideo ? 'Vídeo do Youtube' : 'Remover vídeo'}}
               </md-button>
             </md-menu-item>
-            <md-menu-item>
+            <md-menu-item ng-if="postCtrl.typePost === 'Common'">
               <md-button ng-click="null" ng-file-model="postCtrl.files"
                 ngf-pattern="'application/pdf'" title="Adicionar pdf"
                 ngf-accept="'application/pdf'" ngf-max-size="5MB"
@@ -101,7 +101,7 @@
       <md-progress-linear ng-show="postCtrl.loading" md-mode="indeterminate" style="width: 14%;"></md-progress-linear>
     </div>
   </md-card-content>
-  <md-card-actions style="text-align: right; margin-right: 20px; margin-bottom: 20px;" ng-show="postCtrl.isTyping()">
+  <md-card-actions style="text-align: right; margin-right: 20px; margin-bottom: 20px;" ng-show="postCtrl.showButton()">
     <md-button style="color: #009688" ng-click="postCtrl.cancelDialog()">
       Cancelar
     </md-button>

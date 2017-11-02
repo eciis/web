@@ -165,43 +165,41 @@
   </md-card>
 
   <!-- BODY POST -->
-  <div ng-if="postDetailsCtrl.getTypePost() === 'COMMON'">
-    <img ng-if="postDetailsCtrl.showImage(postDetailsCtrl.post)" ng-src="{{ postDetailsCtrl.post.photo_url }}"
-      class="md-card-image">
-    <div class="youtube-player" ng-if="postDetailsCtrl.showVideo(postDetailsCtrl.post)">
-      <iframe ng-src="{{postDetailsCtrl.getVideoUrl(postDetailsCtrl.post)}}"></iframe>
+  <img ng-if="postDetailsCtrl.showImage(postDetailsCtrl.post)" ng-src="{{ postDetailsCtrl.post.photo_url }}"
+    class="md-card-image">
+  <div class="youtube-player" ng-if="postDetailsCtrl.showVideo(postDetailsCtrl.post)">
+    <iframe ng-src="{{postDetailsCtrl.getVideoUrl(postDetailsCtrl.post)}}"></iframe>
+  </div>
+  <pdf-view pdf-files='postDetailsCtrl.post.pdf_files' is-editing="false"></pdf-view>
+  <md-card-title ng-if="postDetailsCtrl.isShowTitle(postDetailsCtrl.post)">
+    <md-card-title-text>
+      <a href class="md-title hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post)">
+        <span class="md-headline break">{{postDetailsCtrl.post.title}}</span>
+      </a>
+    </md-card-title-text>
+  </md-card-title>
+  <div md-colors="{background: 'teal-500'}" ng-if="postDetailsCtrl.isDeleted(postDetailsCtrl.post)"
+    style='margin: 0 9px 0 9px; height: 130px' layout-gt-xs="row" layout-xs="column" layout-align="center center">
+    <div style="height: 70px; width: 70px;">
+      <md-icon style="font-size:  70px; color: white">delete_forever</md-icon>
     </div>
-    <pdf-view pdf-files='postDetailsCtrl.post.pdf_files' is-editing="false"></pdf-view>
-    <md-card-title ng-if="!postDetailsCtrl.isDeleted(postDetailsCtrl.post)">
-      <md-card-title-text>
-        <a href class="md-title hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post)">
-          <span class="md-headline break">{{postDetailsCtrl.post.title}}</span>
-        </a>
-      </md-card-title-text>
-    </md-card-title>
-    <div md-colors="{background: 'teal-500'}" ng-if="postDetailsCtrl.isDeleted(postDetailsCtrl.post)"
-      style='margin: 0 9px 0 9px; height: 130px' layout-gt-xs="row" layout-xs="column" layout-align="center center">
-      <div style="height: 70px; width: 70px;">
-        <md-icon style="font-size:  70px; color: white">delete_forever</md-icon>
-      </div>
-      <div layout="column" layout-align-xs="center center">
-        <span style="font-size: 19px">ESTA PUBLICAÇÃO FOI REMOVIDA</span>
-        <span>por {{postDetailsCtrl.post.last_modified_by}} {{postDetailsCtrl.post.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats }}.</span>
-      </div>
+    <div layout="column" layout-align-xs="center center">
+      <span style="font-size: 19px">ESTA PUBLICAÇÃO FOI REMOVIDA</span>
+      <span>por {{postDetailsCtrl.post.last_modified_by}} {{postDetailsCtrl.post.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats }}.</span>
     </div>
-    <md-card-content>
-      <div ng-if="postDetailsCtrl.showTextPost()">
-          <p ng-bind-html="postDetailsCtrl.postToURL(postDetailsCtrl.post).text" class="break">
-            {{postDetailsCtrl.postToURL(postDetailsCtrl.post).text}}
-          </p>
-          <div layout="row" layout-align="end-center">
-            <a href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post)">
-              <md-icon style="margin-bottom: -15px; margin-right: -12px;" md-colors="{color: 'light-green'}">more_horiz</md-icon>
-              </a>
-          </div>
-      </div>
-    </md-card-content>
-  </div> 
+  </div>
+  <md-card-content>
+    <div ng-if="postDetailsCtrl.showTextPost()">
+        <p ng-bind-html="postDetailsCtrl.postToURL(postDetailsCtrl.post).text" class="break">
+          {{postDetailsCtrl.postToURL(postDetailsCtrl.post).text}}
+        </p>
+        <div layout="row" layout-align="end-center">
+          <a href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post)">
+            <md-icon style="margin-bottom: -15px; margin-right: -12px;" md-colors="{color: 'light-green'}">more_horiz</md-icon>
+            </a>
+        </div>
+    </div>
+  </md-card-content>
   <md-divider></md-divider>
 
   <!-- BUTTONS -->

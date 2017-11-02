@@ -3,8 +3,6 @@
 
 from test_base_handler import TestBaseHandler
 from models.user import User
-import search_module
-import search_user_module
 from models.institution import Institution
 from handlers.search_handler import SearchHandler
 
@@ -27,8 +25,6 @@ class SearchHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
     def test_get_institution(self, verify_token):
         """Test the search_handler's get method."""
-        # Call the createDocument method
-        search_module.createDocument(self.certbio)
         # Search for the institution by its full name
         certbio_name = 'Lab. de Desenvolvimento de Biomateriais do Nordeste'
         institutions = self.testapp.get(
@@ -50,8 +46,6 @@ class SearchHandlerTest(TestBaseHandler):
             "/api/search/institution?value=%s&state=%s&type=institution"
             % ('CERTBIO', 'pending'))
         self.assertTrue('CERTBIO' not in institutions)
-        # Create a document with a pending institution
-        search_module.createDocument(self.splab)
         # Make sure that there is no SPLAB with pending state.
         institutions = self.testapp.get(
             "/api/search/institution?value=%s&state=%s&type=institution" % ('SPLAB', 'active'))
@@ -69,8 +63,6 @@ class SearchHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
     def test_get_user(self, verify_token):
         """Test the search_handler's get method with type=user."""
-        # Call the createDocument method
-        search_user_module.createUserDocument(self.mayza)
         # Call the get method with the user's full name
         users = self.testapp.get(
             "/api/search/institution?value=%s&state=%s&type=user"

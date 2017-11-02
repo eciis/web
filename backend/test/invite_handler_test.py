@@ -2,7 +2,7 @@
 """Invite Handler Test."""
 
 import json
-import search_module
+from search_module.search_institution import SearchInstitution
 from test_base_handler import TestBaseHandler
 from models.user import User
 from models.institution import Institution
@@ -52,7 +52,8 @@ class InviteHandlerTest(TestBaseHandler):
     def test_delete(self, verify_token, mock_method):
         """Test method delete of InviteHandler."""
         stub_institution = self.invite_institution.stub_institution_key.get()
-        stub_inst_document = search_module.getDocuments(
+        search_institution = SearchInstitution()
+        stub_inst_document = search_institution.getDocuments(
             stub_institution.name,
             'pending'
         )
@@ -81,7 +82,7 @@ class InviteHandlerTest(TestBaseHandler):
         # update invite_institution, stub_institution and stub_inst_document
         invite_institution = self.invite_institution.key.get()
         stub_institution = invite_institution.stub_institution_key.get()
-        stub_inst_document = search_module.getDocuments(
+        stub_inst_document = search_institution.getDocuments(
             stub_institution.name,
             'inactive'
         )

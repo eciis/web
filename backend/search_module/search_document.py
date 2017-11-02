@@ -41,5 +41,17 @@ class SearchDocument(PolyModel):
         updates the previous document.
         """
         index = search.Index(name=self.index_name)
-        index.delete(entity.key.urlsafe())
-        self.createDocument(entity)
+        doc = index.get(entity.key.urlsafe())
+        if(SearchDocument.have_changes(doc.fields, entity)):
+            index.delete(entity.key.urlsafe())
+            self.createDocument(entity)
+
+    @staticmethod
+    def have_changes(fields, entity):
+        """It returns True when there is a change
+        to make in entity's document.
+        """
+        for field in fields:
+            if field.value != getattr(entity, field.name):
+                return True
+        return False

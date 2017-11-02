@@ -6,8 +6,8 @@ from utils import json_response
 import json
 
 from handlers.base_handler import BaseHandler
-from search_document.search_user import SearchUser
-from search_document.search_institution import SearchInstitution
+from search_module.search_user import SearchUser
+from search_module.search_institution import SearchInstitution
 
 types = {'institution': SearchInstitution,
          'user': SearchUser

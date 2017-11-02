@@ -87,7 +87,7 @@
         it('Test searchInstitution', function() {
             var documents = [{name: institutions[0].name, id: institutions[0].key}];
             spyOn($http, 'get').and.callThrough();
-            httpBackend.expect('GET', "/api/search/institution?value=" + institutions[0].name + "&state=active&type=institution" ).respond(documents);
+            httpBackend.expectGET("/api/search/institution?value=" + institutions[0].name + "&state=active&type=institution" ).respond(documents);
             var result;
             service.searchInstitutions(institutions[0].name, 'active', 'institution').then(function(data){
                 result = data;

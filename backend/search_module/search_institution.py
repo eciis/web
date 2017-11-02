@@ -23,33 +23,37 @@ class SearchInstitution(SearchDocument):
         acronym -- the institution's name acronym
         if it is an active one, or the email that the invitation was sent to.
         """
-        admin = institution.email
-        if institution.admin:
-            admin = institution.admin.get().email[0]
+        index = api.search.Index(name=self.index_name)
+        if not index.get(institution.key.urlsafe()):
+            admin = institution.email
+            if institution.admin:
+                admin = institution.admin.get().email[0]
 
-        content = {
-            'id': institution.key.urlsafe(),
-            'name': institution.name,
-            'state': institution.state,
-            'admin': admin,
-            'acronym': institution.acronym,
-            'actuation_area': institution.actuation_area
-        }
-        # Make the structure of the document by setting the fields and its id.
-        document = api.search.Document(
-            # The document's id is the same of the institution's one,
-            # what makes the search easier.
-            doc_id=content['id'],
-            fields=[
-                api.search.TextField(name='name', value=content['name']),
-                api.search.TextField(name='state', value=content['state']),
-                api.search.TextField(name='admin', value=content['admin']),
-                api.search.TextField(name='acronym', value=content['acronym']),
-                api.search.TextField(name='actuation_area',
-                                     value=content['actuation_area'])
-            ]
-        )
-        self.saveDocument(document)
+            content = {
+                'id': institution.key.urlsafe(),
+                'name': institution.name,
+                'state': institution.state,
+                'admin': admin,
+                'acronym': institution.acronym,
+                'actuation_area': institution.actuation_area
+            }
+            # Make the structure of the document by setting the fields and its id.
+            document = api.search.Document(
+                # The document's id is the same of the institution's one,
+                # what makes the search easier.
+                doc_id=content['id'],
+                fields=[
+                    api.search.TextField(name='name', value=content['name']),
+                    api.search.TextField(name='state', value=content['state']),
+                    api.search.TextField(name='admin', value=content['admin']),
+                    api.search.TextField(name='acronym', value=content['acronym']),
+                    api.search.TextField(name='actuation_area',
+                                         value=content['actuation_area'])
+                ]
+            )
+            self.saveDocument(document)
+        else:
+            self.updateDocument(institution)
 
     def getDocuments(self, value, state):
         """Retrieve the documents and return them processed."""

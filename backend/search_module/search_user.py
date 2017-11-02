@@ -20,22 +20,26 @@ class SearchUser(SearchDocument):
         name -- the user's name
         state -- represents the current user's state
         """
-        content = {
-            'id': user.key.urlsafe(),
-            'name': user.name,
-            'state': user.state,
-        }
-        # Make the structure of the document by setting the fields and its id.
-        document = api.search.Document(
-            # The document's id is the same of the user's one,
-            # what makes the search easier.
-            doc_id=content['id'],
-            fields=[
-                api.search.TextField(name='name', value=content['name']),
-                api.search.TextField(name='state', value=content['state']),
-            ]
-        )
-        self.saveDocument(document)
+        index = api.search.Index(name=self.index_name)
+        if not index.get(user.key.urlsafe()):
+            content = {
+                'id': user.key.urlsafe(),
+                'name': user.name,
+                'state': user.state,
+            }
+            # Make the structure of the document by setting the fields and its id.
+            document = api.search.Document(
+                # The document's id is the same of the user's one,
+                # what makes the search easier.
+                doc_id=content['id'],
+                fields=[
+                    api.search.TextField(name='name', value=content['name']),
+                    api.search.TextField(name='state', value=content['state']),
+                ]
+            )
+            self.saveDocument(document)
+        else:
+            self.updateDocument(user)
 
     def getDocuments(self, value, state):
         """Retrieve the documents and return them processed."""

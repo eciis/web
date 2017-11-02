@@ -2,7 +2,6 @@
 """Institution Handler."""
 
 import json
-from search_document.search_institution import SearchInstitution
 
 from google.appengine.ext import ndb
 
@@ -125,8 +124,6 @@ class InstitutionHandler(BaseHandler):
 
         JsonPatch.load(data, institution)
         institution.put()
-        search_institution = SearchInstitution()
-        search_institution.updateDocument(institution)
         institution_json = Utils.toJson(institution)
 
         self.response.write(json.dumps(
@@ -156,8 +153,6 @@ class InstitutionHandler(BaseHandler):
         invite = ndb.Key(urlsafe=inviteKey).get()
         invite.send_response_notification(user, invite.admin_key.urlsafe(), 'ACCEPT')
 
-        search_institution = SearchInstitution()
-        search_institution.createDocument(institution)
         institution_json = Utils.toJson(institution)
         self.response.write(json.dumps(
             institution_json))

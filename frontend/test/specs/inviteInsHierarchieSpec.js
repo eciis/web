@@ -221,14 +221,19 @@
 
         describe('checkInstInvite()', function() {
             it('should call sendInvite() and searchInstitutions()', function(done) {
-                spyOn(instService, 'searchInstitutions').and.callThrough();
+                spyOn(instService, 'searchInstitutions').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            return callback({});
+                        }
+                    };
+                });
                 spyOn(inviteInstCtrl, 'sendInstInvite');
                 inviteInstCtrl.invite = {
                     invitee: "parent@gmail.com",
                     suggestion_institution_name : "Institution Parent",
                     type_of_invite : "INSTITUTION_PARENT"};
                 inviteInstCtrl.user.current_institution = splab;
-                httpBackend.expect('GET', '/api/search/institution', {value: "Institution Parent", state: 'active,pending', type: 'institution'}).respond({});
                 inviteInstCtrl.checkInstInvite().then(function() {
                     expect(instService.searchInstitutions).toHaveBeenCalledWith(
                         inviteInstCtrl.invite.suggestion_institution_name,
@@ -236,22 +241,26 @@
                     expect(inviteInstCtrl.sendInstInvite).toHaveBeenCalledWith(invite);
                     done();
                 });
-                httpBackend.flush();
             });
 
             it('should call showDialog()', function(done) {
-                var documents = [{name: splab.name, id: splab.key}];
+                var documents = {data: {name: splab.name, id: splab.key}};
                 spyOn(inviteInstCtrl, 'showDialog');
+                spyOn(instService, 'searchInstitutions').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            return callback(documents);
+                        }
+                    };
+                });
                 inviteInstCtrl.invite = {
                     invitee: "parent@gmail.com",
                     suggestion_institution_name : "Institution Parent",
                     type_of_invite : "institution_parent"};
-                httpBackend.expect('GET', INSTITUTION_SEARCH_URI+ "Institution Parent" + '&state=active,pending&type=institution').respond(documents);
                 inviteInstCtrl.checkInstInvite().then(function() {
                     expect(inviteInstCtrl.showDialog).toHaveBeenCalled();
                     done();
                 });
-                httpBackend.flush();
             });
         });
 

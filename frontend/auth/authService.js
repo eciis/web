@@ -11,6 +11,11 @@
         var userInfo;
 
         /**
+         * Store the last promise to refresh user authentication token.
+         */
+        var refreshTokenPromise = null;
+
+        /**
         * Store listeners to be executed when user logout is called.
         */
         var onLogoutListeners = [];
@@ -94,8 +99,9 @@
         service.getCurrentUser = function getCurrentUser() {
             return userInfo;
         };
-
+        
         service.getUserToken = function getUserToken() {
+            refreshTokenAsync();
             return userInfo.accessToken;
         };
 
@@ -155,6 +161,27 @@
             if ($window.localStorage.userInfo) {
                 var parse = JSON.parse($window.localStorage.userInfo);
                 userInfo = new User(parse);
+            }
+        }
+
+        /**
+         * Refreshes the user token asynchronously and store in the browser
+         * cache to maintain the section active, during the time that 
+         * the user is using the system. 
+         * 
+         * This function uses a global variable (refreshTokenPromise)
+         * to synchronize the token API call's, preventing multiples
+         * promises executing the same action.
+         */
+        function refreshTokenAsync() {
+            var auth = authObj.$getAuth();
+            if (auth && !refreshTokenPromise) {
+                refreshTokenPromise = auth.getIdToken();
+                refreshTokenPromise.then(function(idToken) {
+                    userInfo.accessToken = idToken;
+                    service.save();
+                    refreshTokenPromise = null;
+                });
             }
         }
 

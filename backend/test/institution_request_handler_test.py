@@ -146,5 +146,6 @@ def initModels(cls):
     cls.request.is_request = True
     cls.request.admin_key = cls.other_user.key
     cls.request.institution_key = cls.new_inst.key
+    cls.request.institution_requested_key = cls.inst_test.key
     cls.request.type_of_invite = 'REQUEST_INSTITUTION'
     cls.request.put()

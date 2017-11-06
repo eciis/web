@@ -58,9 +58,7 @@ class InstitutionChildrenRequestCollectionHandlerTest(TestBaseHandler):
             request['type_of_invite'],
             'REQUEST_INSTITUTION_CHILDREN',
             'Expected sender type_of_invite is REQUEST_INSTITUTION_CHILDREN')
-        self.assertEqual(
-            institution.children_institutions[0], self.inst_requested.key,
-            "The children institution of inst test must be update to inst_requested")
+        
 
     @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_post_user_not_admin(self, verify_token):

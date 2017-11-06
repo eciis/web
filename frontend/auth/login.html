@@ -29,16 +29,21 @@
               <div flex="6" layout="row">
                 <hr style="width:0px;" flex/>
               </div>
-              <div flex="47" layout="column" layout-padding>
-                <small>Email</small>
-                <input type="email" name="name" ng-model="loginCtrl.user.email" aria-label="Nome"
-                  style="border:1px solid grey; padding: 5px; border-radius: 5px;">
-                <small>Senha</small>
-                <input type="password" name="password" ng-model="loginCtrl.user.password" aria-label="Senha"
-                  style="border:1px solid grey; padding: 5px; border-radius: 5px;">
-                <div layout="row" layout-align="end center">
-                  <md-button class="md-primary" ng-click="loginCtrl.loginWithEmailPassword()">Entrar</md-button>
-                </div>
+              <div flex="47">
+                <form ng-submit="loginCtrl.loginWithEmailPassword()" layout="column" layout-padding>
+                  <small>Email</small>
+                  <input type="email" name="email" ng-model="loginCtrl.user.email" aria-label="Email"
+                    style="border:1px solid grey; padding: 5px; border-radius: 5px;">
+                  <small>Senha</small>
+                  <input type="password" name="password" ng-model="loginCtrl.user.password" aria-label="Senha"
+                    style="border:1px solid grey; padding: 5px; border-radius: 5px;">
+                  <div layout="row" layout-align="end center">
+                    <md-button class="md-primary" ng-click="loginCtrl.resetPassword()">
+                      Esqueci minha senha
+                    </md-button>
+                    <md-button type="submit" class="md-primary md-raised">Entrar</md-button>
+                  </div>
+                </form>
               </div>
             </md-content>
           </md-tab>

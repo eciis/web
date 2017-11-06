@@ -143,7 +143,16 @@
                 MessageService.showToast('Email de verificação enviado para o seu email.');
             }, function error(error) {
                 console.error(error);
-            })
+            });
+        }
+
+        service.resetPassword = function resetPassword(email) {
+            authObj.$sendPasswordResetEmail(email).then(
+            function success() {
+                MessageService.showToast('Você receberá um email para resetar sua senha.');
+            }, function error(error) {
+                console.error(error);
+            });
         }
 
         service.$onLogout = function $onLogout(callback) {

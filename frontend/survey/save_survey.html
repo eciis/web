@@ -4,7 +4,7 @@
     style="font-weight: bold; color: #00695C ; margin: 0px; border: 0;resize:none;"/>
   </md-input-container>
   <p class="md-subheader"> Alternativas</p>
-  <md-content flex style="max-height: 400px;" class="hide-scrollbar">
+  <md-content flex style="max-height: 300px;" class="hide-scrollbar">
     <md-input-container ng-repeat="option in surveyCtrl.options" md-no-float class="md-block option">
       <input class=" md-input" ng-model="option.text" ng-change="surveyCtrl.addOption()" placeholder="+ Adicionar uma opção..." />
     </md-input-container>
@@ -18,7 +18,8 @@
   </md-input-container>
 </form>      
 <md-actions layout="row" layout-align="space-between-center">
-    <md-switch class="md-primary" ng-model="surveyCtrl.multipleChoice" required> MULTIPLAESCOLHA
+    <md-switch ng-true-value="'multiple_choice'" ng-false-value="'binary'"
+      ng-model="surveyCtrl.post.type_survey" required> MULTIPLAESCOLHA
     </md-switch>
     <div>
       <md-button title="Cancelar" ng-click="surveyCtrl.resetSurvey()" md-colors="{color: 'default-teal-500'}">CANCELAR

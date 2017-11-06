@@ -24,6 +24,7 @@
         surveyCtrl.calculatePercentage = function(option){
             var percentage = option.number_votes / surveyCtrl.post.number_votes;
             option.percentage = surveyCtrl.post.number_votes === 0 ? 0 : percentage;
+            console.log(option.percentage);
         };
     });
     

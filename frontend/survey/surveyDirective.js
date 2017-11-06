@@ -7,7 +7,6 @@
 
         var surveyCtrl = this;
         surveyCtrl.options = $scope.options;
-        surveyCtrl.multipleChoice = false;
         var option_empty = {'text': '',
                             'number_votes': 0,
                             'voters': []
@@ -45,21 +44,12 @@
             });
         }
 
-        function defineTypeSurvey(){
-            if(surveyCtrl.multipleChoice){
-                surveyCtrl.post.type_survey = 'multiple_choice';
-            } else {
-                surveyCtrl.post.type_survey = 'binary';
-            }
-        }
-
         function formateDate(){
             var date = surveyCtrl.post.deadline.toISOString();
             surveyCtrl.post.deadline = _.split(date, '.')[0];
         }
 
         function createSurvey(){
-            defineTypeSurvey();
             modifyOptions();
             surveyCtrl.post.deadline && formateDate();
             surveyCtrl.post.options = surveyCtrl.options;

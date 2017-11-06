@@ -8,9 +8,9 @@
   </md-card-title>
   <md-list>
     <md-list-item ng-repeat="option in surveyCtrl.post.options">
-      <md-checkbox ng-model="option.selected" ng-click="surveyCtrl.vote(option)"></md-checkbox>
+      <md-checkbox ng-model="option.selected" ng-click="surveyCtrl.vote(option, option.selected)"></md-checkbox>
       <p>{{option.text}}</p>
-      <p class="md-secondary"> {{option.percentage}} </p>
+      <p md-colors="{background: 'teal-900'}" class="md-secondary"> {{option.percentage ? option.percentage : 0}}% </p>
     </md-list-item>
   </md-list>
 </div>

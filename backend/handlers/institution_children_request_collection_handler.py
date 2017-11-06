@@ -20,8 +20,9 @@ class InstitutionChildrenRequestCollectionHandler(BaseHandler):
     @login_required
     def get(self, user, institution_key):
         """Get requests for children links."""
+        inst_key_obj = ndb.Key(urlsafe=institution_key)
         queryRequests = RequestInstitutionChildren.query(
-            RequestInstitutionChildren.institution_requested_key == ndb.Key(urlsafe=institution_key),
+            ndb.OR(RequestInstitutionChildren.institution_requested_key == inst_key_obj, RequestInstitutionChildren.institution_key == inst_key_obj),
             RequestInstitutionChildren.status == 'sent'
         )
 
@@ -48,10 +49,6 @@ class InstitutionChildrenRequestCollectionHandler(BaseHandler):
 
         request = InviteFactory.create(data, type_of_invite)
         request.put()
-
-        parent_institution = request.institution_key.get()
-        parent_institution.children_institutions.append(request.institution_requested_key)
-        parent_institution.put()
 
         request.sendInvite(user, host)
 

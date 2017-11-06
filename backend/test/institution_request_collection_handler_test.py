@@ -46,27 +46,27 @@ class InstitutionRequestCollectionHandlerTest(TestBaseHandler):
         self.assertEqual(
             request['status'],
             'sent',
-            "Expected status muste be equal to sent")
+            "Expected status must be equal to sent")
 
         self.assertEqual(
             request['sender'][0],
             'otheruser@test.com',
-            "Expected sender email muste be equal to otheruser@test.com")
+            "Expected sender email must be equal to otheruser@test.com")
 
         self.assertEqual(
             request['admin_name'],
             'Other User',
-            "Expected admin_name muste be equal to Other User")
+            "Expected admin_name must be equal to Other User")
 
         self.assertEqual(
             request['institution']['name'],
             'new_inst',
-            "Expected institution name muste be equal to new_inst")
+            "Expected institution name must be equal to new_inst")
 
         self.assertEqual(
             request['type_of_invite'],
             'REQUEST_INSTITUTION',
-            "Expected type_of_invite muste be equal to REQUEST_INSTITUTION")
+            "Expected type_of_invite must be equal to REQUEST_INSTITUTION")
 
 
 def initModels(cls):

@@ -42,13 +42,26 @@ class InstitutionChildrenRequestHandlerTest(TestBaseHandler):
         self.assertEqual(
             request['status'],
             'accepted',
-            'Expected status from request must be accepted')
+            'Expected status from request must be accepted'
+        )
+
         self.assertEqual(
             institution.parent_institution, self.inst_test.key,
-            "The parent institution of inst requested must be update to inst test")
+            "The parent institution of inst requested must be update to inst test"
+        )
 
-        self.assertTrue(mock_method.assert_called,
-                        "Should call the send_message_notification")
+        # update inst_test
+        self.inst_test = self.inst_test.key.get()
+        
+        self.assertEqual(
+            self.inst_test.children_institutions[0], institution.key,
+            "The institution inst_test must have institution as child"
+        )
+
+        self.assertTrue(
+            mock_method.assert_called,
+            "Should call the send_message_notification"
+        )
 
     @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
     def test_put_user_not_admin(self, verify_token):

@@ -33,6 +33,10 @@ class InstitutionChildrenRequestHandler(BaseHandler):
         institution_children.parent_institution = request.institution_key
         institution_children.put()
 
+        parent_institution = request.institution_key.get()
+        parent_institution.children_institutions.append(request.institution_requested_key)
+        parent_institution.put()
+
         request.send_response_notification(user, request.admin_key.urlsafe(), 'ACCEPT_INSTITUTION_LINK')
 
         self.response.write(json.dumps(request.make()))

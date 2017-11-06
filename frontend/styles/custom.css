@@ -449,3 +449,8 @@ a:active {
    height: 17px;
    border-radius: 50%;
 }
+
+.sm-label {
+    font-size: 85%;
+    opacity: 0.75;
+}

@@ -155,12 +155,8 @@
             }
         };
 
-        institutionCtrl.showDescription = function showDescription() {
-            institutionCtrl.showFullDescription = true;
-        };
-
-        institutionCtrl.hideDescription = function hideDescription() {
-            institutionCtrl.showFullDescription = false;
+        institutionCtrl.showHideDescription = function hideDescription() {
+            institutionCtrl.showFullDescription = !institutionCtrl.showFullDescription;
         };
 
         institutionCtrl.goToManageMembers = function goToManageMembers(){
@@ -223,6 +219,21 @@
             if(institutionCtrl.current_institution) {
                 return institutionCtrl.current_institution.getFullAddress();
             }
+        };
+
+        institutionCtrl.getInfo = function getInfo(information) {
+            return information ? information : "Não informado";
+        }
+
+        institutionCtrl.getLegalNature = function getLegalNature() {
+            var legalNature = institutionCtrl.current_institution.legal_nature;
+            return legalNature ? institutionCtrl.legal_natures[legalNature] : 'Não informado';
+        }
+
+        institutionCtrl.getMarginBottom = function getMarginBottom(contracted, expanded) {
+            var contractedStyle = {"margin-bottom": contracted};
+            var expandedStyle = {"margin-bottom": expanded};
+            return institutionCtrl.showFullDescription ? expandedStyle : contractedStyle;
         };
 
         institutionCtrl.requestInvitation = function requestInvitation(event) {

@@ -62,11 +62,16 @@
         service.loginWithEmailAndPassword = function loginWithEmailAndPassword(email, password) {
             var deferred = $q.defer();
             authObj.$signInWithEmailAndPassword(email, password).then(function(user) {
-                user.getIdToken(true).then(function(idToken) {
-                    service.setupUser(idToken).then(function success(userInfo) {
-                        deferred.resolve(userInfo);
+                if (user.emailVerified) {
+                    user.getIdToken(true).then(function(idToken) {
+                        service.setupUser(idToken).then(function success(userInfo) {
+                            deferred.resolve(userInfo);
+                        });
                     });
-                });
+                } else {
+                    MessageService.showToast("Seu email precisa ser verificado.");
+                    deferred.reject("Email not verified.");
+                }
             }).catch(function(error) {
                 MessageService.showToast(error);
                 deferred.reject(error);
@@ -79,6 +84,7 @@
             authObj.$createUserWithEmailAndPassword(email, password).then(function(result) {
                 var idToken = result.toJSON().stsTokenManager.accessToken;
                 service.setupUser(idToken).then(function success(userInfo) {
+                    service.sendEmailVerification();
                     deferred.resolve(userInfo);
                 });
             }).catch(function(error) {
@@ -130,6 +136,15 @@
             });
             return deferred.promise;
         };
+
+        service.sendEmailVerification = function sendEmailVerification() {
+            authObj.$getAuth().sendEmailVerification().then(
+            function success() {
+                MessageService.showToast('Email de verificação enviado para o seu email.');
+            }, function error(error) {
+                console.error(error);
+            })
+        }
 
         service.$onLogout = function $onLogout(callback) {
             onLogoutListeners.push(callback);

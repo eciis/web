@@ -19,6 +19,9 @@
             "DELETE_MEMBER": {
                 icon: "clear"
             },
+            "DELETED_INSTITUTION": {
+                icon: "clear"
+            },
             "POST": {
                 icon: "inbox",
                 state: "app.post"

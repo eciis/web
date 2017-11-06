@@ -1,7 +1,13 @@
 """Institution Model."""
+
 from google.appengine.ext import ndb
+
 from custom_exceptions.fieldException import FieldException
 
+from service_messages import send_message_notification
+from service_messages import send_message_email
+
+import json
 import search_module
 
 
@@ -222,7 +228,6 @@ class Institution(ndb.Model):
         user.state = "active"
         user.follows.append(institution.key)
         user.put()
-
 
         return institution
 

@@ -75,9 +75,12 @@
                 Esta instituição ainda não está cadastrada na plataforma</h3>
               </div>
             </div>
-            <div ng-if="inviteInstCtrl.isActive(institution)">
+            <div ng-if="inviteInstCtrl.isActive(institution)" layout="row">
               <md-button ng-click="inviteInstCtrl.removeLink(institution, false)">
                 <md-icon md-colors="{color: 'red-700'}" title="Remover conexão">link</md-icon>
+              </md-button>
+              <md-button ng-click="inviteInstCtrl.removeChild(institution)">
+                <md-icon md-colors="{color: 'red-700'}" title="Remover institutição">delete</md-icon>
               </md-button>
             </div>
           </md-list-item>
@@ -85,17 +88,19 @@
             <md-list-item class="md-3-line" ng-repeat="request in inviteInstCtrl.requested_invites" ng-if="request.status === 'sent'">
               <div class="md-list-item-text" layout="row">
                 <div layout="column">
-                  <a href class="md-title hyperlink" style="margin-top: 7px" ng-click="inviteInstCtrl.goToInst(request.institution_key)">
-                  {{ request.institution_admin.name }}
+                  <a href class="md-title hyperlink" style="margin-top: 7px" ng-click="inviteInstCtrl.goToRequestedInst(request)">
+                  {{ inviteInstCtrl.getReqInstName(request) }}
                   </a>
-                  <h3 style="color: red">{{inviteInstCtrl.showMessage(request.type_of_invite)}}</h3>
+                  <h3 style="color: red">{{inviteInstCtrl.showMessage(request)}}</h3>
                 </div>
-                <md-button class="md-icon-button" ng-click="inviteInstCtrl.rejectRequest(request, request.type_of_invite, $event)" title="Rejeitar">
-                  <md-icon style="color: red">clear</md-icon>
-                </md-button>
-                <md-button class="md-icon-button" ng-click="inviteInstCtrl.acceptRequest(request, request.type_of_invite, $event)" title="Aceitar">
-                  <md-icon style="color: green">check</md-icon>
-                </md-button>
+                <div ng-hide="inviteInstCtrl.isReqSentByCurrentInst(request)">
+                  <md-button class="md-icon-button" ng-click="inviteInstCtrl.rejectRequest(request, request.type_of_invite, $event)" title="Rejeitar">
+                    <md-icon style="color: red">clear</md-icon>
+                  </md-button>
+                  <md-button class="md-icon-button" ng-click="inviteInstCtrl.acceptRequest(request, request.type_of_invite, $event)" title="Aceitar">
+                    <md-icon style="color: green">check</md-icon>
+                  </md-button>
+                </div>
               </div>
             </md-list-item>
         </md-list>

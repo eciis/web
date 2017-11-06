@@ -75,9 +75,12 @@
                 Esta instituição ainda não está cadastrada na plataforma</h3>
               </div>
             </div>
-            <div ng-if="inviteInstCtrl.isActive(institution)">
+            <div ng-if="inviteInstCtrl.isActive(institution)" layout="row">
               <md-button ng-click="inviteInstCtrl.removeLink(institution, false)">
                 <md-icon md-colors="{color: 'red-700'}" title="Remover conexão">link</md-icon>
+              </md-button>
+              <md-button ng-click="inviteInstCtrl.removeChild(institution)">
+                <md-icon md-colors="{color: 'red-700'}" title="Remover institutição">delete</md-icon>
               </md-button>
             </div>
           </md-list-item>

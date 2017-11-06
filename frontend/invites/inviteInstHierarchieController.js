@@ -212,9 +212,7 @@
                         inviteInstCtrl.hasParent = false;
                         inviteInstCtrl.institution.parent_institution = {};
                     } else {
-                        _.remove(inviteInstCtrl.institution.children_institutions, function(inst) {
-                            return institution.key === inst.key;
-                        });
+                        removeInstFromChildren(institution);
                     }
                 });
             }, function() {
@@ -222,6 +220,12 @@
             });
             return promise;
         };
+
+        function removeInstFromChildren(institution) {
+            _.remove(inviteInstCtrl.institution.children_institutions, function(child) {
+                return child.key === institution.key;
+            });
+        }
 
         inviteInstCtrl.acceptRequest = function acceptRequest(request, type_of_invite, event) {
             var promise = MessageService.showConfirmationDialog(event, 'Aceitar Solicitação', isOvewritingParent(type_of_invite));
@@ -300,6 +304,20 @@
                 angular.element($confirmButton).addClass('md-raised md-warn');
                 angular.element($cancelButton).addClass('md-primary');
         }
+
+        inviteInstCtrl.removeChild = function removeChild(institution, ev) {
+            $mdDialog.show({
+                templateUrl: "app/invites/removeChildDialog.html",
+                targetEvent: ev,
+                clickOutsideToClose: true,
+                controller: "RemoveChildController",
+                controllerAs: 'ctrl',
+                locals: {
+                    parent: inviteInstCtrl.institution,
+                    child: institution
+                }
+            });
+        };
 
         loadInstitution();
     });

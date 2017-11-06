@@ -15,7 +15,7 @@ from custom_exceptions.entityException import EntityException
 
 from models.institution import Institution
 from util.json_patch import JsonPatch
-from service_entities import remove_institution_from_users
+from service_entities import enqueue_task
 
 
 from handlers.base_handler import BaseHandler
@@ -168,7 +168,35 @@ class InstitutionHandler(BaseHandler):
         """Handle DELETE Requests."""
         remove_hierarchy = self.request.get('removeHierarchy')
         institution = ndb.Key(urlsafe=institution_key).get()
+
         Utils._assert(not type(institution) is Institution,
                       "Key is not an institution", EntityException)
+
         institution.remove_institution(remove_hierarchy, user)
-        remove_institution_from_users(remove_hierarchy, institution_key)
+
+        params = {
+            'institution_key': institution_key,
+            'remove_hierarchy': remove_hierarchy
+        }
+
+        enqueue_task('remove-inst', params)
+
+        email_params = {
+            "justification": self.request.get('justification'),
+            "message": """Lamentamos informar que a instituição %s foi removida
+            pelo administrador %s """ % (institution.name, user.name),
+            "subject": "Remoção de instituição",
+            "institution_key": institution_key
+        }
+
+        enqueue_task('email-members', email_params)                    
+
+        notification_params = {
+            "entity_type": "DELETED_INSTITUTION",
+            "message": json.dumps({
+                "type": "DELETED_INSTITUTION",
+                "from": user.name.encode('utf8')
+            }),
+            "institution_key": institution_key
+        }
+        enqueue_task('notify-followers', notification_params)                     

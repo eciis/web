@@ -86,7 +86,8 @@ User.prototype.removeInvite = function removeInvite(inviteKey) {
 User.prototype.removeInstitution = function removeInstitution(institutionKey, removeHierarchy) {
     var toRemove = function toRemove(institution) {
         var childToRemove = (institution.parent_institution &&
-                institution.parent_institution === institutionKey && removeHierarchy);
+                institution.parent_institution === institutionKey && 
+                removeHierarchy === 'true');
         return (institution.key === institutionKey) || childToRemove;
     };
 

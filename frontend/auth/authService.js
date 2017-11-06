@@ -1,7 +1,5 @@
 'use strict';
 
-var out_user;
-
 (function() {
     var app = angular.module("app");
 

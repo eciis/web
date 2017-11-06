@@ -4,8 +4,8 @@ function User(data) {
     data = data || {};
     _.extend(this, data);
 
-    if (this.institutions && !this.current_institution) {
-        this.current_institution = this.institutions[0];
+    if (!this.current_institution) {
+        this.changeInstitution();
     }
 }
 
@@ -14,8 +14,12 @@ var SENT = "sent";
 var USER = "USER";
 
 User.prototype.changeInstitution = function changeInstitution(institution) {
-    this.current_institution = _.find(this.institutions, {'key': institution.key});
-    window.localStorage.userInfo = JSON.stringify(this);
+    if (this.institutions && this.institutions.length > 0) {
+        institution = institution || this.institutions[0];
+        this.current_institution = _.find(this.institutions, {'key': institution.key});
+        changeProfileColor(this, institution);
+        window.localStorage.userInfo = JSON.stringify(this);
+    }
 };
 
 User.prototype.follow = function follow(institution) {
@@ -108,6 +112,14 @@ User.prototype.isInactive = function isInactive() {
     var notActive = this.state != 'active';
     return notActive;
 };
+
+function changeProfileColor(user, institution) {
+    var profile = _.find(user.institution_profiles, {
+        'institution_key': institution.key
+    });
+    const color = profile ? profile.color : 'grey';
+    user.current_institution.color = color;
+}
 
 function updateFollowInstitution(follows, institution) {
     var index = _.findIndex(follows, ['key', institution.key]);

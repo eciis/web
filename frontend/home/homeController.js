@@ -82,6 +82,10 @@
             return deferred.promise;
         };
 
+        homeCtrl.isEventsEmpty = function isEventsEmpty() {
+            return homeCtrl.events.length === 0;
+        }
+
         function loadPosts(deferred) {
             PostService.getNextPosts(actualPage).then(function success(response) {
                 actualPage += 1;

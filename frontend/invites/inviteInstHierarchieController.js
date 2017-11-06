@@ -310,39 +310,14 @@
                 templateUrl: "app/invites/removeChildDialog.html",
                 targetEvent: ev,
                 clickOutsideToClose: true,
-                controller: RemoveChildController,
+                controller: "RemoveChildController",
                 controllerAs: 'ctrl',
                 locals: {
-                    child: institution,
-                    user: inviteInstCtrl.user,
-                    removeInstFromChildren: removeInstFromChildren
+                    parent: inviteInstCtrl.institution,
+                    child: institution
                 }
             });
         };
-
-        function RemoveChildController($mdDialog, child, user, InstitutionService, AuthService, removeInstFromChildren) {
-            var ctrl = this;
-            var removeHierarchy = "false";
-            ctrl.justification = "";
-
-            ctrl.closeDialog = function closeDialog() {
-                $mdDialog.cancel();
-            };
-
-            ctrl.removeChildInst = function removeChildInst() {
-                InstitutionService.removeInstitution(child.key, removeHierarchy, ctrl.justification).then(
-                    function success() {
-                        user.removeInstitution(child.key, removeHierarchy);
-                        AuthService.save();
-                        removeInstFromChildren(child);
-                        ctrl.closeDialog();
-                        MessageService.showToast("Instituição removida com sucesso.");
-                    }, function error(response) {
-                        MessageService.showToast(response.data.msg);
-                    }
-                )
-            };
-        }
 
         loadInstitution();
     });

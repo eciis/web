@@ -122,14 +122,10 @@
 
         service.removeInstitution = function removeInstitution(institutionKey, removeHierarchy, justification) {
             var deffered = $q.defer();
-            $http({
-                url: INSTITUTIONS_URI + "/" + institutionKey,
-                method: 'DELETE',
-                params: {
-                    removeHierarchy: removeHierarchy,
-                    justification: justification
-                }
-            }).then(
+            $http.delete(
+                INSTITUTIONS_URI + "/" + institutionKey,
+                {params: {removeHierarchy: removeHierarchy, justification: justification}}
+            ).then(
                 function success(info) {
                     deffered.resolve(info.data);
                 }, function error(data) {

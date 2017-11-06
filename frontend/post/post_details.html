@@ -16,10 +16,10 @@
       <span layout="row" class="md-subhead">
         por {{ postDetailsCtrl.post.author }} {{ postDetailsCtrl.post.publication_date | amUtc | amLocal | amCalendar:referenceTime:formats }}
         <md-button ng-if="postDetailsCtrl.showButtonEdit()" class="md-icon-button"
-        style="margin-top: -9px; margin-right: 10px;"
+        style="margin-top: -8px;"
         ng-click="postDetailsCtrl.editPost()">
-          <div class="sm-fab-button" style="height: 21px">
-            <md-icon style="font-size:16px; color: #FFFFFF; text-align: center;">edit</md-icon>
+          <div class="sm-fab-button" style="height: 15px; width: 15px;">
+            <md-icon style="font-size:11px; color: #FFFFFF; margin-left: -4px;">edit</md-icon>
           </div>
         </md-button>
       </span>

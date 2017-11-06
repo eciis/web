@@ -16,9 +16,9 @@ class SearchUser(SearchDocument):
         """Create a document.
 
         Keyword arguments:
-        id -- the key.urlsafe() of the user
-        name -- the user's name
-        state -- represents the current user's state
+        user -- It wrapps the attributes that will be used in document like id,
+        name and state. All of them are self descriptive and
+        relationed to the user.
         """
         index = api.search.Index(name=self.index_name)
         if not index.get(user.key.urlsafe()):

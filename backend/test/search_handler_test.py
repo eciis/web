@@ -22,7 +22,7 @@ class SearchHandlerTest(TestBaseHandler):
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
-    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
+    @patch('utils.verify_token', return_value={'email': 'test@example.com'})
     def test_get_institution(self, verify_token):
         """Test the search_handler's get method."""
         # Search for the institution by its full name
@@ -60,7 +60,7 @@ class SearchHandlerTest(TestBaseHandler):
             % ('Universidades', 'active, pending'))
         self.assertTrue('CERTBIO' and 'SPLAB' in institutions)
 
-    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
+    @patch('utils.verify_token', return_value={'email': 'test@example.com'})
     def test_get_user(self, verify_token):
         """Test the search_handler's get method with type=user."""
         # Call the get method with the user's full name
@@ -85,7 +85,7 @@ def initModels(cls):
     cls.mayza = User()
     cls.mayza.name = 'Mayza Nunes'
     cls.mayza.cpf = '089.675.908-90'
-    cls.mayza.email = ['mayzabeel@gmail.com']
+    cls.mayza.email = ['test@example.com']
     cls.mayza.institutions = []
     cls.mayza.follows = []
     cls.mayza.institutions_admin = []

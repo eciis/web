@@ -9,9 +9,10 @@ from handlers.base_handler import BaseHandler
 from search_module.search_user import SearchUser
 from search_module.search_institution import SearchInstitution
 
-types = {'institution': SearchInstitution,
-         'user': SearchUser
-         }
+SEARCH_TYPES = {
+    'institution': SearchInstitution,
+    'user': SearchUser
+}
 
 
 class SearchHandler(BaseHandler):
@@ -24,7 +25,7 @@ class SearchHandler(BaseHandler):
         value = self.request.get('value')
         state = self.request.get('state')
         search_type = self.request.get('type')
-        search_entity = types[search_type]()
+        search_entity = SEARCH_TYPES[search_type]()
         self.response.write(
             json.dumps(search_entity.getDocuments(value, state))
         )

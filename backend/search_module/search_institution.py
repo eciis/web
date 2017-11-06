@@ -16,12 +16,9 @@ class SearchInstitution(SearchDocument):
         """Create a document.
 
         Keyword arguments:
-        id -- the key.urlsafe() of the institution
-        name -- the institution's name
-        state -- represents the current institution's state
-        admin -- the email of the institution's admin,
-        acronym -- the institution's name acronym
-        if it is an active one, or the email that the invitation was sent to.
+        institution -- It wrapps the attributes that will be used in document.
+        All of them are self descriptive and
+        relationed to the institution.
         """
         index = api.search.Index(name=self.index_name)
         if not index.get(institution.key.urlsafe()):

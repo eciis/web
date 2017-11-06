@@ -1,8 +1,14 @@
 """Institution Model."""
+
 from google.appengine.ext import ndb
+
 from custom_exceptions.fieldException import FieldException
 
 from search_module.search_institution import SearchInstitution
+from service_messages import send_message_notification
+from service_messages import send_message_email
+
+import json
 
 
 def get_actuation_area(data):

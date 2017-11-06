@@ -27,7 +27,7 @@
 
         inviteInstCtrl.checkInstInvite = function checkInstInvite(ev) {
             var promise;
-
+            
             inviteInstCtrl.invite.institution_key = institutionKey;
             inviteInstCtrl.invite.admin_key = inviteInstCtrl.user.key;
             invite = new Invite(inviteInstCtrl.invite);
@@ -103,7 +103,11 @@
             }
             promise.then(function success() {
                 MessageService.showToast('Convite enviado com sucesso!');
-                addInstitution(invite.type_of_invite, institution_requested_key);
+                if (invite.type_of_invite === REQUEST_PARENT) {
+                    addInstitution(institution_requested_key);
+                } else {
+                    addInviteToChildrenRequests(invite);
+                }
                 deferred.resolve();
             }, function error() {
                 deferred.reject();
@@ -118,15 +122,11 @@
         * @param institution_requested_key - key of institution that receiving the request
         * @return - promise
         */
-        function addInstitution(type_of_invite, institution_requested_key) {
+        function addInstitution(institution_requested_key) {
             var promise = InstitutionService.getInstitution(institution_requested_key);
             promise.then(function(response) {
-               if (type_of_invite === REQUEST_PARENT) {
-                   inviteInstCtrl.institution.addParentInst(response.data);
-                   inviteInstCtrl.hasParent = true;
-               } else {
-                    inviteInstCtrl.institution.addChildrenInst(response.data);
-               }
+                inviteInstCtrl.institution.addParentInst(response.data);
+                inviteInstCtrl.hasParent = true;
             });
             return promise;
         }
@@ -194,6 +194,11 @@
             });
         }
 
+        function addInviteToChildrenRequests(invite) {
+            invite.status = 'sent';
+            inviteInstCtrl.requested_invites.push(invite);
+        };
+
         inviteInstCtrl.removeLink = function removeLink(institution, isParent) {
             var confirm = $mdDialog.confirm({onComplete: designOptions})
                 .clickOutsideToClose(true)
@@ -212,9 +217,7 @@
                         inviteInstCtrl.hasParent = false;
                         inviteInstCtrl.institution.parent_institution = {};
                     } else {
-                        _.remove(inviteInstCtrl.institution.children_institutions, function(inst) {
-                            return institution.key === inst.key;
-                        });
+                        removeInstFromChildren(institution);
                     }
                 });
             }, function() {
@@ -222,6 +225,12 @@
             });
             return promise;
         };
+
+        function removeInstFromChildren(institution) {
+            _.remove(inviteInstCtrl.institution.children_institutions, function(child) {
+                return child.key === institution.key;
+            });
+        }
 
         inviteInstCtrl.acceptRequest = function acceptRequest(request, type_of_invite, event) {
             var promise = MessageService.showConfirmationDialog(event, 'Aceitar Solicitação', isOvewritingParent(type_of_invite));
@@ -254,6 +263,20 @@
             return promise;
         };
 
+        inviteInstCtrl.isReqSentByCurrentInst = function isReqSentByCurrentInst(request) {
+            return institutionKey === request.institution_key;
+        };
+
+        inviteInstCtrl.goToRequestedInst = function goToRequestedInst(request) {
+            var inst_key = inviteInstCtrl.isReqSentByCurrentInst(request) ? request.institution_requested_key : request.institution_key;
+            inviteInstCtrl.goToInst(inst_key);
+        };
+
+        inviteInstCtrl.getReqInstName = function getReqInstName(request) {
+            var inst_name = inviteInstCtrl.isReqSentByCurrentInst(request) ? request.requested_inst_name : request.institution_admin.name;
+            return inst_name;
+        };
+
         function isOvewritingParent(type_of_invite) {
             var message;
             if (inviteInstCtrl.institution.parent_institution && type_of_invite === REQUEST_CHILDREN) {
@@ -271,16 +294,17 @@
             if (invite.type_of_invite === INSTITUTION_PARENT){
                 inviteInstCtrl.institution.addParentInst(stub);
                 inviteInstCtrl.hasParent = true;
-            }
-            else {
+            } else {
                 inviteInstCtrl.institution.addChildrenInst(stub);
             }
             inviteInstCtrl.showButton = true;
         }
 
-        inviteInstCtrl.showMessage = function(type_of_invite) {
+        inviteInstCtrl.showMessage = function(request) {
             var message;
-            if(type_of_invite === REQUEST_CHILDREN) {
+            if(inviteInstCtrl.isReqSentByCurrentInst(request)) {
+                message = 'Solicitação para ser uma instituição subordinada (Aguardando confirmação)';
+            } else if(request.type_of_invite === REQUEST_CHILDREN) {
                 message = 'Solicitação para ser a instituição superior';
             } else {
                 message = 'Solicitação para ser uma instituição subordinada';
@@ -300,6 +324,20 @@
                 angular.element($confirmButton).addClass('md-raised md-warn');
                 angular.element($cancelButton).addClass('md-primary');
         }
+
+        inviteInstCtrl.removeChild = function removeChild(institution, ev) {
+            $mdDialog.show({
+                templateUrl: "app/invites/removeChildDialog.html",
+                targetEvent: ev,
+                clickOutsideToClose: true,
+                controller: "RemoveChildController",
+                controllerAs: 'ctrl',
+                locals: {
+                    parent: inviteInstCtrl.institution,
+                    child: institution
+                }
+            });
+        };
 
         loadInstitution();
     });

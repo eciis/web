@@ -123,13 +123,18 @@
             return deffered.promise;
         };
 
-        service.removeInstitution = function removeInstitution(institutionKey, removeHierarchy) {
+        service.removeInstitution = function removeInstitution(institutionKey, removeHierarchy, justification) {
             var deffered = $q.defer();
-            $http.delete(INSTITUTIONS_URI + "/" + institutionKey + "?removeHierarchy=" + removeHierarchy).then(function success(info) {
-                deffered.resolve(info.data);
-            }, function error(data) {
-                deffered.reject(data);
-            });
+            $http.delete(
+                INSTITUTIONS_URI + "/" + institutionKey,
+                {params: {removeHierarchy: removeHierarchy, justification: justification}}
+            ).then(
+                function success(info) {
+                    deffered.resolve(info.data);
+                }, function error(data) {
+                    deffered.reject(data);
+                }
+            );
             return deffered.promise;
         };
 

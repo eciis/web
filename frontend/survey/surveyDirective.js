@@ -7,7 +7,7 @@
 
         var surveyCtrl = this;
         surveyCtrl.options = $scope.options;
-        surveyCtrl.type_survey = false;
+        surveyCtrl.multipleChoice = false;
         var option_empty = {'text': '',
                             'number_votes': 0,
                             'voters': []
@@ -51,7 +51,7 @@
         }
 
         function getTypeSurvey(){
-            surveyCtrl.post.type_survey = surveyCtrl.type_survey ? 'multiple_choice' : 'binary';
+            surveyCtrl.post.type_survey = surveyCtrl.multipleChoice ? 'multiple_choice' : 'binary';
         }
 
         function createSurvey(){

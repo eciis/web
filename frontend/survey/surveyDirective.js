@@ -7,6 +7,7 @@
 
         var surveyCtrl = this;
         surveyCtrl.options = $scope.options;
+        surveyCtrl.multipleChoice = false;
         var option_empty = {'text': '',
                             'number_votes': 0,
                             'voters': []
@@ -49,8 +50,13 @@
             surveyCtrl.post.deadline = _.split(date, '.')[0];
         }
 
+        function getTypeSurvey(){
+            surveyCtrl.post.type_survey = surveyCtrl.multipleChoice ? 'multiple_choice' : 'binary';
+        }
+
         function createSurvey(){
             modifyOptions();
+            getTypeSurvey();
             surveyCtrl.post.deadline && formateDate();
             surveyCtrl.post.options = surveyCtrl.options;
 

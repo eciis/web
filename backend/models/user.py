@@ -1,7 +1,8 @@
 """User Model."""
+from search_module.search_user import SearchUser
 from google.appengine.ext import ndb
-
 from custom_exceptions.fieldException import FieldException
+
 
 import random
 
@@ -50,7 +51,7 @@ class InstitutionProfile(ndb.Model):
             'name': self.institution_name,
             'photo_url': self.institution_photo_url
         }
-        
+
         profile['color'] = self.color or pick_color()
         profile['institution_key'] = self.institution_key
         return profile
@@ -261,6 +262,11 @@ class User(ndb.Model):
         """
         self.institutions = []
         self.follows = []
+
+    def _post_put_hook(self, future):
+        """This method is called after each User.put()."""
+        search_user = SearchUser()
+        search_user.createDocument(future.get_result().get())
 
     @staticmethod
     def get_active_user(user_email):

@@ -50,7 +50,7 @@ def makeUser(user, request):
         ['acronym', 'photo_url', 'key', 'parent_institution'])
         for institution_key in user.follows
         if institution_key.get().state != 'inactive']
-    user_json['institution_profiles'] = [profile.make() 
+    user_json['institution_profiles'] = [profile.make()
         for profile in user.institution_profiles]
     return user_json
 

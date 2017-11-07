@@ -80,6 +80,7 @@ def initModels(cls):
     cls.user = User()
     cls.user.name = 'user name'
     cls.user.photo_url = 'urlphoto'
+    cls.user.email = ["test@example.com"]
     cls.user.put()
     # new Institution CERTBIO
     cls.certbio = Institution()

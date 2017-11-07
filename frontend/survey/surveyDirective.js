@@ -59,7 +59,6 @@
             getTypeSurvey();
             surveyCtrl.post.deadline && formateDate();
             surveyCtrl.post.options = surveyCtrl.options;
-            console.log(surveyCtrl.post);
 
             return new Post(surveyCtrl.post, surveyCtrl.user.current_institution.key);
         }

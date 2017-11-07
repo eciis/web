@@ -322,7 +322,7 @@ a:active {
 }
 
 .youtube-player img:hover {
-    
+
     -webkit-filter: brightness(75%);
     filter: brightness(75%);
 }
@@ -363,6 +363,7 @@ a:active {
 
 .green-button {
     background-color: #8BC34A;
+    border-radius: 50%;
     color: #FFFFFF;
 }
 

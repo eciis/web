@@ -7,12 +7,12 @@
     var manageMemberCtrl, httpBackend, scope, inviteService, createCtrl, state, authService,
         mdDialog, institutionService;
 
-    var invite = new Invite({invitee: "mayzabeel@gmail.com",
+    var invite = new Invite({invitee: "testuser@example.com",
                         type_of_invite: 'USER',
                         institution_key: '987654321',
                         admin_key: '12345'});
 
-    var otherInvite = new Invite({invitee: "pedro@gmail.com",
+    var otherInvite = new Invite({invitee: "other_user@example.com",
                         type_of_invite: 'USER',
                         institution_key: '987654321',
                         admin_key: '12345'});
@@ -25,7 +25,7 @@
     };
 
     var member = {
-        name: 'tiago',
+        name: 'Member',
         cpf: '121.445.044-07',
         key: '12345',
         email: 'member@gmail.com',
@@ -33,10 +33,10 @@
     };
 
     var user = {
-         name: 'Maiana',
+         name: 'User',
          cpf: '121.445.044-07',
          key: '54321',
-         email: 'maiana.brito@ccc.ufcg.edu.br',
+         email: 'user@example.com',
          institutions: [institution]
      };
 
@@ -127,10 +127,13 @@
             });
 
             it('should call inviteService.sendInvite()', function(done) {
-                manageMemberCtrl.invite = {invitee: "teste@gmail.com",
-                                            type_of_invite: 'USER',
-                                            institution_key: '987654321',
-                                            admin_key: '54321'};
+                manageMemberCtrl.invite = {
+                    invitee: "teste@gmail.com",
+                    type_of_invite: 'USER',
+                    institution_key: '987654321',
+                    admin_key: '54321',
+                    sender_name: 'User'
+                };
                 var newInvite = new Invite(manageMemberCtrl.invite);
                 expect(manageMemberCtrl.sent_invitations.length).toBe(2);
                 var promise = manageMemberCtrl.sendUserInvite();
@@ -157,7 +160,7 @@
             });
 
             it('should be false when the invitee was already invited', function() {
-                var inviteInvited = new Invite({invitee: "mayzabeel@gmail.com",
+                var inviteInvited = new Invite({invitee: "testuser@example.com",
                                             type_of_invite: 'USER',
                                             institution_key: '987654321',
                                             admin_key: '12345'});

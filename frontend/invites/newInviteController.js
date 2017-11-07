@@ -51,9 +51,10 @@
                 promise.then(function success(userSaved) {
                     newInviteCtrl.user.removeInvite(newInviteCtrl.inviteKey);
                     newInviteCtrl.user.institutions = userSaved.institutions;
+                    newInviteCtrl.user.institution_profiles = userSaved.institution_profiles;
                     newInviteCtrl.user.follows = userSaved.follows;
                     newInviteCtrl.user.state = 'active';
-                    newInviteCtrl.user.current_institution = newInviteCtrl.institution;
+                    newInviteCtrl.user.changeInstitution(newInviteCtrl.institution);
                     AuthService.save();
                     $state.go("app.home");
                     showAlert(event, newInviteCtrl.institution.name);

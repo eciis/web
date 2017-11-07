@@ -26,19 +26,20 @@
               <p>Informe seus dados pessoais abaixo para essa instituição:</p>
               <md-input-container flex-gt-sm ng-if="newInviteCtrl.checkUserName()">
                 <label>Seu Nome</label>
-                <input ng-model="newInviteCtrl.user_name" required>
+                <input ng-model="newInviteCtrl.user_name" name="nome" required>
               </md-input-container>
 
               <div layout="column" layout-align="center">
                 <md-input-container flex-gt-sm >
                   <label>Telefone institucional</label>
                   <input ng-pattern="newInviteCtrl.phoneRegex" ng-model="newInviteCtrl.phone" 
-                    placeholder="99 9999-99999" mask="99 9999-99999" mask-validate='false'>
+                    placeholder="99 9999-99999" mask="99 9999-99999" mask-validate='false'
+                    name="telefone">
                 </md-input-container>
 
                 <md-input-container>
                   <label>Email institucional</label>
-                  <input ng-model="newInviteCtrl.email" type="email">
+                  <input ng-model="newInviteCtrl.email" type="email" name="email">
                 </md-input-container>
 
                 <md-input-container flex-gt-sm>

@@ -18,19 +18,6 @@
         var URL_POST = '/posts/';
         postDetailsCtrl.user = AuthService.getCurrentUser();
 
-        postDetailsCtrl.getTypePost = function getTypePost() {
-            if(postDetailsCtrl.post.shared_post){
-                return 'SHARED_POST';
-            } else if(postDetailsCtrl.post.shared_event){
-                return 'SHARED_EVENT';
-            } else if(postDetailsCtrl.post.type_survey){
-                return 'SURVEY';
-            } else {
-                return 'COMMON';
-            }
-            return postDetailsCtrl.post.type_survey;
-        };
-
         postDetailsCtrl.deletePost = function deletePost(ev) {
             var confirm = $mdDialog.confirm()
                 .clickOutsideToClose(true)
@@ -74,7 +61,7 @@
 
         postDetailsCtrl.isShowTitle = function isShowTitle(post) {
             return !postDetailsCtrl.isDeleted(post) && 
-                    postDetailsCtrl.getTypePost() === 'COMMON';
+                    postDetailsCtrl.showPost();
         };
 
         postDetailsCtrl.isShared = function isShared() {
@@ -100,10 +87,21 @@
                 !postDetailsCtrl.isDeleted(postDetailsCtrl.post.shared_event);
         };
 
+        postDetailsCtrl.showSurvey = function showSurvey() {
+            return postDetailsCtrl.post.type_survey;
+        };
+
+        postDetailsCtrl.showPost = function showPost() {
+            return !postDetailsCtrl.showSurvey() && !postDetailsCtrl.isShared();
+        };
+
+        postDetailsCtrl.showSurvey = function showSurvey() {
+            return postDetailsCtrl.post.type_survey;
+        };
+
         postDetailsCtrl.showTextPost = function showTextPost(){
-            const isCommon = postDetailsCtrl.getTypePost() === "COMMON";
             return !postDetailsCtrl.isDeleted(postDetailsCtrl.post) &&
-                     isCommon;
+                     postDetailsCtrl.showPost();
         };
 
         postDetailsCtrl.showButtonDelete = function showButtonDelete() {

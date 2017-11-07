@@ -44,7 +44,6 @@
             });
         }
 
-
         function formateDate(){
             var date = surveyCtrl.post.deadline.toISOString();
             surveyCtrl.post.deadline = _.split(date, '.')[0];

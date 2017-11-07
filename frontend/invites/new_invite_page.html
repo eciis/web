@@ -1,35 +1,47 @@
-<div layout-fill md-colors="{background: 'grey-900'}" layout="column" layout-align="center">
-   <div layout="row" layout-wrap layout-align="center">
-    <md-card flex-gt-xs="50">
-      <md-toolbar md-colors="{background: 'teal-800'}" layout="row">
-        <h1 class="md-toolbar-tools">Novo convite</h1>
-      </md-toolbar>
-      <md-content layout-gt-sm="column" layout-padding>
-        <div>
-          <div>
-            <md-list flex ng-if="newInviteCtrl.isInviteUser()">
-              <md-subheader class="md-no-sticky">{{newInviteCtrl.invite.admin_name}} te enviou um convite para ser membro de:</md-subheader>
-              <md-list-item class="md-3-line">
+<div flex md-colors="{background: 'teal-500'}" layout="column" layout-fill layout-align="center">
+  <div layout="row" layout-xs="column" layout-wrap layout-align="center">
+    <md-card flex-gt-xs="40">
+      <div align="center">
+        <img src="app/images/logowithname.png" aria-label="e-CIS Logo" style="width: 50%;">
+      </div>  
+      <md-card-content layout-gt-sm="column" layout-padding style="background-color:#FFFFFF;">
+        <div layout-align="center" layout-padding layout-margin>
+          <p class="md-title green-text">VOCÊ RECEBEU UM CONVITE DE:</p>
+            <md-list flex>
+              <md-list-item class="md-3-line" style="background-color:#F5F5F5;">
                 <img ng-src="{{ newInviteCtrl.institution.photo_url }}" class="md-avatar" alt="{{newInviteCtrl.institution.name}}" />
                 <div class="md-list-item-text" layout="column">
-                  <h3><b>{{ newInviteCtrl.institution.name }}</b> - {{ newInviteCtrl.institution.email }}</h3>
-                  <h4>{{ newInviteCtrl.institution.phone_number }} | {{ newInviteCtrl.getFullAddress() }}</h4>
-                  <p>{{ newInviteCtrl.institution.description }}</p>
+                  <h3><b>{{ newInviteCtrl.institution.name }}</b></h3>
+                  <p>{{ newInviteCtrl.institution.email }}</p>
+                  <p>Convidado por : {{ newInviteCtrl.invite.admin_name }}</p>
                 </div>
               </md-list-item>
             </md-list>
 
-            <md-list flex ng-if="!newInviteCtrl.isInviteUser()">
-              <p>{{newInviteCtrl.invite.admin_name}} da Instituição {{newInviteCtrl.invite.institution.name}} te enviou um convite para ser administrador da instituição <b>{{ newInviteCtrl.invite.suggestion_institution_name | uppercase}}</b></p>
-            </md-list>
-            <div layout="column" layout-align="center" ng-if="newInviteCtrl.isUserInfoImcomplete()">
-              <p>Informe seus dados pessoais abaixo para essa instituição:</p>
-              <md-input-container flex-gt-sm ng-if="newInviteCtrl.checkUserName()">
-                <label>Seu Nome</label>
+            <div layout="column" layout-align="center">
+              <p class="md-title green-text">{{newInviteCtrl.isInviteUser() ? 'PREENCHA O FORMULÁRIO PARA SE TORNAR UM MEMBRO:' : 'PREENCHA O FORMULÁRIO PARA CADASTRAR A INSTITUIÇÃO:'}}</p>
+              
+              <!-- INVITED INSTITUTION -->
+              <div ng-if="!newInviteCtrl.isInviteUser()">
+                <md-list flex ng-if="!newInviteCtrl.isInviteUser()">
+                  <md-list-item style="background-color:#F5F5F5;">
+                    <md-button md-colors="{background: 'light-green'}" class="md-icon-button" style="margin: 0 10px 0 0;">
+                      <md-icon style="color: white;">account_balance</md-icon>
+                    </md-button>
+                    <div class="md-list-item-text" layout="column">
+                      <h3><b>{{ newInviteCtrl.invite.suggestion_institution_name }}</b></h3>
+                    </div>
+                  </md-list-item>
+                </md-list>
+              </div>
+              
+              <!-- USER INFORMATION -->
+              <div layout="column" layout-align="center" ng-if="newInviteCtrl.isUserInfoImcomplete()">
+                <md-input-container flex-gt-sm ng-if="newInviteCtrl.checkUserName()">
+                  <label>Seu Nome</label>
                 <input ng-model="newInviteCtrl.user_name" name="nome" required>
-              </md-input-container>
+                </md-input-container>
 
-              <div layout="column" layout-align="center">
                 <md-input-container flex-gt-sm >
                   <label>Telefone institucional</label>
                   <input ng-pattern="newInviteCtrl.phoneRegex" ng-model="newInviteCtrl.phone" 
@@ -43,18 +55,17 @@
                 </md-input-container>
 
                 <md-input-container flex-gt-sm>
-                <label>Cargo institucional</label>
-                <input name="cargo" ng-model="newInviteCtrl.office" required>
+                  <label>Cargo institucional</label>
+                  <input name="cargo" ng-model="newInviteCtrl.office" required>
                 </md-input-container>
-              </div>  
+              </div> 
             </div>
           </div>
-        </div>
-        <section layout="row" layout="column" layout-align="end center" layout-wrap>
-           <md-button ng-click="newInviteCtrl.acceptInvite($event)" md-colors="{background: 'teal-900'}">Aceitar</md-button>
-           <md-button ng-click="newInviteCtrl.rejectInvite($event)" md-colors="{background: 'teal-900'}">Rejeitar</md-button>
-        </section>
-      </md-content>
+      </md-card-content>
+      <md-card-actions layout="row" layout-align="end center">
+        <md-button ng-click="newInviteCtrl.rejectInvite($event)" md-colors="{background: 'teal-500'}">Cancelar</md-button>
+        <md-button ng-click="newInviteCtrl.acceptInvite($event)" md-colors="{background: 'teal-500'}">{{newInviteCtrl.isInviteUser() ? 'Enviar' : 'Próximo'}}</md-button> 
+      </md-card-actions>
     </md-card>
   </div>
 </div>

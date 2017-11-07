@@ -77,7 +77,7 @@
                     newInviteCtrl.user.institutions_admin.push(institutionSaved.key);
                     newInviteCtrl.user.follow(institutionSaved);
                     newInviteCtrl.user.addProfile(createProfile(institutionSaved));
-                    newInviteCtrl.user.current_institution = institutionSaved;
+                    newInviteCtrl.user.changeInstitution(institutionSaved);
                     newInviteCtrl.user.state = 'active';
                     newInviteCtrl.user.name = getCurrentName();
                     AuthService.save();
@@ -93,10 +93,13 @@
             return {
                 email: null,
                 institution_key: new_institution.key,
-                institution_name: new_institution.name,
-                institution_photo_url: new_institution.photo_url,
+                institution: {
+                    name: new_institution.name,
+                    photo_url: new_institution.photo_url,
+                },
                 office: 'Administrador',
-                phone: null
+                phone: null,
+                color: 'grey'
             };
         }
 

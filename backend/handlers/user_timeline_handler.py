@@ -42,7 +42,7 @@ class UserTimelineHandler(BaseHandler):
                 limit,
                 queryPosts)
 
-            array = [Post.make(post, self.request.host) for post in queryPosts]
+            array = [post.make(self.request.host) for post in queryPosts]
             visible_posts = [post for post in array
                              if not Post.is_hidden(post)]
 

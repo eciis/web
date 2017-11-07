@@ -40,7 +40,7 @@ class InstitutionTimelineHandler(BaseHandler):
             limit,
             queryPosts)
 
-        array = [Post.make(post, self.request.host) for post in queryPosts]
+        array = [post.make(self.request.host) for post in queryPosts]
 
         data = {
             'posts': array,

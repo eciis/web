@@ -458,3 +458,16 @@ a:active {
    height: 17px;
    border-radius: 50%;
 }
+
+.option{
+    height: 25px;
+    margin: 0px;
+}
+
+md-switch.md-checked .md-thumb {
+  background-color: #009688;
+}
+
+md-switch.md-checked .md-bar {
+    background-color: #80CBC4;
+}

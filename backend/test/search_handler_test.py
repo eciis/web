@@ -66,13 +66,13 @@ class SearchHandlerTest(TestBaseHandler):
         # Call the get method with the user's full name
         users = self.testapp.get(
             "/api/search/institution?value=%s&state=%s&type=user"
-            % (self.mayza.name, self.mayza.state))
-        self.assertTrue("Mayza Nunes" in users)
+            % (self.user.name, self.user.state))
+        self.assertTrue("User" in users)
         # Call the get method with part of the user's name
         users = self.testapp.get(
             "/api/search/institution?value=%s&state=%s&type=user"
-            % ("Mayza", self.mayza.state))
-        self.assertTrue("Mayza Nunes" in users)
+            % ("User", self.user.state))
+        self.assertTrue("User" in users)
 
     def tearDown(cls):
         """Deactivate the test."""
@@ -81,26 +81,26 @@ class SearchHandlerTest(TestBaseHandler):
 
 def initModels(cls):
     """Init the models."""
-    # new User Mayza
-    cls.mayza = User()
-    cls.mayza.name = 'Mayza Nunes'
-    cls.mayza.cpf = '089.675.908-90'
-    cls.mayza.email = ['test@example.com']
-    cls.mayza.institutions = []
-    cls.mayza.follows = []
-    cls.mayza.institutions_admin = []
-    cls.mayza.notifications = []
-    cls.mayza.posts = []
-    cls.mayza.put()
+    # new User
+    cls.user = User()
+    cls.user.name = 'User'
+    cls.user.cpf = '089.675.908-90'
+    cls.user.email = ['test@example.com']
+    cls.user.institutions = []
+    cls.user.follows = []
+    cls.user.institutions_admin = []
+    cls.user.notifications = []
+    cls.user.posts = []
+    cls.user.put()
     # new Institution CERTBIO
     cls.certbio = Institution()
     cls.certbio.name = 'Lab. de Desenvolvimento de Biomateriais do Nordeste'
     cls.certbio.acronym = 'CERTBIO'
     cls.certbio.state = 'active'
     cls.certbio.actuation_area = 'Universidades'
-    cls.certbio.members = [cls.mayza.key]
-    cls.certbio.followers = [cls.mayza.key]
-    cls.certbio.admin = cls.mayza.key
+    cls.certbio.members = [cls.user.key]
+    cls.certbio.followers = [cls.user.key]
+    cls.certbio.admin = cls.user.key
     cls.certbio.put()
     # new Institution SPLAB
     cls.splab = Institution()
@@ -108,10 +108,10 @@ def initModels(cls):
     cls.splab.acronym = 'SPLAB'
     cls.splab.state = 'pending'
     cls.splab.actuation_area = 'Universidades'
-    cls.splab.members = [cls.mayza.key]
-    cls.splab.followers = [cls.mayza.key]
-    cls.splab.admin = cls.mayza.key
+    cls.splab.members = [cls.user.key]
+    cls.splab.followers = [cls.user.key]
+    cls.splab.admin = cls.user.key
     cls.splab.put()
     # updating user institutions admin
-    cls.mayza.institutions_admin = [cls.certbio.key, cls.splab.key]
-    cls.mayza.put()
+    cls.user.institutions_admin = [cls.certbio.key, cls.splab.key]
+    cls.user.put()

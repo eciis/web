@@ -7,7 +7,7 @@
     </md-card-content>
     <div flex>
       <md-card-content>
-        <div ng-if="postCtrl.type_post === 'Common'">
+        <div ng-if="postCtrl.typePost === 'Common'">
           <form name="saveForm" layout="column">
             <md-input-container md-no-float>
               <input style="font-weight: bold; color: #00695C; border: 0;resize:none;"
@@ -31,41 +31,9 @@
             </md-input-container>
           </form>
         </div>
-        <div ng-if="postCtrl.type_post === 'Survey'">
-          <form>
-            <md-input-container class="md-block">
-              <label>Pergunte algo</label>
-              <textarea ng-model="postCtrl.post.title" placeholder="Pergunte algo aqui" style="max-height: 300px"></textarea>
-            </md-input-container>
-            Alternativas
-            <md-list ng-repeat="option in postCtrl.options">
-              <md-list-item>
-              <md-input-container>
-                <label>+ Adicionar uma opção...</label>
-                <input ng-model="option.text" ng-change="postCtrl.addOption()"/>
-              </md-input-container>
-              </md-list-item>
-            </md-list>
-            <md-input-container class="md-input-has-placeholder">
-              <label>Data limite</label>
-              <input mdc-datetime-picker="" ng-change="controller.changeDate('startTime')" short-time="false" 
-                date="true" time="true" type="text" format="YYYY-MM-DD HH:mm" lang="pt-BR" placeholder="Receber respostas até..." 
-                ng-model="controller.post.deadline" class=" md-input" today-text="Hoje" min-date="null" 
-                readonly="readonly" cancel-text="Cancelar">
-            </md-input-container>
-            <md-input-container ng-show="postCtrl.showVideoUrlField()" class="md-block">
-              <label>Link do Video</label>
-              <textarea style="max-height: 400px;overflow-y:auto;resize:none;" ng-model="postCtrl.post.video_url"
-                md-select-on-focus ng-pattern=postCtrl.videoRegex name="video">
-              </textarea>
-              <div ng-messages="saveForm.video.$error">
-                <div ng-message="pattern">Link do Youtube inválido.</div>
-              </div>
-            </md-input-container>
-          </form>
-          <md-switch class="md-primary" ng-model="postCtrl.multipleChoice" required> Multipla Escolha
-          </md-switch>
-        </div>
+          <!-- SURVEY -->
+        <survey-directive ng-if="postCtrl.typePost === 'Survey'" post="postCtrl.post" posts="posts" user="postCtrl.user" 
+            options="postCtrl.options"></survey-directive>
       </md-card-content>
     </div>
     <md-card-content>
@@ -77,7 +45,7 @@
             <md-icon>add</md-icon>
           </md-button>
           <md-menu-content width="4">
-            <md-menu-item>
+            <md-menu-item ng-if="postCtrl.typePost === 'Common'">
               <md-button ng-click="null" ng-model="postCtrl.file"
                 ngf-pattern="'image/*'" title="Adicionar imagem"
                 ngf-accept="'image/*'" ngf-max-size="5MB"
@@ -86,8 +54,8 @@
                 <md-icon>add_a_photo</md-icon>
                 {{!postCtrl.showImage() ? 'Inserir imagem' : 'Trocar imagem'}}
               </md-button>
-            </md-menu-item>
-            <md-menu-item>
+            </md-menu-item ng-if="postCtrl.typePost === 'Common'">
+            <md-menu-item ng-if="postCtrl.typePost === 'Common'">
               <md-button ng-click="postCtrl.setAddVideo()"
                 title="{{postCtrl.addVideo || postCtrl.post.video_url? 'Remover link':'Adicionar link'}}"
                 ng-disabled="postCtrl.hasMedia() && !postCtrl.addVideo">
@@ -95,7 +63,7 @@
                 {{!postCtrl.addVideo ? 'Vídeo do Youtube' : 'Remover vídeo'}}
               </md-button>
             </md-menu-item>
-            <md-menu-item>
+            <md-menu-item ng-if="postCtrl.typePost === 'Common'">
               <md-button ng-click="null" ng-file-model="postCtrl.files"
                 ngf-pattern="'application/pdf'" title="Adicionar pdf"
                 ngf-accept="'application/pdf'" ngf-max-size="5MB"
@@ -108,11 +76,11 @@
             </md-menu-item>
             <md-menu-item>
               <md-button ng-click="postCtrl.setTypeOfPost()" aria-label="Tipo do Post">
-                <div ng-if="postCtrl.type_post === 'Common'">
+                <div ng-if="postCtrl.typePost === 'Common'">
                   <md-icon>poll</md-icon>
                   Criar Enquete
                 </div>
-                <div ng-if="postCtrl.type_post === 'Survey'">
+                <div ng-if="postCtrl.typePost === 'Survey'">
                   <md-icon>edit</md-icon>
                   Alternar para postagem comum
                 </div>
@@ -133,11 +101,12 @@
       <md-progress-linear ng-show="postCtrl.loading" md-mode="indeterminate" style="width: 14%;"></md-progress-linear>
     </div>
   </md-card-content>
-  <md-card-actions style="text-align: right; margin-right: 20px; margin-bottom: 20px;" ng-show="postCtrl.isTyping()">
+  <md-card-actions style="text-align: right; margin-right: 20px; margin-bottom: 20px;" ng-show="postCtrl.showButton()">
     <md-button style="color: #009688" ng-click="postCtrl.cancelDialog()">
       Cancelar
     </md-button>
-    <md-button class="md-raised" md-colors="{background: 'teal-500'}" title="Enviar" ng-click="postCtrl.save(isEditing, originalPost, posts)" 
+    <md-button class="md-raised" md-colors="{background: 'teal-500'}" title="Enviar"
+      ng-click="postCtrl.save(isEditing, originalPost, posts)" 
       ng-disabled="!postCtrl.isValid(saveForm.$invalid)">
       Postar
     </md-button>

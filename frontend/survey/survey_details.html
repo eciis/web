@@ -1,0 +1,17 @@
+<div ng-if="!surveyCtrl.isDeleted()">
+  <md-card-title>
+    <md-card-title-text>
+      <a href class="md-title hyperlink" ng-click="surveyCtrl.goToPost(postDetailsCtrl.post)">
+        <span class="md-headline break">{{surveyCtrl.post.title}}</span>
+      </a>
+    </md-card-title-text>
+  </md-card-title>
+  <md-list>
+    <md-list-item ng-repeat="option in surveyCtrl.post.options">
+      <md-checkbox ng-model="option.selected" ng-click="surveyCtrl.vote(option, option.selected)"></md-checkbox>
+      <p>{{option.text}}</p>
+      <p md-colors="{background: 'teal-900'}" class="md-secondary"> {{option.percentage ? option.percentage : 0}}% </p>
+    </md-list-item>
+  </md-list>
+</div>
+

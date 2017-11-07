@@ -21,6 +21,7 @@
 
             <div layout="column" layout-align="center">
               <p class="md-title color-green">{{newInviteCtrl.isInviteUser() ? 'PREENCHA O FORMULÁRIO PARA SE TORNAR UM MEMBRO:' : 'PREENCHA O FORMULÁRIO PARA CADASTRAR A INSTITUIÇÃO:'}}</p>
+              <!-- INVITED INSTITUTION -->
               <div ng-if="!newInviteCtrl.isInviteUser()">
                 <md-list flex ng-if="!newInviteCtrl.isInviteUser()">
                   <md-list-item style="background-color:#F5F5F5;">
@@ -33,31 +34,28 @@
                   </md-list-item>
                 </md-list>
               </div>
-      
+              <!-- USER INFORMATION -->
+              <div layout="column" layout-align="center" ng-if="newInviteCtrl.isUserInfoImcomplete()">
+                <md-input-container flex-gt-sm ng-if="newInviteCtrl.checkUserName()">
+                  <label>Seu Nome</label>
+                  <input ng-model="newInviteCtrl.user_name" required>
+                </md-input-container>
+                <md-input-container flex-gt-sm >
+                  <label>Telefone institucional</label>
+                  <input ng-pattern="newInviteCtrl.phoneRegex" ng-model="newInviteCtrl.phone" 
+                    placeholder="99 9999-99999" mask="99 9999-99999" mask-validate='false'>
+                </md-input-container>
 
-                <div layout="column" layout-align="center" ng-if="newInviteCtrl.isUserInfoImcomplete()">
-                  <md-input-container flex-gt-sm ng-if="newInviteCtrl.checkUserName()">
-                    <label>Seu Nome</label>
-                    <input ng-model="newInviteCtrl.user_name" required>
-                  </md-input-container>
-                  <md-input-container flex-gt-sm >
-                    <label>Telefone institucional</label>
-                    <input ng-pattern="newInviteCtrl.phoneRegex" ng-model="newInviteCtrl.phone" 
-                      placeholder="99 9999-99999" mask="99 9999-99999" mask-validate='false'>
-                  </md-input-container>
+                <md-input-container>
+                  <label>Email institucional</label>
+                  <input ng-model="newInviteCtrl.email" type="email">
+                </md-input-container>
 
-                  <md-input-container>
-                    <label>Email institucional</label>
-                    <input ng-model="newInviteCtrl.email" type="email">
-                  </md-input-container>
-
-                  <md-input-container flex-gt-sm>
+                <md-input-container flex-gt-sm>
                   <label>Cargo institucional</label>
                   <input name="cargo" ng-model="newInviteCtrl.office" required>
-                  </md-input-container>
-                </div> 
-            
- 
+                </md-input-container>
+              </div> 
             </div>
           </div>
         </div>

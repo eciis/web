@@ -15,9 +15,11 @@
       </div>
       <span layout="row" class="md-subhead">
         por {{ postDetailsCtrl.post.author }} {{ postDetailsCtrl.post.publication_date | amUtc | amLocal | amCalendar:referenceTime:formats }}
-        <md-button class="md-icon-button" style="margin-top: -9px; margin-right: 10px;" ng-click="postDetailsCtrl.editPost()">
-          <div class="sm-fab-button">
-            <md-icon style="font-size:16px; color: #FFFFFF;">edit</md-icon>
+        <md-button ng-if="postDetailsCtrl.showButtonEdit()" class="md-icon-button"
+        style="margin-top: -8px;"
+        ng-click="postDetailsCtrl.editPost()">
+          <div class="sm-fab-button" style="height: 15px; width: 15px;">
+            <md-icon style="font-size:11px; color: #FFFFFF; margin-left: -4px;">edit</md-icon>
           </div>
         </md-button>
       </span>
@@ -200,34 +202,36 @@
   <md-divider></md-divider>
 
   <!-- BUTTONS -->
-  <md-card-actions style="margin-top: 20px;" layout="row" layout-align="space-between center">
-    <div layout="row" layout-align="start center">
-      <md-button md-colors="{background: 'light-green'}" ng-if="postDetailsCtrl.showButtonDelete() && !postDetailsCtrl.isInstInactive()" class="md-icon-button" arial-label="Delete"
-          ng-click="postDetailsCtrl.deletePost($event, postDetailsCtrl.post)" title="Apagar o post">
-        <md-icon style="color: white;">delete</md-icon>
-      </md-button>
-      <b style="font-size: 12px;">EXCLUIR POST</b>
-    </div>
-    <div layout-align="center">
-      <md-button class="md-icon-button" aria-label="Favorite" ng-click="postDetailsCtrl.likeOrDislikePost()"
-          ng-disabled="postDetailsCtrl.disableButton()" ng-class="postDetailsCtrl.isLikedByUser()?'md-warn':''"
-          title="Curtir">
-        <md-icon>grade</md-icon>
-      </md-button>
-      <md-button class="post-count md-icon-button md-primary md-hue-1" ng-click="postDetailsCtrl.getLikes()"
-          title="{{ postDetailsCtrl.post.number_of_likes === 0? 'Ainda ninguém curtiu' :
-                      postDetailsCtrl.post.number_of_likes === 1? '1 pessoa curtiu' :
-                        postDetailsCtrl.post.number_of_likes + ' pessoas curtiram' }}">
-        {{ postDetailsCtrl.post.number_of_likes }}
-      </md-button>
-      <md-button class="md-icon-button" aria-label="Comments" ng-click="postDetailsCtrl.getComments()"
-          ng-disabled="postDetailsCtrl.isPostPage" title="Mostrar comentários">
-        <md-icon>comments</md-icon>
-      </md-button>
-      <md-button class="post-count md-icon-button md-primary md-hue-1"
-          title="{{ postDetailsCtrl.post.number_of_comments }} pessoas comentaram">
-        {{ postDetailsCtrl.post.number_of_comments }}
-      </md-button>
+  <md-card-actions style="margin-top: 20px;">
+    <div layout="row">
+      <div layout-align="start center" ng-if="postDetailsCtrl.showButtonDelete() && !postDetailsCtrl.isInstInactive()">
+        <md-button md-colors="{background: 'light-green'}" class="md-icon-button" arial-label="Delete"
+            ng-click="postDetailsCtrl.deletePost($event, postDetailsCtrl.post)" title="Apagar o post">
+          <md-icon style="color: white;">delete</md-icon>
+        </md-button>
+        <b style="font-size: 12px;">EXCLUIR POST</b>
+      </div>
+      <div style="margin-left: auto;">
+        <md-button class="md-icon-button" aria-label="Favorite" ng-click="postDetailsCtrl.likeOrDislikePost()"
+            ng-disabled="postDetailsCtrl.disableButton()" ng-class="postDetailsCtrl.isLikedByUser()?'md-warn':''"
+            title="Curtir">
+          <md-icon>grade</md-icon>
+        </md-button>
+        <md-button class="post-count md-icon-button md-primary md-hue-1" ng-click="postDetailsCtrl.getLikes()"
+            title="{{ postDetailsCtrl.post.number_of_likes === 0? 'Ainda ninguém curtiu' :
+                        postDetailsCtrl.post.number_of_likes === 1? '1 pessoa curtiu' :
+                          postDetailsCtrl.post.number_of_likes + ' pessoas curtiram' }}">
+          {{ postDetailsCtrl.post.number_of_likes }}
+        </md-button>
+        <md-button class="md-icon-button" aria-label="Comments" ng-click="postDetailsCtrl.getComments()"
+            ng-disabled="postDetailsCtrl.isPostPage" title="Mostrar comentários">
+          <md-icon>comments</md-icon>
+        </md-button>
+        <md-button class="post-count md-icon-button md-primary md-hue-1"
+            title="{{ postDetailsCtrl.post.number_of_comments }} pessoas comentaram">
+          {{ postDetailsCtrl.post.number_of_comments }}
+        </md-button>
+      </div>
     </div>
   </md-card-actions>
 

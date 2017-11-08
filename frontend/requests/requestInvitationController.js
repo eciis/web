@@ -68,7 +68,7 @@
         requestInvCtrl.makeSearch = function () {
             var deferred = $q.defer();
             clearProperties();
-            InstitutionService.searchInstitutions(requestInvCtrl.finalSearch, ACTIVE).then(function success(response) {
+            InstitutionService.searchInstitutions(requestInvCtrl.finalSearch, ACTIVE, 'institution').then(function success(response) {
                 requestInvCtrl.institutions = response.data;
                 deferred.resolve(response);
             });

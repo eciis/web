@@ -45,7 +45,7 @@ class PostHandler(BaseHandler):
         post = post_key.get()
 
         assert type(post) is Post, "Key is not an Post"
-        post_json = Post.make(post, self.request.host)
+        post_json = post.make(self.request.host)
         post_json['data_comments'] = post.comments
         post_json['data_likes'] = getLikes(post, self.request.host)
 

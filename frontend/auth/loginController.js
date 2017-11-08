@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module("app");
     
-    app.controller("LoginController", function LoginController(AuthService, MessageService, $state) {
+    app.controller("LoginController", function LoginController(AuthService, MessageService, $state, $mdDialog) {
         var loginCtrl = this;
 
         loginCtrl.user = {};
@@ -41,6 +41,22 @@
                     $state.go("app.home");
                 }
             );
+        };
+
+        loginCtrl.resetPassword = function resetPassword(ev) {
+            var confirm = $mdDialog.prompt()
+                .title('Esqueceu sua senha?')
+                .textContent('Digite seu email e vamos lhe enviar um link para criar uma nova senha.')
+                .placeholder('Digite seu email')
+                .ariaLabel('Digite seu emai')
+                .targetEvent(ev)
+                .required(true)
+                .ok("Resetar Senha")
+                .cancel("Cancelar");
+
+            $mdDialog.show(confirm).then(function(email) {
+                AuthService.resetPassword(email);
+            });
         };
 
         (function main() {

@@ -74,7 +74,6 @@
         function getMembers() {
             InstitutionService.getMembers(currentInstitutionKey).then(function success(response) {
                 institutionCtrl.members = response.data;
-                institutionCtrl.searchedMembers = institutionCtrl.members;
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
@@ -241,15 +240,6 @@
                 clickOutsideToClose:true,
                 openFrom: '#fab-new-post',
                 closeTo: angular.element(document.querySelector('#fab-new-post'))
-            });
-        };
-
-        institutionCtrl.refreshSearchedMembers = function refreshSearchedMembers() {
-            institutionCtrl.searchedMembers = [];
-            _.forEach(institutionCtrl.members, function(member) {
-                if(_.includes(_.lowerCase(member.name), _.lowerCase(institutionCtrl.currentMember))){
-                    institutionCtrl.searchedMembers.push(member);
-                }
             });
         };
 

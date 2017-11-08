@@ -9,6 +9,7 @@
 
         manageMemberCtrl.invite = {};
         manageMemberCtrl.sent_invitations = [];
+        manageMemberCtrl.currentMember = "";
 
         manageMemberCtrl.showSendInvite = true;
 

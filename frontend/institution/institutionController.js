@@ -19,6 +19,7 @@
         institutionCtrl.showFullDescription = false;
         institutionCtrl.isLoadingPosts = true;
         institutionCtrl.isLoadingPosts = true;
+        institutionCtrl.searchedMember = "";
 
         institutionCtrl.legal_natures = {
             "public": "Pública",
@@ -265,7 +266,7 @@
                 controllerAs: 'ctrl'
             });
         };
-        
+
         function RemoveInstController($mdDialog, institutionKey, InstitutionService, $state) {
             var ctrl = this;
 

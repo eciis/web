@@ -322,7 +322,6 @@ a:active {
 }
 
 .youtube-player img:hover {
-
     -webkit-filter: brightness(75%);
     filter: brightness(75%);
 }
@@ -475,6 +474,27 @@ md-switch.md-checked .md-thumb {
 
 md-switch.md-checked .md-bar {
     background-color: #80CBC4;
+}
+
+md-list-item, md-list-item .md-list-item-inner {
+    min-height: 20px;
+    height: 60px;
+}
+
+.md-button.sm-icon-button {
+    height:32px;
+    width: 32px;
+    min-height: 32px;
+    min-width: 0;
+    padding: 0;
+    border-radius: 50%;
+}
+
+.sm-icon-button md-icon {
+    font-size: 20px;
+    margin: 6px;
+    width: unset !important;
+    min-width: unset !important;
 }
 
 .login-button {

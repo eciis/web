@@ -342,19 +342,25 @@ a:active {
 .notification-badge {
    position:relative;
 }
+
+.notification-badge[data-badge]:after button{
+    background: #004D40;
+}
+
 .notification-badge[data-badge]:after {
    content:attr(data-badge);
    position:absolute;
    top:-3px;
    right:-2px;
    font-size:.7em;
-   background:#FF6F00;
+   background:#004D40;
    color:white;
    width:12px;height:12px;
    text-align:center;
    line-height:18px;
    border-radius:50%;
    border: 2px solid #EFEBE9;
+   float: left;
 }
 
 .inst-timeline-center {

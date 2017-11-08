@@ -63,9 +63,7 @@
         };
 
         postCtrl.addPdf = function addPdf(files) {
-            if(!postCtrl.getOptionEmpty()){
-                postCtrl.pdfFiles = files;
-            }
+            postCtrl.pdfFiles = files;
         };
 
         postCtrl.createEditedPost = function createEditedPost(post) {

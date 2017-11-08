@@ -172,6 +172,9 @@
                         templateUrl: "app/auth/login.html",
                         controller: "LoginController as loginCtrl"
                     }
+                },
+                params: {
+                    "redirect": undefined
                 }
             })
             .state("create_institution", {
@@ -230,7 +233,10 @@
                     var token = AuthService.getUserToken();
                     config.headers.Authorization = 'Bearer ' + token;
                 } else {
-                    $state.go("signin");
+                    var location = $injector.get('$location');
+                    $state.go("signin", {
+                        "redirect": location.path()
+                    });
                 }
 
                 Utils.updateBackendUrl(config);
@@ -256,7 +262,10 @@
                         AuthService.logout();
                         rejection.data.msg = "Sua sessão expirou!";
                     } else {
-                        $state.go("signin");
+                        var location = $injector.get('$location');
+                        $state.go("signin", {
+                            "redirect": location.path()
+                        });
                     }
                 } else if(rejection.status === 403) {
                     rejection.data.msg = "Você não tem permissão para realizar esta operação!";

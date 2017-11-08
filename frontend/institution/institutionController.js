@@ -21,15 +21,6 @@
         institutionCtrl.isLoadingPosts = true;
         institutionCtrl.currentMember = "";
 
-        institutionCtrl.refreshSearchedMembers = function refreshSearchedMembers() {
-            institutionCtrl.searchedMembers = [];
-            _.forEach(institutionCtrl.members, function(member) {
-                if(_.includes(_.lowerCase(member.name), _.lowerCase(institutionCtrl.currentMember))){
-                    institutionCtrl.searchedMembers.push(member);
-                }
-            });
-        };
-
         institutionCtrl.legal_natures = {
             "public": "Pública",
             "private": "Privada",
@@ -250,6 +241,15 @@
                 clickOutsideToClose:true,
                 openFrom: '#fab-new-post',
                 closeTo: angular.element(document.querySelector('#fab-new-post'))
+            });
+        };
+
+        institutionCtrl.refreshSearchedMembers = function refreshSearchedMembers() {
+            institutionCtrl.searchedMembers = [];
+            _.forEach(institutionCtrl.members, function(member) {
+                if(_.includes(_.lowerCase(member.name), _.lowerCase(institutionCtrl.currentMember))){
+                    institutionCtrl.searchedMembers.push(member);
+                }
             });
         };
 

@@ -53,36 +53,36 @@
         </div>
       </md-toolbar>
       <div ng-if="manageMemberCtrl.showMembers" layout-padding>
-      <div layout-margin>
-        <form ng-submit="">
-          <md-input-container layout="row" class="md-icon-float">
-            <label>Buscar</label>
-            <input aria-label="Pesquisar por membros" class="md-icon-float" ng-model="manageMemberCtrl.currentMember">
-          </md-input-container>
-        </form>
-      </div>
-      <md-card-content style="margin-top: -40px;" layout-margin>
-        <md-list flex>
-          <md-list-item md-colors="{background: 'grey-300'}" style="margin-bottom: 10px;"
-          ng-repeat="member in manageMemberCtrl.members | filter: manageMemberCtrl.currentMember" ng-click="null" flex-xs>
-            <img title="{{member.name}}" ng-src="{{member.photo_url}}" class="md-avatar" style="margin: 0 15px 0 -15px; width: 60px; height: 60px;"/>
-            <div layout="column">
-               <b style="position: relative; margin-top: 20px; font-size: 15px;">{{ member.name }}</b>
-               <span style="position: relative; bottom: 20px; font-size: 15px;">{{ member.email[0]}}</span>
-            </div>
-            <md-button class="md-icon-button md-secondary" title="Remover usuário"
-                ng-click="manageMemberCtrl.openRemoveMemberDialog($event, member)"
-                layout-align="center center"
-                ng-if="!manageMemberCtrl.isAdmin(member)">
-              <md-icon>delete</md-icon>
-            </md-button>
-            <md-button ng-click="manageMemberCtrl.showUserProfile(member.key, $event)" class="md-icon-button md-secondary"
-            title="Ver perfil" layout-align="center center">
-              <md-icon>more_horizontal</md-icon>
-            </md-button>
-          </md-list-item>
-        </md-list>
-      </md-card-content>
+        <div layout-margin>
+          <form ng-submit="">
+            <md-input-container layout="row" class="md-icon-float">
+              <label>Buscar</label>
+              <input aria-label="Pesquisar por membros" class="md-icon-float" ng-model="manageMemberCtrl.currentMember">
+            </md-input-container>
+          </form>
+        </div>
+        <md-card-content style="margin-top: -40px;" layout-margin>
+          <md-list flex>
+            <md-list-item md-colors="{background: 'grey-300'}" style="margin-bottom: 10px;"
+            ng-repeat="member in manageMemberCtrl.members | filter: manageMemberCtrl.currentMember" ng-click="null" flex-xs>
+              <img title="{{member.name}}" ng-src="{{member.photo_url}}" class="md-avatar" style="margin: 0 15px 0 -15px; width: 60px; height: 60px;"/>
+              <div layout="column">
+                 <b style="position: relative; margin-top: 20px; font-size: 15px;">{{ member.name }}</b>
+                 <span style="position: relative; bottom: 20px; font-size: 15px;">{{ member.email[0]}}</span>
+              </div>
+              <md-button class="md-icon-button md-secondary" title="Remover usuário"
+                  ng-click="manageMemberCtrl.openRemoveMemberDialog($event, member)"
+                  layout-align="center center"
+                  ng-if="!manageMemberCtrl.isAdmin(member)">
+                <md-icon>delete</md-icon>
+              </md-button>
+              <md-button ng-click="manageMemberCtrl.showUserProfile(member.key, $event)" class="md-icon-button md-secondary"
+              title="Ver perfil" layout-align="center center">
+                <md-icon>more_horizontal</md-icon>
+              </md-button>
+            </md-list-item>
+          </md-list>
+        </md-card-content>
       </div>
     </md-card>
     <!-- INVITATIONS SENT -->

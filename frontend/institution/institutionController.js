@@ -19,7 +19,7 @@
         institutionCtrl.showFullDescription = false;
         institutionCtrl.isLoadingPosts = true;
         institutionCtrl.isLoadingPosts = true;
-        institutionCtrl.currentMember = "";
+        institutionCtrl.searchedMember = "";
 
         institutionCtrl.legal_natures = {
             "public": "Pública",

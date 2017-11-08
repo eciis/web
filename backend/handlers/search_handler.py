@@ -6,7 +6,13 @@ from utils import json_response
 import json
 
 from handlers.base_handler import BaseHandler
-import search_module
+from search_module.search_user import SearchUser
+from search_module.search_institution import SearchInstitution
+
+SEARCH_TYPES = {
+    'institution': SearchInstitution,
+    'user': SearchUser
+}
 
 
 class SearchHandler(BaseHandler):
@@ -18,6 +24,8 @@ class SearchHandler(BaseHandler):
         """Handle GET Requests."""
         value = self.request.get('value')
         state = self.request.get('state')
+        search_type = self.request.get('type')
+        search_entity = SEARCH_TYPES[search_type]()
         self.response.write(
-            json.dumps(search_module.getDocuments(value, state))
+            json.dumps(search_entity.getDocuments(value, state))
         )

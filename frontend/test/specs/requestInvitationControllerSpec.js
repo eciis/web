@@ -61,7 +61,7 @@
 
         describe('makeSearch()', function(){
             it('Should return splab', function(done){
-                httpBackend.expect('GET', SEARCH_INST_URI + "value=" + '"' +  splab.name + '"' + "&state=active").respond([splab]);
+                httpBackend.expect('GET', SEARCH_INST_URI + "value=" + splab.name + "&state=active&type=institution").respond([splab]);
                 requestInvCtrl.search = splab.name;
                 requestInvCtrl.finalSearch = splab.name;
 
@@ -69,7 +69,7 @@
 
                 requestInvCtrl.makeSearch().then(function() {
                     expect(institutionService.searchInstitutions).toHaveBeenCalledWith(
-                        requestInvCtrl.finalSearch, 'active');
+                        requestInvCtrl.finalSearch, 'active', 'institution');
                     expect(requestInvCtrl.institutions).toEqual([splab]);
                     done();
                 });

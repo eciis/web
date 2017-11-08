@@ -77,51 +77,27 @@
 
     describe('Choice survey', function() {
         it('should be survey post', function() {
-            expect(postCtrl.type_post).toEqual("Common");
+            expect(postCtrl.typePost).toEqual("Common");
             expect(postCtrl.options.length).toEqual(0);
             postCtrl.choiceSurvey();
 
-            expect(postCtrl.type_post).toEqual("Survey");
+            expect(postCtrl.typePost).toEqual("Survey");
             expect(postCtrl.options.length).toEqual(2);
         });
     });
 
-    describe('Save survey', function() {
-        it('should create survey post', function(done) {
-            spyOn(postService, 'createPost').and.callThrough();
-            spyOn(postCtrl, 'clearPost');
-            spyOn(mdDialog, 'hide');
-
-            postCtrl.post = survey;
-            postCtrl.options = options;
-            postCtrl.multipleChoice = true;
-
-            var survey_obj = new Post(postCtrl.post, postCtrl.user.current_institution.key);
-            var promise = postCtrl.saveSurvey([]);
-            httpBackend.expect('POST', "/api/posts").respond(survey_obj);
-
-            promise.should.be.fulfilled.then(function() {
-                expect(postService.createPost).toHaveBeenCalledWith(survey_obj);
-                expect(postCtrl.clearPost).toHaveBeenCalled();
-                expect(mdDialog.hide).toHaveBeenCalled();
-            }).should.notify(done);
-            httpBackend.flush();
-            scope.$apply();
-        });
-    });
-
-    describe('isPostValid()', function() {
+    describe('isValid()', function() {
         it('should not be valid', function() {
             post.title = undefined;
             postCtrl.post = new Post(post, {});
             var formInvalid = true;
-            expect(postCtrl.isCommonPostValid(formInvalid)).toBeFalsy();
+            expect(postCtrl.isValid(formInvalid)).toBeFalsy();
         });
 
         it('should be valid', function() {
             postCtrl.post = new Post(post, {});
             var formInvalid = false;
-            expect(postCtrl.isCommonPostValid(formInvalid)).toBeTruthy();
+            expect(postCtrl.isValid(formInvalid)).toBeTruthy();
         });
     });
 

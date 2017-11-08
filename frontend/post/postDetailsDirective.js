@@ -59,6 +59,11 @@
             return isDeleted && !postDetailsCtrl.postHasActivity();
         };
 
+        postDetailsCtrl.isShowTitle = function isShowTitle(post) {
+            return !postDetailsCtrl.isDeleted(post) && 
+                    postDetailsCtrl.showPost();
+        };
+
         postDetailsCtrl.isShared = function isShared() {
             return postDetailsCtrl.post.shared_post ||
                 postDetailsCtrl.post.shared_event;
@@ -82,9 +87,21 @@
                 !postDetailsCtrl.isDeleted(postDetailsCtrl.post.shared_event);
         };
 
+        postDetailsCtrl.showSurvey = function showSurvey() {
+            return postDetailsCtrl.post.type_survey;
+        };
+
+        postDetailsCtrl.showPost = function showPost() {
+            return !postDetailsCtrl.showSurvey() && !postDetailsCtrl.isShared();
+        };
+
+        postDetailsCtrl.showSurvey = function showSurvey() {
+            return postDetailsCtrl.post.type_survey;
+        };
+
         postDetailsCtrl.showTextPost = function showTextPost(){
             return !postDetailsCtrl.isDeleted(postDetailsCtrl.post) &&
-                     !postDetailsCtrl.isShared();
+                     postDetailsCtrl.showPost();
         };
 
         postDetailsCtrl.showButtonDelete = function showButtonDelete() {

@@ -2,7 +2,6 @@
 """Institution Request Handler."""
 
 import json
-import search_module
 from utils import login_required
 from utils import json_response
 from utils import has_permission
@@ -53,7 +52,6 @@ class InstitutionRequestHandler(BaseHandler):
         institution.followers.append(sender.key)
         institution.put()
 
-        search_module.createDocument(institution)
         self.response.write(json.dumps(request.make()))
 
     @login_required

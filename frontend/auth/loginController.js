@@ -19,8 +19,6 @@
             return promise;
         };
 
-
-
         loginCtrl.limpar = function limpar() {
             loginCtrl.user = {};
         };

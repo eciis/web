@@ -18,7 +18,7 @@
         <md-button ng-if="postDetailsCtrl.showButtonEdit()" class="md-icon-button"
         style="margin-top: 4px; height: 15px; width: 15px; min-height: 0px; min-width: 0px;"
         ng-click="postDetailsCtrl.editPost()" md-colors="{background: 'light-green'}">
-          <md-icon style="font-size:11px; color: white; margin-left: -12px; margin-top: -6px;">edit</md-icon>
+          <md-icon style="font-size:11px; color: white; margin-left: -11px; margin-top: -6px;">edit</md-icon>
         </md-button>
       </span>
     </md-card-header-text>
@@ -213,23 +213,23 @@
         </md-button>
         <b style="font-size: 12px;">EXCLUIR POST</b>
       </div>
-      <div style="margin-left: auto;">
+      <div style="margin-left: auto; margin-right: 10px;">
         <md-button class="md-icon-button" aria-label="Favorite" ng-click="postDetailsCtrl.likeOrDislikePost()"
             ng-disabled="postDetailsCtrl.disableButton()" title="Curtir"
-            md-colors="{background: postDetailsCtrl.isLikedByUser() ? 'light-green' : 'grey'}" style="height: 29px; width: 29px; min-height: 29px;"
-            >
+            md-colors="{background: postDetailsCtrl.isLikedByUser() ? 'light-green' : 'grey'}"
+            style="height: 29px; width: 29px; min-height: 29px;">
           <md-icon style="color: white; margin-top: -4.5px; margin-left: -4.7px; font-size: 22px;">grade</md-icon>
         </md-button>
-        <span style="margin-left: -6px; margin-top: -6px;" ng-class="'notification-badge'" data-badge="{{postDetailsCtrl.post.number_of_likes}}">
-        </span>
-        <b style="font-size: 12px;">CURTIR</b>
-        <md-button class="md-icon-button" aria-label="Comments" ng-click="postDetailsCtrl.getComments()"
+        <span style="margin-left: -16px;" class="counter-likes-comments" data-badge="{{postDetailsCtrl.number_of_likes()}}"></span>
+        <b style="font-size: 12px; margin-left: 16px;">CURTIR</b>
+        <md-button class="md-icon-button badge1" aria-label="Comments" ng-click="postDetailsCtrl.getComments()"
             ng-disabled="postDetailsCtrl.isPostPage" title="Mostrar comentários"
             md-colors="{background: 'light-green'}" style="height: 29px; width: 29px; min-height: 29px;"
-            ng-class="'notification-badge'" data-badge=>
+           data-badge="5">
           <md-icon style="color: white; margin-top: -2px; margin-left: -3.5px; font-size: 20px;">comments</md-icon>
         </md-button>
-        <b style="font-size: 12px;">COMENTAR</b>
+        <span style="margin-left: -18px;" class="counter-likes-comments" data-badge="{{postDetailsCtrl.number_of_comments()}}"></span>
+        <b style="font-size: 12px; margin-left: 14px;">COMENTAR</b>
       </div>
     </div>
   </md-card-actions>

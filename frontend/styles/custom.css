@@ -343,24 +343,38 @@ a:active {
    position:relative;
 }
 
-.notification-badge[data-badge]:after button{
-    background: #004D40;
-}
-
 .notification-badge[data-badge]:after {
    content:attr(data-badge);
    position:absolute;
    top:-3px;
    right:-2px;
    font-size:.7em;
-   background:#004D40;
+   background:#FF6F00;
    color:white;
    width:12px;height:12px;
    text-align:center;
    line-height:18px;
    border-radius:50%;
    border: 2px solid #EFEBE9;
-   float: left;
+}
+
+.counter-likes-comments {
+    position:relative;
+}
+
+.counter-likes-comments[data-badge]:after {
+    content:attr(data-badge);
+    position:absolute;
+    top:-10px;
+    right:-10px;
+    font-size:.6em;
+    background:#004D40;
+    color:white;
+    width:18px;height:18px;
+    text-align:center;
+    line-height:18px;
+    border-radius:50%;
+    box-shadow:0 0 1px #333;
 }
 
 .inst-timeline-center {
@@ -449,31 +463,9 @@ a:active {
     font-weight: 700;
 }
 
-.md-title {
-    font-size: 20px;
-    font-weight: 700;
-}
-
-.green-text {
-    color: #004D40;
-}
-
 .sm-fab-button {
    background-color: #8BC34A;
    width: 22px;
    height: 17px;
    border-radius: 50%;
-}
-
-.option{
-    height: 25px;
-    margin: 0px;
-}
-
-md-switch.md-checked .md-thumb {
-  background-color: #009688;
-}
-
-md-switch.md-checked .md-bar {
-    background-color: #80CBC4;
 }

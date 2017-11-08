@@ -31,40 +31,13 @@
                         <p><b>Endereço:</b> {{ institutionCtrl.getFullAddress() }}</p>
                         <div ng-if="!institutionCtrl.showFullDescription">
                             <div layout="column" layout-align="center center" class="ng-if">
-                              <md-button ng-if="!institutionCtrl.showFullDescription" flex ng-click="institutionCtrl.showDescription()">
+                              <md-button ng-if="!institutionCtrl.showFullDescription" flex ng-click="institutionCtrl.showHideDescription()">
                                 MAIS INFORMAÇÕES<md-icon>arrow_drop_down</md-icon>
                               </md-button>
                             </div>
                         </div>
                     </center>
                         <div layout="column" ng-if="institutionCtrl.showFullDescription" layout-wrap>
-                            <div layout="row" flex>
-                                <div layout="column" flex>
-                                    <p ><b>Telefone:</b> {{ institutionCtrl.current_institution.phone_number ? institutionCtrl.current_institution.phone_number : 'Não informado' }}</p>
-                                </div>
-                                <span flex md-truncate></span>
-                                <div layout="column" flex>
-                                    <p><b>CNPJ:</b> {{ institutionCtrl.current_institution.cnpj ? institutionCtrl.current_institution.cnpj : 'Não informado'}}</p>
-                                </div>
-                            </div>
-                            <div layout="row" flex>
-                                <div layout="column" flex>
-                                    <p><b>Área de Atuação:</b> {{ institutionCtrl.current_institution.actuation_area ? institutionCtrl.current_institution.actuation_area : 'Não informado' }}</p>
-                                </div>
-                                <span flex md-truncate></span>
-                                <div layout="column" flex>
-                                    <p ><b>Natureza Jurídica:</b> {{ institutionCtrl.current_institution.legal_nature ? institutionCtrl.legal_natures[institutionCtrl.current_institution.legal_nature] : 'Não informado' }}</p>
-                                </div>
-                            </div>
-                            <div layout="row" flex>
-                                <div layout="column" flex>
-                                    <p><b>Responsável:</b> {{ institutionCtrl.current_institution.admin.name ? institutionCtrl.current_institution.admin.name : 'Não informado'}} </p>
-                                </div>
-                                <span flex md-truncate></span>
-                                <div layout="column" flex>
-                                    <p><b>E-mail do Responsável: </b> {{ institutionCtrl.current_institution.email ? institutionCtrl.current_institution.email : 'Não informado'}}</p>
-                                </div>
-                            </div>
                             <p align="justify"><b>Descrição:</b> {{ institutionCtrl.current_institution.description ? institutionCtrl.current_institution.description : 'Não informado' }}</p>
 
                             <p ng-if="institutionCtrl.hasParentActive(institutionCtrl.current_institution)" align="justify"><b>Instituição hierarquicamente superior:</b>
@@ -79,7 +52,7 @@
                                 </a>{{$last ? '' : ', '}}
                             </spam></p>
                             <div layout="column" layout-align="center center" class="ng-if">
-                                <md-button ng-if="institutionCtrl.showFullDescription" flex ng-click="institutionCtrl.hideDescription()">
+                                <md-button ng-if="institutionCtrl.showFullDescription" flex ng-click="institutionCtrl.showHideDescription()">
                                 <md-icon>arrow_drop_up</md-icon>
                                 </md-button>
                             </div>
@@ -102,23 +75,49 @@
                         {{ institutionCtrl.isUserFollower ? 'Deixar de seguir' : 'Seguir' }}
                     </md-button>
 
-                    <!-- INSTITUTION FOLLOWERS -->
-                    <md-card hide show-gt-xs>
-                        <md-subhead layout-padding class="md-primary" md-colors="{background: 'teal-900'}">Seguidores</md-subhead>
-                        <md-card-content>
-                            <md-grid-list
-                                    md-cols="5" md-cols-gt-md="6"
-                                    md-row-height="1:1"
-                                    md-gutter="4px" md-gutter-gt-sm="4px">
-                                <md-grid-tile ng-repeat="follower in institutionCtrl.followers" ng-click="null" md-rowspan="1"
-                                    md-colspan="1" md-colspan-sm="1">
-                                    <figure>
-                                        <a href class="hyperlink" ng-click="institutionCtrl.showUserProfile(follower.key, $event)">
-                                            <img title="{{follower.name}}" ng-src="{{follower.photo_url}}" width="100%" height="100%"/>
-                                        </a>
-                                    </figure>
-                                </md-grid-tile>
-                            </md-grid-list>
+                    <!-- institution data -->
+                    <md-card style="margin-bottom: 50px;">
+                        <md-toolbar md-colors="{background: 'teal-600'}" layout="row">
+                            <md-icon style="margin-left: 7%;">description</md-icon>
+                            <div class="md-toolbar-tools" flex>
+                                <span class="card-title-light">DADOS CADASTRAIS</span>
+                            </div>
+                        </md-toolbar>
+                        <md-card-content style="padding: 10px;" class="sm-text">
+                            <label for="address" class="sm-label">Endereço</label>
+                            <p id="address"> {{ institutionCtrl.getFullAddress() }}</p>
+                            <label for="phone" class="sm-label">Telefone</label>
+                            <p id="phone"> {{ institutionCtrl.getInfo(institutionCtrl.current_institution.phone_number) }}
+                            </p>
+
+                            <div ng-if="institutionCtrl.showFullDescription">
+                                <label for="cnpj" class="sm-label">CNPJ</label>
+                                <p id="cnpj"> {{ institutionCtrl.getInfo(institutionCtrl.current_institution.cnpj) }}
+                                </p>
+
+                                <label for="actuation_area" class="sm-label">Área de Atuação</label>
+                                <p id="actuation_area"> {{ institutionCtrl.getInfo(institutionCtrl.current_institution.actuation_area) }}
+                                </p>
+
+                                <label for="legal_nature" class="sm-label">Natureza Jurídica</label>
+                                <p id="legal_nature"> {{ institutionCtrl.getLegalNature() }}
+                                </p>
+
+                                <label for="admin" class="sm-label">Responsável</label>
+                                <p id="admin"> {{ institutionCtrl.getInfo(institutionCtrl.current_institution.admin.name) }}</p>
+
+                                <label for="admin_email" class="sm-label">E-mail do Responsável</label>
+                                <p id="admin_email"> {{ institutionCtrl.getInfo(institutionCtrl.current_institution.email) }}</p>
+                            </div>
+
+                            <md-card-action layout="row" layout-align="center" >
+                                <md-button ng-click="institutionCtrl.showHideDescription()"
+                                    class="md-fab md-primary see-more-btn" title="Ver mais"
+                                    md-colors="{background: 'light-green-600'}"
+                                    style="margin-bottom: -42px;">
+                                    <md-icon>more_horiz</md-icon>
+                                </md-button>
+                            </md-card-action>
                         </md-card-content>
                     </md-card>
 
@@ -134,7 +133,7 @@
                           <form ng-submit="">
                             <md-input-container layout="row" class="md-icon-float">
                               <label>Buscar</label>
-                              <input aria-label="Pesquisar por instituições" class="md-icon-float" ng-model="institutionCtrl.currentMember">
+                              <input aria-label="Pesquisar por membros" class="md-icon-float" ng-model="institutionCtrl.currentMember">
                             </md-input-container>
                           </form>
                         </div>
@@ -159,7 +158,6 @@
                 <div flex ng-if="institutionCtrl.isLoadingPosts" layout="row" layout-align="center center">
                     <md-progress-circular md-mode="indeterminate"></md-progress-circular>
                 </div>
-
             </div>
         </div>
     </div>

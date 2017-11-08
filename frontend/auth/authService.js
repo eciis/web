@@ -11,6 +11,11 @@
         var userInfo;
 
         /**
+         * Store the last promise to refresh user authentication token.
+         */
+        var refreshTokenPromise = null;
+
+        /**
         * Store listeners to be executed when user logout is called.
         */
         var onLogoutListeners = [];
@@ -57,11 +62,16 @@
         service.loginWithEmailAndPassword = function loginWithEmailAndPassword(email, password) {
             var deferred = $q.defer();
             authObj.$signInWithEmailAndPassword(email, password).then(function(user) {
-                user.getIdToken(true).then(function(idToken) {
-                    service.setupUser(idToken).then(function success(userInfo) {
-                        deferred.resolve(userInfo);
+                if (user.emailVerified) {
+                    user.getIdToken(true).then(function(idToken) {
+                        service.setupUser(idToken).then(function success(userInfo) {
+                            deferred.resolve(userInfo);
+                        });
                     });
-                });
+                } else {
+                    MessageService.showToast("Seu email precisa ser verificado.");
+                    deferred.reject("Email not verified.");
+                }
             }).catch(function(error) {
                 MessageService.showToast(error);
                 deferred.reject(error);
@@ -74,6 +84,7 @@
             authObj.$createUserWithEmailAndPassword(email, password).then(function(result) {
                 var idToken = result.toJSON().stsTokenManager.accessToken;
                 service.setupUser(idToken).then(function success(userInfo) {
+                    service.sendEmailVerification();
                     deferred.resolve(userInfo);
                 });
             }).catch(function(error) {
@@ -94,8 +105,9 @@
         service.getCurrentUser = function getCurrentUser() {
             return userInfo;
         };
-
+        
         service.getUserToken = function getUserToken() {
+            refreshTokenAsync();
             return userInfo.accessToken;
         };
 
@@ -124,6 +136,24 @@
             });
             return deferred.promise;
         };
+
+        service.sendEmailVerification = function sendEmailVerification() {
+            authObj.$getAuth().sendEmailVerification().then(
+            function success() {
+                MessageService.showToast('Email de verificação enviado para o seu email.');
+            }, function error(error) {
+                console.error(error);
+            });
+        }
+
+        service.resetPassword = function resetPassword(email) {
+            authObj.$sendPasswordResetEmail(email).then(
+            function success() {
+                MessageService.showToast('Você receberá um email para resetar sua senha.');
+            }, function error(error) {
+                console.error(error);
+            });
+        }
 
         service.$onLogout = function $onLogout(callback) {
             onLogoutListeners.push(callback);
@@ -155,6 +185,27 @@
             if ($window.localStorage.userInfo) {
                 var parse = JSON.parse($window.localStorage.userInfo);
                 userInfo = new User(parse);
+            }
+        }
+
+        /**
+         * Refreshes the user token asynchronously and store in the browser
+         * cache to maintain the section active, during the time that 
+         * the user is using the system. 
+         * 
+         * This function uses a global variable (refreshTokenPromise)
+         * to synchronize the token API call's, preventing multiples
+         * promises executing the same action.
+         */
+        function refreshTokenAsync() {
+            var auth = authObj.$getAuth();
+            if (auth && !refreshTokenPromise) {
+                refreshTokenPromise = auth.getIdToken();
+                refreshTokenPromise.then(function(idToken) {
+                    userInfo.accessToken = idToken;
+                    service.save();
+                    refreshTokenPromise = null;
+                });
             }
         }
 

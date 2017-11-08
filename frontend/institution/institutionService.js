@@ -18,9 +18,12 @@
             return deferred.promise;
         };
 
-        service.searchInstitutions = function searchInstitutions(value, state) {
+        service.searchInstitutions = function searchInstitutions(value, state, type) {
             var deferred = $q.defer();
-            $http.get("/api/search/institution?value=" + '"' + value + '"' + "&state=" + state).then(function success(response) {
+            $http({url: "/api/search/institution",
+                method: "GET",
+                params: {value: value, state: state, type: type}
+            }).then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);
@@ -120,13 +123,18 @@
             return deffered.promise;
         };
 
-        service.removeInstitution = function removeInstitution(institutionKey, removeHierarchy) {
+        service.removeInstitution = function removeInstitution(institutionKey, removeHierarchy, justification) {
             var deffered = $q.defer();
-            $http.delete(INSTITUTIONS_URI + "/" + institutionKey + "?removeHierarchy=" + removeHierarchy).then(function success(info) {
-                deffered.resolve(info.data);
-            }, function error(data) {
-                deffered.reject(data);
-            });
+            $http.delete(
+                INSTITUTIONS_URI + "/" + institutionKey,
+                {params: {removeHierarchy: removeHierarchy, justification: justification}}
+            ).then(
+                function success(info) {
+                    deffered.resolve(info.data);
+                }, function error(data) {
+                    deffered.reject(data);
+                }
+            );
             return deffered.promise;
         };
 

@@ -51,4 +51,5 @@ script:
     - ./node_modules/.bin/karma start --browsers Firefox --single-run
 
 notifications:
+    email: false
     slack: e-cis:5ttYSzVNz0z5XwYRaWBHExyW

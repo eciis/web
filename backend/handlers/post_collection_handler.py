@@ -11,7 +11,7 @@ from handlers.base_handler import BaseHandler
 from models.post import Post
 from models.factory_post import PostFactory
 from service_messages import send_message_notification
-from service_entities import send_post_notification
+from service_entities import enqueue_task
 
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
@@ -79,13 +79,17 @@ class PostCollectionHandler(BaseHandler):
 
                 entity_type = 'SHARED_POST'
 
-                send_post_notification(
-                    shared_post,
-                    user,
-                    entity_type
-                )
+                params = {
+                    'author_key': post.author.urlsafe(),
+                    'user_key': user.key.urlsafe(),
+                    'user_name': user.name,
+                    'post_key': post.key.urlsafe(),
+                    'entity_type': entity_type
+                }
 
-            self.response.write(json.dumps(Post.make(post, self.request.host)))
+                enqueue_task('post-notification', params)
+
+            self.response.write(json.dumps(post.make(self.request.host)))
         except Exception as error:
             self.response.set_status(Utils.BAD_REQUEST)
             self.response.write(Utils.getJSONError(

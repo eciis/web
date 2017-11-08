@@ -193,7 +193,7 @@ class InstitutionHandlerTest(TestBaseHandler):
         self.assertTrue(self.certbio.key not in self.mayza.institutions)
 
     @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
-    @mock.patch('service_entities.remove_institution_from_users')
+    @mock.patch('service_entities.enqueue_task')
     def test_delete_with_remove_hierarchy(self, verify_token, mock_method):
         """Test delete removing hierarchy."""
         # Setting up the remove hierarchy test

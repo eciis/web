@@ -196,18 +196,6 @@
             institutionCtrl.isMember = institutionCtrl.user.isMember(institutionKey);
         };
 
-        institutionCtrl.removeInstitution = function removeInstitution(ev) {
-            $mdDialog.show({
-                templateUrl: 'app/institution/removeInstDialog.html',
-                targetEvent: ev,
-                clickOutsideToClose:true,
-                locals: {
-                    institutionKey: institutionCtrl.current_institution.key
-                },
-                controller: RemoveInstController,
-                controllerAs: 'ctrl'
-            });
-        };
 
         institutionCtrl.portfolioDialog = function(ev) {
             $mdDialog.show({
@@ -260,6 +248,19 @@
             ctrl.portfolioUrl = trustedUrl;
         }
 
+        institutionCtrl.removeInstitution = function removeInstitution(ev) {
+            $mdDialog.show({
+                templateUrl: 'app/institution/removeInstDialog.html',
+                targetEvent: ev,
+                clickOutsideToClose:true,
+                locals: {
+                    institutionKey: institutionCtrl.current_institution.key
+                },
+                controller: RemoveInstController,
+                controllerAs: 'ctrl'
+            });
+        };
+        
         function RemoveInstController($mdDialog, institutionKey, InstitutionService, $state) {
             var ctrl = this;
 

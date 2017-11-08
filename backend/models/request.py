@@ -42,5 +42,8 @@ class Request(Invite):
         request_inst_json['sender'] = self.sender_key.get().email
         request_inst_json['status'] = self.status
         request_inst_json['institution_key'] = self.institution_key.urlsafe()
+        if self.institution_requested_key:
+            requested_isntitution = self.institution_requested_key.get()
+            request_inst_json['requested_inst_name'] = requested_isntitution.name
 
         return request_inst_json

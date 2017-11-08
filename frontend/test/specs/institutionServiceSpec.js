@@ -87,9 +87,9 @@
         it('Test searchInstitution', function() {
             var documents = [{name: institutions[0].name, id: institutions[0].key}];
             spyOn($http, 'get').and.callThrough();
-            httpBackend.expect('GET', "/api/search/institution?value=" + '"' + institutions[0].name + '"' + "&state=active" ).respond(documents);
+            httpBackend.expectGET("/api/search/institution?value=" + institutions[0].name + "&state=active&type=institution" ).respond(documents);
             var result;
-            service.searchInstitutions(institutions[0].name, 'active').then(function(data){
+            service.searchInstitutions(institutions[0].name, 'active', 'institution').then(function(data){
                 result = data;
             });
             httpBackend.flush();
@@ -99,8 +99,10 @@
 
         it('Should call http.delete()', function() {
             spyOn($http, 'delete').and.callThrough();
-            httpBackend.expect('DELETE', INSTITUTIONS_URI + "/" + institutions[0].key + "?removeHierarchy=true");
-            service.removeInstitution(institutions[0].key, "true");
+            httpBackend.expect(
+                'DELETE', INSTITUTIONS_URI + "/" + institutions[0].key +
+                "?removeHierarchy=true" + "&justification=justification");
+            service.removeInstitution(institutions[0].key, "true", "justification");
             expect($http.delete).toHaveBeenCalled();
         });
 
@@ -108,7 +110,7 @@
             spyOn($http, 'delete').and.callThrough();
             var institution = {name: 'e-CIS', parent_institution: institutions[0].key, key: 123};
             httpBackend.expect('DELETE', INSTITUTIONS_URI + "/" + institutions[0].key + "/hierarchy/" + institution.key + "?isParent=true");
-            service.removeInstitution(institutions[0].key, institution.key, "true");
+            service.removeInstitution(institutions[0].key, institution.key, "true", "justification");
             expect($http.delete).toHaveBeenCalled();
         });
 

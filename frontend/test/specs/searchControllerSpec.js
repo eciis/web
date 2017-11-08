@@ -97,8 +97,8 @@
                         }
                     };
                 });
-                searchCtrl.makeSearch().then(function() {
-                    expect(instService.searchInstitutions).toHaveBeenCalledWith('splab', 'active');
+                searchCtrl.makeSearch(searchCtrl.search_keyword, 'institution').then(function() {
+                    expect(instService.searchInstitutions).toHaveBeenCalledWith('splab', 'active', 'institution');
                     done();
                 });
             });
@@ -108,7 +108,7 @@
             it('Should call makeSearch()', function() {
                 spyOn(searchCtrl, 'makeSearch');
                 searchCtrl.searchByActuationArea('Universidades');
-                expect(searchCtrl.makeSearch).toHaveBeenCalledWith('Universidades');
+                expect(searchCtrl.makeSearch).toHaveBeenCalledWith('Universidades', 'institution');
             });
         });
 

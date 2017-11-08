@@ -184,7 +184,6 @@ class Post(PolyModel):
 
         return self
 
-    @staticmethod
     def make(post, host):
         """Create personalized json of post."""
         publication_date = post.publication_date.isoformat()
@@ -226,7 +225,8 @@ class Post(PolyModel):
             post_dict['text'] = None
 
         if(post.shared_post):
-            post_dict['shared_post'] = Post.make(post.shared_post.get(), host)
+            post = post.shared_post.get()
+            post_dict['shared_post'] = post.make(host)
 
         if(post.shared_event):
             post_dict['shared_event'] = Event.make(post.shared_event.get())

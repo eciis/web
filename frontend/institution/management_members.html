@@ -62,26 +62,24 @@
         </form>
       </div>
       <md-card-content style="margin-top: -40px;" layout-margin>
-        <md-list>
+        <md-list flex>
           <md-list-item md-colors="{background: 'grey-300'}" style="margin-bottom: 10px;"
-          ng-repeat="member in manageMemberCtrl.members | filter: manageMemberCtrl.currentMember" ng-click="null">
-            <div layout="row" layout-align="start center">
+          ng-repeat="member in manageMemberCtrl.members | filter: manageMemberCtrl.currentMember" ng-click="null" flex-xs>
             <img title="{{member.name}}" ng-src="{{member.photo_url}}" class="md-avatar" style="margin: 0 15px 0 -15px; width: 60px; height: 60px;"/>
             <div layout="column">
                <b style="position: relative; margin-top: 20px; font-size: 15px;">{{ member.name }}</b>
                <span style="position: relative; bottom: 20px; font-size: 15px;">{{ member.email[0]}}</span>
             </div>
-            </div>
-              <md-button class="md-icon-button md-secondary" title="Remover usuário"
-                  ng-click="manageMemberCtrl.openRemoveMemberDialog($event, member)"
-                  layout-align="center center"
-                  ng-if="!manageMemberCtrl.isAdmin(member)">
-                <md-icon>delete</md-icon>
-              </md-button>
-              <md-button ng-click="manageMemberCtrl.showUserProfile(member.key, $event)" class="md-icon-button md-secondary"
-              title="Ver perfil" layout-align="center center">
-                <md-icon>more_horizontal</md-icon>
-              </md-button>
+            <md-button class="md-icon-button md-secondary" title="Remover usuário"
+                ng-click="manageMemberCtrl.openRemoveMemberDialog($event, member)"
+                layout-align="center center"
+                ng-if="!manageMemberCtrl.isAdmin(member)">
+              <md-icon>delete</md-icon>
+            </md-button>
+            <md-button ng-click="manageMemberCtrl.showUserProfile(member.key, $event)" class="md-icon-button md-secondary"
+            title="Ver perfil" layout-align="center center">
+              <md-icon>more_horizontal</md-icon>
+            </md-button>
           </md-list-item>
         </md-list>
       </md-card-content>

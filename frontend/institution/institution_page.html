@@ -123,39 +123,36 @@
                     </md-card>
 
                     <!-- INSTITUTION MEMBERS -->
-                    <md-card hide show-gt-xs>
+                    <md-card>
                         <md-subhead layout-padding class="md-primary" md-colors="{background: 'teal-500'}">
                             <md-icon style="color: #FFFFFF; font-size: 28px; margin-top: -7px; margin-right: 5px;">
                                 account_circle
                             </md-icon>
                             MEMBROS DA INSTITUIÇÃO
                         </md-subhead>
-                        <div layout-margin>
+                        <div layout-margin flex-sm="80">
                           <form ng-submit="">
                             <md-input-container layout="row" class="md-icon-float">
                               <label>Buscar</label>
-                              <input aria-label="Pesquisar por instituições" class="md-icon-float">
+                              <input aria-label="Pesquisar por instituições" class="md-icon-float" ng-model="institutionCtrl.currentMember" ng-change="institutionCtrl.refreshSearchedMembers()">
                             </md-input-container>
                           </form>
                         </div>
-                        <md-card-content style="margin-top: -30px;">
-                            <md-list flex>
-                            <div layout="column"  ng-repeat="member in institutionCtrl.members" style="margin-bottom: 10px;">
-                                <div layout="row" md-colors="{background: 'grey-300'}">
-                                <div layout="row" layout-padding>
-                                    <md-icon class="green-button">account_box</md-icon>
-                                </div>
-                                <md-list-item layout-align="start start" class="md-3-line">
-                                        <div class="md-list-item-text md-3-line" style="font-size: 11px;" layout="column" layout-align="start start">
-                                            <b>{{member.name}}</b>
-                                            <span>{{member.email[0]}}</span>
-                                            <span>Convidado por Pedro Loper Cunha</span>
-                                        </div>
+                        <md-content layout="column" style="background-color: #FFFFFF; margin-top: -25px;" layout-margin>
+                            <md-list>
+                                <md-list-item class="md-line" ng-repeat="member in institutionCtrl.searchedMembers" md-colors="{background: 'grey-300'}" style="margin-bottom: 10px;">
+                                    <div ng-if="!member.photo_url" layout="row" layout-padding style="background-color: #8BC34A; border-radius: 50%; margin-left: -15px;" class="md-offset">
+                                        <md-icon style="border-radius: 50%; color: #FFFFFF;">account_box</md-icon>
+                                    </div>
+                                    <img ng-if="member.photo_url" layout="row" style="border-radius: 50%; margin-left: -15px; width: 50px;" ng-src="{{member.photo_url}}"/>
+                                    <div class="md-list-item-text md-3-line" style="font-size: 11px; margin-left: 5%;" layout="column" flex>
+                                        <b>{{member.name}}</b>
+                                        <span>{{member.email[0]}}</span>
+                                        <span>Convidado por Pedro Loper Cunha</span>
+                                    </div>
                                 </md-list-item>
-                                </div>
-                            </div>
                             </md-list>
-                        </md-card-content>
+                        </md-content>
                     </md-card>
                 </div>
                 <post-timeline flex ng-if="!institutionCtrl.isLoadingPosts" layout="column" md-colors="{background: 'grey-200'}" posts="institutionCtrl.posts"

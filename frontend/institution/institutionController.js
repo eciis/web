@@ -19,6 +19,16 @@
         institutionCtrl.showFullDescription = false;
         institutionCtrl.isLoadingPosts = true;
         institutionCtrl.isLoadingPosts = true;
+        institutionCtrl.currentMember = "";
+
+        institutionCtrl.refreshSearchedMembers = function refreshSearchedMembers() {
+            institutionCtrl.searchedMembers = [];
+            _.forEach(institutionCtrl.members, function(member) {
+                if(_.includes(_.lowerCase(member.name), _.lowerCase(institutionCtrl.currentMember))){
+                    institutionCtrl.searchedMembers.push(member);
+                }
+            });
+        };
 
         institutionCtrl.legal_natures = {
             "public": "Pública",
@@ -73,6 +83,7 @@
         function getMembers() {
             InstitutionService.getMembers(currentInstitutionKey).then(function success(response) {
                 institutionCtrl.members = response.data;
+                institutionCtrl.searchedMembers = institutionCtrl.members;
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
@@ -260,7 +271,7 @@
                 controllerAs: 'ctrl'
             });
         };
-        
+
         function RemoveInstController($mdDialog, institutionKey, InstitutionService, $state) {
             var ctrl = this;
 

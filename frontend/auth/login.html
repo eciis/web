@@ -18,8 +18,7 @@
               <md-button class="md-primary" ng-click="loginCtrl.resetPassword()" md-colors="{background: 'grey-200', color: 'teal-900'}" hide-gt-xs>
                        Esqueci minha senha
               </md-button>
-              <md-button type="submit" class="md-raised md-primary" md-colors="{background: 'teal-500'}"
-                ng-click="loginCtrl.loginWithEmailPassword()">Acessar</md-button>
+              <md-button type="submit" class="md-raised md-primary" md-colors="{background: 'teal-500'}">Acessar</md-button>
             </div>
           </form>
         </div>
@@ -75,23 +74,25 @@
               <img src="/app/images/logowithname.png" style="width: 100%; margin-bottom: 10px;"/>
             </div>
             <div layout="column">
-              <md-input-container class="md-block" style="margin: 0;">
-                <label>Email</label>
-                <input type="email" name="email" ng-model="loginCtrl.newUser.email" required="true" aria-label="Email">
-              </md-input-container>
-              <md-input-container class="md-block" style="margin: 0;">
-                <label>Senha</label>
-                <input type="password" name="password" ng-model="loginCtrl.newUser.password" required="true"  minlength="6"
-                  aria-label="Senha">
-              </md-input-container>
-              <md-input-container class="md-block" style="margin: 0;">
-                <label>Confirmar Senha</label>
-                <input type="password" name="verifypassword" ng-model="loginCtrl.newUser.verifypassword"
-                  required="true" minlength="6" aria-label="Confirmar Senha">
-              </md-input-container>
-              <div layout="row" layout-align="center center" style="margin-bottom: 20px;">
-                <md-button class="md-raised md-primary" md-colors="{background: 'teal-500'}" ng-click="loginCtrl.signup()">Concluir</md-button>
-              </div>
+              <form ng-submit="loginCtrl.signup()">
+                <md-input-container class="md-block" style="margin: 0;">
+                  <label>Email</label>
+                  <input type="email" name="email" ng-model="loginCtrl.newUser.email" required="true" aria-label="Email">
+                </md-input-container>
+                <md-input-container class="md-block" style="margin: 0;">
+                  <label>Senha</label>
+                  <input type="password" name="password" ng-model="loginCtrl.newUser.password" required="true"  minlength="6"
+                    aria-label="Senha">
+                </md-input-container>
+                <md-input-container class="md-block" style="margin: 0;">
+                  <label>Confirmar Senha</label>
+                  <input type="password" name="verifypassword" ng-model="loginCtrl.newUser.verifypassword"
+                    required="true" minlength="6" aria-label="Confirmar Senha">
+                </md-input-container>
+                <div layout="row" layout-align="center center" style="margin-bottom: 20px;">
+                  <md-button type="submit" class="md-raised md-primary" md-colors="{background: 'teal-500'}">Concluir</md-button>
+                </div>
+              </form>
             </div>
           </div>
         </div>

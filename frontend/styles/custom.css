@@ -370,7 +370,8 @@ a:active {
     font-size:.6em;
     background:#004D40;
     color:white;
-    width:18px;height:18px;
+    width:18px;
+    height:18px;
     text-align:center;
     line-height:18px;
     border-radius:50%;
@@ -468,4 +469,9 @@ a:active {
    width: 22px;
    height: 17px;
    border-radius: 50%;
+}
+
+.like-comment-text {
+    font-size: 12px;
+    margin-left: 14px;
 }

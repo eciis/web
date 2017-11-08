@@ -230,12 +230,6 @@
             return legalNature ? institutionCtrl.legal_natures[legalNature] : 'Não informado';
         }
 
-        institutionCtrl.getMarginBottom = function getMarginBottom(contracted, expanded) {
-            var contractedStyle = {"margin-bottom": contracted};
-            var expandedStyle = {"margin-bottom": expanded};
-            return institutionCtrl.showFullDescription ? expandedStyle : contractedStyle;
-        };
-
         institutionCtrl.requestInvitation = function requestInvitation(event) {
             $mdDialog.show({
                 controller: "RequestInvitationController",

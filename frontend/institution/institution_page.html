@@ -38,33 +38,6 @@
                         </div>
                     </center>
                         <div layout="column" ng-if="institutionCtrl.showFullDescription" layout-wrap>
-                            <!-- <div layout="row" flex>
-                                <div layout="column" flex>
-                                    <p><b>Telefone:</b> {{ institutionCtrl.current_institution.phone_number ? institutionCtrl.current_institution.phone_number : 'Não informado' }}</p>
-                                </div>
-                                <span flex md-truncate></span>
-                                <div layout="column" flex>
-                                    <p><b>CNPJ:</b> {{ institutionCtrl.current_institution.cnpj ? institutionCtrl.current_institution.cnpj : 'Não informado'}}</p>
-                                </div>
-                            </div>
-                            <div layout="row" flex>
-                                <div layout="column" flex>
-                                    <p><b>Área de Atuação:</b> {{ institutionCtrl.current_institution.actuation_area ? institutionCtrl.current_institution.actuation_area : 'Não informado' }}</p>
-                                </div>
-                                <span flex md-truncate></span>
-                                <div layout="column" flex>
-                                    <p ><b>Natureza Jurídica:</b> {{ institutionCtrl.current_institution.legal_nature ? institutionCtrl.legal_natures[institutionCtrl.current_institution.legal_nature] : 'Não informado' }}</p>
-                                </div>
-                            </div>
-                            <div layout="row" flex>
-                                <div layout="column" flex>
-                                    <p><b>Responsável:</b> {{ institutionCtrl.current_institution.admin.name ? institutionCtrl.current_institution.admin.name : 'Não informado'}} </p>
-                                </div>
-                                <span flex md-truncate></span>
-                                <div layout="column" flex>
-                                    <p><b>E-mail do Responsável: </b> {{ institutionCtrl.current_institution.email ? institutionCtrl.current_institution.email : 'Não informado'}}</p>
-                                </div>
-                            </div> -->
                             <p align="justify"><b>Descrição:</b> {{ institutionCtrl.current_institution.description ? institutionCtrl.current_institution.description : 'Não informado' }}</p>
 
                             <p ng-if="institutionCtrl.hasParentActive(institutionCtrl.current_institution)" align="justify"><b>Instituição hierarquicamente superior:</b>
@@ -86,7 +59,7 @@
                         </div>
                 </div>
             </div>
-            <div layout="row" layout-xs="column" flex="60" flex-gt-sm="40">
+            <div layout="row" layout-xs="column" flex="60" flex-gt-sm="40"> 
                 <div flex-gt-sm="20" flex-xs="05" layout="column" layout-fill hide show-gt-sm>
                     <!-- Buttons -->
                     <md-button flex-xs class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-900'}"
@@ -102,11 +75,12 @@
                         {{ institutionCtrl.isUserFollower ? 'Deixar de seguir' : 'Seguir' }}
                     </md-button>
 
-                <md-card style="margin-bottom: 40px;">
+                    <!-- institution data -->
+                    <md-card style="margin-bottom: 50px;">
                         <md-toolbar md-colors="{background: 'teal-600'}" layout="row">
                             <md-icon style="margin-left: 7%;">description</md-icon>
                             <div class="md-toolbar-tools" flex>
-                                <span class="card-title-light">Dados Cadastrais</span>
+                                <span class="card-title-light">DADOS CADASTRAIS</span>
                             </div>
                         </md-toolbar>
                         <md-card-content style="padding: 10px;" class="sm-text">
@@ -137,54 +111,15 @@
                                 <p id="admin_email"> {{ institutionCtrl.getInfo(institutionCtrl.current_institution.email) }}</p>
                             </div>
 
-                            <md-card-action layout="row" layout-align="center">
+                            <md-card-action layout="row" layout-align="center" >
                                 <md-button ng-click="institutionCtrl.showHideDescription()"
                                     class="md-fab md-primary see-more-btn" title="Ver mais"
                                     md-colors="{background: 'light-green-600'}"
-                                    ng-style="institutionCtrl.getMarginBottom('-45px', '10px')">
+                                    style="margin-bottom: -42px;">
                                     <md-icon>more_horiz</md-icon>
                                 </md-button>
                             </md-card-action>
                         </md-card-content>                       
-                    </md-card>
-                    <!-- INSTITUTION MEMBERS -->
-                    <md-card hide show-gt-xs>
-                        <md-subhead layout-padding class="md-primary" md-colors="{background: 'teal-900'}">Membros</md-subhead>
-                        <md-card-content>
-                            <md-grid-list
-                                    md-cols="5" md-cols-gt-md="6"
-                                    md-row-height="1:1"
-                                    md-gutter="4px" md-gutter-gt-sm="4px">
-                                <md-grid-tile ng-repeat="member in institutionCtrl.members" ng-click="null" md-rowspan="1"
-                                    md-colspan="1" md-colspan-sm="1">
-                                    <figure>
-                                        <a href class="hyperlink" ng-click="institutionCtrl.showUserProfile(member.key, $event)">
-                                            <img title="{{member.name}}" ng-src="{{member.photo_url}}" width="100%" height="100%"/>
-                                        </a>
-                                    </figure>
-                                </md-grid-tile>
-                            </md-grid-list>
-                        </md-card-content>
-                    </md-card>
-
-                    <!-- INSTITUTION FOLLOWERS -->
-                    <md-card hide show-gt-xs>
-                        <md-subhead layout-padding class="md-primary" md-colors="{background: 'teal-900'}">Seguidores</md-subhead>
-                        <md-card-content>
-                            <md-grid-list
-                                    md-cols="5" md-cols-gt-md="6"
-                                    md-row-height="1:1"
-                                    md-gutter="4px" md-gutter-gt-sm="4px">
-                                <md-grid-tile ng-repeat="follower in institutionCtrl.followers" ng-click="null" md-rowspan="1"
-                                    md-colspan="1" md-colspan-sm="1">
-                                    <figure>
-                                        <a href class="hyperlink" ng-click="institutionCtrl.showUserProfile(follower.key, $event)">
-                                            <img title="{{follower.name}}" ng-src="{{follower.photo_url}}" width="100%" height="100%"/>
-                                        </a>
-                                    </figure>
-                                </md-grid-tile>
-                            </md-grid-list>
-                        </md-card-content>
                     </md-card>
                 </div>
                 <post-timeline flex ng-if="!institutionCtrl.isLoadingPosts" layout="column" md-colors="{background: 'grey-200'}" posts="institutionCtrl.posts"
@@ -193,7 +128,6 @@
                 <div flex ng-if="institutionCtrl.isLoadingPosts" layout="row" layout-align="center center">
                     <md-progress-circular md-mode="indeterminate"></md-progress-circular>
                 </div>
-
             </div>
         </div>
     </div>

@@ -443,6 +443,15 @@ a:active {
     font-weight: 700;
 }
 
+.md-title {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.green-text {
+    color: #004D40;
+}
+
 .sm-fab-button {
    background-color: #8BC34A;
    width: 22px;
@@ -453,4 +462,17 @@ a:active {
 .sm-label {
     font-size: 0.9em;
     opacity: 0.75;
+}
+
+.option{
+    height: 25px;
+    margin: 0px;
+}
+
+md-switch.md-checked .md-thumb {
+  background-color: #009688;
+}
+
+md-switch.md-checked .md-bar {
+    background-color: #80CBC4;
 }

@@ -10,6 +10,8 @@
         manageMemberCtrl.invite = {};
         manageMemberCtrl.sent_invitations = [];
 
+        manageMemberCtrl.showSendInvite = true;
+
         var currentInstitutionKey = $state.params.institutionKey;
         var invite;
 
@@ -44,6 +46,7 @@
             manageMemberCtrl.invite.admin_key = manageMemberCtrl.user.key;
             manageMemberCtrl.invite.type_of_invite = 'USER';
             invite = new Invite(manageMemberCtrl.invite);
+            invite.sender_name = manageMemberCtrl.user.name;
 
             if (manageMemberCtrl.isUserInviteValid(invite)) {
                 var promise = InviteService.sendInvite(invite);

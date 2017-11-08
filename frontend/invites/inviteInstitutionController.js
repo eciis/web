@@ -36,7 +36,7 @@
                 MessageService.showToast('Convite inválido!');
             } else {
                 var suggestionInstName = inviteController.invite.suggestion_institution_name;
-                promise = InstitutionService.searchInstitutions(suggestionInstName, INSTITUTION_STATE);
+                promise = InstitutionService.searchInstitutions(suggestionInstName, INSTITUTION_STATE, 'institution');
                 promise.then(function success(response) {
                     inviteController.showDialogOrSendInvite(response.data, ev);
                 });

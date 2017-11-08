@@ -2,13 +2,14 @@
 
 (function() {
     var app = angular.module("app");
-    
+
     app.controller("LoginController", function LoginController(AuthService, MessageService, $state, $mdDialog) {
         var loginCtrl = this;
 
         loginCtrl.user = {};
 
         loginCtrl.newUser = {};
+        loginCtrl.isRequestInvite = false;
 
         loginCtrl.login = function login() {
             var promise = AuthService.login();
@@ -17,6 +18,8 @@
             });
             return promise;
         };
+
+
 
         loginCtrl.limpar = function limpar() {
             loginCtrl.user = {};

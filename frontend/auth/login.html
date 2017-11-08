@@ -77,7 +77,7 @@
 </div> -->
 
 <md-content layout-fill md-colors="{background: 'teal-500'}" layout-align="center center" layout-gt-xs="row" layout-xs="column">
-  <div class="padded" md-whiteframe="12" style="border-radius: 2px; background-color: white;" flex-gt-xs="65" flex-xs="100" layout="column">
+  <div ng-if="!loginCtrl.isRequestInvite" class="padded" md-whiteframe="12" style="border-radius: 2px; background-color: white;" flex-gt-xs="65" flex-xs="100" layout="column">
     <div layout-gt-xs="row" flex-xs="95" layout-xs="column" layout-align-gt-xs="space-around center" layout-align-xs="space-between center">
       <div layout="column" flex-gt-xs="40">
         <img src="/app/images/LOGO-E-CIS.png" style="width: 100%; margin-bottom: 10px;"/>
@@ -109,7 +109,7 @@
         <p>
           <strong>Se você ainda não possue uma conta no e-CIS solicite abaixo um convite.</strong>
         </p>
-        <md-button md-colors="{background: 'teal-500'}" class="login-button">
+        <md-button md-colors="{background: 'teal-500'}" class="login-button" ng-click="loginCtrl.isRequestInvite = true">
             <md-icon style="color: white;">add_circle</md-icon>
             <strong>SOLICITAR CONVITE</strong>
         </md-button>
@@ -138,4 +138,12 @@
       </a>
     </div>
   </div>
+
+    <div ng-if="loginCtrl.isRequestInvite" class="padded" md-whiteframe="12" style="border-radius: 2px; background-color: white;" flex-gt-xs="50" flex-xs="100" layout="column">
+      <div style="color: black;" layout="row">
+        <div layout="column" flex="90" layout-align="center center">
+          <img src="/app/images/LOGO-E-CIS.png" style="width: 50%; margin-bottom: 10px;"/>
+        </div>
+      </div>
+    </div>
 </md-content>

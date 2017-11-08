@@ -28,11 +28,11 @@
       </div>
       <div style="color: black;" flex-gt-xs="40" layout="column" class="margin">
         <p>
-          <strong>Se você ainda não possue uma conta no e-CIS solicite abaixo um convite.</strong>
+          <b>Se você ainda não possue uma conta no e-CIS solicite abaixo um convite.</b>
         </p>
         <md-button md-colors="{background: 'teal-500'}" class="login-button" ng-click="loginCtrl.isRequestInvite = true">
             <md-icon style="color: white;">add_circle</md-icon>
-            <strong>SOLICITAR CONVITE</strong>
+            <span>SOLICITAR CONVITE</span>
         </md-button>
         <div layout="row" style="margin: 15px 0 15px 0;" layout-align="space-between center">
           <hr style="height:0px;" flex="45"/>
@@ -40,22 +40,22 @@
           <hr style="height:0px;" flex="45"/>
         </div>
         <md-button disabled="true" class="md-raised md-primary login-button">
-            <md-icon md-svg-src="/app/images/facebook-icon.svg"></md-icon>
-            <strong>ACESSE COM FACEBOOK</strong>
+            <md-icon md-svg-src="/app/icons/facebook-icon.svg"></md-icon>
+            <span>ACESSE COM FACEBOOK</span>
         </md-button>
         <md-button class="login-button" style="background-color: #db4437;" ng-click="loginCtrl.login()">
-            <md-icon md-svg-src="/app/images/google-icon.svg"></md-icon>
-            <strong>ACESSE COM GOOGLE</strong>
+            <md-icon md-svg-src="/app/icons/google-icon.svg"></md-icon>
+            <span>ACESSE COM GOOGLE</span>
         </md-button>
         <md-button disabled="true" class="md-raised md-primary login-button">
-            <md-icon md-svg-src="/app/images/twitter-icon.svg"></md-icon>
-            <strong>ACESSE COM TWITTER</strong>
+            <md-icon md-svg-src="/app/icons/twitter-icon.svg"></md-icon>
+            <span>ACESSE COM TWITTER</span>
         </md-button>
       </div>
     </div>
     <div layout-padding md-colors="{background: 'grey-200'}" hide-xs>
       <a href="" style="text-decoration: none;" ng-click="loginCtrl.resetPassword()">
-        <strong md-colors="{color: 'teal-900'}">Esqueceu a senha?</strong>
+        <b md-colors="{color: 'teal-900'}">Esqueceu a senha?</b>
       </a>
     </div>
   </div>

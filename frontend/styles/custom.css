@@ -491,13 +491,15 @@ md-switch.md-checked .md-bar {
     font-size: 12px;
 }
 
-.login-button strong {
+.login-button span {
     font-size: 10px;
     color: white;
     margin-left: 10px;
+    font-weight: bold;
 }
 
 .margin {
     margin-right: 10px;
     margin-left: 10px;
 }
+

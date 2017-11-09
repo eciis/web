@@ -3,7 +3,7 @@
 
     var app = angular.module('app');
 
-    app.controller('SurveyDetailsController', function($scope, SurveyService, $state) {
+    app.controller('SurveyDetailsController', function($scope, SurveyService, $state, MessageService) {
 
         var surveyCtrl = this;
         surveyCtrl.binaryOptionSelected;
@@ -24,6 +24,10 @@
             return surveyCtrl.post.type_survey === 'multiple_choice';
         };
 
+        surveyCtrl.showSendButton = function(){
+            return surveyCtrl.post.type_survey === 'multiple_choice';
+        };
+
         surveyCtrl.votedOption = function(option){
             return _.includes(option.voters, Utils.getKeyFromUrl(surveyCtrl.user.key));
         };
@@ -36,12 +40,23 @@
             return voted;
         };
 
-        surveyCtrl.vote = function(){
+        surveyCtrl.vote = function(ev){
             var optionsSelected = getOptionsSelected();
-            SurveyService.vote(surveyCtrl.post, optionsSelected).then(function sucess(){
-                addVote(optionsSelected);
-                calculatePercentage();
-            });
+            if(optionsSelected.length !== 0){
+                var dialog = MessageService.showConfirmationDialog(ev,
+                    'Confirmar voto', 'Seu voto será permanente. Deseja confirmar?');
+                dialog.then(function() {
+                    SurveyService.vote(surveyCtrl.post, optionsSelected).then(function sucess(){
+                        addVote(optionsSelected);
+                        calculatePercentage();
+                        MessageService.showToast('Voto computado');
+                    });
+                }, function() {
+                        MessageService.showToast('Cancelado');
+                });
+            } else {
+                MessageService.showToast('Você precisa escolher alguma alternativa');
+            }           
         };
 
         function loadBinarySelected(){

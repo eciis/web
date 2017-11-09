@@ -1,7 +1,7 @@
-<div ng-if="!surveyCtrl.isDeleted()" ng-init="surveyCtrl.loadAttributes()">
+<div ng-if="!surveyCtrl.isDeleted()" ng-init="surveyCtrl.loadAttributes()" class="survey-card">
   <md-card-title>
     <md-card-title-text>
-      <a href class="md-title hyperlink" ng-click="surveyCtrl.goToPost(postDetailsCtrl.post)">
+      <a href class="md-title hyperlink" ng-click="surveyCtrl.goToPost()">
         <span class="md-headline break">{{surveyCtrl.post.title}}</span>
       </a>
     </md-card-title-text>
@@ -11,7 +11,7 @@
       <md-list-item ng-repeat="option in surveyCtrl.post.options" 
         ng-class="surveyCtrl.votedOption(option)?'option-selected':''">
         <md-radio-button  ng-if="surveyCtrl.showRadioButton()" aria-label
-          ng-value="option" ng-disabled="surveyCtrl.userVoted()">
+          ng-value="option" ng-disabled="surveyCtrl.userVoted()" style="top:7px">
         </md-radio-button>
         <md-checkbox ng-disabled="surveyCtrl.userVoted()" ng-checked="surveyCtrl.votedOption(option)"
           ng-if="surveyCtrl.showCheckboxButton()" ng-model="option.selected"></md-checkbox>
@@ -24,8 +24,10 @@
       </md-list-item>
     </md-radio-group>
   </md-list>
-  <md-button ng-click="surveyCtrl.vote()" ng-if="!surveyCtrl.userVoted()">
-    VOTAR
-  </md-button>
+  <div layout="column" layout-align="center end">
+    <md-button ng-click="surveyCtrl.vote()" ng-if="!surveyCtrl.userVoted()" md-colors="{color: 'default-teal-500'}" layout-align="end center">
+      VOTAR
+    </md-button>
+  </div>
 </div>
 

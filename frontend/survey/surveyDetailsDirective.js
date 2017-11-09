@@ -3,10 +3,14 @@
 
     var app = angular.module('app');
 
-    app.controller('SurveyDetailsController', function($scope, SurveyService) {
+    app.controller('SurveyDetailsController', function($scope, SurveyService, $state) {
 
         var surveyCtrl = this;
         surveyCtrl.binaryOptionSelected;
+
+        surveyCtrl.goToPost = function goToPost() {
+             $state.go('app.post', {key: surveyCtrl.post.key});
+        };
 
         surveyCtrl.isDeleted = function(){
             return surveyCtrl.post.state === 'deleted';

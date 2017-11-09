@@ -17,6 +17,7 @@
         institutionCtrl.isMember = false;
         institutionCtrl.portfolioUrl = null;
         institutionCtrl.showFullDescription = false;
+        institutionCtrl.showFullData = false;
         institutionCtrl.isLoadingPosts = true;
         institutionCtrl.isLoadingPosts = true;
         institutionCtrl.searchedMember = "";
@@ -160,6 +161,10 @@
             institutionCtrl.showFullDescription = !institutionCtrl.showFullDescription;
         };
 
+        institutionCtrl.showHideData = function showHideData() {
+            institutionCtrl.showFullData = !institutionCtrl.showFullData;
+        };
+
         institutionCtrl.goToManageMembers = function goToManageMembers(){
             $state.go('app.manage_institution.members', {institutionKey: currentInstitutionKey});
         };
@@ -177,11 +182,11 @@
         };
 
         institutionCtrl.hasChildrenActive = function hasChildrenActive(institution) {
-            return !_.isEmpty(institution.children_institutions) && _.some(institution.children_institutions, {'state' :'active'});
+            return institution && !_.isEmpty(institution.children_institutions) && _.some(institution.children_institutions, {'state' :'active'});
         };
 
         institutionCtrl.hasParentActive = function hasParentActive(institution) {
-            return (institution.parent_institution && institution.parent_institution.state === 'active');
+            return institution && (institution.parent_institution && institution.parent_institution.state === 'active');
         };
 
         function checkIfUserIsFollower() {
@@ -221,6 +226,18 @@
                 return institutionCtrl.current_institution.getFullAddress();
             }
         };
+
+
+        institutionCtrl.lorem = `
+        Ao contrário do que se acredita, Lorem Ipsum não é simplesmente um texto randômico. 
+        Com mais de 2000 anos, suas raízes podem ser encontradas em uma obra de literatura latina clássica datada de 45 AC. 
+        Richard McClintock, um professor de latim do Hampden-Sydney College na Virginia, pesquisou uma das mais obscuras palavras em latim,
+        consectetur, oriunda de uma passagem de Lorem Ipsum, e, procurando por entre citações da palavra na literatura clássica,
+        descobriu a sua indubitável origem. Lorem Ipsum vem das seções 1.10.32 e 1.10.33 do "de Finibus Bonorum et Malorum"
+        (Os Extremos do Bem e do Mal), de Cícero, escrito em 45 AC. Este livro é um tratado de teoria da ética muito popular na época da Renascença.
+        A primeira linha de Lorem Ipsum, "Lorem Ipsum dolor sit amet..." vem de uma linha na seção 1.10.32.
+        
+        `
 
         institutionCtrl.getInfo = function getInfo(information) {
             return information ? information : "Não informado";

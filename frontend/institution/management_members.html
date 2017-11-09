@@ -107,9 +107,8 @@
         <md-list>
           <md-list-item class="md-2-line" ng-repeat="invite in manageMemberCtrl.sent_invitations" ng-click="null"
           ng-if="invite.type_of_invite == 'USER'">
-            <md-button md-colors="{background: 'light-green'}" class="md-icon-button" style="margin: 0 10px 0 0;">
-              <md-icon style="color: white;">account_box</md-icon>
-            </md-button>
+            <md-icon class="md-avatar-icon" 
+            md-colors="{background: 'light-green-500', color: 'grey-50'}">account_box</md-icon>
             <div class="md-list-item-text">
               <h3> {{ invite.invitee }} </h3>
               <p> Convidado por: {{invite.sender_name}}</p>
@@ -140,9 +139,8 @@
       <md-card-content ng-if="manageMemberCtrl.showRequests">
         <md-list flex>
           <md-list-item ng-repeat="request in manageMemberCtrl.requests" ng-if="request.status == 'sent'" ng-click="null" class="md-3-line">
-            <md-button md-colors="{background: 'light-green'}" class="md-icon-button" style="margin: 0 10px 0 0;">
-              <md-icon style="color: white;">account_box</md-icon>
-            </md-button>
+            <md-icon class="md-avatar-icon" 
+            md-colors="{background: 'light-green-500', color: 'grey-50'}">account_box</md-icon>
             <div class="md-list-item-text" layout="column">
               <h3>{{ request.sender_name}}</h3>
               <h4>Cargo atual: {{ request.office}}</h4>

@@ -513,6 +513,14 @@ md-list-item, md-list-item .md-list-item-inner {
 
 .xs-icon-button md-icon {
     font-size: 12px;
+    margin: 1px;
+}
+
+.xs-delete-icon-justify md-icon {
+    margin: 2 1 0 0;
+}
+
+.xs-edit-icon-justify md-icon {
     margin: 2px;
 }
 

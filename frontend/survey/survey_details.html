@@ -4,6 +4,10 @@
       <a href class="md-title hyperlink" ng-click="surveyCtrl.goToPost()">
         <span class="md-headline break">{{surveyCtrl.post.title}}</span>
       </a>
+      <span layout="row" class="md-subhead" ng-if="surveyCtrl.post.deadline"> 
+        <b style="color: #009688; margin-right: 2px; margin-left: 2px;">&bull;</b>Prazo limite:
+        {{ surveyCtrl.post.deadline | amUtc | amLocal | amCalendar:referenceTime:formats }}
+      </span>
     </md-card-title-text>
   </md-card-title>
   <md-list>

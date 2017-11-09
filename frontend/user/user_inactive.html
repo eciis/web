@@ -1,14 +1,22 @@
-<div layout-fill md-colors="{background: 'teal-900'}" layout="column" layout-align="center center">
-	<div layout-align="center" layout="column">
-		<md-button disabled="true">
-	        <img src="app/images/oms.png" aria-label="OMS Logo" style="height: 20%;filter: brightness(10) grayscale(1);">
-	    </md-button>
-	   	<div layout="row" layout-wrap layout-align="center"> 
-	   	   Para acessar a plataforma você precisa estar vinculado a uma instituição pré-cadastrada.
-	    </div>
-        <div layout-align="center" layout="column">
-            <md-button ng-click="userInactiveCtrl.resquestInvitation()" md-colors="{background: 'green-900'}">Busque uma instituição</md-button>
-            <md-button ng-click="userInactiveCtrl.logout()" md-colors="{background: 'green-900'}">Sair</md-button>
+<md-content layout-fill layout="column" md-colors="{background: 'teal-500'}" layout-align="center">
+    <div layout="row" layout-align="center center" style="margin-right: 35px;">
+        <md-button class="md-fab md-primary" aria-label="Retornar" ng-click="userInactiveCtrl.logout()"
+          style="margin-right: -35px;" md-colors="{background: 'light-green-500'}">
+          <md-icon>keyboard_arrow_left</md-icon>
+        </md-button>
+        <div class="padded" layout-margin md-whiteframe="12" style="border-radius: 2px; background-color: white;" layout="row" flex-xs="85" flex-sm="65" flex-gt-sm="45" layout-align="center center">
+            <div layout="column" flex-xs="75" flex-gt-xs="80" layout-align="space-between" layout-margin>
+                <div layout="row" layout-align="center center">
+                    <img src="/app/images/logowithname.png" flex="90"/>
+                </div>
+                <div layout="row" layout-align="center center" style="color: black;">
+                    <p style="text-align: center;" flex-gt-xs="70">Para acessar a plataforma você precisa estar vinculado a uma instituição pré-cadastrada.</p>
+                </div>
+                <div layout-gt-xs="row" layout-xs="column" layout-align="end center">
+                    <md-button flex-order-xs="2" class="md-raised md-primary" md-colors="{background: 'teal-500'}" ng-click="userInactiveCtrl.logout()">SAIR</md-button>
+                    <md-button flex-order-xs="1" class="md-raised md-primary" md-colors="{background: 'teal-500'}" ng-click="userInactiveCtrl.resquestInvitation()">BUSCAR INSTITUIÇÃO</md-button>
+                </div>
+            </div>
         </div>
- 	</div>
-</div> 
+    </div>
+</md-content>

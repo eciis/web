@@ -107,138 +107,76 @@
           </div>
         </md-toolbar>
         <md-card-content ng-if="inviteInstCtrl.showChildrenHierarchie">
-          <md-list-item class="md-3-line"
-          ng-repeat="institution in inviteInstCtrl.institution.children_institutions" ng-click="inviteInstCtrl.goToInst(institution)">
-            <md-icon class="md-avatar-icon" md-colors="{background: 'light-green-500', color: 'grey-50'}">account_balance</md-icon>
-            <div class="md-list-item-text" layout="column">
-              <div ng-if="inviteInstCtrl.isActive(institution)">
-                <a href class="md-title hyperlink">
-                {{ institution.name }}
-                </a>
-                <h4 ng-if="institution.invite">Nome Sugerido: {{ inviteInstCtrl.getSuggestedName(institution) }}</h4>
-              </div>
-              <div ng-if="!inviteInstCtrl.isActive(institution)">
-                <h3>{{ institution.name }}</h3>
-                <h3 style="color: red">
-                Esta instituição ainda não está cadastrada na plataforma</h3>
-              </div>
-            </div>
-            <div ng-if="inviteInstCtrl.isActive(institution)" layout="row">
-              <md-button ng-click="inviteInstCtrl.removeLink(institution, false)">
-                <md-icon md-colors="{color: 'red-700'}" title="Remover conexão">link</md-icon>
-              </md-button>
-              <md-button ng-click="inviteInstCtrl.removeChild(institution)">
-                <md-icon md-colors="{color: 'red-700'}" title="Remover institutição">delete</md-icon>
-              </md-button>
-            </div>
-          </md-list-item>
-        </md-card-content>
-    </md-card>
-    <md-card flex layout="column">
-      <md-toolbar md-colors="{background: 'teal-800'}" layout="row">
-        <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
-          <h1>Vínculos Institucionais</h1>
-          <span flex md-truncate></span>
-          <!-- <md-button aria-label="Convidar Nova Instituição" ng-if="inviteInstCtrl.showButton" ng-click="inviteInstCtrl.showButton = false;">
-            <md-icon>add</md-icon>Convidar
-          </md-button> -->
-        </div>
-      </md-toolbar>
-      <md-card-content>
-        <!-- <div layout-gt-sm="column" ng-if="!inviteInstCtrl.showButton">
-          <md-input-container class="md-block" flex-gt-sm>
-            <label>Nome da Instituição convidada</label>
-            <input ng-model="inviteInstCtrl.invite.suggestion_institution_name" required>
-          </md-input-container>
-          <md-input-container class="md-block">
-            <label>Email convite deve ser enviado para:</label>
-            <input ng-model="inviteInstCtrl.invite.invitee" type="email" required>
-          </md-input-container>
-          <p>Qual a conexão da instituição <b>{{inviteInstCtrl.invite.suggestion_institution_name}} </b> com  <b> {{inviteInstCtrl.institution.name}} </b> ?</p>
-
-          <md-radio-group ng-model="inviteInstCtrl.invite.type_of_invite" required>
-
-            <md-radio-button value="INSTITUTION_PARENT" class="md-primary">É a instituição superior</md-radio-button>
-            <md-radio-button value="INSTITUTION_CHILDREN" class="md-primary">É uma subordinada de {{inviteInstCtrl.institution.name}}</md-radio-button>
-            <md-radio-button ng-disabled="true" value="suggestion_invite" class="md-primary">Nenhuma</md-radio-button>
-
-          </md-radio-group>
-          <section layout="row" layout="column" layout-align="end center" layout-wrap>
-            <md-button md-colors="{color: 'teal-700'}" ng-click="inviteInstCtrl.cancelInvite()">Cancelar</md-button>
-            <md-button md-colors="{color: 'teal-700'}" ng-click="inviteInstCtrl.checkInstInvite($event)">Enviar Convite</md-button>
-          </section>
-        </div> -->
-        <md-list class="md-dense" flex>
-          <!-- <md-subheader class="md-no-sticky">Instituição hierarquicamente superior</md-subheader>
-          <md-list-item class="md-3-line" ng-if="inviteInstCtrl.hasParent">
-            <md-icon class="md-avatar-icon" >account_balance</md-icon>
-            <div class="md-list-item-text" layout="column">
-              <a href class="md-title hyperlink" ng-if="inviteInstCtrl.isActive(inviteInstCtrl.institution.parent_institution)"
-              ng-click="inviteInstCtrl.goToInst(inviteInstCtrl.institution.parent_institution.key)">
-                {{ inviteInstCtrl.institution.parent_institution.name }}
-              </a>
-              <h4 ng-if="inviteInstCtrl.institution.parent_institution.invite">
-                Nome Sugerido: {{ inviteInstCtrl.getSuggestedName(inviteInstCtrl.institution.parent_institution) }}
-              </h4>
-              <div ng-if="!inviteInstCtrl.isActive(inviteInstCtrl.institution.parent_institution)">
-                <h3>{{ inviteInstCtrl.institution.parent_institution.name }}</h3>
-                <h3 style="color: red">
-                  Esta instituição ainda não está cadastrada na plataforma</h3>
-              </div>
-            </div>
-            <div ng-if="inviteInstCtrl.isActive(inviteInstCtrl.institution.parent_institution)">
-              <md-button ng-click="inviteInstCtrl.removeLink(inviteInstCtrl.institution.parent_institution, true)">
-                <md-icon md-colors="{color: 'red-700'}" title="Remover conexão">link</md-icon>
-              </md-button>
-            </div>
-          </md-list-item> -->
-          <!-- <md-subheader class="md-no-sticky">Instituições hierarquicamente subordinadas</md-subheader>
-          <md-list-item class="md-3-line"
-          ng-repeat="institution in inviteInstCtrl.institution.children_institutions">
-            <md-icon class="md-avatar-icon" >account_balance</md-icon>
-            <div class="md-list-item-text" layout="column">
-              <div ng-if="inviteInstCtrl.isActive(institution)">
-                <a href class="md-title hyperlink" ng-click="inviteInstCtrl.goToInst(institution.key)">
-                {{ institution.name }}
-                </a>
-                <h4 ng-if="institution.invite">Nome Sugerido: {{ inviteInstCtrl.getSuggestedName(institution) }}</h4>
-              </div>
-              <div ng-if="!inviteInstCtrl.isActive(institution)">
-                <h3>{{ institution.name }}</h3>
-                <h3 style="color: red">
-                Esta instituição ainda não está cadastrada na plataforma</h3>
-              </div>
-            </div>
-            <div ng-if="inviteInstCtrl.isActive(institution)" layout="row">
-              <md-button ng-click="inviteInstCtrl.removeLink(institution, false)">
-                <md-icon md-colors="{color: 'red-700'}" title="Remover conexão">link</md-icon>
-              </md-button>
-              <md-button ng-click="inviteInstCtrl.removeChild(institution)">
-                <md-icon md-colors="{color: 'red-700'}" title="Remover institutição">delete</md-icon>
-              </md-button>
-            </div>
-          </md-list-item> -->
-          <md-subheader class="md-no-sticky">Vinculos pendentes</md-subheader>
-            <md-list-item class="md-3-line" ng-repeat="request in inviteInstCtrl.requested_invites" ng-if="request.status === 'sent'">
-              <div class="md-list-item-text" layout="row">
-                <div layout="column">
-                  <a href class="md-title hyperlink" style="margin-top: 7px" ng-click="inviteInstCtrl.goToRequestedInst(request)">
-                  {{ inviteInstCtrl.getReqInstName(request) }}
+          <md-list class="md-dense" flex>
+            <md-list-item class="md-3-line"
+            ng-repeat="institution in inviteInstCtrl.institution.children_institutions" ng-click="inviteInstCtrl.goToInst(institution)">
+              <md-icon class="md-avatar-icon" md-colors="{background: 'light-green-500', color: 'grey-50'}">account_balance</md-icon>
+              <div class="md-list-item-text" layout="column">
+                <div ng-if="inviteInstCtrl.isActive(institution)">
+                  <a href class="md-title hyperlink">
+                  {{ institution.name }}
                   </a>
-                  <h3 style="color: red">{{inviteInstCtrl.showMessage(request)}}</h3>
+                  <h4 ng-if="institution.invite">Nome Sugerido: {{ inviteInstCtrl.getSuggestedName(institution) }}</h4>
                 </div>
-                <div ng-hide="inviteInstCtrl.isReqSentByCurrentInst(request)">
-                  <md-button class="md-icon-button" ng-click="inviteInstCtrl.rejectRequest(request, request.type_of_invite, $event)" title="Rejeitar">
-                    <md-icon style="color: red">clear</md-icon>
-                  </md-button>
-                  <md-button class="md-icon-button" ng-click="inviteInstCtrl.acceptRequest(request, request.type_of_invite, $event)" title="Aceitar">
-                    <md-icon style="color: green">check</md-icon>
-                  </md-button>
+                <div ng-if="!inviteInstCtrl.isActive(institution)">
+                  <h3>{{ institution.name }}</h3>
+                  <h3 style="color: red">
+                  Esta instituição ainda não está cadastrada na plataforma</h3>
                 </div>
+              </div>
+              <div ng-if="inviteInstCtrl.isActive(institution)" layout="row">
+                <md-button ng-click="inviteInstCtrl.removeLink(institution, false)">
+                  <md-icon md-colors="{color: 'red-700'}" title="Remover conexão">link</md-icon>
+                </md-button>
+                <md-button ng-click="inviteInstCtrl.removeChild(institution)">
+                  <md-icon md-colors="{color: 'red-700'}" title="Remover institutição">delete</md-icon>
+                </md-button>
               </div>
             </md-list-item>
-        </md-list>
-      </md-card-content>
+          </md-list>
+        </md-card-content>
+    </md-card>
+    <md-card>
+        <md-toolbar md-colors="{background: 'teal-500'}" layout="row">
+          <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
+            <h1>
+              <md-icon>link</md-icon>
+              Vinculos pendentes
+            </h1>
+            <span flex md-truncate></span>
+            <md-button ng-if="!inviteInstCtrl.showRequestInvites" ng-click="inviteInstCtrl.showRequestInvites = true;"
+                class="md-icon-button md-secondary">
+              <md-icon>keyboard_arrow_down</md-icon>
+            </md-button>
+            <md-button ng-if="inviteInstCtrl.showRequestInvites" ng-click="inviteInstCtrl.showRequestInvites = false;"
+                class="md-icon-button md-secondary">
+              <md-icon>keyboard_arrow_up</md-icon>
+            </md-button>
+          </div>
+        </md-toolbar>
+        <md-card-content ng-if="inviteInstCtrl.showRequestInvites">
+          <md-list class="md-dense" flex>
+              <md-list-item class="md-3-line" ng-repeat="request in inviteInstCtrl.requested_invites" ng-if="request.status === 'sent'" ng-click="inviteInstCtrl.goToRequestedInst(request)">
+                <md-icon class="md-avatar-icon" md-colors="{background: 'light-green-500', color: 'grey-50'}">account_balance</md-icon>  
+                <div class="md-list-item-text" layout="column">
+                  <div layout="column">
+                    <a href class="md-title hyperlink" style="margin-top: 7px" ng-click="inviteInstCtrl.goToRequestedInst(request)">
+                    {{ inviteInstCtrl.getReqInstName(request) }}
+                    </a>
+                    <h3 style="color: red">{{inviteInstCtrl.showMessage(request)}}</h3>
+                  </div>
+                </div>
+                <div ng-hide="inviteInstCtrl.isReqSentByCurrentInst(request)">
+                    <md-button class="md-icon-button" ng-click="inviteInstCtrl.rejectRequest(request, request.type_of_invite, $event)" title="Rejeitar">
+                      <md-icon style="color: red">clear</md-icon>
+                    </md-button>
+                    <md-button class="md-icon-button" ng-click="inviteInstCtrl.acceptRequest(request, request.type_of_invite, $event)" title="Aceitar">
+                      <md-icon style="color: green">check</md-icon>
+                    </md-button>
+                </div>
+              </md-list-item>
+            </md-list>
+        </md-card-content>
     </md-card>
   </div>
 </div>

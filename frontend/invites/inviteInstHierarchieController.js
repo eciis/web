@@ -24,6 +24,7 @@
         inviteInstCtrl.showSendInvite = false;
         inviteInstCtrl.showParentHierarchie = false;
         inviteInstCtrl.showChildrenHierarchie = false;
+        inviteInstCtrl.showRequestInvites = false;
         inviteInstCtrl.existing_institutions = [];
         inviteInstCtrl.requested_invites = [];
 

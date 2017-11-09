@@ -32,6 +32,21 @@
             return voted;
         };
 
+        surveyCtrl.vote = function(){
+            var optionsSelected = getOptionsSelected();
+            SurveyService.vote(surveyCtrl.post, optionsSelected).then(function sucess(){
+                addVote(optionsSelected);
+                calculatePercentage();
+            });
+        };
+
+        function loadBinarySelected(){
+            if(surveyCtrl.userVoted && surveyCtrl.post.type_survey ==='binary'){
+                surveyCtrl.binaryOptionSelected = _.find(surveyCtrl.post.options, 
+                    function(o) { return surveyCtrl.votedOption(o); });
+            }
+        }
+
         function getOptionsSelected(){
             var optionsSelected = [];
             if(surveyCtrl.post.type_survey === 'multiple_choice'){
@@ -52,22 +67,18 @@
             });
         }
 
-        surveyCtrl.vote = function(){
-            var optionsSelected = getOptionsSelected();
-            SurveyService.vote(surveyCtrl.post, optionsSelected).then(function sucess(){
-                addVote(optionsSelected);
-                surveyCtrl.calculatePercentage();
-            });
-        };
-
-        surveyCtrl.calculatePercentage = function(){
+        function calculatePercentage(){
             if(surveyCtrl.post){
                 _.forEach(surveyCtrl.post.options, function(option) {
                     var percentage = (option.number_votes / surveyCtrl.post.number_votes) * 100;
                     option.percentage = surveyCtrl.post.number_votes === 0 ? 0 : percentage.toFixed(0);
-                    
                 });
             }
+        }
+        
+        surveyCtrl.loadAttributes = function(){
+            loadBinarySelected();
+            calculatePercentage();
         };
     });
     

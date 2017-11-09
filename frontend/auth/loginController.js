@@ -2,7 +2,7 @@
 
 (function() {
     var app = angular.module("app");
-    
+
     app.controller("LoginController", function LoginController(AuthService, MessageService, $state, $mdDialog, 
             $stateParams, $location) {
         var loginCtrl = this;
@@ -10,6 +10,7 @@
         loginCtrl.user = {};
 
         loginCtrl.newUser = {};
+        loginCtrl.isRequestInvite = false;
 
         var redirectPath = $stateParams.redirect;
 

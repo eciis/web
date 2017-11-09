@@ -1,77 +1,104 @@
-<div layout-fill md-colors="{background: 'grey-900'}" layout="column" layout-align="center">
-   <div layout="row" layout-wrap layout-align="center">
-    <div class="padded" md-whiteframe style="border-radius: 5px 5px 0px 0px;">
-      <md-content style="border-radius: 5px 5px 0px 0px;">
-        <md-tabs md-dynamic-height md-border-bottom md-align-tabs="bottom" class="md-default md-hue-2" md-colors="{background: 'grey-300'}">
-          <md-tab label="Já tenho conta"> 
-            <md-content class="md-padding" layout-gt-sm="row" >
-              <div flex="47" layout="column" laytout-align="center center">
-                <div id="firebaseui-container">
-                   <div class="firebaseui-container firebaseui-page-provider-sign-in firebaseui-id-page-provider-sign-in">
-                      <div class="firebaseui-card-content">
-                         <form onsubmit="return false;">
-                            <ul class="firebaseui-idp-list">
-                               <li class="firebaseui-list-item">
-                                 <button class="firebaseui-idp-button mdl-button mdl-js-button mdl-button--raised firebaseui-idp-google firebaseui-id-idp-button" data-provider-id="google.com" data-upgraded=",MaterialButton" ng-click="loginCtrl.login()"><span class="firebaseui-idp-icon-wrapper"><img class="firebaseui-idp-icon" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"></span><span class="firebaseui-idp-text firebaseui-idp-text-long">Entrar com Google</span><span class="firebaseui-idp-text firebaseui-idp-text-short">Google</span>
-                                 </button>
-                               </li>
-                               <li class="firebaseui-list-item"><button disabled="true" class="firebaseui-idp-button mdl-button mdl-js-button mdl-button--raised firebaseui-idp-facebook firebaseui-id-idp-button" data-provider-id="facebook.com" data-upgraded=",MaterialButton"><span class="firebaseui-idp-icon-wrapper"><img class="firebaseui-idp-icon" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/facebook.svg"></span><span class="firebaseui-idp-text firebaseui-idp-text-long">Entrar com Facebook</span><span class="firebaseui-idp-text firebaseui-idp-text-short">Facebook</span></button></li>
-                               <li class="firebaseui-list-item"><button disabled="true" class="firebaseui-idp-button mdl-button mdl-js-button mdl-button--raised firebaseui-idp-twitter firebaseui-id-idp-button" data-provider-id="twitter.com" data-upgraded=",MaterialButton"><span class="firebaseui-idp-icon-wrapper"><img class="firebaseui-idp-icon" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/twitter.svg"></span><span class="firebaseui-idp-text firebaseui-idp-text-long">Entrar com Twitter</span><span class="firebaseui-idp-text firebaseui-idp-text-short">Twitter</span></button></li>
-                               <li class="firebaseui-list-item"><button disabled="true" class="firebaseui-idp-button mdl-button mdl-js-button mdl-button--raised firebaseui-idp-github firebaseui-id-idp-button" data-provider-id="github.com" data-upgraded=",MaterialButton"><span class="firebaseui-idp-icon-wrapper"><img class="firebaseui-idp-icon" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/github.svg"></span><span class="firebaseui-idp-text firebaseui-idp-text-long">Entrar com Github</span><span class="firebaseui-idp-text firebaseui-idp-text-short">Github</span></button></li>
-                               <li class="firebaseui-list-item"><button disabled="true" class="firebaseui-idp-button mdl-button mdl-js-button mdl-button--raised firebaseui-idp-password firebaseui-id-idp-button" data-provider-id="password" data-upgraded=",MaterialButton"><span class="firebaseui-idp-icon-wrapper"><img class="firebaseui-idp-icon" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/mail.svg"></span><span class="firebaseui-idp-text firebaseui-idp-text-long">Entrar com email</span><span class="firebaseui-idp-text firebaseui-idp-text-short">Email</span></button></li>
-                               <li class="firebaseui-list-item"><button disabled="true" class="firebaseui-idp-button mdl-button mdl-js-button mdl-button--raised firebaseui-idp-phone firebaseui-id-idp-button" data-provider-id="phone" data-upgraded=",MaterialButton"><span class="firebaseui-idp-icon-wrapper"><img class="firebaseui-idp-icon" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/phone.svg"></span><span class="firebaseui-idp-text firebaseui-idp-text-long">Entrar com Telefone</span><span class="firebaseui-idp-text firebaseui-idp-text-short">Telefone</span></button></li>
-                            </ul>
-                         </form>
-                      </div>
-                   </div>
-                </div>
-              </div>
-              <div flex="6" layout="row">
-                <hr style="width:0px;" flex/>
-              </div>
-              <div flex="47">
-                <form ng-submit="loginCtrl.loginWithEmailPassword()" layout="column" layout-padding>
-                  <small>Email</small>
-                  <input type="email" name="email" ng-model="loginCtrl.user.email" aria-label="Email"
-                    style="border:1px solid grey; padding: 5px; border-radius: 5px;">
-                  <small>Senha</small>
-                  <input type="password" name="password" ng-model="loginCtrl.user.password" aria-label="Senha"
-                    style="border:1px solid grey; padding: 5px; border-radius: 5px;">
-                  <div layout="row" layout-align="end center">
-                    <md-button class="md-primary" ng-click="loginCtrl.resetPassword()">
-                      Esqueci minha senha
-                    </md-button>
-                    <md-button type="submit" class="md-primary md-raised">Entrar</md-button>
-                  </div>
-                </form>
-              </div>
-            </md-content>
-          </md-tab>
-          <md-tab label="Criar Conta">
-            <md-content layout="column" class="md-padding">
-                <md-input-container class="md-block">
-                  <small>Email</small>
+<md-content layout-fill md-colors="{background: 'teal-500'}" layout-align="center center" layout-gt-xs="row" layout-xs="column">
+  <div ng-if="!loginCtrl.isRequestInvite" class="padded" md-whiteframe="12" style="border-radius: 2px; background-color: white;" flex-sm="65" flex-md="65" flex-lg="65" flex-xl="35" flex-xs="100" layout="column">
+    <div layout-gt-xs="row" flex-xs="95" layout-xs="column" layout-align-gt-xs="space-around center" layout-align-xs="space-between center">
+      <div layout="column" flex-gt-xs="40">
+        <img src="/app/images/logowithname.png" style="width: 100%; margin-bottom: 10px;"/>
+        <div layout="column">
+          <form ng-submit="loginCtrl.loginWithEmailPassword()" class="margin">
+            <md-input-container class="md-block" style="margin: 0;">
+              <label>Email</label>
+              <input type="email" name="email" ng-model="loginCtrl.user.email" required="true" aria-label="Email">
+            </md-input-container>
+            <md-input-container class="md-block" style="margin: 0;">
+              <label>Senha</label>
+              <input type="password" name="password" ng-model="loginCtrl.user.password" required="true"  minlength="6"
+                aria-label="Senha">
+            </md-input-container>
+            <div layout="row" layout-align="end center" style="margin-bottom: 20px">
+              <md-button class="md-primary" ng-click="loginCtrl.resetPassword()" md-colors="{background: 'grey-200', color: 'teal-900'}" hide-gt-xs>
+                       Esqueci minha senha
+              </md-button>
+              <md-button type="submit" class="md-raised md-primary" md-colors="{background: 'teal-500'}">Acessar</md-button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div layout="column" hide-xs>
+        <hr style="width:0px;" flex="40"/>
+      </div>
+      <div style="color: black;" flex-gt-xs="40" layout="column" class="margin">
+        <p>
+          <b>Se você ainda não possue uma conta no e-CIS solicite abaixo um convite.</b>
+        </p>
+        <md-button md-colors="{background: 'teal-500'}" class="login-button" ng-click="loginCtrl.isRequestInvite = true">
+            <md-icon style="color: white;">add_circle</md-icon>
+            <span>SOLICITAR CONVITE</span>
+        </md-button>
+        <div layout="row" style="margin: 15px 0 15px 0;" layout-align="space-between center">
+          <hr style="height:0px;" flex="45"/>
+          <span>OU</span>
+          <hr style="height:0px;" flex="45"/>
+        </div>
+        <md-button disabled="true" class="md-raised md-primary login-button">
+            <md-icon md-svg-src="/app/icons/facebook-icon.svg"></md-icon>
+            <span>ACESSE COM FACEBOOK</span>
+        </md-button>
+        <md-button class="login-button" style="background-color: #db4437;" ng-click="loginCtrl.login()">
+            <md-icon md-svg-src="/app/icons/google-icon.svg"></md-icon>
+            <span>ACESSE COM GOOGLE</span>
+        </md-button>
+        <md-button disabled="true" class="md-raised md-primary login-button">
+            <md-icon md-svg-src="/app/icons/twitter-icon.svg"></md-icon>
+            <span>ACESSE COM TWITTER</span>
+        </md-button>
+      </div>
+    </div>
+    <div layout-padding md-colors="{background: 'grey-200'}" hide-xs>
+      <a href="" style="text-decoration: none;" ng-click="loginCtrl.resetPassword()">
+        <b md-colors="{color: 'teal-900'}">Esqueceu a senha?</b>
+      </a>
+    </div>
+  </div>
+
+  <div layout="row" layout-align="center center" style="margin-right: 27px;" ng-if="loginCtrl.isRequestInvite">
+    <md-button class="md-fab md-primary" aria-label="Retornar"
+      style="margin-right: -27px;" md-colors="{background: 'light-green-500'}"
+      ng-click="loginCtrl.isRequestInvite = false">
+      <md-icon>keyboard_arrow_left</md-icon>
+    </md-button>
+    <div ng-if="loginCtrl.isRequestInvite" class="padded" md-whiteframe="12" style="border-radius: 2px; background-color: white;" flex-sm="50" flex-xs="85" flex-md="50" flex-gt-md="35" layout="column">
+      <div layout="column">
+        <div style="color: black;" layout="row" layout-align="center center">
+          <div layout="column" flex="65">
+            <div layout="row" layout-align="center center">
+              <img src="/app/images/logowithname.png" style="width: 100%; margin-bottom: 10px;"/>
+            </div>
+            <div layout="column">
+              <form ng-submit="loginCtrl.signup()">
+                <md-input-container class="md-block" style="margin: 0;">
+                  <label>Email</label>
                   <input type="email" name="email" ng-model="loginCtrl.newUser.email" required="true" aria-label="Email">
                 </md-input-container>
-              <div layout-gt-sm="row">
-                <md-input-container class="md-block">
-                  <small>Senha</small>
+                <md-input-container class="md-block" style="margin: 0;">
+                  <label>Senha</label>
                   <input type="password" name="password" ng-model="loginCtrl.newUser.password" required="true"  minlength="6"
                     aria-label="Senha">
                 </md-input-container>
-                <md-input-container class="md-block">
-                  <small>Confirmar Senha</small>
-                  <input type="password" name="verifypassword" ng-model="loginCtrl.newUser.verifypassword" 
+                <md-input-container class="md-block" style="margin: 0;">
+                  <label>Confirmar Senha</label>
+                  <input type="password" name="verifypassword" ng-model="loginCtrl.newUser.verifypassword"
                     required="true" minlength="6" aria-label="Confirmar Senha">
                 </md-input-container>
-              </div>
-              <div layout="row" layout-align="end center">
-                <md-button class="md-primary" ng-click="loginCtrl.signup()">Concluir</md-button>
-              </div>
-            </md-content>
-          </md-tab>
-        </md-tabs>
-      </md-content>
+                <div layout="row" layout-align="center center" style="margin-bottom: 20px;">
+                  <md-button type="submit" class="md-raised md-primary" md-colors="{background: 'teal-500'}">Concluir</md-button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div layout-padding md-colors="{background: 'grey-200'}" style="height: 20px;">
+        </div>
+      </div>
     </div>
   </div>
-</div>
+</md-content>

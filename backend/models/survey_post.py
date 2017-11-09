@@ -60,7 +60,7 @@ class SurveyPost(Post):
 
     def is_vote_valid(self, author_key, option):
         """Verify if vote is valid."""
-        if(datetime.datetime.now() > self.deadline):
+        if(self.deadline and datetime.datetime.now() > self.deadline):
             raise Exception("Deadline for receive answers has passed.")
 
         if(author_key in option["voters"]):
@@ -72,10 +72,12 @@ class SurveyPost(Post):
         """Added all votes of user from survey post."""
         if(self.type_survey == "binary" and
                 len(all_options_selected) == 1):
-            self.add_vote(author_key, all_options_selected[0])
+            self.add_vote(author_key, all_options_selected[0]["id"])
         else:
+            print self
+            print all_options_selected
             for option in all_options_selected:
-                self.add_vote(author_key, option)
+                self.add_vote(author_key, option["id"])
 
     def make(post, host):
         """Create personalized json of post."""

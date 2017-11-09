@@ -1,4 +1,4 @@
-<div ng-if="!surveyCtrl.isDeleted()">
+<div ng-if="!surveyCtrl.isDeleted()" ng-init="surveyCtrl.calculatePercentage()">
   <md-card-title>
     <md-card-title-text>
       <a href class="md-title hyperlink" ng-click="surveyCtrl.goToPost(postDetailsCtrl.post)">
@@ -7,13 +7,24 @@
     </md-card-title-text>
   </md-card-title>
   <md-list>
-    <md-list-item ng-repeat="option in surveyCtrl.post.options">
-      <md-checkbox ng-model="option.selected" ng-click="surveyCtrl.vote(option, option.selected)"></md-checkbox>
-      <p>{{option.text}}</p>
-      <p md-colors="{background: 'teal-900'}" class="md-secondary"> {{option.percentage ? option.percentage : 0}}% </p>
-    </md-list-item>
+    <md-radio-group ng-model="surveyCtrl.binaryOptionSelected">
+      <md-list-item ng-repeat="option in surveyCtrl.post.options" 
+        ng-class="surveyCtrl.votedOption(option)?'option-selected':''">
+        <md-radio-button  ng-if="surveyCtrl.showRadioButton()" aria-label
+          ng-value="option" ng-disabled="surveyCtrl.userVoted()">
+        </md-radio-button>
+        <md-checkbox ng-disabled="surveyCtrl.userVoted()" ng-checked="surveyCtrl.votedOption(option)"
+          ng-if="surveyCtrl.showCheckboxButton()" ng-model="option.selected"></md-checkbox>
+        <p>{{option.text}}</p>
+        <div ng-if="surveyCtrl.userVoted()">
+          <div ng-class="surveyCtrl.votedOption(option)?'percentage-selected':'option-percentage'">
+            {{option.percentage ? option.percentage : 0}}%
+          </div>
+        </div>
+      </md-list-item>
+    </md-radio-group>
   </md-list>
-  <md-button ng-click="surveyCtrl.vote()">
+  <md-button ng-click="surveyCtrl.vote()" ng-if="!surveyCtrl.userVoted()">
     VOTAR
   </md-button>
 </div>

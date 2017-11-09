@@ -455,8 +455,29 @@ a:active {
     margin: 0px;
 }
 
+.option-selected{
+    background-color: #E0E0E0;
+    height: 48px;
+}
+
+.option-percentage{
+    background-color: #E0E0E0;
+    width: 78px;
+    height: 48px;
+    top: 50%;
+    left: 50%;
+    color: #616161;
+}
+
+.percentage-selected{
+    background-color: #8BC34A;
+    width: 78px;
+    height: 48px;
+    color: #FFFFFF;
+}
+
 md-switch.md-checked .md-thumb {
-  background-color: #009688;
+    background-color: #009688;
 }
 
 md-switch.md-checked .md-bar {

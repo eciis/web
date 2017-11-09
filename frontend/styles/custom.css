@@ -458,10 +458,6 @@ a:active {
     color: #019587;
 }
 
-.green-text {       
-    color: #004D40;       
- }
-
 .sm-fab-button {
    background-color: #8BC34A;
    width: 22px;
@@ -477,11 +473,6 @@ a:active {
 .sm-label {
     font-size: 0.9em;
     opacity: 0.75;
-}
-
-.option{
-    height: 25px;
-    margin: 0px;
 }
 
 md-switch.md-checked .md-thumb {
@@ -534,4 +525,13 @@ md-list-item, md-list-item .md-list-item-inner {
 .md-title {
     font-size: 20px;
     font-weight: 700;
+}
+
+.green-text {
+    color: #004D40;
+ }
+
+.option{
+    height: 25px;
+    margin: 0px;
 }

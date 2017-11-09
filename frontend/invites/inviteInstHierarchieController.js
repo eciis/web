@@ -21,13 +21,14 @@
         inviteInstCtrl.invite = {};
         inviteInstCtrl.hasParent = false;
         inviteInstCtrl.showButton = true;
+        inviteInstCtrl.showSendInvite = false;
         inviteInstCtrl.existing_institutions = [];
         inviteInstCtrl.requested_invites = [];
 
 
         inviteInstCtrl.checkInstInvite = function checkInstInvite(ev) {
             var promise;
-            
+
             inviteInstCtrl.invite.institution_key = institutionKey;
             inviteInstCtrl.invite.admin_key = inviteInstCtrl.user.key;
             invite = new Invite(inviteInstCtrl.invite);

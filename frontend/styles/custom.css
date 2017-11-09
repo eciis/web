@@ -563,3 +563,20 @@ md-list-item, md-list-item .md-list-item-inner {
     margin-right: 10px;
     margin-left: 10px;
 }
+
+.green-ball {
+    color: #009688;
+    margin-right: 2px;
+    margin-left: 2px;
+}
+
+.user-name {
+    font-size: 15px;
+    color: #00796B;
+}
+
+.user-picture {
+    border-radius: 50%;
+    min-width: 55px;
+    min-height: 55px;
+}

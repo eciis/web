@@ -505,21 +505,15 @@ md-list-item, md-list-item .md-list-item-inner {
     color: white;
 }
 
-.md-button.min-icon-button {
+.md-button.xs-icon-button {
     height:15px;
     width: 15px;
     min-height: 15px;
-    min-width: 0;
-    padding: 0;
-    border-radius: 50%;
 }
 
-.min-icon-button md-icon {
+.xs-icon-button md-icon {
     font-size: 12px;
     margin: 2px;
-    width: unset !important;
-    min-width: unset !important;
-    color: white;
 }
 
 .md-title {

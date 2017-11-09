@@ -16,7 +16,7 @@
       <span layout="row" class="md-subhead">
         por {{ postDetailsCtrl.post.author }} <b style="color: #009688; margin-right: 2px; margin-left: 2px;">&bull;</b>
         {{ postDetailsCtrl.post.publication_date | amUtc | amLocal | amCalendar:referenceTime:formats }}
-        <md-button ng-if="postDetailsCtrl.showButtonEdit()" class="min-icon-button"
+        <md-button ng-if="postDetailsCtrl.showButtonEdit()" class="sm-icon-button xs-icon-button"
         ng-click="postDetailsCtrl.editPost()" md-colors="{background: 'light-green'}"
         style="margin-top: 4px; margin-left: 4px;">
           <md-icon>edit</md-icon>

@@ -22,6 +22,8 @@
         inviteInstCtrl.hasParent = false;
         inviteInstCtrl.showButton = true;
         inviteInstCtrl.showSendInvite = false;
+        inviteInstCtrl.showParentHierarchie = false;
+        inviteInstCtrl.showChildrenHierarchie = false;
         inviteInstCtrl.existing_institutions = [];
         inviteInstCtrl.requested_invites = [];
 
@@ -157,8 +159,12 @@
             inviteInstCtrl.showButton = true;
         };
 
-        inviteInstCtrl.goToInst = function goToInst(institutionKey) {
-            $state.go('app.institution', {institutionKey: institutionKey});
+        inviteInstCtrl.goToInst = function goToInst(institution) {
+            if (inviteInstCtrl.isActive(institution)) {
+                $state.go('app.institution', {institutionKey: institution.key});
+            } else {
+                MessageService.showToast("Institutição inativa!");
+            }
         };
 
         inviteInstCtrl.isActive = function isActive(institution) {

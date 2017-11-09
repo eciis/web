@@ -74,8 +74,6 @@ class SurveyPost(Post):
                 len(all_options_selected) == 1):
             self.add_vote(author_key, all_options_selected[0]["id"])
         else:
-            print self
-            print all_options_selected
             for option in all_options_selected:
                 self.add_vote(author_key, option["id"])
 

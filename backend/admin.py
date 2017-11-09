@@ -16,10 +16,10 @@ from models.post import Post
 from models.post import Comment
 from models.invite import Invite
 from google.appengine.ext import ndb
-import search_module
 from google.appengine.api import search
 
-INDEX_NAME = 'institution'
+INDEX_INSTITUTION = 'institution'
+INDEX_USER = 'user'
 
 
 def add_comments_to_post(user, user_reply, post, institution, comments_qnt=3):
@@ -91,7 +91,6 @@ def createInstitution(data, user):
     user.institutions_admin.append(institution.key)
     user.follows.append(institution.key)
     user.put()
-    search_module.createDocument(institution)
 
     return institution
 
@@ -152,8 +151,10 @@ class ResetHandler(BaseHandler):
         invites = Invite.query().fetch(keys_only=True)
         ndb.delete_multi(invites)
 
-        index = search.Index(name=INDEX_NAME)
-        delete_all_in_index(index)
+        index_institution = search.Index(name=INDEX_INSTITUTION)
+        delete_all_in_index(index_institution)
+        index_user = search.Index(name=INDEX_USER)
+        delete_all_in_index(index_user)
 
         self.response.headers[
             'Content-Type'] = 'application/json; charset=utf-8'
@@ -302,7 +303,7 @@ class ResetHandler(BaseHandler):
             'testeeciis@gmail.com',
             'teste@eciis.com'
         ]
-        admin.photo_url = 'app/images/avatar.jpg'
+        admin.photo_url = "app/images/avatar.jpg"
         admin.institutions = []
         admin.follows = []
         admin.institutions_admin = []

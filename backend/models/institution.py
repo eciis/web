@@ -4,11 +4,11 @@ from google.appengine.ext import ndb
 
 from custom_exceptions.fieldException import FieldException
 
+from search_module.search_institution import SearchInstitution
 from service_messages import send_message_notification
 from service_messages import send_message_email
 
 import json
-import search_module
 
 
 def get_actuation_area(data):
@@ -203,7 +203,6 @@ class Institution(ndb.Model):
         institution_stub.state = 'pending'
 
         institution_stub.put()
-        search_module.createDocument(institution_stub)
 
         return institution_stub
 
@@ -241,7 +240,6 @@ class Institution(ndb.Model):
         user -- the admin of the institution.
         """
         self.state = "inactive"
-        search_module.deleteDocument(self.key.urlsafe())
         user.remove_institution(self.key)
         # Remove the hierarchy
         if remove_hierarchy == "true":
@@ -304,7 +302,6 @@ class Institution(ndb.Model):
         """Change the institution state."""
         self.state = state
         self.put()
-        search_module.updateDocument(self)
 
     def make(self, attributes):
         """Create an institution dictionary with specific filds."""
@@ -327,3 +324,8 @@ class Institution(ndb.Model):
 
             institution[attribute] = attr_value
         return institution
+
+    def _post_put_hook(self, future):
+        """This method is called after each Institution.put()."""
+        search_institution = SearchInstitution()
+        search_institution.createDocument(future.get_result().get())

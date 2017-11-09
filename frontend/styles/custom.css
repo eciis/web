@@ -322,7 +322,6 @@ a:active {
 }
 
 .youtube-player img:hover {
-    
     -webkit-filter: brightness(75%);
     filter: brightness(75%);
 }
@@ -342,6 +341,7 @@ a:active {
 .notification-badge {
    position:relative;
 }
+
 .notification-badge[data-badge]:after {
    content:attr(data-badge);
    position:absolute;
@@ -355,6 +355,26 @@ a:active {
    line-height:18px;
    border-radius:50%;
    border: 2px solid #EFEBE9;
+}
+
+.counter-likes-comments {
+    position:relative;
+}
+
+.counter-likes-comments[data-badge]:after {
+    content:attr(data-badge);
+    position:absolute;
+    top:-10px;
+    right:-10px;
+    font-size:.6em;
+    background:#004D40;
+    color:white;
+    width:18px;
+    height:18px;
+    text-align:center;
+    line-height:18px;
+    border-radius:50%;
+    box-shadow:0 0 1px #333;
 }
 
 .inst-timeline-center {
@@ -456,6 +476,16 @@ a:active {
     margin-right: 40px;
 }
 
+.like-comment-text {
+    font-size: 12px;
+    margin-left: 14px;
+}
+
+.sm-label {
+    font-size: 0.9em;
+    opacity: 0.75;
+}
+
 .option{
     height: 25px;
     margin: 0px;
@@ -506,4 +536,72 @@ md-checkbox.md-checked[disabled] .md-icon {
 
 md-radio-button.md-default-theme .md-on, md-radio-button .md-on {
     background-color: #009688;
+}
+
+.md-button.sm-icon-button {
+    height:32px;
+    width: 32px;
+    min-height: 32px;
+    min-width: 0;
+    padding: 0;
+    border-radius: 50%;
+}
+
+.sm-icon-button md-icon {
+    font-size: 20px;
+    margin: 6px;
+    width: unset !important;
+    min-width: unset !important;
+    color: white;
+}
+
+.md-button.xs-icon-button {
+    height:15px;
+    width: 15px;
+    min-height: 15px;
+}
+
+.xs-icon-button md-icon {
+    font-size: 12px;
+    margin: 2px;
+}
+
+.md-title {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.green-text {
+    color: #004D40;
+ }
+
+.option{
+    height: 25px;
+    margin: 0px;
+}
+
+.login-button {
+    padding-left: 5px;
+    margin: 3px 0 3px 0;
+    text-align: left;
+}
+
+.login-button md-icon {
+    min-height: 10px;
+    min-width: 10px;
+    width: 12px;
+    height: 12px;
+    font-size: 12px;
+}
+
+.login-button span {
+    font-size: 10px;
+    color: white;
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+.margin {
+    margin-right: 10px;
+    margin-left: 10px;
 }

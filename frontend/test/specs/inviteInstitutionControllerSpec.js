@@ -89,15 +89,20 @@
             });
 
             it('should call sendInvite() and searchInstitutions()', function(done) {
-                spyOn(instService, 'searchInstitutions').and.callThrough();
+                spyOn(instService, 'searchInstitutions').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            return callback({});
+                        }
+                    };
+                });
                 spyOn(inviteinstitutionCtrl, 'sendInstInvite');
                 inviteinstitutionCtrl.user.current_institution = splab;
-                httpBackend.expect('GET', INSTITUTION_SEARCH_URI+'"New Institution"&state=active,pending').respond({});
                 inviteinstitutionCtrl.checkInstInvite().then(function() {
                     var testingInvite = new Invite(invite, 'INSTITUTION', splab.key);
                     expect(instService.searchInstitutions).toHaveBeenCalledWith(
                         inviteinstitutionCtrl.invite.suggestion_institution_name,
-                        "active,pending");
+                        "active,pending", 'institution');
                     expect(inviteinstitutionCtrl.sendInstInvite).toHaveBeenCalledWith(testingInvite);
                     done();
                 });
@@ -105,9 +110,15 @@
             });
 
             it('should call showDialog()', function(done) {
-                var documents = [{name: splab.name, id: splab.key}];
+                var documents = {data: {name: splab.name, id: splab.key}};
                 spyOn(inviteinstitutionCtrl, 'showDialog');
-                httpBackend.expect('GET', INSTITUTION_SEARCH_URI+'"New Institution"&state=active,pending').respond(documents);
+                spyOn(instService, 'searchInstitutions').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            return callback(documents);
+                        }
+                    };
+                });
                 inviteinstitutionCtrl.checkInstInvite().then(function() {
                     expect(inviteinstitutionCtrl.showDialog).toHaveBeenCalled();
                     done();
@@ -119,7 +130,8 @@
                 var promise = inviteinstitutionCtrl.sendInstInvite(invite);
                 promise.then(function() {
                     expect(inviteinstitutionCtrl.invite).toEqual({});
-                    expect(inviteinstitutionCtrl.showButton).toBe(true);
+                    expect(inviteinstitutionCtrl.showInvites).toBe(true);
+                    expect(inviteinstitutionCtrl.showSendInvite).toBe(false);
                     expect(invite.status).toEqual('sent');
                     expect(inviteinstitutionCtrl.sent_invitations).toEqual([invite]);
                     done();
@@ -138,7 +150,7 @@
                 httpBackend.flush();
 
                 expect(inviteinstitutionCtrl.invite).toEqual({});
-                expect(inviteinstitutionCtrl.showButton).toBe(true);
+                expect(inviteinstitutionCtrl.showSendInvite).toBe(true);
             });
         });
     });

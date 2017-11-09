@@ -2,18 +2,22 @@
 
 (function() {
     var app = angular.module("app");
-    
-    app.controller("LoginController", function LoginController(AuthService, MessageService, $state, $mdDialog) {
+
+    app.controller("LoginController", function LoginController(AuthService, MessageService, $state, $mdDialog, 
+            $stateParams, $location) {
         var loginCtrl = this;
 
         loginCtrl.user = {};
 
         loginCtrl.newUser = {};
+        loginCtrl.isRequestInvite = false;
+
+        var redirectPath = $stateParams.redirect;
 
         loginCtrl.login = function login() {
             var promise = AuthService.login();
             promise.then(function success() {
-                $state.go("app.home");
+                redirectTo(redirectPath);
             });
             return promise;
         };
@@ -25,7 +29,7 @@
         loginCtrl.loginWithEmailPassword = function loginWithEmailPassword() {
             AuthService.loginWithEmailAndPassword(loginCtrl.user.email, loginCtrl.user.password).then(
                 function success() {
-                    $state.go("app.home");
+                    redirectTo(redirectPath);
                 }
             );
         };
@@ -38,7 +42,7 @@
             }
             AuthService.signupWithEmailAndPassword(newUser.email, newUser.password).then(
                 function success() {
-                    $state.go("app.home");
+                    redirectTo(redirectPath);
                 }
             );
         };
@@ -58,6 +62,14 @@
                 AuthService.resetPassword(email);
             });
         };
+
+        function redirectTo(path) {
+            if (path === '/signin') {
+                $state.go("app.home");
+            } else {
+                $location.path(path);
+            }
+        }
 
         (function main() {
             if (AuthService.isLoggedIn()) {

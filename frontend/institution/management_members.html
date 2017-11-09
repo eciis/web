@@ -10,19 +10,27 @@
             Enviar Convite
           </h1>
           <span flex md-truncate></span>
+          <md-button ng-if="!manageMemberCtrl.showSendInvite" ng-click="manageMemberCtrl.showSendInvite = true;"
+              class="md-icon-button md-secondary">
+            <md-icon>keyboard_arrow_down</md-icon>
+          </md-button>
+          <md-button ng-if="manageMemberCtrl.showSendInvite" ng-click="manageMemberCtrl.showSendInvite = false;"
+              class="md-icon-button md-secondary">
+            <md-icon>keyboard_arrow_up</md-icon>
+          </md-button>
         </div>
       </md-toolbar>
-      <md-card-content>
-        <div>
+      <md-card-content ng-show="manageMemberCtrl.showSendInvite;">
+        <form ng-submit="manageMemberCtrl.sendUserInvite(); manageMemberCtrl.showInvites = true; manageMemberCtrl.showSendInvite = false;">
           <md-input-container class="md-block">
             <label>Email convite deve ser enviado para:</label>
-            <input ng-model="manageMemberCtrl.invite.invitee" type="email"  required>
+            <input ng-model="manageMemberCtrl.invite.invitee" type="email" name="email" required>
           </md-input-container>
           <section layout="row" layout="column" layout-align="end center" layout-wrap>
             <md-button md-colors="{background: 'teal-500'}" ng-click="manageMemberCtrl.cancelInvite()">Cancelar</md-button>
-            <md-button ng-click="manageMemberCtrl.sendUserInvite()" md-colors="{background: 'teal-500'}">Enviar Convite</md-button>
+            <md-button type="submit" md-colors="{background: 'teal-500'}">Enviar Convite</md-button>
           </section>
-        </div>
+        </form>
       </md-card-content>
     </md-card>
     <!-- MANAGE MEMBERS -->
@@ -34,34 +42,48 @@
             Gerenciar Membros
           </h1>
           <span flex md-truncate></span>
-          <md-button ng-if="!manageMemberCtrl.showMembers" ng-click="manageMemberCtrl.showMembers = true;">
+          <md-button ng-if="!manageMemberCtrl.showMembers" ng-click="manageMemberCtrl.showMembers = true;"
+              class="md-icon-button md-secondary">
             <md-icon>keyboard_arrow_down</md-icon>
           </md-button>
-          <md-button ng-if="manageMemberCtrl.showMembers" ng-click="manageMemberCtrl.showMembers = false;">
+          <md-button ng-if="manageMemberCtrl.showMembers" ng-click="manageMemberCtrl.showMembers = false;"
+              class="md-icon-button md-secondary">
             <md-icon>keyboard_arrow_up</md-icon>
           </md-button>
         </div>
       </md-toolbar>
-      <md-card-content ng-if="manageMemberCtrl.showMembers">
-        <md-list >
-          <md-list-item class="md-2-line" ng-repeat="member in manageMemberCtrl.members" ng-click="null">
-            <img class="md-avatar" title="{{member.name}}" ng-src="{{member.photo_url}}" width="100%" height="100%"/>
-            <div class="md-list-item-text">
-              <h3> {{ member.name }} </h3>
-              <p> {{ member.email[0]}} </p>
-            </div>
-            <div>
-              <md-button class="md-icon-button md-secondary" title="Remover usuário" ng-click="manageMemberCtrl.openRemoveMemberDialog($event, member)" layout-align="center center" ng-if="!manageMemberCtrl.isAdmin(member)">
+      <div ng-if="manageMemberCtrl.showMembers" layout-padding>
+        <div layout-margin>
+          <form ng-submit="">
+            <md-input-container layout="row" class="md-icon-float">
+              <label>Buscar</label>
+              <input aria-label="Pesquisar por membros" class="md-icon-float" ng-model="manageMemberCtrl.currentMember">
+            </md-input-container>
+          </form>
+        </div>
+        <md-card-content style="margin-top: -40px;" layout-margin>
+          <md-list flex>
+            <md-list-item md-colors="{background: 'grey-300'}" style="margin-bottom: 10px;"
+            ng-repeat="member in manageMemberCtrl.members | filter: manageMemberCtrl.currentMember" ng-click="null" flex-xs>
+              <img title="{{member.name}}" ng-src="{{member.photo_url}}" class="md-avatar" style="margin: 0 15px 0 -15px; width: 60px; height: 60px;"/>
+              <div layout="column">
+                 <b style="position: relative; margin-top: 20px; font-size: 15px;">{{ member.name }}</b>
+                 <span style="position: relative; bottom: 20px; font-size: 15px;">{{ member.email[0]}}</span>
+              </div>
+              <md-button class="md-icon-button md-secondary" title="Remover usuário"
+                  ng-click="manageMemberCtrl.openRemoveMemberDialog($event, member)"
+                  layout-align="center center"
+                  ng-if="!manageMemberCtrl.isAdmin(member)">
                 <md-icon>delete</md-icon>
               </md-button>
               <md-button ng-click="manageMemberCtrl.showUserProfile(member.key, $event)" class="md-icon-button md-secondary"
               title="Ver perfil" layout-align="center center">
                 <md-icon>more_horizontal</md-icon>
               </md-button>
-            </div>
-          </md-list-item>
-        </md-list>
-      </md-card-content>
+            </md-list-item>
+          </md-list>
+        </md-card-content>
+      </div>
     </md-card>
     <!-- INVITATIONS SENT -->
     <md-card>
@@ -71,10 +93,12 @@
             <md-icon>email</md-icon>
             Convites enviados</h1>
           <span flex md-truncate></span>
-          <md-button  ng-if="!manageMemberCtrl.showInvites" ng-click="manageMemberCtrl.showInvites = true;">
+          <md-button ng-if="!manageMemberCtrl.showInvites" ng-click="manageMemberCtrl.showInvites = true;"
+              class="md-icon-button md-secondary">
             <md-icon>keyboard_arrow_down</md-icon>
           </md-button>
-          <md-button ng-if="manageMemberCtrl.showInvites" ng-click="manageMemberCtrl.showInvites = false;">
+          <md-button ng-if="manageMemberCtrl.showInvites" ng-click="manageMemberCtrl.showInvites = false;"
+              class="md-icon-button md-secondary">
             <md-icon>keyboard_arrow_up</md-icon>
           </md-button>
         </div>
@@ -83,10 +107,9 @@
         <md-list>
           <md-list-item class="md-2-line" ng-repeat="invite in manageMemberCtrl.sent_invitations" ng-click="null"
           ng-if="invite.type_of_invite == 'USER'">
-            <md-button md-colors="{background: 'light-green'}" class="md-icon-button" style="margin: 0 10px 0 0;">
-              <md-icon style="color: white;">account_box</md-icon>
-            </md-button>
-            <div class="md-list-item-text" style="">
+            <md-icon class="md-avatar-icon" 
+            md-colors="{background: 'light-green-500', color: 'grey-50'}">account_box</md-icon>
+            <div class="md-list-item-text">
               <h3> {{ invite.invitee }} </h3>
               <p> Convidado por: {{invite.sender_name}}</p>
             </div>
@@ -103,10 +126,12 @@
             Convites requisitados
           </h1>
           <span flex md-truncate></span>
-          <md-button ng-if="!manageMemberCtrl.showRequests" ng-click="manageMemberCtrl.showRequests = true;">
+          <md-button ng-if="!manageMemberCtrl.showRequests" ng-click="manageMemberCtrl.showRequests = true;"
+              class="md-icon-button md-secondary">
             <md-icon>keyboard_arrow_down</md-icon>
           </md-button>
-          <md-button ng-if="manageMemberCtrl.showRequests" ng-click="manageMemberCtrl.showRequests = false;">
+          <md-button ng-if="manageMemberCtrl.showRequests" ng-click="manageMemberCtrl.showRequests = false;"
+              class="md-icon-button md-secondary">
             <md-icon>keyboard_arrow_up</md-icon>
           </md-button>
         </div>
@@ -114,9 +139,8 @@
       <md-card-content ng-if="manageMemberCtrl.showRequests">
         <md-list flex>
           <md-list-item ng-repeat="request in manageMemberCtrl.requests" ng-if="request.status == 'sent'" ng-click="null" class="md-3-line">
-            <md-button md-colors="{background: 'light-green'}" class="md-icon-button" style="margin: 0 10px 0 0;">
-              <md-icon style="color: white;">account_box</md-icon>
-            </md-button>
+            <md-icon class="md-avatar-icon" 
+            md-colors="{background: 'light-green-500', color: 'grey-50'}">account_box</md-icon>
             <div class="md-list-item-text" layout="column">
               <h3>{{ request.sender_name}}</h3>
               <h4>Cargo atual: {{ request.office}}</h4>

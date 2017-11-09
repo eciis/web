@@ -23,6 +23,7 @@ class TestIsAuthorized(TestBase):
         cls.test.init_datastore_v3_stub()
         cls.test.init_memcache_stub()
         cls.ndb.get_context().set_cache_policy(False)
+        cls.test.init_search_stub()
 
         initModels(cls)
 

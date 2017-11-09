@@ -46,6 +46,7 @@
                 var dialog = MessageService.showConfirmationDialog(ev,
                     'Confirmar voto', 'Seu voto será permanente. Deseja confirmar?');
                 dialog.then(function() {
+                    console.log("oolha entrou");
                     SurveyService.vote(surveyCtrl.post, optionsSelected).then(function sucess(){
                         addVote(optionsSelected);
                         calculatePercentage();

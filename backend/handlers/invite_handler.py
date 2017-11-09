@@ -25,6 +25,8 @@ def makeUser(user, request):
         )
     user_json['follows'] = [institution_key.get().make(
         ['acronym', 'photo_url', 'key', 'parent_institution']) for institution_key in user.follows]
+    user_json['institution_profiles'] = [profile.make() 
+        for profile in user.institution_profiles]
     return user_json
 
 

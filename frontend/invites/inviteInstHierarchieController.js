@@ -38,7 +38,7 @@
                 MessageService.showToast("Já possui instituição superior");
             } else {
                 var suggestionInstName = inviteInstCtrl.invite.suggestion_institution_name;
-                promise = InstitutionService.searchInstitutions(suggestionInstName, INSTITUTION_STATE);
+                promise = InstitutionService.searchInstitutions(suggestionInstName, INSTITUTION_STATE, 'institution');
                 promise.then(function success(response) {
                     inviteInstCtrl.processInvite(response.data, ev);
                 });

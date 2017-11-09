@@ -19,6 +19,7 @@
         institutionCtrl.showFullDescription = false;
         institutionCtrl.isLoadingPosts = true;
         institutionCtrl.isLoadingPosts = true;
+        institutionCtrl.searchedMember = "";
 
         institutionCtrl.legal_natures = {
             "public": "Pública",
@@ -155,12 +156,8 @@
             }
         };
 
-        institutionCtrl.showDescription = function showDescription() {
-            institutionCtrl.showFullDescription = true;
-        };
-
-        institutionCtrl.hideDescription = function hideDescription() {
-            institutionCtrl.showFullDescription = false;
+        institutionCtrl.showHideDescription = function hideDescription() {
+            institutionCtrl.showFullDescription = !institutionCtrl.showFullDescription;
         };
 
         institutionCtrl.goToManageMembers = function goToManageMembers(){
@@ -225,6 +222,15 @@
             }
         };
 
+        institutionCtrl.getInfo = function getInfo(information) {
+            return information ? information : "Não informado";
+        }
+
+        institutionCtrl.getLegalNature = function getLegalNature() {
+            var legalNature = institutionCtrl.current_institution.legal_nature;
+            return legalNature ? institutionCtrl.legal_natures[legalNature] : 'Não informado';
+        }
+
         institutionCtrl.requestInvitation = function requestInvitation(event) {
             $mdDialog.show({
                 controller: "RequestInvitationController",
@@ -260,7 +266,7 @@
                 controllerAs: 'ctrl'
             });
         };
-        
+
         function RemoveInstController($mdDialog, institutionKey, InstitutionService, $state) {
             var ctrl = this;
 

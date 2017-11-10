@@ -10,7 +10,7 @@
         inviteController.sent_invitations = [];
         inviteController.sent_requests = [];
         inviteController.existing_institutions = [];
-        inviteController.showButton = true;
+        inviteController.showSendInvite = true;
         var INSTITUTION_STATE = "active,pending";
 
         var invite;
@@ -19,7 +19,6 @@
 
         inviteController.cancelInvite = function cancelInvite() {
             inviteController.invite = {};
-            inviteController.showButton = true;
         };
 
         inviteController.checkInstInvite = function checkInstInvite(ev) {
@@ -76,10 +75,11 @@
             var promise = InviteService.sendInviteInst(invite);
             promise.then(function success() {
                     inviteController.invite = {};
-                    inviteController.showButton = true;
                     invite.status = 'sent';
                     invite.sender_name = inviteController.user.name;
                     inviteController.sent_invitations.push(invite);
+                    inviteController.showInvites = true;
+                    inviteController.showSendInvite = false;
                     MessageService.showToast('Convite enviado com sucesso!');
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);

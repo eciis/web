@@ -6,23 +6,23 @@
                 <md-card layout="row" flex layout-margin>
                     <md-toolbar md-colors="{background: 'grey-50'}" layout="row" layout-align="center center" layout-margin flex>
                         <div layout="row" layout-align="center center" layout-margin>
-                            <span class="rounded-circle" style="color: #FFFFFF; background: #9E9E9E; width: 25px; height: 25px;"><span layout="row" layout-align="center" style="font-size: 17px;">1</span></span>
+                            <span class="rounded-circle" style="color: #FFFFFF; background: #9E9E9E; width: 25px; height: 25px;"><span layout="row" layout-align="center" style="font-size: 17px; margin-top: 2px;">1</span></span>
                             <span style="font-size: 15px;">Dados cadastrais</span>
                         </div>
                         <hr style="width: 100px;"/>
                         <div layout="row" layout-align="center center" layout-margin>
-                            <md-icon md-colors="{color: 'grey-700'}">account_circle</md-icon>
+                            <span class="rounded-circle" style="color: #FFFFFF; background: #9E9E9E; width: 25px; height: 25px;"><span layout="row" layout-align="center" style="font-size: 17px; margin-top: 2px;">2</span></span>
                             <span style="font-size: 15px;">Dados da instituição</span>
                         </div>
                         <hr style="width: 100px;"/>
                         <div layout="row" layout-align="center center" layout-margin>
-                            <md-icon md-colors="{color: 'grey-700'}">account_circle</md-icon>
+                            <span class="rounded-circle" style="color: #FFFFFF; background: #9E9E9E; width: 25px; height: 25px;"><span layout="row" layout-align="center" style="font-size: 17px; margin-top: 2px;">3</span></span>
                             <span style="font-size: 15px;">Finalizar cadastro</span>
                         </div>
                     </md-toolbar>
                 </md-card>
             </div>
-            <md-card layout-margin>
+            <md-card layout-margin ng-if="instFormCtrl.firstStep">
                 <div layout="column" layout-margin>
                     <md-card-content layout-margin>
                         <div layout-margin>
@@ -32,34 +32,34 @@
                             </md-input-container>
                         </div>
                         <div layout="row" layout-margin>
-                            <md-input-container  flex-gt-sm layout="row">
+                            <md-input-container  flex-gt-sm flex-sm layout="row">
                                   <label>Número</label>
                                   <input name="rua" >
                             </md-input-container>
                             <span flex="3"></span>
-                            <md-input-container  flex-gt-sm layout="row">
+                            <md-input-container  flex-gt-sm flex-sm layout="row">
                               <label>CEP</label>
                               <input name="rua">
                             </md-input-container>
                         </div>
                         <div layout="row" layout-margin>
-                            <md-input-container  flex-gt-sm layout="row">
+                            <md-input-container  flex-gt-sm flex-sm layout="row">
                                   <label>Bairro</label>
                                   <input name="rua" >
                             </md-input-container>
                             <span flex="3"></span>
-                            <md-input-container  flex-gt-sm layout="row">
+                            <md-input-container  flex-gt-sm flex-sm layout="row">
                               <label>Cidade</label>
                               <input name="rua">
                             </md-input-container>
                         </div>
                         <div layout="row" layout-margin>
-                            <md-input-container  flex-gt-sm layout="row">
+                            <md-input-container  flex-gt-sm flex-sm layout="row">
                                   <label>Estado</label>
                                   <input name="rua" >
                             </md-input-container>
                             <span flex="3"></span>
-                            <md-input-container  flex-gt-sm layout="row">
+                            <md-input-container  flex-gt-sm flex-sm layout="row">
                               <label>País</label>
                               <input name="rua">
                             </md-input-container>
@@ -75,6 +75,52 @@
                     </md-card-actions>
                 </div>
             </md-card>
+            <md-card ng-if="instFormCtrl.secondStep" layout-margin>
+                <div>
+                    <md-card-content>
+                        <div layout="column" layout-margin>
+                            <div md-colors="{background: 'grey-300'}" layout="row">
+                            asdkoadp
+                            </div>
+                            <md-input-container class="md-block" flex-gt-sm flex-sm>
+                                  <label>Nome completo da instituição</label>
+                                  <input name="nome completo" >
+                            </md-input-container>
+                            <md-input-container class="md-block" flex-gt-sm flex-sm>
+                                  <label>Sigla</label>
+                                  <input name="sigla">
+                            </md-input-container>
+                            <div layout="column">
+                                <md-input-container class="md-block">
+                                    <label>Área de Atuação</label>
+                                    <md-select layout="column" layout-align="center" name="actuationArea" ng-model="instFormCtrl.newInstitution.actuation_area" required>
+                                      <md-option  ng-repeat="area in instFormCtrl.actuationArea | orderBy: 'name'"
+                                        ng-value="area.name">{{ area.name }}
+                                      </md-option>
+                                    </md-select>
+                                </md-input-container>
+                                <md-input-container  class="md-block">
+                                    <label>Natureza Jurídica</label>
+                                    <md-select layout="column" layout-align="center" name="legalNatures" ng-model="instFormCtrl.newInstitution.legal_nature" required>
+                                        <md-option ng-repeat="nature in instFormCtrl.legalNatures | orderBy: 'name'"
+                                        ng-value="nature.value">{{ nature.name }}
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
+                            </div>
+                        </div>
+                    </md-card-content>
+                    <md-card-actions layout="row" layout-align="end center">
+                        <md-button class="md-raised" md-colors="{background: 'teal-500'}">
+                            PULAR
+                        </md-button>
+                        <md-button class="md-raised" md-colors="{background: 'teal-500'}">
+                            PRÓXIMO
+                        </md-button>
+                    </md-card-actions>
+                </div>
+            </md-card>
+
         </div>
     </div>
 </div>

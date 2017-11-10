@@ -232,11 +232,6 @@
                 if (AuthService.isLoggedIn()) {
                     var token = AuthService.getUserToken();
                     config.headers.Authorization = 'Bearer ' + token;
-                } else {
-                    var location = $injector.get('$location');
-                    $state.go("signin", {
-                        "redirect": location.path()
-                    });
                 }
 
                 Utils.updateBackendUrl(config);
@@ -263,9 +258,7 @@
                         rejection.data.msg = "Sua sessão expirou!";
                     } else {
                         var location = $injector.get('$location');
-                        $state.go("signin", {
-                            "redirect": location.path()
-                        });
+                        $state.go("signin");
                     }
                 } else if(rejection.status === 403) {
                     rejection.data.msg = "Você não tem permissão para realizar esta operação!";
@@ -280,31 +273,49 @@
         };
     });
 
+    var ignored_routes = [
+        'create_institution',
+        'error',
+        'signin',
+        'user_inactive',
+        'new_invite'
+    ];
+
+    app.run(function authInterceptor(AuthService, $transitions, $injector, $state) {
+        $transitions.onStart({
+            to: function(state) {
+                console.log(">>>>>>> auth check")
+                return state != 'signin' && !AuthService.isLoggedIn() && !(_.includes(ignored_routes, state.name));
+            }
+        }, function(transition) {
+            console.log("not logged");
+            $state.go("signin", {
+                "redirect": location.path()
+            });
+
+            console.log("redirect")
+            
+        });
+    });
+
     /**
     * Application listener to filter routes that require active user and set up amCalendar filter configurations.
     * @param {service} AuthService - Service of user authentication
     * @param {service} $transitions - Service of transitions states
     */
     app.run(function userInactiveListener(AuthService, $transitions) {
-        var ignored_routes = [
-            'create_institution',
-            'error',
-            'signin',
-            'user_inactive',
-            'new_invite'
-        ];
-
         $transitions.onStart({
             to: function(state) {
-                return !(_.includes(ignored_routes, state.name));
+
+                console.log(">>>>>>> inactive  check")
+                var user = AuthService.getCurrentUser();
+                var isInactive = user && user.isInactive();
+
+                return !(_.includes(ignored_routes, state.name)) && isInactive;
             }
         }, function(transition) {
-            var user = AuthService.getCurrentUser();
-            var isInactive = user && user.isInactive();
-
-            if (isInactive) {
-                transition.router.stateService.transitionTo('user_inactive');
-            }
+            console.log("inactive?")
+            transition.router.stateService.transitionTo('user_inactive');
         });
 
         const dateFormats = {

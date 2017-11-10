@@ -345,6 +345,7 @@ a:active {
 .notification-badge {
    position:relative;
 }
+
 .notification-badge[data-badge]:after {
    content:attr(data-badge);
    position:absolute;
@@ -358,6 +359,26 @@ a:active {
    line-height:18px;
    border-radius:50%;
    border: 2px solid #EFEBE9;
+}
+
+.counter-likes-comments {
+    position:relative;
+}
+
+.counter-likes-comments[data-badge]:after {
+    content:attr(data-badge);
+    position:absolute;
+    top:-10px;
+    right:-10px;
+    font-size:.6em;
+    background:#004D40;
+    color:white;
+    width:18px;
+    height:18px;
+    text-align:center;
+    line-height:18px;
+    border-radius:50%;
+    box-shadow:0 0 1px #333;
 }
 
 .inst-timeline-center {
@@ -441,20 +462,6 @@ a:active {
     color: #019587;
 }
 
-.md-title {
-    font-size: 20px;
-    font-weight: 700;
-}
-
-.md-title {
-    font-size: 20px;
-    font-weight: 700;
-}
-
-.green-text {
-    color: #004D40;
-}
-
 .sm-fab-button {
    background-color: #8BC34A;
    width: 22px;
@@ -462,14 +469,14 @@ a:active {
    border-radius: 50%;
 }
 
+.like-comment-text {
+    font-size: 12px;
+    margin-left: 14px;
+}
+
 .sm-label {
     font-size: 0.9em;
     opacity: 0.75;
-}
-
-.option{
-    height: 25px;
-    margin: 0px;
 }
 
 md-switch.md-checked .md-thumb {
@@ -480,9 +487,10 @@ md-switch.md-checked .md-bar {
     background-color: #80CBC4;
 }
 
-md-list-item, md-list-item .md-list-item-inner {
+.list-item-dense {
     min-height: 20px;
     height: 60px;
+    margin-bottom: 10px;
 }
 
 .md-button.sm-icon-button {
@@ -499,9 +507,61 @@ md-list-item, md-list-item .md-list-item-inner {
     margin: 6px;
     width: unset !important;
     min-width: unset !important;
+    color: white;
+}
+
+.md-button.xs-icon-button {
+    height:15px;
+    width: 15px;
+    min-height: 15px;
+}
+
+.xs-icon-button md-icon {
+    font-size: 12px;
+    margin: 2px;
+}
+
+.md-title {
+    font-size: 20px;
+    font-weight: 700;
 }
 
 *:focus {
     outline: 0;
     outline: none;
+}
+
+.green-text {
+    color: #004D40;
+ }
+
+.option{
+    height: 25px;
+    margin: 0px;
+}
+
+.login-button {
+    padding-left: 5px;
+    margin: 3px 0 3px 0;
+    text-align: left;
+}
+
+.login-button md-icon {
+    min-height: 10px;
+    min-width: 10px;
+    width: 12px;
+    height: 12px;
+    font-size: 12px;
+}
+
+.login-button span {
+    font-size: 10px;
+    color: white;
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+.margin {
+    margin-right: 10px;
+    margin-left: 10px;
 }

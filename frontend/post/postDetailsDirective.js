@@ -31,6 +31,7 @@
             $mdDialog.show(confirm).then(function() {
                 PostService.deletePost(postDetailsCtrl.post).then(function success() {
                     postDetailsCtrl.post.state = 'deleted';
+                    postDetailsCtrl.post.last_modified_by = postDetailsCtrl.user.name;
                     MessageService.showToast('Post excluído com sucesso');
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);

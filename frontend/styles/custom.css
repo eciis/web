@@ -486,6 +486,7 @@ md-switch.md-checked .md-bar {
 .list-item-dense {
     min-height: 20px;
     height: 60px;
+    margin-bottom: 10px;
 }
 
 .md-button.sm-icon-button {

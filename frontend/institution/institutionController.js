@@ -39,7 +39,7 @@
 
         institutionCtrl.scrollbarConfig = {
             autoHideScrollbar: false,
-            theme: 'dark',
+            theme: 'minimal-dark',
             advanced: { }
         };
 

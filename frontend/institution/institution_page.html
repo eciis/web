@@ -139,7 +139,7 @@
                         </div>
                         <md-content layout="column" style="background-color: #FFFFFF; margin-top: -25px;" layout-margin>
                             <md-list flex="20">
-                                <md-list-item class="md-list-item-low-height" ng-repeat="member in institutionCtrl.members | filter: institutionCtrl.searchedMember"
+                                <md-list-item class="list-item-dense" ng-repeat="member in institutionCtrl.members | filter: institutionCtrl.searchedMember"
                                 md-colors="{background: 'grey-300'}" style="margin-bottom: 10px;">
                                     <img ng-if="member.photo_url" layout="row" style="border-radius: 50%; margin-left: -15px; width: 60px; height: 60px; max-height: 70px;"
                                     ng-src="{{member.photo_url}}" title="{{member.name}}" flex-md="30"/>

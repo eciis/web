@@ -142,6 +142,10 @@ a:active {
     opacity:.50;
 }
 
+.clickable-no-hover {
+    cursor: pointer;
+}
+
 .demo-md-panel {
   min-height: 500px;
 }
@@ -495,4 +499,9 @@ md-list-item, md-list-item .md-list-item-inner {
     margin: 6px;
     width: unset !important;
     min-width: unset !important;
+}
+
+*:focus {
+    outline: 0;
+    outline: none;
 }

@@ -15,13 +15,19 @@
   <link rel="stylesheet" type="text/css" href="app/styles/material-datetimepicker.min.css"/>
   <link rel="stylesheet" type="text/css" href="app/styles/angular-timeline.css"/>
   <link rel="stylesheet" type="text/css" href="app/libs/ng-img-crop.min.css"/>
-  <!-- Malihu Custom Scrollbar style sheet -->
+
+  <!-- ngScrollbar style sheet -->
   <link rel="stylesheet" href="app/libs/jquery.mCustomScrollbar.css"/>
 </head>
 <body ng-app="app" ng-cloak layout="column">
 
   <div flex layout="column" ui-view="main"></div>
 
+  <!-- ngScrollbar Library -->
+  <script src="app/libs/jquery-1.11.0.min.js"></script>
+  <script src="app/libs/jquery.mCustomScrollbar.js"></script>
+  <script src="app/libs/jquery.mCustomScrollbar.concat.min.js"></script>
+  
   <!-- Angular Material requires Angular.js Libraries -->
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.min.js"></script>
@@ -65,9 +71,8 @@
   <script src="app/libs/angular-material-datetimepicker.js"></script>
   <script src="app/libs/angular-timeline.js"></script>
   <script src="app/libs/youtube-embed.js"></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script src="app/libs/jquery.mCustomScrollbar.js"></script>
-
+  <script src="app/libs/scrollbars.min.js"></script>
+  
   <!-- Models -->
   <script src="app/user/user.js"></script>
   <script src="app/post/post.js"></script>

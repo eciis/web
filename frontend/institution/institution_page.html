@@ -49,122 +49,115 @@
                 </div>
             </div>
             <div layout="row" layout-xs="column" flex="60" flex-gt-sm="40">
-                <!-- <div > -->
-                    <div flex-gt-sm="20" flex-xs="05" layout="column" layout-fill hide show-gt-sm>
-                        <!-- Buttons -->
-                        <md-button flex-xs class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-500'}"
-                            ng-if="!institutionCtrl.isMember"
-                            ng-click="institutionCtrl.requestInvitation($event)">
-                            <md-icon>add</md-icon>
-                            Solicitar vínculo
-                        </md-button>
-                        <md-button flex-xs class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-500'}"
-                            ng-if="!institutionCtrl.isMember"
-                            ng-click="institutionCtrl.isUserFollower ? institutionCtrl.unfollow() : institutionCtrl.follow()">
-                            <md-icon>{{ institutionCtrl.isUserFollower ? 'person_outline':'person_add' }}</md-icon>
-                            {{ institutionCtrl.isUserFollower ? 'Deixar de seguir' : 'Seguir' }}
-                        </md-button>
-    
-                        <!-- institution data -->
-                        <md-card style="margin-bottom: 50px;">
-                            <md-toolbar md-colors="{background: 'teal-500'}" layout="row">
-                                <md-icon style="margin-left: 7%;">description</md-icon>
-                                <div class="md-toolbar-tools" flex>
-                                    <span class="card-title-light">DADOS CADASTRAIS</span>
-                                </div>
-                            </md-toolbar>
-                            <md-card-content style="padding: 10px;" class="sm-text">
-                                <label for="address" class="sm-label">Endereço</label>
-                                <p id="address"> {{ institutionCtrl.getFullAddress() }}</p>
-                                <label for="phone" class="sm-label">Telefone</label>
-                                <p id="phone"> {{ institutionCtrl.getInfo(institutionCtrl.current_institution.phone_number) }}
-                                </p>
-    
-                                <div ng-if="institutionCtrl.showFullData">
-                                    <label for="cnpj" class="sm-label">CNPJ</label>
-                                    <p id="cnpj"> {{ institutionCtrl.getInfo(institutionCtrl.current_institution.cnpj) }}
-                                    </p>
-    
-                                    <label for="actuation_area" class="sm-label">Área de Atuação</label>
-                                    <p id="actuation_area"> {{ institutionCtrl.getInfo(institutionCtrl.current_institution.actuation_area) }}
-                                    </p>
-    
-                                    <label for="legal_nature" class="sm-label">Natureza Jurídica</label>
-                                    <p id="legal_nature"> {{ institutionCtrl.getLegalNature() }}
-                                    </p>
-    
-                                    <label for="admin" class="sm-label">Responsável</label>
-                                    <p id="admin"> {{ institutionCtrl.getInfo(institutionCtrl.current_institution.admin.name) }}</p>
-    
-                                    <label for="admin_email" class="sm-label">E-mail do Responsável</label>
-                                    <p id="admin_email"> {{ institutionCtrl.getInfo(institutionCtrl.current_institution.email) }}</p>
-                                </div>
-    
-                                <md-card-action layout="row" layout-align="center" >
-                                    <md-button ng-click="institutionCtrl.showHideData()"
-                                        class="md-fab md-primary see-more-btn" title="Ver mais"
-                                        md-colors="{background: 'light-green-600'}"
-                                        style="margin-bottom: -42px;">
-                                        <md-icon>more_horiz</md-icon>
-                                    </md-button>
-                                </md-card-action>
-                            </md-card-content>
-                        </md-card>
-    
-                        <!-- INSTITUTION MEMBERS -->
-                        <md-card>
-                            <!-- <md-subhead layout-padding class="md-primary" md-colors="{background: 'teal-500'}">
-                                <md-icon style="color: #FFFFFF; font-size: 28px; margin-top: -7px; margin-right: 5px;">
-                                    account_circle
-                                </md-icon>
-                                MEMBROS DA INSTITUIÇÃO
-                            </md-subhead> -->
-                            <md-toolbar md-colors="{background: 'teal-500'}" layout="row">
-                                <md-icon style="margin-left: 7%;">account_circle</md-icon>
-                                <div class="md-toolbar-tools" flex>
-                                    <span class="card-title-light">MEMBROS DA INSTITUIÇÃO</span>
-                                </div>
-                            </md-toolbar>
-                            <div layout-margin flex-sm="80">
-                              <form ng-submit="">
-                                <md-input-container layout="row" class="md-icon-float">
-                                  <label>Buscar</label>
-                                  <input aria-label="Pesquisar por membros" class="md-icon-float" ng-model="institutionCtrl.searchedMember">
-                                </md-input-container>
-                              </form>
-                            </div>
-                            <md-content layout="column" style="background-color: #FFFFFF; margin-top: -25px;" layout-margin>
-                                <md-list flex="20">
-                                    <md-list-item ng-repeat="member in institutionCtrl.members | filter: institutionCtrl.searchedMember"
-                                    md-colors="{background: 'grey-300'}" style="margin-bottom: 10px;">
-                                        <img ng-if="member.photo_url" layout="row" style="border-radius: 50%; margin-left: -15px; width: 60px; height: 60px; max-height: 70px;"
-                                        ng-src="{{member.photo_url}}" title="{{member.name}}" flex-md="30"/>
-                                        <div class="md-list-item-text md-2-line" style="font-size: 12px; margin-left: 5%;" layout="column" flex>
-                                            <b>{{member.name}}</b>
-                                            <span class="break">{{member.email[0]}}</span>
-                                        </div>
-                                    </md-list-item>
-                                </md-list>
-                            </md-content>
-                        </md-card>
-                    </div>
-                <!-- </div> -->
+                <div flex-gt-sm="20" flex-xs="05" layout="column" layout-fill hide show-gt-sm>
+                    <!-- Buttons -->
+                    <md-button flex-xs class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-500'}"
+                        ng-if="!institutionCtrl.isMember"
+                        ng-click="institutionCtrl.requestInvitation($event)">
+                        <md-icon>add</md-icon>
+                        Solicitar vínculo
+                    </md-button>
+                    <md-button flex-xs class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-500'}"
+                        ng-if="!institutionCtrl.isMember"
+                        ng-click="institutionCtrl.isUserFollower ? institutionCtrl.unfollow() : institutionCtrl.follow()">
+                        <md-icon>{{ institutionCtrl.isUserFollower ? 'person_outline':'person_add' }}</md-icon>
+                        {{ institutionCtrl.isUserFollower ? 'Deixar de seguir' : 'Seguir' }}
+                    </md-button>
 
+                    <!-- institution data -->
+                    <md-card style="margin-bottom: 50px;">
+                        <md-toolbar md-colors="{background: 'teal-500'}" layout="row">
+                            <md-icon style="margin-left: 7%;">description</md-icon>
+                            <div class="md-toolbar-tools" flex>
+                                <span class="card-title-light">DADOS CADASTRAIS</span>
+                            </div>
+                        </md-toolbar>
+                        <md-card-content style="padding: 10px;" class="sm-text">
+                            <label for="address" class="sm-label">Endereço</label>
+                            <p id="address"> {{ institutionCtrl.getFullAddress() }}</p>
+                            <label for="phone" class="sm-label">Telefone</label>
+                            <p id="phone"> {{ institutionCtrl.getInfo(institutionCtrl.current_institution.phone_number) }}
+                            </p>
+
+                            <div ng-if="institutionCtrl.showFullData">
+                                <label for="cnpj" class="sm-label">CNPJ</label>
+                                <p id="cnpj"> {{ institutionCtrl.getInfo(institutionCtrl.current_institution.cnpj) }}
+                                </p>
+
+                                <label for="actuation_area" class="sm-label">Área de Atuação</label>
+                                <p id="actuation_area"> {{ institutionCtrl.getInfo(institutionCtrl.current_institution.actuation_area) }}
+                                </p>
+
+                                <label for="legal_nature" class="sm-label">Natureza Jurídica</label>
+                                <p id="legal_nature"> {{ institutionCtrl.getLegalNature() }}
+                                </p>
+
+                                <label for="admin" class="sm-label">Responsável</label>
+                                <p id="admin"> {{ institutionCtrl.getInfo(institutionCtrl.current_institution.admin.name) }}</p>
+
+                                <label for="admin_email" class="sm-label">E-mail do Responsável</label>
+                                <p id="admin_email"> {{ institutionCtrl.getInfo(institutionCtrl.current_institution.email) }}</p>
+                            </div>
+
+                            <md-card-action layout="row" layout-align="center" >
+                                <md-button ng-click="institutionCtrl.showHideData()"
+                                    class="md-fab md-primary see-more-btn" title="Ver mais"
+                                    md-colors="{background: 'light-green-600'}"
+                                    style="margin-bottom: -42px;">
+                                    <md-icon>more_horiz</md-icon>
+                                </md-button>
+                            </md-card-action>
+                        </md-card-content>
+                    </md-card>
+
+                    <!-- INSTITUTION MEMBERS -->
+                    <md-card>
+                        <md-subhead layout-padding class="md-primary" md-colors="{background: 'teal-500'}">
+                            <md-icon style="color: #FFFFFF; font-size: 28px; margin-top: -7px; margin-right: 5px;">
+                                account_circle
+                            </md-icon>
+                            MEMBROS DA INSTITUIÇÃO
+                        </md-subhead>
+                        <div layout-margin flex-sm="80">
+                            <form ng-submit="">
+                            <md-input-container layout="row" class="md-icon-float">
+                                <label>Buscar</label>
+                                <input aria-label="Pesquisar por membros" class="md-icon-float" ng-model="institutionCtrl.searchedMember">
+                            </md-input-container>
+                            </form>
+                        </div>
+                        <md-content layout="column" style="background-color: #FFFFFF; margin-top: -25px;" layout-margin>
+                            <md-list flex="20">
+                                <md-list-item ng-repeat="member in institutionCtrl.members | filter: institutionCtrl.searchedMember"
+                                md-colors="{background: 'grey-300'}" style="margin-bottom: 10px;">
+                                    <img ng-if="member.photo_url" layout="row" style="border-radius: 50%; margin-left: -15px; width: 60px; height: 60px; max-height: 70px;"
+                                    ng-src="{{member.photo_url}}" title="{{member.name}}" flex-md="30"/>
+                                    <div class="md-list-item-text md-2-line" style="font-size: 12px; margin-left: 5%;" layout="column" flex>
+                                        <b>{{member.name}}</b>
+                                        <span class="break">{{member.email[0]}}</span>
+                                    </div>
+                                </md-list-item>
+                            </md-list>
+                        </md-content>
+                    </md-card>
+                </div>
                 
                 <div flex>
                     <md-card>
-                        <md-toolbar md-colors="{background: 'teal-500'}" layout="row">
+                        <md-toolbar md-colors="{background: 'teal-500'}" layout="row" class="clickable-no-hover"
+                            ng-click="institutionCtrl.showHideDescription()">
                             <md-icon style="margin-left: 2%;">email</md-icon>
                             <div class="md-toolbar-tools" flex>
                                 <span class="card-title-light">DESCRIÇÃO DA INSTITUIÇÃO</span>
                             </div>
-                            <md-icon style="margin-right: 2%;" ng-click="institutionCtrl.showHideDescription()" class="clickable">
+                            <md-icon style="margin-right: 2%;">
                                 {{institutionCtrl.showFullDescription ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}
                             </md-icon>
                         </md-toolbar>
-                        <md-card-content ng-show="institutionCtrl.showFullDescription" style="padding: 1.5em; height: 20%;" class="mCustomScrollbar" data-mcs-theme="dark">
-                                <p>{{institutionCtrl.lorem}}</p>
-                                <p>{{institutionCtrl.lorem}}</p>
+                        <md-card-content ng-show="institutionCtrl.showFullDescription"
+                            ng-scrollbars ng-scrollbars-config=institutionCtrl.scrollbarConfig
+                            style="padding: 1.5em; height: 15%; text-align: justify; overflow:hidden">
+                                <p>{{ institutionCtrl.current_institution.description }}</p>
                         </md-card-content>
                     </md-card>
                     

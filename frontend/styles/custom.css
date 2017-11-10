@@ -483,7 +483,7 @@ md-switch.md-checked .md-bar {
     background-color: #80CBC4;
 }
 
-md-list-item, md-list-item .md-list-item-inner {
+.md-list-item-low-height {
     min-height: 20px;
     height: 60px;
 }

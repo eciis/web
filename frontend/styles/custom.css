@@ -389,7 +389,6 @@ a:active {
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     border-radius: 50%;
-    box-shadow: 0 0 5px 1px rgba(51, 51, 51, 0.212);
 }
 
 .event-item {

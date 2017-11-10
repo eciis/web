@@ -185,6 +185,18 @@
                     }
                 }
             })
+            .state("create_institution_form", {
+                url: "/create_institution_form",
+                views: {
+                    main: {
+                        templateUrl: "app/institution/create_inst_form.html",
+                        controller: "InstitutionFormController as instFormCtrl"
+                    }
+                },
+                params: {
+                    institutionKey: undefined
+                }
+            })
             .state("user_inactive", {
                 url: "/userinactive",
                 views: {

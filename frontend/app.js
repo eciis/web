@@ -14,7 +14,8 @@
         'ngMaterialDatePicker',
         'ngMessages',
         'angular-timeline',
-        'ngMask'
+        'ngMask',
+        'ngScrollbars'
     ]);
 
     app.config(function($mdIconProvider, $mdThemingProvider, $stateProvider, $urlMatcherFactoryProvider,

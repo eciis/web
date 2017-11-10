@@ -78,10 +78,12 @@
             <md-card ng-if="instFormCtrl.secondStep" layout-margin>
                 <div>
                     <md-card-content>
-                        <div layout="column" layout-margin>
-                            <div md-colors="{background: 'grey-300'}" layout="row">
-                            asdkoadp
-                            </div>
+                        <div layout="column">
+                            <md-list-item md-colors="{background: 'grey-300'}" layout="row">
+                                <div layout="column" layout-align="center" style="border-radius: 50%;" md-colors="{background: 'teal-900'}">
+                                    <md-icon style="color: #FFFFFF;">add_a_photo</md-icon>
+                                </div>
+                            </md-list-item>
                             <md-input-container class="md-block" flex-gt-sm flex-sm>
                                   <label>Nome completo da instituição</label>
                                   <input name="nome completo" >
@@ -90,10 +92,9 @@
                                   <label>Sigla</label>
                                   <input name="sigla">
                             </md-input-container>
-                            <div layout="column">
                                 <md-input-container class="md-block">
                                     <label>Área de Atuação</label>
-                                    <md-select layout="column" layout-align="center" name="actuationArea" ng-model="instFormCtrl.newInstitution.actuation_area" required>
+                                    <md-select name="actuationArea" ng-model="instFormCtrl.newInstitution.actuation_area" required>
                                       <md-option  ng-repeat="area in instFormCtrl.actuationArea | orderBy: 'name'"
                                         ng-value="area.name">{{ area.name }}
                                       </md-option>
@@ -107,7 +108,6 @@
                                         </md-option>
                                     </md-select>
                                 </md-input-container>
-                            </div>
                         </div>
                     </md-card-content>
                     <md-card-actions layout="row" layout-align="end center">

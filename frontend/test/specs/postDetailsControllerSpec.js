@@ -38,7 +38,7 @@
                     likes: "/api/posts/123456/likes", number_of_likes: 0, number_of_comments: 0
         });
         var secondaryPost = new Post({title: 'secondary post', author_key: "", institution: institutions[0], key: "123412356"});
-        var otherPost = new Post({title: 'other post', author: user, institution: institutions[0], key: "123454356", number_of_likes: 1});
+        var otherPost = new Post({title: 'other post', author: user, institution: institutions[0], key: "123454356", number_of_likes: 1, number_of_comments: 1});
         posts = [mainPost, secondaryPost, otherPost];
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);
@@ -400,6 +400,39 @@
         it('should return true', function() {
             var result = postDetailsCtrl.isSubscriber();
             expect(result).toBe(true);
+        });
+    });
+
+    describe('number_of_likes()', function() {
+
+        beforeEach(function() {
+            postDetailsCtrl.post = posts[2];
+        });
+
+        it('Should return the number of likes if number_of_likes are < 100', function() {
+            postDetailsCtrl.post.number_of_likes = 50;
+            expect(postDetailsCtrl.number_of_likes()).toEqual(50);
+        });
+
+        it('Should return the string "+99" if number_of_likes are > 99', function() {
+            postDetailsCtrl.post.number_of_likes = 150;
+            expect(postDetailsCtrl.number_of_likes()).toEqual("+99");
+        });
+    });
+
+    describe('number_of_comments()', function() {
+        beforeEach(function() {
+            postDetailsCtrl.post = posts[2];
+        });
+
+        it('Should return the number of comments if number_of_comments are < 100', function() {
+            postDetailsCtrl.post.number_of_comments = 50;
+            expect(postDetailsCtrl.number_of_comments()).toEqual(50);
+        });
+
+        it('Should return the string "+99" if number_of_comments are > 99', function() {
+            postDetailsCtrl.post.number_of_comments = 150;
+            expect(postDetailsCtrl.number_of_comments()).toEqual("+99");
         });
     });
 }));

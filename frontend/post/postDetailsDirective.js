@@ -416,6 +416,16 @@
             return postDetailsCtrl.post.institution_state === 'inactive';
         };
 
+        postDetailsCtrl.number_of_likes = function number_of_likes() {
+            return postDetailsCtrl.post.number_of_likes < 100 ?
+            postDetailsCtrl.post.number_of_likes : "+99";
+        };
+
+        postDetailsCtrl.number_of_comments = function number_of_comments() {
+            return postDetailsCtrl.post.number_of_comments < 100 ?
+            postDetailsCtrl.post.number_of_comments : "+99";
+        };
+
         function adjustText(text){
             if(postDetailsCtrl.isLongPostTimeline(text)){
                 text = text.substring(0, LIMIT_POST_CHARACTERS) + "...";

@@ -179,6 +179,7 @@ a:active {
 .ng-if{
     animation:1.0s flipInX ease;
     animation-delay: 0s;
+    margin: 20px 0 20px 0;
 }
 
 @keyframes flipInX {

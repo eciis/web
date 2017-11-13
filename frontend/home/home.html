@@ -121,6 +121,12 @@
         <div>
           <save-post is-dialog="false" posts="homeCtrl.posts"></save-post>
         </div>
+        <div layout="row" layout-align="center center" class="ng-if" ng-if="timelineCtrl.showRefreshTimelineButton()">
+          <md-button flex md-colors="{background: 'teal-700'}" ng-click="homeCtrl.loadMorePosts(true)">
+            VOCÊ TEM NOVOS POSTS
+            <md-icon md-colors="{color: 'grey-100'}">refresh</md-icon>
+          </md-button>
+        </div>
         <md-content id="content" class="body hide-scrollbar">         
             <div layout="row">
                 <post-timeline flex ng-if="!homeCtrl.isLoadingPosts" layout="column" posts="homeCtrl.posts" institution="false" 

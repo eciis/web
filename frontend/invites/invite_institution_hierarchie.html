@@ -64,7 +64,7 @@
       </md-toolbar>
       <md-card-content ng-if="inviteInstCtrl.showParentHierarchie">
         <md-list class="md-dense" flex>
-          <md-list-item class="md-3-line" ng-if="inviteInstCtrl.hasParent" ng-click="inviteInstCtrl.goToInst(inviteInstCtrl.institution.parent_institution)">
+          <md-list-item disable="true" class="md-3-line" ng-if="inviteInstCtrl.hasParent" ng-click="inviteInstCtrl.goToActiveInst(inviteInstCtrl.institution.parent_institution)">
             <md-icon class="md-avatar-icon" md-colors="{background: 'light-green-500', color: 'grey-50'}">account_balance</md-icon>
             <div class="md-list-item-text" layout="column">
               <a href class="md-title hyperlink" ng-if="inviteInstCtrl.isActive(inviteInstCtrl.institution.parent_institution)">
@@ -109,7 +109,7 @@
         <md-card-content ng-if="inviteInstCtrl.showChildrenHierarchie">
           <md-list class="md-dense" flex>
             <md-list-item class="md-3-line"
-            ng-repeat="institution in inviteInstCtrl.institution.children_institutions" ng-click="inviteInstCtrl.goToInst(institution)">
+            ng-repeat="institution in inviteInstCtrl.institution.children_institutions" ng-click="inviteInstCtrl.goToActiveInst(institution)">
               <md-icon class="md-avatar-icon" md-colors="{background: 'light-green-500', color: 'grey-50'}">account_balance</md-icon>
               <div class="md-list-item-text" layout="column">
                 <div ng-if="inviteInstCtrl.isActive(institution)">

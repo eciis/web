@@ -20,7 +20,6 @@
         inviteInstCtrl.institution = {};
         inviteInstCtrl.invite = {};
         inviteInstCtrl.hasParent = false;
-        inviteInstCtrl.showButton = true;
         inviteInstCtrl.showSendInvite = false;
         inviteInstCtrl.showParentHierarchie = false;
         inviteInstCtrl.showChildrenHierarchie = false;
@@ -76,7 +75,7 @@
                 targetEvent: ev,
                 clickOutsideToClose: true
             });
-            inviteInstCtrl.showButton = true;
+            inviteInstCtrl.showSendInvite = false;
         };
 
         inviteInstCtrl.sendInstInvite = function sendInstInvite(invite) {
@@ -157,7 +156,7 @@
 
         inviteInstCtrl.cancelInvite = function cancelInvite() {
             inviteInstCtrl.invite = {};
-            inviteInstCtrl.showButton = true;
+            inviteInstCtrl.showSendInvite = false;
         };
 
         inviteInstCtrl.goToActiveInst = function goToActiveInst(institution) {
@@ -309,7 +308,7 @@
             } else {
                 inviteInstCtrl.institution.addChildrenInst(stub);
             }
-            inviteInstCtrl.showButton = true;
+            inviteInstCtrl.showSendInvite = false;
         }
 
         inviteInstCtrl.showMessage = function(request) {

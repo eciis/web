@@ -10,7 +10,7 @@
       </span>
     </md-card-title-text>
   </md-card-title>
-  <md-list>
+  <md-list layout-padding>
     <md-radio-group ng-model="surveyCtrl.binaryOptionSelected">
       <md-list-item ng-repeat="option in surveyCtrl.post.options" 
         ng-class="surveyCtrl.votedOption(option)?'option-selected':''">
@@ -19,7 +19,7 @@
         </md-radio-button>
         <md-checkbox ng-disabled="surveyCtrl.userVoted()" ng-checked="surveyCtrl.votedOption(option)"
           ng-if="surveyCtrl.showCheckboxButton()" ng-model="option.selected"></md-checkbox>
-        <p>{{option.text}}</p>
+        <p style="padding:5px">{{option.text}}</p>
         <div ng-if="surveyCtrl.userVoted()">
           <div ng-class="surveyCtrl.votedOption(option)?'percentage-selected':'option-percentage'">
             {{option.percentage ? option.percentage : 0}}%

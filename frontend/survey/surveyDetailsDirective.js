@@ -7,6 +7,7 @@
 
         var surveyCtrl = this;
         surveyCtrl.binaryOptionSelected;
+        surveyCtrl.optionsSelected = [];
 
         surveyCtrl.goToPost = function goToPost() {
              $state.go('app.post', {key: surveyCtrl.post.key});
@@ -41,23 +42,28 @@
         };
 
         surveyCtrl.vote = function(ev){
-            var optionsSelected = getOptionsSelected();
-            if(optionsSelected.length !== 0){
+            surveyCtrl.optionsSelected = getOptionsSelected();
+            if(!_.isEmpty(surveyCtrl.optionsSelected)){
                 var dialog = MessageService.showConfirmationDialog(ev,
                     'Confirmar voto', 'Seu voto será permanente. Deseja confirmar?');
                 dialog.then(function() {
-                    console.log("oolha entrou");
-                    SurveyService.vote(surveyCtrl.post, optionsSelected).then(function sucess(){
-                        addVote(optionsSelected);
-                        calculatePercentage();
-                        MessageService.showToast('Voto computado');
-                    });
+                    surveyCtrl.voteService();
                 }, function() {
-                        MessageService.showToast('Cancelado');
+                    MessageService.showToast('Cancelado');
                 });
             } else {
                 MessageService.showToast('Você precisa escolher alguma alternativa');
-            }           
+            }         
+        };
+
+         surveyCtrl.voteService = function(){
+            var promisse = SurveyService.vote(surveyCtrl.post, surveyCtrl.optionsSelected);
+            promisse.then(function sucess(){
+                addVote(surveyCtrl.optionsSelected);
+                calculatePercentage();
+                MessageService.showToast('Voto computado');
+            });
+            return promisse;          
         };
 
         function loadBinarySelected(){

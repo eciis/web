@@ -43,7 +43,7 @@
 
         surveyCtrl.vote = function(ev){
             surveyCtrl.optionsSelected = getOptionsSelected();
-            if(!_.isEmpty(surveyCtrl.optionsSelected)){
+            if(surveyCtrl.optionsSelected.length !== 0){
                 var dialog = MessageService.showConfirmationDialog(ev,
                     'Confirmar voto', 'Seu voto será permanente. Deseja confirmar?');
                 dialog.then(function() {

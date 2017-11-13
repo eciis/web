@@ -125,4 +125,18 @@ describe('Test Post Model:', function() {
             expect(post.hasImage()).toBe(false);
         });
     });
+
+    describe('remove()', function() {
+        it('should set the post state to false', function() {
+            post = new Post(data);
+            post.remove("userName");
+            expect(post.state).toBe('deleted');
+        });
+
+        it('should set post property last_modified_by to userName', function() {
+            post = new Post(data);
+            post.remove("userName");
+            expect(post.last_modified_by).toBe('userName');
+        });
+    });
 });

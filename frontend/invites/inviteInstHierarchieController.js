@@ -325,7 +325,9 @@
         };
 
         inviteInstCtrl.getSuggestedName = function getSuggestedName(institution) {
-            return institution.invite.suggestion_institution_name || institution.name;
+            if (institution.invite) {
+                return institution.invite.suggestion_institution_name || institution.name;
+            }
         };
 
         function designOptions() {

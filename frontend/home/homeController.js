@@ -86,6 +86,18 @@
             return homeCtrl.events.length === 0;
         }
 
+        homeCtrl.openManageColor = function openManageColor(profile){
+            console.log("oooi");
+            $mdDialog.show({
+                controller: "ColorPickerController",
+                controllerAs: "colorPickerCtrl",
+                templateUrl: 'app/home/color_picker.html',
+                parent: angular.element(document.body),
+                clickOutsideToClose: true,
+                targetEvent: profile,
+            });
+        };
+
         function loadPosts(deferred) {
             PostService.getNextPosts(actualPage).then(function success(response) {
                 actualPage += 1;
@@ -132,5 +144,30 @@
         loadEvents();
         homeCtrl.loadMorePosts();
         getFollowingInstitutions();
+    });
+
+    app.controller("ColorPickerController", function ColorPickerController($http, $mdDialog) {
+        var colorPickerCtrl = this;
+
+        colorPickerCtrl.colors;
+        colorPickerCtrl.selected;
+
+        function getColors() {
+            $http.get('app/home/colors.json').then(function success(response) {
+                colorPickerCtrl.colors = response.data;
+            });
+        }
+
+        getColors();
+
+        colorPickerCtrl.cancelDialog = function cancelDialog(){
+            colorPickerCtrl.selected = null;
+            $mdDialog.cancel();
+        }
+
+        colorPickerCtrl.saveColor = function saveColor(color){
+            colorPickerCtrl.selected = color;
+        }
+
     });
 })();

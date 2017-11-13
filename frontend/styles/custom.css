@@ -142,6 +142,10 @@ a:active {
     opacity:.50;
 }
 
+.clickable-no-hover {
+    cursor: pointer;
+}
+
 .demo-md-panel {
   min-height: 500px;
 }
@@ -530,6 +534,12 @@ md-checkbox.md-checked .md-icon {
     background-color: #009688;
 }
 
+.list-item-dense {
+    min-height: 20px;
+    height: 60px;
+    margin-bottom: 10px;
+}
+
 md-checkbox.md-checked[disabled] .md-icon {
     background-color: #009688;
 }
@@ -569,6 +579,11 @@ md-radio-button.md-default-theme .md-on, md-radio-button .md-on {
 .md-title {
     font-size: 20px;
     font-weight: 700;
+}
+
+*:focus {
+    outline: 0;
+    outline: none;
 }
 
 .green-text {

@@ -29,8 +29,9 @@
                 .cancel('Cancelar');
 
             $mdDialog.show(confirm).then(function() {
+                postDetailsCtrl.post = new Post(postDetailsCtrl.post);
                 PostService.deletePost(postDetailsCtrl.post).then(function success() {
-                    postDetailsCtrl.post.state = 'deleted';
+                    postDetailsCtrl.post.remove(postDetailsCtrl.user.name);
                     MessageService.showToast('Post excluído com sucesso');
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);

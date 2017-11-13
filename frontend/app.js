@@ -222,6 +222,15 @@
 
             'https://www.youtube.com/**'
         ]);
+
+        const dateFormats = {
+            calendar: {
+                sameDay: '[Hoje às] LT',
+                lastWeek: 'DD MMMM [de] YYYY [às] LT',
+                sameElse: 'DD MMMM [de] YYYY [às] LT'
+            }
+        };
+        moment.updateLocale('pt-br', dateFormats);
     });
 
     app.factory('BearerAuthInterceptor', function ($injector, $q, $state) {
@@ -238,26 +247,13 @@
 
                 return config || $q.when(config);
             },
-            response: function(config) {
-                var AuthService = $injector.get('AuthService');
-                var user = AuthService.getCurrentUser();
-                if (user && user.key) {
-                    var pendingInvite = user.getPendingInvitation();
-                    if (pendingInvite) {
-                        var inviteKey = pendingInvite.key;
-                        $state.go("new_invite", {key: inviteKey});
-                    }
-                }
-                return config || $q.when(config);
-            },
             responseError: function(rejection) {
                 var AuthService = $injector.get('AuthService');
                 if (rejection.status === 401) {
                     if (AuthService.isLoggedIn()) {
                         AuthService.logout();
                         rejection.data.msg = "Sua sessão expirou!";
-                    } else {
-                        var location = $injector.get('$location');
+                    } else { 
                         $state.go("signin");
                     }
                 } else if(rejection.status === 403) {
@@ -281,20 +277,15 @@
         'new_invite'
     ];
 
-    app.run(function authInterceptor(AuthService, $transitions, $injector, $state) {
+    app.run(function authInterceptor(AuthService, $transitions, $injector, $state, $location) {
         $transitions.onStart({
             to: function(state) {
-                console.log(">>>>>>> auth check")
                 return state != 'signin' && !AuthService.isLoggedIn() && !(_.includes(ignored_routes, state.name));
             }
         }, function(transition) {
-            console.log("not logged");
             $state.go("signin", {
-                "redirect": location.path()
-            });
-
-            console.log("redirect")
-            
+                "redirect": $location.path()
+            });            
         });
     });
 
@@ -306,25 +297,30 @@
     app.run(function userInactiveListener(AuthService, $transitions) {
         $transitions.onStart({
             to: function(state) {
-
-                console.log(">>>>>>> inactive  check")
                 var user = AuthService.getCurrentUser();
                 var isInactive = user && user.isInactive();
 
                 return !(_.includes(ignored_routes, state.name)) && isInactive;
             }
         }, function(transition) {
-            console.log("inactive?")
             transition.router.stateService.transitionTo('user_inactive');
         });
-
-        const dateFormats = {
-            calendar: {
-                sameDay: '[Hoje às] LT',
-                lastWeek: 'DD MMMM [de] YYYY [às] LT',
-                sameElse: 'DD MMMM [de] YYYY [às] LT'
+    });
+        
+    app.run(function inviteInterceptor(AuthService, $transitions, $state) {
+        $transitions.onSuccess({
+            to: function(state) {
+                var user = AuthService.getCurrentUser();
+                if (user && user.key) {
+                    var pendingInvite = user.getPendingInvitation();
+                    return pendingInvite;
+                }
+                return false;
             }
-        };
-        moment.updateLocale('pt-br', dateFormats);
+        }, function(transition) {
+            var pendingInvite = AuthService.getCurrentUser().getPendingInvitation();
+            var inviteKey = pendingInvite.key;
+            $state.go("new_invite", {key: inviteKey});        
+        });
     });
 })();

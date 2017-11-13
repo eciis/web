@@ -64,11 +64,6 @@
         };
 
         function redirectTo(path) {
-            /* FIXME: Verify the state before redirect is not a good
-            *  approach to do that.
-            *  @author: Andre L. Abrantes - 10-11-2017
-            */
-            console.log(path)
             if (path) {
                 $location.path(path);
             } else {

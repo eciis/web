@@ -127,7 +127,7 @@ describe('Test Post Model:', function() {
     });
 
     describe('remove()', function() {
-        it('should set the post state to false', function() {
+        it('should set the post state to deleted', function() {
             post = new Post(data);
             post.remove("userName");
             expect(post.state).toBe('deleted');

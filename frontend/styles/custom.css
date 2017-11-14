@@ -518,6 +518,14 @@ md-switch.md-checked .md-bar {
 
 .xs-icon-button md-icon {
     font-size: 12px;
+    margin: 1px;
+}
+
+.xs-delete-icon-justify md-icon {
+    margin: 2 1 0 0;
+}
+
+.xs-edit-icon-justify md-icon {
     margin: 2px;
 }
 
@@ -564,4 +572,21 @@ md-switch.md-checked .md-bar {
 .margin {
     margin-right: 10px;
     margin-left: 10px;
+}
+
+.xs-bullet {
+    color: #009688;
+    margin-right: 2px;
+    margin-left: 2px;
+}
+
+.user-name {
+    font-size: 15px;
+    color: #00796B;
+}
+
+.user-picture {
+    border-radius: 50%;
+    min-width: 55px;
+    min-height: 55px;
 }

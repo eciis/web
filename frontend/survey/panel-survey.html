@@ -1,0 +1,12 @@
+<md-card style="margin: 0px;">
+  <md-content class="hide-scrollbar">
+	<md-list style="max-height: 150px">
+  	  <md-list-item ng-repeat="voter in ctrl.option.voters" ng-click="null">
+	    <img ng-src="{{voter.photo_url}}" class="md-avatar" />
+	    <div class="md-list-item-text" layout="column">
+	      <p>{{ voter.name }}</p>
+	    </div>
+  	  </md-list-item>
+	</md-list>
+  </md-content>
+</md-card>

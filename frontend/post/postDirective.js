@@ -95,8 +95,6 @@
         postCtrl.save = function save(isEditing, originalPost, posts) {
             if(isEditing) {
                 postCtrl.editPost(originalPost);
-            } else if(postCtrl.typePost === 'Survey'){
-                postCtrl.saveSurvey(posts);
             } else {
                 postCtrl.createPost(posts);
             }

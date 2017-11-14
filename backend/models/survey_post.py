@@ -81,8 +81,19 @@ class SurveyPost(Post):
         """Create personalized json of post."""
         post_dict = super(SurveyPost, post).make(host)
         post_dict["number_votes"] = post.number_votes
-        post_dict["deadline"] = post.deadline.isoformat() if post.deadline else ''
+        post_dict["deadline"] = post.deadline.isoformat(
+        ) if post.deadline else ''
         post_dict["type_survey"] = post.type_survey
-        post_dict["options"] = post.options if post.options else []
+        post_dict["options"] = map(
+            post.make_option, post.options) if post.options else []
 
         return post_dict
+
+    def make_option(post, option):
+        """Create a personalized json of option."""
+        for i in range(len(option["voters"])):
+            user = ndb.Key(urlsafe=option["voters"][i]).get()
+            option["voters"][i] = {'name': user.name,
+                                   'photo_url': user.photo_url,
+                                   'key': user.key.urlsafe()}
+        return option

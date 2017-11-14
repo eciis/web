@@ -3,7 +3,7 @@
 
     var app = angular.module('app');
 
-    app.controller('SurveyDetailsController', function($scope, SurveyService, $state, MessageService) {
+    app.controller('SurveyDetailsController', function($scope, SurveyService, $state, MessageService, $mdPanel) {
 
         var surveyCtrl = this;
         surveyCtrl.binaryOptionSelected;
@@ -30,7 +30,8 @@
         };
 
         surveyCtrl.votedOption = function(option){
-            return _.includes(option.voters, Utils.getKeyFromUrl(surveyCtrl.user.key));
+            var voted = _.filter(option.voters,{'key': Utils.getKeyFromUrl(surveyCtrl.user.key)});
+            return voted.length !== 0 ? true : false;
         };
 
         surveyCtrl.userVoted = function(){
@@ -89,7 +90,10 @@
             _.forEach(options, function(option) {
                 surveyCtrl.post.number_votes += 1;
                 option.number_votes += 1;
-                option.voters.push(Utils.getKeyFromUrl(surveyCtrl.user.key));
+                var voter = {'name': surveyCtrl.user.name,
+                             'photo_url': surveyCtrl.user.photo_url,
+                             'key': Utils.getKeyFromUrl(surveyCtrl.user.key) };
+                option.voters.push(voter);
             });
         }
 
@@ -101,13 +105,47 @@
                 });
             }
         }
+
+        surveyCtrl.scrollbarConfig = {
+            autoHideScrollbar: false,
+            theme: 'minimal-dark',
+            advanced: { }
+        };
         
         surveyCtrl.loadAttributes = function(){
             loadBinarySelected();
             calculatePercentage();
         };
+
+        surveyCtrl.showMenu = function(ev, option) {
+            if(option.voters.length > 0){
+                var position = $mdPanel.newPanelPosition()
+                .relativeTo(ev.target)
+                .addPanelPosition($mdPanel.xPosition.ALIGN_END, $mdPanel.yPosition.BELOW);
+
+                var config = {
+                    attachTo: angular.element(document.body),
+                    controller: 'SurveyDetailsController',
+                    controllerAs: 'ctrl',
+                    templateUrl: 'app/survey/panel-survey.html',
+                    panelClass: 'demo-menu-example',
+                    locals: {
+                      'option': option,
+                    },
+                    position: position,
+                    openFrom: ev,
+                    clickOutsideToClose: true,
+                    escapeToClose: true,
+                    focusOnOpen: false,
+                    zIndex: 2
+                  };
+
+                  $mdPanel.open(config);
+
+            }
+        };
     });
-    
+
     app.directive("surveyDetails", function() {
         return {
             restrict: 'E',

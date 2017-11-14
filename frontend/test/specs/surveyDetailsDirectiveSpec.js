@@ -86,8 +86,8 @@
 
             httpBackend.expect('POST', "/api/surveyposts/" + surveyCtrl.post.key + '/votes').
                 respond(surveyCtrl.optionsSelected);
-            var promisse = surveyCtrl.voteService();
-            promisse.should.be.fulfilled.then(function() {
+            var promise = surveyCtrl.voteService();
+            promise.should.be.fulfilled.then(function() {
                 expect(surveyService.vote).toHaveBeenCalledWith(surveyCtrl.post, surveyCtrl.optionsSelected);
                 expect(surveyCtrl.post.options[0].number_votes).toEqual(1);
                 expect(surveyCtrl.post.options[0].voters).toContain(surveyCtrl.user.key);

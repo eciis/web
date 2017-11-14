@@ -34,11 +34,12 @@
 
         it('Test vote in success case', function() {
             spyOn($http, 'post').and.callThrough();
-            httpBackend.expect('POST', SURVEY_URI + survey.key + "/votes").respond([options[0]]);
-            var result;
-            service.vote(survey, [options[0]]).then(function(data){
-                result = data;
-            });
+            var URI = SURVEY_URI + survey.key + "/votes";
+            httpBackend.expect('POST', URI).respond();
+
+            service.vote(survey, [options[0]]);
+
+            expect($http.post).toHaveBeenCalledWith(URI, [options[0]]);
             httpBackend.flush();
         });
 }));

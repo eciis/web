@@ -71,10 +71,10 @@
             surveyCtrl.multipleChoice = true;
 
             var survey_obj = new Post(surveyCtrl.post, surveyCtrl.user.current_institution.key);
-            var promisse = surveyCtrl.saveSurvey([]);
+            var promise = surveyCtrl.saveSurvey([]);
             httpBackend.expect('POST', "/api/posts").respond(survey_obj);
 
-            promisse.should.be.fulfilled.then(function() {
+            promise.should.be.fulfilled.then(function() {
                 expect(postService.createPost).toHaveBeenCalledWith(survey_obj);
                 expect(surveyCtrl.resetSurvey).toHaveBeenCalled();
                 expect(mdDialog.hide).toHaveBeenCalled();

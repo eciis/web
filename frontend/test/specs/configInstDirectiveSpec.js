@@ -206,4 +206,14 @@ describe('Test ConfigInstDirective', function() {
             });
         });
     });
+
+    describe('nextStep', function() {
+        it('should go to next step', function() {
+            editInstCtrl.steps = [true, false, false];
+            editInstCtrl.nextStep();
+            expect(editInstCtrl.steps).toEqual([false, true, false]);
+            editInstCtrl.nextStep();
+            expect(editInstCtrl.steps).toEqual([false, false, true]);
+        });
+    });
 });

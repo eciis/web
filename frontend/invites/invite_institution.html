@@ -50,7 +50,7 @@
               </md-button>
             </div>
           </md-toolbar>
-          <md-card-content ng-if="inviteInstCtrl.showInvites">
+          <md-card-content ng-show="inviteInstCtrl.showInvites" style="max-height: 40%;" ng-scrollbars>
             <md-list class="md-dense" flex>
               <md-list-item class="md-3-line" ng-repeat="invite in inviteInstCtrl.sent_invitations"
               ng-if="invite.status === 'sent' && invite.type_of_invite === 'INSTITUTION'" ng-click="null">
@@ -80,7 +80,7 @@
               </md-button>
             </div>
           </md-toolbar>
-          <md-card-content ng-if="inviteInstCtrl.showRequests">
+          <md-card-content ng-show="inviteInstCtrl.showRequests" style="max-height: 40%;" ng-scrollbars>
             <md-list class="md-dense" flex>
               <md-list-item class="md-3-line" ng-repeat="request in inviteInstCtrl.sent_requests"
               ng-if="request.status === 'sent' && request.type_of_invite === 'REQUEST_INSTITUTION'"
@@ -110,9 +110,10 @@
               </md-button>
             </div>
           </md-toolbar>
-          <md-card-content  ng-if="inviteInstCtrl.showSentInvitations">
+          <md-card-content  ng-show="inviteInstCtrl.showSentInvitations" style="max-height: 40%;" ng-scrollbars>
             <md-list class="md-dense" flex>
-              <md-list-item class="md-3-line" ng-repeat="invite in inviteInstCtrl.sent_invitations" ng-if="invite.status === 'accepted' && invite.type_of_invite === 'INSTITUTION'">
+              <md-list-item class="md-3-line" ng-repeat="invite in inviteInstCtrl.sent_invitations" 
+                ng-if="invite.status === 'accepted' && invite.type_of_invite === 'INSTITUTION'">
                 <md-icon class="md-avatar-icon" 
                 md-colors="{background: 'light-green-500', color: 'grey-50'}">account_balance</md-icon>
                 <div class="md-list-item-text" layout="column">

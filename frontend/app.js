@@ -117,7 +117,7 @@
                 views: {
                     content_manage_institution: {
                         templateUrl: "app/invites/invite_institution_hierarchie.html",
-                        controller: "InviteInstHierarchieController as inviteInstCtrl"
+                        controller: "InviteInstHierarchieController as inviteInstHierCtrl"
                     }
                 }
             })

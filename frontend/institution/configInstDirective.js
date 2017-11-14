@@ -20,51 +20,6 @@
         };
         configInstCtrl.steps = [true, false, false];
 
-        configInstCtrl.nextStep = function nextStep() {
-            var currentStep = _.findIndex(configInstCtrl.steps, function(situation) {
-                return situation;
-            });
-            if(isCurrentStepValid(currentStep)) {
-                configInstCtrl.steps[currentStep] = false;
-                var nextStep = currentStep + 1;
-                configInstCtrl.steps[nextStep] = true;
-            } else {
-                MessageService.showToast("Campos obrigatórios não preenchidos corretamente.");
-            }
-        };
-
-        function getFields() {
-            var necessaryFieldsForStep = {
-                0: {fields: [configInstCtrl.newInstitution.address], size: 7},
-                1: {fields: [
-                    configInstCtrl.newInstitution.name,
-                    configInstCtrl.newInstitution.acronym,
-                    configInstCtrl.newInstitution.actuation_area,
-                    configInstCtrl.newInstitution.legal_nature
-                    ]},
-                2: {fields: [configInstCtrl.newInstitution.leader]}
-            };
-            return necessaryFieldsForStep;
-        }
-
-        function isCurrentStepValid(currentStep) {
-            var isValid = true;
-            var necessaryFieldsForStep = getFields();
-            _.forEach(necessaryFieldsForStep[currentStep].fields, function(field) {
-                if(_.isUndefined(field) || _.isEmpty(field)) {
-                    isValid = false;
-                }
-            });
-            var size = necessaryFieldsForStep[currentStep].size;
-            if(size)
-                isValid = _.size(necessaryFieldsForStep[currentStep].fields[0]) === size;
-            return isValid;
-        }
-
-        configInstCtrl.getStep = function getStep(step) {
-            return configInstCtrl.steps[step - 1];
-        };
-
         getLegalNatures();
         getActuationAreas();
 
@@ -101,9 +56,9 @@
             if (newInstitution.isValid()){
                 var confirm = $mdDialog.confirm(event)
                     .clickOutsideToClose(true)
-                    .title('Confirmar Edição')
-                    .textContent('Confirmar a edição dessa instituição?')
-                    .ariaLabel('Confirmar Edição')
+                    .title('Confirmar configuração')
+                    .textContent('Confirmar a configuração dessa instituição?')
+                    .ariaLabel('Confirmar Configuração')
                     .targetEvent(event)
                     .ok('Sim')
                     .cancel('Não');
@@ -197,7 +152,7 @@
             configInstCtrl.user.updateInstitutions(institution);
             AuthService.save();
             changeInstitution(institution);
-            MessageService.showToast('Edição de instituição realizado com sucesso');
+            MessageService.showToast('Configuração de instituição realizada com sucesso');
             $state.go('app.institution', {institutionKey: institutionKey});
         }
 
@@ -208,6 +163,59 @@
         configInstCtrl.showImage = function showImage() {
             return configInstCtrl.newInstitution.photo_url !== "app/images/institution.jpg";
         };
+
+        configInstCtrl.getStep = function getStep(step) {
+            return configInstCtrl.steps[step - 1];
+        };
+
+        configInstCtrl.showGreenButton = function showGreenButton(step) {
+            if(step === 2) {
+                return configInstCtrl.getStep(2) || configInstCtrl.getStep(3);
+            } else {
+                return configInstCtrl.getStep(3);
+            }
+        };
+
+        configInstCtrl.nextStep = function nextStep() {
+            var currentStep = _.findIndex(configInstCtrl.steps, function(situation) {
+                return situation;
+            });
+            if(isCurrentStepValid(currentStep)) {
+                configInstCtrl.steps[currentStep] = false;
+                var nextStep = currentStep + 1;
+                configInstCtrl.steps[nextStep] = true;
+            } else {
+                MessageService.showToast("Campos obrigatórios não preenchidos corretamente.");
+            }
+        };
+
+        function getFields() {
+            var necessaryFieldsForStep = {
+                0: {fields: [configInstCtrl.newInstitution.address], size: 7},
+                1: {fields: [
+                    configInstCtrl.newInstitution.name,
+                    configInstCtrl.newInstitution.acronym,
+                    configInstCtrl.newInstitution.actuation_area,
+                    configInstCtrl.newInstitution.legal_nature
+                    ]},
+                2: {fields: [configInstCtrl.newInstitution.leader]}
+            };
+            return necessaryFieldsForStep;
+        }
+
+        function isCurrentStepValid(currentStep) {
+            var isValid = true;
+            var necessaryFieldsForStep = getFields();
+            _.forEach(necessaryFieldsForStep[currentStep].fields, function(field) {
+                if(_.isUndefined(field) || _.isEmpty(field)) {
+                    isValid = false;
+                }
+            });
+            var size = necessaryFieldsForStep[currentStep].size;
+            if(size)
+                isValid = _.size(necessaryFieldsForStep[currentStep].fields[0]) === size;
+            return isValid;
+        }
 
         function changeInstitution(institution) {
             if(configInstCtrl.newInstitution &&

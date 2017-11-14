@@ -5,22 +5,37 @@
             <div layout="row" flex>
                 <md-card layout="row" flex layout-margin>
                     <div flex>
-                    <md-content class="hide-scrollbar" layout="row">
-                        <div layout="row" layout-align="center center" layout-margin>
-                            <span class="rounded-circle" style="color: #FFFFFF; background: #9E9E9E; width: 25px; height: 25px;"><span layout="row" layout-align="center" style="font-size: 17px; margin-top: 2px;">1</span></span>
-                            <span class="no-break">Dados cadastrais</span>
-                            <hr style="width: 100px;"/>
-                        </div>
-                        <div layout="row" layout-align="center center" layout-margin>
-                            <span class="rounded-circle" style="color: #FFFFFF; background: #9E9E9E; width: 25px; height: 25px;"><span layout="row" layout-align="center" style="font-size: 17px; margin-top: 2px;">2</span></span>
-                            <span class="no-break">Dados da instituição</span>
-                            <hr style="width: 100px;"/>
-                        </div>
-                        <div layout="row" layout-align="center center" layout-margin>
-                            <span class="rounded-circle" style="color: #FFFFFF; background: #9E9E9E; width: 25px; height: 25px;"><span layout="row" layout-align="center" style="font-size: 17px; margin-top: 2px;">3</span></span>
-                            <span class="no-break">Finalizar cadastro</span>
-                        </div>
-                    </md-content>
+                        <md-content class="hide-scrollbar" layout="row">
+                            <div layout="row" layout-align="center center" layout-margin>
+                                <span class="rounded-green-circle" style="color: #FFFFFF; width: 25px; height: 25px;">
+                                    <span layout="row" layout-align="center">
+                                        <md-icon ng-if="!configInstCtrl.getStep(1)" style="color: #FFFFFF;">done</md-icon>
+                                        <span ng-if="configInstCtrl.getStep(1)" style="margin-top: 2px;">1</span>
+                                    </span>
+                                </span>
+                                <span class="no-break">Dados cadastrais</span>
+                                <hr style="width: 100px;"/>
+                            </div>
+                            <div layout="row" layout-align="center center" layout-margin>
+                                <span ng-class="configInstCtrl.showGreenButton(2)? 'rounded-green-circle': 'rounded-grey-circle'" style="color: #FFFFFF; width: 25px; height: 25px;">
+                                    <span layout="row" layout-align="center">
+                                        <md-icon ng-if="configInstCtrl.getStep(3)" style="color: #FFFFFF;">done</md-icon>
+                                        <span ng-if="!configInstCtrl.getStep(3)" style="margin-top: 2px;">2</span>
+                                    </span>
+                                </span>
+                                <span class="no-break">Dados da instituição</span>
+                                <hr style="width: 100px;"/>
+                            </div>
+                            <div layout="row" layout-align="center center" layout-margin>
+                                <span ng-class="configInstCtrl.showGreenButton(3)? 'rounded-green-circle': 'rounded-grey-circle'" style="color: #FFFFFF; width: 25px; height: 25px;">
+                                    <span layout="row" layout-align="center">
+                                        <md-icon ng-if="configInstCtrl.newInstitution.leader" style="color: #FFFFFF;">done</md-icon>
+                                        <span ng-if="!configInstCtrl.newInstitution.leader" style="margin-top: 2px;">3</span>
+                                    </span>
+                                </span>
+                                <span class="no-break">Finalizar cadastro</span>
+                            </div>
+                        </md-content>
                     </div>
                 </md-card>
             </div>
@@ -33,19 +48,13 @@
                                   <label>Rua</label>
                                   <input type="text" name="street" required
                                     ng-model="configInstCtrl.newInstitution.address.street">
-                                  <div ng-messages='firstStep.street.$error'>
-                                    <div ng-message="required">Este campo é obrigatório!</div>
-                                  </div>
                                 </md-input-container>
                             </div>
                             <div layout="row" layout-margin>
                                 <md-input-container  flex-gt-sm flex-sm layout="row">
-                                      <label>Número</label>
-                                      <input type="text" name="number" required
-                                        ng-model="configInstCtrl.newInstitution.address.number">
-                                      <div ng-messages='firstStep.number.$error'>
-                                        <div ng-message="required">Este campo é obrigatório!</div>
-                                      </div>
+                                  <label>Número</label>
+                                  <input type="text" name="number" required
+                                    ng-model="configInstCtrl.newInstitution.address.number">
                                 </md-input-container>
                                 <span flex="3"></span>
                                 <md-input-container  flex-gt-sm flex-sm layout="row">
@@ -55,48 +64,32 @@
                                     placeholder="00000-000"
                                     ng-pattern="configInstCtrl.cepRegex"
                                     mask="99999-999">
-                                  <div ng-messages="firstStep.cep.$error">
-                                    <div ng-message="required" >Este campo é obrigatório!</div>
-                                    <div ng-message="pattern" >O CEP deve ser válido!</div>
-                                  </div>
                                 </md-input-container>
                             </div>
                             <div layout="row" layout-margin>
                                 <md-input-container  flex-gt-sm flex-sm layout="row">
-                                      <label>Bairro</label>
-                                      <input type="text" name="neighbourhood" required
-                                        ng-model="configInstCtrl.newInstitution.address.neighbourhood">
-                                      <div ng-messages='firstStep.neighbourhood.$error'>
-                                        <div ng-message="required">Este campo é obrigatório!</div>
-                                      </div>
+                                  <label>Bairro</label>
+                                  <input type="text" name="neighbourhood" required
+                                    ng-model="configInstCtrl.newInstitution.address.neighbourhood">
                                 </md-input-container>
                                 <span flex="3"></span>
                                 <md-input-container  flex-gt-sm flex-sm layout="row">
                                   <label>Cidade</label>
                                   <input type="text" name="city" required
                                     ng-model="configInstCtrl.newInstitution.address.city">
-                                  <div ng-messages='firstStep.city.$error'>
-                                    <div ng-message="required">Este campo é obrigatório!</div>
-                                  </div>
                                 </md-input-container>
                             </div>
                             <div layout="row" layout-margin>
                                 <md-input-container  flex-gt-sm flex-sm layout="row">
-                                      <label>Estado</label>
-                                      <input type="text" name="state" required
-                                        ng-model="configInstCtrl.newInstitution.address.state">
-                                      <div ng-messages='firstStep.state.$error'>
-                                        <div ng-message="required">Este campo é obrigatório!</div>
-                                      </div>
+                                  <label>Estado</label>
+                                  <input type="text" name="state" required
+                                    ng-model="configInstCtrl.newInstitution.address.state">
                                 </md-input-container>
                                 <span flex="3"></span>
                                 <md-input-container  flex-gt-sm flex-sm layout="row">
                                   <label>País</label>
                                   <input type="text" name="country" required
                                     ng-model="configInstCtrl.newInstitution.address.country">
-                                  <div ng-messages='firstStep.country.$error'>
-                                    <div ng-message="required">Este campo é obrigatório!</div>
-                                  </div>
                                 </md-input-container>
                             </div>
                         </form>
@@ -133,20 +126,20 @@
                             </md-list-item>
                             <form layout="column" name="secondStep">
                                 <md-input-container class="md-block" flex-gt-sm flex-sm>
-                                      <label>Nome completo da instituição</label>
-                                      <input type="text" name="fullName" required md-maxlength="90"
-                                        ng-model="configInstCtrl.newInstitution.name">
-                                      <div ng-messages='secondStep.fullName.$error'>
-                                        <div ng-message="required">Este campo é obrigatório!</div>
-                                      </div>
+                                  <label>Nome completo da instituição</label>
+                                  <input type="text" name="fullName" required md-maxlength="90"
+                                    ng-model="configInstCtrl.newInstitution.name">
+                                  <div ng-messages='secondStep.fullName.$error'>
+                                    <div ng-message="required">Este campo é obrigatório!</div>
+                                  </div>
                                 </md-input-container>
                                 <md-input-container style="margin-top: -20px;" class="md-block" flex-gt-sm flex-sm>
-                                      <label>Sigla</label>
-                                      <input type="text" name="acronym" required
-                                        ng-model="configInstCtrl.newInstitution.acronym">
-                                      <div ng-messages='secondStep.acronym.$error'>
-                                        <div ng-message="required">Este campo é obrigatório!</div>
-                                      </div>
+                                  <label>Sigla</label>
+                                  <input type="text" name="acronym" required
+                                    ng-model="configInstCtrl.newInstitution.acronym">
+                                  <div ng-messages='secondStep.acronym.$error'>
+                                    <div ng-message="required">Este campo é obrigatório!</div>
+                                  </div>
                                 </md-input-container>
                                 <md-input-container style="margin-top: -20px;" layout="row" class="md-block" flex-gt-sm flex-sm>
                                     <label>Área de Atuação</label>
@@ -186,21 +179,21 @@
                         <div layout="column">
                             <form layout="column" name="thirdStep">
                                 <md-input-container class="md-block" flex-gt-sm flex-sm>
-                                      <label>Descrição</label>
-                                      <textarea ng-model="configInstCtrl.newInstitution.description" maxlength="1100"
-                                        md-select-on-focus>
-                                      </textarea>
+                                  <label>Descrição</label>
+                                  <textarea ng-model="configInstCtrl.newInstitution.description" maxlength="1100"
+                                    md-select-on-focus>
+                                  </textarea>
                                 </md-input-container>
                                 <md-input-container class="md-block" flex-gt-sm flex-sm>
-                                      <label>Site Institucional</label>
-                                      <input name="site">
+                                  <label>Site Institucional</label>
+                                  <input name="site">
                                 </md-input-container>
                                 <md-input-container class="md-block" flex-gt-sm flex-sm>
-                                      <label>Atual dirigente máximo</label>
-                                      <input type="text" name="leader" required ng-model="configInstCtrl.newInstitution.leader">
-                                      <div ng-messages="thirdStep.leader.$error">
-                                        <div ng-message="required">Este campo é obrigatório!</div>
-                                      </div>
+                                  <label>Atual dirigente máximo</label>
+                                  <input type="text" name="leader" required ng-model="configInstCtrl.newInstitution.leader">
+                                  <div ng-messages="thirdStep.leader.$error">
+                                    <div ng-message="required">Este campo é obrigatório!</div>
+                                  </div>
                                 </md-input-container>
                             </form>
                         </div>

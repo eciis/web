@@ -412,6 +412,18 @@ a:active {
     border-radius: 50%;
 }
 
+.rounded-green-circle {
+    margin-right: 10px;
+    width: 50px;
+    height: 50px;
+    max-width: 50px;
+    max-height: 50px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    background-color: #76FF03;
+}
+
 .event-item {
     padding: 15px 0 15px 0;
     border-bottom: 1px solid #e0e0e0;
@@ -554,4 +566,9 @@ md-switch.md-checked .md-bar {
 .margin {
     margin-right: 10px;
     margin-left: 10px;
+}
+
+.no-break {
+    font-size: 15px;
+    white-space: nowrap;
 }

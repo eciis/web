@@ -190,7 +190,7 @@
                 views: {
                     main: {
                         templateUrl: "app/institution/create_inst_form.html",
-                        controller: "InstitutionFormController as instFormCtrl"
+                        controller: "ConfigInstController as configInstCtrl"
                     }
                 },
                 params: {

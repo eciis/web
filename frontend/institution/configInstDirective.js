@@ -18,6 +18,52 @@
             photo_url: "app/images/institution.jpg",
             email: configInstCtrl.user.email[0]
         };
+        configInstCtrl.steps = [true, false, false];
+
+        configInstCtrl.nextStep = function nextStep() {
+            var currentStep = _.findIndex(configInstCtrl.steps, function(situation) {
+                return situation;
+            });
+            if(isCurrentStepValid(currentStep)) {
+                configInstCtrl.steps[currentStep] = false;
+                var nextStep = currentStep + 1;
+                configInstCtrl.steps[nextStep] = true;
+            } else {
+                MessageService.showToast("Campos obrigatórios não preenchidos corretamente.");
+            }
+        };
+
+        function getFields() {
+            var necessaryFieldsForStep = {
+                0: {fields: [configInstCtrl.newInstitution.address], size: 7},
+                1: {fields: [
+                    configInstCtrl.newInstitution.name,
+                    configInstCtrl.newInstitution.acronym,
+                    configInstCtrl.newInstitution.actuation_area,
+                    configInstCtrl.newInstitution.legal_nature
+                    ]},
+                2: {fields: [configInstCtrl.newInstitution.leader]}
+            };
+            return necessaryFieldsForStep;
+        }
+
+        function isCurrentStepValid(currentStep) {
+            var isValid = true;
+            var necessaryFieldsForStep = getFields();
+            _.forEach(necessaryFieldsForStep[currentStep].fields, function(field) {
+                if(_.isUndefined(field) || _.isEmpty(field)) {
+                    isValid = false;
+                }
+            });
+            var size = necessaryFieldsForStep[currentStep].size;
+            if(size)
+                isValid = _.size(necessaryFieldsForStep[currentStep].fields[0]) === size;
+            return isValid;
+        }
+
+        configInstCtrl.getStep = function getStep(step) {
+            return configInstCtrl.steps[step - 1];
+        };
 
         getLegalNatures();
         getActuationAreas();
@@ -159,6 +205,10 @@
             return !configInstCtrl.loading;
         };
 
+        configInstCtrl.showImage = function showImage() {
+            return configInstCtrl.newInstitution.photo_url !== "app/images/institution.jpg";
+        };
+
         function changeInstitution(institution) {
             if(configInstCtrl.newInstitution &&
                 configInstCtrl.user.current_institution.key === configInstCtrl.newInstitution.key) {
@@ -181,6 +231,7 @@
         function loadInstitution() {
             InstitutionService.getInstitution(institutionKey).then(function success(response) {
                 configInstCtrl.newInstitution = response.data;
+                configInstCtrl.suggestedName = configInstCtrl.newInstitution.name;
                 currentPortfoliourl = configInstCtrl.newInstitution.portfolio_url;
                 observer = jsonpatch.observe(configInstCtrl.newInstitution);
             }, function error(response) {

@@ -47,3 +47,8 @@ Post.prototype.hasImage = function hasImage() {
 Post.prototype.isDeleted = function isDeleted() {
     return this.state === 'deleted';
 };
+
+Post.prototype.remove = function remove(userName) {
+    this.state = 'deleted';
+    this.last_modified_by = userName;
+};

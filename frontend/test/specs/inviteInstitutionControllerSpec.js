@@ -130,7 +130,8 @@
                 var promise = inviteinstitutionCtrl.sendInstInvite(invite);
                 promise.then(function() {
                     expect(inviteinstitutionCtrl.invite).toEqual({});
-                    expect(inviteinstitutionCtrl.showButton).toBe(true);
+                    expect(inviteinstitutionCtrl.showInvites).toBe(true);
+                    expect(inviteinstitutionCtrl.showSendInvite).toBe(false);
                     expect(invite.status).toEqual('sent');
                     expect(inviteinstitutionCtrl.sent_invitations).toEqual([invite]);
                     done();
@@ -149,7 +150,7 @@
                 httpBackend.flush();
 
                 expect(inviteinstitutionCtrl.invite).toEqual({});
-                expect(inviteinstitutionCtrl.showButton).toBe(true);
+                expect(inviteinstitutionCtrl.showSendInvite).toBe(true);
             });
         });
     });

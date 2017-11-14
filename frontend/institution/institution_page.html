@@ -1,5 +1,5 @@
 <md-content id="content" layout="row" md-colors="{background: 'grey-200'}" layout-align="center" >
-    <div flex-gt-lg="80" flex-lg="90" layout="row" layout-wrap layout-align="center" layout-fill>
+    <div flex-gt-lg="70" flex-lg="90" layout="row" layout-wrap layout-align="center" layout-fill>
         <div flex layout="column">
             <div layout="row" layout-xs="column" layout-padding flex-xs="30" flex-sm="15"
                 md-colors="{background: 'grey-50'}" style="margin: 0px 7px 0px 7px;">
@@ -28,18 +28,8 @@
                         <md-button class="md-raised" ng-if="institutionCtrl.portfolioUrl" ng-click="institutionCtrl.portfolioDialog($event)">
                             <md-icon>insert_drive_file</md-icon> Portfólio
                         </md-button>
-                        <p><b>Endereço:</b> {{ institutionCtrl.getFullAddress() }}</p>
-                        <div ng-if="!institutionCtrl.showFullDescription">
-                            <div layout="column" layout-align="center center" class="ng-if">
-                              <md-button ng-if="!institutionCtrl.showFullDescription" flex ng-click="institutionCtrl.showHideDescription()">
-                                MAIS INFORMAÇÕES<md-icon>arrow_drop_down</md-icon>
-                              </md-button>
-                            </div>
-                        </div>
                     </center>
-                        <div layout="column" ng-if="institutionCtrl.showFullDescription" layout-wrap>
-                            <p align="justify"><b>Descrição:</b> {{ institutionCtrl.current_institution.description ? institutionCtrl.current_institution.description : 'Não informado' }}</p>
-
+                        <div layout="column"  layout-wrap>
                             <p ng-if="institutionCtrl.hasParentActive(institutionCtrl.current_institution)" align="justify"><b>Instituição hierarquicamente superior:</b>
                             <a href class="hyperlink" ng-click="institutionCtrl.goToInstitution(institutionCtrl.current_institution.parent_institution.key)">
                                 {{ institutionCtrl.current_institution.parent_institution.name}}</p>
@@ -51,24 +41,19 @@
                                     {{ institution.name }}
                                 </a>{{$last ? '' : ', '}}
                             </spam></p>
-                            <div layout="column" layout-align="center center" class="ng-if">
-                                <md-button ng-if="institutionCtrl.showFullDescription" flex ng-click="institutionCtrl.showHideDescription()">
-                                <md-icon>arrow_drop_up</md-icon>
-                                </md-button>
-                            </div>
                         </div>
                 </div>
             </div>
             <div layout="row" layout-xs="column" flex="60" flex-gt-sm="40">
                 <div flex-gt-sm="20" flex-xs="05" layout="column" layout-fill hide show-gt-sm>
                     <!-- Buttons -->
-                    <md-button flex-xs class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-900'}"
+                    <md-button flex-xs class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-500'}"
                         ng-if="!institutionCtrl.isMember"
                         ng-click="institutionCtrl.requestInvitation($event)">
                         <md-icon>add</md-icon>
                         Solicitar vínculo
                     </md-button>
-                    <md-button flex-xs class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-900'}"
+                    <md-button flex-xs class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-500'}"
                         ng-if="!institutionCtrl.isMember"
                         ng-click="institutionCtrl.isUserFollower ? institutionCtrl.unfollow() : institutionCtrl.follow()">
                         <md-icon>{{ institutionCtrl.isUserFollower ? 'person_outline':'person_add' }}</md-icon>
@@ -77,7 +62,7 @@
 
                     <!-- institution data -->
                     <md-card style="margin-bottom: 50px;">
-                        <md-toolbar md-colors="{background: 'teal-600'}" layout="row">
+                        <md-toolbar md-colors="{background: 'teal-500'}" layout="row">
                             <md-icon style="margin-left: 7%;">description</md-icon>
                             <div class="md-toolbar-tools" flex>
                                 <span class="card-title-light">DADOS CADASTRAIS</span>
@@ -90,7 +75,7 @@
                             <p id="phone"> {{ institutionCtrl.getInfo(institutionCtrl.current_institution.phone_number) }}
                             </p>
 
-                            <div ng-if="institutionCtrl.showFullDescription">
+                            <div ng-if="institutionCtrl.showFullData">
                                 <label for="cnpj" class="sm-label">CNPJ</label>
                                 <p id="cnpj"> {{ institutionCtrl.getInfo(institutionCtrl.current_institution.cnpj) }}
                                 </p>
@@ -111,7 +96,7 @@
                             </div>
 
                             <md-card-action layout="row" layout-align="center" >
-                                <md-button ng-click="institutionCtrl.showHideDescription()"
+                                <md-button ng-click="institutionCtrl.showHideData()"
                                     class="md-fab md-primary see-more-btn" title="Ver mais"
                                     md-colors="{background: 'light-green-600'}"
                                     style="margin-bottom: -42px;">
@@ -130,17 +115,17 @@
                             MEMBROS DA INSTITUIÇÃO
                         </md-subhead>
                         <div layout-margin flex-sm="80">
-                          <form ng-submit="">
+                            <form ng-submit="">
                             <md-input-container layout="row" class="md-icon-float">
-                              <label>Buscar</label>
-                              <input aria-label="Pesquisar por membros" class="md-icon-float" ng-model="institutionCtrl.searchedMember">
+                                <label>Buscar</label>
+                                <input aria-label="Pesquisar por membros" class="md-icon-float" ng-model="institutionCtrl.searchedMember">
                             </md-input-container>
-                          </form>
+                            </form>
                         </div>
                         <md-content layout="column" style="background-color: #FFFFFF; margin-top: -25px;" layout-margin>
                             <md-list flex="20">
-                                <md-list-item ng-repeat="member in institutionCtrl.members | filter: institutionCtrl.searchedMember"
-                                md-colors="{background: 'grey-300'}" style="margin-bottom: 10px;">
+                                <md-list-item class="list-item-dense" ng-repeat="member in institutionCtrl.members | filter: institutionCtrl.searchedMember"
+                                md-colors="{background: 'grey-300'}">
                                     <img ng-if="member.photo_url" layout="row" style="border-radius: 50%; margin-left: -15px; width: 60px; height: 60px; max-height: 70px;"
                                     ng-src="{{member.photo_url}}" title="{{member.name}}" flex-md="30"/>
                                     <div class="md-list-item-text md-2-line" style="font-size: 12px; margin-left: 5%;" layout="column" flex>
@@ -152,9 +137,33 @@
                         </md-content>
                     </md-card>
                 </div>
-                <post-timeline flex ng-if="!institutionCtrl.isLoadingPosts" layout="column" md-colors="{background: 'grey-200'}" posts="institutionCtrl.posts"
-                    institution="true" user="institutionCtrl.user" add-post="institutionCtrl.addPost" load-more-posts="institutionCtrl.loadMorePosts">
-                </post-timeline>
+                
+                <div flex>
+                    <md-card>
+                        <md-toolbar md-colors="{background: 'teal-500'}" layout="row" class="clickable-no-hover"
+                            ng-click="institutionCtrl.showHideDescription()">
+                            <md-icon style="margin-left: 2%;">email</md-icon>
+                            <div class="md-toolbar-tools" flex>
+                                <span class="card-title-light">DESCRIÇÃO DA INSTITUIÇÃO</span>
+                            </div>
+                            <md-icon style="margin-right: 2%;">
+                                {{institutionCtrl.showFullDescription ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}
+                            </md-icon>
+                        </md-toolbar>
+                        <md-card-content ng-show="institutionCtrl.showFullDescription"
+                            ng-scrollbars ng-scrollbars-config=institutionCtrl.scrollbarConfig
+                            style="padding: 1.5em; height: 15%; text-align: justify; overflow:hidden">
+                                <p>{{ institutionCtrl.current_institution.description }}</p>
+                        </md-card-content>
+                    </md-card>
+                    
+                    <post-timeline ng-if="!institutionCtrl.isLoadingPosts" layout="column" 
+                        md-colors="{background: 'grey-200'}" posts="institutionCtrl.posts"
+                        institution="true" user="institutionCtrl.user" add-post="institutionCtrl.addPost"
+                        load-more-posts="institutionCtrl.loadMorePosts">
+                    </post-timeline>
+                </div>
+
                 <div flex ng-if="institutionCtrl.isLoadingPosts" layout="row" layout-align="center center">
                     <md-progress-circular md-mode="indeterminate"></md-progress-circular>
                 </div>

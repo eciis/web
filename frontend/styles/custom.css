@@ -142,6 +142,10 @@ a:active {
     opacity:.50;
 }
 
+.clickable-no-hover {
+    cursor: pointer;
+}
+
 .demo-md-panel {
   min-height: 500px;
 }
@@ -483,9 +487,10 @@ md-switch.md-checked .md-bar {
     background-color: #80CBC4;
 }
 
-md-list-item, md-list-item .md-list-item-inner {
+.list-item-dense {
     min-height: 20px;
     height: 60px;
+    margin-bottom: 10px;
 }
 
 .md-button.sm-icon-button {
@@ -529,6 +534,11 @@ md-list-item, md-list-item .md-list-item-inner {
     font-weight: 700;
 }
 
+*:focus {
+    outline: 0;
+    outline: none;
+}
+
 .green-text {
     color: #004D40;
  }
@@ -564,7 +574,7 @@ md-list-item, md-list-item .md-list-item-inner {
     margin-left: 10px;
 }
 
-.green-ball {
+.xs-margin {
     color: #009688;
     margin-right: 2px;
     margin-left: 2px;

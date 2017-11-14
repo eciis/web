@@ -17,6 +17,7 @@
         institutionCtrl.isMember = false;
         institutionCtrl.portfolioUrl = null;
         institutionCtrl.showFullDescription = false;
+        institutionCtrl.showFullData = false;
         institutionCtrl.isLoadingPosts = true;
         institutionCtrl.isLoadingPosts = true;
         institutionCtrl.searchedMember = "";
@@ -34,6 +35,12 @@
             "research institutes":"Institutos de Pesquisa",
             "colleges":"Universidades",
             "other":"Outra"
+        };
+
+        institutionCtrl.scrollbarConfig = {
+            autoHideScrollbar: false,
+            theme: 'minimal-dark',
+            advanced: { }
         };
 
         var currentInstitutionKey = $state.params.institutionKey;
@@ -157,7 +164,11 @@
         };
 
         institutionCtrl.showHideDescription = function hideDescription() {
-            institutionCtrl.showFullDescription = !institutionCtrl.showFullDescription;
+            institutionCtrl.showFullDescription = institutionCtrl.current_institution.description && !institutionCtrl.showFullDescription ;
+        };
+
+        institutionCtrl.showHideData = function showHideData() {
+            institutionCtrl.showFullData = !institutionCtrl.showFullData;
         };
 
         institutionCtrl.goToManageMembers = function goToManageMembers(){
@@ -177,11 +188,11 @@
         };
 
         institutionCtrl.hasChildrenActive = function hasChildrenActive(institution) {
-            return !_.isEmpty(institution.children_institutions) && _.some(institution.children_institutions, {'state' :'active'});
+            return institution && !_.isEmpty(institution.children_institutions) && _.some(institution.children_institutions, {'state' :'active'});
         };
 
         institutionCtrl.hasParentActive = function hasParentActive(institution) {
-            return (institution.parent_institution && institution.parent_institution.state === 'active');
+            return institution && (institution.parent_institution && institution.parent_institution.state === 'active');
         };
 
         function checkIfUserIsFollower() {
@@ -224,12 +235,12 @@
 
         institutionCtrl.getInfo = function getInfo(information) {
             return information ? information : "Não informado";
-        }
+        };
 
         institutionCtrl.getLegalNature = function getLegalNature() {
             var legalNature = institutionCtrl.current_institution.legal_nature;
             return legalNature ? institutionCtrl.legal_natures[legalNature] : 'Não informado';
-        }
+        };
 
         institutionCtrl.requestInvitation = function requestInvitation(event) {
             $mdDialog.show({

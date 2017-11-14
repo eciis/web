@@ -14,7 +14,7 @@
         </a>
       </div>
       <span layout="row" class="md-subhead">
-        por {{ postDetailsCtrl.post.author }} <b class="green-ball">&bull;</b>
+        por {{ postDetailsCtrl.post.author }} <b class="xs-margin">&bull;</b>
         {{ postDetailsCtrl.post.publication_date | amUtc | amLocal | amCalendar:referenceTime:formats }}
         <md-button ng-if="postDetailsCtrl.showButtonEdit()" class="sm-icon-button xs-icon-button xs-edit-icon-justify"
         ng-click="postDetailsCtrl.editPost()" md-colors="{background: 'light-green'}"

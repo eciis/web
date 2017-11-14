@@ -9,7 +9,7 @@
                 {{commentCtrl.comment.author_name}}</a>
               <small style="color: #7f7f7f;" class="md-caption">
                 | {{commentCtrl.comment.institution_name}}
-                <b class="green-ball">&bull;</b>
+                <b class="xs-margin">&bull;</b>
                 {{commentCtrl.comment.publication_date | amUtc | amLocal | amCalendar:referenceTime:formats}}
               </small>
             </div>
@@ -69,7 +69,7 @@
               </a> 
               <small style="color: #7f7f7f;" class="md-caption">
                 | {{reply.institution_name}}
-                <b class="green-ball">&bull;</b>
+                <b class="xs-margin">&bull;</b>
                 {{reply.publication_date | amUtc | amLocal | amCalendar:referenceTime:formats}}
               </small>
             </div>

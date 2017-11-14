@@ -56,7 +56,7 @@
 				</md-card-header-text>
 			</md-card-header>
 			<md-card-content>
-				<form name="requestuser">
+				<form name="requestuser" ng-submit="requestInvCtrl.sendRequest()">
 					<md-input-container class="md-block" ng-if="requestInvCtrl.showNameInput()">
 			          <label>Nome</label>
 			          <input ng-model="requestInvCtrl.request.name" name="name" required>
@@ -75,18 +75,18 @@
 
 			      	<md-input-container class="md-block">
 			      	<label>Cargo institucional</label>
-			      	<input name="cargo" ng-model="requestInvCtrl.request.office" name="office" required>
-			      	<div ng-messages='requestuser.request.office.$error'>
-			    		<div ng-message="required">Este campo é obrigatório!</div>
-					  </div>
-			      	</md-input-container>
+						<input name="cargo" ng-model="requestInvCtrl.request.office" name="office" required>
+						<div ng-messages='requestuser.request.office.$error'>
+							<div ng-message="required">Este campo é obrigatório!</div>
+						</div>
+					</md-input-container>
+					  <div layout="row" layout-align="end">
+						<md-button type="submit"
+								class="md-button md-warn md-raised">
+							Solicitar Cadastro
+						</md-button>
+					</div>
 				</form>
-				<div layout="row" layout-align="end">
-					<md-button ng-click="requestInvCtrl.sendRequest()" ng-disabled="!requestInvCtrl.hasInstSelect"
-							class="md-button md-warn md-raised">
-						Solicitar Cadastro
-					</md-button>
-				</div>
 			</md-card-content>
 		</md-card>
 	</div>

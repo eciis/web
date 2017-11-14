@@ -64,10 +64,10 @@
         };
 
         function redirectTo(path) {
-            if (path === '/signin') {
-                $state.go("app.home");
-            } else {
+            if (path) {
                 $location.path(path);
+            } else {
+                $state.go("app.home");
             }
         }
 

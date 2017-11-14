@@ -20,14 +20,17 @@
         inviteInstCtrl.institution = {};
         inviteInstCtrl.invite = {};
         inviteInstCtrl.hasParent = false;
-        inviteInstCtrl.showButton = true;
+        inviteInstCtrl.showSendInvite = false;
+        inviteInstCtrl.showParentHierarchie = false;
+        inviteInstCtrl.showChildrenHierarchie = false;
+        inviteInstCtrl.showRequestInvites = false;
         inviteInstCtrl.existing_institutions = [];
         inviteInstCtrl.requested_invites = [];
 
 
         inviteInstCtrl.checkInstInvite = function checkInstInvite(ev) {
             var promise;
-            
+
             inviteInstCtrl.invite.institution_key = institutionKey;
             inviteInstCtrl.invite.admin_key = inviteInstCtrl.user.key;
             invite = new Invite(inviteInstCtrl.invite);
@@ -72,7 +75,7 @@
                 targetEvent: ev,
                 clickOutsideToClose: true
             });
-            inviteInstCtrl.showButton = true;
+            inviteInstCtrl.showSendInvite = false;
         };
 
         inviteInstCtrl.sendInstInvite = function sendInstInvite(invite) {
@@ -153,7 +156,15 @@
 
         inviteInstCtrl.cancelInvite = function cancelInvite() {
             inviteInstCtrl.invite = {};
-            inviteInstCtrl.showButton = true;
+            inviteInstCtrl.showSendInvite = false;
+        };
+
+        inviteInstCtrl.goToActiveInst = function goToActiveInst(institution) {
+            if (inviteInstCtrl.isActive(institution)) {
+                inviteInstCtrl.goToInst(institution.key);
+            } else {
+                MessageService.showToast("Institutição inativa!");
+            }
         };
 
         inviteInstCtrl.goToInst = function goToInst(institutionKey) {
@@ -297,7 +308,7 @@
             } else {
                 inviteInstCtrl.institution.addChildrenInst(stub);
             }
-            inviteInstCtrl.showButton = true;
+            inviteInstCtrl.showSendInvite = false;
         }
 
         inviteInstCtrl.showMessage = function(request) {
@@ -313,7 +324,9 @@
         };
 
         inviteInstCtrl.getSuggestedName = function getSuggestedName(institution) {
-            return institution.invite.suggestion_institution_name || institution.name;
+            if (institution.invite) {
+                return institution.invite.suggestion_institution_name || institution.name;
+            }
         };
 
         function designOptions() {

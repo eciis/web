@@ -29,8 +29,9 @@
                 .cancel('Cancelar');
 
             $mdDialog.show(confirm).then(function() {
+                postDetailsCtrl.post = new Post(postDetailsCtrl.post);
                 PostService.deletePost(postDetailsCtrl.post).then(function success() {
-                    postDetailsCtrl.post.state = 'deleted';
+                    postDetailsCtrl.post.remove(postDetailsCtrl.user.name);
                     MessageService.showToast('Post excluído com sucesso');
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
@@ -621,6 +622,19 @@
         commentCtrl.isInstInactive = function isInstInactive() {
             return commentCtrl.post.institution_state === 'inactive';
         };
+
+        commentCtrl.numberOfLikesMessage = function numberOfLikesMessage(reply) {
+            return commentCtrl.numberOfLikes(reply) === 0? 'Nenhuma curtida' :
+            commentCtrl.numberOfLikes(reply) === 1? commentCtrl.isLikedByUser(reply) ?
+            'Você curtiu isso' : '1 pessoa curtiu' :
+            commentCtrl.numberOfLikes(reply) + ' pessoas curtiram';
+        };
+
+        commentCtrl.numberOfRepliesMessage = function numberOfRepliesMessage() {
+            return commentCtrl.numberOfReplies() === 0? 'Nenhuma resposta' :
+            commentCtrl.numberOfReplies() === 1? '1 resposta' :
+            commentCtrl.numberOfReplies() + ' respostas'
+        }
     });
 
     app.directive("comment", function() {

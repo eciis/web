@@ -10,6 +10,7 @@ from utils import NotAuthorizedException
 from utils import json_response
 from util.json_patch import JsonPatch
 from models.post import Post
+from models.survey_post import SurveyPost
 from models.post import Comment
 from models.post import Like
 
@@ -44,7 +45,7 @@ class PostHandler(BaseHandler):
         post_key = ndb.Key(urlsafe=url_string)
         post = post_key.get()
 
-        assert type(post) is Post, "Key is not an Post"
+        assert type(post) in (Post, SurveyPost), "Key is not an Post"
         post_json = post.make(self.request.host)
         post_json['data_comments'] = post.comments
         post_json['data_likes'] = getLikes(post, self.request.host)

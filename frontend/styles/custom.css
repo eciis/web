@@ -142,6 +142,10 @@ a:active {
     opacity:.50;
 }
 
+.clickable-no-hover {
+    cursor: pointer;
+}
+
 .demo-md-panel {
   min-height: 500px;
 }
@@ -175,6 +179,7 @@ a:active {
 .ng-if{
     animation:1.0s flipInX ease;
     animation-delay: 0s;
+    margin: 20px 0 20px 0;
 }
 
 @keyframes flipInX {
@@ -481,11 +486,22 @@ a:active {
     color: #019587;
 }
 
+.md-title {
+    font-size: 20px;
+    font-weight: 700;
+}
+
 .sm-fab-button {
    background-color: #8BC34A;
    width: 22px;
    height: 17px;
    border-radius: 50%;
+}
+
+.survey-card{
+    margin-top: -1px;
+    margin-left: 40px;
+    margin-right: 40px;
 }
 
 .like-comment-text {
@@ -498,18 +514,62 @@ a:active {
     opacity: 0.75;
 }
 
+.option{
+    height: 25px;
+    margin: 0px;
+}
+
+.option-selected{
+    background-color: #E0E0E0;
+    height: 48px;
+}
+
+.option-percentage{
+    background-color: #E0E0E0;
+    margin-right: -16px;
+    text-align: center;
+    width: 78px;
+    height: 20px;
+    color: #616161;
+    padding-top: 16px;
+    padding-bottom: 16px;
+}
+
+.percentage-selected{
+    margin-right: -16px;
+    background-color: #8BC34A;
+    text-align: center;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    width: 78px;
+    height: 20px;
+    color: #FFFFFF;
+}
+
 md-switch.md-checked .md-thumb {
-  background-color: #009688;
+    background-color: #009688;
 }
 
 md-switch.md-checked .md-bar {
     background-color: #80CBC4;
 }
 
+md-checkbox.md-checked .md-icon {
+    background-color: #009688;
+}
+
 .list-item-dense {
     min-height: 20px;
     height: 60px;
     margin-bottom: 10px;
+}
+
+md-checkbox.md-checked[disabled] .md-icon {
+    background-color: #009688;
+}
+
+md-radio-button.md-default-theme .md-on, md-radio-button .md-on {
+    background-color: #009688;
 }
 
 .md-button.sm-icon-button {
@@ -537,12 +597,25 @@ md-switch.md-checked .md-bar {
 
 .xs-icon-button md-icon {
     font-size: 12px;
+    margin: 1px;
+}
+
+.xs-delete-icon-justify md-icon {
+    margin: 2 1 0 0;
+}
+
+.xs-edit-icon-justify md-icon {
     margin: 2px;
 }
 
 .md-title {
     font-size: 20px;
     font-weight: 700;
+}
+
+*:focus {
+    outline: 0;
+    outline: none;
 }
 
 .green-text {
@@ -583,4 +656,21 @@ md-switch.md-checked .md-bar {
 .no-break {
     font-size: 15px;
     white-space: nowrap;
+}
+
+.xs-bullet {
+    color: #009688;
+    margin-right: 2px;
+    margin-left: 2px;
+}
+
+.user-name {
+    font-size: 15px;
+    color: #00796B;
+}
+
+.user-picture {
+    border-radius: 50%;
+    min-width: 55px;
+    min-height: 55px;
 }

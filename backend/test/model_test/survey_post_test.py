@@ -151,7 +151,7 @@ class SurveyPostTest(TestBase):
         """Test the create method."""
         survey_binary = SurveyPost.create(
             self.data_binary, self.user.key, self.institution.key)
-        options_selected = [survey_binary.options[0]["id"]]
+        options_selected = [survey_binary.options[0]]
         survey_binary.vote(self.user.key, options_selected)
         # Update data
         option_one = survey_binary.options[0]
@@ -167,7 +167,7 @@ class SurveyPostTest(TestBase):
 
         survey_multiple = SurveyPost.create(
             self.data_multiple, self.user.key, self.institution.key)
-        options_selected = [self.options[0]['id'], self.options[1]['id']]
+        options_selected = [self.options[0], self.options[1]]
         survey_multiple.vote(self.user.key, options_selected)
 
         # Update data

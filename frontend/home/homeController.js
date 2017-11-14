@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.controller("HomeController", function HomeController(PostService, AuthService,
+    app.controller("HomeController", function HomeController(PostService, AuthService, NotificationService,
             InstitutionService, $interval, $mdToast, $mdDialog, $state, MessageService, ProfileService, EventService, $q) {
         var homeCtrl = this;
 
@@ -16,6 +16,7 @@
         homeCtrl.posts = [];
         homeCtrl.events = [];
         homeCtrl.followingInstitutions = [];
+        homeCtrl.refreshTimeline = false;
         homeCtrl.instMenuExpanded = false;
         homeCtrl.isLoadingPosts = true;
 
@@ -70,6 +71,7 @@
                 actualPage = 0;
                 morePosts = true;
                 homeCtrl.posts.splice(0, homeCtrl.posts.length);
+                homeCtrl.setRefreshTimelineButton();
                 homeCtrl.isLoadingPosts = true;
             }
 
@@ -84,7 +86,15 @@
 
         homeCtrl.isEventsEmpty = function isEventsEmpty() {
             return homeCtrl.events.length === 0;
-        }
+        };
+
+        homeCtrl.showRefreshTimelineButton = function showRefreshTimelineButton() {
+            return homeCtrl.refreshTimeline;
+         };
+
+        homeCtrl.setRefreshTimelineButton = function setRefreshTimelineButton() {
+            homeCtrl.refreshTimeline = !homeCtrl.refreshTimeline;
+        };
 
         function loadPosts(deferred) {
             PostService.getNextPosts(actualPage).then(function success(response) {
@@ -129,8 +139,11 @@
             return actualEvents;
         }
 
-        loadEvents();
-        homeCtrl.loadMorePosts();
-        getFollowingInstitutions();
+        (function main() {
+            NotificationService.watchPostNotification(homeCtrl.user.key, homeCtrl.setRefreshTimelineButton);
+            loadEvents();
+            homeCtrl.loadMorePosts();
+            getFollowingInstitutions();
+        })();
     });
 })();

@@ -37,12 +37,6 @@
             "other":"Outra"
         };
 
-        institutionCtrl.scrollbarConfig = {
-            autoHideScrollbar: false,
-            theme: 'minimal-dark',
-            advanced: { }
-        };
-
         var currentInstitutionKey = $state.params.institutionKey;
 
         institutionCtrl.user = AuthService.getCurrentUser();

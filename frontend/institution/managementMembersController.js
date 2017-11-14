@@ -12,6 +12,9 @@
         manageMemberCtrl.currentMember = "";
 
         manageMemberCtrl.showSendInvite = true;
+        manageMemberCtrl.showInvites = false;
+        manageMemberCtrl.showRequests = false;
+        manageMemberCtrl.showMembers = false;
 
         var currentInstitutionKey = $state.params.institutionKey;
         var invite;
@@ -142,6 +145,22 @@
                 return sentInvitation.invitee === invite.invitee;
             });
         }
+
+        manageMemberCtrl.showHideInvites = function showHideInvites() {
+            manageMemberCtrl.showInvites = !manageMemberCtrl.showInvites;
+        };
+
+        manageMemberCtrl.showHideRequests = function showHideRequests() {
+            manageMemberCtrl.showRequests = !manageMemberCtrl.showRequests;
+        };
+
+        manageMemberCtrl.showHideMembers = function showHideMembers() {
+            manageMemberCtrl.showMembers = !manageMemberCtrl.showMembers;
+        };
+
+        manageMemberCtrl.showHideSendInvites = function showHideSendInvites() {
+            manageMemberCtrl.showSendInvite = !manageMemberCtrl.showSendInvite;
+        };
 
         manageMemberCtrl.isUserInviteValid = function isUserInviteValid(invite) {
             var isValid = true;

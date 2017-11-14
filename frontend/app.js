@@ -19,7 +19,7 @@
     ]);
 
     app.config(function($mdIconProvider, $mdThemingProvider, $stateProvider, $urlMatcherFactoryProvider,
-        $urlRouterProvider, $locationProvider, $httpProvider, $sceDelegateProvider) {
+        $urlRouterProvider, $locationProvider, $httpProvider, $sceDelegateProvider, ScrollBarsProvider) {
 
         $mdIconProvider.fontSet('md', 'material-icons');
         $mdThemingProvider.theme('docs-dark');
@@ -232,6 +232,20 @@
             }
         };
         moment.updateLocale('pt-br', dateFormats);
+
+        
+        ScrollBarsProvider.defaults = {
+            scrollButtons: {
+                scrollAmount: 'auto', // scroll amount when button pressed
+                enable: true // enable scrolling buttons by default
+            },
+            scrollInertia: 200, // adjust however you want
+            axis: 'yx', // enable 2 axis scrollbars by default,
+            theme: 'minimal-dark',
+            autoHideScrollbar: false
+        };
+
+
     });
 
     app.factory('BearerAuthInterceptor', function ($injector, $q, $state) {

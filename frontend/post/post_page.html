@@ -1,7 +1,10 @@
 <md-content layout="row" md-colors="{background: 'grey-200'}" layout-align="center">
     <div flex-gt-lg="60" flex-lg="60" layout="row" layout-wrap layout-align="center" layout-fill>
-        <div layout="column" flex>
-            <post-details ng-if="postCtrl.post" post="postCtrl.post" is-post-page=true></post-details>   
+        <div layout="column" flex ng-if="postCtrl.post && (postCtrl.post.state != 'deleted' || postCtrl.post.number_of_comments != 0)">
+            <post-details post="postCtrl.post" is-post-page=true></post-details>  
+        </div>
+        <div layout="row" layout-align="center center" ng-if="postCtrl.post.state == 'deleted' && postCtrl.post.number_of_comments === 0">
+            <h2>Esta publicação foi removida.</h2> 
         </div>
     </div>
 </md-content>

@@ -76,39 +76,12 @@ class SurveyPostTest(TestBase):
         option_two = survey_multiple.options[1]
 
         self.assertEquals(
-            self.user.key.urlsafe() in option_two["voters"], True,
+            self.voter in option_two["voters"], True,
             "It should be True"
         )
         self.assertEquals(
             option_two["number_votes"], 1,
             "It should be 1"
-        )
-
-    def test_remove_vote(self):
-        """Test the create method."""
-        survey_binary = SurveyPost.create(
-            self.data_binary, self.user.key, self.institution.key)
-        option_one = survey_binary.options[0]
-        # Add vote
-        survey_binary.add_vote(self.voter, option_one['id'])
-        # Update data
-        option_one = survey_binary.options[0]
-        self.assertEquals(
-            option_one["number_votes"], 1,
-            "It should be 1"
-        )
-        # Remove vote
-        survey_binary.remove_vote(self.user.key.urlsafe(), option_one['id'])
-        # Update data
-        option_one = survey_binary.options[0]
-
-        self.assertEquals(
-            self.user.key.urlsafe() not in option_one["voters"], True,
-            "It should be True"
-        )
-        self.assertEquals(
-            option_one["number_votes"], 0,
-            "It should be 0"
         )
 
     def test_is_vote_valid(self):
@@ -157,7 +130,7 @@ class SurveyPostTest(TestBase):
         option_one = survey_binary.options[0]
 
         self.assertEquals(
-            self.user.key.urlsafe() in option_one["voters"], True,
+            self.voter in option_one["voters"], True,
             "It should be True"
         )
         self.assertEquals(
@@ -240,4 +213,4 @@ def initModels(cls):
 
     cls.voter = {'name': cls.user.name,
                  'photo_url': cls.user.photo_url,
-                 'key': cls.user.key}
+                 'key': cls.user.key.urlsafe()}

@@ -38,44 +38,44 @@ class SurveyPost(Post):
         """Add a vote to the survey post."""
         option = self.options[option_id]
 
-        if(self.is_vote_valid(user["key"], option)):
+        if(self.is_vote_valid(user, option)):
             option["number_votes"] += 1
             option["voters"].append(user)
             self.number_votes += 1
             self.options[option_id] = Utils.toJson(option)
             self.put()
 
-    def remove_vote(self, author_key, option_id):
+    def remove_vote(self, author, option_id):
         """Remove a vote from survey post."""
         option = self.options[option_id]
 
-        if(author_key not in option["voters"]):
+        if(author not in option["voters"]):
             raise Exception("The user didn't vote for this option")
 
         option["number_votes"] -= 1
-        option["voters"].remove(author_key)
+        option["voters"].remove(author)
 
         self.options[option_id] = Utils.toJson(option)
         self.put()
 
-    def is_vote_valid(self, author_key, option):
+    def is_vote_valid(self, author, option):
         """Verify if vote is valid."""
         if(self.deadline and datetime.datetime.now() > self.deadline):
             raise Exception("Deadline for receive answers has passed.")
 
-        if(author_key in option["voters"]):
+        if(author in option["voters"]):
             raise Exception("The user already voted for this option")
 
         return True
 
-    def vote(self, author_key, all_options_selected):
+    def vote(self, author, all_options_selected):
         """Added all votes of user from survey post."""
         if(self.type_survey == "binary" and
                 len(all_options_selected) == 1):
-            self.add_vote(author_key, all_options_selected[0]["id"])
+            self.add_vote(author, all_options_selected[0]["id"])
         else:
             for option in all_options_selected:
-                self.add_vote(author_key, option["id"])
+                self.add_vote(author, option["id"])
 
     def make(post, host):
         """Create personalized json of post."""

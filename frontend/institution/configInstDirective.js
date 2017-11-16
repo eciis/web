@@ -56,9 +56,9 @@
             if (newInstitution.isValid()){
                 var confirm = $mdDialog.confirm(event)
                     .clickOutsideToClose(true)
-                    .title('Confirmar configuração')
-                    .textContent('Confirmar a configuração dessa instituição?')
-                    .ariaLabel('Confirmar Configuração')
+                    .title('Finalizar')
+                    .textContent('Você deseja finalizar e salvar os dados da instituição?')
+                    .ariaLabel('Finalizar')
                     .targetEvent(event)
                     .ok('Sim')
                     .cancel('Não');
@@ -152,7 +152,7 @@
             configInstCtrl.user.updateInstitutions(institution);
             AuthService.save();
             changeInstitution(institution);
-            MessageService.showToast('Configuração de instituição realizada com sucesso');
+            MessageService.showToast('Dados da instituição salvos com sucesso.');
             $state.go('app.institution', {institutionKey: institutionKey});
         }
 

@@ -3,7 +3,7 @@
 describe('Test ConfigInstDirective', function() {
     var editInstCtrl, scope, institutionService, state, deferred;
     var mdToast, mdDialog, http, inviteService, httpBackend, imageService;
-    var authService, createCtrl, pdfService;
+    var authService, createCtrl, pdfService, messageService;
 
     var institution = {
             name: "name",
@@ -59,7 +59,7 @@ describe('Test ConfigInstDirective', function() {
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $httpBackend, $q, $state, $mdToast,
-        $rootScope, $mdDialog, $http, InstitutionService, InviteService, AuthService, PdfService, ImageService) {
+        $rootScope, $mdDialog, $http, InstitutionService, InviteService, AuthService, PdfService, ImageService, MessageService) {
         httpBackend = $httpBackend;
         httpBackend.expectGET('app/institution/legal_nature.json').respond(legal_nature);
         httpBackend.expectGET('app/institution/actuation_area.json').respond(actuation_area);
@@ -73,6 +73,7 @@ describe('Test ConfigInstDirective', function() {
         mdDialog = $mdDialog;
         institutionService = InstitutionService;
         inviteService = InviteService;
+        messageService = MessageService;
         mdToast = $mdToast;
         imageService = ImageService;
         authService = AuthService;
@@ -208,12 +209,78 @@ describe('Test ConfigInstDirective', function() {
     });
 
     describe('nextStep', function() {
-        it('should go to next step', function() {
+        beforeEach(function() {
             editInstCtrl.steps = [true, false, false];
+        });
+
+        it('should go to next step', function() {
             editInstCtrl.nextStep();
             expect(editInstCtrl.steps).toEqual([false, true, false]);
             editInstCtrl.nextStep();
             expect(editInstCtrl.steps).toEqual([false, false, true]);
+        });
+
+        it('should call showToast', function() {
+            spyOn(messageService, 'showToast');
+            editInstCtrl.newInstitution.address = {};
+            editInstCtrl.nextStep();
+            expect(messageService.showToast).toHaveBeenCalled();
+        });
+
+        it('should not pass from first step', function() {
+            editInstCtrl.newInstitution.address = undefined;
+            editInstCtrl.nextStep();
+            expect(editInstCtrl.getStep(1)).toEqual(true);
+            editInstCtrl.newInstitution.address = {
+                street: "floriano",
+                city: "example",
+                country: "brazil"
+            };
+            expect(editInstCtrl.getStep(1)).toEqual(true);
+        });
+
+        it('should not pass from second step', function() {
+            editInstCtrl.nextStep();
+            expect(editInstCtrl.steps).toEqual([false, true, false]);
+            editInstCtrl.newInstitution.name = "";
+            editInstCtrl.nextStep();
+            expect(editInstCtrl.steps).toEqual([false, true, false]);
+            editInstCtrl.newInstitution.name = "user";
+            editInstCtrl.newInstitution.acronym = undefined;
+            editInstCtrl.nextStep();
+            expect(editInstCtrl.steps).toEqual([false, true, false]);
+            editInstCtrl.newInstitution.acronym = "UFCG";
+            editInstCtrl.newInstitution.actuation_area = undefined;
+            editInstCtrl.nextStep();
+            expect(editInstCtrl.steps).toEqual([false, true, false]);
+            editInstCtrl.newInstitution.legal_nature = undefined;
+            editInstCtrl.nextStep();
+            expect(editInstCtrl.steps).toEqual([false, true, false]);
+        });
+    });
+
+    describe('showGreenButton', function() {
+        beforeEach(function() {
+            editInstCtrl.steps = [true, false, false];
+        });
+
+        it('should return true', function() {
+            editInstCtrl.nextStep();
+            var greenButton = editInstCtrl.showGreenButton(2);
+            expect(greenButton).toEqual(true);
+            editInstCtrl.nextStep();
+            greenButton = editInstCtrl.showGreenButton(2);
+            expect(greenButton).toEqual(true);
+            greenButton = editInstCtrl.showGreenButton(3);
+            expect(greenButton).toEqual(true);
+        });
+
+        it('should return false', function() {
+            var greenButton = editInstCtrl.showGreenButton(2);
+            expect(greenButton).toEqual(false);
+            editInstCtrl.nextStep();
+            greenButton = editInstCtrl.showGreenButton(3);
+            expect(greenButton).toEqual(false);
         });
     });
 });

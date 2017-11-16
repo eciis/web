@@ -7,33 +7,33 @@
                     <div flex>
                         <md-content class="hide-scrollbar" layout="row">
                             <div layout="row" layout-align="center center" layout-margin>
-                                <span class="rounded-green-circle" style="color: #FFFFFF; width: 25px; height: 25px;">
+                                <span class="green-circle" style="color: #FFFFFF; width: 25px; height: 25px;">
                                     <span layout="row" layout-align="center">
                                         <md-icon ng-if="!configInstCtrl.getStep(1)" style="color: #FFFFFF;">done</md-icon>
                                         <span ng-if="configInstCtrl.getStep(1)" style="margin-top: 2px;">1</span>
                                     </span>
                                 </span>
-                                <span class="no-break">Dados cadastrais</span>
+                                <span class="inline">Dados cadastrais</span>
                                 <hr style="width: 100px;"/>
                             </div>
                             <div layout="row" layout-align="center center" layout-margin>
-                                <span ng-class="configInstCtrl.showGreenButton(2)? 'rounded-green-circle': 'rounded-grey-circle'" style="color: #FFFFFF; width: 25px; height: 25px;">
+                                <span ng-class="configInstCtrl.showGreenButton(2)? 'green-circle': 'grey-circle'" style="color: #FFFFFF; width: 25px; height: 25px;">
                                     <span layout="row" layout-align="center">
                                         <md-icon ng-if="configInstCtrl.getStep(3)" style="color: #FFFFFF;">done</md-icon>
                                         <span ng-if="!configInstCtrl.getStep(3)" style="margin-top: 2px;">2</span>
                                     </span>
                                 </span>
-                                <span class="no-break">Dados da instituição</span>
+                                <span class="inline">Dados da instituição</span>
                                 <hr style="width: 100px;"/>
                             </div>
                             <div layout="row" layout-align="center center" layout-margin>
-                                <span ng-class="configInstCtrl.showGreenButton(3)? 'rounded-green-circle': 'rounded-grey-circle'" style="color: #FFFFFF; width: 25px; height: 25px;">
+                                <span ng-class="configInstCtrl.showGreenButton(3)? 'green-circle': 'grey-circle'" style="color: #FFFFFF; width: 25px; height: 25px;">
                                     <span layout="row" layout-align="center">
                                         <md-icon ng-if="configInstCtrl.newInstitution.leader" style="color: #FFFFFF;">done</md-icon>
                                         <span ng-if="!configInstCtrl.newInstitution.leader" style="margin-top: 2px;">3</span>
                                     </span>
                                 </span>
-                                <span class="no-break">Finalizar cadastro</span>
+                                <span class="inline">Finalizar cadastro</span>
                             </div>
                         </md-content>
                     </div>

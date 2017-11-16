@@ -185,7 +185,7 @@
             });    
         }
 
-        (function main {
+        (function main() {
             NotificationService.watchPostNotification(homeCtrl.user.key, homeCtrl.setRefreshTimelineButton);
             getColors();
             loadEvents();

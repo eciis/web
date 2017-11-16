@@ -2,7 +2,7 @@
 
 (describe('Test RequestInvitationController', function() {
 
-    var requestInvCtrl, httpBackend, scope, institutionService, createCtrl, state;
+    var requestInvCtrl, httpBackend, scope, institutionService, createCtrl, state, requestService;
 
     var SEARCH_INST_URI = "/api/search/institution?";
     var INST_URI = "/api/institutions/";
@@ -30,11 +30,12 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, InstitutionService, AuthService) {
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, InstitutionService, AuthService, RequestInvitationService) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
         institutionService = InstitutionService;
+        requestService = RequestInvitationService;
 
         httpBackend.when('GET', 'institution/institution_page.html').respond(200);
         httpBackend.when('GET', "main/main.html").respond(200);
@@ -79,14 +80,23 @@
         });
 
         describe('selectInstitution()', function(){
+
             it('Should select certbio', function(done){
                 httpBackend.expect('GET', INST_URI + certbio.id).respond(certbio);
                 spyOn(institutionService, 'getInstitution').and.callThrough();
+                spyOn(requestService, 'getRequests').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            return callback({});
+                        }
+                    };
+                });
                 expect(requestInvCtrl.institutionSelect).toEqual({});
 
                 requestInvCtrl.selectInstitution(certbio).then(function() {
                     expect(requestInvCtrl.institutionSelect).toEqual(certbio);
                     expect(institutionService.getInstitution).toHaveBeenCalled();
+                    expect(requestService.getRequests).toHaveBeenCalled();
                     done();
                 });
                 httpBackend.flush();

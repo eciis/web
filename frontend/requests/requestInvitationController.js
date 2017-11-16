@@ -14,6 +14,7 @@
         requestInvCtrl.wasSearched = false;
         requestInvCtrl.canCreate = false;
         requestInvCtrl.currentUser = AuthService.getCurrentUser();
+        requestInvCtrl.requestsOfSelectedInst = [];
         var ACTIVE = 'active';
 
         requestInvCtrl.sendRequest = function sendRequest() {
@@ -37,6 +38,25 @@
                 requestInvCtrl.cancelDialog();
             });
         };
+
+        requestInvCtrl.verifyAndSendRequest = function verifyAndSendRequest() {
+            if (!_.isEmpty(requestInvCtrl.requestsOfSelectedInst)) {
+                const sent = requestInvCtrl.requestsOfSelectedInst.filter(invite => invite.status === "sent");
+                const senders = _.concat(...sent.map(invite => invite.sender));
+                return !senders.map(email => requestInvCtrl.currentUser.email.includes(email)).includes(true) ?
+                requestInvCtrl.sendRequest() : MessageService.showToast("Usuário já solicitou fazer parte dessa instituição.");
+            } else {
+                requestInvCtrl.sendRequest();
+            }
+        };
+
+        function getRequests(instKey) {
+            RequestInvitationService.getRequests(instKey).then(function success(response) {
+                requestInvCtrl.requestsOfSelectedInst = response;
+            }, function error(response) {
+                requestInvCtrl.cancelDialog();
+            });
+        }
 
         (function main(){
             if(requestInvCtrl.institution) {
@@ -87,7 +107,7 @@
                 requestInvCtrl.request = {
                     institution_name: institution.name
                 };
-
+                getRequests(requestInvCtrl.institutionSelect.key);
                 deferred.resolve(response);
             });
             return deferred.promise;

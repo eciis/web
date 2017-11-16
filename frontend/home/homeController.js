@@ -96,18 +96,13 @@
             homeCtrl.refreshTimeline = !homeCtrl.refreshTimeline;
         };
 
-        homeCtrl.openManageColor = function openManageColor(profile){
+        homeCtrl.openManageColor = function openManageColor(){
             $mdDialog.show({
                 controller: "HomeController",
                 controllerAs: "homeCtrl",
                 templateUrl: 'app/home/color_picker.html',
                 parent: angular.element(document.body),
-                clickOutsideToClose: true,
-                targetEvent: profile,
-                locals: {
-                    originalUser: homeCtrl.user
-                },
-                bindToController: true
+                clickOutsideToClose: true
             });
         };
 

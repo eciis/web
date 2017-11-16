@@ -25,13 +25,9 @@
             return surveyCtrl.post.type_survey === 'multiple_choice';
         };
 
-        surveyCtrl.showSendButton = function(){
-            return surveyCtrl.post.type_survey === 'multiple_choice';
-        };
-
         surveyCtrl.votedOption = function(option){
             var voted = _.filter(option.voters,{'key': Utils.getKeyFromUrl(surveyCtrl.user.key)});
-            return voted.length !== 0 ? true : false;
+            return voted.length !== 0;
         };
 
         surveyCtrl.userVoted = function(){
@@ -40,6 +36,13 @@
                 if(surveyCtrl.votedOption(option)) {voted = true;}
             });
             return voted;
+        };
+
+        surveyCtrl.canVote = function(){
+            var time = new Date (surveyCtrl.post.deadline);
+            time.setHours(time.getHours() - 3);
+            var onTime = surveyCtrl.post.deadline ? new Date() < time : 'true';
+            return onTime && !surveyCtrl.userVoted();
         };
 
         surveyCtrl.vote = function(ev){
@@ -127,7 +130,7 @@
                     attachTo: angular.element(document.body),
                     controller: 'SurveyDetailsController',
                     controllerAs: 'ctrl',
-                    templateUrl: 'app/survey/panel-survey.html',
+                    templateUrl: 'app/survey/panel-voters.html',
                     panelClass: 'demo-menu-example',
                     locals: {
                       'option': option,
@@ -141,7 +144,6 @@
                   };
 
                   $mdPanel.open(config);
-
             }
         };
     });

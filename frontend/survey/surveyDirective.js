@@ -8,6 +8,7 @@
 
         var surveyCtrl = this;
         surveyCtrl.options = $scope.options;
+        surveyCtrl.now = new Date();
         surveyCtrl.multipleChoice = false;
         var option_empty = {'text': '',
                             'number_votes': 0,
@@ -58,7 +59,6 @@
         }
 
         function createSurvey(){
-            console.log("klakakkaka");
             modifyOptions();
             getTypeSurvey();
             surveyCtrl.post.deadline && formateDate();
@@ -73,7 +73,7 @@
                 surveyCtrl.resetSurvey();
                 surveyCtrl.posts.push(new Post(response.data));
                 MessageService.showToast('Postado com sucesso!');
-                surveyCtrl.saveSurvey(true);
+                surveyCtrl.callback();
                 $mdDialog.hide();
             }, function error(response) {
                 AuthService.reload().then(function success() {
@@ -112,7 +112,7 @@
                 posts: '=',
                 user: '=',
                 options: '=',
-                saveSurvey: '='
+                callback: '='
             }
         };
     });

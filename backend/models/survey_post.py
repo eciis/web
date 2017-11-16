@@ -34,13 +34,13 @@ class SurveyPost(Post):
             data, author_key, institution_key)
         return survey_post
 
-    def add_vote(self, author_key, option_id):
+    def add_vote(self, user, option_id):
         """Add a vote to the survey post."""
         option = self.options[option_id]
 
-        if(self.is_vote_valid(author_key, option)):
+        if(self.is_vote_valid(user["key"], option)):
             option["number_votes"] += 1
-            option["voters"].append(author_key)
+            option["voters"].append(user)
             self.number_votes += 1
             self.options[option_id] = Utils.toJson(option)
             self.put()
@@ -84,16 +84,6 @@ class SurveyPost(Post):
         post_dict["deadline"] = post.deadline.isoformat(
         ) if post.deadline else ''
         post_dict["type_survey"] = post.type_survey
-        post_dict["options"] = map(
-            post.make_option, post.options) if post.options else []
+        post_dict["options"] = post.options if post.options else []
 
         return post_dict
-
-    def make_option(post, option):
-        """Create a personalized json of option."""
-        for i in range(len(option["voters"])):
-            user = ndb.Key(urlsafe=option["voters"][i]).get()
-            option["voters"][i] = {'name': user.name,
-                                   'photo_url': user.photo_url,
-                                   'key': user.key.urlsafe()}
-        return option

@@ -14,7 +14,7 @@
       <label>Data limite</label>
       <input mdc-datetime-picker="" short-time="false" date="true" time="true" type="text" 
         format="DD/MM/YYYY HH:mm" lang="pt-BR" placeholder="Receber respostas até..." 
-        ng-model="surveyCtrl.post.deadline" class=" md-input" today-text="Hoje" min-date="null" 
+        ng-model="surveyCtrl.post.deadline" class=" md-input" today-text="Hoje" min-date="surveyCtrl.now" 
         readonly="readonly" cancel-text="Cancelar">
     </md-input-container>
   </div>

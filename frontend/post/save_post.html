@@ -32,7 +32,7 @@
           </form>
         </div>
           <!-- SURVEY -->
-        <survey-directive ng-if="postCtrl.typePost === 'Survey'" post="postCtrl.post" posts="posts" user="postCtrl.user" save-survey="postCtrl.saveSurvey"
+        <survey-directive ng-if="postCtrl.typePost === 'Survey'" post="postCtrl.post" posts="posts" user="postCtrl.user" callback="postCtrl.clearPost"
             options="postCtrl.options"></survey-directive>
       </md-card-content>
     </div>

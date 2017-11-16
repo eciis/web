@@ -19,8 +19,6 @@
             });    
         };
 
-        // TODO: Change interface according design suggested
-        // @author: Maiana Brito
         surveyCtrl.addOption = function(){
             const hasOptionEmpty = surveyCtrl.getOptionEmpty() !== undefined;
             if(!hasOptionEmpty){

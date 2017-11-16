@@ -47,7 +47,7 @@ def makeUser(user, request):
             Utils.toJson(institution.get())
         )
     user_json['follows'] = [institution_key.get().make(
-        ['acronym', 'photo_url', 'key', 'parent_institution'])
+        ['name','acronym', 'photo_url', 'key', 'parent_institution'])
         for institution_key in user.follows
         if institution_key.get().state != 'inactive']
     user_json['institution_profiles'] = [profile.make()

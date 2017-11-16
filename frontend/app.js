@@ -223,6 +223,15 @@
 
             'https://www.youtube.com/**'
         ]);
+
+        const dateFormats = {
+            calendar: {
+                sameDay: '[Hoje às] LT',
+                lastWeek: 'DD MMMM [de] YYYY [às] LT',
+                sameElse: 'DD MMMM [de] YYYY [às] LT'
+            }
+        };
+        moment.updateLocale('pt-br', dateFormats);
     });
 
     app.factory('BearerAuthInterceptor', function ($injector, $q, $state) {
@@ -233,27 +242,10 @@
                 if (AuthService.isLoggedIn()) {
                     var token = AuthService.getUserToken();
                     config.headers.Authorization = 'Bearer ' + token;
-                } else {
-                    var location = $injector.get('$location');
-                    $state.go("signin", {
-                        "redirect": location.path()
-                    });
                 }
 
                 Utils.updateBackendUrl(config);
 
-                return config || $q.when(config);
-            },
-            response: function(config) {
-                var AuthService = $injector.get('AuthService');
-                var user = AuthService.getCurrentUser();
-                if (user && user.key) {
-                    var pendingInvite = user.getPendingInvitation();
-                    if (pendingInvite) {
-                        var inviteKey = pendingInvite.key;
-                        $state.go("new_invite", {key: inviteKey});
-                    }
-                }
                 return config || $q.when(config);
             },
             responseError: function(rejection) {
@@ -262,11 +254,8 @@
                     if (AuthService.isLoggedIn()) {
                         AuthService.logout();
                         rejection.data.msg = "Sua sessão expirou!";
-                    } else {
-                        var location = $injector.get('$location');
-                        $state.go("signin", {
-                            "redirect": location.path()
-                        });
+                    } else { 
+                        $state.go("signin");
                     }
                 } else if(rejection.status === 403) {
                     rejection.data.msg = "Você não tem permissão para realizar esta operação!";
@@ -281,40 +270,58 @@
         };
     });
 
+    var ignored_routes = [
+        'create_institution',
+        'error',
+        'signin',
+        'user_inactive',
+        'new_invite'
+    ];
+
+    app.run(function authInterceptor(AuthService, $transitions, $injector, $state, $location) {
+        $transitions.onStart({
+            to: function(state) {
+                return state != 'signin' && !AuthService.isLoggedIn() && !(_.includes(ignored_routes, state.name));
+            }
+        }, function(transition) {
+            $state.go("signin", {
+                "redirect": $location.path()
+            });            
+        });
+    });
+
     /**
     * Application listener to filter routes that require active user and set up amCalendar filter configurations.
     * @param {service} AuthService - Service of user authentication
     * @param {service} $transitions - Service of transitions states
     */
     app.run(function userInactiveListener(AuthService, $transitions) {
-        var ignored_routes = [
-            'create_institution',
-            'error',
-            'signin',
-            'user_inactive',
-            'new_invite'
-        ];
-
         $transitions.onStart({
             to: function(state) {
-                return !(_.includes(ignored_routes, state.name));
+                var user = AuthService.getCurrentUser();
+                var isInactive = user && user.isInactive();
+
+                return !(_.includes(ignored_routes, state.name)) && isInactive;
             }
         }, function(transition) {
-            var user = AuthService.getCurrentUser();
-            var isInactive = user && user.isInactive();
-
-            if (isInactive) {
-                transition.router.stateService.transitionTo('user_inactive');
-            }
+            transition.router.stateService.transitionTo('user_inactive');
         });
-
-        const dateFormats = {
-            calendar: {
-                sameDay: '[Hoje às] LT',
-                lastWeek: 'DD MMMM [de] YYYY [às] LT',
-                sameElse: 'DD MMMM [de] YYYY [às] LT'
+    });
+        
+    app.run(function inviteInterceptor(AuthService, $transitions, $state) {
+        $transitions.onSuccess({
+            to: function(state) {
+                var user = AuthService.getCurrentUser();
+                if (user && user.key) {
+                    var pendingInvite = user.getPendingInvitation();
+                    return pendingInvite;
+                }
+                return false;
             }
-        };
-        moment.updateLocale('pt-br', dateFormats);
+        }, function(transition) {
+            var pendingInvite = AuthService.getCurrentUser().getPendingInvitation();
+            var inviteKey = pendingInvite.key;
+            $state.go("new_invite", {key: inviteKey});        
+        });
     });
 })();

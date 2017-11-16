@@ -6,7 +6,7 @@
   <p class="md-subheader"> Alternativas</p>
   <md-content flex style="max-height: 300px;" class="hide-scrollbar">
     <md-input-container ng-repeat="option in surveyCtrl.options" md-no-float class="md-block option">
-      <input class=" md-input" ng-model="option.text" ng-change="surveyCtrl.addOption()" placeholder="+ Adicionar uma opção..." />
+      <input class=" md-input" ng-model="option.text" ng-change="surveyCtrl.addOption()" placeholder="+ Adicionar uma opção..." maxlength="150" />
     </md-input-container>
   </md-content>
   <md-input-container class="md-block" >

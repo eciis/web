@@ -91,6 +91,7 @@
             surveyCtrl.options.push(angular.copy(option_empty));
             surveyCtrl.options.push(angular.copy(option_empty));
             surveyCtrl.multipleChoice = false;
+            $mdDialog.hide();
         };
 
         surveyCtrl.isValid = function isValid(){

@@ -50,10 +50,10 @@
               </md-button>
             </div>
           </md-toolbar>
-          <md-card-content ng-show="inviteInstCtrl.showInvites" style="max-height: 40%;" ng-scrollbars>
+          <md-card-content ng-show="inviteInstCtrl.showInvites" 
+            ng-style="inviteInstCtrl.calcHigh(inviteInstCtrl.sent_invitations)" ng-scrollbars>
             <md-list class="md-dense" flex>
-              <md-list-item class="md-3-line" ng-repeat="invite in inviteInstCtrl.sent_invitations"
-              ng-if="invite.status === 'sent' && invite.type_of_invite === 'INSTITUTION'" ng-click="null">
+              <md-list-item class="md-3-line" ng-click="null" ng-repeat="invite in inviteInstCtrl.sent_invitations">
                 <md-icon class="md-avatar-icon" 
                 md-colors="{background: 'light-green-500', color: 'grey-50'}">account_balance</md-icon>
                 <div class="md-list-item-text" layout="column">
@@ -80,19 +80,21 @@
               </md-button>
             </div>
           </md-toolbar>
-          <md-card-content ng-show="inviteInstCtrl.showRequests" style="max-height: 40%;" ng-scrollbars>
-            <md-list class="md-dense" flex>
-              <md-list-item class="md-3-line" ng-repeat="request in inviteInstCtrl.sent_requests"
-              ng-if="request.status === 'sent' && request.type_of_invite === 'REQUEST_INSTITUTION'"
-              ng-click="inviteInstCtrl.showProcessingRequestDialog(request)">
-                <md-icon class="md-avatar-icon" 
-                md-colors="{background: 'light-green-500', color: 'grey-50'}">account_balance</md-icon>
-                <div class="md-list-item-text" layout="column">
-                  <h3>{{ request.institution_name }}</h3>
-                  <p>{{ request.sender[0] }}</p>
-                </div>
-              </md-list-item>
-            </md-list>
+          <md-card-content ng-show="inviteInstCtrl.showRequests" 
+            ng-style="inviteInstCtrl.calcHigh(inviteInstCtrl.sent_requests)" ng-scrollbars>
+            <div flex >
+              <md-list class="md-dense" flex>
+                <md-list-item class="md-3-line" ng-repeat="request in inviteInstCtrl.sent_requests"
+                ng-click="inviteInstCtrl.showProcessingRequestDialog(request)">
+                  <md-icon class="md-avatar-icon" 
+                  md-colors="{background: 'light-green-500', color: 'grey-50'}">account_balance</md-icon>
+                  <div class="md-list-item-text" layout="column">
+                    <h3>{{ request.institution_name }}</h3>
+                    <p>{{ request.sender[0] }}</p>
+                  </div>
+                </md-list-item>
+              </md-list>
+            </div>
           </md-card-content>
         </md-card>
 
@@ -110,10 +112,10 @@
               </md-button>
             </div>
           </md-toolbar>
-          <md-card-content  ng-show="inviteInstCtrl.showSentInvitations" style="max-height: 40%;" ng-scrollbars>
+          <md-card-content  ng-show="inviteInstCtrl.showSentInvitations"
+            ng-style="inviteInstCtrl.calcHigh(inviteInstCtrl.accepted_invitations)" ng-scrollbars>
             <md-list class="md-dense" flex>
-              <md-list-item class="md-3-line" ng-repeat="invite in inviteInstCtrl.sent_invitations" 
-                ng-if="invite.status === 'accepted' && invite.type_of_invite === 'INSTITUTION'">
+              <md-list-item class="md-3-line" ng-repeat="invite in inviteInstCtrl.accepted_invitations">
                 <md-icon class="md-avatar-icon" 
                 md-colors="{background: 'light-green-500', color: 'grey-50'}">account_balance</md-icon>
                 <div class="md-list-item-text" layout="column">

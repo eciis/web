@@ -8,6 +8,7 @@
 
         inviteInstCtrl.invite = {};
         inviteInstCtrl.sent_invitations = [];
+        inviteInstCtrl.accepted_invitations = [];
         inviteInstCtrl.sent_requests = [];
         inviteInstCtrl.existing_institutions = [];
         inviteInstCtrl.showSendInvites = true;
@@ -35,6 +36,13 @@
 
         inviteInstCtrl.showHideSentInvitations =  function showHideSentInvitations() {
             inviteInstCtrl.showSentInvitations = !inviteInstCtrl.showSentInvitations;
+        };
+
+        inviteInstCtrl.calcHigh = function calcHeight(list=[]) {
+            var maxHeight = '40%';
+            var actualHeight = list.length + '0%';
+            var calculedHeight = actualHeight <= maxHeight ? actualHeight : maxHeight;
+            return {height: calculedHeight};
         };
 
         inviteInstCtrl.cancelInvite = function cancelInvite() {
@@ -131,20 +139,32 @@
 
         function loadSentRequests() {
             RequestInvitationService.getRequestsInst().then(function success(response) {
-                inviteInstCtrl.sent_requests = response.data;
+                var requests = response.data || [];
+                var isSentRequest = createRequestSelector('sent', 'REQUEST_INSTITUTION');
+                inviteInstCtrl.sent_requests = requests.filter(isSentRequest);
             }, function error(response) {
                 $state.go('app.home');
                 MessageService.showToast(response.data.msg);
             });
         }
-
+        
         function loadSentInvitations() {
             InviteService.getSentInstitutionInvitations().then(function success(response) {
-                inviteInstCtrl.sent_invitations = response.data;
+                var requests = response.data;
+                var isSentInvitation = createRequestSelector('sent', 'INSTITUTION');
+                var isAcceptedInvitation = createRequestSelector('accepted', 'INSTITUTION');
+                inviteInstCtrl.sent_invitations = requests.filter(isSentInvitation);
+                inviteInstCtrl.accepted_invitations = requests.filter(isAcceptedInvitation);
             }, function error(response) {
                 $state.go('app.home');
                 MessageService.showToast(response.data.msg);
             });
+        }
+        
+        function createRequestSelector(status, type_of_invite) {
+            return function(request) {
+                return request.status === status && request.type_of_invite === type_of_invite;
+            }
         }
 
         (function main() {

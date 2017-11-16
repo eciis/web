@@ -1,6 +1,6 @@
 'use strict';
 
-(function() {
+(function () {
     var app = angular.module("app");
 
     app.controller("ConfigProfileController", function ConfigProfileController($state, InstitutionService,
@@ -17,8 +17,8 @@
         configProfileCtrl.photo_url = configProfileCtrl.newUser.photo_url;
 
         var HAS_ONLY_ONE_INSTITUTION_MSG = "Esta é a única instituição ao qual você é vinculado." +
-                " Ao remover o vínculo você não poderá mais acessar o sistema," +
-                " exceto por meio de novo convite. Deseja remover?";
+            " Ao remover o vínculo você não poderá mais acessar o sistema," +
+            " exceto por meio de novo convite. Deseja remover?";
 
         var HAS_MORE_THAN_ONE_INSTITUTION_MSG = "Ao remover o vínculo com esta instituição," +
             " você deixará de ser membro" +
@@ -28,7 +28,7 @@
         var DELETE_ACCOUNT_ALERT = "Ao excluir sua conta você não poderá mais acessar o sistema," +
             "exceto por meio de novo convite. Deseja realmente excluir sua conta?";
 
-        configProfileCtrl.addImage = function(image) {
+        configProfileCtrl.addImage = function (image) {
             var newSize = 800;
 
             ImageService.compress(image, newSize).then(function success(data) {
@@ -41,7 +41,7 @@
         };
 
         function setImage(image) {
-            $rootScope.$apply(function() {
+            $rootScope.$apply(function () {
                 configProfileCtrl.photo_url = image.src;
             });
         }
@@ -57,7 +57,7 @@
         configProfileCtrl.finish = function finish() {
             if (configProfileCtrl.photo_user) {
                 configProfileCtrl.loading = true;
-                ImageService.saveImage(configProfileCtrl.photo_user).then(function(data) {
+                ImageService.saveImage(configProfileCtrl.photo_user).then(function (data) {
                     configProfileCtrl.newUser.photo_url = data.url;
                     configProfileCtrl.newUser.uploaded_images.push(data.url);
                     saveUser();
@@ -84,7 +84,7 @@
             return deffered.promise;
         }
 
-        configProfileCtrl.showButton = function() {
+        configProfileCtrl.showButton = function () {
             return !configProfileCtrl.loading;
         };
 
@@ -100,9 +100,9 @@
                     .ok('Sim')
                     .cancel('Não');
                 var promise = $mdDialog.show(confirm);
-                promise.then(function() {
+                promise.then(function () {
                     deleteInstitution(institution.key);
-                }, function() {
+                }, function () {
                     MessageService.showToast('Cancelado');
                 });
                 return promise;
@@ -159,10 +159,10 @@
                     .ok('Sim')
                     .cancel('Não');
                 var promise = $mdDialog.show(confirm);
-                promise.then(function() {
+                promise.then(function () {
                     configProfileCtrl.newUser.state = 'inactive';
                     deleteUser();
-                }, function() {
+                }, function () {
                     MessageService.showToast('Cancelado');
                 });
                 return promise;
@@ -194,41 +194,40 @@
 
     app.controller("EditProfileController", function EditProfileController(institution, user, ProfileService,
         AuthService, $mdDialog, MessageService) {
-            var editProfileCtrl = this;
-            editProfileCtrl.phoneRegex = "[0-9]{2}[\\s][0-9]{4,5}[-][0-9]{4,5}";
-            editProfileCtrl.institution = institution;
-            var profileObserver;
+        var editProfileCtrl = this;
+        editProfileCtrl.phoneRegex = "[0-9]{2}[\\s][0-9]{4,5}[-][0-9]{4,5}";
+        editProfileCtrl.institution = institution;
+        var profileObserver;
 
-            editProfileCtrl.edit = function edit() {
-                if(isValidProfile()) {
-                    var patch = jsonpatch.generate(profileObserver);
-                    if(!_.isEmpty(patch)) {
-                        ProfileService.editProfile(patch).then(function success() {
-                            MessageService.showToast('Perfil editado com sucesso');
-                            AuthService.save();
-                        }, function error(response) {
-                            MessageService.showToast(response.data.msg);
-                        });
-                    }
-                    editProfileCtrl.closeDialog();
-                } else {
-                    MessageService.showToast('O cargo é obrigatório.');
+        editProfileCtrl.edit = function edit() {
+            if (isValidProfile()) {
+                if (!_.isEmpty(patch)) {
+                    ProfileService.editProfile(patch).then(function success() {
+                        MessageService.showToast('Perfil editado com sucesso');
+                        AuthService.save();
+                    }, function error(response) {
+                        MessageService.showToast(response.data.msg);
+                    });
                 }
-            };
-
-            editProfileCtrl.closeDialog = function closeDialog() {
-                $mdDialog.hide();
-            };
-
-            function isValidProfile() {
-                return !_.isEmpty(editProfileCtrl.profile.office);
+                editProfileCtrl.closeDialog();
+            } else {
+                MessageService.showToast('O cargo é obrigatório.');
             }
+        };
 
-            (function main() {
-                editProfileCtrl.profile = _.find(user.institution_profiles, function(profile) {
-                    return profile.institution_key === editProfileCtrl.institution.key;
-                });
-                profileObserver = jsonpatch.observe(user);
-            })();
-        });
+        editProfileCtrl.closeDialog = function closeDialog() {
+            $mdDialog.hide();
+        };
+
+        function isValidProfile() {
+            return !_.isEmpty(editProfileCtrl.profile.office);
+        }
+
+        (function main() {
+            editProfileCtrl.profile = _.find(user.institution_profiles, function (profile) {
+                return profile.institution_key === editProfileCtrl.institution.key;
+            });
+            profileObserver = jsonpatch.observe(user);
+        })();
+    });
 })();

@@ -4,7 +4,7 @@
     var app = angular.module("app");
 
     app.controller("HomeController", function HomeController(PostService, AuthService,
-            InstitutionService, $interval, $mdToast, $mdDialog, $state, MessageService, ProfileService, EventService, $q) {
+            InstitutionService, $interval, $mdToast, $mdDialog, $state, MessageService, ProfileService, EventService, $q, $http) {
         var homeCtrl = this;
 
         var ACTIVE = "active";
@@ -87,14 +87,40 @@
         }
 
         homeCtrl.openManageColor = function openManageColor(profile){
-            console.log("oooi");
             $mdDialog.show({
-                controller: "ColorPickerController",
-                controllerAs: "colorPickerCtrl",
+                controller: "HomeController",
+                controllerAs: "homeCtrl",
                 templateUrl: 'app/home/color_picker.html',
                 parent: angular.element(document.body),
                 clickOutsideToClose: true,
                 targetEvent: profile,
+                locals: {
+                    originalUser: homeCtrl.user
+                },
+                bindToController: true
+            });
+        };
+
+        function getColors() {
+            $http.get('app/home/colors.json').then(function success(response) {
+                homeCtrl.colors = response.data;
+            });
+        }
+
+        homeCtrl.cancelDialog = function cancelDialog() {
+            
+        };
+
+        homeCtrl.saveColor = function saveColor(){ 
+            var diff = jsonpatch.compare(homeCtrl.user, homeCtrl.newUser);
+            ProfileService.editProfile(diff).then(function success() {
+                MessageService.showToast('Cor salva com sucesso');
+                AuthService.save();
+                homeCtrl.user.current_institution.color = homeCtrl.newProfile.color;
+                homeCtrl.user.institution_profiles = homeCtrl.newUser.institution_profiles;
+                $mdDialog.cancel();
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
             });
         };
 
@@ -141,33 +167,18 @@
             return actualEvents;
         }
 
-        loadEvents();
-        homeCtrl.loadMorePosts();
-        getFollowingInstitutions();
-    });
+        function loadProfile(){
+            homeCtrl.newUser =  Utils.clone(homeCtrl.user);
 
-    app.controller("ColorPickerController", function ColorPickerController($http, $mdDialog) {
-        var colorPickerCtrl = this;
-
-        colorPickerCtrl.colors;
-        colorPickerCtrl.selected;
-
-        function getColors() {
-            $http.get('app/home/colors.json').then(function success(response) {
-                colorPickerCtrl.colors = response.data;
-            });
+            homeCtrl.newProfile = _.find(homeCtrl.newUser.institution_profiles, function (profile) {
+                return profile.institution_key === homeCtrl.newUser.current_institution.key;
+            });    
         }
 
         getColors();
-
-        colorPickerCtrl.cancelDialog = function cancelDialog(){
-            colorPickerCtrl.selected = null;
-            $mdDialog.cancel();
-        }
-
-        colorPickerCtrl.saveColor = function saveColor(color){
-            colorPickerCtrl.selected = color;
-        }
-
+        loadEvents();
+        homeCtrl.loadMorePosts();
+        getFollowingInstitutions();
+        loadProfile();
     });
 })();

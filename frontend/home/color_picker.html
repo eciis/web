@@ -3,21 +3,21 @@
         <md-content layout-padding>
             <h3>Selecione uma cor:</h3>
             <md-grid-list md-cols="5" md-row-height="1:1" md-gutter="4px">
-              <md-grid-tile ng-repeat="color in colorPickerCtrl.colors">
+              <md-grid-tile ng-repeat="color in homeCtrl.colors">
                     <md-fab-trigger>
-                            <md-button aria-label="menu" class="md-fab md-primary" ng-click="colorPickerCtrl.selected = color.value" 
+                            <md-button aria-label="menu" class="md-fab md-primary" ng-model="homeCtrl.newProfile.color" ng-click="homeCtrl.newProfile.color = color.value" 
                              md-colors="{background: 'default-'+'{{color.value}}'+'-500'}">
-                                <md-icon ng-show="colorPickerCtrl.selected === color.value">check_circle</md-icon>
+                                <md-icon ng-show="homeCtrl.newProfile.color === color.value">check_circle</md-icon>
                             </md-button>
                         </md-fab-trigger>
               </md-grid-tile>
             </md-grid-list>
 
             <div style="text-align: right; margin-right: 20px; margin-bottom: 20px;" >
-                    <md-button style="color: #009688" ng-click="colorPickerCtrl.cancelDialog()">
+                    <md-button style="color: #009688" ng-click="homeCtrl.cancelDialog()">
                       Cancelar
                     </md-button>
-                    <md-button class="md-raised" md-colors="{background: 'default-teal-500'}" ng-click="colorPickerCtrl.saveColor(color.value)" title="Aplicar">
+                    <md-button class="md-raised" md-colors="{background: 'default-teal-500'}" ng-click="homeCtrl.saveColor()" title="Aplicar">
                       Aplicar
                     </md-button>
                 </div>

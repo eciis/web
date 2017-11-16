@@ -62,6 +62,12 @@
             }
         };
 
+        postCtrl.saveSurvey = function saveSurvey(isSaved){
+            if(isSaved){
+                postCtrl.clearPost();
+            }
+        };
+
         postCtrl.addPdf = function addPdf(files) {
             postCtrl.pdfFiles = files;
         };
@@ -239,6 +245,7 @@
         };
 
         postCtrl.clearPost = function clearPost() {
+            console.log("clear post");
             postCtrl.post = {};
             postCtrl.pdfFiles = [];
             postCtrl.hideImage();
@@ -351,6 +358,7 @@
                 postCtrl.createEditedPost($scope.originalPost);
                 observer = jsonpatch.observe(postCtrl.post);
             }
+            postCtrl.typePost = 'Common';
         })();
     });
 

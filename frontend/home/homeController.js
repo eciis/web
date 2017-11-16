@@ -108,7 +108,7 @@
         }
 
         homeCtrl.cancelDialog = function cancelDialog() {
-            
+            $mdDialog.cancel();
         };
 
         homeCtrl.saveColor = function saveColor(){ 

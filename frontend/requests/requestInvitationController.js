@@ -41,10 +41,11 @@
 
         requestInvCtrl.verifyAndSendRequest = function verifyAndSendRequest() {
             if (!_.isEmpty(requestInvCtrl.requestsOfSelectedInst)) {
-                const sent = requestInvCtrl.requestsOfSelectedInst.filter(invite => invite.status === "sent");
-                const senders = _.isEmpty(sent) ? sent : _.concat(...sent.map(invite => invite.sender));
-                return !senders.map(email => requestInvCtrl.currentUser.email.includes(email)).includes(true) ?
-                requestInvCtrl.sendRequest() : MessageService.showToast("Usuário já solicitou fazer parte dessa instituição.");
+                const sender_keys = requestInvCtrl.requestsOfSelectedInst
+                                    .filter(request => request.status === "sent")
+                                    .map(request => request.sender_key);
+                return !sender_keys.includes(requestInvCtrl.currentUser.key) ?
+                        requestInvCtrl.sendRequest() : MessageService.showToast("Usuário já solicitou fazer parte dessa instituição.");
             } else {
                 requestInvCtrl.sendRequest();
             }

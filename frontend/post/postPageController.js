@@ -8,6 +8,10 @@
 
         postCtrl.post = null;
 
+        postCtrl.isDeletedPost = function isDeletedPost() {
+            return postCtrl.post.state == 'deleted' && postCtrl.post.number_of_comments === 0;
+        };
+
         function loadPost(postKey) {
             var promise = PostService.getPost(postKey);
             promise.then(function success(response) {

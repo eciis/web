@@ -96,36 +96,17 @@
             homeCtrl.refreshTimeline = !homeCtrl.refreshTimeline;
         };
 
-        homeCtrl.openManageColor = function openManageColor(){
-            $mdDialog.show({
-                controller: "HomeController",
-                controllerAs: "homeCtrl",
+        homeCtrl.openColorPicker = function openColorPicker(){
+             $mdDialog.show({
+                controller: "ColorPickerController",
+                controllerAs: "colorPickerCtrl",
                 templateUrl: 'app/home/color_picker.html',
                 parent: angular.element(document.body),
-                clickOutsideToClose: true
-            });
-        };
-
-        function getColors() {
-            $http.get('app/home/colors.json').then(function success(response) {
-                homeCtrl.colors = response.data;
-            });
-        }
-
-        homeCtrl.cancelDialog = function cancelDialog() {
-            $mdDialog.cancel();
-        };
-
-        homeCtrl.saveColor = function saveColor(){ 
-            var diff = jsonpatch.compare(homeCtrl.user, homeCtrl.newUser);
-            ProfileService.editProfile(diff).then(function success() {
-                MessageService.showToast('Cor salva com sucesso');
-                AuthService.save();
-                homeCtrl.user.current_institution.color = homeCtrl.newProfile.color;
-                homeCtrl.user.institution_profiles = homeCtrl.newUser.institution_profiles;
-                $mdDialog.cancel();
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
+                clickOutsideToClose: true,
+                locals: {
+                    user : homeCtrl.user
+                },
+                 bindToController: true
             });
         };
 
@@ -172,21 +153,51 @@
             return actualEvents;
         }
 
-        function loadProfile(){
-            homeCtrl.newUser =  Utils.clone(homeCtrl.user);
-
-            homeCtrl.newProfile = _.find(homeCtrl.newUser.institution_profiles, function (profile) {
-                return profile.institution_key === homeCtrl.newUser.current_institution.key;
-            });    
-        }
-
         (function main() {
             NotificationService.watchPostNotification(homeCtrl.user.key, homeCtrl.setRefreshTimelineButton);
-            getColors();
             loadEvents();
             homeCtrl.loadMorePosts();
             getFollowingInstitutions();
+        })();
+    });
+
+    app.controller("ColorPickerController", function ColorPickerController( ProfileService, MessageService, $mdDialog, AuthService, $http) {
+        var colorPickerCtrl = this;
+
+        colorPickerCtrl.saveColor = function saveColor(){ 
+            var diff = jsonpatch.compare(colorPickerCtrl.user, colorPickerCtrl.newUser);
+            ProfileService.editProfile(diff).then(function success() {
+                MessageService.showToast('Cor salva com sucesso');
+                AuthService.save();
+                colorPickerCtrl.user.current_institution.color = colorPickerCtrl.newProfile.color;
+                colorPickerCtrl.user.institution_profiles = colorPickerCtrl.newUser.institution_profiles;
+                $mdDialog.cancel();
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
+            });
+        };
+
+        colorPickerCtrl.cancelDialog = function cancelDialog() {
+            $mdDialog.cancel();
+        };
+
+        function loadProfile(){
+            colorPickerCtrl.newUser =  Utils.clone(colorPickerCtrl.user);
+
+            colorPickerCtrl.newProfile = _.find(colorPickerCtrl.newUser.institution_profiles, function (profile) {
+                return profile.institution_key === colorPickerCtrl.newUser.current_institution.key;
+            });  
+        }
+
+        function loadColors() {
+            $http.get('app/home/colors.json').then(function success(response) {
+                colorPickerCtrl.colors = response.data;
+            });  
+        };
+        
+        (function main(){
             loadProfile();
+            loadColors();
         })();
     });
 })();

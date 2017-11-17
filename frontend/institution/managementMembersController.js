@@ -183,7 +183,7 @@
             return isValid;
         };
 
-        manageMemberCtrl.calcHigh = function calcHeight(list=[]) {
+        manageMemberCtrl.calcHeight = function calcHeight(list=[]) {
             var maxRequestsNumber = 4;
             var maxHeight = '18em';
             var actualHeight = list.length * 6 + 'em';

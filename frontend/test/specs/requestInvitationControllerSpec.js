@@ -87,7 +87,7 @@
                 spyOn(requestService, 'getRequests').and.callFake(function() {
                     return {
                         then: function(callback) {
-                            return callback({});
+                            return callback([{sender_key: maiana.key}]);
                         }
                     };
                 });
@@ -100,6 +100,27 @@
                     done();
                 });
                 httpBackend.flush();
+            });
+        });
+
+        describe('verifyAndSendRequest()', function() {
+            beforeEach(function() {
+                requestInvCtrl.requestsOfSelectedInst = [{sender_key: maiana.key, status: 'sent'}];
+                requestInvCtrl.institutionSelect = {key: certbio.key, admin: {key: '12345'}}
+                requestInvCtrl.request = {name: 'maiana'};
+            });
+
+            it('Should be call filter', function() {
+                spyOn(requestInvCtrl.requestsOfSelectedInst, 'filter').and.callThrough();
+                requestInvCtrl.verifyAndSendRequest();
+                expect(requestInvCtrl.requestsOfSelectedInst.filter).toHaveBeenCalled();
+            });
+
+            it('Should be call sendRequest', function() {
+                requestInvCtrl.requestsOfSelectedInst = [];                
+                spyOn(requestInvCtrl, 'sendRequest');
+                requestInvCtrl.verifyAndSendRequest();
+                expect(requestInvCtrl.sendRequest).toHaveBeenCalled();
             });
         });
 

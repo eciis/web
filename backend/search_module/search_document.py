@@ -42,7 +42,8 @@ class SearchDocument(PolyModel):
         """
         index = search.Index(name=self.index_name)
         doc = index.get(entity.key.urlsafe())
-        if(SearchDocument.have_changes(doc.fields, entity)):
+        # FIXME The doc variable somehow is getting none on production
+        if doc and SearchDocument.have_changes(doc.fields, entity):
             index.delete(entity.key.urlsafe())
             self.createDocument(entity)
 

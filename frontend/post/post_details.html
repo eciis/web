@@ -42,7 +42,7 @@
             Atualizar post
           </md-button>
         </md-menu-item>
-        <md-menu-item ng-if="!postDetailsCtrl.isDeleted(postDetailsCtrl.post) && !postDetailsCtrl.isInstInactive()">
+        <md-menu-item ng-if="postDetailsCtrl.canShare()">
           <md-button aria-label="compartilhar" ng-click="postDetailsCtrl.share(postDetailsCtrl.post)"
             title="Compartilhar o post">
             <md-icon>share</md-icon>

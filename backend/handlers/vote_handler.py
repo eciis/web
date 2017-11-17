@@ -26,5 +26,9 @@ class VoteHandler(BaseHandler):
         Utils._assert(institution.state == 'inactive',
                       "The institution has been deleted", NotAuthorizedException)
 
-        survey.vote(user.key.urlsafe(), options_selected)
+        user_dict = {'name': user.name,
+                     'photo_url': user.photo_url,
+                     'key': user.key.urlsafe()}
+
+        survey.vote(user_dict, options_selected)
         survey.put()

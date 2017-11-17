@@ -549,6 +549,10 @@ md-radio-button.md-default-theme .md-on, md-radio-button .md-on {
     background-color: #009688;
 }
 
+md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked .md-off {
+    border-color: #009688;
+}
+
 .md-button.sm-icon-button {
     height:32px;
     width: 32px;

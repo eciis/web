@@ -18,7 +18,7 @@
         sent_invitations: []
     };
     var inviteData = {
-        invitee: "user@gmail.com", 
+        invitee: "user@gmail.com",
         key: 'xyzcis',
         type_of_invite: 'USER',
         institution_key: '987654321',
@@ -223,7 +223,7 @@
 
             it('should call $state.go()', function(done) {
                 promise.then(function() {
-                    expect(state.go).toHaveBeenCalledWith('app.manage_institution.edit_info', {institutionKey: otherInstitution.key});
+                    expect(state.go).toHaveBeenCalledWith('create_institution_form', {institutionKey: otherInstitution.key});
                     done();
                 });
             });

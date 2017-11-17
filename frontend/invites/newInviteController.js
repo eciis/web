@@ -81,7 +81,7 @@
                     newInviteCtrl.user.state = 'active';
                     newInviteCtrl.user.name = getCurrentName();
                     AuthService.save();
-                    $state.go('app.manage_institution.edit_info', {institutionKey: institutionSaved.key});
+                    $state.go('create_institution_form', {institutionKey: institutionSaved.key});
                 },
                 function error(response) {
                     MessageService.showToast(response.data.msg);

@@ -255,7 +255,7 @@
             var isImageEmpty = dialogCtrl.event.photo_url === "";
             var isImageNull = dialogCtrl.event.photo_url === null;
             var isImageUndefined = dialogCtrl.event.photo_url === undefined;
-            return !isImageEmpty && !isImageNull && !isImageUndefined;
+            return !isImageEmpty && !isImageNull && !isImageUndefined && !dialogCtrl.showImage();
         };
 
         dialogCtrl.cleanImage = function() {

@@ -115,6 +115,11 @@
                 postDetailsCtrl.isDeleted(postDetailsCtrl.post) || postDetailsCtrl.isInstInactive();
         };
 
+        postDetailsCtrl.canShare = function(){
+            return !postDetailsCtrl.showSurvey() && !postDetailsCtrl.isDeleted(postDetailsCtrl.post) &&
+                 !postDetailsCtrl.isInstInactive();
+        };
+
         postDetailsCtrl.showButtonEdit = function showButtonEdit() {
             return postDetailsCtrl.isPostAuthor() && !postDetailsCtrl.isDeleted(postDetailsCtrl.post) &&
                     !postDetailsCtrl.postHasActivity() && !postDetailsCtrl.isShared();

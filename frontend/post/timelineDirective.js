@@ -8,7 +8,6 @@
         var content = document.getElementById("content");
 
         timelineCtrl.user = AuthService.getCurrentUser();
-        timelineCtrl.refreshTimeline = false;
         timelineCtrl.isLoadingPosts = false;
 
         function loadMorePosts() {
@@ -23,27 +22,6 @@
         }
 
         Utils.setScrollListener(content, loadMorePosts);
-
-        timelineCtrl.showRefreshTimelineButton = function showRefreshTimelineButton() {
-           return timelineCtrl.refreshTimeline;
-        };
-
-        timelineCtrl.setRefreshTimelineButton = function setRefreshTimelineButton() {
-            timelineCtrl.refreshTimeline = !timelineCtrl.refreshTimeline;
-        };
-
-        timelineCtrl.load = function load() {
-            var reload = true;
-            timelineCtrl.loadMorePosts(reload).then(function success() {
-                timelineCtrl.setRefreshTimelineButton();
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
-            });
-        };
-
-        (function main() {
-            NotificationService.watchPostNotification(timelineCtrl.user.key, timelineCtrl.setRefreshTimelineButton);
-        })();
     });
 
     app.directive("postTimeline", function() {

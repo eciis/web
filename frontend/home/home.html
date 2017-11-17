@@ -121,6 +121,12 @@
         <div>
           <save-post is-dialog="false" posts="homeCtrl.posts"></save-post>
         </div>
+        <div layout="row" layout-align="center center" class="ng-if" ng-if="homeCtrl.showRefreshTimelineButton()">
+          <md-button flex md-colors="{background: 'teal-700'}" ng-click="homeCtrl.loadMorePosts(true)">
+            VOCÊ TEM NOVOS POSTS
+            <md-icon md-colors="{color: 'grey-100'}">refresh</md-icon>
+          </md-button>
+        </div>
         <md-content id="content" class="body hide-scrollbar">         
             <div layout="row">
                 <post-timeline flex ng-if="!homeCtrl.isLoadingPosts" layout="column" posts="homeCtrl.posts" institution="false" 
@@ -185,18 +191,16 @@
                 <span class="card-title-light">Seguindo</span>
               </div>
             </md-toolbar>
-            <md-card-content style="padding:10px;">
-              <div layout="row" ng-repeat="inst in homeCtrl.followingInstitutions" class="event-item">
-                <div layout="row">
-                  <img class="rounded-circle" ng-src="{{inst.photo_url}}"/>
-                </div>
-                <div layout="column" class="sm-text">
-                  <a href class="md-text hyperlink sm-text"
-                      ng-click="homeCtrl.goToInstitution(inst.key)">
-                    {{ inst.acronym | limitTo: 20 }}{{ inst.acronym.length > 20 ? '...' : ''}}
-                  </a>
-                </div>
-              </div>
+            <md-card-content layout-padding>
+              <md-grid-list md-cols="4" md-row-height="1:1" md-gutter="4px">
+                <md-grid-tile 
+                  ng-repeat="inst in homeCtrl.followingInstitutions | limitTo: 8"
+                  md-colspan="1" md-rowspan="1" class="clickable-no-hover">
+                    <img
+                      class="rounded-circle" ng-click="homeCtrl.goToInstitution(inst.key)" 
+                      ng-src="{{inst.photo_url}}" title="{{inst.name}}"/>
+                </md-grid-tile>
+              </md-grid-list>
               <md-card-actions layout="row" layout-align="center" ng-if="homeCtrl.followingInstitutions.length > 0">
                 <md-button class="md-fab md-primary" title="Ver mais"
                     md-colors="{background: 'light-green-600'}"

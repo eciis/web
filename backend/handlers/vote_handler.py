@@ -19,13 +19,16 @@ class VoteHandler(BaseHandler):
     def post(self, user, survey_key):
         """Handle POST Requests."""
         survey = ndb.Key(urlsafe=survey_key).get()
-        # The array contains id's options
+        # The array contains options
         options_selected = json.loads(self.request.body)
-        options_selected = options_selected.get("options")
 
         institution = survey.institution.get()
         Utils._assert(institution.state == 'inactive',
                       "The institution has been deleted", NotAuthorizedException)
 
-        survey.vote(user.key.urlsafe(), options_selected)
+        user_dict = {'name': user.name,
+                     'photo_url': user.photo_url,
+                     'key': user.key.urlsafe()}
+
+        survey.vote(user_dict, options_selected)
         survey.put()

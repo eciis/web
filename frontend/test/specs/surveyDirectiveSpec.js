@@ -71,7 +71,7 @@
             surveyCtrl.multipleChoice = true;
 
             var survey_obj = new Post(surveyCtrl.post, surveyCtrl.user.current_institution.key);
-            var promise = surveyCtrl.saveSurvey([]);
+            var promise = surveyCtrl.save([]);
             httpBackend.expect('POST', "/api/posts").respond(survey_obj);
 
             promise.should.be.fulfilled.then(function() {

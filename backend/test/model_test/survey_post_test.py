@@ -53,13 +53,13 @@ class SurveyPostTest(TestBase):
         survey_binary = SurveyPost.create(
             self.data_binary, self.user.key, self.institution.key)
         option_one = survey_binary.options[0]
-        survey_binary.add_vote(self.user.key, option_one['id'])
+        survey_binary.add_vote(self.voter, option_one['id'])
 
         # Update data
         option_one = survey_binary.options[0]
 
         self.assertEquals(
-            self.user.key.urlsafe() in option_one["voters"], True,
+            self.voter in option_one["voters"], True,
             "It should be True"
         )
         self.assertEquals(
@@ -70,13 +70,13 @@ class SurveyPostTest(TestBase):
         survey_multiple = SurveyPost.create(
             self.data_multiple, self.user.key, self.institution.key)
         option_two = survey_multiple.options[1]
-        survey_multiple.add_vote(self.user.key, option_two['id'])
+        survey_multiple.add_vote(self.voter, option_two['id'])
 
         # Update data
         option_two = survey_multiple.options[1]
 
         self.assertEquals(
-            self.user.key.urlsafe() in option_two["voters"], True,
+            self.voter in option_two["voters"], True,
             "It should be True"
         )
         self.assertEquals(
@@ -90,15 +90,14 @@ class SurveyPostTest(TestBase):
             self.data_binary, self.user.key, self.institution.key)
         option_one = survey_binary.options[0]
         # Add vote
-        survey_binary.add_vote(self.user.key, option_one['id'])
+        survey_binary.add_vote(self.voter, option_one['id'])
         # Update data
         option_one = survey_binary.options[0]
-        self.assertEquals(
-            option_one["number_votes"], 1,
-            "It should be 1"
-        )
+        self.assertEquals(option_one["number_votes"], 1,
+                          "It should be 1")
         # Remove vote
-        survey_binary.remove_vote(self.user.key.urlsafe(), option_one['id'])
+        survey_binary.remove_vote(
+            self.voter, option_one['id'])
         # Update data
         option_one = survey_binary.options[0]
 
@@ -151,13 +150,13 @@ class SurveyPostTest(TestBase):
         """Test the create method."""
         survey_binary = SurveyPost.create(
             self.data_binary, self.user.key, self.institution.key)
-        options_selected = [survey_binary.options[0]["id"]]
-        survey_binary.vote(self.user.key, options_selected)
+        options_selected = [survey_binary.options[0]]
+        survey_binary.vote(self.voter, options_selected)
         # Update data
         option_one = survey_binary.options[0]
 
         self.assertEquals(
-            self.user.key.urlsafe() in option_one["voters"], True,
+            self.voter in option_one["voters"], True,
             "It should be True"
         )
         self.assertEquals(
@@ -167,7 +166,7 @@ class SurveyPostTest(TestBase):
 
         survey_multiple = SurveyPost.create(
             self.data_multiple, self.user.key, self.institution.key)
-        options_selected = [self.options[0]['id'], self.options[1]['id']]
+        options_selected = [self.options[0], self.options[1]]
         survey_multiple.vote(self.user.key, options_selected)
 
         # Update data
@@ -237,3 +236,7 @@ def initModels(cls):
         'deadline': '2020-07-25T12:30:15',
         'options': cls.options
     }
+
+    cls.voter = {'name': cls.user.name,
+                 'photo_url': cls.user.photo_url,
+                 'key': cls.user.key.urlsafe()}

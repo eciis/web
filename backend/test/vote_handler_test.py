@@ -33,11 +33,9 @@ class VoteHandlerTest(TestBaseHandler):
         self.assertEqual(self.user_post.number_votes, 0,
                          "The number of votes expected was 0")
 
-        # Choice option
-        options_selected = {'options': [self.user_post.options[0]['id']]}
         # Call the post method
         self.testapp.post_json(self.VOTE_URI % self.user_post.key.urlsafe(),
-                               options_selected)
+                               [self.user_post.options[0]])
 
         # Verify objects
         self.user_post = self.user_post.key.get()
@@ -50,7 +48,7 @@ class VoteHandlerTest(TestBaseHandler):
         # Call the post method again
         with self.assertRaises(Exception) as exc:
             self.testapp.post_json(self.VOTE_URI % self.user_post.key.urlsafe(),
-                                   options_selected)
+                                   [self.user_post.options[0]])
         # Verify if message exception
         exc = self.get_message_exception(exc.exception.message)
         self.assertEquals(exc, "Error! The user already voted for this option")

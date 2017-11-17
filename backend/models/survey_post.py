@@ -34,54 +34,55 @@ class SurveyPost(Post):
             data, author_key, institution_key)
         return survey_post
 
-    def add_vote(self, author_key, option_id):
+    def add_vote(self, user, option_id):
         """Add a vote to the survey post."""
         option = self.options[option_id]
 
-        if(self.is_vote_valid(author_key, option)):
+        if(self.is_vote_valid(user, option)):
             option["number_votes"] += 1
-            option["voters"].append(author_key)
+            option["voters"].append(user)
             self.number_votes += 1
             self.options[option_id] = Utils.toJson(option)
             self.put()
 
-    def remove_vote(self, author_key, option_id):
+    def remove_vote(self, author, option_id):
         """Remove a vote from survey post."""
         option = self.options[option_id]
 
-        if(author_key not in option["voters"]):
+        if(author not in option["voters"]):
             raise Exception("The user didn't vote for this option")
 
         option["number_votes"] -= 1
-        option["voters"].remove(author_key)
+        option["voters"].remove(author)
 
         self.options[option_id] = Utils.toJson(option)
         self.put()
 
-    def is_vote_valid(self, author_key, option):
+    def is_vote_valid(self, author, option):
         """Verify if vote is valid."""
-        if(datetime.datetime.now() > self.deadline):
+        if(self.deadline and datetime.datetime.now() > self.deadline):
             raise Exception("Deadline for receive answers has passed.")
 
-        if(author_key in option["voters"]):
+        if(author in option["voters"]):
             raise Exception("The user already voted for this option")
 
         return True
 
-    def vote(self, author_key, all_options_selected):
+    def vote(self, author, all_options_selected):
         """Added all votes of user from survey post."""
         if(self.type_survey == "binary" and
                 len(all_options_selected) == 1):
-            self.add_vote(author_key, all_options_selected[0])
+            self.add_vote(author, all_options_selected[0]["id"])
         else:
             for option in all_options_selected:
-                self.add_vote(author_key, option)
+                self.add_vote(author, option["id"])
 
     def make(post, host):
         """Create personalized json of post."""
         post_dict = super(SurveyPost, post).make(host)
         post_dict["number_votes"] = post.number_votes
-        post_dict["deadline"] = post.deadline.isoformat() if post.deadline else ''
+        post_dict["deadline"] = post.deadline.isoformat(
+        ) if post.deadline else ''
         post_dict["type_survey"] = post.type_survey
         post_dict["options"] = post.options if post.options else []
 

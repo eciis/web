@@ -1,3 +1,4 @@
+
 (function() {
     'use strict';
 
@@ -7,6 +8,7 @@
 
         var surveyCtrl = this;
         surveyCtrl.options = $scope.options;
+        surveyCtrl.now = new Date();
         surveyCtrl.multipleChoice = false;
         var option_empty = {'text': '',
                             'number_votes': 0,
@@ -19,8 +21,6 @@
             });    
         };
 
-        // TODO: Change interface according design suggested
-        // @author: Maiana Brito
         surveyCtrl.addOption = function(){
             const hasOptionEmpty = surveyCtrl.getOptionEmpty() !== undefined;
             if(!hasOptionEmpty){
@@ -30,6 +30,10 @@
 
         surveyCtrl.getOptionEmpty = function(){
             return _.find(surveyCtrl.options, option_empty);
+        };
+
+        surveyCtrl.isTyping = function() {
+            return surveyCtrl.post.title;
         };
 
         /* This method add ids in each option and remove the options that are empty.*/
@@ -63,12 +67,13 @@
             return new Post(surveyCtrl.post, surveyCtrl.user.current_institution.key);
         }
 
-        surveyCtrl.saveSurvey = function() {
+        surveyCtrl.save = function() {
             var survey = createSurvey();
             var promisse = PostService.createPost(survey).then(function success(response) {
                 surveyCtrl.resetSurvey();
                 surveyCtrl.posts.push(new Post(response.data));
                 MessageService.showToast('Postado com sucesso!');
+                surveyCtrl.callback();
                 $mdDialog.hide();
             }, function error(response) {
                 AuthService.reload().then(function success() {
@@ -86,6 +91,7 @@
             surveyCtrl.options.push(angular.copy(option_empty));
             surveyCtrl.options.push(angular.copy(option_empty));
             surveyCtrl.multipleChoice = false;
+            $mdDialog.hide();
         };
 
         surveyCtrl.isValid = function isValid(){
@@ -106,7 +112,8 @@
                 post: '=',
                 posts: '=',
                 user: '=',
-                options: '='
+                options: '=',
+                callback: '='
             }
         };
     });

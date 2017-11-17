@@ -26,7 +26,7 @@
         var observer;
 
         postCtrl.hasMedia = function hasMedia() {
-            return postCtrl.photoBase64Data || postCtrl.pdfFiles.length > 0 || postCtrl.addVideo;
+            return postCtrl.photoBase64Data || postCtrl.pdfFiles.length > 0 || postCtrl.addVideo || postCtrl.photoUrl;
         };
 
         postCtrl.addImage = function(image) {
@@ -69,6 +69,7 @@
         postCtrl.createEditedPost = function createEditedPost(post) {
             postCtrl.photoUrl = post.photo_url;
             postCtrl.pdfFiles = post.pdf_files.slice();
+            postCtrl.addVideo = post.video_url ? true : false;
             postCtrl.post = new Post(post, postCtrl.user.current_institution.key);
         };
 
@@ -244,6 +245,7 @@
             postCtrl.hideImage();
             postCtrl.options = [];
             postCtrl.typePost = "Common";
+            postCtrl.addVideo = false;
         };
 
         postCtrl.showVideo = function showVideo() {

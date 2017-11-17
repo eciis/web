@@ -54,7 +54,7 @@
                 <md-icon>add_a_photo</md-icon>
                 {{!postCtrl.showImage() ? 'Inserir imagem' : 'Trocar imagem'}}
               </md-button>
-            </md-menu-item ng-if="postCtrl.typePost === 'Common'">
+            </md-menu-item>
             <md-menu-item ng-if="postCtrl.typePost === 'Common'">
               <md-button ng-click="postCtrl.setAddVideo()"
                 title="{{postCtrl.addVideo || postCtrl.post.video_url? 'Remover link':'Adicionar link'}}"

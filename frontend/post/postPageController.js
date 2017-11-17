@@ -14,7 +14,7 @@
             var hasNoLikes = postCtrl.post.number_of_likes === 0;
             var hasNoActivity = hasNoComments && hasNoLikes;
 
-            return postCtrl.post.state == 'deleted' && hasNoActivity;
+            return postCtrl.post.state === 'deleted' && hasNoActivity;
         };
 
         function loadPost(postKey) {

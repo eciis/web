@@ -39,9 +39,10 @@
         };
 
         inviteInstCtrl.calcHigh = function calcHeight(list=[]) {
-            var maxHeight = '40%';
-            var actualHeight = list.length + '0%';
-            var calculedHeight = actualHeight <= maxHeight ? actualHeight : maxHeight;
+            var maxRequestsNumber = 4;
+            var maxHeight = '20em';
+            var actualHeight = list.length * 5 + 'em';
+            var calculedHeight = list.length < maxRequestsNumber ? actualHeight : maxHeight;
             return {height: calculedHeight};
         };
 
@@ -151,14 +152,22 @@
         function loadSentInvitations() {
             InviteService.getSentInstitutionInvitations().then(function success(response) {
                 var requests = response.data;
-                var isSentInvitation = createRequestSelector('sent', 'INSTITUTION');
-                var isAcceptedInvitation = createRequestSelector('accepted', 'INSTITUTION');
-                inviteInstCtrl.sent_invitations = requests.filter(isSentInvitation);
-                inviteInstCtrl.accepted_invitations = requests.filter(isAcceptedInvitation);
+                getSentInvitations(requests);
+                getAcceptedInvitations(requests);
             }, function error(response) {
                 $state.go('app.home');
                 MessageService.showToast(response.data.msg);
             });
+        }
+        
+        function getSentInvitations(requests) {
+            var isSentInvitation = createRequestSelector('sent', 'INSTITUTION');
+            inviteInstCtrl.sent_invitations = requests.filter(isSentInvitation);
+        }
+        
+        function getAcceptedInvitations(requests) {
+            var isAcceptedInvitation = createRequestSelector('accepted', 'INSTITUTION');
+            inviteInstCtrl.accepted_invitations = requests.filter(isAcceptedInvitation);
         }
         
         function createRequestSelector(status, type_of_invite) {

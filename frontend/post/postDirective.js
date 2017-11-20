@@ -56,7 +56,7 @@
         postCtrl.choiceSurvey = function() {
             if(postCtrl.typePost === "Common"){
                 postCtrl.typePost = "Survey";
-                postCtrl.options = [];
+                postCtrl.clearPost();
                 postCtrl.options.push(angular.copy(option_empty));
                 postCtrl.options.push(angular.copy(option_empty));
             }
@@ -239,11 +239,10 @@
         };
 
         postCtrl.clearPost = function clearPost() {
-            postCtrl.post = {};
+            postCtrl.typePost == "Common" ? postCtrl.post = {}: ()=>{};
             postCtrl.pdfFiles = [];
             postCtrl.hideImage();
             postCtrl.options = [];
-            postCtrl.typePost = "Common";
         };
 
         postCtrl.showVideo = function showVideo() {

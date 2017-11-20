@@ -113,7 +113,7 @@
             RequestInvitationService.getRequestsInst().then(function success(requests) {
                 inviteController.sent_requests = requests;
             }, function error(response) {
-                $state.go('app.home');
+                $state.go("app.user.home");
                 MessageService.showToast(response.data.msg);
             });
         }
@@ -122,7 +122,7 @@
             InviteService.getSentInstitutionInvitations().then(function success(response) {
                 inviteController.sent_invitations = response.data;
             }, function error(response) {
-                $state.go('app.home');
+                $state.go("app.user.home");
                 MessageService.showToast(response.data.msg);
             });
         }

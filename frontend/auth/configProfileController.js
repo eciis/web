@@ -76,7 +76,7 @@
                 var patch = jsonpatch.generate(observer);
                 UserService.save(patch).then(function success() {
                     AuthService.save();
-                    $state.go("app.home");
+                    $state.go("app.user.home");
                     deffered.resolve();
                 });
             } else {

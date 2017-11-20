@@ -56,7 +56,7 @@
                     newInviteCtrl.user.state = 'active';
                     newInviteCtrl.user.changeInstitution(newInviteCtrl.institution);
                     AuthService.save();
-                    $state.go("app.home");
+                    $state.go("app.user.home");
                     showAlert(event, newInviteCtrl.institution.name);
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
@@ -151,7 +151,7 @@
                     if(newInviteCtrl.user.isInactive()) {
                         $state.go("user_inactive");
                     } else {
-                        $state.go("app.home");
+                        $state.go("app.user.home");
                     }
                 });
             }, function error(response) {
@@ -183,7 +183,7 @@
                     institutionKey = (newInviteCtrl.invite.type_of_invite === "USER") ? newInviteCtrl.invite.institution_key : newInviteCtrl.invite.stub_institution.key;
                     newInviteCtrl.institution = newInviteCtrl.invite.institution;
                 } else {
-                    $state.go("app.home");
+                    $state.go("app.user.home");
                     MessageService.showToast("Você já utilizou este convite.");
                 }
             }, function error(response) {

@@ -239,7 +239,7 @@
         };
 
         postCtrl.clearPost = function clearPost() {
-            postCtrl.typePost == "Common" ? postCtrl.post = {}: ()=>{};
+            postCtrl.typePost === "Common" ? postCtrl.post = {}: ()=>{};
             postCtrl.pdfFiles = [];
             postCtrl.hideImage();
             postCtrl.options = [];

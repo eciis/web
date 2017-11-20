@@ -89,12 +89,20 @@
         function deleteRequest(request) {
             var promise = RequestInvitationService.rejectRequest(request.key);
             promise.then(function success() {
-                request.status = 'rejected';
+                removeRejectedRequest(request);
                 MessageService.showToast("O pedido foi rejeitado!");
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
             return promise;
+        }
+
+        function removeRejectedRequest(request) {
+            request.status = 'rejected';
+            manageMemberCtrl.requests = manageMemberCtrl.requests.filter(function(req) {
+                return req.key !== request.key;
+            });
+            manageMemberCtrl.showRequests = manageMemberCtrl.requests.length > 0;
         }
 
         manageMemberCtrl.cancelInvite = function cancelInvite() {
@@ -183,10 +191,10 @@
             return isValid;
         };
 
-        manageMemberCtrl.calcHeight = function calcHeight(list=[]) {
+        manageMemberCtrl.calcHeight = function calcHeight(list=[], itemHeight=4.5) {
             var maxRequestsNumber = 4;
-            var maxHeight = '18em';
-            var actualHeight = list.length * 6 + 'em';
+            var maxHeight = itemHeight * maxRequestsNumber + 'em';
+            var actualHeight = list.length * itemHeight + 'em';
             var calculedHeight = list.length < maxRequestsNumber ? actualHeight : maxHeight;
             return {height: calculedHeight};
         };

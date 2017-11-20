@@ -120,8 +120,8 @@
           </md-button>
         </div>
       </md-toolbar>
-      <md-card-content ng-show="manageMemberCtrl.showRequests" 
-        ng-style="manageMemberCtrl.calcHeight(manageMemberCtrl.requests)" ng-scrollbars>
+      <md-card-content ng-show="manageMemberCtrl.showRequests"
+        ng-style="manageMemberCtrl.calcHeight(manageMemberCtrl.requests, 5.5)" ng-scrollbars>
         <md-list flex>
           <md-list-item ng-repeat="request in manageMemberCtrl.requests" ng-click="null" class="md-3-line">
             <md-icon class="md-avatar-icon"

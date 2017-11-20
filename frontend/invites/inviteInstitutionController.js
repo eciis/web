@@ -38,10 +38,10 @@
             inviteInstCtrl.showSentInvitations = !inviteInstCtrl.showSentInvitations;
         };
 
-        inviteInstCtrl.calcHeight = function calcHeight(list=[]) {
+        inviteInstCtrl.calcHeight = function calcHeight(list=[], itemHeight=5) {
             var maxRequestsNumber = 4;
-            var maxHeight = '20em';
-            var actualHeight = list.length * 5 + 'em';
+            var maxHeight = itemHeight * maxRequestsNumber + 'em';
+            var actualHeight = list.length * itemHeight + 'em';
             var calculedHeight = list.length < maxRequestsNumber ? actualHeight : maxHeight;
             return {height: calculedHeight};
         };

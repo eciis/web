@@ -21,10 +21,10 @@
         photo_url: "photo_url"
     };
 
-    var maiana = {
-        name: 'Maiana',
+    var user = {
+        name: 'User',
         key: '12107',
-        email: 'maiana.brito@ccc.ufcg.edu.br',
+        email: 'user@ccc.ufcg.edu.br',
         state: 'active'
     };
 
@@ -41,7 +41,7 @@
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', "home/home.html").respond(200);
 
-        AuthService.login(maiana);
+        AuthService.login(user);
 
         createCtrl = function() {
             return $controller('RequestInvitationController',
@@ -87,7 +87,7 @@
                 spyOn(requestService, 'getRequests').and.callFake(function() {
                     return {
                         then: function(callback) {
-                            return callback([{sender_key: maiana.key}]);
+                            return callback([{sender_key: user.key}]);
                         }
                     };
                 });
@@ -105,9 +105,9 @@
 
         describe('verifyAndSendRequest()', function() {
             beforeEach(function() {
-                requestInvCtrl.requestsOfSelectedInst = [{sender_key: maiana.key, status: 'sent'}];
+                requestInvCtrl.requestsOfSelectedInst = [{sender_key: user.key, status: 'sent'}];
                 requestInvCtrl.institutionSelect = {key: certbio.key, admin: {key: '12345'}}
-                requestInvCtrl.request = {name: 'maiana'};
+                requestInvCtrl.request = {name: 'User'};
             });
 
             it('Should be call filter', function() {

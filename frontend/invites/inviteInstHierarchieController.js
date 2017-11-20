@@ -27,7 +27,7 @@
         inviteInstHierCtrl.existing_institutions = [];
         inviteInstHierCtrl.requested_invites = [];
 
-        inviteInstHierCtrl.showHideElement = function showHideElement(flagName) {
+        inviteInstHierCtrl.toggleElement = function toggleElement(flagName) {
             inviteInstHierCtrl[flagName] = !inviteInstHierCtrl[flagName];
         };
 

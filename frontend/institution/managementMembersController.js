@@ -160,7 +160,7 @@
             });
         }
 
-        manageMemberCtrl.showHideElement = function showHideElement(flagName) {
+        manageMemberCtrl.toggleElement = function toggleElement(flagName) {
             manageMemberCtrl[flagName] = !manageMemberCtrl[flagName];
         };
 
@@ -179,12 +179,8 @@
             return isValid;
         };
 
-        manageMemberCtrl.calcHeight = function calcHeight(list=[], itemHeight=4.5) {
-            var maxRequestsNumber = 4;
-            var maxHeight = itemHeight * maxRequestsNumber + 'em';
-            var actualHeight = list.length * itemHeight + 'em';
-            var calculedHeight = list.length < maxRequestsNumber ? actualHeight : maxHeight;
-            return {height: calculedHeight};
+        manageMemberCtrl.calculateHeight = function calculateHeight(list, itemHeight=4.5) {
+            return Utils.calculateHeight(list, itemHeight);
         };
 
         function createRequestSelector(status, type_of_invite) {

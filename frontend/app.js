@@ -243,8 +243,8 @@
                 sameElse: 'DD MMMM [de] YYYY [às] LT'
             }
         };
-        moment.updateLocale('pt-br', dateFormats);
 
+        moment.updateLocale('pt-br', dateFormats);
         
         ScrollBarsProvider.defaults = {
             scrollButtons: {
@@ -256,8 +256,6 @@
             theme: 'minimal-dark',
             autoHideScrollbar: false
         };
-
-
     });
 
     app.factory('BearerAuthInterceptor', function ($injector, $q, $state) {

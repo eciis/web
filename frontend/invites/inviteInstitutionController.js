@@ -22,16 +22,12 @@
         inviteInstCtrl.user = AuthService.getCurrentUser();
 
 
-        inviteInstCtrl.showHideElement = function showHideElement(flagName) {
+        inviteInstCtrl.toggleElement = function toggleElement(flagName) {
             inviteInstCtrl[flagName] = !inviteInstCtrl[flagName];
         };
 
-        inviteInstCtrl.calcHeight = function calcHeight(list=[], itemHeight=5) {
-            var maxRequestsNumber = 4;
-            var maxHeight = itemHeight * maxRequestsNumber + 'em';
-            var actualHeight = list.length * itemHeight + 'em';
-            var calculedHeight = list.length < maxRequestsNumber ? actualHeight : maxHeight;
-            return {height: calculedHeight};
+        inviteInstCtrl.calculateHeight = function calculateHeight(list, itemHeight) {
+            return Utils.calculateHeight(list, itemHeight);
         };
 
         inviteInstCtrl.cancelInvite = function cancelInvite() {

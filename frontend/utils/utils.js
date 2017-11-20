@@ -51,6 +51,13 @@ var Utils = {
         config.url = config.url.replace(restApiRegex, restApiUrl + '/api/$1');
     },
 
+    calculateHeight : function calculateHeight(list=[], itemHeight=5, maxRequestsNumber=4) {
+        var maxHeight = itemHeight * maxRequestsNumber + 'em';
+        var actualHeight = list.length * itemHeight + 'em';
+        var calculedHeight = list.length < maxRequestsNumber ? actualHeight : maxHeight;
+        return {height: calculedHeight};
+    },
+
     setScrollListener: function setScrollListener(content, callback) {
         var alreadyRequested = false;
 

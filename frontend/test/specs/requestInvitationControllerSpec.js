@@ -2,7 +2,7 @@
 
 (describe('Test RequestInvitationController', function() {
 
-    var requestInvCtrl, httpBackend, scope, institutionService, createCtrl, state;
+    var requestInvCtrl, httpBackend, scope, institutionService, createCtrl, state, requestService;
 
     var SEARCH_INST_URI = "/api/search/institution?";
     var INST_URI = "/api/institutions/";
@@ -21,26 +21,27 @@
         photo_url: "photo_url"
     };
 
-    var maiana = {
-        name: 'Maiana',
+    var user = {
+        name: 'User',
         key: '12107',
-        email: 'maiana.brito@ccc.ufcg.edu.br',
+        email: 'user@ccc.ufcg.edu.br',
         state: 'active'
     };
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, InstitutionService, AuthService) {
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, InstitutionService, AuthService, RequestInvitationService) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
         institutionService = InstitutionService;
+        requestService = RequestInvitationService;
 
         httpBackend.when('GET', 'institution/institution_page.html').respond(200);
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', "home/home.html").respond(200);
 
-        AuthService.login(maiana);
+        AuthService.login(user);
 
         createCtrl = function() {
             return $controller('RequestInvitationController',
@@ -79,17 +80,47 @@
         });
 
         describe('selectInstitution()', function(){
+
             it('Should select certbio', function(done){
                 httpBackend.expect('GET', INST_URI + certbio.id).respond(certbio);
                 spyOn(institutionService, 'getInstitution').and.callThrough();
+                spyOn(requestService, 'getRequests').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            return callback([{sender_key: user.key}]);
+                        }
+                    };
+                });
                 expect(requestInvCtrl.institutionSelect).toEqual({});
 
                 requestInvCtrl.selectInstitution(certbio).then(function() {
                     expect(requestInvCtrl.institutionSelect).toEqual(certbio);
                     expect(institutionService.getInstitution).toHaveBeenCalled();
+                    expect(requestService.getRequests).toHaveBeenCalled();
                     done();
                 });
                 httpBackend.flush();
+            });
+        });
+
+        describe('verifyAndSendRequest()', function() {
+            beforeEach(function() {
+                requestInvCtrl.requestsOfSelectedInst = [{sender_key: user.key, status: 'sent'}];
+                requestInvCtrl.institutionSelect = {key: certbio.key, admin: {key: '12345'}}
+                requestInvCtrl.request = {name: 'User'};
+            });
+
+            it('Should be call filter', function() {
+                spyOn(requestInvCtrl.requestsOfSelectedInst, 'filter').and.callThrough();
+                requestInvCtrl.verifyAndSendRequest();
+                expect(requestInvCtrl.requestsOfSelectedInst.filter).toHaveBeenCalled();
+            });
+
+            it('Should be call sendRequest', function() {
+                requestInvCtrl.requestsOfSelectedInst = [];                
+                spyOn(requestInvCtrl, 'sendRequest');
+                requestInvCtrl.verifyAndSendRequest();
+                expect(requestInvCtrl.sendRequest).toHaveBeenCalled();
             });
         });
 

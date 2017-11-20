@@ -415,7 +415,30 @@ a:active {
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     border-radius: 50%;
-    box-shadow: 0 0 5px 1px rgba(51, 51, 51, 0.212);
+}
+
+.grey-circle {
+    margin-right: 10px;
+    width: 50px;
+    height: 50px;
+    max-width: 50px;
+    max-height: 50px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    background: #9E9E9E;
+}
+
+.green-circle {
+    margin-right: 10px;
+    width: 50px;
+    height: 50px;
+    max-width: 50px;
+    max-height: 50px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    background: #8BC34A;
 }
 
 .event-item {
@@ -632,6 +655,11 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
 .margin {
     margin-right: 10px;
     margin-left: 10px;
+}
+
+.inline {
+    font-size: 15px;
+    white-space: nowrap;
 }
 
 .xs-bullet {

@@ -43,7 +43,6 @@ class EventHandler(BaseHandler):
             event_json
         ))
 
-    @json_response
     @login_required
     @is_event_author
     def delete(self, user, key):

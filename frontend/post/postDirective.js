@@ -16,7 +16,7 @@
         postCtrl.photoUrl = "";
         postCtrl.pdfFiles = [];
         postCtrl.deletedFiles = [];
-        postCtrl.addVideo = false;
+        postCtrl.hasVideo = false;
         postCtrl.videoRegex = '(?:http(s)?:\/\/)?(www\.)?youtube\.com\/watch\\?v=.+';
         postCtrl.options = [];
         var option_empty = {'text': '',
@@ -26,7 +26,7 @@
         var observer;
 
         postCtrl.hasMedia = function hasMedia() {
-            return postCtrl.photoBase64Data || postCtrl.pdfFiles.length > 0 || postCtrl.addVideo || postCtrl.photoUrl;
+            return postCtrl.photoBase64Data || postCtrl.pdfFiles.length > 0 || postCtrl.hasVideo || postCtrl.photoUrl;
         };
 
         postCtrl.addImage = function(image) {
@@ -69,7 +69,7 @@
         postCtrl.createEditedPost = function createEditedPost(post) {
             postCtrl.photoUrl = post.photo_url;
             postCtrl.pdfFiles = post.pdf_files.slice();
-            postCtrl.addVideo = post.video_url ? true : false;
+            postCtrl.hasVideo = post.video_url ? true : false;
             postCtrl.post = new Post(post, postCtrl.user.current_institution.key);
         };
 
@@ -245,7 +245,7 @@
             postCtrl.hideImage();
             postCtrl.options = [];
             postCtrl.typePost = "Common";
-            postCtrl.addVideo = false;
+            postCtrl.hasVideo = false;
         };
 
         postCtrl.showVideo = function showVideo() {
@@ -253,16 +253,16 @@
         };
 
         postCtrl.showVideoUrlField = function showVideoUrlField() {
-            var showField = postCtrl.addVideo || postCtrl.post.video_url;
+            var showField = postCtrl.hasVideo || postCtrl.post.video_url;
             return showField;
         };
 
-        postCtrl.setAddVideo = function setAddVideo() {
-            if(postCtrl.post.video_url || postCtrl.addVideo) {
-                postCtrl.addVideo = false;
+        postCtrl.setHasVideo = function setHasVideo() {
+            if(postCtrl.post.video_url || postCtrl.hasVideo) {
+                postCtrl.hasVideo = false;
                 postCtrl.post.video_url = "";
             } else {
-                postCtrl.addVideo = true;
+                postCtrl.hasVideo = true;
             }
         };
 

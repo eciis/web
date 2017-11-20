@@ -4,7 +4,7 @@
     var app = angular.module("app");
 
     app.controller("HomeController", function HomeController(PostService, AuthService, NotificationService,
-            InstitutionService, $interval, $mdToast, $mdDialog, $state, MessageService, ProfileService, EventService, $q) {
+            InstitutionService, $interval, $mdToast, $mdDialog, $state, MessageService, ProfileService, EventService, $q, $http) {
         var homeCtrl = this;
 
         var ACTIVE = "active";
@@ -96,6 +96,20 @@
             homeCtrl.refreshTimeline = !homeCtrl.refreshTimeline;
         };
 
+        homeCtrl.openColorPicker = function openColorPicker(){
+             $mdDialog.show({
+                controller: "ColorPickerController",
+                controllerAs: "colorPickerCtrl",
+                templateUrl: 'app/home/color_picker.html',
+                parent: angular.element(document.body),
+                clickOutsideToClose: true,
+                locals: {
+                    user : homeCtrl.user
+                },
+                 bindToController: true
+            });
+        };
+
         function loadPosts(deferred) {
             PostService.getNextPosts(actualPage).then(function success(response) {
                 actualPage += 1;
@@ -144,6 +158,46 @@
             loadEvents();
             homeCtrl.loadMorePosts();
             getFollowingInstitutions();
+        })();
+    });
+
+    app.controller("ColorPickerController", function ColorPickerController( ProfileService, MessageService, $mdDialog, AuthService, $http) {
+        var colorPickerCtrl = this;
+
+        colorPickerCtrl.saveColor = function saveColor(){ 
+            var diff = jsonpatch.compare(colorPickerCtrl.user, colorPickerCtrl.newUser);
+            ProfileService.editProfile(diff).then(function success() {
+                MessageService.showToast('Cor salva com sucesso');
+                AuthService.save();
+                colorPickerCtrl.user.current_institution.color = colorPickerCtrl.newProfile.color;
+                colorPickerCtrl.user.institution_profiles = colorPickerCtrl.newUser.institution_profiles;
+                $mdDialog.cancel();
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
+            });
+        };
+
+        colorPickerCtrl.cancelDialog = function cancelDialog() {
+            $mdDialog.cancel();
+        };
+
+        function loadProfile(){
+            colorPickerCtrl.newUser =  Utils.clone(colorPickerCtrl.user);
+
+            colorPickerCtrl.newProfile = _.find(colorPickerCtrl.newUser.institution_profiles, function (profile) {
+                return profile.institution_key === colorPickerCtrl.newUser.current_institution.key;
+            });  
+        }
+
+        function loadColors() {
+            $http.get('app/home/colors.json').then(function success(response) {
+                colorPickerCtrl.colors = response.data;
+            });  
+        };
+        
+        (function main(){
+            loadProfile();
+            loadColors();
         })();
     });
 })();

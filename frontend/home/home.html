@@ -31,8 +31,14 @@
                             <md-button ng-click="mainCtrl.changeInstitution(profile)">
                               <md-icon md-colors="{color: profile.color+'-900'}">brightness_1</md-icon>
                               {{ profile.institution.name }}
-                            </md-button>
+                            </md-button> 
                           </md-menu-item>
+                          <md-menu-item>
+                            <md-button ng-click="homeCtrl.openColorPicker(profile)">
+                              <md-icon>color_lens</md-icon>
+                              GERENCIAR CORES
+                            </md-button>
+                        </md-menu-item>
                         </md-menu-content>
                       </md-menu>  
                     </div>

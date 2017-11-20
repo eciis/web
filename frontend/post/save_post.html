@@ -54,13 +54,13 @@
                 <md-icon>add_a_photo</md-icon>
                 {{!postCtrl.showImage() ? 'Inserir imagem' : 'Trocar imagem'}}
               </md-button>
-            </md-menu-item ng-if="postCtrl.typePost === 'Common'">
+            </md-menu-item>
             <md-menu-item ng-if="postCtrl.typePost === 'Common'">
-              <md-button ng-click="postCtrl.setAddVideo()"
-                title="{{postCtrl.addVideo || postCtrl.post.video_url? 'Remover link':'Adicionar link'}}"
-                ng-disabled="postCtrl.hasMedia() && !postCtrl.addVideo">
+              <md-button ng-click="postCtrl.setHasVideo()"
+                title="{{postCtrl.hasVideo || postCtrl.post.video_url? 'Remover link':'Adicionar link'}}"
+                ng-disabled="postCtrl.hasMedia() && !postCtrl.hasVideo">
                 <md-icon>ondemand_video</md-icon>
-                {{!postCtrl.addVideo ? 'Vídeo do Youtube' : 'Remover vídeo'}}
+                {{!postCtrl.hasVideo ? 'Vídeo do Youtube' : 'Remover vídeo'}}
               </md-button>
             </md-menu-item>
             <md-menu-item ng-if="postCtrl.typePost === 'Common'">

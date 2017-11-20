@@ -4,7 +4,8 @@
 
     var app = angular.module("app");
 
-    app.controller("NotificationController", function NotificationController(NotificationService, AuthService, $state, $mdDialog, InstitutionService) {
+    app.controller("NotificationController", function NotificationController(NotificationService, AuthService, $state,
+        $mdDialog, InstitutionService, UserService) {
         var controller = this;
 
         controller.user = AuthService.getCurrentUser();
@@ -154,8 +155,9 @@
                 notificationProperties.dialogProperties.locals.key = notification.entity_key;
                 controller.showDialog(notificationProperties.dialogProperties);
             } else if (notification.type === 'ACCEPTED_LINK'){
-                InstitutionService.getInstitution(notification.entity_key).then(function success(response) {
-                    controller.user.institutions.push(response.data);
+                UserService.load().then(function success(response) {
+                    controller.user.institutions = response.institutions;
+                    controller.user.institution_profiles = response.institution_profiles;
                     AuthService.save();
                     controller.goTo(notification);
                 });

@@ -95,6 +95,7 @@
             },
             "ACCEPTED_LINK": {
                 icon: "link",
+                action: refreshUserInstitutions,
             },
             "REJECT_INSTITUTION_LINK": {
                 icon: "account_balance",
@@ -150,17 +151,12 @@
 
         controller.action = function action(notification) {
             var notificationProperties = type_data[notification.type];
-
+            var  notificationAction = type_data[notification.type].action;
             if (notificationProperties.isDialog) {
                 notificationProperties.dialogProperties.locals.key = notification.entity_key;
                 controller.showDialog(notificationProperties.dialogProperties);
-            } else if (notification.type === 'ACCEPTED_LINK'){
-                UserService.load().then(function success(response) {
-                    controller.user.institutions = response.institutions;
-                    controller.user.institution_profiles = response.institution_profiles;
-                    AuthService.save();
-                    controller.goTo(notification);
-                });
+            } else if (notificationAction){
+                notificationAction(notification);
             } else {
                 controller.goTo(notification);
             }
@@ -191,6 +187,15 @@
                 controller.markAsRead(notification);
             });
         };
+
+        function refreshUserInstitutions (notification) {
+            UserService.load().then(function success(response) {
+                    controller.user.institutions = response.institutions;
+                    controller.user.institution_profiles = response.institution_profiles;
+                    AuthService.save();
+                    controller.goTo(notification);
+            });
+        }
 
         (function main() {
             NotificationService.watchNotifications(controller.user.key, controller.notifications);

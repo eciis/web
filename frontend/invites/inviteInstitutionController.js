@@ -110,8 +110,8 @@
         };
 
         function loadSentRequests() {
-            RequestInvitationService.getRequestsInst().then(function success(response) {
-                inviteController.sent_requests = response.data;
+            RequestInvitationService.getRequestsInst().then(function success(requests) {
+                inviteController.sent_requests = requests;
             }, function error(response) {
                 $state.go('app.home');
                 MessageService.showToast(response.data.msg);

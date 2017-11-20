@@ -61,7 +61,7 @@
         };
 
         mainCtrl.goInvite = function goInvite() {
-            $state.go('app.invite_inst');
+            $state.go('app.user.invite_inst');
         };
 
         mainCtrl.goToInstitution = function goToInstitution(institutionKey) {

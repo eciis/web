@@ -40,12 +40,39 @@
                     }
                 }
             })
-            .state("app.home", {
-                url: "/",
+            .state("app.user", {
+                abstract: true,
                 views: {
                     content: {
+                        templateUrl: "app/user/left_nav.html",
+                        controller: "HomeController as homeCtrl"
+                    }
+                }
+            })
+            .state("app.user.home", {
+                url: "/",
+                views: {
+                    user_content: {
                         templateUrl: "app/home/home.html",
                         controller: "HomeController as homeCtrl"
+                    }
+                }
+            })
+            .state("app.user.invite_inst", {
+                url: "/inviteInstitution",
+                views: {
+                    user_content: {
+                        templateUrl: "app/invites/invite_institution.html",
+                        controller: "InviteInstitutionController as inviteInstCtrl"
+                    }
+                }
+            })
+            .state("app.user.config_profile", {
+                url: "/config_profile",
+                views: {
+                    user_content: {
+                        templateUrl: "app/auth/config_profile.html",
+                        controller: "ConfigProfileController as configProfileCtrl"
                     }
                 }
             })
@@ -118,24 +145,6 @@
                     content_manage_institution: {
                         templateUrl: "app/invites/invite_institution_hierarchie.html",
                         controller: "InviteInstHierarchieController as inviteInstCtrl"
-                    }
-                }
-            })
-            .state("app.invite_inst", {
-                url: "/inviteInstitution",
-                views: {
-                    content: {
-                        templateUrl: "app/invites/invite_institution.html",
-                        controller: "InviteInstitutionController as inviteInstCtrl"
-                    }
-                }
-            })
-            .state("app.config_profile", {
-                url: "/config_profile",
-                views: {
-                    content: {
-                        templateUrl: "app/auth/config_profile.html",
-                        controller: "ConfigProfileController as configProfileCtrl"
                     }
                 }
             })

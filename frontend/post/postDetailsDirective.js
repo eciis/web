@@ -122,7 +122,7 @@
 
         postDetailsCtrl.showButtonEdit = function showButtonEdit() {
             return postDetailsCtrl.isPostAuthor() && !postDetailsCtrl.isDeleted(postDetailsCtrl.post) &&
-                    !postDetailsCtrl.postHasActivity() && !postDetailsCtrl.isShared();
+                    !postDetailsCtrl.postHasActivity() && !postDetailsCtrl.isShared() && !postDetailsCtrl.showSurvey();
         };
 
         postDetailsCtrl.generateLink = function generateLink(){

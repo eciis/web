@@ -122,7 +122,7 @@
 
         (function main() {
             if (mainCtrl.user.name === 'Unknown') {
-                $state.go("app.config_profile");
+                $state.go("app.user.config_profile");
             }
 
             mainCtrl.getPendingTasks();

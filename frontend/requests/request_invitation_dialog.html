@@ -56,7 +56,7 @@
 				</md-card-header-text>
 			</md-card-header>
 			<md-card-content>
-				<form name="requestuser" ng-submit="requestInvCtrl.sendRequest()">
+				<form name="requestuser" ng-submit="requestInvCtrl.verifyAndSendRequest()">
 					<md-input-container class="md-block" ng-if="requestInvCtrl.showNameInput()">
 			          <label>Nome</label>
 			          <input ng-model="requestInvCtrl.request.name" name="name" required>

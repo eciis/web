@@ -186,21 +186,5 @@
                 expect(manageMemberCtrl.invite).toEqual({});
             });
         });
-
-        describe('calcHeight()', function() {
-            it('should set the height to 18em', function() {
-                var requests = ['req01', 'req02', 'req03', 'req05', 'req06'];
-                var calculatedHeigh = manageMemberCtrl.calcHeight(requests);
-                var expectedHeight = {height: '18em'};
-                expect(calculatedHeigh).toEqual(expectedHeight);
-            });
-
-            it('should set height to less than 18em', function() {
-                var requests = ['req01', 'req02'];
-                var calculatedHeigh = manageMemberCtrl.calcHeight(requests);
-                var expectedHeight = {height: '12em'};
-                expect(calculatedHeigh).toEqual(expectedHeight);
-            });
-        });
     });
 }));

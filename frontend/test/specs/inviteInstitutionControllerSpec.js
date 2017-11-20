@@ -147,21 +147,5 @@
                 expect(inviteinstitutionCtrl.showSendInvites).toBe(true);
             });
         });
-
-        describe('calcHeight()', function() {
-            it('should set the height to 20em', function() {
-                var requests = ['req01', 'req02', 'req03', 'req05', 'req06'];
-                var calculatedHeigh = inviteinstitutionCtrl.calcHeight(requests);
-                var expectedHeight = {height: '20em'};
-                expect(calculatedHeigh).toEqual(expectedHeight);
-            });
-
-            it('should set height to less than 20em', function() {
-                var requests = ['req01', 'req02', 'req03'];
-                var calculatedHeigh = inviteinstitutionCtrl.calcHeight(requests);
-                var expectedHeight = {height: '15em'};
-                expect(calculatedHeigh).toEqual(expectedHeight);
-            });
-        });
     });
 }));

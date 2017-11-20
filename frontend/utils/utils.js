@@ -57,7 +57,7 @@ var Utils = {
         var calculedHeight = list.length < maxRequestsNumber ? actualHeight : maxHeight;
         return {height: calculedHeight};
     },
-
+    
     setScrollListener: function setScrollListener(content, callback) {
         var alreadyRequested = false;
 

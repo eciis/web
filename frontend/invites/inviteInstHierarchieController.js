@@ -20,13 +20,16 @@
         inviteInstHierCtrl.institution = {};
         inviteInstHierCtrl.invite = {};
         inviteInstHierCtrl.hasParent = false;
-        inviteInstHierCtrl.showSendInvite = false;
+        inviteInstHierCtrl.showSendInvite = true;
         inviteInstHierCtrl.showParentHierarchie = false;
         inviteInstHierCtrl.showChildrenHierarchie = false;
         inviteInstHierCtrl.showRequestInvites = false;
         inviteInstHierCtrl.existing_institutions = [];
         inviteInstHierCtrl.requested_invites = [];
 
+        inviteInstHierCtrl.showHideElement = function showHideElement(flagName) {
+            inviteInstHierCtrl[flagName] = !inviteInstHierCtrl[flagName];
+        };
 
         inviteInstHierCtrl.checkInstInvite = function checkInstInvite(ev) {
             var promise;

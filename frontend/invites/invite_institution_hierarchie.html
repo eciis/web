@@ -1,20 +1,16 @@
 <div flex-gt-lg="80" flex-lg="90" layout="row" layout-align="center" layout-fill>
   <div flex>
     <md-card>
-      <md-toolbar md-colors="{background: 'teal-500'}" layout="row">
+      <md-toolbar md-colors="{background: 'teal-500'}" layout="row" class="clickable-no-hover" 
+        ng-click="inviteInstHierCtrl.showHideElement('showSendInvite')">
         <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
           <h1>
             <md-icon>send</md-icon>
             Enviar Convite
           </h1>
           <span flex md-truncate></span>
-          <md-button ng-if="!inviteInstHierCtrl.showSendInvite" ng-click="inviteInstHierCtrl.showSendInvite = true;"
-              class="md-icon-button md-secondary">
-            <md-icon>keyboard_arrow_down</md-icon>
-          </md-button>
-          <md-button ng-if="inviteInstHierCtrl.showSendInvite" ng-click="inviteInstHierCtrl.showSendInvite = false;"
-              class="md-icon-button md-secondary">
-            <md-icon>keyboard_arrow_up</md-icon>
+          <md-button class="md-icon-button md-secondary">
+            <md-icon>{{inviteInstHierCtrl.showSendInvite ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</md-icon>
           </md-button>
         </div>
       </md-toolbar>
@@ -45,20 +41,16 @@
       </md-card-content>
     </md-card>
     <md-card>
-      <md-toolbar md-colors="{background: 'teal-500'}" layout="row">
+      <md-toolbar md-colors="{background: 'teal-500'}" layout="row" class="clickable-no-hover"
+        ng-click="inviteInstHierCtrl.showHideElement('showParentHierarchie')">
         <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
           <h1>
             <md-icon>account_balance</md-icon>
             Instituição hierarquicamente superior
           </h1>
           <span flex md-truncate></span>
-          <md-button ng-if="!inviteInstHierCtrl.showParentHierarchie" ng-click="inviteInstHierCtrl.showParentHierarchie = true;"
-              class="md-icon-button md-secondary">
-            <md-icon>keyboard_arrow_down</md-icon>
-          </md-button>
-          <md-button ng-if="inviteInstHierCtrl.showParentHierarchie" ng-click="inviteInstHierCtrl.showParentHierarchie = false;"
-              class="md-icon-button md-secondary">
-            <md-icon>keyboard_arrow_up</md-icon>
+          <md-button class="md-icon-button md-secondary">
+            <md-icon>{{inviteInstHierCtrl.showParentHierarchie ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</md-icon>
           </md-button>
         </div>
       </md-toolbar>
@@ -89,20 +81,16 @@
       </md-card-content>
     </md-card>
     <md-card>
-        <md-toolbar md-colors="{background: 'teal-500'}" layout="row">
+        <md-toolbar md-colors="{background: 'teal-500'}" layout="row" class="clickable-no-hover"
+          ng-click="inviteInstHierCtrl.showHideElement('showChildrenHierarchie')">
           <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
             <h1>
               <md-icon>account_balance</md-icon>
               Instituição hierarquicamente subordinadas
             </h1>
             <span flex md-truncate></span>
-            <md-button ng-if="!inviteInstHierCtrl.showChildrenHierarchie" ng-click="inviteInstHierCtrl.showChildrenHierarchie = true;"
-                class="md-icon-button md-secondary">
-              <md-icon>keyboard_arrow_down</md-icon>
-            </md-button>
-            <md-button ng-if="inviteInstHierCtrl.showChildrenHierarchie" ng-click="inviteInstHierCtrl.showChildrenHierarchie = false;"
-                class="md-icon-button md-secondary">
-              <md-icon>keyboard_arrow_up</md-icon>
+            <md-button class="md-icon-button md-secondary">
+              <md-icon>{{inviteInstHierCtrl.showChildrenHierarchie ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</md-icon>
             </md-button>
           </div>
         </md-toolbar>
@@ -137,20 +125,16 @@
         </md-card-content>
     </md-card>
     <md-card>
-        <md-toolbar md-colors="{background: 'teal-500'}" layout="row">
+        <md-toolbar md-colors="{background: 'teal-500'}" layout="row" class="clickable-no-hover"
+          ng-click="inviteInstHierCtrl.showHideElement('showRequestInvites')">
           <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
             <h1>
               <md-icon>link</md-icon>
               Vinculos pendentes
             </h1>
             <span flex md-truncate></span>
-            <md-button ng-if="!inviteInstHierCtrl.showRequestInvites" ng-click="inviteInstHierCtrl.showRequestInvites = true;"
-                class="md-icon-button md-secondary">
-              <md-icon>keyboard_arrow_down</md-icon>
-            </md-button>
-            <md-button ng-if="inviteInstHierCtrl.showRequestInvites" ng-click="inviteInstHierCtrl.showRequestInvites = false;"
-                class="md-icon-button md-secondary">
-              <md-icon>keyboard_arrow_up</md-icon>
+            <md-button class="md-icon-button md-secondary">
+              <md-icon>{{inviteInstHierCtrl.showRequestInvites ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</md-icon>
             </md-button>
           </div>
         </md-toolbar>

@@ -160,20 +160,8 @@
             });
         }
 
-        manageMemberCtrl.showHideInvites = function showHideInvites() {
-            manageMemberCtrl.showInvites = !manageMemberCtrl.showInvites;
-        };
-
-        manageMemberCtrl.showHideRequests = function showHideRequests() {
-            manageMemberCtrl.showRequests = !manageMemberCtrl.showRequests;
-        };
-
-        manageMemberCtrl.showHideMembers = function showHideMembers() {
-            manageMemberCtrl.showMembers = !manageMemberCtrl.showMembers;
-        };
-
-        manageMemberCtrl.showHideSendInvites = function showHideSendInvites() {
-            manageMemberCtrl.showSendInvite = !manageMemberCtrl.showSendInvite;
+        manageMemberCtrl.showHideElement = function showHideElement(flagName) {
+            manageMemberCtrl[flagName] = !manageMemberCtrl[flagName];
         };
 
         manageMemberCtrl.isUserInviteValid = function isUserInviteValid(invite) {

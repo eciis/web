@@ -22,20 +22,8 @@
         inviteInstCtrl.user = AuthService.getCurrentUser();
 
 
-        inviteInstCtrl.showHideSendInvites = function showHideSendInvites() { 
-            inviteInstCtrl.showSendInvites = !inviteInstCtrl.showSendInvites;
-        };
-
-        inviteInstCtrl.showHideInvites =  function showHideInvites() {
-            inviteInstCtrl.showInvites = !inviteInstCtrl.showInvites;
-        };
-
-        inviteInstCtrl.showHideRequests =  function showHideRequests() {
-            inviteInstCtrl.showRequests = !inviteInstCtrl.showRequests;
-        };
-
-        inviteInstCtrl.showHideSentInvitations =  function showHideSentInvitations() {
-            inviteInstCtrl.showSentInvitations = !inviteInstCtrl.showSentInvitations;
+        inviteInstCtrl.showHideElement = function showHideElement(flagName) {
+            inviteInstCtrl[flagName] = !inviteInstCtrl[flagName];
         };
 
         inviteInstCtrl.calcHeight = function calcHeight(list=[], itemHeight=5) {

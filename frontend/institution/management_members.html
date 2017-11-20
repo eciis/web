@@ -4,7 +4,7 @@
     <!-- SEND INVITE -->
     <md-card>
       <md-toolbar md-colors="{background: 'teal-500'}" layout="row"
-       ng-click="manageMemberCtrl.showHideSendInvites()" class="clickable-no-hover">
+       ng-click="manageMemberCtrl.showHideElement('showSendInvite')" class="clickable-no-hover">
         <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
           <h1>
             <md-icon>send</md-icon>
@@ -32,7 +32,7 @@
     <!-- MANAGE MEMBERS -->
     <md-card>
       <md-toolbar md-colors="{background: 'teal-500'}" layout="row" 
-        ng-click="manageMemberCtrl.showHideMembers()" class="clickable-no-hover">
+        ng-click="manageMemberCtrl.showHideElement('showMembers')" class="clickable-no-hover">
         <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
           <h1>
             <md-icon>account_circle </md-icon>
@@ -80,7 +80,7 @@
     <!-- INVITATIONS SENT -->
     <md-card>
       <md-toolbar md-colors="{background: 'teal-500'}" layout="row" 
-        ng-click="manageMemberCtrl.showHideInvites()" class="clickable-no-hover">
+        ng-click="manageMemberCtrl.showHideElement('showInvites')" class="clickable-no-hover">
         <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
           <h1>
             <md-icon>email</md-icon>
@@ -108,7 +108,7 @@
     <!-- REQUIRED INVITATIONS -->
     <md-card>
       <md-toolbar md-colors="{background: 'teal-500'}" layout="row"
-        ng-click="manageMemberCtrl.showHideRequests()" class="clickable-no-hover">
+        ng-click="manageMemberCtrl.showHideElement('showRequests')" class="clickable-no-hover">
         <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
           <h1>
             <md-icon>feedback</md-icon>

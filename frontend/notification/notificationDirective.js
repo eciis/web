@@ -18,7 +18,10 @@
                 state: "app.post"
             },
             "DELETE_MEMBER": {
-                icon: "clear"
+                icon: "clear",
+                action: function() {
+                    return refreshUserInstitutions();
+                }
             },
             "DELETED_INSTITUTION": {
                 icon: "clear"

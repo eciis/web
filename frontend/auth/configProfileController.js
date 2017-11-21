@@ -153,7 +153,6 @@
                 _.remove(configProfileCtrl.newUser.institution_profiles, function(profile) {
                     return profile.institution_key === institution_key;
                 });
-
                 AuthService.save();
             } else {
                 AuthService.logout();

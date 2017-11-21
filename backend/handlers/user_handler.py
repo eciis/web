@@ -93,7 +93,6 @@ class UserHandler(BaseHandler):
 
         institution.remove_member(user)
         institution.unfollow(user.key)
-        print "deu certo !!!!!"
 
     @json_response
     @login_required

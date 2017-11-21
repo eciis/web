@@ -57,6 +57,8 @@
                 promise.then(function success() {
                     manageMemberCtrl.sent_invitations.push(invite);
                     manageMemberCtrl.invite = {};
+                    manageMemberCtrl.showInvites = true; 
+                    manageMemberCtrl.showSendInvite = false;
                     MessageService.showToast('Convite enviado com sucesso!');
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);

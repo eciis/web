@@ -51,4 +51,5 @@ Post.prototype.isDeleted = function isDeleted() {
 Post.prototype.remove = function remove(userName) {
     this.state = 'deleted';
     this.last_modified_by = userName;
+    this.last_modified_date = new Date().toISOString();
 };

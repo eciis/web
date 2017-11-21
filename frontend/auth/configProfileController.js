@@ -138,11 +138,26 @@
         function deleteInstitution(institution_key) {
             var promise = UserService.deleteInstitution(institution_key);
             promise.then(function success() {
-                AuthService.logout();
+                removeConection(institution_key);
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
             return promise;
+        }
+
+        function removeConection(institution_key) {
+            if (configProfileCtrl.newUser.institutions.length > 1) {
+                _.remove(configProfileCtrl.newUser.institutions, function(institution) {
+                    return institution.key === institution_key;
+                });
+                _.remove(configProfileCtrl.newUser.institution_profiles, function(profile) {
+                    return profile.institution_key === institution_key;
+                });
+
+                AuthService.save();
+            } else {
+                AuthService.logout();
+            }
         }
 
         function isAdminOfAnyInstitution() {

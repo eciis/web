@@ -3,20 +3,16 @@
   <div flex>
     <!-- SEND INVITE -->
     <md-card>
-      <md-toolbar md-colors="{background: 'teal-500'}" layout="row">
+      <md-toolbar md-colors="{background: 'teal-500'}" layout="row"
+       ng-click="manageMemberCtrl.toggleElement('showSendInvite')" class="clickable-no-hover">
         <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
           <h1>
             <md-icon>send</md-icon>
             Enviar Convite
           </h1>
           <span flex md-truncate></span>
-          <md-button ng-if="!manageMemberCtrl.showSendInvite" ng-click="manageMemberCtrl.showSendInvite = true;"
-              class="md-icon-button md-secondary">
-            <md-icon>keyboard_arrow_down</md-icon>
-          </md-button>
-          <md-button ng-if="manageMemberCtrl.showSendInvite" ng-click="manageMemberCtrl.showSendInvite = false;"
-              class="md-icon-button md-secondary">
-            <md-icon>keyboard_arrow_up</md-icon>
+          <md-button class="md-icon-button md-secondary">
+            <md-icon>{{ manageMemberCtrl.showSendInvite ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</md-icon>
           </md-button>
         </div>
       </md-toolbar>
@@ -35,20 +31,16 @@
     </md-card>
     <!-- MANAGE MEMBERS -->
     <md-card>
-      <md-toolbar md-colors="{background: 'teal-500'}" layout="row">
+      <md-toolbar md-colors="{background: 'teal-500'}" layout="row" 
+        ng-click="manageMemberCtrl.toggleElement('showMembers')" class="clickable-no-hover">
         <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
           <h1>
             <md-icon>account_circle </md-icon>
             Gerenciar Membros
           </h1>
           <span flex md-truncate></span>
-          <md-button ng-if="!manageMemberCtrl.showMembers" ng-click="manageMemberCtrl.showMembers = true;"
-              class="md-icon-button md-secondary">
-            <md-icon>keyboard_arrow_down</md-icon>
-          </md-button>
-          <md-button ng-if="manageMemberCtrl.showMembers" ng-click="manageMemberCtrl.showMembers = false;"
-              class="md-icon-button md-secondary">
-            <md-icon>keyboard_arrow_up</md-icon>
+          <md-button class="md-icon-button md-secondary">
+            <md-icon>{{ manageMemberCtrl.showMembers ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</md-icon>
           </md-button>
         </div>
       </md-toolbar>
@@ -87,26 +79,22 @@
     </md-card>
     <!-- INVITATIONS SENT -->
     <md-card>
-      <md-toolbar md-colors="{background: 'teal-500'}" layout="row">
+      <md-toolbar md-colors="{background: 'teal-500'}" layout="row" 
+        ng-click="manageMemberCtrl.toggleElement('showInvites')" class="clickable-no-hover">
         <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
           <h1>
             <md-icon>email</md-icon>
             Convites enviados</h1>
           <span flex md-truncate></span>
-          <md-button ng-if="!manageMemberCtrl.showInvites" ng-click="manageMemberCtrl.showInvites = true;"
-              class="md-icon-button md-secondary">
-            <md-icon>keyboard_arrow_down</md-icon>
-          </md-button>
-          <md-button ng-if="manageMemberCtrl.showInvites" ng-click="manageMemberCtrl.showInvites = false;"
-              class="md-icon-button md-secondary">
-            <md-icon>keyboard_arrow_up</md-icon>
+          <md-button  class="md-icon-button md-secondary">
+            <md-icon>{{ manageMemberCtrl.showInvites ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</md-icon>
           </md-button>
         </div>
       </md-toolbar>
-      <md-card-content ng-if="manageMemberCtrl.showInvites">
+      <md-card-content ng-show="manageMemberCtrl.showInvites" 
+          ng-style="manageMemberCtrl.calculateHeight(manageMemberCtrl.sent_invitations)" ng-scrollbars>
         <md-list>
-          <md-list-item class="md-2-line" ng-repeat="invite in manageMemberCtrl.sent_invitations" ng-click="null"
-          ng-if="invite.type_of_invite == 'USER'">
+          <md-list-item class="md-2-line" ng-repeat="invite in manageMemberCtrl.sent_invitations" ng-click="null">
             <md-icon class="md-avatar-icon"
             md-colors="{background: 'light-green-500', color: 'grey-50'}">account_box</md-icon>
             <div class="md-list-item-text">
@@ -119,26 +107,23 @@
     </md-card>
     <!-- REQUIRED INVITATIONS -->
     <md-card>
-      <md-toolbar md-colors="{background: 'teal-500'}" layout="row">
+      <md-toolbar md-colors="{background: 'teal-500'}" layout="row"
+        ng-click="manageMemberCtrl.toggleElement('showRequests')" class="clickable-no-hover">
         <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
           <h1>
             <md-icon>feedback</md-icon>
             Convites requisitados
           </h1>
           <span flex md-truncate></span>
-          <md-button ng-if="!manageMemberCtrl.showRequests" ng-click="manageMemberCtrl.showRequests = true;"
-              class="md-icon-button md-secondary">
-            <md-icon>keyboard_arrow_down</md-icon>
-          </md-button>
-          <md-button ng-if="manageMemberCtrl.showRequests" ng-click="manageMemberCtrl.showRequests = false;"
-              class="md-icon-button md-secondary">
-            <md-icon>keyboard_arrow_up</md-icon>
+          <md-button  class="md-icon-button md-secondary">
+            <md-icon>{{ manageMemberCtrl.showRequests ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</md-icon>
           </md-button>
         </div>
       </md-toolbar>
-      <md-card-content ng-if="manageMemberCtrl.showRequests">
+      <md-card-content ng-show="manageMemberCtrl.showRequests"
+          ng-style="manageMemberCtrl.calculateHeight(manageMemberCtrl.requests, 5.5)" ng-scrollbars>
         <md-list flex>
-          <md-list-item ng-repeat="request in manageMemberCtrl.requests" ng-if="request.status == 'sent'" ng-click="null" class="md-3-line">
+          <md-list-item ng-repeat="request in manageMemberCtrl.requests" ng-click="null" class="md-3-line">
             <md-icon class="md-avatar-icon"
             md-colors="{background: 'light-green-500', color: 'grey-50'}">account_box</md-icon>
             <div class="md-list-item-text" layout="column">

@@ -12,6 +12,9 @@
         manageMemberCtrl.currentMember = "";
 
         manageMemberCtrl.showSendInvite = true;
+        manageMemberCtrl.showInvites = false;
+        manageMemberCtrl.showRequests = false;
+        manageMemberCtrl.showMembers = false;
 
         var currentInstitutionKey = $state.params.institutionKey;
         var invite;
@@ -54,6 +57,8 @@
                 promise.then(function success() {
                     manageMemberCtrl.sent_invitations.push(invite);
                     manageMemberCtrl.invite = {};
+                    manageMemberCtrl.showInvites = true; 
+                    manageMemberCtrl.showSendInvite = false;
                     MessageService.showToast('Convite enviado com sucesso!');
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
@@ -86,12 +91,20 @@
         function deleteRequest(request) {
             var promise = RequestInvitationService.rejectRequest(request.key);
             promise.then(function success() {
-                request.status = 'rejected';
+                removeRejectedRequest(request);
                 MessageService.showToast("O pedido foi rejeitado!");
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
             return promise;
+        }
+
+        function removeRejectedRequest(request) {
+            request.status = 'rejected';
+            manageMemberCtrl.requests = manageMemberCtrl.requests.filter(function(req) {
+                return req.key !== request.key;
+            });
+            manageMemberCtrl.showRequests = manageMemberCtrl.requests.length > 0;
         }
 
         manageMemberCtrl.cancelInvite = function cancelInvite() {
@@ -104,13 +117,18 @@
 
         function loadInstitution() {
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
-                manageMemberCtrl.sent_invitations = response.data.sent_invitations;
+                getSentInvitations(response.data.sent_invitations);
                 getMembers();
                 getRequests();
             }, function error(response) {
                 $state.go('app.institution', {institutionKey: currentInstitutionKey});
                 MessageService.showToast(response.data.msg);
             });
+        }
+
+        function getSentInvitations(invitations) {
+            var isUserInvitation = createRequestSelector('sent', 'USER');
+            manageMemberCtrl.sent_invitations = invitations.filter(isUserInvitation);
         }
 
         function getMembers() {
@@ -123,7 +141,8 @@
 
         function getRequests() {
             RequestInvitationService.getRequests(currentInstitutionKey).then(function success(response) {
-                manageMemberCtrl.requests = response;
+                var isUserRequest = createRequestSelector('sent', 'REQUEST_USER');
+                manageMemberCtrl.requests = response.filter(isUserRequest);
             });
         }
 
@@ -143,6 +162,10 @@
             });
         }
 
+        manageMemberCtrl.toggleElement = function toggleElement(flagName) {
+            manageMemberCtrl[flagName] = !manageMemberCtrl[flagName];
+        };
+
         manageMemberCtrl.isUserInviteValid = function isUserInviteValid(invite) {
             var isValid = true;
             if (! invite.isValid()) {
@@ -158,13 +181,21 @@
             return isValid;
         };
 
-        loadInstitution();
+        manageMemberCtrl.calculateHeight = function calculateHeight(list, itemHeight=4.5) {
+            return Utils.calculateHeight(list, itemHeight);
+        };
+
+        function createRequestSelector(status, type_of_invite) {
+            return function(request) {
+                return request.status === status && request.type_of_invite === type_of_invite;
+            }
+        }
 
         function RemoveMemberController(member_obj) {
             var removeMemberCtrl = this;
-
+            
             removeMemberCtrl.justification = "";
-
+            
             removeMemberCtrl.removeMember = function removeMember() {
                 InstitutionService.removeMember(currentInstitutionKey, member_obj, removeMemberCtrl.justification).then(function success() {
                     manageMemberCtrl.removeMember(member_obj);
@@ -173,10 +204,12 @@
                     MessageService.showToast(response.data.msg);
                 });
             };
-
+            
             removeMemberCtrl.cancel = function cancel() {
                 $mdDialog.cancel();
             };
         }
+        
+        loadInstitution();
     });
 })();

@@ -73,7 +73,7 @@
       httpBackend.verifyNoOutstandingRequest();
   });
 
-  describe('deleteEvent()', function(){
+  describe('confirmDeleteEvent()', function(){
     beforeEach(function() {
       spyOn(mdDialog, 'confirm').and.callThrough();
       spyOn(mdDialog, 'show').and.callFake(function(){
@@ -89,7 +89,7 @@
     it('Should remove event of events', function() {
       var event = eventCtrl.events[0];
       httpBackend.expect('DELETE', EVENTS_URI + '/' + event.key).respond();
-      eventCtrl.deleteEvent("$event", event);
+      eventCtrl.confirmDeleteEvent("$event", event);
       httpBackend.flush();
 
       expect(eventCtrl.events).not.toContain(event_convert_date);

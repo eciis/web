@@ -94,7 +94,7 @@
 
             mainCtrl = createCtrl();
 
-            expect(state.go).toHaveBeenCalledWith('app.config_profile');
+            expect(state.go).toHaveBeenCalledWith('app.user.config_profile');
         });
     });
 
@@ -130,8 +130,8 @@
         });
         it('Should call state.go() in function goTo()', function(){
             spyOn(state, 'go');
-            mainCtrl.goTo('app.home');
-            expect(state.go).toHaveBeenCalledWith('app.home');
+            mainCtrl.goTo('app.user.home');
+            expect(state.go).toHaveBeenCalledWith('app.user.home');
         });
         it('Should call state.go() in function goToInstitution()', function(){
             spyOn(state, 'go');

@@ -14,7 +14,7 @@
                 eventCtrl.event = response.data;
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
-                $state.go('app.home');
+                $state.go("app.user.home");
             });
         }
 

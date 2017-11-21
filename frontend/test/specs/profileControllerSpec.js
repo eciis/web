@@ -36,7 +36,7 @@
         });
 
         it('should call state.go()', function() {
-            expect(state.go).toHaveBeenCalledWith('app.config_profile');
+            expect(state.go).toHaveBeenCalledWith('app.user.config_profile');
         });
 
         it('should call mdDialog.cancel()', function() {

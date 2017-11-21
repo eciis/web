@@ -97,6 +97,7 @@ class RequestUser(Invite):
         invite_user_json = super(RequestUser, self).make()
         invite_user_json['sender'] = self.sender_key.get().email
         invite_user_json['sender_name'] = self.sender_name
+        invite_user_json['sender_key'] = self.sender_key.urlsafe()
         invite_user_json['office'] = self.office
         invite_user_json['institutional_email'] = self.institutional_email
         invite_user_json['institution_key'] = self.institution_key.urlsafe()

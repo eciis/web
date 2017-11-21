@@ -61,7 +61,7 @@
         };
 
         mainCtrl.goInvite = function goInvite() {
-            $state.go('app.invite_inst');
+            $state.go('app.user.invite_inst');
         };
 
         mainCtrl.goToInstitution = function goToInstitution(institutionKey) {
@@ -122,7 +122,7 @@
 
         (function main() {
             if (mainCtrl.user.name === 'Unknown') {
-                $state.go("app.config_profile");
+                $state.go("app.user.config_profile");
             }
 
             mainCtrl.getPendingTasks();

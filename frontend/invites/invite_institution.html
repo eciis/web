@@ -1,25 +1,21 @@
-<md-content layout="row" md-colors="{background: 'grey-200'}" layout-align="center" class="body">
-  <div flex-gt-lg="80" flex-lg="90" layout="row" layout-align="center" layout-fill>
-    <div flex="80">
+<md-content layout="row" layout-align="center" class="body hide-scrollbar">
+  <div flex layout="row" layout-align="center">
+    <div flex flex-gt-lg="95">
         <md-card flex layout="column">
-          <md-toolbar md-colors="{background: 'teal-500'}" layout="row">
+          <md-toolbar md-colors="{background: 'teal-500'}" layout="row"
+            ng-click="inviteInstCtrl.toggleElement('showSendInvites')" class="clickable-no-hover">
             <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
               <h1>
                 <md-icon>send</md-icon> 
                 Enviar convite
               </h1>
               <span flex md-truncate></span>
-              <md-button ng-if="!inviteInstCtrl.showSendInvite" ng-click="inviteInstCtrl.showSendInvite = true;"
-              class="md-icon-button md-secondary">
-                <md-icon>keyboard_arrow_down</md-icon>
-              </md-button>
-              <md-button ng-if="inviteInstCtrl.showSendInvite" ng-click="inviteInstCtrl.showSendInvite = false;"
-                class="md-icon-button md-secondary">
-                <md-icon>keyboard_arrow_up</md-icon>
+              <md-button class="md-icon-button md-secondary">
+                <md-icon>{{ inviteInstCtrl.showSendInvites ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</md-icon>
               </md-button>
             </div>
           </md-toolbar>
-          <md-card-content ng-show="inviteInstCtrl.showSendInvite;">
+          <md-card-content ng-show="inviteInstCtrl.showSendInvites">
             <div layout-gt-sm="column" layout-padding>
               <div layout-gt-sm="column">
                 <md-input-container class="md-block" flex-gt-sm>
@@ -41,27 +37,23 @@
         </md-card>
 
         <md-card flex layout="column">
-          <md-toolbar md-colors="{background: 'teal-500'}" layout="row">
+          <md-toolbar md-colors="{background: 'teal-500'}" layout="row"
+            ng-click="inviteInstCtrl.toggleElement('showInvites')" class="clickable-no-hover">
             <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
               <h1>
                 <md-icon>email</md-icon>
                 Convites enviados
               </h1>
               <span flex md-truncate></span>
-              <md-button ng-if="!inviteInstCtrl.showInvites" ng-click="inviteInstCtrl.showInvites = true;"
-              class="md-icon-button md-secondary">
-                <md-icon>keyboard_arrow_down</md-icon>
-              </md-button>
-              <md-button ng-if="inviteInstCtrl.showInvites" ng-click="inviteInstCtrl.showInvites = false;"
-                class="md-icon-button md-secondary">
-                <md-icon>keyboard_arrow_up</md-icon>
+              <md-button class="md-icon-button md-secondary">
+                <md-icon>{{ inviteInstCtrl.showInvites ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</md-icon>
               </md-button>
             </div>
           </md-toolbar>
-          <md-card-content ng-if="inviteInstCtrl.showInvites">
+          <md-card-content ng-show="inviteInstCtrl.showInvites" 
+            ng-style="inviteInstCtrl.calculateHeight(inviteInstCtrl.sent_invitations)" ng-scrollbars>
             <md-list class="md-dense" flex>
-              <md-list-item class="md-3-line" ng-repeat="invite in inviteInstCtrl.sent_invitations"
-              ng-if="invite.status === 'sent' && invite.type_of_invite === 'INSTITUTION'" ng-click="null">
+              <md-list-item class="md-3-line" ng-click="null" ng-repeat="invite in inviteInstCtrl.sent_invitations">
                 <md-icon class="md-avatar-icon" 
                 md-colors="{background: 'light-green-500', color: 'grey-50'}">account_balance</md-icon>
                 <div class="md-list-item-text" layout="column">
@@ -75,60 +67,55 @@
         </md-card>
 
         <md-card flex layout="column">
-          <md-toolbar md-colors="{background: 'teal-500'}" layout="row">
+          <md-toolbar md-colors="{background: 'teal-500'}" layout="row"
+            ng-click="inviteInstCtrl.toggleElement('showRequests')" class="clickable-no-hover">
             <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
               <h1>
                 <md-icon>feedback</md-icon>
                 Convites requisitados
               </h1>
               <span flex md-truncate></span>
-              <md-button ng-if="!inviteInstCtrl.showRequests" ng-click="inviteInstCtrl.showRequests = true;"
-              class="md-icon-button md-secondary">
-                <md-icon>keyboard_arrow_down</md-icon>
-              </md-button>
-              <md-button ng-if="inviteInstCtrl.showRequests" ng-click="inviteInstCtrl.showRequests = false;"
-                class="md-icon-button md-secondary">
-                <md-icon>keyboard_arrow_up</md-icon>
+              <md-button class="md-icon-button md-secondary">
+                <md-icon>{{ inviteInstCtrl.showRequests ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</md-icon>
               </md-button>
             </div>
           </md-toolbar>
-          <md-card-content ng-if="inviteInstCtrl.showRequests">
-            <md-list class="md-dense" flex>
-              <md-list-item class="md-3-line" ng-repeat="request in inviteInstCtrl.sent_requests"
-              ng-if="request.status === 'sent' && request.type_of_invite === 'REQUEST_INSTITUTION'"
-              ng-click="inviteInstCtrl.showProcessingRequestDialog(request)">
-                <md-icon class="md-avatar-icon" 
-                md-colors="{background: 'light-green-500', color: 'grey-50'}">account_balance</md-icon>
-                <div class="md-list-item-text" layout="column">
-                  <h3>{{ request.institution_name }}</h3>
-                  <p>{{ request.sender[0] }}</p>
-                </div>
-              </md-list-item>
-            </md-list>
+          <md-card-content ng-show="inviteInstCtrl.showRequests" 
+            ng-style="inviteInstCtrl.calculateHeight(inviteInstCtrl.sent_requests)" ng-scrollbars>
+            <div flex >
+              <md-list class="md-dense" flex>
+                <md-list-item class="md-3-line" ng-repeat="request in inviteInstCtrl.sent_requests"
+                ng-click="inviteInstCtrl.showProcessingRequestDialog(request)">
+                  <md-icon class="md-avatar-icon" 
+                  md-colors="{background: 'light-green-500', color: 'grey-50'}">account_balance</md-icon>
+                  <div class="md-list-item-text" layout="column">
+                    <h3>{{ request.institution_name }}</h3>
+                    <p>{{ request.sender[0] }}</p>
+                  </div>
+                </md-list-item>
+              </md-list>
+            </div>
           </md-card-content>
         </md-card>
 
         <md-card flex layout="column">
-          <md-toolbar md-colors="{background: 'teal-500'}" layout="row">
+          <md-toolbar md-colors="{background: 'teal-500'}" layout="row"
+            ng-click="inviteInstCtrl.toggleElement('showSentInvitations')" class="clickable-no-hover">
             <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
               <h1>
                 <md-icon>check_circle</md-icon>
                 Convites aceitos
               </h1>
               <span flex md-truncate></span>
-              <md-button ng-if="!inviteInstCtrl.showSentInvitations" ng-click="inviteInstCtrl.showSentInvitations = true;"
-              class="md-icon-button md-secondary">
-                <md-icon>keyboard_arrow_down</md-icon>
-              </md-button>
-              <md-button ng-if="inviteInstCtrl.showSentInvitations" ng-click="inviteInstCtrl.showSentInvitations = false;"
-                class="md-icon-button md-secondary">
-                <md-icon>keyboard_arrow_up</md-icon>
+              <md-button class="md-icon-button md-secondary">
+                <md-icon>{{ inviteInstCtrl.showSentInvitations ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</md-icon>
               </md-button>
             </div>
           </md-toolbar>
-          <md-card-content  ng-if="inviteInstCtrl.showSentInvitations">
+          <md-card-content  ng-show="inviteInstCtrl.showSentInvitations"
+            ng-style="inviteInstCtrl.calculateHeight(inviteInstCtrl.accepted_invitations)" ng-scrollbars>
             <md-list class="md-dense" flex>
-              <md-list-item class="md-3-line" ng-repeat="invite in inviteInstCtrl.sent_invitations" ng-if="invite.status === 'accepted' && invite.type_of_invite === 'INSTITUTION'">
+              <md-list-item class="md-3-line" ng-repeat="invite in inviteInstCtrl.accepted_invitations">
                 <md-icon class="md-avatar-icon" 
                 md-colors="{background: 'light-green-500', color: 'grey-50'}">account_balance</md-icon>
                 <div class="md-list-item-text" layout="column">

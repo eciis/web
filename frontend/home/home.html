@@ -1,123 +1,10 @@
 <div flex="100" layout="row" layout-align="center">
-  <div flex-lg="90" flex-gt-lg="70" layout="row" layout-align="space-between"
+  <div flex flex-md="95" layout="row" layout-align="space-around"
       md-colors="{background: 'grey-50'}">
 
-    <!-- LEFT SIDE PANEL -->
-    <md-sidenav class="md-sidenav-left" md-component-id="leftNav" md-whiteframe="4" layout="row"
-      md-is-locked-open="$mdMedia('gt-sm')" flex-gt-md="25">
-      <md-content class="hide-scrollbar" layout="column" hide show-gt-sm
-          md-colors="{background: 'grey-100'}" flex>
-          <div class="container">
-            <div class="row">
-                <div class="card hovercard" 
-                    md-colors="{background: homeCtrl.user.current_institution.color+'-800'}">
-                  <div class="cardheader">
-                    <div class="avatar">
-                      <img alt="Foto do Perfil" ng-src="{{ homeCtrl.user.photo_url }}">
-                    </div>
-                  </div>
-                  <div class="info" 
-                      md-colors="{background: homeCtrl.user.current_institution.color+'-600'}">
-                    <div class="desc">
-                      <div class="md-title">{{ homeCtrl.user.name }}</div>
-                      <span>{{ homeCtrl.user.current_institution.name }}</span>
-                      <md-menu>
-                        <md-button aria-label="Open phone interactions menu" 
-                            class="md-icon-button" ng-click="$mdMenu.open(ev)">
-                          <md-icon md-colors="{color: 'grey-50'}">arrow_drop_down</md-icon>
-                        </md-button>
-                        <md-menu-content width="4">
-                          <md-menu-item ng-repeat="profile in homeCtrl.user.institution_profiles">
-                            <md-button ng-click="mainCtrl.changeInstitution(profile)">
-                              <md-icon md-colors="{color: profile.color+'-900'}">brightness_1</md-icon>
-                              {{ profile.institution.name }}
-                            </md-button>
-                          </md-menu-item>
-                        </md-menu-content>
-                      </md-menu>  
-                    </div>
-                  </div>
-                </div>
-            </div>
-
-            <div class="row section-menu">
-              <md-menu-content width="4" md-colors="{background: 'grey-100'}">
-                <md-menu-item>
-                  <md-button ui-sref="app.home">
-                    <md-icon>home</md-icon>
-                    Início
-                  </md-button>
-                </md-menu-item>
-                <md-menu-item>
-                  <md-button ui-sref="app.config_profile">
-                    <md-icon>account_box</md-icon>
-                    Meu Perfil
-                </md-menu-item>
-                <md-menu-item>
-                  <md-button ng-click="homeCtrl.goToEvents()">
-                    <md-icon>date_range</md-icon>
-                    Eventos
-                  </md-button>
-                </md-menu-item>
-                <md-menu-item ng-if="mainCtrl.isSuperUser()">
-                  <md-button ng-click="mainCtrl.goInvite()">
-                    <md-icon>mail_outline</md-icon>
-                    Convites
-                  </md-button>
-                </md-menu-item>
-                <md-menu-item>
-                  <md-button>
-                    <md-icon>settings</md-icon>
-                    Minhas Configurações
-                  </md-button>
-                </md-menu-item>
-              </md-menu-content>
-            </div>
-
-            <div class="row" ng-if="homeCtrl.user.isAdmin(homeCtrl.user.current_institution.key)">
-              <span class="menu-section-title">INSTITUIÇÃO</span>
-              <md-divider style="margin-top: 10px"></md-divider>
-              <md-menu-content width="4" md-colors="{background: 'grey-100'}">
-                <md-menu-item>
-                  <md-button ng-click="mainCtrl.goToEditInfo()">
-                    <md-icon>edit</md-icon>
-                    Editar Informações
-                  </md-button>
-                </md-menu-item>
-                <md-menu-item>
-                  <md-button  ng-click="mainCtrl.goToManageMembers()">
-                    <md-icon ng-class="mainCtrl.pending_manager_member? 'notification-badge': ''"
-                      data-badge>account_circle</md-icon>
-                    Gerenciar Membros
-                </md-menu-item>
-                <md-menu-item>
-                  <md-button ng-click="mainCtrl.goToManageInstitutions()">
-                    <md-icon ng-class="mainCtrl.pending_inst_invitations? 'notification-badge': ''"
-                      data-badge>account_balance</md-icon>
-                    Vínculos Institucionais
-                  </md-button>
-                </md-menu-item>
-              </md-menu-content>
-            </div>
-
-            <div class="row">
-              <md-divider></md-divider>
-              <md-menu-content width="4" md-colors="{background: 'grey-100'}">
-                <md-menu-item>
-                  <md-button ng-click="mainCtrl.logout()">
-                    <md-icon>exit_to_app</md-icon>
-                    Sair
-                  </md-button>
-                </md-menu-item>
-              </md-menu-content>
-            </div>
-          </div>
-      </md-content>
-    </md-sidenav>
-
     <!-- CONTENT -->
-    <div flex-md="75" flex-gt-md="50" layout-align="center center" layout="column">
-      <div layout="column">
+    <div flex flex-gt-md="70" layout-align="center top" layout="row">
+      <div flex layout="column">
         <div>
           <save-post is-dialog="false" posts="homeCtrl.posts"></save-post>
         </div>
@@ -127,8 +14,8 @@
             <md-icon md-colors="{color: 'grey-100'}">refresh</md-icon>
           </md-button>
         </div>
-        <md-content id="content" class="body hide-scrollbar">         
-            <div layout="row">
+        <md-content flex id="content" class="body hide-scrollbar">         
+            <div flex layout="row">
                 <post-timeline flex ng-if="!homeCtrl.isLoadingPosts" layout="column" posts="homeCtrl.posts" institution="false" 
                 user="homeCtrl.user" add-post="true" load-more-posts='homeCtrl.loadMorePosts'></post-timeline>
               <!-- LOADING CIRCLE -->
@@ -141,7 +28,7 @@
     </div>
 
     <!-- RIGHT SIDE PANEL -->
-    <md-content class="hide-scrollbar" flex-gt-md="20" hide show-gt-md>
+    <md-content class="hide-scrollbar" flex-gt-md="25" hide show-gt-md>
         <div layout="column">
           <md-card style="margin-bottom: 50px;">
             <md-toolbar md-colors="{background: 'teal-600'}" layout="row">

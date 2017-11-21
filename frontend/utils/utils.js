@@ -1,19 +1,20 @@
 "use strict";
 
 var Utils = {
-    deepClone : function deepClone(initalObj, finalObj) {
-        var obj = finalObj || {};
-        for (var i in initalObj) {
-            var prop = initalObj[i];
-
-            if (prop !== null && typeof prop === 'object') {
-                if(prop.constructor === Array) {
-                    obj[i] = deepClone(prop, []);
-                }
+    clone: function clone(obj) {
+        var copy;
+    
+        if (null == obj || "object" != typeof obj) return obj;
+    
+        if (obj instanceof Object) {
+            copy = {};
+            for (var attr in obj) {
+                if (obj.hasOwnProperty(attr)) copy[attr] = clone(obj[attr]);
             }
-            obj[i] = prop;
+            return copy;
         }
-        return obj;
+    
+        throw new Error("Unable to copy obj! Its type isn't supported.");
     },
     addHttpsToUrl :  function addHttpsToUrl(text, urls) {
         if(urls) {
@@ -51,6 +52,21 @@ var Utils = {
         config.url = config.url.replace(restApiRegex, restApiUrl + '/api/$1');
     },
 
+    /**
+     * Create an object with a calculated property height, to be used with 
+     * the directive ng-style on a html element that has a list of itens in it.
+     * @param  {array} list=[] A list of itens.
+     * @param  {number} itemHeight=5 The css estimated height of one item.
+     * @param  {number} maxItensNumber=4 The max number of itens to be shown in the element per scroll.
+     * @returns {object} The object with the property height.   
+     */
+    calculateHeight : function calculateHeight(list=[], itemHeight=5, maxItensNumber=4) {
+        var maxHeight = itemHeight * maxItensNumber + 'em';
+        var actualHeight = list.length * itemHeight + 'em';
+        var calculedHeight = list.length < maxItensNumber ? actualHeight : maxHeight;
+        return {height: calculedHeight};
+    },
+    
     setScrollListener: function setScrollListener(content, callback) {
         var alreadyRequested = false;
 

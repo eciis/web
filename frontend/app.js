@@ -19,7 +19,7 @@
     ]);
 
     app.config(function($mdIconProvider, $mdThemingProvider, $stateProvider, $urlMatcherFactoryProvider,
-        $urlRouterProvider, $locationProvider, $httpProvider, $sceDelegateProvider) {
+        $urlRouterProvider, $locationProvider, $httpProvider, $sceDelegateProvider, ScrollBarsProvider) {
 
         $mdIconProvider.fontSet('md', 'material-icons');
         $mdThemingProvider.theme('docs-dark');
@@ -40,12 +40,39 @@
                     }
                 }
             })
-            .state("app.home", {
-                url: "/",
+            .state("app.user", {
+                abstract: true,
                 views: {
                     content: {
+                        templateUrl: "app/user/left_nav.html",
+                        controller: "HomeController as homeCtrl"
+                    }
+                }
+            })
+            .state("app.user.home", {
+                url: "/",
+                views: {
+                    user_content: {
                         templateUrl: "app/home/home.html",
                         controller: "HomeController as homeCtrl"
+                    }
+                }
+            })
+            .state("app.user.invite_inst", {
+                url: "/inviteInstitution",
+                views: {
+                    user_content: {
+                        templateUrl: "app/invites/invite_institution.html",
+                        controller: "InviteInstitutionController as inviteInstCtrl"
+                    }
+                }
+            })
+            .state("app.user.config_profile", {
+                url: "/config_profile",
+                views: {
+                    user_content: {
+                        templateUrl: "app/auth/config_profile.html",
+                        controller: "ConfigProfileController as configProfileCtrl"
                     }
                 }
             })
@@ -117,25 +144,7 @@
                 views: {
                     content_manage_institution: {
                         templateUrl: "app/invites/invite_institution_hierarchie.html",
-                        controller: "InviteInstHierarchieController as inviteInstCtrl"
-                    }
-                }
-            })
-            .state("app.invite_inst", {
-                url: "/inviteInstitution",
-                views: {
-                    content: {
-                        templateUrl: "app/invites/invite_institution.html",
-                        controller: "InviteInstitutionController as inviteInstCtrl"
-                    }
-                }
-            })
-            .state("app.config_profile", {
-                url: "/config_profile",
-                views: {
-                    content: {
-                        templateUrl: "app/auth/config_profile.html",
-                        controller: "ConfigProfileController as configProfileCtrl"
+                        controller: "InviteInstHierarchieController as inviteInstHierCtrl"
                     }
                 }
             })
@@ -243,7 +252,19 @@
                 sameElse: 'DD MMMM [de] YYYY [às] LT'
             }
         };
+
         moment.updateLocale('pt-br', dateFormats);
+        
+        ScrollBarsProvider.defaults = {
+            scrollButtons: {
+                scrollAmount: 'auto', // scroll amount when button pressed
+                enable: true // enable scrolling buttons by default
+            },
+            scrollInertia: 200, // adjust however you want
+            axis: 'yx', // enable 2 axis scrollbars by default,
+            theme: 'minimal-dark',
+            autoHideScrollbar: false
+        };
     });
 
     app.factory('BearerAuthInterceptor', function ($injector, $q, $state) {
@@ -282,32 +303,32 @@
         };
     });
 
-    var ignored_routes = [
-        'create_institution',
-        'error',
-        'signin',
-        'user_inactive',
-        'new_invite'
-    ];
-
     app.run(function authInterceptor(AuthService, $transitions, $injector, $state, $location) {
         $transitions.onStart({
             to: function(state) {
-                return state != 'signin' && !AuthService.isLoggedIn() && !(_.includes(ignored_routes, state.name));
+                return state != 'signin' && !AuthService.isLoggedIn();
             }
         }, function(transition) {
             $state.go("signin", {
                 "redirect": $location.path()
-            });            
+            });
         });
     });
-
+    
     /**
-    * Application listener to filter routes that require active user and set up amCalendar filter configurations.
-    * @param {service} AuthService - Service of user authentication
-    * @param {service} $transitions - Service of transitions states
-    */
+     * Application listener to filter routes that require active user and set up amCalendar filter configurations.
+     * @param {service} AuthService - Service of user authentication
+     * @param {service} $transitions - Service of transitions states
+     */
     app.run(function userInactiveListener(AuthService, $transitions) {
+        var ignored_routes = [
+            'create_institution',
+            'error',
+            'signin',
+            'user_inactive',
+            'new_invite'
+        ];
+
         $transitions.onStart({
             to: function(state) {
                 var user = AuthService.getCurrentUser();
@@ -321,12 +342,16 @@
     });
         
     app.run(function inviteInterceptor(AuthService, $transitions, $state) {
+        var ignored_routes = [
+            'create_institution_form'
+        ];
+
         $transitions.onSuccess({
             to: function(state) {
                 var user = AuthService.getCurrentUser();
                 if (user && user.key) {
                     var pendingInvite = user.getPendingInvitation();
-                    return pendingInvite;
+                    return pendingInvite && !(_.includes(ignored_routes, state.name));
                 }
                 return false;
             }

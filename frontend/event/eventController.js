@@ -48,7 +48,7 @@
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
                 deferred.reject();
-                $state.go('app.home');
+                $state.go("app.user.home");
             });
         }
 
@@ -83,21 +83,25 @@
             });
         };
 
-        eventCtrl.deleteEvent = function deleteEvent(ev, event) {
+        eventCtrl.confirmDeleteEvent = function confirmDeleteEvent(ev, event) {
             var dialog = MessageService.showConfirmationDialog(ev, 'Excluir Evento', 'Este evento será removido.');
             dialog.then(function() {
-                EventService.deleteEvent(event).then(function success() {
-                _.remove(eventCtrl.events, function(ev){
-                    return ev === event;
-                });
-                MessageService.showToast('Evento removido com sucesso!');
-                }, function error(response) {
-                    MessageService.showToast(response.data.msg);
-                });
+                deleteEvent(event);
             }, function() {
                 MessageService.showToast('Cancelado');
             });
         };
+
+        function deleteEvent(event) {
+            let promise = EventService.deleteEvent(event);
+            promise.then(function success() {
+                eventCtrl.events = eventCtrl.events.filter(thisEvent => thisEvent.key  !== event.key);
+                MessageService.showToast('Evento removido com sucesso!');
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
+            });
+            return promise;
+        }
 
         eventCtrl.recognizeUrl =  function recognizeUrl(event) {
             if(event.text){
@@ -108,8 +112,10 @@
         };
 
         eventCtrl.isLongText = function isLongText(event){
-            var numberOfChar = event.text.length;
-            return numberOfChar >= LIMIT_CHARACTERS;
+            if(event.text) {
+                var numberOfChar = event.text.length;
+                return numberOfChar >= LIMIT_CHARACTERS;
+            }
         };
 
         eventCtrl.canDelete = function canDelete(event) {
@@ -208,7 +214,7 @@
                     MessageService.showToast('Evento editado com sucesso.');
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
-                    $state.go('app.home');
+                    $state.go("app.user.home");
                 });
             } else {
                 MessageService.showToast('Evento inválido');

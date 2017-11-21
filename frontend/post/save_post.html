@@ -9,7 +9,7 @@
       <md-card-content>
         <div ng-if="postCtrl.typePost === 'Common'">
           <form name="saveForm" layout="column">
-            <md-input-container md-no-float>
+            <md-input-container md-no-float class="md-block" style="margin: 0px;">
               <input style="font-weight: bold; color: #00695C; border: 0;resize:none;"
               ng-model="postCtrl.post.title" maxlength="100" placeholder="{{postCtrl.showPlaceholderMsg()}}">
             </md-input-container>
@@ -32,7 +32,7 @@
           </form>
         </div>
           <!-- SURVEY -->
-        <survey-directive ng-if="postCtrl.typePost === 'Survey'" post="postCtrl.post" posts="posts" user="postCtrl.user" callback="postCtrl.clearPost"
+        <survey-directive ng-if="postCtrl.typePost === 'Survey'" post="postCtrl.post" posts="posts" user="postCtrl.user" callback="postCtrl.choiceCommon"
             options="postCtrl.options"></survey-directive>
       </md-card-content>
     </div>
@@ -54,13 +54,13 @@
                 <md-icon>add_a_photo</md-icon>
                 {{!postCtrl.showImage() ? 'Inserir imagem' : 'Trocar imagem'}}
               </md-button>
-            </md-menu-item ng-if="postCtrl.typePost === 'Common'">
+            </md-menu-item>
             <md-menu-item ng-if="postCtrl.typePost === 'Common'">
-              <md-button ng-click="postCtrl.setAddVideo()"
-                title="{{postCtrl.addVideo || postCtrl.post.video_url? 'Remover link':'Adicionar link'}}"
-                ng-disabled="postCtrl.hasMedia() && !postCtrl.addVideo">
+              <md-button ng-click="postCtrl.setHasVideo()"
+                title="{{postCtrl.hasVideo || postCtrl.post.video_url? 'Remover link':'Adicionar link'}}"
+                ng-disabled="postCtrl.hasMedia() && !postCtrl.hasVideo">
                 <md-icon>ondemand_video</md-icon>
-                {{!postCtrl.addVideo ? 'Vídeo do Youtube' : 'Remover vídeo'}}
+                {{!postCtrl.hasVideo ? 'Vídeo do Youtube' : 'Remover vídeo'}}
               </md-button>
             </md-menu-item>
             <md-menu-item ng-if="postCtrl.typePost === 'Common'">
@@ -91,7 +91,7 @@
       </md-card-actions>
     </md-card-content>
   </md-card-content>
-  <md-card-content>
+  <md-card-content ng-show="postCtrl.hasMedia()">
     <div class="image-view" ng-if="postCtrl.showImage()">
       <button ng-click="postCtrl.hideImage()">&times;</button>
       <img style="border-radius: 5%;" ng-src="{{ postCtrl.photoUrl }}"/>
@@ -105,7 +105,7 @@
     <md-button style="color: #009688" ng-click="postCtrl.cancelDialog()">
       Cancelar
     </md-button>
-    <md-button class="md-raised" md-colors="{background: 'teal-500'}" title="Enviar"
+    <md-button class="md-raised" md-colors="{background: 'default-teal-500'}" title="Enviar"
       ng-click="postCtrl.save(isEditing, originalPost, posts)" 
       ng-disabled="!postCtrl.isValid(saveForm.$invalid)">
       Postar

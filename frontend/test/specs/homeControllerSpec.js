@@ -2,7 +2,7 @@
 
 (describe('Test HomeController', function() {
 
-    var homeCtrl, httpBackend, scope, createCtrl, mdDialog, state, postService;
+    var homeCtrl, httpBackend, scope, createCtrl, mdDialog, state, postService, http;
 
     var institutions = [{
         acronym: 'Certbio',
@@ -34,8 +34,9 @@
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, InstitutionService,
-            PostService, $mdDialog, $state, AuthService) {
+            PostService, $mdDialog, $state, AuthService, $http) {
         httpBackend = $httpBackend;
+        http = $http;
         scope = $rootScope.$new();
         mdDialog = $mdDialog;
         state = $state;
@@ -45,7 +46,8 @@
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);
         httpBackend.when('GET', 'error/error.html').respond(200);
-
+        httpBackend.when('GET','app/home/colors.json').respond(200);
+        
         AuthService.getCurrentUser = function() {
             return new User(user);
         };

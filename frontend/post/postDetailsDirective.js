@@ -32,6 +32,9 @@
                 postDetailsCtrl.post = new Post(postDetailsCtrl.post);
                 PostService.deletePost(postDetailsCtrl.post).then(function success() {
                     postDetailsCtrl.post.remove(postDetailsCtrl.user.name);
+                    postDetailsCtrl.post.last_modified_date = new Date().toISOString();
+                    postDetailsCtrl.post.last_modified_by = postDetailsCtrl.user.name;
+                    console.log(postDetailsCtrl.post);
                     MessageService.showToast('Post excluído com sucesso');
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);

@@ -9,11 +9,13 @@
 
     var invite = new Invite({invitee: "testuser@example.com",
                         type_of_invite: 'USER',
+                        status: 'sent',
                         institution_key: '987654321',
                         admin_key: '12345'});
 
     var otherInvite = new Invite({invitee: "other_user@example.com",
                         type_of_invite: 'USER',
+                        status: 'sent',
                         institution_key: '987654321',
                         admin_key: '12345'});
 

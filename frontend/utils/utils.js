@@ -52,6 +52,21 @@ var Utils = {
         config.url = config.url.replace(restApiRegex, restApiUrl + '/api/$1');
     },
 
+    /**
+     * Create an object with a calculated property height, to be used with 
+     * the directive ng-style on a html element that has a list of itens in it.
+     * @param  {array} list=[] A list of itens.
+     * @param  {number} itemHeight=5 The css estimated height of one item.
+     * @param  {number} maxItensNumber=4 The max number of itens to be shown in the element per scroll.
+     * @returns {object} The object with the property height.   
+     */
+    calculateHeight : function calculateHeight(list=[], itemHeight=5, maxItensNumber=4) {
+        var maxHeight = itemHeight * maxItensNumber + 'em';
+        var actualHeight = list.length * itemHeight + 'em';
+        var calculedHeight = list.length < maxItensNumber ? actualHeight : maxHeight;
+        return {height: calculedHeight};
+    },
+    
     setScrollListener: function setScrollListener(content, callback) {
         var alreadyRequested = false;
 

@@ -49,6 +49,7 @@
         };
         state.params.institutionKey = splab.key;
         inviteinstitutionCtrl = createCtrl();
+        httpBackend.flush();
     }));
 
     afterEach(function() {
@@ -60,7 +61,6 @@
 
         it('should exist a user and his name is Tiago', function() {
             expect(inviteinstitutionCtrl.user.name).toEqual(tiago.name);
-            httpBackend.flush();
         });
     });
 
@@ -85,7 +85,6 @@
                     expect(inviteService.sendInviteInst).toHaveBeenCalledWith(invite);
                     done();
                 });
-                httpBackend.flush();
             });
 
             it('should call sendInvite() and searchInstitutions()', function(done) {
@@ -106,7 +105,6 @@
                     expect(inviteinstitutionCtrl.sendInstInvite).toHaveBeenCalledWith(testingInvite);
                     done();
                 });
-                httpBackend.flush();
             });
 
             it('should call showDialog()', function(done) {
@@ -123,7 +121,6 @@
                     expect(inviteinstitutionCtrl.showDialog).toHaveBeenCalled();
                     done();
                 });
-                httpBackend.flush();
             });
 
             it('should change properties invite and sent_invitations', function(done){
@@ -131,12 +128,11 @@
                 promise.then(function() {
                     expect(inviteinstitutionCtrl.invite).toEqual({});
                     expect(inviteinstitutionCtrl.showInvites).toBe(true);
-                    expect(inviteinstitutionCtrl.showSendInvite).toBe(false);
+                    expect(inviteinstitutionCtrl.showSendInvites).toBe(false);
                     expect(invite.status).toEqual('sent');
                     expect(inviteinstitutionCtrl.sent_invitations).toEqual([invite]);
                     done();
                 });
-                httpBackend.flush();
             });
         });
 
@@ -144,13 +140,11 @@
             it('should clear the object invite', function() {
                 inviteinstitutionCtrl.invite = {
                     invitee: "invitee@gmail.com",
-                    suggestion_institution_name : "Institution"};
+                    suggestion_institution_name : "Institution"
+                };
                 inviteinstitutionCtrl.cancelInvite();
-
-                httpBackend.flush();
-
                 expect(inviteinstitutionCtrl.invite).toEqual({});
-                expect(inviteinstitutionCtrl.showSendInvite).toBe(true);
+                expect(inviteinstitutionCtrl.showSendInvites).toBe(true);
             });
         });
     });

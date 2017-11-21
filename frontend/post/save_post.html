@@ -9,7 +9,7 @@
       <md-card-content>
         <div ng-if="postCtrl.typePost === 'Common'">
           <form name="saveForm" layout="column">
-            <md-input-container md-no-float>
+            <md-input-container md-no-float class="md-block" style="margin: 0px;">
               <input style="font-weight: bold; color: #00695C; border: 0;resize:none;"
               ng-model="postCtrl.post.title" maxlength="100" placeholder="{{postCtrl.showPlaceholderMsg()}}">
             </md-input-container>
@@ -91,7 +91,7 @@
       </md-card-actions>
     </md-card-content>
   </md-card-content>
-  <md-card-content>
+  <md-card-content ng-show="postCtrl.hasMedia()">
     <div class="image-view" ng-if="postCtrl.showImage()">
       <button ng-click="postCtrl.hideImage()">&times;</button>
       <img style="border-radius: 5%;" ng-src="{{ postCtrl.photoUrl }}"/>

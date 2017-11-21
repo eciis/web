@@ -13,6 +13,11 @@
              $state.go('app.post', {key: surveyCtrl.post.key});
         };
 
+        surveyCtrl.selectedMultipleOption = function selectBinaryOption() {
+            var optionsSelected = getMultipleChoice();
+            return optionsSelected.length !== 0;
+        };
+
         surveyCtrl.isDeleted = function(){
             return surveyCtrl.post.state === 'deleted';
         };
@@ -80,12 +85,18 @@
         function getOptionsSelected(){
             var optionsSelected = [];
             if(surveyCtrl.post.type_survey === 'multiple_choice'){
-                _.forEach(surveyCtrl.post.options, function(option) {
-                    option.selected && optionsSelected.push(option);
-                });
+                optionsSelected = getMultipleChoice();
             } else {
                 optionsSelected.push(surveyCtrl.binaryOptionSelected);
             }
+            return optionsSelected;
+        }
+
+        function getMultipleChoice() {
+            var optionsSelected = [];
+            _.forEach(surveyCtrl.post.options, function(option) {
+                option.selected && optionsSelected.push(option);
+            });
             return optionsSelected;
         }
 

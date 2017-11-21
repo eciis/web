@@ -84,6 +84,8 @@
             promise.then(function success() {
                     MessageService.showToast('Convite enviado com sucesso!');
                     addInvite(invite);
+                    invite.type_of_invite === INSTITUTION_PARENT ?
+                        inviteInstCtrl.showParentHierarchie = true : inviteInstCtrl.showChildrenHierarchie = true;
                     deferred.resolve();
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
@@ -108,8 +110,10 @@
                 MessageService.showToast('Convite enviado com sucesso!');
                 if (invite.type_of_invite === REQUEST_PARENT) {
                     addInstitution(institution_requested_key);
+                    inviteInstCtrl.showParentHierarchie = true;
                 } else {
                     addInviteToChildrenRequests(invite);
+                    inviteInstCtrl.showChildrenHierarchie = true;
                 }
                 deferred.resolve();
             }, function error() {

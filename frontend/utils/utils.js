@@ -1,19 +1,20 @@
 "use strict";
 
 var Utils = {
-    deepClone : function deepClone(initalObj, finalObj) {
-        var obj = finalObj || {};
-        for (var i in initalObj) {
-            var prop = initalObj[i];
-
-            if (prop !== null && typeof prop === 'object') {
-                if(prop.constructor === Array) {
-                    obj[i] = deepClone(prop, []);
-                }
+    clone: function clone(obj) {
+        var copy;
+    
+        if (null == obj || "object" != typeof obj) return obj;
+    
+        if (obj instanceof Object) {
+            copy = {};
+            for (var attr in obj) {
+                if (obj.hasOwnProperty(attr)) copy[attr] = clone(obj[attr]);
             }
-            obj[i] = prop;
+            return copy;
         }
-        return obj;
+    
+        throw new Error("Unable to copy obj! Its type isn't supported.");
     },
     addHttpsToUrl :  function addHttpsToUrl(text, urls) {
         if(urls) {

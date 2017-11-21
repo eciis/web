@@ -294,32 +294,32 @@
         };
     });
 
-    var ignored_routes = [
-        'create_institution',
-        'error',
-        'signin',
-        'user_inactive',
-        'new_invite'
-    ];
-
     app.run(function authInterceptor(AuthService, $transitions, $injector, $state, $location) {
         $transitions.onStart({
             to: function(state) {
-                return state != 'signin' && !AuthService.isLoggedIn() && !(_.includes(ignored_routes, state.name));
+                return state != 'signin' && !AuthService.isLoggedIn();
             }
         }, function(transition) {
             $state.go("signin", {
                 "redirect": $location.path()
-            });            
+            });
         });
     });
-
+    
     /**
-    * Application listener to filter routes that require active user and set up amCalendar filter configurations.
-    * @param {service} AuthService - Service of user authentication
-    * @param {service} $transitions - Service of transitions states
-    */
+     * Application listener to filter routes that require active user and set up amCalendar filter configurations.
+     * @param {service} AuthService - Service of user authentication
+     * @param {service} $transitions - Service of transitions states
+     */
     app.run(function userInactiveListener(AuthService, $transitions) {
+        var ignored_routes = [
+            'create_institution',
+            'error',
+            'signin',
+            'user_inactive',
+            'new_invite'
+        ];
+
         $transitions.onStart({
             to: function(state) {
                 var user = AuthService.getCurrentUser();
@@ -333,12 +333,16 @@
     });
         
     app.run(function inviteInterceptor(AuthService, $transitions, $state) {
+        var ignored_routes = [
+            'create_institution_form'
+        ];
+
         $transitions.onSuccess({
             to: function(state) {
                 var user = AuthService.getCurrentUser();
                 if (user && user.key) {
                     var pendingInvite = user.getPendingInvitation();
-                    return pendingInvite;
+                    return pendingInvite && !(_.includes(ignored_routes, state.name));
                 }
                 return false;
             }

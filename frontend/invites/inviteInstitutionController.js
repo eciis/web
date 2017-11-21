@@ -123,8 +123,7 @@
         };
 
         function loadSentRequests() {
-            RequestInvitationService.getRequestsInst().then(function success(response) {
-                var requests = response.data || [];
+            RequestInvitationService.getRequestsInst().then(function success(requests) {
                 var isSentRequest = createRequestSelector('sent', 'REQUEST_INSTITUTION');
                 inviteInstCtrl.sent_requests = requests.filter(isSentRequest);
             }, function error(response) {

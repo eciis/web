@@ -24,7 +24,10 @@
                 }
             },
             "DELETED_INSTITUTION": {
-                icon: "clear"
+                icon: "clear",
+                action: function() {
+                    return refreshUserInstitutions();
+                }
             },
             "POST": {
                 icon: "inbox",
@@ -202,7 +205,11 @@
         function refreshUserInstitutions () {
             UserService.load().then(function success(response) {
                 controller.user.institutions = response.institutions;
+                controller.user.follows = response.follows;
                 controller.user.institution_profiles = response.institution_profiles;
+                if(!_.isEmpty(controller.user.institutions)) {
+                    controller.user.changeInstitution();
+                }
                 AuthService.save();
             });
         }

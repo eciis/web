@@ -28,7 +28,7 @@
       </md-list-item>
     </md-radio-group>
   </md-list>
-  <div layout="column" layout-align="center end" ng-if="surveyCtrl.binaryOptionSelected || surveyCtrl.selectedMultipleOption()">
+  <div layout="column" layout-align="center end">
     <md-button ng-click="surveyCtrl.vote($event)" ng-if="surveyCtrl.canVote()" md-colors="{color: 'default-teal-500'}" layout-align="end center">
       VOTAR
     </md-button>

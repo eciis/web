@@ -72,7 +72,7 @@
         });
 
         it('should called voteService', function() {
-            surveyCtrl.optionsSelected = [options[0]];
+            surveyCtrl.binaryOptionSelected = options[0];
             surveyCtrl.vote("$event");
             expect(surveyCtrl.voteService).toHaveBeenCalled();
             scope.$apply();

@@ -83,7 +83,7 @@
                 _.forEach(surveyCtrl.post.options, function(option) {
                     option.selected && optionsSelected.push(option);
                 });
-            } else {
+            } else if (surveyCtrl.binaryOptionSelected) {
                 optionsSelected.push(surveyCtrl.binaryOptionSelected);
             }
             return optionsSelected;

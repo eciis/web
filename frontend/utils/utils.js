@@ -52,8 +52,8 @@ var Utils = {
     },
 
     /**
-     * Create an object with a calculated property hieght, to be used with 
-     * the directive ng-style on an html element that has a list of itens in it.
+     * Create an object with a calculated property height, to be used with 
+     * the directive ng-style on a html element that has a list of itens in it.
      * @param  {array} list=[] A list of itens.
      * @param  {number} itemHeight=5 The css estimated height of one item.
      * @param  {number} maxItensNumber=4 The max number of itens to be shown in the element per scroll.

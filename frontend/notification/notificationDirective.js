@@ -58,8 +58,10 @@
             "REQUEST_USER": {
                icon: "person_add",
                state: "process_request",
-               isDialog: true,
-               dialogProperties: {
+               action: function (properties, notification) {
+                    return showDialog(properties, notification);
+                },
+               properties: {
                     templateUrl: "app/requests/request_processing.html",
                     controller: "RequestProcessingController",
                     controllerAs: "requestCtrl",
@@ -71,8 +73,10 @@
             "REQUEST_INSTITUTION_CHILDREN": {
                 icon: "account_balance",
                 state: "process_request",
-                isDialog: true,
-                dialogProperties: {
+                action: function (properties, notification) {
+                    return showDialog(properties, notification);
+                },
+                properties: {
                      templateUrl: "app/requests/request_processing.html",
                      controller: "RequestProcessingController",
                      controllerAs: "requestCtrl",
@@ -82,8 +86,10 @@
             "REQUEST_INSTITUTION_PARENT": {
                 icon: "account_balance",
                 state: "process_request",
-                isDialog: true,
-                dialogProperties: {
+                action: function (properties, notification) {
+                    return showDialog(properties, notification);
+                },
+                properties: {
                      templateUrl: "app/requests/request_processing.html",
                      controller: "RequestProcessingController",
                      controllerAs: "requestCtrl",
@@ -95,7 +101,9 @@
             },
             "ACCEPTED_LINK": {
                 icon: "link",
-                action: refreshUserInstitutions,
+                action: function() {
+                    return refreshUserInstitutions();
+                }
             },
             "REJECT_INSTITUTION_LINK": {
                 icon: "account_balance",
@@ -115,8 +123,10 @@
             "REQUEST_INSTITUTION": {
                 icon: "account_balance",
                 state: "process_request",
-                isDialog: true,
-                dialogProperties: {
+                action: function (properties, notification) {
+                    return showDialog(properties, notification);
+                },
+                properties: {
                      templateUrl: "app/requests/request_institution_processing.html",
                      controller: "RequestInstitutionProcessingController",
                      controllerAs: "requestCtrl",
@@ -150,13 +160,10 @@
         };
 
         controller.action = function action(notification) {
-            var notificationProperties = type_data[notification.type];
+            var notificationProperties = type_data[notification.type].properties;
             var  notificationAction = type_data[notification.type].action;
-            if (notificationProperties.isDialog) {
-                notificationProperties.dialogProperties.locals.key = notification.entity_key;
-                controller.showDialog(notificationProperties.dialogProperties);
-            } else if (notificationAction){
-                notificationAction(notification);
+            if (notificationAction){
+                notificationAction(notificationProperties, notification);
             } else {
                 controller.goTo(notification);
             }
@@ -164,7 +171,8 @@
             controller.markAsRead(notification);
         };
 
-        controller.showDialog = function showDialog(dialogProperties) {
+        function showDialog(dialogProperties, notification) {
+            dialogProperties.locals.key = notification.entity_key;
             $mdDialog.show({
                 controller: dialogProperties.controller,
                 controllerAs: dialogProperties.controllerAs,
@@ -176,7 +184,7 @@
                 openFrom: '#fab-new-post',
                 closeTo: angular.element(document.querySelector('#fab-new-post'))
             });
-        };
+        }
 
         controller.format = function format(notification) {
             return NotificationService.formatMessage(notification);
@@ -188,12 +196,11 @@
             });
         };
 
-        function refreshUserInstitutions (notification) {
+        function refreshUserInstitutions () {
             UserService.load().then(function success(response) {
-                    controller.user.institutions = response.institutions;
-                    controller.user.institution_profiles = response.institution_profiles;
-                    AuthService.save();
-                    controller.goTo(notification);
+                controller.user.institutions = response.institutions;
+                controller.user.institution_profiles = response.institution_profiles;
+                AuthService.save();
             });
         }
 

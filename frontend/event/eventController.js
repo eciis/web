@@ -48,7 +48,7 @@
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
                 deferred.reject();
-                $state.go('app.home');
+                $state.go("app.user.home");
             });
         }
 
@@ -214,7 +214,7 @@
                     MessageService.showToast('Evento editado com sucesso.');
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
-                    $state.go('app.home');
+                    $state.go("app.user.home");
                 });
             } else {
                 MessageService.showToast('Evento inválido');

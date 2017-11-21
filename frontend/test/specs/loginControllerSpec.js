@@ -54,9 +54,9 @@
 
     describe('main()', function() {
 
-        it('should change state to app.home if user is loggedIn', function() {
+        it('should change state to app.user.home if user is loggedIn', function() {
             expect(authService.isLoggedIn).toHaveBeenCalled();
-            expect(state.go).toHaveBeenCalledWith('app.home');
+            expect(state.go).toHaveBeenCalledWith('app.user.home');
         });
     });
 }));

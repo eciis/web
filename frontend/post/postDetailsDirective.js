@@ -234,7 +234,7 @@
                 postDetailsCtrl.getLikes(postDetailsCtrl.post);
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
-                $state.go('app.home');
+                $state.go("app.user.home");
                 postDetailsCtrl.savingLike = false;
             });
             return promise;
@@ -249,7 +249,7 @@
                 postDetailsCtrl.savingLike = false;
                 postDetailsCtrl.getLikes(postDetailsCtrl.post);
             }, function error() {
-                $state.go('app.home');
+                $state.go("app.user.home");
                 postDetailsCtrl.savingLike = false;
             });
             return promise;
@@ -351,7 +351,7 @@
                     postDetailsCtrl.savingComment = false;
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
-                    $state.go('app.home');
+                    $state.go("app.user.home");
                 });
             } else {
                 MessageService.showToast("Comentário não pode ser vazio.");

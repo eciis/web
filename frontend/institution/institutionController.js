@@ -57,7 +57,7 @@
                 institutionCtrl.checkIfUserIsMember();
                 getPortfolioUrl();
             }, function error(response) {
-                $state.go("app.home");
+                $state.go("app.user.home");
                 MessageService.showToast(response.data.msg);
             });
         }
@@ -296,7 +296,7 @@
                         if(_.isEmpty(institutionCtrl.user.institutions)) {
                             $state.go('user_inactive');
                         } else {
-                            $state.go('app.home');
+                            $state.go("app.user.home");
                         }
                         MessageService.showToast("Instituição removida com sucesso.");
                     });

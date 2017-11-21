@@ -137,7 +137,7 @@
 
             it('should be call $state.go()', function(done) {
                 promise.then(function() {
-                    expect(state.go).toHaveBeenCalledWith('app.home');
+                    expect(state.go).toHaveBeenCalledWith('app.user.home');
                     done();
                 });
             });
@@ -281,7 +281,7 @@
 
             it('should call $state.go()', function(done) {
                 promise.then(function() {
-                    expect(state.go).toHaveBeenCalledWith('app.home');
+                    expect(state.go).toHaveBeenCalledWith('app.user.home');
                     done();
                 });
             });

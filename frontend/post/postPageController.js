@@ -26,7 +26,7 @@
                 if (response.status === 500) {
                     MessageService.showToast(response.data.msg);
                 }
-                $state.go("app.home");
+                $state.go("app.user.home");
             });
             return promise;
         }

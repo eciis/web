@@ -120,7 +120,7 @@
             var promise = configCtrl.finish();
 
             promise.should.be.fulfilled.then(function() {
-                expect(state.go).toHaveBeenCalledWith('app.home');
+                expect(state.go).toHaveBeenCalledWith('app.user.home');
                 expect(userService.save).toHaveBeenCalled();
                 expect(authService.save).toHaveBeenCalled();
             }).should.notify(done);

@@ -79,7 +79,7 @@
                 AuthService.reload().then(function success() {
                     $mdDialog.hide();
                     MessageService.showToast(response.data.msg);
-                    $state.go('app.home');
+                    $state.go("app.user.home");
                 });
             });
             return promisse;

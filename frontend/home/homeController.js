@@ -138,7 +138,7 @@
                 homeCtrl.events = _.take(homeCtrl.events, LIMITE_EVENTS);
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
-                    $state.go('app.home');
+                    $state.go("app.user.home");
             });
         }
 

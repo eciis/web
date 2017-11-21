@@ -9,6 +9,11 @@
         key: '987654321'
     };
 
+    var other_institution = {
+        name: 'other_institution',
+        key: '3279847298'
+    };
+
     var user = {
         name: 'User',
         cpf: '121.445.044-07',
@@ -247,6 +252,7 @@
                 };
             });
 
+            spyOn(authService, 'save').and.callThrough();
             promise = configCtrl.removeInstitution('$event', institution);
         });
 
@@ -274,6 +280,17 @@
         it('Should call authService.logout()', function(done) {
             promise.then(function() {
                 expect(authService.logout).toHaveBeenCalled();
+                done();
+            });
+        });
+
+        it('Should call authService.save()', function(done) {
+            user.institutions.push(other_institution);
+            promise = configCtrl.removeInstitution('$event', institution);
+
+            promise.then(function() {
+                expect(user.institutions).toEqual([other_institution]);
+                expect(authService.save).toHaveBeenCalled();
                 done();
             });
         });

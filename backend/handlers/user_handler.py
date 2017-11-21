@@ -82,6 +82,7 @@ class UserHandler(BaseHandler):
 
         self.response.write(json.dumps(user_json))
 
+    @json_response
     @login_required
     def delete(self, user, institution_key):
         """Handler DELETE Requests."""
@@ -92,6 +93,7 @@ class UserHandler(BaseHandler):
 
         institution.remove_member(user)
         institution.unfollow(user.key)
+        print "deu certo !!!!!"
 
     @json_response
     @login_required

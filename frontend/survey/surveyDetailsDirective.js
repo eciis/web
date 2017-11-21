@@ -83,10 +83,8 @@
                 _.forEach(surveyCtrl.post.options, function(option) {
                     option.selected && optionsSelected.push(option);
                 });
-            } else {
-                if (surveyCtrl.binaryOptionSelected) {
-                    optionsSelected.push(surveyCtrl.binaryOptionSelected);
-                }
+            } else if (surveyCtrl.binaryOptionSelected) {
+                optionsSelected.push(surveyCtrl.binaryOptionSelected);
             }
             return optionsSelected;
         }

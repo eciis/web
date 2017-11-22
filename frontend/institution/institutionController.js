@@ -284,6 +284,7 @@
                     MessageService.showToast("Você deve marcar uma das opções.");
                 } else {
                     InstitutionService.removeInstitution(institutionKey, ctrl.removeHierarchy).then(function success() {
+                        institutionCtrl.user.removeProfile(institutionKey, ctrl.removeHierarchy);
                         institutionCtrl.user.removeInstitution(institutionKey, ctrl.removeHierarchy);
                         AuthService.save();
                         ctrl.closeDialog();

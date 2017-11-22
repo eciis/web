@@ -86,8 +86,8 @@ User.prototype.removeInvite = function removeInvite(inviteKey) {
 User.prototype.removeInstitution = function removeInstitution(institutionKey, removeHierarchy) {
     var toRemove = function toRemove(institution) {
         var childToRemove = (institution.parent_institution &&
-                institution.parent_institution === institutionKey && 
-                removeHierarchy === 'true');
+                institution.parent_institution === institutionKey &&
+                removeHierarchy);
         return (institution.key === institutionKey) || childToRemove;
     };
 
@@ -95,8 +95,21 @@ User.prototype.removeInstitution = function removeInstitution(institutionKey, re
     _.remove(this.follows, toRemove);
 
     if(!_.isEmpty(this.institutions)) {
-        this.current_institution = this.institutions[0];
+        this.changeInstitution();
     }
+};
+
+User.prototype.removeProfile = function removeProfile(institutionKey, removeHierarchy) {
+    var user = this;
+    var toRemove = function toRemove(profile) {
+        // This is necessary because the profile doesn't have the information about hierarchy.
+        var childToRemove = _.find(user.institutions, function(institution) {
+            return (institution.key === profile.institution_key &&
+                institution.parent_institution === institutionKey);
+        });
+        return (profile.institution_key === institutionKey) || (childToRemove && removeHierarchy);
+    };
+    _.remove(this.institution_profiles, toRemove);
 };
 
 User.prototype.updateInstitutions = function updateInstitutions(institution){

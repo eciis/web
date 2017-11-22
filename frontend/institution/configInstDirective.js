@@ -119,7 +119,7 @@
                 if(configInstCtrl.isSubmission) {
                     saveRequestInst();
                 } else {
-                    patchIntitution();
+                    updateStubAndApplyPatch();
                 }
                 $q.resolve(promise);
             }, function error(response) {
@@ -129,8 +129,66 @@
             return promise;
         }
 
+        function updateStubAndApplyPatch() {
+            var updateStubPromise = updateStubInstitution();
+            if (updateStubPromise) {
+                updateStubPromise.then(
+                    function success(institutionSaved) {
+                        MessageService.showToast('Cadastro de instituição realizado com sucesso');
+                        updateUser($state.params.inviteKey, institutionSaved);
+                        patchIntitution();
+                    },
+                    function error(response) {
+                        MessageService.showToast(response.data.msg);
+                });
+            } else {
+                patchIntitution();
+            }
+        }
+
+        function updateStubInstitution() {
+            var inviteKey = $state.params.inviteKey;
+            var promise;
+            if (inviteKey) {
+                promise = InstitutionService.save($state.params.dataProfile, institutionKey, inviteKey);
+            }
+            return promise;
+        }
+
+        function updateUser(inviteKey, institution) {
+            configInstCtrl.user.removeInvite(inviteKey);
+            configInstCtrl.user.institutions.push(institution);
+            configInstCtrl.user.institutions_admin.push(institution.key);
+            configInstCtrl.user.follow(institution);
+            configInstCtrl.user.addProfile(createProfile(configInstCtrl.newInstitution));
+            configInstCtrl.user.changeInstitution(institution);
+            configInstCtrl.user.state = 'active';
+            configInstCtrl.user.name = getCurrentName();
+            AuthService.save();
+        }
+
+        function createProfile(new_institution) {
+            return {
+                email: null,
+                institution_key: new_institution.key,
+                institution: {
+                    name: new_institution.name,
+                    photo_url: new_institution.photo_url,
+                },
+                office: 'Administrador',
+                phone: null,
+                color: 'grey'
+            };
+        }
+
+        function getCurrentName() {
+            return configInstCtrl.user_name ? configInstCtrl.user_name : configInstCtrl.user.name;
+        }
+
         function patchIntitution() {
             var patch = jsonpatch.generate(observer);
+            console.log(patch);
+            console.log(configInstCtrl.newInstitution);
             InstitutionService.update(institutionKey, patch).then(
                 function success() {
                     updateUserInstitutions(configInstCtrl.newInstitution);
@@ -161,7 +219,7 @@
         };
 
         configInstCtrl.showImage = function showImage() {
-            return configInstCtrl.newInstitution.photo_url !== "app/images/institution.jpg";
+            return configInstCtrl.newInstitution.photo_url !== "app/images/institution.jpg" && !_.isEmpty(configInstCtrl.newInstitution.photo_url);
         };
 
         configInstCtrl.getStep = function getStep(step) {

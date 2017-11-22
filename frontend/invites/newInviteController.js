@@ -68,7 +68,12 @@
             var dataProfile = {
                 sender_name : getCurrentName()
             };
-            var promise = InstitutionService.save(dataProfile, institutionKey, newInviteCtrl.inviteKey);
+            $state.go('create_institution_form', {
+                dataProfile: dataProfile,
+                institutionKey: institutionKey,
+                inviteKey: newInviteCtrl.inviteKey
+            });
+            /*var promise = InstitutionService.save(dataProfile, institutionKey, newInviteCtrl.inviteKey);
             promise.then(
                 function success(institutionSaved){
                     MessageService.showToast('Cadastro de instituição realizado com sucesso');
@@ -81,27 +86,13 @@
                     newInviteCtrl.user.state = 'active';
                     newInviteCtrl.user.name = getCurrentName();
                     AuthService.save();
-                    $state.go('create_institution_form', {institutionKey: institutionSaved.key});
+
                 },
                 function error(response) {
                     MessageService.showToast(response.data.msg);
             });
-            return promise;
+            return promise;*/
         };
-
-        function createProfile(new_institution) {
-            return {
-                email: null,
-                institution_key: new_institution.key,
-                institution: {
-                    name: new_institution.name,
-                    photo_url: new_institution.photo_url,
-                },
-                office: 'Administrador',
-                phone: null,
-                color: 'grey'
-            };
-        }
 
         newInviteCtrl.isInviteUser = function isInviteUser(){
             return newInviteCtrl.invite && newInviteCtrl.invite.type_of_invite === "USER";

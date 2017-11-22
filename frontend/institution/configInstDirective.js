@@ -134,7 +134,6 @@
             if (updateStubPromise) {
                 updateStubPromise.then(
                     function success(institutionSaved) {
-                        MessageService.showToast('Cadastro de instituição realizado com sucesso');
                         updateUser($state.params.inviteKey, institutionSaved);
                         patchIntitution();
                     },
@@ -160,7 +159,7 @@
             configInstCtrl.user.institutions.push(institution);
             configInstCtrl.user.institutions_admin.push(institution.key);
             configInstCtrl.user.follow(institution);
-            configInstCtrl.user.addProfile(createProfile(configInstCtrl.newInstitution));
+            configInstCtrl.user.addProfile(createProfile(institution));
             configInstCtrl.user.changeInstitution(institution);
             configInstCtrl.user.state = 'active';
             configInstCtrl.user.name = getCurrentName();
@@ -182,6 +181,7 @@
         }
 
         function getCurrentName() {
+            console.log(configInstCtrl.user_name);
             return configInstCtrl.user_name ? configInstCtrl.user_name : configInstCtrl.user.name;
         }
 

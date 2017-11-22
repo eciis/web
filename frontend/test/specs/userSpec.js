@@ -12,7 +12,8 @@
    var certbio = {
         color: 'grey',
         name: 'Certbio',
-        key: '123456789'
+        key: '123456789',
+        parent_institution: '987654321'
    };
 
    var inviteUser = {
@@ -205,6 +206,59 @@
               expect(user.follows).toEqual([]);
               expect(user.institutions).toEqual([]);
           });
+        });
+
+        describe('removeProfile', function() {
+            beforeEach(function() {
+              userData = {
+                name: 'User',
+                cpf: '111.111.111-11',
+                email: 'user@example.com',
+                institutions: [splab, certbio],
+                follows: [splab, certbio],
+                institution_profiles: [
+                  {institution_key: splab.key},
+                  {institution_key: certbio.key}
+                ]
+              };
+              user = createUser();
+            });
+
+            it('should remove splab profile', function() {
+              expect(user.institution_profiles).toEqual([
+                  {institution_key: splab.key},
+                  {institution_key: certbio.key}
+              ]);
+              user.removeProfile(splab.key, false);
+              expect(user.institution_profiles).toEqual([{institution_key: certbio.key}]);
+            });
+
+            it('should remove certbio profile', function() {
+              expect(user.institution_profiles).toEqual([
+                  {institution_key: splab.key},
+                  {institution_key: certbio.key}
+              ]);
+              user.removeProfile(certbio.key, false);
+              expect(user.institution_profiles).toEqual([{institution_key: splab.key}]);
+            });
+
+            it('should not remove splab profile', function() {
+              expect(user.institution_profiles).toEqual([
+                  {institution_key: splab.key},
+                  {institution_key: certbio.key}
+              ]);
+              user.removeProfile(certbio.key, true);
+              expect(user.institution_profiles).toEqual([{institution_key: splab.key}]);
+            });
+
+            it('should remove all profiles', function() {
+              expect(user.institution_profiles).toEqual([
+                  {institution_key: splab.key},
+                  {institution_key: certbio.key}
+              ]);
+              user.removeProfile(splab.key, true);
+              expect(user.institution_profiles).toEqual([]);
+            });
         });
    });
 }));

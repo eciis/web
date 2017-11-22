@@ -25,7 +25,7 @@
                     newInviteCtrl.addInstitution(event);
                 }
             } else {
-                newInviteCtrl.updateStubInstitution();
+                newInviteCtrl.goToInstForm();
             }
         };
 
@@ -64,7 +64,7 @@
             return promise;
         };
 
-        newInviteCtrl.updateStubInstitution =function updateStubInstitution() {
+        newInviteCtrl.goToInstForm =function goToInstForm() {
             var dataProfile = {
                 sender_name : getCurrentName()
             };
@@ -73,25 +73,6 @@
                 institutionKey: institutionKey,
                 inviteKey: newInviteCtrl.inviteKey
             });
-            /*var promise = InstitutionService.save(dataProfile, institutionKey, newInviteCtrl.inviteKey);
-            promise.then(
-                function success(institutionSaved){
-                    MessageService.showToast('Cadastro de instituição realizado com sucesso');
-                    newInviteCtrl.user.removeInvite(newInviteCtrl.inviteKey);
-                    newInviteCtrl.user.institutions.push(institutionSaved);
-                    newInviteCtrl.user.institutions_admin.push(institutionSaved.key);
-                    newInviteCtrl.user.follow(institutionSaved);
-                    newInviteCtrl.user.addProfile(createProfile(institutionSaved));
-                    newInviteCtrl.user.changeInstitution(institutionSaved);
-                    newInviteCtrl.user.state = 'active';
-                    newInviteCtrl.user.name = getCurrentName();
-                    AuthService.save();
-
-                },
-                function error(response) {
-                    MessageService.showToast(response.data.msg);
-            });
-            return promise;*/
         };
 
         newInviteCtrl.isInviteUser = function isInviteUser(){

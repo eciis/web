@@ -325,6 +325,7 @@
     app.run(function userInactiveListener(AuthService, $transitions) {
         var ignored_routes = [
             'create_institution',
+            'create_institution_form',
             'error',
             'signin',
             'user_inactive',

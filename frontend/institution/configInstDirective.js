@@ -181,14 +181,11 @@
         }
 
         function getCurrentName() {
-            console.log(configInstCtrl.user_name);
             return configInstCtrl.user_name ? configInstCtrl.user_name : configInstCtrl.user.name;
         }
 
         function patchIntitution() {
             var patch = jsonpatch.generate(observer);
-            console.log(patch);
-            console.log(configInstCtrl.newInstitution);
             InstitutionService.update(institutionKey, patch).then(
                 function success() {
                     updateUserInstitutions(configInstCtrl.newInstitution);

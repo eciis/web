@@ -2,9 +2,6 @@ language:
   - python
   - node_js
 
-os:
-  - linux
-
 python:
  - "2.7"
 

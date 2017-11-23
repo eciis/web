@@ -1,6 +1,9 @@
-language: 
+language:
   - python
   - node_js
+
+os:
+  - linux
 
 python:
  - "2.7"
@@ -21,7 +24,7 @@ install:
 - wget $SDK_URL -nv
 - unzip -q google_appengine_$SDK_VERSION.zip
 
-# Install dependencies to backend                                                 
+# Install dependencies to backend
 - mkdir lib
 - pip install -t lib google-auth
 - mv lib/google/* google_appengine/google
@@ -43,8 +46,8 @@ before_script:
 - sh -e /etc/init.d/xvfb start
 
 # command to run tests
-script: 
-    - cd backend 
+script:
+    - cd backend
     - python -m unittest discover -v -p "*test.py"
     - cd ../
     - cd frontend/test

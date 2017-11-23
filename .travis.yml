@@ -22,10 +22,10 @@ install:
 - unzip -q google_appengine_$SDK_VERSION.zip
 
 # Install dependencies to backend                                                 
-- mkdir lib
-- pip install -t lib google-auth==1.1.1 --no-deps
-- mv lib/google/* google_appengine/google
-- rm -rf lib/google
+#- mkdir lib
+#- pip install -t lib google-auth==1.1.1 --no-deps
+#- mv lib/google/* google_appengine/google
+#- rm -rf lib/google
 - cd ../
 
 before_script:

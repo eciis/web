@@ -171,7 +171,9 @@
   <div class="youtube-player" ng-if="postDetailsCtrl.showVideo(postDetailsCtrl.post)">
     <iframe ng-src="{{postDetailsCtrl.getVideoUrl(postDetailsCtrl.post)}}"></iframe>
   </div>
-  <pdf-view pdf-files='postDetailsCtrl.post.pdf_files' is-editing="false"></pdf-view>
+  <pdf-view pdf-files='postDetailsCtrl.post.pdf_files' is-editing="false"
+    ng-hide="postDetailsCtrl.isDeleted(postDetailsCtrl.post)">
+  </pdf-view>
   <md-card-title ng-if="postDetailsCtrl.isShowTitle(postDetailsCtrl.post)">
     <md-card-title-text>
       <a href class="md-title hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post)">

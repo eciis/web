@@ -3,7 +3,7 @@ language:
   - node_js
 
 python:
- - "2.7.14"
+ - "2.7"
 
 node_js:
  - "4.0.0"
@@ -17,9 +17,9 @@ install:
 - pip install -r requirements.txt
 # Idea from https://blog.bekt.net/p/gae-sdk/
 - SDK_VERSION=$(curl -s $API_CHECK | awk -F '\"' '/release/ {print $2}')
-- SDK_URL=https://storage.googleapis.com/appengine-sdks/featured/google_appengine_1.9.62.zip
+- SDK_URL=https://storage.googleapis.com/appengine-sdks/featured/google_appengine_$SDK_VERSION.zip
 - wget $SDK_URL -nv
-- unzip -q google_appengine_1.9.62.zip
+- unzip -q google_appengine_$SDK_VERSION.zip
 
 # Install dependencies to backend                                                 
 - mkdir lib

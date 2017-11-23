@@ -224,7 +224,7 @@
                         postCtrl.clearPost();
                         posts.push(new Post(response.data));
                         MessageService.showToast('Postado com sucesso!');
-                        timelineContent.scrollTop = 0;
+                        changeTimelineToStart();
                         $mdDialog.hide();
                     }, function error(response) {
                         AuthService.reload().then(function success() {
@@ -240,6 +240,12 @@
             postCtrl.post.photo_url = null;
             postCtrl.post.pdf_files = [];
         };
+
+        function changeTimelineToStart() {
+            if (timelineContent) {
+                timelineContent.scrollTop = 0;
+            }
+        }
 
         postCtrl.clearPost = function clearPost() {
             if (postCtrl.typePost === "Common") postCtrl.post = {};

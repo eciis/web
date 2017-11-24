@@ -23,7 +23,7 @@ install:
 
 # Install dependencies to backend                                                 
 - mkdir lib
-- pip install -t lib google-auth==1.1.1 --no-deps
+- pip install -t lib google-auth==1.2.1
 - mv lib/google/* google_appengine/google
 - rm -rf lib/google
 - cd ../

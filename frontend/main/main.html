@@ -15,9 +15,9 @@
     
     <notification></notification>
 
-    <div layout="row" md-theme="input" style="margin-top: 42px;">
-      <form ng-submit="mainCtrl.search()">
-        <md-input-container flex md-no-float>
+    <div layout="row" md-theme="input" style="margin: 0px;">
+      <form ng-submit="mainCtrl.search()" style="margin: 0px;">
+        <md-input-container flex md-no-float style="margin: 0px;">
           <input aria-label="Pesquisar por instituições" class="form-control demo-menu-open-button"
             ng-model="mainCtrl.search_keyword" md-colors="{background: 'teal-800'}"
             ng-show="search">

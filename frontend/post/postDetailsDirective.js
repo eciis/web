@@ -468,7 +468,7 @@
         };
     });
 
-    app.controller('CommentController', function CommentController(CommentService, MessageService, ProfileService) {
+    app.controller('CommentController', function CommentController(CommentService, MessageService, ProfileService, $state) {
         var commentCtrl = this;
 
         // Model to store data of a new reply on a comment
@@ -476,7 +476,7 @@
 
         // Controll the disablement of actions
         commentCtrl.saving = false;
-
+        
         commentCtrl.likeOrDislike = function likeOrDislike(reply) {
             var replyId = reply ? reply.id : undefined;
             if (commentCtrl.isLikedByUser(reply)) {
@@ -611,7 +611,7 @@
             return commentCtrl.post.state === 'deleted';
         };
 
-        commentCtrl.showReplies = function showReplies() {
+        commentCtrl.hideReplies = function hideReplies() {
             if(commentCtrl.post.state === 'deleted') {
                 var noReplies = commentCtrl.numberOfReplies() === 0;
                 return commentCtrl.saving || noReplies;
@@ -640,6 +640,16 @@
             commentCtrl.numberOfReplies() === 1? '1 resposta' :
             commentCtrl.numberOfReplies() + ' respostas'
         }
+
+        commentCtrl.toggleReplies = function toggleReplies() {
+            commentCtrl.showReplies = !commentCtrl.showReplies;
+        };
+        
+        function loadShowReplies() {
+            commentCtrl.showReplies = $state.current.name === 'app.post';
+        }
+
+        loadShowReplies();
     });
 
     app.directive("comment", function() {

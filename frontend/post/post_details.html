@@ -188,9 +188,13 @@
     </div>
     <div layout="column" layout-align-xs="center center">
       <span style="font-size: 19px">ESTA PUBLICAÇÃO FOI REMOVIDA</span>
-      <span>por {{postDetailsCtrl.post.last_modified_by}} {{postDetailsCtrl.post.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats }}.</span>
+      <span>
+        {{postDetailsCtrl.post.last_modified_by == postDetailsCtrl.post.author ? 'por' : 'pelo administrador'}} 
+        {{postDetailsCtrl.post.last_modified_by}} 
+        {{postDetailsCtrl.post.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats }}.
+      </span>
     </div>
-  </div>
+  </div>  
   <md-card-content>
       <div ng-if="postDetailsCtrl.showTextPost()">
           <p ng-bind-html="postDetailsCtrl.postToURL(postDetailsCtrl.post).text" class="break">
@@ -218,7 +222,7 @@
       <div style="margin-left: auto; margin-right: 10px;">
         <md-button class="sm-icon-button" aria-label="Favorite" ng-click="postDetailsCtrl.likeOrDislikePost()"
             ng-disabled="postDetailsCtrl.disableButton()" title="Curtir"
-            md-colors="{background: postDetailsCtrl.isLikedByUser() ? 'light-green' : 'grey'}">
+            md-colors="{{ postDetailsCtrl.getButtonColor(postDetailsCtrl.isLikedByUser()) }}">
           <md-icon>grade</md-icon>
         </md-button>
         <span style="margin-left: -16px;" class="counter-likes-comments" data-badge="{{postDetailsCtrl.number_of_likes()}}"></span>
@@ -226,7 +230,7 @@
         <md-button class="sm-icon-button" aria-label="Comments"
             ng-click="postDetailsCtrl.isPostPage ? 'null' : postDetailsCtrl.getComments()"
             title="Mostrar comentários"
-            md-colors="{background: 'light-green'}">
+            md-colors="{{ postDetailsCtrl.getButtonColor() }}">
           <md-icon>comments</md-icon>
         </md-button>
         <span style="margin-left: -10px;" class="counter-likes-comments" data-badge="{{postDetailsCtrl.number_of_comments()}}"></span>

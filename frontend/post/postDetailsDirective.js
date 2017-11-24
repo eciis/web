@@ -45,7 +45,7 @@
             return postDetailsCtrl.isPostAuthor() || isInstitutionAdmin();
         };
 
-        postDetailsCtrl.isDeleted = function isDeleted(object) {
+        postDetailsCtrl.isDeleted = function isDeleted(object=postDetailsCtrl.post) {
             return object.state == 'deleted';
         };
 
@@ -430,6 +430,11 @@
         postDetailsCtrl.number_of_comments = function number_of_comments() {
             return postDetailsCtrl.post.number_of_comments < 100 ?
             postDetailsCtrl.post.number_of_comments : "+99";
+        };
+
+        postDetailsCtrl.getButtonColor = function getButtonColor(condition=true) {
+            var color = condition && !postDetailsCtrl.isDeleted() ? 'light-green' : 'grey';
+            return {background: color};
         };
 
         function adjustText(text){

@@ -24,8 +24,8 @@ install:
 # Install dependencies to backend                                                 
 - mkdir lib
 - pip install -t lib google-auth --ignore-installed pyasn1 pyasn1-modules
-- pip install pyasn1=0.3.7
-- pip install pyasn1-modules=0.1.5
+- pip install pyasn1==0.3.7
+- pip install pyasn1-modules==0.1.5
 - mv lib/google/* google_appengine/google
 - rm -rf lib/google
 - cd ../

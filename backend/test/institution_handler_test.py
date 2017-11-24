@@ -233,6 +233,35 @@ class InstitutionHandlerTest(TestBaseHandler):
         self.assertTrue(self.splab.key not in self.mayza.institutions)
         self.assertTrue(self.ecis.key not in self.mayza.institutions)
 
+    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
+    def test_delete_child_institution(self, verify_token):
+        """Test delete child institution."""
+        self.mayza.institutions_admin.append(self.splab.key)
+        self.mayza.institutions.append(self.ecis.key)
+        self.ecis.state = "active"
+        self.mayza.add_permission("publish_post", self.ecis.key.urlsafe())
+        self.mayza.add_permission("publish_post", self.splab.key.urlsafe())
+        self.mayza.put()
+        self.ecis.put()
+        self.testapp.delete("/api/institutions/%s?removeHierarchy=false" %
+                            self.ecis.key.urlsafe())
+        self.ecis = self.ecis.key.get()
+        self.assertTrue(self.ecis.state == "inactive")
+
+    @patch('utils.verify_token', return_value={'email': 'raoni.smaneoto@ccc.ufcg.edu.br'})
+    def test_delete_child_institution_without_admin(self, verify_token):
+        """Test delete child institution."""
+        self.raoni.institutions.append(self.ecis.key)
+        self.certbio.state = "active"
+        self.raoni.add_permission("publish_post", self.certbio.key.urlsafe())
+        self.raoni.put()
+        self.certbio.put()
+        with self.assertRaises(Exception):
+            self.testapp.delete("/api/institutions/%s?removeHierarchy=false" %
+                                self.certbio.key.urlsafe())
+        self.certbio = self.certbio.key.get()
+        self.assertTrue(self.certbio.state == "active")
+
     def tearDown(cls):
         """Deactivate the test."""
         cls.test.deactivate()
@@ -324,3 +353,5 @@ def initModels(cls):
     cls.ecis.admin = cls.raoni.key
     cls.ecis.parent_institution = cls.splab.key
     cls.ecis.put()
+    cls.splab.children_institutions.append(cls.ecis.key)
+    cls.splab.put()

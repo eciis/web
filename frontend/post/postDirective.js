@@ -24,6 +24,7 @@
                             'voters': []
                             };
         var observer;
+        var timelineContent = document.getElementById('content');
 
         postCtrl.hasMedia = function hasMedia() {
             return postCtrl.photoBase64Data || postCtrl.pdfFiles.length > 0 || postCtrl.hasVideo || postCtrl.photoUrl;
@@ -223,6 +224,7 @@
                         postCtrl.clearPost();
                         posts.push(new Post(response.data));
                         MessageService.showToast('Postado com sucesso!');
+                        changeTimelineToStart();
                         $mdDialog.hide();
                     }, function error(response) {
                         AuthService.reload().then(function success() {
@@ -238,6 +240,12 @@
             postCtrl.post.photo_url = null;
             postCtrl.post.pdf_files = [];
         };
+
+        function changeTimelineToStart() {
+            if (timelineContent) {
+                timelineContent.scrollTop = 0;
+            }
+        }
 
         postCtrl.clearPost = function clearPost() {
             if (postCtrl.typePost === "Common") postCtrl.post = {};

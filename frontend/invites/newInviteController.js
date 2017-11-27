@@ -45,7 +45,6 @@
 
         newInviteCtrl.addInstitution =  function addInstitution(event) {
             var patch = newInviteCtrl.saveInstProfile();
-            newInviteCtrl.user.addInstitution(newInviteCtrl.institution.key);
 
             var promise = InviteService.acceptInvite(patch, newInviteCtrl.inviteKey);
                 promise.then(function success(userSaved) {
@@ -65,11 +64,8 @@
         };
 
         newInviteCtrl.goToInstForm =function goToInstForm() {
-            var dataProfile = {
-                sender_name : getCurrentName()
-            };
             $state.go('create_institution_form', {
-                dataProfile: dataProfile,
+                senderName: getCurrentName(),
                 institutionKey: institutionKey,
                 inviteKey: newInviteCtrl.inviteKey
             });

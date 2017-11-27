@@ -149,7 +149,8 @@
             var inviteKey = $state.params.inviteKey;
             var promise;
             if (inviteKey) {
-                promise = InstitutionService.save($state.params.dataProfile, institutionKey, inviteKey);
+                var body = {sender_name: $state.params.senderName};
+                promise = InstitutionService.save(body, institutionKey, inviteKey);
             }
             return promise;
         }

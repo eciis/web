@@ -204,7 +204,7 @@
                     }
                 },
                 params: {
-                    dataProfile: undefined,
+                    senderName: undefined,
                     institutionKey: undefined,
                     inviteKey: undefined
                 }

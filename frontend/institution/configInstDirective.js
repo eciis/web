@@ -2,7 +2,8 @@
 (function() {
     var app = angular.module("app");
     app.controller("ConfigInstController", function ConfigInstController(AuthService, InstitutionService, CropImageService,$state,
-            $mdToast, $mdDialog, $http, InviteService, ImageService, $rootScope, MessageService, PdfService, $q, RequestInvitationService) {
+            $mdToast, $mdDialog, $http, InviteService, ImageService, $rootScope, MessageService, PdfService, $q, 
+            RequestInvitationService, brCidadesEstados) {
 
         var configInstCtrl = this;
         var institutionKey = $state.params.institutionKey;
@@ -22,6 +23,27 @@
 
         getLegalNatures();
         getActuationAreas();
+
+        configInstCtrl.getCitiesByState = function getCitiesByState() {
+            configInstCtrl.cities = brCidadesEstados.buscarCidadesPorSigla(configInstCtrl.selectedState.sigla);
+            updateAddressState();
+        };
+
+        function updateAddressState() {
+            configInstCtrl.address.state = configInstCtrl.selectedState && configInstCtrl.selectedState.nome;
+        }
+
+        function loadStateAndCity() {
+            configInstCtrl.states = brCidadesEstados.estados;
+            var stateName = configInstCtrl.address.state;
+            var stateIndex = configInstCtrl.states.findIndex((state) => {
+                return state.nome === stateName;
+            });
+            if(stateIndex >= 0) {
+                configInstCtrl.selectedState = configInstCtrl.states[stateIndex];
+                configInstCtrl.getCitiesByState();
+            }
+        }
 
         configInstCtrl.addImage = function addImage(image) {
             var newSize = 800;
@@ -240,6 +262,8 @@
             InstitutionService.getInstitution(institutionKey).then(function success(response) {
                 configInstCtrl.newInstitution = response.data;
                 configInstCtrl.suggestedName = configInstCtrl.newInstitution.name;
+                configInstCtrl.address = configInstCtrl.newInstitution.address;
+                loadStateAndCity();
                 currentPortfoliourl = configInstCtrl.newInstitution.portfolio_url;
                 observer = jsonpatch.observe(configInstCtrl.newInstitution);
             }, function error(response) {

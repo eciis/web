@@ -66,4 +66,4 @@ class SearchUser(SearchDocument):
                 state_string += states[i]
             else:
                 state_string += " OR " + states[i]
-        return "name: %s AND state: %s" % (value, state_string)
+        return 'name: "%s" AND state: %s' % (value, state_string)

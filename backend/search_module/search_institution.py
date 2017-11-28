@@ -79,4 +79,4 @@ class SearchInstitution(SearchDocument):
                 state_string += states[i]
             else:
                 state_string += " OR " + states[i]
-        return "(name: %s OR acronym: %s OR actuation_area: %s) AND state: %s" % (value, value, value, state_string)
+        return '(name: "%s" OR acronym: "%s" OR actuation_area: "%s") AND state: %s' % (value, value, value, state_string)

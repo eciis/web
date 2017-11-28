@@ -20,7 +20,6 @@
             email: configInstCtrl.user.email[0]
         };
         configInstCtrl.steps = [true, false, false];
-        
 
         getLegalNatures();
         getActuationAreas();
@@ -38,6 +37,7 @@
         function loadAddress() {
             configInstCtrl.newInstitution.address = configInstCtrl.newInstitution.address || {};
             configInstCtrl.address = configInstCtrl.newInstitution.address;
+            console.log(configInstCtrl.address);
             loadCountry();
             loadStateAndCity();
         }

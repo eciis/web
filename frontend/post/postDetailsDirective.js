@@ -89,12 +89,12 @@
         };
 
         postDetailsCtrl.showSharedSurvey = function showSharedSurvey() {
-            return postDetailsCtrl.post.shared_survey &&
+            return postDetailsCtrl.post.shared_post.type_survey &&
                 !postDetailsCtrl.isDeleted(postDetailsCtrl.post);
         };
 
-        postDetailsCtrl.showSurvey = function showSurvey() {
-            return postDetailsCtrl.post.type_survey;
+        postDetailsCtrl.showSurvey = function showSurvey(post=postDetailsCtrl.post) {
+            return post.type_survey;
         };
 
         postDetailsCtrl.showPost = function showPost() {
@@ -225,8 +225,6 @@
                 return post.shared_post;
             } else if(post.shared_event){
                 return post.shared_event;
-            } else if(post.shared_survey){
-                return post.shared_survey;
             }
             return post;
         }
@@ -715,7 +713,9 @@
             return postObj.getVideoUrl();
         };
 
-
+        shareCtrl.isSurvey = function isSurvey() {
+            return shareCtrl.post.type_survey;
+        };
 
         shareCtrl.share = function share() {
             makePost(shareCtrl.post);
@@ -753,8 +753,6 @@
         function makePost(post){
             if(shareCtrl.isEvent()){
                 shareCtrl.newPost.shared_event = post.key;
-            } else if(shareCtrl.isSurvey()) {
-                shareCtrl.newPost.shared_survey = post.key;
             } else {
                 shareCtrl.newPost.shared_post = post.key;
             }

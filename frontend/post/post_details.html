@@ -69,22 +69,7 @@
   </md-card-header>
 
   <!-- SURVEY -->
-  <survey-details ng-if="postDetailsCtrl.showSurvey()" post="postDetailsCtrl.post" posts="posts" user="postDetailsCtrl.user"></survey-details>
-
-  <!-- SHARED SURVEY -->
-  <md-card md-colors="{background: 'default-grey-100'}" ng-if="postDetailsCtrl.showSharedSurvey()">
-    <md-card-header>
-      <md-card-avatar>
-        <img ng-src="{{ postDetailsCtrl.post.shared_post.institution_image }}" class="md-card-image"/>
-      </md-card-avatar>
-      <md-card-header-text>
-        <a href class="md-title hyperlink" ng-click="postDetailsCtrl.goToInstitution(postDetailsCtrl.post.shared_post.institution_key)">
-          {{ postDetailsCtrl.post.shared_post.institution_name }}</a>
-        <span class="md-subhead">por {{ postDetailsCtrl.post.shared_post.author }}</span>
-      </md-card-header-text>
-    </md-card-header>
-    <survey-details post="postDetailsCtrl.post.shared_survey" posts="posts" user="postDetailsCtrl.user"></survey-details>
-  </md-card>
+  <survey-details ng-if="postDetailsCtrl.showSurvey()" post="postDetailsCtrl.post" posts="posts" user="postDetailsCtrl.user" sharedDialog="false"></survey-details>
 
   <!-- BODY SHARED EVENT -->
   <div md-colors="{background: 'teal-500'}" ng-if="postDetailsCtrl.isDeletedEvent(postDetailsCtrl.post) && !postDetailsCtrl.isDeleted(postDetailsCtrl.post)"
@@ -158,6 +143,7 @@
         <span>por {{postDetailsCtrl.post.last_modified_by}} {{postDetailsCtrl.post.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats }}.</span>
       </div>
     </div>
+    <survey-details ng-if="postDetailsCtrl.showSurvey(postDetailsCtrl.post.shared_post)" post="postDetailsCtrl.post.shared_post" posts="posts" user="postDetailsCtrl.user" sharedDialog="false"></survey-details>    
     <md-card-content layout="column">
       <img class="md-card-image" ng-if="postDetailsCtrl.showImage(postDetailsCtrl.post.shared_post)"
         style="width: 100%; height: auto;" ng-src="{{ postDetailsCtrl.post.shared_post.photo_url }}"/>

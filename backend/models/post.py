@@ -146,9 +146,6 @@ class Post(PolyModel):
     # When post is shared event
     shared_event = ndb.KeyProperty(kind="Event")
 
-    # When post is shared survey
-    shared_survey = ndb.KeyProperty(kind="SurveyPost")
-
     # Users that are interested in the post
     subscribers = ndb.KeyProperty(kind="User", repeated=True)
 

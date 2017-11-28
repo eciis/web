@@ -42,7 +42,7 @@
             var nationalTimeZone = new Date (surveyCtrl.post.deadline);
             nationalTimeZone.setHours(nationalTimeZone.getHours() - 3);
             var onTime = surveyCtrl.post.deadline ? new Date() < nationalTimeZone : 'true';
-            return onTime && !surveyCtrl.userVoted();
+            return onTime && !surveyCtrl.userVoted() && !surveyCtrl.sharedDialog;
         };
 
         surveyCtrl.vote = function(ev){
@@ -158,7 +158,8 @@
             bindToController: {
                 post: '=',
                 posts: '=',
-                user: '='
+                user: '=',
+                sharedDialog: '='
             }
         };
     });

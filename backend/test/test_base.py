@@ -38,4 +38,3 @@ class TestBase(unittest.TestCase):
         testbed_instance.init_app_identity_stub()
         testbed_instance.init_mail_stub()
         testbed_instance.init_taskqueue_stub(root_path="..")
-        testbed_instance.init_search_stub()

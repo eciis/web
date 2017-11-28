@@ -14,9 +14,9 @@
             <md-icon md-colors="{color: 'grey-100'}">refresh</md-icon>
           </md-button>
         </div>
-        <md-content flex id="content" class="body hide-scrollbar">         
+        <md-content flex id="content" class="body hide-scrollbar">
             <div flex layout="row">
-                <post-timeline flex ng-if="!homeCtrl.isLoadingPosts" layout="column" posts="homeCtrl.posts" institution="false" 
+                <post-timeline flex ng-if="!homeCtrl.isLoadingPosts" layout="column" posts="homeCtrl.posts" institution="false"
                 user="homeCtrl.user" add-post="true" load-more-posts='homeCtrl.loadMorePosts'></post-timeline>
               <!-- LOADING CIRCLE -->
               <div flex layout-align="center center" layout="row" layout-fill ng-if="homeCtrl.isLoadingPosts">
@@ -58,7 +58,7 @@
                   <a href class="hyperlink sm-text" ng-click="homeCtrl.goToEvent(event)">
                     {{ event.title | limitTo: 80 }}{{ event.title.length > 80 ? '...' : ''}}
                   </a>
-                  <span class="event-author">por {{ event.author }}</span>
+                  <span class="event-author">por {{ event.institution_name }}</span>
                 </div>
               </div>
               <md-card-actions layout="row" layout-align="center" ng-if="!homeCtrl.isEventsEmpty()">
@@ -70,7 +70,7 @@
               </md-card-actions>
             </md-card-content>
           </md-card>
-        
+
           <md-card>
             <md-toolbar md-colors="{background: 'teal-600'}" layout="row">
               <md-icon style="margin-left: 7%;">bookmark</md-icon>
@@ -80,11 +80,11 @@
             </md-toolbar>
             <md-card-content layout-padding>
               <md-grid-list md-cols="4" md-row-height="1:1" md-gutter="4px">
-                <md-grid-tile 
+                <md-grid-tile
                   ng-repeat="inst in homeCtrl.followingInstitutions | limitTo: 8"
                   md-colspan="1" md-rowspan="1" class="clickable-no-hover">
                     <img
-                      class="rounded-circle" ng-click="homeCtrl.goToInstitution(inst.key)" 
+                      class="rounded-circle" ng-click="homeCtrl.goToInstitution(inst.key)"
                       ng-src="{{inst.photo_url}}" title="{{inst.name}}"/>
                 </md-grid-tile>
               </md-grid-list>
@@ -103,7 +103,7 @@
 </div>
 <md-fab-speed-dial id="fab-new-post" class="md-fab-bottom-right" hide-gt-sm>
   <md-fab-trigger>
-    <md-button aria-label="menu" class="md-fab md-primary" ng-click="homeCtrl.newPost()" 
+    <md-button aria-label="menu" class="md-fab md-primary" ng-click="homeCtrl.newPost()"
         md-colors="{background: 'teal-900'}">
       <md-icon>add</md-icon>
     </md-button>

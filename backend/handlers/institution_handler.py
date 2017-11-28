@@ -56,8 +56,10 @@ def is_admin(method):
 
         userisNotAdminOfInstitution = institution.key not in user.institutions_admin
         institutionisNotManagedByUser = institution.admin != user.key
+        userIsNotParentAdmin = institution.parent_institution not in user.institutions_admin
 
-        Utils._assert(userisNotAdminOfInstitution or institutionisNotManagedByUser,
+        Utils._assert(userIsNotParentAdmin and
+                      (userisNotAdminOfInstitution or institutionisNotManagedByUser),
                       'User is not admin', NotAuthorizedException)
 
         method(self, user, institution_key, *args)
@@ -186,7 +188,7 @@ class InstitutionHandler(BaseHandler):
             "institution_key": institution_key
         }
 
-        enqueue_task('email-members', email_params)                    
+        enqueue_task('email-members', email_params)
 
         notification_params = {
             "entity_type": "DELETED_INSTITUTION",
@@ -196,4 +198,4 @@ class InstitutionHandler(BaseHandler):
             }),
             "institution_key": institution_key
         }
-        enqueue_task('notify-followers', notification_params)                     
+        enqueue_task('notify-followers', notification_params)

@@ -40,8 +40,8 @@
                 </b>
               </div>
               <div>
-                <md-button class="sm-icon-button xs-icon-button" aria-label="Reply" ng-click="showReply = !showReply" title="Responder"
-                  title="Comentar" ng-disabled="commentCtrl.showReplies()" md-colors="{background: 'light-green'}">
+                <md-button class="sm-icon-button xs-icon-button" aria-label="Reply" ng-click="commentCtrl.toggleReplies()" title="Responder"
+                  title="Comentar" ng-disabled="commentCtrl.hideReplies()" md-colors="{background: 'light-green'}">
                   <md-icon>reply</md-icon>
                 </md-button>
                 <b style="font-size: 12px; margin-left: -8px;">
@@ -57,8 +57,8 @@
         </div>
       </md-list-item>
       <!-- Replies -->
-      <md-list-item class="md-3-line" style="margin-left: 70px; padding-bottom: 18px; border-left: 2px solid #8BC34A;" ng-if="showReply"
-          ng-repeat="reply in commentCtrl.getReplies() | orderBy:'publication_date'" id="{{reply.id}}">
+      <md-list-item class="md-3-line" style="margin-left: 70px; padding-bottom: 18px; border-left: 2px solid #8BC34A;"
+        ng-show="commentCtrl.showReplies" ng-repeat="reply in commentCtrl.getReplies() | orderBy:'publication_date'" id="{{reply.id}}">
         <img ng-src="{{reply.author_img}}" class="user-picture" width="40px" height="40px"
           alt="{{reply.author_name}}" />
         <div class="md-list-item-text" layout="column" style="margin-left: 8px;">

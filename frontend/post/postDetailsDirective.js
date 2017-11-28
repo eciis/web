@@ -88,6 +88,11 @@
                 !postDetailsCtrl.isDeleted(postDetailsCtrl.post.shared_event);
         };
 
+        postDetailsCtrl.showSharedSurvey = function showSharedSurvey() {
+            return postDetailsCtrl.post.shared_survey &&
+                !postDetailsCtrl.isDeleted(postDetailsCtrl.post);
+        };
+
         postDetailsCtrl.showSurvey = function showSurvey() {
             return postDetailsCtrl.post.type_survey;
         };
@@ -116,7 +121,7 @@
         };
 
         postDetailsCtrl.canShare = function(){
-            return !postDetailsCtrl.showSurvey() && !postDetailsCtrl.isDeleted(postDetailsCtrl.post) &&
+            return !postDetailsCtrl.isDeleted(postDetailsCtrl.post) &&
                  !postDetailsCtrl.isInstInactive();
         };
 
@@ -220,6 +225,8 @@
                 return post.shared_post;
             } else if(post.shared_event){
                 return post.shared_event;
+            } else if(post.shared_survey){
+                return post.shared_survey;
             }
             return post;
         }
@@ -708,6 +715,8 @@
             return postObj.getVideoUrl();
         };
 
+
+
         shareCtrl.share = function share() {
             makePost(shareCtrl.post);
             PostService.createPost(shareCtrl.newPost).then(function success(response) {
@@ -744,6 +753,8 @@
         function makePost(post){
             if(shareCtrl.isEvent()){
                 shareCtrl.newPost.shared_event = post.key;
+            } else if(shareCtrl.isSurvey()) {
+                shareCtrl.newPost.shared_survey = post.key;
             } else {
                 shareCtrl.newPost.shared_post = post.key;
             }

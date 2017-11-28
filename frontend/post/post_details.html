@@ -71,6 +71,21 @@
   <!-- SURVEY -->
   <survey-details ng-if="postDetailsCtrl.showSurvey()" post="postDetailsCtrl.post" posts="posts" user="postDetailsCtrl.user"></survey-details>
 
+  <!-- SHARED SURVEY -->
+  <md-card md-colors="{background: 'default-grey-100'}" ng-if="postDetailsCtrl.showSharedSurvey()">
+    <md-card-header>
+      <md-card-avatar>
+        <img ng-src="{{ postDetailsCtrl.post.shared_post.institution_image }}" class="md-card-image"/>
+      </md-card-avatar>
+      <md-card-header-text>
+        <a href class="md-title hyperlink" ng-click="postDetailsCtrl.goToInstitution(postDetailsCtrl.post.shared_post.institution_key)">
+          {{ postDetailsCtrl.post.shared_post.institution_name }}</a>
+        <span class="md-subhead">por {{ postDetailsCtrl.post.shared_post.author }}</span>
+      </md-card-header-text>
+    </md-card-header>
+    <survey-details post="postDetailsCtrl.post.shared_survey" posts="posts" user="postDetailsCtrl.user"></survey-details>
+  </md-card>
+
   <!-- BODY SHARED EVENT -->
   <div md-colors="{background: 'teal-500'}" ng-if="postDetailsCtrl.isDeletedEvent(postDetailsCtrl.post) && !postDetailsCtrl.isDeleted(postDetailsCtrl.post)"
     style='margin: 0 9px 0 9px; height: 130px' layout-gt-xs="row" layout-xs="column" layout-align="center center">
@@ -210,7 +225,7 @@
   <md-divider></md-divider>
 
   <!-- BUTTONS -->
-  <md-card-actions style="margin-top: 20px;">
+  <md-card-actions style="margin-top: 20px;" ng-if="!postDetailsCtrl.showSurvey()">
     <div layout="row" layout-align="start center">
       <div ng-if="postDetailsCtrl.showButtonDelete() && !postDetailsCtrl.isInstInactive()">
         <md-button md-colors="{background: 'light-green'}" class="sm-icon-button" arial-label="Delete"

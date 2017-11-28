@@ -70,15 +70,27 @@
         <div layout="row">
             <md-input-container class="md-block" flex-gt-xs>
                 <label>País</label>
-                <input type="text" name="country" disabled required
-                    ng-model="configInstCtrl.address.country">
+                <md-select name="country" ng-model="configInstCtrl.address.country" required 
+                    ng-change="configInstCtrl.setAnotherCountry()">
+                    <md-option ng-repeat="country in configInstCtrl.countries" ng-value="country.nome_pais">
+                        {{country.nome_pais}}
+                    </md-option>
+                </md-select>
                 <div ng-messages='instForm.country.$error'>
                     <div ng-message="required">Este campo é obrigatório!</div>
                 </div>
             </md-input-container>
-            <md-input-container class="md-block" flex-gt-xs flex="15">
+            <md-input-container class="md-block" flex-gt-xs ng-if="configInstCtrl.isAnotherCountry">
                 <label>Estado</label>
-                <md-select name="state" ng-model="configInstCtrl.selectedState" required ng-change="configInstCtrl.getCitiesByState()">
+                <input type="text" name="state" required ng-model="configInstCtrl.address.state">
+                <div ng-messages='instForm.state.$error'>
+                    <div ng-message="required">Este campo é obrigatório!</div>
+                </div>
+            </md-input-container>
+            <md-input-container class="md-block" flex-gt-xs ng-if="!configInstCtrl.isAnotherCountry">
+                <label>Estado</label>
+                <md-select name="state" ng-model="configInstCtrl.selectedState" required
+                    ng-change="configInstCtrl.getCitiesByState()">
                     <md-option ng-repeat="state in configInstCtrl.states" ng-value="state">
                         {{state.sigla}}
                     </md-option>
@@ -87,7 +99,14 @@
                     <div ng-message="required">Este campo é obrigatório!</div>
                 </div>
             </md-input-container>
-            <md-input-container class="md-block" flex-gt-xs flex="20">
+            <md-input-container class="md-block" flex-gt-xs ng-if="configInstCtrl.isAnotherCountry">
+                <label>Cidade</label>
+                <input type="text" name="city" required ng-model="configInstCtrl.address.city">
+                <div ng-messages='instForm.city.$error'>
+                    <div ng-message="required">Este campo é obrigatório!</div>
+                </div>
+            </md-input-container>
+            <md-input-container class="md-block" flex-gt-xs ng-if="!configInstCtrl.isAnotherCountry">
                 <label>Cidade</label>
                 <md-select name="city" ng-model="configInstCtrl.address.city" required
                     ng-disabled="!configInstCtrl.selectedState">
@@ -97,6 +116,12 @@
                 </md-select>
                 <div ng-messages='instForm.city.$error'>
                     <div ng-message="required">Este campo é obrigatório!</div>
+                </div>
+                <div ng-messages>
+                    <div ng-show="instForm.state.$pristine && !configInstCtrl.isAnotherCountry" 
+                        style="opacity: 0.9; margin-top: 2px; font-size: 0.8em;">
+                        Primeiro selecione um estado
+                    </div>
                 </div>
             </md-input-container>
             <md-input-container class="md-block" flex-gt-xs>

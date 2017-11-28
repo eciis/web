@@ -54,16 +54,14 @@
         }
 
         configInstCtrl.setAnotherCountry = function isAnotherCountry() {
-            clearAddressFields();
+            clearSelectedState();
             configInstCtrl.isAnotherCountry = configInstCtrl.address.country !== "Brasil";
         };
 
-        function clearAddressFields() {
-            configInstCtrl.address.state = "";
-            configInstCtrl.address.city = "";
+        function clearSelectedState() {
             configInstCtrl.selectedState = "";
         }
-        
+
         configInstCtrl.addImage = function addImage(image) {
             var newSize = 800;
             var promise = ImageService.compress(image, newSize);

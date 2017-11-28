@@ -58,7 +58,7 @@
                   <a href class="hyperlink sm-text" ng-click="homeCtrl.goToEvent(event)">
                     {{ event.title | limitTo: 80 }}{{ event.title.length > 80 ? '...' : ''}}
                   </a>
-                  <span class="event-author">por {{ event.institution_name }}</span>
+                  <span class="event-author">por {{ event.institution_acronym? event.institution_acronym: event.institution_name }}</span>
                 </div>
               </div>
               <md-card-actions layout="row" layout-align="center" ng-if="!homeCtrl.isEventsEmpty()">

@@ -34,6 +34,9 @@ class Event(ndb.Model):
     # Name of Institution
     institution_name = ndb.StringProperty(required=True)
 
+    # Institution's acronym
+    institution_acronym = ndb.StringProperty()
+
     # User who modified the event
     last_modified_by = ndb.KeyProperty(kind="User")
 
@@ -81,6 +84,7 @@ class Event(ndb.Model):
         event.author_name = author.name
         event.institution_key = institution.key
         event.institution_name = institution.name
+        event.institution_acronym = institution.acronym
         event.institution_image = institution.photo_url
         event.last_modified_by = author.key
         event.last_modified_by_name = author.name
@@ -116,7 +120,8 @@ class Event(ndb.Model):
             'photo_url': event.photo_url,
             'author_key': event.author_key.urlsafe(),
             'institution_key': event.institution_key.urlsafe(),
-            'key': event.key.urlsafe()
+            'key': event.key.urlsafe(),
+            'institution_acronym': event.institution_acronym
         }
 
     def __setattr__(self, attr, value):

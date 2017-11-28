@@ -24,6 +24,7 @@
         removeChildCtrl.removeChildInst = function removeChildInst() {
             InstitutionService.removeInstitution(child.key, removeHierarchy, removeChildCtrl.justification).then(
                 function success() {
+                    removeChildCtrl.user.removeProfile(child.key, removeHierarchy);
                     removeChildCtrl.user.removeInstitution(child.key, removeHierarchy);
                     AuthService.save();
                     removeChildFromParent();

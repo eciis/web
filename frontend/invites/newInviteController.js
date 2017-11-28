@@ -25,7 +25,7 @@
                     newInviteCtrl.addInstitution(event);
                 }
             } else {
-                newInviteCtrl.updateStubInstitution();
+                newInviteCtrl.goToInstForm();
             }
         };
 
@@ -45,7 +45,6 @@
 
         newInviteCtrl.addInstitution =  function addInstitution(event) {
             var patch = newInviteCtrl.saveInstProfile();
-            newInviteCtrl.user.addInstitution(newInviteCtrl.institution.key);
 
             var promise = InviteService.acceptInvite(patch, newInviteCtrl.inviteKey);
                 promise.then(function success(userSaved) {
@@ -64,44 +63,13 @@
             return promise;
         };
 
-        newInviteCtrl.updateStubInstitution =function updateStubInstitution() {
-            var dataProfile = {
-                sender_name : getCurrentName()
-            };
-            var promise = InstitutionService.save(dataProfile, institutionKey, newInviteCtrl.inviteKey);
-            promise.then(
-                function success(institutionSaved){
-                    MessageService.showToast('Cadastro de instituição realizado com sucesso');
-                    newInviteCtrl.user.removeInvite(newInviteCtrl.inviteKey);
-                    newInviteCtrl.user.institutions.push(institutionSaved);
-                    newInviteCtrl.user.institutions_admin.push(institutionSaved.key);
-                    newInviteCtrl.user.follow(institutionSaved);
-                    newInviteCtrl.user.addProfile(createProfile(institutionSaved));
-                    newInviteCtrl.user.changeInstitution(institutionSaved);
-                    newInviteCtrl.user.state = 'active';
-                    newInviteCtrl.user.name = getCurrentName();
-                    AuthService.save();
-                    $state.go('create_institution_form', {institutionKey: institutionSaved.key});
-                },
-                function error(response) {
-                    MessageService.showToast(response.data.msg);
+        newInviteCtrl.goToInstForm =function goToInstForm() {
+            $state.go('create_institution_form', {
+                senderName: getCurrentName(),
+                institutionKey: institutionKey,
+                inviteKey: newInviteCtrl.inviteKey
             });
-            return promise;
         };
-
-        function createProfile(new_institution) {
-            return {
-                email: null,
-                institution_key: new_institution.key,
-                institution: {
-                    name: new_institution.name,
-                    photo_url: new_institution.photo_url,
-                },
-                office: 'Administrador',
-                phone: null,
-                color: 'grey'
-            };
-        }
 
         newInviteCtrl.isInviteUser = function isInviteUser(){
             return newInviteCtrl.invite && newInviteCtrl.invite.type_of_invite === "USER";

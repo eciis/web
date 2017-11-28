@@ -103,9 +103,9 @@
             return deferred.promise;
         };
 
-        service.save = function save(data_profile, institutionKey, inviteKey) {
+        service.save = function save(body, institutionKey, inviteKey) {
             var deffered = $q.defer();
-            $http.post(INSTITUTIONS_URI + "/" + institutionKey + "/invites/" + inviteKey, data_profile).then(function success(info) {
+            $http.post(INSTITUTIONS_URI + "/" + institutionKey + "/invites/" + inviteKey, body).then(function success(info) {
                 deffered.resolve(info.data);
             }, function error(data) {
                 deffered.reject(data);

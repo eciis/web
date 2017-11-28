@@ -52,8 +52,8 @@ User.prototype.isMember = function isMember(institutionKey){
     return _.includes(_.map(this.institutions, getKeyObj), institutionKey);
 };
 
-User.prototype.addInstitution = function addInstitution(institutionKey){
-    this.institutions.push(institutionKey);
+User.prototype.addInstitution = function addInstitution(institution) {
+    this.institutions.push(institution);
 };
 
 

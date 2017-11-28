@@ -1,14 +1,14 @@
 <div ng-if="pdfCtrl.showFiles()" ng-repeat="pdf in pdfCtrl.pdfFiles" layout-padding>
   <div layout="row" class="clickable" ng-click="pdfCtrl.pdfDialog($event, pdf)">
-    <div layout="column"  flex="10" md-colors="{background: 'default-light-green'}" layout-align="center">
+    <div layout="column"  flex="10" md-colors="{background: 'default-light-green'}" layout-align="center" flex-xs="25">
       <md-icon class="lg-icon lg-width-height" layout-padding>
         picture_as_pdf
       </md-icon> 
     </div>
-    <div layout="column" layout-padding  flex="80" md-colors="{background: 'default-teal'}" layout-align="center">
+    <div layout="column" layout-padding  flex="80" md-colors="{background: 'default-teal'}" layout-align="center" flex-xs="55">
       {{pdf.name}}
     </div>  
-    <div layout="column" layout-padding  flex="10" md-colors="{background: 'default-teal'}" layout-align="end start">
+    <div layout="column" layout-padding  flex="10" md-colors="{background: 'default-teal'}" layout-align="end start" flex-xs="20">
       <md-icon ng-if="pdfCtrl.isEditing" ng-click="pdfCtrl.hideFile($index)" style="color:white;font:bold;" title="Remover" layout-padding>
         close
       </md-icon> 

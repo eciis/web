@@ -118,7 +118,7 @@
                     <div ng-message="required">Este campo é obrigatório!</div>
                 </div>
                 <div ng-messages>
-                    <div ng-show="instForm.state.$pristine && !configInstCtrl.isAnotherCountry" 
+                    <div ng-show="!configInstCtrl.selectedState && !configInstCtrl.isAnotherCountry" 
                         style="opacity: 0.9; margin-top: 2px; font-size: 0.8em;">
                         Primeiro selecione um estado
                     </div>

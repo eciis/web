@@ -20,7 +20,7 @@
             email: configInstCtrl.user.email[0]
         };
         configInstCtrl.steps = [true, false, false];
-        configInstCtrl.isAnotherCountry = true;
+        
 
         getLegalNatures();
         getActuationAreas();
@@ -35,22 +35,31 @@
             configInstCtrl.address.state = configInstCtrl.selectedState && configInstCtrl.selectedState.nome;
         }
 
-        function loadStateAndCity() {
-            configInstCtrl.states = brCidadesEstados.estados;
-            var stateName = configInstCtrl.address.state;
-            var stateIndex = configInstCtrl.states.findIndex((state) => {
-                return state.nome === stateName;
-            });
-            if(stateIndex >= 0) {
-                configInstCtrl.selectedState = configInstCtrl.states[stateIndex];
-                configInstCtrl.getCitiesByState();
-            }
-        }
-
         function loadAddress() {
             configInstCtrl.newInstitution.address = configInstCtrl.newInstitution.address || {};
             configInstCtrl.address = configInstCtrl.newInstitution.address;
+            loadCountry();
             loadStateAndCity();
+        }
+
+        function loadStateAndCity() {
+            configInstCtrl.states = brCidadesEstados.estados;
+            var isANewInstitution = institutionKey == undefined;
+            if(!isANewInstitution) {
+                var stateName = configInstCtrl.address.state;
+                var stateIndex = configInstCtrl.states.findIndex((state) => {
+                    return state.nome === stateName;
+                });
+                if(stateIndex >= 0) {
+                    configInstCtrl.selectedState = configInstCtrl.states[stateIndex];
+                    configInstCtrl.getCitiesByState();
+                }
+            }
+        }        
+        
+        function loadCountry() {
+            configInstCtrl.address.country = configInstCtrl.address.country || "Brasil";
+            configInstCtrl.isAnotherCountry = configInstCtrl.address.country !== "Brasil";
         }
 
         configInstCtrl.setAnotherCountry = function isAnotherCountry() {

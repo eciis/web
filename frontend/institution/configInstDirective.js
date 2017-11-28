@@ -20,6 +20,8 @@
         };
         configInstCtrl.steps = [true, false, false];
 
+        configInstCtrl.title = "Descrever neste campo as áreas de atuação da sua instituição considerando a missão e objetivos, os principais produtos e/ou serviços, as interfaces com os demais atores e as articulações institucionais no âmbito do CIS(utilize palavras de destaque que possam ser utilizadas como palavras-chave na pesquisa avançada do e-CIS)";
+
         getLegalNatures();
         getActuationAreas();
 
@@ -250,11 +252,13 @@
                 0: {fields: [configInstCtrl.newInstitution.address], size: 7},
                 1: {fields: [
                     configInstCtrl.newInstitution.name,
-                    configInstCtrl.newInstitution.acronym,
                     configInstCtrl.newInstitution.actuation_area,
                     configInstCtrl.newInstitution.legal_nature
                     ]},
-                2: {fields: [configInstCtrl.newInstitution.leader]}
+                2: {fields: [
+                    configInstCtrl.newInstitution.leader,
+                    configInstCtrl.newInstitution.description
+                    ]}
             };
             return necessaryFieldsForStep;
         }

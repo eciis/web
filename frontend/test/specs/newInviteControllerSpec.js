@@ -157,75 +157,11 @@
             });
         });
 
-        describe('updateStubInstitution()', function() {
-
-            var promise;
-
-            beforeEach(function() {
-
-                spyOn(authService, 'save').and.callFake(function() {
-                    return {
-                        then: function(callback) {
-                            return callback();
-                        }
-                    };
-                });
-                spyOn(institutionService, 'save').and.callFake(function() {
-                    return {
-                        then: function(callback) {
-                            return callback(newInviteCtrl.user.current_institution = {
-                                            name: 'otherInstitution',
-                                            key: '123456789',
-                                            sent_invitations: [invite]
-                            });
-                        }
-                    };
-                });
-                spyOn(newInviteCtrl.user, 'addProfile');
+        describe('goToInstForm()', function() {
+            it('should call $state.go()', function() {
                 spyOn(state, 'go');
-                promise = newInviteCtrl.updateStubInstitution();
-            });
-
-            it('user institutions should be contain otherInstitution after acceptInvite', function(done) {
-                promise.then(function() {
-                    expect(newInviteCtrl.user.institutions).toContain(otherInstitution);
-                    done();
-                });
-            });
-
-            it('user should active', function(done) {
-                promise.then(function() {
-                    expect(newInviteCtrl.user.state).toEqual("active");
-                    done();
-                });
-            });
-
-            it('current institution of user should be otherInstitution', function(done) {
-                promise.then(function() {
-                    expect(newInviteCtrl.user.current_institution.name).toEqual(otherInstitution.name);
-                    done();
-                });
-            });
-
-            it('should call addProfile()', function(done) {
-                promise.then(function() {
-                    expect(newInviteCtrl.user.addProfile).toHaveBeenCalled();
-                    done();
-                });
-            });
-
-            it('should call authService.reload()', function(done) {
-                promise.then(function() {
-                    expect(authService.save).toHaveBeenCalled();
-                    done();
-                });
-            });
-
-            it('should call $state.go()', function(done) {
-                promise.then(function() {
-                    expect(state.go).toHaveBeenCalledWith('create_institution_form', {institutionKey: otherInstitution.key});
-                    done();
-                });
+                newInviteCtrl.goToInstForm();
+                expect(state.go).toHaveBeenCalled();
             });
         });
 

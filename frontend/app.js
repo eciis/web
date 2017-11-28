@@ -205,7 +205,9 @@
                     }
                 },
                 params: {
-                    institutionKey: undefined
+                    senderName: undefined,
+                    institutionKey: undefined,
+                    inviteKey: undefined
                 }
             })
             .state("user_inactive", {
@@ -255,7 +257,7 @@
         };
 
         moment.updateLocale('pt-br', dateFormats);
-        
+
         ScrollBarsProvider.defaults = {
             scrollButtons: {
                 scrollAmount: 'auto', // scroll amount when button pressed
@@ -288,7 +290,7 @@
                     if (AuthService.isLoggedIn()) {
                         AuthService.logout();
                         rejection.data.msg = "Sua sessão expirou!";
-                    } else { 
+                    } else {
                         $state.go("signin");
                     }
                 } else if(rejection.status === 403) {
@@ -315,7 +317,7 @@
             });
         });
     });
-    
+
     /**
      * Application listener to filter routes that require active user and set up amCalendar filter configurations.
      * @param {service} AuthService - Service of user authentication
@@ -324,6 +326,7 @@
     app.run(function userInactiveListener(AuthService, $transitions) {
         var ignored_routes = [
             'create_institution',
+            'create_institution_form',
             'error',
             'signin',
             'user_inactive',
@@ -341,7 +344,7 @@
             transition.router.stateService.transitionTo('user_inactive');
         });
     });
-        
+
     app.run(function inviteInterceptor(AuthService, $transitions, $state) {
         var ignored_routes = [
             'create_institution_form'
@@ -359,7 +362,7 @@
         }, function(transition) {
             var pendingInvite = AuthService.getCurrentUser().getPendingInvitation();
             var inviteKey = pendingInvite.key;
-            $state.go("new_invite", {key: inviteKey});        
+            $state.go("new_invite", {key: inviteKey});
         });
     });
 })();

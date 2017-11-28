@@ -19,7 +19,7 @@ describe('Test ConfigInstDirective', function() {
             name: "name",
             photo_url: "",
             email: "email",
-            state: "active",
+            state: "pending",
             key: "inst-key",
             acronym: "INST",
             legal_nature: "public",
@@ -52,20 +52,25 @@ describe('Test ConfigInstDirective', function() {
         {"value":"colleges", "name":"Universidades"},
         {"value":"other", "name":"Outra"}
     ];
+
+    var invite = {'invitee': 'user@email.com',
+            'suggestion_institution_name': "Suggested Name",
+            'type_of_invite': "institution",
+            'status': 'sent',
+            key: 'invite-key'
+    };
+
     var userData = {
         name: 'name',
         key: 'user-key',
         current_institution: {key: "institutuion_key"},
         institutions: institutions,
+        institutions_admin: [],
+        follows: institutions,
+        institution_profiles: [],
         email: ['test@test.com'],
-        invites: [{
-            'invitee': 'user@email.com',
-            'suggestion_institution_name': "Suggested Name",
-            'type_of_invite': "institution",
-            'status': 'sent'
-        }]
+        invites: [invite]
     };
-
 
     beforeEach(module('app'));
 
@@ -93,7 +98,7 @@ describe('Test ConfigInstDirective', function() {
         http = $http;
 
         authService.login(userData);
-
+        state.params.institutionKey = institution.key;
         createCtrl = function() {
             return $controller('ConfigInstController', {
                     scope: scope,
@@ -102,7 +107,7 @@ describe('Test ConfigInstDirective', function() {
                     imageService: imageService
                 });
         };
-        state.params.institutionKey = institution.key;
+
         editInstCtrl = createCtrl();
         httpBackend.flush();
     }));
@@ -170,12 +175,29 @@ describe('Test ConfigInstDirective', function() {
                 };
             });
             spyOn(institutionService, 'update').and.returnValue(deferred.promise);
-            spyOn(editInstCtrl.user, 'updateInstitutions');
+            spyOn(editInstCtrl.user, 'updateInstitutions').and.callThrough();
             spyOn(authService, 'save');
+            spyOn(institutionService, 'save').and.returnValue(deferred.promise);
             spyOn(state, 'go');
-
             editInstCtrl.photo_instituicao = 'base64Test';
             promise = editInstCtrl.submit('$event');
+        });
+
+        it('should update the user', function(done) {
+            state.params.inviteKey = invite.key;
+            promise.then(function() {
+                deferred.resolve(institution);
+                scope.$apply();
+                expect(institutionService.update).toHaveBeenCalled();
+                expect(institutionService.save).toHaveBeenCalled();
+                expect(editInstCtrl.user.updateInstitutions).toHaveBeenCalled();
+                expect(authService.save).toHaveBeenCalled();
+                expect(editInstCtrl.user.institutions).toContain(institution);
+                expect(editInstCtrl.user.invites).toEqual([]);
+                expect(editInstCtrl.user.institutions_admin).toContain(institution.key);
+                expect(editInstCtrl.user.follows).toContain(institution);
+                done();
+            });
         });
 
         it('Should be call mdDialog.show', function(done) {

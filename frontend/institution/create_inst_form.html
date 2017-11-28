@@ -42,54 +42,81 @@
             <md-card layout-margin ng-if="configInstCtrl.getStep(1)">
                 <div layout="column" layout-margin>
                     <md-card-content layout-margin>
-                        <form>
+                        <form name="createInst">
+                            <div layout="row" layout-margin>
+                                <md-input-container  flex-gt-sm flex-sm>
+                                    <label>País</label>
+                                    <md-select name="country" ng-model="configInstCtrl.address.country" required 
+                                        ng-change="configInstCtrl.setAnotherCountry()">
+                                        <md-option ng-repeat="country in configInstCtrl.countries" ng-value="country.nome_pais">
+                                            {{country.nome_pais}}
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
+                                <span flex="3"></span>
+                                <md-input-container flex-gt-sm flex-sm ng-if="configInstCtrl.isAnotherCountry">
+                                    <label>Estado</label>
+                                    <input type="text" name="state" required ng-model="configInstCtrl.address.state">
+                                </md-input-container>
+                                <md-input-container flex-gt-sm flex-sm ng-if="!configInstCtrl.isAnotherCountry">
+                                    <label>Estado</label>
+                                    <md-select name="state" ng-model="configInstCtrl.selectedState" required 
+                                        ng-change="configInstCtrl.getCitiesByState()">
+                                        <md-option ng-repeat="state in configInstCtrl.states" ng-value="state">
+                                            {{state.sigla}}
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
+                            </div>
+                            <div layout="row" layout-margin>
+                                <md-input-container  flex-gt-sm flex-sm ng-if="configInstCtrl.isAnotherCountry">
+                                    <label>Cidade</label>
+                                    <input type="text" name="city" required 
+                                        ng-model="configInstCtrl.address.city">
+                                </md-input-container>
+                                <md-input-container  flex-gt-sm flex-sm ng-if="!configInstCtrl.isAnotherCountry">
+                                    <label>Cidade</label>
+                                    <md-select name="city" ng-model="configInstCtrl.address.city" required
+                                        ng-disabled="!configInstCtrl.selectedState">
+                                        <md-option ng-repeat="city in configInstCtrl.cities" ng-value="city">
+                                            {{city}}
+                                        </md-option>
+                                    </md-select>
+                                    <div ng-messages>
+                                        <div ng-show="createInst.state.$pristine && !configInstCtrl.isAnotherCountry" 
+                                            style="opacity: 0.9; margin-top: 2px; font-size: 0.8em;">
+                                            Primeiro selecione um estado
+                                        </div>
+                                    </div>
+                                </md-input-container>
+                                <span flex="3"></span>
+                                <md-input-container  flex-gt-sm flex-sm layout="row">
+                                    <label>Bairro</label>
+                                    <input type="text" name="neighbourhood" required
+                                        ng-model="configInstCtrl.address.neighbourhood">
+                                </md-input-container>
+                            </div>
+                            <div layout="row" layout-margin>
+                                <md-input-container  flex-gt-sm flex-sm layout="row">
+                                    <label>Número</label>
+                                    <input type="text" name="number" required
+                                        ng-model="configInstCtrl.address.number">
+                                </md-input-container>
+                                <span flex="3"></span>
+                                <md-input-container  flex-gt-sm flex-sm layout="row">
+                                    <label>CEP</label>
+                                    <input type="text" name="cep" required
+                                        ng-model="configInstCtrl.address.cep"
+                                        placeholder="00000-000"
+                                        ng-pattern="configInstCtrl.cepRegex"
+                                        mask="99999-999">
+                                </md-input-container>
+                            </div>
                             <div layout-margin>
                                 <md-input-container  flex-gt-sm layout="row">
-                                  <label>Rua</label>
-                                  <input type="text" name="street" required
-                                    ng-model="configInstCtrl.newInstitution.address.street">
-                                </md-input-container>
-                            </div>
-                            <div layout="row" layout-margin>
-                                <md-input-container  flex-gt-sm flex-sm layout="row">
-                                  <label>Número</label>
-                                  <input type="text" name="number" required
-                                    ng-model="configInstCtrl.newInstitution.address.number">
-                                </md-input-container>
-                                <span flex="3"></span>
-                                <md-input-container  flex-gt-sm flex-sm layout="row">
-                                  <label>CEP</label>
-                                  <input type="text" name="cep" required
-                                    ng-model="configInstCtrl.newInstitution.address.cep"
-                                    placeholder="00000-000"
-                                    ng-pattern="configInstCtrl.cepRegex"
-                                    mask="99999-999">
-                                </md-input-container>
-                            </div>
-                            <div layout="row" layout-margin>
-                                <md-input-container  flex-gt-sm flex-sm layout="row">
-                                  <label>Bairro</label>
-                                  <input type="text" name="neighbourhood" required
-                                    ng-model="configInstCtrl.newInstitution.address.neighbourhood">
-                                </md-input-container>
-                                <span flex="3"></span>
-                                <md-input-container  flex-gt-sm flex-sm layout="row">
-                                  <label>Cidade</label>
-                                  <input type="text" name="city" required
-                                    ng-model="configInstCtrl.newInstitution.address.city">
-                                </md-input-container>
-                            </div>
-                            <div layout="row" layout-margin>
-                                <md-input-container  flex-gt-sm flex-sm layout="row">
-                                  <label>Estado</label>
-                                  <input type="text" name="state" required
-                                    ng-model="configInstCtrl.newInstitution.address.state">
-                                </md-input-container>
-                                <span flex="3"></span>
-                                <md-input-container  flex-gt-sm flex-sm layout="row">
-                                  <label>País</label>
-                                  <input type="text" name="country" required
-                                    ng-model="configInstCtrl.newInstitution.address.country">
+                                    <label>Rua</label>
+                                    <input type="text" name="street" required
+                                    ng-model="configInstCtrl.address.street">
                                 </md-input-container>
                             </div>
                         </form>

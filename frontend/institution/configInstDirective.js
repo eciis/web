@@ -20,9 +20,11 @@
             email: configInstCtrl.user.email[0]
         };
         configInstCtrl.steps = [true, false, false];
+        configInstCtrl.isAnotherCountry = true;
 
         getLegalNatures();
         getActuationAreas();
+        getCountries();
 
         configInstCtrl.getCitiesByState = function getCitiesByState() {
             configInstCtrl.cities = brCidadesEstados.buscarCidadesPorSigla(configInstCtrl.selectedState.sigla);
@@ -45,6 +47,23 @@
             }
         }
 
+        function loadAddress() {
+            configInstCtrl.newInstitution.address = configInstCtrl.newInstitution.address || {};
+            configInstCtrl.address = configInstCtrl.newInstitution.address;
+            loadStateAndCity();
+        }
+
+        configInstCtrl.setAnotherCountry = function isAnotherCountry() {
+            clearAddressFields();
+            configInstCtrl.isAnotherCountry = configInstCtrl.address.country !== "Brasil";
+        };
+
+        function clearAddressFields() {
+            configInstCtrl.address.state = "";
+            configInstCtrl.address.city = "";
+            configInstCtrl.selectedState = "";
+        }
+        
         configInstCtrl.addImage = function addImage(image) {
             var newSize = 800;
             var promise = ImageService.compress(image, newSize);
@@ -258,13 +277,18 @@
             });
         }
 
+        function getCountries() {
+            $http.get('app/institution/countries.json').then(function success(response) {
+                configInstCtrl.countries = response.data;
+            });
+        }
+
         function loadInstitution() {
             InstitutionService.getInstitution(institutionKey).then(function success(response) {
                 configInstCtrl.newInstitution = response.data;
                 configInstCtrl.suggestedName = configInstCtrl.newInstitution.name;
-                configInstCtrl.address = configInstCtrl.newInstitution.address;
-                loadStateAndCity();
                 currentPortfoliourl = configInstCtrl.newInstitution.portfolio_url;
+                loadAddress();
                 observer = jsonpatch.observe(configInstCtrl.newInstitution);
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
@@ -274,6 +298,8 @@
         (function main(){
             if (institutionKey) {
                 loadInstitution();
+            } else {
+                loadAddress();
             }
         })();
     });

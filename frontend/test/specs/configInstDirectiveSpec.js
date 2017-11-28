@@ -172,7 +172,6 @@ describe('Test ConfigInstDirective', function() {
             spyOn(state, 'go');
             editInstCtrl.photo_instituicao = 'base64Test';
             promise = editInstCtrl.submit('$event');
-
         });
 
         it('should update the user', function(done) {

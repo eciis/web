@@ -46,7 +46,7 @@
 
         surveyCtrl.user = user;
         surveyCtrl.post = survey;
-        surveyCtrl.posts = [];
+        surveyCtrl.posts = [survey];
 
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);
@@ -68,13 +68,21 @@
                     }
                 };
             });
-            spyOn(surveyCtrl, 'voteService');
+            spyOn(surveyCtrl, 'voteService').and.callFake(function() {
+                return {
+                    then: function(callback) {
+                        return callback();
+                    }
+                }
+            });
         });
 
-        it('should called voteService', function() {
+        it('should called voteService', function(done) {
             surveyCtrl.binaryOptionSelected = options[0];
-            surveyCtrl.vote("$event");
-            expect(surveyCtrl.voteService).toHaveBeenCalled();
+            surveyCtrl.vote("$event").then(function() {
+                expect(surveyCtrl.voteService).toHaveBeenCalled();
+                done();
+            });
             scope.$apply();
         });
     });

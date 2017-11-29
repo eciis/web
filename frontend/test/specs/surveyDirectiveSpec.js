@@ -25,7 +25,8 @@
 
     var survey = { 'title' : 'The Survey',
                     'type_survey' : 'multiple_choice',
-                    'options' : options
+                    'deadline': new Date(),
+                    'options': options
                     };
 
     beforeEach(inject(function($controller, $httpBackend, $http, $q, $mdDialog,
@@ -49,6 +50,8 @@
 
         surveyCtrl.user = user;
         surveyCtrl.posts = [];
+        surveyCtrl.post = survey;
+        surveyCtrl.options = options;
 
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);

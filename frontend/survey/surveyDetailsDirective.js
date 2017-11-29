@@ -57,6 +57,7 @@
                 }, function() {
                     MessageService.showToast('Cancelado');
                 });
+                return dialog;
             } else {
                 MessageService.showToast('Você precisa escolher alguma alternativa');
             }         
@@ -74,7 +75,7 @@
             let shared_posts = surveyCtrl.posts.filter(post => post.shared_post);
             if(shared_posts) {
                 let shared_post = shared_posts.filter(post => post.shared_post.key === surveyCtrl.post.key);
-                if(shared_post) {
+                if(shared_post.length > 0) {
                     shared_post = shared_post.reduce(post => post);
                     shared_post.shared_post = surveyCtrl.post;
                     surveyCtrl.posts = surveyCtrl.posts.filter(post => post.key !== shared_post.key);
@@ -84,13 +85,13 @@
         }
 
         surveyCtrl.voteService = function(){
-            var promisse = SurveyService.vote(surveyCtrl.post, surveyCtrl.optionsSelected);
-            promisse.then(function sucess(){
+            var promise = SurveyService.vote(surveyCtrl.post, surveyCtrl.optionsSelected);
+            promise.then(function sucess(){
                 addVote(surveyCtrl.optionsSelected);
                 calculatePercentage();
                 MessageService.showToast('Voto computado');
             });
-            return promisse;          
+            return promise;
         };
 
         function loadBinarySelected(){

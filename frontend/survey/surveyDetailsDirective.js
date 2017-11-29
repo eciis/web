@@ -63,6 +63,10 @@
             }         
         };
 
+        function updateSharedPost(post, updatedPost) {
+            if(post.shared_post) post.shared_post = updatedPost;
+            return post;
+        }
         /**
         * Function to synchronize survey posts with shared posts
         * when the user vote in survey post that is shared or vote in shared post that is survey.
@@ -72,15 +76,12 @@
         function syncSharedPosts() {
             surveyCtrl.posts = surveyCtrl.posts.filter(post => post.key !== surveyCtrl.post.key);
             surveyCtrl.posts.push(surveyCtrl.post);
-            let shared_posts = surveyCtrl.posts.filter(post => post.shared_post);
-            if(shared_posts) {
-                let shared_post = shared_posts.filter(post => post.shared_post.key === surveyCtrl.post.key);
-                if(shared_post.length > 0) {
-                    shared_post = shared_post.reduce(post => post);
-                    shared_post.shared_post = surveyCtrl.post;
-                    surveyCtrl.posts = surveyCtrl.posts.filter(post => post.key !== shared_post.key);
-                    surveyCtrl.posts.push(shared_post);
-                }
+            let shared_posts = surveyCtrl.posts.filter(post => post.shared_post && post.shared_post.key === surveyCtrl.post.key);
+            if(shared_posts.length > 0) {
+                surveyCtrl.posts = surveyCtrl.posts
+                    .filter(post => !post.shared_post || post.shared_post && post.shared_post.key !== surveyCtrl.post.key);
+                shared_posts = shared_posts.map(post => updateSharedPost(post, surveyCtrl.post));
+                surveyCtrl.posts = surveyCtrl.posts.concat(shared_posts);
             }
         }
 

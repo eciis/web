@@ -46,7 +46,7 @@ class SearchInstitution(SearchDocument):
                     api.search.TextField(name='admin', value=content['admin']),
                     api.search.TextField(name='acronym', value=content['acronym']),
                     api.search.TextField(name='actuation_area',
-                                         value=content['actuation_area'])
+                                         value=content['actuation_area']),
                     api.search.TextField(name='legal_nature',
                                          value=content['legal_nature'])
                 ]

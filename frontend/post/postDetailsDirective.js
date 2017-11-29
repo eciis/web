@@ -88,11 +88,6 @@
                 !postDetailsCtrl.isDeleted(postDetailsCtrl.post.shared_event);
         };
 
-        postDetailsCtrl.showSharedSurvey = function showSharedSurvey() {
-            return postDetailsCtrl.post.shared_post.type_survey &&
-                !postDetailsCtrl.isDeleted(postDetailsCtrl.post);
-        };
-
         postDetailsCtrl.showSurvey = function showSurvey() {
             return postDetailsCtrl.post.type_survey;
         };

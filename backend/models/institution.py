@@ -201,6 +201,7 @@ class Institution(ndb.Model):
         institution_stub.name = invite.suggestion_institution_name
         institution_stub.email = invite.invitee
         institution_stub.state = 'pending'
+        institution_stub.address = Address()
 
         institution_stub.put()
 

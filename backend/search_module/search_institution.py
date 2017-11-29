@@ -33,7 +33,8 @@ class SearchInstitution(SearchDocument):
                 'admin': admin,
                 'acronym': institution.acronym,
                 'actuation_area': institution.actuation_area,
-                'legal_nature': institution.legal_nature
+                'legal_nature': institution.legal_nature,
+                'address_state': institution.address and institution.address.state
             }
             # Make the structure of the document by setting the fields and its id.
             document = api.search.Document(
@@ -48,7 +49,8 @@ class SearchInstitution(SearchDocument):
                     api.search.TextField(name='actuation_area',
                                          value=content['actuation_area']),
                     api.search.TextField(name='legal_nature',
-                                         value=content['legal_nature'])
+                                         value=content['legal_nature']),
+                    api.search.TextField(name='address_state', value=content['address_state'])
                 ]
             )
             self.saveDocument(document)
@@ -60,8 +62,8 @@ class SearchInstitution(SearchDocument):
         query_string = self.makeQueryStr(value, state)
         index = api.search.Index(self.index_name)
         query_options = api.search.QueryOptions(
-            returned_fields=['name', 'state',
-                             'admin', 'acronym', 'actuation_area', 'legal_nature']
+            returned_fields=['name', 'state', 'admin', 'acronym',
+                             'actuation_area', 'legal_nature', 'address_state']
         )
         query = api.search.Query(
             query_string=query_string, options=query_options)
@@ -75,6 +77,14 @@ class SearchInstitution(SearchDocument):
         value -- value to be searched
         state -- represents the current institution's state.
         """
+        state_string = self.create_state_string(state)
+        fields_values_string = self.create_field_values_string(value)
+
+        query_string = "(%s) AND %s" %(fields_values_string, state_string)
+        return query_string
+
+    def create_state_string(self, state):
+        """Create a string formed by state."""
         states = state.split(",")
         state_string = ""
         for i in xrange(0, len(states), 1):
@@ -82,4 +92,21 @@ class SearchInstitution(SearchDocument):
                 state_string += states[i]
             else:
                 state_string += " OR " + states[i]
-        return '(name: "%s" OR acronym: "%s" OR actuation_area: "%s" OR legal_nature: "%s") AND state: %s' % (value, value, value, value, state_string)
+
+        state_string = "state: %s" % state_string
+        return state_string
+    
+
+    def create_field_values_string(self, value):
+        """Create a string formed by fields and values."""
+        # add a new field here
+        fields = ['name', 'acronym', 'actuation_area', 'legal_nature', 'address_state']
+        fields_values = []
+
+        for field in fields:
+            field_value = "%s: %s" % (field, value)
+            fields_values.append(field_value)
+
+        fields_values_string = " OR ".join(fields_values)
+
+        return fields_values_string

@@ -37,12 +37,11 @@
         function loadAddress() {
             configInstCtrl.newInstitution.address = configInstCtrl.newInstitution.address || {};
             configInstCtrl.address = configInstCtrl.newInstitution.address;
-            console.log(configInstCtrl.address);
             loadCountry();
-            loadStateAndCity();
+            loadStateAndCities();
         }
 
-        function loadStateAndCity() {
+        function loadStateAndCities() {
             configInstCtrl.states = brCidadesEstados.estados;
             var isANewInstitution = institutionKey == undefined;
             if(!isANewInstitution) {

@@ -443,6 +443,12 @@ class ResetHandler(BaseHandler):
         admin.institutions_admin = [certbio.key, eciis.key, splab.key]
         admin.add_permission("analyze_request_inst", eciis.key.urlsafe())
         admin.add_permission("send_invite_inst", eciis.key.urlsafe())
+        admin.add_permission("remove_member", eciis.key.urlsafe())
+        admin.add_permission("remove_member", certbio.key.urlsafe())
+        admin.add_permission("remove_member", splab.key.urlsafe())
+        admin.add_permission("remove_link", eciis.key.urlsafe())
+        admin.add_permission("remove_link", certbio.key.urlsafe())
+        admin.add_permission("remove_link", splab.key.urlsafe())
         admin.put()
 
         # POST of Mayza To Certbio Institution

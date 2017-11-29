@@ -6,6 +6,7 @@ from google.appengine.ext import ndb
 from utils import Utils
 from utils import login_required
 from utils import json_response
+from utils import has_permission
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from custom_exceptions.entityException import EntityException
 
@@ -15,7 +16,6 @@ from service_messages import send_message_notification
 import json
 
 from handlers.base_handler import BaseHandler
-from handlers.institution_handler import is_admin
 
 
 class InstitutionHierarchyHandler(BaseHandler):
@@ -23,10 +23,10 @@ class InstitutionHierarchyHandler(BaseHandler):
 
     @json_response
     @login_required
-    @is_admin
+    @has_permission(permission_type='remove_link')
     @ndb.transactional(xg=True)
     def delete(self, user, institution_key, institution_link):
-        """Handle delete requests."""
+        """Handle delete link between institutions."""
         is_parent = self.request.get('isParent')
         institution = ndb.Key(urlsafe=institution_key).get()
         institution_link = ndb.Key(urlsafe=institution_link).get()

@@ -121,9 +121,9 @@ class InstitutionMemberHandlerTest(TestBaseHandler):
 
         exception_message = self.get_message_exception(ex.exception.message)
         self.assertEqual(
-            "Error! User is not admin",
+            "Error! User is not allowed to do this operation",
             exception_message,
-            "Expected error message is Error! User is not admin")
+            "Error! User is not allowed to do this operation")
 
         # Update the institutions
         self.institution = self.institution.key.get()
@@ -186,6 +186,8 @@ def initModels(cls):
     cls.user.institutions_admin = [cls.institution.key, cls.other_institution.key]
     cls.user.add_permission("publish_post", cls.institution.key.urlsafe())
     cls.user.add_permission("publish_post", cls.other_institution.key.urlsafe())
+    cls.user.add_permission("remove_member", cls.institution.key.urlsafe())
+    cls.user.add_permission("remove_member", cls.other_institution.key.urlsafe())
     cls.user.put()
     cls.second_user.institutions = [cls.institution.key]
     cls.second_user.add_permission(

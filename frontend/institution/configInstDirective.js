@@ -2,7 +2,8 @@
 (function() {
     var app = angular.module("app");
     app.controller("ConfigInstController", function ConfigInstController(AuthService, InstitutionService, CropImageService,$state,
-            $mdToast, $mdDialog, $http, InviteService, ImageService, $rootScope, MessageService, PdfService, $q, RequestInvitationService) {
+            $mdToast, $mdDialog, $http, InviteService, ImageService, $rootScope, MessageService, PdfService, $q, 
+            RequestInvitationService, brCidadesEstados) {
 
         var configInstCtrl = this;
         var institutionKey = $state.params.institutionKey;
@@ -22,6 +23,52 @@
 
         getLegalNatures();
         getActuationAreas();
+        getCountries();
+
+        configInstCtrl.getCitiesByState = function getCitiesByState() {
+            configInstCtrl.cities = brCidadesEstados.buscarCidadesPorSigla(configInstCtrl.selectedState.sigla);
+            updateAddressState();
+        };
+
+        function updateAddressState() {
+            configInstCtrl.address.state = configInstCtrl.selectedState && configInstCtrl.selectedState.nome;
+        }
+
+        function loadAddress() {
+            configInstCtrl.newInstitution.address = configInstCtrl.newInstitution.address || {};
+            configInstCtrl.address = configInstCtrl.newInstitution.address;
+            loadCountry();
+            loadStateAndCities();
+        }
+
+        function loadStateAndCities() {
+            configInstCtrl.states = brCidadesEstados.estados;
+            var isANewInstitution = institutionKey == undefined;
+            if(!isANewInstitution) {
+                var stateName = configInstCtrl.address.state;
+                var stateIndex = configInstCtrl.states.findIndex((state) => {
+                    return state.nome === stateName;
+                });
+                if(stateIndex >= 0) {
+                    configInstCtrl.selectedState = configInstCtrl.states[stateIndex];
+                    configInstCtrl.getCitiesByState();
+                }
+            }
+        }        
+        
+        function loadCountry() {
+            configInstCtrl.address.country = configInstCtrl.address.country || "Brasil";
+            configInstCtrl.isAnotherCountry = configInstCtrl.address.country !== "Brasil";
+        }
+
+        configInstCtrl.setAnotherCountry = function isAnotherCountry() {
+            clearSelectedState();
+            configInstCtrl.isAnotherCountry = configInstCtrl.address.country !== "Brasil";
+        };
+
+        function clearSelectedState() {
+            configInstCtrl.selectedState = "";
+        }
 
         configInstCtrl.addImage = function addImage(image) {
             var newSize = 800;
@@ -292,11 +339,18 @@
             });
         }
 
+        function getCountries() {
+            $http.get('app/institution/countries.json').then(function success(response) {
+                configInstCtrl.countries = response.data;
+            });
+        }
+
         function loadInstitution() {
             InstitutionService.getInstitution(institutionKey).then(function success(response) {
                 configInstCtrl.newInstitution = response.data;
                 configInstCtrl.suggestedName = configInstCtrl.newInstitution.name;
                 currentPortfoliourl = configInstCtrl.newInstitution.portfolio_url;
+                loadAddress();
                 observer = jsonpatch.observe(configInstCtrl.newInstitution);
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
@@ -306,6 +360,8 @@
         (function main(){
             if (institutionKey) {
                 loadInstitution();
+            } else {
+                loadAddress();
             }
         })();
     });

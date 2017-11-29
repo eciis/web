@@ -15,7 +15,8 @@
         'ngMessages',
         'angular-timeline',
         'ngMask',
-        'ngScrollbars'
+        'ngScrollbars',
+        'br.cidades.estados'
     ]);
 
     app.config(function($mdIconProvider, $mdThemingProvider, $stateProvider, $urlMatcherFactoryProvider,

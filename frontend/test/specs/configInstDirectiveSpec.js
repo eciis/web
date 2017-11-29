@@ -5,6 +5,16 @@ describe('Test ConfigInstDirective', function() {
     var mdToast, mdDialog, http, inviteService, httpBackend, imageService;
     var authService, createCtrl, pdfService, messageService;
 
+    var address = {
+        cep: "11111-000",
+        city: "city",
+        country: "Country",
+        neighbourhood: "neighbourhood",
+        number: "555",
+        state: "State",
+        street: "Street x"
+    };
+
     var institution = {
             name: "name",
             photo_url: "",
@@ -16,7 +26,7 @@ describe('Test ConfigInstDirective', function() {
             actuation_area: "government agencies",
             phone_number: "phone",
             cnpj: "cnpj",
-            address: "address",
+            address: address,
             leader: "leader name",
             institutional_email: "email@institutional.com"
     };
@@ -62,8 +72,6 @@ describe('Test ConfigInstDirective', function() {
         invites: [invite]
     };
 
-
-
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $httpBackend, $q, $state, $mdToast,
@@ -71,6 +79,7 @@ describe('Test ConfigInstDirective', function() {
         httpBackend = $httpBackend;
         httpBackend.expectGET('app/institution/legal_nature.json').respond(legal_nature);
         httpBackend.expectGET('app/institution/actuation_area.json').respond(actuation_area);
+        httpBackend.expectGET('app/institution/countries.json').respond({});
         httpBackend.expectGET('/api/institutions/' + institution.key).respond(institution);
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);

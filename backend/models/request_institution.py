@@ -15,8 +15,6 @@ class RequestInstitution(Request):
         sender = self.sender_key
         if not sender:
             raise FieldException("The request require sender_key")
-        # TODO: Check if sender is already invited
-        # Author: Tiago Pereira
 
     @staticmethod
     def create(data):

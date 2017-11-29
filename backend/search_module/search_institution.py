@@ -32,7 +32,8 @@ class SearchInstitution(SearchDocument):
                 'state': institution.state,
                 'admin': admin,
                 'acronym': institution.acronym,
-                'actuation_area': institution.actuation_area
+                'actuation_area': institution.actuation_area,
+                'legal_nature': institution.legal_nature
             }
             # Make the structure of the document by setting the fields and its id.
             document = api.search.Document(
@@ -46,6 +47,8 @@ class SearchInstitution(SearchDocument):
                     api.search.TextField(name='acronym', value=content['acronym']),
                     api.search.TextField(name='actuation_area',
                                          value=content['actuation_area'])
+                    api.search.TextField(name='legal_nature',
+                                         value=content['legal_nature'])
                 ]
             )
             self.saveDocument(document)
@@ -58,7 +61,7 @@ class SearchInstitution(SearchDocument):
         index = api.search.Index(self.index_name)
         query_options = api.search.QueryOptions(
             returned_fields=['name', 'state',
-                             'admin', 'acronym', 'actuation_area']
+                             'admin', 'acronym', 'actuation_area', 'legal_nature']
         )
         query = api.search.Query(
             query_string=query_string, options=query_options)
@@ -79,4 +82,4 @@ class SearchInstitution(SearchDocument):
                 state_string += states[i]
             else:
                 state_string += " OR " + states[i]
-        return '(name: "%s" OR acronym: "%s" OR actuation_area: "%s") AND state: %s' % (value, value, value, state_string)
+        return '(name: "%s" OR acronym: "%s" OR actuation_area: "%s" OR legal_nature: "%s") AND state: %s' % (value, value, value, value, state_string)

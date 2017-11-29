@@ -27,19 +27,19 @@ class InstitutionTimelineHandlerTest(TestBaseHandler):
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
-    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
+    @patch('utils.verify_token', return_value={'email': 'user1@email.com'})
     def test_get(self, verify_token):
         """Test the institution_timeline_handler get method."""
         # Pretend an authentication
-        self.os.environ['REMOTE_USER'] = 'mayzabeel@gmail.com'
-        self.os.environ['USER_EMAIL'] = 'mayzabeel@gmail.com'
+        self.os.environ['REMOTE_USER'] = 'user1@email.com'
+        self.os.environ['USER_EMAIL'] = 'user1@email.com'
         # Added the posts in datastore
-        self.testapp.post_json("/api/posts", self.post_mayza)
+        self.testapp.post_json("/api/posts", self.post_user1)
         self.testapp.post_json("/api/posts", self.post_aux)
 
         # Call the get method
         posts = self.testapp.get("/api/institutions/%s/timeline?page=0&&limit=2" %
-                                 self.certbio.key.urlsafe())
+                                 self.inst1.key.urlsafe())
         # Update the objects
         post_top = (posts.json['posts'])[0]
         key_post_top = ndb.Key(urlsafe=post_top['key'])
@@ -55,7 +55,7 @@ class InstitutionTimelineHandlerTest(TestBaseHandler):
                          "The text expected was new post")
         self.assertEqual(post_top_obj.state, 'published',
                          "The state of post should be published")
-        self.assertEqual(post_last_obj.title, 'Novo edital do CERTBIO',
+        self.assertEqual(post_last_obj.title, 'Novo edital do Inst 1',
                          "The title expected was new post")
         self.assertEqual(post_last_obj.text, "At vero eos et accusamus et iusto",
                          "The text expected was new post")
@@ -63,12 +63,12 @@ class InstitutionTimelineHandlerTest(TestBaseHandler):
                          "The state of post should be published")
 
         # Call the delete method for a post that has activity
-        post_last_obj.like(self.mayza.key)
+        post_last_obj.like(self.user1.key)
         self.testapp.delete("/api/posts/%s" % post_last_obj.key.urlsafe())
 
         # Call the get method
         posts = self.testapp.get("/api/institutions/%s/timeline?page=0&&limit=2" %
-                                 self.certbio.key.urlsafe())
+                                 self.inst1.key.urlsafe())
 
         # Update the objects
         post_top = (posts.json['posts'])[0]
@@ -91,44 +91,44 @@ class InstitutionTimelineHandlerTest(TestBaseHandler):
 
 def initModels(cls):
     """Init the models."""
-    # new User Mayza
-    cls.mayza = User()
-    cls.mayza.name = 'Mayza Nunes'
-    cls.mayza.cpf = '089.675.908-90'
-    cls.mayza.email = ['mayzabeel@gmail.com']
-    cls.mayza.institutions = []
-    cls.mayza.follows = []
-    cls.mayza.institutions_admin = []
-    cls.mayza.notifications = []
-    cls.mayza.posts = []
-    cls.mayza.put()
-    # new Institution CERTBIO
-    cls.certbio = Institution()
-    cls.certbio.name = 'CERTBIO'
-    cls.certbio.acronym = 'CERTBIO'
-    cls.certbio.cnpj = '18.104.068/0001-86'
-    cls.certbio.legal_nature = 'public'
-    cls.certbio.actuation_area = ''
-    cls.certbio.description = 'Ensaio Químico'
-    cls.certbio.email = 'certbio@ufcg.edu.br'
-    cls.certbio.phone_number = '(83) 3322 4455'
-    cls.certbio.members = [cls.mayza.key]
-    cls.certbio.followers = [cls.mayza.key]
-    cls.certbio.posts = []
-    cls.certbio.admin = cls.mayza.key
-    cls.certbio.put()
+    # new User1
+    cls.user1 = User()
+    cls.user1.name = 'User 1'
+    cls.user1.cpf = '089.675.908-90'
+    cls.user1.email = ['user1@email.com']
+    cls.user1.institutions = []
+    cls.user1.follows = []
+    cls.user1.institutions_admin = []
+    cls.user1.notifications = []
+    cls.user1.posts = []
+    cls.user1.put()
+    # new Inst1
+    cls.inst1 = Institution()
+    cls.inst1.name = 'Inst 1'
+    cls.inst1.acronym = 'Inst 1'
+    cls.inst1.cnpj = '18.104.068/0001-86'
+    cls.inst1.legal_nature = 'public'
+    cls.inst1.actuation_area = ''
+    cls.inst1.description = 'Ensaio Químico'
+    cls.inst1.email = 'inst1@email.com'
+    cls.inst1.phone_number = '(83) 3322 4455'
+    cls.inst1.members = [cls.user1.key]
+    cls.inst1.followers = [cls.user1.key]
+    cls.inst1.posts = []
+    cls.inst1.admin = cls.user1.key
+    cls.inst1.put()
     # POST of Mayza To Certbio Institution
-    cls.post_mayza = {
-        'title': "Novo edital do CERTBIO",
+    cls.post_user1 = {
+        'title': "Novo edital do Inst 1",
         'text': "At vero eos et accusamus et iusto",
-        'institution': cls.certbio.key.urlsafe()
+        'institution': cls.inst1.key.urlsafe()
     }
     cls.post_aux = {
         'title': "Post Auxiliar",
         'text': "At vero eos et accusamus et iusto",
-        'institution': cls.certbio.key.urlsafe()
+        'institution': cls.inst1.key.urlsafe()
     }
-    cls.mayza.follows = [cls.certbio.key]
-    cls.mayza.put()
+    cls.user1.follows = [cls.inst1.key]
+    cls.user1.put()
 
-    cls.mayza.add_institution(cls.certbio.key)
+    cls.user1.add_institution(cls.inst1.key)

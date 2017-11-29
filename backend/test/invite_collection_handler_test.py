@@ -14,9 +14,6 @@ from mock import patch
 
 class InviteCollectionHandlerTest(TestBaseHandler):
     """Invite Collection handler test."""
-    # TODO:
-    # Fix the post method, to check specific exceptions and error messages
-    # @author Mayza Nunes 07-07-2017
 
     @classmethod
     def setUp(cls):

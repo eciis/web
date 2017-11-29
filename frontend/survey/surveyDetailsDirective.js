@@ -52,8 +52,7 @@
                     'Confirmar voto', 'Seu voto será permanente. Deseja confirmar?');
                 dialog.then(function() {
                     surveyCtrl.voteService().then(function () {
-                        surveyCtrl.posts = surveyCtrl.posts.filter(post => surveyCtrl.post.key !== post.key);
-                        surveyCtrl.posts.push(surveyCtrl.post);
+                        syncSharedPosts();
                     });
                 }, function() {
                     MessageService.showToast('Cancelado');
@@ -63,7 +62,28 @@
             }         
         };
 
-         surveyCtrl.voteService = function(){
+        /**
+        * Function to synchronize survey posts with shared posts
+        * when the user vote in survey post that is shared or vote in shared post that is survey.
+        * @param {} empty - No require param.
+        * @return {undefined} - Void function returns undefined.
+        */
+        function syncSharedPosts() {
+            surveyCtrl.posts = surveyCtrl.posts.filter(post => post.key !== surveyCtrl.post.key);
+            surveyCtrl.posts.push(surveyCtrl.post);
+            let shared_posts = surveyCtrl.posts.filter(post => post.shared_post);
+            if(shared_posts) {
+                let shared_post = shared_posts.filter(post => post.shared_post.key === surveyCtrl.post.key);
+                if(shared_post) {
+                    shared_post = shared_post.reduce(post => post);
+                    shared_post.shared_post = surveyCtrl.post;
+                    surveyCtrl.posts = surveyCtrl.posts.filter(post => post.key !== shared_post.key);
+                    surveyCtrl.posts.push(shared_post);
+                }
+            }
+        }
+
+        surveyCtrl.voteService = function(){
             var promisse = SurveyService.vote(surveyCtrl.post, surveyCtrl.optionsSelected);
             promisse.then(function sucess(){
                 addVote(surveyCtrl.optionsSelected);

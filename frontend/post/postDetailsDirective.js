@@ -93,8 +93,8 @@
                 !postDetailsCtrl.isDeleted(postDetailsCtrl.post);
         };
 
-        postDetailsCtrl.showSurvey = function showSurvey(post=postDetailsCtrl.post) {
-            return post.type_survey;
+        postDetailsCtrl.showSurvey = function showSurvey() {
+            return postDetailsCtrl.post.type_survey;
         };
 
         postDetailsCtrl.showPost = function showPost() {

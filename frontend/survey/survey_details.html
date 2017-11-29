@@ -28,8 +28,8 @@
       </md-list-item>
     </md-radio-group>
   </md-list>
-  <div layout="column" layout-align="center end">
-    <md-button ng-click="surveyCtrl.vote($event)" ng-if="surveyCtrl.canVote()" md-colors="{color: 'default-teal-500'}" layout-align="end center">
+  <div ng-if="surveyCtrl.canVote()" layout="column" layout-align="center end">
+    <md-button ng-click="surveyCtrl.vote($event)" md-colors="{color: 'default-teal-500'}" layout-align="end center">
       VOTAR
     </md-button>
   </div>

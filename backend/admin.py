@@ -449,6 +449,12 @@ class ResetHandler(BaseHandler):
         admin.add_permission("remove_link", eciis.key.urlsafe())
         admin.add_permission("remove_link", certbio.key.urlsafe())
         admin.add_permission("remove_link", splab.key.urlsafe())
+        admin.add_permission("remove_inst", eciis.key.urlsafe())
+        admin.add_permission("remove_inst", certbio.key.urlsafe())
+        admin.add_permission("remove_inst", splab.key.urlsafe())
+        admin.add_permission("update_inst", eciis.key.urlsafe())
+        admin.add_permission("update_inst", certbio.key.urlsafe())
+        admin.add_permission("update_inst", splab.key.urlsafe())
         admin.put()
 
         # POST of Mayza To Certbio Institution

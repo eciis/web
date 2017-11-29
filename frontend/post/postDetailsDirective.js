@@ -390,10 +390,12 @@
         };
 
         postDetailsCtrl.recognizeUrl =  function recognizeUrl(text) {
-            var urlsInText = text.match(URL_PATTERN);
-            text = addHttpsToUrl(text, urlsInText);
-            text = adjustText(text);
-            return text;
+            if(text) {
+                var urlsInText = text.match(URL_PATTERN);
+                text = addHttpsToUrl(text, urlsInText);
+                text = adjustText(text);
+                return text;
+            }
         };
 
         postDetailsCtrl.showImage = function showImage(post) {

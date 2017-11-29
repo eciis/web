@@ -51,7 +51,10 @@
                 var dialog = MessageService.showConfirmationDialog(ev,
                     'Confirmar voto', 'Seu voto será permanente. Deseja confirmar?');
                 dialog.then(function() {
-                    surveyCtrl.voteService();
+                    surveyCtrl.voteService().then(function () {
+                        surveyCtrl.posts = surveyCtrl.posts.filter(post => surveyCtrl.post.key !== post.key);
+                        surveyCtrl.posts.push(surveyCtrl.post);
+                    });
                 }, function() {
                     MessageService.showToast('Cancelado');
                 });

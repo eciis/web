@@ -25,6 +25,7 @@
 
         AuthService.login(user);
         httpBackend.expectGET('app/institution/actuation_area.json').respond([{}]);
+        httpBackend.expectGET('app/institution/legal_nature.json').respond([{}]);
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', "error/user_inactive.html").respond(200);
         httpBackend.when('GET', "home/home.html").respond(200);

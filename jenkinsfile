@@ -9,6 +9,11 @@ pipeline {
                 sh 'bower install'
                 sh 'cd ../../'
             }
+        },
+         stage('run') {
+            steps {
+                sh './ecis test client'
+            }
         }
     }
 }

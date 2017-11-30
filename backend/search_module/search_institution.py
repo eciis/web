@@ -104,7 +104,7 @@ class SearchInstitution(SearchDocument):
         fields_values = []
 
         for field in fields:
-            field_value = "%s: %s" % (field, value)
+            field_value = '%s: "%s"' % (field, value)
             fields_values.append(field_value)
 
         fields_values_string = " OR ".join(fields_values)

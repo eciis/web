@@ -64,9 +64,11 @@
         };
 
         function updateSharedPost(post, updatedPost) {
-            if(post.shared_post) post.shared_post = updatedPost;
+            if(post.shared_post && post.shared_post.key === updatedPost.key) post.shared_post = updatedPost;
+            if(post.key === updatedPost.key) post = updatedPost;
             return post;
         }
+
         /**
         * Function to synchronize survey posts with shared posts
         * when the user vote in survey post that is shared or vote in shared post that is survey.
@@ -74,15 +76,7 @@
         * @return {undefined} - Void function returns undefined.
         */
         function syncSharedPosts() {
-            surveyCtrl.posts = surveyCtrl.posts.filter(post => post.key !== surveyCtrl.post.key);
-            surveyCtrl.posts.push(surveyCtrl.post);
-            let shared_posts = surveyCtrl.posts.filter(post => post.shared_post && post.shared_post.key === surveyCtrl.post.key);
-            if(shared_posts.length > 0) {
-                surveyCtrl.posts = surveyCtrl.posts
-                    .filter(post => !post.shared_post || post.shared_post && post.shared_post.key !== surveyCtrl.post.key);
-                shared_posts = shared_posts.map(post => updateSharedPost(post, surveyCtrl.post));
-                surveyCtrl.posts = surveyCtrl.posts.concat(shared_posts);
-            }
+            surveyCtrl.posts = surveyCtrl.posts.map(post => updateSharedPost(post, surveyCtrl.post));
         }
 
         surveyCtrl.voteService = function(){

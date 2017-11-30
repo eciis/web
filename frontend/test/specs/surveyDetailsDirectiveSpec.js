@@ -99,7 +99,6 @@
         beforeEach(function() {
             spyOn(surveyService, 'vote').and.callThrough();
             surveyCtrl.optionsSelected = [options[0]];
-            spyOn(surveyCtrl.posts, 'filter');
             spyOn(surveyCtrl.posts, 'map');
             httpBackend.expect('POST', "/api/surveyposts/" + surveyCtrl.post.key + '/votes').
                 respond(surveyCtrl.optionsSelected);
@@ -116,9 +115,8 @@
             scope.$apply();
         });
 
-        it('should call filter and map in timeline posts', function(done) {
+        it('should call map in timeline posts', function(done) {
             promise.should.be.fulfilled.then(function() {
-                expect(surveyCtrl.posts.filter()).toHaveBeenCalled();
                 expect(surveyCtrl.posts.map()).toHaveBeenCalled();
             }).should.notify(done);
             httpBackend.flush();

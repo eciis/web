@@ -3,11 +3,11 @@ pipeline {
     stages {
         stage('build') {
             steps {
-                cd frontend/test/
-                npm install
-                npm install -g bower
-                bower install
-                cd ../../
+                sh 'cd frontend/test/'
+                sh 'npm install'
+                sh 'npm install -g bower'
+                sh 'bower install'
+                sh 'cd ../../'
             }
         }
     }

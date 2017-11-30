@@ -2,10 +2,12 @@
 """Institution Handler."""
 
 import json
+import permissions
 
 from google.appengine.ext import ndb
 
 from utils import Utils
+from utils import has_permission
 from models.invite import Invite
 from utils import login_required
 from utils import json_response
@@ -46,23 +48,6 @@ def isUserInvited(method):
                       NotAuthorizedException)
 
         method(self, user, institution_key, inviteKey)
-    return check_authorization
-
-
-def is_admin(method):
-    """Check if the user is admin of the institution."""
-    def check_authorization(self, user, institution_key, *args):
-        institution = ndb.Key(urlsafe=institution_key).get()
-
-        userisNotAdminOfInstitution = institution.key not in user.institutions_admin
-        institutionisNotManagedByUser = institution.admin != user.key
-        userIsNotParentAdmin = institution.parent_institution not in user.institutions_admin
-
-        Utils._assert(userIsNotParentAdmin and
-                      (userisNotAdminOfInstitution or institutionisNotManagedByUser),
-                      'User is not admin', NotAuthorizedException)
-
-        method(self, user, institution_key, *args)
     return check_authorization
 
 
@@ -115,9 +100,12 @@ class InstitutionHandler(BaseHandler):
 
     @json_response
     @login_required
-    @is_admin
     def patch(self, user, institution_key):
-        """Handler PATCH Requests."""
+        """Handler PATCH Request to update Institution."""
+        Utils._assert(not user.has_permission('update_inst', institution_key),
+                      "User is not allowed to edit institution",
+                      NotAuthorizedException)
+
         data = self.request.body
         institution = ndb.Key(urlsafe=institution_key).get()
 
@@ -150,6 +138,8 @@ class InstitutionHandler(BaseHandler):
             'institution_photo_url': institution.photo_url
         }
         user.create_and_add_profile(data_profile)
+
+        user.add_permissions(permissions.DEFAULT_ADMIN_PERMISSIONS, institution.key.urlsafe())
         user.put()
 
         invite = ndb.Key(urlsafe=inviteKey).get()
@@ -161,7 +151,7 @@ class InstitutionHandler(BaseHandler):
 
     @login_required
     @json_response
-    @is_admin
+    @has_permission(permission_type='remove_inst')
     @ndb.transactional(xg=True)
     def delete(self, user, institution_key):
         """Handle DELETE Requests."""

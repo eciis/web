@@ -24,39 +24,39 @@ class InstitutionHierarchyHandlerTest(TestBaseHandler):
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
-    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
+    @patch('utils.verify_token', return_value={'email': 'user1@gmail.com'})
     def test_delete_child_connection(self, verify_token):
         """Test delete method with isParent=false."""
         # Assert the initial conditions
-        self.assertTrue(self.splab.key in self.certbio.children_institutions)
-        self.assertTrue(self.splab.parent_institution == self.certbio.key)
+        self.assertTrue(self.otherinst.key in self.institution.children_institutions)
+        self.assertTrue(self.otherinst.parent_institution == self.institution.key)
         # Call the delete method
         self.testapp.delete("/api/institutions/%s/hierarchy/%s?isParent=false" %
-                            (self.certbio.key.urlsafe(), self.splab.key.urlsafe()))
+                            (self.institution.key.urlsafe(), self.otherinst.key.urlsafe()))
         # Update the institutions
-        self.certbio = self.certbio.key.get()
-        self.splab = self.splab.key.get()
+        self.institution = self.institution.key.get()
+        self.otherinst = self.otherinst.key.get()
         # Assert the final conditions
         self.assertTrue(
-            self.splab.key not in self.certbio.children_institutions)
-        self.assertTrue(self.splab.parent_institution == self.certbio.key)
+            self.otherinst.key not in self.institution.children_institutions)
+        self.assertTrue(self.otherinst.parent_institution == self.institution.key)
 
-    @patch('utils.verify_token', return_value={'email': 'raoni.smaneoto@ccc.ufcg.edu.br'})
+    @patch('utils.verify_token', return_value={'email': 'otheruser@ccc.ufcg.edu.br'})
     def test_delete_parent_connection(self, verify_token):
         """Test delete method with isParent=true."""
         # Assert the initial conditions
-        self.assertTrue(self.splab.key in self.certbio.children_institutions)
-        self.assertTrue(self.splab.parent_institution == self.certbio.key)
+        self.assertTrue(self.otherinst.key in self.institution.children_institutions)
+        self.assertTrue(self.otherinst.parent_institution == self.institution.key)
         # Call the delete method
         self.testapp.delete("/api/institutions/%s/hierarchy/%s?isParent=true" %
-                            (self.splab.key.urlsafe(), self.certbio.key.urlsafe()))
+                            (self.otherinst.key.urlsafe(), self.institution.key.urlsafe()))
         # Update the institutions
-        self.certbio = self.certbio.key.get()
-        self.splab = self.splab.key.get()
+        self.institution = self.institution.key.get()
+        self.otherinst = self.otherinst.key.get()
         # Assert the final conditions
         self.assertTrue(
-            self.splab.key in self.certbio.children_institutions)
-        self.assertTrue(self.splab.parent_institution is None)
+            self.otherinst.key in self.institution.children_institutions)
+        self.assertTrue(self.otherinst.parent_institution is None)
 
     def tearDown(cls):
         """Deactivate the test."""
@@ -65,64 +65,46 @@ class InstitutionHierarchyHandlerTest(TestBaseHandler):
 
 def initModels(cls):
     """Init the models."""
-    # new User Mayza
-    cls.mayza = User()
-    cls.mayza.name = 'Mayza Nunes'
-    cls.mayza.cpf = '089.675.908-90'
-    cls.mayza.email = ['mayzabeel@gmail.com']
-    cls.mayza.institutions = []
-    cls.mayza.follows = []
-    cls.mayza.institutions_admin = []
-    cls.mayza.notifications = []
-    cls.mayza.posts = []
-    cls.mayza.put()
-    # new User Raoni
-    cls.raoni = User()
-    cls.raoni.name = 'Raoni Smaneoto'
-    cls.raoni.cpf = '089.675.908-65'
-    cls.raoni.email = ['raoni.smaneoto@ccc.ufcg.edu.br']
-    cls.raoni.state = "pending"
-    cls.raoni.institutions = []
-    cls.raoni.follows = []
-    cls.raoni.institutions_admin = []
-    cls.raoni.notifications = []
-    cls.raoni.posts = []
-    cls.raoni.put()
-    # new Institution CERTBIO
-    cls.certbio = Institution()
-    cls.certbio.name = 'CERTBIO'
-    cls.certbio.state = "active"
-    cls.certbio.acronym = 'CERTBIO'
-    cls.certbio.cnpj = '18.104.068/0001-86'
-    cls.certbio.legal_nature = 'public'
-    cls.certbio.actuation_area = ''
-    cls.certbio.description = 'Ensaio Químico'
-    cls.certbio.email = 'certbio@ufcg.edu.br'
-    cls.certbio.phone_number = '(83) 3322 4455'
-    cls.certbio.members = [cls.mayza.key, cls.raoni.key]
-    cls.certbio.followers = [cls.mayza.key, cls.raoni.key]
-    cls.certbio.posts = []
-    cls.certbio.admin = cls.mayza.key
-    cls.certbio.put()
-    cls.mayza.institutions_admin = [cls.certbio.key]
-    cls.mayza.put()
-    # new Institution SPLAB
-    cls.splab = Institution()
-    cls.splab.name = 'SPLAB'
-    cls.splab.acronym = 'SPLAB'
-    cls.splab.cnpj = '18.104.068/0000-86'
-    cls.splab.legal_nature = 'public'
-    cls.splab.actuation_area = ''
-    cls.splab.state = "active"
-    cls.splab.email = 'splab@ufcg.edu.br'
-    cls.splab.phone_number = '(83) 3322 4455'
-    cls.splab.members = [cls.mayza.key, cls.raoni.key]
-    cls.splab.followers = [cls.mayza.key, cls.raoni.key]
-    cls.splab.posts = []
-    cls.splab.admin = cls.raoni.key
-    cls.splab.parent_institution = cls.certbio.key
-    cls.splab.put()
-    cls.raoni.institutions_admin = [cls.splab.key]
-    cls.raoni.put()
-    cls.certbio.children_institutions.append(cls.splab.key)
-    cls.certbio.put()
+    # new User User 1
+    cls.user = User()
+    cls.user.name = 'User 1'
+    cls.user.cpf = '089.675.908-90'
+    cls.user.email = ['user1@gmail.com']
+    cls.user.put()
+    # new User User 2
+    cls.otheruser = User()
+    cls.otheruser.name = 'User 2'
+    cls.otheruser.cpf = '089.675.908-65'
+    cls.otheruser.email = ['otheruser@ccc.ufcg.edu.br']
+    cls.otheruser.state = "pending"
+    cls.otheruser.put()
+    # new Institution Inst
+    cls.institution = Institution()
+    cls.institution.name = 'Inst'
+    cls.institution.state = "active"
+    cls.institution.acronym = 'INST'
+    cls.institution.members = [cls.user.key, cls.otheruser.key]
+    cls.institution.followers = [cls.user.key, cls.otheruser.key]
+    cls.institution.admin = cls.user.key
+    cls.institution.put()
+    cls.user.institutions_admin = [cls.institution.key]
+    cls.user.add_permission("remove_link", cls.institution.key.urlsafe())
+    cls.user.put()
+    # new Institution Other Inst
+    cls.otherinst = Institution()
+    cls.otherinst.name = 'Other Inst'
+    cls.otherinst.acronym = 'OTHER'
+    cls.otherinst.cnpj = '18.104.068/0000-86'
+    cls.otherinst.legal_nature = 'public'
+    cls.otherinst.actuation_area = ''
+    cls.otherinst.state = "active"
+    cls.otherinst.members = [cls.user.key, cls.otheruser.key]
+    cls.otherinst.followers = [cls.user.key, cls.otheruser.key]
+    cls.otherinst.admin = cls.otheruser.key
+    cls.otherinst.parent_institution = cls.institution.key
+    cls.otherinst.put()
+    cls.otheruser.institutions_admin = [cls.otherinst.key]
+    cls.otheruser.add_permission("remove_link", cls.otherinst.key.urlsafe())
+    cls.otheruser.put()
+    cls.institution.children_institutions.append(cls.otherinst.key)
+    cls.institution.put()

@@ -57,9 +57,9 @@ class InstitutionHandlerTest(TestBaseHandler):
 
         self.assertEqual(
             message_exception,
-            "Error! User is not admin",
+            "Error! User is not allowed to edit institution",
             "Expected exception message must be equal to " +
-            "Error! User is not admin")
+            "Error! User is not allowed to edit institution")
 
     @patch('utils.verify_token', return_value={'email': 'other_user@example.com'})
     def test_post(self, verify_token):
@@ -274,11 +274,6 @@ def initModels(cls):
     cls.user.name = 'User'
     cls.user.cpf = '089.675.908-90'
     cls.user.email = ['user@example.com']
-    cls.user.institutions = []
-    cls.user.follows = []
-    cls.user.institutions_admin = []
-    cls.user.notifications = []
-    cls.user.posts = []
     cls.user.put()
     # new User Other
     cls.other_user = User()
@@ -286,11 +281,6 @@ def initModels(cls):
     cls.other_user.cpf = '089.675.908-65'
     cls.other_user.email = ['other_user@example.com']
     cls.other_user.state = "pending"
-    cls.other_user.institutions = []
-    cls.other_user.follows = []
-    cls.other_user.institutions_admin = []
-    cls.other_user.notifications = []
-    cls.other_user.posts = []
     cls.other_user.put()
     # new Institution FIRST INST
     cls.first_inst = Institution()
@@ -304,10 +294,11 @@ def initModels(cls):
     cls.first_inst.phone_number = '(83) 3322 4455'
     cls.first_inst.members = [cls.user.key, cls.other_user.key]
     cls.first_inst.followers = [cls.user.key, cls.other_user.key]
-    cls.first_inst.posts = []
     cls.first_inst.admin = cls.user.key
     cls.first_inst.put()
     cls.user.institutions_admin = [cls.first_inst.key]
+    cls.user.add_permission("update_inst", cls.first_inst.key.urlsafe())
+    cls.user.add_permission("remove_inst", cls.first_inst.key.urlsafe())
     cls.user.put()
     # new Institution SECOND INST
     cls.second_inst = Institution()
@@ -349,7 +340,6 @@ def initModels(cls):
     cls.third_inst.phone_number = '(83) 3322 4455'
     cls.third_inst.members = [cls.user.key, cls.other_user.key]
     cls.third_inst.followers = [cls.user.key, cls.other_user.key]
-    cls.third_inst.posts = []
     cls.third_inst.admin = cls.other_user.key
     cls.third_inst.parent_institution = cls.second_inst.key
     cls.third_inst.put()

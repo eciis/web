@@ -10,6 +10,7 @@ from utils import json_response
 from utils import has_permission
 from service_messages import send_message_notification
 from service_messages import send_message_email
+from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
 from handlers.base_handler import BaseHandler
 
@@ -30,11 +31,13 @@ class InstitutionMembersHandler(BaseHandler):
 
     @json_response
     @login_required
-    @has_permission(permission_type='remove_member')
     @ndb.transactional(xg=True)
     def delete(self, user, url_string):
         """Delete member of specific institution."""
         institution_key = ndb.Key(urlsafe=url_string)
+        Utils._assert(not user.has_permission('remove_member', url_string),
+                      "User is not allowed to remove member",
+                      NotAuthorizedException)
         institution = institution_key.get()
 
         data = self.request.get('removeMember')

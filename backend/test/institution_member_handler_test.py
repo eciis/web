@@ -121,9 +121,9 @@ class InstitutionMemberHandlerTest(TestBaseHandler):
 
         exception_message = self.get_message_exception(ex.exception.message)
         self.assertEqual(
-            "Error! User is not allowed to do this operation",
+            "Error! User is not allowed to remove member",
             exception_message,
-            "Error! User is not allowed to do this operation")
+            "Error! User is not allowed to remove member")
 
         # Update the institutions
         self.institution = self.institution.key.get()

@@ -16,7 +16,8 @@
         var PENDING_STATE = "pending";
 
         suggestInstCtrl.goToInstitution = function goToInstitution(institutionKey) {
-            window.open(makeUrl(institutionKey), '_blank');
+            const url = $state.href('app.institution', {institutionKey: institutionKey});
+            window.open(url, '_blank');
         };
 
         suggestInstCtrl.cancel = function cancel() {
@@ -27,6 +28,11 @@
             return suggestInstCtrl.isActive(state) && suggestInstCtrl.isHierarchy;
         };
 
+        suggestInstCtrl.suggestionToSimpleInvite = function suggestionToSimpleInvite(state) {
+            return suggestInstCtrl.isPending(state) ||
+                (suggestInstCtrl.isActive(state) && !suggestInstCtrl.isHierarchy);
+        }
+
         suggestInstCtrl.isActive = function isActive(state) {
             return state === ACTIVE_STATE;
         };
@@ -34,12 +40,6 @@
         suggestInstCtrl.isPending = function isPending(state) {
             return state === PENDING_STATE;
         };
-
-        function makeUrl(institutionKey){
-            var currentUrl = window.location.href;
-            currentUrl = currentUrl.split('#');
-            return currentUrl[0] + $state.href('app.institution', {institutionKey: institutionKey});
-        }
 
         suggestInstCtrl.checkAndSendInvite = function checkAndSendInvite() {
             if (suggestInstCtrl.chosen_institution) {
@@ -51,14 +51,22 @@
             }
         };
 
-        suggestInstCtrl.showMessage = function() {
-            var message;
-            if(suggestInstCtrl.institutions.length === 1) {
-                message = 'A instituição que você quer convidar é essa?';
-            } else {
-                message = 'A instituição que você quer convidar é alguma dessas?';
-            }
-            return message;
+        suggestInstCtrl.titleMessage = function() {
+            const oneInst = 'Já existe uma instituição com esse nome.';
+            const moreThanOneInst = 'Já existem instituições com esse nome.';
+            const question = ' Deseja convidar mesmo assim?';
+            const selectMsg = 'instituição existente se deseja convidá-la ou selecione a opção de convidar uma nova instituição.'
+            return suggestInstCtrl.institutions.length === 1 ?
+                suggestInstCtrl.isHierarchy ? oneInst +
+                ' Selecione a ' + selectMsg :
+                oneInst + question : suggestInstCtrl.isHierarchy ?
+                moreThanOneInst + ' Selecione uma ' + selectMsg :
+                moreThanOneInst + question;
+        };
+
+        suggestInstCtrl.instStatusMessage = function instStatusMessage(admin, state) {
+            return suggestInstCtrl.isPending(state) ?
+                'Instituição pendente - convite enviado para: ' + admin : 'Instituição ativa'
         };
 
         function sendInviteToExistingInst() {

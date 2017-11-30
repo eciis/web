@@ -24,7 +24,7 @@
                         Pesquisar em todas as áreas
                     </md-option>
                     <md-option ng-repeat="nature in searchCtrl.legalNature | orderBy: 'name'" 
-                        ng-value="nature.name" ng-click="searchCtrl.searchByActuationArea(nature.name)">
+                        ng-value="nature.name" ng-click="searchCtrl.searchByActuationArea(nature.value)">
                         {{nature.name}}
                     </md-option>
                 </md-select>

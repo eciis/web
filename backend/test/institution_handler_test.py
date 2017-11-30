@@ -57,9 +57,9 @@ class InstitutionHandlerTest(TestBaseHandler):
 
         self.assertEqual(
             message_exception,
-            "Error! User is not allowed to do this operation",
+            "Error! User is not allowed to edit institution",
             "Expected exception message must be equal to " +
-            "Error! User is not allowed to do this operation")
+            "Error! User is not allowed to edit institution")
 
     @patch('utils.verify_token', return_value={'email': 'other_user@example.com'})
     def test_post(self, verify_token):

@@ -99,9 +99,12 @@ class InstitutionHandler(BaseHandler):
 
     @json_response
     @login_required
-    @has_permission(permission_type='update_inst')
     def patch(self, user, institution_key):
         """Handler PATCH Request to update Institution."""
+        Utils._assert(not user.has_permission('update_inst', institution_key),
+                      "User is not allowed to edit institution",
+                      NotAuthorizedException)
+
         data = self.request.body
         institution = ndb.Key(urlsafe=institution_key).get()
 

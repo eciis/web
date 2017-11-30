@@ -225,6 +225,16 @@ class User(ndb.Model):
             self.permissions[permission_type] = {entity_key: True}
         self.put()
 
+    def add_permissions(self, list_permissions, entity_key):
+        """Add new permissions to the user permissions list.
+
+        Arguments:
+        list_permissions -- permissions list to be added
+        entity_key -- ndb urlsafe of the object binded to the permission
+        """
+        for permission in list_permissions:
+            self.add_permission(permission,entity_key);
+
     def remove_permission(self, permission_type, entity_key):
         """Remove permission.key from the user permissions list.
 

@@ -441,20 +441,13 @@ class ResetHandler(BaseHandler):
             {"msg": "database initialized with a few institutions"})
 
         admin.institutions_admin = [certbio.key, eciis.key, splab.key]
-        admin.add_permission("analyze_request_inst", eciis.key.urlsafe())
-        admin.add_permission("send_invite_inst", eciis.key.urlsafe())
-        admin.add_permission("remove_member", eciis.key.urlsafe())
-        admin.add_permission("remove_member", certbio.key.urlsafe())
-        admin.add_permission("remove_member", splab.key.urlsafe())
-        admin.add_permission("remove_link", eciis.key.urlsafe())
-        admin.add_permission("remove_link", certbio.key.urlsafe())
-        admin.add_permission("remove_link", splab.key.urlsafe())
-        admin.add_permission("remove_inst", eciis.key.urlsafe())
-        admin.add_permission("remove_inst", certbio.key.urlsafe())
-        admin.add_permission("remove_inst", splab.key.urlsafe())
-        admin.add_permission("update_inst", eciis.key.urlsafe())
-        admin.add_permission("update_inst", certbio.key.urlsafe())
-        admin.add_permission("update_inst", splab.key.urlsafe())
+        DEFAULT_ADMIN_PERMISSIONS  = ["remove_member", "remove_link", "remove_inst", "update_inst"]
+        DEFAULT_SUPER_USER_PERMISSIONS = ["analyze_request_inst", "send_invite_inst"]
+        
+        admin.add_permissions(DEFAULT_ADMIN_PERMISSIONS, certbio.key.urlsafe())
+        admin.add_permissions(DEFAULT_ADMIN_PERMISSIONS, splab.key.urlsafe())
+        admin.add_permissions(DEFAULT_ADMIN_PERMISSIONS, eciis.key.urlsafe())
+        admin.add_permissions(DEFAULT_SUPER_USER_PERMISSIONS, eciis.key.urlsafe())
         admin.put()
 
         # POST of Mayza To Certbio Institution

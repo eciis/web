@@ -134,10 +134,8 @@ class InstitutionHandler(BaseHandler):
             'institution_photo_url': institution.photo_url
         }
         user.create_and_add_profile(data_profile)
-        user.add_permission("remove_member", institution.key.urlsafe())
-        user.add_permission("remove_link", institution.key.urlsafe())
-        user.add_permission("remove_inst", institution.key.urlsafe())
-        user.add_permission("update_inst", institution.key.urlsafe())
+        DEFAULT_ADMIN_PERMISSIONS  = ["remove_member", "remove_link", "remove_inst", "update_inst"]
+        user.add_permissions(DEFAULT_ADMIN_PERMISSIONS, institution.key.urlsafe())
         user.put()
 
         invite = ndb.Key(urlsafe=inviteKey).get()

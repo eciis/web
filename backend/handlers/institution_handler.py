@@ -10,6 +10,7 @@ from utils import has_permission
 from models.invite import Invite
 from utils import login_required
 from utils import json_response
+from permissions import DEFAULT_ADMIN_PERMISSIONS
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from custom_exceptions.entityException import EntityException
 
@@ -137,7 +138,7 @@ class InstitutionHandler(BaseHandler):
             'institution_photo_url': institution.photo_url
         }
         user.create_and_add_profile(data_profile)
-        DEFAULT_ADMIN_PERMISSIONS  = ["remove_member", "remove_link", "remove_inst", "update_inst"]
+
         user.add_permissions(DEFAULT_ADMIN_PERMISSIONS, institution.key.urlsafe())
         user.put()
 

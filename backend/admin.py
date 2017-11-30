@@ -15,6 +15,8 @@ from models.institution import Address
 from models.post import Post
 from models.post import Comment
 from models.invite import Invite
+from permissions import DEFAULT_ADMIN_PERMISSIONS
+from permissions import DEFAULT_SUPER_USER_PERMISSIONS
 from google.appengine.ext import ndb
 from google.appengine.api import search
 
@@ -441,8 +443,6 @@ class ResetHandler(BaseHandler):
             {"msg": "database initialized with a few institutions"})
 
         admin.institutions_admin = [certbio.key, eciis.key, splab.key]
-        DEFAULT_ADMIN_PERMISSIONS  = ["remove_member", "remove_link", "remove_inst", "update_inst"]
-        DEFAULT_SUPER_USER_PERMISSIONS = ["analyze_request_inst", "send_invite_inst"]
         
         admin.add_permissions(DEFAULT_ADMIN_PERMISSIONS, certbio.key.urlsafe())
         admin.add_permissions(DEFAULT_ADMIN_PERMISSIONS, splab.key.urlsafe())

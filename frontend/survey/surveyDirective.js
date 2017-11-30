@@ -21,11 +21,13 @@
             });    
         };
 
+        surveyCtrl.changeOption = function(option) {
+            option.text ? surveyCtrl.addOption() : surveyCtrl.options.length > 2 && surveyCtrl.removeOption(option);
+        }
+
         surveyCtrl.addOption = function(){
             const hasOptionEmpty = surveyCtrl.getOptionEmpty() !== undefined;
-            if(!hasOptionEmpty){
-                surveyCtrl.options.push(angular.copy(option_empty));
-            }
+            surveyCtrl.options.length < 10 && !hasOptionEmpty && surveyCtrl.options.push(angular.copy(option_empty));
         };
 
         surveyCtrl.getOptionEmpty = function(){
@@ -38,15 +40,8 @@
 
         /* This method add ids in each option and remove the options that are empty.*/
         function modifyOptions(){
-            var id = 0;
-            _.forEach(surveyCtrl.options, function(option) {
-              if(option.text !== ''){
-                option.id = id;
-                id += 1;
-              }else{
-                surveyCtrl.removeOption(option);
-              }
-            });
+            let id = 0;
+            surveyCtrl.options.map(option => option.text ? option.id = id++ : surveyCtrl.removeOption(option));
         }
 
         function formateDate(){
@@ -68,21 +63,25 @@
         }
 
         surveyCtrl.save = function() {
-            var survey = createSurvey();
-            var promisse = PostService.createPost(survey).then(function success(response) {
-                surveyCtrl.resetSurvey();
-                surveyCtrl.posts.push(new Post(response.data));
-                MessageService.showToast('Postado com sucesso!');
-                surveyCtrl.callback();
-                $mdDialog.hide();
-            }, function error(response) {
-                AuthService.reload().then(function success() {
+            if(surveyCtrl.isValid()) {
+                var survey = createSurvey();
+                var promise = PostService.createPost(survey).then(function success(response) {
+                    surveyCtrl.resetSurvey();
+                    surveyCtrl.posts.push(new Post(response.data));
+                    MessageService.showToast('Postado com sucesso!');
+                    surveyCtrl.callback();
                     $mdDialog.hide();
-                    MessageService.showToast(response.data.msg);
-                    $state.go("app.user.home");
+                }, function error(response) {
+                    AuthService.reload().then(function success() {
+                        $mdDialog.hide();
+                        MessageService.showToast(response.data.msg);
+                        $state.go("app.user.home");
+                    });
                 });
-            });
-            return promisse;
+                return promise;
+            } else {
+                MessageService.showToast("Enquete deve ter no mínimo 2 opções e data limite definida");
+            }
         };
 
         surveyCtrl.resetSurvey = function resetSurvey() {
@@ -95,8 +94,8 @@
         };
 
         surveyCtrl.isValid = function isValid(){
-            const hasOptionEmpty = surveyCtrl.getOptionEmpty() === undefined;
-            return surveyCtrl.post.title && !hasOptionEmpty;
+            const notEnoughOptions = surveyCtrl.options.filter(option => option.text).length < 2;
+            return surveyCtrl.post.title && !notEnoughOptions && surveyCtrl.post.deadline;
         };
 
     });

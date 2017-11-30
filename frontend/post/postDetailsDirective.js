@@ -116,7 +116,7 @@
         };
 
         postDetailsCtrl.canShare = function(){
-            return !postDetailsCtrl.showSurvey() && !postDetailsCtrl.isDeleted(postDetailsCtrl.post) &&
+            return !postDetailsCtrl.isDeleted(postDetailsCtrl.post) &&
                  !postDetailsCtrl.isInstInactive();
         };
 
@@ -385,10 +385,12 @@
         };
 
         postDetailsCtrl.recognizeUrl =  function recognizeUrl(text) {
-            var urlsInText = text.match(URL_PATTERN);
-            text = addHttpsToUrl(text, urlsInText);
-            text = adjustText(text);
-            return text;
+            if(text) {
+                var urlsInText = text.match(URL_PATTERN);
+                text = addHttpsToUrl(text, urlsInText);
+                text = adjustText(text);
+                return text;
+            }
         };
 
         postDetailsCtrl.showImage = function showImage(post) {
@@ -706,6 +708,10 @@
         shareCtrl.getVideoUrl = function getVideoUrl() {
             var postObj = new Post(shareCtrl.post);
             return postObj.getVideoUrl();
+        };
+
+        shareCtrl.isSurvey = function isSurvey() {
+            return shareCtrl.post.type_survey;
         };
 
         shareCtrl.share = function share() {

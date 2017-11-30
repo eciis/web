@@ -10,6 +10,7 @@
         searchCtrl.search_keyword = $state.params.search_keyword;
         searchCtrl.institutions = [];
         searchCtrl.actuationAreas = [];
+        searchCtrl.legalNature = [];
         searchCtrl.loading = false;
 
         searchCtrl.makeSearch = function makeSearch(value, type) {
@@ -56,6 +57,12 @@
             });
         }
 
+        function getLegalNatures() {
+            $http.get('app/institution/legal_nature.json').then(function success(response) {
+                searchCtrl.legalNature = response.data;
+            });
+        }
+
         function loadSearch() {
             if (searchCtrl.search_keyword) {
                 searchCtrl.makeSearch(searchCtrl.search_keyword, 'institution');
@@ -64,6 +71,7 @@
 
         (function main() {
             getActuationAreas();
+            getLegalNatures();
             loadSearch();
         })();
     });

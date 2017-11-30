@@ -52,16 +52,14 @@
         };
 
         suggestInstCtrl.titleMessage = function() {
-            const oneInst = 'Já existe uma instituição com esse nome.';
-            const moreThanOneInst = 'Já existem instituições com esse nome.';
-            const question = ' Deseja convidar mesmo assim?';
-            const selectMsg = 'instituição existente se deseja convidá-la ou selecione a opção de convidar uma nova instituição.'
-            return suggestInstCtrl.institutions.length === 1 ?
-                suggestInstCtrl.isHierarchy ? oneInst +
-                ' Selecione a ' + selectMsg :
-                oneInst + question : suggestInstCtrl.isHierarchy ?
-                moreThanOneInst + ' Selecione uma ' + selectMsg :
-                moreThanOneInst + question;
+            const hasOnlyOneInst = suggestInstCtrl.institutions.length === 1;
+            const firstPhrase = hasOnlyOneInst ?
+                'Já existe uma instituição com esse nome. ' : 'Já existem instituições com esse nome. ';
+            const optionsPhrase = hasOnlyOneInst ?
+                'Selecione a instituição existente se deseja convidá-la ou selecione a opção de convidar uma nova instituição.' :
+                'Selecione uma das instituições existentes se deseja convidá-la ou selecione a opção de convidar uma nova instituição';
+            const lastPhrase = suggestInstCtrl.isHierarchy ? optionsPhrase : 'Deseja convidar mesmo assim?';
+            return firstPhrase + lastPhrase;
         };
 
         suggestInstCtrl.instStatusMessage = function instStatusMessage(admin, state) {

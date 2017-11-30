@@ -52,6 +52,12 @@ class SearchDocument(PolyModel):
         to make in entity's document.
         """
         for field in fields:
-            if field.value != getattr(entity, field.name):
+            field_name = field.name
+            isAnAdressField = "address_" in field_name
+            
+            if isAnAdressField: 
+                field_name = field_name.split('_')[1]
+            
+            if field.value != getattr(entity, field_name):
                 return True
         return False

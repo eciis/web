@@ -2,10 +2,11 @@
 """Institution Request Handler."""
 
 import json
+import permissions
+
 from utils import login_required
 from utils import json_response
 from utils import has_permission
-from permissions import DEFAULT_ADMIN_PERMISSIONS
 from handlers.base_handler import BaseHandler
 from google.appengine.ext import ndb
 
@@ -47,7 +48,7 @@ class InstitutionRequestHandler(BaseHandler):
             'institution_photo_url': institution.photo_url
         }
         sender.create_and_add_profile(data_profile)
-        user.add_permissions(DEFAULT_ADMIN_PERMISSIONS, institution.key.urlsafe())
+        user.add_permissions(permissions.DEFAULT_ADMIN_PERMISSIONS, institution.key.urlsafe())
 
         institution.admin = sender.key
         institution.members.append(sender.key)

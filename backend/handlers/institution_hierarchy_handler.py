@@ -24,9 +24,9 @@ class InstitutionHierarchyHandler(BaseHandler):
     @login_required
     @ndb.transactional(xg=True)
     def delete(self, user, institution_key, institution_link):
-        Utils._assert(user.is_not_authorized(['remove_link'], institution_key ),
-                      "User is not allowed to remove link between institutions",
-                      NotAuthorizedException)
+        user.has_permission('remove_link',
+                            "User is not allowed to remove link between institutions",
+                            institution_key)
 
         """Handle delete link between institutions."""
         is_parent = self.request.get('isParent')

@@ -48,9 +48,9 @@ class PostCollectionHandler(BaseHandler):
                       NotAuthorizedException)
 
         permission = get_permission(data)
-        Utils._assert(user.is_not_authorized([permission], institution_key),
-                      "You don't have permission to publish post.",
-                      NotAuthorizedException)
+        user.has_permission(permission,
+                            "You don't have permission to publish post.",
+                            institution_key)
 
         try:
             post = PostFactory.create(data, user.key, institution.key)

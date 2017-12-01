@@ -2,6 +2,7 @@
 from search_module.search_user import SearchUser
 from google.appengine.ext import ndb
 from custom_exceptions.fieldException import FieldException
+from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
 
 import random
@@ -245,31 +246,22 @@ class User(ndb.Model):
         del self.permissions[permission_type][entity_key]
         self.put()
 
-    def has_permission(self, permission_type, entity_key=None):
-        """Verify existence of permission.key on user permissions list.
-
-        It trys to access the permission.key, if exist, returns the value,
-        otherwise, except and return False.
-
+    def has_permission(self, permission_type, message_exception, entity_key=None):
+        """Verify if user has permission on determinate entity.
 
         Arguments:
         permission_type -- permission name that will be used to verify authorization
+        message_exception -- to be throwed when no user is not allowed
         entity_key -- ndb urlsafe of the object binded to the permission
         """
         try:
             if entity_key:
-                return self.permissions[permission_type][entity_key]
-            else:
-                return permission_type in self.permissions
+                if self.permissions[permission_type][entity_key]:
+                    return True
+                raise NotAuthorizedException(message_exception)
         except:
-            return False
-
-    def is_not_authorized(self, permissions_list, entity_key):
-        """Check user permission."""
-        for permission in permissions_list:
-            if self.has_permission(permission, entity_key):
-                return False
-        return True
+            raise NotAuthorizedException(message_exception)
+        
 
     def disable_account(self):
         """Desable user account.

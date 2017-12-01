@@ -30,10 +30,8 @@ class RemoveInstitutionHandlerTest(TestBaseHandler):
         institution = mocks.create_institution()
         institution.members = [common_user.key, admin.key]
         admin.institutions_admin = [institution.key]
-        admin.institutions = [institution.key]
-        common_user.institutions = [institution.key]
-        admin.add_permission("publish_post", institution.key.urlsafe())
-        common_user.add_permission("publish_post", institution.key.urlsafe())
+        admin.add_institution(institution.key)
+        common_user.add_institution(institution.key)
         common_user.put()
         admin.put()
         institution.put()

@@ -213,7 +213,7 @@ def getSuperUsers():
     for institution in institutionsTrusted:
         for userKey in institution.members:
             user = userKey.get()
-            if user.has_permission('analyze_request_inst', institution.key.urlsafe()):
+            if permissions['analyze_request_inst'][institution.key.urlsafe()]:
                 userswithpermission.append(user)
     return userswithpermission
 
@@ -222,8 +222,7 @@ def has_permission(permission_type):
     """Check user permission."""
     def method_for_verification(method):
         def check_permission(self, user, *args):
-            Utils._assert(
-                not (user.has_permission(permission_type)),
+            Utils._assert( (permission_type not in user.permissions),
                 'User is not allowed to do this operation',
                 NotAuthorizedException)
             return method(self, user, *args)

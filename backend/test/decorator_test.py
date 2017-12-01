@@ -27,38 +27,14 @@ class TestIsAuthorized(TestBase):
         """Test if the user is really not allowed."""
         """Make sure that an exception is raised because the user
         is not authorized."""
-        self.first_user = mocks.create_user()
-        self.second_user = mocks.create_user()
-        self.third_user = mocks.create_user()
-        self.first_inst = mocks.create_institution()
-        self.second_inst = mocks.create_institution()
-        self.first_user_post = mocks.create_post(
-            self.first_user.key, self.first_inst.key)
-        self.second_user_post = mocks.create_post(
-            self.second_user.key, self.second_inst.key)
-        self.third_user_post = mocks.create_post(
-            self.third_user.key, self.first_inst.key)
+        first_user = mocks.create_user()
+        second_user = mocks.create_user()
+        inst = mocks.create_institution()
+        first_user_post = mocks.create_post(
+            first_user.key, inst.key)
         with self.assertRaises(NotAuthorizedException) as Aex:
-            is_decorated(self, self.second_user,
-                         self.first_user_post.key.urlsafe())
-        # Make sure that the message of the exception is the expected one
-        self.assertEqual(str(Aex.exception),
-                         'User is not allowed to remove this post',
-                         "A different message than expected was received")
-        """Make sure that an exception is raised because the user
-        is not authorized."""
-        with self.assertRaises(NotAuthorizedException) as Aex:
-            is_decorated(self, self.third_user,
-                         self.second_user_post.key.urlsafe())
-        # Make sure that the message of the exception is the expected one
-        self.assertEqual(str(Aex.exception),
-                         'User is not allowed to remove this post',
-                         "A different message than expected was received")
-        """Make sure that an exception is raised because the user
-        is not authorized."""
-        with self.assertRaises(NotAuthorizedException) as Aex:
-            is_decorated(self, self.second_user,
-                         self.third_user_post.key.urlsafe())
+            is_authorized_to_delete_post(self, second_user,
+                                         first_user_post.key.urlsafe())
         # Make sure that the message of the exception is the expected one
         self.assertEqual(str(Aex.exception),
                          'User is not allowed to remove this post',
@@ -68,68 +44,54 @@ class TestIsAuthorized(TestBase):
         """Test if everything goes ok."""
         """ Make sure if the return is None, once when everything goes ok
         the method returns nothing."""
-        self.first_user = mocks.create_user()
-        self.second_user = mocks.create_user()
-        self.third_user = mocks.create_user()
-        self.first_inst = mocks.create_institution()
-        self.first_inst.admin = self.first_user.key
-        self.first_inst.put()
-        self.second_inst = mocks.create_institution()
-        self.second_inst.admin = self.first_user.key
-        self.second_inst.put()
-        self.first_user_post = mocks.create_post(
-            self.first_user.key, self.first_inst.key)
-        self.second_user_post = mocks.create_post(
-            self.second_user.key, self.second_inst.key)
-        self.third_user_post = mocks.create_post(
-            self.third_user.key, self.first_inst.key)
-        self.assertIsNone(is_decorated(self, self.first_user,
-                                       self.first_user_post.key.urlsafe()),
+        user_admin = mocks.create_user()
+        common_user = mocks.create_user()
+        inst = mocks.create_institution()
+        inst.admin = user_admin.key
+        inst.put()
+        admin_post = mocks.create_post(
+            user_admin.key, inst.key)
+        common_user_post = mocks.create_post(
+            common_user.key, inst.key)
+        self.assertIsNone(is_authorized_to_delete_post(self, user_admin,
+                                                       admin_post.key.urlsafe()),
                           "Something went wrong during the execution")
         """ Make sure if the return is None, once when everything goes ok
         the method returns nothing."""
-        self.assertIsNone(is_decorated(self, self.first_user,
-                                       self.second_user_post.key.urlsafe()),
-                          "Something went wrong during the execution")
-        """ Make sure if the return is None, once when everything goes ok
-        the method returns nothing."""
-        self.assertIsNone(is_decorated(self, self.first_user,
-                                       self.third_user_post.key.urlsafe()),
+        self.assertIsNone(is_authorized_to_delete_post(self, user_admin,
+                                                       common_user_post.key.urlsafe()),
                           "Something went wrong during the execution")
 
     def test_is_post_author_in_failure(self):
         """Test is_post_author decorator."""
         """Make sure that an exception is raised because the user
         is not the post's author."""
-        self.second_user = mocks.create_user()
-        self.third_user = mocks.create_user()
-        self.first_inst = mocks.create_institution()
-        self.second_inst = mocks.create_institution()
-        self.second_user_post = mocks.create_post(
-            self.second_user.key, self.second_inst.key)
-        self.third_user_post = mocks.create_post(
-            self.third_user.key, self.first_inst.key)
+        first_user = mocks.create_user()
+        second_user = mocks.create_user()
+        inst = mocks.create_institution()
+        first_user_post = mocks.create_post(
+            first_user.key, inst.key)
         with self.assertRaises(NotAuthorizedException) as Naex:
             is_decorated_by_post_author(
-                self, self.second_user, self.third_user_post.key.urlsafe())
+                self, second_user, first_user_post.key.urlsafe())
         self.assertEquals(
             Naex.exception.message, 'User is not allowed to edit this post',
             "The exception's message wasn't the expected one")
         # Test with an invalid url_string.
         with self.assertRaises(Exception):
             is_decorated_by_post_author(
-                self, self.second_user, "")
+                self, second_user, "")
 
     def test_is_post_author_in_success(self):
         """Test is_post_author decorator."""
         """ Make sure if the return is None, once when everything goes ok
         the method returns nothing."""
-        self.first_user = mocks.create_user()
-        self.first_inst = mocks.create_institution()
-        self.first_user_post = mocks.create_post(
-            self.first_user.key, self.first_inst.key)
-        self.assertIsNone(is_decorated_by_post_author(self, self.first_user,
-                                                      self.first_user_post.key.urlsafe()),
+        first_user = mocks.create_user()
+        inst = mocks.create_institution()
+        first_user_post = mocks.create_post(
+            first_user.key, inst.key)
+        self.assertIsNone(is_decorated_by_post_author(self, first_user,
+                                                      first_user_post.key.urlsafe()),
                           "Something went wrong during the execution")
 
     def tearDown(self):
@@ -138,7 +100,7 @@ class TestIsAuthorized(TestBase):
 
 
 @is_authorized
-def is_decorated(self, user, key):
+def is_authorized_to_delete_post(self, user, key):
     """Allow the system test the decorator."""
     pass
 

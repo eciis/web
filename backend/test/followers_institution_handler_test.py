@@ -95,11 +95,9 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
         user.email = ['user@email.com']
         institution = mocks.create_institution()
         user.follows = [institution.key]
-        user.institutions = [institution.key]
+        user.add_institution(institution.key)
         institution.followers = [user.key]
-        institution.members = [user.key]
-        user.put()
-        institution.put()
+        institution.add_member(user)
         self.assertEquals(len(institution.followers), 1,
                           "The institution should have a follower")
         self.assertEquals(len(user.follows), 1,

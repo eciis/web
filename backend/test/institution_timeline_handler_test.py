@@ -32,9 +32,7 @@ class InstitutionTimelineHandlerTest(TestBaseHandler):
         institution = mocks.create_institution()
         user.email = ['user@email.com']
         user.add_institution(institution.key)
-        institution.members = [user.key]
-        user.put()
-        institution.put()
+        institution.add_member(user)
         post = {
             'title': "Novo edital da instituição",
             'text': "At vero eos et accusamus et iusto",

@@ -28,7 +28,8 @@ describe('Test ConfigInstDirective', function() {
             cnpj: "cnpj",
             address: address,
             leader: "leader name",
-            institutional_email: "email@institutional.com"
+            institutional_email: "email@institutional.com",
+            description: "teste"
     };
 
     var institutions = [{
@@ -279,11 +280,6 @@ describe('Test ConfigInstDirective', function() {
             editInstCtrl.newInstitution.name = "";
             editInstCtrl.nextStep();
             expect(editInstCtrl.steps).toEqual([false, true, false]);
-            editInstCtrl.newInstitution.name = "user";
-            editInstCtrl.newInstitution.acronym = undefined;
-            editInstCtrl.nextStep();
-            expect(editInstCtrl.steps).toEqual([false, true, false]);
-            editInstCtrl.newInstitution.acronym = "UFCG";
             editInstCtrl.newInstitution.actuation_area = undefined;
             editInstCtrl.nextStep();
             expect(editInstCtrl.steps).toEqual([false, true, false]);

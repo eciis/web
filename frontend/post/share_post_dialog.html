@@ -31,7 +31,7 @@
             <iframe ng-src="{{ sharePostCtrl.getVideoUrl() }}"></iframe>
           </div>
           <p></p>
-          <a href class="md-text hyperlink" ng-click="sharePostCtrl.goTo()">
+          <a ng-if="!sharePostCtrl.isSurvey()" href class="md-text hyperlink" ng-click="sharePostCtrl.goTo()">
             <span>{{ sharePostCtrl.post.title }}</span>
           </a>
           <p ng-if="sharePostCtrl.isEvent()">
@@ -46,6 +46,7 @@
           </p>         
           <span class="md-subhead" ng-bind-html="sharePostCtrl.post.text"></span>
           <pdf-view pdf-files='sharePostCtrl.post.pdf_files' is-editing="false"></pdf-view>
+          <survey-details ng-if="sharePostCtrl.isSurvey()" post="sharePostCtrl.post" posts="sharePostCtrl.posts" user="sharePostCtrl.user" isdialog="true"></survey-details>
         </md-card-content>
       </md-card>
     </md-card-content>

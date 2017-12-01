@@ -23,7 +23,7 @@
         key: '1239'
     };
 
-    var url_splab = window.location.href + "/institution/"+ splab.key + "/details";
+    var url_splab = "/institution/"+ splab.key + "/details";
 
     beforeEach(module('app'));
 

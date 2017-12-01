@@ -10,6 +10,8 @@ import mocks
 
 from mock import patch
 
+USER = {'email': 'user@email.com'}
+
 
 class InstitutionTimelineHandlerTest(TestBaseHandler):
     """Institution Timeline Handler Test."""
@@ -25,10 +27,10 @@ class InstitutionTimelineHandlerTest(TestBaseHandler):
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
 
-    @patch('utils.verify_token', return_value={'email': 'user@email.com'})
+    @patch('utils.verify_token', return_value=USER)
     def test_get(self, verify_token):
         """Test the institution_timeline_handler get method."""
-        user = mocks.create_user('user@email.com')
+        user = mocks.create_user(USER['email'])
         institution = mocks.create_institution()
         user.add_institution(institution.key)
         institution.add_member(user)

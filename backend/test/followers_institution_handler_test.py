@@ -6,6 +6,7 @@ import mocks
 
 from mock import patch
 
+USER = {'email': 'user@email.com'}
 
 class InstitutionFollowersHandlerTest(TestBaseHandler):
     """Test the institution_followers_handler class."""
@@ -20,10 +21,10 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
 
-    @patch('utils.verify_token', return_value={'email': 'user@email.com'})
+    @patch('utils.verify_token', return_value=USER)
     def test_post(self, verify_token):
         """Test the institution_follower_handler post method."""
-        user = mocks.create_user('user@email.com')
+        user = mocks.create_user(USER['email'])
         institution = mocks.create_institution()
         self.assertEquals(len(institution.followers), 0,
                           "The institution shouldn't have any follower")
@@ -57,10 +58,10 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
         self.assertEquals(len(user.follows), 1,
                           "The user should follow institution")
 
-    @patch('utils.verify_token', return_value={'email': 'user@email.com'})
+    @patch('utils.verify_token', return_value=USER)
     def test_delete(self, verify_token):
         """Test the institution_follower_handler delete method."""
-        user = mocks.create_user('user@email.com')
+        user = mocks.create_user(USER['email'])
         institution = mocks.create_institution()
         user.follow(institution.key)
         institution.follow(user.key)
@@ -83,10 +84,10 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
         self.assertEquals(len(institution.followers), 0,
                           "The institution shouldn't have any follower")
 
-    @patch('utils.verify_token', return_value={'email': 'user@email.com'})
+    @patch('utils.verify_token', return_value=USER)
     def teste_delete_usermember(self, verify_token):
         """Test that user member try unfollow the institution."""
-        user = mocks.create_user('user@email.com')
+        user = mocks.create_user(USER['email'])
         institution = mocks.create_institution()
         user.follow(institution.key)
         user.add_institution(institution.key)

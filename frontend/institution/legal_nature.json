@@ -1,5 +1,5 @@
 [
     {"value":"public", "name":"Pública"}, 
-    {"value":"private", "name":"Privada"},
-    {"value":"philanthropic", "name":"Filantrópica"}
+    {"value":"private for-profit", "name":"Privada com fins lucrativos"},
+    {"value":"private non-profit", "name":"Privada sem fins lucrativos"}
 ]

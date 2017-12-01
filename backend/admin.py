@@ -5,6 +5,7 @@ import logging
 import json
 import urllib
 import hashlib
+import permissions
 
 from utils import Utils
 
@@ -441,8 +442,11 @@ class ResetHandler(BaseHandler):
             {"msg": "database initialized with a few institutions"})
 
         admin.institutions_admin = [certbio.key, eciis.key, splab.key]
-        admin.add_permission("analyze_request_inst", eciis.key.urlsafe())
-        admin.add_permission("send_invite_inst", eciis.key.urlsafe())
+        
+        admin.add_permissions(permissions.DEFAULT_ADMIN_PERMISSIONS, certbio.key.urlsafe())
+        admin.add_permissions(permissions.DEFAULT_ADMIN_PERMISSIONS, splab.key.urlsafe())
+        admin.add_permissions(permissions.DEFAULT_ADMIN_PERMISSIONS, eciis.key.urlsafe())
+        admin.add_permissions(permissions.DEFAULT_SUPER_USER_PERMISSIONS, eciis.key.urlsafe())
         admin.put()
 
         # POST of Mayza To Certbio Institution

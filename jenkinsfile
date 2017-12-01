@@ -1,0 +1,14 @@
+pipeline {
+    agent { docker 'node:4.0.0' }
+    stages {
+        stage('build') {
+            steps {
+                sh 'cd frontend/test/'
+                sh 'npm install'
+                sh 'npm install -g bower'
+                sh 'bower install'
+                sh 'cd ../../'
+            }
+        }
+    }
+}

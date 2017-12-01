@@ -161,12 +161,14 @@
         })();
     });
 
-    app.controller("ColorPickerController", function ColorPickerController( ProfileService, MessageService, $mdDialog, AuthService, $http) {
+    app.controller("ColorPickerController", function ColorPickerController(user, ProfileService, MessageService, $mdDialog, AuthService, $http) {
         var colorPickerCtrl = this;
+        colorPickerCtrl.user = user;
 
         colorPickerCtrl.saveColor = function saveColor(){
             var diff = jsonpatch.compare(colorPickerCtrl.user, colorPickerCtrl.newUser);
-            ProfileService.editProfile(diff).then(function success() {
+            var promise = ProfileService.editProfile(diff);
+            promise.then(function success() {
                 MessageService.showToast('Cor salva com sucesso');
                 colorPickerCtrl.user.current_institution.color = colorPickerCtrl.newProfile.color;
                 colorPickerCtrl.user.institution_profiles = colorPickerCtrl.newUser.institution_profiles;
@@ -175,6 +177,7 @@
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
+            return promise;
         };
 
         colorPickerCtrl.cancelDialog = function cancelDialog() {

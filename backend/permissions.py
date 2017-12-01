@@ -7,7 +7,7 @@ DEFAULT_ADMIN_PERMISSIONS  = [
     "update_inst",
     "remove_posts", 
     "remove_insts",
-    "link_insts"
+    "answer_link_inst_request"
     ]
 
 DEFAULT_SUPER_USER_PERMISSIONS = [

@@ -29,9 +29,9 @@ class TestIsAuthorized(TestBase):
         is not authorized."""
         first_user = mocks.create_user()
         second_user = mocks.create_user()
-        inst = mocks.create_institution()
+        institution = mocks.create_institution()
         first_user_post = mocks.create_post(
-            first_user.key, inst.key)
+            first_user.key, institution.key)
         with self.assertRaises(NotAuthorizedException) as Aex:
             is_authorized_to_delete_post(self, second_user,
                                          first_user_post.key.urlsafe())
@@ -46,13 +46,13 @@ class TestIsAuthorized(TestBase):
         the method returns nothing."""
         user_admin = mocks.create_user()
         common_user = mocks.create_user()
-        inst = mocks.create_institution()
-        inst.admin = user_admin.key
-        inst.put()
+        institution = mocks.create_institution()
+        institution.admin = user_admin.key
+        institution.put()
         admin_post = mocks.create_post(
-            user_admin.key, inst.key)
+            user_admin.key, institution.key)
         common_user_post = mocks.create_post(
-            common_user.key, inst.key)
+            common_user.key, institution.key)
         self.assertIsNone(is_authorized_to_delete_post(self, user_admin,
                                                        admin_post.key.urlsafe()),
                           "Something went wrong during the execution")
@@ -68,9 +68,9 @@ class TestIsAuthorized(TestBase):
         is not the post's author."""
         first_user = mocks.create_user()
         second_user = mocks.create_user()
-        inst = mocks.create_institution()
+        institution = mocks.create_institution()
         first_user_post = mocks.create_post(
-            first_user.key, inst.key)
+            first_user.key, institution.key)
         with self.assertRaises(NotAuthorizedException) as Naex:
             is_decorated_by_post_author(
                 self, second_user, first_user_post.key.urlsafe())
@@ -87,9 +87,9 @@ class TestIsAuthorized(TestBase):
         """ Make sure if the return is None, once when everything goes ok
         the method returns nothing."""
         first_user = mocks.create_user()
-        inst = mocks.create_institution()
+        institution = mocks.create_institution()
         first_user_post = mocks.create_post(
-            first_user.key, inst.key)
+            first_user.key, institution.key)
         self.assertIsNone(is_decorated_by_post_author(self, first_user,
                                                       first_user_post.key.urlsafe()),
                           "Something went wrong during the execution")

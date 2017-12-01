@@ -264,6 +264,13 @@ class User(ndb.Model):
         except:
             return False
 
+    def is_not_authorized(self, permissions_list, entity_key):
+        """Check user permission."""
+        for permission in permissions_list:
+            if self.has_permission(permission, entity_key):
+                return False
+        return True
+
     def disable_account(self):
         """Desable user account.
 

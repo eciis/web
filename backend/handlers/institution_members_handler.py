@@ -35,9 +35,10 @@ class InstitutionMembersHandler(BaseHandler):
     def delete(self, user, url_string):
         """Delete member of specific institution."""
         institution_key = ndb.Key(urlsafe=url_string)
-        Utils._assert(not user.has_permission('remove_member', url_string),
-                      "User is not allowed to remove member",
-                      NotAuthorizedException)
+        Utils._assert( user.is_not_authorized(['remove_member'], url_string),
+                       "User is not allowed to remove member",
+                       NotAuthorizedException)
+                       
         institution = institution_key.get()
 
         data = self.request.get('removeMember')

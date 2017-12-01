@@ -102,7 +102,7 @@ class InstitutionHandler(BaseHandler):
     @login_required
     def patch(self, user, institution_key):
         """Handler PATCH Request to update Institution."""
-        Utils._assert(not user.has_permission('update_inst', institution_key),
+        Utils._assert(user.is_not_authorized(['update_inst'], institution_key) ,
                       "User is not allowed to edit institution",
                       NotAuthorizedException)
 

@@ -321,7 +321,7 @@ class ResetHandler(BaseHandler):
             'street': 'Avenida Aprígio Veloso',
             'neighbourhood': 'Universitário',
             'city': 'Campina Grande',
-            'state': 'Paraíba',
+            'federal_state': 'Paraíba',
             'cep': '58428-830',
             'country': 'Brasil'
         }
@@ -360,7 +360,7 @@ class ResetHandler(BaseHandler):
             'neighbourhood': 'Prata',
             'city': 'Campina Grande',
             'cep': '58400-565',
-            'state': 'Paraíba',
+            'federal_state': 'Paraíba',
             'country': 'Brasil'
         }
         address_key = Address.create(address_data)
@@ -398,7 +398,7 @@ class ResetHandler(BaseHandler):
             'neighbourhood': 'Centenário',
             'city': 'Campina Grande',
             'cep': '58428-080',
-            'state': 'Paraíba',
+            'federal_state': 'Paraíba',
             'country': 'Brasil'
         }
         address_key = Address.create(address_data)

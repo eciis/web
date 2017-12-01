@@ -34,7 +34,7 @@ class SearchInstitution(SearchDocument):
                 'acronym': institution.acronym,
                 'actuation_area': institution.actuation_area,
                 'legal_nature': institution.legal_nature,
-                'address_state': institution.address and institution.address.state
+                'federal_state': institution.address and institution.address.federal_state
             }
             # Make the structure of the document by setting the fields and its id.
             document = api.search.Document(
@@ -50,7 +50,7 @@ class SearchInstitution(SearchDocument):
                                          value=content['actuation_area']),
                     api.search.TextField(name='legal_nature',
                                          value=content['legal_nature']),
-                    api.search.TextField(name='address_state', value=content['address_state'])
+                    api.search.TextField(name='federal_state', value=content['federal_state'])
                 ]
             )
             self.saveDocument(document)
@@ -63,7 +63,7 @@ class SearchInstitution(SearchDocument):
         index = api.search.Index(self.index_name)
         query_options = api.search.QueryOptions(
             returned_fields=['name', 'state', 'admin', 'acronym',
-                             'actuation_area', 'legal_nature', 'address_state']
+                             'actuation_area', 'legal_nature', 'federal_state']
         )
         query = api.search.Query(
             query_string=query_string, options=query_options)
@@ -100,7 +100,7 @@ class SearchInstitution(SearchDocument):
     def create_field_values_string(self, value):
         """Create a string formed by fields and values."""
         # add a new field here
-        fields = ['name', 'acronym', 'actuation_area', 'legal_nature', 'address_state']
+        fields = ['name', 'acronym', 'actuation_area', 'legal_nature', 'federal_state']
         fields_values = []
 
         for field in fields:

@@ -31,7 +31,7 @@
         };
 
         function updateAddressState() {
-            configInstCtrl.address.state = configInstCtrl.selectedState && configInstCtrl.selectedState.nome;
+            configInstCtrl.address.federal_state = configInstCtrl.selectedState && configInstCtrl.selectedState.nome;
         }
 
         function loadAddress() {
@@ -45,7 +45,7 @@
             configInstCtrl.states = brCidadesEstados.estados;
             var isANewInstitution = institutionKey == undefined;
             if(!isANewInstitution) {
-                var stateName = configInstCtrl.address.state;
+                var stateName = configInstCtrl.address.federal_state;
                 var stateIndex = configInstCtrl.states.findIndex((state) => {
                     return state.nome === stateName;
                 });

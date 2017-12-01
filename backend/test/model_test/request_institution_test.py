@@ -212,7 +212,7 @@ def initModels(cls):
     cls.address.street = 'street'
     cls.address.neighbourhood = 'neighbourhood'
     cls.address.city = 'city'
-    cls.address.state = 'state'
+    cls.address.federal_state = 'state'
     cls.address.city = 'city'
     cls.address.cep = '000'
     cls.address.country = 'country'

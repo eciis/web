@@ -34,13 +34,6 @@ def create_institution():
     institution = Institution()
     inst_hash = getHash(institution)
     institution.name = "Inst %s" % inst_hash
-    institution.email = "inst%s@email.com" % inst_hash
-    institution.acronym = "acronym %s" % inst_hash
-    institution.cnpj = "cnpj %s" % inst_hash
-    institution.phone_number = "phone %s" % inst_hash
-    institution.photo_url = "photo %s" % inst_hash
-    institution.actuation_area = "area %s" % inst_hash
-    institution.description = "description %s" % inst_hash
     institution.put()
     return institution
 

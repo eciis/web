@@ -28,9 +28,8 @@ class InstitutionTimelineHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': 'user@email.com'})
     def test_get(self, verify_token):
         """Test the institution_timeline_handler get method."""
-        user = mocks.create_user()
+        user = mocks.create_user('user@email.com')
         institution = mocks.create_institution()
-        user.email = ['user@email.com']
         user.add_institution(institution.key)
         institution.add_member(user)
         post = {

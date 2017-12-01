@@ -23,9 +23,7 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': 'user@email.com'})
     def test_post(self, verify_token):
         """Test the institution_follower_handler post method."""
-        user = mocks.create_user()
-        user.email = ['user@email.com']
-        user.put()
+        user = mocks.create_user('user@email.com')
         institution = mocks.create_institution()
         self.assertEquals(len(institution.followers), 0,
                           "The institution shouldn't have any follower")
@@ -62,13 +60,10 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': 'user@email.com'})
     def test_delete(self, verify_token):
         """Test the institution_follower_handler delete method."""
-        user = mocks.create_user()
-        user.email = ['user@email.com']
+        user = mocks.create_user('user@email.com')
         institution = mocks.create_institution()
-        user.follows = [institution.key]
-        institution.followers = [user.key]
-        user.put()
-        institution.put()
+        user.follow(institution.key)
+        institution.follow(user.key)
         # Assert that the user follows the institution
         self.assertEquals(len(institution.followers), 1,
                           "The institution should have a follower")
@@ -91,12 +86,11 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': 'user@email.com'})
     def teste_delete_usermember(self, verify_token):
         """Test that user member try unfollow the institution."""
-        user = mocks.create_user()
-        user.email = ['user@email.com']
+        user = mocks.create_user('user@email.com')
         institution = mocks.create_institution()
-        user.follows = [institution.key]
+        user.follow(institution.key)
         user.add_institution(institution.key)
-        institution.followers = [user.key]
+        institution.follow(user.key)
         institution.add_member(user)
         self.assertEquals(len(institution.followers), 1,
                           "The institution should have a follower")

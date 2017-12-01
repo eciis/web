@@ -19,12 +19,12 @@ def getHash(obj):
     return str(hash_num)
 
 
-def create_user():
+def create_user(email=None):
     """Create user function."""
     user = User()
     user_hash = getHash(user)
     user.name = "User %s" % user_hash
-    user.email = ["user%s@email.com" % user_hash]
+    user.email = [email or "user%s@email.com" % user_hash]
     user.put()
     return user
 

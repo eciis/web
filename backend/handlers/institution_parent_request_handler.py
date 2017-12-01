@@ -2,11 +2,14 @@
 """Institution Parent Request Handler."""
 
 import json
+from utils import Utils
 from utils import login_required
 from utils import json_response
 from utils import is_admin_of_requested_inst
 from handlers.base_handler import BaseHandler
 from google.appengine.ext import ndb
+import permissions
+from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
 
 class InstitutionParentRequestHandler(BaseHandler):
@@ -21,11 +24,13 @@ class InstitutionParentRequestHandler(BaseHandler):
 
     @login_required
     @json_response
-    @is_admin_of_requested_inst
     @ndb.transactional(xg=True)
     def put(self, user, request_key):
-        """Handler PUT Requests."""
+        """Handler PUT Requests. Change request status from 'sent' to 'accepted'."""
         request = ndb.Key(urlsafe=request_key).get()
+        Utils._assert(not user.has_permission('link_insts', request.institution_requested_key.urlsafe()),
+                'User is not allowed to accept link between institutions',
+                NotAuthorizedException)
         request.change_status('accepted')
         request.put()
 
@@ -39,11 +44,12 @@ class InstitutionParentRequestHandler(BaseHandler):
 
     @login_required
     @json_response
-    @is_admin_of_requested_inst
     def delete(self, user, request_key):
         """Change request status from 'sent' to 'rejected'."""
-        request_key = ndb.Key(urlsafe=request_key)
-        request = request_key.get()
+        request = ndb.Key(urlsafe=request_key).get()
+        Utils._assert(not user.has_permission('link_insts', request.institution_requested_key.urlsafe()),
+                    'User is not allowed to reject link between institutions',
+                    NotAuthorizedException)
         request.change_status('rejected')
         request.put()
 

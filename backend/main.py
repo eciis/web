@@ -46,7 +46,7 @@ webapp2.WSGIApplication.allowed_methods = frozenset(methods)
 app = webapp2.WSGIApplication([
     ("/api/requests/(.*)/user", RequestHandler),
     ("/api/invites", InviteCollectionHandler),
-    ("/api/invites/institution", InviteInstitutionHandler),
+    ("/api/invites/institution/(.*)", InviteInstitutionHandler),
     ("/api/invites/(.*)", InviteHandler),
     ("/api/requests/(.*)/institution", InstitutionRequestHandler),
     ("/api/requests/(.*)/institution_parent", InstitutionParentRequestHandler),
@@ -60,7 +60,7 @@ app = webapp2.WSGIApplication([
     ("/api/institutions/(.*)/hierarchy/(.*)", InstitutionHierarchyHandler),
     ("/api/institutions/(.*)/invites/(.*)", InstitutionHandler),
     ("/api/institutions/(.*)/requests/user", UserRequestCollectionHandler),
-    ("/api/institutions/requests/institution", InstitutionRequestCollectionHandler),
+    ("/api/institutions/requests/institution/(.*)", InstitutionRequestCollectionHandler),
     ("/api/institutions/(.*)/requests/institution_parent", InstitutionParentRequestCollectionHandler),
     ("/api/institutions/(.*)/requests/institution_children", InstitutionChildrenRequestCollectionHandler),
     ("/api/institutions/(.*)", InstitutionHandler),

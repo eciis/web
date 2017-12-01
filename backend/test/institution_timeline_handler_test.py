@@ -2,8 +2,6 @@
 """Institution Timeline handler test."""
 
 from test_base_handler import TestBaseHandler
-from models.user import User
-from models.institution import Institution
 from handlers.post_handler import PostHandler
 from handlers.post_collection_handler import PostCollectionHandler
 from handlers.institution_timeline_handler import InstitutionTimelineHandler

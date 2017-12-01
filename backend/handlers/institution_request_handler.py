@@ -5,6 +5,7 @@ import json
 from utils import login_required
 from utils import json_response
 from utils import has_permission
+from utils import check_permission
 from handlers.base_handler import BaseHandler
 from google.appengine.ext import ndb
 
@@ -18,6 +19,11 @@ class InstitutionRequestHandler(BaseHandler):
     def get(self, user, request_key):
         """Handler GET Requests."""
         request = ndb.Key(urlsafe=request_key).get()
+        permission_type='analyze_request_inst'
+        check_permission(
+            user, 
+            permission_type, 
+            request.institution_requested_key.get().key.urlsafe())
         self.response.write(json.dumps(request.make()))
 
     @login_required

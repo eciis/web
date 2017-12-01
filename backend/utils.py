@@ -230,6 +230,11 @@ def has_permission(permission_type):
         return check_permission
     return method_for_verification
 
+def check_permission(user, permission_type, institution_key):
+    Utils._assert(
+        not (user.has_permission(permission_type, institution_key)),
+        'User is not allowed to do this operation',
+        NotAuthorizedException)
 
 def offset_pagination(page, number_fetchs, query):
     """Modify query for get entities using offset pagination."""

@@ -116,7 +116,7 @@ def initModels(cls):
     cls.inst_requested.address = cls.address
     cls.inst_requested.put()
     # Update Institutions admin by other user
-    cls.user.add_permission("link_insts", cls.inst_requested.key.urlsafe())
+    cls.other_user.add_permission("link_insts", cls.inst_requested.key.urlsafe())
     cls.other_user.put()
     # new Request
     cls.request = RequestInstitutionParent()

@@ -115,15 +115,12 @@ class InstitutionMemberHandlerTest(TestBaseHandler):
         self.assertTrue(self.institution.key in self.second_user.institutions,
                         "Institution should be in institutions of second_user")
         # Call the delete method
-        print "MAYZAAAAAA 4444444444"
-        print self.second_user.permissions
         with self.assertRaises(Exception) as ex:
             self.testapp.delete("/api/institutions/%s/members?removeMember=%s" %
                                 (self.institution.key.urlsafe(), self.second_user.key.urlsafe()))
 
         exception_message = self.get_message_exception(ex.exception.message)
-        print "MAYZAAAAAA"
-        print exception_message
+
         self.assertEqual(
             "Error! User is not allowed to remove member",
             exception_message,

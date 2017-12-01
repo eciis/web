@@ -110,3 +110,16 @@ class SearchInstitution(SearchDocument):
         fields_values_string = " OR ".join(fields_values)
 
         return fields_values_string
+
+    @staticmethod
+    def have_changes(fields, entity):
+        """It returns True when there is a change
+        to make in entity's document.
+        """        
+        for field in fields:            
+            if not hasattr(entity, field.name):
+                entity = entity.address
+
+            if field.value != getattr(entity, field.name):
+                return True
+        return False

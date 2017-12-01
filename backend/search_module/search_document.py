@@ -51,12 +51,7 @@ class SearchDocument(PolyModel):
         """It returns True when there is a change
         to make in entity's document.
         """
-        address_fields = ['federal_state']
-        
         for field in fields:            
-            if field.name in address_fields:
-                entity = entity.address
-
             if field.value != getattr(entity, field.name):
                 return True
         return False

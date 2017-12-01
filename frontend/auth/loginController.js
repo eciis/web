@@ -50,7 +50,7 @@
         loginCtrl.resetPassword = function resetPassword(ev) {
             var confirm = $mdDialog.prompt()
                 .title('Esqueceu sua senha?')
-                .textContent('Digite seu email e vamos lhe enviar um link para criar uma nova senha.')
+                .textContent('Digite seu email para enviarmos um link para criar uma nova senha.')
                 .placeholder('Digite seu email')
                 .ariaLabel('Digite seu emai')
                 .targetEvent(ev)

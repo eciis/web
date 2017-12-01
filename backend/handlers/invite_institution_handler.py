@@ -10,20 +10,24 @@ from utils import Utils
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from handlers.base_handler import BaseHandler
 from models.factory_invites import InviteFactory
-from utils import has_permission
-
+from utils import check_permission
 
 class InviteInstitutionHandler(BaseHandler):
     """Invite Institution Handler."""
 
     @json_response
     @login_required
-    @has_permission(permission_type='send_invite_inst')
     @is_admin
-    def post(self, user):
+    def post(self, user, institution_key):
         """Handle POST Requests."""
         data = json.loads(self.request.body)
         host = self.request.host
+
+        permission_type='send_invite_inst'
+        check_permission(
+            user, 
+            permission_type, 
+            institution_key)
 
         type_of_invite = data.get('type_of_invite')
         Utils._assert(type_of_invite != 'INSTITUTION',

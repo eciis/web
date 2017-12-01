@@ -138,7 +138,7 @@ def initModels(cls):
     cls.other_user.institutions_admin = [cls.new_inst.key]
     cls.other_user.put()
 
-    cls.user_admin.permissions['analyze_request_inst'] = cls.inst_test.key.urlsafe()
+    cls.user_admin.permissions['analyze_request_inst'] = {cls.inst_test.key.urlsafe() : True}
     cls.user_admin.put()
     # new Request
     cls.request = RequestInstitution()

@@ -17,7 +17,7 @@ class InviteInstitutionHandlerTest(TestBaseHandler):
         """Provide the base for the tests."""
         super(InviteInstitutionHandlerTest, cls).setUp()
         app = cls.webapp2.WSGIApplication(
-            [("/api/invites/institution", InviteInstitutionHandler),
+            [("/api/invites/institution/(.*)", InviteInstitutionHandler),
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
@@ -25,7 +25,8 @@ class InviteInstitutionHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': 'first_user@gmail.com'})
     def test_post_invite_institution(self, verify_token):
         """Test post invite institution."""
-        self.testapp.post_json("/api/invites/institution", {
+        print self.institution.key.urlsafe()
+        self.testapp.post_json("/api/invites/institution/" + self.institution.key.urlsafe(), {
             'invitee': 'ana@gmail.com',
             'admin_key': self.first_user.key.urlsafe(),
             'type_of_invite': 'INSTITUTION',
@@ -36,7 +37,7 @@ class InviteInstitutionHandlerTest(TestBaseHandler):
     def test_post_invite_institution_fail(self, verify_token):
         """Test post invite institution fail."""
         with self.assertRaises(Exception) as ex:
-            self.testapp.post_json("/api/invites/institution", {
+            self.testapp.post_json("/api/invites/institution/" + self.institution.key.urlsafe(), {
                 'invitee': 'ana@gmail.com',
                 'admin_key': self.first_user.key.urlsafe(),
                 'type_of_invite': 'INSTITUTION_PARENT',
@@ -53,7 +54,7 @@ class InviteInstitutionHandlerTest(TestBaseHandler):
     def test_post_user_not_allowed(self, verify_token):
         """Test post user not allowed."""
         with self.assertRaises(Exception) as ex:
-            self.testapp.post_json("/api/invites/institution", {
+            self.testapp.post_json("/api/invites/institution/" + self.institution.key.urlsafe(), {
                 'invitee': 'ana@gmail.com',
                 'admin_key': self.second_user.key.urlsafe(),
                 'type_of_invite': 'INSTITUTION',
@@ -105,5 +106,5 @@ def initModels(cls):
     cls.second_user.institutions_admin = [cls.other_institution.key]
     cls.second_user.put()
 
-    cls.first_user.permissions['send_invite_inst'] = 'sdgjhagdjhgsjg'
+    cls.first_user.permissions['send_invite_inst'] = {cls.institution.key.urlsafe(): True}
     cls.first_user.put()

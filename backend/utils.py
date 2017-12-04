@@ -217,11 +217,6 @@ def getSuperUsers():
                 userswithpermission.append(user)
     return userswithpermission
 
-def check_permission(user, permission_type, institution_key):
-        user.has_permission(permission_type,
-            'User is not allowed to do this operation',
-            institution_key)
-
 def offset_pagination(page, number_fetchs, query):
     """Modify query for get entities using offset pagination."""
     offset = page * number_fetchs

@@ -47,8 +47,8 @@ class InstitutionRequestHandlerTest(TestBaseHandler):
         message = self.get_message_exception(str(ex.exception))
         self.assertEqual(
             message,
-            'Error! User is not allowed to do this operation',
-            "Expected message must be equal to Error! User is not allowed to do this operation")
+            'Error! User is not allowed to get requests',
+            "Expected message must be equal to Error! User is not allowed to get requests")
 
     @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
     def test_put(self, verify_token):

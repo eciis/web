@@ -10,7 +10,6 @@ from utils import Utils
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from handlers.base_handler import BaseHandler
 from models.factory_invites import InviteFactory
-from utils import check_permission
 
 class InviteInstitutionHandler(BaseHandler):
     """Invite Institution Handler."""
@@ -24,9 +23,9 @@ class InviteInstitutionHandler(BaseHandler):
         host = self.request.host
 
         permission_type='send_invite_inst'
-        check_permission(
-            user, 
-            permission_type, 
+        user.has_permission(
+            permission_type,
+            'User is not allowed to post invite', 
             institution_key)
 
         type_of_invite = data.get('type_of_invite')

@@ -64,8 +64,8 @@ class InviteInstitutionHandlerTest(TestBaseHandler):
         message = self.get_message_exception(ex.exception.message)
         self.assertEqual(
             message,
-            'Error! User is not allowed to do this operation',
-            'Expected exception message must be equal to Error! User is not allowed to do this operation')
+            'Error! User is not allowed to post invite',
+            'Expected exception message must be equal to Error! User is not allowed to post invite')
 
 
 def initModels(cls):

@@ -7,7 +7,6 @@ import permissions
 from google.appengine.ext import ndb
 
 from utils import Utils
-from utils import check_permission
 from models.invite import Invite
 from utils import login_required
 from utils import json_response
@@ -158,9 +157,9 @@ class InstitutionHandler(BaseHandler):
         institution = ndb.Key(urlsafe=institution_key).get()
         
         permission_type='remove_inst'
-        check_permission(
-            user, 
-            permission_type, 
+        user.has_permission(
+            permission_type,
+            'User is not allowed to remove institution',
             institution_key)
 
         Utils._assert(not type(institution) is Institution,

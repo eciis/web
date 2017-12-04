@@ -61,8 +61,9 @@ class InstitutionProfile(ndb.Model):
     def is_valid(profiles):
         """Verify the new user profile."""
         new_profile = profiles[len(profiles) - 1]
-        office_is_defined = new_profile.office != None
-        return office_is_defined
+        if new_profile.office:
+            return True
+        return False
 
     @staticmethod
     def create(data):

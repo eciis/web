@@ -217,23 +217,10 @@ def getSuperUsers():
                 userswithpermission.append(user)
     return userswithpermission
 
-
-def has_permission(permission_type):
-    """Check user permission."""
-    def method_for_verification(method):
-        def check_permission(self, user, *args):
-            Utils._assert( (permission_type not in user.permissions),
-                'User is not allowed to do this operation',
-                NotAuthorizedException)
-            return method(self, user, *args)
-        return check_permission
-    return method_for_verification
-
 def check_permission(user, permission_type, institution_key):
-    Utils._assert(
-        not (user.has_permission(permission_type, institution_key)),
-        'User is not allowed to do this operation',
-        NotAuthorizedException)
+        user.has_permission(permission_type,
+            'User is not allowed to do this operation',
+            institution_key)
 
 def offset_pagination(page, number_fetchs, query):
     """Modify query for get entities using offset pagination."""

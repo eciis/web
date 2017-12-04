@@ -7,7 +7,7 @@ import permissions
 from google.appengine.ext import ndb
 
 from utils import Utils
-from utils import has_permission
+from utils import check_permission
 from models.invite import Invite
 from utils import login_required
 from utils import json_response
@@ -151,12 +151,17 @@ class InstitutionHandler(BaseHandler):
 
     @login_required
     @json_response
-    @has_permission(permission_type='remove_inst')
     @ndb.transactional(xg=True)
     def delete(self, user, institution_key):
         """Handle DELETE Requests."""
         remove_hierarchy = self.request.get('removeHierarchy')
         institution = ndb.Key(urlsafe=institution_key).get()
+        
+        permission_type='remove_inst'
+        check_permission(
+            user, 
+            permission_type, 
+            institution_key)
 
         Utils._assert(not type(institution) is Institution,
                       "Key is not an institution", EntityException)

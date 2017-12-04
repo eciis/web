@@ -30,12 +30,30 @@ def create_user(email=None):
     return user
 
 
-def create_institution():
+def create_address():
+    address = Address()
+    address_hash = getHash(address)
+    address.number = "%s" % address_hash
+    address.street = "street %s" % address_hash
+    address.neighbourhood = "neighbourhood %s" % address_hash
+    address.city = "city %s" % address_hash
+    address.federal_state = "federal_state %s" % address_hash
+    address.cep = "cep %s" % address_hash
+    address.country = "country %s" % address_hash
+    address.put()
+    
+    return address
+
+
+def create_institution(has_address=False):
     """Create institution function."""
     institution = Institution()
     inst_hash = getHash(institution)
     institution.name = "Inst %s" % inst_hash
-    institution.address = Address()
+
+    if(has_address): 
+        institution.address = create_address()
+
     institution.put()
     return institution
 

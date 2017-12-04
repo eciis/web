@@ -47,7 +47,7 @@
             if (!invite.isValid()) {
                 MessageService.showToast('Convite inválido!');
             } else if (!isSuperUser()) {
-                MessageService.showToast('Você deve ser super usuário da instituição para enviar o convite!');
+                MessageService.showToast('Você não tem permissão para enviar este tipo de convite.');
             } else {
                 var suggestionInstName = inviteInstCtrl.invite.suggestion_institution_name;
                 promise = InstitutionService.searchInstitutions(suggestionInstName, INSTITUTION_STATE, 'institution');
@@ -164,10 +164,7 @@
 
         function isSuperUser() {
             var current_institution_key = inviteInstCtrl.user.current_institution.key;
-            if (inviteInstCtrl.user.permissions.analyze_request_inst) {
-                return inviteInstCtrl.user.permissions.analyze_request_inst[current_institution_key]; 
-            }
-            return false;
+            return inviteInstCtrl.user.hasPermission('analyze_request_inst', current_institution_key);
         }
 
         (function main() {

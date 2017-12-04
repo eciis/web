@@ -25,7 +25,6 @@ class InviteInstitutionHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': 'first_user@gmail.com'})
     def test_post_invite_institution(self, verify_token):
         """Test post invite institution."""
-        print self.institution.key.urlsafe()
         self.testapp.post_json("/api/invites/institution/" + self.institution.key.urlsafe(), {
             'invitee': 'ana@gmail.com',
             'admin_key': self.first_user.key.urlsafe(),
@@ -106,5 +105,5 @@ def initModels(cls):
     cls.second_user.institutions_admin = [cls.other_institution.key]
     cls.second_user.put()
 
-    cls.first_user.permissions['send_invite_inst'] = {cls.institution.key.urlsafe(): True}
+    cls.first_user.add_permission('send_invite_inst', cls.institution.key.urlsafe())
     cls.first_user.put()

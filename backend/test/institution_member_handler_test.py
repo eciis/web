@@ -120,6 +120,7 @@ class InstitutionMemberHandlerTest(TestBaseHandler):
                                 (self.institution.key.urlsafe(), self.second_user.key.urlsafe()))
 
         exception_message = self.get_message_exception(ex.exception.message)
+
         self.assertEqual(
             "Error! User is not allowed to remove member",
             exception_message,

@@ -13,6 +13,7 @@
     var tiago = {
         name: 'Tiago',
         institutions: [splab],
+        current_institution: splab,
         follows: splab.key,
         invites:[]
     };
@@ -34,7 +35,7 @@
         AuthService.login(tiago);
 
         httpBackend.expect('GET', '/api/invites').respond([]);
-        httpBackend.expect('GET', '/api/institutions/requests/institution').respond([]);
+        httpBackend.expect('GET', '/api/institutions/requests/institution/987654321').respond([]);
         httpBackend.when('GET', 'institution/institution_page.html').respond(200);
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', "home/home.html").respond(200);

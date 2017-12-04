@@ -5,9 +5,15 @@
 
     var mdDialog, scope, inviteController, scopeInvite;
 
+    var splab = {
+        name: 'Splab',
+        key: '1239'
+    };
+
     var mayza = {
         name: 'Mayza',
         key: 'user-key',
+        current_institution: splab,
         invites: [{
             'invitee': 'user@email.com',
             'suggestion_institution_name': "Suggested Name",
@@ -16,11 +22,6 @@
             'stub_institution': { 'name': "Suggested Name",
                                   'key': '00001'}
         }]
-    };
-
-    var splab = {
-        name: 'Splab',
-        key: '1239'
     };
 
     var url_splab = "/institution/"+ splab.key + "/details";
@@ -43,7 +44,7 @@
         });
 
         httpBackend.expect('GET', '/api/invites').respond([]);
-        httpBackend.expect('GET', '/api/institutions/requests/institution').respond([]);
+        httpBackend.expect('GET', '/api/institutions/requests/institution/1239').respond([]);
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', "error/user_inactive.html").respond(200);
         httpBackend.when('GET', 'invites/existing_institutions.html').respond(200);
@@ -95,7 +96,7 @@
     });
 
     describe('goToInstitution()', function() {
-         it('should call state.go()', function() {
+        it('should call state.go()', function() {
             spyOn(window, 'open');
             suggestInstCtrl.goToInstitution(splab.key);
             expect(window.open).toHaveBeenCalledWith(url_splab, '_blank');

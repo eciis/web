@@ -5,6 +5,19 @@ from google.appengine import api
 from search_document import SearchDocument
 
 
+def institution_has_changes(fields, entity):
+        """It returns True when there is a change
+        to make in entity's document.
+        """        
+        for field in fields:            
+            if not hasattr(entity, field.name):
+                entity = entity.address
+
+            if field.value != getattr(entity, field.name):
+                return True
+        return False
+
+
 class SearchInstitution(SearchDocument):
     """Search institution's model."""
 
@@ -95,7 +108,6 @@ class SearchInstitution(SearchDocument):
 
         state_string = "state: %s" % state_string
         return state_string
-    
 
     def create_field_values_string(self, value):
         """Create a string formed by fields and values."""
@@ -110,16 +122,11 @@ class SearchInstitution(SearchDocument):
         fields_values_string = " OR ".join(fields_values)
 
         return fields_values_string
+    
+    def updateDocument(self, entity, have_changes=institution_has_changes):
+        """Update a Document.
 
-    @staticmethod
-    def have_changes(fields, entity):
-        """It returns True when there is a change
-        to make in entity's document.
-        """        
-        for field in fields:            
-            if not hasattr(entity, field.name):
-                entity = entity.address
-
-            if field.value != getattr(entity, field.name):
-                return True
-        return False
+        When an entity changes its fields, this function
+        updates the previous document.
+        """
+        super(SearchInstitution, self).updateDocument(entity, have_changes)

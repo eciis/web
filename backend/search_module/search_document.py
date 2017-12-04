@@ -5,6 +5,17 @@ from google.appengine.ext.ndb.polymodel import PolyModel
 from google.appengine.api import search
 
 
+
+def have_changes(fields, entity):
+    """It returns True when there is a change
+    to make in entity's document.
+    """
+    for field in fields:            
+        if field.value != getattr(entity, field.name):
+            return True
+    return False
+
+
 class SearchDocument(PolyModel):
     """Search's model."""
 
@@ -34,7 +45,7 @@ class SearchDocument(PolyModel):
         index = search.Index(name=self.index_name)
         index.put(document)
 
-    def updateDocument(self, entity):
+    def updateDocument(self, entity, have_changes=have_changes):
         """Update a Document.
 
         When an entity changes its fields, this function
@@ -42,16 +53,6 @@ class SearchDocument(PolyModel):
         """
         index = search.Index(name=self.index_name)
         doc = index.get(entity.key.urlsafe())
-        if(SearchDocument.have_changes(doc.fields, entity)):
+        if(have_changes(doc.fields, entity)):
             index.delete(entity.key.urlsafe())
             self.createDocument(entity)
-
-    @staticmethod
-    def have_changes(fields, entity):
-        """It returns True when there is a change
-        to make in entity's document.
-        """
-        for field in fields:            
-            if field.value != getattr(entity, field.name):
-                return True
-        return False

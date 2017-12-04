@@ -40,20 +40,14 @@ def create_address():
     address.federal_state = "federal_state %s" % address_hash
     address.cep = "cep %s" % address_hash
     address.country = "country %s" % address_hash
-    address.put()
-    
     return address
 
 
-def create_institution(has_address=False):
+def create_institution():
     """Create institution function."""
     institution = Institution()
     inst_hash = getHash(institution)
     institution.name = "Inst %s" % inst_hash
-
-    if(has_address): 
-        institution.address = create_address()
-
     institution.put()
     return institution
 

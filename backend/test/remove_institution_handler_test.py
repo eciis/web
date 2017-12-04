@@ -27,7 +27,8 @@ class RemoveInstitutionHandlerTest(TestBaseHandler):
         # Verify the members
         admin = mocks.create_user()
         common_user = mocks.create_user()
-        institution = mocks.create_institution(has_address=True)
+        institution = mocks.create_institution()
+        institution.address = mocks.create_address()
         institution.add_member(common_user)
         institution.add_member(admin)
         admin.institutions_admin = [institution.key]

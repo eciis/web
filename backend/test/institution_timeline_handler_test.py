@@ -31,7 +31,8 @@ class InstitutionTimelineHandlerTest(TestBaseHandler):
     def test_get(self, verify_token):
         """Test the institution_timeline_handler get method."""
         user = mocks.create_user(USER['email'])
-        institution = mocks.create_institution(has_address=True)
+        institution = mocks.create_institution()
+        institution.address = mocks.create_address()
         user.add_institution(institution.key)
         institution.add_member(user)
         post = {

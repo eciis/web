@@ -25,7 +25,9 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
     def test_post(self, verify_token):
         """Test the institution_follower_handler post method."""
         user = mocks.create_user(USER['email'])
-        institution = mocks.create_institution(has_address=True)
+        institution = mocks.create_institution()
+        institution.address = mocks.create_address()
+        institution.put()
         self.assertEquals(len(institution.followers), 0,
                           "The institution shouldn't have any follower")
         self.assertEquals(len(user.follows), 0,
@@ -62,7 +64,8 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
     def test_delete(self, verify_token):
         """Test the institution_follower_handler delete method."""
         user = mocks.create_user(USER['email'])
-        institution = mocks.create_institution(has_address=True)
+        institution = mocks.create_institution()
+        institution.address = mocks.create_address()
         user.follow(institution.key)
         institution.follow(user.key)
         # Assert that the user follows the institution
@@ -88,7 +91,8 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
     def teste_delete_usermember(self, verify_token):
         """Test that user member try unfollow the institution."""
         user = mocks.create_user(USER['email'])
-        institution = mocks.create_institution(has_address=True)
+        institution = mocks.create_institution()
+        institution.address = mocks.create_address()
         user.follow(institution.key)
         user.add_institution(institution.key)
         institution.follow(user.key)

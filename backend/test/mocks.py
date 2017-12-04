@@ -2,6 +2,7 @@
 
 from models.user import User
 from models.institution import Institution
+from models.institution import Address
 from models.post import Post
 import datetime
 import sys
@@ -34,6 +35,7 @@ def create_institution():
     institution = Institution()
     inst_hash = getHash(institution)
     institution.name = "Inst %s" % inst_hash
+    institution.address = Address()
     institution.put()
     return institution
 

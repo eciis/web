@@ -123,7 +123,8 @@
         };
 
         function loadSentRequests() {
-            RequestInvitationService.getRequestsInst().then(function success(requests) {
+            var institution_key = inviteInstCtrl.user.current_institution.key;
+            RequestInvitationService.getRequestsInst(institution_key).then(function success(requests) {
                 var isSentRequest = createRequestSelector('sent', 'REQUEST_INSTITUTION');
                 inviteInstCtrl.sent_requests = requests.filter(isSentRequest);
             }, function error(response) {

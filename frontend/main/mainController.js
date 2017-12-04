@@ -41,7 +41,10 @@
 
         mainCtrl.isSuperUser = function isSuperUser() {
             var current_institution_key = mainCtrl.user.current_institution.key;
-            return mainCtrl.user.permissions.analyze_request_inst[current_institution_key];
+            if (mainCtrl.user.permissions.analyze_request_inst) {
+                return mainCtrl.user.permissions.analyze_request_inst[current_institution_key]; 
+            }
+            return false;
         };
 
         mainCtrl.changeInstitution = function changeInstitution(profile) {

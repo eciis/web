@@ -15,6 +15,11 @@
         institutions: [splab],
         current_institution: splab,
         follows: splab.key,
+        permissions : {
+            analyze_request_inst: {
+                '987654321': true
+            }
+        },
         invites:[]
     };
 

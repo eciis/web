@@ -21,7 +21,6 @@ class InviteInstitutionHandler(BaseHandler):
         """Handle POST Requests."""
         data = json.loads(self.request.body)
         host = self.request.host
-        permission_type='send_invite_inst'
 
         type_of_invite = data.get('type_of_invite')
         Utils._assert(type_of_invite != 'INSTITUTION',
@@ -30,7 +29,7 @@ class InviteInstitutionHandler(BaseHandler):
 
         institution = invite.institution_key.get()
         user.has_permission(
-            permission_type,
+            'send_invite_inst',
             'User is not allowed to post invite', 
             institution.key.urlsafe())
         Utils._assert(institution.state == 'inactive',

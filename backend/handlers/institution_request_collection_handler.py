@@ -35,9 +35,8 @@ class InstitutionRequestCollectionHandler(BaseHandler):
     @login_required
     def get(self, user, institution_key):
         """Get requests for new institutions."""
-        permission_type='analyze_request_inst'
         user.has_permission(
-            permission_type,
+            'analyze_request_inst',
             'User is not allowed to get requests',
             institution_key)
             

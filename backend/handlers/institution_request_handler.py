@@ -10,9 +10,8 @@ from handlers.base_handler import BaseHandler
 from google.appengine.ext import ndb
 
 def has_permission(user, operation, institution_key):
-    permission_type='analyze_request_inst'
     user.has_permission(
-        permission_type,
+        'analyze_request_inst',
         'User is not allowed to %s requests' %(operation),
         institution_key)
 

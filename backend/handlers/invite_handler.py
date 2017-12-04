@@ -81,16 +81,16 @@ class InviteHandler(BaseHandler):
 
         institution.add_member(user)
         institution.follow(user.key)
-
+ 
         JsonPatch.load(data, user, define_entity)
 
         invite.send_response_notification(user, invite.admin_key.urlsafe(), 'ACCEPT')
-        # TODO: Change the method is valid to check only
-        # the new institution profile of this patch
-        # @author: Mayza Nunes 19/09/2017
+        
         Utils._assert(
             not InstitutionProfile.is_valid(user.institution_profiles),
-            "The profile is invalid.", FieldException)
+            "The profile is invalid.", FieldException
+        )
+        
         user.put()
-
+        
         self.response.write(json.dumps(makeUser(user, self.request)))

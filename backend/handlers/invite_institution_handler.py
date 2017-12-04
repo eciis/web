@@ -17,16 +17,11 @@ class InviteInstitutionHandler(BaseHandler):
     @json_response
     @login_required
     @is_admin
-    def post(self, user, institution_key):
+    def post(self, user):
         """Handle POST Requests."""
         data = json.loads(self.request.body)
         host = self.request.host
-
         permission_type='send_invite_inst'
-        user.has_permission(
-            permission_type,
-            'User is not allowed to post invite', 
-            institution_key)
 
         type_of_invite = data.get('type_of_invite')
         Utils._assert(type_of_invite != 'INSTITUTION',
@@ -34,6 +29,10 @@ class InviteInstitutionHandler(BaseHandler):
         invite = InviteFactory.create(data, type_of_invite)
 
         institution = invite.institution_key.get()
+        user.has_permission(
+            permission_type,
+            'User is not allowed to post invite', 
+            institution.key.urlsafe())
         Utils._assert(institution.state == 'inactive',
                       "The institution has been deleted", NotAuthorizedException)
 

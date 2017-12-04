@@ -123,10 +123,10 @@ class SearchInstitution(SearchDocument):
 
         return fields_values_string
     
-    def updateDocument(self, entity, have_changes=institution_has_changes):
+    def updateDocument(self, entity, has_changes=institution_has_changes):
         """Update a Document.
 
         When an entity changes its fields, this function
         updates the previous document.
         """
-        super(SearchInstitution, self).updateDocument(entity, have_changes)
+        super(SearchInstitution, self).updateDocument(entity, has_changes)

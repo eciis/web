@@ -2,6 +2,7 @@
 
 from models.user import User
 from models.institution import Institution
+from models.institution import Address
 from models.post import Post
 import datetime
 import sys
@@ -27,6 +28,19 @@ def create_user(email=None):
     user.email = [email or "user%s@email.com" % user_hash]
     user.put()
     return user
+
+
+def create_address():
+    address = Address()
+    address_hash = getHash(address)
+    address.number = "%s" % address_hash
+    address.street = "street %s" % address_hash
+    address.neighbourhood = "neighbourhood %s" % address_hash
+    address.city = "city %s" % address_hash
+    address.federal_state = "federal_state %s" % address_hash
+    address.cep = "cep %s" % address_hash
+    address.country = "country %s" % address_hash
+    return address
 
 
 def create_institution():

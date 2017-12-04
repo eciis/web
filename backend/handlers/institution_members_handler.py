@@ -4,10 +4,10 @@
 from google.appengine.ext import ndb
 import json
 
-from handlers.institution_handler import is_admin
 from utils import login_required
 from utils import Utils
 from utils import json_response
+from utils import has_permission
 from service_messages import send_message_notification
 from service_messages import send_message_email
 
@@ -30,11 +30,14 @@ class InstitutionMembersHandler(BaseHandler):
 
     @json_response
     @login_required
-    @is_admin
     @ndb.transactional(xg=True)
     def delete(self, user, url_string):
         """Delete member of specific institution."""
         institution_key = ndb.Key(urlsafe=url_string)
+        user.has_permission('remove_member',
+                            "User is not allowed to remove member",
+                            url_string)
+                       
         institution = institution_key.get()
 
         data = self.request.get('removeMember')

@@ -15,7 +15,6 @@ from service_messages import send_message_notification
 import json
 
 from handlers.base_handler import BaseHandler
-from handlers.institution_handler import is_admin
 
 
 class InstitutionHierarchyHandler(BaseHandler):
@@ -23,10 +22,13 @@ class InstitutionHierarchyHandler(BaseHandler):
 
     @json_response
     @login_required
-    @is_admin
     @ndb.transactional(xg=True)
     def delete(self, user, institution_key, institution_link):
-        """Handle delete requests."""
+        """Handle delete link between institutions."""
+        user.has_permission('remove_link',
+                            "User is not allowed to remove link between institutions",
+                            institution_key)
+
         is_parent = self.request.get('isParent')
         institution = ndb.Key(urlsafe=institution_key).get()
         institution_link = ndb.Key(urlsafe=institution_link).get()

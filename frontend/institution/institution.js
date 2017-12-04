@@ -17,7 +17,7 @@ Institution.prototype.make = function make() {
 
 Institution.prototype.isValid = function isValid() {
     var required_fields = [this.name, this.legal_nature, this.address,
-        this.actuation_area, this.leader];
+        this.actuation_area, this.leader, this.description];
     var isValid = true;
 
     _.forEach(required_fields, function(field) {

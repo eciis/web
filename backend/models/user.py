@@ -2,6 +2,7 @@
 from search_module.search_user import SearchUser
 from google.appengine.ext import ndb
 from custom_exceptions.fieldException import FieldException
+from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
 
 import random
@@ -225,6 +226,16 @@ class User(ndb.Model):
             self.permissions[permission_type] = {entity_key: True}
         self.put()
 
+    def add_permissions(self, list_permissions, entity_key):
+        """Add new permissions to the user permissions list.
+
+        Arguments:
+        list_permissions -- permissions list to be added
+        entity_key -- ndb urlsafe of the object binded to the permission
+        """
+        for permission in list_permissions:
+            self.add_permission(permission,entity_key);
+
     def remove_permission(self, permission_type, entity_key):
         """Remove permission.key from the user permissions list.
 
@@ -235,24 +246,22 @@ class User(ndb.Model):
         del self.permissions[permission_type][entity_key]
         self.put()
 
-    def has_permission(self, permission_type, entity_key=None):
-        """Verify existence of permission.key on user permissions list.
-
-        It trys to access the permission.key, if exist, returns the value,
-        otherwise, except and return False.
-
+    def has_permission(self, permission_type, message_exception, entity_key=None):
+        """Verify if user has permission on determinate entity.
 
         Arguments:
         permission_type -- permission name that will be used to verify authorization
+        message_exception -- to be throwed when no user is not allowed
         entity_key -- ndb urlsafe of the object binded to the permission
         """
         try:
             if entity_key:
-                return self.permissions[permission_type][entity_key]
-            else:
-                return permission_type in self.permissions
+                if self.permissions[permission_type][entity_key]:
+                    return True
+                raise NotAuthorizedException(message_exception)
         except:
-            return False
+            raise NotAuthorizedException(message_exception)
+        
 
     def disable_account(self):
         """Desable user account.

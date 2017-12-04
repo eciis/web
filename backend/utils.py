@@ -189,23 +189,6 @@ def is_admin_of_requested_inst(method):
         return check_authorization
 
 
-def is_authorized(method):
-    """Check if the user is the author of the post or admin of institution."""
-    def check_authorization(self, user, url_string, *args):
-        obj_key = ndb.Key(urlsafe=url_string)
-        post = obj_key.get()
-        institution = post.institution.get()
-        Utils._assert(not post or not institution,
-                      'Post or institution is invalid', Exception)
-        Utils._assert(post.author != user.key and
-                      institution.admin != user.key,
-                      'User is not allowed to remove this post',
-                      NotAuthorizedException)
-
-        method(self, user, url_string, *args)
-    return check_authorization
-
-
 def getSuperUsers():
     """Get users of institutions trusted that has permission to analize resquests for new institutions."""
     userswithpermission = []
@@ -222,7 +205,7 @@ def has_permission(permission_type):
     """Check user permission."""
     def method_for_verification(method):
         def check_permission(self, user, *args):
-            Utils._assert( (permission_type not in user.permissions),
+            Utils._assert((permission_type not in user.permissions),
                 'User is not allowed to do this operation',
                 NotAuthorizedException)
             return method(self, user, *args)

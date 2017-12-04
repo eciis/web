@@ -5,13 +5,11 @@ from google.appengine.ext import ndb
 
 from utils import Utils
 from utils import login_required
-from utils import is_authorized
 from utils import NotAuthorizedException
 from utils import json_response
 from util.json_patch import JsonPatch
 from models.post import Post
 from models.survey_post import SurveyPost
-from models.post import Comment
 from models.post import Like
 
 from handlers.base_handler import BaseHandler
@@ -56,7 +54,6 @@ class PostHandler(BaseHandler):
 
     @json_response
     @login_required
-    @is_authorized
     def delete(self, user, key):
         """Handle DELETE Requests."""
         """Get the post from the datastore."""
@@ -68,7 +65,6 @@ class PostHandler(BaseHandler):
 
     @json_response
     @login_required
-    @is_post_author
     def patch(self, user, url_string):
         """Handler PATCH Requests."""
         data = self.request.body

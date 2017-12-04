@@ -81,7 +81,7 @@ class PostHandlerTest(TestBaseHandler):
     def test_patch(self, verify_token):
         """Test the post_handler's patch method."""
 
-        exception_message = "Error! User is not allowed to edit this post"
+        exception_message = "User is not allowed to edit this post"
         expected_alert = "Expected: " + exception_message + ". But got: "
 
         # Call the patch method and assert that  it raises an exception
@@ -131,6 +131,7 @@ class PostHandlerTest(TestBaseHandler):
             exception_message,
             expected_alert + raises_context_message)
 
+        exception_message = "The user can not update this post"
         # test the case when the post has a like, so it can not be updated
         self.first_user_post.like(self.second_user.key)
         self.first_user_post = self.first_user_post.key.get()
@@ -198,18 +199,21 @@ def initModels(cls):
     cls.first_user_post.author = cls.first_user.key
     cls.first_user_post.institution = cls.institution.key
     cls.first_user_post.put()
+    cls.first_user.add_permissions(["edit_post", "remove_post"], cls.first_user_post.key.urlsafe())
 
     # POST of first_user To institution
     cls.first_user_other_post = Post()
     cls.first_user_other_post.author = cls.first_user.key
     cls.first_user_other_post.institution = cls.institution.key
     cls.first_user_other_post.put()
+    cls.first_user.add_permissions(["edit_post", "remove_post"], cls.first_user_other_post.key.urlsafe())
 
     # Post of second_user
     cls.second_user_post = Post()
     cls.second_user_post.author = cls.second_user.key
     cls.second_user_post.institution = cls.institution.key
     cls.second_user_post.put()
+    cls.second_user.add_permissions(["edit_post", "remove_post"], cls.second_user_post.key.urlsafe())
 
     # update institution's posts
     cls.institution.posts = [cls.second_user_post.key, cls.first_user_post.key,

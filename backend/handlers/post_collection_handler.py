@@ -55,6 +55,7 @@ class PostCollectionHandler(BaseHandler):
         try:
             post = PostFactory.create(data, user.key, institution.key)
             post.put()
+            user.add_permissions(["edit_post", "remove_post"], post.key.urlsafe())
 
             """ Update Institution."""
             institution.posts.append(post.key)

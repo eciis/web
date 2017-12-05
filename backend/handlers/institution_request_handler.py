@@ -9,8 +9,9 @@ from utils import json_response
 from handlers.base_handler import BaseHandler
 from google.appengine.ext import ndb
 
-def has_permission(user, operation, institution_key):
-    user.has_permission(
+
+def check_permission(user, operation, institution_key):
+    user.check_permission(
         'analyze_request_inst',
         'User is not allowed to %s requests' %(operation),
         institution_key)
@@ -23,7 +24,7 @@ class InstitutionRequestHandler(BaseHandler):
     def get(self, user, request_key):
         """Handler GET Requests."""
         request = ndb.Key(urlsafe=request_key).get()
-        has_permission(
+        check_permission(
             user,
             'get',
             request.institution_requested_key.urlsafe())
@@ -35,7 +36,7 @@ class InstitutionRequestHandler(BaseHandler):
     def put(self, user, request_key):
         """Handler PUT Requests."""
         request = ndb.Key(urlsafe=request_key).get()
-        has_permission(
+        check_permission(
             user,
             'put',
             request.institution_requested_key.urlsafe())
@@ -73,7 +74,7 @@ class InstitutionRequestHandler(BaseHandler):
         """Change request status from 'sent' to 'rejected'."""
         request_key = ndb.Key(urlsafe=request_key)
         request = request_key.get()
-        has_permission(
+        check_permission(
             user,
             'remove',
             request.institution_requested_key.urlsafe())

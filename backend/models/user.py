@@ -234,7 +234,7 @@ class User(ndb.Model):
         entity_key -- ndb urlsafe of the object binded to the permission
         """
         for permission in list_permissions:
-            self.add_permission(permission,entity_key);
+            self.add_permission(permission, entity_key)
 
     def remove_permission(self, permission_type, entity_key):
         """Remove permission.key from the user permissions list.
@@ -246,22 +246,33 @@ class User(ndb.Model):
         del self.permissions[permission_type][entity_key]
         self.put()
 
-    def has_permission(self, permission_type, message_exception, entity_key=None):
+    def has_permission(self, permission_type, entity_key=None):
         """Verify if user has permission on determinate entity.
 
         Arguments:
         permission_type -- permission name that will be used to verify authorization
-        message_exception -- to be throwed when no user is not allowed
         entity_key -- ndb urlsafe of the object binded to the permission
         """
         try:
             if entity_key:
                 if self.permissions[permission_type][entity_key]:
                     return True
-                raise NotAuthorizedException(message_exception)
+            return False
         except:
+            return False
+
+    def check_permission(self, permission_type, message_exception, entity_key=None):
+        """Throw exception when user hasn't permission.
+
+        Arguments:
+        permission_type -- permission name that will be used to verify authorization
+        message_exception -- to be throwed when no user is not allowed
+        entity_key -- ndb urlsafe of the object binded to the permission
+        """
+        if self.has_permission(permission_type, entity_key):
+            return True
+        else:
             raise NotAuthorizedException(message_exception)
-        
 
     def disable_account(self):
         """Desable user account.

@@ -208,6 +208,7 @@ class InstitutionHandlerTest(TestBaseHandler):
         self.user.institutions_admin.append(self.second_inst.key)
         self.user.add_permission("publish_post", self.third_inst.key.urlsafe())
         self.user.add_permission("publish_post", self.second_inst.key.urlsafe())
+        self.user.add_permission("remove_inst", self.second_inst.key.urlsafe())
         self.user.put()
         self.other_user.institutions_admin.append(self.third_inst.key)
         self.other_user.institutions.append(self.third_inst.key)
@@ -240,7 +241,7 @@ class InstitutionHandlerTest(TestBaseHandler):
         self.user.institutions.append(self.third_inst.key)
         self.third_inst.state = "active"
         self.user.add_permission("publish_post", self.third_inst.key.urlsafe())
-        self.user.add_permission("publish_post", self.second_inst.key.urlsafe())
+        self.user.add_permission("remove_inst", self.third_inst.key.urlsafe())
         self.user.put()
         self.third_inst.put()
         self.testapp.delete("/api/institutions/%s?removeHierarchy=false" %
@@ -253,7 +254,6 @@ class InstitutionHandlerTest(TestBaseHandler):
         """Test delete child institution."""
         self.other_user.institutions.append(self.third_inst.key)
         self.first_inst.state = "active"
-        self.other_user.add_permission("publish_post", self.first_inst.key.urlsafe())
         self.other_user.put()
         self.first_inst.put()
         with self.assertRaises(Exception):

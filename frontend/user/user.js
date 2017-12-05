@@ -126,6 +126,14 @@ User.prototype.isInactive = function isInactive() {
     return notActive;
 };
 
+User.prototype.hasPermission = function hasPermission(permissionType, entityKey) {
+    var key = entityKey || this.current_institution.key;
+    if (this.permissions[permissionType]) {
+        return this.permissions[permissionType][key];
+    }
+    return false;
+};
+
 function changeProfileColor(user, institution) {
     var profile = _.find(user.institution_profiles, {
         'institution_key': institution.key

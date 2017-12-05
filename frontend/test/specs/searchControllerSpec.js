@@ -105,10 +105,10 @@
             });
         });
 
-        describe('searchByActuationArea()', function() {
+        describe('searchBy()', function() {
             it('Should call makeSearch()', function() {
                 spyOn(searchCtrl, 'makeSearch');
-                searchCtrl.searchByActuationArea('Universidades');
+                searchCtrl.searchBy('Universidades');
                 expect(searchCtrl.makeSearch).toHaveBeenCalledWith('Universidades', 'institution');
             });
         });

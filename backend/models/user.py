@@ -59,11 +59,11 @@ class InstitutionProfile(ndb.Model):
 
     @staticmethod
     def is_valid(profiles):
-        """Verify the user profile."""
-        for profile in profiles:
-            if not profile.office:
-                return False
-        return True
+        """Verify the new user profile."""
+        new_profile = profiles[len(profiles) - 1]
+        if new_profile.office:
+            return True
+        return False
 
     @staticmethod
     def create(data):

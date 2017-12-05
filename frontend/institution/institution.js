@@ -51,7 +51,7 @@ Institution.prototype.addChildrenInst = function addChildrenInst(institution){
 Institution.prototype.getFullAddress = function getFullAddress() {
     if(this.address) {
         var fullAddress = this.address.street + ", " + this.address.number + ", " + this.address.neighbourhood +
-                         ", " + this.address.city + ", " + this.address.state + ", " + this.address.country;
+                         ", " + this.address.city + ", " + this.address.federal_state + ", " + this.address.country;
         return fullAddress;
     }
 };

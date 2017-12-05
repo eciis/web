@@ -4,9 +4,9 @@
 import json
 from utils import login_required
 from utils import json_response
-from utils import is_admin_of_requested_inst
 from handlers.base_handler import BaseHandler
 from google.appengine.ext import ndb
+
 
 
 class InstitutionChildrenRequestHandler(BaseHandler):
@@ -21,11 +21,13 @@ class InstitutionChildrenRequestHandler(BaseHandler):
 
     @login_required
     @json_response
-    @is_admin_of_requested_inst
     @ndb.transactional(xg=True)
     def put(self, user, request_key):
-        """Handler PUT Requests."""
+        """Handler PUT Requests. Change status of children_request from 'sent' to 'accepted'."""
         request = ndb.Key(urlsafe=request_key).get()
+        user.has_permission('answer_link_inst_request',
+                            'User is not allowed to accept link between institutions',
+                            request.institution_requested_key.urlsafe())
         request.change_status('accepted')
         request.put()
 
@@ -43,11 +45,12 @@ class InstitutionChildrenRequestHandler(BaseHandler):
 
     @login_required
     @json_response
-    @is_admin_of_requested_inst
     def delete(self, user, request_key):
         """Change request status from 'sent' to 'rejected'."""
-        request_key = ndb.Key(urlsafe=request_key)
-        request = request_key.get()
+        request = ndb.Key(urlsafe=request_key).get()
+        user.has_permission('answer_link_inst_request',
+                            'User is not allowed to reject link between institutions',
+                            request.institution_requested_key.urlsafe())
         request.change_status('rejected')
         request.put()
 

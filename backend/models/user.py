@@ -262,7 +262,7 @@ class User(ndb.Model):
             return False
 
     def check_permission(self, permission_type, message_exception, entity_key=None):
-        """Throw exception case user hasn't permission.
+        """Throw exception when user hasn't permission.
 
         Arguments:
         permission_type -- permission name that will be used to verify authorization

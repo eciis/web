@@ -60,8 +60,13 @@ class PostHandler(BaseHandler):
         obj_key = ndb.Key(urlsafe=key)
         post = obj_key.get()
 
-        """Set the informations about post."""
-        post.delete(user)
+        is_admin = user.has_permission("remove_posts", post.institution.urlsafe())
+        is_author = user.has_permission("remove_post", key)
+
+        if(is_admin or is_author):
+            post.delete(user)
+        else:
+            raise NotAuthorizedException("The user can not remove this post")
 
     @json_response
     @login_required
@@ -75,6 +80,10 @@ class PostHandler(BaseHandler):
             Utils._assert(post.has_activity(),
                           "The user can not update this post",
                           NotAuthorizedException)
+
+            user.check_permission("edit_post",
+                                  "User is not allowed to edit this post",
+                                  url_string)
 
             """Apply patch."""
             JsonPatch.load(data, post)

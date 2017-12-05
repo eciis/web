@@ -6,11 +6,11 @@
             <md-subhead layout-padding class="md-primary" md-colors="{background: 'teal-900'}">Buscar por área de atuação</md-subhead>
             <md-card-content>
                 <md-select ng-model="searCtrl.searchActuation" placeholder="Buscar por...">
-                    <md-option ng-click="searchCtrl.searchByActuationArea('*')" value="Pesquisar em todas as áreas">
+                    <md-option ng-click="searchCtrl.searchBy('*')" value="Pesquisar em todas as áreas">
                         Pesquisar em todas as áreas
                     </md-option>
                     <md-option ng-repeat="actuation_area in searchCtrl.actuationAreas | orderBy: 'name'" 
-                        ng-value="actuation_area.name" ng-click="searchCtrl.searchByActuationArea(actuation_area.name)">
+                        ng-value="actuation_area.name" ng-click="searchCtrl.searchBy(actuation_area.name)">
                         {{actuation_area.name}}
                     </md-option>
                 </md-select>
@@ -20,12 +20,26 @@
             <md-subhead layout-padding class="md-primary" md-colors="{background: 'teal-900'}">Buscar por natureza legal</md-subhead>
             <md-card-content>
                 <md-select ng-model="searCtrl.searchNature" placeholder="Buscar por...">
-                    <md-option ng-click="searchCtrl.searchByActuationArea('*')" value="Pesquisar em todas as áreas">
+                    <md-option ng-click="searchCtrl.searchBy('*')" value="Pesquisar em todas as áreas">
                         Pesquisar em todas as áreas
                     </md-option>
                     <md-option ng-repeat="nature in searchCtrl.legalNature | orderBy: 'name'" 
-                        ng-value="nature.name" ng-click="searchCtrl.searchByActuationArea(nature.value)">
+                        ng-value="nature.name" ng-click="searchCtrl.searchBy(nature.value)">
                         {{nature.name}}
+                    </md-option>
+                </md-select>
+            </md-card-content>
+          </md-card>
+          <md-card>
+            <md-subhead layout-padding class="md-primary" md-colors="{background: 'teal-900'}">Buscar por estado</md-subhead>
+            <md-card-content>
+                <md-select ng-model="searCtrl.searchState" placeholder="Buscar por...">
+                    <md-option ng-click="searchCtrl.searchBy('*')" value="Pesquisar em todas as áreas">
+                        Pesquisar em todos os estados
+                    </md-option>
+                    <md-option ng-repeat="state in searchCtrl.states" 
+                        ng-value="state" ng-click="searchCtrl.searchBy(state.nome)">
+                        {{state.nome}}
                     </md-option>
                 </md-select>
             </md-card-content>

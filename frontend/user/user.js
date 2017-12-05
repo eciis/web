@@ -127,8 +127,13 @@ User.prototype.isInactive = function isInactive() {
 };
 
 User.prototype.hasPermission = function hasPermission(permissionType, entityKey) {
+    var current_institution_key = this.current_institution.key;
     if (this.permissions[permissionType]) {
-        return this.permissions[permissionType][entityKey]; 
+        if (entityKey) {
+            return this.permissions[permissionType][entityKey];
+        } else {
+            return this.permissions[permissionType][current_institution_key];
+        }
     }
     return false;
 };

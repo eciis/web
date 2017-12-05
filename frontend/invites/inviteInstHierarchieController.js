@@ -321,7 +321,9 @@
         inviteInstHierCtrl.showMessage = function(request) {
             var message;
             if(inviteInstHierCtrl.isReqSentByCurrentInst(request)) {
-                message = 'Solicitação para ser uma instituição subordinada (Aguardando confirmação)';
+                message = request.type_of_invite === REQUEST_CHILDREN ?
+                    'Solicitação para ser uma instituição subordinada (Aguardando confirmação)' :
+                    'Solicitação para ser uma instituição superior (Aguardando confirmação)';
             } else if(request.type_of_invite === REQUEST_CHILDREN) {
                 message = 'Solicitação para ser a instituição superior';
             } else {

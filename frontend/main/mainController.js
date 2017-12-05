@@ -40,7 +40,8 @@
         };
 
         mainCtrl.isSuperUser = function isSuperUser() {
-            return mainCtrl.user.permissions.analyze_request_inst;
+            var current_institution_key = mainCtrl.user.current_institution.key;
+            return mainCtrl.user.hasPermission('analyze_request_inst', current_institution_key);
         };
 
         mainCtrl.changeInstitution = function changeInstitution(profile) {

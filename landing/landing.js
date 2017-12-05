@@ -90,7 +90,7 @@
                 url: "/home-termos-de-uso",
                 views: {
                     content: {
-                        templateUrl: "terms.html",
+                        templateUrl: "coming_soon.html",
                         controller: "MainController as ctrl"
                     }
                 }
@@ -99,7 +99,7 @@
                 url: "/home-privacidade",
                 views: {
                     content: {
-                        templateUrl: "privacy.html",
+                        templateUrl: "coming_soon.html",
                         controller: "MainController as ctrl"
                     }
                 }

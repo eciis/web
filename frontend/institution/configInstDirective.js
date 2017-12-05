@@ -16,7 +16,6 @@
         configInstCtrl.phoneRegex = "[0-9]{2}[\\s][0-9]{4,5}[-][0-9]{4,5}";
         configInstCtrl.cepRegex = "([0-9]{5}[-][0-9]{3})";
         configInstCtrl.newInstitution = {
-            photo_url: "app/images/institution.jpg",
             email: configInstCtrl.user.email[0]
         };
         configInstCtrl.steps = [true, false, false];
@@ -354,11 +353,17 @@
                 configInstCtrl.newInstitution = response.data;
                 configInstCtrl.suggestedName = configInstCtrl.newInstitution.name;
                 currentPortfoliourl = configInstCtrl.newInstitution.portfolio_url;
-                loadAddress();
+                loadAddress(); 
+                setDefaultPhotoUrl();
                 observer = jsonpatch.observe(configInstCtrl.newInstitution);
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
+        }
+
+        function setDefaultPhotoUrl() {
+            var defaultPhotoUrl = "app/images/institution.jpg";
+            configInstCtrl.newInstitution.photo_url = configInstCtrl.newInstitution.photo_url || defaultPhotoUrl;
         }
 
         (function main(){

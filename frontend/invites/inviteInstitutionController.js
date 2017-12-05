@@ -46,6 +46,8 @@
 
             if (!invite.isValid()) {
                 MessageService.showToast('Convite inválido!');
+            } else if (!inviteInstCtrl.user.hasPermission('analyze_request_inst')) {
+                MessageService.showToast('Você não tem permissão para enviar este tipo de convite.');
             } else {
                 var suggestionInstName = inviteInstCtrl.invite.suggestion_institution_name;
                 promise = InstitutionService.searchInstitutions(suggestionInstName, INSTITUTION_STATE, 'institution');
@@ -123,7 +125,8 @@
         };
 
         function loadSentRequests() {
-            RequestInvitationService.getRequestsInst().then(function success(requests) {
+            var institution_key = inviteInstCtrl.user.current_institution.key;
+            RequestInvitationService.getRequestsInst(institution_key).then(function success(requests) {
                 var isSentRequest = createRequestSelector('sent', 'REQUEST_INSTITUTION');
                 inviteInstCtrl.sent_requests = requests.filter(isSentRequest);
             }, function error(response) {

@@ -7,7 +7,6 @@ import json
 from utils import login_required
 from utils import Utils
 from utils import json_response
-from utils import has_permission
 from service_messages import send_message_notification
 from service_messages import send_message_email
 

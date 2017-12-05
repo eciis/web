@@ -28,7 +28,7 @@ class InviteInstitutionHandler(BaseHandler):
         invite = InviteFactory.create(data, type_of_invite)
 
         institution = invite.institution_key.get()
-        user.has_permission(
+        user.check_permission(
             'send_invite_inst',
             'User is not allowed to post invite', 
             institution.key.urlsafe())

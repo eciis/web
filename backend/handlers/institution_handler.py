@@ -155,8 +155,8 @@ class InstitutionHandler(BaseHandler):
         """Handle DELETE Requests."""
         remove_hierarchy = self.request.get('removeHierarchy')
         institution = ndb.Key(urlsafe=institution_key).get()
-        
-        user.has_permission(
+
+        user.check_permission(
             'remove_inst',
             'User is not allowed to remove institution',
             institution_key)

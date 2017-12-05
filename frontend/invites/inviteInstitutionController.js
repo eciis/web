@@ -58,6 +58,37 @@
             }
         };
 
+        inviteInstCtrl.acceptRequest = function acceptRequest(request) {
+            var promise = RequestInvitationService.acceptRequest(request.key);
+            promise.then(function success() {
+                MessageService.showToast("Solicitação aceita!");
+                _.remove(inviteInstCtrl.sent_requests, function(req) {
+                    return req == request;
+                });
+                inviteInstCtrl.accepted_invitations.push(request);
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
+            });
+        };
+
+        inviteInstCtrl.rejectRequest = function rejectInvite(event, request){
+            var promise = RequestInvitationService.showRejectDialog(event);
+
+            promise.then(function() {
+                RequestInvitationService.rejectRequest(request.key).then(function success() {
+                    MessageService.showToast("Solicitação rejeitada!");
+                    _.remove(inviteInstCtrl.sent_requests, function(req) {
+                        return req == request;
+                    });
+                }, function error(response) {
+                    MessageService.showToast(response.data.msg);
+                });
+            }, function() {
+                MessageService.showToast('Cancelado');
+            });
+            return promise;
+        };
+
         inviteInstCtrl.showDialogOrSendInvite = function showDialogOrSendInvite(data, ev) {
             inviteInstCtrl.existing_institutions = data;
             if(_.isEmpty(inviteInstCtrl.existing_institutions)) {

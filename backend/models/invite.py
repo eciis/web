@@ -4,6 +4,7 @@ from google.appengine.ext import ndb
 from google.appengine.ext.ndb.polymodel import PolyModel
 from service_messages import send_message_email
 from service_messages import send_message_notification
+from utils import get_super_institution
 import json
 
 
@@ -56,6 +57,7 @@ class Invite(PolyModel):
         invite.is_request = data.get('is_request') or False
         invite.institution_key = ndb.Key(urlsafe=data.get('institution_key'))
         invite.sender_key = invite.admin_key
+        invite.institution_requested_key = get_super_institution().key
         if data.get('sender_key'):
             invite.sender_key = ndb.Key(urlsafe=data.get('sender_key'))
         invite.sender_name = invite.sender_key.get().name

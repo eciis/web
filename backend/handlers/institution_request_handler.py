@@ -23,6 +23,7 @@ class InstitutionRequestHandler(BaseHandler):
     @json_response
     def get(self, user, request_key):
         """Handler GET Requests."""
+        print request_key
         request = ndb.Key(urlsafe=request_key).get()
         check_permission(
             user,

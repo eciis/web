@@ -69,15 +69,15 @@
             }
         }
 
-        function loadState() {
-            searchCtrl.states = brCidadesEstados.estados;
+        function loadBrazilianFederalStates() {
+            searchCtrl.brazilianFederalStates = brCidadesEstados.estados;
         }
 
         (function main() {
             getActuationAreas();
             getLegalNatures();
             loadSearch();
-            loadState();
+            loadBrazilianFederalStates();
         })();
     });
 })();

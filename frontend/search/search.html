@@ -37,7 +37,7 @@
                     <md-option ng-click="searchCtrl.searchBy('*')" value="Pesquisar em todas as áreas">
                         Pesquisar em todos os estados
                     </md-option>
-                    <md-option ng-repeat="state in searchCtrl.states" 
+                    <md-option ng-repeat="state in searchCtrl.brazilianFederalStates" 
                         ng-value="state" ng-click="searchCtrl.searchBy(state.nome)">
                         {{state.nome}}
                     </md-option>

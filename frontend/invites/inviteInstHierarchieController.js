@@ -351,6 +351,10 @@
             return inviteInstHierCtrl.user.permissions.remove_inst[institution_key];
         };
 
+        inviteInstHierCtrl.linkStatus = function linkStatus(institution) {
+            return institution.parent_institution ? "confirmado" : "não confirmado";
+        };
+
         inviteInstHierCtrl.removeChild = function removeChild(institution, ev) {
             $mdDialog.show({
                 templateUrl: "app/invites/removeChildDialog.html",

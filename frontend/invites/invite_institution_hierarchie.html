@@ -104,6 +104,7 @@
                   <a href class="md-title hyperlink">
                   {{ institution.name }}
                   </a>
+                  <h3>Status do vínculo: {{inviteInstHierCtrl.linkStatus(institution)}}</h3>
                   <h4 ng-if="institution.invite">Nome Sugerido: {{ inviteInstHierCtrl.getSuggestedName(institution) }}</h4>
                 </div>
                 <div ng-if="!inviteInstHierCtrl.isActive(institution)">

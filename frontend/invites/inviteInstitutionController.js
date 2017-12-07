@@ -59,7 +59,7 @@
         };
 
         inviteInstCtrl.acceptRequest = function acceptRequest(request) {
-            var promise = RequestInvitationService.acceptRequest(request.key);
+            var promise = RequestInvitationService.acceptRequestInst(request.key);
             promise.then(function success() {
                 MessageService.showToast("Solicitação aceita!");
                 _.remove(inviteInstCtrl.sent_requests, function(req) {
@@ -74,7 +74,7 @@
             var promise = RequestInvitationService.showRejectDialog(event);
 
             promise.then(function() {
-                RequestInvitationService.rejectRequest(request.key).then(function success() {
+                RequestInvitationService.rejectRequestInst(request.key).then(function success() {
                     MessageService.showToast("Solicitação rejeitada!");
                     _.remove(inviteInstCtrl.sent_requests, function(req) {
                         return req == request;

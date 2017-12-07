@@ -70,6 +70,11 @@ class InstitutionRequestCollectionHandlerTest(TestBaseHandler):
             'REQUEST_INSTITUTION',
             "Expected type_of_invite must be equal to REQUEST_INSTITUTION")
 
+        self.assertEqual(
+            request['requested_inst_name'],
+            "Complexo Industrial da Saude",
+            "Expected institution_requested be new inst")
+
 
 def initModels(cls):
     """Init the models."""

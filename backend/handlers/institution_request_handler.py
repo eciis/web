@@ -52,6 +52,7 @@ class InstitutionRequestHandler(BaseHandler):
         sender.follow(institution.key)
         sender.institutions_admin.append(institution.key)
         sender.change_state('active')
+        print institution.photo_url
 
         data_profile = {
             'office': 'Administrador',

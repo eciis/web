@@ -21,6 +21,9 @@ def createInstitution(user, data):
         if property != 'admin':
             setattr(inst_stub, property, data[property])
 
+    if (data.get("photo_url") is None):
+            inst_stub.photo_url = "app/images/institution.jpg"
+
     inst_stub.address = Address.create(data.get('address'))
     inst_stub.state = 'pending'
     inst_stub.put()

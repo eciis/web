@@ -2,7 +2,7 @@
 
 (describe('Test InviteInstitutionController', function() {
 
-    var inviteinstitutionCtrl, httpBackend, scope, inviteService, createCtrl, state, instService;
+    var inviteinstitutionCtrl, httpBackend, scope, inviteService, createCtrl, state, instService, mdDialog, requestInvitationService;
 
     var splab = {
             name: 'SPLAB',
@@ -23,19 +23,30 @@
         invites:[]
     };
 
+    var request = {
+        admin_name: 'example',
+        institution_key: splab.key,
+        institution_requested_key: splab.key,
+        key: '000000',
+        sender: 'admin',
+        status: 'sent',
+    }
+
     var INSTITUTION_SEARCH_URI = '/api/search/institution?value=';
 
     var invite = new Invite({invitee: "mayzabeel@gmail.com", suggestion_institution_name : "New Institution"}, 'institution', splab.key);
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $state,
-        InviteService, AuthService, InstitutionService) {
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $state, $mdDialog,
+        InviteService, AuthService, InstitutionService, RequestInvitationService) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
+        mdDialog = $mdDialog;
         inviteService = InviteService;
         instService = InstitutionService;
+        requestInvitationService = RequestInvitationService;
 
         AuthService.login(tiago);
 
@@ -151,6 +162,61 @@
                 inviteinstitutionCtrl.cancelInvite();
                 expect(inviteinstitutionCtrl.invite).toEqual({});
                 expect(inviteinstitutionCtrl.showSendInvites).toBe(true);
+            });
+        });
+
+        describe('acceptRequest()', function() {
+            it('should call accept request', function(done) {
+                spyOn(mdDialog, 'show').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            return callback();
+                        }
+                    };
+                });
+                spyOn(requestInvitationService, 'acceptRequestInst').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            return callback();
+                        }
+                    };
+                });
+                spyOn(instService, 'getInstitution').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            return callback({data: splab, msg: 'success'});
+                        }
+                    };
+                });
+                var promise = inviteinstitutionCtrl.acceptRequest(request, 'REQUEST_INSTITUTION');
+                promise.then(function() {
+                    expect(requestInvitationService.acceptRequestInst).toHaveBeenCalledWith(request.key);
+                    done();
+                });
+            });
+        });
+
+        describe('rejectRequest()', function() {
+            it('should call reject parent request', function(done) {
+                spyOn(mdDialog, 'show').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            return callback();
+                        }
+                    };
+                });
+                spyOn(requestInvitationService, 'rejectInstParentRequest').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            return callback();
+                        }
+                    };
+                });
+                var promise = inviteinstitutionCtrl.rejectRequest(request, 'REQUEST_INSTITUTION');
+                promise.then(function() {
+                    expect(requestInvitationService.rejectRequestInst).toHaveBeenCalledWith(request.key);
+                    done();
+                });
             });
         });
     });

@@ -59,11 +59,11 @@
                     }
                 }
             })
-            .state("landing.ecisdetails", {
-                url: "/home-CIS",
+            .state("landing.platformcisdetails", {
+                url: "/home-plataforma-CIS",
                 views: {
                     content: {
-                        templateUrl: "ecisdetails.html",
+                        templateUrl: "platformcisdetails.html",
                         controller: "MainController as ctrl"
                     }
                 }

@@ -171,7 +171,7 @@ def initModels(cls):
     cls.address.street = 'street'
     # new Institution inst test
     cls.inst_test = Institution()
-    cls.inst_test.name = 'inst test'
+    cls.inst_test.name = 'Complexo Industrial da Saude'
     cls.inst_test.address = cls.address
     cls.inst_test.members = [cls.user_admin.key]
     cls.inst_test.followers = [cls.user_admin.key]

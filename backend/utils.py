@@ -193,6 +193,9 @@ def is_admin_of_requested_inst(method):
 
 def get_super_institution():
     """Return Super Institution of system."""
+    # TODO: When change The Super Institution change
+    # institution name in test of invite
+    # @author: Maiana Brito
     return Institution.query().filter(Institution.name == "Complexo Industrial da Saude").get()
 
 

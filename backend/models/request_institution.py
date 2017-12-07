@@ -5,6 +5,7 @@ from invite import Invite
 from request import Request
 from google.appengine.ext import ndb
 from utils import getSuperUsers
+from utils import get_super_institution
 from custom_exceptions.fieldException import FieldException
 
 
@@ -22,6 +23,7 @@ class RequestInstitution(Request):
         request = RequestInstitution()
         request.sender_key = ndb.Key(urlsafe=data.get('sender_key'))
         request = Invite.create(data, request)
+        request.institution_requested_key = get_super_institution().key
         request.isValid()
         return request
 

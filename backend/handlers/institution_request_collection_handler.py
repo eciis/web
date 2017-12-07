@@ -49,7 +49,7 @@ class InstitutionRequestCollectionHandler(BaseHandler):
 
     @login_required
     @json_response
-    def post(self, user, remove):
+    def post(self, user):
         """Handler of post requests."""
         data = json.loads(self.request.body)
         host = self.request.host
@@ -63,8 +63,6 @@ class InstitutionRequestCollectionHandler(BaseHandler):
             EntityException
         )
 
-        print data
-
         user.name = data['admin']['name']
         user.put()
 
@@ -75,8 +73,6 @@ class InstitutionRequestCollectionHandler(BaseHandler):
 
         request = InviteFactory.create(data, type_of_invite)
         request.put()
-
-        print request
 
         request.sendInvite(user, host)
 

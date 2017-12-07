@@ -65,7 +65,6 @@
                 _.remove(inviteInstCtrl.sent_requests, function(req) {
                     return req == request;
                 });
-                inviteInstCtrl.accepted_invitations.push(request);
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });

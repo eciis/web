@@ -4,6 +4,8 @@
 import json
 from test_base_handler import TestBaseHandler
 from models.user import User
+from models.institution import Institution
+from models.institution import Address
 from handlers.institution_request_collection_handler import InstitutionRequestCollectionHandler
 
 from mock import patch
@@ -12,7 +14,7 @@ from mock import patch
 class InstitutionRequestCollectionHandlerTest(TestBaseHandler):
     """Test the handler InstitutionChildrenRequestCollectionHandler."""
 
-    REQUEST_URI = "/api/institutions/requests/institution"
+    REQUEST_URI = "/api/institutions/requests/institution/"
 
     @classmethod
     def setUp(cls):
@@ -76,3 +78,13 @@ def initModels(cls):
     cls.other_user.name = 'Other User'
     cls.other_user.email = ['otheruser@test.com']
     cls.other_user.put()
+    # new Institution Address
+    cls.address = Address()
+    cls.address.number = '01'
+    cls.address.street = 'street'
+    # new Institution inst requested to be parent of inst test
+    cls.new_inst = Institution()
+    cls.new_inst.name = 'Complexo Industrial da Saude'
+    cls.new_inst.photo_url = 'images/photo.jpg'
+    cls.new_inst.address = cls.address
+    cls.new_inst.put()

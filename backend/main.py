@@ -45,7 +45,7 @@ webapp2.WSGIApplication.allowed_methods = frozenset(methods)
 
 app = webapp2.WSGIApplication([
     ("/api/requests/(.*)/user", RequestHandler),
-    ("/api/invites", InviteCollectionHandler),
+    ("/api/invites", InviteCollectionHandler), 
     ("/api/invites/institution", InviteInstitutionHandler),
     ("/api/invites/(.*)", InviteHandler),
     ("/api/requests/(.*)/institution", InstitutionRequestHandler),

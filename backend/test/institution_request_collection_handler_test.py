@@ -21,7 +21,7 @@ class InstitutionRequestCollectionHandlerTest(TestBaseHandler):
         """Provide the base for the tests."""
         super(InstitutionRequestCollectionHandlerTest, cls).setUp()
         app = cls.webapp2.WSGIApplication(
-            [(InstitutionRequestCollectionHandlerTest.REQUEST_URI, InstitutionRequestCollectionHandler),
+            [("/api/institutions/requests/institution/(.*)", InstitutionRequestCollectionHandler),
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)

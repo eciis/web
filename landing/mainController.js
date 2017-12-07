@@ -3,7 +3,7 @@
     var landing = angular.module('landing');
     
     landing.controller("MainController", function MainController($state, $location, $anchorScroll, $q,
-            $firebaseArray, $mdDialog, $mdSidenav, $mdMedia) {
+            $firebaseArray, $mdDialog, $mdSidenav, $mdMedia, $timeout) {
         var ctrl = this;
 
         ctrl.mdMedia = $mdMedia;
@@ -82,6 +82,10 @@
                 $anchorScroll();
             } else {
                 $state.go("landing.home", {'#': section});
+                $timeout(function () {
+                    $location.hash(section);
+                    $anchorScroll();
+                }, 500);
             }
         };
     });

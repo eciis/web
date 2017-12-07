@@ -43,6 +43,7 @@ class InstitutionHierarchyHandler(BaseHandler):
                       "The institution has been deleted", NotAuthorizedException)
 
         institution.remove_link(institution_link, is_parent)
+        user.remove_permission('remove_link', institution_link.key.urlsafe())
         admin = institution_link.admin
         entity_type = 'INSTITUTION'
         message = {'type': 'INSTITUTION', 'from': user.name.encode('utf8')}

@@ -256,6 +256,9 @@ class Institution(ndb.Model):
     def remove_link(self, institution_link, is_parent):
         """Remove the connection between self and institution_link."""
         if is_parent == "true":
+            parent_institution = self.parent_institution.get()
+            admin_of_parent_inst = parent_institution.admin.get()
+            admin_of_parent_inst.remove_permission("remove_inst", self.key.urlsafe())
             self.parent_institution = None
         else:
             self.children_institutions.remove(institution_link.key)

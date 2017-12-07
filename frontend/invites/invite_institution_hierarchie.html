@@ -116,7 +116,7 @@
                 <md-button ng-click="inviteInstHierCtrl.removeLink(institution, false)">
                   <md-icon md-colors="{color: 'red-700'}" title="Remover conexão">link</md-icon>
                 </md-button>
-                <md-button ng-click="inviteInstHierCtrl.removeChild(institution)">
+                <md-button ng-if="inviteInstHierCtrl.canRemoveInst(institution.key)" ng-click="inviteInstHierCtrl.removeChild(institution)">
                   <md-icon md-colors="{color: 'red-700'}" title="Remover institutição">delete</md-icon>
                 </md-button>
               </div>

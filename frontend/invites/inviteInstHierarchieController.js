@@ -347,6 +347,10 @@
                 angular.element($cancelButton).addClass('md-primary');
         }
 
+        inviteInstHierCtrl.canRemoveInst = function canRemoveInst(institution_key) {
+            return inviteInstHierCtrl.user.permissions.remove_inst[institution_key];
+        };
+
         inviteInstHierCtrl.removeChild = function removeChild(institution, ev) {
             $mdDialog.show({
                 templateUrl: "app/invites/removeChildDialog.html",

@@ -3,13 +3,14 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("SearchController", function SearchController($state, InstitutionService, MessageService, $http) {
+    app.controller("SearchController", function SearchController($state, InstitutionService, MessageService, $http, brCidadesEstados) {
 
         var searchCtrl = this;
 
         searchCtrl.search_keyword = $state.params.search_keyword;
         searchCtrl.institutions = [];
         searchCtrl.actuationAreas = [];
+        searchCtrl.legalNature = [];
         searchCtrl.loading = false;
 
         searchCtrl.makeSearch = function makeSearch(value, type) {
@@ -42,8 +43,8 @@
             }
         };
 
-        searchCtrl.searchByActuationArea = function searchByActuationArea(chosen_area) {
-            searchCtrl.makeSearch(chosen_area, 'institution');
+        searchCtrl.searchBy = function searchBy(search) {
+            searchCtrl.makeSearch(search, 'institution');
         };
 
         searchCtrl.isLoading = function isLoading() {
@@ -56,15 +57,27 @@
             });
         }
 
+        function getLegalNatures() {
+            $http.get('app/institution/legal_nature.json').then(function success(response) {
+                searchCtrl.legalNature = response.data;
+            });
+        }
+
         function loadSearch() {
             if (searchCtrl.search_keyword) {
                 searchCtrl.makeSearch(searchCtrl.search_keyword, 'institution');
             }
         }
 
+        function loadBrazilianFederalStates() {
+            searchCtrl.brazilianFederalStates = brCidadesEstados.estados;
+        }
+
         (function main() {
             getActuationAreas();
+            getLegalNatures();
             loadSearch();
+            loadBrazilianFederalStates();
         })();
     });
 })();

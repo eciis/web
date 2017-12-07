@@ -5,20 +5,31 @@ describe('Test ConfigInstDirective', function() {
     var mdToast, mdDialog, http, inviteService, httpBackend, imageService;
     var authService, createCtrl, pdfService, messageService;
 
+    var address = {
+        cep: "11111-000",
+        city: "city",
+        country: "Country",
+        neighbourhood: "neighbourhood",
+        number: "555",
+        state: "State",
+        street: "Street x"
+    };
+
     var institution = {
             name: "name",
             photo_url: "",
             email: "email",
-            state: "active",
+            state: "pending",
             key: "inst-key",
             acronym: "INST",
             legal_nature: "public",
             actuation_area: "government agencies",
             phone_number: "phone",
             cnpj: "cnpj",
-            address: "address",
+            address: address,
             leader: "leader name",
-            institutional_email: "email@institutional.com"
+            institutional_email: "email@institutional.com",
+            description: "teste"
     };
 
     var institutions = [{
@@ -42,18 +53,24 @@ describe('Test ConfigInstDirective', function() {
         {"value":"colleges", "name":"Universidades"},
         {"value":"other", "name":"Outra"}
     ];
+
+    var invite = {'invitee': 'user@email.com',
+            'suggestion_institution_name': "Suggested Name",
+            'type_of_invite': "institution",
+            'status': 'sent',
+            key: 'invite-key'
+    };
+
     var userData = {
         name: 'name',
         key: 'user-key',
         current_institution: {key: "institutuion_key"},
         institutions: institutions,
+        institutions_admin: [],
+        follows: institutions,
+        institution_profiles: [],
         email: ['test@test.com'],
-        invites: [{
-            'invitee': 'user@email.com',
-            'suggestion_institution_name': "Suggested Name",
-            'type_of_invite': "institution",
-            'status': 'sent'
-        }]
+        invites: [invite]
     };
 
     beforeEach(module('app'));
@@ -63,6 +80,7 @@ describe('Test ConfigInstDirective', function() {
         httpBackend = $httpBackend;
         httpBackend.expectGET('app/institution/legal_nature.json').respond(legal_nature);
         httpBackend.expectGET('app/institution/actuation_area.json').respond(actuation_area);
+        httpBackend.expectGET('app/institution/countries.json').respond({});
         httpBackend.expectGET('/api/institutions/' + institution.key).respond(institution);
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);
@@ -81,7 +99,7 @@ describe('Test ConfigInstDirective', function() {
         http = $http;
 
         authService.login(userData);
-
+        state.params.institutionKey = institution.key;
         createCtrl = function() {
             return $controller('ConfigInstController', {
                     scope: scope,
@@ -90,7 +108,7 @@ describe('Test ConfigInstDirective', function() {
                     imageService: imageService
                 });
         };
-        state.params.institutionKey = institution.key;
+
         editInstCtrl = createCtrl();
         httpBackend.flush();
     }));
@@ -158,12 +176,29 @@ describe('Test ConfigInstDirective', function() {
                 };
             });
             spyOn(institutionService, 'update').and.returnValue(deferred.promise);
-            spyOn(editInstCtrl.user, 'updateInstitutions');
+            spyOn(editInstCtrl.user, 'updateInstitutions').and.callThrough();
             spyOn(authService, 'save');
+            spyOn(institutionService, 'save').and.returnValue(deferred.promise);
             spyOn(state, 'go');
-
             editInstCtrl.photo_instituicao = 'base64Test';
             promise = editInstCtrl.submit('$event');
+        });
+
+        it('should update the user', function(done) {
+            state.params.inviteKey = invite.key;
+            promise.then(function() {
+                deferred.resolve(institution);
+                scope.$apply();
+                expect(institutionService.update).toHaveBeenCalled();
+                expect(institutionService.save).toHaveBeenCalled();
+                expect(editInstCtrl.user.updateInstitutions).toHaveBeenCalled();
+                expect(authService.save).toHaveBeenCalled();
+                expect(editInstCtrl.user.institutions).toContain(institution);
+                expect(editInstCtrl.user.invites).toEqual([]);
+                expect(editInstCtrl.user.institutions_admin).toContain(institution.key);
+                expect(editInstCtrl.user.follows).toContain(institution);
+                done();
+            });
         });
 
         it('Should be call mdDialog.show', function(done) {
@@ -245,11 +280,6 @@ describe('Test ConfigInstDirective', function() {
             editInstCtrl.newInstitution.name = "";
             editInstCtrl.nextStep();
             expect(editInstCtrl.steps).toEqual([false, true, false]);
-            editInstCtrl.newInstitution.name = "user";
-            editInstCtrl.newInstitution.acronym = undefined;
-            editInstCtrl.nextStep();
-            expect(editInstCtrl.steps).toEqual([false, true, false]);
-            editInstCtrl.newInstitution.acronym = "UFCG";
             editInstCtrl.newInstitution.actuation_area = undefined;
             editInstCtrl.nextStep();
             expect(editInstCtrl.steps).toEqual([false, true, false]);

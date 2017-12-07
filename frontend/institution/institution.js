@@ -17,7 +17,7 @@ Institution.prototype.make = function make() {
 
 Institution.prototype.isValid = function isValid() {
     var required_fields = [this.name, this.legal_nature, this.address,
-        this.actuation_area, this.leader];
+        this.actuation_area, this.leader, this.description];
     var isValid = true;
 
     _.forEach(required_fields, function(field) {
@@ -51,7 +51,7 @@ Institution.prototype.addChildrenInst = function addChildrenInst(institution){
 Institution.prototype.getFullAddress = function getFullAddress() {
     if(this.address) {
         var fullAddress = this.address.street + ", " + this.address.number + ", " + this.address.neighbourhood +
-                         ", " + this.address.city + ", " + this.address.state + ", " + this.address.country;
+                         ", " + this.address.city + ", " + this.address.federal_state + ", " + this.address.country;
         return fullAddress;
     }
 };

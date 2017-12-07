@@ -67,7 +67,7 @@ class UserTest(TestBase):
             self.user.permissions[permission_type][entity_key],
             "Permission publish_post should be granted to the user.")
 
-        has_permission = self.user.has_permission(permission_type, entity_key)
+        has_permission = self.user.check_permission(permission_type,"User is not allowed to do this operation", entity_key)
 
         self.assertTrue(
             has_permission,
@@ -81,12 +81,15 @@ class UserTest(TestBase):
         permission_type = "publish_post"
         entity_key = "key_of_post"
 
-        has_permission = self.user.has_permission(permission_type, entity_key)
+        with self.assertRaises(Exception) as ex:
+            self.user.check_permission(permission_type, "User is not allowed to do this operation", entity_key)
 
-        self.assertFalse(
-            has_permission,
-            "User should not be granted with publish_post permission on post %s"
-            % entity_key)
+        exception_message = ex.exception.message
+        
+        self.assertEqual(
+            "User is not allowed to do this operation",
+            exception_message,
+            "User is not allowed to do this operation")
 
 
 def initModels(cls):

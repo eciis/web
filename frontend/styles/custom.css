@@ -678,3 +678,25 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
     min-width: 55px;
     min-height: 55px;
 }
+
+.toolbar-search form {
+    margin: 0px;
+}
+
+.toolbar-search md-input-container {
+    margin: 0px;
+    height: 32px;
+}
+
+@media only screen and (max-width: 600px) {
+    .small-text {
+        font-size: 15px;
+    }
+    .increase-distance {
+        margin-top: -15px;
+        padding-bottom: 10px;
+    }
+    .reduce-distance {
+        margin-top: -5px;
+    }
+}

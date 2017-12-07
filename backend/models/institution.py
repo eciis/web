@@ -29,7 +29,7 @@ class Address(ndb.Model):
 
     city = ndb.StringProperty()
 
-    state = ndb.StringProperty()
+    federal_state = ndb.StringProperty()
 
     cep = ndb.StringProperty()
 
@@ -41,7 +41,7 @@ class Address(ndb.Model):
         yield 'street', self.street
         yield 'neighbourhood', self.neighbourhood
         yield 'city', self.city
-        yield 'state', self.state
+        yield 'federal_state', self.federal_state
         yield 'cep', self.cep
         yield 'country', self.country
 
@@ -53,7 +53,7 @@ class Address(ndb.Model):
         address.street = data.get('street')
         address.neighbourhood = data.get('neighbourhood')
         address.city = data.get('city')
-        address.state = data.get('state')
+        address.federal_state = data.get('federal_state')
         address.cep = data.get('cep')
         address.country = data.get('country')
 
@@ -70,7 +70,7 @@ class Institution(ndb.Model):
     cnpj = ndb.StringProperty()
 
     legal_nature = ndb.StringProperty(
-        choices=set(["public", "private", "philanthropic"]))
+        choices=set(["public", "private for-profit", "private non-profit"]))
 
     address = ndb.StructuredProperty(Address)
 
@@ -201,6 +201,7 @@ class Institution(ndb.Model):
         institution_stub.name = invite.suggestion_institution_name
         institution_stub.email = invite.invitee
         institution_stub.state = 'pending'
+        institution_stub.address = Address()
 
         institution_stub.put()
 

@@ -2,6 +2,7 @@
 """Institution Handler."""
 
 import json
+import permissions
 
 from google.appengine.ext import ndb
 
@@ -46,21 +47,6 @@ def isUserInvited(method):
                       NotAuthorizedException)
 
         method(self, user, institution_key, inviteKey)
-    return check_authorization
-
-
-def is_admin(method):
-    """Check if the user is admin of the institution."""
-    def check_authorization(self, user, institution_key, *args):
-        institution = ndb.Key(urlsafe=institution_key).get()
-
-        userisNotAdminOfInstitution = institution.key not in user.institutions_admin
-        institutionisNotManagedByUser = institution.admin != user.key
-
-        Utils._assert(userisNotAdminOfInstitution or institutionisNotManagedByUser,
-                      'User is not admin', NotAuthorizedException)
-
-        method(self, user, institution_key, *args)
     return check_authorization
 
 
@@ -113,9 +99,12 @@ class InstitutionHandler(BaseHandler):
 
     @json_response
     @login_required
-    @is_admin
     def patch(self, user, institution_key):
-        """Handler PATCH Requests."""
+        """Handler PATCH Request to update Institution."""
+        user.check_permission('update_inst',
+                              "User is not allowed to edit institution",
+                              institution_key)
+
         data = self.request.body
         institution = ndb.Key(urlsafe=institution_key).get()
 
@@ -148,6 +137,8 @@ class InstitutionHandler(BaseHandler):
             'institution_photo_url': institution.photo_url
         }
         user.create_and_add_profile(data_profile)
+
+        user.add_permissions(permissions.DEFAULT_ADMIN_PERMISSIONS, institution.key.urlsafe())
         user.put()
 
         invite = ndb.Key(urlsafe=inviteKey).get()
@@ -159,12 +150,16 @@ class InstitutionHandler(BaseHandler):
 
     @login_required
     @json_response
-    @is_admin
     @ndb.transactional(xg=True)
     def delete(self, user, institution_key):
         """Handle DELETE Requests."""
         remove_hierarchy = self.request.get('removeHierarchy')
         institution = ndb.Key(urlsafe=institution_key).get()
+
+        user.check_permission(
+            'remove_inst',
+            'User is not allowed to remove institution',
+            institution_key)
 
         Utils._assert(not type(institution) is Institution,
                       "Key is not an institution", EntityException)
@@ -186,7 +181,7 @@ class InstitutionHandler(BaseHandler):
             "institution_key": institution_key
         }
 
-        enqueue_task('email-members', email_params)                    
+        enqueue_task('email-members', email_params)
 
         notification_params = {
             "entity_type": "DELETED_INSTITUTION",
@@ -196,4 +191,4 @@ class InstitutionHandler(BaseHandler):
             }),
             "institution_key": institution_key
         }
-        enqueue_task('notify-followers', notification_params)                     
+        enqueue_task('notify-followers', notification_params)

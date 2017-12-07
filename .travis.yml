@@ -1,4 +1,4 @@
-language: 
+language:
   - python
   - node_js
 
@@ -21,9 +21,11 @@ install:
 - wget $SDK_URL -nv
 - unzip -q google_appengine_$SDK_VERSION.zip
 
-# Install dependencies to backend                                                 
+# Install dependencies to backend
 - mkdir lib
-- pip install -t lib google-auth
+- pip install -t lib google-auth --ignore-installed pyasn1 pyasn1-modules
+- pip install pyasn1==0.3.7
+- pip install pyasn1-modules==0.1.5
 - mv lib/google/* google_appengine/google
 - rm -rf lib/google
 - cd ../
@@ -43,8 +45,8 @@ before_script:
 - sh -e /etc/init.d/xvfb start
 
 # command to run tests
-script: 
-    - cd backend 
+script:
+    - cd backend
     - python -m unittest discover -v -p "*test.py"
     - cd ../
     - cd frontend/test

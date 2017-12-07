@@ -24,8 +24,15 @@
     var survey = { 'title' : 'The Survey',
                     'type_survey' : 'binary',
                     'options' : options,
-                    'number_votes' : 0
+                    'number_votes' : 0,
+                    'key': 12345
                     };
+
+    var shared_post = {
+            'title': 'shared post',
+            'shared_post': survey,
+            'key': 54321
+            };
 
     beforeEach(inject(function($controller, $httpBackend, $http, $q, $mdDialog,
             SurveyService, AuthService, $rootScope) {
@@ -46,7 +53,7 @@
 
         surveyCtrl.user = user;
         surveyCtrl.post = survey;
-        surveyCtrl.posts = [];
+        surveyCtrl.posts = [survey,shared_post];
 
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);
@@ -68,29 +75,58 @@
                     }
                 };
             });
-            spyOn(surveyCtrl, 'voteService');
+            spyOn(surveyCtrl, 'voteService').and.callFake(function() {
+                return {
+                    then: function(callback) {
+                        return callback();
+                    }
+                }
+            });
         });
 
-        it('should called voteService', function() {
+        it('should called voteService', function(done) {
             surveyCtrl.binaryOptionSelected = options[0];
-            surveyCtrl.vote("$event");
-            expect(surveyCtrl.voteService).toHaveBeenCalled();
+            surveyCtrl.vote("$event").then(function() {
+                expect(surveyCtrl.voteService).toHaveBeenCalled();
+                done();
+            });
             scope.$apply();
         });
     });
 
-    describe('voteService()', function(){
-        it('should added vote in option', function(done) {
+    describe('voteService()', function() {
+        var promise;
+        beforeEach(function() {
             spyOn(surveyService, 'vote').and.callThrough();
             surveyCtrl.optionsSelected = [options[0]];
-
+            spyOn(surveyCtrl.posts, 'map');
             httpBackend.expect('POST', "/api/surveyposts/" + surveyCtrl.post.key + '/votes').
                 respond(surveyCtrl.optionsSelected);
-            var promise = surveyCtrl.voteService();
+            promise = surveyCtrl.voteService();
+        });
+
+        it('should added vote in option', function(done) {
             promise.should.be.fulfilled.then(function() {
                 expect(surveyService.vote).toHaveBeenCalledWith(surveyCtrl.post, surveyCtrl.optionsSelected);
                 expect(surveyCtrl.post.options[0].number_votes).toEqual(1);
                 expect(surveyCtrl.post.options[0].voters[0].key).toContain(surveyCtrl.user.key);
+            }).should.notify(done);
+            httpBackend.flush();
+            scope.$apply();
+        });
+
+        it('should call map in timeline posts', function(done) {
+            promise.should.be.fulfilled.then(function() {
+                expect(surveyCtrl.posts.map()).toHaveBeenCalled();
+            }).should.notify(done);
+            httpBackend.flush();
+            scope.$apply();
+        });
+
+        it('should added vote in shared_post', function(done) {
+            surveyCtrl.post.options[0].number_votes = 0;
+            promise.should.be.fulfilled.then(function() {
+                expect(shared_post.shared_post.options[0].number_votes).toEqual(1);
             }).should.notify(done);
             httpBackend.flush();
             scope.$apply();

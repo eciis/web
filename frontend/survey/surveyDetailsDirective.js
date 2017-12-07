@@ -42,7 +42,7 @@
             var nationalTimeZone = new Date (surveyCtrl.post.deadline);
             nationalTimeZone.setHours(nationalTimeZone.getHours() - 3);
             var onTime = surveyCtrl.post.deadline ? new Date() < nationalTimeZone : 'true';
-            return onTime && !surveyCtrl.userVoted();
+            return onTime && !surveyCtrl.userVoted() && !surveyCtrl.isdialog;
         };
 
         surveyCtrl.vote = function(ev){
@@ -51,23 +51,42 @@
                 var dialog = MessageService.showConfirmationDialog(ev,
                     'Confirmar voto', 'Seu voto será permanente. Deseja confirmar?');
                 dialog.then(function() {
-                    surveyCtrl.voteService();
+                    surveyCtrl.voteService().then(function () {
+                        syncSharedPosts();
+                    });
                 }, function() {
                     MessageService.showToast('Cancelado');
                 });
+                return dialog;
             } else {
                 MessageService.showToast('Você precisa escolher alguma alternativa');
             }         
         };
 
-         surveyCtrl.voteService = function(){
-            var promisse = SurveyService.vote(surveyCtrl.post, surveyCtrl.optionsSelected);
-            promisse.then(function sucess(){
+        function updateSharedPost(post, updatedPost) {
+            if(post.shared_post && post.shared_post.key === updatedPost.key) post.shared_post = updatedPost;
+            if(post.key === updatedPost.key) post = updatedPost;
+            return post;
+        }
+
+        /**
+        * Function to synchronize survey posts with shared posts
+        * when the user vote in survey post that is shared or vote in shared post that is survey.
+        * @param {} empty - No require param.
+        * @return {undefined} - Void function returns undefined.
+        */
+        function syncSharedPosts() {
+            surveyCtrl.posts = surveyCtrl.posts.map(post => updateSharedPost(post, surveyCtrl.post));
+        }
+
+        surveyCtrl.voteService = function(){
+            var promise = SurveyService.vote(surveyCtrl.post, surveyCtrl.optionsSelected);
+            promise.then(function sucess(){
                 addVote(surveyCtrl.optionsSelected);
                 calculatePercentage();
                 MessageService.showToast('Voto computado');
             });
-            return promisse;          
+            return promise;
         };
 
         function loadBinarySelected(){
@@ -158,7 +177,8 @@
             bindToController: {
                 post: '=',
                 posts: '=',
-                user: '='
+                user: '=',
+                isdialog: '='
             }
         };
     });

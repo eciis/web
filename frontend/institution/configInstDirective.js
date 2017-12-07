@@ -2,7 +2,8 @@
 (function() {
     var app = angular.module("app");
     app.controller("ConfigInstController", function ConfigInstController(AuthService, InstitutionService, CropImageService,$state,
-            $mdToast, $mdDialog, $http, InviteService, ImageService, $rootScope, MessageService, PdfService, $q, RequestInvitationService) {
+            $mdToast, $mdDialog, $http, InviteService, ImageService, $rootScope, MessageService, PdfService, $q, 
+            RequestInvitationService, brCidadesEstados) {
 
         var configInstCtrl = this;
         var institutionKey = $state.params.institutionKey;
@@ -15,13 +16,60 @@
         configInstCtrl.phoneRegex = "[0-9]{2}[\\s][0-9]{4,5}[-][0-9]{4,5}";
         configInstCtrl.cepRegex = "([0-9]{5}[-][0-9]{3})";
         configInstCtrl.newInstitution = {
-            photo_url: "app/images/institution.jpg",
             email: configInstCtrl.user.email[0]
         };
         configInstCtrl.steps = [true, false, false];
 
+        configInstCtrl.descriptionGuide = "Descrever neste campo as áreas de atuação da sua instituição considerando a missão e objetivos, os principais produtos e/ou serviços, as interfaces com os demais atores e as articulações institucionais no âmbito do CIS(utilize palavras de destaque que possam ser utilizadas como palavras-chave na pesquisa avançada do e-CIS)";
+
         getLegalNatures();
         getActuationAreas();
+        getCountries();
+
+        configInstCtrl.getCitiesByState = function getCitiesByState() {
+            configInstCtrl.cities = brCidadesEstados.buscarCidadesPorSigla(configInstCtrl.selectedState.sigla);
+            updateAddressState();
+        };
+
+        function updateAddressState() {
+            configInstCtrl.address.federal_state = configInstCtrl.selectedState && configInstCtrl.selectedState.nome;
+        }
+
+        function loadAddress() {
+            configInstCtrl.newInstitution.address = configInstCtrl.newInstitution.address || {};
+            configInstCtrl.address = configInstCtrl.newInstitution.address;
+            loadCountry();
+            loadStateAndCities();
+        }
+
+        function loadStateAndCities() {
+            configInstCtrl.states = brCidadesEstados.estados;
+            var isANewInstitution = institutionKey == undefined;
+            if(!isANewInstitution) {
+                var stateName = configInstCtrl.address.federal_state;
+                var stateIndex = configInstCtrl.states.findIndex((state) => {
+                    return state.nome === stateName;
+                });
+                if(stateIndex >= 0) {
+                    configInstCtrl.selectedState = configInstCtrl.states[stateIndex];
+                    configInstCtrl.getCitiesByState();
+                }
+            }
+        }        
+        
+        function loadCountry() {
+            configInstCtrl.address.country = configInstCtrl.address.country || "Brasil";
+            configInstCtrl.isAnotherCountry = configInstCtrl.address.country !== "Brasil";
+        }
+
+        configInstCtrl.setAnotherCountry = function isAnotherCountry() {
+            clearSelectedState();
+            configInstCtrl.isAnotherCountry = configInstCtrl.address.country !== "Brasil";
+        };
+
+        function clearSelectedState() {
+            configInstCtrl.selectedState = "";
+        }
 
         configInstCtrl.addImage = function addImage(image) {
             var newSize = 800;
@@ -119,7 +167,7 @@
                 if(configInstCtrl.isSubmission) {
                     saveRequestInst();
                 } else {
-                    patchIntitution();
+                    updateStubAndApplyPatch();
                 }
                 $q.resolve(promise);
             }, function error(response) {
@@ -127,6 +175,62 @@
                 $q.reject(promise);
             });
             return promise;
+        }
+
+        function updateStubAndApplyPatch() {
+            var updateStubPromise = updateStubInstitution();
+            if (updateStubPromise) {
+                updateStubPromise.then(
+                    function success(institutionSaved) {
+                        updateUser($state.params.inviteKey, institutionSaved);
+                        patchIntitution();
+                    },
+                    function error(response) {
+                        MessageService.showToast(response.data.msg);
+                });
+            } else {
+                patchIntitution();
+            }
+        }
+
+        function updateStubInstitution() {
+            var inviteKey = $state.params.inviteKey;
+            var promise;
+            if (inviteKey) {
+                var body = {sender_name: $state.params.senderName};
+                promise = InstitutionService.save(body, institutionKey, inviteKey);
+            }
+            return promise;
+        }
+
+        function updateUser(inviteKey, institution) {
+            configInstCtrl.user.removeInvite(inviteKey);
+            configInstCtrl.user.institutions.push(institution);
+            configInstCtrl.user.institutions_admin.push(institution.key);
+            configInstCtrl.user.follow(institution);
+            configInstCtrl.user.addProfile(createProfile(institution));
+            configInstCtrl.user.changeInstitution(institution);
+            configInstCtrl.user.state = 'active';
+            configInstCtrl.user.name = getCurrentName();
+            AuthService.save();
+        }
+
+        function createProfile(new_institution) {
+            return {
+                email: null,
+                institution_key: new_institution.key,
+                institution: {
+                    name: new_institution.name,
+                    photo_url: new_institution.photo_url,
+                },
+                office: 'Administrador',
+                phone: null,
+                color: 'grey'
+            };
+        }
+
+        function getCurrentName() {
+            return configInstCtrl.user_name ? configInstCtrl.user_name : configInstCtrl.user.name;
         }
 
         function patchIntitution() {
@@ -145,7 +249,7 @@
                 function success() {
                     MessageService.showToast("Pedido enviado com sucesso!");
                     $state.go('user_inactive');
-                });
+            });
         }
 
         function updateUserInstitutions(institution) {
@@ -161,7 +265,7 @@
         };
 
         configInstCtrl.showImage = function showImage() {
-            return configInstCtrl.newInstitution.photo_url !== "app/images/institution.jpg";
+            return configInstCtrl.newInstitution.photo_url !== "app/images/institution.jpg" && !_.isEmpty(configInstCtrl.newInstitution.photo_url);
         };
 
         configInstCtrl.getStep = function getStep(step) {
@@ -194,11 +298,13 @@
                 0: {fields: [configInstCtrl.newInstitution.address], size: 7},
                 1: {fields: [
                     configInstCtrl.newInstitution.name,
-                    configInstCtrl.newInstitution.acronym,
                     configInstCtrl.newInstitution.actuation_area,
                     configInstCtrl.newInstitution.legal_nature
                     ]},
-                2: {fields: [configInstCtrl.newInstitution.leader]}
+                2: {fields: [
+                    configInstCtrl.newInstitution.leader,
+                    configInstCtrl.newInstitution.description
+                    ]}
             };
             return necessaryFieldsForStep;
         }
@@ -236,20 +342,35 @@
             });
         }
 
+        function getCountries() {
+            $http.get('app/institution/countries.json').then(function success(response) {
+                configInstCtrl.countries = response.data;
+            });
+        }
+
         function loadInstitution() {
             InstitutionService.getInstitution(institutionKey).then(function success(response) {
                 configInstCtrl.newInstitution = response.data;
                 configInstCtrl.suggestedName = configInstCtrl.newInstitution.name;
                 currentPortfoliourl = configInstCtrl.newInstitution.portfolio_url;
+                loadAddress(); 
+                setDefaultPhotoUrl();
                 observer = jsonpatch.observe(configInstCtrl.newInstitution);
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
         }
 
+        function setDefaultPhotoUrl() {
+            var defaultPhotoUrl = "app/images/institution.jpg";
+            configInstCtrl.newInstitution.photo_url = configInstCtrl.newInstitution.photo_url || defaultPhotoUrl;
+        }
+
         (function main(){
             if (institutionKey) {
                 loadInstitution();
+            } else {
+                loadAddress();
             }
         })();
     });

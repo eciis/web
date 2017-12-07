@@ -2,7 +2,7 @@
 
     <div>
         <md-dialog-content class="md-dialog-content" layout="column">
-            <h3>{{suggestInstCtrl.showMessage()}}</h3>
+            <h3>{{suggestInstCtrl.titleMessage()}}</h3>
             <md-radio-group ng-model="suggestInstCtrl.chosen_institution" required flex>
                 <md-list ng-repeat="institution in suggestInstCtrl.institutions" flex>
                     <md-list-item class="md-2-line" ng-if="suggestInstCtrl.showSuggestion(institution.state)">
@@ -14,17 +14,17 @@
                             </md-button>
                         </div>
                     </md-list-item>
-                    <md-list-item ng-if="suggestInstCtrl.isPending(institution.state)" ng-click="null" class="md-2-line">
+                    <md-list-item ng-if="suggestInstCtrl.suggestionToSimpleInvite(institution.state)" ng-click="null" class="md-2-line">
                         <div class="md-list-item-text">
                             <h3 style="color: #616161">{{institution.name}}</h3>
-                            <p style="color: #9E9E9E">Convite enviado para: {{institution.admin}}<p>
+                            <p style="color: #9E9E9E">{{suggestInstCtrl.instStatusMessage(institution.admin, institution.state)}}<p>
                         </div>
                         <md-icon style="color: #424242">error</md-icon>
                     </md-list-item>
                 </md-list>
                 <md-list>
-                    <md-list-item>
-                        <md-radio-button ng-value="null" class="md-primary" flex>Não, desejo convidar outra instituição</md-radio-button>
+                    <md-list-item ng-if="suggestInstCtrl.isHierarchy">
+                        <md-radio-button ng-value="null" class="md-primary" flex>Convidar nova instituição</md-radio-button>
                     </md-list-item>
                 </md-list>
             </md-radio-group>

@@ -52,8 +52,8 @@ User.prototype.isMember = function isMember(institutionKey){
     return _.includes(_.map(this.institutions, getKeyObj), institutionKey);
 };
 
-User.prototype.addInstitution = function addInstitution(institutionKey){
-    this.institutions.push(institutionKey);
+User.prototype.addInstitution = function addInstitution(institution) {
+    this.institutions.push(institution);
 };
 
 
@@ -124,6 +124,14 @@ User.prototype.addProfile = function addProfile(profile){
 User.prototype.isInactive = function isInactive() {
     var notActive = this.state != 'active';
     return notActive;
+};
+
+User.prototype.hasPermission = function hasPermission(permissionType, entityKey) {
+    var key = entityKey || this.current_institution.key;
+    if (this.permissions[permissionType]) {
+        return this.permissions[permissionType][key];
+    }
+    return false;
 };
 
 function changeProfileColor(user, institution) {

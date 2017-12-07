@@ -63,8 +63,8 @@ class InviteInstitutionHandlerTest(TestBaseHandler):
         message = self.get_message_exception(ex.exception.message)
         self.assertEqual(
             message,
-            'Error! User is not allowed to do this operation',
-            'Expected exception message must be equal to Error! User is not allowed to do this operation')
+            'Error! User is not allowed to post invite',
+            'Expected exception message must be equal to Error! User is not allowed to post invite')
 
 
 def initModels(cls):
@@ -105,5 +105,5 @@ def initModels(cls):
     cls.second_user.institutions_admin = [cls.other_institution.key]
     cls.second_user.put()
 
-    cls.first_user.permissions['send_invite_inst'] = 'sdgjhagdjhgsjg'
+    cls.first_user.add_permission('send_invite_inst', cls.institution.key.urlsafe())
     cls.first_user.put()

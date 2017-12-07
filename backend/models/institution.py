@@ -202,6 +202,7 @@ class Institution(ndb.Model):
         institution_stub.email = invite.invitee
         institution_stub.state = 'pending'
         institution_stub.address = Address()
+        institution_stub.photo_url = "app/images/institution.jpg"
 
         institution_stub.put()
 

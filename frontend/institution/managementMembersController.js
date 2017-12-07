@@ -15,6 +15,7 @@
         manageMemberCtrl.showInvites = false;
         manageMemberCtrl.showRequests = false;
         manageMemberCtrl.showMembers = false;
+        manageMemberCtrl.requests = [];
 
         var currentInstitutionKey = $state.params.institutionKey;
         var invite;
@@ -113,6 +114,10 @@
 
         manageMemberCtrl.isAdmin = function isAdmin(member) {
             return member.key === manageMemberCtrl.user.key;
+        };
+
+        manageMemberCtrl.hasRequested = function hasRequested() {
+            return _.find(manageMemberCtrl.requests, request => request.status === 'sent');
         };
 
         function loadInstitution() {

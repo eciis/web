@@ -68,6 +68,7 @@
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
+            return promise;
         };
 
         inviteInstCtrl.rejectRequest = function rejectInvite(event, request){

@@ -188,7 +188,7 @@
                         }
                     };
                 });
-                var promise = inviteinstitutionCtrl.acceptRequest(request, 'REQUEST_INSTITUTION');
+                var promise = inviteinstitutionCtrl.acceptRequest(request);
                 promise.then(function() {
                     expect(requestInvitationService.acceptRequestInst).toHaveBeenCalledWith(request.key);
                     done();
@@ -205,14 +205,14 @@
                         }
                     };
                 });
-                spyOn(requestInvitationService, 'rejectInstParentRequest').and.callFake(function() {
+                spyOn(requestInvitationService, 'rejectRequestInst').and.callFake(function() {
                     return {
                         then: function(callback) {
                             return callback();
                         }
                     };
                 });
-                var promise = inviteinstitutionCtrl.rejectRequest(request, 'REQUEST_INSTITUTION');
+                var promise = inviteinstitutionCtrl.rejectRequest("$event", request);
                 promise.then(function() {
                     expect(requestInvitationService.rejectRequestInst).toHaveBeenCalledWith(request.key);
                     done();

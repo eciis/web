@@ -60,7 +60,7 @@
                 }
             })
             .state("landing.ecisdetails", {
-                url: "/home-e-CIS",
+                url: "/home-CIS",
                 views: {
                     content: {
                         templateUrl: "ecisdetails.html",

@@ -35,6 +35,11 @@ class InstitutionChildrenRequestCollectionHandler(BaseHandler):
     @is_admin
     def post(self, user, institution_key):
         """Handler of post requests."""
+        user.check_permission(
+            'send_link_inst_request',
+            'User is not allowed to send request', 
+            institution_key)
+
         data = json.loads(self.request.body)
         host = self.request.host
         inst_children_request_type = 'REQUEST_INSTITUTION_CHILDREN'

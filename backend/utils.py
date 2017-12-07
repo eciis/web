@@ -194,7 +194,7 @@ def is_admin_of_requested_inst(method):
 def get_super_institution():
     """Return Super Institution of system."""
     # TODO: Currently, The Super Institution is 'CIS' but will change to 'Ministério da Saúde',
-    # should be modified the query and in tests.
+    # should be modified the query and tests.
     # @author: Maiana Brito
     return Institution.query().filter(Institution.name == "Complexo Industrial da Saude").get()
 

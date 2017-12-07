@@ -336,6 +336,10 @@
             }
         };
 
+        inviteInstHierCtrl.hasRequested = function hasRequested() {
+            return _.find(inviteInstHierCtrl.requested_invites, request => request.status === 'sent');
+        };
+
         function designOptions() {
                 var $dialog = angular.element(document.querySelector('md-dialog'));
                 var $actionsSection = $dialog.find('md-dialog-actions');

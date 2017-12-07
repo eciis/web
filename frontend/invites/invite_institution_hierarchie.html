@@ -125,11 +125,11 @@
         </md-card-content>
     </md-card>
     <md-card>
-        <md-toolbar md-colors="{background: 'teal-500'}" layout="row" class="clickable-no-hover"
+        <md-toolbar md-colors="(inviteInstHierCtrl.hasRequested()) ? {background: 'light-green-500'} : {background: 'teal-500'}" layout="row" class="clickable-no-hover"
           ng-click="inviteInstHierCtrl.toggleElement('showRequestInvites')">
           <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
             <h1>
-              <md-icon>link</md-icon>
+              <md-icon ng-class="(inviteInstHierCtrl.hasRequested()) ? 'notification-badge' : ''" data-badge>feedback</md-icon>
               Vinculos pendentes
             </h1>
             <span flex md-truncate></span>

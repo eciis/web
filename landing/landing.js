@@ -56,11 +56,11 @@
                     }
                 }
             })
-            .state("landing.ecisdetails", {
-                url: "/home-e-CIS",
+            .state("landing.platformcisdetails", {
+                url: "/home-plataforma-CIS",
                 views: {
                     content: {
-                        templateUrl: "ecisdetails.html"
+                        templateUrl: "platformcisdetails.html"
                     }
                 }
             })

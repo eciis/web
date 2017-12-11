@@ -9,6 +9,7 @@ from models.institution import Address
 from handlers.institution_request_collection_handler import InstitutionRequestCollectionHandler
 
 from mock import patch
+import mocks
 
 
 class InstitutionRequestCollectionHandlerTest(TestBaseHandler):
@@ -79,17 +80,11 @@ class InstitutionRequestCollectionHandlerTest(TestBaseHandler):
 def initModels(cls):
     """Init the models."""
     # Other user
-    cls.other_user = User()
-    cls.other_user.name = 'Other User'
-    cls.other_user.email = ['otheruser@test.com']
-    cls.other_user.put()
+    cls.other_user = mocks.create_user()
     # new Institution Address
-    cls.address = Address()
-    cls.address.number = '01'
-    cls.address.street = 'street'
+    cls.address = mocks.create_address()
     # new Institution inst requested to be parent of inst test
-    cls.new_inst = Institution()
-    cls.new_inst.name = 'Complexo Industrial da Saude'
-    cls.new_inst.photo_url = 'images/photo.jpg'
+    cls.new_inst = mocks.create_institution()
+    cls.new_inst.name = "Complexo Industrial da Saude"
     cls.new_inst.address = cls.address
     cls.new_inst.put()

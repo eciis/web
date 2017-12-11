@@ -1,20 +1,34 @@
-<md-dialog aria-label="instituições">
-    <div>
-        <md-dialog-content class="md-dialog-content" layout="column">
+<md-dialog aria-label="instituições" flex-gt-xs="50" flex-xs="90">
+    <md-dialog-content layout-margin layout-padding layout="column">
+        <div layout="row" layout-align="space-between center">
+            <b>Deseja remover esta instituição permanetemente?</b>
+            <div>
+                <button style="background-color: white; border: 0;" ng-click="ctrl.closeDialog()">
+                    <md-icon>clear</md-icon>
+                </button>
+            </div>
+        </div>
+        <div layout-padding layout="row" layout-align="start center" md-colors="{background: 'default-grey-300'}">
+            <img ng-src="{{ctrl.institution.photo_url}}"
+                style="border-radius: 50%; height: 100px; width: 100px;"></img>
+            <div layout="column" layout-align="center start">
+                <b>{{ctrl.institution.name}}</b>
+                <span>{{ctrl.institution.email}}</span>
+            </div>
+        </div>
+        <div>
             <md-radio-group ng-model="ctrl.removeHierarchy" required>
                 <md-radio-button ng-value="true" class="md-primary">
-                    <b>Desejo</b> remover toda a hierarquia abaixo dessa instituição
+                    Desejo remover toda a hierarquia abaixo dessa instituição
                 </md-radio-button>
                 <md-radio-button ng-value="false" class="md-primary">
-                    <b>Não</b> desejo remover toda a hierarquia abaixo dessa instituição
+                    Desejo manter toda a hierarquia abaixo dessa instituição
                 </md-radio-button>
             </md-radio-group>
-            <h3>A instituição será removida permanentemente</h3>
-            <h3>Deseja continuar?</h3>
-        </md-dialog-content>
-        <md-dialog-actions layout="row" layout-align="center center">
-            <md-button class="md-warn" ng-click="ctrl.closeDialog()" layout-align="center">Cancelar</md-button>
-            <md-button class="md-warn md-raised" ng-click="ctrl.removeInst()">Continuar</md-button>
-        </md-dialog-actions>
-    </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row" layout-align="end center">
+        <md-button class="md-primary" ng-click="ctrl.closeDialog()" layout-align="center" md-colors="{color: 'default-teal-700'}">Cancelar</md-button>
+        <md-button class="md-primary" ng-click="ctrl.removeInst()" md-colors="{color: 'default-teal-700'}">Continuar</md-button>
+    </md-dialog-actions>
 </md-dialog>

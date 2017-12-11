@@ -265,15 +265,17 @@
                 targetEvent: ev,
                 clickOutsideToClose:true,
                 locals: {
-                    institutionKey: institutionCtrl.current_institution.key
+                    institution: institutionCtrl.current_institution
                 },
                 controller: RemoveInstController,
                 controllerAs: 'ctrl'
             });
         };
 
-        function RemoveInstController($mdDialog, institutionKey, InstitutionService, $state) {
+        function RemoveInstController($mdDialog, institution, InstitutionService, $state) {
             var ctrl = this;
+
+            ctrl.institution = institution;
 
             ctrl.closeDialog = function() {
                 $mdDialog.cancel();
@@ -283,9 +285,9 @@
                 if(ctrl.removeHierarchy === undefined) {
                     MessageService.showToast("Você deve marcar uma das opções.");
                 } else {
-                    InstitutionService.removeInstitution(institutionKey, ctrl.removeHierarchy).then(function success() {
-                        institutionCtrl.user.removeProfile(institutionKey, ctrl.removeHierarchy);
-                        institutionCtrl.user.removeInstitution(institutionKey, ctrl.removeHierarchy);
+                    InstitutionService.removeInstitution(institution.key, ctrl.removeHierarchy).then(function success() {
+                        institutionCtrl.user.removeProfile(institution.key, ctrl.removeHierarchy);
+                        institutionCtrl.user.removeInstitution(institution.key, ctrl.removeHierarchy);
                         AuthService.save();
                         ctrl.closeDialog();
                         if(_.isEmpty(institutionCtrl.user.institutions)) {

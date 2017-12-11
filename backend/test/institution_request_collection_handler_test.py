@@ -3,9 +3,6 @@
 
 import json
 from test_base_handler import TestBaseHandler
-from models.user import User
-from models.institution import Institution
-from models.institution import Address
 from handlers.institution_request_collection_handler import InstitutionRequestCollectionHandler
 
 from mock import patch
@@ -25,11 +22,18 @@ class InstitutionRequestCollectionHandlerTest(TestBaseHandler):
             [("/api/institutions/requests/institution/(.*)", InstitutionRequestCollectionHandler),
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
-        initModels(cls)
 
     @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_post(self, verify_token):
         """Test handler post."""
+        # Initialize objects
+        self.other_user = mocks.create_user()
+        self.address = mocks.create_address()
+        self.new_inst = mocks.create_institution()
+        self.new_inst.name = "Complexo Industrial da Saude"
+        self.new_inst.address = self.address
+        self.new_inst.put()
+
         data = {
             'sender_key': self.other_user.key.urlsafe(),
             'name': 'new_inst',
@@ -75,16 +79,3 @@ class InstitutionRequestCollectionHandlerTest(TestBaseHandler):
             request['requested_inst_name'],
             "Complexo Industrial da Saude",
             "Expected institution_requested be new inst")
-
-
-def initModels(cls):
-    """Init the models."""
-    # Other user
-    cls.other_user = mocks.create_user()
-    # new Institution Address
-    cls.address = mocks.create_address()
-    # new Institution inst requested to be parent of inst test
-    cls.new_inst = mocks.create_institution()
-    cls.new_inst.name = "Complexo Industrial da Saude"
-    cls.new_inst.address = cls.address
-    cls.new_inst.put()

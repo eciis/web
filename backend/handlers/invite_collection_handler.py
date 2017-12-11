@@ -30,7 +30,6 @@ class InviteCollectionHandler(BaseHandler):
 
     @json_response
     @login_required
-    @is_admin
     def post(self, user):
         """Handle POST Requests."""
         data = json.loads(self.request.body)
@@ -41,17 +40,25 @@ class InviteCollectionHandler(BaseHandler):
                       "invitation type not allowed", NotAuthorizedException)
         invite = InviteFactory.create(data, type_of_invite)
 
-        institution = invite.institution_key.get()
-        Utils._assert(institution.state == 'inactive',
-                      "The institution has been deleted", NotAuthorizedException)
+        can_invite_inst = user.has_permission("send_link_inst_invite", invite.institution_key.urlsafe())
+        can_invite_members = user.has_permission("invite_members", invite.institution_key.urlsafe())
 
-        invite.put()
+        if(can_invite_inst or can_invite_members):
+            institution = invite.institution_key.get()
+            Utils._assert(institution.state == 'inactive',
+                        "The institution has been deleted", NotAuthorizedException)
+            
 
-        if(invite.stub_institution_key):
-            invite.stub_institution_key.get().addInvite(invite)
+            invite.put()
 
-        invite.sendInvite(user, host)
+            if(invite.stub_institution_key):
+                invite.stub_institution_key.get().addInvite(invite)
 
-        make_invite = invite.make()
+            invite.sendInvite(user, host)
 
-        self.response.write(json.dumps(make_invite))
+            make_invite = invite.make()
+
+            self.response.write(json.dumps(make_invite))
+        else:
+            raise NotAuthorizedException("User is not allowed to send invites")
+        

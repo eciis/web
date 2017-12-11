@@ -80,9 +80,9 @@ class InstitutionChildrenRequestCollectionHandlerTest(TestBaseHandler):
 
         exception_message = self.get_message_exception(ex.exception.message)
         self.assertEqual(
-            "Error! User is not admin",
+            "Error! User is not allowed to send request",
             exception_message,
-            "Expected error message is Error! User is not admin")
+            "Expected error message is Error! User is not allowed to send request")
 
 
 def initModels(cls):
@@ -110,6 +110,8 @@ def initModels(cls):
     cls.inst_test.put()
     # Update institutions admin from User admin
     cls.user_admin.institutions_admin = [cls.inst_test.key]
+    cls.user_admin.put()
+    cls.user_admin.add_permission("send_link_inst_request", cls.inst_test.key.urlsafe())
     cls.user_admin.put()
     # new Institution inst requested to be parent of inst test
     cls.inst_requested = Institution()

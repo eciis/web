@@ -32,7 +32,6 @@ class InstitutionChildrenRequestCollectionHandler(BaseHandler):
 
     @login_required
     @json_response
-    @is_admin
     def post(self, user, institution_key):
         """Handler of post requests."""
         user.check_permission(

@@ -9,10 +9,14 @@
             </div>
         </div>
         <div layout-padding layout="row" layout-align="start center" md-colors="{background: 'default-grey-300'}">
-            <img ng-src="{{ctrl.institution.photo_url}}"
+            <a ui-sref="app.institution({institutionKey: '{{ctrl.institution.key}}'})" target="_blank">
+                <img ng-src="{{ctrl.institution.photo_url}}"
                 style="border-radius: 50%; height: 100px; width: 100px;"></img>
+            </a>
             <div layout="column" layout-align="center start">
-                <b>{{ctrl.institution.name}}</b>
+                <a ui-sref="app.institution({institutionKey: '{{ctrl.institution.key}}'})" target="_blank">
+                    <b md-colors="{color: 'default-grey-700'}">{{ctrl.institution.name}}</b>
+                </a>
                 <span>{{ctrl.institution.email}}</span>
             </div>
         </div>

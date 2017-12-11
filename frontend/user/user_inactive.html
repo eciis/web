@@ -5,16 +5,53 @@
           <md-icon>keyboard_arrow_left</md-icon>
         </md-button>
         <div class="padded" layout-margin md-whiteframe="12" style="border-radius: 2px;" md-colors="{background: 'grey-50'}" layout="row" flex-xs="85" flex-sm="65" flex-gt-sm="45" layout-align="center center">
-            <div layout="column" flex-xs="75" flex-gt-xs="80" layout-align="space-between" layout-margin>
+            <div layout="column" flex-xs="65" flex-gt-xs="70" layout-align="space-between" layout-margin>
                 <div layout="row" layout-align="center center">
                     <img src="/app/images/logowithname.png" flex="90"/>
                 </div>
                 <div layout="row" layout-align="center center" style="color: black;">
-                    <p style="text-align: center;" flex-gt-xs="70">Para acessar a plataforma você precisa estar vinculado a uma instituição pré-cadastrada.</p>
+                    <p style="font-weight: 500;" flex-gt-xs="80">Busque uma instituição que você faz parte.</p>
                 </div>
+                <div md-theme="input" class="search-field">
+                    <form ng-submit="userInactiveCtrl.showMenu($event)">
+                        <md-input-container class="md-block" flex-gt-sm>
+                          <input placeholder="Busque uma instituição" ng-model="userInactiveCtrl.search" flex-gt-sm autocomplete="off">
+                          <md-icon class="material-icons">&#xE8B6;</md-icon>
+                        </md-input-container>
+                    </form>
+                </div>
+                <md-list flex>
+                    <md-list-item ng-repeat="institution in requestInvCtrl.institutions" ng-click="requestInvCtrl.selectInstitution(institution)"
+                            ng-class="requestInvCtrl.showFullInformation(institution)? 'md-3-line': ''"
+                            ng-disabled="requestInvCtrl.showFullInformation(institution)">
+                        <div ng-if="!requestInvCtrl.showFullInformation(institution)" class="md-list-item-text" layout-align="center center"
+                                layout="column" style='text-align: center'>
+                            {{ institution.name }}
+                        </div>
+                        <div class="md-list-item-text" ng-if="requestInvCtrl.showFullInformation(institution)">
+                            <div layout-align="center center" layout="column" layout-padding>
+                                    <h3><b>{{ requestInvCtrl.institutionSelect.name }}</b></h3>
+                                    <h4>{{ requestInvCtrl.institutionSelect.email }}</h4>
+                                    <h4>{{ requestInvCtrl.getFullAddress(requestInvCtrl.institutionSelect) }}</h4>
+                                <p align="center">
+                                    {{ requestInvCtrl.institutionSelect.description }}
+                                </p>
+                            </div>
+                        </div>
+                    </md-list-item>
+                    <md-list-item ng-if="requestInvCtrl.showMessage()">
+                        <div class="md-list-item-text" layout-align="center center" layout="column"
+                        style='text-align: center'>
+                            <p>Infelizmente sua instituição não está cadastrada. Para cadastrar pressione o botão abaixo:</p>
+                            <md-checkbox ng-model="requestInvCtrl.canCreate" class="md-primary" aria-label="Checkbox 1">
+                                Manifesto que tenho autonomia para cadastrar a  instituição
+                            </md-checkbox>
+                            <md-button ng-class="requestInvCtrl.canCreate?'green-button':''" ng-disabled="!requestInvCtrl.canCreate" ng-click="requestInvCtrl.createInst()">Quero criar minha instituição</md-button>
+                        </div>
+                    </md-list-item>
+                </md-list>
                 <div layout-gt-xs="row" layout-xs="column" layout-align="end center">
-                    <md-button flex-order-xs="2" class="md-raised md-primary" md-colors="{background: 'teal-500'}" ng-click="userInactiveCtrl.logout()">SAIR</md-button>
-                    <md-button flex-order-xs="1" class="md-raised md-primary" md-colors="{background: 'teal-500'}" ng-click="userInactiveCtrl.resquestInvitation()">BUSCAR INSTITUIÇÃO</md-button>
+                    <md-button flex-order-xs="1" class="md-raised md-primary" md-colors="{background: 'teal-500'}" ng-click="userInactiveCtrl.resquestInvitation()">AVANÇAR</md-button>
                 </div>
             </div>
         </div>

@@ -7,7 +7,6 @@
         AuthService, RequestInvitationService, $state) {
         var requestInvCtrl = this;
 
-        requestInvCtrl.search = "";
         requestInvCtrl.institutions = [];
         requestInvCtrl.institutionSelect = {};
         requestInvCtrl.hasInstSelect = false;
@@ -51,14 +50,6 @@
             }
         };
 
-        function getRequests(instKey) {
-            RequestInvitationService.getRequests(instKey).then(function success(response) {
-                requestInvCtrl.requestsOfSelectedInst = response;
-            }, function error(response) {
-                requestInvCtrl.cancelDialog();
-            });
-        }
-
         (function main(){
             if(requestInvCtrl.institution) {
                 requestInvCtrl.hasInstSelect = true;
@@ -66,68 +57,8 @@
             }
         })();
 
-        requestInvCtrl.createInst = function createInst() {
-            $state.go("create_institution");
-            $mdDialog.hide();
-        };
-
         requestInvCtrl.cancelDialog = function() {
             $mdDialog.cancel();
-        };
-
-        requestInvCtrl.showMenu = function showMenu() {
-            var deferred = $q.defer();
-            if(requestInvCtrl.search) {
-                requestInvCtrl.finalSearch = requestInvCtrl.search;
-                requestInvCtrl.makeSearch().then(function success() {
-                    deferred.resolve(requestInvCtrl.institutions);
-                });
-            }
-            return deferred.promise;
-        };
-
-        requestInvCtrl.makeSearch = function () {
-            var deferred = $q.defer();
-            clearProperties();
-            InstitutionService.searchInstitutions(requestInvCtrl.finalSearch, ACTIVE, 'institution').then(function success(response) {
-                requestInvCtrl.institutions = response.data;
-                deferred.resolve(response);
-            });
-
-            return deferred.promise;
-        };
-
-        requestInvCtrl.selectInstitution = function selectInstitution(institution){
-            var deferred = $q.defer();
-
-            InstitutionService.getInstitution(institution.id).then(function success(response) {
-                requestInvCtrl.institutionSelect = response.data;
-                requestInvCtrl.hasInstSelect = true;
-                requestInvCtrl.showFullInformation(institution);
-
-                requestInvCtrl.request = {
-                    institution_name: institution.name
-                };
-                getRequests(requestInvCtrl.institutionSelect.key);
-                deferred.resolve(response);
-            });
-            return deferred.promise;
-        };
-
-        requestInvCtrl.showFullInformation = function showFullInformation(institution){
-           if(!_.isEmpty(requestInvCtrl.institutions)){
-                return requestInvCtrl.institutionSelect.key === institution.id;
-            }
-
-            return false;
-        };
-
-        requestInvCtrl.showMessage = function showMessage(){
-            if(_.isEmpty(requestInvCtrl.institutions)){
-                return requestInvCtrl.wasSearched;
-            }
-
-            return false;
         };
 
         requestInvCtrl.getFullAddress = function getFullAddress(institution) {

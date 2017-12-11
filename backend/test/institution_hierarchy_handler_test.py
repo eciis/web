@@ -31,23 +31,15 @@ class InstitutionHierarchyHandlerTest(TestBaseHandler):
         admin = mocks.create_user(ADMIN['email'])
         otheruser = mocks.create_user(USER['email'])
         institution = mocks.create_institution()
-        institution.address = mocks.create_address()
         otherinst = mocks.create_institution()
-        otherinst.address = mocks.create_address()
-        institution.add_member(admin)
-        otherinst.add_member(otheruser)
-        admin.institutions_admin = [institution.key]
-        otheruser.institutions_admin = [otherinst.key]
-        admin.add_institution(institution.key)
-        otheruser.add_institution(otherinst.key)
-        institution.admin = admin.key
-        otherinst.admin = otheruser.key
         institution.children_institutions.append(otherinst.key)
         otherinst.parent_institution = institution.key
-        admin.add_permissions(["remove_inst", "remove_link"], otherinst.key.urlsafe())
-        otheruser.add_permission("remove_link", institution.key.urlsafe())
+        institution.admin = admin.key
+        otherinst.admin = otheruser.key
         institution.put()
         otherinst.put()
+        admin.add_permissions(["remove_inst", "remove_link"], otherinst.key.urlsafe())
+        otheruser.add_permission("remove_link", institution.key.urlsafe())
         self.assertTrue(otherinst.key in institution.children_institutions)
         self.assertTrue(otherinst.parent_institution == institution.key)
         # Call the delete method
@@ -68,23 +60,15 @@ class InstitutionHierarchyHandlerTest(TestBaseHandler):
         admin = mocks.create_user(ADMIN['email'])
         otheruser = mocks.create_user(USER['email'])
         institution = mocks.create_institution()
-        institution.address = mocks.create_address()
         otherinst = mocks.create_institution()
-        otherinst.address = mocks.create_address()
-        institution.add_member(admin)
-        otherinst.add_member(otheruser)
-        admin.institutions_admin = [institution.key]
-        otheruser.institutions_admin = [otherinst.key]
-        admin.add_institution(institution.key)
-        otheruser.add_institution(otherinst.key)
-        institution.admin = admin.key
-        otherinst.admin = otheruser.key
         institution.children_institutions.append(otherinst.key)
         otherinst.parent_institution = institution.key
-        admin.add_permissions(["remove_inst", "remove_link"], otherinst.key.urlsafe())
-        otheruser.add_permission("remove_link", institution.key.urlsafe())
+        institution.admin = admin.key
+        otherinst.admin = otheruser.key
         institution.put()
         otherinst.put()
+        admin.add_permissions(["remove_inst", "remove_link"], otherinst.key.urlsafe())
+        otheruser.add_permission("remove_link", institution.key.urlsafe())
         self.assertTrue(otherinst.key in institution.children_institutions)
         self.assertTrue(otherinst.parent_institution == institution.key)
         # Call the delete method

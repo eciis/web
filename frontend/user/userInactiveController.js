@@ -8,7 +8,13 @@
         var userInactiveCtrl = this;
 
         userInactiveCtrl.user = AuthService.getCurrentUser();
+        userInactiveCtrl.institutions = [];
         userInactiveCtrl.search = "";
+        userInactiveCtrl.request = null;
+        userInactiveCtrl.institutionSelect = {};
+        userInactiveCtrl.hasInstSelect = false;
+        userInactiveCtrl.wasSearched = false;
+        var ACTIVE = 'active';
 
         userInactiveCtrl.logout = function logout() {
             AuthService.logout();
@@ -21,12 +27,13 @@
                 userInactiveCtrl.institutionSelect = response.data;
                 userInactiveCtrl.hasInstSelect = true;
                 userInactiveCtrl.showFullInformation(institution);
-
                 userInactiveCtrl.request = {
                     institution_name: institution.name
                 };
                 getRequests(userInactiveCtrl.institutionSelect.key);
                 deferred.resolve(response);
+                
+            console.log(userInactiveCtrl.institutionSelect);
             });
             return deferred.promise;
         };
@@ -75,7 +82,7 @@
             var deferred = $q.defer();
             clearProperties();
             InstitutionService.searchInstitutions(userInactiveCtrl.finalSearch, ACTIVE, 'institution').then(function success(response) {
-                requestInvCtrl.institutions = response.data;
+                userInactiveCtrl.institutions = response.data;
                 deferred.resolve(response);
             });
 
@@ -83,10 +90,10 @@
         };
 
         function clearProperties(){
-            requestInvCtrl.request = null;
-            requestInvCtrl.institutionSelect = {};
-            requestInvCtrl.hasInstSelect = false;
-            requestInvCtrl.wasSearched = true;
+            userInactiveCtrl.request = null;
+            userInactiveCtrl.institutionSelect = {};
+            userInactiveCtrl.hasInstSelect = false;
+            userInactiveCtrl.wasSearched = true;
         }
 
         userInactiveCtrl.resquestInvitation = function resquestInvitation(event) {

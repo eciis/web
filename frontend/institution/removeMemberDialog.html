@@ -6,13 +6,26 @@
         </md-card-header-text>
       </md-card-header>
       <md-card-content layout="column">
-        <form name="saveForm">
-          <md-input-container class="md-block">
-            <label>Insira o motivo da remoção (opcional)</label>
-            <textarea name="message" ng-model="removeMemberCtrl.justification">
-            </textarea>
-          </md-input-container>
-        </form>
+        <md-list flex>
+          <md-list-item class="list-item-dense" md-colors="{background: 'grey-900'}" ng-click="null" flex-xs>
+            <img title="{{removeMemberCtrl.member.name}}" ng-src="{{removeMemberCtrl.member.photo_url}}" class="md-avatar"
+              style="margin: 0 15px 0 -15px; width: 60px; height: 60px;"/>
+            <div layout="column">
+              <b style="position: relative; margin-top: 20px; font-size: 15px;">{{ removeMemberCtrl.member.name }}</b>
+              <span style="position: relative; bottom: 20px; font-size: 15px;">{{ removeMemberCtrl.member.email[0]}}</span>
+              <span style="position: relative; bottom: 20px; font-size: 15px;"> Convidado por: fulano</span>
+            </div>
+          </md-list-item>
+        </md-list>
+        <div>
+          <form name="saveForm">
+            <md-input-container class="md-block">
+              <label>Insira o motivo da remoção (opcional)</label>
+              <textarea name="message" ng-model="removeMemberCtrl.justification">
+              </textarea>
+            </md-input-container>
+          </form>
+        </div>
       </md-card-content>
       <md-dialog-actions layout="row">
         <span flex></span>

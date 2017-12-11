@@ -1,22 +1,18 @@
-<md-content layout-fill md-colors="{background: 'teal-500'}" layout-align="center center" layout-gt-xs="row" layout-xs="row">
+<md-content layout-fill md-colors="{background: 'teal-500'}" layout-align="center center" layout="row">
 
-  <div ng-if="!loginCtrl.isRequestInvite" class="padded" md-whiteframe="12" style="border-radius: 2px; background-color: white;" 
-    flex-xs="85" flex-sm="65" flex-md="65" flex-lg="30" flex-xl="35" layout="column">
+  <div ng-if="!loginCtrl.isRequestInvite" md-whiteframe="12" style="border-radius: 2px; background-color: white;" 
+    flex-xs="90" flex-sm="65" flex-md="65" flex-lg="30" flex-xl="35">
 
-    <div layout="row" flex-xs="95" layout-align-xs="center center">
-      <div layout="column" flex="5" layout-align="center">
+    <div layout="row">
+      <div layout="column" flex="5" layout-align="center" hide-xs>
         <md-button class="md-fab md-primary" title="Voltar" md-colors="{background: 'light-green-600'}"
-          style="margin-left: -37px; width: 70px; height: 70px;" hide-xs>
+          style="margin-left: -37px; width: 70px; height: 70px;">
           <md-icon style="font-size: 3em; margin: 0 0 14 7">keyboard_arrow_left</md-icon>
-        </md-button>
-        <md-button class="md-fab md-primary" title="Voltar" md-colors="{background: 'light-green-600'}"
-          style="margin-left: -20px; width: 45px; height: 45px;" hide-gt-xs>
-          <md-icon style="font-size: 2em; margin-right: 10em">keyboard_arrow_left</md-icon>
         </md-button>
       </div>
       
-      <div flex="95" layout-gt-xs="row" layout-xs="row" layout-align-gt-xs="space-around center" layout-align-gt-xs="center center">
-        <div layout="column" flex-gt-xs="85">
+      <div flex layout="row" layout-align="space-around center">
+        <div layout="column" flex-xs="80" flex-gt-xs="85">
           <img src="/app/images/logowithname.png" style="width: 100%; margin-bottom: 10px;"/>
           <form ng-submit="loginCtrl.loginWithEmailPassword()" class="margin">
             <md-input-container class="md-block" style="margin: 0;">
@@ -28,10 +24,11 @@
               <input type="password" name="password" ng-model="loginCtrl.user.password" required="true"  minlength="6" aria-label="Senha">
             </md-input-container>
             <div layout="row" layout-align="end center" style="margin-bottom: 10px">
-              <md-button class="md-primary" ng-click="loginCtrl.resetPassword()" md-colors="{background: 'grey-200', color: 'teal-900'}" hide-gt-xs>
+              <md-button flex-xs="60" class="md-primary" ng-click="loginCtrl.resetPassword()" md-colors="{background: 'grey-200', color: 'teal-900'}"
+                hide-gt-xs style="font-size: 11px; margin-left: 0;">
                 Esqueci minha senha
               </md-button>
-              <md-button type="submit" style="margin: 0" class="md-raised md-primary" md-colors="{background: 'teal-500'}">Acessar</md-button>
+              <md-button flex-xs type="submit" style="margin: 0" class="md-raised md-primary" md-colors="{background: 'teal-500'}">Acessar</md-button>
             </div>
           </form>
           <div layout="column" class="margin">

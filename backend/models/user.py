@@ -234,7 +234,7 @@ class User(ndb.Model):
         entity_key -- ndb urlsafe of the object binded to the permission
         """
         for permission in list_permissions:
-            self.add_permission(permission,entity_key);
+            self.add_permission(permission,entity_key)
 
     def remove_permission(self, permission_type, entity_key):
         """Remove permission.key from the user permissions list.

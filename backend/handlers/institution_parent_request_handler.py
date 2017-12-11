@@ -34,6 +34,12 @@ class InstitutionParentRequestHandler(BaseHandler):
         parent_institution.children_institutions.append(request.institution_key)
         parent_institution.put()
 
+        institution_children = request.institution_key.get()
+        user.add_permissions(["remove_link", "remove_inst"], institution_children.key.urlsafe())
+
+        admin_of_children_inst = institution_children.admin.get()
+        admin_of_children_inst.add_permission("remove_link", parent_institution.key.urlsafe())
+
         request.send_response_notification(user, request.admin_key.urlsafe(), 'ACCEPT_INSTITUTION_LINK')
 
         self.response.write(json.dumps(request.make()))

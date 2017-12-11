@@ -88,7 +88,6 @@ def initModels(cls):
     cls.institution.admin = cls.user.key
     cls.institution.put()
     cls.user.institutions_admin = [cls.institution.key]
-    cls.user.add_permission("remove_link", cls.institution.key.urlsafe())
     cls.user.put()
     # new Institution Other Inst
     cls.otherinst = Institution()
@@ -104,7 +103,8 @@ def initModels(cls):
     cls.otherinst.parent_institution = cls.institution.key
     cls.otherinst.put()
     cls.otheruser.institutions_admin = [cls.otherinst.key]
-    cls.otheruser.add_permission("remove_link", cls.otherinst.key.urlsafe())
+    cls.otheruser.add_permission("remove_link", cls.institution.key.urlsafe())
+    cls.user.add_permissions(["remove_inst", "remove_link"], cls.otherinst.key.urlsafe())
     cls.otheruser.put()
     cls.institution.children_institutions.append(cls.otherinst.key)
     cls.institution.put()

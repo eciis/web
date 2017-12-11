@@ -351,7 +351,11 @@
             return inviteInstHierCtrl.user.permissions.remove_inst[institution_key];
         };
 
-        inviteInstHierCtrl.linkStatus = function linkStatus(institution) {
+        inviteInstHierCtrl.linkParentStatus = function linkParentStatus() {
+            return inviteInstHierCtrl.institution.parent_institution ? "confirmado" : "não confirmado";
+        };
+
+        inviteInstHierCtrl.linkChildrenStatus = function linkChildrenStatus(institution) {
             return institution.parent_institution ? "confirmado" : "não confirmado";
         };
 

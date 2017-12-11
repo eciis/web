@@ -1,9 +1,23 @@
-<md-content layout-fill md-colors="{background: 'teal-500'}" layout-align="center center" layout-gt-xs="row" layout-xs="column">
-  <div ng-if="!loginCtrl.isRequestInvite" class="padded" md-whiteframe="12" style="border-radius: 2px; background-color: white;" flex-sm="65" flex-md="65" flex-lg="65" flex-xl="35" flex-xs="100" layout="column">
-    <div layout-gt-xs="row" flex-xs="95" layout-xs="column" layout-align-gt-xs="space-around center" layout-align-xs="space-between center">
-      <div layout="column" flex-gt-xs="40">
-        <img src="/app/images/logowithname.png" style="width: 100%; margin-bottom: 10px;"/>
-        <div layout="column">
+<md-content layout-fill md-colors="{background: 'teal-500'}" layout-align="center center" layout-gt-xs="row" layout-xs="row">
+
+  <div ng-if="!loginCtrl.isRequestInvite" class="padded" md-whiteframe="12" style="border-radius: 2px; background-color: white;" 
+    flex-xs="85" flex-sm="65" flex-md="65" flex-lg="30" flex-xl="35" layout="column">
+
+    <div layout="row" flex-xs="95" layout-align-xs="center center">
+      <div layout="column" flex="5" layout-align="center">
+        <md-button class="md-fab md-primary" title="Voltar" md-colors="{background: 'light-green-600'}"
+          style="margin-left: -37px; width: 70px; height: 70px;" hide-xs>
+          <md-icon style="font-size: 3em; margin: 0 0 14 7">keyboard_arrow_left</md-icon>
+        </md-button>
+        <md-button class="md-fab md-primary" title="Voltar" md-colors="{background: 'light-green-600'}"
+          style="margin-left: -20px; width: 45px; height: 45px;" hide-gt-xs>
+          <md-icon style="font-size: 2em; margin-right: 10em">keyboard_arrow_left</md-icon>
+        </md-button>
+      </div>
+      
+      <div flex="95" layout-gt-xs="row" layout-xs="row" layout-align-gt-xs="space-around center" layout-align-gt-xs="center center">
+        <div layout="column" flex-gt-xs="85">
+          <img src="/app/images/logowithname.png" style="width: 100%; margin-bottom: 10px;"/>
           <form ng-submit="loginCtrl.loginWithEmailPassword()" class="margin">
             <md-input-container class="md-block" style="margin: 0;">
               <label>Email</label>
@@ -11,51 +25,48 @@
             </md-input-container>
             <md-input-container class="md-block" style="margin: 0;">
               <label>Senha</label>
-              <input type="password" name="password" ng-model="loginCtrl.user.password" required="true"  minlength="6"
-                aria-label="Senha">
+              <input type="password" name="password" ng-model="loginCtrl.user.password" required="true"  minlength="6" aria-label="Senha">
             </md-input-container>
-            <div layout="row" layout-align="end center" style="margin-bottom: 20px">
+            <div layout="row" layout-align="end center" style="margin-bottom: 10px">
               <md-button class="md-primary" ng-click="loginCtrl.resetPassword()" md-colors="{background: 'grey-200', color: 'teal-900'}" hide-gt-xs>
-                       Esqueci minha senha
+                Esqueci minha senha
               </md-button>
-              <md-button type="submit" class="md-raised md-primary" md-colors="{background: 'teal-500'}">Acessar</md-button>
+              <md-button type="submit" style="margin: 0" class="md-raised md-primary" md-colors="{background: 'teal-500'}">Acessar</md-button>
             </div>
           </form>
+          <div layout="column" class="margin">
+            <md-button disabled="true" class="md-raised md-primary login-button">
+              <md-icon md-svg-src="/app/icons/facebook-icon.svg" style="padding-left: 1em;"></md-icon>
+              <span>ACESSE COM FACEBOOK</span>
+            </md-button>
+            <md-button class="login-button" ng-click="loginCtrl.login()"
+              style="background-color: #db4437; margin: 10px 0 10px 0;">
+              <md-icon md-svg-src="/app/icons/google-icon.svg" style="padding-left: 1em;"></md-icon>
+              <span>ACESSE COM GOOGLE</span>
+            </md-button>
+            <md-button disabled="true" class="md-raised md-primary login-button">
+            <md-icon md-svg-src="/app/icons/twitter-icon.svg" style="padding-left: 1em;"></md-icon>
+              <span>ACESSE COM TWITTER</span>
+            </md-button>
+            <div layout="row" style="margin-top: 15px;">
+              <hr style="height:0px;" flex/>
+            </div>
+            <p style="color: black;">
+              <b>Se você ainda não possui uma conta no e-CIS solicite abaixo um convite.</b>
+            </p>
+            <md-button md-colors="{background: 'teal-500'}" class="login-button" ng-click="loginCtrl.isRequestInvite = true"
+              style="margin-bottom: 30px;">
+                <md-icon style="color: white; padding-left: 1em;">add_circle</md-icon>
+                <span>SOLICITAR CONVITE</span>
+            </md-button>
+          </div>
         </div>
-      </div>
-      <div layout="column" hide-xs>
-        <hr style="width:0px;" flex="40"/>
-      </div>
-      <div style="color: black;" flex-gt-xs="40" layout="column" class="margin">
-        <p>
-          <b>Se você ainda não possui uma conta no e-CIS solicite abaixo um convite.</b>
-        </p>
-        <md-button md-colors="{background: 'teal-500'}" class="login-button" ng-click="loginCtrl.isRequestInvite = true">
-            <md-icon style="color: white;">add_circle</md-icon>
-            <span>SOLICITAR CONVITE</span>
-        </md-button>
-        <div layout="row" style="margin: 15px 0 15px 0;" layout-align="space-between center">
-          <hr style="height:0px;" flex="45"/>
-          <span>OU</span>
-          <hr style="height:0px;" flex="45"/>
-        </div>
-        <md-button disabled="true" class="md-raised md-primary login-button">
-            <md-icon md-svg-src="/app/icons/facebook-icon.svg"></md-icon>
-            <span>ACESSE COM FACEBOOK</span>
-        </md-button>
-        <md-button class="login-button" style="background-color: #db4437;" ng-click="loginCtrl.login()">
-            <md-icon md-svg-src="/app/icons/google-icon.svg"></md-icon>
-            <span>ACESSE COM GOOGLE</span>
-        </md-button>
-        <md-button disabled="true" class="md-raised md-primary login-button">
-            <md-icon md-svg-src="/app/icons/twitter-icon.svg"></md-icon>
-            <span>ACESSE COM TWITTER</span>
-        </md-button>
       </div>
     </div>
-    <div layout-padding md-colors="{background: 'grey-200'}" hide-xs>
+
+    <div style="padding: 15px; font-size: 14px;" md-colors="{background: 'grey-300'}" hide-xs>
       <a href="" style="text-decoration: none;" ng-click="loginCtrl.resetPassword()">
-        <b md-colors="{color: 'teal-900'}">Esqueceu a senha?</b>
+        <b md-colors="{color: 'teal-500'}">Esqueceu a senha?</b>
       </a>
     </div>
   </div>
@@ -66,7 +77,8 @@
       ng-click="loginCtrl.isRequestInvite = false">
       <md-icon>keyboard_arrow_left</md-icon>
     </md-button>
-    <div ng-if="loginCtrl.isRequestInvite" class="padded" md-whiteframe="12" style="border-radius: 2px; background-color: white;" flex-sm="50" flex-xs="85" flex-md="50" flex-gt-md="35" layout="column">
+    <div ng-if="loginCtrl.isRequestInvite" class="padded" md-whiteframe="12" style="border-radius: 2px; background-color: white;" 
+      flex-sm="50" flex-xs="85" flex-md="50" flex-gt-md="35" layout="column">
       <div layout="column">
         <div style="color: black;" layout="row" layout-align="center center">
           <div layout="column" flex="65">

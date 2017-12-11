@@ -1,51 +1,34 @@
-<md-dialog aria-label="instituições" flex="50">
-<!--    <div>
-        <md-dialog-content class="md-dialog-content" layout="column">
-            <md-radio-group ng-model="ctrl.removeHierarchy" required>
-                <md-radio-button ng-value="true" class="md-primary">
-                    <b>Desejo</b> remover toda a hierarquia abaixo dessa instituição
-                </md-radio-button>
-                <md-radio-button ng-value="false" class="md-primary">
-                    <b>Não</b> desejo remover toda a hierarquia abaixo dessa instituição
-                </md-radio-button>
-            </md-radio-group>
-            <h3>A instituição será removida permanentemente</h3>
-            <h3>Deseja continuar?</h3>
-        </md-dialog-content>
-        <md-dialog-actions layout="row" layout-align="center center">
-            <md-button class="md-warn" ng-click="ctrl.closeDialog()" layout-align="center">Cancelar</md-button>
-            <md-button class="md-warn md-raised" ng-click="ctrl.removeInst()">Continuar</md-button>
-        </md-dialog-actions>
-    </div>-->
+<md-dialog aria-label="instituições" flex-gt-xs="50" flex-xs="90">
     <md-dialog-content layout-margin layout-padding layout="column">
         <div layout="row" layout-align="space-between center">
             <b>Deseja remover esta instituição permanetemente?</b>
             <div>
-                <md-icon>clear</md-icon>
+                <button style="background-color: white; border: 0;" ng-click="ctrl.closeDialog()">
+                    <md-icon>clear</md-icon>
+                </button>
             </div>
         </div>
         <div layout-padding layout="row" layout-align="start center" style="background-color: #E0E0E0;">
-            <img src="http://www.ferramentasblog.com/wordpress/wp-content/uploads/2011/01/gato.jpg"
+            <img ng-src="{{ctrl.institution.photo_url}}"
                 style="border-radius: 50%; height: 100px; width: 100px;"></img>
             <div layout="column" layout-align="center start">
-                <b>INSTITUIÇÃO</b>
-                <span>testeciis@gmail.com</span>
-                <span>Convidado por: Luiz Fernando</span>
+                <b>{{ctrl.institution.name}}</b>
+                <span>{{ctrl.institution.email}}</span>
             </div>
         </div>
         <div>
             <md-radio-group ng-model="ctrl.removeHierarchy" required>
                 <md-radio-button ng-value="true" class="md-primary">
-                    <b>Desejo</b> remover toda a hierarquia abaixo dessa instituição
+                    Desejo remover toda a hierarquia abaixo dessa instituição
                 </md-radio-button>
                 <md-radio-button ng-value="false" class="md-primary">
-                    <b>Não</b> desejo remover toda a hierarquia abaixo dessa instituição
+                    Não desejo remover toda a hierarquia abaixo dessa instituição
                 </md-radio-button>
             </md-radio-group>
         </div>
     </md-dialog-content>
     <md-dialog-actions layout="row" layout-align="end center">
-        <md-button class="md-primary" ng-click="ctrl.closeDialog()" layout-align="center" style="color:#00796B;" md-colors="{color: 'teal-700'}">Cancelar</md-button>
+        <md-button class="md-primary" ng-click="ctrl.closeDialog()" layout-align="center" style="color:#00796B;">Cancelar</md-button>
         <md-button class="md-primary" ng-click="ctrl.removeInst()" style="color:#00796B;">Continuar</md-button>
     </md-dialog-actions>
 </md-dialog>

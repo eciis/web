@@ -1,5 +1,5 @@
-<div flex md-colors="{background: 'grey-100'}" layout="row" layout-wrap>
-    <div md-whiteframe layout="row" layout-align="center center" flex="100"
+<div flex md-colors="{background: 'grey-100'}" layout="column" layout-wrap>
+    <div md-whiteframe layout="row" layout-align="center center"
             md-colors="{background: 'teal-500'}" style="padding: 7em 0 4em 0;">
         <div flex="75" layout="column" layout-align="center center">
             <h1 style="font-weight: bold;" md-colors="{color: 'grey-100'}">
@@ -8,21 +8,20 @@
         </div>
     </div>
 
-    <div layout="row" layout-align="center start" flex="100"
-            layout-padding>
-        <div layout="column" flex="50">
+    <div layout="row" layout-align="center start" layout-padding>
+        <div flex flex-md="70" flex-gt-md="50">
             <div layout="column">
-                <div layout="column" layout-align="center center">
+                <center>
                     <h1 md-colors="{color: 'grey-500'}" class="md-display-1">
-                        Queremos você no e-CIS
+                        Queremos você na plataforma CIS
                     </h1>
                     <p align="center" class="md-subhead">
                         Demonstre seu interesse em participar da plataforma. Preencha os campos abaixo informando os seus dados e da Instituição que você faz parte. Em breve entraremos em contato.
                     </p>
-                </div>
+                </center>
             </div>
             <div layout="row" layout-align="center center">
-                <div flex="50" layout="column">
+                <div flex flex-md="70" flex-gt-md="50" layout="column">
                     <form name="form" ng-submit="form.$valid && ctrl.submitForm(ev)">
                         <md-input-container class="md-block">
                             <label>Seu nome</label>
@@ -63,7 +62,7 @@
   <div class="md-dialog-container" id="myDialog">
     <md-dialog layout-padding>
         <div layout="row" layout-align="start center">
-            <h2>Seja um dos pioneiros no e-CIS</h2>
+            <h2>Seja um dos pioneiros na plataforma CIS</h2>
             <span flex md-truncate></span>
 
             <md-button class="md-icon-button" ng-click="ctrl.cancel()">

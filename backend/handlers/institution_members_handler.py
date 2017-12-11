@@ -7,7 +7,6 @@ import json
 from utils import login_required
 from utils import Utils
 from utils import json_response
-from utils import has_permission
 from service_messages import send_message_notification
 from service_messages import send_message_email
 
@@ -34,10 +33,10 @@ class InstitutionMembersHandler(BaseHandler):
     def delete(self, user, url_string):
         """Delete member of specific institution."""
         institution_key = ndb.Key(urlsafe=url_string)
-        user.has_permission('remove_member',
-                            "User is not allowed to remove member",
-                            url_string)
-                       
+        user.check_permission('remove_member',
+                              "User is not allowed to remove member",
+                              url_string)
+
         institution = institution_key.get()
 
         data = self.request.get('removeMember')

@@ -25,9 +25,10 @@ class InstitutionHierarchyHandler(BaseHandler):
     @ndb.transactional(xg=True)
     def delete(self, user, institution_key, institution_link):
         """Handle delete link between institutions."""
-        user.has_permission('remove_link',
-                            "User is not allowed to remove link between institutions",
-                            institution_link)
+
+        user.check_permission('remove_link',
+                              "User is not allowed to remove link between institutions",
+                              institution_link)
 
         is_parent = self.request.get('isParent')
         institution = ndb.Key(urlsafe=institution_key).get()

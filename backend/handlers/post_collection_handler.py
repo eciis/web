@@ -48,13 +48,14 @@ class PostCollectionHandler(BaseHandler):
                       NotAuthorizedException)
 
         permission = get_permission(data)
-        user.has_permission(permission,
-                            "You don't have permission to publish post.",
-                            institution_key)
+        user.check_permission(permission,
+                              "You don't have permission to publish post.",
+                              institution_key)
 
         try:
             post = PostFactory.create(data, user.key, institution.key)
             post.put()
+            user.add_permissions(["edit_post", "remove_post"], post.key.urlsafe())
 
             """ Update Institution."""
             institution.posts.append(post.key)

@@ -25,9 +25,9 @@ class InstitutionChildrenRequestHandler(BaseHandler):
     def put(self, user, request_key):
         """Handler PUT Requests. Change status of children_request from 'sent' to 'accepted'."""
         request = ndb.Key(urlsafe=request_key).get()
-        user.has_permission('answer_link_inst_request',
-                            'User is not allowed to accept link between institutions',
-                            request.institution_requested_key.urlsafe())
+        user.check_permission('answer_link_inst_request',
+                              'User is not allowed to accept link between institutions',
+                              request.institution_requested_key.urlsafe())
         request.change_status('accepted')
         request.put()
 
@@ -53,9 +53,9 @@ class InstitutionChildrenRequestHandler(BaseHandler):
     def delete(self, user, request_key):
         """Change request status from 'sent' to 'rejected'."""
         request = ndb.Key(urlsafe=request_key).get()
-        user.has_permission('answer_link_inst_request',
-                            'User is not allowed to reject link between institutions',
-                            request.institution_requested_key.urlsafe())
+        user.check_permission('answer_link_inst_request',
+                              'User is not allowed to reject link between institutions',
+                              request.institution_requested_key.urlsafe())
         request.change_status('rejected')
         request.put()
 

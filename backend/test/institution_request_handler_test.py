@@ -47,8 +47,8 @@ class InstitutionRequestHandlerTest(TestBaseHandler):
         message = self.get_message_exception(str(ex.exception))
         self.assertEqual(
             message,
-            'Error! User is not allowed to do this operation',
-            "Expected message must be equal to Error! User is not allowed to do this operation")
+            'Error! User is not allowed to get requests',
+            "Expected message must be equal to Error! User is not allowed to get requests")
 
     @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
     def test_put(self, verify_token):
@@ -138,7 +138,7 @@ def initModels(cls):
     cls.other_user.institutions_admin = [cls.new_inst.key]
     cls.other_user.put()
 
-    cls.user_admin.permissions['analyze_request_inst'] = cls.inst_test.key.urlsafe()
+    cls.user_admin.add_permission('analyze_request_inst', cls.inst_test.key.urlsafe())
     cls.user_admin.put()
     # new Request
     cls.request = RequestInstitution()

@@ -65,7 +65,7 @@ case "$1" in
             if [ ! -z $3 ]; then # Especified one or more yaml configuration files
                 gcloud app deploy --version $version --no-promote $3
             else
-                gcloud app deploy --version $version --no-promote $APP_YAML $FRONTEND_YAML $BACKEND_YAML $WORKER_YAML
+                gcloud app deploy --version $version --no-promote $APP_YAML $FRONTEND_YAML $BACKEND_YAML $WORKER_YAML queue.yaml
             fi
         else
             set_backend_url

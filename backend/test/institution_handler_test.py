@@ -253,7 +253,6 @@ class InstitutionHandlerTest(TestBaseHandler):
         """Test delete child institution."""
         self.other_user.institutions.append(self.third_inst.key)
         self.first_inst.state = "active"
-        self.other_user.add_permission("publish_post", self.first_inst.key.urlsafe())
         self.other_user.put()
         self.first_inst.put()
         with self.assertRaises(Exception):

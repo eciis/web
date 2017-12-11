@@ -36,8 +36,8 @@
             return HttpService.get(REQUESTS_URI + institution_key + "/requests/user");
         };
 
-        service.getRequestsInst = function getRequestsInst() {
-            return HttpService.get(REQUESTS_URI + "requests/institution");
+        service.getRequestsInst = function getRequestsInst(institution_key) {
+            return HttpService.get(REQUESTS_URI + "requests/institution/" + institution_key);
         };
 
         service.getRequestInst = function getRequestInst(request_key) {

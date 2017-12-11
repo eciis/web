@@ -8,7 +8,7 @@
                 </button>
             </div>
         </div>
-        <div layout-padding layout="row" layout-align="start center" style="background-color: #E0E0E0;">
+        <div layout-padding layout="row" layout-align="start center" md-colors="{background: 'default-grey-300'}">
             <img ng-src="{{ctrl.institution.photo_url}}"
                 style="border-radius: 50%; height: 100px; width: 100px;"></img>
             <div layout="column" layout-align="center start">
@@ -22,13 +22,13 @@
                     Desejo remover toda a hierarquia abaixo dessa instituição
                 </md-radio-button>
                 <md-radio-button ng-value="false" class="md-primary">
-                    Não desejo remover toda a hierarquia abaixo dessa instituição
+                    Desejo manter toda a hierarquia abaixo dessa instituição
                 </md-radio-button>
             </md-radio-group>
         </div>
     </md-dialog-content>
     <md-dialog-actions layout="row" layout-align="end center">
-        <md-button class="md-primary" ng-click="ctrl.closeDialog()" layout-align="center" style="color:#00796B;">Cancelar</md-button>
-        <md-button class="md-primary" ng-click="ctrl.removeInst()" style="color:#00796B;">Continuar</md-button>
+        <md-button class="md-primary" ng-click="ctrl.closeDialog()" layout-align="center" md-colors="{color: 'default-teal-700'}">Cancelar</md-button>
+        <md-button class="md-primary" ng-click="ctrl.removeInst()" md-colors="{color: 'default-teal-700'}">Continuar</md-button>
     </md-dialog-actions>
 </md-dialog>

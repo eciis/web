@@ -1,4 +1,4 @@
-<md-content layout-fill layout="column" md-colors="{background: 'teal-500'}" layout-align="center">
+<md-content layout-fill layout="column" md-colors="{background: 'teal-500'}" layout-align="center center">
     <div layout="row" layout-align="center center" style="margin-right: 35px;">
         <md-button class="md-fab md-primary" aria-label="Retornar" ng-click="userInactiveCtrl.logout()"
           style="margin-right: -35px;" md-colors="{background: 'light-green-500'}">
@@ -12,39 +12,42 @@
                     <img src="/app/images/logowithname.png" flex="90"/>
                 </div>
                 <!-- Search institution -->
-                <div ng-if="!userInactiveCtrl.choicedInst">
-                    <p style="font-weight: 500">Busque uma instituição que você faz parte.</p>
-                    <div md-theme="input" class="search-field" style="margin: 0px; height: 48">
+                
+                <p style="font-weight: 500" ng-if="!userInactiveCtrl.choicedInst">
+                    Busque uma instituição que você faz parte.</p>
+                <div md-theme="input" class="search-field" style="margin: 0px; height: 48"
+                    ng-if="!userInactiveCtrl.choicedInst">
                         <form ng-submit="userInactiveCtrl.showMenu($event)" style="margin-bottom: 0px; height: 48">
-                            <md-input-container class="md-block" flex-gt-sm style="margin: 0px; height: 48">
+                            <md-input-container md-no-float class="md-block" flex-gt-sm style="margin: 0px; height: 48">
                               <input placeholder="Busque uma instituição" ng-model="userInactiveCtrl.search" flex-gt-sm autocomplete="off">
                               <md-icon class="material-icons">&#xE8B6;</md-icon>
                             </md-input-container>
                         </form>
-                    </div>
-                    <md-content style="max-height: 300px;" class="hide-scrollbar">
-                        <md-list flex layout-padding style="margin: 0px;">
-                            <md-list-item ng-repeat="institution in userInactiveCtrl.institutions" 
-                                    ng-click="userInactiveCtrl.selectInstitution(institution)"
-                                    ng-disabled="userInactiveCtrl.showFullInformation(institution)"
-                                    md-colors="userInactiveCtrl.isInstSelect(institution) ? {background: 'grey-300'}:''"
-                                    class="md-3-line md-long-text" style="margin: 0px;">
-                                <div layout-align="center center" layout="row">
-                                  <md-icon class="md-avatar-icon"  ng-if="!userInactiveCtrl.isInstSelect(institution)"
-                                    md-colors="{background: 'light-green-500', color: 'grey-50'}">account_balance</md-icon>
-                                  <md-icon class="md-avatar-icon" ng-if="userInactiveCtrl.isInstSelect(institution)"
-                                    md-colors="{background: 'light-green-500', color: 'grey-50'}">done</md-icon>
-                                  <div layout="column" class="md-3-line">
-                                    <div>
-                                        <h4 style="margin:0px">{{ institution.name }}</h4>
-                                    </div>
-                                    <div ng-if="userInactiveCtrl.showFullInformation(institution)" class="md-list-item-text md-3-line">
-                                      <p>{{ userInactiveCtrl.institutionSelect.email }}</p>
-                                      <p>{{ userInactiveCtrl.institutionSelect.actuation_area }}</p>
-                                      <p>{{ userInactiveCtrl.getFullAddress(userInactiveCtrl.institutionSelect) }}</p>
-                                    </div>
+                </div>
+                <md-content style="max-height: 300px;" class="hide-scrollbar" layout="column"
+                    ng-if="!userInactiveCtrl.choicedInst">
+                    <md-list flex layout-padding style="margin: 0px;">
+                        <md-list-item ng-repeat="institution in userInactiveCtrl.institutions" 
+                            ng-click="userInactiveCtrl.selectInstitution(institution)"
+                            ng-disabled="userInactiveCtrl.showFullInformation(institution)"
+                            md-colors="userInactiveCtrl.isInstSelect(institution) ? {background: 'grey-300'}:''"
+                            class="md-3-line md-long-text" style="margin: 0px;">
+                            <div layout-align="center center" layout="row">
+                                <md-icon class="md-avatar-icon"  ng-if="!userInactiveCtrl.isInstSelect(institution)"
+                                  md-colors="{background: 'light-green-500', color: 'grey-50'}">account_balance</md-icon>
+                                <md-icon class="md-avatar-icon" ng-if="userInactiveCtrl.isInstSelect(institution)"
+                                  md-colors="{background: 'light-green-500', color: 'grey-50'}">done</md-icon>
+                                <div layout="column" class="md-3-line">
+                                  <div>
+                                    <h4 style="margin:0px">{{ institution.name }}</h4>
+                                  </div>
+                                  <div ng-if="userInactiveCtrl.showFullInformation(institution)" class="md-list-item-text md-3-line">
+                                    <p>{{ userInactiveCtrl.institutionSelect.email }}</p>
+                                    <p>{{ userInactiveCtrl.institutionSelect.actuation_area }}</p>
+                                    <p>{{ userInactiveCtrl.getFullAddress(userInactiveCtrl.institutionSelect) }}</p>
                                   </div>
                                 </div>
+                            </div>
                             </md-list-item>
                             <md-list-item ng-if="userInactiveCtrl.showMessage()">
                                 <div class="md-list-item-text" layout-align="center center" layout="column"
@@ -58,11 +61,12 @@
                             </md-list-item>
                         </md-list>
                     </md-content>
-                    <div layout-gt-xs="row" layout-xs="column" layout-align="end center">
+                    <div layout-gt-xs="row" layout-xs="column" layout-align="end center"
+                        ng-if="!userInactiveCtrl.choicedInst">
                         <md-button flex-order-xs="1" class="md-raised md-primary" md-colors="{background: 'teal-500'}" 
                         ng-click="userInactiveCtrl.confirmInst()">AVANÇAR</md-button>
                     </div>
-                </div>
+                
                 <!-- Form user -->
                 <form name="requestuser" ng-submit="userInactiveCtrl.verifyAndSendRequest()" 
                         ng-if="userInactiveCtrl.showRequestUser()">

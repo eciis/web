@@ -70,6 +70,7 @@
         };
 
         userInactiveCtrl.selectInstitution = function selectInstitution(institution){
+            console.log("select");
             var deferred = $q.defer();
 
             InstitutionService.getInstitution(institution.id).then(function success(response) {

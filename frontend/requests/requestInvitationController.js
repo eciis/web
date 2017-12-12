@@ -7,14 +7,10 @@
         AuthService, RequestInvitationService, $state) {
         var requestInvCtrl = this;
 
-        requestInvCtrl.institutions = [];
         requestInvCtrl.institutionSelect = {};
-        requestInvCtrl.hasInstSelect = false;
-        requestInvCtrl.wasSearched = false;
-        requestInvCtrl.canCreate = false;
         requestInvCtrl.currentUser = AuthService.getCurrentUser();
         requestInvCtrl.requestsOfSelectedInst = [];
-        var ACTIVE = 'active';
+        requestInvCtrl.request = null;
 
         requestInvCtrl.sendRequest = function sendRequest() {
             var dataInvite = {
@@ -61,11 +57,6 @@
             $mdDialog.cancel();
         };
 
-        requestInvCtrl.getFullAddress = function getFullAddress(institution) {
-                var instObject = new Institution(institution);
-                return instObject.getFullAddress();
-        };
-
         requestInvCtrl.cancelRequest = function cancelRequest() {
             requestInvCtrl.request = null;
         };
@@ -73,12 +64,5 @@
         requestInvCtrl.showNameInput = function showNameInput() {
             return requestInvCtrl.currentUser.name === 'Unknown' || !requestInvCtrl.currentUser.name;
         };
-
-        function clearProperties(){
-            requestInvCtrl.request = null;
-            requestInvCtrl.institutionSelect = {};
-            requestInvCtrl.hasInstSelect = false;
-            requestInvCtrl.wasSearched = true;
-        }
     });
 })();

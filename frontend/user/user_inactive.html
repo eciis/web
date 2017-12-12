@@ -4,55 +4,102 @@
           style="margin-right: -35px;" md-colors="{background: 'light-green-500'}">
           <md-icon>keyboard_arrow_left</md-icon>
         </md-button>
-        <div class="padded" layout-margin md-whiteframe="12" style="border-radius: 2px;" md-colors="{background: 'grey-50'}" layout="row" flex-xs="85" flex-sm="65" flex-gt-sm="45" layout-align="center center">
+        <div class="padded" layout-margin md-whiteframe="12" style="border-radius: 2px;" 
+            md-colors="{background: 'grey-50'}" layout="row" flex-xs="90" 
+            flex-sm="65" flex-gt-sm="45" layout-align="center center">
             <div layout="column" flex-xs="65" flex-gt-xs="70" layout-align="space-between" layout-margin>
                 <div layout="row" layout-align="center center">
                     <img src="/app/images/logowithname.png" flex="90"/>
                 </div>
-                <div layout="row" layout-align="center center" style="color: black;">
-                    <p style="font-weight: 500;" flex-gt-xs="80">Busque uma instituição que você faz parte.</p>
+                <!-- Search institution -->
+                <div ng-if="!userInactiveCtrl.choicedInst">
+                    <p style="font-weight: 500">Busque uma instituição que você faz parte.</p>
+                    <div md-theme="input" class="search-field" style="margin: 0px; height: 48">
+                        <form ng-submit="userInactiveCtrl.showMenu($event)" style="margin-bottom: 0px; height: 48">
+                            <md-input-container class="md-block" flex-gt-sm style="margin: 0px; height: 48">
+                              <input placeholder="Busque uma instituição" ng-model="userInactiveCtrl.search" flex-gt-sm autocomplete="off">
+                              <md-icon class="material-icons">&#xE8B6;</md-icon>
+                            </md-input-container>
+                        </form>
+                    </div>
+                    <md-content style="max-height: 300px;" class="hide-scrollbar">
+                        <md-list flex layout-padding style="margin: 0px;">
+                            <md-list-item ng-repeat="institution in userInactiveCtrl.institutions" 
+                                    ng-click="userInactiveCtrl.selectInstitution(institution)"
+                                    ng-disabled="userInactiveCtrl.showFullInformation(institution)"
+                                    md-colors="userInactiveCtrl.isInstSelect(institution) ? {background: 'grey-300'}:''"
+                                    class="md-3-line md-long-text" style="margin: 0px;">
+                                <div layout-align="center center" layout="row">
+                                  <md-icon class="md-avatar-icon"  ng-if="!userInactiveCtrl.isInstSelect(institution)"
+                                    md-colors="{background: 'light-green-500', color: 'grey-50'}">account_balance</md-icon>
+                                  <md-icon class="md-avatar-icon" ng-if="userInactiveCtrl.isInstSelect(institution)"
+                                    md-colors="{background: 'light-green-500', color: 'grey-50'}">done</md-icon>
+                                  <div layout="column" class="md-3-line">
+                                    <div>
+                                        <h4 style="margin:0px">{{ institution.name }}</h4>
+                                    </div>
+                                    <div ng-if="userInactiveCtrl.showFullInformation(institution)" class="md-list-item-text md-3-line">
+                                      <p>{{ userInactiveCtrl.institutionSelect.email }}</p>
+                                      <p>{{ userInactiveCtrl.institutionSelect.actuation_area }}</p>
+                                      <p>{{ userInactiveCtrl.getFullAddress(userInactiveCtrl.institutionSelect) }}</p>
+                                    </div>
+                                  </div>
+                                </div>
+                            </md-list-item>
+                            <md-list-item ng-if="userInactiveCtrl.showMessage()">
+                                <div class="md-list-item-text" layout-align="center center" layout="column"
+                                style='text-align: center'>
+                                    <p>Infelizmente sua instituição não está cadastrada. Para cadastrar pressione o botão abaixo:</p>
+                                    <md-checkbox ng-model="userInactiveCtrl.canCreate" class="md-primary" aria-label="Checkbox 1">
+                                        Manifesto que tenho autonomia para cadastrar a  instituição
+                                    </md-checkbox>
+                                    <md-button ng-class="userInactiveCtrl.canCreate?'green-button':''" ng-disabled="!userInactiveCtrl.canCreate" ng-click="userInactiveCtrl.createInst()">Quero criar minha instituição</md-button>
+                                </div>
+                            </md-list-item>
+                        </md-list>
+                    </md-content>
+                    <div layout-gt-xs="row" layout-xs="column" layout-align="end center">
+                        <md-button flex-order-xs="1" class="md-raised md-primary" md-colors="{background: 'teal-500'}" 
+                        ng-click="userInactiveCtrl.confirmInst()">AVANÇAR</md-button>
+                    </div>
                 </div>
-                <div md-theme="input" class="search-field">
-                    <form ng-submit="userInactiveCtrl.showMenu($event)">
-                        <md-input-container class="md-block" flex-gt-sm>
-                          <input placeholder="Busque uma instituição" ng-model="userInactiveCtrl.search" flex-gt-sm autocomplete="off">
-                          <md-icon class="material-icons">&#xE8B6;</md-icon>
-                        </md-input-container>
-                    </form>
-                </div>
-                <md-list flex>
-                    <md-list-item ng-repeat="institution in userInactiveCtrl.institutions" ng-click="userInactiveCtrl.selectInstitution(institution)"
-                            ng-class="userInactiveCtrl.showFullInformation(institution)? 'md-3-line': ''"
-                            ng-disabled="userInactiveCtrl.showFullInformation(institution)">
-                        <div class="md-list-item-text" layout-align="center center"
-                            layout="row" style='text-align: center; font-weight: 500;"'>
-                          <md-icon class="md-avatar-icon"  ng-if="userInactiveCtrl.institutionSelect.key !== institution.id"
-                            md-colors="{background: 'light-green-500', color: 'grey-50'}">account_balance</md-icon>
-                          <md-icon class="md-avatar-icon" ng-if="userInactiveCtrl.institutionSelect.key === institution.id"
-                            md-colors="{background: 'light-green-500', color: 'grey-50'}">done</md-icon>
-                          <div layout="column">
-                            {{ institution.name }}
-                            <div ng-if="userInactiveCtrl.showFullInformation(institution)">
-                              <h4>{{ userInactiveCtrl.institutionSelect.email }}</h4>
-                              <h4>{{ userInactiveCtrl.getFullAddress(userInactiveCtrl.institutionSelect) }}</h4>
-                              <h4>{{ userInactiveCtrl.institutionSelect.actuation_area }}</h4>
-                            </div>
-                          </div>
+                <!-- Form user -->
+                <form name="requestuser" ng-submit="userInactiveCtrl.verifyAndSendRequest()" 
+                        ng-if="userInactiveCtrl.showRequestUser()">
+                    <div layout="row" style="font-weight: 500">
+                        <p>Para finalizar o pedido de convite, preencha suas informacoes institucionais.</p>
+                    </div>
+                    <md-input-container class="md-block">
+                    <label>Cargo institucional</label>
+                        <input name="cargo" ng-model="userInactiveCtrl.request.office" name="office" required>
+                        <div ng-messages='userInactiveCtrl.request.office.$error'>
+                            <div ng-message="required">Este campo é obrigatório!</div>
                         </div>
-                    </md-list-item>
-                    <md-list-item ng-if="userInactiveCtrl.showMessage()">
-                        <div class="md-list-item-text" layout-align="center center" layout="column"
-                        style='text-align: center'>
-                            <p>Infelizmente sua instituição não está cadastrada. Para cadastrar pressione o botão abaixo:</p>
-                            <md-checkbox ng-model="userInactiveCtrl.canCreate" class="md-primary" aria-label="Checkbox 1">
-                                Manifesto que tenho autonomia para cadastrar a  instituição
-                            </md-checkbox>
-                            <md-button ng-class="userInactiveCtrl.canCreate?'green-button':''" ng-disabled="!userInactiveCtrl.canCreate" ng-click="userInactiveCtrl.createInst()">Quero criar minha instituição</md-button>
-                        </div>
-                    </md-list-item>
-                </md-list>
-                <div layout-gt-xs="row" layout-xs="column" layout-align="end center">
-                    <md-button flex-order-xs="1" class="md-raised md-primary" md-colors="{background: 'teal-500'}" ng-click="userInactiveCtrl.resquestInvitation()">AVANÇAR</md-button>
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                      <label>Email institucional</label>
+                      <input ng-model="userInactiveCtrl.request.email" type="email" name="email" required>
+                      <div ng-messages='userInactiveCtrl.request.email.$error'>
+                        <div ng-message="required">Este campo é obrigatório!</div>
+                      </div>
+                    </md-input-container>
+                    <div layout="row" layout-align="end">
+                        <md-button type="submit" class="md-raised md-primary" md-colors="{background: 'teal-500'}">
+                            FINALIZAR
+                        </md-button>
+                    </div>
+                </form>
+                <!-- End page of request -->
+                <div layout="column" ng-if="userInactiveCtrl.isFinished">
+                    <div style="font-weight: 500; text-align: center;">
+                        <p>Sua solicitação de convite foi enviada e esta em análise pelo administrador
+                        de sua instituição na plataforma e-CIS.</p>
+                        <p>Você receberá a confirmação em seu email.</p>
+                    </div>
+                    <div layout-gt-xs="row" layout-xs="column" layout-align="end center">
+                        <md-button flex-order-xs="1" class="md-raised md-primary" md-colors="{background: 'teal-500'}" 
+                            ng-click="userInactiveCtrl.logout()">PÁGINA INICIAL</md-button>
+                    </div>
                 </div>
             </div>
         </div>

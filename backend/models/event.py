@@ -89,6 +89,7 @@ class Event(ndb.Model):
         """Create an event."""
         event = Event()
         event.text = data.get('text')
+        event.programation = data.get('programation')
         event.title = data.get('title')
         event.photo_url = data.get('photo_url')
         event.author_key = author.key
@@ -105,6 +106,7 @@ class Event(ndb.Model):
             data.get('start_time'), "%Y-%m-%dT%H:%M:%S")
         event.end_time = datetime.datetime.strptime(
             data.get('end_time'), "%Y-%m-%dT%H:%M:%S")
+        event.address = Address.create(data)
 
         event.isValid()
 

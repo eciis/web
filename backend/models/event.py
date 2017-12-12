@@ -1,7 +1,8 @@
 """Event Model."""
-from google.appengine.ext import ndb
 import datetime
+from google.appengine.ext import ndb
 from custom_exceptions.fieldException import FieldException
+from models.address import Address
 
 
 class Event(ndb.Model):
@@ -12,6 +13,17 @@ class Event(ndb.Model):
 
     # Image uploaded
     photo_url = ndb.StringProperty(indexed=False)
+
+    # Urls of videos
+    video_url = ndb.StringProperty(indexed=False, repeated=True)
+
+    # Userful link to the event
+    useful_links = ndb.StringProperty(indexed=False, repeated=True)
+
+    # Programation of event
+    programation = ndb.StringProperty(indexed=False)
+
+    address = ndb.StructuredProperty(Address)
 
     # Text about the event
     text = ndb.TextProperty()

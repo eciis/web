@@ -5,7 +5,6 @@ import json
 
 from utils import login_required
 from utils import json_response
-from utils import is_admin
 from utils import Utils
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from handlers.base_handler import BaseHandler
@@ -42,13 +41,12 @@ class InviteCollectionHandler(BaseHandler):
 
         can_invite_inst = user.has_permission("send_link_inst_invite", invite.institution_key.urlsafe())
         can_invite_members = user.has_permission("invite_members", invite.institution_key.urlsafe())
-
+    
         if(can_invite_inst or can_invite_members):
             institution = invite.institution_key.get()
             Utils._assert(institution.state == 'inactive',
                         "The institution has been deleted", NotAuthorizedException)
             
-
             invite.put()
 
             if(invite.stub_institution_key):
@@ -58,7 +56,6 @@ class InviteCollectionHandler(BaseHandler):
 
             make_invite = invite.make()
 
-            self.response.write(json.dumps(make_invite))
+            self.response.write(json.dumps(make_invite)) 
         else:
             raise NotAuthorizedException("User is not allowed to send invites")
-        

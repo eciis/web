@@ -5,7 +5,6 @@ from google.appengine.ext import ndb
 import json
 from utils import login_required
 from utils import json_response
-from utils import is_admin
 from utils import Utils
 from custom_exceptions.entityException import EntityException
 from handlers.base_handler import BaseHandler

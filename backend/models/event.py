@@ -90,10 +90,10 @@ class Event(ndb.Model):
         event = Event()
         event.text = data.get('text')
         event.programation = data.get('programation')
-        event.video_url = data.get('video_url')
+        event.video_url = data.get('video_url', [])
         event.title = data.get('title')
         event.photo_url = data.get('photo_url')
-        event.useful_links = data.get('useful_links')
+        event.useful_links = data.get('useful_links', [])
         event.author_key = author.key
         event.author_photo = author.photo_url
         event.author_name = author.name

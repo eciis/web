@@ -4,7 +4,7 @@
     var app = angular.module("app");
 
     app.controller("LoginController", function LoginController(AuthService, MessageService, $state, $mdDialog, 
-            $stateParams, $location) {
+            $stateParams, $location, $window) {
         var loginCtrl = this;
 
         loginCtrl.user = {};
@@ -61,6 +61,10 @@
             $mdDialog.show(confirm).then(function(email) {
                 AuthService.resetPassword(email);
             });
+        };
+
+        loginCtrl.goToLandingPage = function goToLandingPage() {
+            $window.open(Config.LANDINGPAGE_URL, '_self');
         };
 
         function redirectTo(path) {

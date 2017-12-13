@@ -41,7 +41,6 @@ class RequestHandlerTest(TestBaseHandler):
         admin.put()
         institution.put()
         otheruser = mocks.create_user(USER['email'])
-        otheruser.put()
         data = {
         'sender_key': otheruser.key.urlsafe(),
         'is_request': True,
@@ -87,14 +86,7 @@ class RequestHandlerTest(TestBaseHandler):
         admin.add_permission("answer_user_request", institution.key.urlsafe())
         admin.put()
         otheruser = mocks.create_user(USER['email'])
-        profile_data = {
-            'office': "member",
-            'institution_name': institution.name,
-            'institution_photo_url': "photo-url.com",
-            'institution_key': institution.key.urlsafe()
-        }
-        otheruser.create_and_add_profile(profile_data)
-        otheruser.put()
+        
         data = {
         'sender_key': otheruser.key.urlsafe(),
         'is_request': True,
@@ -144,14 +136,6 @@ class RequestHandlerTest(TestBaseHandler):
         admin.add_permission("answer_user_request", institution.key.urlsafe())
         admin.put()
         otheruser = mocks.create_user(USER['email'])
-        profile_data = {
-            'office': "member",
-            'institution_name': institution.name,
-            'institution_photo_url': "photo-url.com",
-            'institution_key': institution.key.urlsafe()
-        }
-        otheruser.create_and_add_profile(profile_data)
-        otheruser.put()
         data = {
         'sender_key': otheruser.key.urlsafe(),
         'is_request': True,
@@ -183,14 +167,6 @@ class RequestHandlerTest(TestBaseHandler):
         admin.add_permission("answer_user_request", institution.key.urlsafe())
         admin.put()
         otheruser = mocks.create_user(USER['email'])
-        profile_data = {
-            'office': "member",
-            'institution_name': institution.name,
-            'institution_photo_url': "photo-url.com",
-            'institution_key': institution.key.urlsafe()
-        }
-        otheruser.create_and_add_profile(profile_data)
-        otheruser.put()
         data = {
         'sender_key': otheruser.key.urlsafe(),
         'is_request': True,
@@ -264,14 +240,6 @@ class RequestHandlerTest(TestBaseHandler):
         admin.add_permission("answer_user_request", institution.key.urlsafe())
         admin.put()
         otheruser = mocks.create_user(USER['email'])
-        profile_data = {
-            'office': "member",
-            'institution_name': institution.name,
-            'institution_photo_url': "photo-url.com",
-            'institution_key': institution.key.urlsafe()
-        }
-        otheruser.create_and_add_profile(profile_data)
-        otheruser.put()
         data = {
         'sender_key': otheruser.key.urlsafe(),
         'is_request': True,

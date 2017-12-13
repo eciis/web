@@ -1,27 +1,32 @@
-<md-dialog flex flex-gt-md="40" layout="row">
-    <md-card flex="100">
-      <md-card-header>
-        <md-card-header-text>
-          <span class="md-title">Você deseja remover esse membro?</span>
-        </md-card-header-text>
-      </md-card-header>
-      <md-card-content layout="column">
-        <form name="saveForm">
-          <md-input-container class="md-block">
-            <label>Insira o motivo da remoção (opcional)</label>
-            <textarea name="message" ng-model="removeMemberCtrl.justification">
-            </textarea>
-          </md-input-container>
-        </form>
-      </md-card-content>
-      <md-dialog-actions layout="row">
-        <span flex></span>
-        <md-button ng-click="removeMemberCtrl.cancel()">
-            Cancelar
-        </md-button>
-        <md-button class="md-raised" md-colors="::{background: 'dialogTheme-primary-900'}" ng-click="removeMemberCtrl.removeMember()">
-            Confirmar
-        </md-button>
-      </md-dialog-actions>
-    </md-card>
+<md-dialog flex flex-gt-md="40" layout="row"  layout-margin layout-padding> 
+  <div flex>
+    <div layout="row" layout-align="space-between start">
+      <span class="md-title">Deseja remover este membro de sua instituição?</span>
+      <md-button class="md-icon-button md-secondary" style="margin: -8 -10 0 0" ng-click="removeMemberCtrl.cancel()">
+        <md-icon style="color: #212121">close</md-icon>
+      </md-button>
+    </div>
+    <div layout="column" style="margin-top: 1em">
+      <md-list-item class="md-3-line" md-colors="{background: 'default-grey-300'}" flex-xs> 
+        <img title="{{removeMemberCtrl.member.name}}" ng-src="{{removeMemberCtrl.member.photo_url}}"
+          class="md-avatar" style="width: 60px; height: 60px;"/>
+        <div class="md-list-item-text" layout="column">
+          <h3><b>{{ removeMemberCtrl.member.name | uppercase }}</b></h3>
+          <h4>{{ removeMemberCtrl.member.email[0]}}</h4>
+        </div>
+      </md-list-item>
+      <form name="saveForm" style="margin: 2em 0 -1em 0">
+        <b>Motivo da remoção <b style="font-size: 10px;">(Opcional)</b></b>
+        <md-input-container class="md-block">
+          <textarea placeholder="Escreva aqui" name="message" 
+            ng-model="removeMemberCtrl.justification" style="border-color: #004D40;">
+          </textarea>
+        </md-input-container>
+      </form>
+    </div>
+    <div layout="row" md-colors="{color: 'default-teal'}" layout-align="end center">
+      <md-button ng-click="removeMemberCtrl.cancel()">Cancelar</md-button>
+      <md-button ng-click="removeMemberCtrl.removeMember()">Confirmar</md-button>
+    </div>
+  </div>
 </md-dialog>

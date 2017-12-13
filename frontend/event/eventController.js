@@ -3,7 +3,7 @@
     var app = angular.module('app');
 
     app.controller("EventController", function EventController(MessageService, EventService,
-            $state, $mdDialog, AuthService, $q, PostService) {
+            $state, $mdDialog, AuthService, $q) {
         var eventCtrl = this;
         var content = document.getElementById("content");
 
@@ -66,13 +66,20 @@
             });
         };
 
-        eventCtrl.share = function share(event) {
-            var post = new Post({}, eventCtrl.user.current_institution.key);
-            post.shared_event = event.key;
-            PostService.createPost(post).then(function success() {
-                MessageService.showToast('Evento compartilhado com sucesso!');
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
+        eventCtrl.share = function share(ev, event) {
+            $mdDialog.show({
+                controller: "SharePostController",
+                controllerAs: "sharePostCtrl",
+                templateUrl: 'app/post/share_post_dialog.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose:true,
+                locals: {
+                    user : eventCtrl.user,
+                    posts: [],
+                    post: event,
+                    addPost: false
+                }
             });
         };
 

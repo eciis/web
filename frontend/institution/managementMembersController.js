@@ -201,8 +201,7 @@
             
             removeMemberCtrl.justification = "";
             removeMemberCtrl.member = member_obj;
-            console.log(member_obj);
-            
+
             removeMemberCtrl.removeMember = function removeMember() {
                 InstitutionService.removeMember(currentInstitutionKey, member_obj, removeMemberCtrl.justification).then(function success() {
                     manageMemberCtrl.removeMember(member_obj);

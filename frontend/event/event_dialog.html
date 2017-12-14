@@ -88,18 +88,19 @@
 </md-dialog>-->
 <div layout-padding layout="column" flex-gt-sm="40" flex-xs="90" flex-sm="60">
   <md-dialog style="max-width: 100%;">
-    <md-dialog-content layout="row" layout-align="center center" class="hide-scrollbar">
-      <div layout="row" layout-align="center center">
-        <span class="green-circle" style="color: #FFFFFF; width: 20px; height: 20px;">
-          <span layout="row" layout-algin="center">
-            <!--<md-icon style="color: #FFFFFF;">done</md-icon>-->
-            <span style="margin: 3px auto; font-size: 12px;">1</span>
+    <md-dialog-content layout="row" class="hide-scrollbar">
+      <div layout="row" layout-align="space-between center" flex="100">
+        <div layout="row" layout-align="center center">
+          <span class="green-circle" style="color: #FFFFFF; width: 20px; height: 20px;">
+            <span layout="row" layout-algin="center">
+              <!--<md-icon style="color: #FFFFFF;">done</md-icon>-->
+              <span style="margin: 3px auto; font-size: 12px;">1</span>
+            </span>
           </span>
-        </span>
-        <b class="inline" style="font-size: 14px;">Informação inicial</b>
-        <hr style="width: 40px;" layout-margin/>
-      </div>
-      <div layout="row" layout-align="center center">
+          <b class="inline" style="font-size: 14px;">Informação inicial</b>
+        </div>
+        <hr style="min-width: 40px; width: 20%" layout-margin/>
+        <div layout="row" layout-align="center center">
           <span class="green-circle" style="color: #FFFFFF; width: 20px; height: 20px;">
               <span layout="row" layout-algin="center">
                 <!--<md-icon style="color: #FFFFFF;">done</md-icon>-->
@@ -107,26 +108,29 @@
               </span>
           </span>
           <b class="inline" style="font-size: 14px;">Descrição e Progamação</b>
-          <hr style="width: 40px;" layout-margin/>
+          
         </div>
+        <hr style="min-width: 40px; width: 20%" layout-margin/>
         <div layout="row" layout-align="center center">
           <span class="green-circle" style="color: #FFFFFF; width: 20px; height: 20px;">
               <span layout="row" layout-algin="center">
-                <!--<md-icon style="color: #FFFFFF;">done</md-icon>-->
-                <span style="margin: 3px auto; font-size: 12px;">3</span>
-              </span>
+              <!--<md-icon style="color: #FFFFFF;">done</md-icon>-->
+              <span style="margin: 3px auto; font-size: 12px;">3</span>
+            </span>
           </span>
           <b class="inline" style="font-size: 14px;">Mídia</b>
         </div>
+      </div>
     </md-dialog-content>
   </md-dialog>
   <md-dialog style="max-width: 100%;">
     <md-dialog-content class="hide-scrollbar" layout-padding>
-      <div md-colors="{background: 'default-green-A400'}" layout="column" layout-padding>
-        <md-button layout="column">
+      <div md-colors="{background: 'default-green-A400'}" layout="column" layout-align="center center" layout-padding>
+        <md-button style="border-radius: 50px" ng-click="null" ng-model="controller.file" ngf-pattern="'image/*'"
+          ngf-accept="'image/*'" ngf-max-size="5MB" ngf-select="controller.addImage(controller.file)">
           <md-icon style="height: 70px; width: 70px; font-size: 70px; color:white;" layout="column" layout-align="center center">add_a_photo</md-icon>
-          <b style="color: white;">Inserir foto de divulgação do evento</b>
         </md-button>
+        <b style="color: white; text-align: center;">Inserir foto de divulgação do evento</b>
       </div>
       <div layout="column">
         <md-input-container style="margin-bottom: 0">

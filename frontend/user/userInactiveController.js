@@ -15,6 +15,7 @@
         userInactiveCtrl.hasInstSelect = false;
         userInactiveCtrl.wasSearched = false;
         userInactiveCtrl.institutions = [];
+        userInactiveCtrl.requestsOfSelectedInst = [];
         userInactiveCtrl.request = null;
         userInactiveCtrl.institutionSelect = {};
         var ACTIVE = 'active';
@@ -70,7 +71,6 @@
         };
 
         userInactiveCtrl.selectInstitution = function selectInstitution(institution){
-            console.log("select");
             var deferred = $q.defer();
 
             InstitutionService.getInstitution(institution.id).then(function success(response) {
@@ -90,8 +90,11 @@
             if(_.isEmpty(userInactiveCtrl.institutions)){
                 return userInactiveCtrl.wasSearched;
             }
-
             return false;
+        };
+
+        userInactiveCtrl.canSend = function canSend(){
+            return userInactiveCtrl.request.office && userInactiveCtrl.request.email;
         };
 
         userInactiveCtrl.isInstSelect = function isInstSelect(institution){

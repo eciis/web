@@ -50,6 +50,7 @@
             if(requestInvCtrl.institution) {
                 requestInvCtrl.hasInstSelect = true;
                 requestInvCtrl.institutionSelect = requestInvCtrl.institution;
+                getRequests(requestInvCtrl.institution.key);
             }
         })();
 
@@ -64,5 +65,11 @@
         requestInvCtrl.showNameInput = function showNameInput() {
             return requestInvCtrl.currentUser.name === 'Unknown' || !requestInvCtrl.currentUser.name;
         };
+
+        function getRequests(instKey) {
+            RequestInvitationService.getRequests(instKey).then(function success(response) {
+                requestInvCtrl.requestsOfSelectedInst = response;
+            });
+        }
     });
 })();

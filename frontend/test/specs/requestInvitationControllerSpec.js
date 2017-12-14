@@ -60,53 +60,10 @@
 
     describe('RequestInvitationController functions', function() {
 
-        describe('makeSearch()', function(){
-            it('Should return splab', function(done){
-                httpBackend.expect('GET', SEARCH_INST_URI + "value=" + splab.name + "&state=active&type=institution").respond([splab]);
-                requestInvCtrl.search = splab.name;
-                requestInvCtrl.finalSearch = splab.name;
-
-                spyOn(institutionService, 'searchInstitutions').and.callThrough();
-
-                requestInvCtrl.makeSearch().then(function() {
-                    expect(institutionService.searchInstitutions).toHaveBeenCalledWith(
-                        requestInvCtrl.finalSearch, 'active', 'institution');
-                    expect(requestInvCtrl.institutions).toEqual([splab]);
-                    done();
-                });
-                httpBackend.flush();
-            });
-
-        });
-
-        describe('selectInstitution()', function(){
-
-            it('Should select certbio', function(done){
-                httpBackend.expect('GET', INST_URI + certbio.id).respond(certbio);
-                spyOn(institutionService, 'getInstitution').and.callThrough();
-                spyOn(requestService, 'getRequests').and.callFake(function() {
-                    return {
-                        then: function(callback) {
-                            return callback([{sender_key: user.key}]);
-                        }
-                    };
-                });
-                expect(requestInvCtrl.institutionSelect).toEqual({});
-
-                requestInvCtrl.selectInstitution(certbio).then(function() {
-                    expect(requestInvCtrl.institutionSelect).toEqual(certbio);
-                    expect(institutionService.getInstitution).toHaveBeenCalled();
-                    expect(requestService.getRequests).toHaveBeenCalled();
-                    done();
-                });
-                httpBackend.flush();
-            });
-        });
-
         describe('verifyAndSendRequest()', function() {
             beforeEach(function() {
                 requestInvCtrl.requestsOfSelectedInst = [{sender_key: user.key, status: 'sent'}];
-                requestInvCtrl.institutionSelect = {key: certbio.key, admin: {key: '12345'}}
+                requestInvCtrl.institutionSelect = {key: certbio.key, admin: {key: '12345'}};
                 requestInvCtrl.request = {name: 'User'};
             });
 
@@ -121,43 +78,6 @@
                 spyOn(requestInvCtrl, 'sendRequest');
                 requestInvCtrl.verifyAndSendRequest();
                 expect(requestInvCtrl.sendRequest).toHaveBeenCalled();
-            });
-        });
-
-        describe('showFullInformation()', function(){
-            it('Should showFullInformation be true', function(){
-                requestInvCtrl.institutions = [certbio];
-                requestInvCtrl.institutionSelect = certbio;
-
-                expect(requestInvCtrl.showFullInformation(certbio)).toEqual(true);
-            });
-
-            it('Should showFullInformation be false', function(){
-                requestInvCtrl.institutions = [];
-                expect(requestInvCtrl.showFullInformation()).toEqual(false);
-
-                requestInvCtrl.institutions = [certbio, splab];
-                requestInvCtrl.institutionSelect = certbio;
-                expect(requestInvCtrl.showFullInformation(splab)).toEqual(false);
-            });
-        });
-
-        describe('showMessage()', function(){
-            it('Should showMessage be true', function(){
-                requestInvCtrl.institutions = [];
-                requestInvCtrl.wasSearched = true;
-
-                expect(requestInvCtrl.showMessage()).toEqual(true);
-            });
-
-            it('Should showMessage be false', function(){
-                requestInvCtrl.institutions = [];
-                requestInvCtrl.wasSearched = false;
-                expect(requestInvCtrl.showMessage()).toEqual(false);
-
-                requestInvCtrl.institutions = [certbio];
-                requestInvCtrl.wasSearched = true;
-                expect(requestInvCtrl.showMessage()).toEqual(false);
             });
         });
     });

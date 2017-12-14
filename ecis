@@ -6,9 +6,13 @@ FRONTEND_YAML=frontend/frontend.yaml
 BACKEND_YAML=backend/backend.yaml
 WORKER_YAML=backend/worker.yaml
 
-BACKEND_DOMAIN="backend.eciis-splab.appspot.com"
+DOMAIN = "eciis-splab.appspot.com"
+
+BACKEND_DOMAIN="backend.$DOMAIN"
 
 BACKEND_LOCAL="localhost:8082"
+
+LANDINGPAGE_LOCAL="localhost:8080"
 
 FRONTEND_CONFIG_FILE="frontend/config.js"
 
@@ -21,8 +25,18 @@ function set_backend_url {
     else
         url="http://"$1
     fi
-    sed -i "4s|.*|    BACKEND_URL: '$url'|" $FRONTEND_CONFIG_FILE
+    sed -i "4s|.*|    BACKEND_URL: '$url',|" $FRONTEND_CONFIG_FILE
     echo ">> Frontend will use ${bold}$url${_bold} as backend."
+}
+
+function set_landingpage_url {
+    if [ -z $1 ]; then
+        url="http://$DOMAIN"
+    else
+        url="http://"$1
+    fi
+    sed -i "5s|.*|    LANDINGPAGE_URL: '$url'|" $FRONTEND_CONFIG_FILE
+    echo ">> Frontend will use ${bold}$url${_bold} as landing page."
 }
 
 case "$1" in
@@ -36,6 +50,8 @@ case "$1" in
         fi
 
         set_backend_url $BACKEND_LOCAL
+
+        set_landingpage_url $LANDINGPAGE_LOCAL
 
         dev_appserver.py $APP_YAML $FRONTEND_YAML $BACKEND_YAML $WORKER_YAML
     ;;
@@ -62,6 +78,9 @@ case "$1" in
             url=$version"."$BACKEND_DOMAIN
             set_backend_url $url
 
+            url=$version"."$DOMAIN
+            set_landingpage_url $url
+
             if [ ! -z $3 ]; then # Especified one or more yaml configuration files
                 gcloud app deploy --version $version --no-promote $3
             else
@@ -69,6 +88,7 @@ case "$1" in
             fi
         else
             set_backend_url
+            set_landingpage_url
             gcloud app deploy $APP_YAML $FRONTEND_YAML $BACKEND_YAML $WORKER_YAML
         fi
 

@@ -4,7 +4,7 @@
     var app = angular.module("app");
 
     app.controller("UserInactiveController", function UserInactiveController(AuthService, RequestInvitationService, InstitutionService, 
-                    $mdDialog, $state, $q, MessageService) {
+                    $mdDialog, $state, $q, MessageService, $window) {
         var userInactiveCtrl = this;
 
         userInactiveCtrl.user = AuthService.getCurrentUser();
@@ -149,6 +149,10 @@
                 deferred.resolve(response);
             });
             return deferred.promise;
+        };
+
+        userInactiveCtrl.goToLandingPage = function goToLandingPage() {
+            $window.open(Config.LANDINGPAGE_URL, '_self');
         };
 
         function clearProperties(){

@@ -13,7 +13,13 @@
         </div>
           <md-divider style="border: 1px; border-style: solid; color: #03b3a1;"></md-divider>
         <div layout="row" md-colors="{background: 'grey-100'}" style="padding: 0 10px 0 10px">
-          <h3 md-colors="{color:'teal-400'}">{{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'MMMM' | uppercase}}</h3>
+          <h3 md-colors="{color:'teal-400'}" ng-if="eventDetailsCtrl.endInOtherMonth()">
+            {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'MMM' | uppercase}}
+             | {{eventDetailsCtrl.event.end_time | amUtc | amLocal | amDateFormat:'MMM' | uppercase}}
+          </h3>
+          <h3 md-colors="{color:'teal-400'}" ng-if="!eventDetailsCtrl.endInOtherMonth()">
+              {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'MMMM' | uppercase}}
+          </h3>
         </div>
       </div>
     </md-card-content>

@@ -82,44 +82,7 @@
       <span>por {{postDetailsCtrl.post.shared_event.last_modified_by}} {{postDetailsCtrl.post.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats }}.</span>
     </div>
   </div>
-  <md-card ng-if="postDetailsCtrl.showSharedEvent()">
-    <md-card-content layout="column">
-      <md-card layout="row" md-colors="{background: 'teal-50'}" ng-if="!postDetailsCtrl.isDeleted(postDetailsCtrl.post.shared_event)">
-        <div layout="column">
-          <div layout="row" layout-align="center end" md-colors="{background: 'teal-100'}">
-            <h1 class="md-display-1" md-colors="{color:'teal-900'}">
-              {{postDetailsCtrl.post.shared_event.start_time | amUtc | amLocal | amDateFormat:'DD'}}
-            </h1>
-          </div>
-          <div layout="row" layout-align="center start" md-colors="{background: 'teal-200'}" style="padding: 0 10px 0 10px">
-            <h3 md-colors="{color:'teal-800'}">{{postDetailsCtrl.post.shared_event.start_time | amUtc | amLocal | amDateFormat:'MMMM'}}</h3>
-          </div>
-        </div>
-        <div layout="column" layout-align="center start" style="padding-left: 10px">
-          <a href class="md-subhead hyperlink" ng-click="postDetailsCtrl.goToEvent(postDetailsCtrl.post.shared_event)">
-            <span>{{ postDetailsCtrl.post.shared_event.title | uppercase}}</span>
-          </a>
-          <div layout="row">
-            <md-icon>place</md-icon>
-            <p>Em {{ postDetailsCtrl.post.shared_event.local }}</p>
-          </div>
-          <div layout="row">
-            <md-icon>event</md-icon>
-            <p>De {{postDetailsCtrl.post.shared_event.start_time | amUtc | amLocal | amCalendar:referenceTime:formats }}
-               até {{postDetailsCtrl.post.shared_event.end_time | amUtc | amLocal | amCalendar:referenceTime:formats }}
-            </p>
-          </div>
-        </div>
-      </md-card>
-      <p class="break" ng-if="!postDetailsCtrl.isDeleted(postDetailsCtrl.post.shared_event)"
-        ng-bind-html="postDetailsCtrl.recognizeUrl(postDetailsCtrl.post.shared_event.text)" >
-      </p>
-    </md-card-content>
-    <md-card>
-      <img class="md-card-image" ng-if="postDetailsCtrl.showImage(postDetailsCtrl.post.shared_event)"
-        ng-src="{{ postDetailsCtrl.post.shared_event.photo_url }}"/>
-    </md-card>
-  </md-card>
+  <event-details ng-if="postDetailsCtrl.showSharedEvent()" event="postDetailsCtrl.post.shared_event" is-event-page=false></event-details>
 
   <!-- BODY SHARED POST -->
   <md-card md-colors="{background: 'default-grey-100'}" ng-if="postDetailsCtrl.showSharedPost()">

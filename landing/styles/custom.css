@@ -76,6 +76,13 @@ body {
     }
 }
 
+
+@media screen and (max-width: 960px) and (orientation:landscape) {
+    .section {
+        min-height: 1000px;
+    }
+}
+
 @media screen and (min-width: 960px) {
     .header-image {
         width: 70%;

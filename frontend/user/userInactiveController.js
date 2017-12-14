@@ -28,7 +28,7 @@
             if(userInactiveCtrl.hasInstSelect){
                 userInactiveCtrl.choicedInst = true;
             } else {
-                MessageService.showToast("Escolha a instituição.");
+                MessageService.showToast("Escolha uma instituição.");
             }
         };
 

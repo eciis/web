@@ -13,7 +13,7 @@
 
         service.sendRequestInst = function sendRequestInst(request) {
             request.type_of_invite = "REQUEST_INSTITUTION";
-            return HttpService.post(REQUESTS_URI + "requests/institution", request);
+            return HttpService.post(REQUESTS_URI + "requests/institution/", request);
         };
 
         service.sendRequestToParentInst = function(invite, institution_requested_key) {

@@ -2,19 +2,19 @@
 
 (describe('Test InviteInstitutionController', function() {
 
-    var inviteinstitutionCtrl, httpBackend, scope, inviteService, createCtrl, state, instService;
+    var inviteinstitutionCtrl, httpBackend, scope, inviteService, createCtrl, state, instService, mdDialog, requestInvitationService;
 
-    var splab = {
-            name: 'SPLAB',
+    var institution = {
+            name: 'institution',
             key: '987654321',
             sent_invitations: []
     };
 
-    var tiago = {
-        name: 'Tiago',
-        institutions: [splab],
-        current_institution: splab,
-        follows: splab.key,
+    var user = {
+        name: 'user',
+        institutions: [institution],
+        current_institution: institution,
+        follows: institution.key,
         permissions : {
             analyze_request_inst: {
                 '987654321': true
@@ -23,21 +23,32 @@
         invites:[]
     };
 
+    var request = {
+        admin_name: 'example',
+        institution_key: institution.key,
+        institution_requested_key: institution.key,
+        key: '000000',
+        sender: 'admin',
+        status: 'sent',
+    }
+
     var INSTITUTION_SEARCH_URI = '/api/search/institution?value=';
 
-    var invite = new Invite({invitee: "mayzabeel@gmail.com", suggestion_institution_name : "New Institution"}, 'institution', splab.key);
+    var invite = new Invite({invitee: "user@gmail.com", suggestion_institution_name : "New Institution"}, 'institution', institution.key);
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $state,
-        InviteService, AuthService, InstitutionService) {
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $state, $mdDialog,
+        InviteService, AuthService, InstitutionService, RequestInvitationService) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
+        mdDialog = $mdDialog;
         inviteService = InviteService;
         instService = InstitutionService;
+        requestInvitationService = RequestInvitationService;
 
-        AuthService.login(tiago);
+        AuthService.login(user);
 
         httpBackend.expect('GET', '/api/invites').respond([]);
         httpBackend.expect('GET', '/api/institutions/requests/institution/987654321').respond([]);
@@ -53,7 +64,7 @@
                     inviteService: InviteService,
                 });
         };
-        state.params.institutionKey = splab.key;
+        state.params.institutionKey = institution.key;
         inviteinstitutionCtrl = createCtrl();
         httpBackend.flush();
     }));
@@ -65,8 +76,8 @@
 
     describe('InviteInstitutionController properties', function() {
 
-        it('should exist a user and his name is Tiago', function() {
-            expect(inviteinstitutionCtrl.user.name).toEqual(tiago.name);
+        it('should exist a user and his name is user', function() {
+            expect(inviteinstitutionCtrl.user.name).toEqual(user.name);
         });
     });
 
@@ -85,7 +96,7 @@
             });
 
             it('should call inviteService.sendInvite()', function(done) {
-                inviteinstitutionCtrl.user.current_institution = splab;
+                inviteinstitutionCtrl.user.current_institution = institution;
                 var promise = inviteinstitutionCtrl.sendInstInvite(invite);
                 promise.then(function() {
                     expect(inviteService.sendInviteInst).toHaveBeenCalledWith(invite);
@@ -102,9 +113,9 @@
                     };
                 });
                 spyOn(inviteinstitutionCtrl, 'sendInstInvite');
-                inviteinstitutionCtrl.user.current_institution = splab;
+                inviteinstitutionCtrl.user.current_institution = institution;
                 inviteinstitutionCtrl.checkInstInvite().then(function() {
-                    var testingInvite = new Invite(invite, 'INSTITUTION', splab.key);
+                    var testingInvite = new Invite(invite, 'INSTITUTION', institution.key);
                     expect(instService.searchInstitutions).toHaveBeenCalledWith(
                         inviteinstitutionCtrl.invite.suggestion_institution_name,
                         "active,pending", 'institution');
@@ -114,7 +125,7 @@
             });
 
             it('should call showDialog()', function(done) {
-                var documents = {data: {name: splab.name, id: splab.key}};
+                var documents = {data: {name: institution.name, id: institution.key}};
                 spyOn(inviteinstitutionCtrl, 'showDialog');
                 spyOn(instService, 'searchInstitutions').and.callFake(function() {
                     return {
@@ -151,6 +162,61 @@
                 inviteinstitutionCtrl.cancelInvite();
                 expect(inviteinstitutionCtrl.invite).toEqual({});
                 expect(inviteinstitutionCtrl.showSendInvites).toBe(true);
+            });
+        });
+
+        describe('acceptRequest()', function() {
+            it('should call accept request', function(done) {
+                spyOn(mdDialog, 'show').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            return callback();
+                        }
+                    };
+                });
+                spyOn(requestInvitationService, 'acceptRequestInst').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            return callback();
+                        }
+                    };
+                });
+                spyOn(instService, 'getInstitution').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            return callback({data: institution, msg: 'success'});
+                        }
+                    };
+                });
+                var promise = inviteinstitutionCtrl.acceptRequest(request);
+                promise.then(function() {
+                    expect(requestInvitationService.acceptRequestInst).toHaveBeenCalledWith(request.key);
+                    done();
+                });
+            });
+        });
+
+        describe('rejectRequest()', function() {
+            it('should call reject parent request', function(done) {
+                spyOn(mdDialog, 'show').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            return callback();
+                        }
+                    };
+                });
+                spyOn(requestInvitationService, 'rejectRequestInst').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            return callback();
+                        }
+                    };
+                });
+                var promise = inviteinstitutionCtrl.rejectRequest("$event", request);
+                promise.then(function() {
+                    expect(requestInvitationService.rejectRequestInst).toHaveBeenCalledWith(request.key);
+                    done();
+                });
             });
         });
     });

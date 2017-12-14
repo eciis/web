@@ -59,6 +59,15 @@
                     }
                 }
             })
+            .state("app.user.events", {
+                url: "/events",
+                views: {
+                    user_content: {
+                        templateUrl: "app/event/event.html",
+                        controller: "EventController as eventCtrl",
+                    }
+                }
+            })
             .state("app.user.invite_inst", {
                 url: "/inviteInstitution",
                 views: {
@@ -111,15 +120,6 @@
                     content_manage_institution: {
                         templateUrl: "app/institution/management_members.html",
                         controller: "ManagementMembersController as manageMemberCtrl"
-                    }
-                }
-            })
-            .state("app.events", {
-                url: "/events",
-                views: {
-                    content: {
-                        templateUrl: "app/event/event.html",
-                        controller: "EventController as eventCtrl",
                     }
                 }
             })

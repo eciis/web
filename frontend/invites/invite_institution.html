@@ -92,6 +92,10 @@
                     <h3>{{ request.institution_name }}</h3>
                     <p>{{ request.sender[0] }}</p>
                   </div>
+                  <md-icon class="md-secondary md-hue-3" title="Rejeitar" 
+                      ng-click="inviteInstCtrl.rejectRequest($event, request)">close</md-icon>
+                  <md-icon class="md-secondary" title="Aceitar" 
+                      ng-click="inviteInstCtrl.acceptRequest(request)" style="margin-left: 30%">send</md-icon>
                 </md-list-item>
               </md-list>
             </div>

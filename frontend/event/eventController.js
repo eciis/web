@@ -104,7 +104,7 @@
         }
 
         eventCtrl.recognizeUrl =  function recognizeUrl(event) {
-            if(event.text){
+            if(event && event.text){
                 var text = Utils.recognizeUrl(event.text);
                 text = adjustText(text, event);
                 return text;
@@ -164,6 +164,20 @@
         (function main() {
             eventCtrl.loadMoreEvents();
         })();
+    });
+
+    app.directive("eventDetails", function() {
+        return {
+            restrict: 'E',
+            templateUrl: "app/event/event_details.html",
+            controllerAs: "eventDetailsCtrl",
+            controller: "EventController",
+            scope: {},
+            bindToController: {
+                event: '=',
+                isEventPage: '=',
+            }
+        };
     });
 
     app.controller('EventDialogController', function EventDialogController(MessageService,

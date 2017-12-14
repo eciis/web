@@ -3,30 +3,37 @@
 
 import json
 from test_base_handler import TestBaseHandler
-from models.user import User
 from handlers.institution_request_collection_handler import InstitutionRequestCollectionHandler
 
 from mock import patch
+import mocks
 
 
 class InstitutionRequestCollectionHandlerTest(TestBaseHandler):
     """Test the handler InstitutionChildrenRequestCollectionHandler."""
 
-    REQUEST_URI = "/api/institutions/requests/institution"
+    REQUEST_URI = "/api/institutions/requests/institution/"
 
     @classmethod
     def setUp(cls):
         """Provide the base for the tests."""
         super(InstitutionRequestCollectionHandlerTest, cls).setUp()
         app = cls.webapp2.WSGIApplication(
-            [(InstitutionRequestCollectionHandlerTest.REQUEST_URI, InstitutionRequestCollectionHandler),
+            [("/api/institutions/requests/institution/(.*)", InstitutionRequestCollectionHandler),
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
-        initModels(cls)
 
     @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_post(self, verify_token):
         """Test handler post."""
+        # Initialize objects
+        self.other_user = mocks.create_user()
+        self.address = mocks.create_address()
+        self.new_inst = mocks.create_institution()
+        self.new_inst.name = "Complexo Industrial da Saude"
+        self.new_inst.address = self.address
+        self.new_inst.put()
+
         data = {
             'sender_key': self.other_user.key.urlsafe(),
             'name': 'new_inst',
@@ -68,11 +75,7 @@ class InstitutionRequestCollectionHandlerTest(TestBaseHandler):
             'REQUEST_INSTITUTION',
             "Expected type_of_invite must be equal to REQUEST_INSTITUTION")
 
-
-def initModels(cls):
-    """Init the models."""
-    # Other user
-    cls.other_user = User()
-    cls.other_user.name = 'Other User'
-    cls.other_user.email = ['otheruser@test.com']
-    cls.other_user.put()
+        self.assertEqual(
+            request['requested_inst_name'],
+            "Complexo Industrial da Saude",
+            "Expected institution_requested be new inst")

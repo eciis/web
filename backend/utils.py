@@ -158,6 +158,7 @@ def is_institution_member(method):
                 Utils.FORBIDDEN, "User is not a member of this Institution"))
     return check_members
 
+
 def is_admin(method):
         """Check if the user is admin of the institution."""
         def check_authorization(self, user, *args):
@@ -173,6 +174,7 @@ def is_admin(method):
             method(self, user, *args)
         return check_authorization
 
+
 def is_admin_of_requested_inst(method):
         """Check if the user is admin of the institution requested in requests for institution link."""
         def check_authorization(self, user, request_key, *args):
@@ -187,6 +189,14 @@ def is_admin_of_requested_inst(method):
 
             method(self, user, request_key, *args)
         return check_authorization
+
+
+def get_super_institution():
+    """Return Super Institution of system."""
+    # TODO: Currently, The Super Institution is 'CIS' but will change to 'Ministério da Saúde',
+    # should modify how to verify it.
+    # @author: Maiana Brito
+    return Institution.query().filter(Institution.name == "Complexo Industrial da Saude").get()
 
 
 def getSuperUsers():

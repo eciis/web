@@ -44,8 +44,7 @@
         AuthService.login(user);
 
         createCtrl = function() {
-            return $controller('UserInactiveController',
-                {
+            return $controller('UserInactiveController', {
                     scope: scope,
                     institutionService: institutionService
                 });

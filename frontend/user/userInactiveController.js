@@ -4,7 +4,7 @@
     var app = angular.module("app");
 
     app.controller("UserInactiveController", function UserInactiveController(AuthService, RequestInvitationService, InstitutionService, 
-                            $mdDialog, $state, $q, MessageService) {
+                    $mdDialog, $state, $q, MessageService) {
         var userInactiveCtrl = this;
 
         userInactiveCtrl.user = AuthService.getCurrentUser();
@@ -63,8 +63,8 @@
                                     .filter(request => request.status === "sent")
                                     .map(request => request.sender_key);
                 return !sender_keys.includes(userInactiveCtrl.user.key) ?
-                        userInactiveCtrl.sendRequest() : 
-                        MessageService.showToast("Usuário já solicitou fazer parte dessa instituição.");
+                       userInactiveCtrl.sendRequest() : 
+                       MessageService.showToast("Usuário já solicitou fazer parte dessa instituição.");
             } else {
                 userInactiveCtrl.sendRequest();
             }
@@ -116,7 +116,6 @@
            if(!_.isEmpty(userInactiveCtrl.institutions)){
                 return userInactiveCtrl.institutionSelect.key === institution.id;
             }
-
             return false;
         };
 
@@ -143,7 +142,6 @@
                 userInactiveCtrl.institutions = response.data;
                 deferred.resolve(response);
             });
-
             return deferred.promise;
         };
 
@@ -153,7 +151,5 @@
             userInactiveCtrl.hasInstSelect = false;
             userInactiveCtrl.wasSearched = true;
         }
-
-        
     });
 })();

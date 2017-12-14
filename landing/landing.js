@@ -28,8 +28,7 @@
                 url: "/",
                 views: {
                     content: {
-                        templateUrl: "home.html",
-                        controller: "MainController as ctrl"
+                        templateUrl: "home.html"
                     }
                 }
             })
@@ -37,8 +36,7 @@
                 url: "/home-pre-cadastro",
                 views: {
                     content: {
-                        templateUrl: "pre_signup.html",
-                        controller: "MainController as ctrl"
+                        templateUrl: "pre_signup.html"
                     }
                 }
             })
@@ -54,8 +52,7 @@
                 url: "/home-em-breve",
                 views: {
                     content: {
-                        templateUrl: "coming_soon.html",
-                        controller: "MainController as ctrl"
+                        templateUrl: "coming_soon.html"
                     }
                 }
             })
@@ -63,8 +60,7 @@
                 url: "/home-plataforma-CIS",
                 views: {
                     content: {
-                        templateUrl: "platformcisdetails.html",
-                        controller: "MainController as ctrl"
+                        templateUrl: "platformcisdetails.html"
                     }
                 }
             })
@@ -72,8 +68,7 @@
                 url: "/home-cis",
                 views: {
                     content: {
-                        templateUrl: "cisdetails.html",
-                        controller: "MainController as ctrl"
+                        templateUrl: "cisdetails.html"
                     }
                 }
             })
@@ -81,8 +76,7 @@
                 url: "/home-instituicoes-mantenedoras",
                 views: {
                     content: {
-                        templateUrl: "support_institutions.html",
-                        controller: "MainController as ctrl"
+                        templateUrl: "support_institutions.html"
                     }
                 }
             })
@@ -90,8 +84,7 @@
                 url: "/home-termos-de-uso",
                 views: {
                     content: {
-                        templateUrl: "coming_soon.html",
-                        controller: "MainController as ctrl"
+                        templateUrl: "coming_soon.html"
                     }
                 }
             })
@@ -99,8 +92,7 @@
                 url: "/home-privacidade",
                 views: {
                     content: {
-                        templateUrl: "coming_soon.html",
-                        controller: "MainController as ctrl"
+                        templateUrl: "coming_soon.html"
                     }
                 }
             });

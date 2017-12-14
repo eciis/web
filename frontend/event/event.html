@@ -1,72 +1,42 @@
-<md-content id="content" layout="row" md-colors="{background: 'grey-200'}" layout-align="center" class="body">
-  <div flex-gt-lg="80" flex-lg="90" layout="row" layout-align="center" layout-fill>
-    <div layout="column" layout-align="center center" ng-if="eventCtrl.events.length === 0">
-      <p>
-        <span class="md-subhead">Seja o primeiro a criar um evento.</span>
-      </p>
-      <md-button aria-label="menu" class="md-button" ng-click="eventCtrl.newEvent()" md-colors="{background: 'teal-900'}">
-        Criar evento
-      </md-button>
-    </div>
-    <timeline>
-      <timeline-event ng-repeat="event in eventCtrl.events | orderBy:'start_time'">
-        <timeline-badge class="primary">
-          <md-icon style="margin-top: 14px; color: white;">event</md-icon>
-        </timeline-badge>
-        <timeline-panel>
-          <md-card ng-if="event.photo_url">
-            <img class="md-card-image" ng-src="{{event.photo_url}}"/>
-          </md-card>
-          <md-card>
-            <md-card-header>
-              <md-card-header-text>
-                <div layout="row" layout-align="start center">
-                  <a href md-colors="{color: 'teal-900'}" class="md-title hyperlink" ng-click="eventCtrl.goToEvent(event)" >
-                    {{ event.title }}</a>
-                  <span flex md-truncate></span>
+<div flex="100" layout="row" layout-align="center">
+  <div flex flex-md="95" layout="row" layout-align="space-around"
+      md-colors="{background: 'grey-50'}">
+    <div flex flex-gt-md="100" layout-align="center top" layout="row">
+      <div flex layout="column">
+        <div layout="column" layout-align="center center" ng-if="eventCtrl.events.length === 0">
+          <p>
+            <span class="md-subhead">Seja o primeiro a criar um evento.</span>
+          </p>
+          <md-button aria-label="menu" class="md-button" ng-click="eventCtrl.newEvent()" md-colors="{background: 'teal-900'}">
+            Criar evento
+          </md-button>
+        </div>
+        <md-content flex id="content" class="body hide-scrollbar">
+          <div flex layout="row">
+            <div flex>
+              <div ng-repeat="event in eventCtrl.events | orderBy:'start_time'" ng-if="eventCtrl.events.length > 0"
+                  style="margin-left: 65px; border-left: 2px solid #8BC34A;" layut="colum">
+                <div flex-gt-md="100" layout="row">
+                  <div style="display: flex; align-items: center;">
+                    <md-button class="md-fab md-primary" title="Compartilhar"
+                      style="margin-left: -30px; background-color: #8BC34A; vertical-align: middle;"
+                      ng-click="eventCtrl.share($event, event)">
+                      <md-icon>share</md-icon>
+                    </md-button>
+                  </div>
+                  <div flex style="margin-left: -22px;">
+                    <event-details event="event" is-event-page=false></event-details>
+                  </div>
                 </div>
-                <span class="md-subhead">por {{ event.institution_name }} | {{ event.author }}</span>
-              </md-card-header-text>
-            </md-card-header>
-            <md-card-content layout="column">
-              <p ng-if="event.text" ng-bind-html="eventCtrl.recognizeUrl(event)" class="break">
-              </p>
-              <div layout="row" layout-align="end-center">
-                <a href class="md-text hyperlink" ng-click="eventCtrl.goToEvent(event)" ng-if="eventCtrl.isLongText(event)">
-                  <span class="md-subhead" >continuar lendo</span>
-                </a>
               </div>
-              <p>
-                <span class="md-caption">Local:</span> <span md-colors="{color: 'teal-900'}">{{ event.local }}</span> |
-                <b md-colors="{color: 'teal-900'}">
-                  {{ event.start_time | amUtc | amLocal | amCalendar}}
-                </b> até
-                <b md-colors="{color: 'teal-900'}">
-                  {{ event.end_time | amUtc | amLocal | amCalendar }}
-                </b>
-              </p>
-              <div layout="row" layout-align="end center">
-               <md-button class="md-icon-button" aria-label="editar" title="Editar este evento"
-                  ng-if="eventCtrl.canEdit(event)" ng-click="eventCtrl.editEvent($event, event)">
-                  <md-icon>edit</md-icon>
-                </md-button>
-                <md-button class="md-icon-button" aria-label="compartilhar" title="Excluir este evento"
-                  ng-if="eventCtrl.canDelete(event)" ng-click="eventCtrl.confirmDeleteEvent($event, event)">
-                  <md-icon>delete</md-icon>
-                </md-button>
-                <md-button class="md-icon-button" aria-label="compartilhar" title="Compartilhar este evento"
-                  ng-click="eventCtrl.share($event, event)">
-                  <md-icon>share</md-icon>
-                </md-button>
-              </div>
-            </md-card-content>
-          </md-card>
-        </timeline-panel>
-      </timeline-event>
-    </timeline>
+            </div>
+          </div>
+        </md-content>
+      </div>
+    </div>
+    <md-content class="hide-scrollbar" flex-gt-md="20" hide show-gt-md></md-content>
   </div>
-</md-content>
-
+</div>
 <md-fab-speed-dial id="fab-new-event" class="md-fab-bottom-right">
   <md-fab-trigger>
     <md-button aria-label="menu" class="md-fab md-primary" ng-click="eventCtrl.newEvent()" md-colors="{background: 'teal-900'}">

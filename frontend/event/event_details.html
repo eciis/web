@@ -1,12 +1,12 @@
-<div style='font-style:italic; text-align: center' ng-if="eventDetailsCtrl.isDeleted(eventDetailsCtrl.event)">
-  <p>Este evento foi removido por</p>
-  <p>
-    {{eventDetailsCtrl.event.last_modified_by}}
-    {{eventDetailsCtrl.event.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats}}.
-  </p>
-</div>
-<div layout="column">
-  <md-card ng-if="!eventDetailsCtrl.isDeleted(eventDetailsCtrl.event)" layout="column">
+<md-card>
+  <div style='font-style:italic; text-align: center' ng-if="eventDetailsCtrl.isDeleted(eventDetailsCtrl.event)">
+    <p>Este evento foi removido por</p>
+    <p>
+      {{eventDetailsCtrl.event.last_modified_by}}
+      {{eventDetailsCtrl.event.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats}}.
+    </p>
+  </div>
+  <div layout="column" ng-if="!eventDetailsCtrl.isDeleted(eventDetailsCtrl.event)">
     <img class="md-card-image" ng-if="eventDetailsCtrl.showImage(eventDetailsCtrl.event)" 
       ng-src="{{ eventDetailsCtrl.event.photo_url }}"/>
     <md-card layout="row" md-colors="{background: 'teal-50'}">
@@ -32,8 +32,5 @@
           </div>
         </div>
       </md-card>
-  </md-card>
-  <p class="break"
-    ng-bind-html="eventDetailsCtrl.recognizeUrl(eventDetailsCtrl.event.text)" >
-  </p>
-</div>
+  </div>
+</md-card>

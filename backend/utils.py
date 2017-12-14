@@ -142,6 +142,16 @@ def json_response(method):
         method(self, *args)
     return response
 
+
+
+
+
+def get_super_institution():
+    """Return Super Institution of system."""
+    # TODO: Currently, The Super Institution is 'CIS' but will change to 'Ministério da Saúde',
+    # should modify how to verify it.
+    # @author: Maiana Brito
+    return Institution.query().filter(Institution.name == "Complexo Industrial da Saude").get()
 def getSuperUsers():
     """Get users of institutions trusted that has permission to analize resquests for new institutions."""
     userswithpermission = []

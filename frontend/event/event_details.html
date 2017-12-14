@@ -1,36 +1,28 @@
-<md-card>
-  <div style='font-style:italic; text-align: center' ng-if="eventDetailsCtrl.isDeleted(eventDetailsCtrl.event)">
-    <p>Este evento foi removido por</p>
-    <p>
-      {{eventDetailsCtrl.event.last_modified_by}}
-      {{eventDetailsCtrl.event.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats}}.
-    </p>
-  </div>
-  <div layout="column" ng-if="!eventDetailsCtrl.isDeleted(eventDetailsCtrl.event)">
-    <img class="md-card-image" ng-if="eventDetailsCtrl.showImage(eventDetailsCtrl.event)" 
+
+<div layout="column" ng-if="!eventDetailsCtrl.isDeleted(eventDetailsCtrl.event)">
+  <md-card layout="column" md-colors="{background: 'teal-400'}">
+      <img class="md-card-image"
       ng-src="{{ eventDetailsCtrl.event.photo_url }}"/>
-    <md-card layout="row" md-colors="{background: 'teal-50'}">
-        <div layout="column">
-          <div layout="row" layout-align="center end" md-colors="{background: 'teal-100'}">
-            <h1 class="md-display-1" md-colors="{color:'teal-900'}">{{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'DD'}}</h1>
-          </div>
-          <div layout="row" layout-align="center start" md-colors="{background: 'teal-200'}" style="padding: 0 10px 0 10px">
-            <h3 md-colors="{color:'teal-800'}">{{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'MMMM'}}</h3>
-          </div>
+    <div layout="row">
+    <md-card-content md-colors="{background: 'grey-100'}">
+      <div layout="column">
+        <div layout="row" layout-align="center end" md-colors="{background: 'grey-100'}">
+          <h1 class="md-display-1" md-colors="{color:'teal-400'}" style="font-weight: bold;">
+            {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'DD'}}
+            A {{eventDetailsCtrl.event.end_time | amUtc | amLocal | amDateFormat:'DD' | uppercase}}</h1>
         </div>
-        <div layout="column" layout-align="center start" style="padding-left: 10px">
-          <a href class="md-subhead hyperlink" ng-click="eventDetailsCtrl.goToEvent(eventDetailsCtrl.event)">
-            <span>{{ eventDetailsCtrl.event.title | uppercase}}</span>
-          </a>
-          <div layout="row">    
-            <md-icon>place</md-icon> 
-            <p>Em {{ eventDetailsCtrl.event.local }}</p>
-          </div>
-          <div layout="row">
-            <md-icon>event</md-icon>
-            <p>De {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amCalendar:referenceTime:formats }} até {{eventDetailsCtrl.event.end_time | amUtc | amLocal | amCalendar:referenceTime:formats }}</p>
-          </div>
+          <md-divider style="border: 1px; border-style: solid; color: #03b3a1;"></md-divider>
+        <div layout="row" layout-align="end start" md-colors="{background: 'grey-100'}" style="padding: 0 10px 0 10px">
+          <h3 md-colors="{color:'teal-400'}">{{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'MMMM' | uppercase}}</h3>
         </div>
-      </md-card>
-  </div>
-</md-card>
+      </div>
+    </md-card-content>
+    <md-card-content flex layout="column">
+        <a href class="md-title hyperlink" ng-click="eventDetailsCtrl.goToEvent(eventDetailsCtrl.event)">
+            <span style="color: white;">{{ eventDetailsCtrl.event.title | uppercase}}</span>
+        </a>
+        <span style="color: white; margin-top: auto;">Organizado por {{eventDetailsCtrl.event.institution_name}}</span>
+    </md-card-content>
+    </div>
+    </md-card>
+</div>

@@ -1,13 +1,13 @@
 <md-content layout-fill layout="column" md-colors="{background: 'teal-500'}" layout-align="center center">
     <div layout="row" layout-align="center center" style="margin-right: 35px;">
         <md-button class="md-fab md-primary" aria-label="Retornar" ng-click="userInactiveCtrl.logout()"
-          style="margin-right: -35px;" md-colors="{background: 'light-green-500'}">
+          style="margin-right: -35px;" md-colors="{background: 'light-green-500'}" hide-xs>
           <md-icon>keyboard_arrow_left</md-icon>
         </md-button>
         <div class="padded" layout-margin md-whiteframe="12" style="border-radius: 2px;" 
             md-colors="{background: 'grey-50'}" layout="row" flex-xs="90" 
             flex-sm="65" flex-gt-sm="45" layout-align="center center">
-            <div layout="column" flex-xs="65" flex-gt-xs="70" layout-align="space-between" layout-margin>
+            <div layout="column" flex-xs="85" flex-gt-xs="70" layout-align="space-between" layout-margin>
                 <div layout="row" layout-align="center center">
                     <img src="/app/images/logowithname.png" flex="90"/>
                 </div>
@@ -39,7 +39,8 @@
                                   md-colors="{background: 'light-green-500', color: 'grey-50'}">done</md-icon>
                                 <div layout="column" class="md-3-line">
                                   <div>
-                                    <h4 style="margin:0px">{{ institution.name }}</h4>
+                                    <h4 style="margin:0px" hide-xs>{{ institution.name }}</h4>
+                                    <h5 style="margin:0px" hide-gt-xs>{{ institution.name }}</h5>
                                   </div>
                                   <div ng-if="userInactiveCtrl.showFullInformation(institution)" class="md-list-item-text md-3-line">
                                     <p>{{ userInactiveCtrl.institutionSelect.email }}</p>
@@ -68,31 +69,24 @@
                     </div>
                 
                 <!-- Form user -->
-                <form name="requestuser" ng-submit="userInactiveCtrl.verifyAndSendRequest()" 
-                        ng-if="userInactiveCtrl.showRequestUser()">
-                    <div layout="row" style="font-weight: 500">
+                <form name="requestuser"  ng-if="userInactiveCtrl.showRequestUser()">
+                <div layout="row" style="font-weight: 500" ng-if="userInactiveCtrl.showRequestUser()">
                         <p>Para finalizar o pedido de convite, preencha suas informacoes institucionais.</p>
-                    </div>
-                    <md-input-container class="md-block">
-                    <label>Cargo institucional</label>
-                        <input name="cargo" ng-model="userInactiveCtrl.request.office" name="office" required>
-                        <div ng-messages='userInactiveCtrl.request.office.$error'>
-                            <div ng-message="required">Este campo é obrigatório!</div>
-                        </div>
-                    </md-input-container>
-                    <md-input-container class="md-block">
-                      <label>Email institucional</label>
-                      <input ng-model="userInactiveCtrl.request.email" type="email" name="email" required>
-                      <div ng-messages='userInactiveCtrl.request.email.$error'>
-                        <div ng-message="required">Este campo é obrigatório!</div>
-                      </div>
-                    </md-input-container>
-                    <div layout="row" layout-align="end">
-                        <md-button type="submit" class="md-raised md-primary" md-colors="{background: 'teal-500'}">
-                            FINALIZAR
-                        </md-button>
-                    </div>
-                </form>
+                </div>
+                <md-input-container class="md-block">
+                <label>Cargo institucional</label>
+                    <input name="cargo" ng-model="userInactiveCtrl.request.office" name="office" required>
+                </md-input-container>
+                <md-input-container class="md-block">
+                    <label>Email institucional</label>
+                    <input ng-model="userInactiveCtrl.request.email" type="email" name="email" required>
+                </md-input-container>
+                <div layout="row" layout-align="end">
+                    <md-button ng-click="userInactiveCtrl.verifyAndSendRequest()" 
+                    class="md-raised md-primary" md-colors="{background: 'teal-500'}">
+                        FINALIZAR
+                    </md-button>
+                </div>
                 <!-- End page of request -->
                 <div layout="column" ng-if="userInactiveCtrl.isFinished">
                     <div style="font-weight: 500; text-align: center;">

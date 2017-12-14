@@ -65,7 +65,7 @@
                     <div layout-gt-xs="row" layout-xs="column" layout-align="end center"
                         ng-if="!userInactiveCtrl.choicedInst">
                         <md-button flex-order-xs="1" class="md-raised md-primary" md-colors="{background: 'teal-500'}" 
-                        ng-click="userInactiveCtrl.confirmInst()" ng-if="userInactiveCtrl.hasInstSelect">AVANÇAR</md-button>
+                        ng-click="userInactiveCtrl.confirmInst()">AVANÇAR</md-button>
                     </div>
                 
                 <!-- Form user -->
@@ -82,7 +82,7 @@
                         <input ng-model="userInactiveCtrl.request.email" type="email" name="email" required>
                     </md-input-container>
                     <div layout="row" layout-align="end">
-                        <md-button ng-click="userInactiveCtrl.verifyAndSendRequest()" ng-if="userInactiveCtrl.canSend()"
+                        <md-button ng-click="userInactiveCtrl.send()"
                         class="md-raised md-primary" md-colors="{background: 'teal-500'}">
                             FINALIZAR
                         </md-button>

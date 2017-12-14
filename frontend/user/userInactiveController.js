@@ -25,7 +25,7 @@
         };
 
         userInactiveCtrl.confirmInst =  function confirmInst(){
-            if(userInactiveCtrl.institutionSelect){
+            if(userInactiveCtrl.hasInstSelect){
                 userInactiveCtrl.choicedInst = true;
             } else {
                 MessageService.showToast("Escolha a instituição.");
@@ -93,8 +93,14 @@
             return false;
         };
 
-        userInactiveCtrl.canSend = function canSend(){
-            return userInactiveCtrl.request.office && userInactiveCtrl.request.email;
+        userInactiveCtrl.send = function send(){
+            var emptyOffice = userInactiveCtrl.request.office === undefined;
+            var emptyEmail = userInactiveCtrl.request.office === undefined;
+            if(emptyOffice && emptyEmail){
+                MessageService.showToast("Preencha todos os campos.");
+            } else {
+                userInactiveCtrl.verifyAndSendRequest();
+            }
         };
 
         userInactiveCtrl.isInstSelect = function isInstSelect(institution){

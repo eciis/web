@@ -12,24 +12,20 @@
           </md-button>
         </div>
         <md-content flex id="content" class="body hide-scrollbar">
-          <div flex layout="row">
-            <div flex>
-              <div ng-repeat="event in eventCtrl.events | orderBy:'start_time'" ng-if="eventCtrl.events.length > 0"
-                  style="margin-left: 65px; border-left: 2px solid #8BC34A;" layut="colum">
-                <div flex-gt-md="100" layout="row">
-                  <div style="display: flex; align-items: center;">
-                    <md-button class="md-fab md-primary" title="Compartilhar"
-                      style="margin-left: -30px; background-color: #8BC34A; vertical-align: middle;"
-                      ng-click="eventCtrl.share($event, event)">
-                      <md-icon>share</md-icon>
-                    </md-button>
-                  </div>
-                  <div flex style="margin-left: -22px;">
-                    <md-card>
-                        <event-details event="event" is-event-page=false></event-details>
-                    </md-card>
-                  </div>
-                </div>
+          <div ng-repeat="event in eventCtrl.events | orderBy:'start_time'" ng-if="eventCtrl.events.length > 0"
+              style="margin-left: 65px; border-left: 2px solid #8BC34A;" layut="colum">
+            <div layout="row">
+              <div style="display: flex; align-items: center;">
+                <md-button class="md-fab md-primary" title="Compartilhar"
+                  style="margin-left: -30px; background-color: #8BC34A; vertical-align: middle;"
+                  ng-click="eventCtrl.share($event, event)">
+                  <md-icon>share</md-icon>
+                </md-button>
+              </div>
+              <div flex style="margin-left: -22px;">
+                <md-card>
+                    <event-details event="event" is-event-page=false></event-details>
+                </md-card>
               </div>
             </div>
           </div>

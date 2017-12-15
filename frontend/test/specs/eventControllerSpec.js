@@ -8,7 +8,8 @@
   var splab = {name: 'Splab', key: '098745'};
   var EVENTS_URI = '/api/events';
 
-  var date_now = new Date();
+  var date = new Date('2017-12-14');
+  var date_next_month = new Date('2018-01-14');
 
   var user = {
       name: 'User',
@@ -25,14 +26,17 @@
     'text': 'Text',
     'local': 'Local',
     'photo_url': null,
-    'start_time': date_now,
-    'end_time': date_now,
+    'start_time': date,
+    'end_time': date,
   };
 
   var post = new Post({}, splab.key);
   post.shared_event = event.key;
 
   var event_convert_date = new Event(event, splab.key);
+
+  event.end_time = date_next_month;
+  var other_event = new Event(event, splab.key);
 
   beforeEach(module('app'));
 
@@ -61,7 +65,7 @@
             mdDialog: mdDialog
         });
 
-      httpBackend.when('GET', "/api/events?page=0&limit=5").respond({events: [event_convert_date], next: false});
+      httpBackend.when('GET', "/api/events?page=0&limit=5").respond({events: [event_convert_date, other_event], next: false});
       httpBackend.when('GET', 'main/main.html').respond(200);
       httpBackend.when('GET', 'home/home.html').respond(200);
       httpBackend.when('GET', 'auth/login.html').respond(200);
@@ -130,6 +134,18 @@
       spyOn(mdDialog, 'show');
       eventCtrl.editEvent('$event', event);
       expect(mdDialog.show).toHaveBeenCalled();
+    });
+  });
+
+  describe('endInOtherMonth', function() {
+    it('Should be false when end_time of event is in the same month', function() {
+      eventCtrl.event = eventCtrl.events[0];
+      expect(eventCtrl.endInOtherMonth()).toBeFalsy();
+    });
+
+    it('Should be true when end_time of event is in the other month', function() {
+      eventCtrl.event = eventCtrl.events[1];
+      expect(eventCtrl.endInOtherMonth()).toBeTruthy();
     });
   });
 }));

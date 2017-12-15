@@ -67,12 +67,12 @@
         </md-card>
 
         <md-card flex layout="column">
-          <md-toolbar md-colors="{background: 'teal-500'}" layout="row"
+          <md-toolbar md-colors="(inviteInstCtrl.sent_requests.length > 0) ? {background: 'light-green-500'} : {background: 'teal-500'}" layout="row"
             ng-click="inviteInstCtrl.toggleElement('showRequests')" class="clickable-no-hover">
             <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
               <h1>
-                <md-icon>feedback</md-icon>
-                Convites requisitados
+                <md-icon ng-class="(inviteInstCtrl.sent_requests.length > 0) ? 'notification-badge' : ''" data-badge>feedback</md-icon>
+                <span md-colors="{color: 'grey-50'}">Convites requisitados</span>
               </h1>
               <span flex md-truncate></span>
               <md-button class="md-icon-button md-secondary">

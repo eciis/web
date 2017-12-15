@@ -180,8 +180,8 @@
         };
     });
 
-    app.controller('EventDialogController', function EventDialogController(MessageService,
-            ImageService, AuthService, EventService, $state, $rootScope, $mdDialog) {
+    app.controller('EventDialogController', function EventDialogController(MessageService, brCidadesEstados,
+            ImageService, AuthService, EventService, $state, $rootScope, $mdDialog, $http) {
         var dialogCtrl = this;
 
         dialogCtrl.loading = false;
@@ -285,6 +285,15 @@
            delete dialogCtrl.event.photo_url;
         };
 
+        dialogCtrl.getCitiesByState = function getCitiesByState() {
+            dialogCtrl.cities = brCidadesEstados.buscarCidadesPorSigla(dialogCtrl.event.federal_state.sigla);
+        };
+
+        function loadFederalStates() {
+            dialogCtrl.federalStates = brCidadesEstados.estados;
+            console.log(dialogCtrl.federalStates);
+        }
+
         function generatePatch(patch, data) {
             if(dialogCtrl.dateToChange.startTime) {
                 patch.push({op: 'replace', path: "/start_time", value: data.start_time});
@@ -317,7 +326,15 @@
             }
         }
 
+        function getCountries() {
+            $http.get('app/institution/countries.json').then(function success(response) {
+                dialogCtrl.countries = response.data;
+            });
+        }
+
         (function main() {
+            getCountries();
+            loadFederalStates();
             if(dialogCtrl.event) {
                 dialogCtrl.dateChangeEvent = _.clone(dialogCtrl.event);
                 dialogCtrl.dateChangeEvent.start_time = new Date(dialogCtrl.dateChangeEvent.start_time);

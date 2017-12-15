@@ -124,75 +124,84 @@
     </md-dialog-content>
   </md-dialog>
   <md-dialog style="max-width: 100%;">
-    <md-dialog-content class="hide-scrollbar" layout-padding>
-      <div md-colors="{background: 'default-green-A400'}" layout="column" layout-align="center center" layout-padding>
-        <md-button style="border-radius: 50px" ng-click="null" ng-model="controller.file" ngf-pattern="'image/*'"
-          ngf-accept="'image/*'" ngf-max-size="5MB" ngf-select="controller.addImage(controller.file)">
-          <md-icon style="height: 70px; width: 70px; font-size: 70px; color:white;" layout="column" layout-align="center center">add_a_photo</md-icon>
-        </md-button>
-        <b style="color: white; text-align: center;">Inserir foto de divulgação do evento</b>
-      </div>
-      <div layout="column">
-        <md-input-container style="margin-bottom: 0">
-          <label>Nome do evento</label>
-          <input ng-model="controller.teste"/>
-        </md-input-container>
-        <div layout="row">
-            <md-input-container style="margin: 0">
-                <label>Data inicial</label>
-                <input ng-model="controller.teste"/>
+    <form>
+      <md-dialog-content class="hide-scrollbar" layout-padding>
+        <div md-colors="{background: 'default-teal-500'}" layout="column" layout-align="center center" layout-padding>
+          <md-button style="border-radius: 50px" ng-click="null" ng-model="controller.file" ngf-pattern="'image/*'"
+            ngf-accept="'image/*'" ngf-max-size="5MB" ngf-select="controller.addImage(controller.file)">
+            <md-icon style="height: 70px; width: 70px; font-size: 70px; color:white;" layout="column" layout-align="center center">add_a_photo</md-icon>
+          </md-button>
+          <b style="color: white; text-align: center;">Inserir foto de divulgação do evento</b>
+        </div>
+        <div layout="column">
+          <md-input-container style="margin-bottom: 0">
+            <label>Nome do evento</label>
+            <input ng-model="controller.event.title"/>
+          </md-input-container>
+          <div layout="row" layout-align="space-between center">
+              <md-input-container style="margin: 0" flex="45">
+                  <input mdc-datetime-picker="" short-time="false" date="true" time="true" type="text" format="DD-MM-YYYY HH:mm" lang="pt-BR" required="true"
+                  placeholder="Data inicial" ng-model="controller.event.start_time" class=" md-input" today-text="Hoje" min-date="null"
+                  max-date="controller.event.end_time" readonly="readonly" cancel-text="Cancelar"/>
+              </md-input-container flex="45">
+              <md-input-container style="margin: 0">
+                  <input mdc-datetime-picker="" ng-change="controller.changeDate('endTime')" date="true" time="true" type="text" lang="pt-BR" today-text="Hoje" required="true"
+                  placeholder="Data final" class=" md-input" readonly="readonly" format="YYYY-MM-DD HH:mm" max-date="null"
+                  ng-model="controller.dateChangeEvent.end_time" cancel-text="Cancelar" min-date="controller.event.start_time">
+              </md-input-container>
+          </div>
+          <md-input-container style="margin: 0">
+              <label>Local (Onde o evento vai acontecer)</label>
+              <input ng-model="controller.event.local"/>
+          </md-input-container>
+          <div layout="row">
+              <md-input-container style="margin: 0">
+                  <label>Rua</label>
+                  <input ng-model="controller.teste"/>
+              </md-input-container>
+              <md-input-container style="margin: 0">
+                  <label>Numero</label>
+                  <input ng-model="controller.teste"/>
+              </md-input-container>
+          </div>
+          <md-input-container style="margin: 0">
+              <label>Complemento</label>
+              <input ng-model="controller.teste"/>
+          </md-input-container>
+        </div>
+        <div layout="row" layout-align="space-between center">
+            <md-input-container style="margin: 0" flex="45">
+                <label>Pais</label>
+                <md-select ng-model="controller.event.state">
+                    <md-option ng-repeat="country in controller.countries"
+                      ng-value="country.nome_pais">{{country.nome_pais}}</md-option>
+                </md-select>
             </md-input-container>
-            <md-input-container style="margin: 0">
-                <label>Data final</label>
-                <input ng-model="controller.teste"/>
+            <md-input-container style="margin: 0" flex="45">
+                <label>Estado</label>
+                <md-select ng-model="controller.event.federal_state" ng-change="controller.getCitiesByState()">
+                  <md-option ng-repeat="federal_state in controller.federalStates"
+                    ng-value="federal_state">{{federal_state.sigla}}</md-option>
+                </md-select>
             </md-input-container>
         </div>
-        <md-input-container style="margin: 0">
-            <label>Local (Onde o evento vai acontecer)</label>
-            <input ng-model="controller.teste"/>
-        </md-input-container>
         <div layout="row">
-            <md-input-container style="margin: 0">
-                <label>Rua</label>
-                <input ng-model="controller.teste"/>
-            </md-input-container>
-            <md-input-container style="margin: 0">
-                <label>Numero</label>
-                <input ng-model="controller.teste"/>
+            <md-input-container style="margin: 0" flex="45">
+                <label>Cidade</label>
+                <md-select ng-model="controller.event.country"  ng-disabled="!controller.event.federal_state">
+                  <md-option ng-repeat="city in controller.cities" ng-value="city">{{city}}</md-option>
+                </md-select>
             </md-input-container>
         </div>
-        <md-input-container style="margin: 0">
-            <label>Complemento</label>
-            <input ng-model="controller.teste"/>
-        </md-input-container>
-      </div>
-      <div layout="row" layout-align="space-between center">
-          <md-input-container style="margin: 0" flex="45">
-              <label>Pais</label>
-              <md-select ng-model="controller.sta">
-              </md-select>
-          </md-input-container>
-          <md-input-container style="margin: 0" flex="45">
-              <label>Estado</label>
-              <md-select ng-model="controller.sta">
-              </md-select>
-          </md-input-container>
-      </div>
-      <div layout="row">
-          <md-input-container style="margin: 0" flex="45">
-              <label>Cidade</label>
-              <md-select ng-model="controller.sta">
-              </md-select>
-          </md-input-container>
-      </div>
-    </md-dialog-content>
-    <md-dialog-actions layout="row">
-        <md-button class="md-raised" md-colors="{background: 'default-green-A700'}">
-            <span style="color: white;">cancelar</span>
-          </md-button>
-          <md-button class="md-raised" md-colors="{background: 'default-green-A700'}">
-              <span style="color: white;">avançar</span>
-          </md-button>
-    </md-dialog-actions>
+      </md-dialog-content>
+      <md-dialog-actions layout="row">
+          <md-button class="md-raised" md-colors="{background: 'default-teal-500'}">
+              <span style="color: white;">cancelar</span>
+            </md-button>
+            <md-button class="md-raised" md-colors="{background: 'default-teal-500'}">
+                <span style="color: white;">avançar</span>
+            </md-button>
+      </md-dialog-actions>
+    </form>
   </md-dialog>
 </div>

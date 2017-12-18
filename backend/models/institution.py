@@ -161,7 +161,7 @@ class Institution(ndb.Model):
         institution_stub.email = invite.invitee
         institution_stub.state = 'pending'
         institution_stub.address = Address()
-        institution_stub.photo_url = "app/images/institution.jpg"
+        institution_stub.photo_url = "app/images/institution.png"
 
         institution_stub.put()
 
@@ -179,7 +179,7 @@ class Institution(ndb.Model):
         institution.followers.append(user.key)
         institution.state = 'active'
         if (institution.photo_url is None):
-            institution.photo_url = "app/images/institution.jpg"
+            institution.photo_url = "app/images/institution.png"
         institution.put()
 
         user.add_institution(institution.key)

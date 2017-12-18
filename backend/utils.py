@@ -126,7 +126,7 @@ def create_user(name, email):
     user = User()
     user.email = email
     user.name = name
-    user.photo_url = "app/images/avatar.jpg"
+    user.photo_url = "app/images/avatar.png"
     user.put()
 
     return user

@@ -5,6 +5,7 @@ from invite import Invite
 from request import Request
 from google.appengine.ext import ndb
 from utils import getSuperUsers
+from utils import get_super_institution
 from custom_exceptions.fieldException import FieldException
 
 
@@ -22,8 +23,29 @@ class RequestInstitution(Request):
         request = RequestInstitution()
         request.sender_key = ndb.Key(urlsafe=data.get('sender_key'))
         request = Invite.create(data, request)
+        request.institution_requested_key = get_super_institution().key
         request.isValid()
         return request
+
+    def send_response_email(self, host, operation):
+        """Method to send email of sender institution when invite is accepted or rejected."""
+        institution_name = self.institution_key.get().name
+        rejectMessage = """Olá,
+        Lamentamos informar mas o seu pedido não foi aceito.
+        Sugerimos que fale com o seu superior para que seja enviado um convite.
+
+        Equipe e-CIS"""
+
+        acceptMessage = """Olá,
+        A instituição %s foi aceita na plataforma, seja bem vindo ao e-CIS.
+        Realize seu login no link abaixo:
+        http://%s/signin
+
+        Equipe e-CIS""" % (institution_name, host)
+
+        sender_email = self.sender_key.get().email[0]
+        body = acceptMessage if operation == "ACCEPT" else rejectMessage
+        super(RequestInstitution, self).send_email(host, sender_email, body)
 
     def send_email(self, host, body=None):
         """Method of send email of request institution link."""

@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("SearchController", function SearchController($state, InstitutionService, MessageService, $http) {
+    app.controller("SearchController", function SearchController($state, InstitutionService, MessageService, $http, brCidadesEstados) {
 
         var searchCtrl = this;
 
@@ -43,8 +43,8 @@
             }
         };
 
-        searchCtrl.searchByActuationArea = function searchByActuationArea(chosen_area) {
-            searchCtrl.makeSearch(chosen_area, 'institution');
+        searchCtrl.searchBy = function searchBy(search) {
+            searchCtrl.makeSearch(search, 'institution');
         };
 
         searchCtrl.isLoading = function isLoading() {
@@ -69,10 +69,15 @@
             }
         }
 
+        function loadBrazilianFederalStates() {
+            searchCtrl.brazilianFederalStates = brCidadesEstados.estados;
+        }
+
         (function main() {
             getActuationAreas();
             getLegalNatures();
             loadSearch();
+            loadBrazilianFederalStates();
         })();
     });
 })();

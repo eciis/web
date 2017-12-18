@@ -321,7 +321,9 @@
         inviteInstHierCtrl.showMessage = function(request) {
             var message;
             if(inviteInstHierCtrl.isReqSentByCurrentInst(request)) {
-                message = 'Solicitação para ser uma instituição subordinada (Aguardando confirmação)';
+                message = request.type_of_invite === REQUEST_CHILDREN ?
+                    'Solicitação para ser uma instituição subordinada (Aguardando confirmação)' :
+                    'Solicitação para ser uma instituição superior (Aguardando confirmação)';
             } else if(request.type_of_invite === REQUEST_CHILDREN) {
                 message = 'Solicitação para ser a instituição superior';
             } else {
@@ -336,6 +338,10 @@
             }
         };
 
+        inviteInstHierCtrl.hasRequested = function hasRequested() {
+            return _.find(inviteInstHierCtrl.requested_invites, request => request.status === 'sent');
+        };
+
         function designOptions() {
                 var $dialog = angular.element(document.querySelector('md-dialog'));
                 var $actionsSection = $dialog.find('md-dialog-actions');
@@ -344,6 +350,18 @@
                 angular.element($confirmButton).addClass('md-raised md-warn');
                 angular.element($cancelButton).addClass('md-primary');
         }
+
+        inviteInstHierCtrl.canRemoveInst = function canRemoveInst(institution_key) {
+            return inviteInstHierCtrl.user.permissions.remove_inst[institution_key];
+        };
+
+        inviteInstHierCtrl.linkParentStatus = function linkParentStatus() {
+            return inviteInstHierCtrl.institution.parent_institution ? "confirmado" : "não confirmado";
+        };
+
+        inviteInstHierCtrl.linkChildrenStatus = function linkChildrenStatus(institution) {
+            return institution.parent_institution ? "confirmado" : "não confirmado";
+        };
 
         inviteInstHierCtrl.removeChild = function removeChild(institution, ev) {
             $mdDialog.show({

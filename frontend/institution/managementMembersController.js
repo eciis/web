@@ -15,6 +15,7 @@
         manageMemberCtrl.showInvites = false;
         manageMemberCtrl.showRequests = false;
         manageMemberCtrl.showMembers = false;
+        manageMemberCtrl.requests = [];
 
         var currentInstitutionKey = $state.params.institutionKey;
         var invite;
@@ -115,6 +116,10 @@
             return member.key === manageMemberCtrl.user.key;
         };
 
+        manageMemberCtrl.hasRequested = function hasRequested() {
+            return _.find(manageMemberCtrl.requests, request => request.status === 'sent');
+        };
+
         function loadInstitution() {
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
                 getSentInvitations(response.data.sent_invitations);
@@ -195,7 +200,8 @@
             var removeMemberCtrl = this;
             
             removeMemberCtrl.justification = "";
-            
+            removeMemberCtrl.member = member_obj;
+
             removeMemberCtrl.removeMember = function removeMember() {
                 InstitutionService.removeMember(currentInstitutionKey, member_obj, removeMemberCtrl.justification).then(function success() {
                     manageMemberCtrl.removeMember(member_obj);

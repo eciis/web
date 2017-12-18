@@ -52,7 +52,7 @@ def isUserInvited(method):
 
 def childrenToJson(obj):
     """Return the array with json from institution that are obj children."""
-    json = [Institution.make(institution.get(), ['name', 'key', 'state', 'invite'])
+    json = [Institution.make(institution.get(), ['name', 'key', 'state', 'invite', 'parent_institution'])
             for institution in obj.children_institutions]
     return json
 

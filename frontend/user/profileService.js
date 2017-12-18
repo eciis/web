@@ -41,6 +41,7 @@
         profileCtrl.loading = true;
 
         UserService.getUser(user).then(function success(response) {
+
                 profileCtrl.user = response;
                 profileCtrl.loading = false;
         });

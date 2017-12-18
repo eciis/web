@@ -8,7 +8,7 @@ from utils import login_required
 from utils import Utils
 from utils import json_response
 from service_messages import send_message_notification
-from service_messages import send_message_email
+from send_email_hierarchy.remove_member_email_sender import RemoveMemberEmailSender
 
 from handlers.base_handler import BaseHandler
 
@@ -67,11 +67,11 @@ class InstitutionMembersHandler(BaseHandler):
             """ % (justification)
 
         body = message + """
-
         Equipe e-CIS
         """
-        send_message_email(
-            member.email,
-            body,
-            subject
-        )
+        email_sender = RemoveMemberEmailSender(**{
+            'receiver': member.email,
+            'subject': subject,
+            'body': {'body': body}
+        })
+        email_sender.send_email()

@@ -190,6 +190,8 @@
         dialogCtrl.photoUrl = "";
         dialogCtrl.dateToChange = {};
         dialogCtrl.observer = {};
+        dialogCtrl.isAnotherCountry = false;
+        dialogCtrl.steps = [true, false, false];
 
         dialogCtrl.save = function save() {
             if(!dialogCtrl.isEditing) {
@@ -289,9 +291,39 @@
             dialogCtrl.cities = brCidadesEstados.buscarCidadesPorSigla(dialogCtrl.event.federal_state.sigla);
         };
 
+        dialogCtrl.setAnotherCountry = function isAnotherCountry() {
+            clearSelectedState();
+            dialogCtrl.isAnotherCountry = dialogCtrl.event.country !== "Brasil";
+        };
+
+        dialogCtrl.getStep = function getStep(step) {
+            return dialogCtrl.steps[step - 1];
+        };
+
+        dialogCtrl.nextStep = function nextStep() {
+            var currentStep = _.findIndex(dialogCtrl.steps, function(situation) {
+                return situation;
+            });
+            dialogCtrl.steps[currentStep] = false;
+            var nextStep = currentStep + 1;
+            dialogCtrl.steps[nextStep] = true;
+        };
+        
+        dialogCtrl.showGreenButton = function showGreenButton(step) {
+            if(step === 2) {
+                return dialogCtrl.getStep(2) || dialogCtrl.getStep(3);
+            } else {
+                return dialogCtrl.getStep(3);
+            }
+        };
+
+        function clearSelectedState() {
+            dialogCtrl.event.federal_state = "";
+            dialogCtrl.event.city = "";
+        }
+
         function loadFederalStates() {
             dialogCtrl.federalStates = brCidadesEstados.estados;
-            console.log(dialogCtrl.federalStates);
         }
 
         function generatePatch(patch, data) {

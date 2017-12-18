@@ -6,6 +6,7 @@ from utils import Utils
 reload(sys)
 sys.setdefaultencoding('utf8')
 
+
 class EmailSender(object):
 
     def __init__(self, **kwargs):
@@ -13,7 +14,7 @@ class EmailSender(object):
         self.receiver = kwargs['receiver']
         self.html = 'default.html'
         self.body = ""
-    
+
     def send_email(self, email_json=None):
         taskqueue.add(
             url='/api/queue/send-email',
@@ -26,6 +27,3 @@ class EmailSender(object):
                 'json': json.dumps(email_json if email_json else self.body)
             }
         )
-
-
-    

@@ -3,10 +3,6 @@ api_version: 1
 threadsafe: true
 service: worker
 
-libraries:
-- name: jinja2
-  version: latest
-
 handlers:
 - url: /api/queue/.*
   script: worker.app

@@ -80,7 +80,6 @@ class Invite(PolyModel):
         email_sender = InviteUserEmailSender(**{
             'receiver': receiver_email, 
             'subject': subject, 
-            'inst_email': self.institutional_email,
             'institution': self.institution_key.get().acronym,
             'inviter': self.sender_name
         })

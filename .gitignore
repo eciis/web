@@ -528,7 +528,7 @@ frontend/config.js
 # remove index.yaml
 **/*index.yaml  
 
-# Backend tests
+# Backend tests 
 backend/env_tests
 backend/google_appengine
 backend/Pipfile

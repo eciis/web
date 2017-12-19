@@ -18,7 +18,7 @@ def create_message(sender_key):
         'from': {
             'name': name.encode('utf8'),
             'photo_url': sender.photo_url,
-            'instituion': ''
+            'institution': ''
         }
     }
     return json.dumps(message)
@@ -26,10 +26,18 @@ def create_message(sender_key):
 
 def create_entity(entity_key):
     entity_obj = ndb.Key(urlsafe=entity_key).get()
-    name = entity_obj.name if hasattr(entity_obj, 'name') else entity_obj.title
+    class_name = entity_obj.__class__.__name__
+    name = ''
+
+    if class_name == 'Post':
+        institution = entity_obj.institution.get()
+        name = institution.name
+    elif class_name == 'Institution':
+        name = entity_obj.name
+    
     entity = {
         "key": entity_key,
-        "name": name
+        "institution_name": name
     }
     return json.dumps(entity)
 

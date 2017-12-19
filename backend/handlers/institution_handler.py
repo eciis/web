@@ -184,11 +184,8 @@ class InstitutionHandler(BaseHandler):
         enqueue_task('email-members', email_params)
 
         notification_params = {
+            "sender_key": user.key.urlsafe(),
             "entity_type": "DELETED_INSTITUTION",
-            "message": json.dumps({
-                "type": "DELETED_INSTITUTION",
-                "from": user.name.encode('utf8')
-            }),
             "institution_key": institution_key
         }
         enqueue_task('notify-followers', notification_params)

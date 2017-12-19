@@ -71,10 +71,9 @@ class RequestHandler(BaseHandler):
         request.send_response_email(host, "ACCEPT")
 
         entity_type = 'ACCEPTED_LINK'
-        message = {'type': 'ACCEPTED_LINK', 'from': user.name.encode('utf8')}
         send_message_notification(
             request.sender_key.urlsafe(),
-            json.dumps(message),
+            user.key.urlsafe(),
             entity_type,
             institution.key.urlsafe())
 

@@ -47,10 +47,9 @@ class InstitutionMembersHandler(BaseHandler):
 
         if member.state != 'inactive':
             entity_type = 'DELETE_MEMBER'
-            message = {'type': 'DELETE_MEMBER', 'from': user.name.encode('utf8')}
             send_message_notification(
                 member.key.urlsafe(),
-                json.dumps(message),
+                user.key.urlsafe(),
                 entity_type,
                 institution.key.urlsafe())
 

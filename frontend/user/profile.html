@@ -28,20 +28,20 @@
                             account_balance</md-icon>
                         <div class="md-list-item-text" layout="column">
                           <h3><b>{{ profile.institution.name }}</b> </h3>
-                          <div layout="row">
+                          <h5 layout="row" style="margin: 0;">
                             <p md-colors="{color: 'default-teal-600'}">Cargo: </p> 
                             <p style="padding-left:1%">{{ profile.office}}</p>
-                          </div>
-                          <div layout="row">
-                            <p md-colors="{color: 'default-teal-600'}" style="padding-right: 1%">
+                          </h5>
+                          <h5 layout="row" style="margin: 0;">
+                            <p md-colors="{color: 'default-teal-600'}">
                                 Telefone institucional: </p>
-                            <p>{{ profileCtrl.showProperty(profile.phone)}}</p>
-                          </div>
-                          <h4 layout="row">
-                            <p md-colors="{color: 'default-teal-600'}"  style="padding-right: 1%">
+                            <p style="margin-left: 1%;">{{ profileCtrl.showProperty(profile.phone)}}</p>
+                          </h5>
+                          <h5 layout="row" style="margin: 0;">
+                            <p md-colors="{color: 'default-teal-600'}">
                                 Email institucional: </p>
-                            <p>{{profileCtrl.showProperty(profile.email)}}</p>
-                          </h4>
+                            <p style="margin-left: 1%;">{{profileCtrl.showProperty(profile.email)}}</p>
+                          </h5>
                         </div>
                     </md-list-item>
                 </md-list>

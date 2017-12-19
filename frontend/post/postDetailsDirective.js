@@ -513,7 +513,7 @@
             }
         };
 
-        commentCtrl.isPostDeleted = function isPostDeleted() {
+        commentCtrl.isDeletedPost  = function isDeletedPost() {
             return commentCtrl.post.state === 'deleted';
         };
 
@@ -590,7 +590,7 @@
         };
 
         commentCtrl.confirmCommentDeletion = function confirmCommentDeletion(event, reply) {
-            if(commentCtrl.isPostDeleted()) {
+            if(!commentCtrl.isDeletedPost()) {
                 MessageService.showConfirmationDialog(event, 'Excluir Comentário',
                     'Este comentário será excluído e desaparecerá do referente post.'
                 ).then(function() {
@@ -619,11 +619,11 @@
         };
 
         commentCtrl.canReply = function canReply() {
-            return commentCtrl.showReplies && !commentCtrl.isPostDeleted() && !commentCtrl.isInstInactive();
+            return commentCtrl.showReplies && !commentCtrl.isDeletedPost() && !commentCtrl.isInstInactive();
         };
 
         commentCtrl.hideReplies = function hideReplies() {
-            if(commentCtrl.isPostDeleted()) {
+            if(commentCtrl.isDeletedPost()) {
                 var noReplies = commentCtrl.numberOfReplies() === 0;
                 return commentCtrl.saving || noReplies;
             }
@@ -631,7 +631,7 @@
         };
 
         commentCtrl.disableButton = function disableButton() {
-            return commentCtrl.saving || commentCtrl.isPostDeleted() || commentCtrl.isInstInactive();
+            return commentCtrl.saving || commentCtrl.isDeletedPost() || commentCtrl.isInstInactive();
         };
 
         commentCtrl.isInstInactive = function isInstInactive() {

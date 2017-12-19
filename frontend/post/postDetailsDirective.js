@@ -513,6 +513,10 @@
             }
         };
 
+        commentCtrl.isPostDeleted = function isPostDeleted() {
+            return commentCtrl.post.state === 'deleted';
+        };
+
         commentCtrl.isLikedByUser = function isLikedByUser(reply) {
             if (reply) {
                 return _.includes(reply.likes, commentCtrl.user.key);
@@ -586,7 +590,7 @@
         };
 
         commentCtrl.confirmCommentDeletion = function confirmCommentDeletion(event, reply) {
-            if(commentCtrl.post.state !== 'deleted') {
+            if(commentCtrl.isPostDeleted()) {
                 MessageService.showConfirmationDialog(event, 'Excluir Comentário',
                     'Este comentário será excluído e desaparecerá do referente post.'
                 ).then(function() {
@@ -615,11 +619,11 @@
         };
 
         commentCtrl.canReply = function canReply() {
-            return commentCtrl.post.state === 'deleted';
+            return commentCtrl.showReplies && !commentCtrl.isPostDeleted() && !commentCtrl.isInstInactive();
         };
 
         commentCtrl.hideReplies = function hideReplies() {
-            if(commentCtrl.post.state === 'deleted') {
+            if(commentCtrl.isPostDeleted()) {
                 var noReplies = commentCtrl.numberOfReplies() === 0;
                 return commentCtrl.saving || noReplies;
             }
@@ -627,8 +631,7 @@
         };
 
         commentCtrl.disableButton = function disableButton() {
-            var postDeleted = commentCtrl.post.state === 'deleted';
-            return commentCtrl.saving || postDeleted || commentCtrl.isInstInactive();
+            return commentCtrl.saving || commentCtrl.isPostDeleted() || commentCtrl.isInstInactive();
         };
 
         commentCtrl.isInstInactive = function isInstInactive() {

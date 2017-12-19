@@ -308,7 +308,16 @@
             var nextStep = currentStep + 1;
             dialogCtrl.steps[nextStep] = true;
         };
-        
+
+        dialogCtrl.previousStep = function previousStep() {
+            var currentStep = _.findIndex(dialogCtrl.steps, function(situation) {
+                return situation;
+            });
+            dialogCtrl.steps[currentStep] = false;
+            var nextStep = currentStep - 1;
+            dialogCtrl.steps[nextStep] = true;
+        };
+
         dialogCtrl.showGreenButton = function showGreenButton(step) {
             if(step === 2) {
                 return dialogCtrl.getStep(2) || dialogCtrl.getStep(3);

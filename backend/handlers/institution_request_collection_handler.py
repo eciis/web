@@ -11,7 +11,6 @@ from models.institution import Institution
 from models.institution import Address
 from models.factory_invites import InviteFactory
 from models.request_institution import RequestInstitution
-from utils import has_permission
 
 
 def createInstitution(user, data):
@@ -21,6 +20,9 @@ def createInstitution(user, data):
     for property in data:
         if property != 'admin':
             setattr(inst_stub, property, data[property])
+
+    if (data.get("photo_url") is None):
+            inst_stub.photo_url = "app/images/institution.png"
 
     inst_stub.address = Address.create(data.get('address'))
     inst_stub.state = 'pending'
@@ -34,9 +36,13 @@ class InstitutionRequestCollectionHandler(BaseHandler):
 
     @json_response
     @login_required
-    @has_permission(permission_type='analyze_request_inst')
-    def get(self, user):
+    def get(self, user, institution_key):
         """Get requests for new institutions."""
+        user.check_permission(
+            'analyze_request_inst',
+            'User is not allowed to get requests',
+            institution_key)
+
         queryRequests = RequestInstitution.query(
             RequestInstitution.status == 'sent'
         )
@@ -46,7 +52,7 @@ class InstitutionRequestCollectionHandler(BaseHandler):
 
     @login_required
     @json_response
-    def post(self, user):
+    def post(self, user, institution_key):
         """Handler of post requests."""
         data = json.loads(self.request.body)
         host = self.request.host

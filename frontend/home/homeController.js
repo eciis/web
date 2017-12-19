@@ -31,7 +31,7 @@
         };
 
         homeCtrl.goToEvents = function goToEvents() {
-            $state.go('app.events');
+            $state.go('app.user.events');
         };
 
         homeCtrl.goToEvent = function goToEvent(event) {

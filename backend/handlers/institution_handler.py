@@ -7,7 +7,6 @@ import permissions
 from google.appengine.ext import ndb
 
 from utils import Utils
-from utils import has_permission
 from models.invite import Invite
 from utils import login_required
 from utils import json_response
@@ -53,7 +52,7 @@ def isUserInvited(method):
 
 def childrenToJson(obj):
     """Return the array with json from institution that are obj children."""
-    json = [Institution.make(institution.get(), ['name', 'key', 'state', 'invite'])
+    json = [Institution.make(institution.get(), ['name', 'key', 'state', 'invite', 'parent_institution'])
             for institution in obj.children_institutions]
     return json
 
@@ -102,9 +101,9 @@ class InstitutionHandler(BaseHandler):
     @login_required
     def patch(self, user, institution_key):
         """Handler PATCH Request to update Institution."""
-        Utils._assert(not user.has_permission('update_inst', institution_key),
-                      "User is not allowed to edit institution",
-                      NotAuthorizedException)
+        user.check_permission('update_inst',
+                              "User is not allowed to edit institution",
+                              institution_key)
 
         data = self.request.body
         institution = ndb.Key(urlsafe=institution_key).get()
@@ -151,12 +150,16 @@ class InstitutionHandler(BaseHandler):
 
     @login_required
     @json_response
-    @has_permission(permission_type='remove_inst')
     @ndb.transactional(xg=True)
     def delete(self, user, institution_key):
         """Handle DELETE Requests."""
         remove_hierarchy = self.request.get('removeHierarchy')
         institution = ndb.Key(urlsafe=institution_key).get()
+
+        user.check_permission(
+            'remove_inst',
+            'User is not allowed to remove institution',
+            institution_key)
 
         Utils._assert(not type(institution) is Institution,
                       "Key is not an institution", EntityException)

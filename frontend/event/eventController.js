@@ -13,7 +13,7 @@
         eventCtrl.events = [];
 
         eventCtrl.user = AuthService.getCurrentUser();
-        eventCtrl.isLoadingEvents = false;
+        eventCtrl.isLoadingEvents = true;
 
         var LIMIT_CHARACTERS = 100;
 
@@ -33,8 +33,6 @@
 
 
         function loadEvents(deferred) {
-            eventCtrl.isLoadingEvents = true;
-
             EventService.getEvents(actualPage).then(function success(response) {
                 actualPage += 1;
                 moreEvents = response.data.next;
@@ -104,7 +102,7 @@
         }
 
         eventCtrl.recognizeUrl =  function recognizeUrl(event) {
-            if(event.text){
+            if(event && event.text){
                 var text = Utils.recognizeUrl(event.text);
                 text = adjustText(text, event);
                 return text;
@@ -149,6 +147,13 @@
             $state.go('app.event', {eventKey: event.key});
         };
 
+
+        eventCtrl.endInOtherMonth = function endInOtherMonth() {
+            const startMonth = new Date(eventCtrl.event.start_time).getMonth();
+            const endMonth = new Date(eventCtrl.event.end_time).getMonth();
+            return startMonth !== endMonth;
+        };
+
         function isInstitutionAdmin(event) {
             return _.includes(_.map(eventCtrl.user.institutions_admin, Utils.getKeyFromUrl),
                 Utils.getKeyFromUrl(event.institution_key));
@@ -164,6 +169,20 @@
         (function main() {
             eventCtrl.loadMoreEvents();
         })();
+    });
+
+    app.directive("eventDetails", function() {
+        return {
+            restrict: 'E',
+            templateUrl: "app/event/event_details.html",
+            controllerAs: "eventDetailsCtrl",
+            controller: "EventController",
+            scope: {},
+            bindToController: {
+                event: '=',
+                isEventPage: '=',
+            }
+        };
     });
 
     app.controller('EventDialogController', function EventDialogController(MessageService,

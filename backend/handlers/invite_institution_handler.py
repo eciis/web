@@ -5,21 +5,16 @@ import json
 
 from utils import login_required
 from utils import json_response
-from utils import is_admin
 from utils import Utils
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from handlers.base_handler import BaseHandler
 from models.factory_invites import InviteFactory
-from utils import has_permission
-
 
 class InviteInstitutionHandler(BaseHandler):
     """Invite Institution Handler."""
 
     @json_response
     @login_required
-    @has_permission(permission_type='send_invite_inst')
-    @is_admin
     def post(self, user):
         """Handle POST Requests."""
         data = json.loads(self.request.body)
@@ -31,6 +26,10 @@ class InviteInstitutionHandler(BaseHandler):
         invite = InviteFactory.create(data, type_of_invite)
 
         institution = invite.institution_key.get()
+        user.check_permission(
+            'send_invite_inst',
+            'User is not allowed to post invite', 
+            institution.key.urlsafe())
         Utils._assert(institution.state == 'inactive',
                       "The institution has been deleted", NotAuthorizedException)
 

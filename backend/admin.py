@@ -68,7 +68,7 @@ def getGravatar(email):
 def createInstitution(data, user):
     """Create a new Institution."""
 
-    institutionImage = "http://eciis-splab.appspot.com/images/institution.jpg"
+    institutionImage = "http://eciis-splab.appspot.com/images/institution.png"
     institution = Institution()
     institution.name = data.get('name')
     institution.acronym = data.get('acronym')
@@ -304,7 +304,7 @@ class ResetHandler(BaseHandler):
             'testeeciis@gmail.com',
             'teste@eciis.com'
         ]
-        admin.photo_url = "app/images/avatar.jpg"
+        admin.photo_url = "app/images/avatar.png"
         admin.institutions = []
         admin.follows = []
         admin.institutions_admin = []
@@ -322,7 +322,7 @@ class ResetHandler(BaseHandler):
             'street': 'Avenida Aprígio Veloso',
             'neighbourhood': 'Universitário',
             'city': 'Campina Grande',
-            'state': 'Paraíba',
+            'federal_state': 'Paraíba',
             'cep': '58428-830',
             'country': 'Brasil'
         }
@@ -361,7 +361,7 @@ class ResetHandler(BaseHandler):
             'neighbourhood': 'Prata',
             'city': 'Campina Grande',
             'cep': '58400-565',
-            'state': 'Paraíba',
+            'federal_state': 'Paraíba',
             'country': 'Brasil'
         }
         address_key = Address.create(address_data)
@@ -399,7 +399,7 @@ class ResetHandler(BaseHandler):
             'neighbourhood': 'Centenário',
             'city': 'Campina Grande',
             'cep': '58428-080',
-            'state': 'Paraíba',
+            'federal_state': 'Paraíba',
             'country': 'Brasil'
         }
         address_key = Address.create(address_data)
@@ -470,20 +470,22 @@ class ResetHandler(BaseHandler):
         mayza_post.last_modified_by = mayza.key
         mayza_post.put()
         add_comments_to_post(mayza, andre, mayza_post, mayza.institutions[0], 2)
+        mayza.add_permissions(['edit_post', 'remove_post'], mayza_post.key.urlsafe())
 
         # POST of Mayza To Certbio Institution with image
-        mayza_post_comIMG = Post()
-        mayza_post_comIMG.title = "Post do CERTBIO com imagem"
-        mayza_post_comIMG.photo_url = "https://workingatbooking.com/content/uploads/2017/04/womenintech_heroimage.jpg"
-        mayza_post_comIMG.text = "Lorem ipsum dolor sit amet, consectetur \
+        post_with_image = Post()
+        post_with_image.title = "Post do CERTBIO com imagem"
+        post_with_image.photo_url = "https://workingatbooking.com/content/uploads/2017/04/womenintech_heroimage.jpg"
+        post_with_image.text = "Lorem ipsum dolor sit amet, consectetur \
         adipiscing elit. Praesent maximus id est in dapibus. Fusce lorem \
         libero, vulputate quis purus maximus, auctor tempus enim. Sed."
-        mayza_post_comIMG.author = mayza.key
-        mayza_post_comIMG.institution = certbio.key
-        mayza_post_comIMG.last_modified_by = mayza.key
-        mayza_post_comIMG.put()
-        add_comments_to_post(mayza, jorge, mayza_post_comIMG,
+        post_with_image.author = mayza.key
+        post_with_image.institution = certbio.key
+        post_with_image.last_modified_by = mayza.key
+        post_with_image.put()
+        add_comments_to_post(mayza, jorge, post_with_image,
                              mayza.institutions[0], 1)
+        mayza.add_permissions(['edit_post', 'remove_post'], post_with_image.key.urlsafe())
 
         # POST of André To SPLAB Institution
         andre_post = Post()
@@ -506,6 +508,7 @@ class ResetHandler(BaseHandler):
         andre_post.last_modified_by = andre.key
         andre_post.put()
         add_comments_to_post(andre, mayza, andre_post, andre.institutions[0], 3)
+        andre.add_permissions(['edit_post', 'remove_post'], andre_post.key.urlsafe())
 
         # POST of Dalton To e-cis Institution
         dalton_post = Post()
@@ -529,6 +532,7 @@ class ResetHandler(BaseHandler):
         dalton_post.last_modified_by = dalton.key
         dalton_post.put()
         add_comments_to_post(dalton, jorge, dalton_post, dalton.institutions[0], 2)
+        dalton.add_permissions(['edit_post', 'remove_post'], dalton_post.key.urlsafe())
 
         # POST of Dalton To CERTBIO Institution
         dalton_postCertbio = Post()
@@ -540,6 +544,7 @@ class ResetHandler(BaseHandler):
         dalton_postCertbio.put()
         add_comments_to_post(dalton, jorge, dalton_postCertbio,
                              dalton.institutions[0], 1)
+        dalton.add_permissions(['edit_post', 'remove_post'], dalton_postCertbio.key.urlsafe())
 
         # POST of Jorge To SPLAB Institution
         jorge_post = Post()
@@ -549,6 +554,7 @@ class ResetHandler(BaseHandler):
         jorge_post.institution = splab.key
         jorge_post.last_modified_by = jorge.key
         jorge_post.put()
+        jorge.add_permissions(['edit_post', 'remove_post'], jorge_post.key.urlsafe())
 
         # POST of Jorge To e-cis Institution
         jorge_post_eCIIS = Post()
@@ -572,6 +578,7 @@ class ResetHandler(BaseHandler):
         jorge_post_eCIIS.last_modified_by = jorge.key
         jorge_post_eCIIS.put()
         add_comments_to_post(jorge, mayza, jorge_post_eCIIS, jorge.institutions[0], 3)
+        jorge.add_permissions(['edit_post', 'remove_post'], jorge_post_eCIIS.key.urlsafe())
 
         # Side efect of a post
         jorge.posts = [jorge_post.key, jorge_post_eCIIS.key]
@@ -583,14 +590,14 @@ class ResetHandler(BaseHandler):
         andre.posts = [andre_post.key]
         andre.put()
 
-        mayza.posts = [mayza_post.key, mayza_post_comIMG.key]
+        mayza.posts = [mayza_post.key, post_with_image.key]
         mayza.put()
 
         eciis.posts = [jorge_post_eCIIS.key, dalton_post.key]
         eciis.put()
 
         certbio.posts = [dalton_postCertbio.key,
-                         mayza_post.key, mayza_post_comIMG.key]
+                         mayza_post.key, post_with_image.key]
         certbio.put()
 
         splab.posts = [jorge_post.key, andre_post.key]

@@ -1,53 +1,6 @@
 <md-dialog flex-gt-lg="50" flex-lg="50">
 	<div layout="row">
-		<md-card flex layout="column" ng-if="!requestInvCtrl.institution">
-			<md-card-header layout="row" layout-align="center center">
-				<md-card-header-text><span class="md-title">Busque a instituição que você faz parte.</span></md-card-header-text>
-			    <md-button class="md-icon-button" ng-click="requestInvCtrl.cancelDialog()">
-			        <md-icon>close</md-icon>
-			    </md-button>
-			</md-card-header>
-			<md-card-content>
-				<div md-theme="input" class="search-field">
-				    <form ng-submit="requestInvCtrl.showMenu($event)">
-				      	<md-input-container class="md-block" flex-gt-sm>
-				          <input placeholder="Nome da instituição" ng-model="requestInvCtrl.search" flex-gt-sm autocomplete="off">
-				          <md-icon class="material-icons">&#xE8B6;</md-icon>
-				        </md-input-container>
-				    </form>
-				</div>
-				<md-list flex>
-				    <md-list-item ng-repeat="institution in requestInvCtrl.institutions" ng-click="requestInvCtrl.selectInstitution(institution)"
-					    	ng-class="requestInvCtrl.showFullInformation(institution)? 'md-3-line': ''"
-					    	ng-disabled="requestInvCtrl.showFullInformation(institution)">
-					    <div ng-if="!requestInvCtrl.showFullInformation(institution)" class="md-list-item-text" layout-align="center center"
-					    		layout="column" style='text-align: center'>
-				            {{ institution.name }}
-					    </div>
-					    <div class="md-list-item-text" ng-if="requestInvCtrl.showFullInformation(institution)">
-					    	<div layout-align="center center" layout="column" layout-padding>
-						            <h3><b>{{ requestInvCtrl.institutionSelect.name }}</b></h3>
-						            <h4>{{ requestInvCtrl.institutionSelect.email }}</h4>
-						            <h4>{{ requestInvCtrl.getFullAddress(requestInvCtrl.institutionSelect) }}</h4>
-					            <p align="center">
-						            {{ requestInvCtrl.institutionSelect.description }}
-					            </p>
-					    	</div>
-					    </div>
-				    </md-list-item>
-				    <md-list-item ng-if="requestInvCtrl.showMessage()">
-				    	<div class="md-list-item-text" layout-align="center center" layout="column"
-					    style='text-align: center'>
-				            <p>Infelizmente sua instituição não está cadastrada. Para cadastrar pressione o botão abaixo:</p>
-				            <md-checkbox ng-model="requestInvCtrl.canCreate" class="md-primary" aria-label="Checkbox 1">
-						        Manifesto que tenho autonomia para cadastrar a  instituição
-						    </md-checkbox>
-                    		<md-button ng-class="requestInvCtrl.canCreate?'green-button':''" ng-disabled="!requestInvCtrl.canCreate" ng-click="requestInvCtrl.createInst()">Quero criar minha instituição</md-button>
-					    </div>
-				    </md-list-item>
-				</md-list>
-			</md-card-content>
-		</md-card>
+		<!-- Request to be member -->
 		<md-card flex ng-if="requestInvCtrl.request || requestInvCtrl.institution">
 			<md-card-header layout="row" layout-align="center center">
 				<md-card-header-text>

@@ -4,7 +4,7 @@
     var app = angular.module("app");
 
     app.controller("LoginController", function LoginController(AuthService, MessageService, $state, $mdDialog, 
-            $stateParams, $location) {
+            $stateParams, $location, $window) {
         var loginCtrl = this;
 
         loginCtrl.user = {};
@@ -50,17 +50,21 @@
         loginCtrl.resetPassword = function resetPassword(ev) {
             var confirm = $mdDialog.prompt()
                 .title('Esqueceu sua senha?')
-                .textContent('Digite seu email e vamos lhe enviar um link para criar uma nova senha.')
+                .textContent('Digite seu email e enviaremos um link para criar uma nova senha.')
                 .placeholder('Digite seu email')
                 .ariaLabel('Digite seu emai')
                 .targetEvent(ev)
                 .required(true)
-                .ok("Resetar Senha")
+                .ok("Redefinir Senha")
                 .cancel("Cancelar");
 
             $mdDialog.show(confirm).then(function(email) {
                 AuthService.resetPassword(email);
             });
+        };
+
+        loginCtrl.goToLandingPage = function goToLandingPage() {
+            $window.open(Config.LANDINGPAGE_URL, '_self');
         };
 
         function redirectTo(path) {

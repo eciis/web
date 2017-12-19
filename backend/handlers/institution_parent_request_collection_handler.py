@@ -5,7 +5,6 @@ from google.appengine.ext import ndb
 import json
 from utils import login_required
 from utils import json_response
-from utils import is_admin
 from utils import Utils
 from custom_exceptions.entityException import EntityException
 from handlers.base_handler import BaseHandler
@@ -20,8 +19,9 @@ class InstitutionParentRequestCollectionHandler(BaseHandler):
     @login_required
     def get(self, user, institution_key):
         """Get requests for parent links."""
+        inst_key_obj = ndb.Key(urlsafe=institution_key)
         queryRequests = RequestInstitutionParent.query(
-            RequestInstitutionParent.institution_requested_key == ndb.Key(urlsafe=institution_key),
+            ndb.OR(RequestInstitutionParent.institution_requested_key == inst_key_obj, RequestInstitutionParent.institution_key == inst_key_obj),
             RequestInstitutionParent.status == 'sent'
         )
 
@@ -31,9 +31,13 @@ class InstitutionParentRequestCollectionHandler(BaseHandler):
 
     @login_required
     @json_response
-    @is_admin
     def post(self, user, institution_key):
         """Handler of post requests."""
+        user.check_permission(
+            'send_link_inst_request',
+            'User is not allowed to send request', 
+            institution_key)
+
         data = json.loads(self.request.body)
         host = self.request.host
         inst_parent_request_type = 'REQUEST_INSTITUTION_PARENT'

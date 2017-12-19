@@ -62,6 +62,7 @@
               <a href class="md-title hyperlink" ng-if="inviteInstHierCtrl.isActive(inviteInstHierCtrl.institution.parent_institution)">
                 {{ inviteInstHierCtrl.institution.parent_institution.name }}
               </a>
+              <h3>Status do vínculo: {{inviteInstHierCtrl.linkParentStatus()}}</h3>
               <h4 ng-if="inviteInstHierCtrl.institution.parent_institution.invite">
                 Nome Sugerido: {{ inviteInstHierCtrl.getSuggestedName(inviteInstHierCtrl.institution.parent_institution) }}
               </h4>
@@ -104,6 +105,7 @@
                   <a href class="md-title hyperlink">
                   {{ institution.name }}
                   </a>
+                  <h3>Status do vínculo: {{inviteInstHierCtrl.linkChildrenStatus(institution)}}</h3>
                   <h4 ng-if="institution.invite">Nome Sugerido: {{ inviteInstHierCtrl.getSuggestedName(institution) }}</h4>
                 </div>
                 <div ng-if="!inviteInstHierCtrl.isActive(institution)">
@@ -116,7 +118,7 @@
                 <md-button ng-click="inviteInstHierCtrl.removeLink(institution, false)">
                   <md-icon md-colors="{color: 'red-700'}" title="Remover conexão">link</md-icon>
                 </md-button>
-                <md-button ng-click="inviteInstHierCtrl.removeChild(institution)">
+                <md-button ng-if="inviteInstHierCtrl.canRemoveInst(institution.key)" ng-click="inviteInstHierCtrl.removeChild(institution)">
                   <md-icon md-colors="{color: 'red-700'}" title="Remover institutição">delete</md-icon>
                 </md-button>
               </div>
@@ -125,12 +127,12 @@
         </md-card-content>
     </md-card>
     <md-card>
-        <md-toolbar md-colors="{background: 'teal-500'}" layout="row" class="clickable-no-hover"
+        <md-toolbar md-colors="(inviteInstHierCtrl.hasRequested()) ? {background: 'light-green-500'} : {background: 'teal-500'}" layout="row" class="clickable-no-hover"
           ng-click="inviteInstHierCtrl.toggleElement('showRequestInvites')">
           <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
             <h1>
-              <md-icon>link</md-icon>
-              Vinculos pendentes
+              <md-icon ng-class="(inviteInstHierCtrl.hasRequested()) ? 'notification-badge' : ''" data-badge>feedback</md-icon>
+              <span md-colors="{color: 'grey-50'}">Vinculos pendentes</span>
             </h1>
             <span flex md-truncate></span>
             <md-button class="md-icon-button md-secondary">

@@ -24,11 +24,12 @@ class InstitutionHierarchyHandler(BaseHandler):
     @login_required
     @ndb.transactional(xg=True)
     def delete(self, user, institution_key, institution_link):
-        Utils._assert(not user.has_permission('remove_link', institution_key),
-                      "User is not allowed to remove link between institutions",
-                      NotAuthorizedException)
-
         """Handle delete link between institutions."""
+
+        user.check_permission('remove_link',
+                              "User is not allowed to remove link between institutions",
+                              institution_link)
+
         is_parent = self.request.get('isParent')
         institution = ndb.Key(urlsafe=institution_key).get()
         institution_link = ndb.Key(urlsafe=institution_link).get()
@@ -43,11 +44,14 @@ class InstitutionHierarchyHandler(BaseHandler):
                       "The institution has been deleted", NotAuthorizedException)
 
         institution.remove_link(institution_link, is_parent)
-        admin = institution_link.admin
+        user.remove_permission('remove_link', institution_link.key.urlsafe())
+        admin = institution_link.admin.get()
+        if is_parent == "true":
+            admin.remove_permission("remove_inst", institution.key.urlsafe())
         entity_type = 'INSTITUTION'
         message = {'type': 'INSTITUTION', 'from': user.name.encode('utf8')}
         send_message_notification(
-            admin.urlsafe(),
+            admin.key.urlsafe(),
             json.dumps(message),
             entity_type,
             institution_link.key.urlsafe())

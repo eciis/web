@@ -5,11 +5,10 @@ from firebase import send_notification
 from google.appengine.api import mail
 import logging
 from google.appengine.ext import ndb
-from models.institution import Institution
-from models.post import Post
 from utils import json_response
 from service_messages import send_message_notification
 from service_messages import send_message_email
+from jinja2 import Environment, FileSystemLoader
 
 
 class BaseHandler(webapp2.RequestHandler):
@@ -60,12 +59,14 @@ class SendEmailHandler(BaseHandler):
         """Method of send new email."""
         invitee = self.request.get('invitee')
         subject = self.request.get('subject')
-        body = self.request.get('body')
-
+        env = Environment(loader=FileSystemLoader('templates'))
+        template = env.get_template(self.request.get('html'))
+        html_content = json.loads(self.request.get('json'))
         mail.send_mail(sender="e-CIS <eciis@splab.ufcg.edu.br>",
                        to="<%s>" % invitee,
                        subject=subject,
-                       body=body)
+                       body="",
+                       html=template.render(html_content))
 
 
 class RemoveInstitutionHandler(BaseHandler):
@@ -125,7 +126,7 @@ class EmailMembersHandler(BaseHandler):
                 message = message + """pelo seguinte motivo:
                 '%s'
                 """ % justification
-            
+
             send_message_email(
                 member.email,
                 message,

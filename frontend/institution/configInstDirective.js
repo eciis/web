@@ -16,7 +16,6 @@
         configInstCtrl.phoneRegex = "[0-9]{2}[\\s][0-9]{4,5}[-][0-9]{4,5}";
         configInstCtrl.cepRegex = "([0-9]{5}[-][0-9]{3})";
         configInstCtrl.newInstitution = {
-            photo_url: "app/images/institution.jpg",
             email: configInstCtrl.user.email[0]
         };
         configInstCtrl.steps = [true, false, false];
@@ -33,7 +32,7 @@
         };
 
         function updateAddressState() {
-            configInstCtrl.address.state = configInstCtrl.selectedState && configInstCtrl.selectedState.nome;
+            configInstCtrl.address.federal_state = configInstCtrl.selectedState && configInstCtrl.selectedState.nome;
         }
 
         function loadAddress() {
@@ -47,7 +46,7 @@
             configInstCtrl.states = brCidadesEstados.estados;
             var isANewInstitution = institutionKey == undefined;
             if(!isANewInstitution) {
-                var stateName = configInstCtrl.address.state;
+                var stateName = configInstCtrl.address.federal_state;
                 var stateIndex = configInstCtrl.states.findIndex((state) => {
                     return state.nome === stateName;
                 });
@@ -266,7 +265,7 @@
         };
 
         configInstCtrl.showImage = function showImage() {
-            return configInstCtrl.newInstitution.photo_url !== "app/images/institution.jpg" && !_.isEmpty(configInstCtrl.newInstitution.photo_url);
+            return configInstCtrl.newInstitution.photo_url !== "app/images/institution.png" && !_.isEmpty(configInstCtrl.newInstitution.photo_url);
         };
 
         configInstCtrl.getStep = function getStep(step) {
@@ -354,11 +353,17 @@
                 configInstCtrl.newInstitution = response.data;
                 configInstCtrl.suggestedName = configInstCtrl.newInstitution.name;
                 currentPortfoliourl = configInstCtrl.newInstitution.portfolio_url;
-                loadAddress();
+                loadAddress(); 
+                setDefaultPhotoUrl();
                 observer = jsonpatch.observe(configInstCtrl.newInstitution);
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
+        }
+
+        function setDefaultPhotoUrl() {
+            var defaultPhotoUrl = "app/images/institution.png";
+            configInstCtrl.newInstitution.photo_url = configInstCtrl.newInstitution.photo_url || defaultPhotoUrl;
         }
 
         (function main(){

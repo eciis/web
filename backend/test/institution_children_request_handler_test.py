@@ -71,9 +71,9 @@ class InstitutionChildrenRequestHandlerTest(TestBaseHandler):
 
         exception_message = self.get_message_exception(ex.exception.message)
         self.assertEqual(
-            "Error! User is not admin",
+            "Error! User is not allowed to accept link between institutions",
             exception_message,
-            "Expected error message is Error! User is not admin")
+            "Expected error message is Error! User is not allowed to accept link between institutions")
 
     @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
     @mock.patch('service_messages.send_message_notification')
@@ -130,7 +130,7 @@ def initModels(cls):
     cls.inst_requested.address = cls.address
     cls.inst_requested.put()
     # Update Institutions admin by other user
-    cls.other_user.institutions_admin = [cls.inst_requested.key]
+    cls.other_user.add_permission("answer_link_inst_request", cls.inst_requested.key.urlsafe())
     cls.other_user.put()
     # new Request
     cls.request = RequestInstitutionChildren()

@@ -2,6 +2,7 @@
 from search_module.search_user import SearchUser
 from google.appengine.ext import ndb
 from custom_exceptions.fieldException import FieldException
+from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
 
 import random
@@ -58,11 +59,11 @@ class InstitutionProfile(ndb.Model):
 
     @staticmethod
     def is_valid(profiles):
-        """Verify the user profile."""
-        for profile in profiles:
-            if not profile.office:
-                return False
-        return True
+        """Verify the new user profile."""
+        new_profile = profiles[len(profiles) - 1]
+        if new_profile.office:
+            return True
+        return False
 
     @staticmethod
     def create(data):
@@ -233,7 +234,7 @@ class User(ndb.Model):
         entity_key -- ndb urlsafe of the object binded to the permission
         """
         for permission in list_permissions:
-            self.add_permission(permission,entity_key);
+            self.add_permission(permission, entity_key)
 
     def remove_permission(self, permission_type, entity_key):
         """Remove permission.key from the user permissions list.
@@ -246,11 +247,7 @@ class User(ndb.Model):
         self.put()
 
     def has_permission(self, permission_type, entity_key=None):
-        """Verify existence of permission.key on user permissions list.
-
-        It trys to access the permission.key, if exist, returns the value,
-        otherwise, except and return False.
-
+        """Verify if user has permission on determinate entity.
 
         Arguments:
         permission_type -- permission name that will be used to verify authorization
@@ -258,11 +255,24 @@ class User(ndb.Model):
         """
         try:
             if entity_key:
-                return self.permissions[permission_type][entity_key]
-            else:
-                return permission_type in self.permissions
+                if self.permissions[permission_type][entity_key]:
+                    return True
+            return False
         except:
             return False
+
+    def check_permission(self, permission_type, message_exception, entity_key=None):
+        """Throw exception when user hasn't permission.
+
+        Arguments:
+        permission_type -- permission name that will be used to verify authorization
+        message_exception -- to be throwed when no user is not allowed
+        entity_key -- ndb urlsafe of the object binded to the permission
+        """
+        if self.has_permission(permission_type, entity_key):
+            return True
+        else:
+            raise NotAuthorizedException(message_exception)
 
     def disable_account(self):
         """Desable user account.

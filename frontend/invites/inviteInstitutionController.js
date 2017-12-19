@@ -46,6 +46,8 @@
 
             if (!invite.isValid()) {
                 MessageService.showToast('Convite inválido!');
+            } else if (!inviteInstCtrl.user.hasPermission('analyze_request_inst')) {
+                MessageService.showToast('Você não tem permissão para enviar este tipo de convite.');
             } else {
                 var suggestionInstName = inviteInstCtrl.invite.suggestion_institution_name;
                 promise = InstitutionService.searchInstitutions(suggestionInstName, INSTITUTION_STATE, 'institution');
@@ -54,6 +56,37 @@
                 });
                 return promise;
             }
+        };
+
+        inviteInstCtrl.acceptRequest = function acceptRequest(request) {
+            var promise = RequestInvitationService.acceptRequestInst(request.key);
+            promise.then(function success() {
+                MessageService.showToast("Solicitação aceita!");
+                _.remove(inviteInstCtrl.sent_requests, function(req) {
+                    return req == request;
+                });
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
+            });
+            return promise;
+        };
+
+        inviteInstCtrl.rejectRequest = function rejectInvite(event, request){
+            var promise = RequestInvitationService.showRejectDialog(event);
+
+            promise.then(function() {
+                RequestInvitationService.rejectRequestInst(request.key).then(function success() {
+                    MessageService.showToast("Solicitação rejeitada!");
+                    _.remove(inviteInstCtrl.sent_requests, function(req) {
+                        return req == request;
+                    });
+                }, function error(response) {
+                    MessageService.showToast(response.data.msg);
+                });
+            }, function() {
+                MessageService.showToast('Cancelado');
+            });
+            return promise;
         };
 
         inviteInstCtrl.showDialogOrSendInvite = function showDialogOrSendInvite(data, ev) {
@@ -123,7 +156,8 @@
         };
 
         function loadSentRequests() {
-            RequestInvitationService.getRequestsInst().then(function success(requests) {
+            var institution_key = inviteInstCtrl.user.current_institution.key;
+            RequestInvitationService.getRequestsInst(institution_key).then(function success(requests) {
                 var isSentRequest = createRequestSelector('sent', 'REQUEST_INSTITUTION');
                 inviteInstCtrl.sent_requests = requests.filter(isSentRequest);
             }, function error(response) {

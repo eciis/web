@@ -6,7 +6,7 @@ FRONTEND_YAML=frontend/frontend.yaml
 BACKEND_YAML=backend/backend.yaml
 WORKER_YAML=backend/worker.yaml
 
-DOMAIN = "eciis-splab.appspot.com"
+DOMAIN="eciis-splab.appspot.com"
 
 BACKEND_DOMAIN="backend.$DOMAIN"
 

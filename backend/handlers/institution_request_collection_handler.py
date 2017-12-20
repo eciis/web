@@ -22,7 +22,7 @@ def createInstitution(user, data):
             setattr(inst_stub, property, data[property])
 
     if (data.get("photo_url") is None):
-            inst_stub.photo_url = "app/images/institution.jpg"
+            inst_stub.photo_url = "app/images/institution.png"
 
     inst_stub.address = Address.create(data.get('address'))
     inst_stub.state = 'pending'

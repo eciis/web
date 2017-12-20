@@ -10,6 +10,7 @@ from models.post import Post
 from utils import json_response
 from service_messages import send_message_notification
 from service_messages import send_message_email
+from jinja2 import Environment, FileSystemLoader
 
 
 class BaseHandler(webapp2.RequestHandler):
@@ -36,16 +37,16 @@ class SendNotificationHandler(BaseHandler):
     @json_response
     def post(self):
         """Method of create new task for send notification."""
-        user_key = self.request.get("user_key")
+        receiver_key = self.request.get("receiver_key")
         message = json.loads(self.request.get("message"))
         entity_type = self.request.get("entity_type")
-        entity_key = self.request.get("entity_key")
+        entity = json.loads(self.request.get("entity"))
 
         send_notification(
-            user_key,
+            receiver_key,
             message,
             entity_type,
-            entity_key
+            entity
         )
 
 
@@ -60,12 +61,14 @@ class SendEmailHandler(BaseHandler):
         """Method of send new email."""
         invitee = self.request.get('invitee')
         subject = self.request.get('subject')
-        body = self.request.get('body')
-
+        env = Environment(loader=FileSystemLoader('templates'))
+        template = env.get_template(self.request.get('html'))
+        html_content = json.loads(self.request.get('json'))
         mail.send_mail(sender="e-CIS <eciis@splab.ufcg.edu.br>",
                        to="<%s>" % invitee,
                        subject=subject,
-                       body=body)
+                       body="",
+                       html=template.render(html_content))
 
 
 class RemoveInstitutionHandler(BaseHandler):
@@ -87,21 +90,20 @@ class PostNotificationHandler(BaseHandler):
 
     def post(self):
         """Handle post requests."""
-        post_author_key = self.request.get('author_key')
-        current_user_key = self.request.get('user_key')
-        user_name = self.request.get('user_name')
-        post_key = self.request.get('post_key')
+        post_author_key = self.request.get('receiver_key')
+        sender_key = self.request.get('sender_key')
+        post_key = self.request.get('entity_key')
+        entity_type = self.request.get('entity_type')
+        
         subscribers = ndb.Key(urlsafe=post_key).get().subscribers
 
-        entity_type = self.request.get('entity_type')
-        message = {'type': entity_type, 'from': user_name.encode('utf8')}
-        userIsAuthor = post_author_key == current_user_key
+        user_is_author = post_author_key == sender_key
         for subscriber in subscribers:
-            subscriberIsCurrentUser = subscriber.urlsafe() == current_user_key
-            if not (userIsAuthor and subscriberIsCurrentUser) and not subscriberIsCurrentUser:
+            subscriber_is_sender = subscriber.urlsafe() == sender_key
+            if not (user_is_author and subscriber_is_sender) and not subscriber_is_sender:
                 send_message_notification(
                     subscriber.urlsafe(),
-                    json.dumps(message),
+                    sender_key,
                     entity_type,
                     post_key
                 )
@@ -125,7 +127,7 @@ class EmailMembersHandler(BaseHandler):
                 message = message + """pelo seguinte motivo:
                 '%s'
                 """ % justification
-            
+
             send_message_email(
                 member.email,
                 message,
@@ -138,9 +140,9 @@ class NotifyFollowersHandler(BaseHandler):
 
     def post(self):
         """Send notifications to institution followers."""
-        inst_key = self.request.get('institution_key')
-        message = self.request.get('message')
+        sender_key = self.request.get('sender_key')
         entity_type = self.request.get('entity_type')
+        inst_key = self.request.get('institution_key')
 
         institution = ndb.Key(urlsafe=inst_key).get()
 
@@ -150,9 +152,9 @@ class NotifyFollowersHandler(BaseHandler):
             if is_active:
                 send_message_notification(
                     follower.key.urlsafe(),
-                    message,
+                    sender_key,
                     entity_type,
-                    institution.key.urlsafe()
+                    inst_key
                 )
 
 

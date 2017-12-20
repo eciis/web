@@ -68,7 +68,7 @@ def getGravatar(email):
 def createInstitution(data, user):
     """Create a new Institution."""
 
-    institutionImage = "http://eciis-splab.appspot.com/images/institution.jpg"
+    institutionImage = "http://eciis-splab.appspot.com/images/institution.png"
     institution = Institution()
     institution.name = data.get('name')
     institution.acronym = data.get('acronym')
@@ -304,7 +304,7 @@ class ResetHandler(BaseHandler):
             'testeeciis@gmail.com',
             'teste@eciis.com'
         ]
-        admin.photo_url = "app/images/avatar.jpg"
+        admin.photo_url = "app/images/avatar.png"
         admin.institutions = []
         admin.follows = []
         admin.institutions_admin = []

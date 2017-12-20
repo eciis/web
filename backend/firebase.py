@@ -38,10 +38,10 @@ def firebase_post(path, value=None):
     response, content = _get_http().request(path, method='POST', body=value)
     return json.loads(content)
 
-def send_notification(user, message, entity_type, entity_key):
+def send_notification(user, message, entity_type, entity):
     url = '{}/notifications/{}.json'.format(FIREBASE_URL, user)
     message['status'] = 'NEW'
     message['timestamp'] = datetime.datetime.now().isoformat()
     message['entity_type'] = entity_type
-    message['entity_key'] = entity_key
+    message['entity'] = entity
     firebase_post(url, value=json.dumps(message))

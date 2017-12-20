@@ -22,16 +22,6 @@ class LikeException(Exception):
             message or 'User already made this action in publication.')
 
 
-def send_like_notification(sender, receiver_key, entity_type, entity_key):
-    """Send notification of like comments or post."""
-    message = {'type': entity_type, 'from': sender.name.encode('utf8')}
-    send_message_notification(
-        receiver_key,
-        json.dumps(message),
-        entity_type,
-        entity_key)
-
-
 class LikeHandler(BaseHandler):
     """Like Handler."""
 
@@ -75,7 +65,13 @@ class LikeHandler(BaseHandler):
 
             isAuthorComment = comment['author_key'] != user.key.urlsafe()
             if comment and isAuthorComment:
-                send_like_notification(user, comment['author_key'], entity_type, post.key.urlsafe())
+                receiver_key = comment['author_key']
+                send_message_notification(
+                    receiver_key,
+                    user.key.urlsafe(), 
+                    entity_type, 
+                    post.key.urlsafe()
+                )
         else:
             Utils._assert(user.is_liked_post(post.key),
                       "User already liked this publication", NotAuthorizedException)
@@ -83,10 +79,9 @@ class LikeHandler(BaseHandler):
             post.like(user.key)
 
             params = {
-                'author_key': post.author.urlsafe(),
-                'user_key': user.key.urlsafe(),
-                'user_name': user.name,
-                'post_key': post.key.urlsafe(),
+                'receiver_key': post.author.urlsafe(),
+                'sender_key': user.key.urlsafe(),
+                'entity_key': post.key.urlsafe(),
                 'entity_type': entity_type
             }
 

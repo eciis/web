@@ -5,7 +5,6 @@ from google.appengine.ext import ndb
 import json
 from utils import login_required
 from utils import json_response
-from utils import is_admin
 from utils import Utils
 from custom_exceptions.entityException import EntityException
 from handlers.base_handler import BaseHandler
@@ -32,9 +31,13 @@ class InstitutionChildrenRequestCollectionHandler(BaseHandler):
 
     @login_required
     @json_response
-    @is_admin
     def post(self, user, institution_key):
         """Handler of post requests."""
+        user.check_permission(
+            'send_link_inst_request',
+            'User is not allowed to send request', 
+            institution_key)
+
         data = json.loads(self.request.body)
         host = self.request.host
         inst_children_request_type = 'REQUEST_INSTITUTION_CHILDREN'

@@ -138,7 +138,7 @@
         function makeUrl(institutionKey){
             var currentUrl = window.location.href;
             currentUrl = currentUrl.split('#');
-            return currentUrl[0] + $state.href('app.institution', {institutionKey: institutionKey});
+            return currentUrl[0] + $state.href('app.institution.timeline', {institutionKey: institutionKey});
         }
 
         (function main () {

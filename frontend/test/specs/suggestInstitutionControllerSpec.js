@@ -24,7 +24,7 @@
         }]
     };
 
-    var url_splab = "/institution/"+ splab.key + "/details";
+    var url_splab = "/institution/"+ splab.key + "/home";
 
     beforeEach(module('app'));
 

@@ -16,7 +16,7 @@
         var PENDING_STATE = "pending";
 
         suggestInstCtrl.goToInstitution = function goToInstitution(institutionKey) {
-            const url = $state.href('app.institution', {institutionKey: institutionKey});
+            const url = $state.href('app.institution.timeline', {institutionKey: institutionKey});
             window.open(url, '_blank');
         };
 

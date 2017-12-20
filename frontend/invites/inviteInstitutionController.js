@@ -152,7 +152,7 @@
         };
 
         inviteInstCtrl.goToInst = function goToInst(institutionKey) {
-            $state.go('app.institution', {institutionKey: institutionKey});
+            $state.go('app.institution.timeline', {institutionKey: institutionKey});
         };
 
         function loadSentRequests() {

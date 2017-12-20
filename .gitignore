@@ -529,6 +529,8 @@ frontend/config.js
 **/*index.yaml  
 
 # Backend tests 
-backend/env_tests
+backend/py_env
 backend/google_appengine
 backend/Pipfile
+
+.env_cleaned

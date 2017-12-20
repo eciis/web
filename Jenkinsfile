@@ -11,7 +11,7 @@ pipeline {
       steps {
         parallel(
           "Backend": {
-            sh './ecis test server'
+            sh './ecis test server --clean'
             
           },
           "Frontend": {

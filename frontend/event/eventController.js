@@ -190,8 +190,20 @@
         dialogCtrl.photoUrl = "";
         dialogCtrl.dateToChange = {};
         dialogCtrl.observer = {};
+        dialogCtrl.videoUrls = [{
+            url: '',
+            description: ''
+        }];
+        dialogCtrl.usefulLinks = [{
+            url: '',
+            description: ''
+        }];
         dialogCtrl.isAnotherCountry = false;
         dialogCtrl.steps = [true, false, false];
+        var emptyUrl = {
+            url: '',
+            description: ''
+        };
 
         dialogCtrl.save = function save() {
             if(!dialogCtrl.isEditing) {
@@ -200,6 +212,28 @@
                 saveImageAndCallEventFunction(updateEvent);
             }
         };
+
+        dialogCtrl.removeUrl = function(url, urlList) {
+            _.remove(urlList, function(element) {
+             return element === url;
+           });    
+        };
+
+        dialogCtrl.changeUrlLink = function(urlLink, urlList) {
+            console.log(dialogCtrl.event);
+            urlLink.url ? dialogCtrl.addUrl(urlList) : urlList.length > 1 && 
+                            dialogCtrl.removeUrl(urlLink, urlList);
+        };
+
+        dialogCtrl.addUrl = function(urlList){
+            const hasEmptyUrl = dialogCtrl.getEmptyUrl(urlList) !== undefined;
+            urlList.length < 10 && !hasEmptyUrl && urlList.push(angular.copy(emptyUrl));
+        };
+
+        dialogCtrl.getEmptyUrl = function(urlList){
+            return _.find(urlList, emptyUrl);
+        };
+
 
         function saveImageAndCallEventFunction(callback) {
             if (dialogCtrl.photoBase64Data) {
@@ -288,7 +322,7 @@
         };
 
         dialogCtrl.getCitiesByState = function getCitiesByState() {
-            dialogCtrl.cities = brCidadesEstados.buscarCidadesPorSigla(dialogCtrl.event.federal_state.sigla);
+            dialogCtrl.cities = brCidadesEstados.buscarCidadesPorSigla(dialogCtrl.selectedFederalState.sigla);
         };
 
         dialogCtrl.setAnotherCountry = function isAnotherCountry() {
@@ -308,6 +342,14 @@
             var nextStep = currentStep + 1;
             dialogCtrl.steps[nextStep] = true;
         };
+
+        dialogCtrl.nextStepOrSave = function nextStepOrSave() {
+            if (dialogCtrl.getStep(3)) {
+                dialogCtrl.save();
+            } else {
+                dialogCtrl.nextStep();
+            }
+        }
 
         dialogCtrl.previousStep = function previousStep() {
             var currentStep = _.findIndex(dialogCtrl.steps, function(situation) {
@@ -353,6 +395,7 @@
 
         function create() {
             var event = new Event(dialogCtrl.event, dialogCtrl.user.current_institution.key);
+            event.federal_state = dialogCtrl.selectedFederalState.nome;
             if (event.isValid()) {
                 EventService.createEvent(event).then(function success(response) {
                     dialogCtrl.closeDialog();

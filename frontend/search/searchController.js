@@ -38,7 +38,7 @@
         searchCtrl.goToInstitution = function goToInstitution(institutionId) {
             if (institutionId) {
                 InstitutionService.getInstitution(institutionId).then(function success(response) {
-                    $state.go('app.institution', {institutionKey: response.data.key});
+                    $state.go('app.institution.timeline', {institutionKey: response.data.key});
                 });
             }
         };

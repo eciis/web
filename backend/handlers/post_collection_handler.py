@@ -66,12 +66,11 @@ class PostCollectionHandler(BaseHandler):
             user.put()
 
             entity_type = PostFactory.get_type(data)
-            message = {'type': entity_type, 'from': user.name.encode('utf8')}
             for follower in institution.followers:
                 if follower != user.key:
                     send_message_notification(
                         follower.urlsafe(),
-                        json.dumps(message),
+                        user.key.urlsafe(),
                         entity_type,
                         post.key.urlsafe())
 
@@ -81,10 +80,9 @@ class PostCollectionHandler(BaseHandler):
                 entity_type = 'SHARED_POST'
 
                 params = {
-                    'author_key': post.author.urlsafe(),
-                    'user_key': user.key.urlsafe(),
-                    'user_name': user.name,
-                    'post_key': post.key.urlsafe(),
+                    'receiver_key': post.author.urlsafe(),
+                    'sender_key': user.key.urlsafe(),
+                    'entity_key': post.key.urlsafe(),
                     'entity_type': entity_type
                 }
 

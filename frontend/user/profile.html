@@ -1,37 +1,62 @@
-<md-dialog aria-label="Profiles" layout-padding>
-    <div layout-padding>
-        <md-dialog-content class="md-dialog-content" layout="column" ng-if="profileCtrl.isToShow()">
-            <div layout="row" layout-align="center center">
-                <img style="border-radius: 50%; width: 80px;" ng-src="{{ profileCtrl.user.photo_url }}" alt="{{profileCtrl.user.name}}" />
+<div layout="column" layout-align="center center">
+    <md-dialog aria-label="Profiles" layout-padding style="padding: 0; margin: 0;">
+        <md-content layout="column" class="hide-scrollbar" ng-if="profileCtrl.isToShow()" style="padding: 0; margin-bottom: 3%">
+            <div layout-align="center center">
+                <div class="card hovercard" md-colors="{background: 'default-teal-600'}">
+                    <div class="cardheader">
+                        <div class="avatar">
+                           <img alt="Foto do Perfil" ng-src="{{ profileCtrl.user.photo_url }}" alt="{{profileCtrl.user.name}}">
+                        </div>
+                    </div>
+                    <div class="info" 
+                        md-colors="{background: 'default-grey-50'}">
+                        <div class="desc">
+                      </div>
+                    </div>
+                </div>
             </div>
-            <div style="margin-top: -20px;" layout="row" layout-align="center center">
-                <h2>{{profileCtrl.user.name}}
-                    <md-icon title="Configurações de perfil" class="clickable"
-                        ng-click="profileCtrl.goToConfigProfile()"
-                        ng-if="profileCtrl.isOwnProfile()">
-                        settings
-                    </md-icon>
-                </h2>
-
+            <div style="margin-top: -20px;">
+                <h2 style="text-align: center;">{{profileCtrl.user.name}}</h2>
+                <p style="text-align: center; margin-top:-3% " md-colors="{color: 'default-teal-600'}">{{profileCtrl.user.email[0]}}</p>
             </div>
-            <md-subheader><h3>Perfis Institucionais: </h3></md-subheader>
-            <md-content style="max-height: 40%;" ng-scrollbars>
+            <md-divider style="align-self: center;width: 45%;"></md-divider>
+            <div layout-padding>
+                <h2 style="text-align: center;" md-colors="{color: 'default-teal-600'}">Vínculos Institucionais </h2>
                 <md-list ng-repeat="profile in profileCtrl.user.institution_profiles">
-                    <md-list-item class="md-3-line">
-                        <img ng-src="{{ profile.institution.photo_url }}" class="md-avatar" alt="{{profile.institution.name}}" />
+                    <md-list-item class="md-3-line" md-colors="{background: 'default-grey-200'}">
+                        <md-icon class="md-avatar-icon" md-colors="{background: 'default-light-green-500', color: 'default-grey-50'}">
+                            account_balance</md-icon>
                         <div class="md-list-item-text" layout="column">
                           <h3><b>{{ profile.institution.name }}</b> </h3>
-                          <h4><b>Cargo: {{profile.office}}</b></h4>
-                          <h4><b>Telefone institucional: {{profileCtrl.showProperty(profile.phone)}}</b></h4>
-                          <h4><b>Email institucional: {{profileCtrl.showProperty(profile.email)}}</b></h4>
+                          <h5 layout="row" style="margin: 0;">
+                            <p md-colors="{color: 'default-teal-600'}">Cargo: </p> 
+                            <p style="padding-left:1%">{{ profile.office}}</p>
+                          </h5>
+                          <h5 layout="row" style="margin: 0;">
+                            <p md-colors="{color: 'default-teal-600'}">
+                                Telefone institucional: </p>
+                            <p style="margin-left: 1%;">{{ profileCtrl.showProperty(profile.phone)}}</p>
+                          </h5>
+                          <h5 layout="row" style="margin: 0;">
+                            <p md-colors="{color: 'default-teal-600'}">
+                                Email institucional: </p>
+                            <p style="margin-left: 1%;">{{profileCtrl.showProperty(profile.email)}}</p>
+                          </h5>
                         </div>
                     </md-list-item>
                 </md-list>
-            </md-content>
-        </md-dialog-content>
-        <md-dialog-content ng-if="!profileCtrl.loading && !profileCtrl.isToShow()">
+            </div>
+        </md-content>
+        <div ng-if="!profileCtrl.loading && !profileCtrl.isToShow()">
             <h2>O usuário não possui instituições.</h2>
-        </md-dialog-content>
+        </div>
+        <md-progress-circular ng-show="profileCtrl.loading" md-mode="indeterminate"></md-progress-circular>
+    </md-dialog>
+    <div>
+        <md-button ng-if="profileCtrl.isOwnProfile()" class="md-fab md-primary md-padding" aria-label="Editar" 
+            style="margin-top: -25%;"
+                ng-click="profileCtrl.goToConfigProfile()" md-colors="{background: 'default-light-green-500'}">
+            <md-icon>edit</md-icon>
+        </md-button>
     </div>
-    <md-progress-circular ng-show="profileCtrl.loading" md-mode="indeterminate"></md-progress-circular>
-</md-dialog>
+ </div>

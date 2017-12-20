@@ -8,7 +8,6 @@ from google.appengine.ext import ndb
 from utils import login_required
 from utils import json_response
 from utils import Utils
-from service_messages import send_message_notification
 from service_entities import enqueue_task
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from custom_exceptions.entityException import EntityException
@@ -53,10 +52,9 @@ class PostCommentHandler(BaseHandler):
         entity_type = 'COMMENT'
 
         params = {
-            'author_key': post.author.urlsafe(),
-            'user_key': user.key.urlsafe(),
-            'user_name': user.name,
-            'post_key': post.key.urlsafe(),
+            'receiver_key': post.author.urlsafe(),
+            'sender_key': user.key.urlsafe(),
+            'entity_key': post.key.urlsafe(),
             'entity_type': entity_type
         }
 

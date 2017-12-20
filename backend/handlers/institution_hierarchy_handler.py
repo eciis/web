@@ -49,9 +49,8 @@ class InstitutionHierarchyHandler(BaseHandler):
         if is_parent == "true":
             admin.remove_permission("remove_inst", institution.key.urlsafe())
         entity_type = 'INSTITUTION'
-        message = {'type': 'INSTITUTION', 'from': user.name.encode('utf8')}
         send_message_notification(
             admin.key.urlsafe(),
-            json.dumps(message),
+            user.key.urlsafe(),
             entity_type,
             institution_link.key.urlsafe())

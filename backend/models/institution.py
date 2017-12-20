@@ -2,12 +2,8 @@
 
 from google.appengine.ext import ndb
 
-from custom_exceptions.fieldException import FieldException
-
 from search_module.search_institution import SearchInstitution
 from models.address import Address
-
-import json
 
 
 def get_actuation_area(data):

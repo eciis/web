@@ -10,7 +10,7 @@
       </md-button>
       </div>
       <md-list-item class="md-2-line" ng-repeat="notification in controller.notifications | orderBy:'-timestamp'" ng-click="controller.action(notification)">
-        <md-icon>{{controller.getIcon(notification.type)}}</md-icon>
+        <md-icon>{{controller.getIcon(notification.entity_type)}}</md-icon>
         <div class="md-list-item-text">
           <h3>{{controller.format(notification)}}</h3>
           <p style="font-size: 10px;">{{notification.timestamp | date: 'd-MM-y'}} às {{notification.timestamp | date: 'HH:mm'}} hrs</p>

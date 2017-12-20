@@ -39,8 +39,9 @@
         var CHILD_ADDED = "child_added";
 
         service.formatMessage = function formatMessage(notification) {
-            var message = TRANSLATE_MESSAGE[notification.type];
-            return notification.from+" "+message;
+            var message = TRANSLATE_MESSAGE[notification.entity_type];
+            var name = notification.from.name || notification.from
+            return `${name} ${message}`;
         };
 
         service.watchNotifications = function watchNotifications(userKey, notificationsList) {
@@ -69,7 +70,7 @@
                 firebaseArrayNotifications.$watch(function(ev) {
                     if (ev.event === CHILD_ADDED) {
                         var notification = firebaseArrayNotifications.$getRecord(ev.key);
-                        if (notification.type === POST_NOTIFICATION) {
+                        if (notification.entity_type === POST_NOTIFICATION) {
                             callback();
                         }
                     }

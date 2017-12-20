@@ -95,14 +95,9 @@ class Invite(PolyModel):
         """
         entity_type = entity_type or 'INVITE'
 
-        sender_name = user.name if user.name != "Unknown" else user.email[0]
-        message = json.dumps({
-            'from': sender_name.encode('utf8'), 'type': entity_type
-        })
-
         send_message_notification(
             receiver_key,
-            message,
+            user.key.urlsafe(),
             entity_type,
             self.key.urlsafe()
         )

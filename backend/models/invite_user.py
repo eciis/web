@@ -4,6 +4,7 @@ from google.appengine.ext import ndb
 from custom_exceptions.fieldException import FieldException
 from models.user import User
 from models.institution import Institution
+from send_email_hierarchy.invite_user_email_sender import InviteUserEmailSender
 
 
 class InviteUser(Invite):
@@ -51,15 +52,14 @@ class InviteUser(Invite):
 
     def send_email(self, host, body=None):
         """Method of send email of invite user."""
-        institution_key = self.institution_key.urlsafe()
-        invite_key = self.key.urlsafe()
-
-        body = body or """Oi:
-        Voce tem um novo convite. Acesse:
-        http://%s/institution/%s/%s/new_invite/USER
-
-        Equipe e-CIS """ % (host, institution_key, invite_key)
-        super(InviteUser, self).send_email(host, self.invitee, body)
+        subject = "Convite plataforma e-CIS"
+        email_sender = InviteUserEmailSender(**{
+            'receiver': self.invitee,
+            'subject': subject,
+            'institution': self.institution_key.get().acronym,
+            'inviter': self.sender_name
+        })
+        email_sender.send_email()
 
     def send_notification(self, user):
         """Method of send notification of invite user."""

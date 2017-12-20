@@ -13,7 +13,7 @@ class EmailSender(object):
         self.subject = kwargs['subject']
         self.receiver = kwargs['receiver']
         self.html = 'default.html'
-        self.body = ""
+        self.body = kwargs['body'] if 'body' in kwargs.keys() else ""
 
     def send_email(self, email_json=None):
         taskqueue.add(
@@ -24,6 +24,6 @@ class EmailSender(object):
                 'invitee': self.receiver,
                 'subject': self.subject,
                 'html': self.html,
-                'json': json.dumps(email_json if email_json else self.body)
+                'json': json.dumps(email_json if email_json else {'body': self.body})
             }
         )

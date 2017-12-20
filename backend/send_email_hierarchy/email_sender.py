@@ -27,3 +27,7 @@ class EmailSender(object):
                 'json': json.dumps(email_json if email_json else {'body': self.body})
             }
         )
+
+    def crop_institution_name(self, institution_name):
+        institution_name = (institution_name[:26] + '...') if len(institution_name) > 29 else institution_name
+        return institution_name

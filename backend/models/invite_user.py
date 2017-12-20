@@ -52,11 +52,11 @@ class InviteUser(Invite):
 
     def send_email(self, host, body=None):
         """Method of send email of invite user."""
-        subject = "Convite plataforma e-CIS"
+        subject = "Convite plataforma CIS"
         email_sender = InviteUserEmailSender(**{
             'receiver': self.invitee,
             'subject': subject,
-            'institution': self.institution_key.get().acronym,
+            'institution': self.institution_key.get().name,
             'inviter': self.sender_name
         })
         email_sender.send_email()

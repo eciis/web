@@ -11,14 +11,16 @@ from google.appengine.api import taskqueue
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-def create_message(sender_key):
+def create_message(sender_key, current_institution_key):
     sender = ndb.Key(urlsafe=sender_key).get()
     name = sender.name if sender.name != "Unknown" else sender.email[0]
+    if current_institution_key:
+        institution = ndb.Key(urlsafe=current_institution_key).get()
     message = {
         'from': {
             'name': name.encode('utf8'),
             'photo_url': sender.photo_url,
-            'institution': ''
+            'institution': institution.name or ""
         }
     }
     return json.dumps(message)
@@ -42,7 +44,7 @@ def create_entity(entity_key):
     return json.dumps(entity)
 
 
-def send_message_notification(receiver_key, sender_key, entity_type, entity_key):
+def send_message_notification(receiver_key, sender_key, entity_type, entity_key, current_institution_key=None):
     """Method of send notification.
 
     Keyword arguments:
@@ -52,7 +54,7 @@ def send_message_notification(receiver_key, sender_key, entity_type, entity_key)
     entity_type -- type of notification.
     entity_key -- entity key of type invite.
     """
-    message = create_message(sender_key)
+    message = create_message(sender_key, current_institution_key)
     entity = create_entity(entity_key)
     taskqueue.add(
         url='/api/queue/send-notification',

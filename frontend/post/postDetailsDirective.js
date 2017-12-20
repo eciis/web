@@ -226,7 +226,8 @@
 
         function likePost() {
             postDetailsCtrl.savingLike = true;
-            var promise = PostService.likePost(postDetailsCtrl.post);
+            var currentInstitutionKey = postDetailsCtrl.user.current_institution.key;
+            var promise = PostService.likePost(postDetailsCtrl.post, currentInstitutionKey);
             promise.then(function success() {
                 addPostKeyToUser(postDetailsCtrl.post.key);
                 postDetailsCtrl.post.number_of_likes += 1;

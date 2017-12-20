@@ -46,9 +46,11 @@ class LikeHandler(BaseHandler):
         """This method is only meant to give like in post."""
         post = ndb.Key(urlsafe=post_key).get()
         institution = post.institution.get()
+        current_institution_key = self.request.get('currentInstKey')
+        entity_type = 'LIKE_POST'
+        
         Utils._assert(institution.state == 'inactive',
                       "The institution has been deleted", NotAuthorizedException)
-        entity_type = 'LIKE_POST'
 
         if comment_id:
             comment = post.get_comment(comment_id)
@@ -70,7 +72,8 @@ class LikeHandler(BaseHandler):
                     receiver_key,
                     user.key.urlsafe(), 
                     entity_type, 
-                    post.key.urlsafe()
+                    post.key.urlsafe(),
+                    current_institution_key
                 )
         else:
             Utils._assert(user.is_liked_post(post.key),
@@ -82,7 +85,8 @@ class LikeHandler(BaseHandler):
                 'receiver_key': post.author.urlsafe(),
                 'sender_key': user.key.urlsafe(),
                 'entity_key': post.key.urlsafe(),
-                'entity_type': entity_type
+                'entity_type': entity_type,
+                'current_institution_key': current_institution_key
             }
 
             enqueue_task('post-notification', params)
@@ -95,8 +99,10 @@ class LikeHandler(BaseHandler):
         """This method is only meant to dislike in post."""
         post = ndb.Key(urlsafe=post_key).get()
         institution = post.institution.get()
+
         Utils._assert(institution.state == 'inactive',
                       "The institution has been deleted", NotAuthorizedException)
+        
         if comment_id:
             comment = post.get_comment(comment_id)
             if reply_id:

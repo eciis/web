@@ -94,6 +94,7 @@ class PostNotificationHandler(BaseHandler):
         sender_key = self.request.get('sender_key')
         post_key = self.request.get('entity_key')
         entity_type = self.request.get('entity_type')
+        current_institution_key = self.request.get('current_institution_key')
         
         subscribers = ndb.Key(urlsafe=post_key).get().subscribers
 
@@ -105,7 +106,8 @@ class PostNotificationHandler(BaseHandler):
                     subscriber.urlsafe(),
                     sender_key,
                     entity_type,
-                    post_key
+                    post_key,
+                    current_institution_key
                 )
 
 class EmailMembersHandler(BaseHandler):

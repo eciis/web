@@ -190,14 +190,8 @@
         dialogCtrl.photoUrl = "";
         dialogCtrl.dateToChange = {};
         dialogCtrl.observer = {};
-        dialogCtrl.videoUrls = [{
-            url: '',
-            description: ''
-        }];
-        dialogCtrl.usefulLinks = [{
-            url: '',
-            description: ''
-        }];
+        dialogCtrl.videoUrls = [];
+        dialogCtrl.usefulLinks = [];
         dialogCtrl.isAnotherCountry = false;
         dialogCtrl.steps = [true, false, false];
         var emptyUrl = {
@@ -396,6 +390,7 @@
 
         function create() {
             var event = new Event(dialogCtrl.event, dialogCtrl.user.current_institution.key);
+            addLinks(event);
             if (dialogCtrl.selectedFederalState)
                 event.federal_state = dialogCtrl.selectedFederalState.nome;
             if (event.isValid()) {
@@ -411,6 +406,13 @@
                 MessageService.showToast('Evento inválido!');
             }
         }
+
+        function addLinks(event) {
+            let videoUrls = _.filter(dialogCtrl.videoUrls, e => e.url !== '');
+            let usefulLinks = _.filter(dialogCtrl.usefulLinks, e => e.url !== '');
+            event.video_url = videoUrls;
+            event.useful_links = usefulLinks;
+        };
 
         function getCountries() {
             $http.get('app/institution/countries.json').then(function success(response) {
@@ -429,6 +431,8 @@
                 dialogCtrl.observer = jsonpatch.observe(dialogCtrl.event);
             } else {
                 dialogCtrl.event = {};
+                dialogCtrl.videoUrls = [angular.copy(emptyUrl)];
+                dialogCtrl.usefulLinks = [angular.copy(emptyUrl)];
             }
         })();
     });

@@ -19,10 +19,8 @@
                   <md-button ng-show="configProfileCtrl.showButton()" ng-click="null" ng-model="configProfileCtrl.file" ngf-pattern="'image/*'"
                   ngf-accept="'image/*'" ngf-max-size="5MB"
                   ngf-select="configProfileCtrl.cropImage(configProfileCtrl.file)"
-                  style="position: absolute; top: 50%; left: 50%;
-                  transform: translate(-50%, -50%); width: 200px;
-                  height: 200px; margin-left: -1px;" class="md-icon-button">
-                  <md-icon style="color: white; height: 100px; width: 100px; font-size: 100px;">add_a_photo</md-icon>
+                  class="md-icon-button edit-profile-avatar-button">
+                  <md-icon class="edit-profile-avatar-icon">add_a_photo</md-icon>
                   <p><b style="color: white;">Alterar foto</b></p>
                   </md-button>
                   <md-progress-linear ng-show="configProfileCtrl.loading" md-mode="indeterminate" style="width: 20%"></md-progress-linear>

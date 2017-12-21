@@ -4,6 +4,7 @@ from models.institution import Institution
 from custom_exceptions.fieldException import FieldException
 from models.user import User
 from send_email_hierarchy.invite_institution_email_sender import InviteInstitutionEmailSender
+from util.strings_pt_br import get_common_string
 
 
 class InviteInstitution(Invite):
@@ -47,7 +48,7 @@ class InviteInstitution(Invite):
 
     def send_email(self, host, body=None):
         """Method of send email of invite institution."""
-        subject = "Convite plataforma CIS"
+        subject = get_common_string('INVITE_EMAIL_SUBJECT')
         email_sender = InviteInstitutionEmailSender(**{
             'receiver': self.invitee,
             'subject': subject,

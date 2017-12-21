@@ -126,7 +126,7 @@ def create_user(name, email):
     user = User()
     user.email = email
     user.name = name
-    user.photo_url = "app/images/avatar.jpg"
+    user.photo_url = "app/images/avatar.png"
     user.put()
 
     return user
@@ -143,50 +143,12 @@ def json_response(method):
     return response
 
 
-def is_institution_member(method):
-    """Check if user passed as parameter is member of an institution."""
-    def check_members(self, user, *args):
-        data = json.loads(self.request.body)
-        institution_key = ndb.Key(urlsafe=data['institution'])
-        institution = institution_key.get()
-
-        if user.key in institution.members:
-            method(self, user, institution, *args)
-        else:
-            self.response.set_status(Utils.FORBIDDEN)
-            self.response.write(Utils.getJSONError(
-                Utils.FORBIDDEN, "User is not a member of this Institution"))
-    return check_members
-
-def is_admin(method):
-        """Check if the user is admin of the institution."""
-        def check_authorization(self, user, *args):
-            data = json.loads(self.request.body)
-            institution_key = ndb.Key(urlsafe=data['institution_key'])
-            institution = institution_key.get()
-            userisNotAdminOfInstitution = institution.key not in user.institutions_admin
-            institutionisNotManagedByUser = institution.admin != user.key
-
-            Utils._assert(userisNotAdminOfInstitution or institutionisNotManagedByUser,
-                          'User is not admin', NotAuthorizedException)
-
-            method(self, user, *args)
-        return check_authorization
-
-def is_admin_of_requested_inst(method):
-        """Check if the user is admin of the institution requested in requests for institution link."""
-        def check_authorization(self, user, request_key, *args):
-            request = ndb.Key(urlsafe=request_key).get()
-            institution = request.institution_requested_key.get()
-
-            userisNotAdminOfInstitution = institution.key not in user.institutions_admin
-            institutionisNotManagedByUser = institution.admin != user.key
-
-            Utils._assert(userisNotAdminOfInstitution or institutionisNotManagedByUser,
-                          'User is not admin', NotAuthorizedException)
-
-            method(self, user, request_key, *args)
-        return check_authorization
+def get_super_institution():
+    """Return Super Institution of system."""
+    # TODO: Currently, The Super Institution is 'CIS' but will change to 'Ministério da Saúde',
+    # should modify how to verify it.
+    # @author: Maiana Brito
+    return Institution.query().filter(Institution.name == "Complexo Industrial da Saude").get()
 
 
 def getSuperUsers():
@@ -199,6 +161,7 @@ def getSuperUsers():
             if user.has_permission('analyze_request_inst', institution.key.urlsafe()):
                 userswithpermission.append(user)
     return userswithpermission
+
 
 def offset_pagination(page, number_fetchs, query):
     """Modify query for get entities using offset pagination."""

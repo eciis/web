@@ -159,15 +159,15 @@
         };
 
         controller.goTo = function goTo(notification) {
-            if(notification.type !== 'INSTITUTION') {
-                var state = type_data[notification.type].state;
-                $state.go(state, {key: notification.entity_key});
+            if(notification.entity_type !== 'INSTITUTION') {
+                var state = type_data[notification.entity_type].state;
+                $state.go(state, {key: notification.entity.key});
             }
         };
 
         controller.action = function action(notification) {
-            var notificationProperties = type_data[notification.type].properties;
-            var  notificationAction = type_data[notification.type].action;
+            var notificationProperties = type_data[notification.entity_type].properties;
+            var  notificationAction = type_data[notification.entity_type].action;
             if (notificationAction){
                 notificationAction(notificationProperties, notification);
             } else {
@@ -178,7 +178,7 @@
         };
 
         function showDialog(dialogProperties, notification) {
-            dialogProperties.locals.key = notification.entity_key;
+            dialogProperties.locals.key = notification.entity.key;
             $mdDialog.show({
                 controller: dialogProperties.controller,
                 controllerAs: dialogProperties.controllerAs,

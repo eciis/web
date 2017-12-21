@@ -58,10 +58,9 @@ class ReplyCommentHandler(BaseHandler):
 
         if (post.author != user.key):
             entity_type = 'COMMENT'
-            message = {'type': 'COMMENT', 'from': user.name.encode('utf8'), 'on': post.title.encode('utf8')}
             send_message_notification(
                 post.author.urlsafe(),
-                json.dumps(message),
+                user.key.urlsafe(),
                 entity_type,
                 post.key.urlsafe()
             )
@@ -70,10 +69,9 @@ class ReplyCommentHandler(BaseHandler):
 
         if (comment.get('author_key') != user.key.urlsafe()):
             entity_type = 'COMMENT'
-            message = {'type': 'REPLY_COMMENT', 'from': user.name.encode('utf8'), 'on': post.title.encode('utf8')}
             send_message_notification(
                 comment.get('author_key'),
-                json.dumps(message),
+                user.key.urlsafe(),
                 entity_type,
                 post.key.urlsafe()
             )

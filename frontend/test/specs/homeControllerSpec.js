@@ -106,7 +106,7 @@
             it('should call state.go()', function() {
                 spyOn(state, 'go');
                 homeCtrl.goToInstitution('123456789');
-                expect(state.go).toHaveBeenCalledWith('app.institution', {institutionKey: '123456789'});
+                expect(state.go).toHaveBeenCalledWith('app.institution.timeline', {institutionKey: '123456789'});
             });
         });
 

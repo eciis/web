@@ -136,7 +136,7 @@
         it('Should call state.go() in function goToInstitution()', function(){
             spyOn(state, 'go');
             mainCtrl.goToInstitution(otherInstitution.key);
-            expect(state.go).toHaveBeenCalledWith('app.institution', {institutionKey: '1239'});
+            expect(state.go).toHaveBeenCalledWith('app.institution.timeline', {institutionKey: '1239'});
         });
 
         it('User should not be admin of your current institution', function(){

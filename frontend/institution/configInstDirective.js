@@ -257,7 +257,7 @@
             AuthService.save();
             changeInstitution(institution);
             MessageService.showToast('Dados da instituição salvos com sucesso.');
-            $state.go('app.institution', {institutionKey: institutionKey});
+            $state.go('app.institution.timeline', {institutionKey: institutionKey});
         }
 
         configInstCtrl.showButton = function() {
@@ -265,7 +265,7 @@
         };
 
         configInstCtrl.showImage = function showImage() {
-            return configInstCtrl.newInstitution.photo_url !== "app/images/institution.jpg" && !_.isEmpty(configInstCtrl.newInstitution.photo_url);
+            return configInstCtrl.newInstitution.photo_url !== "app/images/institution.png" && !_.isEmpty(configInstCtrl.newInstitution.photo_url);
         };
 
         configInstCtrl.getStep = function getStep(step) {
@@ -362,7 +362,7 @@
         }
 
         function setDefaultPhotoUrl() {
-            var defaultPhotoUrl = "app/images/institution.jpg";
+            var defaultPhotoUrl = "app/images/institution.png";
             configInstCtrl.newInstitution.photo_url = configInstCtrl.newInstitution.photo_url || defaultPhotoUrl;
         }
 

@@ -9,7 +9,6 @@ from utils import json_response
 from utils import getSuperUsers
 from handlers.base_handler import BaseHandler
 from custom_exceptions.entityException import EntityException
-from utils import is_admin_of_requested_inst
 from service_messages import send_message_notification
 
 
@@ -32,7 +31,6 @@ class RequestHandler(BaseHandler):
     """Request Handler."""
 
     @login_required
-    @is_admin_of_requested_inst
     @json_response
     def get(self, user, request_key):
         """Handler GET Requests."""
@@ -41,20 +39,23 @@ class RequestHandler(BaseHandler):
 
     @login_required
     @json_response
-    @is_admin_of_requested_inst
     @ndb.transactional(xg=True)
     def put(self, user, request_key):
-        """Handler PUT Requests."""
+        """Handler PUT to accept user Request ."""
         request = ndb.Key(urlsafe=request_key).get()
+        institution_key = request.institution_key
+        
         Utils._assert(
             request.status != 'sent',
             "this request has already been processed",
             EntityException)
+        
+        user.check_permission('answer_user_request',
+                              "User is not allowed to accept user request",
+                              request.institution_requested_key.urlsafe())
 
         request.change_status('accepted')
         request.put()
-
-        institution_key = request.institution_key
         institution = institution_key.get()
         sender = request.sender_key.get()
 
@@ -71,29 +72,33 @@ class RequestHandler(BaseHandler):
         request.send_response_email(host, "ACCEPT")
 
         entity_type = 'ACCEPTED_LINK'
-        message = {'type': 'ACCEPTED_LINK', 'from': user.name.encode('utf8')}
         send_message_notification(
             request.sender_key.urlsafe(),
-            json.dumps(message),
+            user.key.urlsafe(),
             entity_type,
             institution.key.urlsafe())
 
         self.response.write(json.dumps(makeUser(sender, self.request)))
 
     @login_required
-    @is_admin_of_requested_inst
     @json_response
     def delete(self, user, request_key):
         """Change request status from 'sent' to 'rejected'."""
         request = ndb.Key(urlsafe=request_key).get()
+        institution_key = request.institution_requested_key.urlsafe()
+
         Utils._assert(
             request.status != 'sent',
             "this request has already been processed",
             EntityException)
+        
+        user.check_permission('answer_user_request',
+                              "User is not allowed to reject user request",
+                              institution_key)
 
         request.change_status('rejected')
 
-        institution_key = request.institution_requested_key.urlsafe()
+        
         sender_user = request.sender_key.get()
         sender_user.remove_profile(institution_key)
 

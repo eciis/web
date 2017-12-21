@@ -22,8 +22,8 @@ class InstitutionMemberHandlerTest(TestBaseHandler):
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
+    @mock.patch('handlers.institution_members_handler.RemoveMemberEmailSender.send_email')
     @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
-    @mock.patch('service_messages.send_message_notification')
     def test_delete_with_notification(self, verify_token, mock_method):
         """Test if a notification is sent when the member is deleted."""
         # Set up the second_user
@@ -40,8 +40,8 @@ class InstitutionMemberHandlerTest(TestBaseHandler):
         # Assert that mock_method has been called
         self.assertTrue(mock_method.called, "send_message_notification should've been called.")
 
+    @mock.patch('handlers.institution_members_handler.RemoveMemberEmailSender.send_email')
     @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
-    @mock.patch('service_messages.send_message_email')
     def test_delete_with_email(self, verify_token, mock_method):
         """Test if a notification is sent when the member is deleted."""
         # Call the delete method

@@ -21,6 +21,9 @@ def createInstitution(user, data):
         if property != 'admin':
             setattr(inst_stub, property, data[property])
 
+    if (data.get("photo_url") is None):
+            inst_stub.photo_url = "app/images/institution.png"
+
     inst_stub.address = Address.create(data.get('address'))
     inst_stub.state = 'pending'
     inst_stub.put()
@@ -49,7 +52,7 @@ class InstitutionRequestCollectionHandler(BaseHandler):
 
     @login_required
     @json_response
-    def post(self, user):
+    def post(self, user, institution_key):
         """Handler of post requests."""
         data = json.loads(self.request.body)
         host = self.request.host

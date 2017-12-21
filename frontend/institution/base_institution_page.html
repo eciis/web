@@ -1,0 +1,115 @@
+<div flex="100" layout="row" layout-align="center">
+    <div flex flex-lg="90" flex-gt-lg="70" layout="row" md-colors="{background: 'grey-50'}">
+        <div layout="column" flex>
+        
+            <!-- COVER -->
+            <div class="container">
+                <div layout="row" flex md-colors="{background: 'grey-50'}" >
+                    <div class="card hovercard" flex md-colors="{background: 'light-green'}">
+                        <div class="cardheader">
+                            <div class="avatar">
+                                <img alt="Foto do Perfil" ng-src="{{ institutionCtrl.current_institution.photo_url }}">
+                            </div>
+                        </div>
+                        <div class="info" md-colors="{background: 'teal-500'}">
+                            <div class="desc" >
+                                <div class="md-title">{{ institutionCtrl.current_institution.name }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div layout="row">
+                <!-- LEFT MENU -->
+                <div class="container">
+                    <div flex="20" layout="column" hide show-gt-sm>
+                        <md-sidenav class="md-sidenav-left" md-component-id="leftNav" md-whiteframe="4" layout="row"
+                        md-is-locked-open="$mdMedia('gt-sm')" flex>
+                            <md-content class="hide-scrollbar" layout="column" hide show-gt-sm
+                            md-colors="{background: 'grey-100'}" flex>    
+                                <!-- Buttons -->
+                                <div layout="row">
+                                    <md-button flex class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-500'}"
+                                    ng-if="!institutionCtrl.isMember" style="text-align: left;"
+                                    ng-click="institutionCtrl.isUserFollower ? institutionCtrl.unfollow() : institutionCtrl.follow()">
+                                        <md-icon>rss_feed</md-icon>
+                                        {{ institutionCtrl.isUserFollower ? 'Deixar de seguir' : 'Seguir' }}
+                                    </md-button>   
+                                </div>
+                                <div layout="row">
+                                    <md-button flex class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-500'}"
+                                    ng-if="institutionCtrl.current_institution.website_url" style="text-align: left;"
+                                    ng-click="institutionCtrl.openWebsite()">
+                                        <md-icon>web</md-icon>
+                                        Acessar Website
+                                    </md-button>   
+                                </div>
+                                <div layout="row">
+                                    <md-button flex class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-500'}"
+                                    ng-if="!institutionCtrl.isMember" style="text-align: left;"
+                                    ng-click="institutionCtrl.requestInvitation($event)">
+                                        <md-icon>add_to_photos</md-icon>
+                                        Solicitar vínculo
+                                    </md-button>
+                                </div>
+                                <!-- Menu -->
+                                <div class="row section-menu">
+                                    <div layout-padding>
+                                        <span class="menu-section-title">INSTITUIÇÃO</span>
+                                        <md-divider style="margin-top: 10px"></md-divider>
+                                    </div>
+                                    <md-menu-item>
+                                        <md-button ng-click="institutionCtrl.goToInstitution(institutionCtrl.current_institution.key)">
+                                            <md-icon>home</md-icon>
+                                            Início
+                                        </md-button>
+                                    </md-menu-item>
+                                    <md-menu-item>
+                                        <md-button  ng-click="institutionCtrl.goToCommingSoon(institutionCtrl.current_institution.key)">
+                                            <md-icon>assignment</md-icon>
+                                             Dados cadastrais
+                                        </md-button>
+                                    </md-menu-item>
+                                    <md-menu-item>
+                                        <md-button ng-click="institutionCtrl.goToCommingSoon(institutionCtrl.current_institution.key)">
+                                            <md-icon>account_circle</md-icon>
+                                            Membros
+                                        </md-button>
+                                    </md-menu-item>
+                                    <md-menu-item >
+                                        <md-button ng-click="institutionCtrl.goToCommingSoon(institutionCtrl.current_institution.key)">
+                                            <md-icon>people</md-icon>
+                                            Seguidores
+                                        </md-button>
+                                    </md-menu-item>
+                                    <md-menu-item>
+                                        <md-button ng-click="institutionCtrl.goToCommingSoon(institutionCtrl.current_institution.key)">
+                                            <md-icon>settings</md-icon>
+                                            Vinculos Institucionais
+                                        </md-button>
+                                    </md-menu-item>
+                                    <md-menu-item ng-if="institutionCtrl.portfolioUrl">
+                                        <md-button  ng-click="institutionCtrl.portfolioDialog($event)">
+                                            <md-icon>description</md-icon>
+                                            Portfólio
+                                        </md-button>
+                                    </md-menu-item>
+                                    <md-menu-item>
+                                        <md-button ng-click="institutionCtrl.goToCommingSoon(institutionCtrl.current_institution.key)">
+                                            <md-icon>date_range</md-icon>
+                                            Eventos
+                                        </md-button>
+                                    </md-menu-item>
+                                </div>
+                            </md-content>
+                        </md-sidenav>
+                    </div>
+                </div>
+
+                <!-- INSTITUTION TIMELINE -->
+                <div flex ui-view="institution_content" layout="column" md-colors="{background: 'grey-50'}"></div>
+            </div>
+        </div>
+    </div>
+</div>

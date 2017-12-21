@@ -123,7 +123,7 @@
             it('should be call state.go ', function() {
                 spyOn(state, 'go');
                 inviteInstCtrl.goToInst(splab.key);
-                expect(state.go).toHaveBeenCalledWith('app.institution',
+                expect(state.go).toHaveBeenCalledWith('app.institution.timeline',
                     Object({ institutionKey: '987654321' }));
             });
         });

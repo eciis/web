@@ -5,7 +5,6 @@ import json
 
 from utils import login_required
 from utils import json_response
-from utils import is_admin
 from utils import Utils
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from handlers.base_handler import BaseHandler
@@ -16,7 +15,6 @@ class InviteInstitutionHandler(BaseHandler):
 
     @json_response
     @login_required
-    @is_admin
     def post(self, user):
         """Handle POST Requests."""
         data = json.loads(self.request.body)

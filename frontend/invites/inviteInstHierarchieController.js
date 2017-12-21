@@ -175,7 +175,7 @@
         };
 
         inviteInstHierCtrl.goToInst = function goToInst(institutionKey) {
-            $state.go('app.institution', {institutionKey: institutionKey});
+            $state.go('app.institution.timeline', {institutionKey: institutionKey});
         };
 
         inviteInstHierCtrl.isActive = function isActive(institution) {
@@ -189,7 +189,7 @@
                 inviteInstHierCtrl.hasParent = !_.isEmpty(inviteInstHierCtrl.institution.parent_institution);
                 getRequests();
             }, function error(response) {
-                $state.go('app.institution', {institutionKey: institutionKey});
+                $state.go('app.institution.timeline', {institutionKey: institutionKey});
                 MessageService.showToast(response.data.msg);
             });
             return promise;

@@ -128,7 +128,7 @@
   <div layout="row" layout-align="start center" style="padding: 0;">
     <div flex="0" ng-if="controller.getStep(2) || controller.getStep(3)">
         <md-button class="md-fab md-primary" style="margin-left: -28px;" ng-click="controller.previousStep()"
-          md-colors="{background: 'default-teal-500'}">
+          md-colors="{background: 'default-teal-500'}" hide-xs>
             <md-icon >keyboard_arrow_left</md-icon>
         </md-button>
     </div>
@@ -241,14 +241,18 @@
                   <p class="md-subheader">Vídeos</p>
                   <div class="hide-scrollbar" style="max-height: 25%; overflow-y:auto; margin: 8px 0 8px 0;">
                     <div ng-repeat="videoUrl in controller.videoUrls" layout="column">
-                      <md-input-container class="md-block" style="height: 25px; margin-bottom: 5px;">
+                      <md-input-container class="md-block" style="height: 25px;">
                         <label>Link do Youtube</label>
-                        <input class="md-input" ng-model="videoUrl.url" placeholder="+ Adicionar um vídeo do Youtube" 
-                          ng-change="controller.changeUrlLink(videoUrl, controller.videoUrls)"/>                  
+                        <input class="md-input" ng-model="videoUrl.url" placeholder="+ Adicionar um vídeo do Youtube..."
+                          ng-change="controller.changeUrlLink(videoUrl, controller.videoUrls)" ng-pattern="'(?:http(s)?:\/\/)?(www\.)?youtube\.com\/watch\\?v=.+'"
+                          name="video"/>
+                          <div ng-messages="createEvent.video.$error">
+                              <div ng-message="pattern">Link do Youtube inválido.</div>
+                          </div>                  
                       </md-input-container>
-                      <md-input-container class="md-block" style="height: 25px; margin-bottom: 5px;">
+                      <md-input-container class="md-block" style="height: 25px;">
                         <label>Descrição</label>
-                        <input class="md-input" ng-model="videoUrl.description" placeholder="Adicione uma descrição para o vídeo" maxlength="150" />                  
+                        <input class="md-input" ng-model="videoUrl.description" placeholder="Adicione uma descrição para o vídeo..." maxlength="150" />                  
                       </md-input-container>
                     </div>
                   </div>
@@ -257,14 +261,14 @@
                   <p class="md-subheader">Links úteis</p>
                   <div class="hide-scrollbar" style="max-height: 25%; overflow-y:auto; margin: 8px 0 8px 0;">
                     <div ng-repeat="usefulLink in controller.usefulLinks" layout="column">
-                      <md-input-container class="md-block" style="height: 25px; margin-bottom: 5px;">
+                      <md-input-container class="md-block" style="height: 25px;">
                         <label>Link</label>
-                        <input class="md-input" ng-model="usefulLink.url" placeholder="+ Adicionar um vídeo do Youtube" 
+                        <input class="md-input" ng-model="usefulLink.url" placeholder="+ Adicionar um link..." 
                           ng-change="controller.changeUrlLink(usefulLink, controller.usefulLinks)"/>                  
                       </md-input-container>
-                      <md-input-container class="md-block" style="height: 25px; margin-bottom: 5px;">
+                      <md-input-container class="md-block" style="height: 25px;">
                         <label>Descrição</label>
-                        <input class="md-input" ng-model="usefulLink.description" placeholder="Adicione uma descrição para o vídeo" maxlength="150" />                  
+                        <input class="md-input" ng-model="usefulLink.description" placeholder="Adicione uma descrição para o link..." maxlength="150" />                  
                       </md-input-container>
                     </div>
                   </div>
@@ -275,10 +279,14 @@
           <md-dialog-actions layout="row">
               <md-button class="md-raised" md-colors="{background: 'default-teal-500'}" ng-click="controller.closeDialog()">
                   <span style="color: white;">cancelar</span>
-                </md-button>
-                <md-button class="md-raised" type="submit" md-colors="{background: 'default-teal-500'}">
-                    <span style="color: white;">{{controller.getStep(3) ? "publicar" : "avançar"}}</span>
-                </md-button>
+              </md-button>
+              <md-button class="md-raised" md-colors="{background: 'default-teal-500'}" ng-click="controller.previousStep()"
+                hide-gt-xs ng-if="controller.getStep(2) || controller.getStep(3)">
+                  <span style="color: white;">voltar</span>
+              </md-button>
+              <md-button class="md-raised" type="submit" md-colors="{background: 'default-teal-500'}">
+                  <span style="color: white;">{{controller.getStep(3) ? "publicar" : "avançar"}}</span>
+              </md-button>
           </md-dialog-actions>
         </form>
       </md-dialog>

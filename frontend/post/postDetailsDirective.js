@@ -619,7 +619,8 @@
         };
 
         commentCtrl.canReply = function canReply() {
-            return commentCtrl.showReplies && !commentCtrl.isDeletedPost() && !commentCtrl.isInstInactive();
+            return commentCtrl.showReplies && !commentCtrl.isDeletedPost() &&
+                    !commentCtrl.isInstInactive();
         };
 
         commentCtrl.hideReplies = function hideReplies() {
@@ -648,7 +649,7 @@
         commentCtrl.numberOfRepliesMessage = function numberOfRepliesMessage() {
             return commentCtrl.numberOfReplies() === 0? 'Nenhuma resposta' :
             commentCtrl.numberOfReplies() === 1? '1 resposta' :
-            commentCtrl.numberOfReplies() + ' respostas'
+            commentCtrl.numberOfReplies() + ' respostas';
         }
 
         commentCtrl.toggleReplies = function toggleReplies() {

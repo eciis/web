@@ -159,7 +159,6 @@
                 function(member){
                     return member.key === manageMemberCtrl.institution.admin.key;
             });
-            console.log(manageMemberCtrl.institution.admin);
         }
 
         function getEmail(user) {

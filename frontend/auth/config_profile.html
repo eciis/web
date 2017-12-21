@@ -12,34 +12,34 @@
           </div>
         </md-toolbar>
         <md-card-content>
-          <div layout-gt-sm="column" layout-padding>
-            <div layout-gt-sm="column" layout-padding layout-align="center center">
-              <img style="border-radius: 50%; " ng-src="{{ configProfileCtrl.photo_url }}" width="100px" height="100px" />
-            <div>
-                <md-button ng-show="configProfileCtrl.showButton()" ng-click="null" ng-model="configProfileCtrl.file" ngf-pattern="'image/*'"
-                      ngf-accept="'image/*'" ngf-max-size="5MB"
-                      ngf-select="configProfileCtrl.cropImage(configProfileCtrl.file)">
-                    <b>Adicionar imagem</b>
-                </md-button>
-            </div>
-            <md-progress-linear ng-show="configProfileCtrl.loading" md-mode="indeterminate" style="width: 20%"></md-progress-linear>
-            <div layout-gt-sm="row">
-              <md-input-container flex-gt-sm>
-                <label>Nome</label>
-                <input ng-model="configProfileCtrl.newUser.name" required>
-              </md-input-container>
-
-              <md-input-container>
-                <label>Email</label>
-                <input ng-model="configProfileCtrl.newUser.email" type="email" disabled>
-              </md-input-container>
-            </div>
-
-            <md-input-container flex-gt-sm>
-            <label>CPF</label>
-            <input name="CPF" ng-model="configProfileCtrl.newUser.cpf" placeholder="123.456.789-00"
-              mask="999.999.999-99" ng-pattern="configProfileCtrl.cpfRegex" required>
-            </md-input-container>
+          <div layout-gt-sm="column">
+            <div layout-gt-sm="row" layout-align="center center">
+              <div layout="row" layout-align="center center" style="position: relative; margin: auto;">
+                  <img style="border-radius: 50%;" ng-src="{{ configProfileCtrl.photo_url }}" width="200px" height="200px">
+                  <md-button ng-show="configProfileCtrl.showButton()" ng-click="null" ng-model="configProfileCtrl.file" ngf-pattern="'image/*'"
+                  ngf-accept="'image/*'" ngf-max-size="5MB"
+                  ngf-select="configProfileCtrl.cropImage(configProfileCtrl.file)"
+                  class="md-icon-button edit-profile-avatar-button">
+                  <md-icon class="edit-profile-avatar-icon">add_a_photo</md-icon>
+                  <p><b style="color: white;">Alterar foto</b></p>
+                  </md-button>
+                  <md-progress-linear ng-show="configProfileCtrl.loading" md-mode="indeterminate" style="width: 20%"></md-progress-linear>
+              </div>
+              <div layout="column" md-theme="input" class="input" style="width: 550px; margin-left: auto;">
+                <md-input-container flex-gt-sm>
+                  <label>Nome</label>
+                  <input ng-model="configProfileCtrl.newUser.name" required>
+                </md-input-container>
+                <md-input-container flex-gt-sm>
+                  <label>Email</label>
+                  <input ng-model="configProfileCtrl.newUser.email" type="email" disabled>
+                </md-input-container>
+                <md-input-container flex-gt-sm>
+                <label>CPF</label>
+                <input name="CPF" ng-model="configProfileCtrl.newUser.cpf" placeholder="123.456.789-00"
+                  mask="999.999.999-99" ng-pattern="configProfileCtrl.cpfRegex" required>
+                </md-input-container>
+              </div>
             </div>
             <section layout="row" layout="column" layout-align="end center" layout-wrap>
               <md-button ng-click="configProfileCtrl.deleteAccount($event)" md-colors="{background: 'red-500'}">Excluir conta</md-button>

@@ -178,7 +178,11 @@
         };
 
         institutionCtrl.goToInstitution = function goToInstitution(institutionKey) {
-            $state.go('app.institution', {institutionKey: institutionKey});
+            $state.go('app.institution.timeline', {institutionKey: institutionKey});
+        };
+
+        institutionCtrl.goToCommingSoon = function goToCommingSoon(institutionKey) {
+            $state.go('app.institution.comming_soon', {institutionKey: institutionKey});
         };
 
         institutionCtrl.hasChildrenActive = function hasChildrenActive(institution) {

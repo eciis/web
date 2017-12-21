@@ -1,0 +1,54 @@
+#!/bin/bash
+
+ENV_TEST_DIRECTORY=py_env
+ENV_SITE_PACKAGES=$ENV_TEST_DIRECTORY/lib/python2.7/site-packages
+APPENGINE_DIRECTORY=google_appengine/google_appengine
+
+FLAG_CLEAN=false
+
+if [ -e .env_cleaned ]; then
+  FLAG_CLEAN=true
+  rm -rf .env_cleaned
+fi
+
+cd backend
+
+case "$1" in
+  clean)
+    echo "=========== Cleaning environment ==========="
+    rm -rf $ENV_TEST_DIRECTORY
+    rm -rf google_appengine
+    FLAG_CLEAN=true
+    echo "Environment cleaned!"
+  ;;
+esac
+
+echo "=========== Starting virtual env ==========="
+virtualenv $ENV_TEST_DIRECTORY
+
+source $ENV_TEST_DIRECTORY/bin/activate
+
+echo "=========== Installing dependencies ==========="
+
+python -m pip install -r requirements.txt
+
+if [ $? != 0 ]; then
+  exit 1
+fi
+
+if [ $FLAG_CLEAN = true ]; then
+  echo "=========== Setup Google App Engine ==========="
+  git clone https://github.com/eciis/google_appengine.git
+
+  mv -n $APPENGINE_DIRECTORY/google/* $ENV_SITE_PACKAGES/google/
+
+  mv -n $APPENGINE_DIRECTORY/lib/* $ENV_SITE_PACKAGES
+
+  FANCY_URLLIB=$ENV_TEST_DIRECTORY/lib/python2.7/site-packages/fancy_urllib
+
+  mv $FANCY_URLLIB/fancy_urllib/__init__.py $FANCY_URLLIB
+
+  rm -rf google_appengine
+fi
+
+echo "=========== All done! ==========="

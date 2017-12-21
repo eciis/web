@@ -1,0 +1,42 @@
+<div flex="100" layout="row" layout-align="center">
+    <div flex flex-md="95" layout="row" layout-align="space-around"
+    md-colors="{background: 'grey-50'}">
+        <!-- CONTENT -->
+        <div flex="95" layout-align="center top" layout="row">
+            <div flex layout="column">
+                <div>
+                    <md-card>
+                        <md-toolbar md-colors="{background: 'teal-500'}" layout="row" class="clickable-no-hover"
+                        ng-click="institutionCtrl.showHideDescription()">
+                            <md-icon style="margin-left: 2%;">email</md-icon>
+                            <div class="md-toolbar-tools" flex>
+                                <span class="card-title-light">DESCRIÇÃO DA INSTITUIÇÃO</span>
+                            </div>
+                            <md-icon style="margin-right: 2%;">
+                                {{institutionCtrl.showFullDescription ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}
+                            </md-icon>
+                        </md-toolbar>
+                        <md-card-content 
+                        ng-show="institutionCtrl.showFullDescription" ng-scrollbars 
+                        style="padding: 1.5em; height: 15%; text-align: justify; overflow:hidden">
+                            <p>{{ institutionCtrl.current_institution.description }}</p>
+                        </md-card-content>
+                    </md-card>
+                </div>
+                <md-content flex id="content" class="body hide-scrollbar">
+                    <div flex layout="row">
+                        <post-timeline ng-if="!institutionCtrl.isLoadingPosts" layout="column" 
+                        md-colors="{background: 'grey-50'}" posts="institutionCtrl.posts"
+                        institution="true" user="institutionCtrl.user" add-post="institutionCtrl.addPost"
+                        load-more-posts="institutionCtrl.loadMorePosts">
+                        </post-timeline>
+                        <!-- LOADING CIRCLE --> 
+                        <div flex ng-if="institutionCtrl.isLoadingPosts" layout="row" layout-align="center center">
+                                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                        </div>      
+                    </div>
+                </md-content>
+            </div>
+        </div>
+    </div>
+</div>

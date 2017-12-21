@@ -126,7 +126,7 @@
                 getMembers();
                 getRequests();
             }, function error(response) {
-                $state.go('app.institution', {institutionKey: currentInstitutionKey});
+                $state.go('app.institution.timeline', {institutionKey: currentInstitutionKey});
                 MessageService.showToast(response.data.msg);
             });
         }

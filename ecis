@@ -6,7 +6,7 @@ FRONTEND_YAML=frontend/frontend.yaml
 BACKEND_YAML=backend/backend.yaml
 WORKER_YAML=backend/worker.yaml
 
-DOMAIN = "eciis-splab.appspot.com"
+DOMAIN="eciis-splab.appspot.com"
 
 BACKEND_DOMAIN="backend.$DOMAIN"
 
@@ -15,6 +15,8 @@ BACKEND_LOCAL="localhost:8082"
 LANDINGPAGE_LOCAL="localhost:8080"
 
 FRONTEND_CONFIG_FILE="frontend/config.js"
+
+PY_ENV=backend/py_env
 
 bold=$(tput bold)
 _bold=$(tput sgr0)
@@ -41,6 +43,19 @@ function set_landingpage_url {
 
 case "$1" in
     run)
+        echo "=========== Cleaning Environment ==========="
+        rm -rf $PY_ENV
+        rm -rf frontend/test/node_modules frontend/test/bower_components
+
+        echo "=========== Starting Virtual Environment ==========="
+        virtualenv $PY_ENV
+        source $PY_ENV/bin/activate
+
+        echo "=========== Installing Dependencies ==========="
+        python -m pip install -r backend/requirements.txt
+
+        touch .env_cleaned # Flag to the test script knows that the env was cleaned
+
         if which xdg-open > /dev/null
         then
           xdg-open $SYS_URL
@@ -48,6 +63,8 @@ case "$1" in
         then
           gnome-open $SYS_URL
         fi
+
+        echo "=========== Starting Microservices ==========="
 
         set_backend_url $BACKEND_LOCAL
 
@@ -59,19 +76,39 @@ case "$1" in
     test)
         case "$2" in
             client)
-                echo "=========== Iniciando Testes do Frontend ==========="
-                cd frontend/test && karma start $3
+                echo "=========== Starting Fronted Tests ==========="
+                cd frontend/test
+                
+                if [ ! -e node_modules ]; then
+                    npm install
+                fi
+
+                if [ ! -e bower_components ]; then
+                    bower install
+                fi
+
+                karma start --single-run
             ;;
 
             server)
-                echo "=========== Iniciando Testes do Backend ==========="
+                if [ "$3" == "--clean" ]; then
+                    ./setup_env_test clean
+                else
+                    ./setup_env_test
+                fi
+
+                if [ $? != 0 ]; then # Verify the last script output looking for an error
+                    exit 1 # Stop the script execution
+                fi
+                echo "=========== Starting Backend Tests ==========="
+                source $PY_ENV/bin/activate
                 cd backend
                 python -m unittest discover -v -p "*test.py"
         esac
     ;;
 
     deploy)
-        echo "=========== Iniciando deploy no App Engine ==========="
+        echo "=========== Staring Google App Engine Deployment ==========="
 
         if [ ! -z $2 ]; then
             version=$2

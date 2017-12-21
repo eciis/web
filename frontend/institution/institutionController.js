@@ -181,6 +181,10 @@
             $state.go('app.institution.timeline', {institutionKey: institutionKey});
         };
 
+        institutionCtrl.goToMembers = function goToMembers(institutionKey) {
+            $state.go('app.institution.members', {institutionKey: institutionKey});
+        };
+
         institutionCtrl.goToCommingSoon = function goToCommingSoon(institutionKey) {
             $state.go('app.institution.comming_soon', {institutionKey: institutionKey});
         };

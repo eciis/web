@@ -7,6 +7,7 @@
         RequestInvitationService, ProfileService) {
         var manageMemberCtrl = this;
 
+        manageMemberCtrl.institution = {};
         manageMemberCtrl.invite = {};
         manageMemberCtrl.sent_invitations = [];
         manageMemberCtrl.currentMember = "";
@@ -122,6 +123,7 @@
 
         function loadInstitution() {
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
+                manageMemberCtrl.institution = response.data;
                 getSentInvitations(response.data.sent_invitations);
                 getMembers();
                 getRequests();
@@ -139,6 +141,7 @@
         function getMembers() {
             InstitutionService.getMembers(currentInstitutionKey).then(function success(response) {
                 manageMemberCtrl.members = response.data;
+                getAdmin();
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
@@ -149,6 +152,14 @@
                 var isUserRequest = createRequestSelector('sent', 'REQUEST_USER');
                 manageMemberCtrl.requests = response.filter(isUserRequest);
             });
+        }
+
+        function getAdmin() {
+            manageMemberCtrl.institution.admin = _.find(manageMemberCtrl.members, 
+                function(member){
+                    return member.key === manageMemberCtrl.institution.admin.key;
+            });
+            console.log(manageMemberCtrl.institution.admin);
         }
 
         function getEmail(user) {

@@ -70,7 +70,7 @@ case "$1" in
 
         set_landingpage_url $LANDINGPAGE_LOCAL
 
-        dev_appserver.py $APP_YAML $FRONTEND_YAML $BACKEND_YAML $WORKER_YAML
+        dev_appserver.py $APP_YAML $FRONTEND_YAML $BACKEND_YAML $WORKER_YAML $2
     ;;
 
     test)

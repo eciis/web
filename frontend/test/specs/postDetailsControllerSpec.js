@@ -176,7 +176,7 @@
 
             postDetailsCtrl.goToInstitution(institutions[0].key);
 
-            expect(state.go).toHaveBeenCalledWith('app.institution', Object({ institutionKey: institutions[0].key }));
+            expect(state.go).toHaveBeenCalledWith('app.institution.timeline', Object({ institutionKey: institutions[0].key }));
         });
     });
 

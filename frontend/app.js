@@ -87,11 +87,28 @@
                 }
             })
             .state("app.institution", {
-                url: "/institution/:institutionKey/details",
+                abstract: true,
                 views: {
                     content: {
-                        templateUrl: "app/institution/institution_page.html",
+                        templateUrl: "app/institution/base_institution_page.html",
                         controller: "InstitutionController as institutionCtrl"
+                    }
+                }
+            })
+            .state("app.institution.timeline", {
+                url: "/institution/:institutionKey/home",
+                views: {
+                    institution_content: {
+                        templateUrl: "app/institution/timeline_inst.html",
+                        controller: "InstitutionController as institutionCtrl"
+                    }
+                }
+            })
+            .state("app.institution.comming_soon", {
+                url: "/institution/:institutionKey/comming_soon",
+                views: {
+                    institution_content: {
+                        templateUrl: "app/institution/comming_soon.html"
                     }
                 }
             })

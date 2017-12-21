@@ -281,7 +281,7 @@
         }
 
         postDetailsCtrl.goToInstitution = function goToInstitution(institutionKey) {
-            $state.go('app.institution', {institutionKey: institutionKey});
+            $state.go('app.institution.timeline', {institutionKey: institutionKey});
         };
 
         postDetailsCtrl.goToPost = function goToPost(post) {

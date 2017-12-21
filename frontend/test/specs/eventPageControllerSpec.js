@@ -206,7 +206,7 @@
     it('Should call state.go', function() {
       spyOn(state, 'go');
       eventCtrl.goToInstitution(institution.key);
-      expect(state.go).toHaveBeenCalledWith('app.institution', Object({ institutionKey: institution.key }));
+      expect(state.go).toHaveBeenCalledWith('app.institution.timeline', Object({ institutionKey: institution.key }));
     });
   });
 }));

@@ -527,3 +527,10 @@ frontend/config.js
 
 # remove index.yaml
 **/*index.yaml  
+
+# Backend tests 
+backend/py_env
+backend/google_appengine
+backend/Pipfile
+
+.env_cleaned

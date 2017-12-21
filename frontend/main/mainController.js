@@ -66,7 +66,7 @@
         };
 
         mainCtrl.goToInstitution = function goToInstitution(institutionKey) {
-            $state.go('app.institution', {institutionKey: institutionKey});
+            $state.go('app.institution.timeline', {institutionKey: institutionKey});
             mainCtrl.toggle();
         };
 

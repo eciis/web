@@ -14,13 +14,15 @@ sys.setdefaultencoding('utf8')
 def create_message(sender_key, current_institution_key):
     sender = ndb.Key(urlsafe=sender_key).get()
     name = sender.name if sender.name != "Unknown" else sender.email[0]
+    inst_name = ""
     if current_institution_key:
         institution = ndb.Key(urlsafe=current_institution_key).get()
+        inst_name = institution.name
     message = {
         'from': {
             'name': name.encode('utf8'),
             'photo_url': sender.photo_url,
-            'institution': institution.name or ""
+            'institution': inst_name
         }
     }
     return json.dumps(message)

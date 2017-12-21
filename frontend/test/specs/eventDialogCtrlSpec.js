@@ -30,7 +30,8 @@
     'start_time': date_now,
     'end_time': date_now,
     'video_url': [], 
-    'useful_links': []
+    'useful_links': [],
+    'country': 'Brasil'
   };
 
   var post = new Post({}, splab.key);

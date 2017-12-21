@@ -115,15 +115,18 @@ class Event(ndb.Model):
         return event
 
     def make_address(self):
-        address = {
-            'city': self.address.city,
-            'country': self.address.country,
-            'federal_state': self.address.federal_state,
-            'number': self.address.number,
-            'street': self.address.street
-        }
+        if self.address :
+            address = {
+                'city': self.address.city,
+                'country': self.address.country,
+                'federal_state': self.address.federal_state,
+                'number': self.address.number,
+                'street': self.address.street
+            }
 
-        return address
+            return address
+        else:
+            return {}
 
     @staticmethod
     def make(event):

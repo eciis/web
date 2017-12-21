@@ -4,7 +4,7 @@
     <div flex flex-gt-md="100" layout-align="center top" layout="row">
       <div flex layout="column">
         <div>
-          <md-card flex="90" flex-gt-xs="95" style="margin-left: 40px; margin-right: 35px;">
+          <md-card ng-click="eventCtrl.newEvent()" flex="90" flex-gt-xs="95" style="margin-left: 40px; margin-right: 35px;">
             <md-card-content layout="row" style="padding:5px;">
               <md-card-content layout="row">
                 <img ng-src="{{ eventCtrl.user.current_institution.photo_url }}"
@@ -19,7 +19,7 @@
                   <md-menu md-offset="-199 70">
                     <md-button class="md-fab md-primary" title="Criar novo evento"
                     style="margin-right: -100px; background-color: #7CB342"
-                    ng-click="eventCtrl.newEvent()">
+                    ng-click="null">
                       <md-icon>add</md-icon>
                     </md-button>
                   </md-menu>

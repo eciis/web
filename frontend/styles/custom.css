@@ -692,9 +692,10 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
-    width: 200px;
-    height: 200px; margin-left: -1px;
+    transform: translate(-50%, -50%) ;
+    width: 200px !important;
+    height: 200px !important;
+    margin-left: -1px !important;
 }
 
 .edit-profile-avatar-icon {

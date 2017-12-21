@@ -29,6 +29,8 @@
     'photo_url': null,
     'start_time': date_now,
     'end_time': date_now,
+    'video_url': [], 
+    'useful_links': []
   };
 
   var post = new Post({}, splab.key);
@@ -61,10 +63,8 @@
       controller.event = event;
       controller.events = [];
 
-      httpBackend.when('GET', "/api/events").respond([]);
-      httpBackend.when('GET', 'main/main.html').respond(200);
-      httpBackend.when('GET', 'home/home.html').respond(200);
-      httpBackend.when('GET', 'auth/login.html').respond(200);
+      httpBackend.when('GET', 'app/institution/countries.json').respond(200);
+      httpBackend.flush();
   }));
 
   afterEach(function() {

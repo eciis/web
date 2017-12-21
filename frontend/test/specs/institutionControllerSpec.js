@@ -48,7 +48,6 @@
 
         httpBackend.expect('GET', INSTITUTIONS_URI + splab.key + '/timeline?page=0&limit=10').respond({posts: posts, next: true});
         httpBackend.expect('GET', INSTITUTIONS_URI + splab.key).respond(splab);
-        httpBackend.expect('GET', INSTITUTIONS_URI + splab.key + '/members').respond([tiago]);
         httpBackend.expect('GET', INSTITUTIONS_URI + splab.key + '/followers').respond([raoni]);
         httpBackend.when('GET', 'institution/institution_page.html').respond(200);
         httpBackend.when('GET', 'institution/removeInstDialog.html').respond(200);
@@ -82,10 +81,6 @@
 
         it('should exist posts', function() {
             expect(institutionCtrl.posts).toEqual(posts);
-        });
-
-        it('should exist members', function() {
-            expect(institutionCtrl.members).toEqual([tiago]);
         });
 
         it('should exist followers', function() {

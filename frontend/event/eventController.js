@@ -214,12 +214,11 @@
 
         dialogCtrl.removeUrl = function(url, urlList) {
             _.remove(urlList, function(element) {
-             return element === url;
+                return element === url;
            });    
         };
 
         dialogCtrl.changeUrlLink = function(urlLink, urlList) {
-            console.log(dialogCtrl.event);
             urlLink.url ? dialogCtrl.addUrl(urlList) : urlList.length > 1 && 
                             dialogCtrl.removeUrl(urlLink, urlList);
         };
@@ -413,8 +412,8 @@
         }
 
         function addLinks(event) {
-            let videoUrls = _.filter(dialogCtrl.videoUrls, e => e.url !== '');
-            let usefulLinks = _.filter(dialogCtrl.usefulLinks, e => e.url !== '');
+            let videoUrls = _.filter(dialogCtrl.videoUrls, videoUrl => videoUrl.url !== '');
+            let usefulLinks = _.filter(dialogCtrl.usefulLinks, usefulLink => usefulLink.url !== '');
             event.video_url = videoUrls;
             event.useful_links = usefulLinks;
         };

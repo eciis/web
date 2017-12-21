@@ -134,7 +134,7 @@
     </div>
     <div layout="column" flex="100" layout-padding style="padding: 0;">
       <md-dialog style="max-width: 100%;">
-        <form ng-submit="controller.nextStepOrSave()">
+        <form name="createEvent" ng-submit="controller.nextStepOrSave()">
           <md-dialog-content class="hide-scrollbar" layout-padding ng-if="controller.getStep(1)">
             <div md-colors="{background: 'default-teal-500'}" layout="column" layout-align="center center" layout-padding
               style="overflow: hidden; height: 150px; padding-left: 0; padding-right: 0;" class="event-image-view">
@@ -153,23 +153,23 @@
             <div layout="column">
               <md-input-container style="margin-bottom: 0">
                 <label>Nome do evento</label>
-                <input ng-model="controller.event.title"/>
+                <input ng-model="controller.event.title" required/>
               </md-input-container>
               <div layout="row" layout-align="space-between center">
                   <md-input-container style="margin: 0" flex="45">
                       <input mdc-datetime-picker="" short-time="false" date="true" time="true" type="text" format="DD-MM-YYYY HH:mm" lang="pt-BR"
                       placeholder="Data inicial" ng-model="controller.event.start_time" class=" md-input" today-text="Hoje" min-date="null"
-                      max-date="controller.event.end_time" readonly="readonly" cancel-text="Cancelar"/>
+                      max-date="controller.event.end_time" readonly="readonly" cancel-text="Cancelar" required/>
                   </md-input-container flex="45">
                   <md-input-container style="margin: 0">
                       <input mdc-datetime-picker="" ng-change="controller.changeDate('endTime')" date="true" time="true" type="text" lang="pt-BR" today-text="Hoje"
                       placeholder="Data final" class=" md-input" readonly="readonly" format="YYYY-MM-DD HH:mm" max-date="null"
-                      ng-model="controller.event.end_time" cancel-text="Cancelar" min-date="null">
+                      ng-model="controller.event.end_time" cancel-text="Cancelar" min-date="null" required>
                   </md-input-container>
               </div>
               <md-input-container style="margin: 0">
                   <label>Local (Onde o evento vai acontecer)</label>
-                  <input ng-model="controller.event.local"/>
+                  <input ng-model="controller.event.local" required/>
               </md-input-container>
               <div layout="row">
                   <md-input-container style="margin: 0">

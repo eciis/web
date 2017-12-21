@@ -370,6 +370,7 @@
 
         function clearSelectedState() {
             dialogCtrl.event.federal_state = "";
+            dialogCtrl.selectedFederalState = "";
             dialogCtrl.event.city = "";
         }
 
@@ -395,7 +396,8 @@
 
         function create() {
             var event = new Event(dialogCtrl.event, dialogCtrl.user.current_institution.key);
-            event.federal_state = dialogCtrl.selectedFederalState.nome;
+            if (dialogCtrl.selectedFederalState)
+                event.federal_state = dialogCtrl.selectedFederalState.nome;
             if (event.isValid()) {
                 EventService.createEvent(event).then(function success(response) {
                     dialogCtrl.closeDialog();

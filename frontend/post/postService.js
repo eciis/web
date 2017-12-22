@@ -42,9 +42,10 @@
             return deferred.promise;
         };
 
-        service.likePost = function likePost(post, currentInstitutionKey) {
+        service.likePost = function likePost(post, currentInstitution) {
             var deferred = $q.defer();
-            $http.post(`${POSTS_URI}/${post.key}/likes?currentInstKey=${currentInstitutionKey}`)
+            var currentInst = { name: currentInstitution.name };
+            $http.post(`${POSTS_URI}/${post.key}/likes`, currentInst)
             .then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {

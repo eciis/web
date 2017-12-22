@@ -11,24 +11,23 @@ from google.appengine.api import taskqueue
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-def create_message(sender_key, current_institution_key):
+def create_message(sender_key, current_institution):
+    """Create a message based on user current institution."""
     sender = ndb.Key(urlsafe=sender_key).get()
     name = sender.name if sender.name != "Unknown" else sender.email[0]
-    inst_name = ""
-    if current_institution_key:
-        institution = ndb.Key(urlsafe=current_institution_key).get()
-        inst_name = institution.name
+    institution_name = current_institution.get('name') if current_institution else ""
     message = {
         'from': {
             'name': name.encode('utf8'),
             'photo_url': sender.photo_url,
-            'institution': inst_name
+            'institution_name': institution_name
         }
     }
     return json.dumps(message)
 
 
 def create_entity(entity_key):
+    """Create a short entity with only key and name."""
     entity_obj = ndb.Key(urlsafe=entity_key).get()
     class_name = entity_obj.__class__.__name__
     name = ''
@@ -46,7 +45,7 @@ def create_entity(entity_key):
     return json.dumps(entity)
 
 
-def send_message_notification(receiver_key, sender_key, entity_type, entity_key, current_institution_key=None):
+def send_message_notification(receiver_key, sender_key, entity_type, entity_key, current_institution=None):
     """Method of send notification.
 
     Keyword arguments:
@@ -55,8 +54,9 @@ def send_message_notification(receiver_key, sender_key, entity_type, entity_key,
     messagem -- message of notification.
     entity_type -- type of notification.
     entity_key -- entity key of type invite.
+    current_institution -- the institution the user was logged in when the notification was send
     """
-    message = create_message(sender_key, current_institution_key)
+    message = create_message(sender_key, current_institution)
     entity = create_entity(entity_key)
     taskqueue.add(
         url='/api/queue/send-notification',

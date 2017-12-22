@@ -232,7 +232,6 @@
             return _.find(urlList, emptyUrl);
         };
 
-
         function saveImageAndCallEventFunction(callback) {
             if (dialogCtrl.photoBase64Data) {
                 dialogCtrl.loading = true;

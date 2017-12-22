@@ -48,6 +48,8 @@ def create_institution():
     institution = Institution()
     inst_hash = getHash(institution)
     institution.name = "Inst %s" % inst_hash
+    institution.address = create_address()
+    institution.description = "description"
     institution.put()
     return institution
 

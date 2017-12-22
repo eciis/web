@@ -3,18 +3,20 @@
 
 from google.appengine import api
 from search_document import SearchDocument
+from models.address import Address
 
 
 def institution_has_changes(fields, entity):
         """It returns True when there is a change
         to make in entity's document.
-        """        
-        for field in fields:            
-            if not hasattr(entity, field.name):
-                entity = entity.address
+        """
+        if not isinstance(entity, Address):
+            for field in fields:
+                if not hasattr(entity, field.name):
+                    entity = entity.address
 
-            if field.value != getattr(entity, field.name):
-                return True
+                if field.value != getattr(entity, field.name):
+                    return True
         return False
 
 
@@ -47,7 +49,8 @@ class SearchInstitution(SearchDocument):
                 'acronym': institution.acronym,
                 'actuation_area': institution.actuation_area,
                 'legal_nature': institution.legal_nature,
-                'federal_state': institution.address and institution.address.federal_state
+                'federal_state': institution.address and institution.address.federal_state,
+                'description': institution.description
             }
             # Make the structure of the document by setting the fields and its id.
             document = api.search.Document(
@@ -63,7 +66,8 @@ class SearchInstitution(SearchDocument):
                                          value=content['actuation_area']),
                     api.search.TextField(name='legal_nature',
                                          value=content['legal_nature']),
-                    api.search.TextField(name='federal_state', value=content['federal_state'])
+                    api.search.TextField(name='federal_state', value=content['federal_state']),
+                    api.search.TextField(name='description', value=content['description'])
                 ]
             )
             self.saveDocument(document)
@@ -76,7 +80,7 @@ class SearchInstitution(SearchDocument):
         index = api.search.Index(self.index_name)
         query_options = api.search.QueryOptions(
             returned_fields=['name', 'state', 'admin', 'acronym',
-                             'actuation_area', 'legal_nature', 'federal_state']
+                             'actuation_area', 'legal_nature', 'federal_state', 'description']
         )
         query = api.search.Query(
             query_string=query_string, options=query_options)
@@ -112,7 +116,7 @@ class SearchInstitution(SearchDocument):
     def create_field_values_string(self, value):
         """Create a string formed by fields and values."""
         # add a new field here
-        fields = ['name', 'acronym', 'actuation_area', 'legal_nature', 'federal_state']
+        fields = ['name', 'acronym', 'actuation_area', 'legal_nature', 'federal_state', 'description']
         fields_values = []
 
         for field in fields:

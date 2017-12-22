@@ -29,10 +29,10 @@ class RemoveInstitutionHandlerTest(TestBaseHandler):
         common_user = mocks.create_user()
         institution = mocks.create_institution()
         institution.address = mocks.create_address()
-        institution.add_member(common_user)
-        institution.add_member(admin)
         admin.institutions_admin = [institution.key]
         admin.add_institution(institution.key)
+        institution.members = [admin.key, common_user.key]
+        institution.put()
         common_user.add_institution(institution.key)
         self.assertTrue(institution.key in admin.institutions)
         self.assertTrue(institution.key in common_user.institutions)

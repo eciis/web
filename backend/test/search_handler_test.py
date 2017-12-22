@@ -87,7 +87,7 @@ class SearchHandlerTest(TestBaseHandler):
             % (user.name, user.state))
         self.assertTrue("User" in users)
         # Call the get method with part of the user's name
-        users = testapp.get(
+        users = self.testapp.get(
             "/api/search/institution?value=%s&state=%s&type=user"
             % ("User", user.state))
         self.assertTrue("User" in users)

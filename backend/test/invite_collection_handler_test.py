@@ -127,7 +127,6 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         otherinst.address = mocks.create_address()
         otherinst.add_member(otheruser)
         institution.put()
-        otherinst.put()
 
         invite = self.testapp.post_json("/api/invites", {
             'invitee': 'otheruser@ccc.ufcg.edu.br',

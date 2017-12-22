@@ -3,18 +3,20 @@
 
 from google.appengine import api
 from search_document import SearchDocument
+from models.address import Address
 
 
 def institution_has_changes(fields, entity):
         """It returns True when there is a change
         to make in entity's document.
-        """        
-        for field in fields:            
-            if not hasattr(entity, field.name):
-                entity = entity.address
+        """
+        if not isinstance(entity, Address):
+            for field in fields:
+                if not hasattr(entity, field.name):
+                    entity = entity.address
 
-            if field.value != getattr(entity, field.name):
-                return True
+                if field.value != getattr(entity, field.name):
+                    return True
         return False
 
 

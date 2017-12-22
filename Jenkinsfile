@@ -11,22 +11,11 @@ pipeline {
       steps {
         parallel(
           "Backend": {
-            sh './ecis test server --clean'
+            sh 'echo Backend'
             
           },
           "Frontend": {
-            sh '''
-                cd frontend/test
-
-                rm -rf node_modules bower_components
-
-                npm install -g bower chai@^3.0.0 chai-as-promised@^5.1.0 jasmine-core karma karma-chai karma-chai-as-promised karma-chrome-launcher karma-jasmine karma-spec-reporter
-
-                npm install
-
-                bower install --allow-root
-
-                karma start --single-run'''
+            sh 'echo Frontend'
             
           }
         )
@@ -38,18 +27,14 @@ pipeline {
       }
     }
   }
-  environment {
-    GIT_COMMITTER_NAME = 'user'
-    GIT_COMMITTER_EMAIL = 'email'
-  }
   post {
     success {
-      slackSend(color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+      slackSend(color: '#689F38', message: "SUCCESS: Build <${env.BUILD_URL}display/redirect|#${env.BUILD_NUMBER}> of *${env.JOB_NAME}*")
       
     }
     
     failure {
-      slackSend(color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+      slackSend(color: '#d32f2f', message: "FAILED: Build <${env.BUILD_URL}display/redirect|#${env.BUILD_NUMBER}> of *${env.JOB_NAME}*")
       
     }
     

@@ -1,18 +1,24 @@
-<md-dialog layout-padding flex-md="30" flex-gt-sm="40" flex-sm="50" flex-xs="70">
-    <section layout="column" layout-align="end end">
-        <md-button class="md-icon-button" ng-click="editProfileCtrl.closeDialog()">
-            <md-icon>close</md-icon>
-        </md-button>
-    </section>
-    <section layout="row" layout-align="center center">
-        <img style="border-radius: 50%; width: 80px;" ng-src="{{ editProfileCtrl.institution.photo_url }}"
-        alt="{{editProfileCtrl.institution.name}}" />
-    </section>
-    <section style="margin-top: -20px;" layout="row" layout-align="center center">
-        <h3 class="md-title">Editar perfil</h3>
-    </section>
-    <div>
-        <md-dialog-content class="md-dialog-content" layout="column" layout-align="center">
+<md-dialog flex flex-gt-md="25" flex-md="40" flex-gt-sm="50" flex-sm="50" flex-xs="100">
+    <md-dialog-content layout="column" class="hide-scrollbar" ng-if="true" style="padding: 0; margin-bottom: 3%">
+        <div layout-align="center center">
+            <div class="card hovercard" md-colors="{background: 'default-teal-600'}">
+                <div class="cardheader">
+                    <div class="avatar">
+                        <img alt="Foto do Perfil" ng-src="{{ editProfileCtrl.institution.photo_url }}"
+                        alt="{{editProfileCtrl.institution.name}}">
+                    </div>
+                </div>
+                <div class="info"
+                    md-colors="{background: 'default-grey-50'}">
+                    <div class="desc">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="margin-top: -20px;">
+            <h2 style="text-align: center;">{{editProfileCtrl.institution.name}}</h2>
+        </div>
+        <div layout="column" md-theme="input" class="input" style="margin-left: 40px; margin-right: 40px;">
             <md-input-container>
                 <label>Telefone institucional</label>
                 <input ng-model="editProfileCtrl.profile.phone" placeholder="99 9999-99999" 
@@ -26,12 +32,16 @@
                 <label>Cargo</label>
                 <input ng-model="editProfileCtrl.profile.office" required>
             </md-input-container>
-        </md-dialog-content>
-        <md-dialog-actions layout="row" layout-align="end center">
-            <md-button class="md-raised" md-colors="::{background: 'dialogTheme-primary-900'}"
-            ng-click="editProfileCtrl.edit()">
-                Salvar
-            </md-button>
-        </md-dialog-actions>
-    </div>
+            <md-dialog-actions layout="row" layout-align="end center">
+                <md-button class="md-raised" md-colors="{background: 'default-teal-600'}"
+                ng-click="editProfileCtrl.closeDialog()">
+                    Cancelar
+                </md-button>
+                <md-button class="md-raised" md-colors="{background: 'default-teal-600'}"
+                ng-click="editProfileCtrl.edit()">
+                    Salvar
+                </md-button>
+            </md-dialog-actions>
+        </div>
+    </md-dialog-content>
 </md-dialog>

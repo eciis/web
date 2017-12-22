@@ -84,13 +84,10 @@
         };
 
         service.getFollowers = function getFollowers(institution_key) {
-            console.log("geeet follow");
-            console.log(INSTITUTIONS_URI + "/" + institution_key + "/followers");
             var deferred = $q.defer();
             $http.get(INSTITUTIONS_URI + "/" + institution_key + "/followers").then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
-                console.log(response);
                 deferred.reject(response);
             });
             return deferred.promise;

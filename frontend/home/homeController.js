@@ -144,11 +144,10 @@
 
         function activeEvents(allEvents){
             var now = new Date();
-            var actualEvents = _.remove(allEvents, function(event) {
+            var actualEvents = _.clone(allEvents);
+            _.remove(actualEvents, function(event) {
                 var end = new Date(event.end_time);
-                if(end >= now){
-                    return event;
-                }
+                return end <= now;
             });
             return actualEvents;
         }

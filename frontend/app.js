@@ -104,6 +104,15 @@
                     }
                 }
             })
+            .state("app.institution.followers", {
+                url: "/institution/:institutionKey/followers",
+                views: {
+                    institution_content: {
+                        templateUrl: "app/institution/followers.html",
+                        controller: "InstitutionController as followersCtrl"
+                    }
+                }
+            })
             .state("app.institution.comming_soon", {
                 url: "/institution/:institutionKey/comming_soon",
                 views: {

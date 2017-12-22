@@ -20,7 +20,6 @@
         institutionCtrl.showFullData = false;
         institutionCtrl.isLoadingPosts = true;
         institutionCtrl.isLoadingPosts = true;
-        institutionCtrl.searchedMember = "";
 
         institutionCtrl.legal_natures = {
             "public": "Pública",
@@ -181,6 +180,10 @@
             $state.go('app.institution.timeline', {institutionKey: institutionKey});
         };
 
+        institutionCtrl.goToFollowers = function goToFollowers(institutionKey) {
+            $state.go('app.institution.followers', {institutionKey: institutionKey});
+        };
+
         institutionCtrl.goToCommingSoon = function goToCommingSoon(institutionKey) {
             $state.go('app.institution.comming_soon', {institutionKey: institutionKey});
         };
@@ -275,6 +278,8 @@
                 controllerAs: 'ctrl'
             });
         };
+
+
 
         function RemoveInstController($mdDialog, institution, InstitutionService, $state) {
             var ctrl = this;

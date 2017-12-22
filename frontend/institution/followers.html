@@ -1,0 +1,44 @@
+<div flex="100" layout="row" layout-align="center">
+    <div flex flex-md="95" layout="row" layout-align="space-around"
+            md-colors="{background: 'grey-50'}">
+          <!-- CONTENT -->
+        <md-content class="hide-scrollbar" flex="90">
+        <md-card>
+        	<md-card-content>
+	        	<md-toolbar md-colors="{background: 'teal-500'}" layout="row">
+	                <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
+	                    <h1>
+	                      <md-icon>account_circle </md-icon>
+	                      SEGUIDORES
+	                    </h1>
+	                    <span flex md-truncate></span>
+	                </div>
+	            </md-toolbar>
+	            <div layout-margin>
+	                <form ng-submit="">
+	                    <md-input-container layout="row" class="md-icon-float">
+	                      <label>Buscar</label>
+	                      <input aria-label="Pesquisar por membros" class="md-icon-float" ng-model="followersCtrl.currentFollower">
+	                      <md-icon md-colors="{color: 'grey-500'}">search</md-icon>
+	                    </md-input-container>
+	                </form>
+	            </div>
+	            <md-content flex style="max-height: 280px;" ng-scrollbars>
+	                <md-list flex>
+	                    <md-list-item class="list-item-dense" md-colors="{background: 'grey-300'}"
+	                      ng-repeat="follower in followersCtrl.followers | filter: followersCtrl.currentFollower" 
+	                      ng-click="followersCtrl.showUserProfile(follower.key, $event)" flex-xs>
+	                      <img title="{{follower.name}}" ng-src="{{follower.photo_url}}" class="md-avatar" 
+	                        style="margin: 0 15px 0 -15px; width: 60px; height: 60px;"/>
+	                      <div layout="column">
+	                         <b style="position: relative; margin-top: 20px; font-size: 15px;">{{ follower.name }}</b>
+	                         <span style="position: relative; bottom: 20px; font-size: 15px;">{{ follower.email[0]}}</span>
+	                      </div>
+	                    </md-list-item>
+	                </md-list>
+	            </md-content>
+            </md-card-content>
+        </md-card>
+        </md-content>
+    </div>
+</div>

@@ -86,11 +86,13 @@
         it('Test likePost in success case', function() {
             spyOn($http, 'post').and.callThrough();
             var LIKE_URI = POSTS_URI + '/' + posts[0].key + '/likes';
-            var currentInst = { name: user.current_institution.name };
+            var body = { 
+                currentInstitution: { name: user.current_institution.name }
+            };
             httpBackend.expect('POST', LIKE_URI).respond();
             service.likePost(posts[0], user.current_institution);
             httpBackend.flush();
-            expect($http.post).toHaveBeenCalledWith(LIKE_URI, currentInst);
+            expect($http.post).toHaveBeenCalledWith(LIKE_URI, body);
         });
 
         it('Test dislikePost in success case', function() {

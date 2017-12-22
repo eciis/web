@@ -1,0 +1,56 @@
+<div layout="row" layout-align="center">
+    <div flex flex-md="95" layout="row" layout-align="space-around"
+            md-colors="{background: 'grey-50'}">
+          <!-- CONTENT -->
+        <md-content class="hide-scrollbar" flex="90">
+        <md-card>
+        	<md-card-content>
+	        	<md-toolbar md-colors="{background: 'teal-500'}" layout="row">
+	                <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
+	                    <h1>
+	                      <md-icon>account_circle </md-icon>
+	                      MEMBROS
+	                    </h1>
+	                    <span flex md-truncate></span>
+	                </div>
+	            </md-toolbar>
+	            <h3>ADMINISTRADOR</h3>
+	            <div layout="row" style="margin-top: 2%; margin-bottom: 5%" 
+	                md-colors="{background: 'grey-300'}" ng-click="membersCtrl.showUserProfile(membersCtrl.institution.admin.key, $event)">  
+	                <img title="{{membersCtrl.institution.admin.name}}" ng-src="{{membersCtrl.institution.admin.photo_url}}" class="md-avatar" style="width: 60px; height: 60px; margin-right: 2%"/>
+	                <div layout="column" layout-align="center" 
+	                	ng-click="membersCtrl.showUserProfile(membersCtrl.institution.admin.key, $event)">
+	                    <b>{{ membersCtrl.institution.admin.name }}</b>
+	                    <span>{{ membersCtrl.institution.admin.email[0]}}</span>
+	                </div>
+	            </div>
+	            <h3>CORPO TÉCNICO</h3>
+	            <div layout-margin>
+	                <form ng-submit="">
+	                    <md-input-container layout="row" class="md-icon-float">
+	                      <label>Buscar</label>
+	                      <input aria-label="Pesquisar por membros" class="md-icon-float" ng-model="membersCtrl.currentMember">
+	                      <md-icon md-colors="{color: 'grey-500'}">search</md-icon>
+	                    </md-input-container>
+	                </form>
+	            </div>
+	            <md-content flex style="max-height: 280px;" ng-scrollbars>
+	                <md-list flex>
+	                    <md-list-item class="list-item-dense" md-colors="{background: 'grey-300'}"
+	                      ng-repeat="member in membersCtrl.members | filter: membersCtrl.currentMember" 
+	                      ng-click="membersCtrl.showUserProfile(member.key, $event)" flex-xs>
+	                      <img title="{{member.name}}" ng-src="{{member.photo_url}}" class="md-avatar" 
+	                        style="margin: 0 15px 0 -15px; width: 60px; height: 60px;"/>
+	                      <div layout="column" 
+	                      	ng-click="membersCtrl.showUserProfile(membersCtrl.institution.admin.key, $event)">
+	                         <b style="position: relative; margin-top: 20px; font-size: 15px;">{{ member.name }}</b>
+	                         <span style="position: relative; bottom: 20px; font-size: 15px;">{{ member.email[0]}}</span>
+	                      </div>
+	                    </md-list-item>
+	                </md-list>
+	            </md-content>
+            </md-card-content>
+        </md-card>
+        </md-content>
+    </div>
+</div>

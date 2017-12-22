@@ -112,6 +112,15 @@
                     }
                 }
             })
+            .state("app.institution.members", {
+                url: "/institution/:institutionKey/members",
+                views: {
+                    institution_content: {
+                        templateUrl: "app/institution/members.html",
+                        controller: "ManagementMembersController as membersCtrl"
+                    }
+                }
+            })
             .state("app.post", {
                 url: "/posts/:key",
                 views: {

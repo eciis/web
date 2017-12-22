@@ -23,6 +23,7 @@
 
         user.follows = [institutions[0], institutions[1]];
         user.institutions = [institutions[0]];
+        user.current_institution = institutions[0];
 
         var posts = [
             {title: 'test', text: 'main post test', institution: institutions[0].key, key: '1'},
@@ -84,10 +85,14 @@
 
         it('Test likePost in success case', function() {
             spyOn($http, 'post').and.callThrough();
-            httpBackend.expect('POST', POSTS_URI + '/' + posts[0].key + '/likes').respond();
-            service.likePost(posts[0]);
+            var LIKE_URI = POSTS_URI + '/' + posts[0].key + '/likes';
+            var body = { 
+                currentInstitution: { name: user.current_institution.name }
+            };
+            httpBackend.expect('POST', LIKE_URI).respond();
+            service.likePost(posts[0], user.current_institution);
             httpBackend.flush();
-            expect($http.post).toHaveBeenCalled();
+            expect($http.post).toHaveBeenCalledWith(LIKE_URI, body);
         });
 
         it('Test dislikePost in success case', function() {

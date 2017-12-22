@@ -39,7 +39,8 @@ class LikeHandlerTest(TestBaseHandler):
         # Checks if the key of Other User are not in the authors
         self.assertNotIn(self.other_user.key.urlsafe(), authors)
         # Call the post method
-        self.testapp.post(self.LIKE_URI % self.user_post.key.urlsafe())
+        body = json.dumps({"currentInstitution": {"name": "instName"}})
+        self.testapp.post(self.LIKE_URI % self.user_post.key.urlsafe(), body)
         # Verify if after the like the number of likes at post is 1
         self.user_post = self.user_post.key.get()
         self.assertEqual(self.user_post.get_number_of_likes(), 1,
@@ -65,7 +66,8 @@ class LikeHandlerTest(TestBaseHandler):
                          "The number of likes expected was 0, but was %d"
                          % self.user_post.get_number_of_likes())
         # Call the post method
-        self.testapp.post(self.LIKE_URI % self.user_post.key.urlsafe())
+        body = json.dumps({"currentInstitution": {"name": "instName"}})
+        self.testapp.post(self.LIKE_URI % self.user_post.key.urlsafe(), body)
         # Verify if after the like the number of likes at post is 1
         self.user_post = self.user_post.key.get()
         self.assertEqual(self.user_post.get_number_of_likes(), 1,
@@ -73,7 +75,7 @@ class LikeHandlerTest(TestBaseHandler):
                          % self.user_post.get_number_of_likes())
         # Call the post method again
         with self.assertRaises(Exception) as exc:
-            self.testapp.post(self.LIKE_URI % self.user_post.key.urlsafe())
+            self.testapp.post(self.LIKE_URI % self.user_post.key.urlsafe(), body)
         # Verify if message exception
         exc = self.get_message_exception(exc.exception.message)
         self.assertEquals(exc, "Error! User already liked this publication")
@@ -86,7 +88,7 @@ class LikeHandlerTest(TestBaseHandler):
         # Authentication with User
         verify_token.return_value={'email': 'user@example.com'}
         # Call the post method
-        self.testapp.post(self.LIKE_URI % self.user_post.key.urlsafe())
+        self.testapp.post(self.LIKE_URI % self.user_post.key.urlsafe(), body)
         # Refresh user_post
         self.user_post = self.user_post.key.get()
         # Verify if after the like with other user the number of likes at
@@ -99,7 +101,8 @@ class LikeHandlerTest(TestBaseHandler):
     def test_delete(self, verify_token):
         """Test the like_post_handler's delete method."""
         # Call the post method
-        self.testapp.post(self.LIKE_URI % self.user_post.key.urlsafe())
+        body = json.dumps({"currentInstitution": {"name": "instName"}})
+        self.testapp.post(self.LIKE_URI % self.user_post.key.urlsafe(), body)
         # Refresh user_post
         self.user_post = self.user_post.key.get()
         # Verify if after the like the number of likes at post is 1

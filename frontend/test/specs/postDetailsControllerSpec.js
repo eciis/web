@@ -145,7 +145,7 @@
             expect(postDetailsCtrl.isLikedByUser).toHaveBeenCalledWith();
             expect(postDetailsCtrl.getLikes).toHaveBeenCalledWith(posts[0]);
             expect(postDetailsCtrl.showLikes).toEqual(true);
-            expect(postService.likePost).toHaveBeenCalledWith(posts[0]);
+            expect(postService.likePost).toHaveBeenCalledWith(posts[0], user.current_institution);
         });
 
         it('Should dislike the post', function() {

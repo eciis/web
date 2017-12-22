@@ -38,18 +38,14 @@ pipeline {
       }
     }
   }
-  environment {
-    GIT_COMMITTER_NAME = 'user'
-    GIT_COMMITTER_EMAIL = 'email'
-  }
   post {
     success {
-      slackSend(color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+      slackSend(color: '#689F38', message: "SUCCESS: Build <${env.BUILD_URL}display/redirect|#${env.BUILD_NUMBER}> of *${env.JOB_NAME}*")
       
     }
     
     failure {
-      slackSend(color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+      slackSend(color: '#d32f2f', message: "FAILED: Build <${env.BUILD_URL}display/redirect|#${env.BUILD_NUMBER}> of *${env.JOB_NAME}*")
       
     }
     

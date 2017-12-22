@@ -11,11 +11,22 @@ pipeline {
       steps {
         parallel(
           "Backend": {
-            sh 'echo Backend'
+            sh './ecis test server --clean'
             
           },
           "Frontend": {
-            sh 'echo Frontend'
+            sh '''
+                cd frontend/test
+
+                rm -rf node_modules bower_components
+
+                npm install -g bower chai@^3.0.0 chai-as-promised@^5.1.0 jasmine-core karma karma-chai karma-chai-as-promised karma-chrome-launcher karma-jasmine karma-spec-reporter
+
+                npm install
+
+                bower install --allow-root
+
+                karma start --single-run'''
             
           }
         )

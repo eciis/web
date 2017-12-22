@@ -28,7 +28,7 @@
                         <post-timeline ng-if="!institutionCtrl.isLoadingPosts" layout="column" 
                         md-colors="{background: 'grey-50'}" posts="institutionCtrl.posts"
                         institution="true" user="institutionCtrl.user" add-post="institutionCtrl.addPost"
-                        load-more-posts="institutionCtrl.loadMorePosts">
+                        load-more-posts="institutionCtrl.loadMorePosts" flex>
                         </post-timeline>
                         <!-- LOADING CIRCLE --> 
                         <div flex ng-if="institutionCtrl.isLoadingPosts" layout="row" layout-align="center center">

@@ -46,7 +46,8 @@ class LikeHandler(BaseHandler):
         """This method is only meant to give like in post."""
         post = ndb.Key(urlsafe=post_key).get()
         institution = post.institution.get()
-        current_institution = self.request.body
+        body = json.loads(self.request.body)
+        current_institution = body.get('currentInstitution')
         entity_type = 'LIKE_POST'
         
         Utils._assert(institution.state == 'inactive',
@@ -73,7 +74,7 @@ class LikeHandler(BaseHandler):
                     user.key.urlsafe(), 
                     entity_type, 
                     post.key.urlsafe(),
-                    json.loads(current_institution)
+                    current_institution
                 )
         else:
             Utils._assert(user.is_liked_post(post.key),
@@ -86,7 +87,7 @@ class LikeHandler(BaseHandler):
                 'sender_key': user.key.urlsafe(),
                 'entity_key': post.key.urlsafe(),
                 'entity_type': entity_type,
-                'current_institution': current_institution
+                'current_institution': json.dumps(current_institution)
             }
 
             enqueue_task('post-notification', params)

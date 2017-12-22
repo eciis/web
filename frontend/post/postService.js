@@ -44,8 +44,12 @@
 
         service.likePost = function likePost(post, currentInstitution) {
             var deferred = $q.defer();
-            var currentInst = { name: currentInstitution.name };
-            $http.post(`${POSTS_URI}/${post.key}/likes`, currentInst)
+            var body = {
+                currentInstitution: {
+                    name: currentInstitution.name 
+                }
+            };
+            $http.post(`${POSTS_URI}/${post.key}/likes`, body)
             .then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {

@@ -114,20 +114,6 @@ class Event(ndb.Model):
 
         return event
 
-    def make_address(self):
-        if self.address :
-            address = {
-                'city': self.address.city,
-                'country': self.address.country,
-                'federal_state': self.address.federal_state,
-                'number': self.address.number,
-                'street': self.address.street
-            }
-
-            return address
-        else:
-            return {}
-
     @staticmethod
     def make(event):
         """Create personalized json of event."""
@@ -140,7 +126,7 @@ class Event(ndb.Model):
             'programation': event.programation,
             'video_url': event.video_url,
             'useful_links': event.useful_links,
-            'address': event.make_address(),
+            'address': event.address.make() if event.address else {},
             'local': event.local,
             'start_time': start_time,
             'end_time': end_time,

@@ -134,7 +134,7 @@
             spyOn(postDetailsCtrl, 'isLikedByUser').and.callThrough();
             spyOn(postDetailsCtrl, 'getLikes').and.callThrough();
             spyOn(postService, 'likePost').and.callThrough();
-            httpBackend.expect('POST', POSTS_URI + '/' + posts[0].key + '/likes?currentInstKey=' + user.current_institution.key).respond();
+            httpBackend.expect('POST', POSTS_URI + '/' + posts[0].key + '/likes').respond();
             httpBackend.expect('GET', "/api/posts/123456/likes").respond();
             postDetailsCtrl.user.liked_posts = [];
             expect(postDetailsCtrl.showLikes).toEqual(false);
@@ -145,7 +145,7 @@
             expect(postDetailsCtrl.isLikedByUser).toHaveBeenCalledWith();
             expect(postDetailsCtrl.getLikes).toHaveBeenCalledWith(posts[0]);
             expect(postDetailsCtrl.showLikes).toEqual(true);
-            expect(postService.likePost).toHaveBeenCalledWith(posts[0], user.current_institution.key);
+            expect(postService.likePost).toHaveBeenCalledWith(posts[0], user.current_institution);
         });
 
         it('Should dislike the post', function() {

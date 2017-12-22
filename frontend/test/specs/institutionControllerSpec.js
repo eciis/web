@@ -6,34 +6,34 @@
 
     var INSTITUTIONS_URI = "/api/institutions/";
 
-    var splab = {
-        acronym: 'SPLAB',
+    var first_institution = {
+        acronym: 'first_institution',
         key: '987654321',
         photo_url: "photo_url"
     };
 
-    var certbio = {
-        acronym: 'CERTBIO',
+    var sec_institution = {
+        acronym: 'sec_institution',
         key: '123456789',
         photo_url: "photo_url"
     };
 
-    var tiago = {
-        name: 'Tiago',
-        institutions: [splab],
-        follows: [certbio],
-        institutions_admin: splab,
-        current_institution: splab
+    var first_user = {
+        name: 'first_user',
+        institutions: [first_institution],
+        follows: [sec_institution],
+        institutions_admin: first_institution,
+        current_institution: first_institution
     };
 
-    var raoni = {
-        name: 'Raoni',
-        institutions: [certbio],
-        follows: [splab]
+    var sec_user = {
+        name: 'sec_user',
+        institutions: [sec_institution],
+        follows: [first_institution]
     };
 
     var posts = [{
-        author: 'Raoni',
+        author: 'sec_user',
         author_key: "abcdefg"
     }];
 
@@ -46,15 +46,14 @@
         mdDialog = $mdDialog;
         institutionService = InstitutionService;
 
-        httpBackend.expect('GET', INSTITUTIONS_URI + splab.key + '/timeline?page=0&limit=10').respond({posts: posts, next: true});
-        httpBackend.expect('GET', INSTITUTIONS_URI + splab.key).respond(splab);
-        httpBackend.expect('GET', INSTITUTIONS_URI + splab.key + '/members').respond([tiago]);
+        httpBackend.expect('GET', INSTITUTIONS_URI + first_institution.key + '/timeline?page=0&limit=10').respond({posts: posts, next: true});
+        httpBackend.expect('GET', INSTITUTIONS_URI + first_institution.key).respond(first_institution);
         httpBackend.when('GET', 'institution/institution_page.html').respond(200);
         httpBackend.when('GET', 'institution/removeInstDialog.html').respond(200);
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', "home/home.html").respond(200);
 
-        AuthService.login(tiago);
+        AuthService.login(first_user);
 
         createCtrl = function() {
             return $controller('InstitutionController',
@@ -63,7 +62,7 @@
                     institutionService: institutionService
                 });
         };
-        state.params.institutionKey = splab.key;
+        state.params.institutionKey = first_institution.key;
         institutionCtrl = createCtrl();
         httpBackend.flush();
     }));
@@ -75,20 +74,16 @@
 
     describe('InstitutionController properties', function() {
 
-        it('should exist a user and his name is Tiago', function() {
-            expect(institutionCtrl.user.name).toEqual(tiago.name);
+        it('should exist a user and his name is first_user', function() {
+            expect(institutionCtrl.user.name).toEqual(first_user.name);
         });
 
         it('should exist posts', function() {
             expect(institutionCtrl.posts).toEqual(posts);
         });
 
-        it('should exist members', function() {
-            expect(institutionCtrl.members).toEqual([tiago]);
-        });
-
         it('should exist currentInstitution', function() {
-            expect(institutionCtrl.current_institution.make()).toEqual(splab);
+            expect(institutionCtrl.current_institution.make()).toEqual(first_institution);
         });
     });
 
@@ -100,7 +95,7 @@
         });
 
         it('Should is not admin', function(){
-            institutionCtrl.user.current_institution = certbio;
+            institutionCtrl.user.current_institution = sec_institution;
 
             spyOn(institutionCtrl.user, 'isAdmin').and.callThrough();
             expect(institutionCtrl.isAdmin()).toEqual(false);
@@ -112,7 +107,7 @@
         });
 
         it('Should isMember be false', function(){
-            institutionCtrl.user.institutions = [certbio];
+            institutionCtrl.user.institutions = [sec_institution];
             spyOn(institutionCtrl.user, 'isMember').and.callThrough();
             institutionCtrl.checkIfUserIsMember();
             expect(institutionCtrl.isMember).toEqual(false);
@@ -134,7 +129,7 @@
             it('should call institutionService.follow() ', function(done) {
                 var promise = institutionCtrl.follow();
                 promise.then(function() {
-                    expect(institutionService.follow).toHaveBeenCalledWith(splab.key);
+                    expect(institutionService.follow).toHaveBeenCalledWith(first_institution.key);
                     done();
                 });
                 scope.$apply();
@@ -143,7 +138,7 @@
             it('should call user.follow()', function(done) {
                 var promise = institutionCtrl.follow();
                 promise.then(function() {
-                    expect(institutionCtrl.user.follow).toHaveBeenCalledWith(splab);
+                    expect(institutionCtrl.user.follow).toHaveBeenCalledWith(first_institution);
                     done();
                 });
                 scope.$apply();
@@ -157,7 +152,7 @@
                 spyOn(institutionService, 'getFollowers').and.callFake(function() {
                     return {
                         then: function(callback) {
-                            return callback([raoni]);
+                            return callback([sec_user]);
                         }
                     };
                 });
@@ -174,7 +169,7 @@
             it('should call user.isMember()', function(done) {
                 var promise = institutionCtrl.unfollow();
                 promise.then(function() {
-                    expect(institutionCtrl.user.isMember).toHaveBeenCalledWith(splab.key);
+                    expect(institutionCtrl.user.isMember).toHaveBeenCalledWith(first_institution.key);
                     done();
                 });
                 scope.$apply();
@@ -183,7 +178,7 @@
             it('should call institutionService.unfollow()', function(done) {
                 var promise = institutionCtrl.unfollow();
                 promise.then(function() {
-                    expect(institutionService.unfollow).toHaveBeenCalledWith(splab.key);
+                    expect(institutionService.unfollow).toHaveBeenCalledWith(first_institution.key);
                     done();
                 });
                 scope.$apply();
@@ -224,7 +219,7 @@
                 var actualPage = 1;
 
                 promise.then(function success() {
-                    expect(institutionService.getNextPosts).toHaveBeenCalledWith(splab.key, actualPage);
+                    expect(institutionService.getNextPosts).toHaveBeenCalledWith(first_institution.key, actualPage);
                     done();
                 });
 

@@ -84,6 +84,30 @@
         });
     });
 
+    describe('canReply()', function() {
+        it('Should return true', function() {
+            commentCtrl.post = posts[0];
+            commentCtrl.post.state = "active";
+            commentCtrl.showReplies = true;
+            expect(commentCtrl.canReply()).toBeTruthy();
+        });
+
+        it('Should return false', function() {
+            commentCtrl.post = posts[0];
+            commentCtrl.post.state = "deleted";
+            commentCtrl.showReplies = true;
+            expect(commentCtrl.canReply()).toBeFalsy();
+        });
+
+        it('Should return false', function() {
+            commentCtrl.post = posts[0];
+            commentCtrl.post.state = "active";
+            commentCtrl.post.institution_state = 'inactive';
+            commentCtrl.showReplies = true;
+            expect(commentCtrl.canReply()).toBeFalsy();
+        });
+    });
+
     describe('confirmCommentDeletion()', function(){
         beforeEach(function() {
             posts[0].state = 'published';

@@ -19,11 +19,17 @@
                         institution_key: '987654321',
                         admin_key: '12345'});
 
+    var admin = {
+        name: 'Admin',
+        key: '145',
+    };
+
     var institution = {
             name: 'institution',
             key: '987654321',
+            admin: admin,
             sent_invitations: [invite, otherInvite]  ,
-            members: [member]
+            members: [member, admin]
     };
 
     var member = {

@@ -36,6 +36,11 @@
             return userInactiveCtrl.choicedInst && !userInactiveCtrl.isFinished;
         };
 
+        userInactiveCtrl.showButtonNext =  function showButtonNext(){
+            var hasInstFound = userInactiveCtrl.institutions.length > 0;
+            return !userInactiveCtrl.choicedInst && hasInstFound;
+        };
+
         userInactiveCtrl.sendRequest = function sendRequest() {
             var dataInvite = {
                 institution_key : userInactiveCtrl.institutionSelect.key,

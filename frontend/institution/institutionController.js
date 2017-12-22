@@ -11,7 +11,6 @@
 
         institutionCtrl.current_institution = null;
         institutionCtrl.posts = [];
-        institutionCtrl.members = [];
         institutionCtrl.isUserFollower = false;
         institutionCtrl.isMember = false;
         institutionCtrl.portfolioUrl = null;
@@ -42,7 +41,6 @@
         function loadInstitution() {
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
                 institutionCtrl.current_institution = new Institution(response.data);
-                getMembers();
                 checkIfUserIsFollower();
                 institutionCtrl.checkIfUserIsMember();
                 getPortfolioUrl();
@@ -66,14 +64,6 @@
 
         function setPortifolioURL(url) {
             institutionCtrl.portfolioUrl = url;
-        }
-
-        function getMembers() {
-            InstitutionService.getMembers(currentInstitutionKey).then(function success(response) {
-                institutionCtrl.members = response.data;
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
-            });
         }
 
         institutionCtrl.loadMorePosts = function loadMorePosts() {
@@ -165,6 +155,10 @@
 
         institutionCtrl.goToInstitution = function goToInstitution(institutionKey) {
             $state.go('app.institution.timeline', {institutionKey: institutionKey});
+        };
+
+        institutionCtrl.goToMembers = function goToMembers(institutionKey) {
+            $state.go('app.institution.members', {institutionKey: institutionKey});
         };
 
         institutionCtrl.goToFollowers = function goToFollowers(institutionKey) {

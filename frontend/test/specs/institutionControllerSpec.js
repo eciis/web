@@ -49,7 +49,6 @@
         httpBackend.expect('GET', INSTITUTIONS_URI + splab.key + '/timeline?page=0&limit=10').respond({posts: posts, next: true});
         httpBackend.expect('GET', INSTITUTIONS_URI + splab.key).respond(splab);
         httpBackend.expect('GET', INSTITUTIONS_URI + splab.key + '/members').respond([tiago]);
-        httpBackend.expect('GET', INSTITUTIONS_URI + splab.key + '/followers').respond([raoni]);
         httpBackend.when('GET', 'institution/institution_page.html').respond(200);
         httpBackend.when('GET', 'institution/removeInstDialog.html').respond(200);
         httpBackend.when('GET', "main/main.html").respond(200);
@@ -88,10 +87,6 @@
             expect(institutionCtrl.members).toEqual([tiago]);
         });
 
-        it('should exist followers', function() {
-            expect(institutionCtrl.followers).toEqual([raoni]);
-        });
-
         it('should exist currentInstitution', function() {
             expect(institutionCtrl.current_institution.make()).toEqual(splab);
         });
@@ -126,13 +121,6 @@
         describe('follow()', function() {
 
             beforeEach(function() {
-                spyOn(institutionService, 'getFollowers').and.callFake(function() {
-                    return {
-                        then: function(callback) {
-                            return callback([raoni, tiago]);
-                        }
-                    };
-                });
                 spyOn(institutionService, 'follow').and.callFake(function() {
                     return {
                         then: function(callback) {
@@ -147,15 +135,6 @@
                 var promise = institutionCtrl.follow();
                 promise.then(function() {
                     expect(institutionService.follow).toHaveBeenCalledWith(splab.key);
-                    done();
-                });
-                scope.$apply();
-            });
-
-            it('should call institutionService.getFollowers()', function(done) {
-                var promise = institutionCtrl.follow();
-                promise.then(function() {
-                    expect(institutionService.getFollowers).toHaveBeenCalledWith(splab.key);
                     done();
                 });
                 scope.$apply();
@@ -205,15 +184,6 @@
                 var promise = institutionCtrl.unfollow();
                 promise.then(function() {
                     expect(institutionService.unfollow).toHaveBeenCalledWith(splab.key);
-                    done();
-                });
-                scope.$apply();
-            });
-
-            it('should call institutionService.getFollowers()', function(done) {
-                var promise = institutionCtrl.unfollow();
-                promise.then(function() {
-                    expect(institutionService.getFollowers).toHaveBeenCalledWith(splab.key);
                     done();
                 });
                 scope.$apply();

@@ -18,7 +18,7 @@
 	                <form ng-submit="">
 	                    <md-input-container layout="row" class="md-icon-float">
 	                      <label>Buscar</label>
-	                      <input aria-label="Pesquisar por membros" class="md-icon-float" ng-model="followersCtrl.currentFollower">
+	                      <input aria-label="Pesquisar por seguidor" class="md-icon-float" ng-model="followersCtrl.currentFollower">
 	                      <md-icon md-colors="{color: 'grey-500'}">search</md-icon>
 	                    </md-input-container>
 	                </form>
@@ -30,7 +30,7 @@
 	                      ng-click="followersCtrl.showUserProfile(follower.key, $event)" flex-xs>
 	                      <img title="{{follower.name}}" ng-src="{{follower.photo_url}}" class="md-avatar" 
 	                        style="margin: 0 15px 0 -15px; width: 60px; height: 60px;"/>
-	                      <div layout="column">
+	                      <div layout="column" ng-click="followersCtrl.showUserProfile(follower.key, $event)">
 	                         <b style="position: relative; margin-top: 20px; font-size: 15px;">{{ follower.name }}</b>
 	                         <span style="position: relative; bottom: 20px; font-size: 15px;">{{ follower.email[0]}}</span>
 	                      </div>

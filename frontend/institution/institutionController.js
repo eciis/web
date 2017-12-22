@@ -12,13 +12,11 @@
         institutionCtrl.current_institution = null;
         institutionCtrl.posts = [];
         institutionCtrl.members = [];
-        institutionCtrl.followers = [];
         institutionCtrl.isUserFollower = false;
         institutionCtrl.isMember = false;
         institutionCtrl.portfolioUrl = null;
         institutionCtrl.showFullDescription = false;
         institutionCtrl.showFullData = false;
-        institutionCtrl.isLoadingPosts = true;
         institutionCtrl.isLoadingPosts = true;
 
         institutionCtrl.legal_natures = {
@@ -45,7 +43,6 @@
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
                 institutionCtrl.current_institution = new Institution(response.data);
                 getMembers();
-                getFollowers();
                 checkIfUserIsFollower();
                 institutionCtrl.checkIfUserIsMember();
                 getPortfolioUrl();
@@ -74,14 +71,6 @@
         function getMembers() {
             InstitutionService.getMembers(currentInstitutionKey).then(function success(response) {
                 institutionCtrl.members = response.data;
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
-            });
-        }
-
-        function getFollowers() {
-            InstitutionService.getFollowers(currentInstitutionKey).then(function success(response) {
-                institutionCtrl.followers = response.data;
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
@@ -130,7 +119,6 @@
                 institutionCtrl.user.follow(institution);
                 institutionCtrl.isUserFollower = true;
                 AuthService.save();
-                getFollowers();
             }, function error() {
                 MessageService.showToast('Erro ao seguir a instituição.');
             });
@@ -148,7 +136,6 @@
                     institutionCtrl.user.unfollow(institutionCtrl.current_institution);
                     institutionCtrl.isUserFollower = false;
                     AuthService.save();
-                    getFollowers();
                 }, function error() {
                     MessageService.showToast('Erro ao deixar de seguir instituição.');
                 });
@@ -224,10 +211,6 @@
             $window.open(website);
         };
 
-        institutionCtrl.showUserProfile = function showUserProfile(userKey, ev) {
-            ProfileService.showProfile(userKey, ev);
-        };
-
         institutionCtrl.getFullAddress = function getFullAddress() {
             if(institutionCtrl.current_institution) {
                 return institutionCtrl.current_institution.getFullAddress();
@@ -278,7 +261,7 @@
                 controllerAs: 'ctrl'
             });
         };
-        
+
         function RemoveInstController($mdDialog, institution, InstitutionService, $state) {
             var ctrl = this;
 
@@ -308,4 +291,30 @@
             };
         }
     });
+
+    app.controller("FollowersInstController", function InstitutionController($state, InstitutionService,
+            InviteService, AuthService, MessageService, $sce, $mdDialog, PdfService, $rootScope, ProfileService, $q){
+
+        var followersCtrl = this;
+        var currentInstitutionKey = $state.params.institutionKey;
+
+        followersCtrl.followers = [];
+        followersCtrl.currentFollower = "";
+
+        function getFollowers() {
+            InstitutionService.getFollowers(currentInstitutionKey).then(function success(response) {
+                followersCtrl.followers = response.data;
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
+            });
+        }
+
+        followersCtrl.showUserProfile = function showUserProfile(userKey, ev) {
+            ProfileService.showProfile(userKey, ev);
+        };
+
+        getFollowers();
+
+    });
+
 })();

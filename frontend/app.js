@@ -109,7 +109,7 @@
                 views: {
                     institution_content: {
                         templateUrl: "app/institution/followers.html",
-                        controller: "InstitutionController as followersCtrl"
+                        controller: "FollowersInstController as followersCtrl"
                     }
                 }
             })

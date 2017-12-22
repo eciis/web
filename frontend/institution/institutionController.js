@@ -293,7 +293,7 @@
     });
 
     app.controller("FollowersInstController", function InstitutionController($state, InstitutionService,
-            InviteService, AuthService, MessageService, $sce, $mdDialog, PdfService, $rootScope, ProfileService, $q){
+            MessageService, ProfileService){
 
         var followersCtrl = this;
         var currentInstitutionKey = $state.params.institutionKey;

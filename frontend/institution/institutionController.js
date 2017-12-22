@@ -11,15 +11,12 @@
 
         institutionCtrl.current_institution = null;
         institutionCtrl.posts = [];
-        institutionCtrl.followers = [];
         institutionCtrl.isUserFollower = false;
         institutionCtrl.isMember = false;
         institutionCtrl.portfolioUrl = null;
         institutionCtrl.showFullDescription = false;
         institutionCtrl.showFullData = false;
         institutionCtrl.isLoadingPosts = true;
-        institutionCtrl.isLoadingPosts = true;
-        institutionCtrl.searchedMember = "";
 
         institutionCtrl.legal_natures = {
             "public": "Pública",
@@ -44,7 +41,6 @@
         function loadInstitution() {
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
                 institutionCtrl.current_institution = new Institution(response.data);
-                getFollowers();
                 checkIfUserIsFollower();
                 institutionCtrl.checkIfUserIsMember();
                 getPortfolioUrl();
@@ -68,14 +64,6 @@
 
         function setPortifolioURL(url) {
             institutionCtrl.portfolioUrl = url;
-        }
-
-        function getFollowers() {
-            InstitutionService.getFollowers(currentInstitutionKey).then(function success(response) {
-                institutionCtrl.followers = response.data;
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
-            });
         }
 
         institutionCtrl.loadMorePosts = function loadMorePosts() {
@@ -121,7 +109,6 @@
                 institutionCtrl.user.follow(institution);
                 institutionCtrl.isUserFollower = true;
                 AuthService.save();
-                getFollowers();
             }, function error() {
                 MessageService.showToast('Erro ao seguir a instituição.');
             });
@@ -139,7 +126,6 @@
                     institutionCtrl.user.unfollow(institutionCtrl.current_institution);
                     institutionCtrl.isUserFollower = false;
                     AuthService.save();
-                    getFollowers();
                 }, function error() {
                     MessageService.showToast('Erro ao deixar de seguir instituição.');
                 });
@@ -173,6 +159,10 @@
 
         institutionCtrl.goToMembers = function goToMembers(institutionKey) {
             $state.go('app.institution.members', {institutionKey: institutionKey});
+        };
+
+        institutionCtrl.goToFollowers = function goToFollowers(institutionKey) {
+            $state.go('app.institution.followers', {institutionKey: institutionKey});
         };
 
         institutionCtrl.goToCommingSoon = function goToCommingSoon(institutionKey) {
@@ -213,10 +203,6 @@
         institutionCtrl.openWebsite = function openWebsite() {
             var website = institutionCtrl.current_institution.website_url;
             $window.open(website);
-        };
-
-        institutionCtrl.showUserProfile = function showUserProfile(userKey, ev) {
-            ProfileService.showProfile(userKey, ev);
         };
 
         institutionCtrl.getFullAddress = function getFullAddress() {
@@ -299,4 +285,30 @@
             };
         }
     });
+
+    app.controller("FollowersInstController", function InstitutionController($state, InstitutionService,
+            MessageService, ProfileService){
+
+        var followersCtrl = this;
+        var currentInstitutionKey = $state.params.institutionKey;
+
+        followersCtrl.followers = [];
+        followersCtrl.currentFollower = "";
+
+        function getFollowers() {
+            InstitutionService.getFollowers(currentInstitutionKey).then(function success(response) {
+                followersCtrl.followers = response.data;
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
+            });
+        }
+
+        followersCtrl.showUserProfile = function showUserProfile(userKey, ev) {
+            ProfileService.showProfile(userKey, ev);
+        };
+
+        getFollowers();
+
+    });
+
 })();

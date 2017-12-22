@@ -28,8 +28,6 @@
         var DELETE_ACCOUNT_ALERT = "Ao excluir sua conta você não poderá mais acessar o sistema," +
             "exceto por meio de novo convite. Deseja realmente excluir sua conta?";
 
-        configProfileCtrl.showInstLinks = false;
-
         configProfileCtrl.addImage = function(image) {
             var newSize = 800;
 

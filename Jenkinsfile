@@ -26,7 +26,8 @@ pipeline {
 
                 bower install --allow-root
 
-                karma start --single-run'''            
+                karma start --single-run'''
+            
           }
         )
       }
@@ -40,5 +41,17 @@ pipeline {
   environment {
     GIT_COMMITTER_NAME = 'user'
     GIT_COMMITTER_EMAIL = 'email'
+  }
+  post {
+    success {
+      slackSend(color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+      
+    }
+    
+    failure {
+      slackSend(color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+      
+    }
+    
   }
 }

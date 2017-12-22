@@ -3,6 +3,8 @@ from invite import Invite
 from models.institution import Institution
 from custom_exceptions.fieldException import FieldException
 from models.user import User
+from send_email_hierarchy.invite_institution_email_sender import InviteInstitutionEmailSender
+from util.strings_pt_br import get_string
 
 
 class InviteInstitution(Invite):
@@ -46,17 +48,15 @@ class InviteInstitution(Invite):
 
     def send_email(self, host, body=None):
         """Method of send email of invite institution."""
-        institution_key = self.institution_key.urlsafe()
-        invite_key = self.key.urlsafe()
-        body = body or """
-        Sua empresa %s foi convidada a se cadastrar na plataforma.
-        Para realizar o cadastro crie sua conta pessoal em
-        http://%s/institution/%s/%s/new_invite/INSTITUTION
-        e proceda com o cadastro da sua empresa.
-        Equipe e-CIS
-        """ % (self.suggestion_institution_name, host, institution_key, invite_key)
-
-        super(InviteInstitution, self).send_email(host, self.invitee, body)
+        subject = get_string('INVITE_EMAIL_SUBJECT')
+        email_sender = InviteInstitutionEmailSender(**{
+            'receiver': self.invitee,
+            'subject': subject,
+            'institution': self.institution_key.get().name,
+            'inviter': self.sender_name,
+            'invited_institution': self.suggestion_institution_name
+        })
+        email_sender.send_email()
 
     def send_notification(self, user):
         """Method of send notification of invite institution."""

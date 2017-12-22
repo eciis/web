@@ -19,7 +19,7 @@
                   <md-button ng-show="configProfileCtrl.showButton()" ng-click="null" ng-model="configProfileCtrl.file" ngf-pattern="'image/*'"
                   ngf-accept="'image/*'" ngf-max-size="5MB"
                   ngf-select="configProfileCtrl.cropImage(configProfileCtrl.file)"
-                  class="md-icon-button edit-profile-avatar-button">
+                  class="md-icon-button edit-profile-avatar-button" style="width: 200px; height: 200px; margin-left: -1px;">
                   <md-icon class="edit-profile-avatar-icon">add_a_photo</md-icon>
                   <p><b style="color: white;">Alterar foto</b></p>
                   </md-button>
@@ -57,17 +57,9 @@
                 Vínculos institucionais
               </h1>
               <span flex md-truncate></span>
-              <md-button ng-if="!configProfileCtrl.showInstLinks" ng-click="configProfileCtrl.showInstLinks = true;"
-              class="md-icon-button md-secondary">
-                <md-icon>keyboard_arrow_down</md-icon>
-              </md-button>
-              <md-button ng-if="configProfileCtrl.showInstLinks" ng-click="configProfileCtrl.showInstLinks = false;"
-                class="md-icon-button md-secondary">
-                <md-icon>keyboard_arrow_up</md-icon>
-              </md-button>
             </div>
           </md-toolbar>
-          <md-card-content ng-show="configProfileCtrl.showInstLinks;">
+          <md-card-content >
               <md-list class="md-dense" flex>
                   <md-subheader class="md-no-sticky">Seus vínculos institucionais:</md-subheader>
                   <md-list-item class="md-3-line" ng-repeat="institution in configProfileCtrl.newUser.institutions track by institution.key">

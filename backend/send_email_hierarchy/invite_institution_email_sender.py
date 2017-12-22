@@ -10,7 +10,7 @@ class InviteInstitutionEmailSender(EmailSender):
         """The class constructor.
 
         It initializes the object with its html and its specific properties.
-        crop_institution_name is called to get sure that the names don't exceed the maximum allowed size.
+        crop_institution_name is called to make sure that the names don't exceed the maximum allowed size.
         """
         super(InviteInstitutionEmailSender, self).__init__(**kwargs)
         self.html = 'invite_institution_email.html'

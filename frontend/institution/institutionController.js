@@ -278,9 +278,7 @@
                 controllerAs: 'ctrl'
             });
         };
-
-
-
+        
         function RemoveInstController($mdDialog, institution, InstitutionService, $state) {
             var ctrl = this;
 

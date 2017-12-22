@@ -3,13 +3,29 @@
       md-colors="{background: 'grey-50'}">
     <div flex flex-gt-md="100" layout-align="center top" layout="row">
       <div flex layout="column">
-        <div layout="column" layout-align="center center" ng-if="eventCtrl.events.length === 0 && !eventCtrl.isLoadingEvents">
-          <p>
-            <span class="md-subhead">Seja o primeiro a criar um evento.</span>
-          </p>
-          <md-button aria-label="menu" class="md-button" ng-click="eventCtrl.newEvent()" md-colors="{background: 'teal-900'}">
-            Criar evento
-          </md-button>
+        <div>
+          <md-card ng-click="eventCtrl.newEvent()" flex="90" flex-gt-xs="95" style="margin-left: 40px; margin-right: 35px;">
+            <md-card-content layout="row" style="padding:5px;">
+              <md-card-content layout="row">
+                <img ng-src="{{ eventCtrl.user.current_institution.photo_url }}"
+                title="{{eventCtrl.user.current_institution.name}}"
+                style="border-radius: 50%; margin-top: 7px" width="50px" height="50px"/>
+                <h4 style="margin-left: 15px; color: #03b3a1;">CRIAR EVENTO</h4>
+              </md-card-content>
+              <div flex>
+              </div>
+              <md-card-content>
+                <md-card-actions layout="column" float>
+                  <md-menu md-offset="-199 70">
+                    <md-button class="md-fab md-primary" title="Criar novo evento"
+                    style="margin-right: -100px; background-color: #7CB342">
+                      <md-icon>add</md-icon>
+                    </md-button>
+                  </md-menu>
+                </md-card-actions>
+              </md-card-content>
+            </md-card-content>
+          </md-card>
         </div>
         <div flex layout-align="center center" layout="row" layout-fill ng-if="eventCtrl.isLoadingEvents">
             <md-progress-circular md-mode="indeterminate"></md-progress-circular>
@@ -38,10 +54,3 @@
     <md-content class="hide-scrollbar" flex-gt-md="20" hide show-gt-md></md-content>
   </div>
 </div>
-<md-fab-speed-dial id="fab-new-event" class="md-fab-bottom-right">
-  <md-fab-trigger>
-    <md-button aria-label="menu" class="md-fab md-primary" ng-click="eventCtrl.newEvent()" md-colors="{background: 'teal-900'}">
-      <md-icon>add</md-icon>
-    </md-button>
-  </md-fab-trigger>
-</md-fab-speed-dial>

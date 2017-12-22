@@ -162,6 +162,76 @@
           expect(messageService.showToast).toHaveBeenCalledWith('Evento inválido!');
         });
       });
+
+      describe('changeUrlLink()', function() {
+        it('Should call addUrl', function () {
+          spyOn(controller, 'addUrl').and.callThrough();
+          var urlList = [];
+          var url = {
+            url: 'url',
+            description: 'url'
+          };
+          expect(urlList.length).toEqual(0);
+          controller.changeUrlLink(url, urlList);
+          expect(controller.videoUrls.length).toEqual(1);
+          expect(controller.addUrl).toHaveBeenCalled();
+        });
+
+        it('Should call removeUrl', function () {
+          var urlList = [{
+            url: 'url',
+            description: 'url'
+          }, {
+            url: '',
+            description: 'url description'
+          }];
+
+          var url = {
+            url: '',
+            description: 'url'
+          };
+
+          spyOn(controller, 'removeUrl').and.callThrough();
+          expect(urlList.length).toEqual(2);
+          controller.changeUrlLink(url, urlList);
+          expect(controller.videoUrls.length).toEqual(1);
+          expect(controller.removeUrl).toHaveBeenCalled();
+        });
+      });
+
+      describe('getEmptyUrl', function() {
+        it('Should return an empty url', function () {
+          var url = {
+            url: '',
+            description: ''
+          };
+          var urlList = [url];
+
+          expect(controller.getEmptyUrl(urlList)).toEqual(url);
+        });
+      });
+
+      describe('getStep', function() {
+        it('should return if step is current', function () {
+          spyOn(controller, 'save').and.callFake(function() {});
+
+          expect(controller.getStep(1)).toEqual(true);
+          controller.nextStep();
+          expect(controller.getStep(1)).toEqual(false);
+          expect(controller.getStep(2)).toEqual(true);
+          controller.previousStep();
+          expect(controller.getStep(1)).toEqual(true);
+          expect(controller.getStep(2)).toEqual(false);
+
+          controller.nextStepOrSave();
+          controller.nextStepOrSave();
+          controller.nextStepOrSave();
+          expect(controller.save).toHaveBeenCalled();
+          expect(controller.getStep(1)).toEqual(false);
+          expect(controller.getStep(2)).toEqual(false);
+          expect(controller.getStep(3)).toEqual(true);
+        });
+      }); 
     });
   });
 }));

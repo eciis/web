@@ -26,6 +26,17 @@ class Address(ndb.Model):
         yield 'federal_state', self.federal_state
         yield 'cep', self.cep
         yield 'country', self.country
+    
+    def make(self):
+        address = {
+            'city': self.city,
+            'country': self.country,
+            'federal_state': self.federal_state,
+            'number': self.number,
+            'street': self.street
+        }
+
+        return address
 
     @staticmethod
     def create(data):

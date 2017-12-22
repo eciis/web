@@ -1,88 +1,208 @@
-<md-dialog aria-label="Novo Evento">
-  <md-dialog-content>
-    <div layout="column">
-      <md-card layout="column">
-        <md-card-header>
-          <md-card-avatar>
-            <img ng-src="{{ controller.user.current_institution.photo_url }}" class="md-user-avatar"/>
-          </md-card-avatar>
-          <md-card-header-text>
-            <span class="md-title">{{ controller.user.current_institution.name }}</span>
-            <span class="md-subhead">por {{ controller.user.name }}</span>
-          </md-card-header-text>
-          <section layout="column" layout-align="end end">
-              <md-button class="md-icon-button" ng-click="controller.closeDialog()">
-                  <md-icon>close</md-icon>
-              </md-button>
-          </section>
-        </md-card-header>
-        <md-card-content layout="column">
-          <md-input-container>
-            <label>Título</label>
-            <input ng-model="controller.event.title" placeholder="Escreva aqui o nome do evento" required="true">
-          </md-input-container>
-          <md-input-container>
-            <label>Descrição</label>
-            <textarea style="max-height: 400px;overflow-y:auto;resize:none;" ng-model="controller.event.text" md-select-on-focus placeholder="Escreva aqui a descrição do evento"></textarea>
-            </textarea>
-          </md-input-container>
-          <md-input-container>
-            <label>Local</label>
-            <input ng-model="controller.event.local" placeholder="Escreva aqui o local do evento" required="true">
-          </md-input-container>
-          <div layout="row" ng-if="!controller.isEditing">
-            <md-input-container class="md-input-has-placeholder">
-              <label>Início</label>
-              <input mdc-datetime-picker="" short-time="false" date="true" time="true" type="text" format="DD-MM-YYYY HH:mm" lang="pt-BR" required="true"
-              placeholder="Data/Horário" ng-model="controller.event.start_time" class=" md-input" today-text="Hoje" min-date="null"
-              max-date="controller.event.end_time" readonly="readonly" cancel-text="Cancelar">
-              <div class="md-errors-spacer"></div>
-            </md-input-container>
-            <md-input-container class="md-input-has-placeholder">
-              <label>Fim</label>
-              <input mdc-datetime-picker="" date="true" time="true" type="text" lang="pt-BR" today-text="Hoje" required="true"
-              placeholder="Data/Horário" class=" md-input" readonly="readonly" format="DD-MM-YYYY HH:mm" max-date="null"
-              ng-model="controller.event.end_time" cancel-text="Cancelar" min-date="controller.event.start_time">
-              <div class="md-errors-spacer"></div>
-            </md-input-container>
+<div layout-padding layout="column" flex-gt-sm="40" flex-xs="90" flex-sm="60">
+  <div style="padding:0;">
+    <md-card style="max-width: 100%; margin:0;">
+      <md-card-content style="padding: 8px;">
+        <div layout="row" layout-align="space-between center" class="hide-scrollbar" style="overflow-y: auto;">
+          <div layout="row" layout-align="center center">
+            <span class="green-circle" style="color: #FFFFFF; width: 20px; height: 20px;">
+              <span layout="row" layout-algin="center">
+                <md-icon style="color: #FFFFFF; margin: 4px 4px; font-size: 12px;" ng-if="!controller.getStep(1)">done</md-icon>
+                <span style="margin: 3px auto; font-size: 12px;" ng-if="controller.getStep(1)">1</span>
+              </span>
+            </span>
+            <b class="inline" style="font-size: 14px;">Informação inicial</b>
           </div>
-          <div layout="row" ng-if="controller.isEditing">
-            <md-input-container class="md-input-has-placeholder">
-              <label>Início</label>
-              <input mdc-datetime-picker="" ng-change="controller.changeDate('startTime')" short-time="false" date="true" time="true" type="text" format="YYYY-MM-DD HH:mm" lang="pt-BR" required="true"
-              placeholder="Data/Horário" ng-model="controller.dateChangeEvent.start_time" class=" md-input" today-text="Hoje" min-date="null"
-              max-date="controller.event.end_time" readonly="readonly" cancel-text="Cancelar">
-              <div class="md-errors-spacer"></div>
-            </md-input-container>
-            <md-input-container class="md-input-has-placeholder">
-              <label>Fim</label>
-              <input mdc-datetime-picker="" ng-change="controller.changeDate('endTime')" date="true" time="true" type="text" lang="pt-BR" today-text="Hoje" required="true"
-              placeholder="Data/Horário" class=" md-input" readonly="readonly" format="YYYY-MM-DD HH:mm" max-date="null"
-              ng-model="controller.dateChangeEvent.end_time" cancel-text="Cancelar" min-date="controller.event.start_time">
-              <div class="md-errors-spacer"></div>
-            </md-input-container>
+          <hr style="min-width: 40px; width: 20%" layout-margin/>
+          <div layout="row" layout-align="center center">
+            <span ng-class="controller.showGreenButton(2)? 'green-circle': 'grey-circle'" style="color: #FFFFFF; width: 20px; height: 20px;">
+                <span layout="row" layout-algin="center">
+                  <md-icon style="color: #FFFFFF; margin: 4px 4px; font-size: 12px;" ng-if="controller.getStep(3)">done</md-icon>
+                  <span style="margin: 3px auto; font-size: 12px;" ng-if="!controller.getStep(3)">2</span>
+                </span>
+            </span>
+            <b class="inline" style="font-size: 14px;">Descrição e Progamação</b>
+            
           </div>
-          <div class="image-view" ng-if="controller.showImage()">
-            <button ng-click="controller.cleanImage()">&times;</button>
-            <img style="border-radius: 5%;" ng-src="{{ controller.photoUrl }}"/>
+          <hr style="min-width: 40px; width: 20%" layout-margin/>
+          <div layout="row" layout-align="center center">
+            <span ng-class="controller.showGreenButton(3)? 'green-circle': 'grey-circle'" style="color: #FFFFFF; width: 20px; height: 20px;">
+                <span layout="row" layout-algin="center">
+                <md-icon style="color: #FFFFFF; margin: 4px 4px; font-size: 12px;" ng-if="controller.getStep(3)">done</md-icon>
+                <span style="margin: 3px auto; font-size: 12px;" ng-if="!controller.getStep(3)">3</span>
+              </span>
+            </span>
+            <b class="inline" style="font-size: 14px;">Mídia</b>
           </div>
-          <div class="image-view" ng-if="controller.showEventImage()">
-            <button ng-click="controller.cleanImage()">&times;</button>
-            <img style="border-radius: 5%;" ng-src="{{ controller.event.photo_url }}"/>
-          </div>
-          <md-progress-linear ng-show="controller.loading" md-mode="indeterminate" style="width: 14%; margin-top: 5px"></md-progress-linear>
-        </md-card-content>
-        <div layout="row">
-          <span flex></span>
-          <md-button class="md-icon-button" ng-click="null" ng-model="controller.file" ngf-pattern="'image/*'"
-                        ngf-accept="'image/*'" ngf-max-size="5MB" ngf-select="controller.addImage(controller.file)">
-                <md-icon>add_a_photo</md-icon>
-          </md-button>
-          <md-button class="md-icon-button" ng-click="controller.save()" ng-if="controller.showButtonSend()">
-            <md-icon>send</md-icon>
-          </md-button>
         </div>
-      </md-card>
+      </md-card-content>
+    </md-dialog>
+  </div>
+  <div layout="row" layout-align="start center" style="padding: 0;">
+    <div flex="0" ng-if="controller.getStep(2) || controller.getStep(3)">
+        <md-button class="md-fab md-primary" style="margin-left: -28px;" ng-click="controller.previousStep()"
+          md-colors="{background: 'default-teal-500'}" hide-xs>
+            <md-icon >keyboard_arrow_left</md-icon>
+        </md-button>
     </div>
-  </md-dialog-content>
-</md-dialog>
+    <div layout="column" flex="100" layout-padding style="padding: 0;">
+      <md-dialog style="max-width: 100%;">
+        <form name="createEvent" ng-submit="controller.nextStepOrSave()">
+          <md-dialog-content class="hide-scrollbar" layout-padding ng-if="controller.getStep(1)">
+            <div md-colors="{background: 'default-teal-500'}" layout="column" layout-align="center center" layout-padding
+              style="overflow: hidden; height: 150px; padding-left: 0; padding-right: 0;" class="event-image-view">
+              <button ng-click="controller.cleanImage()" type="button" class="event-image-view-button"
+                ng-if="controller.showImage()">&times;</button>
+              <div style="width: 100%; padding:0; background-color: white;" ng-if="controller.showImage()">
+                <img ng-src="{{controller.photoUrl}}" style="width: 100%; padding:0"/>
+              </div>
+              <md-button style="border-radius: 50px" ng-click="null" ng-model="controller.file" ngf-pattern="'image/*'"
+                ngf-accept="'image/*'" ngf-max-size="5MB" ngf-select="controller.addImage(controller.file)"
+                ng-if="!controller.showImage()">
+                <md-icon style="height: 70px; width: 70px; font-size: 70px; color:white;" layout="column" layout-align="center center">add_a_photo</md-icon>
+              </md-button>
+              <b style="color: white; text-align: center;" ng-if="!controller.showImage()">Inserir foto de divulgação do evento</b>
+            </div>
+            <div layout="column">
+              <md-input-container style="margin-bottom: 0">
+                <label>Nome do evento</label>
+                <input ng-model="controller.event.title" required/>
+              </md-input-container>
+              <div layout="row" layout-align="space-between center">
+                  <md-input-container style="margin: 0" flex="45">
+                      <input mdc-datetime-picker="" short-time="false" date="true" time="true" type="text" format="DD-MM-YYYY HH:mm" lang="pt-BR"
+                      placeholder="Data inicial" ng-model="controller.event.start_time" class=" md-input" today-text="Hoje" min-date="null"
+                      max-date="controller.event.end_time" readonly="readonly" cancel-text="Cancelar" required/>
+                  </md-input-container flex="45">
+                  <md-input-container style="margin: 0">
+                      <input mdc-datetime-picker="" ng-change="controller.changeDate('endTime')" date="true" time="true" type="text" lang="pt-BR" today-text="Hoje"
+                      placeholder="Data final" class=" md-input" readonly="readonly" format="YYYY-MM-DD HH:mm" max-date="null"
+                      ng-model="controller.event.end_time" cancel-text="Cancelar" min-date="null" required>
+                  </md-input-container>
+              </div>
+              <md-input-container style="margin: 0">
+                  <label>Local (Onde o evento vai acontecer)</label>
+                  <input ng-model="controller.event.local" required/>
+              </md-input-container>
+              <div layout="row">
+                  <md-input-container style="margin: 0">
+                      <label>Rua</label>
+                      <input ng-model="controller.event.street"/>
+                  </md-input-container>
+                  <md-input-container style="margin: 0">
+                      <label>Numero</label>
+                      <input ng-model="controller.event.number"/>
+                  </md-input-container>
+              </div>
+            </div>
+            <div layout="row" layout-align="space-between center">
+                <md-input-container style="margin: 0" flex="45">
+                    <label>Pais</label>
+                    <md-select ng-model="controller.event.country" ng-change="controller.setAnotherCountry()">
+                        <md-option ng-repeat="country in controller.countries"
+                          ng-value="country.nome_pais">{{country.nome_pais}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container style="margin: 0" flex="45" ng-if="controller.isAnotherCountry">
+                    <label>Estado</label>
+                    <input type="text" name="state" ng-model="controller.event.federal_state">
+                </md-input-container>
+                <md-input-container style="margin: 0" flex="45" ng-if="!controller.isAnotherCountry">
+                    <label>Estado</label>
+                    <md-select ng-model="controller.selectedFederalState" ng-change="controller.getCitiesByState()"
+                      ng-disabled="!controller.event.country" required/>
+                      <md-option ng-repeat="federal_state in controller.federalStates"
+                        ng-value="federal_state">{{federal_state.sigla}}</md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+            <div layout="row">
+                <md-input-container style="margin: 0" flex="45" ng-if="controller.isAnotherCountry">
+                    <label>Cidade</label>
+                    <input type="text" name="city" ng-model="controller.event.city">
+                </md-input-container>
+                <md-input-container style="margin: 0" flex="45" ng-if="!controller.isAnotherCountry">
+                    <label>Cidade</label>
+                    <md-select ng-model="controller.event.city"  ng-disabled="!controller.selectedFederalState"
+                      required/>
+                      <md-option ng-repeat="city in controller.cities" ng-value="city">{{city}}</md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+          </md-dialog-content>
+          <md-dialog-content ng-if="controller.getStep(2)" class="hide-scrollbar" layout-padding>
+            <div layout="row" layout-align="center center">
+              <div layout="column" flex="95">
+                <md-input-container class="md-block">
+                  <label style="font-weight: bold; font-size: 25px;" md-colors="{color: 'default-teal-700'}">Descrição</label>
+                  <textarea ng-model="controller.event.description" rows="5" md-select-on-focus
+                    placeholder="Insira aqui uma breve descrição sobre o evento"
+                    style="border-style: solid; border-width: 1px; border-color: #009688; border-radius: 5px;"></textarea>
+                </md-input-container>
+                <md-input-container class="md-block">
+                  <label style="font-weight: bold; font-size: 25px;" md-colors="{color: 'default-teal-700'}">Programação</label>
+                  <textarea ng-model="controller.event.programation" rows="5" md-select-on-focus
+                    placeholder="Insira a programação completa do evento"
+                    style="border-style: solid; border-width: 1px; border-color: #009688; border-radius: 5px;"></textarea>
+                </md-input-container>
+              </div>
+            </div>
+          </md-dialog-content>
+          <md-dialog-content ng-if="controller.getStep(3)" layout-padding class="hide-scrollbar">
+            <div layout="row" layout-align="center center">
+              <div flex="95" layout="column">
+                <div layout-margin>
+                  <p class="md-subheader">Vídeos</p>
+                  <div class="hide-scrollbar" style="max-height: 25%; overflow-y:auto; margin: 8px 0 8px 0;">
+                    <div ng-repeat="videoUrl in controller.videoUrls" layout="column">
+                      <md-input-container class="md-block" style="height: 25px;">
+                        <label>Link do Youtube</label>
+                        <input class="md-input" ng-model="videoUrl.url" placeholder="+ Adicionar um vídeo do Youtube..."
+                          ng-change="controller.changeUrlLink(videoUrl, controller.videoUrls)" ng-pattern="'(?:http(s)?:\/\/)?(www\.)?youtube\.com\/watch\\?v=.+'"
+                          name="video"/>
+                          <div ng-messages="createEvent.video.$error">
+                              <div ng-message="pattern">Link do Youtube inválido.</div>
+                          </div>                  
+                      </md-input-container>
+                      <md-input-container class="md-block" style="height: 25px;">
+                        <label>Descrição</label>
+                        <input class="md-input" ng-model="videoUrl.description" placeholder="Adicione uma descrição para o vídeo..." maxlength="150" />                  
+                      </md-input-container>
+                    </div>
+                  </div>
+                </div>
+                <div layout-margin>
+                  <p class="md-subheader">Links úteis</p>
+                  <div class="hide-scrollbar" style="max-height: 25%; overflow-y:auto; margin: 8px 0 8px 0;">
+                    <div ng-repeat="usefulLink in controller.usefulLinks" layout="column">
+                      <md-input-container class="md-block" style="height: 25px;">
+                        <label>Link</label>
+                        <input class="md-input" ng-model="usefulLink.url" placeholder="+ Adicionar um link..." 
+                          ng-change="controller.changeUrlLink(usefulLink, controller.usefulLinks)" type="url"/>                  
+                      </md-input-container>
+                      <md-input-container class="md-block" style="height: 25px;">
+                        <label>Descrição</label>
+                        <input class="md-input" ng-model="usefulLink.description" placeholder="Adicione uma descrição para o link..." maxlength="150" />                  
+                      </md-input-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </md-dialog-content>
+          <md-dialog-actions layout="row">
+              <md-button class="md-raised" md-colors="{background: 'default-teal-500'}" ng-click="controller.closeDialog()">
+                  <span style="color: white;">cancelar</span>
+              </md-button>
+              <md-button class="md-raised" md-colors="{background: 'default-teal-500'}" ng-click="controller.previousStep()"
+                hide-gt-xs ng-if="controller.getStep(2) || controller.getStep(3)">
+                  <span style="color: white;">voltar</span>
+              </md-button>
+              <md-button class="md-raised" type="submit" md-colors="{background: 'default-teal-500'}">
+                  <span style="color: white;">{{controller.getStep(3) ? "publicar" : "avançar"}}</span>
+              </md-button>
+          </md-dialog-actions>
+        </form>
+      </md-dialog>
+    </div>
+  </div>
+</div>

@@ -29,6 +29,9 @@
     'photo_url': null,
     'start_time': date_now,
     'end_time': date_now,
+    'video_url': [], 
+    'useful_links': [],
+    'country': 'Brasil'
   };
 
   var post = new Post({}, splab.key);
@@ -61,10 +64,8 @@
       controller.event = event;
       controller.events = [];
 
-      httpBackend.when('GET', "/api/events").respond([]);
-      httpBackend.when('GET', 'main/main.html').respond(200);
-      httpBackend.when('GET', 'home/home.html').respond(200);
-      httpBackend.when('GET', 'auth/login.html').respond(200);
+      httpBackend.when('GET', 'app/institution/countries.json').respond(200);
+      httpBackend.flush();
   }));
 
   afterEach(function() {
@@ -161,6 +162,76 @@
           expect(messageService.showToast).toHaveBeenCalledWith('Evento inválido!');
         });
       });
+
+      describe('changeUrlLink()', function() {
+        it('Should call addUrl', function () {
+          spyOn(controller, 'addUrl').and.callThrough();
+          var urlList = [];
+          var url = {
+            url: 'url',
+            description: 'url'
+          };
+          expect(urlList.length).toEqual(0);
+          controller.changeUrlLink(url, urlList);
+          expect(controller.videoUrls.length).toEqual(1);
+          expect(controller.addUrl).toHaveBeenCalled();
+        });
+
+        it('Should call removeUrl', function () {
+          var urlList = [{
+            url: 'url',
+            description: 'url'
+          }, {
+            url: '',
+            description: 'url description'
+          }];
+
+          var url = {
+            url: '',
+            description: 'url'
+          };
+
+          spyOn(controller, 'removeUrl').and.callThrough();
+          expect(urlList.length).toEqual(2);
+          controller.changeUrlLink(url, urlList);
+          expect(controller.videoUrls.length).toEqual(1);
+          expect(controller.removeUrl).toHaveBeenCalled();
+        });
+      });
+
+      describe('getEmptyUrl', function() {
+        it('Should return an empty url', function () {
+          var url = {
+            url: '',
+            description: ''
+          };
+          var urlList = [url];
+
+          expect(controller.getEmptyUrl(urlList)).toEqual(url);
+        });
+      });
+
+      describe('getStep', function() {
+        it('should return if step is current', function () {
+          spyOn(controller, 'save').and.callFake(function() {});
+
+          expect(controller.getStep(1)).toEqual(true);
+          controller.nextStep();
+          expect(controller.getStep(1)).toEqual(false);
+          expect(controller.getStep(2)).toEqual(true);
+          controller.previousStep();
+          expect(controller.getStep(1)).toEqual(true);
+          expect(controller.getStep(2)).toEqual(false);
+
+          controller.nextStepOrSave();
+          controller.nextStepOrSave();
+          controller.nextStepOrSave();
+          expect(controller.save).toHaveBeenCalled();
+          expect(controller.getStep(1)).toEqual(false);
+          expect(controller.getStep(2)).toEqual(false);
+          expect(controller.getStep(3)).toEqual(true);
+        });
+      }); 
     });
   });
 }));

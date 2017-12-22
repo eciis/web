@@ -185,8 +185,8 @@
         };
     });
 
-    app.controller('EventDialogController', function EventDialogController(MessageService,
-            ImageService, AuthService, EventService, $state, $rootScope, $mdDialog) {
+    app.controller('EventDialogController', function EventDialogController(MessageService, brCidadesEstados,
+            ImageService, AuthService, EventService, $state, $rootScope, $mdDialog, $http) {
         var dialogCtrl = this;
 
         dialogCtrl.loading = false;
@@ -195,6 +195,14 @@
         dialogCtrl.photoUrl = "";
         dialogCtrl.dateToChange = {};
         dialogCtrl.observer = {};
+        dialogCtrl.videoUrls = [];
+        dialogCtrl.usefulLinks = [];
+        dialogCtrl.isAnotherCountry = false;
+        dialogCtrl.steps = [true, false, false];
+        var emptyUrl = {
+            url: '',
+            description: ''
+        };
 
         dialogCtrl.save = function save() {
             if(!dialogCtrl.isEditing) {
@@ -202,6 +210,26 @@
             } else {
                 saveImageAndCallEventFunction(updateEvent);
             }
+        };
+
+        dialogCtrl.removeUrl = function(url, urlList) {
+            _.remove(urlList, function(element) {
+                return element === url;
+           });    
+        };
+
+        dialogCtrl.changeUrlLink = function(urlLink, urlList) {
+            urlLink.url ? dialogCtrl.addUrl(urlList) : urlList.length > 1 && 
+                            dialogCtrl.removeUrl(urlLink, urlList);
+        };
+
+        dialogCtrl.addUrl = function(urlList){
+            const hasEmptyUrl = dialogCtrl.getEmptyUrl(urlList) !== undefined;
+            urlList.length < 10 && !hasEmptyUrl && urlList.push(angular.copy(emptyUrl));
+        };
+
+        dialogCtrl.getEmptyUrl = function(urlList){
+            return _.find(urlList, emptyUrl);
         };
 
         function saveImageAndCallEventFunction(callback) {
@@ -290,6 +318,63 @@
            delete dialogCtrl.event.photo_url;
         };
 
+        dialogCtrl.getCitiesByState = function getCitiesByState() {
+            dialogCtrl.cities = brCidadesEstados.buscarCidadesPorSigla(dialogCtrl.selectedFederalState.sigla);
+        };
+
+        dialogCtrl.setAnotherCountry = function isAnotherCountry() {
+            clearSelectedState();
+            dialogCtrl.isAnotherCountry = dialogCtrl.event.country !== "Brasil";
+        };
+
+        dialogCtrl.getStep = function getStep(step) {
+            return dialogCtrl.steps[step - 1];
+        };
+
+        dialogCtrl.nextStep = function nextStep() {
+            var currentStep = _.findIndex(dialogCtrl.steps, function(situation) {
+                return situation;
+            });
+            dialogCtrl.steps[currentStep] = false;
+            var nextStep = currentStep + 1;
+            dialogCtrl.steps[nextStep] = true;
+        };
+
+        dialogCtrl.nextStepOrSave = function nextStepOrSave() {
+            if (dialogCtrl.getStep(3)) {
+                dialogCtrl.save();
+            } else {
+                dialogCtrl.nextStep();
+            }
+        }
+
+        dialogCtrl.previousStep = function previousStep() {
+            var currentStep = _.findIndex(dialogCtrl.steps, function(situation) {
+                return situation;
+            });
+            dialogCtrl.steps[currentStep] = false;
+            var nextStep = currentStep - 1;
+            dialogCtrl.steps[nextStep] = true;
+        };
+
+        dialogCtrl.showGreenButton = function showGreenButton(step) {
+            if(step === 2) {
+                return dialogCtrl.getStep(2) || dialogCtrl.getStep(3);
+            } else {
+                return dialogCtrl.getStep(3);
+            }
+        };
+
+        function clearSelectedState() {
+            dialogCtrl.event.federal_state = "";
+            dialogCtrl.selectedFederalState = "";
+            dialogCtrl.event.city = "";
+        }
+
+        function loadFederalStates() {
+            dialogCtrl.federalStates = brCidadesEstados.estados;
+        }
+
         function generatePatch(patch, data) {
             if(dialogCtrl.dateToChange.startTime) {
                 patch.push({op: 'replace', path: "/start_time", value: data.start_time});
@@ -308,6 +393,9 @@
 
         function create() {
             var event = new Event(dialogCtrl.event, dialogCtrl.user.current_institution.key);
+            addLinks(event);
+            if (dialogCtrl.selectedFederalState)
+                event.federal_state = dialogCtrl.selectedFederalState.nome;
             if (event.isValid()) {
                 EventService.createEvent(event).then(function success(response) {
                     dialogCtrl.closeDialog();
@@ -322,7 +410,23 @@
             }
         }
 
+        function addLinks(event) {
+            let videoUrls = _.filter(dialogCtrl.videoUrls, videoUrl => videoUrl.url !== '');
+            let usefulLinks = _.filter(dialogCtrl.usefulLinks, usefulLink => usefulLink.url !== '');
+            event.video_url = videoUrls;
+            event.useful_links = usefulLinks;
+        };
+
+        function getCountries() {
+            $http.get('app/institution/countries.json').then(function success(response) {
+                dialogCtrl.countries = response.data;
+                dialogCtrl.event.country = "Brasil";
+            });
+        }
+
         (function main() {
+            getCountries();
+            loadFederalStates();
             if(dialogCtrl.event) {
                 dialogCtrl.dateChangeEvent = _.clone(dialogCtrl.event);
                 dialogCtrl.dateChangeEvent.start_time = new Date(dialogCtrl.dateChangeEvent.start_time);
@@ -331,6 +435,8 @@
                 dialogCtrl.observer = jsonpatch.observe(dialogCtrl.event);
             } else {
                 dialogCtrl.event = {};
+                dialogCtrl.videoUrls = [angular.copy(emptyUrl)];
+                dialogCtrl.usefulLinks = [angular.copy(emptyUrl)];
             }
         })();
     });

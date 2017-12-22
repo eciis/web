@@ -15,10 +15,10 @@ class Event(ndb.Model):
     photo_url = ndb.StringProperty(indexed=False)
 
     # Urls of videos
-    video_url = ndb.StringProperty(indexed=False, repeated=True)
+    video_url = ndb.JsonProperty(indexed=False, repeated=True)
 
     # Userful link to the event
-    useful_links = ndb.StringProperty(indexed=False, repeated=True)
+    useful_links = ndb.JsonProperty(indexed=False, repeated=True)
 
     # Programation of event
     programation = ndb.StringProperty(indexed=False)
@@ -126,7 +126,7 @@ class Event(ndb.Model):
             'programation': event.programation,
             'video_url': event.video_url,
             'useful_links': event.useful_links,
-            'address': event.address,
+            'address': event.address.make() if event.address else {},
             'local': event.local,
             'start_time': start_time,
             'end_time': end_time,

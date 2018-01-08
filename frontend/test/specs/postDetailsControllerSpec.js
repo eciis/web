@@ -358,8 +358,8 @@
         });
 
         it('should return the embed Youtube url', function() {
-            post.video_url = 'https://www.youtube.com/watch?v=3T3g8rV-5GU';
-            expect(postDetailsCtrl.getVideoUrl(post)).toBe('https://www.youtube.com/embed/3T3g8rV-5GU');
+            post.video_url = [{url: 'https://www.youtube.com/watch?v=3T3g8rV-5GU'}];
+            expect(postDetailsCtrl.getVideoUrl(post)).toEqual(['https://www.youtube.com/embed/3T3g8rV-5GU']);
         });
     });
 

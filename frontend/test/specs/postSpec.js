@@ -56,9 +56,9 @@ describe('Test Post Model:', function() {
         });
         
         it('should behave...', function() {
-            data.video_url = 'https://www.youtube.com/watch?v=3T3g8rV-5GU';
+            data.video_url = [{url: 'https://www.youtube.com/watch?v=3T3g8rV-5GU'}];
             post = new Post(data);
-            expect(post.getVideoUrl()).toBe('https://www.youtube.com/embed/3T3g8rV-5GU');
+            expect(post.getVideoUrl()).toEqual(['https://www.youtube.com/embed/3T3g8rV-5GU']);
         });
     });
 
@@ -75,13 +75,13 @@ describe('Test Post Model:', function() {
         });
 
         it('should be false when the video_url is empty', function() {
-            data.video_url = "";
+            data.video_url = [];
             post = new Post(data);
             expect(post.hasVideo()).toBe(false);
         });
 
         it('should be true when the video_url is valid', function() {
-            data.video_url = "https://www.youtube.com/watch?v=3T3g8rV-5GU";
+            data.video_url = ["https://www.youtube.com/watch?v=3T3g8rV-5GU"];
             post = new Post(data);
             expect(post.hasVideo()).toBe(true);
         });

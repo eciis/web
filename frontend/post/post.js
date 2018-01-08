@@ -27,6 +27,7 @@ Post.prototype.getVideoUrl = function getVideoUrl() {
         var videoUrls = this.video_url.map(url => {
             var params = _.split(url.url, '=');
             var id = params[params.length - 1];
+            console.log(url, id)
             return 'https://www.youtube.com/embed/' + id;
         });
 
@@ -37,8 +38,8 @@ Post.prototype.getVideoUrl = function getVideoUrl() {
 Post.prototype.hasVideo = function hasVideo() {
     var isNotNull = this.video_url !== null;
     var isNotUndefined = this.video_url !== undefined;
-    var isNotEmpty = this.video_url.length !== 0;
-    return isNotNull && isNotEmpty && isNotUndefined;
+    var isNotEmpty = isNotNull && isNotUndefined && this.video_url.length !== 0;
+    return isNotEmpty;
 };
 
 Post.prototype.hasImage = function hasImage() {

@@ -3,9 +3,9 @@
 (function() {
     var app = angular.module("app");
 
-    app.service("PostService", function PostService($http, $q) {
+    app.service("PostService", function PostService($http, $q, AuthService) {
         var service = this;
-
+        var user = AuthService.getCurrentUser();
         var POSTS_URI = "/api/posts";
         var LIMIT = 10;
         service.posts = [];
@@ -34,7 +34,13 @@
 
         service.createPost = function createPost(post) {
             var deferred = $q.defer();
-            $http.post(POSTS_URI, post).then(function success(response) {
+            var body = {
+                post: post,
+                currentInstitution: {
+                    name: user.current_institution ? user.current_institution.name : ""
+                }
+            };
+            $http.post(POSTS_URI, body).then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);
@@ -42,11 +48,11 @@
             return deferred.promise;
         };
 
-        service.likePost = function likePost(post, currentInstitution) {
+        service.likePost = function likePost(post) {
             var deferred = $q.defer();
             var body = {
                 currentInstitution: {
-                    name: currentInstitution.name 
+                    name: user.current_institution.name 
                 }
             };
             $http.post(`${POSTS_URI}/${post.key}/likes`, body)

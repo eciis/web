@@ -40,20 +40,22 @@ class PostCollectionHandler(BaseHandler):
     def post(self, user):
         """Handle POST Requests."""
         data = json.loads(self.request.body)
-        institution_key = data['institution']
+        post_data = data['post']
+        current_institution = data['currentInstitution']
+        institution_key = post_data['institution']
         institution = ndb.Key(urlsafe=institution_key).get()
 
         Utils._assert(institution.state == 'inactive',
                       "The institution has been deleted",
                       NotAuthorizedException)
 
-        permission = get_permission(data)
+        permission = get_permission(post_data)
         user.check_permission(permission,
                               "You don't have permission to publish post.",
                               institution_key)
 
         try:
-            post = PostFactory.create(data, user.key, institution.key)
+            post = PostFactory.create(post_data, user.key, institution.key)
             post.put()
             user.add_permissions(["edit_post", "remove_post"], post.key.urlsafe())
 
@@ -65,25 +67,25 @@ class PostCollectionHandler(BaseHandler):
             user.posts.append(post.key)
             user.put()
 
-            entity_type = PostFactory.get_type(data)
+            entity_type = PostFactory.get_type(post_data)
             for follower in institution.followers:
                 if follower != user.key:
                     send_message_notification(
                         follower.urlsafe(),
                         user.key.urlsafe(),
                         entity_type,
-                        post.key.urlsafe())
+                        post.key.urlsafe(),
+                        current_institution
+                    )
 
             if(post.shared_post):
-                shared_post = ndb.Key(urlsafe=data['shared_post']).get()
-
                 entity_type = 'SHARED_POST'
-
                 params = {
                     'receiver_key': post.author.urlsafe(),
                     'sender_key': user.key.urlsafe(),
                     'entity_key': post.key.urlsafe(),
-                    'entity_type': entity_type
+                    'entity_type': entity_type,
+                    'current_institution': json.dumps(current_institution)
                 }
 
                 enqueue_task('post-notification', params)

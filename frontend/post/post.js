@@ -27,7 +27,6 @@ Post.prototype.getVideoUrl = function getVideoUrl() {
         var videoUrls = this.video_url.map(url => {
             var params = _.split(url.url, '=');
             var id = params[params.length - 1];
-            console.log(url, id)
             return 'https://www.youtube.com/embed/' + id;
         });
 

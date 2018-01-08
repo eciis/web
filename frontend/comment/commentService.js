@@ -68,23 +68,25 @@
             return deferred.promise;
         };
 
-        service.like = function like(postKey, commentId, replyId) {
-            return likeOrDeslike(postKey, commentId, replyId, $http.post);
+        service.like = function like(postKey, commentId, replyId, currentInstitution) {
+            return likeOrDeslike(postKey, commentId, replyId, $http.post, currentInstitution);
         };
 
         service.dislike = function like(postKey, commentId, replyId) {
             return likeOrDeslike(postKey, commentId, replyId, $http.delete);
         };
 
-        function likeOrDeslike(postKey, commentId, replyId, method) {
+        function likeOrDeslike(postKey, commentId, replyId, method, currentInstitution) {
             var deferred = $q.defer();
-            var URI = POST_URI + postKey + '/comments/' + commentId;
-            if (replyId) {
-                URI = URI + "/replies/" + replyId + "/likes";
-            } else {
-                URI = URI + "/likes";
-            }
-            method(URI).then(
+            var replyUri = replyId ? `/replies/${replyId}` : "";
+            var URI = POST_URI + postKey + '/comments/' + commentId + replyUri + "/likes";
+            var body = {
+                currentInstitution: {
+                    name: currentInstitution ? currentInstitution.name : ""
+                }
+            };            
+            var promise = currentInstitution ? method(URI, body) : method(URI);
+            promise.then(
                 function success(response) {
                     deferred.resolve(response);
                 }, function error(response) {

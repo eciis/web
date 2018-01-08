@@ -62,5 +62,6 @@
       </div>
     </div>
     
-    <signup return-action="loginCtrl.requestInvite" ng-if="loginCtrl.isRequestInvite"></signup>
+    <signup return-action="loginCtrl.requestInvite" callback="loginCtrl.redirect"
+      ng-if="loginCtrl.isRequestInvite"></signup>
   </md-content>

@@ -9,7 +9,6 @@
 
         loginCtrl.user = {};
 
-        loginCtrl.newUser = {};
         loginCtrl.isRequestInvite = false;
 
         var redirectPath = $stateParams.redirect;
@@ -34,17 +33,8 @@
             );
         };
 
-        loginCtrl.signup = function signup() {
-            var newUser = loginCtrl.newUser;
-            if (newUser.password !== newUser.verifypassword) {
-                MessageService.showToast("Senhas incompatíveis");
-                return;
-            }
-            AuthService.signupWithEmailAndPassword(newUser.email, newUser.password).then(
-                function success() {
-                    redirectTo(redirectPath);
-                }
-            );
+        loginCtrl.redirect = function success() {
+            redirectTo(redirectPath);
         };
 
         loginCtrl.resetPassword = function resetPassword(ev) {

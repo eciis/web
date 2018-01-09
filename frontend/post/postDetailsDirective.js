@@ -288,7 +288,7 @@
         };
 
         postDetailsCtrl.goToEvent = function goToEvent(event) {
-            $state.go('app.event', {eventKey: event.key});
+            $state.go('app.user.event', {eventKey: event.key});
         };
 
         postDetailsCtrl.getValues = function getValues(object) {
@@ -746,7 +746,7 @@
         shareCtrl.goTo = function goTo(){
             shareCtrl.cancelDialog();
             if(shareCtrl.isEvent()){
-                $state.go('app.event', {eventKey: shareCtrl.post.key});
+                $state.go('app.user.event', {eventKey: shareCtrl.post.key});
             }
             $state.go('app.post', {postKey: shareCtrl.post.key});
         };

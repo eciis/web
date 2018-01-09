@@ -144,14 +144,16 @@
         };
 
         eventCtrl.goToEvent = function goToEvent(event) {
-            $state.go('app.event', {eventKey: event.key});
+            $state.go('app.user.event', {eventKey: event.key});
         };
 
 
         eventCtrl.endInOtherMonth = function endInOtherMonth() {
-            const startMonth = new Date(eventCtrl.event.start_time).getMonth();
-            const endMonth = new Date(eventCtrl.event.end_time).getMonth();
-            return startMonth !== endMonth;
+            if(eventCtrl.event) {
+                const startMonth = new Date(eventCtrl.event.start_time).getMonth();
+                const endMonth = new Date(eventCtrl.event.end_time).getMonth();
+                return startMonth !== endMonth;
+            }
         };
 
         function isInstitutionAdmin(event) {
@@ -403,7 +405,7 @@
                     MessageService.showToast('Evento criado com sucesso, esperando aprovação!');
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
-                    $state.go("app.events");
+                    $state.go("app.user.events");
                 });
             } else {
                 MessageService.showToast('Evento inválido!');

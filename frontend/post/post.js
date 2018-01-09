@@ -33,7 +33,7 @@ Post.prototype.getVideoUrl = function getVideoUrl() {
 Post.prototype.hasVideo = function hasVideo() {
     var isNotNull = this.video_url !== null;
     var isNotUndefined = this.video_url !== undefined;
-    var isNotEmpty = this.video_url.length !== "";
+    var isNotEmpty = this.video_url !== "";
     return isNotNull && isNotUndefined && isNotEmpty;
 };
 

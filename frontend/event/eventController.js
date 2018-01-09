@@ -156,6 +156,14 @@
             }
         };
 
+        eventCtrl.getVideoUrl = function getVideoUrl(video_url) {
+            if(video_url) {
+                var params = _.split(video_url, '=');
+                var id = params[params.length - 1];
+                return 'https://www.youtube.com/embed/' + id;
+            }
+        };
+
         function isInstitutionAdmin(event) {
             return _.includes(_.map(eventCtrl.user.institutions_admin, Utils.getKeyFromUrl),
                 Utils.getKeyFromUrl(event.institution_key));

@@ -1,20 +1,5 @@
-<div flex="100" layout="row" layout-align="center">
-  <div flex flex-md="95" layout="row" layout-align="space-around"
-      md-colors="{background: 'grey-50'}">
-    <div flex flex-gt-md="100" layout-align="center top" layout="row">
-      <div flex layout="column">
-        <div>
-          <md-content flex id="content" class="body hide-scrollbar">
-            <div flex="90" flex-gt-xs="95" style="margin-left: 40px; margin-right: 35px;">
-              <event-details event="eventCtrl.event" is-event-page=true></event-details>
-            </div>
-          </md-content>
-        </div>
-        <div flex layout-align="center center" layout="row" layout-fill ng-if="eventCtrl.isLoadingEvents">
-            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-        </div>
-      </div>
-    </div>
-    <md-content class="hide-scrollbar" flex-gt-md="0" hide show-gt-md></md-content>
+<md-content id="content" class="body hide-scrollbar">
+  <div flex="90" flex-gt-xs="95" style="margin-left: 40px; margin-right: 35px;">
+    <event-details event="eventCtrl.event" is-event-page=true></event-details>
   </div>
-</div>
+</md-content>

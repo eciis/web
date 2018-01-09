@@ -17,6 +17,7 @@
         ];
 
     user.current_institution = institutions[0];
+    user = new User(user);
     var POSTS_URI = "/api/posts";
 
 
@@ -47,8 +48,9 @@
         httpBackend.when('GET', 'error/error.html').respond(200);
 
         AuthService.getCurrentUser = function() {
-            return new User(user);
+            return user;
         };
+        commentService.user = user;
 
         postDetailsCtrl = $controller('PostDetailsController',{
             scope: scope,

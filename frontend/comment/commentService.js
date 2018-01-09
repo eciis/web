@@ -3,10 +3,11 @@
 (function() {
     var app = angular.module("app");
 
-    app.service('CommentService', function CommentService($http, $q) {
+    app.service('CommentService', function CommentService($http, $q, AuthService) {
         var service = this;
 
         var POST_URI = '/api/posts/';
+        service.user = AuthService.getCurrentUser();
 
         service.getComments = function getComments(commentUri) {
             var deferred = $q.defer();
@@ -20,8 +21,16 @@
 
         service.createComment = function createComment(postKey, text, institutionKey) {
             var deferred = $q.defer();
-            var data = {'text': text, 'institution_key': institutionKey};
-            $http.post(POST_URI + postKey + '/comments', data).then(
+            var body = {
+                commentData: {
+                    text: text, 
+                    institution_key: institutionKey
+                },
+                currentInstitution: {
+                    name: service.user.current_institution.name
+                }
+            };
+            $http.post(POST_URI + postKey + '/comments', body).then(
                 function success(response) {
                     deferred.resolve(response);
                 }, function error(response) {
@@ -45,8 +54,16 @@
 
         service.replyComment = function createComment(postKey, text, institutionKey, commentId) {
             var deferred = $q.defer();
-            var data = {'text': text, 'institution_key': institutionKey};
-            $http.post(POST_URI + postKey + '/comments/' + commentId + '/replies' , data).then(
+            var body = {
+                replyData: {
+                    text: text, 
+                    institution_key: institutionKey
+                },
+                currentInstitution: {
+                    name: service.user.current_institution.name
+                }
+            };
+            $http.post(POST_URI + postKey + '/comments/' + commentId + '/replies' , body).then(
                 function success(response) {
                     deferred.resolve(response);
                 }, function error(response) {

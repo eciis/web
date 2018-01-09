@@ -46,11 +46,18 @@ class ReplyCommentHandlerTest(TestBaseHandler):
                           "Expected size of replies list should be zero")
 
         # Call the post method
-        data_reply = {"text": "reply of comment",
-                        "institution_key": self.institution.key.urlsafe()}
+        body = {
+            'replyData': {
+                "text": "reply of comment",
+                "institution_key": self.institution.key.urlsafe()
+            },
+            'currentInstitution': {
+                'name': 'currentInstitution'
+            }
+        }
         self.testapp.post(self.URL_REPLY_COMMENT %
             (self.user_post.key.urlsafe(), self.comment.id),
-                          json.dumps(data_reply))
+                          json.dumps(body))
 
         # Update post
         self.user_post = self.user_post.key.get()
@@ -75,7 +82,7 @@ class ReplyCommentHandlerTest(TestBaseHandler):
         with self.assertRaises(Exception) as raises_context:
             comment_id = 21456
             self.testapp.post(self.URL_REPLY_COMMENT % (self.user_post.key.urlsafe(), comment_id),
-                              json.dumps(data_reply))
+                              json.dumps(body))
 
         exception_message = self.get_message_exception(str(raises_context.exception))
         self.assertEqual(

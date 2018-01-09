@@ -6,7 +6,8 @@
     comment = {text: 'text', post_key: 'post-key', id: 'comment-id'};
 
     var user = {
-        state: 'active'
+        state: 'active',
+        current_institution: {name: 'currentInstitution'}
     };
 
     beforeEach(module('app'));
@@ -19,6 +20,7 @@
         commentService = CommentService;
         comments = [comment];
         AuthService.login(user);
+        commentService.user = user;
         httpBackend.when('GET', 'app/main/main.html').respond(200);
         httpBackend.when('GET', 'app/home/home.html').respond(200);
         httpBackend.when('GET', 'app/error/error.html').respond(200);
@@ -64,7 +66,15 @@
         var text = 'new_text';
         var institutionKey = 'institution-Key';
         var postKey = 'post-key';
-        var data = {text: text, institution_key: institutionKey};
+        var body = { 
+            commentData: {
+                text: text, 
+                institution_key: institutionKey
+            },
+            currentInstitution: {
+                name: user.current_institution.name
+            }
+        }
         var newComment = {text: text, post_key: postKey, id: 'new-comment-id'};
 
         beforeEach(function() {
@@ -81,7 +91,7 @@
         it('should call http.post()', function() {
             deferred.resolve(newComment);
             scope.$apply();
-            expect(http.post).toHaveBeenCalledWith(postCommentsUri, data);
+            expect(http.post).toHaveBeenCalledWith(postCommentsUri, body);
             expect(answer).toEqual(newComment);
             expect(error).toBeUndefined();
             httpBackend.flush();
@@ -90,7 +100,7 @@
         it('should call http.post() and occur an error', function() {
             deferred.reject({status: 400, data: {msg: 'Erro'}});
             scope.$apply();
-            expect(http.post).toHaveBeenCalledWith(postCommentsUri, data);
+            expect(http.post).toHaveBeenCalledWith(postCommentsUri, body);
             expect(answer).toBeUndefined();
             expect(error.status).toEqual(400);
             httpBackend.flush();
@@ -133,7 +143,15 @@
         var text = 'reply of comment';
         var institutionKey = 'institution-Key';
         var postKey = 'post-key';
-        var data = {text: text, institution_key: institutionKey};
+        var body = {
+            replyData: {
+                text: text, 
+                institution_key: institutionKey
+            },
+            currentInstitution: {
+                name: user.current_institution.name
+            }
+        };
         var comment = {text: text, post_key: postKey, id: 'new-comment-id'};
 
         var replyUri = postCommentsUri+"/"+comment.id+"/replies";
@@ -152,7 +170,7 @@
         it('should call http.post()', function() {
             deferred.resolve(comment);
             scope.$apply();
-            expect(http.post).toHaveBeenCalledWith(replyUri, data);
+            expect(http.post).toHaveBeenCalledWith(replyUri, body);
             expect(error).toBeUndefined();
             httpBackend.flush();
         });
@@ -160,7 +178,7 @@
         it('should call http.post() and occur an error', function() {
             deferred.reject({status: 400, data: {msg: 'Erro'}});
             scope.$apply();
-            expect(http.post).toHaveBeenCalledWith(replyUri, data);
+            expect(http.post).toHaveBeenCalledWith(replyUri, body);
             expect(answer).toBeUndefined();
             expect(error.status).toEqual(400);
             httpBackend.flush();

@@ -24,21 +24,17 @@ Post.prototype.isValid = function isValid() {
 
 Post.prototype.getVideoUrl = function getVideoUrl() {
     if(this.video_url) {
-        var videoUrls = this.video_url.map(url => {
-            var params = _.split(url.url, '=');
-            var id = params[params.length - 1];
-            return 'https://www.youtube.com/embed/' + id;
-        });
-
-        return videoUrls;
+        var params = _.split(this.video_url, '=');
+        var id = params[params.length - 1];
+        return 'https://www.youtube.com/embed/' + id;
     }
 };
 
 Post.prototype.hasVideo = function hasVideo() {
     var isNotNull = this.video_url !== null;
     var isNotUndefined = this.video_url !== undefined;
-    var isNotEmpty = isNotNull && isNotUndefined && this.video_url.length !== 0;
-    return isNotEmpty;
+    var isNotEmpty = this.video_url.length !== "";
+    return isNotNull && isNotUndefined && isNotEmpty;
 };
 
 Post.prototype.hasImage = function hasImage() {

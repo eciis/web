@@ -17,7 +17,7 @@
             if(mainCtrl.search_keyword) {
                 var search = mainCtrl.search_keyword;
                 mainCtrl.search_keyword = '';
-                $state.go('app.search', {search_keyword: search});
+                $state.go('app.user.search', {search_keyword: search});
             }
         };
 

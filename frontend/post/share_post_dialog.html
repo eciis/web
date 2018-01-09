@@ -27,9 +27,6 @@
           <div class="image-view" ng-if="sharePostCtrl.showImage()">
             <img class="md-card-image" style="border-radius: 3%;" ng-src="{{ sharePostCtrl.post.photo_url }}"/>
           </div>
-          <div class="youtube-player" ng-if="sharePostCtrl.showVideo()">
-            <iframe ng-src="{{ sharePostCtrl.getVideoUrl() }}"></iframe>
-          </div>
           <p></p>
           <a ng-if="!sharePostCtrl.isSurvey()" href class="md-text hyperlink" ng-click="sharePostCtrl.goTo()">
             <span>{{ sharePostCtrl.post.title }}</span>

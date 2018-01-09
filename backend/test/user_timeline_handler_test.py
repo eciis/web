@@ -31,8 +31,15 @@ class UserTimelineHandlerTest(TestBaseHandler):
     def test_get(self, verify_token):
         """Test the user_timeline_handler get method."""
         # Added a post in datastore
-        self.testapp.post_json("/api/posts", self.post_user)
-        self.testapp.post_json("/api/posts", self.post_aux)
+        body = {
+            'post': self.post_user,
+            'currentInstitution': {
+                'name': 'currentInstitution'
+            }
+        }
+        self.testapp.post_json("/api/posts", body)
+        body['post'] = self.post_aux
+        self.testapp.post_json("/api/posts", body)
 
         # Call the get method
         posts = self.testapp.get("/api/user/timeline?page=0&&limit=2")

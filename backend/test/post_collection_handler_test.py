@@ -33,11 +33,7 @@ class PostCollectionHandlerTest(TestBaseHandler):
         """Test the post_collection_handler's post method."""
 
         # Make the request and assign the answer to post
-        post = self.testapp.post_json("/api/posts", {'title': 'new post',
-                                                     'institution':
-                                                     self.institution.key.urlsafe(),
-                                                     'text':
-                                                     'testing new post'})
+        post = self.testapp.post_json("/api/posts", self.body)
         # Retrieve the entities
         post = json.loads(post._app_iter[0])
         key_post = ndb.Key(urlsafe=post['key'])
@@ -62,10 +58,11 @@ class PostCollectionHandlerTest(TestBaseHandler):
                          "The post's text is not the expected one")
 
         with self.assertRaises(Exception) as raises_context:
-            self.testapp.post_json("/api/posts", {'institution':
-                                                  self.institution.key.urlsafe(),
-                                                  'text':
-                                                  'testing another post'})
+            self.body['post'] = {
+                'institution': self.institution.key.urlsafe(),
+                'text': 'testing another post'
+            }
+            self.testapp.post_json("/api/posts", self.body)
 
         exception_message = self.get_message_exception(str(raises_context.exception))
         self.assertEqual(
@@ -75,10 +72,11 @@ class PostCollectionHandlerTest(TestBaseHandler):
         )
 
         with self.assertRaises(Exception) as raises_context:
-            self.testapp.post_json("/api/posts", {'institution':
-                                                  self.institution.key.urlsafe(),
-                                                  'title':
-                                                  'testing another post'})
+            self.body['post'] = {
+                'institution': self.institution.key.urlsafe(),
+                'title': 'testing another post'
+            }
+            self.testapp.post_json("/api/posts", self.body)
 
         exception_message = self.get_message_exception(str(raises_context.exception))
         self.assertEqual(
@@ -92,10 +90,11 @@ class PostCollectionHandlerTest(TestBaseHandler):
     def test_post_sharing(self, verify_token, mock_method):
         """Test the post_collection_handler's post method."""
         # Make the request and assign the answer to post
-        post = self.testapp.post_json("/api/posts", {'institution':
-                                                     self.institution.key.urlsafe(),
-                                                     'shared_post':
-                                                     self.user_post.key.urlsafe()}).json
+        self.body['post'] = {
+            'institution': self.institution.key.urlsafe(),
+            'shared_post': self.user_post.key.urlsafe()
+        }
+        post = self.testapp.post_json("/api/posts", self.body).json
         # Retrieve the entities
         key_post = ndb.Key(urlsafe=post['key'])
         post_obj = key_post.get()
@@ -131,10 +130,11 @@ class PostCollectionHandlerTest(TestBaseHandler):
     def test_post_shared_event(self, verify_token):
         """Test the post_collection_handler's post method in case that post is shared_event."""
         # Make the request and assign the answer to post
-        post = self.testapp.post_json("/api/posts", {'institution':
-                                                     self.institution.key.urlsafe(),
-                                                     'shared_event':
-                                                     self.event.key.urlsafe()}).json
+        self.body['post'] = {
+            'institution': self.institution.key.urlsafe(),
+            'shared_event': self.event.key.urlsafe()
+        }
+        post = self.testapp.post_json("/api/posts", self.body).json
         # Retrieve the entities
         key_post = ndb.Key(urlsafe=post['key'])
         post_obj = key_post.get()
@@ -171,7 +171,8 @@ class PostCollectionHandlerTest(TestBaseHandler):
     def test_post_survey(self, verify_token):
         """Test post method."""
         # Make the request and assign the answer to post method
-        survey = self.testapp.post_json("/api/posts", self.survey_post)
+        self.body['post'] = self.survey_post
+        survey = self.testapp.post_json("/api/posts", self.body)
         # Retrieve the entities
         survey = json.loads(survey._app_iter[0])
         key_survey = ndb.Key(urlsafe=survey['key'])
@@ -273,4 +274,17 @@ def initModels(cls):
         'type_survey': 'multiple_choice',
         'deadline': '2020-07-25T12:30:15',
         'options': cls.options
+    }
+    # body for post method
+    post_data = {
+        'title': 'new post',
+        'institution':
+        cls.institution.key.urlsafe(),
+        'text':
+        'testing new post'
+    }
+    current_institution = { 'name': 'current_institution' }
+    cls.body = {
+        'post': post_data,
+        'currentInstitution': current_institution
     }

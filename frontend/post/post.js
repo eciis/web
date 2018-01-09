@@ -34,7 +34,7 @@ Post.prototype.hasVideo = function hasVideo() {
     var isNotNull = this.video_url !== null;
     var isNotUndefined = this.video_url !== undefined;
     var isNotEmpty = this.video_url !== "";
-    return isNotNull && isNotUndefined && isNotEmpty;
+    return isNotNull && isNotEmpty && isNotUndefined;
 };
 
 Post.prototype.hasImage = function hasImage() {

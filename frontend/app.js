@@ -50,6 +50,15 @@
                     }
                 }
             })
+            .state("app.user.search", {
+                url: "/search/:search_keyword",
+                views: {
+                    user_content: {
+                        templateUrl: "app/search/search.html",
+                        controller: "SearchController as searchCtrl"
+                    }
+                }
+            })
             .state("app.user.home", {
                 url: "/",
                 views: {
@@ -181,15 +190,6 @@
                     content_manage_institution: {
                         templateUrl: "app/invites/invite_institution_hierarchie.html",
                         controller: "InviteInstHierarchieController as inviteInstHierCtrl"
-                    }
-                }
-            })
-            .state("app.search", {
-                url: "/search/:search_keyword",
-                views: {
-                    content: {
-                        templateUrl: "app/search/search.html",
-                        controller: "SearchController as searchCtrl"
                     }
                 }
             })

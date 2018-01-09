@@ -50,8 +50,7 @@
             httpBackend.when('GET', 'home/home.html').respond(200);
             httpBackend.when('GET', 'error/error.html').respond(200);
             httpBackend.when('GET', 'auth/login.html').respond(200);
-
-            AuthService.login(login_user);
+            service.user = user;
         }));
 
         afterEach(function() {
@@ -79,7 +78,13 @@
                 result = data;
             });
             httpBackend.flush();
-            expect($http.post).toHaveBeenCalledWith(POSTS_URI, posts[0]);
+            var body = {
+                post: posts[0],
+                currentInstitution: {
+                    name: user.current_institution.name
+                }
+            }
+            expect($http.post).toHaveBeenCalledWith(POSTS_URI, body);
             expect(result.data).toEqual(posts[0]);
         });
 
@@ -90,7 +95,7 @@
                 currentInstitution: { name: user.current_institution.name }
             };
             httpBackend.expect('POST', LIKE_URI).respond();
-            service.likePost(posts[0], user.current_institution);
+            service.likePost(posts[0]);
             httpBackend.flush();
             expect($http.post).toHaveBeenCalledWith(LIKE_URI, body);
         });

@@ -12,11 +12,12 @@
     };
 
     var institutions = [
-            {name: 'Splab',key: '098745', followers: [user], members: [user], admin: user},
-            {name: 'e-CIS', key: '456879', followers: [user], members: [user]}
-        ];
+        {name: 'Splab',key: '098745', followers: [user], members: [user], admin: user},
+        {name: 'e-CIS', key: '456879', followers: [user], members: [user]}
+    ];
 
     user.current_institution = institutions[0];
+    user = new User(user);
     var POSTS_URI = "/api/posts";
 
 
@@ -47,8 +48,9 @@
         httpBackend.when('GET', 'error/error.html').respond(200);
 
         AuthService.getCurrentUser = function() {
-            return new User(user);
+            return user;
         };
+        postService.user = user;
 
         postDetailsCtrl = $controller('PostDetailsController',{
             scope: scope,
@@ -145,7 +147,7 @@
             expect(postDetailsCtrl.isLikedByUser).toHaveBeenCalledWith();
             expect(postDetailsCtrl.getLikes).toHaveBeenCalledWith(posts[0]);
             expect(postDetailsCtrl.showLikes).toEqual(true);
-            expect(postService.likePost).toHaveBeenCalledWith(posts[0], user.current_institution);
+            expect(postService.likePost).toHaveBeenCalledWith(posts[0]);
         });
 
         it('Should dislike the post', function() {

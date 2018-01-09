@@ -5,10 +5,10 @@
 
     app.service("PostService", function PostService($http, $q, AuthService) {
         var service = this;
-        var user = AuthService.getCurrentUser();
         var POSTS_URI = "/api/posts";
         var LIMIT = 10;
         service.posts = [];
+        service.user = AuthService.getCurrentUser();
 
         service.get = function getPosts() {
             var deferred = $q.defer();
@@ -34,10 +34,11 @@
 
         service.createPost = function createPost(post) {
             var deferred = $q.defer();
+            var institutionName = service.user.current_institution ? service.user.current_institution.name : "";
             var body = {
                 post: post,
                 currentInstitution: {
-                    name: user.current_institution ? user.current_institution.name : ""
+                    name: institutionName
                 }
             };
             $http.post(POSTS_URI, body).then(function success(response) {
@@ -52,7 +53,7 @@
             var deferred = $q.defer();
             var body = {
                 currentInstitution: {
-                    name: user.current_institution.name 
+                    name: service.user.current_institution.name 
                 }
             };
             $http.post(`${POSTS_URI}/${post.key}/likes`, body)

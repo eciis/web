@@ -67,8 +67,7 @@
         }
 
         institutionCtrl.limitString = function limitString(string, limit){
-            return string && string.length > limit ?  
-                string.substring(0, limit+1) + "..." : string;
+            return Utils.limitString(string, limit);
         };
 
         institutionCtrl.loadMorePosts = function loadMorePosts() {

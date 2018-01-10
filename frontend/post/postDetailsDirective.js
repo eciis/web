@@ -408,14 +408,6 @@
             return postObj.getVideoUrl();
         };
 
-        postDetailsCtrl.isLongPostTimeline = function isLongPostTimeline(text){
-            if(text){
-                var numberOfChar = text.length;
-                return !postDetailsCtrl.isPostPage &&
-                    numberOfChar >= LIMIT_POST_CHARACTERS;
-            }
-        };
-
         postDetailsCtrl.showUserProfile = function showUserProfile(userKey, ev) {
             ProfileService.showProfile(userKey, ev);
         };
@@ -440,9 +432,8 @@
         };
 
         function adjustText(text){
-            if(postDetailsCtrl.isLongPostTimeline(text)){
-                text = text.substring(0, LIMIT_POST_CHARACTERS) + "...";
-            }
+            text = (!postDetailsCtrl.isPostPage && text) ?
+                Utils.limitString(text, LIMIT_POST_CHARACTERS) : text;
             return text.replace(URL_PATTERN,REPLACE_URL);
         }
 
@@ -761,12 +752,8 @@
         }
 
         function adjustText(text){
-            if(text){
-                if(text.length > LIMIT_POST_CHARACTERS){
-                    text = text.substring(0, LIMIT_POST_CHARACTERS) + "...";
-                }
-                return text.replace(URL_PATTERN,REPLACE_URL);
-            }
+            text = (text) ? Utils.limitString(text, LIMIT_POST_CHARACTERS) : text;
+            return text.replace(URL_PATTERN,REPLACE_URL);
         }
     });
 })();

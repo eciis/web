@@ -3,140 +3,140 @@
             md-colors="{background: 'grey-50'}">
           <!-- CONTENT -->
         <md-content class="hide-scrollbar" flex="90">
-        <md-card>
-        	<md-toolbar md-colors="{background: 'teal-500'}" layout="row">
-                <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
-                    <md-icon>assignment</md-icon>
-                    <h5 style="font-weight:normal; margin-left: 2%">                      
-                      DADOS CADASTRAIS
-                    </h5>
-                    <span flex md-truncate></span>
-                </div>
-            </md-toolbar>
-        	<md-card-content style="padding: 5%; margin-top: -4%">
-	            <h2>Informações institucionais</h3>
-	            <h4 md-colors="{color: 'teal-900'}">Nome</h4>
-	            <p md-colors="{color: 'grey-600'}"><b>
-	            	{{institutionCtrl.current_institution.name ? 
-	            		institutionCtrl.current_institution.name : "Não informado"}}</b></p>
+	        <md-card>
+	        	<md-toolbar md-colors="{background: 'teal-500'}" layout="row">
+	                <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
+	                    <md-icon>assignment</md-icon>
+	                    <h5 style="font-weight:normal; margin-left: 2%">                      
+	                      DADOS CADASTRAIS
+	                    </h5>
+	                    <span flex md-truncate></span>
+	                </div>
+	            </md-toolbar>
+	        	<md-card-content style="padding: 5%; margin-top: -4%">
+		            <h2>Informações institucionais</h3>
+		            <h4 md-colors="{color: 'teal-900'}">Nome</h4>
+		            <p md-colors="{color: 'grey-600'}"><b>
+		            	{{institutionCtrl.current_institution.name ? 
+		            		institutionCtrl.current_institution.name : "Não informado"}}</b></p>
 
-	            <div layout="row" layout-xs="column" layout-align-gt-xs="space-between center">
-	            	<div layout="column">
-			            <h4 md-colors="{color: 'teal-900'}">Sigla</h4>
-			             <p md-colors="{color: 'grey-600'}" style="margin-top: 0">
-			             	{{institutionCtrl.limitString(institutionCtrl.current_institution.acronym, 30) ? 
-	            			institutionCtrl.limitString(institutionCtrl.current_institution.acronym, 30) :
-	            			 "Não informado"}}</p>
-	            	</div>
-	            	<div layout="column">
-			            <h4 md-colors="{color: 'teal-900'}">Áreas de atuação</h4>
-			             <p md-colors="{color: 'grey-600'}" style="margin-top: 0">
-			               {{institutionCtrl.current_institution.actuation_area ? 
-	            			institutionCtrl.current_institution.actuation_area : "Não informado"}}</p>
-	            	</div>
-	            </div>
+		            <div layout="row" layout-xs="column" layout-align-gt-xs="space-between center">
+		            	<div layout="column">
+				            <h4 md-colors="{color: 'teal-900'}">Sigla</h4>
+				             <p md-colors="{color: 'grey-600'}" style="margin-top: 0">
+				             	{{institutionCtrl.limitString(institutionCtrl.current_institution.acronym, 30) ? 
+		            			institutionCtrl.limitString(institutionCtrl.current_institution.acronym, 30) :
+		            			 "Não informado"}}</p>
+		            	</div>
+		            	<div layout="column">
+				            <h4 md-colors="{color: 'teal-900'}">Áreas de atuação</h4>
+				             <p md-colors="{color: 'grey-600'}" style="margin-top: 0">
+				               {{institutionCtrl.current_institution.actuation_area ? 
+		            			institutionCtrl.current_institution.actuation_area : "Não informado"}}</p>
+		            	</div>
+		            </div>
 
-	            <h4 md-colors="{color: 'teal-900'}">Responsável</h4>
-	            <p md-colors="{color: 'grey-600'}" style="margin-top: 0">
-	            	{{institutionCtrl.current_institution.admin.name ? 
-	            	institutionCtrl.current_institution.admin.name : "Não informado"}}</p>
+		            <h4 md-colors="{color: 'teal-900'}">Responsável</h4>
+		            <p md-colors="{color: 'grey-600'}" style="margin-top: 0">
+		            	{{institutionCtrl.current_institution.admin.name ? 
+		            	institutionCtrl.current_institution.admin.name : "Não informado"}}</p>
 
-	            <div layout="row" layout-xs="column" layout-align-gt-xs="space-between center">
-	            	<div layout="column">
-			            <h4 md-colors="{color: 'teal-900'}">Natureza legal</h4>
-			             <p md-colors="{color: 'grey-600'}" style="margin-top: 0">
-	            		  {{institutionCtrl.current_institution.legal_nature ? 
-	            			institutionCtrl.current_institution.legal_nature : "Não informado"}}</p>
-	            	</div>
-	            	<div layout="column">
-			            <h4 md-colors="{color: 'teal-900'}">CNPJ</h4>
-			             <p md-colors="{color: 'grey-600'}" style="margin-top: 0">
-	            			{{institutionCtrl.current_institution.cnpj ? 
-	            			institutionCtrl.current_institution.cnpj : "Não informado"}}</p>
-	            	</div>
-	            </div>
-	            <hr style="margin-top: 4%;" width="100%" size="4" color=#00796B>
+		            <div layout="row" layout-xs="column" layout-align-gt-xs="space-between center">
+		            	<div layout="column">
+				            <h4 md-colors="{color: 'teal-900'}">Natureza legal</h4>
+				             <p md-colors="{color: 'grey-600'}" style="margin-top: 0">
+		            		  {{institutionCtrl.current_institution.legal_nature ? 
+		            			institutionCtrl.current_institution.legal_nature : "Não informado"}}</p>
+		            	</div>
+		            	<div layout="column">
+				            <h4 md-colors="{color: 'teal-900'}">CNPJ</h4>
+				             <p md-colors="{color: 'grey-600'}" style="margin-top: 0">
+		            			{{institutionCtrl.current_institution.cnpj ? 
+		            			institutionCtrl.current_institution.cnpj : "Não informado"}}</p>
+		            	</div>
+		            </div>
+		            <hr style="margin-top: 4%;" width="100%" size="4" color=#00796B>
 
-	            <h2>Localização</h2>
-	            <h4 md-colors="{color: 'teal-900'}">Endereço</h4>
-	            <div layout="row" layout-xs="column" layout-align-gt-xs="space-between center"
-	            	style="margin-top: -4%">
-	            	<div layout="column">
-			            <h5 style="margin-bottom: 0">Logradouro</h5>
-			             <p style="margin-top: 0" md-colors="{color: 'grey-600'}">
-	            			{{institutionCtrl.limitString(institutionCtrl.current_institution.address.street, 90) ? 
-	            			institutionCtrl.limitString(institutionCtrl.current_institution.address.street,90) : 
-	            			"Não informado"}}</p>
-	            	</div>
-	            	<div layout="column">
-			            <h5 style="margin-bottom: 0">N°</h5>
-			             <p style="margin-top: 0" md-colors="{color: 'grey-600'}">
-	            			{{institutionCtrl.current_institution.address.number ? 
-	            			institutionCtrl.current_institution.address.number : "Não informado"}}</p>
-	            	</div>
-	            	<div layout="column">
-			            <h5 style="margin-bottom: 0">Bairro</h5>
-			             <p style="margin-top: 0"  md-colors="{color: 'grey-600'}">
-	            			{{institutionCtrl.limitString(institutionCtrl.current_institution.address.neighbourhood, 30) ? 
-	            			institutionCtrl.limitString(institutionCtrl.current_institution.address.neighbourhood, 30) :
-	            			"Não informado"}}</p>
-	            	</div>
-	            </div>
+		            <h2>Localização</h2>
+		            <h4 md-colors="{color: 'teal-900'}">Endereço</h4>
+		            <div layout="row" layout-xs="column" layout-align-gt-xs="space-between center"
+		            	style="margin-top: -4%">
+		            	<div layout="column">
+				            <h5 style="margin-bottom: 0">Logradouro</h5>
+				             <p style="margin-top: 0" md-colors="{color: 'grey-600'}">
+		            			{{institutionCtrl.limitString(institutionCtrl.current_institution.address.street, 90) ? 
+		            			institutionCtrl.limitString(institutionCtrl.current_institution.address.street,90) : 
+		            			"Não informado"}}</p>
+		            	</div>
+		            	<div layout="column">
+				            <h5 style="margin-bottom: 0">N°</h5>
+				             <p style="margin-top: 0" md-colors="{color: 'grey-600'}">
+		            			{{institutionCtrl.current_institution.address.number ? 
+		            			institutionCtrl.current_institution.address.number : "Não informado"}}</p>
+		            	</div>
+		            	<div layout="column">
+				            <h5 style="margin-bottom: 0">Bairro</h5>
+				             <p style="margin-top: 0"  md-colors="{color: 'grey-600'}">
+		            			{{institutionCtrl.limitString(institutionCtrl.current_institution.address.neighbourhood, 30) ? 
+		            			institutionCtrl.limitString(institutionCtrl.current_institution.address.neighbourhood, 30) :
+		            			"Não informado"}}</p>
+		            	</div>
+		            </div>
 
-	            <div layout="row" layout-xs="column" layout-align-gt-xs="space-between center">
-	            	<div layout="column">
-			            <h5 style="margin-bottom: 0">Cidade</h5>
-			             <p style="margin-top: 0"  md-colors="{color: 'grey-600'}">
-	            			{{institutionCtrl.limitString(institutionCtrl.current_institution.address.city, 50) ? 
-	            			institutionCtrl.limitString(institutionCtrl.current_institution.address.city, 50) : 
-	            			"Não informado"}}</p>
-	            	</div>
-	            	<div layout="column">
-			            <h5 style="margin-bottom: 0">Estado</h5>
-			             <p style="margin-top: 0"  md-colors="{color: 'grey-600'}">
-	            			{{institutionCtrl.limitString(institutionCtrl.current_institution.address.federal_state, 20) ? 
-	            			institutionCtrl.limitString(institutionCtrl.current_institution.address.federal_state, 20) :
-	            			"Não informado"}}</p>
-	            	</div>
-	            	<div layout="column">
-			            <h5 style="margin-bottom: 0">País</h5>
-			             <p style="margin-top: 0"  md-colors="{color: 'grey-600'}">
-	            			{{institutionCtrl.current_institution.address.country ? 
-	            			institutionCtrl.current_institution.address.country : "Não informado"}}</p>
-	            	</div>
-	            	<div layout="column" layout-align="center">
-			            <h5 style="margin-bottom: 0">CEP</h5>
-	            		 <p style="margin-top: 0"  md-colors="{color: 'grey-600'}">
-	            		 	{{institutionCtrl.current_institution.address.cep ? 
-	            			institutionCtrl.current_institution.address.cep : "Não informado"}}</p>
-	            	</div>
-	            </div>
-	            <hr style="margin-top: 4%;" width="100%" size="4" color=#00796B>
+		            <div layout="row" layout-xs="column" layout-align-gt-xs="space-between center">
+		            	<div layout="column">
+				            <h5 style="margin-bottom: 0">Cidade</h5>
+				             <p style="margin-top: 0"  md-colors="{color: 'grey-600'}">
+		            			{{institutionCtrl.limitString(institutionCtrl.current_institution.address.city, 50) ? 
+		            			institutionCtrl.limitString(institutionCtrl.current_institution.address.city, 50) : 
+		            			"Não informado"}}</p>
+		            	</div>
+		            	<div layout="column">
+				            <h5 style="margin-bottom: 0">Estado</h5>
+				             <p style="margin-top: 0"  md-colors="{color: 'grey-600'}">
+		            			{{institutionCtrl.limitString(institutionCtrl.current_institution.address.federal_state, 20) ? 
+		            			institutionCtrl.limitString(institutionCtrl.current_institution.address.federal_state, 20) :
+		            			"Não informado"}}</p>
+		            	</div>
+		            	<div layout="column">
+				            <h5 style="margin-bottom: 0">País</h5>
+				             <p style="margin-top: 0"  md-colors="{color: 'grey-600'}">
+		            			{{institutionCtrl.current_institution.address.country ? 
+		            			institutionCtrl.current_institution.address.country : "Não informado"}}</p>
+		            	</div>
+		            	<div layout="column" layout-align="center">
+				            <h5 style="margin-bottom: 0">CEP</h5>
+		            		 <p style="margin-top: 0"  md-colors="{color: 'grey-600'}">
+		            		 	{{institutionCtrl.current_institution.address.cep ? 
+		            			institutionCtrl.current_institution.address.cep : "Não informado"}}</p>
+		            	</div>
+		            </div>
+		            <hr style="margin-top: 4%;" width="100%" size="4" color=#00796B>
 
-	            <h2>Contato</h2>
-	            <div layout="row" layout-xs="column" 
-	            	layout-align-gt-xs="space-between center" style="margin-top: -3%">
-	            	<div layout="column">
-			            <h5 style="margin-bottom: 0">Email</h5>
-	            		 <p style="margin-top: 0" md-colors="{color: 'grey-600'}">
-	            		 	{{institutionCtrl.current_institution.email ? 
-	            			institutionCtrl.current_institution.email : "Não informado"}}</p>
-	            	</div>
-	            	<div layout="column">
-			            <h5 style="margin-bottom: 0">Telefone</h5>
-			             <p style="margin-top: 0" md-colors="{color: 'grey-600'}">
-	            			{{institutionCtrl.current_institution.phone_number ? 
-	            			institutionCtrl.current_institution.phone_number : "Não informado"}}</p>
-	            	</div>
-	            	<div layout="column">
-			            <h5 style="margin-bottom: 0">Ramal</h5>
-			            <p style="margin-top: 0" md-colors="{color: 'grey-600'}">
-	            			{{institutionCtrl.current_institution.branch ? 
-	            			institutionCtrl.current_institution.branch : "Não informado"}}</p>
-	            	</div>
-	            </div>
-            </md-card-content>
-        </md-card>
+		            <h2>Contato</h2>
+		            <div layout="row" layout-xs="column" 
+		            	layout-align-gt-xs="space-between center" style="margin-top: -3%">
+		            	<div layout="column">
+				            <h5 style="margin-bottom: 0">Email</h5>
+		            		 <p style="margin-top: 0" md-colors="{color: 'grey-600'}">
+		            		 	{{institutionCtrl.current_institution.email ? 
+		            			institutionCtrl.current_institution.email : "Não informado"}}</p>
+		            	</div>
+		            	<div layout="column">
+				            <h5 style="margin-bottom: 0">Telefone</h5>
+				             <p style="margin-top: 0" md-colors="{color: 'grey-600'}">
+		            			{{institutionCtrl.current_institution.phone_number ? 
+		            			institutionCtrl.current_institution.phone_number : "Não informado"}}</p>
+		            	</div>
+		            	<div layout="column">
+				            <h5 style="margin-bottom: 0">Ramal</h5>
+				            <p style="margin-top: 0" md-colors="{color: 'grey-600'}">
+		            			{{institutionCtrl.current_institution.branch ? 
+		            			institutionCtrl.current_institution.branch : "Não informado"}}</p>
+		            	</div>
+		            </div>
+	            </md-card-content>
+	        </md-card>
         </md-content>
     </div>
 </div>

@@ -30,12 +30,32 @@
           <span style="color: white; margin-top: auto;">Organizado por {{eventDetailsCtrl.event.institution_name}}</span>
       </md-card-content>
       <md-card-content ng-if="eventDetailsCtrl.isEventPage">
-        <md-card-actions layout="column" float>
-            <md-button class="md-fab md-primary" title="Criar novo evento"
-            style="margin-right: -100px; background-color: #7CB342"
-            ng-click="eventDetailsCtrl.share($event, eventDetailsCtrl.event)">
-              <md-icon>share</md-icon>
+        <md-card-actions layout="row">
+          <md-menu md-offset="-145 75" ng-if="eventDetailsCtrl.isEventAuthor(eventDetailsCtrl.event)">
+            <md-button class="md-icon-button" style="width: 70px; height: 70px;" title="Opções"
+            style="margin-top: 25px;" ng-click="$mdMenu.open(ev)">
+              <md-icon style="color: white; font-size: 40px;">more_vert</md-icon>
             </md-button>
+            <md-menu-content>
+              <md-menu-item>
+                <md-button ng-click="null">
+                  <md-icon>edit</md-icon>
+                  Editar evento
+                </md-button>
+              </md-menu-item>
+              <md-menu-item>
+                <md-button ng-click="eventDetailsCtrl.confirmDeleteEvent($event, eventDetailsCtrl.event)">
+                  <md-icon>cancel</md-icon>
+                  Cancelar evento
+                </md-button>
+              </md-menu-item>
+            </md-menu-content>
+          </md-menu>
+          <md-button class="md-fab md-primary" title="Compartilhar"
+          style="margin-right: -50px; margin-top: 15px; background-color: #7CB342;"
+          ng-click="eventDetailsCtrl.share($event, eventDetailsCtrl.event)">
+            <md-icon>share</md-icon>
+          </md-button>
         </md-card-actions>
       </md-card-content>
     </div>
@@ -43,7 +63,7 @@
       <div style="margin-left: 20px; margin-right: 20px;">
         <md-card-content flex>
           <h4 style="color: #03b3a1;">Endereço</h4>
-          <div layout="row" style="display: flex; justify-content: flex-start;">
+          <div layout="row" class="left-justify">
             <p>
               <md-icon style="font-size: 40px;">location_on</md-icon>
             </p>
@@ -58,74 +78,74 @@
           <div layout="row">
             <div layout="column">
               <h4 style="color: #03b3a1;">Horário</h4>
-              <div layout="row" style="display: flex; justify-content: flex-start;">
+              <div layout="row" class="left-justify">
                 <p>
                   <md-icon style="font-size: 40px;">access_time</md-icon>
                 </p>
                 <div layout="column" style="margin-left: 40px;">
-                  <h3>8h30 as 18h</h3>
-                  <span style="margin-top: -15px; color: #959796;">Carga horária: 9h30</span>
+                  <h3>{{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'H:mm' | uppercase}} às
+                      {{eventDetailsCtrl.event.end_time | amUtc | amLocal | amDateFormat:'H:mm' | uppercase}}
+                  </h3>
+                  <span style="margin-top: -15px; color: #959796;">Carga horária: não definida</span>
                 </div>
               </div>
             </div>
             <div layout="column" style="margin-left: 200px;">
               <h4 style="color: #03b3a1;">Site oficial</h4>
-              <div layout="row" style="display: flex; justify-content: flex-start;">
+              <div layout="row" class="left-justify">
                 <p>
                   <md-icon style="font-size: 40px;">public</md-icon>
                 </p>
                 <div layout="column" style="margin-left: 40px;">
-                  <h3>www.saude.gov.br</h3>
+                  <h3>Não definido</h3>
                 </div>
               </div>
             </div>
           </div>
         </md-card-content>
-        <md-divider style="margin-left: 15px; margin-right: 15px; color: #03b3a1; border: 2px solid;"></md-divider>
-        <md-card-content flex>
-          <h2>Descrição</h2>
-          <p>
-           Está faltando a descrição
-          </p>
-        </md-card-content>
-        <md-divider style="margin-left: 15px; margin-right: 15px; color: #03b3a1; border: 2px solid;"></md-divider>
-        <md-card-content flex>
-          <h2>Programação</h2>
-          <p>
-            9:00 - 9:30 Abertura
-          </br>
-          </br>
-            9:30 - 10:00 "Biossegurança, Bioproteção e Defesa Biológica no âmbito do Ministério da Defesa" - Brigadeiro Médico
-             Eduardo Serra Negra Camerini (MD)
-            
-            ...
-          </p>
-        </md-card-content>
-        <md-divider ng-if="eventDetailsCtrl.event.video_url.length > 0" style="margin-left: 15px; margin-right: 15px; color: #03b3a1; border: 2px solid;"></md-divider>
-        <md-card-content ng-if="eventDetailsCtrl.event.video_url.length > 0" flex>
-          <h2>Vídeos</h2>
-          <div layout="column" ng-repeat="video in eventDetailsCtrl.event.video_url">
-            <h3 style="color: #03b3a1; margin-left: 5px;">{{video.description}}</h3>
-            <div class="youtube-player">
-              <iframe ng-src="{{ eventDetailsCtrl.getVideoUrl(video.url) }}"></iframe>
-            </div>
-          </div>
-        </md-card-content>
-        <md-divider ng-if="eventDetailsCtrl.event.useful_links.length > 0" style="margin-left: 15px; margin-right: 15px; color: #03b3a1; border: 2px solid;"></md-divider>
-        <md-card-content ng-if="eventDetailsCtrl.event.useful_links.length > 0" flex>
-          <h2>Links úteis</h2>
-          <md-list>
-            <md-list-item class="list-item-dense" md-colors="{background: 'grey-300'}" style="height: 75px;"
-            ng-repeat="link in eventDetailsCtrl.event.useful_links" ng-click="null" flex-xs>
-              <md-button class="md-fab md-primary" style="background-color: #7CB342;">
-                  <md-icon>link</md-icon>
-              </md-button>
-              <div layout="column">
-                <b style="font-size: 20px;">{{ link.description }}</b>
+        <div ng-if="eventDetailsCtrl.event.text">
+          <md-divider class="ligth-green-divider"></md-divider>
+          <md-card-content flex>
+            <h2>Descrição</h2>
+            <div style="white-space: pre-line;" ng-bind-html="eventDetailsCtrl.event.text"></div>
+          </md-card-content>
+        </div>
+        <div ng-if="eventDetailsCtrl.event.programation">
+          <md-divider class="ligth-green-divider"></md-divider>
+          <md-card-content flex>
+            <h2>Programação</h2>
+            <div style="white-space: pre-line;" ng-bind-html="eventDetailsCtrl.event.programation"></div>
+          </md-card-content>
+        </div>
+        <div ng-if="eventDetailsCtrl.event.video_url.length > 0">
+          <md-divider class="ligth-green-divider"></md-divider>
+          <md-card-content flex>
+            <h2>Vídeos</h2>
+            <div layout="column" ng-repeat="video in eventDetailsCtrl.event.video_url">
+              <h3 style="color: #03b3a1; margin-left: 5px;">{{video.description}}</h3>
+              <div class="youtube-player">
+                <iframe ng-src="{{ eventDetailsCtrl.getVideoUrl(video.url) }}"></iframe>
               </div>
-            </md-list-item>
-          </md-list>
-        </md-card-content>
+            </div>
+          </md-card-content>
+        </div>
+        <div ng-if="eventDetailsCtrl.event.useful_links.length > 0">
+          <md-divider class="ligth-green-divider"></md-divider>
+          <md-card-content flex>
+            <h2>Links úteis</h2>
+            <md-list>
+              <md-list-item class="list-item-dense" md-colors="{background: 'grey-300'}" style="height: 75px;"
+              ng-repeat="link in eventDetailsCtrl.event.useful_links" flex-xs>
+                <md-button class="md-fab md-primary" style="background-color: #7CB342;" title="Link" ng-href="{{link.url}}" target="_blank">
+                    <md-icon style="margin-top:15px;">link</md-icon>
+                </md-button>
+                <div layout="column">
+                  <b style="font-size: 20px;">{{ link.description }}</b>
+                </div>
+              </md-list-item>
+            </md-list>
+          </md-card-content>
+        </div>
       </div>
     </div>
   </md-card>

@@ -753,6 +753,18 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
     font-size: 100px;
 }
 
+.left-justify {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.ligth-green-divider {
+    margin-left: 15px;
+    margin-right: 15px;
+    color: #03b3a1;
+    border: 2px solid;
+}
+
 @media only screen and (max-width: 600px) {
     .small-text {
         font-size: 15px;

@@ -12,7 +12,6 @@
         function loadEvent(eventKey) {
             EventService.getEvent(eventKey).then(function success(response) {
                 eventCtrl.event = response.data;
-                console.log(response.data);
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
                 $state.go("app.user.home");

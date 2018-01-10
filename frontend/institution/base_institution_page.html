@@ -60,45 +60,52 @@
                                         <md-divider style="margin-top: 10px"></md-divider>
                                     </div>
                                     <md-menu-item>
-                                        <md-button ng-click="institutionCtrl.goToInstitution(institutionCtrl.current_institution.key)">
+                                        <md-button ng-class="institutionCtrl.inHome?'option-selected-inst':''"
+                                            ng-click="institutionCtrl.goToInstitution(institutionCtrl.current_institution.key)">
                                             <md-icon>home</md-icon>
-                                            Início
+                                            <b>Início</b>
                                         </md-button>
                                     </md-menu-item>
                                     <md-menu-item>
-                                        <md-button  ng-click="institutionCtrl.goToCommingSoon(institutionCtrl.current_institution.key)">
+                                        <md-button  ng-class="institutionCtrl.inRegistrationData?'option-selected-inst':''"
+                                            ng-click="institutionCtrl.goToCommingSoon(institutionCtrl.current_institution.key)">
                                             <md-icon>assignment</md-icon>
-                                             Dados cadastrais
+                                             <b>Dados cadastrais</b>
                                         </md-button>
                                     </md-menu-item>
                                     <md-menu-item>
-                                        <md-button ng-click="institutionCtrl.goToMembers(institutionCtrl.current_institution.key)">
+                                        <md-button ng-class="institutionCtrl.inMember?'option-selected-inst':''"
+                                            ng-click="institutionCtrl.goToMembers(institutionCtrl.current_institution.key)">
                                             <md-icon>account_circle</md-icon>
-                                            Membros
+                                            <b>Membros</b>
                                         </md-button>
                                     </md-menu-item>
                                     <md-menu-item >
-                                        <md-button ng-click="institutionCtrl.goToFollowers(institutionCtrl.current_institution.key)">
+                                        <md-button ng-class="institutionCtrl.inFollowers?'option-selected-inst':''"
+                                            ng-click="institutionCtrl.goToFollowers(institutionCtrl.current_institution.key)">
                                             <md-icon>people</md-icon>
-                                            Seguidores
+                                            <b>Seguidores</b>
                                         </md-button>
                                     </md-menu-item>
                                     <md-menu-item>
-                                        <md-button ng-click="institutionCtrl.goToCommingSoon(institutionCtrl.current_institution.key)">
+                                        <md-button ng-class="institutionCtrl.inSettings?'option-selected-inst':''"
+                                            ng-click="institutionCtrl.goToCommingSoon(institutionCtrl.current_institution.key)">
                                             <md-icon>settings</md-icon>
-                                            Vinculos Institucionais
+                                            <b>Vinculos Institucionais</b>
                                         </md-button>
                                     </md-menu-item>
                                     <md-menu-item ng-if="institutionCtrl.portfolioUrl">
-                                        <md-button  ng-click="institutionCtrl.portfolioDialog($event)">
+                                        <md-button  
+                                            ng-click="institutionCtrl.portfolioDialog($event)">
                                             <md-icon>description</md-icon>
-                                            Portfólio
+                                            <b>Portfólio</b>
                                         </md-button>
                                     </md-menu-item>
                                     <md-menu-item>
-                                        <md-button ng-click="institutionCtrl.goToCommingSoon(institutionCtrl.current_institution.key)">
+                                        <md-button 
+                                            ng-click="institutionCtrl.goToCommingSoon(institutionCtrl.current_institution.key)">
                                             <md-icon>date_range</md-icon>
-                                            Eventos
+                                            <b>Eventos</b>
                                         </md-button>
                                     </md-menu-item>
                                 </div>

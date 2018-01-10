@@ -18,6 +18,14 @@
         institutionCtrl.showFullData = false;
         institutionCtrl.isLoadingPosts = true;
 
+        institutionCtrl.inHome = true;
+        institutionCtrl.inMember = false;
+        institutionCtrl.inFollowers = false;
+        institutionCtrl.inRegistrationData = false;
+        institutionCtrl.inSettings = false;
+        institutionCtrl.inPortfolio = false;
+        institutionCtrl.inEvent = false;
+
         institutionCtrl.legal_natures = {
             "public": "Pública",
             "private": "Privada",
@@ -64,6 +72,16 @@
 
         function setPortifolioURL(url) {
             institutionCtrl.portfolioUrl = url;
+        }
+
+        function clearButtons() {
+            institutionCtrl.inHome = false;
+            institutionCtrl.inMember = false;
+            institutionCtrl.inFollowers = false;
+            institutionCtrl.inRegistrationData = false;
+            institutionCtrl.inSettings = false;
+            institutionCtrl.inPortfolio = false;
+            institutionCtrl.inEvent = false;
         }
 
         institutionCtrl.loadMorePosts = function loadMorePosts() {
@@ -154,18 +172,25 @@
         };
 
         institutionCtrl.goToInstitution = function goToInstitution(institutionKey) {
+            clearButtons();
+            institutionCtrl.inHome = true;
             $state.go('app.institution.timeline', {institutionKey: institutionKey});
         };
 
         institutionCtrl.goToMembers = function goToMembers(institutionKey) {
+            clearButtons();
+            institutionCtrl.inMember = true;
             $state.go('app.institution.members', {institutionKey: institutionKey});
         };
 
         institutionCtrl.goToFollowers = function goToFollowers(institutionKey) {
+            clearButtons();
+            institutionCtrl.inFollowers = true;
             $state.go('app.institution.followers', {institutionKey: institutionKey});
         };
 
         institutionCtrl.goToCommingSoon = function goToCommingSoon(institutionKey) {
+            clearButtons();
             $state.go('app.institution.comming_soon', {institutionKey: institutionKey});
         };
 

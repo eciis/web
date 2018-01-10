@@ -28,6 +28,7 @@
     'photo_url': null,
     'start_time': date,
     'end_time': date,
+    'video_url': {url: 'https://www.youtube.com/watch?v=123456789'}
   };
 
   var post = new Post({}, splab.key);
@@ -146,6 +147,18 @@
     it('Should be true when end_time of event is in the other month', function() {
       eventCtrl.event = eventCtrl.events[1];
       expect(eventCtrl.endInOtherMonth()).toBeTruthy();
+    });
+
+    it('Should be undefined when event is null or undefined', function() {
+      eventCtrl.event = null;
+      expect(eventCtrl.endInOtherMonth()).toEqual(undefined);
+    })
+  });
+
+  describe('getVideoUrl', function() {
+    it('Should return the embed link https://www.youtube.com/embed/123456789', function() {
+      eventCtrl.event = eventCtrl.events[0];
+      expect(eventCtrl.getVideoUrl(eventCtrl.event.video_url.url)).toEqual('https://www.youtube.com/embed/123456789')
     });
   });
 }));

@@ -95,7 +95,7 @@
             promise.then(function success() {
                 eventCtrl.events = eventCtrl.events.filter(thisEvent => thisEvent.key  !== event.key);
                 MessageService.showToast('Evento removido com sucesso!');
-                if (eventCtrl.isEventPage) $state.go('app.user.events');
+                $state.go('app.user.events');
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });

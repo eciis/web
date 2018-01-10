@@ -141,7 +141,7 @@
         };
 
         eventCtrl.isEventAuthor = function isEventAuthor(event) {
-            return Utils.getKeyFromUrl(event.author_key) === eventCtrl.user.key;
+            if(event) return Utils.getKeyFromUrl(event.author_key) === eventCtrl.user.key;
         };
 
         eventCtrl.goToEvent = function goToEvent(event) {

@@ -3,11 +3,11 @@
     
     var app = angular.module('app');
     
-    app.controller('SignupController', function(AuthService) {
+    app.controller('SignupController', function(AuthService, $scope) {
         var controller = this;
 
         controller.newUser = {};
-
+ 
         controller.signup = function signup() {
             var newUser = controller.newUser;
             if (newUser.password !== newUser.verifypassword) {
@@ -19,6 +19,12 @@
                 newUser.password
             ).then(controller.callback);
         };
+
+        (function main() {
+            if ($scope.emailDisabled) {
+                controller.newUser.email = $scope.email;
+            }
+        })();
     });
 
     app.directive("signup", function() {
@@ -27,6 +33,11 @@
             templateUrl: "app/auth/signup.html",
             controller: "SignupController",
             controllerAs: "controller",
+            scope: {
+                cardTitle: '@',
+                emailDisabled: '=',
+                email: '='
+            },
             bindToController: {
                 returnAction: '=',
                 callback: '='

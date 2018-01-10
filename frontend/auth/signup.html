@@ -13,13 +13,13 @@
               <img src="/app/images/logowithname.png" style="margin-top: 20px; margin-bottom: 20px; width: 75%;"/>
           </div>
           <div layout="row" layout-align="center center" style="margin-bottom: 50px;">
-              <b>Preencha o formulário abaixo para solicitar um convite</b>
+              <b>{{ cardTitle }}</b>
           </div>
           <div layout="column">
             <form ng-submit="controller.signup()">
               <md-input-container class="md-block" style="margin: 0;">
                 <label>Email</label>
-                <input type="email" name="email" ng-model="controller.newUser.email" required="true" aria-label="Email">
+                <input disabled="emailDisabled" type="email" name="email" ng-model="controller.newUser.email" required="true" aria-label="Email">
               </md-input-container>
               <md-input-container class="md-block" style="margin: 0;">
                 <label>Senha</label>

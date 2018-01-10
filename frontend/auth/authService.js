@@ -100,6 +100,8 @@
             userInfo = undefined;
 
             executeLogoutListeners();
+
+            $state.go("signin");
         };
 
         service.getCurrentUser = function getCurrentUser() {
@@ -159,11 +161,12 @@
             onLogoutListeners.push(callback);
         };
 
-        authObj.$onAuthStateChanged(function(firebaseUser) {
-            if (!firebaseUser) {
-                $state.go("signin");
-            }
-        });
+        // authObj.$onAuthStateChanged(function(firebaseUser) {
+        //     console.log(">>>>>>>>>>>>>>>>>>>>. ", firebaseUser)
+        //     if (!firebaseUser) {
+        //         $state.go("signin");
+        //     }
+        // });
 
         /**
         * Execute each function stored to be thriggered when user logout

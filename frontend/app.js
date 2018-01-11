@@ -139,6 +139,15 @@
                     }
                 }
             })
+            .state("app.institution.registration_data", {
+                url: "/institution/:institutionKey/registration_data",
+                views: {
+                    institution_content: {
+                        templateUrl: "app/institution/registration_data.html",
+                        controller: "InstitutionController as institutionCtrl"
+                    }
+                }
+            })
             .state("app.post", {
                 url: "/posts/:key",
                 views: {
@@ -167,10 +176,10 @@
                     }
                 }
             })
-            .state("app.event", {
+            .state("app.user.event", {
                 url: "/event/:eventKey/details",
                 views: {
-                    content: {
+                    user_content: {
                         templateUrl: "app/event/event_page.html",
                         controller: "EventPageController as eventCtrl",
                     }

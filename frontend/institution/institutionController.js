@@ -74,6 +74,10 @@
             institutionCtrl.portfolioUrl = url;
         }
 
+        institutionCtrl.limitString = function limitString(string, limit){
+            return Utils.limitString(string, limit);
+        };
+
         function clearButtons() {
             institutionCtrl.inHome = false;
             institutionCtrl.inMember = false;
@@ -187,6 +191,10 @@
             clearButtons();
             institutionCtrl.inFollowers = true;
             $state.go('app.institution.followers', {institutionKey: institutionKey});
+        };
+
+        institutionCtrl.goToRegistrationData = function goToRegistrationData(institutionKey) {
+            $state.go('app.institution.registration_data', {institutionKey: institutionKey});
         };
 
         institutionCtrl.goToCommingSoon = function goToCommingSoon(institutionKey) {

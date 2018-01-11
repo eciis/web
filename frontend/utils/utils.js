@@ -52,6 +52,11 @@ var Utils = {
         config.url = config.url.replace(restApiRegex, restApiUrl + '/api/$1');
     },
 
+    limitString : function limitString(string, limit){
+            return string && string.length > limit ?  
+                string.substring(0, limit+1) + "..." : string;
+    },
+
     /**
      * Create an object with a calculated property height, to be used with 
      * the directive ng-style on a html element that has a list of itens in it.

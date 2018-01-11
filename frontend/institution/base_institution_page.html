@@ -4,17 +4,19 @@
         
             <!-- COVER -->
             <div class="container">
-                <div layout="row" flex md-colors="{background: 'grey-50'}" >
+                <div layout="row" flex md-colors="{background: 'grey-50'}">
                     <div class="card hovercard" flex md-colors="{background: 'light-green'}">
-                        <div class="cardheader">
-                            <div class="avatar">
+                        <div class="cardheader inst">
+                            <div class="avatar inst" layout-align-gt-xs="start end" layout-align-xs="center center" 
+                                layout-gt-xs="row" layout-xs="column" layout-margin>
                                 <img alt="Foto do Perfil" ng-src="{{ institutionCtrl.current_institution.photo_url }}">
+                                <div layout-align-gt-xs="end center" layout-align-xs="center" layout="row" 
+                                    class="md-title inst-desc">
+                                    <P>{{ institutionCtrl.current_institution.name }}</P>
+                                </div>
                             </div>
                         </div>
-                        <div class="info" md-colors="{background: 'teal-500'}">
-                            <div class="desc" >
-                                <div class="md-title">{{ institutionCtrl.current_institution.name }}</div>
-                            </div>
+                        <div class="info inst" md-colors="{background: 'teal-500'}">
                         </div>
                     </div>
                 </div>
@@ -68,7 +70,7 @@
                                     </md-menu-item>
                                     <md-menu-item>
                                         <md-button  ng-class="institutionCtrl.inRegistrationData?'option-selected-inst':''"
-                                            ng-click="institutionCtrl.goToCommingSoon(institutionCtrl.current_institution.key)">
+                                            ng-click="institutionCtrl.goToRegistrationData(institutionCtrl.current_institution.key)">
                                             <md-icon>assignment</md-icon>
                                              <b>Dados cadastrais</b>
                                         </md-button>

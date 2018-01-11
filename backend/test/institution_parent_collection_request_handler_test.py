@@ -54,6 +54,22 @@ class InstitutionParentRequestCollectionHandlerTest(TestBaseHandler):
             'type_of_invite': 'REQUEST_INSTITUTION_PARENT'
         }
 
+        with self.assertRaises(Exception) as ex:
+            self.testapp.post_json(
+                "/api/institutions/" + institution.key.urlsafe() + "/requests/institution_parent",
+                data)
+
+        exception_message = self.get_message_exception(ex.exception.message)
+        self.assertEqual(
+            "Error! Hierarchical requests is not avaiable on test version",
+            exception_message,
+            "Expected error message is Error! Hierarchical requests is not avaiable on test version")
+
+        """TODO: Uncomment test below when the hierarchical requests can be avaiable
+        @author: Mayza Nunes 11/01/2018
+        """
+        """
+
         request = self.testapp.post_json(
             "/api/institutions/" + institution.key.urlsafe() + "/requests/institution_parent",
             data)
@@ -80,7 +96,7 @@ class InstitutionParentRequestCollectionHandlerTest(TestBaseHandler):
 
     @patch('utils.verify_token', return_value=USER)
     def test_post_user_not_admin(self, verify_token):
-        """Test post request with user is not admin."""
+        #Test post request with user is not admin.
         admin = mocks.create_user(ADMIN['email'])
         institution = mocks.create_institution()		 
         admin.institutions_admin = [institution.key]
@@ -114,3 +130,4 @@ class InstitutionParentRequestCollectionHandlerTest(TestBaseHandler):
             "Error! User is not allowed to send request",
             exception_message,
             "Expected error message is Error! User is not allowed to send request")
+"""

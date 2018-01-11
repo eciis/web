@@ -18,8 +18,6 @@
         institutionCtrl.showFullData = false;
         institutionCtrl.isLoadingPosts = true;
 
-        institutionCtrl.stateView = $state.current.name.split(".")[2];
-
         institutionCtrl.legal_natures = {
             "public": "Pública",
             "private": "Privada",
@@ -271,6 +269,14 @@
             });
         };
 
+        function getStateView(){
+            return $state.current.name.split(".")[2];
+        }
+
+        institutionCtrl.inStateView = function inStateView(state){
+            return state === institutionCtrl.stateView;
+        };
+
         function RemoveInstController($mdDialog, institution, InstitutionService, $state) {
             var ctrl = this;
 
@@ -299,6 +305,10 @@
                 }
             };
         }
+
+        (function main(){
+            institutionCtrl.stateView = getStateView();
+        })();
     });
 
     app.controller("FollowersInstController", function InstitutionController($state, InstitutionService,

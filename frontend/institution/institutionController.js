@@ -18,13 +18,7 @@
         institutionCtrl.showFullData = false;
         institutionCtrl.isLoadingPosts = true;
 
-        institutionCtrl.inHome = true;
-        institutionCtrl.inMember = false;
-        institutionCtrl.inFollowers = false;
-        institutionCtrl.inRegistrationData = false;
-        institutionCtrl.inSettings = false;
-        institutionCtrl.inPortfolio = false;
-        institutionCtrl.inEvent = false;
+        institutionCtrl.stateView = $state.current.name.split(".")[2];
 
         institutionCtrl.legal_natures = {
             "public": "Pública",
@@ -77,16 +71,6 @@
         institutionCtrl.limitString = function limitString(string, limit){
             return Utils.limitString(string, limit);
         };
-
-        function clearButtons() {
-            institutionCtrl.inHome = false;
-            institutionCtrl.inMember = false;
-            institutionCtrl.inFollowers = false;
-            institutionCtrl.inRegistrationData = false;
-            institutionCtrl.inSettings = false;
-            institutionCtrl.inPortfolio = false;
-            institutionCtrl.inEvent = false;
-        }
 
         institutionCtrl.loadMorePosts = function loadMorePosts() {
             var deferred = $q.defer();
@@ -176,31 +160,27 @@
         };
 
         institutionCtrl.goToInstitution = function goToInstitution(institutionKey) {
-            clearButtons();
-            institutionCtrl.inHome = true;
+            institutionCtrl.stateView = "timeline";
             $state.go('app.institution.timeline', {institutionKey: institutionKey});
         };
 
         institutionCtrl.goToMembers = function goToMembers(institutionKey) {
-            clearButtons();
-            institutionCtrl.inMember = true;
+            institutionCtrl.stateView = "members";
             $state.go('app.institution.members', {institutionKey: institutionKey});
         };
 
         institutionCtrl.goToFollowers = function goToFollowers(institutionKey) {
-            clearButtons();
-            institutionCtrl.inFollowers = true;
+            institutionCtrl.stateView = "followers";
             $state.go('app.institution.followers', {institutionKey: institutionKey});
         };
 
         institutionCtrl.goToRegistrationData = function goToRegistrationData(institutionKey) {
-            clearButtons();
-            institutionCtrl.inRegistrationData = true;
+            institutionCtrl.stateView = "registration_data";
             $state.go('app.institution.registration_data', {institutionKey: institutionKey});
         };
 
         institutionCtrl.goToCommingSoon = function goToCommingSoon(institutionKey) {
-            clearButtons();
+            institutionCtrl.stateView = "";
             $state.go('app.institution.comming_soon', {institutionKey: institutionKey});
         };
 

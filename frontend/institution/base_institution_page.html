@@ -62,35 +62,35 @@
                                         <md-divider style="margin-top: 10px"></md-divider>
                                     </div>
                                     <md-menu-item>
-                                        <md-button ng-class="institutionCtrl.inHome?'option-selected-inst':''"
+                                        <md-button ng-class="institutionCtrl.stateView === 'timeline'?'option-selected-inst':''"
                                             ng-click="institutionCtrl.goToInstitution(institutionCtrl.current_institution.key)">
                                             <md-icon>home</md-icon>
                                             <b>Início</b>
                                         </md-button>
                                     </md-menu-item>
                                     <md-menu-item>
-                                        <md-button  ng-class="institutionCtrl.inRegistrationData?'option-selected-inst':''"
+                                        <md-button  ng-class="institutionCtrl.stateView === 'registration_data'?'option-selected-inst':''"
                                             ng-click="institutionCtrl.goToRegistrationData(institutionCtrl.current_institution.key)">
                                             <md-icon>assignment</md-icon>
                                              <b>Dados cadastrais</b>
                                         </md-button>
                                     </md-menu-item>
                                     <md-menu-item>
-                                        <md-button ng-class="institutionCtrl.inMember?'option-selected-inst':''"
+                                        <md-button ng-class="institutionCtrl.stateView === 'members'?'option-selected-inst':''"
                                             ng-click="institutionCtrl.goToMembers(institutionCtrl.current_institution.key)">
                                             <md-icon>account_circle</md-icon>
                                             <b>Membros</b>
                                         </md-button>
                                     </md-menu-item>
                                     <md-menu-item >
-                                        <md-button ng-class="institutionCtrl.inFollowers?'option-selected-inst':''"
+                                        <md-button ng-class="institutionCtrl.stateView === 'followers'?'option-selected-inst':''"
                                             ng-click="institutionCtrl.goToFollowers(institutionCtrl.current_institution.key)">
                                             <md-icon>people</md-icon>
                                             <b>Seguidores</b>
                                         </md-button>
                                     </md-menu-item>
                                     <md-menu-item>
-                                        <md-button ng-class="institutionCtrl.inSettings?'option-selected-inst':''"
+                                        <md-button ng-class="institutionCtrl.stateView === 'SETTINGS'?'option-selected-inst':''"
                                             ng-click="institutionCtrl.goToCommingSoon(institutionCtrl.current_institution.key)">
                                             <md-icon>settings</md-icon>
                                             <b>Vinculos Institucionais</b>

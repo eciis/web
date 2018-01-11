@@ -167,10 +167,10 @@
                     }
                 }
             })
-            .state("app.event", {
+            .state("app.user.event", {
                 url: "/event/:eventKey/details",
                 views: {
-                    content: {
+                    user_content: {
                         templateUrl: "app/event/event_page.html",
                         controller: "EventPageController as eventCtrl",
                     }

@@ -163,7 +163,9 @@
             if(eventCtrl.isLongText(event)){
                 text = text.substring(0, LIMIT_CHARACTERS) + "...";
             }
+            
             return text;
+
         }
 
         (function main() {

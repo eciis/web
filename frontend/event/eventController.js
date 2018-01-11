@@ -126,6 +126,9 @@
         };
 
         eventCtrl.editEvent = function editEvent(ev, event) {
+            /* TODO: FIX this function to work in event page
+            * @author: Tiago Pereira - 11/01/2018
+            */
             $mdDialog.show({
                 controller: 'EventDialogController',
                 controllerAs: "controller",

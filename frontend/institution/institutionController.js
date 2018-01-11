@@ -194,6 +194,8 @@
         };
 
         institutionCtrl.goToRegistrationData = function goToRegistrationData(institutionKey) {
+            clearButtons();
+            institutionCtrl.inRegistrationData = true;
             $state.go('app.institution.registration_data', {institutionKey: institutionKey});
         };
 

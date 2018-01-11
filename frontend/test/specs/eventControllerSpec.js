@@ -108,24 +108,9 @@
 
     it('Should returns a event with https url in text', function() {
       event_convert_date.text = "Access: http://www.google.com";
-      event_convert_date.text = eventCtrl.recognizeUrl(event_convert_date);
+      event_convert_date.text = eventCtrl.recognizeUrl(event_convert_date.text);
       expect(event_convert_date.text)
         .toEqual("Access: <a href='http://www.google.com' target='_blank'>http://www.google.com</a>");
-    });
-  });
-
-  describe('isLongText()', function() {
-
-    it('Should be false', function() {
-      expect(eventCtrl.isLongText(event_convert_date)).toBe(false);
-    });
-
-    it('Should be true', function() {
-      event_convert_date.text = "Access: www.google.com aAt vero et accusamus et iusto odio dignis\
-                  simos ducimus quiblanditiis praesentium voluptatum deleniti atque corr\
-                  pti quos dolores et quas molestias excepturi sint occaecati cupiditate\
-                  non provident, similique sunt in culpa qui officia deserunt mollitia"
-      expect(eventCtrl.isLongText(event_convert_date)).toBe(true);
     });
   });
 

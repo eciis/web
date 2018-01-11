@@ -66,6 +66,10 @@
             institutionCtrl.portfolioUrl = url;
         }
 
+        institutionCtrl.limitString = function limitString(string, limit){
+            return Utils.limitString(string, limit);
+        };
+
         institutionCtrl.loadMorePosts = function loadMorePosts() {
             var deferred = $q.defer();
 
@@ -163,6 +167,10 @@
 
         institutionCtrl.goToFollowers = function goToFollowers(institutionKey) {
             $state.go('app.institution.followers', {institutionKey: institutionKey});
+        };
+
+        institutionCtrl.goToRegistrationData = function goToRegistrationData(institutionKey) {
+            $state.go('app.institution.registration_data', {institutionKey: institutionKey});
         };
 
         institutionCtrl.goToCommingSoon = function goToCommingSoon(institutionKey) {

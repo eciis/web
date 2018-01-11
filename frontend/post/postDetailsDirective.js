@@ -367,9 +367,6 @@
             return _.includes(_.map(postDetailsCtrl.user.institutions_admin, getKeyFromUrl), postDetailsCtrl.post.institution_key);
         }
 
-        var URL_PATTERN = /(((www.)|(http(s)?:\/\/))[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
-        var REPLACE_URL = "<a href=\'$1\' target='_blank'>$1</a>";
-
         /**
         * replace urls in a string with links to make the urls clickable.
         * If urls don't containing http or https, this function add the https.
@@ -380,17 +377,11 @@
         */
         postDetailsCtrl.postToURL =  function postToURL(receivedPost) {
             var post = new Post(receivedPost, receivedPost.institutionKey);
-            post.text = postDetailsCtrl.recognizeUrl(post.text);
-            return post;
-        };
-
-        postDetailsCtrl.recognizeUrl =  function recognizeUrl(text) {
-            if(text) {
-                var urlsInText = text.match(URL_PATTERN);
-                text = addHttpsToUrl(text, urlsInText);
-                text = adjustText(text);
-                return text;
+            if(post.text){
+                post.text = Utils.recognizeUrl(post.text);
+                post.text = adjustText(post.text);
             }
+            return post;
         };
 
         postDetailsCtrl.showImage = function showImage(post) {
@@ -406,14 +397,6 @@
         postDetailsCtrl.getVideoUrl = function getVideoUrl(post) {
             var postObj = new Post(post);
             return postObj.getVideoUrl();
-        };
-
-        postDetailsCtrl.isLongPostTimeline = function isLongPostTimeline(text){
-            if(text){
-                var numberOfChar = text.length;
-                return !postDetailsCtrl.isPostPage &&
-                    numberOfChar >= LIMIT_POST_CHARACTERS;
-            }
         };
 
         postDetailsCtrl.showUserProfile = function showUserProfile(userKey, ev) {
@@ -440,23 +423,9 @@
         };
 
         function adjustText(text){
-            if(postDetailsCtrl.isLongPostTimeline(text)){
-                text = text.substring(0, LIMIT_POST_CHARACTERS) + "...";
-            }
-            return text.replace(URL_PATTERN,REPLACE_URL);
-        }
-
-        function addHttpsToUrl(text, urls) {
-            if(urls) {
-                var http = "http://";
-                for (var i = 0; i < urls.length; i++) {
-                    if(urls[i].slice(0, 4) !== "http") {
-                        text = text.replace(urls[i], http + urls[i]);
-                    }
-                }
-            }
-            return text;
-        }    
+            return (!postDetailsCtrl.isPostPage && text) ?
+                Utils.limitString(text, LIMIT_POST_CHARACTERS) : text;
+        }  
     });
 
     app.directive("postDetails", function() {
@@ -685,14 +654,13 @@
         var LIMIT_POST_CHARACTERS = 200;
         var URL_PATTERN = /(((www.)|(http(s)?:\/\/))[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
         var REPLACE_URL = "<a href=\'$1\' target='_blank'>$1</a>";
-
+        
         shareCtrl.user = user;
 
         shareCtrl.post = new Post(post, post.institution_key);
-        shareCtrl.post.text = adjustText(post.text);
+       
         shareCtrl.posts = posts;
         shareCtrl.addPost = addPost;
-
         shareCtrl.newPost = new Post({}, shareCtrl.user.current_institution.key);
 
         shareCtrl.cancelDialog = function cancelDialog() {
@@ -760,13 +728,11 @@
             shareCtrl.newPost.pdf_files = [];
         }
 
-        function adjustText(text){
+        shareCtrl.postToURL =  function postToURL(text) {
             if(text){
-                if(text.length > LIMIT_POST_CHARACTERS){
-                    text = text.substring(0, LIMIT_POST_CHARACTERS) + "...";
-                }
-                return text.replace(URL_PATTERN,REPLACE_URL);
+                text = Utils.limitString(text, LIMIT_POST_CHARACTERS);
             }
-        }
+            return text.replace(URL_PATTERN,REPLACE_URL);
+        };
     });
 })();

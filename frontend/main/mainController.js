@@ -125,7 +125,7 @@
             if (mainCtrl.user.name === 'Unknown') {
                 $state.go("app.user.config_profile");
             }
-            
+
             mainCtrl.getPendingTasks();
         })();
     });

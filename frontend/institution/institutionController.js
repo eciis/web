@@ -273,8 +273,8 @@
             });
         };
 
-        function getStateView(){
-            return $state.current.name.split(".")[2];
+        function loadStateView(){
+            institutionCtrl.stateView = $state.current.name.split(".")[2];
         }
 
         institutionCtrl.inStateView = function inStateView(state){
@@ -288,6 +288,7 @@
 
             ctrl.closeDialog = function() {
                 $mdDialog.cancel();
+                loadStateView();
             };
 
             ctrl.removeInst = function removeInst() {
@@ -311,7 +312,7 @@
         }
 
         (function main(){
-            institutionCtrl.stateView = getStateView();
+            loadStateView();
         })();
     });
 

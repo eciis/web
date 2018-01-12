@@ -23,9 +23,8 @@
 
         homeCtrl.user = AuthService.getCurrentUser();
 
-        function getStateView(){
+        function loadStateView(){
             homeCtrl.stateView = $state.current.name.split(".")[2];
-            console.log(homeCtrl.stateView);
         }
  
         homeCtrl.inStateView = function inStateView(state){
@@ -183,7 +182,7 @@
             loadEvents();
             homeCtrl.loadMorePosts();
             getFollowingInstitutions();
-            getStateView();
+            loadStateView();
         })();
     });
 

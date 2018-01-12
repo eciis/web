@@ -44,6 +44,7 @@ class SearchInstitution(SearchDocument):
             content = {
                 'id': institution.key.urlsafe(),
                 'name': institution.name,
+                'email': institution.email,
                 'state': institution.state,
                 'admin': admin,
                 'acronym': institution.acronym,
@@ -59,6 +60,7 @@ class SearchInstitution(SearchDocument):
                 doc_id=content['id'],
                 fields=[
                     api.search.TextField(name='name', value=content['name']),
+                    api.search.TextField(name='email', value=content['email']),
                     api.search.TextField(name='state', value=content['state']),
                     api.search.TextField(name='admin', value=content['admin']),
                     api.search.TextField(name='acronym', value=content['acronym']),
@@ -79,7 +81,7 @@ class SearchInstitution(SearchDocument):
         query_string = self.makeQueryStr(value, state)
         index = api.search.Index(self.index_name)
         query_options = api.search.QueryOptions(
-            returned_fields=['name', 'state', 'admin', 'acronym',
+            returned_fields=['name', 'state', 'email', 'admin', 'acronym',
                              'actuation_area', 'legal_nature', 'federal_state', 'description']
         )
         query = api.search.Query(
@@ -116,7 +118,7 @@ class SearchInstitution(SearchDocument):
     def create_field_values_string(self, value):
         """Create a string formed by fields and values."""
         # add a new field here
-        fields = ['name', 'acronym', 'actuation_area', 'legal_nature', 'federal_state', 'description']
+        fields = ['name', 'acronym', 'email', 'actuation_area', 'legal_nature', 'federal_state', 'description']
         fields_values = []
 
         for field in fields:

@@ -27,30 +27,40 @@
                       <md-button flex-xs type="submit" style="margin: 0" class="md-raised md-primary" md-colors="{background: 'teal-500'}">Acessar</md-button>
                     </div>
                   </form>
-                  <md-button disabled="true" class="md-raised md-primary login-button">
-                    <md-icon md-svg-src="/app/icons/facebook-icon.svg" style="padding-left: 1em;"></md-icon>
-                    <span>ACESSE COM FACEBOOK</span>
-                  </md-button>
                   <md-button class="login-button" ng-click="loginCtrl.login()"
                     style="background-color: #db4437; margin: 10px 0 10px 0;">
                     <md-icon md-svg-src="/app/icons/google-icon.svg" style="padding-left: 1em;"></md-icon>
                     <span>ACESSE COM GOOGLE</span>
                   </md-button>
-                  <md-button disabled="true" class="md-raised md-primary login-button">
-                  <md-icon md-svg-src="/app/icons/twitter-icon.svg" style="padding-left: 1em;"></md-icon>
-                    <span>ACESSE COM TWITTER</span>
-                  </md-button>
-                  <div layout="row" style="margin-top: 15px;">
-                    <hr style="height:0px;" flex/>
+                  <!-- TODO: Uncomment when it is possible to connect with other social networks
+                             @author: Mayza Nunes 11/01/2018
+
+                    <md-button disabled="true" class="md-raised md-primary login-button">
+                        <md-icon md-svg-src="/app/icons/facebook-icon.svg" style="padding-left: 1em;"></md-icon>
+                        <span>ACESSE COM FACEBOOK</span>
+                    </md-button>
+                    <md-button disabled="true" class="md-raised md-primary login-button">
+                      <md-icon md-svg-src="/app/icons/twitter-icon.svg" style="padding-left: 1em;"></md-icon>
+                        <span>ACESSE COM TWITTER</span>
+                    </md-button>
+                    <div layout="row" style="margin-top: 15px;">
+                      <hr style="height:0px;" flex/>
+                    </div>
+                  -->
+
+                  <!--
+                    Hidden on first version, because this option has not will be disponible yet.
+                  -->
+                  <div ng-if="false">
+                    <p style="color: black;">
+                      <b>Se você ainda não possui uma conta no e-CIS solicite abaixo um convite.</b>
+                    </p>
+                    <md-button md-colors="{background: 'teal-500'}" class="login-button" ng-click="loginCtrl.isRequestInvite = true"
+                      style="margin-bottom: 30px;">
+                        <md-icon style="color: white; padding-left: 1em;">add_circle</md-icon>
+                        <span>SOLICITAR CONVITE</span>
+                    </md-button>
                   </div>
-                  <p style="color: black;">
-                    <b>Se você ainda não possui uma conta no e-CIS solicite abaixo um convite.</b>
-                  </p>
-                  <md-button md-colors="{background: 'teal-500'}" class="login-button" ng-click="loginCtrl.isRequestInvite = true"
-                    style="margin-bottom: 30px;">
-                      <md-icon style="color: white; padding-left: 1em;">add_circle</md-icon>
-                      <span>SOLICITAR CONVITE</span>
-                  </md-button>
               </div>
             </md-card-content>
             <div style="padding: 15px; font-size: 14px;" md-colors="{background: 'grey-300'}" hide-xs>

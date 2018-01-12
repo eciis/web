@@ -139,6 +139,15 @@
                     }
                 }
             })
+            .state("app.institution.registration_data", {
+                url: "/institution/:institutionKey/registration_data",
+                views: {
+                    institution_content: {
+                        templateUrl: "app/institution/registration_data.html",
+                        controller: "InstitutionController as institutionCtrl"
+                    }
+                }
+            })
             .state("app.post", {
                 url: "/posts/:key",
                 views: {

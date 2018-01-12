@@ -15,8 +15,6 @@
         eventCtrl.user = AuthService.getCurrentUser();
         eventCtrl.isLoadingEvents = true;
 
-        var LIMIT_CHARACTERS = 100;
-
         eventCtrl.loadMoreEvents = function loadMoreEvents() {
             var deferred = $q.defer();
 
@@ -102,18 +100,9 @@
             return promise;
         }
 
-        eventCtrl.recognizeUrl =  function recognizeUrl(event) {
-            if(event && event.text){
-                var text = Utils.recognizeUrl(event.text);
-                text = adjustText(text, event);
-                return text;
-            }
-        };
-
-        eventCtrl.isLongText = function isLongText(event){
-            if(event.text) {
-                var numberOfChar = event.text.length;
-                return numberOfChar >= LIMIT_CHARACTERS;
+        eventCtrl.recognizeUrl =  function recognizeUrl(text) {
+            if(text){
+                return Utils.recognizeUrl(text);
             }
         };
 
@@ -171,13 +160,6 @@
         function isInstitutionAdmin(event) {
             return _.includes(_.map(eventCtrl.user.institutions_admin, Utils.getKeyFromUrl),
                 Utils.getKeyFromUrl(event.institution_key));
-        }
-
-        function adjustText(text, event){
-            if(eventCtrl.isLongText(event)){
-                text = text.substring(0, LIMIT_CHARACTERS) + "...";
-            }
-            return text;
         }
 
         (function main() {

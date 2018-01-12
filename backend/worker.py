@@ -1,6 +1,7 @@
 """Send notifications handler."""
 import webapp2
 import json
+import permissions
 from firebase import send_notification
 from google.appengine.api import mail
 import logging
@@ -160,6 +161,24 @@ class NotifyFollowersHandler(BaseHandler):
                 )
 
 
+class AddAdminPermissionsInInstitutionHierarchy(BaseHandler):
+
+    def addAdminPermissions(self, institution_key, parent_institution_key):
+        parent_institution = ndb.Key(urlsafe=parent_institution_key).get()
+        admin = parent_institution.admin.get()
+        admin.add_permissions(permissions.DEFAULT_ADMIN_PERMISSIONS, institution_key)
+        admin.put()
+
+        if parent_institution.parent_institution:
+            self.addAdminPermissions(institution_key, parent_institution.parent_institution.urlsafe())
+
+
+    def post(self):
+        institution_key = self.request.get('institution_key')
+        institution = ndb.Key(urlsafe=institution_key).get()
+        if institution.parent_institution:
+            self.addAdminPermissions(institution_key, institution.parent_institution.urlsafe())
+
 
 app = webapp2.WSGIApplication([
     ('/api/queue/send-notification', SendNotificationHandler),
@@ -167,5 +186,6 @@ app = webapp2.WSGIApplication([
     ('/api/queue/remove-inst', RemoveInstitutionHandler),
     ('/api/queue/post-notification', PostNotificationHandler),
     ('/api/queue/email-members', EmailMembersHandler),
-    ('/api/queue/notify-followers', NotifyFollowersHandler)
+    ('/api/queue/notify-followers', NotifyFollowersHandler),
+    ('/api/queue/add-admin-permissions', AddAdminPermissionsInInstitutionHierarchy)
 ], debug=True)

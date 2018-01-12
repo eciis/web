@@ -144,6 +144,8 @@ class InstitutionHandler(BaseHandler):
         invite = ndb.Key(urlsafe=inviteKey).get()
         invite.send_response_notification(user, invite.admin_key.urlsafe(), 'ACCEPT')
 
+        enqueue_task('add-admin-permissions', {'institution_key': institution_key})
+
         institution_json = Utils.toJson(institution)
         self.response.write(json.dumps(
             institution_json))

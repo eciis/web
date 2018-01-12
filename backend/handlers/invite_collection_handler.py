@@ -39,11 +39,11 @@ class InviteCollectionHandler(BaseHandler):
         Utils._assert(type_of_invite == 'INSTITUTION',
                       "invitation type not allowed", NotAuthorizedException)
         
-        """TODO: Remove the assert bellow when the hierarchical invitations can be avaiable
+        """TODO: Remove the assert bellow when the hierarchical invitations can be available
         @author: Mayza Nunes 11/01/2018
         """
         Utils._assert(type_of_invite != 'USER',
-                      "Hierarchical invitations is not avaiable on test version", NotAuthorizedException)
+                      "Hierarchical invitations is not available in this version", NotAuthorizedException)
 
         invite = InviteFactory.create(data, type_of_invite)
 

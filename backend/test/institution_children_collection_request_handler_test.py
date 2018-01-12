@@ -63,11 +63,11 @@ class InstitutionChildrenRequestCollectionHandlerTest(TestBaseHandler):
 
         exception_message = self.get_message_exception(ex.exception.message)
         self.assertEqual(
-            "Error! Hierarchical requests is not avaiable on test version",
+            "Error! Hierarchical requests is not available in this version",
             exception_message,
-            "Expected error message is Error! Hierarchical requests is not avaiable on test version")
+            "Expected error message is Error! Hierarchical requests is not available in this version")
 
-        """TODO: Uncomment test below when the hierarchical requests can be avaiable
+        """TODO: Uncomment test below when the hierarchical requests can be available
         @author: Mayza Nunes 11/01/2018
         """
         """

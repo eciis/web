@@ -28,7 +28,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
 
-    """TODO: Uncomment test below when the hierarchical invitations can be avaiable
+    """TODO: Uncomment test below when the hierarchical invitations can be available
     @author: Mayza Nunes 11/01/2018
     """
     """

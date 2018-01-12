@@ -45,11 +45,11 @@ class InstitutionChildrenRequestCollectionHandler(BaseHandler):
 
         type_of_invite = data.get('type_of_invite')
 
-        """TODO: Remove the assert bellow when the hierarchical requests can be avaiable
+        """TODO: Remove the assert bellow when the hierarchical requests can be available
         @author: Mayza Nunes 11/01/2018
         """
         Utils._assert(type_of_invite == 'REQUEST_INSTITUTION_CHILDREN',
-                      "Hierarchical requests is not avaiable on test version", NotAuthorizedException)
+                      "Hierarchical requests is not available in this version", NotAuthorizedException)
 
         Utils._assert(
             type_of_invite != inst_children_request_type,

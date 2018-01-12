@@ -83,10 +83,18 @@
                   <md-icon style="font-size: 40px;">access_time</md-icon>
                 </p>
                 <div layout="column" style="margin-left: 40px;">
-                  <h3>{{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'H:mm' | uppercase}} às
-                      {{eventDetailsCtrl.event.end_time | amUtc | amLocal | amDateFormat:'H:mm' | uppercase}}
+                  <h3>
+                      De {{eventCtrl.event.start_time | amUtc | amLocal | amDateFormat: 'DD' }}
+                       de {{eventCtrl.event.start_time | amUtc | amLocal | amDateFormat: 'MMM' }}
+                       de {{eventCtrl.event.start_time | amUtc | amLocal | amDateFormat: 'YYYY' }}
+                       às {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'H:mm' | uppercase}}
                   </h3>
-                  <span style="margin-top: -15px; color: #959796;">Carga horária: não definida</span>
+                  <span style="margin-top: -15px; color: #959796;">
+                      até {{eventCtrl.event.start_time | amUtc | amLocal | amDateFormat: 'DD' }}
+                       de {{eventCtrl.event.start_time | amUtc | amLocal | amDateFormat: 'MMM' }}
+                        de {{eventCtrl.event.start_time | amUtc | amLocal | amDateFormat: 'YYYY' }}
+                      às {{eventDetailsCtrl.event.end_time | amUtc | amLocal | amDateFormat:'H:mm' | uppercase}}
+                  </span>
                 </div>
               </div>
             </div>
@@ -97,7 +105,12 @@
                   <md-icon style="font-size: 40px;">public</md-icon>
                 </p>
                 <div layout="column" style="margin-left: 40px;">
-                  <h3>Não definido</h3>
+                  <h3>
+                    <a target="_blank" href="{{eventDetailsCtrl.event.official_site}}">
+                      {{eventDetailsCtrl.event.official_site ?
+                      eventDetailsCtrl.event.official_site : 'Não definido'}}
+                    </a>
+                  </h3>
                 </div>
               </div>
             </div>

@@ -4,31 +4,149 @@
       <img class="md-card-image"
       ng-src="{{ eventDetailsCtrl.event.photo_url }}"/>
     <div layout="row">
-    <md-card-content style="max-height: 150px" md-colors="{background: 'grey-100'}">
-      <div style="max-height: 100px;" layout="column">
-        <div layout="row" md-colors="{background: 'grey-100'}">
-          <h1 class="md-display-1" md-colors="{color:'teal-400'}" style="font-weight: bold; margin-top: auto;">
-            {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'DD'}}
-            A {{eventDetailsCtrl.event.end_time | amUtc | amLocal | amDateFormat:'DD' | uppercase}}</h1>
+      <md-card-content style="max-height: 150px" md-colors="{background: 'grey-200'}">
+        <div style="max-height: 100px;" layout="column">
+          <div layout="row" md-colors="{background: 'grey-200'}">
+            <h1 class="md-display-1" md-colors="{color:'teal-400'}" style="font-weight: bold; margin-top: auto;">
+              {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'DD'}}
+              A {{eventDetailsCtrl.event.end_time | amUtc | amLocal | amDateFormat:'DD' | uppercase}}</h1>
+          </div>
+            <md-divider style="border: 1px; border-style: solid; color: #03b3a1;"></md-divider>
+          <div layout="row" md-colors="{background: 'grey-200'}" style="padding: 0 10px 0 10px">
+            <h3 md-colors="{color:'teal-400'}" ng-if="eventDetailsCtrl.endInOtherMonth()">
+              {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'MMM' | uppercase}}
+              | {{eventDetailsCtrl.event.end_time | amUtc | amLocal | amDateFormat:'MMM' | uppercase}}
+            </h3>
+            <h3 md-colors="{color:'teal-400'}" ng-if="!eventDetailsCtrl.endInOtherMonth()">
+                {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'MMMM' | uppercase}}
+            </h3>
+          </div>
         </div>
-          <md-divider style="border: 1px; border-style: solid; color: #03b3a1;"></md-divider>
-        <div layout="row" md-colors="{background: 'grey-100'}" style="padding: 0 10px 0 10px">
-          <h3 md-colors="{color:'teal-400'}" ng-if="eventDetailsCtrl.endInOtherMonth()">
-            {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'MMM' | uppercase}}
-             | {{eventDetailsCtrl.event.end_time | amUtc | amLocal | amDateFormat:'MMM' | uppercase}}
-          </h3>
-          <h3 md-colors="{color:'teal-400'}" ng-if="!eventDetailsCtrl.endInOtherMonth()">
-              {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'MMMM' | uppercase}}
-          </h3>
+      </md-card-content>
+      <md-card-content flex layout="column">
+          <a href class="md-title hyperlink" ng-click="eventDetailsCtrl.goToEvent(eventDetailsCtrl.event)">
+              <span style="color: white;">{{ eventDetailsCtrl.event.title | uppercase}}</span>
+          </a>
+          <span style="color: white; margin-top: auto;">Organizado por {{eventDetailsCtrl.event.institution_name}}</span>
+      </md-card-content>
+      <md-card-content ng-if="eventDetailsCtrl.isEventPage">
+        <md-card-actions layout="row">
+          <md-menu md-offset="-165 45" ng-if="eventDetailsCtrl.isEventAuthor(eventDetailsCtrl.event)">
+            <md-button class="md-icon-button" title="Opções"
+            style="margin-top: 25px;" ng-click="$mdMenu.open(ev)">
+              <md-icon style="color: white;">more_vert</md-icon>
+            </md-button>
+            <md-menu-content>
+              <md-menu-item>
+                <md-button ng-click="null">
+                  <md-icon>edit</md-icon>
+                  Editar evento
+                </md-button>
+              </md-menu-item>
+              <md-menu-item>
+                <md-button ng-click="eventDetailsCtrl.confirmDeleteEvent($event, eventDetailsCtrl.event)">
+                  <md-icon>cancel</md-icon>
+                  Cancelar evento
+                </md-button>
+              </md-menu-item>
+            </md-menu-content>
+          </md-menu>
+          <md-button class="md-fab md-primary" title="Compartilhar"
+          style="margin-right: -50px; margin-top: 15px; background-color: #7CB342;"
+          ng-click="eventDetailsCtrl.share($event, eventDetailsCtrl.event)">
+            <md-icon>share</md-icon>
+          </md-button>
+        </md-card-actions>
+      </md-card-content>
+    </div>
+    <div ng-if="eventDetailsCtrl.isEventPage" md-colors="{background: 'grey-50'}">
+      <div style="margin-left: 20px; margin-right: 20px;">
+        <md-card-content flex>
+          <h4 style="color: #03b3a1;">Endereço</h4>
+          <div layout="row" class="left-justify">
+            <p>
+              <md-icon style="font-size: 40px;">location_on</md-icon>
+            </p>
+            <div layout="column" style="margin-left: 40px;">
+              <h3>{{eventDetailsCtrl.event.local}}</h3>
+              <span style="margin-top: -15px; color: #959796;">{{eventDetailsCtrl.event.address.street}}, {{eventDetailsCtrl.event.address.number}}
+                </br>
+                {{eventDetailsCtrl.event.address.city}} - {{eventDetailsCtrl.event.address.federal_state}} - {{eventDetailsCtrl.event.address.country}}
+              </span>
+            </div>
+          </div>
+          <div layout="row">
+            <div layout="column">
+              <h4 style="color: #03b3a1;">Horário</h4>
+              <div layout="row" class="left-justify">
+                <p>
+                  <md-icon style="font-size: 40px;">access_time</md-icon>
+                </p>
+                <div layout="column" style="margin-left: 40px;">
+                  <h3>{{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'H:mm' | uppercase}} às
+                      {{eventDetailsCtrl.event.end_time | amUtc | amLocal | amDateFormat:'H:mm' | uppercase}}
+                  </h3>
+                  <span style="margin-top: -15px; color: #959796;">Carga horária: não definida</span>
+                </div>
+              </div>
+            </div>
+            <div layout="column" style="margin-left: 200px;">
+              <h4 style="color: #03b3a1;">Site oficial</h4>
+              <div layout="row" class="left-justify">
+                <p>
+                  <md-icon style="font-size: 40px;">public</md-icon>
+                </p>
+                <div layout="column" style="margin-left: 40px;">
+                  <h3>Não definido</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </md-card-content>
+        <div ng-if="eventDetailsCtrl.event.text">
+          <md-divider class="ligth-green-divider"></md-divider>
+          <md-card-content flex>
+            <h2>Descrição</h2>
+            <div style="white-space: pre-line;" ng-bind-html="eventDetailsCtrl.recognizeUrl(eventDetailsCtrl.event.text)"></div>
+          </md-card-content>
+        </div>
+        <div ng-if="eventDetailsCtrl.event.programation">
+          <md-divider class="ligth-green-divider"></md-divider>
+          <md-card-content flex>
+            <h2>Programação</h2>
+            <div style="white-space: pre-line;" ng-bind-html="eventDetailsCtrl.recognizeUrl(eventDetailsCtrl.event.programation)"></div>
+          </md-card-content>
+        </div>
+        <div ng-if="eventDetailsCtrl.event.video_url.length > 0">
+          <md-divider class="ligth-green-divider"></md-divider>
+          <md-card-content flex>
+            <h2>Vídeos</h2>
+            <div layout="column" ng-repeat="video in eventDetailsCtrl.event.video_url">
+              <h3 style="color: #03b3a1; margin-left: 5px;">{{video.description}}</h3>
+              <div class="youtube-player">
+                <iframe ng-src="{{ eventDetailsCtrl.getVideoUrl(video.url) }}"></iframe>
+              </div>
+            </div>
+          </md-card-content>
+        </div>
+        <div ng-if="eventDetailsCtrl.event.useful_links.length > 0">
+          <md-divider class="ligth-green-divider"></md-divider>
+          <md-card-content flex>
+            <h2>Links úteis</h2>
+            <md-list>
+              <md-list-item class="list-item-dense" md-colors="{background: 'grey-300'}" style="height: 75px;"
+              ng-repeat="link in eventDetailsCtrl.event.useful_links" flex-xs>
+                <md-button class="md-fab md-primary" style="background-color: #7CB342;" title="Link" ng-href="{{link.url}}" target="_blank">
+                    <md-icon style="margin-top:15px;">link</md-icon>
+                </md-button>
+                <div layout="column">
+                  <b style="font-size: 20px;">{{ link.description }}</b>
+                </div>
+              </md-list-item>
+            </md-list>
+          </md-card-content>
         </div>
       </div>
-    </md-card-content>
-    <md-card-content flex layout="column">
-        <a href class="md-title hyperlink" ng-click="eventDetailsCtrl.goToEvent(eventDetailsCtrl.event)">
-            <span style="color: white;">{{ eventDetailsCtrl.event.title | uppercase}}</span>
-        </a>
-        <span style="color: white; margin-top: auto;">Organizado por {{eventDetailsCtrl.event.institution_name}}</span>
-    </md-card-content>
     </div>
-    </md-card>
+  </md-card>
 </div>

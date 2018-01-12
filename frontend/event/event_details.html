@@ -69,7 +69,8 @@
             </p>
             <div layout="column" style="margin-left: 40px;">
               <h3>{{eventDetailsCtrl.event.local}}</h3>
-              <span style="margin-top: -15px; color: #959796;">{{eventDetailsCtrl.event.address.street}}, {{eventDetailsCtrl.event.address.number}}
+              <span style="margin-top: -15px; color: #959796;">{{eventDetailsCtrl.event.address.street}},
+                 {{eventDetailsCtrl.event.address.number ? eventDetailsCtrl.event.address.number : 'S/N'}}
                 </br>
                 {{eventDetailsCtrl.event.address.city}} - {{eventDetailsCtrl.event.address.federal_state}} - {{eventDetailsCtrl.event.address.country}}
               </span>
@@ -84,21 +85,15 @@
                 </p>
                 <div layout="column" style="margin-left: 40px;">
                   <h3>
-                      De {{eventCtrl.event.start_time | amUtc | amLocal | amDateFormat: 'DD' }}
-                       de {{eventCtrl.event.start_time | amUtc | amLocal | amDateFormat: 'MMM' }}
-                       de {{eventCtrl.event.start_time | amUtc | amLocal | amDateFormat: 'YYYY' }}
-                       às {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'H:mm' | uppercase}}
+                      De {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amCalendar:referenceTime:formats }}
                   </h3>
                   <span style="margin-top: -15px; color: #959796;">
-                      até {{eventCtrl.event.start_time | amUtc | amLocal | amDateFormat: 'DD' }}
-                       de {{eventCtrl.event.start_time | amUtc | amLocal | amDateFormat: 'MMM' }}
-                        de {{eventCtrl.event.start_time | amUtc | amLocal | amDateFormat: 'YYYY' }}
-                      às {{eventDetailsCtrl.event.end_time | amUtc | amLocal | amDateFormat:'H:mm' | uppercase}}
+                      até {{eventDetailsCtrl.event.end_time | amUtc | amLocal | amCalendar:referenceTime:formats }}
                   </span>
                 </div>
               </div>
             </div>
-            <div layout="column" style="margin-left: 200px;">
+            <div layout="column" style="margin-left: 100px;">
               <h4 style="color: #03b3a1;">Site oficial</h4>
               <div layout="row" class="left-justify">
                 <p>
@@ -106,10 +101,10 @@
                 </p>
                 <div layout="column" style="margin-left: 40px;">
                   <h3>
-                    <a target="_blank" href="{{eventDetailsCtrl.event.official_site}}">
-                      {{eventDetailsCtrl.event.official_site ?
-                      eventDetailsCtrl.event.official_site : 'Não definido'}}
+                    <a ng-if"eventDetailsCtrl.event.official_site" target="_blank" href="{{eventDetailsCtrl.event.official_site}}">
+                      {{ eventDetailsCtrl.event.official_site }}
                     </a>
+                    <b ng-if="!eventDetailsCtrl.event.official_site">Não definido</b>
                   </h3>
                 </div>
               </div>

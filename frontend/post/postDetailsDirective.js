@@ -487,7 +487,6 @@
         
         commentCtrl.likeOrDislike = function likeOrDislike(reply) {
             var replyId = reply ? reply.id : undefined;
-            var currentInstitution = commentCtrl.user.current_institution;
             if (commentCtrl.isLikedByUser(reply)) {
                 CommentService.dislike(commentCtrl.post.key, commentCtrl.comment.id, replyId).then(
                     function sucess() {
@@ -503,7 +502,7 @@
                     }
                 );
             } else {
-                CommentService.like(commentCtrl.post.key, commentCtrl.comment.id, replyId, currentInstitution).then(
+                CommentService.like(commentCtrl.post.key, commentCtrl.comment.id, replyId).then(
                     function sucess() {
                         if (reply) {
                             reply.likes.push(commentCtrl.user.key);

@@ -121,6 +121,19 @@
             );
         };
 
+        mainCtrl.resendEmailVerification = function resendEmailVerification() {
+            AuthService.sendEmailVerification();
+        };
+
+        mainCtrl.userEmailVerified = function userEmailVerified() {
+            return AuthService.emailVerified();
+        };
+
+        mainCtrl.refreshUser = function refreshUser() {
+            AuthService.reload();
+            $state.reload();
+        };
+
         (function main() {
             if (mainCtrl.user.name === 'Unknown') {
                 $state.go("app.user.config_profile");

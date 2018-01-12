@@ -10,6 +10,17 @@
         var invite_id = $stateParams.id;
 
         controller.invite = {};
+
+        controller.loading = false;
+
+        controller.displayLoading = function displayLoading() {
+            controller.loading = true;
+            controller.cancelSignup();
+        };
+
+        controller.goToHome = function goToHome() {
+            $state.go("app.user.home");
+        };
         
         controller.cancelSignup = function cancelSignup() {
             controller.signup = false;

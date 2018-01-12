@@ -1,6 +1,6 @@
-'use strict';
-
 (function() {
+    'use strict';
+
     var app = angular.module("app");
 
     app.service("AuthService", function AuthService($q, $state, $firebaseAuth, $window, UserService, MessageService) {
@@ -28,14 +28,15 @@
 
         service.setupUser = function setupUser(idToken) {
             var deferred = $q.defer();
-            var userToken = {
-                accessToken : idToken
+            var firebaseUser = {
+                accessToken : idToken,
+                emailVerified: authObj.$getAuth().emailVerified
             };
 
-            userInfo = userToken;
+            userInfo = firebaseUser;
 
             UserService.load().then(function success(userLoaded) {
-                configUser(userLoaded, userToken);
+                configUser(userLoaded, firebaseUser);
                 deferred.resolve(userInfo);
             }, function error(error) {
                 MessageService.showToast(error);
@@ -69,6 +70,7 @@
                         });
                     });
                 } else {
+                    service.sendEmailVerification(user);
                     MessageService.showToast("Seu email precisa ser verificado.");
                     deferred.reject("Email not verified.");
                 }
@@ -82,6 +84,7 @@
         service.signupWithEmailAndPassword = function signupWithEmailAndPassword(email, password) {
             var deferred = $q.defer();
             authObj.$createUserWithEmailAndPassword(email, password).then(function(result) {
+                service.sendEmailVerification();
                 var idToken = result.toJSON().stsTokenManager.accessToken;
                 service.setupUser(idToken).then(function success(userInfo) {
                     service.sendEmailVerification();
@@ -127,10 +130,11 @@
         service.reload = function reload() {
             var deferred = $q.defer();
             UserService.load().then(function success(userLoaded) {
-                var userToken = {
-                    accessToken : userInfo.accessToken
+                var firebaseUser = {
+                    accessToken: userInfo.accessToken,
+                    emailVerified: userInfo.emailVerified
                 };
-                configUser(userLoaded, userToken);
+                configUser(userLoaded, firebaseUser);
                 deferred.resolve(userInfo);
             }, function error(error) {
                 MessageService.showToast(error);
@@ -139,14 +143,15 @@
             return deferred.promise;
         };
 
-        service.sendEmailVerification = function sendEmailVerification() {
-            authObj.$getAuth().sendEmailVerification().then(
+        service.sendEmailVerification = function sendEmailVerification(user) {
+            var auth_user = user || authObj.$getAuth();
+            auth_user.sendEmailVerification().then(
             function success() {
                 MessageService.showToast('Email de verificação enviado para o seu email.');
             }, function error(error) {
                 console.error(error);
             });
-        }
+        };
 
         service.resetPassword = function resetPassword(email) {
             authObj.$sendPasswordResetEmail(email).then(
@@ -155,18 +160,16 @@
             }, function error(error) {
                 console.error(error);
             });
-        }
+        };
 
         service.$onLogout = function $onLogout(callback) {
             onLogoutListeners.push(callback);
         };
 
-        // authObj.$onAuthStateChanged(function(firebaseUser) {
-        //     console.log(">>>>>>>>>>>>>>>>>>>>. ", firebaseUser)
-        //     if (!firebaseUser) {
-        //         $state.go("signin");
-        //     }
-        // });
+        service.emailVerified = function emailVerified() {
+            if (userInfo) return userInfo.emailVerified;
+            return false;
+        };
 
         /**
         * Execute each function stored to be thriggered when user logout
@@ -178,9 +181,9 @@
             });
         }
 
-        function configUser(userLoaded, userToken) {
+        function configUser(userLoaded, firebaseUser) {
             userInfo = new User(userLoaded);
-            _.extend(userInfo, userToken);
+            _.extend(userInfo, firebaseUser);
             $window.localStorage.userInfo = JSON.stringify(userInfo);
         }
 

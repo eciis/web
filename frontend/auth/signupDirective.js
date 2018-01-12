@@ -9,6 +9,9 @@
         controller.newUser = {};
  
         controller.signup = function signup() {
+            if (controller.beforeStart) {
+                controller.beforeStart();
+            }
             var newUser = controller.newUser;
             if (newUser.password !== newUser.verifypassword) {
                 MessageService.showToast("Senhas incompatíveis");
@@ -17,7 +20,7 @@
             AuthService.signupWithEmailAndPassword(
                 newUser.email, 
                 newUser.password
-            ).then(controller.callback);
+            ).then(controller.callback, controller.errorHandler);
         };
 
         (function main() {
@@ -40,7 +43,9 @@
             },
             bindToController: {
                 returnAction: '=',
-                callback: '='
+                beforeStart: '=',
+                callback: '=',
+                errorHandler: '='
             }
         };
     });

@@ -3,7 +3,7 @@
         ng-if="!acceptInviteCtrl.signup">      
         <md-card>
             <md-card-content>
-                <div layout="column" flex style="padding: 2%" >
+                <div layout="column" flex style="padding: 2%" ng-hide="acceptInviteCtrl.loading">
                     <div layout="row" layout-align="center center">
                         <img src="/app/images/logowithname.png" style="margin-top: 20px; margin-bottom: 20px; width: 75%;"/>
                     </div>
@@ -26,12 +26,20 @@
                         <md-button flex ui-sref="signin" md-colors="{background: 'teal-500'}">ENTRAR</md-button>
                     </div>
                 </div>
+                <div layout="column" flex layout-align="center center" ng-show="acceptInviteCtrl.loading">
+                    <div layout="row">
+                        <p class="small-text md-title green-text">Processando seu convite.</p>
+                    </div>
+                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                </div>
             </md-card-content>
         </md-card>
     </div>
 
     <signup return-action="acceptInviteCtrl.cancelSignup" 
         card-title="Preencha o formulário para criar uma conta"
-        email-disabled="true" email="acceptInviteCtrl.invite.invitee"    
+        email-disabled="true" email="acceptInviteCtrl.invite.invitee"
+        before-start="acceptInviteCtrl.displayLoading"
+        callback="acceptInviteCtrl.goToHome"
         ng-if="acceptInviteCtrl.signup"></signup>
 </md-content>

@@ -29,26 +29,30 @@
           <div class="row section-menu">
               <md-menu-content width="4" md-colors="{background: 'grey-100'}">
                 <md-menu-item>
-                  <md-button ng-click="institutionCtrl.goToEditInfo()">
+                  <md-button ng-click="institutionCtrl.goToEditInfo()"
+                    ng-class="institutionCtrl.inStateView('edit_info')?'option-selected-inst':''">
                     <md-icon>edit</md-icon>
-                    Editar Informações
+                    <b>Editar Informações</b>
                   </md-button>
                 </md-menu-item>
                 <md-menu-item>
-                  <md-button ng-click="institutionCtrl.goToManageMembers()">
+                  <md-button ng-click="institutionCtrl.goToManageMembers()"
+                    ng-class="institutionCtrl.inStateView('members')?'option-selected-inst':''">
                     <md-icon>people</md-icon>
-                    Gerenciar membros
+                    <b>Gerenciar membros</b>
                 </md-menu-item>
                 <md-menu-item>
-                  <md-button ng-click="institutionCtrl.goToManageInstitutions()">
+                  <md-button ng-click="institutionCtrl.goToManageInstitutions()"
+                    ng-class="institutionCtrl.inStateView('invite_inst')?'option-selected-inst':''">
                     <md-icon>account_balance</md-icon>
-                    Vínculos Institucionais
+                    <b>Vínculos Institucionais</b>
                   </md-button>
                 </md-menu-item>
                 <md-menu-item>
-                  <md-button ng-click="institutionCtrl.removeInstitution()">
+                  <md-button ng-click="institutionCtrl.removeInstitution()"
+                    ng-class="institutionCtrl.inStateView('remove_inst')?'option-selected-inst':''">
                     <md-icon>delete</md-icon>
-                    Remover Instituição
+                    <b>Remover Instituição</b>
                   </md-button>
                 </md-menu-item>
               </md-menu-content>

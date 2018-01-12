@@ -13,6 +13,16 @@
         mainCtrl.pending_manager_member = 0;
         mainCtrl.pending_inst_invitations = 0;
 
+        mainCtrl.stateView = "";
+
+        function getStateView(){
+            mainCtrl.stateView = $state.current.name.split(".")[2];
+        }
+ 
+        mainCtrl.inStateView = function inStateView(state){
+             return state === mainCtrl.stateView;
+        };
+
         mainCtrl.search = function search() {
             if(mainCtrl.search_keyword) {
                 var search = mainCtrl.search_keyword;
@@ -62,6 +72,7 @@
         };
 
         mainCtrl.goInvite = function goInvite() {
+            mainCtrl.stateView = "user.invite_inst";
             $state.go('app.user.invite_inst');
         };
 
@@ -79,18 +90,21 @@
         };
 
         mainCtrl.goToManageMembers = function goToManageMembers(){
+            mainCtrl.stateView = "members";
             $state.go('app.manage_institution.members', {
                 institutionKey: mainCtrl.user.current_institution.key
             });
         };
 
         mainCtrl.goToManageInstitutions = function goToManageInstitutions(){
+            mainCtrl.stateView = "manage_institution.invite_inst";
             $state.go('app.manage_institution.invite_inst', {
                 institutionKey: mainCtrl.user.current_institution.key
             });
         };
 
         mainCtrl.goToEditInfo = function goToEditInfo(){
+            mainCtrl.stateView = "edit_info";
             $state.go('app.manage_institution.edit_info', {
                 institutionKey: mainCtrl.user.current_institution.key
             });
@@ -125,8 +139,8 @@
             if (mainCtrl.user.name === 'Unknown') {
                 $state.go("app.user.config_profile");
             }
-
             mainCtrl.getPendingTasks();
+            getStateView();
         })();
     });
 })();

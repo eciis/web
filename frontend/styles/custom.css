@@ -827,3 +827,8 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
         margin-top: -5px;
     }
 }
+
+.option-selected-left-bar{
+    color:#009688;
+    background-color:#E0E0E0;
+} 

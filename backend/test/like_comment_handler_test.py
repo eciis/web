@@ -20,7 +20,22 @@ class LikeCommentHandlerTest(TestBaseHandler):
             [("/api/posts/(.*)/comments/(.*)/likes", LikeHandler),], debug=True
         )
         cls.testapp = cls.webtest.TestApp(app)
-        init(cls)
+        
+        # mocking entities
+        # new Users
+        cls.user = mocks.create_user('user@example.com')
+        cls.other_user = mocks.create_user('otheruser@example.com')
+        cls.third_user = mocks.create_user('thirduser@example.com')
+        # new Institution
+        cls.institution = mocks.create_institution()
+        # Post of User
+        cls.post = mocks.create_post(cls.user.key, cls.institution.key)
+        # comment
+        cls.comment = mocks.create_comment(cls.institution.key.urlsafe(), cls.third_user)
+        # add comment to post
+        cls.post.add_comment(cls.comment)
+        # creating uri
+        cls.uri = '/api/posts/%s/comments/%s/likes' % (cls.post.key.urlsafe(), cls.comment.id)
 
     @patch('utils.verify_token', return_value={'email': 'otheruser@example.com'})
     def test_get(self, verify_token):
@@ -132,21 +147,3 @@ class LikeCommentHandlerTest(TestBaseHandler):
     def tearDown(cls):
         """Deactivate the test."""
         cls.test.deactivate()
-
-
-def init(cls):
-    """Init the models."""
-    # new Users
-    cls.user = mocks.create_user('user@example.com')
-    cls.other_user = mocks.create_user('otheruser@example.com')
-    cls.third_user = mocks.create_user('thirduser@example.com')
-    # new Institution
-    cls.institution = mocks.create_institution()
-    # Post of User
-    cls.post = mocks.create_post(cls.user.key, cls.institution.key)
-    # comment
-    cls.comment = mocks.create_comment(cls.institution.key.urlsafe(), cls.third_user)
-    # add comment to post
-    cls.post.add_comment(cls.comment)
-
-    cls.uri = '/api/posts/%s/comments/%s/likes' % (cls.post.key.urlsafe(), cls.comment.id)

@@ -22,7 +22,17 @@ class LikePostHandlerTest(TestBaseHandler):
             [("/api/posts/(.*)/likes", LikeHandler),], debug=True
         )
         cls.testapp = cls.webtest.TestApp(app)
-        initModels(cls)
+        
+        # models creation
+        # new User User
+        cls.user = mocks.create_user('user@example.com')
+        # new User Other User
+        cls.other_user = mocks.create_user('otheruser@example.com')
+        # new Institution SPLAB
+        cls.institution = mocks.create_institution()
+        # new Post
+        cls.post = mocks.create_post(cls.user.key, cls.institution.key)
+
 
     @patch('utils.verify_token', return_value={'email': 'otheruser@example.com'})
     def test_get(self, verify_token):
@@ -149,15 +159,3 @@ class LikePostHandlerTest(TestBaseHandler):
     def tearDown(cls):
         """Deactivate the test."""
         cls.test.deactivate()
-
-
-def initModels(cls):
-    """Init the models."""
-    # new User User
-    cls.user = mocks.create_user('user@example.com')
-    # new User Other User
-    cls.other_user = mocks.create_user('otheruser@example.com')
-    # new Institution SPLAB
-    cls.institution = mocks.create_institution()
-    # new Post
-    cls.post = mocks.create_post(cls.user.key, cls.institution.key)

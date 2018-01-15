@@ -4,6 +4,7 @@ from models.user import User
 from models.institution import Institution
 from models.institution import Address
 from models.post import Post
+from models.event import Event
 import datetime
 import sys
 
@@ -64,3 +65,21 @@ def create_post(author_key, institution_key):
     post.text = "text %s" % post_hash
     post.put()
     return post
+
+
+def create_event(author_key, institution_key):
+    """Create post."""
+    event = Event()
+    event.author_key = author_key
+    event.institution_key = institution_key
+    event_hash = getHash(event)
+    event.title = "title %s" % event_hash
+    event.start_time = datetime.datetime.now()
+    event.end_time = datetime.datetime.now()
+    event.author_photo = event_hash
+    event.author_name = event_hash
+    event.institution_name = event_hash
+    event.institution_image = event_hash
+    event.local = event_hash
+    event.put()
+    return event

@@ -5,7 +5,8 @@
 
     var userTest = {
         name : 'User',
-        accessToken: 'jdsfkbcbmnweuiyeuiwyhdjskalhdjkhjk'
+        accessToken: 'jdsfkbcbmnweuiyeuiwyhdjskalhdjkhjk',
+        emailVerified: true
     };
 
     beforeEach(module('app'));
@@ -20,12 +21,12 @@
         it('should call authService.setupUser()', function() {
             spyOn(userService, 'load').and.callThrough();
 
-            authService.setupUser(userTest.accessToken);
+            authService.setupUser(userTest.accessToken, userTest.emailVerified);
             var user = authService.getCurrentUser();
-            var userLuiz = new User(userTest);
+            var new_user = new User(userTest);
 
             expect(userService.load).toHaveBeenCalled();
-            expect(user).toEqual(userLuiz);
+            expect(user).toEqual(new_user);
         });
     });
 
@@ -35,9 +36,11 @@
         });
 
         it('should authService.getCurrentUser()', function() {
+            spyOn(userService, 'load').and.callThrough();
+            authService.setupUser(userTest.accessToken, userTest.emailVerified);
             var user = authService.getCurrentUser();
-            var userLuiz = new User(userTest);
-            expect(user).toEqual(userLuiz);
+            var new_user = new User(userTest);
+            expect(user).toEqual(new_user);
         });
 
         it('should authService.getUserToken()', function() {
@@ -51,12 +54,15 @@
         });
 
         it('should authService.save()', function() {
+            spyOn(userService, 'load').and.callThrough();
+            authService.setupUser(userTest.accessToken, userTest.emailVerified);
+
             window.localStorage.userInfo = null;
             authService.save();
             var userCache = window.localStorage.userInfo;
-            var luizCache = JSON.stringify(userTest);
+            var new_user = JSON.stringify(userTest);
 
-            expect(userCache).toEqual(luizCache);
+            expect(userCache).toEqual(new_user);
         });
     });
 }));

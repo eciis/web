@@ -66,6 +66,10 @@
             institutionCtrl.portfolioUrl = url;
         }
 
+        institutionCtrl.limitString = function limitString(string, limit){
+            return Utils.limitString(string, limit);
+        };
+
         institutionCtrl.loadMorePosts = function loadMorePosts() {
             var deferred = $q.defer();
 
@@ -154,18 +158,27 @@
         };
 
         institutionCtrl.goToInstitution = function goToInstitution(institutionKey) {
+            institutionCtrl.stateView = "timeline";
             $state.go('app.institution.timeline', {institutionKey: institutionKey});
         };
 
         institutionCtrl.goToMembers = function goToMembers(institutionKey) {
+            institutionCtrl.stateView = "members";
             $state.go('app.institution.members', {institutionKey: institutionKey});
         };
 
         institutionCtrl.goToFollowers = function goToFollowers(institutionKey) {
+            institutionCtrl.stateView = "followers";
             $state.go('app.institution.followers', {institutionKey: institutionKey});
         };
 
+        institutionCtrl.goToRegistrationData = function goToRegistrationData(institutionKey) {
+            institutionCtrl.stateView = "registration_data";
+            $state.go('app.institution.registration_data', {institutionKey: institutionKey});
+        };
+
         institutionCtrl.goToCommingSoon = function goToCommingSoon(institutionKey) {
+            institutionCtrl.stateView = "";
             $state.go('app.institution.comming_soon', {institutionKey: institutionKey});
         };
 
@@ -256,6 +269,14 @@
             });
         };
 
+        function getStateView(){
+            return $state.current.name.split(".")[2];
+        }
+
+        institutionCtrl.inStateView = function inStateView(state){
+            return state === institutionCtrl.stateView;
+        };
+
         function RemoveInstController($mdDialog, institution, InstitutionService, $state) {
             var ctrl = this;
 
@@ -284,6 +305,10 @@
                 }
             };
         }
+
+        (function main(){
+            institutionCtrl.stateView = getStateView();
+        })();
     });
 
     app.controller("FollowersInstController", function InstitutionController($state, InstitutionService,

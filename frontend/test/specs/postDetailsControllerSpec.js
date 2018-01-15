@@ -32,6 +32,7 @@
         http = $http;
         state = $state;
         commentService = CommentService;
+        commentService.user = user;
         var mainPost = new Post({
                     title: 'main post', author_key: user.key, institution_key: institutions[0].key,
                     key: "123456", comments: "/api/posts/123456/comments",
@@ -246,44 +247,6 @@
         it('Should not change the original post text', function() {
             postDetailsCtrl.postToURL(post);
             expect(post.text).toEqual("Acessem: www.google.com");
-        });
-    });
-
-    describe('isLongPostTimeline()', function() {
-        var post;
-        var long_post;
-
-        beforeEach(function() {
-            post = {
-                title: 'Post de Tiago em www.twitter.com',
-                text: 'Acessem: www.google.com',
-                institutionKey: '54321'
-            };
-
-            long_post = {
-                title: "Post muito longo",
-                text: "Acessem: www.google.com aAt vero et accusamus et iusto odio dignis\
-                    simos ducimus quiblanditiis praesentium voluptatum deleniti atque corr\
-                    pti quos dolores et quas molestias excepturi sint occaecati cupiditate\
-                    non provident, similique sunt in culpa qui officia deserunt mollitia \
-                    animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis e\
-                    et expedita distinctio. Nam libero tempore, cum soluta nobis est elige\
-                    ndi optio cumque nihil impedit quo minus id quod maxime placeat facere\
-                    possimus, omnis voluptas assumenda est, omnis dolor repellendus. \
-                    Temporibus autem quibusdam et aut officiis debitis aut rerum necessit\
-                    atibus saepe eveniet ut et voluptates repudiandae sint et molestiae \
-                    non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, \
-                    ut aut reiciendis voluptatibus Acessem: www.google.com.",
-                institutionKey: '54321'
-            };
-        });
-
-        it('Should be true', function() {
-            expect(postDetailsCtrl.isLongPostTimeline(long_post.text)).toBe(true);
-        });
-
-        it('Should be false', function() {
-            expect(postDetailsCtrl.isLongPostTimeline(post.text)).toBe(false);
         });
     });
 

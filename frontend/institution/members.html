@@ -4,16 +4,16 @@
           <!-- CONTENT -->
         <md-content class="hide-scrollbar" flex="90">
         <md-card>
+        	<md-toolbar md-colors="{background: 'teal-500'}" layout="row">
+            	<div class="md-toolbar-tools" flex layout="row" layout-align="center center">
+                    <md-icon>account_circle </md-icon>
+                    <h5 style="font-weight:normal; margin-left: 2%">         
+                      MEMBROS
+                    </h5>
+                    <span flex md-truncate></span>
+                </div>
+            </md-toolbar>
         	<md-card-content>
-	        	<md-toolbar md-colors="{background: 'teal-500'}" layout="row">
-	                <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
-	                    <h1>
-	                      <md-icon>account_circle </md-icon>
-	                      MEMBROS
-	                    </h1>
-	                    <span flex md-truncate></span>
-	                </div>
-	            </md-toolbar>
 	            <h3>ADMINISTRADOR</h3>
 	            <div layout="row" style="margin-top: 2%; margin-bottom: 5%" 
 	                md-colors="{background: 'grey-300'}" ng-click="membersCtrl.showUserProfile(membersCtrl.institution.admin.key, $event)">  

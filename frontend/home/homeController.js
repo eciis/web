@@ -27,7 +27,7 @@
             homeCtrl.stateView = $state.current.name.split(".")[2];
         }
  
-        homeCtrl.getClassCSS = function getClassCSS(state){
+        homeCtrl.getClassCSSLeftBar = function getClassCSSLeftBar(state){
              return (state === homeCtrl.stateView) ? "option-selected-left-bar":"";
          };
 

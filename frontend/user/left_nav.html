@@ -50,27 +50,27 @@
                 <md-menu-content width="4" md-colors="{background: 'grey-100'}">
                   <md-menu-item>
                     <md-button ng-click="homeCtrl.goHome()"
-                      ng-class="homeCtrl.getClassCSS('home')">
+                      ng-class="homeCtrl.getClassCSSLeftBar('home')">
                       <md-icon>home</md-icon>
                       <b>Início</b>
                     </md-button>
                   </md-menu-item>
                   <md-menu-item>
                     <md-button ng-click="homeCtrl.goToProfile()"
-                      ng-class="homeCtrl.getClassCSS('config_profile')">
+                      ng-class="homeCtrl.getClassCSSLeftBar('config_profile')">
                       <md-icon>account_box</md-icon>
                       <b>Meu Perfil</b>
                   </md-menu-item>
                   <md-menu-item>
                     <md-button ng-click="homeCtrl.goToEvents()"
-                      ng-class="homeCtrl.getClassCSS('events')">
+                      ng-class="homeCtrl.getClassCSSLeftBar('events')">
                       <md-icon>date_range</md-icon>
                       <b>Eventos</b>
                     </md-button>
                   </md-menu-item>
                   <md-menu-item ng-if="mainCtrl.isSuperUser()">
                     <md-button ng-click="homeCtrl.goInvite()"
-                      ng-class="homeCtrl.getClassCSS('invite_inst')">
+                      ng-class="homeCtrl.getClassCSSLeftBar('invite_inst')">
                       <md-icon>mail_outline</md-icon>
                       <b>Convites</b>
                     </md-button>

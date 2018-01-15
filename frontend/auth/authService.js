@@ -83,10 +83,10 @@
 
         service.signupWithEmailAndPassword = function signupWithEmailAndPassword(email, password) {
             var deferred = $q.defer();
-            authObj.$createUserWithEmailAndPassword(email, password).then(function(result) {
+            authObj.$createUserWithEmailAndPassword(email, password).then(function(user) {
                 service.sendEmailVerification();
-                var idToken = result.toJSON().stsTokenManager.accessToken;
-                service.setupUser(idToken, result.user.emailVerified).then(function success(userInfo) {
+                var idToken = user.toJSON().stsTokenManager.accessToken;
+                service.setupUser(idToken, user.emailVerified).then(function success(userInfo) {
                     service.sendEmailVerification();
                     deferred.resolve(userInfo);
                 });

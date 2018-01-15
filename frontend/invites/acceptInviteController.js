@@ -25,6 +25,10 @@
         controller.cancelSignup = function cancelSignup() {
             controller.signup = false;
         };
+
+        controller.errorHandler = function errorHandler(error) {
+            controller.loading = false;
+        };
         
         (function main() {
             InviteService.getInvite(invite_id).then(function(response) {

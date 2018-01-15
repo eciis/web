@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 """Post Collection handler test."""
 
+import json
+import datetime
+import mocks
 from test_base_handler import TestBaseHandler
 from models.user import User
 from models.institution import Institution
@@ -8,11 +11,7 @@ from models.post import Post
 from models.event import Event
 from handlers.post_collection_handler import PostCollectionHandler
 from google.appengine.ext import ndb
-import json
-
-import mock
 from mock import patch
-import datetime
 
 
 class PostCollectionHandlerTest(TestBaseHandler):
@@ -28,8 +27,10 @@ class PostCollectionHandlerTest(TestBaseHandler):
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
-    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
-    def test_post(self, verify_token):
+    @patch('handlers.post_collection_handler.enqueue_task')
+    @patch('handlers.post_collection_handler.send_message_notification')
+    @patch('utils.verify_token', return_value={'email': 'user@email.com'})
+    def test_post(self, verify_token, send_message_notification, enqueue_task):
         """Test the post_collection_handler's post method."""
 
         # Make the request and assign the answer to post
@@ -56,6 +57,17 @@ class PostCollectionHandlerTest(TestBaseHandler):
         self.assertEqual(post_obj.text,
                          'testing new post',
                          "The post's text is not the expected one")
+
+        # assert the notification was sent to the institution followers
+        send_message_notification.assert_called_with(
+            self.other_user.key.urlsafe(),
+            self.user.key.urlsafe(),
+            "POST",
+            key_post.urlsafe(),
+            self.body.get('currentInstitution')
+        )
+        # assert that no shared post notification was sent
+        enqueue_task.assert_not_called()
 
         with self.assertRaises(Exception) as raises_context:
             self.body['post'] = {
@@ -85,14 +97,15 @@ class PostCollectionHandlerTest(TestBaseHandler):
             "Excpected exception message must be equal to text"
         )
 
-    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
-    @mock.patch('service_messages.send_message_notification')
-    def test_post_sharing(self, verify_token, mock_method):
+    @patch('handlers.post_collection_handler.enqueue_task')
+    @patch('handlers.post_collection_handler.send_message_notification')
+    @patch('utils.verify_token', return_value={'email': 'user@email.com'})
+    def test_post_sharing(self, verify_token, send_message_notification, enqueue_task):
         """Test the post_collection_handler's post method."""
         # Make the request and assign the answer to post
         self.body['post'] = {
             'institution': self.institution.key.urlsafe(),
-            'shared_post': self.user_post.key.urlsafe()
+            'shared_post': self.post.key.urlsafe()
         }
         post = self.testapp.post_json("/api/posts", self.body).json
         # Retrieve the entities
@@ -115,18 +128,35 @@ class PostCollectionHandlerTest(TestBaseHandler):
         shared_post_obj = post['shared_post']
 
         # Check if the shared_post's attributes are the expected
-        self.assertEqual(shared_post_obj['title'], "Post existente",
-                         "The post's title expected is Post existente")
+        self.assertEqual(shared_post_obj['title'], self.post.title,
+                         "The post's title expected is %s" % self.post.title)
         self.assertEqual(shared_post_obj['institution_key'], self.institution.key.urlsafe(),
                          "The post's institution expected is certbio")
         self.assertEqual(shared_post_obj['text'],
-                         "Post inicial que quero compartilhar",
-                         "The post's text expected is Post inicial que quero compartilhar")
-        # check if the notification to author is called
-        self.assertTrue(mock_method.send_message_notification.assert_not_called,
-                        'send_message_notification is not called')
+                         self.post.text,
+                         "The post's text expected is '%s'" % self.post.text)
 
-    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
+        # check if the notification was sent to the institution's followers
+        send_message_notification.assert_called_with(
+            self.other_user.key.urlsafe(),
+            self.user.key.urlsafe(),
+            "POST",
+            key_post.urlsafe(),
+            self.body.get('currentInstitution')
+        )
+        # check if the notification was sent to the post's author
+        enqueue_task.assert_called_with(
+            "post-notification",
+            {
+                'receiver_key': self.post.author.urlsafe(),
+                'sender_key': self.user.key.urlsafe(),
+                'entity_key': post.get('key'),
+                'entity_type': 'SHARED_POST',
+                'current_institution': json.dumps(self.body.get('currentInstitution'))
+            }
+        )
+
+    @patch('utils.verify_token', return_value={'email': 'user@email.com'})
     def test_post_shared_event(self, verify_token):
         """Test the post_collection_handler's post method in case that post is shared_event."""
         # Make the request and assign the answer to post
@@ -156,7 +186,7 @@ class PostCollectionHandlerTest(TestBaseHandler):
 
         # Check if the shared_post's attributes are the expected
         self.assertEqual(shared_event_obj['title'], "New Event",
-                         "The post's title expected is Post existente")
+                         "The post's title expected is New Event")
         self.assertEqual(shared_event_obj['institution_key'],
                          self.institution.key.urlsafe(),
                          "The post's institution expected is certbio")
@@ -167,7 +197,7 @@ class PostCollectionHandlerTest(TestBaseHandler):
                          "Description of new Event",
                          "The post's text expected is Post inicial que quero compartilhar")
 
-    @patch('utils.verify_token', return_value={'email': 'mayzabeel@gmail.com'})
+    @patch('utils.verify_token', return_value={'email': 'user@email.com'})
     def test_post_survey(self, verify_token):
         """Test post method."""
         # Make the request and assign the answer to post method
@@ -203,42 +233,34 @@ class PostCollectionHandlerTest(TestBaseHandler):
 
 def initModels(cls):
     """Init the models."""
-    # new User Mayza
-    cls.user = User()
-    cls.user.name = 'Mayza Nunes'
-    cls.user.cpf = '089.675.908-90'
-    cls.user.email = ['mayzabeel@gmail.com']
+    # new User
+    cls.user = mocks.create_user('user@email.com')
     cls.user.photo_url = 'urlphoto'
-    cls.user.institutions_admin = []
-    cls.user.posts = []
     cls.user.put()
-    # new Institution CERTBIO
-    cls.institution = Institution()
-    cls.institution.name = 'CERTBIO'
-    cls.institution.email = 'certbio@ufcg.edu.br'
+    # new User
+    cls.other_user = mocks.create_user('user@email.com')
+    cls.other_user.photo_url = 'urlphoto'
+    cls.user.put()
+    # new Institution 
+    cls.institution = mocks.create_institution()
     cls.institution.photo_url = 'urlphoto'
-    cls.institution.posts = []
-    cls.institution.followers = []
     cls.institution.admin = cls.user.key
+    cls.institution.follow(cls.other_user.key)
     cls.institution.put()
-    # POST of Mayza To Certbio Institution
-    cls.user_post = Post()
-    cls.user_post.title = "Post existente"
-    cls.user_post.text = "Post inicial que quero compartilhar"
-    cls.user_post.author = cls.user.key
-    cls.user_post.last_modified_by = cls.user.key
-    cls.user_post.institution = cls.institution.key
-    cls.user_post.put()
+    # POST 
+    cls.post = mocks.create_post(cls.user.key, cls.institution.key)
+    cls.post.last_modified_by = cls.user.key
+    cls.post.put()
 
     """ Update Institution."""
-    cls.institution.posts.append(cls.user_post.key)
+    cls.institution.posts.append(cls.post.key)
     cls.institution.followers.append(cls.user.key)
     cls.institution.put()
 
     """ Update User."""
-    cls.user.posts.append(cls.user_post.key)
+    cls.user.posts.append(cls.post.key)
     cls.user.add_institution(cls.institution.key)
-    cls.user_post.put()
+    cls.post.put()
 
     # Events
     cls.event = Event()
@@ -278,10 +300,8 @@ def initModels(cls):
     # body for post method
     post_data = {
         'title': 'new post',
-        'institution':
-        cls.institution.key.urlsafe(),
-        'text':
-        'testing new post'
+        'institution': cls.institution.key.urlsafe(),
+        'text': 'testing new post'
     }
     current_institution = { 'name': 'current_institution' }
     cls.body = {

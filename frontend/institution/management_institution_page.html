@@ -30,14 +30,14 @@
               <md-menu-content width="4" md-colors="{background: 'grey-100'}">
                 <md-menu-item>
                   <md-button ng-click="institutionCtrl.goToEditInfo()"
-                    ng-class="institutionCtrl.getClassCSS('edit_info')">
+                    ng-class="institutionCtrl.getClassCSSLeftBar('edit_info')">
                     <md-icon>edit</md-icon>
                     <b>Editar Informações</b>
                   </md-button>
                 </md-menu-item>
                 <md-menu-item>
                   <md-button ng-click="institutionCtrl.goToManageMembers()"
-                    ng-class="institutionCtrl.getClassCSS('members')">
+                    ng-class="institutionCtrl.getClassCSSLeftBar('members')">
                     <md-icon>people</md-icon>
                     <b>Gerenciar membros</b>
                 </md-menu-item>
@@ -45,14 +45,14 @@
                 @author: Mayza Nunes 10/01/17-->
                 <md-menu-item ng-if="false">
                   <md-button ng-click="institutionCtrl.goToManageInstitutions()"
-                    ng-class="institutionCtrl.getClassCSS('invite_inst')">
+                    ng-class="institutionCtrl.getClassCSSLeftBar('invite_inst')">
                     <md-icon>account_balance</md-icon>
                     <b>Vínculos Institucionais</b>
                   </md-button>
                 </md-menu-item>
                 <md-menu-item>
                   <md-button ng-click="institutionCtrl.removeInstitution()"
-                    ng-class="institutionCtrl.getClassCSS('remove_inst')">
+                    ng-class="institutionCtrl.getClassCSSLeftBar('remove_inst')">
                     <md-icon>delete</md-icon>
                     <b>Remover Instituição</b>
                   </md-button>

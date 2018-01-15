@@ -29,7 +29,7 @@
                 };
             };
 
-            AuthService.setupUser(idToken);
+            AuthService.setupUser(idToken, true);
         };
 
         AuthService.login(user);

@@ -7,6 +7,7 @@ import json
 from utils import login_required
 from handlers.base_handler import BaseHandler
 from models.user import InstitutionProfile
+from models.invite import Invite
 from custom_exceptions.fieldException import FieldException
 from utils import json_response
 from utils import Utils
@@ -39,11 +40,10 @@ class InviteHandler(BaseHandler):
     """Invite Handler."""
 
     @json_response
-    @login_required
-    def get(self, user, key):
+    def get(self, key):
         """Get invite of key passed."""
         invite_key = ndb.Key(urlsafe=key)
-        invite = invite_key.get()
+        invite = Invite.get_by_id(invite_key.id())
         invite = invite.make()
 
         self.response.write(json.dumps(invite))

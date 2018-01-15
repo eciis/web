@@ -14,6 +14,7 @@ from oauth2client import client
 from oauth2client.crypt import AppIdentityError
 
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
+from custom_exceptions.queryException import QueryException
 
 
 class Utils():
@@ -170,6 +171,25 @@ def offset_pagination(page, number_fetchs, query):
     query, next_cursor, more = query.fetch_page(
         number_fetchs,
         offset=offset)
+
+    return [query, more]
+
+
+def paginate_events(params, query):
+    """Paginate events."""
+    params = dict(params)
+
+    page = to_int(
+        params['page'] if 'page' in params.keys() else Utils.DEFAULT_PAGINATION_OFFSET,
+        QueryException,
+        "Query param page must be an integer")
+    limit = to_int(
+        params['limit'] if 'limit' in params.keys() else Utils.DEFAULT_PAGINATION_LIMIT,
+        QueryException,
+        "Query param limit must be an integer")
+
+    more = False
+    query, more = offset_pagination(page, limit, query)
 
     return [query, more]
 

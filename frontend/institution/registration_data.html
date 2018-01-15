@@ -128,11 +128,10 @@
 		            			{{institutionCtrl.current_institution.phone_number ? 
 		            			institutionCtrl.current_institution.phone_number : "Não informado"}}</p>
 		            	</div>
-		            	<div layout="column">
+		            	<div layout="column" ng-if="institutionCtrl.current_institution.branch_line">
 				            <h5 style="margin-bottom: 0">Ramal</h5>
 				            <p style="margin-top: 0" md-colors="{color: 'grey-600'}">
-		            			{{institutionCtrl.current_institution.branch_line ? 
-		            			institutionCtrl.current_institution.branch_line : "Não informado"}}</p>
+		            			{{institutionCtrl.current_institution.branch_line }}</p>
 		            	</div>
 		            </div>
 	            </md-card-content>

@@ -195,6 +195,8 @@
         dialogCtrl.usefulLinks = [];
         dialogCtrl.isAnotherCountry = false;
         dialogCtrl.steps = [true, false, false];
+        dialogCtrl.now = new Date();
+        dialogCtrl.start_time = null;
         var emptyUrl = {
             url: '',
             description: ''
@@ -226,6 +228,12 @@
 
         dialogCtrl.getEmptyUrl = function(urlList){
             return _.find(urlList, emptyUrl);
+        };
+
+        dialogCtrl.createInitDate = function() {
+           if(dialogCtrl.event.start_time) {
+                dialogCtrl.start_time = new Date(dialogCtrl.event.start_time);
+           }
         };
 
         function saveImageAndCallEventFunction(callback) {

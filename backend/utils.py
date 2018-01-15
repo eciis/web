@@ -135,7 +135,7 @@ def create_user(name, email):
     return user
 
 def get_health_ministry():
-    """Get health ministry institution by email."""
+    """Get health ministry institution."""
     query = Institution.query(Institution.name == "Ministério da Saúde", Institution.acronym == "MS")
     return query
 

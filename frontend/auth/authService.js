@@ -26,11 +26,11 @@
             }
         });
 
-        service.setupUser = function setupUser(idToken) {
+        service.setupUser = function setupUser(idToken, emailVerified) {
             var deferred = $q.defer();
             var firebaseUser = {
                 accessToken : idToken,
-                emailVerified: authObj.$getAuth().emailVerified
+                emailVerified: emailVerified
             };
 
             userInfo = firebaseUser;
@@ -49,7 +49,7 @@
             var deferred = $q.defer();
             authObj.$signInWithPopup("google").then(function(result) {
                 result.user.getIdToken(true).then(function(idToken) {
-                    service.setupUser(idToken).then(function success(userInfo) {
+                    service.setupUser(idToken, result.user.emailVerified).then(function success(userInfo) {
                         deferred.resolve(userInfo);
                     });
                 });
@@ -65,7 +65,7 @@
             authObj.$signInWithEmailAndPassword(email, password).then(function(user) {
                 if (user.emailVerified) {
                     user.getIdToken(true).then(function(idToken) {
-                        service.setupUser(idToken).then(function success(userInfo) {
+                        service.setupUser(idToken, user.emailVerified).then(function success(userInfo) {
                             deferred.resolve(userInfo);
                         });
                     });
@@ -86,7 +86,7 @@
             authObj.$createUserWithEmailAndPassword(email, password).then(function(result) {
                 service.sendEmailVerification();
                 var idToken = result.toJSON().stsTokenManager.accessToken;
-                service.setupUser(idToken).then(function success(userInfo) {
+                service.setupUser(idToken, result.user.emailVerified).then(function success(userInfo) {
                     service.sendEmailVerification();
                     deferred.resolve(userInfo);
                 });

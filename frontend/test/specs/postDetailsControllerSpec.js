@@ -32,6 +32,7 @@
         http = $http;
         state = $state;
         commentService = CommentService;
+        commentService.user = user;
         var mainPost = new Post({
                     title: 'main post', author_key: user.key, institution_key: institutions[0].key,
                     key: "123456", comments: "/api/posts/123456/comments",

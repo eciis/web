@@ -4,6 +4,7 @@ from models.user import User
 from models.institution import Institution
 from models.institution import Address
 from models.post import Post
+from models.post import Comment
 from models.event import Event
 import datetime
 import sys
@@ -67,8 +68,18 @@ def create_post(author_key, institution_key):
     return post
 
 
+def create_comment(institution_key_urlsafe, author):
+    data = {
+        'text': 'text-',
+        'institution_key': institution_key_urlsafe
+    }
+    comment = Comment.create(data, author)
+    comment.text += comment.id
+    return comment
+
+
 def create_event(author_key, institution_key):
-    """Create post."""
+    """Create event."""
     event = Event()
     event.author_key = author_key
     event.institution_key = institution_key

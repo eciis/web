@@ -27,12 +27,16 @@ class LikeHandler(BaseHandler):
 
     @json_response
     @login_required
-    def get(self, user, post_key, comment_id=None):
+    def get(self, user, post_key, comment_id=None, reply_id=None):
         """Handler GET Requests."""
         post = ndb.Key(urlsafe=post_key).get()
         if comment_id:
             comment = post.get_comment(comment_id)
-            likes = comment.get('likes')
+            if(reply_id):
+                reply = comment.get('replies').get(reply_id)
+                likes = reply.get('likes')
+            else:
+                likes = comment.get('likes')
         else:
             likes = [Like.make(like, self.request.host) for like in post.likes]
 
@@ -66,8 +70,8 @@ class LikeHandler(BaseHandler):
             likes.append(user.key.urlsafe())
             post.put()
 
-            isAuthorComment = comment['author_key'] != user.key.urlsafe()
-            if comment and isAuthorComment:
+            user_is_the_author = comment['author_key'] == user.key.urlsafe()
+            if not user_is_the_author:
                 receiver_key = comment['author_key']
                 send_message_notification(
                     receiver_key,
@@ -112,7 +116,7 @@ class LikeHandler(BaseHandler):
             likes = comment.get('likes')
 
             Utils._assert(user.key.urlsafe() not in likes,
-                      "User hasn't liked this comment", LikeException)
+                      "User hasn't liked this comment.", LikeException)
             likes.remove(user.key.urlsafe())
             post.put();
         else:

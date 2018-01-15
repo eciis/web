@@ -43,11 +43,13 @@ class PostCommentHandler(BaseHandler):
     @ndb.transactional(xg=True)
     def post(self, user, post_key):
         """Handle Post Comments requests."""
-        data = json.loads(self.request.body)
+        body = json.loads(self.request.body)
+        comment_data = body['commentData']
+        current_institution = body['currentInstitution']
         post = ndb.Key(urlsafe=post_key).get()
         Utils._assert(post.state == 'deleted',
                       "This post has been deleted", EntityException)
-        comment = Comment.create(data, user)
+        comment = Comment.create(comment_data, user)
         post.add_comment(comment)
         entity_type = 'COMMENT'
 
@@ -55,7 +57,8 @@ class PostCommentHandler(BaseHandler):
             'receiver_key': post.author.urlsafe(),
             'sender_key': user.key.urlsafe(),
             'entity_key': post.key.urlsafe(),
-            'entity_type': entity_type
+            'entity_type': entity_type,
+            'current_institution': json.dumps(current_institution)
         }
 
         enqueue_task('post-notification', params)

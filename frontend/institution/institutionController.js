@@ -277,7 +277,7 @@
             institutionCtrl.stateView = $state.current.name.split(".")[2];
         }
 
-        institutionCtrl.getClassCSSLeftBar = function getClassCSSLeftBar(state){
+        institutionCtrl.getSelectedItemClass = function getSelectedItemClass(state){
             return (state === institutionCtrl.stateView) ? "option-selected-left-bar":"";
         };
 

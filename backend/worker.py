@@ -172,7 +172,6 @@ class AddAdminPermissionsInInstitutionHierarchy(BaseHandler):
         if parent_institution.parent_institution:
             self.addAdminPermissions(institution_key, parent_institution.parent_institution.urlsafe())
 
-
     def post(self):
         institution_key = self.request.get('institution_key')
         institution = ndb.Key(urlsafe=institution_key).get()

@@ -25,7 +25,46 @@ class PostCollectionHandlerTest(TestBaseHandler):
             [("/api/posts", PostCollectionHandler),
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
-        initModels(cls)
+
+        # create models
+        # new User
+        cls.user = mocks.create_user('user@email.com')
+        cls.user.photo_url = 'urlphoto'
+        cls.user.put()
+        # new User
+        cls.other_user = mocks.create_user('user@email.com')
+        cls.other_user.photo_url = 'urlphoto'
+        cls.user.put()
+        # new Institution 
+        cls.institution = mocks.create_institution()
+        cls.institution.photo_url = 'urlphoto'
+        cls.institution.admin = cls.user.key
+        cls.institution.follow(cls.other_user.key)
+        cls.institution.put()
+        # POST 
+        cls.post = mocks.create_post(cls.user.key, cls.institution.key)
+        cls.post.last_modified_by = cls.user.key
+        cls.post.put()
+        # Update Institution
+        cls.institution.posts.append(cls.post.key)
+        cls.institution.followers.append(cls.user.key)
+        cls.institution.put()
+        # Update User
+        cls.user.posts.append(cls.post.key)
+        cls.user.add_institution(cls.institution.key)
+        cls.post.put()
+        # body for post method
+        post_data = {
+            'title': 'new post',
+            'institution': cls.institution.key.urlsafe(),
+            'text': 'testing new post'
+        }
+        current_institution = { 'name': 'current_institution' }
+        cls.body = {
+            'post': post_data,
+            'currentInstitution': current_institution
+        }
+
 
     @patch('handlers.post_collection_handler.enqueue_task')
     @patch('handlers.post_collection_handler.send_message_notification')
@@ -156,13 +195,19 @@ class PostCollectionHandlerTest(TestBaseHandler):
             }
         )
 
+    @patch('handlers.post_collection_handler.enqueue_task')
+    @patch('handlers.post_collection_handler.send_message_notification')
     @patch('utils.verify_token', return_value={'email': 'user@email.com'})
-    def test_post_shared_event(self, verify_token):
+    def test_post_shared_event(self, verify_token, send_message_notification, enqueue_task):
         """Test the post_collection_handler's post method in case that post is shared_event."""
+        # create an event
+        event = mocks.create_event(self.user, self.institution)
+        event.text = "Description of new Event"
+        event.put()
         # Make the request and assign the answer to post
         self.body['post'] = {
             'institution': self.institution.key.urlsafe(),
-            'shared_event': self.event.key.urlsafe()
+            'shared_event': event.key.urlsafe()
         }
         post = self.testapp.post_json("/api/posts", self.body).json
         # Retrieve the entities
@@ -185,23 +230,56 @@ class PostCollectionHandlerTest(TestBaseHandler):
         shared_event_obj = post['shared_event']
 
         # Check if the shared_post's attributes are the expected
-        self.assertEqual(shared_event_obj['title'], "New Event",
+        self.assertEqual(shared_event_obj['title'], event.title,
                          "The post's title expected is New Event")
         self.assertEqual(shared_event_obj['institution_key'],
                          self.institution.key.urlsafe(),
-                         "The post's institution expected is certbio")
+                         "The post's institution expected is %s" % self.institution.key.urlsafe())
         self.assertEqual(shared_event_obj['author_key'],
                          self.user.key.urlsafe(),
-                         "The post's institution expected is certbio")
+                         "The post's institution expected is %s" % self.user.key.urlsafe())
         self.assertEqual(shared_event_obj['text'],
-                         "Description of new Event",
-                         "The post's text expected is Post inicial que quero compartilhar")
+                         event.text,
+                         "The post's text expected is %s" % event.text)
 
+        # assert the notifiction was sent to the institution followers
+        send_message_notification.assert_called_with(
+            self.other_user.key.urlsafe(),
+            self.user.key.urlsafe(),
+            "POST",
+            key_post.urlsafe(),
+            self.body.get('currentInstitution')
+        )
+        # assert that no notification was sent to the post's author
+        enqueue_task.assert_not_called()
+    
+    @patch('handlers.post_collection_handler.enqueue_task')
+    @patch('handlers.post_collection_handler.send_message_notification')
     @patch('utils.verify_token', return_value={'email': 'user@email.com'})
-    def test_post_survey(self, verify_token):
+    def test_post_survey(self, verify_token, send_message_notification, enqueue_task):
         """Test post method."""
+        # Survey post
+        options = [
+            {'id': 0,
+            'text': 'first option', 
+            'number_votes': 0,
+            'voters': []
+            },
+            {'id': 1,
+            'text': 'second option',
+            'number_votes': 0,
+            'voters': []
+            }]
+        survey_post = {
+            'institution': self.institution.key.urlsafe(),
+            'title': 'Survey with Multiple choice',
+            'text': 'Description of survey',
+            'type_survey': 'multiple_choice',
+            'deadline': '2020-07-25T12:30:15',
+            'options': options
+        }
         # Make the request and assign the answer to post method
-        self.body['post'] = self.survey_post
+        self.body['post'] = survey_post
         survey = self.testapp.post_json("/api/posts", self.body)
         # Retrieve the entities
         survey = json.loads(survey._app_iter[0])
@@ -230,81 +308,13 @@ class PostCollectionHandlerTest(TestBaseHandler):
         self.assertEqual(survey_obj.state, 'published',
                          "The post's state is 'published'")
 
-
-def initModels(cls):
-    """Init the models."""
-    # new User
-    cls.user = mocks.create_user('user@email.com')
-    cls.user.photo_url = 'urlphoto'
-    cls.user.put()
-    # new User
-    cls.other_user = mocks.create_user('user@email.com')
-    cls.other_user.photo_url = 'urlphoto'
-    cls.user.put()
-    # new Institution 
-    cls.institution = mocks.create_institution()
-    cls.institution.photo_url = 'urlphoto'
-    cls.institution.admin = cls.user.key
-    cls.institution.follow(cls.other_user.key)
-    cls.institution.put()
-    # POST 
-    cls.post = mocks.create_post(cls.user.key, cls.institution.key)
-    cls.post.last_modified_by = cls.user.key
-    cls.post.put()
-
-    """ Update Institution."""
-    cls.institution.posts.append(cls.post.key)
-    cls.institution.followers.append(cls.user.key)
-    cls.institution.put()
-
-    """ Update User."""
-    cls.user.posts.append(cls.post.key)
-    cls.user.add_institution(cls.institution.key)
-    cls.post.put()
-
-    # Events
-    cls.event = Event()
-    cls.event.title = "New Event"
-    cls.event.text = "Description of new Event"
-    cls.event.author_key = cls.user.key
-    cls.event.author_name = cls.user.name
-    cls.event.author_photo = cls.user.photo_url
-    cls.event.institution_key = cls.institution.key
-    cls.event.institution_name = cls.institution.name
-    cls.event.institution_image = cls.institution.photo_url
-    cls.event.start_time = datetime.datetime.now()
-    cls.event.end_time = datetime.datetime.now()
-    cls.event.local = "Event location"
-    cls.event.put()
-
-    # Survey post
-    cls.options = [
-        {'id': 0,
-         'text': 'first option',
-         'number_votes': 0,
-         'voters': []
-         },
-        {'id': 1,
-         'text': 'second option',
-         'number_votes': 0,
-         'voters': []
-         }]
-    cls.survey_post = {
-        'institution': cls.institution.key.urlsafe(),
-        'title': 'Survey with Multiple choice',
-        'text': 'Description of survey',
-        'type_survey': 'multiple_choice',
-        'deadline': '2020-07-25T12:30:15',
-        'options': cls.options
-    }
-    # body for post method
-    post_data = {
-        'title': 'new post',
-        'institution': cls.institution.key.urlsafe(),
-        'text': 'testing new post'
-    }
-    current_institution = { 'name': 'current_institution' }
-    cls.body = {
-        'post': post_data,
-        'currentInstitution': current_institution
-    }
+        # assert the notifiction was sent to the institution followers
+        send_message_notification.assert_called_with(
+            self.other_user.key.urlsafe(),
+            self.user.key.urlsafe(),
+            "SURVEY_POST",
+            survey.get('key'),
+            self.body.get('currentInstitution')
+        )
+        # assert that no notification was sent to the post's author
+        enqueue_task.assert_not_called()

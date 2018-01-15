@@ -27,8 +27,8 @@
             homeCtrl.stateView = $state.current.name.split(".")[2];
         }
  
-        homeCtrl.inStateView = function inStateView(state){
-             return state === homeCtrl.stateView;
+        homeCtrl.getClassCSS = function getClassCSS(state){
+             return (state === homeCtrl.stateView) ? "option-selected-left-bar":"";
          };
 
         homeCtrl.goToInstitution = function goToInstitution(institutionKey) {

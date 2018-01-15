@@ -62,28 +62,28 @@
                                         <md-divider style="margin-top: 10px"></md-divider>
                                     </div>
                                     <md-menu-item>
-                                        <md-button ng-class="institutionCtrl.inStateView('timeline')?'option-selected-left-bar':''"
+                                        <md-button ng-class="institutionCtrl.getClassCSS('timeline')"
                                             ng-click="institutionCtrl.goToInstitution(institutionCtrl.current_institution.key)">
                                             <md-icon>home</md-icon>
                                             <b>Início</b>
                                         </md-button>
                                     </md-menu-item>
                                     <md-menu-item>
-                                        <md-button  ng-class="institutionCtrl.inStateView('registration_data')?'option-selected-left-bar':''"
+                                        <md-button  ng-class="institutionCtrl.getClassCSS('registration_data')"
                                             ng-click="institutionCtrl.goToRegistrationData(institutionCtrl.current_institution.key)">
                                             <md-icon>assignment</md-icon>
                                              <b>Dados cadastrais</b>
                                         </md-button>
                                     </md-menu-item>
                                     <md-menu-item>
-                                        <md-button ng-class="institutionCtrl.inStateView('members')?'option-selected-left-bar':''"
+                                        <md-button ng-class="institutionCtrl.getClassCSS('members')"
                                             ng-click="institutionCtrl.goToMembers(institutionCtrl.current_institution.key)">
                                             <md-icon>account_circle</md-icon>
                                             <b>Membros</b>
                                         </md-button>
                                     </md-menu-item>
                                     <md-menu-item >
-                                        <md-button ng-class="institutionCtrl.inStateView('followers')?'option-selected-left-bar':''"
+                                        <md-button ng-class="institutionCtrl.getClassCSS('followers')"
                                             ng-click="institutionCtrl.goToFollowers(institutionCtrl.current_institution.key)">
                                             <md-icon>people</md-icon>
                                             <b>Seguidores</b>
@@ -92,7 +92,7 @@
                                     <!--TODO: Show the item below when hierarchical invitations can be sent 
                                     @author: Mayza Nunes 10/01/17-->
                                     <md-menu-item ng-if="false">
-                                        <md-button ng-class="institutionCtrl.inStateView('settings')?'option-selected-left-bar':''"
+                                        <md-button ng-class="institutionCtrl.getClassCSS('settings')"
                                             ng-click="institutionCtrl.goToCommingSoon(institutionCtrl.current_institution.key)">
                                             <md-icon>settings</md-icon>
                                             <b>Vinculos Institucionais</b>

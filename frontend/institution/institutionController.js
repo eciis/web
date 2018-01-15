@@ -277,8 +277,8 @@
             institutionCtrl.stateView = $state.current.name.split(".")[2];
         }
 
-        institutionCtrl.inStateView = function inStateView(state){
-            return state === institutionCtrl.stateView;
+        institutionCtrl.getClassCSS = function getClassCSS(state){
+            return (state === institutionCtrl.stateView) ? "option-selected-left-bar":"";
         };
 
         function RemoveInstController($mdDialog, institution, InstitutionService, $state) {

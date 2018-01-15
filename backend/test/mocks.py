@@ -4,6 +4,7 @@ from models.user import User
 from models.institution import Institution
 from models.institution import Address
 from models.post import Post
+from models.post import Comment
 import datetime
 import sys
 
@@ -64,3 +65,13 @@ def create_post(author_key, institution_key):
     post.text = "text %s" % post_hash
     post.put()
     return post
+
+
+def create_comment(institution_key_urlsafe, author):
+    data = {
+        'text': 'text-',
+        'institution_key': institution_key_urlsafe
+    }
+    comment = Comment.create(data, author)
+    comment.text += comment.id
+    return comment

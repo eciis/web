@@ -444,8 +444,9 @@
         };
     });
 
-    app.controller('CommentController', function CommentController(CommentService, MessageService, ProfileService, $state) {
+    app.controller('CommentController', function CommentController(CommentService, MessageService, ProfileService, $state, AuthService) {
         var commentCtrl = this;
+        commentCtrl.user = AuthService.getCurrentUser();
 
         // Model to store data of a new reply on a comment
         commentCtrl.newReply = null;

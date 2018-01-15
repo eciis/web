@@ -163,20 +163,23 @@ class NotifyFollowersHandler(BaseHandler):
 
 class AddAdminPermissionsInInstitutionHierarchy(BaseHandler):
 
-    def addAdminPermissions(self, institution_key, parent_institution_key):
-        parent_institution = ndb.Key(urlsafe=parent_institution_key).get()
-        admin = parent_institution.admin.get()
-        admin.add_permissions(permissions.DEFAULT_ADMIN_PERMISSIONS, institution_key)
-        admin.put()
+    def addAdminPermissions(self, institution_key):
+        institution = ndb.Key(urlsafe=institution_key).get()
+        admin = institution.admin.get()
 
-        if parent_institution.parent_institution:
-            self.addAdminPermissions(institution_key, parent_institution.parent_institution.urlsafe())
+        if institution.parent_institution:
+            parent_institution = institution.parent_institution.get()
+            admin_parent = parent_institution.admin.get()
+            
+            for permission in admin.permissions:
+                for institution_key in admin.permissions[permission]:
+                    admin_parent.add_permission(permission, institution_key)
+
+            self.addAdminPermissions(parent_institution.key.urlsafe())
 
     def post(self):
         institution_key = self.request.get('institution_key')
-        institution = ndb.Key(urlsafe=institution_key).get()
-        if institution.parent_institution:
-            self.addAdminPermissions(institution_key, institution.parent_institution.urlsafe())
+        self.addAdminPermissions(institution_key)
 
 
 app = webapp2.WSGIApplication([

@@ -24,6 +24,7 @@ class InviteUserEmailSender(EmailSender):
         """
         email_json = {
             'institution': self.institution, 
-            'inviter': self.inviter, 
+            'inviter': self.inviter,
+            'invite_key': self.invite_key
         }
         super(InviteUserEmailSender, self).send_email(email_json)

@@ -89,8 +89,10 @@ class ReplyCommentHandler(BaseHandler):
         """Handle Delete Comments requests."""
         post = ndb.Key(urlsafe=post_key).get()
         institution = post.institution.get()
+        
         Utils._assert(institution.state == 'inactive',
                       "The institution has been deleted", NotAuthorizedException)
+        
         comment = post.get_comment(comment_id)
         replies = comment.get('replies')
 
@@ -100,7 +102,5 @@ class ReplyCommentHandler(BaseHandler):
         check_permission(user, institution, post, replies.get(reply_id))
 
         del replies[reply_id]
-
         post.put()
-
         self.response.write(json.dumps(replies.get(reply_id)))

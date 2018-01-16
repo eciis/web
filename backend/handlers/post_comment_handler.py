@@ -18,12 +18,12 @@ from models.post import Comment
 
 def check_permission(user, institution, post, comment):
     """Check the user permission to delete comment."""
-    isNotPostAuthor = post.author != user.key
-    isNotAdmin = institution.admin != user.key
-    isNotCommentAuthor = comment.get('author_key') != user.key.urlsafe()
-    Utils._assert(isNotPostAuthor and
-                  isNotAdmin and
-                  isNotCommentAuthor,
+    is_not_post_author = post.author != user.key
+    is_not_admin = institution.admin != user.key
+    is_not_comment_author = comment.get('author_key') != user.key.urlsafe()
+    Utils._assert(is_not_post_author and
+                  is_not_admin and
+                  is_not_comment_author,
                   "User not allowed to remove comment", NotAuthorizedException)
 
 
@@ -47,8 +47,10 @@ class PostCommentHandler(BaseHandler):
         comment_data = body['commentData']
         current_institution = body['currentInstitution']
         post = ndb.Key(urlsafe=post_key).get()
+
         Utils._assert(post.state == 'deleted',
                       "This post has been deleted", EntityException)
+                      
         comment = Comment.create(comment_data, user)
         post.add_comment(comment)
         entity_type = 'COMMENT'
@@ -72,16 +74,18 @@ class PostCommentHandler(BaseHandler):
         """Handle Delete Comments requests."""
         post = ndb.Key(urlsafe=post_key).get()
         institution = post.institution.get()
+        
         Utils._assert(institution.state == 'inactive',
                       "The institution has been deleted", NotAuthorizedException)
         Utils._assert(post.state == 'deleted',
                       "Can not delete comment in deleted post", NotAuthorizedException)
+        
         comment = post.get_comment(comment_id)
-
-        hasActivity = len(comment.get('replies')) > 0 or len(comment.get('likes')) > 0
-        Utils._assert(hasActivity,
+        has_activity = len(comment.get('replies')) > 0 or len(comment.get('likes')) > 0
+        
+        Utils._assert(has_activity,
                       "Comment with activity can't be removed", NotAuthorizedException)
-        Utils._assert(hasActivity,
+        Utils._assert(has_activity,
                       "Comment with activity can't be removed", NotAuthorizedException)
 
         check_permission(user, institution, post, comment)

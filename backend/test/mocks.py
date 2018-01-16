@@ -92,4 +92,7 @@ def create_event(author, institution):
     event_hash = getHash(event)
     event.title += event_hash
     event.local += event_hash
+    event.author_photo = event_hash
+    event.institution_image = event_hash
+    event.put()
     return event

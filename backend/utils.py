@@ -175,15 +175,12 @@ def offset_pagination(page, number_fetchs, query):
     return [query, more]
 
 
-def query_paginated(request_data, query, page=None, limit=None):
+def query_paginated(request_data, query):
     """Paginate queries
     
     Keyword arguments:
     request_data -- The query string params
     query -- The query result of an specific entity
-    page -- An optional parameter that represents the current page of the pagination
-    limit -- An optional parameter that represents the maximum number of 
-    entities that can be retrieved.
     """
     request_data = dict(request_data)
 
@@ -191,12 +188,12 @@ def query_paginated(request_data, query, page=None, limit=None):
         request_data['page'] if 'page' in request_data.keys(
         ) else Utils.DEFAULT_PAGINATION_OFFSET,
         QueryException,
-        "Query param page must be an integer") if not page else page
+        "Query param page must be an integer")
     limit = to_int(
         request_data['limit'] if 'limit' in request_data.keys(
         ) else Utils.DEFAULT_PAGINATION_LIMIT,
         QueryException,
-        "Query param limit must be an integer") if not limit else limit
+        "Query param limit must be an integer")
 
     more = False
     query, more = offset_pagination(page, limit, query)

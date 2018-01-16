@@ -216,17 +216,15 @@
 
         function getLegalNature() {
             InstitutionService.getLegalNatures().then(function success(response) {
-                var legal = _.find(response.data, 
-                    { 'value': institutionCtrl.current_institution.legal_nature });
-                institutionCtrl.instLegalNature = legal.name;
+                institutionCtrl.instLegalNature = _.get(response.data, 
+                    institutionCtrl.current_institution.legal_nature);
             });
         }
 
         function getActuationArea() {
             InstitutionService.getActuationAreas().then(function success(response) {
-                var area = _.find(response.data, 
-                    { 'value': institutionCtrl.current_institution.actuation_area });
-                institutionCtrl.instActuationArea = area.name;
+                institutionCtrl.instActuationArea = _.get(response.data, 
+                   institutionCtrl.current_institution.actuation_area);
             });
         }
 

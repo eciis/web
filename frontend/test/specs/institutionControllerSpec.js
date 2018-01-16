@@ -6,25 +6,23 @@
 
     var INSTITUTIONS_URI = "/api/institutions/";
 
-    var legal_nature = [
-        {"value":"public", "name":"Pública"},
-        {"value":"private", "name":"Privada"},
-        {"value":"philanthropic", "name":"Filantrópica"}
-    ];
-    var area = [
-        {"value":"official laboratories", "name":"Laboratórios Oficiais"},
-        {"value":"government agencies", "name":"Ministérios e outros Órgãos do Governo"},
-        {"value":"funding agencies", "name":"Agências de Fomento"},
-        {"value":"research institutes", "name":"Institutos de Pesquisa"},
-        {"value":"colleges", "name":"Universidades"},
-        {"value":"other", "name":"Outra"}
-    ];
+    var legal_nature = {
+        "private for-profit":"Privada com fins lucrativos",
+        "private non-profit":"Privada sem fins lucrativos",
+        "public":"Pública" 
+    };
+    var area = {
+        "OFFICIAL_BANK": "Banco Oficial",
+        "COMMISSION": "Comissão",
+        "COUNCIL": "Conselho",
+        "PRIVATE_COMPANY": "Empresa Privada",
+    };
 
     var first_institution = {
         acronym: 'first_institution',
         key: '987654321',
         photo_url: "photo_url",
-        actuation_area : "colleges",
+        actuation_area : "COMMISSION",
         legal_nature : "public"
     };
 
@@ -32,8 +30,8 @@
         acronym: 'sec_institution',
         key: '123456789',
         photo_url: "photo_url",
-        actuation_area : "research institutes",
-        legal_nature : "philanthropic"
+        actuation_area : "COMMISSION",
+        legal_nature : "public"
     };
 
     var first_user = {

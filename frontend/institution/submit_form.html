@@ -165,10 +165,13 @@
         </div>
         <div layout="row">
             <md-input-container class="md-block" flex-gt-sm>
+                <!-- The alphabetical order is being made manually 
+                in the json file actuation_area.json.
+                    @TODO: MaianaBrito -->
                 <label>Área de Atuação</label>
                 <md-select  name="actuationArea" ng-model="configInstCtrl.newInstitution.actuation_area" required>
-                  <md-option  ng-repeat="area in configInstCtrl.actuationArea | orderBy: 'name'"
-                    ng-value="area.value">{{ area.name }}
+                  <md-option ng-repeat="(key, value) in configInstCtrl.actuationArea"
+                        ng-value="key">{{ value }}
                   </md-option>
                 </md-select>
                 <div ng-messages="instForm.actuationArea.$error">
@@ -176,10 +179,13 @@
                 </div>
             </md-input-container>
             <md-input-container class="md-block" flex-gt-sm>
+                <!-- The alphabetical order is being made manually 
+                in the json file legal_nature.
+                    @TODO: MaianaBrito -->
                 <label>Natureza Jurídica</label>
                   <md-select  name="legalNatures" ng-model="configInstCtrl.newInstitution.legal_nature" required>
-                  <md-option ng-repeat="nature in configInstCtrl.legalNatures | orderBy: 'name'"
-                    ng-value="nature.value">{{ nature.name }}
+                  <md-option ng-repeat="(key, value) in configInstCtrl.legalNatures"
+                    ng-value="key">{{ value }}
                   </md-option>
                 </md-select>
                 <div ng-messages="instForm.legalNatures.$error">

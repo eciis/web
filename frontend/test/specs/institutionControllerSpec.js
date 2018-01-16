@@ -6,16 +6,34 @@
 
     var INSTITUTIONS_URI = "/api/institutions/";
 
+    var legal_nature = [
+        {"value":"public", "name":"Pública"},
+        {"value":"private", "name":"Privada"},
+        {"value":"philanthropic", "name":"Filantrópica"}
+    ];
+    var area = [
+        {"value":"official laboratories", "name":"Laboratórios Oficiais"},
+        {"value":"government agencies", "name":"Ministérios e outros Órgãos do Governo"},
+        {"value":"funding agencies", "name":"Agências de Fomento"},
+        {"value":"research institutes", "name":"Institutos de Pesquisa"},
+        {"value":"colleges", "name":"Universidades"},
+        {"value":"other", "name":"Outra"}
+    ];
+
     var first_institution = {
         acronym: 'first_institution',
         key: '987654321',
-        photo_url: "photo_url"
+        photo_url: "photo_url",
+        actuation_area : "colleges",
+        legal_nature : "public"
     };
 
     var sec_institution = {
         acronym: 'sec_institution',
         key: '123456789',
-        photo_url: "photo_url"
+        photo_url: "photo_url",
+        actuation_area : "research institutes",
+        legal_nature : "philanthropic"
     };
 
     var first_user = {
@@ -48,6 +66,8 @@
 
         httpBackend.expect('GET', INSTITUTIONS_URI + first_institution.key + '/timeline?page=0&limit=10').respond({posts: posts, next: true});
         httpBackend.expect('GET', INSTITUTIONS_URI + first_institution.key).respond(first_institution);
+        httpBackend.expectGET('app/institution/actuation_area.json').respond(area);
+        httpBackend.expectGET('app/institution/legal_nature.json').respond(legal_nature);
         httpBackend.when('GET', 'institution/institution_page.html').respond(200);
         httpBackend.when('GET', 'institution/removeInstDialog.html').respond(200);
         httpBackend.when('GET', "main/main.html").respond(200);
@@ -62,6 +82,7 @@
                     institutionService: institutionService
                 });
         };
+
         state.params.institutionKey = first_institution.key;
         institutionCtrl = createCtrl();
         httpBackend.flush();
@@ -80,6 +101,14 @@
 
         it('should exist posts', function() {
             expect(institutionCtrl.posts).toEqual(posts);
+        });
+
+        it('should exist currentInstitution', function() {
+            expect(institutionCtrl.current_institution.make()).toEqual(first_institution);
+        });
+
+        it('should exist currentInstitution', function() {
+            expect(institutionCtrl.current_institution.make()).toEqual(first_institution);
         });
 
         it('should exist currentInstitution', function() {

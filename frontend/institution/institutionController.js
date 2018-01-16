@@ -17,6 +17,8 @@
         institutionCtrl.showFullDescription = false;
         institutionCtrl.showFullData = false;
         institutionCtrl.isLoadingPosts = true;
+        institutionCtrl.instLegalNature = "";
+        institutionCtrl.instActuationArea = "";
 
         var currentInstitutionKey = $state.params.institutionKey;
 
@@ -29,8 +31,9 @@
                 checkIfUserIsFollower();
                 institutionCtrl.checkIfUserIsMember();
                 getPortfolioUrl();
-                getLegalNature();
                 getActuationArea();
+                getLegalNature();
+                
             }, function error(response) {
                 $state.go("app.user.home");
                 MessageService.showToast(response.data.msg);
@@ -215,7 +218,7 @@
             InstitutionService.getLegalNatures().then(function success(response) {
                 var legal = _.find(response.data, 
                     { 'value': institutionCtrl.current_institution.legal_nature });
-                institutionCtrl.current_institution.legal_nature = legal.name;
+                institutionCtrl.instLegalNature = legal.name;
             });
         }
 
@@ -223,7 +226,7 @@
             InstitutionService.getActuationAreas().then(function success(response) {
                 var area = _.find(response.data, 
                     { 'value': institutionCtrl.current_institution.actuation_area });
-                institutionCtrl.current_institution.actuation_area = area.name;
+                institutionCtrl.instActuationArea = area.name;
             });
         }
 

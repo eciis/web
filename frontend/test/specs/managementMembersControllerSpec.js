@@ -11,6 +11,7 @@
                         type_of_invite: 'USER',
                         status: 'sent',
                         institution_key: '987654321',
+                        key: '123',
                         admin_key: '12345'});
 
     var otherInvite = new Invite({invitee: "other_user@example.com",
@@ -190,6 +191,32 @@
                 manageMemberCtrl.cancelInvite();
 
                 expect(manageMemberCtrl.invite).toEqual({});
+            });
+        });
+
+        describe('resendInvite()', function () {
+            it('', function () {
+                spyOn(mdDialog, 'confirm').and.callThrough();
+                spyOn(mdDialog, 'show').and.callFake(function () {
+                    return {
+                        then: function (callback) {
+                            return callback();
+                        }
+                    };
+                });
+                spyOn(inviteService, 'resendInvite').and.callFake(function () {
+                    return {
+                        then: function (callback) {
+                            return callback();
+                        }
+                    };
+                });
+
+                manageMemberCtrl.resendInvite(invite.key, '$event');
+
+                expect(mdDialog.confirm).toHaveBeenCalled();
+                expect(mdDialog.show).toHaveBeenCalled();
+                expect(inviteService.resendInvite).toHaveBeenCalled();
             });
         });
     });

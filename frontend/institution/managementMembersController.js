@@ -200,6 +200,29 @@
             return Utils.calculateHeight(list, itemHeight);
         };
 
+        manageMemberCtrl.resendInvite = function resendInvite(inviteKey, event) {
+            var confirm = $mdDialog.confirm();
+            confirm
+                .clickOutsideToClose(false)
+                .title('Reenviar convite')
+                .textContent('Você deseja reenviar o convite?')
+                .ariaLabel('Reenviar convite')
+                .targetEvent(event)
+                .ok('Reenviar convite')
+                .cancel('Cancelar');
+            var promise = $mdDialog.show(confirm);
+            promise.then(function () {
+                InviteService.resendInvite(inviteKey).then(function success() {
+                    MessageService.showToast("Convite reenviado com sucesso.");
+                }, function error(response) {
+                    MessageService.showToast(response.data.msg);
+                });
+            }, function () {
+                MessageService.showToast('Cancelado.');
+            });
+            return promise;
+        };
+
         function createRequestSelector(status, type_of_invite) {
             return function(request) {
                 return request.status === status && request.type_of_invite === type_of_invite;

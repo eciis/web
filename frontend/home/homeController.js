@@ -19,8 +19,17 @@
         homeCtrl.refreshTimeline = false;
         homeCtrl.instMenuExpanded = false;
         homeCtrl.isLoadingPosts = true;
+        homeCtrl.stateView = "";
 
         homeCtrl.user = AuthService.getCurrentUser();
+
+        function loadStateView(){
+            homeCtrl.stateView = $state.current.name.split(".")[2];
+        }
+ 
+        homeCtrl.getSelectedItemClass = function getSelectedItemClass(state){
+             return (state === homeCtrl.stateView) ? "option-selected-left-bar":"";
+         };
 
         homeCtrl.goToInstitution = function goToInstitution(institutionKey) {
             $state.go('app.institution.timeline', {institutionKey: institutionKey});
@@ -30,8 +39,24 @@
             ProfileService.showProfile(userKey, ev);
         };
 
+        homeCtrl.goHome = function goHome() {
+            homeCtrl.stateView = "home";
+            $state.go('app.user.home');
+        };
+
+        homeCtrl.goToProfile = function goToProfile() {
+            homeCtrl.stateView = "config_profile";
+            $state.go('app.user.config_profile');
+        };
+
         homeCtrl.goToEvents = function goToEvents() {
+            homeCtrl.stateView = "events";
             $state.go('app.user.events');
+        };
+
+        homeCtrl.goInvite = function goInvite() {
+            homeCtrl.stateView = "invite_inst";
+            $state.go('app.user.invite_inst');
         };
 
         homeCtrl.goToEvent = function goToEvent(event) {
@@ -157,6 +182,7 @@
             loadEvents();
             homeCtrl.loadMorePosts();
             getFollowingInstitutions();
+            loadStateView();
         })();
     });
 
@@ -195,7 +221,7 @@
             $http.get('app/home/colors.json').then(function success(response) {
                 colorPickerCtrl.colors = response.data;
             });
-        };
+        }
 
         (function main(){
             loadProfile();

@@ -338,11 +338,8 @@
 
         function getActuationAreas() {
             InstitutionService.getActuationAreas().then(function success(response) {
-                console.log(response.data);
                 configInstCtrl.actuationArea = response.data;
-                console.log(configInstCtrl.actuationArea);
             });
-            console.log(configInstCtrl.actuationArea);
         }
 
         function getCountries() {

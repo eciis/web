@@ -14,7 +14,6 @@ class InviteUserEmailSender(EmailSender):
         super(InviteUserEmailSender, self).__init__(**kwargs)
         self.html = 'invite_user.html'
         self.inviter = kwargs['inviter']
-        self.invite_key = kwargs['invite_key']
         self.institution = self.crop_institution_name(kwargs['institution'])
 
     def send_email(self):

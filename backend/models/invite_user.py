@@ -56,7 +56,6 @@ class InviteUser(Invite):
         subject = get_string('INVITE_EMAIL_SUBJECT')
         email_sender = InviteUserEmailSender(**{
             'receiver': self.invitee,
-            'invite_key': self.key.urlsafe(),
             'subject': subject,
             'institution': self.institution_key.get().name,
             'inviter': self.sender_name

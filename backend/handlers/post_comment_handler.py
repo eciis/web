@@ -50,20 +50,21 @@ class PostCommentHandler(BaseHandler):
 
         Utils._assert(post.state == 'deleted',
                       "This post has been deleted", EntityException)
-                      
+
         comment = Comment.create(comment_data, user)
         post.add_comment(comment)
         entity_type = 'COMMENT'
 
-        params = {
-            'receiver_key': post.author.urlsafe(),
-            'sender_key': user.key.urlsafe(),
-            'entity_key': post.key.urlsafe(),
-            'entity_type': entity_type,
-            'current_institution': json.dumps(current_institution)
-        }
-
-        enqueue_task('post-notification', params)
+        user_is_the_post_author = post.author == user.key
+        if(not user_is_the_post_author):
+            params = {
+                'receiver_key': post.author.urlsafe(),
+                'sender_key': user.key.urlsafe(),
+                'entity_key': post.key.urlsafe(),
+                'entity_type': entity_type,
+                'current_institution': json.dumps(current_institution)
+            }
+            enqueue_task('post-notification', params)
 
         self.response.write(json.dumps(Utils.toJson(comment)))
 

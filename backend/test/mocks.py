@@ -92,4 +92,5 @@ def create_event(author, institution):
     event_hash = getHash(event)
     event.title += event_hash
     event.local += event_hash
+    event.put()
     return event

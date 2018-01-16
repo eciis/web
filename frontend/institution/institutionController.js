@@ -145,6 +145,10 @@
             institutionCtrl.showFullData = !institutionCtrl.showFullData;
         };
 
+        institutionCtrl.showFollowButton = function showFollowButton() {
+           return !institutionCtrl.isMember && institutionCtrl.current_institution.name !== "Ministério da Saúde";
+        };
+
         institutionCtrl.goToManageMembers = function goToManageMembers(){
             $state.go('app.manage_institution.members', {institutionKey: currentInstitutionKey});
         };

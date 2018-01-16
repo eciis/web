@@ -33,7 +33,7 @@
                                 <!-- Buttons -->
                                 <div layout="row">
                                     <md-button flex class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-500'}"
-                                    ng-if="!institutionCtrl.isMember" style="text-align: left;"
+                                    ng-if="institutionCtrl.showFollowButton()" style="text-align: left;"
                                     ng-click="institutionCtrl.isUserFollower ? institutionCtrl.unfollow() : institutionCtrl.follow()">
                                         <md-icon>rss_feed</md-icon>
                                         {{ institutionCtrl.isUserFollower ? 'Deixar de seguir' : 'Seguir' }}

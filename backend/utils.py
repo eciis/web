@@ -127,10 +127,17 @@ def create_user(name, email):
     user.email = email
     user.name = name
     user.photo_url = "app/images/avatar.png"
+    health_ministry = get_health_ministry().get()
+    if health_ministry is not None:
+        user.follows.append(health_ministry.key)
     user.put()
-
+    
     return user
 
+def get_health_ministry():
+    """Get health ministry institution."""
+    query = Institution.query(Institution.name == "Ministério da Saúde", Institution.acronym == "MS")
+    return query
 
 def json_response(method):
     """Add content type header to the response."""

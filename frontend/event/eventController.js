@@ -352,7 +352,7 @@
 
         dialogCtrl.setAnotherCountry = function isAnotherCountry() {
             clearSelectedState();
-            dialogCtrl.isAnotherCountry = dialogCtrl.event.country !== "Brasil";
+            dialogCtrl.isAnotherCountry = dialogCtrl.event.address.country !== "Brasil";
         };
 
         dialogCtrl.getStep = function getStep(step) {
@@ -394,7 +394,7 @@
         };
 
         function clearSelectedState() {
-            dialogCtrl.event.federal_state = "";
+            dialogCtrl.event.address.federal_state = "";
             dialogCtrl.selectedFederalState = "";
             dialogCtrl.event.city = "";
         }
@@ -420,10 +420,10 @@
         }
 
         function create() {
+            if (dialogCtrl.selectedFederalState)
+                dialogCtrl.event.address.federal_state = dialogCtrl.selectedFederalState.nome;
             var event = new Event(dialogCtrl.event, dialogCtrl.user.current_institution.key);
             addLinks(event);
-            if (dialogCtrl.selectedFederalState)
-                event.federal_state = dialogCtrl.selectedFederalState.nome;
             if (event.isValid()) {
                 EventService.createEvent(event).then(function success(response) {
                     dialogCtrl.closeDialog();
@@ -448,7 +448,7 @@
         function getCountries() {
             $http.get('app/institution/countries.json').then(function success(response) {
                 dialogCtrl.countries = response.data;
-                dialogCtrl.event.country = "Brasil";
+                dialogCtrl.event.address.country = "Brasil";
             });
         }
 
@@ -461,6 +461,8 @@
                 dialogCtrl.dateChangeEvent.end_time = new Date(dialogCtrl.dateChangeEvent.end_time);
                 dialogCtrl.start_time = new Date(dialogCtrl.dateChangeEvent.start_time);
                 dialogCtrl.end_time = new Date(dialogCtrl.dateChangeEvent.end_time);
+                dialogCtrl.event.start_time = new Date(dialogCtrl.dateChangeEvent.start_time);
+                dialogCtrl.event.end_time = new Date(dialogCtrl.dateChangeEvent.end_time);
                 dialogCtrl.dateChangeEvent = new Event(dialogCtrl.dateChangeEvent, dialogCtrl.user.current_institution.key);
                 dialogCtrl.observer = jsonpatch.observe(dialogCtrl.event);
             } else {

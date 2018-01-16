@@ -34,6 +34,7 @@
         state = $state;
         commentService = CommentService;
         commentService.user = user;
+        postService.user = user;
         var mainPost = new Post({
                     title: 'main post', author_key: user.key, institution_key: institutions[0].key,
                     key: "123456", comments: "/api/posts/123456/comments",
@@ -51,8 +52,6 @@
         AuthService.getCurrentUser = function() {
             return user;
         };
-        commentService.user = user;
-        postService.user = user;
 
         postDetailsCtrl = $controller('PostDetailsController',{
             scope: scope,

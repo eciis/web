@@ -32,7 +32,7 @@ class InstitutionEventsHandlerTest(TestBaseHandler):
 
         institution = mocks.create_institution()
         user = mocks.create_user('user@gmail.com')
-        event = mocks.create_event(user.key, institution.key)
+        event = mocks.create_event(user, institution)
 
         # Call the get method
         events = self.testapp.get("/api/institutions/%s/events?page=0&limit=1" % institution.key.urlsafe())
@@ -60,9 +60,9 @@ class InstitutionEventsHandlerTest(TestBaseHandler):
 
         institution = mocks.create_institution()
         user = mocks.create_user('user@gmail.com')
-        event = mocks.create_event(user.key, institution.key)
-        second_event = mocks.create_event(user.key, institution.key)
-        third_event = mocks.create_event(user.key, institution.key)
+        event = mocks.create_event(user, institution)
+        second_event = mocks.create_event(user, institution)
+        third_event = mocks.create_event(user, institution)
 
         # Call the get method
         events = self.testapp.get(
@@ -84,9 +84,9 @@ class InstitutionEventsHandlerTest(TestBaseHandler):
 
         institution = mocks.create_institution()
         user = mocks.create_user('user@gmail.com')
-        event = mocks.create_event(user.key, institution.key)
-        second_event = mocks.create_event(user.key, institution.key)
-        third_event = mocks.create_event(user.key, institution.key)
+        event = mocks.create_event(user, institution)
+        second_event = mocks.create_event(user, institution)
+        third_event = mocks.create_event(user, institution)
 
         # Call the get method
         events = self.testapp.get(

@@ -175,7 +175,7 @@ def offset_pagination(page, number_fetchs, query):
     return [query, more]
 
 
-def paginate_events(params, query):
+def paginate(params, query):
     """Paginate events."""
     params = dict(params)
 

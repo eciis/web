@@ -10,7 +10,7 @@ from utils import Utils
 from models.event import Event
 from utils import login_required
 from utils import json_response
-from utils import paginate_events
+from utils import paginate
 from utils import to_int
 from custom_exceptions.queryException import QueryException
 
@@ -30,7 +30,7 @@ class InstitutionEventsHandler(BaseHandler):
         queryEvents = Event.query(Event.institution_key == institution_key,
                                   Event.state == 'published').order(Event.start_time, Event.key)
         
-        queryEvents, more = paginate_events(self.request.GET.items(), queryEvents)
+        queryEvents, more = paginate(self.request.GET.items(), queryEvents)
 
         array = [Utils.toJson(Event.make(event), host=self.request.host)
                  for event in queryEvents]

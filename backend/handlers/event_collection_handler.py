@@ -11,7 +11,7 @@ from models.event import Event
 from utils import login_required
 from utils import json_response
 from utils import NotAuthorizedException
-from utils import paginate_events
+from utils import paginate
 from utils import to_int
 from custom_exceptions.queryException import QueryException
 
@@ -29,7 +29,7 @@ class EventCollectionHandler(BaseHandler):
         if len(user.follows) > 0:
             queryEvents = Event.query(Event.institution_key.IN(
                 user.follows), Event.state == 'published').order(Event.start_time, Event.key)
-            queryEvents, more = paginate_events(
+            queryEvents, more = paginate(
                 self.request.GET.items(), queryEvents)
 
             array = [Utils.toJson(Event.make(event), host=self.request.host) for event in queryEvents]

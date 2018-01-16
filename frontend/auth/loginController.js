@@ -9,6 +9,7 @@
 
         loginCtrl.user = {};
 
+        loginCtrl.newUser = {};
         loginCtrl.isRequestInvite = false;
 
         var redirectPath = $stateParams.redirect;
@@ -33,8 +34,17 @@
             );
         };
 
-        loginCtrl.redirect = function success() {
-            redirectTo(redirectPath);
+        loginCtrl.signup = function signup() {
+            var newUser = loginCtrl.newUser;
+            if (newUser.password !== newUser.verifypassword) {
+                MessageService.showToast("Senhas incompatíveis");
+                return;
+            }
+            AuthService.signupWithEmailAndPassword(newUser.email, newUser.password).then(
+                function success() {
+                    redirectTo(redirectPath);
+                }
+            );
         };
 
         loginCtrl.resetPassword = function resetPassword(ev) {
@@ -55,10 +65,6 @@
 
         loginCtrl.goToLandingPage = function goToLandingPage() {
             $window.open(Config.LANDINGPAGE_URL, '_self');
-        };
-
-        loginCtrl.requestInvite = function requestInvite() {
-            loginCtrl.isRequestInvite = !loginCtrl.isRequestInvite;
         };
 
         function redirectTo(path) {

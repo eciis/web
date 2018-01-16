@@ -36,12 +36,3 @@
 </md-toolbar>
 
 <div ui-view="content" layout="column" md-colors="{background: 'grey-200'}"></div>
-
-<md-toolbar class="md-warn" ng-if="!mainCtrl.userEmailVerified()" ng-hide="hideEmailVerification">
-  <div class="md-toolbar-tools" layout-align="end center">
-    <h2 class="md-flex">Verifique seu email para confirmar sua conta.</h2>
-    <md-button class="md-raised md-warn md-hue-2" ng-click="mainCtrl.resendEmailVerification()">Reenviar confirmação</md-button>
-    <md-button class="md-icon-button" ng-click="mainCtrl.refreshUser()"><md-icon>refresh</md-icon></md-button>
-    <md-button class="md-icon-button" ng-click="hideEmailVerification = true"><md-icon>close</md-icon></md-button>
-  </div>
-</md-toolbar>

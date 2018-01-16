@@ -269,16 +269,12 @@
 
         function updateEvent() {
             var event = _.clone(dialogCtrl.dateChangeEvent);
+            event.start_time = new Date(dialogCtrl.start_time);
+            event.end_time = new Date(dialogCtrl.event.end_time);
             event = new Event(event, dialogCtrl.user.current_institution.key);
             if(event.isValid()) {
-                var patch = generatePatch(jsonpatch.generate(dialogCtrl.observer), event);
+                var patch = formatPatch(generatePatch(jsonpatch.generate(dialogCtrl.observer), event));
                 EventService.editEvent(dialogCtrl.event.key, patch).then(function success() {
-                    if(dialogCtrl.dateToChange.startTime) {
-                        dialogCtrl.event.start_time = event.start_time;
-                    }
-                    if(dialogCtrl.dateToChange.endTime) {
-                        dialogCtrl.event.end_time = event.end_time;
-                    }
                     dialogCtrl.closeDialog();
                     MessageService.showToast('Evento editado com sucesso.');
                 }, function error(response) {
@@ -288,6 +284,16 @@
             } else {
                 MessageService.showToast('Evento inválido');
             }
+        }
+
+        function formatPatch(patch) {
+            return patch.reduce((a, b) => {
+                if(b.path === "/end_time" || b.path === "/start_time") {
+                    b.value = b.value.split(".")[0];
+                }
+                a.push(b);
+                return a;
+            }, []);
         }
 
         dialogCtrl.changeDate = function changeDate(typeOfDate) {
@@ -453,6 +459,8 @@
                 dialogCtrl.dateChangeEvent = _.clone(dialogCtrl.event);
                 dialogCtrl.dateChangeEvent.start_time = new Date(dialogCtrl.dateChangeEvent.start_time);
                 dialogCtrl.dateChangeEvent.end_time = new Date(dialogCtrl.dateChangeEvent.end_time);
+                dialogCtrl.start_time = new Date(dialogCtrl.dateChangeEvent.start_time);
+                dialogCtrl.end_time = new Date(dialogCtrl.dateChangeEvent.end_time);
                 dialogCtrl.dateChangeEvent = new Event(dialogCtrl.dateChangeEvent, dialogCtrl.user.current_institution.key);
                 dialogCtrl.observer = jsonpatch.observe(dialogCtrl.event);
             } else {

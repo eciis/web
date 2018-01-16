@@ -86,22 +86,15 @@
         };
 
         service.like = function like(postKey, commentId, replyId) {
-            return likeOrDeslike(postKey, commentId, replyId, $http.post);
-        };
-
-        service.dislike = function like(postKey, commentId, replyId) {
-            return likeOrDeslike(postKey, commentId, replyId, $http.delete);
-        };
-
-        function likeOrDeslike(postKey, commentId, replyId, method) {
             var deferred = $q.defer();
-            var URI = POST_URI + postKey + '/comments/' + commentId;
-            if (replyId) {
-                URI = URI + "/replies/" + replyId + "/likes";
-            } else {
-                URI = URI + "/likes";
-            }
-            method(URI).then(
+            var currentInstitutionName = service.user.current_institution.name;
+            var URI = createLikeCommentURI(postKey, commentId, replyId);
+            var body = {
+                currentInstitution: {
+                    name: currentInstitutionName
+                }
+            };            
+            $http.post(URI, body).then(
                 function success(response) {
                     deferred.resolve(response);
                 }, function error(response) {
@@ -109,6 +102,25 @@
                 }
             );
             return deferred.promise;
+        };
+
+        service.dislike = function like(postKey, commentId, replyId) {
+            var deferred = $q.defer();
+            var URI = createLikeCommentURI(postKey, commentId, replyId);
+            $http.delete(URI).then(
+                function success(response) {
+                    deferred.resolve(response);
+                }, function error(response) {
+                    deferred.reject(response);
+                }
+            );
+            return deferred.promise;
+        };
+
+        function createLikeCommentURI(postKey, commentId, replyId) {
+            var replyUri = replyId ? `/replies/${replyId}` : "";
+            var URI = POST_URI + postKey + '/comments/' + commentId + replyUri + "/likes";    
+            return URI;
         }
     });
 })();

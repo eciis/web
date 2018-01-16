@@ -7,7 +7,9 @@
 
     var user = {
         state: 'active',
-        current_institution: {name: 'currentInstitution'}
+        current_institution: {
+            name: 'currentInstitution'
+        }
     };
 
     beforeEach(module('app'));
@@ -218,8 +220,10 @@
     });
 
     describe('like()', function() {
+        var body = {};
         beforeEach(function() {
             spyOn(http, 'post').and.returnValue(deferred.promise);
+            body.currentInstitution = { name: user.current_institution.name };
         });
 
         it('should call http.post()', function() {
@@ -233,7 +237,7 @@
             );
             deferred.resolve();
             scope.$apply();
-            expect(http.post).toHaveBeenCalledWith(URI);
+            expect(http.post).toHaveBeenCalledWith(URI, body);
             expect(answer).toBeUndefined();
             httpBackend.flush();
         });
@@ -249,7 +253,7 @@
             );
             deferred.resolve();
             scope.$apply();
-            expect(http.post).toHaveBeenCalledWith(URI);
+            expect(http.post).toHaveBeenCalledWith(URI, body);
             expect(answer).toBeUndefined();
             httpBackend.flush();
         });

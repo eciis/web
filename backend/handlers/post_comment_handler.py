@@ -43,9 +43,9 @@ class PostCommentHandler(BaseHandler):
     @ndb.transactional(xg=True)
     def post(self, user, post_key):
         """Handle Post Comments requests."""
-        data = json.loads(self.request.body)
-        comment_data = data['commentData']
-        current_institution = data['currentInstitution']
+        body = json.loads(self.request.body)
+        comment_data = body['commentData']
+        current_institution = body['currentInstitution']
         post = ndb.Key(urlsafe=post_key).get()
         Utils._assert(post.state == 'deleted',
                       "This post has been deleted", EntityException)

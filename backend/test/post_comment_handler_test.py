@@ -42,8 +42,10 @@ class PostCommentHandlerTest(TestBaseHandler):
                           "Expected size of comment's list should be zero")
 
         # Call the post method
-        self.testapp.post(self.URL_POST_COMMENT % self.mayza_post.key.urlsafe(),
-                          json.dumps(self.body))
+        self.testapp.post_json(
+            self.URL_POST_COMMENT % self.mayza_post.key.urlsafe(),
+            self.body
+        )
 
         # Update post
         self.mayza_post = self.mayza_post.key.get()
@@ -67,8 +69,10 @@ class PostCommentHandlerTest(TestBaseHandler):
         exception_message = "Error! This post has been deleted"
         self.body['commentData'] = self.other_comment
         with self.assertRaises(Exception) as raises_context:
-            self.testapp.post(self.URL_POST_COMMENT % self.mayza_post.key.urlsafe(),
-                              json.dumps(self.body))
+            self.testapp.post_json(
+                self.URL_POST_COMMENT % self.mayza_post.key.urlsafe(),
+                self.body
+            )
         raises_context_message = self.get_message_exception(raises_context.exception.message)
         self.assertEquals(
             raises_context_message,
@@ -84,8 +88,10 @@ class PostCommentHandlerTest(TestBaseHandler):
 
         # Call the post method
         self.body['commentData'] = self.other_comment
-        self.testapp.post(self.URL_POST_COMMENT % self.mayza_post.key.urlsafe(),
-                          json.dumps(self.body))
+        self.testapp.post_json(
+            self.URL_POST_COMMENT % self.mayza_post.key.urlsafe(),
+            self.body
+        )
 
         # Update post
         self.mayza_post = self.mayza_post.key.get()
@@ -98,9 +104,10 @@ class PostCommentHandlerTest(TestBaseHandler):
     def test_delete(self, verify_token):
         """User can delete your comment in Post."""
         # Added comment
-        self.response = self.testapp.post(self.URL_POST_COMMENT %
-                                          self.mayza_post.key.urlsafe(),
-                                          json.dumps(self.body)).json
+        self.response = self.testapp.post_json(
+            self.URL_POST_COMMENT % self.mayza_post.key.urlsafe(),
+            self.body
+        ).json
         # ID of comment
         self.id_comment = self.response["id"]
         self.mayza_post = self.mayza_post.key.get()
@@ -122,9 +129,10 @@ class PostCommentHandlerTest(TestBaseHandler):
     def test_delete_in_deleted_post(self, verify_token):
         """User can not delete comment in deleted Post."""
         # Added comment
-        self.response = self.testapp.post(self.URL_POST_COMMENT %
-                                          self.mayza_post.key.urlsafe(),
-                                          json.dumps(self.body)).json
+        self.response = self.testapp.post_json(
+            self.URL_POST_COMMENT % self.mayza_post.key.urlsafe(),
+            self.body
+        ).json
         # ID of comment
         self.id_comment = self.response["id"]
         self.mayza_post = self.mayza_post.key.get()
@@ -151,9 +159,10 @@ class PostCommentHandlerTest(TestBaseHandler):
     def test_delete_simpleuser(self, verify_token):
         """An simple user can't delete comments by other users in Post."""
         # Added comment of Mayza
-        self.response = self.testapp.post(self.URL_POST_COMMENT %
-                                          self.mayza_post.key.urlsafe(),
-                                          json.dumps(self.body)).json
+        self.response = self.testapp.post_json(
+            self.URL_POST_COMMENT % self.mayza_post.key.urlsafe(),
+            self.body
+        ).json
         # ID of comment
         self.id_comment = self.response["id"]
         self.mayza_post = self.mayza_post.key.get()
@@ -182,9 +191,10 @@ class PostCommentHandlerTest(TestBaseHandler):
         """Owner user can delete comment from other user in Post."""
         # Added comment user Maiana
         self.body['commentData'] = self.other_comment
-        self.response = self.testapp.post(self.URL_POST_COMMENT %
-                                          self.mayza_post.key.urlsafe(),
-                                          json.dumps(self.body)).json
+        self.response = self.testapp.post_json(
+            self.URL_POST_COMMENT % self.mayza_post.key.urlsafe(),
+            self.body
+        ).json
         # ID of comment
         self.id_other_comment = self.response["id"]
         self.mayza_post = self.mayza_post.key.get()
@@ -206,9 +216,10 @@ class PostCommentHandlerTest(TestBaseHandler):
     def test_check_permission(self, verify_token):
         """Test method check_permission in post_comment_handler."""
         # Added comment
-        self.response = self.testapp.post(self.URL_POST_COMMENT %
-                                          self.mayza_post.key.urlsafe(),
-                                          json.dumps(self.body)).json
+        self.response = self.testapp.post_json(
+            self.URL_POST_COMMENT % self.mayza_post.key.urlsafe(),
+            self.body
+        ).json
 
         # When a user(Maiana) try delete comment of other user(Mayza).
         with self.assertRaises(NotAuthorizedException):
@@ -270,6 +281,6 @@ def initModels(cls):
     cls.body = {
         'commentData': cls.comment,
         'currentInstitution': {
-            'name': 'currentInstitution'
+            'name': 'inst_name'
         }
     }

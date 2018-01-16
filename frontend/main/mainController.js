@@ -17,7 +17,7 @@
             if(mainCtrl.search_keyword) {
                 var search = mainCtrl.search_keyword;
                 mainCtrl.search_keyword = '';
-                $state.go('app.search', {search_keyword: search});
+                $state.go('app.user.search', {search_keyword: search});
             }
         };
 
@@ -71,7 +71,7 @@
         };
 
         mainCtrl.goEvents = function goEvents(){
-            $state.go('app.events');
+            $state.go('app.user.events');
         };
 
         mainCtrl.logout = function logout() {
@@ -119,6 +119,19 @@
             RequestInvitationService.getChildrenRequests(mainCtrl.user.current_institution.key).then(
                 increaseInstInvitationsNumber, function error() {}
             );
+        };
+
+        mainCtrl.resendEmailVerification = function resendEmailVerification() {
+            AuthService.sendEmailVerification();
+        };
+
+        mainCtrl.userEmailVerified = function userEmailVerified() {
+            return AuthService.emailVerified();
+        };
+
+        mainCtrl.refreshUser = function refreshUser() {
+            AuthService.reload();
+            $state.reload();
         };
 
         (function main() {

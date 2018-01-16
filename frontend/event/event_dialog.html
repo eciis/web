@@ -70,18 +70,18 @@
               <div layout="row" layout-align="space-between center">
                   <md-input-container style="margin: 0" flex="45">
                       <input mdc-datetime-picker="" short-time="false" date="true" time="true" type="text" format="DD-MM-YYYY HH:mm" lang="pt-BR"
-                      placeholder="Data inicial" ng-model="controller.event.start_time" class=" md-input" today-text="Hoje" min-date="null"
-                      max-date="controller.event.end_time" readonly="readonly" cancel-text="Cancelar" required/>
+                      placeholder="Data inicial" ng-model="controller.event.start_time" class=" md-input" today-text="Hoje" min-date="controller.now"
+                      max-date="controller.event.end_time" readonly="readonly" cancel-text="Cancelar" ng-change="controller.createInitDate()" required/>
                   </md-input-container flex="45">
                   <md-input-container style="margin: 0">
                       <input mdc-datetime-picker="" ng-change="controller.changeDate('endTime')" date="true" time="true" type="text" lang="pt-BR" today-text="Hoje"
-                      placeholder="Data final" class=" md-input" readonly="readonly" format="YYYY-MM-DD HH:mm" max-date="null"
-                      ng-model="controller.event.end_time" cancel-text="Cancelar" min-date="null" required>
+                      placeholder="Data final" class=" md-input" readonly="readonly" format="DD-MM-YYYY HH:mm" max-date="null"
+                      ng-model="controller.event.end_time" cancel-text="Cancelar" min-date="controller.start_time" required>
                   </md-input-container>
               </div>
               <md-input-container style="margin: 0">
-                  <label>Local (Onde o evento vai acontecer)</label>
-                  <input ng-model="controller.event.local" required/>
+                  <label>Site oficial</label>
+                  <input type="url" ng-model="controller.event.official_site"/>
               </md-input-container>
               <div layout="row">
                   <md-input-container style="margin: 0">
@@ -95,6 +95,10 @@
               </div>
             </div>
             <div layout="row" layout-align="space-between center">
+                <md-input-container style="margin: 0; margin-top: 25px;" flex="45">
+                    <label>Local </label>
+                    <input ng-model="controller.event.local" required/>
+                </md-input-container>
                 <md-input-container style="margin: 0" flex="45">
                     <label>Pais</label>
                     <md-select ng-model="controller.event.country" ng-change="controller.setAnotherCountry()">
@@ -102,6 +106,8 @@
                           ng-value="country.nome_pais">{{country.nome_pais}}</md-option>
                     </md-select>
                 </md-input-container>
+            </div>
+            <div layout="row" layout-align="space-between center">
                 <md-input-container style="margin: 0" flex="45" ng-if="controller.isAnotherCountry">
                     <label>Estado</label>
                     <input type="text" name="state" ng-model="controller.event.federal_state">
@@ -114,8 +120,6 @@
                         ng-value="federal_state">{{federal_state.sigla}}</md-option>
                     </md-select>
                 </md-input-container>
-            </div>
-            <div layout="row">
                 <md-input-container style="margin: 0" flex="45" ng-if="controller.isAnotherCountry">
                     <label>Cidade</label>
                     <input type="text" name="city" ng-model="controller.event.city">
@@ -134,7 +138,7 @@
               <div layout="column" flex="95">
                 <md-input-container class="md-block">
                   <label style="font-weight: bold; font-size: 25px;" md-colors="{color: 'default-teal-700'}">Descrição</label>
-                  <textarea ng-model="controller.event.description" rows="5" md-select-on-focus
+                  <textarea ng-model="controller.event.text" rows="5" md-select-on-focus
                     placeholder="Insira aqui uma breve descrição sobre o evento"
                     style="border-style: solid; border-width: 1px; border-color: #009688; border-radius: 5px;"></textarea>
                 </md-input-container>

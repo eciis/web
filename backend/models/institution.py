@@ -45,6 +45,8 @@ class Institution(ndb.Model):
 
     phone_number = ndb.StringProperty()
 
+    branch_line = ndb.StringProperty()
+
     # Bollean that represents if the institution is Trusted or not.
     trusted = ndb.BooleanProperty(default=False)
 

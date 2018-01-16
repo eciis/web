@@ -27,13 +27,10 @@
           <div class="image-view" ng-if="sharePostCtrl.showImage()">
             <img class="md-card-image" style="border-radius: 3%;" ng-src="{{ sharePostCtrl.post.photo_url }}"/>
           </div>
-          <div class="youtube-player" ng-if="sharePostCtrl.showVideo()">
-            <iframe ng-src="{{ sharePostCtrl.getVideoUrl() }}"></iframe>
-          </div>
           <p></p>
-          <a ng-if="!sharePostCtrl.isSurvey()" href class="md-text hyperlink" ng-click="sharePostCtrl.goTo()">
-            <span>{{ sharePostCtrl.post.title }}</span>
-          </a>
+          <span ng-if="!sharePostCtrl.isSurvey()" class="md-text">
+            <b>{{ sharePostCtrl.post.title }}</b>
+          </span>
           <p ng-if="sharePostCtrl.isEvent()">
             <span class="md-caption">Local:</span> 
             <span md-colors="{color: 'default-teal-900'}">{{ sharePostCtrl.post.local }}</span> | 
@@ -44,7 +41,7 @@
               {{ sharePostCtrl.post.end_time | amUtc | amLocal | amCalendar:referenceTime:formats }}
             </b>
           </p>         
-          <span class="md-subhead" ng-bind-html="sharePostCtrl.post.text"></span>
+          <span class="md-subhead" ng-bind-html="sharePostCtrl.postToURL(sharePostCtrl.post.text)"></span>
           <pdf-view pdf-files='sharePostCtrl.post.pdf_files' is-editing="false"></pdf-view>
           <survey-details ng-if="sharePostCtrl.isSurvey()" post="sharePostCtrl.post" posts="sharePostCtrl.posts" user="sharePostCtrl.user" isdialog="true"></survey-details>
         </md-card-content>

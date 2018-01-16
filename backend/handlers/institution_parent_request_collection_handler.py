@@ -10,6 +10,7 @@ from custom_exceptions.entityException import EntityException
 from handlers.base_handler import BaseHandler
 from models.factory_invites import InviteFactory
 from models.request_institution_parent import RequestInstitutionParent
+from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
 
 class InstitutionParentRequestCollectionHandler(BaseHandler):
@@ -43,6 +44,12 @@ class InstitutionParentRequestCollectionHandler(BaseHandler):
         inst_parent_request_type = 'REQUEST_INSTITUTION_PARENT'
 
         type_of_invite = data.get('type_of_invite')
+
+        """TODO: Remove the assert bellow when the hierarchical requests can be available
+        @author: Mayza Nunes 11/01/2018
+        """
+        Utils._assert(type_of_invite == 'REQUEST_INSTITUTION_PARENT',
+                      "Hierarchical requests is not available in this version", NotAuthorizedException)
 
         Utils._assert(
             type_of_invite != inst_parent_request_type,

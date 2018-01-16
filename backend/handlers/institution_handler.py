@@ -173,6 +173,7 @@ class InstitutionHandler(BaseHandler):
             'remove_hierarchy': remove_hierarchy
         }
 
+        enqueue_task('remove-admin-permissions', params)
         enqueue_task('remove-inst', params)
 
         email_params = {

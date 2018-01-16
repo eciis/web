@@ -192,7 +192,7 @@ class RemoveAdminPermissionsInInstitutionHierarchy(BaseHandler):
         for permission in permissions_keys:
             institution_keys = permissions[permission].keys()
             for institution_key in institution_keys:
-                if ndb.Key(urlsafe=institution_key) not in admin.institutions_admin:
+                if ndb.Key(urlsafe=institution_key) not in admin.institutions:
                     admin.remove_permission(permission, institution_key)
 
         if institution.parent_institution:

@@ -33,8 +33,8 @@ class TestBase(unittest.TestCase):
         cls.images = images
 
         """Start stub to identity app"""
-        cls.testbed_instance = cls.testbed.Testbed()
-        cls.testbed_instance.activate()
-        cls.testbed_instance.init_app_identity_stub()
-        cls.testbed_instance.init_mail_stub()
-        cls.testbed_instance.init_taskqueue_stub(root_path="..")
+        testbed_instance = cls.testbed.Testbed()
+        testbed_instance.activate()
+        testbed_instance.init_app_identity_stub()
+        testbed_instance.init_mail_stub()
+        testbed_instance.init_taskqueue_stub(root_path="..")

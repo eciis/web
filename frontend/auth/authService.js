@@ -1,6 +1,6 @@
-'use strict';
-
 (function() {
+    'use strict';
+
     var app = angular.module("app");
 
     app.service("AuthService", function AuthService($q, $state, $firebaseAuth, $window, UserService, MessageService) {
@@ -28,14 +28,15 @@
 
         service.setupUser = function setupUser(idToken, emailVerified) {
             var deferred = $q.defer();
-            var userToken = {
-                accessToken: idToken
+            var firebaseUser = {
+                accessToken : idToken,
+                emailVerified: emailVerified
             };
 
-            userInfo = userToken;
+            userInfo = firebaseUser;
 
             UserService.load().then(function success(userLoaded) {
-                configUser(userLoaded, userToken);
+                configUser(userLoaded, firebaseUser);
                 deferred.resolve(userInfo);
             }, function error(error) {
                 MessageService.showToast(error);
@@ -48,7 +49,7 @@
             var deferred = $q.defer();
             authObj.$signInWithPopup("google").then(function(result) {
                 result.user.getIdToken(true).then(function(idToken) {
-                    service.setupUser(idToken).then(function success(userInfo) {
+                    service.setupUser(idToken, result.user.emailVerified).then(function success(userInfo) {
                         deferred.resolve(userInfo);
                     });
                 });
@@ -64,11 +65,12 @@
             authObj.$signInWithEmailAndPassword(email, password).then(function(user) {
                 if (user.emailVerified) {
                     user.getIdToken(true).then(function(idToken) {
-                        service.setupUser(idToken).then(function success(userInfo) {
+                        service.setupUser(idToken, user.emailVerified).then(function success(userInfo) {
                             deferred.resolve(userInfo);
                         });
                     });
                 } else {
+                    service.sendEmailVerification(user);
                     MessageService.showToast("Seu email precisa ser verificado.");
                     deferred.reject("Email not verified.");
                 }
@@ -81,9 +83,10 @@
 
         service.signupWithEmailAndPassword = function signupWithEmailAndPassword(email, password) {
             var deferred = $q.defer();
-            authObj.$createUserWithEmailAndPassword(email, password).then(function (result) {
+            authObj.$createUserWithEmailAndPassword(email, password).then(function(user) {
+                service.sendEmailVerification();
                 var idToken = user.toJSON().stsTokenManager.accessToken;
-                service.setupUser(idToken).then(function success(userInfo) {
+                service.setupUser(idToken, user.emailVerified).then(function success(userInfo) {
                     service.sendEmailVerification();
                     deferred.resolve(userInfo);
                 });
@@ -100,6 +103,8 @@
             userInfo = undefined;
 
             executeLogoutListeners();
+
+            $state.go("signin");
         };
 
         service.getCurrentUser = function getCurrentUser() {
@@ -125,10 +130,11 @@
         service.reload = function reload() {
             var deferred = $q.defer();
             UserService.load().then(function success(userLoaded) {
-                var userToken = {
+                var firebaseUser = {
                     accessToken: userInfo.accessToken,
+                    emailVerified: userInfo.emailVerified
                 };
-                configUser(userLoaded, userToken);
+                configUser(userLoaded, firebaseUser);
                 deferred.resolve(userInfo);
             }, function error(error) {
                 MessageService.showToast(error);
@@ -137,14 +143,15 @@
             return deferred.promise;
         };
 
-        service.sendEmailVerification = function sendEmailVerification() {
-            authObj.$getAuth().sendEmailVerification().then(
+        service.sendEmailVerification = function sendEmailVerification(user) {
+            var auth_user = user || authObj.$getAuth();
+            auth_user.sendEmailVerification().then(
             function success() {
                 MessageService.showToast('Email de verificação enviado para o seu email.');
             }, function error(error) {
                 console.error(error);
             });
-        }
+        };
 
         service.resetPassword = function resetPassword(email) {
             authObj.$sendPasswordResetEmail(email).then(
@@ -153,17 +160,16 @@
             }, function error(error) {
                 console.error(error);
             });
-        }
+        };
 
         service.$onLogout = function $onLogout(callback) {
             onLogoutListeners.push(callback);
         };
 
-        authObj.$onAuthStateChanged(function (firebaseUser) {
-            if (!firebaseUser) {
-                $state.go("signin");
-            }
-        });
+        service.emailVerified = function emailVerified() {
+            if (userInfo) return userInfo.emailVerified;
+            return false;
+        };
 
         /**
         * Execute each function stored to be thriggered when user logout
@@ -175,9 +181,9 @@
             });
         }
 
-        function configUser(userLoaded, userToken) {
+        function configUser(userLoaded, firebaseUser) {
             userInfo = new User(userLoaded);
-            _.extend(userInfo, userToken);
+            _.extend(userInfo, firebaseUser);
             $window.localStorage.userInfo = JSON.stringify(userInfo);
         }
 

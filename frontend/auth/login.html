@@ -61,6 +61,19 @@
                         <span>SOLICITAR CONVITE</span>
                     </md-button>
                   </div>
+                  <!--
+                    Hidden on first version, because this option has not will be disponible yet.
+                  -->
+                  <div ng-if="false">
+                    <p style="color: black;">
+                      <b>Se você ainda não possui uma conta no e-CIS solicite abaixo um convite.</b>
+                    </p>
+                    <md-button md-colors="{background: 'teal-500'}" class="login-button" ng-click="loginCtrl.isRequestInvite = true"
+                      style="margin-bottom: 30px;">
+                        <md-icon style="color: white; padding-left: 1em;">add_circle</md-icon>
+                        <span>SOLICITAR CONVITE</span>
+                    </md-button>
+                  </div>
               </div>
             </md-card-content>
             <div style="padding: 15px; font-size: 14px;" md-colors="{background: 'grey-300'}" hide-xs>
@@ -72,41 +85,7 @@
       </div>
     </div>
     
-    <div layout="row" layout-align="center center" ng-if="loginCtrl.isRequestInvite">
-      <md-button class="md-fab md-primary" aria-label="Retornar" style="margin-right: -27px; width: 65px; height: 65px;" md-colors="{background: 'light-green-600'}"
-        ng-click="loginCtrl.isRequestInvite = false" hide-xs>
-        <md-icon style="font-size: 3em; margin: 0 0 14 5">keyboard_arrow_left</md-icon>
-      </md-button>
-      <div ng-if="loginCtrl.isRequestInvite" class="padded" md-whiteframe="12" style="border-radius: 2px; background-color: white;"
-        flex-sm="50" flex-xs="85" flex-md="50" flex-gt-md="35" layout="column">
-        <div layout="column">
-          <div style="color: black;" layout="row" layout-align="center center">
-            <div layout="column" flex-xs="85" flex="80">
-              <div layout="row" layout-align="center center">
-                <img src="/app/images/logowithname.png" style="margin-top: 20px; margin-bottom: 20px; width: 75%;" />
-              </div>
-              <div layout="column">
-                <form ng-submit="loginCtrl.signup()">
-                  <md-input-container class="md-block" style="margin: 0;">
-                    <label>Email</label>
-                    <input type="email" name="email" ng-model="loginCtrl.newUser.email" required="true" aria-label="Email">
-                  </md-input-container>
-                  <md-input-container class="md-block" style="margin: 0;">
-                    <label>Senha</label>
-                    <input type="password" name="password" ng-model="loginCtrl.newUser.password" required="true" minlength="6" aria-label="Senha">
-                  </md-input-container>
-                  <md-input-container class="md-block" style="margin: 0;">
-                    <label>Confirmar Senha</label>
-                    <input type="password" name="verifypassword" ng-model="loginCtrl.newUser.verifypassword" required="true" minlength="6" aria-label="Confirmar Senha">
-                  </md-input-container>
-                  <div layout="row" layout-align="center center" style="margin-bottom: 20px;">
-                    <md-button type="submit" class="md-raised md-primary" md-colors="{background: 'teal-500'}">Concluir</md-button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <signup return-action="loginCtrl.requestInvite" callback="loginCtrl.redirect"
+      card-title="Preencha o formulário para solicitar um convite"
+      ng-if="loginCtrl.isRequestInvite"></signup>
   </md-content>

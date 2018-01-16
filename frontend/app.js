@@ -254,6 +254,15 @@
                     inviteKey: undefined
                 }
             })
+            .state("accept_invite", {
+                url: "/accept_invite?id",
+                views: {
+                    main: {
+                        templateUrl: "app/invites/accept_invite.html",
+                        controller: "AcceptInviteController as acceptInviteCtrl"
+                    }
+                }
+            })
             .state("user_inactive", {
                 url: "/userinactive",
                 views: {
@@ -351,9 +360,14 @@
     });
 
     app.run(function authInterceptor(AuthService, $transitions, $injector, $state, $location) {
+        var ignored_routes = [
+            'signin',
+            'accept_invite'
+        ];
+
         $transitions.onStart({
             to: function(state) {
-                return state != 'signin' && !AuthService.isLoggedIn();
+                return !(_.includes(ignored_routes, state.name)) && !AuthService.isLoggedIn();
             }
         }, function(transition) {
             $state.go("signin", {

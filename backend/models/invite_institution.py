@@ -52,6 +52,7 @@ class InviteInstitution(Invite):
         email_sender = InviteInstitutionEmailSender(**{
             'receiver': self.invitee,
             'subject': subject,
+            'invite_key': self.key.urlsafe(),
             'institution': self.institution_key.get().name,
             'inviter': self.sender_name,
             'invited_institution': self.suggestion_institution_name

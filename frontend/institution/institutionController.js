@@ -184,9 +184,9 @@
             $state.go('app.institution.registration_data', {institutionKey: institutionKey});
         };
 
-        institutionCtrl.goToCommingSoon = function goToCommingSoon(institutionKey) {
-            institutionCtrl.stateView = "";
-            $state.go('app.institution.comming_soon', {institutionKey: institutionKey});
+        institutionCtrl.goToEvents = function goToEvents(institutionKey) {
+            institutionCtrl.stateView = "events";
+            $state.go('app.institution.events', {institutionKey: institutionKey});
         };
 
         institutionCtrl.hasChildrenActive = function hasChildrenActive(institution) {
@@ -344,5 +344,4 @@
         getFollowers();
 
     });
-
 })();

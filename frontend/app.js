@@ -122,11 +122,12 @@
                     }
                 }
             })
-            .state("app.institution.comming_soon", {
-                url: "/institution/:institutionKey/comming_soon",
+            .state("app.institution.events", {
+                url: "/institution/:institutionKey/institution_events",
                 views: {
                     institution_content: {
-                        templateUrl: "app/institution/comming_soon.html"
+                        templateUrl: "app/institution/institution_events.html",
+                        controller: "EventController as eventCtrl"
                     }
                 }
             })

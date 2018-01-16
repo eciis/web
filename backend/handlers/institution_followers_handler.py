@@ -60,6 +60,9 @@ class InstitutionFollowersHandler(BaseHandler):
 
         Utils._assert(institution.state == 'inactive',
                       "The institution has been deleted", NotAuthorizedException)
+        
+        Utils._assert(institution.name == 'Ministério da Saúde',
+                      "The institution can not be unfollowed", NotAuthorizedException)
 
         if(not type(institution) is Institution):
             raise Exception("Key is not an Institution")

@@ -243,8 +243,9 @@ class User(ndb.Model):
         permission_type -- permission name used to verify authorization
         entity_key -- ndb urlsafe of the object binded to the permission
         """
-        del self.permissions[permission_type][entity_key]
-        self.put()
+        if self.permissions.get(permission_type, {}).get(entity_key):
+            del self.permissions[permission_type][entity_key]
+            self.put()
 
     def has_permission(self, permission_type, entity_key=None):
         """Verify if user has permission on determinate entity.

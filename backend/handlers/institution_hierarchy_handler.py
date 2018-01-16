@@ -12,6 +12,7 @@ from custom_exceptions.entityException import EntityException
 from models.institution import Institution
 
 from service_messages import send_message_notification
+from service_entities import enqueue_task
 import json
 
 from handlers.base_handler import BaseHandler
@@ -48,6 +49,9 @@ class InstitutionHierarchyHandler(BaseHandler):
         admin = institution_link.admin.get()
         if is_parent == "true":
             admin.remove_permission("remove_inst", institution.key.urlsafe())
+            enqueue_task('remove-admin-permissions', {'institution_key': institution.key.urlsafe()})
+        else:
+            enqueue_task('remove-admin-permissions', {'institution_key': institution_link.key.urlsafe()})
         entity_type = 'INSTITUTION'
         send_message_notification(
             admin.key.urlsafe(),

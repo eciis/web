@@ -182,6 +182,33 @@ class AddAdminPermissionsInInstitutionHierarchy(BaseHandler):
         self.addAdminPermissions(institution_key)
 
 
+class RemoveAdminPermissionsInInstitutionHierarchy(BaseHandler):
+
+    def removeAdminPermissions(self, institution_key, permissions):
+        institution = ndb.Key(urlsafe=institution_key).get()
+        admin = institution.admin.get()
+        permissions_keys = permissions.keys()
+
+        for permission in permissions_keys:
+            institution_keys = permissions[permission].keys()
+            for institution_key in institution_keys:
+                if ndb.Key(urlsafe=institution_key) not in admin.institutions_admin:
+                    admin.remove_permission(permission, institution_key)
+
+        if institution.parent_institution:
+            self.removeAdminPermissions(institution.parent_institution.urlsafe(), permissions)
+
+    def post(self):
+        #import pdb
+        #pdb.set_trace()
+        institution_key = self.request.get('institution_key')
+        institution = ndb.Key(urlsafe=institution_key).get()
+        admin = institution.admin.get()
+        
+        if institution.parent_institution:
+            permissions = admin.permissions
+            self.removeAdminPermissions(institution_key, permissions)
+
 app = webapp2.WSGIApplication([
     ('/api/queue/send-notification', SendNotificationHandler),
     ('/api/queue/send-email', SendEmailHandler),
@@ -189,5 +216,6 @@ app = webapp2.WSGIApplication([
     ('/api/queue/post-notification', PostNotificationHandler),
     ('/api/queue/email-members', EmailMembersHandler),
     ('/api/queue/notify-followers', NotifyFollowersHandler),
-    ('/api/queue/add-admin-permissions', AddAdminPermissionsInInstitutionHierarchy)
+    ('/api/queue/add-admin-permissions', AddAdminPermissionsInInstitutionHierarchy),
+    ('/api/queue/remove-admin-permissions', RemoveAdminPermissionsInInstitutionHierarchy)
 ], debug=True)

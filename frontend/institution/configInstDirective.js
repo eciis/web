@@ -331,13 +331,13 @@
         }
 
         function getLegalNatures() {
-            $http.get('app/institution/legal_nature.json').then(function success(response) {
+            InstitutionService.getLegalNatures().then(function success(response) {
                 configInstCtrl.legalNatures = response.data;
             });
         }
 
         function getActuationAreas() {
-            $http.get('app/institution/actuation_area.json').then(function success(response) {
+            InstitutionService.getActuationAreas().then(function success(response) {
                 configInstCtrl.actuationArea = response.data;
             });
         }

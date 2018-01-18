@@ -17,21 +17,8 @@
         institutionCtrl.showFullDescription = false;
         institutionCtrl.showFullData = false;
         institutionCtrl.isLoadingPosts = true;
-
-        institutionCtrl.legal_natures = {
-            "public": "Pública",
-            "private": "Privada",
-            "philanthropic": "Filantrópica"
-        };
-
-        institutionCtrl.actuation_areas = {
-            "official laboratories":"Laboratórios Oficiais",
-            "government agencies":"Ministérios e outros Órgãos do Governo",
-            "funding agencies":"Agências de Fomento",
-            "research institutes":"Institutos de Pesquisa",
-            "colleges":"Universidades",
-            "other":"Outra"
-        };
+        institutionCtrl.instLegalNature = "";
+        institutionCtrl.instActuationArea = "";
 
         var currentInstitutionKey = $state.params.institutionKey;
 
@@ -44,6 +31,9 @@
                 checkIfUserIsFollower();
                 institutionCtrl.checkIfUserIsMember();
                 getPortfolioUrl();
+                getActuationArea();
+                getLegalNature();
+                
             }, function error(response) {
                 $state.go("app.user.home");
                 MessageService.showToast(response.data.msg);
@@ -231,13 +221,22 @@
             }
         };
 
+        function getLegalNature() {
+            InstitutionService.getLegalNatures().then(function success(response) {
+                institutionCtrl.instLegalNature = _.get(response.data, 
+                    institutionCtrl.current_institution.legal_nature);
+            });
+        }
+
+        function getActuationArea() {
+            InstitutionService.getActuationAreas().then(function success(response) {
+                institutionCtrl.instActuationArea = _.get(response.data, 
+                   institutionCtrl.current_institution.actuation_area);
+            });
+        }
+
         institutionCtrl.getInfo = function getInfo(information) {
             return information ? information : "Não informado";
-        };
-
-        institutionCtrl.getLegalNature = function getLegalNature() {
-            var legalNature = institutionCtrl.current_institution.legal_nature;
-            return legalNature ? institutionCtrl.legal_natures[legalNature] : 'Não informado';
         };
 
         institutionCtrl.requestInvitation = function requestInvitation(event) {

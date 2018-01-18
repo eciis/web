@@ -23,7 +23,7 @@ class Institution(ndb.Model):
     cnpj = ndb.StringProperty()
 
     legal_nature = ndb.StringProperty(
-        choices=set(["public", "private for-profit", "private non-profit"]))
+        choices=set(["PUBLIC", "PRIVATE_FOR-PROFIT", "PRIVATE_NON-PROFIT"]))
 
     address = ndb.StructuredProperty(Address)
 

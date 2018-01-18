@@ -37,7 +37,9 @@ class EventCollectionHandlerTest(TestBaseHandler):
             'text': 'testing new event',
             'start_time': '2027-12-24T10:25:48',
             'end_time': '2027-12-25T10:25:48',
-            'local': 'local do evento'})
+            'local': 'local do evento',
+            'address': {}
+            })
         # Retrieve the entities
         event = json.loads(event._app_iter[0])
         key_event = ndb.Key(urlsafe=event['key'])
@@ -62,7 +64,9 @@ class EventCollectionHandlerTest(TestBaseHandler):
                 'text': 'testing new event',
                 'start_time': '2027-12-24T10:25:48',
                 'end_time': '2027-12-20T10:25:48',
-                'local': 'local do evento'})
+                'local': 'local do evento',
+                'address': {}
+                })
 
         message_exception = self.get_message_exception(str(raises_context.exception))
 
@@ -80,7 +84,9 @@ class EventCollectionHandlerTest(TestBaseHandler):
                 'text': 'testing new event',
                 'start_time': '2010-12-24T10:25:48',
                 'end_time': '2010-12-25T10:25:48',
-                'local': 'local do evento'})
+                'local': 'local do evento',
+                'address': {}
+                })
 
         message_exception = self.get_message_exception(str(raises_context.exception))
 

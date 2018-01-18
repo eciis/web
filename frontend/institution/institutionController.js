@@ -38,7 +38,7 @@
                 
             }, function error(response) {
                 $state.go("app.user.home");
-                institutionCtrl.isLoadingData = true;
+                institutionCtrl.isLoadingData = true; 
                 MessageService.showToast(response.data.msg);
             });
         }
@@ -330,12 +330,15 @@
 
         followersCtrl.followers = [];
         followersCtrl.currentFollower = "";
+        followersCtrl.isLoadingFollowers = true;
 
         function getFollowers() {
             InstitutionService.getFollowers(currentInstitutionKey).then(function success(response) {
                 followersCtrl.followers = response.data;
+                followersCtrl.isLoadingFollowers = false;
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
+                followersCtrl.isLoadingFollowers = true;
             });
         }
 

@@ -40,19 +40,17 @@ describe('Test ConfigInstDirective', function() {
         members: []
     }];
 
-    var legal_nature = [
-        {"value":"public", "name":"Pública"},
-        {"value":"private", "name":"Privada"},
-        {"value":"philanthropic", "name":"Filantrópica"}
-    ];
-    var actuation_area = [
-        {"value":"official laboratories", "name":"Laboratórios Oficiais"},
-        {"value":"government agencies", "name":"Ministérios e outros Órgãos do Governo"},
-        {"value":"funding agencies", "name":"Agências de Fomento"},
-        {"value":"research institutes", "name":"Institutos de Pesquisa"},
-        {"value":"colleges", "name":"Universidades"},
-        {"value":"other", "name":"Outra"}
-    ];
+    var legal_nature = {
+        "private for-profit":"Privada com fins lucrativos",
+        "private non-profit":"Privada sem fins lucrativos",
+        "public":"Pública" 
+    };
+    var actuation_area = {
+        "OFFICIAL_BANK": "Banco Oficial",
+        "COMMISSION": "Comissão",
+        "COUNCIL": "Conselho",
+        "PRIVATE_COMPANY": "Empresa Privada",
+    };
 
     var invite = {'invitee': 'user@email.com',
             'suggestion_institution_name': "Suggested Name",

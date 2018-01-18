@@ -50,6 +50,36 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
         # Assert that the user hasn't been removed from the followers
         self.assertEquals(len(institution.followers), 1,
                           "The institution should have a follower")
+    
+    @patch('utils.verify_token', return_value=USER)
+    def teste_delete_usermember_health_ministry(self, verify_token):
+        """Test that user member try unfollow the health ministry institution."""
+        user = mocks.create_user(USER['email'])
+        institution = mocks.create_institution()
+        institution.address = mocks.create_address()
+        user.follow(institution.key)
+        user.add_institution(institution.key)
+        institution.followers = [user.key]
+        institution.name = "Ministério da Saúde"
+        institution.add_member(user)
+        self.assertEquals(len(institution.followers), 1,
+                          "The institution should have a follower")
+        self.assertEquals(len(user.follows), 1,
+                          "The user should follow an institution")
+
+        # Call the delete method
+        with self.assertRaises(Exception) as raises_context:
+            self.testapp.delete("/api/institutions/%s/followers" %
+                            institution.key.urlsafe())
+
+        message_exception = self.get_message_exception(str(raises_context.exception))
+
+        self.assertEqual(
+            message_exception,
+            "Error! The institution can not be unfollowed",
+            "Expected exception message must be equal to Error! The institution can not be unfollowed")
+
+        
 
     # TODO: fix this test because not work after add fiel 'description' in search_institution.py
     # Author: Tiago Pereira - 22/12/2017

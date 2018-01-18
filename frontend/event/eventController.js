@@ -15,25 +15,26 @@
         eventCtrl.user = AuthService.getCurrentUser();
         eventCtrl.isLoadingEvents = true;
 
-        var LIMIT_CHARACTERS = 100;
-
         eventCtrl.loadMoreEvents = function loadMoreEvents() {
             var deferred = $q.defer();
 
             if (moreEvents) {
-                loadEvents(deferred);
+                if(eventCtrl.institutionKey) {
+                    loadEvents(deferred, EventService.getInstEvents);
+                } else {
+                    loadEvents(deferred, EventService.getEvents);
+                }
             } else {
                 deferred.resolve();
             }
-
             return deferred.promise;
         };
 
         Utils.setScrollListener(content, eventCtrl.loadMoreEvents);
 
 
-        function loadEvents(deferred) {
-            EventService.getEvents(actualPage).then(function success(response) {
+        function loadEvents(deferred, getEvents) {
+            getEvents(actualPage, eventCtrl.institutionKey).then(function success(response) {
                 actualPage += 1;
                 moreEvents = response.data.next;
 
@@ -71,9 +72,9 @@
                 templateUrl: 'app/post/share_post_dialog.html',
                 parent: angular.element(document.body),
                 targetEvent: ev,
-                clickOutsideToClose:true,
+                clickOutsideToClose: true,
                 locals: {
-                    user : eventCtrl.user,
+                    user: eventCtrl.user,
                     posts: [],
                     post: event,
                     addPost: false
@@ -81,122 +82,10 @@
             });
         };
 
-        eventCtrl.confirmDeleteEvent = function confirmDeleteEvent(ev, event) {
-            var dialog = MessageService.showConfirmationDialog(ev, 'Excluir Evento', 'Este evento será removido.');
-            dialog.then(function() {
-                deleteEvent(event);
-            }, function() {
-                MessageService.showToast('Cancelado');
-            });
-        };
-
-        function deleteEvent(event) {
-            let promise = EventService.deleteEvent(event);
-            promise.then(function success() {
-                eventCtrl.events = eventCtrl.events.filter(thisEvent => thisEvent.key  !== event.key);
-                MessageService.showToast('Evento removido com sucesso!');
-                $state.go('app.user.events');
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
-            });
-            return promise;
-        }
-
-        eventCtrl.recognizeUrl =  function recognizeUrl(event) {
-            if(event && event.text){
-                var text = Utils.recognizeUrl(event.text);
-                text = adjustText(text, event);
-                return text;
-            }
-        };
-
-        eventCtrl.isLongText = function isLongText(event){
-            if(event.text) {
-                var numberOfChar = event.text.length;
-                return numberOfChar >= LIMIT_CHARACTERS;
-            }
-        };
-
-        eventCtrl.canDelete = function canDelete(event) {
-            return eventCtrl.isEventAuthor(event) || isInstitutionAdmin(event);
-        };
-
-        eventCtrl.canEdit = function canEdit(event) {
-            return eventCtrl.isEventAuthor(event);
-        };
-
-        eventCtrl.editEvent = function editEvent(ev, event) {
-            /* TODO: FIX this function to work in event page
-            * @author: Tiago Pereira - 11/01/2018
-            */
-            $mdDialog.show({
-                controller: 'EventDialogController',
-                controllerAs: "controller",
-                templateUrl: 'app/event/event_dialog.html',
-                targetEvent: ev,
-                clickOutsideToClose: true,
-                locals: {
-                    event: event,
-                    isEditing: true
-                },
-                bindToController: true
-            });
-        };
-
-        eventCtrl.isEventAuthor = function isEventAuthor(event) {
-            if(event) return Utils.getKeyFromUrl(event.author_key) === eventCtrl.user.key;
-        };
-
-        eventCtrl.goToEvent = function goToEvent(event) {
-            $state.go('app.user.event', {eventKey: event.key});
-        };
-
-
-        eventCtrl.endInOtherMonth = function endInOtherMonth() {
-            if(eventCtrl.event) {
-                const startMonth = new Date(eventCtrl.event.start_time).getMonth();
-                const endMonth = new Date(eventCtrl.event.end_time).getMonth();
-                return startMonth !== endMonth;
-            }
-        };
-
-        eventCtrl.getVideoUrl = function getVideoUrl(video_url) {
-            if(video_url) {
-                var params = _.split(video_url, '=');
-                var id = params[params.length - 1];
-                return 'https://www.youtube.com/embed/' + id;
-            }
-        };
-
-        function isInstitutionAdmin(event) {
-            return _.includes(_.map(eventCtrl.user.institutions_admin, Utils.getKeyFromUrl),
-                Utils.getKeyFromUrl(event.institution_key));
-        }
-
-        function adjustText(text, event){
-            if(eventCtrl.isLongText(event)){
-                text = text.substring(0, LIMIT_CHARACTERS) + "...";
-            }
-            return text;
-        }
-
         (function main() {
+            eventCtrl.institutionKey = $state.params.institutionKey;
             eventCtrl.loadMoreEvents();
         })();
-    });
-
-    app.directive("eventDetails", function() {
-        return {
-            restrict: 'E',
-            templateUrl: "app/event/event_details.html",
-            controllerAs: "eventDetailsCtrl",
-            controller: "EventController",
-            scope: {},
-            bindToController: {
-                event: '=',
-                isEventPage: '=',
-            }
-        };
     });
 
     app.controller('EventDialogController', function EventDialogController(MessageService, brCidadesEstados,

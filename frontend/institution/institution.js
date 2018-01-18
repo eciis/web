@@ -9,7 +9,9 @@ Institution.prototype.make = function make() {
     var institution =  {
         acronym: this.acronym,
         key: this.key,
-        photo_url: this.photo_url
+        photo_url: this.photo_url,
+        legal_nature: this.legal_nature,
+        actuation_area: this.actuation_area
     };
     return institution;
 };

@@ -492,6 +492,11 @@ a:active {
     color: #FFFFFF;
 }
 
+.green-button-text {
+    color: #009688;
+    background-color: #FFFFFFFF;
+}
+
 .hide-scrollbar::-webkit-scrollbar {
     display: none;
 }

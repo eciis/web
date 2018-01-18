@@ -11,6 +11,7 @@
                         type_of_invite: 'USER',
                         status: 'sent',
                         institution_key: '987654321',
+                        key: '123',
                         admin_key: '12345'});
 
     var otherInvite = new Invite({invitee: "other_user@example.com",
@@ -128,7 +129,9 @@
                 spyOn(inviteService, 'sendInvite').and.callFake(function() {
                     return {
                         then: function(callback) {
-                            return callback();
+                            return callback(
+                                {data: {key: '123'}}
+                            );
                         }
                     };
                 });
@@ -140,7 +143,8 @@
                     type_of_invite: 'USER',
                     institution_key: '987654321',
                     admin_key: '54321',
-                    sender_name: 'User'
+                    sender_name: 'User',
+                    key: '123'
                 };
                 var newInvite = new Invite(manageMemberCtrl.invite);
                 expect(manageMemberCtrl.sent_invitations.length).toBe(2);
@@ -190,6 +194,32 @@
                 manageMemberCtrl.cancelInvite();
 
                 expect(manageMemberCtrl.invite).toEqual({});
+            });
+        });
+
+        describe('resendInvite()', function () {
+            it('should resend the invite', function () {
+                spyOn(mdDialog, 'confirm').and.callThrough();
+                spyOn(mdDialog, 'show').and.callFake(function () {
+                    return {
+                        then: function (callback) {
+                            return callback();
+                        }
+                    };
+                });
+                spyOn(inviteService, 'resendInvite').and.callFake(function () {
+                    return {
+                        then: function (callback) {
+                            return callback();
+                        }
+                    };
+                });
+
+                manageMemberCtrl.resendInvite(invite.key, '$event');
+
+                expect(mdDialog.confirm).toHaveBeenCalled();
+                expect(mdDialog.show).toHaveBeenCalled();
+                expect(inviteService.resendInvite).toHaveBeenCalled();
             });
         });
     });

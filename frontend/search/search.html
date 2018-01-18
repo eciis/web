@@ -25,32 +25,32 @@
                     <h4 md-colors="{color:'grey-700'}">Filtrar pesquisa</h4>
 
                     <div layout="row" layout-xs="column" layout-align="space-between">
-                        <md-select ng-model="searCtrl.searchActuation" placeholder="Área de atuação" style="min-width: 30%">
-                            <md-option ng-click="searchCtrl.searchBy('*')" value="Pesquisar em todas as áreas">
+                        <md-select ng-model="searchCtrl.searchActuation" placeholder="Área de atuação" style="min-width: 30%">
+                            <md-option ng-click="searchCtrl.searchBy('*')">
                                 Pesquisar em todas as áreas
                             </md-option>
                             <md-option ng-repeat="actuation_area in searchCtrl.actuationAreas | orderBy: 'name'" 
-                                ng-value="actuation_area.name" ng-click="searchCtrl.searchBy(actuation_area.name)">
+                                ng-value="actuation_area.name" ng-click="searchCtrl.searchBy(actuation_area.value, 'actuation_area')">
                                 {{actuation_area.name}}
                             </md-option>
                         </md-select>
 
-                        <md-select ng-model="searCtrl.searchNature" placeholder="Natureza legal" style="min-width: 30%">
-                            <md-option ng-click="searchCtrl.searchBy('*')" value="Pesquisar em todas as áreas">
+                        <md-select ng-model="searchCtrl.searchNature" placeholder="Natureza legal" style="min-width: 30%">
+                            <md-option ng-click="searchCtrl.searchBy('*')">
                                 Pesquisar em todas as áreas
                             </md-option>
                             <md-option ng-repeat="nature in searchCtrl.legalNature | orderBy: 'name'" 
-                                ng-value="nature.name" ng-click="searchCtrl.searchBy(nature.value)">
+                                ng-value="nature.name" ng-click="searchCtrl.searchBy(nature.value, 'legal_nature')">
                                 {{nature.name}}
                             </md-option>
                         </md-select>
 
-                        <md-select ng-model="searCtrl.searchState" placeholder="Localização" style="min-width: 30%">
-                            <md-option ng-click="searchCtrl.searchBy('*')" value="Pesquisar em todas as áreas">
+                        <md-select ng-model="searchCtrl.searchState" placeholder="Localização" style="min-width: 30%">
+                            <md-option ng-click="searchCtrl.searchBy('*')">
                                 Pesquisar em todos os estados
                             </md-option>
                             <md-option ng-repeat="state in searchCtrl.brazilianFederalStates" 
-                                ng-value="state" ng-click="searchCtrl.searchBy(state.nome)">
+                                ng-value="state" ng-click="searchCtrl.searchBy(state.nome, 'federal_state')">
                                 {{state.nome}}
                             </md-option>
                         </md-select>

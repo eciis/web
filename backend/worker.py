@@ -199,8 +199,6 @@ class RemoveAdminPermissionsInInstitutionHierarchy(BaseHandler):
             self.removeAdminPermissions(institution.parent_institution.urlsafe(), permissions)
 
     def post(self):
-        #import pdb
-        #pdb.set_trace()
         institution_key = self.request.get('institution_key')
         institution = ndb.Key(urlsafe=institution_key).get()
         admin = institution.admin.get()

@@ -35,6 +35,7 @@ class InstitutionHandlerTest(TestBaseHandler):
         initModels(cls)
 
     def enqueue_task(self, handler_selector, params):
+        """Method of mock enqueue tasks."""
         if handler_selector == 'add-admin-permissions' or handler_selector == 'remove-admin-permissions':
             self.testapp.post('/api/queue/' + handler_selector, params=params)
 
@@ -190,7 +191,7 @@ class InstitutionHandlerTest(TestBaseHandler):
     @patch('handlers.institution_handler.enqueue_task')
     @patch('utils.verify_token', return_value={'email': 'user@example.com'})
     def test_remove_admin_permission_in_institution_hierarchy(self, verify_token, enqueue_task):
-        """Test add admin permissions in institution hierarchy."""
+        """Test remove admin permissions in institution hierarchy."""
         first_user = mocks.create_user()
         second_user = mocks.create_user()
         third_user = mocks.create_user()
@@ -214,6 +215,9 @@ class InstitutionHandlerTest(TestBaseHandler):
         second_inst.children_institutions.append(third_inst.key)
 
         second_user.add_permission('remove_inst', second_inst.key.urlsafe())
+        first_user.add_permission('publish_post', third_inst.key.urlsafe())
+        second_user.add_permission('publish_post', third_inst.key.urlsafe())
+        third_user.add_permission('publish_post', third_inst.key.urlsafe())
 
         first_inst.put()
         second_inst.put()
@@ -223,30 +227,12 @@ class InstitutionHandlerTest(TestBaseHandler):
         second_user.put()
         third_user.put()
 
-        invite = InviteInstitution()
-        invite.invitee = third_user.email[0]
-        invite.admin_key = second_user.key
-        invite.type_of_invite = 'institution'
-        invite.suggestion_institution_name = "New Inst"
-        invite.stub_institution_key = third_inst.key
-        invite.put()
-        
-        verify_token._mock_return_value = {'email': third_user.email[0]}
+        verify_token._mock_return_value = {'email': second_user.email[0]}
         enqueue_task.side_effect = self.enqueue_task
-
-        data = {'sender_name': 'user name updated'}
-        self.testapp.post_json("/api/institutions/%s/invites/%s"
-                          % (third_inst.key.urlsafe(), invite.key.urlsafe()), data)
 
         first_user = first_user.key.get()
         second_user = second_user.key.get()
         third_user = third_user.key.get()
-
-        self.assertTrue(third_inst.key.urlsafe() in first_user.permissions['publish_post'])
-        self.assertTrue(third_inst.key.urlsafe() in second_user.permissions['publish_post'])
-        self.assertTrue(third_inst.key.urlsafe() in third_user.permissions['publish_post'])
-
-        verify_token._mock_return_value = {'email': second_user.email[0]}
 
         self.testapp.delete("/api/institutions/%s?removeHierarchy=true" %
                             second_inst.key.urlsafe())

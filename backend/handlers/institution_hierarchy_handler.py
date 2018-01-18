@@ -44,14 +44,17 @@ class InstitutionHierarchyHandler(BaseHandler):
         Utils._assert(institution_link.state == 'inactive',
                       "The institution has been deleted", NotAuthorizedException)
 
-        institution.remove_link(institution_link, is_parent)
-        user.remove_permission('remove_link', institution_link.key.urlsafe())
         admin = institution_link.admin.get()
+        
         if is_parent == "true":
             admin.remove_permission("remove_inst", institution.key.urlsafe())
             enqueue_task('remove-admin-permissions', {'institution_key': institution.key.urlsafe()})
         else:
             enqueue_task('remove-admin-permissions', {'institution_key': institution_link.key.urlsafe()})
+
+        institution.remove_link(institution_link, is_parent)
+        user.remove_permission('remove_link', institution_link.key.urlsafe())
+        
         entity_type = 'INSTITUTION'
         send_message_notification(
             admin.key.urlsafe(),

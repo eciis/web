@@ -15,7 +15,7 @@
   <!-- Custom CSS -->
   <link rel="stylesheet" type="text/css" href="support/styles/custom.css"/>
 </head>
-<body ng-app="app" ng-cloak layout="column">
+<body ng-app="support" ng-cloak layout="column">
 
   <div flex layout="column" ui-view="main"></div>
 
@@ -54,7 +54,20 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-moment/1.0.1/angular-moment.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/ngMask/3.1.1/ngMask.js"></script>
 
+  <script src="support/config.js"></script>
 
+  <script src="support/auth/utils.js"></script>
+  
   <script src="support/support.js"></script>
+
+  <script src="support/auth/user.js"></script>
+
+  <script src="support/auth/messageService.js"></script>
+  <script src="support/auth/userService.js"></script>
+  <script src="support/auth/authService.js"></script>
+
+  <script src="support/main/mainController.js"></script>
+  <script src="support/auth/loginController.js"></script>
+  <script src="support/error/errorController.js"></script>
 </body>
 </html>

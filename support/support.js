@@ -5,19 +5,15 @@
         'ngMaterial',
         'ui.router',
         'ngAnimate',
-        'ngFileUpload',
         'firebase',
         'ngSanitize',
-        'ngImgCrop',
         'angularMoment',
-        'ngClipboard',
-        'ngMaterialDatePicker',
         'ngMessages',
         'ngMask'
     ]);
 
     support.config(function($mdIconProvider, $mdThemingProvider, $stateProvider, $urlMatcherFactoryProvider,
-        $urlRouterProvider, $locationProvider, $httpProvider, $sceDelegateProvider, ScrollBarsProvider) {
+        $urlRouterProvider, $locationProvider, $httpProvider, $sceDelegateProvider) {
 
         $mdIconProvider.fontSet('md', 'material-icons');
         $mdThemingProvider.theme('docs-dark');
@@ -33,8 +29,8 @@
                 abstract: true,
                 views: {
                     main: {
-                        templateUrl: "support/main/main.html",
-                        controller: "MainController as mainCtrl"
+                        // templateUrl: "support/main/main.html",
+                        // controller: "MainController as mainCtrl"
                     }
                 }
             })
@@ -42,8 +38,8 @@
                 abstract: true,
                 views: {
                     content: {
-                        templateUrl: "support/user/left_nav.html",
-                        controller: "HomeController as homeCtrl"
+                        // templateUrl: "support/user/left_nav.html",
+                        // controller: "HomeController as homeCtrl"
                     }
                 }
             })
@@ -51,8 +47,8 @@
                 url: "/",
                 views: {
                     user_content: {
-                        templateUrl: "support/home/home.html",
-                        controller: "HomeController as homeCtrl"
+                        // templateUrl: "support/home/home.html",
+                        // controller: "HomeController as homeCtrl"
                     }
                 }
             })
@@ -68,15 +64,15 @@
                     "redirect": undefined
                 }
             })
-            .state("user_inactive", {
-                url: "/userinactive",
-                views: {
-                    main: {
-                      templateUrl: "support/user/user_inactive.html",
-                      controller: "UserInactiveController as userInactiveCtrl"
-                    }
-                }
-            })
+            // .state("user_inactive", {
+            //     url: "/userinactive",
+            //     views: {
+            //         main: {
+            //           templateUrl: "support/user/user_inactive.html",
+            //           controller: "UserInactiveController as userInactiveCtrl"
+            //         }
+            //     }
+            // })
             .state("error", {
                 url: "/error",
                 views: {

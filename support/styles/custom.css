@@ -1,0 +1,20 @@
+.login-button {
+    padding-left: 5px;
+    margin: 3px 0 3px 0;
+    text-align: left;
+}
+
+.login-button md-icon {
+    min-height: 10px;
+    min-width: 10px;
+    width: 12px;
+    height: 12px;
+    font-size: 12px;
+}
+
+.login-button span {
+    font-size: 10px;
+    color: white;
+    margin-left: 10px;
+    font-weight: bold;
+}

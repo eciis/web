@@ -31,6 +31,7 @@
 
         newInviteCtrl.saveInstProfile = function configInstProfile() {
             var profile = {phone: newInviteCtrl.phone,
+                    branch_line: newInviteCtrl.branch_line,
                     email: newInviteCtrl.email,
                     office: newInviteCtrl.office,
                     institution_key: newInviteCtrl.institution.key,

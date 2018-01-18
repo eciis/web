@@ -37,6 +37,7 @@ class InstitutionProfile(ndb.Model):
     office = ndb.StringProperty(required=True)
     email = ndb.StringProperty()
     phone = ndb.StringProperty()
+    branch_line = ndb.StringProperty()
     institution_name = ndb.StringProperty()
     institution_photo_url = ndb.StringProperty()
     institution_key = ndb.StringProperty(required=True)
@@ -48,6 +49,7 @@ class InstitutionProfile(ndb.Model):
         profile['office'] = self.office
         profile['email'] = self.email
         profile['phone'] = self.phone
+        profile['branch_line'] = self.branch_line
         profile['institution'] = {
             'name': self.institution_name,
             'photo_url': self.institution_photo_url
@@ -79,6 +81,7 @@ class InstitutionProfile(ndb.Model):
         profile.office = data.get('office')
         profile.email = data.get('email')
         profile.phone = data.get('phone')
+        profile.branch_line = data.get('branch_line')
         profile.institution_name = data.get('institution_name')
         profile.institution_photo_url = data.get('institution_photo_url')
         profile.institution_key = data.get('institution_key')

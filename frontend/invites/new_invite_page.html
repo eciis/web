@@ -43,6 +43,12 @@
                   </md-input-container>
 
                   <md-input-container>
+                    <label>Ramal</label>
+                    <input ng-model="newInviteCtrl.branch_line" placeholder="999" 
+                      name="ramal">
+                  </md-input-container>
+
+                  <md-input-container>
                     <label>Telefone institucional</label>
                     <input ng-pattern="newInviteCtrl.phoneRegex" ng-model="newInviteCtrl.phone"
                       placeholder="99 9999-99999" mask="99 9999-99999" mask-validate='false'

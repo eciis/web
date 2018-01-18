@@ -268,6 +268,7 @@
         }
 
         function updateEvent() {
+            addLinks(dialogCtrl.event);
             var event = _.clone(dialogCtrl.dateChangeEvent);
             event.start_time = new Date(dialogCtrl.start_time);
             event.end_time = new Date(dialogCtrl.event.end_time);
@@ -290,6 +291,10 @@
             return patch.reduce((a, b) => {
                 if(b.path === "/end_time" || b.path === "/start_time") {
                     b.value = b.value.split(".")[0];
+                }
+                if((b.path.includes("video_url") || b.path.includes("useful_links"))
+                    && b.value.url === '') {
+                        return a;
                 }
                 a.push(b);
                 return a;
@@ -348,6 +353,7 @@
 
         dialogCtrl.getCitiesByState = function getCitiesByState() {
             dialogCtrl.cities = brCidadesEstados.buscarCidadesPorSigla(dialogCtrl.selectedFederalState.sigla);
+            dialogCtrl.event.address.federal_state = dialogCtrl.selectedFederalState.nome;
         };
 
         dialogCtrl.setAnotherCountry = function isAnotherCountry() {
@@ -396,7 +402,7 @@
         function clearSelectedState() {
             dialogCtrl.event.address.federal_state = "";
             dialogCtrl.selectedFederalState = "";
-            dialogCtrl.event.city = "";
+            dialogCtrl.event.address.city = "";
         }
 
         function loadFederalStates() {
@@ -420,8 +426,6 @@
         }
 
         function create() {
-            if (dialogCtrl.selectedFederalState)
-                dialogCtrl.event.address.federal_state = dialogCtrl.selectedFederalState.nome;
             var event = new Event(dialogCtrl.event, dialogCtrl.user.current_institution.key);
             addLinks(event);
             if (event.isValid()) {
@@ -439,8 +443,8 @@
         }
 
         function addLinks(event) {
-            let videoUrls = _.filter(dialogCtrl.videoUrls, videoUrl => videoUrl.url !== '');
-            let usefulLinks = _.filter(dialogCtrl.usefulLinks, usefulLink => usefulLink.url !== '');
+            let videoUrls = dialogCtrl.videoUrls.filter(videoUrl => videoUrl.url !== '');
+            let usefulLinks = dialogCtrl.usefulLinks.filter(usefulLink => usefulLink.url !== '');
             event.video_url = videoUrls;
             event.useful_links = usefulLinks;
         };
@@ -448,8 +452,16 @@
         function getCountries() {
             $http.get('app/institution/countries.json').then(function success(response) {
                 dialogCtrl.countries = response.data;
-                dialogCtrl.event.address.country = "Brasil";
             });
+        }
+
+        function loadSelectedState() {
+            if (dialogCtrl.event.address.federal_state) {
+                dialogCtrl.selectedFederalState = dialogCtrl.federalStates
+                    .filter(federalState => federalState.nome === dialogCtrl.event.address.federal_state)
+                    .reduce(federalState => federalState);
+                dialogCtrl.getCitiesByState();
+           }
         }
 
         (function main() {
@@ -460,13 +472,15 @@
                 dialogCtrl.dateChangeEvent.start_time = new Date(dialogCtrl.dateChangeEvent.start_time);
                 dialogCtrl.dateChangeEvent.end_time = new Date(dialogCtrl.dateChangeEvent.end_time);
                 dialogCtrl.start_time = new Date(dialogCtrl.dateChangeEvent.start_time);
-                dialogCtrl.end_time = new Date(dialogCtrl.dateChangeEvent.end_time);
                 dialogCtrl.event.start_time = new Date(dialogCtrl.dateChangeEvent.start_time);
                 dialogCtrl.event.end_time = new Date(dialogCtrl.dateChangeEvent.end_time);
                 dialogCtrl.dateChangeEvent = new Event(dialogCtrl.dateChangeEvent, dialogCtrl.user.current_institution.key);
                 dialogCtrl.observer = jsonpatch.observe(dialogCtrl.event);
+                loadSelectedState();
+                dialogCtrl.videoUrls = dialogCtrl.event.video_url.concat([angular.copy(emptyUrl)]);
+                dialogCtrl.usefulLinks = dialogCtrl.event.useful_links.concat([angular.copy(emptyUrl)]);
             } else {
-                dialogCtrl.event = {};
+                dialogCtrl.event = {address: {}};
                 dialogCtrl.videoUrls = [angular.copy(emptyUrl)];
                 dialogCtrl.usefulLinks = [angular.copy(emptyUrl)];
             }

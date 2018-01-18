@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Invite Handler Test."""
+"""Resend Invite Handler Test."""
 
 import json
 from search_module.search_institution import SearchInstitution
@@ -25,11 +25,6 @@ class ResendInviteHandlerTest(TestBaseHandler):
     def setUp(cls):
         """Provide the base for the tests."""
         super(ResendInviteHandlerTest, cls).setUp()
-
-        methods = set(cls.webapp2.WSGIApplication.allowed_methods)
-        methods.add('PATCH')
-        cls.webapp2.WSGIApplication.allowed_methods = frozenset(methods)
-
         app = cls.webapp2.WSGIApplication(
             [(ResendInviteHandlerTest.INVITE_URI, ResendInviteHandler),
              ], debug=True)

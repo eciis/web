@@ -21,6 +21,9 @@ class ResendInviteHandler(BaseHandler):
         host = self.request.host
         invite = ndb.Key(urlsafe=invite_key).get()
         
+        Utils._assert(invite.status != 'sent',
+                      "The invite has already been used", NotAuthorizedException)
+
         can_invite_members = user.has_permission(
             "invite_members", invite.institution_key.urlsafe())
 

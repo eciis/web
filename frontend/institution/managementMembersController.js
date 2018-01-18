@@ -57,8 +57,6 @@
             if (manageMemberCtrl.isUserInviteValid(invite)) {
                 var promise = InviteService.sendInvite(invite);
                 promise.then(function success(response) {
-                    console.log(response);
-                    console.log(":>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.");
                     invite.key = response.data.key;
                     manageMemberCtrl.sent_invitations.push(invite);
                     manageMemberCtrl.invite = {};
@@ -204,7 +202,7 @@
         };
 
         manageMemberCtrl.resendInvite = function resendInvite(inviteKey, event) {
-            var confirm = $mdDialog.confirm();
+            var confirm = $mdDialog.confirm({ onComplete: designOptions });
             confirm
                 .clickOutsideToClose(false)
                 .title('Reenviar convite')
@@ -225,6 +223,17 @@
             });
             return promise;
         };
+
+        function designOptions() {
+            var $dialog = angular.element(document.querySelector('md-dialog'));
+            var $actionsSection = $dialog.find('md-dialog-actions');
+            var $cancelButton = $actionsSection.children()[0];
+            var $confirmButton = $actionsSection.children()[1];
+            angular.element($confirmButton).removeClass('md-primary');
+            angular.element($cancelButton).removeClass('md-primary');
+            angular.element($confirmButton).addClass('green-button-text');
+            angular.element($cancelButton).addClass('green-button-text');
+        }
 
         function createRequestSelector(status, type_of_invite) {
             return function(request) {

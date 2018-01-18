@@ -111,7 +111,20 @@ class ReplyCommentHandlerTest(TestBaseHandler):
             )
         ]
         send_message_notification.assert_has_calls(calls)
-
+    
+    @patch('handlers.reply_comment_handler.send_message_notification')
+    @patch('utils.verify_token', return_value={'email': THIRD_USER_EMAIL})
+    def test_post_method_on_deleted_post(self, verify_token, send_message_notification):
+        """Test post a comment when the post is deleted."""
+        body = {
+            'replyData': {
+                "text": "reply of comment",
+                "institution_key": self.institution.key.urlsafe()
+            },
+            'currentInstitution': {
+                'name': 'currentInstitution'
+            }
+        }
         # Verify that the post is published
         self.assertEquals(self.user_post.state, "published")
 
@@ -135,6 +148,8 @@ class ReplyCommentHandlerTest(TestBaseHandler):
             "Error! This post has been deleted",
             "Expected exception message must be equal to " +
             "Error! This post has been deleted")
+        # assert no notification was sent
+        send_message_notification.assert_not_called()
 
     @patch('utils.verify_token', return_value={'email': USER_EMAIL})
     def test_delete(self, verify_token):

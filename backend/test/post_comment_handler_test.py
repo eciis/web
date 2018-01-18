@@ -60,7 +60,7 @@ class PostCommentHandlerTest(TestBaseHandler):
     @patch('handlers.post_comment_handler.enqueue_task')
     @patch('utils.verify_token', return_value={'email': OTHER_USER_EMAIL})
     def test_post(self, verify_token, enqueue_task):
-        """Another user comment in Post of user."""
+        """Other_user's comment on user's post."""
         # Verify size of list
         self.assertEquals(len(self.user_post.comments), 0,
                           "Expected size of comment's list should be zero")
@@ -117,7 +117,7 @@ class PostCommentHandlerTest(TestBaseHandler):
     @patch('handlers.post_comment_handler.enqueue_task')
     @patch('utils.verify_token', return_value={'email': USER_EMAIL})
     def test_post_ownerpost(self, verify_token, enqueue_task):
-        """Owner user comment in Post."""
+        """Owner user comments on its own Post."""
         # Verify size of list
         self.assertEquals(len(self.user_post.comments), 0,
                           "Expected size of comment's list should be zero")

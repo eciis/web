@@ -252,7 +252,7 @@ def initModels(cls):
     cls.certbio.name = 'CERTBIO'
     cls.certbio.acronym = 'CERTBIO'
     cls.certbio.cnpj = '18.104.068/0001-86'
-    cls.certbio.legal_nature = 'public'
+    cls.certbio.legal_nature = 'PUBLIC'
     cls.certbio.actuation_area = ''
     cls.certbio.description = 'Ensaio Químico - Determinação de Material Volátil por \
             Gravimetria e Ensaio Biológico - Ensaio de Citotoxicidade'

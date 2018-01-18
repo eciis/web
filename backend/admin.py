@@ -661,7 +661,7 @@ class ResetMSHandler(BaseHandler):
             'name': 'Ministério da Saúde',
             'acronym': 'MS',
             'cnpj': '',
-            'legal_nature': 'public',
+            'legal_nature': 'PUBLIC',
             'address': address_key,
             'actuation_area': 'Ministérios e outros Órgãos do Governo',
             'description': 'O Ministério da Saúde é o órgão do Poder Executivo Federal responsável pela organização  \

@@ -124,12 +124,14 @@
             });
         });
 
-        describe('sendUserInvite()', function() {
+        fdescribe('sendUserInvite()', function() {
             beforeEach(function() {
                 spyOn(inviteService, 'sendInvite').and.callFake(function() {
                     return {
                         then: function(callback) {
-                            return callback();
+                            return callback(
+                                {data: {key: '123'}}
+                            );
                         }
                     };
                 });
@@ -141,7 +143,8 @@
                     type_of_invite: 'USER',
                     institution_key: '987654321',
                     admin_key: '54321',
-                    sender_name: 'User'
+                    sender_name: 'User',
+                    key: '123'
                 };
                 var newInvite = new Invite(manageMemberCtrl.invite);
                 expect(manageMemberCtrl.sent_invitations.length).toBe(2);
@@ -195,7 +198,7 @@
         });
 
         describe('resendInvite()', function () {
-            it('', function () {
+            it('should resend the invite', function () {
                 spyOn(mdDialog, 'confirm').and.callThrough();
                 spyOn(mdDialog, 'show').and.callFake(function () {
                     return {

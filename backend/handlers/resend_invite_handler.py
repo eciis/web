@@ -27,11 +27,11 @@ class ResendInviteHandler(BaseHandler):
         can_invite_members = user.has_permission(
             "invite_members", invite.institution_key.urlsafe())
 
-        if(can_invite_members):
-            institution = invite.institution_key.get()
-            Utils._assert(institution.state == 'inactive',
-                          "The institution has been deleted", NotAuthorizedException)
+        Utils._assert(not can_invite_members,
+            "User is not allowed to send invites", NotAuthorizedException)
 
-            invite.sendInvite(user, host)
-        else:
-            raise NotAuthorizedException("User is not allowed to send invites")
+        institution = invite.institution_key.get()
+        Utils._assert(institution.state == 'inactive',
+                        "The institution has been deleted", NotAuthorizedException)
+
+        invite.sendInvite(user, host)

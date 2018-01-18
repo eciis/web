@@ -56,7 +56,10 @@
 
             if (manageMemberCtrl.isUserInviteValid(invite)) {
                 var promise = InviteService.sendInvite(invite);
-                promise.then(function success() {
+                promise.then(function success(response) {
+                    console.log(response);
+                    console.log(":>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.");
+                    invite.key = response.data.key;
                     manageMemberCtrl.sent_invitations.push(invite);
                     manageMemberCtrl.invite = {};
                     manageMemberCtrl.showInvites = true; 

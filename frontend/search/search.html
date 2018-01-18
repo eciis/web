@@ -26,7 +26,7 @@
 
                     <div layout="row" layout-xs="column" layout-align="space-between">
                         <md-select ng-model="searchCtrl.searchActuation" placeholder="Área de atuação" style="min-width: 30%">
-                            <md-option ng-click="searchCtrl.searchBy('*')">
+                            <md-option ng-click="searchCtrl.searchBy(null, 'actuation_area')">
                                 Pesquisar em todas as áreas
                             </md-option>
                             <md-option ng-repeat="actuation_area in searchCtrl.actuationAreas | orderBy: 'name'" 
@@ -36,7 +36,7 @@
                         </md-select>
 
                         <md-select ng-model="searchCtrl.searchNature" placeholder="Natureza legal" style="min-width: 30%">
-                            <md-option ng-click="searchCtrl.searchBy('*')">
+                            <md-option ng-click="searchCtrl.searchBy(null, 'legal_nature')">
                                 Pesquisar em todas as áreas
                             </md-option>
                             <md-option ng-repeat="nature in searchCtrl.legalNature | orderBy: 'name'" 
@@ -46,7 +46,7 @@
                         </md-select>
 
                         <md-select ng-model="searchCtrl.searchState" placeholder="Localização" style="min-width: 30%">
-                            <md-option ng-click="searchCtrl.searchBy('*')">
+                            <md-option ng-click="searchCtrl.searchBy(null, 'federal_state')">
                                 Pesquisar em todos os estados
                             </md-option>
                             <md-option ng-repeat="state in searchCtrl.brazilianFederalStates" 

@@ -19,6 +19,7 @@
         institutionCtrl.isLoadingPosts = true;
         institutionCtrl.instLegalNature = "";
         institutionCtrl.instActuationArea = "";
+        institutionCtrl.isLoadingData = true;
 
         var currentInstitutionKey = $state.params.institutionKey;
 
@@ -33,9 +34,11 @@
                 getPortfolioUrl();
                 getActuationArea();
                 getLegalNature();
+                institutionCtrl.isLoadingData = false;
                 
             }, function error(response) {
                 $state.go("app.user.home");
+                institutionCtrl.isLoadingData = true;
                 MessageService.showToast(response.data.msg);
             });
         }

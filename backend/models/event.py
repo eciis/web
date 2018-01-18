@@ -20,6 +20,9 @@ class Event(ndb.Model):
     # Userful link to the event
     useful_links = ndb.JsonProperty(indexed=False, repeated=True)
 
+    # Official site of event
+    official_site = ndb.StringProperty()
+
     # Programation of event
     programation = ndb.StringProperty(indexed=False)
 
@@ -94,6 +97,7 @@ class Event(ndb.Model):
         event.title = data.get('title')
         event.photo_url = data.get('photo_url')
         event.useful_links = data.get('useful_links', [])
+        event.official_site = data.get('official_site')
         event.author_key = author.key
         event.author_photo = author.photo_url
         event.author_name = author.name
@@ -126,6 +130,7 @@ class Event(ndb.Model):
             'programation': event.programation,
             'video_url': event.video_url,
             'useful_links': event.useful_links,
+            'official_site': event.official_site,
             'address': event.address.make() if event.address else {},
             'local': event.local,
             'start_time': start_time,

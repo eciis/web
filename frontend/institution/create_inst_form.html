@@ -166,10 +166,14 @@
                                   <input type="text" name="acronym" ng-model="configInstCtrl.newInstitution.acronym">
                                 </md-input-container>
                                 <md-input-container style="margin-top: -20px;" layout="row" class="md-block" flex-gt-sm flex-sm>
+                                    <!--The alphabetical order is being made manually 
+                                    in the json file actuation_area.json.
+                                    TODO: Do this automatically.
+                                        @author: Maiana Brito -->
                                     <label>Área de Atuação</label>
                                     <md-select name="actuationArea" ng-model="configInstCtrl.newInstitution.actuation_area" required>
-                                      <md-option ng-repeat="area in configInstCtrl.actuationArea | orderBy: 'name'"
-                                        ng-value="area.name">{{ area.name }}
+                                      <md-option ng-repeat="(key, value) in configInstCtrl.actuationArea"
+                                        ng-value="key">{{ value }}
                                       </md-option>
                                     </md-select>
                                     <div ng-messages="secondStep.actuationArea.$error">
@@ -177,16 +181,41 @@
                                     </div>
                                 </md-input-container>
                                 <md-input-container style="margin-top: 5px;" layout="row" class="md-block" flex-gt-sm flex-sm>
+                                    <!-- The alphabetical order is being made manually 
+                                    in the json file legal_nature.
+                                        TODO: Do this automatically.
+                                        @author: Maiana Brito -->
                                     <label>Natureza Jurídica</label>
                                     <md-select name="legalNatures" ng-model="configInstCtrl.newInstitution.legal_nature" required>
-                                        <md-option ng-repeat="nature in configInstCtrl.legalNatures | orderBy: 'name'"
-                                            ng-value="nature.value">{{ nature.name }}
+                                        <md-option ng-repeat="(key, value) in configInstCtrl.legalNatures"
+                                            ng-value="key">{{ value }}
                                         </md-option>
                                     </md-select>
                                     <div ng-messages="secondStep.legalNatures.$error">
                                         <div ng-message="required" >Este campo é obrigatório!</div>
                                     </div>
                                 </md-input-container>
+                                <div layout="row">
+                                    <md-input-container class="md-block" flex-gt-xs>
+                                        <label>Telefone</label>
+                                        <input type="text" name="phone"
+                                            ng-model="configInstCtrl.newInstitution.phone_number"
+                                        ng-pattern=configInstCtrl.phoneRegex
+                                        minlength="12" md-maxlength="13"
+                                        placeholder="99 9999-99999"
+                                        mask="99 9999-99999"
+                                        mask-validate='false'>
+                                        <div ng-messages="instForm.phone.$error">
+                                            <div ng-message="pattern" >O número de telefone deve ser válido!</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container class="md-block" flex-gt-xs flex="20">
+                                        <label>Ramal</label>
+                                        <input type="text" name="branch_line"
+                                            ng-model="configInstCtrl.newInstitution.branch_line"
+                                        placeholder="999">
+                                    </md-input-container>
+                                </div>
                             </form>
                        </div>
                     </md-card-content>

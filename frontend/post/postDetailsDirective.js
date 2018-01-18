@@ -226,7 +226,7 @@
 
         function likePost() {
             postDetailsCtrl.savingLike = true;
-            var promise = PostService.likePost(postDetailsCtrl.post, postDetailsCtrl.user.current_institution);
+            var promise = PostService.likePost(postDetailsCtrl.post);
             promise.then(function success() {
                 addPostKeyToUser(postDetailsCtrl.post.key);
                 postDetailsCtrl.post.number_of_likes += 1;
@@ -444,8 +444,9 @@
         };
     });
 
-    app.controller('CommentController', function CommentController(CommentService, MessageService, ProfileService, $state) {
+    app.controller('CommentController', function CommentController(CommentService, MessageService, ProfileService, $state, AuthService) {
         var commentCtrl = this;
+        commentCtrl.user = AuthService.getCurrentUser();
 
         // Model to store data of a new reply on a comment
         commentCtrl.newReply = null;

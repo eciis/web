@@ -122,11 +122,12 @@
                     }
                 }
             })
-            .state("app.institution.comming_soon", {
-                url: "/institution/:institutionKey/comming_soon",
+            .state("app.institution.events", {
+                url: "/institution/:institutionKey/institution_events",
                 views: {
                     institution_content: {
-                        templateUrl: "app/institution/comming_soon.html"
+                        templateUrl: "app/institution/institution_events.html",
+                        controller: "EventController as eventCtrl"
                     }
                 }
             })
@@ -254,6 +255,15 @@
                     inviteKey: undefined
                 }
             })
+            .state("accept_invite", {
+                url: "/accept_invite?id",
+                views: {
+                    main: {
+                        templateUrl: "app/invites/accept_invite.html",
+                        controller: "AcceptInviteController as acceptInviteCtrl"
+                    }
+                }
+            })
             .state("user_inactive", {
                 url: "/userinactive",
                 views: {
@@ -351,9 +361,14 @@
     });
 
     app.run(function authInterceptor(AuthService, $transitions, $injector, $state, $location) {
+        var ignored_routes = [
+            'signin',
+            'accept_invite'
+        ];
+
         $transitions.onStart({
             to: function(state) {
-                return state != 'signin' && !AuthService.isLoggedIn();
+                return !(_.includes(ignored_routes, state.name)) && !AuthService.isLoggedIn();
             }
         }, function(transition) {
             $state.go("signin", {

@@ -33,7 +33,7 @@
                                 <!-- Buttons -->
                                 <div layout="row">
                                     <md-button flex class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-500'}"
-                                    ng-if="!institutionCtrl.isMember" style="text-align: left;"
+                                    ng-if="institutionCtrl.showFollowButton()" style="text-align: left;"
                                     ng-click="institutionCtrl.isUserFollower ? institutionCtrl.unfollow() : institutionCtrl.follow()">
                                         <md-icon>rss_feed</md-icon>
                                         {{ institutionCtrl.isUserFollower ? 'Deixar de seguir' : 'Seguir' }}
@@ -62,35 +62,37 @@
                                         <md-divider style="margin-top: 10px"></md-divider>
                                     </div>
                                     <md-menu-item>
-                                        <md-button ng-class="institutionCtrl.inStateView('timeline')?'option-selected-inst':''"
+                                        <md-button ng-class="institutionCtrl.getSelectedItemClass('timeline')"
                                             ng-click="institutionCtrl.goToInstitution(institutionCtrl.current_institution.key)">
                                             <md-icon>home</md-icon>
                                             <b>Início</b>
                                         </md-button>
                                     </md-menu-item>
                                     <md-menu-item>
-                                        <md-button  ng-class="institutionCtrl.inStateView('registration_data')?'option-selected-inst':''"
+                                        <md-button  ng-class="institutionCtrl.getSelectedItemClass('registration_data')"
                                             ng-click="institutionCtrl.goToRegistrationData(institutionCtrl.current_institution.key)">
                                             <md-icon>assignment</md-icon>
                                              <b>Dados cadastrais</b>
                                         </md-button>
                                     </md-menu-item>
                                     <md-menu-item>
-                                        <md-button ng-class="institutionCtrl.inStateView('members')?'option-selected-inst':''"
+                                        <md-button ng-class="institutionCtrl.getSelectedItemClass('members')"
                                             ng-click="institutionCtrl.goToMembers(institutionCtrl.current_institution.key)">
                                             <md-icon>account_circle</md-icon>
                                             <b>Membros</b>
                                         </md-button>
                                     </md-menu-item>
                                     <md-menu-item >
-                                        <md-button ng-class="institutionCtrl.inStateView('followers')?'option-selected-inst':''"
+                                        <md-button ng-class="institutionCtrl.getSelectedItemClass('followers')"
                                             ng-click="institutionCtrl.goToFollowers(institutionCtrl.current_institution.key)">
                                             <md-icon>people</md-icon>
                                             <b>Seguidores</b>
                                         </md-button>
                                     </md-menu-item>
-                                    <md-menu-item>
-                                        <md-button ng-class="institutionCtrl.inStateView('settings')?'option-selected-inst':''"
+                                    <!--TODO: Show the item below when hierarchical invitations can be sent 
+                                    @author: Mayza Nunes 10/01/17-->
+                                    <md-menu-item ng-if="false">
+                                        <md-button ng-class="institutionCtrl.getSelectedItemClass('settings')"
                                             ng-click="institutionCtrl.goToCommingSoon(institutionCtrl.current_institution.key)">
                                             <md-icon>settings</md-icon>
                                             <b>Vinculos Institucionais</b>
@@ -105,7 +107,7 @@
                                     </md-menu-item>
                                     <md-menu-item>
                                         <md-button 
-                                            ng-click="institutionCtrl.goToCommingSoon(institutionCtrl.current_institution.key)">
+                                            ng-click="institutionCtrl.goToEvents(institutionCtrl.current_institution.key)">
                                             <md-icon>date_range</md-icon>
                                             <b>Eventos</b>
                                         </md-button>

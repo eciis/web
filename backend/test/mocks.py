@@ -1,11 +1,15 @@
 """Mocks' file."""
 
+import datetime
+import sys
+
 from models.user import User
 from models.institution import Institution
 from models.institution import Address
 from models.post import Post
-import datetime
-import sys
+from models.post import Comment
+from models.event import Event
+from models.factory_invites import InviteFactory
 
 
 def getHash(obj):
@@ -64,3 +68,46 @@ def create_post(author_key, institution_key):
     post.text = "text %s" % post_hash
     post.put()
     return post
+
+
+def create_comment(institution_key_urlsafe, author):
+    """Create a comment."""
+    data = {
+        'text': 'text-',
+        'institution_key': institution_key_urlsafe
+    }
+    comment = Comment.create(data, author)
+    comment.text += comment.id
+    return comment
+
+
+def create_event(author, institution):
+    """Create an event."""
+    data = {
+        'title': 'title ',
+        'local': 'location ',
+        'start_time': datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
+        'end_time': (datetime.datetime.now() + datetime.timedelta(days=1)).strftime("%Y-%m-%dT%H:%M:%S")
+    }
+    event = Event.create(data, author, institution)
+    event_hash = getHash(event)
+    event.title += event_hash
+    event.local += event_hash
+    event.author_photo = event_hash
+    event.institution_image = event_hash
+    event.put()
+    return event
+
+def create_invite(admin, institution_key, type_of_invite):
+    """Create an invite."""
+    data = {
+        'invitee': str(admin.email),
+        'admin_key': admin.key.urlsafe(),
+        'institution_key': institution_key.urlsafe()
+    }
+
+    invite = InviteFactory.create(data, type_of_invite)
+    invite_hash = getHash(invite)
+    invite.sender_name = invite_hash
+    invite.put()
+    return invite

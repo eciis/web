@@ -23,7 +23,7 @@ class Institution(ndb.Model):
     cnpj = ndb.StringProperty()
 
     legal_nature = ndb.StringProperty(
-        choices=set(["public", "private for-profit", "private non-profit"]))
+        choices=set(["PUBLIC", "PRIVATE_FOR-PROFIT", "PRIVATE_NON-PROFIT"]))
 
     address = ndb.StructuredProperty(Address)
 
@@ -44,6 +44,8 @@ class Institution(ndb.Model):
     website_url = ndb.StringProperty(indexed=False)
 
     phone_number = ndb.StringProperty()
+
+    branch_line = ndb.StringProperty()
 
     # Bollean that represents if the institution is Trusted or not.
     trusted = ndb.BooleanProperty(default=False)

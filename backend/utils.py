@@ -14,6 +14,7 @@ from oauth2client import client
 from oauth2client.crypt import AppIdentityError
 
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
+from custom_exceptions.queryException import QueryException
 
 
 class Utils():
@@ -127,10 +128,17 @@ def create_user(name, email):
     user.email = email
     user.name = name
     user.photo_url = "app/images/avatar.png"
+    health_ministry = get_health_ministry().get()
+    if health_ministry is not None:
+        user.follows.append(health_ministry.key)
     user.put()
-
+    
     return user
 
+def get_health_ministry():
+    """Get health ministry institution."""
+    query = Institution.query(Institution.name == "Ministério da Saúde", Institution.acronym == "MS")
+    return query
 
 def json_response(method):
     """Add content type header to the response."""
@@ -170,6 +178,32 @@ def offset_pagination(page, number_fetchs, query):
     query, next_cursor, more = query.fetch_page(
         number_fetchs,
         offset=offset)
+
+    return [query, more]
+
+
+def query_paginated(request_data, query):
+    """Paginate queries
+    
+    Keyword arguments:
+    request_data -- The query string params
+    query -- The query result of an specific entity
+    """
+    request_data = dict(request_data)
+
+    page = to_int(
+        request_data['page'] if 'page' in request_data.keys(
+        ) else Utils.DEFAULT_PAGINATION_OFFSET,
+        QueryException,
+        "Query param page must be an integer")
+    limit = to_int(
+        request_data['limit'] if 'limit' in request_data.keys(
+        ) else Utils.DEFAULT_PAGINATION_LIMIT,
+        QueryException,
+        "Query param limit must be an integer")
+
+    more = False
+    query, more = offset_pagination(page, limit, query)
 
     return [query, more]
 

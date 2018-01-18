@@ -21,12 +21,13 @@
 
         service.createComment = function createComment(postKey, text, institutionKey) {
             var deferred = $q.defer();
-            var currentInstitutionName = service.user.current_institution.name;
-            var commentData = {'text': text, 'institution_key': institutionKey};
             var body = {
-                commentData: commentData,
+                commentData: {
+                    text: text, 
+                    institution_key: institutionKey
+                },
                 currentInstitution: {
-                    name: currentInstitutionName
+                    name: service.user.current_institution.name
                 }
             };
             $http.post(POST_URI + postKey + '/comments', body).then(
@@ -53,8 +54,16 @@
 
         service.replyComment = function createComment(postKey, text, institutionKey, commentId) {
             var deferred = $q.defer();
-            var data = {'text': text, 'institution_key': institutionKey};
-            $http.post(POST_URI + postKey + '/comments/' + commentId + '/replies' , data).then(
+            var body = {
+                replyData: {
+                    text: text, 
+                    institution_key: institutionKey
+                },
+                currentInstitution: {
+                    name: service.user.current_institution.name
+                }
+            };
+            $http.post(POST_URI + postKey + '/comments/' + commentId + '/replies' , body).then(
                 function success(response) {
                     deferred.resolve(response);
                 }, function error(response) {

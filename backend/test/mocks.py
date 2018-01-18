@@ -1,12 +1,14 @@
 """Mocks' file."""
 
+import datetime
+import sys
+
 from models.user import User
 from models.institution import Institution
 from models.institution import Address
 from models.post import Post
 from models.post import Comment
-import datetime
-import sys
+from models.event import Event
 
 
 def getHash(obj):
@@ -68,6 +70,7 @@ def create_post(author_key, institution_key):
 
 
 def create_comment(institution_key_urlsafe, author):
+    """Create a comment."""
     data = {
         'text': 'text-',
         'institution_key': institution_key_urlsafe
@@ -75,3 +78,21 @@ def create_comment(institution_key_urlsafe, author):
     comment = Comment.create(data, author)
     comment.text += comment.id
     return comment
+
+
+def create_event(author, institution):
+    """Create an event."""
+    data = {
+        'title': 'title ',
+        'local': 'location ',
+        'start_time': datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
+        'end_time': (datetime.datetime.now() + datetime.timedelta(days=1)).strftime("%Y-%m-%dT%H:%M:%S")
+    }
+    event = Event.create(data, author, institution)
+    event_hash = getHash(event)
+    event.title += event_hash
+    event.local += event_hash
+    event.author_photo = event_hash
+    event.institution_image = event_hash
+    event.put()
+    return event

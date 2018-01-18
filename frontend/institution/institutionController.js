@@ -135,15 +135,22 @@
             institutionCtrl.showFullData = !institutionCtrl.showFullData;
         };
 
+        institutionCtrl.showFollowButton = function showFollowButton() {
+           return !institutionCtrl.isMember && institutionCtrl.current_institution.name !== "Ministério da Saúde";
+        };
+
         institutionCtrl.goToManageMembers = function goToManageMembers(){
+            institutionCtrl.stateView = "members";
             $state.go('app.manage_institution.members', {institutionKey: currentInstitutionKey});
         };
 
         institutionCtrl.goToManageInstitutions = function goToManageInstitutions(){
+            institutionCtrl.stateView = "invite_inst";
             $state.go('app.manage_institution.invite_inst', {institutionKey: currentInstitutionKey});
         };
 
         institutionCtrl.goToEditInfo = function goToEditInfo(){
+            institutionCtrl.stateView = "edit_info";
             $state.go('app.manage_institution.edit_info', {institutionKey: currentInstitutionKey});
         };
 
@@ -167,9 +174,9 @@
             $state.go('app.institution.registration_data', {institutionKey: institutionKey});
         };
 
-        institutionCtrl.goToCommingSoon = function goToCommingSoon(institutionKey) {
-            institutionCtrl.stateView = "";
-            $state.go('app.institution.comming_soon', {institutionKey: institutionKey});
+        institutionCtrl.goToEvents = function goToEvents(institutionKey) {
+            institutionCtrl.stateView = "events";
+            $state.go('app.institution.events', {institutionKey: institutionKey});
         };
 
         institutionCtrl.hasChildrenActive = function hasChildrenActive(institution) {
@@ -256,6 +263,7 @@
         }
 
         institutionCtrl.removeInstitution = function removeInstitution(ev) {
+            institutionCtrl.stateView = "remove_inst";
             $mdDialog.show({
                 templateUrl: 'app/institution/removeInstDialog.html',
                 targetEvent: ev,
@@ -268,12 +276,12 @@
             });
         };
 
-        function getStateView(){
-            return $state.current.name.split(".")[2];
+        function loadStateView(){
+            institutionCtrl.stateView = $state.current.name.split(".")[2];
         }
 
-        institutionCtrl.inStateView = function inStateView(state){
-            return state === institutionCtrl.stateView;
+        institutionCtrl.getSelectedItemClass = function getSelectedItemClass(state){
+            return (state === institutionCtrl.stateView) ? "option-selected-left-bar":"";
         };
 
         function RemoveInstController($mdDialog, institution, InstitutionService, $state) {
@@ -283,6 +291,7 @@
 
             ctrl.closeDialog = function() {
                 $mdDialog.cancel();
+                loadStateView();
             };
 
             ctrl.removeInst = function removeInst() {
@@ -306,7 +315,7 @@
         }
 
         (function main(){
-            institutionCtrl.stateView = getStateView();
+            loadStateView();
         })();
     });
 
@@ -334,5 +343,4 @@
         getFollowers();
 
     });
-
 })();

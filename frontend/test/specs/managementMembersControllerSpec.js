@@ -124,7 +124,7 @@
             });
         });
 
-        fdescribe('sendUserInvite()', function() {
+        describe('sendUserInvite()', function() {
             beforeEach(function() {
                 spyOn(inviteService, 'sendInvite').and.callFake(function() {
                     return {

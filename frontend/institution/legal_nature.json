@@ -1,5 +1,5 @@
 {
-    "private for-profit":"Privada com fins lucrativos",
-    "private non-profit":"Privada sem fins lucrativos",
-    "public":"Pública" 
+    "PRIVATE_FOR-PROFIT":"Privada com fins lucrativos",
+    "PRIVATE_NON-PROFIT":"Privada sem fins lucrativos",
+    "PUBLIC":"Pública" 
 }

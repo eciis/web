@@ -166,9 +166,10 @@
                                   <input type="text" name="acronym" ng-model="configInstCtrl.newInstitution.acronym">
                                 </md-input-container>
                                 <md-input-container style="margin-top: -20px;" layout="row" class="md-block" flex-gt-sm flex-sm>
-                                    <!-- The alphabetical order is being made manually 
+                                    <!--The alphabetical order is being made manually 
                                     in the json file actuation_area.json.
-                                        @TODO: MaianaBrito -->
+                                    TODO: Do this automatically.
+                                        @author: Maiana Brito -->
                                     <label>Área de Atuação</label>
                                     <md-select name="actuationArea" ng-model="configInstCtrl.newInstitution.actuation_area" required>
                                       <md-option ng-repeat="(key, value) in configInstCtrl.actuationArea"
@@ -182,7 +183,8 @@
                                 <md-input-container style="margin-top: 5px;" layout="row" class="md-block" flex-gt-sm flex-sm>
                                     <!-- The alphabetical order is being made manually 
                                     in the json file legal_nature.
-                                        @TODO: MaianaBrito -->
+                                        TODO: Do this automatically.
+                                        @author: Maiana Brito -->
                                     <label>Natureza Jurídica</label>
                                     <md-select name="legalNatures" ng-model="configInstCtrl.newInstitution.legal_nature" required>
                                         <md-option ng-repeat="(key, value) in configInstCtrl.legalNatures"

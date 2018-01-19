@@ -32,10 +32,10 @@
             </div>
         </div>
       <md-menu-content md-colors="{background: 'teal-900'}">
-        <md-menu-item>
-          <md-button md-colors="{color: 'teal-100'}">
-            <md-icon md-colors="{color: 'teal-100'}">bug_report</md-icon>
-            Reportar um Problema
+        <md-menu-item ng-repeat="option in mainCtrl.sideNavOptions">
+          <md-button md-colors="{color: 'teal-100'}" ng-click="{{option.action}}">
+            <md-icon md-colors="{color: 'teal-100'}">{{option.icon}}</md-icon>
+            {{option.label}}
           </md-button>
         </md-menu-item>
         <md-menu-divider></md-menu-divider>

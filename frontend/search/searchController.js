@@ -19,7 +19,7 @@
 
         searchCtrl.makeSearch = function makeSearch(value, type, attribute) {
             searchCtrl.loading = false;
-            var promise = InstitutionService.searchInstitutions(value ? value : searchCtrl.search_keyword, "active", type);
+            var promise = InstitutionService.searchInstitutions(value ? value : (searchCtrl.search_keyword || ""), "active", type);
             promise.then(function success(response) {
                 searchCtrl.institutions = response.data;
                 searchCtrl.initialInstitutions = _.clone(searchCtrl.institutions);
@@ -34,6 +34,7 @@
         searchCtrl.search = function search() {
             if (searchCtrl.search_keyword) {
                 searchCtrl.makeSearch(searchCtrl.search_keyword, 'institution');
+                searchCtrl.previous_keyword = searchCtrl.search_keyword;
             }
         };
 
@@ -50,7 +51,7 @@
         };
 
         searchCtrl.searchBy = function searchBy(search, attribute) {
-            if((_.isEmpty(searchCtrl.initialInstitutions) || searchCtrl.search_keyword != searchCtrl.previous_keyword || !searchCtrl.search_keyword) && (search || searchCtrl.search_keyword))  {
+            if (searchInServer())  {
                 searchCtrl.makeSearch(search, 'institution', attribute);
                 searchCtrl.previous_keyword = searchCtrl.search_keyword;
             } else {
@@ -59,21 +60,28 @@
         };
 
         function getFilteredInstitutions(search, attribute) {
-            console.log(search);
-            console.log(attribute);
             searchCtrl.institutions = _.filter(searchCtrl.initialInstitutions, function (institution) {
-                var sameNature = legalNatures[institution.legal_nature] == searchCtrl.searchNature || !searchCtrl.searchNature || searchCtrl.searchNature == "Pesquisar em todas as áreas";
-                var sameActuationArea = actuationAreas[institution.actuation_area] == searchCtrl.searchActuation || !searchCtrl.searchActuation || searchCtrl.searchActuation == "Pesquisar em todas as áreas";
-                var sameState = !searchCtrl.searchState || institution.federal_state == searchCtrl.searchState.nome || searchCtrl.searchState == "Pesquisar em todos os estados";
+                var natureDefaultValue = searchCtrl.searchNature === "Pesquisar em todas as áreas";
+                var actuationDefaultValue = searchCtrl.searchActuation === "Pesquisar em todas as áreas";
+                var stateDefaultValue = searchCtrl.searchState === "Pesquisar em todos os estados";
+
+                var sameNature = legalNatures[institution.legal_nature] === searchCtrl.searchNature || !searchCtrl.searchNature || natureDefaultValue;
+                var sameActuationArea = actuationAreas[institution.actuation_area] === searchCtrl.searchActuation || !searchCtrl.searchActuation || actuationDefaultValue;
+                var sameState = !searchCtrl.searchState || institution.federal_state === searchCtrl.searchState.nome || stateDefaultValue;
+
                 var returnValue = { 
-                    "actuation_area": (institution.actuation_area == search && sameNature && sameState) || !search,
-                    "legal_nature": (institution.legal_nature == search && sameActuationArea && sameState) || !search,
-                    "federal_state": (institution.federal_state == search && sameActuationArea && sameNature) || !search,
-                    "": true,
-                    undefined: true
+                    "actuation_area": ((institution.actuation_area === search || !search) && sameNature && sameState),
+                    "legal_nature": ((institution.legal_nature === search || !search) && sameActuationArea && sameState),
+                    "federal_state": ((institution.federal_state === search || !search) && sameActuationArea && sameNature),
                 }
-                return returnValue[attribute];
+
+                return attribute ? returnValue[attribute] : true;
             });
+        }
+
+        function searchInServer () {
+            var keywordHasChanged = searchCtrl.search_keyword != searchCtrl.previous_keyword;
+            return _.isEmpty(searchCtrl.initialInstitutions) || keywordHasChanged || !searchCtrl.search_keyword;
         }
 
         searchCtrl.isLoading = function isLoading() {
@@ -106,14 +114,14 @@
 
         function objectToObjectArray(object) {
             var keys = _.keys(object);
-            var array = [];
+            var arrayToReturn = [];
             _.forEach(keys, function(key) {
                 var current_obj = {}
                 current_obj.name = object[key];
                 current_obj.value = key;
-                array.push(current_obj);
+                arrayToReturn.push(current_obj);
             });
-            return array;
+            return arrayToReturn;
         }
 
         (function main() {

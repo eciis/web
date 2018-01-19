@@ -109,7 +109,7 @@
             it('Should call makeSearch()', function() {
                 spyOn(searchCtrl, 'makeSearch');
                 searchCtrl.searchBy('Universidades');
-                expect(searchCtrl.makeSearch).toHaveBeenCalledWith('Universidades', 'institution');
+                expect(searchCtrl.makeSearch).toHaveBeenCalled();
             });
         });
 

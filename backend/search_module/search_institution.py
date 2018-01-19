@@ -99,7 +99,7 @@ class SearchInstitution(SearchDocument):
         state_string = self.create_state_string(state)
         fields_values_string = self.create_field_values_string(value)
 
-        query_string = "(%s) AND %s" %(fields_values_string, state_string)
+        query_string = "(%s) AND %s" % (fields_values_string, state_string) if fields_values_string else state_string
         return query_string
 
     def create_state_string(self, state):
@@ -122,10 +122,11 @@ class SearchInstitution(SearchDocument):
         fields_values = []
 
         for field in fields:
-            field_value = '%s: "%s"' % (field, value)
-            fields_values.append(field_value)
+            if value:
+                field_value = '%s: "%s"' % (field, value)
+                fields_values.append(field_value)
 
-        fields_values_string = " OR ".join(fields_values)
+        fields_values_string = " OR ".join(fields_values) if fields_values else ""
 
         return fields_values_string
     

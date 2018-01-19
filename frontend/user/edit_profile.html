@@ -1,4 +1,4 @@
-<md-dialog flex flex-gt-md="25" flex-md="40" flex-gt-sm="50" flex-sm="50" flex-xs="100">
+<md-dialog flex-gt-md="25" flex-md="40" flex-gt-sm="50" flex-sm="50" flex-xs="100">
     <md-dialog-content layout="column" class="hide-scrollbar" ng-if="true" style="padding: 0; margin-bottom: 3%">
         <div layout-align="center center">
             <div class="card hovercard" md-colors="{background: 'default-teal-600'}">
@@ -20,11 +20,6 @@
         </div>
         <div layout="column" md-theme="input" class="input" style="margin-left: 40px; margin-right: 40px;">
             <md-input-container>
-                <label>Telefone institucional</label>
-                <input ng-model="editProfileCtrl.profile.phone" placeholder="99 9999-99999" 
-                    mask="99 9999-99999" mask-validate='false' ng-pattern="editProfileCtrl.phoneRegex">
-            </md-input-container>
-            <md-input-container>
                 <label>Email institucional</label>
                 <input ng-model="editProfileCtrl.profile.email" type="email">
             </md-input-container>
@@ -32,6 +27,17 @@
                 <label>Cargo</label>
                 <input ng-model="editProfileCtrl.profile.office" required>
             </md-input-container>
+            <div layout-gt-sm="row">
+                <md-input-container flex-gt-sm="70">
+                    <label>Telefone institucional</label>
+                    <input ng-model="editProfileCtrl.profile.phone" placeholder="99 9999-99999" 
+                        mask="99 9999-99999" mask-validate='false' ng-pattern="editProfileCtrl.phoneRegex">
+                </md-input-container>
+                <md-input-container flex-gt-sm="30">
+                    <label>Ramal</label>
+                    <input ng-model="editProfileCtrl.profile.branch_line" placeholder="999">
+                </md-input-container>
+            </div>
             <md-dialog-actions layout="row" layout-align="end center">
                 <md-button class="md-raised" md-colors="{background: 'default-teal-600'}"
                 ng-click="editProfileCtrl.closeDialog()">

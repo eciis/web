@@ -25,14 +25,25 @@ class InstitutionHierarchyHandler(BaseHandler):
     @login_required
     @ndb.transactional(xg=True)
     def delete(self, user, institution_key, institution_link):
-        """Handle delete link between institutions."""
+        """
+        Handle delete link between institutions.
+
+        This handler remove the link between two institutions. 
+        If the parameter isParent is true, it means that the removal 
+        request was made from a daughter institution, otherwise 
+        the request was made by a parent institution.
+        """
 
         user.check_permission('remove_link',
                               "User is not allowed to remove link between institutions",
                               institution_link)
 
         is_parent = self.request.get('isParent')
+        # If isParent If isParent is true, this attribute 
+        # holds the reference of the children intitution.
         institution = ndb.Key(urlsafe=institution_key).get()
+        # If isParent If isParent is true, this attribute 
+        # holds the reference of the parent intitution.
         institution_link = ndb.Key(urlsafe=institution_link).get()
 
         Utils._assert(not type(institution) is Institution,

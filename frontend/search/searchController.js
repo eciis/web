@@ -52,11 +52,9 @@
 
         searchCtrl.searchBy = function searchBy(search, attribute) {
             if (searchInServer())  {
-                console.log("oi");
                 searchCtrl.makeSearch(search, 'institution', attribute);
                 searchCtrl.previous_keyword = searchCtrl.search_keyword;
             } else {
-                console.log("oi2");
                 getFilteredInstitutions(search, attribute);
             }
         };
@@ -66,7 +64,7 @@
                 var natureDefaultValue = searchCtrl.searchNature === "Pesquisar em todas as áreas";
                 var actuationDefaultValue = searchCtrl.searchActuation === "Pesquisar em todas as áreas";
                 var stateDefaultValue = searchCtrl.searchState === "Pesquisar em todos os estados";
-                console.log(legalNatures[institution.legal_nature]);
+
                 var sameNature = legalNatures[institution.legal_nature] === searchCtrl.searchNature || !searchCtrl.searchNature || natureDefaultValue;
                 var sameActuationArea = actuationAreas[institution.actuation_area] === searchCtrl.searchActuation || !searchCtrl.searchActuation || actuationDefaultValue;
                 var sameState = !searchCtrl.searchState || institution.federal_state === searchCtrl.searchState.nome || stateDefaultValue;

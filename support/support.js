@@ -34,19 +34,10 @@
                     }
                 }
             })
-            .state("support.user", {
-                abstract: true,
-                views: {
-                    content: {
-                        // templateUrl: "app/user/left_nav.html",
-                        // controller: "HomeController as homeCtrl"
-                    }
-                }
-            })
-            .state("support.user.home", {
+            .state("support.home", {
                 url: "/",
                 views: {
-                    user_content: {
+                    content: {
                         // templateUrl: "app/home/home.html",
                         // controller: "HomeController as homeCtrl"
                     }
@@ -64,15 +55,6 @@
                     "redirect": undefined
                 }
             })
-            // .state("user_inactive", {
-            //     url: "/userinactive",
-            //     views: {
-            //         main: {
-            //           templateUrl: "app/user/user_inactive.html",
-            //           controller: "UserInactiveController as userInactiveCtrl"
-            //         }
-            //     }
-            // })
             .state("error", {
                 url: "/error",
                 views: {
@@ -170,7 +152,7 @@
      * @param {service} AuthService - Service of user authentication
      * @param {service} $transitions - Service of transitions states
      */
-    support.run(function userInactiveListener(AuthService, $transitions) {
+    support.run(function userInactiveListener(AuthService, MessageService, $transitions) {
         var ignored_routes = [
             'error',
             'signin',
@@ -185,7 +167,8 @@
                 return !(_.includes(ignored_routes, state.name)) && isInactive;
             }
         }, function(transition) {
-            transition.router.stateService.transitionTo('user_inactive');
+            AuthService.logout();
+            MessageService.showToast("Você ainda não tem uma conta ativa na plataforma.");
         });
     });
 })();

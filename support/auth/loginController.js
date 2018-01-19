@@ -65,13 +65,13 @@
             if (path) {
                 $location.path(path);
             } else {
-                $state.go("support.user.home");
+                $state.go("support.home");
             }
         }
 
         (function main() {
             if (AuthService.isLoggedIn()) {
-                $state.go("support.user.home");
+                $state.go("support.home");
             }
         })();
     });

@@ -39,6 +39,8 @@
         var CHILD_ADDED = "child_added";
 
         service.formatMessage = function formatMessage(notification) {
+            if(notification.status == 'NEW') console.log(notification);
+
             var message = TRANSLATE_MESSAGE[notification.entity_type];
             var name = notification.from.name || notification.from
             return `${name} ${message}`;

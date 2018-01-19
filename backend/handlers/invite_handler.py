@@ -52,11 +52,14 @@ class InviteHandler(BaseHandler):
     @login_required
     def delete(self, user, key):
         """Change invite status from 'sent' to 'rejected'."""
+        current_institution = self.request.get('currentInstitution')
+        current_institution = json.loads(current_institution)
         invite_key = ndb.Key(urlsafe=key)
         invite = invite_key.get()
         invite.change_status('rejected')
         invite.put()
-        invite.send_response_notification(user, invite.admin_key.urlsafe(), 'REJECT')
+        response_type = "REJECT_INVITE_USER"
+        invite.send_response_notification(current_institution, response_type, user)
 
         if invite.stub_institution_key:
             stub_institution = invite.stub_institution_key.get()
@@ -67,8 +70,9 @@ class InviteHandler(BaseHandler):
     @ndb.transactional(xg=True)
     def patch(self, user, invite_key):
         """Handler PATCH Requests."""
+        current_institution = self.request.get('currentInstitution')
+        current_institution = json.loads(current_institution)
         data = self.request.body
-
         invite = ndb.Key(urlsafe=invite_key).get()
         invite.change_status('accepted')
 
@@ -84,8 +88,9 @@ class InviteHandler(BaseHandler):
  
         JsonPatch.load(data, user, define_entity)
 
-        invite.send_response_notification(user, invite.admin_key.urlsafe(), 'ACCEPT')
-        
+        response_type = "ACCEPT_INVITE_USER"
+        invite.send_response_notification(current_institution, response_type, user)
+
         Utils._assert(
             not InstitutionProfile.is_valid(user.institution_profiles),
             "The profile is invalid.", FieldException

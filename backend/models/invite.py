@@ -3,9 +3,9 @@
 from google.appengine.ext import ndb
 from google.appengine.ext.ndb.polymodel import PolyModel
 from service_messages import send_message_notification
-import json
 from send_email_hierarchy.email_sender import EmailSender
 from util.strings_pt_br import get_string
+from models.user import User       
 
 
 class Invite(PolyModel):
@@ -65,10 +65,10 @@ class Invite(PolyModel):
 
         return invite
 
-    def sendInvite(self, user, host):
+    def sendInvite(self, user, host, current_institution=None):
         """Send invite."""
         self.send_email(host)
-        self.send_notification(user)
+        self.send_notification(current_institution)
 
     def send_email(self, host, receiver_email, body):
         """Method of send email of invite user."""
@@ -80,22 +80,24 @@ class Invite(PolyModel):
         })
         email_sender.send_email()
 
-    def send_notification(self, user, receiver_key, entity_type=None):
-        """Method of send notification of invite user.
-
-        Keyword arguments:
-        user -- user email that did the action.
-        entity_type -- type of notification.
-        Case not receive use invite type.
-        """
+    def send_notification(self, current_institution, sender=None, receiver_key=None, entity_type=None):
+        """Method of send notification of invite user."""
+        sender_key = sender.key if sender else self.sender_key
+        receiver_key = receiver_key if receiver_key else User.get_active_user(self.invitee).key
         entity_type = entity_type or 'INVITE'
-
         send_message_notification(
-            receiver_key,
-            user.key.urlsafe(),
+            receiver_key.urlsafe(),
+            sender_key.urlsafe(),
             entity_type,
-            self.key.urlsafe()
+            self.key.urlsafe(),
+            current_institution
         )
+
+    def send_response_notification(self, current_institution, response_type, sender=None):
+        """Send notification to sender of invite when invite is accepted or rejected."""
+        receiver_key = self.sender_key
+        sender = sender if sender else User.get_active_user(self.invitee)
+        self.send_notification(current_institution, sender, receiver_key, response_type)
 
     def make(self):
         """Create personalized json of invite."""

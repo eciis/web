@@ -10,7 +10,7 @@
         var currentPortfoliourl = null;
         var observer;
 
-        configInstCtrl.loading = false;
+        configInstCtrl.loading = true;
         configInstCtrl.user = AuthService.getCurrentUser();
         configInstCtrl.cnpjRegex = "[0-9]{2}[\.][0-9]{3}[\.][0-9]{3}[\/][0-9]{4}[-][0-9]{2}";
         configInstCtrl.phoneRegex = "[0-9]{2}[\\s][0-9]{4,5}[-][0-9]{4,5}";
@@ -356,8 +356,10 @@
                 loadAddress(); 
                 setDefaultPhotoUrl();
                 observer = jsonpatch.observe(configInstCtrl.newInstitution);
+                configInstCtrl.loading = false;
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
+                configInstCtrl.loading = true;
             });
         }
 

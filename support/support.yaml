@@ -6,7 +6,7 @@ service: support
 default_expiration: "1s"
 
 handlers:
-- url: /support/(.*)
+- url: /app/(.*)
   static_files: \1
   upload: (.*)
 

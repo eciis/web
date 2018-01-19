@@ -29,7 +29,7 @@
                 abstract: true,
                 views: {
                     main: {
-                        templateUrl: "support/main/main.html",
+                        templateUrl: "app/main/main.html",
                         controller: "MainController as mainCtrl"
                     }
                 }
@@ -38,7 +38,7 @@
                 abstract: true,
                 views: {
                     content: {
-                        // templateUrl: "support/user/left_nav.html",
+                        // templateUrl: "app/user/left_nav.html",
                         // controller: "HomeController as homeCtrl"
                     }
                 }
@@ -47,7 +47,7 @@
                 url: "/",
                 views: {
                     user_content: {
-                        // templateUrl: "support/home/home.html",
+                        // templateUrl: "app/home/home.html",
                         // controller: "HomeController as homeCtrl"
                     }
                 }
@@ -56,7 +56,7 @@
                 url: "/signin",
                 views: {
                     main: {
-                        templateUrl: "support/auth/login.html",
+                        templateUrl: "app/auth/login.html",
                         controller: "LoginController as loginCtrl"
                     }
                 },
@@ -68,7 +68,7 @@
             //     url: "/userinactive",
             //     views: {
             //         main: {
-            //           templateUrl: "support/user/user_inactive.html",
+            //           templateUrl: "app/user/user_inactive.html",
             //           controller: "UserInactiveController as userInactiveCtrl"
             //         }
             //     }
@@ -77,7 +77,7 @@
                 url: "/error",
                 views: {
                     main: {
-                        templateUrl: "support/error/error.html",
+                        templateUrl: "app/error/error.html",
                         controller: "ErrorController as errorCtrl"
                     }
                 },

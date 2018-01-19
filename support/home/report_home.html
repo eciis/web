@@ -1,0 +1,16 @@
+<div layout="column" md-colors="{background: 'blue-grey-100'}">
+    <div md-whiteframe="2" layout-padding md-colors="{background: 'grey-100'}" layout="column">
+        <span class="md-headline">Problemas Informados</span>
+    </div>
+    <span flex></span>
+
+    <md-card>
+        <md-card-content>
+            <md-list-item ng-repeat="report in controller.reports" class="noright" ng-click="null">
+                <img alt="Foto" ng-src="/app/images/avatar.png" class="md-avatar" />
+                <p>{{ report.title }}</p>
+                <md-icon>done</md-icon>
+            </md-list-item>
+        </md-card-content>
+    </md-card>
+</div>

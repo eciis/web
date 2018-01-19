@@ -4,7 +4,7 @@
     var support = angular.module('support');
 
     support.controller("MainController", function MainController($mdSidenav, $mdDialog, $mdToast, $state,
-            AuthService, $rootScope, $q, $mdMenu) {
+            AuthService, $rootScope, $q, $mdMenu, $timeout, $scope) {
         var mainCtrl = this;
 
         mainCtrl.user = AuthService.getCurrentUser();
@@ -71,5 +71,31 @@
             AuthService.reload();
             $state.reload();
         };
+
+        function debounce(func, wait, context) {
+            var timer;
+        
+            return function debounced() {
+                var context = $scope,
+                    args = Array.prototype.slice.call(arguments);
+                $timeout.cancel(timer);
+                timer = $timeout(function() {
+                timer = undefined;
+                func.apply(context, args);
+                }, wait || 10);
+            };
+        }
+
+        function buildDelayedToggler(navID) {
+            return debounce(function() {
+                $mdSidenav(navID).toggle();
+            }, 200);
+        }
+
+        $scope.close = function () {
+            $mdSidenav('left').close();
+        };
+
+        $scope.toggleLeft = buildDelayedToggler('left');
     });
 })();

@@ -1,47 +1,79 @@
-<!-- TOOLBAR -->
-<md-toolbar md-colors="{background: 'teal-900'}" layout-wrap layout-align="center" layout="row">
-  <div class="md-toolbar-tools" flex-lg="90" flex-gt-lg="70" layout="row" layout-align="center center">
-    <md-button class="md-icon-button hide-gt-sm" aria-label="Meu menu" ng-click="mainCtrl.toggle()" hide-gt-sm>
-      <md-icon>menu</md-icon>
-    </md-button>
+<section layout="row" flex>
+  <md-sidenav
+      md-colors="{background: 'teal-900'}"
+      class="md-sidenav-left"
+      md-component-id="left"
+      md-is-locked-open="$mdMedia('gt-md')"
+      md-whiteframe="3">
+    <md-toolbar md-colors="{background: 'teal-700'}" layout-align="start center" layout="row">
+        <md-button ng-click="close()" class="md-icon-button" hide-gt-md>
+          <md-icon>arrow_back</md-icon>
+        </md-button>
+        <md-button disabled="true" ui-sref="support.user.home" hide show-gt-md>
+          <img src="support/images/logo.png" aria-label="Plataforma Virtual CIS" style="height: 30px;">
+        </md-button>
+        <span class="md-subhead" hide-gt-md>Plataforma CIS | Suporte</span>
+    </md-toolbar>
+    <md-content md-colors="{background: 'teal-900'}">
+        <div class="row">
+            <div class="card hovercard" 
+                md-colors="{background: 'teal-800'}">
+              <div class="cardheader">
+                <div class="avatar">
+                  <img alt="Foto do Perfil" ng-src="{{ mainCtrl.user.photo_url }}">
+                </div>
+              </div>
+              <div class="info" 
+                  md-colors="{background: 'teal-700'}">
+                <div class="desc">
+                  <div class="md-title">{{ mainCtrl.user.name }}</div>
+                </div>
+              </div>
+            </div>
+        </div>
+      <md-menu-content md-colors="{background: 'teal-900'}">
+        <md-menu-item>
+          <md-button md-colors="{color: 'teal-100'}">
+            <md-icon md-colors="{color: 'teal-100'}">bug_report</md-icon>
+            Reportar um Problema
+          </md-button>
+        </md-menu-item>
+        <md-menu-divider></md-menu-divider>
+        <md-menu-item>
+          <md-button md-colors="{color: 'teal-100'}" ng-click="mainCtrl.logout()">
+            <md-icon md-colors="{color: 'teal-100'}">exit_to_app</md-icon>
+            Sair
+          </md-button>
+        </md-menu-item>
+      </md-menu-content>
+    </md-content>
+  </md-sidenav>
 
-    <a ui-sref="app.user.home" layout="row" layout-align="center center">
-      <md-button disabled="true">
-        <img src="app/images/logo.png" aria-label="Plataforma Virtual CIS" style="height: 50%;">
-      </md-button>
-    </a>
+  <md-content flex>
+    <div layout="column" layout-align="top center">
+      <md-toolbar md-colors="{background: 'teal-900'}" layout-wrap layout-align="center" layout="row">
+        <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
+          <md-button class="md-icon-button hide-gt-sm" aria-label="Menu principal" ng-click="toggleLeft()" hide-gt-md>
+            <md-icon>menu</md-icon>
+          </md-button>
 
-    <span flex md-truncate></span>
+          <md-button disabled="true" ui-sref="support.user.home" hide-gt-md>
+            <img src="support/images/logo.png" aria-label="Plataforma Virtual CIS" style="height: 30px;">
+          </md-button>
 
-    <a ui-sref="app.user.home" >
-      <md-button class="md-icon-button" title="Home">
-        <md-icon>home</md-icon>
-      </md-button>
-    </a>
+          <span class="md-subhead" hide show-gt-md> > <b>Plataforma CIS</b> | Suporte</span>
 
-    <notification></notification>
+          <span flex md-truncate></span>
 
-    <div layout="row" md-theme="input" class="toolbar-search" md-colors="{background: search? 'teal-800': 'teal-900'}">
-      <form ng-submit="mainCtrl.search()" ng-show="search">
-        <md-input-container flex md-no-float>
-          <input aria-label="Pesquisar por instituições" 
-          ng-model="mainCtrl.search_keyword" md-colors="{background: 'teal-800'}">
-        </md-input-container>
-      </form>
-      <md-button ng-click="search = !search" class="md-icon-button" title="Buscar">
-        <md-icon>search</md-icon>
-      </md-button>
+          <a ui-sref="support.user.home" >
+            <md-button class="md-icon-button" title="Home">
+              <md-icon>home</md-icon>
+            </md-button>
+          </a>
+        </div>
+      </md-toolbar>
+
+      <div ui-view="content" layout="column" md-colors="{background: 'grey-200'}"></div>
     </div>
-  </div>
-</md-toolbar>
-
-<div ui-view="content" layout="column" md-colors="{background: 'grey-200'}"></div>
-
-<md-toolbar class="md-warn" ng-if="!mainCtrl.userEmailVerified()" ng-hide="hideEmailVerification">
-  <div class="md-toolbar-tools" layout-align="end center">
-    <h2 class="md-flex">Verifique seu email para confirmar sua conta.</h2>
-    <md-button class="md-raised md-warn md-hue-2" ng-click="mainCtrl.resendEmailVerification()">Reenviar confirmação</md-button>
-    <md-button class="md-icon-button" ng-click="mainCtrl.refreshUser()"><md-icon>refresh</md-icon></md-button>
-    <md-button class="md-icon-button" ng-click="hideEmailVerification = true"><md-icon>close</md-icon></md-button>
-  </div>
-</md-toolbar>
+  </md-content>
+</section>

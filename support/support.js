@@ -29,8 +29,8 @@
                 abstract: true,
                 views: {
                     main: {
-                        // templateUrl: "support/main/main.html",
-                        // controller: "MainController as mainCtrl"
+                        templateUrl: "support/main/main.html",
+                        controller: "MainController as mainCtrl"
                     }
                 }
             })

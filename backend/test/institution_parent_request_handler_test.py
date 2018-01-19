@@ -8,9 +8,11 @@ from models.institution import Institution
 from models.institution import Address
 from models.request_institution_parent import RequestInstitutionParent
 from handlers.institution_parent_request_handler import InstitutionParentRequestHandler
+from worker import AddAdminPermissionsInInstitutionHierarchy
 
 import mock
 from mock import patch
+import mocks
 
 
 class InstitutionParentRequestHandlerTest(TestBaseHandler):
@@ -24,9 +26,15 @@ class InstitutionParentRequestHandlerTest(TestBaseHandler):
         super(InstitutionParentRequestHandlerTest, cls).setUp()
         app = cls.webapp2.WSGIApplication(
             [(InstitutionParentRequestHandlerTest.REQUEST_URI, InstitutionParentRequestHandler),
+            ('/api/queue/add-admin-permissions', AddAdminPermissionsInInstitutionHierarchy)
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
+    
+    def enqueue_task(self, handler_selector, params):
+        """Method of mock enqueue tasks."""
+        if handler_selector == 'add-admin-permissions':
+            self.testapp.post('/api/queue/' + handler_selector, params=params)
 
     @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
     @mock.patch('service_messages.send_message_notification')
@@ -82,6 +90,66 @@ class InstitutionParentRequestHandlerTest(TestBaseHandler):
 
         self.assertTrue(mock_method.assert_called,
                         "Should call the send_message_notification")
+
+    @patch('handlers.institution_parent_request_handler.enqueue_task')
+    @patch('utils.verify_token', return_value={'email': 'user@example.com'})
+    def test_add_admin_permission_in_institution_hierarchy(self, verify_token, enqueue_task):
+        """Test add admin permissions in institution hierarchy."""
+        first_user = mocks.create_user()
+        second_user = mocks.create_user()
+        third_user = mocks.create_user()
+
+        first_inst = mocks.create_institution()
+        second_inst = mocks.create_institution()
+        third_inst = mocks.create_institution()
+
+        first_inst.admin = first_user.key
+        second_inst.admin = second_user.key
+        third_inst.admin = third_user.key
+
+        first_user.institutions_admin.append(first_inst.key)
+        second_user.institutions_admin.append(second_inst.key)
+        third_user.institutions_admin.append(third_inst.key)
+
+        second_inst.parent_institution = first_inst.key
+        third_inst.parent_institution = second_inst.key
+
+        first_inst.children_institutions.append(second_inst.key)
+
+        third_user.add_permission('publish_post', third_inst.key.urlsafe())
+        second_user.add_permission('answer_link_inst_request', second_inst.key.urlsafe())
+
+        first_inst.put()
+        second_inst.put()
+        third_inst.put()
+
+        first_user.put()
+        second_user.put()
+        third_user.put()
+
+        request = RequestInstitutionParent()
+        request.admin_key = third_user.key
+        request.sender_key = third_user.key
+        request.institution_key = third_inst.key
+        request.institution_requested_key = second_inst.key
+        request.put()
+        
+        verify_token._mock_return_value = {'email': second_user.email[0]}
+        enqueue_task.side_effect = self.enqueue_task
+
+        self.assertTrue(third_inst.key.urlsafe() not in first_user.permissions.get('publish_post', {}))
+        self.assertTrue(third_inst.key.urlsafe() not in second_user.permissions.get('publish_post', {}))
+
+        self.testapp.put("/api/requests/%s/institution_parent"
+                          % (request.key.urlsafe()))
+
+        first_user = first_user.key.get()
+        second_user = second_user.key.get()
+        third_user = third_user.key.get()
+
+        self.assertTrue(third_inst.key.urlsafe() in first_user.permissions['publish_post'])
+        self.assertTrue(third_inst.key.urlsafe() in second_user.permissions['publish_post'])
+        self.assertTrue(third_inst.key.urlsafe() in third_user.permissions['publish_post'])
 
 
 def initModels(cls):

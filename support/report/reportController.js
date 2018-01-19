@@ -6,7 +6,7 @@
     support.controller("ReportController", function ReportController($state, MessageService, $firebaseArray) {
         var controller = this;
 
-        controller.report = {title: "Teste", description: "Descrição"};
+        controller.report = {};
 
         var ref = firebase.database().ref();
 

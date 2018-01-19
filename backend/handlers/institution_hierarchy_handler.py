@@ -39,10 +39,10 @@ class InstitutionHierarchyHandler(BaseHandler):
                               institution_link)
 
         is_parent = self.request.get('isParent')
-        # If isParent If isParent is true, this attribute 
+        # If isParent is true, this attribute 
         # holds the reference of the children intitution.
         institution = ndb.Key(urlsafe=institution_key).get()
-        # If isParent If isParent is true, this attribute 
+        # If isParent is true, this attribute 
         # holds the reference of the parent intitution.
         institution_link = ndb.Key(urlsafe=institution_link).get()
 

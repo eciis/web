@@ -38,8 +38,17 @@
                 url: "/",
                 views: {
                     content: {
-                        // templateUrl: "app/home/home.html",
-                        // controller: "HomeController as homeCtrl"
+                        // templateUrl: "app/report/report.html",
+                        // controller: "ReportController as controller"
+                    }
+                }
+            })
+            .state("support.report", {
+                url: "/report",
+                views: {
+                    content: {
+                        templateUrl: "app/report/report.html",
+                        controller: "ReportController as controller"
                     }
                 }
             })

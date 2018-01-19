@@ -9,6 +9,18 @@
 
         controller.user = AuthService.getCurrentUser();
 
+        controller.sideNavOptions = [
+            {
+                label: "Início",
+                icon: "home",
+                action: function() { $state.go("support.home"); }
+            },{
+                label: "Reportar um Problema",
+                icon: "bug_report",
+                action: function() { $state.go("support.report"); }
+            }
+        ];
+
         controller.isAdmin = function isAdmin(keyInstitution) {
             if (controller.user && controller.user.isAdmin(keyInstitution)){
                 return true;

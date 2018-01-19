@@ -163,7 +163,6 @@ class InstitutionHandlerTest(TestBaseHandler):
         invite = InviteInstitution()
         invite.invitee = third_user.email[0]
         invite.admin_key = second_user.key
-        invite.suggestion_institution_name = "New Inst"
         invite.stub_institution_key = third_inst.key
         invite.put()
         

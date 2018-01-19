@@ -61,6 +61,11 @@
                   <h4>{{ invite.invitee }}</h4>
                   <h4>Convidada por: {{ invite.sender_name }}</h4>
                 </div>
+                <div layout-align="end center">
+                  <md-button class="md-raised" ng-click="inviteInstCtrl.resendInvite(invite.key, $event)">
+                    Reenviar
+                  </md-button>
+                </div>
               </md-list-item>
             </md-list>
           </md-card-content>

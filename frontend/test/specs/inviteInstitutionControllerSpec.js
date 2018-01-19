@@ -34,7 +34,7 @@
 
     var INSTITUTION_SEARCH_URI = '/api/search/institution?value=';
 
-    var invite = new Invite({invitee: "user@gmail.com", suggestion_institution_name : "New Institution"}, 'institution', institution.key);
+    var invite = new Invite({invitee: "user@gmail.com", suggestion_institution_name : "New Institution", key: '123'}, 'institution', institution.key);
 
     beforeEach(module('app'));
 
@@ -88,7 +88,9 @@
                 spyOn(inviteService, 'sendInviteInst').and.callFake(function() {
                     return {
                         then: function(callback) {
-                            return callback();
+                            return callback(
+                                {data: {key: '123'}}
+                            );
                         }
                     };
                 });
@@ -217,6 +219,32 @@
                     expect(requestInvitationService.rejectRequestInst).toHaveBeenCalledWith(request.key);
                     done();
                 });
+            });
+        });
+
+        describe('resendInvite()', function () {
+            it('should resend the invite', function () {
+                spyOn(mdDialog, 'confirm').and.callThrough();
+                spyOn(mdDialog, 'show').and.callFake(function () {
+                    return {
+                        then: function (callback) {
+                            return callback();
+                        }
+                    };
+                });
+                spyOn(inviteService, 'resendInvite').and.callFake(function () {
+                    return {
+                        then: function (callback) {
+                            return callback();
+                        }
+                    };
+                });
+
+                inviteinstitutionCtrl.resendInvite(invite.key, '$event');
+
+                expect(mdDialog.confirm).toHaveBeenCalled();
+                expect(mdDialog.show).toHaveBeenCalled();
+                expect(inviteService.resendInvite).toHaveBeenCalled();
             });
         });
     });

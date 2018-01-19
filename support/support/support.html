@@ -20,19 +20,19 @@
                 md-colors="{background: 'teal-800'}">
               <div class="cardheader">
                 <div class="avatar">
-                  <img alt="Foto do Perfil" ng-src="{{ mainCtrl.user.photo_url }}">
+                  <img alt="Foto do Perfil" ng-src="{{ controller.user.photo_url }}">
                 </div>
               </div>
               <div class="info" 
                   md-colors="{background: 'teal-700'}">
                 <div class="desc">
-                  <div class="md-title">{{ mainCtrl.user.name }}</div>
+                  <div class="md-title">{{ controller.user.name }}</div>
                 </div>
               </div>
             </div>
         </div>
       <md-menu-content md-colors="{background: 'teal-900'}">
-        <md-menu-item ng-repeat="option in mainCtrl.sideNavOptions">
+        <md-menu-item ng-repeat="option in controller.sideNavOptions">
           <md-button md-colors="{color: 'teal-100'}" ng-click="{{option.action}}">
             <md-icon md-colors="{color: 'teal-100'}">{{option.icon}}</md-icon>
             {{option.label}}
@@ -40,7 +40,7 @@
         </md-menu-item>
         <md-menu-divider></md-menu-divider>
         <md-menu-item>
-          <md-button md-colors="{color: 'teal-100'}" ng-click="mainCtrl.logout()">
+          <md-button md-colors="{color: 'teal-100'}" ng-click="controller.logout()">
             <md-icon md-colors="{color: 'teal-100'}">exit_to_app</md-icon>
             Sair
           </md-button>

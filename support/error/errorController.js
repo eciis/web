@@ -10,7 +10,7 @@
         errorCtrl.status = $stateParams.status;
 
         errorCtrl.goToHome = function goToHome() {
-            $state.go("support.user.home");
+            $state.go("support.home");
         };
     });
 })();

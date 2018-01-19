@@ -30,7 +30,7 @@
                 views: {
                     main: {
                         templateUrl: "app/support/support.html",
-                        controller: "SupportController as SupportController"
+                        controller: "SupportController as controller"
                     }
                 }
             })

@@ -29,6 +29,7 @@ class InstitutionProfileTest(TestBase):
             'institution_key': 'institution_key',
             'email': 'institutional_email',
             'phone': '88 8888-88888',
+            'branch_line': '888',
             'institution': {
                 'name': 'institution_name',
                 'photo_url': 'photo_url.com'
@@ -101,6 +102,7 @@ def initModels(cls):
         'office': 'member',
         'email': 'institutional_email',
         'phone': '88 8888-88888',
+        'branch_line': '888',
         'institution_key': 'institution_key',
         'institution_name': 'institution_name',
         'institution_photo_url': 'photo_url.com'

@@ -118,7 +118,7 @@ class SearchInstitution(SearchDocument):
     def create_field_values_string(self, value):
         """Create a string formed by fields and values."""
         # add a new field here
-        fields = ['name', 'acronym', 'email', 'actuation_area', 'legal_nature', 'federal_state', 'description']
+        fields = ['name', 'acronym', 'actuation_area', 'legal_nature', 'federal_state', 'description']
         fields_values = []
 
         for field in fields:

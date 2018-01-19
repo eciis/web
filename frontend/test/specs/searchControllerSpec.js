@@ -12,7 +12,24 @@
 
     var splab = {
         name: 'Splab',
-        key: '1239'
+        key: '1239',
+        federal_state: 'Paraíba',
+        actuation_area: 'REGULATORY_AGENCY',
+        legal_nature: 'PRIVATE_FOR-PROFIT'
+    };
+
+    var inst = {
+        name: 'Testing inst',
+        federal_state: 'Bahia',
+        actuation_area: 'REGULATORY_AGENCY',
+        legal_nature: 'PRIVATE_NON-PROFIT'
+    };
+    
+    var instToTest = {
+        name: 'Inst to test',
+        federal_state: 'Paraíba',
+        actuation_area: 'FUNDING_AGENCY',
+        legal_nature: 'PUBLIC'
     };
 
     beforeEach(module('app'));
@@ -24,8 +41,15 @@
         instService = InstitutionService;
 
         AuthService.login(user);
-        httpBackend.expectGET('app/institution/actuation_area.json').respond([{}]);
-        httpBackend.expectGET('app/institution/legal_nature.json').respond([{}]);
+        httpBackend.expectGET('app/institution/actuation_area.json').respond({
+            "FUNDING_AGENCY": "Agência de Fomento",
+            "REGULATORY_AGENCY": "Agência Reguladora"}
+        );
+        httpBackend.expectGET('app/institution/legal_nature.json').respond({
+            "PRIVATE_FOR-PROFIT": "Privada com fins lucrativos",
+            "PRIVATE_NON-PROFIT": "Privada sem fins lucrativos",
+            "PUBLIC": "Pública"
+        });
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', "error/user_inactive.html").respond(200);
         httpBackend.when('GET', "home/home.html").respond(200);
@@ -33,6 +57,8 @@
         createCtrl = function() {
             return $controller('SearchController', {
                 scope: scope,
+                state: state,
+                search_keyword: ""
             });
         };
         searchCtrl = createCtrl();
@@ -106,10 +132,89 @@
         });
 
         describe('searchBy()', function() {
+            beforeEach(function () {
+                spyOn(searchCtrl, 'makeSearch').and.callThrough();
+                spyOn(instService, 'searchInstitutions').and.callFake(function () {
+                    return {
+                        then: function (callback) {
+                            return callback(
+                                {data: [splab, inst, instToTest]}
+                            );
+                        }
+                    };
+                });
+                searchCtrl.makeSearch("", 'institution');
+                searchCtrl.search_keyword = "random";
+                searchCtrl.previous_keyword = searchCtrl.search_keyword;
+            });
+
             it('Should call makeSearch()', function() {
-                spyOn(searchCtrl, 'makeSearch');
                 searchCtrl.searchBy('Universidades');
                 expect(searchCtrl.makeSearch).toHaveBeenCalled();
+            });
+
+            it('Should filter the institutions by actuation_area', function () {
+                searchCtrl.searchBy('REGULATORY_AGENCY', 'actuation_area');
+                expect(searchCtrl.institutions).toEqual([splab, inst]);
+
+                searchCtrl.searchBy('FUNDING_AGENCY', 'actuation_area');
+                expect(searchCtrl.institutions).toEqual([instToTest]);
+
+                searchCtrl.searchBy('PRIVATE_COMPANY', 'actuation_area');
+                expect(searchCtrl.institutions).toEqual([]);
+            });
+
+            it('Should filter the institutions by legal_nature', function () {
+                searchCtrl.searchBy('PRIVATE_FOR-PROFIT', 'legal_nature');
+                expect(searchCtrl.institutions).toEqual([splab]);
+
+                searchCtrl.searchBy('PRIVATE_NON-PROFIT', 'legal_nature');
+                expect(searchCtrl.institutions).toEqual([inst]);
+
+                searchCtrl.searchBy('PUBLIC', 'legal_nature');
+                expect(searchCtrl.institutions).toEqual([instToTest]);
+            });
+
+            it('Should filter the institutions by federal_state', function () {
+                searchCtrl.searchBy('Paraíba', 'federal_state');
+                expect(searchCtrl.institutions).toEqual([splab, instToTest]);
+
+                searchCtrl.searchBy('Bahia', 'federal_state');
+                expect(searchCtrl.institutions).toEqual([inst]);
+
+                searchCtrl.searchBy('Pernambuco', 'federal_state');
+                expect(searchCtrl.institutions).toEqual([]);
+            });
+
+            it('Should filter the institutions by actuation_area and legal_nature', function () {
+                searchCtrl.searchNature = "Privada com fins lucrativos"
+                searchCtrl.searchBy('REGULATORY_AGENCY', 'actuation_area');
+                expect(searchCtrl.institutions).toEqual([splab]);
+
+                searchCtrl.searchActuation = "Agência de Fomento"
+                searchCtrl.searchBy('PUBLIC', 'legal_nature');
+                expect(searchCtrl.institutions).toEqual([instToTest]);
+
+                searchCtrl.searchNature = "Privada sem fins lucrativos"
+                searchCtrl.searchBy('REGULATORY_AGENCY', 'actuation_area');
+                expect(searchCtrl.institutions).toEqual([inst]);
+            });
+
+            it('Should filter the institutions by actuation_area, legal_nature and federal_state', function () {
+                searchCtrl.searchNature = "Privada com fins lucrativos"
+                searchCtrl.searchState = {nome: "Alagoas"}
+                searchCtrl.searchBy('REGULATORY_AGENCY', 'actuation_area');
+                expect(searchCtrl.institutions).toEqual([]);
+
+                searchCtrl.searchActuation = "Agência de Fomento"
+                searchCtrl.searchState = { nome: "Paraíba" }
+                searchCtrl.searchBy('PUBLIC', 'legal_nature');
+                expect(searchCtrl.institutions).toEqual([instToTest]);
+
+                searchCtrl.searchNature = "Privada sem fins lucrativos"
+                searchCtrl.searchState = { nome: "Bahia" }
+                searchCtrl.searchBy('REGULATORY_AGENCY', 'actuation_area');
+                expect(searchCtrl.institutions).toEqual([inst]);
             });
         });
 

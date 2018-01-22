@@ -12,7 +12,7 @@
                                 <img alt="Foto do Perfil" ng-src="{{ institutionCtrl.institution.photo_url }}">
                                 <div layout-align-gt-xs="end center" layout-align-xs="center" layout="row" 
                                     class="md-title inst-desc">
-                                    <P>{{ institutionCtrl.current_institution.name }}</P>
+                                    <p>{{ institutionCtrl.institution.name }}</p>
                                 </div>
                             </div>
                         </div>
@@ -41,7 +41,7 @@
                                 </div>
                                 <div layout="row">
                                     <md-button flex class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-500'}"
-                                    ng-if="institutionCtrl.current_institution.website_url" style="text-align: left;"
+                                    ng-if="institutionCtrl.institution.website_url" style="text-align: left;"
                                     ng-click="institutionCtrl.openWebsite()">
                                         <md-icon>web</md-icon>
                                         Acessar Website

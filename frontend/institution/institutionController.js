@@ -304,13 +304,17 @@
                         AuthService.save();
                         ctrl.closeDialog();
                         if(_.isEmpty(institutionCtrl.user.institutions)) {
-                            $state.go('user_inactive');
+                            AuthService.logout();
                         } else {
                             $state.go("app.user.home");
                         }
                         MessageService.showToast("Instituição removida com sucesso.");
                     });
                 }
+            };
+
+            ctrl.hasOneInstitution = function hasOneInstitution() {
+                return _.size(institutionCtrl.user.institutions) === 1;
             };
         }
 

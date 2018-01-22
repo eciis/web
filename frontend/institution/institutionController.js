@@ -136,7 +136,7 @@
         };
 
         institutionCtrl.showFollowButton = function showFollowButton() {
-           return !institutionCtrl.isMember && institutionCtrl.current_institution.name !== "Ministério da Saúde";
+           return !institutionCtrl.isMember && institutionCtrl.current_institution && institutionCtrl.current_institution.name !== "Ministério da Saúde";
         };
 
         institutionCtrl.goToManageMembers = function goToManageMembers(){

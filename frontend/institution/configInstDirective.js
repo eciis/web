@@ -257,7 +257,7 @@
             AuthService.save();
             changeInstitution(institution);
             MessageService.showToast('Dados da instituição salvos com sucesso.');
-            $state.go('app.institution.timeline', {institutionKey: institutionKey});
+            $state.go('app.user.home');
         }
 
         configInstCtrl.showButton = function() {

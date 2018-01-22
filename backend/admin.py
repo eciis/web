@@ -688,6 +688,7 @@ class ResetMSHandler(BaseHandler):
 
         admin.add_permissions(permissions.DEFAULT_ADMIN_PERMISSIONS, ms.key.urlsafe())
         admin.add_permissions(permissions.DEFAULT_SUPER_USER_PERMISSIONS, ms.key.urlsafe())
+        create_profile(admin, ms)
         admin.put()
 
         self.response.write(json.dumps(jsonList))

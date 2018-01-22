@@ -14,6 +14,7 @@
         postDetailsCtrl.showComments = false;
         postDetailsCtrl.savingComment = false;
         postDetailsCtrl.savingLike = false;
+        postDetailsCtrl.isLoadingComments = true;
 
         var URL_POST = '/posts/';
         postDetailsCtrl.user = AuthService.getCurrentUser();
@@ -301,7 +302,9 @@
             promise.then(function success(response) {
                 postDetailsCtrl.post.data_comments = response.data;
                 postDetailsCtrl.post.number_of_comments = _.size(postDetailsCtrl.post.data_comments);
+                postDetailsCtrl.isLoadingComments = false;
             }, function error(response) {
+                postDetailsCtrl.isLoadingComments = true;
                 MessageService.showToast(response.data.msg);
             });
             return promise;

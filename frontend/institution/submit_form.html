@@ -1,261 +1,266 @@
 <div layout-padding>
-    <div class="row">
-        <div class="avatar" align="center">
-            <img style="border-radius: 50%;" ng-src="{{ configInstCtrl.newInstitution.photo_url }}"
-                width="100px" height="100px"/>
-        </div>
-        <div class="info" align="center">
-            <div class="title">
-                <md-button ng-show="configInstCtrl.showButton()" ng-click="null"
-                    ng-model="configInstCtrl.file" ngf-pattern="'image/*'"
-                    ngf-accept="'image/*'" ngf-max-size="5MB" class="md-raised"
-                    ngf-select="configInstCtrl.cropImage(configInstCtrl.file)">
-                    <b>Adicionar imagem</b>
-                </md-button>
-                <md-progress-linear ng-show="configInstCtrl.loading" md-mode="indeterminate"
-                    style="width: 14%; margin-left: auto; margin-right: auto">
-                </md-progress-linear>
-            </div>
-        </div>
+    <div flex ng-if="configInstCtrl.loading"  layout="row" layout-align="center center">
+        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
     </div>
-    <form name="instForm" ng-submit="configInstCtrl.submit($event)">
-        <div layout="row">
-            <md-input-container class="md-block" flex-gt-xs flex="60">
-                <label>Nome</label>
-                <input type="text" name="name" required md-maxlength="90"
-                    ng-model="configInstCtrl.newInstitution.name">
-                <div ng-messages='instForm.name.$error'>
-                    <div ng-message="required">Este campo é obrigatório!</div>
+    <div ng-if="!configInstCtrl.loading">
+        <div class="row" >
+            <div class="avatar" align="center">
+                <img style="border-radius: 50%;" ng-src="{{ configInstCtrl.newInstitution.photo_url }}"
+                    width="100px" height="100px"/>
+            </div>
+            <div class="info" align="center">
+                <div class="title">
+                    <md-button ng-show="configInstCtrl.showButton()" ng-click="null"
+                        ng-model="configInstCtrl.file" ngf-pattern="'image/*'"
+                        ngf-accept="'image/*'" ngf-max-size="5MB" class="md-raised"
+                        ngf-select="configInstCtrl.cropImage(configInstCtrl.file)">
+                        <b>Adicionar imagem</b>
+                    </md-button>
+                    <md-progress-linear ng-show="configInstCtrl.loading" md-mode="indeterminate"
+                        style="width: 14%; margin-left: auto; margin-right: auto">
+                    </md-progress-linear>
                 </div>
-            </md-input-container>
-            <md-input-container class="md-block" flex-gt-xs flex="40">
-                <label>Sigla</label>
-                <input type="text" name="acronym" ng-model="configInstCtrl.newInstitution.acronym">
-            </md-input-container>
+            </div>
         </div>
-        <div layout="row">
-            <md-input-container class="md-block" flex-gt-xs>
-                <label>Rua</label>
-                <input type="text" name="street" required
-                    ng-model="configInstCtrl.address.street">
-                <div ng-messages='instForm.street.$error'>
-                    <div ng-message="required">Este campo é obrigatório!</div>
-                </div>
-            </md-input-container>
-            <md-input-container class="md-block" flex-gt-xs  flex="20">
-                <label>Número</label>
-                <input type="text" name="number" required
-                    ng-model="configInstCtrl.address.number">
-                <div ng-messages='instForm.number.$error'>
-                    <div ng-message="required">Este campo é obrigatório!</div>
-                </div>
-            </md-input-container>
-            <md-input-container class="md-block" flex-gt-xs  flex="20">
-                <label>CEP</label>
-                <input type="text" name="cep" required
-                    ng-model="configInstCtrl.address.cep"
-                    minlength="9" md-maxlength="9" placeholder="00000-000"
-                    ng-pattern="configInstCtrl.cepRegex"
-                    mask="99999-999">
-                <div ng-messages="instForm.cep.$error">
-                    <div ng-message="required" >Este campo é obrigatório!</div>
-                    <div ng-message="pattern" >O CEP deve ser válido!</div>
-                </div>
-            </md-input-container>
-        </div>
-        <div layout="row">
-            <md-input-container class="md-block" flex-gt-xs>
-                <label>País</label>
-                <md-select name="country" ng-model="configInstCtrl.address.country" required 
-                    ng-change="configInstCtrl.setAnotherCountry()">
-                    <md-option ng-repeat="country in configInstCtrl.countries" ng-value="country.nome_pais">
-                        {{country.nome_pais}}
-                    </md-option>
-                </md-select>
-                <div ng-messages='instForm.country.$error'>
-                    <div ng-message="required">Este campo é obrigatório!</div>
-                </div>
-            </md-input-container>
-            <md-input-container class="md-block" flex-gt-xs ng-if="configInstCtrl.isAnotherCountry">
-                <label>Estado</label>
-                <input type="text" name="state" required ng-model="configInstCtrl.address.federal_state">
-                <div ng-messages='instForm.state.$error'>
-                    <div ng-message="required">Este campo é obrigatório!</div>
-                </div>
-            </md-input-container>
-            <md-input-container class="md-block" flex-gt-xs ng-if="!configInstCtrl.isAnotherCountry">
-                <label>Estado</label>
-                <md-select name="state" ng-model="configInstCtrl.selectedState" required
-                    ng-change="configInstCtrl.getCitiesByState()">
-                    <md-option ng-repeat="state in configInstCtrl.states" ng-value="state">
-                        {{state.sigla}}
-                    </md-option>
-                </md-select>
-                <div ng-messages='instForm.state.$error'>
-                    <div ng-message="required">Este campo é obrigatório!</div>
-                </div>
-            </md-input-container>
-            <md-input-container class="md-block" flex-gt-xs ng-if="configInstCtrl.isAnotherCountry">
-                <label>Cidade</label>
-                <input type="text" name="city" required ng-model="configInstCtrl.address.city">
-                <div ng-messages='instForm.city.$error'>
-                    <div ng-message="required">Este campo é obrigatório!</div>
-                </div>
-            </md-input-container>
-            <md-input-container class="md-block" flex-gt-xs ng-if="!configInstCtrl.isAnotherCountry">
-                <label>Cidade</label>
-                <md-select name="city" ng-model="configInstCtrl.address.city" required
-                    ng-disabled="!configInstCtrl.selectedState">
-                    <md-option ng-repeat="city in configInstCtrl.cities" ng-value="city">
-                        {{city}}
-                    </md-option>
-                </md-select>
-                <div ng-messages='instForm.city.$error'>
-                    <div ng-message="required">Este campo é obrigatório!</div>
-                </div>
-                <div ng-messages>
-                    <div ng-show="!configInstCtrl.selectedState && !configInstCtrl.isAnotherCountry" 
-                        style="opacity: 0.9; margin-top: 2px; font-size: 0.8em;">
-                        Primeiro selecione um estado
+        <form name="instForm" ng-submit="configInstCtrl.submit($event)">
+            <div layout="row">
+                <md-input-container class="md-block" flex-gt-xs flex="60">
+                    <label>Nome</label>
+                    <input type="text" name="name" required md-maxlength="90"
+                        ng-model="configInstCtrl.newInstitution.name">
+                    <div ng-messages='instForm.name.$error'>
+                        <div ng-message="required">Este campo é obrigatório!</div>
                     </div>
-                </div>
-            </md-input-container>
-            <md-input-container class="md-block" flex-gt-xs>
-                <label>Bairro</label>
-                <input type="text" name="neighbourhood" required
-                    ng-model="configInstCtrl.address.neighbourhood">
-                <div ng-messages='instForm.neighbourhood.$error'>
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-xs flex="40">
+                    <label>Sigla</label>
+                    <input type="text" name="acronym" ng-model="configInstCtrl.newInstitution.acronym">
+                </md-input-container>
+            </div>
+            <div layout="row">
+                <md-input-container class="md-block" flex-gt-xs>
+                    <label>Rua</label>
+                    <input type="text" name="street" required
+                        ng-model="configInstCtrl.address.street">
+                    <div ng-messages='instForm.street.$error'>
+                        <div ng-message="required">Este campo é obrigatório!</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-xs  flex="20">
+                    <label>Número</label>
+                    <input type="text" name="number" required
+                        ng-model="configInstCtrl.address.number">
+                    <div ng-messages='instForm.number.$error'>
+                        <div ng-message="required">Este campo é obrigatório!</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-xs  flex="20">
+                    <label>CEP</label>
+                    <input type="text" name="cep" required
+                        ng-model="configInstCtrl.address.cep"
+                        minlength="9" md-maxlength="9" placeholder="00000-000"
+                        ng-pattern="configInstCtrl.cepRegex"
+                        mask="99999-999">
+                    <div ng-messages="instForm.cep.$error">
+                        <div ng-message="required" >Este campo é obrigatório!</div>
+                        <div ng-message="pattern" >O CEP deve ser válido!</div>
+                    </div>
+                </md-input-container>
+            </div>
+            <div layout="row">
+                <md-input-container class="md-block" flex-gt-xs>
+                    <label>País</label>
+                    <md-select name="country" ng-model="configInstCtrl.address.country" required 
+                        ng-change="configInstCtrl.setAnotherCountry()">
+                        <md-option ng-repeat="country in configInstCtrl.countries" ng-value="country.nome_pais">
+                            {{country.nome_pais}}
+                        </md-option>
+                    </md-select>
+                    <div ng-messages='instForm.country.$error'>
+                        <div ng-message="required">Este campo é obrigatório!</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-xs ng-if="configInstCtrl.isAnotherCountry">
+                    <label>Estado</label>
+                    <input type="text" name="state" required ng-model="configInstCtrl.address.federal_state">
+                    <div ng-messages='instForm.state.$error'>
+                        <div ng-message="required">Este campo é obrigatório!</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-xs ng-if="!configInstCtrl.isAnotherCountry">
+                    <label>Estado</label>
+                    <md-select name="state" ng-model="configInstCtrl.selectedState" required
+                        ng-change="configInstCtrl.getCitiesByState()">
+                        <md-option ng-repeat="state in configInstCtrl.states" ng-value="state">
+                            {{state.sigla}}
+                        </md-option>
+                    </md-select>
+                    <div ng-messages='instForm.state.$error'>
+                        <div ng-message="required">Este campo é obrigatório!</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-xs ng-if="configInstCtrl.isAnotherCountry">
+                    <label>Cidade</label>
+                    <input type="text" name="city" required ng-model="configInstCtrl.address.city">
+                    <div ng-messages='instForm.city.$error'>
+                        <div ng-message="required">Este campo é obrigatório!</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-xs ng-if="!configInstCtrl.isAnotherCountry">
+                    <label>Cidade</label>
+                    <md-select name="city" ng-model="configInstCtrl.address.city" required
+                        ng-disabled="!configInstCtrl.selectedState">
+                        <md-option ng-repeat="city in configInstCtrl.cities" ng-value="city">
+                            {{city}}
+                        </md-option>
+                    </md-select>
+                    <div ng-messages='instForm.city.$error'>
+                        <div ng-message="required">Este campo é obrigatório!</div>
+                    </div>
+                    <div ng-messages>
+                        <div ng-show="!configInstCtrl.selectedState && !configInstCtrl.isAnotherCountry" 
+                            style="opacity: 0.9; margin-top: 2px; font-size: 0.8em;">
+                            Primeiro selecione um estado
+                        </div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-xs>
+                    <label>Bairro</label>
+                    <input type="text" name="neighbourhood" required
+                        ng-model="configInstCtrl.address.neighbourhood">
+                    <div ng-messages='instForm.neighbourhood.$error'>
+                        <div ng-message="required">Este campo é obrigatório!</div>
+                    </div>
+                </md-input-container>
+            </div>
+            <div layout="row">
+                <md-input-container class="md-block" flex-gt-xs>
+                    <label>CNPJ</label>
+                    <input type="text" name="cnpj"
+                        ng-model="configInstCtrl.newInstitution.cnpj"
+                        ng-pattern=configInstCtrl.cnpjRegex
+                        minlength="18" md-maxlength="18"
+                        placeholder="00.000.000/0000-00"
+                        mask="99.999.999/9999-99">
+                <div ng-messages="instForm.cnpj.$error">
+                        <div ng-message="required" >Este campo é obrigatório!</div>
+                        <div ng-message="pattern" >O CNPJ deve ser válido!</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-xs>
+                    <label>Telefone</label>
+                    <input type="text" name="phone"
+                        ng-model="configInstCtrl.newInstitution.phone_number"
+                    ng-pattern=configInstCtrl.phoneRegex
+                    minlength="12" md-maxlength="13"
+                    placeholder="99 9999-99999"
+                    mask="99 9999-99999"
+                    mask-validate='false'>
+                    <div ng-messages="instForm.phone.$error">
+                        <div ng-message="pattern" >O número de telefone deve ser válido!</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-xs flex="20">
+                    <label>Ramal</label>
+                    <input type="text" name="branch_line"
+                        ng-model="configInstCtrl.newInstitution.branch_line"
+                    placeholder="999">
+                </md-input-container>
+            </div>
+            <div layout="row">
+                <md-input-container class="md-block" flex-gt-sm>
+                    <!-- The alphabetical order is being made manually 
+                    in the json file actuation_area.json.
+                        TODO: Do this automatically.
+                        @author: Maiana Brito -->
+                    <label>Área de Atuação</label>
+                    <md-select  name="actuationArea" ng-model="configInstCtrl.newInstitution.actuation_area" required>
+                    <md-option ng-repeat="(key, value) in configInstCtrl.actuationArea"
+                            ng-value="key">{{ value }}
+                    </md-option>
+                    </md-select>
+                    <div ng-messages="instForm.actuationArea.$error">
+                        <div ng-message="required" >Este campo é obrigatório!</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <!-- The alphabetical order is being made manually 
+                    in the json file legal_nature.
+                        TODO: Do this automatically.
+                        @author: Maiana Brito -->
+                    <label>Natureza Jurídica</label>
+                    <md-select  name="legalNatures" ng-model="configInstCtrl.newInstitution.legal_nature" required>
+                    <md-option ng-repeat="(key, value) in configInstCtrl.legalNatures"
+                        ng-value="key">{{ value }}
+                    </md-option>
+                    </md-select>
+                    <div ng-messages="instForm.legalNatures.$error">
+                        <div ng-message="required" >Este campo é obrigatório!</div>
+                    </div>
+                </md-input-container>
+            </div>
+                <div ng-if="configInstCtrl.newInstitution.actuation_area == 'other'">
+                <md-input-container class="md-block" flex-gt-xs>
+                    <label>Informe outra área de atuação</label>
+                    <input type="text" name="other" ng-model="configInstCtrl.newInstitution.other_area">
+                </md-input-container>
+            </div>
+            <md-input-container class="md-block">
+                <label>Uma breve descrição da sua instituição</label>
+                <textarea ng-model="configInstCtrl.newInstitution.description" maxlength="1100"
+                    md-select-on-focus required>
+                </textarea>
+                <md-icon title="{{configInstCtrl.descriptionGuide}}" style="font-size: 20px;">
+                    help_outline
+                </md-icon>
+                <div ng-messages="instForm.leader.$error">
                     <div ng-message="required">Este campo é obrigatório!</div>
                 </div>
             </md-input-container>
-        </div>
-        <div layout="row">
+            <md-input-container class="md-block">
+                <label>Site Institucional</label>
+                <input type="text" ng-model="configInstCtrl.newInstitution.website_url">
+            </md-input-container>
             <md-input-container class="md-block" flex-gt-xs>
-                <label>CNPJ</label>
-                <input type="text" name="cnpj"
-                    ng-model="configInstCtrl.newInstitution.cnpj"
-                    ng-pattern=configInstCtrl.cnpjRegex
-                    minlength="18" md-maxlength="18"
-                    placeholder="00.000.000/0000-00"
-                    mask="99.999.999/9999-99">
-               <div ng-messages="instForm.cnpj.$error">
-                    <div ng-message="required" >Este campo é obrigatório!</div>
-                    <div ng-message="pattern" >O CNPJ deve ser válido!</div>
+                <label>Nome do atual dirigente máximo</label>
+                <input type="text" name="leader" required ng-model="configInstCtrl.newInstitution.leader">
+                <div ng-messages="instForm.leader.$error">
+                    <div ng-message="required">Este campo é obrigatório!</div>
                 </div>
             </md-input-container>
             <md-input-container class="md-block" flex-gt-xs>
-                <label>Telefone</label>
-                <input type="text" name="phone"
-                    ng-model="configInstCtrl.newInstitution.phone_number"
-                ng-pattern=configInstCtrl.phoneRegex
-                minlength="12" md-maxlength="13"
-                placeholder="99 9999-99999"
-                mask="99 9999-99999"
-                mask-validate='false'>
-                <div ng-messages="instForm.phone.$error">
-                    <div ng-message="pattern" >O número de telefone deve ser válido!</div>
+                <label>Email Institucional</label>
+                <input type="email" name="institutionalEmail"
+                ng-model="configInstCtrl.newInstitution.institutional_email">
+                <div ng-messages="instForm.institutionalEmail.$error">
+                    <div ng-message="email">O email deve ser válido!</div>
                 </div>
             </md-input-container>
-            <md-input-container class="md-block" flex-gt-xs flex="20">
-                <label>Ramal</label>
-                <input type="text" name="branch_line"
-                    ng-model="configInstCtrl.newInstitution.branch_line"
-                placeholder="999">
-            </md-input-container>
-        </div>
-        <div layout="row">
-            <md-input-container class="md-block" flex-gt-sm>
-                <!-- The alphabetical order is being made manually 
-                in the json file actuation_area.json.
-                    TODO: Do this automatically.
-                    @author: Maiana Brito -->
-                <label>Área de Atuação</label>
-                <md-select  name="actuationArea" ng-model="configInstCtrl.newInstitution.actuation_area" required>
-                  <md-option ng-repeat="(key, value) in configInstCtrl.actuationArea"
-                        ng-value="key">{{ value }}
-                  </md-option>
-                </md-select>
-                <div ng-messages="instForm.actuationArea.$error">
-                    <div ng-message="required" >Este campo é obrigatório!</div>
-                </div>
-            </md-input-container>
-            <md-input-container class="md-block" flex-gt-sm>
-                <!-- The alphabetical order is being made manually 
-                in the json file legal_nature.
-                    TODO: Do this automatically.
-                    @author: Maiana Brito -->
-                <label>Natureza Jurídica</label>
-                  <md-select  name="legalNatures" ng-model="configInstCtrl.newInstitution.legal_nature" required>
-                  <md-option ng-repeat="(key, value) in configInstCtrl.legalNatures"
-                    ng-value="key">{{ value }}
-                  </md-option>
-                </md-select>
-                <div ng-messages="instForm.legalNatures.$error">
-                    <div ng-message="required" >Este campo é obrigatório!</div>
-                </div>
-            </md-input-container>
-        </div>
-            <div ng-if="configInstCtrl.newInstitution.actuation_area == 'other'">
             <md-input-container class="md-block" flex-gt-xs>
-                <label>Informe outra área de atuação</label>
-                <input type="text" name="other" ng-model="configInstCtrl.newInstitution.other_area">
+                <label>Responsável</label>
+                <input type="text" name="Responsavel" ng-disabled="!configInstCtrl.isSubmission"
+                ng-model="configInstCtrl.newInstitution.admin.name" required>
+                <div ng-messages="instForm.Responsavel.$error">
+                    <div ng-message="required">Este campo é obrigatório!</div>
+                    <div ng-message="email">O nome deve ser válido!</div>
+                </div>
             </md-input-container>
-        </div>
-        <md-input-container class="md-block">
-            <label>Uma breve descrição da sua instituição</label>
-            <textarea ng-model="configInstCtrl.newInstitution.description" maxlength="1100"
-                md-select-on-focus required>
-            </textarea>
-            <md-icon title="{{configInstCtrl.descriptionGuide}}" style="font-size: 20px;">
-                help_outline
-            </md-icon>
-            <div ng-messages="instForm.leader.$error">
-                <div ng-message="required">Este campo é obrigatório!</div>
+            <md-input-container class="md-block" flex-gt-xs>
+                <label>Email do responsável</label>
+                <input type="email" name="EmailResponsavel" disabled
+                    ng-model="configInstCtrl.newInstitution.email">
+            </md-input-container>
+            <md-input-container class="md-block">
+                <md-button ng-click="null" ng-model="configInstCtrl.file" ngf-pattern="'application/pdf'"
+                    ngf-accept="'application/pdf'" ngf-max-size="5MB"
+                    ngf-select="null" class="md-raised">
+                    <md-icon>{{configInstCtrl.file? 'insert_drive_file': 'attach_file'}}</md-icon>
+                    {{configInstCtrl.file? 'Portfólio adicionado': 'Adicionar Portfólio'}}
+                </md-button>
+            </md-input-container>
+            <div layout="row" layout-align="end center">
+                <md-button type="submit" md-colors="{background: 'teal-500'}">Confirmar</md-button>
             </div>
-        </md-input-container>
-        <md-input-container class="md-block">
-            <label>Site Institucional</label>
-            <input type="text" ng-model="configInstCtrl.newInstitution.website_url">
-        </md-input-container>
-        <md-input-container class="md-block" flex-gt-xs>
-            <label>Nome do atual dirigente máximo</label>
-            <input type="text" name="leader" required ng-model="configInstCtrl.newInstitution.leader">
-            <div ng-messages="instForm.leader.$error">
-                <div ng-message="required">Este campo é obrigatório!</div>
-            </div>
-        </md-input-container>
-        <md-input-container class="md-block" flex-gt-xs>
-            <label>Email Institucional</label>
-            <input type="email" name="institutionalEmail"
-            ng-model="configInstCtrl.newInstitution.institutional_email">
-            <div ng-messages="instForm.institutionalEmail.$error">
-                <div ng-message="email">O email deve ser válido!</div>
-            </div>
-        </md-input-container>
-        <md-input-container class="md-block" flex-gt-xs>
-            <label>Responsável</label>
-            <input type="text" name="Responsavel" ng-disabled="!configInstCtrl.isSubmission"
-            ng-model="configInstCtrl.newInstitution.admin.name" required>
-            <div ng-messages="instForm.Responsavel.$error">
-                <div ng-message="required">Este campo é obrigatório!</div>
-                <div ng-message="email">O nome deve ser válido!</div>
-            </div>
-        </md-input-container>
-        <md-input-container class="md-block" flex-gt-xs>
-            <label>Email do responsável</label>
-            <input type="email" name="EmailResponsavel" disabled
-                ng-model="configInstCtrl.newInstitution.email">
-        </md-input-container>
-        <md-input-container class="md-block">
-            <md-button ng-click="null" ng-model="configInstCtrl.file" ngf-pattern="'application/pdf'"
-                ngf-accept="'application/pdf'" ngf-max-size="5MB"
-                ngf-select="null" class="md-raised">
-                <md-icon>{{configInstCtrl.file? 'insert_drive_file': 'attach_file'}}</md-icon>
-                {{configInstCtrl.file? 'Portfólio adicionado': 'Adicionar Portfólio'}}
-            </md-button>
-        </md-input-container>
-        <div layout="row" layout-align="end center">
-            <md-button type="submit" md-colors="{background: 'teal-500'}">Confirmar</md-button>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>

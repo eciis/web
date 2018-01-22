@@ -13,6 +13,7 @@
         manageMemberCtrl.currentMember = "";
 
         manageMemberCtrl.showSendInvite = true;
+        manageMemberCtrl.isLoadingMembers = true;
         manageMemberCtrl.showInvites = false;
         manageMemberCtrl.showRequests = false;
         manageMemberCtrl.showMembers = false;
@@ -143,7 +144,9 @@
             InstitutionService.getMembers(currentInstitutionKey).then(function success(response) {
                 manageMemberCtrl.members = response.data;
                 getAdmin();
+                manageMemberCtrl.isLoadingMembers = false;
             }, function error(response) {
+                manageMemberCtrl.isLoadingMembers = true;
                 MessageService.showToast(response.data.msg);
             });
         }

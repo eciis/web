@@ -2,8 +2,11 @@
     <div flex flex-md="95" layout="row" layout-align="space-around"
         md-colors="{background: 'grey-50'}">
         <!-- CONTENT -->
-        <md-content flex id="content" class="body hide-scrollbar">
-            <div ng-repeat="event in eventCtrl.events | orderBy:'start_time'" ng-if="eventCtrl.events.length > 0" style="margin-left: 65px; border-left: 2px solid #8BC34A;">
+        <md-content  flex id="content" class="body hide-scrollbar">
+            <div flex ng-if="eventCtrl.isLoadingEvents"  layout="row" layout-align="center center">
+                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+            </div>
+            <div ng-if="!eventCtrl.isLoadingEvents" ng-repeat="event in eventCtrl.events | orderBy:'start_time'" ng-if="eventCtrl.events.length > 0" style="margin-left: 65px; border-left: 2px solid #8BC34A;">
                 <div layout="row">
                     <div style="display: flex; align-items: center;">
                         <md-button class="md-fab md-primary" title="Compartilhar" style="margin-left: -30px; background-color: #8BC34A; vertical-align: middle;"

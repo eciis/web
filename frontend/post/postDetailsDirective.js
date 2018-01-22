@@ -232,8 +232,8 @@
                 postDetailsCtrl.post.number_of_likes += 1;
                 postDetailsCtrl.savingLike = false;
                 postDetailsCtrl.getLikes(postDetailsCtrl.post);
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
+            }, function error() {
+                MessageService.showToast("O usuário já fez essa ação na publicação.");
                 $state.go("app.user.home");
                 postDetailsCtrl.savingLike = false;
             });
@@ -249,6 +249,7 @@
                 postDetailsCtrl.savingLike = false;
                 postDetailsCtrl.getLikes(postDetailsCtrl.post);
             }, function error() {
+                MessageService.showToast("O usuário já fez essa ação na publicação.");
                 $state.go("app.user.home");
                 postDetailsCtrl.savingLike = false;
             });
@@ -468,6 +469,10 @@
                                 return commentCtrl.user.key === key;
                             });
                         }
+                    }, function error() {
+                        $state.go("app.user.home");
+                        MessageService.showToast("O usuário já fez essa ação nesse comentário.");
+                        commentCtrl.saving = false;
                     }
                 );
             } else {
@@ -478,6 +483,10 @@
                         } else {
                             commentCtrl.comment.likes.push(commentCtrl.user.key);
                         }
+                    }, function error() {
+                        $state.go("app.user.home");
+                        MessageService.showToast("O usuário já fez essa ação nesse comentário.");
+                        commentCtrl.saving = false;
                     }
                 );
             }

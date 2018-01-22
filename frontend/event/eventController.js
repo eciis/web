@@ -158,10 +158,7 @@
 
         function updateEvent() {
             addLinks(dialogCtrl.event);
-            var event = _.clone(dialogCtrl.dateChangeEvent);
-            event.start_time = new Date(dialogCtrl.start_time);
-            event.end_time = new Date(dialogCtrl.event.end_time);
-            event = new Event(event, dialogCtrl.user.current_institution.key);
+            event = new Event(dialogCtrl.event, dialogCtrl.user.current_institution.key);
             if(event.isValid()) {
                 var patch = formatPatch(generatePatch(jsonpatch.generate(dialogCtrl.observer), event));
                 EventService.editEvent(dialogCtrl.event.key, patch).then(function success() {
@@ -176,14 +173,15 @@
             }
         }
 
+        /*
+        * This function remove the string '.000Z' added in end of properties start_time and end_time automatically by generatePatch.
+        * @param {patch} - The patch list of properties that be changed.
+        * @return {undefined} - Void function returns undefined.
+        */
         function formatPatch(patch) {
             return patch.reduce((a, b) => {
                 if(b.path === "/end_time" || b.path === "/start_time") {
                     b.value = b.value.split(".")[0];
-                }
-                if((b.path.includes("video_url") || b.path.includes("useful_links"))
-                    && b.value.url === '') {
-                        return a;
                 }
                 a.push(b);
                 return a;
@@ -344,6 +342,18 @@
             });
         }
 
+        function initObserver() {
+            dialogCtrl.dateChangeEvent = _.clone(dialogCtrl.event);
+            dialogCtrl.dateChangeEvent = new Event(dialogCtrl.dateChangeEvent, dialogCtrl.user.current_institution.key);
+            dialogCtrl.observer = jsonpatch.observe(dialogCtrl.event);
+        }
+
+        function loadDateToShow() {
+            dialogCtrl.start_time = new Date(dialogCtrl.dateChangeEvent.start_time);
+            dialogCtrl.event.start_time = new Date(dialogCtrl.dateChangeEvent.start_time);
+            dialogCtrl.event.end_time = new Date(dialogCtrl.dateChangeEvent.end_time);
+        }
+
         function loadSelectedState() {
             if (dialogCtrl.event.address.federal_state) {
                 dialogCtrl.selectedFederalState = dialogCtrl.federalStates
@@ -353,25 +363,26 @@
            }
         }
 
-        (function main() {
-            getCountries();
-            loadFederalStates();
+        function initUrlFields() {
             if(dialogCtrl.event) {
-                dialogCtrl.dateChangeEvent = _.clone(dialogCtrl.event);
-                dialogCtrl.dateChangeEvent.start_time = new Date(dialogCtrl.dateChangeEvent.start_time);
-                dialogCtrl.dateChangeEvent.end_time = new Date(dialogCtrl.dateChangeEvent.end_time);
-                dialogCtrl.start_time = new Date(dialogCtrl.dateChangeEvent.start_time);
-                dialogCtrl.event.start_time = new Date(dialogCtrl.dateChangeEvent.start_time);
-                dialogCtrl.event.end_time = new Date(dialogCtrl.dateChangeEvent.end_time);
-                dialogCtrl.dateChangeEvent = new Event(dialogCtrl.dateChangeEvent, dialogCtrl.user.current_institution.key);
-                dialogCtrl.observer = jsonpatch.observe(dialogCtrl.event);
-                loadSelectedState();
                 dialogCtrl.videoUrls = dialogCtrl.event.video_url.concat([angular.copy(emptyUrl)]);
                 dialogCtrl.usefulLinks = dialogCtrl.event.useful_links.concat([angular.copy(emptyUrl)]);
             } else {
-                dialogCtrl.event = {address: {}};
                 dialogCtrl.videoUrls = [angular.copy(emptyUrl)];
                 dialogCtrl.usefulLinks = [angular.copy(emptyUrl)];
+            }
+        }
+
+        (function main() {
+            getCountries();
+            loadFederalStates();
+            initUrlFields();
+            if(dialogCtrl.event) {
+                loadSelectedState();
+                initObserver();
+                loadDateToShow();
+            } else {
+                dialogCtrl.event = {address: {}};
             }
         })();
     });

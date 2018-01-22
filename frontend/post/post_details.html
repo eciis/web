@@ -218,11 +218,11 @@
 
   <!-- COMMENTS -->
   <div ng-if="postDetailsCtrl.showComments || postDetailsCtrl.isPostPage">
-    <div flex ng-if="postDetailsCtrl.isLoadingComments"  layout="row" layout-align="center center">
+    <div flex ng-if="postDetailsCtrl.isLoadingComments && !postDetailsCtrl.isPostPage"  layout="row" layout-align="center center">
       <md-progress-circular md-mode="indeterminate"></md-progress-circular>
     </div> 
     <md-divider style="margin-top: 15px;"></md-divider>
-    <comment ng-if="!postDetailsCtrl.isLoadingComments"
+    <comment ng-if="!postDetailsCtrl.isLoadingComments || postDetailsCtrl.isPostPage"
       ng-repeat="comment in postDetailsCtrl.getValues(postDetailsCtrl.post.data_comments) | orderBy:'publication_date'"
       comment="comment" user="postDetailsCtrl.user" post="postDetailsCtrl.post"></comment>
   </div>

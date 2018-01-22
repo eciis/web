@@ -9,7 +9,7 @@
         var morePosts = true;
         var actualPage = 0;
 
-        institutionCtrl.current_institution = null;
+        institutionCtrl.institution = null;
         institutionCtrl.posts = [];
         institutionCtrl.isUserFollower = false;
         institutionCtrl.isMember = false;
@@ -23,11 +23,11 @@
         var currentInstitutionKey = $state.params.institutionKey;
 
         institutionCtrl.user = AuthService.getCurrentUser();
-        institutionCtrl.addPost = institutionCtrl.user.current_institution.key === currentInstitutionKey;
+        institutionCtrl.addPost = institutionCtrl.user.institution.key === currentInstitutionKey;
 
         function loadInstitution() {
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
-                institutionCtrl.current_institution = new Institution(response.data);
+                institutionCtrl.institution = new Institution(response.data);
                 checkIfUserIsFollower();
                 institutionCtrl.checkIfUserIsMember();
                 getPortfolioUrl();
@@ -41,7 +41,7 @@
         }
 
         function getPortfolioUrl() {
-            institutionCtrl.portfolioUrl = institutionCtrl.current_institution.portfolio_url;
+            institutionCtrl.portfolioUrl = institutionCtrl.institution.portfolio_url;
             if(institutionCtrl.portfolioUrl) {
                 PdfService.getReadableURL(institutionCtrl.portfolioUrl, setPortifolioURL)
                     .then(function success() {
@@ -90,7 +90,7 @@
 
         institutionCtrl.isAdmin = function isAdmin() {
             var isAdmin = institutionCtrl.user.isAdmin(currentInstitutionKey);
-            var isloggedWithInstitution = (institutionCtrl.user.current_institution.key === currentInstitutionKey);
+            var isloggedWithInstitution = (institutionCtrl.user.institution.key === currentInstitutionKey);
 
             return isAdmin && isloggedWithInstitution;
         };
@@ -98,8 +98,8 @@
         institutionCtrl.follow = function follow(){
             var promise = InstitutionService.follow(currentInstitutionKey);
             promise.then(function success(){
-                MessageService.showToast("Seguindo "+institutionCtrl.current_institution.name);
-                var institution = institutionCtrl.current_institution.make();
+                MessageService.showToast("Seguindo "+institutionCtrl.institution.name);
+                var institution = institutionCtrl.institution.make();
                 institutionCtrl.user.follow(institution);
                 institutionCtrl.isUserFollower = true;
                 AuthService.save();
@@ -110,14 +110,14 @@
         };
 
         institutionCtrl.unfollow = function unfollow() {
-            if(institutionCtrl.user.isMember(institutionCtrl.current_institution.key)){
-                MessageService.showToast("Você não pode deixar de seguir " + institutionCtrl.current_institution.name);
+            if(institutionCtrl.user.isMember(institutionCtrl.institution.key)){
+                MessageService.showToast("Você não pode deixar de seguir " + institutionCtrl.institution.name);
             }
             else{
                 var promise = InstitutionService.unfollow(currentInstitutionKey);
                 promise.then(function success(){
-                    MessageService.showToast("Deixou de seguir "+institutionCtrl.current_institution.name);
-                    institutionCtrl.user.unfollow(institutionCtrl.current_institution);
+                    MessageService.showToast("Deixou de seguir "+institutionCtrl.institution.name);
+                    institutionCtrl.user.unfollow(institutionCtrl.institution);
                     institutionCtrl.isUserFollower = false;
                     AuthService.save();
                 }, function error() {
@@ -128,7 +128,7 @@
         };
 
         institutionCtrl.showHideDescription = function hideDescription() {
-            institutionCtrl.showFullDescription = institutionCtrl.current_institution.description && !institutionCtrl.showFullDescription ;
+            institutionCtrl.showFullDescription = institutionCtrl.institution.description && !institutionCtrl.showFullDescription ;
         };
 
         institutionCtrl.showHideData = function showHideData() {
@@ -136,7 +136,7 @@
         };
 
         institutionCtrl.showFollowButton = function showFollowButton() {
-           return !institutionCtrl.isMember && institutionCtrl.current_institution && institutionCtrl.current_institution.name !== "Ministério da Saúde";
+           return institutionCtrl.institution && !institutionCtrl.isMember && institutionCtrl.institution.name !== "Ministério da Saúde";
         };
 
         institutionCtrl.goToManageMembers = function goToManageMembers(){
@@ -188,11 +188,11 @@
         };
 
         function checkIfUserIsFollower() {
-            institutionCtrl.isUserFollower = institutionCtrl.user.isFollower(institutionCtrl.current_institution);
+            institutionCtrl.isUserFollower = institutionCtrl.user.isFollower(institutionCtrl.institution);
         }
 
         institutionCtrl.checkIfUserIsMember = function checkIfUserIsMember() {
-            var institutionKey = institutionCtrl.current_institution.key;
+            var institutionKey = institutionCtrl.institution.key;
             institutionCtrl.isMember = institutionCtrl.user.isMember(institutionKey);
         };
 
@@ -211,27 +211,27 @@
         };
 
         institutionCtrl.openWebsite = function openWebsite() {
-            var website = institutionCtrl.current_institution.website_url;
+            var website = institutionCtrl.institution.website_url;
             $window.open(website);
         };
 
         institutionCtrl.getFullAddress = function getFullAddress() {
-            if(institutionCtrl.current_institution) {
-                return institutionCtrl.current_institution.getFullAddress();
+            if(institutionCtrl.institution) {
+                return institutionCtrl.institution.getFullAddress();
             }
         };
 
         function getLegalNature() {
             InstitutionService.getLegalNatures().then(function success(response) {
                 institutionCtrl.instLegalNature = _.get(response.data, 
-                    institutionCtrl.current_institution.legal_nature);
+                    institutionCtrl.institution.legal_nature);
             });
         }
 
         function getActuationArea() {
             InstitutionService.getActuationAreas().then(function success(response) {
                 institutionCtrl.instActuationArea = _.get(response.data, 
-                   institutionCtrl.current_institution.actuation_area);
+                   institutionCtrl.institution.actuation_area);
             });
         }
 
@@ -247,7 +247,7 @@
                 parent: angular.element(document.body),
                 targetEvent: event,
                 locals: {
-                    institution: institutionCtrl.current_institution
+                    institution: institutionCtrl.institution
                 },
                 bindToController: true,
                 clickOutsideToClose:true,
@@ -269,7 +269,7 @@
                 targetEvent: ev,
                 clickOutsideToClose:true,
                 locals: {
-                    institution: institutionCtrl.current_institution
+                    institution: institutionCtrl.institution
                 },
                 controller: RemoveInstController,
                 controllerAs: 'ctrl'

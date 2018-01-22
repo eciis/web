@@ -122,7 +122,14 @@ class InstitutionHandler(BaseHandler):
     @login_required
     @isUserInvited
     def post(self, user, institution_key, inviteKey):
-        """Handler POST Requests."""
+        """
+        Handler POST Requests.
+        
+        This handler terminates the configuration of the institution 
+        from the created stub, marks the invite received as accepted and 
+        adds the permissions of administered in the higher institutions 
+        if the institution created has a parent institution.
+        """
         data = json.loads(self.request.body)
 
         institution = ndb.Key(urlsafe=institution_key).get()
@@ -144,6 +151,8 @@ class InstitutionHandler(BaseHandler):
         invite = ndb.Key(urlsafe=inviteKey).get()
         invite.send_response_notification(user, invite.admin_key.urlsafe(), 'ACCEPT')
 
+        enqueue_task('add-admin-permissions', {'institution_key': institution_key})
+
         institution_json = Utils.toJson(institution)
         self.response.write(json.dumps(
             institution_json))
@@ -152,7 +161,15 @@ class InstitutionHandler(BaseHandler):
     @json_response
     @ndb.transactional(xg=True)
     def delete(self, user, institution_key):
-        """Handle DELETE Requests."""
+        """
+        Handle DELETE institution.
+
+        This handler is responsible for deleting an institution.
+        If the 'remove_hierarchy' parameter is true, it removes the child hierarchy.
+        When removing an institution, the permissions of administrator,
+        in relation to this institution, are removed from
+        the administrators of the parents institutions.
+        """
         remove_hierarchy = self.request.get('removeHierarchy')
         institution = ndb.Key(urlsafe=institution_key).get()
 
@@ -171,6 +188,7 @@ class InstitutionHandler(BaseHandler):
             'remove_hierarchy': remove_hierarchy
         }
 
+        enqueue_task('remove-admin-permissions', params)
         enqueue_task('remove-inst', params)
 
         email_params = {

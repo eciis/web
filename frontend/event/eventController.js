@@ -175,7 +175,7 @@
 
         /*
         * This function remove the string '.000Z' added in end of properties start_time and end_time automatically by generatePatch.
-        * @param {patch} - The patch list of properties that be changed.
+        * @param {patch} - The patch list of properties that was changed.
         * @return {undefined} - Void function returns undefined.
         */
         function formatPatch(patch) {
@@ -342,13 +342,13 @@
             });
         }
 
-        function initObserver() {
+        function initPatchObserver() {
             dialogCtrl.dateChangeEvent = _.clone(dialogCtrl.event);
             dialogCtrl.dateChangeEvent = new Event(dialogCtrl.dateChangeEvent, dialogCtrl.user.current_institution.key);
             dialogCtrl.observer = jsonpatch.observe(dialogCtrl.event);
         }
 
-        function loadDateToShow() {
+        function loadEventDates() {
             dialogCtrl.start_time = new Date(dialogCtrl.dateChangeEvent.start_time);
             dialogCtrl.event.start_time = new Date(dialogCtrl.dateChangeEvent.start_time);
             dialogCtrl.event.end_time = new Date(dialogCtrl.dateChangeEvent.end_time);
@@ -379,8 +379,8 @@
             initUrlFields();
             if(dialogCtrl.event) {
                 loadSelectedState();
-                initObserver();
-                loadDateToShow();
+                initPatchObserver();
+                loadEventDates();
             } else {
                 dialogCtrl.event = {address: {}};
             }

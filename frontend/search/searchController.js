@@ -3,7 +3,8 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("SearchController", function SearchController($state, InstitutionService, MessageService, $http, brCidadesEstados) {
+    app.controller("SearchController", function SearchController($state, InstitutionService, MessageService, 
+        brCidadesEstados, HttpService) {
 
         var searchCtrl = this;
 
@@ -19,7 +20,8 @@
 
         searchCtrl.makeSearch = function makeSearch(value, type, attribute) {
             searchCtrl.loading = false;
-            var promise = InstitutionService.searchInstitutions(value ? value : (searchCtrl.search_keyword || ""), "active", type);
+            var valueOrKeyword = value ? value : (searchCtrl.search_keyword || "");
+            var promise = InstitutionService.searchInstitutions(valueOrKeyword, "active", type);
             promise.then(function success(response) {
                 searchCtrl.institutions = response.data;
                 searchCtrl.initialInstitutions = _.clone(searchCtrl.institutions);
@@ -61,22 +63,33 @@
 
         function getFilteredInstitutions(search, attribute) {
             searchCtrl.institutions = _.filter(searchCtrl.initialInstitutions, function (institution) {
-                var natureDefaultValue = searchCtrl.searchNature === "Pesquisar em todas as áreas";
-                var actuationDefaultValue = searchCtrl.searchActuation === "Pesquisar em todas as áreas";
-                var stateDefaultValue = searchCtrl.searchState === "Pesquisar em todos os estados";
-
-                var sameNature = legalNatures[institution.legal_nature] === searchCtrl.searchNature || !searchCtrl.searchNature || natureDefaultValue;
-                var sameActuationArea = actuationAreas[institution.actuation_area] === searchCtrl.searchActuation || !searchCtrl.searchActuation || actuationDefaultValue;
-                var sameState = !searchCtrl.searchState || institution.federal_state === searchCtrl.searchState.nome || stateDefaultValue;
-
-                var returnValue = { 
-                    "actuation_area": ((institution.actuation_area === search || !search) && sameNature && sameState),
-                    "legal_nature": ((institution.legal_nature === search || !search) && sameActuationArea && sameState),
-                    "federal_state": ((institution.federal_state === search || !search) && sameActuationArea && sameNature),
-                }
-
-                return attribute ? returnValue[attribute] : true;
+                return canInstitutionBeInFilteredList(institution, search, attribute);
             });
+        }
+
+        function canInstitutionBeInFilteredList (institution, search, attribute) {
+            var natureDefaultValue = searchCtrl.searchNature === "Pesquisar em todas as áreas";
+            var actuationDefaultValue = searchCtrl.searchActuation === "Pesquisar em todas as áreas";
+            var stateDefaultValue = searchCtrl.searchState === "Pesquisar em todos os estados";
+
+            var natureIsNotSelected = !searchCtrl.searchNature || natureDefaultValue;
+            var actuationIsNotSelected = !searchCtrl.searchActuation || actuationDefaultValue;
+            var stateIsNotSelected = !searchCtrl.searchState || stateDefaultValue;
+
+            // True If the fields are the same or If the field is not selected. 
+            var sameNature = legalNatures[institution.legal_nature] === searchCtrl.searchNature || natureIsNotSelected;
+            var sameActuationArea = actuationAreas[institution.actuation_area] === searchCtrl.searchActuation || actuationIsNotSelected;
+            var sameState = stateIsNotSelected || institution.federal_state === searchCtrl.searchState.nome;
+
+            // It keeps If the search's current attribute is the same in the institution and the search param and
+            // If the others controller's and institution's fields are the same.
+            var returnValue = {
+                "actuation_area": ((institution.actuation_area === search || !search) && sameNature && sameState),
+                "legal_nature": ((institution.legal_nature === search || !search) && sameActuationArea && sameState),
+                "federal_state": ((institution.federal_state === search || !search) && sameActuationArea && sameNature),
+            }
+
+            return attribute ? returnValue[attribute] : true;
         }
 
         function searchInServer () {
@@ -89,16 +102,16 @@
         };
 
         function getActuationAreas() {
-            $http.get('app/institution/actuation_area.json').then(function success(response) {
-                searchCtrl.actuationAreas = objectToObjectArray(response.data);
-                actuationAreas = response.data;
+            HttpService.get('app/institution/actuation_area.json').then(function success(response) {
+                searchCtrl.actuationAreas = objectToObjectArray(response);
+                actuationAreas = response;
             });
         }
 
         function getLegalNatures() {
-            $http.get('app/institution/legal_nature.json').then(function success(response) {
-                searchCtrl.legalNature = objectToObjectArray(response.data);
-                legalNatures = response.data;
+            HttpService.get('app/institution/legal_nature.json').then(function success(response) {
+                searchCtrl.legalNature = objectToObjectArray(response);
+                legalNatures = response;
             });
         }
 

@@ -19,6 +19,7 @@
         homeCtrl.refreshTimeline = false;
         homeCtrl.instMenuExpanded = false;
         homeCtrl.isLoadingPosts = true;
+        homeCtrl.showMessageOfEmptyEvents = true;
         homeCtrl.stateView = "";
 
         homeCtrl.user = AuthService.getCurrentUser();
@@ -33,6 +34,18 @@
 
         homeCtrl.goToInstitution = function goToInstitution(institutionKey) {
             $state.go('app.institution.timeline', {institutionKey: institutionKey});
+        };
+
+        homeCtrl.showEvent = function showEvent(event) {
+            var end_time = event.end_time;
+            var date = new Date();
+            var current_time = date.toISOString().substr(0, end_time.length);
+
+            if (current_time <= end_time) {
+                homeCtrl.showMessageOfEmptyEvents = false;
+            }
+
+            return current_time <= end_time;
         };
 
         homeCtrl.showUserProfile = function showUserProfile(userKey, ev) {
@@ -110,7 +123,7 @@
         };
 
         homeCtrl.isEventsEmpty = function isEventsEmpty() {
-            return homeCtrl.events.length === 0;
+            return homeCtrl.events.length === 0 || homeCtrl.showMessageOfEmptyEvents;
         };
 
         homeCtrl.showRefreshTimelineButton = function showRefreshTimelineButton() {

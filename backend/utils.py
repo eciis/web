@@ -121,6 +121,11 @@ def login_required(method):
         method(self, user, *args)
     return login
 
+def follow_health_ministry(user,health_ministry):
+    user.follows.append(health_ministry.key)
+    user.put()
+    health_ministry.followers.append(user.key)
+    health_ministry.put()
 
 def create_user(name, email):
     """Create user."""
@@ -130,7 +135,7 @@ def create_user(name, email):
     user.photo_url = "app/images/avatar.png"
     health_ministry = get_health_ministry().get()
     if health_ministry is not None:
-        user.follows.append(health_ministry.key)
+        follow_health_ministry(user,health_ministry)
     user.put()
     
     return user

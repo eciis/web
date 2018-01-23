@@ -6,8 +6,6 @@ from utils import Utils
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-MAXIMUM_SIZE = 29
-LAST_CHAR = 26
 
 class EmailSender(object):
 
@@ -40,7 +38,8 @@ class EmailSender(object):
             }
         )
 
-    def crop_institution_name(self, institution_name):
-        """Crop the institution name if it is bigger than the maximum size."""
-        institution_name = (institution_name[:LAST_CHAR] + '...') if len(institution_name) > MAXIMUM_SIZE else institution_name
-        return institution_name
+    def crop_name(self, name, size):
+        """Crop the name if it is bigger than the maximum size."""
+        name = (name[:(size-3)] + '...') if len(
+            name) > size else name
+        return name

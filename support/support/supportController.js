@@ -4,7 +4,7 @@
     var support = angular.module('support');
 
     support.controller("SupportController", function SupportController($mdSidenav, $state,
-            AuthService, $timeout, $scope) {
+            AuthService, $timeout, $scope, FirebaseService) {
         var controller = this;
 
         controller.user = AuthService.getCurrentUser();
@@ -67,5 +67,9 @@
         };
 
         $scope.toggleLeft = buildDelayedToggler('left');
+
+        (function main() {
+            FirebaseService.setup();
+        })();
     });
 })();

@@ -1,12 +1,12 @@
 (function () {
     var support = angular.module('support');
 
-    support.service('FirebaseService', function ($firebaseArray) {
+    support.service('FirebaseService', function ($firebaseArray, AuthService) {
         var service = this;
 
         var firebaseRef = firebase.database().ref();
-        var reportsRef = firebaseRef.child("reports/");
-        var reportsArray = $firebaseArray(reportsRef);
+        
+        var reportsArray;
 
         service.getReports = function getReports() {
             return reportsArray.$loaded();
@@ -14,6 +14,16 @@
 
         service.createReport = function createReport(report) {
             return reportsArray.$add(report);
+        };
+
+        AuthService.$onLogout(function destroy() {
+            reportsArray.$destroy();
+            reportsArray = undefined;
+        });
+
+        service.setup = function setup() {
+            var reportsRef = firebaseRef.child("reports/");
+            reportsArray = $firebaseArray(reportsRef);
         };
     });
 })();

@@ -16,6 +16,7 @@ from custom_exceptions.entityException import EntityException
 from models.institution import Institution
 from util.json_patch import JsonPatch
 from service_entities import enqueue_task
+from send_email_hierarchy.remove_institution_email_sender import RemoveInstitutionEmailSender
 
 
 from handlers.base_handler import BaseHandler
@@ -193,13 +194,14 @@ class InstitutionHandler(BaseHandler):
 
         email_params = {
             "justification": self.request.get('justification'),
-            "message": """Lamentamos informar que a instituição %s foi removida
+            "body": """Lamentamos informar que a instituição %s foi removida
             pelo administrador %s """ % (institution.name, user.name),
             "subject": "Remoção de instituição",
-            "institution_key": institution_key
+            "inst_key": institution_key
         }
-
-        enqueue_task('email-members', email_params)
+        
+        email_sender = RemoveInstitutionEmailSender(**email_params)
+        email_sender.send_email()
 
         notification_params = {
             "sender_key": user.key.urlsafe(),

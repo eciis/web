@@ -15,7 +15,7 @@ class EmailSender(object):
         It initializes the object with the common properties.
         """
         self.subject = kwargs['subject']
-        self.receiver = kwargs['receiver']
+        self.receiver = kwargs['receiver'] if 'receiver' in kwargs.keys() else ""
         self.html = 'default.html'
         self.body = kwargs['body'] if 'body' in kwargs.keys() else ""
 

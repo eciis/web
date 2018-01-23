@@ -83,7 +83,7 @@
                 <md-grid-tile
                   ng-repeat="inst in homeCtrl.followingInstitutions | limitTo: 8"
                   md-colspan="1" md-rowspan="1" class="clickable-no-hover">
-                    <img  
+                    <img
                       class="rounded-circle" ng-click="homeCtrl.goToInstitution(inst.key)"
                       ng-src="{{inst.photo_url}}" title="{{inst.name}}"/>
                 </md-grid-tile>

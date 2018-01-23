@@ -4,6 +4,8 @@
 from google.appengine.ext.ndb.polymodel import PolyModel
 from google.appengine.api import search
 
+import logging
+
 
 def has_changes(fields, entity):
     """It returns True when there is a change
@@ -52,6 +54,9 @@ class SearchDocument(PolyModel):
         """
         index = search.Index(name=self.index_name)
         doc = index.get(entity.key.urlsafe())
-        if(has_changes(doc.fields, entity)):
-            index.delete(entity.key.urlsafe())
-            self.createDocument(entity)
+        if not doc is None or not doc is type(None):
+            if(has_changes(doc.fields, entity)):
+                index.delete(entity.key.urlsafe())
+                self.createDocument(entity)
+        else:
+            logging.warning("Update document of {} was not possible. The document returned None.", self.index_name)

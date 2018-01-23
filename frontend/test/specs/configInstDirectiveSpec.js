@@ -43,7 +43,8 @@ describe('Test ConfigInstDirective', function() {
     var legal_nature = {
         "private for-profit":"Privada com fins lucrativos",
         "private non-profit":"Privada sem fins lucrativos",
-        "public":"Pública" 
+        "public":"Pública",
+        "startup":"Startup" 
     };
     var actuation_area = {
         "OFFICIAL_BANK": "Banco Oficial",

@@ -54,7 +54,7 @@ class SearchDocument(PolyModel):
         """
         index = search.Index(name=self.index_name)
         doc = index.get(entity.key.urlsafe())
-        if not doc is None or not doc is type(None):
+        if not doc is None and not doc is type(None):
             if(has_changes(doc.fields, entity)):
                 index.delete(entity.key.urlsafe())
                 self.createDocument(entity)

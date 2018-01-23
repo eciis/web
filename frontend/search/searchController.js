@@ -76,12 +76,12 @@
             var actuationIsNotSelected = !searchCtrl.searchActuation || actuationDefaultValue;
             var stateIsNotSelected = !searchCtrl.searchState || stateDefaultValue;
 
-            // True If the fields are the same or If the field is not selected. 
+            // True If the institution's fields and controller's fields are the same or If the field is not selected. 
             var sameNature = legalNatures[institution.legal_nature] === searchCtrl.searchNature || natureIsNotSelected;
             var sameActuationArea = actuationAreas[institution.actuation_area] === searchCtrl.searchActuation || actuationIsNotSelected;
             var sameState = stateIsNotSelected || institution.federal_state === searchCtrl.searchState.nome;
 
-            // It keeps If the search's current attribute is the same in the institution and the search param and
+            // It stores If the search's current attribute is the same in the institution and the search param and
             // If the others controller's and institution's fields are the same.
             var returnValue = {
                 "actuation_area": ((institution.actuation_area === search || !search) && sameNature && sameState),

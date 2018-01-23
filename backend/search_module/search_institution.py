@@ -36,7 +36,7 @@ class SearchInstitution(SearchDocument):
         relationed to the institution.
         """
         index = api.search.Index(name=self.index_name)
-        if not index.get(institution.key.urlsafe()):
+        if index.get(institution.key.urlsafe()) is None:
             admin = institution.email
             if institution.admin:
                 admin = institution.admin.get().email[0]

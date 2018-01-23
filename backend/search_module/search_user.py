@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Search User."""
 
-from google.appengine import api
+from google.appengine.api import search
 from search_document import SearchDocument
 
 
@@ -20,7 +20,7 @@ class SearchUser(SearchDocument):
         name and state. All of them are self descriptive and
         relationed to the user.
         """
-        index = api.search.Index(name=self.index_name)
+        index = search.Index(name=self.index_name)
         doc = index.get(user.key.urlsafe())
         if doc is None or doc is type(None):
             content = {
@@ -29,13 +29,13 @@ class SearchUser(SearchDocument):
                 'state': user.state,
             }
             # Make the structure of the document by setting the fields and its id.
-            document = api.search.Document(
+            document = search.Document(
                 # The document's id is the same of the user's one,
                 # what makes the search easier.
                 doc_id=content['id'],
                 fields=[
-                    api.search.TextField(name='name', value=content['name']),
-                    api.search.TextField(name='state', value=content['state']),
+                    search.TextField(name='name', value=content['name']),
+                    search.TextField(name='state', value=content['state']),
                 ]
             )
             self.saveDocument(document)
@@ -45,11 +45,11 @@ class SearchUser(SearchDocument):
     def getDocuments(self, value, state):
         """Retrieve the documents and return them processed."""
         query_string = self.makeQueryStr(value, state)
-        index = api.search.Index(name=self.index_name)
-        query_options = api.search.QueryOptions(
+        index = search.Index(name=self.index_name)
+        query_options = search.QueryOptions(
             returned_fields=['name', 'state']
         )
-        query = api.search.Query(query_string=query_string, options=query_options)
+        query = search.Query(query_string=query_string, options=query_options)
         documents = index.search(query)
         return self.processDocuments(documents)
 

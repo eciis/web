@@ -21,7 +21,7 @@ class SearchUser(SearchDocument):
         relationed to the user.
         """
         index = api.search.Index(name=self.index_name)
-        if not index.get(user.key.urlsafe()):
+        if index.get(user.key.urlsafe()) is None:
             content = {
                 'id': user.key.urlsafe(),
                 'name': user.name,

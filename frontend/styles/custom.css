@@ -516,6 +516,8 @@ a:active {
     margin-right: 10px;
     width: 50px;
     height: 50px;
+    min-width: 40px;
+    min-height: 40px;
     max-width: 50px;
     max-height: 50px;
     -webkit-border-radius: 50%;

@@ -132,7 +132,7 @@ def create_user(name, email):
     user.name = name
     user.photo_url = "app/images/avatar.png"
     health_ministry = get_health_ministry().get()
-    deciis = get_deciis()
+    deciis = get_deciis().get()
     """"TODO: All users have to follow MS and DECIIS
         Think of a better way to do it
         @author: Mayza Nunes 24/01/2018

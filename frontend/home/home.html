@@ -43,7 +43,7 @@
                   Nenhum evento próximo
                 </center>
               </div>
-              <div layout="row" ng-repeat="event in homeCtrl.events" class="event-item">
+              <div layout="row" ng-repeat="event in homeCtrl.events | filter: homeCtrl.eventInProgress" class="event-item">
                 <div layout="row">
                   <div class="rounded-circle event-date">
                     <span class="event-day">

@@ -709,7 +709,6 @@ class ResetMSHandler(BaseHandler):
             {"msg": "database initialized with Ministerio da Saude"})
 
         admin.add_permissions(permissions.DEFAULT_ADMIN_PERMISSIONS, ms.key.urlsafe())
-        admin.add_permissions(permissions.DEFAULT_SUPER_USER_PERMISSIONS, ms.key.urlsafe())
         create_profile(admin, ms)
 
         admin.add_permissions(permissions.DEFAULT_ADMIN_PERMISSIONS, deciis.key.urlsafe())

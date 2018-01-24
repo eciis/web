@@ -707,7 +707,7 @@ class ResetMSHandler(BaseHandler):
         
         jsonList.append(
             {"msg": "database initialized with Ministerio da Saude and\
-            Departamento do Complexo Industrial e Inovação em Saúde "})
+            Departamento do Complexo Industrial e Inovacao em Saude "})
 
         admin.add_permissions(permissions.DEFAULT_ADMIN_PERMISSIONS, ms.key.urlsafe())
         create_profile(admin, ms)

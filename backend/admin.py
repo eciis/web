@@ -636,6 +636,7 @@ class ResetMSHandler(BaseHandler):
         admin.name = 'Administrador da Plataforma Virtual CIS'
         admin.cpf = '000.000.000-01'
         admin.email = [
+            'deciis@saude.gov.br',
             'plataformavirtualcis@gmail.com'
         ]
         admin.photo_url = "app/images/avatar.png"
@@ -672,7 +673,7 @@ class ResetMSHandler(BaseHandler):
              Federação, os municípios, a iniciativa privada e a sociedade, contribuindo para a melhoria da qualidade \
              de vida e para o exercício da cidadania.',
             'photo_url': 'https://i1.wp.com/notta.news/wp-content/uploads/2017/08/tbg_20170713080909_62787.jpg?w=1024',
-            'email': 'testeeciis@gmail.com',
+            'email': 'deciis@saude.gov.br',
             'phone_number': '61 3315-2425',
             'state': 'active',
             'institutional_email':'sic@saude.gov.br',
@@ -680,7 +681,29 @@ class ResetMSHandler(BaseHandler):
             'website_url':'http://portalms.saude.gov.br/'
         }
         
+        data_deciis = {
+            'name': 'Departamento do Complexo Industrial e Inovação em Saúde',
+            'acronym': 'DECIIS',
+            'cnpj': '',
+            'legal_nature': 'PUBLIC',
+            'address': address_key,
+            'actuation_area': 'Ministérios e outros Órgãos do Governo',
+            'description': 'O Departamento do Complexo Industrial e Inovação em Saúde (DECIIS/SCTIE) foi criado \
+             em 2009, a partir da publicação do Decreto Presidencial nº 6860, com o objetivo de fomentar a \
+             produção pública de tecnologias estratégicas para o Sistema Único de Saúde - SUS e consolidar a \
+             estratégia nacional de fomento, desenvolvimento e inovação no âmbito do Complexo Industrial da \
+              Saúde - CIS.',
+            'photo_url': 'https://i1.wp.com/notta.news/wp-content/uploads/2017/08/tbg_20170713080909_62787.jpg?w=1024',
+            'email': 'deciis@saude.gov.br',
+            'phone_number': '61 3315-2425',
+            'state': 'active',
+            'institutional_email':'deciis@saude.gov.br',
+            'leader':' Ministro Ricardo Barros',
+            'website_url':'http://portalms.saude.gov.br/'
+        }
+
         ms = createInstitution(data, admin)
+        deciis = createInstitution(data_deciis, admin)
         
         jsonList.append(
             {"msg": "database initialized with Ministerio da Saude"})
@@ -688,6 +711,10 @@ class ResetMSHandler(BaseHandler):
         admin.add_permissions(permissions.DEFAULT_ADMIN_PERMISSIONS, ms.key.urlsafe())
         admin.add_permissions(permissions.DEFAULT_SUPER_USER_PERMISSIONS, ms.key.urlsafe())
         create_profile(admin, ms)
+
+        admin.add_permissions(permissions.DEFAULT_ADMIN_PERMISSIONS, deciis.key.urlsafe())
+        admin.add_permissions(permissions.DEFAULT_SUPER_USER_PERMISSIONS, deciis.key.urlsafe())
+        create_profile(admin, deciis)
         admin.put()
 
         self.response.write(json.dumps(jsonList))

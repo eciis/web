@@ -36,7 +36,7 @@
             $state.go('app.institution.timeline', {institutionKey: institutionKey});
         };
 
-        homeCtrl.isNotFinalizedEvent = function isNotFinalizedEvent(event) {
+        homeCtrl.eventInProgress = function eventInProgress(event) {
             var end_time = event.end_time;
             var date = new Date();
             var current_time = date.toISOString().substr(0, end_time.length);

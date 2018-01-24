@@ -636,8 +636,7 @@ class ResetMSHandler(BaseHandler):
         admin.name = 'Administrador da Plataforma Virtual CIS'
         admin.cpf = '000.000.000-01'
         admin.email = [
-            'testeeciis@gmail.com',
-            'teste@eciis.com'
+            'plataformavirtualcis@gmail.com'
         ]
         admin.photo_url = "app/images/avatar.png"
         admin.state = 'active'

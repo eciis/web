@@ -706,7 +706,8 @@ class ResetMSHandler(BaseHandler):
         deciis = createInstitution(data_deciis, admin)
         
         jsonList.append(
-            {"msg": "database initialized with Ministerio da Saude"})
+            {"msg": "database initialized with Ministerio da Saude and\
+            Departamento do Complexo Industrial e Inovação em Saúde "})
 
         admin.add_permissions(permissions.DEFAULT_ADMIN_PERMISSIONS, ms.key.urlsafe())
         create_profile(admin, ms)

@@ -121,9 +121,9 @@ def login_required(method):
         method(self, user, *args)
     return login
 
-def follow_health_ministry(user,health_ministry):
-    user.follow(health_ministry.key)
-    health_ministry.follow(user.key)
+def follow_inst(user,inst):
+    user.follow(inst.key)
+    inst.follow(user.key)
 
 def create_user(name, email):
     """Create user."""
@@ -132,8 +132,15 @@ def create_user(name, email):
     user.name = name
     user.photo_url = "app/images/avatar.png"
     health_ministry = get_health_ministry().get()
+    deciis = get_deciis()
+    """"TODO: All users have to follow MS and DECIIS
+        Think of a better way to do it
+        @author: Mayza Nunes 24/01/2018
+    """
     if health_ministry is not None:
-        follow_health_ministry(user,health_ministry)
+        follow_inst(user, health_ministry)
+    if deciis is not None:
+        follow_inst(user, deciis)
     user.put()
     
     return user
@@ -141,6 +148,11 @@ def create_user(name, email):
 def get_health_ministry():
     """Get health ministry institution."""
     query = Institution.query(Institution.name == "Ministério da Saúde", Institution.acronym == "MS")
+    return query
+
+def get_deciis():
+    """Get health ministry institution."""
+    query = Institution.query(Institution.name == "Departamento do Complexo Industrial e Inovação em Saúde", Institution.acronym == "DECIIS")
     return query
 
 def json_response(method):

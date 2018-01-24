@@ -1,15 +1,15 @@
 'use strict';
 
-(function() {
+(function () {
     var app = angular.module('app');
 
-    app.controller("SearchController", function SearchController($state, InstitutionService, MessageService, 
+    app.controller("SearchController", function SearchController($state, InstitutionService, MessageService,
         brCidadesEstados, HttpService) {
 
         var searchCtrl = this;
 
         searchCtrl.search_keyword = $state.params.search_keyword;
-        searchCtrl.previous_keyword =  searchCtrl.search_keyword;
+        searchCtrl.previous_keyword = searchCtrl.search_keyword;
         searchCtrl.initialInstitutions = [];
         searchCtrl.institutions = [];
         searchCtrl.actuationAreas = [];
@@ -47,13 +47,13 @@
         searchCtrl.goToInstitution = function goToInstitution(institutionId) {
             if (institutionId) {
                 InstitutionService.getInstitution(institutionId).then(function success(response) {
-                    $state.go('app.institution.timeline', {institutionKey: response.data.key});
+                    $state.go('app.institution.timeline', { institutionKey: response.data.key });
                 });
             }
         };
 
         searchCtrl.searchBy = function searchBy(search, attribute) {
-            if (searchInServer())  {
+            if (searchInServer()) {
                 searchCtrl.makeSearch(search, 'institution', attribute);
                 refreshPreviousKeyword();
             } else {
@@ -67,8 +67,8 @@
          * comparing the attribute selected with the search param value.
          * Besides, only the others attributes are compared with the controller's fields, 
          * once they wouldn't be updated as expected if one of them were the selected one.
-         * @param {string} The search's string 
-         * @param {string} The searched attribute 
+         * @param {string} search: The search's string 
+         * @param {string} attribute: The searched attribute 
          */
         function getFilteredInstitutions(search, attribute) {
             searchCtrl.institutions = _.filter(searchCtrl.initialInstitutions, function (institution) {
@@ -76,33 +76,59 @@
             });
         }
 
-        function canInstitutionBeInFilteredList (institution, search, attribute) {
-            var natureDefaultValue = searchCtrl.searchNature === "Pesquisar em todas as áreas";
-            var actuationDefaultValue = searchCtrl.searchActuation === "Pesquisar em todas as áreas";
-            var stateDefaultValue = searchCtrl.searchState === "Pesquisar em todos os estados";
-
-            //That's necessary once the function needs to know what is the attribute selected
-            var natureIsNotSelected = !searchCtrl.searchNature || natureDefaultValue;
-            var actuationIsNotSelected = !searchCtrl.searchActuation || actuationDefaultValue;
-            var stateIsNotSelected = !searchCtrl.searchState || stateDefaultValue;
+        /**
+         * An institution can be in filtered list if its searched attribute
+         * is equal to the search value and if the others attributes are equal
+         * to those of the controller or aren't selected.
+         */
+        function canInstitutionBeInFilteredList(institution, search, attribute) {
+            //That's necessary once the function needs to know which is the attribute selected
+            var natureIsNotSelected = fieldIsNotSelected(searchCtrl.searchNature, "Pesquisar em todas as áreas");
+            var actuationIsNotSelected = fieldIsNotSelected(searchCtrl.searchActuation, "Pesquisar em todas as áreas");
+            var stateIsNotSelected = fieldIsNotSelected(searchCtrl.searchState, "Pesquisar em todos os estados");
 
             // True If the institution's fields and controller's fields are the same or If the field is not selected. 
             var sameNature = legalNatures[institution.legal_nature] === searchCtrl.searchNature || natureIsNotSelected;
             var sameActuationArea = actuationAreas[institution.actuation_area] === searchCtrl.searchActuation || actuationIsNotSelected;
             var sameState = stateIsNotSelected || institution.federal_state === searchCtrl.searchState.nome;
 
-            // It stores If the search's current attribute is the same in the institution and in the search param and
-            // If the others controller's and institution's fields are the same.
-            var returnValue = {
-                "actuation_area": ((institution.actuation_area === search || !search) && sameNature && sameState),
-                "legal_nature": ((institution.legal_nature === search || !search) && sameActuationArea && sameState),
-                "federal_state": ((institution.federal_state === search || !search) && sameActuationArea && sameNature),
-            }
+            var searchedAttributeCondition = getSearchedAttributeCondition(institution, search,
+                { nature: sameNature, actuation: sameActuationArea, state: sameState }
+            );
 
-            return attribute ? returnValue[attribute] : true;
+            return attribute ? searchedAttributeCondition[attribute] : true;
         }
 
-        function searchInServer () {
+        /**
+         * The field is not selected if its controller's property is undefined 
+         * or equal to the default value
+         * @param {string} field 
+         * @param {string} defaultValue 
+         */
+        function fieldIsNotSelected(field, defaultValue) {
+            return !field || field === defaultValue;
+        }
+
+        /**
+         * Returns an object that stores if the search's attribute is the same
+         * in the institution and in the search param and if the others controller's and
+         * institution's fields are the same. Thus, it's possible to know if the institution
+         * can stay in the filtered list.
+         * @param {object} samePropertiesObject: An object that allows to know if the institution's
+         * attributes are equal to those of the controller.
+         */
+        function getSearchedAttributeCondition(institution, search, samePropertiesObject) {
+            return {
+                "actuation_area": ((institution.actuation_area === search || !search) &&
+                    samePropertiesObject.nature && samePropertiesObject.state),
+                "legal_nature": ((institution.legal_nature === search || !search) &&
+                    samePropertiesObject.actuation && samePropertiesObject.state),
+                "federal_state": ((institution.federal_state === search || !search) &&
+                    samePropertiesObject.actuation && samePropertiesObject.nature),
+            }
+        }
+
+        function searchInServer() {
             var keywordHasChanged = searchCtrl.search_keyword != searchCtrl.previous_keyword;
             return _.isEmpty(searchCtrl.initialInstitutions) || keywordHasChanged || !searchCtrl.search_keyword;
         }
@@ -138,7 +164,7 @@
         function objectToObjectArray(object) {
             var keys = _.keys(object);
             var arrayToReturn = [];
-            _.forEach(keys, function(key) {
+            _.forEach(keys, function (key) {
                 var current_obj = {}
                 current_obj.name = object[key];
                 current_obj.value = key;
@@ -146,7 +172,7 @@
             });
             return arrayToReturn;
         }
-        
+
         function refreshPreviousKeyword() {
             searchCtrl.previous_keyword = searchCtrl.search_keyword;
         }

@@ -11,6 +11,8 @@
 
         newInviteCtrl.inviteKey = $state.params.key;
 
+        newInviteCtrl.acceptedInvite = false;
+
         newInviteCtrl.user = AuthService.getCurrentUser();
 
         newInviteCtrl.phoneRegex = "[0-9]{2}[\\s][0-9]{4,5}[-][0-9]{4,5}";
@@ -20,6 +22,7 @@
         var institutionKey;
 
         newInviteCtrl.acceptInvite = function acceptInvite(event) {
+            newInviteCtrl.acceptedInvite = true;
             if (newInviteCtrl.invite.type_of_invite === "USER") {
                 if(isValidProfile()) {
                     newInviteCtrl.addInstitution(event);

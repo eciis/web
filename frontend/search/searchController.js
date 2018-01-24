@@ -36,7 +36,7 @@
         searchCtrl.search = function search() {
             if (searchCtrl.search_keyword) {
                 searchCtrl.makeSearch(searchCtrl.search_keyword, 'institution');
-                searchCtrl.previous_keyword = searchCtrl.search_keyword;
+                refreshPreviousKeyword();
             }
         };
 
@@ -55,12 +55,21 @@
         searchCtrl.searchBy = function searchBy(search, attribute) {
             if (searchInServer())  {
                 searchCtrl.makeSearch(search, 'institution', attribute);
-                searchCtrl.previous_keyword = searchCtrl.search_keyword;
+                refreshPreviousKeyword();
             } else {
                 getFilteredInstitutions(search, attribute);
             }
         };
 
+
+        /**
+         * By filtering the initialInstitutions this method gets the searched ones by
+         * comparing the attribute selected with the search param value.
+         * Besides, only the others attributes are compared with the controller's fields, 
+         * once they wouldn't be updated as expected if one of them were the selected one.
+         * @param {string} The search's string 
+         * @param {string} The searched attribute 
+         */
         function getFilteredInstitutions(search, attribute) {
             searchCtrl.institutions = _.filter(searchCtrl.initialInstitutions, function (institution) {
                 return canInstitutionBeInFilteredList(institution, search, attribute);
@@ -72,6 +81,7 @@
             var actuationDefaultValue = searchCtrl.searchActuation === "Pesquisar em todas as áreas";
             var stateDefaultValue = searchCtrl.searchState === "Pesquisar em todos os estados";
 
+            //That's necessary once the function needs to know what is the attribute selected
             var natureIsNotSelected = !searchCtrl.searchNature || natureDefaultValue;
             var actuationIsNotSelected = !searchCtrl.searchActuation || actuationDefaultValue;
             var stateIsNotSelected = !searchCtrl.searchState || stateDefaultValue;
@@ -81,7 +91,7 @@
             var sameActuationArea = actuationAreas[institution.actuation_area] === searchCtrl.searchActuation || actuationIsNotSelected;
             var sameState = stateIsNotSelected || institution.federal_state === searchCtrl.searchState.nome;
 
-            // It stores If the search's current attribute is the same in the institution and the search param and
+            // It stores If the search's current attribute is the same in the institution and in the search param and
             // If the others controller's and institution's fields are the same.
             var returnValue = {
                 "actuation_area": ((institution.actuation_area === search || !search) && sameNature && sameState),
@@ -135,6 +145,10 @@
                 arrayToReturn.push(current_obj);
             });
             return arrayToReturn;
+        }
+        
+        function refreshPreviousKeyword() {
+            searchCtrl.previous_keyword = searchCtrl.search_keyword;
         }
 
         (function main() {

@@ -53,13 +53,13 @@
 
         function getActuationAreas() {
             $http.get('app/institution/actuation_area.json').then(function success(response) {
-                searchCtrl.actuationAreas = response.data;
+                searchCtrl.actuationAreas = objectToObjectArray(response.data);
             });
         }
 
         function getLegalNatures() {
             $http.get('app/institution/legal_nature.json').then(function success(response) {
-                searchCtrl.legalNature = response.data;
+                searchCtrl.legalNature = objectToObjectArray(response.data);
             });
         }
 
@@ -71,6 +71,18 @@
 
         function loadBrazilianFederalStates() {
             searchCtrl.brazilianFederalStates = brCidadesEstados.estados;
+        }
+
+        function objectToObjectArray(object) {
+            var keys = _.keys(object);
+            var arrayToReturn = [];
+            _.forEach(keys, function (key) {
+                var current_obj = {}
+                current_obj.name = object[key];
+                current_obj.value = key;
+                arrayToReturn.push(current_obj);
+            });
+            return arrayToReturn;
         }
 
         (function main() {

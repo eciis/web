@@ -103,8 +103,10 @@
         * service notifications.
         */
         AuthService.$onLogout(function destroy() {
-            firebaseArrayNotifications.$destroy();
-            firebaseArrayNotifications = undefined;
+            if(firebaseArrayNotifications) {
+                firebaseArrayNotifications.$destroy();
+                firebaseArrayNotifications = undefined;
+            }
         });
     });
 })();

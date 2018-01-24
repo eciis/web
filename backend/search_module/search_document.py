@@ -59,7 +59,7 @@ class SearchDocument(PolyModel):
                 index.delete(entity.key.urlsafe())
                 self.createDocument(entity)
         else:
-            // TODO: Refact this flow to update document, avoiding NoneType
-            // when the index is searched.
-            // @author: Andre Abrantes - 24-01-2018
+            # TODO: Refact this flow to update document, avoiding NoneType
+            # when the index is searched.
+            # @author: Andre Abrantes - 24-01-2018
             logging.warning("Update document of {} was not possible. The document returned None.", self.index_name)

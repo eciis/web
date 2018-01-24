@@ -1,5 +1,6 @@
 {
     "PRIVATE_FOR-PROFIT":"Privada com fins lucrativos",
     "PRIVATE_NON-PROFIT":"Privada sem fins lucrativos",
-    "PUBLIC":"Pública" 
+    "PUBLIC":"Pública",
+    "STARTUP":"Startup"  
 }

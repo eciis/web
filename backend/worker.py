@@ -1,6 +1,7 @@
 """Send notifications handler."""
 import webapp2
 import json
+import permissions
 from firebase import send_notification
 from google.appengine.api import mail
 import logging
@@ -122,19 +123,22 @@ class EmailMembersHandler(BaseHandler):
 
         institution = ndb.Key(urlsafe=inst_key).get()
 
+        env = Environment(loader=FileSystemLoader('templates'))
+        template = env.get_template(self.request.get('html'))
+        
         for member_key in institution.members:
             member = member_key.get()
             is_admin = member_key == institution.admin
             if(is_admin and justification):
-                message = message + """pelo seguinte motivo:
+                message['body'] += """pelo seguinte motivo:
                 '%s'
                 """ % justification
-
-            send_message_email(
-                member.email,
-                message,
-                subject
-            )
+            
+            mail.send_mail(sender="e-CIS <eciis@splab.ufcg.edu.br>",
+                        to="<%s>" % member.email,
+                        subject=subject,
+                        body="",
+                        html=template.render(json.loads(message)))
 
 
 class NotifyFollowersHandler(BaseHandler):
@@ -160,6 +164,51 @@ class NotifyFollowersHandler(BaseHandler):
                 )
 
 
+class AddAdminPermissionsInInstitutionHierarchy(BaseHandler):
+
+    def addAdminPermissions(self, institution_key):
+        institution = ndb.Key(urlsafe=institution_key).get()
+        admin = institution.admin.get()
+
+        if institution.parent_institution:
+            parent_institution = institution.parent_institution.get()
+            admin_parent = parent_institution.admin.get()
+            
+            for permission in admin.permissions:
+                for institution_key in admin.permissions[permission]:
+                    admin_parent.add_permission(permission, institution_key)
+
+            self.addAdminPermissions(parent_institution.key.urlsafe())
+
+    def post(self):
+        institution_key = self.request.get('institution_key')
+        self.addAdminPermissions(institution_key)
+
+
+class RemoveAdminPermissionsInInstitutionHierarchy(BaseHandler):
+
+    def removeAdminPermissions(self, institution_key, permissions):
+        institution = ndb.Key(urlsafe=institution_key).get()
+        admin = institution.admin.get()
+        permissions_keys = permissions.keys()
+
+        for permission in permissions_keys:
+            institution_keys = permissions[permission].keys()
+            for institution_key in institution_keys:
+                if ndb.Key(urlsafe=institution_key) not in admin.institutions:
+                    admin.remove_permission(permission, institution_key)
+
+        if institution.parent_institution:
+            self.removeAdminPermissions(institution.parent_institution.urlsafe(), permissions)
+
+    def post(self):
+        institution_key = self.request.get('institution_key')
+        institution = ndb.Key(urlsafe=institution_key).get()
+        admin = institution.admin.get()
+        
+        if institution.parent_institution:
+            permissions = admin.permissions
+            self.removeAdminPermissions(institution_key, permissions)
 
 app = webapp2.WSGIApplication([
     ('/api/queue/send-notification', SendNotificationHandler),
@@ -167,5 +216,7 @@ app = webapp2.WSGIApplication([
     ('/api/queue/remove-inst', RemoveInstitutionHandler),
     ('/api/queue/post-notification', PostNotificationHandler),
     ('/api/queue/email-members', EmailMembersHandler),
-    ('/api/queue/notify-followers', NotifyFollowersHandler)
+    ('/api/queue/notify-followers', NotifyFollowersHandler),
+    ('/api/queue/add-admin-permissions', AddAdminPermissionsInInstitutionHierarchy),
+    ('/api/queue/remove-admin-permissions', RemoveAdminPermissionsInInstitutionHierarchy)
 ], debug=True)

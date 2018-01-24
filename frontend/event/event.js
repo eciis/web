@@ -26,8 +26,10 @@ Event.prototype.isValid = function isValid() {
 };
 
 Event.prototype.convertDate = function(){
-    var size_date = 19;
-    this.start_time = (this.start_time.toISOString()).substring(0, size_date);
-    this.end_time = (this.end_time.toISOString()).substring(0, size_date);
+    if(typeof this.start_time === "object" && typeof this.end_time === "object") {
+        var size_date = 19;
+        this.start_time = (this.start_time.toISOString()).substring(0, size_date);
+        this.end_time = (this.end_time.toISOString()).substring(0, size_date);
+    }
 };
 

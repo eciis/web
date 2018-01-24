@@ -636,8 +636,7 @@ class ResetMSHandler(BaseHandler):
         admin.name = 'Administrador da Plataforma Virtual CIS'
         admin.cpf = '000.000.000-01'
         admin.email = [
-            'testeeciis@gmail.com',
-            'teste@eciis.com'
+            'plataformavirtualcis@gmail.com'
         ]
         admin.photo_url = "app/images/avatar.png"
         admin.state = 'active'
@@ -688,6 +687,7 @@ class ResetMSHandler(BaseHandler):
 
         admin.add_permissions(permissions.DEFAULT_ADMIN_PERMISSIONS, ms.key.urlsafe())
         admin.add_permissions(permissions.DEFAULT_SUPER_USER_PERMISSIONS, ms.key.urlsafe())
+        create_profile(admin, ms)
         admin.put()
 
         self.response.write(json.dumps(jsonList))

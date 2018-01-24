@@ -29,7 +29,9 @@ class RequestUserTest(TestBase):
                 'photo_url': 'photo_url',
                 'local': 'splab',
                 'start_time': str(datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S")),
-                'end_time': str(datetime.datetime(2018, 10, 20).strftime("%Y-%m-%dT%H:%M:%S"))}
+                'end_time': str(datetime.datetime(2018, 10, 20).strftime("%Y-%m-%dT%H:%M:%S")),
+                'address': {}
+                }
         new_event = Event.create(data, self.user, self.certbio)
 
         self.assertEqual(new_event.title, data.get('title'))

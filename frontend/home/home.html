@@ -43,7 +43,7 @@
                   Nenhum evento próximo
                 </center>
               </div>
-              <div layout="row" ng-repeat="event in homeCtrl.events" class="event-item">
+              <div layout="row" ng-repeat="event in homeCtrl.events | filter: homeCtrl.eventInProgress" class="event-item">
                 <div layout="row">
                   <div class="rounded-circle event-date">
                     <span class="event-day">
@@ -84,7 +84,7 @@
                   ng-repeat="inst in homeCtrl.followingInstitutions | limitTo: 8"
                   md-colspan="1" md-rowspan="1" class="clickable-no-hover">
                     <img
-                      class="rounded-circle" ng-click="homeCtrl.goToInstitution(inst.key)"
+                      class="rounded-circle clickable" ng-click="homeCtrl.goToInstitution(inst.key)"
                       ng-src="{{inst.photo_url}}" title="{{inst.name}}"/>
                 </md-grid-tile>
               </md-grid-list>

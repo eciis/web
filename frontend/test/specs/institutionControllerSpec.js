@@ -102,15 +102,15 @@
         });
 
         it('should exist currentInstitution', function() {
-            expect(institutionCtrl.current_institution.make()).toEqual(first_institution);
+            expect(institutionCtrl.institution.make()).toEqual(first_institution);
         });
 
         it('should exist currentInstitution', function() {
-            expect(institutionCtrl.current_institution.make()).toEqual(first_institution);
+            expect(institutionCtrl.institution.make()).toEqual(first_institution);
         });
 
         it('should exist currentInstitution', function() {
-            expect(institutionCtrl.current_institution.make()).toEqual(first_institution);
+            expect(institutionCtrl.institution.make()).toEqual(first_institution);
         });
     });
 
@@ -214,7 +214,7 @@
             it('should call user.unfollow()', function(done) {
                 var promise = institutionCtrl.unfollow();
                 promise.then(function() {
-                    expect(institutionCtrl.user.unfollow).toHaveBeenCalledWith(institutionCtrl.current_institution);
+                    expect(institutionCtrl.user.unfollow).toHaveBeenCalledWith(institutionCtrl.institution);
                     done();
                 });
                 scope.$apply();

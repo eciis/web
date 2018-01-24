@@ -1,7 +1,8 @@
 <md-dialog aria-label="instituições" flex-gt-xs="50" flex-xs="90">
     <md-dialog-content layout-margin layout-padding layout="column">
         <div layout="row" layout-align="space-between center">
-            <b>Deseja remover esta instituição permanetemente?</b>
+            <b ng-if="!ctrl.hasOneInstitution()">Deseja remover esta instituição permanentemente?</b>
+            <b ng-if="ctrl.hasOneInstitution()">Ao remover essa instituição você perderá o acesso a plataforma. Deseja remover?</b>
             <div>
                 <button style="background-color: white; border: 0;" ng-click="ctrl.closeDialog()">
                     <md-icon>clear</md-icon>

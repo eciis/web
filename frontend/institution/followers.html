@@ -1,5 +1,8 @@
 <div layout="row" layout-align="center">
-    <div flex flex-md="95" layout="row" layout-align="space-around"
+	<div flex ng-if="followersCtrl.isLoadingFollowers"  layout="row" layout-align="center center">
+		<md-progress-circular md-mode="indeterminate"></md-progress-circular>
+	</div> 
+    <div ng-if="!followersCtrl.isLoadingFollowers" flex flex-md="95" layout="row" layout-align="space-around"
             md-colors="{background: 'grey-50'}">
           <!-- CONTENT -->
         <md-content class="hide-scrollbar" flex="90">

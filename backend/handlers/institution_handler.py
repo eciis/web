@@ -16,6 +16,7 @@ from custom_exceptions.entityException import EntityException
 from models.institution import Institution
 from util.json_patch import JsonPatch
 from service_entities import enqueue_task
+from send_email_hierarchy.remove_institution_email_sender import RemoveInstitutionEmailSender
 
 
 from handlers.base_handler import BaseHandler
@@ -122,7 +123,14 @@ class InstitutionHandler(BaseHandler):
     @login_required
     @isUserInvited
     def post(self, user, institution_key, inviteKey):
-        """Handler POST Requests."""
+        """
+        Handler POST Requests.
+        
+        This handler terminates the configuration of the institution 
+        from the created stub, marks the invite received as accepted and 
+        adds the permissions of administered in the higher institutions 
+        if the institution created has a parent institution.
+        """
         data = json.loads(self.request.body)
 
         institution = ndb.Key(urlsafe=institution_key).get()
@@ -144,6 +152,8 @@ class InstitutionHandler(BaseHandler):
         invite = ndb.Key(urlsafe=inviteKey).get()
         invite.send_response_notification(user, invite.admin_key.urlsafe(), 'ACCEPT')
 
+        enqueue_task('add-admin-permissions', {'institution_key': institution_key})
+
         institution_json = Utils.toJson(institution)
         self.response.write(json.dumps(
             institution_json))
@@ -152,7 +162,15 @@ class InstitutionHandler(BaseHandler):
     @json_response
     @ndb.transactional(xg=True)
     def delete(self, user, institution_key):
-        """Handle DELETE Requests."""
+        """
+        Handle DELETE institution.
+
+        This handler is responsible for deleting an institution.
+        If the 'remove_hierarchy' parameter is true, it removes the child hierarchy.
+        When removing an institution, the permissions of administrator,
+        in relation to this institution, are removed from
+        the administrators of the parents institutions.
+        """
         remove_hierarchy = self.request.get('removeHierarchy')
         institution = ndb.Key(urlsafe=institution_key).get()
 
@@ -171,17 +189,19 @@ class InstitutionHandler(BaseHandler):
             'remove_hierarchy': remove_hierarchy
         }
 
+        enqueue_task('remove-admin-permissions', params)
         enqueue_task('remove-inst', params)
 
         email_params = {
             "justification": self.request.get('justification'),
-            "message": """Lamentamos informar que a instituição %s foi removida
+            "body": """Lamentamos informar que a instituição %s foi removida
             pelo administrador %s """ % (institution.name, user.name),
             "subject": "Remoção de instituição",
-            "institution_key": institution_key
+            "inst_key": institution_key
         }
-
-        enqueue_task('email-members', email_params)
+        
+        email_sender = RemoveInstitutionEmailSender(**email_params)
+        email_sender.send_email()
 
         notification_params = {
             "sender_key": user.key.urlsafe(),

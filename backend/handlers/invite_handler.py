@@ -9,6 +9,7 @@ from handlers.base_handler import BaseHandler
 from models.user import InstitutionProfile
 from models.invite import Invite
 from custom_exceptions.fieldException import FieldException
+from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from utils import json_response
 from utils import Utils
 from util.json_patch import JsonPatch
@@ -70,6 +71,11 @@ class InviteHandler(BaseHandler):
         data = self.request.body
 
         invite = ndb.Key(urlsafe=invite_key).get()
+
+        Utils._assert(invite.status == 'accepted', 
+            "Invitation already accepted", 
+            NotAuthorizedException)
+            
         invite.change_status('accepted')
 
         institution_key = invite.institution_key

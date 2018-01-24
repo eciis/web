@@ -21,7 +21,7 @@
                 <span>{{ctrl.institution.email}}</span>
             </div>
         </div>
-        <div>
+        <div ng-if="!ctrl.thereIsNoChild()">
             <md-radio-group ng-model="ctrl.removeHierarchy" required>
                 <md-radio-button ng-value="true" class="md-primary">
                     Desejo remover toda a hierarquia abaixo dessa instituição

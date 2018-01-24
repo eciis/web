@@ -296,29 +296,29 @@
                 $mdDialog.cancel();
                 loadStateView();
             };
-
+            
             ctrl.removeInst = function removeInst() {
-                if(ctrl.removeHierarchy === undefined) {
-                    MessageService.showToast("Você deve marcar uma das opções.");
-                } else {
-                    InstitutionService.removeInstitution(institution.key, ctrl.removeHierarchy).then(function success() {
-                        institutionCtrl.user.removeProfile(institution.key, ctrl.removeHierarchy);
-                        institutionCtrl.user.removeInstitution(institution.key, ctrl.removeHierarchy);
-                        AuthService.save();
-                        ctrl.closeDialog();
-                        if(_.isEmpty(institutionCtrl.user.institutions)) {
-                            AuthService.logout();
-                        } else {
-                            $state.go("app.user.home");
-                        }
-                        MessageService.showToast("Instituição removida com sucesso.");
-                    });
-                }
+                InstitutionService.removeInstitution(institution.key, ctrl.removeHierarchy).then(function success() {
+                    institutionCtrl.user.removeProfile(institution.key, ctrl.removeHierarchy);
+                    institutionCtrl.user.removeInstitution(institution.key, ctrl.removeHierarchy);
+                    AuthService.save();
+                    ctrl.closeDialog();
+                    if(_.isEmpty(institutionCtrl.user.institutions)) {
+                        AuthService.logout();
+                    } else {
+                        $state.go("app.user.home");
+                    }
+                    MessageService.showToast("Instituição removida com sucesso.");
+                });
             };
 
             ctrl.hasOneInstitution = function hasOneInstitution() {
                 return _.size(institutionCtrl.user.institutions) === 1;
             };
+            
+            ctrl.thereIsNoChild = function thereIsNoChild() {
+                return _.isEmpty(institution.children_institutions);
+            }
         }
 
         (function main(){

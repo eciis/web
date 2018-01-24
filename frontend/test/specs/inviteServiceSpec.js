@@ -7,6 +7,12 @@
         var inviteUser = {institution_key: "098745", type_of_invite: "user", invitee: "mayzabeel@gmail.com"};
         var inviteInstitution = {institution_key: "098745", type_of_invite: "institution", suggestion_institution_name: "New Institution", invitee: "mayzabeel@gmail.com"};
         var invites = [inviteInstitution];
+        var body = {
+            data: null,
+            currentInstitution: {
+                name: 'currentInstitution'
+            }
+        };
 
         beforeEach(module('app'));
 
@@ -14,6 +20,12 @@
             httpBackend = $httpBackend;
             $http = _$http_;
             service = InviteService;
+            service.user = {
+                name: 'user',
+                current_institution: {
+                    name: "currentInstitution"
+                }
+            };
             httpBackend.when('GET', 'main/main.html').respond(200);
             httpBackend.when('GET', 'home/home.html').respond(200);
             httpBackend.when('GET', 'error/error.html').respond(200);
@@ -26,12 +38,12 @@
             var result;
             service.sendInvite(inviteUser).then(function(data){
                 result = data;
-                expect($http.post).toHaveBeenCalledWith(INVITES_URI, inviteUser);
+                body['data'] = inviteUser;
+                expect($http.post).toHaveBeenCalledWith(INVITES_URI, body);
                 expect(result.data).toEqual(inviteUser);
                 done();
             });
             httpBackend.flush();
-           
         });
 
         it('Test sendInvite institution in success case', function(done) {
@@ -40,7 +52,8 @@
             var result;
             service.sendInvite(inviteInstitution).then(function(data){
                 result = data;
-                expect($http.post).toHaveBeenCalledWith(INVITES_URI, inviteInstitution);
+                body['data'] = inviteInstitution;
+                expect($http.post).toHaveBeenCalledWith(INVITES_URI, body);
                 expect(result.data).toEqual(inviteInstitution);
                 done();
             });

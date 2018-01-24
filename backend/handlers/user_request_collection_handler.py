@@ -62,7 +62,7 @@ class UserRequestCollectionHandler(BaseHandler):
         if(request.stub_institution_key):
             request.stub_institution_key.get().addInvite(request)
 
-        request.sendInvite(user, host)
+        request.send_invite(host)
 
         make_invite = request.make()
 

@@ -91,5 +91,19 @@ var Utils = {
                 });
             }
         };
+    },
+    createBody: function createBody(data, currentInstitution) {
+        return {
+            data: data,
+            currentInstitution: {
+                name: currentInstitution.name
+            }
+        };
+    },
+    currentInstitutionToString: function currentInstitutionToString(currentInstitution) {
+        var currentInstitution = { 
+            name: currentInstitution.name 
+        };
+        return JSON.stringify(currentInstitution);
     }
 };

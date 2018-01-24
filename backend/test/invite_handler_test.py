@@ -2,18 +2,18 @@
 """Invite Handler Test."""
 
 import json
-from search_module.search_institution import SearchInstitution
+import mocks
+
 from test_base_handler import TestBaseHandler
-from models.user import User
-from models.institution import Institution
-from models.institution import Address
+from search_module.search_institution import SearchInstitution
 from models.invite_user import InviteUser
+from models.invite import Invite
 from models.invite_institution import InviteInstitution
 from handlers.invite_handler import InviteHandler
-
-import mock
 from mock import patch
 
+CURRENT_INSTITUTION = {'name': 'currentInstitution'}
+CURRENT_INST_STRING = json.dumps(CURRENT_INSTITUTION)
 
 class InviteHandlerTest(TestBaseHandler):
     """Invite Handler Test."""
@@ -33,7 +33,26 @@ class InviteHandlerTest(TestBaseHandler):
             [(InviteHandlerTest.INVITE_URI, InviteHandler),
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
-        initModels(cls)
+        
+        # create models
+        # new User
+        cls.user_admin = mocks.create_user('useradmin@test.com')
+        # Other user
+        cls.other_user = mocks.create_user('otheruser@test.com')
+        # new Institution inst test
+        cls.inst_test = mocks.create_institution()
+        cls.inst_test.admin = cls.user_admin.key
+        cls.inst_test.put()
+        # New invite user
+        cls.data = {
+            'invitee': 'otheruser@test.com',
+            'admin_key': cls.user_admin.key.urlsafe(),
+            'institution_key': cls.inst_test.key.urlsafe(),
+            'type_of_invite': 'USER'
+        }
+        cls.invite = InviteUser.create(cls.data)
+        cls.invite.put()
+
 
     @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_get(self, verify_token):
@@ -47,11 +66,18 @@ class InviteHandlerTest(TestBaseHandler):
             self.invite.make(),
             "Expected invite should be equal to make")
 
+    @patch.object(Invite, 'send_notification')
     @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
-    @mock.patch('service_messages.send_message_notification')
-    def test_delete(self, verify_token, mock_method):
+    def test_delete(self, verify_token, send_notification):
         """Test method delete of InviteHandler."""
-        stub_institution = self.invite_institution.stub_institution_key.get()
+        # create innvite institution
+        self.data['suggestion_institution_name'] = 'new Institution'
+        self.data['type_of_invite'] = 'INSTITUTION'
+        invite_institution = InviteInstitution.create(self.data)
+        invite_institution.admin_key = self.user_admin.key
+        invite_institution.put()
+        # get stub institution
+        stub_institution = invite_institution.stub_institution_key.get()
         search_institution = SearchInstitution()
         stub_inst_document = search_institution.getDocuments(
             stub_institution.name,
@@ -76,11 +102,13 @@ class InviteHandlerTest(TestBaseHandler):
             'pending', "The searched institution state should be pending"
         )
 
-        self.testapp.delete('/api/invites/' +
-                            self.invite_institution.key.urlsafe())
+        self.testapp.delete(
+            '/api/invites/%s?currentInstitution=%s' 
+            % (invite_institution.key.urlsafe(), CURRENT_INST_STRING)
+        )
 
         # update invite_institution, stub_institution and stub_inst_document
-        invite_institution = self.invite_institution.key.get()
+        invite_institution = invite_institution.key.get()
         stub_institution = invite_institution.stub_institution_key.get()
         stub_inst_document = search_institution.getDocuments(
             stub_institution.name,
@@ -109,18 +137,26 @@ class InviteHandlerTest(TestBaseHandler):
             searched_inst.get('state'),
             'inactive', "The searched institution state should be inactive"
         )
+        # assert the notification was sent
+        send_notification.assert_called_with(
+            current_institution=CURRENT_INSTITUTION, 
+            sender_key=self.other_user.key,
+            receiver_key=self.user_admin.key,
+            entity_type='REJECT_INVITE_INSTITUTION'
+        )
 
-        self.assertTrue(mock_method.assert_called,
-                        "Should call the send_message_notification")
-
+    @patch.object(Invite, 'send_notification')
     @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
-    @mock.patch('service_messages.send_message_notification')
-    def test_patch(self, verify_token, mock_method):
+    def test_patch(self, verify_token, send_notification):
         """Test method patch of InviteHandler."""
         profile = '{"email": "otheruser@test.com", "office": "Developer"}'
         json_patch = '[{"op": "add", "path": "/institution_profiles/-", "value": ' + profile + '}]'
-        self.testapp.patch('/api/invites/' + self.invite.key.urlsafe(), json_patch)
-
+        self.testapp.patch(
+            '/api/invites/%s?currentInstitution=%s'
+            % (self.invite.key.urlsafe(), CURRENT_INST_STRING),
+            json_patch
+        )
+    
         invite = self.invite.key.get()
         self.assertEqual(
             invite.status,
@@ -144,17 +180,26 @@ class InviteHandlerTest(TestBaseHandler):
             'active',
             "Expected state should be equal to active")
 
-        self.assertTrue(mock_method.assert_called,
-                        "Should call the send_message_notification")
+        send_notification.assert_called_with(
+            current_institution=CURRENT_INSTITUTION, 
+            sender_key=self.other_user.key, 
+            receiver_key=self.user_admin.key,
+            entity_type="ACCEPT_INVITE_USER"
+        )
 
+    @patch.object(Invite, 'send_notification')
     @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
-    def test_patch_fail(self, verify_token):
+    def test_patch_fail(self, verify_token, send_notification):
         """Test patch fail in InviteHandler because the profile has not office."""
         profile = '{"email": "otheruser@test.com"}'
         json_patch = '[{"op": "add", "path": "/institution_profiles/-", "value": ' + profile + '}]'
 
         with self.assertRaises(Exception) as ex:
-            self.testapp.patch('/api/invites/' + self.invite.key.urlsafe(), json_patch)
+            self.testapp.patch(
+                '/api/invites/%s?currentInstitution=%s'
+                % (self.invite.key.urlsafe(), CURRENT_INST_STRING),
+                json_patch
+            )
 
         exception_message = self.get_message_exception(str(ex.exception))
 
@@ -162,45 +207,6 @@ class InviteHandlerTest(TestBaseHandler):
             exception_message,
             'Error! The profile is invalid.',
             "Expected exception_message should be equal to 'Error! The profile is invalid.'")
-
-
-def initModels(cls):
-    """Init the models."""
-    # new User
-    cls.user_admin = User()
-    cls.user_admin.name = 'User Admin'
-    cls.user_admin.email = ['useradmin@test.com']
-    cls.user_admin.put()
-    # Other user
-    cls.other_user = User()
-    cls.other_user.name = 'Other User'
-    cls.other_user.email = ['otheruser@test.com']
-    cls.other_user.put()
-    # isntitution address
-    cls.address = Address()
-    # new Institution inst test
-    cls.inst_test = Institution()
-    cls.inst_test.name = 'inst test'
-    cls.inst_test.address = cls.address
-    cls.inst_test.members = [cls.user_admin.key]
-    cls.inst_test.followers = [cls.user_admin.key]
-    cls.inst_test.admin = cls.user_admin.key
-    cls.inst_test.put()
-
-    # New invite user
-    data = {
-        'invitee': 'otheruser@test.com',
-        'admin_key': cls.user_admin.key.urlsafe(),
-        'institution_key': cls.inst_test.key.urlsafe(),
-        'type_of_invite': 'USER'
-    }
-
-    cls.invite = InviteUser.create(data)
-    cls.invite.put()
-
-    # New invite institution
-    data['suggestion_institution_name'] = 'new Institution'
-    data['type_of_invite'] = 'INSTITUTION'
-
-    cls.invite_institution = InviteInstitution.create(data)
-    cls.invite_institution.put()
+        
+        # assert the notification was not sent
+        send_notification.assert_not_called()

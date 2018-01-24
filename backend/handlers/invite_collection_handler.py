@@ -32,11 +32,10 @@ class InviteCollectionHandler(BaseHandler):
     def post(self, user):
         """Handle POST Requests."""
         body = json.loads(self.request.body)
-        invite_data = body['inviteData']
+        data = body['data']
         current_institution = body['currentInstitution']
         host = self.request.host
-
-        type_of_invite = invite_data.get('type_of_invite')
+        type_of_invite = data.get('type_of_invite')
 
         Utils._assert(type_of_invite == 'INSTITUTION',
                       "invitation type not allowed", NotAuthorizedException)
@@ -47,7 +46,7 @@ class InviteCollectionHandler(BaseHandler):
         Utils._assert(type_of_invite != 'USER',
                       "Hierarchical invitations is not available in this version", NotAuthorizedException)
 
-        invite = InviteFactory.create(invite_data, type_of_invite)
+        invite = InviteFactory.create(data, type_of_invite)
 
         can_invite_inst = user.has_permission("send_link_inst_invite", invite.institution_key.urlsafe())
         can_invite_members = user.has_permission("invite_members", invite.institution_key.urlsafe())
@@ -62,7 +61,7 @@ class InviteCollectionHandler(BaseHandler):
             if(invite.stub_institution_key):
                 invite.stub_institution_key.get().addInvite(invite)
 
-            invite.sendInvite(user, host, current_institution)
+            invite.send_invite(host, current_institution)
 
             make_invite = invite.make()
 

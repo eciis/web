@@ -21,12 +21,7 @@
         };
 
         service.sendInvite = function sendInvite(invite) {
-            var body = {
-                inviteData: invite,
-                currentInstitution: {
-                    name: service.user.current_institution.name
-                }
-            };
+            var body = Utils.createBody(invite, service.user.current_institution);
             var deferred = $q.defer();
             $http.post(INVITES_URI, body).then(function success(response) {
                 deferred.resolve(response);
@@ -37,8 +32,9 @@
         };
 
         service.sendInviteInst = function sendInviteInst(invite) {
+            var body = Utils.createBody(invite, service.user.current_institution);
             var deferred = $q.defer();
-            $http.post(INVITES_URI + '/institution', invite).then(function success(response) {
+            $http.post(INVITES_URI + '/institution', body).then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);
@@ -47,7 +43,7 @@
         };
 
         service.deleteInvite = function deleteInvite(inviteKey) {
-            var currentInstitution = currentInstitutionToString();
+            var currentInstitution = Utils.currentInstitutionToString(service.user.current_institution);
             var deferred = $q.defer();
             $http.delete(`${INVITES_URI}/${inviteKey}?currentInstitution=${currentInstitution}`).then(function sucess(response) {
                 deferred.resolve(response);
@@ -68,7 +64,7 @@
         };
 
         service.acceptInvite = function acceptInvite(patch, invite_key) {
-            var currentInstitution = currentInstitutionToString();
+            var currentInstitution = Utils.currentInstitutionToString(service.user.current_institution);
             var deffered = $q.defer();
             $http.patch(`${INVITES_URI}/${invite_key}?currentInstitution=${currentInstitution}`, patch).then(function success(info) {
                 deffered.resolve(info.data);
@@ -77,12 +73,5 @@
             });
             return deffered.promise;
         };
-
-        function currentInstitutionToString() {
-            var currentInstitution = { 
-                name: service.user.current_institution.name 
-            };
-            return JSON.stringify(currentInstitution);
-        }
     });
 })();

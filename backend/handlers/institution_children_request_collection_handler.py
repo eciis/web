@@ -60,6 +60,6 @@ class InstitutionChildrenRequestCollectionHandler(BaseHandler):
         request = InviteFactory.create(data, type_of_invite)
         request.put()
 
-        request.sendInvite(user, host)
+        request.send_invite(host)
 
         self.response.write(json.dumps(request.make()))

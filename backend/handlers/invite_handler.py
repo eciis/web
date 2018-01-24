@@ -36,6 +36,11 @@ def define_entity(dictionary):
     return InstitutionProfile
 
 
+def get_current_institution(request):
+    current_institution = request.get('currentInstitution')
+    return json.loads(current_institution)
+
+
 class InviteHandler(BaseHandler):
     """Invite Handler."""
 
@@ -52,14 +57,12 @@ class InviteHandler(BaseHandler):
     @login_required
     def delete(self, user, key):
         """Change invite status from 'sent' to 'rejected'."""
-        current_institution = self.request.get('currentInstitution')
-        current_institution = json.loads(current_institution)
+        current_institution = get_current_institution(self.request)
         invite_key = ndb.Key(urlsafe=key)
         invite = invite_key.get()
         invite.change_status('rejected')
         invite.put()
-        response_type = "REJECT_INVITE_USER"
-        invite.send_response_notification(current_institution, response_type, user)
+        invite.send_response_notification(current_institution, user.key, 'REJECT')
 
         if invite.stub_institution_key:
             stub_institution = invite.stub_institution_key.get()
@@ -70,8 +73,7 @@ class InviteHandler(BaseHandler):
     @ndb.transactional(xg=True)
     def patch(self, user, invite_key):
         """Handler PATCH Requests."""
-        current_institution = self.request.get('currentInstitution')
-        current_institution = json.loads(current_institution)
+        current_institution = get_current_institution(self.request)
         data = self.request.body
         invite = ndb.Key(urlsafe=invite_key).get()
         invite.change_status('accepted')
@@ -85,11 +87,7 @@ class InviteHandler(BaseHandler):
 
         institution.add_member(user)
         institution.follow(user.key)
- 
         JsonPatch.load(data, user, define_entity)
-
-        response_type = "ACCEPT_INVITE_USER"
-        invite.send_response_notification(current_institution, response_type, user)
 
         Utils._assert(
             not InstitutionProfile.is_valid(user.institution_profiles),
@@ -97,5 +95,6 @@ class InviteHandler(BaseHandler):
         )
         
         user.put()
+        invite.send_response_notification(current_institution, user.key, 'ACCEPT')
         
         self.response.write(json.dumps(makeUser(user, self.request)))

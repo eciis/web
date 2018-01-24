@@ -1,19 +1,32 @@
 # -*- coding: utf-8 -*-
 """Invite Collection handler test."""
 
-from test_base_handler import TestBaseHandler
-from models.institution import Institution
-from models.institution import Address
-from models.user import User
-from handlers.invite_collection_handler import InviteCollectionHandler
-from google.appengine.ext import ndb
 import json
 import mocks
+
+from test_base_handler import TestBaseHandler
+from google.appengine.ext import ndb
+from models.invite import Invite
+from handlers.invite_collection_handler import InviteCollectionHandler
 
 from mock import patch
 
 ADMIN = {'email': 'user1@gmail.com'}
 USER = {'email': 'otheruser@ccc.ufcg.edu.br'}
+CURRENT_INSTITUTION = {'name': 'currentInstitution'}
+
+def create_body(invitee_email, admin, institution):
+    """Create a body for the post method."""
+    body = {
+        'data': {
+            'invitee': invitee_email,
+            'admin_key': admin.key.urlsafe(),
+            'type_of_invite': 'USER',
+            'institution_key': institution.key.urlsafe()
+        },
+        'currentInstitution': CURRENT_INSTITUTION
+    }
+    return body
 
 
 class InviteCollectionHandlerTest(TestBaseHandler):
@@ -145,8 +158,9 @@ class InviteCollectionHandlerTest(TestBaseHandler):
                          was stub")
 
     """
+    @patch.object(Invite, 'send_invite')
     @patch('utils.verify_token', return_value=ADMIN)
-    def test_post_invite_user(self, verify_token):
+    def test_post_invite_user(self, verify_token, send_invite):
         admin = mocks.create_user(ADMIN['email'])
         institution = mocks.create_institution()		 
         admin.institutions_admin = [institution.key]
@@ -154,12 +168,9 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         admin.add_permission("invite_members",institution.key.urlsafe())
         admin.put()
         institution.put()
+        body = create_body('ana@gmail.com', admin, institution)
 
-        invite = self.testapp.post_json("/api/invites", {
-            'invitee': 'ana@gmail.com',
-            'admin_key': admin.key.urlsafe(),
-            'type_of_invite': 'USER',
-            'institution_key': institution.key.urlsafe()})
+        invite = self.testapp.post_json("/api/invites", body)
         # Retrieve the entities
         invite = json.loads(invite._app_iter[0])
         key_invite = ndb.Key(urlsafe=invite['key'])
@@ -173,8 +184,12 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         self.assertEqual(invite_obj.institution_key, institution.key,
                          "The institution key expected was key of institution")
 
+        # assert the invite was sent
+        send_invite.assert_called_with("localhost:80", CURRENT_INSTITUTION)
+
+    @patch.object(Invite, 'send_invite')
     @patch('utils.verify_token', return_value=ADMIN)
-    def test_post_invite_user_member_of_other_institution(self, verify_token):
+    def test_post_invite_user_member_of_other_institution(self, verify_token, send_invite):
         admin = mocks.create_user(ADMIN['email'])
         institution = mocks.create_institution()		 
         admin.institutions_admin = [institution.key]
@@ -186,12 +201,9 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         otherinst.address = mocks.create_address()
         otherinst.add_member(otheruser)
         institution.put()
+        body = create_body(USER['email'], admin, institution)
 
-        invite = self.testapp.post_json("/api/invites", {
-            'invitee': 'otheruser@ccc.ufcg.edu.br',
-            'admin_key': admin.key.urlsafe(),
-            'type_of_invite': 'USER',
-            'institution_key': institution.key.urlsafe()})
+        invite = self.testapp.post_json("/api/invites", body)
         # Retrieve the entities
         invite = json.loads(invite._app_iter[0])
         key_invite = ndb.Key(urlsafe=invite['key'])
@@ -205,8 +217,12 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         self.assertEqual(invite_obj.institution_key, institution.key,
                          "The institution key expected was key of institution")
 
+        # assert the invite was sent
+        send_invite.assert_called_with("localhost:80", CURRENT_INSTITUTION)
+
+    @patch.object(Invite, 'send_invite')
     @patch('utils.verify_token', return_value=ADMIN)
-    def test_post_invite_user_already_member(self, verify_token):
+    def test_post_invite_user_already_member(self, verify_token, send_invite):
         """ Check if raise exception when the invite is
         for user already member of institution."""
         admin = mocks.create_user(ADMIN['email'])
@@ -218,24 +234,25 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         otheruser = mocks.create_user(USER['email'])
         institution.add_member(otheruser)
         institution.put()
+        body = create_body(USER['email'], admin, institution)
 
         with self.assertRaises(Exception) as raises_context:
-            self.testapp.post_json("/api/invites", {
-                'invitee': 'otheruser@ccc.ufcg.edu.br',
-                'admin_key': admin.key.urlsafe(),
-                'type_of_invite': 'USER',
-                'institution_key': institution.key.urlsafe()})
+            self.testapp.post_json("/api/invites", body)
 
         message_exception = self.get_message_exception(str(raises_context.exception))
 
         self.assertEqual(
             message_exception,
             "Error! The invitee is already a member",
-            "Expected exception message must be equal to " +
+            "Expected exception message must be equal to "
             "Error! The invitee is already a member")
+        
+        # assert the invite was not sent
+        send_invite.assert_not_called()
 
+    @patch.object(Invite, 'send_invite')
     @patch('utils.verify_token', return_value=USER)
-    def test_post_invite_without_admin(self, verify_token):
+    def test_post_invite_without_admin(self, verify_token, send_invite):
         """ Check if raise exception when the admin_key is not admistrator."""
         admin = mocks.create_user(ADMIN['email'])
         institution = mocks.create_institution()		 
@@ -244,12 +261,9 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         admin.add_permission("invite_members",institution.key.urlsafe())
         admin.put()
         institution.put()
+        body = create_body('ana@gmail.com', admin, institution)
         with self.assertRaises(Exception) as raises_context:
-            self.testapp.post_json("/api/invites", {
-                'invitee': 'ana@gmail.com',
-                'admin_key': admin.key.urlsafe(),
-                'type_of_invite': 'USER',
-                'institution_key': institution.key.urlsafe()})
+            self.testapp.post_json("/api/invites", body)
 
         message_exception = self.get_message_exception(str(raises_context.exception))
 
@@ -257,3 +271,6 @@ class InviteCollectionHandlerTest(TestBaseHandler):
             message_exception,
             "Error! User is not allowed to send invites",
             "Expected exception message must be equal to Error! User is not allowed to send invites")
+        
+        # assert the invite was not sent
+        send_invite.assert_not_called()

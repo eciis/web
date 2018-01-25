@@ -11,6 +11,7 @@
         var observer;
 
         configInstCtrl.loading = true;
+        configInstCtrl.hasSubmitted = false;
         configInstCtrl.user = AuthService.getCurrentUser();
         configInstCtrl.cnpjRegex = "[0-9]{2}[\.][0-9]{3}[\.][0-9]{3}[\/][0-9]{4}[-][0-9]{2}";
         configInstCtrl.phoneRegex = "[0-9]{2}[\\s][0-9]{4,5}[-][0-9]{4,5}";
@@ -113,6 +114,7 @@
 
                 promise = $mdDialog.show(confirm);
                 promise.then(function() {
+                    configInstCtrl.hasSubmitted = true;
                     updateInstitution();
                 }, function() {
                     MessageService.showToast('Cancelado');

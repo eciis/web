@@ -260,8 +260,8 @@
                         </div>
                     </md-card-content>
                     <md-card-actions layout="row" layout-align="end center">
-                        <md-button class="md-raised" md-colors="{background: 'teal-500'}" ng-click="configInstCtrl.submit($event)">
-                            FINALIZAR
+                        <md-button class="md-raised" md-colors="{background: 'teal-500'}" ng-disabled={{configInstCtrl.hasSubmitted}}
+                            ng-click="configInstCtrl.submit($event)"> FINALIZAR
                         </md-button>
                     </md-card-actions>
                 </div>

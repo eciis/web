@@ -647,7 +647,6 @@ class ResetMSHandler(BaseHandler):
 
         # new Institution Ministério da Saúde
         address_data = {
-            'number': '0',
             'street': 'Esplanada dos Ministérios Bloco G ',
             'neighbourhood': 'Zona Cívico-Administrativa',
             'city': 'Brasília',
@@ -660,46 +659,30 @@ class ResetMSHandler(BaseHandler):
         data = {
             'name': 'Ministério da Saúde',
             'acronym': 'MS',
-            'cnpj': '',
             'legal_nature': 'PUBLIC',
             'address': address_key,
-            'actuation_area': 'Ministérios e outros Órgãos do Governo',
-            'description': 'O Ministério da Saúde é o órgão do Poder Executivo Federal responsável pela organização  \
-             e elaboração de planos e políticas públicas voltados para a promoção, prevenção e assistência à saúde   \
-             dos brasileiros. É função do ministério dispor de condições para a proteção e recuperação da saúde da   \
-             população, reduzindo as enfermidades, controlando as doenças endêmicas e parasitárias e melhorando a   \
-             vigilância à saúde, dando, assim, mais qualidade de vida ao brasileiro. MISSÃO: Promover a saúde da  \
-             população mediante a integração e a construção de parcerias com os órgãos federais, as unidades da   \
-             Federação, os municípios, a iniciativa privada e a sociedade, contribuindo para a melhoria da qualidade \
-             de vida e para o exercício da cidadania.',
+            'actuation_area': 'GOVERNMENT_AGENCIES',
+            'description': 'Ministério da Saúde',
             'photo_url': 'https://i1.wp.com/notta.news/wp-content/uploads/2017/08/tbg_20170713080909_62787.jpg?w=1024',
             'email': 'deciis@saude.gov.br',
             'phone_number': '61 3315-2425',
             'state': 'active',
             'institutional_email':'sic@saude.gov.br',
             'leader':' Ministro Ricardo Barros',
-            'website_url':'http://portalms.saude.gov.br/'
         }
         
         data_deciis = {
             'name': 'Departamento do Complexo Industrial e Inovação em Saúde',
             'acronym': 'DECIIS',
-            'cnpj': '',
             'legal_nature': 'PUBLIC',
             'address': address_key,
-            'actuation_area': 'Ministérios e outros Órgãos do Governo',
-            'description': 'O Departamento do Complexo Industrial e Inovação em Saúde (DECIIS/SCTIE) foi criado \
-             em 2009, a partir da publicação do Decreto Presidencial nº 6860, com o objetivo de fomentar a \
-             produção pública de tecnologias estratégicas para o Sistema Único de Saúde - SUS e consolidar a \
-             estratégia nacional de fomento, desenvolvimento e inovação no âmbito do Complexo Industrial da \
-              Saúde - CIS.',
+            'actuation_area': 'GOVERNMENT_AGENCIES',
+            'description': 'Departamento do Complexo Industrial e Inovação em Saúde',
             'photo_url': 'https://i1.wp.com/notta.news/wp-content/uploads/2017/08/tbg_20170713080909_62787.jpg?w=1024',
             'email': 'deciis@saude.gov.br',
-            'phone_number': '61 3315-2425',
             'state': 'active',
             'institutional_email':'deciis@saude.gov.br',
-            'leader':' Ministro Ricardo Barros',
-            'website_url':'http://portalms.saude.gov.br/'
+            'leader':' Ministro Ricardo Barros'
         }
 
         ms = createInstitution(data, admin)

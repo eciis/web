@@ -139,7 +139,11 @@
         };
 
         institutionCtrl.showFollowButton = function showFollowButton() {
-           return institutionCtrl.institution && !institutionCtrl.isMember && institutionCtrl.institution.name !== "Ministério da Saúde";
+           return institutionCtrl.institution && 
+           !institutionCtrl.isMember && 
+           institutionCtrl.institution.name !== "Ministério da Saúde" &&
+           institutionCtrl.institution.name !== "Departamento do Complexo Industrial e Inovação em Saúde"
+           ;
         };
 
         institutionCtrl.goToManageMembers = function goToManageMembers(){

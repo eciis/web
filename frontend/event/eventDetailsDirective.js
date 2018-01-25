@@ -107,6 +107,37 @@
             }
         };
 
+        eventCtrl.getStreetAndNumber = function getStreetAndNumber() {
+            if(eventCtrl.event.address.number && eventCtrl.event.address.street) {
+                return eventCtrl.event.address.street + ", " + eventCtrl.event.address.number;
+            } else if(!eventCtrl.event.address.number && eventCtrl.event.address.street) {
+                return eventCtrl.event.address.street + ", S/N";
+            } else if(eventCtrl.event.address.number && !eventCtrl.event.address.street) {
+                return "Rua não informada, " + eventCtrl.event.address.number;
+            } else {
+                return eventCtrl.event.address.number;
+            }
+        };
+
+        eventCtrl.getCity = function getCity() {
+            if(eventCtrl.event.address.city)
+                return eventCtrl.event.address.city;
+        };
+
+        eventCtrl.getFederalState = function getFederalState() {
+            if(eventCtrl.event.address.federal_state)
+                return eventCtrl.event.address.city ?
+                    ", " + eventCtrl.event.address.federal_state
+                    : eventCtrl.event.address.federal_state;
+        };
+
+        eventCtrl.getCountry = function getCountry() {
+            if(eventCtrl.event.address.country)
+                return eventCtrl.event.address.federal_state ?
+                    " - " + eventCtrl.event.address.country
+                    : eventCtrl.event.address.country;
+        };
+
         function isInstitutionAdmin(event) {
             return _.includes(_.map(eventCtrl.user.institutions_admin, Utils.getKeyFromUrl),
                 Utils.getKeyFromUrl(event.institution_key));

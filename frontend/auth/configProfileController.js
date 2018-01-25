@@ -127,8 +127,7 @@
                 controllerAs: "editProfileCtrl",
                 locals: {
                     institution: inst,
-                    user: configProfileCtrl.user,
-                    user: configProfileCtrl.newUser
+                    user: configProfileCtrl.user
                 },
                 targetEvent: ev,
                 clickOutsideToClose: true

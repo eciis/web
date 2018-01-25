@@ -53,7 +53,7 @@
         };
 
         searchCtrl.searchBy = function searchBy(search, attribute) {
-            if (searchInServer()) {
+            if (keywordHasChanges()) {
                 searchCtrl.makeSearch(search, 'institution', attribute);
                 refreshPreviousKeyword();
             } else {
@@ -128,7 +128,7 @@
             }
         }
 
-        function searchInServer() {
+        function keywordHasChanges() {
             var keywordHasChanged = searchCtrl.search_keyword != searchCtrl.previous_keyword;
             return _.isEmpty(searchCtrl.initialInstitutions) || keywordHasChanged || !searchCtrl.search_keyword;
         }

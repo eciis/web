@@ -215,6 +215,7 @@
 
         editProfileCtrl.edit = function edit() {
             if (isValidProfile()) {
+                editProfileCtrl.changeUser();
                 var patch = jsonpatch.generate(profileObserver);
                 if (!_.isEmpty(patch)) {
                     ProfileService.editProfile(patch).then(function success() {
@@ -234,6 +235,17 @@
             $mdDialog.hide();
         };
 
+        editProfileCtrl.changeUser = function changeUser() {
+            console.log((user.institution_profiles));
+            _.forEach(Object.keys(user.institution_profiles), function(attribute) {
+               _.set(user.institution_profiles, attribute, _.get(editProfileCtrl.copyProfile, attribute));
+            });
+            console.log((user.institution_profiles));
+
+/*            var index = _.indexOf(user.institution_profiles, editProfileCtrl.profile);
+            user.institution_profiles[index] = editProfileCtrl.copyProfile;*/
+        };
+
         function isValidProfile() {
             return !_.isEmpty(editProfileCtrl.profile.office);
         }
@@ -242,6 +254,7 @@
             editProfileCtrl.profile = _.find(user.institution_profiles, function (profile) {
                 return profile.institution_key === editProfileCtrl.institution.key;
             });
+            editProfileCtrl.copyProfile = angular.copy(editProfileCtrl.profile);
             profileObserver = jsonpatch.observe(user);
         })();
     });

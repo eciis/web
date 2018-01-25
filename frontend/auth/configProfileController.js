@@ -139,7 +139,7 @@
         }
 
         function hasMoreThanOneInstitution() {
-            return !_.isEmpty(configProfileCtrl.user.institutions);
+            return _.size(configProfileCtrl.user.institutions) > 1;
         }
 
         function deleteInstitution(institution_key) {
@@ -153,7 +153,7 @@
         }
 
         function removeConection(institution_key) {
-            if (!_.isEmpty(configProfileCtrl.user.institutions)) {
+            if (_.size(configProfileCtrl.user.institutions) > 1) {
                 _.remove(configProfileCtrl.user.institutions, function(institution) {
                     return institution.key === institution_key;
                 });

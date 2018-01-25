@@ -2,12 +2,12 @@
   <div layout="column" layout-align="center center" layout-fill flex>
     <div layout="row" layout-xs="column" layout-align="center center">
       <div flex-sm="60" flex-gt-sm="40" layout-align="center center">
-        <form name="accetpInvite" ng-submit="newInviteCtrl.acceptInvite($event)">
-          <md-card>
-            <md-card-content style="background-color:#FFFFFF;" layout="column" layout-align="center">
-              <div align="center">
-                <img src="app/images/logowithname.png" aria-label="e-CIS Logo" style="width: 50%;">
-              </div>
+        <md-card>
+          <md-card-content style="background-color:#FFFFFF;" layout="column" layout-align="center">
+            <div align="center">
+              <img src="app/images/logowithname.png" aria-label="e-CIS Logo" style="width: 50%;">
+            </div>
+            <form name="accetpInvite" ng-submit="newInviteCtrl.acceptInvite($event)">
               <div layout="column" layout-align="center" layout-margin>
                 <p class="small-text md-title green-text">VOCÊ RECEBEU UM CONVITE DE:</p>
                   <md-list class="reduce-distance">
@@ -66,17 +66,17 @@
                       </div>
                     </div>
                   </div>
+              </div>
+              <md-card-actions layout="row" layout-align="end center">
+                <md-button ng-if="!newInviteCtrl.acceptedInvite" ng-click="newInviteCtrl.rejectInvite($event)" md-colors="{background: 'teal-500'}">Cancelar</md-button>
+                <md-button ng-if="!newInviteCtrl.acceptedInvite" type="submit" md-colors="{background: 'teal-500'}">{{newInviteCtrl.isInviteUser() ? 'Enviar' : 'Próximo'}}</md-button>
+                <div ng-if="newInviteCtrl.acceptedInvite" flex="100" layout="row" layout-align="center center">
+                  <md-progress-circular  class="md-hue-2" md-diameter="30px"></md-progress-circular>
                 </div>
-                <md-card-actions layout="row" layout-align="end center">
-                  <md-button ng-if="!newInviteCtrl.acceptedInvite" ng-click="newInviteCtrl.rejectInvite($event)" md-colors="{background: 'teal-500'}">Cancelar</md-button>
-                  <md-button ng-if="!newInviteCtrl.acceptedInvite" type="submit" md-colors="{background: 'teal-500'}">{{newInviteCtrl.isInviteUser() ? 'Enviar' : 'Próximo'}}</md-button>
-                  <div ng-if="newInviteCtrl.acceptedInvite" flex="100" layout="row" layout-align="center center">
-                    <md-progress-circular  class="md-hue-2" md-diameter="30px"></md-progress-circular>
-                  </div>
-                </md-card-actions>
-            </md-card-content>
-          </md-card>
-        </form>
+              </md-card-actions>
+            </form>
+          </md-card-content>
+        </md-card>
       </div>
     </div>
   </div>

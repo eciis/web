@@ -73,7 +73,7 @@ class InviteHandler(BaseHandler):
         invite = ndb.Key(urlsafe=invite_key).get()
 
         Utils._assert(invite.status == 'accepted', 
-            "Invitation already accepted", 
+            "This invitation has already been accepted", 
             NotAuthorizedException)
             
         invite.change_status('accepted')

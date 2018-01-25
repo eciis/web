@@ -21,21 +21,21 @@
         <div layout="column" md-theme="input" class="input" style="margin-left: 40px; margin-right: 40px;">
             <md-input-container>
                 <label>Email institucional</label>
-                <input name="email" ng-model="editProfileCtrl.copyProfile.email" type="email">
+                <input name="email" ng-model="editProfileCtrl.profile.email" type="email">
             </md-input-container>
             <md-input-container>
                 <label>Cargo</label>
-                <input name="cargo" ng-model="editProfileCtrl.copyProfile.office" required>
+                <input name="cargo" ng-model="editProfileCtrl.profile.office" required>
             </md-input-container>
             <div layout-gt-sm="row">
                 <md-input-container flex-gt-sm="70">
                     <label>Telefone institucional</label>
-                    <input ng-model="editProfileCtrl.copyProfile.phone" placeholder="99 9999-99999" 
+                    <input ng-model="editProfileCtrl.profile.phone" placeholder="99 9999-99999" 
                         name="telefone" mask="99 9999-99999" mask-validate='false' ng-pattern="editProfileCtrl.phoneRegex">
                 </md-input-container>
                 <md-input-container flex-gt-sm="30">
                     <label>Ramal</label>
-                    <input name="ramal" ng-model="editProfileCtrl.copyProfile.branch_line" 
+                    <input name="ramal" ng-model="editProfileCtrl.profile.branch_line" 
                         placeholder="999">
                 </md-input-container>
             </div>

@@ -11,7 +11,8 @@
         // Variable used to observe the changes on the user model.
         var observer;
 
-        configProfileCtrl.newUser = AuthService.getCurrentUser();
+        configProfileCtrl.user = AuthService.getCurrentUser();
+        configProfileCtrl.newUser = _.clone(configProfileCtrl.user);
         configProfileCtrl.loading = false;
         configProfileCtrl.cpfRegex = /^\d{3}\.\d{3}\.\d{3}\-\d{2}$/;
         configProfileCtrl.photo_url = configProfileCtrl.newUser.photo_url;
@@ -58,8 +59,8 @@
             if (configProfileCtrl.photo_user) {
                 configProfileCtrl.loading = true;
                 ImageService.saveImage(configProfileCtrl.photo_user).then(function (data) {
-                    configProfileCtrl.newUser.photo_url = data.url;
-                    configProfileCtrl.newUser.uploaded_images.push(data.url);
+                    configProfileCtrl.user.photo_url = data.url;
+                    configProfileCtrl.user.uploaded_images.push(data.url);
                     saveUser();
                     configProfileCtrl.loading = false;
                 });
@@ -71,6 +72,7 @@
         function saveUser() {
             var deffered = $q.defer();
             if (configProfileCtrl.newUser.isValid()) {
+                changeUser();
                 var patch = jsonpatch.generate(observer);
                 UserService.save(patch).then(function success() {
                     AuthService.save();
@@ -83,6 +85,13 @@
             }
             return deffered.promise;
         }
+
+        function changeUser() {
+            var attributes = ["name", "cpf"];
+            _.forEach(attributes, function(attr){
+                _.set(configProfileCtrl.user, attr, _.get(configProfileCtrl.newUser, attr));
+            });
+        };
 
         configProfileCtrl.showButton = function () {
             return !configProfileCtrl.loading;
@@ -118,6 +127,7 @@
                 controllerAs: "editProfileCtrl",
                 locals: {
                     institution: inst,
+                    user: configProfileCtrl.user,
                     user: configProfileCtrl.newUser
                 },
                 targetEvent: ev,
@@ -126,11 +136,11 @@
         };
 
         function isAdmin(institution_key) {
-            return configProfileCtrl.newUser.isAdmin(institution_key);
+            return configProfileCtrl.user.isAdmin(institution_key);
         }
 
         function hasMoreThanOneInstitution() {
-            return configProfileCtrl.newUser.institutions.length > 1;
+            return configProfileCtrl.user.institutions.length > 1;
         }
 
         function deleteInstitution(institution_key) {
@@ -144,11 +154,11 @@
         }
 
         function removeConection(institution_key) {
-            if (configProfileCtrl.newUser.institutions.length > 1) {
-                _.remove(configProfileCtrl.newUser.institutions, function(institution) {
+            if (configProfileCtrl.user.institutions.length > 1) {
+                _.remove(configProfileCtrl.user.institutions, function(institution) {
                     return institution.key === institution_key;
                 });
-                _.remove(configProfileCtrl.newUser.institution_profiles, function(profile) {
+                _.remove(configProfileCtrl.user.institution_profiles, function(profile) {
                     return profile.institution_key === institution_key;
                 });
                 AuthService.save();
@@ -158,7 +168,7 @@
         }
 
         function isAdminOfAnyInstitution() {
-            return configProfileCtrl.newUser.institutions_admin.length > 0;
+            return configProfileCtrl.user.institutions_admin.length > 0;
         }
 
         configProfileCtrl.deleteAccount = function deleteAccount(event) {
@@ -174,7 +184,7 @@
                     .cancel('Não');
                 var promise = $mdDialog.show(confirm);
                 promise.then(function () {
-                    configProfileCtrl.newUser.state = 'inactive';
+                    configProfileCtrl.user.state = 'inactive';
                     deleteUser();
                 }, function () {
                     MessageService.showToast('Cancelado');
@@ -197,10 +207,10 @@
         }
 
         (function main() {
-            observer = jsonpatch.observe(configProfileCtrl.newUser);
+            observer = jsonpatch.observe(configProfileCtrl.user);
 
-            if (configProfileCtrl.newUser.name === 'Unknown') {
-                delete configProfileCtrl.newUser.name;
+            if (configProfileCtrl.user.name === 'Unknown') {
+                delete configProfileCtrl.user.name;
             }
         })();
     });
@@ -215,7 +225,6 @@
 
         editProfileCtrl.edit = function edit() {
             if (isValidProfile()) {
-                editProfileCtrl.changeUser();
                 var patch = jsonpatch.generate(profileObserver);
                 if (!_.isEmpty(patch)) {
                     ProfileService.editProfile(patch).then(function success() {
@@ -228,22 +237,11 @@
                 editProfileCtrl.closeDialog();
             } else {
                 MessageService.showToast('O cargo é obrigatório.');
-            }
+            } 
         };
 
         editProfileCtrl.closeDialog = function closeDialog() {
             $mdDialog.hide();
-        };
-
-        editProfileCtrl.changeUser = function changeUser() {
-            console.log((user.institution_profiles));
-            _.forEach(Object.keys(user.institution_profiles), function(attribute) {
-               _.set(user.institution_profiles, attribute, _.get(editProfileCtrl.copyProfile, attribute));
-            });
-            console.log((user.institution_profiles));
-
-/*            var index = _.indexOf(user.institution_profiles, editProfileCtrl.profile);
-            user.institution_profiles[index] = editProfileCtrl.copyProfile;*/
         };
 
         function isValidProfile() {
@@ -254,7 +252,6 @@
             editProfileCtrl.profile = _.find(user.institution_profiles, function (profile) {
                 return profile.institution_key === editProfileCtrl.institution.key;
             });
-            editProfileCtrl.copyProfile = angular.copy(editProfileCtrl.profile);
             profileObserver = jsonpatch.observe(user);
         })();
     });

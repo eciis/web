@@ -1,0 +1,36 @@
+<md-dialog layout="row" flex-gt-md="40">
+    <div flex ng-if="!controller.next">
+        <md-dialog-content class="md-dialog-content" layout="column">
+            <h3 class="md-title" md-colors="{color: 'default-grey-800'}">Bem vindo a versão de testes da Plataforma CIS</h3>
+            <div layout="row" layout-align="center center">
+                <md-button class="md-fab md-primary" md-colors="{background: 'default-light-green-600'}">
+                    <md-icon>priority_high</md-icon>
+                </md-button>
+                <p flex="80" class="md-subhead" layout-margin>
+                    Nesta versão contamos com a sua contribuição para apontar erros e melhorias na plataforma,
+                    veja como contribuir.
+                </p>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row" layout-align="end center" md-colors="{color: 'default-teal-600'}">
+            <md-button ng-click="controller.next = true">
+                Avançar
+            </md-button>
+        </md-dialog-actions>
+    </div>
+</md-dialog>
+
+<div flex="30" ng-if="controller.next" style="position: relative; left: 10%; top: 35%;">
+    <md-card>
+        <md-card-content layout="column">
+            <p class="md-subhead" layout-margin>
+                Clique nesse botão na página em que você gostaria de sugerir ou relatar um problema.
+            </p>
+        </md-card-content >
+        <md-card-actions layout="row" layout-align="end center" md-colors="{color: 'default-teal-600'}">
+            <md-button ng-click="controller.cancel()" md-colors="{color: 'default-teal-600'}">
+                Começar a usar
+            </md-button>
+        </md-card-actions>
+    </md-card>
+</div>

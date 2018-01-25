@@ -12,6 +12,8 @@ from handlers.institution_parent_request_handler import InstitutionParentRequest
 import mock
 from mock import patch
 
+CURRENT_INSTITUTION = {'name': 'currentInstitution'}
+CURRENT_INST_STRING = json.dumps(CURRENT_INSTITUTION)
 
 class InstitutionParentRequestHandlerTest(TestBaseHandler):
     """Test the handler InstitutionChildrenRequestCollectionHandler."""
@@ -33,7 +35,9 @@ class InstitutionParentRequestHandlerTest(TestBaseHandler):
     def test_put(self, verify_token, mock_method):
         """Test method post of InstitutionParentRequestHandler."""
         request = self.testapp.put_json(
-            "/api/requests/" + self.request.key.urlsafe() + "/institution_parent")
+            "/api/requests/%s/institution_parent?currentInstitution=%s"
+            % (self.request.key.urlsafe(), CURRENT_INST_STRING)
+        )
 
         request = json.loads(request._app_iter[0])
 
@@ -53,7 +57,10 @@ class InstitutionParentRequestHandlerTest(TestBaseHandler):
     def test_put_user_not_admin(self, verify_token):
         """Test put request with user is not admin."""
         with self.assertRaises(Exception) as ex:
-            self.testapp.put('/api/requests/' + self.request.key.urlsafe() + "/institution_parent")
+            self.testapp.put(
+            "/api/requests/%s/institution_parent?currentInstitution=%s"
+            % (self.request.key.urlsafe(), CURRENT_INST_STRING)
+        )
 
         exception_message = self.get_message_exception(ex.exception.message)
         self.assertEqual(
@@ -66,7 +73,9 @@ class InstitutionParentRequestHandlerTest(TestBaseHandler):
     def test_delete(self, verify_token, mock_method):
         """Test method post of InstitutionChildrenRequestHandler."""
         self.testapp.delete(
-            "/api/requests/" + self.request.key.urlsafe() + "/institution_parent")
+            "/api/requests/%s/institution_parent?currentInstitution=%s"
+            % (self.request.key.urlsafe(), CURRENT_INST_STRING)
+        )
 
         institution = self.inst_requested.key.get()
 

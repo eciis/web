@@ -135,7 +135,16 @@ class InstitutionHandler(BaseHandler):
 
         institution = ndb.Key(urlsafe=institution_key).get()
 
-        institution.createInstitutionWithStub(user, inviteKey, institution)
+        invite = ndb.Key(urlsafe=inviteKey).get()
+
+        Utils._assert(invite.status == 'accepted', 
+            "This invitation has already been accepted", 
+            NotAuthorizedException)
+
+        invite.status = 'accepted'
+        invite.put()
+
+        institution.createInstitutionWithStub(user, institution)
 
         user.name = data.get('sender_name')
         data_profile = {
@@ -149,7 +158,6 @@ class InstitutionHandler(BaseHandler):
         user.add_permissions(permissions.DEFAULT_ADMIN_PERMISSIONS, institution.key.urlsafe())
         user.put()
 
-        invite = ndb.Key(urlsafe=inviteKey).get()
         invite.send_response_notification(user, invite.admin_key.urlsafe(), 'ACCEPT')
 
         enqueue_task('add-admin-permissions', {'institution_key': institution_key})

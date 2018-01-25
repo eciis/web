@@ -135,7 +135,7 @@
         };
 
         function isAdmin(institution_key) {
-            return configProfileCtrl.user.isAdmin(institution_key);
+            return configProfileCtrl.newUser.isAdmin(institution_key);
         }
 
         function hasMoreThanOneInstitution() {
@@ -210,6 +210,7 @@
 
             if (configProfileCtrl.user.name === 'Unknown') {
                 delete configProfileCtrl.user.name;
+                delete configProfileCtrl.newUser.name;
             }
         })();
     });

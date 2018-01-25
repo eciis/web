@@ -72,7 +72,7 @@
         function saveUser() {
             var deffered = $q.defer();
             if (configProfileCtrl.newUser.isValid()) {
-                changeUser();
+                updateUser();
                 var patch = jsonpatch.generate(observer);
                 UserService.save(patch).then(function success() {
                     AuthService.save();
@@ -86,7 +86,7 @@
             return deffered.promise;
         }
 
-        function changeUser() {
+        function updateUser() {
             var attributes = ["name", "cpf"];
             _.forEach(attributes, function(attr){
                 _.set(configProfileCtrl.user, attr, _.get(configProfileCtrl.newUser, attr));
@@ -139,7 +139,7 @@
         }
 
         function hasMoreThanOneInstitution() {
-            return configProfileCtrl.user.institutions.length > 1;
+            return !_.isEmpty(configProfileCtrl.user.institutions);
         }
 
         function deleteInstitution(institution_key) {
@@ -153,7 +153,7 @@
         }
 
         function removeConection(institution_key) {
-            if (configProfileCtrl.user.institutions.length > 1) {
+            if (!_.isEmpty(configProfileCtrl.user.institutions)) {
                 _.remove(configProfileCtrl.user.institutions, function(institution) {
                     return institution.key === institution_key;
                 });
@@ -167,7 +167,7 @@
         }
 
         function isAdminOfAnyInstitution() {
-            return configProfileCtrl.user.institutions_admin.length > 0;
+            return !_.isEmpty(configProfileCtrl.user.institutions_admin);
         }
 
         configProfileCtrl.deleteAccount = function deleteAccount(event) {

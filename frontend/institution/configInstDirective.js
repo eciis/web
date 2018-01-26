@@ -11,6 +11,7 @@
         var observer;
 
         configInstCtrl.loading = true;
+        configInstCtrl.hasSubmitted = false;
         configInstCtrl.user = AuthService.getCurrentUser();
         configInstCtrl.cnpjRegex = "[0-9]{2}[\.][0-9]{3}[\.][0-9]{3}[\/][0-9]{4}[-][0-9]{2}";
         configInstCtrl.phoneRegex = "[0-9]{2}[\\s][0-9]{4,5}[-][0-9]{4,5}";
@@ -102,6 +103,7 @@
             var newInstitution = new Institution(configInstCtrl.newInstitution);
             var promise;
             if (newInstitution.isValid()){
+                configInstCtrl.hasSubmitted = true;
                 var confirm = $mdDialog.confirm(event)
                     .clickOutsideToClose(true)
                     .title('Finalizar')
@@ -115,6 +117,7 @@
                 promise.then(function() {
                     updateInstitution();
                 }, function() {
+                    configInstCtrl.hasSubmitted = false;
                     MessageService.showToast('Cancelado');
                 });
             } else {

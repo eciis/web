@@ -126,8 +126,7 @@
                 controller: 'EditProfileController',
                 controllerAs: "editProfileCtrl",
                 locals: {
-                    institution: inst,
-                    user: configProfileCtrl.user
+                    institution: inst
                 },
                 targetEvent: ev,
                 clickOutsideToClose: true
@@ -216,12 +215,14 @@
     });
 
 
-    app.controller("EditProfileController", function EditProfileController(institution, user, ProfileService,
+    app.controller("EditProfileController", function EditProfileController(institution, ProfileService,
         AuthService, $mdDialog, MessageService) {
         var editProfileCtrl = this;
         editProfileCtrl.phoneRegex = "[0-9]{2}[\\s][0-9]{4,5}[-][0-9]{4,5}";
+        editProfileCtrl.user = AuthService.getCurrentUser();
         editProfileCtrl.institution = institution;
-        var profileObserver;
+        let profileObserver = {};
+        let oldProfile;
 
         editProfileCtrl.edit = function edit() {
             if (isValidProfile()) {
@@ -234,13 +235,15 @@
                         MessageService.showToast(response.data.msg);
                     });
                 }
-                editProfileCtrl.closeDialog();
+                $mdDialog.hide();
             } else {
                 MessageService.showToast('O cargo é obrigatório.');
             } 
         };
 
         editProfileCtrl.closeDialog = function closeDialog() {
+            const indexOfProfile = editProfileCtrl.user.institution_profiles.indexOf(editProfileCtrl.profile);
+            editProfileCtrl.user.institution_profiles[indexOfProfile] = oldProfile;
             $mdDialog.hide();
         };
 
@@ -249,10 +252,11 @@
         }
 
         (function main() {
-            editProfileCtrl.profile = _.find(user.institution_profiles, function (profile) {
-                return profile.institution_key === editProfileCtrl.institution.key;
-            });
-            profileObserver = jsonpatch.observe(user);
+            editProfileCtrl.profile = editProfileCtrl.user.institution_profiles
+                .filter(profile => profile.institution_key === editProfileCtrl.institution.key)
+                .reduce(profile => profile);
+            oldProfile = _.clone(editProfileCtrl.profile);
+            profileObserver = jsonpatch.observe(editProfileCtrl.user);
         })();
     });
 })();

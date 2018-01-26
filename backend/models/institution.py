@@ -164,12 +164,7 @@ class Institution(ndb.Model):
         return institution_stub
 
     @ndb.transactional(xg=True)
-    def createInstitutionWithStub(self, user, inviteKey, institution):
-        invite = ndb.Key(urlsafe=inviteKey).get()
-
-        invite.status = 'accepted'
-        invite.put()
-
+    def createInstitutionWithStub(self, user, institution):
         institution.admin = user.key
         institution.members.append(user.key)
         institution.followers.append(user.key)

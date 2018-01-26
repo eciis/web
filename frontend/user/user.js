@@ -118,7 +118,7 @@ User.prototype.updateInstitutions = function updateInstitutions(institution){
 };
 
 User.prototype.addProfile = function addProfile(profile){
-    this.institution_profiles.push(profile);
+    this.institution_profiles ? this.institution_profiles.push(profile) : this.institution_profiles = [profile];
 };
 
 User.prototype.isInactive = function isInactive() {

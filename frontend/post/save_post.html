@@ -14,7 +14,7 @@
               ng-model="postCtrl.post.title" maxlength="100" placeholder="{{postCtrl.showPlaceholderMsg()}}">
             </md-input-container>
             <md-input-container ng-show="postCtrl.isTyping()" md-no-float>
-              <textarea name="message" style="border: 0; max-height: 400px;resize:none;" ng-model="postCtrl.post.text" placeholder="Texto">
+              <textarea name="message" style="border: 0; max-height: 400px;resize:none; overflow: auto;" ng-model="postCtrl.post.text" placeholder="Texto" class="hide-scrollbar">
               </textarea>
               <div ng-messages='saveForm.message.$error'>
                   <div ng-message="required">O post deve conter um texto!</div>

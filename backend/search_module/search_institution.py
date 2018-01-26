@@ -100,7 +100,7 @@ class SearchInstitution(SearchDocument):
         state_string = self.create_state_string(state)
         fields_values_string = self.create_field_values_string(value)
 
-        query_string = "(%s) AND %s" %(fields_values_string, state_string)
+        query_string = "(%s) AND %s" % (fields_values_string, state_string) if fields_values_string else state_string
         return query_string
 
     def create_state_string(self, state):
@@ -117,16 +117,22 @@ class SearchInstitution(SearchDocument):
         return state_string
 
     def create_field_values_string(self, value):
-        """Create a string formed by fields and values."""
+        """Create a string formed by fields and values.
+        
+        If value is empty the method will return an empty string
+        which means that the query will be only by the state
+        and the fields won't be considered.
+        """
         # add a new field here
-        fields = ['name', 'acronym', 'email', 'actuation_area', 'legal_nature', 'federal_state', 'description']
+        fields = ['name', 'acronym', 'actuation_area', 'legal_nature', 'federal_state', 'description']
         fields_values = []
 
-        for field in fields:
-            field_value = '%s: "%s"' % (field, value)
-            fields_values.append(field_value)
+        if value:
+            for field in fields:
+                field_value = '%s: "%s"' % (field, value)
+                fields_values.append(field_value)
 
-        fields_values_string = " OR ".join(fields_values)
+        fields_values_string = " OR ".join(fields_values) if fields_values else ""
 
         return fields_values_string
     

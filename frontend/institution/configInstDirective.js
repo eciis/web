@@ -332,15 +332,15 @@
         }
 
         function isValidAdress(currentStep, address){
-            var lala = true;
+            var valid = true;
             if(currentStep === 0 && address && address.country === "Brasil"){
                 _.forEach(address, function(value, key) {
                     if(! value || _.isEmpty(value)) {
-                        lala = false;
+                        valid = false;
                     }
                 });
             }
-            return lala;
+            return valid;
         }
 
         function getLegalNatures() {

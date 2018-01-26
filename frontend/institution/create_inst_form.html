@@ -58,7 +58,7 @@
                                 <span flex="3"></span>
                                 <md-input-container flex-gt-sm flex-sm ng-if="configInstCtrl.isAnotherCountry">
                                     <label>Estado</label>
-                                    <input type="text" name="state" required ng-model="configInstCtrl.address.federal_state">
+                                    <input type="text" name="state" ng-model="configInstCtrl.address.federal_state">
                                 </md-input-container>
                                 <md-input-container flex-gt-sm flex-sm ng-if="!configInstCtrl.isAnotherCountry">
                                     <label>Estado</label>
@@ -73,7 +73,7 @@
                             <div layout="row" layout-margin>
                                 <md-input-container  flex-gt-sm flex-sm ng-if="configInstCtrl.isAnotherCountry">
                                     <label>Cidade</label>
-                                    <input type="text" name="city" required ng-model="configInstCtrl.address.city">
+                                    <input type="text" name="city" ng-model="configInstCtrl.address.city">
                                 </md-input-container>
                                 <md-input-container  flex-gt-sm flex-sm ng-if="!configInstCtrl.isAnotherCountry">
                                     <label>Cidade</label>
@@ -93,20 +93,20 @@
                                 <span flex="3"></span>
                                 <md-input-container  flex-gt-sm flex-sm layout="row">
                                     <label>Bairro</label>
-                                    <input type="text" name="neighbourhood" required
+                                    <input type="text" name="neighbourhood" ng-required="!configInstCtrl.isAnotherCountry"
                                         ng-model="configInstCtrl.address.neighbourhood">
                                 </md-input-container>
                             </div>
                             <div layout="row" layout-margin>
                                 <md-input-container  flex-gt-sm flex-sm layout="row">
                                     <label>Número</label>
-                                    <input type="text" name="number" required
+                                    <input type="text" name="number" ng-required="!configInstCtrl.isAnotherCountry"
                                         ng-model="configInstCtrl.address.number">
                                 </md-input-container>
                                 <span flex="3"></span>
                                 <md-input-container  flex-gt-sm flex-sm layout="row">
                                     <label>CEP</label>
-                                    <input type="text" name="cep" required
+                                    <input type="text" name="cep" ng-required="!configInstCtrl.isAnotherCountry"
                                         ng-model="configInstCtrl.address.cep"
                                         placeholder="00000-000"
                                         ng-pattern="configInstCtrl.cepRegex"
@@ -116,7 +116,7 @@
                             <div layout-margin>
                                 <md-input-container  flex-gt-sm layout="row">
                                     <label>Rua</label>
-                                    <input type="text" name="street" required
+                                    <input type="text" name="street" ng-required="!configInstCtrl.isAnotherCountry"
                                     ng-model="configInstCtrl.address.street">
                                 </md-input-container>
                             </div>

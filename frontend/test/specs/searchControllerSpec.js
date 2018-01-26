@@ -153,69 +153,6 @@
                 expect(searchCtrl.makeSearch).toHaveBeenCalled();
             });
 
-            it('Should filter the institutions by actuation_area', function () {
-                searchCtrl.searchBy('REGULATORY_AGENCY', 'actuation_area');
-                expect(searchCtrl.institutions).toEqual([splab, inst]);
-
-                searchCtrl.searchBy('FUNDING_AGENCY', 'actuation_area');
-                expect(searchCtrl.institutions).toEqual([instToTest]);
-
-                searchCtrl.searchBy('PRIVATE_COMPANY', 'actuation_area');
-                expect(searchCtrl.institutions).toEqual([]);
-            });
-
-            it('Should filter the institutions by legal_nature', function () {
-                searchCtrl.searchBy('PRIVATE_FOR-PROFIT', 'legal_nature');
-                expect(searchCtrl.institutions).toEqual([splab]);
-
-                searchCtrl.searchBy('PRIVATE_NON-PROFIT', 'legal_nature');
-                expect(searchCtrl.institutions).toEqual([inst]);
-
-                searchCtrl.searchBy('PUBLIC', 'legal_nature');
-                expect(searchCtrl.institutions).toEqual([instToTest]);
-            });
-
-            it('Should filter the institutions by federal_state', function () {
-                searchCtrl.searchBy('Paraíba', 'federal_state');
-                expect(searchCtrl.institutions).toEqual([splab, instToTest]);
-
-                searchCtrl.searchBy('Bahia', 'federal_state');
-                expect(searchCtrl.institutions).toEqual([inst]);
-
-                searchCtrl.searchBy('Pernambuco', 'federal_state');
-                expect(searchCtrl.institutions).toEqual([]);
-            });
-
-            it('Should filter the institutions by actuation_area and legal_nature', function () {
-                searchCtrl.searchNature = "Privada com fins lucrativos"
-                searchCtrl.searchBy('REGULATORY_AGENCY', 'actuation_area');
-                expect(searchCtrl.institutions).toEqual([splab]);
-
-                searchCtrl.searchActuation = "Agência de Fomento"
-                searchCtrl.searchBy('PUBLIC', 'legal_nature');
-                expect(searchCtrl.institutions).toEqual([instToTest]);
-
-                searchCtrl.searchNature = "Privada sem fins lucrativos"
-                searchCtrl.searchBy('REGULATORY_AGENCY', 'actuation_area');
-                expect(searchCtrl.institutions).toEqual([inst]);
-            });
-
-            it('Should filter the institutions by actuation_area, legal_nature and federal_state', function () {
-                searchCtrl.searchNature = "Privada com fins lucrativos"
-                searchCtrl.searchState = {nome: "Alagoas"}
-                searchCtrl.searchBy('REGULATORY_AGENCY', 'actuation_area');
-                expect(searchCtrl.institutions).toEqual([]);
-
-                searchCtrl.searchActuation = "Agência de Fomento"
-                searchCtrl.searchState = { nome: "Paraíba" }
-                searchCtrl.searchBy('PUBLIC', 'legal_nature');
-                expect(searchCtrl.institutions).toEqual([instToTest]);
-
-                searchCtrl.searchNature = "Privada sem fins lucrativos"
-                searchCtrl.searchState = { nome: "Bahia" }
-                searchCtrl.searchBy('REGULATORY_AGENCY', 'actuation_area');
-                expect(searchCtrl.institutions).toEqual([inst]);
-            });
         });
 
         describe('isLoading()', function() {

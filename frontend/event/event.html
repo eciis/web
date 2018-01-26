@@ -30,7 +30,7 @@
         <div flex layout-align="center center" layout="row" layout-fill ng-if="eventCtrl.isLoadingEvents">
             <md-progress-circular md-mode="indeterminate"></md-progress-circular>
         </div>
-        <md-card style="margin-left: 40px;">
+        <md-card ng-if="eventCtrl.events.lentgh === 0" style="margin-left: 40px;">
             <md-content layout-align="center center" layout="column">
               <h4>Nenhum evento a ser exibido.</h4>
             </md-content>

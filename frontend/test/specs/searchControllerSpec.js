@@ -12,7 +12,24 @@
 
     var splab = {
         name: 'Splab',
-        key: '1239'
+        key: '1239',
+        federal_state: 'Paraíba',
+        actuation_area: 'REGULATORY_AGENCY',
+        legal_nature: 'PRIVATE_FOR-PROFIT'
+    };
+
+    var inst = {
+        name: 'Testing inst',
+        federal_state: 'Bahia',
+        actuation_area: 'REGULATORY_AGENCY',
+        legal_nature: 'PRIVATE_NON-PROFIT'
+    };
+    
+    var instToTest = {
+        name: 'Inst to test',
+        federal_state: 'Paraíba',
+        actuation_area: 'FUNDING_AGENCY',
+        legal_nature: 'PUBLIC'
     };
 
     beforeEach(module('app'));
@@ -24,8 +41,15 @@
         instService = InstitutionService;
 
         AuthService.login(user);
-        httpBackend.expectGET('app/institution/actuation_area.json').respond([{}]);
-        httpBackend.expectGET('app/institution/legal_nature.json').respond([{}]);
+        httpBackend.expectGET('app/institution/actuation_area.json').respond({
+            "FUNDING_AGENCY": "Agência de Fomento",
+            "REGULATORY_AGENCY": "Agência Reguladora"}
+        );
+        httpBackend.expectGET('app/institution/legal_nature.json').respond({
+            "PRIVATE_FOR-PROFIT": "Privada com fins lucrativos",
+            "PRIVATE_NON-PROFIT": "Privada sem fins lucrativos",
+            "PUBLIC": "Pública"
+        });
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', "error/user_inactive.html").respond(200);
         httpBackend.when('GET', "home/home.html").respond(200);
@@ -33,6 +57,8 @@
         createCtrl = function() {
             return $controller('SearchController', {
                 scope: scope,
+                state: state,
+                search_keyword: ""
             });
         };
         searchCtrl = createCtrl();
@@ -106,11 +132,27 @@
         });
 
         describe('searchBy()', function() {
-            it('Should call makeSearch()', function() {
-                spyOn(searchCtrl, 'makeSearch');
-                searchCtrl.searchBy('Universidades');
-                expect(searchCtrl.makeSearch).toHaveBeenCalledWith('Universidades', 'institution');
+            beforeEach(function () {
+                spyOn(searchCtrl, 'makeSearch').and.callThrough();
+                spyOn(instService, 'searchInstitutions').and.callFake(function () {
+                    return {
+                        then: function (callback) {
+                            return callback(
+                                {data: [splab, inst, instToTest]}
+                            );
+                        }
+                    };
+                });
+                searchCtrl.makeSearch("", 'institution');
+                searchCtrl.search_keyword = "random";
+                searchCtrl.previous_keyword = searchCtrl.search_keyword;
             });
+
+            it('Should call makeSearch()', function() {
+                searchCtrl.searchBy('Universidades');
+                expect(searchCtrl.makeSearch).toHaveBeenCalled();
+            });
+
         });
 
         describe('isLoading()', function() {

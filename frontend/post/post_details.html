@@ -162,7 +162,7 @@
   </div>  
   <md-card-content>
       <div ng-if="postDetailsCtrl.showTextPost()">
-          <p ng-bind-html="postDetailsCtrl.postToURL(postDetailsCtrl.post).text" class="break">
+          <p ng-bind-html="postDetailsCtrl.postToURL(postDetailsCtrl.post).text" class="text">
             {{postDetailsCtrl.postToURL(postDetailsCtrl.post).text}}
           </p>
           <div layout="row" layout-align="end-center" ng-if="!postDetailsCtrl.isPostPage">

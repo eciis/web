@@ -295,33 +295,49 @@
 
         function getFields() {
             var necessaryFieldsForStep = {
-                0: {fields: [configInstCtrl.newInstitution.address], size: 7},
-                1: {fields: [
+                0: {
+                    fields: [configInstCtrl.newInstitution.address],
+                    isValid :  function(){
+                        var address = configInstCtrl.newInstitution.address;
+                        var valid = true;
+                        if(address && address.country === "Brasil"){
+                            _.forEach(address, function(value, key) {
+                                if(! value || _.isEmpty(value)) {
+                                    valid = false;
+                                }
+                            });
+                        }
+                        return valid;
+                    }
+                },
+                1: {
+                    fields: [
                     configInstCtrl.newInstitution.name,
                     configInstCtrl.newInstitution.actuation_area,
                     configInstCtrl.newInstitution.legal_nature
-                    ]},
+                    ]
+                },
                 2: {fields: [
                     configInstCtrl.newInstitution.leader,
                     configInstCtrl.newInstitution.description
-                    ]}
+                    ]
+                }
             };
             return necessaryFieldsForStep;
         }
 
         function isCurrentStepValid(currentStep) {
             var isValid = true;
-            var isValidSize = true;
+            var isFieldValid = true;
             var necessaryFieldsForStep = getFields();
             _.forEach(necessaryFieldsForStep[currentStep].fields, function(field) {
-                if(!isValidAdress(currentStep, field) || _.isUndefined(field) || _.isEmpty(field)) {
+                if(_.isUndefined(field) || _.isEmpty(field)) {
                     isValid = false;
                 }
             });
-            var size = necessaryFieldsForStep[currentStep].size;
-            if(size)
-                isValidSize = _.size(necessaryFieldsForStep[currentStep].fields[0]) === size;
-            return isValid && isValidSize;
+            isFieldValid = necessaryFieldsForStep[currentStep].isValid ? 
+                necessaryFieldsForStep[currentStep].isValid() : true;
+            return isValid && isFieldValid;
         }
 
         function changeInstitution(institution) {
@@ -329,18 +345,6 @@
                 configInstCtrl.user.current_institution.key === configInstCtrl.newInstitution.key) {
                 configInstCtrl.user.changeInstitution(institution);
             }
-        }
-
-        function isValidAdress(currentStep, address){
-            var valid = true;
-            if(currentStep === 0 && address && address.country === "Brasil"){
-                _.forEach(address, function(value, key) {
-                    if(! value || _.isEmpty(value)) {
-                        valid = false;
-                    }
-                });
-            }
-            return valid;
         }
 
         function getLegalNatures() {

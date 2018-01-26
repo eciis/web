@@ -114,8 +114,8 @@
                 </md-input-container>
                 <md-input-container style="margin: 0" flex="45" ng-if="!controller.isAnotherCountry">
                     <label>Estado</label>
-                    <md-select ng-model="controller.selectedFederalState" ng-change="controller.getCitiesByState()"
-                      ng-disabled="!controller.event.address.country" required/>
+                    <md-select ng-model="controller.selectedFederalState" required ng-change="controller.getCitiesByState()"
+                      ng-disabled="!controller.event.address.country"/>
                       <md-option ng-repeat="federal_state in controller.federalStates"
                         ng-value="federal_state">{{federal_state.sigla}}</md-option>
                     </md-select>
@@ -126,8 +126,8 @@
                 </md-input-container>
                 <md-input-container style="margin: 0" flex="45" ng-if="!controller.isAnotherCountry">
                     <label>Cidade</label>
-                    <md-select ng-model="controller.event.address.city"  ng-disabled="!controller.selectedFederalState"
-                      required/>
+                    <md-select required ng-model="controller.event.address.city"  ng-disabled="!controller.selectedFederalState"
+                      />
                       <md-option ng-repeat="city in controller.cities" ng-value="city">{{city}}</md-option>
                     </md-select>
                 </md-input-container>

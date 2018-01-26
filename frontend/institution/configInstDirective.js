@@ -311,16 +311,17 @@
 
         function isCurrentStepValid(currentStep) {
             var isValid = true;
+            var isValidSize = true;
             var necessaryFieldsForStep = getFields();
             _.forEach(necessaryFieldsForStep[currentStep].fields, function(field) {
-                if(_.isUndefined(field) || _.isEmpty(field)) {
+                if(!isValidAdress(currentStep, field) || _.isUndefined(field) || _.isEmpty(field)) {
                     isValid = false;
                 }
             });
             var size = necessaryFieldsForStep[currentStep].size;
             if(size)
-                isValid = _.size(necessaryFieldsForStep[currentStep].fields[0]) === size;
-            return isValid;
+                isValidSize = _.size(necessaryFieldsForStep[currentStep].fields[0]) === size;
+            return isValid && isValidSize;
         }
 
         function changeInstitution(institution) {
@@ -328,6 +329,18 @@
                 configInstCtrl.user.current_institution.key === configInstCtrl.newInstitution.key) {
                 configInstCtrl.user.changeInstitution(institution);
             }
+        }
+
+        function isValidAdress(currentStep, address){
+            var lala = true;
+            if(currentStep === 0 && address.country === "Brasil"){
+                _.forEach(address, function(value, key) {
+                    if(! value || _.isEmpty(value)) {
+                        lala = false;
+                    }
+                });
+            }
+            return lala;
         }
 
         function getLegalNatures() {

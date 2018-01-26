@@ -272,9 +272,10 @@
                 targetEvent: ev,
                 clickOutsideToClose:true,
                 locals: {
-                    institution: institutionCtrl.institution
+                    institution: institutionCtrl.institution,
+                    loadStateView: loadStateView
                 },
-                controller: RemoveInstController,
+                controller: "RemoveInstController",
                 controllerAs: 'ctrl'
             });
         };
@@ -287,43 +288,48 @@
             return (state === institutionCtrl.stateView) ? "option-selected-left-bar":"";
         };
 
-        function RemoveInstController($mdDialog, institution, InstitutionService, $state) {
-            var ctrl = this;
-
-            ctrl.institution = institution;
-
-            ctrl.closeDialog = function() {
-                $mdDialog.cancel();
-                loadStateView();
-            };
-            
-            ctrl.removeInst = function removeInst() {
-                InstitutionService.removeInstitution(institution.key, ctrl.removeHierarchy).then(function success() {
-                    institutionCtrl.user.removeProfile(institution.key, ctrl.removeHierarchy);
-                    institutionCtrl.user.removeInstitution(institution.key, ctrl.removeHierarchy);
-                    AuthService.save();
-                    ctrl.closeDialog();
-                    if(_.isEmpty(institutionCtrl.user.institutions)) {
-                        AuthService.logout();
-                    } else {
-                        $state.go("app.user.home");
-                    }
-                    MessageService.showToast("Instituição removida com sucesso.");
-                });
-            };
-
-            ctrl.hasOneInstitution = function hasOneInstitution() {
-                return _.size(institutionCtrl.user.institutions) === 1;
-            };
-            
-            ctrl.thereIsNoChild = function thereIsNoChild() {
-                return _.isEmpty(institution.children_institutions);
-            }
-        }
+        
 
         (function main(){
             loadStateView();
         })();
+    });
+
+    app.controller("RemoveInstController", function RemoveInstController($mdDialog, institution, 
+        InstitutionService, $state, AuthService, loadStateView, MessageService) {
+        var ctrl = this;
+
+        ctrl.institution = institution;
+        ctrl.user = AuthService.getCurrentUser();
+        ctrl.loadStateView = loadStateView;
+
+        ctrl.closeDialog = function () {
+            $mdDialog.cancel();
+            ctrl.loadStateView();
+        };
+
+        ctrl.removeInst = function removeInst() {
+            InstitutionService.removeInstitution(institution.key, ctrl.removeHierarchy).then(function success() {
+                ctrl.user.removeProfile(institution.key, ctrl.removeHierarchy);
+                ctrl.user.removeInstitution(institution.key, ctrl.removeHierarchy);
+                AuthService.save();
+                ctrl.closeDialog();
+                if (_.isEmpty(ctrl.user.institutions)) {
+                    AuthService.logout();
+                } else {
+                    $state.go("app.user.home");
+                }
+                MessageService.showToast("Instituição removida com sucesso.");
+            });
+        };
+
+        ctrl.hasOneInstitution = function hasOneInstitution() {
+            return _.size(ctrl.user.institutions) === 1;
+        };
+
+        ctrl.thereIsNoChild = function thereIsNoChild() {
+            return _.isEmpty(institution.children_institutions);
+        }
     });
 
     app.controller("FollowersInstController", function InstitutionController($state, InstitutionService,

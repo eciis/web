@@ -124,7 +124,7 @@
                     </md-card-content>
                     <md-card-actions layout="row" layout-align="end center">
                         <md-button class="md-raised" md-colors="{background: 'teal-500'}" ng-click="configInstCtrl.nextStep()">
-                            PRÓXIMO
+                           PRÓXIMO
                         </md-button>
                     </md-card-actions>
                 </div>
@@ -259,10 +259,13 @@
                             </form>
                         </div>
                     </md-card-content>
-                    <md-card-actions layout="row" layout-align="end center">
-                        <md-button class="md-raised" md-colors="{background: 'teal-500'}" ng-disabled={{configInstCtrl.hasSubmitted}}
-                            ng-click="configInstCtrl.submit($event)"> FINALIZAR
+                    <md-card-actions layout="row" layout-align="end center" ng-if="!configInstCtrl.hasSubmitted">
+                        <md-button class="md-raised" md-colors="{background: 'teal-500'}" ng-click="configInstCtrl.submit($event)"> 
+                            FINALIZAR
                         </md-button>
+                    </md-card-actions>
+                    <md-card-actions layout="row" layout-align="center center" ng-if="configInstCtrl.hasSubmitted">
+                        <md-progress-circular class="md-hue-2" md-diameter="25px"></md-progress-circular>
                     </md-card-actions>
                 </div>
             </md-card>

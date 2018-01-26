@@ -103,6 +103,7 @@
             var newInstitution = new Institution(configInstCtrl.newInstitution);
             var promise;
             if (newInstitution.isValid()){
+                configInstCtrl.hasSubmitted = true;
                 var confirm = $mdDialog.confirm(event)
                     .clickOutsideToClose(true)
                     .title('Finalizar')
@@ -114,9 +115,9 @@
 
                 promise = $mdDialog.show(confirm);
                 promise.then(function() {
-                    configInstCtrl.hasSubmitted = true;
                     updateInstitution();
                 }, function() {
+                    configInstCtrl.hasSubmitted = false;
                     MessageService.showToast('Cancelado');
                 });
             } else {

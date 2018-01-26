@@ -9,8 +9,8 @@
         var searchCtrl = this;
 
         searchCtrl.search_keyword = $state.params.search_keyword;
+        // This field allows the controller know when it has to go to the server to make the search.
         searchCtrl.previous_keyword = searchCtrl.search_keyword;
-        searchCtrl.initialInstitutions = [];
         searchCtrl.institutions = [];
         searchCtrl.actuationAreas = [];
         searchCtrl.legalNature = [];
@@ -24,7 +24,7 @@
             var promise = InstitutionService.searchInstitutions(valueOrKeyword, "active", type);
             promise.then(function success(response) {
                 searchCtrl.institutions = response.data;
-                searchCtrl.initialInstitutions = _.clone(searchCtrl.institutions);
+
                 searchCtrl.loading = true;
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
@@ -58,9 +58,24 @@
             }
         };
 
+        /**
+         * This function verifies if there is any changes in the search_keyword.
+         * If it has changes, the search will be made in the server and the
+         * previous_keyword will be updated. Otherwise, the search is just a filtering
+         * in the controller's institutions field.
+         */
         function keywordHasChanges() {
             var keywordHasChanged = searchCtrl.search_keyword != searchCtrl.previous_keyword;
             return _.isEmpty(searchCtrl.initialInstitutions) || keywordHasChanged || !searchCtrl.search_keyword;
+        }
+
+        /**
+         * Refreshes the previous_keyword field. It is called
+         * when the controller goes to the server to make the search,
+         * in other words, when the search_keywords changes.
+         */
+        function refreshPreviousKeyword() {
+            searchCtrl.previous_keyword = searchCtrl.search_keyword;
         }
 
         searchCtrl.isLoading = function isLoading() {
@@ -101,10 +116,6 @@
                 arrayToReturn.push(current_obj);
             });
             return arrayToReturn;
-        }
-
-        function refreshPreviousKeyword() {
-            searchCtrl.previous_keyword = searchCtrl.search_keyword;
         }
 
         (function main() {

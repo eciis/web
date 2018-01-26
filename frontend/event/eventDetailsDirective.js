@@ -107,35 +107,33 @@
             }
         };
 
-        eventCtrl.getStreetAndNumber = function getStreetAndNumber() {
-            if(eventCtrl.event.address.number && eventCtrl.event.address.street) {
-                return eventCtrl.event.address.street + ", " + eventCtrl.event.address.number;
-            } else if(!eventCtrl.event.address.number && eventCtrl.event.address.street) {
-                return eventCtrl.event.address.street + ", S/N";
-            } else if(eventCtrl.event.address.number && !eventCtrl.event.address.street) {
-                return "Rua não informada, " + eventCtrl.event.address.number;
-            } else {
-                return eventCtrl.event.address.number;
+        eventCtrl.getStreet = function getStreet() {
+            if(eventCtrl.event.address.street)
+                return eventCtrl.event.address.street + ", ";
+        };
+
+        eventCtrl.getNumber = function getNumber(address) {
+            if(address.street) {
+                return address.number ?
+                    address.number : "S/N";
             }
         };
 
-        eventCtrl.getCity = function getCity() {
-            if(eventCtrl.event.address.city)
-                return eventCtrl.event.address.city;
+        eventCtrl.getCity = function getCity(address) {
+            if(address.city)
+                return address.city;
         };
 
-        eventCtrl.getFederalState = function getFederalState() {
-            if(eventCtrl.event.address.federal_state)
-                return eventCtrl.event.address.city ?
-                    ", " + eventCtrl.event.address.federal_state
-                    : eventCtrl.event.address.federal_state;
+        eventCtrl.getFederalState = function getFederalState(address) {
+            if(address.federal_state)
+                return address.city ?
+                    ", " + address.federal_state : address.federal_state;
         };
 
-        eventCtrl.getCountry = function getCountry() {
-            if(eventCtrl.event.address.country)
-                return eventCtrl.event.address.federal_state ?
-                    " - " + eventCtrl.event.address.country
-                    : eventCtrl.event.address.country;
+        eventCtrl.getCountry = function getCountry(address) {
+            if(address.country)
+                return address.federal_state ?
+                    " - " + address.country : address.country;
         };
 
         function isInstitutionAdmin(event) {

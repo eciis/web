@@ -70,9 +70,12 @@
             <div layout="column" style="margin-left: 40px;">
               <h3>{{eventDetailsCtrl.event.local}}</h3>
               <span style="margin-top: -15px; color: #959796;">
-                 {{eventDetailsCtrl.getStreetAndNumber()}}
+                 {{eventDetailsCtrl.getStreet(eventDetailsCtrl.event.address)}}
+                 {{eventDetailsCtrl.getNumber(eventDetailsCtrl.event.address)}}
                 </br>
-                {{eventDetailsCtrl.getCity()}}{{eventDetailsCtrl.getFederalState()}}{{eventDetailsCtrl.getCountry()}}
+                {{eventDetailsCtrl.getCity(eventDetailsCtrl.event.address)}}
+                {{eventDetailsCtrl.getFederalState(eventDetailsCtrl.event.address)}}
+                {{eventDetailsCtrl.getCountry(eventDetailsCtrl.event.address)}}
               </span>
             </div>
           </div>

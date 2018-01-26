@@ -107,35 +107,6 @@
             }
         };
 
-        eventCtrl.getStreet = function getStreet() {
-            if(eventCtrl.event.address.street)
-                return eventCtrl.event.address.street + ", ";
-        };
-
-        eventCtrl.getNumber = function getNumber(address) {
-            if(address.street) {
-                return address.number ?
-                    address.number : "S/N";
-            }
-        };
-
-        eventCtrl.getCity = function getCity(address) {
-            if(address.city)
-                return address.city;
-        };
-
-        eventCtrl.getFederalState = function getFederalState(address) {
-            if(address.federal_state)
-                return address.city ?
-                    ", " + address.federal_state : address.federal_state;
-        };
-
-        eventCtrl.getCountry = function getCountry(address) {
-            if(address.country)
-                return address.federal_state ?
-                    " - " + address.country : address.country;
-        };
-
         function isInstitutionAdmin(event) {
             return _.includes(_.map(eventCtrl.user.institutions_admin, Utils.getKeyFromUrl),
                 Utils.getKeyFromUrl(event.institution_key));

@@ -112,7 +112,7 @@ class Event(ndb.Model):
             data.get('start_time'), "%Y-%m-%dT%H:%M:%S")
         event.end_time = datetime.datetime.strptime(
             data.get('end_time'), "%Y-%m-%dT%H:%M:%S")
-        event.address = Address.create(data)
+        event.address = Address.create(data.get('address'))
 
         event.isValid()
 

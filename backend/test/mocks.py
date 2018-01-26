@@ -87,7 +87,8 @@ def create_event(author, institution):
         'title': 'title ',
         'local': 'location ',
         'start_time': datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
-        'end_time': (datetime.datetime.now() + datetime.timedelta(days=1)).strftime("%Y-%m-%dT%H:%M:%S")
+        'end_time': (datetime.datetime.now() + datetime.timedelta(days=1)).strftime("%Y-%m-%dT%H:%M:%S"),
+        'address': {}
     }
     event = Event.create(data, author, institution)
     event_hash = getHash(event)

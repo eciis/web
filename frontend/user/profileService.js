@@ -53,7 +53,7 @@
         };
 
         profileCtrl.showProperty = function getProperty(property) {
-            return property || 'Não informado';
+            return Utils.limitString(property, 35) || 'Não informado';
         };
 
         profileCtrl.goToConfigProfile = function goToConfigProfile() {

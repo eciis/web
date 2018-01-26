@@ -65,7 +65,7 @@ class SendEmailHandler(BaseHandler):
         env = Environment(loader=FileSystemLoader('templates'))
         template = env.get_template(self.request.get('html'))
         html_content = json.loads(self.request.get('json'))
-        mail.send_mail(sender="e-CIS <eciis@splab.ufcg.edu.br>",
+        mail.send_mail(sender="Plataforma Virtual CIS <eciis@splab.ufcg.edu.br>",
                        to="<%s>" % invitee,
                        subject=subject,
                        body="",
@@ -123,19 +123,22 @@ class EmailMembersHandler(BaseHandler):
 
         institution = ndb.Key(urlsafe=inst_key).get()
 
+        env = Environment(loader=FileSystemLoader('templates'))
+        template = env.get_template(self.request.get('html'))
+        
         for member_key in institution.members:
             member = member_key.get()
             is_admin = member_key == institution.admin
             if(is_admin and justification):
-                message = message + """pelo seguinte motivo:
+                message['body'] += """pelo seguinte motivo:
                 '%s'
                 """ % justification
-
-            send_message_email(
-                member.email,
-                message,
-                subject
-            )
+            
+            mail.send_mail(sender="Plataforma Virtual CIS <eciis@splab.ufcg.edu.br>",
+                        to="<%s>" % member.email,
+                        subject=subject,
+                        body="",
+                        html=template.render(json.loads(message)))
 
 
 class NotifyFollowersHandler(BaseHandler):

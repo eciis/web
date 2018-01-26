@@ -150,5 +150,18 @@
                 scope.$apply();
             });
         });
+
+        describe('eventInProgress()', function() {
+            it('Should be true or false the call of eventInProgress', function() {
+                var date = new Date();
+                date.setYear(3000);
+                var event = {end_time: date.toISOString()};
+                expect(homeCtrl.eventInProgress(event)).toEqual(true);
+
+                date.setYear(2000);
+                event.end_time = date.toISOString();
+                expect(homeCtrl.eventInProgress(event)).toEqual(false);
+            });
+        });
     });
 }));

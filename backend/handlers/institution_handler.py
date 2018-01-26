@@ -16,6 +16,7 @@ from custom_exceptions.entityException import EntityException
 from models.institution import Institution
 from util.json_patch import JsonPatch
 from service_entities import enqueue_task
+from send_email_hierarchy.remove_institution_email_sender import RemoveInstitutionEmailSender
 
 
 from handlers.base_handler import BaseHandler
@@ -134,7 +135,16 @@ class InstitutionHandler(BaseHandler):
 
         institution = ndb.Key(urlsafe=institution_key).get()
 
-        institution.createInstitutionWithStub(user, inviteKey, institution)
+        invite = ndb.Key(urlsafe=inviteKey).get()
+
+        Utils._assert(invite.status == 'accepted', 
+            "This invitation has already been accepted", 
+            NotAuthorizedException)
+
+        invite.status = 'accepted'
+        invite.put()
+
+        institution.createInstitutionWithStub(user, institution)
 
         user.name = data.get('sender_name')
         data_profile = {
@@ -148,7 +158,6 @@ class InstitutionHandler(BaseHandler):
         user.add_permissions(permissions.DEFAULT_ADMIN_PERMISSIONS, institution.key.urlsafe())
         user.put()
 
-        invite = ndb.Key(urlsafe=inviteKey).get()
         invite.send_response_notification(user, invite.admin_key.urlsafe(), 'ACCEPT')
 
         enqueue_task('add-admin-permissions', {'institution_key': institution_key})
@@ -193,13 +202,14 @@ class InstitutionHandler(BaseHandler):
 
         email_params = {
             "justification": self.request.get('justification'),
-            "message": """Lamentamos informar que a instituição %s foi removida
+            "body": """Lamentamos informar que a instituição %s foi removida
             pelo administrador %s """ % (institution.name, user.name),
             "subject": "Remoção de instituição",
-            "institution_key": institution_key
+            "inst_key": institution_key
         }
-
-        enqueue_task('email-members', email_params)
+        
+        email_sender = RemoveInstitutionEmailSender(**email_params)
+        email_sender.send_email()
 
         notification_params = {
             "sender_key": user.key.urlsafe(),

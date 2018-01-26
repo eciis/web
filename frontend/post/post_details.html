@@ -165,7 +165,7 @@
           <p ng-bind-html="postDetailsCtrl.postToURL(postDetailsCtrl.post).text" class="break">
             {{postDetailsCtrl.postToURL(postDetailsCtrl.post).text}}
           </p>
-          <div layout="row" layout-align="end-center">
+          <div layout="row" layout-align="end-center" ng-if="!postDetailsCtrl.isPostPage">
           <a href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post)">
             <md-icon style="margin-bottom: -15px; margin-right: -12px;" md-colors="{color: 'light-green'}">more_horiz</md-icon>
               </a>
@@ -186,7 +186,7 @@
       </div>
       <div style="margin-left: auto; margin-right: 10px;" ng-if="!postDetailsCtrl.showSurvey()">
         <md-button class="sm-icon-button" aria-label="Favorite" ng-click="postDetailsCtrl.likeOrDislikePost()"
-            ng-disabled="postDetailsCtrl.disableButton()" title="Curtir"
+            ng-disabled="postDetailsCtrl.disableButton()" title="{{(postDetailsCtrl.isLikedByUser()) ? 'Descurtir' : 'Curtir'}}"
             md-colors="{{ postDetailsCtrl.getButtonColor(postDetailsCtrl.isLikedByUser()) }}">
           <md-icon>grade</md-icon>
         </md-button>
@@ -218,8 +218,11 @@
 
   <!-- COMMENTS -->
   <div ng-if="postDetailsCtrl.showComments || postDetailsCtrl.isPostPage">
+    <div flex ng-if="postDetailsCtrl.isLoadingComments && !postDetailsCtrl.isPostPage"  layout="row" layout-align="center center">
+      <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+    </div> 
     <md-divider style="margin-top: 15px;"></md-divider>
-    <comment
+    <comment ng-if="!postDetailsCtrl.isLoadingComments || postDetailsCtrl.isPostPage"
       ng-repeat="comment in postDetailsCtrl.getValues(postDetailsCtrl.post.data_comments) | orderBy:'publication_date'"
       comment="comment" user="postDetailsCtrl.user" post="postDetailsCtrl.post"></comment>
   </div>

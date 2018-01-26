@@ -378,6 +378,7 @@
             loadFederalStates();
             initUrlFields();
             if(dialogCtrl.event) {
+                dialogCtrl.photoUrl = dialogCtrl.event.photo_url;
                 loadSelectedState();
                 initPatchObserver();
                 loadEventDates();

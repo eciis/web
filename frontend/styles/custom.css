@@ -133,6 +133,12 @@
     text-decoration: none;
 }
 
+.text {
+    word-wrap: break-word; 
+    text-align: left;
+    white-space: pre-line;
+  }
+
 .post-deleted {
     background-color:#F5F5F5;
 }

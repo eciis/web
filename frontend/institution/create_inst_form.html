@@ -1,275 +1,272 @@
-<div flex>
-<div md-colors="{background: 'teal-500'}" layout="column" layout-fill layout-align="center">
-    <div layout="column" layout-xs="column" layout-wrap layout-align="center center">
-        <div>
-            <div layout="row" flex>
-                <md-card layout="row" flex layout-margin>
-                    <div flex>
-                        <md-content class="hide-scrollbar" layout="row">
-                            <div layout="row" layout-align="center center" layout-margin>
-                                <span class="green-circle" style="color: #FFFFFF; width: 25px; height: 25px;">
-                                    <span layout="row" layout-align="center">
-                                        <md-icon ng-if="!configInstCtrl.getStep(1)" style="color: #FFFFFF;">done</md-icon>
-                                        <span ng-if="configInstCtrl.getStep(1)" style="margin-top: 3px;">1</span>
+<md-content flex md-colors="{background: 'teal-500'}">
+    <div flex layout-fill flex-gt-md="100" layout="column" layout-align="center">
+        <div layout="column" layout-xs="column" layout-margin layout-align="center center">
+            <div flex flex-gt-md="100">
+                <div layout="row">
+                    <md-card layout="row">
+                        <div>
+                            <md-content class="hide-scrollbar" layout="row">
+                                <div layout="row" layout-align="center center" layout-margin>
+                                    <span class="green-circle" style="color: #FFFFFF; width: 25px; height: 25px;">
+                                        <span layout="row" layout-align="center">
+                                            <md-icon ng-if="!configInstCtrl.getStep(1)" style="color: #FFFFFF;">done</md-icon>
+                                            <span ng-if="configInstCtrl.getStep(1)" style="margin-top: 3px;">1</span>
+                                        </span>
                                     </span>
-                                </span>
-                                <span class="inline">Dados cadastrais</span>
-                                <hr style="width: 100px;"/>
-                            </div>
-                            <div layout="row" layout-align="center center" layout-margin>
-                                <span ng-class="configInstCtrl.showGreenButton(2)? 'green-circle': 'grey-circle'" style="color: #FFFFFF; width: 25px; height: 25px;">
-                                    <span layout="row" layout-align="center">
-                                        <md-icon ng-if="configInstCtrl.getStep(3)" style="color: #FFFFFF;">done</md-icon>
-                                        <span ng-if="!configInstCtrl.getStep(3)" style="margin-top: 3px;">2</span>
+                                    <span class="inline">Dados cadastrais</span>
+                                    <hr style="width: 100px;"/>
+                                </div>
+                                <div layout="row" layout-align="center center" layout-margin>
+                                    <span ng-class="configInstCtrl.showGreenButton(2)? 'green-circle': 'grey-circle'" style="color: #FFFFFF; width: 25px; height: 25px;">
+                                        <span layout="row" layout-align="center">
+                                            <md-icon ng-if="configInstCtrl.getStep(3)" style="color: #FFFFFF;">done</md-icon>
+                                            <span ng-if="!configInstCtrl.getStep(3)" style="margin-top: 3px;">2</span>
+                                        </span>
                                     </span>
-                                </span>
-                                <span class="inline">Dados da instituição</span>
-                                <hr style="width: 100px;"/>
-                            </div>
-                            <div layout="row" layout-align="center center" layout-margin>
-                                <span ng-class="configInstCtrl.showGreenButton(3)? 'green-circle': 'grey-circle'" style="color: #FFFFFF; width: 25px; height: 25px;">
-                                    <span layout="row" layout-align="center">
-                                        <md-icon ng-if="configInstCtrl.newInstitution.leader && configInstCtrl.newInstitution.description" style="color: #FFFFFF;">
-                                            done
-                                        </md-icon>
-                                        <span ng-if="!(configInstCtrl.newInstitution.leader && configInstCtrl.newInstitution.description)" style="margin-top: 3px;">3</span>
+                                    <span class="inline">Dados da instituição</span>
+                                    <hr style="width: 100px;"/>
+                                </div>
+                                <div layout="row" layout-align="center center" layout-margin>
+                                    <span ng-class="configInstCtrl.showGreenButton(3)? 'green-circle': 'grey-circle'" style="color: #FFFFFF; width: 25px; height: 25px;">
+                                        <span layout="row" layout-align="center">
+                                            <md-icon ng-if="configInstCtrl.newInstitution.leader && configInstCtrl.newInstitution.description" style="color: #FFFFFF;">
+                                                done
+                                            </md-icon>
+                                            <span ng-if="!(configInstCtrl.newInstitution.leader && configInstCtrl.newInstitution.description)" style="margin-top: 3px;">3</span>
+                                        </span>
                                     </span>
-                                </span>
-                                <span class="inline">Finalizar cadastro</span>
-                            </div>
-                        </md-content>
-                    </div>
-                </md-card>
-            </div>
-            <md-card layout-margin ng-if="configInstCtrl.getStep(1)">
-                <div layout="column" layout-margin>
-                    <md-card-content layout-margin>
-                        <form name="createInst">
-                            <div layout="row" layout-margin>
-                                <md-input-container  flex-gt-sm flex-sm>
-                                    <label>País</label>
-                                    <md-select name="country" ng-model="configInstCtrl.address.country" required 
-                                        ng-change="configInstCtrl.setAnotherCountry()">
-                                        <md-option ng-repeat="country in configInstCtrl.countries" ng-value="country.nome_pais">
-                                            {{country.nome_pais}}
-                                        </md-option>
-                                    </md-select>
-                                </md-input-container>
-                                <span flex="3"></span>
-                                <md-input-container flex-gt-sm flex-sm ng-if="configInstCtrl.isAnotherCountry">
-                                    <label>Estado</label>
-                                    <input type="text" name="state" required ng-model="configInstCtrl.address.federal_state">
-                                </md-input-container>
-                                <md-input-container flex-gt-sm flex-sm ng-if="!configInstCtrl.isAnotherCountry">
-                                    <label>Estado</label>
-                                    <md-select name="state" ng-model="configInstCtrl.selectedState" required 
-                                        ng-change="configInstCtrl.getCitiesByState()">
-                                        <md-option ng-repeat="state in configInstCtrl.states" ng-value="state">
-                                            {{state.sigla}}
-                                        </md-option>
-                                    </md-select>
-                                </md-input-container>
-                            </div>
-                            <div layout="row" layout-margin>
-                                <md-input-container  flex-gt-sm flex-sm ng-if="configInstCtrl.isAnotherCountry">
-                                    <label>Cidade</label>
-                                    <input type="text" name="city" required ng-model="configInstCtrl.address.city">
-                                </md-input-container>
-                                <md-input-container  flex-gt-sm flex-sm ng-if="!configInstCtrl.isAnotherCountry">
-                                    <label>Cidade</label>
-                                    <md-select name="city" ng-model="configInstCtrl.address.city" required
-                                        ng-disabled="!configInstCtrl.selectedState">
-                                        <md-option ng-repeat="city in configInstCtrl.cities" ng-value="city">
-                                            {{city}}
-                                        </md-option>
-                                    </md-select>
-                                    <div ng-messages>
-                                        <div ng-show="createInst.state.$pristine && !configInstCtrl.isAnotherCountry" 
-                                            style="opacity: 0.9; margin-top: 2px; font-size: 0.8em;">
-                                            Primeiro selecione um estado
-                                        </div>
-                                    </div>
-                                </md-input-container>
-                                <span flex="3"></span>
-                                <md-input-container  flex-gt-sm flex-sm layout="row">
-                                    <label>Bairro</label>
-                                    <input type="text" name="neighbourhood" required
-                                        ng-model="configInstCtrl.address.neighbourhood">
-                                </md-input-container>
-                            </div>
-                            <div layout="row" layout-margin>
-                                <md-input-container  flex-gt-sm flex-sm layout="row">
-                                    <label>Número</label>
-                                    <input type="text" name="number" required
-                                        ng-model="configInstCtrl.address.number">
-                                </md-input-container>
-                                <span flex="3"></span>
-                                <md-input-container  flex-gt-sm flex-sm layout="row">
-                                    <label>CEP</label>
-                                    <input type="text" name="cep" required
-                                        ng-model="configInstCtrl.address.cep"
-                                        placeholder="00000-000"
-                                        ng-pattern="configInstCtrl.cepRegex"
-                                        mask="99999-999">
-                                </md-input-container>
-                            </div>
-                            <div layout-margin>
-                                <md-input-container  flex-gt-sm layout="row">
-                                    <label>Rua</label>
-                                    <input type="text" name="street" required
-                                    ng-model="configInstCtrl.address.street">
-                                </md-input-container>
-                            </div>
-                        </form>
-                    </md-card-content>
-                    <md-card-actions layout="row" layout-align="end center">
-                        <md-button class="md-raised" md-colors="{background: 'teal-500'}" ng-click="configInstCtrl.nextStep()">
-                           PRÓXIMO
-                        </md-button>
-                    </md-card-actions>
+                                    <span class="inline">Finalizar cadastro</span>
+                                </div>
+                            </md-content>
+                        </div>
+                    </md-card>
                 </div>
-            </md-card>
-            <md-card ng-if="configInstCtrl.getStep(2)" layout-margin>
-                <div>
-                    <md-card-content layout-margin>
-                        <div layout="column" layout-margin>
-                            <md-list-item md-colors="{background: 'grey-300'}" class="md-line" layout="row" layout-margin style="height: 100px;">
-                                    <div layout="column">
-                                        <md-button layout="row" class="md-icon-button" style="border-radius: 50%; height: 70px; width: 70px;"
-                                            md-colors="{background: 'teal-900'}" ng-show="configInstCtrl.showButton()" ng-click="null"
-                                            ng-model="configInstCtrl.file" ngf-pattern="'image/*'"
-                                            ngf-accept="'image/*'" ngf-max-size="5MB" class="md-raised"
-                                            ngf-select="configInstCtrl.cropImage(configInstCtrl.file)" ng-if="!configInstCtrl.showImage()">
-                                            <md-icon flex-xs="10" style="color: #FFFFFF; font-size: 35px; margin: 0 0 10px 8px;">add_a_photo</md-icon>
-                                        </md-button>
-                                        <md-button layout="row" class="md-icon-button" style="border-radius: 50%; height: 80px; width: 80px;"
-                                            ng-show="configInstCtrl.showButton()" ng-click="null"
-                                            ng-model="configInstCtrl.file" ngf-pattern="'image/*'"
-                                            ngf-accept="'image/*'" ngf-max-size="5MB" class="md-raised"
-                                            ngf-select="configInstCtrl.cropImage(configInstCtrl.file)" ng-if="configInstCtrl.showImage()">
-                                            <img ng-if="configInstCtrl.showImage()" style="border-radius: 50%; width: 100%; height: 100%;" ng-src="{{ configInstCtrl.newInstitution.photo_url }}"/>
-                                        </md-button>
-                                    </div>
-                                    <b>{{configInstCtrl.suggestedName}} </b>
-                            </md-list-item>
-                            <form layout="column" name="secondStep">
-                                <md-input-container class="md-block" flex-gt-sm flex-sm>
-                                  <label>Nome completo da instituição</label>
-                                  <input type="text" name="fullName" required md-maxlength="90"
-                                    ng-model="configInstCtrl.newInstitution.name">
-                                  <div ng-messages='secondStep.fullName.$error'>
-                                    <div ng-message="required">Este campo é obrigatório!</div>
-                                  </div>
-                                </md-input-container>
-                                <md-input-container style="margin-top: -20px;" class="md-block" flex-gt-sm flex-sm>
-                                  <label>Sigla</label>
-                                  <input type="text" name="acronym" ng-model="configInstCtrl.newInstitution.acronym">
-                                </md-input-container>
-                                <md-input-container style="margin-top: -20px;" layout="row" class="md-block" flex-gt-sm flex-sm>
-                                    <!--The alphabetical order is being made manually 
-                                    in the json file actuation_area.json.
-                                    TODO: Do this automatically.
-                                        @author: Maiana Brito -->
-                                    <label>Área de Atuação</label>
-                                    <md-select name="actuationArea" ng-model="configInstCtrl.newInstitution.actuation_area" required>
-                                      <md-option ng-repeat="(key, value) in configInstCtrl.actuationArea"
-                                        ng-value="key">{{ value }}
-                                      </md-option>
-                                    </md-select>
-                                    <div ng-messages="secondStep.actuationArea.$error">
-                                        <div ng-message="required" >Este campo é obrigatório!</div>
-                                    </div>
-                                </md-input-container>
-                                <md-input-container style="margin-top: 5px;" layout="row" class="md-block" flex-gt-sm flex-sm>
-                                    <!-- The alphabetical order is being made manually 
-                                    in the json file legal_nature.
-                                        TODO: Do this automatically.
-                                        @author: Maiana Brito -->
-                                    <label>Natureza Jurídica</label>
-                                    <md-select name="legalNatures" ng-model="configInstCtrl.newInstitution.legal_nature" required>
-                                        <md-option ng-repeat="(key, value) in configInstCtrl.legalNatures"
-                                            ng-value="key">{{ value }}
-                                        </md-option>
-                                    </md-select>
-                                    <div ng-messages="secondStep.legalNatures.$error">
-                                        <div ng-message="required" >Este campo é obrigatório!</div>
-                                    </div>
-                                </md-input-container>
-                                <div layout="row">
-                                    <md-input-container class="md-block" flex-gt-xs>
-                                        <label>Telefone</label>
-                                        <input type="text" name="phone"
-                                            ng-model="configInstCtrl.newInstitution.phone_number"
-                                        ng-pattern=configInstCtrl.phoneRegex
-                                        minlength="12" md-maxlength="13"
-                                        placeholder="99 9999-99999"
-                                        mask="99 9999-99999"
-                                        mask-validate='false'>
-                                        <div ng-messages="instForm.phone.$error">
-                                            <div ng-message="pattern" >O número de telefone deve ser válido!</div>
+                <md-card layout-margin ng-if="configInstCtrl.getStep(1)" flex>
+                    <div layout="column" layout-margin>
+                        <md-card-content layout-margin>
+                            <form name="createInst">
+                                <div layout="row" layout-margin>
+                                    <md-input-container  flex-gt-sm flex-sm>
+                                        <label>País</label>
+                                        <md-select name="country" ng-model="configInstCtrl.address.country" required
+                                            ng-change="configInstCtrl.setAnotherCountry()">
+                                            <md-option ng-repeat="country in configInstCtrl.countries" ng-value="country.nome_pais">
+                                                {{country.nome_pais}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                    <span flex="3"></span>
+                                    <md-input-container flex-gt-sm flex-sm ng-if="configInstCtrl.isAnotherCountry">
+                                        <label>Estado</label>
+                                        <input type="text" name="state" required ng-model="configInstCtrl.address.federal_state">
+                                    </md-input-container>
+                                    <md-input-container flex-gt-sm flex-sm ng-if="!configInstCtrl.isAnotherCountry">
+                                        <label>Estado</label>
+                                        <md-select name="state" ng-model="configInstCtrl.selectedState" required
+                                            ng-change="configInstCtrl.getCitiesByState()">
+                                            <md-option ng-repeat="state in configInstCtrl.states" ng-value="state">
+                                                {{state.sigla}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row" layout-margin>
+                                    <md-input-container  flex-gt-sm flex-sm ng-if="configInstCtrl.isAnotherCountry">
+                                        <label>Cidade</label>
+                                        <input type="text" name="city" required ng-model="configInstCtrl.address.city">
+                                    </md-input-container>
+                                    <md-input-container  flex-gt-sm flex-sm ng-if="!configInstCtrl.isAnotherCountry">
+                                        <label>Cidade</label>
+                                        <md-select name="city" ng-model="configInstCtrl.address.city" required
+                                            ng-disabled="!configInstCtrl.selectedState">
+                                            <md-option ng-repeat="city in configInstCtrl.cities" ng-value="city">
+                                                {{city}}
+                                            </md-option>
+                                        </md-select>
+                                        <div ng-messages>
+                                            <div ng-show="createInst.state.$pristine && !configInstCtrl.isAnotherCountry"
+                                                style="opacity: 0.9; margin-top: 2px; font-size: 0.8em;">
+                                                Primeiro selecione um estado
+                                            </div>
                                         </div>
                                     </md-input-container>
-                                    <md-input-container class="md-block" flex-gt-xs flex="20">
-                                        <label>Ramal</label>
-                                        <input type="text" name="branch_line"
-                                            ng-model="configInstCtrl.newInstitution.branch_line"
-                                        placeholder="999">
+                                    <span flex="3"></span>
+                                    <md-input-container  flex-gt-sm flex-sm layout="row">
+                                        <label>Bairro</label>
+                                        <input type="text" name="neighbourhood" required
+                                            ng-model="configInstCtrl.address.neighbourhood">
+                                    </md-input-container>
+                                </div>
+                                <div layout="row" layout-margin>
+                                    <md-input-container  flex-gt-sm flex-sm layout="row">
+                                        <label>Número</label>
+                                        <input type="text" name="number" required
+                                            ng-model="configInstCtrl.address.number">
+                                    </md-input-container>
+                                    <span flex="3"></span>
+                                    <md-input-container  flex-gt-sm flex-sm layout="row">
+                                        <label>CEP</label>
+                                        <input type="text" name="cep" required
+                                            ng-model="configInstCtrl.address.cep"
+                                            placeholder="00000-000"
+                                            ng-pattern="configInstCtrl.cepRegex"
+                                            mask="99999-999">
+                                    </md-input-container>
+                                </div>
+                                <div layout-margin>
+                                    <md-input-container  flex-gt-sm layout="row">
+                                        <label>Rua</label>
+                                        <input type="text" name="street" required
+                                        ng-model="configInstCtrl.address.street">
                                     </md-input-container>
                                 </div>
                             </form>
-                       </div>
-                    </md-card-content>
-                    <md-card-actions layout="row" layout-align="end center">
-                        <md-button ng-click="configInstCtrl.nextStep()" class="md-raised" md-colors="{background: 'teal-500'}">
-                            AVANÇAR
-                        </md-button>
-                    </md-card-actions>
-                </div>
-            </md-card>
-            <md-card ng-if="configInstCtrl.getStep(3)" layout-margin>
-                <div flex>
-                    <md-card-content layout-margin>
-                        <div layout="column">
-                            <form layout="column" name="thirdStep">
-                                <md-input-container class="md-block" flex-gt-sm flex-sm>
-                                  <label>
-                                    Uma breve descrição da sua instituição
-                                  </label>
-                                  <textarea ng-model="configInstCtrl.newInstitution.description" maxlength="1100"
-                                    md-select-on-focus required style="max-height: 100px; overflow-y: scroll;">
-                                  </textarea>
-                                  <md-icon title="{{configInstCtrl.descriptionGuide}}" style="font-size: 20px;">
-                                        help_outline
-                                  </md-icon>
-                                  <div ng-messages="thirdStep.leader.$error">
-                                    <div ng-message="required">Este campo é obrigatório!</div>
-                                  </div>
-                                </md-input-container>
-                                <md-input-container class="md-block" flex-gt-sm flex-sm>
-                                  <label>Site Institucional</label>
-                                  <input name="site">
-                                </md-input-container>
-                                <md-input-container class="md-block" flex-gt-sm flex-sm>
-                                  <label>Nome do atual dirigente máximo</label>
-                                  <input type="text" name="leader" required ng-model="configInstCtrl.newInstitution.leader">
-                                  <div ng-messages="thirdStep.leader.$error">
-                                    <div ng-message="required">Este campo é obrigatório!</div>
-                                  </div>
-                                </md-input-container>
-                            </form>
+                        </md-card-content>
+                        <md-card-actions layout="row" layout-align="end center">
+                            <md-button class="md-raised" md-colors="{background: 'teal-500'}" ng-click="configInstCtrl.nextStep()">
+                                PRÓXIMO
+                            </md-button>
+                        </md-card-actions>
+                    </div>
+                </md-card>
+                <md-card ng-if="configInstCtrl.getStep(2)" layout-margin flex>
+                    <div layout="column" layout-margin>
+                        <md-card-content layout-margin>
+                            <div layout="column" layout-margin>
+                                <md-list-item md-colors="{background: 'grey-300'}" class="md-line" layout="row" layout-margin style="height: 100px;">
+                                        <div layout="column">
+                                            <md-button layout="row" class="md-icon-button" style="border-radius: 50%; height: 70px; width: 70px;"
+                                                md-colors="{background: 'teal-900'}" ng-show="configInstCtrl.showButton()" ng-click="null"
+                                                ng-model="configInstCtrl.file" ngf-pattern="'image/*'"
+                                                ngf-accept="'image/*'" ngf-max-size="5MB" class="md-raised"
+                                                ngf-select="configInstCtrl.cropImage(configInstCtrl.file)" ng-if="!configInstCtrl.showImage()">
+                                                <md-icon flex-xs="10" style="color: #FFFFFF; font-size: 35px; margin: 0 0 10px 8px;">add_a_photo</md-icon>
+                                            </md-button>
+                                            <md-button layout="row" class="md-icon-button" style="border-radius: 50%; height: 80px; width: 80px;"
+                                                ng-show="configInstCtrl.showButton()" ng-click="null"
+                                                ng-model="configInstCtrl.file" ngf-pattern="'image/*'"
+                                                ngf-accept="'image/*'" ngf-max-size="5MB" class="md-raised"
+                                                ngf-select="configInstCtrl.cropImage(configInstCtrl.file)" ng-if="configInstCtrl.showImage()">
+                                                <img ng-if="configInstCtrl.showImage()" style="border-radius: 50%; width: 100%; height: 100%;" ng-src="{{ configInstCtrl.newInstitution.photo_url }}"/>
+                                            </md-button>
+                                        </div>
+                                        <b>{{configInstCtrl.suggestedName}} </b>
+                                </md-list-item>
+                                <form layout="column" name="secondStep">
+                                    <md-input-container class="md-block" flex-gt-sm flex-sm>
+                                    <label>Nome completo da instituição</label>
+                                    <input type="text" name="fullName" required md-maxlength="90"
+                                        ng-model="configInstCtrl.newInstitution.name">
+                                    <div ng-messages='secondStep.fullName.$error'>
+                                        <div ng-message="required">Este campo é obrigatório!</div>
+                                    </div>
+                                    </md-input-container>
+                                    <md-input-container style="margin-top: -20px;" class="md-block" flex-gt-sm flex-sm>
+                                    <label>Sigla</label>
+                                    <input type="text" name="acronym" ng-model="configInstCtrl.newInstitution.acronym">
+                                    </md-input-container>
+                                    <md-input-container style="margin-top: -20px;" layout="row" class="md-block" flex-gt-sm flex-sm>
+                                        <!--The alphabetical order is being made manually
+                                        in the json file actuation_area.json.
+                                        TODO: Do this automatically.
+                                            @author: Maiana Brito -->
+                                        <label>Área de Atuação</label>
+                                        <md-select name="actuationArea" ng-model="configInstCtrl.newInstitution.actuation_area" required>
+                                        <md-option ng-repeat="(key, value) in configInstCtrl.actuationArea"
+                                            ng-value="key">{{ value }}
+                                        </md-option>
+                                        </md-select>
+                                        <div ng-messages="secondStep.actuationArea.$error">
+                                            <div ng-message="required" >Este campo é obrigatório!</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container style="margin-top: 5px;" layout="row" class="md-block" flex-gt-sm flex-sm>
+                                        <!-- The alphabetical order is being made manually
+                                        in the json file legal_nature.
+                                            TODO: Do this automatically.
+                                            @author: Maiana Brito -->
+                                        <label>Natureza Jurídica</label>
+                                        <md-select name="legalNatures" ng-model="configInstCtrl.newInstitution.legal_nature" required>
+                                            <md-option ng-repeat="(key, value) in configInstCtrl.legalNatures"
+                                                ng-value="key">{{ value }}
+                                            </md-option>
+                                        </md-select>
+                                        <div ng-messages="secondStep.legalNatures.$error">
+                                            <div ng-message="required" >Este campo é obrigatório!</div>
+                                        </div>
+                                    </md-input-container>
+                                    <div layout="row">
+                                        <md-input-container class="md-block" flex-gt-xs>
+                                            <label>Telefone</label>
+                                            <input type="text" name="phone"
+                                                ng-model="configInstCtrl.newInstitution.phone_number"
+                                            ng-pattern=configInstCtrl.phoneRegex
+                                            minlength="12" md-maxlength="13"
+                                            placeholder="99 9999-99999"
+                                            mask="99 9999-99999"
+                                            mask-validate='false'>
+                                            <div ng-messages="instForm.phone.$error">
+                                                <div ng-message="pattern" >O número de telefone deve ser válido!</div>
+                                            </div>
+                                        </md-input-container>
+                                        <md-input-container class="md-block" flex-gt-xs flex="20">
+                                            <label>Ramal</label>
+                                            <input type="text" name="branch_line"
+                                                ng-model="configInstCtrl.newInstitution.branch_line"
+                                            placeholder="999">
+                                        </md-input-container>
+                                    </div>
+                                </form>
                         </div>
-                    </md-card-content>
-                    <md-card-actions layout="row" layout-align="end center" ng-if="!configInstCtrl.hasSubmitted">
-                        <md-button class="md-raised" md-colors="{background: 'teal-500'}" ng-click="configInstCtrl.submit($event)"> 
-                            FINALIZAR
-                        </md-button>
-                    </md-card-actions>
-                    <md-card-actions layout="row" layout-align="center center" ng-if="configInstCtrl.hasSubmitted">
-                        <md-progress-circular class="md-hue-2" md-diameter="25px"></md-progress-circular>
-                    </md-card-actions>
-                </div>
-            </md-card>
+                        </md-card-content>
+                        <md-card-actions layout="row" layout-align="end center">
+                            <md-button ng-click="configInstCtrl.nextStep()" class="md-raised" md-colors="{background: 'teal-500'}">
+                                AVANÇAR
+                            </md-button>
+                        </md-card-actions>
+                    </div>
+                </md-card>
+                <md-card ng-if="configInstCtrl.getStep(3)" layout-margin>
+                    <div flex>
+                        <md-card-content layout-margin>
+                            <div layout="column">
+                                <form layout="column" name="thirdStep">
+                                    <md-input-container class="md-block" flex-gt-sm flex-sm>
+                                    <label>
+                                        Uma breve descrição da sua instituição
+                                    </label>
+                                    <textarea ng-model="configInstCtrl.newInstitution.description" maxlength="1100"
+                                        md-select-on-focus required style="max-height: 100px; overflow-y: scroll;">
+                                    </textarea>
+                                    <md-icon title="{{configInstCtrl.descriptionGuide}}" style="font-size: 20px;">
+                                            help_outline
+                                    </md-icon>
+                                    <div ng-messages="thirdStep.leader.$error">
+                                        <div ng-message="required">Este campo é obrigatório!</div>
+                                    </div>
+                                    </md-input-container>
+                                    <md-input-container class="md-block" flex-gt-sm flex-sm>
+                                    <label>Site Institucional</label>
+                                    <input name="site">
+                                    </md-input-container>
+                                    <md-input-container class="md-block" flex-gt-sm flex-sm>
+                                    <label>Nome do atual dirigente máximo</label>
+                                    <input type="text" name="leader" required ng-model="configInstCtrl.newInstitution.leader">
+                                    <div ng-messages="thirdStep.leader.$error">
+                                        <div ng-message="required">Este campo é obrigatório!</div>
+                                    </div>
+                                    </md-input-container>
+                                </form>
+                            </div>
+                        </md-card-content>
+                        <md-card-actions layout="row" layout-align="end center">
+                            <md-button class="md-raised" md-colors="{background: 'teal-500'}" ng-click="configInstCtrl.submit($event)">
+                                FINALIZAR
+                            </md-button>
+                        </md-card-actions>
+                    </div>
+                </md-card>
+            </div>
         </div>
     </div>
-</div>
-</div>
+    </md-content>

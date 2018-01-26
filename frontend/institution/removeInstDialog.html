@@ -1,28 +1,28 @@
 <md-dialog aria-label="instituições" flex-gt-xs="50" flex-xs="90">
     <md-dialog-content layout-margin layout-padding layout="column">
         <div layout="row" layout-align="space-between center">
-            <b ng-if="!ctrl.hasOneInstitution()">Deseja remover esta instituição permanentemente?</b>
-            <b ng-if="ctrl.hasOneInstitution()">Ao remover essa instituição você perderá o acesso a plataforma. Deseja remover?</b>
+            <b ng-if="!removeInstCtrl.hasOneInstitution()">Deseja remover esta instituição permanentemente?</b>
+            <b ng-if="removeInstCtrl.hasOneInstitution()">Ao remover essa instituição você perderá o acesso a plataforma. Deseja remover?</b>
             <div>
-                <button style="background-color: white; border: 0;" ng-click="ctrl.closeDialog()">
+                <button style="background-color: white; border: 0;" ng-click="removeInstCtrl.closeDialog()">
                     <md-icon>clear</md-icon>
                 </button>
             </div>
         </div>
         <div layout-padding layout="row" layout-align="start center" md-colors="{background: 'default-grey-300'}">
-            <a ui-sref="app.institution({institutionKey: '{{ctrl.institution.key}}'})" target="_blank">
-                <img ng-src="{{ctrl.institution.photo_url}}"
+            <a ui-sref="app.institution({institutionKey: '{{removeInstCtrl.institution.key}}'})" target="_blank">
+                <img ng-src="{{removeInstCtrl.institution.photo_url}}"
                 style="border-radius: 50%; height: 100px; width: 100px;"></img>
             </a>
             <div layout="column" layout-align="center start">
-                <a ui-sref="app.institution({institutionKey: '{{ctrl.institution.key}}'})" target="_blank">
-                    <b md-colors="{color: 'default-grey-900'}">{{ctrl.institution.name}}</b>
+                <a ui-sref="app.institution({institutionKey: '{{removeInstCtrl.institution.key}}'})" target="_blank">
+                    <b md-colors="{color: 'default-grey-900'}">{{removeInstCtrl.institution.name}}</b>
                 </a>
-                <span>{{ctrl.institution.email}}</span>
+                <span>{{removeInstCtrl.institution.email}}</span>
             </div>
         </div>
-        <div ng-if="!ctrl.thereIsNoChild()">
-            <md-radio-group ng-model="ctrl.removeHierarchy" required>
+        <div ng-if="!removeInstCtrl.thereIsNoChild()">
+            <md-radio-group ng-model="removeInstCtrl.removeHierarchy" required>
                 <md-radio-button ng-value="true" class="md-primary">
                     Desejo remover toda a hierarquia abaixo dessa instituição
                 </md-radio-button>
@@ -33,7 +33,7 @@
         </div>
     </md-dialog-content>
     <md-dialog-actions layout="row" layout-align="end center">
-        <md-button class="md-primary" ng-click="ctrl.closeDialog()" layout-align="center" md-colors="{color: 'default-teal-700'}">Cancelar</md-button>
-        <md-button class="md-primary" ng-click="ctrl.removeInst()" md-colors="{color: 'default-teal-700'}">Continuar</md-button>
+        <md-button class="md-primary" ng-click="removeInstCtrl.closeDialog()" layout-align="center" md-colors="{color: 'default-teal-700'}">Cancelar</md-button>
+        <md-button class="md-primary" ng-click="removeInstCtrl.removeInst()" md-colors="{color: 'default-teal-700'}">Continuar</md-button>
     </md-dialog-actions>
 </md-dialog>

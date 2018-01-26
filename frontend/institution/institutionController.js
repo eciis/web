@@ -276,7 +276,7 @@
                     loadStateView: loadStateView
                 },
                 controller: "RemoveInstController",
-                controllerAs: 'ctrl'
+                controllerAs: 'removeInstCtrl'
             });
         };
 
@@ -297,24 +297,24 @@
 
     app.controller("RemoveInstController", function RemoveInstController($mdDialog, institution, 
         InstitutionService, $state, AuthService, loadStateView, MessageService) {
-        var ctrl = this;
+        var removeInstCtrl = this;
 
-        ctrl.institution = institution;
-        ctrl.user = AuthService.getCurrentUser();
-        ctrl.loadStateView = loadStateView;
+        removeInstCtrl.institution = institution;
+        removeInstCtrl.user = AuthService.getCurrentUser();
+        removeInstCtrl.loadStateView = loadStateView;
 
-        ctrl.closeDialog = function () {
+        removeInstCtrl.closeDialog = function () {
             $mdDialog.cancel();
-            ctrl.loadStateView();
+            removeInstCtrl.loadStateView();
         };
 
-        ctrl.removeInst = function removeInst() {
-            InstitutionService.removeInstitution(institution.key, ctrl.removeHierarchy).then(function success() {
-                ctrl.user.removeProfile(institution.key, ctrl.removeHierarchy);
-                ctrl.user.removeInstitution(institution.key, ctrl.removeHierarchy);
+        removeInstCtrl.removeInst = function removeInst() {
+            InstitutionService.removeInstitution(institution.key, removeInstCtrl.removeHierarchy).then(function success() {
+                removeInstCtrl.user.removeProfile(institution.key, removeInstCtrl.removeHierarchy);
+                removeInstCtrl.user.removeInstitution(institution.key, removeInstCtrl.removeHierarchy);
                 AuthService.save();
-                ctrl.closeDialog();
-                if (_.isEmpty(ctrl.user.institutions)) {
+                removeInstCtrl.closeDialog();
+                if (_.isEmpty(removeInstCtrl.user.institutions)) {
                     AuthService.logout();
                 } else {
                     $state.go("app.user.home");
@@ -323,11 +323,11 @@
             });
         };
 
-        ctrl.hasOneInstitution = function hasOneInstitution() {
-            return _.size(ctrl.user.institutions) === 1;
+        removeInstCtrl.hasOneInstitution = function hasOneInstitution() {
+            return _.size(removeInstCtrl.user.institutions) === 1;
         };
 
-        ctrl.thereIsNoChild = function thereIsNoChild() {
+        removeInstCtrl.thereIsNoChild = function thereIsNoChild() {
             return _.isEmpty(institution.children_institutions);
         }
     });

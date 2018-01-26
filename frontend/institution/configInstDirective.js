@@ -333,7 +333,7 @@
 
         function isValidAdress(currentStep, address){
             var lala = true;
-            if(currentStep === 0 && address.country === "Brasil"){
+            if(currentStep === 0 && address && address.country === "Brasil"){
                 _.forEach(address, function(value, key) {
                     if(! value || _.isEmpty(value)) {
                         lala = false;

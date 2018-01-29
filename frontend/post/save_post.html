@@ -23,7 +23,7 @@
                     <div ng-message="required">O post deve conter um texto!</div>
                 </div>
               </md-input-container>
-              <md-input-container ng-show="postCtrl.showVideoUrlField()" class="md-block">
+              <md-input-container ng-show="postCtrl.showVideoUrlField()" class="md-block" style="margin-bottom: 0;">
                 <label>Link do Video</label>
                 <textarea style="max-height: 400px;overflow-y:auto;resize:none;" ng-model="postCtrl.post.video_url"
                   md-select-on-focus ng-pattern=postCtrl.videoRegex name="video">
@@ -93,7 +93,7 @@
         </div>
       </div>
     </md-card-content>
-    <md-card-content ng-show="postCtrl.hasMedia()">
+    <md-card-content ng-show="postCtrl.hasMedia() && !postCtrl.hasVideo">
       <div class="image-view" ng-if="postCtrl.showImage()">
         <button ng-click="postCtrl.hideImage()">&times;</button>
         <img style="border-radius: 5%;" ng-src="{{ postCtrl.photoUrl }}"/>

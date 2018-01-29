@@ -42,7 +42,7 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
         # post body
         cls.body = {
             'data': None,
-            'current_institution': {
+            'currentInstitution': {
                 'name': 'current_institution'
             }
         }

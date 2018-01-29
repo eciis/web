@@ -34,7 +34,7 @@ class UserRequestCollectionHandler(BaseHandler):
         body = json.loads(self.request.body)
         data = body['data']
         host = self.request.host
-        current_institution = body['current_institution']
+        current_institution = body['currentInstitution']
         user_request_type = 'REQUEST_USER'
 
         type_of_invite = data.get('type_of_invite')

@@ -60,7 +60,7 @@
                     newInviteCtrl.user.changeInstitution(newInviteCtrl.institution);
                     AuthService.save();
                     $state.go("app.user.home");
-                    showAlert(event, newInviteCtrl.institution.name);
+                    showAlert(event);
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
                 });
@@ -132,17 +132,20 @@
             return promise;
         }
 
-        function showAlert(event, institutionName) {
-             $mdDialog.show(
-               $mdDialog.alert()
-                 .parent(angular.element(document.querySelector('#popupContainer')))
-                 .clickOutsideToClose(true)
-                 .title('Bem-vindo')
-                 .textContent('Você agora é membro de ' + institutionName)
-                 .ariaLabel('Novo membro')
-                 .ok('Ok')
-                 .targetEvent(event)
-             );
+        function showAlert(event) {
+            $mdDialog.show({
+                templateUrl: 'app/invites/welcome_dialog.html',
+                controller: function WelcomeController() {
+                    var controller = this;
+                    controller.next = false;
+                    controller.cancel = function() {
+                        $mdDialog.cancel();
+                    };
+                },
+                controllerAs: "controller",
+                targetEvent: event,
+                clickOutsideToClose: false
+            });
         }
 
         function loadInvite(){

@@ -63,8 +63,7 @@
                 url: "/",
                 views: {
                     user_content: {
-                        templateUrl: "app/home/home.html",
-                        controller: "HomeController as homeCtrl"
+                        templateUrl: "app/home/home.html"
                     }
                 }
             })

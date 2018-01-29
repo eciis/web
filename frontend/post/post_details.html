@@ -131,6 +131,9 @@
   </md-card>
 
   <!-- BODY POST -->
+  <div ng-show="postDetailsCtrl.isPostEmpty()" layout="row" layout-align="center center">
+    <md-progress-circular md-mode="indeterminate" style="width: 20%"></md-progress-circular>
+  </div>
   <img ng-if="postDetailsCtrl.showImage(postDetailsCtrl.post)" ng-src="{{ postDetailsCtrl.post.photo_url }}"
       class="md-card-image">
   <div class="youtube-player" ng-if="postDetailsCtrl.showVideo(postDetailsCtrl.post)">

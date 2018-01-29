@@ -367,6 +367,10 @@
             return postDetailsCtrl.post.author_key == postDetailsCtrl.user.key;
         };
 
+        postDetailsCtrl.isPostEmpty = function  isPostEmpty() {
+            return !postDetailsCtrl.post || _.isEmpty(postDetailsCtrl.post);
+        };
+
         function isInstitutionAdmin() {
             return _.includes(_.map(postDetailsCtrl.user.institutions_admin, getKeyFromUrl), postDetailsCtrl.post.institution_key);
         }

@@ -1,5 +1,5 @@
 <md-card flex="90" flex-gt-xs="95">
-  <form name="saveForm" ng-submit="postCtrl.save(isEditing, originalPost, posts)">
+  <form name="saveForm" ng-submit="postCtrl.save(isEditing, originalPost, posts, saveForm)" style="margin: 0;">
     <md-card-content layout="row" style="padding:5px;">
       <md-card-content>
         <img ng-src="{{ postCtrl.getInstPhotoUrl()}}"
@@ -100,7 +100,8 @@
         <md-progress-linear ng-show="postCtrl.loading" md-mode="indeterminate" style="width: 14%;"></md-progress-linear>
       </div>
     </md-card-content>
-    <md-card-actions style="text-align: right; margin-right: 20px; margin-bottom: 20px;" ng-show="postCtrl.showButton()">
+    <md-card-actions style="text-align: right; margin-right: 20px; margin-bottom: 20px;" ng-show="postCtrl.showButton()"
+      layout="row" layout-align="end center">
       <md-button style="color: #009688" ng-click="postCtrl.cancelDialog()">
         Cancelar
       </md-button>

@@ -190,7 +190,7 @@
             return actualEvents;
         }
 
-        homeCtrl.takeTour = function takeTour() {
+        homeCtrl.takeTour = function takeTour(event) {
             $mdDialog.show({
                 templateUrl: 'app/invites/welcome_dialog.html',
                 controller: function WelcomeController() {

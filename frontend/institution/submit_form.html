@@ -254,8 +254,8 @@
                 <md-button ng-click="null" ng-model="configInstCtrl.file" ngf-pattern="'application/pdf'"
                     ngf-accept="'application/pdf'" ngf-max-size="5MB"
                     ngf-select="null" class="md-raised">
-                    <md-icon>{{configInstCtrl.file? 'insert_drive_file': 'attach_file'}}</md-icon>
-                    {{configInstCtrl.file? 'Portfólio adicionado': 'Adicionar Portfólio'}}
+                    <md-icon>{{configInstCtrl.getPortfolioButtonIcon()}}</md-icon>
+                    {{configInstCtrl.getPortfolioButtonMessage()}}
                 </md-button>
             </md-input-container>
             <div layout="row" layout-align="end center">

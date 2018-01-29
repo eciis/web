@@ -296,6 +296,22 @@
             }
         };
 
+        configInstCtrl.getPortfolioButtonMessage = function getPortfolioButtonMessage () {
+            if(configInstCtrl.newInstitution.portfolio_url || configInstCtrl.file) {
+                return "Trocar Portfólio";
+            } else {
+                return "Adicionar Portfólio";
+            }
+        };
+
+        configInstCtrl.getPortfolioButtonIcon = function getPortfolioButtonIcon() {
+            if (configInstCtrl.newInstitution.portfolio_url || configInstCtrl.file) {
+                return "insert_drive_file";
+            } else {
+                return "attach_file";
+            }
+        };
+
         function getFields() {
             var necessaryFieldsForStep = {
                 0: {fields: [configInstCtrl.newInstitution.address], size: 7},

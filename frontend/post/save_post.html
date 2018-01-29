@@ -9,9 +9,12 @@
       <div flex>
         <md-card-content>
           <div ng-if="postCtrl.typePost === 'Common'"  layout="column">
-              <md-input-container md-no-float class="md-block" style="margin: 0px;" required>
-                <input style="font-weight: bold; color: #00695C; border: 0;resize:none;"
-                ng-model="postCtrl.post.title" maxlength="100" placeholder="{{postCtrl.showPlaceholderMsg()}}">
+              <md-input-container md-no-float class="md-block" style="margin: 0px;">
+                <input name="title" style="font-weight: bold; color: #00695C; border: 0;resize:none;"
+                ng-model="postCtrl.post.title" maxlength="100" placeholder="{{postCtrl.showPlaceholderMsg()}}" required>
+                <div ng-messages='saveForm.title.$error'>
+                    <div ng-message="required">O post deve conter um título!</div>
+                </div>
               </md-input-container>
               <md-input-container ng-show="postCtrl.isTyping()" md-no-float>
                 <textarea name="message" style="border: 0; max-height: 400px;resize:none; overflow: auto;" ng-model="postCtrl.post.text" placeholder="Texto" id="text" class="hide-scrollbar" required>

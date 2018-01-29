@@ -127,7 +127,7 @@
                 <md-input-container style="margin: 0" flex="45" ng-if="!controller.isAnotherCountry">
                     <label>Cidade</label>
                     <md-select ng-model="controller.event.address.city"  ng-disabled="!controller.selectedFederalState"
-                       required/>
+                      required/>
                       <md-option ng-repeat="city in controller.cities" ng-value="city">{{city}}</md-option>
                     </md-select>
                 </md-input-container>

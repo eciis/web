@@ -87,10 +87,14 @@ class RequestUser(Invite):
         body = acceptMessage if operation == "ACCEPT" else rejectMessage
         super(RequestUser, self).send_email(host, sender_email, body)
 
-    def send_notification(self, user):
+    def send_notification(self, current_institution):
         """Method of send notification of invite user."""
         entity_type = 'REQUEST_USER'
-        super(RequestUser, self).send_notification(user, self.admin_key.urlsafe(), entity_type)
+        super(RequestUser, self).send_notification(
+            current_institution=current_institution, 
+            sender_key=self.admin_key,
+            entity_type=entity_type
+        )
 
     def make(self):
         """Create json of invite to user."""

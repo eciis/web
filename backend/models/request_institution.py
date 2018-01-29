@@ -63,13 +63,17 @@ class RequestInstitution(Request):
         for super_user in super_users:
             super(RequestInstitution, self).send_email(host, super_user.email, body)
 
-    def send_notification(self, user):
+    def send_notification(self, current_institution):
         """Method of send notification of request intitution."""
         entity_type = 'REQUEST_INSTITUTION'
         super_users = getSuperUsers()
 
         for super_user in super_users:
-            super(RequestInstitution, self).send_notification(user, super_user.key.urlsafe(), entity_type)
+            super(RequestInstitution, self).send_notification(
+                current_institution=current_institution, 
+                receiver_key=super_user.key,
+                entity_type=entity_type
+            )
 
     def make(self):
         """Create json of request to institution."""

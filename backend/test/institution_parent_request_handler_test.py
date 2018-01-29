@@ -9,7 +9,7 @@ from models.institution import Address
 from models.request_institution_parent import RequestInstitutionParent
 from handlers.institution_parent_request_handler import InstitutionParentRequestHandler
 
-import mock
+import mocks
 from mock import patch
 
 CURRENT_INSTITUTION = {'name': 'currentInstitution'}
@@ -30,8 +30,8 @@ class InstitutionParentRequestHandlerTest(TestBaseHandler):
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
+    @patch('service_messages.send_message_notification')
     @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
-    @mock.patch('service_messages.send_message_notification')
     def test_put(self, verify_token, mock_method):
         """Test method post of InstitutionParentRequestHandler."""
         request = self.testapp.put_json(
@@ -68,13 +68,16 @@ class InstitutionParentRequestHandlerTest(TestBaseHandler):
             exception_message,
             "Expected error message is Error! User is not allowed to accept link between institutions")
 
+    @patch('service_messages.send_message_notification')
     @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
-    @mock.patch('service_messages.send_message_notification')
-    def test_delete(self, verify_token, mock_method):
+    def test_delete(self, verify_token, send_message_notification):
         """Test method post of InstitutionChildrenRequestHandler."""
+        print "under test"
+        print self.request.key
+
         self.testapp.delete(
             "/api/requests/%s/institution_parent?currentInstitution=%s"
-            % (self.request.key.urlsafe(), CURRENT_INST_STRING)
+             % (self.request.key.urlsafe(), CURRENT_INST_STRING)
         )
 
         institution = self.inst_requested.key.get()
@@ -89,40 +92,26 @@ class InstitutionParentRequestHandlerTest(TestBaseHandler):
             institution.children_institutions, [],
             "The list of children institution of inst requested is empty")
 
-        self.assertTrue(mock_method.assert_called,
+        self.assertTrue(send_message_notification.assert_called,
                         "Should call the send_message_notification")
 
 
 def initModels(cls):
     """Init the models."""
     # new User
-    cls.user_admin = User()
-    cls.user_admin.name = 'User Admin'
-    cls.user_admin.email = ['useradmin@test.com']
-    cls.user_admin.put()
+    cls.user_admin = mocks.create_user('useradmin@test.com')
     # Other user
-    cls.other_user = User()
-    cls.other_user.name = 'Other User'
-    cls.other_user.email = ['otheruser@test.com']
-    cls.other_user.put()
+    cls.other_user = mocks.create_user('otheruser@test.com')
     # new institution address
     cls.address = Address()
     cls.address.street = "street"
     # new Institution inst test
-    cls.inst_test = Institution()
-    cls.inst_test.name = 'inst test'
-    cls.inst_test.members = [cls.user_admin.key]
-    cls.inst_test.followers = [cls.user_admin.key]
+    cls.inst_test = mocks.create_institution()
     cls.inst_test.admin = cls.user_admin.key
-    cls.inst_test.address = cls.address
     cls.inst_test.put()
     # new Institution inst requested to be parent of inst test
-    cls.inst_requested = Institution()
-    cls.inst_requested.name = 'inst requested'
-    cls.inst_requested.members = [cls.user_admin.key]
-    cls.inst_requested.followers = [cls.user_admin.key]
+    cls.inst_requested = mocks.create_institution()
     cls.inst_requested.admin = cls.other_user.key
-    cls.inst_requested.address = cls.address
     cls.inst_requested.put()
     # Update Institutions admin by other user
     cls.other_user.add_permission("answer_link_inst_request", cls.inst_requested.key.urlsafe())

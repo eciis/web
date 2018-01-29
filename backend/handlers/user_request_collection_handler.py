@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """User Request Collection Handler."""
-
 import json
 from google.appengine.ext import ndb
 from utils import login_required
@@ -32,12 +31,13 @@ class UserRequestCollectionHandler(BaseHandler):
     @json_response
     def post(self, user, institution_key):
         """Handler of post requests."""
-        data = json.loads(self.request.body)
+        body = json.loads(self.request.body)
+        data = body['data']
         host = self.request.host
+        current_institution = body['current_institution']
         user_request_type = 'REQUEST_USER'
 
         type_of_invite = data.get('type_of_invite')
-
         Utils._assert(
             type_of_invite != user_request_type,
             "The type must be REQUEST_USER",
@@ -62,8 +62,7 @@ class UserRequestCollectionHandler(BaseHandler):
         if(request.stub_institution_key):
             request.stub_institution_key.get().addInvite(request)
 
-        request.send_invite(host)
-
+        request.send_invite(host, current_institution)
         make_invite = request.make()
 
         self.response.write(json.dumps(make_invite))

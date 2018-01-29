@@ -30,6 +30,11 @@
         <div flex layout-align="center center" layout="row" layout-fill ng-if="eventCtrl.isLoadingEvents">
             <md-progress-circular md-mode="indeterminate"></md-progress-circular>
         </div>
+        <md-card ng-if="eventCtrl.events.lentgh === 0" style="margin-left: 40px;">
+            <md-content layout-align="center center" layout="column">
+              <h4>Nenhum evento a ser exibido.</h4>
+            </md-content>
+        </md-card>
         <md-content flex id="content" class="body hide-scrollbar">
           <div ng-repeat="event in eventCtrl.events | orderBy:'start_time'" ng-if="eventCtrl.events.length > 0"
               style="margin-left: 65px; border-left: 2px solid #8BC34A;" layut="colum">

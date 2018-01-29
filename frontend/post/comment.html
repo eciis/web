@@ -26,7 +26,8 @@
             </div>
             <div layout="row" style="margin-left: auto;">
               <div>
-                <md-button class="sm-icon-button xs-icon-button" aria-label="Favorite" ng-click="commentCtrl.likeOrDislike()" title="Curtir"
+                <md-button class="sm-icon-button xs-icon-button" aria-label="Favorite" ng-click="commentCtrl.likeOrDislike()" 
+                    title="{{(commentCtrl.isLikedByUser()) ? 'Descurtir' : 'Curtir'}}"
                     ng-disabled="commentCtrl.disableButton()" md-colors="{background: commentCtrl.isLikedByUser() ? 'light-green' : 'grey'}">
                   <md-icon>grade</md-icon>
                 </md-button>
@@ -86,7 +87,8 @@
             </div>
             <div layout="row" style="margin-left: auto;">
               <div>
-                <md-button class="sm-icon-button xs-icon-button" aria-label="Favorite" ng-click="commentCtrl.likeOrDislike(reply)" title="Curtir"
+                <md-button class="sm-icon-button xs-icon-button" aria-label="Favorite" ng-click="commentCtrl.likeOrDislike(reply)" 
+                    title="{{(commentCtrl.isLikedByUser(reply)) ? 'Descurtir' : 'Curtir'}}"
                     ng-disabled="commentCtrl.disableButton()" md-colors="{background: commentCtrl.isLikedByUser(reply) ? 'light-green' : 'grey'}">
                   <md-icon>grade</md-icon>
                 </md-button>

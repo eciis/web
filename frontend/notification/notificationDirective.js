@@ -202,6 +202,11 @@
             });
         };
 
+        controller.number_of_notifications = function number_of_notifications() {
+            return controller.notifications.length < 100 ?
+            controller.notifications.length : "+99";
+        };
+
         function refreshUserInstitutions () {
             UserService.load().then(function success(response) {
                 controller.user.institutions = response.institutions;

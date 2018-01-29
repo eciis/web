@@ -133,6 +133,12 @@
     text-decoration: none;
 }
 
+.text {
+    word-wrap: break-word; 
+    text-align: left;
+    white-space: pre-line;
+  }
+
 .post-deleted {
     background-color:#F5F5F5;
 }
@@ -474,6 +480,25 @@ a:active {
     right:-10px;
     font-size:.6em;
     background:#004D40;
+    color:white;
+    width:18px;
+    height:18px;
+    text-align:center;
+    line-height:18px;
+    border-radius:50%;
+    box-shadow:0 0 1px #333;
+}
+
+.counter-of-notifications {
+    position:relative;
+}
+
+.counter-of-notifications[data-badge]:after {
+    content:attr(data-badge);
+    position:absolute;
+    right:-10px;
+    font-size:.6em;
+    background:#F4511E;
     color:white;
     width:18px;
     height:18px;
@@ -841,13 +866,11 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
   right: 4%;
   bottom: -2%;
   z-index: 10;
-  padding: 0.5%;
+  padding: 0 20px 10px 20px;
   -webkit-box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
      -moz-box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
           box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-  color: #444;
   background-color: #f5f5f5;
-  border: 1px solid rgba(0, 0, 0, 0.1);
   text-align: center;
   font-size: 10px;
 }

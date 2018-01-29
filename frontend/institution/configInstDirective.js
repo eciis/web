@@ -297,18 +297,7 @@
             var necessaryFieldsForStep = {
                 0: {
                     fields: [configInstCtrl.newInstitution.address],
-                    isValid :  function(){
-                        var address = configInstCtrl.newInstitution.address;
-                        var valid = true;
-                        if(address && address.country === "Brasil"){
-                            _.forEach(address, function(value, key) {
-                                if(! value || _.isEmpty(value)) {
-                                    valid = false;
-                                }
-                            });
-                        }
-                        return valid;
-                    }
+                    isValid :  configInstCtrl.isValidAdress
                 },
                 1: {
                     fields: [
@@ -317,7 +306,8 @@
                     configInstCtrl.newInstitution.legal_nature
                     ]
                 },
-                2: {fields: [
+                2: {
+                    fields: [
                     configInstCtrl.newInstitution.leader,
                     configInstCtrl.newInstitution.description
                     ]
@@ -325,6 +315,19 @@
             };
             return necessaryFieldsForStep;
         }
+
+        configInstCtrl.isValidAdress =  function isValidAdress(currentStep){       
+            var valid = true;
+            var address = configInstCtrl.address;    
+            if(currentStep === 0 && address && address.country === "Brasil"){     
+                _.forEach(address, function(value, key) {     
+                    if(! value || _.isEmpty(value)) {     
+                        valid = false;        
+                    }     
+                });       
+            }     
+            return valid;     
+         }     
 
         function isCurrentStepValid(currentStep) {
             var isValid = true;
@@ -336,7 +339,7 @@
                 }
             });
             isFieldValid = necessaryFieldsForStep[currentStep].isValid ? 
-                necessaryFieldsForStep[currentStep].isValid() : true;
+                necessaryFieldsForStep[currentStep].isValid(currentStep) : true;
             return isValid && isFieldValid;
         }
 

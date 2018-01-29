@@ -271,6 +271,20 @@ describe('Test ConfigInstDirective', function() {
                 country: "Brazil"
             };
             expect(editInstCtrl.getStep(1)).toEqual(true);
+            editInstCtrl.newInstitution.address = {
+                country: ""
+            };
+            expect(editInstCtrl.getStep(1)).toEqual(true);
+        });
+
+        it('should not pass from first step', function() {
+            editInstCtrl.newInstitution.address = undefined;
+            editInstCtrl.nextStep();
+            expect(editInstCtrl.getStep(1)).toEqual(true);
+            editInstCtrl.newInstitution.address = {
+                country: ""
+            };
+            expect(editInstCtrl.getStep(1)).toEqual(true);
         });
 
         it('should not pass from second step', function() {

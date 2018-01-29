@@ -17,6 +17,8 @@
 
         newInviteCtrl.phoneRegex = "[0-9]{2}[\\s][0-9]{4,5}[-][0-9]{4,5}";
 
+        newInviteCtrl.loading = true;
+
         var observer;
 
         var institutionKey;
@@ -161,8 +163,10 @@
                     $state.go("app.user.home");
                     MessageService.showToast("Você já utilizou este convite.");
                 }
+                newInviteCtrl.loading = false;
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
+                newInviteCtrl.loading = true;
             });
         }
 

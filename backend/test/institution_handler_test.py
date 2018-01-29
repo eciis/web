@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 """Post handler test."""
-
+import operator
 from test_base_handler import TestBaseHandler
 from models.invite_institution import InviteInstitution
 from models.user import User
 from models.institution import Institution
 from handlers.institution_handler import InstitutionHandler
+from worker import AddAdminPermissionsInInstitutionHierarchy
+from worker import RemoveAdminPermissionsInInstitutionHierarchy
 
 from mock import patch
 import mocks
@@ -24,6 +26,8 @@ class InstitutionHandlerTest(TestBaseHandler):
         app = cls.webapp2.WSGIApplication(
             [("/api/institutions/(.*)/invites/(.*)", InstitutionHandler),
              ("/api/institutions/(.*)", InstitutionHandler),
+             ("/api/queue/add-admin-permissions", AddAdminPermissionsInInstitutionHierarchy),
+             ('/api/queue/remove-admin-permissions', RemoveAdminPermissionsInInstitutionHierarchy)
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
         
@@ -85,7 +89,19 @@ class InstitutionHandlerTest(TestBaseHandler):
         cls.third_inst.put()
         cls.second_inst.children_institutions.append(cls.third_inst.key)
         cls.second_inst.put()
+        # method post body
+        cls.body = {
+            'data': None,
+            'currentInstitution': {
+                'name': 'currentInstitution'
+            }
+        }
     
+
+    def enqueue_task(self, handler_selector, params):
+        """Method of mock enqueue tasks."""
+        if handler_selector == 'add-admin-permissions' or handler_selector == 'remove-admin-permissions':
+            self.testapp.post('/api/queue/' + handler_selector, params=params)
 
     @patch('utils.verify_token', return_value={'email': 'user@example.com'})
     def test_patch(self, verify_token):
@@ -124,15 +140,8 @@ class InstitutionHandlerTest(TestBaseHandler):
     def test_post(self, verify_token):
         """Test the post_handler's post method."""
         # Call the patch method and assert that  it raises an exception
-        body = {
-            'data': {
-                'sender_name': 'user name updated'
-            },
-            'currentInstitution': {
-                'name': 'currentInstitution'
-            }
-        }
-        self.testapp.post_json("/api/institutions/%s/invites/%s" % (self.stub.key.urlsafe(), self.invite.key.urlsafe()), body)
+        self.body['data'] = {'sender_name': 'user name updated'}
+        self.testapp.post_json("/api/institutions/%s/invites/%s" % (self.stub.key.urlsafe(), self.invite.key.urlsafe()), self.body)
 
         self.inst_create = self.stub.key.get()
         self.assertEqual(self.inst_create.admin, self.other_user.key,
@@ -178,6 +187,124 @@ class InstitutionHandlerTest(TestBaseHandler):
             "Error! User is not invitee to create this Institution",
             "Expected exception message must be equal to " +
             "Error! User is not invitee to create this Institution")
+    
+    @patch('handlers.institution_handler.enqueue_task')
+    @patch('utils.verify_token', return_value={'email': 'user@example.com'})
+    def test_add_admin_permission_in_institution_hierarchy(self, verify_token, enqueue_task):
+        """Test add admin permissions in institution hierarchy."""
+        first_user = mocks.create_user()
+        second_user = mocks.create_user()
+        third_user = mocks.create_user()
+
+        first_inst = mocks.create_institution()
+        second_inst = mocks.create_institution()
+        third_inst = mocks.create_institution()
+
+        first_inst.admin = first_user.key
+        second_inst.admin = second_user.key
+        third_inst.admin = third_user.key
+
+        first_user.institutions_admin.append(first_inst.key)
+        second_user.institutions_admin.append(second_inst.key)
+        third_user.institutions_admin.append(third_inst.key)
+
+        second_inst.parent_institution = first_inst.key
+        third_inst.parent_institution = second_inst.key
+
+        first_inst.children_institutions.append(second_inst.key)
+        second_inst.children_institutions.append(third_inst.key)
+
+        first_inst.put()
+        second_inst.put()
+        third_inst.put()
+
+        first_user.put()
+        second_user.put()
+        third_user.put()
+
+        invite = InviteInstitution()
+        invite.invitee = third_user.email[0]
+        invite.institution_key = third_inst.key
+        invite.admin_key = second_user.key
+        invite.stub_institution_key = third_inst.key
+        invite.put()
+        
+        verify_token._mock_return_value = {'email': third_user.email[0]}
+        enqueue_task.side_effect = self.enqueue_task
+
+        self.assertEqual(first_user.permissions, {})
+        self.assertEqual(second_user.permissions, {})
+        self.assertEqual(third_user.permissions, {})
+
+        self.body['data'] = {'sender_name': 'user name updated'}
+        self.testapp.post_json("/api/institutions/%s/invites/%s"
+                          % (third_inst.key.urlsafe(), invite.key.urlsafe()), self.body)
+
+        first_user = first_user.key.get()
+        second_user = second_user.key.get()
+        third_user = third_user.key.get()
+
+        self.assertTrue(third_inst.key.urlsafe() in first_user.permissions['publish_post'])
+        self.assertTrue(third_inst.key.urlsafe() in second_user.permissions['publish_post'])
+        self.assertTrue(third_inst.key.urlsafe() in third_user.permissions['publish_post'])
+        
+
+    @patch('handlers.institution_handler.enqueue_task')
+    @patch('utils.verify_token', return_value={'email': 'user@example.com'})
+    def test_remove_admin_permission_in_institution_hierarchy(self, verify_token, enqueue_task):
+        """Test remove admin permissions in institution hierarchy."""
+        first_user = mocks.create_user()
+        second_user = mocks.create_user()
+        third_user = mocks.create_user()
+
+        first_inst = mocks.create_institution()
+        second_inst = mocks.create_institution()
+        third_inst = mocks.create_institution()
+
+        first_inst.admin = first_user.key
+        second_inst.admin = second_user.key
+        third_inst.admin = third_user.key
+
+        first_user.institutions_admin.append(first_inst.key)
+        second_user.institutions_admin.append(second_inst.key)
+        third_user.institutions_admin.append(third_inst.key)
+
+        second_inst.parent_institution = first_inst.key
+        third_inst.parent_institution = second_inst.key
+
+        first_inst.children_institutions.append(second_inst.key)
+        second_inst.children_institutions.append(third_inst.key)
+
+        second_user.add_permission('remove_inst', second_inst.key.urlsafe())
+        first_user.add_permission('publish_post', third_inst.key.urlsafe())
+        second_user.add_permission('publish_post', third_inst.key.urlsafe())
+        third_user.add_permission('publish_post', third_inst.key.urlsafe())
+
+        first_inst.put()
+        second_inst.put()
+        third_inst.put()
+
+        first_user.put()
+        second_user.put()
+        third_user.put()
+
+        verify_token._mock_return_value = {'email': second_user.email[0]}
+        enqueue_task.side_effect = self.enqueue_task
+
+        first_user = first_user.key.get()
+        second_user = second_user.key.get()
+        third_user = third_user.key.get()
+
+        self.testapp.delete("/api/institutions/%s?removeHierarchy=true" %
+                            second_inst.key.urlsafe())
+        
+        first_user = first_user.key.get()
+        second_user = second_user.key.get()
+        third_user = third_user.key.get()
+        
+        self.assertTrue(third_inst.key.urlsafe() not in first_user.permissions['publish_post'])
+        self.assertTrue(third_inst.key.urlsafe() not in second_user.permissions['publish_post'])
+        self.assertTrue(third_inst.key.urlsafe() in third_user.permissions['publish_post'])
 
     @patch('utils.verify_token', return_value={'email': 'user@example.com'})
     def test_get(self, verify_token):

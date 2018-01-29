@@ -119,10 +119,11 @@
 
         inviteInstCtrl.sendInstInvite = function sendInstInvite(invite) {
             var promise = InviteService.sendInviteInst(invite);
-            promise.then(function success() {
+            promise.then(function success(response) {
                     inviteInstCtrl.invite = {};
                     invite.status = 'sent';
                     invite.sender_name = inviteInstCtrl.user.name;
+                    invite.key = response.data.key;
                     inviteInstCtrl.sent_invitations.push(invite);
                     inviteInstCtrl.showInvites = true;
                     inviteInstCtrl.showSendInvites = false;
@@ -154,6 +155,40 @@
         inviteInstCtrl.goToInst = function goToInst(institutionKey) {
             $state.go('app.institution.timeline', {institutionKey: institutionKey});
         };
+
+        inviteInstCtrl.resendInvite = function resendInvite(inviteKey, event) {
+            var confirm = $mdDialog.confirm({ onComplete: designOptions });
+            confirm
+                .clickOutsideToClose(false)
+                .title('Reenviar convite')
+                .textContent('Você deseja reenviar o convite?')
+                .ariaLabel('Reenviar convite')
+                .targetEvent(event)
+                .ok('Reenviar convite')
+                .cancel('Cancelar');
+            var promise = $mdDialog.show(confirm);
+            promise.then(function () {
+                InviteService.resendInvite(inviteKey).then(function success() {
+                    MessageService.showToast("Convite reenviado com sucesso.");
+                }, function error(response) {
+                    MessageService.showToast(response.data.msg);
+                });
+            }, function () {
+                MessageService.showToast('Cancelado.');
+            });
+            return promise;
+        };
+
+        function designOptions() {
+            var $dialog = angular.element(document.querySelector('md-dialog'));
+            var $actionsSection = $dialog.find('md-dialog-actions');
+            var $cancelButton = $actionsSection.children()[0];
+            var $confirmButton = $actionsSection.children()[1];
+            angular.element($confirmButton).removeClass('md-primary');
+            angular.element($cancelButton).removeClass('md-primary');
+            angular.element($confirmButton).addClass('green-button-text');
+            angular.element($cancelButton).addClass('green-button-text');
+        }
 
         function loadSentRequests() {
             var institution_key = inviteInstCtrl.user.current_institution.key;

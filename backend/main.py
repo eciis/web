@@ -39,6 +39,7 @@ from handlers.institution_children_request_handler import InstitutionChildrenReq
 from handlers.institution_hierarchy_handler import InstitutionHierarchyHandler
 from handlers.request_handler import RequestHandler
 from handlers.institution_events_handler import InstitutionEventsHandler
+from handlers.resend_invite_handler import ResendInviteHandler
 
 methods = set(webapp2.WSGIApplication.allowed_methods)
 methods.add('PATCH')
@@ -48,6 +49,7 @@ app = webapp2.WSGIApplication([
     ("/api/requests/(.*)/user", RequestHandler),
     ("/api/invites", InviteCollectionHandler), 
     ("/api/invites/institution", InviteInstitutionHandler),
+    ("/api/invites/(.*)/resend", ResendInviteHandler),
     ("/api/invites/(.*)", InviteHandler),
     ("/api/requests/(.*)/institution", InstitutionRequestHandler),
     ("/api/requests/(.*)/institution_parent", InstitutionParentRequestHandler),

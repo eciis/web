@@ -71,6 +71,6 @@ class InstitutionMembersHandler(BaseHandler):
         email_sender = RemoveMemberEmailSender(**{
             'receiver': member.email,
             'subject': subject,
-            'body': {'body': body}
+            'body': body
         })
         email_sender.send_email()

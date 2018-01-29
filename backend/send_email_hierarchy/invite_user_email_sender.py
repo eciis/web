@@ -2,6 +2,9 @@
 
 from email_sender import EmailSender
 
+MAXIMUM_INSTITUTION_NAME = 29
+MAXIMUM_USER_NAME = 26
+
 class InviteUserEmailSender(EmailSender):
     """Entity responsible for send invite user's email."""
 
@@ -13,9 +16,9 @@ class InviteUserEmailSender(EmailSender):
         """
         super(InviteUserEmailSender, self).__init__(**kwargs)
         self.html = 'invite_user.html'
-        self.inviter = kwargs['inviter']
+        self.inviter = self.crop_name(kwargs['inviter'], MAXIMUM_USER_NAME)
         self.invite_key = kwargs['invite_key']
-        self.institution = self.crop_institution_name(kwargs['institution'])
+        self.institution = self.crop_name(kwargs['institution'], MAXIMUM_INSTITUTION_NAME)
 
     def send_email(self):
         """It enqueue a sending email task with the json that will fill the entity's html.

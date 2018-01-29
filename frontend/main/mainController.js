@@ -4,8 +4,9 @@
 
     app.controller("MainController", function MainController($mdSidenav, $mdDialog, $mdToast, $state,
             AuthService, $rootScope, $q, RequestInvitationService,
-            InviteService, $mdMenu) {
+            InviteService, $mdMenu, $window) {
         var mainCtrl = this;
+        var url_report = "http://support.plataformacis.org";
 
         mainCtrl.search_keyword = "";
         mainCtrl.user = AuthService.getCurrentUser();
@@ -95,6 +96,11 @@
                 institutionKey: mainCtrl.user.current_institution.key
             });
         };
+
+        mainCtrl.goToReport = function goToReport() {
+            $window.open(url_report);
+        };
+
 
         mainCtrl.openConfigMenu = function openConfigMenu(ev) {
             $mdMenu.open(ev);

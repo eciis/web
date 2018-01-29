@@ -38,6 +38,10 @@
             return voted;
         };
 
+        surveyCtrl.isSurveyAuthor = function isSurveyAuthor() {
+            return surveyCtrl.post.author_key == surveyCtrl.user.key;
+        }
+
         surveyCtrl.canVote = function(){
             var nationalTimeZone = new Date (surveyCtrl.post.deadline);
             nationalTimeZone.setHours(nationalTimeZone.getHours() - 3);

@@ -133,6 +133,12 @@
     text-decoration: none;
 }
 
+.text {
+    word-wrap: break-word; 
+    text-align: left;
+    white-space: pre-line;
+  }
+
 .post-deleted {
     background-color:#F5F5F5;
 }
@@ -483,6 +489,25 @@ a:active {
     box-shadow:0 0 1px #333;
 }
 
+.counter-of-notifications {
+    position:relative;
+}
+
+.counter-of-notifications[data-badge]:after {
+    content:attr(data-badge);
+    position:absolute;
+    right:-10px;
+    font-size:.6em;
+    background:#F4511E;
+    color:white;
+    width:18px;
+    height:18px;
+    text-align:center;
+    line-height:18px;
+    border-radius:50%;
+    box-shadow:0 0 1px #333;
+}
+
 .inst-timeline-center {
     margin-left: 46%;
 }
@@ -490,6 +515,11 @@ a:active {
 .green-button {
     background-color: #8BC34A;
     color: #FFFFFF;
+}
+
+.green-button-text {
+    color: #009688;
+    background-color: #FFFFFFFF;
 }
 
 .hide-scrollbar::-webkit-scrollbar {
@@ -511,6 +541,8 @@ a:active {
     margin-right: 10px;
     width: 50px;
     height: 50px;
+    min-width: 40px;
+    min-height: 40px;
     max-width: 50px;
     max-height: 50px;
     -webkit-border-radius: 50%;
@@ -831,4 +863,18 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
 .option-selected-left-bar{
     color:#009688;
     background-color:#E0E0E0;
+}
+
+.feedback-btn {
+  position: fixed;
+  right: 4%;
+  bottom: -2%;
+  z-index: 10;
+  padding: 0 20px 10px 20px;
+  -webkit-box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+     -moz-box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  background-color: #f5f5f5;
+  text-align: center;
+  font-size: 10px;
 }

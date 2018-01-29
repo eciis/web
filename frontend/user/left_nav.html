@@ -75,12 +75,6 @@
                       <b>Convites</b>
                     </md-button>
                   </md-menu-item>
-                  <md-menu-item>
-                    <md-button>
-                      <md-icon>settings</md-icon>
-                      <b>Minhas Configurações</b>
-                    </md-button>
-                  </md-menu-item>
                 </md-menu-content>
               </div>
   
@@ -115,6 +109,12 @@
               <div class="row">
                 <md-divider></md-divider>
                 <md-menu-content width="4" md-colors="{background: 'grey-100'}">
+                  <md-menu-item>
+                      <md-button ng-click="homeCtrl.takeTour(event)">
+                        <md-icon>card_travel</md-icon>
+                        <b>Iniciar Tutorial</b>
+                      </md-button>
+                    </md-menu-item>
                   <md-menu-item>
                     <md-button ng-click="mainCtrl.logout()">
                       <md-icon>exit_to_app</md-icon>

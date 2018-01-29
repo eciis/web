@@ -140,6 +140,26 @@
             return deffered.promise;
         };
 
+        service.getLegalNatures = function getLegalNatures() {
+            var deferred = $q.defer();
+            $http.get('app/institution/legal_nature.json').then(function success(response) {
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+            return deferred.promise;
+        };
+
+        service.getActuationAreas = function getActuationAreas() {
+            var deferred = $q.defer();
+            $http.get('app/institution/actuation_area.json').then(function success(response) {
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+            return deferred.promise;
+        };
+
         service.removeLink = function removeLink(institutionKey, institutionLink, isParent) {
             var deffered = $q.defer();
             $http.delete(INSTITUTIONS_URI + "/" + institutionKey + "/hierarchy/" + institutionLink + "?isParent=" + isParent).then(function success(info) {

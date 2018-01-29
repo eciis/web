@@ -13,6 +13,7 @@
         manageMemberCtrl.currentMember = "";
 
         manageMemberCtrl.showSendInvite = true;
+        manageMemberCtrl.isLoadingMembers = true;
         manageMemberCtrl.showInvites = false;
         manageMemberCtrl.showRequests = false;
         manageMemberCtrl.showMembers = false;
@@ -56,7 +57,8 @@
 
             if (manageMemberCtrl.isUserInviteValid(invite)) {
                 var promise = InviteService.sendInvite(invite);
-                promise.then(function success() {
+                promise.then(function success(response) {
+                    invite.key = response.data.key;
                     manageMemberCtrl.sent_invitations.push(invite);
                     manageMemberCtrl.invite = {};
                     manageMemberCtrl.showInvites = true; 
@@ -142,7 +144,9 @@
             InstitutionService.getMembers(currentInstitutionKey).then(function success(response) {
                 manageMemberCtrl.members = response.data;
                 getAdmin();
+                manageMemberCtrl.isLoadingMembers = false;
             }, function error(response) {
+                manageMemberCtrl.isLoadingMembers = true;
                 MessageService.showToast(response.data.msg);
             });
         }
@@ -199,6 +203,40 @@
         manageMemberCtrl.calculateHeight = function calculateHeight(list, itemHeight=4.5) {
             return Utils.calculateHeight(list, itemHeight);
         };
+
+        manageMemberCtrl.resendInvite = function resendInvite(inviteKey, event) {
+            var confirm = $mdDialog.confirm({ onComplete: designOptions });
+            confirm
+                .clickOutsideToClose(false)
+                .title('Reenviar convite')
+                .textContent('Você deseja reenviar o convite?')
+                .ariaLabel('Reenviar convite')
+                .targetEvent(event)
+                .ok('Reenviar convite')
+                .cancel('Cancelar');
+            var promise = $mdDialog.show(confirm);
+            promise.then(function () {
+                InviteService.resendInvite(inviteKey).then(function success() {
+                    MessageService.showToast("Convite reenviado com sucesso.");
+                }, function error(response) {
+                    MessageService.showToast(response.data.msg);
+                });
+            }, function () {
+                MessageService.showToast('Cancelado.');
+            });
+            return promise;
+        };
+
+        function designOptions() {
+            var $dialog = angular.element(document.querySelector('md-dialog'));
+            var $actionsSection = $dialog.find('md-dialog-actions');
+            var $cancelButton = $actionsSection.children()[0];
+            var $confirmButton = $actionsSection.children()[1];
+            angular.element($confirmButton).removeClass('md-primary');
+            angular.element($cancelButton).removeClass('md-primary');
+            angular.element($confirmButton).addClass('green-button-text');
+            angular.element($cancelButton).addClass('green-button-text');
+        }
 
         function createRequestSelector(status, type_of_invite) {
             return function(request) {

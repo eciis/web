@@ -5,6 +5,7 @@ import json
 from utils import login_required
 from utils import json_response
 from handlers.base_handler import BaseHandler
+from service_entities import enqueue_task
 from google.appengine.ext import ndb
 
 
@@ -42,6 +43,8 @@ class InstitutionParentRequestHandler(BaseHandler):
         admin_of_children_inst.add_permission("remove_link", parent_institution.key.urlsafe())
         
         request.send_response_notification(current_institution, user.key, 'ACCEPT')
+
+        enqueue_task('add-admin-permissions', {'institution_key': institution_children.key.urlsafe()})
 
         self.response.write(json.dumps(request.make()))
 

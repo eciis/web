@@ -339,9 +339,9 @@ class ResetHandler(BaseHandler):
             'name': 'Laboratório de Avaliação e Desenvolvimento de Biomateriais do Nordeste',
             'acronym': 'CERTBIO',
             'cnpj': '18.104.068/0001-86',
-            'legal_nature': 'public',
+            'legal_nature': 'PUBLIC',
             'address': address_key,
-            'actuation_area': 'research institutes',
+            'actuation_area': 'RESEARCH_INSTITUTE',
             'description': 'Ensaio Químico - Determinação de Material Volátil por Gravimetria e Ensaio Biológico - Ensaio de Citotoxicidade',
             'photo_url': 'https://pbs.twimg.com/profile_images/1782760873/Logo_do_site_400x400.jpg',
             'email': 'certbio@ufcg.edu.br',
@@ -377,9 +377,9 @@ class ResetHandler(BaseHandler):
             'name': 'Software Practice Laboratory',
             'acronym': 'SPLAB',
             'cnpj': '18.104.068/0001-56',
-            'legal_nature': 'public',
+            'legal_nature': 'PUBLIC',
             'address': address_key,
-            'actuation_area': 'college',
+            'actuation_area': 'COLLEGE',
             'description': """The mission of the Software Practices Laboratory (SPLab) is to promote the development of the state-of-the-art in the theory and practice of Software Engineering.""",
             'photo_url': 'http://amaurymedeiros.com/images/splab.png',
             'email': 'splab@ufcg.edu.br',
@@ -415,9 +415,9 @@ class ResetHandler(BaseHandler):
             'name': 'Complexo Industrial da Saude',
             'acronym': 'e-ciis',
             'cnpj': '18.104.068/0001-30',
-            'legal_nature': 'public',
+            'legal_nature': 'PUBLIC',
             'address': address_key,
-            'actuation_area': 'college',
+            'actuation_area': 'COLLEGE',
             'description': 'The mission of the e-CIIS is to promote the development of the state-of-the-art in the theory and practice of Software Engineering.',
             'photo_url': 'http://www.paho.org/bra/images/stories/BRA01A/logobireme.jpg',
             'email': 'eciis@ufcg.edu.br',
@@ -636,8 +636,8 @@ class ResetMSHandler(BaseHandler):
         admin.name = 'Administrador da Plataforma Virtual CIS'
         admin.cpf = '000.000.000-01'
         admin.email = [
-            'testeeciis@gmail.com',
-            'teste@eciis.com'
+            'deciis@saude.gov.br',
+            'plataformavirtualcis@gmail.com'
         ]
         admin.photo_url = "app/images/avatar.png"
         admin.state = 'active'
@@ -647,7 +647,6 @@ class ResetMSHandler(BaseHandler):
 
         # new Institution Ministério da Saúde
         address_data = {
-            'number': '0',
             'street': 'Esplanada dos Ministérios Bloco G ',
             'neighbourhood': 'Zona Cívico-Administrativa',
             'city': 'Brasília',
@@ -660,34 +659,45 @@ class ResetMSHandler(BaseHandler):
         data = {
             'name': 'Ministério da Saúde',
             'acronym': 'MS',
-            'cnpj': '',
-            'legal_nature': 'public',
+            'legal_nature': 'PUBLIC',
             'address': address_key,
-            'actuation_area': 'Ministérios e outros Órgãos do Governo',
-            'description': 'O Ministério da Saúde é o órgão do Poder Executivo Federal responsável pela organização  \
-             e elaboração de planos e políticas públicas voltados para a promoção, prevenção e assistência à saúde   \
-             dos brasileiros. É função do ministério dispor de condições para a proteção e recuperação da saúde da   \
-             população, reduzindo as enfermidades, controlando as doenças endêmicas e parasitárias e melhorando a   \
-             vigilância à saúde, dando, assim, mais qualidade de vida ao brasileiro. MISSÃO: Promover a saúde da  \
-             população mediante a integração e a construção de parcerias com os órgãos federais, as unidades da   \
-             Federação, os municípios, a iniciativa privada e a sociedade, contribuindo para a melhoria da qualidade \
-             de vida e para o exercício da cidadania.',
+            'actuation_area': 'GOVERNMENT_AGENCIES',
+            'description': 'Ministério da Saúde',
             'photo_url': 'https://i1.wp.com/notta.news/wp-content/uploads/2017/08/tbg_20170713080909_62787.jpg?w=1024',
-            'email': 'testeeciis@gmail.com',
+            'email': 'deciis@saude.gov.br',
             'phone_number': '61 3315-2425',
             'state': 'active',
             'institutional_email':'sic@saude.gov.br',
             'leader':' Ministro Ricardo Barros',
-            'website_url':'http://portalms.saude.gov.br/'
         }
         
+        data_deciis = {
+            'name': 'Departamento do Complexo Industrial e Inovação em Saúde',
+            'acronym': 'DECIIS',
+            'legal_nature': 'PUBLIC',
+            'address': address_key,
+            'actuation_area': 'GOVERNMENT_AGENCIES',
+            'description': 'Departamento do Complexo Industrial e Inovação em Saúde',
+            'photo_url': 'https://i1.wp.com/notta.news/wp-content/uploads/2017/08/tbg_20170713080909_62787.jpg?w=1024',
+            'email': 'deciis@saude.gov.br',
+            'state': 'active',
+            'institutional_email':'deciis@saude.gov.br',
+            'leader':' Ministro Ricardo Barros'
+        }
+
         ms = createInstitution(data, admin)
+        deciis = createInstitution(data_deciis, admin)
         
         jsonList.append(
-            {"msg": "database initialized with Ministerio da Saude"})
+            {"msg": "database initialized with Ministerio da Saude and\
+            Departamento do Complexo Industrial e Inovacao em Saude "})
 
         admin.add_permissions(permissions.DEFAULT_ADMIN_PERMISSIONS, ms.key.urlsafe())
-        admin.add_permissions(permissions.DEFAULT_SUPER_USER_PERMISSIONS, ms.key.urlsafe())
+        create_profile(admin, ms)
+
+        admin.add_permissions(permissions.DEFAULT_ADMIN_PERMISSIONS, deciis.key.urlsafe())
+        admin.add_permissions(permissions.DEFAULT_SUPER_USER_PERMISSIONS, deciis.key.urlsafe())
+        create_profile(admin, deciis)
         admin.put()
 
         self.response.write(json.dumps(jsonList))

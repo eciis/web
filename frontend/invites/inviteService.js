@@ -31,6 +31,16 @@
             return deferred.promise;
         };
 
+        service.resendInvite = function resendInvite(inviteKey) {
+            var deferred = $q.defer();
+            $http.post(INVITES_URI + "/" + inviteKey + "/resend").then(function success(response) {
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+            return deferred.promise;
+        };
+
         service.sendInviteInst = function sendInviteInst(invite) {
             var body = Utils.createBody(invite, service.user.current_institution);
             var deferred = $q.defer();

@@ -157,17 +157,11 @@
         }
 
         function updateEvent() {
-            var event = _.clone(dialogCtrl.dateChangeEvent);
-            event = new Event(event, dialogCtrl.user.current_institution.key);
+            addLinks(dialogCtrl.event);
+            event = new Event(dialogCtrl.event, dialogCtrl.user.current_institution.key);
             if(event.isValid()) {
-                var patch = generatePatch(jsonpatch.generate(dialogCtrl.observer), event);
+                var patch = formatPatch(generatePatch(jsonpatch.generate(dialogCtrl.observer), event));
                 EventService.editEvent(dialogCtrl.event.key, patch).then(function success() {
-                    if(dialogCtrl.dateToChange.startTime) {
-                        dialogCtrl.event.start_time = event.start_time;
-                    }
-                    if(dialogCtrl.dateToChange.endTime) {
-                        dialogCtrl.event.end_time = event.end_time;
-                    }
                     dialogCtrl.closeDialog();
                     MessageService.showToast('Evento editado com sucesso.');
                 }, function error(response) {
@@ -177,6 +171,21 @@
             } else {
                 MessageService.showToast('Evento inválido');
             }
+        }
+
+        /*
+        * This function remove the string '.000Z' added in end of properties start_time and end_time automatically by generatePatch.
+        * @param {patch} - The patch list of properties that was changed.
+        * @return {undefined} - Void function returns undefined.
+        */
+        function formatPatch(patch) {
+            return patch.reduce((a, b) => {
+                if(b.path === "/end_time" || b.path === "/start_time") {
+                    b.value = b.value.split(".")[0];
+                }
+                a.push(b);
+                return a;
+            }, []);
         }
 
         dialogCtrl.changeDate = function changeDate(typeOfDate) {
@@ -231,11 +240,12 @@
 
         dialogCtrl.getCitiesByState = function getCitiesByState() {
             dialogCtrl.cities = brCidadesEstados.buscarCidadesPorSigla(dialogCtrl.selectedFederalState.sigla);
+            dialogCtrl.event.address.federal_state = dialogCtrl.selectedFederalState.nome;
         };
 
         dialogCtrl.setAnotherCountry = function isAnotherCountry() {
             clearSelectedState();
-            dialogCtrl.isAnotherCountry = dialogCtrl.event.country !== "Brasil";
+            dialogCtrl.isAnotherCountry = dialogCtrl.event.address.country !== "Brasil";
         };
 
         dialogCtrl.getStep = function getStep(step) {
@@ -277,9 +287,9 @@
         };
 
         function clearSelectedState() {
-            dialogCtrl.event.federal_state = "";
+            dialogCtrl.event.address.federal_state = "";
             dialogCtrl.selectedFederalState = "";
-            dialogCtrl.event.city = "";
+            dialogCtrl.event.address.city = "";
         }
 
         function loadFederalStates() {
@@ -305,8 +315,6 @@
         function create() {
             var event = new Event(dialogCtrl.event, dialogCtrl.user.current_institution.key);
             addLinks(event);
-            if (dialogCtrl.selectedFederalState)
-                event.federal_state = dialogCtrl.selectedFederalState.nome;
             if (event.isValid()) {
                 EventService.createEvent(event).then(function success(response) {
                     dialogCtrl.closeDialog();
@@ -322,8 +330,8 @@
         }
 
         function addLinks(event) {
-            let videoUrls = _.filter(dialogCtrl.videoUrls, videoUrl => videoUrl.url !== '');
-            let usefulLinks = _.filter(dialogCtrl.usefulLinks, usefulLink => usefulLink.url !== '');
+            let videoUrls = dialogCtrl.videoUrls.filter(videoUrl => videoUrl.url !== '');
+            let usefulLinks = dialogCtrl.usefulLinks.filter(usefulLink => usefulLink.url !== '');
             event.video_url = videoUrls;
             event.useful_links = usefulLinks;
         };
@@ -331,23 +339,51 @@
         function getCountries() {
             $http.get('app/institution/countries.json').then(function success(response) {
                 dialogCtrl.countries = response.data;
-                dialogCtrl.event.country = "Brasil";
             });
+        }
+
+        function initPatchObserver() {
+            dialogCtrl.dateChangeEvent = _.clone(dialogCtrl.event);
+            dialogCtrl.dateChangeEvent = new Event(dialogCtrl.dateChangeEvent, dialogCtrl.user.current_institution.key);
+            dialogCtrl.observer = jsonpatch.observe(dialogCtrl.event);
+        }
+
+        function loadEventDates() {
+            dialogCtrl.start_time = new Date(dialogCtrl.dateChangeEvent.start_time);
+            dialogCtrl.event.start_time = new Date(dialogCtrl.dateChangeEvent.start_time);
+            dialogCtrl.event.end_time = new Date(dialogCtrl.dateChangeEvent.end_time);
+        }
+
+        function loadSelectedState() {
+            if (dialogCtrl.event.address.federal_state) {
+                dialogCtrl.selectedFederalState = dialogCtrl.federalStates
+                    .filter(federalState => federalState.nome === dialogCtrl.event.address.federal_state)
+                    .reduce(federalState => federalState);
+                dialogCtrl.getCitiesByState();
+           }
+        }
+
+        function initUrlFields() {
+            if(dialogCtrl.event) {
+                dialogCtrl.videoUrls = dialogCtrl.event.video_url.concat([angular.copy(emptyUrl)]);
+                dialogCtrl.usefulLinks = dialogCtrl.event.useful_links.concat([angular.copy(emptyUrl)]);
+            } else {
+                dialogCtrl.videoUrls = [angular.copy(emptyUrl)];
+                dialogCtrl.usefulLinks = [angular.copy(emptyUrl)];
+            }
         }
 
         (function main() {
             getCountries();
             loadFederalStates();
+            initUrlFields();
             if(dialogCtrl.event) {
-                dialogCtrl.dateChangeEvent = _.clone(dialogCtrl.event);
-                dialogCtrl.dateChangeEvent.start_time = new Date(dialogCtrl.dateChangeEvent.start_time);
-                dialogCtrl.dateChangeEvent.end_time = new Date(dialogCtrl.dateChangeEvent.end_time);
-                dialogCtrl.dateChangeEvent = new Event(dialogCtrl.dateChangeEvent, dialogCtrl.user.current_institution.key);
-                dialogCtrl.observer = jsonpatch.observe(dialogCtrl.event);
+                dialogCtrl.photoUrl = dialogCtrl.event.photo_url;
+                loadSelectedState();
+                initPatchObserver();
+                loadEventDates();
             } else {
-                dialogCtrl.event = {};
-                dialogCtrl.videoUrls = [angular.copy(emptyUrl)];
-                dialogCtrl.usefulLinks = [angular.copy(emptyUrl)];
+                dialogCtrl.event = {address: {}};
             }
         })();
     });

@@ -1,7 +1,13 @@
 <md-menu md-position-mode="target-right target">
-  <md-button aria-label="menu" class="md-icon-button" ng-click="$mdMenu.open(ev)" ng-disabled="controller.notifications.length === 0">
-    <md-icon style="color:#81C784;">{{ controller.notifications.length === 0 ? 'notifications_none' : 'notifications'}}</md-icon>
-  </md-button>
+  <div>
+    <span ng-if="controller.notifications.length > 0"
+      style="position:relative; bottom: -1px; right:-33px;"
+      class="counter-of-notifications" data-badge="{{controller.number_of_notifications()}}">
+    </span>
+    <md-button aria-label="menu" class="md-icon-button" ng-click="$mdMenu.open(ev)" ng-disabled="controller.notifications.length === 0">
+      <md-icon style="color:#81C784;">{{ controller.notifications.length === 0 ? 'notifications_none' : 'notifications'}}</md-icon>
+    </md-button>
+  </div>
   <md-menu-content width="5">
     <md-list>
       <div layout="row" layout-align="end center">

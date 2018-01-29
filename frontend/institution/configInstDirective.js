@@ -300,7 +300,7 @@
             var necessaryFieldsForStep = {
                 0: {
                     fields: [configInstCtrl.newInstitution.address],
-                    isValid :  configInstCtrl.isValidAdress
+                    isValid :  configInstCtrl.isValidAddress
                 },
                 1: {
                     fields: [
@@ -319,7 +319,7 @@
             return necessaryFieldsForStep;
         }
 
-        configInstCtrl.isValidAdress =  function isValidAdress(currentStep){       
+        configInstCtrl.isValidAddress =  function isValidAddress(currentStep){       
             var valid = true;
             var address = configInstCtrl.address;    
             if(currentStep === 0 && address && address.country === "Brasil"){     

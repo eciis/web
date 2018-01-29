@@ -1,22 +1,22 @@
 <md-card flex="90" flex-gt-xs="95">
   <form name="saveForm" ng-submit="postCtrl.save(isEditing, originalPost, posts, saveForm)" style="margin: 0;">
-    <md-card-content layout="row" style="padding:5px;">
-      <md-card-content>
+    <md-card-content layout="row" style="padding:0;" layout-padding>
+      <div>
         <img ng-src="{{ postCtrl.getInstPhotoUrl()}}"
         title="{{postCtrl.user.current_institution.name}}"
-        style="border-radius: 50%; margin-top: 7px" width="50px" height="50px"/>
-      </md-card-content>
+        style="border-radius: 50%;" width="50px" height="50px"/>
+      </div>
       <div flex>
-        <md-card-content>
+        <div>
           <div ng-if="postCtrl.typePost === 'Common'"  layout="column">
-              <md-input-container md-no-float class="md-block" style="margin: 0px;">
+              <md-input-container md-no-float class="md-block" style="margin: 0px; padding-top: 10px;">
                 <input name="title" style="font-weight: bold; color: #00695C; border: 0;resize:none;"
                 ng-model="postCtrl.post.title" maxlength="100" placeholder="{{postCtrl.showPlaceholderMsg()}}" required>
                 <div ng-messages='saveForm.title.$error'>
                     <div ng-message="required">O post deve conter um título!</div>
                 </div>
               </md-input-container>
-              <md-input-container ng-show="postCtrl.isTyping()" md-no-float>
+              <md-input-container ng-show="postCtrl.isTyping()" md-no-float style="margin: 0px;">
                 <textarea name="message" style="border: 0; max-height: 400px;resize:none; overflow: auto;" ng-model="postCtrl.post.text" placeholder="Texto" id="text" class="hide-scrollbar" required>
                 </textarea>
                 <div ng-messages='saveForm.message.$error'>
@@ -36,13 +36,13 @@
             <!-- SURVEY -->
           <survey-directive ng-if="postCtrl.typePost === 'Survey'" post="postCtrl.post" posts="posts" user="postCtrl.user" callback="postCtrl.choiceCommon"
               options="postCtrl.options"></survey-directive>
-        </md-card-content>
+        </div>
       </div>
-      <md-card-content>
-        <md-card-actions layout="column" float>
+      <div>
+        <div layout="column" float>
           <md-menu md-offset="-199 70">
             <md-button class="md-fab md-primary" title="Opções"
-              style="margin-right: -100px; background-color: #7CB342"
+              style="margin-right: -35px; background-color: #7CB342"
               ng-click="$mdMenu.open(ev)">
               <md-icon>add</md-icon>
             </md-button>
@@ -90,8 +90,8 @@
               </md-menu-item>
             </md-menu-content>
           </md-menu>
-        </md-card-actions>
-      </md-card-content>
+        </div>
+      </div>
     </md-card-content>
     <md-card-content ng-show="postCtrl.hasMedia()">
       <div class="image-view" ng-if="postCtrl.showImage()">

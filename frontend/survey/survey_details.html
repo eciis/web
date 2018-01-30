@@ -20,7 +20,7 @@
         <md-checkbox ng-disabled="!surveyCtrl.canVote()" ng-checked="surveyCtrl.votedOption(option)"
           ng-if="surveyCtrl.showCheckboxButton()" ng-model="option.selected"></md-checkbox>
         <p style="padding:5px">{{option.text}}</p>
-        <div ng-if="surveyCtrl.userVoted()" ng-click="surveyCtrl.showMenu($event, option)" title="Clique para ver quem votou nessa opção">
+        <div ng-if="surveyCtrl.userVoted() || surveyCtrl.isSurveyAuthor()" ng-click="surveyCtrl.showMenu($event, option)" title="Clique para ver quem votou nessa opção">
           <div ng-class="surveyCtrl.votedOption(option)?'percentage-selected':'option-percentage'">
             {{option.percentage ? option.percentage : 0}}%
           </div>

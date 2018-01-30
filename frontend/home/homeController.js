@@ -190,6 +190,22 @@
             return actualEvents;
         }
 
+        homeCtrl.takeTour = function takeTour(event) {
+            $mdDialog.show({
+                templateUrl: 'app/invites/welcome_dialog.html',
+                controller: function WelcomeController() {
+                    var controller = this;
+                    controller.next = false;
+                    controller.cancel = function() {
+                        $mdDialog.cancel();
+                    };
+                },
+                controllerAs: "controller",
+                targetEvent: event,
+                clickOutsideToClose: false
+            });
+        };
+
         (function main() {
             NotificationService.watchPostNotification(homeCtrl.user.key, homeCtrl.setRefreshTimelineButton);
             loadEvents();

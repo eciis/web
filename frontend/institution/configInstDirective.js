@@ -319,10 +319,10 @@
             return necessaryFieldsForStep;
         }
 
-        configInstCtrl.isValidAddress =  function isValidAddress(currentStep){       
+        configInstCtrl.isValidAddress =  function isValidAddress(){       
             var valid = true;
             var address = configInstCtrl.address;    
-            if(currentStep === 0 && address && address.country === "Brasil"){     
+            if(address && address.country === "Brasil"){     
                 _.forEach(address, function(value, key) {     
                     if(! value || _.isEmpty(value)) {     
                         valid = false;        
@@ -342,7 +342,7 @@
                 }
             });
             isFieldValid = necessaryFieldsForStep[currentStep].isValid ? 
-                necessaryFieldsForStep[currentStep].isValid(currentStep) : true;
+                necessaryFieldsForStep[currentStep].isValid() : true;
             return isValid && isFieldValid;
         }
 

@@ -18,7 +18,7 @@
                   <img style="border-radius: 50%;" ng-src="{{ configProfileCtrl.photo_url }}" width="200px" height="200px">
                   <md-button ng-show="configProfileCtrl.showButton()" ng-click="null" ng-model="configProfileCtrl.file" ngf-pattern="'image/*'"
                   ngf-accept="'image/*'" ngf-max-size="5MB"
-                  ngf-select="configProfileCtrl.cropImage(configProfileCtrl.file)"
+                  ngf-select="configProfileCtrl.cropImage(configProfileCtrl.file, $event)"
                   class="md-icon-button edit-profile-avatar-button" style="width: 200px; height: 200px; margin-left: -1px;">
                   <md-icon class="edit-profile-avatar-icon">add_a_photo</md-icon>
                   <p><b style="color: white;">Alterar foto</b></p>

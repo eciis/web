@@ -85,8 +85,8 @@
             return promise;
         };
 
-        configInstCtrl.cropImage = function cropImage(image_file) {
-            CropImageService.crop(image_file).then(function success(croppedImage) {
+        configInstCtrl.cropImage = function cropImage(image_file, event) {
+            CropImageService.crop(image_file, event).then(function success(croppedImage) {
                 configInstCtrl.addImage(croppedImage);
             }, function error() {
                 configInstCtrl.file = null;

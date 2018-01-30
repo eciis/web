@@ -13,7 +13,7 @@
                     <md-button ng-show="configInstCtrl.showButton()" ng-click="null"
                         ng-model="configInstCtrl.file" ngf-pattern="'image/*'"
                         ngf-accept="'image/*'" ngf-max-size="5MB" class="md-raised"
-                        ngf-select="configInstCtrl.cropImage(configInstCtrl.file)">
+                        ngf-select="configInstCtrl.cropImage(configInstCtrl.file, $event)">
                         <b>Adicionar imagem</b>
                     </md-button>
                     <md-progress-linear ng-show="configInstCtrl.loading" md-mode="indeterminate"

@@ -496,16 +496,17 @@ a:active {
 .counter-of-notifications[data-badge]:after {
     content:attr(data-badge);
     position:absolute;
-    right:-10px;
-    font-size:.6em;
+    right:-12px;
+    font-size:.5em;
     background:#F4511E;
     color:white;
-    width:18px;
-    height:18px;
+    width:20px;
+    height:20px;
     text-align:center;
-    line-height:18px;
+    line-height:21px;
     border-radius:50%;
     box-shadow:0 0 1px #333;
+    z-index: 100;
 }
 
 .inst-timeline-center {

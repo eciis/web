@@ -83,54 +83,60 @@
                   <label>Site oficial</label>
                   <input type="url" ng-model="controller.event.official_site"/>
               </md-input-container>
-              <div layout="row">
-                  <md-input-container style="margin: 0">
-                      <label>Rua</label>
-                      <input ng-model="controller.event.address.street"/>
+              <div layout="row" layout-align="space-between">
+                <md-input-container style="margin: 0;" flex="45">
+                      <label>Nome do Local </label>
+                      <input ng-model="controller.event.local" required/>
                   </md-input-container>
-                  <md-input-container style="margin: 0">
-                      <label>Numero</label>
-                      <input ng-model="controller.event.address.number"/>
+                  <md-input-container style="margin: 0" flex="45">
+                      <label>Pais</label>
+                      <md-select ng-model="controller.event.address.country" ng-change="controller.setAnotherCountry()">
+                          <md-option ng-repeat="country in controller.countries"
+                            ng-value="country.nome_pais">{{country.nome_pais}}</md-option>
+                      </md-select>
                   </md-input-container>
               </div>
-            </div>
-            <div layout="row" layout-align="space-between center">
-                <md-input-container style="margin: 0; margin-top: 25px;" flex="45">
-                    <label>Local </label>
-                    <input ng-model="controller.event.local" required/>
-                </md-input-container>
-                <md-input-container style="margin: 0" flex="45">
-                    <label>Pais</label>
-                    <md-select ng-model="controller.event.address.country" ng-change="controller.setAnotherCountry()">
-                        <md-option ng-repeat="country in controller.countries"
-                          ng-value="country.nome_pais">{{country.nome_pais}}</md-option>
-                    </md-select>
-                </md-input-container>
-            </div>
-            <div layout="row" layout-align="space-between center">
-                <md-input-container style="margin: 0" flex="45" ng-if="controller.isAnotherCountry">
-                    <label>Estado</label>
-                    <input type="text" name="state" ng-model="controller.event.address.federal_state">
-                </md-input-container>
-                <md-input-container style="margin: 0" flex="45" ng-if="!controller.isAnotherCountry">
-                    <label>Estado</label>
-                    <md-select ng-model="controller.selectedFederalState" ng-change="controller.getCitiesByState()"
-                      ng-disabled="!controller.event.address.country" required/>
-                      <md-option ng-repeat="federal_state in controller.federalStates"
-                        ng-value="federal_state">{{federal_state.sigla}}</md-option>
-                    </md-select>
-                </md-input-container>
-                <md-input-container style="margin: 0" flex="45" ng-if="controller.isAnotherCountry">
-                    <label>Cidade</label>
-                    <input type="text" name="city" ng-model="controller.event.address.city">
-                </md-input-container>
-                <md-input-container style="margin: 0" flex="45" ng-if="!controller.isAnotherCountry">
-                    <label>Cidade</label>
-                    <md-select ng-model="controller.event.address.city"  ng-disabled="!controller.selectedFederalState"
-                      required/>
-                      <md-option ng-repeat="city in controller.cities" ng-value="city">{{city}}</md-option>
-                    </md-select>
-                </md-input-container>
+              <div layout="row" ng-class="controller.isAnotherCountry? 'address-another-country': ''" layout-align="space-between">
+                  <md-input-container style="margin: 0" flex="45" ng-if="controller.isAnotherCountry">
+                      <label>Estado</label>
+                      <input type="text" name="state" ng-model="controller.event.address.federal_state">
+                  </md-input-container>
+                  <md-input-container style="margin: 0" flex="45" ng-if="!controller.isAnotherCountry">
+                      <label>Estado</label>
+                      <md-select name="state" ng-model="controller.selectedFederalState" ng-change="controller.getCitiesByState()"
+                        ng-disabled="!controller.event.address.country" required/>
+                        <md-option ng-repeat="federal_state in controller.federalStates"
+                          ng-value="federal_state">{{federal_state.sigla}}</md-option>
+                      </md-select>
+                  </md-input-container>
+                  <md-input-container style="margin: 0" flex="45" ng-if="controller.isAnotherCountry">
+                      <label>Cidade</label>
+                      <input type="text" name="city" ng-model="controller.event.address.city">
+                  </md-input-container>
+                  <md-input-container style="margin: 0" flex="45" ng-if="!controller.isAnotherCountry">
+                      <label>Cidade</label>
+                      <md-select ng-model="controller.event.address.city"  ng-disabled="!controller.selectedFederalState"
+                        required/>
+                        <md-option ng-repeat="city in controller.cities" ng-value="city">{{city}}</md-option>
+                      </md-select>
+                      <div ng-messages>
+                          <div ng-show="createEvent.state.$pristine && !controller.isAnotherCountry"
+                              style="opacity: 0.9; margin-top: 2px; font-size: 0.8em;">
+                              Primeiro selecione um estado
+                          </div>
+                      </div>
+                  </md-input-container>
+              </div>
+              <div layout="row" layout-align="space-between">
+                  <md-input-container flex="65">
+                      <label>Rua</label>
+                      <input ng-required="!controller.isAnotherCountry" ng-model="controller.event.address.street"/>
+                  </md-input-container>
+                  <md-input-container flex="30">
+                      <label>Numero</label>
+                      <input ng-required="!controller.isAnotherCountry" ng-model="controller.event.address.number"/>
+                  </md-input-container>
+              </div>
             </div>
           </md-dialog-content>
           <md-dialog-content ng-if="controller.getStep(2)" class="hide-scrollbar" layout-padding>
@@ -193,7 +199,7 @@
               </div>
             </div>
           </md-dialog-content>
-          <md-dialog-actions layout="row">
+          <md-dialog-actions style="border:0px" layout="row">
               <md-button class="md-raised" md-colors="{background: 'default-teal-500'}" ng-click="controller.closeDialog()">
                   <span style="color: white;">cancelar</span>
               </md-button>

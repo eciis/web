@@ -766,6 +766,10 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
     text-align: left;
 }
 
+.address-another-country{
+    height: 34px;
+}
+
 .login-button md-icon {
     min-height: 10px;
     min-width: 10px;

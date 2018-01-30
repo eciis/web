@@ -71,11 +71,11 @@
               <h3>{{eventDetailsCtrl.event.local}}</h3>
               <span style="margin-top: -15px; color: #959796;">
                  {{eventDetailsCtrl.event.address.street ? eventDetailsCtrl.event.address.street + ', ' : ''}}
-                 {{eventDetailsCtrl.event.address.number ? eventDetailsCtrl.event.address.number : 'S/N'}}
+                 {{ eventDetailsCtrl.event.address.street && eventDetailsCtrl.event.address.number ? eventDetailsCtrl.event.address.number : eventDetailsCtrl.event.address.street ? 'S/N' : ''}}
                 </br>
                 {{eventDetailsCtrl.event.address.city ? eventDetailsCtrl.event.address.city : ''}}
-                {{eventDetailsCtrl.event.address.federal_state ? ', ' + eventDetailsCtrl.event.address.federal_state : ''}}
-                {{eventDetailsCtrl.event.address.country ? ' - ' + eventDetailsCtrl.event.address.country : ''}}
+                {{eventDetailsCtrl.event.address.federal_state ? ', ' + eventDetailsCtrl.event.address.federal_state + ' - ': ''}}
+                {{eventDetailsCtrl.event.address.country ? eventDetailsCtrl.event.address.country : ''}}
               </span>
             </div>
           </div>

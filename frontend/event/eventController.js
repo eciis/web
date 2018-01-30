@@ -256,10 +256,43 @@
             var currentStep = _.findIndex(dialogCtrl.steps, function(situation) {
                 return situation;
             });
-            dialogCtrl.steps[currentStep] = false;
-            var nextStep = currentStep + 1;
-            dialogCtrl.steps[nextStep] = true;
+            if(isCurrentStepValid(currentStep)){
+                dialogCtrl.steps[currentStep] = false;
+                var nextStep = currentStep + 1;
+                dialogCtrl.steps[nextStep] = true;
+            } else {
+                MessageService.showToast("Preencha os campos obrigatórios corretamente.");
+            }
         };
+
+        dialogCtrl.isValidAddress = function isValidAddress(){
+            
+        }
+
+        function getRequireAttributesStep() {
+            var necessaryFieldsForStep = {
+                0: {
+                    attributes: ["title", "start_time", "end_time"],
+                    isValid: dialogCtrl.isValidAddress
+                }
+
+            };
+            return necessaryFieldsForStep;
+        }
+
+        function isCurrentStepValid(currentStep) {
+            var isValid = true;
+            var necessaryFieldsForStep = getRequireAttributesStep();
+            _.forEach(necessaryFieldsForStep[currentStep].fields, function(field) {
+                if(_.isUndefined(field) || _.isEmpty(field)) {
+                    isValid = false;
+                }
+            });
+            var size = necessaryFieldsForStep[currentStep].size;
+            if(size)
+                isValid = _.size(necessaryFieldsForStep[currentStep].fields[0]) === size;
+            return isValid;
+        }
 
         dialogCtrl.nextStepOrSave = function nextStepOrSave() {
             if (dialogCtrl.getStep(3)) {

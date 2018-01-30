@@ -86,11 +86,11 @@
               <div layout="row">
                   <md-input-container style="margin: 0">
                       <label>Rua</label>
-                      <input ng-model="controller.event.address.street"/>
+                      <input ng-required="!controller.isAnotherCountry" ng-model="controller.event.address.street"/>
                   </md-input-container>
                   <md-input-container style="margin: 0">
                       <label>Numero</label>
-                      <input ng-model="controller.event.address.number"/>
+                      <input ng-required="!controller.isAnotherCountry" ng-model="controller.event.address.number"/>
                   </md-input-container>
               </div>
             </div>

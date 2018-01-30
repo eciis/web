@@ -434,6 +434,7 @@
             initUrlFields();
             if(dialogCtrl.event) {
                 dialogCtrl.photoUrl = dialogCtrl.event.photo_url;
+                dialogCtrl.isAnotherCountry = dialogCtrl.event.address.country !== "Brasil";
                 loadSelectedState();
                 initPatchObserver();
                 loadEventDates();

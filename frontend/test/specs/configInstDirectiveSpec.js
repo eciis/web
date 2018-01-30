@@ -326,4 +326,44 @@ describe('Test ConfigInstDirective', function() {
             expect(greenButton).toEqual(false);
         });
     });
+
+    describe('getPortfolioButtonMessage()', function() {
+        it('should return "Trocar Portfólio"', function() {
+            editInstCtrl.newInstitution.portfolio_url = "portfolio/test";
+            var message = editInstCtrl.getPortfolioButtonMessage();
+            expect(message).toEqual("Trocar Portfólio");
+            delete editInstCtrl.newInstitution.portfolio_url;
+            editInstCtrl.file = "portfolio/test";
+            message = editInstCtrl.getPortfolioButtonMessage();
+            expect(message).toEqual("Trocar Portfólio");
+            editInstCtrl.newInstitution.portfolio_url = "portfolio/test";
+            message = editInstCtrl.getPortfolioButtonMessage();
+            expect(message).toEqual("Trocar Portfólio");
+        });
+
+        it('should return "Adicionar Portfólio"', function () {
+            var message = editInstCtrl.getPortfolioButtonMessage();
+            expect(message).toEqual("Adicionar Portfólio");
+        });
+    });
+
+    describe('getPortfolioButtonIcon()', function () {
+        it('should return "insert_drive_file"', function () {
+            editInstCtrl.newInstitution.portfolio_url = "portfolio/test";
+            var message = editInstCtrl.getPortfolioButtonIcon();
+            expect(message).toEqual("insert_drive_file");
+            delete editInstCtrl.newInstitution.portfolio_url;
+            editInstCtrl.file = "portfolio/test";
+            message = editInstCtrl.getPortfolioButtonIcon();
+            expect(message).toEqual("insert_drive_file");
+            editInstCtrl.newInstitution.portfolio_url = "portfolio/test";
+            message = editInstCtrl.getPortfolioButtonIcon();
+            expect(message).toEqual("insert_drive_file");
+        });
+
+        it('should return "attach_file"', function () {
+            var message = editInstCtrl.getPortfolioButtonIcon();
+            expect(message).toEqual("attach_file");
+        });
+    });
 });

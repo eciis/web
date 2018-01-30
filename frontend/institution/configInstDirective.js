@@ -21,7 +21,7 @@
         };
         configInstCtrl.steps = [true, false, false];
 
-        configInstCtrl.descriptionGuide = "Descrever neste campo as áreas de atuação da sua instituição considerando a missão e objetivos, os principais produtos e/ou serviços, as interfaces com os demais atores e as articulações institucionais no âmbito do CIS(utilize palavras de destaque que possam ser utilizadas como palavras-chave na pesquisa avançada do e-CIS)";
+        configInstCtrl.descriptionGuide = "Descrever neste campo as áreas de atuação da sua instituição considerando a missão e objetivos, os principais produtos e/ou serviços, as interfaces com os demais atores e as articulações institucionais no âmbito do CIS(utilize palavras de destaque que possam ser utilizadas como palavras-chave na pesquisa avançada da Plataforma CIS)";
 
         getLegalNatures();
         getActuationAreas();

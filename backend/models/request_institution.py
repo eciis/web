@@ -34,14 +34,14 @@ class RequestInstitution(Request):
         Lamentamos informar mas o seu pedido não foi aceito.
         Sugerimos que fale com o seu superior para que seja enviado um convite.
 
-        Equipe e-CIS"""
+        Equipe da Plataforma CIS"""
 
         acceptMessage = """Olá,
-        A instituição %s foi aceita na plataforma, seja bem vindo ao e-CIS.
+        A instituição %s foi aceita na plataforma, seja bem vindo a Plataforma CIS.
         Realize seu login no link abaixo:
         http://%s/signin
 
-        Equipe e-CIS""" % (institution_name, host)
+        Equipe da Plataforma CIS""" % (institution_name, host)
 
         sender_email = self.sender_key.get().email[0]
         body = acceptMessage if operation == "ACCEPT" else rejectMessage
@@ -56,7 +56,7 @@ class RequestInstitution(Request):
         Sua instituição recebeu um novo pedido. Acesse:
         http://%s/requests/%s/institution_children para analisar o mesmo.
 
-        Equipe e-CIS """ % (host, request_key)
+        Equipe da Plataforma CIS """ % (host, request_key)
 
         super_users = getSuperUsers()
 

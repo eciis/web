@@ -66,7 +66,7 @@ class InstitutionMembersHandler(BaseHandler):
             """ % (justification)
 
         body = message + """
-        Equipe e-CIS
+        Equipe da Plataforma CIS
         """
         email_sender = RemoveMemberEmailSender(**{
             'receiver': member.email,

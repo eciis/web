@@ -29,7 +29,7 @@ class RequestInstitutionChildren(Request):
         Sua instituição recebeu um novo pedido. Acesse:
         http://%s/requests/%s/institution_children para analisar o mesmo.
 
-        Equipe e-CIS """ % (host, request_key)
+        Equipe da Plataforma CIS """ % (host, request_key)
         super(RequestInstitutionChildren, self).send_email(host, requested_email, body)
 
     def send_notification(self, user):

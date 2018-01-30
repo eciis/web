@@ -56,7 +56,7 @@
             Compartilhar
           </md-button>
         </md-menu-item>
-        <md-menu-item>
+        <md-menu-item ng-if="!postDetailsCtrl.isPostAuthor()">
           <md-button aria-label="Favorite" ng-click="postDetailsCtrl.addOrRemoveSubscriber()"
             ng-disabled="postDetailsCtrl.disableButton()" ng-class="postDetailsCtrl.isSubscriber()?'md-warn':''"
             title="Marcar interesse e receber notificações">

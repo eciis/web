@@ -16,9 +16,20 @@ Institution.prototype.make = function make() {
     return institution;
 };
 
+Institution.prototype.isValidAddress = function isValidAdress(){
+    var valid = true;
+    if(this.address && this.address.country === "Brasil"){
+        _.forEach(this.address, function(value, key) {
+            if(! value || _.isEmpty(value)) {
+                valid = false;
+            }
+        });
+    }
+    return valid;
+};
 
 Institution.prototype.isValid = function isValid() {
-    var required_fields = [this.name, this.legal_nature, this.address,
+    var required_fields = [this.name, this.legal_nature,
         this.actuation_area, this.leader, this.description];
     var isValid = true;
 
@@ -27,7 +38,7 @@ Institution.prototype.isValid = function isValid() {
             isValid = false;
         }
     });
-    return isValid;
+    return isValid && this.isValidAddress();
 };
 
 Institution.prototype.addInvite = function addInvite(invite){

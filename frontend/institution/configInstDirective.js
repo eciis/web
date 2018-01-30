@@ -298,32 +298,52 @@
 
         function getFields() {
             var necessaryFieldsForStep = {
-                0: {fields: [configInstCtrl.newInstitution.address], size: 7},
-                1: {fields: [
+                0: {
+                    fields: [configInstCtrl.newInstitution.address],
+                    isValid :  configInstCtrl.isValidAddress
+                },
+                1: {
+                    fields: [
                     configInstCtrl.newInstitution.name,
                     configInstCtrl.newInstitution.actuation_area,
                     configInstCtrl.newInstitution.legal_nature
-                    ]},
-                2: {fields: [
+                    ]
+                },
+                2: {
+                    fields: [
                     configInstCtrl.newInstitution.leader,
                     configInstCtrl.newInstitution.description
-                    ]}
+                    ]
+                }
             };
             return necessaryFieldsForStep;
         }
 
+        configInstCtrl.isValidAddress =  function isValidAddress(){       
+            var valid = true;
+            var address = configInstCtrl.address;    
+            if(address && address.country === "Brasil"){     
+                _.forEach(address, function(value, key) {     
+                    if(! value || _.isEmpty(value)) {     
+                        valid = false;        
+                    }     
+                });       
+            }     
+            return valid;     
+         }     
+
         function isCurrentStepValid(currentStep) {
             var isValid = true;
+            var isFieldValid = true;
             var necessaryFieldsForStep = getFields();
             _.forEach(necessaryFieldsForStep[currentStep].fields, function(field) {
                 if(_.isUndefined(field) || _.isEmpty(field)) {
                     isValid = false;
                 }
             });
-            var size = necessaryFieldsForStep[currentStep].size;
-            if(size)
-                isValid = _.size(necessaryFieldsForStep[currentStep].fields[0]) === size;
-            return isValid;
+            isFieldValid = necessaryFieldsForStep[currentStep].isValid ? 
+                necessaryFieldsForStep[currentStep].isValid() : true;
+            return isValid && isFieldValid;
         }
 
         function changeInstitution(institution) {

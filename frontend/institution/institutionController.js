@@ -186,6 +186,10 @@
             $state.go('app.institution.events', {institutionKey: institutionKey});
         };
 
+        institutionCtrl.goToHome = function goToHome() {
+            $state.go('app.user.home');
+        };
+
         institutionCtrl.hasChildrenActive = function hasChildrenActive(institution) {
             return institution && !_.isEmpty(institution.children_institutions) && _.some(institution.children_institutions, {'state' :'active'});
         };

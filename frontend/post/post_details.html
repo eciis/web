@@ -1,5 +1,9 @@
-<div ng-show="postDetailsCtrl.isPostEmpty()" layout="row" layout-align="center center">
-  <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+<div layout="column" layout-align="center center" layout-fill ng-show="postDetailsCtrl.isPostEmpty()">
+  <div layout="row" layout-align="center center">
+    <div layout-align="center center">
+      <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+    </div>
+  </div>
 </div>
 <md-card ng-class="postDetailsCtrl.isDeleted(postDetailsCtrl.post)|| postDetailsCtrl.isDeletedEvent(postDetailsCtrl.post)?'post-deleted':''"
   ng-hide="postDetailsCtrl.isHidden() || postDetailsCtrl.isPostEmpty()">

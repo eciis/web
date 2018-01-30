@@ -14,6 +14,7 @@
 
         manageMemberCtrl.showSendInvite = true;
         manageMemberCtrl.isLoadingMembers = true;
+        manageMemberCtrl.isLoadingInvite = false;
         manageMemberCtrl.showInvites = false;
         manageMemberCtrl.showRequests = false;
         manageMemberCtrl.showMembers = false;
@@ -56,6 +57,7 @@
             invite.sender_name = manageMemberCtrl.user.name;
 
             if (manageMemberCtrl.isUserInviteValid(invite)) {
+                manageMemberCtrl.isLoadingInvite = true;
                 var promise = InviteService.sendInvite(invite);
                 promise.then(function success(response) {
                     invite.key = response.data.key;
@@ -63,8 +65,10 @@
                     manageMemberCtrl.invite = {};
                     manageMemberCtrl.showInvites = true; 
                     manageMemberCtrl.showSendInvite = false;
+                    manageMemberCtrl.isLoadingInvite = false;
                     MessageService.showToast('Convite enviado com sucesso!');
                 }, function error(response) {
+                    manageMemberCtrl.isLoadingInvite = false;
                     MessageService.showToast(response.data.msg);
                 });
                 return promise;

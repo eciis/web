@@ -3,9 +3,9 @@
     <div layout="row" layout-xs="column" layout-align="center center">
       <div flex-sm="60" flex-gt-sm="40" layout-align="center center">
         <div ng-show="newInviteCtrl.loading" layout="row" layout-align="center center">
-          <md-progress-circular md-mode="indeterminate" style="width: 20%"></md-progress-circular>
+          <md-progress-circular md-mode="indeterminate"></md-progress-circular>
         </div>
-        <md-card>
+        <md-card ng-show="!newInviteCtrl.loading">
           <md-card-content style="background-color:#FFFFFF;" layout="column" layout-align="center">
             <div align="center">
               <img src="app/images/logowithname.png" aria-label="e-CIS Logo" style="width: 50%;">

@@ -523,7 +523,17 @@ a:active {
 }
 
 .hide-scrollbar::-webkit-scrollbar {
-    display: none;
+    width: .3em;
+    height: .3em;
+}
+.hide-scrollbar::-webkit-scrollbar-button {
+    background: #009688
+}
+.hide-scrollbar::-webkit-scrollbar-track-piece {
+    background: #ccc
+}
+.hide-scrollbar::-webkit-scrollbar-thumb {
+    background: #009688
 }
 
 .card-title-light {

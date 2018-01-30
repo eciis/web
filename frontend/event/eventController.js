@@ -266,31 +266,50 @@
         };
 
         dialogCtrl.isValidAddress = function isValidAddress(){
-            
-        }
+            var valid = true;
+            var address = dialogCtrl.event.address;
+            var attributes = ["street", "number", "country", "federal_state", "city"];
+            if(address && address.country === "Brasil"){     
+                _.forEach(attributes, function(attr) {     
+                    var value = _.get(dialogCtrl.event.address, attr);
+                    if(! value || _.isUndefined(value) || _.isEmpty(value)) {
+                        valid = false;
+                    }   
+                });       
+            }     
+            return valid;
+        };
 
-        function getRequireAttributesStep() {
+        function getFields() {
             var necessaryFieldsForStep = {
                 0: {
-                    attributes: ["title", "start_time", "end_time"],
+                    fields: [
+                        dialogCtrl.event.title,
+                        dialogCtrl.event.local,
+                        dialogCtrl.event.address
+                    ],
                     isValid: dialogCtrl.isValidAddress
                 }
-
             };
             return necessaryFieldsForStep;
         }
 
         function isCurrentStepValid(currentStep) {
+            var necessaryFieldsForStep = getFields();
             var isValid = true;
-            var necessaryFieldsForStep = getRequireAttributesStep();
-            _.forEach(necessaryFieldsForStep[currentStep].fields, function(field) {
-                if(_.isUndefined(field) || _.isEmpty(field)) {
-                    isValid = false;
-                }
-            });
-            var size = necessaryFieldsForStep[currentStep].size;
-            if(size)
-                isValid = _.size(necessaryFieldsForStep[currentStep].fields[0]) === size;
+
+            if(! _.isUndefined(necessaryFieldsForStep[currentStep])){
+                _.forEach(necessaryFieldsForStep[currentStep].fields, function(field) {
+                    if(_.isUndefined(field) || _.isEmpty(field)) {
+                        isValid = false;
+                    }
+                });
+
+                var isValidFunction = necessaryFieldsForStep[currentStep].isValid ? 
+                    necessaryFieldsForStep[currentStep].isValid() : true;
+                isValid = isValid && isValidFunction;
+
+            }
             return isValid;
         }
 
@@ -407,6 +426,9 @@
         }
 
         (function main() {
+            var address = {
+                            country : "Brasil"
+                        };
             getCountries();
             loadFederalStates();
             initUrlFields();
@@ -416,7 +438,9 @@
                 initPatchObserver();
                 loadEventDates();
             } else {
-                dialogCtrl.event = {address: {}};
+                dialogCtrl.event = {
+                                    address: address
+                                    };
             }
         })();
     });

@@ -83,19 +83,19 @@
                   <label>Site oficial</label>
                   <input type="url" ng-model="controller.event.official_site"/>
               </md-input-container>
-              <div layout="row">
-                  <md-input-container style="margin: 0">
+              <div layout="row" layout-align="space-between">
+                  <md-input-container flex="65" style="margin: 0">
                       <label>Rua</label>
                       <input ng-required="!controller.isAnotherCountry" ng-model="controller.event.address.street"/>
                   </md-input-container>
-                  <md-input-container style="margin: 0">
+                  <md-input-container flex="30" style="margin: 0">
                       <label>Numero</label>
                       <input ng-required="!controller.isAnotherCountry" ng-model="controller.event.address.number"/>
                   </md-input-container>
               </div>
             </div>
-            <div layout="row" layout-align="space-between center">
-                <md-input-container style="margin: 0; margin-top: 25px;" flex="45">
+            <div layout="row" layout-align="space-between">
+                <md-input-container style="margin: 0;" flex="45">
                     <label>Local </label>
                     <input ng-model="controller.event.local" required/>
                 </md-input-container>

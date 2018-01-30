@@ -21,6 +21,15 @@
       state: 'active'
   };
 
+  var address = {
+        city: "city",
+        country: "Country",
+        neighbourhood: "neighbourhood",
+        number: "555",
+        state: "State",
+        street: "Street x"
+    };
+
   // Event of SPLAB by User
   var event = {
     'title': 'Title',
@@ -31,7 +40,7 @@
     'end_time': date_now,
     'video_url': [], 
     'useful_links': [],
-    'country': 'Brasil'
+    'address': address
   };
 
   var post = new Post({}, splab.key);
@@ -214,6 +223,7 @@
       describe('getStep', function() {
         it('should return if step is current', function () {
           spyOn(controller, 'save').and.callFake(function() {});
+          controller.event.local = "Local";
 
           expect(controller.getStep(1)).toEqual(true);
           controller.nextStep();
@@ -231,7 +241,45 @@
           expect(controller.getStep(2)).toEqual(false);
           expect(controller.getStep(3)).toEqual(true);
         });
-      }); 
+      });
+
+      describe('nextStep', function() {
+        beforeEach(function() {
+            controller.steps = [true, false, false];
+        });
+
+        it('should call showToast', function() {
+            spyOn(messageService, 'showToast');
+            controller.event.address = {};
+            controller.nextStep();
+            expect(messageService.showToast).toHaveBeenCalled();
+        });
+
+        it('should not pass from first step', function() {
+            controller.event.address = undefined;
+            controller.nextStep();
+            expect(controller.getStep(1)).toEqual(true);
+            controller.event.address = {
+                street: "floriano",
+                city: "example",
+                country: "Brasil"
+            };
+            expect(controller.getStep(1)).toEqual(true);
+        });
+
+        it('should not pass from second step', function() {
+            controller.event.title = "";
+            controller.nextStep();
+            expect(controller.steps).toEqual([true, false, false]);
+        });
+
+        it('should not pass from second step', function() {
+            controller.event.title = "Title";
+            controller.event.local = "";
+            controller.nextStep();
+            expect(controller.steps).toEqual([true, false, false]);
+        });
+    }); 
     });
   });
 }));

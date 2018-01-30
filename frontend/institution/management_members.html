@@ -22,7 +22,10 @@
             <label>Email convite deve ser enviado para:</label>
             <input ng-model="manageMemberCtrl.invite.invitee" type="email" name="email" required>
           </md-input-container>
-          <section layout="row" layout="column" layout-align="end center" layout-wrap>
+          <div flex layout-align="center center" layout="row" ng-if="manageMemberCtrl.isLoadingInvite">
+            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+          </div>
+          <section layout="row" layout="column" layout-align="end center" layout-wrap ng-if="!manageMemberCtrl.isLoadingInvite">
             <md-button md-colors="{background: 'teal-500'}" ng-click="manageMemberCtrl.cancelInvite()">Cancelar</md-button>
             <md-button type="submit" md-colors="{background: 'teal-500'}">Enviar Convite</md-button>
           </section>
@@ -95,7 +98,7 @@
           ng-style="manageMemberCtrl.calculateHeight(manageMemberCtrl.sent_invitations)" ng-scrollbars>
         <md-list>
           <md-list-item class="md-2-line" ng-repeat="invite in manageMemberCtrl.sent_invitations" ng-click="null">
-            <md-icon class="md-avatar-icon"
+            <md-icon class="md-avatar-icon" style="margin-top: 2px"
             md-colors="{background: 'light-green-500', color: 'grey-50'}">account_box</md-icon>
             <div class="md-list-item-text">
               <h3> {{ invite.invitee }} </h3>

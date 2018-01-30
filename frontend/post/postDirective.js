@@ -94,7 +94,9 @@
             }
         };
 
-        postCtrl.save = function save(isEditing, originalPost, posts) {
+        postCtrl.save = function save(isEditing, originalPost, posts, saveForm) {
+            saveForm.$setPristine();
+            saveForm.$setUntouched();
             if(isEditing) {
                 postCtrl.editPost(originalPost);
             } else {

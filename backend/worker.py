@@ -65,7 +65,7 @@ class SendEmailHandler(BaseHandler):
         env = Environment(loader=FileSystemLoader('templates'))
         template = env.get_template(self.request.get('html'))
         html_content = json.loads(self.request.get('json'))
-        mail.send_mail(sender="Plataforma Virtual CIS <eciis@splab.ufcg.edu.br>",
+        mail.send_mail(sender="Plataforma Virtual CIS <plataformavirtualcis@gmail.com>",
                        to="<%s>" % invitee,
                        subject=subject,
                        body="",
@@ -134,7 +134,7 @@ class EmailMembersHandler(BaseHandler):
                 '%s'
                 """ % justification
             
-            mail.send_mail(sender="Plataforma Virtual CIS <eciis@splab.ufcg.edu.br>",
+            mail.send_mail(sender="Plataforma Virtual CIS <plataformavirtualcis@gmail.com>",
                         to="<%s>" % member.email,
                         subject=subject,
                         body="",

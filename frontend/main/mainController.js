@@ -6,7 +6,7 @@
             AuthService, $rootScope, $q, RequestInvitationService,
             InviteService, $mdMenu, $window) {
         var mainCtrl = this;
-        var url_report = "http://support.plataformacis.org";
+        var url_report = "http://support.plataformacis.org/report";
 
         mainCtrl.search_keyword = "";
         mainCtrl.user = AuthService.getCurrentUser();

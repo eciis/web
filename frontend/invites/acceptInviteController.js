@@ -23,10 +23,11 @@
         };
 
         controller.signin = function signin() {
-            if (AuthService.isLoggedIn())
+            if (AuthService.isLoggedIn()) {
                 $state.go("new_invite", {key: invite_id});
-            else
+            } else {
                 $state.go('signin');
+            }
         };
         
         controller.cancelSignup = function cancelSignup() {

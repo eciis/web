@@ -139,14 +139,14 @@
                                                 md-colors="{background: 'teal-900'}" ng-show="configInstCtrl.showButton()" ng-click="null"
                                                 ng-model="configInstCtrl.file" ngf-pattern="'image/*'"
                                                 ngf-accept="'image/*'" ngf-max-size="5MB" class="md-raised"
-                                                ngf-select="configInstCtrl.cropImage(configInstCtrl.file)" ng-if="!configInstCtrl.showImage()">
+                                                ngf-select="configInstCtrl.cropImage(configInstCtrl.file, $event)" ng-if="!configInstCtrl.showImage()">
                                                 <md-icon flex-xs="10" style="color: #FFFFFF; font-size: 35px; margin: 0 0 10px 8px;">add_a_photo</md-icon>
                                             </md-button>
                                             <md-button layout="row" class="md-icon-button" style="border-radius: 50%; height: 80px; width: 80px;"
                                                 ng-show="configInstCtrl.showButton()" ng-click="null"
                                                 ng-model="configInstCtrl.file" ngf-pattern="'image/*'"
                                                 ngf-accept="'image/*'" ngf-max-size="5MB" class="md-raised"
-                                                ngf-select="configInstCtrl.cropImage(configInstCtrl.file)" ng-if="configInstCtrl.showImage()">
+                                                ngf-select="configInstCtrl.cropImage(configInstCtrl.file, $event)" ng-if="configInstCtrl.showImage()">
                                                 <img ng-if="configInstCtrl.showImage()" style="border-radius: 50%; width: 100%; height: 100%;" ng-src="{{ configInstCtrl.newInstitution.photo_url }}"/>
                                             </md-button>
                                         </div>

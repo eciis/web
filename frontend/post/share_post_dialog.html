@@ -31,17 +31,7 @@
           <span ng-if="!sharePostCtrl.isSurvey() && !sharePostCtrl.isEvent()" class="md-text">
             <b>{{ sharePostCtrl.post.title }}</b>
           </span>
-          <event-details ng-if="sharePostCtrl.isEvent()" event="sharePostCtrl.post" is-event-page=false></event-details>
-          <!--<p ng-if="sharePostCtrl.isEvent()">
-            <span class="md-caption">Local:</span> 
-            <span md-colors="{color: 'default-teal-900'}">{{ sharePostCtrl.post.local }}</span> | 
-            <b md-colors="{color: 'default-teal-900'}">
-              {{ sharePostCtrl.post.start_time | amUtc | amLocal | amCalendar:referenceTime:formats }}
-            </b> até
-            <b md-colors="{color: 'default-teal-900'}">
-              {{ sharePostCtrl.post.end_time | amUtc | amLocal | amCalendar:referenceTime:formats }}
-            </b>
-          </p>-->         
+          <event-details ng-if="sharePostCtrl.isEvent()" event="sharePostCtrl.post" is-event-page=false></event-details>        
           <span class="md-subhead" ng-if="!sharePostCtrl.isEvent()" ng-bind-html="sharePostCtrl.postToURL(sharePostCtrl.post.text)"></span>
           <pdf-view pdf-files='sharePostCtrl.post.pdf_files' is-editing="false"></pdf-view>
           <survey-details ng-if="sharePostCtrl.isSurvey()" post="sharePostCtrl.post" posts="sharePostCtrl.posts" user="sharePostCtrl.user" isdialog="true"></survey-details>

@@ -103,7 +103,7 @@ var Utils = {
         };
     },
     currentInstitutionToString: function currentInstitutionToString(currentInstitution) {
-        currentInstitution = {
+        var currentInstitution = {
             name: currentInstitution.name
         };
         return JSON.stringify(currentInstitution);

@@ -6,7 +6,7 @@
   <!-- LEFT SIDE PANEL -->
     <md-sidenav class="md-sidenav-left" md-component-id="leftNav" md-whiteframe="4" layout="row"
     md-is-locked-open="$mdMedia('gt-sm')" flex-gt-md="25">
-      <md-content class="hide-scrollbar" layout="column" hide show-gt-sm
+      <md-content class="custom-scrollbar" layout="column" hide show-gt-sm
       md-colors="{background: 'grey-100'}" flex>
         <div class="container">
           <div class="row">
@@ -64,7 +64,7 @@
     </md-sidenav>
 
     <!-- CONTENT -->
-    <md-content id="content" flex-gt-md="70" flex class="body hide-scrollbar">
+    <md-content id="content" flex-gt-md="70" flex class="body custom-scrollbar">
       <div ui-view="content_manage_institution" flex layout="column"></div>
     </md-content>
   <div>

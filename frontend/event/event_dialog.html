@@ -2,7 +2,7 @@
   <div style="padding:0;">
     <md-card style="max-width: 100%; margin:0;">
       <md-card-content style="padding: 8px;">
-        <div layout="row" layout-align="space-between center" class="hide-scrollbar" style="overflow-y: auto;">
+        <div layout="row" layout-align="space-between center" class="custom-scrollbar" style="overflow-y: auto;">
           <div layout="row" layout-align="center center">
             <span class="green-circle" style="color: #FFFFFF; width: 20px; height: 20px;">
               <span layout="row" layout-algin="center">
@@ -47,7 +47,7 @@
     <div layout="column" flex="100" layout-padding style="padding: 0;">
       <md-dialog style="max-width: 100%;">
         <form name="createEvent" ng-submit="controller.nextStepOrSave()">
-          <md-dialog-content class="hide-scrollbar" layout-padding ng-if="controller.getStep(1)">
+          <md-dialog-content class="custom-scrollbar" layout-padding ng-if="controller.getStep(1)">
             <div md-colors="{background: 'default-teal-500'}" layout="column" layout-align="center center" layout-padding
               style="overflow: hidden; height: 150px; padding-left: 0; padding-right: 0;" class="event-image-view">
               <button ng-click="controller.cleanImage()" type="button" class="event-image-view-button"
@@ -133,7 +133,7 @@
                 </md-input-container>
             </div>
           </md-dialog-content>
-          <md-dialog-content ng-if="controller.getStep(2)" class="hide-scrollbar" layout-padding>
+          <md-dialog-content ng-if="controller.getStep(2)" class="custom-scrollbar" layout-padding>
             <div layout="row" layout-align="center center">
               <div layout="column" flex="95">
                 <md-input-container class="md-block">
@@ -151,12 +151,12 @@
               </div>
             </div>
           </md-dialog-content>
-          <md-dialog-content ng-if="controller.getStep(3)" layout-padding class="hide-scrollbar">
+          <md-dialog-content ng-if="controller.getStep(3)" layout-padding class="custom-scrollbar">
             <div layout="row" layout-align="center center">
               <div flex="95" layout="column">
                 <div layout-margin>
                   <p class="md-subheader">Vídeos</p>
-                  <div class="hide-scrollbar" style="max-height: 25%; overflow-y:auto; margin: 8px 0 8px 0;">
+                  <div class="custom-scrollbar" style="max-height: 25%; overflow-y:auto; margin: 8px 0 8px 0;">
                     <div ng-repeat="videoUrl in controller.videoUrls" layout="column">
                       <md-input-container class="md-block" style="height: 25px;">
                         <label>Link do Youtube</label>
@@ -176,7 +176,7 @@
                 </div>
                 <div layout-margin>
                   <p class="md-subheader">Links úteis</p>
-                  <div class="hide-scrollbar" style="max-height: 25%; overflow-y:auto; margin: 8px 0 8px 0;">
+                  <div class="custom-scrollbar" style="max-height: 25%; overflow-y:auto; margin: 8px 0 8px 0;">
                     <div ng-repeat="usefulLink in controller.usefulLinks" layout="column">
                       <md-input-container class="md-block" style="height: 25px;">
                         <label>Link</label>

@@ -1,4 +1,4 @@
-<form layout="column">
+<form name="saveSurvey" layout="column" ng-submit="surveyCtrl.save()">
   <md-input-container md-no-float class="md-block" style="margin: 0px;">
     <input ng-model="surveyCtrl.post.title" placeholder="Pergunte algo" 
     style="font-weight: bold; color: #00695C ; margin: 0px; border: 0;resize:none;"/>
@@ -12,21 +12,24 @@
     </md-content>
     <md-input-container class="md-block">
       <label>Data limite</label>
-      <input mdc-datetime-picker="" short-time="false" date="true" time="true" type="text" 
+      <input name="date" mdc-datetime-picker="" short-time="false" date="true" time="true" type="text" 
         format="DD/MM/YYYY HH:mm" lang="pt-BR" placeholder="Receber respostas até..." 
         ng-model="surveyCtrl.post.deadline" class=" md-input" today-text="Hoje" min-date="surveyCtrl.now" 
-        readonly="readonly" cancel-text="Cancelar">
+        readonly="readonly" cancel-text="Cancelar" required>
+        <div ng-messages="saveSurvey.date.$error">
+          <div ng-message="required">Insira a data limite da enquente.</div>
+        </div>
     </md-input-container>
-  </div>
-</form>      
-<md-actions layout="row" layout-align="space-between-center" ng-if="surveyCtrl.isTyping()">
-    <md-switch ng-model="surveyCtrl.multipleChoice" required> MULTIPLA ESCOLHA
-    </md-switch>
-    <div style="right: 0">
-      <md-button title="Cancelar" ng-click="surveyCtrl.resetSurvey()" md-colors="{color: 'default-teal-500'}">CANCELAR
-      </md-button>
-      <md-button title="Enviar" ng-click="surveyCtrl.save()" md-colors="{background: 'default-teal-500'}">POSTAR
-      </md-button>
-    </div>
-</md-actions>
+  </div> 
+  <md-actions layout="row" layout-align="space-between-center" ng-if="surveyCtrl.isTyping()">
+      <md-switch ng-model="surveyCtrl.multipleChoice" required> MULTIPLA ESCOLHA
+      </md-switch>
+      <div style="right: 0">
+        <md-button title="Cancelar" ng-click="surveyCtrl.resetSurvey()" md-colors="{color: 'default-teal-500'}">CANCELAR
+        </md-button>
+        <md-button title="Enviar" type="submit" md-colors="{background: 'default-teal-500'}">POSTAR
+        </md-button>
+      </div>
+  </md-actions>
+</form>
 

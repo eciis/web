@@ -167,8 +167,8 @@
       </span>
     </div>
   </div>  
-  <md-card-content>
-      <div ng-if="postDetailsCtrl.showTextPost()">
+  <md-card-content ng-if="postDetailsCtrl.showTextPost()">
+      <div>
           <p ng-bind-html="postDetailsCtrl.postToURL(postDetailsCtrl.post).text" class="text">
             {{postDetailsCtrl.postToURL(postDetailsCtrl.post).text}}
           </p>
@@ -179,7 +179,7 @@
           </div>
       </div>
   </md-card-content>
-  <md-divider></md-divider>
+  <md-divider ng-if="!postDetailsCtrl.showSurvey() || postDetailsCtrl.showButtonDelete() && !postDetailsCtrl.isInstInactive()"></md-divider>
 
   <!-- BUTTONS -->
   <md-card-actions style="margin-top: 20px;">

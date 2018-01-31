@@ -74,6 +74,9 @@
                         templateUrl: "app/event/event.html",
                         controller: "EventController as eventCtrl",
                     }
+                },
+                params: {
+                    posts: undefined
                 }
             })
             .state("app.user.invite_inst", {

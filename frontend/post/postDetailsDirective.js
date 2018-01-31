@@ -33,6 +33,10 @@
                 postDetailsCtrl.post = new Post(postDetailsCtrl.post);
                 PostService.deletePost(postDetailsCtrl.post).then(function success() {
                     postDetailsCtrl.post.remove(postDetailsCtrl.user.name);
+                    _.remove(postDetailsCtrl.posts, function (post) {
+                        return post.key === postDetailsCtrl.post.key;
+                    });
+                    postDetailsCtrl.posts.push(postDetailsCtrl.post);
                     MessageService.showToast('Post excluído com sucesso');
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);

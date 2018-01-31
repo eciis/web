@@ -68,6 +68,7 @@
    describe('deletePost()', function(){
         beforeEach(function() {
             postDetailsCtrl.post = posts[0];
+            postDetailsCtrl.posts = [];
             spyOn(mdDialog, 'confirm').and.callThrough();
             spyOn(mdDialog, 'show').and.callFake(function(){
                 return {

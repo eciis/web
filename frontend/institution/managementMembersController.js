@@ -81,6 +81,9 @@
             promise.then(function success(response) {
                 manageMemberCtrl.members.push(response);
                 request.status = 'accepted';
+                _.remove(manageMemberCtrl.requests, function (each) {
+                    return each.key === request.key;
+                });
                 MessageService.showToast("Pedido aceito!");
             });
             return promise;

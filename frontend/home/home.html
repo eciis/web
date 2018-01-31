@@ -14,7 +14,7 @@
             <md-icon md-colors="{color: 'grey-100'}">refresh</md-icon>
           </md-button>
         </div>
-        <md-content flex id="content" class="body hide-scrollbar">
+        <md-content flex id="content" class="body custom-scrollbar">
             <div flex layout="row">
                 <post-timeline flex ng-if="!homeCtrl.isLoadingPosts" layout="column" posts="homeCtrl.posts" institution="false"
                 user="homeCtrl.user" add-post="true" load-more-posts='homeCtrl.loadMorePosts'></post-timeline>

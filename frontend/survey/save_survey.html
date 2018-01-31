@@ -5,7 +5,7 @@
   </md-input-container>
   <div ng-if="surveyCtrl.isTyping()">
     <p class="md-subheader"> Alternativas</p>
-    <md-content flex style="max-height: 300px;" class="hide-scrollbar">
+    <md-content flex style="max-height: 300px;" class="custom-scrollbar">
       <md-input-container ng-repeat="option in surveyCtrl.options" md-no-float class="md-block" style="height: 25px;">
         <input class="md-input" ng-model="option.text" ng-change="surveyCtrl.changeOption(option)" placeholder="+ Adicionar uma opção..." maxlength="150" />
       </md-input-container>

@@ -64,7 +64,7 @@
 
         homeCtrl.goToEvents = function goToEvents() {
             homeCtrl.stateView = "events";
-            $state.go('app.user.events');
+            $state.go('app.user.events', {posts: homeCtrl.posts});
         };
 
         homeCtrl.goInvite = function goInvite() {

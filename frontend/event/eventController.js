@@ -75,9 +75,9 @@
                 clickOutsideToClose: true,
                 locals: {
                     user: eventCtrl.user,
-                    posts: [],
+                    posts: $state.params.posts,
                     post: event,
-                    addPost: false
+                    addPost: true
                 }
             });
         };

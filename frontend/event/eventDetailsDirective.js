@@ -26,7 +26,7 @@
                     user: eventCtrl.user,
                     posts: [],
                     post: event,
-                    addPost: false
+                    addPost: true
                 }
             });
         };

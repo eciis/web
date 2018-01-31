@@ -37,6 +37,9 @@ def create_entity(entity_key):
         name = institution.name
     elif class_name == 'Institution':
         name = entity_obj.name
+    elif 'Invite' in class_name:
+        institution = entity_obj.institution_key.get()
+        name = institution.name
     
     entity = {
         "key": entity_key,

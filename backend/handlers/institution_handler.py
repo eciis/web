@@ -18,7 +18,6 @@ from util.json_patch import JsonPatch
 from service_entities import enqueue_task
 from send_email_hierarchy.remove_institution_email_sender import RemoveInstitutionEmailSender
 
-
 from handlers.base_handler import BaseHandler
 
 
@@ -131,7 +130,9 @@ class InstitutionHandler(BaseHandler):
         adds the permissions of administered in the higher institutions 
         if the institution created has a parent institution.
         """
-        data = json.loads(self.request.body)
+        body = json.loads(self.request.body)
+        data = body['data']
+        current_institution = body['currentInstitution']
 
         institution = ndb.Key(urlsafe=institution_key).get()
 
@@ -158,7 +159,8 @@ class InstitutionHandler(BaseHandler):
         user.add_permissions(permissions.DEFAULT_ADMIN_PERMISSIONS, institution.key.urlsafe())
         user.put()
 
-        invite.send_response_notification(user, invite.admin_key.urlsafe(), 'ACCEPT')
+        invite = ndb.Key(urlsafe=inviteKey).get()
+        invite.send_response_notification(current_institution, user.key, 'ACCEPT')
 
         enqueue_task('add-admin-permissions', {'institution_key': institution_key})
 

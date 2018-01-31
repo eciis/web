@@ -32,14 +32,25 @@ class RequestInstitutionChildren(Request):
         Equipe da Plataforma CIS """ % (host, request_key)
         super(RequestInstitutionChildren, self).send_email(host, requested_email, body)
 
-    def send_notification(self, user):
-        """Method of send notification of invite user."""
+    def send_notification(self, current_institution):
+        """Method of send notification of request institution children."""
         entity_type = 'REQUEST_INSTITUTION_CHILDREN'
-        super(RequestInstitutionChildren, self).send_notification(user, self.institution_requested_key.get().admin.urlsafe(), entity_type)
+        admin = self.institution_requested_key.get().admin
+        super(RequestInstitutionChildren, self).send_notification(
+            current_institution=current_institution, 
+            receiver_key=admin.key, 
+            entity_type=entity_type
+        )
 
-    def send_response_notification(self, user, receiver_key, entity_type):
+    def send_response_notification(self, current_institution, invitee_key, action):
         """Send notification to sender of invite when invite is accepted or rejected."""
-        super(RequestInstitutionChildren, self).send_notification(user, receiver_key, entity_type)
+        entity_type = 'ACCEPT_INSTITUTION_LINK' if action == 'ACCEPT' else 'REJECT_INSTITUTION_LINK'
+        super(RequestInstitutionChildren, self).send_notification(
+            current_institution=current_institution, 
+            sender_key=invitee_key, 
+            receiver_key=self.sender_key or self.admin_key,
+            entity_type=entity_type
+        )
 
     def make(self):
         """Create json of request to institution children."""

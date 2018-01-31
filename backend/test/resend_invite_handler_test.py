@@ -41,7 +41,14 @@ class ResendInviteHandlerTest(TestBaseHandler):
         user.add_permission("invite_members", institution.key.urlsafe())
         user.put()
         # Call the post method
-        self.testapp.post("/api/invites/%s/resend" %
-                          invite.key.urlsafe())
+        body = {
+            'currentInstitution': {
+                'name': 'current_institution'
+            }
+        }
+        self.testapp.post_json(
+            "/api/invites/%s/resend" % invite.key.urlsafe(),
+            body
+        )
         self.assertTrue(mock_method.called)
         self.assertTrue(second_mock_method.called)

@@ -31,9 +31,10 @@ class InviteCollectionHandler(BaseHandler):
     @login_required
     def post(self, user):
         """Handle POST Requests."""
-        data = json.loads(self.request.body)
+        body = json.loads(self.request.body)
+        data = body['data']
+        current_institution = body['currentInstitution']
         host = self.request.host
-
         type_of_invite = data.get('type_of_invite')
 
         Utils._assert(type_of_invite == 'INSTITUTION',
@@ -60,7 +61,7 @@ class InviteCollectionHandler(BaseHandler):
             if(invite.stub_institution_key):
                 invite.stub_institution_key.get().addInvite(invite)
 
-            invite.sendInvite(user, host)
+            invite.send_invite(host, current_institution)
 
             make_invite = invite.make()
 

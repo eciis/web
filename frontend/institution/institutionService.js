@@ -2,11 +2,12 @@
     "use strict";
     var app = angular.module("app");
 
-    app.service("InstitutionService", function InstitutionService($http, $q) {
+    app.service("InstitutionService", function InstitutionService($http, $q, AuthService) {
         var service = this;
 
         var INSTITUTIONS_URI = "/api/institutions";
         var LIMIT = 10;
+        service.user = AuthService.getCurrentUser();
 
         service.getInstitutions = function getInstitutions() {
             var deferred = $q.defer();
@@ -103,7 +104,8 @@
             return deferred.promise;
         };
 
-        service.save = function save(body, institutionKey, inviteKey) {
+        service.save = function save(data, institutionKey, inviteKey) {
+            var body = Utils.createBody(data, service.user.current_institution);
             var deffered = $q.defer();
             $http.post(INSTITUTIONS_URI + "/" + institutionKey + "/invites/" + inviteKey, body).then(function success(info) {
                 deffered.resolve(info.data);

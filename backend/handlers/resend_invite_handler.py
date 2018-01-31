@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """Resend Invite Handler."""
-
 import json
 
 from utils import login_required
@@ -18,6 +17,8 @@ class ResendInviteHandler(BaseHandler):
     @login_required
     def post(self, user, invite_key):
         """Handle POST Requests."""
+        body = json.loads(self.request.body)
+        current_institution = body['currentInstitution']
         host = self.request.host
         invite = ndb.Key(urlsafe=invite_key).get()
         
@@ -34,4 +35,4 @@ class ResendInviteHandler(BaseHandler):
         Utils._assert(institution.state == 'inactive',
                         "The institution has been deleted", NotAuthorizedException)
 
-        invite.sendInvite(user, host)
+        invite.send_invite(host, current_institution)

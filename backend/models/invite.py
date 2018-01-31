@@ -3,9 +3,9 @@
 from google.appengine.ext import ndb
 from google.appengine.ext.ndb.polymodel import PolyModel
 from service_messages import send_message_notification
-import json
 from send_email_hierarchy.email_sender import EmailSender
 from util.strings_pt_br import get_string
+from models.user import User       
 
 
 class Invite(PolyModel):
@@ -65,10 +65,10 @@ class Invite(PolyModel):
 
         return invite
 
-    def sendInvite(self, user, host):
+    def send_invite(self, host, current_institution=None):
         """Send invite."""
         self.send_email(host)
-        self.send_notification(user)
+        self.send_notification(current_institution)
 
     def send_email(self, host, receiver_email, body):
         """Method of send email of invite user."""
@@ -80,22 +80,22 @@ class Invite(PolyModel):
         })
         email_sender.send_email()
 
-    def send_notification(self, user, receiver_key, entity_type=None):
-        """Method of send notification of invite user.
-
-        Keyword arguments:
-        user -- user email that did the action.
-        entity_type -- type of notification.
-        Case not receive use invite type.
-        """
-        entity_type = entity_type or 'INVITE'
-
-        send_message_notification(
-            receiver_key,
-            user.key.urlsafe(),
-            entity_type,
-            self.key.urlsafe()
-        )
+    def send_notification(self, current_institution, sender_key=None, receiver_key=None, entity_type=None):
+        """Method of send notification to invitee."""
+        sender_key = sender_key or self.sender_key
+        if not receiver_key:
+            active_invitee = User.get_active_user(self.invitee)
+            receiver_key = active_invitee and active_invitee.key
+        
+        if receiver_key:
+            entity_type = entity_type or 'INVITE'
+            send_message_notification(
+                receiver_key.urlsafe(),
+                sender_key.urlsafe(),
+                entity_type,
+                self.key.urlsafe(),
+                current_institution
+            )
 
     def make(self):
         """Create personalized json of invite."""

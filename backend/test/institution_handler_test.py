@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """Post handler test."""
-
 import operator
 from test_base_handler import TestBaseHandler
 from models.invite_institution import InviteInstitution
@@ -10,7 +9,6 @@ from handlers.institution_handler import InstitutionHandler
 from worker import AddAdminPermissionsInInstitutionHierarchy
 from worker import RemoveAdminPermissionsInInstitutionHierarchy
 
-import mock
 from mock import patch
 import mocks
 
@@ -32,7 +30,73 @@ class InstitutionHandlerTest(TestBaseHandler):
              ('/api/queue/remove-admin-permissions', RemoveAdminPermissionsInInstitutionHierarchy)
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
-        initModels(cls)
+        
+        # create models
+        # new User
+        cls.user = mocks.create_user('user@example.com')
+        cls.user.name = "User"
+        # new User Other
+        cls.other_user = mocks.create_user('other_user@example.com')
+        cls.other_user.state = "pending"
+        cls.other_user.put()
+        # new Institution FIRST INST
+        cls.first_inst = mocks.create_institution()
+        cls.first_inst.name = 'FIRST INST'
+        cls.first_inst.acronym = 'FIRST INST'
+        cls.first_inst.cnpj = '18.104.068/0001-86'
+        cls.first_inst.email = 'first_inst@example.com'
+        cls.first_inst.members = [cls.user.key, cls.other_user.key]
+        cls.first_inst.followers = [cls.user.key, cls.other_user.key]
+        cls.first_inst.admin = cls.user.key
+        cls.first_inst.put()
+        cls.user.institutions_admin = [cls.first_inst.key]
+        cls.user.add_permission("update_inst", cls.first_inst.key.urlsafe())
+        cls.user.add_permission("remove_inst", cls.first_inst.key.urlsafe())
+        cls.user.put()
+        # new Institution SECOND INST
+        cls.second_inst = mocks.create_institution()
+        cls.second_inst.name = 'SECOND INST'
+        cls.second_inst.acronym = 'SECOND INST'
+        cls.second_inst.cnpj = '18.104.068/0000-86'
+        cls.second_inst.email = 'second_inst@example.com'
+        cls.second_inst.members = [cls.user.key, cls.other_user.key]
+        cls.second_inst.followers = [cls.user.key, cls.other_user.key]
+        cls.second_inst.posts = []
+        cls.second_inst.admin = None
+        cls.second_inst.put()
+        # Invite for Other create new inst
+        cls.invite = InviteInstitution()
+        cls.invite.invitee = 'other_user@example.com'
+        cls.invite.institution_key = cls.second_inst.key
+        cls.invite.admin_key = cls.user.key
+        cls.invite.type_of_invite = 'institution'
+        cls.invite.suggestion_institution_name = "Nova Inst"
+        cls.invite.put()
+        # Stub of Institution
+        cls.stub = Institution()
+        cls.stub.name = 'Nova Inst'
+        cls.stub.state = 'pending'
+        cls.stub.put()
+        # update invite
+        cls.invite.stub_institution_key = cls.stub.key
+        cls.invite.put()
+        # new Institution ECIS
+        cls.third_inst = mocks.create_institution()
+        cls.third_inst.members = [cls.user.key, cls.other_user.key]
+        cls.third_inst.followers = [cls.user.key, cls.other_user.key]
+        cls.third_inst.admin = cls.other_user.key
+        cls.third_inst.parent_institution = cls.second_inst.key
+        cls.third_inst.put()
+        cls.second_inst.children_institutions.append(cls.third_inst.key)
+        cls.second_inst.put()
+        # method post body
+        cls.body = {
+            'data': None,
+            'currentInstitution': {
+                'name': 'currentInstitution'
+            }
+        }
+    
 
     def enqueue_task(self, handler_selector, params):
         """Method of mock enqueue tasks."""
@@ -76,10 +140,8 @@ class InstitutionHandlerTest(TestBaseHandler):
     def test_post(self, verify_token):
         """Test the post_handler's post method."""
         # Call the patch method and assert that  it raises an exception
-        data = {'sender_name': 'user name updated'}
-
-        self.testapp.post_json("/api/institutions/%s/invites/%s"
-                          % (self.stub.key.urlsafe(), self.invite.key.urlsafe()), data)
+        self.body['data'] = {'sender_name': 'user name updated'}
+        self.testapp.post_json("/api/institutions/%s/invites/%s" % (self.stub.key.urlsafe(), self.invite.key.urlsafe()), self.body)
 
         self.inst_create = self.stub.key.get()
         self.assertEqual(self.inst_create.admin, self.other_user.key,
@@ -162,6 +224,7 @@ class InstitutionHandlerTest(TestBaseHandler):
 
         invite = InviteInstitution()
         invite.invitee = third_user.email[0]
+        invite.institution_key = third_inst.key
         invite.admin_key = second_user.key
         invite.stub_institution_key = third_inst.key
         invite.put()
@@ -173,9 +236,9 @@ class InstitutionHandlerTest(TestBaseHandler):
         self.assertEqual(second_user.permissions, {})
         self.assertEqual(third_user.permissions, {})
 
-        data = {'sender_name': 'user name updated'}
+        self.body['data'] = {'sender_name': 'user name updated'}
         self.testapp.post_json("/api/institutions/%s/invites/%s"
-                          % (third_inst.key.urlsafe(), invite.key.urlsafe()), data)
+                          % (third_inst.key.urlsafe(), invite.key.urlsafe()), self.body)
 
         first_user = first_user.key.get()
         second_user = second_user.key.get()
@@ -321,7 +384,7 @@ class InstitutionHandlerTest(TestBaseHandler):
         self.assertTrue(self.first_inst.key not in self.user.institutions)
 
     @patch('utils.verify_token', return_value={'email': 'user@example.com'})
-    @mock.patch('service_entities.enqueue_task')
+    @patch('service_entities.enqueue_task')
     def test_delete_with_remove_hierarchy(self, verify_token, mock_method):
         """Test delete removing hierarchy."""
         # Setting up the remove hierarchy test
@@ -392,83 +455,3 @@ class InstitutionHandlerTest(TestBaseHandler):
     def tearDown(cls):
         """Deactivate the test."""
         cls.test.deactivate()
-
-
-def initModels(cls):
-    """Init the models."""
-    # new User
-    cls.user = User()
-    cls.user.name = 'User'
-    cls.user.cpf = '089.675.908-90'
-    cls.user.email = ['user@example.com']
-    cls.user.put()
-    # new User Other
-    cls.other_user = User()
-    cls.other_user.name = 'Other'
-    cls.other_user.cpf = '089.675.908-65'
-    cls.other_user.email = ['other_user@example.com']
-    cls.other_user.state = "pending"
-    cls.other_user.put()
-    # new Institution FIRST INST
-    cls.first_inst = Institution()
-    cls.first_inst.name = 'FIRST INST'
-    cls.first_inst.acronym = 'FIRST INST'
-    cls.first_inst.cnpj = '18.104.068/0001-86'
-    cls.first_inst.legal_nature = 'PUBLIC'
-    cls.first_inst.actuation_area = ''
-    cls.first_inst.description = 'Ensaio Químico'
-    cls.first_inst.email = 'first_inst@example.com'
-    cls.first_inst.phone_number = '(83) 3322 4455'
-    cls.first_inst.members = [cls.user.key, cls.other_user.key]
-    cls.first_inst.followers = [cls.user.key, cls.other_user.key]
-    cls.first_inst.admin = cls.user.key
-    cls.first_inst.put()
-    cls.user.institutions_admin = [cls.first_inst.key]
-    cls.user.add_permission("update_inst", cls.first_inst.key.urlsafe())
-    cls.user.add_permission("remove_inst", cls.first_inst.key.urlsafe())
-    cls.user.put()
-    # new Institution SECOND INST
-    cls.second_inst = Institution()
-    cls.second_inst.name = 'SECOND INST'
-    cls.second_inst.acronym = 'SECOND INST'
-    cls.second_inst.cnpj = '18.104.068/0000-86'
-    cls.second_inst.legal_nature = 'PUBLIC'
-    cls.second_inst.actuation_area = ''
-    cls.second_inst.email = 'second_inst@example.com'
-    cls.second_inst.phone_number = '(83) 3322 4455'
-    cls.second_inst.members = [cls.user.key, cls.other_user.key]
-    cls.second_inst.followers = [cls.user.key, cls.other_user.key]
-    cls.second_inst.posts = []
-    cls.second_inst.admin = None
-    cls.second_inst.put()
-    # Invite for Other create new inst
-    cls.invite = InviteInstitution()
-    cls.invite.invitee = 'other_user@example.com'
-    cls.invite.admin_key = cls.user.key
-    cls.invite.type_of_invite = 'institution'
-    cls.invite.suggestion_institution_name = "Nova Inst"
-    cls.invite.put()
-    # Stub of Institution
-    cls.stub = Institution()
-    cls.stub.name = 'Nova Inst'
-    cls.stub.state = 'pending'
-    cls.stub.put()
-    # update invite
-    cls.invite.stub_institution_key = cls.stub.key
-    cls.invite.put()
-    # new Institution ECIS
-    cls.third_inst = Institution()
-    cls.third_inst.name = 'THIRD INST'
-    cls.third_inst.acronym = 'THIRD INST'
-    cls.third_inst.cnpj = '18.104.068/0000-86'
-    cls.third_inst.legal_nature = 'PUBLIC'
-    cls.third_inst.actuation_area = ''
-    cls.third_inst.email = 'third_inst@example.com'
-    cls.third_inst.phone_number = '(83) 3322 4455'
-    cls.third_inst.members = [cls.user.key, cls.other_user.key]
-    cls.third_inst.followers = [cls.user.key, cls.other_user.key]
-    cls.third_inst.admin = cls.other_user.key
-    cls.third_inst.parent_institution = cls.second_inst.key
-    cls.third_inst.put()
-    cls.second_inst.children_institutions.append(cls.third_inst.key)
-    cls.second_inst.put()

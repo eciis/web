@@ -9,7 +9,6 @@ from service_entities import enqueue_task
 from google.appengine.ext import ndb
 
 
-
 class InstitutionChildrenRequestHandler(BaseHandler):
     """Institution Children Request Handler."""
 
@@ -25,7 +24,8 @@ class InstitutionChildrenRequestHandler(BaseHandler):
     @ndb.transactional(xg=True)
     def put(self, user, request_key):
         """Handler PUT Requests. Change status of children_request from 'sent' to 'accepted'."""
-        request = ndb.Key(urlsafe=request_key).get()
+        current_institution = json.loads(self.request.get('currentInstitution'))
+        request = ndb.Key(urlsafe=request_key).get()        
         user.check_permission('answer_link_inst_request',
                               'User is not allowed to accept link between institutions',
                               request.institution_requested_key.urlsafe())
@@ -45,7 +45,7 @@ class InstitutionChildrenRequestHandler(BaseHandler):
 
         user.add_permission("remove_link", parent_institution.key.urlsafe())
 
-        request.send_response_notification(user, request.admin_key.urlsafe(), 'ACCEPT_INSTITUTION_LINK')
+        request.send_response_notification(current_institution, user.key, 'ACCEPT')
 
         enqueue_task('add-admin-permissions', {'institution_key': institution_children.key.urlsafe()})
 
@@ -55,6 +55,7 @@ class InstitutionChildrenRequestHandler(BaseHandler):
     @json_response
     def delete(self, user, request_key):
         """Change request status from 'sent' to 'rejected'."""
+        current_institution = json.loads(self.request.get('currentInstitution'))
         request = ndb.Key(urlsafe=request_key).get()
         user.check_permission('answer_link_inst_request',
                               'User is not allowed to reject link between institutions',
@@ -62,4 +63,5 @@ class InstitutionChildrenRequestHandler(BaseHandler):
         request.change_status('rejected')
         request.put()
 
-        request.send_response_notification(user, request.admin_key.urlsafe(), 'REJECT_INSTITUTION_LINK')
+        request.send_response_notification(current_institution, user.key, 'REJECT')
+        

@@ -3,12 +3,14 @@
 (function() {
     var app = angular.module("app");
 
-    app.service("RequestInvitationService", function RequestInvitationService(MessageService, HttpService) {
+    app.service("RequestInvitationService", function RequestInvitationService(MessageService, HttpService, AuthService) {
         var service = this;
         var REQUESTS_URI = "/api/institutions/";
+        service.user = AuthService.getCurrentUser();
 
         service.sendRequest = function sendRequest(request, institution_key) {
-            return HttpService.post(REQUESTS_URI + institution_key + "/requests/user", request);
+            var body = Utils.createBody(request, service.user.current_institution);
+            return HttpService.post(REQUESTS_URI + institution_key + "/requests/user", body);
         };
 
         service.sendRequestInst = function sendRequestInst(request) {
@@ -17,11 +19,13 @@
         };
 
         service.sendRequestToParentInst = function(invite, institution_requested_key) {
-            return HttpService.post(REQUESTS_URI + institution_requested_key + "/requests/institution_parent", invite);
+            var body = Utils.createBody(invite, service.user.current_institution);
+            return HttpService.post(REQUESTS_URI + institution_requested_key + "/requests/institution_parent", body);
         };
 
         service.sendRequestToChildrenInst = function(invite, institution_requested_key) {
-            return HttpService.post(REQUESTS_URI + institution_requested_key + "/requests/institution_children", invite);
+            var body = Utils.createBody(invite, service.user.current_institution);
+            return HttpService.post(REQUESTS_URI + institution_requested_key + "/requests/institution_children", body);
         };
 
         service.getParentRequests = function(institution_key) {
@@ -65,19 +69,31 @@
         };
 
         service.acceptInstParentRequest = function acceptRequest(request_key) {
-            return HttpService.put("/api/requests/" + request_key + "/institution_parent");
+            var currentInstitution = Utils.currentInstitutionToString(service.user.current_institution);
+            return HttpService.put(
+                `/api/requests/${request_key}/institution_parent?currentInstitution=${currentInstitution}`
+            );
         };
 
         service.rejectInstParentRequest = function rejectRequest(request_key) {
-            return HttpService.delete("/api/requests/" + request_key + "/institution_parent");
+            var currentInstitution = Utils.currentInstitutionToString(service.user.current_institution);
+            return HttpService.delete(
+                `/api/requests/${request_key}/institution_parent?currentInstitution=${currentInstitution}`
+            );
         };
 
         service.acceptInstChildrenRequest = function acceptRequest(request_key) {
-            return HttpService.put("/api/requests/" + request_key + "/institution_children");
+            var currentInstitution = Utils.currentInstitutionToString(service.user.current_institution);
+            return HttpService.put(
+                `/api/requests/${request_key}/institution_children?currentInstitution=${currentInstitution}`
+            );
         };
 
         service.rejectInstChildrenRequest = function rejectRequest(request_key) {
-            return HttpService.delete("/api/requests/" + request_key + "/institution_children");
+            var currentInstitution = Utils.currentInstitutionToString(service.user.current_institution);
+            return HttpService.delete(
+                `/api/requests/${request_key}/institution_children?currentInstitution=${currentInstitution}`
+            );
         };
 
         service.showRejectDialog = function showRejectDialog(event) {

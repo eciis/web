@@ -54,9 +54,10 @@
         };
 
         service.deleteInvite = function deleteInvite(inviteKey) {
-            var currentInstitution = Utils.currentInstitutionToString(service.user.current_institution);
             var deferred = $q.defer();
-            $http.delete(`${INVITES_URI}/${inviteKey}?currentInstitution=${currentInstitution}`).then(function sucess(response) {
+            var url = `${INVITES_URI}/${inviteKey}`;
+            url = addCurrentInstToUrl(url);
+            $http.delete(url).then(function sucess(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);
@@ -75,14 +76,23 @@
         };
 
         service.acceptInvite = function acceptInvite(patch, invite_key) {
-            var currentInstitution = Utils.currentInstitutionToString(service.user.current_institution);
             var deffered = $q.defer();
-            $http.patch(`${INVITES_URI}/${invite_key}?currentInstitution=${currentInstitution}`, patch).then(function success(info) {
+            var url = `${INVITES_URI}/${invite_key}`;
+            url = addCurrentInstToUrl(url);
+            $http.patch(url, patch).then(function success(info) {
                 deffered.resolve(info.data);
             }, function error(data) {
                 deffered.reject(data);
             });
             return deffered.promise;
         };
+
+        function addCurrentInstToUrl(url) {
+            if(!_.isEmpty(service.user.institution)) {
+                var currentInstitution = Utils.currentInstitutionToString(service.user.current_institution);
+                url += `?currentInstitution=${currentInstitution}`;
+            }
+            return url;
+        }
     });
 })();

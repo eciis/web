@@ -93,7 +93,7 @@ var Utils = {
         };
     },
     createBody: function createBody(data, currentInstitution) {
-        var instData = {};
+        var instData = {name: ""};
         if(currentInstitution) {
             instData.name = currentInstitution.name;
         }
@@ -103,10 +103,9 @@ var Utils = {
         };
     },
     currentInstitutionToString: function currentInstitutionToString(currentInstitution) {
-        var instData = {};
-        if(currentInstitution) {
-            instData.name = currentInstitution.name;
-        }
-        return JSON.stringify(instData);
+        currentInstitution = {
+            name: currentInstitution.name
+        };
+        return JSON.stringify(currentInstitution);
     }
 };

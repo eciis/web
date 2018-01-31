@@ -68,7 +68,7 @@
               <md-menu-item ng-if="postCtrl.typePost === 'Common'">
                 <md-button ng-click="null" ng-file-model="postCtrl.files"
                   ngf-pattern="'application/pdf'" title="Adicionar pdf"
-                  ngf-accept="'application/pdf'" ngf-max-size="5MB"
+                  ngf-accept="'application/pdf'"
                   ngf-max-files="1"
                   ngf-select="postCtrl.addPdf($files)"
                   ng-disabled="postCtrl.hasMedia() && !postCtrl.showFiles()">

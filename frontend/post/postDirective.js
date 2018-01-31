@@ -25,6 +25,7 @@
                             };
         var observer;
         var timelineContent = document.getElementById('content');
+        var MAXIMUM_PDF_SIZE = 5242880; // 5Mb in bytes
 
         postCtrl.hasMedia = function hasMedia() {
             return postCtrl.photoBase64Data || postCtrl.pdfFiles.length > 0 || postCtrl.hasVideo || postCtrl.photoUrl;
@@ -64,7 +65,11 @@
         };
 
         postCtrl.addPdf = function addPdf(files) {
-            postCtrl.pdfFiles = files;
+            if(files[0].size > MAXIMUM_PDF_SIZE) {
+                MessageService.showToast('O arquivo deve ser um pdf menor que 5 Mb');
+            } else {
+                postCtrl.pdfFiles = files;
+            }      
         };
 
         postCtrl.createEditedPost = function createEditedPost(post) {
@@ -136,7 +141,7 @@
                         }
                         deferred.resolve();
                     }, function error(response) {
-                        MessageService.showToast(response.data.msg);
+                        MessageService.showToast(response);
                         deferred.reject();
                 });
             } else {

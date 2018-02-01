@@ -158,7 +158,8 @@
             </div>
           </md-dialog-content>
           <md-dialog-content ng-if="controller.getStep(3)" layout-padding class="custom-scrollbar">
-            <div layout="row" layout-align="center center">
+            <load-circle flex ng-if="controller.loading"></load-circle>
+            <div ng-if="!controller.loading" layout="row" layout-align="center center">
               <div flex="95" layout="column">
                 <div layout-margin>
                   <p class="md-subheader">Vídeos</p>
@@ -199,7 +200,7 @@
               </div>
             </div>
           </md-dialog-content>
-          <md-dialog-actions style="border:0px" layout="row">
+          <md-dialog-actions ng-if="!controller.loading" style="border:0px" layout="row">
               <md-button class="md-raised" md-colors="{background: 'default-teal-500'}" ng-click="controller.closeDialog()">
                   <span style="color: white;">cancelar</span>
               </md-button>

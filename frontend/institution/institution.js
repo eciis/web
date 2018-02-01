@@ -21,7 +21,7 @@ Institution.prototype.isValidAddress = function isValidAdress(){
     if(this.address && this.address.country === "Brasil"){
         _.forEach(this.address, function(value, key) {
             var isNotNumber =  key !== "number";
-            var isValid =  ! value || _.isEmpty(value); 
+            var isValid =  !value || _.isEmpty(value); 
             if(isNotNumber && isValid) {
                 valid = false;
             }

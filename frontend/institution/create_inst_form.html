@@ -100,7 +100,7 @@
                                 <div layout="row" layout-margin>
                                     <md-input-container  class="md-block" flex-gt-sm flex-sm layout="row">
                                         <label>Número</label>
-                                        <input type="text" name="number" ng-required="!configInstCtrl.isAnotherCountry"
+                                        <input type="text" name="number"
                                                 ng-model="configInstCtrl.address.number" ng-pattern="configInstCtrl.numberRegex">
                                         <div ng-messages='createInst.number.$error'>
                                             <div ng-message="pattern" >O número deve ser válido!</div>
@@ -233,7 +233,7 @@
                         </div>
                         </md-card-content>
                         <md-card-actions layout="row" layout-align="end center">
-                            <md-button ng-click="configInstCtrl.nextStep()" class="md-raised" md-colors="{background: 'teal-500'}">
+                            <md-button ng-click="secondStep.$valid && configInstCtrl.nextStep()" class="md-raised" md-colors="{background: 'teal-500'}">
                                 AVANÇAR
                             </md-button>
                         </md-card-actions>

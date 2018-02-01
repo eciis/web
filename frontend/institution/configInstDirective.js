@@ -340,8 +340,10 @@
             var valid = true;
             var address = configInstCtrl.address;    
             if(address && address.country === "Brasil"){     
-                _.forEach(address, function(value, key) {     
-                    if(! value || _.isEmpty(value)) {     
+                _.forEach(address, function(value, key) {
+                    var isNotNumber =  key !== "number";
+                    var isValid =  ! value || _.isEmpty(value); 
+                    if(isNotNumber && isValid) {
                         valid = false;        
                     }     
                 });       

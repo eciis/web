@@ -93,31 +93,41 @@
                                     <span flex="3"></span>
                                     <md-input-container  flex-gt-sm flex-sm layout="row">
                                         <label>Bairro</label>
-                                    <input type="text" name="neighbourhood" ng-required="!configInstCtrl.isAnotherCountry"
+                                        <input type="text" name="neighbourhood" ng-required="!configInstCtrl.isAnotherCountry"
                                             ng-model="configInstCtrl.address.neighbourhood">
                                     </md-input-container>
                                 </div>
                                 <div layout="row" layout-margin>
-                                    <md-input-container  flex-gt-sm flex-sm layout="row">
+                                    <md-input-container  class="md-block" flex-gt-sm flex-sm layout="row">
                                         <label>Número</label>
-                                    <input type="text" name="number" ng-required="!configInstCtrl.isAnotherCountry"
-                                            ng-model="configInstCtrl.address.number">
+                                        <input type="text" name="number" ng-required="!configInstCtrl.isAnotherCountry"
+                                                ng-model="configInstCtrl.address.number" ng-pattern="configInstCtrl.numberRegex">
+                                        <div ng-messages='createInst.number.$error'>
+                                            <div ng-message="pattern" >O número deve ser válido!</div>
+                                        </div>
                                     </md-input-container>
                                     <span flex="3"></span>
-                                    <md-input-container  flex-gt-sm flex-sm layout="row">
+                                    <md-input-container class="md-block" flex-gt-sm flex-sm layout="row">
                                         <label>CEP</label>
-                                    <input type="text" name="cep" ng-required="!configInstCtrl.isAnotherCountry"
-                                            ng-model="configInstCtrl.address.cep"
-                                            placeholder="00000-000"
-                                            ng-pattern="configInstCtrl.cepRegex"
-                                            mask="99999-999">
+                                        <input type="text" name="cep" ng-required="!configInstCtrl.isAnotherCountry"
+                                                ng-model="configInstCtrl.address.cep" 
+                                                placeholder="00000-000"
+                                                ng-pattern="configInstCtrl.cepRegex"
+                                                mask="99999-999">
+                                        <div ng-messages="createInst.cep.$error">
+                                            <div ng-message="required">Este campo é obrigatório!</div>
+                                            <div ng-message="pattern">O CEP deve ser válido!</div>
+                                        </div>
                                     </md-input-container>
                                 </div>
                                 <div layout-margin>
-                                    <md-input-container  flex-gt-sm layout="row">
+                                    <md-input-container class="md-block" flex-gt-sm layout="row">
                                         <label>Rua</label>
-                                    <input type="text" name="street" ng-required="!configInstCtrl.isAnotherCountry"
-                                        ng-model="configInstCtrl.address.street">
+                                        <input type="text" name="street" ng-required="!configInstCtrl.isAnotherCountry"
+                                            ng-model="configInstCtrl.address.street">
+                                        <div ng-messages='createInst.street.$error'>
+                                            <div ng-message="required">Este campo é obrigatório!</div>
+                                        </div>
                                     </md-input-container>
                                 </div>
                             </form>
@@ -192,7 +202,7 @@
                                             </md-option>
                                         </md-select>
                                         <div ng-messages="secondStep.legalNatures.$error">
-                                            <div ng-message="required" >Este campo é obrigatório!</div>
+                                            <div ng-message="required">Este campo é obrigatório!</div>
                                         </div>
                                     </md-input-container>
                                     <div layout="row">
@@ -206,14 +216,17 @@
                                             mask="99 9999-99999"
                                             mask-validate='false'>
                                             <div ng-messages="instForm.phone.$error">
-                                                <div ng-message="pattern" >O número de telefone deve ser válido!</div>
+                                                <div ng-message="pattern">O número de telefone deve ser válido!</div>
                                             </div>
                                         </md-input-container>
                                         <md-input-container class="md-block" flex-gt-xs flex="20">
                                             <label>Ramal</label>
-                                            <input type="text" name="branch_line"
+                                            <input type="text" name="branch_line" ng-pattern=configInstCtrl.numberRegex
                                                 ng-model="configInstCtrl.newInstitution.branch_line"
                                             placeholder="999">
+                                            <div ng-messages="secondStep.branch_line.$error">
+                                                <div ng-message="pattern">O ramal deve ser válido!</div>
+                                            </div>
                                         </md-input-container>
                                     </div>
                                 </form>

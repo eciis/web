@@ -75,6 +75,12 @@
                 postDetailsCtrl.post.shared_event;
         };
 
+        postDetailsCtrl.getCSSClassPost = function getCSSClassPost() {
+            return (postDetailsCtrl.isDeleted(postDetailsCtrl.post) || 
+                    postDetailsCtrl.isDeletedEvent(postDetailsCtrl.post) || 
+                        postDetailsCtrl.isInstInactive()) ? 'post-deleted':'';
+        };
+
         postDetailsCtrl.postHasActivity = function postHasActivity() {
             var hasNoComments = postDetailsCtrl.post.number_of_comments === 0;
             var hasNoLikes = postDetailsCtrl.post.number_of_likes === 0;

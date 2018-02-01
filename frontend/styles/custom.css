@@ -892,3 +892,16 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
   text-align: center;
   font-size: 10px;
 }
+
+.post-inst-inactive{
+    color: #FFFFFF;
+    text-align: center;
+    font-weight: bold;
+    font-size: 10px;
+    background-color: #BDBDBD;
+    padding: 10px;
+}
+
+.img-post-shadow{
+    box-shadow:0 0 12px #9E9E9E;
+}

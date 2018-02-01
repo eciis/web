@@ -346,7 +346,8 @@ class ResetHandler(BaseHandler):
             'photo_url': 'https://pbs.twimg.com/profile_images/1782760873/Logo_do_site_400x400.jpg',
             'email': 'certbio@ufcg.edu.br',
             'phone_number': '83 3322-4455',
-            'state': 'active'
+            'state': 'active',
+            'leader': 'User'
         }
 
         certbio = createInstitution(data, admin)
@@ -384,7 +385,8 @@ class ResetHandler(BaseHandler):
             'photo_url': 'http://amaurymedeiros.com/images/splab.png',
             'email': 'splab@ufcg.edu.br',
             'phone_number': '83 3322-7865',
-            'state': 'active'
+            'state': 'active',
+            'leader': 'User'
         }
 
         splab = createInstitution(data, admin)
@@ -422,7 +424,8 @@ class ResetHandler(BaseHandler):
             'photo_url': 'http://www.paho.org/bra/images/stories/BRA01A/logobireme.jpg',
             'email': 'eciis@ufcg.edu.br',
             'phone_number': '83 3322-7865',
-            'state': 'active'
+            'state': 'active',
+            'leader': 'User'
         }
 
         eciis = createInstitution(data, admin)

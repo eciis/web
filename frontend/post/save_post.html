@@ -95,7 +95,9 @@
     </md-card-content>
     <md-card-content ng-show="postCtrl.hasMedia() && !postCtrl.hasVideo">
       <div class="image-view" ng-if="postCtrl.showImage()">
-        <button ng-click="postCtrl.hideImage()">&times;</button>
+        <md-button class="md-icon-button" ng-click="postCtrl.hideImage()" style="margin-left: -0.5em;" title="Remover">
+          <md-icon>clear</md-icon>
+        </md-button>
         <img style="border-radius: 5%;" ng-src="{{ postCtrl.photoUrl }}"/>
       </div>
       <pdf-view pdf-files='postCtrl.pdfFiles' is-editing="true"></pdf-view>

@@ -49,9 +49,10 @@
                 <md-input-container class="md-block" flex-gt-xs  flex="20">
                     <label>Número</label>
                     <input type="text" name="number" ng-required="!configInstCtrl.isAnotherCountry"
-                        ng-model="configInstCtrl.address.number">
+                        ng-model="configInstCtrl.address.number" ng-pattern="configInstCtrl.numberRegex">
                     <div ng-messages='instForm.number.$error'>
                         <div ng-message="required">Este campo é obrigatório!</div>
+                        <div ng-message="pattern" >O número deve ser válido!</div>
                     </div>
                 </md-input-container>
                 <md-input-container class="md-block" flex-gt-xs  flex="20">
@@ -62,8 +63,8 @@
                         ng-pattern="configInstCtrl.cepRegex"
                         mask="99999-999">
                     <div ng-messages="instForm.cep.$error">
-                        <div ng-message="required" >Este campo é obrigatório!</div>
-                        <div ng-message="pattern" >O CEP deve ser válido!</div>
+                        <div ng-message="required">Este campo é obrigatório!</div>
+                        <div ng-message="pattern">O CEP deve ser válido!</div>
                     </div>
                 </md-input-container>
             </div>
@@ -136,9 +137,9 @@
                         minlength="18" md-maxlength="18"
                         placeholder="00.000.000/0000-00"
                         mask="99.999.999/9999-99">
-                <div ng-messages="instForm.cnpj.$error">
-                        <div ng-message="required" >Este campo é obrigatório!</div>
-                        <div ng-message="pattern" >O CNPJ deve ser válido!</div>
+                    <div ng-messages="instForm.cnpj.$error">
+                        <div ng-message="required">Este campo é obrigatório!</div>
+                        <div ng-message="pattern">O CNPJ deve ser válido!</div>
                     </div>
                 </md-input-container>
                 <md-input-container class="md-block" flex-gt-xs>
@@ -151,14 +152,17 @@
                     mask="99 9999-99999"
                     mask-validate='false'>
                     <div ng-messages="instForm.phone.$error">
-                        <div ng-message="pattern" >O número de telefone deve ser válido!</div>
+                        <div ng-message="pattern">O número de telefone deve ser válido!</div>
                     </div>
                 </md-input-container>
                 <md-input-container class="md-block" flex-gt-xs flex="20">
                     <label>Ramal</label>
-                    <input type="text" name="branch_line"
+                    <input type="text" name="branch_line" ng-pattern=configInstCtrl.numberRegex
                         ng-model="configInstCtrl.newInstitution.branch_line"
                     placeholder="999">
+                    <div ng-messages="instForm.branch_line.$error">
+                        <div ng-message="pattern">O ramal deve ser válido!</div>
+                    </div>
                 </md-input-container>
             </div>
             <div layout="row">

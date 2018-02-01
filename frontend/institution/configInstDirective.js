@@ -16,6 +16,7 @@
         configInstCtrl.cnpjRegex = "[0-9]{2}[\.][0-9]{3}[\.][0-9]{3}[\/][0-9]{4}[-][0-9]{2}";
         configInstCtrl.phoneRegex = "[0-9]{2}[\\s][0-9]{4,5}[-][0-9]{4,5}";
         configInstCtrl.cepRegex = "([0-9]{5}[-][0-9]{3})";
+        configInstCtrl.numberRegex = "[0-9]+$";
         configInstCtrl.newInstitution = {
             email: configInstCtrl.user.email[0]
         };

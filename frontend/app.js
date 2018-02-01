@@ -331,6 +331,18 @@
                 if (AuthService.isLoggedIn()) {
                     var token = AuthService.getUserToken();
                     config.headers.Authorization = 'Bearer ' + token;
+                    if (!_.isEmpty(AuthService.getCurrentUser().institutions)) {
+                        config.headers['Institution-Authorization'] = AuthService.getCurrentUser().current_institution.key;
+                    }
+                    if (config.method === 'POST') {
+                        //TODO: Verify which backend handler threats the POST 
+                        // having a data property inside body content, and remove it
+                        // to default behavior, to avoid inconsistency.
+                        // @author: Andre Abrantes - 01-02-2018
+                        config.data = {
+                            data: config.data
+                        };
+                    }
                 }
 
                 Utils.updateBackendUrl(config);

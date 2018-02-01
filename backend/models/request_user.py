@@ -87,12 +87,17 @@ class RequestUser(Invite):
         body = acceptMessage if operation == "ACCEPT" else rejectMessage
         super(RequestUser, self).send_email(host, sender_email, body)
 
+    """ 
+    The sender, in this case, is the user who is asking to be an institution's members.
+    The receiver is the institution's admin, who is receive the notification of the request.
+    """
     def send_notification(self, current_institution):
         """Method of send notification of invite user."""
         entity_type = 'REQUEST_USER'
         super(RequestUser, self).send_notification(
             current_institution=current_institution, 
-            sender_key=self.admin_key,
+            sender_key=self.sender_key,
+            receiver_key=self.admin_key,
             entity_type=entity_type
         )
 

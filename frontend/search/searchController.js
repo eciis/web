@@ -65,8 +65,8 @@
          * in the controller's institutions field.
          */
         function keywordHasChanges() {
-            var keywordHasChanged = searchCtrl.search_keyword != searchCtrl.previous_keyword;
-            return _.isEmpty(searchCtrl.initialInstitutions) || keywordHasChanged || !searchCtrl.search_keyword;
+            var keywordHasChanged = searchCtrl.search_keyword !== searchCtrl.previous_keyword;
+            return _.isEmpty(searchCtrl.institutions) || keywordHasChanged || !searchCtrl.search_keyword;
         }
 
         /**

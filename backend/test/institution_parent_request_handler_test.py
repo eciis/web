@@ -12,8 +12,6 @@ from handlers.institution_parent_request_handler import InstitutionParentRequest
 from worker import AddAdminPermissionsInInstitutionHierarchy
 from mock import patch
 
-CURRENT_INSTITUTION = {'name': 'currentInstitution'}
-CURRENT_INST_STRING = json.dumps(CURRENT_INSTITUTION)
 
 class InstitutionParentRequestHandlerTest(TestBaseHandler):
     """Test the handler InstitutionChildrenRequestCollectionHandler."""
@@ -41,10 +39,12 @@ class InstitutionParentRequestHandlerTest(TestBaseHandler):
         # new Institution inst test
         cls.inst_test = mocks.create_institution()
         cls.inst_test.admin = cls.user_admin.key
+        cls.user_admin.add_institution(cls.inst_test.key)
         cls.inst_test.put()
         # new Institution inst requested to be parent of inst test
         cls.inst_requested = mocks.create_institution()
         cls.inst_requested.admin = cls.other_user.key
+        cls.other_user.add_institution(cls.inst_requested.key)
         cls.inst_requested.put()
         # Update Institutions admin by other user
         cls.other_user.add_permission("answer_link_inst_request", cls.inst_requested.key.urlsafe())
@@ -70,8 +70,8 @@ class InstitutionParentRequestHandlerTest(TestBaseHandler):
     def test_put(self, verify_token, send_notification):
         """Test method post of InstitutionParentRequestHandler."""
         request = self.testapp.put_json(
-            "/api/requests/%s/institution_parent?currentInstitution=%s"
-            % (self.request.key.urlsafe(), CURRENT_INST_STRING)
+            "/api/requests/%s/institution_parent" % self.request.key.urlsafe(),
+            headers={'institution-authorization': self.inst_requested.key.urlsafe()}
         )
 
         request = json.loads(request._app_iter[0])
@@ -88,7 +88,7 @@ class InstitutionParentRequestHandlerTest(TestBaseHandler):
         
         # Assert the notification was sent
         send_notification.assert_called_with(
-            current_institution=CURRENT_INSTITUTION, 
+            current_institution=self.inst_requested.key, 
             sender_key=self.other_user.key, 
             receiver_key=self.user_admin.key,
             entity_type='ACCEPT_INSTITUTION_LINK'
@@ -99,23 +99,23 @@ class InstitutionParentRequestHandlerTest(TestBaseHandler):
         """Test put request with user is not admin."""
         with self.assertRaises(Exception) as ex:
             self.testapp.put(
-            "/api/requests/%s/institution_parent?currentInstitution=%s"
-            % (self.request.key.urlsafe(), CURRENT_INST_STRING)
-        )
+            "/api/requests/%s/institution_parent" % self.request.key.urlsafe(),
+            headers={'institution-authorization': self.inst_test.key.urlsafe()})
 
         exception_message = self.get_message_exception(ex.exception.message)
+        expected_message = "Error! User is not allowed to accept link between institutions"
         self.assertEqual(
-            "Error! User is not allowed to accept link between institutions",
+            expected_message,
             exception_message,
-            "Expected error message is Error! User is not allowed to accept link between institutions")
+            "Expected error message is %s but was %s" % (expected_message, exception_message))
 
     @patch.object(Invite, 'send_notification')
     @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_delete(self, verify_token, send_notification):
         """Test method post of InstitutionChildrenRequestHandler."""
         self.testapp.delete(
-            "/api/requests/%s/institution_parent?currentInstitution=%s"
-             % (self.request.key.urlsafe(), CURRENT_INST_STRING)
+            "/api/requests/%s/institution_parent" % self.request.key.urlsafe(),
+            headers={'institution-authorization': self.inst_requested.key.urlsafe()}
         )
 
         institution = self.inst_requested.key.get()
@@ -132,7 +132,7 @@ class InstitutionParentRequestHandlerTest(TestBaseHandler):
 
         # assert notfication was sent
         send_notification.assert_called_with(
-            current_institution=CURRENT_INSTITUTION, 
+            current_institution=self.inst_requested.key, 
             sender_key=self.other_user.key, 
             receiver_key=self.user_admin.key,
             entity_type='REJECT_INSTITUTION_LINK'
@@ -182,14 +182,15 @@ class InstitutionParentRequestHandlerTest(TestBaseHandler):
         request.put()
         
         verify_token._mock_return_value = {'email': second_user.email[0]}
+        second_user.add_institution(second_inst.key)
         enqueue_task.side_effect = self.enqueue_task
 
         self.assertTrue(third_inst.key.urlsafe() not in first_user.permissions.get('publish_post', {}))
         self.assertTrue(third_inst.key.urlsafe() not in second_user.permissions.get('publish_post', {}))
 
         self.testapp.put(
-            "/api/requests/%s/institution_parent?currentInstitution=%s"
-             % (request.key.urlsafe(), CURRENT_INST_STRING)
+            "/api/requests/%s/institution_parent" % request.key.urlsafe(),
+            headers={'institution-authorization': second_inst.key.urlsafe()}
         )
 
         first_user = first_user.key.get()

@@ -132,7 +132,6 @@ class InstitutionHandler(BaseHandler):
         """
         body = json.loads(self.request.body)
         data = body['data']
-        current_institution = body['currentInstitution']
 
         institution = ndb.Key(urlsafe=institution_key).get()
 
@@ -160,7 +159,7 @@ class InstitutionHandler(BaseHandler):
         user.put()
 
         invite = ndb.Key(urlsafe=inviteKey).get()
-        invite.send_response_notification(current_institution, user.key, 'ACCEPT')
+        invite.send_response_notification(user.current_institution, user.key, 'ACCEPT')
 
         enqueue_task('add-admin-permissions', {'institution_key': institution_key})
 

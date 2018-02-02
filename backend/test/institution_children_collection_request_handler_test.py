@@ -35,6 +35,7 @@ class InstitutionChildrenRequestCollectionHandlerTest(TestBaseHandler):
         admin = mocks.create_user(ADMIN['email'])
         institution = mocks.create_institution()		 
         admin.institutions_admin = [institution.key]
+        admin.add_institution(institution.key)
         institution.admin = admin.key
         admin.add_permission("send_link_inst_request", institution.key.urlsafe())
         admin.put()
@@ -43,6 +44,7 @@ class InstitutionChildrenRequestCollectionHandlerTest(TestBaseHandler):
         inst_requested = mocks.create_institution()
         admin_requested = mocks.create_user(ADMIN['email'])
         admin.institutions_admin = [inst_requested.key]
+        admin.add_institution(inst_requested.key)
         admin_requested.put()
         inst_requested.admin = admin_requested.key 
         inst_requested.put()
@@ -57,13 +59,12 @@ class InstitutionChildrenRequestCollectionHandlerTest(TestBaseHandler):
         }
         body = {
             'data': data,
-            'currentInstitution': {'name': 'currentInstitution'}
         } 
 
         with self.assertRaises(Exception) as ex:
             self.testapp.post_json(
                 "/api/institutions/" + institution.key.urlsafe() + "/requests/institution_children",
-                body)
+                body, headers={'institution-authorization':institution.key.urlsafe()})
 
         exception_message = self.get_message_exception(ex.exception.message)
         self.assertEqual(

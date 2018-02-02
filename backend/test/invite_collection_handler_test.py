@@ -23,8 +23,7 @@ def create_body(invitee_email, admin, institution):
             'admin_key': admin.key.urlsafe(),
             'type_of_invite': 'USER',
             'institution_key': institution.key.urlsafe()
-        },
-        'currentInstitution': CURRENT_INSTITUTION
+        }
     }
     return body
 
@@ -170,7 +169,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         institution.put()
         body = create_body('ana@gmail.com', admin, institution)
 
-        invite = self.testapp.post_json("/api/invites", body)
+        invite = self.testapp.post_json("/api/invites", body, headers={'institution-authorization': institution.key.urlsafe()})
         # Retrieve the entities
         invite = json.loads(invite._app_iter[0])
         key_invite = ndb.Key(urlsafe=invite['key'])
@@ -203,7 +202,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         institution.put()
         body = create_body(USER['email'], admin, institution)
 
-        invite = self.testapp.post_json("/api/invites", body)
+        invite = self.testapp.post_json("/api/invites", body, headers={'institution-authorization': institution.key.urlsafe()})
         # Retrieve the entities
         invite = json.loads(invite._app_iter[0])
         key_invite = ndb.Key(urlsafe=invite['key'])
@@ -261,7 +260,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         admin.add_permission("invite_members",institution.key.urlsafe())
         admin.put()
         institution.put()
-        body = create_body('ana@gmail.com', admin, institution)
+        body = create_body('ana@gmail.com', admin, institution, headers={'institution-authorization': institution.key.urlsafe()})
         with self.assertRaises(Exception) as raises_context:
             self.testapp.post_json("/api/invites", body)
 

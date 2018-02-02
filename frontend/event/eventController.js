@@ -315,6 +315,7 @@
 
         dialogCtrl.nextStepOrSave = function nextStepOrSave() {
             if (dialogCtrl.getStep(3)) {
+                dialogCtrl.blockPublishButton = true;
                 dialogCtrl.save();
             } else {
                 dialogCtrl.nextStep();

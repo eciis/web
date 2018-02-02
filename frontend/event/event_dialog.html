@@ -207,7 +207,7 @@
                 hide-gt-xs ng-if="controller.getStep(2) || controller.getStep(3)">
                   <span style="color: white;">voltar</span>
               </md-button>
-              <md-button class="md-raised" type="submit" md-colors="{background: 'default-teal-500'}">
+              <md-button class="md-raised" type="submit" md-colors="{background: 'default-teal-500'}" ng-disabled="controller.blockPublishButton">
                   <span style="color: white;">{{controller.getStep(3) ? "publicar" : "avançar"}}</span>
               </md-button>
           </md-dialog-actions>

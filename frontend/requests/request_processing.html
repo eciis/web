@@ -1,17 +1,29 @@
 <md-dialog>
-  <md-toolbar style="background-color: #00695C" layout="row">
-    <div class="md-toolbar-tools">
-      <h1 class="md-toolbar-tools">Confirmar Vínculo</h1>
-    </div>
-    <section layout="column" layout-align="center center">
-        <md-button class="md-icon-button" ng-click="requestCtrl.hideDialog()">
-            <md-icon>close</md-icon>
-        </md-button>
-    </section>
-  </md-toolbar>
   <md-dialog-content class="md-dialog-content" layout-gt-sm="column" layout-padding>
-    <div>
-      <md-list flex>
+    <h4>Confirmar Vínculo</h4>
+    <p>Um usuário da plataforma solicitou vincular-se a uma das instituições que você administra. Clique em confirmar para aceitar ou cancelar para recusar vinculo.</p>
+    <div layout="column" layout-padding>
+      <div layout="row" md-colors="{background: 'default-grey-200'}" layout-margin>
+        <div>
+          <img style="width: 75px; height: 75px; border-radius: 50%;" src="app/images/avatar.png"></img>
+        </div>
+        <div layout="column" layout-align="center start">
+          <span>INSTITUIÇÃO</span>
+          <span>teste@teste.com</span>
+          <span>Convidado por: Luiz Fernando</span>
+        </div>
+      </div>
+      <div layout="row" md-colors="{background: 'default-grey-200'}" layout-margin>
+          <div>
+            <img style="width: 75px; height: 75px; border-radius: 50%;" src="app/images/avatar.png"></img>
+          </div>
+          <div layout="column" layout-align="center start">
+            <span>INSTITUIÇÃO</span>
+            <span>teste@teste.com</span>
+            <span>Convidado por: Luiz Fernando</span>
+          </div>
+      </div>
+      <!--<md-list flex>
         <md-list-item class="md-3-line">
           <img ng-src="{{ requestCtrl.parent.photo_url }}" class="md-avatar" alt="{{requestCtrl.parent.name}}" />
           <div class="md-list-item-text" layout="column">
@@ -42,15 +54,14 @@
             </md-list-item>
           </div>
         </div>
-      </md-list>
+      </md-list>-->
     </div>
   </md-dialog-content>
   <md-dialog-actions layout="row" layout-align="end center" layout-wrap>
-    <md-button ng-click="requestCtrl.rejectRequest($event)" class="md-primary">
+    <md-button ng-click="requestCtrl.rejectRequest($event)" class="md-primary" md-colors="{color: 'default-teal-500'}">
       Não Confirmar
     </md-button>
-    <md-button ng-click="requestCtrl.acceptRequest()"
-        class="md-warn md-raised md-hue-2">
+    <md-button ng-click="requestCtrl.acceptRequest()" class="md-primary" md-colors="{color: 'default-teal-500'}">
       Confirmar
     </md-button>
   </md-dialog-actions>

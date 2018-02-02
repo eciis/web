@@ -139,7 +139,7 @@ class InviteHandlerTest(TestBaseHandler):
         )
         # assert the notification was sent
         send_notification.assert_called_with(
-            current_institution=CURRENT_INSTITUTION, 
+            current_institution=None, # The first invite the user doesn't have current_institution 
             sender_key=self.other_user.key,
             receiver_key=self.user_admin.key,
             entity_type='REJECT_INVITE_INSTITUTION'
@@ -152,8 +152,8 @@ class InviteHandlerTest(TestBaseHandler):
         profile = '{"email": "otheruser@test.com", "office": "Developer"}'
         json_patch = '[{"op": "add", "path": "/institution_profiles/-", "value": ' + profile + '}]'
         self.testapp.patch(
-            '/api/invites/%s?currentInstitution=%s'
-            % (self.invite.key.urlsafe(), CURRENT_INST_STRING),
+            '/api/invites/%s'
+            % self.invite.key.urlsafe(),
             json_patch
         )
     
@@ -181,7 +181,7 @@ class InviteHandlerTest(TestBaseHandler):
             "Expected state should be equal to active")
 
         send_notification.assert_called_with(
-            current_institution=CURRENT_INSTITUTION, 
+            current_institution=None, # The first invite the user doesn't have current_institution 
             sender_key=self.other_user.key, 
             receiver_key=self.user_admin.key,
             entity_type="ACCEPT_INVITE_USER"

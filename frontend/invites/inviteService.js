@@ -21,7 +21,9 @@
 
         service.sendInvite = function sendInvite(invite) {
             var deferred = $q.defer();
-            $http.post(INVITES_URI, invite).then(function success(response) {
+            $http.post(INVITES_URI, {
+                data: invite
+            }).then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);
@@ -41,7 +43,9 @@
 
         service.sendInviteInst = function sendInviteInst(invite) {
             var deferred = $q.defer();
-            $http.post(INVITES_URI + '/institution', invite).then(function success(response) {
+            $http.post(INVITES_URI + '/institution', {
+                data: invite
+            }).then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);

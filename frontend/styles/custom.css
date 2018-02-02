@@ -892,3 +892,8 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
   text-align: center;
   font-size: 10px;
 }
+
+.dialog-transparent-without-shadow{
+    background-color: rgba(0, 0, 0, 0);
+    box-shadow: 0 0 0;
+}

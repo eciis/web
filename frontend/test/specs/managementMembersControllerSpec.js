@@ -231,7 +231,7 @@
         });
 
         describe('acceptRequest', function() {
-            fit('should remove the request from the array', function() {
+            it('should remove the request from the array', function() {
                 spyOn(requestInvitationService, 'acceptRequest').and.callFake(function () {
                     return {
                         then: function (callback) {

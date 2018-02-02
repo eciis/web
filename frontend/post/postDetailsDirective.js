@@ -759,7 +759,7 @@
             if(text){
                 text = Utils.limitString(text, LIMIT_POST_CHARACTERS);
             }
-            return text.replace(URL_PATTERN,REPLACE_URL);
+            return text && text.replace(URL_PATTERN,REPLACE_URL);
         };
     });
 })();

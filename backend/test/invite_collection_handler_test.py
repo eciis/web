@@ -163,13 +163,15 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         admin = mocks.create_user(ADMIN['email'])
         institution = mocks.create_institution()		 
         admin.institutions_admin = [institution.key]
+        admin.add_institution(institution.key)
         institution.admin = admin.key
         admin.add_permission("invite_members",institution.key.urlsafe())
         admin.put()
         institution.put()
         body = create_body('ana@gmail.com', admin, institution)
 
-        invite = self.testapp.post_json("/api/invites", body, headers={'institution-authorization': institution.key.urlsafe()})
+        invite = self.testapp.post_json("/api/invites", body, 
+            headers={'institution-authorization': institution.key.urlsafe()})
         # Retrieve the entities
         invite = json.loads(invite._app_iter[0])
         key_invite = ndb.Key(urlsafe=invite['key'])
@@ -184,7 +186,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
                          "The institution key expected was key of institution")
 
         # assert the invite was sent
-        send_invite.assert_called_with("localhost:80", CURRENT_INSTITUTION)
+        send_invite.assert_called_with("localhost:80", institution.key)
 
     @patch.object(Invite, 'send_invite')
     @patch('utils.verify_token', return_value=ADMIN)
@@ -192,6 +194,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         admin = mocks.create_user(ADMIN['email'])
         institution = mocks.create_institution()		 
         admin.institutions_admin = [institution.key]
+        admin.add_institution(institution.key)
         institution.admin = admin.key
         admin.add_permission("invite_members",institution.key.urlsafe())
         admin.put()
@@ -202,7 +205,8 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         institution.put()
         body = create_body(USER['email'], admin, institution)
 
-        invite = self.testapp.post_json("/api/invites", body, headers={'institution-authorization': institution.key.urlsafe()})
+        invite = self.testapp.post_json("/api/invites", body, 
+            headers={'institution-authorization': institution.key.urlsafe()})
         # Retrieve the entities
         invite = json.loads(invite._app_iter[0])
         key_invite = ndb.Key(urlsafe=invite['key'])
@@ -217,7 +221,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
                          "The institution key expected was key of institution")
 
         # assert the invite was sent
-        send_invite.assert_called_with("localhost:80", CURRENT_INSTITUTION)
+        send_invite.assert_called_with("localhost:80", institution.key)
 
     @patch.object(Invite, 'send_invite')
     @patch('utils.verify_token', return_value=ADMIN)
@@ -260,7 +264,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         admin.add_permission("invite_members",institution.key.urlsafe())
         admin.put()
         institution.put()
-        body = create_body('ana@gmail.com', admin, institution, headers={'institution-authorization': institution.key.urlsafe()})
+        body = create_body('ana@gmail.com', admin, institution)
         with self.assertRaises(Exception) as raises_context:
             self.testapp.post_json("/api/invites", body)
 

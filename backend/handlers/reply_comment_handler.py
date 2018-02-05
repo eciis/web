@@ -45,7 +45,6 @@ class ReplyCommentHandler(BaseHandler):
         """Handle Post Comments requests."""
         data = json.loads(self.request.body)
         reply_data = data['replyData']
-        current_institution = data['currentInstitution']
         post = ndb.Key(urlsafe=post_key).get()
         institution = post.institution.get()
 
@@ -66,7 +65,7 @@ class ReplyCommentHandler(BaseHandler):
                 user.key.urlsafe(),
                 entity_type,
                 post.key.urlsafe(),
-                current_institution
+                user.current_institution
             )
 
         comment = post.get_comment(comment_id)
@@ -77,7 +76,7 @@ class ReplyCommentHandler(BaseHandler):
                 user.key.urlsafe(),
                 entity_type,
                 post.key.urlsafe(),
-                current_institution
+                user.current_institution
             )
 
         self.response.write(json.dumps(Utils.toJson(reply)))

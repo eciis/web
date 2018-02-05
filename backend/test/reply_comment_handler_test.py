@@ -46,6 +46,7 @@ class ReplyCommentHandlerTest(TestBaseHandler):
         cls.third_user = mocks.create_user(THIRD_USER_EMAIL)
         # new Institution CERTBIO
         cls.institution = mocks.create_institution()
+        cls.third_user.add_institution(cls.institution.key)
         # POST of User To Certbio Institution
         cls.user_post = mocks.create_post(cls.user.key, cls.institution.key)
         # comment from other_user
@@ -71,14 +72,12 @@ class ReplyCommentHandlerTest(TestBaseHandler):
             'replyData': {
                 "text": "reply of comment",
                 "institution_key": self.institution.key.urlsafe()
-            },
-            'currentInstitution': {
-                'name': 'currentInstitution'
             }
         }
+
         self.testapp.post_json(
             URL_REPLY_COMMENT % (self.user_post.key.urlsafe(), self.other_user_comment.id),
-            body
+            body, headers={'institution-authorization': self.institution.key.urlsafe()}
         )
 
         # Update post
@@ -98,7 +97,7 @@ class ReplyCommentHandlerTest(TestBaseHandler):
                 self.third_user.key.urlsafe(),
                 "COMMENT",
                 self.user_post.key.urlsafe(),
-                body['currentInstitution']
+                self.institution.key
             ),
             # args used to send the notification to the author 
             # from the comment that was replyed
@@ -107,7 +106,7 @@ class ReplyCommentHandlerTest(TestBaseHandler):
                 self.third_user.key.urlsafe(),
                 "COMMENT",
                 self.user_post.key.urlsafe(),
-                body['currentInstitution']
+                self.institution.key
             )
         ]
         send_message_notification.assert_has_calls(calls)
@@ -120,9 +119,6 @@ class ReplyCommentHandlerTest(TestBaseHandler):
             'replyData': {
                 "text": "reply of comment",
                 "institution_key": self.institution.key.urlsafe()
-            },
-            'currentInstitution': {
-                'name': 'currentInstitution'
             }
         }
         # Verify that the post is published
@@ -139,15 +135,18 @@ class ReplyCommentHandlerTest(TestBaseHandler):
         # to comment a deleted post
         with self.assertRaises(Exception) as raises_context:
             comment_id = 21456
-            self.testapp.post(URL_REPLY_COMMENT % (self.user_post.key.urlsafe(), comment_id),
-                              json.dumps(body))
+            self.testapp.post_json(
+                URL_REPLY_COMMENT % (self.user_post.key.urlsafe(), comment_id), body,
+                headers={'institution-authorization': self.institution.key.urlsafe()}
+            )
 
         exception_message = self.get_message_exception(str(raises_context.exception))
+        expected_message = "Error! This post has been deleted"
         self.assertEqual(
             exception_message,
-            "Error! This post has been deleted",
-            "Expected exception message must be equal to " +
-            "Error! This post has been deleted")
+            expected_message,
+            "Expected exception message must be equal to %s but was %s" %
+            (expected_message, exception_message))
         # assert no notification was sent
         send_message_notification.assert_not_called()
 

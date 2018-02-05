@@ -20,7 +20,9 @@ Institution.prototype.isValidAddress = function isValidAdress(){
     var valid = true;
     if(this.address && this.address.country === "Brasil"){
         _.forEach(this.address, function(value, key) {
-            if(! value || _.isEmpty(value)) {
+            var isNotNumber =  key !== "number";
+            var isValid =  !value || _.isEmpty(value); 
+            if(isNotNumber && isValid) {
                 valid = false;
             }
         });

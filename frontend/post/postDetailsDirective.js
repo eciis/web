@@ -75,6 +75,12 @@
                 postDetailsCtrl.post.shared_event;
         };
 
+        postDetailsCtrl.getCSSClassPost = function getCSSClassPost() {
+            return (postDetailsCtrl.isDeleted(postDetailsCtrl.post) || 
+                    postDetailsCtrl.isDeletedEvent(postDetailsCtrl.post) || 
+                        postDetailsCtrl.isInstInactive()) ? 'post-deleted':'';
+        };
+
         postDetailsCtrl.postHasActivity = function postHasActivity() {
             var hasNoComments = postDetailsCtrl.post.number_of_comments === 0;
             var hasNoLikes = postDetailsCtrl.post.number_of_likes === 0;
@@ -753,7 +759,7 @@
             if(text){
                 text = Utils.limitString(text, LIMIT_POST_CHARACTERS);
             }
-            return text.replace(URL_PATTERN,REPLACE_URL);
+            return text && text.replace(URL_PATTERN,REPLACE_URL);
         };
     });
 })();

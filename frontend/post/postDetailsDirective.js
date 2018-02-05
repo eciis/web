@@ -10,7 +10,6 @@
 
         var LIMIT_POST_CHARACTERS = 1000;
 
-        postDetailsCtrl.showLikes = false;
         postDetailsCtrl.showComments = false;
         postDetailsCtrl.savingComment = false;
         postDetailsCtrl.savingLike = false;
@@ -331,8 +330,7 @@
 
         postDetailsCtrl.getLikes = function getLikes() {
             var likesUri = postDetailsCtrl.post.likes;
-            postDetailsCtrl.showLikes = !postDetailsCtrl.showLikes;
-            if(postDetailsCtrl.showLikes) {
+            if(postDetailsCtrl.isPostPage) {
                 var promise = PostService.getLikes(likesUri);
                 promise.then(function success(response) {
                     postDetailsCtrl.post.data_likes = response.data;

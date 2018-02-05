@@ -18,7 +18,6 @@ class ResendInviteHandler(BaseHandler):
     def post(self, user, invite_key):
         """Handle POST Requests."""
         body = json.loads(self.request.body)
-        current_institution = body['currentInstitution']
         host = self.request.host
         invite = ndb.Key(urlsafe=invite_key).get()
         
@@ -35,4 +34,4 @@ class ResendInviteHandler(BaseHandler):
         Utils._assert(institution.state == 'inactive',
                         "The institution has been deleted", NotAuthorizedException)
 
-        invite.send_invite(host, current_institution)
+        invite.send_invite(host, user.current_institution)

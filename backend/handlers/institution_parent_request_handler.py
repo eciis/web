@@ -24,7 +24,6 @@ class InstitutionParentRequestHandler(BaseHandler):
     @ndb.transactional(xg=True)
     def put(self, user, request_key):
         """Handler PUT Requests. Change status of parent_request from 'sent' to 'accepted'."""
-        current_institution = json.loads(self.request.get('currentInstitution'))
         request = ndb.Key(urlsafe=request_key).get()
         user.check_permission('answer_link_inst_request',
                               'User is not allowed to accept link between institutions',
@@ -42,7 +41,7 @@ class InstitutionParentRequestHandler(BaseHandler):
         admin_of_children_inst = institution_children.admin.get()
         admin_of_children_inst.add_permission("remove_link", parent_institution.key.urlsafe())
         
-        request.send_response_notification(current_institution, user.key, 'ACCEPT')
+        request.send_response_notification(user.current_institution, user.key, 'ACCEPT')
 
         enqueue_task('add-admin-permissions', {'institution_key': institution_children.key.urlsafe()})
 
@@ -52,7 +51,6 @@ class InstitutionParentRequestHandler(BaseHandler):
     @json_response
     def delete(self, user, request_key):
         """Change request status from 'sent' to 'rejected'."""
-        current_institution = json.loads(self.request.get('currentInstitution'))
         request = ndb.Key(urlsafe=request_key).get()
         user.check_permission('answer_link_inst_request',
                               'User is not allowed to reject link between institutions',
@@ -60,4 +58,4 @@ class InstitutionParentRequestHandler(BaseHandler):
         request.change_status('rejected')
         request.put()
 
-        request.send_response_notification(current_institution, user.key, 'REJECT')
+        request.send_response_notification(user.current_institution, user.key, 'REJECT')

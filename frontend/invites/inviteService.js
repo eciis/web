@@ -7,7 +7,6 @@
         var service = this;
 
         var INVITES_URI = "/api/invites";
-        service.user = AuthService.getCurrentUser();
     
         service.getInvite = function(inviteKey) {
             var deferred = $q.defer();
@@ -21,9 +20,10 @@
         };
 
         service.sendInvite = function sendInvite(invite) {
-            var body = Utils.createBody(invite, service.user.current_institution);
             var deferred = $q.defer();
-            $http.post(INVITES_URI, body).then(function success(response) {
+            $http.post(INVITES_URI, {
+                data: invite
+            }).then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);
@@ -32,9 +32,8 @@
         };
 
         service.resendInvite = function resendInvite(inviteKey) {
-            var body = Utils.createBody({}, service.user.current_institution);
             var deferred = $q.defer();
-            $http.post(INVITES_URI + "/" + inviteKey + "/resend", body).then(function success(response) {
+            $http.post(INVITES_URI + "/" + inviteKey + "/resend", {}).then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);
@@ -43,9 +42,10 @@
         };
 
         service.sendInviteInst = function sendInviteInst(invite) {
-            var body = Utils.createBody(invite, service.user.current_institution);
             var deferred = $q.defer();
-            $http.post(INVITES_URI + '/institution', body).then(function success(response) {
+            $http.post(INVITES_URI + '/institution', {
+                data: invite
+            }).then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);
@@ -54,9 +54,9 @@
         };
 
         service.deleteInvite = function deleteInvite(inviteKey) {
-            var currentInstitution = Utils.currentInstitutionToString(service.user.current_institution);
             var deferred = $q.defer();
-            $http.delete(`${INVITES_URI}/${inviteKey}?currentInstitution=${currentInstitution}`).then(function sucess(response) {
+            var url = `${INVITES_URI}/${inviteKey}`;
+            $http.delete(url).then(function sucess(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);
@@ -75,9 +75,9 @@
         };
 
         service.acceptInvite = function acceptInvite(patch, invite_key) {
-            var currentInstitution = Utils.currentInstitutionToString(service.user.current_institution);
             var deffered = $q.defer();
-            $http.patch(`${INVITES_URI}/${invite_key}?currentInstitution=${currentInstitution}`, patch).then(function success(info) {
+            var url = `${INVITES_URI}/${invite_key}`;
+            $http.patch(url, patch).then(function success(info) {
                 deffered.resolve(info.data);
             }, function error(data) {
                 deffered.reject(data);

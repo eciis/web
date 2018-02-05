@@ -334,6 +334,9 @@
                 if (AuthService.isLoggedIn()) {
                     var token = AuthService.getUserToken();
                     config.headers.Authorization = 'Bearer ' + token;
+                    if (!_.isEmpty(AuthService.getCurrentUser().institutions)) {
+                        config.headers['Institution-Authorization'] = AuthService.getCurrentUser().current_institution.key;
+                    }
                 }
 
                 Utils.updateBackendUrl(config);

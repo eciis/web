@@ -8,10 +8,7 @@
         var inviteInstitution = {institution_key: "098745", type_of_invite: "institution", suggestion_institution_name: "New Institution", invitee: "mayzabeel@gmail.com"};
         var invites = [inviteInstitution];
         var body = {
-            data: null,
-            currentInstitution: {
-                name: 'currentInstitution'
-            }
+            data: null
         };
 
         beforeEach(module('app'));
@@ -53,7 +50,7 @@
             service.sendInvite(inviteInstitution).then(function(data){
                 result = data;
                 body['data'] = inviteInstitution;
-                expect($http.post).toHaveBeenCalledWith(INVITES_URI, body);
+                expect($http.post).toHaveBeenCalledWith(INVITES_URI, {data: inviteInstitution});
                 expect(result.data).toEqual(inviteInstitution);
                 done();
             });

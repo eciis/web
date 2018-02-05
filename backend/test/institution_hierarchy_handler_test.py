@@ -134,7 +134,7 @@ class InstitutionHierarchyHandlerTest(TestBaseHandler):
         verify_token._mock_return_value = {'email': third_user.email[0]}
 
         self.testapp.delete("/api/institutions/%s/hierarchy/%s?isParent=true" %
-                            (third_inst.key.urlsafe(), second_inst.key.urlsafe()))
+            (third_inst.key.urlsafe(), second_inst.key.urlsafe()))
         
         first_user = first_user.key.get()
         second_user = second_user.key.get()

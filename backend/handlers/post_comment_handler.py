@@ -45,7 +45,6 @@ class PostCommentHandler(BaseHandler):
         """Handle Post Comments requests."""
         body = json.loads(self.request.body)
         comment_data = body['commentData']
-        current_institution = body['currentInstitution']
         post = ndb.Key(urlsafe=post_key).get()
 
         Utils._assert(post.state == 'deleted',
@@ -62,7 +61,7 @@ class PostCommentHandler(BaseHandler):
                 'sender_key': user.key.urlsafe(),
                 'entity_key': post.key.urlsafe(),
                 'entity_type': entity_type,
-                'current_institution': json.dumps(current_institution)
+                'current_institution': user.current_institution.urlsafe()
             }
             enqueue_task('post-notification', params)
 

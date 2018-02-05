@@ -301,3 +301,8 @@ class User(ndb.Model):
             user_found = user_found.next()
             if user_found.state == 'active':
                 return user_found
+
+    def is_member(self, institution_key):
+        """Verify if the institution is part of the
+        institutions list that the user belongs."""
+        return institution_key in self.institutions

@@ -38,20 +38,14 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
         cls.inst_test.members = [cls.user_admin.key]
         cls.inst_test.followers = [cls.user_admin.key]
         cls.inst_test.admin = cls.user_admin.key
+        cls.user_admin.add_institution(cls.inst_test.key)
         cls.inst_test.put()
-        # post body
-        cls.body = {
-            'data': None,
-            'currentInstitution': {
-                'name': 'current_institution'
-            }
-        }
 
 
     @patch('utils.verify_token', return_value={'email': 'other_user@test.com'})
     def test_post(self, verify_token):
         """Test method post of UserRequestCollectionHandlerTest."""
-        data = {
+        body = {
             'sender_key': self.other_user.key.urlsafe(),
             'is_request': True,
             'admin_key': self.user_admin.key.urlsafe(),
@@ -61,10 +55,9 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
             'office': 'CEO',
             'institutional_email': 'other@ceo.com'
         }
-        self.body['data'] = data
 
         request = self.testapp.post_json(
-            "/api/institutions/%s/requests/user" % self.inst_test.key.urlsafe(), self.body
+            "/api/institutions/%s/requests/user" % self.inst_test.key.urlsafe(), body
         )
         request = json.loads(request._app_iter[0])
 
@@ -92,7 +85,7 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': 'other_user@test.com'})
     def test_post_invalid_request_type(self, verify_token):
         """Test if an exception is thrown by passing an invalid request."""
-        data = {
+        body = {
             'sender_key': self.other_user.key.urlsafe(),
             'is_request': True,
             'admin_key': self.user_admin.key.urlsafe(),
@@ -104,12 +97,11 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
             'institution_name': self.inst_test.name,
             'institution_photo_url': self.inst_test.photo_url
         }
-        self.body['data'] = data
 
         with self.assertRaises(Exception) as ex:
             self.testapp.post_json(
                 "/api/institutions/" + self.inst_test.key.urlsafe() +
-                "/requests/user", self.body)
+                "/requests/user", body)
 
         exception_message = self.get_message_exception(ex.exception.message)
         self.assertEqual(

@@ -32,8 +32,10 @@ class InviteInstitutionHandlerTest(TestBaseHandler):
         cls.institution = mocks.create_institution()
         # set the institution admin to be the first user
         cls.first_user.institutions_admin = [cls.institution.key]
+        cls.first_user.add_institution(cls.institution.key)
         cls.first_user.put()
         cls.institution.admin = cls.first_user.key
+        cls.institution.add_member(cls.first_user)
         cls.institution.put()
         # update first user permissions
         cls.first_user.add_permission('send_invite_inst', cls.institution.key.urlsafe())
@@ -46,19 +48,17 @@ class InviteInstitutionHandlerTest(TestBaseHandler):
             'institution_key': cls.institution.key.urlsafe()
         }
         cls.body = {
-            'data': data,
-            'currentInstitution': {
-                'name': 'currentInstitution'
-            }
+            'data': data
         }
 
     @patch.object(Invite, 'send_invite')
     @patch('utils.verify_token', return_value={'email': 'first_user@gmail.com'})
     def test_post_invite_institution(self, verify_token, send_invite):
         """Test post invite institution."""
-        self.testapp.post_json("/api/invites/institution", self.body)
+        self.testapp.post_json("/api/invites/institution", self.body,
+            headers={'institution-authorization':self.institution.key.urlsafe()})
         # assert the invite was sent to the invitee
-        send_invite.assert_called_with(host, self.body['currentInstitution'])
+        send_invite.assert_called_with(host, self.institution.key)
     
     @patch.object(Invite, 'send_invite')
     @patch('utils.verify_token', return_value={'email': 'first_user@gmail.com'})

@@ -33,7 +33,6 @@ class InviteCollectionHandler(BaseHandler):
         """Handle POST Requests."""
         body = json.loads(self.request.body)
         data = body['data']
-        current_institution = body['currentInstitution']
         host = self.request.host
         type_of_invite = data.get('type_of_invite')
 
@@ -61,7 +60,7 @@ class InviteCollectionHandler(BaseHandler):
             if(invite.stub_institution_key):
                 invite.stub_institution_key.get().addInvite(invite)
 
-            invite.send_invite(host, current_institution)
+            invite.send_invite(host, user.current_institution)
 
             make_invite = invite.make()
 

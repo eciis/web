@@ -6,11 +6,9 @@
     app.service("RequestInvitationService", function RequestInvitationService(MessageService, HttpService, AuthService) {
         var service = this;
         var REQUESTS_URI = "/api/institutions/";
-        service.user = AuthService.getCurrentUser();
 
         service.sendRequest = function sendRequest(request, institution_key) {
-            var body = Utils.createBody(request, service.user.current_institution);
-            return HttpService.post(REQUESTS_URI + institution_key + "/requests/user", body);
+            return HttpService.post(REQUESTS_URI + institution_key + "/requests/user", request);
         };
 
         service.sendRequestInst = function sendRequestInst(request) {
@@ -19,13 +17,11 @@
         };
 
         service.sendRequestToParentInst = function(invite, institution_requested_key) {
-            var body = Utils.createBody(invite, service.user.current_institution);
-            return HttpService.post(REQUESTS_URI + institution_requested_key + "/requests/institution_parent", body);
+            return HttpService.post(REQUESTS_URI + institution_requested_key + "/requests/institution_parent", invite);
         };
 
         service.sendRequestToChildrenInst = function(invite, institution_requested_key) {
-            var body = Utils.createBody(invite, service.user.current_institution);
-            return HttpService.post(REQUESTS_URI + institution_requested_key + "/requests/institution_children", body);
+            return HttpService.post(REQUESTS_URI + institution_requested_key + "/requests/institution_children", invite);
         };
 
         service.getParentRequests = function(institution_key) {

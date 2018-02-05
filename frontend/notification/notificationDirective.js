@@ -144,13 +144,13 @@
         };
 
         controller.markAsRead = function markAsRead(notification) {
-            /*var promise = NotificationService.markAsRead(notification);
+            var promise = NotificationService.markAsRead(notification);
             promise.then(function success() {
                 _.remove(controller.notifications, function find(found) {
                     return found.$id === notification.$id;
                 });
             });
-            return promise;*/
+            return promise;
         };
 
         controller.getIcon = function getIcon(type) {

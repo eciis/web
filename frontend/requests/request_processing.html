@@ -29,43 +29,11 @@
             </div>
         </div>
       </div>
-      <!--<md-list flex>
-        <md-list-item class="md-3-line">
-          <img ng-src="{{ requestCtrl.parent.photo_url }}" class="md-avatar" alt="{{requestCtrl.parent.name}}" />
-          <div class="md-list-item-text" layout="column">
-            <h3><b>{{ requestCtrl.parent.name }}</b> - {{ requestCtrl.parent.email }}</h3>
-            <h4>{{ requestCtrl.parent.phone_number }} | {{ requestCtrl.getFullAddress(requestCtrl.parent) }}</h4>
-            <p>{{ requestCtrl.parent.description }}</p>
-          </div>
-        </md-list-item>
-        <div layout="row" style="margin-left: 25px;">
-          <div layout="column" style="margin-bottom: 20px;" layout-align="start start">
-            <md-icon>subdirectory_arrow_right</md-icon>
-          </div>
-          <div layout="column" flex layout-align="end start">
-            <md-list-item ng-class="requestCtrl.children.name? 'md-3-line' : 'md-2-line'">
-              <img ng-src="{{ requestCtrl.children.photo_url || 'app/images/avatar.png'}}" class="md-avatar"
-                alt="{{ requestCtrl.children.name }}" />
-              <div class="md-list-item-text" layout="column">
-                <h3>
-                  <b>{{ requestCtrl.children.name || requestCtrl.children.sender_name}}</b> -
-                  {{ requestCtrl.children.email || requestCtrl.children.office }}
-                </h3>
-                <h4 ng-if="requestCtrl.children.institutional_email">{{ requestCtrl.children.institutional_email }}</h4>
-                <div ng-if="requestCtrl.children.name">
-                  <h4>{{ requestCtrl.children.phone_number }} | {{ requestCtrl.getFullAddress(requestCtrl.children) }}</h4>
-                  <p>{{ requestCtrl.children.description }}</p>
-                </div>
-              </div>
-            </md-list-item>
-          </div>
-        </div>
-      </md-list>-->
     </div>
   </md-dialog-content>
   <md-dialog-actions layout="row" layout-align="end center" layout-wrap>
     <md-button ng-click="requestCtrl.rejectRequest($event)" class="md-primary" md-colors="{color: 'default-teal-500'}">
-      Não Confirmar
+      Cancelar
     </md-button>
     <md-button ng-click="requestCtrl.acceptRequest()" class="md-primary" md-colors="{color: 'default-teal-500'}">
       Confirmar

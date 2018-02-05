@@ -58,6 +58,8 @@
             $rootScope: rootscope,
             $scope: scope
         });
+
+        postDetailsCtrl.isPostPage = true;
     }));
 
     afterEach(function() {
@@ -141,14 +143,12 @@
             httpBackend.expect('POST', POSTS_URI + '/' + posts[0].key + '/likes').respond();
             httpBackend.expect('GET', "/api/posts/123456/likes").respond();
             postDetailsCtrl.user.liked_posts = [];
-            expect(postDetailsCtrl.showLikes).toEqual(false);
             postDetailsCtrl.likeOrDislikePost(posts[0]).then(function() {
                 expect(posts[0].number_of_likes).toEqual(1);
             });
             httpBackend.flush();
             expect(postDetailsCtrl.isLikedByUser).toHaveBeenCalledWith();
             expect(postDetailsCtrl.getLikes).toHaveBeenCalledWith(posts[0]);
-            expect(postDetailsCtrl.showLikes).toEqual(true);
             expect(postService.likePost).toHaveBeenCalledWith(posts[0]);
         });
 

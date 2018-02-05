@@ -1,56 +1,41 @@
-<md-dialog>
-  <md-toolbar style="background-color: #00695C" layout="row">
-    <div class="md-toolbar-tools">
-      <h1 class="md-toolbar-tools">Confirmar Vínculo</h1>
-    </div>
-    <section layout="column" layout-align="center center">
-        <md-button class="md-icon-button" ng-click="requestCtrl.hideDialog()">
-            <md-icon>close</md-icon>
-        </md-button>
-    </section>
-  </md-toolbar>
+<md-dialog flex-gt-sm="45" flex-sm="80" flex-xs="100">
   <md-dialog-content class="md-dialog-content" layout-gt-sm="column" layout-padding>
-    <div>
-      <md-list flex>
-        <md-list-item class="md-3-line">
-          <img ng-src="{{ requestCtrl.parent.photo_url }}" class="md-avatar" alt="{{requestCtrl.parent.name}}" />
-          <div class="md-list-item-text" layout="column">
-            <h3><b>{{ requestCtrl.parent.name }}</b> - {{ requestCtrl.parent.email }}</h3>
-            <h4>{{ requestCtrl.parent.phone_number }} | {{ requestCtrl.getFullAddress(requestCtrl.parent) }}</h4>
-            <p>{{ requestCtrl.parent.description }}</p>
-          </div>
-        </md-list-item>
-        <div layout="row" style="margin-left: 25px;">
-          <div layout="column" style="margin-bottom: 20px;" layout-align="start start">
-            <md-icon>subdirectory_arrow_right</md-icon>
-          </div>
-          <div layout="column" flex layout-align="end start">
-            <md-list-item ng-class="requestCtrl.children.name? 'md-3-line' : 'md-2-line'">
-              <img ng-src="{{ requestCtrl.children.photo_url || 'app/images/avatar.png'}}" class="md-avatar"
-                alt="{{ requestCtrl.children.name }}" />
-              <div class="md-list-item-text" layout="column">
-                <h3>
-                  <b>{{ requestCtrl.children.name || requestCtrl.children.sender_name}}</b> -
-                  {{ requestCtrl.children.email || requestCtrl.children.office }}
-                </h3>
-                <h4 ng-if="requestCtrl.children.institutional_email">{{ requestCtrl.children.institutional_email }}</h4>
-                <div ng-if="requestCtrl.children.name">
-                  <h4>{{ requestCtrl.children.phone_number }} | {{ requestCtrl.getFullAddress(requestCtrl.children) }}</h4>
-                  <p>{{ requestCtrl.children.description }}</p>
-                </div>
-              </div>
-            </md-list-item>
-          </div>
+    <h4 style="margin: 0;">Confirmar Vínculo</h4>
+    <p style="margin: 0;">Um usuário da plataforma solicitou vincular-se a uma das instituições que você administra. Clique em confirmar para aceitar ou cancelar para recusar vinculo.</p>
+    <div layout="column">
+      <div layout="row" md-colors="{background: 'default-grey-200'}" layout-margin style="margin: 0 0 8px 0;">
+        <div>
+          <img style="width: 75px; height: 75px; border-radius: 50%;" ng-src="{{requestCtrl.parent.photo_url || 'app/images/institution.png'}}" 
+            alt="{{requestCtrl.parent.name}}"></img>
         </div>
-      </md-list>
+        <div layout="column" layout-align="center start">
+          <b>{{ requestCtrl.parent.name }}</b>
+          <span>{{ requestCtrl.parent.email }}</span>
+        </div>
+      </div>
+      <div layout="row">
+        <div flex="5" layout="row" layout-align="center">
+          <div style="width: 8px;" md-colors="{background: 'default-teal-500'}"></div>
+        </div>
+        <div layout="row" md-colors="{background: 'default-grey-200'}" layout-margin flex="95" style="margin: 0;">
+            <div>
+              <img style="width: 75px; height: 75px; border-radius: 50%;" ng-src="{{ requestCtrl.children.photo_url || 'app/images/avatar.png'}}"
+                alt="{{ requestCtrl.children.name }}"></img>
+            </div>
+            <div layout="column" layout-align="center start">
+              <b>{{ requestCtrl.children.name || requestCtrl.children.sender_name}}</b>
+              <span>{{ requestCtrl.children.institutional_email }}</span>
+              <span>{{ requestCtrl.children.office }}</span>
+            </div>
+        </div>
+      </div>
     </div>
   </md-dialog-content>
   <md-dialog-actions layout="row" layout-align="end center" layout-wrap>
-    <md-button ng-click="requestCtrl.rejectRequest($event)" class="md-primary">
-      Não Confirmar
+    <md-button ng-click="requestCtrl.rejectRequest($event)" class="md-primary" md-colors="{color: 'default-teal-500'}">
+      Cancelar
     </md-button>
-    <md-button ng-click="requestCtrl.acceptRequest()"
-        class="md-warn md-raised md-hue-2">
+    <md-button ng-click="requestCtrl.acceptRequest()" class="md-primary" md-colors="{color: 'default-teal-500'}">
       Confirmar
     </md-button>
   </md-dialog-actions>

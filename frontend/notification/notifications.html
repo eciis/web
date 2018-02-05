@@ -15,7 +15,7 @@
         <md-icon>clear_all</md-icon>
       </md-button>
       </div>
-      <md-list-item class="md-2-line" ng-repeat="notification in controller.notifications | orderBy:'-timestamp'" ng-click="controller.action(notification)">
+      <md-list-item class="md-2-line" ng-repeat="notification in controller.notifications | orderBy:'-timestamp'" ng-click="controller.action(notification, $event)">
         <md-icon>{{controller.getIcon(notification.entity_type)}}</md-icon>
         <div class="md-list-item-text">
           <h3>{{controller.format(notification)}}</h3>

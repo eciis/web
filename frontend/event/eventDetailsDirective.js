@@ -13,6 +13,7 @@
 
         eventCtrl.user = AuthService.getCurrentUser();
         eventCtrl.isLoadingEvents = true;
+        eventCtrl.showImage = true;
 
         eventCtrl.share = function share(ev, event) {
             $mdDialog.show({
@@ -80,8 +81,16 @@
                     isEditing: true
                 },
                 bindToController: true
-            });
+            }).then(function(){
+                eventCtrl.showImage = hasImage(event);
+            })
         };
+
+        function hasImage(event) {
+            var emptyPhoto = event && event.photo_url == "";
+            var nullPhoto = event && event.photo_url == null;
+            return !(emptyPhoto || nullPhoto);
+        }
 
         eventCtrl.isEventAuthor = function isEventAuthor(event) {
             if (event) return Utils.getKeyFromUrl(event.author_key) === eventCtrl.user.key;
@@ -113,7 +122,7 @@
         }
 
     });
-
+    
     app.directive("eventDetails", function () {
         return {
             restrict: 'E',

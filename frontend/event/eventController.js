@@ -232,10 +232,10 @@
         };
 
         dialogCtrl.cleanImage = function() {
-           dialogCtrl.photoUrl = "";
-           dialogCtrl.photoBase64Data = null;
-           dialogCtrl.deletePreviousImage = true;
-           delete dialogCtrl.event.photo_url;
+            dialogCtrl.photoUrl = "";
+            dialogCtrl.photoBase64Data = null;
+            dialogCtrl.deletePreviousImage = true;
+            delete dialogCtrl.event.photo_url;
         };
 
         dialogCtrl.getCitiesByState = function getCitiesByState() {

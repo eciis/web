@@ -372,7 +372,7 @@
                 EventService.createEvent(event).then(function success(response) {
                     dialogCtrl.closeDialog();
                     dialogCtrl.events.push(response.data);
-                    MessageService.showToast('Evento criado com sucesso, esperando aprovação!');
+                    MessageService.showToast('Evento criado com sucesso!');
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
                     $state.go("app.user.events");

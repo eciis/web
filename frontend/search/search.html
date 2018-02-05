@@ -70,9 +70,7 @@
                             <b>&bull; Nenhuma instituição encontrada</b>
                         </md-list-item>
                     </md-list>
-                    <div layout-align="center center" layout="row">
-                      <md-progress-circular ng-show="searchCtrl.isLoading()" md-mode="indeterminate"></md-progress-circular>
-                    </div>
+                    <load-circle flex ng-if="searchCtrl.isLoading()"></load-circle>
                 </md-card-content>
             </md-card>
         </div>

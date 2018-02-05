@@ -1,7 +1,5 @@
 <div layout="row" flex layout-align="center">
-	<div flex ng-if="membersCtrl.isLoadingMembers"  layout="row" layout-align="center center">
-		<md-progress-circular md-mode="indeterminate"></md-progress-circular>
-	</div>   
+	<load-circle flex ng-if="membersCtrl.isLoadingMembers"></load-circle>
     <div ng-if="!membersCtrl.isLoadingMembers" flex flex-md="95" layout="row" layout-align="space-around"
             md-colors="{background: 'grey-50'}">
           <!-- CONTENT -->

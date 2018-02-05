@@ -16,9 +16,6 @@ def create_message(sender_key, current_institution):
     sender = ndb.Key(urlsafe=sender_key).get()
     name = sender.name if sender.name != "Unknown" else sender.email[0]
     if current_institution and current_institution is not type(None):
-        print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>."
-        print current_institution
-        print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>."
         institution_name = current_institution.get().name 
     else:
         institution_name = ""

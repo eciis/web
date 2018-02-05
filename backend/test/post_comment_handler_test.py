@@ -65,9 +65,6 @@ class PostCommentHandlerTest(TestBaseHandler):
                           "Expected size of comment's list should be zero")
 
         # Call the post method
-        print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>...."
-        print self.institution.key.urlsafe()
-        print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>...."
         self.testapp.post_json(
             URL_POST_COMMENT % self.user_post.key.urlsafe(),
             self.body,

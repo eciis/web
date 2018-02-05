@@ -51,14 +51,14 @@ class InviteInstitutionHandlerTest(TestBaseHandler):
             'data': data
         }
 
-    # @patch.object(Invite, 'send_invite')
-    # @patch('utils.verify_token', return_value={'email': 'first_user@gmail.com'})
-    # def test_post_invite_institution(self, verify_token, send_invite):
-    #     """Test post invite institution."""
-    #     self.testapp.post_json("/api/invites/institution", self.body,
-    #         headers={'institution-authorization':self.institution.key.urlsafe()})
-    #     # assert the invite was sent to the invitee
-    #     send_invite.assert_called_with(host, self.institution.key)
+    @patch.object(Invite, 'send_invite')
+    @patch('utils.verify_token', return_value={'email': 'first_user@gmail.com'})
+    def test_post_invite_institution(self, verify_token, send_invite):
+        """Test post invite institution."""
+        self.testapp.post_json("/api/invites/institution", self.body,
+            headers={'institution-authorization':self.institution.key.urlsafe()})
+        # assert the invite was sent to the invitee
+        send_invite.assert_called_with(host, self.institution.key)
     
     @patch.object(Invite, 'send_invite')
     @patch('utils.verify_token', return_value={'email': 'first_user@gmail.com'})

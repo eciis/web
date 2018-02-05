@@ -1,27 +1,33 @@
-<md-dialog>
+<md-dialog flex-gt-sm="45" flex-sm="80" flex-xs="100">
   <md-dialog-content class="md-dialog-content" layout-gt-sm="column" layout-padding>
-    <h4>Confirmar Vínculo</h4>
-    <p>Um usuário da plataforma solicitou vincular-se a uma das instituições que você administra. Clique em confirmar para aceitar ou cancelar para recusar vinculo.</p>
-    <div layout="column" layout-padding>
-      <div layout="row" md-colors="{background: 'default-grey-200'}" layout-margin>
+    <h4 style="margin: 0;">Confirmar Vínculo</h4>
+    <p style="margin: 0;">Um usuário da plataforma solicitou vincular-se a uma das instituições que você administra. Clique em confirmar para aceitar ou cancelar para recusar vinculo.</p>
+    <div layout="column">
+      <div layout="row" md-colors="{background: 'default-grey-200'}" layout-margin style="margin: 0 0 8px 0;">
         <div>
-          <img style="width: 75px; height: 75px; border-radius: 50%;" src="app/images/avatar.png"></img>
+          <img style="width: 75px; height: 75px; border-radius: 50%;" ng-src="{{requestCtrl.parent.photo_url || 'app/images/institution.png'}}" 
+            alt="{{requestCtrl.parent.name}}"></img>
         </div>
         <div layout="column" layout-align="center start">
-          <span>INSTITUIÇÃO</span>
-          <span>teste@teste.com</span>
-          <span>Convidado por: Luiz Fernando</span>
+          <b>{{ requestCtrl.parent.name }}</b>
+          <span>{{ requestCtrl.parent.email }}</span>
         </div>
       </div>
-      <div layout="row" md-colors="{background: 'default-grey-200'}" layout-margin>
-          <div>
-            <img style="width: 75px; height: 75px; border-radius: 50%;" src="app/images/avatar.png"></img>
-          </div>
-          <div layout="column" layout-align="center start">
-            <span>INSTITUIÇÃO</span>
-            <span>teste@teste.com</span>
-            <span>Convidado por: Luiz Fernando</span>
-          </div>
+      <div layout="row">
+        <div flex="5" layout="row" layout-align="center">
+          <div style="width: 8px;" md-colors="{background: 'default-teal-500'}"></div>
+        </div>
+        <div layout="row" md-colors="{background: 'default-grey-200'}" layout-margin flex="95" style="margin: 0;">
+            <div>
+              <img style="width: 75px; height: 75px; border-radius: 50%;" ng-src="{{ requestCtrl.children.photo_url || 'app/images/avatar.png'}}"
+                alt="{{ requestCtrl.children.name }}"></img>
+            </div>
+            <div layout="column" layout-align="center start">
+              <b>{{ requestCtrl.children.name || requestCtrl.children.sender_name}}</b>
+              <span>{{ requestCtrl.children.institutional_email }}</span>
+              <span>{{ requestCtrl.children.office }}</span>
+            </div>
+        </div>
       </div>
       <!--<md-list flex>
         <md-list-item class="md-3-line">

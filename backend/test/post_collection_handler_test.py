@@ -39,6 +39,7 @@ class PostCollectionHandlerTest(TestBaseHandler):
         cls.institution = mocks.create_institution()
         cls.institution.photo_url = 'urlphoto'
         cls.institution.admin = cls.user.key
+        cls.user.add_institution(cls.institution.key)
         cls.institution.follow(cls.other_user.key)
         cls.institution.put()
         # POST 
@@ -59,10 +60,8 @@ class PostCollectionHandlerTest(TestBaseHandler):
             'institution': cls.institution.key.urlsafe(),
             'text': 'testing new post'
         }
-        current_institution = { 'name': 'current_institution' }
         cls.body = {
-            'post': post_data,
-            'currentInstitution': current_institution
+            'post': post_data
         }
 
 
@@ -73,7 +72,8 @@ class PostCollectionHandlerTest(TestBaseHandler):
         """Test the post_collection_handler's post method."""
 
         # Make the request and assign the answer to post
-        post = self.testapp.post_json("/api/posts", self.body)
+        post = self.testapp.post_json("/api/posts", self.body,
+            headers={'institution-authorization': self.institution.key.urlsafe()})
         # Retrieve the entities
         post = json.loads(post._app_iter[0])
         key_post = ndb.Key(urlsafe=post['key'])
@@ -103,7 +103,7 @@ class PostCollectionHandlerTest(TestBaseHandler):
             self.user.key.urlsafe(),
             "POST",
             key_post.urlsafe(),
-            self.body.get('currentInstitution')
+            self.institution.key
         )
         # assert that no shared post notification was sent
         enqueue_task.assert_not_called()
@@ -113,7 +113,8 @@ class PostCollectionHandlerTest(TestBaseHandler):
                 'institution': self.institution.key.urlsafe(),
                 'text': 'testing another post'
             }
-            self.testapp.post_json("/api/posts", self.body)
+            self.testapp.post_json("/api/posts", self.body,
+                headers={'institution-authorization': self.institution.key.urlsafe()})
 
         exception_message = self.get_message_exception(str(raises_context.exception))
         self.assertEqual(
@@ -127,7 +128,8 @@ class PostCollectionHandlerTest(TestBaseHandler):
                 'institution': self.institution.key.urlsafe(),
                 'title': 'testing another post'
             }
-            self.testapp.post_json("/api/posts", self.body)
+            self.testapp.post_json("/api/posts", self.body,
+                headers={'institution-authorization': self.institution.key.urlsafe()})
 
         exception_message = self.get_message_exception(str(raises_context.exception))
         self.assertEqual(
@@ -146,7 +148,8 @@ class PostCollectionHandlerTest(TestBaseHandler):
             'institution': self.institution.key.urlsafe(),
             'shared_post': self.post.key.urlsafe()
         }
-        post = self.testapp.post_json("/api/posts", self.body).json
+        post = self.testapp.post_json("/api/posts", self.body,
+            headers={'institution-authorization': self.institution.key.urlsafe()}).json
         # Retrieve the entities
         key_post = ndb.Key(urlsafe=post['key'])
         post_obj = key_post.get()
@@ -181,7 +184,7 @@ class PostCollectionHandlerTest(TestBaseHandler):
             self.user.key.urlsafe(),
             "POST",
             key_post.urlsafe(),
-            self.body.get('currentInstitution')
+            self.institution.key
         )
         # check if the notification was sent to the post's author
         enqueue_task.assert_called_with(
@@ -191,7 +194,7 @@ class PostCollectionHandlerTest(TestBaseHandler):
                 'sender_key': self.user.key.urlsafe(),
                 'entity_key': post.get('key'),
                 'entity_type': 'SHARED_POST',
-                'current_institution': json.dumps(self.body.get('currentInstitution'))
+                'current_institution': self.institution.key.urlsafe()
             }
         )
 
@@ -209,7 +212,8 @@ class PostCollectionHandlerTest(TestBaseHandler):
             'institution': self.institution.key.urlsafe(),
             'shared_event': event.key.urlsafe()
         }
-        post = self.testapp.post_json("/api/posts", self.body).json
+        post = self.testapp.post_json("/api/posts", self.body,
+            headers={'institution-authorization': self.institution.key.urlsafe()}).json
         # Retrieve the entities
         key_post = ndb.Key(urlsafe=post['key'])
         post_obj = key_post.get()
@@ -248,7 +252,7 @@ class PostCollectionHandlerTest(TestBaseHandler):
             self.user.key.urlsafe(),
             "POST",
             key_post.urlsafe(),
-            self.body.get('currentInstitution')
+            self.institution.key
         )
         # assert that no notification was sent to the post's author
         enqueue_task.assert_not_called()
@@ -280,7 +284,8 @@ class PostCollectionHandlerTest(TestBaseHandler):
         }
         # Make the request and assign the answer to post method
         self.body['post'] = survey_post
-        survey = self.testapp.post_json("/api/posts", self.body)
+        survey = self.testapp.post_json("/api/posts", self.body,
+            headers={'institution-authorization': self.institution.key.urlsafe()})
         # Retrieve the entities
         survey = json.loads(survey._app_iter[0])
         key_survey = ndb.Key(urlsafe=survey['key'])
@@ -314,7 +319,7 @@ class PostCollectionHandlerTest(TestBaseHandler):
             self.user.key.urlsafe(),
             "SURVEY_POST",
             survey.get('key'),
-            self.body.get('currentInstitution')
+            self.institution.key
         )
         # assert that no notification was sent to the post's author
         enqueue_task.assert_not_called()

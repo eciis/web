@@ -41,7 +41,6 @@ class PostCollectionHandler(BaseHandler):
         """Handle POST Requests."""
         data = json.loads(self.request.body)
         post_data = data['post']
-        current_institution = data['currentInstitution']
         institution_key = post_data['institution']
         institution = ndb.Key(urlsafe=institution_key).get()
 
@@ -75,7 +74,7 @@ class PostCollectionHandler(BaseHandler):
                         user.key.urlsafe(),
                         entity_type,
                         post.key.urlsafe(),
-                        current_institution
+                        user.current_institution
                     )
 
             if(post.shared_post):
@@ -85,7 +84,7 @@ class PostCollectionHandler(BaseHandler):
                     'sender_key': user.key.urlsafe(),
                     'entity_key': post.key.urlsafe(),
                     'entity_type': entity_type,
-                    'current_institution': json.dumps(current_institution)
+                    'current_institution': user.current_institution.urlsafe()
                 }
 
                 enqueue_task('post-notification', params)

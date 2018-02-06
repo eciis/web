@@ -29,6 +29,7 @@
         }
  
         homeCtrl.getSelectedItemClass = function getSelectedItemClass(state){
+            loadStateView();
              return (state === homeCtrl.stateView) ? "option-selected-left-bar":"";
          };
 

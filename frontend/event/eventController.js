@@ -160,6 +160,7 @@
             addLinks(dialogCtrl.event);
             event = new Event(dialogCtrl.event, dialogCtrl.user.current_institution.key);
             if(event.isValid()) {
+                dialogCtrl.loading = true;
                 var patch = formatPatch(generatePatch(jsonpatch.generate(dialogCtrl.observer), event));
                 EventService.editEvent(dialogCtrl.event.key, patch).then(function success() {
                     dialogCtrl.closeDialog();
@@ -315,6 +316,7 @@
 
         dialogCtrl.nextStepOrSave = function nextStepOrSave() {
             if (dialogCtrl.getStep(3)) {
+                dialogCtrl.blockPublishButton = true;
                 dialogCtrl.save();
             } else {
                 dialogCtrl.nextStep();
@@ -368,10 +370,11 @@
             var event = new Event(dialogCtrl.event, dialogCtrl.user.current_institution.key);
             addLinks(event);
             if (event.isValid()) {
+                dialogCtrl.loading = true;
                 EventService.createEvent(event).then(function success(response) {
                     dialogCtrl.closeDialog();
                     dialogCtrl.events.push(response.data);
-                    MessageService.showToast('Evento criado com sucesso, esperando aprovação!');
+                    MessageService.showToast('Evento criado com sucesso!');
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
                     $state.go("app.user.events");

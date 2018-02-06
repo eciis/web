@@ -22,14 +22,14 @@
                 </div>
             </div>
 
-            <div layout="row">
+            <md-content layout="row">
                 <!-- LEFT MENU -->
                 <div class="container">
                     <div flex="20" layout="column" hide show-gt-sm>
                         <md-sidenav class="md-sidenav-left" md-component-id="leftNav" md-whiteframe="4" layout="row"
-                        md-is-locked-open="$mdMedia('gt-sm')" flex>
+                            md-is-locked-open="$mdMedia('gt-sm')" flex>
                             <md-content class="custom-scrollbar" layout="column" hide show-gt-sm
-                            md-colors="{background: 'grey-100'}" flex>    
+                                md-colors="{background: 'grey-100'}" flex>    
                                 <!-- Buttons -->
                                 <div layout="row">
                                     <md-button flex class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-500'}"
@@ -72,7 +72,7 @@
                                         <md-button  ng-class="institutionCtrl.getSelectedItemClass('registration_data')"
                                             ng-click="institutionCtrl.goToRegistrationData(institutionCtrl.institution.key)">
                                             <md-icon>assignment</md-icon>
-                                             <b>Dados cadastrais</b>
+                                                <b>Dados cadastrais</b>
                                         </md-button>
                                     </md-menu-item>
                                     <md-menu-item>
@@ -125,8 +125,9 @@
                 </div>
 
                 <!-- INSTITUTION TIMELINE -->
-                <div flex ui-view="institution_content" layout="column" md-colors="{background: 'grey-50'}"></div>
-            </div>
+                <div layout="row" flex ui-view="institution_content" layout="column" md-colors="{background: 'grey-50'}"></div>
+            </md-content>
         </div>
     </div>
 </div>
+    

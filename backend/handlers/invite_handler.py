@@ -37,11 +37,6 @@ def define_entity(dictionary):
     return InstitutionProfile
 
 
-def get_current_institution(request):
-    current_institution = request.get('currentInstitution')
-    return json.loads(current_institution)
-
-
 class InviteHandler(BaseHandler):
     """Invite Handler."""
 
@@ -58,12 +53,11 @@ class InviteHandler(BaseHandler):
     @login_required
     def delete(self, user, key):
         """Change invite status from 'sent' to 'rejected'."""
-        current_institution = get_current_institution(self.request)
         invite_key = ndb.Key(urlsafe=key)
         invite = invite_key.get()
         invite.change_status('rejected')
         invite.put()
-        invite.send_response_notification(current_institution, user.key, 'REJECT')
+        invite.send_response_notification(user.current_institution, user.key, 'REJECT')
 
         if invite.stub_institution_key:
             stub_institution = invite.stub_institution_key.get()
@@ -74,7 +68,6 @@ class InviteHandler(BaseHandler):
     @ndb.transactional(xg=True)
     def patch(self, user, invite_key):
         """Handler PATCH Requests."""
-        current_institution = get_current_institution(self.request)
         data = self.request.body
         invite = ndb.Key(urlsafe=invite_key).get()
 
@@ -101,6 +94,6 @@ class InviteHandler(BaseHandler):
         )
         
         user.put()
-        invite.send_response_notification(current_institution, user.key, 'ACCEPT')
+        invite.send_response_notification(user.current_institution, user.key, 'ACCEPT')
         
         self.response.write(json.dumps(makeUser(user, self.request)))

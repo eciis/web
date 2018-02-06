@@ -30,6 +30,8 @@ class LikePostHandlerTest(TestBaseHandler):
         cls.other_user = mocks.create_user('otheruser@example.com')
         # new Institution SPLAB
         cls.institution = mocks.create_institution()
+        cls.user.add_institution(cls.institution.key)
+        cls.other_user.add_institution(cls.institution.key)
         # new Post
         cls.post = mocks.create_post(cls.user.key, cls.institution.key)
 
@@ -50,8 +52,8 @@ class LikePostHandlerTest(TestBaseHandler):
         # Checks if the key of Other User are not in the authors
         self.assertNotIn(self.other_user.key.urlsafe(), authors)
         # Call the post method
-        body = {"currentInstitution": {"name": "instName"}}
-        self.testapp.post_json(uri, body)
+        self.testapp.post_json(uri, {},
+            headers={'institution-authorization': self.institution.key.urlsafe()})
         # Verify if after the like the number of likes at post is 1
         self.post = self.post.key.get()
         self.assertEqual(self.post.get_number_of_likes(), 1,
@@ -78,8 +80,8 @@ class LikePostHandlerTest(TestBaseHandler):
                          "The number of likes expected was 0, but it was %d"
                          % self.post.get_number_of_likes())
         # Call the post method
-        body = {"currentInstitution": {"name": "instName"}}
-        self.testapp.post_json(uri, body)
+        self.testapp.post_json(uri, {},
+            headers={'institution-authorization': self.institution.key.urlsafe()})
         # Verify if after the like the number of likes at post is 1
         self.post = self.post.key.get()
         self.assertEqual(self.post.get_number_of_likes(), 1,
@@ -91,16 +93,15 @@ class LikePostHandlerTest(TestBaseHandler):
             'sender_key': self.other_user.key.urlsafe(),
             'entity_key': self.post.key.urlsafe(),
             'entity_type': 'LIKE_POST',
-            'current_institution': json.dumps(body.get('currentInstitution'))
+            'current_institution': self.institution.key.urlsafe()
         }
 
         enqueue_task.assert_called_with('post-notification', params)
 
-
-
         # Call the post method again
         with self.assertRaises(Exception) as exc:
-            self.testapp.post_json(uri, body)
+            self.testapp.post_json(uri, {},
+            headers={'institution-authorization': self.institution.key.urlsafe()})
         # Verify if message exception
         exc = self.get_message_exception(exc.exception.message)
         self.assertEquals(exc, "Error! User already liked this publication")
@@ -113,7 +114,8 @@ class LikePostHandlerTest(TestBaseHandler):
         # Authentication with User
         verify_token.return_value = {'email': 'user@example.com'}
         # Call the post method
-        self.testapp.post_json(uri, body)
+        self.testapp.post_json(uri, {},
+            headers={'institution-authorization': self.institution.key.urlsafe()})
         # Refresh post
         self.post = self.post.key.get()
         # Verify if after the like with other user the number of likes at
@@ -127,8 +129,8 @@ class LikePostHandlerTest(TestBaseHandler):
         """Test the like_post_handler's delete method."""
         uri = '/api/posts/%s/likes' % self.post.key.urlsafe()
         # Call the post method
-        body = {"currentInstitution": {"name": "instName"}}
-        self.testapp.post_json(uri, body)
+        self.testapp.post_json(uri, {},
+            headers={'institution-authorization': self.institution.key.urlsafe()})
         # Refresh post
         self.post = self.post.key.get()
         # Verify if after the like the number of likes at post is 1

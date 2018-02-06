@@ -31,10 +31,8 @@ class UserRequestCollectionHandler(BaseHandler):
     @json_response
     def post(self, user, institution_key):
         """Handler of post requests."""
-        body = json.loads(self.request.body)
-        data = body['data']
+        data = json.loads(self.request.body)
         host = self.request.host
-        current_institution = body['currentInstitution']
         user_request_type = 'REQUEST_USER'
 
         type_of_invite = data.get('type_of_invite')
@@ -62,7 +60,7 @@ class UserRequestCollectionHandler(BaseHandler):
         if(request.stub_institution_key):
             request.stub_institution_key.get().addInvite(request)
 
-        request.send_invite(host, current_institution)
+        request.send_invite(host, user.current_institution)
         make_invite = request.make()
 
         self.response.write(json.dumps(make_invite))

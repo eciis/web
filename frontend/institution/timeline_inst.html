@@ -17,7 +17,7 @@
                             </md-icon>
                         </md-toolbar>
                         <md-card-content 
-                        ng-show="institutionCtrl.showFullDescription" ng-scrollbars 
+                        ng-show="institutionCtrl.showFullDescription" ng-scrollbars class="text"
                         style="padding: 1.5em; height: 15%; text-align: justify; overflow:hidden">
                             <p>{{ institutionCtrl.institution.description }}</p>
                         </md-card-content>
@@ -31,9 +31,7 @@
                         load-more-posts="institutionCtrl.loadMorePosts" flex>
                         </post-timeline>
                         <!-- LOADING CIRCLE --> 
-                        <div flex ng-if="institutionCtrl.isLoadingPosts" layout="row" layout-align="center center">
-                                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-                        </div>      
+                        <load-circle flex ng-if="institutionCtrl.isLoadingPosts"></load-circle>
                     </div>
                 </md-content>
             </div>

@@ -28,6 +28,8 @@ class LikeCommentHandlerTest(TestBaseHandler):
         cls.third_user = mocks.create_user('thirduser@example.com')
         # new Institution
         cls.institution = mocks.create_institution()
+        cls.user.add_institution(cls.institution.key)
+        cls.other_user.add_institution(cls.institution.key)
         # Post of User
         cls.post = mocks.create_post(cls.user.key, cls.institution.key)
         # comment
@@ -41,8 +43,8 @@ class LikeCommentHandlerTest(TestBaseHandler):
     def test_get(self, verify_token):
         """Test the like_comment_handler's get method."""
         # like the comment
-        body = { "currentInstitution": {"name": "instName"} }
-        self.testapp.post_json(self.uri, body)
+        self.testapp.post_json(self.uri, {},
+            headers={'institution-authorization': self.institution.key.urlsafe()})
         # Call the get method
         data = self.testapp.get(self.uri)
         # Verify the status of request
@@ -66,8 +68,8 @@ class LikeCommentHandlerTest(TestBaseHandler):
             "This comment should have no like."
         )
         # Call the post method
-        body = { "currentInstitution": {"name": "instName"} }
-        self.testapp.post_json(self.uri, body)
+        self.testapp.post_json(self.uri, {},
+            headers={'institution-authorization': self.institution.key.urlsafe()})
         # update the post obj
         self.post = self.post.key.get()
         # assert the comment has one likes
@@ -82,12 +84,13 @@ class LikeCommentHandlerTest(TestBaseHandler):
             self.user.key.urlsafe(),
             "LIKE_COMMENT",
             self.post.key.urlsafe(),
-            body.get('currentInstitution')
+            self.institution.key
         )
 
         # Call the post method again
         with self.assertRaises(Exception) as exc:
-            self.testapp.post_json(self.uri, body)
+            self.testapp.post_json(self.uri, {},
+                headers={'institution-authorization': self.institution.key.urlsafe()})
         # Verify the exception message
         exc = self.get_message_exception(exc.exception.message)
         self.assertEquals(exc, "Error! User already liked this comment")

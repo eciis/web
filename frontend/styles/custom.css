@@ -734,6 +734,7 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
     width: unset !important;
     min-width: unset !important;
     color: white;
+    text-align: center;
 }
 
 .md-button.xs-icon-button {
@@ -743,8 +744,10 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
 }
 
 .xs-icon-button md-icon {
-    font-size: 12px;
-    margin: 1px;
+    font-size: 11px;
+    margin: auto;
+    height: 11px;
+    min-height: 10px;
 }
 
 .xs-delete-icon-justify md-icon {
@@ -891,4 +894,22 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
   background-color: #f5f5f5;
   text-align: center;
   font-size: 10px;
+}
+
+.post-inst-inactive {
+    color: #FFFFFF;
+    text-align: center;
+    font-weight: bold;
+    font-size: 10px;
+    background-color: #BDBDBD;
+    padding: 10px;
+}
+
+.img-post-shadow {
+    box-shadow:0 0 12px #9E9E9E;
+}
+
+.dialog-transparent-without-shadow {
+    background-color: rgba(0, 0, 0, 0);
+    box-shadow: 0 0 0;
 }

@@ -83,6 +83,7 @@ class InstitutionHandlerTest(TestBaseHandler):
         # new Institution ECIS
         cls.third_inst = mocks.create_institution()
         cls.third_inst.members = [cls.user.key, cls.other_user.key]
+        cls.other_user.add_institution(cls.third_inst.key)
         cls.third_inst.followers = [cls.user.key, cls.other_user.key]
         cls.third_inst.admin = cls.other_user.key
         cls.third_inst.parent_institution = cls.second_inst.key
@@ -91,10 +92,7 @@ class InstitutionHandlerTest(TestBaseHandler):
         cls.second_inst.put()
         # method post body
         cls.body = {
-            'data': None,
-            'currentInstitution': {
-                'name': 'currentInstitution'
-            }
+            'data': None
         }
     
 
@@ -141,7 +139,9 @@ class InstitutionHandlerTest(TestBaseHandler):
         """Test the post_handler's post method."""
         # Call the patch method and assert that  it raises an exception
         self.body['data'] = {'sender_name': 'user name updated'}
-        self.testapp.post_json("/api/institutions/%s/invites/%s" % (self.stub.key.urlsafe(), self.invite.key.urlsafe()), self.body)
+        self.testapp.post_json("/api/institutions/%s/invites/%s" % 
+            (self.stub.key.urlsafe(), self.invite.key.urlsafe()), self.body,
+            headers={'institution-authorization': self.third_inst.key.urlsafe()})
 
         self.inst_create = self.stub.key.get()
         self.assertEqual(self.inst_create.admin, self.other_user.key,

@@ -5,13 +5,14 @@
     </div>
   </div>
 </div>
-<md-card ng-class="postDetailsCtrl.isDeleted(postDetailsCtrl.post)|| postDetailsCtrl.isDeletedEvent(postDetailsCtrl.post)?'post-deleted':''"
+<md-card ng-class="postDetailsCtrl.getCSSClassPost()"
   ng-hide="postDetailsCtrl.isHidden() || postDetailsCtrl.isPostEmpty()">
   <!-- HEADER -->
+  <div class="post-inst-inactive" ng-if="postDetailsCtrl.isInstInactive()">INSTITUIÇÃO DESATIVADA</div>
   <md-card-header>
     <md-card-avatar>
       <a href ng-click="postDetailsCtrl.goToInstitution(postDetailsCtrl.post.institution_key)">
-        <img ng-src="{{ postDetailsCtrl.post.institution_image }}" role="button" class="md-user-avatar"/>
+        <img ng-src="{{ postDetailsCtrl.post.institution_image }}" role="button" class="md-user-avatar img-post-shadow"/>
       </a>
     </md-card-avatar>
     <md-card-header-text>
@@ -30,7 +31,6 @@
         </md-button>
       </span>
     </md-card-header-text>
-    <md-subheader ng-if="postDetailsCtrl.isInstInactive()">Instituição inativa</md-subheader>
     <md-menu md-offset="-200 45">
       <md-button class="md-icon-button" style="margin-right: -20px; margin-top: -15px" ng-click="$mdMenu.open(ev)">
         <md-icon>more_vert</md-icon>
@@ -225,9 +225,7 @@
 
   <!-- COMMENTS -->
   <div ng-if="postDetailsCtrl.showComments || postDetailsCtrl.isPostPage">
-    <div flex ng-if="postDetailsCtrl.isLoadingComments && !postDetailsCtrl.isPostPage"  layout="row" layout-align="center center">
-      <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-    </div> 
+    <load-circle flex ng-if="postDetailsCtrl.isLoadingComments && !postDetailsCtrl.isPostPage"></load-circle>
     <md-divider style="margin-top: 15px;"></md-divider>
     <comment ng-if="!postDetailsCtrl.isLoadingComments || postDetailsCtrl.isPostPage"
       ng-repeat="comment in postDetailsCtrl.getValues(postDetailsCtrl.post.data_comments) | orderBy:'publication_date'"

@@ -41,7 +41,6 @@ class InstitutionParentRequestCollectionHandler(BaseHandler):
 
         body = json.loads(self.request.body)
         data = body['data']
-        current_institution = body['currentInstitution']
         host = self.request.host
         inst_parent_request_type = 'REQUEST_INSTITUTION_PARENT'
 
@@ -66,6 +65,6 @@ class InstitutionParentRequestCollectionHandler(BaseHandler):
         institution_children.parent_institution = request.institution_requested_key
         institution_children.put()
 
-        request.send_invite(host, current_institution)
+        request.send_invite(host, user.current_institution)
 
         self.response.write(json.dumps(request.make()))

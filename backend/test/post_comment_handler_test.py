@@ -44,6 +44,8 @@ class PostCommentHandlerTest(TestBaseHandler):
         cls.institution.followers = [cls.user.key]
         cls.institution.admin = cls.user.key
         cls.institution.put()
+        cls.user.add_institution(cls.institution.key)
+        cls.other_user.add_institution(cls.institution.key)
         # POST of user To institution 
         cls.user_post = mocks.create_post(cls.user.key, cls.institution.key)
         # Comments
@@ -51,10 +53,7 @@ class PostCommentHandlerTest(TestBaseHandler):
         cls.other_comment = {'text': 'Second comment. Using in Test', 'institution_key': cls.institution.key.urlsafe()}
         # http post body
         cls.body = {
-            'commentData': cls.comment,
-            'currentInstitution': {
-                'name': cls.institution.name
-            }
+            'commentData': cls.comment
         }
 
     @patch('handlers.post_comment_handler.enqueue_task')
@@ -68,7 +67,8 @@ class PostCommentHandlerTest(TestBaseHandler):
         # Call the post method
         self.testapp.post_json(
             URL_POST_COMMENT % self.user_post.key.urlsafe(),
-            self.body
+            self.body,
+            headers={'institution-authorization': self.institution.key.urlsafe()}
         )
 
         # Update post
@@ -84,7 +84,7 @@ class PostCommentHandlerTest(TestBaseHandler):
             'sender_key': self.other_user.key.urlsafe(),
             'entity_key': self.user_post.key.urlsafe(),
             'entity_type': 'COMMENT',
-            'current_institution': json.dumps(self.body['currentInstitution'])
+            'current_institution': self.institution.key.urlsafe()
         }
         enqueue_task.assert_called_with('post-notification', params)
 
@@ -145,7 +145,8 @@ class PostCommentHandlerTest(TestBaseHandler):
         # Added comment
         self.response = self.testapp.post_json(
             URL_POST_COMMENT % self.user_post.key.urlsafe(),
-            self.body
+            self.body,
+            headers={'institution-authorization': self.institution.key.urlsafe()}
         ).json
         # ID of comment
         self.id_comment = self.response["id"]
@@ -170,7 +171,8 @@ class PostCommentHandlerTest(TestBaseHandler):
         # Added comment
         self.response = self.testapp.post_json(
             URL_POST_COMMENT % self.user_post.key.urlsafe(),
-            self.body
+            self.body,
+            headers={'institution-authorization': self.institution.key.urlsafe()}
         ).json
         # ID of comment
         self.id_comment = self.response["id"]
@@ -232,7 +234,8 @@ class PostCommentHandlerTest(TestBaseHandler):
         self.body['commentData'] = self.other_comment
         self.response = self.testapp.post_json(
             URL_POST_COMMENT % self.user_post.key.urlsafe(),
-            self.body
+            self.body,
+            headers={'institution-authorization': self.institution.key.urlsafe()}
         ).json
         # ID of comment
         self.id_other_comment = self.response["id"]

@@ -160,6 +160,7 @@
             addLinks(dialogCtrl.event);
             event = new Event(dialogCtrl.event, dialogCtrl.user.current_institution.key);
             if(event.isValid()) {
+                dialogCtrl.loading = true;
                 var patch = formatPatch(generatePatch(jsonpatch.generate(dialogCtrl.observer), event));
                 EventService.editEvent(dialogCtrl.event.key, patch).then(function success() {
                     dialogCtrl.closeDialog();
@@ -369,6 +370,7 @@
             var event = new Event(dialogCtrl.event, dialogCtrl.user.current_institution.key);
             addLinks(event);
             if (event.isValid()) {
+                dialogCtrl.loading = true;
                 EventService.createEvent(event).then(function success(response) {
                     dialogCtrl.closeDialog();
                     dialogCtrl.events.push(response.data);

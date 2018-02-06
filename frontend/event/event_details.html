@@ -102,10 +102,10 @@
                 <p>
                   <md-icon style="font-size: 40px;">public</md-icon>
                 </p>
-                <div layout="column" style="margin-left: 40px;">
+                <div layout="column" class="break" style="margin-left: 40px;">
                   <h3>
                     <a ng-if"eventDetailsCtrl.event.official_site" target="_blank" href="{{eventDetailsCtrl.event.official_site}}">
-                      {{ eventDetailsCtrl.event.official_site }}
+                      {{ eventDetailsCtrl.getOfficialSite() }}
                     </a>
                     <b ng-if="!eventDetailsCtrl.event.official_site">Não definido</b>
                   </h3>
@@ -116,16 +116,16 @@
         </md-card-content>
         <div ng-if="eventDetailsCtrl.event.text">
           <md-divider class="ligth-green-divider"></md-divider>
-          <md-card-content flex>
+          <md-card-content flex class="text">
             <h2>Descrição</h2>
-            <div style="white-space: pre-line;" ng-bind-html="eventDetailsCtrl.recognizeUrl(eventDetailsCtrl.event.text)"></div>
+            <div ng-bind-html="eventDetailsCtrl.recognizeUrl(eventDetailsCtrl.event.text)"></div>
           </md-card-content>
         </div>
         <div ng-if="eventDetailsCtrl.event.programation">
           <md-divider class="ligth-green-divider"></md-divider>
-          <md-card-content flex>
+          <md-card-content flex class="text">
             <h2>Programação</h2>
-            <div style="white-space: pre-line;" ng-bind-html="eventDetailsCtrl.recognizeUrl(eventDetailsCtrl.event.programation)"></div>
+            <div ng-bind-html="eventDetailsCtrl.recognizeUrl(eventDetailsCtrl.event.programation)"></div>
           </md-card-content>
         </div>
         <div ng-if="eventDetailsCtrl.event.video_url.length > 0">

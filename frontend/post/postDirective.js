@@ -37,7 +37,7 @@
 
             ImageService.compress(image, newSize).then(function success(data) {
                 postCtrl.photoBase64Data = data;
-                ImageService.readFile(dtrueata, setImage);
+                ImageService.readFile(data, setImage);
                 postCtrl.deletePreviousImage = true;
                 postCtrl.file = null;
             }, function error(error) {

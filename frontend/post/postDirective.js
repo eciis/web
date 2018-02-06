@@ -11,7 +11,7 @@
         postCtrl.post = {};
         postCtrl.typePost = 'Common';
         postCtrl.loading = false;
-        postCtrl.loadingPost = true;
+        postCtrl.loadingPost = false;
         postCtrl.deletePreviousImage = false;
         postCtrl.user = AuthService.getCurrentUser();
         postCtrl.photoUrl = "";
@@ -37,7 +37,7 @@
 
             ImageService.compress(image, newSize).then(function success(data) {
                 postCtrl.photoBase64Data = data;
-                ImageService.readFile(data, setImage);
+                ImageService.readFile(dtrueata, setImage);
                 postCtrl.deletePreviousImage = true;
                 postCtrl.file = null;
             }, function error(error) {

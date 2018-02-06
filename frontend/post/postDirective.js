@@ -11,7 +11,7 @@
         postCtrl.post = {};
         postCtrl.typePost = 'Common';
         postCtrl.loading = false;
-        postCtrl.loadingPost = false;
+        postCtrl.loadingPost = true;
         postCtrl.deletePreviousImage = false;
         postCtrl.user = AuthService.getCurrentUser();
         postCtrl.photoUrl = "";

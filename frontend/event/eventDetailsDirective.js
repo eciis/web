@@ -77,7 +77,8 @@
                 clickOutsideToClose: true,
                 locals: {
                     event: event,
-                    isEditing: true
+                    isEditing: true,
+                    resetEvent: resetEvent
                 },
                 bindToController: true
             });
@@ -110,6 +111,10 @@
         function isInstitutionAdmin(event) {
             return _.includes(_.map(eventCtrl.user.institutions_admin, Utils.getKeyFromUrl),
                 Utils.getKeyFromUrl(event.institution_key));
+        }
+
+        function resetEvent(oldEvent) {
+            eventCtrl.event = _.cloneDeep(oldEvent);
         }
 
     });

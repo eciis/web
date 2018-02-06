@@ -59,6 +59,8 @@
             mdDialog: mdDialog
         });
 
+        eventCtrl.showImage = true;
+
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);
         httpBackend.when('GET', 'auth/login.html').respond(200);
@@ -106,7 +108,7 @@
     describe('editEvent', function () {
 
         it('should call $mdDialog.show', function () {
-            spyOn(mdDialog, 'show');
+            spyOn(mdDialog, 'show').and.returnValue(deffered.promise);
             eventCtrl.editEvent('$event', event);
             expect(mdDialog.show).toHaveBeenCalled();
         });

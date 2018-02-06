@@ -1,7 +1,7 @@
 
 <div layout="column" ng-if="!eventDetailsCtrl.isDeleted(eventDetailsCtrl.event)">
   <md-card layout="column" md-colors="{background: 'default-teal-400'}">
-      <img class="md-card-image"
+      <img class="md-card-image" ng-if="eventDetailsCtrl.showImage"
       ng-src="{{ eventDetailsCtrl.event.photo_url }}"/>
     <div layout="row">
       <md-card-content style="max-height: 150px" md-colors="{background: 'default-grey-200'}">

@@ -12,7 +12,7 @@
               <md-input-container md-no-float class="md-block" style="margin: 0px; padding-top: 10px;">
                 <input name="title" style="font-weight: bold; color: #00695C; border: 0;resize:none;"
                 ng-model="postCtrl.post.title" maxlength="100" placeholder="{{postCtrl.showPlaceholderMsg()}}" required>
-                <div ng-messages='saveForm.title.$error'>
+                <div ng-show="postCtrl.isTyping()" ng-messages='saveForm.title.$error'>
                     <div ng-message="required">O post deve conter um título!</div>
                 </div>
               </md-input-container>

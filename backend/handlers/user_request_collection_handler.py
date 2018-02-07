@@ -44,18 +44,8 @@ class UserRequestCollectionHandler(BaseHandler):
 
         request = InviteFactory.create(data, type_of_invite)
         request.put()
-
-        institution = ndb.Key(urlsafe=institution_key).get()
+        
         user.name = data.get('sender_name')
-
-        # data_profile = {
-        #     'office': request.office,
-        #     'email': request.institutional_email,
-        #     'institution_key': institution_key,
-        #     'institution_name': institution.name,
-        #     'institution_photo_url': institution.photo_url
-        # }
-        # user.create_and_add_profile(data_profile)
 
         if(request.stub_institution_key):
             request.stub_institution_key.get().addInvite(request)

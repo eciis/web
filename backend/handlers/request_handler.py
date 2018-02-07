@@ -66,8 +66,6 @@ class RequestHandler(BaseHandler):
         institution.add_member(sender)
         institution.follow(sender.key)
         institution.put()
-        import pdb
-        pdb.set_trace()
 
         data_profile = {
             'office': request.office,

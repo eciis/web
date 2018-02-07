@@ -9,12 +9,6 @@ from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from utils import Utils
 import json
 
-@ndb.transactional(retries=10)
-def update_vote(survey_key, user_dict, options_selected):
-    survey = survey_key.get()
-    survey.vote(user_dict, options_selected)
-    survey.put()
-
 class VoteHandler(BaseHandler):
     """Vote Handler."""
 
@@ -35,4 +29,4 @@ class VoteHandler(BaseHandler):
                      'photo_url': user.photo_url,
                      'key': user.key.urlsafe()}
 
-        update_vote(survey_key, user_dict, options_selected)
+        survey_key.get().vote(user_dict, options_selected)

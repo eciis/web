@@ -9,16 +9,21 @@ from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from utils import Utils
 import json
 
+@ndb.transactional(retries=10)
+def update_vote(survey_key, user_dict, options_selected):
+    survey = survey_key.get()
+    survey.vote(user_dict, options_selected)
+    survey.put()
 
 class VoteHandler(BaseHandler):
     """Vote Handler."""
 
     @json_response
     @login_required
-    @ndb.transactional(xg=True)
     def post(self, user, survey_key):
         """Handle POST Requests."""
-        survey = ndb.Key(urlsafe=survey_key).get()
+        survey_key = ndb.Key(urlsafe=survey_key)
+        survey = survey_key.get()
         # The array contains options
         options_selected = json.loads(self.request.body)
 
@@ -30,5 +35,4 @@ class VoteHandler(BaseHandler):
                      'photo_url': user.photo_url,
                      'key': user.key.urlsafe()}
 
-        survey.vote(user_dict, options_selected)
-        survey.put()
+        update_vote(survey_key, user_dict, options_selected)

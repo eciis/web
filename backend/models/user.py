@@ -182,6 +182,11 @@ class User(ndb.Model):
 
         self.put()
 
+    @ndb.transactional(retries=10)
+    def add_post(self, post):
+        self.posts.append(post.key)
+        self.put()
+
     def is_liked_post(self, postKey):
         """Verify if post is liked."""
         return postKey in self.liked_posts
@@ -216,6 +221,7 @@ class User(ndb.Model):
         self.state = state
         self.put()
 
+    @ndb.transactional(retries=10)
     def add_permission(self, permission_type, entity_key):
         """Add new permission.key to the user permissions list.
 

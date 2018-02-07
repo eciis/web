@@ -36,61 +36,65 @@ class PostCollectionHandler(BaseHandler):
 
     @json_response
     @login_required
-    @ndb.transactional(xg=True)
     def post(self, user):
         """Handle POST Requests."""
-        data = json.loads(self.request.body)
-        post_data = data['post']
+        # PRE-PROCESS REQUEST ==========================
+        body = json.loads(self.request.body)
+        post_data = body['post']
         institution_key = post_data['institution']
+        # PRE-PROCESS REQUEST END ======================
+
         institution = ndb.Key(urlsafe=institution_key).get()
 
+        # Validação ==================================
         Utils._assert(institution.state == 'inactive',
                       "The institution has been deleted",
                       NotAuthorizedException)
 
         permission = get_permission(post_data)
-        user.check_permission(permission,
+        user.key.get().check_permission(permission,
                               "You don't have permission to publish post.",
                               institution_key)
+        # Validação fim =============================
 
-        try:
-            post = PostFactory.create(post_data, user.key, institution.key)
-            post.put()
-            user.add_permissions(["edit_post", "remove_post"], post.key.urlsafe())
+        post = PostFactory.create(post_data, user.key, institution.key)
+        
+        user.key.get().add_permissions(["edit_post", "remove_post"], post.key.urlsafe())
 
-            """ Update Institution."""
-            institution.posts.append(post.key)
-            institution.put()
+        """ Update Institution."""
+        institution.key.get().posts.append(post)
 
-            """ Update User."""
-            user.posts.append(post.key)
-            user.put()
+        """ Update User."""
+        user.key.get().add_post(post)
 
-            entity_type = PostFactory.get_type(post_data)
-            for follower in institution.followers:
-                if follower != user.key:
-                    send_message_notification(
-                        follower.urlsafe(),
-                        user.key.urlsafe(),
-                        entity_type,
-                        post.key.urlsafe(),
-                        user.current_institution
-                    )
+        entity_type = PostFactory.get_type(post_data)
+        self.response.write(json.dumps(post.key.get().make(self.request.host)))
+        # try:
+        #     ------------------- CRÍTICO ---- JOGAR EM UMA FILA
+        #     for follower in institution.followers:
+        #         if follower != user.key:
+        #             send_message_notification(
+        #                 follower.urlsafe(),
+        #                 user.key.urlsafe(),
+        #                 entity_type,
+        #                 post.key.urlsafe(),
+        #                 user.current_institution
+        #             )
 
-            if(post.shared_post):
-                entity_type = 'SHARED_POST'
-                params = {
-                    'receiver_key': post.author.urlsafe(),
-                    'sender_key': user.key.urlsafe(),
-                    'entity_key': post.key.urlsafe(),
-                    'entity_type': entity_type,
-                    'current_institution': user.current_institution.urlsafe()
-                }
+        #     if(post.shared_post):
+        #         entity_type = 'SHARED_POST'
+        #         params = {
+        #             'receiver_key': post.author.urlsafe(),
+        #             'sender_key': user.key.urlsafe(),
+        #             'entity_key': post.key.urlsafe(),
+        #             'entity_type': entity_type,
+        #             'current_institution': user.current_institution.urlsafe()
+        #         }
 
-                enqueue_task('post-notification', params)
+        #         enqueue_task('post-notification', params)
 
-            self.response.write(json.dumps(post.make(self.request.host)))
-        except Exception as error:
-            self.response.set_status(Utils.BAD_REQUEST)
-            self.response.write(Utils.getJSONError(
-                Utils.BAD_REQUEST, error.message))
+        #     self.response.write(json.dumps(post.make(self.request.host)))
+        # except Exception as error: # MUITO ERRADO, ESTÁ TRATANTO QUALQUER EXCEPTION QUE VIER, ISSO MASCARA INÚMEROS ERROS
+        #     self.response.set_status(Utils.BAD_REQUEST)
+        #     self.response.write(Utils.getJSONError(
+        #         Utils.BAD_REQUEST, error.message))

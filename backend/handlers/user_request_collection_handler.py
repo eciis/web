@@ -46,6 +46,7 @@ class UserRequestCollectionHandler(BaseHandler):
         request.put()
         
         user.name = data.get('sender_name')
+        user.put()
 
         if(request.stub_institution_key):
             request.stub_institution_key.get().addInvite(request)

@@ -75,7 +75,6 @@ class RequestHandler(BaseHandler):
             'institution_photo_url': institution.photo_url
         }
         sender.create_and_add_profile(data_profile)
-        sender.put()
 
         host = self.request.host
         request.send_response_email(host, "ACCEPT")

@@ -7,6 +7,7 @@ from test_base_handler import TestBaseHandler
 from models.user import User
 from models.institution import Institution
 from models.institution import Address
+from models.invite import Invite
 from handlers.user_request_collection_handler import UserRequestCollectionHandler
 
 from mock import patch
@@ -29,8 +30,12 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
         # create models
         # new User
         cls.user_admin = mocks.create_user('useradmin@test.com')
+        # new institution
+        cls.other_inst = mocks.create_institution()
         # Other user
         cls.other_user = mocks.create_user('other_user@test.com')
+        cls.other_user.institutions = [cls.other_inst.key]
+        cls.other_user.put()
         # new Institution inst test
         cls.inst_test = mocks.create_institution()
         cls.inst_test.name = 'inst test'
@@ -40,12 +45,14 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
         cls.inst_test.admin = cls.user_admin.key
         cls.user_admin.add_institution(cls.inst_test.key)
         cls.inst_test.put()
+        # create header
+        cls.headers = {"Institution-Authorization": cls.other_inst.key.urlsafe()}
 
-
+    @patch.object(Invite, "send_invite")
     @patch('utils.verify_token', return_value={'email': 'other_user@test.com'})
-    def test_post(self, verify_token):
+    def test_post(self, verify_token, send_invite):
         """Test method post of UserRequestCollectionHandlerTest."""
-        body = {
+        data = {
             'sender_key': self.other_user.key.urlsafe(),
             'is_request': True,
             'admin_key': self.user_admin.key.urlsafe(),
@@ -55,9 +62,12 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
             'office': 'CEO',
             'institutional_email': 'other@ceo.com'
         }
+        body = {"data": data}
 
         request = self.testapp.post_json(
-            "/api/institutions/%s/requests/user" % self.inst_test.key.urlsafe(), body
+            "/api/institutions/%s/requests/user" % self.inst_test.key.urlsafe(), 
+            body, 
+            headers=self.headers
         )
         request = json.loads(request._app_iter[0])
 
@@ -81,11 +91,15 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
         self.assertEqual(
             user_updated.name, 'user name updated',
             'Expected new user name is user name updated')
+        
+        # assert the notification was sent
+        send_invite.assert_called_with('localhost:80', self.other_inst.key)
 
+    @patch.object(Invite, "send_invite")
     @patch('utils.verify_token', return_value={'email': 'other_user@test.com'})
-    def test_post_invalid_request_type(self, verify_token):
+    def test_post_invalid_request_type(self, verify_token, send_invite):
         """Test if an exception is thrown by passing an invalid request."""
-        body = {
+        data = {
             'sender_key': self.other_user.key.urlsafe(),
             'is_request': True,
             'admin_key': self.user_admin.key.urlsafe(),
@@ -97,14 +111,21 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
             'institution_name': self.inst_test.name,
             'institution_photo_url': self.inst_test.photo_url
         }
+        body = {"data": data}
 
         with self.assertRaises(Exception) as ex:
             self.testapp.post_json(
                 "/api/institutions/" + self.inst_test.key.urlsafe() +
-                "/requests/user", body)
+                "/requests/user",
+                body,
+                headers=self.headers
+            )
 
         exception_message = self.get_message_exception(ex.exception.message)
         self.assertEqual(
             'Error! The type must be REQUEST_USER',
             exception_message,
             "Expected error message is Error! The type must be REQUEST_USER")
+
+        # assert the notification was not sent
+        send_invite.assert_not_called()

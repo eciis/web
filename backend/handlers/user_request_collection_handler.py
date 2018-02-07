@@ -31,7 +31,8 @@ class UserRequestCollectionHandler(BaseHandler):
     @json_response
     def post(self, user, institution_key):
         """Handler of post requests."""
-        data = json.loads(self.request.body)
+        body = json.loads(self.request.body)
+        data = body['data']
         host = self.request.host
         user_request_type = 'REQUEST_USER'
 

@@ -76,7 +76,9 @@ class RequestHandler(BaseHandler):
             request.sender_key.urlsafe(),
             user.key.urlsafe(),
             entity_type,
-            institution.key.urlsafe())
+            institution.key.urlsafe(),
+            user.current_institution
+        )
 
         self.response.write(json.dumps(makeUser(sender, self.request)))
 

@@ -401,4 +401,19 @@
             expect(postDetailsCtrl.number_of_comments()).toEqual("+99");
         });
     });
+
+    describe('reloadPost()', function () {
+        it('should call getPost(postKey)', function () {
+            postDetailsCtrl.post = posts[0];
+            spyOn(postService, 'getPost').and.callFake(function () {
+                return {
+                    then: function (callback) {
+                        return callback();
+                    }
+                };
+            });
+            postDetailsCtrl.reloadPost();
+            expect(postService.getPost).toHaveBeenCalledWith(posts[0].key);
+        });
+    })
 }));

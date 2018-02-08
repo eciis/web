@@ -107,10 +107,8 @@
     </md-card-content>
     <md-card-actions style="text-align: right; margin-right: 20px; margin-bottom: 20px;"
       layout="row" layout-align="end center">
-      <div flex layout-align="center center" layout="row" ng-if="postCtrl.loadingPost">
-        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-      </div>
-      <md-button  ng-show="postCtrl.showButton()" style="color: #009688" ng-click="postCtrl.cancelDialog()">
+      <load-circle flex ng-if="postCtrl.loadingPost"></load-circle>
+      <md-button ng-show="postCtrl.showButton()" style="color: #009688" ng-click="postCtrl.cancelDialog()">
         Cancelar
       </md-button>
       <md-button  ng-show="postCtrl.showButton()" class="md-raised" md-colors="{background: 'default-teal-500'}" title="Enviar"

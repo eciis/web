@@ -26,8 +26,9 @@ class InstitutionProfileTest(TestBase):
         institution.name = 'institution_name'
         institution.photo_url = 'photo_url.com'
         institution.put()
-        profile.institution.name = institution.name
-        profile.institution.photo_url = institution.photo_url
+        profile.institution = {}
+        profile.institution['name'] = institution.name
+        profile.institution['photo_url'] = institution.photo_url
         profile.institution_key = institution.key
         profile.put()
         profile.color = "grey"

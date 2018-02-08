@@ -106,10 +106,7 @@
                 icon: "account_balance",
             },
             "ACCEPTED_LINK": {
-                icon: "link",
-                action: function() {
-                    return refreshUserInstitutions();
-                }
+                icon: "link"
             },
             "REJECT_INSTITUTION_LINK": {
                 icon: "account_balance",
@@ -221,6 +218,7 @@
 
         (function main() {
             NotificationService.watchNotifications(controller.user.key, controller.notifications);
+            NotificationService.refreshUserInstitutions = refreshUserInstitutions;
         })();
     });
 

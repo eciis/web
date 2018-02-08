@@ -56,10 +56,6 @@
                     if (ev.event === CHILD_ADDED) {
                         var notification = firebaseArrayNotifications.$getRecord(ev.key);
                         notificationsList.push(notification);
-
-                        if (isNew(notification)) {
-                            MessageService.showToast(service.formatMessage(notification));
-                        }
                     }
                 });
             });

@@ -25,13 +25,14 @@
                 </div>
                 <md-content flex id="content" class="body custom-scrollbar">
                     <div flex layout="row">
-                        <post-timeline ng-if="false" add-layout-fill="true" layout="column" 
+                        <post-timeline ng-if="!institutionCtrl.isLoadingPosts" layout="column" 
                         md-colors="{background: 'grey-50'}" posts="institutionCtrl.posts"
                         institution="true" user="institutionCtrl.user" add-post="institutionCtrl.addPost"
                         load-more-posts="institutionCtrl.loadMorePosts" flex>
                         </post-timeline>
                         <!-- LOADING CIRCLE --> 
-                        <load-circle flex ng-if="true"></load-circle>
+                        <load-circle flex add-layout-fill="true"
+                            ng-if="institutionCtrl.isLoadingPosts"></load-circle>
                     </div>
                 </md-content>
             </div>

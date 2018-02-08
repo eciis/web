@@ -182,7 +182,7 @@ class User(ndb.Model):
 
         self.put()
 
-    @ndb.transactional(retries=10)
+    @ndb.transactional_async(retries=10)
     def add_post(self, post):
         self.posts.append(post.key)
         self.put()
@@ -221,7 +221,7 @@ class User(ndb.Model):
         self.state = state
         self.put()
 
-    @ndb.transactional(retries=10)
+    @ndb.transactional_async(retries=10)
     def add_permission(self, permission_type, entity_key):
         """Add new permission.key to the user permissions list.
 

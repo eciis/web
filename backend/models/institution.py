@@ -117,7 +117,7 @@ class Institution(ndb.Model):
             self.followers.remove(member.key)
             self.put()
 
-    @ndb.transactional(retries=10)
+    @ndb.transactional_async(retries=10)
     def add_post(self, post):
         """Add a new post to the institution list of posts."""
         self.posts.append(post.key)

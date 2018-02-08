@@ -306,6 +306,18 @@
             return _.values(object);
         };
 
+        postDetailsCtrl.reloadPost = function reloadPost() {
+            var promise = PostService.getPost(postDetailsCtrl.post.key);
+            promise.then(function success(response) {
+                postDetailsCtrl.post = response;
+                postDetailsCtrl.isLoadingComments = false;
+            }, function error(response) {
+                postDetailsCtrl.isLoadingComments = true;
+                MessageService.showToast(response.data.msg);
+            }); 
+            return promise;
+        }
+
         postDetailsCtrl.loadComments = function refreshComments() {
             var promise  =  CommentService.getComments(postDetailsCtrl.post.comments);
             promise.then(function success(response) {

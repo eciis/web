@@ -68,6 +68,7 @@ class SurveyPost(Post):
 
         return True
 
+    @ndb.transactional(retries=10)
     def vote(self, author, all_options_selected):
         """Added all votes of user from survey post."""
         if(self.type_survey == "binary" and
@@ -76,6 +77,7 @@ class SurveyPost(Post):
         else:
             for option in all_options_selected:
                 self.add_vote(author, option["id"])
+        self.put()
 
     def make(post, host):
         """Create personalized json of post."""

@@ -2,7 +2,7 @@
   <div style="padding:0;">
     <md-card style="max-width: 100%; margin:0;">
       <md-card-content style="padding: 8px;">
-        <div layout="row" layout-align="space-between center" class="custom-scrollbar" style="overflow-y: auto;">
+        <div layout="row" layout-align="space-between center" class="hide-scrollbar" style="overflow-y: auto;">
           <div layout="row" layout-align="center center">
             <span class="green-circle" style="color: #FFFFFF; width: 20px; height: 20px;">
               <span layout="row" layout-algin="center">
@@ -120,7 +120,7 @@
                         <md-option ng-repeat="city in controller.cities" ng-value="city">{{city}}</md-option>
                       </md-select>
                       <div ng-messages>
-                          <div ng-show="createEvent.state.$pristine && !controller.isAnotherCountry"
+                          <div ng-show="createEvent.state.$pristine && !controller.isAnotherCountry && !controller.selectedFederalState"
                               style="opacity: 0.9; margin-top: 2px; font-size: 0.8em;">
                               Primeiro selecione um estado
                           </div>

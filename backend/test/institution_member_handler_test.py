@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 """Institution member handler test."""
 
+import mocks
+
 from test_base_handler import TestBaseHandler
 from models.user import User
 from models.institution import Institution
 from handlers.institution_members_handler import InstitutionMembersHandler
-import mock
 from mock import patch
 
 
@@ -20,11 +21,42 @@ class InstitutionMemberHandlerTest(TestBaseHandler):
             [("/api/institutions/(.*)/members", InstitutionMembersHandler)
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
-        initModels(cls)
+        
+        # create models
+        # new User user
+        cls.user = mocks.create_user('user@gmail.com')
+        # new User second_user
+        cls.second_user = mocks.create_user('second_user@ccc.ufcg.edu.br')
+        # new Institution institution
+        cls.institution = mocks.create_institution()
+        cls.institution.members = [cls.user.key, cls.second_user.key]
+        cls.institution.followers = [cls.user.key, cls.second_user.key]
+        cls.institution.admin = cls.user.key
+        cls.institution.put()
+        # another institution
+        cls.other_institution = mocks.create_institution()
+        cls.other_institution.members = [cls.user.key]
+        cls.other_institution.followers = [cls.user.key, cls.second_user.key]
+        cls.other_institution.admin = cls.user.key
+        cls.other_institution.put()
+        # update user
+        cls.user.institutions = [cls.institution.key, cls.other_institution.key]
+        cls.user.institutions_admin = [cls.institution.key, cls.other_institution.key]
+        cls.user.add_permission("publish_post", cls.institution.key.urlsafe())
+        cls.user.add_permission("publish_post", cls.other_institution.key.urlsafe())
+        cls.user.add_permission("remove_member", cls.institution.key.urlsafe())
+        cls.user.add_permission("remove_member", cls.other_institution.key.urlsafe())
+        cls.user.put()
+        cls.second_user.institutions = [cls.institution.key]
+        cls.second_user.add_permission("publish_post", cls.institution.key.urlsafe())
+        cls.second_user.put()
+        # create headers
+        cls.headers = {'Institution-Authorization': cls.institution.key.urlsafe()}
 
-    @mock.patch('handlers.institution_members_handler.RemoveMemberEmailSender.send_email')
+    @patch('handlers.institution_members_handler.send_message_notification')
+    @patch('handlers.institution_members_handler.RemoveMemberEmailSender.send_email')
     @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
-    def test_delete_with_notification(self, verify_token, mock_method):
+    def test_delete_with_notification(self, verify_token, send_email, send_message_notification):
         """Test if a notification is sent when the member is deleted."""
         # Set up the second_user
         self.second_user.institutions = [self.institution.key, self.other_institution.key]
@@ -34,22 +66,47 @@ class InstitutionMemberHandlerTest(TestBaseHandler):
         self.institution.put()
         self.other_institution.put()
         # Call the delete method
-        self.testapp.delete("/api/institutions/%s/members?removeMember=%s" %
-                            (self.institution.key.urlsafe(), self.second_user.key.urlsafe()))
+        self.testapp.delete(
+            "/api/institutions/%s/members?removeMember=%s" 
+            % (self.institution.key.urlsafe(), self.second_user.key.urlsafe()),
+            headers=self.headers
+        )
 
-        # Assert that mock_method has been called
-        self.assertTrue(mock_method.called, "send_message_notification should've been called.")
+        # Assert send_message_notification has been called
+        send_message_notification.assert_called_with(
+            self.second_user.key.urlsafe(),
+            self.user.key.urlsafe(),
+            "DELETE_MEMBER",
+            self.institution.key.urlsafe(),
+            self.institution.key
+        )
+        # Assert that send_email has been called
+        send_email.assert_called()
 
-    @mock.patch('handlers.institution_members_handler.RemoveMemberEmailSender.send_email')
+    @patch('handlers.institution_members_handler.send_message_notification')
+    @patch('handlers.institution_members_handler.RemoveMemberEmailSender.send_email')
     @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
-    def test_delete_with_email(self, verify_token, mock_method):
-        """Test if a notification is sent when the member is deleted."""
+    def test_delete_with_email(self, verify_token, send_email, send_message_notification):
+        """Test delete a member that belongs to only one institution."""
+        # new user
+        third_user = mocks.create_user()
+        third_user.institutions = [self.institution.key]
+        third_user.put()
+        # update institution
+        self.institution.members.append(third_user.key)
+        self.institution.followers.append(third_user.key)
+        self.institution.put()
         # Call the delete method
-        self.testapp.delete("/api/institutions/%s/members?removeMember=%s" %
-                            (self.institution.key.urlsafe(), self.second_user.key.urlsafe()))
+        self.testapp.delete(
+            "/api/institutions/%s/members?removeMember=%s" 
+            % (self.institution.key.urlsafe(), third_user.key.urlsafe())
+        )
 
-        # Assert that mock_method has been called
-        self.assertTrue(mock_method.called, "send_message_email should've been called.")
+        # assert send_message_notification was not called
+        send_message_notification.assert_not_called()
+
+        # Assert that send_email has been called
+        send_email.assert_called()
 
     @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
     def test_delete(self, verify_token):
@@ -138,59 +195,3 @@ class InstitutionMemberHandlerTest(TestBaseHandler):
     def tearDown(cls):
         """Deactivate the test."""
         cls.test.deactivate()
-
-
-def initModels(cls):
-    """Init the models."""
-    # new User user
-    cls.user = User()
-    cls.user.name = 'user'
-    cls.user.state = "active"
-    cls.user.email = ['user@gmail.com']
-    cls.user.institutions = []
-    cls.user.follows = []
-    cls.user.institutions_admin = []
-    cls.user.posts = []
-    cls.user.put()
-    # new User second_user
-    cls.second_user = User()
-    cls.second_user.name = 'second_user'
-    cls.second_user.email = ['second_user@ccc.ufcg.edu.br']
-    cls.second_user.state = "active"
-    cls.second_user.institutions = []
-    cls.second_user.follows = []
-    cls.second_user.institutions_admin = []
-    cls.second_user.posts = []
-    cls.second_user.put()
-    # new Institution institution
-    cls.institution = Institution()
-    cls.institution.name = 'institution'
-    cls.institution.state = "active"
-    cls.institution.email = 'institution@ufcg.edu.br'
-    cls.institution.members = [cls.user.key, cls.second_user.key]
-    cls.institution.followers = [cls.user.key, cls.second_user.key]
-    cls.institution.posts = []
-    cls.institution.admin = cls.user.key
-    cls.institution.put()
-    # another institution
-    cls.other_institution = Institution()
-    cls.other_institution.name = 'other_institution'
-    cls.other_institution.state = 'active'
-    cls.other_institution.email = 'other_institution@email.com'
-    cls.other_institution.members = [cls.user.key]
-    cls.other_institution.followers = [cls.user.key, cls.second_user.key]
-    cls.other_institution.posts = []
-    cls.other_institution.admin = cls.user.key
-    cls.other_institution.put()
-
-    cls.user.institutions = [cls.institution.key, cls.other_institution.key]
-    cls.user.institutions_admin = [cls.institution.key, cls.other_institution.key]
-    cls.user.add_permission("publish_post", cls.institution.key.urlsafe())
-    cls.user.add_permission("publish_post", cls.other_institution.key.urlsafe())
-    cls.user.add_permission("remove_member", cls.institution.key.urlsafe())
-    cls.user.add_permission("remove_member", cls.other_institution.key.urlsafe())
-    cls.user.put()
-    cls.second_user.institutions = [cls.institution.key]
-    cls.second_user.add_permission(
-        "publish_post", cls.institution.key.urlsafe())
-    cls.second_user.put()

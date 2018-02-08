@@ -14,7 +14,7 @@
             scope: {
                 addLayoutFill: '='
             },
-            controller: "loadController",
+            controller: "LoadController",
             controlerAs: "ctrl",
             template: '<div flex>'
                     + '<div layout="column" id="element" layout-align="center center">'

@@ -149,7 +149,8 @@ class NotifyFollowersHandler(BaseHandler):
         sender_key = self.request.get('sender_key')
         entity_type = self.request.get('entity_type')
         inst_key = self.request.get('institution_key')
-
+        current_institution = ndb.Key(urlsafe=self.request.get('current_institution'))
+        
         institution = ndb.Key(urlsafe=inst_key).get()
 
         for follower_key in institution.followers:
@@ -160,7 +161,8 @@ class NotifyFollowersHandler(BaseHandler):
                     follower.key.urlsafe(),
                     sender_key,
                     entity_type,
-                    inst_key
+                    inst_key,
+                    current_institution
                 )
 
 

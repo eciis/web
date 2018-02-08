@@ -50,6 +50,7 @@ class InstitutionHandlerTest(TestBaseHandler):
         cls.first_inst.admin = cls.user.key
         cls.first_inst.put()
         cls.user.institutions_admin = [cls.first_inst.key]
+        cls.user.institutions = [cls.first_inst.key]
         cls.user.add_permission("update_inst", cls.first_inst.key.urlsafe())
         cls.user.add_permission("remove_inst", cls.first_inst.key.urlsafe())
         cls.user.put()
@@ -94,6 +95,8 @@ class InstitutionHandlerTest(TestBaseHandler):
         cls.body = {
             'data': None
         }
+        # create headers
+        cls.headers = {'Institution-Authorization': cls.first_inst.key.urlsafe()};
     
 
     def enqueue_task(self, handler_selector, params):
@@ -294,9 +297,17 @@ class InstitutionHandlerTest(TestBaseHandler):
         first_user = first_user.key.get()
         second_user = second_user.key.get()
         third_user = third_user.key.get()
+        # add second_int to second user institutions
+        second_user.institutions.append(second_inst.key)
+        second_user.put()
+        # update headers
+        self.headers['Institution-Authorization'] = second_inst.key.urlsafe()
 
-        self.testapp.delete("/api/institutions/%s?removeHierarchy=true" %
-                            second_inst.key.urlsafe())
+        self.testapp.delete(
+            "/api/institutions/%s?removeHierarchy=true"
+            % second_inst.key.urlsafe(), 
+            headers=self.headers
+        )
         
         first_user = first_user.key.get()
         second_user = second_user.key.get()
@@ -372,8 +383,11 @@ class InstitutionHandlerTest(TestBaseHandler):
         # Assert that first_inst is in user.institutions.admin
         self.assertTrue(self.first_inst.key in self.user.institutions_admin)
         # Call the delete method
-        self.testapp.delete("/api/institutions/%s?removeHierarchy=false" %
-                            self.first_inst.key.urlsafe())
+        self.testapp.delete(
+            "/api/institutions/%s?removeHierarchy=false" 
+            % self.first_inst.key.urlsafe(),
+            headers=self.headers
+        )
         # Update first_inst and user
         self.first_inst = self.first_inst.key.get()
         self.user = self.user.key.get()
@@ -407,8 +421,11 @@ class InstitutionHandlerTest(TestBaseHandler):
         self.other_user.add_permission("publish_post", self.second_inst.key.urlsafe())
         self.other_user.put()
         # Call the delete method
-        self.testapp.delete("/api/institutions/%s?removeHierarchy=true" %
-                            self.second_inst.key.urlsafe())
+        self.testapp.delete(
+            "/api/institutions/%s?removeHierarchy=true"
+            % self.second_inst.key.urlsafe(),
+            headers=self.headers
+        )
         # Assert that remove_institutions_from_users has been called
         self.assertTrue(mock_method.called)
         # Retrieve the entities
@@ -434,8 +451,11 @@ class InstitutionHandlerTest(TestBaseHandler):
         self.user.add_permission("publish_post", self.second_inst.key.urlsafe())
         self.user.put()
         self.third_inst.put()
-        self.testapp.delete("/api/institutions/%s?removeHierarchy=false" %
-                            self.third_inst.key.urlsafe())
+        self.testapp.delete(
+            "/api/institutions/%s?removeHierarchy=false" 
+            % self.third_inst.key.urlsafe(),
+            headers=self.headers
+        )
         self.third_inst = self.third_inst.key.get()
         self.assertTrue(self.third_inst.state == "inactive")
 
@@ -447,8 +467,11 @@ class InstitutionHandlerTest(TestBaseHandler):
         self.other_user.put()
         self.first_inst.put()
         with self.assertRaises(Exception):
-            self.testapp.delete("/api/institutions/%s?removeHierarchy=false" %
-                                self.first_inst.key.urlsafe())
+            self.testapp.delete(
+                "/api/institutions/%s?removeHierarchy=false" 
+                % self.first_inst.key.urlsafe(),
+                headers=self.headers
+            )
         self.first_inst = self.first_inst.key.get()
         self.assertTrue(self.first_inst.state == "active")
 

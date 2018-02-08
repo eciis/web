@@ -120,7 +120,7 @@
                         <md-option ng-repeat="city in controller.cities" ng-value="city">{{city}}</md-option>
                       </md-select>
                       <div ng-messages>
-                          <div ng-show="createEvent.state.$pristine && !controller.isAnotherCountry"
+                          <div ng-show="createEvent.state.$pristine && !controller.isAnotherCountry && !controller.selectedFederalState"
                               style="opacity: 0.9; margin-top: 2px; font-size: 0.8em;">
                               Primeiro selecione um estado
                           </div>

@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.service("RequestInvitationService", function RequestInvitationService(MessageService, HttpService, AuthService) {
+    app.service("RequestInvitationService", function RequestInvitationService(MessageService, HttpService) {
         var service = this;
         var REQUESTS_URI = "/api/institutions/";
 
@@ -66,31 +66,19 @@
         };
 
         service.acceptInstParentRequest = function acceptRequest(request_key) {
-            var currentInstitution = Utils.currentInstitutionToString(service.user.current_institution);
-            return HttpService.put(
-                `/api/requests/${request_key}/institution_parent?currentInstitution=${currentInstitution}`
-            );
+            return HttpService.put(`/api/requests/${request_key}/institution_parent`);
         };
 
         service.rejectInstParentRequest = function rejectRequest(request_key) {
-            var currentInstitution = Utils.currentInstitutionToString(service.user.current_institution);
-            return HttpService.delete(
-                `/api/requests/${request_key}/institution_parent?currentInstitution=${currentInstitution}`
-            );
+            return HttpService.delete(`/api/requests/${request_key}/institution_parent`);
         };
 
         service.acceptInstChildrenRequest = function acceptRequest(request_key) {
-            var currentInstitution = Utils.currentInstitutionToString(service.user.current_institution);
-            return HttpService.put(
-                `/api/requests/${request_key}/institution_children?currentInstitution=${currentInstitution}`
-            );
+            return HttpService.put(`/api/requests/${request_key}/institution_children`);
         };
 
         service.rejectInstChildrenRequest = function rejectRequest(request_key) {
-            var currentInstitution = Utils.currentInstitutionToString(service.user.current_institution);
-            return HttpService.delete(
-                `/api/requests/${request_key}/institution_children?currentInstitution=${currentInstitution}`
-            );
+            return HttpService.delete(`/api/requests/${request_key}/institution_children`);
         };
 
         service.showRejectDialog = function showRejectDialog(event) {

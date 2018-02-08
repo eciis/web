@@ -102,10 +102,7 @@ class InviteHandlerTest(TestBaseHandler):
             'pending', "The searched institution state should be pending"
         )
 
-        self.testapp.delete(
-            '/api/invites/%s?currentInstitution=%s' 
-            % (invite_institution.key.urlsafe(), CURRENT_INST_STRING)
-        )
+        self.testapp.delete('/api/invites/%s' % invite_institution.key.urlsafe())
 
         # update invite_institution, stub_institution and stub_inst_document
         invite_institution = invite_institution.key.get()
@@ -196,8 +193,7 @@ class InviteHandlerTest(TestBaseHandler):
 
         with self.assertRaises(Exception) as ex:
             self.testapp.patch(
-                '/api/invites/%s?currentInstitution=%s'
-                % (self.invite.key.urlsafe(), CURRENT_INST_STRING),
+                '/api/invites/%s'% self.invite.key.urlsafe(),
                 json_patch
             )
 

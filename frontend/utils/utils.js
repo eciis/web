@@ -91,21 +91,5 @@ var Utils = {
                 });
             }
         };
-    },
-    createBody: function createBody(data, currentInstitution) {
-        var instData = {name: ""};
-        if(currentInstitution) {
-            instData.name = currentInstitution.name;
-        }
-        return {
-            data: data,
-            currentInstitution: instData
-        };
-    },
-    currentInstitutionToString: function currentInstitutionToString(currentInstitution) {
-        var currentInstitution = {
-            name: currentInstitution.name
-        };
-        return JSON.stringify(currentInstitution);
     }
 };

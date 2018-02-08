@@ -21,21 +21,18 @@ class InstitutionProfileTest(TestBase):
 
     def test_make(self):
         """Test the make method."""
-        profile = InstitutionProfile.create(self.data_profile)
         institution = mocks.create_institution()
         institution.name = 'institution_name'
         institution.photo_url = 'photo_url.com'
         institution.put()
-        profile.institution = {}
-        profile.institution['name'] = institution.name
-        profile.institution['photo_url'] = institution.photo_url
-        profile.institution_key = institution.key
-        profile.put()
+        self.data_profile['institution_key'] = institution.key.urlsafe()
+        profile = InstitutionProfile.create(self.data_profile)
+        institution = mocks.create_institution()
         profile.color = "grey"
         maked_profile = {
             'office': 'member',
             'color': 'grey',
-            'institution_key': institution.key,
+            'institution_key': institution.key.urlsafe(),
             'email': 'institutional_email',
             'phone': '88 8888-88888',
             'branch_line': '888',

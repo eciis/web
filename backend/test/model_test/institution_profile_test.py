@@ -27,7 +27,6 @@ class InstitutionProfileTest(TestBase):
         institution.put()
         self.data_profile['institution_key'] = institution.key.urlsafe()
         profile = InstitutionProfile.create(self.data_profile)
-        institution = mocks.create_institution()
         profile.color = "grey"
         maked_profile = {
             'office': 'member',
@@ -37,8 +36,8 @@ class InstitutionProfileTest(TestBase):
             'phone': '88 8888-88888',
             'branch_line': '888',
             'institution': {
-                'name': 'institution_name',
-                'photo_url': 'photo_url.com'
+                'name': 'institution_name'.decode('utf8'),
+                'photo_url': 'photo_url.com'.decode('utf8')
             }
         }
 

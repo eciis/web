@@ -71,6 +71,13 @@ def adminToJson(admin):
     }
     return Utils.toJson(admin_json)
 
+def get_new_inst_name(patch):
+    """Return value of new institution name, if changed, to update user profile."""
+    list_patchs = json.loads(patch, encoding="utf-8")
+    for patch in list_patchs:
+        if patch['path'] == '/name':
+            return patch['value']
+    return None
 
 class InstitutionHandler(BaseHandler):
     """Institution Handler."""
@@ -113,6 +120,12 @@ class InstitutionHandler(BaseHandler):
 
         JsonPatch.load(data, institution)
         institution.put()
+
+        new_inst_name = get_new_inst_name(data)
+
+        if new_inst_name:
+            user.update_inst_name(new_inst_name, institution_key)
+
         institution_json = Utils.toJson(institution)
 
         self.response.write(json.dumps(

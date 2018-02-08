@@ -306,3 +306,11 @@ class User(ndb.Model):
         """Verify if the institution is part of the
         institutions list that the user belongs."""
         return institution_key in self.institutions
+
+    def update_inst_name(self, new_inst_name, institution_key):
+        """Update the institution name in a specific profile."""
+        for profile in self.institution_profiles:
+            if profile.institution_key == institution_key:
+                profile.institution_name = new_inst_name
+                self.put()
+                return

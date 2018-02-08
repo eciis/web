@@ -105,12 +105,13 @@
         <md-progress-linear ng-show="postCtrl.loading" md-mode="indeterminate" style="width: 14%;"></md-progress-linear>
       </div>
     </md-card-content>
-    <md-card-actions style="text-align: right; margin-right: 20px; margin-bottom: 20px;" ng-show="postCtrl.showButton()"
+    <md-card-actions style="text-align: right; margin-right: 20px; margin-bottom: 20px;"
       layout="row" layout-align="end center">
-      <md-button style="color: #009688" ng-click="postCtrl.cancelDialog()">
+      <load-circle flex ng-if="postCtrl.loadingPost"></load-circle>
+      <md-button ng-show="postCtrl.showButton()" style="color: #009688" ng-click="postCtrl.cancelDialog()">
         Cancelar
       </md-button>
-      <md-button class="md-raised" md-colors="{background: 'default-teal-500'}" title="Enviar"
+      <md-button  ng-show="postCtrl.showButton()" class="md-raised" md-colors="{background: 'default-teal-500'}" title="Enviar"
         type="submit">
         Postar
       </md-button>

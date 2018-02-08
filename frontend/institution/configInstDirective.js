@@ -258,6 +258,7 @@
 
         function updateUserInstitutions(institution) {
             configInstCtrl.user.updateInstitutions(institution);
+            configInstCtrl.user.updateInstProfile(institution);
             AuthService.save();
             changeInstitution(institution);
             MessageService.showToast('Dados da instituição salvos com sucesso.');

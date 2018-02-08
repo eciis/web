@@ -34,16 +34,16 @@ class SurveyPost(Post):
             data, author_key, institution_key)
         return survey_post
 
+    @ndb.transactional(retries=10)
     def add_vote(self, user, option_id):
         """Add a vote to the survey post."""
         option = self.options[option_id]
 
-        if(self.is_vote_valid(user, option)):
-            option["number_votes"] += 1
-            option["voters"].append(user)
-            self.number_votes += 1
-            self.options[option_id] = Utils.toJson(option)
-            self.put()
+        option["number_votes"] += 1
+        option["voters"].append(user)
+        self.number_votes += 1
+        self.options[option_id] = Utils.toJson(option)
+        self.put()
 
     def remove_vote(self, author, option_id):
         """Remove a vote from survey post."""
@@ -68,16 +68,16 @@ class SurveyPost(Post):
 
         return True
 
-    @ndb.transactional(retries=10)
     def vote(self, author, all_options_selected):
         """Added all votes of user from survey post."""
         if(self.type_survey == "binary" and
-                len(all_options_selected) == 1):
-            self.add_vote(author, all_options_selected[0]["id"])
+            len(all_options_selected) == 1 and
+            self.is_vote_valid(author, all_options_selected[0])):
+           self.add_vote(author, all_options_selected[0]["id"])
         else:
             for option in all_options_selected:
-                self.add_vote(author, option["id"])
-        self.put()
+                if(self.is_vote_valid(author, option)):
+                    self.add_vote(author, option["id"])
 
     def make(post, host):
         """Create personalized json of post."""

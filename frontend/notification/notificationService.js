@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.service("NotificationService", function NotificationService($firebaseArray,  MessageService, AuthService) {
+    app.service("NotificationService", function NotificationService($firebaseArray,  MessageService, AuthService, $rootScope) {
         var service = this;
 
         var ref = firebase.database().ref();
@@ -38,8 +38,6 @@
         var POST_NOTIFICATION = 'POST';
         var CHILD_ADDED = "child_added";
 
-        service.user = AuthService.getCurrentUser();
-
         service.formatMessage = function formatMessage(notification) {
             var message = TRANSLATE_MESSAGE[notification.entity_type];
             var name = notification.from.name || notification.from
@@ -58,7 +56,9 @@
                     if (ev.event === CHILD_ADDED) {
                         var notification = firebaseArrayNotifications.$getRecord(ev.key);
                         notificationsList.push(notification);
-                        verifyNotification(notification);
+                        if (isNew(notification)) {
+                            $rootScope.$emit(notification.entity_type);
+                        }
                     }
                 });
             });
@@ -94,12 +94,6 @@
 
         function isNew(notification) {
             return notification.status === "NEW";
-        }
-
-        function verifyNotification(notification) {
-            if (notification.entity_type === 'ACCEPTED_LINK') {
-                service.refreshUserInstitutions();
-            }
         }
 
         /**

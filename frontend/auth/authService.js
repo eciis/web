@@ -3,7 +3,8 @@
 
     var app = angular.module("app");
 
-    app.service("AuthService", function AuthService($q, $state, $firebaseAuth, $window, UserService, MessageService) {
+    app.service("AuthService", function AuthService($q, $state, $firebaseAuth, $window, UserService, 
+        MessageService, $rootScope) {
         var service = this;
 
         var authObj = $firebaseAuth();
@@ -19,6 +20,8 @@
         * Store listeners to be executed when user logout is called.
         */
         var onLogoutListeners = [];
+
+        var REFRESH_USER_EVENT = 'ACCEPTED_LINK';
 
         Object.defineProperty(service, 'user', {
             get: function() {
@@ -171,6 +174,12 @@
             return false;
         };
 
+        function eventListener() {
+            $rootScope.$on(REFRESH_USER_EVENT, function (event) {
+                service.reload();
+            })
+        }
+        
         /**
         * Execute each function stored to be thriggered when user logout
         * is called.
@@ -216,5 +225,6 @@
         }
 
         init();
+        eventListener();
     });
 })();

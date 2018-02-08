@@ -218,7 +218,6 @@
 
         (function main() {
             NotificationService.watchNotifications(controller.user.key, controller.notifications);
-            NotificationService.refreshUserInstitutions = refreshUserInstitutions;
         })();
     });
 

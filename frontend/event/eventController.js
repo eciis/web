@@ -207,7 +207,6 @@
         };
 
         dialogCtrl.closeDialog = function closeDialog() {
-            dialogCtrl.resetEvent(dialogCtrl.oldEvent);
             $mdDialog.hide();
         };
 

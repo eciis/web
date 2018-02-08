@@ -4,7 +4,6 @@
     var app = angular.module("app");
 
     app.controller("LoadController", function($scope){
-        console.log($scope.addLayoutFill);
         $scope.addLayoutFill ? 
             document.getElementById("element").classList.add("layout-fill") : "";
     });

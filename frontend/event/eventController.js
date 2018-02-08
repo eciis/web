@@ -158,7 +158,7 @@
 
         function updateEvent() {
             addLinks(dialogCtrl.event);
-            event = new Event(dialogCtrl.event, dialogCtrl.user.current_institution.key);
+            var event = new Event(dialogCtrl.event, dialogCtrl.user.current_institution.key);
             if(event.isValid()) {
                 dialogCtrl.loading = true;
                 var patch = formatPatch(generatePatch(jsonpatch.generate(dialogCtrl.observer), event));

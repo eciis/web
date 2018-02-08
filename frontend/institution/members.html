@@ -1,5 +1,5 @@
 <div layout="row" flex layout-align="center">
-	<load-circle flex ng-if="membersCtrl.isLoadingMembers"></load-circle>
+	<load-circle flex add-layout-fill="true" ng-if="membersCtrl.isLoadingMembers"></load-circle>
     <div ng-if="!membersCtrl.isLoadingMembers" flex flex-md="95" layout="row" layout-align="space-around"
             md-colors="{background: 'grey-50'}">
           <!-- CONTENT -->

@@ -31,7 +31,8 @@
                         load-more-posts="institutionCtrl.loadMorePosts" flex>
                         </post-timeline>
                         <!-- LOADING CIRCLE --> 
-                        <load-circle flex ng-if="institutionCtrl.isLoadingPosts"></load-circle>
+                        <load-circle flex add-layout-fill="true"
+                            ng-if="institutionCtrl.isLoadingPosts"></load-circle>
                     </div>
                 </md-content>
             </div>

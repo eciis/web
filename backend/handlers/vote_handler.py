@@ -9,6 +9,7 @@ from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from utils import Utils
 import json
 
+
 class VoteHandler(BaseHandler):
     """Vote Handler."""
 

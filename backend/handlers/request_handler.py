@@ -62,11 +62,19 @@ class RequestHandler(BaseHandler):
         sender.add_institution(institution_key)
         sender.follow(institution_key)
         sender.change_state('active')
-        sender.put()
 
         institution.add_member(sender)
         institution.follow(sender.key)
         institution.put()
+
+        data_profile = {
+            'office': request.office,
+            'email': request.institutional_email,
+            'institution_key': institution_key.urlsafe(),
+            'institution_name': institution.name,
+            'institution_photo_url': institution.photo_url
+        }
+        sender.create_and_add_profile(data_profile)
 
         host = self.request.host
         request.send_response_email(host, "ACCEPT")

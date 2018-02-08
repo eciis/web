@@ -76,9 +76,6 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
             self.user_admin.name,
             'Expected sender admin_name is User Admin')
         self.assertEqual(
-            len(user_updated.institution_profiles),
-            1, 'Expected one profile in user profiles')
-        self.assertEqual(
             user_updated.name, 'user name updated',
             'Expected new user name is user name updated')
 

@@ -11,6 +11,7 @@
         postCtrl.post = {};
         postCtrl.typePost = 'Common';
         postCtrl.loading = false;
+        postCtrl.loadingPost = false;
         postCtrl.deletePreviousImage = false;
         postCtrl.user = AuthService.getCurrentUser();
         postCtrl.photoUrl = "";
@@ -199,9 +200,12 @@
         }
 
         postCtrl.editPost = function editPost(originalPost) {
+            postCtrl.loadingPost = true;
             deleteImage(postCtrl.post).then(function success() {
+                postCtrl.loadingPost = false;
                 saveEditedPost(originalPost);
             }, function error(error) {
+                postCtrl.loadingPost = false;
                 MessageService.showToast(error);
             });
         };
@@ -227,16 +231,19 @@
             $q.all(savePromises).then(function success() {
                 var post = new Post(postCtrl.post, postCtrl.user.current_institution.key);
                 if (post.isValid()) {
+                    postCtrl.loadingPost = true;
                     PostService.createPost(post).then(function success(response) {
                         postCtrl.clearPost();
                         posts.push(new Post(response.data));
                         MessageService.showToast('Postado com sucesso!');
                         changeTimelineToStart();
                         $mdDialog.hide();
+                        postCtrl.loadingPost = false;
                     }, function error(response) {
                         AuthService.reload().then(function success() {
                             $mdDialog.hide();
                             MessageService.showToast(response.data.msg);
+                            postCtrl.loadingPost = false;
                             $state.go("app.user.home");
                         });
                     });
@@ -355,7 +362,8 @@
         };
 
         postCtrl.showButton = function() {
-            return postCtrl.typePost === 'Common' && postCtrl.isTyping();
+            return postCtrl.typePost === 'Common' && postCtrl.isTyping() && 
+                !postCtrl.loadingPost;
         };
 
         postCtrl.showPlaceholderMsg = function() {

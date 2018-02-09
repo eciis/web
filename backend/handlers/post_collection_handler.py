@@ -36,6 +36,7 @@ class PostCollectionHandler(BaseHandler):
 
     @json_response
     @login_required
+    @ndb.toplevel
     def post(self, user):
         """Handle POST Requests."""
         body = json.loads(self.request.body)

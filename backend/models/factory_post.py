@@ -20,7 +20,7 @@ class PostFactory:
         else:
             obj = Post()
             obj.create(data, user_key, institution_key)
-            obj.put()
+        obj.put()
         return obj
 
     @staticmethod

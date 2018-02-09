@@ -117,10 +117,11 @@ class PostCollectionHandlerTest(TestBaseHandler):
                 headers={'institution-authorization': self.institution.key.urlsafe()})
 
         exception_message = self.get_message_exception(str(raises_context.exception))
+        expected_message = "Error! Title can not be empty"
         self.assertEqual(
             exception_message,
-            "Title can not be empty",
-            "Excpected exception message must be equal to title"
+            expected_message,
+            "Expected exception should be %s but was %s" % (expected_message, exception_message)
         )
 
         with self.assertRaises(Exception) as raises_context:
@@ -134,7 +135,7 @@ class PostCollectionHandlerTest(TestBaseHandler):
         exception_message = self.get_message_exception(str(raises_context.exception))
         self.assertEqual(
             exception_message,
-            "Text can not be empty",
+            "Error! Text can not be empty",
             "Excpected exception message must be equal to text"
         )
 

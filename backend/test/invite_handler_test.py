@@ -146,7 +146,7 @@ class InviteHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_patch(self, verify_token, send_notification):
         """Test method patch of InviteHandler."""
-        profile = '{"email": "otheruser@test.com", "office": "Developer"}'
+        profile = '{"email": "otheruser@test.com", "office": "Developer", "institution_key": "%s"}' % self.inst_test.key.urlsafe()
         json_patch = '[{"op": "add", "path": "/institution_profiles/-", "value": ' + profile + '}]'
         self.testapp.patch(
             '/api/invites/%s'

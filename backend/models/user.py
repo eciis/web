@@ -181,10 +181,15 @@ class User(ndb.Model):
 
         self.put()
 
-    @ndb.transactional_async(retries=10)
+    @ndb.toplevel
     def add_post(self, post):
-        self.posts.append(post.key)
-        self.put()
+        @ndb.transactional_tasklet(retries=10)
+        def add_post_to_user(user_key, post_key):
+            user = yield user_key.get_async()
+            user.posts.append(post_key)
+            yield user.put_async()
+
+        add_post_to_user(self.key, post.key)
 
     def is_liked_post(self, postKey):
         """Verify if post is liked."""
@@ -220,7 +225,26 @@ class User(ndb.Model):
         self.state = state
         self.put()
 
-    @ndb.transactional_async(retries=10)
+    @ndb.toplevel
+    def add_permissions_async(self, list_permissions, entity_key):
+        """Add new permission.key to the user permissions list.
+
+        Arguments:
+        permission_type -- permission name that will be used to verify authorization
+        entity_key -- ndb urlsafe of the object binded to the permission
+        """
+        @ndb.transactional_tasklet(retries=10)
+        def add_permissions_to_user(user_key, list_permissions, entity_key):
+            user = yield user_key.get_async()
+            for permission in list_permissions:
+                if user.permissions.get(permission, None):
+                    user.permissions[permission][entity_key] = True
+                else:
+                    user.permissions[permission] = {entity_key: True}
+                yield user.put_async()
+        
+        add_permissions_to_user(self.key, list_permissions, entity_key)
+
     def add_permission(self, permission_type, entity_key):
         """Add new permission.key to the user permissions list.
 

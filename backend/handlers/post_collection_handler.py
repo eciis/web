@@ -55,7 +55,7 @@ class PostCollectionHandler(BaseHandler):
                               institution_key)
         post = PostFactory.create(post_data, user.key, institution.key)
         
-        user.key.get().add_permissions(["edit_post", "remove_post"], post.key.urlsafe())
+        user.key.get().add_permissions_async(["edit_post", "remove_post"], post.key.urlsafe())
 
         institution.key.get().add_post(post)
 

@@ -30,4 +30,4 @@ class VoteHandler(BaseHandler):
                      'photo_url': user.photo_url,
                      'key': user.key.urlsafe()}
 
-        survey_key.get().vote(user_dict, options_selected)
+        survey.vote(user_dict, options_selected)

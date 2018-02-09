@@ -25,10 +25,12 @@
                             'Deseja sair sem salvar as alterações?');
                     
                     promisse.then(function success() {
-                        modified = false;
+                        transitionListener();
                         $state.go(targetState._identifier, targetState._params);
                     }, function error() {
                     });
+                } else {
+                    transitionListener();
                 }
             });
 

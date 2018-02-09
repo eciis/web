@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.service('SubmitFormListenerService', function($transitions) {
+    app.service('SubmitFormListenerService', function($transitions, MessageService, $state) {
         var service = this;
 
         service.addListener = function addListener(obj, formElement, scope) {
@@ -17,12 +17,18 @@
                 to: () => true
             }, function(transition) {
                 if (modified) {
-                    let confirmed = confirm('Deseja sair sem salvar as alterações?');
-                    if (confirmed) {
-                        transitionListener();
-                    } else {
-                        transition.abort();
-                    }
+                    transition.abort();
+                    let targetState = transition._targetState;
+                    let promisse = MessageService.showConfirmationDialog(
+                            'event', 
+                            '',
+                            'Deseja sair sem salvar as alterações?');
+                    
+                    promisse.then(function success() {
+                        modified = false;
+                        $state.go(targetState._identifier, targetState._params);
+                    }, function error() {
+                    });
                 }
             });
 

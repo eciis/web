@@ -7,7 +7,6 @@
         return {
             restrict: 'A',
             link: function($scope, element, attrs) {
-                console.log(attrs);
                 SubmitFormListenerService.addListener(attrs.submitFormWatch, element.context, $scope);
             }
         };

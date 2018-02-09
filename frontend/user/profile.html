@@ -49,7 +49,9 @@
         <div ng-if="!profileCtrl.loading && !profileCtrl.isToShow()">
             <h2>O usuário não possui instituições.</h2>
         </div>
-        <md-progress-circular ng-show="profileCtrl.loading" md-mode="indeterminate"></md-progress-circular>
+        <div ng-show="profileCtrl.loading" layout-margin layout="row" layout-align="center center" style="padding: 0;">
+            <load-circle></load-circle>
+        </div>
     </md-dialog>
     <div>
         <md-button ng-if="profileCtrl.isOwnProfile()" class="md-fab md-primary md-padding" aria-label="Editar" 

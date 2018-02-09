@@ -1,5 +1,5 @@
 <!-- CONTENT -->
-<div flex-gt-lg="80" flex-lg="90" layout-align="center" layout-fill>
+<div flex flex-gt-lg="80" flex-lg="90" layout-align="center">
   <div flex>
     <!-- SEND INVITE -->
     <md-card>
@@ -22,7 +22,8 @@
             <label>Email convite deve ser enviado para:</label>
             <input ng-model="manageMemberCtrl.invite.invitee" type="email" name="email" required>
           </md-input-container>
-          <section layout="row" layout="column" layout-align="end center" layout-wrap>
+          <load-circle flex ng-if="manageMemberCtrl.isLoadingInvite"></load-circle>
+          <section layout="row" layout="column" layout-align="end center" layout-wrap ng-if="!manageMemberCtrl.isLoadingInvite">
             <md-button md-colors="{background: 'teal-500'}" ng-click="manageMemberCtrl.cancelInvite()">Cancelar</md-button>
             <md-button type="submit" md-colors="{background: 'teal-500'}">Enviar Convite</md-button>
           </section>
@@ -95,11 +96,16 @@
           ng-style="manageMemberCtrl.calculateHeight(manageMemberCtrl.sent_invitations)" ng-scrollbars>
         <md-list>
           <md-list-item class="md-2-line" ng-repeat="invite in manageMemberCtrl.sent_invitations" ng-click="null">
-            <md-icon class="md-avatar-icon"
+            <md-icon class="md-avatar-icon" style="margin-top: 2px"
             md-colors="{background: 'light-green-500', color: 'grey-50'}">account_box</md-icon>
             <div class="md-list-item-text">
               <h3> {{ invite.invitee }} </h3>
               <p> Convidado por: {{invite.sender_name}}</p>
+            </div>
+            <div layout-align="end center">
+              <md-button class="md-raised" ng-click="manageMemberCtrl.resendInvite(invite.key, $event)">
+                Reenviar
+              </md-button>
             </div>
           </md-list-item>
         </md-list>

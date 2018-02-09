@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 """Post handler test."""
 
+import json
+import mocks
+
 from test_base_handler import TestBaseHandler
 from models.post import Post
 from models.user import User
@@ -8,20 +11,18 @@ from models.institution import Institution
 from models.post import Comment
 from handlers.reply_comment_handler import ReplyCommentHandler
 
-from mock import patch
-
+from mock import patch, call
 from utils import Utils
 
-import json
+USER_EMAIL = "user@email.com"
+OTHER_USER_EMAIL = "otheruser@email.com"
+THIRD_USER_EMAIL = "thirduser@email.com"
 
+URL_REPLY_COMMENT = "/api/posts/%s/comments/%s/replies"
+URL_DELETE_REPLY = "/api/posts/%s/comments/%s/replies/%s"
 
 class ReplyCommentHandlerTest(TestBaseHandler):
     """Test the post_handler class."""
-
-    USER_DATA = {'email': 'user@example.com'}
-
-    URL_REPLY_COMMENT = "/api/posts/%s/comments/%s/replies"
-    URL_DELETE_REPLY = "/api/posts/%s/comments/%s/replies/%s"
 
     @classmethod
     def setUp(cls):
@@ -35,31 +36,91 @@ class ReplyCommentHandlerTest(TestBaseHandler):
             ("/api/posts/(.*)/comments/(.*)/replies/(.*)", ReplyCommentHandler)
         ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
-        initModels(cls)
 
-    @patch('utils.verify_token', return_value=USER_DATA)
-    def test_post(self, verify_token):
+        # create models
+        # new User
+        cls.user = mocks.create_user(USER_EMAIL)
+        # other user
+        cls.other_user = mocks.create_user(OTHER_USER_EMAIL)
+        # third user
+        cls.third_user = mocks.create_user(THIRD_USER_EMAIL)
+        # new Institution CERTBIO
+        cls.institution = mocks.create_institution()
+        cls.third_user.add_institution(cls.institution.key)
+        # POST of User To Certbio Institution
+        cls.user_post = mocks.create_post(cls.user.key, cls.institution.key)
+        # comment from other_user
+        cls.other_user_comment = mocks.create_comment(cls.institution.key.urlsafe(), cls.other_user)
+        # reply from third_user
+        cls.reply = mocks.create_comment(cls.institution.key.urlsafe(), cls.third_user)
+        # add comment to post
+        cls.user_post.add_comment(cls.other_user_comment)
+        cls.user_post.put()
+
+
+    @patch('handlers.reply_comment_handler.send_message_notification')
+    @patch('utils.verify_token', return_value={'email': THIRD_USER_EMAIL})
+    def test_post(self, verify_token, send_message_notification):
         """Reply a comment of post"""
         # Verify size of list
-        user_comment = self.user_post.get_comment(self.comment.id)
-        self.assertEquals(len(user_comment.get('replies')), 0,
+        other_user_comment = self.user_post.get_comment(self.other_user_comment.id)
+        self.assertEquals(len(other_user_comment.get('replies')), 0,
                           "Expected size of replies list should be zero")
 
         # Call the post method
-        data_reply = {"text": "reply of comment",
-                        "institution_key": self.institution.key.urlsafe()}
-        self.testapp.post(self.URL_REPLY_COMMENT %
-            (self.user_post.key.urlsafe(), self.comment.id),
-                          json.dumps(data_reply))
+        body = {
+            'replyData': {
+                "text": "reply of comment",
+                "institution_key": self.institution.key.urlsafe()
+            }
+        }
+
+        self.testapp.post_json(
+            URL_REPLY_COMMENT % (self.user_post.key.urlsafe(), self.other_user_comment.id),
+            body, headers={'institution-authorization': self.institution.key.urlsafe()}
+        )
 
         # Update post
         self.user_post = self.user_post.key.get()
 
         # Verify size of list
-        user_comment = self.user_post.get_comment(self.comment.id)
-        self.assertEquals(len(user_comment.get('replies')), 1,
-                          "Expected size of comment's list should be one")
+        other_user_comment = self.user_post.get_comment(self.other_user_comment.id)
+        self.assertEquals(
+            len(other_user_comment.get('replies')), 1,
+            "Expected size of comment's list should be one"
+        )
 
+        calls = [
+            # args used to send the notification to the post author
+            call(
+                self.user.key.urlsafe(),
+                self.third_user.key.urlsafe(),
+                "COMMENT",
+                self.user_post.key.urlsafe(),
+                self.institution.key
+            ),
+            # args used to send the notification to the author 
+            # from the comment that was replyed
+            call(
+                self.other_user.key.urlsafe(),
+                self.third_user.key.urlsafe(),
+                "COMMENT",
+                self.user_post.key.urlsafe(),
+                self.institution.key
+            )
+        ]
+        send_message_notification.assert_has_calls(calls)
+    
+    @patch('handlers.reply_comment_handler.send_message_notification')
+    @patch('utils.verify_token', return_value={'email': THIRD_USER_EMAIL})
+    def test_post_method_on_deleted_post(self, verify_token, send_message_notification):
+        """Test post a comment when the post is deleted."""
+        body = {
+            'replyData': {
+                "text": "reply of comment",
+                "institution_key": self.institution.key.urlsafe()
+            }
+        }
         # Verify that the post is published
         self.assertEquals(self.user_post.state, "published")
 
@@ -74,17 +135,22 @@ class ReplyCommentHandlerTest(TestBaseHandler):
         # to comment a deleted post
         with self.assertRaises(Exception) as raises_context:
             comment_id = 21456
-            self.testapp.post(self.URL_REPLY_COMMENT % (self.user_post.key.urlsafe(), comment_id),
-                              json.dumps(data_reply))
+            self.testapp.post_json(
+                URL_REPLY_COMMENT % (self.user_post.key.urlsafe(), comment_id), body,
+                headers={'institution-authorization': self.institution.key.urlsafe()}
+            )
 
         exception_message = self.get_message_exception(str(raises_context.exception))
+        expected_message = "Error! This post has been deleted"
         self.assertEqual(
             exception_message,
-            "Error! This post has been deleted",
-            "Expected exception message must be equal to " +
-            "Error! This post has been deleted")
+            expected_message,
+            "Expected exception message must be equal to %s but was %s" %
+            (expected_message, exception_message))
+        # assert no notification was sent
+        send_message_notification.assert_not_called()
 
-    @patch('utils.verify_token', return_value=USER_DATA)
+    @patch('utils.verify_token', return_value={'email': USER_EMAIL})
     def test_delete(self, verify_token):
         """Delete a reply of a comment"""
         # Verify if before the delete the post's state is published
@@ -96,55 +162,26 @@ class ReplyCommentHandlerTest(TestBaseHandler):
             "institution_key": self.institution.key.urlsafe()
         }, self.user)
 
-        user_comment = self.user_post.get_comment(self.comment.id)
-        user_comment.get('replies')[reply.id] = Utils.toJson(reply)
+        other_user_comment = self.user_post.get_comment(self.other_user_comment.id)
+        other_user_comment.get('replies')[reply.id] = Utils.toJson(reply)
 
         self.user_post.put()
 
-        user_comment = self.user_post.key.get().get_comment(self.comment.id)
-        self.assertEquals(len(user_comment.get('replies')), 1,
+        other_user_comment = self.user_post.key.get().get_comment(self.other_user_comment.id)
+        self.assertEquals(len(other_user_comment.get('replies')), 1,
                           "Expected size of replies list should be one")
 
         # Call the delete method
-        self.testapp.delete(self.URL_DELETE_REPLY % (
+        self.testapp.delete(URL_DELETE_REPLY % (
             self.user_post.key.urlsafe(),
-            self.comment.id,
+            self.other_user_comment.id,
             reply.id
         ))
 
-        user_comment = self.user_post.key.get().get_comment(self.comment.id)
-        self.assertEquals(len(user_comment.get('replies')), 0,
+        other_user_comment = self.user_post.key.get().get_comment(self.other_user_comment.id)
+        self.assertEquals(len(other_user_comment.get('replies')), 0,
                           "Expected size of replies list should be zero")
 
     def tearDown(cls):
         """Deactivate the test."""
         cls.test.deactivate()
-
-
-def initModels(cls):
-    """Init the models."""
-    # new User User
-    cls.user = User()
-    cls.user.name = 'User'
-    cls.user.email = ['user@example.com']
-    cls.user.put()
-    # new User Test User
-    cls.test_user = User()
-    cls.test_user.name = 'Test User'
-    cls.test_user.email = ['testuser@example.com']
-    cls.test_user.photo_url = '/image.jpg'
-    cls.test_user.put()
-    # new Institution CERTBIO
-    cls.institution = Institution()
-    cls.institution.name = 'Institution'
-    cls.institution.put()
-    # POST of User To Certbio Institution
-    cls.user_post = Post()
-    cls.user_post.author = cls.user.key
-    cls.user_post.institution = cls.institution.key
-    cls.user_post.put()
-    # comment
-    cls.comment = Comment.create({"text": "comment",
-        "institution_key": cls.institution.key.urlsafe()}, cls.user)
-    cls.user_post.add_comment(cls.comment)
-    cls.user_post.put()

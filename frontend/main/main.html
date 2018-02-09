@@ -7,7 +7,7 @@
 
     <a ui-sref="app.user.home" layout="row" layout-align="center center">
       <md-button disabled="true">
-        <img src="app/images/logo.png" aria-label="Plataforma Virtual CIS" style="height: 50%;">
+        <img src="app/images/logo.png" aria-label="Plataforma Virtual CIS" style="height: 35px;">
       </md-button>
     </a>
 
@@ -35,7 +35,14 @@
   </div>
 </md-toolbar>
 
-<div ui-view="content" layout="column" md-colors="{background: 'grey-200'}"></div>
+<md-content ui-view="content" flex layout="column" md-colors="{background: 'grey-200'}"></md-content>
+
+<div hide-xs hide-sm>
+  <md-button class="feedback-btn" ng-click="mainCtrl.goToReport()" 
+      md-colors="{background: 'light-green-700', color: 'grey-50'}">
+    Reportar problemas
+  </md-button>
+</div>
 
 <md-toolbar class="md-warn" ng-if="!mainCtrl.userEmailVerified()" ng-hide="hideEmailVerification">
   <div class="md-toolbar-tools" layout-align="end center">

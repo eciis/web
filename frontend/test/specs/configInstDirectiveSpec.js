@@ -40,19 +40,18 @@ describe('Test ConfigInstDirective', function() {
         members: []
     }];
 
-    var legal_nature = [
-        {"value":"public", "name":"Pública"},
-        {"value":"private", "name":"Privada"},
-        {"value":"philanthropic", "name":"Filantrópica"}
-    ];
-    var actuation_area = [
-        {"value":"official laboratories", "name":"Laboratórios Oficiais"},
-        {"value":"government agencies", "name":"Ministérios e outros Órgãos do Governo"},
-        {"value":"funding agencies", "name":"Agências de Fomento"},
-        {"value":"research institutes", "name":"Institutos de Pesquisa"},
-        {"value":"colleges", "name":"Universidades"},
-        {"value":"other", "name":"Outra"}
-    ];
+    var legal_nature = {
+        "private for-profit":"Privada com fins lucrativos",
+        "private non-profit":"Privada sem fins lucrativos",
+        "public":"Pública",
+        "startup":"Startup" 
+    };
+    var actuation_area = {
+        "OFFICIAL_BANK": "Banco Oficial",
+        "COMMISSION": "Comissão",
+        "COUNCIL": "Conselho",
+        "PRIVATE_COMPANY": "Empresa Privada",
+    };
 
     var invite = {'invitee': 'user@email.com',
             'suggestion_institution_name': "Suggested Name",
@@ -269,7 +268,21 @@ describe('Test ConfigInstDirective', function() {
             editInstCtrl.newInstitution.address = {
                 street: "floriano",
                 city: "example",
-                country: "brazil"
+                country: "Brazil"
+            };
+            expect(editInstCtrl.getStep(1)).toEqual(true);
+            editInstCtrl.newInstitution.address = {
+                country: ""
+            };
+            expect(editInstCtrl.getStep(1)).toEqual(true);
+        });
+
+        it('should not pass from first step', function() {
+            editInstCtrl.newInstitution.address = undefined;
+            editInstCtrl.nextStep();
+            expect(editInstCtrl.getStep(1)).toEqual(true);
+            editInstCtrl.newInstitution.address = {
+                country: ""
             };
             expect(editInstCtrl.getStep(1)).toEqual(true);
         });
@@ -311,6 +324,46 @@ describe('Test ConfigInstDirective', function() {
             editInstCtrl.nextStep();
             greenButton = editInstCtrl.showGreenButton(3);
             expect(greenButton).toEqual(false);
+        });
+    });
+
+    describe('getPortfolioButtonMessage()', function() {
+        it('should return "Trocar Portfólio"', function() {
+            editInstCtrl.newInstitution.portfolio_url = "portfolio/test";
+            var message = editInstCtrl.getPortfolioButtonMessage();
+            expect(message).toEqual("Trocar Portfólio");
+            delete editInstCtrl.newInstitution.portfolio_url;
+            editInstCtrl.file = "portfolio/test";
+            message = editInstCtrl.getPortfolioButtonMessage();
+            expect(message).toEqual("Trocar Portfólio");
+            editInstCtrl.newInstitution.portfolio_url = "portfolio/test";
+            message = editInstCtrl.getPortfolioButtonMessage();
+            expect(message).toEqual("Trocar Portfólio");
+        });
+
+        it('should return "Adicionar Portfólio"', function () {
+            var message = editInstCtrl.getPortfolioButtonMessage();
+            expect(message).toEqual("Adicionar Portfólio");
+        });
+    });
+
+    describe('getPortfolioButtonIcon()', function () {
+        it('should return "insert_drive_file"', function () {
+            editInstCtrl.newInstitution.portfolio_url = "portfolio/test";
+            var message = editInstCtrl.getPortfolioButtonIcon();
+            expect(message).toEqual("insert_drive_file");
+            delete editInstCtrl.newInstitution.portfolio_url;
+            editInstCtrl.file = "portfolio/test";
+            message = editInstCtrl.getPortfolioButtonIcon();
+            expect(message).toEqual("insert_drive_file");
+            editInstCtrl.newInstitution.portfolio_url = "portfolio/test";
+            message = editInstCtrl.getPortfolioButtonIcon();
+            expect(message).toEqual("insert_drive_file");
+        });
+
+        it('should return "attach_file"', function () {
+            var message = editInstCtrl.getPortfolioButtonIcon();
+            expect(message).toEqual("attach_file");
         });
     });
 });

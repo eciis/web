@@ -104,7 +104,11 @@ case "$1" in
                 echo "=========== Starting Backend Tests ==========="
                 source $PY_ENV/bin/activate
                 cd backend
-                python -m unittest discover -v -p "*test.py"
+                TEST_NAME="*test.py"
+                if [ "$3" == "--name" ] && [ ! -z "$4" ]; then
+                    TEST_NAME=$4
+                fi
+                python -m unittest discover -v -p $TEST_NAME
         esac
     ;;
 

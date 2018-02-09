@@ -64,8 +64,8 @@
             "REQUEST_USER": {
                icon: "person_add",
                state: "process_request",
-               action: function (properties, notification) {
-                    return showDialog(properties, notification);
+               action: function (properties, notification, event) {
+                    return showDialog(properties, notification, event);
                 },
                properties: {
                     templateUrl: "app/requests/request_processing.html",
@@ -79,8 +79,8 @@
             "REQUEST_INSTITUTION_CHILDREN": {
                 icon: "account_balance",
                 state: "process_request",
-                action: function (properties, notification) {
-                    return showDialog(properties, notification);
+                action: function (properties, notification, event) {
+                    return showDialog(properties, notification, event);
                 },
                 properties: {
                      templateUrl: "app/requests/request_processing.html",
@@ -92,8 +92,8 @@
             "REQUEST_INSTITUTION_PARENT": {
                 icon: "account_balance",
                 state: "process_request",
-                action: function (properties, notification) {
-                    return showDialog(properties, notification);
+                action: function (properties, notification, event) {
+                    return showDialog(properties, notification, event);
                 },
                 properties: {
                      templateUrl: "app/requests/request_processing.html",
@@ -106,10 +106,7 @@
                 icon: "account_balance",
             },
             "ACCEPTED_LINK": {
-                icon: "link",
-                action: function() {
-                    return refreshUserInstitutions();
-                }
+                icon: "link"
             },
             "REJECT_INSTITUTION_LINK": {
                 icon: "account_balance",
@@ -129,8 +126,8 @@
             "REQUEST_INSTITUTION": {
                 icon: "account_balance",
                 state: "process_request",
-                action: function (properties, notification) {
-                    return showDialog(properties, notification);
+                action: function (properties, notification, event) {
+                    return showDialog(properties, notification, event);
                 },
                 properties: {
                      templateUrl: "app/requests/request_institution_processing.html",
@@ -165,11 +162,11 @@
             }
         };
 
-        controller.action = function action(notification) {
+        controller.action = function action(notification, event) {
             var notificationProperties = type_data[notification.entity_type].properties;
             var  notificationAction = type_data[notification.entity_type].action;
             if (notificationAction){
-                notificationAction(notificationProperties, notification);
+                notificationAction(notificationProperties, notification, event);
             } else {
                 controller.goTo(notification);
             }
@@ -177,7 +174,7 @@
             controller.markAsRead(notification);
         };
 
-        function showDialog(dialogProperties, notification) {
+        function showDialog(dialogProperties, notification, event) {
             dialogProperties.locals.key = notification.entity.key;
             $mdDialog.show({
                 controller: dialogProperties.controller,
@@ -200,6 +197,11 @@
             _.forEach(controller.notifications, function(notification) {
                 controller.markAsRead(notification);
             });
+        };
+
+        controller.number_of_notifications = function number_of_notifications() {
+            return controller.notifications.length < 100 ?
+            controller.notifications.length : "+99";
         };
 
         function refreshUserInstitutions () {

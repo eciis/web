@@ -11,6 +11,7 @@
         postCtrl.post = {};
         postCtrl.typePost = 'Common';
         postCtrl.loading = false;
+        postCtrl.loadingPost = false;
         postCtrl.deletePreviousImage = false;
         postCtrl.user = AuthService.getCurrentUser();
         postCtrl.photoUrl = "";
@@ -25,6 +26,7 @@
                             };
         var observer;
         var timelineContent = document.getElementById('content');
+        var MAXIMUM_PDF_SIZE = 5242880; // 5Mb in bytes
 
         postCtrl.hasMedia = function hasMedia() {
             return postCtrl.photoBase64Data || postCtrl.pdfFiles.length > 0 || postCtrl.hasVideo || postCtrl.photoUrl;
@@ -64,7 +66,11 @@
         };
 
         postCtrl.addPdf = function addPdf(files) {
-            postCtrl.pdfFiles = files;
+            if(files[0].size > MAXIMUM_PDF_SIZE) {
+                MessageService.showToast('O arquivo deve ser um pdf menor que 5 Mb');
+            } else {
+                postCtrl.pdfFiles = files;
+            }      
         };
 
         postCtrl.createEditedPost = function createEditedPost(post) {
@@ -94,7 +100,9 @@
             }
         };
 
-        postCtrl.save = function save(isEditing, originalPost, posts) {
+        postCtrl.save = function save(isEditing, originalPost, posts, saveForm) {
+            saveForm.$setPristine();
+            saveForm.$setUntouched();
             if(isEditing) {
                 postCtrl.editPost(originalPost);
             } else {
@@ -134,7 +142,7 @@
                         }
                         deferred.resolve();
                     }, function error(response) {
-                        MessageService.showToast(response.data.msg);
+                        MessageService.showToast(response);
                         deferred.reject();
                 });
             } else {
@@ -192,9 +200,12 @@
         }
 
         postCtrl.editPost = function editPost(originalPost) {
+            postCtrl.loadingPost = true;
             deleteImage(postCtrl.post).then(function success() {
+                postCtrl.loadingPost = false;
                 saveEditedPost(originalPost);
             }, function error(error) {
+                postCtrl.loadingPost = false;
                 MessageService.showToast(error);
             });
         };
@@ -220,16 +231,19 @@
             $q.all(savePromises).then(function success() {
                 var post = new Post(postCtrl.post, postCtrl.user.current_institution.key);
                 if (post.isValid()) {
+                    postCtrl.loadingPost = true;
                     PostService.createPost(post).then(function success(response) {
                         postCtrl.clearPost();
                         posts.push(new Post(response.data));
                         MessageService.showToast('Postado com sucesso!');
                         changeTimelineToStart();
                         $mdDialog.hide();
+                        postCtrl.loadingPost = false;
                     }, function error(response) {
                         AuthService.reload().then(function success() {
                             $mdDialog.hide();
                             MessageService.showToast(response.data.msg);
+                            postCtrl.loadingPost = false;
                             $state.go("app.user.home");
                         });
                     });
@@ -348,7 +362,8 @@
         };
 
         postCtrl.showButton = function() {
-            return postCtrl.typePost === 'Common' && postCtrl.isTyping();
+            return postCtrl.typePost === 'Common' && postCtrl.isTyping() && 
+                !postCtrl.loadingPost;
         };
 
         postCtrl.showPlaceholderMsg = function() {

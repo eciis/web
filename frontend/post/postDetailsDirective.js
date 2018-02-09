@@ -10,10 +10,10 @@
 
         var LIMIT_POST_CHARACTERS = 1000;
 
-        postDetailsCtrl.showLikes = false;
         postDetailsCtrl.showComments = false;
         postDetailsCtrl.savingComment = false;
         postDetailsCtrl.savingLike = false;
+        postDetailsCtrl.isLoadingComments = true;
 
         var URL_POST = '/posts/';
         postDetailsCtrl.user = AuthService.getCurrentUser();
@@ -32,6 +32,10 @@
                 postDetailsCtrl.post = new Post(postDetailsCtrl.post);
                 PostService.deletePost(postDetailsCtrl.post).then(function success() {
                     postDetailsCtrl.post.remove(postDetailsCtrl.user.name);
+                    _.remove(postDetailsCtrl.posts, function (post) {
+                        return post.key === postDetailsCtrl.post.key;
+                    });
+                    postDetailsCtrl.posts.push(postDetailsCtrl.post);
                     MessageService.showToast('Post excluído com sucesso');
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
@@ -68,6 +72,12 @@
         postDetailsCtrl.isShared = function isShared() {
             return postDetailsCtrl.post.shared_post ||
                 postDetailsCtrl.post.shared_event;
+        };
+
+        postDetailsCtrl.getCSSClassPost = function getCSSClassPost() {
+            return (postDetailsCtrl.isDeleted(postDetailsCtrl.post) || 
+                    postDetailsCtrl.isDeletedEvent(postDetailsCtrl.post) || 
+                        postDetailsCtrl.isInstInactive()) ? 'post-deleted':'';
         };
 
         postDetailsCtrl.postHasActivity = function postHasActivity() {
@@ -232,8 +242,8 @@
                 postDetailsCtrl.post.number_of_likes += 1;
                 postDetailsCtrl.savingLike = false;
                 postDetailsCtrl.getLikes(postDetailsCtrl.post);
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
+            }, function error() {
+                MessageService.showToast("O usuário já fez essa ação na publicação.");
                 $state.go("app.user.home");
                 postDetailsCtrl.savingLike = false;
             });
@@ -249,6 +259,7 @@
                 postDetailsCtrl.savingLike = false;
                 postDetailsCtrl.getLikes(postDetailsCtrl.post);
             }, function error() {
+                MessageService.showToast("O usuário já fez essa ação na publicação.");
                 $state.go("app.user.home");
                 postDetailsCtrl.savingLike = false;
             });
@@ -295,12 +306,26 @@
             return _.values(object);
         };
 
+        postDetailsCtrl.reloadPost = function reloadPost() {
+            var promise = PostService.getPost(postDetailsCtrl.post.key);
+            promise.then(function success(response) {
+                postDetailsCtrl.post = response;
+                postDetailsCtrl.isLoadingComments = false;
+            }, function error(response) {
+                postDetailsCtrl.isLoadingComments = true;
+                MessageService.showToast(response.data.msg);
+            }); 
+            return promise;
+        }
+
         postDetailsCtrl.loadComments = function refreshComments() {
             var promise  =  CommentService.getComments(postDetailsCtrl.post.comments);
             promise.then(function success(response) {
                 postDetailsCtrl.post.data_comments = response.data;
                 postDetailsCtrl.post.number_of_comments = _.size(postDetailsCtrl.post.data_comments);
+                postDetailsCtrl.isLoadingComments = false;
             }, function error(response) {
+                postDetailsCtrl.isLoadingComments = true;
                 MessageService.showToast(response.data.msg);
             });
             return promise;
@@ -317,8 +342,7 @@
 
         postDetailsCtrl.getLikes = function getLikes() {
             var likesUri = postDetailsCtrl.post.likes;
-            postDetailsCtrl.showLikes = !postDetailsCtrl.showLikes;
-            if(postDetailsCtrl.showLikes) {
+            if(postDetailsCtrl.isPostPage) {
                 var promise = PostService.getLikes(likesUri);
                 promise.then(function success(response) {
                     postDetailsCtrl.post.data_likes = response.data;
@@ -361,6 +385,10 @@
 
         postDetailsCtrl.isPostAuthor = function isPostAuthor() {
             return postDetailsCtrl.post.author_key == postDetailsCtrl.user.key;
+        };
+
+        postDetailsCtrl.isPostEmpty = function  isPostEmpty() {
+            return !postDetailsCtrl.post || _.isEmpty(postDetailsCtrl.post);
         };
 
         function isInstitutionAdmin() {
@@ -468,6 +496,10 @@
                                 return commentCtrl.user.key === key;
                             });
                         }
+                    }, function error() {
+                        $state.go("app.user.home");
+                        MessageService.showToast("O usuário já fez essa ação nesse comentário.");
+                        commentCtrl.saving = false;
                     }
                 );
             } else {
@@ -478,6 +510,10 @@
                         } else {
                             commentCtrl.comment.likes.push(commentCtrl.user.key);
                         }
+                    }, function error() {
+                        $state.go("app.user.home");
+                        MessageService.showToast("O usuário já fez essa ação nesse comentário.");
+                        commentCtrl.saving = false;
                     }
                 );
             }
@@ -733,7 +769,7 @@
             if(text){
                 text = Utils.limitString(text, LIMIT_POST_CHARACTERS);
             }
-            return text.replace(URL_PATTERN,REPLACE_URL);
+            return text && text.replace(URL_PATTERN,REPLACE_URL);
         };
     });
 })();

@@ -16,21 +16,22 @@
               </div>
               <md-card-content>
                 <md-card-actions layout="column" float>
-                  <md-menu md-offset="-199 70">
-                    <md-button class="md-fab md-primary" title="Criar novo evento"
+                  <md-button class="md-fab md-primary" title="Criar novo evento"
                     style="margin-right: -100px; background-color: #7CB342">
-                      <md-icon>add</md-icon>
-                    </md-button>
-                  </md-menu>
+                    <md-icon>add</md-icon>
+                  </md-button>
                 </md-card-actions>
               </md-card-content>
             </md-card-content>
           </md-card>
         </div>
-        <div flex layout-align="center center" layout="row" layout-fill ng-if="eventCtrl.isLoadingEvents">
-            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-        </div>
-        <md-content flex id="content" class="body hide-scrollbar">
+        <load-circle flex add-layout-fill="true" ng-if="eventCtrl.isLoadingEvents"></load-circle>
+        <md-card ng-if="eventCtrl.events.lentgh === 0" style="margin-left: 40px;">
+            <md-content layout-align="center center" layout="column">
+              <h4>Nenhum evento a ser exibido.</h4>
+            </md-content>
+        </md-card>
+        <md-content flex id="content" class="body custom-scrollbar">
           <div ng-repeat="event in eventCtrl.events | orderBy:'start_time'" ng-if="eventCtrl.events.length > 0"
               style="margin-left: 65px; border-left: 2px solid #8BC34A;" layut="colum">
             <div layout="row">
@@ -51,6 +52,6 @@
         </md-content>
       </div>
     </div>
-    <md-content class="hide-scrollbar" flex-gt-md="20" hide show-gt-md></md-content>
+    <md-content class="custom-scrollbar" flex-gt-md="20" hide show-gt-md></md-content>
   </div>
 </div>

@@ -63,7 +63,7 @@ class RequestUser(Invite):
         Voce tem um novo convite. Acesse:
         http://%s/institution/%s/%s/new_invite/USER
 
-        Equipe e-CIS """ % (host, institution_key, invite_key)
+        Equipe da Plataforma CIS """ % (host, institution_key, invite_key)
         super(RequestUser, self).send_email(host, admin_email, body)
 
     def send_response_email(self, host, operation):
@@ -73,24 +73,33 @@ class RequestUser(Invite):
         Lamentamos informar mas o seu pedido não foi aceito pela instituição %s.
         Sugerimos que fale com o seu superior para que seja enviado um convite.
 
-        Equipe e-CIS""" % (institution_name)
+        Equipe da Plataforma CIS""" % (institution_name)
 
         acceptMessage = """Olá,
         Você foi aceito na plataforma como membro da instituição
-        %s, seja bem vindo ao e-CIS.
+        %s, seja bem vindo a Plataforma CIS.
         Realize seu login no link abaixo:
         http://%s/signin
 
-        Equipe e-CIS""" % (institution_name, host)
+        Equipe da Plataforma CIS""" % (institution_name, host)
 
         sender_email = self.sender_key.get().email[0]
         body = acceptMessage if operation == "ACCEPT" else rejectMessage
         super(RequestUser, self).send_email(host, sender_email, body)
 
-    def send_notification(self, user):
+    """ 
+    The sender, in this case, is the user who is asking to be an institution's members.
+    The receiver is the institution's admin, who is receive the notification of the request.
+    """
+    def send_notification(self, current_institution):
         """Method of send notification of invite user."""
         entity_type = 'REQUEST_USER'
-        super(RequestUser, self).send_notification(user, self.admin_key.urlsafe(), entity_type)
+        super(RequestUser, self).send_notification(
+            current_institution=current_institution, 
+            sender_key=self.sender_key,
+            receiver_key=self.admin_key,
+            entity_type=entity_type
+        )
 
     def make(self):
         """Create json of invite to user."""

@@ -15,7 +15,10 @@ def create_message(sender_key, current_institution):
     """Create a message based on user current institution."""
     sender = ndb.Key(urlsafe=sender_key).get()
     name = sender.name if sender.name != "Unknown" else sender.email[0]
-    institution_name = current_institution.get('name') if current_institution else ""
+    if current_institution and current_institution is not type(None):
+        institution_name = current_institution.get().name 
+    else:
+        institution_name = ""
     message = {
         'from': {
             'name': name.encode('utf8'),
@@ -30,13 +33,20 @@ def create_entity(entity_key):
     """Create a short entity with only key and name."""
     entity_obj = ndb.Key(urlsafe=entity_key).get()
     class_name = entity_obj.__class__.__name__
+    is_post = class_name == 'Post'
+    is_institution = class_name == 'Institution'
+    is_invite = 'Invite' in class_name
+    is_request = 'Request' in class_name
     name = ''
 
-    if class_name == 'Post':
+    if is_post:
         institution = entity_obj.institution.get()
         name = institution.name
-    elif class_name == 'Institution':
+    elif is_institution:
         name = entity_obj.name
+    elif is_invite or is_request:
+        institution = entity_obj.institution_key.get()
+        name = institution.name
     
     entity = {
         "key": entity_key,
@@ -54,7 +64,7 @@ def send_message_notification(receiver_key, sender_key, entity_type, entity_key,
     messagem -- message of notification.
     entity_type -- type of notification.
     entity_key -- entity key of type invite.
-    current_institution -- the institution the user was logged in when the notification was send
+    current_institution -- the institution the user was logged in when the notification was sent
     """
     message = create_message(sender_key, current_institution)
     entity = create_entity(entity_key)

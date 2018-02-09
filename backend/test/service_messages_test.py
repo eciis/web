@@ -22,7 +22,7 @@ class ServiceMessageTest(TestBaseHandler):
         sender.photo_url = "photo-url"
         sender.put()
         institution = mocks.create_institution()
-        current_institution = {"name": institution.name}
+        current_institution = institution.key
         message = service_messages.create_message(sender.key.urlsafe(), current_institution)
         expected_message = {
             'from': {
@@ -35,7 +35,7 @@ class ServiceMessageTest(TestBaseHandler):
         self.assertEquals(
             message,
             json.dumps(expected_message),
-            "The created message should be igual to the expected one"
+            "The created message should be igual to the expected one but was: "+message
         )
 
 

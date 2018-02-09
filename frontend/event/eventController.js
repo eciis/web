@@ -19,19 +19,22 @@
             var deferred = $q.defer();
 
             if (moreEvents) {
-                loadEvents(deferred);
+                if(eventCtrl.institutionKey) {
+                    loadEvents(deferred, EventService.getInstEvents);
+                } else {
+                    loadEvents(deferred, EventService.getEvents);
+                }
             } else {
                 deferred.resolve();
             }
-
             return deferred.promise;
         };
 
         Utils.setScrollListener(content, eventCtrl.loadMoreEvents);
 
 
-        function loadEvents(deferred) {
-            EventService.getEvents(actualPage).then(function success(response) {
+        function loadEvents(deferred, getEvents) {
+            getEvents(actualPage, eventCtrl.institutionKey).then(function success(response) {
                 actualPage += 1;
                 moreEvents = response.data.next;
 
@@ -69,116 +72,20 @@
                 templateUrl: 'app/post/share_post_dialog.html',
                 parent: angular.element(document.body),
                 targetEvent: ev,
-                clickOutsideToClose:true,
+                clickOutsideToClose: true,
                 locals: {
-                    user : eventCtrl.user,
-                    posts: [],
+                    user: eventCtrl.user,
+                    posts: $state.params.posts,
                     post: event,
-                    addPost: false
+                    addPost: true
                 }
             });
         };
 
-        eventCtrl.confirmDeleteEvent = function confirmDeleteEvent(ev, event) {
-            var dialog = MessageService.showConfirmationDialog(ev, 'Excluir Evento', 'Este evento será removido.');
-            dialog.then(function() {
-                deleteEvent(event);
-            }, function() {
-                MessageService.showToast('Cancelado');
-            });
-        };
-
-        function deleteEvent(event) {
-            let promise = EventService.deleteEvent(event);
-            promise.then(function success() {
-                eventCtrl.events = eventCtrl.events.filter(thisEvent => thisEvent.key  !== event.key);
-                MessageService.showToast('Evento removido com sucesso!');
-                $state.go('app.user.events');
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
-            });
-            return promise;
-        }
-
-        eventCtrl.recognizeUrl =  function recognizeUrl(text) {
-            if(text){
-                return Utils.recognizeUrl(text);
-            }
-        };
-
-        eventCtrl.canDelete = function canDelete(event) {
-            return eventCtrl.isEventAuthor(event) || isInstitutionAdmin(event);
-        };
-
-        eventCtrl.canEdit = function canEdit(event) {
-            return eventCtrl.isEventAuthor(event);
-        };
-
-        eventCtrl.editEvent = function editEvent(ev, event) {
-            /* TODO: FIX this function to work in event page
-            * @author: Tiago Pereira - 11/01/2018
-            */
-            $mdDialog.show({
-                controller: 'EventDialogController',
-                controllerAs: "controller",
-                templateUrl: 'app/event/event_dialog.html',
-                targetEvent: ev,
-                clickOutsideToClose: true,
-                locals: {
-                    event: event,
-                    isEditing: true
-                },
-                bindToController: true
-            });
-        };
-
-        eventCtrl.isEventAuthor = function isEventAuthor(event) {
-            if(event) return Utils.getKeyFromUrl(event.author_key) === eventCtrl.user.key;
-        };
-
-        eventCtrl.goToEvent = function goToEvent(event) {
-            $state.go('app.user.event', {eventKey: event.key});
-        };
-
-
-        eventCtrl.endInOtherMonth = function endInOtherMonth() {
-            if(eventCtrl.event) {
-                const startMonth = new Date(eventCtrl.event.start_time).getMonth();
-                const endMonth = new Date(eventCtrl.event.end_time).getMonth();
-                return startMonth !== endMonth;
-            }
-        };
-
-        eventCtrl.getVideoUrl = function getVideoUrl(video_url) {
-            if(video_url) {
-                var params = _.split(video_url, '=');
-                var id = params[params.length - 1];
-                return 'https://www.youtube.com/embed/' + id;
-            }
-        };
-
-        function isInstitutionAdmin(event) {
-            return _.includes(_.map(eventCtrl.user.institutions_admin, Utils.getKeyFromUrl),
-                Utils.getKeyFromUrl(event.institution_key));
-        }
-
         (function main() {
+            eventCtrl.institutionKey = $state.params.institutionKey;
             eventCtrl.loadMoreEvents();
         })();
-    });
-
-    app.directive("eventDetails", function() {
-        return {
-            restrict: 'E',
-            templateUrl: "app/event/event_details.html",
-            controllerAs: "eventDetailsCtrl",
-            controller: "EventController",
-            scope: {},
-            bindToController: {
-                event: '=',
-                isEventPage: '=',
-            }
-        };
     });
 
     app.controller('EventDialogController', function EventDialogController(MessageService, brCidadesEstados,
@@ -250,18 +157,13 @@
         }
 
         function updateEvent() {
-            var event = _.clone(dialogCtrl.dateChangeEvent);
-            event = new Event(event, dialogCtrl.user.current_institution.key);
+            addLinks(dialogCtrl.event);
+            var event = new Event(dialogCtrl.event, dialogCtrl.user.current_institution.key);
             if(event.isValid()) {
-                var patch = generatePatch(jsonpatch.generate(dialogCtrl.observer), event);
+                dialogCtrl.loading = true;
+                var patch = formatPatch(generatePatch(jsonpatch.generate(dialogCtrl.observer), event));
                 EventService.editEvent(dialogCtrl.event.key, patch).then(function success() {
-                    if(dialogCtrl.dateToChange.startTime) {
-                        dialogCtrl.event.start_time = event.start_time;
-                    }
-                    if(dialogCtrl.dateToChange.endTime) {
-                        dialogCtrl.event.end_time = event.end_time;
-                    }
-                    dialogCtrl.closeDialog();
+                    $mdDialog.hide();
                     MessageService.showToast('Evento editado com sucesso.');
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
@@ -270,6 +172,21 @@
             } else {
                 MessageService.showToast('Evento inválido');
             }
+        }
+
+        /*
+        * This function remove the string '.000Z' added in end of properties start_time and end_time automatically by generatePatch.
+        * @param {patch} - The patch list of properties that was changed.
+        * @return {undefined} - Void function returns undefined.
+        */
+        function formatPatch(patch) {
+            return patch.reduce((a, b) => {
+                if(b.path === "/end_time" || b.path === "/start_time") {
+                    b.value = b.value.split(".")[0];
+                }
+                a.push(b);
+                return a;
+            }, []);
         }
 
         dialogCtrl.changeDate = function changeDate(typeOfDate) {
@@ -316,19 +233,20 @@
         };
 
         dialogCtrl.cleanImage = function() {
-           dialogCtrl.photoUrl = "";
-           dialogCtrl.photoBase64Data = null;
-           dialogCtrl.deletePreviousImage = true;
-           delete dialogCtrl.event.photo_url;
+            dialogCtrl.photoUrl = "";
+            dialogCtrl.photoBase64Data = null;
+            dialogCtrl.deletePreviousImage = true;
+            delete dialogCtrl.event.photo_url;
         };
 
         dialogCtrl.getCitiesByState = function getCitiesByState() {
             dialogCtrl.cities = brCidadesEstados.buscarCidadesPorSigla(dialogCtrl.selectedFederalState.sigla);
+            dialogCtrl.event.address.federal_state = dialogCtrl.selectedFederalState.nome;
         };
 
         dialogCtrl.setAnotherCountry = function isAnotherCountry() {
             clearSelectedState();
-            dialogCtrl.isAnotherCountry = dialogCtrl.event.country !== "Brasil";
+            dialogCtrl.isAnotherCountry = dialogCtrl.event.address.country !== "Brasil";
         };
 
         dialogCtrl.getStep = function getStep(step) {
@@ -339,13 +257,66 @@
             var currentStep = _.findIndex(dialogCtrl.steps, function(situation) {
                 return situation;
             });
-            dialogCtrl.steps[currentStep] = false;
-            var nextStep = currentStep + 1;
-            dialogCtrl.steps[nextStep] = true;
+            if(isCurrentStepValid(currentStep)){
+                dialogCtrl.steps[currentStep] = false;
+                var nextStep = currentStep + 1;
+                dialogCtrl.steps[nextStep] = true;
+            } else {
+                MessageService.showToast("Preencha os campos obrigatórios corretamente.");
+            }
         };
+
+        dialogCtrl.isValidAddress = function isValidAddress(){
+            var valid = true;
+            var address = dialogCtrl.event.address;
+            var attributes = ["street", "number", "country", "federal_state", "city"];
+            if(address && address.country === "Brasil"){     
+                _.forEach(attributes, function(attr) {     
+                    var value = _.get(dialogCtrl.event.address, attr);
+                    if(! value || _.isUndefined(value) || _.isEmpty(value)) {
+                        valid = false;
+                    }   
+                });       
+            }     
+            return valid;
+        };
+
+        function getFields() {
+            var necessaryFieldsForStep = {
+                0: {
+                    fields: [
+                        dialogCtrl.event.title,
+                        dialogCtrl.event.local,
+                        dialogCtrl.event.address
+                    ],
+                    isValid: dialogCtrl.isValidAddress
+                }
+            };
+            return necessaryFieldsForStep;
+        }
+
+        function isCurrentStepValid(currentStep) {
+            var necessaryFieldsForStep = getFields();
+            var isValid = true;
+
+            if(! _.isUndefined(necessaryFieldsForStep[currentStep])){
+                _.forEach(necessaryFieldsForStep[currentStep].fields, function(field) {
+                    if(_.isUndefined(field) || _.isEmpty(field)) {
+                        isValid = false;
+                    }
+                });
+
+                var isValidFunction = necessaryFieldsForStep[currentStep].isValid ? 
+                    necessaryFieldsForStep[currentStep].isValid() : true;
+                isValid = isValid && isValidFunction;
+
+            }
+            return isValid;
+        }
 
         dialogCtrl.nextStepOrSave = function nextStepOrSave() {
             if (dialogCtrl.getStep(3)) {
+                dialogCtrl.blockPublishButton = true;
                 dialogCtrl.save();
             } else {
                 dialogCtrl.nextStep();
@@ -370,9 +341,9 @@
         };
 
         function clearSelectedState() {
-            dialogCtrl.event.federal_state = "";
+            dialogCtrl.event.address.federal_state = "";
             dialogCtrl.selectedFederalState = "";
-            dialogCtrl.event.city = "";
+            dialogCtrl.event.address.city = "";
         }
 
         function loadFederalStates() {
@@ -398,13 +369,12 @@
         function create() {
             var event = new Event(dialogCtrl.event, dialogCtrl.user.current_institution.key);
             addLinks(event);
-            if (dialogCtrl.selectedFederalState)
-                event.federal_state = dialogCtrl.selectedFederalState.nome;
             if (event.isValid()) {
+                dialogCtrl.loading = true;
                 EventService.createEvent(event).then(function success(response) {
-                    dialogCtrl.closeDialog();
+                    $mdDialog.hide();
                     dialogCtrl.events.push(response.data);
-                    MessageService.showToast('Evento criado com sucesso, esperando aprovação!');
+                    MessageService.showToast('Evento criado com sucesso!');
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
                     $state.go("app.user.events");
@@ -415,8 +385,8 @@
         }
 
         function addLinks(event) {
-            let videoUrls = _.filter(dialogCtrl.videoUrls, videoUrl => videoUrl.url !== '');
-            let usefulLinks = _.filter(dialogCtrl.usefulLinks, usefulLink => usefulLink.url !== '');
+            let videoUrls = dialogCtrl.videoUrls.filter(videoUrl => videoUrl.url !== '');
+            let usefulLinks = dialogCtrl.usefulLinks.filter(usefulLink => usefulLink.url !== '');
             event.video_url = videoUrls;
             event.useful_links = usefulLinks;
         };
@@ -424,23 +394,58 @@
         function getCountries() {
             $http.get('app/institution/countries.json').then(function success(response) {
                 dialogCtrl.countries = response.data;
-                dialogCtrl.event.country = "Brasil";
             });
         }
 
-        (function main() {
-            getCountries();
-            loadFederalStates();
+        function initPatchObserver() {
+            dialogCtrl.dateChangeEvent = _.clone(dialogCtrl.event);
+            dialogCtrl.dateChangeEvent = new Event(dialogCtrl.dateChangeEvent, dialogCtrl.user.current_institution.key);
+            dialogCtrl.observer = jsonpatch.observe(dialogCtrl.event);
+        }
+
+        function loadEventDates() {
+            dialogCtrl.start_time = new Date(dialogCtrl.dateChangeEvent.start_time);
+            dialogCtrl.event.start_time = new Date(dialogCtrl.dateChangeEvent.start_time);
+            dialogCtrl.event.end_time = new Date(dialogCtrl.dateChangeEvent.end_time);
+        }
+
+        function loadSelectedState() {
+            if (dialogCtrl.event.address.federal_state) {
+                dialogCtrl.selectedFederalState = dialogCtrl.federalStates
+                    .filter(federalState => federalState.nome === dialogCtrl.event.address.federal_state)
+                    .reduce(federalState => federalState);
+                dialogCtrl.getCitiesByState();
+           }
+        }
+
+        function initUrlFields() {
             if(dialogCtrl.event) {
-                dialogCtrl.dateChangeEvent = _.clone(dialogCtrl.event);
-                dialogCtrl.dateChangeEvent.start_time = new Date(dialogCtrl.dateChangeEvent.start_time);
-                dialogCtrl.dateChangeEvent.end_time = new Date(dialogCtrl.dateChangeEvent.end_time);
-                dialogCtrl.dateChangeEvent = new Event(dialogCtrl.dateChangeEvent, dialogCtrl.user.current_institution.key);
-                dialogCtrl.observer = jsonpatch.observe(dialogCtrl.event);
+                dialogCtrl.videoUrls = dialogCtrl.event.video_url.concat([angular.copy(emptyUrl)]);
+                dialogCtrl.usefulLinks = dialogCtrl.event.useful_links.concat([angular.copy(emptyUrl)]);
             } else {
-                dialogCtrl.event = {};
                 dialogCtrl.videoUrls = [angular.copy(emptyUrl)];
                 dialogCtrl.usefulLinks = [angular.copy(emptyUrl)];
+            }
+        }
+
+        (function main() {
+            var address = {
+                            country : "Brasil"
+                        };
+            getCountries();
+            loadFederalStates();
+            initUrlFields();
+            if(dialogCtrl.event) {
+                dialogCtrl.photoUrl = dialogCtrl.event.photo_url;
+                dialogCtrl.isAnotherCountry = dialogCtrl.event.address.country !== "Brasil";
+                loadSelectedState();
+                initPatchObserver();
+                loadEventDates();
+                dialogCtrl.oldEvent = _.cloneDeep(dialogCtrl.event);
+            } else {
+                dialogCtrl.event = {
+                                    address: address
+                                    };
             }
         })();
     });

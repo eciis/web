@@ -63,19 +63,15 @@ class InviteUser(Invite):
         })
         email_sender.send_email()
 
-    def send_notification(self, user):
-        """Method of send notification of invite user."""
-        entity_type = 'INVITE'
-
-        user_found = User.get_active_user(self.invitee)
-
-        if user_found:
-            super(InviteUser, self).send_notification(user, user_found.key.urlsafe(), entity_type)
-
-    def send_response_notification(self, user, receiver_key, operation):
+    def send_response_notification(self, current_institution, invitee_key, action):
         """Send notification to sender of invite when invite is accepted or rejected."""
-        response_type = 'ACCEPT_INVITE_USER' if operation == 'ACCEPT' else 'REJECT_INVITE_USER'
-        super(InviteUser, self).send_notification(user, receiver_key, response_type)
+        entity_type = "ACCEPT_INVITE_USER" if action == 'ACCEPT' else "REJECT_INVITE_USER"
+        self.send_notification(
+            current_institution=current_institution, 
+            sender_key=invitee_key, 
+            receiver_key=self.sender_key or self.admin_key,
+            entity_type=entity_type
+        )
 
     def make(self):
         """Create json of invite to user."""

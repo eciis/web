@@ -6,16 +6,32 @@
 
     var INSTITUTIONS_URI = "/api/institutions/";
 
+    var legal_nature = {
+        "private for-profit":"Privada com fins lucrativos",
+        "private non-profit":"Privada sem fins lucrativos",
+        "public":"Pública" 
+    };
+    var area = {
+        "OFFICIAL_BANK": "Banco Oficial",
+        "COMMISSION": "Comissão",
+        "COUNCIL": "Conselho",
+        "PRIVATE_COMPANY": "Empresa Privada",
+    };
+
     var first_institution = {
         acronym: 'first_institution',
         key: '987654321',
-        photo_url: "photo_url"
+        photo_url: "photo_url",
+        actuation_area : "COMMISSION",
+        legal_nature : "public"
     };
 
     var sec_institution = {
         acronym: 'sec_institution',
         key: '123456789',
-        photo_url: "photo_url"
+        photo_url: "photo_url",
+        actuation_area : "COMMISSION",
+        legal_nature : "public"
     };
 
     var first_user = {
@@ -48,6 +64,8 @@
 
         httpBackend.expect('GET', INSTITUTIONS_URI + first_institution.key + '/timeline?page=0&limit=10').respond({posts: posts, next: true});
         httpBackend.expect('GET', INSTITUTIONS_URI + first_institution.key).respond(first_institution);
+        httpBackend.expectGET('app/institution/actuation_area.json').respond(area);
+        httpBackend.expectGET('app/institution/legal_nature.json').respond(legal_nature);
         httpBackend.when('GET', 'institution/institution_page.html').respond(200);
         httpBackend.when('GET', 'institution/removeInstDialog.html').respond(200);
         httpBackend.when('GET', "main/main.html").respond(200);
@@ -62,6 +80,7 @@
                     institutionService: institutionService
                 });
         };
+
         state.params.institutionKey = first_institution.key;
         institutionCtrl = createCtrl();
         httpBackend.flush();
@@ -83,7 +102,15 @@
         });
 
         it('should exist currentInstitution', function() {
-            expect(institutionCtrl.current_institution.make()).toEqual(first_institution);
+            expect(institutionCtrl.institution.make()).toEqual(first_institution);
+        });
+
+        it('should exist currentInstitution', function() {
+            expect(institutionCtrl.institution.make()).toEqual(first_institution);
+        });
+
+        it('should exist currentInstitution', function() {
+            expect(institutionCtrl.institution.make()).toEqual(first_institution);
         });
     });
 
@@ -187,7 +214,7 @@
             it('should call user.unfollow()', function(done) {
                 var promise = institutionCtrl.unfollow();
                 promise.then(function() {
-                    expect(institutionCtrl.user.unfollow).toHaveBeenCalledWith(institutionCtrl.current_institution);
+                    expect(institutionCtrl.user.unfollow).toHaveBeenCalledWith(institutionCtrl.institution);
                     done();
                 });
                 scope.$apply();

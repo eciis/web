@@ -9,6 +9,7 @@ from handlers.base_handler import BaseHandler
 from models.user import InstitutionProfile
 from models.invite import Invite
 from custom_exceptions.fieldException import FieldException
+from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from utils import json_response
 from utils import Utils
 from util.json_patch import JsonPatch
@@ -56,7 +57,7 @@ class InviteHandler(BaseHandler):
         invite = invite_key.get()
         invite.change_status('rejected')
         invite.put()
-        invite.send_response_notification(user, invite.admin_key.urlsafe(), 'REJECT')
+        invite.send_response_notification(user.current_institution, user.key, 'REJECT')
 
         if invite.stub_institution_key:
             stub_institution = invite.stub_institution_key.get()
@@ -68,8 +69,12 @@ class InviteHandler(BaseHandler):
     def patch(self, user, invite_key):
         """Handler PATCH Requests."""
         data = self.request.body
-
         invite = ndb.Key(urlsafe=invite_key).get()
+
+        Utils._assert(invite.status == 'accepted', 
+            "This invitation has already been accepted", 
+            NotAuthorizedException)
+            
         invite.change_status('accepted')
 
         institution_key = invite.institution_key
@@ -81,16 +86,14 @@ class InviteHandler(BaseHandler):
 
         institution.add_member(user)
         institution.follow(user.key)
- 
         JsonPatch.load(data, user, define_entity)
 
-        invite.send_response_notification(user, invite.admin_key.urlsafe(), 'ACCEPT')
-        
         Utils._assert(
             not InstitutionProfile.is_valid(user.institution_profiles),
             "The profile is invalid.", FieldException
         )
         
         user.put()
+        invite.send_response_notification(user.current_institution, user.key, 'ACCEPT')
         
         self.response.write(json.dumps(makeUser(user, self.request)))

@@ -1,4 +1,4 @@
-<md-content layout="row" md-colors="{background: 'grey-200'}" layout-align="center">
+<div layout="row" flex md-colors="{background: 'grey-200'}" layout-align="center">
   <!-- CONTENT -->
   <div flex-lg="90" flex-gt-lg="70" flex layout="row" layout-align="space-between"
   md-colors="{background: 'grey-50'}">
@@ -6,7 +6,7 @@
   <!-- LEFT SIDE PANEL -->
     <md-sidenav class="md-sidenav-left" md-component-id="leftNav" md-whiteframe="4" layout="row"
     md-is-locked-open="$mdMedia('gt-sm')" flex-gt-md="25">
-      <md-content class="hide-scrollbar" layout="column" hide show-gt-sm
+      <md-content class="custom-scrollbar" layout="column" hide show-gt-sm
       md-colors="{background: 'grey-100'}" flex>
         <div class="container">
           <div class="row">
@@ -14,13 +14,13 @@
             md-colors="{background: institutionCtrl.user.current_institution.color+'-800'}">
               <div class="cardheader">
                 <div class="avatar">
-                  <img alt="Foto da Instituição" ng-src="{{ institutionCtrl.current_institution.photo_url }}">
+                  <img alt="Foto da Instituição" ng-src="{{ institutionCtrl.institution.photo_url }}">
                 </div>
               </div>
               <div class="info" 
               md-colors="{background: institutionCtrl.user.current_institution.color+'-600'}">
                 <div class="desc">
-                  <div class="md-title">{{ institutionCtrl.current_institution.name }}</div>
+                  <div class="md-title">{{ institutionCtrl.institution.name }}</div>
                 </div>
               </div>
             </div>
@@ -64,8 +64,8 @@
     </md-sidenav>
 
     <!-- CONTENT -->
-    <md-content id="content" flex-gt-md="70" flex class="body hide-scrollbar">
+    <md-content id="content" flex-gt-md="70" flex class="body custom-scrollbar">
       <div ui-view="content_manage_institution" flex layout="column"></div>
     </md-content>
-  <div>
-</md-content>
+  </div>
+</div>

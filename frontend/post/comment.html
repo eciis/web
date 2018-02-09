@@ -13,7 +13,7 @@
                 {{commentCtrl.comment.publication_date | amUtc | amLocal | amCalendar:referenceTime:formats}}
               </small>
             </div>
-            <p style="margin-top: 4px;">{{commentCtrl.comment.text}}</p>
+            <p style="margin-top: 4px;white-space: pre-line;" ng-bind-html="commentCtrl.comment.text"></p>
           </div>
           <div layout="row" layout-align="start center" style="margin-top: 8px;">
             <div ng-if="commentCtrl.canDeleteComment()">
@@ -26,7 +26,8 @@
             </div>
             <div layout="row" style="margin-left: auto;">
               <div>
-                <md-button class="sm-icon-button xs-icon-button" aria-label="Favorite" ng-click="commentCtrl.likeOrDislike()" title="Curtir"
+                <md-button class="sm-icon-button xs-icon-button" aria-label="Favorite" ng-click="commentCtrl.likeOrDislike()" 
+                    title="{{(commentCtrl.isLikedByUser()) ? 'Descurtir' : 'Curtir'}}"
                     ng-disabled="commentCtrl.disableButton()" md-colors="{background: commentCtrl.isLikedByUser() ? 'light-green' : 'grey'}">
                   <md-icon>grade</md-icon>
                 </md-button>
@@ -73,7 +74,7 @@
                 {{reply.publication_date | amUtc | amLocal | amCalendar:referenceTime:formats}}
               </small>
             </div>
-            <p style="margin-top: 4px;">{{reply.text}}</p>
+            <p style="margin-top: 4px; white-space: pre-line;" ng-bind-html="reply.text"></p>
           </div>
           <div layout="row" layout-align="start center">
             <div ng-if="commentCtrl.canDeleteComment(reply)">
@@ -86,7 +87,8 @@
             </div>
             <div layout="row" style="margin-left: auto;">
               <div>
-                <md-button class="sm-icon-button xs-icon-button" aria-label="Favorite" ng-click="commentCtrl.likeOrDislike(reply)" title="Curtir"
+                <md-button class="sm-icon-button xs-icon-button" aria-label="Favorite" ng-click="commentCtrl.likeOrDislike(reply)" 
+                    title="{{(commentCtrl.isLikedByUser(reply)) ? 'Descurtir' : 'Curtir'}}"
                     ng-disabled="commentCtrl.disableButton()" md-colors="{background: commentCtrl.isLikedByUser(reply) ? 'light-green' : 'grey'}">
                   <md-icon>grade</md-icon>
                 </md-button>

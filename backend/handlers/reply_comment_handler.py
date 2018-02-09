@@ -44,36 +44,39 @@ class ReplyCommentHandler(BaseHandler):
     def post(self, user, post_key, comment_id):
         """Handle Post Comments requests."""
         data = json.loads(self.request.body)
+        reply_data = data['replyData']
         post = ndb.Key(urlsafe=post_key).get()
         institution = post.institution.get()
+
         Utils._assert(institution.state == 'inactive',
                       "The institution has been deleted", NotAuthorizedException)
         Utils._assert(post.state == 'deleted',
                       "This post has been deleted", EntityException)
-        reply = Comment.create(data, user)
 
+        reply = Comment.create(reply_data, user)
         post.reply_comment(reply, comment_id)
-
         post.put()
 
+        entity_type = 'COMMENT'
+
         if (post.author != user.key):
-            entity_type = 'COMMENT'
             send_message_notification(
                 post.author.urlsafe(),
                 user.key.urlsafe(),
                 entity_type,
-                post.key.urlsafe()
+                post.key.urlsafe(),
+                user.current_institution
             )
 
         comment = post.get_comment(comment_id)
 
         if (comment.get('author_key') != user.key.urlsafe()):
-            entity_type = 'COMMENT'
             send_message_notification(
                 comment.get('author_key'),
                 user.key.urlsafe(),
                 entity_type,
-                post.key.urlsafe()
+                post.key.urlsafe(),
+                user.current_institution
             )
 
         self.response.write(json.dumps(Utils.toJson(reply)))
@@ -85,8 +88,10 @@ class ReplyCommentHandler(BaseHandler):
         """Handle Delete Comments requests."""
         post = ndb.Key(urlsafe=post_key).get()
         institution = post.institution.get()
+        
         Utils._assert(institution.state == 'inactive',
                       "The institution has been deleted", NotAuthorizedException)
+        
         comment = post.get_comment(comment_id)
         replies = comment.get('replies')
 
@@ -96,7 +101,5 @@ class ReplyCommentHandler(BaseHandler):
         check_permission(user, institution, post, replies.get(reply_id))
 
         del replies[reply_id]
-
         post.put()
-
         self.response.write(json.dumps(replies.get(reply_id)))

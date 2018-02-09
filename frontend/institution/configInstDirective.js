@@ -10,17 +10,19 @@
         var currentPortfoliourl = null;
         var observer;
 
-        configInstCtrl.loading = false;
+        configInstCtrl.loading = true;
+        configInstCtrl.hasSubmitted = false;
         configInstCtrl.user = AuthService.getCurrentUser();
         configInstCtrl.cnpjRegex = "[0-9]{2}[\.][0-9]{3}[\.][0-9]{3}[\/][0-9]{4}[-][0-9]{2}";
         configInstCtrl.phoneRegex = "[0-9]{2}[\\s][0-9]{4,5}[-][0-9]{4,5}";
         configInstCtrl.cepRegex = "([0-9]{5}[-][0-9]{3})";
+        configInstCtrl.numberRegex = "[0-9]+$";
         configInstCtrl.newInstitution = {
             email: configInstCtrl.user.email[0]
         };
         configInstCtrl.steps = [true, false, false];
 
-        configInstCtrl.descriptionGuide = "Descrever neste campo as áreas de atuação da sua instituição considerando a missão e objetivos, os principais produtos e/ou serviços, as interfaces com os demais atores e as articulações institucionais no âmbito do CIS(utilize palavras de destaque que possam ser utilizadas como palavras-chave na pesquisa avançada do e-CIS)";
+        configInstCtrl.descriptionGuide = "Descrever neste campo as áreas de atuação da sua instituição considerando a missão e objetivos, os principais produtos e/ou serviços, as interfaces com os demais atores e as articulações institucionais no âmbito do CIS(utilize palavras de destaque que possam ser utilizadas como palavras-chave na pesquisa avançada da Plataforma CIS)";
 
         getLegalNatures();
         getActuationAreas();
@@ -84,8 +86,8 @@
             return promise;
         };
 
-        configInstCtrl.cropImage = function cropImage(image_file) {
-            CropImageService.crop(image_file).then(function success(croppedImage) {
+        configInstCtrl.cropImage = function cropImage(image_file, event) {
+            CropImageService.crop(image_file, event).then(function success(croppedImage) {
                 configInstCtrl.addImage(croppedImage);
             }, function error() {
                 configInstCtrl.file = null;
@@ -102,6 +104,7 @@
             var newInstitution = new Institution(configInstCtrl.newInstitution);
             var promise;
             if (newInstitution.isValid()){
+                configInstCtrl.hasSubmitted = true;
                 var confirm = $mdDialog.confirm(event)
                     .clickOutsideToClose(true)
                     .title('Finalizar')
@@ -115,6 +118,7 @@
                 promise.then(function() {
                     updateInstitution();
                 }, function() {
+                    configInstCtrl.hasSubmitted = false;
                     MessageService.showToast('Cancelado');
                 });
             } else {
@@ -254,10 +258,11 @@
 
         function updateUserInstitutions(institution) {
             configInstCtrl.user.updateInstitutions(institution);
+            configInstCtrl.user.updateInstProfile(institution);
             AuthService.save();
             changeInstitution(institution);
             MessageService.showToast('Dados da instituição salvos com sucesso.');
-            $state.go('app.institution.timeline', {institutionKey: institutionKey});
+            $state.go('app.user.home');
         }
 
         configInstCtrl.showButton = function() {
@@ -293,34 +298,72 @@
             }
         };
 
+        configInstCtrl.getPortfolioButtonMessage = function getPortfolioButtonMessage () {
+            if(configInstCtrl.newInstitution.portfolio_url || configInstCtrl.file) {
+                return "Trocar Portfólio";
+            } else {
+                return "Adicionar Portfólio";
+            }
+        };
+
+        configInstCtrl.getPortfolioButtonIcon = function getPortfolioButtonIcon() {
+            if (configInstCtrl.newInstitution.portfolio_url || configInstCtrl.file) {
+                return "insert_drive_file";
+            } else {
+                return "attach_file";
+            }
+        };
+
         function getFields() {
             var necessaryFieldsForStep = {
-                0: {fields: [configInstCtrl.newInstitution.address], size: 7},
-                1: {fields: [
+                0: {
+                    fields: [configInstCtrl.newInstitution.address],
+                    isValid :  configInstCtrl.isValidAddress
+                },
+                1: {
+                    fields: [
                     configInstCtrl.newInstitution.name,
                     configInstCtrl.newInstitution.actuation_area,
                     configInstCtrl.newInstitution.legal_nature
-                    ]},
-                2: {fields: [
+                    ]
+                },
+                2: {
+                    fields: [
                     configInstCtrl.newInstitution.leader,
                     configInstCtrl.newInstitution.description
-                    ]}
+                    ]
+                }
             };
             return necessaryFieldsForStep;
         }
 
+        configInstCtrl.isValidAddress =  function isValidAddress(){       
+            var valid = true;
+            var address = configInstCtrl.address;    
+            if(address && address.country === "Brasil"){     
+                _.forEach(address, function(value, key) {
+                    var isNotNumber =  key !== "number";
+                    var isValid =  !value || _.isEmpty(value); 
+                    if(isNotNumber && isValid) {
+                        valid = false;        
+                    }     
+                });       
+            }     
+            return valid;     
+         }     
+
         function isCurrentStepValid(currentStep) {
             var isValid = true;
+            var isFieldValid = true;
             var necessaryFieldsForStep = getFields();
             _.forEach(necessaryFieldsForStep[currentStep].fields, function(field) {
                 if(_.isUndefined(field) || _.isEmpty(field)) {
                     isValid = false;
                 }
             });
-            var size = necessaryFieldsForStep[currentStep].size;
-            if(size)
-                isValid = _.size(necessaryFieldsForStep[currentStep].fields[0]) === size;
-            return isValid;
+            isFieldValid = necessaryFieldsForStep[currentStep].isValid ? 
+                necessaryFieldsForStep[currentStep].isValid() : true;
+            return isValid && isFieldValid;
         }
 
         function changeInstitution(institution) {
@@ -331,13 +374,13 @@
         }
 
         function getLegalNatures() {
-            $http.get('app/institution/legal_nature.json').then(function success(response) {
+            InstitutionService.getLegalNatures().then(function success(response) {
                 configInstCtrl.legalNatures = response.data;
             });
         }
 
         function getActuationAreas() {
-            $http.get('app/institution/actuation_area.json').then(function success(response) {
+            InstitutionService.getActuationAreas().then(function success(response) {
                 configInstCtrl.actuationArea = response.data;
             });
         }
@@ -356,8 +399,10 @@
                 loadAddress(); 
                 setDefaultPhotoUrl();
                 observer = jsonpatch.observe(configInstCtrl.newInstitution);
+                configInstCtrl.loading = false;
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
+                configInstCtrl.loading = true;
             });
         }
 

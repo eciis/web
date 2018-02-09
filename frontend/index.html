@@ -4,7 +4,10 @@
 
   <base href="/" />
 
-  <title>e-CIS</title>
+  <title>Plataforma CIS</title>
+  
+  <!--Favicon-->
+  <link rel="shortcut icon" type="image/icon" href="app/favicon.ico" />
 
   <!-- Angular Material style sheet -->
   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css"/>
@@ -24,6 +27,17 @@
 <body ng-app="app" ng-cloak layout="column">
 
   <div flex layout="column" ui-view="main"></div>
+
+  <script> 
+    var $buoop = {notify:{i:14,f:-4,o:-4,s:-2,c:-4},insecure:true,api:5,noclose:true,l:"pt-br"};
+    function $buo_f(){ 
+     var e = document.createElement("script"); 
+     e.src = "//browser-update.org/update.min.js"; 
+     document.body.appendChild(e);
+    };
+    try {document.addEventListener("DOMContentLoaded", $buo_f,false)}
+    catch(e){window.attachEvent("onload", $buo_f)}
+  </script>
 
   <!-- ngScrollbar Library -->
   <script src="app/libs/jquery-1.11.0.min.js"></script>
@@ -90,6 +104,7 @@
   <script src="app/utils/utils.js"></script>
   <script src="app/utils/messageService.js"></script>
   <script src="app/utils/httpService.js"></script>
+  <script src="app/utils/loadCircleDirective.js"></script>
 
   <!-- Auth/Login Library -->
   <script src="app/auth/signupDirective.js"></script>
@@ -133,6 +148,7 @@
   <script src="app/event/eventService.js"></script>
   <script src="app/event/eventController.js"></script>
   <script src="app/event/eventPageController.js"></script>
+  <script src="app/event/eventDetailsDirective.js"></script>
 
   <!-- Institution Library -->
   <script src="app/institution/institutionController.js"></script>

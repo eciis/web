@@ -8,7 +8,8 @@
         var REQUESTS_URI = "/api/institutions/";
 
         service.sendRequest = function sendRequest(request, institution_key) {
-            return HttpService.post(REQUESTS_URI + institution_key + "/requests/user", request);
+            var body = {data: request};
+            return HttpService.post(REQUESTS_URI + institution_key + "/requests/user", body);
         };
 
         service.sendRequestInst = function sendRequestInst(request) {
@@ -65,19 +66,19 @@
         };
 
         service.acceptInstParentRequest = function acceptRequest(request_key) {
-            return HttpService.put("/api/requests/" + request_key + "/institution_parent");
+            return HttpService.put(`/api/requests/${request_key}/institution_parent`);
         };
 
         service.rejectInstParentRequest = function rejectRequest(request_key) {
-            return HttpService.delete("/api/requests/" + request_key + "/institution_parent");
+            return HttpService.delete(`/api/requests/${request_key}/institution_parent`);
         };
 
         service.acceptInstChildrenRequest = function acceptRequest(request_key) {
-            return HttpService.put("/api/requests/" + request_key + "/institution_children");
+            return HttpService.put(`/api/requests/${request_key}/institution_children`);
         };
 
         service.rejectInstChildrenRequest = function rejectRequest(request_key) {
-            return HttpService.delete("/api/requests/" + request_key + "/institution_children");
+            return HttpService.delete(`/api/requests/${request_key}/institution_children`);
         };
 
         service.showRejectDialog = function showRejectDialog(event) {

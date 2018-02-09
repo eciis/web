@@ -54,8 +54,7 @@ class LikeReplyHandlerTest(TestBaseHandler):
             "This reply should have no like."
         )
         # Call the post method
-        body = { "currentInstitution": {"name": "instName"} }
-        self.testapp.post_json(self.uri, body)
+        self.testapp.post_json(self.uri, {})
         # Call the get method again
         data = self.testapp.get(self.uri)
         # Get the body of request
@@ -70,12 +69,12 @@ class LikeReplyHandlerTest(TestBaseHandler):
             self.user.key.urlsafe(),
             "LIKE_COMMENT",
             self.post.key.urlsafe(),
-            body.get('currentInstitution')
+            None
         )
 
         # Call the post method again
         with self.assertRaises(Exception) as exc:
-            self.testapp.post_json(self.uri, body)
+            self.testapp.post_json(self.uri, {})
         # Verify the exception message
         exc = self.get_message_exception(exc.exception.message)
         self.assertEquals(exc, "Error! User already liked this comment")

@@ -39,7 +39,8 @@ class InstitutionParentRequestCollectionHandler(BaseHandler):
             'User is not allowed to send request', 
             institution_key)
 
-        data = json.loads(self.request.body)
+        body = json.loads(self.request.body)
+        data = body['data']
         host = self.request.host
         inst_parent_request_type = 'REQUEST_INSTITUTION_PARENT'
 
@@ -64,6 +65,6 @@ class InstitutionParentRequestCollectionHandler(BaseHandler):
         institution_children.parent_institution = request.institution_requested_key
         institution_children.put()
 
-        request.sendInvite(user, host)
+        request.send_invite(host, user.current_institution)
 
         self.response.write(json.dumps(request.make()))

@@ -34,14 +34,14 @@ class RequestInstitution(Request):
         Lamentamos informar mas o seu pedido não foi aceito.
         Sugerimos que fale com o seu superior para que seja enviado um convite.
 
-        Equipe e-CIS"""
+        Equipe da Plataforma CIS"""
 
         acceptMessage = """Olá,
-        A instituição %s foi aceita na plataforma, seja bem vindo ao e-CIS.
+        A instituição %s foi aceita na plataforma, seja bem vindo a Plataforma CIS.
         Realize seu login no link abaixo:
         http://%s/signin
 
-        Equipe e-CIS""" % (institution_name, host)
+        Equipe da Plataforma CIS""" % (institution_name, host)
 
         sender_email = self.sender_key.get().email[0]
         body = acceptMessage if operation == "ACCEPT" else rejectMessage
@@ -56,20 +56,24 @@ class RequestInstitution(Request):
         Sua instituição recebeu um novo pedido. Acesse:
         http://%s/requests/%s/institution_children para analisar o mesmo.
 
-        Equipe e-CIS """ % (host, request_key)
+        Equipe da Plataforma CIS """ % (host, request_key)
 
         super_users = getSuperUsers()
 
         for super_user in super_users:
             super(RequestInstitution, self).send_email(host, super_user.email, body)
 
-    def send_notification(self, user):
+    def send_notification(self, current_institution):
         """Method of send notification of request intitution."""
         entity_type = 'REQUEST_INSTITUTION'
         super_users = getSuperUsers()
 
         for super_user in super_users:
-            super(RequestInstitution, self).send_notification(user, super_user.key.urlsafe(), entity_type)
+            super(RequestInstitution, self).send_notification(
+                current_institution=current_institution, 
+                receiver_key=super_user.key,
+                entity_type=entity_type
+            )
 
     def make(self):
         """Create json of request to institution."""

@@ -118,7 +118,7 @@ User.prototype.updateInstitutions = function updateInstitutions(institution){
 };
 
 User.prototype.addProfile = function addProfile(profile){
-    this.institution_profiles.push(profile);
+    this.institution_profiles ? this.institution_profiles.push(profile) : this.institution_profiles = [profile];
 };
 
 User.prototype.isInactive = function isInactive() {
@@ -134,6 +134,12 @@ User.prototype.hasPermission = function hasPermission(permissionType, entityKey)
     return false;
 };
 
+User.prototype.updateInstProfile = function updateInstProfile(institution) {
+    const index = _.findIndex(this.institution_profiles, ['institution_key', institution.key]);
+    this.institution_profiles[index].institution.name = institution.name;
+    this.institution_profiles[index].institution.photo_url = institution.photo_url;
+};
+
 function changeProfileColor(user, institution) {
     var profile = _.find(user.institution_profiles, {
         'institution_key': institution.key
@@ -146,6 +152,7 @@ function updateFollowInstitution(follows, institution) {
     var index = _.findIndex(follows, ['key', institution.key]);
     follows[index].acronym = institution.acronym;
     follows[index].photo_url = institution.photo_url;
+    follows[index].name = institution.name;
 }
 
 function updateInstitution(institutions, institution) {

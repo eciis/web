@@ -1,10 +1,18 @@
-<md-card ng-class="postDetailsCtrl.isDeleted(postDetailsCtrl.post)|| postDetailsCtrl.isDeletedEvent(postDetailsCtrl.post)?'post-deleted':''"
-  ng-hide="postDetailsCtrl.isHidden()">
+<div layout="column" layout-align="center center" layout-fill ng-show="postDetailsCtrl.isPostEmpty()">
+  <div layout="row" layout-align="center center">
+    <div layout-align="center center">
+      <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+    </div>
+  </div>
+</div>
+<md-card ng-class="postDetailsCtrl.getCSSClassPost()"
+  ng-hide="postDetailsCtrl.isHidden() || postDetailsCtrl.isPostEmpty()">
   <!-- HEADER -->
+  <div class="post-inst-inactive" ng-if="postDetailsCtrl.isInstInactive()">INSTITUIÇÃO DESATIVADA</div>
   <md-card-header>
     <md-card-avatar>
       <a href ng-click="postDetailsCtrl.goToInstitution(postDetailsCtrl.post.institution_key)">
-        <img ng-src="{{ postDetailsCtrl.post.institution_image }}" role="button" class="md-user-avatar"/>
+        <img ng-src="{{ postDetailsCtrl.post.institution_image }}" role="button" class="md-user-avatar img-post-shadow"/>
       </a>
     </md-card-avatar>
     <md-card-header-text>
@@ -23,7 +31,6 @@
         </md-button>
       </span>
     </md-card-header-text>
-    <md-subheader ng-if="postDetailsCtrl.isInstInactive()">Instituição inativa</md-subheader>
     <md-menu md-offset="-200 45">
       <md-button class="md-icon-button" style="margin-right: -20px; margin-top: -15px" ng-click="$mdMenu.open(ev)">
         <md-icon>more_vert</md-icon>
@@ -36,8 +43,8 @@
           </md-button>
         </md-menu-item>
         <md-menu-item ng-if="!postDetailsCtrl.isInstInactive()">
-          <md-button arial-label="Atualizar" title="Atualizar comentários"
-            ng-click="postDetailsCtrl.loadComments()">
+          <md-button arial-label="Atualizar" title="Atualizar post"
+            ng-click="postDetailsCtrl.reloadPost()">
             <md-icon>refresh</md-icon>
             Atualizar post
           </md-button>
@@ -49,7 +56,7 @@
             Compartilhar
           </md-button>
         </md-menu-item>
-        <md-menu-item>
+        <md-menu-item ng-if="!postDetailsCtrl.isPostAuthor()">
           <md-button aria-label="Favorite" ng-click="postDetailsCtrl.addOrRemoveSubscriber()"
             ng-disabled="postDetailsCtrl.disableButton()" ng-class="postDetailsCtrl.isSubscriber()?'md-warn':''"
             title="Marcar interesse e receber notificações">
@@ -117,7 +124,7 @@
       href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post.shared_post)">
         <span>{{ postDetailsCtrl.post.shared_post.title }}</span>
       </a>
-      <p class="break" ng-if="!postDetailsCtrl.isDeleted(postDetailsCtrl.post.shared_post)"
+      <p class="text" ng-if="!postDetailsCtrl.isDeleted(postDetailsCtrl.post.shared_post)"
         ng-bind-html="postDetailsCtrl.postToURL(postDetailsCtrl.post.shared_post).text" ></p>
       <div layout="row" layout-align="end-center">
         <a href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post.shared_post)"
@@ -160,19 +167,19 @@
       </span>
     </div>
   </div>  
-  <md-card-content>
-      <div ng-if="postDetailsCtrl.showTextPost()">
-          <p ng-bind-html="postDetailsCtrl.postToURL(postDetailsCtrl.post).text" class="break">
+  <md-card-content ng-if="postDetailsCtrl.showTextPost()">
+      <div>
+          <p ng-bind-html="postDetailsCtrl.postToURL(postDetailsCtrl.post).text" class="text">
             {{postDetailsCtrl.postToURL(postDetailsCtrl.post).text}}
           </p>
-          <div layout="row" layout-align="end-center">
+          <div layout="row" layout-align="end-center" ng-if="!postDetailsCtrl.isPostPage">
           <a href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post)">
             <md-icon style="margin-bottom: -15px; margin-right: -12px;" md-colors="{color: 'light-green'}">more_horiz</md-icon>
               </a>
           </div>
       </div>
   </md-card-content>
-  <md-divider></md-divider>
+  <md-divider ng-if="!postDetailsCtrl.showSurvey() || postDetailsCtrl.showButtonDelete() && !postDetailsCtrl.isInstInactive()"></md-divider>
 
   <!-- BUTTONS -->
   <md-card-actions style="margin-top: 20px;">
@@ -186,7 +193,7 @@
       </div>
       <div style="margin-left: auto; margin-right: 10px;" ng-if="!postDetailsCtrl.showSurvey()">
         <md-button class="sm-icon-button" aria-label="Favorite" ng-click="postDetailsCtrl.likeOrDislikePost()"
-            ng-disabled="postDetailsCtrl.disableButton()" title="Curtir"
+            ng-disabled="postDetailsCtrl.disableButton()" title="{{(postDetailsCtrl.isLikedByUser()) ? 'Descurtir' : 'Curtir'}}"
             md-colors="{{ postDetailsCtrl.getButtonColor(postDetailsCtrl.isLikedByUser()) }}">
           <md-icon>grade</md-icon>
         </md-button>
@@ -218,8 +225,9 @@
 
   <!-- COMMENTS -->
   <div ng-if="postDetailsCtrl.showComments || postDetailsCtrl.isPostPage">
+    <load-circle flex ng-if="postDetailsCtrl.isLoadingComments && !postDetailsCtrl.isPostPage"></load-circle>
     <md-divider style="margin-top: 15px;"></md-divider>
-    <comment
+    <comment ng-if="!postDetailsCtrl.isLoadingComments || postDetailsCtrl.isPostPage"
       ng-repeat="comment in postDetailsCtrl.getValues(postDetailsCtrl.post.data_comments) | orderBy:'publication_date'"
       comment="comment" user="postDetailsCtrl.user" post="postDetailsCtrl.post"></comment>
   </div>
@@ -237,7 +245,7 @@
             ng-disabled="postDetailsCtrl.savingComment"></textarea>
             <div layout="row" layout-align="end center">
               <md-button ng-show="postDetailsCtrl.newComment"
-              class="md-raised md-primary" aria-label="postar" type="submit">Escrever</md-button>
+              class="md-raised md-primary" aria-label="postar" type="submit" md-colors="{background: 'teal-500'}">Enviar</md-button>
             </div>
           </form>
         </md-input-container>

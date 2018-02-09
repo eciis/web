@@ -63,8 +63,7 @@
                 url: "/",
                 views: {
                     user_content: {
-                        templateUrl: "app/home/home.html",
-                        controller: "HomeController as homeCtrl"
+                        templateUrl: "app/home/home.html"
                     }
                 }
             })
@@ -75,6 +74,9 @@
                         templateUrl: "app/event/event.html",
                         controller: "EventController as eventCtrl",
                     }
+                },
+                params: {
+                    posts: undefined
                 }
             })
             .state("app.user.invite_inst", {
@@ -122,11 +124,12 @@
                     }
                 }
             })
-            .state("app.institution.comming_soon", {
-                url: "/institution/:institutionKey/comming_soon",
+            .state("app.institution.events", {
+                url: "/institution/:institutionKey/institution_events",
                 views: {
                     institution_content: {
-                        templateUrl: "app/institution/comming_soon.html"
+                        templateUrl: "app/institution/institution_events.html",
+                        controller: "EventController as eventCtrl"
                     }
                 }
             })
@@ -331,6 +334,9 @@
                 if (AuthService.isLoggedIn()) {
                     var token = AuthService.getUserToken();
                     config.headers.Authorization = 'Bearer ' + token;
+                    if (!_.isEmpty(AuthService.getCurrentUser().institutions)) {
+                        config.headers['Institution-Authorization'] = AuthService.getCurrentUser().current_institution.key;
+                    }
                 }
 
                 Utils.updateBackendUrl(config);

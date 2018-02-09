@@ -47,7 +47,7 @@
     <div layout="column" flex="100" layout-padding style="padding: 0;">
       <md-dialog style="max-width: 100%;">
         <form name="createEvent" ng-submit="controller.nextStepOrSave()">
-          <md-dialog-content class="hide-scrollbar" layout-padding ng-if="controller.getStep(1)">
+          <md-dialog-content class="custom-scrollbar" layout-padding ng-if="controller.getStep(1)">
             <div md-colors="{background: 'default-teal-500'}" layout="column" layout-align="center center" layout-padding
               style="overflow: hidden; height: 150px; padding-left: 0; padding-right: 0;" class="event-image-view">
               <button ng-click="controller.cleanImage()" type="button" class="event-image-view-button"
@@ -69,13 +69,13 @@
               </md-input-container>
               <div layout="row" layout-align="space-between center">
                   <md-input-container style="margin: 0" flex="45">
-                      <input mdc-datetime-picker="" short-time="false" date="true" time="true" type="text" format="DD-MM-YYYY HH:mm" lang="pt-BR"
+                      <input mdc-datetime-picker="" short-time="false" date="true" time="true" type="text" format="DD-MM-YYYY HH:mm"
                       placeholder="Data inicial" ng-model="controller.event.start_time" class=" md-input" today-text="Hoje" min-date="controller.now"
-                      max-date="controller.event.end_time" readonly="readonly" cancel-text="Cancelar" ng-change="controller.createInitDate()" required/>
+                      max-date="controller.event.end_time" cancel-text="Cancelar" ng-change="controller.createInitDate()" required/>
                   </md-input-container flex="45">
                   <md-input-container style="margin: 0">
-                      <input mdc-datetime-picker="" ng-change="controller.changeDate('endTime')" date="true" time="true" type="text" lang="pt-BR" today-text="Hoje"
-                      placeholder="Data final" class=" md-input" readonly="readonly" format="DD-MM-YYYY HH:mm" max-date="null"
+                      <input mdc-datetime-picker="" ng-change="controller.changeDate('endTime')" date="true" time="true" type="text"today-text="Hoje"
+                      placeholder="Data final" class=" md-input" format="DD-MM-YYYY HH:mm" max-date="null"
                       ng-model="controller.event.end_time" cancel-text="Cancelar" min-date="controller.start_time" required>
                   </md-input-container>
               </div>
@@ -83,57 +83,63 @@
                   <label>Site oficial</label>
                   <input type="url" ng-model="controller.event.official_site"/>
               </md-input-container>
-              <div layout="row">
-                  <md-input-container style="margin: 0">
-                      <label>Rua</label>
-                      <input ng-model="controller.event.street"/>
+              <div layout="row" layout-align="space-between">
+                <md-input-container style="margin: 0;" flex="45">
+                      <label>Nome do Local </label>
+                      <input ng-model="controller.event.local" required/>
                   </md-input-container>
-                  <md-input-container style="margin: 0">
+                  <md-input-container style="margin: 0" flex="45">
+                      <label>Pais</label>
+                      <md-select ng-model="controller.event.address.country" ng-change="controller.setAnotherCountry()">
+                          <md-option ng-repeat="country in controller.countries"
+                            ng-value="country.nome_pais">{{country.nome_pais}}</md-option>
+                      </md-select>
+                  </md-input-container>
+              </div>
+              <div layout="row" ng-class="controller.isAnotherCountry? 'address-another-country': ''" layout-align="space-between">
+                  <md-input-container style="margin: 0" flex="45" ng-if="controller.isAnotherCountry">
+                      <label>Estado</label>
+                      <input type="text" name="state" ng-model="controller.event.address.federal_state">
+                  </md-input-container>
+                  <md-input-container style="margin: 0" flex="45" ng-if="!controller.isAnotherCountry">
+                      <label>Estado</label>
+                      <md-select name="state" ng-model="controller.selectedFederalState" ng-change="controller.getCitiesByState()"
+                        ng-disabled="!controller.event.address.country" required/>
+                        <md-option ng-repeat="federal_state in controller.federalStates"
+                          ng-value="federal_state">{{federal_state.sigla}}</md-option>
+                      </md-select>
+                  </md-input-container>
+                  <md-input-container style="margin: 0" flex="45" ng-if="controller.isAnotherCountry">
+                      <label>Cidade</label>
+                      <input type="text" name="city" ng-model="controller.event.address.city">
+                  </md-input-container>
+                  <md-input-container style="margin: 0" flex="45" ng-if="!controller.isAnotherCountry">
+                      <label>Cidade</label>
+                      <md-select ng-model="controller.event.address.city"  ng-disabled="!controller.selectedFederalState"
+                        required/>
+                        <md-option ng-repeat="city in controller.cities" ng-value="city">{{city}}</md-option>
+                      </md-select>
+                      <div ng-messages>
+                          <div ng-show="createEvent.state.$pristine && !controller.isAnotherCountry && !controller.selectedFederalState"
+                              style="opacity: 0.9; margin-top: 2px; font-size: 0.8em;">
+                              Primeiro selecione um estado
+                          </div>
+                      </div>
+                  </md-input-container>
+              </div>
+              <div layout="row" layout-align="space-between">
+                  <md-input-container flex="65">
+                      <label>Rua</label>
+                      <input ng-required="!controller.isAnotherCountry" ng-model="controller.event.address.street"/>
+                  </md-input-container>
+                  <md-input-container flex="30">
                       <label>Numero</label>
-                      <input ng-model="controller.event.number"/>
+                      <input ng-required="!controller.isAnotherCountry" ng-model="controller.event.address.number"/>
                   </md-input-container>
               </div>
             </div>
-            <div layout="row" layout-align="space-between center">
-                <md-input-container style="margin: 0; margin-top: 25px;" flex="45">
-                    <label>Local </label>
-                    <input ng-model="controller.event.local" required/>
-                </md-input-container>
-                <md-input-container style="margin: 0" flex="45">
-                    <label>Pais</label>
-                    <md-select ng-model="controller.event.country" ng-change="controller.setAnotherCountry()">
-                        <md-option ng-repeat="country in controller.countries"
-                          ng-value="country.nome_pais">{{country.nome_pais}}</md-option>
-                    </md-select>
-                </md-input-container>
-            </div>
-            <div layout="row" layout-align="space-between center">
-                <md-input-container style="margin: 0" flex="45" ng-if="controller.isAnotherCountry">
-                    <label>Estado</label>
-                    <input type="text" name="state" ng-model="controller.event.federal_state">
-                </md-input-container>
-                <md-input-container style="margin: 0" flex="45" ng-if="!controller.isAnotherCountry">
-                    <label>Estado</label>
-                    <md-select ng-model="controller.selectedFederalState" ng-change="controller.getCitiesByState()"
-                      ng-disabled="!controller.event.country" required/>
-                      <md-option ng-repeat="federal_state in controller.federalStates"
-                        ng-value="federal_state">{{federal_state.sigla}}</md-option>
-                    </md-select>
-                </md-input-container>
-                <md-input-container style="margin: 0" flex="45" ng-if="controller.isAnotherCountry">
-                    <label>Cidade</label>
-                    <input type="text" name="city" ng-model="controller.event.city">
-                </md-input-container>
-                <md-input-container style="margin: 0" flex="45" ng-if="!controller.isAnotherCountry">
-                    <label>Cidade</label>
-                    <md-select ng-model="controller.event.city"  ng-disabled="!controller.selectedFederalState"
-                      required/>
-                      <md-option ng-repeat="city in controller.cities" ng-value="city">{{city}}</md-option>
-                    </md-select>
-                </md-input-container>
-            </div>
           </md-dialog-content>
-          <md-dialog-content ng-if="controller.getStep(2)" class="hide-scrollbar" layout-padding>
+          <md-dialog-content ng-if="controller.getStep(2)" class="custom-scrollbar" layout-padding>
             <div layout="row" layout-align="center center">
               <div layout="column" flex="95">
                 <md-input-container class="md-block">
@@ -151,12 +157,13 @@
               </div>
             </div>
           </md-dialog-content>
-          <md-dialog-content ng-if="controller.getStep(3)" layout-padding class="hide-scrollbar">
-            <div layout="row" layout-align="center center">
+          <md-dialog-content ng-if="controller.getStep(3)" layout-padding class="custom-scrollbar">
+            <load-circle flex ng-if="controller.loading"></load-circle>
+            <div ng-if="!controller.loading" layout="row" layout-align="center center">
               <div flex="95" layout="column">
                 <div layout-margin>
                   <p class="md-subheader">Vídeos</p>
-                  <div class="hide-scrollbar" style="max-height: 25%; overflow-y:auto; margin: 8px 0 8px 0;">
+                  <div class="custom-scrollbar" style="max-height: 25%; overflow-y:auto; margin: 8px 0 8px 0;">
                     <div ng-repeat="videoUrl in controller.videoUrls" layout="column">
                       <md-input-container class="md-block" style="height: 25px;">
                         <label>Link do Youtube</label>
@@ -176,7 +183,7 @@
                 </div>
                 <div layout-margin>
                   <p class="md-subheader">Links úteis</p>
-                  <div class="hide-scrollbar" style="max-height: 25%; overflow-y:auto; margin: 8px 0 8px 0;">
+                  <div class="custom-scrollbar" style="max-height: 25%; overflow-y:auto; margin: 8px 0 8px 0;">
                     <div ng-repeat="usefulLink in controller.usefulLinks" layout="column">
                       <md-input-container class="md-block" style="height: 25px;">
                         <label>Link</label>
@@ -193,7 +200,7 @@
               </div>
             </div>
           </md-dialog-content>
-          <md-dialog-actions layout="row">
+          <md-dialog-actions ng-if="!controller.loading" style="border:0px" layout="row">
               <md-button class="md-raised" md-colors="{background: 'default-teal-500'}" ng-click="controller.closeDialog()">
                   <span style="color: white;">cancelar</span>
               </md-button>
@@ -201,7 +208,7 @@
                 hide-gt-xs ng-if="controller.getStep(2) || controller.getStep(3)">
                   <span style="color: white;">voltar</span>
               </md-button>
-              <md-button class="md-raised" type="submit" md-colors="{background: 'default-teal-500'}">
+              <md-button class="md-raised" type="submit" md-colors="{background: 'default-teal-500'}" ng-disabled="controller.blockPublishButton">
                   <span style="color: white;">{{controller.getStep(3) ? "publicar" : "avançar"}}</span>
               </md-button>
           </md-dialog-actions>

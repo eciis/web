@@ -9,6 +9,7 @@ from models.institution import Address
 from models.post import Post
 from models.post import Comment
 from models.event import Event
+from models.factory_invites import InviteFactory
 
 
 def getHash(obj):
@@ -86,7 +87,8 @@ def create_event(author, institution):
         'title': 'title ',
         'local': 'location ',
         'start_time': datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
-        'end_time': (datetime.datetime.now() + datetime.timedelta(days=1)).strftime("%Y-%m-%dT%H:%M:%S")
+        'end_time': (datetime.datetime.now() + datetime.timedelta(days=1)).strftime("%Y-%m-%dT%H:%M:%S"),
+        'address': {}
     }
     event = Event.create(data, author, institution)
     event_hash = getHash(event)
@@ -96,3 +98,17 @@ def create_event(author, institution):
     event.institution_image = event_hash
     event.put()
     return event
+
+def create_invite(admin, institution_key, type_of_invite):
+    """Create an invite."""
+    data = {
+        'invitee': str(admin.email),
+        'admin_key': admin.key.urlsafe(),
+        'institution_key': institution_key.urlsafe()
+    }
+
+    invite = InviteFactory.create(data, type_of_invite)
+    invite_hash = getHash(invite)
+    invite.sender_name = invite_hash
+    invite.put()
+    return invite

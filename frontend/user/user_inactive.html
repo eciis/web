@@ -26,7 +26,7 @@
                                     </md-input-container>
                                 </form>
                         </div>
-                        <md-content style="max-height: 300px;" class="hide-scrollbar" layout="column"
+                        <md-content style="max-height: 300px;" class="custom-scrollbar" layout="column"
                             ng-if="!userInactiveCtrl.choicedInst">
                             <md-list flex layout-padding style="margin: 0px;">
                                 <md-list-item ng-repeat="institution in userInactiveCtrl.institutions" 
@@ -94,7 +94,7 @@
                         <div layout="column" ng-if="userInactiveCtrl.isFinished">
                             <div style="font-weight: 500; text-align: center;">
                                 <p>Sua solicitação de convite foi enviada e esta em análise pelo administrador
-                                de sua instituição na plataforma e-CIS.</p>
+                                de sua instituição na Plataforma CIS.</p>
                                 <p>Você receberá a confirmação em seu email.</p>
                             </div>
                             <div layout-gt-xs="row" layout-xs="column" layout-align="end center">

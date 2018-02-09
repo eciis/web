@@ -1,4 +1,4 @@
-<md-content layout="row" layout-align="center" class="body hide-scrollbar">
+<md-content layout="row" layout-align="center" class="body custom-scrollbar">
   <div flex layout="row" layout-align="center">
     <div flex flex-gt-lg="95">
         <md-card flex layout="column">
@@ -60,6 +60,11 @@
                   <h3>{{ invite.suggestion_institution_name }}</h3>
                   <h4>{{ invite.invitee }}</h4>
                   <h4>Convidada por: {{ invite.sender_name }}</h4>
+                </div>
+                <div layout-align="end center">
+                  <md-button class="md-raised" ng-click="inviteInstCtrl.resendInvite(invite.key, $event)">
+                    Reenviar
+                  </md-button>
                 </div>
               </md-list-item>
             </md-list>

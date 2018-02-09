@@ -1,4 +1,4 @@
-<md-content layout="row" layout-align="center" class="hide-scrollbar">
+<md-content layout="row" layout-align="center" class="custom-scrollbar">
     <div flex="95" layout-align="center" layout-fill>
         <div layout-align="center" layout-fill>
             <md-card>
@@ -25,32 +25,23 @@
                     <h4 md-colors="{color:'grey-700'}">Filtrar pesquisa</h4>
 
                     <div layout="row" layout-xs="column" layout-align="space-between">
-                        <md-select ng-model="searCtrl.searchActuation" placeholder="Área de atuação" style="min-width: 30%">
-                            <md-option ng-click="searchCtrl.searchBy('*')" value="Pesquisar em todas as áreas">
-                                Pesquisar em todas as áreas
-                            </md-option>
+                        <md-select ng-model="searchCtrl.searchActuation" placeholder="Área de atuação" style="min-width: 30%">
                             <md-option ng-repeat="actuation_area in searchCtrl.actuationAreas | orderBy: 'name'" 
-                                ng-value="actuation_area.name" ng-click="searchCtrl.searchBy(actuation_area.name)">
+                                ng-value="actuation_area.value" ng-click="searchCtrl.searchBy(actuaction_area.value)">
                                 {{actuation_area.name}}
                             </md-option>
                         </md-select>
 
-                        <md-select ng-model="searCtrl.searchNature" placeholder="Natureza legal" style="min-width: 30%">
-                            <md-option ng-click="searchCtrl.searchBy('*')" value="Pesquisar em todas as áreas">
-                                Pesquisar em todas as áreas
-                            </md-option>
+                        <md-select ng-model="searchCtrl.searchNature" placeholder="Natureza legal" style="min-width: 30%">
                             <md-option ng-repeat="nature in searchCtrl.legalNature | orderBy: 'name'" 
-                                ng-value="nature.name" ng-click="searchCtrl.searchBy(nature.value)">
+                                ng-value="nature.value" ng-click="searchCtrl.searchBy(nature.value)">
                                 {{nature.name}}
                             </md-option>
                         </md-select>
 
-                        <md-select ng-model="searCtrl.searchState" placeholder="Localização" style="min-width: 30%">
-                            <md-option ng-click="searchCtrl.searchBy('*')" value="Pesquisar em todas as áreas">
-                                Pesquisar em todos os estados
-                            </md-option>
+                        <md-select ng-model="searchCtrl.searchState" placeholder="Localização" style="min-width: 30%">
                             <md-option ng-repeat="state in searchCtrl.brazilianFederalStates" 
-                                ng-value="state" ng-click="searchCtrl.searchBy(state.nome)">
+                                ng-value="state.nome" ng-click="searchCtrl.searchBy(state.nome)">
                                 {{state.nome}}
                             </md-option>
                         </md-select>
@@ -58,7 +49,8 @@
 
                     <md-list ng-if="searchCtrl.loading">
                         <h4 md-colors="{color:'grey-700'}">Resultados da pesquisa</h4>
-                        <md-list-item class="list-item-dense" ng-repeat="institution in searchCtrl.institutions" 
+                        <md-list-item class="list-item-dense" ng-repeat="institution in searchCtrl.institutions 
+                        | filter: searchCtrl.searchActuation | filter: searchCtrl.searchNature | filter: searchCtrl.searchState" 
                             style="margin-bottom: 1%;"
                               md-colors="{background: 'grey-300'}">
                             <div layout="row" ng-click="searchCtrl.goToInstitution(institution.id)">
@@ -78,9 +70,7 @@
                             <b>&bull; Nenhuma instituição encontrada</b>
                         </md-list-item>
                     </md-list>
-                    <div layout-align="center center" layout="row">
-                      <md-progress-circular ng-show="searchCtrl.isLoading()" md-mode="indeterminate"></md-progress-circular>
-                    </div>
+                    <load-circle flex ng-if="searchCtrl.isLoading()"></load-circle>
                 </md-card-content>
             </md-card>
         </div>

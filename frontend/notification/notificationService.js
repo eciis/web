@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.service("NotificationService", function NotificationService($firebaseArray,  MessageService, AuthService) {
+    app.service("NotificationService", function NotificationService($firebaseArray,  MessageService, AuthService, $rootScope) {
         var service = this;
 
         var ref = firebase.database().ref();
@@ -56,9 +56,8 @@
                     if (ev.event === CHILD_ADDED) {
                         var notification = firebaseArrayNotifications.$getRecord(ev.key);
                         notificationsList.push(notification);
-
                         if (isNew(notification)) {
-                            MessageService.showToast(service.formatMessage(notification));
+                            $rootScope.$emit(notification.entity_type);
                         }
                     }
                 });
@@ -103,8 +102,10 @@
         * service notifications.
         */
         AuthService.$onLogout(function destroy() {
-            firebaseArrayNotifications.$destroy();
-            firebaseArrayNotifications = undefined;
+            if(firebaseArrayNotifications) {
+                firebaseArrayNotifications.$destroy();
+                firebaseArrayNotifications = undefined;
+            }
         });
     });
 })();

@@ -17,13 +17,13 @@
                             </md-icon>
                         </md-toolbar>
                         <md-card-content 
-                        ng-show="institutionCtrl.showFullDescription" ng-scrollbars 
+                        ng-show="institutionCtrl.showFullDescription" ng-scrollbars class="text"
                         style="padding: 1.5em; height: 15%; text-align: justify; overflow:hidden">
-                            <p>{{ institutionCtrl.current_institution.description }}</p>
+                            <p>{{ institutionCtrl.institution.description }}</p>
                         </md-card-content>
                     </md-card>
                 </div>
-                <md-content flex id="content" class="body hide-scrollbar">
+                <md-content flex id="content" class="body custom-scrollbar">
                     <div flex layout="row">
                         <post-timeline ng-if="!institutionCtrl.isLoadingPosts" layout="column" 
                         md-colors="{background: 'grey-50'}" posts="institutionCtrl.posts"
@@ -31,9 +31,8 @@
                         load-more-posts="institutionCtrl.loadMorePosts" flex>
                         </post-timeline>
                         <!-- LOADING CIRCLE --> 
-                        <div flex ng-if="institutionCtrl.isLoadingPosts" layout="row" layout-align="center center">
-                                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-                        </div>      
+                        <load-circle flex add-layout-fill="true"
+                            ng-if="institutionCtrl.isLoadingPosts"></load-circle>
                     </div>
                 </md-content>
             </div>

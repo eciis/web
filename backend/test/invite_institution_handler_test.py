@@ -1,13 +1,17 @@
 """Invite Institution Handler Test."""
 
+import mocks
+
 from test_base_handler import TestBaseHandler
 from models.institution import Institution
 from models.institution import Address
 from models.user import User
+from models.invite import Invite
 from handlers.invite_institution_handler import InviteInstitutionHandler
 
 from mock import patch
 
+host = 'localhost:80'
 
 class InviteInstitutionHandlerTest(TestBaseHandler):
     """Invite Institution handler test."""
@@ -20,28 +24,49 @@ class InviteInstitutionHandlerTest(TestBaseHandler):
             [("/api/invites/institution", InviteInstitutionHandler),
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
-        initModels(cls)
 
-    @patch('utils.verify_token', return_value={'email': 'first_user@gmail.com'})
-    def test_post_invite_institution(self, verify_token):
-        """Test post invite institution."""
-        self.testapp.post_json("/api/invites/institution", {
-            'invitee': 'ana@gmail.com',
-            'admin_key': self.first_user.key.urlsafe(),
+        # create models
+        # new User
+        cls.first_user = mocks.create_user('first_user@gmail.com')
+        # new Institution
+        cls.institution = mocks.create_institution()
+        # set the institution admin to be the first user
+        cls.first_user.institutions_admin = [cls.institution.key]
+        cls.first_user.add_institution(cls.institution.key)
+        cls.first_user.put()
+        cls.institution.admin = cls.first_user.key
+        cls.institution.add_member(cls.first_user)
+        cls.institution.put()
+        # update first user permissions
+        cls.first_user.add_permission('send_invite_inst', cls.institution.key.urlsafe())
+        cls.first_user.put()
+        data = {
+            'invitee': 'userA@gmail.com',
+            'admin_key': cls.first_user.key.urlsafe(),
             'type_of_invite': 'INSTITUTION',
             'suggestion_institution_name': 'New Institution',
-            'institution_key': self.institution.key.urlsafe()})
+            'institution_key': cls.institution.key.urlsafe()
+        }
+        cls.body = {
+            'data': data
+        }
 
+    @patch.object(Invite, 'send_invite')
     @patch('utils.verify_token', return_value={'email': 'first_user@gmail.com'})
-    def test_post_invite_institution_fail(self, verify_token):
+    def test_post_invite_institution(self, verify_token, send_invite):
+        """Test post invite institution."""
+        self.testapp.post_json("/api/invites/institution", self.body,
+            headers={'institution-authorization':self.institution.key.urlsafe()})
+        # assert the invite was sent to the invitee
+        send_invite.assert_called_with(host, self.institution.key)
+    
+    @patch.object(Invite, 'send_invite')
+    @patch('utils.verify_token', return_value={'email': 'first_user@gmail.com'})
+    def test_post_invite_institution_fail(self, verify_token, send_invite):
         """Test post invite institution fail."""
         with self.assertRaises(Exception) as ex:
-            self.testapp.post_json("/api/invites/institution", {
-                'invitee': 'ana@gmail.com',
-                'admin_key': self.first_user.key.urlsafe(),
-                'type_of_invite': 'INSTITUTION_PARENT',
-                'suggestion_institution_name': 'New Institution',
-                'institution_key': self.institution.key.urlsafe()})
+            self.body['data']['type_of_invite'] = 'INSTITUTION_PARENT'
+            self.testapp.post_json("/api/invites/institution", self.body)
 
         message = self.get_message_exception(ex.exception.message)
         self.assertEqual(
@@ -49,61 +74,51 @@ class InviteInstitutionHandlerTest(TestBaseHandler):
             'Error! invitation type not allowed',
             'Expected exception message must be equal to Error! invitation type not allowed')
 
+        # assert the invite was not sent to the invitee
+        send_invite.assert_not_called() 
+
+    @patch.object(Invite, 'send_invite')
     @patch('utils.verify_token', return_value={'email': 'second_user@ccc.ufcg.edu.br'})
-    def test_post_user_not_allowed(self, verify_token):
+    def test_post_user_not_allowed(self, verify_token, send_invite):
         """Test post user not allowed."""
+        # new Institution
+        other_institution = mocks.create_institution()
+        # new user
+        second_user = mocks.create_user('second_user@ccc.ufcg.edu.br')
+        # set the other_institution admin to be the second_user
+        second_user.institutions_admin = [other_institution.key]
+        second_user.put()
+        other_institution.admin = second_user.key
+        other_institution.put()
+
         with self.assertRaises(Exception) as ex:
-            self.testapp.post_json("/api/invites/institution", {
-                'invitee': 'ana@gmail.com',
-                'admin_key': self.second_user.key.urlsafe(),
-                'type_of_invite': 'INSTITUTION',
-                'suggestion_institution_name': 'New Institution',
-                'institution_key': self.other_institution.key.urlsafe()})
+            self.body['data']['admin_key'] = second_user.key.urlsafe()
+            self.body['data']['institution_key'] = other_institution.key.urlsafe()
+            self.testapp.post_json("/api/invites/institution", self.body)
 
         message = self.get_message_exception(ex.exception.message)
         self.assertEqual(
             message,
             'Error! User is not allowed to post invite',
             'Expected exception message must be equal to Error! User is not allowed to post invite')
+        
+        # assert the invite was not sent to the invitee
+        send_invite.assert_not_called() 
 
+    @patch.object(Invite, 'send_invite')
+    @patch('utils.verify_token', return_value={'email': 'first_user@gmail.com'})
+    def test_post_invite_institution_inactive(self, verify_token, send_invite):
+        """Test post invite institution fail."""
+        with self.assertRaises(Exception) as ex:
+            self.institution.state = 'inactive'
+            self.institution.put()
+            self.testapp.post_json("/api/invites/institution", self.body)
 
-def initModels(cls):
-    """Init the models."""
-    # new Institution Address
-    cls.address = Address()
-    cls.address.number = '01'
-    cls.address.street = 'street'
-    # new Institution
-    cls.institution = Institution()
-    cls.institution.name = 'institution'
-    cls.institution.address = cls.address
-    cls.institution.put()
-    # new User
-    cls.first_user = User()
-    cls.first_user.name = 'first_user'
-    cls.first_user.email = ['first_user@gmail.com']
-    cls.first_user.institutions = [cls.institution.key]
-    cls.first_user.institutions_admin = [cls.institution.key]
-    cls.first_user.put()
-    # new User
-    cls.second_user = User()
-    cls.second_user.name = 'second_user'
-    cls.second_user.email = ['second_user@ccc.ufcg.edu.br']
-    cls.second_user.put()
-
-    # new Institution other_institution
-    cls.other_institution = Institution()
-    cls.other_institution.name = 'other_institution'
-    cls.other_institution.address = cls.address
-    cls.other_institution.members = [cls.first_user.key]
-    cls.other_institution.admin = cls.second_user.key
-    cls.other_institution.put()
-    # set first_user to be admin of institution
-    cls.institution.admin = cls.first_user.key
-    cls.institution.members = [cls.first_user.key, cls.second_user.key]
-    cls.institution.put()
-    cls.second_user.institutions_admin = [cls.other_institution.key]
-    cls.second_user.put()
-
-    cls.first_user.add_permission('send_invite_inst', cls.institution.key.urlsafe())
-    cls.first_user.put()
+        message = self.get_message_exception(ex.exception.message)
+        self.assertEqual(
+            message,
+            "Error! The institution has been deleted",
+            "Expected exception message must be equal to 'Error! The institution has been deleted'") 
+        
+        # assert the invite was not sent to the invitee
+        send_invite.assert_not_called() 

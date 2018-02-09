@@ -96,6 +96,25 @@ def verify_token(request):
             logging.exception(str(error))
             return None
 
+def setup_current_institution(user, request):
+    """
+    Current institution is used by the backend to specify which
+    institution the user is logged. The HTTP header Institution-Authorization,
+    if exist, comes with the institution key that provides the direct
+    access to the resource. Once the header exists, it creates a user
+    property 'current_institution' with a ndb.Key to be used during 
+    the transaction.
+    """
+    try:
+        institution_header = request.headers['Institution-Authorization']
+        institution_key = ndb.Key(urlsafe=institution_header)
+        Utils._assert(not user.is_member(institution_key),
+            "Invalid Current Institution! User is not an active member.",
+            NotAuthorizedException)
+        user.current_institution = institution_key
+    except KeyError as error:
+        user.current_institution = None
+
 
 def login_required(method):
     """Handle required login."""
@@ -118,9 +137,14 @@ def login_required(method):
             user.name = user_name
             user.email = [user_email]
 
+        setup_current_institution(user, self.request)
+
         method(self, user, *args)
     return login
 
+def follow_inst(user,inst):
+    user.follow(inst.key)
+    inst.follow(user.key)
 
 def create_user(name, email):
     """Create user."""
@@ -129,8 +153,15 @@ def create_user(name, email):
     user.name = name
     user.photo_url = "app/images/avatar.png"
     health_ministry = get_health_ministry().get()
+    deciis = get_deciis().get()
+    """"TODO: All users have to follow MS and DECIIS
+        Think of a better way to do it
+        @author: Mayza Nunes 24/01/2018
+    """
     if health_ministry is not None:
-        user.follows.append(health_ministry.key)
+        follow_inst(user, health_ministry)
+    if deciis is not None:
+        follow_inst(user, deciis)
     user.put()
     
     return user
@@ -140,11 +171,16 @@ def get_health_ministry():
     query = Institution.query(Institution.name == "Ministério da Saúde", Institution.acronym == "MS")
     return query
 
+def get_deciis():
+    """Get health ministry institution."""
+    query = Institution.query(Institution.name == "Departamento do Complexo Industrial e Inovação em Saúde", Institution.acronym == "DECIIS")
+    return query
+
 def json_response(method):
     """Add content type header to the response."""
     def response(self, *args):
         self.response.headers['Access-Control-Allow-Origin'] = '*'
-        self.response.headers['Access-Control-Allow-Headers'] = 'X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Authorization'
+        self.response.headers['Access-Control-Allow-Headers'] = 'X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Authorization, Institution-Authorization'
         self.response.headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE, PATCH'
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
         method(self, *args)

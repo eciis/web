@@ -3,7 +3,7 @@
 from ..test_base import TestBase
 
 from models.user import InstitutionProfile
-
+from .. import mocks
 
 class InstitutionProfileTest(TestBase):
     """Test the institution profile model."""
@@ -21,17 +21,23 @@ class InstitutionProfileTest(TestBase):
 
     def test_make(self):
         """Test the make method."""
+        institution = mocks.create_institution()
+        institution.name = 'institution_name'
+        institution.photo_url = 'photo_url.com'
+        institution.put()
+        self.data_profile['institution_key'] = institution.key.urlsafe()
         profile = InstitutionProfile.create(self.data_profile)
-        profile.color = "grey";
+        profile.color = "grey"
         maked_profile = {
             'office': 'member',
             'color': 'grey',
-            'institution_key': 'institution_key',
+            'institution_key': institution.key.urlsafe(),
             'email': 'institutional_email',
             'phone': '88 8888-88888',
+            'branch_line': '888',
             'institution': {
-                'name': 'institution_name',
-                'photo_url': 'photo_url.com'
+                'name': 'institution_name'.decode('utf8'),
+                'photo_url': 'photo_url.com'.decode('utf8')
             }
         }
 
@@ -101,6 +107,7 @@ def initModels(cls):
         'office': 'member',
         'email': 'institutional_email',
         'phone': '88 8888-88888',
+        'branch_line': '888',
         'institution_key': 'institution_key',
         'institution_name': 'institution_name',
         'institution_photo_url': 'photo_url.com'

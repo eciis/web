@@ -53,11 +53,15 @@ class InstitutionParentRequestCollectionHandlerTest(TestBaseHandler):
             'institution_requested_key': inst_requested.key.urlsafe(),
             'type_of_invite': 'REQUEST_INSTITUTION_PARENT'
         }
+        body = {
+            'data': data,
+            'currentInstitution': {'name': 'currentInstitution'}
+        }
 
         with self.assertRaises(Exception) as ex:
             self.testapp.post_json(
                 "/api/institutions/" + institution.key.urlsafe() + "/requests/institution_parent",
-                data)
+                body)
 
         exception_message = self.get_message_exception(ex.exception.message)
         self.assertEqual(

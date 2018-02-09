@@ -58,6 +58,8 @@
             $rootScope: rootscope,
             $scope: scope
         });
+
+        postDetailsCtrl.isPostPage = true;
     }));
 
     afterEach(function() {
@@ -141,14 +143,12 @@
             httpBackend.expect('POST', POSTS_URI + '/' + posts[0].key + '/likes').respond();
             httpBackend.expect('GET', "/api/posts/123456/likes").respond();
             postDetailsCtrl.user.liked_posts = [];
-            expect(postDetailsCtrl.showLikes).toEqual(false);
             postDetailsCtrl.likeOrDislikePost(posts[0]).then(function() {
                 expect(posts[0].number_of_likes).toEqual(1);
             });
             httpBackend.flush();
             expect(postDetailsCtrl.isLikedByUser).toHaveBeenCalledWith();
             expect(postDetailsCtrl.getLikes).toHaveBeenCalledWith(posts[0]);
-            expect(postDetailsCtrl.showLikes).toEqual(true);
             expect(postService.likePost).toHaveBeenCalledWith(posts[0]);
         });
 
@@ -401,4 +401,19 @@
             expect(postDetailsCtrl.number_of_comments()).toEqual("+99");
         });
     });
+
+    describe('reloadPost()', function () {
+        it('should call getPost(postKey)', function () {
+            postDetailsCtrl.post = posts[0];
+            spyOn(postService, 'getPost').and.callFake(function () {
+                return {
+                    then: function (callback) {
+                        return callback();
+                    }
+                };
+            });
+            postDetailsCtrl.reloadPost();
+            expect(postService.getPost).toHaveBeenCalledWith(posts[0].key);
+        });
+    })
 }));

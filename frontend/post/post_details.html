@@ -43,8 +43,8 @@
           </md-button>
         </md-menu-item>
         <md-menu-item ng-if="!postDetailsCtrl.isInstInactive()">
-          <md-button arial-label="Atualizar" title="Atualizar comentários"
-            ng-click="postDetailsCtrl.loadComments()">
+          <md-button arial-label="Atualizar" title="Atualizar post"
+            ng-click="postDetailsCtrl.reloadPost()">
             <md-icon>refresh</md-icon>
             Atualizar post
           </md-button>
@@ -124,7 +124,7 @@
       href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post.shared_post)">
         <span>{{ postDetailsCtrl.post.shared_post.title }}</span>
       </a>
-      <p class="break" ng-if="!postDetailsCtrl.isDeleted(postDetailsCtrl.post.shared_post)"
+      <p class="text" ng-if="!postDetailsCtrl.isDeleted(postDetailsCtrl.post.shared_post)"
         ng-bind-html="postDetailsCtrl.postToURL(postDetailsCtrl.post.shared_post).text" ></p>
       <div layout="row" layout-align="end-center">
         <a href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post.shared_post)"
@@ -225,9 +225,7 @@
 
   <!-- COMMENTS -->
   <div ng-if="postDetailsCtrl.showComments || postDetailsCtrl.isPostPage">
-    <div flex ng-if="postDetailsCtrl.isLoadingComments && !postDetailsCtrl.isPostPage"  layout="row" layout-align="center center">
-      <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-    </div> 
+    <load-circle flex ng-if="postDetailsCtrl.isLoadingComments && !postDetailsCtrl.isPostPage"></load-circle>
     <md-divider style="margin-top: 15px;"></md-divider>
     <comment ng-if="!postDetailsCtrl.isLoadingComments || postDetailsCtrl.isPostPage"
       ng-repeat="comment in postDetailsCtrl.getValues(postDetailsCtrl.post.data_comments) | orderBy:'publication_date'"

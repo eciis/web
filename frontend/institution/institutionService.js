@@ -105,7 +105,7 @@
         };
 
         service.save = function save(data, institutionKey, inviteKey) {
-            var body = Utils.createBody(data, service.user.current_institution);
+            var body = {data: data};
             var deffered = $q.defer();
             $http.post(INSTITUTIONS_URI + "/" + institutionKey + "/invites/" + inviteKey, body).then(function success(info) {
                 deffered.resolve(info.data);

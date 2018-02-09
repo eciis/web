@@ -2,9 +2,7 @@
   <div layout="column" layout-align="center center" layout-fill flex>
     <div layout="row" layout-xs="column" layout-align="center center">
       <div flex-sm="60" flex-gt-sm="40" layout-align="center center">
-        <div ng-show="newInviteCtrl.loading" layout="row" layout-align="center center">
-          <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-        </div>
+        <load-circle ng-show="newInviteCtrl.loading"></load-circle>
         <md-card ng-show="!newInviteCtrl.loading">
           <md-card-content style="background-color:#FFFFFF;" layout="column" layout-align="center">
             <div align="center">

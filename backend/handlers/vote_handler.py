@@ -15,10 +15,10 @@ class VoteHandler(BaseHandler):
 
     @json_response
     @login_required
-    @ndb.transactional(xg=True)
     def post(self, user, survey_key):
         """Handle POST Requests."""
-        survey = ndb.Key(urlsafe=survey_key).get()
+        survey_key = ndb.Key(urlsafe=survey_key)
+        survey = survey_key.get()
         # The array contains options
         options_selected = json.loads(self.request.body)
 
@@ -30,5 +30,4 @@ class VoteHandler(BaseHandler):
                      'photo_url': user.photo_url,
                      'key': user.key.urlsafe()}
 
-        survey.vote(user_dict, options_selected)
-        survey.put()
+        survey_key.get().vote(user_dict, options_selected)

@@ -12,12 +12,12 @@
               <md-input-container md-no-float class="md-block" style="margin: 0px; padding-top: 10px;">
                 <input name="title" style="font-weight: bold; color: #00695C; border: 0;resize:none;"
                 ng-model="postCtrl.post.title" maxlength="100" placeholder="{{postCtrl.showPlaceholderMsg()}}" required>
-                <div ng-messages='saveForm.title.$error'>
+                <div ng-show="postCtrl.isTyping()" ng-messages='saveForm.title.$error'>
                     <div ng-message="required">O post deve conter um título!</div>
                 </div>
               </md-input-container>
               <md-input-container ng-show="postCtrl.isTyping()" md-no-float style="margin: 0px;">
-                <textarea name="message" style="border: 0; max-height: 400px;resize:none; overflow: auto;" ng-model="postCtrl.post.text" placeholder="Texto" id="text" class="custom-scrollbar" required>
+                <textarea name="message" style="border: 0; max-height: 100px; resize:none; overflow: auto;" ng-model="postCtrl.post.text" placeholder="Texto" id="text" class="custom-scrollbar" required>
                 </textarea>
                 <div ng-messages='saveForm.message.$error'>
                     <div ng-message="required">O post deve conter um texto!</div>
@@ -105,12 +105,13 @@
         <md-progress-linear ng-show="postCtrl.loading" md-mode="indeterminate" style="width: 14%;"></md-progress-linear>
       </div>
     </md-card-content>
-    <md-card-actions style="text-align: right; margin-right: 20px; margin-bottom: 20px;" ng-show="postCtrl.showButton()"
+    <md-card-actions style="text-align: right; margin-right: 20px; margin-bottom: 20px;"
       layout="row" layout-align="end center">
-      <md-button style="color: #009688" ng-click="postCtrl.cancelDialog()">
+      <load-circle flex ng-if="postCtrl.loadingPost"></load-circle>
+      <md-button ng-show="postCtrl.showButton()" style="color: #009688" ng-click="postCtrl.cancelDialog()">
         Cancelar
       </md-button>
-      <md-button class="md-raised" md-colors="{background: 'default-teal-500'}" title="Enviar"
+      <md-button  ng-show="postCtrl.showButton()" class="md-raised" md-colors="{background: 'default-teal-500'}" title="Enviar"
         type="submit">
         Postar
       </md-button>

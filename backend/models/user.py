@@ -38,21 +38,20 @@ class InstitutionProfile(ndb.Model):
     email = ndb.StringProperty()
     phone = ndb.StringProperty()
     branch_line = ndb.StringProperty()
-    institution_name = ndb.StringProperty()
-    institution_photo_url = ndb.StringProperty()
     institution_key = ndb.StringProperty(required=True)
     color = ndb.StringProperty()
 
     def make(self):
         """Make the Institution Profile json."""
+        institution = ndb.Key(urlsafe=self.institution_key).get()
         profile = {}
         profile['office'] = self.office
         profile['email'] = self.email
         profile['phone'] = self.phone
         profile['branch_line'] = self.branch_line
         profile['institution'] = {
-            'name': self.institution_name,
-            'photo_url': self.institution_photo_url
+            'name': institution.name,
+            'photo_url': institution.photo_url
         }
 
         profile['color'] = self.color or pick_color()

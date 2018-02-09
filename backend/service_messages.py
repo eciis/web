@@ -33,14 +33,18 @@ def create_entity(entity_key):
     """Create a short entity with only key and name."""
     entity_obj = ndb.Key(urlsafe=entity_key).get()
     class_name = entity_obj.__class__.__name__
+    is_post = class_name == 'Post'
+    is_institution = class_name == 'Institution'
+    is_invite = 'Invite' in class_name
+    is_request = 'Request' in class_name
     name = ''
 
-    if class_name == 'Post':
+    if is_post:
         institution = entity_obj.institution.get()
         name = institution.name
-    elif class_name == 'Institution':
+    elif is_institution:
         name = entity_obj.name
-    elif 'Invite' in class_name:
+    elif is_invite or is_request:
         institution = entity_obj.institution_key.get()
         name = institution.name
     

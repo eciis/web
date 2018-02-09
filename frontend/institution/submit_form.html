@@ -1,7 +1,5 @@
 <div layout-padding>
-    <div flex ng-if="configInstCtrl.loading"  layout="row" layout-align="center center">
-        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-    </div>
+    <load-circle add-layout-fill="true" flex ng-if="configInstCtrl.loading"></load-circle>
     <div ng-if="!configInstCtrl.loading">
         <div class="row" >
             <div class="avatar" align="center">

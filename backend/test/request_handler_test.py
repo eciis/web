@@ -81,6 +81,7 @@ class RequestHandlerTest(TestBaseHandler):
         admin = mocks.create_user(ADMIN['email'])
         institution = mocks.create_institution()		 
         institution.admin = admin.key
+        institution.photo_url = 'tst.jpg'
         institution.put()
         admin.institutions_admin = [institution.key]
         admin.add_permission("answer_user_request", institution.key.urlsafe())
@@ -92,6 +93,7 @@ class RequestHandlerTest(TestBaseHandler):
         'is_request': True,
         'admin_key': admin.key.urlsafe(),
         'institution_key': institution.key.urlsafe(),
+        'office': 'Dev',
         'type_of_invite': 'REQUEST_USER'
         }
         request = RequestUser.create(data)
@@ -131,6 +133,7 @@ class RequestHandlerTest(TestBaseHandler):
         admin = mocks.create_user(ADMIN['email'])
         institution = mocks.create_institution()		 
         institution.admin = admin.key
+        institution.photo_url = 'tst.jpg'
         institution.put()
         admin.institutions_admin = [institution.key]
         admin.add_permission("answer_user_request", institution.key.urlsafe())
@@ -141,6 +144,7 @@ class RequestHandlerTest(TestBaseHandler):
         'is_request': True,
         'admin_key': admin.key.urlsafe(),
         'institution_key': institution.key.urlsafe(),
+        'office': 'Dev',
         'type_of_invite': 'REQUEST_USER'
         }
         request = RequestUser.create(data)

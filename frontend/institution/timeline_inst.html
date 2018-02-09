@@ -31,9 +31,8 @@
                         load-more-posts="institutionCtrl.loadMorePosts" flex>
                         </post-timeline>
                         <!-- LOADING CIRCLE --> 
-                        <div flex ng-if="institutionCtrl.isLoadingPosts" layout="row" layout-align="center center">
-                                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-                        </div>      
+                        <load-circle flex add-layout-fill="true"
+                            ng-if="institutionCtrl.isLoadingPosts"></load-circle>
                     </div>
                 </md-content>
             </div>

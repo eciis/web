@@ -10,7 +10,6 @@
 
         var LIMIT_POST_CHARACTERS = 1000;
 
-        postDetailsCtrl.showLikes = false;
         postDetailsCtrl.showComments = false;
         postDetailsCtrl.savingComment = false;
         postDetailsCtrl.savingLike = false;
@@ -307,6 +306,18 @@
             return _.values(object);
         };
 
+        postDetailsCtrl.reloadPost = function reloadPost() {
+            var promise = PostService.getPost(postDetailsCtrl.post.key);
+            promise.then(function success(response) {
+                postDetailsCtrl.post = response;
+                postDetailsCtrl.isLoadingComments = false;
+            }, function error(response) {
+                postDetailsCtrl.isLoadingComments = true;
+                MessageService.showToast(response.data.msg);
+            }); 
+            return promise;
+        }
+
         postDetailsCtrl.loadComments = function refreshComments() {
             var promise  =  CommentService.getComments(postDetailsCtrl.post.comments);
             promise.then(function success(response) {
@@ -331,8 +342,7 @@
 
         postDetailsCtrl.getLikes = function getLikes() {
             var likesUri = postDetailsCtrl.post.likes;
-            postDetailsCtrl.showLikes = !postDetailsCtrl.showLikes;
-            if(postDetailsCtrl.showLikes) {
+            if(postDetailsCtrl.isPostPage) {
                 var promise = PostService.getLikes(likesUri);
                 promise.then(function success(response) {
                     postDetailsCtrl.post.data_likes = response.data;

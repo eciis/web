@@ -106,10 +106,7 @@
                 icon: "account_balance",
             },
             "ACCEPTED_LINK": {
-                icon: "link",
-                action: function() {
-                    return refreshUserInstitutions();
-                }
+                icon: "link"
             },
             "REJECT_INSTITUTION_LINK": {
                 icon: "account_balance",

@@ -4,6 +4,7 @@
 import json
 from test_base_handler import TestBaseHandler
 from handlers.institution_request_collection_handler import InstitutionRequestCollectionHandler
+from models.invite import Invite
 
 from mock import patch
 import mocks
@@ -23,8 +24,9 @@ class InstitutionRequestCollectionHandlerTest(TestBaseHandler):
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
 
+    @patch.object(Invite, 'send_invite')
     @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
-    def test_post(self, verify_token):
+    def test_post(self, verify_token, send_invite):
         """Test handler post."""
         # Initialize objects
         self.other_user = mocks.create_user()
@@ -46,8 +48,9 @@ class InstitutionRequestCollectionHandlerTest(TestBaseHandler):
             },
             'type_of_invite': 'REQUEST_INSTITUTION'
         }
+        body = {"data": data}
 
-        response = self.testapp.post_json(InstitutionRequestCollectionHandlerTest.REQUEST_URI, data)
+        response = self.testapp.post_json(InstitutionRequestCollectionHandlerTest.REQUEST_URI, body)
         request = json.loads(response._app_iter[0])
 
         self.assertEqual(
@@ -79,3 +82,5 @@ class InstitutionRequestCollectionHandlerTest(TestBaseHandler):
             request['requested_inst_name'],
             "Complexo Industrial da Saude",
             "Expected institution_requested be new inst")
+
+        send_invite.assert_called_with('localhost:80', None)

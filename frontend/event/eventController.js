@@ -158,11 +158,12 @@
 
         function updateEvent() {
             addLinks(dialogCtrl.event);
-            event = new Event(dialogCtrl.event, dialogCtrl.user.current_institution.key);
+            var event = new Event(dialogCtrl.event, dialogCtrl.user.current_institution.key);
             if(event.isValid()) {
+                dialogCtrl.loading = true;
                 var patch = formatPatch(generatePatch(jsonpatch.generate(dialogCtrl.observer), event));
                 EventService.editEvent(dialogCtrl.event.key, patch).then(function success() {
-                    dialogCtrl.closeDialog();
+                    $mdDialog.hide();
                     MessageService.showToast('Evento editado com sucesso.');
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
@@ -232,10 +233,10 @@
         };
 
         dialogCtrl.cleanImage = function() {
-           dialogCtrl.photoUrl = "";
-           dialogCtrl.photoBase64Data = null;
-           dialogCtrl.deletePreviousImage = true;
-           delete dialogCtrl.event.photo_url;
+            dialogCtrl.photoUrl = "";
+            dialogCtrl.photoBase64Data = null;
+            dialogCtrl.deletePreviousImage = true;
+            delete dialogCtrl.event.photo_url;
         };
 
         dialogCtrl.getCitiesByState = function getCitiesByState() {
@@ -369,8 +370,9 @@
             var event = new Event(dialogCtrl.event, dialogCtrl.user.current_institution.key);
             addLinks(event);
             if (event.isValid()) {
+                dialogCtrl.loading = true;
                 EventService.createEvent(event).then(function success(response) {
-                    dialogCtrl.closeDialog();
+                    $mdDialog.hide();
                     dialogCtrl.events.push(response.data);
                     MessageService.showToast('Evento criado com sucesso!');
                 }, function error(response) {
@@ -439,6 +441,7 @@
                 loadSelectedState();
                 initPatchObserver();
                 loadEventDates();
+                dialogCtrl.oldEvent = _.cloneDeep(dialogCtrl.event);
             } else {
                 dialogCtrl.event = {
                                     address: address

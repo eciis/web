@@ -215,6 +215,7 @@ class InstitutionHandler(BaseHandler):
         notification_params = {
             "sender_key": user.key.urlsafe(),
             "entity_type": "DELETED_INSTITUTION",
-            "institution_key": institution_key
+            "institution_key": institution_key,
+            "current_institution": user.current_institution.urlsafe()
         }
         enqueue_task('notify-followers', notification_params)

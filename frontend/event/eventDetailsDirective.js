@@ -13,6 +13,7 @@
 
         eventCtrl.user = AuthService.getCurrentUser();
         eventCtrl.isLoadingEvents = true;
+        eventCtrl.showImage = true;
 
         eventCtrl.share = function share(ev, event) {
             $mdDialog.show({
@@ -77,11 +78,20 @@
                 clickOutsideToClose: true,
                 locals: {
                     event: event,
-                    isEditing: true
+                    isEditing: true,
+                    resetEvent: resetEvent
                 },
                 bindToController: true
-            });
+            }).then(function(){
+                eventCtrl.showImage = hasImage(event);
+            })
         };
+
+        function hasImage(event) {
+            var emptyPhoto = event && event.photo_url == "";
+            var nullPhoto = event && event.photo_url == null;
+            return !(emptyPhoto || nullPhoto);
+        }
 
         eventCtrl.isEventAuthor = function isEventAuthor(event) {
             if (event) return Utils.getKeyFromUrl(event.author_key) === eventCtrl.user.key;
@@ -107,13 +117,21 @@
             }
         };
 
+        eventCtrl.getOfficialSite = function getOfficialSite() {
+           return Utils.limitString(eventCtrl.event.official_site, 80);
+        };
+
         function isInstitutionAdmin(event) {
             return _.includes(_.map(eventCtrl.user.institutions_admin, Utils.getKeyFromUrl),
                 Utils.getKeyFromUrl(event.institution_key));
         }
 
-    });
+        function resetEvent(oldEvent) {
+            eventCtrl.event = _.cloneDeep(oldEvent);
+        }
 
+    });
+    
     app.directive("eventDetails", function () {
         return {
             restrict: 'E',

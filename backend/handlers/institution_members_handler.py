@@ -51,7 +51,9 @@ class InstitutionMembersHandler(BaseHandler):
                 member.key.urlsafe(),
                 user.key.urlsafe(),
                 entity_type,
-                institution.key.urlsafe())
+                institution.key.urlsafe(),
+                user.current_institution
+            )
 
         subject = "Remoção de vínculo"
         message = """Lamentamos informar que seu vínculo com a instituição %s

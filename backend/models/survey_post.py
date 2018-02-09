@@ -47,19 +47,6 @@ class SurveyPost(Post):
             data, author_key, institution_key)
         return survey_post
 
-    def remove_vote(self, author, option_id):
-        """Remove a vote from survey post."""
-        option = self.key.get().options[option_id]
-
-        if(author not in option["voters"]):
-            raise Exception("The user didn't vote for this option")
-
-        option["number_votes"] -= 1
-        option["voters"].remove(author)
-
-        self.options[option_id] = Utils.toJson(option)
-        self.put()
-
     def is_vote_valid(self, author, option):
         """Verify if vote is valid."""
         if(self.deadline and datetime.datetime.now() > self.deadline):

@@ -33,8 +33,9 @@ class InstitutionHierarchyHandlerTest(TestBaseHandler):
         if handler_selector == 'add-admin-permissions' or handler_selector == 'remove-admin-permissions':
             self.testapp.post('/api/queue/' + handler_selector, params=params)
 
+    @patch('handlers.institution_hierarchy_handler.send_message_notification')
     @patch('utils.verify_token', return_value=ADMIN)
-    def test_delete_child_connection(self, verify_token):
+    def test_delete_child_connection(self, verify_token, send_message_notification):
         """Test delete method with isParent=false."""
         # Assert the initial conditions
         admin = mocks.create_user(ADMIN['email'])
@@ -47,13 +48,17 @@ class InstitutionHierarchyHandlerTest(TestBaseHandler):
         otherinst.admin = otheruser.key
         institution.put()
         otherinst.put()
+        admin.add_institution(institution.key)
         admin.add_permissions(["remove_inst", "remove_link"], otherinst.key.urlsafe())
         otheruser.add_permission("remove_link", institution.key.urlsafe())
         self.assertTrue(otherinst.key in institution.children_institutions)
         self.assertTrue(otherinst.parent_institution == institution.key)
         # Call the delete method
-        self.testapp.delete("/api/institutions/%s/hierarchy/%s?isParent=false" %
-                            (institution.key.urlsafe(), otherinst.key.urlsafe()))
+        self.testapp.delete(
+            "/api/institutions/%s/hierarchy/%s?isParent=false" 
+            % (institution.key.urlsafe(), otherinst.key.urlsafe()),
+            headers={'institution-authorization': institution.key.urlsafe()}
+        )
         # Update the institutions
         institution = institution.key.get()
         otherinst = otherinst.key.get()
@@ -61,9 +66,18 @@ class InstitutionHierarchyHandlerTest(TestBaseHandler):
         self.assertTrue(
             otherinst.key not in institution.children_institutions)
         self.assertTrue(otherinst.parent_institution == institution.key)
+        # assert the notification was sent
+        send_message_notification.assert_called_with(
+            otheruser.key.urlsafe(),
+            admin.key.urlsafe(),
+            "INSTITUTION",
+            otherinst.key.urlsafe(),
+            institution.key
+        )
 
+    @patch('handlers.institution_hierarchy_handler.send_message_notification')
     @patch('utils.verify_token', return_value=USER)
-    def test_delete_parent_connection(self, verify_token):
+    def test_delete_parent_connection(self, verify_token, send_message_notification):
         """Test delete method with isParent=true."""
         # Assert the initial conditions
         admin = mocks.create_user(ADMIN['email'])
@@ -77,12 +91,16 @@ class InstitutionHierarchyHandlerTest(TestBaseHandler):
         institution.put()
         otherinst.put()
         admin.add_permissions(["remove_inst", "remove_link"], otherinst.key.urlsafe())
+        otheruser.add_institution(otherinst.key)
         otheruser.add_permission("remove_link", institution.key.urlsafe())
         self.assertTrue(otherinst.key in institution.children_institutions)
         self.assertTrue(otherinst.parent_institution == institution.key)
         # Call the delete method
-        self.testapp.delete("/api/institutions/%s/hierarchy/%s?isParent=true" %
-                            (otherinst.key.urlsafe(), institution.key.urlsafe()))
+        self.testapp.delete(
+            "/api/institutions/%s/hierarchy/%s?isParent=true" 
+            % (otherinst.key.urlsafe(), institution.key.urlsafe()),
+            headers={'institution-authorization': otherinst.key.urlsafe()}
+        )
         # Update the institutions
         institution = institution.key.get()
         otherinst = otherinst.key.get()
@@ -90,6 +108,14 @@ class InstitutionHierarchyHandlerTest(TestBaseHandler):
         self.assertTrue(
             otherinst.key in institution.children_institutions)
         self.assertTrue(otherinst.parent_institution is None)
+        # assert the notification was sent
+        send_message_notification.assert_called_with(
+            admin.key.urlsafe(),
+            otheruser.key.urlsafe(),
+            "INSTITUTION",
+            institution.key.urlsafe(),
+            otherinst.key
+        )
 
     @patch('handlers.institution_hierarchy_handler.enqueue_task')
     @patch('utils.verify_token', return_value={'email': 'user@example.com'})

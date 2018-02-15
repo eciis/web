@@ -3,11 +3,11 @@
 (function () {
     var app = angular.module('app');
 
-    app.directive('preventChangePage', function(SubmitFormListenerService) {
+    app.directive('preventStateChange', function(SubmitFormListenerService) {
         return {
             restrict: 'A',
             link: function($scope, element, attrs) {
-                SubmitFormListenerService.addListener(attrs.preventChangePage, element.context, $scope);
+                SubmitFormListenerService.addListener(attrs.preventStateChange, element.context, $scope);
             }
         };
     });

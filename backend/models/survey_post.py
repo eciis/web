@@ -4,19 +4,6 @@ from google.appengine.ext import ndb
 from utils import Utils
 import datetime
 
-@ndb.transactional(retries=10)
-def update_vote(survey_key, user, option_id):
-    """Add a vote to the survey post."""
-    survey = survey_key.get()
-    option = survey.options[option_id]
-
-    option["number_votes"] += 1
-    option["voters"].append(user)
-    survey.number_votes += 1
-    survey.options[option_id] = Utils.toJson(option)
-    survey.put()
-
-    return survey
 
 class SurveyPost(Post):
     """Model of survey post."""
@@ -47,26 +34,32 @@ class SurveyPost(Post):
             data, author_key, institution_key)
         return survey_post
 
-    def is_vote_valid(self, author, option):
+    def is_vote_valid(self, author, option, number_options_selected):
         """Verify if vote is valid."""
         if(self.deadline and datetime.datetime.now() > self.deadline):
             raise Exception("Deadline for receive answers has passed.")
 
         if(author in option["voters"]):
             raise Exception("The user already voted for this option")
+        
+        if(self.type_survey == "binary" and number_options_selected != 1):
+            raise Exception("The binary survey should only receive one option")
 
         return True
 
+    @ndb.transactional(retries=10)
     def vote(self, author, all_options_selected):
         """Added all votes of user from survey post."""
-        if(self.type_survey == "binary" and
-            len(all_options_selected) == 1 and
-            self.is_vote_valid(author, all_options_selected[0])):
-           update_vote(self.key, author, all_options_selected[0]["id"])
-        else:
-            for option in all_options_selected:
-                if(self.is_vote_valid(author, option)):
-                    update_vote(self.key, author, option["id"])
+        for option in all_options_selected:
+            if(self.is_vote_valid(author, option, len(all_options_selected))):
+                survey = self.key.get()
+                option = survey.options[option["id"]]
+
+                option["number_votes"] += 1
+                option["voters"].append(author)
+                survey.number_votes += 1
+                survey.options[option["id"]] = Utils.toJson(option)
+                survey.put()
 
     def make(post, host):
         """Create personalized json of post."""

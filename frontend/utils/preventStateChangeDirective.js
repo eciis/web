@@ -7,7 +7,7 @@
         return {
             restrict: 'A',
             link: function($scope, element, attrs) {
-                SubmitFormListenerService.addListener(attrs.preventStateChange, element.context, $scope);
+                SubmitFormListenerService.addListener(attrs.preventStateChange, element[0], $scope);
             }
         };
     });

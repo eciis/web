@@ -4,6 +4,8 @@ from google.appengine.ext import ndb
 from google.appengine.ext.ndb.polymodel import PolyModel
 from custom_exceptions.fieldException import FieldException
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
+from service_messages import send_message_notification
+from service_entities import enqueue_task
 from models.event import Event
 from utils import Utils
 
@@ -266,15 +268,60 @@ class Post(PolyModel):
         """Get the number of likes in this post."""
         return len(self.likes)
 
-    def like(self, author_key):
-        """Increment one 'like' in post."""
-        if self.get_like(author_key) is None:
+    @ndb.transactional(retries=10, xg=True)
+    def like(self, user):
+        """Increment one 'like' in post and send notification."""
+        post = self.key.get()
+        Utils._assert(user.is_liked_post(post.key), 
+                    "User already liked this publication", NotAuthorizedException)
+        user.like_post(post.key)
+        if post.get_like(user.key) is None:
             like = Like()
-            like.author = author_key
+            like.author = user.key
             like.id = Utils.getHash(like)
-            self.likes.append(like)
-            self.put()
+            post.likes.append(like)
+            post.put()
 
+        entity_type = 'LIKE_POST'
+        params = {
+                'receiver_key': post.author.urlsafe(),
+                'sender_key': user.key.urlsafe(),
+                'entity_key': post.key.urlsafe(),
+                'entity_type': entity_type,
+                'current_institution': user.current_institution.urlsafe()
+            }
+
+        enqueue_task('post-notification', params)
+
+    @ndb.transactional(retries=10, xg=True)
+    def like_comment(self, user, comment_id=None, reply_id=None):
+        """Increment one 'like' in  comment or reply and send notification.""" 
+        post = self.key.get()
+       
+        comment = post.get_comment(comment_id)
+        if reply_id:
+            comment = comment.get('replies').get(reply_id)
+
+        likes = comment.get('likes')
+        
+        Utils._assert(user.key.urlsafe() in likes,
+                    "User already liked this comment", NotAuthorizedException)
+        likes.append(user.key.urlsafe())
+        post.put()
+
+        entity_type = 'LIKE_COMMENT'
+        
+        user_is_the_author = comment['author_key'] == user.key.urlsafe()
+        if not user_is_the_author:
+            receiver_key = comment['author_key']
+            send_message_notification(
+            receiver_key,
+            user.key.urlsafe(), 
+            entity_type, 
+            user.key.urlsafe(),
+            user.current_institution
+            )
+     
     def dislike(self, author_key):
         """Decrease one 'like' in post."""
         like = self.get_like(author_key)

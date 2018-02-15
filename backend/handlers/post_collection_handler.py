@@ -56,11 +56,11 @@ class PostCollectionHandler(BaseHandler):
                               institution_key)
         post = PostFactory.create(post_data, user.key, institution.key)
         
-        user.key.get().add_permissions_async(["edit_post", "remove_post"], post.key.urlsafe())
+        user.add_permissions_async(["edit_post", "remove_post"], post.key.urlsafe())
 
-        institution.key.get().add_post(post)
+        institution.add_post(post)
 
-        user.key.get().add_post(post)
+        user.add_post(post)
 
         entity_type = PostFactory.get_type(post_data)
 

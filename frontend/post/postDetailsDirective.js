@@ -586,7 +586,8 @@
         commentCtrl.deleteComment = function deleteComment() {
             CommentService.deleteComment(commentCtrl.post.key, commentCtrl.comment.id).then(
                 function success() {
-                    delete commentCtrl.post.data_comments[commentCtrl.comment.id];
+                    commentCtrl.post.data_comments = commentCtrl.post.data_comments
+                        .filter(comment => comment.id !== commentCtrl.comment.id);
                     commentCtrl.post.number_of_comments--;
                     MessageService.showToast('Comentário excluído com sucesso');
                 }, function error(response) {

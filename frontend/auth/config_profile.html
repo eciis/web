@@ -64,9 +64,13 @@
                   <md-subheader class="md-no-sticky">Seus vínculos institucionais:</md-subheader>
                   <md-list-item class="md-3-line" ng-repeat="institution in configProfileCtrl.newUser.institutions track by institution.key">
                     <img style="border-radius: 50%; " ng-src="{{ institution.photo_url }}" width="50px" height="50px" />
-                    <div style="margin-left: 10px;" class="md-list-item-text" layout="column">
-                      <h3>{{ institution.acronym }}</h3>
-                      <h4>{{ institution.name }}</h4>
+                    <div style="margin-left: 10px; margin-top: 9px;" class="md-list-item-text" layout="column">
+                      <a href class="hyperlink" target="_blank" ng-click="configProfileCtrl.goToInstitution(institution.key)">
+                          {{ institution.acronym }}
+                      </a>
+                      <a href class="hyperlink" target="_blank" ng-click="configProfileCtrl.goToInstitution(institution.key)">
+                          {{ institution.name }}
+                      </a>
                     </div>
                     <div layout="row">
                       <md-button class="md-secondary sm-icon-button" title="Editar perfil institucional"

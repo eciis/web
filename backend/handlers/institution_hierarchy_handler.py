@@ -71,4 +71,6 @@ class InstitutionHierarchyHandler(BaseHandler):
             admin.key.urlsafe(),
             user.key.urlsafe(),
             entity_type,
-            institution_link.key.urlsafe())
+            institution_link.key.urlsafe(),
+            user.current_institution
+        )

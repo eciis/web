@@ -57,9 +57,15 @@ class PostCollectionHandler(BaseHandler):
         @ndb.transactional(xg=True, retries=10)
         def create_post(post_data, user, institution):
             created_post = PostFactory.create(post_data, user.key, institution.key)
-            user.add_post(created_post) # O add permissions já está dentro
-            # Colocar isso em uma fila
-            # institution.add_post(created_post)
+            user.add_post(created_post)
+            
+            params = {
+                'institution_key': institution.key.urlsafe(),
+                'created_post_key': created_post.key.urlsafe()
+            }
+
+            enqueue_task('add-post-institution', params)
+
             return created_post
 
         post = create_post(post_data, user, institution)

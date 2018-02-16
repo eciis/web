@@ -302,10 +302,6 @@
             $state.go('app.user.event', {eventKey: event.key});
         };
 
-        postDetailsCtrl.getValues = function getValues(object) {
-            return _.values(object);
-        };
-
         postDetailsCtrl.reloadPost = function reloadPost() {
             var promise = PostService.getPost(postDetailsCtrl.post.key);
             promise.then(function success(response) {

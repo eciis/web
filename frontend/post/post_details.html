@@ -228,7 +228,7 @@
     <load-circle flex ng-if="postDetailsCtrl.isLoadingComments && !postDetailsCtrl.isPostPage"></load-circle>
     <md-divider style="margin-top: 15px;"></md-divider>
     <comment ng-if="!postDetailsCtrl.isLoadingComments || postDetailsCtrl.isPostPage"
-      ng-repeat="comment in postDetailsCtrl.getValues(postDetailsCtrl.post.data_comments) | orderBy:'publication_date'"
+      ng-repeat="comment in postDetailsCtrl.post.data_comments | orderBy:'publication_date'"
       comment="comment" user="postDetailsCtrl.user" post="postDetailsCtrl.post"></comment>
   </div>
   

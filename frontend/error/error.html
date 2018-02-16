@@ -1,13 +1,39 @@
-<div layout-fill md-colors="{background: 'teal-900'}" layout="column" layout-align="center center">
-    <div layout-align="center" layout="column">
-        <md-button disabled="true">
-            <img src="app/images/oms.png" aria-label="OMS Logo" style="height: 20%;filter: brightness(10) grayscale(1);">
-        </md-button>
-        <div layout="row" layout-wrap layout-align="center"> 
-           {{ errorCtrl.status }} : {{ errorCtrl.msg }}
-        </div>
-        <div layout="row" layout-align="center"> 
-           <md-button class="md-warn md-hue-1" ng-click="errorCtrl.goToHome()">Voltar</md-button>
+<md-content flex class="body hide-scrollbar">
+    <div layout="row">
+        <div flex layout="column" md-colors="{background: 'grey-50'}">
+            <div layout="column" >
+                <div class="container">
+                    <div layout="row" flex md-colors="{background: 'grey-50'}">
+                        <div class="card hovercard" flex md-colors="{background: 'light-green'}">
+                            <div class="cardheader inst">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <md-card layout-align="center" style="margin-top: -84px; z-index: 1000; width: 700px; margin-left: auto; margin-right: auto;">
+                <md-toolbar md-colors="{background: 'teal-500'}" layout="row">
+                    <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
+                        <h1>
+                        ERRO {{errorCtrl.status}}
+                        </h1>
+                        <span flex md-truncate></span>
+                    </div>
+                </md-toolbar>
+                <md-card-content>
+                    <h3>
+                        Ocorreu um erro ao acessar esta informação.
+                    </h3>
+                    <h5>
+                        {{ errorCtrl.msg }}
+                    </h5>
+                    <section layout="row" layout="column" layout-align="end center" layout-wrap>
+                        <md-button ng-click="errorCtrl.goToHome()" md-colors="{background: 'teal-500'}">Voltar</md-button>
+                        <md-button ng-click="null" md-colors="{background: 'teal-500'}">Reportar erro</md-button>
+                    </section>
+                </md-card-content>
+            </md-card>
         </div>
     </div>
-</div> 
+</md-content>

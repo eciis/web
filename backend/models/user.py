@@ -181,15 +181,21 @@ class User(ndb.Model):
 
         self.put()
 
-    @ndb.toplevel
-    def add_post(self, post):
-        @ndb.transactional_tasklet(retries=10)
-        def add_post_to_user(user_key, post_key):
-            user = yield user_key.get_async()
-            user.posts.append(post_key)
-            yield user.put_async()
+    # @ndb.toplevel
+    # def add_post(self, post):
+    #     @ndb.transactional_tasklet(retries=10)
+    #     def add_post_to_user(user_key, post_key):
+    #         user = yield user_key.get_async()
+    #         user.posts.append(post_key)
+    #         yield user.put_async()
 
-        add_post_to_user(self.key, post.key)
+    #     add_post_to_user(self.key, post.key)
+
+    def add_post(self, post):
+        user = self.key.get()
+        user.posts.append(post.key)
+        self.add_permissions(["edit_post", "remove_post"], post.key.urlsafe())
+        self.put()
 
     def is_liked_post(self, postKey):
         """Verify if post is liked."""

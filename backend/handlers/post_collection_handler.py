@@ -36,7 +36,6 @@ class PostCollectionHandler(BaseHandler):
 
     @json_response
     @login_required
-    @ndb.toplevel
     def post(self, user):
         """Handle POST Requests."""
         body = json.loads(self.request.body)
@@ -54,13 +53,16 @@ class PostCollectionHandler(BaseHandler):
         user.key.get().check_permission(permission,
                               "You don't have permission to publish post.",
                               institution_key)
-        post = PostFactory.create(post_data, user.key, institution.key)
-        
-        user.add_permissions_async(["edit_post", "remove_post"], post.key.urlsafe())
 
-        institution.add_post(post)
+        @ndb.transactional(xg=True, retries=10)
+        def create_post(post_data, user, institution):
+            created_post = PostFactory.create(post_data, user.key, institution.key)
+            user.add_post(created_post) # O add permissions já está dentro
+            # Colocar isso em uma fila
+            # institution.add_post(created_post)
+            return created_post
 
-        user.add_post(post)
+        post = create_post(post_data, user, institution)
 
         entity_type = PostFactory.get_type(post_data)
 

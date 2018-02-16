@@ -117,16 +117,13 @@ class Institution(ndb.Model):
             self.followers.remove(member.key)
             self.put()
 
-    @ndb.toplevel
     def add_post(self, post):
         """Add a new post to the institution list of posts."""
-        @ndb.transactional_tasklet(retries=10)
-        def add_post_to_institution(institution_key, post_key):
-            institution = yield institution_key.get_async()
-            institution.posts.append(post_key)
-            yield institution.put_async()
-        
-        add_post_to_institution(self.key, post.key)
+        # institution = yield institution_key.get_async()
+        # institution = None
+        institution = self.key.get()
+        institution.posts.append(post.key)
+        institution.put()
 
     def addInvite(self, invite):
         """Add invite in institution."""

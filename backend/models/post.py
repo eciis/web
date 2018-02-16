@@ -272,7 +272,7 @@ class Post(PolyModel):
     def like(self, user):
         """Increment one 'like' in post and send notification."""
         post = self.key.get()
-        Utils._assert(user.is_liked_post(post.key), 
+        Utils._assert(post.key in user.liked_posts, 
                     "User already liked this publication", NotAuthorizedException)
         user.like_post(post.key)
         if post.get_like(user.key) is None:

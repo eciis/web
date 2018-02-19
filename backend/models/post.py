@@ -4,6 +4,7 @@ from google.appengine.ext import ndb
 from google.appengine.ext.ndb.polymodel import PolyModel
 from custom_exceptions.fieldException import FieldException
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
+from custom_exceptions.entityException import EntityException
 from models.event import Event
 from utils import Utils
 
@@ -252,7 +253,9 @@ class Post(PolyModel):
         self.put()
 
     def reply_comment(self, reply, comment_id):
-        comment = self.comments.get(comment_id)
+        comment = self.get_comment(comment_id)
+        Utils._assert(
+            not comment, "This comment has been deleted.", EntityException)
         replies = comment.get('replies')
         replies[reply.id] = Utils.toJson(reply)
 

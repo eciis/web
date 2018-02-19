@@ -127,22 +127,6 @@
             $window.localStorage.userInfo = JSON.stringify(userInfo);
         };
 
-        service.reload = function reload() {
-            var deferred = $q.defer();
-            UserService.load().then(function success(userLoaded) {
-                var firebaseUser = {
-                    accessToken: userInfo.accessToken,
-                    emailVerified: userInfo.emailVerified
-                };
-                configUser(userLoaded, firebaseUser);
-                deferred.resolve(userInfo);
-            }, function error(error) {
-                MessageService.showToast(error);
-                deferred.reject(error);
-            });
-            return deferred.promise;
-        };
-
         service.sendEmailVerification = function sendEmailVerification(user) {
             var auth_user = user || authObj.$getAuth();
             auth_user.sendEmailVerification().then(
@@ -156,7 +140,7 @@
         service.resetPassword = function resetPassword(email) {
             authObj.$sendPasswordResetEmail(email).then(
             function success() {
-                MessageService.showToast('Você receberá um email para resetar sua senha.');
+                MessageService.showToast('Você receberá um email para redefinir sua senha.');
             }, function error(error) {
                 console.error(error);
             });

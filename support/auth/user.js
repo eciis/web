@@ -5,10 +5,6 @@ function User(data) {
     _.extend(this, data);
 }
 
-var SENT = "sent";
-
-var USER = "USER";
-
 User.prototype.isInactive = function isInactive() {
     var notActive = this.state != 'active';
     return notActive;

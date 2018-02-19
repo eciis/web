@@ -9,8 +9,6 @@
             
         loginCtrl.user = {};
 
-        loginCtrl.isRequestInvite = false;
-
         var redirectPath = $stateParams.redirect;
 
         loginCtrl.login = function login() {
@@ -19,10 +17,6 @@
                 redirectTo(redirectPath);
             });
             return promise;
-        };
-
-        loginCtrl.limpar = function limpar() {
-            loginCtrl.user = {};
         };
 
         loginCtrl.loginWithEmailPassword = function loginWithEmailPassword() {
@@ -51,14 +45,6 @@
             $mdDialog.show(confirm).then(function(email) {
                 AuthService.resetPassword(email);
             });
-        };
-
-        loginCtrl.goToLandingPage = function goToLandingPage() {
-            $window.open(Config.LANDINGPAGE_URL, '_self');
-        };
-
-        loginCtrl.requestInvite = function requestInvite() {
-            loginCtrl.isRequestInvite = !loginCtrl.isRequestInvite;
         };
 
         function redirectTo(path) {

@@ -8,17 +8,6 @@
 
         var USER_URI = "/api/user";
 
-        service.save = function save(patch) {
-            patch = JSON.parse(angular.toJson(patch));
-            var deffered = $q.defer();
-            $http.patch(USER_URI, patch).then(function success(info) {
-                deffered.resolve(info.data);
-            }, function error(data) {
-                deffered.reject(data);
-            });
-            return deffered.promise;
-        };
-
         service.load = function load() {
             var deffered = $q.defer();
             $http.get(USER_URI).then(function loadUser(info) {

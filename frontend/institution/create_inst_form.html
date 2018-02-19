@@ -271,6 +271,7 @@
                                     </md-input-container>
                                 </form>
                             </div>
+                            <load-circle layout="row" layout-align="center center" ng-if="configInstCtrl.loadingSaveInstitution"></load-circle>
                         </md-card-content>
                         <md-card-actions layout="row" layout-align="end center">
                             <md-button class="md-raised" md-colors="{background: 'teal-500'}" ng-click="configInstCtrl.submit($event)">

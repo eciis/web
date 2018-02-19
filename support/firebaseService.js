@@ -22,7 +22,7 @@
         });
 
         service.setup = function setup() {
-            var reportsRef = firebaseRef.child("reports/");
+            var reportsRef = firebaseRef.child("reports/"+AuthService.getCurrentUser().uid);
             reportsArray = $firebaseArray(reportsRef);
         };
     });

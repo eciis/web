@@ -6,14 +6,26 @@
 
     <md-card>
         <md-card-content>
-            <md-list-item ng-repeat="report in controller.reports" class="noright md-2-line" ng-click="null">
+            <md-list-item ng-repeat="report in controller.reports" class="noright md-2-line" ng-click="controller.showReport(report, $event)">
                 <img alt="Foto" ng-src="/app/images/avatar.png" class="md-avatar" />
                 <div class="md-list-item-text">
                     <h3>{{ report.title }}</h3>
-                    <h4>{{ report.timestamp | amUtc | amLocal | amCalendar:referenceTime:formats  }}</h4>
+                    <h4>{{ report.timestamp | amUtc | amLocal | amCalendar:referenceTime:formats }}</h4>
                 </div>
                 <md-icon>done</md-icon>
             </md-list-item>
         </md-card-content>
     </md-card>
+</div>
+
+<div style="visibility: hidden">
+    <div class="md-dialog-container" id="showReport" layout="row" layout-align="center center">
+        <md-dialog layout-padding flex-gt-sm="60" flex="90">
+            <h2>{{ controller.selectedReport.title }}</h2>
+            <p>
+                {{ controller.selectedReport.description }}
+            </p>
+            <h4>{{ controller.selectedReport.timestamp | amUtc | amLocal | amCalendar:referenceTime:format }}</h4>
+        </md-dialog>
+    </div>
 </div>

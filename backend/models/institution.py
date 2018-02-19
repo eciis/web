@@ -119,8 +119,6 @@ class Institution(ndb.Model):
 
     def add_post(self, post):
         """Add a new post to the institution list of posts."""
-        # institution = yield institution_key.get_async()
-        # institution = None
         institution = self.key.get()
         institution.posts.append(post.key)
         institution.put()

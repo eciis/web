@@ -753,6 +753,10 @@
             $state.go('app.post', {postKey: shareCtrl.post.key});
         };
 
+        shareCtrl.showPdfFiles = function showPdfFiles() {
+            return !_.isEmpty(shareCtrl.post.pdf_files);
+        };
+
         function makePost(post){
             if(shareCtrl.isEvent()){
                 shareCtrl.newPost.shared_event = post.key;

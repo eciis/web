@@ -1,4 +1,4 @@
-<md-dialog flex flex-gt-md="40" layout="row">
+<md-dialog flex-gt-md="40" layout="row" style="max-height: 90%;">
   <div flex>
     <md-card flex>
       <md-card-header>
@@ -24,19 +24,21 @@
               <span class="md-subhead">por {{ sharePostCtrl.post.author }}</span>
             </md-card-header-text>
           </md-card-header>
-          <md-card-content>
+          <md-card-content layout-margin>
             <div class="image-view" ng-if="sharePostCtrl.showImage() && !sharePostCtrl.isEvent()">
               <img class="md-card-image" style="border-radius: 3%;" ng-src="{{ sharePostCtrl.post.photo_url }}" />
             </div>
-            <p></p>
             <span ng-if="!sharePostCtrl.isSurvey() && !sharePostCtrl.isEvent()" class="md-text">
               <b>{{ sharePostCtrl.post.title }}</b>
             </span>
             <event-details ng-if="sharePostCtrl.isEvent()" event="sharePostCtrl.post" is-event-page=false></event-details>
-            <span class="md-subhead" ng-if="!sharePostCtrl.isEvent()" ng-bind-html="sharePostCtrl.postToURL(sharePostCtrl.post.text)"></span>
-            <pdf-view pdf-files='sharePostCtrl.post.pdf_files' is-editing="false"></pdf-view>
+            <span class="md-subhead" ng-if="!sharePostCtrl.isEvent() && sharePostCtrl.post.text" ng-bind-html="sharePostCtrl.postToURL(sharePostCtrl.post.text)"></span>
+            <pdf-view ng-if="sharePostCtrl.showPdfFiles()" pdf-files='sharePostCtrl.post.pdf_files' is-editing="false"></pdf-view>
             <survey-details ng-if="sharePostCtrl.isSurvey()" post="sharePostCtrl.post" posts="sharePostCtrl.posts" user="sharePostCtrl.user"
-              isdialog="true"></survey-details>
+              isdialog="true" hide show-gt-xs></survey-details>
+            <div ng-if="sharePostCtrl.isSurvey()" hide-gt-xs layout-padding>
+              <p layout="row"><b>Essa visualização não está otimizada para mobile!</b></p>
+            </div>
           </md-card-content>
         </md-card>
       </md-card-content>

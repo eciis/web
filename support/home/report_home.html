@@ -6,9 +6,12 @@
 
     <md-card>
         <md-card-content>
-            <md-list-item ng-repeat="report in controller.reports" class="noright" ng-click="null">
+            <md-list-item ng-repeat="report in controller.reports" class="noright md-2-line" ng-click="null">
                 <img alt="Foto" ng-src="/app/images/avatar.png" class="md-avatar" />
-                <p>{{ report.title }}</p>
+                <div class="md-list-item-text">
+                    <h3>{{ report.title }}</h3>
+                    <h4>{{ report.timestamp | amUtc | amLocal | amCalendar:referenceTime:formats  }}</h4>
+                </div>
                 <md-icon>done</md-icon>
             </md-list-item>
         </md-card-content>

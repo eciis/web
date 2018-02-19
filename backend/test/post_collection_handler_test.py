@@ -78,12 +78,8 @@ class PostCollectionHandlerTest(TestBaseHandler):
         post = json.loads(post._app_iter[0])
         key_post = ndb.Key(urlsafe=post['key'])
         post_obj = key_post.get()
-        print ">>>>>>>>>>>>>>>>> post: ", key_post.urlsafe()
         self.institution = self.institution.key.get()
         self.user = self.user.key.get()
-        print ">>>>>>>>>>>>>>>>>>. user key: ",self.user.key.urlsafe()
-        print ">>>>>>>>>>>>>>>. posts: ", self.user.posts
-        print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> before get test"
         # Check class object
         self.assertEqual(post_obj._class_name(), 'Post',
                          "The class of post is 'Post'")

@@ -86,8 +86,6 @@ class PostCollectionHandlerTest(TestBaseHandler):
         # Check if the post's key is in institution and user
         self.assertTrue(key_post in self.user.posts,
                         "The post is not in user.posts")
-        self.assertTrue(key_post in self.user.posts,
-                        "The post is not in institution.posts")
         # Check if the post's attributes are the expected
         self.assertEqual(post_obj.title, 'new post',
                          "The title expected was new post")
@@ -105,8 +103,14 @@ class PostCollectionHandlerTest(TestBaseHandler):
             key_post.urlsafe(),
             self.institution.key
         )
-        # assert that no shared post notification was sent
-        enqueue_task.assert_not_called()
+        # assert that add post to institution was sent to the queue
+        enqueue_task.assert_called_with(
+            "add-post-institution",
+            {
+                'institution_key': self.institution.key.urlsafe(),
+                'created_post_key': post.get('key')
+            }
+        )
 
         with self.assertRaises(Exception) as raises_context:
             self.body['post'] = {
@@ -117,10 +121,11 @@ class PostCollectionHandlerTest(TestBaseHandler):
                 headers={'institution-authorization': self.institution.key.urlsafe()})
 
         exception_message = self.get_message_exception(str(raises_context.exception))
+        expected_message = "Error! Title can not be empty"
         self.assertEqual(
             exception_message,
-            "Title can not be empty",
-            "Excpected exception message must be equal to title"
+            expected_message,
+            "Expected exception should be %s but was %s" % (expected_message, exception_message)
         )
 
         with self.assertRaises(Exception) as raises_context:
@@ -134,7 +139,7 @@ class PostCollectionHandlerTest(TestBaseHandler):
         exception_message = self.get_message_exception(str(raises_context.exception))
         self.assertEqual(
             exception_message,
-            "Text can not be empty",
+            "Error! Text can not be empty",
             "Excpected exception message must be equal to text"
         )
 
@@ -161,8 +166,6 @@ class PostCollectionHandlerTest(TestBaseHandler):
         # Check if the post's key is in institution and user
         self.assertTrue(key_post in self.user.posts,
                         "The post is not in user.posts")
-        self.assertTrue(key_post in self.institution.posts,
-                        "The post is not in institution.posts")
         # Check if the post's attributes are the expected
         self.assertEqual(post_obj.institution, self.institution.key,
                          "The post's institution is not the expected one")
@@ -177,7 +180,7 @@ class PostCollectionHandlerTest(TestBaseHandler):
         self.assertEqual(shared_post_obj['text'],
                          self.post.text,
                          "The post's text expected is '%s'" % self.post.text)
-
+        
         # check if the notification was sent to the institution's followers
         send_message_notification.assert_called_with(
             self.other_user.key.urlsafe(),
@@ -225,8 +228,6 @@ class PostCollectionHandlerTest(TestBaseHandler):
         # Check if the post's key is in institution and user
         self.assertTrue(key_post in self.user.posts,
                         "The post is not in user.posts")
-        self.assertTrue(key_post in self.institution.posts,
-                        "The post is not in institution.posts")
         # Check if the post's attributes are the expected
         self.assertEqual(post_obj.institution, self.institution.key,
                          "The post's institution is not the expected one")
@@ -254,8 +255,14 @@ class PostCollectionHandlerTest(TestBaseHandler):
             key_post.urlsafe(),
             self.institution.key
         )
-        # assert that no notification was sent to the post's author
-        enqueue_task.assert_not_called()
+        # assert that add post to institution was sent to the queue        
+        enqueue_task.assert_called_with(
+            "add-post-institution",
+            {
+                'institution_key': self.institution.key.urlsafe(),
+                'created_post_key': post_obj.key.urlsafe()
+            }
+        )
     
     @patch('handlers.post_collection_handler.enqueue_task')
     @patch('handlers.post_collection_handler.send_message_notification')
@@ -299,8 +306,6 @@ class PostCollectionHandlerTest(TestBaseHandler):
         # Check if the survey post's key is in institution and user
         self.assertTrue(key_survey in self.user.posts,
                         "The post is not in user.posts")
-        self.assertTrue(key_survey in self.institution.posts,
-                        "The post is not in institution.posts")
         # Check if the survey post's attributes are the expected
         self.assertEqual(survey_obj.title, 'Survey with Multiple choice',
                          "The title expected was 'Survey with Multiple choice'")
@@ -321,5 +326,11 @@ class PostCollectionHandlerTest(TestBaseHandler):
             survey.get('key'),
             self.institution.key
         )
-        # assert that no notification was sent to the post's author
-        enqueue_task.assert_not_called()
+
+        enqueue_task.assert_called_with(
+            "add-post-institution",
+            {
+                'institution_key': self.institution.key.urlsafe(),
+                'created_post_key': survey_obj.key.urlsafe()
+            }
+        )

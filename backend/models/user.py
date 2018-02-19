@@ -181,6 +181,12 @@ class User(ndb.Model):
 
         self.put()
 
+    def add_post(self, post):
+        user = self.key.get()
+        user.posts.append(post.key)
+        user.add_permissions(["edit_post", "remove_post"], post.key.urlsafe())
+        user.put()
+
     def is_liked_post(self, postKey):
         """Verify if post is liked."""
         return postKey in self.liked_posts

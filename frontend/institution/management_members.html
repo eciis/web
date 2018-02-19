@@ -57,7 +57,7 @@
         <md-card-content style="margin-top: -40px;" layout-margin>
           <md-list flex>
             <md-list-item class="list-item-dense" md-colors="{background: 'grey-300'}"
-              ng-repeat="member in manageMemberCtrl.members | filter: manageMemberCtrl.currentMember" ng-click="null" flex-xs>
+              ng-repeat="member in manageMemberCtrl.members | filter: manageMemberCtrl.currentMember" ng-click="manageMemberCtrl.showUserProfile(member.key, $event)" flex-xs>
               <img title="{{member.name}}" ng-src="{{member.photo_url}}" class="md-avatar" style="margin: 0 15px 0 -15px; width: 60px; height: 60px;"/>
               <div layout="column">
                  <b style="position: relative; margin-top: 20px; font-size: 15px;">{{ member.name }}</b>

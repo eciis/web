@@ -36,12 +36,12 @@ class PostCollectionHandler(BaseHandler):
 
     @json_response
     @login_required
-    @ndb.transactional(xg=True)
     def post(self, user):
         """Handle POST Requests."""
-        data = json.loads(self.request.body)
-        post_data = data['post']
+        body = json.loads(self.request.body)
+        post_data = body['post']
         institution_key = post_data['institution']
+
         institution = ndb.Key(urlsafe=institution_key).get()
 
         Utils._assert(institution.state == 'inactive',
@@ -49,48 +49,49 @@ class PostCollectionHandler(BaseHandler):
                       NotAuthorizedException)
 
         permission = get_permission(post_data)
-        user.check_permission(permission,
+
+        user.key.get().check_permission(permission,
                               "You don't have permission to publish post.",
                               institution_key)
 
-        try:
-            post = PostFactory.create(post_data, user.key, institution.key)
-            post.put()
-            user.add_permissions(["edit_post", "remove_post"], post.key.urlsafe())
+        @ndb.transactional(xg=True, retries=10)
+        def create_post(post_data, user, institution):
+            created_post = PostFactory.create(post_data, user.key, institution.key)
+            user.add_post(created_post)
 
-            """ Update Institution."""
-            institution.posts.append(post.key)
-            institution.put()
+            params = {
+                'institution_key': institution.key.urlsafe(),
+                'created_post_key': created_post.key.urlsafe()
+            }
 
-            """ Update User."""
-            user.posts.append(post.key)
-            user.put()
+            enqueue_task('add-post-institution', params)
 
-            entity_type = PostFactory.get_type(post_data)
-            for follower in institution.followers:
-                if follower != user.key:
-                    send_message_notification(
-                        follower.urlsafe(),
-                        user.key.urlsafe(),
-                        entity_type,
-                        post.key.urlsafe(),
-                        user.current_institution
-                    )
+            return created_post
 
-            if(post.shared_post):
-                entity_type = 'SHARED_POST'
-                params = {
-                    'receiver_key': post.author.urlsafe(),
-                    'sender_key': user.key.urlsafe(),
-                    'entity_key': post.key.urlsafe(),
-                    'entity_type': entity_type,
-                    'current_institution': user.current_institution.urlsafe()
-                }
+        post = create_post(post_data, user, institution)
 
-                enqueue_task('post-notification', params)
+        entity_type = PostFactory.get_type(post_data)
 
-            self.response.write(json.dumps(post.make(self.request.host)))
-        except Exception as error:
-            self.response.set_status(Utils.BAD_REQUEST)
-            self.response.write(Utils.getJSONError(
-                Utils.BAD_REQUEST, error.message))
+        for follower in institution.followers:
+            if follower != user.key:
+                send_message_notification(
+                    follower.urlsafe(),
+                    user.key.urlsafe(),
+                    entity_type,
+                    post.key.urlsafe(),
+                    user.current_institution
+                )
+
+        if(post.shared_post):
+            entity_type = 'SHARED_POST'
+            params = {
+                'receiver_key': post.author.urlsafe(),
+                'sender_key': user.key.urlsafe(),
+                'entity_key': post.key.urlsafe(),
+                'entity_type': entity_type,
+                'current_institution': user.current_institution.urlsafe()
+            }
+
+            enqueue_task('post-notification', params)
+
+        self.response.write(json.dumps(post.make(self.request.host)))

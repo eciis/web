@@ -193,6 +193,11 @@
             }
         };
 
+        configProfileCtrl.goToInstitution = function goToInstitution(institutionKey) {
+            const url = $state.href('app.institution.timeline', {institutionKey: institutionKey});
+            window.open(url, '_blank');
+        };
+
         function deleteUser() {
             var patch = jsonpatch.generate(observer);
             var promise = UserService.save(patch);

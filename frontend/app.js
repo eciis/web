@@ -275,10 +275,10 @@
                     }
                 }
             })
-            .state("error", {
+            .state("app.error", {
                 url: "/error",
                 views: {
-                    main: {
+                    content: {
                         templateUrl: "app/error/error.html",
                         controller: "ErrorController as errorCtrl"
                     }

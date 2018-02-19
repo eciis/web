@@ -255,8 +255,14 @@ class PostCollectionHandlerTest(TestBaseHandler):
             key_post.urlsafe(),
             self.institution.key
         )
-        # assert that add post to institution was sent to the queue
-        enqueue_task.assert_called()
+        # assert that add post to institution was sent to the queue        
+        enqueue_task.assert_called_with(
+            "add-post-institution",
+            {
+                'institution_key': self.institution.key.urlsafe(),
+                'created_post_key': post_obj.key.urlsafe()
+            }
+        )
     
     @patch('handlers.post_collection_handler.enqueue_task')
     @patch('handlers.post_collection_handler.send_message_notification')

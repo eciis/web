@@ -6,7 +6,11 @@
 
     <md-card>
         <md-card-content>
-            <md-list-item ng-repeat="report in controller.reports" class="noright md-2-line" ng-click="controller.showReport(report, $event)">
+            <div layout="row" layout-align="center center" ng-if="controller.reports.length <= 0">
+                <md-progress-circular ng-if="controller.loading" md-mode="indeterminate"></md-progress-circular>
+                <h4 ng-if="!controller.loading">Você ainda não reportou nenhum problema!</h4>
+            </div>
+            <md-list-item  ng-if="controller.reports" ng-repeat="report in controller.reports" class="noright md-2-line" ng-click="controller.showReport(report, $event)">
                 <img alt="Foto" ng-src="/app/images/avatar.png" class="md-avatar" />
                 <div class="md-list-item-text">
                     <h3>{{ report.title }}</h3>
@@ -20,12 +24,22 @@
 
 <div style="visibility: hidden">
     <div class="md-dialog-container" id="showReport" layout="row" layout-align="center center">
-        <md-dialog layout-padding flex-gt-sm="60" flex="90">
-            <h2>{{ controller.selectedReport.title }}</h2>
-            <p>
-                {{ controller.selectedReport.description }}
-            </p>
-            <h4>{{ controller.selectedReport.timestamp | amUtc | amLocal | amCalendar:referenceTime:format }}</h4>
+        <md-dialog flex-gt-md="50" flex="95">
+            <md-toolbar md-colors="{background: 'teal-800'}">
+                <div class="md-toolbar-tools">
+                    <span class="md-title">{{controller.selectedReport.title}}</span>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="controller.cancelDialog()">
+                        <md-icon>close</md-icon>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <div layout-padding layout="column">
+                <p>
+                    {{ controller.selectedReport.description }}
+                </p>
+                <h4>{{ controller.selectedReport.timestamp | amUtc | amLocal | amCalendar:referenceTime:format }}</h4>
+            </div>
         </md-dialog>
     </div>
 </div>

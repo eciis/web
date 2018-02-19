@@ -10,6 +10,8 @@
 
         controller.selectedReport = null;
 
+        controller.loading = true;
+
         controller.showReport = function showReport(report, event) {
             controller.selectedReport = report;
             $mdDialog.show({
@@ -20,9 +22,14 @@
             });
         };
 
+        controller.cancelDialog = function cancelDialog() {
+            $mdDialog.cancel();
+        };
+
         (function main() {
             FirebaseService.getReports().then(function (reports) {
                 controller.reports = reports;
+                controller.loading = false;
             });
         })();
     });

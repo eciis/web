@@ -78,16 +78,18 @@ class PostCollectionHandlerTest(TestBaseHandler):
         post = json.loads(post._app_iter[0])
         key_post = ndb.Key(urlsafe=post['key'])
         post_obj = key_post.get()
+        print ">>>>>>>>>>>>>>>>> post: ", key_post.urlsafe()
         self.institution = self.institution.key.get()
         self.user = self.user.key.get()
+        print ">>>>>>>>>>>>>>>>>>. user key: ",self.user.key.urlsafe()
+        print ">>>>>>>>>>>>>>>. posts: ", self.user.posts
+        print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> before get test"
         # Check class object
         self.assertEqual(post_obj._class_name(), 'Post',
                          "The class of post is 'Post'")
         # Check if the post's key is in institution and user
         self.assertTrue(key_post in self.user.posts,
                         "The post is not in user.posts")
-        self.assertTrue(key_post in self.user.posts,
-                        "The post is not in institution.posts")
         # Check if the post's attributes are the expected
         self.assertEqual(post_obj.title, 'new post',
                          "The title expected was new post")
@@ -105,8 +107,14 @@ class PostCollectionHandlerTest(TestBaseHandler):
             key_post.urlsafe(),
             self.institution.key
         )
-        # assert that no shared post notification was sent
-        enqueue_task.assert_not_called()
+        # assert that add post to institution was sent to the queue
+        enqueue_task.assert_called_with(
+            "add-post-institution",
+            {
+                'institution_key': self.institution.key.urlsafe(),
+                'created_post_key': post.get('key')
+            }
+        )
 
         with self.assertRaises(Exception) as raises_context:
             self.body['post'] = {
@@ -162,8 +170,6 @@ class PostCollectionHandlerTest(TestBaseHandler):
         # Check if the post's key is in institution and user
         self.assertTrue(key_post in self.user.posts,
                         "The post is not in user.posts")
-        self.assertTrue(key_post in self.institution.posts,
-                        "The post is not in institution.posts")
         # Check if the post's attributes are the expected
         self.assertEqual(post_obj.institution, self.institution.key,
                          "The post's institution is not the expected one")
@@ -178,7 +184,7 @@ class PostCollectionHandlerTest(TestBaseHandler):
         self.assertEqual(shared_post_obj['text'],
                          self.post.text,
                          "The post's text expected is '%s'" % self.post.text)
-
+        
         # check if the notification was sent to the institution's followers
         send_message_notification.assert_called_with(
             self.other_user.key.urlsafe(),
@@ -226,8 +232,6 @@ class PostCollectionHandlerTest(TestBaseHandler):
         # Check if the post's key is in institution and user
         self.assertTrue(key_post in self.user.posts,
                         "The post is not in user.posts")
-        self.assertTrue(key_post in self.institution.posts,
-                        "The post is not in institution.posts")
         # Check if the post's attributes are the expected
         self.assertEqual(post_obj.institution, self.institution.key,
                          "The post's institution is not the expected one")
@@ -255,8 +259,8 @@ class PostCollectionHandlerTest(TestBaseHandler):
             key_post.urlsafe(),
             self.institution.key
         )
-        # assert that no notification was sent to the post's author
-        enqueue_task.assert_not_called()
+        # assert that add post to institution was sent to the queue
+        enqueue_task.assert_called()
     
     @patch('handlers.post_collection_handler.enqueue_task')
     @patch('handlers.post_collection_handler.send_message_notification')
@@ -300,8 +304,6 @@ class PostCollectionHandlerTest(TestBaseHandler):
         # Check if the survey post's key is in institution and user
         self.assertTrue(key_survey in self.user.posts,
                         "The post is not in user.posts")
-        self.assertTrue(key_survey in self.institution.posts,
-                        "The post is not in institution.posts")
         # Check if the survey post's attributes are the expected
         self.assertEqual(survey_obj.title, 'Survey with Multiple choice',
                          "The title expected was 'Survey with Multiple choice'")
@@ -322,5 +324,11 @@ class PostCollectionHandlerTest(TestBaseHandler):
             survey.get('key'),
             self.institution.key
         )
-        # assert that no notification was sent to the post's author
-        enqueue_task.assert_not_called()
+
+        enqueue_task.assert_called_with(
+            "add-post-institution",
+            {
+                'institution_key': self.institution.key.urlsafe(),
+                'created_post_key': survey_obj.key.urlsafe()
+            }
+        )

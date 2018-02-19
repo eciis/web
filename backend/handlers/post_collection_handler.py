@@ -58,7 +58,7 @@ class PostCollectionHandler(BaseHandler):
         def create_post(post_data, user, institution):
             created_post = PostFactory.create(post_data, user.key, institution.key)
             user.add_post(created_post)
-            
+
             params = {
                 'institution_key': institution.key.urlsafe(),
                 'created_post_key': created_post.key.urlsafe()

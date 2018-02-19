@@ -127,7 +127,7 @@ case "$1" in
 
         BACKEND_DOMAIN="backend.$DOMAIN"
         
-        echo "=========== Staring Google App Engine Deployment ==========="
+        echo "=========== Starting Google App Engine Deployment ==========="
 
         if [ ! -z $2 ]; then
             version=$2

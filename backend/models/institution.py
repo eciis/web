@@ -117,6 +117,12 @@ class Institution(ndb.Model):
             self.followers.remove(member.key)
             self.put()
 
+    def add_post(self, post):
+        """Add a new post to the institution list of posts."""
+        institution = self.key.get()
+        institution.posts.append(post.key)
+        institution.put()
+
     def addInvite(self, invite):
         """Add invite in institution."""
         self.invite = invite.key

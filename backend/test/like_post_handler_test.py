@@ -96,7 +96,7 @@ class LikePostHandlerTest(TestBaseHandler):
             'current_institution': self.institution.key.urlsafe()
         }
 
-        #enqueue_task.assert_called_with('post-notification', params)
+        enqueue_task.assert_called_with('post-notification', params)
 
         # Call the post method again
         with self.assertRaises(Exception) as exc:

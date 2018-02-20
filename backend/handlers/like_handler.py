@@ -72,7 +72,7 @@ class LikeHandler(BaseHandler):
                     receiver_key,
                     user.key.urlsafe(), 
                     entity_type, 
-                    user.key.urlsafe(),
+                    post_key,
                     user.current_institution
                 )
         else:

@@ -118,7 +118,8 @@
         };
 
         eventCtrl.getOfficialSite = function getOfficialSite() {
-           return Utils.limitString(eventCtrl.event.official_site, 80);
+            if(eventCtrl.event)
+                return Utils.limitString(eventCtrl.event.official_site, 80);
         };
 
         function isInstitutionAdmin(event) {

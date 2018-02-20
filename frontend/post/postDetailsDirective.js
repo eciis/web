@@ -567,6 +567,8 @@
                     commentCtrl.newReply = null;
                     commentCtrl.saving = false;
                 },function error(error) {
+                    commentCtrl.newReply = null;
+                    commentCtrl.saving = false;
                     MessageService.showToast(error.data.msg);
                 });
             }
@@ -755,6 +757,10 @@
                 $state.go('app.user.event', {eventKey: shareCtrl.post.key});
             }
             $state.go('app.post', {postKey: shareCtrl.post.key});
+        };
+
+        shareCtrl.showPdfFiles = function showPdfFiles() {
+            return !_.isEmpty(shareCtrl.post.pdf_files);
         };
 
         function makePost(post){

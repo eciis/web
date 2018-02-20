@@ -116,6 +116,7 @@
 
                 promise = $mdDialog.show(confirm);
                 promise.then(function() {
+                    configInstCtrl.loadingSaveInstitution = true;
                     updateInstitution();
                 }, function() {
                     configInstCtrl.hasSubmitted = false;
@@ -261,6 +262,7 @@
             configInstCtrl.user.updateInstProfile(institution);
             AuthService.save();
             changeInstitution(institution);
+            configInstCtrl.loadingSaveInstitution = false;
             MessageService.showToast('Dados da instituição salvos com sucesso.');
             $state.go('app.user.home');
         }

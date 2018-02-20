@@ -74,6 +74,11 @@
                 postDetailsCtrl.post.shared_event;
         };
 
+        postDetailsCtrl.isSharedSurvey = function isSharedSurvey() {
+            return postDetailsCtrl.post.shared_post && 
+                postDetailsCtrl.post.shared_post.type_survey;
+        };
+
         postDetailsCtrl.getCSSClassPost = function getCSSClassPost() {
             return (postDetailsCtrl.isDeleted(postDetailsCtrl.post) || 
                     postDetailsCtrl.isDeletedEvent(postDetailsCtrl.post) || 
@@ -102,14 +107,14 @@
             return postDetailsCtrl.post.type_survey;
         };
 
+        postDetailsCtrl.showCommentInput = function showCommentInput() {
+            return (postDetailsCtrl.showComments || postDetailsCtrl.isPostPage) && !postDetailsCtrl.isDeleted(postDetailsCtrl.post) && !postDetailsCtrl.isInstInactive();
+        };
+
         postDetailsCtrl.showPost = function showPost() {
             return !postDetailsCtrl.showSurvey() && !postDetailsCtrl.isShared();
         };
-
-        postDetailsCtrl.showSurvey = function showSurvey() {
-            return postDetailsCtrl.post.type_survey;
-        };
-
+        
         postDetailsCtrl.showTextPost = function showTextPost(){
             return !postDetailsCtrl.isDeleted(postDetailsCtrl.post) &&
                      postDetailsCtrl.showPost();
@@ -119,6 +124,10 @@
             return postDetailsCtrl.isAuthorized() &&
                 !postDetailsCtrl.isDeleted(postDetailsCtrl.post);
         };
+
+        postDetailsCtrl.showActivityButtons = function showActivityButtons() {
+            return !postDetailsCtrl.showSurvey() && !postDetailsCtrl.isSharedSurvey();
+        }
 
         postDetailsCtrl.disableButton = function disableButton() {
             return postDetailsCtrl.savingLike ||
@@ -302,10 +311,6 @@
             $state.go('app.user.event', {eventKey: event.key});
         };
 
-        postDetailsCtrl.getValues = function getValues(object) {
-            return _.values(object);
-        };
-
         postDetailsCtrl.reloadPost = function reloadPost() {
             var promise = PostService.getPost(postDetailsCtrl.post.key);
             promise.then(function success(response) {
@@ -321,7 +326,7 @@
         postDetailsCtrl.loadComments = function refreshComments() {
             var promise  =  CommentService.getComments(postDetailsCtrl.post.comments);
             promise.then(function success(response) {
-                postDetailsCtrl.post.data_comments = response.data;
+                postDetailsCtrl.post.data_comments = _.values(response.data);
                 postDetailsCtrl.post.number_of_comments = _.size(postDetailsCtrl.post.data_comments);
                 postDetailsCtrl.isLoadingComments = false;
             }, function error(response) {
@@ -358,7 +363,7 @@
 
         function addComment(post, comment) {
             var postComments = postDetailsCtrl.post.data_comments;
-            postComments[comment.id] = comment;
+            postComments.push(comment);
             post.number_of_comments += 1;
         }
 
@@ -445,8 +450,10 @@
             postDetailsCtrl.post.number_of_comments : "+99";
         };
 
-        postDetailsCtrl.getButtonColor = function getButtonColor(condition=true) {
-            var color = condition && !postDetailsCtrl.isDeleted() ? 'light-green' : 'grey';
+        postDetailsCtrl.getButtonColor = function getButtonColor(condition=true, isCommentButton) {
+            var hasComments = (postDetailsCtrl.post.number_of_comments > 0 && isCommentButton);
+            var isNotDeletedOrHasComments = !postDetailsCtrl.isDeleted() || hasComments;
+            var color = condition && isNotDeletedOrHasComments ? 'light-green' : 'grey';
             return {background: color};
         };
 
@@ -567,6 +574,8 @@
                     commentCtrl.newReply = null;
                     commentCtrl.saving = false;
                 },function error(error) {
+                    commentCtrl.newReply = null;
+                    commentCtrl.saving = false;
                     MessageService.showToast(error.data.msg);
                 });
             }
@@ -586,7 +595,8 @@
         commentCtrl.deleteComment = function deleteComment() {
             CommentService.deleteComment(commentCtrl.post.key, commentCtrl.comment.id).then(
                 function success() {
-                    delete commentCtrl.post.data_comments[commentCtrl.comment.id];
+                    commentCtrl.post.data_comments = commentCtrl.post.data_comments
+                        .filter(comment => comment.id !== commentCtrl.comment.id);
                     commentCtrl.post.number_of_comments--;
                     MessageService.showToast('Comentário excluído com sucesso');
                 }, function error(response) {
@@ -754,6 +764,10 @@
                 $state.go('app.user.event', {eventKey: shareCtrl.post.key});
             }
             $state.go('app.post', {postKey: shareCtrl.post.key});
+        };
+
+        shareCtrl.showPdfFiles = function showPdfFiles() {
+            return !_.isEmpty(shareCtrl.post.pdf_files);
         };
 
         function makePost(post){

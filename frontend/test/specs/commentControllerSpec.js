@@ -124,12 +124,12 @@
                 };
             });
             spyOn(commentService, 'deleteComment').and.callThrough();
-            commentCtrl.post.data_comments = {5: comment};
+            commentCtrl.post.data_comments = [comment];
             httpBackend.expect('DELETE', POSTS_URI + '/' + posts[0].key + '/comments/' + "5").respond(comment);
             commentCtrl.confirmCommentDeletion("$event");
             httpBackend.flush();
             expect(commentService.deleteComment).toHaveBeenCalledWith(commentCtrl.post.key, 5);
-            expect(commentCtrl.post.data_comments).toEqual({});
+            expect(commentCtrl.post.data_comments).toEqual([]);
             expect(mdDialog.confirm).toHaveBeenCalled();
             expect(mdDialog.show).toHaveBeenCalled();
         });

@@ -5,7 +5,7 @@
     var app = angular.module("app");
 
     app.controller("PostController", function PostController($mdDialog, PostService, AuthService,
-            $mdToast, $rootScope, ImageService, MessageService, $q, $scope, $state, PdfService) {
+            $mdToast, $rootScope, ImageService, MessageService, $q, $scope, $state, PdfService, SubmitFormListenerService) {
         var postCtrl = this;
 
         postCtrl.post = {};
@@ -18,7 +18,7 @@
         postCtrl.pdfFiles = [];
         postCtrl.deletedFiles = [];
         postCtrl.hasVideo = false;
-        postCtrl.videoRegex = '(?:http(s)?:\/\/)?(www\.)?youtube\.com\/watch\\?v=.+';
+        postCtrl.videoRegex = '(https?\:\/\/)?((www\.)?youtube\.com|youtu\.?be)\/.+';
         postCtrl.options = [];
         var option_empty = {'text': '',
                             'number_votes': 0,

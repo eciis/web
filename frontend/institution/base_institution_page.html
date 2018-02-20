@@ -5,7 +5,7 @@
             <!-- COVER -->
             <div class="container">
                 <div layout="row" flex md-colors="{background: 'grey-50'}">
-                    <div class="card hovercard" flex md-colors="{background: 'light-green'}">
+                    <div class="card hovercard" flex md-colors="{background: 'light-green'}" style="margin: 0;">
                         <div class="cardheader inst">
                             <div class="avatar inst" layout-align-gt-xs="start end" layout-align-xs="center center" 
                                 layout-gt-xs="row" layout-xs="column" layout-margin>
@@ -22,10 +22,10 @@
                 </div>
             </div>
 
-            <md-content layout="row" class="custom-scrollbar">
+            <md-content layout="row" class="custom-scrollbar" flex>
                 <!-- LEFT MENU -->
-                <div class="container">
-                    <div flex="20" layout="column" hide show-gt-sm>
+                <div class="container" layout="row">
+                    <div flex hide show-gt-sm layout="row">
                         <md-sidenav class="md-sidenav-left" md-component-id="leftNav" md-whiteframe="4" layout="row"
                             md-is-locked-open="$mdMedia('gt-sm')" flex>
                             <md-content class="custom-scrollbar" layout="column" hide show-gt-sm
@@ -33,7 +33,7 @@
                                 <!-- Buttons -->
                                 <div layout="row">
                                     <md-button flex class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-500'}"
-                                    ng-if="institutionCtrl.showFollowButton()" style="text-align: left;"
+                                    ng-if="institutionCtrl.showFollowButton()" style="text-align: left; margin: 8px 8px 0 8px;"
                                     ng-click="institutionCtrl.isUserFollower ? institutionCtrl.unfollow() : institutionCtrl.follow()">
                                         <md-icon>rss_feed</md-icon>
                                         {{ institutionCtrl.isUserFollower ? 'Deixar de seguir' : 'Seguir' }}
@@ -41,7 +41,7 @@
                                 </div>
                                 <div layout="row">
                                     <md-button flex class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-500'}"
-                                    ng-if="institutionCtrl.institution.website_url" style="text-align: left;"
+                                    ng-if="institutionCtrl.institution.website_url" style="text-align: left; margin: 8px 8px 0 8px;"
                                     ng-click="institutionCtrl.openWebsite()">
                                         <md-icon>web</md-icon>
                                         Acessar Website
@@ -49,7 +49,7 @@
                                 </div>
                                 <div layout="row">
                                     <md-button flex class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-500'}"
-                                    ng-if="!institutionCtrl.isMember" style="text-align: left;"
+                                    ng-if="!institutionCtrl.isMember" style="text-align: left; margin: 8px;"
                                     ng-click="institutionCtrl.requestInvitation($event)">
                                         <md-icon>add_to_photos</md-icon>
                                         Solicitar vínculo

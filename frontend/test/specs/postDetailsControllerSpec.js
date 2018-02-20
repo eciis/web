@@ -425,7 +425,7 @@
             expect(postDetailsCtrl.isDeleted).toHaveBeenCalled();
             expect(result.background).toEqual('light-green');
             postDetailsCtrl.post.state = 'deleted';
-            var result = postDetailsCtrl.getButtonColor();
+            var result = postDetailsCtrl.getButtonColor(true, true);
             expect(postDetailsCtrl.isDeleted).toHaveBeenCalled();
             expect(result.background).toEqual('light-green');
         });
@@ -434,7 +434,7 @@
             spyOn(postDetailsCtrl, 'isDeleted').and.callThrough();
             postDetailsCtrl.post = posts[0];
             postDetailsCtrl.post.state = 'deleted';
-            var result = postDetailsCtrl.getButtonColor();
+            var result = postDetailsCtrl.getButtonColor(true, true);
             expect(postDetailsCtrl.isDeleted).toHaveBeenCalled();
             expect(result.background).toEqual('grey');
         })

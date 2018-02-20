@@ -47,12 +47,61 @@ class LikeHandler(BaseHandler):
     def post(self, user, post_key, comment_id=None, reply_id=None):
         """Handle POST Requests."""
         """This method is only meant to give like in post, comment or reply."""
-        post = ndb.Key(urlsafe=post_key).get()
-
         if comment_id:
-            post.like_comment(user, comment_id, reply_id)
+            @ndb.transactional(retries=10)
+            def like_comment(post_key, user, comment_id=None, reply_id=None):
+                """Increment one 'like' in  comment or reply and send notification.""" 
+                post = ndb.Key(urlsafe=post_key).get()
+                comment = post.get_comment(comment_id)
+                if reply_id:
+                    comment = comment.get('replies').get(reply_id)
+                likes = comment.get('likes')
+                Utils._assert(user.key.urlsafe() in likes,
+                            "User already liked this comment", NotAuthorizedException)
+                likes.append(user.key.urlsafe())
+                post.put()
+                return comment
+
+            comment = like_comment(post_key, user, comment_id, reply_id)
+
+            entity_type = 'LIKE_COMMENT'
+            user_is_the_author = comment['author_key'] == user.key.urlsafe()
+            if not user_is_the_author:
+                receiver_key = comment['author_key']
+                send_message_notification(
+                    receiver_key,
+                    user.key.urlsafe(), 
+                    entity_type, 
+                    user.key.urlsafe(),
+                    user.current_institution
+                )
         else:
-            post.like(user)
+            @ndb.transactional(retries=10, xg=True)
+            def like(post_key, user):
+                post = ndb.Key(urlsafe=post_key).get()
+                Utils._assert(post.key in user.liked_posts, 
+                    "User already liked this publication", NotAuthorizedException)
+                user.like_post(post.key)
+                if post.get_like(user.key) is None:
+                    like = Like()
+                    like.author = user.key
+                    like.id = Utils.getHash(like)
+                    post.likes.append(like)
+                    post.put()
+                return post
+            
+            post = like(post_key, user)
+
+            entity_type = 'LIKE_POST'
+            params = {
+                    'receiver_key': post.author.urlsafe(),
+                    'sender_key': user.key.urlsafe(),
+                    'entity_key': post.key.urlsafe(),
+                    'entity_type': entity_type,
+                    'current_institution': user.current_institution.urlsafe()
+                }
+
+            enqueue_task('post-notification', params)
 
     @json_response
     @login_required

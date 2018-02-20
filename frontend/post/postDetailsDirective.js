@@ -450,8 +450,10 @@
             postDetailsCtrl.post.number_of_comments : "+99";
         };
 
-        postDetailsCtrl.getButtonColor = function getButtonColor(condition=true) {
-            var color = condition && !postDetailsCtrl.isDeleted() ? 'light-green' : 'grey';
+        postDetailsCtrl.getButtonColor = function getButtonColor(condition=true, isCommentButton) {
+            var hasComments = (postDetailsCtrl.post.number_of_comments > 0 && isCommentButton);
+            var isNotDeletedOrHasComments = !postDetailsCtrl.isDeleted() || hasComments;
+            var color = condition && isNotDeletedOrHasComments ? 'light-green' : 'grey';
             return {background: color};
         };
 

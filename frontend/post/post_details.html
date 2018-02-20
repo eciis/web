@@ -194,7 +194,7 @@
       <div style="margin-left: auto; margin-right: 10px;" ng-if="!postDetailsCtrl.showSurvey()">
         <md-button class="sm-icon-button" aria-label="Favorite" ng-click="postDetailsCtrl.likeOrDislikePost()"
             ng-disabled="postDetailsCtrl.disableButton()" title="{{(postDetailsCtrl.isLikedByUser()) ? 'Descurtir' : 'Curtir'}}"
-            md-colors="{{ postDetailsCtrl.getButtonColor(postDetailsCtrl.isLikedByUser()) }}">
+            md-colors="{{ postDetailsCtrl.getButtonColor(postDetailsCtrl.isLikedByUser(), false) }}">
           <md-icon>grade</md-icon>
         </md-button>
         <span style="margin-left: -16px;" class="counter-likes-comments" data-badge="{{postDetailsCtrl.number_of_likes()}}"></span>

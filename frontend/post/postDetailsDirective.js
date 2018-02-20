@@ -442,7 +442,8 @@
         };
 
         postDetailsCtrl.getButtonColor = function getButtonColor(condition=true) {
-            var color = condition && !postDetailsCtrl.isDeleted() ? 'light-green' : 'grey';
+            var isNotDeletedOrHasComments = !postDetailsCtrl.isDeleted() || postDetailsCtrl.post.number_of_comments > 0;
+            var color = condition && isNotDeletedOrHasComments ? 'light-green' : 'grey';
             return {background: color};
         };
 

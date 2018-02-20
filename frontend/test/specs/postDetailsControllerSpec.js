@@ -416,4 +416,27 @@
             expect(postService.getPost).toHaveBeenCalledWith(posts[0].key);
         });
     })
+
+    describe('getButtonColor()', function () {
+        it('should return light-green', function () {
+            spyOn(postDetailsCtrl, 'isDeleted').and.callThrough();
+            postDetailsCtrl.post = posts[2];
+            var result = postDetailsCtrl.getButtonColor();
+            expect(postDetailsCtrl.isDeleted).toHaveBeenCalled();
+            expect(result.background).toEqual('light-green');
+            postDetailsCtrl.post.state = 'deleted';
+            var result = postDetailsCtrl.getButtonColor();
+            expect(postDetailsCtrl.isDeleted).toHaveBeenCalled();
+            expect(result.background).toEqual('light-green');
+        });
+
+        it('should return grey', function () {
+            spyOn(postDetailsCtrl, 'isDeleted').and.callThrough();
+            postDetailsCtrl.post = posts[0];
+            postDetailsCtrl.post.state = 'deleted';
+            var result = postDetailsCtrl.getButtonColor();
+            expect(postDetailsCtrl.isDeleted).toHaveBeenCalled();
+            expect(result.background).toEqual('grey');
+        })
+    });
 }));

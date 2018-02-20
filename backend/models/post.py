@@ -268,6 +268,15 @@ class Post(PolyModel):
         """Get the number of likes in this post."""
         return len(self.likes)
 
+    def like(self, author_key):
+        """Increment one 'like' in post."""
+        if self.get_like(author_key) is None:
+            like = Like()
+            like.author = author_key
+            like.id = Utils.getHash(like)
+            self.likes.append(like)
+            self.put()
+
     def dislike(self, author_key):
         """Decrease one 'like' in post."""
         like = self.get_like(author_key)

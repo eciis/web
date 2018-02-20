@@ -302,10 +302,6 @@
             $state.go('app.user.event', {eventKey: event.key});
         };
 
-        postDetailsCtrl.getValues = function getValues(object) {
-            return _.values(object);
-        };
-
         postDetailsCtrl.reloadPost = function reloadPost() {
             var promise = PostService.getPost(postDetailsCtrl.post.key);
             promise.then(function success(response) {
@@ -321,7 +317,7 @@
         postDetailsCtrl.loadComments = function refreshComments() {
             var promise  =  CommentService.getComments(postDetailsCtrl.post.comments);
             promise.then(function success(response) {
-                postDetailsCtrl.post.data_comments = response.data;
+                postDetailsCtrl.post.data_comments = _.values(response.data);
                 postDetailsCtrl.post.number_of_comments = _.size(postDetailsCtrl.post.data_comments);
                 postDetailsCtrl.isLoadingComments = false;
             }, function error(response) {
@@ -358,7 +354,7 @@
 
         function addComment(post, comment) {
             var postComments = postDetailsCtrl.post.data_comments;
-            postComments[comment.id] = comment;
+            postComments.push(comment);
             post.number_of_comments += 1;
         }
 
@@ -586,7 +582,8 @@
         commentCtrl.deleteComment = function deleteComment() {
             CommentService.deleteComment(commentCtrl.post.key, commentCtrl.comment.id).then(
                 function success() {
-                    delete commentCtrl.post.data_comments[commentCtrl.comment.id];
+                    commentCtrl.post.data_comments = commentCtrl.post.data_comments
+                        .filter(comment => comment.id !== commentCtrl.comment.id);
                     commentCtrl.post.number_of_comments--;
                     MessageService.showToast('Comentário excluído com sucesso');
                 }, function error(response) {

@@ -52,32 +52,46 @@ class SurveyPostTest(TestBase):
         """Test the is_valid method."""
         frist_vote = self.data_binary["options"][0]
         second_vote = self.data_binary["options"][1]
+        TOTAL_VOTES = 1
         survey_binary = SurveyPost.create(
             self.data_binary, self.user.key, self.institution.key)
         survey_multiple = SurveyPost.create(
             self.data_multiple, self.user.key, self.institution.key)
 
         self.assertEquals(
-            survey_binary.is_vote_valid(self.user.key, frist_vote),
+            survey_binary.is_vote_valid(self.user.key, frist_vote, TOTAL_VOTES),
             True, "It should be True"
         )
         self.assertEquals(
-            survey_multiple.is_vote_valid(self.user.key, second_vote),
+            survey_multiple.is_vote_valid(self.user.key, second_vote, TOTAL_VOTES),
+            True, "It should be True"
+        )
+
+        self.assertEquals(
+            survey_multiple.is_vote_valid(self.user.key, second_vote, TOTAL_VOTES + 1),
             True, "It should be True"
         )
 
         frist_vote['voters'].append(self.user.key)
         with self.assertRaises(Exception) as ex:
-            survey_binary.is_vote_valid(self.user.key, frist_vote)
+            survey_binary.is_vote_valid(self.user.key, frist_vote, TOTAL_VOTES)
 
         self.assertEqual(
             'The user already voted for this option',
             str(ex.exception),
             'The user already voted for this option')
 
+        with self.assertRaises(Exception) as ex:
+            survey_binary.is_vote_valid(self.user.key, second_vote, TOTAL_VOTES + 1)
+
+        self.assertEqual(
+            'The binary survey should only receive one option',
+            str(ex.exception),
+            'The binary survey should only receive one option')
+
         survey_binary.deadline = datetime.datetime(2002, 12, 25)
         with self.assertRaises(Exception) as ex:
-            survey_binary.is_vote_valid(self.user.key, frist_vote)
+            survey_binary.is_vote_valid(self.user.key, frist_vote, TOTAL_VOTES)
 
         self.assertEqual(
             'Deadline for receive answers has passed.',

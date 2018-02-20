@@ -1,4 +1,4 @@
-<md-dialog layout="row" flex-gt-md="40" style="box-shadow: none;">
+<md-dialog layout="row" flex-gt-md="40" style="box-shadow: none; position: relative;">
     <div flex ng-if="!controller.next">
         <md-dialog-content class="md-dialog-content" layout="column">
             <h3 class="md-title" md-colors="{color: 'default-grey-800'}">Bem vindo a versão de testes da Plataforma CIS</h3>
@@ -20,10 +20,10 @@
     </div>
 </md-dialog>
 
-<div flex="50" flex-gt-md="30" ng-if="controller.next" style="position: relative; left: 10%; top: 35%;">
+<div flex="50" flex-gt-md="30" ng-if="controller.next" style="position: absolute; bottom: 30px; right: 4.5%;">
     <md-card>
         <md-card-content layout="column">
-            <p class="md-subhead" layout-margin>
+            <p layout-margin>
                 Clique nesse botão na página em que você gostaria de sugerir ou relatar um problema.
             </p>
         </md-card-content >

@@ -1,0 +1,79 @@
+<section layout="row" flex  md-colors="{background: 'blue-grey-100'}">
+  <md-sidenav
+      md-colors="{background: 'teal-900'}"
+      class="md-sidenav-left"
+      md-component-id="left"
+      md-is-locked-open="$mdMedia('gt-md')"
+      md-whiteframe="3">
+    <md-toolbar md-colors="{background: 'teal-700'}" layout-align="start center" layout="row">
+        <md-button ng-click="close()" class="md-icon-button" hide-gt-md>
+          <md-icon>arrow_back</md-icon>
+        </md-button>
+        <md-button disabled="true" ui-sref="support.user.home" hide show-gt-md>
+          <img src="app/images/logo.png" aria-label="Plataforma Virtual CIS" style="height: 30px;">
+        </md-button>
+        <span class="md-subhead" hide-gt-md>Plataforma CIS | Suporte</span>
+    </md-toolbar>
+    <md-content md-colors="{background: 'teal-900'}">
+        <div class="row">
+            <div class="card hovercard" 
+                md-colors="{background: 'teal-800'}">
+              <div class="cardheader">
+                <div class="avatar">
+                  <img alt="Foto do Perfil" ng-src="{{ controller.user.photo_url }}">
+                </div>
+              </div>
+              <div class="info" 
+                  md-colors="{background: 'teal-700'}">
+                <div class="desc">
+                  <div class="md-title">{{ controller.user.name }}</div>
+                </div>
+              </div>
+            </div>
+        </div>
+      <md-menu-content md-colors="{background: 'teal-900'}">
+        <md-menu-item ng-repeat="option in controller.sideNavOptions" ng-click="close()">
+          <md-button md-colors="{color: 'teal-100'}" ng-click="option.action()">
+            <md-icon md-colors="{color: 'teal-100'}">{{option.icon}}</md-icon>
+            {{option.label}}
+          </md-button>
+        </md-menu-item>
+        <md-menu-item>
+          <md-button md-colors="{color: 'teal-100'}" ng-click="controller.logout()">
+            <md-icon md-colors="{color: 'teal-100'}">exit_to_app</md-icon>
+            Sair
+          </md-button>
+        </md-menu-item>
+      </md-menu-content>
+    </md-content>
+  </md-sidenav>
+
+  <div layout="column" flex>
+    <md-toolbar md-colors="{background: 'teal-900'}" layout-wrap layout-align="center" layout="row">
+      <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
+        <md-button class="md-icon-button" aria-label="Menu principal" ng-click="toggleLeft()" hide-gt-md>
+          <md-icon>menu</md-icon>
+        </md-button>
+
+        <md-button disabled="true" ui-sref="support.user.home" hide-gt-md>
+          <img src="app/images/logo.png" aria-label="Plataforma Virtual CIS" style="height: 30px;">
+        </md-button>
+
+        <span class="md-subhead" hide show-gt-md> > <b>Plataforma CIS</b> | Suporte</span>
+
+        <span flex md-truncate></span>
+
+        <a ui-sref="support.home" >
+          <md-button class="md-icon-button" title="Início">
+            <md-icon>home</md-icon>
+          </md-button>
+        </a>
+      </div>
+    </md-toolbar>
+    <md-content>
+      <div layout="row" layout-align="top center">
+        <div flex ui-view="content" layout="column"></div>
+      </div>
+    </md-content>
+  </div>
+</section>

@@ -334,7 +334,12 @@
                 if (AuthService.isLoggedIn()) {
                     var token = AuthService.getUserToken();
                     config.headers.Authorization = 'Bearer ' + token;
-                    if (!_.isEmpty(AuthService.getCurrentUser().institutions)) {
+                    
+                    var API_URL = "/api/";
+                    var FIRST_POSITION = 0;
+                    var requestToApi = config.url.indexOf(API_URL) == FIRST_POSITION;
+                    
+                    if (!_.isEmpty(AuthService.getCurrentUser().institutions) && requestToApi) {
                         config.headers['Institution-Authorization'] = AuthService.getCurrentUser().current_institution.key;
                     }
                 }

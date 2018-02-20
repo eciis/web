@@ -8,6 +8,11 @@ APP_YAML=app.yaml
 FRONTEND_YAML=frontend/frontend.yaml
 BACKEND_YAML=backend/backend.yaml
 WORKER_YAML=backend/worker.yaml
+SUPPORT_YAML=support/support.yaml
+
+DOMAIN="plataformacis.org"
+
+BACKEND_DOMAIN="backend.$DOMAIN"
 
 BACKEND_LOCAL="localhost:8082"
 
@@ -66,7 +71,7 @@ case "$1" in
 
         set_landingpage_url $LANDINGPAGE_LOCAL
 
-        dev_appserver.py $APP_YAML $FRONTEND_YAML $BACKEND_YAML $WORKER_YAML $2
+        dev_appserver.py $APP_YAML $FRONTEND_YAML $BACKEND_YAML $SUPPORT_YAML $WORKER_YAML $2
     ;;
 
     test)
@@ -140,12 +145,12 @@ case "$1" in
             if [ ! -z $3 ]; then # Especified one or more yaml configuration files
                 gcloud app deploy --version $version --no-promote $3
             else
-                gcloud app deploy --version $version --no-promote $APP_YAML $FRONTEND_YAML $BACKEND_YAML $WORKER_YAML queue.yaml
+                gcloud app deploy --version $version --no-promote $APP_YAML $FRONTEND_YAML $BACKEND_YAML $SUPPORT_YAML $WORKER_YAML queue.yaml
             fi
         else
             set_backend_url
             set_landingpage_url
-            gcloud app deploy $APP_YAML $FRONTEND_YAML $BACKEND_YAML $WORKER_YAML
+            gcloud app deploy $APP_YAML $FRONTEND_YAML $BACKEND_YAML $SUPPORT_YAML $WORKER_YAML
         fi
 
         exit 0

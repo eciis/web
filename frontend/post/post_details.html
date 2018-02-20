@@ -191,7 +191,7 @@
         </md-button>
         <b style="font-size: 12px;">EXCLUIR POST</b>
       </div>
-      <div style="margin-left: auto; margin-right: 10px;" ng-if="!postDetailsCtrl.showSurvey()">
+      <div style="margin-left: auto; margin-right: 10px;" ng-if="postDetailsCtrl.showActivityButtons()">
         <md-button class="sm-icon-button" aria-label="Favorite" ng-click="postDetailsCtrl.likeOrDislikePost()"
             ng-disabled="postDetailsCtrl.disableButton()" title="{{(postDetailsCtrl.isLikedByUser()) ? 'Descurtir' : 'Curtir'}}"
             md-colors="{{ postDetailsCtrl.getButtonColor(postDetailsCtrl.isLikedByUser()) }}">

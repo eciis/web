@@ -102,6 +102,10 @@
             return postDetailsCtrl.post.type_survey;
         };
 
+        postDetailsCtrl.showCommentInput = function showCommentInput() {
+            return (postDetailsCtrl.showComments || postDetailsCtrl.isPostPage) && !postDetailsCtrl.isDeleted(postDetailsCtrl.post) && !postDetailsCtrl.isInstInactive();
+        };
+
         postDetailsCtrl.showPost = function showPost() {
             return !postDetailsCtrl.showSurvey() && !postDetailsCtrl.isShared();
         };

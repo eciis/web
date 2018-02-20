@@ -182,7 +182,7 @@
   <md-divider ng-if="!postDetailsCtrl.showSurvey() || postDetailsCtrl.showButtonDelete() && !postDetailsCtrl.isInstInactive()"></md-divider>
 
   <!-- BUTTONS -->
-  <md-card-actions style="margin-top: 20px;">
+  <md-card-actions style="margin-top: 20px; margin-bottom: 20px;">
     <div layout="row" layout-align="start center">
       <div ng-if="postDetailsCtrl.showButtonDelete() && !postDetailsCtrl.isInstInactive()">
         <md-button md-colors="{background: 'light-green'}" class="sm-icon-button" arial-label="Delete"
@@ -213,8 +213,8 @@
 
 
   <!-- LIKES -->
-  <div layout="row" layout-align="start center">
-    <md-list ng-repeat="like in postDetailsCtrl.post.data_likes" ng-if="postDetailsCtrl.isPostPage">
+  <div layout="row" layout-align="start center" ng-if="postDetailsCtrl.isPostPage">
+    <md-list ng-repeat="like in postDetailsCtrl.post.data_likes">
       <md-list-item>
         <a href class="hyperlink" ng-click="postDetailsCtrl.showUserProfile(like.author_key, $event)">
           <img class="resize" title="{{ like.author }}" ng-src="{{ like.author_img }}"/>
@@ -223,21 +223,21 @@
     </md-list>
   </div>
 
+  <md-divider ng-if="postDetailsCtrl.showComments || postDetailsCtrl.isPostPage"></md-divider>
+  
   <!-- COMMENTS -->
   <div ng-if="postDetailsCtrl.showComments || postDetailsCtrl.isPostPage">
     <load-circle flex ng-if="postDetailsCtrl.isLoadingComments && !postDetailsCtrl.isPostPage"></load-circle>
-    <md-divider style="margin-top: 15px;"></md-divider>
     <comment ng-if="!postDetailsCtrl.isLoadingComments || postDetailsCtrl.isPostPage"
       ng-repeat="comment in postDetailsCtrl.post.data_comments | orderBy:'publication_date'"
       comment="comment" user="postDetailsCtrl.user" post="postDetailsCtrl.post"></comment>
   </div>
   
 
-  <md-list ng-if="!postDetailsCtrl.showSurvey()">
-    <md-list-item class="md-3-line" ng-if="(postDetailsCtrl.showComments || postDetailsCtrl.isPostPage) && !postDetailsCtrl.isDeleted(postDetailsCtrl.post) && !postDetailsCtrl.isInstInactive()">
+  <md-list ng-if="!postDetailsCtrl.showSurvey() && postDetailsCtrl.showCommentInput()">
+    <md-list-item class="md-3-line">
       <img ng-src="{{postDetailsCtrl.user.photo_url}}" class="md-avatar" alt="{{postDetailsCtrl.user.name}}" />
       <div class="md-list-item-text">
-        <h2>{{comment.author_name}}</h2>
         <md-input-container class="md-block">
           <form ng-submit="postDetailsCtrl.createComment()" layout="column">
             <label>Comentar</label>

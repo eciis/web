@@ -10,10 +10,6 @@ BACKEND_YAML=backend/backend.yaml
 WORKER_YAML=backend/worker.yaml
 SUPPORT_YAML=support/support.yaml
 
-DOMAIN="plataformacis.org"
-
-BACKEND_DOMAIN="backend.$DOMAIN"
-
 BACKEND_LOCAL="localhost:8082"
 
 LANDINGPAGE_LOCAL="localhost:8080"

@@ -563,6 +563,8 @@
                     commentCtrl.newReply = null;
                     commentCtrl.saving = false;
                 },function error(error) {
+                    commentCtrl.newReply = null;
+                    commentCtrl.saving = false;
                     MessageService.showToast(error.data.msg);
                 });
             }

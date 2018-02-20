@@ -3,7 +3,7 @@
   <md-card layout="column" md-colors="{background: 'default-teal-400'}">
       <img class="md-card-image" ng-if="eventDetailsCtrl.showImage"
       ng-src="{{ eventDetailsCtrl.event.photo_url }}"/>
-    <div layout="row">
+    <div layout="row" layout-xs="column">
       <md-card-content style="max-height: 150px" md-colors="{background: 'default-grey-200'}">
         <div style="max-height: 100px;" layout="column">
           <div layout="row" md-colors="{background: 'default-grey-200'}">
@@ -23,16 +23,16 @@
           </div>
         </div>
       </md-card-content>
-      <md-card-content flex layout="column">
+      <md-card-content flex-gt-xs layout="column">
           <a href class="md-title hyperlink" ng-click="eventDetailsCtrl.goToEvent(eventDetailsCtrl.event)">
               <span style="color: white;">{{ eventDetailsCtrl.event.title | uppercase}}</span>
           </a>
           <span style="color: white; margin-top: auto;">Organizado por {{eventDetailsCtrl.event.institution_name}}</span>
       </md-card-content>
-      <md-card-content ng-if="eventDetailsCtrl.isEventPage">
+      <md-card-content ng-if="eventDetailsCtrl.isEventPage" hide-xs>
         <md-card-actions layout="row">
           <md-menu md-offset="-165 45" ng-if="eventDetailsCtrl.isEventAuthor(eventDetailsCtrl.event)">
-            <md-button class="md-icon-button" title="Opções"
+            <md-button class="md-icon-button" title="Opções" hide-xs
             style="margin-top: 25px;" ng-click="$mdMenu.open(ev)">
               <md-icon style="color: white;">more_vert</md-icon>
             </md-button>
@@ -79,8 +79,8 @@
               </span>
             </div>
           </div>
-          <div layout="row">
-            <div layout="column">
+          <div layout="row" layout-xs="column" layout-align="space-between center">
+            <div layout="column" style="margin-right: 25px">
               <h4 style="color: #03b3a1;">Horário</h4>
               <div layout="row" class="left-justify">
                 <p>
@@ -96,7 +96,7 @@
                 </div>
               </div>
             </div>
-            <div layout="column" style="margin-left: 100px;">
+            <div layout="column">
               <h4 style="color: #03b3a1;">Site oficial</h4>
               <div layout="row" class="left-justify">
                 <p>

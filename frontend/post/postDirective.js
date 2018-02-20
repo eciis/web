@@ -18,7 +18,7 @@
         postCtrl.pdfFiles = [];
         postCtrl.deletedFiles = [];
         postCtrl.hasVideo = false;
-        postCtrl.videoRegex = '(?:http(s)?:\/\/)?(www\.)?youtube\.com\/watch\\?v=.+';
+        postCtrl.videoRegex = '(https?\:\/\/)?((www\.)?youtube\.com|youtu\.?be)\/.+';
         postCtrl.options = [];
         var option_empty = {'text': '',
                             'number_votes': 0,

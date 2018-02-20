@@ -24,8 +24,8 @@ Post.prototype.isValid = function isValid() {
 
 Post.prototype.getVideoUrl = function getVideoUrl() {
     if(this.video_url) {
-        var params = _.split(this.video_url, '=');
-        var id = params[params.length - 1];
+        const match = this.video_url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/i);
+        const id = match[1];
         return 'https://www.youtube.com/embed/' + id;
     }
 };

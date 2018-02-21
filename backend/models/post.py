@@ -270,7 +270,8 @@ class Post(PolyModel):
     @ndb.transactional(retries=10)
     def like_comment(self, user, comment_id=None, reply_id=None):
         """Increment one 'like' in  comment or reply.""" 
-        comment = self.get_comment(comment_id)
+        post = self.key.get()
+        comment = post.get_comment(comment_id)
         if reply_id:
             comment = comment.get('replies').get(reply_id)
 
@@ -279,7 +280,7 @@ class Post(PolyModel):
         Utils._assert(user.key.urlsafe() in likes,
                     "User already liked this comment", NotAuthorizedException)
         likes.append(user.key.urlsafe())
-        self.put()
+        post.put()
         return comment
 
     @ndb.transactional(retries=10, xg=True)

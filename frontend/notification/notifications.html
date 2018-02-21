@@ -1,4 +1,4 @@
-<md-menu md-offset="0 70">
+<md-menu md-position-mode="target-right target">
   <div>
     <span ng-if="controller.notifications.length > 0" style="position:relative; bottom: -1px; right:-33px;"
       class="counter-of-notifications" data-badge="{{controller.number_of_notifications()}}">
@@ -33,7 +33,7 @@
           </md-list-item>
         </md-list>
       </md-content>
-      <div layout="row" layout-align="space-between center" style="color: #009688; padding: 20px 0 20px 0">
+      <div layout="row" layout-align="space-between center" style="color: #009688; padding: 1rem 0 1rem 0">
         <md-button aria-label="done all" ng-click="controller.clearAll()">
           MARCAR TODAS COMO LIDAS
         </md-button>

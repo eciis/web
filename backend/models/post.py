@@ -266,7 +266,8 @@ class Post(PolyModel):
     def get_number_of_likes(self):
         """Get the number of likes in this post."""
         return len(self.likes)
-    
+
+    @ndb.transactional(retries=10)
     def like_comment(self, user, comment_id=None, reply_id=None):
         """Increment one 'like' in  comment or reply.""" 
         comment = self.get_comment(comment_id)
@@ -281,16 +282,22 @@ class Post(PolyModel):
         self.put()
         return comment
 
+    @ndb.transactional(retries=10, xg=True)
     def like(self, author_key):
-        """Increment one 'like' in post."""
+        """Increment one 'like' in post."""         
         post = self.key.get()
+        user =  author_key.get()
+        Utils._assert(post.key in user.liked_posts, 
+            "User already liked this publication", NotAuthorizedException)
         if post.get_like(author_key) is None:
             like = Like()
             like.author = author_key
             like.id = Utils.getHash(like)
             post.likes.append(like)
             post.put()
-
+            user.like_post(post.key)
+        return post
+            
     def dislike(self, author_key):
         """Decrease one 'like' in post."""
         like = self.get_like(author_key)

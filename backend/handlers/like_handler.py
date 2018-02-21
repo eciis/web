@@ -47,15 +47,9 @@ class LikeHandler(BaseHandler):
     def post(self, user, post_key, comment_id=None, reply_id=None):
         """Handle POST Requests."""
         """This method is only meant to give like in post, comment or reply and send notification."""
-        if comment_id:
-            @ndb.transactional(retries=10)
-            def like_comment(post_key, user, comment_id=None, reply_id=None):
-                """Increment one 'like' in  comment or reply""" 
-                post = ndb.Key(urlsafe=post_key).get()
-                update_comment = post.like_comment(user, comment_id, reply_id)
-                return update_comment
-                
-            comment = like_comment(post_key, user, comment_id, reply_id)
+        post = ndb.Key(urlsafe=post_key).get()
+        if comment_id:            
+            comment = post.like_comment(user, comment_id, reply_id)
 
             entity_type = 'LIKE_COMMENT'
             user_is_the_author = comment['author_key'] == user.key.urlsafe()
@@ -68,17 +62,9 @@ class LikeHandler(BaseHandler):
                     post_key,
                     user.current_institution
                 ) 
-        else:
-            @ndb.transactional(retries=10, xg=True)
-            def like(post_key, user):
-                post = ndb.Key(urlsafe=post_key).get()
-                Utils._assert(post.key in user.liked_posts, 
-                    "User already liked this publication", NotAuthorizedException)
-                user.like_post(post.key)
-                post.like(user.key)
-                return post
-            
-            post = like(post_key, user)
+        else: 
+            post = ndb.Key(urlsafe=post_key).get()
+            post = post.like(user.key)
 
             entity_type = 'LIKE_POST'
             params = {

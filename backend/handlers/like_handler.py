@@ -46,19 +46,15 @@ class LikeHandler(BaseHandler):
     @login_required
     def post(self, user, post_key, comment_id=None, reply_id=None):
         """Handle POST Requests."""
-        """This method is only meant to give like in post, comment or reply."""
+        """This method is only meant to give like in post, comment or reply and send notification."""
         if comment_id:
             @ndb.transactional(retries=10)
             def like_comment(post_key, user, comment_id=None, reply_id=None):
-                """Increment one 'like' in  comment or reply and send notification.""" 
+                """Increment one 'like' in  comment or reply""" 
                 post = ndb.Key(urlsafe=post_key).get()
-                comment = post.get_comment(comment_id)
-                if reply_id:
-                    comment = comment.get('replies').get(reply_id)
-                post.like_comment(comment, user.key.urlsafe() )
+                update_comment = post.like_comment(user, comment_id, reply_id)
+                return update_comment
                 
-                return comment
-
             comment = like_comment(post_key, user, comment_id, reply_id)
 
             entity_type = 'LIKE_COMMENT'
@@ -71,7 +67,7 @@ class LikeHandler(BaseHandler):
                     entity_type, 
                     post_key,
                     user.current_institution
-                )
+                ) 
         else:
             @ndb.transactional(retries=10, xg=True)
             def like(post_key, user):

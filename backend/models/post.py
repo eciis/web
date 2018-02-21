@@ -267,14 +267,19 @@ class Post(PolyModel):
         """Get the number of likes in this post."""
         return len(self.likes)
     
-    def like_comment(self, comment, author_key):
-        """Increment one 'like' in post comment or reply."""
-        post = self.key.get()
+    def like_comment(self, user, comment_id=None, reply_id=None):
+        """Increment one 'like' in  comment or reply.""" 
+        comment = self.get_comment(comment_id)
+        if reply_id:
+            comment = comment.get('replies').get(reply_id)
+
         likes = comment.get('likes')
-        Utils._assert(author_key in likes,
-                "User already liked this comment", NotAuthorizedException)
-        likes.append(author_key)
-        post.put()
+        
+        Utils._assert(user.key.urlsafe() in likes,
+                    "User already liked this comment", NotAuthorizedException)
+        likes.append(user.key.urlsafe())
+        self.put()
+        return comment
 
     def like(self, author_key):
         """Increment one 'like' in post."""

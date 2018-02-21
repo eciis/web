@@ -38,19 +38,6 @@
         };
 
         loginCtrl.resetPassword = function resetPassword(ev) {
-            // var confirm = $mdDialog.prompt()
-            //     .title('Esqueceu sua senha?')
-            //     .textContent('Digite seu email e enviaremos um link para criar uma nova senha.')
-            //     .placeholder('Digite seu email')
-            //     .ariaLabel('Digite seu emai')
-            //     .targetEvent(ev)
-            //     .required(true)
-            //     .ok("Redefinir Senha")
-            //     .cancel("Cancelar");
-
-            // $mdDialog.show(confirm).then(function(email) {
-            //     AuthService.resetPassword(email);
-            // });
             $mdDialog.show({
                 controller: "ResetPasswordController",
                 controllerAs: "resetCtrl",
@@ -88,11 +75,11 @@
         var resetCtrl = this;
 
         resetCtrl.email = '';
-        resetCtrl.showNextScreen = false;
+        resetCtrl.showConfirmedRest = false;
 
         resetCtrl.resetPassword = function resetPassword() {
             AuthService.resetPassword(resetCtrl.email);
-            resetCtrl.showNextScreen = true;
+            resetCtrl.showConfirmedRest = true;
         };
 
         resetCtrl.closeResetDialog = function closeResetDialog() {

@@ -159,8 +159,9 @@ class InviteCollectionHandlerTest(TestBaseHandler):
                          was stub")
 
     """
+    @patch('handlers.invite_collection_handler.enqueue_task')
     @patch('utils.verify_token', return_value=ADMIN)
-    def test_post_invite_user(self, verify_token):
+    def test_post_invite_user(self, verify_token, enqueue_task):
         admin = mocks.create_user(ADMIN['email'])
         institution = mocks.create_institution()		 
         admin.institutions_admin = [institution.key]
@@ -175,12 +176,14 @@ class InviteCollectionHandlerTest(TestBaseHandler):
             headers={'institution-authorization': institution.key.urlsafe()})
         # Retrieve the entities
         answer = json.loads(answer._app_iter[0])
+        enqueue_task.assert_called()
 
         self.assertTrue(
             answer == {u'msg': u'Os convites est\xe3o sendo processados.'})
 
+    @patch('handlers.invite_collection_handler.enqueue_task')
     @patch('utils.verify_token', return_value=ADMIN)
-    def test_post_invite_user_member_of_other_institution(self, verify_token):
+    def test_post_invite_user_member_of_other_institution(self, verify_token, enqueue_task):
         admin = mocks.create_user(ADMIN['email'])
         institution = mocks.create_institution()		 
         admin.institutions_admin = [institution.key]
@@ -201,6 +204,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
 
         self.assertTrue(
             answer == {u'msg': u'Os convites est\xe3o sendo processados.'})
+        enqueue_task.assert_called()
 
     @patch.object(Invite, 'send_invite')
     @patch('utils.verify_token', return_value=ADMIN)
@@ -259,7 +263,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
     
     @patch('handlers.invite_collection_handler.enqueue_task')
     @patch('utils.verify_token', return_value=ADMIN)
-    def test_post_many_invites_at_once(self, verify_token, mock_method):
+    def test_post_many_invites_at_once(self, verify_token, enqueue_task):
         admin = mocks.create_user(ADMIN['email'])
         institution = mocks.create_institution()
         admin.institutions_admin = [institution.key]
@@ -281,4 +285,4 @@ class InviteCollectionHandlerTest(TestBaseHandler):
 
         self.assertTrue(
             answer == {u'msg': u'Os convites est\xe3o sendo processados.'})
-        mock_method.assert_called()
+        enqueue_task.assert_called()

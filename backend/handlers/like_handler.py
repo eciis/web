@@ -63,7 +63,6 @@ class LikeHandler(BaseHandler):
                     user.current_institution
                 ) 
         else: 
-            post = ndb.Key(urlsafe=post_key).get()
             post = post.like(user.key)
 
             entity_type = 'LIKE_POST'

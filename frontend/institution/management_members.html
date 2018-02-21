@@ -16,7 +16,7 @@
           </md-button>
         </div>
       </md-toolbar>
-      <md-card-content ng-show="manageMemberCtrl.showSendInvite;" style="max-height: 150px;">
+      <md-card-content ng-show="manageMemberCtrl.showSendInvite;">
         <form ng-submit="manageMemberCtrl.sendUserInvite()">
           <md-input-container class="md-block" ng-repeat="currentEmail in manageMemberCtrl.emails">
             <label>Email convite deve ser enviado para:</label>

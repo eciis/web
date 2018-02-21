@@ -7,6 +7,8 @@
         RequestInvitationService, ProfileService) {
         var manageMemberCtrl = this;
 
+        var MAX_EMAILS = 1;
+
         manageMemberCtrl.institution = {};
         manageMemberCtrl.invite = {};
         manageMemberCtrl.sent_invitations = [];
@@ -19,6 +21,8 @@
         manageMemberCtrl.showRequests = false;
         manageMemberCtrl.showMembers = false;
         manageMemberCtrl.requests = [];
+        var empty_email = {email: ''};
+        manageMemberCtrl.emails = [_.clone(empty_email)];
 
         var currentInstitutionKey = $state.params.institutionKey;
         var invite;
@@ -56,17 +60,22 @@
             invite = new Invite(manageMemberCtrl.invite);
             invite.sender_name = manageMemberCtrl.user.name;
 
+            var emails = getEmails();
+            var requestBody = {
+                invite_body: invite,
+                emails: emails
+            }
+
             if (manageMemberCtrl.isUserInviteValid(invite)) {
                 manageMemberCtrl.isLoadingInvite = true;
-                var promise = InviteService.sendInvite(invite);
+                var promise = InviteService.sendInvite(requestBody);
                 promise.then(function success(response) {
-                    invite.key = response.data.key;
                     manageMemberCtrl.sent_invitations.push(invite);
                     manageMemberCtrl.invite = {};
                     manageMemberCtrl.showInvites = true; 
                     manageMemberCtrl.showSendInvite = false;
                     manageMemberCtrl.isLoadingInvite = false;
-                    MessageService.showToast('Convite enviado com sucesso!');
+                    MessageService.showToast(response.data.msg);
                 }, function error(response) {
                     manageMemberCtrl.isLoadingInvite = false;
                     MessageService.showToast(response.data.msg);
@@ -233,6 +242,26 @@
             });
             return promise;
         };
+
+        manageMemberCtrl.canAddAnotherEmailField = function canAddAnotherEmailField() {
+            if (_.size(manageMemberCtrl.emails) < MAX_EMAILS) {
+                addAnotherField()
+            };
+        };
+
+        function addAnotherField() {
+            manageMemberCtrl.emails.push(_.clone(empty_email));
+        }
+
+        function getEmails() {
+            var emails = [];
+            _.each(manageMemberCtrl.emails, function (email) {
+                if (!_.isEmpty(email.email)) {
+                    emails.push(email.email);
+                }
+            });
+            return emails;
+        }
 
         function designOptions() {
             var $dialog = angular.element(document.querySelector('md-dialog'));

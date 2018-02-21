@@ -137,7 +137,7 @@
                     return {
                         then: function(callback) {
                             return callback(
-                                {data: {key: '123'}}
+                                { data: { 'msg': 'Os convites estão sendo processados.' }}
                             );
                         }
                     };
@@ -146,18 +146,22 @@
 
             it('should call inviteService.sendInvite()', function(done) {
                 manageMemberCtrl.invite = {
-                    invitee: "teste@gmail.com",
                     type_of_invite: 'USER',
                     institution_key: '987654321',
                     admin_key: '54321',
                     sender_name: 'User',
                     key: '123'
                 };
+                manageMemberCtrl.emails = [{ email: "teste@gmail.com" }]
                 var newInvite = new Invite(manageMemberCtrl.invite);
+                var requestBody = {
+                    invite_body: newInvite,
+                    emails: ["teste@gmail.com"]
+                }
                 expect(manageMemberCtrl.sent_invitations.length).toBe(2);
                 var promise = manageMemberCtrl.sendUserInvite();
                 promise.then(function() {
-                    expect(inviteService.sendInvite).toHaveBeenCalledWith(newInvite);
+                    expect(inviteService.sendInvite).toHaveBeenCalledWith(requestBody);
                     expect(manageMemberCtrl.invite).toEqual({});
                     expect(manageMemberCtrl.sent_invitations).toContain(invite);
                     expect(manageMemberCtrl.sent_invitations).toContain(newInvite);

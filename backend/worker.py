@@ -8,6 +8,7 @@ import logging
 from google.appengine.ext import ndb
 from models.institution import Institution
 from models.post import Post
+from models.invite_user import InviteUser
 from utils import json_response
 from service_messages import send_message_notification
 from service_messages import send_message_email
@@ -222,6 +223,18 @@ class AddPostInInstitution(BaseHandler):
 
         institution.add_post(created_post)
 
+class SendInviteHandler(BaseHandler):
+
+    def post(self):
+        """It iterates in an array of invites creating and sending them."""
+        keys = json.loads(self.request.get('invites_keys'))
+        host = self.request.get('host')
+        current_institution = json.loads(self.request.get('current_institution'))
+        current_institution = ndb.Key(urlsafe=current_institution)
+        for key in keys:
+            invite = ndb.Key(urlsafe=key).get()
+            invite.send_invite(host, current_institution)
+
 app = webapp2.WSGIApplication([
     ('/api/queue/send-notification', SendNotificationHandler),
     ('/api/queue/send-email', SendEmailHandler),
@@ -231,5 +244,6 @@ app = webapp2.WSGIApplication([
     ('/api/queue/notify-followers', NotifyFollowersHandler),
     ('/api/queue/add-admin-permissions', AddAdminPermissionsInInstitutionHierarchy),
     ('/api/queue/remove-admin-permissions', RemoveAdminPermissionsInInstitutionHierarchy),
-    ('/api/queue/add-post-institution', AddPostInInstitution)
+    ('/api/queue/add-post-institution', AddPostInInstitution),
+    ('/api/queue/send-invite', SendInviteHandler)
 ], debug=True)

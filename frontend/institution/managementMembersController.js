@@ -7,7 +7,7 @@
         RequestInvitationService, ProfileService) {
         var manageMemberCtrl = this;
 
-        var MAX_EMAILS = 1;
+        var MAX_EMAILS_QUANTITY = 1;
 
         manageMemberCtrl.institution = {};
         manageMemberCtrl.invite = {};
@@ -243,13 +243,13 @@
             return promise;
         };
 
-        manageMemberCtrl.canAddAnotherEmailField = function canAddAnotherEmailField() {
-            if (_.size(manageMemberCtrl.emails) < MAX_EMAILS) {
-                addAnotherField()
+        manageMemberCtrl.canAddEmailField = function canAddEmailField() {
+            if (_.size(manageMemberCtrl.emails) < MAX_EMAILS_QUANTITY) {
+                addField()
             };
         };
 
-        function addAnotherField() {
+        function addField() {
             manageMemberCtrl.emails.push(_.clone(empty_email));
         }
 

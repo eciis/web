@@ -63,16 +63,21 @@ class InviteCollectionHandler(BaseHandler):
 
         for email in data['emails']:
             invite['invitee'] = email
-            current_invite = InviteFactory.create(invite, type_of_invite)
-            current_invite.put()
-
-            if(current_invite.stub_institution_key):
-                current_invite.stub_institution_key.get().addInvite(current_invite)
-
+            current_invite = createInvite(invite)
             invites_keys.append(current_invite.key.urlsafe())
 
         enqueue_task('send-invite', {'invites_keys': json.dumps(invites_keys), 'host': host,
                                      'current_institution': json.dumps(user.current_institution.urlsafe())})
 
         self.response.write(json.dumps(
-            {'msg': 'Os convites estão sendo processados.'}))
+            {'msg': 'The invites are being processed.'}))
+
+def createInvite(data):
+    """Create an invite."""
+    invite = InviteFactory.create(data, data['type_of_invite'])
+    invite.put()
+
+    if(invite.stub_institution_key):
+        invite.stub_institution_key.get().addInvite(invite)
+    
+    return invite

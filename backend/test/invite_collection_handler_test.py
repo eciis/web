@@ -179,7 +179,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         enqueue_task.assert_called()
 
         self.assertTrue(
-            answer == {u'msg': u'Os convites est\xe3o sendo processados.'})
+            answer == {'msg': 'The invites are being processed.'})
 
     @patch('handlers.invite_collection_handler.enqueue_task')
     @patch('utils.verify_token', return_value=ADMIN)
@@ -203,7 +203,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         answer = json.loads(answer._app_iter[0])
 
         self.assertTrue(
-            answer == {u'msg': u'Os convites est\xe3o sendo processados.'})
+            answer == {'msg': 'The invites are being processed.'})
         enqueue_task.assert_called()
 
     @patch.object(Invite, 'send_invite')
@@ -284,5 +284,5 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         answer = json.loads(answer._app_iter[0])
 
         self.assertTrue(
-            answer == {u'msg': u'Os convites est\xe3o sendo processados.'})
+            answer == {'msg': 'The invites are being processed.'})
         enqueue_task.assert_called()

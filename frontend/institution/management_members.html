@@ -20,7 +20,7 @@
         <form ng-submit="manageMemberCtrl.sendUserInvite()">
           <md-input-container class="md-block" ng-repeat="currentEmail in manageMemberCtrl.emails">
             <label>Email convite deve ser enviado para:</label>
-            <input ng-model="currentEmail.email" ng-change="manageMemberCtrl.canAddAnotherEmailField()" type="email" name="email" required>
+            <input ng-model="currentEmail.email" ng-change="manageMemberCtrl.canAddEmailField()" type="email" name="email" required>
           </md-input-container>
           <load-circle flex ng-if="manageMemberCtrl.isLoadingInvite"></load-circle>
           <section layout="row" layout="column" layout-align="end center" layout-wrap ng-if="!manageMemberCtrl.isLoadingInvite">

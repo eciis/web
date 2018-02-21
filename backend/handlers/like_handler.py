@@ -55,11 +55,8 @@ class LikeHandler(BaseHandler):
                 comment = post.get_comment(comment_id)
                 if reply_id:
                     comment = comment.get('replies').get(reply_id)
-                likes = comment.get('likes')
-                Utils._assert(user.key.urlsafe() in likes,
-                            "User already liked this comment", NotAuthorizedException)
-                likes.append(user.key.urlsafe())
-                post.put()
+                post.like_comment(comment, user.key.urlsafe() )
+                
                 return comment
 
             comment = like_comment(post_key, user, comment_id, reply_id)
@@ -82,12 +79,7 @@ class LikeHandler(BaseHandler):
                 Utils._assert(post.key in user.liked_posts, 
                     "User already liked this publication", NotAuthorizedException)
                 user.like_post(post.key)
-                if post.get_like(user.key) is None:
-                    like = Like()
-                    like.author = user.key
-                    like.id = Utils.getHash(like)
-                    post.likes.append(like)
-                    post.put()
+                post.like(user.key)
                 return post
             
             post = like(post_key, user)

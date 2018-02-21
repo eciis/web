@@ -38,18 +38,26 @@
         };
 
         loginCtrl.resetPassword = function resetPassword(ev) {
-            var confirm = $mdDialog.prompt()
-                .title('Esqueceu sua senha?')
-                .textContent('Digite seu email e enviaremos um link para criar uma nova senha.')
-                .placeholder('Digite seu email')
-                .ariaLabel('Digite seu emai')
-                .targetEvent(ev)
-                .required(true)
-                .ok("Redefinir Senha")
-                .cancel("Cancelar");
+            // var confirm = $mdDialog.prompt()
+            //     .title('Esqueceu sua senha?')
+            //     .textContent('Digite seu email e enviaremos um link para criar uma nova senha.')
+            //     .placeholder('Digite seu email')
+            //     .ariaLabel('Digite seu emai')
+            //     .targetEvent(ev)
+            //     .required(true)
+            //     .ok("Redefinir Senha")
+            //     .cancel("Cancelar");
 
-            $mdDialog.show(confirm).then(function(email) {
-                AuthService.resetPassword(email);
+            // $mdDialog.show(confirm).then(function(email) {
+            //     AuthService.resetPassword(email);
+            // });
+            $mdDialog.show({
+                controller: "ResetPasswordController",
+                controllerAs: "resetCtrl",
+                templateUrl: '/app/auth/reset_password_dialog.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose:true
             });
         };
 
@@ -74,5 +82,21 @@
                 $state.go("app.user.home");
             }
         })();
+    });
+
+    app.controller('ResetPasswordController', function(AuthService, $mdDialog) {
+        var resetCtrl = this;
+
+        resetCtrl.email = '';
+        resetCtrl.showNextScreen = false;
+
+        resetCtrl.resetPassword = function resetPassword() {
+            AuthService.resetPassword(resetCtrl.email);
+            resetCtrl.showNextScreen = true;
+        };
+
+        resetCtrl.closeResetDialog = function closeResetDialog() {
+            $mdDialog.hide();
+        };
     });
 })();

@@ -9,7 +9,7 @@
   </div>
   <md-menu-content width="2" class="notifications-menu">
     <div layout="column">
-      <md-content class="custom-scrollbar" style="height: 25rem;">
+      <md-content class="custom-scrollbar" style="max-height: 25rem;">
         <md-list style="padding: 10px;">
           <md-list-item class="md-3-line" md-colors="{background: 'grey-200'}" style="margin-bottom: 5px; padding: 3 0 3 0;"
             ng-repeat="notification in controller.notifications | orderBy:'-timestamp'"

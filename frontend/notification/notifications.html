@@ -9,9 +9,9 @@
   </div>
   <md-menu-content width="2" class="notifications-menu">
     <div layout="column">
-      <md-content class="custom-scrollbar">
+      <md-content class="custom-scrollbar" style="height: 25rem;">
         <md-list style="padding: 10px;">
-          <md-list-item class="md-3-line" md-colors="{background: 'grey-200'}" style="margin-bottom: 5px; padding: 3 0 3 0"
+          <md-list-item class="md-3-line" md-colors="{background: 'grey-200'}" style="margin-bottom: 5px; padding: 3 0 3 0;"
             ng-repeat="notification in controller.notifications | orderBy:'-timestamp'"
             ng-click="controller.action(notification, $event)">
             <img ng-src="{{notification.from.photo_url}}" class="md-avatar" style="width: 60px; height: 60px;"/>
@@ -37,7 +37,7 @@
         <md-button aria-label="done all" ng-click="controller.clearAll()">
           MARCAR TODAS COMO LIDAS
         </md-button>
-        <md-button >
+        <md-button disabled="true">
           VER TUDO
         </md-button>
       </div>

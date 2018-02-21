@@ -16,7 +16,7 @@
             ng-click="controller.action(notification, $event)">
             <img ng-src="{{notification.from.photo_url}}" class="md-avatar" style="width: 60px; height: 60px;"/>
             <div class="md-list-item-text" layout="column" >
-              <p><b style="font-size: 18px;">{{ notification.from.name }}</b></p>
+              <p><b style="font-size: 18px;">{{ controller.limitString(notification.from.name, 28) }}</b></p>
               <p><b style="font-size: 15px; color: #009688;">{{ controller.limitString(notification.from.institution_name, 32) }}</b></p>
               <div layout="row">
                 <div class="notification-icon-bg">

@@ -11,6 +11,7 @@ from handlers.base_handler import BaseHandler
 from models.invite_institution import InviteInstitution
 from models.factory_invites import InviteFactory
 from service_entities import enqueue_task
+from google.appengine.ext import ndb
 
 
 class InviteCollectionHandler(BaseHandler):
@@ -38,31 +39,31 @@ class InviteCollectionHandler(BaseHandler):
         invites_keys = []
         invite = data['invite_body']
         type_of_invite = invite.get('type_of_invite')
+
+        Utils._assert(type_of_invite == 'INSTITUTION',
+                      "invitation type not allowed", NotAuthorizedException)
+
+        """TODO: Remove the assert bellow when the hierarchical invitations can be available
+        @author: Mayza Nunes 11/01/2018
+        """
+        Utils._assert(type_of_invite != 'USER',
+                        "Hierarchical invitations is not available in this version", NotAuthorizedException)
+
+        institution = ndb.Key(urlsafe=invite['institution_key']).get()
+        can_invite_inst = user.has_permission(
+            "send_link_inst_invite", institution.key.urlsafe())
+        can_invite_members = user.has_permission(
+            "invite_members", institution.key.urlsafe())
+
+        Utils._assert(not can_invite_inst and not can_invite_members,
+                        "User is not allowed to send invites", NotAuthorizedException)
+
+        Utils._assert(institution.state == 'inactive',
+                        "The institution has been deleted", NotAuthorizedException)
+
         for email in data['emails']:
             invite['invitee'] = email
-            Utils._assert(type_of_invite == 'INSTITUTION',
-                          "invitation type not allowed", NotAuthorizedException)
-
-            """TODO: Remove the assert bellow when the hierarchical invitations can be available
-            @author: Mayza Nunes 11/01/2018
-            """
-            Utils._assert(type_of_invite != 'USER',
-                          "Hierarchical invitations is not available in this version", NotAuthorizedException)
-
             current_invite = InviteFactory.create(invite, type_of_invite)
-
-            can_invite_inst = user.has_permission(
-                "send_link_inst_invite", current_invite.institution_key.urlsafe())
-            can_invite_members = user.has_permission(
-                "invite_members", current_invite.institution_key.urlsafe())
-
-            Utils._assert(not can_invite_inst and not can_invite_members,
-                          "User is not allowed to send invites", NotAuthorizedException)
-
-            institution = current_invite.institution_key.get()
-            Utils._assert(institution.state == 'inactive',
-                          "The institution has been deleted", NotAuthorizedException)
-
             current_invite.put()
 
             if(current_invite.stub_institution_key):

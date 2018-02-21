@@ -30,13 +30,9 @@ class InstitutionCollectionHandlerTest(TestBaseHandler):
         # new User
         user = mocks.create_user('user@example.com')
         # new Institution FIRST INST
-        first_inst = mocks.create_institution()
-        first_inst.name = 'FIRST INST'
-        first_inst.put()
+        first_inst = mocks.create_institution('FIRST INST')
         # new Institution SECOND INST
-        second_inst = mocks.create_institution()
-        second_inst.name = 'SECOND INST'
-        second_inst.put()
+        second_inst = mocks.create_institution('SECOND INST')
 
         # Call the get method
         all_institutions = self.testapp.get("/api/institutions").json

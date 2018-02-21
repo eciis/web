@@ -43,9 +43,9 @@
         };
 
         surveyCtrl.timeHasBeenExpired = function timeHasBeenExpired() {
-            var nationalTimeZone = new Date (surveyCtrl.post.deadline);
-            nationalTimeZone.setHours(nationalTimeZone.getHours() - 3);
-            return new Date() > nationalTimeZone;
+            const deadline = new Date (surveyCtrl.post.deadline);
+            const currentTime = new Date((_.split(new Date().toISOString(), '.')[0]))
+            return deadline < currentTime;
         };
 
         surveyCtrl.canVote = function(){

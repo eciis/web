@@ -29,11 +29,6 @@ class InstitutionCollectionHandlerTest(TestBaseHandler):
         # create models
         # new User
         user = mocks.create_user('user@example.com')
-        user.name = "User"
-        # new User Other
-        other_user = mocks.create_user('other_user@example.com')
-        other_user.state = "pending"
-        other_user.put()
         # new Institution FIRST INST
         first_inst = mocks.create_institution()
         first_inst.name = 'FIRST INST'

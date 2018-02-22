@@ -1,30 +1,46 @@
 <md-menu md-position-mode="target-right target">
   <div>
-    <span ng-if="controller.notifications.length > 0"
-      style="position:relative; bottom: -1px; right:-33px;"
+    <span ng-if="controller.notifications.length > 0" style="position:relative; bottom: -1px; right:-33px;"
       class="counter-of-notifications" data-badge="{{controller.number_of_notifications()}}">
     </span>
     <md-button aria-label="menu" class="md-icon-button" ng-click="$mdMenu.open(ev)" ng-disabled="controller.notifications.length === 0">
       <md-icon style="color:#81C784;">{{ controller.notifications.length === 0 ? 'notifications_none' : 'notifications'}}</md-icon>
     </md-button>
   </div>
-  <md-menu-content width="5">
-    <md-list>
-      <div layout="row" layout-align="end center">
-      <md-button aria-label="done all" class="md-icon-button" ng-click="controller.clearAll()">
-        <md-icon>clear_all</md-icon>
-      </md-button>
-      </div>
-      <md-list-item class="md-2-line" ng-repeat="notification in controller.notifications | orderBy:'-timestamp'" ng-click="controller.action(notification, $event)">
-        <md-icon>{{controller.getIcon(notification.entity_type)}}</md-icon>
-        <div class="md-list-item-text">
-          <h3>{{controller.format(notification)}}</h3>
-          <p style="font-size: 10px;">{{notification.timestamp | amUtc | amLocal | amCalendar:referenceTime:formats }}</p>
-        </div>
-        <md-button class="md-warn md-hue-1 md-icon-button" ng-click="controller.markAsRead(notification)">
-          <md-icon>markunread</md-icon>
+  <md-menu-content width="2" class="notifications-menu">
+    <div layout="column">
+      <md-content class="custom-scrollbar" style="max-height: 25rem;">
+        <md-list style="padding: 10px;">
+          <md-list-item class="md-3-line" md-colors="{background: 'grey-200'}" style="margin-bottom: 5px; padding: 3 0 3 0;"
+            ng-repeat="notification in controller.notifications | orderBy:'-timestamp'"
+            ng-click="controller.action(notification, $event)">
+            <img ng-src="{{notification.from.photo_url}}" class="md-avatar" style="width: 60px; height: 60px;"/>
+            <div class="md-list-item-text" layout="column" >
+              <p><b style="font-size: 18px;">{{ controller.limitString(notification.from.name, 28) }}</b></p>
+              <p><b style="font-size: 15px; color: #009688;">{{ controller.limitString(notification.from.institution_name, 32) }}</b></p>
+              <div layout="row">
+                <div class="notification-icon-bg">
+                  <md-icon class="notification-icon">{{controller.getIcon(notification.entity_type)}}</md-icon>
+                </div>
+                <p style="font-size: 10px; max-height: 3em; margin-left: 4px;">
+                  <b>
+                    {{controller.format(notification)}} - 
+                    {{notification.timestamp | amUtc | amLocal | amCalendar:referenceTime:formats }}
+                  </b>
+                </p>
+              </div>
+            </div>    
+          </md-list-item>
+        </md-list>
+      </md-content>
+      <div layout="row" layout-align="space-between center" style="color: #009688; padding: 1rem 0 1rem 0">
+        <md-button aria-label="done all" ng-click="controller.clearAll()">
+          MARCAR TODAS COMO LIDAS
         </md-button>
-      </md-list-item>
-    </md-list>
+        <md-button disabled="true">
+          VER TUDO
+        </md-button>
+      </div>
+    </div>
   </md-menu-content>
 </md-menu>

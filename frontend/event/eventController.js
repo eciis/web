@@ -164,7 +164,6 @@
                 var patch = formatPatch(generatePatch(jsonpatch.generate(dialogCtrl.observer), event));
                 EventService.editEvent(dialogCtrl.event.key, patch).then(function success() {
                     $mdDialog.hide(event);
-                    dialogCtrl.chaged = true;
                     MessageService.showToast('Evento editado com sucesso.');
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
@@ -442,7 +441,7 @@
                 loadSelectedState();
                 initPatchObserver();
                 loadEventDates();
-                dialogCtrl.oldEvent = _.clone(dialogCtrl.event);
+                dialogCtrl.oldEvent = _.cloneDeep(dialogCtrl.event);
             } else {
                 dialogCtrl.event = {
                                     address: address

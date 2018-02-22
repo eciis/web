@@ -519,9 +519,7 @@
                         }
                     }, function error(response) {
                         $state.go("app.user.home");
-                        var message = (response.data.msg === "Error! This comment was deleted.") ?
-                        "Esse comentário foi removido" : "O usuário já fez essa ação nesse comentário.";
-                        MessageService.showToast(message);
+                        MessageService.showToast(response.data.msg);
                         commentCtrl.saving = false;
                     }
                 );

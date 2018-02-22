@@ -3,7 +3,7 @@
 
     var app = angular.module('app');
 
-    app.controller('PdfController', function PdfController(PdfService, $mdDialog, $sce) {
+    app.controller('PdfController', function PdfController($mdDialog) {
         var pdfCtrl = this;     
 
         pdfCtrl.showFiles = function() {
@@ -13,21 +13,17 @@
 
         pdfCtrl.pdfDialog = function(ev, pdf) {
             if(!pdfCtrl.isEditing) {
-                var readablePdf = {};
-                PdfService.getReadableURL(pdf.url, setPdfURL, readablePdf).then(
-                    function success() {
-                        $mdDialog.show({
-                            templateUrl: 'app/post/pdfDialog.html',
-                            targetEvent: ev,
-                            clickOutsideToClose:true,
-                            locals: {
-                                pdfUrl: readablePdf.url
-                            },
-                            controller: DialogController,
-                            controllerAs: 'ctrl'
-                        });
-                    });
-                }
+                $mdDialog.show({
+                    templateUrl: 'app/post/pdfDialog.html',
+                    targetEvent: ev,
+                    clickOutsideToClose:true,
+                    locals: {
+                        pdf: pdf
+                    },
+                    controller: DialogController,
+                    controllerAs: 'ctrl'
+                });
+            }
         };
 
         pdfCtrl.hideFile = function(index) {
@@ -41,10 +37,23 @@
             pdf.url = url;
         }
 
-        function DialogController($mdDialog, pdfUrl) {
+        function DialogController($mdDialog, PdfService, $sce, pdf) {
             var ctrl = this;
-            var trustedUrl = $sce.trustAsResourceUrl(pdfUrl);
-            ctrl.pdfUrl = trustedUrl;
+            ctrl.pdfUrl = "";
+            ctrl.isLoadingPdf = true;
+
+            function readPdf() {
+                var readablePdf = {};
+                PdfService.getReadableURL(pdf.url, setPdfURL, readablePdf).then(function success() {
+                    var trustedUrl = $sce.trustAsResourceUrl(readablePdf.url);
+                    ctrl.pdfUrl = trustedUrl;
+                    ctrl.isLoadingPdf = false;
+                });
+            }
+
+            (function main() {
+                readPdf();
+            })();
         }
     });
 

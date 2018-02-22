@@ -1,3 +1,6 @@
-<md-dialog layout-fill flex="80" aria-label="portfólio">
-    <embed layout="column" ng-src="{{ctrl.pdfUrl}}" flex="100" type='application/pdf'></embed>
+<md-dialog layout-fill flex="80" aria-label="portfólio" layout="row" layout-align="center">
+    <div ng-if="ctrl.isLoadingPdf" layout="row" layout-align="center center">
+        <load-circle></load-circle>
+    </div>
+    <embed ng-if="!ctrl.isLoadingPdf" layout="column" ng-src="{{ctrl.pdfUrl}}" flex="100" type='application/pdf'></embed>
 </md-dialog>

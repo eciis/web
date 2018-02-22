@@ -503,7 +503,7 @@
                                 return commentCtrl.user.key === key;
                             });
                         }
-                    }, function error() {
+                    }, function error(response) {
                         $state.go("app.user.home");
                         MessageService.showToast("O usuário já fez essa ação nesse comentário.");
                         commentCtrl.saving = false;
@@ -517,9 +517,11 @@
                         } else {
                             commentCtrl.comment.likes.push(commentCtrl.user.key);
                         }
-                    }, function error() {
+                    }, function error(response) {
                         $state.go("app.user.home");
-                        MessageService.showToast("O usuário já fez essa ação nesse comentário.");
+                        var message = (response.data.msg === "Error! This comment was deleted.") ?
+                        "Esse comentário foi removido" : "O usuário já fez essa ação nesse comentário.";
+                        MessageService.showToast(message);
                         commentCtrl.saving = false;
                     }
                 );

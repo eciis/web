@@ -277,6 +277,9 @@ class Post(PolyModel):
         if reply_id:
             comment = comment.get('replies').get(reply_id)
 
+        Utils._assert(comment is None,
+                    "This comment was deleted.", NotAuthorizedException)
+
         likes = comment.get('likes')
         
         Utils._assert(user.key.urlsafe() in likes,

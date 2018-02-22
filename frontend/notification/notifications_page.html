@@ -1,0 +1,38 @@
+<div flex layout-align="center">
+    <div flex style="margin: 0 2em 0 1em">
+        <md-card>
+            <md-toolbar md-colors="{background: 'teal-500'}" layout="row">
+                <div class="md-toolbar-tools">
+                    <h1>
+                        <md-icon>notifications</md-icon>
+                        Notificações
+                    </h1>
+                </div>
+            </md-toolbar>
+            <md-card-content style="max-height: 32em">
+                <md-list style="padding: 10px;">
+                    <md-list-item class="md-3-line" md-colors="{background: 'grey-200'}" style="margin-bottom: 5px; padding: 3 0 3 0;"
+                        ng-repeat="notification in controller.notifications | orderBy:'-timestamp'"
+                        ng-click="controller.action(notification, $event)">
+                            <img ng-src="{{notification.from.photo_url}}" class="md-avatar" style="width: 60px; height: 60px;"/>
+                            <div class="md-list-item-text" layout="column">
+                                <p><b style="font-size: 18px;">{{ controller.limitString(notification.from.name, 28) }}</b></p>
+                                <p><b style="font-size: 15px; color: #009688;">{{ controller.limitString(notification.from.institution_name, 32) }}</b></p>
+                                <div layout="row">
+                                    <div class="notification-icon-bg">
+                                        <md-icon class="notification-icon">{{controller.getIcon(notification.entity_type)}}</md-icon>
+                                    </div>
+                                    <p style="font-size: 10px; max-height: 3em; margin-left: 4px;">
+                                        <b>
+                                        {{controller.format(notification)}} - 
+                                        {{notification.timestamp | amUtc | amLocal | amCalendar:referenceTime:formats }}
+                                        </b>
+                                    </p>
+                                </div>
+                            </div>    
+                    </md-list-item>
+                </md-list>
+            </md-card-content>
+        </md-card>
+    </div>
+</div>

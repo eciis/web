@@ -97,6 +97,15 @@
                     }
                 }
             })
+            .state("app.user.notifications", {
+                url: "/notifications",
+                views: {
+                    user_content: {
+                        templateUrl: "app/notification/notifications_page.html",
+                        constroller: "NotificationController as controller"
+                    }
+                }
+            })
             .state("app.institution", {
                 abstract: true,
                 views: {

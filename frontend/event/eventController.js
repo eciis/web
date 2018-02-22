@@ -441,7 +441,6 @@
                 loadSelectedState();
                 initPatchObserver();
                 loadEventDates();
-                dialogCtrl.oldEvent = _.cloneDeep(dialogCtrl.event);
             } else {
                 dialogCtrl.event = {
                                     address: address

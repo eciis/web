@@ -128,10 +128,6 @@
                 Utils.getKeyFromUrl(event.institution_key));
         }
 
-        function resetEvent(oldEvent) {
-            eventCtrl.event = _.cloneDeep(oldEvent);
-        }
-
     });
     
     app.directive("eventDetails", function () {

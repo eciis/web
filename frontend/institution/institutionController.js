@@ -221,7 +221,8 @@
 
         institutionCtrl.openWebsite = function openWebsite() {
             var website = institutionCtrl.institution.website_url;
-            $window.open(website);
+            website = Utils.addHttpsToUrl(website, [website]);
+            $window.open(website, '_blank');
         };
 
         institutionCtrl.getFullAddress = function getFullAddress() {

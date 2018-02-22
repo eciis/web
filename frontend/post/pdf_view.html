@@ -1,5 +1,5 @@
 <div ng-if="pdfCtrl.showFiles()" ng-repeat="pdf in pdfCtrl.pdfFiles" layout-padding>
-  <div layout="row" class="clickable" ng-click="pdfCtrl.pdfDialog($event, pdf)">
+  <div layout="row" ng-class="!pdfCtrl.isEditing ? 'clickable' : ''" ng-click="pdfCtrl.pdfDialog($event, pdf)">
     <div layout="column"  flex="10" md-colors="{background: 'default-light-green'}" layout-align="center" flex-xs="25">
       <md-icon class="lg-icon lg-width-height" layout-padding>
         picture_as_pdf

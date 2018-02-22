@@ -12,20 +12,22 @@
         };
 
         pdfCtrl.pdfDialog = function(ev, pdf) {
-            var readablePdf = {};
-            PdfService.getReadableURL(pdf.url, setPdfURL, readablePdf).then(
-                function success() {
-                    $mdDialog.show({
-                        templateUrl: 'app/post/pdfDialog.html',
-                        targetEvent: ev,
-                        clickOutsideToClose:true,
-                        locals: {
-                            pdfUrl: readablePdf.url
-                        },
-                        controller: DialogController,
-                        controllerAs: 'ctrl'
+            if(!pdfCtrl.isEditing) {
+                var readablePdf = {};
+                PdfService.getReadableURL(pdf.url, setPdfURL, readablePdf).then(
+                    function success() {
+                        $mdDialog.show({
+                            templateUrl: 'app/post/pdfDialog.html',
+                            targetEvent: ev,
+                            clickOutsideToClose:true,
+                            locals: {
+                                pdfUrl: readablePdf.url
+                            },
+                            controller: DialogController,
+                            controllerAs: 'ctrl'
+                        });
                     });
-                });
+                }
         };
 
         pdfCtrl.hideFile = function(index) {

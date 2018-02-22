@@ -132,4 +132,18 @@
             scope.$apply();
         });
     });
+
+    describe('timeHasBeenExpired()', function() {
+
+        it('Should be true if current time is bigger than deadline', function() {
+            surveyCtrl.post.deadline = new Date('2015-01-01T12:00:00');
+            expect(surveyCtrl.timeHasBeenExpired()).toBeTruthy();
+        });
+
+        it('Should be false if current time is lower than deadline', function() {
+            surveyCtrl.post.deadline = new Date();
+            surveyCtrl.post.deadline.setHours(surveyCtrl.post.deadline.getHours() + 20);
+            expect(surveyCtrl.timeHasBeenExpired()).toBeFalsy();
+        });
+    });
 }));

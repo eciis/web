@@ -77,12 +77,13 @@
                 targetEvent: ev,
                 clickOutsideToClose: true,
                 locals: {
-                    event: event,
-                    isEditing: true,
-                    resetEvent: resetEvent
+                    event: _.clone(event),
+                    isEditing: true
                 },
                 bindToController: true
-            }).then(function(){
+            }).then(function success(event){
+                (event && event.title && eventCtrl.event !== event) ?  
+                    eventCtrl.event = event : null;
                 eventCtrl.showImage = hasImage(event);
             })
         };

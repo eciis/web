@@ -163,7 +163,8 @@
                 dialogCtrl.loading = true;
                 var patch = formatPatch(generatePatch(jsonpatch.generate(dialogCtrl.observer), event));
                 EventService.editEvent(dialogCtrl.event.key, patch).then(function success() {
-                    $mdDialog.hide();
+                    $mdDialog.hide(event);
+                    dialogCtrl.chaged = true;
                     MessageService.showToast('Evento editado com sucesso.');
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
@@ -404,9 +405,9 @@
         }
 
         function loadEventDates() {
-            dialogCtrl.start_time = new Date(dialogCtrl.dateChangeEvent.start_time);
-            dialogCtrl.event.start_time = new Date(dialogCtrl.dateChangeEvent.start_time);
-            dialogCtrl.event.end_time = new Date(dialogCtrl.dateChangeEvent.end_time);
+            dialogCtrl.start_time = moment.utc(dialogCtrl.dateChangeEvent.start_time)._d;
+            dialogCtrl.event.start_time = moment.utc(dialogCtrl.dateChangeEvent.start_time)._d;
+            dialogCtrl.event.end_time = moment.utc(dialogCtrl.dateChangeEvent.end_time)._d;
         }
 
         function loadSelectedState() {
@@ -441,7 +442,7 @@
                 loadSelectedState();
                 initPatchObserver();
                 loadEventDates();
-                dialogCtrl.oldEvent = _.cloneDeep(dialogCtrl.event);
+                dialogCtrl.oldEvent = _.clone(dialogCtrl.event);
             } else {
                 dialogCtrl.event = {
                                     address: address

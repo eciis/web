@@ -8,6 +8,8 @@
         var surveyCtrl = this;
         surveyCtrl.binaryOptionSelected;
         surveyCtrl.optionsSelected = [];
+        var MAX_DIALOG_CHAR_QUANTITY = 55;
+        var MAX_CHAR_QUANTITY = 90;
 
         surveyCtrl.goToPost = function goToPost() {
              $state.go('app.post', {key: surveyCtrl.post.key});
@@ -169,6 +171,10 @@
                   $mdPanel.open(config);
             }
         };
+
+        surveyCtrl.getOption = function getOption(optionText) {
+            return surveyCtrl.isdialog ? Utils.limitString(optionText, MAX_DIALOG_CHAR_QUANTITY) : Utils.limitString(optionText, MAX_CHAR_QUANTITY);
+        };
     });
 
     app.directive("surveyDetails", function() {
@@ -182,7 +188,8 @@
                 post: '=',
                 posts: '=',
                 user: '=',
-                isdialog: '='
+                isdialog: '=',
+                isPostPage: '='
             }
         };
     });

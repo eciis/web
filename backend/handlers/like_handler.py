@@ -44,31 +44,14 @@ class LikeHandler(BaseHandler):
 
     @json_response
     @login_required
-    @ndb.transactional(xg=True)
     def post(self, user, post_key, comment_id=None, reply_id=None):
         """Handle POST Requests."""
-        """This method is only meant to give like in post."""
+        """This method is only meant to give like in post, comment or reply and send notification."""
         post = ndb.Key(urlsafe=post_key).get()
-        institution = post.institution.get()
-        body = json.loads(self.request.body)
-        entity_type = 'LIKE_POST'
-        
-        Utils._assert(institution.state == 'inactive',
-                      "The institution has been deleted", NotAuthorizedException)
+        if comment_id:            
+            comment = post.like_comment(user, comment_id, reply_id)
 
-        if comment_id:
-            comment = post.get_comment(comment_id)
             entity_type = 'LIKE_COMMENT'
-            if reply_id:
-                comment = comment.get('replies').get(reply_id)
-
-            likes = comment.get('likes')
-
-            Utils._assert(user.key.urlsafe() in likes,
-                      "User already liked this comment", NotAuthorizedException)
-            likes.append(user.key.urlsafe())
-            post.put()
-
             user_is_the_author = comment['author_key'] == user.key.urlsafe()
             if not user_is_the_author:
                 receiver_key = comment['author_key']
@@ -76,22 +59,20 @@ class LikeHandler(BaseHandler):
                     receiver_key,
                     user.key.urlsafe(), 
                     entity_type, 
-                    post.key.urlsafe(),
+                    post_key,
                     user.current_institution
-                )
-        else:
-            Utils._assert(user.is_liked_post(post.key),
-                      "User already liked this publication", NotAuthorizedException)
-            user.like_post(post.key)
-            post.like(user.key)
+                ) 
+        else: 
+            post = post.like(user.key)
 
+            entity_type = 'LIKE_POST'
             params = {
-                'receiver_key': post.author.urlsafe(),
-                'sender_key': user.key.urlsafe(),
-                'entity_key': post.key.urlsafe(),
-                'entity_type': entity_type,
-                'current_institution': user.current_institution.urlsafe()
-            }
+                    'receiver_key': post.author.urlsafe(),
+                    'sender_key': user.key.urlsafe(),
+                    'entity_key': post.key.urlsafe(),
+                    'entity_type': entity_type,
+                    'current_institution': user.current_institution.urlsafe()
+                }
 
             enqueue_task('post-notification', params)
 

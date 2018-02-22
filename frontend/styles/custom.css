@@ -913,3 +913,24 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
     background-color: rgba(0, 0, 0, 0);
     box-shadow: 0 0 0;
 }
+
+.notifications-menu {
+    overflow-y: hidden; 
+    padding: 1rem 1rem 0 1rem; 
+    max-height: 30rem; 
+    max-width: 25rem; 
+}
+
+.notification-icon {
+    font-size: 20px; 
+    color:white;
+}
+
+.notification-icon-bg {
+    background: #009688; 
+    width: 21px; 
+    height: 21px; 
+    padding: 4px; 
+    margin-top: 4px; 
+    border-radius: 50%;
+}

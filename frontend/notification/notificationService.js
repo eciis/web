@@ -10,38 +10,40 @@
 
         var firebaseArrayNotifications;
 
-        var TRANSLATE_MESSAGE = {
-            'COMMENT': 'comentou em um post de seu interesse',
-            'POST': 'publicou um novo post',
-            'SURVEY_POST': 'publicou uma nova enquete',
-            'SHARED_POST': 'compartilhou um post de seu interesse',
-            'INVITE': 'te enviou um novo convite',
-            'INSTITUTION': 'removeu a conexão entre suas instituições',
-            'DELETED_INSTITUTION': 'removeu uma das instituições que você segue',
-            'REQUEST_USER': 'solicitou ser membro de sua instituição',
-            'REQUEST_INSTITUTION_PARENT': 'solicitou um novo vínculo entre sua instituição e a dele',
-            'REQUEST_INSTITUTION_CHILDREN': 'solicitou um novo vínculo entre sua instituição e a dele',
-            'REQUEST_INSTITUTION': 'deseja criar uma nova institutição',
-            'REPLY_COMMENT': 'respondeu o seu comentário',
-            'LIKE_COMMENT': 'curtiu seu comentário',
-            'LIKE_POST': 'curtiu um post de seu interesse',
-            'REJECT_INSTITUTION_LINK': 'rejeitou sua solicitação de vínculo entre instituições',
-            'ACCEPT_INSTITUTION_LINK': 'aceitou sua solicitação de vínculo entre instituições',
-            'REJECT_INVITE_USER': 'rejeitou o convite para ser membro de sua instituição',
-            'ACCEPT_INVITE_USER': 'aceitou o convite para ser membro de sua instituição',
-            'REJECT_INVITE_INSTITUTION': 'rejeitou o seu convite para ser administrador',
-            'ACCEPT_INVITE_INSTITUTION': 'aceitou o seu convite para ser administrador',
-            'DELETE_MEMBER': 'removeu você de sua instituição',
-            'ACCEPTED_LINK': 'aceitou sua solicitação de vínculo'
+        var MESSAGE_ASSEMBLERS = {
+            'COMMENT': messageCreator('Comentou em um post de '),
+            'POST': messageCreator('Publicou um novo post de '),
+            'SURVEY_POST': messageCreator('Publicou uma nova enquete de '),
+            'SHARED_POST': messageCreator('Compartilhou um post de '),
+            'INVITE': messageCreator('Te enviou um novo convite via '),
+            'INSTITUTION': messageCreator('Removeu a conexão entre '),
+            'DELETED_INSTITUTION': messageCreator('Removeu '),
+            'REQUEST_USER': messageCreator('Solicitou ser membro de '),
+            'REQUEST_INSTITUTION_PARENT': messageCreator('Solicitou um novo vínculo entre '),
+            'REQUEST_INSTITUTION_CHILDREN': messageCreator('Solicitou um novo vínculo entre '),
+            'REQUEST_INSTITUTION': messageCreator('Deseja criar uma nova institutição'),
+            'REPLY_COMMENT': messageCreator('Respondeu ao seu comentário no post de '),
+            'LIKE_COMMENT': messageCreator('Curtiu seu comentário no post de '),
+            'LIKE_POST': messageCreator('Curtiu um post de '),
+            'REJECT_INSTITUTION_LINK': messageCreator('Rejeitou sua solicitação de vínculo entre '),
+            'ACCEPT_INSTITUTION_LINK': messageCreator('Aceitou sua solicitação de vínculo entre '),
+            'REJECT_INVITE_USER': messageCreator('Rejeitou o convite para ser membro de '),
+            'ACCEPT_INVITE_USER': messageCreator('Aceitou o convite para ser membro de '),
+            'REJECT_INVITE_INSTITUTION': messageCreator('Rejeitou o seu convite para ser administrador'),
+            'ACCEPT_INVITE_INSTITUTION': messageCreator('Aceitou o seu convite para ser administrador'),
+            'DELETE_MEMBER': messageCreator('Removeu você de '),
+            'ACCEPTED_LINK': messageCreator('Aceitou sua solicitação de vínculo a ')
         };
 
         var POST_NOTIFICATION = 'POST';
         var CHILD_ADDED = "child_added";
 
         service.formatMessage = function formatMessage(notification) {
-            var message = TRANSLATE_MESSAGE[notification.entity_type];
-            var name = notification.from.name || notification.from
-            return `${name} ${message}`;
+            var entity_type = notification.entity_type;
+            var mainInst = notification.entity.institution_name;
+            var otherInst = notification.from.institution_name;
+            var message = assembleMessage(entity_type, mainInst, otherInst);
+            return message;
         };
 
         service.watchNotifications = function watchNotifications(userKey, notificationsList) {
@@ -94,6 +96,24 @@
 
         function isNew(notification) {
             return notification.status === "NEW";
+        }
+
+        function assembleMessage(entity_type, mainInst, otherInst) {
+            var assembler = MESSAGE_ASSEMBLERS[entity_type];
+            return assembler(mainInst, otherInst);
+        }
+
+        function messageCreator(message) {
+            return function (mainInst, otherInst) {
+                if(mainInst && otherInst) {
+                    message = message + `${mainInst} e ${otherInst}`;
+                    return Utils.limitString(message, 50);
+                } else if(mainInst) {
+                    return Utils.limitString(message + mainInst, 50);
+                } else {
+                    return message;
+                }
+            };            
         }
 
         /**

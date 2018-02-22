@@ -404,16 +404,9 @@
         }
 
         function loadEventDates() {
-            dialogCtrl.start_time = toLocaleDate(dialogCtrl.dateChangeEvent.start_time);
-            //dialogCtrl.event.start_time = toLocaleDate(dialogCtrl.dateChangeEvent.start_time);
-            //dialogCtrl.event.end_time = toLocaleDate(dialogCtrl.dateChangeEvent.end_time);
-        }
-
-        function toLocaleDate(dateU){
-            console.log(moment.locale(), moment(dateU));
-            console.log(moment(dateU).toLocaleString());
-            console.log(moment.utc(moment(dateU).toLocaleString()));
-            return moment.utc(moment(dateU).toLocaleString());
+            dialogCtrl.start_time = new Date(dialogCtrl.dateChangeEvent.start_time);
+            dialogCtrl.event.start_time = new Date(dialogCtrl.dateChangeEvent.start_time);
+            dialogCtrl.event.end_time = new Date(dialogCtrl.dateChangeEvent.end_time);
         }
 
         function loadSelectedState() {

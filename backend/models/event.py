@@ -121,8 +121,9 @@ class Event(ndb.Model):
     @staticmethod
     def make(event):
         """Create personalized json of event."""
-        start_time = event.start_time.isoformat()
-        end_time = event.end_time.isoformat()
+        INTERNATIONAL_ZONE = 'Z'
+        start_time = event.start_time.isoformat() + INTERNATIONAL_ZONE
+        end_time = event.end_time.isoformat() + INTERNATIONAL_ZONE
         last_modified_date = event.last_modified_date.isoformat()
         return {
             'title': event.title,

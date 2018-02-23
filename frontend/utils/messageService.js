@@ -15,6 +15,7 @@
             "Error! The end time must be after the current time": "A data final do evento deve ser posterior a data atual!",
             "Error! The end time can not be before the start time": "A data final do evento deve ser posterior a inicial!",
             "Error! The invite has already been used": "Esse convite já foi utilizado!",
+            "Error! This comment has been deleted.": "Esse comentário foi removido!",
             "Error! This post has been deleted": "Esse post foi removido."
         };
 

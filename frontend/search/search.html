@@ -49,8 +49,8 @@
 
                     <md-list ng-if="searchCtrl.loading">
                         <h4 md-colors="{color:'grey-700'}">Resultados da pesquisa</h4>
-                        <md-list-item class="list-item-dense" ng-repeat="institution in searchCtrl.institutions 
-                        | filter: searchCtrl.searchActuation | filter: searchCtrl.searchNature | filter: searchCtrl.searchState" 
+                        <md-list-item class="list-item-dense" ng-repeat="institution in institutions = (searchCtrl.institutions 
+                        | filter: searchCtrl.searchActuation | filter: searchCtrl.searchNature | filter: searchCtrl.searchState)" 
                             style="margin-bottom: 1%;"
                               md-colors="{background: 'grey-300'}">
                             <div layout="row" ng-click="searchCtrl.goToInstitution(institution.id)">
@@ -66,7 +66,7 @@
                                 </div>
                             </div>
                         </md-list-item>
-                        <md-list-item class="md-3-line" ng-if="searchCtrl.notHasInstitutions()">
+                        <md-list-item class="md-3-line" ng-if="institutions.length === 0">
                             <b>&bull; Nenhuma instituição encontrada</b>
                         </md-list-item>
                     </md-list>

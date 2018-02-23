@@ -38,7 +38,7 @@
         var mainPost = new Post({
                     title: 'main post', author_key: user.key, institution_key: institutions[0].key,
                     key: "123456", comments: "/api/posts/123456/comments",
-                    likes: "/api/posts/123456/likes", number_of_likes: 0, number_of_comments: 0
+                    likes: "/api/posts/123456/likes", number_of_likes: 0, number_of_comments: 0, data_comments: {}
         });
         var secondaryPost = new Post({title: 'secondary post', author_key: "", institution: institutions[0], key: "123412356"});
         var otherPost = new Post({title: 'other post', author: user, institution: institutions[0], key: "123454356", number_of_likes: 1, number_of_comments: 1});
@@ -408,7 +408,7 @@
             spyOn(postService, 'getPost').and.callFake(function () {
                 return {
                     then: function (callback) {
-                        return callback();
+                        return callback(posts[0]);
                     }
                 };
             });

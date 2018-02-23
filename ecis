@@ -1,4 +1,7 @@
 #!/bin/bash
+bold=$(tput bold)
+_bold=$(tput sgr0)
+
 SYS_URL='http://localhost:8080'
 
 APP_YAML=app.yaml
@@ -7,20 +10,14 @@ BACKEND_YAML=backend/backend.yaml
 WORKER_YAML=backend/worker.yaml
 SUPPORT_YAML=support/support.yaml
 
-DOMAIN="plataformacis.org"
-
-BACKEND_DOMAIN="backend.$DOMAIN"
-
 BACKEND_LOCAL="localhost:8082"
 
 LANDINGPAGE_LOCAL="localhost:8080"
 
 FRONTEND_CONFIG_FILE="frontend/config.js"
+SUPPORT_CONFIG_FILE="support/config.js"
 
 PY_ENV=backend/py_env
-
-bold=$(tput bold)
-_bold=$(tput sgr0)
 
 function set_backend_url {
     if [ -z $1 ]; then
@@ -30,6 +27,8 @@ function set_backend_url {
     fi
     sed -i "4s|.*|    BACKEND_URL: '$url',|" $FRONTEND_CONFIG_FILE
     echo ">> Frontend will use ${bold}$url${_bold} as backend."
+    sed -i "4s|.*|    BACKEND_URL: '$url',|" $SUPPORT_CONFIG_FILE
+    echo ">> Support will use ${bold}$url${_bold} as backend."
 }
 
 function set_landingpage_url {
@@ -40,6 +39,8 @@ function set_landingpage_url {
     fi
     sed -i "5s|.*|    LANDINGPAGE_URL: '$url'|" $FRONTEND_CONFIG_FILE
     echo ">> Frontend will use ${bold}$url${_bold} as landing page."
+    sed -i "5s|.*|    LANDINGPAGE_URL: '$url'|" $SUPPORT_CONFIG_FILE
+    echo ">> Support will use ${bold}$url${_bold} as landing page."
 }
 
 case "$1" in
@@ -113,7 +114,26 @@ case "$1" in
     ;;
 
     deploy)
-        echo "=========== Staring Google App Engine Deployment ==========="
+        read -p "${bold}>> Type the app name:${_bold} " APP_NAME
+
+        gcloud config set project $APP_NAME
+
+        echo "${bold}>> Deploy will use the following GCloud configuration${_bold}"
+        gcloud config list
+
+        read -p "${bold}Is everything correct (Y/n)?${_bold} " ANSWER
+
+        if [ "$ANSWER" != "n" ]; then
+            echo "Yes"
+        else
+            exit 1
+        fi
+
+        DOMAIN="$APP_NAME.appspot.com"
+
+        BACKEND_DOMAIN="backend.$DOMAIN"
+        
+        echo "=========== Starting Google App Engine Deployment ==========="
 
         if [ ! -z $2 ]; then
             version=$2

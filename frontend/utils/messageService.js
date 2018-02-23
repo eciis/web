@@ -16,6 +16,7 @@
             "Error! The end time can not be before the start time": "A data final do evento deve ser posterior a inicial!",
             "Error! The invite has already been used": "Esse convite já foi utilizado!",
             "Error! This comment has been deleted.": "Esse comentário foi removido!",
+            "Error! User already liked this comment.": "O usuário já curtiu esse comentário.",
             "The invites are being processed.": "Os convites estão sendo processados."
         };
 
@@ -32,7 +33,7 @@
         };
 
         function customMessage(message) {
-            return msg[message.code] || msg[message] || message;
+            return (message && msg[message.code]) || msg[message] || message;
         }
 
         service.showConfirmationDialog = function showConfirmationDialog(event, title, textContent) {

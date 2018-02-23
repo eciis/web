@@ -184,6 +184,7 @@ def initModels(cls):
     cls.second_user.name = 'second_user'
     cls.second_user.email = ['second_user@ccc.ufcg.edu.br']
     cls.second_user.photo_url = '/img.jpg'
+    cls.second_user.liked_posts = []
     cls.second_user.put()
 
     # new Institution

@@ -204,6 +204,10 @@
             controller.notifications.length : "+99";
         };
 
+        controller.limitString = function limitString(string, value) {
+            return Utils.limitString(string, value);
+        };
+
         function refreshUserInstitutions () {
             UserService.load().then(function success(response) {
                 controller.user.institutions = response.institutions;

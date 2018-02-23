@@ -281,6 +281,17 @@
             return valid;
         };
 
+        dialogCtrl.isValidDate = function isValidDate(){  
+            var isUndefined = _.isUndefined(dialogCtrl.event.start_time) || 
+                _.isUndefined(dialogCtrl.event.end_time);
+            var endDateAfterNow = new Date() < dialogCtrl.event.end_time;
+            return !isUndefined && endDateAfterNow;
+        };
+
+        dialogCtrl.isValidStepOne = function isValidStepOne(){  
+            return dialogCtrl.isValidAddress() && dialogCtrl.isValidDate();
+        };
+
         function getFields() {
             var necessaryFieldsForStep = {
                 0: {
@@ -289,7 +300,7 @@
                         dialogCtrl.event.local,
                         dialogCtrl.event.address
                     ],
-                    isValid: dialogCtrl.isValidAddress
+                    isValid: dialogCtrl.isValidStepOne
                 }
             };
             return necessaryFieldsForStep;

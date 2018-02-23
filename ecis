@@ -19,6 +19,10 @@ SUPPORT_CONFIG_FILE="support/config.js"
 
 PY_ENV=backend/py_env
 
+APP_VERSION=$(git branch | grep '* ' | tr -d '* ')
+sed -i "6s|.*|    APP_VERSION: '$APP_VERSION'|" $FRONTEND_CONFIG_FILE
+sed -i "6s|.*|    APP_VERSION: '$APP_VERSION'|" $SUPPORT_CONFIG_FILE
+
 function set_backend_url {
     if [ -z $1 ]; then
         url="http://$BACKEND_DOMAIN"
@@ -37,9 +41,9 @@ function set_landingpage_url {
     else
         url="http://"$1
     fi
-    sed -i "5s|.*|    LANDINGPAGE_URL: '$url'|" $FRONTEND_CONFIG_FILE
+    sed -i "5s|.*|    LANDINGPAGE_URL: '$url',|" $FRONTEND_CONFIG_FILE
     echo ">> Frontend will use ${bold}$url${_bold} as landing page."
-    sed -i "5s|.*|    LANDINGPAGE_URL: '$url'|" $SUPPORT_CONFIG_FILE
+    sed -i "5s|.*|    LANDINGPAGE_URL: '$url',|" $SUPPORT_CONFIG_FILE
     echo ">> Support will use ${bold}$url${_bold} as landing page."
 }
 
@@ -114,6 +118,12 @@ case "$1" in
     ;;
 
     deploy)
+        APP_VERSION=$(git tag | tail -1)
+        read -p ">> The ${bold}Latest${_bold} APP VERSION ${bold}$APP_VERSION${_bold} will be deployed, ok?"
+        git checkout tags/"$APP_VERSION"
+        sed -i "6s|.*|    APP_VERSION: '$APP_VERSION'|" $FRONTEND_CONFIG_FILE
+        sed -i "6s|.*|    APP_VERSION: '$APP_VERSION'|" $SUPPORT_CONFIG_FILE
+
         read -p "${bold}>> Type the app name:${_bold} " APP_NAME
 
         gcloud config set project $APP_NAME

@@ -30,7 +30,7 @@
                     if (!userIsAMember()) {
                         newInviteCtrl.addInstitution(event);
                     } else {
-                        deleteInvite();
+                        newInviteCtrl.deleteInvite();
                     }
                 }
             } else {
@@ -138,7 +138,7 @@
             return promise;
         }
 
-        function deleteInvite() {
+       newInviteCtrl.deleteInvite = function deleteInvite() {
             var promise = InviteService.deleteInvite(newInviteCtrl.inviteKey);
             promise.then(function success() {
                 newInviteCtrl.user.removeInvite(newInviteCtrl.inviteKey);

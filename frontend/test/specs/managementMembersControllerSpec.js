@@ -161,10 +161,12 @@
                 expect(manageMemberCtrl.sent_invitations.length).toBe(2);
                 var promise = manageMemberCtrl.sendUserInvite();
                 promise.then(function() {
+                    var expectedInvite = _.clone(newInvite);
+                    expectedInvite.invitee = "teste@gmail.com";
                     expect(inviteService.sendInvite).toHaveBeenCalledWith(requestBody);
                     expect(manageMemberCtrl.invite).toEqual({});
                     expect(manageMemberCtrl.sent_invitations).toContain(invite);
-                    expect(manageMemberCtrl.sent_invitations).toContain(newInvite);
+                    expect(manageMemberCtrl.sent_invitations).toContain(expectedInvite);
                     expect(manageMemberCtrl.sent_invitations.length).toBe(3);
                     done();
                 });

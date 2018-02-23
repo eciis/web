@@ -232,5 +232,16 @@
                 expect(authService.save).toHaveBeenCalled();
             });
         });
+
+        describe('acceptInvite', function () {
+            it('should call deleteInvite', function () {
+                spyOn(newInviteCtrl, 'deleteInvite');
+                newInviteCtrl.institution = otherInstitution;
+                newInviteCtrl.user = otherUser;
+                newInviteCtrl.office = "developer";
+                newInviteCtrl.acceptInvite("$event");
+                expect(newInviteCtrl.deleteInvite).toHaveBeenCalled();
+            });
+        });
     });
 }));

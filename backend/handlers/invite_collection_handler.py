@@ -69,7 +69,7 @@ class InviteCollectionHandler(BaseHandler):
                 invites_keys.append(current_invite.key.urlsafe())
 
             enqueue_task('send-invite', {'invites_keys': json.dumps(invites_keys), 'host': host,
-                                        'current_institution': current_institution_key.urlsafe()})
+                                         'current_institution': current_institution_key.urlsafe()})
 
         process_invites(data['emails'], invite, user.current_institution)
 

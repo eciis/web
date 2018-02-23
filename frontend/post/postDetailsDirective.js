@@ -316,7 +316,7 @@
             postDetailsCtrl.post.type_survey = false;
             var promise = PostService.getPost(postDetailsCtrl.post.key);
             promise.then(function success(response) {
-                postDetailsCtrl.post = Object.assign(response);
+                postDetailsCtrl.post = response;
                 postDetailsCtrl.isLoadingComments = false;
             }, function error(response) {
                 postDetailsCtrl.post.type_survey = type_survey;

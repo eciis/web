@@ -91,18 +91,6 @@
             });
         });
 
-        describe('notHasInstitution', function() {
-
-            it('Should be true when institutions list is empty', function() {
-                expect(searchCtrl.notHasInstitutions()).toBeTruthy();
-            });
-
-            it('Should be false when instituions list contains some institution', function() {
-                searchCtrl.institutions.push(splab);
-                expect(searchCtrl.notHasInstitutions()).toBeFalsy();
-            });
-        });
-
         describe('search()', function() {
 
             it('Should call makeSearch()', function() {

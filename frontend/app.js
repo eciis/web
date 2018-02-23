@@ -68,7 +68,7 @@
                 }
             })
             .state("app.user.institutions", {
-                url: "/",
+                url: "/all_institutions",
                 views: {
                     user_content: {
                         templateUrl: "app/institution/institutions.html",

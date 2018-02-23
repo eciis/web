@@ -116,7 +116,7 @@
                       </md-button>
                     </md-menu-item>
                     <md-menu-item>
-                      <md-button ng-click="homeCtrl.goToInstitutions()">
+                      <md-button ng-click="homeCtrl.goToInstitutions()"  ng-class="homeCtrl.getSelectedItemClass('institutions')">
                         <md-icon>account_balance</md-icon>
                         <b>Instituições cadastradas</b>
                       </md-button>

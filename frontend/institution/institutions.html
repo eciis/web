@@ -1,24 +1,78 @@
 <md-content layout="row" layout-align="center" class="body custom-scrollbar">
-    <div flex>
-        <div flex flex-gt-md="95" layout="row" layout-align="center">
+    <div flex flex-gt-md="95" layout="row" layout-align="center">
+        <div flex>
             <md-card flex layout="column">
-            <md-toolbar md-colors="{background: 'teal-500'}" layout="row">
-                <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
-                <h1>
-                    <md-icon>account_balance</md-icon>
-                    Instituições cadastradas
-                </h1>
-                <span flex md-truncate></span>
-                </div>
-            </md-toolbar>
-            <md-card-content>
-                <md-grid-list md-cols="2" md-row-height="1:1" md-gutter="4px">
-                    <md-grid-tile ng-repeat="inst in allInstituinsCtrl.institutions" 
-                    md-colspan="1" md-rowspan="1" class="clickable-no-hover">
-                        {{inst.name}}
-                    </md-grid-tile>
-                </md-grid-list>
-            </md-card-content>
+                <md-toolbar md-colors="{background: 'teal-500'}" layout="row">
+                    <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
+                    <h1>
+                        <md-icon>account_balance</md-icon>
+                        Instituições cadastradas
+                    </h1>
+                    <span flex md-truncate></span>
+                    </div>
+                </md-toolbar>
+                <md-card-content>
+                        
+                    <md-grid-list md-cols="2" md-row-height="3:2" >
+                        <md-grid-tile ng-repeat="inst in allInstituinsCtrl.institutions" 
+                        class="clickable-no-hover">
+                            <!--CARD DA INST-->
+                            <md-card >
+                                <!-- HEADER -->
+                                <md-card-header>
+                                    <md-card-avatar>
+                                    <a href ng-click="allInstituinsCtrl.goToInstitution(inst.key)">
+                                        <img ng-src="{{ inst.photo_url }}" role="button" class="md-user-avatar img-post-shadow"/>
+                                    </a>
+                                    </md-card-avatar>
+                                    <md-card-header-text>
+                                    <div>
+                                        <a href class="md-title hyperlink" ng-click="allInstituinsCtrl.goToInstitution(inst.key)">
+                                        {{ inst.name }}
+                                        </a>
+                                    </div>
+                                    <span layout="row" class="md-subhead">
+                                        Cidade/Estado
+                                    </span>
+                                    </md-card-header-text>
+                                </md-card-header>
+
+                                
+                                
+                                <!-- BODY POST -->
+                                <md-card-content > 
+                                    <div layout="row" layout-align="center center" flex ng-style="{height: '150px'}"
+                                    md-colors="{background: 'light-green'}"> 
+                                    <img style="width: 100px; height: 100px; border-radius: 50%;" ng-src="{{'app/images/institution.png'}}" >     
+                                </div>
+                                    <!-- COVER 
+                                        <img  ng-src="{{inst.photo_url}}" class="mat-card-image md-card-image" alt="Washed Out" >
+                                        
+                                    <div layout="row" layout-margin layout-wrap layout-align="center center">
+                                            <md-card flex="65"> 
+                                                    <img ng-src="{{inst.photo_url}}">
+                                            </md-card>
+                                       </div>
+
+                                    <md-card class="card" >
+                                            <img ng-src="oii">
+                                    </md-card>
+                                    -->
+                                    <!--DESCRIPTION-->
+                                    <spam>
+                                        {{inst.description}}
+                                    </spam>
+                                </md-card-content>
+                                
+                                <!-- BUTTONS -->
+                                <md-card-actions layout="row" layout-align="end center">
+                                    <md-button>Ver página</md-button>
+                                    <md-button>Seguir</md-button>
+                                </md-card-actions>
+                            </md-card>
+                        </md-grid-tile>
+                    </md-grid-list>
+                </md-card-content>
             </md-card>
         </div>
     </div>

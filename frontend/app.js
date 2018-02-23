@@ -71,7 +71,8 @@
                 url: "/",
                 views: {
                     user_content: {
-                        templateUrl: "app/institution/institutions.html"
+                        templateUrl: "app/institution/institutions.html",
+                        controller: "AllInstitutionsController as allInstituinsCtrl"
                     }
                 }
             })

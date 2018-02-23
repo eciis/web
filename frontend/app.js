@@ -67,6 +67,14 @@
                     }
                 }
             })
+            .state("app.user.institutions", {
+                url: "/",
+                views: {
+                    user_content: {
+                        templateUrl: "app/institution/institutions.html"
+                    }
+                }
+            })
             .state("app.user.events", {
                 url: "/events",
                 views: {

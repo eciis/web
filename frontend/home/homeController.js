@@ -68,6 +68,11 @@
             $state.go('app.user.events', {posts: homeCtrl.posts});
         };
 
+        homeCtrl.goToInstitutions = function goToInstitutions() {
+            homeCtrl.stateView = "institutions";
+            $state.go('app.user.institutions');
+        };
+
         homeCtrl.goInvite = function goInvite() {
             homeCtrl.stateView = "invite_inst";
             $state.go('app.user.invite_inst');

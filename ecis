@@ -15,6 +15,7 @@ BACKEND_LOCAL="localhost:8082"
 LANDINGPAGE_LOCAL="localhost:8080"
 
 FRONTEND_CONFIG_FILE="frontend/config.js"
+SUPPORT_CONFIG_FILE="support/config.js"
 
 PY_ENV=backend/py_env
 
@@ -26,6 +27,8 @@ function set_backend_url {
     fi
     sed -i "4s|.*|    BACKEND_URL: '$url',|" $FRONTEND_CONFIG_FILE
     echo ">> Frontend will use ${bold}$url${_bold} as backend."
+    sed -i "4s|.*|    BACKEND_URL: '$url',|" $SUPPORT_CONFIG_FILE
+    echo ">> Support will use ${bold}$url${_bold} as backend."
 }
 
 function set_landingpage_url {
@@ -36,6 +39,8 @@ function set_landingpage_url {
     fi
     sed -i "5s|.*|    LANDINGPAGE_URL: '$url'|" $FRONTEND_CONFIG_FILE
     echo ">> Frontend will use ${bold}$url${_bold} as landing page."
+    sed -i "5s|.*|    LANDINGPAGE_URL: '$url'|" $SUPPORT_CONFIG_FILE
+    echo ">> Support will use ${bold}$url${_bold} as landing page."
 }
 
 case "$1" in

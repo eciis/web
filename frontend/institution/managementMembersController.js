@@ -6,7 +6,11 @@
         InviteService, $mdToast, $state, $mdDialog, InstitutionService, AuthService, MessageService,
         RequestInvitationService, ProfileService) {
         var manageMemberCtrl = this;
-
+        /* TODO: FIX the MAX_EMAILS_QUANTITY's value
+        * The current value is one because the view that supports
+        * many invitations at once is not ready yet.
+        * @author: Raoni Smaneoto - 23/02/2018
+        */
         var MAX_EMAILS_QUANTITY = 1;
 
         manageMemberCtrl.institution = {};
@@ -70,7 +74,7 @@
                 manageMemberCtrl.isLoadingInvite = true;
                 var promise = InviteService.sendInvite(requestBody);
                 promise.then(function success(response) {
-                    manageMemberCtrl.sent_invitations.push(invite);
+                    refreshSentInvitations(requestBody.emails, requestBody.invite_body);
                     manageMemberCtrl.invite = {};
                     manageMemberCtrl.showInvites = true; 
                     manageMemberCtrl.showSendInvite = false;
@@ -83,6 +87,13 @@
                 return promise;
             }
         };
+
+        function refreshSentInvitations(emails, invite) {
+            _.each(emails, function(email) {
+                invite.invitee = email;
+                manageMemberCtrl.sent_invitations.push(_.clone(invite));
+            });
+        }
 
         manageMemberCtrl.acceptRequest = function acceptRequest(request) {
             var promise = RequestInvitationService.acceptRequest(request.key);

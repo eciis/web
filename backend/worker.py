@@ -229,7 +229,7 @@ class SendInviteHandler(BaseHandler):
         """It iterates in an array of invites creating and sending them."""
         keys = json.loads(self.request.get('invites_keys'))
         host = self.request.get('host')
-        current_institution = json.loads(self.request.get('current_institution'))
+        current_institution = self.request.get('current_institution')
         current_institution = ndb.Key(urlsafe=current_institution)
         for key in keys:
             invite = ndb.Key(urlsafe=key).get()

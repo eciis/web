@@ -36,7 +36,6 @@ class InviteCollectionHandler(BaseHandler):
         body = json.loads(self.request.body)
         data = body['data']
         host = self.request.host
-        invites_keys = []
         invite = data['invite_body']
         type_of_invite = invite.get('type_of_invite')
 
@@ -61,13 +60,18 @@ class InviteCollectionHandler(BaseHandler):
         Utils._assert(institution.state == 'inactive',
                         "The institution has been deleted", NotAuthorizedException)
 
-        for email in data['emails']:
-            invite['invitee'] = email
-            current_invite = createInvite(invite)
-            invites_keys.append(current_invite.key.urlsafe())
+        @ndb.transactional(xg=True, retries=10)
+        def process_invites(emails, invite, current_institution_key):
+            invites_keys = []
+            for email in emails:
+                invite['invitee'] = email
+                current_invite = createInvite(invite)
+                invites_keys.append(current_invite.key.urlsafe())
 
-        enqueue_task('send-invite', {'invites_keys': json.dumps(invites_keys), 'host': host,
-                                     'current_institution': json.dumps(user.current_institution.urlsafe())})
+            enqueue_task('send-invite', {'invites_keys': json.dumps(invites_keys), 'host': host,
+                                        'current_institution': current_institution_key.urlsafe()})
+
+        process_invites(data['emails'], invite, user.current_institution)
 
         self.response.write(json.dumps(
             {'msg': 'The invites are being processed.'}))

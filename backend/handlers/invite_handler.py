@@ -37,6 +37,14 @@ def define_entity(dictionary):
     return InstitutionProfile
 
 
+def check_if_user_is_member(user, institution_key):
+    """Check if the user is already a member."""
+    for current_institution in user.institutions:
+        if(current_institution == institution_key):
+            return True
+    return False
+
+
 class InviteHandler(BaseHandler):
     """Invite Handler."""
 
@@ -74,11 +82,14 @@ class InviteHandler(BaseHandler):
         Utils._assert(invite.status == 'accepted', 
             "This invitation has already been accepted", 
             NotAuthorizedException)
-            
-        invite.change_status('accepted')
 
         institution_key = invite.institution_key
         institution = institution_key.get()
+
+        Utils._assert(check_if_user_is_member(user, institution_key), 
+            "The user is already a member", NotAuthorizedException)
+
+        invite.change_status('accepted')
 
         user.add_institution(institution_key)
         user.follow(institution_key)

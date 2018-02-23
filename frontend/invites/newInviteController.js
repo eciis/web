@@ -27,7 +27,11 @@
             newInviteCtrl.acceptedInvite = true;
             if (newInviteCtrl.invite.type_of_invite === "USER") {
                 if(isValidProfile()) {
-                    newInviteCtrl.addInstitution(event);
+                    if (!userIsAMember()) {
+                        newInviteCtrl.addInstitution(event);
+                    } else {
+                        deleteInvite();
+                    }
                 }
             } else {
                 newInviteCtrl.goToInstForm();
@@ -99,7 +103,7 @@
                     .cancel('Não');
                     var promise = $mdDialog.show(confirm);
                 promise.then(function() {
-                    deleteInvite();
+                    deleteInviteAndReloadUser();
                 }, function() {
                     MessageService.showToast('Cancelado');
                 });
@@ -118,7 +122,7 @@
             return instObj.getFullAddress();
         };
 
-        function deleteInvite() {
+        function deleteInviteAndReloadUser() {
             var promise = InviteService.deleteInvite(newInviteCtrl.inviteKey);
             promise.then(function success() {
                 AuthService.reload().then(function() {
@@ -132,6 +136,18 @@
                 MessageService.showToast(response.data.msg);
             });
             return promise;
+        }
+
+        function deleteInvite() {
+            var promise = InviteService.deleteInvite(newInviteCtrl.inviteKey);
+            promise.then(function success() {
+                newInviteCtrl.user.removeInvite(newInviteCtrl.inviteKey);
+                AuthService.save();
+                MessageService.showToast('Você já é membro dessa instituição');
+                $state.go('app.user.home');
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
+            })
         }
 
         function showAlert(event) {
@@ -180,6 +196,14 @@
 
         function getCurrentName() {
             return newInviteCtrl.user_name ? newInviteCtrl.user_name : newInviteCtrl.user.name;
+        }
+
+        function userIsAMember() {
+            var userIsMember = false;
+            _.each(newInviteCtrl.user.institutions, function (institution) {
+                userIsMember = institution.key === newInviteCtrl.institution.key;
+            });
+            return userIsMember;
         }
 
         loadInvite();

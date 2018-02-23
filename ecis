@@ -45,7 +45,7 @@ function set_landingpage_url {
 
 case "$1" in
     run)
-        APP_VERSION=$(git branch | grep '* ' | tr -d '* ')
+        APP_VERSION=$(git branch | grep "*" | tr -d "()*" | cut -c2-)
         sed -i "6s|.*|    APP_VERSION: '$APP_VERSION'|" $FRONTEND_CONFIG_FILE
         sed -i "6s|.*|    APP_VERSION: '$APP_VERSION'|" $SUPPORT_CONFIG_FILE
 

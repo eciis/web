@@ -19,10 +19,6 @@ SUPPORT_CONFIG_FILE="support/config.js"
 
 PY_ENV=backend/py_env
 
-APP_VERSION=$(git branch | grep '* ' | tr -d '* ')
-sed -i "6s|.*|    APP_VERSION: '$APP_VERSION'|" $FRONTEND_CONFIG_FILE
-sed -i "6s|.*|    APP_VERSION: '$APP_VERSION'|" $SUPPORT_CONFIG_FILE
-
 function set_backend_url {
     if [ -z $1 ]; then
         url="http://$BACKEND_DOMAIN"
@@ -49,6 +45,10 @@ function set_landingpage_url {
 
 case "$1" in
     run)
+        APP_VERSION=$(git branch | grep '* ' | tr -d '* ')
+        sed -i "6s|.*|    APP_VERSION: '$APP_VERSION'|" $FRONTEND_CONFIG_FILE
+        sed -i "6s|.*|    APP_VERSION: '$APP_VERSION'|" $SUPPORT_CONFIG_FILE
+
         echo "=========== Cleaning Environment ==========="
         rm -rf $PY_ENV
         rm -rf frontend/test/node_modules frontend/test/bower_components

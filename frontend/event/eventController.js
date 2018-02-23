@@ -284,8 +284,7 @@
         dialogCtrl.isValidDate = function isValidDate(){  
             var isUndefined = _.isUndefined(dialogCtrl.event.start_time) || 
                 _.isUndefined(dialogCtrl.event.end_time);
-            var endDateAfterNow = new Date() < dialogCtrl.event.end_time;
-            return !isUndefined && endDateAfterNow;
+            return !isUndefined;
         };
 
         dialogCtrl.isValidStepOne = function isValidStepOne(){  

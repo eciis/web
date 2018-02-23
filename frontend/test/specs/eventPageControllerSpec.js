@@ -92,31 +92,6 @@
       httpBackend.verifyNoOutstandingRequest();
   });
 
-  describe('deleteEvent()', function(){
-    beforeEach(function() {
-      spyOn(mdDialog, 'confirm').and.callThrough();
-      spyOn(mdDialog, 'show').and.callFake(function(){
-        return {
-          then: function(callback) {
-            return callback();
-          }
-        };
-      });
-      spyOn(eventService, 'deleteEvent').and.callThrough();
-    });
-
-    it('Should remove event of events', function() {
-      var event = eventCtrl.event;
-      httpBackend.expect('DELETE', EVENTS_URI + '/' + event.key).respond();
-      eventCtrl.deleteEvent("$event", event);
-      httpBackend.flush();
-
-      expect(eventService.deleteEvent).toHaveBeenCalledWith(event);
-      expect(mdDialog.confirm).toHaveBeenCalled();
-      expect(mdDialog.show).toHaveBeenCalled();
-    });
-  });  
-
   describe('share()', function() {
 
     it('should eventService.createPost be called', function() {

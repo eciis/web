@@ -9,6 +9,8 @@
 
         controller.user = AuthService.getCurrentUser();
 
+        controller.APP_VERSION = Config.APP_VERSION;
+
         controller.sideNavOptions = [
             {
                 label: "Início",

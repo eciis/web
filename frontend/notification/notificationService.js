@@ -111,12 +111,13 @@
 
         function messageCreator(message, notifType) {
             return function (mainInst, otherInst) {
-                if(notifType == DOUBLE_INST) {
-                    return message + `${mainInst} e ${otherInst}`;
-                } else if(notifType == SINGLE_INST) {
-                    return message + mainInst;
-                } else {
-                    return message;
+                switch(notifType) {
+                    case DOUBLE_INST: 
+                        return message + `${mainInst} e ${otherInst}`; 
+                    case SINGLE_INST:
+                        return message + mainInst; 
+                    default:
+                        return message;
                 }
             };            
         }

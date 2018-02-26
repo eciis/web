@@ -17,7 +17,8 @@
             "Error! The invite has already been used": "Esse convite já foi utilizado!",
             "Error! This comment has been deleted.": "Esse comentário foi removido!",
             "Error! This post has been deleted": "Esse post foi removido.",
-            "Error! User already liked this comment.": "O usuário já curtiu esse comentário."
+            "Error! User already liked this comment.": "O usuário já curtiu esse comentário.",
+            "The invites are being processed.": "Os convites estão sendo processados."
         };
 
         service.showToast = function showToast(message) {

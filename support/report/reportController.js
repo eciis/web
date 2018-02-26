@@ -126,6 +126,7 @@
             controller.report.userKey = user.key;
             controller.report.timestamp = new Date().toISOString();
             controller.report.userInfo = getUserInfo();
+            controller.report.appVersion = Config.APP_VERSION;
             FirebaseService.createReport(controller.report).then(function () {
                 MessageService.showToast("Obrigado! Recebemos seu Relatório.");
                 $state.go("support.home");

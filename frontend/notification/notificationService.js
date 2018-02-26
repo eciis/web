@@ -109,9 +109,9 @@
             return assembler(mainInst, otherInst);
         }
 
-        function messageCreator(message, notifType) {
+        function messageCreator(message, notificationType) {
             return function (mainInst, otherInst) {
-                switch(notifType) {
+                switch(notificationType) {
                     case DOUBLE_INST: 
                         return message + `${mainInst} e ${otherInst}`; 
                     case SINGLE_INST:

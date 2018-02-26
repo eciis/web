@@ -12,7 +12,7 @@
             <div style="margin: 0 1em 0 1em;">
                 <form>
                     <md-input-container class="md-block">
-                        <input placeholder="Buscar" ng-model="controller.keyword">
+                        <input placeholder="Buscar" ng-model="notificationCtrl.keyword">
                             <md-icon>search</md-icon>
                     </md-input-container>
                 </form>
@@ -20,23 +20,23 @@
             <md-content class="custom-scrollbar">
                 <md-list style="padding: 10px;">
                     <md-list-item class="md-3-line" md-colors="{background: 'grey-200'}" style="margin-bottom: 5px; padding: 3 0 3 0;"
-                        ng-repeat="notification in controller.notifications | orderBy:'-timestamp' | filter: controller.keyword" 
-                        ng-click="controller.action(notification, $event)">
+                        ng-repeat="notification in notificationCtrl.notifications | orderBy:'-timestamp' | filter: notificationCtrl.keyword" 
+                        ng-click="notificationCtrl.action(notification, $event)">
                             <img ng-src="{{notification.from.photo_url}}" class="md-avatar" style="width: 60px; height: 60px;"/>
                             <div class="md-list-item-text" layout="column">
-                                <p><b style="font-size: 18px;">{{ controller.limitString(notification.from.name, 85) }}</b></p>
-                                <p><b style="font-size: 15px; color: #009688;">{{ controller.limitString(notification.from.institution_name, 85) }}</b></p>
+                                <p><b style="font-size: 18px;">{{ notificationCtrl.limitString(notification.from.name, 85) }}</b></p>
+                                <p><b style="font-size: 15px; color: #009688;">{{ notificationCtrl.limitString(notification.from.institution_name, 85) }}</b></p>
                                 <div layout="row">
                                     <div class="notification-icon-bg" hide show-gt-xs>
-                                        <md-icon class="notification-icon">{{controller.getIcon(notification.entity_type)}}</md-icon>
+                                        <md-icon class="notification-icon">{{notificationCtrl.getIcon(notification.entity_type)}}</md-icon>
                                     </div>
                                     <div class="notification-icon-bg" hide show-xs style="margin-top: 1em;">
-                                        <md-icon class="notification-icon">{{controller.getIcon(notification.entity_type)}}</md-icon>
+                                        <md-icon class="notification-icon">{{notificationCtrl.getIcon(notification.entity_type)}}</md-icon>
                                     </div>
                                     <div style="max-height: 3em; margin-left: 4px; margin-top: 10px">
                                         <p style="font-size: 11px;">
                                             <b>
-                                                {{ controller.limitString(controller.format(notification), 95) }} - 
+                                                {{ notificationCtrl.limitString(notificationCtrl.format(notification), 95) }} - 
                                                 {{ notification.timestamp | amUtc | amLocal | amCalendar:referenceTime:formats }}
                                             </b>
                                         </p>

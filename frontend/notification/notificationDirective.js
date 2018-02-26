@@ -208,6 +208,10 @@
             return Utils.limitString(string, value);
         };
 
+        controller.seeAll = function seeAll() {
+            $state.go('app.user.notifications');
+        }
+
         function refreshUserInstitutions () {
             UserService.load().then(function success(response) {
                 controller.user.institutions = response.institutions;

@@ -24,8 +24,8 @@
                 </div>
                 <p style="font-size: 10px; max-height: 3em; margin-left: 4px;">
                   <b>
-                    {{controller.format(notification)}} - 
-                    {{notification.timestamp | amUtc | amLocal | amCalendar:referenceTime:formats }}
+                    {{ controller.limitString(controller.format(notification), 50) }} - 
+                    {{ notification.timestamp | amUtc | amLocal | amCalendar:referenceTime:formats }}
                   </b>
                 </p>
               </div>
@@ -37,7 +37,7 @@
         <md-button aria-label="done all" ng-click="controller.clearAll()">
           MARCAR TODAS COMO LIDAS
         </md-button>
-        <md-button disabled="true">
+        <md-button ng-click="controller.seeAll()">
           VER TUDO
         </md-button>
       </div>

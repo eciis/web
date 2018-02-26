@@ -10,29 +10,35 @@
 
         var firebaseArrayNotifications;
 
+        /** Types of notification based on 
+         *  the number of institutions mentioned on it **/
+        var NO_INST = 'no_institution';
+        var SINGLE_INST = 'single_institution';
+        var DOUBLE_INST = 'double_institutions';
+
         var MESSAGE_ASSEMBLERS = {
-            'COMMENT': messageCreator('Comentou em um post de '),
-            'POST': messageCreator('Publicou um novo post de '),
-            'SURVEY_POST': messageCreator('Publicou uma nova enquete de '),
-            'SHARED_POST': messageCreator('Compartilhou um post de '),
-            'INVITE': messageCreator('Te enviou um novo convite via '),
-            'INSTITUTION': messageCreator('Removeu a conexão entre '),
-            'DELETED_INSTITUTION': messageCreator('Removeu '),
-            'REQUEST_USER': messageCreator('Solicitou ser membro de '),
-            'REQUEST_INSTITUTION_PARENT': messageCreator('Solicitou um novo vínculo entre '),
-            'REQUEST_INSTITUTION_CHILDREN': messageCreator('Solicitou um novo vínculo entre '),
-            'REQUEST_INSTITUTION': messageCreator('Deseja criar uma nova institutição'),
-            'REPLY_COMMENT': messageCreator('Respondeu ao seu comentário no post de '),
-            'LIKE_COMMENT': messageCreator('Curtiu seu comentário no post de '),
-            'LIKE_POST': messageCreator('Curtiu um post de '),
-            'REJECT_INSTITUTION_LINK': messageCreator('Rejeitou sua solicitação de vínculo entre '),
-            'ACCEPT_INSTITUTION_LINK': messageCreator('Aceitou sua solicitação de vínculo entre '),
-            'REJECT_INVITE_USER': messageCreator('Rejeitou o convite para ser membro de '),
-            'ACCEPT_INVITE_USER': messageCreator('Aceitou o convite para ser membro de '),
-            'REJECT_INVITE_INSTITUTION': messageCreator('Rejeitou o seu convite para ser administrador'),
-            'ACCEPT_INVITE_INSTITUTION': messageCreator('Aceitou o seu convite para ser administrador'),
-            'DELETE_MEMBER': messageCreator('Removeu você de '),
-            'ACCEPTED_LINK': messageCreator('Aceitou sua solicitação de vínculo a ')
+            'COMMENT': messageCreator('Comentou em um post de ', SINGLE_INST),
+            'POST': messageCreator('Publicou um novo post de ', SINGLE_INST),
+            'SURVEY_POST': messageCreator('Publicou uma nova enquete de ', SINGLE_INST),
+            'SHARED_POST': messageCreator('Compartilhou um post de ', SINGLE_INST),
+            'INVITE': messageCreator('Te enviou um novo convite via ', SINGLE_INST),
+            'INSTITUTION': messageCreator('Removeu a conexão entre ', DOUBLE_INST),
+            'DELETED_INSTITUTION': messageCreator('Removeu ', SINGLE_INST),
+            'REQUEST_USER': messageCreator('Solicitou ser membro de ', SINGLE_INST),
+            'REQUEST_INSTITUTION_PARENT': messageCreator('Solicitou um novo vínculo entre ', DOUBLE_INST),
+            'REQUEST_INSTITUTION_CHILDREN': messageCreator('Solicitou um novo vínculo entre ', DOUBLE_INST),
+            'REQUEST_INSTITUTION': messageCreator('Deseja criar uma nova institutição', NO_INST),
+            'REPLY_COMMENT': messageCreator('Respondeu ao seu comentário no post de ', SINGLE_INST),
+            'LIKE_COMMENT': messageCreator('Curtiu seu comentário no post de ', SINGLE_INST),
+            'LIKE_POST': messageCreator('Curtiu um post de ', SINGLE_INST),
+            'REJECT_INSTITUTION_LINK': messageCreator('Rejeitou sua solicitação de vínculo entre ', DOUBLE_INST),
+            'ACCEPT_INSTITUTION_LINK': messageCreator('Aceitou sua solicitação de vínculo entre ', DOUBLE_INST),
+            'REJECT_INVITE_USER': messageCreator('Rejeitou o convite para ser membro de ', SINGLE_INST),
+            'ACCEPT_INVITE_USER': messageCreator('Aceitou o convite para ser membro de ', SINGLE_INST),
+            'REJECT_INVITE_INSTITUTION': messageCreator('Rejeitou o seu convite para ser administrador', NO_INST),
+            'ACCEPT_INVITE_INSTITUTION': messageCreator('Aceitou o seu convite para ser administrador', NO_INST),
+            'DELETE_MEMBER': messageCreator('Removeu você de ', SINGLE_INST),
+            'ACCEPTED_LINK': messageCreator('Aceitou sua solicitação de vínculo com ', SINGLE_INST)
         };
 
         var POST_NOTIFICATION = 'POST';
@@ -103,13 +109,12 @@
             return assembler(mainInst, otherInst);
         }
 
-        function messageCreator(message) {
+        function messageCreator(message, notifType) {
             return function (mainInst, otherInst) {
-                if(mainInst && otherInst) {
-                    message = message + `${mainInst} e ${otherInst}`;
-                    return Utils.limitString(message, 50);
-                } else if(mainInst) {
-                    return Utils.limitString(message + mainInst, 50);
+                if(notifType == DOUBLE_INST) {
+                    return message + `${mainInst} e ${otherInst}`;
+                } else if(notifType == SINGLE_INST) {
+                    return message + mainInst;
                 } else {
                     return message;
                 }

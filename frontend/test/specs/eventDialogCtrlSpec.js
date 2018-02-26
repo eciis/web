@@ -267,19 +267,41 @@
             expect(controller.getStep(1)).toEqual(true);
         });
 
-        it('should not pass from second step', function() {
+        it('should not pass from first step', function() {
             controller.event.title = "";
             controller.nextStep();
             expect(controller.steps).toEqual([true, false, false]);
         });
 
-        it('should not pass from second step', function() {
+        it('should not pass from first step', function() {
             controller.event.title = "Title";
             controller.event.local = "";
             controller.nextStep();
             expect(controller.steps).toEqual([true, false, false]);
         });
-    }); 
+
+        it('should not pass from first step', function() {
+          controller.event.title = "Title";
+          controller.event.address = address;
+          controller.event.local = "Local";
+          controller.event.start_time = undefined;
+          controller.event.end_time = undefined;
+          controller.nextStep();
+          expect(controller.steps).toEqual([true, false, false]);
+        });
+
+        it('should pass from first and second step', function() {
+          controller.event.title = "Title";
+          controller.event.local = "Local";
+          controller.event.address = address;
+          controller.event.start_time =  date_now;
+          controller.event.end_time = date_now;
+          controller.nextStep();
+          expect(controller.steps).toEqual([false, true, false]);
+          controller.nextStep();
+          expect(controller.steps).toEqual([false, false, true]);
+        });
+      }); 
     });
   });
 }));

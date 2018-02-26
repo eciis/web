@@ -282,12 +282,11 @@
         };
 
         dialogCtrl.isValidDate = function isValidDate(){  
-            var isUndefined = _.isUndefined(dialogCtrl.event.start_time) || 
-                _.isUndefined(dialogCtrl.event.end_time);
-            return !isUndefined;
+            return  !_.isUndefined(dialogCtrl.event.start_time) || 
+                !_.isUndefined(dialogCtrl.event.end_time);
         };
 
-        dialogCtrl.isValidStepOne = function isValidStepOne(){  
+        dialogCtrl.isValidStepOne = function isValidStepOne(){ 
             return dialogCtrl.isValidAddress() && dialogCtrl.isValidDate();
         };
 

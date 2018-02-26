@@ -2,7 +2,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("AllInstitutionsController", function InviteUserController(
+    app.controller("AllInstitutionsController", function AllInstitutionsController(
         $state, InstitutionService, AuthService, MessageService) {
         var allInstituinsCtrl = this;
 
@@ -18,5 +18,22 @@
         }
 
         loadInstitutions();
+    });
+
+    app.controller("InstitutionCardController", function InstitutionCardController(){
+        var instituinsCardCtrl = this;
+    });
+
+    app.directive("institutionCardDetails", function () {
+        return {
+            restrict: 'E',
+            templateUrl: "app/institution/institution_card.html",
+            controllerAs: "instituinsCardCtrl",
+            controller: "InstitutionCardController",
+            scope: {},
+            bindToController: {
+                institution: '='
+            }
+        };
     });
 })();

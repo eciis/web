@@ -9,7 +9,7 @@
                         <div class="cardheader inst">
                             <div class="avatar inst" layout-align-gt-xs="start end" layout-align-xs="center center" 
                                 layout-gt-xs="row" layout-xs="column" layout-margin>
-                                <img style="background-color: white;" alt="Foto do Perfil" ng-src="{{ institutionCtrl.institution.photo_url }}">
+                                <img style="background-color: white;" alt="Foto do Perfil" ng-src="{{ institutionCtrl.institution.photo_url || '/app/images/institution.png' }}">
                                 <div layout-align-gt-xs="end center" layout-align-xs="center" layout="row" 
                                     class="md-title inst-desc">
                                     <p>{{ institutionCtrl.institution.name }}</p>

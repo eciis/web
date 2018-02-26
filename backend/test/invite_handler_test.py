@@ -221,9 +221,11 @@ class InviteHandlerTest(TestBaseHandler):
 
         message_exception = self.get_message_exception(
             str(raises_context.exception))
+        
+        expected_message = "Error! The user is already a member"
 
         self.assertEqual(
             message_exception,
-            "Error! The user is already a member",
-            "Expected exception message must be equal to "
-            "Error! The user is already a member")
+            expected_message,
+            "Expected exception message must be equal to %s" %expected_message
+        )

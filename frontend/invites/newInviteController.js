@@ -30,6 +30,7 @@
                     if (!userIsAMember()) {
                         newInviteCtrl.addInstitution(event);
                     } else {
+                        MessageService.showToast('Você já é membro dessa instituição');
                         newInviteCtrl.deleteInvite();
                     }
                 }
@@ -103,7 +104,7 @@
                     .cancel('Não');
                     var promise = $mdDialog.show(confirm);
                 promise.then(function() {
-                    deleteInviteAndReloadUser();
+                   newInviteCtrl.deleteInvite();
                 }, function() {
                     MessageService.showToast('Cancelado');
                 });
@@ -122,32 +123,20 @@
             return instObj.getFullAddress();
         };
 
-        function deleteInviteAndReloadUser() {
-            var promise = InviteService.deleteInvite(newInviteCtrl.inviteKey);
-            promise.then(function success() {
-                AuthService.reload().then(function() {
-                    if(newInviteCtrl.user.isInactive()) {
-                        $state.go("user_inactive");
-                    } else {
-                        $state.go("app.user.home");
-                    }
-                });
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
-            });
-            return promise;
-        }
-
-       newInviteCtrl.deleteInvite = function deleteInvite() {
+        newInviteCtrl.deleteInvite = function deleteInvite() {
             var promise = InviteService.deleteInvite(newInviteCtrl.inviteKey);
             promise.then(function success() {
                 newInviteCtrl.user.removeInvite(newInviteCtrl.inviteKey);
                 AuthService.save();
-                MessageService.showToast('Você já é membro dessa instituição');
-                $state.go('app.user.home');
+                if(newInviteCtrl.user.isInactive()) {
+                    $state.go("user_inactive");
+                } else {
+                    $state.go("app.user.home");
+                }
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
-            })
+            });
+            return promise;
         }
 
         function showAlert(event) {

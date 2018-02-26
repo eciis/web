@@ -177,27 +177,26 @@
         describe('isUserInviteValid()', function() {
 
             it('should be true with new invite', function() {
-                var newInvite = new Invite({invitee: "teste@gmail.com",
-                                            type_of_invite: 'USER',
+                var newInvite = new Invite({type_of_invite: 'USER',
                                             institution_key: '987654321',
                                             admin_key: '12345'});
-                expect(manageMemberCtrl.isUserInviteValid(newInvite)).toBe(true);
+                expect(manageMemberCtrl.isUserInvitesValid(newInvite, ["teste@gmail.com"])).toBe(true);
             });
 
             it('should be false when the invitee was already invited', function() {
-                var inviteInvited = new Invite({invitee: "testuser@example.com",
-                                            type_of_invite: 'USER',
+                var inviteInvited = new Invite({type_of_invite: 'USER',
                                             institution_key: '987654321',
                                             admin_key: '12345'});
-                expect(manageMemberCtrl.isUserInviteValid(inviteInvited)).toBe(false);
+                expect(manageMemberCtrl.isUserInvitesValid(inviteInvited, ["testuser@example.com", 
+                    "member@gmail.com"])).toBe(false);
             });
 
             it('should be false when the invitee was already member', function() {
-                var inviteMember = new Invite({invitee: "member@gmail.com",
-                                            type_of_invite: 'USER',
+                var inviteMember = new Invite({type_of_invite: 'USER',
                                             institution_key: '987654321',
                                             admin_key: '12345'});
-                expect(manageMemberCtrl.isUserInviteValid(inviteMember)).toBe(false);
+                expect(manageMemberCtrl.isUserInvitesValid(inviteMember, ["member@gmail.com", 
+                    "testuser@example.com"])).toBe(false);
             });
         });
 

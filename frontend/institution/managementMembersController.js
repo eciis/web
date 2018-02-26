@@ -70,7 +70,7 @@
                 emails: emails
             }
 
-            if (manageMemberCtrl.isUserInviteValid(invite)) {
+            if (manageMemberCtrl.isUserInvitesValid(invite, emails)) {
                 manageMemberCtrl.isLoadingInvite = true;
                 var promise = InviteService.sendInvite(requestBody);
                 promise.then(function success(response) {
@@ -197,33 +197,47 @@
             return user.email;
         }
 
-        function inviteeIsMember(invite) {
-            return _.find(_.map(manageMemberCtrl.members, getEmail), function(emails) {
-                return _.includes(emails, invite.invitee);
+        function getMember(inviteEmails) {
+            var memberEmail;
+            _.each(inviteEmails, function (email) {
+                memberEmail = _.find(_.map(manageMemberCtrl.members, getEmail), function (emails) {
+                    return _.includes(emails, email);
+                });
             });
+            return memberEmail;
         }
 
-        function inviteeIsInvited(invite) {
-            return _.find(manageMemberCtrl.sent_invitations, function(sentInvitation) {
-                return sentInvitation.invitee === invite.invitee;
+        function getInvitedEmail(inviteEmails) {
+            var inviteSent;
+            _.each(inviteEmails, function (email) {
+                inviteSent = _.find(manageMemberCtrl.sent_invitations, function (sentInvitation) {
+                    return sentInvitation.invitee === email;
+                });
             });
+            return inviteSent ? inviteSent.invitee : inviteSent;
         }
 
         manageMemberCtrl.toggleElement = function toggleElement(flagName) {
             manageMemberCtrl[flagName] = !manageMemberCtrl[flagName];
         };
 
-        manageMemberCtrl.isUserInviteValid = function isUserInviteValid(invite) {
+        manageMemberCtrl.isUserInvitesValid = function isUserInvitesValid(invite, emails) {
             var isValid = true;
             if (! invite.isValid()) {
                 isValid = false;
                 MessageService.showToast('Convite inválido!');
-            } else if (inviteeIsMember(invite)) {
-                isValid = false;
-                MessageService.showToast('O convidado já é um membro!');
-            } else if (inviteeIsInvited(invite)) {
-                isValid = false;
-                MessageService.showToast('Este email já foi convidado');
+            } else {
+                var memberEmail = getMember(emails);
+                if(memberEmail) {
+                    isValid = false;
+                    MessageService.showToast('O email ' + memberEmail + ' pertence a um membro da instituição');
+                } else {
+                    var invitedEmail = getInvitedEmail(emails);
+                    if(invitedEmail) {
+                        isValid = false;
+                        MessageService.showToast('O email ' + invitedEmail + ' já foi convidado');
+                    }
+                }
             }
             return isValid;
         };

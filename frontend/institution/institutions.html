@@ -1,7 +1,7 @@
 <md-content layout="row" layout-align="center" class="body custom-scrollbar">
     <div flex flex-gt-md="95" layout="row" layout-align="center">
         <div flex>
-            <md-card flex layout="column">
+            <md-card>
                 <md-toolbar md-colors="{background: 'teal-500'}" layout="row">
                     <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
                     <h1>
@@ -12,11 +12,11 @@
                     </div>
                 </md-toolbar>
                 <md-card-content>
-                        
-                    <div layout="row" layout-md="column" layout-xs="column">
-                        <div ng-repeat="inst in allInstituinsCtrl.institutions" 
+                    <div layout-xs="column" layout="row" layout-wrap>
+                        <div layout-xs="row" layout="column" flex-xs="100" flex="50" ng-repeat="inst in allInstituinsCtrl.institutions" 
                         class="clickable-no-hover">
-                            <institution-card-details institution="inst"></institution-card-details>
+                            <institution-card-details institution="inst" user="allInstituinsCtrl.user">
+                            </institution-card-details>
                         </div>
                     </div>
                 </md-card-content>

@@ -914,7 +914,7 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
     box-shadow: 0 0 0;
 }
 
- share-post{
+.share-post{
     max-height: 250px;
     overflow: auto;
 }

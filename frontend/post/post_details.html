@@ -80,7 +80,8 @@
   </md-card-header>
 
   <!-- SURVEY -->
-  <survey-details ng-if="postDetailsCtrl.showSurvey()" post="postDetailsCtrl.post" posts="postDetailsCtrl.posts" user="postDetailsCtrl.user" isdialog="false"></survey-details>
+  <survey-details ng-if="postDetailsCtrl.showSurvey()" post="postDetailsCtrl.post" 
+    posts="postDetailsCtrl.posts" user="postDetailsCtrl.user" isdialog="false" is-post-page="postDetailsCtrl.isPostPage"></survey-details>
 
   <!-- BODY SHARED EVENT -->
   <div md-colors="{background: 'teal-500'}" ng-if="postDetailsCtrl.isDeletedEvent(postDetailsCtrl.post) && !postDetailsCtrl.isDeleted(postDetailsCtrl.post)"

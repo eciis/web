@@ -16,6 +16,7 @@
         configProfileCtrl.loading = false;
         configProfileCtrl.cpfRegex = /^\d{3}\.\d{3}\.\d{3}\-\d{2}$/;
         configProfileCtrl.photo_url = configProfileCtrl.newUser.photo_url;
+        configProfileCtrl.loadingSubmission = false;
 
         var HAS_ONLY_ONE_INSTITUTION_MSG = "Esta é a única instituição ao qual você é vinculado." +
             " Ao remover o vínculo você não poderá mais acessar o sistema," +
@@ -56,6 +57,7 @@
         };
 
         configProfileCtrl.finish = function finish() {
+            configProfileCtrl.loadingSubmission = true;
             if (configProfileCtrl.photo_user) {
                 configProfileCtrl.loading = true;
                 ImageService.saveImage(configProfileCtrl.photo_user).then(function (data) {
@@ -63,6 +65,7 @@
                     configProfileCtrl.user.uploaded_images.push(data.url);
                     saveUser();
                     configProfileCtrl.loading = false;
+                    configProfileCtrl.loadingSubmission = false;
                 });
             } else {
                 return saveUser();
@@ -76,6 +79,8 @@
                 var patch = jsonpatch.generate(observer);
                 UserService.save(patch).then(function success() {
                     AuthService.save();
+                    configProfileCtrl.loadingSubmission = false;
+                    MessageService.showToast("Edição concluída com sucesso");
                     $state.go("app.user.home");
                     deffered.resolve();
                 });

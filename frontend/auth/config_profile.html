@@ -41,7 +41,8 @@
                 </md-input-container>
               </div>
             </div>
-            <section layout="row" layout="column" layout-align="end center" layout-wrap>
+            <load-circle layout="row" layout-align="center center" ng-if="configProfileCtrl.loadingSubmission"></load-circle>
+            <section layout="row" layout="column" layout-align="end center" layout-wrap ng-if="!configProfileCtrl.loadingSubmission">
               <md-button ng-click="configProfileCtrl.deleteAccount($event)" md-colors="{background: 'red-500'}">Excluir conta</md-button>
               <md-button ng-click="configProfileCtrl.finish()" md-colors="{background: 'teal-500'}">Concluir edição</md-button>
             </section>

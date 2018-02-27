@@ -287,3 +287,7 @@ class Institution(ndb.Model):
         """This method is called after each Institution.put()."""
         search_institution = SearchInstitution()
         search_institution.createDocument(future.get_result().get())
+    
+    def has_member(self, user_key):
+        """Check if the user is member."""
+        return user_key in self.members

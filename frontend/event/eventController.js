@@ -282,7 +282,7 @@
         };
 
         dialogCtrl.isValidDate = function isValidDate(){  
-            return  !_.isUndefined(dialogCtrl.event.start_time) || 
+            return  !_.isUndefined(dialogCtrl.event.start_time) && 
                 !_.isUndefined(dialogCtrl.event.end_time);
         };
 

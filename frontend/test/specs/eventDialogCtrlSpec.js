@@ -285,7 +285,7 @@
           controller.event.address = address;
           controller.event.local = "Local";
           controller.event.start_time = undefined;
-          controller.event.end_time = undefined;
+          controller.event.end_time = date_now;
           controller.nextStep();
           expect(controller.steps).toEqual([true, false, false]);
         });

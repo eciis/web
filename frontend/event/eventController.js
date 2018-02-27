@@ -316,7 +316,7 @@
 
         dialogCtrl.nextStepOrSave = function nextStepOrSave() {
             if (dialogCtrl.getStep(3)) {
-                dialogCtrl.blockPublishButton = true;
+                dialogCtrl.blockReturnButton = true;
                 dialogCtrl.save();
             } else {
                 dialogCtrl.nextStep();
@@ -376,6 +376,8 @@
                     dialogCtrl.events.push(response.data);
                     MessageService.showToast('Evento criado com sucesso!');
                 }, function error(response) {
+                    dialogCtrl.loading = false;
+                    dialogCtrl.blockReturnButton = false;
                     MessageService.showToast(response.data.msg);
                     $state.go("app.user.events");
                 });

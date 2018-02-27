@@ -914,6 +914,11 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
     box-shadow: 0 0 0;
 }
 
+.share-post{
+    max-height: 250px;
+    overflow: auto;
+}
+
 .notifications-menu {
     overflow-y: hidden; 
     padding: 1rem 1rem 0 1rem; 

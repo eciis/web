@@ -14,7 +14,7 @@
         </md-button>
       </md-card-header>
       <md-card-content flex>
-        <md-card md-colors="{background: 'default-grey-100'}" flex>
+        <md-card md-colors="{background: 'default-grey-100'}" flex class="custom-scrollbar share-post">
           <md-card-header>
             <md-card-avatar>
               <img ng-src="{{ sharePostCtrl.post.institution_image }}" class="md-user-avatar" />
@@ -35,7 +35,7 @@
             <span class="md-subhead" ng-if="!sharePostCtrl.isEvent() && sharePostCtrl.post.text" ng-bind-html="sharePostCtrl.postToURL(sharePostCtrl.post.text)"></span>
             <pdf-view ng-if="sharePostCtrl.showPdfFiles()" pdf-files='sharePostCtrl.post.pdf_files' is-editing="false"></pdf-view>
             <survey-details ng-if="sharePostCtrl.isSurvey()" post="sharePostCtrl.post" posts="sharePostCtrl.posts" user="sharePostCtrl.user"
-              isdialog="true" hide show-gt-xs></survey-details>
+              isdialog="true" is-post-page="false" hide show-gt-xs></survey-details>
           </md-card-content>
         </md-card>
       </md-card-content>

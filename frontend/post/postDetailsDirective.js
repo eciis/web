@@ -81,8 +81,8 @@
 
         postDetailsCtrl.timeHasBeenExpired = function timeHasBeenExpired() {
             if(postDetailsCtrl.post.type_survey) {
-                const deadline = new Date (postDetailsCtrl.post.deadline);
-                const currentTime = new Date((_.split(new Date().toISOString(), '.')[0]))
+                var deadline = new Date (postDetailsCtrl.post.deadline);
+                var currentTime = new Date((_.split(new Date().toISOString(), '.')[0]))
                 return deadline < currentTime;
             }
         };

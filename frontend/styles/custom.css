@@ -957,3 +957,9 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
     text-align: center;
     font-size: 10px;
 }
+
+.expired-survey {
+    background-color: rgba(190, 186, 186, 0.966);
+    text-align: center;
+    font-size: 15px;
+}

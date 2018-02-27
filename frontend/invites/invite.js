@@ -6,10 +6,11 @@ function Invite(data) {
 }
 
 Invite.prototype.isValid = function isValid() {
-    var noHasInvitee = _.isUndefined(this.invitee) || _.isEmpty(this.invitee);
-    var noHasType = _.isUndefined(this.type_of_invite) || _.isEmpty(this.type_of_invite);
+    var isInviteeNecessary = this.type_of_invite != 'USER';
+    var hasNoInvitee = (_.isUndefined(this.invitee) || _.isEmpty(this.invitee)) && isInviteeNecessary;
+    var hasNoType = _.isUndefined(this.type_of_invite) || _.isEmpty(this.type_of_invite);
 
-    if (noHasInvitee || noHasType) {
+    if (hasNoInvitee || hasNoType) {
         return false;
     }
     return true;

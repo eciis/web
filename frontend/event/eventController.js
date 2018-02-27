@@ -163,7 +163,7 @@
                 dialogCtrl.loading = true;
                 var patch = formatPatch(generatePatch(jsonpatch.generate(dialogCtrl.observer), event));
                 EventService.editEvent(dialogCtrl.event.key, patch).then(function success() {
-                    $mdDialog.hide();
+                    $mdDialog.hide(event);
                     MessageService.showToast('Evento editado com sucesso.');
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
@@ -450,7 +450,6 @@
                 loadSelectedState();
                 initPatchObserver();
                 loadEventDates();
-                dialogCtrl.oldEvent = _.cloneDeep(dialogCtrl.event);
             } else {
                 dialogCtrl.event = {
                                     address: address

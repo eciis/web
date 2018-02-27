@@ -23,61 +23,6 @@ class InviteInstitutionTest(TestBase):
         cls.test.init_memcache_stub()
         initModels(cls)
 
-    def invitee_is_member(self):
-        """Test invitee_is_member method."""
-        is_admin_member = InviteUser.invitee_is_member(
-            self.admin.email[0], self.institution
-        )
-
-        is_user_member = InviteUser.invitee_is_member(
-            self.user.email[0], self.institution
-        )
-
-        self.assertEquals(
-            is_admin_member,
-            True,
-            "The admin should be a member of this institution"
-        )
-
-        self.assertEquals(
-            is_user_member,
-            False,
-            "The user should not be a member of this institution"
-        )
-
-    def test_invitee_is_invited(self):
-        """Test invitee_is_invited method."""
-        is_user_invited = InviteUser.invitee_is_invited(
-            self.user.email[0], self.institution.key
-        )
-
-        is_user_not_invited = InviteUser.invitee_is_invited(
-            "not_invited@email", self.institution.key
-        )
-
-        self.assertEquals(
-            is_user_invited,
-            True,
-            "The user should have been invited"
-        )
-
-        self.assertEquals(
-            is_user_not_invited,
-            False,
-            "The user should not have invites"
-        )
-
-    def test_check_is_invite_user_valid_when_invitee_already_invited(self):
-        """Test check_is_invite_user_valid when invitee has already been invited."""
-        with self.assertRaises(FieldException):
-            InviteUser.check_is_invite_user_valid(self.data)
-
-    def test_check_is_invite_user_valid_when_invitee_already_member(self):
-        """Test check_is_invite_user_valid when the invitee is already a member."""
-        self.data["invitee"] = self.admin.email[0]
-        with self.assertRaises(FieldException):
-            InviteUser.check_is_invite_user_valid(self.data)
-
     def test_create(self):
         """Test create method."""
         self.data["invitee"] = "other_user@email"

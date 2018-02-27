@@ -6,11 +6,11 @@
 
     app.controller("NotificationController", function NotificationController(NotificationService, AuthService, $state,
         $mdDialog, InstitutionService, UserService) {
-        var controller = this;
+        var notificationCtrl = this;
 
-        controller.user = AuthService.getCurrentUser();
+        notificationCtrl.user = AuthService.getCurrentUser();
 
-        controller.notifications = [];
+        notificationCtrl.notifications = [];
 
         var type_data = {
             "COMMENT": {
@@ -140,38 +140,38 @@
             }
         };
 
-        controller.markAsRead = function markAsRead(notification) {
+        notificationCtrl.markAsRead = function markAsRead(notification) {
             var promise = NotificationService.markAsRead(notification);
             promise.then(function success() {
-                _.remove(controller.notifications, function find(found) {
+                _.remove(notificationCtrl.notifications, function find(found) {
                     return found.$id === notification.$id;
                 });
             });
             return promise;
         };
 
-        controller.getIcon = function getIcon(type) {
+        notificationCtrl.getIcon = function getIcon(type) {
             var icon = type_data[type].icon;
             return icon;
         };
 
-        controller.goTo = function goTo(notification) {
+        notificationCtrl.goTo = function goTo(notification) {
             if(notification.entity_type !== 'INSTITUTION') {
                 var state = type_data[notification.entity_type].state;
                 $state.go(state, {key: notification.entity.key});
             }
         };
 
-        controller.action = function action(notification, event) {
+        notificationCtrl.action = function action(notification, event) {
             var notificationProperties = type_data[notification.entity_type].properties;
             var  notificationAction = type_data[notification.entity_type].action;
             if (notificationAction){
                 notificationAction(notificationProperties, notification, event);
             } else {
-                controller.goTo(notification);
+                notificationCtrl.goTo(notification);
             }
 
-            controller.markAsRead(notification);
+            notificationCtrl.markAsRead(notification);
         };
 
         function showDialog(dialogProperties, notification, event) {
@@ -189,35 +189,43 @@
             });
         }
 
-        controller.format = function format(notification) {
+        notificationCtrl.format = function format(notification) {
             return NotificationService.formatMessage(notification);
         };
 
-        controller.clearAll = function clearAll() {
-            _.forEach(controller.notifications, function(notification) {
-                controller.markAsRead(notification);
+        notificationCtrl.clearAll = function clearAll() {
+            _.forEach(notificationCtrl.notifications, function(notification) {
+                notificationCtrl.markAsRead(notification);
             });
         };
 
-        controller.number_of_notifications = function number_of_notifications() {
-            return controller.notifications.length < 100 ?
-            controller.notifications.length : "+99";
+        notificationCtrl.number_of_notifications = function number_of_notifications() {
+            return notificationCtrl.notifications.length < 100 ?
+                    notificationCtrl.notifications.length : "+99";
         };
+
+        notificationCtrl.limitString = function limitString(string, value) {
+            return Utils.limitString(string, value);
+        };
+
+        notificationCtrl.seeAll = function seeAll() {
+            $state.go('app.user.notifications');
+        }
 
         function refreshUserInstitutions () {
             UserService.load().then(function success(response) {
-                controller.user.institutions = response.institutions;
-                controller.user.follows = response.follows;
-                controller.user.institution_profiles = response.institution_profiles;
-                if(!_.isEmpty(controller.user.institutions)) {
-                    controller.user.changeInstitution();
+                notificationCtrl.user.institutions = response.institutions;
+                notificationCtrl.user.follows = response.follows;
+                notificationCtrl.user.institution_profiles = response.institution_profiles;
+                if(!_.isEmpty(notificationCtrl.user.institutions)) {
+                    notificationCtrl.user.changeInstitution();
                 }
                 AuthService.save();
             });
         }
 
         (function main() {
-            NotificationService.watchNotifications(controller.user.key, controller.notifications);
+            NotificationService.watchNotifications(notificationCtrl.user.key, notificationCtrl.notifications);
         })();
     });
 
@@ -225,7 +233,7 @@
         return {
             restrict: 'E',
             templateUrl: "app/notification/notifications.html",
-            controllerAs: "controller",
+            controllerAs: "notificationCtrl",
             controller: "NotificationController"
         };
     });

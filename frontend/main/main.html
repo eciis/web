@@ -44,6 +44,10 @@
   </md-button>
 </div>
 
+<h4 class="md-caption app-version">
+    {{mainCtrl.APP_VERSION}}
+</h4>
+
 <md-toolbar class="md-warn" ng-if="!mainCtrl.userEmailVerified()" ng-hide="hideEmailVerification">
   <div class="md-toolbar-tools" layout-align="end center">
     <h2 class="md-flex">Verifique seu email para confirmar sua conta.</h2>

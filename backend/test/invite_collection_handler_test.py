@@ -207,36 +207,6 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         enqueue_task.assert_called()
 
     @patch.object(Invite, 'send_invite')
-    @patch('utils.verify_token', return_value=ADMIN)
-    def test_post_invite_user_already_member(self, verify_token, send_invite):
-        """ Check if raise exception when the invite is
-        for user already member of institution."""
-        admin = mocks.create_user(ADMIN['email'])
-        institution = mocks.create_institution()		 
-        admin.institutions_admin = [institution.key]
-        institution.admin = admin.key
-        admin.add_permission("invite_members",institution.key.urlsafe())
-        admin.put()
-        otheruser = mocks.create_user(USER['email'])
-        institution.add_member(otheruser)
-        institution.put()
-        body = create_body([USER['email']], admin, institution)
-
-        with self.assertRaises(Exception) as raises_context:
-            self.testapp.post_json("/api/invites", body)
-
-        message_exception = self.get_message_exception(str(raises_context.exception))
-
-        self.assertEqual(
-            message_exception,
-            "Error! The invitee is already a member",
-            "Expected exception message must be equal to "
-            "Error! The invitee is already a member")
-        
-        # assert the invite was not sent
-        send_invite.assert_not_called()
-
-    @patch.object(Invite, 'send_invite')
     @patch('utils.verify_token', return_value=USER)
     def test_post_invite_without_admin(self, verify_token, send_invite):
         """ Check if raise exception when the admin_key is not admistrator."""

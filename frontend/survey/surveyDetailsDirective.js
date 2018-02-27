@@ -42,7 +42,13 @@
 
         surveyCtrl.isSurveyAuthor = function isSurveyAuthor() {
             return surveyCtrl.post.author_key == surveyCtrl.user.key;
-        }
+        };
+
+        surveyCtrl.timeHasBeenExpired = function timeHasBeenExpired() {
+            const deadline = new Date (surveyCtrl.post.deadline);
+            const currentTime = new Date((_.split(new Date().toISOString(), '.')[0]))
+            return deadline < currentTime;
+        };
 
         surveyCtrl.canVote = function(){
             var nationalTimeZone = new Date (surveyCtrl.post.deadline);

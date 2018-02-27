@@ -47,11 +47,11 @@ def create_address():
     return address
 
 
-def create_institution():
+def create_institution(name=None):
     """Create institution function."""
     institution = Institution()
     inst_hash = getHash(institution)
-    institution.name = "Inst %s" % inst_hash
+    institution.name = name or "Inst %s" % inst_hash
     institution.address = create_address()
     institution.description = "description"
     institution.put()

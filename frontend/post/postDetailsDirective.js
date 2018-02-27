@@ -507,7 +507,7 @@
                                 return commentCtrl.user.key === key;
                             });
                         }
-                    }, function error() {
+                    }, function error(response) {
                         $state.go("app.user.home");
                         MessageService.showToast("O usuário já fez essa ação nesse comentário.");
                         commentCtrl.saving = false;
@@ -521,9 +521,9 @@
                         } else {
                             commentCtrl.comment.likes.push(commentCtrl.user.key);
                         }
-                    }, function error() {
+                    }, function error(response) {
                         $state.go("app.user.home");
-                        MessageService.showToast("O usuário já fez essa ação nesse comentário.");
+                        MessageService.showToast(response.data.msg);
                         commentCtrl.saving = false;
                     }
                 );

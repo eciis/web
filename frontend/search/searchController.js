@@ -39,10 +39,6 @@
             }
         };
 
-        searchCtrl.notHasInstitutions = function notHasInstitutions() {
-            return _.isEmpty(searchCtrl.institutions);
-        };
-
         searchCtrl.goToInstitution = function goToInstitution(institutionId) {
             if (institutionId) {
                 InstitutionService.getInstitution(institutionId).then(function success(response) {

@@ -10,6 +10,8 @@ from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from handlers.base_handler import BaseHandler
 from models.invite_institution import InviteInstitution
 from models.factory_invites import InviteFactory
+from service_entities import enqueue_task
+from google.appengine.ext import ndb
 
 
 class InviteCollectionHandler(BaseHandler):
@@ -34,36 +36,52 @@ class InviteCollectionHandler(BaseHandler):
         body = json.loads(self.request.body)
         data = body['data']
         host = self.request.host
-        type_of_invite = data.get('type_of_invite')
+        invite = data['invite_body']
+        type_of_invite = invite.get('type_of_invite')
 
         Utils._assert(type_of_invite == 'INSTITUTION',
                       "invitation type not allowed", NotAuthorizedException)
-        
+
         """TODO: Remove the assert bellow when the hierarchical invitations can be available
         @author: Mayza Nunes 11/01/2018
         """
         Utils._assert(type_of_invite != 'USER',
-                      "Hierarchical invitations is not available in this version", NotAuthorizedException)
+                        "Hierarchical invitations is not available in this version", NotAuthorizedException)
 
-        invite = InviteFactory.create(data, type_of_invite)
+        institution = ndb.Key(urlsafe=invite['institution_key']).get()
+        can_invite_inst = user.has_permission(
+            "send_link_inst_invite", institution.key.urlsafe())
+        can_invite_members = user.has_permission(
+            "invite_members", institution.key.urlsafe())
 
-        can_invite_inst = user.has_permission("send_link_inst_invite", invite.institution_key.urlsafe())
-        can_invite_members = user.has_permission("invite_members", invite.institution_key.urlsafe())
-    
-        if(can_invite_inst or can_invite_members):
-            institution = invite.institution_key.get()
-            Utils._assert(institution.state == 'inactive',
+        Utils._assert(not can_invite_inst and not can_invite_members,
+                        "User is not allowed to send invites", NotAuthorizedException)
+
+        Utils._assert(institution.state == 'inactive',
                         "The institution has been deleted", NotAuthorizedException)
-            
-            invite.put()
 
-            if(invite.stub_institution_key):
-                invite.stub_institution_key.get().addInvite(invite)
+        @ndb.transactional(xg=True, retries=10)
+        def process_invites(emails, invite, current_institution_key):
+            invites_keys = []
+            for email in emails:
+                invite['invitee'] = email
+                current_invite = createInvite(invite)
+                invites_keys.append(current_invite.key.urlsafe())
 
-            invite.send_invite(host, user.current_institution)
+            enqueue_task('send-invite', {'invites_keys': json.dumps(invites_keys), 'host': host,
+                                         'current_institution': current_institution_key.urlsafe()})
 
-            make_invite = invite.make()
+        process_invites(data['emails'], invite, user.current_institution)
 
-            self.response.write(json.dumps(make_invite)) 
-        else:
-            raise NotAuthorizedException("User is not allowed to send invites")
+        self.response.write(json.dumps(
+            {'msg': 'The invites are being processed.'}))
+
+def createInvite(data):
+    """Create an invite."""
+    invite = InviteFactory.create(data, data['type_of_invite'])
+    invite.put()
+
+    if(invite.stub_institution_key):
+        invite.stub_institution_key.get().addInvite(invite)
+    
+    return invite

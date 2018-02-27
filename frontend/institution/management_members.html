@@ -23,6 +23,22 @@
             <input ng-model="currentEmail.email" ng-change="manageMemberCtrl.canAddEmailField()" type="email" name="email" required>
           </md-input-container>
           <load-circle flex ng-if="manageMemberCtrl.isLoadingInvite"></load-circle>
+          <div layout="column">
+            <div layout="row">
+              <h2 style="color: #00897B;">Convite em lote</h2>
+            </div>
+            <p>Convide todos os membros de sua instituição de uma única vez, basta adicionar somente os endereços de e-mail
+              válidos em uma planilha e salvar no formato CSV.
+            </p>
+            <md-list>
+                <md-list-item class="list-item-dense" md-colors="{background: 'default-grey-300'}" style="height: 75px;" flex-xs ng-click="null">
+                  <div layout="row" style="margin-left: auto; margin-right: auto;">
+                    <md-icon style="color: #7CB342; font-size: 45px; margin-right: 30px; margin-top: 15px;">file_upload</md-icon>
+                    <p style="font-size: 20px;">ENVIAR ENDEREÇOS EM CSV</p>
+                  </div>
+                </md-list-item>
+              </md-list>
+          </div>
           <section layout="row" layout="column" layout-align="end center" layout-wrap ng-if="!manageMemberCtrl.isLoadingInvite">
             <md-button md-colors="{background: 'teal-500'}" ng-click="manageMemberCtrl.cancelInvite()">Cancelar</md-button>
             <md-button type="submit" md-colors="{background: 'teal-500'}">Enviar Convite</md-button>

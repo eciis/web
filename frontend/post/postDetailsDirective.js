@@ -312,7 +312,7 @@
         };
 
         postDetailsCtrl.reloadPost = function reloadPost() {
-            const type_survey = postDetailsCtrl.post.type_survey;
+            var type_survey = postDetailsCtrl.post.type_survey;
             postDetailsCtrl.post.type_survey = false;
             var promise = PostService.getPost(postDetailsCtrl.post.key);
             promise.then(function success(response) {

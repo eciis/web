@@ -8,15 +8,12 @@
             </div>
             <div class="info" align="center">
                 <div class="title">
-                    <md-button ng-show="configInstCtrl.showButton()" ng-click="null"
+                    <md-button ng-click="null"
                         ng-model="configInstCtrl.file" ngf-pattern="'image/*'"
                         ngf-accept="'image/*'" ngf-max-size="5MB" class="md-raised"
                         ngf-select="configInstCtrl.cropImage(configInstCtrl.file, $event)">
                         <b>Adicionar imagem</b>
                     </md-button>
-                    <md-progress-linear ng-show="configInstCtrl.loading" md-mode="indeterminate"
-                        style="width: 14%; margin-left: auto; margin-right: auto">
-                    </md-progress-linear>
                 </div>
             </div>
         </div>
@@ -253,7 +250,8 @@
                     {{configInstCtrl.getPortfolioButtonMessage()}}
                 </md-button>
             </md-input-container>
-            <div layout="row" layout-align="end center">
+            <load-circle ng-show="configInstCtrl.isSubmitting"></load-circle>
+            <div layout="row" layout-align="end center" ng-hide="configInstCtrl.isSubmitting">
                 <md-button type="submit" md-colors="{background: 'teal-500'}">Confirmar</md-button>
             </div>
         </form>

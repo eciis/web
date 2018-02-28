@@ -492,6 +492,7 @@
         commentCtrl.likeOrDislike = function likeOrDislike(reply) {
             var replyId = reply ? reply.id : undefined;
             if (commentCtrl.isLikedByUser(reply)) {
+                commentCtrl.saving = true;
                 CommentService.dislike(commentCtrl.post.key, commentCtrl.comment.id, replyId).then(
                     function sucess() {
                         if (reply) {
@@ -503,6 +504,7 @@
                                 return commentCtrl.user.key === key;
                             });
                         }
+                        commentCtrl.saving = false;
                     }, function error(response) {
                         $state.go("app.user.home");
                         MessageService.showToast("O usuário já fez essa ação nesse comentário.");
@@ -510,6 +512,7 @@
                     }
                 );
             } else {
+                commentCtrl.saving = true;
                 CommentService.like(commentCtrl.post.key, commentCtrl.comment.id, replyId).then(
                     function sucess() {
                         if (reply) {
@@ -517,6 +520,7 @@
                         } else {
                             commentCtrl.comment.likes.push(commentCtrl.user.key);
                         }
+                        commentCtrl.saving = false;
                     }, function error(response) {
                         $state.go("app.user.home");
                         MessageService.showToast(response.data.msg);

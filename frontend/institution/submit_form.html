@@ -249,7 +249,7 @@
             <md-input-container class="md-block">
                 <md-button ng-click="null" ng-model="configInstCtrl.file" ngf-pattern="'application/pdf'"
                     ngf-accept="'application/pdf'" ngf-max-size="5MB"
-                    ngf-select="configInstCtrl.setPdfFileSelected()" class="md-raised">
+                    ngf-select="configInstCtrl.clearPortfolioUrl()" class="md-raised">
                     <md-icon>{{configInstCtrl.getPortfolioButtonIcon()}}</md-icon>
                     {{configInstCtrl.getPortfolioButtonMessage()}}
                 </md-button>

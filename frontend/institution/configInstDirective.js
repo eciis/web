@@ -168,8 +168,8 @@
             return defer.promise;
         }
 
-        configInstCtrl.setPdfFileSelected = function setPdfFileSelected() {
-            configInstCtrl.newInstitution.pdfFileSelected = true;
+        configInstCtrl.clearPortfolioUrl = function clearPortfolioUrl() {
+            configInstCtrl.newInstitution.portfolio_url = "";
         }
 
         function updateInstitution() {

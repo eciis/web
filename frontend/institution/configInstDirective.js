@@ -22,7 +22,10 @@
         };
         configInstCtrl.steps = [true, false, false];
 
-        configInstCtrl.descriptionGuide = "Descrever neste campo as áreas de atuação da sua instituição considerando a missão e objetivos, os principais produtos e/ou serviços, as interfaces com os demais atores e as articulações institucionais no âmbito do CIS(utilize palavras de destaque que possam ser utilizadas como palavras-chave na pesquisa avançada da Plataforma CIS)";
+        configInstCtrl.descriptionGuide = "Descrever neste campo as áreas de atuação da sua instituição " +
+        "considerando a missão e objetivos, os principais produtos e/ou serviços, as interfaces com os " +
+        "demais atores e as articulações institucionais no âmbito do CIS(utilize palavras de destaque " +
+        "que possam ser utilizadas como palavras-chave na pesquisa avançada da Plataforma CIS)";
 
         getLegalNatures();
         getActuationAreas();
@@ -34,12 +37,11 @@
         };
 
         function updateAddressState() {
-            configInstCtrl.address.federal_state = configInstCtrl.selectedState && configInstCtrl.selectedState.nome;
+            configInstCtrl.newInstitution.address.federal_state = configInstCtrl.selectedState && configInstCtrl.selectedState.nome;
         }
 
         function loadAddress() {
             configInstCtrl.newInstitution.address = configInstCtrl.newInstitution.address || {};
-            configInstCtrl.address = configInstCtrl.newInstitution.address;
             loadCountry();
             loadStateAndCities();
         }
@@ -48,7 +50,7 @@
             configInstCtrl.states = brCidadesEstados.estados;
             var isANewInstitution = institutionKey == undefined;
             if(!isANewInstitution) {
-                var stateName = configInstCtrl.address.federal_state;
+                var stateName = configInstCtrl.newInstitution.address.federal_state;
                 var stateIndex = configInstCtrl.states.findIndex((state) => {
                     return state.nome === stateName;
                 });
@@ -60,13 +62,13 @@
         }        
         
         function loadCountry() {
-            configInstCtrl.address.country = configInstCtrl.address.country || "Brasil";
-            configInstCtrl.isAnotherCountry = configInstCtrl.address.country !== "Brasil";
+            configInstCtrl.newInstitution.address.country = configInstCtrl.newInstitution.address.country || "Brasil";
+            configInstCtrl.isAnotherCountry = configInstCtrl.newInstitution.address.country !== "Brasil";
         }
 
         configInstCtrl.setAnotherCountry = function isAnotherCountry() {
             clearSelectedState();
-            configInstCtrl.isAnotherCountry = configInstCtrl.address.country !== "Brasil";
+            configInstCtrl.isAnotherCountry = configInstCtrl.newInstitution.address.country !== "Brasil";
         };
 
         function clearSelectedState() {
@@ -163,6 +165,10 @@
                 defer.resolve();
             }
             return defer.promise;
+        }
+
+        configInstCtrl.setPdfFileSelected = function setPdfFileSelected() {
+            configInstCtrl.newInstitution.pdfFileSelected = true;
         }
 
         function updateInstitution() {
@@ -341,7 +347,7 @@
 
         configInstCtrl.isValidAddress =  function isValidAddress(){       
             var valid = true;
-            var address = configInstCtrl.address;    
+            var address = configInstCtrl.newInstitution.address;    
             if(address && address.country === "Brasil"){     
                 _.forEach(address, function(value, key) {
                     var isNotNumber =  key !== "number";

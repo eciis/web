@@ -137,7 +137,11 @@
                          key: ""
                      }
                 }
-            }
+            },
+            "REPLY_COMMENT": {
+                icon: "comment",
+                state: "app.post"
+            },
         };
 
         notificationCtrl.markAsRead = function markAsRead(notification) {

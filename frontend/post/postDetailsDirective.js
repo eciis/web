@@ -312,11 +312,15 @@
         };
 
         postDetailsCtrl.reloadPost = function reloadPost() {
+            var type_survey = postDetailsCtrl.post.type_survey;
+            postDetailsCtrl.post.type_survey = false;
             var promise = PostService.getPost(postDetailsCtrl.post.key);
             promise.then(function success(response) {
+                response.data_comments = Object.values(response.data_comments);
                 postDetailsCtrl.post = response;
                 postDetailsCtrl.isLoadingComments = false;
             }, function error(response) {
+                postDetailsCtrl.post.type_survey = type_survey;
                 postDetailsCtrl.isLoadingComments = true;
                 MessageService.showToast(response.data.msg);
             }); 

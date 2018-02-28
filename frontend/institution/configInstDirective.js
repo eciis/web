@@ -170,7 +170,7 @@
 
         configInstCtrl.clearPortfolioUrl = function clearPortfolioUrl() {
             configInstCtrl.newInstitution.portfolio_url = "";
-        }
+        };
 
         function updateInstitution() {
             var savePromises = [savePortfolio(), saveImage()];

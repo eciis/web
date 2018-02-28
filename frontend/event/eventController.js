@@ -163,7 +163,7 @@
                 dialogCtrl.loading = true;
                 var patch = formatPatch(generatePatch(jsonpatch.generate(dialogCtrl.observer), event));
                 EventService.editEvent(dialogCtrl.event.key, patch).then(function success() {
-                    $mdDialog.hide();
+                    $mdDialog.hide(event);
                     MessageService.showToast('Evento editado com sucesso.');
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
@@ -281,6 +281,15 @@
             return valid;
         };
 
+        dialogCtrl.isValidDate = function isValidDate(){  
+            return  !_.isUndefined(dialogCtrl.event.start_time) && 
+                !_.isUndefined(dialogCtrl.event.end_time);
+        };
+
+        dialogCtrl.isValidStepOne = function isValidStepOne(){ 
+            return dialogCtrl.isValidAddress() && dialogCtrl.isValidDate();
+        };
+
         function getFields() {
             var necessaryFieldsForStep = {
                 0: {
@@ -289,7 +298,7 @@
                         dialogCtrl.event.local,
                         dialogCtrl.event.address
                     ],
-                    isValid: dialogCtrl.isValidAddress
+                    isValid: dialogCtrl.isValidStepOne
                 }
             };
             return necessaryFieldsForStep;
@@ -316,7 +325,7 @@
 
         dialogCtrl.nextStepOrSave = function nextStepOrSave() {
             if (dialogCtrl.getStep(3)) {
-                dialogCtrl.blockPublishButton = true;
+                dialogCtrl.blockReturnButton = true;
                 dialogCtrl.save();
             } else {
                 dialogCtrl.nextStep();
@@ -376,6 +385,8 @@
                     dialogCtrl.events.push(response.data);
                     MessageService.showToast('Evento criado com sucesso!');
                 }, function error(response) {
+                    dialogCtrl.loading = false;
+                    dialogCtrl.blockReturnButton = false;
                     MessageService.showToast(response.data.msg);
                     $state.go("app.user.events");
                 });
@@ -441,7 +452,6 @@
                 loadSelectedState();
                 initPatchObserver();
                 loadEventDates();
-                dialogCtrl.oldEvent = _.cloneDeep(dialogCtrl.event);
             } else {
                 dialogCtrl.event = {
                                     address: address

@@ -176,10 +176,10 @@
                         }
                     };
                 });
-                spyOn(authService, 'reload').and.callFake(function() {
+                spyOn(authService, 'save').and.callFake(function() {
                     return {
                         then: function(callback) {
-                            return callback(newInviteCtrl.user = new User(otherUser));
+                            return callback();
                         }
                     };
                 });
@@ -210,7 +210,7 @@
 
             it('should call authService.reload()', function(done) {
                 promise.then(function() {
-                    expect(authService.reload).toHaveBeenCalled();
+                    expect(authService.save).toHaveBeenCalled();
                     done();
                 });
             });
@@ -230,6 +230,30 @@
                 newInviteCtrl.saveInstProfile();
                 expect(newInviteCtrl.user.addProfile).toHaveBeenCalled();
                 expect(authService.save).toHaveBeenCalled();
+            });
+        });
+
+        describe('deleteInvite', function () {
+            it('should call deleteInvite', function (done) {
+                spyOn(inviteService, 'deleteInvite').and.callFake(function () {
+                    return {
+                        then: function (callback) {
+                            return callback();
+                        }
+                    };
+                });
+                spyOn(authService, 'save');
+                newInviteCtrl.institution = otherInstitution;
+                newInviteCtrl.user = new User(otherUser);
+                spyOn(newInviteCtrl.user, 'removeInvite');
+                newInviteCtrl.office = "developer";
+                var promise = newInviteCtrl.deleteInvite();
+                promise.then(function success() {
+                    expect(newInviteCtrl.user.removeInvite).toHaveBeenCalled();
+                    expect(authService.save).toHaveBeenCalled();
+                    done();
+                });
+                expect(inviteService.deleteInvite).toHaveBeenCalled();
             });
         });
     });

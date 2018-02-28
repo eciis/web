@@ -15,6 +15,9 @@ BACKEND_LOCAL="localhost:8082"
 LANDINGPAGE_LOCAL="localhost:8080"
 
 FRONTEND_CONFIG_FILE="frontend/config.js"
+SUPPORT_CONFIG_FILE="support/config.js"
+
+git update-index --skip-worktree $FRONTEND_CONFIG_FILE $SUPPORT_CONFIG_FILE
 
 PY_ENV=backend/py_env
 
@@ -26,6 +29,8 @@ function set_backend_url {
     fi
     sed -i "4s|.*|    BACKEND_URL: '$url',|" $FRONTEND_CONFIG_FILE
     echo ">> Frontend will use ${bold}$url${_bold} as backend."
+    sed -i "4s|.*|    BACKEND_URL: '$url',|" $SUPPORT_CONFIG_FILE
+    echo ">> Support will use ${bold}$url${_bold} as backend."
 }
 
 function set_landingpage_url {
@@ -34,12 +39,18 @@ function set_landingpage_url {
     else
         url="http://"$1
     fi
-    sed -i "5s|.*|    LANDINGPAGE_URL: '$url'|" $FRONTEND_CONFIG_FILE
+    sed -i "5s|.*|    LANDINGPAGE_URL: '$url',|" $FRONTEND_CONFIG_FILE
     echo ">> Frontend will use ${bold}$url${_bold} as landing page."
+    sed -i "5s|.*|    LANDINGPAGE_URL: '$url',|" $SUPPORT_CONFIG_FILE
+    echo ">> Support will use ${bold}$url${_bold} as landing page."
 }
 
 case "$1" in
     run)
+        APP_VERSION=$(git branch | grep "*" | tr -d "()*" | cut -c2-)
+        sed -i "6s|.*|    APP_VERSION: '$APP_VERSION'|" $FRONTEND_CONFIG_FILE
+        sed -i "6s|.*|    APP_VERSION: '$APP_VERSION'|" $SUPPORT_CONFIG_FILE
+
         echo "=========== Cleaning Environment ==========="
         rm -rf $PY_ENV
         rm -rf frontend/test/node_modules frontend/test/bower_components
@@ -109,7 +120,35 @@ case "$1" in
     ;;
 
     deploy)
-        read -p "${bold}>> Type the app name:${_bold} " APP_NAME
+        APP_VERSION=$(git tag | sort -V | tail -1)
+        read -p ">> Type de APP VERSION or use the ${bold}Latest${_bold} ${bold}$APP_VERSION${_bold}: " NEW_APP_VERSION
+        if [ "$NEW_APP_VERSION" != "" ]; then
+            APP_VERSION=$NEW_APP_VERSION
+        fi
+        git checkout tags/"$APP_VERSION"
+        sed -i "6s|.*|    APP_VERSION: '$APP_VERSION'|" $FRONTEND_CONFIG_FILE
+        sed -i "6s|.*|    APP_VERSION: '$APP_VERSION'|" $SUPPORT_CONFIG_FILE
+
+        echo "${bold}>> Select the application to deploy:${_bold}"
+        options=("development-cis" "eciis-splab" "Other")
+        select opt in "${options[@]}"
+        do
+            case $opt in
+                "development-cis")
+                    APP_NAME="development-cis"
+                    break
+                    ;;
+                "eciis-splab")
+                    APP_NAME="eciis-splab"
+                    break
+                    ;;
+                "Other")
+                    read -p "${bold}>> Type the app name:${_bold} " APP_NAME
+                    break
+                    ;;
+                *) echo invalid option;;
+            esac
+        done
 
         gcloud config set project $APP_NAME
 

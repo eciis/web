@@ -312,11 +312,15 @@
         };
 
         postDetailsCtrl.reloadPost = function reloadPost() {
+            var type_survey = postDetailsCtrl.post.type_survey;
+            postDetailsCtrl.post.type_survey = false;
             var promise = PostService.getPost(postDetailsCtrl.post.key);
             promise.then(function success(response) {
+                response.data_comments = Object.values(response.data_comments);
                 postDetailsCtrl.post = response;
                 postDetailsCtrl.isLoadingComments = false;
             }, function error(response) {
+                postDetailsCtrl.post.type_survey = type_survey;
                 postDetailsCtrl.isLoadingComments = true;
                 MessageService.showToast(response.data.msg);
             }); 
@@ -492,6 +496,7 @@
         commentCtrl.likeOrDislike = function likeOrDislike(reply) {
             var replyId = reply ? reply.id : undefined;
             if (commentCtrl.isLikedByUser(reply)) {
+                commentCtrl.saving = true;
                 CommentService.dislike(commentCtrl.post.key, commentCtrl.comment.id, replyId).then(
                     function sucess() {
                         if (reply) {
@@ -503,13 +508,15 @@
                                 return commentCtrl.user.key === key;
                             });
                         }
-                    }, function error() {
+                        commentCtrl.saving = false;
+                    }, function error(response) {
                         $state.go("app.user.home");
                         MessageService.showToast("O usuário já fez essa ação nesse comentário.");
                         commentCtrl.saving = false;
                     }
                 );
             } else {
+                commentCtrl.saving = true;
                 CommentService.like(commentCtrl.post.key, commentCtrl.comment.id, replyId).then(
                     function sucess() {
                         if (reply) {
@@ -517,9 +524,10 @@
                         } else {
                             commentCtrl.comment.likes.push(commentCtrl.user.key);
                         }
-                    }, function error() {
+                        commentCtrl.saving = false;
+                    }, function error(response) {
                         $state.go("app.user.home");
-                        MessageService.showToast("O usuário já fez essa ação nesse comentário.");
+                        MessageService.showToast(response.data.msg);
                         commentCtrl.saving = false;
                     }
                 );

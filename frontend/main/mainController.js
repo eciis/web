@@ -14,6 +14,8 @@
         mainCtrl.pending_manager_member = 0;
         mainCtrl.pending_inst_invitations = 0;
 
+        mainCtrl.APP_VERSION = Config.APP_VERSION;
+
         mainCtrl.search = function search() {
             if(mainCtrl.search_keyword) {
                 var search = mainCtrl.search_keyword;

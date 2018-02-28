@@ -206,3 +206,26 @@ class InviteHandlerTest(TestBaseHandler):
         
         # assert the notification was not sent
         send_notification.assert_not_called()
+    
+    @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
+    def test_patch_with_a_user_that_is_already_a_member(self, verify_token):
+        """Test a patch invite_user when the user is already a member."""
+        self.inst_test.add_member(self.other_user)
+        self.other_user.add_institution(self.inst_test.key)
+
+        with self.assertRaises(Exception) as raises_context:
+            self.testapp.patch(
+                '/api/invites/%s'
+                % self.invite.key.urlsafe()
+            )
+
+        message_exception = self.get_message_exception(
+            str(raises_context.exception))
+        
+        expected_message = "Error! The user is already a member"
+
+        self.assertEqual(
+            message_exception,
+            expected_message,
+            "Expected exception message must be equal to %s" %expected_message
+        )

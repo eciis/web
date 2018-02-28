@@ -6,6 +6,12 @@
         InviteService, $mdToast, $state, $mdDialog, InstitutionService, AuthService, MessageService,
         RequestInvitationService, ProfileService) {
         var manageMemberCtrl = this;
+        /* TODO: FIX the MAX_EMAILS_QUANTITY's value
+        * The current value is one because the view that supports
+        * many invitations at once is not ready yet.
+        * @author: Raoni Smaneoto - 23/02/2018
+        */
+        var MAX_EMAILS_QUANTITY = 1;
 
         manageMemberCtrl.institution = {};
         manageMemberCtrl.invite = {};
@@ -19,6 +25,8 @@
         manageMemberCtrl.showRequests = false;
         manageMemberCtrl.showMembers = false;
         manageMemberCtrl.requests = [];
+        var empty_email = {email: ''};
+        manageMemberCtrl.emails = [_.clone(empty_email)];
 
         var currentInstitutionKey = $state.params.institutionKey;
         var invite;
@@ -56,17 +64,22 @@
             invite = new Invite(manageMemberCtrl.invite);
             invite.sender_name = manageMemberCtrl.user.name;
 
-            if (manageMemberCtrl.isUserInviteValid(invite)) {
+            var emails = getEmails();
+            var requestBody = {
+                invite_body: invite,
+                emails: emails
+            }
+
+            if (manageMemberCtrl.isUserInvitesValid(invite, emails)) {
                 manageMemberCtrl.isLoadingInvite = true;
-                var promise = InviteService.sendInvite(invite);
+                var promise = InviteService.sendInvite(requestBody);
                 promise.then(function success(response) {
-                    invite.key = response.data.key;
-                    manageMemberCtrl.sent_invitations.push(invite);
+                    refreshSentInvitations(requestBody.emails);
                     manageMemberCtrl.invite = {};
                     manageMemberCtrl.showInvites = true; 
                     manageMemberCtrl.showSendInvite = false;
                     manageMemberCtrl.isLoadingInvite = false;
-                    MessageService.showToast('Convite enviado com sucesso!');
+                    MessageService.showToast(response.data.msg);
                 }, function error(response) {
                     manageMemberCtrl.isLoadingInvite = false;
                     MessageService.showToast(response.data.msg);
@@ -74,6 +87,14 @@
                 return promise;
             }
         };
+
+        function refreshSentInvitations(emails) {
+            var inviteToAdd = new Invite(manageMemberCtrl.invite);
+            _.each(emails, function(email) {
+                inviteToAdd.invitee = email;
+                manageMemberCtrl.sent_invitations.push(_.clone(inviteToAdd));
+            });
+        }
 
         manageMemberCtrl.acceptRequest = function acceptRequest(request) {
             var promise = RequestInvitationService.acceptRequest(request.key);
@@ -176,33 +197,47 @@
             return user.email;
         }
 
-        function inviteeIsMember(invite) {
-            return _.find(_.map(manageMemberCtrl.members, getEmail), function(emails) {
-                return _.includes(emails, invite.invitee);
+        function getMember(inviteEmails) {
+            var memberEmail;
+            _.each(inviteEmails, function (email) {
+                memberEmail = _.find(_.map(manageMemberCtrl.members, getEmail), function (emails) {
+                    return _.includes(emails, email);
+                });
             });
+            return memberEmail;
         }
 
-        function inviteeIsInvited(invite) {
-            return _.find(manageMemberCtrl.sent_invitations, function(sentInvitation) {
-                return sentInvitation.invitee === invite.invitee;
+        function getInvitedEmail(inviteEmails) {
+            var inviteSent;
+            _.each(inviteEmails, function (email) {
+                inviteSent = _.find(manageMemberCtrl.sent_invitations, function (sentInvitation) {
+                    return sentInvitation.invitee === email;
+                });
             });
+            return inviteSent ? inviteSent.invitee : inviteSent;
         }
 
         manageMemberCtrl.toggleElement = function toggleElement(flagName) {
             manageMemberCtrl[flagName] = !manageMemberCtrl[flagName];
         };
 
-        manageMemberCtrl.isUserInviteValid = function isUserInviteValid(invite) {
+        manageMemberCtrl.isUserInvitesValid = function isUserInvitesValid(invite, emails) {
             var isValid = true;
             if (! invite.isValid()) {
                 isValid = false;
                 MessageService.showToast('Convite inválido!');
-            } else if (inviteeIsMember(invite)) {
-                isValid = false;
-                MessageService.showToast('O convidado já é um membro!');
-            } else if (inviteeIsInvited(invite)) {
-                isValid = false;
-                MessageService.showToast('Este email já foi convidado');
+            } else {
+                var memberEmail = getMember(emails);
+                if(memberEmail) {
+                    isValid = false;
+                    MessageService.showToast('O email ' + memberEmail + ' pertence a um membro da instituição');
+                } else {
+                    var invitedEmail = getInvitedEmail(emails);
+                    if(invitedEmail) {
+                        isValid = false;
+                        MessageService.showToast('O email ' + invitedEmail + ' já foi convidado');
+                    }
+                }
             }
             return isValid;
         };
@@ -233,6 +268,26 @@
             });
             return promise;
         };
+
+        manageMemberCtrl.canAddEmailField = function canAddEmailField() {
+            if (_.size(manageMemberCtrl.emails) < MAX_EMAILS_QUANTITY) {
+                addField()
+            };
+        };
+
+        function addField() {
+            manageMemberCtrl.emails.push(_.clone(empty_email));
+        }
+
+        function getEmails() {
+            var emails = [];
+            _.each(manageMemberCtrl.emails, function (email) {
+                if (!_.isEmpty(email.email)) {
+                    emails.push(email.email);
+                }
+            });
+            return emails;
+        }
 
         function designOptions() {
             var $dialog = angular.element(document.querySelector('md-dialog'));

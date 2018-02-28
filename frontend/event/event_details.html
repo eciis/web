@@ -6,7 +6,7 @@
     <div layout="row" layout-xs="column">
       <md-card-content style="max-height: 150px" md-colors="{background: 'default-grey-200'}">
         <div style="max-height: 100px;" layout="column">
-          <div layout="row" md-colors="{background: 'default-grey-200'}">
+          <div style="max-height: 50px;" layout="row" md-colors="{background: 'default-grey-200'}">
             <h1 class="md-display-1" md-colors="{color:'default-teal-400'}" style="font-weight: bold; margin-top: auto;">
               {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'DD'}}
               A {{eventDetailsCtrl.event.end_time | amUtc | amLocal | amDateFormat:'DD' | uppercase}}</h1>

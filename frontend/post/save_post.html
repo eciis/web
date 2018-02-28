@@ -34,7 +34,7 @@
               </md-input-container>
           </div>
             <!-- SURVEY -->
-          <survey-directive ng-if="postCtrl.typePost === 'Survey'" post="postCtrl.post" posts="posts" user="postCtrl.user" callback="postCtrl.choiceCommon"
+          <survey-directive ng-if="postCtrl.typePost === 'Survey' && !isEditing" post="postCtrl.post" posts="posts" user="postCtrl.user" callback="postCtrl.choiceCommon"
               options="postCtrl.options"></survey-directive>
         </div>
       </div>
@@ -76,7 +76,7 @@
                   {{!postCtrl.showFiles() ? 'Anexar PDF' : 'Trocar PDF'}}
                 </md-button>
               </md-menu-item>
-              <md-menu-item>
+              <md-menu-item ng-if="!isEditing">
                 <md-button ng-click="postCtrl.setTypeOfPost()" aria-label="Tipo do Post">
                   <div ng-if="postCtrl.typePost === 'Common'">
                     <md-icon>poll</md-icon>

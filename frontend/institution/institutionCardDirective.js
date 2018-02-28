@@ -21,9 +21,8 @@
             if(institutionCardCtrl.institution.address.country === "Brasil"){
                 return institutionCardCtrl.institution.address.city + "/" + institutionCardCtrl.institution.address.federal_state
             }
-            return institutionCardCtrl.institution.address.country
-            
-        }
+            return institutionCardCtrl.institution.address.country  
+        };
 
         institutionCardCtrl.generateLink = function generateLink(){
             var currentUrl = (window.location.host);
@@ -36,7 +35,7 @@
             return institutionCardCtrl.institution && !institutionCardCtrl.isMember && 
                    institutionCardCtrl.institution.name !== "Ministério da Saúde" &&
                    institutionCardCtrl.institution.name !== "Departamento do Complexo Industrial e Inovação em Saúde";
-         };
+        };
 
         institutionCardCtrl.follow = function follow(){
             var promise = InstitutionService.follow(institutionCardCtrl.institution.key);

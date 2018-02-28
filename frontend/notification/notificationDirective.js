@@ -137,6 +137,9 @@
                          key: ""
                      }
                 }
+            },
+            'DELETED_POST': {
+                icon: "clear"
             }
         };
 

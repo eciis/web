@@ -926,12 +926,6 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
     color:white;
 }
 
-.mat-card-image {
-    max-width: 400px;
-    max-height: 200px;
-    background-size: cover;
-  }
-
 .notification-icon-bg {
     background: #009688; 
     width: 21px; 

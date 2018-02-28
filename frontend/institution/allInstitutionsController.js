@@ -5,12 +5,14 @@
     app.controller("AllInstitutionsController", function AllInstitutionsController(
         $state, InstitutionService, AuthService, MessageService) {
         var allInstituinsCtrl = this;
+        allInstituinsCtrl.isLoadingInstitutions = true;
 
         allInstituinsCtrl.user = AuthService.getCurrentUser();
 
         function loadInstitutions() {
             InstitutionService.getInstitutions().then(function success(response) {
                 allInstituinsCtrl.institutions = response.data;
+                allInstituinsCtrl.isLoadingInstitutions = false;
             }, function error(response) {
                 $state.go('app.user.home');
                 MessageService.showToast(response.data.msg);
@@ -33,7 +35,7 @@
 
         institutionCardCtrl.generateLink = function generateLink(){
             var currentUrl = (window.location.host);
-        var url = currentUrl + URL_INSTITUTION + institutionCardCtrl.institution.key +  "/home";
+            var url = currentUrl + URL_INSTITUTION + institutionCardCtrl.institution.key + "/home";
             ngClipboard.toClipboard(url);
             MessageService.showToast("O link foi copiado");
         };
@@ -56,7 +58,6 @@
                     actuation_area: institutionCardCtrl.institution.actuation_area
                 };
                 institutionCardCtrl.user.follow(institution);
-                institutionCardCtrl.isUserFollower = institutionCardCtrl.user.isFollower(institutionCardCtrl.institution);
                 AuthService.save();
             }, function error() {
                 MessageService.showToast('Erro ao seguir a instituição.');
@@ -73,8 +74,6 @@
                 promise.then(function success(){
                     MessageService.showToast("Deixou de seguir "+institutionCardCtrl.institution.name);
                     institutionCardCtrl.user.unfollow(institutionCardCtrl.institution);
-                    institutionCardCtrl.user.isFollower(institutionCardCtrl.institution);
-                    institutionCardCtrl.isUserFollower =  institutionCardCtrl.user.isFollower(institutionCardCtrl.institution);
                     AuthService.save();
                 }, function error() {
                     MessageService.showToast('Erro ao deixar de seguir instituição.');
@@ -90,13 +89,6 @@
             }
         };
 
-        function checkIfUserIsFollower() {
-            if (institutionCardCtrl.user && institutionCardCtrl.institution){
-                institutionCardCtrl.isUserFollower = institutionCardCtrl.user.isFollower(institutionCardCtrl.institution);
-            }   
-        }
-
-        checkIfUserIsFollower();
         institutionCardCtrl.checkIfUserIsMember();
     });
 

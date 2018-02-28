@@ -12,7 +12,9 @@
                     </div>
                 </md-toolbar>
                 <md-card-content>
-                    <div layout-xs="column" layout="row" layout-wrap>
+                    <load-circle add-layout-fill="true" flex ng-show="allInstituinsCtrl.isLoadingInstitutions"></load-circle>
+                    <div ng-if="!allInstituinsCtrl.isLoadingInstitutions" 
+                        layout-xs="column" layout="row" layout-wrap>
                         <div layout-xs="row" layout="column" flex-xs="100" flex="50" 
                             ng-repeat="inst in allInstituinsCtrl.institutions" 
                             class="clickable-no-hover">

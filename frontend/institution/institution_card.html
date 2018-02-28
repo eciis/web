@@ -8,11 +8,11 @@
         <md-card-header-text>
             <div>
                 <a href class="md-title hyperlink" ng-click="institutionCardCtrl.goToInstitution(institutionCardCtrl.institution.key)">
-                {{ institutionCardCtrl.institution.name }}
+                {{ institutionCardCtrl.limitString(institutionCardCtrl.institution.name, 50) }}
                 </a>
             </div>
             <span layout="row" class="md-subhead">
-                {{institutionCardCtrl.institution.address.city}}/{{institutionCardCtrl.institution.address.federal_state}}
+                {{institutionCardCtrl.getAddressInfo()}}
             </span>
         </md-card-header-text>
         <md-menu md-offset="-200 45">
@@ -37,7 +37,7 @@
         </div>
         <!--DESCRIPTION-->
         <spam>
-            {{institutionCardCtrl.institution.description}}
+            {{institutionCardCtrl.limitString(institutionCardCtrl.institution.description, 150)}}
         </spam>
     </md-card-content>
     <!-- BUTTONS -->

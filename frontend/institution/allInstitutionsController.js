@@ -33,6 +33,18 @@
             $state.go('app.institution.timeline', {institutionKey: institutionKey});
         };
 
+        institutionCardCtrl.limitString = function limitString(string, limit){
+            return Utils.limitString(string, limit);
+        };
+
+        institutionCardCtrl.getAddressInfo = function getAddressInfo(){
+            if(institutionCardCtrl.institution.address.country === "Brasil"){
+                return institutionCardCtrl.institution.address.city + "/" + institutionCardCtrl.institution.address.federal_state
+            }
+            return institutionCardCtrl.institution.address.country
+            
+        }
+
         institutionCardCtrl.generateLink = function generateLink(){
             var currentUrl = (window.location.host);
             var url = currentUrl + URL_INSTITUTION + institutionCardCtrl.institution.key + "/home";

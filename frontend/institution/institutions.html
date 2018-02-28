@@ -14,8 +14,8 @@
                 <md-card-content>
                     <load-circle add-layout-fill="true" flex ng-show="allInstituinsCtrl.isLoadingInstitutions"></load-circle>
                     <div ng-if="!allInstituinsCtrl.isLoadingInstitutions" 
-                        layout-xs="column" layout="row" layout-wrap>
-                        <div layout-xs="row" layout="column" flex-xs="100" flex="50" 
+                        layout-xs="column" layout-gt-xs="row" layout-wrap>
+                        <div layout-xs="row" layout="column"  flex-gt-xs="33" 
                             ng-repeat="inst in allInstituinsCtrl.institutions" 
                             class="clickable-no-hover">
                             <institution-card-details institution="inst" user="allInstituinsCtrl.user">

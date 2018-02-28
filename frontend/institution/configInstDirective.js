@@ -326,7 +326,7 @@
         function getFields() {
             var necessaryFieldsForStep = {
                 0: {
-                    fields: [configInstCtrl.address],
+                    fields: [configInstCtrl.newInstitution.address],
                     isValid :  configInstCtrl.isValidAddress
                 },
                 1: {

@@ -1,5 +1,5 @@
-'use strict';
 (function() {
+    'use strict';
     var app = angular.module('app');
 
     app.controller("AllInstitutionsController", function AllInstitutionsController(
@@ -62,14 +62,7 @@
             var promise = InstitutionService.follow(institutionCardCtrl.institution.key);
             promise.then(function success(){
                 MessageService.showToast("Seguindo "+ institutionCardCtrl.institution.name);
-                var institution =  {
-                    acronym: institutionCardCtrl.institution.acronym,
-                    key: institutionCardCtrl.institution.key,
-                    photo_url: institutionCardCtrl.institution.photo_url,
-                    legal_nature: institutionCardCtrl.institution.legal_nature,
-                    actuation_area: institutionCardCtrl.institution.actuation_area
-                };
-                institutionCardCtrl.user.follow(institution);
+                institutionCardCtrl.user.follow(institutionCardCtrl.institution);
                 AuthService.save();
             }, function error() {
                 MessageService.showToast('Erro ao seguir a instituição.');

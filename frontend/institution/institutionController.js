@@ -101,9 +101,8 @@
         institutionCtrl.follow = function follow(){
             var promise = InstitutionService.follow(currentInstitutionKey);
             promise.then(function success(){
-                MessageService.showToast("Seguindo "+institutionCtrl.institution.name);
-                var institution = institutionCtrl.institution.make();
-                institutionCtrl.user.follow(institution);
+                MessageService.showToast("Seguindo "+ institutionCtrl.institution.name);
+                institutionCtrl.user.follow(institutionCtrl.institution);
                 institutionCtrl.isUserFollower = true;
                 AuthService.save();
             }, function error() {

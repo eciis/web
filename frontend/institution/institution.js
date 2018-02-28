@@ -5,17 +5,6 @@ function Institution(data) {
     _.extend(this, data);
 }
 
-Institution.prototype.make = function make() {
-    var institution =  {
-        acronym: this.acronym,
-        key: this.key,
-        photo_url: this.photo_url,
-        legal_nature: this.legal_nature,
-        actuation_area: this.actuation_area
-    };
-    return institution;
-};
-
 Institution.prototype.isValidAddress = function isValidAdress(){
     var valid = true;
     if(this.address && this.address.country === "Brasil"){

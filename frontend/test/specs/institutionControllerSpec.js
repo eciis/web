@@ -101,17 +101,6 @@
             expect(institutionCtrl.posts).toEqual(posts);
         });
 
-        it('should exist currentInstitution', function() {
-            expect(institutionCtrl.institution.make()).toEqual(first_institution);
-        });
-
-        it('should exist currentInstitution', function() {
-            expect(institutionCtrl.institution.make()).toEqual(first_institution);
-        });
-
-        it('should exist currentInstitution', function() {
-            expect(institutionCtrl.institution.make()).toEqual(first_institution);
-        });
     });
 
     describe('InstitutionController functions', function() {

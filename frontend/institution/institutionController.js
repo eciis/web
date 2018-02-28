@@ -106,7 +106,7 @@
                 institutionCtrl.isUserFollower = true;
                 AuthService.save();
             }, function error() {
-                MessageService.showToast('Erro ao seguir a instituição.');
+                MessageService.showToast('Não foi possível seguir a instituição.');
             });
             return promise;
         };

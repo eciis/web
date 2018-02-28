@@ -1,20 +1,18 @@
-<!--CARD DA INST-->
 <md-card>
-    <!-- HEADER -->
     <md-card-header>
         <md-card-avatar>
-            <a href ng-click="instituinsCardCtrl.goToInstitution(instituinsCardCtrl.institution.key)">
-                <img ng-src="{{ instituinsCardCtrl.institution.photo_url }}" role="button" class="md-user-avatar img-post-shadow"/>
+            <a href ng-click="institutionCardCtrl.goToInstitution(institutionCardCtrl.institution.key)">
+                <img ng-src="{{ institutionCardCtrl.institution.photo_url }}" role="button" class="md-user-avatar img-post-shadow"/>
             </a>
         </md-card-avatar>
         <md-card-header-text>
             <div>
-                <a href class="md-title hyperlink" ng-click="instituinsCardCtrl.goToInstitution(instituinsCardCtrl.institution.key)">
-                {{ instituinsCardCtrl.institution.name }}
+                <a href class="md-title hyperlink" ng-click="institutionCardCtrl.goToInstitution(institutionCardCtrl.institution.key)">
+                {{ institutionCardCtrl.institution.name }}
                 </a>
             </div>
             <span layout="row" class="md-subhead">
-                {{instituinsCardCtrl.institution.address.city}}/{{instituinsCardCtrl.institution.address.federal_state}}
+                {{institutionCardCtrl.institution.address.city}}/{{institutionCardCtrl.institution.address.federal_state}}
             </span>
         </md-card-header-text>
         <md-menu md-offset="-200 45">
@@ -23,7 +21,7 @@
             </md-button>
             <md-menu-content width="4">
                 <md-menu-item>
-                    <md-button ng-click="null">
+                    <md-button ng-click="institutionCardCtrl.generateLink()">
                     <md-icon>link</md-icon>
                     Obter link
                     </md-button>
@@ -39,17 +37,17 @@
         </div>
         <!--DESCRIPTION-->
         <spam>
-            {{instituinsCardCtrl.institution.description}}
+            {{institutionCardCtrl.institution.description}}
         </spam>
     </md-card-content>
     <!-- BUTTONS -->
     <md-card-actions layout="row" layout-align="end center">
-        <md-button ng-click="instituinsCardCtrl.goToInstitution(instituinsCardCtrl.institution.key)">Ver página</md-button>
+        <md-button ng-click="institutionCardCtrl.goToInstitution(institutionCardCtrl.institution.key)">Ver página</md-button>
         <md-button 
-            ng-if="instituinsCardCtrl.showFollowButton()" 
-            ng-click="instituinsCardCtrl.user.isFollower(instituinsCardCtrl.institution) ? instituinsCardCtrl.unfollow() : instituinsCardCtrl.follow()">
+            ng-if="institutionCardCtrl.showFollowButton()" 
+            ng-click="institutionCardCtrl.user.isFollower(institutionCardCtrl.institution) ? institutionCardCtrl.unfollow() : institutionCardCtrl.follow()">
                 <md-icon style="font-size:18px;">rss_feed</md-icon>
-                {{ instituinsCardCtrl.user.isFollower(instituinsCardCtrl.institution)  ? 'Deixar de seguir' : 'Seguir' }}
+                {{ institutionCardCtrl.user.isFollower(institutionCardCtrl.institution)  ? 'Deixar de seguir' : 'Seguir' }}
         </md-button>  
     </md-card-actions>
 </md-card>

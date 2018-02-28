@@ -21,13 +21,21 @@
     });
 
     app.controller("InstitutionCardController", function InstitutionCardController(
-        $state, AuthService, InstitutionService, MessageService){
+        $state, AuthService, InstitutionService, MessageService, ngClipboard){
         var institutionCardCtrl = this;
+        var URL_INSTITUTION = '/institution/';
 
         institutionCardCtrl.user = AuthService.getCurrentUser();
 
         institutionCardCtrl.goToInstitution = function goToInstitution(institutionKey) {
             $state.go('app.institution.timeline', {institutionKey: institutionKey});
+        };
+
+        institutionCardCtrl.generateLink = function generateLink(){
+            var currentUrl = (window.location.host);
+        var url = currentUrl + URL_INSTITUTION + institutionCardCtrl.institution.key +  "/home";
+            ngClipboard.toClipboard(url);
+            MessageService.showToast("O link foi copiado");
         };
 
         institutionCardCtrl.showFollowButton = function showFollowButton() {
@@ -96,12 +104,11 @@
         return {
             restrict: 'E',
             templateUrl: "app/institution/institution_card.html",
-            controllerAs: "instituinsCardCtrl",
+            controllerAs: "institutionCardCtrl",
             controller: "InstitutionCardController",
             scope: {},
             bindToController: {
-                institution: '=',
-                user: '='
+                institution: '='
             }
         };
     });

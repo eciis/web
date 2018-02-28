@@ -36,11 +36,11 @@
                     <input type="text" name="acronym" ng-model="configInstCtrl.newInstitution.acronym">
                 </md-input-container>
             </div>
-            <div layout="row" prevent-state-change="configInstCtrl.newInstitution.address">
+            <div layout="row">
                 <md-input-container class="md-block" flex-gt-xs>
                     <label>Rua</label>
                     <input type="text" name="street" ng-required="!configInstCtrl.isAnotherCountry"
-                        ng-model="configInstCtrl.newInstitution.address.street">
+                        ng-model="configInstCtrl.address.street">
                     <div ng-messages='instForm.street.$error'>
                         <div ng-message="required">Este campo é obrigatório!</div>
                     </div>
@@ -48,7 +48,7 @@
                 <md-input-container class="md-block" flex-gt-xs  flex="20">
                     <label>Número</label>
                     <input type="text" name="number"
-                        ng-model="configInstCtrl.newInstitution.address.number" ng-pattern="configInstCtrl.numberRegex">
+                        ng-model="configInstCtrl.address.number" ng-pattern="configInstCtrl.numberRegex">
                     <div ng-messages='instForm.number.$error'>
                         <div ng-message="pattern" >O número deve ser válido!</div>
                     </div>
@@ -56,7 +56,7 @@
                 <md-input-container class="md-block" flex-gt-xs  flex="20">
                     <label>CEP</label>
                     <input type="text" name="cep" ng-required="!configInstCtrl.isAnotherCountry"
-                        ng-model="configInstCtrl.newInstitution.address.cep"
+                        ng-model="configInstCtrl.address.cep"
                         minlength="9" md-maxlength="9" placeholder="00000-000"
                         ng-pattern="configInstCtrl.cepRegex"
                         mask="99999-999">
@@ -69,7 +69,7 @@
             <div layout="row">
                 <md-input-container class="md-block" flex-gt-xs>
                     <label>País</label>
-                    <md-select name="country" ng-model="configInstCtrl.newInstitution.address.country" required 
+                    <md-select name="country" ng-model="configInstCtrl.address.country" required 
                         ng-change="configInstCtrl.setAnotherCountry()">
                         <md-option ng-repeat="country in configInstCtrl.countries" ng-value="country.nome_pais">
                             {{country.nome_pais}}
@@ -81,7 +81,7 @@
                 </md-input-container>
                 <md-input-container class="md-block" flex-gt-xs ng-if="configInstCtrl.isAnotherCountry">
                     <label>Estado</label>
-                    <input type="text" name="state" ng-model="configInstCtrl.newInstitution.address.federal_state">
+                    <input type="text" name="state" ng-model="configInstCtrl.address.federal_state">
                 </md-input-container>
                 <md-input-container class="md-block" flex-gt-xs ng-if="!configInstCtrl.isAnotherCountry">
                     <label>Estado</label>
@@ -97,11 +97,11 @@
                 </md-input-container>
                 <md-input-container class="md-block" flex-gt-xs ng-if="configInstCtrl.isAnotherCountry">
                     <label>Cidade</label>
-                    <input type="text" name="city" ng-model="configInstCtrl.newInstitution.address.city">
+                    <input type="text" name="city" ng-model="configInstCtrl.address.city">
                 </md-input-container>
                 <md-input-container class="md-block" flex-gt-xs ng-if="!configInstCtrl.isAnotherCountry">
                     <label>Cidade</label>
-                    <md-select name="city" ng-model="configInstCtrl.newInstitution.address.city" required
+                    <md-select name="city" ng-model="configInstCtrl.address.city" required
                         ng-disabled="!configInstCtrl.selectedState">
                         <md-option ng-repeat="city in configInstCtrl.cities" ng-value="city">
                             {{city}}
@@ -120,7 +120,7 @@
                 <md-input-container class="md-block" flex-gt-xs>
                     <label>Bairro</label>
                     <input type="text" name="neighbourhood" ng-required="!configInstCtrl.isAnotherCountry"
-                        ng-model="configInstCtrl.newInstitution.address.neighbourhood">
+                        ng-model="configInstCtrl.address.neighbourhood">
                     <div ng-messages='instForm.neighbourhood.$error'>
                         <div ng-message="required">Este campo é obrigatório!</div>
                     </div>

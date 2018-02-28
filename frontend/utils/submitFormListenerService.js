@@ -8,10 +8,10 @@
 
         service.addListener = function addListener(obj, formElement, scope) {
             let modified = false;
-
-            scope.$watchCollection(obj, (newObj, oldObj) => {
+            let objectEquality = true;
+            scope.$watch(obj, (newObj, oldObj) => {
                 modified = !angular.equals(newObj, oldObj);
-            });
+            }, objectEquality);
 
             let transitionListener = $transitions.onStart({
                 to: () => true

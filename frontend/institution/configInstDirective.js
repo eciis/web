@@ -37,11 +37,12 @@
         };
 
         function updateAddressState() {
-            configInstCtrl.newInstitution.address.federal_state = configInstCtrl.selectedState && configInstCtrl.selectedState.nome;
+            configInstCtrl.address.federal_state = configInstCtrl.selectedState && configInstCtrl.selectedState.nome;
         }
 
         function loadAddress() {
             configInstCtrl.newInstitution.address = configInstCtrl.newInstitution.address || {};
+            configInstCtrl.address = configInstCtrl.newInstitution.address;
             loadCountry();
             loadStateAndCities();
         }
@@ -50,7 +51,7 @@
             configInstCtrl.states = brCidadesEstados.estados;
             var isANewInstitution = institutionKey == undefined;
             if(!isANewInstitution) {
-                var stateName = configInstCtrl.newInstitution.address.federal_state;
+                var stateName = configInstCtrl.address.federal_state;
                 var stateIndex = configInstCtrl.states.findIndex((state) => {
                     return state.nome === stateName;
                 });
@@ -62,13 +63,13 @@
         }        
         
         function loadCountry() {
-            configInstCtrl.newInstitution.address.country = configInstCtrl.newInstitution.address.country || "Brasil";
-            configInstCtrl.isAnotherCountry = configInstCtrl.newInstitution.address.country !== "Brasil";
+            configInstCtrl.address.country = configInstCtrl.address.country || "Brasil";
+            configInstCtrl.isAnotherCountry = configInstCtrl.address.country !== "Brasil";
         }
 
         configInstCtrl.setAnotherCountry = function isAnotherCountry() {
             clearSelectedState();
-            configInstCtrl.isAnotherCountry = configInstCtrl.newInstitution.address.country !== "Brasil";
+            configInstCtrl.isAnotherCountry = configInstCtrl.address.country !== "Brasil";
         };
 
         function clearSelectedState() {
@@ -325,7 +326,7 @@
         function getFields() {
             var necessaryFieldsForStep = {
                 0: {
-                    fields: [configInstCtrl.newInstitution.address],
+                    fields: [configInstCtrl.address],
                     isValid :  configInstCtrl.isValidAddress
                 },
                 1: {
@@ -347,7 +348,7 @@
 
         configInstCtrl.isValidAddress =  function isValidAddress(){       
             var valid = true;
-            var address = configInstCtrl.newInstitution.address;    
+            var address = configInstCtrl.address;    
             if(address && address.country === "Brasil"){     
                 _.forEach(address, function(value, key) {
                     var isNotNumber =  key !== "number";

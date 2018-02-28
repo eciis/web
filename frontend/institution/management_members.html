@@ -31,11 +31,18 @@
               válidos em uma planilha e salvar no formato CSV.
             </p>
             <md-list>
-                <md-list-item class="list-item-dense" md-colors="{background: 'default-grey-300'}" style="height: 75px;" flex-xs ng-click="null">
-                  <div layout="row" style="margin-left: auto; margin-right: auto;">
-                    <md-icon style="color: #7CB342; font-size: 45px; margin-right: 30px; margin-top: 15px;">file_upload</md-icon>
-                    <p style="font-size: 20px;">ENVIAR ENDEREÇOS EM CSV</p>
-                  </div>
+                <md-list-item class="list-item-dense" md-colors="{background: 'default-grey-300'}" style="height: 75px;" flex-xs>
+                  <md-button  style="margin-left: auto;" ng-click="null"
+                    ng-file-model="manageMemberCtrl.files"
+                    ngf-pattern="'.csv'" title="Adicionar CSV"
+                    ngf-accept="'.csv'"
+                    ngf-max-files="1"
+                    ngf-select="manageMemberCtrl.addCSV($files, $ev)">
+                    <div layout="row">
+                      <md-icon style="color: #7CB342; font-size: 45px; margin-right: 30px; margin-top: 15px;">file_upload</md-icon>
+                      <p style="font-size: 20px;">ENVIAR ENDEREÇOS EM CSV</p>
+                    </div>
+                  </md-button>
                 </md-list-item>
               </md-list>
           </div>

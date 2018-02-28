@@ -1,0 +1,31 @@
+<div layout="column" layout-align="center center">
+    <md-dialog aria-label="Emails" layout-padding style="padding: 0; margin: 0;">
+        <md-content layout="column" class="custom-scrollbar" style="padding: 0; margin-bottom: 3%">
+            <div layout-padding>
+                <h3 style="text-align: center;" md-colors="{color: 'default-teal-800'}">Convite em lote</h3>
+                <p>Confira os endereços importados e selecione os que deseja convidar</p>
+                <md-list>
+                    <md-list-item>
+                        <md-checkbox ng-checked="selectEmailsCtrl.selectAll" ng-model="selectEmailsCtrl.selectAll"
+                        ng-click="selectEmailsCtrl.selectAllEmails()"></md-checkbox>
+                        <span>Selecionar todos</span>
+                    </md-list-item>
+                    <md-list-item ng-repeat="email in selectEmailsCtrl.emails" md-colors="{background: 'default-grey-300'}">
+                        <md-checkbox ng-checked="email.selected"
+                        ng-model="email.selected"></md-checkbox>
+                        <span>{{ email.email }}</span>
+                        <md-divider></md-divider>
+                    </md-list-item>
+                </md-list>
+            </div>
+            <md-dialog-actions style="border:0px; margin-right: 10px;" layout="row">
+                <md-button ng-if="!controller.loading" class="md-raised" md-colors="{background: 'default-teal-500'}" ng-click="selectEmailsCtrl.closeDialog()">
+                    <span style="color: white;">cancelar</span>
+                </md-button>
+                <md-button class="md-raised" md-colors="{background: 'default-teal-500'}" ng-click="selectEmailsCtrl.sendInvite()">
+                    <span style="color: white;">convidar</span>
+                </md-button>
+            </md-dialog-actions>
+        </md-content>
+    </md-dialog>
+ </div>

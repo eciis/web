@@ -275,6 +275,36 @@
             };
         };
 
+        function selectEmailsDialog(emails, ev) {
+            $mdDialog.show({
+                templateUrl: 'app/institution/select_emails.html',
+                controller: "SelectEmailsController",
+                controllerAs: "selectEmailsCtrl",
+                locals: {
+                    emails: emails,
+                },
+                targetEvent: ev,
+                clickOutsideToClose: true
+            });
+        }
+
+        manageMemberCtrl.addCSV = function addCSV(files, ev) {
+            if(files[0].size > 5242880) {
+                MessageService.showToast('O arquivo deve ser um CSV menor que 5 Mb');
+            } else {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var emails = e.target.result.split('\n');
+                    emails = emails.filter(email => email !== "");
+                    emails = emails.map((email) => {
+                        return {email: email, selected: false};
+                    });
+                    selectEmailsDialog(emails, ev);
+                }
+                reader.readAsText(files[0]);
+            }
+        };
+
         function addField() {
             manageMemberCtrl.emails.push(_.clone(empty_email));
         }
@@ -327,5 +357,34 @@
         }
         
         loadInstitution();
+    });
+
+    app.controller("SelectEmailsController", function SelectEmailsController(emails, $mdDialog) {
+        var selectEmailsCtrl = this;
+
+        selectEmailsCtrl.emails = emails;
+        selectEmailsCtrl.selectAll = false;
+
+        selectEmailsCtrl.selectAllEmails = function selectAllEmails() {
+            if(!selectEmailsCtrl.selectAll) {
+                selectEmailsCtrl.selectAll = true;
+                selectEmailsCtrl.emails = selectEmailsCtrl.emails.map((email) => {
+                    return {email: email.email, selected: true};
+                });
+            } else {
+                selectEmailsCtrl.selectAll = true;
+                selectEmailsCtrl.emails = selectEmailsCtrl.emails.map((email) => {
+                    return {email: email.email, selected: false};
+                });
+            }
+        };
+
+        selectEmailsCtrl.closeDialog = function closeDialog() {
+            $mdDialog.cancel();
+        };
+
+        selectEmailsCtrl.sendInvite = function sendInvite() {
+
+        };
     });
 })();

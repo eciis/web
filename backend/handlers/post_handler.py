@@ -69,7 +69,7 @@ class PostHandler(BaseHandler):
 
         post.delete(user)
 
-        if(is_admin):
+        if(is_admin and not is_author):
             send_message_notification(post.author.urlsafe(), user.key.urlsafe(), 
                 'DELETED_POST', post.key.urlsafe())
 

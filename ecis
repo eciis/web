@@ -17,6 +17,8 @@ LANDINGPAGE_LOCAL="localhost:8080"
 FRONTEND_CONFIG_FILE="frontend/config.js"
 SUPPORT_CONFIG_FILE="support/config.js"
 
+git update-index --skip-worktree $FRONTEND_CONFIG_FILE $SUPPORT_CONFIG_FILE
+
 PY_ENV=backend/py_env
 
 function set_backend_url {
@@ -118,13 +120,35 @@ case "$1" in
     ;;
 
     deploy)
-        APP_VERSION=$(git tag | tail -1)
-        read -p ">> The ${bold}Latest${_bold} APP VERSION ${bold}$APP_VERSION${_bold} will be deployed, ok?"
+        APP_VERSION=$(git tag | sort -V | tail -1)
+        read -p ">> Type de APP VERSION or use the ${bold}Latest${_bold} ${bold}$APP_VERSION${_bold}: " NEW_APP_VERSION
+        if [ "$NEW_APP_VERSION" != "" ]; then
+            APP_VERSION=$NEW_APP_VERSION
+        fi
         git checkout tags/"$APP_VERSION"
         sed -i "6s|.*|    APP_VERSION: '$APP_VERSION'|" $FRONTEND_CONFIG_FILE
         sed -i "6s|.*|    APP_VERSION: '$APP_VERSION'|" $SUPPORT_CONFIG_FILE
 
-        read -p "${bold}>> Type the app name:${_bold} " APP_NAME
+        echo "${bold}>> Select the application to deploy:${_bold}"
+        options=("development-cis" "eciis-splab" "Other")
+        select opt in "${options[@]}"
+        do
+            case $opt in
+                "development-cis")
+                    APP_NAME="development-cis"
+                    break
+                    ;;
+                "eciis-splab")
+                    APP_NAME="eciis-splab"
+                    break
+                    ;;
+                "Other")
+                    read -p "${bold}>> Type the app name:${_bold} " APP_NAME
+                    break
+                    ;;
+                *) echo invalid option;;
+            esac
+        done
 
         gcloud config set project $APP_NAME
 

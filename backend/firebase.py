@@ -9,12 +9,12 @@ import datetime
 
 from oauth2client.client import GoogleCredentials
 
+from firebase_config import FIREBASE_URL
+
 _FIREBASE_SCOPES = [
     'https://www.googleapis.com/auth/firebase.database',
     'https://www.googleapis.com/auth/userinfo.email']
 
-
-FIREBASE_URL = "https://eciis-splab.firebaseio.com"
 
 @lru_cache()
 def _get_http():

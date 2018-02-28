@@ -21,6 +21,23 @@ git update-index --skip-worktree $FRONTEND_CONFIG_FILE $SUPPORT_CONFIG_FILE
 
 PY_ENV=backend/py_env
 
+# Receive as a paramameter 'production' or 'development'
+function setup_firebase_config {
+    echo ">> Setting up Firebase configuration"
+
+    ECIS_CONFIG_FOLDER="$HOME/ecis-config/$1"
+
+    FIREBASE_CONFIG_FILE="$ECIS_CONFIG_FOLDER/firebase-config.js"
+
+    FIREBASE_BACKEND_CONFIG_FILE="$ECIS_CONFIG_FOLDER/firebase_config.py"
+
+    export GOOGLE_APPLICATION_CREDENTIALS="'$ECIS_CONFIG_FOLDER/firebase-private-key.json'"
+
+    cp $FIREBASE_CONFIG_FILE frontend/
+    cp $FIREBASE_CONFIG_FILE support/
+    cp $FIREBASE_BACKEND_CONFIG_FILE backend/
+}
+
 function set_backend_url {
     if [ -z $1 ]; then
         url="http://$BACKEND_DOMAIN"
@@ -73,6 +90,7 @@ case "$1" in
         fi
 
         echo "=========== Starting Microservices ==========="
+        setup_firebase_config development
 
         set_backend_url $BACKEND_LOCAL
 

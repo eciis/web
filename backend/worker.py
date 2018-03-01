@@ -246,11 +246,14 @@ class TransferAdminPermissionsHandler(BaseHandler):
             else:
                 user.permissions.update({permission: permissions[permission]})
     
-    def remove_permissions(self, user, permissions):
+    def remove_permissions(self, user, permissions, institution_key):
         for permission in permissions:
             if permission in user.permissions:
-                for institution_key in permissions[permission]:
-                    user.remove_permission(permission, institution_key)
+                for institution in permissions[permission]:
+                    if institution != institution_key and institution not in user.institutions_admin:
+                        user.remove_permission(permission, institution_key)
+                    elif institution == institution_key:
+                        user.remove_permission(permission, institution_key)
     
     def post(self):
         institution_key = self.request.get('institution_key')
@@ -261,7 +264,7 @@ class TransferAdminPermissionsHandler(BaseHandler):
         new_admin = ndb.Key(urlsafe=user_key).get()
 
         self.add_permission(new_admin, permissions)
-        self.remove_permissions(admin, permissions)
+        self.remove_permissions(admin, permissions, institution_key)
 
         new_admin.put()
         admin.put()

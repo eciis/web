@@ -91,5 +91,15 @@ var Utils = {
                 });
             }
         };
+    },
+
+    /**
+     * Verify if email is a valid email.
+     * @param {string} email the email that be verified.
+     * @returns {boolean} True if is a valid email or false if is invalid.
+     */
+    validateEmail: function validateEmail(email) {
+        var regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return regex.test(email);
     }
 };

@@ -237,7 +237,7 @@ class SendInviteHandler(BaseHandler):
             invite.send_invite(host, current_institution)
 
 
-class TransferPermissionsHandler(BaseHandler):
+class TransferAdminPermissionsHandler(BaseHandler):
 
     def add_permission(self, user, permissions):
         for permission in permissions:
@@ -256,20 +256,15 @@ class TransferPermissionsHandler(BaseHandler):
         institution_key = self.request.get('institution_key')
         user_key = self.request.get('user_key')
         permissions = get_all_hierarchy_admin_permissions(institution_key)
-        institution = ndb.Key(urlsafe=institution_key)
+        institution = ndb.Key(urlsafe=institution_key).get()
         admin = institution.admin.get()
         new_admin = ndb.Key(urlsafe=user_key).get()
 
         self.add_permission(new_admin, permissions)
         self.remove_permissions(admin, permissions)
 
-        institution.admin = new_admin
-        new_admin.institutions_admin.append(institution.key)
-        admin.institutions_admin.remove(institution.key)
-
-        institution.put()
-        admin.put()
         new_admin.put()
+        admin.put()
 
 
 app = webapp2.WSGIApplication([
@@ -283,5 +278,5 @@ app = webapp2.WSGIApplication([
     ('/api/queue/remove-admin-permissions', RemoveAdminPermissionsInInstitutionHierarchy),
     ('/api/queue/add-post-institution', AddPostInInstitution),
     ('/api/queue/send-invite', SendInviteHandler),
-    ('/api/queue/transfer-permissions', TransferPermissionsHandler)
+    ('/api/queue/transfer-admin-permissions', TransferAdminPermissionsHandler)
 ], debug=True)

@@ -397,9 +397,11 @@
         };
 
         selectEmailsCtrl.sendInvite = function sendInvite() {
-            if(selectEmailsCtrl.selectedEmails.length > 0) {
+            if(selectEmailsCtrl.selectedEmails.length > 0 && selectEmailsCtrl.selectedEmails.length < 51) {
                 selectEmailsCtrl.manageMemberCtrl.sendUserInvite(selectEmailsCtrl.selectedEmails);
                 selectEmailsCtrl.closeDialog();
+            } else if(selectEmailsCtrl.selectedEmails > 50) {
+                MessageService.showToast("Limite máximo de 50 e-mails selecionados excedido.");
             } else {
                 MessageService.showToast("Pelo menos um e-mail deve ser selecionado.");
             }

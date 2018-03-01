@@ -51,7 +51,6 @@
         }
         
         allInstituinsCtrl.loadMoreInstitutions();
-        Utils.setScrollListener(content, allInstituinsCtrl.loadMoreInstitutions);
-       
+        Utils.setScrollListener(content, allInstituinsCtrl.loadMoreInstitutions); 
     }); 
 })();

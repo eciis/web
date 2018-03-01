@@ -48,6 +48,9 @@ class InviteUserAdmHandler(BaseHandler):
 
         self.response.write(json.dumps(invite.make()))
 
-
-
-        
+    @json_response
+    @login_required
+    def delete(self, user, invite_key):    
+        invite = ndb.Key(urlsafe=invite_key)
+        invite.change_status('rejected')
+        invite.put()

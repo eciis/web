@@ -57,14 +57,14 @@
             ProfileService.showProfile(userKey, ev);
         };
 
-        manageMemberCtrl.sendUserInvite = function sendInvite() {
+        manageMemberCtrl.sendUserInvite = function sendInvite(loadedEmails) {
             manageMemberCtrl.invite.institution_key = currentInstitutionKey;
             manageMemberCtrl.invite.admin_key = manageMemberCtrl.user.key;
             manageMemberCtrl.invite.type_of_invite = 'USER';
             invite = new Invite(manageMemberCtrl.invite);
             invite.sender_name = manageMemberCtrl.user.name;
 
-            var emails = getEmails();
+            var emails = getEmails(loadedEmails);
             var requestBody = {
                 invite_body: invite,
                 emails: emails
@@ -282,6 +282,7 @@
                 controllerAs: "selectEmailsCtrl",
                 locals: {
                     emails: emails,
+                    manageMemberCtrl: manageMemberCtrl
                 },
                 bindToController: true,
                 targetEvent: ev,
@@ -307,7 +308,9 @@
             manageMemberCtrl.emails.push(_.clone(empty_email));
         }
 
-        function getEmails() {
+        function getEmails(loadedEmails) {
+            if(loadedEmails && loadedEmails.length > 0) return loadedEmails;
+
             var emails = [];
             _.each(manageMemberCtrl.emails, function (email) {
                 if (!_.isEmpty(email.email)) {
@@ -357,7 +360,7 @@
         loadInstitution();
     });
 
-    app.controller("SelectEmailsController", function SelectEmailsController($mdDialog, AuthService) {
+    app.controller("SelectEmailsController", function SelectEmailsController($mdDialog, AuthService, MessageService) {
         var selectEmailsCtrl = this;
 
         selectEmailsCtrl.user = AuthService.getCurrentUser();
@@ -394,7 +397,12 @@
         };
 
         selectEmailsCtrl.sendInvite = function sendInvite() {
-
+            if(selectEmailsCtrl.selectedEmails.length > 0) {
+                selectEmailsCtrl.manageMemberCtrl.sendUserInvite(selectEmailsCtrl.selectedEmails);
+                selectEmailsCtrl.closeDialog();
+            } else {
+                MessageService.showToast("Pelo menos um e-mail deve ser selecionado.");
+            }
         };
     });
 })();

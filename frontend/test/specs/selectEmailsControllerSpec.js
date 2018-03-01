@@ -2,7 +2,7 @@
 
 (describe('Test SelectEmailsController', function() {
 
-    var mdDialog, scope, newCtrl, selectEmailsCtrl;
+    var mdDialog, scope, state, newCtrl, selectEmailsCtrl, manageMemberCtrl;
 
     var user = {
          name: 'User',
@@ -15,16 +15,25 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $rootScope, $mdDialog, AuthService) {
+    beforeEach(inject(function($controller, $state, $rootScope, $mdDialog, AuthService, InstitutionService, InviteService) {
         mdDialog = $mdDialog;
         scope = $rootScope.$new();
+        state = $state;
         newCtrl = $controller;
         AuthService.login(user);
+        state.params.institutionKey = '123456789';
+        manageMemberCtrl = newCtrl('ManagementMembersController', {
+                    scope: scope,
+                    inviteService: InviteService,
+                    institutionService: InstitutionService
+        });
+
         selectEmailsCtrl = newCtrl('SelectEmailsController', {
-              scope: scope,
-          }, {
-            emails: emails
-          });
+            scope: scope,
+        }, {
+          emails: emails,
+          manageMemberCtrl: manageMemberCtrl
+        });
     }));
 
     describe('SelectEmailsController properties', function() {
@@ -103,6 +112,15 @@
             spyOn(mdDialog, 'cancel');
             selectEmailsCtrl.closeDialog();
             expect(mdDialog.cancel).toHaveBeenCalled();
+        });
+    });
+
+    describe('sendInvite()', function() {
+        it('Should call sendUserInvite() in ManagementMembersController', function() {
+            spyOn(manageMemberCtrl, 'sendUserInvite');
+            selectEmailsCtrl.selectAllEmails();
+            selectEmailsCtrl.sendInvite();
+            expect(manageMemberCtrl.sendUserInvite).toHaveBeenCalledWith(selectEmailsCtrl.selectedEmails);
         });
     });
 }));

@@ -20,11 +20,7 @@ class InstitutionCollectionHandler(BaseHandler):
     @json_response
     @login_required
     def get(self, user):
-        """Get all institutions. PAGINAR
-        institution_collection = Institution.query().fetch()
-        self.response.write(json.dumps(
-            Utils.toJson(institution_collection, host=self.request.host)
-        ))"""
+        """Get all institutions."""
 
         page = to_int(
             self.request.get('page', Utils.DEFAULT_PAGINATION_OFFSET),

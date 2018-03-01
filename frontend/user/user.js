@@ -22,13 +22,13 @@ User.prototype.changeInstitution = function changeInstitution(institution) {
     }
 };
 
-User.prototype.follow = function follow(institution_info) {
+User.prototype.follow = function follow(institution) {
     var institution =  {
-        acronym: institution_info.acronym,
-        key: institution_info.key,
-        photo_url: institution_info.photo_url,
-        legal_nature: institution_info.legal_nature,
-        actuation_area: institution_info.actuation_area
+        acronym: institution.acronym,
+        key: institution.key,
+        photo_url: institution.photo_url,
+        legal_nature: institution.legal_nature,
+        actuation_area: institution.actuation_area
     };
     this.follows.push(institution);
 };

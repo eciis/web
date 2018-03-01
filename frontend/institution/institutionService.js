@@ -21,8 +21,7 @@
 
         service.getNextInstitutions = function getNextInstitutions(page) {
             var deferred = $q.defer();
-            $http.get("/api/institutions?page=" + page + "&limit=" + LIMIT).then(function success(response) {
-                //service.posts = response.data;
+            $http.get("/api/institutions?page=" + page + "&limit=" + LIMIT).then(function success(response) {  
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);

@@ -23,7 +23,7 @@ PY_ENV=backend/py_env
 
 # Receive as a paramameter 'production' or 'development'
 function setup_firebase_config {
-    echo ">> Setting up Firebase configuration"
+    echo ">> Setting up Firebase configuration to $1 mode"
 
     ECIS_CONFIG_FOLDER="$HOME/ecis-config/$1"
 
@@ -33,11 +33,12 @@ function setup_firebase_config {
 
     export GOOGLE_APPLICATION_CREDENTIALS="$ECIS_CONFIG_FOLDER/firebase-private-key.json"
 
-    echo $GOOGLE_APPLICATION_CREDENTIALS
-
     cp $FIREBASE_CONFIG_FILE frontend/
+    catch_error $?
     cp $FIREBASE_CONFIG_FILE support/
+    catch_error $?
     cp $FIREBASE_BACKEND_CONFIG_FILE backend/
+    catch_error $?
 }
 
 function set_backend_url {
@@ -64,6 +65,14 @@ function set_landingpage_url {
     echo ">> Support will use ${bold}$url${_bold} as landing page."
 }
 
+function catch_error {
+    if [ $1 -ne 0 ]; then
+        echo ">> Something went wrong."
+        exit 0;
+    fi
+    echo ">> done"
+}
+
 case "$1" in
     run)
         APP_VERSION=$(git branch | grep "*" | tr -d "()*" | cut -c2-)
@@ -72,7 +81,10 @@ case "$1" in
 
         echo "=========== Cleaning Environment ==========="
         rm -rf $PY_ENV
+        catch_error $?
+
         rm -rf frontend/test/node_modules frontend/test/bower_components
+        catch_error $?
 
         echo "=========== Starting Virtual Environment ==========="
         virtualenv $PY_ENV
@@ -109,10 +121,12 @@ case "$1" in
                 
                 if [ ! -e node_modules ]; then
                     npm install
+                    catch_error $?
                 fi
 
                 if [ ! -e bower_components ]; then
                     bower install
+                    catch_error $?
                 fi
 
                 karma start --single-run
@@ -147,6 +161,8 @@ case "$1" in
             APP_VERSION=$NEW_APP_VERSION
         fi
         git checkout tags/"$APP_VERSION"
+        catch_error $?
+
         sed -i "6s|.*|    APP_VERSION: '$APP_VERSION'|" $FRONTEND_CONFIG_FILE
         sed -i "6s|.*|    APP_VERSION: '$APP_VERSION'|" $SUPPORT_CONFIG_FILE
 
@@ -188,6 +204,14 @@ case "$1" in
 
         BACKEND_DOMAIN="backend.$DOMAIN"
         
+        ENVIRONMENT="development"
+        read -p "${bold}Choose which environment to use: (development) ${_bold} " NEW_ENVIRONMENT 
+        if [ "$NEW_ENVIRONMENT" != "" ]; then
+            ENVIRONMENT=$NEW_ENVIRONMENT
+        fi
+        setup_firebase_config $ENVIRONMENT
+        catch_error $?
+
         echo "=========== Starting Google App Engine Deployment ==========="
 
         if [ ! -z $2 ]; then
@@ -197,9 +221,6 @@ case "$1" in
 
             url=$version"."$DOMAIN
             set_landingpage_url $url
-
-            read -p "${bold}Choose which environment to use: (development) ${_bold} " ENVIRONMENT 
-            setup_firebase_config $ENVIRONMENT
 
             if [ ! -z $3 ]; then # Especified one or more yaml configuration files
                 gcloud app deploy --version $version --no-promote $3
@@ -217,6 +238,10 @@ case "$1" in
 
     *)
         echo "$1 is not a ecis command."
-        echo "Usage: $0 {run|test|deploy}"
+        echo "Usage: $0 [ run | test | deploy ]"
+        echo "- run [ --enable-sendmail ]"
+        echo "- test [ server | client ]"
+        echo "---- test server [ --name <your_test.py> ]"
+        echo "- deploy [ version_name ]"
         exit 1
 esac

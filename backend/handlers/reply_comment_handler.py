@@ -69,6 +69,7 @@ class ReplyCommentHandler(BaseHandler):
             )
 
         comment = post.get_comment(comment_id)
+        entity_type = "REPLY_COMMENT"
 
         if (comment.get('author_key') != user.key.urlsafe()):
             send_message_notification(

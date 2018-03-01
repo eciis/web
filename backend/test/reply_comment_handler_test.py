@@ -104,7 +104,7 @@ class ReplyCommentHandlerTest(TestBaseHandler):
             call(
                 self.other_user.key.urlsafe(),
                 self.third_user.key.urlsafe(),
-                "COMMENT",
+                "REPLY_COMMENT",
                 self.user_post.key.urlsafe(),
                 self.institution.key
             )

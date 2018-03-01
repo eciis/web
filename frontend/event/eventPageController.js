@@ -28,20 +28,6 @@
             });
         };
 
-        eventCtrl.deleteEvent = function deleteEvent(ev, event) {
-            var dialog = MessageService.showConfirmationDialog(ev, 'Excluir Evento', 'Este evento será removido.');
-            dialog.then(function() {
-                EventService.deleteEvent(event).then(function success() {
-                event.state = 'deleted';
-                MessageService.showToast('Evento removido com sucesso!');
-                }, function error(response) {
-                    MessageService.showToast(response.data.msg);
-                });
-            }, function() {
-                MessageService.showToast('Cancelado');
-            });
-        };
-
         eventCtrl.goToInstitution = function goToInstitution(institutionKey) {
             $state.go('app.institution.timeline', {institutionKey: institutionKey});
         };

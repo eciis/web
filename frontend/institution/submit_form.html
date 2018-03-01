@@ -1,7 +1,7 @@
 <div layout-padding>
     <load-circle add-layout-fill="true" flex ng-if="configInstCtrl.loading"></load-circle>
     <div ng-if="!configInstCtrl.loading">
-        <div class="row" >
+        <div class="row">
             <div class="avatar" align="center">
                 <img style="border-radius: 50%;" ng-src="{{ configInstCtrl.newInstitution.photo_url }}"
                     width="100px" height="100px"/>
@@ -20,7 +20,8 @@
                 </div>
             </div>
         </div>
-        <form name="instForm" ng-submit="instForm.$valid && configInstCtrl.submit($event)">
+        <form name="instForm" prevent-state-change="configInstCtrl.newInstitution" 
+            ng-submit="instForm.$valid && configInstCtrl.submit($event)">
             <div layout="row">
                 <md-input-container class="md-block" flex-gt-xs flex="60">
                     <label>Nome</label>
@@ -248,7 +249,7 @@
             <md-input-container class="md-block">
                 <md-button ng-click="null" ng-model="configInstCtrl.file" ngf-pattern="'application/pdf'"
                     ngf-accept="'application/pdf'" ngf-max-size="5MB"
-                    ngf-select="null" class="md-raised">
+                    ngf-select="configInstCtrl.clearPortfolioUrl()" class="md-raised">
                     <md-icon>{{configInstCtrl.getPortfolioButtonIcon()}}</md-icon>
                     {{configInstCtrl.getPortfolioButtonMessage()}}
                 </md-button>

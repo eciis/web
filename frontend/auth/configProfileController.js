@@ -3,7 +3,7 @@
 (function () {
     var app = angular.module("app");
 
-    app.controller("ConfigProfileController", function ConfigProfileController($state, InstitutionService, SubmitFormListenerService,
+    app.controller("ConfigProfileController", function ConfigProfileController($state, InstitutionService,
         CropImageService, AuthService, UserService, ImageService, $rootScope, $mdToast, $q, MessageService, $mdDialog) {
 
         var configProfileCtrl = this;

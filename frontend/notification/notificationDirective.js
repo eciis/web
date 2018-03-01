@@ -137,6 +137,10 @@
                          key: ""
                      }
                 }
+            },
+            "SHARED_EVENT": {
+                icon: "share",
+                state: "app.post"
             }
         };
 

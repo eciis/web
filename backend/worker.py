@@ -10,6 +10,7 @@ from models.institution import Institution
 from models.post import Post
 from models.invite_user import InviteUser
 from utils import json_response
+from utils import get_all_hierarchy_admin_permissions
 from service_messages import send_message_notification
 from service_messages import send_message_email
 from jinja2 import Environment, FileSystemLoader
@@ -235,6 +236,42 @@ class SendInviteHandler(BaseHandler):
             invite = ndb.Key(urlsafe=key).get()
             invite.send_invite(host, current_institution)
 
+
+class TransferPermissionsHandler(BaseHandler):
+
+    def add_permission(self, user, permissions):
+        for permission in permissions:
+            if permission in user.permissions:
+                user.permissions[permission].update(permissions[permission])
+            else:
+                user.permissions.update({permission: permissions[permission]})
+    
+    def remove_permissions(self, user, permissions):
+        for permission in permissions:
+            if permission in user.permissions:
+                for institution_key in permissions[permission]:
+                    user.remove_permission(permission, institution_key)
+    
+    def post(self):
+        institution_key = self.request.get('institution_key')
+        user_key = self.request.get('user_key')
+        permissions = get_all_hierarchy_admin_permissions(institution_key)
+        institution = ndb.Key(urlsafe=institution_key)
+        admin = institution.admin.get()
+        new_admin = ndb.Key(urlsafe=user_key).get()
+
+        self.add_permission(new_admin, permissions)
+        self.remove_permissions(admin, permissions)
+
+        institution.admin = new_admin
+        new_admin.institutions_admin.append(institution.key)
+        admin.institutions_admin.remove(institution.key)
+
+        institution.put()
+        admin.put()
+        new_admin.put()
+
+
 app = webapp2.WSGIApplication([
     ('/api/queue/send-notification', SendNotificationHandler),
     ('/api/queue/send-email', SendEmailHandler),
@@ -245,5 +282,6 @@ app = webapp2.WSGIApplication([
     ('/api/queue/add-admin-permissions', AddAdminPermissionsInInstitutionHierarchy),
     ('/api/queue/remove-admin-permissions', RemoveAdminPermissionsInInstitutionHierarchy),
     ('/api/queue/add-post-institution', AddPostInInstitution),
-    ('/api/queue/send-invite', SendInviteHandler)
+    ('/api/queue/send-invite', SendInviteHandler),
+    ('/api/queue/transfer-permissions', TransferPermissionsHandler)
 ], debug=True)

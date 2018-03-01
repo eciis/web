@@ -22,6 +22,8 @@ class InstitutionCollectionHandler(BaseHandler):
     def get(self, user):
         """Get all institutions."""
 
+        INSTITUTION_ATTRIBUTES = ['name', 'key', 'acronym', 'address', 'photo_url', 'description']
+
         page = to_int(
             self.request.get('page', Utils.DEFAULT_PAGINATION_OFFSET),
             QueryException,
@@ -38,7 +40,7 @@ class InstitutionCollectionHandler(BaseHandler):
             limit,
             queryInstitutions)
 
-        array = [ Institution.make(institution, ['name', 'key', 'acronym', 'address', 'photo_url', 'description']) 
+        array = [ Institution.make(institution, INSTITUTION_ATTRIBUTES) 
         for institution in queryInstitutions]
 
         data = {

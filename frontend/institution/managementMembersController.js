@@ -6,12 +6,7 @@
         InviteService, $mdToast, $state, $mdDialog, InstitutionService, AuthService, MessageService,
         RequestInvitationService, ProfileService) {
         var manageMemberCtrl = this;
-        /* TODO: FIX the MAX_EMAILS_QUANTITY's value
-        * The current value is one because the view that supports
-        * many invitations at once is not ready yet.
-        * @author: Raoni Smaneoto - 23/02/2018
-        */
-        var MAX_EMAILS_QUANTITY = 1;
+        var MAX_EMAILS_QUANTITY = 10;
 
         manageMemberCtrl.institution = {};
         manageMemberCtrl.invite = {};
@@ -140,6 +135,7 @@
         }
 
         manageMemberCtrl.cancelInvite = function cancelInvite() {
+            manageMemberCtrl.emails = [_.clone(empty_email)];
             manageMemberCtrl.invite = {};
         };
 
@@ -269,15 +265,22 @@
             return promise;
         };
 
-        manageMemberCtrl.canAddEmailField = function canAddEmailField() {
-            if (_.size(manageMemberCtrl.emails) < MAX_EMAILS_QUANTITY) {
-                addField()
-            };
+        manageMemberCtrl.changeEmail = function changeEmail(field) {
+            (field.email === empty_email.email) ? removeField(field) : addField();
         };
 
         function addField() {
-            manageMemberCtrl.emails.push(_.clone(empty_email));
+            var isValidSize = _.size(manageMemberCtrl.emails) < MAX_EMAILS_QUANTITY;
+            var hasEmptyField = _.find(manageMemberCtrl.emails, empty_email);
+            (isValidSize && !hasEmptyField) ? manageMemberCtrl.emails.push(_.clone(empty_email)) : null;
         }
+
+        function removeField(field) {
+            manageMemberCtrl.emails.length === 1 ? null : 
+                _.remove(manageMemberCtrl.emails, function(element) {
+                    return element === field;
+                });
+        };
 
         function getEmails() {
             var emails = [];

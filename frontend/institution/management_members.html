@@ -8,7 +8,7 @@
         <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
           <h1>
             <md-icon>send</md-icon>
-            Convidar membros
+            ENVIAR CONVITE
           </h1>
           <span flex md-truncate></span>
           <md-button class="md-icon-button md-secondary">
@@ -16,16 +16,23 @@
           </md-button>
         </div>
       </md-toolbar>
-      <md-card-content ng-show="manageMemberCtrl.showSendInvite;">
+      <md-card-content ng-show="manageMemberCtrl.showSendInvite;" style="margin-left:3%">
+        <h2 md-colors="{color: 'teal-900'}">Convidar membros</h2>
+        <p md-colors="{color: 'grey-600'}">Coloque abaixo os endereços de e-mail das pessoas que você deseja convidar 
+          para fazer parte da sua instituição na Plataforma CIS.</p>
+        <p style="font-size: 10px; margin-bottom: 0; margin-top:30px;" md-colors="{color: 'grey-700'}">Endereço de e-mail</p>
         <form ng-submit="manageMemberCtrl.sendUserInvite()">
-          <md-input-container class="md-block" ng-repeat="currentEmail in manageMemberCtrl.emails">
-            <label>Email convite deve ser enviado para:</label>
-            <input ng-model="currentEmail.email" ng-change="manageMemberCtrl.canAddEmailField()" type="email" name="email" required>
-          </md-input-container>
+          <md-content style="max-height: 250px" class="custom-scrollbar">
+            <md-input-container md-no-float class="md-block md-icon-right md-icon-float" class="inputEmail"
+              ng-repeat="currentEmail in manageMemberCtrl.emails" style="height:20px;"  md-colors="{color: 'grey-500'}">
+              <input class="inputEmail" ng-model="currentEmail.email" ng-change="manageMemberCtrl.changeEmail(currentEmail)" md-maxlength="120"
+                type="email" name="email" placeholder="+ Adicionar um endereço de e-mail..." style="height:20px;">
+            </md-input-container>
+          </md-content>
           <load-circle flex ng-if="manageMemberCtrl.isLoadingInvite"></load-circle>
           <section layout="row" layout="column" layout-align="end center" layout-wrap ng-if="!manageMemberCtrl.isLoadingInvite">
             <md-button md-colors="{background: 'teal-500'}" ng-click="manageMemberCtrl.cancelInvite()">Cancelar</md-button>
-            <md-button type="submit" md-colors="{background: 'teal-500'}">Enviar Convite</md-button>
+            <md-button type="submit" md-colors="{background: 'teal-500'}">Enviar</md-button>
           </section>
         </form>
       </md-card-content>

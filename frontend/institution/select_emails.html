@@ -12,7 +12,7 @@
                         <span ng-if="!selectEmailsCtrl.isChecked()">Marcar todos</span>
                     </md-list-item>
                     <md-list-item ng-repeat="email in selectEmailsCtrl.emails" md-colors="{background: 'default-grey-300'}">
-                        <md-checkbox ng-checked="selectEmailsCtrl.exists(email)" ng-click="selectEmailsCtrl.select(email)"></md-checkbox>
+                        <md-checkbox ng-checked="selectEmailsCtrl.exists(email) && selectEmailsCtrl.validateEmail(email)" ng-click="selectEmailsCtrl.select(email)"></md-checkbox>
                         <span>{{ email }}</span>
                         <md-divider></md-divider>
                     </md-list-item>

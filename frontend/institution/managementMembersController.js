@@ -382,6 +382,8 @@
             var emailExists = index > INVALID_INDEX;
             if(emailExists) {
                 selectEmailsCtrl.selectedEmails.splice(index, 1);
+            } else if (!selectEmailsCtrl.validateEmail(email)){
+                MessageService.showToast("Não é possível selecionar esta opção. E-mail inválido.");
             } else {
                 selectEmailsCtrl.selectedEmails.push(email);
             }
@@ -392,16 +394,19 @@
         };
 
         selectEmailsCtrl.selectAllEmails = function selectAllEmails() {
-            if(selectEmailsCtrl.emails && selectEmailsCtrl.selectedEmails.length === selectEmailsCtrl.emails.length) {
+            var filteredEmails = selectEmailsCtrl.emails.filter(email => selectEmailsCtrl.validateEmail(email));
+            if(selectEmailsCtrl.emails && selectEmailsCtrl.selectedEmails.length === filteredEmails.length) {
                 selectEmailsCtrl.selectedEmails = [];
-            } else if(selectEmailsCtrl.emails && selectEmailsCtrl.selectedEmails.length >= 0) {
-                selectEmailsCtrl.selectedEmails = selectEmailsCtrl.emails.slice(0);
+            } else if(filteredEmails && selectEmailsCtrl.selectedEmails.length >= 0) {
+                selectEmailsCtrl.selectedEmails = filteredEmails.slice(0);
             }
         };
 
         selectEmailsCtrl.isChecked = function isChecked() {
-            if(selectEmailsCtrl.emails)
-                return selectEmailsCtrl.selectedEmails.length === selectEmailsCtrl.emails.length;
+            if(selectEmailsCtrl.emails) {
+                var filteredEmails = selectEmailsCtrl.emails.filter(email => selectEmailsCtrl.validateEmail(email));
+                return selectEmailsCtrl.selectedEmails.length === filteredEmails.length;
+            }
         };
 
         selectEmailsCtrl.closeDialog = function closeDialog() {
@@ -418,5 +423,10 @@
                 MessageService.showToast("Pelo menos um e-mail deve ser selecionado.");
             }
         };
+
+        selectEmailsCtrl.validateEmail = function validateEmail(email) {
+            var regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return regex.test(email);
+        }
     });
 })();

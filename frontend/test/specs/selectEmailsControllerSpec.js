@@ -123,4 +123,15 @@
             expect(manageMemberCtrl.sendUserInvite).toHaveBeenCalledWith(selectEmailsCtrl.selectedEmails);
         });
     });
+
+    describe('validateEmail()', function() {
+
+        it('Should return false if is a valid email', function() {
+            expect(selectEmailsCtrl.validateEmail("abcdefjh")).toBeFalsy();
+        });
+
+        it('Should return true if is a valid email', function() {
+            expect(selectEmailsCtrl.validateEmail(emails[0])).toBeTruthy();
+        });
+    });
 }));

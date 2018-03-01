@@ -57,6 +57,10 @@ var Utils = {
                 string.substring(0, limit+1) + "..." : string;
     },
 
+    generateLink : function generateLink(url){
+        return window.location.host + url;
+    },
+
     /**
      * Create an object with a calculated property height, to be used with 
      * the directive ng-style on a html element that has a list of itens in it.

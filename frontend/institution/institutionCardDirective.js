@@ -24,9 +24,8 @@
             return institutionCardCtrl.institution.address.country  
         };
 
-        institutionCardCtrl.generateLink = function generateLink(){
-            var currentUrl = (window.location.host);
-            var url = currentUrl + URL_INSTITUTION + institutionCardCtrl.institution.key + "/home";
+        institutionCardCtrl.copyLink = function copyLink(){
+            var url = Utils.generateLink(URL_INSTITUTION + institutionCardCtrl.institution.key + "/home");
             ngClipboard.toClipboard(url);
             MessageService.showToast("O link foi copiado");
         };

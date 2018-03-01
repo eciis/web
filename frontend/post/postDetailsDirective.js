@@ -144,9 +144,8 @@
                     !postDetailsCtrl.postHasActivity() && !postDetailsCtrl.isShared() && !postDetailsCtrl.showSurvey();
         };
 
-        postDetailsCtrl.generateLink = function generateLink(){
-            var currentUrl = (window.location.host);
-            var url = currentUrl + URL_POST + postDetailsCtrl.post.key;
+        postDetailsCtrl.copyLink = function copyLink(){
+            var url = Utils.generateLink(URL_POST + postDetailsCtrl.post.key);
             ngClipboard.toClipboard(url);
             MessageService.showToast("O link foi copiado");
         };

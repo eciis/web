@@ -141,6 +141,10 @@
             "SHARED_EVENT": {
                 icon: "share",
                 state: "app.post"
+            },
+            "REPLY_COMMENT": {
+                icon: "comment",
+                state: "app.post"
             }
         };
 

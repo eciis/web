@@ -296,9 +296,6 @@
                 reader.onload = function(e) {
                     var emails = e.target.result.split('\n');
                     emails = emails.filter(email => email !== "");
-                    emails = emails.map((email) => {
-                        return {email: email, selected: false};
-                    });
                     selectEmailsDialog(emails, ev);
                 }
                 reader.readAsText(files[0]);
@@ -363,19 +360,30 @@
         var selectEmailsCtrl = this;
 
         selectEmailsCtrl.emails = emails;
-        selectEmailsCtrl.selectAll = false;
+        selectEmailsCtrl.selectedEmails = [];
+
+        selectEmailsCtrl.select = function select(email) {
+            var index = selectEmailsCtrl.selectedEmails.indexOf(email);
+            if(index > -1) {
+                selectEmailsCtrl.selectedEmails.splice(index, 1);
+            } else {
+                selectEmailsCtrl.selectedEmails.push(email);
+            }
+        };
+
+        selectEmailsCtrl.exists = function exists(email) {
+            return selectEmailsCtrl.selectedEmails.indexOf(email) > -1;
+        };
+
+        selectEmailsCtrl.isChecked = function isChecked() {
+            return selectEmailsCtrl.selectedEmails.length === selectEmailsCtrl.emails.length;
+        }
 
         selectEmailsCtrl.selectAllEmails = function selectAllEmails() {
-            if(!selectEmailsCtrl.selectAll) {
-                selectEmailsCtrl.selectAll = true;
-                selectEmailsCtrl.emails = selectEmailsCtrl.emails.map((email) => {
-                    return {email: email.email, selected: true};
-                });
-            } else {
-                selectEmailsCtrl.selectAll = true;
-                selectEmailsCtrl.emails = selectEmailsCtrl.emails.map((email) => {
-                    return {email: email.email, selected: false};
-                });
+            if(selectEmailsCtrl.selectedEmails.length === selectEmailsCtrl.emails.length) {
+                selectEmailsCtrl.selectedEmails = [];
+            } else if(selectEmailsCtrl.selectedEmails.length >= 0) {
+                selectEmailsCtrl.selectedEmails = selectEmailsCtrl.emails.slice(0);
             }
         };
 

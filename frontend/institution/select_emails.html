@@ -6,14 +6,14 @@
                 <p>Confira os endereços importados e selecione os que deseja convidar</p>
                 <md-list>
                     <md-list-item>
-                        <md-checkbox ng-checked="selectEmailsCtrl.selectAll" ng-model="selectEmailsCtrl.selectAll"
+                        <md-checkbox aria-label="Select All" ng-checked="selectEmailsCtrl.isChecked()"
                         ng-click="selectEmailsCtrl.selectAllEmails()"></md-checkbox>
-                        <span>Selecionar todos</span>
+                        <span ng-if="selectEmailsCtrl.isChecked()">Desmarcar todos</span>
+                        <span ng-if="!selectEmailsCtrl.isChecked()">Marcar todos</span>
                     </md-list-item>
                     <md-list-item ng-repeat="email in selectEmailsCtrl.emails" md-colors="{background: 'default-grey-300'}">
-                        <md-checkbox ng-checked="email.selected"
-                        ng-model="email.selected"></md-checkbox>
-                        <span>{{ email.email }}</span>
+                        <md-checkbox ng-checked="selectEmailsCtrl.exists(email)" ng-click="selectEmailsCtrl.select(email)"></md-checkbox>
+                        <span>{{ email }}</span>
                         <md-divider></md-divider>
                     </md-list-item>
                 </md-list>

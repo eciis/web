@@ -953,3 +953,8 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
     text-align: center;
     font-size: 10px;
   }
+
+md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
+    border-color:#009688;
+    border-width: 0 0 2px;
+}  

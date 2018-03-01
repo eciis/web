@@ -16,6 +16,14 @@
         parent_institution: '987654321'
    };
 
+    var certbio_info =  {
+      acronym: undefined,
+      key: '123456789',
+      photo_url: undefined,
+      legal_nature: undefined,
+      actuation_area: undefined
+    };
+
    var inviteUser = {
         institution_key: "098745",
         type_of_invite: "USER",
@@ -93,13 +101,14 @@
 
           it('follows should not contain certbio key before follow', function() {
             user = createUser();
-            expect(user.follows).not.toContain(certbio);
+            expect(user.follows).not.toContain(certbio_info);
           });
 
           it('follows should contain certbio key after follow', function() {
             user = createUser();
-            user.follow(certbio);
-            expect(user.follows).toContain(certbio);
+            var certbio_inst = new Institution(certbio);
+            user.follow(certbio_inst);
+            expect(user.follows).toContain(certbio_info);
           });
         });
 
@@ -107,14 +116,15 @@
 
           it('follows should contain certbio key before unfollow', function() {
             user = createUser();
-            user.follow(certbio);
-            expect(user.follows).toContain(certbio);
+            var certbio_inst = new Institution(certbio);
+            user.follow(certbio_inst);
+            expect(user.follows).toContain(certbio_info);
           });
 
           it('follows should not contain certbio key after unfollow', function() {
             user = createUser();
             user.unfollow(certbio);
-            expect(user.follows).not.toContain(certbio);
+            expect(user.follows).not.toContain(certbio_info);
           });
         });
 

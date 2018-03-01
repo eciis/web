@@ -152,6 +152,7 @@
             });
 
             it('should call user.follow()', function(done) {
+                first_institution = new Institution(first_institution);
                 var promise = institutionCtrl.follow();
                 promise.then(function() {
                     expect(institutionCtrl.user.follow).toHaveBeenCalledWith(first_institution);

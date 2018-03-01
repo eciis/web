@@ -12,6 +12,7 @@
         * @author: Raoni Smaneoto - 23/02/2018
         */
         var MAX_EMAILS_QUANTITY = 1;
+        var MAXIMUM_CSV_SIZE = 5242880;
 
         manageMemberCtrl.institution = {};
         manageMemberCtrl.invite = {};
@@ -291,7 +292,7 @@
         }
 
         manageMemberCtrl.addCSV = function addCSV(files, ev) {
-            if(files[0].size > 5242880) {
+            if(files[0].size > MAXIMUM_CSV_SIZE) {
                 MessageService.showToast('O arquivo deve ser um CSV menor que 5 Mb');
             } else {
                 var reader = new FileReader();
@@ -366,9 +367,12 @@
         selectEmailsCtrl.user = AuthService.getCurrentUser();
         selectEmailsCtrl.selectedEmails = [];
 
+        var INVALID_INDEX = -1;
+        var LIMIT_OF_EMAILS = 50;
+
         selectEmailsCtrl.select = function select(email) {
             var index = selectEmailsCtrl.selectedEmails.indexOf(email);
-            if(index > -1) {
+            if(index > INVALID_INDEX) {
                 selectEmailsCtrl.selectedEmails.splice(index, 1);
             } else {
                 selectEmailsCtrl.selectedEmails.push(email);
@@ -397,10 +401,10 @@
         };
 
         selectEmailsCtrl.sendInvite = function sendInvite() {
-            if(selectEmailsCtrl.selectedEmails.length > 0 && selectEmailsCtrl.selectedEmails.length < 51) {
+            if(selectEmailsCtrl.selectedEmails.length > 0 && selectEmailsCtrl.selectedEmails.length <= LIMIT_OF_EMAILS) {
                 selectEmailsCtrl.manageMemberCtrl.sendUserInvite(selectEmailsCtrl.selectedEmails);
                 selectEmailsCtrl.closeDialog();
-            } else if(selectEmailsCtrl.selectedEmails > 50) {
+            } else if(selectEmailsCtrl.selectedEmails > LIMIT_OF_EMAILS) {
                 MessageService.showToast("Limite máximo de 50 e-mails selecionados excedido.");
             } else {
                 MessageService.showToast("Pelo menos um e-mail deve ser selecionado.");

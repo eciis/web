@@ -126,7 +126,7 @@
 
     describe('validateEmail()', function() {
 
-        it('Should return false if is a valid email', function() {
+        it('Should return false if is a invalid email', function() {
             expect(selectEmailsCtrl.validateEmail("abcdefjh")).toBeFalsy();
         });
 

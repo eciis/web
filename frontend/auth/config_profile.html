@@ -12,7 +12,7 @@
           </div>
         </md-toolbar>
         <md-card-content>
-          <div layout-gt-sm="column">
+          <form ng-submit="configProfileCtrl.finish()"  prevent-state-change="configProfileCtrl.newUser" layout-gt-sm="column">
             <div layout-gt-sm="row" layout-align="center center">
               <div layout="row" layout-align="center center" style="position: relative; margin: auto;">
                   <img style="border-radius: 50%;" ng-src="{{ configProfileCtrl.photo_url }}" width="200px" height="200px">
@@ -44,9 +44,9 @@
             <load-circle layout="row" layout-align="center center" ng-if="configProfileCtrl.loadingSubmission"></load-circle>
             <section layout="row" layout="column" layout-align="end center" layout-wrap ng-if="!configProfileCtrl.loadingSubmission">
               <md-button ng-click="configProfileCtrl.deleteAccount($event)" md-colors="{background: 'red-500'}">Excluir conta</md-button>
-              <md-button ng-click="configProfileCtrl.finish()" md-colors="{background: 'teal-500'}">Concluir edição</md-button>
+              <md-button type="submit" md-colors="{background: 'teal-500'}">Concluir edição</md-button>
             </section>
-          </div>
+          </form>
         </md-card-content>
       </md-card>
 

@@ -21,6 +21,25 @@ git update-index --skip-worktree $FRONTEND_CONFIG_FILE $SUPPORT_CONFIG_FILE
 
 PY_ENV=backend/py_env
 
+# Receive as a paramameter 'production' or 'development'
+function setup_firebase_config {
+    echo ">> Setting up Firebase configuration"
+
+    ECIS_CONFIG_FOLDER="$HOME/ecis-config/$1"
+
+    FIREBASE_CONFIG_FILE="$ECIS_CONFIG_FOLDER/firebase-config.js"
+
+    FIREBASE_BACKEND_CONFIG_FILE="$ECIS_CONFIG_FOLDER/firebase_config.py"
+
+    export GOOGLE_APPLICATION_CREDENTIALS="$ECIS_CONFIG_FOLDER/firebase-private-key.json"
+
+    echo $GOOGLE_APPLICATION_CREDENTIALS
+
+    cp $FIREBASE_CONFIG_FILE frontend/
+    cp $FIREBASE_CONFIG_FILE support/
+    cp $FIREBASE_BACKEND_CONFIG_FILE backend/
+}
+
 function set_backend_url {
     if [ -z $1 ]; then
         url="http://$BACKEND_DOMAIN"
@@ -73,6 +92,7 @@ case "$1" in
         fi
 
         echo "=========== Starting Microservices ==========="
+        setup_firebase_config development
 
         set_backend_url $BACKEND_LOCAL
 
@@ -111,6 +131,7 @@ case "$1" in
                 echo "=========== Starting Backend Tests ==========="
                 source $PY_ENV/bin/activate
                 cd backend
+                echo 'FIREBASE_URL = "FIREBASE_URL"' > firebase_config.py
                 TEST_NAME="*test.py"
                 if [ "$3" == "--name" ] && [ ! -z "$4" ]; then
                     TEST_NAME=$4
@@ -176,6 +197,9 @@ case "$1" in
 
             url=$version"."$DOMAIN
             set_landingpage_url $url
+
+            read -p "${bold}Choose which environment to use: (development) ${_bold} " ENVIRONMENT 
+            setup_firebase_config $ENVIRONMENT
 
             if [ ! -z $3 ]; then # Especified one or more yaml configuration files
                 gcloud app deploy --version $version --no-promote $3

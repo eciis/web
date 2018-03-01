@@ -79,10 +79,22 @@
                 postDetailsCtrl.post.shared_post.type_survey;
         };
 
+        postDetailsCtrl.timeHasBeenExpired = function timeHasBeenExpired() {
+            if(postDetailsCtrl.post.type_survey) {
+                var deadline = new Date (postDetailsCtrl.post.deadline);
+                var currentTime = new Date((_.split(new Date().toISOString(), '.')[0]))
+                return deadline < currentTime;
+            }
+        };
+
+        function getSurveyCSSClass() {
+            return postDetailsCtrl.timeHasBeenExpired() ? 'grey-background' : '';
+        }
+
         postDetailsCtrl.getCSSClassPost = function getCSSClassPost() {
             return (postDetailsCtrl.isDeleted(postDetailsCtrl.post) || 
                     postDetailsCtrl.isDeletedEvent(postDetailsCtrl.post) || 
-                        postDetailsCtrl.isInstInactive()) ? 'post-deleted':'';
+                        postDetailsCtrl.isInstInactive()) ? 'post-deleted': getSurveyCSSClass();
         };
 
         postDetailsCtrl.postHasActivity = function postHasActivity() {
@@ -312,11 +324,15 @@
         };
 
         postDetailsCtrl.reloadPost = function reloadPost() {
+            var type_survey = postDetailsCtrl.post.type_survey;
+            postDetailsCtrl.post.type_survey = false;
             var promise = PostService.getPost(postDetailsCtrl.post.key);
             promise.then(function success(response) {
+                response.data_comments = Object.values(response.data_comments);
                 postDetailsCtrl.post = response;
                 postDetailsCtrl.isLoadingComments = false;
             }, function error(response) {
+                postDetailsCtrl.post.type_survey = type_survey;
                 postDetailsCtrl.isLoadingComments = true;
                 MessageService.showToast(response.data.msg);
             }); 
@@ -492,6 +508,7 @@
         commentCtrl.likeOrDislike = function likeOrDislike(reply) {
             var replyId = reply ? reply.id : undefined;
             if (commentCtrl.isLikedByUser(reply)) {
+                commentCtrl.saving = true;
                 CommentService.dislike(commentCtrl.post.key, commentCtrl.comment.id, replyId).then(
                     function sucess() {
                         if (reply) {
@@ -503,6 +520,7 @@
                                 return commentCtrl.user.key === key;
                             });
                         }
+                        commentCtrl.saving = false;
                     }, function error(response) {
                         $state.go("app.user.home");
                         MessageService.showToast("O usuário já fez essa ação nesse comentário.");
@@ -510,6 +528,7 @@
                     }
                 );
             } else {
+                commentCtrl.saving = true;
                 CommentService.like(commentCtrl.post.key, commentCtrl.comment.id, replyId).then(
                     function sucess() {
                         if (reply) {
@@ -517,6 +536,7 @@
                         } else {
                             commentCtrl.comment.likes.push(commentCtrl.user.key);
                         }
+                        commentCtrl.saving = false;
                     }, function error(response) {
                         $state.go("app.user.home");
                         MessageService.showToast(response.data.msg);

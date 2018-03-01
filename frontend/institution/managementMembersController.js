@@ -6,12 +6,12 @@
         InviteService, $mdToast, $state, $mdDialog, InstitutionService, AuthService, MessageService,
         RequestInvitationService, ProfileService) {
         var manageMemberCtrl = this;
-        /* TODO: FIX the MAX_EMAILS_QUANTITY's value
-        * The current value is one because the view that supports
-        * many invitations at once is not ready yet.
-        * @author: Raoni Smaneoto - 23/02/2018
+        var MAX_EMAILS_QUANTITY = 10;
+
+        /** 
+         * This number to equal 5Mb in bytes
+         * that mean the limit size of CSV file accepted
         */
-        var MAX_EMAILS_QUANTITY = 1;
         var MAXIMUM_CSV_SIZE = 5242880;
 
         manageMemberCtrl.institution = {};
@@ -141,6 +141,7 @@
         }
 
         manageMemberCtrl.cancelInvite = function cancelInvite() {
+            manageMemberCtrl.emails = [_.clone(empty_email)];
             manageMemberCtrl.invite = {};
         };
 
@@ -270,10 +271,8 @@
             return promise;
         };
 
-        manageMemberCtrl.canAddEmailField = function canAddEmailField() {
-            if (_.size(manageMemberCtrl.emails) < MAX_EMAILS_QUANTITY) {
-                addField()
-            };
+        manageMemberCtrl.changeEmail = function changeEmail(field) {
+            (field.email === empty_email.email) ? removeField(field) : addField();
         };
 
         function selectEmailsDialog(emails, ev) {
@@ -306,12 +305,20 @@
         };
 
         function addField() {
-            manageMemberCtrl.emails.push(_.clone(empty_email));
+            var isValidSize = _.size(manageMemberCtrl.emails) < MAX_EMAILS_QUANTITY;
+            var hasEmptyField = _.find(manageMemberCtrl.emails, empty_email);
+            (isValidSize && !hasEmptyField) ? manageMemberCtrl.emails.push(_.clone(empty_email)) : null;
         }
+
+        function removeField(field) {
+            manageMemberCtrl.emails.length === 1 ? null : 
+                _.remove(manageMemberCtrl.emails, function(element) {
+                    return element === field;
+                });
+        };
 
         function getEmails(loadedEmails) {
             if(loadedEmails && loadedEmails.length > 0) return loadedEmails;
-
             var emails = [];
             _.each(manageMemberCtrl.emails, function (email) {
                 if (!_.isEmpty(email.email)) {
@@ -368,11 +375,11 @@
         selectEmailsCtrl.selectedEmails = [];
 
         var INVALID_INDEX = -1;
-        var LIMIT_OF_EMAILS = 50;
 
         selectEmailsCtrl.select = function select(email) {
             var index = selectEmailsCtrl.selectedEmails.indexOf(email);
-            if(index > INVALID_INDEX) {
+            var emailExists = index > INVALID_INDEX;
+            if(emailExists) {
                 selectEmailsCtrl.selectedEmails.splice(index, 1);
             } else {
                 selectEmailsCtrl.selectedEmails.push(email);
@@ -401,11 +408,11 @@
         };
 
         selectEmailsCtrl.sendInvite = function sendInvite() {
-            if(selectEmailsCtrl.selectedEmails.length > 0 && selectEmailsCtrl.selectedEmails.length <= LIMIT_OF_EMAILS) {
+            if(selectEmailsCtrl.selectedEmails.length > 0 && selectEmailsCtrl.selectedEmails.length <= MAX_EMAILS_QUANTITY) {
                 selectEmailsCtrl.manageMemberCtrl.sendUserInvite(selectEmailsCtrl.selectedEmails);
                 selectEmailsCtrl.closeDialog();
-            } else if(selectEmailsCtrl.selectedEmails > LIMIT_OF_EMAILS) {
-                MessageService.showToast("Limite máximo de 50 e-mails selecionados excedido.");
+            } else if(selectEmailsCtrl.selectedEmails > MAX_EMAILS_QUANTITY) {
+                MessageService.showToast("Limite máximo de " + MAX_EMAILS_QUANTITY + " e-mails selecionados excedido.");
             } else {
                 MessageService.showToast("Pelo menos um e-mail deve ser selecionado.");
             }

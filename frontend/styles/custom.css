@@ -940,6 +940,10 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
     border-radius: 50%;
 }
 
+.grey-background {
+   background: #EEEEEE;
+}
+
 .app-version {
     position: fixed;
     left: 10%;
@@ -953,3 +957,14 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
     text-align: center;
     font-size: 10px;
   }
+
+md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
+    border-color:#009688;
+    border-width: 0 0 2px;
+}
+
+.expired-survey {
+    background-color: rgba(190, 186, 186, 0.966);
+    text-align: center;
+    font-size: 15px;
+}

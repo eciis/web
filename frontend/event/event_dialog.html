@@ -72,8 +72,8 @@
                       <input mdc-datetime-picker="" short-time="false" date="true" time="true" type="text" format="DD-MM-YYYY HH:mm"
                       placeholder="Data inicial" ng-model="controller.event.start_time" class=" md-input" today-text="Hoje" min-date="controller.now"
                       max-date="controller.event.end_time" cancel-text="Cancelar" ng-change="controller.createInitDate()" required/>
-                  </md-input-container flex="45">
-                  <md-input-container style="margin: 0">
+                  </md-input-container>
+                  <md-input-container style="margin: 0" flex="45">
                       <input mdc-datetime-picker="" ng-change="controller.changeDate('endTime')" date="true" time="true" type="text"today-text="Hoje"
                       placeholder="Data final" class=" md-input" format="DD-MM-YYYY HH:mm" max-date="null"
                       ng-model="controller.event.end_time" cancel-text="Cancelar" min-date="controller.start_time" required>

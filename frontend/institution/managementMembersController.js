@@ -8,6 +8,12 @@
         var manageMemberCtrl = this;
         var MAX_EMAILS_QUANTITY = 10;
 
+        /** 
+         * This number to equal 5Mb in bytes
+         * that mean the limit size of CSV file accepted
+        */
+        var MAXIMUM_CSV_SIZE = 5242880;
+
         manageMemberCtrl.institution = {};
         manageMemberCtrl.invite = {};
         manageMemberCtrl.sent_invitations = [];
@@ -52,14 +58,14 @@
             ProfileService.showProfile(userKey, ev);
         };
 
-        manageMemberCtrl.sendUserInvite = function sendInvite() {
+        manageMemberCtrl.sendUserInvite = function sendInvite(loadedEmails) {
             manageMemberCtrl.invite.institution_key = currentInstitutionKey;
             manageMemberCtrl.invite.admin_key = manageMemberCtrl.user.key;
             manageMemberCtrl.invite.type_of_invite = 'USER';
             invite = new Invite(manageMemberCtrl.invite);
             invite.sender_name = manageMemberCtrl.user.name;
 
-            var emails = getEmails();
+            var emails = getEmails(loadedEmails);
             var requestBody = {
                 invite_body: invite,
                 emails: emails
@@ -269,6 +275,35 @@
             (field.email === empty_email.email) ? removeField(field) : addField();
         };
 
+        function selectEmailsDialog(emails, ev) {
+            $mdDialog.show({
+                templateUrl: 'app/institution/select_emails.html',
+                controller: "SelectEmailsController",
+                controllerAs: "selectEmailsCtrl",
+                locals: {
+                    emails: emails,
+                    manageMemberCtrl: manageMemberCtrl
+                },
+                bindToController: true,
+                targetEvent: ev,
+                clickOutsideToClose: true
+            });
+        }
+
+        manageMemberCtrl.addCSV = function addCSV(files, ev) {
+            if(files[0].size > MAXIMUM_CSV_SIZE) {
+                MessageService.showToast('O arquivo deve ser um CSV menor que 5 Mb');
+            } else {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var emails = e.target.result.split('\n');
+                    emails = emails.filter(email => email !== "");
+                    selectEmailsDialog(emails, ev);
+                }
+                reader.readAsText(files[0]);
+            }
+        };
+
         function addField() {
             var isValidSize = _.size(manageMemberCtrl.emails) < MAX_EMAILS_QUANTITY;
             var hasEmptyField = _.find(manageMemberCtrl.emails, empty_email);
@@ -282,7 +317,8 @@
                 });
         };
 
-        function getEmails() {
+        function getEmails(loadedEmails) {
+            if(loadedEmails && loadedEmails.length > 0) return loadedEmails;
             var emails = [];
             _.each(manageMemberCtrl.emails, function (email) {
                 if (!_.isEmpty(email.email)) {
@@ -330,5 +366,66 @@
         }
         
         loadInstitution();
+    });
+
+    app.controller("SelectEmailsController", function SelectEmailsController($mdDialog, AuthService, MessageService) {
+        var selectEmailsCtrl = this;
+
+        selectEmailsCtrl.user = AuthService.getCurrentUser();
+        selectEmailsCtrl.selectedEmails = [];
+
+        var INVALID_INDEX = -1;
+        var MAX_EMAILS_QUANTITY = 50;
+
+        selectEmailsCtrl.select = function select(email) {
+            var index = selectEmailsCtrl.selectedEmails.indexOf(email);
+            var emailExists = index > INVALID_INDEX;
+            if(emailExists) {
+                selectEmailsCtrl.selectedEmails.splice(index, 1);
+            } else if (!selectEmailsCtrl.validateEmail(email)){
+                MessageService.showToast("Não é possível selecionar esta opção. E-mail inválido.");
+            } else {
+                selectEmailsCtrl.selectedEmails.push(email);
+            }
+        };
+
+        selectEmailsCtrl.exists = function exists(email) {
+            return selectEmailsCtrl.selectedEmails.indexOf(email) !== -1;
+        };
+
+        selectEmailsCtrl.selectAllEmails = function selectAllEmails() {
+            var filteredEmails = selectEmailsCtrl.emails.filter(email => selectEmailsCtrl.validateEmail(email));
+            if(selectEmailsCtrl.emails && selectEmailsCtrl.selectedEmails.length === filteredEmails.length) {
+                selectEmailsCtrl.selectedEmails = [];
+            } else if(filteredEmails && selectEmailsCtrl.selectedEmails.length >= 0) {
+                selectEmailsCtrl.selectedEmails = filteredEmails.slice(0);
+            }
+        };
+
+        selectEmailsCtrl.isChecked = function isChecked() {
+            if(selectEmailsCtrl.emails) {
+                var filteredEmails = selectEmailsCtrl.emails.filter(email => selectEmailsCtrl.validateEmail(email));
+                return selectEmailsCtrl.selectedEmails.length === filteredEmails.length;
+            }
+        };
+
+        selectEmailsCtrl.closeDialog = function closeDialog() {
+            $mdDialog.cancel();
+        };
+
+        selectEmailsCtrl.sendInvite = function sendInvite() {
+            if(selectEmailsCtrl.selectedEmails.length > 0 && selectEmailsCtrl.selectedEmails.length <= MAX_EMAILS_QUANTITY) {
+                selectEmailsCtrl.manageMemberCtrl.sendUserInvite(selectEmailsCtrl.selectedEmails);
+                selectEmailsCtrl.closeDialog();
+            } else if(selectEmailsCtrl.selectedEmails > MAX_EMAILS_QUANTITY) {
+                MessageService.showToast("Limite máximo de " + MAX_EMAILS_QUANTITY + " e-mails selecionados excedido.");
+            } else {
+                MessageService.showToast("Pelo menos um e-mail deve ser selecionado.");
+            }
+        };
+
+        selectEmailsCtrl.validateEmail = function validateEmail(email) {
+            return Utils.validateEmail(email);
+        }
     });
 })();

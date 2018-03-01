@@ -17,7 +17,8 @@
         allInstitutionsCtrl.loadMoreInstitutions = function loadMoreInstitutions(reload) {
             var deferred = $q.defer();
 
-            if (reload) { allInstitutionsCtrl.loadMoreInstitutions
+            if (reload) { 
+                allInstitutionsCtrl.loadMoreInstitutions
                 actualPage = 0;
                 moreInstitutions = true;
                 allInstitutionsCtrl.institutions.splice(0, allInstitutionsCtrl.institutions.length);

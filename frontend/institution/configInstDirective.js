@@ -11,7 +11,7 @@
         var observer;
 
         configInstCtrl.loading = true;
-        configInstCtrl.hasSubmitted = false;
+        configInstCtrl.isSubmitting = false;
         configInstCtrl.user = AuthService.getCurrentUser();
         configInstCtrl.cnpjRegex = "[0-9]{2}[\.][0-9]{3}[\.][0-9]{3}[\/][0-9]{4}[-][0-9]{2}";
         configInstCtrl.phoneRegex = "[0-9]{2}[\\s][0-9]{4,5}[-][0-9]{4,5}";
@@ -107,7 +107,6 @@
             var newInstitution = new Institution(configInstCtrl.newInstitution);
             var promise;
             if (newInstitution.isValid()){
-                configInstCtrl.hasSubmitted = true;
                 var confirm = $mdDialog.confirm(event)
                     .clickOutsideToClose(true)
                     .title('Finalizar')
@@ -118,11 +117,10 @@
                     .cancel('Não');
 
                 promise = $mdDialog.show(confirm);
-                promise.then(function() {
+                promise.then(function success() {
                     configInstCtrl.loadingSaveInstitution = true;
                     updateInstitution();
-                }, function() {
-                    configInstCtrl.hasSubmitted = false;
+                }, function error() {
                     MessageService.showToast('Cancelado');
                 });
             } else {
@@ -134,10 +132,9 @@
         function saveImage() {
             var defer = $q.defer();
             if(configInstCtrl.photo_instituicao) {
-                configInstCtrl.loading = true;
+                configInstCtrl.isSubmitting = true;
                 ImageService.saveImage(configInstCtrl.photo_instituicao).then(
-                    function(data) {
-                        configInstCtrl.loading = false;
+                    function success(data) {
                         configInstCtrl.newInstitution.photo_url = data.url;
                         defer.resolve();
                     }, function error(response) {
@@ -173,9 +170,11 @@
         };
 
         function updateInstitution() {
+            configInstCtrl.isSubmitting = true;
             var savePromises = [savePortfolio(), saveImage()];
             var promise = $q.defer();
             $q.all(savePromises).then(function success() {
+                configInstCtrl.isSubmitting = false;
                 if(configInstCtrl.isSubmission) {
                     saveRequestInst();
                 } else {
@@ -183,6 +182,7 @@
                 }
                 $q.resolve(promise);
             }, function error(response) {
+                configInstCtrl.isSubmitting = false;
                 MessageService.showToast(response.data.msg);
                 $q.reject(promise);
             });
@@ -273,10 +273,6 @@
             MessageService.showToast('Dados da instituição salvos com sucesso.');
             $state.go('app.user.home');
         }
-
-        configInstCtrl.showButton = function() {
-            return !configInstCtrl.loading;
-        };
 
         configInstCtrl.showImage = function showImage() {
             return configInstCtrl.newInstitution.photo_url !== "app/images/institution.png" && !_.isEmpty(configInstCtrl.newInstitution.photo_url);

@@ -4,24 +4,24 @@
 
     app.controller("AllInstitutionsController", function AllInstitutionsController(
         $state, InstitutionService, AuthService, MessageService, $q) {
-        var allInstituinsCtrl = this;
+        var allInstitutionsCtrl = this;
 
         var content = document.getElementById("content");
         var moreInstitutions = true;
         var actualPage = 0;
 
-        allInstituinsCtrl.user = AuthService.getCurrentUser();
-        allInstituinsCtrl.isLoadingInstitutions = true;
-        allInstituinsCtrl.institutions = [];
+        allInstitutionsCtrl.user = AuthService.getCurrentUser();
+        allInstitutionsCtrl.isLoadingInstitutions = true;
+        allInstitutionsCtrl.institutions = [];
 
-        allInstituinsCtrl.loadMoreInstitutions = function loadMoreInstitutions(reload) {
+        allInstitutionsCtrl.loadMoreInstitutions = function loadMoreInstitutions(reload) {
             var deferred = $q.defer();
 
-            if (reload) { allInstituinsCtrl.loadMoreInstitutions
+            if (reload) { allInstitutionsCtrl.loadMoreInstitutions
                 actualPage = 0;
                 moreInstitutions = true;
-                allInstituinsCtrl.institutions.splice(0, allInstituinsCtrl.institutions.length);
-                allInstituinsCtrl.isLoadingInstitutions = true;
+                allInstitutionsCtrl.institutions.splice(0, allInstitutionsCtrl.institutions.length);
+                allInstitutionsCtrl.isLoadingInstitutions = true;
             }
 
             if (moreInstitutions) {
@@ -39,10 +39,10 @@
                 moreInstitutions = response.data.next;
 
                 _.forEach(response.data.institutions, function(institution) {
-                    allInstituinsCtrl.institutions.push(institution);
+                    allInstitutionsCtrl.institutions.push(institution);
                 });
 
-                allInstituinsCtrl.isLoadingInstitutions = false;
+                allInstitutionsCtrl.isLoadingInstitutions = false;
                 deferred.resolve();
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
@@ -50,7 +50,7 @@
             });
         }
         
-        allInstituinsCtrl.loadMoreInstitutions();
-        Utils.setScrollListener(content, allInstituinsCtrl.loadMoreInstitutions); 
+        allInstitutionsCtrl.loadMoreInstitutions();
+        Utils.setScrollListener(content, allInstitutionsCtrl.loadMoreInstitutions); 
     }); 
 })();

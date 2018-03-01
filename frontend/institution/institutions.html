@@ -12,13 +12,13 @@
                     </div>
                 </md-toolbar>
                 <md-card-content>
-                    <load-circle add-layout-fill="true" flex ng-show="allInstituinsCtrl.isLoadingInstitutions"></load-circle>
-                    <div ng-if="!allInstituinsCtrl.isLoadingInstitutions" 
+                    <load-circle add-layout-fill="true" flex ng-show="allInstitutionsCtrl.isLoadingInstitutions"></load-circle>
+                    <div ng-if="!allInstitutionsCtrl.isLoadingInstitutions" 
                         layout-xs="column" layout-gt-xs="row" layout-wrap>
                         <div layout-xs="row" layout="column"  flex-gt-xs="33" 
-                            ng-repeat="inst in allInstituinsCtrl.institutions" 
+                            ng-repeat="inst in allInstitutionsCtrl.institutions" 
                             class="clickable-no-hover">
-                            <institution-card-details institution="inst" user="allInstituinsCtrl.user">
+                            <institution-card-details institution="inst" user="allInstitutionsCtrl.user">
                             </institution-card-details>
                         </div>
                     </div>

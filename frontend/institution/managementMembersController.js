@@ -380,7 +380,7 @@
         };
 
         selectEmailsCtrl.exists = function exists(email) {
-            return selectEmailsCtrl.selectedEmails.indexOf(email) > -1;
+            return selectEmailsCtrl.selectedEmails.indexOf(email) !== -1;
         };
 
         selectEmailsCtrl.selectAllEmails = function selectAllEmails() {

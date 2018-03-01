@@ -17,7 +17,7 @@ describe('Test ConfigInstDirective', function() {
 
     var institution = {
             name: "name",
-            photo_url: "",
+            photo_url: "imagens/test",
             email: "email",
             state: "pending",
             key: "inst-key",
@@ -30,6 +30,14 @@ describe('Test ConfigInstDirective', function() {
             leader: "leader name",
             institutional_email: "email@institutional.com",
             description: "teste"
+    };
+
+    var institution_info = {
+        photo_url: "imagens/test",
+        key: "inst-key",
+        acronym: "INST",
+        legal_nature: "public",
+        actuation_area: "government agencies",
     };
 
     var institutions = [{
@@ -185,6 +193,7 @@ describe('Test ConfigInstDirective', function() {
 
         it('should update the user', function(done) {
             state.params.inviteKey = invite.key;
+            
             promise.then(function() {
                 deferred.resolve(institution);
                 scope.$apply();
@@ -195,7 +204,7 @@ describe('Test ConfigInstDirective', function() {
                 expect(editInstCtrl.user.institutions).toContain(institution);
                 expect(editInstCtrl.user.invites).toEqual([]);
                 expect(editInstCtrl.user.institutions_admin).toContain(institution.key);
-                expect(editInstCtrl.user.follows).toContain(institution);
+                expect(editInstCtrl.user.follows).toContain(institution_info);
                 done();
             });
         });

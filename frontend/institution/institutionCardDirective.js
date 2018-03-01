@@ -50,15 +50,14 @@
         };
 
         institutionCardCtrl.unfollow = function unfollow() {
-            if(institutionCardCtrl.user.isMember(institutionCardCtrl.institution.key)){
+            if (institutionCardCtrl.user.isMember(institutionCardCtrl.institution.key)){
                 MessageService.showToast("Você não pode deixar de seguir " + institutionCardCtrl.institution.name);
-            }
-            else{
+            } else {
                 var promise = InstitutionService.unfollow(institutionCardCtrl.institution.key);
                 promise.then(function success(){
-                    MessageService.showToast("Deixou de seguir "+institutionCardCtrl.institution.name);
                     institutionCardCtrl.user.unfollow(institutionCardCtrl.institution);
                     AuthService.save();
+                    MessageService.showToast("Deixou de seguir "+institutionCardCtrl.institution.name);
                 }, function error() {
                     MessageService.showToast('Erro ao deixar de seguir instituição.');
                 });

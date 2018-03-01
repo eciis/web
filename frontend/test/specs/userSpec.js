@@ -3,20 +3,20 @@
 (describe('Test User model', function() {
    var user, createUser;
 
-   var splab = {
+   var inst = {
         color: 'blue',
-        name: 'SPLAB',
+        name: 'inst',
         key: '987654321'
    };
 
-   var certbio = {
+   var other_inst = {
         color: 'grey',
-        name: 'Certbio',
+        name: 'other_inst',
         key: '123456789',
         parent_institution: '987654321'
    };
 
-    var certbio_info =  {
+    var other_inst_info =  {
       acronym: undefined,
       key: '123456789',
       photo_url: undefined,
@@ -43,8 +43,8 @@
         name: 'Tiago Pereira',
         cpf: '111.111.111-11',
         email: 'tiago.pereira@ccc.ufcg.edu.br',
-        institutions: [splab],
-        follows: [splab],
+        institutions: [inst],
+        follows: [inst],
         invites: [inviteUser, inviteInstitution]
    };
 
@@ -73,12 +73,12 @@
           expect(user.email).toEqual('tiago.pereira@ccc.ufcg.edu.br');
         });
 
-        it('institutions should contain splab', function() {
-          expect(user.institutions).toContain(splab);
+        it('institutions should contain inst', function() {
+          expect(user.institutions).toContain(inst);
         });
 
-        it('follows should contain splab key', function() {
-          expect(user.follows).toContain(splab);
+        it('follows should contain inst key', function() {
+          expect(user.follows).toContain(inst);
         });
    });
 
@@ -88,70 +88,70 @@
 
           it('should be true', function() {
             user = createUser();
-            expect(user.isFollower(splab)).toBe(true);
+            expect(user.isFollower(inst)).toBe(true);
           });
 
           it('should be false', function() {
             user = createUser();
-            expect(user.isFollower(certbio)).toBe(false);
+            expect(user.isFollower(other_inst)).toBe(false);
           });
         });
 
         describe('follow()', function() {
 
-          it('follows should not contain certbio key before follow', function() {
+          it('follows should not contain other_inst key before follow', function() {
             user = createUser();
-            expect(user.follows).not.toContain(certbio_info);
+            expect(user.follows).not.toContain(other_inst_info);
           });
 
-          it('follows should contain certbio key after follow', function() {
+          it('follows should contain other_inst key after follow', function() {
             user = createUser();
-            var certbio_inst = new Institution(certbio);
-            user.follow(certbio_inst);
-            expect(user.follows).toContain(certbio_info);
+            var other_inst_inst = new Institution(other_inst);
+            user.follow(other_inst_inst);
+            expect(user.follows).toContain(other_inst_info);
           });
         });
 
         describe('unfollow()', function() {
 
-          it('follows should contain certbio key before unfollow', function() {
+          it('follows should contain other_inst key before unfollow', function() {
             user = createUser();
-            var certbio_inst = new Institution(certbio);
-            user.follow(certbio_inst);
-            expect(user.follows).toContain(certbio_info);
+            var other_inst = new Institution(other_inst);
+            user.follow(other_inst);
+            expect(user.follows).toContain(other_inst_info);
           });
 
-          it('follows should not contain certbio key after unfollow', function() {
+          it('follows should not contain other_inst key after unfollow', function() {
             user = createUser();
-            user.unfollow(certbio);
-            expect(user.follows).not.toContain(certbio_info);
+            user.unfollow(other_inst);
+            expect(user.follows).not.toContain(other_inst_info);
           });
         });
 
         describe('isMember()', function() {
 
-          it('should is member of splab', function() {
+          it('should is member of inst', function() {
             user = createUser();
-            expect(user.isMember(splab.key)).toBe(true);
+            expect(user.isMember(inst.key)).toBe(true);
           });
 
-          it('should not is member of certbio', function() {
+          it('should not is member of other_inst', function() {
             user = createUser();
-            expect(user.isMember(certbio.key)).toBe(false);
+            expect(user.isMember(other_inst.key)).toBe(false);
           });
         });
 
         describe('addInstitution()', function() {
 
-          it('institutions should not contain certbio key before addInstitution', function() {
+          it('institutions should not contain other_inst key before addInstitution', function() {
             user = createUser();
-            expect(user.institutions).not.toContain(certbio.key);
+            expect(user.institutions).not.toContain(other_inst.key);
           });
 
-          it('institutions should contain certbio key after addInstitution', function() {
+          it('institutions should contain other_inst key after addInstitution', function() {
             user = createUser();
-            user.addInstitution(certbio.key);
-            expect(user.institutions).toContain(certbio.key);
+            user.addInstitution(other_inst.key);
+            expect(user.institutions).toContain(other_inst.key);
           });
 
         });
@@ -175,19 +175,19 @@
           it('should call JSON stringify', function() {
             spyOn(JSON, 'stringify').and.callThrough();
 
-            userData.institutions = [splab, certbio];
+            userData.institutions = [inst, other_inst];
             user = createUser();
 
-            expect(user.current_institution).toBe(splab);
+            expect(user.current_institution).toBe(inst);
 
-            user.changeInstitution(certbio);
+            user.changeInstitution(other_inst);
 
             expect(JSON.stringify).toHaveBeenCalled();
-            expect(user.current_institution).toBe(certbio);
+            expect(user.current_institution).toBe(other_inst);
 
             var cachedUser = JSON.parse(window.localStorage.userInfo);
 
-            expect(cachedUser.current_institution).toEqual(certbio);
+            expect(cachedUser.current_institution).toEqual(other_inst);
           });
         });
 
@@ -207,12 +207,12 @@
                 name: 'Tiago Pereira',
                 cpf: '111.111.111-11',
                 email: 'tiago.pereira@ccc.ufcg.edu.br',
-                institutions: [splab],
-                follows: [splab],
+                institutions: [inst],
+                follows: [inst],
                 invites: [inviteUser, inviteInstitution]
               };
               user = createUser();
-              user.removeInstitution(splab.key);
+              user.removeInstitution(inst.key);
               expect(user.follows).toEqual([]);
               expect(user.institutions).toEqual([]);
           });
@@ -224,49 +224,49 @@
                 name: 'User',
                 cpf: '111.111.111-11',
                 email: 'user@example.com',
-                institutions: [splab, certbio],
-                follows: [splab, certbio],
+                institutions: [inst, other_inst],
+                follows: [inst, other_inst],
                 institution_profiles: [
-                  {institution_key: splab.key},
-                  {institution_key: certbio.key}
+                  {institution_key: inst.key},
+                  {institution_key: other_inst.key}
                 ]
               };
               user = createUser();
             });
 
-            it('should remove splab profile', function() {
+            it('should remove inst profile', function() {
               expect(user.institution_profiles).toEqual([
-                  {institution_key: splab.key},
-                  {institution_key: certbio.key}
+                  {institution_key: inst.key},
+                  {institution_key: other_inst.key}
               ]);
-              user.removeProfile(splab.key, false);
-              expect(user.institution_profiles).toEqual([{institution_key: certbio.key}]);
+              user.removeProfile(inst.key, false);
+              expect(user.institution_profiles).toEqual([{institution_key: other_inst.key}]);
             });
 
-            it('should remove certbio profile', function() {
+            it('should remove other_inst profile', function() {
               expect(user.institution_profiles).toEqual([
-                  {institution_key: splab.key},
-                  {institution_key: certbio.key}
+                  {institution_key: inst.key},
+                  {institution_key: other_inst.key}
               ]);
-              user.removeProfile(certbio.key, false);
-              expect(user.institution_profiles).toEqual([{institution_key: splab.key}]);
+              user.removeProfile(other_inst.key, false);
+              expect(user.institution_profiles).toEqual([{institution_key: inst.key}]);
             });
 
-            it('should not remove splab profile', function() {
+            it('should not remove inst profile', function() {
               expect(user.institution_profiles).toEqual([
-                  {institution_key: splab.key},
-                  {institution_key: certbio.key}
+                  {institution_key: inst.key},
+                  {institution_key: other_inst.key}
               ]);
-              user.removeProfile(certbio.key, true);
-              expect(user.institution_profiles).toEqual([{institution_key: splab.key}]);
+              user.removeProfile(other_inst.key, true);
+              expect(user.institution_profiles).toEqual([{institution_key: inst.key}]);
             });
 
             it('should remove all profiles', function() {
               expect(user.institution_profiles).toEqual([
-                  {institution_key: splab.key},
-                  {institution_key: certbio.key}
+                  {institution_key: inst.key},
+                  {institution_key: other_inst.key}
               ]);
-              user.removeProfile(splab.key, true);
+              user.removeProfile(inst.key, true);
               expect(user.institution_profiles).toEqual([]);
             });
         });

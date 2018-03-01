@@ -4,6 +4,7 @@ import json
 import datetime
 import sys
 import logging
+import permissions
 
 from google.appengine.ext import ndb
 
@@ -256,3 +257,22 @@ def to_int(value, exception, message_exception):
         raise exception(message_exception)
 
     return value
+
+
+def get_all_hierarchy_admin_permissions(institution_key, permissions_dict=None):
+    if not permissions_dict:
+        permissions_dict = {}
+
+    institution = ndb.Key(urlsafe=institution_key).get()
+
+    for permission in permissions.DEFAULT_ADMIN_PERMISSIONS:
+        if permission in permissions_dict:
+            permissions_dict[permission].update({institution_key: True})
+        else:
+            permissions_dict.update({permission: {institution_key: True}})
+
+    for children in institution.children_institutions:
+        get_all_hierarchy_admin_permissions(children.urlsafe(), permissions_dict)
+    
+    return permissions_dict
+

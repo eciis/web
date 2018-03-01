@@ -6,6 +6,7 @@ from google.appengine.ext import ndb
 from utils import login_required
 from utils import json_response
 from utils import Utils
+from utils import makeUser
 from service_entities import enqueue_task
 from handlers.base_handler import BaseHandler
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
@@ -46,7 +47,7 @@ class InviteUserAdmHandler(BaseHandler):
             }
         )
 
-        self.response.write(json.dumps(invite.make()))
+        self.response.write(json.dumps(makeUser(user, self.request)))
 
     @json_response
     @login_required

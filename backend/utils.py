@@ -259,6 +259,23 @@ def to_int(value, exception, message_exception):
     return value
 
 
+def makeUser(user, request):
+    """Make User."""
+    user_json = Utils.toJson(user, host=request.host)
+    user_json['logout'] = 'http://%s/logout?redirect=%s' %\
+        (request.host, request.path)
+    user_json['institutions'] = []
+    for institution in user.institutions:
+        user_json['institutions'].append(
+            Utils.toJson(institution.get())
+        )
+    user_json['follows'] = [institution_key.get().make(
+        ['acronym', 'photo_url', 'key', 'parent_institution']) for institution_key in user.follows]
+    user_json['institution_profiles'] = [profile.make() 
+        for profile in user.institution_profiles]
+    return user_json
+    
+
 def get_all_hierarchy_admin_permissions(institution_key, permissions_dict=None):
     if not permissions_dict:
         permissions_dict = {}

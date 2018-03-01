@@ -375,6 +375,7 @@
         selectEmailsCtrl.selectedEmails = [];
 
         var INVALID_INDEX = -1;
+        var MAX_EMAILS_QUANTITY = 50;
 
         selectEmailsCtrl.select = function select(email) {
             var index = selectEmailsCtrl.selectedEmails.indexOf(email);

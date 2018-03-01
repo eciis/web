@@ -283,6 +283,7 @@
                 locals: {
                     emails: emails,
                 },
+                bindToController: true,
                 targetEvent: ev,
                 clickOutsideToClose: true
             });
@@ -356,10 +357,10 @@
         loadInstitution();
     });
 
-    app.controller("SelectEmailsController", function SelectEmailsController(emails, $mdDialog) {
+    app.controller("SelectEmailsController", function SelectEmailsController($mdDialog, AuthService) {
         var selectEmailsCtrl = this;
 
-        selectEmailsCtrl.emails = emails;
+        selectEmailsCtrl.user = AuthService.getCurrentUser();
         selectEmailsCtrl.selectedEmails = [];
 
         selectEmailsCtrl.select = function select(email) {
@@ -375,16 +376,17 @@
             return selectEmailsCtrl.selectedEmails.indexOf(email) > -1;
         };
 
-        selectEmailsCtrl.isChecked = function isChecked() {
-            return selectEmailsCtrl.selectedEmails.length === selectEmailsCtrl.emails.length;
-        }
-
         selectEmailsCtrl.selectAllEmails = function selectAllEmails() {
-            if(selectEmailsCtrl.selectedEmails.length === selectEmailsCtrl.emails.length) {
+            if(selectEmailsCtrl.emails && selectEmailsCtrl.selectedEmails.length === selectEmailsCtrl.emails.length) {
                 selectEmailsCtrl.selectedEmails = [];
-            } else if(selectEmailsCtrl.selectedEmails.length >= 0) {
+            } else if(selectEmailsCtrl.emails && selectEmailsCtrl.selectedEmails.length >= 0) {
                 selectEmailsCtrl.selectedEmails = selectEmailsCtrl.emails.slice(0);
             }
+        };
+
+        selectEmailsCtrl.isChecked = function isChecked() {
+            if(selectEmailsCtrl.emails)
+                return selectEmailsCtrl.selectedEmails.length === selectEmailsCtrl.emails.length;
         };
 
         selectEmailsCtrl.closeDialog = function closeDialog() {

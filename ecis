@@ -34,11 +34,11 @@ function setup_firebase_config {
     export GOOGLE_APPLICATION_CREDENTIALS="$ECIS_CONFIG_FOLDER/firebase-private-key.json"
 
     cp $FIREBASE_CONFIG_FILE frontend/
-    catch_error $?
+    catch_error $? "Firebase on Frontend ok"
     cp $FIREBASE_CONFIG_FILE support/
-    catch_error $?
+    catch_error $? "Firebase on Support ok"
     cp $FIREBASE_BACKEND_CONFIG_FILE backend/
-    catch_error $?
+    catch_error $? "Firebase on Backend ok"
 }
 
 function set_backend_url {
@@ -48,9 +48,9 @@ function set_backend_url {
         url="http://"$1
     fi
     sed -i "4s|.*|    BACKEND_URL: '$url',|" $FRONTEND_CONFIG_FILE
-    echo ">> Frontend will use ${bold}$url${_bold} as backend."
+    catch_error $? "Frontend will use ${bold}$url${_bold} as backend."
     sed -i "4s|.*|    BACKEND_URL: '$url',|" $SUPPORT_CONFIG_FILE
-    echo ">> Support will use ${bold}$url${_bold} as backend."
+    catch_error $? "Support will use ${bold}$url${_bold} as backend."
 }
 
 function set_landingpage_url {
@@ -60,35 +60,44 @@ function set_landingpage_url {
         url="http://"$1
     fi
     sed -i "5s|.*|    LANDINGPAGE_URL: '$url',|" $FRONTEND_CONFIG_FILE
-    echo ">> Frontend will use ${bold}$url${_bold} as landing page."
+    catch_error $? "Frontend will use ${bold}$url${_bold} as landing page."
     sed -i "5s|.*|    LANDINGPAGE_URL: '$url',|" $SUPPORT_CONFIG_FILE
-    echo ">> Support will use ${bold}$url${_bold} as landing page."
+    catch_error $? "Support will use ${bold}$url${_bold} as landing page."
 }
 
 function catch_error {
     if [ $1 -ne 0 ]; then
-        echo ">> Something went wrong."
+        echo ">> The last command exited with error $1. Fix it then try again!"
         exit 0;
     fi
-    echo ">> done"
+    if [ ! -z "$2" ]; then
+        # Print the message passed as the second parameters
+        echo ">> $2"
+    else
+        echo ">> done"
+    fi
 }
 
 case "$1" in
     run)
         APP_VERSION=$(git branch | grep "*" | tr -d "()*" | cut -c2-)
         sed -i "6s|.*|    APP_VERSION: '$APP_VERSION'|" $FRONTEND_CONFIG_FILE
+        catch_error $? "APP VERSION on Frontend $APP_VERSION"
         sed -i "6s|.*|    APP_VERSION: '$APP_VERSION'|" $SUPPORT_CONFIG_FILE
+        catch_error $? "APP VERSION on Support $APP_VERSION"
 
         echo "=========== Cleaning Environment ==========="
         rm -rf $PY_ENV
-        catch_error $?
+        catch_error $? "Removed Pyenv Folder"
 
         rm -rf frontend/test/node_modules frontend/test/bower_components
-        catch_error $?
+        catch_error $? "Removed node_modules and bower_components"
 
         echo "=========== Starting Virtual Environment ==========="
         virtualenv $PY_ENV
+        catch_error $? "Setup Virtual Env"
         source $PY_ENV/bin/activate
+        catch_error $? "Activated"
 
         echo "=========== Installing Dependencies ==========="
         python -m pip install -r backend/requirements.txt
@@ -121,12 +130,12 @@ case "$1" in
                 
                 if [ ! -e node_modules ]; then
                     npm install
-                    catch_error $?
+                    catch_error $? "Node packages installed with success"
                 fi
 
                 if [ ! -e bower_components ]; then
                     bower install
-                    catch_error $?
+                    catch_error $? "Bower packages installed with success"
                 fi
 
                 karma start --single-run
@@ -161,10 +170,12 @@ case "$1" in
             APP_VERSION=$NEW_APP_VERSION
         fi
         git checkout tags/"$APP_VERSION"
-        catch_error $?
+        catch_error $? "Git checked out to tag $APP_VERSION"
 
         sed -i "6s|.*|    APP_VERSION: '$APP_VERSION'|" $FRONTEND_CONFIG_FILE
+        catch_error $? "APP VERSION on Frontend $APP_VERSION"
         sed -i "6s|.*|    APP_VERSION: '$APP_VERSION'|" $SUPPORT_CONFIG_FILE
+        catch_error $? "APP VERSION on Support $APP_VERSION"
 
         echo "${bold}>> Select the application to deploy:${_bold}"
         options=("development-cis" "eciis-splab" "Other")
@@ -191,6 +202,7 @@ case "$1" in
 
         echo "${bold}>> Deploy will use the following GCloud configuration${_bold}"
         gcloud config list
+        catch_error $? "GCloud project configured to $APP_NAME"
 
         read -p "${bold}Is everything correct (Y/n)?${_bold} " ANSWER
 
@@ -210,7 +222,7 @@ case "$1" in
             ENVIRONMENT=$NEW_ENVIRONMENT
         fi
         setup_firebase_config $ENVIRONMENT
-        catch_error $?
+        catch_error $? "Firebase setup with success"
 
         echo "=========== Starting Google App Engine Deployment ==========="
 

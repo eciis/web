@@ -11,6 +11,7 @@ from util.json_patch import JsonPatch
 from models.post import Post
 from models.survey_post import SurveyPost
 from models.post import Like
+from service_messages import send_message_notification
 
 from handlers.base_handler import BaseHandler
 
@@ -62,11 +63,15 @@ class PostHandler(BaseHandler):
 
         is_admin = user.has_permission("remove_posts", post.institution.urlsafe())
         is_author = user.has_permission("remove_post", key)
+        
+        Utils._assert(not is_admin and not is_author,
+                      "The user can not remove this post", NotAuthorizedException)
 
-        if(is_admin or is_author):
-            post.delete(user)
-        else:
-            raise NotAuthorizedException("The user can not remove this post")
+        post.delete(user)
+
+        if(is_admin and not is_author):
+            send_message_notification(post.author.urlsafe(), user.key.urlsafe(), 
+                'DELETED_POST', post.key.urlsafe())
 
     @json_response
     @login_required

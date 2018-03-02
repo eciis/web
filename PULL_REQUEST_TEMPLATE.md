@@ -1,5 +1,5 @@
-<p><b>Feature/Bug description:</b> ...</p>
+**Feature/Bug description:** ...
 
-<p><b>Solution:</b> ...</p>
+**Solution:** ...
 
-<p><b>TODO/FIXME:</b> n/a</p>
+**TODO/FIXME:** n/a

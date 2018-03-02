@@ -211,7 +211,7 @@ class PostCollectionHandlerTest(TestBaseHandler):
                     'entity_key': key_post.urlsafe(),
                     'entity_type': 'SHARED_POST',
                     'current_institution': self.institution.key.urlsafe(),
-                    'subscribers': json.dumps([subscriber.urlsafe() for subscriber in self.post.subscribers])
+                    'shared_entity_key': self.post.key.urlsafe()
                 }
             )
         ]

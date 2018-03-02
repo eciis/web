@@ -40,6 +40,7 @@
             'DELETE_MEMBER': messageCreator('Removeu você de ', SINGLE_INST),
             'ACCEPTED_LINK': messageCreator('Aceitou sua solicitação de vínculo com ', SINGLE_INST),
             'SHARED_EVENT': messageCreator('Compartilhou um evento de ', SINGLE_INST),
+            'DELETED_POST': messageCreator('Deletou o seu post em ', SINGLE_INST),
             'REPLY_COMMENT': messageCreator('Respondeu um comentário seu')
         };
 

@@ -57,6 +57,10 @@ var Utils = {
                 string.substring(0, limit+1) + "..." : string;
     },
 
+    generateLink : function generateLink(url){
+        return window.location.host + url;
+    },
+
     /**
      * Create an object with a calculated property height, to be used with 
      * the directive ng-style on a html element that has a list of itens in it.
@@ -91,5 +95,15 @@ var Utils = {
                 });
             }
         };
+    },
+
+    /**
+     * Verify if email is a valid email.
+     * @param {string} email the email that be verified.
+     * @returns {boolean} True if is a valid email or false if is invalid.
+     */
+    validateEmail: function validateEmail(email) {
+        var regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return regex.test(email);
     }
 };

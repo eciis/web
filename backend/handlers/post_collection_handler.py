@@ -91,7 +91,7 @@ class PostCollectionHandler(BaseHandler):
                 'entity_key': post.key.urlsafe(),
                 'entity_type': entity_type,
                 'current_institution': user.current_institution.urlsafe(),
-                'subscribers': json.dumps([subscriber.urlsafe() for subscriber in shared_post.subscribers])
+                'shared_entity_key': shared_post.key.urlsafe()
             }
 
             enqueue_task('post-notification', params)

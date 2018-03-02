@@ -101,13 +101,12 @@
         institutionCtrl.follow = function follow(){
             var promise = InstitutionService.follow(currentInstitutionKey);
             promise.then(function success(){
-                MessageService.showToast("Seguindo "+institutionCtrl.institution.name);
-                var institution = institutionCtrl.institution.make();
-                institutionCtrl.user.follow(institution);
+                institutionCtrl.user.follow(institutionCtrl.institution);
                 institutionCtrl.isUserFollower = true;
                 AuthService.save();
+                MessageService.showToast("Seguindo "+ institutionCtrl.institution.name);
             }, function error() {
-                MessageService.showToast('Erro ao seguir a instituição.');
+                MessageService.showToast('Não foi possível seguir a instituição.');
             });
             return promise;
         };

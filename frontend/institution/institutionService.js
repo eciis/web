@@ -19,6 +19,16 @@
             return deferred.promise;
         };
 
+        service.getNextInstitutions = function getNextInstitutions(page) {
+            var deferred = $q.defer();
+            $http.get("/api/institutions?page=" + page + "&limit=" + LIMIT).then(function success(response) {  
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+            return deferred.promise;
+        };
+
         service.searchInstitutions = function searchInstitutions(value, state, type) {
             var deferred = $q.defer();
             $http({url: "/api/search/institution",

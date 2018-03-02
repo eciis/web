@@ -142,6 +142,9 @@
                 icon: "share",
                 state: "app.post"
             },
+            'DELETED_POST': {
+                icon: "clear"
+            },
             "REPLY_COMMENT": {
                 icon: "comment",
                 state: "app.post"

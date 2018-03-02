@@ -1,0 +1,29 @@
+<md-content id="content" layout="row" layout-align="center" class="body custom-scrollbar">
+    <div flex flex-gt-md="95" layout="row" layout-align="center">
+        <div flex>
+            <md-card>
+                <md-toolbar md-colors="{background: 'teal-500'}" layout="row">
+                    <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
+                    <h1>
+                        <md-icon>account_balance</md-icon>
+                        Instituições cadastradas
+                    </h1>
+                    <span flex md-truncate></span>
+                    </div>
+                </md-toolbar>
+                <md-card-content>
+                    <load-circle add-layout-fill="true" flex ng-show="allInstitutionsCtrl.isLoadingInstitutions"></load-circle>
+                    <div ng-if="!allInstitutionsCtrl.isLoadingInstitutions" 
+                        layout-xs="column" layout-gt-xs="row" layout-wrap>
+                        <div layout-xs="row" layout="column"  flex-gt-xs="33" 
+                            ng-repeat="inst in allInstitutionsCtrl.institutions" 
+                            class="clickable-no-hover">
+                            <institution-card-details institution="inst" user="allInstitutionsCtrl.user">
+                            </institution-card-details>
+                        </div>
+                    </div>
+                </md-card-content>
+            </md-card>
+        </div>
+    </div>
+</md-content>

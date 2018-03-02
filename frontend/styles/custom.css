@@ -968,3 +968,8 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
     text-align: center;
     font-size: 15px;
 }
+
+.shared-survey{
+    padding-top :0px;
+    margin-top : -25px;
+}

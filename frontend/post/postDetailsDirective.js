@@ -109,6 +109,11 @@
                 !postDetailsCtrl.isDeleted(postDetailsCtrl.post);
         };
 
+        postDetailsCtrl.showSharedPostText = function showSharedPostText() {
+            return !postDetailsCtrl.isDeleted(postDetailsCtrl.post.shared_post) &&
+                !postDetailsCtrl.post.shared_post.type_survey;
+        };
+
         postDetailsCtrl.showSharedEvent = function showSharedEvent() {
             return postDetailsCtrl.post.shared_event &&
                 !postDetailsCtrl.isDeleted(postDetailsCtrl.post) &&

@@ -1,6 +1,11 @@
 #!/bin/bash
+# --- BASH CONSTANTS ---------
 bold=$(tput bold)
 _bold=$(tput sgr0)
+red=$(tput setaf 1)
+green=$(tput setaf 2)
+reset=$(tput sgr0)
+# ----------------------------
 
 SYS_URL='http://localhost:8080'
 
@@ -65,16 +70,27 @@ function set_landingpage_url {
     catch_error $? "Support will use ${bold}$url${_bold} as landing page."
 }
 
+# Usage [ --error ] <message_to_log>
+function log_message {
+    if [ "$1" == "--error" ]; then
+        echo "${red}[eCIS ERROR]${reset}    $2"
+    else
+        echo "${green}[eCIS LOG]${reset}    $1"
+    fi
+}
+
+# Receives two arguments, the first must be the last output of a command ($?),
+# and the second, is an optional message to be logged if no errors are found.
 function catch_error {
     if [ $1 -ne 0 ]; then
-        echo ">> The last command exited with error $1. Fix it then try again!"
+        echo "${red}[eCIS ERROR]${reset} The last command exited with error $1. Fix it then try again!"
         exit 0;
     fi
     if [ ! -z "$2" ]; then
         # Print the message passed as the second parameters
-        echo ">> $2"
+        echo "${green}[eCIS LOG]${reset}    $2"
     else
-        echo ">> done"
+        echo "${green}[eCIS LOG]${reset}    done"
     fi
 }
 
@@ -125,19 +141,24 @@ case "$1" in
     test)
         case "$2" in
             client)
-                echo "=========== Starting Fronted Tests ==========="
+                echo "=========== Starting Fronted Tests Setup ==========="
                 cd frontend/test
                 
                 if [ ! -e node_modules ]; then
                     npm install
-                    catch_error $? "Node packages installed with success"
+                    catch_error $? "Node modules installed with success"
+                else
+                    log_message "Node modules already installed"
                 fi
 
                 if [ ! -e bower_components ]; then
                     bower install
-                    catch_error $? "Bower packages installed with success"
+                    catch_error $? "Bower modules installed with success"
+                else
+                    log_message "Bower modules already installed"
                 fi
 
+                echo "=========== Starting to run Fronted Tests ==========="
                 karma start --single-run
             ;;
 

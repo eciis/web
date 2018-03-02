@@ -72,26 +72,38 @@ class PostCollectionHandler(BaseHandler):
 
         entity_type = PostFactory.get_type(post_data)
 
-        for follower in institution.followers:
-            if follower != user.key:
-                send_message_notification(
-                    follower.urlsafe(),
-                    user.key.urlsafe(),
-                    entity_type,
-                    post.key.urlsafe(),
-                    user.current_institution
-                )
+        params = {
+            'sender_key': user.key.urlsafe(),
+            'entity_key': post.key.urlsafe(),
+            'entity_type': entity_type,
+            'institution_key': post.institution.urlsafe(),
+            'current_institution': user.current_institution.urlsafe()
+        }
+
+        enqueue_task('notify-followers', params)
 
         if(post.shared_post):
+            shared_post = post.shared_post.get()
             entity_type = 'SHARED_POST'
             params = {
-                'receiver_key': post.author.urlsafe(),
+                'receiver_key': shared_post.author.urlsafe(),
                 'sender_key': user.key.urlsafe(),
                 'entity_key': post.key.urlsafe(),
                 'entity_type': entity_type,
-                'current_institution': user.current_institution.urlsafe()
+                'current_institution': user.current_institution.urlsafe(),
+                'shared_entity_key': shared_post.key.urlsafe()
             }
 
             enqueue_task('post-notification', params)
+        elif post.shared_event:
+            shared_event = post.shared_event.get()
+            send_message_notification(
+                shared_event.author_key.urlsafe(),
+                user.key.urlsafe(),
+                'SHARED_EVENT',
+                post.key.urlsafe(),
+                user.current_institution
+            )
+
 
         self.response.write(json.dumps(post.make(self.request.host)))

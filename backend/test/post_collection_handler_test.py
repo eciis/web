@@ -11,7 +11,7 @@ from models.post import Post
 from models.event import Event
 from handlers.post_collection_handler import PostCollectionHandler
 from google.appengine.ext import ndb
-from mock import patch
+from mock import patch, call
 
 
 class PostCollectionHandlerTest(TestBaseHandler):
@@ -66,9 +66,8 @@ class PostCollectionHandlerTest(TestBaseHandler):
 
 
     @patch('handlers.post_collection_handler.enqueue_task')
-    @patch('handlers.post_collection_handler.send_message_notification')
     @patch('utils.verify_token', return_value={'email': 'user@email.com'})
-    def test_post(self, verify_token, send_message_notification, enqueue_task):
+    def test_post(self, verify_token, enqueue_task):
         """Test the post_collection_handler's post method."""
 
         # Make the request and assign the answer to post
@@ -95,22 +94,28 @@ class PostCollectionHandlerTest(TestBaseHandler):
                          'testing new post',
                          "The post's text is not the expected one")
 
-        # assert the notification was sent to the institution followers
-        send_message_notification.assert_called_with(
-            self.other_user.key.urlsafe(),
-            self.user.key.urlsafe(),
-            "POST",
-            key_post.urlsafe(),
-            self.institution.key
-        )
+        calls = [
+            call(
+                "add-post-institution",
+                {
+                    'institution_key': self.institution.key.urlsafe(),
+                    'created_post_key': post.get('key')
+                }
+            ),
+            call(
+                'notify-followers',
+                {
+                    'sender_key': self.user.key.urlsafe(),
+                    'entity_key': key_post.urlsafe(),
+                    'entity_type': 'POST',
+                    'institution_key': self.institution.key.urlsafe(),
+                    'current_institution': self.institution.key.urlsafe()
+                }
+            )
+        ]
+
         # assert that add post to institution was sent to the queue
-        enqueue_task.assert_called_with(
-            "add-post-institution",
-            {
-                'institution_key': self.institution.key.urlsafe(),
-                'created_post_key': post.get('key')
-            }
-        )
+        enqueue_task.assert_has_calls(calls)
 
         with self.assertRaises(Exception) as raises_context:
             self.body['post'] = {
@@ -144,9 +149,8 @@ class PostCollectionHandlerTest(TestBaseHandler):
         )
 
     @patch('handlers.post_collection_handler.enqueue_task')
-    @patch('handlers.post_collection_handler.send_message_notification')
     @patch('utils.verify_token', return_value={'email': 'user@email.com'})
-    def test_post_sharing(self, verify_token, send_message_notification, enqueue_task):
+    def test_post_sharing(self, verify_token, enqueue_task):
         """Test the post_collection_handler's post method."""
         # Make the request and assign the answer to post
         self.body['post'] = {
@@ -181,25 +185,39 @@ class PostCollectionHandlerTest(TestBaseHandler):
                          self.post.text,
                          "The post's text expected is '%s'" % self.post.text)
         
-        # check if the notification was sent to the institution's followers
-        send_message_notification.assert_called_with(
-            self.other_user.key.urlsafe(),
-            self.user.key.urlsafe(),
-            "POST",
-            key_post.urlsafe(),
-            self.institution.key
-        )
+        calls = [
+            call(
+                "add-post-institution",
+                {
+                    'institution_key': self.institution.key.urlsafe(),
+                    'created_post_key': key_post.urlsafe()
+                }
+            ),
+            call(
+                'notify-followers',
+                {
+                    'sender_key': self.user.key.urlsafe(),
+                    'entity_key': post.get('key'),
+                    'entity_type': 'POST',
+                    'institution_key': self.institution.key.urlsafe(),
+                    'current_institution': self.institution.key.urlsafe()
+                }
+            ),
+            call(
+                'post-notification',
+                {
+                    'receiver_key': self.post.author.urlsafe(),
+                    'sender_key': self.user.key.urlsafe(),
+                    'entity_key': key_post.urlsafe(),
+                    'entity_type': 'SHARED_POST',
+                    'current_institution': self.institution.key.urlsafe(),
+                    'shared_entity_key': self.post.key.urlsafe()
+                }
+            )
+        ]
+
         # check if the notification was sent to the post's author
-        enqueue_task.assert_called_with(
-            "post-notification",
-            {
-                'receiver_key': self.post.author.urlsafe(),
-                'sender_key': self.user.key.urlsafe(),
-                'entity_key': post.get('key'),
-                'entity_type': 'SHARED_POST',
-                'current_institution': self.institution.key.urlsafe()
-            }
-        )
+        enqueue_task.assert_has_calls(calls)
 
     @patch('handlers.post_collection_handler.enqueue_task')
     @patch('handlers.post_collection_handler.send_message_notification')
@@ -247,22 +265,36 @@ class PostCollectionHandlerTest(TestBaseHandler):
                          event.text,
                          "The post's text expected is %s" % event.text)
 
+        calls = [
+            call(
+                "add-post-institution",
+                {
+                    'institution_key': self.institution.key.urlsafe(),
+                    'created_post_key': post_obj.key.urlsafe()
+                }
+            ),
+            call(
+                'notify-followers',
+                {
+                    'sender_key': self.user.key.urlsafe(),
+                    'entity_key': key_post.urlsafe(),
+                    'entity_type': 'POST',
+                    'institution_key': self.institution.key.urlsafe(),
+                    'current_institution': self.institution.key.urlsafe()
+                }
+            )
+        ]
+
         # assert the notifiction was sent to the institution followers
         send_message_notification.assert_called_with(
-            self.other_user.key.urlsafe(),
+            event.author_key.urlsafe(),
             self.user.key.urlsafe(),
-            "POST",
+            "SHARED_EVENT",
             key_post.urlsafe(),
             self.institution.key
         )
         # assert that add post to institution was sent to the queue        
-        enqueue_task.assert_called_with(
-            "add-post-institution",
-            {
-                'institution_key': self.institution.key.urlsafe(),
-                'created_post_key': post_obj.key.urlsafe()
-            }
-        )
+        enqueue_task.assert_has_calls(calls)
     
     @patch('handlers.post_collection_handler.enqueue_task')
     @patch('handlers.post_collection_handler.send_message_notification')
@@ -318,19 +350,24 @@ class PostCollectionHandlerTest(TestBaseHandler):
         self.assertEqual(survey_obj.state, 'published',
                          "The post's state is 'published'")
 
-        # assert the notifiction was sent to the institution followers
-        send_message_notification.assert_called_with(
-            self.other_user.key.urlsafe(),
-            self.user.key.urlsafe(),
-            "SURVEY_POST",
-            survey.get('key'),
-            self.institution.key
-        )
+        calls = [
+            call(
+                "add-post-institution",
+                {
+                    'institution_key': self.institution.key.urlsafe(),
+                    'created_post_key': survey_obj.key.urlsafe()
+                }
+            ),
+            call(
+                'notify-followers',
+                {
+                    'sender_key': self.user.key.urlsafe(),
+                    'entity_key': key_survey.urlsafe(),
+                    'entity_type': 'SURVEY_POST', 
+                    'institution_key': self.institution.key.urlsafe(),
+                    'current_institution': self.institution.key.urlsafe()
+                }
+            )
+        ]
 
-        enqueue_task.assert_called_with(
-            "add-post-institution",
-            {
-                'institution_key': self.institution.key.urlsafe(),
-                'created_post_key': survey_obj.key.urlsafe()
-            }
-        )
+        enqueue_task.assert_has_calls(calls)

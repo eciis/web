@@ -32,6 +32,13 @@
             return promise;
         };
 
+        searchCtrl.clearFilters = function clearFilters() {
+            searchCtrl.searchActuation = "";
+            searchCtrl.searchNature = "";
+            searchCtrl.searchState = "";
+            searchCtrl.institutions = [];
+        };
+
         searchCtrl.search = function search() {
             if (searchCtrl.search_keyword) {
                 searchCtrl.makeSearch(searchCtrl.search_keyword, 'institution');

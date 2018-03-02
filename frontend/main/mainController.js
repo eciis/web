@@ -24,6 +24,12 @@
             }
         };
 
+        mainCtrl.newVersionAvailable = function newVersionAvailable() {
+            var has  = AuthService.newVersionAvailable()
+            console.log(">>>>>>>>.. has? :", has)
+            return has;
+        };
+
         mainCtrl.toggle = function toggle() {
             $mdSidenav('leftNav').toggle();
         };

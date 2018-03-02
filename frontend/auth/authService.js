@@ -29,6 +29,24 @@
             }
         });
 
+        var hasVersionAvailable = false;
+        service.setAppVersion = function setAppVersion(appVersion) {
+            if (appVersion) {
+                if (appVersion === Config.APP_VERSION) {
+                    hasVersionAvailable = false;
+                    console.log(appVersion)
+                    console.log(Config.APP_VERSION)
+
+                } else {
+                    hasVersionAvailable = true;
+                } 
+            }
+        };
+
+        service.newVersionAvailable = function newVersionAvailable() {
+            return hasVersionAvailable;
+        };
+
         service.setupUser = function setupUser(idToken, emailVerified) {
             var deferred = $q.defer();
             var firebaseUser = {

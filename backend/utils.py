@@ -180,9 +180,11 @@ def json_response(method):
     """Add content type header to the response."""
     def response(self, *args):
         self.response.headers['Access-Control-Allow-Origin'] = '*'
+        self.response.headers['Access-Control-Expose-Headers'] = 'APP_VERSION'
         self.response.headers['Access-Control-Allow-Headers'] = 'X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Authorization, Institution-Authorization'
         self.response.headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE, PATCH'
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+        self.response.headers['APP_VERSION'] = "v1.0"
         method(self, *args)
     return response
 

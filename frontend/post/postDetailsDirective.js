@@ -79,10 +79,10 @@
                 postDetailsCtrl.post.shared_post.type_survey;
         };
 
-        postDetailsCtrl.timeHasBeenExpired = function timeHasBeenExpired() {
-            if(postDetailsCtrl.post.type_survey) {
-                var deadline = new Date (postDetailsCtrl.post.deadline);
-                var currentTime = new Date((_.split(new Date().toISOString(), '.')[0]))
+        postDetailsCtrl.timeHasBeenExpired = function timeHasBeenExpired(post) {
+            if(post && post.type_survey) {
+                var deadline = new Date (post.deadline);
+                var currentTime = new Date((_.split(new Date().toISOString(), '.')[0]));
                 return deadline < currentTime;
             }
         };
@@ -102,6 +102,11 @@
             var hasNoLikes = postDetailsCtrl.post.number_of_likes === 0;
 
             return !hasNoComments || !hasNoLikes;
+        };
+
+        postDetailsCtrl.isSharedSurveyExpired = function isSharedSurveyExpired() {
+            return postDetailsCtrl.post.shared_post.type_survey &&
+                postDetailsCtrl.timeHasBeenExpired(postDetailsCtrl.post.shared_post);
         };
 
         postDetailsCtrl.showSharedPost = function showSharedPost() {

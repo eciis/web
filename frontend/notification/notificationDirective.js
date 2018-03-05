@@ -138,6 +138,10 @@
                      }
                 }
             },
+            "SHARED_EVENT": {
+                icon: "share",
+                state: "app.post"
+            },
             'DELETED_POST': {
                 icon: "clear"
             },

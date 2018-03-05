@@ -35,7 +35,7 @@
         surveyCtrl.userVoted = function(){
             var voted = false;
             _.forEach(surveyCtrl.post.options, function(option) {
-                if(surveyCtrl.votedOption(option)) {voted = true;}
+                (surveyCtrl.votedOption(option)) ? voted = true : null;
             });
             return voted;
         };
@@ -95,7 +95,6 @@
             var promise = SurveyService.vote(surveyCtrl.post, surveyCtrl.optionsSelected);
             promise.then(function sucess(){
                 addVote(surveyCtrl.optionsSelected);
-                calculatePercentage();
                 MessageService.showToast('Voto computado');
             });
             return promise;
@@ -124,6 +123,7 @@
             _.forEach(options, function(option) {
                 surveyCtrl.post.number_votes += 1;
                 option.number_votes += 1;
+                calculatePercentage(option);
                 var voter = {'name': surveyCtrl.user.name,
                              'photo_url': surveyCtrl.user.photo_url,
                              'key': Utils.getKeyFromUrl(surveyCtrl.user.key) };
@@ -131,13 +131,14 @@
             });
         }
 
-        function calculatePercentage(){
-            if(surveyCtrl.post){
-                _.forEach(surveyCtrl.post.options, function(option) {
-                    var percentage = (option.number_votes / surveyCtrl.post.number_votes) * 100;
-                    option.percentage = surveyCtrl.post.number_votes === 0 ? 0 : percentage.toFixed(0);
-                });
-            }
+        function calculatePercentage(option){
+            option.percentage =  (surveyCtrl.post.number_votes === 0) ? 0 :
+                ((option.number_votes / surveyCtrl.post.number_votes) * 100).toFixed(0);
+        }
+
+        surveyCtrl.getPercentage = function getPercentage(option){
+            (!option.percentage) ? calculatePercentage(option) : null;
+            return option.percentage + "%";
         }
 
         surveyCtrl.scrollbarConfig = {
@@ -148,7 +149,6 @@
         
         surveyCtrl.loadAttributes = function(){
             loadBinarySelected();
-            calculatePercentage();
         };
 
         surveyCtrl.showMenu = function(ev, option) {

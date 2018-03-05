@@ -13,6 +13,7 @@
         allInstitutionsCtrl.user = AuthService.getCurrentUser();
         allInstitutionsCtrl.isLoadingInstitutions = true;
         allInstitutionsCtrl.institutions = [];
+        allInstitutionsCtrl.filterKeyword = "";
 
         allInstitutionsCtrl.loadMoreInstitutions = function loadMoreInstitutions(reload) {
             var deferred = $q.defer();
@@ -33,6 +34,20 @@
 
             return deferred.promise;
         };
+
+        allInstitutionsCtrl.getInstitutions = function getInstitutions() {
+            if(allInstitutionsCtrl.filterKeyword === "" || allInstitutionsCtrl.filterKeyword === "*") {
+                return allInstitutionsCtrl.institutions;
+            } else {
+                return allInstitutionsCtrl.institutions
+                    .filter(inst =>
+                        _.includes(normalizeString(inst.name), normalizeString(allInstitutionsCtrl.filterKeyword)));
+            }
+        };
+
+        function normalizeString(string) {
+            return Utils.normalizeString(string);
+        }
 
         function loadInstitutions(deferred) {
             InstitutionService.getNextInstitutions(actualPage).then(function success(response) {

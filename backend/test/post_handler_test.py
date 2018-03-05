@@ -7,7 +7,7 @@ from models.user import User
 from models.institution import Institution
 from models.post import Comment
 from handlers.post_handler import PostHandler
-
+import mocks
 from mock import patch
 
 
@@ -25,6 +25,8 @@ class PostHandlerTest(TestBaseHandler):
             [("/api/posts/(.*)", PostHandler),
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
+        cls.first_user = mocks.create_user('first_user@gmail.com')
+        cls.first_user.put()
         initModels(cls)
 
     @patch('utils.verify_token', return_value={'email': 'first_user@gmail.com'})
@@ -165,6 +167,43 @@ class PostHandlerTest(TestBaseHandler):
             raises_context_message,
             exception_message,
             expected_alert + raises_context_message)
+    
+    @patch('handlers.post_handler.send_message_notification')
+    @patch('utils.verify_token', return_value={'email': 'first_user@gmail.com'})
+    def test_delete_with_admin(self, verify_token, mock_method):
+        """Test delete a post with admin."""
+        self.first_user.add_permission(
+            "remove_posts", self.institution.key.urlsafe())
+        self.first_user.put()
+        self.assertEqual(self.second_user_post.state, 'published',
+                          "The post's state must be published")
+        self.testapp.delete("/api/posts/%s" %
+                            self.second_user_post.key.urlsafe())
+        # Retrieve the post from the datastore, once it has been changed
+        self.second_user_post = self.second_user_post.key.get()
+        # Make sure the post's state is deleted
+        self.assertEqual(self.second_user_post.state, 'deleted',
+                         "The post's state must be deleted")
+        
+        mock_method.assert_called()
+
+    @patch('utils.verify_token', return_value={'email': 'second_user@ccc.ufcg.edu.br'})
+    def test_delete_without_admin(self, verify_token):
+        """Test delete a post with admin."""
+        self.assertEqual(self.first_user_post.state, 'published',
+                         "The post's state must be published")
+        with self.assertRaises(Exception) as raises_context:
+            self.testapp.delete("/api/posts/%s" %
+                                self.first_user_post.key.urlsafe())
+        # Retrieve the post from the datastore, once it has been changed
+        self.first_user_post = self.first_user_post.key.get()
+        # Make sure the post's state is deleted
+        self.assertEqual(self.first_user_post.state, 'published',
+                         "The post's state must be published")
+        message = self.get_message_exception(str(raises_context.exception))
+        self.assertEquals(message, "Error! The user can not remove this post")
+        
+
 
     def tearDown(cls):
         """Deactivate the test."""
@@ -173,12 +212,6 @@ class PostHandlerTest(TestBaseHandler):
 
 def initModels(cls):
     """Init the models."""
-    # new User first_user
-    cls.first_user = User()
-    cls.first_user.name = 'first_user'
-    cls.first_user.email = ['first_user@gmail.com']
-    cls.first_user.put()
-
     # new User second_user
     cls.second_user = User()
     cls.second_user.name = 'second_user'
@@ -194,6 +227,7 @@ def initModels(cls):
     cls.institution.followers = [cls.first_user.key, cls.second_user.key]
     cls.institution.admin = cls.first_user.key
     cls.institution.put()
+    cls.first_user.institutions_admin.append(cls.institution.key)
 
     # POST of first_user To Institution
     cls.first_user_post = Post()

@@ -35,13 +35,13 @@ class InstitutionCollectionHandlerTest(TestBaseHandler):
         second_inst = mocks.create_institution('SECOND INST')
 
         # Call the get method
-        all_institutions = self.testapp.get("/api/institutions").json
-
+        all_institutions = self.testapp.get("/api/institutions?page=0&&limit=2").json
+        
         self.assertEqual(len(all_institutions), 2,
                          "The length of all institutions list should be 2")
 
-        self.assertEqual(all_institutions[0]['name'], first_inst.name,
+        self.assertEqual(all_institutions['institutions'][0]['name'], first_inst.name,
                          "The name of institituion should be equal to the first_inst name")
 
-        self.assertEqual(all_institutions[1]['name'], second_inst.name,
+        self.assertEqual(all_institutions['institutions'][1]['name'], second_inst.name,
                          "The name of institution should be equal to the second_inst name")

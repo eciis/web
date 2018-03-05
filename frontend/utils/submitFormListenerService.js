@@ -7,19 +7,19 @@
         var service = this;
 
         service.addListener = function addListener(obj, formElement, scope) {
-            let modified = false;
-
-            scope.$watchCollection(obj, (newObj, oldObj) => {
+            var modified = false;
+            var objectEquality = true;
+            scope.$watch(obj, (newObj, oldObj) => {
                 modified = !angular.equals(newObj, oldObj);
-            });
+            }, objectEquality);
 
-            let transitionListener = $transitions.onStart({
+            var transitionListener = $transitions.onStart({
                 to: () => true
             }, function(transition) {
                 if (modified) {
                     transition.abort();
-                    let targetState = transition._targetState;
-                    let promisse = MessageService.showConfirmationDialog(
+                    var targetState = transition._targetState;
+                    var promisse = MessageService.showConfirmationDialog(
                             'event', 
                             '',
                             'Deseja sair sem salvar as alterações?');

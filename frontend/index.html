@@ -54,15 +54,11 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.5/angular-material.min.js"></script>
 
   <!-- Firebase -->
+  <script src="app/firebase-config.js"></script>
   <script src="https://www.gstatic.com/firebasejs/4.1.3/firebase.js"></script>
   <script>
     // Initialize the Firebase SDK
-    var firebaseConfig = {
-        apiKey: "AIzaSyCrrVy8FgG_jV-1h0EM4jpKbF3Vk5EjwCc",   // Your Firebase API key
-        authDomain: "eciis-splab.firebaseapp.com",           // Your Firebase Auth domain ("*.firebaseapp.com")
-        databaseURL: "https://eciis-splab.firebaseio.com",   // Your Firebase Database URL ("https://*.firebaseio.com")
-        storageBucket: "eciis-splab.appspot.com"             // Your Cloud Storage for Firebase bucket ("*.appspot.com")
-    };
+    var firebaseConfig = FIREBASE_CONFIG;
     firebase.initializeApp(firebaseConfig);
   </script>
 
@@ -155,6 +151,8 @@
   <script src="app/institution/institutionService.js"></script>
   <script src="app/institution/configInstDirective.js"></script>
   <script src="app/institution/managementMembersController.js"></script>
+  <script src="app/institution/allInstitutionsController.js"></script>
+  <script src="app/institution/institutionCardDirective.js"></script>
 
   <!-- Invite Library -->
   <script src="app/invites/inviteService.js"></script>

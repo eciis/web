@@ -37,9 +37,11 @@ class UserTimelineHandlerTest(TestBaseHandler):
                 'name': 'currentInstitution'
             }
         }
-        self.testapp.post_json("/api/posts", body)
+        self.testapp.post_json(
+            "/api/posts", body, headers={'institution-authorization': self.post_user['institution']})
         body['post'] = self.post_aux
-        self.testapp.post_json("/api/posts", body)
+        self.testapp.post_json(
+            "/api/posts", body, headers={'institution-authorization': self.post_aux['institution']})
 
         # Call the get method
         posts = self.testapp.get("/api/user/timeline?page=0&&limit=2")

@@ -4,7 +4,7 @@
       <a href class="md-title hyperlink" ng-click="surveyCtrl.goToPost()">
         <span class="md-headline break">{{surveyCtrl.post.title}}</span>
       </a>
-      <span layout="row" class="md-subhead" ng-if="surveyCtrl.post.deadline"> 
+      <span ng-if="!surveyCtrl.timeHasBeenExpired()" layout="row" class="md-subhead" ng-if="surveyCtrl.post.deadline">
         <b style="color: #009688; margin-right: 2px; margin-left: 2px;">&bull;</b>Prazo limite:
         {{ surveyCtrl.post.deadline | amUtc | amLocal | amCalendar:referenceTime:formats }}
       </span>
@@ -21,9 +21,10 @@
           ng-if="surveyCtrl.showCheckboxButton()" ng-model="option.selected"></md-checkbox>
         <p ng-if="!surveyCtrl.isPostPage">{{surveyCtrl.getOption(option.text)}}</p>
         <p ng-if="surveyCtrl.isPostPage">{{option.text}}</p>
-        <div ng-if="surveyCtrl.userVoted() || surveyCtrl.isSurveyAuthor() || surveyCtrl.timeHasBeenExpired()" ng-click="surveyCtrl.showMenu($event, option)" title="Clique para ver quem votou nessa opção">
+        <div ng-if="surveyCtrl.userVoted() || surveyCtrl.isSurveyAuthor() || surveyCtrl.timeHasBeenExpired()" 
+          ng-click="surveyCtrl.showMenu($event, option)" title="Clique para ver quem votou nessa opção">
           <div ng-class="surveyCtrl.votedOption(option)?'percentage-selected':'option-percentage'">
-            {{option.percentage ? option.percentage : 0}}%
+            {{surveyCtrl.getPercentage(option)}}
           </div>
         </div>
       </md-list-item>

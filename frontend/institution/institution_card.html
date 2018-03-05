@@ -1,0 +1,53 @@
+<md-card>
+    <md-card-header>
+        <md-card-avatar>
+            <a href ng-click="institutionCardCtrl.goToInstitution(institutionCardCtrl.institution.key)">
+                <img ng-src="{{ institutionCardCtrl.institution.photo_url }}" role="button" class="md-user-avatar img-post-shadow"/>
+            </a>
+        </md-card-avatar>
+        <md-card-header-text>
+            <div>
+                <a href class="md-title hyperlink" ng-click="institutionCardCtrl.goToInstitution(institutionCardCtrl.institution.key)">
+                {{ institutionCardCtrl.limitString(institutionCardCtrl.institution.name, 50) }}
+                </a>
+            </div>
+            <span layout="row" class="md-subhead">
+                {{institutionCardCtrl.getAddressInfo()}}
+            </span>
+        </md-card-header-text>
+        <md-menu md-offset="-200 45">
+            <md-button class="md-icon-button" style="margin-right: -20px; margin-top: -15px" ng-click="$mdMenu.open(ev)">
+                <md-icon>more_vert</md-icon>
+            </md-button>
+            <md-menu-content width="4">
+                <md-menu-item>
+                    <md-button ng-click="institutionCardCtrl.copyLink()">
+                    <md-icon>link</md-icon>
+                    Obter link
+                    </md-button>
+                </md-menu-item>
+            </md-menu-content>
+        </md-menu>
+    </md-card-header>
+    <!-- BODY POST -->
+    <md-card-content > 
+        <div layout="row" layout-align="center center" style="height: 150px;margin-bottom: 20px;"
+        md-colors="{background: 'light-green'}"> 
+            <img style="width: 100px; height: 100px;" ng-src="{{'app/images/institution.png'}}" >     
+        </div>
+        <!--DESCRIPTION-->
+        <spam>
+            {{institutionCardCtrl.limitString(institutionCardCtrl.institution.description, 150)}}
+        </spam>
+    </md-card-content>
+    <!-- BUTTONS -->
+    <md-card-actions layout="row" layout-align="end center">
+        <md-button ng-click="institutionCardCtrl.goToInstitution(institutionCardCtrl.institution.key)">Ver página</md-button>
+        <md-button 
+            ng-if="institutionCardCtrl.showFollowButton()" 
+            ng-click="institutionCardCtrl.user.isFollower(institutionCardCtrl.institution) ? institutionCardCtrl.unfollow() : institutionCardCtrl.follow()">
+                <md-icon style="font-size:18px;">rss_feed</md-icon>
+                {{ institutionCardCtrl.user.isFollower(institutionCardCtrl.institution)  ? 'Deixar de seguir' : 'Seguir' }}
+        </md-button>  
+    </md-card-actions>
+</md-card>

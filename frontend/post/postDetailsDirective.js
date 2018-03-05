@@ -88,7 +88,7 @@
         };
 
         function getSurveyCSSClass() {
-            return postDetailsCtrl.timeHasBeenExpired() ? 'grey-background' : '';
+            return postDetailsCtrl.timeHasBeenExpired(postDetailsCtrl.post) ? 'grey-background' : '';
         }
 
         postDetailsCtrl.getCSSClassPost = function getCSSClassPost() {

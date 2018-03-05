@@ -6,7 +6,7 @@
     <div flex flex-gt-md="70" layout-align="center top" layout="row">
       <div flex layout="column">
         <div>
-          <save-post is-dialog="false" posts="homeCtrl.posts"></save-post>
+          <save-post is-dialog="false" posts="homeCtrl.posts" hide show-gt-sm></save-post>
         </div>
         <div layout="row" layout-align="center center" class="ng-if" ng-if="homeCtrl.showRefreshTimelineButton()">
           <md-button flex md-colors="{background: 'teal-700'}" ng-click="homeCtrl.loadMorePosts(true)">

@@ -46,6 +46,12 @@ function setup_firebase_config {
     catch_error $? "Firebase on Backend ok"
 }
 
+function setup_app_version {
+    APP_VERSION_FILE="backend/app_version.py"
+    echo 'APP_VERSION = "'$1'"' > $APP_VERSION_FILE
+    catch_error $? "Setup APP VERSION with success"
+}
+
 function set_backend_url {
     if [ -z $1 ]; then
         url="http://$BACKEND_DOMAIN"
@@ -129,6 +135,8 @@ case "$1" in
         fi
 
         echo "=========== Starting Microservices ==========="
+        setup_app_version $APP_VERSION
+
         setup_firebase_config development
 
         set_backend_url $BACKEND_LOCAL
@@ -174,8 +182,11 @@ case "$1" in
                 fi
                 echo "=========== Starting Backend Tests ==========="
                 source $PY_ENV/bin/activate
+                setup_app_version "master"
+                
                 cd backend
                 echo 'FIREBASE_URL = "FIREBASE_URL"' > firebase_config.py
+
                 TEST_NAME="*test.py"
                 if [ "$3" == "--name" ] && [ ! -z "$4" ]; then
                     TEST_NAME=$4
@@ -244,6 +255,8 @@ case "$1" in
         fi
         setup_firebase_config $ENVIRONMENT
         catch_error $? "Firebase setup with success"
+
+        setup_app_version $APP_VERSION
 
         echo "=========== Starting Google App Engine Deployment ==========="
 

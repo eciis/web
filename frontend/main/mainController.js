@@ -25,9 +25,7 @@
         };
 
         mainCtrl.newVersionAvailable = function newVersionAvailable() {
-            var has  = AuthService.newVersionAvailable()
-            console.log(">>>>>>>>.. has? :", has)
-            return has;
+            return AuthService.newVersionAvailable();
         };
 
         mainCtrl.toggle = function toggle() {
@@ -146,6 +144,7 @@
         mainCtrl.refreshUser = function refreshUser() {
             AuthService.reload();
             $state.reload();
+            $window.location.reload();
         };
 
         (function main() {

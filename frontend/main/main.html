@@ -35,11 +35,14 @@
   </div>
 </md-toolbar>
 <md-toolbar md-colors="{background: 'teal-700'}" layout-wrap layout-align="center" layout="row" ng-if="mainCtrl.newVersionAvailable()">
-  <div class="md-toolbar-tools" flex-lg="90" flex-gt-lg="70" layout="row" layout-align="center center">
-    NOVA VERSÃO DISPONÍVEL
-    <span></span>
-
-    <md-button>Clique aqui para atualizar</md-button>
+  <div class="md-toolbar-tools clickable" flex-lg="90" flex-gt-lg="70" layout="row" layout-align="center center" ng-click="mainCtrl.refreshUser()">
+    <md-button class="md-icon-button" md-colors="{background: 'teal-50'}">
+      <md-icon md-colors="{color: 'teal-700'}">refresh</md-icon>
+    </md-button>
+    <div layout="column">
+      <h1 class="md-subhead clickable">Atualização Disponível</h1>
+      <span class="md-caption clickable">Clique para atualizar a Plataforma Virtual CIS</span>
+    </div>
   </div>
 </md-toolbar>
 

@@ -12,8 +12,16 @@
                     </div>
                 </md-toolbar>
                 <md-card-content>
+                    <div style="margin-top: 5%;">
+                        <form ng-submit="searchCtrl.search()">
+                            <md-input-container class="md-block">
+                            <input placeholder="Buscar instituição..."
+                                ng-model="searchCtrl.search_keyword">
+                            </md-input-container>
+                        </form>
+                    </div>
                     <load-circle add-layout-fill="true" flex ng-show="allInstitutionsCtrl.isLoadingInstitutions"></load-circle>
-                    <div ng-if="!allInstitutionsCtrl.isLoadingInstitutions" 
+                    <div ng-if="!allInstitutionsCtrl.isLoadingInstitutions"
                         layout-xs="column" layout-gt-xs="row" layout-wrap>
                         <div layout-xs="row" layout="column"  flex-gt-xs="33" 
                             ng-repeat="inst in allInstitutionsCtrl.institutions" 

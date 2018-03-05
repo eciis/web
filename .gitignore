@@ -530,6 +530,8 @@ frontend/firebase-config.js
 support/firebase-config.js
 backend/firebase_config.py
 
+backend/app_version.py
+
 # remove index.yaml
 **/*index.yaml  
 

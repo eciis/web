@@ -5,6 +5,8 @@ import datetime
 import sys
 import logging
 
+from app_version import APP_VERSION
+
 from google.appengine.ext import ndb
 
 from models.user import User
@@ -184,7 +186,7 @@ def json_response(method):
         self.response.headers['Access-Control-Allow-Headers'] = 'X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Authorization, Institution-Authorization'
         self.response.headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE, PATCH'
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
-        self.response.headers['APP_VERSION'] = "v1.0"
+        self.response.headers['APP_VERSION'] = APP_VERSION
         method(self, *args)
     return response
 

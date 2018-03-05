@@ -31,18 +31,18 @@ class InviteUserAdmHandler(BaseHandler):
         actual_admin = invite.admin_key.get()
         institution = invite.institution_key.get()
 
-        institution.admin = user.key
+        #institution.admin = user.key
         user.institutions_admin.append(institution.key)
         actual_admin.institutions_admin.remove(institution.key)
 
         institution.put()
         user.put()
         actual_admin.put()
-
+    
         enqueue_task(
             'transfer-admin-permissions', 
             {
-                'institution_key': institution.keu.urlsafe(), 
+                'institution_key': institution.key.urlsafe(), 
                 'user_key': user.key.urlsafe()
             }
         )

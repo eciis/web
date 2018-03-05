@@ -262,12 +262,14 @@ class TransferAdminPermissionsHandler(BaseHandler):
         institution = ndb.Key(urlsafe=institution_key).get()
         admin = institution.admin.get()
         new_admin = ndb.Key(urlsafe=user_key).get()
+        institution.admin = new_admin.key
 
         self.add_permission(new_admin, permissions)
         self.remove_permissions(admin, permissions, institution_key)
 
         new_admin.put()
         admin.put()
+        institution.put()
 
 
 app = webapp2.WSGIApplication([

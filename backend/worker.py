@@ -252,10 +252,10 @@ class TransferAdminPermissionsHandler(BaseHandler):
         for permission in permissions:
             if permission in user.permissions:
                 for institution in permissions[permission]:
-                    if institution != institution_key and institution not in user.institutions_admin:
-                        user.remove_permission(permission, institution_key)
+                    if institution != institution_key and ndb.Key(urlsafe=institution) not in user.institutions_admin:
+                        del user.permissions[permission][institution]
                     elif institution == institution_key:
-                        user.remove_permission(permission, institution_key)
+                        del user.permissions[permission][institution]
     
     def post(self):
         institution_key = self.request.get('institution_key')

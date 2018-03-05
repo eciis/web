@@ -75,7 +75,139 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         institution = institution.key.get()
         admin = admin.key.get()
         new_admin = new_admin.key.get()
+        invite = invite.key.get()
 
         self.assertFalse(hasAdminPermissions(admin, institution.key.urlsafe()))
         self.assertTrue(hasAdminPermissions(new_admin, institution.key.urlsafe()))
         self.assertEquals(new_admin.key, institution.admin)
+        self.assertEquals(invite.status, 'accepted')
+    
+    @patch('utils.verify_token', return_value={'email': 'usr_test@test.com'})
+    def test_put_accepted_and_rejected_invite(self, verify_token):
+        """Test put accepted and rejected invite."""
+        admin = mocks.create_user()
+        new_admin = mocks.create_user()
+
+        institution = mocks.create_institution()
+        institution.admin = admin.key
+        institution.members = [admin.key, new_admin.key]
+
+        admin.institutions_admin = [institution.key]
+        addAdminPermission(admin, institution.key.urlsafe())
+
+        institution.put()
+        admin.put()
+        new_admin.put()
+    
+        invite = mocks.create_invite(admin, institution.key, 'USER_ADM')
+        invite.change_status('accepted')
+
+        self.assertTrue(hasAdminPermissions(admin, institution.key.urlsafe()))
+        self.assertFalse(hasAdminPermissions(new_admin, institution.key.urlsafe()))
+        self.assertEquals(admin.key, institution.admin)
+
+        with self.assertRaises(Exception) as raises_context:
+            self.testapp.put('/api/invites/%s/institution_adm' %(invite.key.urlsafe()))
+        
+        institution = institution.key.get()
+        admin = admin.key.get()
+        new_admin = new_admin.key.get()
+
+        self.assertTrue(hasAdminPermissions(admin, institution.key.urlsafe()))
+        self.assertFalse(hasAdminPermissions(new_admin, institution.key.urlsafe()))
+        self.assertEquals(admin.key, institution.admin)
+        self.assertEquals(invite.status, 'accepted')
+
+        message_exception = self.get_message_exception(str(raises_context.exception))
+        self.assertEqual(message_exception, 'Error! This invitation has already been accepted')
+
+        invite.change_status('rejected')
+
+        with self.assertRaises(Exception) as raises_context:
+            self.testapp.put('/api/invites/%s/institution_adm' %(invite.key.urlsafe()))
+        
+        institution = institution.key.get()
+        admin = admin.key.get()
+        new_admin = new_admin.key.get()
+        invite = invite.key.get()
+
+        self.assertTrue(hasAdminPermissions(admin, institution.key.urlsafe()))
+        self.assertFalse(hasAdminPermissions(new_admin, institution.key.urlsafe()))
+        self.assertEquals(admin.key, institution.admin)
+        self.assertEquals(invite.status, 'rejected')
+
+        message_exception = self.get_message_exception(str(raises_context.exception))
+        self.assertEqual(message_exception, 'Error! This invitation has already been rejected')
+
+    @patch('utils.verify_token', return_value={'email': 'usr_test@test.com'})
+    def test_put_invite_not_allowed(self, verify_token):
+        """Test put invite not allowed."""
+        admin = mocks.create_user()
+        new_admin = mocks.create_user()
+
+        institution = mocks.create_institution()
+        institution.admin = admin.key
+        institution.members = [admin.key, new_admin.key]
+
+        admin.institutions_admin = [institution.key]
+        addAdminPermission(admin, institution.key.urlsafe())
+
+        institution.put()
+        admin.put()
+        new_admin.put()
+    
+        invite = mocks.create_invite(admin, institution.key, 'USER')
+
+        self.assertTrue(hasAdminPermissions(admin, institution.key.urlsafe()))
+        self.assertFalse(hasAdminPermissions(new_admin, institution.key.urlsafe()))
+        self.assertEquals(admin.key, institution.admin)
+
+        with self.assertRaises(Exception) as raises_context:
+            self.testapp.put('/api/invites/%s/institution_adm' %(invite.key.urlsafe()))
+        
+        institution = institution.key.get()
+        admin = admin.key.get()
+        new_admin = new_admin.key.get()
+        invite = invite.key.get()
+
+        self.assertTrue(hasAdminPermissions(admin, institution.key.urlsafe()))
+        self.assertFalse(hasAdminPermissions(new_admin, institution.key.urlsafe()))
+        self.assertEquals(admin.key, institution.admin)
+        self.assertEquals(invite.status, 'sent')
+
+        message_exception = self.get_message_exception(str(raises_context.exception))
+        self.assertEqual(message_exception, 'Error! invitation type not allowed')
+
+    @patch('utils.verify_token', return_value={'email': 'usr_test@test.com'})
+    def test_delete(self, verify_token):
+        """Test reject invite."""
+        admin = mocks.create_user()
+        new_admin = mocks.create_user()
+
+        institution = mocks.create_institution()
+        institution.admin = admin.key
+        institution.members = [admin.key, new_admin.key]
+
+        admin.institutions_admin = [institution.key]
+        addAdminPermission(admin, institution.key.urlsafe())
+
+        institution.put()
+        admin.put()
+        new_admin.put()
+    
+        invite = mocks.create_invite(admin, institution.key, 'USER_ADM')
+        self.assertTrue(hasAdminPermissions(admin, institution.key.urlsafe()))
+        self.assertFalse(hasAdminPermissions(new_admin, institution.key.urlsafe()))
+        self.assertEquals(admin.key, institution.admin)
+
+        self.testapp.delete('/api/invites/%s/institution_adm' %(invite.key.urlsafe()))
+        
+        institution = institution.key.get()
+        admin = admin.key.get()
+        new_admin = new_admin.key.get()
+        invite = invite.key.get()
+
+        self.assertTrue(hasAdminPermissions(admin, institution.key.urlsafe()))
+        self.assertFalse(hasAdminPermissions(new_admin, institution.key.urlsafe()))
+        self.assertEquals(admin.key, institution.admin)
+        self.assertEquals(invite.status, 'rejected')

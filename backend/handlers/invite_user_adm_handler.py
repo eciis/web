@@ -26,12 +26,21 @@ class InviteUserAdmHandler(BaseHandler):
             invite.status == 'accepted', 
             "This invitation has already been accepted", 
             NotAuthorizedException)
+        
+        Utils._assert(
+            invite.status == 'rejected', 
+            "This invitation has already been rejected", 
+            NotAuthorizedException)
+        
+        Utils._assert(
+            invite.make()['type_of_invite'] != 'INVITE_USER_ADM', 
+            "invitation type not allowed", 
+            NotAuthorizedException)
 
         invite.change_status('accepted')
         actual_admin = invite.admin_key.get()
         institution = invite.institution_key.get()
 
-        #institution.admin = user.key
         user.institutions_admin.append(institution.key)
         actual_admin.institutions_admin.remove(institution.key)
 
@@ -51,7 +60,7 @@ class InviteUserAdmHandler(BaseHandler):
 
     @json_response
     @login_required
-    def delete(self, user, invite_key):    
-        invite = ndb.Key(urlsafe=invite_key)
+    def delete(self, user, invite_key):  
+        invite = ndb.Key(urlsafe=invite_key).get()
         invite.change_status('rejected')
         invite.put()

@@ -8,13 +8,12 @@
 <md-card ng-class="postDetailsCtrl.getCSSClassPost()"
   ng-hide="postDetailsCtrl.isHidden() || postDetailsCtrl.isPostEmpty()">
   <!-- HEADER -->
-  <div ng-if="postDetailsCtrl.showSurvey() && postDetailsCtrl.timeHasBeenExpired()" class="expired-survey">
+  <div ng-if="postDetailsCtrl.showSurvey() && postDetailsCtrl.timeHasBeenExpired(postDetailsCtrl.post)" class="expired-survey">
       <b style="color: white;">ENQUETE FINALIZADA | {{postDetailsCtrl.post.deadline | amUtc | amLocal | amCalendar:referenceTime:formats}}</b>
   </div>
-
   <div class="post-inst-inactive" ng-if="postDetailsCtrl.isInstInactive()">INSTITUIÇÃO DESATIVADA</div>
   <md-card-header>
-    <md-card-avatar>
+    <md-card-avatar style="margin-right: 12px;">
       <a href ng-click="postDetailsCtrl.goToInstitution(postDetailsCtrl.post.institution_key)">
         <img ng-src="{{ postDetailsCtrl.post.institution_image }}" role="button" class="md-user-avatar img-post-shadow"/>
       </a>
@@ -104,8 +103,11 @@
 
   <!-- BODY SHARED POST -->
   <md-card md-colors="{background: 'default-grey-100'}" ng-if="postDetailsCtrl.showSharedPost()">
+    <div ng-if="postDetailsCtrl.isSharedSurveyExpired()" class="expired-survey">
+      <b style="color: white;">ENQUETE FINALIZADA | {{postDetailsCtrl.post.shared_post.deadline | amUtc | amLocal | amCalendar:referenceTime:formats}}</b>
+    </div>
     <md-card-header>
-      <md-card-avatar>
+      <md-card-avatar style="margin-right: 12px;">
         <img ng-src="{{ postDetailsCtrl.post.shared_post.institution_image }}" class="md-user-avatar img-post-shadow"/>
       </md-card-avatar>
       <md-card-header-text>

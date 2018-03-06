@@ -85,6 +85,7 @@
                 var currentTime = new Date((_.split(new Date().toISOString(), '.')[0]));
                 return deadline < currentTime;
             }
+            return false;
         };
 
         function getSurveyCSSClass() {
@@ -105,6 +106,8 @@
         };
 
         postDetailsCtrl.isSharedSurveyExpired = function isSharedSurveyExpired() {
+            console.log(postDetailsCtrl.post.shared_post.type_survey,
+                postDetailsCtrl.timeHasBeenExpired(postDetailsCtrl.post.shared_post))
             return postDetailsCtrl.post.shared_post.type_survey &&
                 postDetailsCtrl.timeHasBeenExpired(postDetailsCtrl.post.shared_post);
         };

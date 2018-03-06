@@ -106,8 +106,6 @@
         };
 
         postDetailsCtrl.isSharedSurveyExpired = function isSharedSurveyExpired() {
-            console.log(postDetailsCtrl.post.shared_post.type_survey,
-                postDetailsCtrl.timeHasBeenExpired(postDetailsCtrl.post.shared_post))
             return postDetailsCtrl.post.shared_post.type_survey &&
                 postDetailsCtrl.timeHasBeenExpired(postDetailsCtrl.post.shared_post);
         };

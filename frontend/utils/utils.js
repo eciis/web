@@ -105,5 +105,14 @@ var Utils = {
     validateEmail: function validateEmail(email) {
         var regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return regex.test(email);
+    },
+
+    /**
+     * This function return an string in normalized form, without accents and special chars.
+     * @param {string} string the string that will be normalized.
+     * @returns {string} The string in normalized form.
+     */
+    normalizeString: function normalizeString(string) {
+        return string.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
     }
 };

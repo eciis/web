@@ -62,8 +62,8 @@
             manageMemberCtrl.invite.institution_key = currentInstitutionKey;
             manageMemberCtrl.invite.admin_key = manageMemberCtrl.user.key;
             manageMemberCtrl.invite.type_of_invite = 'USER';
+            manageMemberCtrl.invite.sender_name = manageMemberCtrl.user.name;
             invite = new Invite(manageMemberCtrl.invite);
-            invite.sender_name = manageMemberCtrl.user.name;
 
             var emails = getEmails(loadedEmails);
             var requestBody = {

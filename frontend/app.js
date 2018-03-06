@@ -366,6 +366,12 @@
 
                 return config || $q.when(config);
             },
+            response: function(response) {
+                var app_version = response.headers("app_version");
+                var AuthService = $injector.get('AuthService');
+                AuthService.setAppVersion(app_version);
+                return response || $q.when(response);
+            },
             responseError: function(rejection) {
                 var AuthService = $injector.get('AuthService');
                 if (rejection.status === 401) {

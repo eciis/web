@@ -25,7 +25,7 @@
                 return userInfo;
             }
         });
-
+        
         service.setupUser = function setupUser(idToken, emailVerified, uid) {
             var deferred = $q.defer();
             var firebaseUser = {

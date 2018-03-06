@@ -6,6 +6,8 @@ import sys
 import logging
 import permissions
 
+from app_version import APP_VERSION
+
 from google.appengine.ext import ndb
 
 from models.user import User
@@ -181,9 +183,11 @@ def json_response(method):
     """Add content type header to the response."""
     def response(self, *args):
         self.response.headers['Access-Control-Allow-Origin'] = '*'
+        self.response.headers['Access-Control-Expose-Headers'] = 'APP_VERSION'
         self.response.headers['Access-Control-Allow-Headers'] = 'X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Authorization, Institution-Authorization'
         self.response.headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE, PATCH'
         self.response.headers['Content-Type'] = 'application/json; charset=utf-8'
+        self.response.headers['APP_VERSION'] = APP_VERSION
         method(self, *args)
     return response
 

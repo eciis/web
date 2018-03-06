@@ -45,6 +45,11 @@ class InviteHandler(BaseHandler):
         """Change invite status from 'sent' to 'rejected'."""
         invite_key = ndb.Key(urlsafe=key)
         invite = invite_key.get()
+
+        Utils._assert(invite.status != 'sent',
+                      "This invitation has already been processed",
+                      NotAuthorizedException)
+
         invite.change_status('rejected')
         invite.put()
         invite.send_response_notification(user.current_institution, user.key, 'REJECT')
@@ -61,8 +66,8 @@ class InviteHandler(BaseHandler):
         data = self.request.body
         invite = ndb.Key(urlsafe=invite_key).get()
 
-        Utils._assert(invite.status == 'accepted', 
-            "This invitation has already been accepted", 
+        Utils._assert(invite.status != 'sent', 
+            "This invitation has already been processed", 
             NotAuthorizedException)
 
         institution_key = invite.institution_key

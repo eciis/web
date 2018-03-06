@@ -12,11 +12,19 @@
                     </div>
                 </md-toolbar>
                 <md-card-content>
+                    <div style="margin-top: 15px;">
+                        <form>
+                            <md-input-container class="md-block">
+                            <input placeholder="Buscar instituição..."
+                                ng-model="allInstitutionsCtrl.filterKeyword">
+                            </md-input-container>
+                        </form>
+                    </div>
                     <load-circle add-layout-fill="true" flex ng-show="allInstitutionsCtrl.isLoadingInstitutions"></load-circle>
                     <div ng-if="!allInstitutionsCtrl.isLoadingInstitutions" 
-                        layout-xs="column" layout-gt-xs="row" layout-wrap>
-                        <div layout-xs="row" layout="column"  flex-gt-xs="33" 
-                            ng-repeat="inst in allInstitutionsCtrl.institutions" 
+                        layout-xs="column" layout-gt-sm="row" layout-xl="row" layout-wrap>
+                        <div layout-xs="row" layout="column" flex-xl="33" flex-gt-sm="50"
+                            ng-repeat="inst in allInstitutionsCtrl.getInstitutions()" 
                             class="clickable-no-hover">
                             <institution-card-details institution="inst" user="allInstitutionsCtrl.user">
                             </institution-card-details>

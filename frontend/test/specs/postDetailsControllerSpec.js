@@ -16,6 +16,30 @@
         {name: 'e-CIS', key: '456879', followers: [user], members: [user]}
     ];
 
+    var options = [{
+                    'id' : 0,
+                    'text': 'Option number 1',
+                    'number_votes': 0,
+                    'voters': [] },
+                    {'id': 1,
+                    'text': 'Option number 2',
+                    'number_votes': 0,
+                    'voters': [] 
+                }];
+    var survey = new Post({
+                            title : 'The Survey',
+                            type_survey : 'binary',
+                            options : options,
+                            deadline: new Date('2054-03-14T23:54:00'),
+                            number_votes : 0,
+                            key: '12345'
+                        });
+    var sharedSurvey = new Post({
+                                    title: 'shared post',
+                                    shared_post: survey,
+                                    key: '54321'
+                                });
+
     user.current_institution = institutions[0];
     user = new User(user);
     var POSTS_URI = "/api/posts";
@@ -40,9 +64,22 @@
                     key: "123456", comments: "/api/posts/123456/comments",
                     likes: "/api/posts/123456/likes", number_of_likes: 0, number_of_comments: 0, data_comments: {}
         });
-        var secondaryPost = new Post({title: 'secondary post', author_key: "", institution: institutions[0], key: "123412356"});
-        var otherPost = new Post({title: 'other post', author: user, institution: institutions[0], key: "123454356", number_of_likes: 1, number_of_comments: 1});
-        posts = [mainPost, secondaryPost, otherPost];
+        var secondaryPost = new Post({
+                                        title: 'secondary post',
+                                        author_key: "", 
+                                        institution: institutions[0], 
+                                        key: "123412356"
+                                    });
+        var otherPost = new Post({
+                                    title: 'other post', 
+                                    author: user,
+                                    institution: institutions[0],
+                                    key: "123454356",
+                                    number_of_likes: 1,
+                                    number_of_comments: 1
+                                });
+        
+        posts = [mainPost, secondaryPost, otherPost, survey, sharedSurvey];
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);
         httpBackend.when('GET', 'error/error.html').respond(200);
@@ -131,6 +168,35 @@
             postDetailsCtrl.post = posts[1];
             retorno = postDetailsCtrl.isAuthorized();
             expect(retorno).toEqual(false);
+        });
+    });
+
+    describe('timeHasBeenExpired()', function() {
+
+        it('Should return false', function() {
+            postDetailsCtrl.post = posts[3];
+           expect(postDetailsCtrl.timeHasBeenExpired(postDetailsCtrl.post)).toEqual(false);
+        });
+
+        it('Should return true', function() {
+            postDetailsCtrl.post = posts[3];
+            postDetailsCtrl.post.deadline = new Date('2014-03-14T23:54:00');
+            expect(postDetailsCtrl.timeHasBeenExpired(postDetailsCtrl.post)).toEqual(true);
+        });
+    });
+
+    describe('isSharedSurveyExpired()', function() {
+
+        it('Should return false', function() {
+            postDetailsCtrl.post = posts[4];
+            postDetailsCtrl.post.shared_post.deadline = new Date('2054-03-14T23:54:00');
+           expect(postDetailsCtrl.isSharedSurveyExpired()).toEqual(false);
+        });
+
+        it('Should return true', function() {
+            postDetailsCtrl.post = posts[4];
+            postDetailsCtrl.post.shared_post.deadline = new Date('2014-03-14T23:54:00');
+            expect(postDetailsCtrl.isSharedSurveyExpired()).toEqual(true);
         });
     });
 

@@ -23,11 +23,30 @@
 
         var REFRESH_USER_EVENT = 'ACCEPTED_LINK';
 
+        var versionAvailable = false;
+
         Object.defineProperty(service, 'user', {
             get: function() {
                 return userInfo;
             }
         });
+
+        // It receives the app version and verify if it matches with
+        // the actual frontend version, setting up the private variable
+        // versionAvailable with true, if matches, or false, otherwise.
+        service.setAppVersion = function setAppVersion(appVersion) {
+            if (appVersion) {
+                if (appVersion === Config.APP_VERSION) {
+                    versionAvailable = false;
+                } else {
+                    versionAvailable = true;
+                } 
+            }
+        };
+
+        service.newVersionAvailable = function newVersionAvailable() {
+            return versionAvailable;
+        };
 
         service.setupUser = function setupUser(idToken, emailVerified) {
             var deferred = $q.defer();

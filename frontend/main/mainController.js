@@ -24,6 +24,10 @@
             }
         };
 
+        mainCtrl.newVersionAvailable = function newVersionAvailable() {
+            return AuthService.newVersionAvailable();
+        };
+
         mainCtrl.toggle = function toggle() {
             $mdSidenav('leftNav').toggle();
         };
@@ -140,6 +144,7 @@
         mainCtrl.refreshUser = function refreshUser() {
             AuthService.reload();
             $state.reload();
+            $window.location.reload();
         };
 
         (function main() {

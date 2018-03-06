@@ -199,30 +199,32 @@
 
   <!-- BUTTONS -->
   <md-card-actions style="margin-top: 20px; margin-bottom: 20px;">
-    <div layout="row" layout-align="start center">
+    <div layout="row" layout-align="space-between center">
       <div ng-if="postDetailsCtrl.showButtonDelete() && !postDetailsCtrl.isInstInactive()">
         <md-button md-colors="{background: 'light-green'}" class="sm-icon-button" arial-label="Delete"
             ng-click="postDetailsCtrl.deletePost($event, postDetailsCtrl.post)" title="Apagar o post">
           <md-icon>delete</md-icon>
         </md-button>
-        <b style="font-size: 12px;">EXCLUIR POST</b>
+        <b hide-xs style="font-size: 12px;">EXCLUIR POST</b>
       </div>
-      <div style="margin-left: auto; margin-right: 10px;" ng-if="postDetailsCtrl.showActivityButtons()">
-        <md-button class="sm-icon-button" aria-label="Favorite" ng-click="postDetailsCtrl.likeOrDislikePost()"
-            ng-disabled="postDetailsCtrl.disableButton()" title="{{(postDetailsCtrl.isLikedByUser()) ? 'Descurtir' : 'Curtir'}}"
-            md-colors="{{ postDetailsCtrl.getButtonColor(postDetailsCtrl.isLikedByUser(), false) }}">
-          <md-icon>grade</md-icon>
-        </md-button>
-        <span style="margin-left: -16px;" class="counter-likes-comments" data-badge="{{postDetailsCtrl.number_of_likes()}}"></span>
-        <b class="like-comment-text">CURTIR</b>
-        <md-button class="sm-icon-button" aria-label="Comments"
-            ng-click="postDetailsCtrl.isPostPage ? 'null' : postDetailsCtrl.getComments()"
-            title="Mostrar comentários"
-            md-colors="{{ postDetailsCtrl.getButtonColor(true, true) }}">
-          <md-icon>comments</md-icon>
-        </md-button>
-        <span style="margin-left: -10px;" class="counter-likes-comments" data-badge="{{postDetailsCtrl.number_of_comments()}}"></span>
-        <b class="like-comment-text">COMENTAR</b>
+      <div layout="row">
+        <div style="margin-left: auto; margin-right: 10px;" ng-if="postDetailsCtrl.showActivityButtons()">
+          <md-button class="sm-icon-button" aria-label="Favorite" ng-click="postDetailsCtrl.likeOrDislikePost()"
+              ng-disabled="postDetailsCtrl.disableButton()" title="{{(postDetailsCtrl.isLikedByUser()) ? 'Descurtir' : 'Curtir'}}"
+              md-colors="{{ postDetailsCtrl.getButtonColor(postDetailsCtrl.isLikedByUser(), false) }}">
+            <md-icon>grade</md-icon>
+          </md-button>
+          <span style="margin-left: -16px;" class="counter-likes-comments" data-badge="{{postDetailsCtrl.number_of_likes()}}"></span>
+          <b class="like-comment-text">CURTIR</b>
+          <md-button class="sm-icon-button" aria-label="Comments"
+              ng-click="postDetailsCtrl.isPostPage ? 'null' : postDetailsCtrl.getComments()"
+              title="Mostrar comentários"
+              md-colors="{{ postDetailsCtrl.getButtonColor(true, true) }}">
+            <md-icon>comments</md-icon>
+          </md-button>
+          <span style="margin-left: -10px;" class="counter-likes-comments" data-badge="{{postDetailsCtrl.number_of_comments()}}"></span>
+          <b class="like-comment-text">COMENTAR</b>
+        </div>
       </div>
     </div>
   </md-card-actions>

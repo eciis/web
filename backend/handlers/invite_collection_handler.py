@@ -45,7 +45,7 @@ class InviteCollectionHandler(BaseHandler):
         """TODO: Remove the assert bellow when the hierarchical invitations can be available
         @author: Mayza Nunes 11/01/2018
         """
-        Utils._assert(type_of_invite != 'USER',
+        Utils._assert(type_of_invite != 'USER' and type_of_invite != 'USER_ADM',
                         "Hierarchical invitations is not available in this version", NotAuthorizedException)
 
         institution = ndb.Key(urlsafe=invite['institution_key']).get()

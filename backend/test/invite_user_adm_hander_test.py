@@ -43,9 +43,10 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
     def enqueue_task(self, handler_selector, params):
         self.testapp.post('/api/queue/' + handler_selector, params)
 
+    @patch.object(Invite, 'send_notification')
     @patch('handlers.invite_user_adm_handler.enqueue_task')
     @patch('utils.verify_token', return_value={'email': 'usr_test@test.com'})
-    def test_put(self, verify_token, enqueue_task):
+    def test_put(self, verify_token, enqueue_task, send_notification):
         """Test put method  in inviteUserAdmHandler."""
         enqueue_task.side_effect = self.enqueue_task
 
@@ -106,10 +107,10 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
             'Invitation status must be equal to accepted!'
         )
     
-
+    @patch.object(Invite, 'send_notification')
     @patch('handlers.invite_user_adm_handler.enqueue_task')
     @patch('utils.verify_token', return_value={'email': 'usr_test@test.com'})
-    def test_put_invite_in_hierarchy(self, verify_token, enqueue_task):
+    def test_put_invite_in_hierarchy(self, verify_token, enqueue_task, send_notification):
         """Test put invite in hierarchy."""
         enqueue_task.side_effect = self.enqueue_task
 
@@ -399,8 +400,9 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
             'Expected message of exception must be equal to Error! invitation type not allowed'
         )
 
+    @patch.object(Invite, 'send_notification')
     @patch('utils.verify_token', return_value={'email': 'usr_test@test.com'})
-    def test_delete(self, verify_token):
+    def test_delete(self, verify_token, send_notification):
         """Test reject invite."""
         admin = mocks.create_user()
         new_admin = mocks.create_user()

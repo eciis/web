@@ -26,9 +26,26 @@ class InviteUserAdm(InviteUser):
         return invite
         
 
-    def send_notification(self, current_institution):
-        entity_type = 'USER_ADM' 
-        super(InviteUserAdm, self).send_notification(current_institution, entity_type=entity_type)
+    def send_notification(self, current_institution, entity_type=None, sender_key=None, receiver_key=None):
+        if not entity_type:
+         entity_type = 'USER_ADM'
+         
+        super(InviteUserAdm, self).send_notification(
+            current_institution=current_institution, 
+            sender_key=sender_key, 
+            receiver_key=receiver_key,
+            entity_type=entity_type
+        )
+    
+    def send_response_notification(self, current_institution, action):
+        """Send notification to sender of invite when invite is accepted or rejected."""
+        entity_type = "ACCEPT_INVITE_USER_ADM" if action == 'ACCEPT' else "REJECT_INVITE_USER_ADM"
+        self.send_notification(
+            current_institution=current_institution, 
+            sender_key=self.invitee_key, 
+            receiver_key=self.sender_key or self.admin_key,
+            entity_type=entity_type
+        )
     
     def send_email(self, host):
         pass

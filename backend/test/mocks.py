@@ -99,13 +99,16 @@ def create_event(author, institution):
     event.put()
     return event
 
-def create_invite(admin, institution_key, type_of_invite):
+def create_invite(admin, institution_key, type_of_invite, invitee_key=None):
     """Create an invite."""
     data = {
         'invitee': str(admin.email),
         'admin_key': admin.key.urlsafe(),
-        'institution_key': institution_key.urlsafe()
+        'institution_key': institution_key.urlsafe(),
     }
+
+    if invitee_key:
+        data['invitee_key'] = invitee_key
 
     invite = InviteFactory.create(data, type_of_invite)
     invite_hash = getHash(invite)

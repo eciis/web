@@ -64,7 +64,7 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         new_admin.put()
     
         verify_token._mock_return_value = {'email': new_admin.email[0]}
-        invite = mocks.create_invite(admin, institution.key, 'USER_ADM')
+        invite = mocks.create_invite(admin, institution.key, 'USER_ADM', new_admin.key.urlsafe())
 
         self.assertTrue(
             hasAdminPermissions(admin, institution.key.urlsafe()),
@@ -148,7 +148,7 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         other_admin.put()
     
         verify_token._mock_return_value = {'email': new_admin.email[0]}
-        invite = mocks.create_invite(admin, institution.key, 'USER_ADM')
+        invite = mocks.create_invite(admin, institution.key, 'USER_ADM', new_admin.key.urlsafe())
 
         self.assertTrue(
             hasAdminPermissions(admin, institution.key.urlsafe()),
@@ -245,7 +245,7 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         admin.put()
         new_admin.put()
     
-        invite = mocks.create_invite(admin, institution.key, 'USER_ADM')
+        invite = mocks.create_invite(admin, institution.key, 'USER_ADM', new_admin.key.urlsafe())
         invite.change_status('accepted')
 
         self.assertTrue(
@@ -415,7 +415,7 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         admin.put()
         new_admin.put()
     
-        invite = mocks.create_invite(admin, institution.key, 'USER_ADM')
+        invite = mocks.create_invite(admin, institution.key, 'USER_ADM', new_admin.key.urlsafe())
         self.assertTrue(
             hasAdminPermissions(admin, institution.key.urlsafe()), 
             'Admin must have super user permissions for this institution!'

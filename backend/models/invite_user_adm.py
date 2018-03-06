@@ -1,14 +1,28 @@
 """Invite User Admin Model."""
+from google.appengine.ext import ndb
 from invite_user import InviteUser
+from utils import Utils
+from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
 
 class InviteUserAdm(InviteUser):
     """Model of Invite User Admin."""
 
+    def check_invite(self):
+        invitee = self.invitee_key
+        institution = self.institution_key.get()
+        Utils._assert(
+            invitee not in institution.members, 
+            "The invitee is not a member of this institution!", 
+            NotAuthorizedException)
+        
+
     @staticmethod
     def create(data):
         invite = InviteUserAdm()
+        invite.invitee_key = ndb.Key(urlsafe=data['invitee_key'])
         InviteUser.create(data, invite)
+        invite.check_invite()
         return invite
         
 

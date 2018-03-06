@@ -8,6 +8,8 @@ from utils import login_required
 from utils import json_response
 from handlers.base_handler import BaseHandler
 from google.appengine.ext import ndb
+from utils import Utils
+from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
 
 def check_permission(user, operation, institution_key):
@@ -36,6 +38,11 @@ class InstitutionRequestHandler(BaseHandler):
     def put(self, user, request_key):
         """Handler PUT Requests."""
         request = ndb.Key(urlsafe=request_key).get()
+
+        Utils._assert(request.status != 'sent',
+                      "This request has already been processed",
+                      NotAuthorizedException)
+
         check_permission(
             user,
             'put',
@@ -74,6 +81,11 @@ class InstitutionRequestHandler(BaseHandler):
         """Change request status from 'sent' to 'rejected'."""
         request_key = ndb.Key(urlsafe=request_key)
         request = request_key.get()
+
+        Utils._assert(request.status != 'sent',
+                      "This request has already been processed",
+                      NotAuthorizedException)
+
         check_permission(
             user,
             'remove',

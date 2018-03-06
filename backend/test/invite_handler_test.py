@@ -229,3 +229,95 @@ class InviteHandlerTest(TestBaseHandler):
             expected_message,
             "Expected exception message must be equal to %s" %expected_message
         )
+
+    @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
+    def test_patch_with_an_accepted_invite(self, verify_token):
+        """Test patch with an accepted invite."""
+        self.invite.status = "accepted"
+        self.invite.put()
+
+        with self.assertRaises(Exception) as raises_context:
+            self.testapp.patch(
+                '/api/invites/%s'
+                % self.invite.key.urlsafe()
+            )
+
+        message_exception = self.get_message_exception(
+            str(raises_context.exception))
+
+        expected_message = "Error! This invitation has already been processed"
+
+        self.assertEqual(
+            message_exception,
+            expected_message,
+            "Expected exception message must be equal to %s" % expected_message
+        )
+    
+    @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
+    def test_patch_with_a_rejected_invite(self, verify_token):
+        """Test patch with a rejected invite."""
+        self.invite.status = "rejected"
+        self.invite.put()
+
+        with self.assertRaises(Exception) as raises_context:
+            self.testapp.patch(
+                '/api/invites/%s'
+                % self.invite.key.urlsafe()
+            )
+
+        message_exception = self.get_message_exception(
+            str(raises_context.exception))
+
+        expected_message = "Error! This invitation has already been processed"
+
+        self.assertEqual(
+            message_exception,
+            expected_message,
+            "Expected exception message must be equal to %s" % expected_message
+        )
+    
+    @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
+    def test_delete_with_a_rejected_invite(self, verify_token):
+        """Test delete with a rejected invite."""
+        self.invite.status = "rejected"
+        self.invite.put()
+
+        with self.assertRaises(Exception) as raises_context:
+            self.testapp.delete(
+                '/api/invites/%s'
+                % self.invite.key.urlsafe()
+            )
+
+        message_exception = self.get_message_exception(
+            str(raises_context.exception))
+
+        expected_message = "Error! This invitation has already been processed"
+
+        self.assertEqual(
+            message_exception,
+            expected_message,
+            "Expected exception message must be equal to %s" % expected_message
+        )
+    
+    @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
+    def test_delete_with_an_accepted_invite(self, verify_token):
+        """Test delete with an accepted invite."""
+        self.invite.status = "accepted"
+        self.invite.put()
+
+        with self.assertRaises(Exception) as raises_context:
+            self.testapp.delete(
+                '/api/invites/%s'
+                % self.invite.key.urlsafe()
+            )
+
+        message_exception = self.get_message_exception(
+            str(raises_context.exception))
+
+        expected_message = "Error! This invitation has already been processed"
+
+        self.assertEqual(
+            message_exception,
+            expected_message,
+            "Expected exception message must be equal to %s" % expected_message
+        )

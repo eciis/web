@@ -102,7 +102,98 @@ class InstitutionRequestHandlerTest(TestBaseHandler):
             new_inst.state,
             'inactive',
             "Expected state must be equal to inactive")
+    
+    @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
+    def test_delete_with_an_accepted_request(self, verify_token):
+        """Test delete with an accepted request."""
+        self.request.status = "accepted"
+        self.request.put()
 
+        with self.assertRaises(Exception) as raises_context:
+            self.testapp.delete(
+                '/api/requests/%s/institution'
+                % self.request.key.urlsafe()
+            )
+
+        message_exception = self.get_message_exception(
+            str(raises_context.exception))
+
+        expected_message = "Error! This request has already been processed"
+
+        self.assertEqual(
+            message_exception,
+            expected_message,
+            "Expected exception message must be equal to %s" % expected_message
+        )
+    
+    @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
+    def test_delete_with_a_rejected_request(self, verify_token):
+        """Test delete with a rejected request."""
+        self.request.status = "rejected"
+        self.request.put()
+
+        with self.assertRaises(Exception) as raises_context:
+            self.testapp.delete(
+                '/api/requests/%s/institution'
+                % self.request.key.urlsafe()
+            )
+
+        message_exception = self.get_message_exception(
+            str(raises_context.exception))
+
+        expected_message = "Error! This request has already been processed"
+
+        self.assertEqual(
+            message_exception,
+            expected_message,
+            "Expected exception message must be equal to %s" % expected_message
+        )
+
+    @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
+    def test_put_with_a_rejected_request(self, verify_token):
+        """Test delete with a rejected request."""
+        self.request.status = "rejected"
+        self.request.put()
+
+        with self.assertRaises(Exception) as raises_context:
+            self.testapp.put(
+                '/api/requests/%s/institution'
+                % self.request.key.urlsafe()
+            )
+
+        message_exception = self.get_message_exception(
+            str(raises_context.exception))
+
+        expected_message = "Error! This request has already been processed"
+
+        self.assertEqual(
+            message_exception,
+            expected_message,
+            "Expected exception message must be equal to %s" % expected_message
+        )
+    
+    @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
+    def test_put_with_an_accepted_request(self, verify_token):
+        """Test delete with an accepted request."""
+        self.request.status = "accepted"
+        self.request.put()
+
+        with self.assertRaises(Exception) as raises_context:
+            self.testapp.put(
+                '/api/requests/%s/institution'
+                % self.request.key.urlsafe()
+            )
+
+        message_exception = self.get_message_exception(
+            str(raises_context.exception))
+
+        expected_message = "Error! This request has already been processed"
+
+        self.assertEqual(
+            message_exception,
+            expected_message,
+            "Expected exception message must be equal to %s" % expected_message
+        )
 
 def initModels(cls):
     """Init the models."""

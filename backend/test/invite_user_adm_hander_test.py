@@ -110,6 +110,7 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
     @patch('handlers.invite_user_adm_handler.enqueue_task')
     @patch('utils.verify_token', return_value={'email': 'usr_test@test.com'})
     def test_put_invite_in_hierarchy(self, verify_token, enqueue_task):
+        """Test put invite in hierarchy."""
         enqueue_task.side_effect = self.enqueue_task
 
         admin = mocks.create_user()

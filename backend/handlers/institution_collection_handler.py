@@ -23,6 +23,7 @@ class InstitutionCollectionHandler(BaseHandler):
         """Get all institutions."""
 
         INSTITUTION_ATTRIBUTES = ['name', 'key', 'acronym', 'address', 'photo_url', 'description']
+        ACTIVE_STATE = "active"
 
         page = to_int(
             self.request.get('page', Utils.DEFAULT_PAGINATION_OFFSET),
@@ -33,7 +34,7 @@ class InstitutionCollectionHandler(BaseHandler):
             QueryException,
             "Query param limit must be an integer")
 
-        queryInstitutions = Institution.query()
+        queryInstitutions = Institution.query(Institution.state == ACTIVE_STATE)
 
         queryInstitutions, more = offset_pagination(
             page,

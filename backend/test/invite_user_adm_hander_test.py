@@ -66,9 +66,19 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         verify_token._mock_return_value = {'email': new_admin.email[0]}
         invite = mocks.create_invite(admin, institution.key, 'USER_ADM')
 
-        self.assertTrue(hasAdminPermissions(admin, institution.key.urlsafe()))
-        self.assertFalse(hasAdminPermissions(new_admin, institution.key.urlsafe()))
-        self.assertEquals(admin.key, institution.admin)
+        self.assertTrue(
+            hasAdminPermissions(admin, institution.key.urlsafe()),
+            'Admin must have super user permissions for this institution!'
+        )
+        self.assertFalse(
+            hasAdminPermissions(new_admin, institution.key.urlsafe()),
+            'new_admin should not have super user permissions for this institution!'
+        )
+        self.assertEquals(
+            admin.key, 
+            institution.admin,
+            'Admin must be the administrator of the institution!'
+        )
 
         self.testapp.put('/api/invites/%s/institution_adm' %(invite.key.urlsafe()))
 
@@ -77,10 +87,24 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         new_admin = new_admin.key.get()
         invite = invite.key.get()
 
-        self.assertFalse(hasAdminPermissions(admin, institution.key.urlsafe()))
-        self.assertTrue(hasAdminPermissions(new_admin, institution.key.urlsafe()))
-        self.assertEquals(new_admin.key, institution.admin)
-        self.assertEquals(invite.status, 'accepted')
+        self.assertFalse(
+            hasAdminPermissions(admin, institution.key.urlsafe()),
+            'Admin should not have super user permissions for this institution!'    
+        )
+        self.assertTrue(
+            hasAdminPermissions(new_admin, institution.key.urlsafe()),
+            'New_admin must have super user permissions for this institution!'
+        )
+        self.assertEquals(
+            new_admin.key, 
+            institution.admin,
+            'New_admin must be the administrator of the institution!'
+        )
+        self.assertEquals(
+            invite.status, 
+            'accepted',
+            'Invitation status must be equal to accepted!'
+        )
     
 
     @patch('handlers.invite_user_adm_handler.enqueue_task')
@@ -126,14 +150,39 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         verify_token._mock_return_value = {'email': new_admin.email[0]}
         invite = mocks.create_invite(admin, institution.key, 'USER_ADM')
 
-        self.assertTrue(hasAdminPermissions(admin, institution.key.urlsafe()))
-        self.assertTrue(hasAdminPermissions(admin, second_inst.key.urlsafe()))
-        self.assertTrue(hasAdminPermissions(admin, third_inst.key.urlsafe()))
-        self.assertTrue(hasAdminPermissions(other_admin, second_inst.key.urlsafe()))
-        self.assertFalse(hasAdminPermissions(new_admin, institution.key.urlsafe()))
-        self.assertFalse(hasAdminPermissions(new_admin, second_inst.key.urlsafe()))
-        self.assertFalse(hasAdminPermissions(new_admin, third_inst.key.urlsafe()))
-        self.assertEquals(admin.key, institution.admin)
+        self.assertTrue(
+            hasAdminPermissions(admin, institution.key.urlsafe()),
+            'Admin must have super user permissions for this institution!'
+        )
+        self.assertTrue(
+            hasAdminPermissions(admin, second_inst.key.urlsafe()),
+            'Admin must have super user permissions for second_inst institution!'
+        )
+        self.assertTrue(
+            hasAdminPermissions(admin, third_inst.key.urlsafe()),
+            'Admin must have super user permissions for third_inst institution!'
+        )
+        self.assertTrue(
+            hasAdminPermissions(other_admin, second_inst.key.urlsafe()),
+            'other_admin must have super user permissions for second_inst institution!'    
+        )
+        self.assertFalse(
+            hasAdminPermissions(new_admin, institution.key.urlsafe()),
+            'new_admin should not have super user permissions for this institution!'
+        )
+        self.assertFalse(
+            hasAdminPermissions(new_admin, second_inst.key.urlsafe()),
+            'new_admin should not have super user permissions for the second_inst institution!'
+        )
+        self.assertFalse(
+            hasAdminPermissions(new_admin, third_inst.key.urlsafe()),
+            'new_admin should not have super user permissions for the third_inst institution!'
+        )
+        self.assertEquals(
+            admin.key, 
+            institution.admin,
+            'Admin must be the administrator of the institution!'
+        )
 
         self.testapp.put('/api/invites/%s/institution_adm' %(invite.key.urlsafe()))
 
@@ -145,14 +194,39 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         other_admin.key.get()
         invite = invite.key.get()
 
-        self.assertFalse(hasAdminPermissions(admin, institution.key.urlsafe()))
-        self.assertFalse(hasAdminPermissions(admin, second_inst.key.urlsafe()))
-        self.assertTrue(hasAdminPermissions(admin, third_inst.key.urlsafe()))
-        self.assertTrue(hasAdminPermissions(other_admin, second_inst.key.urlsafe()))
-        self.assertTrue(hasAdminPermissions(new_admin, institution.key.urlsafe()))
-        self.assertTrue(hasAdminPermissions(new_admin, second_inst.key.urlsafe()))
-        self.assertTrue(hasAdminPermissions(new_admin, third_inst.key.urlsafe()))
-        self.assertEquals(new_admin.key, institution.admin)
+        self.assertFalse(
+            hasAdminPermissions(admin, institution.key.urlsafe()),
+            'admin should not have super user permissions for this institution!'
+        )
+        self.assertFalse(
+            hasAdminPermissions(admin, second_inst.key.urlsafe()),
+            'admin should not have super user permissions for the third_inst institution!'
+        )
+        self.assertTrue(
+            hasAdminPermissions(admin, third_inst.key.urlsafe()),
+            'Admin must have super user permissions for third_inst institution!'    
+        )
+        self.assertTrue(
+            hasAdminPermissions(other_admin, second_inst.key.urlsafe()),
+            'other_admin must have super user permissions for second_inst institution!'
+        )
+        self.assertTrue(
+            hasAdminPermissions(new_admin, institution.key.urlsafe()),
+            'new_admin must have super user permissions for this institution!'
+        )
+        self.assertTrue(
+            hasAdminPermissions(new_admin, second_inst.key.urlsafe()),
+            'New_admin must have super user permissions for second_inst institution!'
+        )
+        self.assertTrue(
+            hasAdminPermissions(new_admin, third_inst.key.urlsafe()),
+            'New_admin must have super user permissions for third_inst institution!'
+        )
+        self.assertEquals(
+            new_admin.key, 
+            institution.admin,
+            'New_admin must be the administrator of the institution!'
+        )
 
     @patch('utils.verify_token', return_value={'email': 'usr_test@test.com'})
     def test_put_accepted_and_rejected_invite(self, verify_token):
@@ -174,9 +248,19 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         invite = mocks.create_invite(admin, institution.key, 'USER_ADM')
         invite.change_status('accepted')
 
-        self.assertTrue(hasAdminPermissions(admin, institution.key.urlsafe()))
-        self.assertFalse(hasAdminPermissions(new_admin, institution.key.urlsafe()))
-        self.assertEquals(admin.key, institution.admin)
+        self.assertTrue(
+            hasAdminPermissions(admin, institution.key.urlsafe()),
+            'Admin must have super user permissions for this institution!'
+        )
+        self.assertFalse(
+            hasAdminPermissions(new_admin, institution.key.urlsafe()),
+            'New_admin should not have super user permissions for this institution!'
+        )
+        self.assertEquals(
+            admin.key, 
+            institution.admin,
+            'Admin must be the administrator of the institution!'
+        )
 
         with self.assertRaises(Exception) as raises_context:
             self.testapp.put('/api/invites/%s/institution_adm' %(invite.key.urlsafe()))
@@ -185,13 +269,31 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         admin = admin.key.get()
         new_admin = new_admin.key.get()
 
-        self.assertTrue(hasAdminPermissions(admin, institution.key.urlsafe()))
-        self.assertFalse(hasAdminPermissions(new_admin, institution.key.urlsafe()))
-        self.assertEquals(admin.key, institution.admin)
-        self.assertEquals(invite.status, 'accepted')
+        self.assertTrue(
+            hasAdminPermissions(admin, institution.key.urlsafe()),
+            'Admin must have super user permissions for this institution!'
+        )
+        self.assertFalse(
+            hasAdminPermissions(new_admin, institution.key.urlsafe()),
+            'New_admin should not have super user permissions for this institution!'
+        )
+        self.assertEquals(
+            admin.key, 
+            institution.admin,
+            'Admin must be the administrator of the institution!'
+        )
+        self.assertEquals(
+            invite.status, 
+            'accepted',
+            'Invitation status must be equal to accepted!'
+        )
 
         message_exception = self.get_message_exception(str(raises_context.exception))
-        self.assertEqual(message_exception, 'Error! This invitation has already been accepted')
+        self.assertEqual(
+            message_exception, 
+            'Error! This invitation has already been accepted',
+            'Expected message of exception must be equal to Error! This invitation has already been accepted'
+        )
 
         invite.change_status('rejected')
 
@@ -203,13 +305,31 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         new_admin = new_admin.key.get()
         invite = invite.key.get()
 
-        self.assertTrue(hasAdminPermissions(admin, institution.key.urlsafe()))
-        self.assertFalse(hasAdminPermissions(new_admin, institution.key.urlsafe()))
-        self.assertEquals(admin.key, institution.admin)
-        self.assertEquals(invite.status, 'rejected')
+        self.assertTrue(
+            hasAdminPermissions(admin, institution.key.urlsafe()),
+            'Admin must have super user permissions for this institution!'
+        )
+        self.assertFalse(
+            hasAdminPermissions(new_admin, institution.key.urlsafe()),
+            'New_admin should not have super user permissions for this institution!'
+        )
+        self.assertEquals(
+            admin.key, 
+            institution.admin,
+            'Admin must be the administrator of the institution!'
+        )
+        self.assertEquals(
+            invite.status, 
+            'rejected',
+            'Invitation status must be equal to rejected!'
+        )
 
         message_exception = self.get_message_exception(str(raises_context.exception))
-        self.assertEqual(message_exception, 'Error! This invitation has already been rejected')
+        self.assertEqual(
+            message_exception, 
+            'Error! This invitation has already been rejected',
+            'Expected message of exception must be equal to Error! This invitation has already been rejected'
+        )
 
     @patch('utils.verify_token', return_value={'email': 'usr_test@test.com'})
     def test_put_invite_not_allowed(self, verify_token):
@@ -230,9 +350,19 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
     
         invite = mocks.create_invite(admin, institution.key, 'USER')
 
-        self.assertTrue(hasAdminPermissions(admin, institution.key.urlsafe()))
-        self.assertFalse(hasAdminPermissions(new_admin, institution.key.urlsafe()))
-        self.assertEquals(admin.key, institution.admin)
+        self.assertTrue(
+            hasAdminPermissions(admin, institution.key.urlsafe()),
+            'Admin must have super user permissions for this institution!'
+        )
+        self.assertFalse(
+            hasAdminPermissions(new_admin, institution.key.urlsafe()),
+            'New_admin should not have super user permissions for this institution!'    
+        )
+        self.assertEquals(
+            admin.key, 
+            institution.admin,
+            'Admin must be the administrator of the institution!'
+        )
 
         with self.assertRaises(Exception) as raises_context:
             self.testapp.put('/api/invites/%s/institution_adm' %(invite.key.urlsafe()))
@@ -242,13 +372,31 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         new_admin = new_admin.key.get()
         invite = invite.key.get()
 
-        self.assertTrue(hasAdminPermissions(admin, institution.key.urlsafe()))
-        self.assertFalse(hasAdminPermissions(new_admin, institution.key.urlsafe()))
-        self.assertEquals(admin.key, institution.admin)
-        self.assertEquals(invite.status, 'sent')
+        self.assertTrue(
+            hasAdminPermissions(admin, institution.key.urlsafe()), 
+            'Admin must have super user permissions for this institution!'
+        )
+        self.assertFalse(
+            hasAdminPermissions(new_admin, institution.key.urlsafe()),
+            'New_admin should not have super user permissions for this institution!'
+        )
+        self.assertEquals(
+            admin.key, 
+            institution.admin,
+            'Admin must be the administrator of the institution!'
+        )
+        self.assertEquals(
+            invite.status, 
+            'sent',
+            'Invitation status must be equal to sent!'
+        )
 
         message_exception = self.get_message_exception(str(raises_context.exception))
-        self.assertEqual(message_exception, 'Error! invitation type not allowed')
+        self.assertEqual(
+            message_exception, 
+            'Error! invitation type not allowed',
+            'Expected message of exception must be equal to Error! invitation type not allowed'
+        )
 
     @patch('utils.verify_token', return_value={'email': 'usr_test@test.com'})
     def test_delete(self, verify_token):
@@ -268,9 +416,19 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         new_admin.put()
     
         invite = mocks.create_invite(admin, institution.key, 'USER_ADM')
-        self.assertTrue(hasAdminPermissions(admin, institution.key.urlsafe()))
-        self.assertFalse(hasAdminPermissions(new_admin, institution.key.urlsafe()))
-        self.assertEquals(admin.key, institution.admin)
+        self.assertTrue(
+            hasAdminPermissions(admin, institution.key.urlsafe()), 
+            'Admin must have super user permissions for this institution!'
+        )
+        self.assertFalse(
+            hasAdminPermissions(new_admin, institution.key.urlsafe()),
+            'New_admin should not have super user permissions for this institution!'
+        )
+        self.assertEquals(
+            admin.key, 
+            institution.admin,
+            'Admin must be the administrator of the institution!'
+        )
 
         self.testapp.delete('/api/invites/%s/institution_adm' %(invite.key.urlsafe()))
         
@@ -279,7 +437,21 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         new_admin = new_admin.key.get()
         invite = invite.key.get()
 
-        self.assertTrue(hasAdminPermissions(admin, institution.key.urlsafe()))
-        self.assertFalse(hasAdminPermissions(new_admin, institution.key.urlsafe()))
-        self.assertEquals(admin.key, institution.admin)
-        self.assertEquals(invite.status, 'rejected')
+        self.assertTrue(
+            hasAdminPermissions(admin, institution.key.urlsafe()),
+            'Admin must have super user permissions for this institution!'
+        )
+        self.assertFalse(
+            hasAdminPermissions(new_admin, institution.key.urlsafe()),
+            'New_admin should not have super user permissions for this institution!'
+        )
+        self.assertEquals(
+            admin.key, 
+            institution.admin,
+            'Admin must be the administrator of the institution!'
+        )
+        self.assertEquals(
+            invite.status, 
+            'rejected',
+            'Invitation status must be equal to rejected!'
+        )

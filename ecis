@@ -281,7 +281,9 @@ case "$1" in
 
         exit 0
         ;;
-
+    github-prs)
+        python parse_github_prs.py $2
+        ;;
     *)
         echo "$1 is not a ecis command."
         echo "Usage: $0 [ run | test | deploy ]"

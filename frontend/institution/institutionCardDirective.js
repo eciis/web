@@ -3,7 +3,7 @@
     var app = angular.module('app');
 
     app.controller("InstitutionCardController", function InstitutionCardController(
-        $state, AuthService, InstitutionService, MessageService, ngClipboard){
+        $state, AuthService, InstitutionService, MessageService, ngClipboard, $mdDialog){
         var institutionCardCtrl = this;
         var URL_INSTITUTION = '/institution/';
 
@@ -72,6 +72,23 @@
         };
 
         institutionCardCtrl.checkIfUserIsMember();
+
+        institutionCardCtrl.requestInvitation = function requestInvitation(event) {
+            $mdDialog.show({
+                controller: "RequestInvitationController",
+                controllerAs: "requestInvCtrl",
+                templateUrl: 'app/requests/request_invitation_dialog.html',
+                parent: angular.element(document.body),
+                targetEvent: event,
+                locals: {
+                    institution: institutionCardCtrl.institution
+                },
+                bindToController: true,
+                clickOutsideToClose:true,
+                openFrom: '#fab-new-post',
+                closeTo: angular.element(document.querySelector('#fab-new-post'))
+            });
+        };
     });
 
     app.directive("institutionCardDetails", function () {

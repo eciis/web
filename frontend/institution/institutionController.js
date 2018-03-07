@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller("InstitutionController", function InstitutionController($state, InstitutionService,
-            InviteService, AuthService, MessageService, $sce, $mdDialog, PdfService, $rootScope, $window, ProfileService, $q) {
+            InviteService, AuthService, MessageService, $sce, $mdDialog, PdfService, $rootScope, $window, ProfileService, $q, CropImageService, ImageService) {
         var institutionCtrl = this;
         var morePosts = true;
         var actualPage = 0;
@@ -20,6 +20,9 @@
         institutionCtrl.instLegalNature = "";
         institutionCtrl.instActuationArea = "";
         institutionCtrl.isLoadingData = true;
+
+        var patch;
+        var observer;
 
         var currentInstitutionKey = $state.params.institutionKey;
 
@@ -264,6 +267,53 @@
                 closeTo: angular.element(document.querySelector('#fab-new-post'))
             });
         };
+
+        institutionCtrl.cropImage = function cropImage(imageFile, event) {
+            CropImageService.crop(imageFile, event, 'rectangle').then(function success(croppedImage) {
+                institutionCtrl.addImage(croppedImage);
+            }, function error() {
+                institutionCtrl.file = null;
+            });
+        };
+
+        institutionCtrl.addImage = function (image) {
+            var newSize = 800;
+            
+            ImageService.compress(image, newSize).then(function success(data) {
+                institutionCtrl.cover_photo = data;
+                ImageService.readFile(data, setImage);
+                institutionCtrl.file = null;
+                institutionCtrl.finish();
+            }, function error(error) {
+                MessageService.showToast(error);
+            });
+        };
+
+        institutionCtrl.finish = function finish() {
+            if (institutionCtrl.cover_photo) {
+                institutionCtrl.loading = true;
+                ImageService.saveImage(institutionCtrl.cover_photo).then(function (data) {
+                    updateCoverImage(data);
+                });
+            }
+        };
+
+        function updateCoverImage(data) {
+            observer = jsonpatch.observe(institutionCtrl.institution);
+            institutionCtrl.institution.cover_photo = data.url;
+            var patch = jsonpatch.generate(observer);
+            InstitutionService.update(institutionCtrl.institution.key, patch).then(function success(response) {
+                institutionCtrl.institution = response;
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
+            });
+        }
+
+        function setImage(image) {
+            $rootScope.$apply(function () {
+                institutionCtrl.cover_photo = image.src;
+            });
+        }
 
         function DialogController($mdDialog, portfolioUrl) {
             var ctrl = this;

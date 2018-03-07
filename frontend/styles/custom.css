@@ -72,13 +72,14 @@
 
 .inst-desc {
     position: relative;
-    top: 18px;
+    top: 3px;
     height: 48px;
     margin: 8 0 8 0;
     padding: 0;
     font-family: 'Roboto', sans-serif;
     color: #FFF;
     overflow: hidden;
+    margin-left: 12em;
 }
 
 .inst-desc p {
@@ -89,6 +90,52 @@
     overflow: hidden;
 }
 
+@media screen and (max-width: 1920px) {
+
+    .card.hovercard .avatar.inst img {
+        width: 10em;
+        height: 10em;
+        margin: 0;
+    }
+
+    .inst-desc {
+        top: 10px;
+        height: 25px;
+        margin-left: 11em;
+    }
+}
+
+@media screen and (max-width: 1280px) {
+
+    .card.hovercard .avatar.inst img {
+        width: 10em;
+        height: 10em;
+        margin-top: 2em;
+    }
+
+    .inst-desc {
+        top: 12px;
+        height: 25px;
+        margin-left: 11em;
+    }
+}
+
+@media screen and (max-width: 960px) {
+
+    .card.hovercard .avatar.inst img {
+        width: 10em;
+        height: 10em;
+        margin-top: 1em;
+        margin-left: -0.5em;
+    }
+
+    .inst-desc {
+        top: 12px;
+        height: 25px;
+        margin-left: 10em;
+    }
+}
+
 @media screen and (max-width: 599px) {
 
     .card.hovercard .cardheader.inst {
@@ -96,15 +143,17 @@
     }
 
     .inst-desc {
-        top: 0;
+        top: 15px;
         height: 25px;
         margin: 0;
+        margin-left: 9em;
     }
 
     .card.hovercard .avatar.inst img {
-        width: 100px;
-        height: 100px;
+        width: 6em;
+        height: 6em;
         margin: 0;
+        margin-top: 1.5em;
     }
 }
 
@@ -972,4 +1021,29 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
 .shared-survey{
     padding-top :0px;
     margin-top : -25px;
+}
+
+.cover-photo {
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+}
+
+.cover-photo-text {
+    opacity: 0.0;
+    filter: alpha(opacity=50);
+}
+
+.cover-photo-button {
+    opacity: 0.7;
+    filter: alpha(opacity=50);
+}
+
+.cover-photo:hover .cover-photo-text{
+    opacity: 1.0;
+    filter: alpha(opacity=100);
+}
+
+.cover-photo:hover .cover-photo-button {
+    opacity: 1.0;
+    filter: alpha(opacity=100);
 }

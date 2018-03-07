@@ -49,7 +49,7 @@
         }
 
         configProfileCtrl.cropImage = function cropImage(imageFile, event) {
-            CropImageService.crop(imageFile, event).then(function success(croppedImage) {
+            CropImageService.crop(imageFile, event, 'circle').then(function success(croppedImage) {
                 configProfileCtrl.addImage(croppedImage);
             }, function error() {
                 configProfileCtrl.file = null;

@@ -11,7 +11,9 @@
     <md-card-content layout="column">
       <div class="cropArea">
         <img-crop image="cropImgCtrl.image" result-image="cropImgCtrl.croppedImage"
-                  result-image-size="cropImgCtrl.resultImgSize" result-image-format="cropImgCtrl.resultImgFormat"></img-crop>
+            result-image-size="cropImgCtrl.resultImgSize" result-image-format="cropImgCtrl.resultImgFormat" 
+            area-type="{{cropImgCtrl.areaType}}" style="background-color: #FFFFFF;">
+        </img-crop>
       </div>
     </md-card-content>
     <md-dialog-actions layout="row">

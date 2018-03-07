@@ -10,7 +10,6 @@ from models.institution import Institution
 from models.post import Post
 from models.invite_user import InviteUser
 from utils import json_response
-from utils import get_all_hierarchy_admin_permissions
 from service_messages import send_message_notification
 from service_messages import send_message_email
 from jinja2 import Environment, FileSystemLoader
@@ -264,8 +263,8 @@ class TransferAdminPermissionsHandler(BaseHandler):
     def post(self):
         institution_key = self.request.get('institution_key')
         user_key = self.request.get('user_key')
-        permissions = get_all_hierarchy_admin_permissions(institution_key)
         institution = ndb.Key(urlsafe=institution_key).get()
+        permissions = institution.get_all_hierarchy_admin_permissions()
         admin = institution.admin.get()
         new_admin = ndb.Key(urlsafe=user_key).get()
         institution.admin = new_admin.key

@@ -4,6 +4,7 @@ from google.appengine.ext import ndb
 
 from search_module.search_institution import SearchInstitution
 from models.address import Address
+from permissions import DEFAULT_ADMIN_PERMISSIONS
 
 
 def get_actuation_area(data):
@@ -291,3 +292,21 @@ class Institution(ndb.Model):
     def has_member(self, user_key):
         """Check if the user is member."""
         return user_key in self.members
+    
+    def get_all_hierarchy_admin_permissions(self, permissions=None):
+        if not permissions:
+            permissions = {}
+
+        institution_key = self.key.urlsafe()
+
+        for permission in DEFAULT_ADMIN_PERMISSIONS:
+            if permission in permissions:
+                permissions[permission].update({institution_key: True})
+            else:
+                permissions.update({permission: {institution_key: True}})
+
+        for children in self.children_institutions:
+            children = children.get()
+            children.get_all_hierarchy_admin_permissions(permissions)
+        
+        return permissions

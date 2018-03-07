@@ -4,7 +4,6 @@ import json
 import datetime
 import sys
 import logging
-import permissions
 
 from app_version import APP_VERSION
 
@@ -278,22 +277,3 @@ def makeUser(user, request):
     user_json['institution_profiles'] = [profile.make() 
         for profile in user.institution_profiles]
     return user_json
-    
-
-def get_all_hierarchy_admin_permissions(institution_key, permissions_dict=None):
-    if not permissions_dict:
-        permissions_dict = {}
-
-    institution = ndb.Key(urlsafe=institution_key).get()
-
-    for permission in permissions.DEFAULT_ADMIN_PERMISSIONS:
-        if permission in permissions_dict:
-            permissions_dict[permission].update({institution_key: True})
-        else:
-            permissions_dict.update({permission: {institution_key: True}})
-
-    for children in institution.children_institutions:
-        get_all_hierarchy_admin_permissions(children.urlsafe(), permissions_dict)
-    
-    return permissions_dict
-

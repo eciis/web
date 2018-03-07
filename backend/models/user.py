@@ -256,10 +256,12 @@ class User(ndb.Model):
             self.put()
     
     def remove_permissions(self, permission_type, list_entity_keys):
-        if permission_type in self.permissions:
-            for entity_key in list_entity_keys:
-                if self.permissions.get(permission_type, {}).get(entity_key):
-                    del self.permissions[permission_type][entity_key]
+        if permission_type not in self.permissions:
+            return
+
+        for entity_key in list_entity_keys:
+            if self.permissions.get(permission_type, {}).get(entity_key):
+                del self.permissions[permission_type][entity_key]
         self.put()
 
     def has_permission(self, permission_type, entity_key=None):

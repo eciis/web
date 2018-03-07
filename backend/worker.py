@@ -16,6 +16,12 @@ from service_messages import send_message_email
 from jinja2 import Environment, FileSystemLoader
 
 
+def should_remove(user, institution, current_inst_key):
+        is_current_inst = institution == current_inst_key
+        is_not_admin = (not is_current_inst) and ndb.Key(urlsafe=institution) not in user.institutions_admin
+        
+        return is_not_admin or is_current_inst
+
 class BaseHandler(webapp2.RequestHandler):
     """Base Handler."""
 
@@ -250,14 +256,11 @@ class TransferAdminPermissionsHandler(BaseHandler):
                 user.permissions.update({permission: permissions[permission]})
     
     def remove_permissions(self, user, permissions, institution_key):
-        for permission in permissions:
-            if permission in user.permissions:
-                for institution in permissions[permission]:
-                    if institution != institution_key and ndb.Key(urlsafe=institution) not in user.institutions_admin:
-                        del user.permissions[permission][institution]
-                    elif institution == institution_key:
-                        del user.permissions[permission][institution]
-    
+        for permission, insts in permissions.items():
+            inst_keys = [inst for inst in insts if should_remove(user, inst, institution_key)]
+            user.remove_permissions(permission, inst_keys)
+
+
     def post(self):
         institution_key = self.request.get('institution_key')
         user_key = self.request.get('user_key')

@@ -254,6 +254,13 @@ class User(ndb.Model):
         if self.permissions.get(permission_type, {}).get(entity_key):
             del self.permissions[permission_type][entity_key]
             self.put()
+    
+    def remove_permissions(self, permission_type, list_entity_keys):
+        if permission_type in self.permissions:
+            for entity_key in list_entity_keys:
+                if self.permissions.get(permission_type, {}).get(entity_key):
+                    del self.permissions[permission_type][entity_key]
+        self.put()
 
     def has_permission(self, permission_type, entity_key=None):
         """Verify if user has permission on determinate entity.

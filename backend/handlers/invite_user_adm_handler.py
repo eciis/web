@@ -23,13 +23,8 @@ class InviteUserAdmHandler(BaseHandler):
         invite = ndb.Key(urlsafe=invite_key).get()
 
         Utils._assert(
-            invite.status == 'accepted', 
-            "This invitation has already been accepted", 
-            NotAuthorizedException)
-        
-        Utils._assert(
-            invite.status == 'rejected', 
-            "This invitation has already been rejected", 
+            invite.status != 'sent',
+            "This invitation has already been processed",
             NotAuthorizedException)
         
         Utils._assert(

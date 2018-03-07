@@ -133,7 +133,7 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
 
         third_inst.admin = admin.key
         third_inst.members = [admin.key]
-        second_inst.parent_institution = second_inst.key
+        third_inst.parent_institution = second_inst.key
 
         admin.institutions_admin = [institution.key, third_inst.key]
         other_admin.institutions_admin = [second_inst.key]
@@ -293,8 +293,8 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         message_exception = self.get_message_exception(str(raises_context.exception))
         self.assertEqual(
             message_exception, 
-            'Error! This invitation has already been accepted',
-            'Expected message of exception must be equal to Error! This invitation has already been accepted'
+            'Error! This invitation has already been processed',
+            'Expected message of exception must be equal to Error! This invitation has already been processed'
         )
 
         invite.change_status('rejected')
@@ -329,8 +329,8 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         message_exception = self.get_message_exception(str(raises_context.exception))
         self.assertEqual(
             message_exception, 
-            'Error! This invitation has already been rejected',
-            'Expected message of exception must be equal to Error! This invitation has already been rejected'
+            'Error! This invitation has already been processed',
+            'Expected message of exception must be equal to Error! This invitation has already been processed'
         )
 
     @patch('utils.verify_token', return_value={'email': 'usr_test@test.com'})

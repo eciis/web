@@ -256,6 +256,13 @@ class User(ndb.Model):
             self.put()
     
     def remove_permissions(self, permission_type, list_entity_keys):
+        """
+        Remove permissions to the user permissions list.
+
+        Arguments:
+        permission_type -- Type of permission to be removed
+        list_entity_keys -- Keys of entities to be removed of permissions
+        """
         if permission_type not in self.permissions:
             return
 

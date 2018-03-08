@@ -294,6 +294,16 @@ class Institution(ndb.Model):
         return user_key in self.members
     
     def get_all_hierarchy_admin_permissions(self, permissions=None):
+        """
+        This method get all hierarchy admin permissions of
+        institution. When result, returns a dict containing
+        the admin permissions of all institutions belonging 
+        to the child hierarchy.
+
+        Arguments:
+        permissions(Optional) -- Dict of previous permissions added for add more permissons. 
+        If not passed, creates new dict of permissions
+        """
         if not permissions:
             permissions = {}
 

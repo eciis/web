@@ -401,9 +401,9 @@
                 configInstCtrl.newInstitution = response.data;
                 configInstCtrl.suggestedName = configInstCtrl.newInstitution.name;
                 currentPortfoliourl = configInstCtrl.newInstitution.portfolio_url;
+                observer = jsonpatch.observe(configInstCtrl.newInstitution);
                 loadAddress(); 
                 setDefaultPhotoUrl();
-                observer = jsonpatch.observe(configInstCtrl.newInstitution);
                 configInstCtrl.loading = false;
             }, function error(response) {
                 MessageService.showToast(response.data.msg);

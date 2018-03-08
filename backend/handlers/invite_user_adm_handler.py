@@ -12,7 +12,6 @@ from handlers.base_handler import BaseHandler
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
 
-
 class InviteUserAdmHandler(BaseHandler):
     """Invite User Admin Handler."""
 
@@ -29,7 +28,7 @@ class InviteUserAdmHandler(BaseHandler):
         
         Utils._assert(
             invite.make()['type_of_invite'] != 'INVITE_USER_ADM', 
-            "invitation type not allowed", 
+            "Invitation type not allowed", 
             NotAuthorizedException)
 
         actual_admin = invite.admin_key.get()

@@ -401,8 +401,8 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         message_exception = self.get_message_exception(str(raises_context.exception))
         self.assertEqual(
             message_exception, 
-            'Error! invitation type not allowed',
-            'Expected message of exception must be equal to Error! invitation type not allowed'
+            'Error! Invitation type not allowed',
+            'Expected message of exception must be equal to Error! Invitation type not allowed'
         )
 
     @patch.object(Invite, 'send_notification')

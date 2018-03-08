@@ -93,6 +93,10 @@
             return firebaseArrayNotifications.$save(notification);
         };
 
+        service.getAllNotifications = function getAllNotifications() {
+            return firebaseArrayNotifications;
+        };
+
         function setupNotifications(userKey, callback) {
             if (!firebaseArrayNotifications) {
                 var notificationsRef = ref.child("notifications/"+userKey);

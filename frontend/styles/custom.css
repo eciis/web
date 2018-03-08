@@ -906,6 +906,8 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
 }
 
 .img-post-shadow {
+    height: 40px;
+    width:40px;
     box-shadow:0 0 12px #9E9E9E;
 }
 

@@ -31,8 +31,14 @@ class InstitutionCollectionHandlerTest(TestBaseHandler):
         user = mocks.create_user('user@example.com')
         # new Institution FIRST INST
         first_inst = mocks.create_institution('FIRST INST')
-        # new Institution SECOND INST
+        first_inst.state = "active"
+        first_inst.put()
+        # new Institution SECOND INST with pending state default 
         second_inst = mocks.create_institution('SECOND INST')
+        # new Institution THIRD INST
+        third_inst = mocks.create_institution('THIRD INST')
+        third_inst.state = "active"
+        third_inst.put()
 
         # Call the get method
         all_institutions = self.testapp.get("/api/institutions?page=0&&limit=2").json
@@ -43,5 +49,5 @@ class InstitutionCollectionHandlerTest(TestBaseHandler):
         self.assertEqual(all_institutions['institutions'][0]['name'], first_inst.name,
                          "The name of institituion should be equal to the first_inst name")
 
-        self.assertEqual(all_institutions['institutions'][1]['name'], second_inst.name,
-                         "The name of institution should be equal to the second_inst name")
+        self.assertEqual(all_institutions['institutions'][1]['name'], third_inst.name,
+                         "The name of institution should be equal to the third_inst name")

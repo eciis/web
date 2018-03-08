@@ -3,7 +3,7 @@
     var app = angular.module('app');
 
     app.controller("InstitutionCardController", function InstitutionCardController(
-        $state, AuthService, InstitutionService, MessageService, ngClipboard){
+        $state, AuthService, InstitutionService, MessageService, ngClipboard, $mdDialog){
         var institutionCardCtrl = this;
         var URL_INSTITUTION = '/institution/';
 
@@ -31,7 +31,7 @@
         };
 
         institutionCardCtrl.showFollowButton = function showFollowButton() {
-            return institutionCardCtrl.institution && !institutionCardCtrl.isMember && 
+            return institutionCardCtrl.institution && !institutionCardCtrl.isUserMember() && 
                    institutionCardCtrl.institution.name !== "Ministério da Saúde" &&
                    institutionCardCtrl.institution.name !== "Departamento do Complexo Industrial e Inovação em Saúde";
         };
@@ -64,14 +64,27 @@
             }
         };
 
-        institutionCardCtrl.checkIfUserIsMember = function checkIfUserIsMember() {
-            if (institutionCardCtrl.institution){
-                var institutionKey = institutionCardCtrl.institution.key;
-                institutionCardCtrl.isMember = institutionCardCtrl.user.isMember(institutionKey);
-            }
+        institutionCardCtrl.isUserMember = function isUserMember() {
+            var institutionKey = institutionCardCtrl.institution && institutionCardCtrl.institution.key;
+            return institutionKey && institutionCardCtrl.user.isMember(institutionKey);
         };
 
-        institutionCardCtrl.checkIfUserIsMember();
+        institutionCardCtrl.requestInvitation = function requestInvitation(event) {
+            $mdDialog.show({
+                controller: "RequestInvitationController",
+                controllerAs: "requestInvCtrl",
+                templateUrl: 'app/requests/request_invitation_dialog.html',
+                parent: angular.element(document.body),
+                targetEvent: event,
+                locals: {
+                    institution: institutionCardCtrl.institution
+                },
+                bindToController: true,
+                clickOutsideToClose:true,
+                openFrom: '#fab-new-post',
+                closeTo: angular.element(document.querySelector('#fab-new-post'))
+            });
+        };
     });
 
     app.directive("institutionCardDetails", function () {

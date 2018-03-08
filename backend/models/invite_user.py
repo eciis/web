@@ -12,9 +12,10 @@ class InviteUser(Invite):
     """Model of invite user."""
 
     @staticmethod
-    def create(data):
+    def create(data, invite=None):
         """Create a post and check required fields."""
-        invite = InviteUser()
+        if not invite:
+            invite = InviteUser()
         invite.invitee = data.get('invitee')
         invite = Invite.create(data, invite)
         return invite

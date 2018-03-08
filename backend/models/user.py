@@ -211,6 +211,12 @@ class User(ndb.Model):
             self.add_permission("publish_survey", institution_key.urlsafe())
             self.put()
 
+    def add_institution_admin(self, institution_key):
+        """Add a institution_key in institutions admin list of user."""
+        if institution_key not in self.institutions_admin:
+            self.institutions_admin.append(institution_key)
+            self.put()
+
     def add_image(self, url_image):
         """Add images in list of uploaded images."""
         self.uploaded_images.append(url_image)
@@ -253,6 +259,28 @@ class User(ndb.Model):
         """
         if self.permissions.get(permission_type, {}).get(entity_key):
             del self.permissions[permission_type][entity_key]
+            self.put()
+    
+    def remove_permissions(self, permission_type, list_entity_keys):
+        """
+        Remove permissions to the user permissions list.
+
+        Arguments:
+        permission_type -- Type of permission to be removed
+        list_entity_keys -- Keys of entities to be removed of permissions
+        """
+        if permission_type not in self.permissions:
+            return
+
+        for entity_key in list_entity_keys:
+            if self.permissions.get(permission_type, {}).get(entity_key):
+                del self.permissions[permission_type][entity_key]
+        self.put()
+    
+    def remove_institution_admin(self, institution_key):
+        """Remove a institution admin to user."""
+        if institution_key not in self.institutions_admin:
+            self.institutions_admin.remove(institution_key)
             self.put()
 
     def has_permission(self, permission_type, entity_key=None):

@@ -45,6 +45,9 @@ class Invite(PolyModel):
     #  Indicates whether the operation is of the requested type
     is_request = ndb.BooleanProperty(default=False)
 
+    # Invitee key for the invite user admin
+    invitee_key = ndb.KeyProperty(kind="User")
+
     # Data to create InstitutionProfile for user requests
     sender_name = ndb.StringProperty()
     office = ndb.StringProperty()

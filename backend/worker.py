@@ -15,6 +15,40 @@ from service_messages import send_message_email
 from jinja2 import Environment, FileSystemLoader
 
 
+def should_remove(user, institution_key, current_inst_key):
+    """
+    This method checks whether or not a permission should be removed from the user. 
+    If the user is an administrator of the institution and this institution is 
+    not the one in which the transfer of permissions is being done (Current_inst_key), 
+    it returns false because the permission should not be removed, otherwise it returns true.
+
+    Arguments:
+    user -- User to verify permission
+    institution_key -- Institution key to verify that permissions must be removed
+    current_inst_key -- Key of the institution from which the transfer of permissions is being made.
+    """
+    is_current_inst = institution_key == current_inst_key
+    is_not_admin = (not is_current_inst) and ndb.Key(urlsafe=institution_key) not in user.institutions_admin
+    
+    return is_not_admin or is_current_inst
+
+def filter_permissions_to_remove(user, permissions, institution_key):
+    """
+    This method filters the permissions passed as a parameter and 
+    returns a dictionary of filtered permissions that must be removed 
+    from the user according to the rules applied in the 'should_remove' method.
+
+    Arguments:
+    user -- User to verify if permission must be removed
+    permissions -- Permissions to filter
+    institution_key -- Key of the institution from which the transfer of permissions is being made.
+    """
+    permissions_filtered = {}
+    for permission, institutions in permissions.items():
+            instition_keys = [inst for inst in institutions if should_remove(user, inst, institution_key)]
+            permissions_filtered[permission] = instition_keys
+    return  permissions_filtered
+
 class BaseHandler(webapp2.RequestHandler):
     """Base Handler."""
 
@@ -238,6 +272,58 @@ class SendInviteHandler(BaseHandler):
             invite = ndb.Key(urlsafe=key).get()
             invite.send_invite(host, current_institution)
 
+
+class TransferAdminPermissionsHandler(BaseHandler):
+
+    def add_permissions(self, user, permissions):
+        """
+        This method adds new permissions in user with the permissions passed in parameter.
+
+        Arguments:
+        user -- user to add permissions
+        permissions -- Dict of all the permissions to be added.
+        """
+        for permission in permissions:
+            if permission in user.permissions:
+                user.permissions[permission].update(permissions[permission])
+            else:
+                user.permissions.update({permission: permissions[permission]})
+    
+    def remove_permissions(self, user, permissions):
+        """    
+        This method removes the permissions of the user according to the permissions 
+        dictionary passed as parameter.
+        
+        Arguments:
+        user -- User to remove permissions
+        permissions -- Permissions to remove
+        """
+        for permission, instition_keys in permissions.items():
+            user.remove_permissions(permission, instition_keys)
+
+
+    def post(self):
+        institution_key = self.request.get('institution_key')
+        user_key = self.request.get('user_key')
+        institution = ndb.Key(urlsafe=institution_key).get()
+        admin = institution.admin.get()
+        new_admin = ndb.Key(urlsafe=user_key).get()
+        
+        @ndb.transactional(xg=True, retries=10)
+        def save_changes(admin, new_admin, institution):
+            permissions = institution.get_all_hierarchy_admin_permissions()
+            institution.set_admin(new_admin.key)
+            self.add_permissions(new_admin, permissions)
+            permissions_filtered = filter_permissions_to_remove(admin, permissions, institution_key)
+            self.remove_permissions(admin, permissions_filtered)
+
+            new_admin.put()
+            admin.put()
+            institution.put()
+        
+        save_changes(admin, new_admin, institution)
+
+
 app = webapp2.WSGIApplication([
     ('/api/queue/send-notification', SendNotificationHandler),
     ('/api/queue/send-email', SendEmailHandler),
@@ -248,5 +334,6 @@ app = webapp2.WSGIApplication([
     ('/api/queue/add-admin-permissions', AddAdminPermissionsInInstitutionHierarchy),
     ('/api/queue/remove-admin-permissions', RemoveAdminPermissionsInInstitutionHierarchy),
     ('/api/queue/add-post-institution', AddPostInInstitution),
-    ('/api/queue/send-invite', SendInviteHandler)
+    ('/api/queue/send-invite', SendInviteHandler),
+    ('/api/queue/transfer-admin-permissions', TransferAdminPermissionsHandler)
 ], debug=True)

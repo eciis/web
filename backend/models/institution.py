@@ -4,6 +4,7 @@ from google.appengine.ext import ndb
 
 from search_module.search_institution import SearchInstitution
 from models.address import Address
+from permissions import DEFAULT_ADMIN_PERMISSIONS
 
 
 def get_actuation_area(data):
@@ -241,6 +242,10 @@ class Institution(ndb.Model):
             child = child.get()
             child.parent_institution = None
             child.put()
+    
+    def set_admin(self, user_key):
+        self.admin = user_key
+        self.put()
 
     @ndb.transactional(xg=True)
     def remove_institution_from_users(self, remove_hierarchy):
@@ -291,3 +296,31 @@ class Institution(ndb.Model):
     def has_member(self, user_key):
         """Check if the user is member."""
         return user_key in self.members
+    
+    def get_all_hierarchy_admin_permissions(self, permissions=None):
+        """
+        This method get all hierarchy admin permissions of
+        institution. When result, returns a dict containing
+        the admin permissions of all institutions belonging 
+        to the child hierarchy.
+
+        Arguments:
+        permissions(Optional) -- Dict of previous permissions added for add more permissons. 
+        If not passed, creates new dict of permissions
+        """
+        if not permissions:
+            permissions = {}
+
+        institution_key = self.key.urlsafe()
+
+        for permission in DEFAULT_ADMIN_PERMISSIONS:
+            if permission in permissions:
+                permissions[permission].update({institution_key: True})
+            else:
+                permissions.update({permission: {institution_key: True}})
+
+        for children in self.children_institutions:
+            children = children.get()
+            children.get_all_hierarchy_admin_permissions(permissions)
+        
+        return permissions

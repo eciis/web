@@ -12,24 +12,9 @@ from custom_exceptions.fieldException import FieldException
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from utils import json_response
 from utils import Utils
+from utils import makeUser
 from util.json_patch import JsonPatch
 
-
-def makeUser(user, request):
-    """Make User."""
-    user_json = Utils.toJson(user, host=request.host)
-    user_json['logout'] = 'http://%s/logout?redirect=%s' %\
-        (request.host, request.path)
-    user_json['institutions'] = []
-    for institution in user.institutions:
-        user_json['institutions'].append(
-            Utils.toJson(institution.get())
-        )
-    user_json['follows'] = [institution_key.get().make(
-        ['acronym', 'photo_url', 'key', 'parent_institution']) for institution_key in user.follows]
-    user_json['institution_profiles'] = [profile.make() 
-        for profile in user.institution_profiles]
-    return user_json
 
 
 def define_entity(dictionary):

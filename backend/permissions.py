@@ -11,8 +11,7 @@ DEFAULT_ADMIN_PERMISSIONS  = [
     "send_link_inst_request",
     "send_link_inst_invite",
     "invite_members",
-    "answer_user_request",
-    "publish_post"
+    "answer_user_request"
     ]
 
 DEFAULT_SUPER_USER_PERMISSIONS = [

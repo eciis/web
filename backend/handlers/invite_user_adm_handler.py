@@ -32,25 +32,26 @@ class InviteUserAdmHandler(BaseHandler):
             "invitation type not allowed", 
             NotAuthorizedException)
 
-        invite.change_status('accepted')
         actual_admin = invite.admin_key.get()
         institution = invite.institution_key.get()
 
-        user.institutions_admin.append(institution.key)
-        actual_admin.institutions_admin.remove(institution.key)
 
-        institution.put()
-        user.put()
-        actual_admin.put()
-    
-        enqueue_task(
-            'transfer-admin-permissions', 
-            {
-                'institution_key': institution.key.urlsafe(), 
-                'user_key': user.key.urlsafe()
-            }
-        )
-        invite.send_response_notification(current_institution=institution.key.urlsafe(), action='ACCEPT')
+        @ndb.transactional(xg=True, retries=10)
+        def save_changes(user, actual_admin, invite, institution):
+            user.add_institution_admin(institution.key)
+            actual_admin.remove_institution_admin(institution.key)
+            invite.change_status('accepted')
+        
+            enqueue_task(
+                'transfer-admin-permissions', 
+                {
+                    'institution_key': institution.key.urlsafe(), 
+                    'user_key': user.key.urlsafe()
+                }
+            )
+            invite.send_response_notification(current_institution=institution.key.urlsafe(), action='ACCEPT')
+        
+        save_changes(user, actual_admin, invite, institution)
         self.response.write(json.dumps(makeUser(user, self.request)))
 
     @json_response

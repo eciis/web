@@ -30,9 +30,10 @@ class InviteUserAdmTest(TestBase):
         admin = mocks.create_user()
         new_admin = mocks.create_user()
 
-        institution.admin = admin.key
-        institution.members = [admin.key, new_admin.key]
-        admin.institutions_admin = [institution.key]
+        institution.set_admin(admin.key)
+        institution.add_member(admin)
+        institution.add_member(new_admin)
+        admin.add_institution_admin(institution.key)
 
         institution.put()
         admin.put()

@@ -306,18 +306,22 @@ class TransferAdminPermissionsHandler(BaseHandler):
         institution_key = self.request.get('institution_key')
         user_key = self.request.get('user_key')
         institution = ndb.Key(urlsafe=institution_key).get()
-        permissions = institution.get_all_hierarchy_admin_permissions()
         admin = institution.admin.get()
         new_admin = ndb.Key(urlsafe=user_key).get()
-        institution.admin = new_admin.key
+        
+        @ndb.transactional(xg=True, retries=10)
+        def save_changes(admin, new_admin, institution):
+            permissions = institution.get_all_hierarchy_admin_permissions()
+            institution.set_admin(new_admin.key)
+            self.add_permissions(new_admin, permissions)
+            permissions_filtered = filter_permissions_to_remove(admin, permissions, institution_key)
+            self.remove_permissions(admin, permissions_filtered)
 
-        self.add_permissions(new_admin, permissions)
-        permissions_filtered = filter_permissions_to_remove(admin, permissions, institution_key)
-        self.remove_permissions(admin, permissions_filtered)
-
-        new_admin.put()
-        admin.put()
-        institution.put()
+            new_admin.put()
+            admin.put()
+            institution.put()
+        
+        save_changes(admin, new_admin, institution)
 
 
 app = webapp2.WSGIApplication([

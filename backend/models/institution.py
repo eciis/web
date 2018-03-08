@@ -263,8 +263,6 @@ class Institution(ndb.Model):
 
     def make(self, attributes):
         """Create an institution dictionary with specific filds."""
-        # import pdb
-        # pdb.set_trace()
         institution = {}
         for attribute in attributes:
             attr_value = getattr(self, attribute)

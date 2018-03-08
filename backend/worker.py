@@ -44,9 +44,9 @@ def filter_permissions_to_remove(user, permissions, institution_key):
     institution_key -- Key of the institution from which the transfer of permissions is being made.
     """
     permissions_filtered = {}
-    for permission, insts in permissions.items():
-            inst_keys = [inst for inst in insts if should_remove(user, inst, institution_key)]
-            permissions_filtered[permission] = inst_keys
+    for permission, institutions in permissions.items():
+            instition_keys = [inst for inst in institutions if should_remove(user, inst, institution_key)]
+            permissions_filtered[permission] = instition_keys
     return  permissions_filtered
 
 class BaseHandler(webapp2.RequestHandler):
@@ -298,8 +298,8 @@ class TransferAdminPermissionsHandler(BaseHandler):
         user -- User to remove permissions
         permissions -- Permissions to remove
         """
-        for permission, insts in permissions.items():
-            user.remove_permissions(permission, insts)
+        for permission, instition_keys in permissions.items():
+            user.remove_permissions(permission, instition_keys)
 
 
     def post(self):

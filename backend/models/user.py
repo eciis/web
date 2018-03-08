@@ -212,7 +212,7 @@ class User(ndb.Model):
             self.put()
 
     def add_institution_admin(self, institution_key):
-        """Add a institution admin to user."""
+        """Add a institution_key in institutions admin list of user."""
         if institution_key not in self.institutions_admin:
             self.institutions_admin.append(institution_key)
             self.put()

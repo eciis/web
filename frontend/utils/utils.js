@@ -114,5 +114,40 @@ var Utils = {
      */
     normalizeString: function normalizeString(string) {
         return string.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    },
+
+    /**
+     * This function return a boolean to indicate if a string has a word
+     * bigger that screen width proportion.
+     * @param {string} string the string that will be analized.
+     * @returns {boolean} True if string has a word bigger to the screen width proportion. False in otherwise.
+     */
+    isBiggerToScreen: function isBiggerToScreen(string) {
+        var words = string.split(" ");
+        var greatestWordLength = words
+            .reduce((acumulator, word) => {
+                return acumulator > word.length ? acumulator : word.length;
+            }, 0);
+
+        /* The values references to the width of screen */
+        var smallScreen = 360;
+        var mediumScreen = 640;
+        var bigScreen = 840;
+        var XBigScreen = 940;
+
+        /* Max length of a word supported by screen width */
+        var maxLengthWordToSmallScreen = 21;
+        var maxLengthToMediumScreen = 42;
+        var maxLengthToBigScreen = 58;
+        var maxLengthWordToXBigScreen = 64;
+        var maxLengthWordToLargerScreen = 60;
+
+        var screenWidth = screen.width;
+
+        return (screenWidth <= smallScreen && greatestWordLength >= maxLengthWordToSmallScreen)
+            || (screenWidth > smallScreen && screenWidth <= mediumScreen && greatestWordLength >= maxLengthToMediumScreen)
+            || (screenWidth > mediumScreen && screenWidth <= bigScreen && greatestWordLength >= maxLengthToBigScreen)
+            || (screenWidth > bigScreen && screenWidth <= XBigScreen && greatestWordLength >= maxLengthWordToXBigScreen)
+            || (greatestWordLength >= maxLengthWordToLargerScreen);
     }
 };

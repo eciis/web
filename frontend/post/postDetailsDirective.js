@@ -256,6 +256,10 @@
             }
         };
 
+        postDetailsCtrl.getResponsiveTitleClass = function getResponsiveTitleClass() {
+            return Utils.isBiggerToScreen(postDetailsCtrl.post.title) ? 'break' : 'no-break';
+        };
+
         function getOriginalPost(post){
             if(post.shared_post){
                 return post.shared_post;

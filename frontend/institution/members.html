@@ -18,7 +18,8 @@
 	            <h3>ADMINISTRADOR</h3>
 	            <div layout="row" style="margin-top: 2%; margin-bottom: 5%" 
 	                md-colors="{background: 'grey-300'}" ng-click="membersCtrl.showUserProfile(membersCtrl.institution.admin.key, $event)">  
-	                <img title="{{membersCtrl.institution.admin.name}}" ng-src="{{membersCtrl.institution.admin.photo_url}}" class="md-avatar" style="width: 60px; height: 60px; margin-right: 2%"/>
+					<img title="{{membersCtrl.institution.admin.name}}" ng-src="{{membersCtrl.institution.admin.photo_url}}" class="md-avatar"
+					style="width: 60px; height: 60px; margin-right: 2%; border-radius: 50%;"/>
 	                <div layout="column" layout-align="center" 
 	                	ng-click="membersCtrl.showUserProfile(membersCtrl.institution.admin.key, $event)">
 	                    <b>{{ membersCtrl.institution.admin.name }}</b>

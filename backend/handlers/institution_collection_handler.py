@@ -21,8 +21,7 @@ class InstitutionCollectionHandler(BaseHandler):
     @login_required
     def get(self, user):
         """Get all institutions."""
-
-        INSTITUTION_ATTRIBUTES = ['name', 'key', 'acronym', 'address', 'photo_url', 'description']
+        INSTITUTION_ATTRIBUTES = ['name', 'key', 'acronym', 'address', 'photo_url', 'description', 'admin']
         ACTIVE_STATE = "active"
 
         page = to_int(
@@ -41,7 +40,7 @@ class InstitutionCollectionHandler(BaseHandler):
             limit,
             queryInstitutions)
 
-        array = [ Institution.make(institution, INSTITUTION_ATTRIBUTES) 
+        array = [institution.make(INSTITUTION_ATTRIBUTES) 
         for institution in queryInstitutions]
 
         data = {

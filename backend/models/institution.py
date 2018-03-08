@@ -263,14 +263,13 @@ class Institution(ndb.Model):
 
     def make(self, attributes):
         """Create an institution dictionary with specific filds."""
+        # import pdb
+        # pdb.set_trace()
         institution = {}
         for attribute in attributes:
             attr_value = getattr(self, attribute)
             if(isinstance(attr_value, ndb.Key)):
-                if attribute != 'parent_institution':
-                    attr_value = self.key.urlsafe()
-                elif self.parent_institution:
-                    attr_value = self.parent_institution.urlsafe()
+                attr_value = attr_value.urlsafe()
             if((attribute == "invite") and attr_value):
                 invite_key = self.key.get().invite
                 attr_value = {

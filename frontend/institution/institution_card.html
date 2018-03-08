@@ -25,7 +25,7 @@
                         <md-icon>link</md-icon> Obter link
                     </md-button>
                 </md-menu-item>
-                <md-menu-item>
+                <md-menu-item ng-if="!institutionCardCtrl.isUserMember()">
                     <md-button ng-click="institutionCardCtrl.requestInvitation(event)">
                         <md-icon>flag</md-icon> Solicitar vínculo
                     </md-button>

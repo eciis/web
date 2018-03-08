@@ -13,10 +13,11 @@
         requestInvCtrl.request = null;
 
         requestInvCtrl.sendRequest = function sendRequest() {
+            var adminKey = requestInvCtrl.institutionSelect.admin.key || requestInvCtrl.institutionSelect.admin;
             var dataInvite = {
                 institution_key : requestInvCtrl.institutionSelect.key,
                 sender_key : requestInvCtrl.currentUser.key,
-                admin_key : requestInvCtrl.institutionSelect.admin.key,
+                admin_key : adminKey,
                 is_request : true,
                 type_of_invite : 'REQUEST_USER',
                 sender_name : requestInvCtrl.request.name || requestInvCtrl.currentUser.name,

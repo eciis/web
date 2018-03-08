@@ -31,7 +31,7 @@
         };
 
         institutionCardCtrl.showFollowButton = function showFollowButton() {
-            return institutionCardCtrl.institution && !institutionCardCtrl.isMember && 
+            return institutionCardCtrl.institution && !institutionCardCtrl.isUserMember() && 
                    institutionCardCtrl.institution.name !== "Ministério da Saúde" &&
                    institutionCardCtrl.institution.name !== "Departamento do Complexo Industrial e Inovação em Saúde";
         };
@@ -64,14 +64,10 @@
             }
         };
 
-        institutionCardCtrl.checkIfUserIsMember = function checkIfUserIsMember() {
-            if (institutionCardCtrl.institution){
-                var institutionKey = institutionCardCtrl.institution.key;
-                institutionCardCtrl.isMember = institutionCardCtrl.user.isMember(institutionKey);
-            }
+        institutionCardCtrl.isUserMember = function isUserMember() {
+            var institutionKey = institutionCardCtrl.institution && institutionCardCtrl.institution.key;
+            return institutionKey && institutionCardCtrl.user.isMember(institutionKey);
         };
-
-        institutionCardCtrl.checkIfUserIsMember();
 
         institutionCardCtrl.requestInvitation = function requestInvitation(event) {
             $mdDialog.show({

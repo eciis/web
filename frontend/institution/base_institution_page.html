@@ -33,21 +33,22 @@
                     </div>
                 </div>
             </div> -->
-
-            <div layout="column" style="height: 25em;">
-                <div md-colors="{background: 'light-green-500'}" style="margin: 0; height: 18em; overflow: hidden;">
-                    <img ng-if="institutionCtrl.institution.cover_photo" ng-src="{{institutionCtrl.institution.cover_photo}}" style="width: 100%; height:500px;"/>
-                    <div layout="row" layout-align="end start" layout-margin style="height: 0px;" style="position: relative;">
-                        <div layout="column" layout-align "end start">
-                            <div layout="row" layout-align="center center" class="cover-photo">
-                                <span class="cover-photo-text">Adicionar foto de capa</span>
-                                <md-button style="position: relative;" class="md-icon-button cover-photo-button" ng-model="institutionCtrl.file" ngf-pattern="'image/*'" ngf-accept="'image/*'"
-                                    ngf-max-size="5MB" ngf-select="institutionCtrl.cropImage(institutionCtrl.file, $event)" ng-click="null">
-                                    <md-icon>add_a_photo</md-icon>
-                                </md-button>
-                            </div>
+            
+            <div layout="column" style="position: relative; height: 25em;">
+                <div ng-if="institutionCtrl.isAdmin()" layout="row" layout-align="end start" style="height: 0px; position: relative;">
+                    <div layout="column" layout-align "end start">
+                        <div layout="row" layout-align="center center" class="cover-photo">
+                            <span class="cover-photo-text">Adicionar foto de capa</span>
+                            <md-button style="position: relative;" class="md-icon-button cover-photo-button" ng-model="institutionCtrl.file" ngf-pattern="'image/*'"
+                                ngf-accept="'image/*'" ngf-max-size="5MB" ngf-select="institutionCtrl.cropImage(institutionCtrl.file, $event)"
+                                ng-click="null">
+                                <md-icon>add_a_photo</md-icon>
+                            </md-button>
                         </div>
                     </div>
+                </div>
+                <div md-colors="{background: 'light-green-500'}" style="margin: 0; height: 25vh; overflow: hidden;">
+                    <img ng-if="institutionCtrl.institution.cover_photo" ng-src="{{institutionCtrl.institution.cover_photo}}" style="width: 100%; height:100vh;"/>
                 </div>
                 <div class="card hovercard" style="position: fixed; background: none; margin-top: 3em; margin-left: 3em;">
                     <div class="cardheader">
@@ -56,7 +57,7 @@
                         </div>
                     </div>
                 </div>
-                <div md-colors="{background: 'teal-500'}" style="height: 5em;">
+                <div md-colors="{background: 'teal-500'}" style="height: 7vh;">
                     <div layout-align-gt-xs="end center" layout-align-xs="center" layout="row" 
                                     class="md-title inst-desc">
                         <p>{{ institutionCtrl.institution.name }}</p>

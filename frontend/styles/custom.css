@@ -95,7 +95,7 @@
     .card.hovercard .avatar.inst img {
         width: 10em;
         height: 10em;
-        margin: 0;
+        margin-top: 0.5em;
     }
 
     .inst-desc {
@@ -110,7 +110,7 @@
     .card.hovercard .avatar.inst img {
         width: 10em;
         height: 10em;
-        margin-top: 2em;
+        margin-top: 2.5em;
     }
 
     .inst-desc {
@@ -126,7 +126,6 @@
         width: 10em;
         height: 10em;
         margin-top: 1em;
-        margin-left: -0.5em;
     }
 
     .inst-desc {
@@ -143,7 +142,7 @@
     }
 
     .inst-desc {
-        top: 15px;
+        top: 10px;
         height: 25px;
         margin: 0;
         margin-left: 9em;
@@ -1024,8 +1023,8 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
 }
 
 .cover-photo {
-    opacity: 0.5;
-    filter: alpha(opacity=50);
+    opacity: 2.5;
+    filter: alpha(opacity=100);
 }
 
 .cover-photo-text {

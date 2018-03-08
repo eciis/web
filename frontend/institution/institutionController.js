@@ -283,27 +283,28 @@
                 institutionCtrl.cover_photo = data;
                 ImageService.readFile(data, setImage);
                 institutionCtrl.file = null;
-                institutionCtrl.finish();
+                institutionCtrl.saveImage();
             }, function error(error) {
                 MessageService.showToast(error);
             });
         };
 
-        institutionCtrl.finish = function finish() {
+        institutionCtrl.saveImage = function saveImage() {
             if (institutionCtrl.cover_photo) {
                 institutionCtrl.loading = true;
-                ImageService.saveImage(institutionCtrl.cover_photo).then(function (data) {
+                ImageService.saveImage(institutionCtrl.cover_photo).then(function success(data) {
                     updateCoverImage(data);
+                }, function error(response) {
+                    MessageService.showToast(response.msg);
                 });
             }
         };
 
         function updateCoverImage(data) {
-            observer = jsonpatch.observe(institutionCtrl.institution);
-            institutionCtrl.institution.cover_photo = data.url;
-            var patch = jsonpatch.generate(observer);
+            var patch = [{ op: "replace", path: "/cover_photo", value: data.url }];
             InstitutionService.update(institutionCtrl.institution.key, patch).then(function success(response) {
                 institutionCtrl.institution = response;
+                institutionCtrl.loading = false;
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });

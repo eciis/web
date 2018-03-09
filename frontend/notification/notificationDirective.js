@@ -216,7 +216,7 @@
             });
         };
 
-        notificationCtrl.number_of_notifications = function number_of_notifications() {
+        notificationCtrl.numberUnreadNotifications = function numberUnreadNotifications() {
             return notificationCtrl.notifications.length < 100 ?
                     notificationCtrl.notifications.length : "+99";
         };

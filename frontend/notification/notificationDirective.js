@@ -11,6 +11,7 @@
         notificationCtrl.user = AuthService.getCurrentUser();
 
         notificationCtrl.notifications = [];
+        notificationCtrl.allNotifications = [];
 
         var type_data = {
             "COMMENT": {
@@ -200,6 +201,11 @@
             });
         }
 
+        notificationCtrl.showNotifications = function showNotifications($mdMenu, $event) {
+            (notificationCtrl.notifications.length === 0) ? notificationCtrl.seeAll() : 
+                $mdMenu.open($event);
+        };
+
         notificationCtrl.format = function format(notification) {
             return NotificationService.formatMessage(notification);
         };
@@ -210,7 +216,7 @@
             });
         };
 
-        notificationCtrl.number_of_notifications = function number_of_notifications() {
+        notificationCtrl.numberUnreadNotifications = function numberUnreadNotifications() {
             return notificationCtrl.notifications.length < 100 ?
                     notificationCtrl.notifications.length : "+99";
         };
@@ -237,6 +243,7 @@
 
         (function main() {
             NotificationService.watchNotifications(notificationCtrl.user.key, notificationCtrl.notifications);
+            notificationCtrl.allNotifications = NotificationService.getAllNotifications();
         })();
     });
 

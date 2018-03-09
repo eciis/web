@@ -1,9 +1,9 @@
 <md-menu md-position-mode="target-right target">
   <div>
     <span ng-if="notificationCtrl.notifications.length > 0" style="position:relative; bottom: -1px; right:-33px;"
-      class="counter-of-notifications" data-badge="{{notificationCtrl.number_of_notifications()}}">
+      class="counter-of-notifications" data-badge="{{notificationCtrl.numberUnreadNotifications()}}">
     </span>
-    <md-button aria-label="menu" class="md-icon-button" ng-click="$mdMenu.open(ev)" ng-disabled="notificationCtrl.notifications.length === 0">
+    <md-button aria-label="menu" class="md-icon-button" ng-click="notificationCtrl.showNotifications($mdMenu, ev)">
       <md-icon style="color:#81C784;">{{ notificationCtrl.notifications.length === 0 ? 'notifications_none' : 'notifications'}}</md-icon>
     </md-button>
   </div>

@@ -8,7 +8,7 @@
 
         var ref = firebase.database().ref();
 
-        var firebaseArrayNotifications;
+        service.firebaseArrayNotifications;
 
         /** Types of notification based on 
          *  the number of institutions mentioned on it **/
@@ -57,15 +57,15 @@
 
         service.watchNotifications = function watchNotifications(userKey, notificationsList) {
             setupNotifications(userKey, function() {
-                _.forEach(firebaseArrayNotifications, function each(notification) {
+                _.forEach(service.firebaseArrayNotifications, function each(notification) {
                     if (isNew(notification)) {
                         notificationsList.push(notification);
                     }
                 });
 
-                firebaseArrayNotifications.$watch(function(ev) {
+                service.firebaseArrayNotifications.$watch(function(ev) {
                     if (ev.event === CHILD_ADDED) {
-                        var notification = firebaseArrayNotifications.$getRecord(ev.key);
+                        var notification = service.firebaseArrayNotifications.$getRecord(ev.key);
                         notificationsList.push(notification);
                         if (isNew(notification)) {
                             $rootScope.$emit(notification.entity_type);
@@ -77,9 +77,9 @@
 
         service.watchPostNotification = function watchPostNotification(userKey, callback) {
             setupNotifications(userKey, function() {
-                firebaseArrayNotifications.$watch(function(ev) {
+                service.firebaseArrayNotifications.$watch(function(ev) {
                     if (ev.event === CHILD_ADDED) {
-                        var notification = firebaseArrayNotifications.$getRecord(ev.key);
+                        var notification = service.firebaseArrayNotifications.$getRecord(ev.key);
                         if (notification.entity_type === POST_NOTIFICATION) {
                             callback();
                         }
@@ -90,15 +90,19 @@
 
         service.markAsRead = function markAsRead(notification) {
             notification.status = "READ";
-            return firebaseArrayNotifications.$save(notification);
+            return service.firebaseArrayNotifications.$save(notification);
+        };
+
+        service.getAllNotifications = function getAllNotifications() {
+            return service.firebaseArrayNotifications;
         };
 
         function setupNotifications(userKey, callback) {
-            if (!firebaseArrayNotifications) {
+            if (!service.firebaseArrayNotifications) {
                 var notificationsRef = ref.child("notifications/"+userKey);
-                firebaseArrayNotifications = $firebaseArray(notificationsRef);
+                service.firebaseArrayNotifications = $firebaseArray(notificationsRef);
             }
-            firebaseArrayNotifications.$loaded().then(function() {
+            service.firebaseArrayNotifications.$loaded().then(function() {
                 callback();
             });
         }
@@ -131,9 +135,9 @@
         * service notifications.
         */
         AuthService.$onLogout(function destroy() {
-            if(firebaseArrayNotifications) {
-                firebaseArrayNotifications.$destroy();
-                firebaseArrayNotifications = undefined;
+            if(service.firebaseArrayNotifications) {
+                service.firebaseArrayNotifications.$destroy();
+                service.firebaseArrayNotifications = undefined;
             }
         });
     });

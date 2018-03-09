@@ -505,7 +505,8 @@
         };
     });
 
-    app.controller('CommentController', function CommentController(CommentService, MessageService, ProfileService, $state, AuthService) {
+    app.controller('CommentController', function CommentController(CommentService, MessageService, ProfileService, $state, 
+            AuthService, UserService, $scope) {
         var commentCtrl = this;
         commentCtrl.user = AuthService.getCurrentUser();
 
@@ -706,7 +707,26 @@
             commentCtrl.showReplies = $state.current.name === 'app.post';
         }
 
-        loadShowReplies();
+        function updateComment(){
+            loadAuthor(commentCtrl.comment);
+            _.forEach(commentCtrl.comment.replies, function(value, key) {
+                loadAuthor(value);
+            });
+        }
+
+        function loadAuthor(comment) {
+            var promise = UserService.getUser(comment.author_key);
+            promise.then(function(response){
+                comment.author_name = response.name;
+                comment.author_img = response.photo_url;
+            });
+        }
+
+        (function main(){
+            commentCtrl.comment = $scope.comment;
+            loadShowReplies();
+            updateComment();
+        })();
     });
 
     app.directive("comment", function() {
@@ -715,9 +735,10 @@
             templateUrl: "app/post/comment.html",
             controllerAs: "commentCtrl",
             controller: "CommentController",
-            scope: {},
+            scope: {
+                comment: '='
+            },
             bindToController: {
-                comment: '=',
                 post: '=',
                 user: '='
             }

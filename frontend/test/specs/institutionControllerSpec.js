@@ -2,7 +2,7 @@
 
 (describe('Test InstitutionController', function() {
 
-    var institutionCtrl, httpBackend, scope, institutionService, createCtrl, state, mdDialog;
+    var institutionCtrl, httpBackend, scope, institutionService, createCtrl, state, mdDialog, cropImageService, imageService;
 
     var INSTITUTIONS_URI = "/api/institutions/";
 
@@ -55,12 +55,15 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, InstitutionService, AuthService, UserService, $mdDialog) {
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, 
+            InstitutionService, AuthService, UserService, $mdDialog, CropImageService, ImageService) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
         mdDialog = $mdDialog;
         institutionService = InstitutionService;
+        cropImageService = CropImageService;
+        imageService = ImageService;
 
         httpBackend.expect('GET', INSTITUTIONS_URI + first_institution.key + '/timeline?page=0&limit=10').respond({posts: posts, next: true});
         httpBackend.expect('GET', INSTITUTIONS_URI + first_institution.key).respond(first_institution);
@@ -250,6 +253,62 @@
                 spyOn(mdDialog, 'show');
                 institutionCtrl.requestInvitation('$event');
                 expect(mdDialog.show).toHaveBeenCalled();
+            });
+        });
+
+        describe('cropImage()', function () {
+            beforeEach(function () {
+                var image = createImage(100);
+
+                spyOn(cropImageService, 'crop').and.callFake(function () {
+                    return {
+                        then: function (callback) {
+                            return callback("Image");
+                        }
+                    };
+                });
+
+                spyOn(imageService, 'compress').and.callFake(function () {
+                    return {
+                        then: function (callback) {
+                            return callback(image);
+                        }
+                    };
+                });
+
+                spyOn(imageService, 'readFile').and.callFake(function () {
+                    institutionCtrl.institution.cover_photo = "Picture's base64 data";
+                });
+
+                spyOn(imageService, 'saveImage').and.callFake(function () {
+                    return {
+                        then: function (callback) {
+                            return callback(image);
+                        }
+                    };
+                });
+
+                spyOn(institutionService, 'update').and.callFake(function () {
+                    return {
+                        then: function (callback) {
+                            return callback(first_institution);
+                        }
+                    };
+                });
+            });
+
+            it('should call all the image functions', function () {
+                spyOn(institutionCtrl, 'addImage').and.callThrough();
+                spyOn(institutionCtrl, 'saveImage').and.callThrough();
+                var image = createImage(100);
+                institutionCtrl.cropImage(image);
+                expect(cropImageService.crop).toHaveBeenCalled();
+                expect(institutionCtrl.addImage).toHaveBeenCalled();
+                expect(imageService.compress).toHaveBeenCalled();
+                expect(imageService.readFile).toHaveBeenCalled();
+                expect(institutionCtrl.saveImage).toHaveBeenCalled();
+                expect(imageService.saveImage).toHaveBeenCalled();
+                expect(institutionService.update).toHaveBeenCalled();
             });
         });
     });

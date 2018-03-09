@@ -1,39 +1,7 @@
 <div flex="100" layout="row" layout-align="center">
     <div flex flex-lg="90" flex-gt-lg="70" layout="row" md-colors="{background: 'grey-50'}">
         <div layout="column" flex>
-        
             <!-- COVER -->
-            <!-- <div class="container">
-                <div layout="row" flex md-colors="{background: 'grey-50'}">
-                    <div class="card hovercard" flex md-colors="{background: 'light-green'}" style="margin: 0; height: 18em; overflow: hidden;">
-                        <div layout="row" layout-align="end start" layout-margin>
-                            <div layout="column" layout-align "end start">
-                                <div layout="row" layout-align="center center" class="cover-photo">
-                                    <span class="cover-photo-text">Adicionar foto de capa</span>
-                                    <md-button class="md-icon-button cover-photo-button" ng-model="institutionCtrl.file" ngf-pattern="'image/*'" ngf-accept="'image/*'" 
-                                        ngf-max-size="5MB" ngf-select="institutionCtrl.cropImage(institutionCtrl.file, $event)" ng-click="null">
-                                        <md-icon>add_a_photo</md-icon>
-                                    </md-button>
-                                </div>
-                            </div>
-                        </div>
-                        <img ng-src="{{institutionCtrl.cover_photo}}" style="width: 100%; position: relative;"/>
-                        <div class="cardheader inst">
-                            <div class="avatar inst" layout-align-gt-xs="start end" layout-align-xs="center center" 
-                                layout-gt-xs="row" layout-xs="column" layout-margin>
-                                <img style="background-color: white;" alt="Foto do Perfil" ng-src="{{ institutionCtrl.institution.photo_url || '/app/images/institution.png' }}">
-                                <div layout-align-gt-xs="end center" layout-align-xs="center" layout="row" 
-                                    class="md-title inst-desc">
-                                    <p>{{ institutionCtrl.institution.name }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="info inst" md-colors="{background: 'teal-500'}">
-                    </div>
-                </div>
-            </div> -->
-            
             <div layout="column" style="position: relative; height: 25em;">
                 <div ng-if="institutionCtrl.isAdmin()" layout="row" layout-align="end start" style="height: 0px; position: relative;">
                     <div layout="column" layout-align "end start">

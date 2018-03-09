@@ -278,7 +278,7 @@
 
         institutionCtrl.addImage = function (image) {
             var newSize = 800;
-            
+
             ImageService.compress(image, newSize).then(function success(data) {
                 institutionCtrl.cover_photo = data;
                 ImageService.readFile(data, setImage);

@@ -25,6 +25,7 @@
         manageMemberCtrl.showInvites = false;
         manageMemberCtrl.showRequests = false;
         manageMemberCtrl.showMembers = false;
+        manageMemberCtrl.showAdministrator = false;
         manageMemberCtrl.requests = [];
         var empty_email = {email: ''};
         manageMemberCtrl.emails = [_.clone(empty_email)];

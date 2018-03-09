@@ -60,6 +60,65 @@
         </form>
       </md-card-content>
     </md-card>
+    <!-- MANAGE ADMINISTRATORS -->
+    <md-card>
+      <md-toolbar md-colors="{background: 'teal-500'}" layout="row"
+        class="clickable-no-hover" ng-click="manageMemberCtrl.toggleElement('showAdministrator')">
+        <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
+          <h1>
+            <md-icon>account_circle </md-icon>
+            ADMINISTRADOR
+          </h1>
+          <span flex md-truncate></span>
+          <md-button class="md-icon-button md-secondary">
+            <md-icon>{{ manageMemberCtrl.showAdministrator ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</md-icon>
+          </md-button>
+        </div>
+      </md-toolbar>
+      <md-card-content ng-show="manageMemberCtrl.showAdministrator">
+        <md-list flex>
+          <md-list-item class="list-item-dense" md-colors="{background: 'grey-300'}"
+            ng-click="manageMemberCtrl.showUserProfile(manageMemberCtrl.institution.admin.key, $event)" flex-xs>
+            <img title="{{manageMemberCtrl.institution.admin.name}}" ng-src="{{manageMemberCtrl.institution.admin.photo_url || '/app/images/avatar.png'}}" 
+              class="md-avatar" style="margin: 0 15px 0 -15px; width: 60px; height: 60px;"/>
+            <div layout="column">
+               <b style="position: relative; margin-top: 20px; font-size: 15px;">{{ manageMemberCtrl.institution.admin.name }}</b>
+               <span style="position: relative; bottom: 20px; font-size: 15px;">{{ manageMemberCtrl.institution.admin.email[0]}}</span>
+            </div>
+            <div layout="row" layout-align="end center" flex>
+              <p style="border: solid; height: 35px; width: 148px;
+                text-align: center; border-color: rgb(0, 150, 136); border-radius: 3px;
+                color: rgb(0, 150, 136); font-weight: bold; line-height: 21px; padding: 5px;">ADMINISTRADOR</p>
+            </div>
+          </md-list-item>
+          <md-list-item class="list-item-dense" md-colors="{background: 'grey-300'}"
+            ng-click="manageMemberCtrl.showUserProfile(manageMemberCtrl.institution.admin.key, $event)" flex-xs>
+            <div layout="row" flex>
+              <div style="width: 5px; margin-left: -15px;" md-colors="{background: 'teal-500'}"></div>
+              <div style="width: 5px; background-color: white;"></div>
+              <div layout="row" layout-align="start center"  flex>
+                <img title="{{manageMemberCtrl.institution.admin.name}}" ng-src="{{manageMemberCtrl.institution.admin.photo_url || '/app/images/avatar.png'}}" 
+                  class="md-avatar" style="margin: 0 15px 0 px; width: 60px; height: 60px;"/>
+                <div layout="column">
+                  <b style="position: relative; margin-top: 20px; font-size: 15px;">{{ manageMemberCtrl.institution.admin.name }}</b>
+                  <span style="position: relative; bottom: 20px; font-size: 15px;">{{ manageMemberCtrl.institution.admin.email[0]}}</span>
+                </div>
+                <div layout="row" layout-align="end center" flex>
+                  <p style="border: solid; height: 35px; width: 148px; margin-right: -6px;
+                    text-align: center; border-color: rgb(0, 150, 136); border-radius: 3px;
+                    color: rgb(0, 150, 136); font-weight: bold; line-height: 21px; padding: 5px;">EM APROVAÇÃO</p>
+                </div>
+              </div>
+            </div>
+          </md-list-item>
+        </md-list>
+      </md-card-content>
+      <md-card-actions layout="row" layout-align="end center" ng-show="manageMemberCtrl.showAdministrator">
+        <md-button class="md-raised" md-colors="{background: 'teal-500'}">
+          TRANSFERIR
+        </md-button>
+      </md-card-actions>
+    </md-card>
     <!-- MANAGE MEMBERS -->
     <md-card>
       <md-toolbar md-colors="{background: 'teal-500'}" layout="row" 

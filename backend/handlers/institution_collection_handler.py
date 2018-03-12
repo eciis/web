@@ -21,7 +21,7 @@ class InstitutionCollectionHandler(BaseHandler):
     @login_required
     def get(self, user):
         """Get all institutions."""
-        INSTITUTION_ATTRIBUTES = ['name', 'key', 'acronym', 'address', 'photo_url', 'description', 'admin']
+        INSTITUTION_ATTRIBUTES = ['name', 'key', 'acronym', 'address', 'photo_url', 'description', 'admin', 'cover_photo']
         ACTIVE_STATE = "active"
 
         page = to_int(

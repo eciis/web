@@ -85,6 +85,10 @@
                 closeTo: angular.element(document.querySelector('#fab-new-post'))
             });
         };
+
+        institutionCardCtrl.hasCover = function hasCover() {
+            return institutionCardCtrl.institution.cover_photo && !_.isEmpty(institutionCardCtrl.institution.cover_photo);
+        };
     });
 
     app.directive("institutionCardDetails", function () {

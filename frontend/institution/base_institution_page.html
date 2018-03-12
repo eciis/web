@@ -4,7 +4,7 @@
             <div>
                 <!-- COVER -->
                 <div layout="column" style="position: relative; height: 15.5em;">
-                    <div ng-if="institutionCtrl.isAdmin()" layout="row" layout-align="end start" style="height: 0px; position: relative;">
+                    <div ng-if="institutionCtrl.isAdmin()" hide-xs layout="row" layout-align="end start" style="height: 0px; position: relative;">
                         <div layout="column" layout-align "end start">
                             <div layout="row" layout-align="center center" class="cover-photo">
                                 <span class="cover-photo-text">Adicionar foto de capa</span>
@@ -26,9 +26,9 @@
                         <img hide-gt-xs style="height: 8em; width:8em; margin: -7em 0 -0.8em 0; border-radius: 50%;" 
                             ng-src="{{ institutionCtrl.institution.photo_url || '/app/images/institution.png' }}"/>
                         <div class="md-title">
-                            <p hide-xs>{{ institutionCtrl.institution.name }}</p>
+                            <p hide-xs>{{ institutionCtrl.limitString(institutionCtrl.institution.name, 200) }}</p>
                             <center hide-gt-xs>
-                                <p style="font-size:0.8em">{{ institutionCtrl.institution.name }}</p>
+                                <p style="font-size:0.8em">{{ institutionCtrl.limitString(institutionCtrl.institution.name, 110) }}</p>
                             </center>
                         </div>
                     </div>

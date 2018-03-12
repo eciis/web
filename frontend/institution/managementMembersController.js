@@ -48,6 +48,20 @@
             });
         };
 
+        manageMemberCtrl.openTransferAdminDialog = function openTransferAdminDialog(ev) {
+            $mdDialog.show({
+                templateUrl: 'app/institution/transfer_admin_dialog.html',
+                controller: 'TransferAdminController',
+                controllerAs: 'transferAdminCtrl',
+                locals: {
+                    institution_members: manageMemberCtrl.members,
+                    institution: manageMemberCtrl.institution
+                },
+                targetEvent: ev,
+                clickOutsideToClose: true
+            });
+        }
+
         manageMemberCtrl.removeMember = function removeMember(member_obj) {
             _.remove(manageMemberCtrl.members, function(member) {
                 return member.key === member_obj.key;
@@ -428,5 +442,47 @@
         selectEmailsCtrl.validateEmail = function validateEmail(email) {
             return Utils.validateEmail(email);
         }
+    });
+
+    app.controller('TransferAdminController', function(institution_members, institution, $mdDialog) {
+        var transferAdminCtrl = this;
+        transferAdminCtrl.institution_members = institution_members;
+        transferAdminCtrl.member = null;
+        transferAdminCtrl.selectedMember = null;
+
+        transferAdminCtrl.searchMember = function searchMember(member) {
+            if (transferAdminCtrl.member) {
+                var foundMemberByEmail = _.find(member.email, function(email) {
+                    return email.includes(transferAdminCtrl.member);
+                });
+
+                return foundMemberByEmail || member.name.includes(transferAdminCtrl.member);
+            }
+            return false;
+        };
+
+        transferAdminCtrl.selectMember = function selectMember(member) {
+            transferAdminCtrl.selectedMember = member;
+            transferAdminCtrl.member = member.email[0];
+        };
+
+        transferAdminCtrl.cancel = function cancel() {
+            $mdDialog.cancel();
+        };
+
+        transferAdminCtrl.confirm = function confirm() {
+            if (transferAdminCtrl.selectedMember) {
+                let data = {
+                    institution_key: institution.key,
+                    admin_key: institution.admin.key,
+                    type_of_invite: 'USER_ADM',
+                    sender_name: institution.admin.name,
+                    invitee_key: transferAdminCtrl.selectedMember.key,
+                    invitee: transferAdminCtrl.selectedMember.email[0]
+                };
+
+                let invite = new Invite(data);
+            }
+        };
     });
 })();

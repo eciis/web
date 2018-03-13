@@ -4,8 +4,7 @@
     var app = angular.module('app');
 
     app.controller("InstitutionController", function InstitutionController($state, InstitutionService,
-            InviteService, AuthService, MessageService, $sce, $mdDialog, PdfService, $rootScope, $window, 
-            ProfileService, $q, CropImageService, ImageService) {
+            InviteService, AuthService, MessageService, $sce, $mdDialog, PdfService, $rootScope, $window, ProfileService, $q, CropImageService, ImageService) {
         var institutionCtrl = this;
         var morePosts = true;
         var actualPage = 0;

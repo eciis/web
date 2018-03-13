@@ -442,6 +442,10 @@ a:active {
     word-break: break-all;
 }
 
+.no-break {
+    word-break: keep-all;
+}
+
 .align-top {
     margin-top: 13px;
 }

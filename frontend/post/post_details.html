@@ -164,8 +164,9 @@
   </pdf-view>
   <md-card-title ng-if="postDetailsCtrl.isShowTitle(postDetailsCtrl.post)">
     <md-card-title-text>
-      <a href class="md-title hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post)">
-        <span class="md-headline break">{{postDetailsCtrl.post.title}}</span>
+      <a href class="md-title hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post)"
+      ng-class="postDetailsCtrl.getResponsiveTitleClass()">
+        <span class="md-headline">{{postDetailsCtrl.post.title}}</span>
       </a>
     </md-card-title-text>
   </md-card-title>

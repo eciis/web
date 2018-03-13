@@ -12,7 +12,7 @@
         var observer;
 
         configProfileCtrl.user = AuthService.getCurrentUser();
-        configProfileCtrl.newUser = _.clone(configProfileCtrl.user);
+        configProfileCtrl.newUser = _.cloneDeep(configProfileCtrl.user);
         configProfileCtrl.loading = false;
         configProfileCtrl.cpfRegex = /^\d{3}\.\d{3}\.\d{3}\-\d{2}$/;
         configProfileCtrl.photo_url = configProfileCtrl.newUser.photo_url;
@@ -134,7 +134,7 @@
                     institution: inst
                 },
                 targetEvent: ev,
-                clickOutsideToClose: true
+                clickOutsideToClose: false
             });
         };
 

@@ -26,14 +26,13 @@ class InviteUserAdm(InviteUser):
         return invite
         
 
-    def send_notification(self, current_institution, entity_type=None, sender_key=None, receiver_key=None):
-        if not entity_type:
-         entity_type = 'USER_ADM'
+    def send_notification(self, current_institution):
+        entity_type = 'USER_ADM'
          
         super(InviteUserAdm, self).send_notification(
             current_institution=current_institution, 
-            sender_key=sender_key, 
-            receiver_key=receiver_key,
+            sender_key=self.sender_key, 
+            receiver_key=self.invitee_key,
             entity_type=entity_type
         )
     

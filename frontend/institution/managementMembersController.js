@@ -444,7 +444,7 @@
         }
     });
 
-    app.controller('TransferAdminController', function(institution_members, institution, $mdDialog) {
+    app.controller('TransferAdminController', function(institution_members, institution, InviteService, MessageService, $mdDialog) {
         var transferAdminCtrl = this;
         transferAdminCtrl.institution_members = institution_members;
         transferAdminCtrl.member = null;
@@ -482,6 +482,14 @@
                 };
 
                 let invite = new Invite(data);
+
+                InviteService.sendInviteUserAdm(invite).then(function success(response) {
+                    console.log(response);
+                }, function error(response) {
+                    console.log(response);
+                });
+            } else {
+                MessageService.showToast('Selecione um memebro!');
             }
         };
     });

@@ -11,7 +11,6 @@ from utils import Utils
 import datetime
 
 
-
 def getCommentsUri(post, host):
     """Create uri to access post comments."""
     return "http://%s/api/posts/%s/comments" % (host, post.key.urlsafe())

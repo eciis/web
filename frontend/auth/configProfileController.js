@@ -158,9 +158,7 @@
 
         function removeConection(institution_key) {
             if (_.size(configProfileCtrl.user.institutions) > 1) {
-                _.remove(configProfileCtrl.user.institutions, function(institution) {
-                    return institution.key === institution_key;
-                });
+                configProfileCtrl.user.removeInstitution(institution_key);
                 _.remove(configProfileCtrl.user.institution_profiles, function(profile) {
                     return profile.institution_key === institution_key;
                 });

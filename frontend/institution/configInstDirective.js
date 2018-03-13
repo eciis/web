@@ -249,7 +249,8 @@
             var patch = jsonpatch.generate(observer);
             InstitutionService.update(institutionKey, patch).then(
                 function success() {
-                    updateUserInstitutions(configInstCtrl.newInstitution);
+                    if(configInstCtrl.newInstitution)
+                        updateUserInstitutions(configInstCtrl.newInstitution);
                 },
                 function error(response) {
                     MessageService.showToast(response.data.msg);

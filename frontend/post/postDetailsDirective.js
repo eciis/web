@@ -706,7 +706,7 @@
         function loadShowReplies() {
             commentCtrl.showReplies = $state.current.name === 'app.post';
         }
-        
+
         loadShowReplies();
     });
 
@@ -718,9 +718,9 @@
             controller: "CommentController",
             scope: {},
             bindToController: {
+                comment: '=',
                 post: '=',
-                user: '=',
-                comment: '='
+                user: '='
             }
         };
     });

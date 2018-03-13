@@ -9,7 +9,6 @@ from models.event import Event
 from utils import Utils
 
 import datetime
-import json
 
 
 

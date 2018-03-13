@@ -122,7 +122,7 @@ var Utils = {
      * @param {string} string the string that will be analized.
      * @returns {boolean} True if string has a word bigger to the screen width proportion. False in otherwise.
      */
-    isBiggerToScreen: function isBiggerToScreen(string) {
+    isLargerThanTheScreen: function isLargerThanTheScreen(string) {
         var words = string.split(" ");
         var greatestWordLength = words
             .reduce((acumulator, word) => {
@@ -130,24 +130,26 @@ var Utils = {
             }, 0);
 
         /* The values references to the width of screen */
-        var smallScreen = 360;
+        var smallScreen = 380;
         var mediumScreen = 640;
-        var bigScreen = 840;
-        var XBigScreen = 940;
+        var largeScreen = 840;
+        var extraLargeScreen = 940;
 
         /* Max length of a word supported by screen width */
-        var maxLengthWordToSmallScreen = 21;
-        var maxLengthToMediumScreen = 42;
-        var maxLengthToBigScreen = 58;
-        var maxLengthWordToXBigScreen = 64;
-        var maxLengthWordToLargerScreen = 60;
+        var maxLengthWordToSmallScreen = 20;
+        var maxLengthToMediumScreen = 41;
+        var maxLengthToLargeScreen = 57;
+        var maxLengthWordToExtraLargeScreen = 63;
+        var maxLengthWordToGtExtraLargeScreen = 59;
 
         var screenWidth = screen.width;
 
-        return (screenWidth <= smallScreen && greatestWordLength >= maxLengthWordToSmallScreen)
-            || (screenWidth > smallScreen && screenWidth <= mediumScreen && greatestWordLength >= maxLengthToMediumScreen)
-            || (screenWidth > mediumScreen && screenWidth <= bigScreen && greatestWordLength >= maxLengthToBigScreen)
-            || (screenWidth > bigScreen && screenWidth <= XBigScreen && greatestWordLength >= maxLengthWordToXBigScreen)
-            || (greatestWordLength >= maxLengthWordToLargerScreen);
+        var supportSmallScreen = screenWidth <= smallScreen && greatestWordLength >= maxLengthWordToSmallScreen;
+        var supportMediumScreen = screenWidth > smallScreen && screenWidth <= mediumScreen && greatestWordLength >= maxLengthToMediumScreen;
+        var supportLargeScreen = screenWidth > mediumScreen && screenWidth <= largeScreen && greatestWordLength >= maxLengthToLargeScreen;
+        var supportExtraLargeScreen = screenWidth > largeScreen && screenWidth <= extraLargeScreen && greatestWordLength >= maxLengthWordToExtraLargeScreen;
+        var supportGtExtraLargeScreen = screenWidth > extraLargeScreen && greatestWordLength >= maxLengthWordToGtExtraLargeScreen
+
+        return supportSmallScreen || supportMediumScreen || supportLargeScreen || supportExtraLargeScreen || supportExtraLargeScreen || supportGtExtraLargeScreen;
     }
 };

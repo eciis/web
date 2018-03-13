@@ -257,7 +257,7 @@
         };
 
         postDetailsCtrl.getResponsiveTitleClass = function getResponsiveTitleClass() {
-            return Utils.isBiggerToScreen(postDetailsCtrl.post.title) ? 'break' : 'no-break';
+            return Utils.isLargerThanTheScreen(postDetailsCtrl.post.title) ? 'break' : 'no-break';
         };
 
         function getOriginalPost(post){

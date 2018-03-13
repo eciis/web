@@ -509,7 +509,8 @@
         };
     });
 
-    app.controller('CommentController', function CommentController(CommentService, MessageService, ProfileService, $state, AuthService) {
+    app.controller('CommentController', function CommentController(CommentService, MessageService, ProfileService, 
+            $state, AuthService) {
         var commentCtrl = this;
         commentCtrl.user = AuthService.getCurrentUser();
 

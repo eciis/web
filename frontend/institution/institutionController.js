@@ -25,7 +25,6 @@
         var observer;
 
         var currentInstitutionKey = $state.params.institutionKey;
-
         institutionCtrl.user = AuthService.getCurrentUser();
         institutionCtrl.addPost = institutionCtrl.user.current_institution.key === currentInstitutionKey;
 

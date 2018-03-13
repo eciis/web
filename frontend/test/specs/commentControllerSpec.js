@@ -45,11 +45,10 @@
         httpBackend.when('GET', 'error/error.html').respond(200);
 
         AuthService.login(user);
-
         commentCtrl = $controller('CommentController', {
             scope: scope
         });
-
+        
         commentCtrl.user = AuthService.getCurrentUser();
         commentCtrl.comment = comment;
     }));

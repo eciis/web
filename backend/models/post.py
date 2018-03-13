@@ -9,6 +9,8 @@ from models.event import Event
 from utils import Utils
 
 import datetime
+import json
+
 
 
 def getCommentsUri(post, host):
@@ -218,6 +220,17 @@ class Post(PolyModel):
             'subscribers': [subscriber.urlsafe() for subscriber in post.subscribers]
         }
         return post.modify_post(post_dict, host)
+
+    def make_comments(post):
+        for comment in post.comments.values():
+            post.loadAuthor(comment)
+            for reply in comment['replies'].values():
+                post.loadAuthor(reply)
+            
+    def loadAuthor(self, entity):
+        author = ndb.Key(urlsafe=entity["author_key"]).get()
+        entity["author_name"] = author.name
+        entity["author_img"] = author.photo_url
 
     def modify_post(post, post_dict, host):
         """Create personalized json if post was deleted or shared."""

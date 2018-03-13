@@ -92,6 +92,7 @@ class InstitutionHandler(BaseHandler):
         institution_json['sent_invitations'] = getSentInvitations(obj.key)
         institution_json['parent_institution'] = parentToJson(obj)
         institution_json['children_institutions'] = childrenToJson(obj)
+        institution_json['cover_photo'] = obj.cover_photo
 
         self.response.write(json.dumps(
             institution_json

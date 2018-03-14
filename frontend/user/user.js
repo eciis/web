@@ -101,6 +101,16 @@ User.prototype.removeInstitution = function removeInstitution(institutionKey, re
     _.remove(this.institutions, toRemove);
     _.remove(this.follows, toRemove);
 
+    var isAdmin = _.find(this.institutions_admin, function (each) {
+        return _.includes(each, institutionKey);
+    });
+    
+    if(isAdmin) {
+        _.remove(this.institutions_admin, function(currentInstUrl) {
+            return _.includes(currentInstUrl, institutionKey);
+        });
+    }
+
     if(!_.isEmpty(this.institutions)) {
         this.changeInstitution();
     }

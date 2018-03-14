@@ -17,6 +17,8 @@
         configProfileCtrl.cpfRegex = /^\d{3}\.\d{3}\.\d{3}\-\d{2}$/;
         configProfileCtrl.photo_url = configProfileCtrl.newUser.photo_url;
         configProfileCtrl.loadingSubmission = false;
+        
+        observer = jsonpatch.observe(configProfileCtrl.user);
 
         var HAS_ONLY_ONE_INSTITUTION_MSG = "Esta é a única instituição ao qual você é vinculado." +
             " Ao remover o vínculo você não poderá mais acessar o sistema," +
@@ -201,6 +203,7 @@
 
         function deleteUser() {
             var patch = jsonpatch.generate(observer);
+            console.log(patch);
             var promise = UserService.save(patch);
             promise.then(function success() {
                 AuthService.logout();
@@ -209,10 +212,8 @@
             });
             return promise;
         }
-
+        
         (function main() {
-            observer = jsonpatch.observe(configProfileCtrl.user);
-
             if (configProfileCtrl.user.name === 'Unknown') {
                 delete configProfileCtrl.user.name;
                 delete configProfileCtrl.newUser.name;

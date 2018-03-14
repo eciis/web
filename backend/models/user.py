@@ -279,7 +279,7 @@ class User(ndb.Model):
     
     def remove_institution_admin(self, institution_key):
         """Remove a institution admin to user."""
-        if institution_key not in self.institutions_admin:
+        if institution_key in self.institutions_admin:
             self.institutions_admin.remove(institution_key)
             self.put()
 

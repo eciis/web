@@ -7,7 +7,7 @@ import mocks
 
 from test_base_handler import TestBaseHandler
 from google.appengine.ext import ndb
-from models.invite import Invite
+from models.invite_user_adm import InviteUserAdm
 from handlers.invite_user_adm_handler import InviteUserAdmHandler
 from worker import TransferAdminPermissionsHandler
 import permissions
@@ -43,7 +43,7 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
     def enqueue_task(self, handler_selector, params):
         self.testapp.post('/api/queue/' + handler_selector, params)
 
-    @patch.object(Invite, 'send_notification')
+    @patch.object(InviteUserAdm, 'send_notification')
     @patch('handlers.invite_user_adm_handler.enqueue_task')
     @patch('utils.verify_token', return_value={'email': 'usr_test@test.com'})
     def test_put(self, verify_token, enqueue_task, send_notification):
@@ -108,7 +108,7 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
             'Invitation status must be equal to accepted!'
         )
     
-    @patch.object(Invite, 'send_notification')
+    @patch.object(InviteUserAdm, 'send_notification')
     @patch('handlers.invite_user_adm_handler.enqueue_task')
     @patch('utils.verify_token', return_value={'email': 'usr_test@test.com'})
     def test_put_invite_in_hierarchy(self, verify_token, enqueue_task, send_notification):
@@ -405,7 +405,7 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
             'Expected message of exception must be equal to Error! Invitation type not allowed'
         )
 
-    @patch.object(Invite, 'send_notification')
+    @patch.object(InviteUserAdm, 'send_notification')
     @patch('utils.verify_token', return_value={'email': 'usr_test@test.com'})
     def test_delete(self, verify_token, send_notification):
         """Test reject invite."""

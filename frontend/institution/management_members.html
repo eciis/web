@@ -91,22 +91,27 @@
                 color: rgb(0, 150, 136); font-weight: bold; line-height: 21px; padding: 5px;">ADMINISTRADOR</p>
             </div>
           </md-list-item>
-          <md-list-item class="list-item-dense" md-colors="{background: 'grey-300'}"
-            ng-click="manageMemberCtrl.showUserProfile(manageMemberCtrl.institution.admin.key, $event)" flex-xs>
+          <md-list-item class="list-item-dense" md-colors="{background: 'grey-300'}" ng-repeat="invite in manageMemberCtrl.sent_invitations_adm"
+            ng-click="manageMemberCtrl.showUserProfile(invite.invitee_key, $event)" flex-xs>
             <div layout="row" flex>
               <div style="width: 5px; margin-left: -15px;" md-colors="{background: 'teal-500'}"></div>
               <div style="width: 5px; background-color: white;"></div>
               <div layout="row" layout-align="start center"  flex>
-                <img title="{{manageMemberCtrl.institution.admin.name}}" ng-src="{{manageMemberCtrl.institution.admin.photo_url || '/app/images/avatar.png'}}" 
+                <img title="{{manageMemberCtrl.institution.admin.name}}" ng-src="{{manageMemberCtrl.getMemberPhotoUrl(invite.invitee_key)}}" 
                   class="md-avatar" style="margin: 0 15px 0 px; width: 60px; height: 60px;"/>
                 <div layout="column">
-                  <b style="position: relative; margin-top: 20px; font-size: 15px;">{{ manageMemberCtrl.institution.admin.name }}</b>
-                  <span style="position: relative; bottom: 20px; font-size: 15px;">{{ manageMemberCtrl.institution.admin.email[0]}}</span>
+                  <b style="position: relative; margin-top: 20px; font-size: 15px;">{{ manageMemberCtrl.getMemberName(invite.invitee_key) }}</b>
+                  <span style="position: relative; bottom: 20px; font-size: 15px;">{{ invite.invitee }}</span>
                 </div>
                 <div layout="row" layout-align="end center" flex>
                   <p style="border: solid; height: 35px; width: 148px; margin-right: -6px;
                     text-align: center; border-color: rgb(0, 150, 136); border-radius: 3px;
-                    color: rgb(0, 150, 136); font-weight: bold; line-height: 21px; padding: 5px;">EM APROVAÇÃO</p>
+                    color: rgb(0, 150, 136); font-weight: bold; line-height: 21px; padding: 5px;"
+                    ng-if="invite.status === 'sent'">EM APROVAÇÃO</p>
+                  <p style="border: solid; height: 35px; width: 148px; margin-right: -6px;
+                    text-align: center; border-color: rgb(0, 150, 136); border-radius: 3px;
+                    color: rgb(0, 150, 136); font-weight: bold; line-height: 21px; padding: 5px;"
+                    ng-if="invite.status === 'rejected'">RECUSADO</p>
                 </div>
               </div>
             </div>

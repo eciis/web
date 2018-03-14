@@ -17,7 +17,9 @@
         manageMemberCtrl.institution = {};
         manageMemberCtrl.invite = {};
         manageMemberCtrl.sent_invitations = [];
+        manageMemberCtrl.sent_invitations_adm = [];
         manageMemberCtrl.currentMember = "";
+        manageMemberCtrl.members = [];
 
         manageMemberCtrl.showSendInvite = true;
         manageMemberCtrl.isLoadingMembers = true;
@@ -59,8 +61,10 @@
                 },
                 targetEvent: ev,
                 clickOutsideToClose: true
+            }).then(function success(response) {
+                manageMemberCtrl.sent_invitations_adm.push(response);
             });
-        }
+        };
 
         manageMemberCtrl.removeMember = function removeMember(member_obj) {
             _.remove(manageMemberCtrl.members, function(member) {
@@ -171,8 +175,8 @@
         function loadInstitution() {
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
                 manageMemberCtrl.institution = response.data;
-                getSentInvitations(response.data.sent_invitations);
                 getMembers();
+                getSentInvitations(response.data.sent_invitations);
                 getRequests();
             }, function error(response) {
                 $state.go('app.institution.timeline', {institutionKey: currentInstitutionKey});
@@ -182,7 +186,9 @@
 
         function getSentInvitations(invitations) {
             var isUserInvitation = createRequestSelector('sent', 'USER');
+            var isUserAdmInvitation = createRequestSelector('sent', 'INVITE_USER_ADM');
             manageMemberCtrl.sent_invitations = invitations.filter(isUserInvitation);
+            manageMemberCtrl.sent_invitations_adm = invitations.filter(isUserAdmInvitation);
         }
 
         function getMembers() {
@@ -318,6 +324,20 @@
                 reader.readAsText(files[0]);
             }
         };
+
+        manageMemberCtrl.getMemberPhotoUrl = function getMemberPhotoUrl(key) {
+            let member = getMemberByKey(key);
+            return member.photo_url || '/app/images/avatar.png';
+        };
+
+        manageMemberCtrl.getMemberName = function getMembeName(key) {
+            let member = getMemberByKey(key);
+            return member.name || 'Nome do Membro';
+        };
+
+        function getMemberByKey(key) {
+            return manageMemberCtrl.members.reduce((foundMember, member) => (member.key === key) ? member : foundMember, {});
+        }
 
         function addField() {
             var isValidSize = _.size(manageMemberCtrl.emails) < MAX_EMAILS_QUANTITY;
@@ -484,9 +504,10 @@
                 let invite = new Invite(data);
 
                 InviteService.sendInviteUserAdm(invite).then(function success(response) {
-                    console.log(response);
+                    invite.status = 'sent';
+                    $mdDialog.hide(invite);
                 }, function error(response) {
-                    console.log(response);
+                    MessageService.showToast(response.data);
                 });
             } else {
                 MessageService.showToast('Selecione um memebro!');

@@ -26,10 +26,6 @@
             inviteInstCtrl[flagName] = !inviteInstCtrl[flagName];
         };
 
-        inviteInstCtrl.calculateHeight = function calculateHeight(list, itemHeight) {
-            return Utils.calculateHeight(list, itemHeight);
-        };
-
         inviteInstCtrl.cancelInvite = function cancelInvite() {
             inviteInstCtrl.invite = {};
         };

@@ -168,6 +168,7 @@
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
                     $state.go("app.user.home");
+                    $mdDialog.hide(event);
                 });
             } else {
                 MessageService.showToast('Evento inválido');

@@ -62,6 +62,11 @@
                 targetEvent: ev,
                 clickOutsideToClose: true
             }).then(function success(response) {
+                manageMemberCtrl.sent_invitations_adm.map((invite) => {
+                    if (invite.status === 'sent') 
+                        invite.status = 'rejected';
+                });
+
                 manageMemberCtrl.sent_invitations_adm.push(response);
             });
         };

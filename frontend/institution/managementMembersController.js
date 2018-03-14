@@ -413,9 +413,21 @@
             $mdDialog.cancel();
         };
 
+        function removeSentInvitations() {
+            if(selectEmailsCtrl.manageMemberCtrl.sent_invitations.length > 0) {
+                var invitedEmails = selectEmailsCtrl.manageMemberCtrl.sent_invitations.
+                    map(invite => {
+                        return invite.invitee;
+                    });
+                return selectEmailsCtrl.selectedEmails.filter(email => !invitedEmails.includes(email));
+            }
+            return selectEmailsCtrl.selectedEmails;
+        }
+
         selectEmailsCtrl.sendInvite = function sendInvite() {
             if(selectEmailsCtrl.selectedEmails.length > 0 && selectEmailsCtrl.selectedEmails.length <= MAX_EMAILS_QUANTITY) {
-                selectEmailsCtrl.manageMemberCtrl.sendUserInvite(selectEmailsCtrl.selectedEmails);
+                var emails = removeSentInvitations();
+                selectEmailsCtrl.manageMemberCtrl.sendUserInvite(emails);
                 selectEmailsCtrl.closeDialog();
             } else if(selectEmailsCtrl.selectedEmails > MAX_EMAILS_QUANTITY) {
                 MessageService.showToast("Limite máximo de " + MAX_EMAILS_QUANTITY + " e-mails selecionados excedido.");

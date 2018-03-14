@@ -167,7 +167,6 @@
                     MessageService.showToast('Evento editado com sucesso.');
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
-                    $state.go("app.user.home");
                     $mdDialog.hide(event);
                 });
             } else {

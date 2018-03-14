@@ -123,7 +123,7 @@
         </div>
       </md-toolbar>
       <md-card-content ng-show="manageMemberCtrl.showInvites" 
-          ng-style="manageMemberCtrl.calculateHeight(manageMemberCtrl.sent_invitations)" ng-scrollbars>
+           style="overflow: auto; max-height: 270px;" class="custom-scrollbar">
         <md-list>
           <md-list-item class="md-2-line" ng-repeat="invite in manageMemberCtrl.sent_invitations" ng-click="null">
             <md-icon class="md-avatar-icon" style="margin-top: 2px"

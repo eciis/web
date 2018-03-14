@@ -148,6 +148,9 @@
             "REPLY_COMMENT": {
                 icon: "comment",
                 state: "app.post"
+            },
+            "USER_ADM": {
+                icon: "account_balance"
             }
         };
 

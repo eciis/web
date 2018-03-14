@@ -123,7 +123,7 @@
         </div>
       </md-toolbar>
       <md-card-content ng-show="manageMemberCtrl.showInvites" 
-           style="overflow: auto; max-height: 270px;" class="custom-scrollbar">
+           style="overflow: auto; max-height: 220px;" class="custom-scrollbar">
         <md-list>
           <md-list-item class="md-2-line" ng-repeat="invite in manageMemberCtrl.sent_invitations" ng-click="null">
             <md-icon class="md-avatar-icon" style="margin-top: 2px"
@@ -168,7 +168,7 @@
               <p>Email institucional: {{ request.institutional_email}}</p>
             </div>
             <md-icon class="md-secondary md-hue-3" title="Rejeitar" ng-click="manageMemberCtrl.rejectRequest(request, $event)">close</md-icon>
-            <md-icon class="md-secondary" title="Aceitar membro" ng-click="manageMemberCtrl.acceptRequest(request)" style="margin-left: 30%">send</md-icon>
+            <md-icon class="md-secondary" title="Aceitar membro" ng-click="manageMemberCtrl.acceptRequest(request)">send</md-icon>
           </md-list-item>
         </md-list>
       </md-card-content>

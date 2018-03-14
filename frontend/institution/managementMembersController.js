@@ -244,10 +244,6 @@
             return isValid;
         };
 
-        manageMemberCtrl.calculateHeight = function calculateHeight(list, itemHeight=4.5) {
-            return Utils.calculateHeight(list, itemHeight);
-        };
-
         manageMemberCtrl.resendInvite = function resendInvite(inviteKey, event) {
             var confirm = $mdDialog.confirm({ onComplete: designOptions });
             confirm

@@ -414,7 +414,7 @@
         };
 
         function removeSentInvitations() {
-            if(selectEmailsCtrl.manageMemberCtrl.sent_invitations.length > 0) {
+            if(!_.isEmpty(selectEmailsCtrl.manageMemberCtrl.sent_invitations)) {
                 var invitedEmails = selectEmailsCtrl.manageMemberCtrl.sent_invitations.
                     map(invite => {
                         return invite.invitee;

@@ -98,6 +98,44 @@ class InviteUserAdmTest(TestBase):
             'Expected message of exception must be equal to The invitee is not a member of this institution!'
         )
     
+    def test_create_more_than_one_invitation(self):
+
+        institution = mocks.create_institution()
+        admin = mocks.create_user()
+        new_admin = mocks.create_user()
+
+        institution.set_admin(admin.key)
+        institution.add_member(admin)
+        institution.add_member(new_admin)
+        admin.add_institution_admin(institution.key)
+
+        institution.put()
+        admin.put()
+
+        data = {
+            "invitee": new_admin.email[0],
+            "institution_key": institution.key.urlsafe(),
+            "admin_key": admin.key.urlsafe(),
+            "is_request": False,
+            "sender_key": admin.key.urlsafe(),
+            "sender_name": admin.name,
+            "invitee_key": new_admin.key.urlsafe()
+        }
+
+        created_invite = InviteUserAdm.create(data)
+        created_invite.put()
+
+        with self.assertRaises(NotAuthorizedException) as raises_context:
+            InviteUserAdm.create(data)
+        
+        message_exeption = str(raises_context.exception)
+        self.assertEqual(
+            message_exeption, 
+            'An invitation is already being processed for this institution!',
+            'Expected message of exception must be equal to An invitation is already being processed for this institution!'
+        )
+
+    
     def test_make(self):
         """Test make invite."""
         institution = mocks.create_institution()

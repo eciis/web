@@ -163,6 +163,7 @@ class User(ndb.Model):
             self.institutions.remove(institution)
             self.remove_permission('publish_post', institution.urlsafe())
             self.remove_profile(institution.urlsafe())
+            self.follows.remove(institution)
             if len(self.institutions) == 0:
                 self.change_state('inactive')
             self.put()

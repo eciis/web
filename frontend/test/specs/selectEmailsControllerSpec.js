@@ -13,8 +13,8 @@
 
     var emails = ["test1@example.com", "test2@example.com", "test3@example.com"];
     var members = [{name: "Member 1", email: ["member1@example.com"]},{name: "Member 2", email: ["member2@example.com"]}];
-    var sentInvitations = [{invitee: "test4@example.com"}, {invitee: "test5@example.com"}];
-
+    var sentInvitations = [{invitee: "test4@example.com"}];
+    var requestedMembers = [{institutional_email: "test5@example.com"}]
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $state, $rootScope, $mdDialog, AuthService, InstitutionService, InviteService) {
@@ -31,6 +31,7 @@
         });
         manageMemberCtrl.members = members;
         manageMemberCtrl.sent_invitations = sentInvitations;
+        manageMemberCtrl.requests = requestedMembers;
         selectEmailsCtrl = newCtrl('SelectEmailsController', {
             scope: scope,
         }, {
@@ -140,7 +141,7 @@
 
     describe('removePendingAndMembersEmails()', function() {
         it('Should return emails that not belongs to members or has been not invited', function() {
-            selectEmailsCtrl.selectedEmails = ["test1@example.com", "test4@example.com", "member1@example.com"];
+            selectEmailsCtrl.selectedEmails = ["test1@example.com", "member1@example.com", "test4@example.com", "test5@example.com"];
             var filteredEmails = selectEmailsCtrl.removePendingAndMembersEmails();
             expect(filteredEmails).toEqual(["test1@example.com"]);
         });

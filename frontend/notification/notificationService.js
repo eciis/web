@@ -42,7 +42,7 @@
             'SHARED_EVENT': messageCreator('Compartilhou um evento de ', SINGLE_INST),
             'DELETED_POST': messageCreator('Deletou o seu post em ', SINGLE_INST),
             'REPLY_COMMENT': messageCreator('Respondeu um comentário seu'),
-            'USER_ADM': messageCreator('Enviou um convite para ser administrador da instituição ', SINGLE_INST)
+            'USER_ADM': messageCreator('Indicou você para ser administrador da instituição ', SINGLE_INST)
         };
 
         var POST_NOTIFICATION = 'POST';

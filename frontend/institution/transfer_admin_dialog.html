@@ -21,7 +21,7 @@
             </md-list-item>
             <md-list-item ng-if="members.length === 0">
                 <div layout="row" layout-align="center" flex="100">
-                    <p>Não existe membro com esse nome ou email</p>
+                    <p>Nenhum membro foi encontrado com esse nome ou email.</p>
                 </div>
             </md-list-item>
         </md-list>
@@ -32,7 +32,7 @@
         CANCELAR
      </md-button>
      <md-button class="md-raised" md-colors="{color: 'default-teal-500'}" ng-click="transferAdminCtrl.confirm()">
-        COMFIRMAR
+        CONFIRMAR
     </md-button>
  </md-dialog-actions>
 </md-dialog>

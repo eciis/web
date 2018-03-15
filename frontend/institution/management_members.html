@@ -107,11 +107,17 @@
                   <p style="border: solid; height: 35px; width: 148px; margin-right: -6px;
                     text-align: center; border-color: rgb(0, 150, 136); border-radius: 3px;
                     color: rgb(0, 150, 136); font-weight: bold; line-height: 21px; padding: 5px;"
-                    ng-if="invite.status === 'sent'">EM APROVAÇÃO</p>
-                  <p style="border: solid; height: 35px; width: 148px; margin-right: -6px;
-                    text-align: center; border-color: rgb(0, 150, 136); border-radius: 3px;
-                    color: rgb(0, 150, 136); font-weight: bold; line-height: 21px; padding: 5px;"
-                    ng-if="invite.status === 'rejected'">RECUSADO</p>
+                    ng-if="invite.status === 'sent'">PENDENTE</p>
+                  <div style="border: solid; height: 35px; width: 148px; margin-right: -6px;
+                    border-color: rgb(0, 150, 136); border-radius: 3px; font-weight: bold;" 
+                    layout="row" layout-align="center center" md-colors="{background: 'teal-500', color: 'grey-50'}"
+                    ng-if="invite.status === 'rejected'">
+                    <md-icon style="margin: 0 5px 0 0; border-radius: 50%;" 
+                      md-colors="{background: 'grey-50', color: 'teal-500'}">
+                      clear
+                    </md-icon>
+                    <span>RECUSADO</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -119,7 +125,8 @@
         </md-list>
       </md-card-content>
       <md-card-actions layout="row" layout-align="end center" ng-show="manageMemberCtrl.showAdministrator">
-        <md-button class="md-raised" md-colors="{background: 'teal-500'}" ng-click="manageMemberCtrl.openTransferAdminDialog($event)">
+        <md-button class="md-raised" md-colors="{background: manageMemberCtrl.transferButtonColor}" ng-click="manageMemberCtrl.openTransferAdminDialog($event)"
+          ng-disabled="manageMemberCtrl.disableTransferAdminButton()">
           TRANSFERIR
         </md-button>
       </md-card-actions>

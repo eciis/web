@@ -22,6 +22,7 @@
         manageMemberCtrl.members = [];
 
         manageMemberCtrl.showSendInvite = true;
+        manageMemberCtrl.transferButtonColor = 'teal-500';
         manageMemberCtrl.isLoadingMembers = true;
         manageMemberCtrl.isLoadingInvite = false;
         manageMemberCtrl.showInvites = false;
@@ -338,6 +339,15 @@
         manageMemberCtrl.getMemberName = function getMembeName(key) {
             let member = getMemberByKey(key);
             return member.name || 'Nome do Membro';
+        };
+
+        manageMemberCtrl.disableTransferAdminButton = function disableTransferAdminButton() {
+            let alreadySended = manageMemberCtrl.sent_invitations_adm.reduce(
+                (found, invite) => (invite.status === 'sent') ? true : found, 
+                false
+            );
+            manageMemberCtrl.transferButtonColor =  (alreadySended) ? 'grey-300' : 'teal-500';
+            return alreadySended;
         };
 
         function getMemberByKey(key) {

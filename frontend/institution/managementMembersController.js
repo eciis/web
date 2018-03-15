@@ -436,7 +436,7 @@
                 if(!_.isEmpty(emails)) {
                     selectEmailsCtrl.manageMemberCtrl.sendUserInvite(emails);
                 } else {
-                    MessageService.showToast("Todos os e-mails selecionados já foram convidados ou pertencem a algum membro da instituição.")
+                    MessageService.showToast("E-mails selecionados já foram convidados ou pertencem a algum membro da instituição.")
                 }
                 selectEmailsCtrl.closeDialog();
             } else if(selectEmailsCtrl.selectedEmails > MAX_EMAILS_QUANTITY) {

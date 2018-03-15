@@ -193,8 +193,9 @@
 
         describe('getPendingInvitation', function() {
 
-          it('should return some invite', function() {
+          fit('should return some invite', function() {
             user = createUser();
+            console.log(user.getPendingInvitation());
             expect(user.getPendingInvitation().should.not.be.empty);
           });
         });

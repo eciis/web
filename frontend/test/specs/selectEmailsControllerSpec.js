@@ -14,7 +14,7 @@
     var emails = ["test1@example.com", "test2@example.com", "test3@example.com"];
     var members = [{name: "Member 1", email: ["member1@example.com"]},{name: "Member 2", email: ["member2@example.com"]}];
     var sentInvitations = [{invitee: "test4@example.com"}];
-    var requestedMembers = [{institutional_email: "test5@example.com"}]
+    var requestedMembers = [{institutional_email: "test5@example.com"}];
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $state, $rootScope, $mdDialog, AuthService, InstitutionService, InviteService) {

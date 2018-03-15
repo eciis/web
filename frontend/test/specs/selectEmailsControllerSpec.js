@@ -12,6 +12,7 @@
     };
 
     var emails = ["test1@example.com", "test2@example.com", "test3@example.com"];
+    var members = ["member1@example.com", "member2@example.com"];
 
     beforeEach(module('app'));
 
@@ -27,7 +28,7 @@
                     inviteService: InviteService,
                     institutionService: InstitutionService
         });
-
+        manageMemberCtrl.members = members;
         selectEmailsCtrl = newCtrl('SelectEmailsController', {
             scope: scope,
         }, {

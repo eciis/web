@@ -413,21 +413,31 @@
             $mdDialog.cancel();
         };
 
-        function removeSentInvitations() {
-            if(!_.isEmpty(selectEmailsCtrl.manageMemberCtrl.sent_invitations)) {
-                var invitedEmails = selectEmailsCtrl.manageMemberCtrl.sent_invitations.
-                    map(invite => {
-                        return invite.invitee;
-                    });
-                return selectEmailsCtrl.selectedEmails.filter(email => !invitedEmails.includes(email));
-            }
-            return selectEmailsCtrl.selectedEmails;
+        function removePendingAndMembersEmails() {
+            var invitedEmails = selectEmailsCtrl.manageMemberCtrl.sent_invitations.
+                map(invite => {
+                    return invite.invitee;
+                });
+
+            var membersEmails = [].concat.apply([], selectEmailsCtrl.manageMemberCtrl.members
+                .map(member => {
+                    return member.email;
+                }));
+
+            var emailsNotMembersAndNotInvited = selectEmailsCtrl.selectedEmails.
+                filter(email => !invitedEmails.includes(email) && !membersEmails.includes(email));
+
+            return emailsNotMembersAndNotInvited;
         }
 
         selectEmailsCtrl.sendInvite = function sendInvite() {
-            if(selectEmailsCtrl.selectedEmails.length > 0 && selectEmailsCtrl.selectedEmails.length <= MAX_EMAILS_QUANTITY) {
-                var emails = removeSentInvitations();
-                selectEmailsCtrl.manageMemberCtrl.sendUserInvite(emails);
+            if(!_.isEmpty(selectEmailsCtrl.selectedEmails) && _.size(selectEmailsCtrl.selectedEmails) <= MAX_EMAILS_QUANTITY) {
+                var emails = removePendingAndMembersEmails();
+                if(!_.isEmpty(emails)) {
+                    selectEmailsCtrl.manageMemberCtrl.sendUserInvite(emails);
+                } else {
+                    MessageService.showToast("Todos os e-mails selecionados já foram convidados ou pertencem a algum membro da instituição.")
+                }
                 selectEmailsCtrl.closeDialog();
             } else if(selectEmailsCtrl.selectedEmails > MAX_EMAILS_QUANTITY) {
                 MessageService.showToast("Limite máximo de " + MAX_EMAILS_QUANTITY + " e-mails selecionados excedido.");

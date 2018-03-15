@@ -281,7 +281,7 @@
                 controller: "SelectEmailsController",
                 controllerAs: "selectEmailsCtrl",
                 locals: {
-                    emails: emails,
+                    emails: _.uniq(emails),
                     manageMemberCtrl: manageMemberCtrl
                 },
                 bindToController: true,
@@ -414,8 +414,14 @@
         };
 
         selectEmailsCtrl.removePendingAndMembersEmails = function removePendingAndMembersEmails() {
-            var invitedEmails = selectEmailsCtrl.manageMemberCtrl.sent_invitations.
-                map(invite => {
+
+            var requestedEmails = selectEmailsCtrl.manageMemberCtrl.requests
+                .map(request => {
+                    return request.institutional_email;
+                });
+
+            var invitedEmails = selectEmailsCtrl.manageMemberCtrl.sent_invitations
+                .map(invite => {
                     return invite.invitee;
                 });
 
@@ -424,8 +430,9 @@
                     return member.email;
                 }));
 
-            var emailsNotMembersAndNotInvited = selectEmailsCtrl.selectedEmails.
-                filter(email => !invitedEmails.includes(email) && !membersEmails.includes(email));
+            var emailsNotMembersAndNotInvited = selectEmailsCtrl.selectedEmails
+                .filter(email =>
+                    !invitedEmails.includes(email) && !membersEmails.includes(email) && !requestedEmails.includes(email));
 
             return emailsNotMembersAndNotInvited;
         }
@@ -436,7 +443,7 @@
                 if(!_.isEmpty(emails)) {
                     selectEmailsCtrl.manageMemberCtrl.sendUserInvite(emails);
                 } else {
-                    MessageService.showToast("E-mails selecionados já foram convidados ou pertencem a algum membro da instituição.")
+                    MessageService.showToast("E-mails selecionados já foram convidados, requisitaram ser membro ou pertencem a algum membro da instituição.");
                 }
                 selectEmailsCtrl.closeDialog();
             } else if(selectEmailsCtrl.selectedEmails > MAX_EMAILS_QUANTITY) {

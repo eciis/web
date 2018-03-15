@@ -521,6 +521,7 @@
                 InviteService.sendInviteUserAdm(invite).then(function success(response) {
                     invite.status = 'sent';
                     $mdDialog.hide(invite);
+                    MessageService.showToast("Convite enviado com sucesso!");
                 }, function error(response) {
                     MessageService.showToast(response.data);
                 });

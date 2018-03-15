@@ -45,6 +45,19 @@
             });
         }
 
+        institutionCtrl.changeCover = false;
+
+        var instPage = document.getElementById("instPage");
+        var bigCover = document.getElementById("bigCover");
+        var leftMenu = document.getElementById("leftMenu");
+        var floatingCover = document.getElementById("floatingCover");
+        
+        instPage && instPage.addEventListener('scroll', function() {
+            var rate = instPage.scrollTop / 145;
+            bigCover.style.opacity = 1 - rate;
+            floatingCover.style.opacity = rate;
+        });
+
         function getPortfolioUrl() {
             institutionCtrl.portfolioUrl = institutionCtrl.institution.portfolio_url;
             if(institutionCtrl.portfolioUrl) {

@@ -1,14 +1,19 @@
-<div flex="100" layout="row" layout-align="center">
-    <div flex flex-lg="90" flex-gt-lg="70" layout="row" md-colors="{background: 'grey-50'}">
+<md-content id="instPage" flex="100" layout="row" layout-align="center" class="custom-scrollbar">
+    <div flex flex-lg="90" flex-gt-lg="70" layout="column" md-colors="{background: 'grey-50'}">
+        <div id="floatingCover" class="floating-cover" md-colors="{background: 'teal-500'}" layout="row" layout-align-gt-xs="start center" 
+            layout-align-xs="center center">
+            <img class="inst-img" alt="Foto do Perfil" ng-src="{{ institutionCtrl.institution.photo_url || '/app/images/institution.png' }}">
+            <p class="md-title" style="margin-left: 1em">{{ institutionCtrl.limitString(institutionCtrl.institution.name, 200) }}</p>
+        </div>
         <div layout="column" flex>
-            <div>
+            <div flex>
                 <!-- COVER -->
-                <div layout="column" style="position: relative; height: 15.5em;">
+                <div layout="column" style="height: 15.5em;" id="bigCover">
                     <div ng-if="institutionCtrl.isAdmin()" hide-xs layout="row" layout-align="end start" style="height: 0px; position: relative;">
                         <div layout="column" layout-align "end start">
                             <div layout="row" layout-align="center center" class="cover-photo">
                                 <span class="cover-photo-text">Adicionar foto de capa</span>
-                                <md-button style="position: relative;" class="md-icon-button cover-photo-button" ng-model="institutionCtrl.file" ngf-pattern="'image/*'"
+                                <md-button style="position: relative; z-index:3" class="md-icon-button cover-photo-button" ng-model="institutionCtrl.file" ngf-pattern="'image/*'"
                                     ngf-accept="'image/*'" ngf-max-size="5MB" ngf-select="institutionCtrl.cropImage(institutionCtrl.file, $event)"
                                     ng-click="null">
                                     <md-icon>add_a_photo</md-icon>
@@ -34,10 +39,9 @@
                     </div>
                 </div>
             </div>
-
-            <md-content layout="row" class="custom-scrollbar" flex>
+            <div layout="row" flex="70" style="margin-top:1em;">
                 <!-- LEFT MENU -->
-                <div class="container" layout="row">
+                <div id="leftMenu" class="container" layout="row" style="z-index: 1;">
                     <div flex hide show-gt-sm layout="row">
                         <md-sidenav class="md-sidenav-left" md-component-id="leftNav" md-whiteframe="4" layout="row"
                             md-is-locked-open="$mdMedia('gt-sm')" flex>
@@ -138,9 +142,9 @@
                 </div>
 
                 <!-- INSTITUTION TIMELINE -->
-                <div layout="row" flex ui-view="institution_content" layout="column" md-colors="{background: 'grey-50'}"></div>
-            </md-content>
+                <div layout="row" flex ui-view="institution_content" layout="column" md-colors="{background: 'grey-50'}" style="z-index: 1;"></div>
+            </div>
         </div>
     </div>
-</div>
+</md-content>
     

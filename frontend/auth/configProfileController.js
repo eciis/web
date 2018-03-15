@@ -200,7 +200,7 @@
         };
 
         function deleteUser() {
-            var patch = jsonpatch.generate(observer);
+            var patch = [{op: "replace", path: "/state", value: "inactive"}];
             var promise = UserService.save(patch);
             promise.then(function success() {
                 AuthService.logout();
@@ -209,7 +209,7 @@
             });
             return promise;
         }
-
+        
         (function main() {
             observer = jsonpatch.observe(configProfileCtrl.user);
 

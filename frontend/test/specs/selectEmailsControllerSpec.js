@@ -12,7 +12,8 @@
     };
 
     var emails = ["test1@example.com", "test2@example.com", "test3@example.com"];
-    var members = ["member1@example.com", "member2@example.com"];
+    var members = [{name: "Member 1", email: ["member1@example.com"]},{name: "Member 2", email: ["member2@example.com"]}];
+    var sentInvitations = [{invitee: "test4@example.com"}, {invitee: "test5@example.com"}];
 
     beforeEach(module('app'));
 
@@ -29,6 +30,7 @@
                     institutionService: InstitutionService
         });
         manageMemberCtrl.members = members;
+        manageMemberCtrl.sent_invitations = sentInvitations;
         selectEmailsCtrl = newCtrl('SelectEmailsController', {
             scope: scope,
         }, {
@@ -133,6 +135,14 @@
 
         it('Should return true if is a valid email', function() {
             expect(selectEmailsCtrl.validateEmail(emails[0])).toBeTruthy();
+        });
+    });
+
+    describe('removePendingAndMembersEmails()', function() {
+        it('Should return emails that not belongs to members or has been not invited', function() {
+            selectEmailsCtrl.selectedEmails = ["test1@example.com", "test4@example.com", "member1@example.com"];
+            var filteredEmails = selectEmailsCtrl.removePendingAndMembersEmails();
+            expect(filteredEmails).toEqual(["test1@example.com"]);
         });
     });
 }));

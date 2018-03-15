@@ -413,7 +413,7 @@
             $mdDialog.cancel();
         };
 
-        function removePendingAndMembersEmails() {
+        selectEmailsCtrl.removePendingAndMembersEmails = function removePendingAndMembersEmails() {
             var invitedEmails = selectEmailsCtrl.manageMemberCtrl.sent_invitations.
                 map(invite => {
                     return invite.invitee;
@@ -432,7 +432,7 @@
 
         selectEmailsCtrl.sendInvite = function sendInvite() {
             if(!_.isEmpty(selectEmailsCtrl.selectedEmails) && _.size(selectEmailsCtrl.selectedEmails) <= MAX_EMAILS_QUANTITY) {
-                var emails = removePendingAndMembersEmails();
+                var emails = selectEmailsCtrl.removePendingAndMembersEmails();
                 if(!_.isEmpty(emails)) {
                     selectEmailsCtrl.manageMemberCtrl.sendUserInvite(emails);
                 } else {

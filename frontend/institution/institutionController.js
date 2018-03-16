@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller("InstitutionController", function InstitutionController($state, InstitutionService,
-            InviteService, AuthService, MessageService, $sce, $mdDialog, PdfService, $rootScope, $window, ProfileService, $q) {
+            InviteService, AuthService, MessageService, $sce, $mdDialog, PdfService, $rootScope, $window, ProfileService, $q, CropImageService, ImageService) {
         var institutionCtrl = this;
         var morePosts = true;
         var actualPage = 0;
@@ -20,9 +20,12 @@
         institutionCtrl.instLegalNature = "";
         institutionCtrl.instActuationArea = "";
         institutionCtrl.isLoadingData = true;
+        institutionCtrl.isLoadingCover = false;
+
+        var patch;
+        var observer;
 
         var currentInstitutionKey = $state.params.institutionKey;
-
         institutionCtrl.user = AuthService.getCurrentUser();
         institutionCtrl.addPost = institutionCtrl.user.current_institution.key === currentInstitutionKey;
 
@@ -128,6 +131,10 @@
                 return promise;
             }
         };
+
+        institutionCtrl.showImageCover = function showImageCover(){
+            return !institutionCtrl.isLoadingCover && institutionCtrl.institution.cover_photo;
+        }
 
         institutionCtrl.showHideDescription = function hideDescription() {
             institutionCtrl.showFullDescription = institutionCtrl.institution.description && !institutionCtrl.showFullDescription ;
@@ -264,6 +271,54 @@
                 closeTo: angular.element(document.querySelector('#fab-new-post'))
             });
         };
+
+        institutionCtrl.cropImage = function cropImage(imageFile, event) {
+            CropImageService.crop(imageFile, event, 'rectangle').then(function success(croppedImage) {
+                institutionCtrl.addImage(croppedImage);
+            }, function error() {
+                institutionCtrl.file = null;
+            });
+        };
+
+        institutionCtrl.addImage = function (image) {
+            var newSize = 800;
+
+            ImageService.compress(image, newSize).then(function success(data) {
+                institutionCtrl.cover_photo = data;
+                ImageService.readFile(data, setImage);
+                institutionCtrl.file = null;
+                institutionCtrl.saveImage();
+            }, function error(error) {
+                MessageService.showToast(error);
+            });
+        };
+
+        institutionCtrl.saveImage = function saveImage() {
+            if (institutionCtrl.cover_photo) {
+                institutionCtrl.isLoadingCover = true;
+                ImageService.saveImage(institutionCtrl.cover_photo).then(function success(data) {
+                    updateCoverImage(data);
+                }, function error(response) {
+                    MessageService.showToast(response.msg);
+                });
+            }
+        };
+
+        function updateCoverImage(data) {
+            var patch = [{ op: "replace", path: "/cover_photo", value: data.url }];
+            InstitutionService.update(institutionCtrl.institution.key, patch).then(function success(response) {
+                institutionCtrl.institution = response;
+                institutionCtrl.isLoadingCover = false;
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
+            });
+        }
+
+        function setImage(image) {
+            $rootScope.$apply(function () {
+                institutionCtrl.cover_photo = image.src;
+            });
+        }
 
         function DialogController($mdDialog, portfolioUrl) {
             var ctrl = this;

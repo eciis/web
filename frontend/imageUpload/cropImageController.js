@@ -4,11 +4,12 @@
     var app = angular.module("app");
 
     app.controller('CropImageController', function CropImageController(image_file, $rootScope,
-        $mdDialog, ImageService, MessageService) {
+        $mdDialog, ImageService, MessageService, areaType) {
         var cropImgCtrl = this;
 
         cropImgCtrl.image = '';
         cropImgCtrl.croppedImage = '';
+        cropImgCtrl.areaType = areaType;
 
         function readImage(image_file) {
             ImageService.readFile(image_file, function (image) {

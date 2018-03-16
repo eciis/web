@@ -51,7 +51,7 @@
             </div>
           </md-toolbar>
           <md-card-content ng-show="inviteInstCtrl.showInvites" 
-            ng-style="inviteInstCtrl.calculateHeight(inviteInstCtrl.sent_invitations)" ng-scrollbars>
+             style="overflow: auto; max-height: 235px;" class="custom-scrollbar">
             <md-list class="md-dense" flex>
               <md-list-item class="md-3-line" ng-click="null" ng-repeat="invite in inviteInstCtrl.sent_invitations">
                 <md-icon class="md-avatar-icon" 
@@ -86,7 +86,7 @@
             </div>
           </md-toolbar>
           <md-card-content ng-show="inviteInstCtrl.showRequests" 
-            ng-style="inviteInstCtrl.calculateHeight(inviteInstCtrl.sent_requests)" ng-scrollbars>
+             style="overflow: auto; max-height: 240px;" class="custom-scrollbar">
             <div flex >
               <md-list class="md-dense" flex>
                 <md-list-item class="md-3-line" ng-repeat="request in inviteInstCtrl.sent_requests"
@@ -122,7 +122,7 @@
             </div>
           </md-toolbar>
           <md-card-content  ng-show="inviteInstCtrl.showSentInvitations"
-            ng-style="inviteInstCtrl.calculateHeight(inviteInstCtrl.accepted_invitations)" ng-scrollbars>
+             style="overflow: auto; max-height: 235px;" class="custom-scrollbar">
             <md-list class="md-dense" flex>
               <md-list-item class="md-3-line" ng-repeat="invite in inviteInstCtrl.accepted_invitations">
                 <md-icon class="md-avatar-icon" 

@@ -86,7 +86,7 @@
 
   <!-- SURVEY -->
   <survey-details ng-if="postDetailsCtrl.showSurvey()" post="postDetailsCtrl.post" 
-    posts="postDetailsCtrl.posts" user="postDetailsCtrl.user" isdialog="false" is-post-page="postDetailsCtrl.isPostPage"></survey-details>
+    posts="postDetailsCtrl.posts" user="postDetailsCtrl.user" isdialog="false" is-post-page="postDetailsCtrl.isPostPage" reload-post="postDetailsCtrl.reloadPost"></survey-details>
 
   <!-- BODY SHARED EVENT -->
   <div md-colors="{background: 'teal-500'}" ng-if="postDetailsCtrl.isDeletedEvent(postDetailsCtrl.post) && !postDetailsCtrl.isDeleted(postDetailsCtrl.post)"
@@ -164,8 +164,9 @@
   </pdf-view>
   <md-card-title ng-if="postDetailsCtrl.isShowTitle(postDetailsCtrl.post)">
     <md-card-title-text>
-      <a href class="md-title hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post)">
-        <span class="md-headline break">{{postDetailsCtrl.post.title}}</span>
+      <a href class="md-title hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post)"
+      ng-class="postDetailsCtrl.getResponsiveTitleClass()">
+        <span class="md-headline">{{postDetailsCtrl.post.title}}</span>
       </a>
     </md-card-title-text>
   </md-card-title>

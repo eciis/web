@@ -256,6 +256,10 @@
             }
         };
 
+        postDetailsCtrl.getResponsiveTitleClass = function getResponsiveTitleClass() {
+            return Utils.isLargerThanTheScreen(postDetailsCtrl.post.title) ? 'break' : 'no-break';
+        };
+
         function getOriginalPost(post){
             if(post.shared_post){
                 return post.shared_post;
@@ -505,7 +509,8 @@
         };
     });
 
-    app.controller('CommentController', function CommentController(CommentService, MessageService, ProfileService, $state, AuthService) {
+    app.controller('CommentController', function CommentController(CommentService, MessageService, ProfileService, 
+            $state, AuthService) {
         var commentCtrl = this;
         commentCtrl.user = AuthService.getCurrentUser();
 

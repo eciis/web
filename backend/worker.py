@@ -200,7 +200,7 @@ class NotifyFollowersHandler(BaseHandler):
                     follower.key.urlsafe(),
                     sender_key,
                     entity_type,
-                    entity_key,
+                    entity_key or inst_key,
                     current_institution
                 )
 

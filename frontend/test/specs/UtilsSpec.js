@@ -31,29 +31,6 @@
 	        .toEqual("Access: <a href='http://www.google.com' target='_blank'>http://www.google.com</a>");
 	    });
 	});
-
-	describe('calculateHeight()', function() {
-		it('should set the height to 20em', function() {
-			var requests = ['req01', 'req02', 'req03', 'req05', 'req06'];
-			var calculatedHeigh = Utils.calculateHeight(requests);
-			var expectedHeight = {height: '20em'};
-			expect(calculatedHeigh).toEqual(expectedHeight);
-		});
-
-		it('should set height to less than 20em', function() {
-			var requests = ['req01', 'req02', 'req03'];
-			var calculatedHeigh = Utils.calculateHeight(requests);
-			var expectedHeight = {height: '15em'};
-			expect(calculatedHeigh).toEqual(expectedHeight);
-		});
-
-		it('should set height to 30em', function() {
-			var requests = ['req01', 'req02', 'req03', 'req05', 'req06'];
-			var calculatedHeigh = Utils.calculateHeight(requests, 10, 3);
-			var expectedHeight = {height: '30em'};
-			expect(calculatedHeigh).toEqual(expectedHeight);
-		});
-	});
 }));
 
 

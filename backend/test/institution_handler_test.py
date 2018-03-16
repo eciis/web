@@ -51,6 +51,7 @@ class InstitutionHandlerTest(TestBaseHandler):
         cls.first_inst.put()
         cls.user.institutions_admin = [cls.first_inst.key]
         cls.user.institutions = [cls.first_inst.key]
+        cls.user.follows = [cls.first_inst.key]
         cls.user.add_permission("update_inst", cls.first_inst.key.urlsafe())
         cls.user.add_permission("remove_inst", cls.first_inst.key.urlsafe())
         cls.user.put()
@@ -85,6 +86,7 @@ class InstitutionHandlerTest(TestBaseHandler):
         cls.third_inst = mocks.create_institution()
         cls.third_inst.members = [cls.user.key, cls.other_user.key]
         cls.other_user.add_institution(cls.third_inst.key)
+        cls.other_user.follows.append(cls.third_inst.key)
         cls.third_inst.followers = [cls.user.key, cls.other_user.key]
         cls.third_inst.admin = cls.other_user.key
         cls.third_inst.parent_institution = cls.second_inst.key
@@ -299,6 +301,7 @@ class InstitutionHandlerTest(TestBaseHandler):
         third_user = third_user.key.get()
         # add second_int to second user institutions
         second_user.institutions.append(second_inst.key)
+        second_user.follows.append(second_inst.key)
         second_user.put()
         # update headers
         self.headers['Institution-Authorization'] = second_inst.key.urlsafe()
@@ -410,6 +413,7 @@ class InstitutionHandlerTest(TestBaseHandler):
         self.third_inst.put()
         self.user.institutions.append(self.third_inst.key)
         self.user.institutions.append(self.second_inst.key)
+        self.user.follows = [self.third_inst.key, self.second_inst.key]
         self.user.institutions_admin.append(self.second_inst.key)
         self.user.add_permission("publish_post", self.third_inst.key.urlsafe())
         self.user.add_permissions(["publish_post", "remove_inst"], self.second_inst.key.urlsafe())
@@ -417,6 +421,7 @@ class InstitutionHandlerTest(TestBaseHandler):
         self.other_user.institutions_admin.append(self.third_inst.key)
         self.other_user.institutions.append(self.third_inst.key)
         self.other_user.institutions.append(self.second_inst.key)
+        self.other_user.follows = [self.third_inst.key, self.second_inst.key]
         self.other_user.add_permission("publish_post", self.third_inst.key.urlsafe())
         self.other_user.add_permission("publish_post", self.second_inst.key.urlsafe())
         self.other_user.put()
@@ -446,6 +451,7 @@ class InstitutionHandlerTest(TestBaseHandler):
         """Test delete child institution."""
         self.user.institutions_admin.append(self.second_inst.key)
         self.user.institutions.append(self.third_inst.key)
+        self.user.follows.append(self.third_inst.key)
         self.third_inst.state = "active"
         self.user.add_permissions(["publish_post", "remove_inst"], self.third_inst.key.urlsafe())
         self.user.add_permission("publish_post", self.second_inst.key.urlsafe())

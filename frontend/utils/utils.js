@@ -60,21 +60,6 @@ var Utils = {
     generateLink : function generateLink(url){
         return window.location.host + url;
     },
-
-    /**
-     * Create an object with a calculated property height, to be used with 
-     * the directive ng-style on a html element that has a list of itens in it.
-     * @param  {array} list=[] A list of itens.
-     * @param  {number} itemHeight=5 The css estimated height of one item.
-     * @param  {number} maxItensNumber=4 The max number of itens to be shown in the element per scroll.
-     * @returns {object} The object with the property height.   
-     */
-    calculateHeight : function calculateHeight(list=[], itemHeight=5, maxItensNumber=4) {
-        var maxHeight = itemHeight * maxItensNumber + 'em';
-        var actualHeight = list.length * itemHeight + 'em';
-        var calculedHeight = list.length < maxItensNumber ? actualHeight : maxHeight;
-        return {height: calculedHeight};
-    },
     
     setScrollListener: function setScrollListener(content, callback) {
         var alreadyRequested = false;
@@ -114,5 +99,42 @@ var Utils = {
      */
     normalizeString: function normalizeString(string) {
         return string.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    },
+
+    /**
+     * This function return a boolean to indicate if a string has a word
+     * bigger that screen width proportion.
+     * @param {string} string the string that will be analized.
+     * @returns {boolean} True if string has a word bigger to the screen width proportion. False in otherwise.
+     */
+    isLargerThanTheScreen: function isLargerThanTheScreen(string) {
+        var words = string.split(" ");
+        var greatestWordLength = words
+            .reduce((acumulator, word) => {
+                return acumulator > word.length ? acumulator : word.length;
+            }, 0);
+
+        /* The values references to the width of screen */
+        var smallScreen = 380;
+        var mediumScreen = 640;
+        var largeScreen = 840;
+        var extraLargeScreen = 940;
+
+        /* Max length of a word supported by screen width */
+        var maxLengthWordToSmallScreen = 20;
+        var maxLengthToMediumScreen = 41;
+        var maxLengthToLargeScreen = 57;
+        var maxLengthWordToExtraLargeScreen = 63;
+        var maxLengthWordToGtExtraLargeScreen = 59;
+
+        var screenWidth = screen.width;
+
+        var supportSmallScreen = screenWidth <= smallScreen && greatestWordLength >= maxLengthWordToSmallScreen;
+        var supportMediumScreen = screenWidth > smallScreen && screenWidth <= mediumScreen && greatestWordLength >= maxLengthToMediumScreen;
+        var supportLargeScreen = screenWidth > mediumScreen && screenWidth <= largeScreen && greatestWordLength >= maxLengthToLargeScreen;
+        var supportExtraLargeScreen = screenWidth > largeScreen && screenWidth <= extraLargeScreen && greatestWordLength >= maxLengthWordToExtraLargeScreen;
+        var supportGtExtraLargeScreen = screenWidth > extraLargeScreen && greatestWordLength >= maxLengthWordToGtExtraLargeScreen
+
+        return supportSmallScreen || supportMediumScreen || supportLargeScreen || supportExtraLargeScreen || supportExtraLargeScreen || supportGtExtraLargeScreen;
     }
 };

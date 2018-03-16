@@ -163,6 +163,7 @@ class User(ndb.Model):
             self.institutions.remove(institution)
             self.remove_permission('publish_post', institution.urlsafe())
             self.remove_profile(institution.urlsafe())
+            self.follows.remove(institution)
             if len(self.institutions) == 0:
                 self.change_state('inactive')
             self.put()
@@ -279,7 +280,7 @@ class User(ndb.Model):
     
     def remove_institution_admin(self, institution_key):
         """Remove a institution admin to user."""
-        if institution_key not in self.institutions_admin:
+        if institution_key in self.institutions_admin:
             self.institutions_admin.remove(institution_key)
             self.put()
 

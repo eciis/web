@@ -204,7 +204,7 @@
                 expect(manageMemberCtrl.isValidAllEmails()).toBe(false);
             });
 
-            it('should be false when the invitee was written more then one times', function() {
+            it('should be false when the email was written more then one times', function() {
                 var inviteMember = new Invite({type_of_invite: 'USER',
                                             institution_key: '987654321',
                                             admin_key: '12345'});
@@ -213,7 +213,7 @@
                 expect(manageMemberCtrl.isValidAllEmails()).toBe(false);
             });
 
-            it('should be false when the invitee was requested by the user', function() {
+            it('should be false when the invitee requested an invitation', function() {
                 var inviteMember = new Invite({type_of_invite: 'USER',
                                             institution_key: '987654321',
                                             admin_key: '12345'});
@@ -233,7 +233,8 @@
         });
 
         describe('removePendingAndMembersEmails()', function() {
-            it('Should return emails that not belongs to members or has been not invited', function() {
+            it('Should return emails that are according to with the conditions(is not a member, was not sent the invite,'+
+                 ' was not request the invite, is not duplicated.', function() {
                 var emails = ["testuser@example.com", "member@gmail.com", "new@gmail.com", "new@gmail.com",
                                                 "request@gmail.com", "email@gmail.com"];
                 var filteredEmails = manageMemberCtrl.removePendingAndMembersEmails(emails);

@@ -17,6 +17,12 @@ class InviteUserAdm(InviteUser):
             "The invitee is not a member of this institution!", 
             NotAuthorizedException)
         
+        Utils._assert(
+            self.admin_key != institution.admin, 
+            "Sender is not admin of this institution!", 
+            NotAuthorizedException
+        )
+        
         queryAnotherInvite = InviteUserAdm.query(
             InviteUserAdm.institution_key == self.institution_key,
             InviteUserAdm.status == 'sent'

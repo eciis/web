@@ -2,7 +2,7 @@
 
 (describe('Test HomeController', function() {
 
-    var homeCtrl, httpBackend, scope, createCtrl, mdDialog, state, postService, http;
+    var homeCtrl, httpBackend, scope, createCtrl, mdDialog, state, postService, http, notificationService;
 
     var institutions = [{
         acronym: 'Certbio',
@@ -34,13 +34,14 @@
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, InstitutionService,
-            PostService, $mdDialog, $state, AuthService, $http) {
+            PostService, $mdDialog, $state, AuthService, $http, NotificationService) {
         httpBackend = $httpBackend;
         http = $http;
         scope = $rootScope.$new();
         mdDialog = $mdDialog;
         state = $state;
         postService = PostService;
+        notificationService = NotificationService;
         httpBackend.expect('GET', '/api/user/timeline?page=0&limit=10').respond({posts: posts, next: true});
         httpBackend.when('GET', "/api/events?page=0&limit=5").respond([event]);
         httpBackend.when('GET', 'main/main.html').respond(200);
@@ -136,6 +137,13 @@
                         }
                     };
                 });
+                spyOn(notificationService, 'watchPostNotification').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            callback();
+                        }
+                    };
+                });
             });
 
             /* 
@@ -144,7 +152,6 @@
             Client doesn't have permission to access the desired data.
             @author: Mayza Nunes 16/03/2017
             */
-            /*
             it('Should call institutionService.getNextPosts()', function(done) {
                 var promise = homeCtrl.loadMorePosts();
                 var actualPage = 1;
@@ -153,9 +160,8 @@
                     expect(postService.getNextPosts).toHaveBeenCalledWith(actualPage);
                     done();
                 });
-
                 scope.$apply();
-            });*/
+            });
         });
 
         describe('eventInProgress()', function() {

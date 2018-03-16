@@ -65,6 +65,7 @@
                 dialog.then(function() {
                     surveyCtrl.voteService().then(function () {
                         syncSharedPosts();
+                        surveyCtrl.reloadPost();
                     });
                 }, function() {
                     MessageService.showToast('Cancelado');
@@ -88,7 +89,8 @@
         * @return {undefined} - Void function returns undefined.
         */
         function syncSharedPosts() {
-            surveyCtrl.posts = surveyCtrl.posts.map(post => updateSharedPost(post, surveyCtrl.post));
+            if(surveyCtrl.posts)
+                surveyCtrl.posts = surveyCtrl.posts.map(post => updateSharedPost(post, surveyCtrl.post));
         }
 
         surveyCtrl.voteService = function(){
@@ -195,7 +197,8 @@
                 posts: '=',
                 user: '=',
                 isdialog: '=',
-                isPostPage: '='
+                isPostPage: '=',
+                reloadPost: '='
             }
         };
     });

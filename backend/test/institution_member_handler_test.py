@@ -41,6 +41,7 @@ class InstitutionMemberHandlerTest(TestBaseHandler):
         cls.other_institution.put()
         # update user
         cls.user.institutions = [cls.institution.key, cls.other_institution.key]
+        cls.user.follows = [cls.institution.key, cls.other_institution.key]
         cls.user.institutions_admin = [cls.institution.key, cls.other_institution.key]
         cls.user.add_permission("publish_post", cls.institution.key.urlsafe())
         cls.user.add_permission("publish_post", cls.other_institution.key.urlsafe())
@@ -48,6 +49,7 @@ class InstitutionMemberHandlerTest(TestBaseHandler):
         cls.user.add_permission("remove_member", cls.other_institution.key.urlsafe())
         cls.user.put()
         cls.second_user.institutions = [cls.institution.key]
+        cls.second_user.follows = [cls.institution.key]
         cls.second_user.add_permission("publish_post", cls.institution.key.urlsafe())
         cls.second_user.put()
         # create headers
@@ -91,6 +93,7 @@ class InstitutionMemberHandlerTest(TestBaseHandler):
         # new user
         third_user = mocks.create_user()
         third_user.institutions = [self.institution.key]
+        third_user.follows = [self.institution.key]
         third_user.put()
         # update institution
         self.institution.members.append(third_user.key)

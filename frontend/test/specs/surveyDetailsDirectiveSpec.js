@@ -54,6 +54,7 @@
         surveyCtrl.user = user;
         surveyCtrl.post = survey;
         surveyCtrl.posts = [survey,shared_post];
+        surveyCtrl.reloadPost = () => {};
 
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);

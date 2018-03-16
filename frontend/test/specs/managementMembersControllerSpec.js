@@ -52,7 +52,8 @@
      var request = {
          status: 'sent',
          key: '123',
-         type_of_invite: 'REQUEST_USER'
+         type_of_invite: 'REQUEST_USER',
+         institutional_email: 'request@gmail.com'
      }
 
     beforeEach(module('app'));
@@ -182,21 +183,61 @@
                                             admin_key: '12345'});
                 expect(manageMemberCtrl.isUserInvitesValid(newInvite, ["teste@gmail.com"])).toBe(true);
             });
+        });
+
+        describe('isValidAllEmails()', function() {
 
             it('should be false when the invitee was already invited', function() {
                 var inviteInvited = new Invite({type_of_invite: 'USER',
                                             institution_key: '987654321',
                                             admin_key: '12345'});
-                expect(manageMemberCtrl.isUserInvitesValid(inviteInvited, ["testuser@example.com", 
-                    "member@gmail.com"])).toBe(false);
+                manageMemberCtrl.emails = ["testuser@example.com"];
+                expect(manageMemberCtrl.isValidAllEmails()).toBe(false);
             });
 
             it('should be false when the invitee was already member', function() {
                 var inviteMember = new Invite({type_of_invite: 'USER',
                                             institution_key: '987654321',
                                             admin_key: '12345'});
-                expect(manageMemberCtrl.isUserInvitesValid(inviteMember, ["member@gmail.com", 
-                    "testuser@example.com"])).toBe(false);
+
+                 manageMemberCtrl.emails = ["member@gmail.com"];
+                expect(manageMemberCtrl.isValidAllEmails()).toBe(false);
+            });
+
+            it('should be false when the invitee was written more then one times', function() {
+                var inviteMember = new Invite({type_of_invite: 'USER',
+                                            institution_key: '987654321',
+                                            admin_key: '12345'});
+
+                manageMemberCtrl.emails = ["new@gmail.com", "new@gmail.com"];
+                expect(manageMemberCtrl.isValidAllEmails()).toBe(false);
+            });
+
+            it('should be false when the invitee was requested by the user', function() {
+                var inviteMember = new Invite({type_of_invite: 'USER',
+                                            institution_key: '987654321',
+                                            admin_key: '12345'});
+
+                 manageMemberCtrl.emails = ['request@gmail.com'];
+                expect(manageMemberCtrl.isValidAllEmails()).toBe(false);
+            });
+
+            it('should be true', function() {
+                var inviteMember = new Invite({type_of_invite: 'USER',
+                                            institution_key: '987654321',
+                                            admin_key: '12345'});
+
+                 manageMemberCtrl.emails = ['email@gmail.com'];
+                expect(manageMemberCtrl.isValidAllEmails()).toBe(false);
+            });
+        });
+
+        describe('removePendingAndMembersEmails()', function() {
+            it('Should return emails that not belongs to members or has been not invited', function() {
+                var emails = ["testuser@example.com", "member@gmail.com", "new@gmail.com", "new@gmail.com",
+                                                "request@gmail.com", "email@gmail.com"];
+                var filteredEmails = manageMemberCtrl.removePendingAndMembersEmails(emails);
+                expect(filteredEmails).toEqual(["new@gmail.com", "email@gmail.com"]);
             });
         });
 

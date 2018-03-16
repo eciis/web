@@ -1,11 +1,10 @@
 'use strict';
-var scope = null;
 (function() {
     var app = angular.module('app');
 
     app.controller("ManagementMembersController", function InviteUserController(
         InviteService, $mdToast, $state, $mdDialog, InstitutionService, AuthService, MessageService,
-        RequestInvitationService, ProfileService, $scope) {
+        RequestInvitationService, ProfileService) {
         var manageMemberCtrl = this;
         var MAX_EMAILS_QUANTITY = 10;
 
@@ -32,7 +31,6 @@ var scope = null;
 
         var currentInstitutionKey = $state.params.institutionKey;
         var invite;
-        scope = $scope;
 
         manageMemberCtrl.user = AuthService.getCurrentUser();
 
@@ -72,8 +70,8 @@ var scope = null;
                 invite_body: invite,
                 emails: emails
             }
-
-            if (manageMemberCtrl.isUserInvitesValid(invite, emails)) {
+            
+            if (manageMemberCtrl.isValidAllEmails()) {
                 manageMemberCtrl.isLoadingInvite = true;
                 var promise = InviteService.sendInvite(requestBody);
                 promise.then(function success(response) {
@@ -234,18 +232,6 @@ var scope = null;
             if (! invite.isValid()) {
                 isValid = false;
                 MessageService.showToast('Convite inválido!');
-            } else {
-                var memberEmail = getMember(emails);
-                if(memberEmail) {
-                    isValid = false;
-                    MessageService.showToast('O email ' + memberEmail + ' pertence a um membro da instituição');
-                } else {
-                    var invitedEmail = getInvitedEmail(emails);
-                    if(invitedEmail) {
-                        isValid = false;
-                        MessageService.showToast('O email ' + invitedEmail + ' já foi convidado');
-                    }
-                }
             }
             return isValid;
         };
@@ -274,22 +260,44 @@ var scope = null;
         };
 
         manageMemberCtrl.changeEmail = function changeEmail(field) {
-            if(field.email === empty_email.email){ 
-                removeField(field) 
-            }else{
-                document.getElementById('email1').onchange = manageMemberCtrl.isValidEmail;
-                addField();
-            }
+            (field.email === empty_email.email)? removeField(field) : addField();
         };
 
-        manageMemberCtrl.isValidEmail = function isValidEmail() {
-            //(field.email === empty_email.email) ? addField() : addField();
-            // Se não for válido
-            var name = "email1"
-            var input =  document.getElementById(name);
-            console.log(name, input);
-            input.setCustomValidity("Esse email não é válido.");        
-        };
+        manageMemberCtrl.removePendingAndMembersEmails = function removePendingAndMembersEmails(emails) {
+            var requestedEmails = manageMemberCtrl.requests
+                .map(request => {
+                    return request.institutional_email;
+                });
+
+            var invitedEmails = manageMemberCtrl.sent_invitations
+                .map(invite => {
+                    return invite.invitee;
+                });
+
+            var membersEmails = [].concat.apply([], manageMemberCtrl.members
+                .map(member => {
+                    return member.email;
+                }));
+
+            var emailsNotMembersAndNotInvited = emails.filter(email =>
+                    !invitedEmails.includes(email) && !membersEmails.includes(email) 
+                        && !requestedEmails.includes(email));
+
+            return (emailsNotMembersAndNotInvited[0] === undefined) ? [] :  _.uniq(emailsNotMembersAndNotInvited);
+        }
+
+        manageMemberCtrl.isValidAllEmails = function isValidAllEmails() {
+            var emails = manageMemberCtrl.emails.map(email => email.email);
+            var correctArray = manageMemberCtrl.removePendingAndMembersEmails(emails);
+
+            if(correctArray.length !== manageMemberCtrl.emails.length){
+                MessageService.showToast("E-mails selecionados já foram convidados, " +
+                                "requisitaram ser membro ou pertencem a algum" +
+                                " membro da instituição.");
+                return false;
+            }
+            return true;
+        }
 
         function selectEmailsDialog(emails, ev) {
             $mdDialog.show({
@@ -429,33 +437,9 @@ var scope = null;
             $mdDialog.cancel();
         };
 
-        selectEmailsCtrl.removePendingAndMembersEmails = function removePendingAndMembersEmails() {
-
-            var requestedEmails = selectEmailsCtrl.manageMemberCtrl.requests
-                .map(request => {
-                    return request.institutional_email;
-                });
-
-            var invitedEmails = selectEmailsCtrl.manageMemberCtrl.sent_invitations
-                .map(invite => {
-                    return invite.invitee;
-                });
-
-            var membersEmails = [].concat.apply([], selectEmailsCtrl.manageMemberCtrl.members
-                .map(member => {
-                    return member.email;
-                }));
-
-            var emailsNotMembersAndNotInvited = selectEmailsCtrl.selectedEmails
-                .filter(email =>
-                    !invitedEmails.includes(email) && !membersEmails.includes(email) && !requestedEmails.includes(email));
-
-            return emailsNotMembersAndNotInvited;
-        }
-
         selectEmailsCtrl.sendInvite = function sendInvite() {
             if(!_.isEmpty(selectEmailsCtrl.selectedEmails) && _.size(selectEmailsCtrl.selectedEmails) <= MAX_EMAILS_QUANTITY) {
-                var emails = selectEmailsCtrl.removePendingAndMembersEmails();
+                var emails = selectEmailsCtrl.manageMemberCtrl.removePendingAndMembersEmails(selectEmailsCtrl.selectedEmails)
                 if(!_.isEmpty(emails)) {
                     selectEmailsCtrl.manageMemberCtrl.sendUserInvite(emails);
                 } else {

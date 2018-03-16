@@ -26,7 +26,7 @@
             <md-input-container md-no-float class="md-block md-icon-right md-icon-float" class="inputEmail"
               ng-repeat="currentEmail in manageMemberCtrl.emails" style="height:20px;"  md-colors="{color: 'grey-500'}">
               <input class="inputEmail" ng-model="currentEmail.email" ng-change="manageMemberCtrl.changeEmail(currentEmail)" md-maxlength="120"
-                type="email" id="email1"  name="{{manageMemberCtrl.getInputName(currentEmail)}}" placeholder="+ Adicionar um endereço de e-mail..." style="height:20px;">
+                type="email" id="{{manageMemberCtrl.getInputName(currentEmail)}}" placeholder="+ Adicionar um endereço de e-mail..." style="height:20px;">
             </md-input-container>
           </md-content>
           <load-circle flex ng-if="manageMemberCtrl.isLoadingInvite"></load-circle>

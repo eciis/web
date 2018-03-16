@@ -138,12 +138,4 @@
             expect(selectEmailsCtrl.validateEmail(emails[0])).toBeTruthy();
         });
     });
-
-    describe('removePendingAndMembersEmails()', function() {
-        it('Should return emails that not belongs to members or has been not invited', function() {
-            selectEmailsCtrl.selectedEmails = ["test1@example.com", "member1@example.com", "test4@example.com", "test5@example.com"];
-            var filteredEmails = selectEmailsCtrl.removePendingAndMembersEmails();
-            expect(filteredEmails).toEqual(["test1@example.com"]);
-        });
-    });
 }));

@@ -975,3 +975,13 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
     padding-top :0px;
     margin-top : -25px;
 }
+
+.status-invite-adm {
+    border: solid; 
+    height: 35px; 
+    width: 148px;
+    text-align: center; 
+    border-color: rgb(0, 150, 136); 
+    border-radius: 3px;
+    font-weight: bold;
+}

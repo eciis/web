@@ -18,7 +18,7 @@ class InviteUserAdm(InviteUser):
             NotAuthorizedException)
         
         Utils._assert(
-            self.admin_key != institution.admin, 
+            self.sender_key != institution.admin, 
             "Sender is not admin of this institution!", 
             NotAuthorizedException
         )

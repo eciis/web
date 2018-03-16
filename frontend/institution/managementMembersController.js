@@ -69,7 +69,7 @@
                 });
 
                 manageMemberCtrl.sent_invitations_adm.push(response);
-            });
+            }, function error() {});
         };
 
         manageMemberCtrl.removeMember = function removeMember(member_obj) {

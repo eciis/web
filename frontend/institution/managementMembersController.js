@@ -121,10 +121,6 @@
                 return promise;
         };
 
-        manageMemberCtrl.getInputName = function getInputName(currentEmail){
-            return "email" + _.indexOf(manageMemberCtrl.emails, currentEmail);
-        };
-
         function deleteRequest(request) {
             var promise = RequestInvitationService.rejectRequest(request.key);
             promise.then(function success() {
@@ -260,7 +256,7 @@
         };
 
         manageMemberCtrl.changeEmail = function changeEmail(field) {
-            (field.email === empty_email.email)? removeField(field) : addField();
+            (field.email === empty_email.email) ? removeField(field) : addField();
         };
 
         manageMemberCtrl.removePendingAndMembersEmails = function removePendingAndMembersEmails(emails) {

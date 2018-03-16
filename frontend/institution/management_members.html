@@ -21,12 +21,12 @@
         <p md-colors="{color: 'grey-600'}">Coloque abaixo os endereços de e-mail das pessoas que você deseja convidar 
           para fazer parte da sua instituição na Plataforma CIS.</p>
         <p style="font-size: 10px; margin-bottom: 0; margin-top:30px;" md-colors="{color: 'grey-700'}">Endereço de e-mail</p>
-        <form ng-submit="manageMemberCtrl.sendUserInvite()">
+        <form name="myForm" ng-submit="manageMemberCtrl.sendUserInvite()">
           <md-content style="max-height: 250px" class="custom-scrollbar">
             <md-input-container md-no-float class="md-block md-icon-right md-icon-float" class="inputEmail"
               ng-repeat="currentEmail in manageMemberCtrl.emails" style="height:20px;"  md-colors="{color: 'grey-500'}">
               <input class="inputEmail" ng-model="currentEmail.email" ng-change="manageMemberCtrl.changeEmail(currentEmail)" md-maxlength="120"
-                type="email" name="email" placeholder="+ Adicionar um endereço de e-mail..." style="height:20px;">
+                type="email" id="email1"  name="{{manageMemberCtrl.getInputName(currentEmail)}}" placeholder="+ Adicionar um endereço de e-mail..." style="height:20px;">
             </md-input-container>
           </md-content>
           <load-circle flex ng-if="manageMemberCtrl.isLoadingInvite"></load-circle>

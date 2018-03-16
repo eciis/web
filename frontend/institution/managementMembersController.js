@@ -1,10 +1,11 @@
 'use strict';
+var scope = null;
 (function() {
     var app = angular.module('app');
 
     app.controller("ManagementMembersController", function InviteUserController(
         InviteService, $mdToast, $state, $mdDialog, InstitutionService, AuthService, MessageService,
-        RequestInvitationService, ProfileService) {
+        RequestInvitationService, ProfileService, $scope) {
         var manageMemberCtrl = this;
         var MAX_EMAILS_QUANTITY = 10;
 
@@ -31,6 +32,7 @@
 
         var currentInstitutionKey = $state.params.institutionKey;
         var invite;
+        scope = $scope;
 
         manageMemberCtrl.user = AuthService.getCurrentUser();
 
@@ -76,7 +78,7 @@
                 var promise = InviteService.sendInvite(requestBody);
                 promise.then(function success(response) {
                     refreshSentInvitations(requestBody.emails);
-                    manageMemberCtrl.invite = {};
+                    manageMemberCtrl.cancelInvite(); 
                     manageMemberCtrl.showInvites = true; 
                     manageMemberCtrl.showSendInvite = false;
                     manageMemberCtrl.isLoadingInvite = false;
@@ -119,6 +121,10 @@
                     MessageService.showToast('Rejeição de pedido cancelada!');
                 });
                 return promise;
+        };
+
+        manageMemberCtrl.getInputName = function getInputName(currentEmail){
+            return "email" + _.indexOf(manageMemberCtrl.emails, currentEmail);
         };
 
         function deleteRequest(request) {
@@ -272,7 +278,21 @@
         };
 
         manageMemberCtrl.changeEmail = function changeEmail(field) {
-            (field.email === empty_email.email) ? removeField(field) : addField();
+            if(field.email === empty_email.email){ 
+                removeField(field) 
+            }else{
+                document.getElementById('email1').onchange = manageMemberCtrl.isValidEmail;
+                addField();
+            }
+        };
+
+        manageMemberCtrl.isValidEmail = function isValidEmail() {
+            //(field.email === empty_email.email) ? addField() : addField();
+            // Se não for válido
+            var name = "email1"
+            var input =  document.getElementById(name);
+            console.log(name, input);
+            input.setCustomValidity("Esse email não é válido.");        
         };
 
         function selectEmailsDialog(emails, ev) {

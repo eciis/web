@@ -51,16 +51,15 @@
                   <!--
                     Hidden on first version, because this option has not will be disponible yet.
                   -->
-                  <div ng-if="false">
-                    <p style="color: black;">
-                      <b>Se você ainda não possui uma conta na Plataforma CIS solicite abaixo um convite.</b>
-                    </p>
-                    <md-button md-colors="{background: 'teal-500'}" class="login-button" ng-click="loginCtrl.isRequestInvite = true"
-                      style="margin-bottom: 30px;">
-                        <md-icon style="color: white; padding-left: 1em;">add_circle</md-icon>
-                        <span>SOLICITAR CONVITE</span>
-                    </md-button>
-                  </div>
+                <md-divider></md-divider>
+                <p style="color: black;">
+                  <b>Se você ainda não possui uma conta na Plataforma CIS solicite abaixo um convite.</b>
+                </p>
+                <md-button md-colors="{background: 'teal-500'}" class="login-button" ng-click="loginCtrl.isRequestInvite = true"
+                  style="margin-bottom: 30px; margin: 10px 0 10px 0;">
+                    <md-icon style="color: white; padding-left: 1em;">add_circle</md-icon>
+                    <span>SOLICITAR CONVITE</span>
+                </md-button>
               </div>
             </md-card-content>
             <div style="padding: 15px; font-size: 14px;" md-colors="{background: 'grey-300'}" hide-xs>

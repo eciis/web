@@ -157,6 +157,7 @@
         };
 
         userInactiveCtrl.goToLandingPage = function goToLandingPage() {
+            userInactiveCtrl.logout();
             $window.open(Config.LANDINGPAGE_URL, '_self');
         };
 

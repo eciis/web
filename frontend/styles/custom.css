@@ -1072,7 +1072,7 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
 .floating-menu {
     position: fixed;
     z-index: 2;
-    margin-top: -10em;
+    margin-top: -10.5em;
 }
 
 @-moz-document url-prefix() { 

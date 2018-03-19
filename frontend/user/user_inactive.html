@@ -65,7 +65,7 @@
                     </div>
 
                     <!-- Form user -->
-                    <form name="requestuser"  ng-if="userInactiveCtrl.showRequestUser()" style="margin: 0px;">
+                    <form ng-submit="userInactiveCtrl.verifyAndSendRequest()" name="requestuser"  ng-if="userInactiveCtrl.showRequestUser()" style="margin: 0px;">
                         <div layout="row" style="font-weight: 500" ng-if="userInactiveCtrl.showRequestUser()">
                                 <p>Para finalizar o pedido de convite, preencha suas informações institucionais.</p>
                         </div>
@@ -82,7 +82,7 @@
                             <input ng-model="userInactiveCtrl.request.email" type="email" name="email" required>
                         </md-input-container>
                         <div layout="row" layout-align="end">
-                            <md-button ng-click="userInactiveCtrl.send()"
+                            <md-button type="submit"
                             class="md-raised md-primary" md-colors="{background: 'teal-500'}">
                                 FINALIZAR
                             </md-button>

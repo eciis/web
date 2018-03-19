@@ -98,17 +98,6 @@
             return false;
         };
 
-        userInactiveCtrl.send = function send(){
-            var emptyName =  userInactiveCtrl.request.name === undefined;
-            var emptyOffice = userInactiveCtrl.request.office === undefined;
-            var emptyEmail = userInactiveCtrl.request.email === undefined;
-            if(emptyName || emptyOffice || emptyEmail){
-                MessageService.showToast("Preencha todos os campos.");
-            } else {
-                userInactiveCtrl.verifyAndSendRequest();
-            }
-        };
-
         userInactiveCtrl.isInstSelect = function isInstSelect(institution){
             return userInactiveCtrl.institutionSelect.key === institution.id;
         };

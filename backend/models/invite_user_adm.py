@@ -8,6 +8,7 @@ from custom_exceptions.notAuthorizedException import NotAuthorizedException
 class InviteUserAdm(InviteUser):
     """Model of Invite User Admin."""
 
+
     def check_invite(self):
         invitee = self.invitee_key
         institution = self.institution_key.get()
@@ -15,6 +16,23 @@ class InviteUserAdm(InviteUser):
             invitee not in institution.members, 
             "The invitee is not a member of this institution!", 
             NotAuthorizedException)
+        
+        Utils._assert(
+            self.sender_key != institution.admin, 
+            "Sender is not admin of this institution!", 
+            NotAuthorizedException
+        )
+        
+        queryAnotherInvite = InviteUserAdm.query(
+            InviteUserAdm.institution_key == self.institution_key,
+            InviteUserAdm.status == 'sent'
+        )
+
+        Utils._assert(
+           queryAnotherInvite.count() > 0,
+           "An invitation is already being processed for this institution!",
+           NotAuthorizedException
+        )
         
 
     @staticmethod
@@ -26,14 +44,13 @@ class InviteUserAdm(InviteUser):
         return invite
         
 
-    def send_notification(self, current_institution, entity_type=None, sender_key=None, receiver_key=None):
-        if not entity_type:
-         entity_type = 'USER_ADM'
+    def send_notification(self, current_institution):
+        entity_type = 'USER_ADM'
          
         super(InviteUserAdm, self).send_notification(
             current_institution=current_institution, 
-            sender_key=sender_key, 
-            receiver_key=receiver_key,
+            sender_key=self.sender_key, 
+            receiver_key=self.invitee_key,
             entity_type=entity_type
         )
     

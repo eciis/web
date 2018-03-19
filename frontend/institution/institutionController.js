@@ -45,20 +45,24 @@
             });
         }
 
-        institutionCtrl.changeCover = false;
-
-        var instPage = document.getElementById("instPage");
-        var bigCover = document.getElementById("bigCover");
-        var leftMenu = document.getElementById("leftMenu");
-        var floatingCover = document.getElementById("floatingCover");
+        changeCoverOnScroll();
         
-        instPage && instPage.addEventListener('scroll', function() {
-            var rate = instPage.scrollTop / 145;
-            bigCover.style.opacity = 1 - rate;
-            floatingCover.style.opacity = rate;
-
-            instPage.scrollTop >= 160 ? leftMenu.classList.add('floating-menu') : leftMenu.classList.remove('floating-menu');
-        });
+        function changeCoverOnScroll() {
+            var instPage = document.getElementById("instPage");
+            var bigCover = document.getElementById("bigCover");
+            var leftMenu = document.getElementById("leftMenu");
+            var floatingCoverGtLg = document.getElementById("floatingCoverGtLg");
+            var floatingCoverLg = document.getElementById("floatingCoverLg");
+            
+            instPage && instPage.addEventListener('scroll', function() {
+                var rate = instPage.scrollTop / 145;
+                bigCover.style.opacity = 1 - rate;
+                floatingCoverLg.style.opacity = rate;
+                floatingCoverGtLg.style.opacity = rate;
+    
+                instPage.scrollTop >= 160 ? leftMenu.classList.add('floating-menu') : leftMenu.classList.remove('floating-menu');
+            });
+        }
 
         function getPortfolioUrl() {
             institutionCtrl.portfolioUrl = institutionCtrl.institution.portfolio_url;

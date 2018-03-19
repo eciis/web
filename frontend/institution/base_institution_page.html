@@ -1,44 +1,51 @@
 <md-content id="instPage" flex="100" layout="row" layout-align="center" class="custom-scrollbar">
     <div flex flex-lg="90" flex-gt-lg="70" layout="column" md-colors="{background: 'grey-50'}">
-        <div id="floatingCover" class="floating-cover" md-colors="{background: 'teal-500'}" layout="row" layout-align-gt-xs="start center" 
-            layout-align-xs="center center">
-            <img class="inst-img" alt="Foto do Perfil" ng-src="{{ institutionCtrl.institution.photo_url || '/app/images/institution.png' }}">
-            <p class="md-title" style="margin-left: 1em">{{ institutionCtrl.limitString(institutionCtrl.institution.name, 200) }}</p>
-        </div>
+        
         <div layout="column" flex>
-            <div flex>
-                <!-- COVER -->
-                <div layout="column" style="height: 15.5em;" id="bigCover">
-                    <div ng-if="institutionCtrl.isAdmin()" hide-xs layout="row" layout-align="end start" style="height: 0px; position: relative;">
-                        <div layout="column" layout-align "end start">
-                            <div layout="row" layout-align="center center" class="cover-photo">
-                                <span class="cover-photo-text">Adicionar foto de capa</span>
-                                <md-button style="position: relative; z-index:3" class="md-icon-button cover-photo-button" ng-model="institutionCtrl.file" ngf-pattern="'image/*'"
-                                    ngf-accept="'image/*'" ngf-max-size="5MB" ngf-select="institutionCtrl.cropImage(institutionCtrl.file, $event)"
-                                    ng-click="null">
-                                    <md-icon>add_a_photo</md-icon>
-                                </md-button>
-                            </div>
-                        </div>
-                    </div>
-                    <div md-colors="{background: 'light-green-500'}" style="margin: 0; height: 11em; overflow: hidden;">
-                        <img ng-if="institutionCtrl.institution.cover_photo" ng-src="{{institutionCtrl.institution.cover_photo}}" style="width: 100%;"/>
-                    </div>
-                    <div md-colors="{background: 'teal-500'}" style="height: 4em;" layout-xs="column" layout="row"
-                        layout-align-gt-xs="start center" layout-align-xs="center center">
-                        <img hide-xs style="height: 10em; width: 10em; margin: -7.5em 2em 0 3em; border-radius: 50%;" 
-                            ng-src="{{ institutionCtrl.institution.photo_url || '/app/images/institution.png' }}"/>
-                        <img hide-gt-xs style="height: 8em; width:8em; margin: -7em 0 -0.8em 0; border-radius: 50%;" 
-                            ng-src="{{ institutionCtrl.institution.photo_url || '/app/images/institution.png' }}"/>
-                        <div class="md-title">
-                            <p hide-xs>{{ institutionCtrl.limitString(institutionCtrl.institution.name, 200) }}</p>
-                            <center hide-gt-xs>
-                                <p style="font-size:0.8em">{{ institutionCtrl.limitString(institutionCtrl.institution.name, 110) }}</p>
-                            </center>
+            <!-- FLOATING COVER -->
+            <div id="floatingCoverGtLg" class="floating-cover" md-colors="{background: 'teal-500'}" layout="row" layout-align="start center"
+                style="width: 83.9em" hide show-gt-lg>
+                <img class="inst-img" alt="Foto do Perfil" ng-src="{{ institutionCtrl.institution.photo_url || '/app/images/institution.png' }}">
+                <p class="md-title" style="margin-left: 1em">{{ institutionCtrl.limitString(institutionCtrl.institution.name, 200) }}</p>
+            </div>
+            <div id="floatingCoverLg" class="floating-cover" md-colors="{background: 'teal-500'}" layout="row" layout-align="start center"
+                style="width: 80.9em" hide show-lg>
+                <img class="inst-img" alt="Foto do Perfil" ng-src="{{ institutionCtrl.institution.photo_url || '/app/images/institution.png' }}">
+                <p class="md-title" style="margin-left: 1em">{{ institutionCtrl.limitString(institutionCtrl.institution.name, 200) }}</p>
+            </div>
+
+            <!-- COVER -->
+            <div layout="column" style="height: 15.5em;" id="bigCover">
+                <div ng-if="institutionCtrl.isAdmin()" hide-xs layout="row" layout-align="end start" style="height: 0px; position: relative;">
+                    <div layout="column" layout-align "end start">
+                        <div layout="row" layout-align="center center" class="cover-photo">
+                            <span class="cover-photo-text">Adicionar foto de capa</span>
+                            <md-button style="position: relative; z-index:3" class="md-icon-button cover-photo-button" ng-model="institutionCtrl.file" ngf-pattern="'image/*'"
+                                ngf-accept="'image/*'" ngf-max-size="5MB" ngf-select="institutionCtrl.cropImage(institutionCtrl.file, $event)"
+                                ng-click="null">
+                                <md-icon>add_a_photo</md-icon>
+                            </md-button>
                         </div>
                     </div>
                 </div>
+                <div md-colors="{background: 'light-green-500'}" style="margin: 0; height: 11em; overflow: hidden;">
+                    <img ng-if="institutionCtrl.institution.cover_photo" ng-src="{{institutionCtrl.institution.cover_photo}}" style="width: 100%;"/>
+                </div>
+                <div md-colors="{background: 'teal-500'}" style="height: 4em;" layout-xs="column" layout="row"
+                    layout-align-gt-xs="start center" layout-align-xs="center center">
+                    <img hide-xs style="height: 10em; width: 10em; margin: -7.5em 2em 0 3em; border-radius: 50%;" 
+                        ng-src="{{ institutionCtrl.institution.photo_url || '/app/images/institution.png' }}"/>
+                    <img hide-gt-xs style="height: 8em; width:8em; margin: -7em 0 -0.8em 0; border-radius: 50%;" 
+                        ng-src="{{ institutionCtrl.institution.photo_url || '/app/images/institution.png' }}"/>
+                    <div class="md-title">
+                        <p hide-xs>{{ institutionCtrl.limitString(institutionCtrl.institution.name, 200) }}</p>
+                        <center hide-gt-xs>
+                            <p style="font-size:0.8em">{{ institutionCtrl.limitString(institutionCtrl.institution.name, 110) }}</p>
+                        </center>
+                    </div>
+                </div>
             </div>
+
             <div layout="row" flex="70" style="margin-top:1em;">
                 <!-- LEFT MENU -->
                 <div flex="25" hide show-gt-sm>

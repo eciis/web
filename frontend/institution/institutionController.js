@@ -133,7 +133,7 @@
         };
 
         institutionCtrl.showImageCover = function showImageCover(){
-            return !institutionCtrl.isLoadingCover && institutionCtrl.institution.cover_photo;
+                return institutionCtrl.institution && !institutionCtrl.isLoadingCover && institutionCtrl.institution.cover_photo;
         }
 
         institutionCtrl.showHideDescription = function hideDescription() {

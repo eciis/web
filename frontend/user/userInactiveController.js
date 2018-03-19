@@ -99,9 +99,10 @@
         };
 
         userInactiveCtrl.send = function send(){
+            var emptyName =  userInactiveCtrl.request.name === undefined;
             var emptyOffice = userInactiveCtrl.request.office === undefined;
-            var emptyEmail = userInactiveCtrl.request.office === undefined;
-            if(emptyOffice && emptyEmail){
+            var emptyEmail = userInactiveCtrl.request.email === undefined;
+            if(emptyName || emptyOffice || emptyEmail){
                 MessageService.showToast("Preencha todos os campos.");
             } else {
                 userInactiveCtrl.verifyAndSendRequest();

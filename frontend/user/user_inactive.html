@@ -70,7 +70,11 @@
                                 <p>Para finalizar o pedido de convite, preencha suas informações institucionais.</p>
                         </div>
                         <md-input-container class="md-block">
-                        <label>Cargo institucional</label>
+                            <label>Nome</label>
+                            <input name="nome" ng-model="userInactiveCtrl.request.name" name="name" required>
+                        </md-input-container>
+                        <md-input-container class="md-block">
+                            <label>Cargo institucional</label>
                             <input name="cargo" ng-model="userInactiveCtrl.request.office" name="office" required>
                         </md-input-container>
                         <md-input-container class="md-block">

@@ -56,6 +56,8 @@
             var rate = instPage.scrollTop / 145;
             bigCover.style.opacity = 1 - rate;
             floatingCover.style.opacity = rate;
+
+            instPage.scrollTop >= 160 ? leftMenu.classList.add('floating-menu') : leftMenu.classList.remove('floating-menu');
         });
 
         function getPortfolioUrl() {

@@ -1,0 +1,29 @@
+<md-dialog flex="40">
+    <md-dialog-content layout="row" layout-align="center center">
+        <div layout="column" flex="90">
+            <h3>Você foi indicado para ser administrador</h3>
+            <p>
+                {{processCtrl.invite.sender_name}} lhe indicou para ser o novo administrador desta instituição.
+                Como administrador você poderá adicionar ou remover membros, vínculos
+                institucionais e editar informações da instituição.
+            </p>
+            <md-list >
+                <md-list-item class="list-item-dense" md-colors="{background: 'default-grey-300'}" flex-xs>
+                    <img title="{{processCtrl.invite.institution.name}}" ng-src="{{processCtrl.invite.institution.photo_url || '/app/images/institution.png'}}" class="md-avatar" style="margin: 0 15px 0 -15px; width: 60px; height: 60px;"/>
+                    <div layout="column" layout-align="center start">
+                        <b style="font-size: 15px;">{{ processCtrl.invite.institution.name }}</b>
+                        <span style="font-size: 15px;">{{ processCtrl.invite.institution.email }}</span>
+                    </div>
+                </md-list-item>
+            </md-list>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions>
+        <md-button class="md-raised" md-colors="{color: 'default-teal-500'}" ng-click="processCtrl.reject()">
+            RECUSAR
+        </md-button>
+        <md-button class="md-raised" md-colors="{color: 'default-teal-500'}" ng-click="processCtrl.accept()">
+            ACEITAR
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

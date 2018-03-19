@@ -48,7 +48,7 @@ class InviteUserAdmHandler(BaseHandler):
                     'user_key': user.key.urlsafe()
                 }
             )
-            invite.send_response_notification(current_institution=institution.key.urlsafe(), action='ACCEPT')
+            invite.send_response_notification(current_institution=institution.key, action='ACCEPT')
         
         save_changes(user, actual_admin, invite, institution)
         self.response.write(json.dumps(makeUser(user, self.request)))

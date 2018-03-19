@@ -44,6 +44,18 @@
             return deferred.promise;
         };
 
+        service.acceptInviteUserAdm = function acceptInviteUserAdm(inviteKey) {
+            var deferred = $q.defer();
+
+            $http.put(INVITES_URI + '/' + inviteKey + '/institution_adm').then(function success(response) {
+                deferred.resolve(response);
+            }, function error(response) {
+                deffered.reject(response);
+            });
+
+            return deffered.promise;
+        };
+
         service.resendInvite = function resendInvite(inviteKey) {
             var deferred = $q.defer();
             $http.post(INVITES_URI + "/" + inviteKey + "/resend", {}).then(function success(response) {

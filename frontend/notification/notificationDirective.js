@@ -151,7 +151,16 @@
                 state: "app.post"
             },
             "USER_ADM": {
-                icon: "account_balance"
+                icon: "account_balance",
+                action: function(properties, notification, event) {
+                    return showDialog(properties, notification, event);
+                },
+                properties: {
+                    templateUrl: "app/invites/process_invite_user_adm.html",
+                    controller: "ProcessInviteUserAdmController",
+                    controllerAs: "processCtrl",
+                    locals: {}
+                }
             }
         };
 

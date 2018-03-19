@@ -216,6 +216,24 @@
               expect(user.follows).toEqual([]);
               expect(user.institutions).toEqual([]);
           });
+
+          it('should remove the institution from user.institutions, user.follows and institutions_admin',
+            function () {
+              userData = {
+                name: 'Tiago Pereira',
+                cpf: '111.111.111-11',
+                email: 'tiago.pereira@ccc.ufcg.edu.br',
+                institutions: [inst],
+                follows: [inst],
+                invites: [inviteUser, inviteInstitution],
+                institutions_admin: ['/api/someurl/institution/' + inst.key]
+              };
+              user = createUser();
+              user.removeInstitution(inst.key);
+              expect(user.follows).toEqual([]);
+              expect(user.institutions).toEqual([]);
+              expect(user.institutions_admin).toEqual([]);
+            });
         });
 
         describe('removeProfile', function() {

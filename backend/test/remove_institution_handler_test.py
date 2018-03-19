@@ -31,9 +31,13 @@ class RemoveInstitutionHandlerTest(TestBaseHandler):
         institution.address = mocks.create_address()
         admin.institutions_admin = [institution.key]
         admin.add_institution(institution.key)
+        admin.follows = [institution.key]
         institution.members = [admin.key, common_user.key]
         institution.put()
         common_user.add_institution(institution.key)
+        common_user.follows = [institution.key]
+        admin.put()
+        common_user.put()
         self.assertTrue(institution.key in admin.institutions)
         self.assertTrue(institution.key in common_user.institutions)
         # Call the post method

@@ -12,7 +12,7 @@
         var observer;
 
         configProfileCtrl.user = AuthService.getCurrentUser();
-        configProfileCtrl.newUser = _.clone(configProfileCtrl.user);
+        configProfileCtrl.newUser = _.cloneDeep(configProfileCtrl.user);
         configProfileCtrl.loading = false;
         configProfileCtrl.cpfRegex = /^\d{3}\.\d{3}\.\d{3}\-\d{2}$/;
         configProfileCtrl.photo_url = configProfileCtrl.newUser.photo_url;
@@ -134,7 +134,7 @@
                     institution: inst
                 },
                 targetEvent: ev,
-                clickOutsideToClose: true
+                clickOutsideToClose: false
             });
         };
 
@@ -158,12 +158,8 @@
 
         function removeConection(institution_key) {
             if (_.size(configProfileCtrl.user.institutions) > 1) {
-                _.remove(configProfileCtrl.user.institutions, function(institution) {
-                    return institution.key === institution_key;
-                });
-                _.remove(configProfileCtrl.user.institution_profiles, function(profile) {
-                    return profile.institution_key === institution_key;
-                });
+                configProfileCtrl.user.removeInstitution(institution_key);
+                configProfileCtrl.user.removeProfile(institution_key);
                 AuthService.save();
             } else {
                 AuthService.logout();
@@ -204,7 +200,7 @@
         };
 
         function deleteUser() {
-            var patch = jsonpatch.generate(observer);
+            var patch = [{op: "replace", path: "/state", value: "inactive"}];
             var promise = UserService.save(patch);
             promise.then(function success() {
                 AuthService.logout();
@@ -213,7 +209,7 @@
             });
             return promise;
         }
-
+        
         (function main() {
             observer = jsonpatch.observe(configProfileCtrl.user);
 

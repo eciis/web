@@ -9,6 +9,7 @@ from google.appengine.ext import ndb
 from models.institution import Institution
 from models.post import Post
 from models.invite_user import InviteUser
+from models.invite_user_adm import InviteUserAdm
 from utils import json_response
 from service_messages import send_message_notification
 from service_messages import send_message_email
@@ -199,7 +200,7 @@ class NotifyFollowersHandler(BaseHandler):
                     follower.key.urlsafe(),
                     sender_key,
                     entity_type,
-                    entity_key,
+                    entity_key or inst_key,
                     current_institution
                 )
 

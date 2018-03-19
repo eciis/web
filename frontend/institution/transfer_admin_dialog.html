@@ -1,0 +1,38 @@
+<md-dialog flex="40">
+ <md-dialog-content layout="row" layout-align="center center">
+    <div layout="column" flex="90">
+        <h3>Transferir administração</h3>
+        <p>Cada institutição precisa ter um administrador na plataforma CIS.
+            Escolha abaixo um novo administrador para sua instituição:
+        </p>
+        <md-input-container>
+            <input aria-label="Search member" ng-model="transferAdminCtrl.member"/>
+            <md-icon>search</md-icon>
+        </md-input-container>
+        <md-list ng-if="transferAdminCtrl.member != null">
+            <md-list-item class="list-item-dense" md-colors="{background: 'default-grey-300'}"
+                ng-repeat="member in members = (transferAdminCtrl.institution_members | filter: transferAdminCtrl.searchMember)" 
+                ng-click="transferAdminCtrl.selectMember(member)" flex-xs>
+                <img title="{{member.name}}" ng-src="{{member.photo_url}}" class="md-avatar" style="margin: 0 15px 0 -15px; width: 60px; height: 60px;"/>
+                <div layout="column">
+                    <b style="position: relative; margin-top: 20px; font-size: 15px;">{{ member.name }}</b>
+                    <span style="position: relative; bottom: 20px; font-size: 15px;">{{ member.email[0]}}</span>
+                </div>
+            </md-list-item>
+            <md-list-item ng-if="members.length === 0">
+                <div layout="row" layout-align="center" flex="100">
+                    <p>Nenhum membro foi encontrado com esse nome ou email.</p>
+                </div>
+            </md-list-item>
+        </md-list>
+    </div>
+ </md-dialog-content>
+ <md-dialog-actions>
+     <md-button class="md-raised" md-colors="{color: 'default-teal-500'}" ng-click="transferAdminCtrl.cancel()">
+        CANCELAR
+     </md-button>
+     <md-button class="md-raised" md-colors="{color: 'default-teal-500'}" ng-click="transferAdminCtrl.confirm()">
+        CONFIRMAR
+    </md-button>
+ </md-dialog-actions>
+</md-dialog>

@@ -20,6 +20,7 @@
         institutionCtrl.instLegalNature = "";
         institutionCtrl.instActuationArea = "";
         institutionCtrl.isLoadingData = true;
+        institutionCtrl.isLoadingCover = false;
 
         var patch;
         var observer;
@@ -130,6 +131,10 @@
                 return promise;
             }
         };
+
+        institutionCtrl.showImageCover = function showImageCover(){
+                return institutionCtrl.institution && !institutionCtrl.isLoadingCover && institutionCtrl.institution.cover_photo;
+        }
 
         institutionCtrl.showHideDescription = function hideDescription() {
             institutionCtrl.showFullDescription = institutionCtrl.institution.description && !institutionCtrl.showFullDescription ;
@@ -290,7 +295,7 @@
 
         institutionCtrl.saveImage = function saveImage() {
             if (institutionCtrl.cover_photo) {
-                institutionCtrl.loading = true;
+                institutionCtrl.isLoadingCover = true;
                 ImageService.saveImage(institutionCtrl.cover_photo).then(function success(data) {
                     updateCoverImage(data);
                 }, function error(response) {
@@ -303,7 +308,7 @@
             var patch = [{ op: "replace", path: "/cover_photo", value: data.url }];
             InstitutionService.update(institutionCtrl.institution.key, patch).then(function success(response) {
                 institutionCtrl.institution = response;
-                institutionCtrl.loading = false;
+                institutionCtrl.isLoadingCover = false;
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });

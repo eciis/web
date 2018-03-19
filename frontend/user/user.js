@@ -80,8 +80,18 @@ User.prototype.isValid = function isValid() {
     return true;
 };
 
+/**
+ * Get the pending user's invitations bypassing those of type 
+ * INVITE_USER_ADM because they are processed 
+ * via notification and this method is used for invitations 
+ * that are processed on the new_invite page
+ */
 User.prototype.getPendingInvitation = function getPendingInvitation(){
-    return _.find(this.invites, {'status': SENT});
+    return _.find(this.invites, function(invite) {
+        if (invite.status === SENT && invite.type_of_invite !== 'INVITE_USER_ADM') {
+            return invite;
+        }
+    });
 };
 
 User.prototype.removeInvite = function removeInvite(inviteKey) {
@@ -100,6 +110,12 @@ User.prototype.removeInstitution = function removeInstitution(institutionKey, re
 
     _.remove(this.institutions, toRemove);
     _.remove(this.follows, toRemove);
+    
+    if(this.isAdmin(institutionKey)) {
+        _.remove(this.institutions_admin, function(currentInstUrl) {
+            return _.includes(currentInstUrl, institutionKey);
+        });
+    }
 
     if(!_.isEmpty(this.institutions)) {
         this.changeInstitution();

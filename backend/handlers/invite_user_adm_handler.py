@@ -59,4 +59,4 @@ class InviteUserAdmHandler(BaseHandler):
         invite = ndb.Key(urlsafe=invite_key).get()
         invite.change_status('rejected')
         invite.put()
-        invite.send_response_notification(current_institution=invite.institution_key.urlsafe(), action='REJECT')
+        invite.send_response_notification(current_institution=invite.institution_key, action='REJECT')

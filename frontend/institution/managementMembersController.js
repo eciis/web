@@ -192,9 +192,8 @@
 
         function getSentInvitations(invitations) {
             var isUserInvitation = createRequestSelector('sent', 'USER');
-            var isUserAdmInvitation = createRequestSelector('sent', 'INVITE_USER_ADM');
             manageMemberCtrl.sent_invitations = invitations.filter(isUserInvitation);
-            manageMemberCtrl.sent_invitations_adm = invitations.filter(isUserAdmInvitation);
+            manageMemberCtrl.sent_invitations_adm = invitations.filter(invite => invite.type_of_invite === 'INVITE_USER_ADM');
         }
 
         function getMembers() {

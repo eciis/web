@@ -313,9 +313,7 @@
             var emails = manageMemberCtrl.emails.map(email => email.email);
             var correctArray = manageMemberCtrl.removePendingAndMembersEmails(emails);
 
-            console.log(correctArray, emails);
-            console.log(correctArray === emails);
-            if(correctArray !== emails){
+            if(!_.isEqual(correctArray, emails)){
                 MessageService.showToast("E-mails selecionados já foram convidados, " +
                                 "requisitaram ser membro ou pertencem a algum" +
                                 " membro da instituição.");

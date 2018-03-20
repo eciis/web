@@ -242,10 +242,10 @@
             });
         });
 
-        describe('cancelInvite()', function() {
+        describe('clearInvite()', function() {
             it('should clear the object invite', function() {
                 manageMemberCtrl.invite = invite;
-                manageMemberCtrl.cancelInvite();
+                manageMemberCtrl.clearInvite();
 
                 expect(manageMemberCtrl.invite).toEqual({});
             });

@@ -291,5 +291,29 @@
                 expect(manageMemberCtrl.requests).toEqual([]);
             })
         });
+
+        describe('disableTransferAdminButton', function() {
+
+            it('Should return true if invitation sent', function() {
+                var data = {
+                    status: 'sent'
+                };
+                var invite = new Invite(data);
+
+                manageMemberCtrl.sent_invitations_adm = [invite];
+
+                expect(manageMemberCtrl.disableTransferAdminButton()).toBeTruthy();
+            });
+
+            it('Should return false if no invitation sent', function() {
+                var data = {
+                    status: 'rejected'
+                };
+                var invite = new Invite(data);
+
+                manageMemberCtrl.sent_invitations_adm = [invite];
+                expect(manageMemberCtrl.disableTransferAdminButton()).toBeFalsy();
+            });
+        });
     });
 }));

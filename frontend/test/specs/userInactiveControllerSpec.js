@@ -2,7 +2,7 @@
 
 (describe('Test UserInactiveController', function() {
 
-    var userInactiveCtrl, httpBackend, scope, institutionService, createCtrl, state, requestService;
+    var userInactiveCtrl, httpBackend, scope, institutionService, createCtrl, state, requestService, authService;
 
     var SEARCH_INST_URI = "/api/search/institution?";
     var INST_URI = "/api/institutions/";
@@ -30,12 +30,14 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, InstitutionService, AuthService, RequestInvitationService) {
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, InstitutionService,
+        AuthService, RequestInvitationService) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
         institutionService = InstitutionService;
         requestService = RequestInvitationService;
+        authService = AuthService;
 
         httpBackend.when('GET', 'institution/institution_page.html').respond(200);
         httpBackend.when('GET', "main/main.html").respond(200);
@@ -157,6 +159,39 @@
                 userInactiveCtrl.institutions = [institution];
                 userInactiveCtrl.wasSearched = true;
                 expect(userInactiveCtrl.showMessage()).toEqual(false);
+            });
+        });
+
+        describe('goToLandingPage()', function() {
+            var window;
+
+            beforeEach(inject(function($window) {
+                window = $window;
+                spyOn(window, 'open').and.callFake(function() {
+                    return true;
+                });
+                spyOn(userInactiveCtrl, 'logout');
+            }));
+
+            it('Should call userInactiveCtrl.logout()', function() {
+                userInactiveCtrl.goToLandingPage();
+                expect(userInactiveCtrl.logout).toHaveBeenCalled();
+            });
+
+            it('Should call $window.open()', function() {
+                userInactiveCtrl.goToLandingPage();
+                expect(window.open).toHaveBeenCalled();
+            });
+        });
+
+        describe('logout()', function() {
+            beforeEach(function() {
+                spyOn(authService, 'logout');
+            });
+
+            it('Should call AuthService.logout()', function() {
+                userInactiveCtrl.logout();
+                expect(authService.logout).toHaveBeenCalled();
             });
         });
     });

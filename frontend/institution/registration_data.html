@@ -2,7 +2,7 @@
     <div flex flex-md="95" layout="row" layout-align="space-around"
             md-colors="{background: 'grey-50'}">
           <!-- CONTENT -->
-        <md-content class="custom-scrollbar" flex="90">
+        <div flex="90">
 			<load-cicle flex add-layout-fill="true" ng-if="institutionCtrl.isLoadingData"></load-cicle>
 	        <md-card ng-if="!institutionCtrl.isLoadingData">
 	        	<md-toolbar md-colors="{background: 'teal-500'}" layout="row">
@@ -136,6 +136,6 @@
 		            </div>
 	            </md-card-content>
 	        </md-card>
-        </md-content>
+        </div>
     </div>
 </div>

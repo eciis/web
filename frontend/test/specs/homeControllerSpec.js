@@ -34,7 +34,7 @@
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, InstitutionService,
-            PostService, $mdDialog, $state, AuthService, $http) {
+            PostService, $mdDialog, $state, AuthService, $http, NotificationService) {
         httpBackend = $httpBackend;
         http = $http;
         scope = $rootScope.$new();
@@ -57,6 +57,15 @@
                 scope: scope
             });
         };
+
+        spyOn(NotificationService, 'watchPostNotification').and.callFake(function() {
+            return {
+                then: function(callback) {
+                    callback();
+                }
+            };
+        });
+
         homeCtrl = createCtrl();
         httpBackend.flush();
     }));
@@ -138,7 +147,7 @@
                 });
             });
 
-            it('Should call institutionService.getNextPosts()', function(done) {
+            it('Should call postService.getNextPosts()', function(done) {
                 var promise = homeCtrl.loadMorePosts();
                 var actualPage = 1;
 
@@ -146,7 +155,6 @@
                     expect(postService.getNextPosts).toHaveBeenCalledWith(actualPage);
                     done();
                 });
-
                 scope.$apply();
             });
         });

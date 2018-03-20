@@ -17,14 +17,18 @@
         manageMemberCtrl.institution = {};
         manageMemberCtrl.invite = {};
         manageMemberCtrl.sent_invitations = [];
+        manageMemberCtrl.sent_invitations_adm = [];
         manageMemberCtrl.currentMember = "";
+        manageMemberCtrl.members = [];
 
         manageMemberCtrl.showSendInvite = true;
+        manageMemberCtrl.transferButtonColor = 'teal-500';
         manageMemberCtrl.isLoadingMembers = true;
         manageMemberCtrl.isLoadingInvite = false;
         manageMemberCtrl.showInvites = false;
         manageMemberCtrl.showRequests = false;
         manageMemberCtrl.showMembers = false;
+        manageMemberCtrl.showAdministrator = false;
         manageMemberCtrl.requests = [];
         var empty_email = {email: ''};
         manageMemberCtrl.emails = [_.clone(empty_email)];
@@ -45,6 +49,27 @@
                 targetEvent: ev,
                 clickOutsideToClose: true
             });
+        };
+
+        manageMemberCtrl.openTransferAdminDialog = function openTransferAdminDialog(ev) {
+            $mdDialog.show({
+                templateUrl: 'app/institution/transfer_admin_dialog.html',
+                controller: 'TransferAdminController',
+                controllerAs: 'transferAdminCtrl',
+                locals: {
+                    institution_members: manageMemberCtrl.members,
+                    institution: manageMemberCtrl.institution
+                },
+                targetEvent: ev,
+                clickOutsideToClose: true
+            }).then(function success(response) {
+                manageMemberCtrl.sent_invitations_adm.map((invite) => {
+                    if (invite.status === 'sent') 
+                        invite.status = 'rejected';
+                });
+
+                manageMemberCtrl.sent_invitations_adm.push(response);
+            }, function error() {});
         };
 
         manageMemberCtrl.removeMember = function removeMember(member_obj) {
@@ -156,8 +181,8 @@
         function loadInstitution() {
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
                 manageMemberCtrl.institution = response.data;
-                getSentInvitations(response.data.sent_invitations);
                 getMembers();
+                getSentInvitations(response.data.sent_invitations);
                 getRequests();
             }, function error(response) {
                 $state.go('app.institution.timeline', {institutionKey: currentInstitutionKey});
@@ -167,7 +192,9 @@
 
         function getSentInvitations(invitations) {
             var isUserInvitation = createRequestSelector('sent', 'USER');
+            var isUserAdmInvitation = createRequestSelector('sent', 'INVITE_USER_ADM');
             manageMemberCtrl.sent_invitations = invitations.filter(isUserInvitation);
+            manageMemberCtrl.sent_invitations_adm = invitations.filter(isUserAdmInvitation);
         }
 
         function getMembers() {
@@ -326,6 +353,29 @@
             }
         };
 
+        manageMemberCtrl.getMemberPhotoUrl = function getMemberPhotoUrl(key) {
+            let member = getMemberByKey(key);
+            return member.photo_url || '/app/images/avatar.png';
+        };
+
+        manageMemberCtrl.getMemberName = function getMembeName(key) {
+            let member = getMemberByKey(key);
+            return member.name || 'Nome do Membro';
+        };
+
+        manageMemberCtrl.disableTransferAdminButton = function disableTransferAdminButton() {
+            let alreadySended = manageMemberCtrl.sent_invitations_adm.reduce(
+                (found, invite) => (invite.status === 'sent') ? true : found, 
+                false
+            );
+            manageMemberCtrl.transferButtonColor =  (alreadySended) ? 'grey-300' : 'teal-500';
+            return alreadySended;
+        };
+
+        function getMemberByKey(key) {
+            return manageMemberCtrl.members.reduce((foundMember, member) => (member.key === key) ? member : foundMember, {});
+        }
+
         function addField() {
             var isValidSize = _.size(manageMemberCtrl.emails) < MAX_EMAILS_QUANTITY;
             var hasEmptyField = _.find(manageMemberCtrl.emails, empty_email);
@@ -454,5 +504,57 @@
         selectEmailsCtrl.validateEmail = function validateEmail(email) {
             return Utils.validateEmail(email);
         }
+    });
+
+    app.controller('TransferAdminController', function(institution_members, institution, InviteService, MessageService, $mdDialog) {
+        var transferAdminCtrl = this;
+        transferAdminCtrl.institution_members = institution_members;
+        transferAdminCtrl.member = null;
+        transferAdminCtrl.selectedMember = null;
+
+        transferAdminCtrl.searchMember = function searchMember(member) {
+            if (transferAdminCtrl.member) {
+                var foundMemberByEmail = _.find(member.email, function(email) {
+                    return email.includes(transferAdminCtrl.member);
+                });
+
+                return foundMemberByEmail || member.name.includes(transferAdminCtrl.member);
+            }
+            return false;
+        };
+
+        transferAdminCtrl.selectMember = function selectMember(member) {
+            transferAdminCtrl.selectedMember = member;
+            transferAdminCtrl.member = member.email[0];
+        };
+
+        transferAdminCtrl.cancel = function cancel() {
+            $mdDialog.cancel();
+        };
+
+        transferAdminCtrl.confirm = function confirm() {
+            if (transferAdminCtrl.selectedMember) {
+                let data = {
+                    institution_key: institution.key,
+                    admin_key: institution.admin.key,
+                    type_of_invite: 'USER_ADM',
+                    sender_name: institution.admin.name,
+                    invitee_key: transferAdminCtrl.selectedMember.key,
+                    invitee: transferAdminCtrl.selectedMember.email[0]
+                };
+
+                let invite = new Invite(data);
+
+                InviteService.sendInviteUserAdm(invite).then(function success(response) {
+                    invite.status = 'sent';
+                    $mdDialog.hide(invite);
+                    MessageService.showToast("Convite enviado com sucesso!");
+                }, function error(response) {
+                    MessageService.showToast(response.data);
+                });
+            } else {
+                MessageService.showToast('Selecione um memebro!');
+            }
+        };
     });
 })();

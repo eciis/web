@@ -76,7 +76,7 @@
                 var promise = InviteService.sendInvite(requestBody);
                 promise.then(function success(response) {
                     refreshSentInvitations(requestBody.emails);
-                    manageMemberCtrl.cancelInvite(); 
+                    manageMemberCtrl.clearInvite(); 
                     manageMemberCtrl.showInvites = true; 
                     manageMemberCtrl.showSendInvite = false;
                     manageMemberCtrl.isLoadingInvite = false;
@@ -140,7 +140,7 @@
             manageMemberCtrl.showRequests = manageMemberCtrl.requests.length > 0;
         }
 
-        manageMemberCtrl.cancelInvite = function cancelInvite() {
+        manageMemberCtrl.clearInvite = function clearInvite() {
             manageMemberCtrl.emails = [_.clone(empty_email)];
             manageMemberCtrl.invite = {};
         };
@@ -279,14 +279,16 @@
                     !invitedEmails.includes(email) && !membersEmails.includes(email) 
                         && !requestedEmails.includes(email));
 
-            return (emailsNotMembersAndNotInvited[0] === undefined) ? [] :  _.uniq(emailsNotMembersAndNotInvited);
+            return _.uniq(emailsNotMembersAndNotInvited);
         }
 
         manageMemberCtrl.isValidAllEmails = function isValidAllEmails() {
             var emails = manageMemberCtrl.emails.map(email => email.email);
             var correctArray = manageMemberCtrl.removePendingAndMembersEmails(emails);
 
-            if(correctArray.length !== manageMemberCtrl.emails.length){
+            console.log(correctArray, emails);
+            console.log(correctArray === emails);
+            if(correctArray !== emails){
                 MessageService.showToast("E-mails selecionados já foram convidados, " +
                                 "requisitaram ser membro ou pertencem a algum" +
                                 " membro da instituição.");

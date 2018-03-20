@@ -191,7 +191,7 @@
                 var inviteInvited = new Invite({type_of_invite: 'USER',
                                             institution_key: '987654321',
                                             admin_key: '12345'});
-                manageMemberCtrl.emails = ["testuser@example.com"];
+                manageMemberCtrl.emails = [{'email' : "testuser@example.com"}];
                 expect(manageMemberCtrl.isValidAllEmails()).toBe(false);
             });
 
@@ -200,7 +200,7 @@
                                             institution_key: '987654321',
                                             admin_key: '12345'});
 
-                 manageMemberCtrl.emails = ["member@gmail.com"];
+                 manageMemberCtrl.emails = [{'email' :"member@gmail.com"}];
                 expect(manageMemberCtrl.isValidAllEmails()).toBe(false);
             });
 
@@ -209,7 +209,7 @@
                                             institution_key: '987654321',
                                             admin_key: '12345'});
 
-                manageMemberCtrl.emails = ["new@gmail.com", "new@gmail.com"];
+                manageMemberCtrl.emails = [{'email': "new@gmail.com"}, {'email': "new@gmail.com"}];
                 expect(manageMemberCtrl.isValidAllEmails()).toBe(false);
             });
 
@@ -218,17 +218,17 @@
                                             institution_key: '987654321',
                                             admin_key: '12345'});
 
-                 manageMemberCtrl.emails = ['request@gmail.com'];
+                 manageMemberCtrl.emails = [{'email': 'request@gmail.com'}];
                 expect(manageMemberCtrl.isValidAllEmails()).toBe(false);
             });
 
-            it('should be true', function() {
+           fit('should be true', function() {
                 var inviteMember = new Invite({type_of_invite: 'USER',
                                             institution_key: '987654321',
                                             admin_key: '12345'});
 
-                 manageMemberCtrl.emails = ['email@gmail.com'];
-                expect(manageMemberCtrl.isValidAllEmails()).toBe(false);
+                 manageMemberCtrl.emails = [{'email': 'email@gmail.com'}];
+                expect(manageMemberCtrl.isValidAllEmails()).toBe(true);
             });
         });
 

@@ -338,7 +338,8 @@
         }
 
         manageMemberCtrl.addCSV = function addCSV(files, ev) {
-            if(files[0].size > MAXIMUM_CSV_SIZE) {
+            var file = files[0];
+            if(file && (file.size > MAXIMUM_CSV_SIZE)) {
                 MessageService.showToast('O arquivo deve ser um CSV menor que 5 Mb');
             } else {
                 var reader = new FileReader();
@@ -347,7 +348,7 @@
                     emails = emails.filter(email => email !== "");
                     selectEmailsDialog(emails, ev);
                 }
-                reader.readAsText(files[0]);
+                file && reader.readAsText(file);
             }
         };
 

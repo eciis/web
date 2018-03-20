@@ -222,7 +222,7 @@
                 expect(manageMemberCtrl.isValidAllEmails()).toBe(false);
             });
 
-           fit('should be true', function() {
+           it('should be true', function() {
                 var inviteMember = new Invite({type_of_invite: 'USER',
                                             institution_key: '987654321',
                                             admin_key: '12345'});

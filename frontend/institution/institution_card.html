@@ -39,8 +39,8 @@
         md-colors="{background: 'light-green'}" ng-if="!institutionCardCtrl.hasCover()"> 
             <img style="width: 100px; height: 100px;" ng-src="{{'app/images/institution.png'}}" >     
         </div>
-        <div class="container" ng-if="institutionCardCtrl.hasCover()" layout="row" layout-align="center center" style="background-image: url({{institutionCardCtrl.institution.cover_photo}}); height: 145px;
-            width: 100%; background-position: 50% 0%; background-size:cover; margin-bottom: 20px;" >
+        <div class="container inst-card-cover" ng-if="institutionCardCtrl.hasCover()" layout="row" layout-align="center center" 
+            style="background-image: url({{institutionCardCtrl.institution.cover_photo}});">
         </div>
         <!--DESCRIPTION-->
         <spam>

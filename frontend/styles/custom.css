@@ -1092,3 +1092,12 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
         margin-top: -11em;
     }
   }
+
+.inst-card-cover {
+    height: 145px;
+    width: 100%; 
+    background-position: 50% 0%; 
+    background-size:cover; 
+    margin-bottom: 20px;
+    box-shadow: 0px 0px 20px grey;
+}

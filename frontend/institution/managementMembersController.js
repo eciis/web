@@ -96,7 +96,7 @@
                 emails: emails
             }
             
-            if (manageMemberCtrl.isValidAllEmails() && manageMemberCtrl.isUserInvitesValid(invite)) {
+            if (manageMemberCtrl.isValidAllEmails() && manageMemberCtrl.isUserInviteValid(invite)) {
                 manageMemberCtrl.isLoadingInvite = true;
                 var promise = InviteService.sendInvite(requestBody);
                 promise.then(function success(response) {

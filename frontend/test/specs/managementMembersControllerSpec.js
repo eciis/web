@@ -181,7 +181,7 @@
                 var newInvite = new Invite({type_of_invite: 'USER',
                                             institution_key: '987654321',
                                             admin_key: '12345'});
-                expect(manageMemberCtrl.isUserInvitesValid(newInvite, ["teste@gmail.com"])).toBe(true);
+                expect(manageMemberCtrl.isUserInviteValid(newInvite)).toBe(true);
             });
         });
 

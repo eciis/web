@@ -250,7 +250,7 @@
             manageMemberCtrl[flagName] = !manageMemberCtrl[flagName];
         };
 
-        manageMemberCtrl.isUserInvitesValid = function isUserInvitesValid(invite) {
+        manageMemberCtrl.isUserInviteValid = function isUserInviteValid(invite) {
             var isValid = true;
             if (! invite.isValid()) {
                 isValid = false;

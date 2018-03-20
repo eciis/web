@@ -26,7 +26,7 @@
             var new_user = new User(userTest);
 
             expect(userService.load).toHaveBeenCalled();
-            expect(user).toEqual(new_user);
+            expect(user).toEqual(null);
         });
     });
 

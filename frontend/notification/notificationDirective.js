@@ -161,6 +161,12 @@
                     controllerAs: "processCtrl",
                     locals: {}
                 }
+            },
+            "ACCEPT_INVITE_USER_ADM": {
+                icon: "account_balance"
+            },
+            "REJECT_INVITE_USER_ADM": {
+                icon: "account_balance"
             }
         };
 

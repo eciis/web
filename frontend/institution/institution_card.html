@@ -43,9 +43,11 @@
             style="background-image: url({{institutionCardCtrl.institution.cover_photo}});">
         </div>
         <!--DESCRIPTION-->
-        <spam>
-            {{institutionCardCtrl.limitString(institutionCardCtrl.institution.description, 150)}}
-        </spam>
+        <div style="height: 5em;">
+            <spam>
+                {{institutionCardCtrl.limitString(institutionCardCtrl.institution.description, 150)}}
+            </spam>
+        </div>
     </md-card-content>
     <!-- BUTTONS -->
     <md-card-actions layout="row" layout-align="end center">

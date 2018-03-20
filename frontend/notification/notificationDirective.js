@@ -159,11 +159,24 @@
                     templateUrl: "app/invites/process_invite_user_adm.html",
                     controller: "ProcessInviteUserAdmController",
                     controllerAs: "processCtrl",
-                    locals: {}
+                    locals: {
+                        type_of_dialog: 'accept'
+                    }
                 }
             },
             "ACCEPT_INVITE_USER_ADM": {
-                icon: "account_balance"
+                icon: "account_balance",
+                action: function(properties, notification, event) {
+                    return showDialog(properties, notification, event);
+                },
+                properties: {
+                    templateUrl: "app/invites/process_invite_user_adm.html",
+                    controller: "ProcessInviteUserAdmController",
+                    controllerAs: "processCtrl",
+                    locals: {
+                        type_of_dialog: 'accepted'
+                    }
+                }
             },
             "REJECT_INVITE_USER_ADM": {
                 icon: "account_balance"

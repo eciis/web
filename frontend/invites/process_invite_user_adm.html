@@ -1,5 +1,6 @@
 <md-dialog flex="40">
-    <md-dialog-content layout="row" layout-align="center center">
+    <!-- ACCEPT -->
+    <md-dialog-content layout="row" layout-align="center center" ng-if="processCtrl.type_of_dialog === 'accept'">
         <div layout="column" flex="90">
             <h3>Você foi indicado para ser administrador</h3>
             <p>
@@ -18,12 +19,46 @@
             </md-list>
         </div>
     </md-dialog-content>
-    <md-dialog-actions>
+    <md-dialog-actions ng-if="processCtrl.type_of_dialog === 'accept'">
         <md-button class="md-raised" md-colors="{color: 'default-teal-500'}" ng-click="processCtrl.reject()">
             RECUSAR
         </md-button>
         <md-button class="md-raised" md-colors="{color: 'default-teal-500'}" ng-click="processCtrl.accept()">
             ACEITAR
+        </md-button>
+    </md-dialog-actions>
+
+    <!-- ACCEPTED -->
+    <md-dialog-content layout="row" layout-align="center center" ng-if="processCtrl.type_of_dialog === 'accepted'">
+        <div layout="column" flex="90" ng-if="!processCtrl.isAccepting">
+            <h3>Transferência de administração realizada com sucesso</h3>
+            <p>
+                {{processCtrl.invite.invitee_name}} aceitou ser administrador da instituição.
+                A partir deste momento você não é mais adminstrador da instituição:
+            </p>
+            <md-list >
+                <md-list-item class="list-item-dense" md-colors="{background: 'default-grey-300'}" flex-xs>
+                    <img title="{{processCtrl.invite.institution.name}}" ng-src="{{processCtrl.invite.institution.photo_url || '/app/images/institution.png'}}" class="md-avatar" style="margin: 0 15px 0 -15px; width: 60px; height: 60px;"/>
+                    <div layout="column" layout-align="center start">
+                        <b style="font-size: 15px;">{{ processCtrl.invite.institution.name }}</b>
+                        <span style="font-size: 15px;">{{ processCtrl.invite.institution.email }}</span>
+                    </div>
+                </md-list-item>
+            </md-list>
+        </div>
+        <div layout="column" flex="90" ng-if="processCtrl.isAccepting">
+            <h3>Você é o novo administrador</h3>
+            <div layout="row" layout-align="center center">
+                <div style="margin-right: 16px;">
+                    <img title="{{processCtrl.invite.institution.name}}" ng-src="{{processCtrl.invite.institution.photo_url || '/app/images/institution.png'}}" class="md-avatar" style="width: 80px; height: 80px; max-width: 100px;"/>
+                </div>
+                <span>A partir de agora você já está habilitado para administrar a instituição na Plataforma CIS.</span>
+            </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions ng-if="processCtrl.type_of_dialog === 'accepted'">
+        <md-button class="md-raised" md-colors="{color: 'default-teal-500'}" ng-click="processCtrl.close()">
+            FECHAR
         </md-button>
     </md-dialog-actions>
 </md-dialog>

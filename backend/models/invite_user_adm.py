@@ -71,4 +71,5 @@ class InviteUserAdm(InviteUser):
         make = super(InviteUserAdm, self).make()
         make['type_of_invite'] = 'INVITE_USER_ADM'
         make['invitee_key'] = self.invitee_key.urlsafe()
+        make['invitee_name'] = self.invitee_key.get().name
         return make

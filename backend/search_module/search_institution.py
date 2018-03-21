@@ -13,6 +13,7 @@ def institution_has_changes(fields, entity):
         if not isinstance(entity, Address):
             for field in fields:
                 if not hasattr(entity, field.name):
+                    print entity
                     entity = entity.address
 
                 if field.value != getattr(entity, field.name):

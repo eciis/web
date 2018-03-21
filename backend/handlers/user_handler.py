@@ -22,8 +22,9 @@ def getInvites(user_email):
     invites = []
 
     queryInvites = Invite.query(Invite.invitee.IN(user_email),
-                                Invite.status == 'sent')
-    invites = [invite.make() for invite in queryInvites]
+                                Invite.status == 'sent')                              
+
+    invites = [invite.make() if invite.institution_key.get().state == "active" else '' for invite in queryInvites]
 
     return invites
 

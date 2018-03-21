@@ -37,7 +37,7 @@
         name: 'Member',
         cpf: '121.445.044-07',
         key: '12345',
-        email: 'member@gmail.com',
+        email: ['member@gmail.com'],
         institutions: [institution]
     };
 
@@ -45,7 +45,7 @@
          name: 'User',
          cpf: '121.445.044-07',
          key: '54321',
-         email: 'user@example.com',
+         email: ['user@example.com'],
          institutions: [institution]
      };
 

@@ -297,8 +297,7 @@
                     return invite.invitee;
                 });
 
-            var membersEmails = manageMemberCtrl.members.reduce((emails, member) => 
-                                                                [...emails, ...member.email], []);
+            var membersEmails = manageMemberCtrl.members.reduce((emails, member) => [...emails, ...member.email], []);
 
             var emailsNotMembersAndNotInvited = emails.filter(email =>
                     !invitedEmails.includes(email) && !membersEmails.includes(email) 

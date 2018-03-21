@@ -23,7 +23,7 @@
                         </md-card-content>
                     </md-card>
                 </div>
-                <md-content flex id="content" class="body custom-scrollbar">
+                <div flex id="content" class="body">
                     <div flex layout="row">
                         <post-timeline ng-if="!institutionCtrl.isLoadingPosts" layout="column" 
                         md-colors="{background: 'grey-50'}" posts="institutionCtrl.posts"
@@ -34,7 +34,7 @@
                         <load-circle flex add-layout-fill="true"
                             ng-if="institutionCtrl.isLoadingPosts"></load-circle>
                     </div>
-                </md-content>
+                </div>
             </div>
         </div>
     </div>

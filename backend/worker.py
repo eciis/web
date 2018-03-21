@@ -50,6 +50,18 @@ def filter_permissions_to_remove(user, permissions, institution_key):
             permissions_filtered[permission] = instition_keys
     return  permissions_filtered
 
+def isAdminOfParentInst(user, institution_parent_key):
+    if ndb.Key(urlsafe=institution_parent_key) in user.institutions_admin:
+        return True
+    
+    parent_inst = ndb.Key(urlsafe=institution_parent_key).get()
+
+    if parent_inst.parent_institution:
+        return isAdminOfParentInst(user, parent_inst.parent_institution.urlsafe())
+    else:
+        return False
+
+
 class BaseHandler(webapp2.RequestHandler):
     """Base Handler."""
 
@@ -315,8 +327,10 @@ class TransferAdminPermissionsHandler(BaseHandler):
             permissions = institution.get_all_hierarchy_admin_permissions()
             institution.set_admin(new_admin.key)
             self.add_permissions(new_admin, permissions)
-            permissions_filtered = filter_permissions_to_remove(admin, permissions, institution_key)
-            self.remove_permissions(admin, permissions_filtered)
+            
+            if (not institution.parent_institution) or (not isAdminOfParentInst(admin, institution.parent_institution.urlsafe())):
+                permissions_filtered = filter_permissions_to_remove(admin, permissions, institution_key)
+                self.remove_permissions(admin, permissions_filtered)
 
             new_admin.put()
             admin.put()

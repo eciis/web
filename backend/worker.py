@@ -50,14 +50,21 @@ def filter_permissions_to_remove(user, permissions, institution_key):
             permissions_filtered[permission] = instition_keys
     return  permissions_filtered
 
-def isAdminOfParentInst(user, institution_parent_key):
+def is_admin_of_parent_inst(user, institution_parent_key):
+    """
+    This method checks if the user is an administrator of some parent institution.
+
+    Arguments:
+    user -- User to verify if is admin of some parent institution
+    institution_parent_key -- Key of parent institution for check if user is admin 
+    """
     if ndb.Key(urlsafe=institution_parent_key) in user.institutions_admin:
         return True
     
     parent_inst = ndb.Key(urlsafe=institution_parent_key).get()
 
     if parent_inst.parent_institution:
-        return isAdminOfParentInst(user, parent_inst.parent_institution.urlsafe())
+        return is_admin_of_parent_inst(user, parent_inst.parent_institution.urlsafe())
     else:
         return False
 
@@ -328,7 +335,7 @@ class TransferAdminPermissionsHandler(BaseHandler):
             institution.set_admin(new_admin.key)
             self.add_permissions(new_admin, permissions)
             
-            if (not institution.parent_institution) or (not isAdminOfParentInst(admin, institution.parent_institution.urlsafe())):
+            if (not institution.parent_institution) or (not is_admin_of_parent_inst(admin, institution.parent_institution.urlsafe())):
                 permissions_filtered = filter_permissions_to_remove(admin, permissions, institution_key)
                 self.remove_permissions(admin, permissions_filtered)
 

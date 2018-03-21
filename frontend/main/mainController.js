@@ -125,6 +125,9 @@
                     mainCtrl.pending_manager_member = response.length;
                 }, function error() {}
             );
+            RequestInvitationService.getRequestsInst(mainCtrl.user.current_institution.key).then(
+                increaseInstInvitationsNumber, function error() {}
+            )
             RequestInvitationService.getParentRequests(mainCtrl.user.current_institution.key).then(
                 increaseInstInvitationsNumber, function error() {}
             );

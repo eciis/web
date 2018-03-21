@@ -228,7 +228,7 @@ class InviteHandlerTest(TestBaseHandler):
         self.assertEqual(
             message_exception,
             expected_message,
-            "Expected exception message must be equal to %s" %message_exception
+            "Expected exception message must be equal to %s" %expected_message
         )
     
     @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})

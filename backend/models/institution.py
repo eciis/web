@@ -295,6 +295,10 @@ class Institution(ndb.Model):
     def has_member(self, user_key):
         """Check if the user is member."""
         return user_key in self.members
+
+    def is_active(self):
+        """Check if is active."""
+        return self.state == "active"
     
     def get_all_hierarchy_admin_permissions(self, permissions=None):
         """

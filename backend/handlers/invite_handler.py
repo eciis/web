@@ -26,10 +26,6 @@ def check_if_user_is_member(user, institution):
     """Check if the user is already a member."""
     return institution.has_member(user.key) and user.is_member(institution.key)
 
-def check_if_inst_is_active(institution):
-    """Check if the institution is active."""
-    return institution.state == "active"
-
 
 class InviteHandler(BaseHandler):
     """Invite Handler."""
@@ -80,7 +76,7 @@ class InviteHandler(BaseHandler):
         Utils._assert(check_if_user_is_member(user, institution), 
             "The user is already a member", NotAuthorizedException)
         
-        Utils._assert(not check_if_inst_is_active(institution), 
+        Utils._assert(not institution.is_active(), 
             "The institution is not active.", NotAuthorizedException)
 
         invite.change_status('accepted')

@@ -1069,6 +1069,7 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
     height: 4em;
     border-radius: 50%;
     margin-left: 3em;
+    box-shadow: 0 0 1px 0px grey;
 }
 
 .floating-cover {

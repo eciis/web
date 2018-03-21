@@ -610,6 +610,7 @@ a:active {
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     border-radius: 50%;
+    box-shadow: 0 0 1px 0px grey;
 }
 
 .grey-circle {

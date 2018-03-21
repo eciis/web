@@ -421,6 +421,7 @@
             if (institutionKey) {
                 loadInstitution();
             } else {
+                configInstCtrl.isSubmission = true;
                 loadAddress();
             }
         })();

@@ -53,7 +53,14 @@
                             <md-list-item ng-if="userInactiveCtrl.showMessage()">
                                 <div class="md-list-item-text" layout-align="center center" layout="column"
                                 style='text-align: center'>
-                                    <p><b>Infelizmente sua instituição não está cadastrada.</b></p>
+                                    <p><b>Infelizmente sua instituição não está cadastrada. Para cadastrar pressione o botão abaixo:</b></p>
+                                        <md-checkbox ng-model="userInactiveCtrl.canCreate" class="md-primary" aria-label="Checkbox 1">
+                                            Manifesto que tenho autonomia para cadastrar a instituição
+                                        </md-checkbox>
+                                        <md-button ng-class="userInactiveCtrl.canCreate?'green-button':''"
+                                        ng-disabled="!userInactiveCtrl.canCreate" ng-click="userInactiveCtrl.createInst()">
+                                            Quero criar minha instituição
+                                        </md-button>
                                 </div>
                             </md-list-item>
                         </md-list>

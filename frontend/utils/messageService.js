@@ -18,7 +18,8 @@
             "Error! This comment has been deleted.": "Esse comentário foi removido!",
             "Error! This post has been deleted": "Esse post foi removido.",
             "Error! User already liked this comment.": "O usuário já curtiu esse comentário.",
-            "The invites are being processed.": "Os convites estão sendo processados."
+            "The invites are being processed.": "Os convites estão sendo processados.",
+            "Error! The institution is not active.": "Essa instituição não está ativa."
         };
 
         service.showToast = function showToast(message) {

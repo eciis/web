@@ -17,13 +17,14 @@ from handlers.base_handler import BaseHandler
 from google.appengine.ext import ndb
 
 
-def getInvites(user_email):
+def get_invites(user_email):
     """Query that return list of invites for this user."""
     invites = []
 
     queryInvites = Invite.query(Invite.invitee.IN(user_email),
-                                Invite.status == 'sent')
-    invites = [invite.make() for invite in queryInvites]
+                                Invite.status == 'sent')                              
+
+    invites = [invite.make() if invite.institution_key.get().state == "active" else '' for invite in queryInvites]
 
     return invites
 
@@ -33,7 +34,7 @@ def define_entity(dictionary):
     return InstitutionProfile
 
 
-def makeUser(user, request):
+def make_user(user, request):
     """TODO: Move this method to User when utils.py is refactored.
 
     @author Andre L Abrantes - 20-06-2017
@@ -77,8 +78,8 @@ class UserHandler(BaseHandler):
         if not user.key:
             user = create_user(user.name, user.email)
 
-        user_json = makeUser(user, self.request)
-        user_json['invites'] = getInvites(user.email)
+        user_json = make_user(user, self.request)
+        user_json['invites'] = get_invites(user.email)
 
         self.response.write(json.dumps(user_json))
 
@@ -110,4 +111,4 @@ class UserHandler(BaseHandler):
         """Update user."""
         user.put()
 
-        self.response.write(json.dumps(makeUser(user, self.request)))
+        self.response.write(json.dumps(make_user(user, self.request)))

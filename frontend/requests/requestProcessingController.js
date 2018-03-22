@@ -72,6 +72,10 @@
             $mdDialog.hide();
         };
 
+        requestController.sizeGtSmDialog = function sizeGtSmDialog() {
+            return (requestController.request && requestController.request.status === 'sent') ? '45' : '25';
+        };
+
         function loadInstitution(institutionKey) {
             InstitutionService.getInstitution(institutionKey).then(function success(response) {
                 requestController.institution = response.data;
@@ -101,9 +105,6 @@
                     loadInstitution(requestController.request.institution_requested_key);
                 } else if (requestController.request.status === 'sent' && !requestController.isInstRequest(requestController.request)) {
                     loadInstitution(requestController.request.institution_key);
-                } else {
-                    requestController.hideDialog();
-                    MessageService.showToast("Você já resolveu esta solicitação.");
                 }
             }, function error(response) {
                 MessageService.showToast(response.data.msg);

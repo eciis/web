@@ -57,8 +57,6 @@
                 scope: scope
             });
         };
-        homeCtrl = createCtrl();
-        httpBackend.flush();
 
         spyOn(NotificationService, 'watchPostNotification').and.callFake(function() {
             return {
@@ -67,6 +65,9 @@
                 }
             };
         });
+
+        homeCtrl = createCtrl();
+        httpBackend.flush();
     }));
 
     afterEach(function() {

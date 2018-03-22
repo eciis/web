@@ -18,10 +18,11 @@
         };
 
         institutionCardCtrl.getAddressInfo = function getAddressInfo(){
-            if(institutionCardCtrl.institution.address.country === "Brasil"){
-                return institutionCardCtrl.institution.address.city + "/" + institutionCardCtrl.institution.address.federal_state
+            var address = institutionCardCtrl.institution.address.country;
+            if(address === "Brasil"){
+                address = institutionCardCtrl.institution.address.city + "/" + institutionCardCtrl.institution.address.federal_state;
             }
-            return institutionCardCtrl.institution.address.country  
+            return Utils.limitString(address, 25);
         };
 
         institutionCardCtrl.copyLink = function copyLink(){

@@ -95,13 +95,13 @@
                 invite_body: invite,
                 emails: emails
             }
-
-            if (manageMemberCtrl.isUserInvitesValid(invite, emails)) {
+            
+            if (manageMemberCtrl.isValidAllEmails() && manageMemberCtrl.isUserInviteValid(invite)) {
                 manageMemberCtrl.isLoadingInvite = true;
                 var promise = InviteService.sendInvite(requestBody);
                 promise.then(function success(response) {
                     refreshSentInvitations(requestBody.emails);
-                    manageMemberCtrl.invite = {};
+                    manageMemberCtrl.clearInvite(); 
                     manageMemberCtrl.showInvites = true; 
                     manageMemberCtrl.showSendInvite = false;
                     manageMemberCtrl.isLoadingInvite = false;
@@ -165,7 +165,7 @@
             manageMemberCtrl.showRequests = manageMemberCtrl.requests.length > 0;
         }
 
-        manageMemberCtrl.cancelInvite = function cancelInvite() {
+        manageMemberCtrl.clearInvite = function clearInvite() {
             manageMemberCtrl.emails = [_.clone(empty_email)];
             manageMemberCtrl.invite = {};
         };
@@ -249,23 +249,11 @@
             manageMemberCtrl[flagName] = !manageMemberCtrl[flagName];
         };
 
-        manageMemberCtrl.isUserInvitesValid = function isUserInvitesValid(invite, emails) {
+        manageMemberCtrl.isUserInviteValid = function isUserInviteValid(invite) {
             var isValid = true;
             if (! invite.isValid()) {
                 isValid = false;
                 MessageService.showToast('Convite inválido!');
-            } else {
-                var memberEmail = getMember(emails);
-                if(memberEmail) {
-                    isValid = false;
-                    MessageService.showToast('O email ' + memberEmail + ' pertence a um membro da instituição');
-                } else {
-                    var invitedEmail = getInvitedEmail(emails);
-                    if(invitedEmail) {
-                        isValid = false;
-                        MessageService.showToast('O email ' + invitedEmail + ' já foi convidado');
-                    }
-                }
             }
             return isValid;
         };
@@ -297,6 +285,39 @@
             (field.email === empty_email.email) ? removeField(field) : addField();
         };
 
+        manageMemberCtrl.removePendingAndMembersEmails = function removePendingAndMembersEmails(emails) {
+            var requestedEmails = manageMemberCtrl.requests
+                .map(request => {
+                    return request.institutional_email;
+                });
+
+            var invitedEmails = manageMemberCtrl.sent_invitations
+                .map(invite => {
+                    return invite.invitee;
+                });
+
+            var membersEmails = manageMemberCtrl.members.reduce((emails, member) => [...emails, ...member.email], []);
+
+            var emailsNotMembersAndNotInvited = emails.filter(email =>
+                    !invitedEmails.includes(email) && !membersEmails.includes(email) 
+                        && !requestedEmails.includes(email));
+
+            return _.uniq(emailsNotMembersAndNotInvited);
+        }
+
+        manageMemberCtrl.isValidAllEmails = function isValidAllEmails() {
+            var emails = manageMemberCtrl.emails.map(email => email.email);
+            var correctArray = manageMemberCtrl.removePendingAndMembersEmails(emails);
+
+            if(!_.isEqual(correctArray, emails)){
+                MessageService.showToast("E-mails selecionados já foram convidados, " +
+                                "requisitaram ser membro ou pertencem a algum" +
+                                " membro da instituição.");
+                return false;
+            }
+            return true;
+        }
+
         function selectEmailsDialog(emails, ev) {
             $mdDialog.show({
                 templateUrl: 'app/institution/select_emails.html',
@@ -313,7 +334,8 @@
         }
 
         manageMemberCtrl.addCSV = function addCSV(files, ev) {
-            if(files[0].size > MAXIMUM_CSV_SIZE) {
+            var file = files[0];
+            if(file && (file.size > MAXIMUM_CSV_SIZE)) {
                 MessageService.showToast('O arquivo deve ser um CSV menor que 5 Mb');
             } else {
                 var reader = new FileReader();
@@ -322,7 +344,7 @@
                     emails = emails.filter(email => email !== "");
                     selectEmailsDialog(emails, ev);
                 }
-                reader.readAsText(files[0]);
+                file && reader.readAsText(file);
             }
         };
 
@@ -458,33 +480,9 @@
             $mdDialog.cancel();
         };
 
-        selectEmailsCtrl.removePendingAndMembersEmails = function removePendingAndMembersEmails() {
-
-            var requestedEmails = selectEmailsCtrl.manageMemberCtrl.requests
-                .map(request => {
-                    return request.institutional_email;
-                });
-
-            var invitedEmails = selectEmailsCtrl.manageMemberCtrl.sent_invitations
-                .map(invite => {
-                    return invite.invitee;
-                });
-
-            var membersEmails = [].concat.apply([], selectEmailsCtrl.manageMemberCtrl.members
-                .map(member => {
-                    return member.email;
-                }));
-
-            var emailsNotMembersAndNotInvited = selectEmailsCtrl.selectedEmails
-                .filter(email =>
-                    !invitedEmails.includes(email) && !membersEmails.includes(email) && !requestedEmails.includes(email));
-
-            return emailsNotMembersAndNotInvited;
-        }
-
         selectEmailsCtrl.sendInvite = function sendInvite() {
             if(!_.isEmpty(selectEmailsCtrl.selectedEmails) && _.size(selectEmailsCtrl.selectedEmails) <= MAX_EMAILS_QUANTITY) {
-                var emails = selectEmailsCtrl.removePendingAndMembersEmails();
+                var emails = selectEmailsCtrl.manageMemberCtrl.removePendingAndMembersEmails(selectEmailsCtrl.selectedEmails)
                 if(!_.isEmpty(emails)) {
                     selectEmailsCtrl.manageMemberCtrl.sendUserInvite(emails);
                 } else {

@@ -2,7 +2,7 @@
     <div flex flex-md="95" layout="row" layout-align="space-around"
             md-colors="{background: 'grey-50'}">
           <!-- CONTENT -->
-        <md-content class="custom-scrollbar" flex="90">
+        <div flex="90">
 			<load-circle flex add-layout-fill="true" ng-if="followersCtrl.isLoadingFollowers"></load-circle>
 			<md-card ng-if="!followersCtrl.isLoadingFollowers">
 				<md-toolbar md-colors="{background: 'teal-500'}" layout="row">
@@ -24,7 +24,7 @@
 							</md-input-container>
 						</form>
 					</div>
-					<md-content flex style="max-height: 280px;" ng-scrollbars>
+					<md-content flex style="max-height: 280px;" class="custom-scrollbar">
 						<md-list flex>
 							<md-list-item class="list-item-dense" md-colors="{background: 'grey-300'}"
 							ng-repeat="follower in followersCtrl.followers | filter: followersCtrl.currentFollower" 
@@ -40,6 +40,6 @@
 					</md-content>
 				</md-card-content>
 			</md-card>
-        </md-content>
+        </div>
     </div>
 </div>

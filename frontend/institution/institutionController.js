@@ -133,7 +133,7 @@
         };
 
         institutionCtrl.showImageCover = function showImageCover(){
-            return !institutionCtrl.isLoadingCover && institutionCtrl.institution.cover_photo;
+                return institutionCtrl.institution && !institutionCtrl.isLoadingCover && institutionCtrl.institution.cover_photo;
         }
 
         institutionCtrl.showHideDescription = function hideDescription() {
@@ -349,10 +349,28 @@
             return (state === institutionCtrl.stateView) ? "option-selected-left-bar":"";
         };
 
+        function changeCoverOnScroll() {
+            var instPage = document.getElementById("instPage");
+            var bigCover = document.getElementById("bigCover");
+            var leftMenu = document.getElementById("leftMenu");
+            var floatingCoverGtLg = document.getElementById("floatingCoverGtLg");
+            var floatingCoverLg = document.getElementById("floatingCoverLg");
+            var floatingCoverXs = document.getElementById("floatingCoverXs");
+            
+            instPage && instPage.addEventListener('scroll', function() {
+                var rate = instPage.scrollTop / 145;
+                bigCover.style.opacity = 1 - rate;
+                floatingCoverGtLg.style.opacity = rate;
+                floatingCoverLg.style.opacity = rate;
+                floatingCoverXs.style.opacity = rate;
+    
+                instPage.scrollTop >= 160 ? leftMenu.classList.add('floating-menu') : leftMenu.classList.remove('floating-menu');
+            });
+        }
         
-
         (function main(){
             loadStateView();
+            changeCoverOnScroll();
         })();
     });
 

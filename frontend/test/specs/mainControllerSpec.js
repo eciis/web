@@ -27,9 +27,12 @@
         key: '1239'
     };
 
+    var institutionKey = institution.key;
+
     user.institutions = [institution, otherInstitution];
-    user.institutions_admin = [institution.key];
+    user.institutions_admin = [institutionKey];
     user.current_institution = institution;
+    user.permissions = {analyze_request_inst: {institutionKey: true}};
 
     beforeEach(module('app'));
 
@@ -83,6 +86,7 @@
               name: 'Unknown',
               invites: [],
               institutions: [otherInstitution],
+              permissions: {},
               state: 'active'
             };
 

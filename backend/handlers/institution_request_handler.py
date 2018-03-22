@@ -74,6 +74,9 @@ class InstitutionRequestHandler(BaseHandler):
         institution.followers.append(sender.key)
         institution.put()
 
+        host = self.request.host
+        request.send_response_email(host, "ACCEPT")
+
         self.response.write(json.dumps(request.make()))
 
     @login_required
@@ -96,3 +99,6 @@ class InstitutionRequestHandler(BaseHandler):
         institution = request.institution_key.get()
         institution.state = 'inactive'
         institution.put()
+
+        host = self.request.host
+        request.send_response_email(host, "REJECT")

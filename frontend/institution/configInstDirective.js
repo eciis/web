@@ -2,7 +2,7 @@
 (function() {
     var app = angular.module("app");
     app.controller("ConfigInstController", function ConfigInstController(AuthService, InstitutionService, CropImageService,$state,
-            $mdToast, $mdDialog, $http, InviteService, ImageService, $rootScope, MessageService, PdfService, $q, 
+            $mdToast, $mdDialog, $http, InviteService, ImageService, $rootScope, MessageService, PdfService, $q, $window,
             RequestInvitationService, brCidadesEstados) {
 
         var configInstCtrl = this;
@@ -20,7 +20,7 @@
         configInstCtrl.newInstitution = {
             email: configInstCtrl.user.email[0]
         };
-        configInstCtrl.steps = [true, false, false];
+        configInstCtrl.steps = [true, false, false, false];
 
         configInstCtrl.descriptionGuide = "Descrever neste campo as áreas de atuação da sua instituição " +
         "considerando a missão e objetivos, os principais produtos e/ou serviços, as interfaces com os " +
@@ -106,7 +106,8 @@
         configInstCtrl.submit = function submit(event) {
             var newInstitution = new Institution(configInstCtrl.newInstitution);
             var promise;
-            if (newInstitution.isValid()){
+            var currentStep = 3;
+            if (isCurrentStepValid(currentStep) && newInstitution.isValid()){
                 var confirm = $mdDialog.confirm(event)
                     .clickOutsideToClose(true)
                     .title('Finalizar')
@@ -261,7 +262,7 @@
             RequestInvitationService.sendRequestInst(configInstCtrl.newInstitution).then(
                 function success() {
                     MessageService.showToast("Pedido enviado com sucesso!");
-                    $state.go('user_inactive');
+                    configInstCtrl.nextStep();
             });
         }
 
@@ -320,6 +321,11 @@
             }
         };
 
+        configInstCtrl.goToLandingPage = function goToLandingPage() {
+            AuthService.logout();
+            $window.open(Config.LANDINGPAGE_URL, '_self');
+        };
+
         function getFields() {
             var necessaryFieldsForStep = {
                 0: {
@@ -338,8 +344,17 @@
                     configInstCtrl.newInstitution.leader,
                     configInstCtrl.newInstitution.description
                     ]
+                },
+                3: {
+                    fields: [
+                    configInstCtrl.newInstitution.description,
+                    configInstCtrl.newInstitution.leader
+                    ]
                 }
             };
+            if(configInstCtrl.isSubmission) {
+                necessaryFieldsForStep[3].fields.push(configInstCtrl.newInstitution.admin.name);
+            }
             return necessaryFieldsForStep;
         }
 
@@ -421,6 +436,8 @@
             if (institutionKey) {
                 loadInstitution();
             } else {
+                configInstCtrl.isSubmission = true;
+                configInstCtrl.newInstitution.admin = {};
                 loadAddress();
             }
         })();

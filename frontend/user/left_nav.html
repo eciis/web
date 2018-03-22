@@ -71,7 +71,9 @@
                   <md-menu-item ng-if="mainCtrl.isSuperUser()">
                     <md-button ng-click="homeCtrl.goInvite()"
                       ng-class="homeCtrl.getSelectedItemClass('invite_inst')">
-                      <md-icon>mail_outline</md-icon>
+                      <md-icon ng-class="mainCtrl.pending_inst_invitations? 'notification-badge': ''"
+                        data-badge>
+                        mail_outline</md-icon>
                       <b>Convites</b>
                     </md-button>
                   </md-menu-item>

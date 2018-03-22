@@ -5,7 +5,7 @@
                 <div layout="row">
                     <md-card layout="row">
                         <div>
-                            <md-content class="custom-scrollbar" layout="row">
+                            <md-content ng-if="!configInstCtrl.getStep(4)" class="custom-scrollbar" layout="row">
                                 <div layout="row" layout-align="center center" layout-margin>
                                     <span class="green-circle" style="color: #FFFFFF; width: 25px; height: 25px;">
                                         <span layout="row" layout-align="center">
@@ -268,15 +268,37 @@
                                         <div ng-message="required">Este campo é obrigatório!</div>
                                     </div>
                                     </md-input-container>
+                                    <md-input-container ng-if="configInstCtrl.isSubmission" class="md-block" flex-gt-sm flex-sm>
+                                        <label>Seu nome</label>
+                                        <input name="admin" required ng-model="configInstCtrl.newInstitution.admin.name">
+                                    </md-input-container>
                                 </form>
                             </div>
                             <load-circle layout="row" layout-align="center center" ng-if="configInstCtrl.loadingSaveInstitution"></load-circle>
                         </md-card-content>
                         <md-card-actions layout="row" layout-align="end center">
-                            <md-button class="md-raised" ng-if="!configInstCtrl.loadingSaveInstitution" md-colors="{background: 'teal-500'}" ng-click="configInstCtrl.submit($event)">
+                            <md-button class="md-raised" ng-if="!configInstCtrl.loadingSaveInstitution"
+                            md-colors="{background: 'teal-500'}" ng-click="configInstCtrl.submit($event)">
                                 FINALIZAR
                             </md-button>
                         </md-card-actions>
+                    </div>
+                </md-card>
+                <md-card ng-if="configInstCtrl.getStep(4)" layout-margin>
+                    <div flex>
+                        <md-card-content layout-margin>
+                            <div layout="column">
+                                <div style="font-weight: 500; text-align: center;">
+                                    <p>Sua solicitação de convite foi enviada e esta em análise pela administração
+                                    da Plataforma CIS.</p>
+                                    <p>Você receberá a confirmação em seu email.</p>
+                                </div>
+                                <div layout-gt-xs="row" layout-xs="column" layout-align="end center">
+                                    <md-button flex-order-xs="1" class="md-raised md-primary" md-colors="{background: 'teal-500'}"
+                                        ng-click="configInstCtrl.goToLandingPage()">PÁGINA INICIAL</md-button>
+                                </div>
+                            </div>
+                        </md-card-content>
                     </div>
                 </md-card>
             </div>

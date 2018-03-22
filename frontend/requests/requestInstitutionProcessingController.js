@@ -50,6 +50,10 @@
             $mdDialog.cancel();
         };
 
+        requestController.getSizeGtSmDialog = function getSizeGtSmDialog() {
+            return requestController.request.status === 'sent' ? '45' : '25';
+        };
+
         function loadInstitution(institutionKey) {
             InstitutionService.getInstitution(institutionKey).then(function success(response) {
                 requestController.institution = response.data;
@@ -68,9 +72,6 @@
                 requestController.request = new Invite(response);
                 if (requestController.request.status === 'sent') {
                     loadInstitution(requestController.request.institution_key);
-                } else {
-                    requestController.hideDialog();
-                    MessageService.showToast("Você já resolveu esta solicitação.");
                 }
             });
         }

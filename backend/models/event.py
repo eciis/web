@@ -1,5 +1,6 @@
 """Event Model."""
 import datetime
+import json
 from google.appengine.ext import ndb
 from custom_exceptions.fieldException import FieldException
 from models.address import Address
@@ -84,8 +85,21 @@ class Event(ndb.Model):
             raise FieldException("Event must contains start time and end time")
         if self.end_time < self.start_time:
             raise FieldException("The end time can not be before the start time")
-        if self.end_time < date_now:
+        if date_now > self.end_time:
             raise FieldException("The end time must be after the current time")
+
+    def verify_patch(self, patch):
+        """Check if the patch is valid after the event has ended."""
+        forbidden_props = ["title", "official_site", "address", "start_time", "end_time", "local"]
+        patch_props = [p['path'][1:] for p in json.loads(patch)]
+        has_ended = datetime.datetime.today() > self.end_time
+
+        print patch_props
+        for p in patch_props:
+            p = "adress" if "address" in p else p
+            if has_ended and p in forbidden_props:
+                raise FieldException("The event basic data can not be changed after it has ended")
+    
 
     @staticmethod
     def create(data, author, institution):

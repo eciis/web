@@ -13,6 +13,7 @@
             "Error! The institution has been deleted": "A instituição está inativa.",
             "Error! The user must be interested at his post": "O autor deve ser interessado em seu post.",
             "Error! The end time must be after the current time": "A data final do evento deve ser posterior a data atual!",
+            "Error! The event basic data can not be changed after it has ended": "As informações básicas do evento não podem ser alteradas após sua data de termino!",
             "Error! The end time can not be before the start time": "A data final do evento deve ser posterior a inicial!",
             "Error! The invite has already been used": "Esse convite já foi utilizado!",
             "Error! This comment has been deleted.": "Esse comentário foi removido!",

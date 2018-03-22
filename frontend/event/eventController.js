@@ -239,12 +239,18 @@
             delete dialogCtrl.event.photo_url;
         };
 
+        dialogCtrl.isEventOutdated = function isEventOutdated() {
+            var endDate = new Date(dialogCtrl.event.end_time);
+            var now = Date.now();
+            return now > endDate;
+        };
+
         dialogCtrl.getCitiesByState = function getCitiesByState() {
             dialogCtrl.cities = brCidadesEstados.buscarCidadesPorSigla(dialogCtrl.selectedFederalState.sigla);
             dialogCtrl.event.address.federal_state = dialogCtrl.selectedFederalState.nome;
         };
 
-        dialogCtrl.setAnotherCountry = function isAnotherCountry() {
+        dialogCtrl.setAnotherCountry = function setAnotherCountry() {
             clearSelectedState();
             dialogCtrl.isAnotherCountry = dialogCtrl.event.address.country !== "Brasil";
         };
@@ -421,11 +427,13 @@
         }
 
         function loadSelectedState() {
-            if (dialogCtrl.event.address.federal_state) {
+            if (dialogCtrl.event.address.federal_state && !dialogCtrl.isAnotherCountry) {
                 dialogCtrl.selectedFederalState = dialogCtrl.federalStates
                     .filter(federalState => federalState.nome === dialogCtrl.event.address.federal_state)
                     .reduce(federalState => federalState);
                 dialogCtrl.getCitiesByState();
+           } else {
+                dialogCtrl.selectedFederalState = dialogCtrl.event.address.federal_state;
            }
         }
 
@@ -440,9 +448,7 @@
         }
 
         (function main() {
-            var address = {
-                            country : "Brasil"
-                        };
+            var address = { country : "Brasil" };
             getCountries();
             loadFederalStates();
             initUrlFields();
@@ -453,9 +459,7 @@
                 initPatchObserver();
                 loadEventDates();
             } else {
-                dialogCtrl.event = {
-                                    address: address
-                                    };
+                dialogCtrl.event = { address: address };
             }
         })();
     });

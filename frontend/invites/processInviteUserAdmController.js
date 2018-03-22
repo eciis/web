@@ -23,7 +23,7 @@
         processCtrl.reject = function reject() {
             InviteService.rejectInviteUserAdm(processCtrl.invite.key).then(function success() {
                 MessageService.showToast('Convite recusado!');
-                $mdDialog.hide();
+                processCtrl.close();
             });
         };
 
@@ -38,6 +38,10 @@
                 if (invite.status === 'sent' || type_of_dialog === 'accepted') {
                     processCtrl.invite = invite;
 
+                    /**
+                     * Will enter this condition when the dialog type is 'accepted' 
+                     * (when the user is sending the invitation).
+                     */
                     if(invite.status === 'accepted') {
                         _.remove(processCtrl.current_user.institutions_admin, function(url) {
                             return getKey(url) === invite.institution_key;

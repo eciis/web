@@ -50,8 +50,8 @@
             $mdDialog.cancel();
         };
 
-        requestController.sizeGtSmDialog = function sizeGtSmDialog() {
-            return (requestController.request.status === 'sent') ? '45' : '25';
+        requestController.getSizeGtSmDialog = function getSizeGtSmDialog() {
+            return requestController.request.status === 'sent' ? '45' : '25';
         };
 
         function loadInstitution(institutionKey) {

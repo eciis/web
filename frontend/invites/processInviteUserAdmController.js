@@ -12,18 +12,18 @@
 
         processCtrl.accept = function accept() {
             InviteService.acceptInviteUserAdm(processCtrl.invite.key).then(function success() {
-                MessageService.showToast('Convite aceito com sucesso!');
                 processCtrl.current_user.institutions_admin.push(processCtrl.invite.institution_key);
                 AuthService.save();
                 processCtrl.type_of_dialog = 'accepted';
                 processCtrl.isAccepting = true;
+                MessageService.showToast('Convite aceito com sucesso!');
             });
         };
 
         processCtrl.reject = function reject() {
             InviteService.rejectInviteUserAdm(processCtrl.invite.key).then(function success() {
-                MessageService.showToast('Convite recusado!');
                 processCtrl.close();
+                MessageService.showToast('Convite recusado!');
             });
         };
 
@@ -50,8 +50,8 @@
                     }
 
                 } else {
-                    MessageService.showToast('Convite já processado!');
                     processCtrl.close();
+                    MessageService.showToast('Convite já processado!');
                 }
             });
         })();

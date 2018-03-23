@@ -181,7 +181,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         self.assertEqual(
             answer["msg"], 'The invites are being processed.')
 
-        #The return is array of invite
+        #The entity 'invites' is an array that contains email and key of invites
         invite = answer['invites'][0]
         self.assertEqual(invite['email'], 'ana@gmail.com')
         self.assertTrue(invite['key'])

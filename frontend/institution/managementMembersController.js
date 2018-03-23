@@ -100,7 +100,7 @@
                 manageMemberCtrl.isLoadingInvite = true;
                 var promise = InviteService.sendInvite(requestBody);
                 promise.then(function success(response) {
-                    refreshSentInvitations(requestBody.emails);
+                    refreshSentInvitations(requestBody.emails, response.data.invites);
                     manageMemberCtrl.clearInvite(); 
                     manageMemberCtrl.showInvites = true; 
                     manageMemberCtrl.showSendInvite = false;
@@ -114,10 +114,11 @@
             }
         };
 
-        function refreshSentInvitations(emails) {
+        function refreshSentInvitations(emails, invites) {
             var inviteToAdd = new Invite(manageMemberCtrl.invite);
             _.each(emails, function(email) {
                 inviteToAdd.invitee = email;
+                inviteToAdd.key = invites.reduce(invite => invite.email === email).key;
                 manageMemberCtrl.sent_invitations.push(_.clone(inviteToAdd));
             });
         }

@@ -60,6 +60,7 @@ class InviteCollectionHandler(BaseHandler):
         Utils._assert(institution.state == 'inactive',
                         "The institution has been deleted", NotAuthorizedException)
 
+        invites = []
         @ndb.transactional(xg=True, retries=10)
         def process_invites(emails, invite, current_institution_key):
             invites_keys = []
@@ -67,6 +68,7 @@ class InviteCollectionHandler(BaseHandler):
                 invite['invitee'] = email
                 current_invite = createInvite(invite)
                 invites_keys.append(current_invite.key.urlsafe())
+                invites.append({'email': email, 'key': current_invite.key.urlsafe()})
 
             enqueue_task('send-invite', {'invites_keys': json.dumps(invites_keys), 'host': host,
                                          'current_institution': current_institution_key.urlsafe()})
@@ -75,11 +77,12 @@ class InviteCollectionHandler(BaseHandler):
             process_invites(data['emails'], invite, user.current_institution)
         else:
             invite = createInvite(invite)
+            invites.append({'email': invite.invitee, 'key': invite.key.urlsafe()})
             enqueue_task('send-invite', {'invites_keys': json.dumps([invite.key.urlsafe()]), 'host': host,
                                          'current_institution': user.current_institution.urlsafe()})
 
         self.response.write(json.dumps(
-            {'msg': 'The invites are being processed.'}))
+            {'msg': 'The invites are being processed.', 'invites' : invites}))
 
 def createInvite(data):
     """Create an invite."""

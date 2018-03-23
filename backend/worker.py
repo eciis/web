@@ -294,6 +294,7 @@ class SendInviteHandler(BaseHandler):
 
 
 class TransferAdminPermissionsHandler(BaseHandler):
+    """Handler of transfer admin permissions."""
 
     def add_permissions(self, user, permissions):
         """
@@ -323,6 +324,13 @@ class TransferAdminPermissionsHandler(BaseHandler):
 
 
     def post(self):
+        """
+        This method is responsible for adding all administrator permissions linked 
+        to an institution to the new administrator, and removing the same permissions 
+        from the old administrator. It performs a search for all permissions for the 
+        institution in which the administrator transfer is being made and its hierarchy of children, 
+        finally inserts these permissions in the new administrator and removes of the old administrator.
+        """
         institution_key = self.request.get('institution_key')
         user_key = self.request.get('user_key')
         institution = ndb.Key(urlsafe=institution_key).get()

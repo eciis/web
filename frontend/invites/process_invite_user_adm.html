@@ -1,6 +1,6 @@
 <md-dialog flex-gt-md="40" flex-md="70" flex-sm="80" flex-xs="95">
     <!-- ACCEPT -->
-    <md-dialog-content layout="row" layout-align="center center" ng-if="processCtrl.type_of_dialog === 'accept'">
+    <md-dialog-content layout="row" layout-align="center center" ng-if="processCtrl.type_of_dialog === processCtrl.ACCEPT_INVITATION">
         <div layout="column" flex="90">
             <h3>Você foi indicado para ser administrador</h3>
             <p>
@@ -19,7 +19,7 @@
             </md-list>
         </div>
     </md-dialog-content>
-    <md-dialog-actions ng-if="processCtrl.type_of_dialog === 'accept'">
+    <md-dialog-actions ng-if="processCtrl.type_of_dialog === processCtrl.ACCEPT_INVITATION">
         <md-button class="md-raised" md-colors="{color: 'default-teal-500'}" ng-click="processCtrl.reject()">
             RECUSAR
         </md-button>
@@ -29,8 +29,9 @@
     </md-dialog-actions>
 
     <!-- ACCEPTED -->
-    <md-dialog-content layout="row" layout-align="center center" ng-if="processCtrl.type_of_dialog === 'accepted'">
-        <div layout="column" flex="90" ng-if="!processCtrl.isAccepting">
+    <md-dialog-content layout="row" layout-align="center center" 
+        ng-if="processCtrl.type_of_dialog === processCtrl.VIEW_INVITE_SENDER || processCtrl.type_of_dialog === processCtrl.VIEW_INVITE_INVITEE">
+        <div layout="column" flex="90" ng-if="processCtrl.type_of_dialog === processCtrl.VIEW_INVITE_SENDER">
             <h3>Transferência de administração realizada com sucesso</h3>
             <p>
                 {{processCtrl.invite.invitee_name}} aceitou ser administrador da instituição.
@@ -46,7 +47,7 @@
                 </md-list-item>
             </md-list>
         </div>
-        <div layout="column" flex="90" ng-if="processCtrl.isAccepting">
+        <div layout="column" flex="90" ng-if="processCtrl.type_of_dialog === processCtrl.VIEW_INVITE_INVITEE">
             <h3>Você é o novo administrador</h3>
             <div layout="row" layout-align="center center">
                 <div style="margin-right: 16px;">
@@ -56,7 +57,7 @@
             </div>
         </div>
     </md-dialog-content>
-    <md-dialog-actions ng-if="processCtrl.type_of_dialog === 'accepted'">
+    <md-dialog-actions ng-if="processCtrl.type_of_dialog === processCtrl.VIEW_INVITE_SENDER || processCtrl.type_of_dialog === processCtrl.VIEW_INVITE_INVITEE">
         <md-button class="md-raised" md-colors="{color: 'default-teal-500'}" ng-click="processCtrl.close()">
             FECHAR
         </md-button>

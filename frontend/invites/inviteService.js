@@ -56,7 +56,7 @@
             return deferred.promise;
         };
 
-        service.rejectInviteUserAdm = function acceptInviteUserAdm(inviteKey) {
+        service.rejectInviteUserAdm = function rejectInviteUserAdm(inviteKey) {
             var deferred = $q.defer();
 
             HttpService.delete(INVITES_URI + '/' + inviteKey + '/institution_adm').then(function success(response) {

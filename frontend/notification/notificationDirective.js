@@ -160,7 +160,7 @@
                     controller: "ProcessInviteUserAdmController",
                     controllerAs: "processCtrl",
                     locals: {
-                        type_of_dialog: 'accept'
+                        type_of_dialog: 'ACCEPT_INVITATION'
                     }
                 }
             },
@@ -174,7 +174,7 @@
                     controller: "ProcessInviteUserAdmController",
                     controllerAs: "processCtrl",
                     locals: {
-                        type_of_dialog: 'accepted'
+                        type_of_dialog: 'VIEW_ACCEPTED_INVITATION_SENDER'
                     }
                 }
             },

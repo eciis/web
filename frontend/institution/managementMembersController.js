@@ -118,7 +118,7 @@
             var inviteToAdd = new Invite(manageMemberCtrl.invite);
             _.each(emails, function(email) {
                 inviteToAdd.invitee = email;
-                inviteToAdd.key = invites.reduce(invite => invite.email === email).key;
+                inviteToAdd.key = invites.reduce((acum, invite) => (invite.email === email) ? invite.key : acum, "");
                 manageMemberCtrl.sent_invitations.push(_.clone(inviteToAdd));
             });
         }

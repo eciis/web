@@ -87,26 +87,21 @@ class UserHandler(BaseHandler):
     @login_required
     def delete(self, user, institution_key):
         """Handler DELETE Requests."""
-        institution_key = ndb.Key(urlsafe=institution_key)
-        institution = institution_key.get()
+        user.state = 'inactive'
 
-        user.remove_institution(institution_key)
+        remove_user_from_institutions(user)
+        user.disable_account()
 
-        institution.remove_member(user)
-        institution.unfollow(user.key)
+        user.put()
 
     @json_response
     @login_required
     def patch(self, user):
         """Handler PATCH Requests."""
         data = self.request.body
-        print data
+
         """Apply patch."""
         JsonPatch.load(data, user)
-
-        if(user.state == 'inactive'):
-            remove_user_from_institutions(user)
-            user.disable_account()
 
         """Update user."""
         user.put()

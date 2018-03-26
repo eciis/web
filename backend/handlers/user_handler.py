@@ -100,7 +100,7 @@ class UserHandler(BaseHandler):
     def patch(self, user):
         """Handler PATCH Requests."""
         data = self.request.body
-
+        print data
         """Apply patch."""
         JsonPatch.load(data, user)
 

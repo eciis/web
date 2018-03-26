@@ -7,7 +7,7 @@ import json
 from utils import login_required
 from utils import Utils
 from utils import json_response
-from send_email_hierarchy.remove_member_email_sender import LeaveInstitutionEmailSender
+from send_email_hierarchy.leave_institution_email_sender import LeaveInstitutionEmailSender
 
 from handlers.base_handler import BaseHandler
 

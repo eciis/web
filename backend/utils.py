@@ -111,7 +111,7 @@ def setup_current_institution(user, request):
         institution_header = request.headers['Institution-Authorization']
         institution_key = ndb.Key(urlsafe=institution_header)
         Utils._assert(not user.is_member(institution_key),
-            "Invalid Current Institution! User is not an active member.",
+            "Instituição atual inválida! Usuário não é um membro ativo.",
             NotAuthorizedException)
         user.current_institution = institution_key
     except KeyError as error:

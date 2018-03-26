@@ -85,28 +85,31 @@ class UserHandler(BaseHandler):
 
     @json_response
     @login_required
-    def delete(self, user, institution_key):
-        """Handler DELETE Requests."""
-        institution_key = ndb.Key(urlsafe=institution_key)
-        institution = institution_key.get()
+    def delete(self, user):
+        """Handle DELETE Requests.
+        
+        This method is responsible to handle the account deletion operation,
+        once in this operation the user is going to be deleted.
+        """
+        user.state = 'inactive'
 
-        user.remove_institution(institution_key)
+        remove_user_from_institutions(user)
+        user.disable_account()
 
-        institution.remove_member(user)
-        institution.unfollow(user.key)
+        user.put()
 
     @json_response
     @login_required
     def patch(self, user):
-        """Handler PATCH Requests."""
+        """Handle PATCH Requests.
+        
+        This method is only responsible for update user data.
+        Thus, edition requests comes to here.
+        """
         data = self.request.body
 
         """Apply patch."""
         JsonPatch.load(data, user)
-
-        if(user.state == 'inactive'):
-            remove_user_from_institutions(user)
-            user.disable_account()
 
         """Update user."""
         user.put()

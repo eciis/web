@@ -19,7 +19,8 @@
             "Error! This post has been deleted": "Esse post foi removido.",
             "Error! User already liked this comment.": "O usuário já curtiu esse comentário.",
             "The invites are being processed.": "Os convites estão sendo processados.",
-            "Error! The institution is not active.": "Essa instituição não está ativa."
+            "Error! The institution is not active.": "Essa instituição não está ativa.",
+            "Error! Invalid Current Institution! User is not an active member.": "Usuário não é um membro ativo."
         };
 
         service.showToast = function showToast(message) {

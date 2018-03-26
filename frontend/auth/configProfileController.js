@@ -200,8 +200,7 @@
         };
 
         function deleteUser() {
-            var patch = [{op: "replace", path: "/state", value: "inactive"}];
-            var promise = UserService.save(patch);
+            var promise = UserService.deleteAccount();
             promise.then(function success() {
                 AuthService.logout();
             }, function error(response) {

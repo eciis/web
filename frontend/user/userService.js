@@ -8,9 +8,9 @@
 
         var USER_URI = "/api/user";
 
-        service.deleteInstitution = function deleteInstitution(institutionKey) {
+        service.deleteAccount = function deleteAccount() {
             var deffered = $q.defer();
-            $http.delete(USER_URI + '/institutions/' + institutionKey).then(function success(info) {
+            $http.delete(USER_URI + '/institutions/').then(function success(info) {
                 deffered.resolve(info.data);
             }, function error(data) {
                 deffered.reject(data);
@@ -42,6 +42,16 @@
         service.load = function load() {
             var deffered = $q.defer();
             $http.get(USER_URI).then(function loadUser(info) {
+                deffered.resolve(info.data);
+            }, function error(data) {
+                deffered.reject(data);
+            });
+            return deffered.promise;
+        };
+
+        service.deleteInstitution = function deleteInstitution(institution_key) {
+            var deffered = $q.defer();
+            $http.delete(USER_URI + '/institutions/' + institution_key + '/institutional-operations').then(function success(info) {
                 deffered.resolve(info.data);
             }, function error(data) {
                 deffered.reject(data);

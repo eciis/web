@@ -309,7 +309,7 @@
                 };
             });
 
-            spyOn(userService, 'save').and.callFake(function() {
+            spyOn(userService, 'deleteAccount').and.callFake(function() {
                 return {
                     then: function(callback) {
                         return callback();
@@ -335,9 +335,9 @@
             });
         });
 
-        it('Should call userService.save()', function(done) {
+        it('Should call userService.deleteAccount()', function(done) {
             promise.then(function() {
-                expect(userService.save).toHaveBeenCalled();
+                expect(userService.deleteAccount).toHaveBeenCalled();
                 done();
             });
         });

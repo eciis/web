@@ -85,7 +85,7 @@ class UserHandler(BaseHandler):
 
     @json_response
     @login_required
-    def delete(self, user, institution_key):
+    def delete(self, user):
         """Handler DELETE Requests."""
         user.state = 'inactive'
 
@@ -93,6 +93,8 @@ class UserHandler(BaseHandler):
         user.disable_account()
 
         user.put()
+
+        self.response.write(json.dumps(make_user(user, self.request)))
 
     @json_response
     @login_required

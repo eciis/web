@@ -86,7 +86,11 @@ class UserHandler(BaseHandler):
     @json_response
     @login_required
     def delete(self, user):
-        """Handler DELETE Requests."""
+        """Handle DELETE Requests.
+        
+        This method is responsible to handle the account deletion operation,
+        once in this operation the user is going to be deleted.
+        """
         user.state = 'inactive'
 
         remove_user_from_institutions(user)
@@ -97,7 +101,11 @@ class UserHandler(BaseHandler):
     @json_response
     @login_required
     def patch(self, user):
-        """Handler PATCH Requests."""
+        """Handle PATCH Requests.
+        
+        This method is only responsible for update user data.
+        Thus, edition requests comes to here.
+        """
         data = self.request.body
 
         """Apply patch."""

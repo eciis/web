@@ -13,12 +13,18 @@ from handlers.base_handler import BaseHandler
 
 
 class UserInstitutionsHandler(BaseHandler):
-    """Handle user's operations relationed to an especific institution."""
+    """Handle user's operations relationed to a specific institution."""
 
     @json_response
     @login_required
     def delete(self, user, institution_key):
-        """Handle DELETE Requests."""
+        """Handle DELETE Requests.
+        
+        This method delete an institution, which key is received as a paramater,
+        from the user.
+        In oposite of institution_members_handler's delete method, here the user requests to remove
+        an intitution. There, the institution's admin makes the request.
+        """
         institution_key = ndb.Key(urlsafe=institution_key)
         institution = institution_key.get()
 

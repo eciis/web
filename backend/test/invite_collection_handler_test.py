@@ -177,9 +177,14 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         # Retrieve the entities
         answer = json.loads(answer._app_iter[0])
         enqueue_task.assert_called()
+        
+        self.assertEqual(
+            answer["msg"], 'The invites are being processed.')
 
-        self.assertTrue(
-            answer == {'msg': 'The invites are being processed.'})
+        #The entity 'invites' is an array that contains email and key of invites
+        invite = answer['invites'][0]
+        self.assertEqual(invite['email'], 'ana@gmail.com')
+        self.assertTrue(invite['key'])
 
     @patch('handlers.invite_collection_handler.enqueue_task')
     @patch('utils.verify_token', return_value=ADMIN)
@@ -202,8 +207,13 @@ class InviteCollectionHandlerTest(TestBaseHandler):
             headers={'institution-authorization': institution.key.urlsafe()})
         answer = json.loads(answer._app_iter[0])
 
-        self.assertTrue(
-            answer == {'msg': 'The invites are being processed.'})
+        self.assertEqual(
+            answer["msg"], 'The invites are being processed.')
+        
+        invite = answer['invites'][0]
+        self.assertEqual(invite['email'], 'otheruser@ccc.ufcg.edu.br')
+        self.assertTrue(invite['key'])
+
         enqueue_task.assert_called()
 
     @patch.object(Invite, 'send_invite')
@@ -253,6 +263,11 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         # Retrieve the entities
         answer = json.loads(answer._app_iter[0])
 
-        self.assertTrue(
-            answer == {'msg': 'The invites are being processed.'})
+        self.assertEqual(
+            answer["msg"], 'The invites are being processed.')
+
+        invite = answer['invites'][0]
+        self.assertEqual(invite['email'], 'ana@gmail.com')
+        self.assertTrue(invite['key'])
+        
         enqueue_task.assert_called()

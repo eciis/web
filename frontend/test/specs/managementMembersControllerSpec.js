@@ -138,7 +138,11 @@
                     return {
                         then: function(callback) {
                             return callback(
-                                { data: { 'msg': 'Os convites estão sendo processados.' }}
+                                { data: { 
+                                          'msg': 'Os convites estão sendo processados.'.clone,
+                                          'invites': [{ 'email': "teste@gmail.com", 'key': '123' }]
+                                        }
+                                }
                             );
                         }
                     };

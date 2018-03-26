@@ -8,6 +8,7 @@ from models.institution import Institution
 from models.institution import Address
 from models.request_institution import RequestInstitution
 from handlers.institution_request_handler import InstitutionRequestHandler
+import permissions
 
 from mock import patch
 
@@ -91,6 +92,9 @@ class InstitutionRequestHandlerTest(TestBaseHandler):
         self.assertTrue(
             user.key in new_inst.members,
             "Expected Other User in user institution members")
+
+        for permission in permissions.DEFAULT_ADMIN_PERMISSIONS:
+            self.assertTrue(permission in user.permissions)
 
     @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
     def teste_delete(self, verify_token):

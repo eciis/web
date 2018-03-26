@@ -68,5 +68,8 @@ class EventHandler(BaseHandler):
         """Apply patch."""
         JsonPatch.load(patch, event)
 
+        is_patch = True
+        event.isValid(is_patch)
+
         """Update event."""
         event.put()

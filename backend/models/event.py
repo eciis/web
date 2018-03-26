@@ -77,7 +77,7 @@ class Event(ndb.Model):
     # Local of the event
     local = ndb.StringProperty(required=True)
 
-    def isValid(self):
+    def isValid(self, is_patch=False):
         """Check if is valid event."""
         date_now = datetime.datetime.today()
 
@@ -85,16 +85,16 @@ class Event(ndb.Model):
             raise FieldException("Event must contains start time and end time")
         if self.end_time < self.start_time:
             raise FieldException("The end time can not be before the start time")
-        if date_now > self.end_time:
+        if date_now > self.end_time and not is_patch:
             raise FieldException("The end time must be after the current time")
 
     def verify_patch(self, patch):
         """Check if the patch is valid after the event has ended."""
-        forbidden_props = ["title", "official_site", "address", "start_time", "end_time", "local"]
-        patch_props = [p['path'][1:] for p in json.loads(patch)]
+        INDEX_AFTER_SLASH = 1
         has_ended = datetime.datetime.today() > self.end_time
+        forbidden_props = ["title", "official_site", "address", "local"]
+        patch_props = [p['path'][INDEX_AFTER_SLASH:] for p in json.loads(patch)]
 
-        print patch_props
         for p in patch_props:
             p = "adress" if "address" in p else p
             if has_ended and p in forbidden_props:

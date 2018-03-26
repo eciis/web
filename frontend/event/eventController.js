@@ -89,7 +89,7 @@
     });
 
     app.controller('EventDialogController', function EventDialogController(MessageService, brCidadesEstados,
-            ImageService, AuthService, EventService, $state, $rootScope, $mdDialog, $http) {
+            ImageService, AuthService, EventService, $state, $rootScope, $mdDialog, $http, $q) {
         var dialogCtrl = this;
 
         dialogCtrl.loading = false;
@@ -102,19 +102,19 @@
         dialogCtrl.usefulLinks = [];
         dialogCtrl.isAnotherCountry = false;
         dialogCtrl.steps = [true, false, false];
-        dialogCtrl.now = new Date();
-        dialogCtrl.start_time = null;
+        dialogCtrl.now = Date.now();
         var emptyUrl = {
             url: '',
             description: ''
         };
 
         dialogCtrl.save = function save() {
-            if(!dialogCtrl.isEditing) {
-                saveImageAndCallEventFunction(create);
-            } else {
-                saveImageAndCallEventFunction(updateEvent);
-            }
+            var saveImgPromise = saveImageAndCallEventFunction();
+            saveImgPromise.then(function success() {
+                dialogCtrl.isEditing ? updateEvent() : create();
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
+            });
         };
 
         dialogCtrl.removeUrl = function(url, urlList) {
@@ -137,23 +137,28 @@
             return _.find(urlList, emptyUrl);
         };
 
-        dialogCtrl.createInitDate = function() {
-           if(dialogCtrl.event.start_time) {
-                dialogCtrl.start_time = new Date(dialogCtrl.event.start_time);
-           }
+        dialogCtrl.createInitDate = function createInitDate() {
+            // var EXTRA_MIN = 5;
+            dialogCtrl.startTime = dialogCtrl.event.start_time && new Date(dialogCtrl.event.start_time);
+            // dialogCtrl.startTime && dialogCtrl.startTime.setMinutes(dialogCtrl.startTime.getMinutes() + EXTRA_MIN);
         };
 
-        function saveImageAndCallEventFunction(callback) {
+        function saveImageAndCallEventFunction() {
+            var defer = $q.defer();
             if (dialogCtrl.photoBase64Data) {
                 dialogCtrl.loading = true;
-                ImageService.saveImage(dialogCtrl.photoBase64Data).then(function success(data) {
+                ImageService.saveImage(dialogCtrl.photoBase64Data)
+                .then(function success(data) {
                     dialogCtrl.loading = false;
                     dialogCtrl.event.photo_url = data.url;
-                    callback();
+                    defer.resolve();
+                }, function error(response) {
+                    defer.reject(response);
                 });
             } else {
-                callback();
+               defer.resolve();
             }
+            return defer.promise;
         }
 
         function updateEvent() {
@@ -161,8 +166,10 @@
             var event = new Event(dialogCtrl.event, dialogCtrl.user.current_institution.key);
             if(event.isValid()) {
                 dialogCtrl.loading = true;
-                var patch = formatPatch(generatePatch(jsonpatch.generate(dialogCtrl.observer), event));
-                EventService.editEvent(dialogCtrl.event.key, patch).then(function success() {
+                var patch = jsonpatch.generate(dialogCtrl.observer);
+                var formatedPatch = formatPatch(generatePatch(patch, event));
+                EventService.editEvent(dialogCtrl.event.key, formatedPatch)
+                .then(function success() {
                     $mdDialog.hide(event);
                     MessageService.showToast('Evento editado com sucesso.');
                 }, function error(response) {
@@ -415,15 +422,12 @@
         }
 
         function initPatchObserver() {
-            dialogCtrl.dateChangeEvent = _.clone(dialogCtrl.event);
-            dialogCtrl.dateChangeEvent = new Event(dialogCtrl.dateChangeEvent, dialogCtrl.user.current_institution.key);
             dialogCtrl.observer = jsonpatch.observe(dialogCtrl.event);
         }
 
         function loadEventDates() {
-            dialogCtrl.start_time = new Date(dialogCtrl.dateChangeEvent.start_time);
-            dialogCtrl.event.start_time = new Date(dialogCtrl.dateChangeEvent.start_time);
-            dialogCtrl.event.end_time = new Date(dialogCtrl.dateChangeEvent.end_time);
+            dialogCtrl.event.start_time = new Date(dialogCtrl.event.start_time);
+            dialogCtrl.event.end_time = new Date(dialogCtrl.event.end_time);
         }
 
         function loadSelectedState() {
@@ -456,8 +460,8 @@
                 dialogCtrl.photoUrl = dialogCtrl.event.photo_url;
                 dialogCtrl.isAnotherCountry = dialogCtrl.event.address.country !== "Brasil";
                 loadSelectedState();
-                initPatchObserver();
                 loadEventDates();
+                initPatchObserver();
             } else {
                 dialogCtrl.event = { address: address };
             }

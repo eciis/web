@@ -10,7 +10,7 @@
 
         service.deleteAccount = function deleteAccount() {
             var deffered = $q.defer();
-            $http.delete(USER_URI + '/institutions/').then(function success(info) {
+            $http.delete(USER_URI).then(function success(info) {
                 deffered.resolve(info.data);
             }, function error(data) {
                 deffered.reject(data);

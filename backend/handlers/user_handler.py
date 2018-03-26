@@ -94,8 +94,6 @@ class UserHandler(BaseHandler):
 
         user.put()
 
-        self.response.write(json.dumps(make_user(user, self.request)))
-
     @json_response
     @login_required
     def patch(self, user):

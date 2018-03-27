@@ -138,9 +138,7 @@
         };
 
         dialogCtrl.createInitDate = function createInitDate() {
-            // var EXTRA_MIN = 5;
             dialogCtrl.startTime = dialogCtrl.event.start_time && new Date(dialogCtrl.event.start_time);
-            // dialogCtrl.startTime && dialogCtrl.startTime.setMinutes(dialogCtrl.startTime.getMinutes() + EXTRA_MIN);
         };
 
         function saveImageAndCallEventFunction() {

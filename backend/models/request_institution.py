@@ -39,9 +39,9 @@ class RequestInstitution(Request):
         acceptMessage = """Olá,
         A instituição %s foi aceita na plataforma, seja bem vindo a Plataforma CIS.
         Realize seu login no link abaixo:
-        http://%s/signin
+        http://frontend.plataformacis.org/signin
 
-        Equipe da Plataforma CIS""" % (institution_name, host)
+        Equipe da Plataforma CIS""" % institution_name
 
         sender_email = self.sender_key.get().email[0]
         body = acceptMessage if operation == "ACCEPT" else rejectMessage

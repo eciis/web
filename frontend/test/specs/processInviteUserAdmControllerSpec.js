@@ -47,7 +47,7 @@
 
         processInviteUserAdmCtrl = $controller('ProcessInviteUserAdmController', {
             key: invite.key,
-            type_of_dialog: 'ACCEPT_INVITATION',
+            typeOfDialog: 'ACCEPT_INVITATION',
             InviteService: inviteService,
             MessageService: messageService,
             AuthService: authService,
@@ -70,14 +70,14 @@
         });
 
         it('Should accept the invitation to become an administrator', function() {
-            expect(processInviteUserAdmCtrl.type_of_dialog).toEqual('ACCEPT_INVITATION');
+            expect(processInviteUserAdmCtrl.typeOfDialog).toEqual('ACCEPT_INVITATION');
             expect(processInviteUserAdmCtrl.isAccepting).toBeFalsy();
             
             processInviteUserAdmCtrl.accept();
             user = JSON.parse(window.localStorage.userInfo);
 
             expect(user.institutions_admin).toEqual([institution.key]);
-            expect(processInviteUserAdmCtrl.type_of_dialog).toEqual('VIEW_ACCEPTED_INVITATION_INVITEE');
+            expect(processInviteUserAdmCtrl.typeOfDialog).toEqual('VIEW_ACCEPTED_INVITATION_INVITEE');
             expect(processInviteUserAdmCtrl.isAccepting).toBeTruthy();
             expect(inviteService.acceptInviteUserAdm).toHaveBeenCalledWith(invite.key);
             expect(messageService.showToast).toHaveBeenCalledWith('Convite aceito com sucesso!');
@@ -135,7 +135,7 @@
 
             controller('ProcessInviteUserAdmController', {
                 key: invite.key,
-                type_of_dialog: 'accept',
+                typeOfDialog: 'accept',
                 InviteService: inviteService,
                 MessageService: messageService,
                 AuthService: authService,
@@ -162,7 +162,7 @@
 
             controller('ProcessInviteUserAdmController', {
                 key: invite.key,
-                type_of_dialog: 'VIEW_ACCEPTED_INVITATION_SENDER',
+                typeOfDialog: 'VIEW_ACCEPTED_INVITATION_SENDER',
                 InviteService: inviteService,
                 MessageService: messageService,
                 AuthService: authService,

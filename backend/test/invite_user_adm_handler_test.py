@@ -15,11 +15,7 @@ import permissions
 from mock import patch
 
 def addAdminPermission(user, institution_key):
-    for permission in permissions.DEFAULT_ADMIN_PERMISSIONS:
-        if permission in user.permissions:
-            user.permissions[permission].update({institution_key: True})
-        else:
-            user.permissions.update({permission: {institution_key: True}})
+    user.add_permissions(permissions.DEFAULT_ADMIN_PERMISSIONS, institution_key)
 
 def hasAdminPermissions(user, institution_key):
     for permission in permissions.DEFAULT_ADMIN_PERMISSIONS:
@@ -43,7 +39,7 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
     def enqueue_task(self, handler_selector, params):
         self.testapp.post('/api/queue/' + handler_selector, params)
 
-    @patch.object(InviteUserAdm, 'send_notification')
+    @patch('models.invite_user_adm.InviteUserAdm.send_notification')
     @patch('handlers.invite_user_adm_handler.enqueue_task')
     @patch('utils.verify_token', return_value={'email': 'usr_test@test.com'})
     def test_put(self, verify_token, enqueue_task, send_notification):
@@ -108,7 +104,7 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
             'Invitation status must be equal to accepted!'
         )
     
-    @patch.object(InviteUserAdm, 'send_notification')
+    @patch('models.invite_user_adm.InviteUserAdm.send_notification')
     @patch('handlers.invite_user_adm_handler.enqueue_task')
     @patch('utils.verify_token', return_value={'email': 'usr_test@test.com'})
     def test_put_invite_in_hierarchy(self, verify_token, enqueue_task, send_notification):
@@ -233,7 +229,7 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
             'New_admin must be the administrator of the institution!'
         )
     
-    @patch.object(InviteUserAdm, 'send_notification')
+    @patch('models.invite_user_adm.InviteUserAdm.send_notification')
     @patch('handlers.invite_user_adm_handler.enqueue_task')
     @patch('utils.verify_token', return_value={'email': 'usr_test@test.com'})
     def test_put_invite_with_user_admin_of_parent_inst(self, verify_token, enqueue_task, send_notification):
@@ -531,7 +527,7 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
             'Expected message of exception must be equal to Error! Invitation type not allowed'
         )
 
-    @patch.object(InviteUserAdm, 'send_notification')
+    @patch('models.invite_user_adm.InviteUserAdm.send_notification')
     @patch('utils.verify_token', return_value={'email': 'usr_test@test.com'})
     def test_delete(self, verify_token, send_notification):
         """Test reject invite."""

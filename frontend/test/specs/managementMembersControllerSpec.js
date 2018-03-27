@@ -300,7 +300,7 @@
                 };
                 var invite = new Invite(data);
 
-                manageMemberCtrl.sent_invitations_adm = [invite];
+                manageMemberCtrl.sentInvitationsAdm = [invite];
 
                 expect(manageMemberCtrl.disableTransferAdminButton()).toBeTruthy();
             });

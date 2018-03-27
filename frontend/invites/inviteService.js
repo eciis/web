@@ -45,27 +45,11 @@
         };
 
         service.acceptInviteUserAdm = function acceptInviteUserAdm(inviteKey) {
-            var deferred = $q.defer();
-
-            HttpService.put(INVITES_URI + '/' + inviteKey + '/institution_adm').then(function success(response) {
-                deferred.resolve(response);
-            }, function error(response) {
-                deferred.reject(response);
-            });
-
-            return deferred.promise;
+            return HttpService.put(INVITES_URI + '/' + inviteKey + '/institution_adm');
         };
 
         service.rejectInviteUserAdm = function rejectInviteUserAdm(inviteKey) {
-            var deferred = $q.defer();
-
-            HttpService.delete(INVITES_URI + '/' + inviteKey + '/institution_adm').then(function success(response) {
-                deferred.resolve(response);
-            }, function error(response) {
-                deferred.reject(response);
-            });
-
-            return deferred.promise;
+            return HttpService.delete(INVITES_URI + '/' + inviteKey + '/institution_adm');
         };
 
         service.resendInvite = function resendInvite(inviteKey) {

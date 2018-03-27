@@ -164,6 +164,7 @@ class InstitutionRequestHandlerTest(TestBaseHandler):
                 '/api/requests/%s/institution'
                 % self.request.key.urlsafe()
             )
+        user = self.other_user.key.get()
 
         message_exception = self.get_message_exception(
             str(raises_context.exception))
@@ -175,6 +176,9 @@ class InstitutionRequestHandlerTest(TestBaseHandler):
             expected_message,
             "Expected exception message must be equal to %s" % expected_message
         )
+
+        for permission in permissions.DEFAULT_ADMIN_PERMISSIONS:
+            self.assertTrue(permission not in user.permissions)
     
     @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
     def test_put_with_an_accepted_request(self, verify_token):
@@ -187,6 +191,7 @@ class InstitutionRequestHandlerTest(TestBaseHandler):
                 '/api/requests/%s/institution'
                 % self.request.key.urlsafe()
             )
+        user = self.other_user.key.get()
 
         message_exception = self.get_message_exception(
             str(raises_context.exception))
@@ -198,6 +203,9 @@ class InstitutionRequestHandlerTest(TestBaseHandler):
             expected_message,
             "Expected exception message must be equal to %s" % expected_message
         )
+
+        for permission in permissions.DEFAULT_ADMIN_PERMISSIONS:
+            self.assertTrue(permission not in user.permissions)
 
 def initModels(cls):
     """Init the models."""

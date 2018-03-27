@@ -55,10 +55,11 @@
                      * Will enter this condition when the dialog type is 'accepted' 
                      * (when the user is sending the invitation).
                      */
-                    if(invite.status === processCtrl.VIEW_INVITE_SENDER) {
+                    if(type_of_dialog === processCtrl.VIEW_INVITE_SENDER) {
                         _.remove(processCtrl.current_user.institutions_admin, function(url) {
                             return getKey(url) === invite.institution_key;
                         });
+
                         AuthService.save();
                     }
 

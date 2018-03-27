@@ -109,8 +109,10 @@
         };
 
         dialogCtrl.save = function save() {
-            var saveImgPromise = saveImageAndCallEventFunction();
+            var saveImgPromise = dialogCtrl.saveImage();
             saveImgPromise.then(function success() {
+                console.log("success");
+                console.log(dialogCtrl.isEditing);
                 dialogCtrl.isEditing ? updateEvent() : create();
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
@@ -141,7 +143,7 @@
             dialogCtrl.startTime = dialogCtrl.event.start_time && new Date(dialogCtrl.event.start_time);
         };
 
-        function saveImageAndCallEventFunction() {
+        dialogCtrl.saveImage = function saveImage() {
             var defer = $q.defer();
             if (dialogCtrl.photoBase64Data) {
                 dialogCtrl.loading = true;
@@ -160,6 +162,7 @@
         }
 
         function updateEvent() {
+            console.log("updateEvent");
             addLinks(dialogCtrl.event);
             var event = new Event(dialogCtrl.event, dialogCtrl.user.current_institution.key);
             if(event.isValid()) {
@@ -168,6 +171,7 @@
                 var formatedPatch = formatPatch(generatePatch(patch, event));
                 EventService.editEvent(dialogCtrl.event.key, formatedPatch)
                 .then(function success() {
+                    console.log("editEvent");
                     $mdDialog.hide(event);
                     MessageService.showToast('Evento editado com sucesso.');
                 }, function error(response) {

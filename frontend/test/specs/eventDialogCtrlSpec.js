@@ -2,7 +2,7 @@
 
 (describe('Test EventDialogController', function() {
 
-  var controller, scope, httpBackend, rootScope, deffered, imageService, eventService,
+  var controller, scope, httpBackend, rootScope, deferred, imageService, eventService,
     postService, messageService, newCtrl;
 
   var EVENT_URI = "/api/events";
@@ -56,7 +56,7 @@
       scope = $rootScope.$new();
       httpBackend = $httpBackend;
       rootScope = $rootScope;
-      deffered = $q.defer();
+      deferred = $q.defer();
       eventService = EventService;
       postService = PostService;
       messageService = MessageService;
@@ -128,28 +128,36 @@
     describe('save()', function() {
 
       it('should eventService.createEvent be called', function() {
-        spyOn(eventService, 'createEvent').and.returnValue(deffered.promise);
-        deffered.resolve(event);
+        spyOn(eventService, 'createEvent').and.returnValue(deferred.promise);
+        deferred.resolve(event);
         controller.save();
         scope.$apply();
         expect(eventService.createEvent).toHaveBeenCalledWith(event_convert_date);
       });
 
       it('should call eventService.editEvent', function() {
-        spyOn(eventService, 'editEvent').and.callFake(function() {
-          return {
-            then: function(callback) {
-              return callback();
-            }
-          };
-        });
-        controller.observer = jsonpatch.observe(controller.event);
+        spyOn(controller, 'saveImage').and.returnValue(deferred.promise);
+        spyOn(eventService, 'editEvent').and.returnValue(deferred.promise);
+
+        deferred.resolve();
         controller.isEditing = true;
-        controller.dateChangeEvent = new Event(event, user.current_institution.key);
-        controller.dateChangeEvent.start_time = new Date();
-        controller.dateChangeEvent.end_time = new Date();
+        controller.observer = jsonpatch.observe(controller.event);
         controller.save();
+
+        console.log("===========================================");
+        expect(controller.saveImage).toHaveBeenCalled();
         expect(eventService.editEvent).toHaveBeenCalled();
+      });
+
+      fit('should call eventService.createEvent', function() {
+          spyOn(controller, 'saveImage').and.returnValue(Promise.resolve());
+          spyOn(eventService, 'createEvent').and.returnValue(Promise.resolve({data: controller.event}));
+          
+          scope.$apply();
+          controller.isEditing = false;
+          controller.save();
+          expect(eventService.createEvent).toHaveBeenCalled();
+          httpBackend.flush();
       });
 
       describe('MessageService.showToast()', function(){

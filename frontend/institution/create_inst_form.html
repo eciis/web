@@ -141,27 +141,27 @@
                 </md-card>
                 <md-card ng-if="configInstCtrl.getStep(2)" layout-margin flex>
                     <div layout="column" layout-margin>
-                        <md-card-content layout-margin>
-                            <div layout="column" layout-margin>
-                                <md-list-item md-colors="{background: 'grey-300'}" class="md-line" layout="row" layout-margin style="height: 100px;">
-                                        <div layout="column">
-                                            <md-button layout="row" class="md-icon-button" style="border-radius: 50%; height: 70px; width: 70px;"
-                                                md-colors="{background: 'teal-900'}" ng-click="null"
-                                                ng-model="configInstCtrl.file" ngf-pattern="'image/*'"
-                                                ngf-accept="'image/*'" ngf-max-size="5MB" class="md-raised"
-                                                ngf-select="configInstCtrl.cropImage(configInstCtrl.file, $event)" ng-if="!configInstCtrl.showImage()">
-                                                <md-icon flex-xs="10" style="color: #FFFFFF; font-size: 35px; margin: 0 0 10px 8px;">add_a_photo</md-icon>
-                                            </md-button>
-                                            <md-button layout="row" class="md-icon-button" style="border-radius: 50%; height: 80px; width: 80px;" ng-click="null"
-                                                ng-model="configInstCtrl.file" ngf-pattern="'image/*'"
-                                                ngf-accept="'image/*'" ngf-max-size="5MB" class="md-raised"
-                                                ngf-select="configInstCtrl.cropImage(configInstCtrl.file, $event)" ng-if="configInstCtrl.showImage()">
-                                                <img ng-if="configInstCtrl.showImage()" style="border-radius: 50%; width: 100%; height: 100%;" ng-src="{{ configInstCtrl.newInstitution.photo_url }}"/>
-                                            </md-button>
-                                        </div>
-                                        <b>{{configInstCtrl.suggestedName}} </b>
-                                </md-list-item>
-                                <form layout="column" name="secondStep">
+                        <form layout="column" name="secondStep" ng-submit="configInstCtrl.nextStep()">
+                            <md-card-content layout-margin>
+                                <div layout="column" layout-margin>
+                                    <md-list-item md-colors="{background: 'grey-300'}" class="md-line" layout="row" layout-margin style="height: 100px;">
+                                            <div layout="column">
+                                                <md-button layout="row" class="md-icon-button" style="border-radius: 50%; height: 70px; width: 70px;"
+                                                    md-colors="{background: 'teal-900'}" ng-click="null"
+                                                    ng-model="configInstCtrl.file" ngf-pattern="'image/*'"
+                                                    ngf-accept="'image/*'" ngf-max-size="5MB" class="md-raised"
+                                                    ngf-select="configInstCtrl.cropImage(configInstCtrl.file, $event)" ng-if="!configInstCtrl.showImage()">
+                                                    <md-icon flex-xs="10" style="color: #FFFFFF; font-size: 35px; margin: 0 0 10px 8px;">add_a_photo</md-icon>
+                                                </md-button>
+                                                <md-button layout="row" class="md-icon-button" style="border-radius: 50%; height: 80px; width: 80px;" ng-click="null"
+                                                    ng-model="configInstCtrl.file" ngf-pattern="'image/*'"
+                                                    ngf-accept="'image/*'" ngf-max-size="5MB" class="md-raised"
+                                                    ngf-select="configInstCtrl.cropImage(configInstCtrl.file, $event)" ng-if="configInstCtrl.showImage()">
+                                                    <img ng-if="configInstCtrl.showImage()" style="border-radius: 50%; width: 100%; height: 100%;" ng-src="{{ configInstCtrl.newInstitution.photo_url }}"/>
+                                                </md-button>
+                                            </div>
+                                            <b>{{configInstCtrl.suggestedName}} </b>
+                                    </md-list-item>
                                     <md-input-container class="md-block" flex-gt-sm flex-sm>
                                     <label>Nome completo da instituição</label>
                                     <input type="text" name="fullName" required md-maxlength="90"
@@ -228,14 +228,14 @@
                                             </div>
                                         </md-input-container>
                                     </div>
-                                </form>
-                        </div>
-                        </md-card-content>
-                        <md-card-actions layout="row" layout-align="end center">
-                            <md-button ng-click="secondStep.$valid && configInstCtrl.nextStep()" class="md-raised" md-colors="{background: 'teal-500'}">
-                                AVANÇAR
-                            </md-button>
-                        </md-card-actions>
+                            </div>
+                            </md-card-content>
+                            <md-card-actions layout="row" layout-align="end center">
+                                <md-button type="submit" class="md-raised" md-colors="{background: 'teal-500'}">
+                                    AVANÇAR
+                                </md-button>
+                            </md-card-actions>
+                        </form>
                     </div>
                 </md-card>
                 <md-card ng-if="configInstCtrl.getStep(3)" layout-margin>

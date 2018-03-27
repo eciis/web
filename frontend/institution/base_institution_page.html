@@ -1,24 +1,29 @@
+<!-- FLOATING COVER -->
+<div>
+    <div id="floatingCoverXs" class="floating-cover" md-colors="{background: 'teal-500'}" layout="row"
+        style="top: 3.5em; width: 100%;" hide show-xs show-sm>
+        <img class="inst-img" style="margin-left: 1em; margin-top: -0.5em;" alt="Foto do Perfil" ng-src="{{ institutionCtrl.institution.photo_url || '/app/images/institution.png' }}">
+        <p class="md-title" style="font-size:0.8em; margin-left: 1em;">{{ institutionCtrl.limitString(institutionCtrl.institution.name, 100) }}</p>
+    </div>
+    <div id="floatingCoverMd" class="floating-cover" md-colors="{background: 'teal-500'}" layout="row"
+        style="top: 4.5em; width: 100%;" hide show-md>
+        <img class="inst-img" style="margin-left: 1em; margin-top: -0.5em;" alt="Foto do Perfil" ng-src="{{ institutionCtrl.institution.photo_url || '/app/images/institution.png' }}">
+        <p class="md-title" style="font-size:0.8em; margin-left: 1em;">{{ institutionCtrl.limitString(institutionCtrl.institution.name, 100) }}</p>
+    </div>
+    <div id="floatingCoverLg" class="floating-cover" md-colors="{background: 'teal-500'}" layout="row"
+        style="top: 4.5em;  width: 100%;" hide show-lg>
+        <img class="inst-img" style="margin-top: -0.5em;" alt="Foto do Perfil" ng-src="{{ institutionCtrl.institution.photo_url || '/app/images/institution.png' }}">
+        <p class="md-title" style="margin-left: 1em">{{ institutionCtrl.limitString(institutionCtrl.institution.name, 200) }}</p>
+    </div>
+    <div id="floatingCoverGtLg" class="floating-cover" md-colors="{background: 'teal-500'}" layout="row"
+        style="top: 4.5em;  width: 100%;" hide show-gt-lg>
+        <img class="inst-img" style="margin-top: -0.5em;" alt="Foto do Perfil" ng-src="{{ institutionCtrl.institution.photo_url || '/app/images/institution.png' }}">
+        <p class="md-title" style="margin-left: 1em">{{ institutionCtrl.limitString(institutionCtrl.institution.name, 200) }}</p>
+    </div>
+</div>
 <md-content id="instPage" flex="100" layout="row" layout-align="center" class="custom-scrollbar">
     <div flex flex-lg="90" flex-gt-lg="70" layout="column" md-colors="{background: 'grey-50'}">
-        
         <div layout="column" flex>
-            <!-- FLOATING COVER -->
-            <div id="floatingCoverXs" class="floating-cover" md-colors="{background: 'teal-500'}" layout="row" layout-align="start center"
-                style="width: 80.9em; top: 4em;" hide show-xs show-sm show-md>
-                <img class="inst-img" style="margin-left: 1em;" alt="Foto do Perfil" ng-src="{{ institutionCtrl.institution.photo_url || '/app/images/institution.png' }}">
-                <p class="md-title" style="font-size:0.8em; margin-left: 1em;">{{ institutionCtrl.limitString(institutionCtrl.institution.name, 100) }}</p>
-            </div>
-            <div id="floatingCoverLg" class="floating-cover" md-colors="{background: 'teal-500'}" layout="row" layout-align="start center"
-                style="width: 80.9em;" hide show-lg>
-                <img class="inst-img" alt="Foto do Perfil" ng-src="{{ institutionCtrl.institution.photo_url || '/app/images/institution.png' }}">
-                <p class="md-title" style="margin-left: 1em">{{ institutionCtrl.limitString(institutionCtrl.institution.name, 200) }}</p>
-            </div>
-            <div id="floatingCoverGtLg" class="floating-cover" md-colors="{background: 'teal-500'}" layout="row" layout-align="start center"
-                style="width: 83.9em" hide show-gt-lg>
-                <img class="inst-img" alt="Foto do Perfil" ng-src="{{ institutionCtrl.institution.photo_url || '/app/images/institution.png' }}">
-                <p class="md-title" style="margin-left: 1em">{{ institutionCtrl.limitString(institutionCtrl.institution.name, 200) }}</p>
-            </div>
-
             <!-- COVER -->
             <div layout="column" style="height: 15.5em; box-shadow: 0 -2px 5px 0px grey;" id="bigCover">
                 <div ng-if="institutionCtrl.isAdmin()" hide-xs layout="row" layout-align="end start" style="height: 0px; position: relative;">
@@ -54,12 +59,12 @@
                 </div>
             </div>
 
-            <div layout="row" flex="70" style="margin-top:1em;">
+            <div layout="row" flex="70" style="margin-top: 2.5em;">
                 <!-- LEFT MENU -->
                 <div flex="25" hide show-gt-sm>
                     <div id="leftMenu" class="container" layout="row">
                         <div flex  layout="row">
-                            <md-sidenav class="md-sidenav-left" md-component-id="leftNav" md-whiteframe="4" layout="row"
+                            <md-sidenav style="max-width: 90%;" class="md-sidenav-left" md-component-id="leftNav" md-whiteframe="4" layout="row"
                                 md-is-locked-open="$mdMedia('gt-sm')" flex>
                                 <md-content class="custom-scrollbar" layout="column" hide show-gt-sm
                                     md-colors="{background: 'grey-100'}" flex>    

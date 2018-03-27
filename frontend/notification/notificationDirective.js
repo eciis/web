@@ -151,6 +151,34 @@
                 state: "app.post"
             },
             "USER_ADM": {
+                icon: "account_balance",
+                action: function(properties, notification, event) {
+                    return showDialog(properties, notification, event);
+                },
+                properties: {
+                    templateUrl: "app/invites/process_invite_user_adm.html",
+                    controller: "ProcessInviteUserAdmController",
+                    controllerAs: "processCtrl",
+                    locals: {
+                        typeOfDialog: 'ACCEPT_INVITATION'
+                    }
+                }
+            },
+            "ACCEPT_INVITE_USER_ADM": {
+                icon: "account_balance",
+                action: function(properties, notification, event) {
+                    return showDialog(properties, notification, event);
+                },
+                properties: {
+                    templateUrl: "app/invites/process_invite_user_adm.html",
+                    controller: "ProcessInviteUserAdmController",
+                    controllerAs: "processCtrl",
+                    locals: {
+                        typeOfDialog: 'VIEW_ACCEPTED_INVITATION_SENDER'
+                    }
+                }
+            },
+            "REJECT_INVITE_USER_ADM": {
                 icon: "account_balance"
             }
         };

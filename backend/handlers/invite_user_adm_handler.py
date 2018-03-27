@@ -48,7 +48,7 @@ class InviteUserAdmHandler(BaseHandler):
                     'user_key': user.key.urlsafe()
                 }
             )
-            invite.send_response_notification(current_institution=institution.key.urlsafe(), action='ACCEPT')
+            invite.send_response_notification(current_institution=institution.key, action='ACCEPT')
         
         save_changes(user, actual_admin, invite, institution)
         self.response.write(json.dumps(makeUser(user, self.request)))
@@ -59,4 +59,4 @@ class InviteUserAdmHandler(BaseHandler):
         invite = ndb.Key(urlsafe=invite_key).get()
         invite.change_status('rejected')
         invite.put()
-        invite.send_response_notification(current_institution=invite.institution_key.urlsafe(), action='REJECT')
+        invite.send_response_notification(current_institution=invite.institution_key, action='REJECT')

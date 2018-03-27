@@ -213,6 +213,7 @@ class InviteUserAdmTest(TestBase):
             "institution": institution.make(REQUIRED_PROPERTIES),
             "institution_key": institution.key.urlsafe(),
             "invitee_key": new_admin.key.urlsafe(),
+            "invitee_name": new_admin.name,
             "type_of_invite": "INVITE_USER_ADM"
         }
 

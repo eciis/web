@@ -57,7 +57,7 @@ class InviteUserAdm(InviteUser):
     def send_response_notification(self, current_institution, action):
         """Send notification to sender of invite when invite is accepted or rejected."""
         entity_type = "ACCEPT_INVITE_USER_ADM" if action == 'ACCEPT' else "REJECT_INVITE_USER_ADM"
-        self.send_notification(
+        super(InviteUserAdm, self).send_notification(
             current_institution=current_institution, 
             sender_key=self.invitee_key, 
             receiver_key=self.sender_key or self.admin_key,
@@ -71,4 +71,5 @@ class InviteUserAdm(InviteUser):
         make = super(InviteUserAdm, self).make()
         make['type_of_invite'] = 'INVITE_USER_ADM'
         make['invitee_key'] = self.invitee_key.urlsafe()
+        make['invitee_name'] = self.invitee_key.get().name
         return make

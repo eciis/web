@@ -50,6 +50,25 @@ def filter_permissions_to_remove(user, permissions, institution_key):
             permissions_filtered[permission] = instition_keys
     return  permissions_filtered
 
+def is_admin_of_parent_inst(user, institution_parent_key):
+    """
+    This method checks if the user is an administrator of some parent institution.
+
+    Arguments:
+    user -- User to verify if is admin of some parent institution
+    institution_parent_key -- Key of parent institution for check if user is admin 
+    """
+    if ndb.Key(urlsafe=institution_parent_key) in user.institutions_admin:
+        return True
+    
+    parent_inst = ndb.Key(urlsafe=institution_parent_key).get()
+
+    if parent_inst.parent_institution:
+        return is_admin_of_parent_inst(user, parent_inst.parent_institution.urlsafe())
+    else:
+        return False
+
+
 class BaseHandler(webapp2.RequestHandler):
     """Base Handler."""
 
@@ -275,6 +294,7 @@ class SendInviteHandler(BaseHandler):
 
 
 class TransferAdminPermissionsHandler(BaseHandler):
+    """Handler of transfer admin permissions."""
 
     def add_permissions(self, user, permissions):
         """
@@ -304,6 +324,13 @@ class TransferAdminPermissionsHandler(BaseHandler):
 
 
     def post(self):
+        """
+        This method is responsible for adding all administrator permissions linked 
+        to an institution to the new administrator, and removing the same permissions 
+        from the old administrator. It performs a search for all permissions for the 
+        institution in which the administrator transfer is being made and its hierarchy of children, 
+        finally inserts these permissions in the new administrator and removes from the old administrator.
+        """
         institution_key = self.request.get('institution_key')
         user_key = self.request.get('user_key')
         institution = ndb.Key(urlsafe=institution_key).get()
@@ -315,8 +342,10 @@ class TransferAdminPermissionsHandler(BaseHandler):
             permissions = institution.get_all_hierarchy_admin_permissions()
             institution.set_admin(new_admin.key)
             self.add_permissions(new_admin, permissions)
-            permissions_filtered = filter_permissions_to_remove(admin, permissions, institution_key)
-            self.remove_permissions(admin, permissions_filtered)
+            
+            if (not institution.parent_institution) or (not is_admin_of_parent_inst(admin, institution.parent_institution.urlsafe())):
+                permissions_filtered = filter_permissions_to_remove(admin, permissions, institution_key)
+                self.remove_permissions(admin, permissions_filtered)
 
             new_admin.put()
             admin.put()

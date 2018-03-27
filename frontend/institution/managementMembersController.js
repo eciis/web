@@ -17,7 +17,7 @@
         manageMemberCtrl.institution = {};
         manageMemberCtrl.invite = {};
         manageMemberCtrl.sent_invitations = [];
-        manageMemberCtrl.sent_invitations_adm = [];
+        manageMemberCtrl.sentInvitationsAdm = [];
         manageMemberCtrl.currentMember = "";
         manageMemberCtrl.members = [];
 
@@ -63,12 +63,7 @@
                 targetEvent: ev,
                 clickOutsideToClose: true
             }).then(function success(response) {
-                manageMemberCtrl.sent_invitations_adm.map((invite) => {
-                    if (invite.status === 'sent') 
-                        invite.status = 'rejected';
-                });
-
-                manageMemberCtrl.sent_invitations_adm.push(response);
+                manageMemberCtrl.sentInvitationsAdm.push(response);
             }, function error() {});
         };
 
@@ -193,9 +188,8 @@
 
         function getSentInvitations(invitations) {
             var isUserInvitation = createRequestSelector('sent', 'USER');
-            var isUserAdmInvitation = createRequestSelector('sent', 'INVITE_USER_ADM');
             manageMemberCtrl.sent_invitations = invitations.filter(isUserInvitation);
-            manageMemberCtrl.sent_invitations_adm = invitations.filter(isUserAdmInvitation);
+            manageMemberCtrl.sentInvitationsAdm = invitations.filter(invite => invite.type_of_invite === 'INVITE_USER_ADM');
         }
 
         function getMembers() {
@@ -361,7 +355,7 @@
         };
 
         manageMemberCtrl.disableTransferAdminButton = function disableTransferAdminButton() {
-            let alreadySended = manageMemberCtrl.sent_invitations_adm.reduce(
+            let alreadySended = manageMemberCtrl.sentInvitationsAdm.reduce(
                 (found, invite) => (invite.status === 'sent') ? true : found, 
                 false
             );

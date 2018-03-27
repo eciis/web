@@ -329,7 +329,7 @@ class TransferAdminPermissionsHandler(BaseHandler):
         to an institution to the new administrator, and removing the same permissions 
         from the old administrator. It performs a search for all permissions for the 
         institution in which the administrator transfer is being made and its hierarchy of children, 
-        finally inserts these permissions in the new administrator and removes of the old administrator.
+        finally inserts these permissions in the new administrator and removes from the old administrator.
         """
         institution_key = self.request.get('institution_key')
         user_key = self.request.get('user_key')

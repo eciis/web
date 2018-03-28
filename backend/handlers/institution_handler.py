@@ -25,8 +25,7 @@ def getSentInvitations(institution_key):
     """Query that return list of invites for this user."""
     invites = []
 
-    queryInvites = Invite.query(Invite.institution_key == institution_key,
-                                Invite.status == 'sent')
+    queryInvites = Invite.query(Invite.institution_key == institution_key)
 
     invites = [invite.make() for invite in queryInvites]
 

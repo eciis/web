@@ -355,6 +355,7 @@
             var leftMenu = document.getElementById("leftMenu");
             var floatingCoverGtLg = document.getElementById("floatingCoverGtLg");
             var floatingCoverLg = document.getElementById("floatingCoverLg");
+            var floatingCoverMd = document.getElementById("floatingCoverMd");
             var floatingCoverXs = document.getElementById("floatingCoverXs");
             
             instPage && instPage.addEventListener('scroll', function() {
@@ -362,11 +363,20 @@
                 bigCover.style.opacity = 1 - rate;
                 floatingCoverGtLg.style.opacity = rate;
                 floatingCoverLg.style.opacity = rate;
+                floatingCoverMd.style.opacity = rate;
                 floatingCoverXs.style.opacity = rate;
     
                 instPage.scrollTop >= 160 ? leftMenu.classList.add('floating-menu') : leftMenu.classList.remove('floating-menu');
             });
         }
+
+        institutionCtrl.getResponsiveWidth = function getResponsiveWidth() {
+            var leftMenu = document.getElementById("leftMenu");
+            var showCustomGtSmWidth = screen.width <= 1120;
+            var isFloating = leftMenu.classList.contains('floating-menu');
+
+            return isFloating && showCustomGtSmWidth ? 'custom-max-width' : '';
+        };
         
         (function main(){
             loadStateView();

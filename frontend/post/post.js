@@ -53,3 +53,11 @@ Post.prototype.remove = function remove(userName) {
     this.last_modified_by = userName;
     this.last_modified_date = new Date().toISOString();
 };
+
+
+Post.prototype.hasActivity = function hasActivity() {
+    var hasComments = this.number_of_comments > 0;
+    var hasLikes = this.number_of_likes > 0;
+
+    return hasComments || hasLikes;
+};

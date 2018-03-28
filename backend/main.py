@@ -11,6 +11,7 @@ from handlers.login_logout_handler import LoginHandler
 from handlers.login_logout_handler import LogoutHandler
 from handlers.user_handler import UserHandler
 from handlers.user_profile_handler import UserProfileHandler
+from handlers.user_institutions_handler import UserInstitutionsHandler
 from handlers.post_collection_handler import PostCollectionHandler
 from handlers.post_handler import PostHandler
 from handlers.like_handler import LikeHandler
@@ -51,11 +52,11 @@ app = webapp2.WSGIApplication([
     ("/api/invites", InviteCollectionHandler), 
     ("/api/invites/institution", InviteInstitutionHandler),
     ("/api/invites/(.*)/resend", ResendInviteHandler),
+    ("/api/invites/(.*)/institution_adm", InviteUserAdmHandler),
     ("/api/invites/(.*)", InviteHandler),
     ("/api/requests/(.*)/institution", InstitutionRequestHandler),
     ("/api/requests/(.*)/institution_parent", InstitutionParentRequestHandler),
     ("/api/requests/(.*)/institution_children", InstitutionChildrenRequestHandler),
-    ("/api/invites/(.*)/institution_adm", InviteUserAdmHandler),
     ("/api/events/(.*)", EventHandler),
     ("/api/events.*", EventCollectionHandler),
     ("/api/institutions", InstitutionCollectionHandler),
@@ -84,6 +85,7 @@ app = webapp2.WSGIApplication([
     ("/api/surveyposts/(.*)/votes", VoteHandler),
     ("/api/user", UserHandler),
     ("/api/user/(.*)/profile", UserProfileHandler),
+    ("/api/user/institutions/(.*)/institutional-operations", UserInstitutionsHandler),
     ("/api/user/institutions/(.*)", UserHandler),
     ("/api/user/timeline.*", UserTimelineHandler),
     ("/api/search/institution", SearchHandler),

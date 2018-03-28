@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.service("InviteService", function InviteService($http, $q, AuthService) {
+    app.service("InviteService", function InviteService($http, $q, HttpService, AuthService) {
         var service = this;
 
         var INVITES_URI = "/api/invites";
@@ -42,6 +42,14 @@
             });
 
             return deferred.promise;
+        };
+
+        service.acceptInviteUserAdm = function acceptInviteUserAdm(inviteKey) {
+            return HttpService.put(INVITES_URI + '/' + inviteKey + '/institution_adm');
+        };
+
+        service.rejectInviteUserAdm = function rejectInviteUserAdm(inviteKey) {
+            return HttpService.delete(INVITES_URI + '/' + inviteKey + '/institution_adm');
         };
 
         service.resendInvite = function resendInvite(inviteKey) {

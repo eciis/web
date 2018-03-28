@@ -19,7 +19,17 @@
             "Error! This comment has been deleted.": "Esse comentário foi removido!",
             "Error! This post has been deleted": "Esse post foi removido.",
             "Error! User already liked this comment.": "O usuário já curtiu esse comentário.",
-            "The invites are being processed.": "Os convites estão sendo processados."
+            "The invites are being processed.": "Os convites estão sendo processados.",
+            "Error! The institution is not active.": "Essa instituição não está ativa.",
+            "Error! Invalid Current Institution! User is not an active member.": "Usuário não é um membro ativo.",
+            "Error! This invitation has already been processed": "Esse convite já foi processado.",
+            "Error! Invitation type not allowed": "Tipo de convite não permitido.",
+            "Error! The invitee is not a member of this institution!": "O convidado não é um membro dessa instituição.",
+            "Error! The invitee is already admin of this institution!": "O convidado já é o administrador dessa instituição.",
+            "Error! Sender is not admin of this institution!": "Você não é o administrador dessa instituição.",
+            "Error! An invitation is already being processed for this institution!": "Um convite desse mesmo tipo já está sendo processado para essa instituição.",
+            "Error! The sender is already a member": "O usuário já é um membro.",
+            "Error! The sender is already invited": "O usuário já foi convidado para ser membro dessa instituição."
         };
 
         service.showToast = function showToast(message) {

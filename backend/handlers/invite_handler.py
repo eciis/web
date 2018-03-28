@@ -75,6 +75,9 @@ class InviteHandler(BaseHandler):
 
         Utils._assert(check_if_user_is_member(user, institution), 
             "The user is already a member", NotAuthorizedException)
+        
+        Utils._assert(not institution.is_active(), 
+            "The institution is not active.", NotAuthorizedException)
 
         invite.change_status('accepted')
 

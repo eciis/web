@@ -168,6 +168,38 @@ class InviteUserAdmTest(TestBase):
             'Sender is not admin of this institution!',
             'Expected message of exception must be equal to Sender is not admin of this institution!'
         )
+    
+    def test_create_user_already_admin(self):
+        """Test create with user already admin."""
+        institution = mocks.create_institution()
+        admin = mocks.create_user()
+
+        institution.set_admin(admin.key)
+        institution.add_member(admin)
+        admin.add_institution_admin(institution.key)
+
+        institution.put()
+        admin.put()
+
+        data = {
+            "invitee": admin.email[0],
+            "institution_key": institution.key.urlsafe(),
+            "admin_key": admin.key.urlsafe(),
+            "is_request": False,
+            "sender_key": admin.key.urlsafe(),
+            "sender_name": admin.name,
+            "invitee_key": admin.key.urlsafe()
+        }
+
+        with self.assertRaises(NotAuthorizedException) as raises_context:
+            InviteUserAdm.create(data)
+        
+        message_exeption = str(raises_context.exception)
+        self.assertEqual(
+            message_exeption, 
+            'The invitee is already admin of this institution!',
+            'Expected message of exception must be equal to The invitee is already admin of this institution!'
+        )
 
     
     def test_make(self):
@@ -213,6 +245,7 @@ class InviteUserAdmTest(TestBase):
             "institution": institution.make(REQUIRED_PROPERTIES),
             "institution_key": institution.key.urlsafe(),
             "invitee_key": new_admin.key.urlsafe(),
+            "invitee_name": new_admin.name,
             "type_of_invite": "INVITE_USER_ADM"
         }
 

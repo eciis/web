@@ -42,6 +42,7 @@ class InviteHandlerTest(TestBaseHandler):
         # new Institution inst test
         cls.inst_test = mocks.create_institution()
         cls.inst_test.admin = cls.user_admin.key
+        cls.inst_test.state = "active"
         cls.inst_test.put()
         # New invite user
         cls.data = {
@@ -206,6 +207,29 @@ class InviteHandlerTest(TestBaseHandler):
         
         # assert the notification was not sent
         send_notification.assert_not_called()
+    
+    @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
+    def test_patch_with_inst_inactive(self, verify_token):
+        """Test a patch invite_user when the user is already a member."""
+        self.inst_test.state = "inactive"
+        self.inst_test.put()
+
+        with self.assertRaises(Exception) as raises_context:
+            self.testapp.patch(
+                '/api/invites/%s'
+                % self.invite.key.urlsafe()
+            )
+
+        message_exception = self.get_message_exception(
+            str(raises_context.exception))
+        
+        expected_message = "Error! The institution is not active."
+
+        self.assertEqual(
+            message_exception,
+            expected_message,
+            "Expected exception message must be equal to %s" %expected_message
+        )
     
     @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_patch_with_a_user_that_is_already_a_member(self, verify_token):

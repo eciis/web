@@ -17,7 +17,7 @@
         manageMemberCtrl.institution = {};
         manageMemberCtrl.invite = {};
         manageMemberCtrl.sent_invitations = [];
-        manageMemberCtrl.sent_invitations_adm = [];
+        manageMemberCtrl.sentInvitationsAdm = [];
         manageMemberCtrl.currentMember = "";
         manageMemberCtrl.members = [];
 
@@ -63,12 +63,7 @@
                 targetEvent: ev,
                 clickOutsideToClose: true
             }).then(function success(response) {
-                manageMemberCtrl.sent_invitations_adm.map((invite) => {
-                    if (invite.status === 'sent') 
-                        invite.status = 'rejected';
-                });
-
-                manageMemberCtrl.sent_invitations_adm.push(response);
+                manageMemberCtrl.sentInvitationsAdm.push(response);
             }, function error() {});
         };
 
@@ -100,7 +95,7 @@
                 manageMemberCtrl.isLoadingInvite = true;
                 var promise = InviteService.sendInvite(requestBody);
                 promise.then(function success(response) {
-                    refreshSentInvitations(requestBody.emails);
+                    refreshSentInvitations(requestBody.emails, response.data.invites);
                     manageMemberCtrl.clearInvite(); 
                     manageMemberCtrl.showInvites = true; 
                     manageMemberCtrl.showSendInvite = false;
@@ -114,10 +109,11 @@
             }
         };
 
-        function refreshSentInvitations(emails) {
+        function refreshSentInvitations(emails, invites) {
             var inviteToAdd = new Invite(manageMemberCtrl.invite);
             _.each(emails, function(email) {
                 inviteToAdd.invitee = email;
+                inviteToAdd.key = invites.reduce((acum, invite) => (invite.email === email) ? invite.key : acum, "");
                 manageMemberCtrl.sent_invitations.push(_.clone(inviteToAdd));
             });
         }
@@ -192,9 +188,8 @@
 
         function getSentInvitations(invitations) {
             var isUserInvitation = createRequestSelector('sent', 'USER');
-            var isUserAdmInvitation = createRequestSelector('sent', 'INVITE_USER_ADM');
             manageMemberCtrl.sent_invitations = invitations.filter(isUserInvitation);
-            manageMemberCtrl.sent_invitations_adm = invitations.filter(isUserAdmInvitation);
+            manageMemberCtrl.sentInvitationsAdm = invitations.filter(invite => invite.type_of_invite === 'INVITE_USER_ADM');
         }
 
         function getMembers() {
@@ -360,7 +355,7 @@
         };
 
         manageMemberCtrl.disableTransferAdminButton = function disableTransferAdminButton() {
-            let alreadySended = manageMemberCtrl.sent_invitations_adm.reduce(
+            let alreadySended = manageMemberCtrl.sentInvitationsAdm.reduce(
                 (found, invite) => (invite.status === 'sent') ? true : found, 
                 false
             );
@@ -530,24 +525,28 @@
 
         transferAdminCtrl.confirm = function confirm() {
             if (transferAdminCtrl.selectedMember) {
-                let data = {
-                    institution_key: institution.key,
-                    admin_key: institution.admin.key,
-                    type_of_invite: 'USER_ADM',
-                    sender_name: institution.admin.name,
-                    invitee_key: transferAdminCtrl.selectedMember.key,
-                    invitee: transferAdminCtrl.selectedMember.email[0]
-                };
+                if (transferAdminCtrl.selectedMember.key !== institution.admin.key) {
+                    let data = {
+                        institution_key: institution.key,
+                        admin_key: institution.admin.key,
+                        type_of_invite: 'USER_ADM',
+                        sender_name: institution.admin.name,
+                        invitee_key: transferAdminCtrl.selectedMember.key,
+                        invitee: transferAdminCtrl.selectedMember.email[0]
+                    };
 
-                let invite = new Invite(data);
+                    let invite = new Invite(data);
 
-                InviteService.sendInviteUserAdm(invite).then(function success(response) {
-                    invite.status = 'sent';
-                    $mdDialog.hide(invite);
-                    MessageService.showToast("Convite enviado com sucesso!");
-                }, function error(response) {
-                    MessageService.showToast(response.data);
-                });
+                    InviteService.sendInviteUserAdm(invite).then(function success(response) {
+                        invite.status = 'sent';
+                        $mdDialog.hide(invite);
+                        MessageService.showToast("Convite enviado com sucesso!");
+                    }, function error(response) {
+                        MessageService.showToast(response.data);
+                    });
+                } else {
+                    MessageService.showToast('Você já é administrador da instituição, selecione outro membro!');
+                }
             } else {
                 MessageService.showToast('Selecione um memebro!');
             }

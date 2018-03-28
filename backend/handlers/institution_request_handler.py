@@ -67,12 +67,15 @@ class InstitutionRequestHandler(BaseHandler):
             'institution_photo_url': institution.photo_url
         }
         sender.create_and_add_profile(data_profile)
-        user.add_permissions(permissions.DEFAULT_ADMIN_PERMISSIONS, institution.key.urlsafe())
+        sender.add_permissions(permissions.DEFAULT_ADMIN_PERMISSIONS, institution.key.urlsafe())
 
         institution.admin = sender.key
         institution.members.append(sender.key)
         institution.followers.append(sender.key)
         institution.put()
+
+        host = self.request.host
+        request.send_response_email(host, "ACCEPT")
 
         self.response.write(json.dumps(request.make()))
 
@@ -96,3 +99,6 @@ class InstitutionRequestHandler(BaseHandler):
         institution = request.institution_key.get()
         institution.state = 'inactive'
         institution.put()
+
+        host = self.request.host
+        request.send_response_email(host, "REJECT")

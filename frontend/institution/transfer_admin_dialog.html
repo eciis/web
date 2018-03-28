@@ -1,4 +1,4 @@
-<md-dialog flex="40">
+<md-dialog flex-gt-md="40" flex-md="70" flex-sm="80" flex-xs="95">
  <md-dialog-content layout="row" layout-align="center center">
     <div layout="column" flex="90">
         <h3>Transferir administração</h3>
@@ -14,7 +14,7 @@
                 ng-repeat="member in members = (transferAdminCtrl.institution_members | filter: transferAdminCtrl.searchMember)" 
                 ng-click="transferAdminCtrl.selectMember(member)" flex-xs>
                 <img title="{{member.name}}" ng-src="{{member.photo_url}}" class="md-avatar" style="margin: 0 15px 0 -15px; width: 60px; height: 60px;"/>
-                <div layout="column">
+                <div layout="column" ng-click="transferAdminCtrl.selectMember(member)">
                     <b style="position: relative; margin-top: 20px; font-size: 15px;">{{ member.name }}</b>
                     <span style="position: relative; bottom: 20px; font-size: 15px;">{{ member.email[0]}}</span>
                 </div>

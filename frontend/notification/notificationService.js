@@ -42,7 +42,9 @@
             'SHARED_EVENT': messageCreator('Compartilhou um evento de ', SINGLE_INST),
             'DELETED_POST': messageCreator('Deletou o seu post em ', SINGLE_INST),
             'REPLY_COMMENT': messageCreator('Respondeu um comentário seu'),
-            'USER_ADM': messageCreator('Indicou você para ser administrador da instituição ', SINGLE_INST)
+            'USER_ADM': messageCreator('Indicou você para ser administrador da instituição ', SINGLE_INST),
+            'ACCEPT_INVITE_USER_ADM': messageCreator('Aceitou seu convite para ser administrador de ', SINGLE_INST),
+            'REJECT_INVITE_USER_ADM': messageCreator('Rejeitou seu convite para ser administrador de ', SINGLE_INST)
         };
 
         var POST_NOTIFICATION = 'POST';
@@ -69,7 +71,7 @@
                         var notification = service.firebaseArrayNotifications.$getRecord(ev.key);
                         notificationsList.push(notification);
                         if (isNew(notification)) {
-                            $rootScope.$emit(notification.entity_type);
+                            $rootScope.$emit(notification.entity_type, notification.entity);
                         }
                     }
                 });

@@ -55,7 +55,7 @@ def create_entity(entity_key):
     return json.dumps(entity)
 
 
-def send_message_notification(receiver_key, sender_key, entity_type, entity_key, current_institution=None):
+def send_message_notification(receiver_key, sender_key, entity_type, entity_key, current_institution=None, entity=None):
     """Method of send notification.
 
     Keyword arguments:
@@ -65,9 +65,10 @@ def send_message_notification(receiver_key, sender_key, entity_type, entity_key,
     entity_type -- type of notification.
     entity_key -- entity key of type invite.
     current_institution -- the institution the user was logged in when the notification was sent
+    entity -- this parameter is useful when it's necessary to send the full entity to the notification for consistency reasons in the frontend
     """
     message = create_message(sender_key, current_institution)
-    entity = create_entity(entity_key)
+    entity = entity or create_entity(entity_key)
     taskqueue.add(
         url='/api/queue/send-notification',
         target='worker',

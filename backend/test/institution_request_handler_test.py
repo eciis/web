@@ -8,7 +8,8 @@ from models.institution import Institution
 from models.institution import Address
 from models.request_institution import RequestInstitution
 from handlers.institution_request_handler import InstitutionRequestHandler
-
+import permissions
+import mocks
 from mock import patch
 
 
@@ -92,6 +93,9 @@ class InstitutionRequestHandlerTest(TestBaseHandler):
             user.key in new_inst.members,
             "Expected Other User in user institution members")
 
+        for permission in permissions.DEFAULT_ADMIN_PERMISSIONS:
+            self.assertTrue(permission in user.permissions)
+
     @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
     def teste_delete(self, verify_token):
         """Test handler delete."""
@@ -160,6 +164,7 @@ class InstitutionRequestHandlerTest(TestBaseHandler):
                 '/api/requests/%s/institution'
                 % self.request.key.urlsafe()
             )
+        user = self.other_user.key.get()
 
         message_exception = self.get_message_exception(
             str(raises_context.exception))
@@ -171,6 +176,9 @@ class InstitutionRequestHandlerTest(TestBaseHandler):
             expected_message,
             "Expected exception message must be equal to %s" % expected_message
         )
+
+        for permission in permissions.DEFAULT_ADMIN_PERMISSIONS:
+            self.assertTrue(permission not in user.permissions)
     
     @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
     def test_put_with_an_accepted_request(self, verify_token):
@@ -183,6 +191,7 @@ class InstitutionRequestHandlerTest(TestBaseHandler):
                 '/api/requests/%s/institution'
                 % self.request.key.urlsafe()
             )
+        user = self.other_user.key.get()
 
         message_exception = self.get_message_exception(
             str(raises_context.exception))
@@ -195,40 +204,32 @@ class InstitutionRequestHandlerTest(TestBaseHandler):
             "Expected exception message must be equal to %s" % expected_message
         )
 
+        for permission in permissions.DEFAULT_ADMIN_PERMISSIONS:
+            self.assertTrue(permission not in user.permissions)
+
 def initModels(cls):
     """Init the models."""
     # new User
-    cls.user_admin = User()
-    cls.user_admin.name = 'User Admin'
-    cls.user_admin.email = ['useradmin@test.com']
-    cls.user_admin.put()
+    cls.user_admin = mocks.create_user('useradmin@test.com')
     # Other user
-    cls.other_user = User()
-    cls.other_user.name = 'Other User'
-    cls.other_user.email = ['otheruser@test.com']
-    cls.other_user.put()
+    cls.other_user = mocks.create_user('otheruser@test.com')
     # new institution address
-    cls.address = Address()
-    cls.address.street = "street"
+    cls.address = mocks.create_address()
     # new Institution inst test
-    cls.inst_test = Institution()
-    cls.inst_test.name = 'inst test'
-    cls.inst_test.photo_url = 'images/photo.jpg'
+    cls.inst_test = mocks.create_institution('inst test')
     cls.inst_test.members = [cls.user_admin.key]
     cls.inst_test.followers = [cls.user_admin.key]
     cls.inst_test.admin = cls.user_admin.key
     cls.inst_test.address = cls.address
     cls.inst_test.put()
     # new Institution inst requested to be parent of inst test
-    cls.new_inst = Institution()
-    cls.new_inst.name = 'new_inst'
-    cls.new_inst.photo_url = 'images/photo.jpg'
+    cls.new_inst = mocks.create_institution('new_inst')
     cls.new_inst.address = cls.address
+    cls.new_inst.photo_url = 'images/photo.jpg'
     cls.new_inst.put()
     # Update Institutions admin by other user
     cls.other_user.institutions_admin = [cls.new_inst.key]
     cls.other_user.put()
-
     cls.user_admin.add_permission('analyze_request_inst', cls.inst_test.key.urlsafe())
     cls.user_admin.put()
     # new Request

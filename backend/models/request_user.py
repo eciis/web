@@ -79,9 +79,9 @@ class RequestUser(Invite):
         Você foi aceito na plataforma como membro da instituição
         %s, seja bem vindo a Plataforma CIS.
         Realize seu login no link abaixo:
-        http://%s/signin
+        http://frontend.plataformacis.org/signin
 
-        Equipe da Plataforma CIS""" % (institution_name, host)
+        Equipe da Plataforma CIS""" % institution_name
 
         sender_email = self.sender_key.get().email[0]
         body = acceptMessage if operation == "ACCEPT" else rejectMessage

@@ -52,6 +52,7 @@
         };
 
         mainCtrl.changeInstitution = function changeInstitution(profile) {
+            mainCtrl.user = AuthService.getCurrentUser();
             mainCtrl.user.changeInstitution({'key': profile.institution_key});
             mainCtrl.getPendingTasks();
         };
@@ -125,12 +126,19 @@
                     mainCtrl.pending_manager_member = response.length;
                 }, function error() {}
             );
+
             RequestInvitationService.getParentRequests(mainCtrl.user.current_institution.key).then(
                 increaseInstInvitationsNumber, function error() {}
             );
             RequestInvitationService.getChildrenRequests(mainCtrl.user.current_institution.key).then(
                 increaseInstInvitationsNumber, function error() {}
             );
+
+            if(mainCtrl.isSuperUser()) {
+                RequestInvitationService.getRequestsInst(mainCtrl.user.current_institution.key).then(
+                    increaseInstInvitationsNumber, function error() {}
+                );
+            }
         };
 
         mainCtrl.resendEmailVerification = function resendEmailVerification() {

@@ -360,12 +360,12 @@
 
         configInstCtrl.isValidAddress =  function isValidAddress(){       
             var valid = true;
-            var address = configInstCtrl.address;    
+            var address = configInstCtrl.address;
+            var fields = ['city', 'country', 'federal_state', 'neighbourhood', 'street', 'cep'];    
             if(address && address.country === "Brasil"){     
-                _.forEach(address, function(value, key) {
-                    var isNotNumber =  key !== "number";
-                    var isValid =  !value || _.isEmpty(value); 
-                    if(isNotNumber && isValid) {
+                _.forEach(fields, function(field) {
+                    let value = _.get(address, field);
+                    if(!value || _.isEmpty(value)) {
                         valid = false;        
                     }     
                 });       
@@ -436,6 +436,7 @@
             if (institutionKey) {
                 loadInstitution();
             } else {
+                console.log(">>>>>>>>>>>>>>. é novo");
                 configInstCtrl.isSubmission = true;
                 configInstCtrl.newInstitution.admin = {};
                 loadAddress();

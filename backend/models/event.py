@@ -89,11 +89,11 @@ class Event(ndb.Model):
             raise FieldException("The end time must be after the current time")
 
     def verify_patch(self, patch):
-        """Check if the patch is valid after the event has ended."""
+        """Check if the patch is valid."""
         INDEX_AFTER_SLASH = 1
         has_ended = datetime.datetime.today() > self.end_time
         forbidden_props = ["title", "official_site", "address", "local"]
-        patch_props = [p['path'][INDEX_AFTER_SLASH:] for p in json.loads(patch)]
+        patch_props = [update['path'][INDEX_AFTER_SLASH:] for update in json.loads(patch)]
 
         for p in patch_props:
             p = "address" if "address" in p else p

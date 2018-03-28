@@ -29,11 +29,11 @@ class EventHandlerTest(TestBaseHandler):
         cls.testapp = cls.webtest.TestApp(app)
         
         """Init the models."""
-        # new User user
+        # new User
         cls.user = mocks.create_user('user@gmail.com')
-        # new User user
+        # new User
         cls.second_user = mocks.create_user('usersd@gmail.com')
-        # new Institution institution
+        # new Institution
         cls.institution = mocks.create_institution()
         cls.institution.members = [cls.user.key]
         cls.institution.followers = [cls.user.key]
@@ -121,7 +121,7 @@ class EventHandlerTest(TestBaseHandler):
         # Pretend a new authentication
         verify_token.return_value = {'email': 'usersd@gmail.com'}
 
-        # Call the patch method and assert that  it raises an exception
+        # Call the patch method and assert that it raises an exception
         with self.assertRaises(Exception):
             self.testapp.patch_json("/api/events/%s"
                                     % self.event.key.urlsafe(),

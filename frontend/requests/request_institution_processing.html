@@ -9,7 +9,7 @@
         </md-button>
     </section>
   </md-toolbar>
-  <div ng-if="requestCtrl.isValid">
+  <div ng-if="requestCtrl.isSent">
     <md-dialog-content class="md-dialog-content" layout-gt-sm="column" layout-padding>
       <div>
         <md-list flex>
@@ -34,7 +34,7 @@
       </md-button>
     </md-dialog-actions>
   </div>
-  <div ng-if="!requestCtrl.isValid">
+  <div ng-if="!requestCtrl.isSent">
     <md-dialog-content class="md-dialog-content" layout-gt-sm="column" layout-padding>
       <b>Esse convite já foi processado.</b>
     </md-dialog-content>

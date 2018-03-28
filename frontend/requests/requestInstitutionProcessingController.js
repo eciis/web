@@ -13,7 +13,7 @@
         requestController.user = AuthService.getCurrentUser();
 
         requestController.parent = null;
-        requestController.isValid = false;
+        requestController.isSent = false;
 
         requestController.acceptRequest = function acceptRequest() {
             RequestInvitationService.acceptRequestInst(requestController.request.key).then(function success() {
@@ -74,12 +74,12 @@
                 if (requestController.request.status === 'sent') {
                     loadInstitution(requestController.request.institution_key);
                 }
-                validateRequest();
+                isRequestSent();
             });
         }
 
-        function validateRequest() {
-            requestController.isValid = requestController.request.status === 'sent';
+        function isRequestSent() {
+            requestController.isSent = requestController.request.status === 'sent';
         }
 
         (function main () {

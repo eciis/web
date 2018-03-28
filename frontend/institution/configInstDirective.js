@@ -436,7 +436,6 @@
             if (institutionKey) {
                 loadInstitution();
             } else {
-                console.log(">>>>>>>>>>>>>>. é novo");
                 configInstCtrl.isSubmission = true;
                 configInstCtrl.newInstitution.admin = {};
                 loadAddress();

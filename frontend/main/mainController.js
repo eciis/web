@@ -52,6 +52,7 @@
         };
 
         mainCtrl.changeInstitution = function changeInstitution(profile) {
+            mainCtrl.user = AuthService.getCurrentUser();
             mainCtrl.user.changeInstitution({'key': profile.institution_key});
             mainCtrl.getPendingTasks();
         };

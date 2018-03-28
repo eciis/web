@@ -17,6 +17,11 @@
         processCtrl.accept = function accept() {
             InviteService.acceptInviteUserAdm(processCtrl.invite.key).then(function success() {
                 processCtrl.current_user.institutions_admin.push(processCtrl.invite.institution_key);
+                let institution = processCtrl.current_user.institutions.reduce(
+                    (inst_found, institution) => (institution.key === processCtrl.invite.institution_key) ? institution : inst_found, 
+                    {}
+                );
+                institution.admin = processCtrl.current_user.key;
                 AuthService.save();
                 processCtrl.typeOfDialog = processCtrl.VIEW_INVITE_INVITEE;
                 processCtrl.isAccepting = true;

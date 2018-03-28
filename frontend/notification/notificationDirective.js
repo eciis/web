@@ -20,14 +20,14 @@
             },
             "DELETE_MEMBER": {
                 icon: "clear",
-                action: function() {
-                    return refreshUserInstitutions();
+                action: function (properties, notification, event) {
+                    return refreshUserInstitutions(notification);
                 }
             },
             "DELETED_INSTITUTION": {
                 icon: "clear",
-                action: function() {
-                    return refreshUserInstitutions();
+                action: function (properties, notification, event) {
+                    return refreshUserInstitutions(notification);
                 }
             },
             "POST": {
@@ -260,14 +260,12 @@
             $state.go('app.user.notifications');
         }
 
-        function refreshUserInstitutions () {
+        function refreshUserInstitutions (notification) {
+            notificationCtrl.user.goToDifferentInstitution(notification.entity.key);
             UserService.load().then(function success(response) {
                 notificationCtrl.user.institutions = response.institutions;
                 notificationCtrl.user.follows = response.follows;
                 notificationCtrl.user.institution_profiles = response.institution_profiles;
-                if(!_.isEmpty(notificationCtrl.user.institutions)) {
-                    notificationCtrl.user.changeInstitution();
-                }
                 AuthService.save();
             });
         }

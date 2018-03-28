@@ -163,6 +163,17 @@ User.prototype.updateInstProfile = function updateInstProfile(institution) {
     this.institution_profiles[index].institution.photo_url = institution.photo_url;
 };
 
+User.prototype.goToDifferentInstitution = function goToDifferentInstitution(previousKey) {
+    var user = this;
+    _.forEach(this.institutions, function(institution) {
+        if(institution.key !== previousKey) {
+            user.current_institution = institution;
+            changeProfileColor(user, institution);
+            window.localStorage.userInfo = JSON.stringify(this);
+        }
+    });
+};
+
 function changeProfileColor(user, institution) {
     var profile = _.find(user.institution_profiles, {
         'institution_key': institution.key

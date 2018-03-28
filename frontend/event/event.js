@@ -10,19 +10,11 @@ function Event(data, institution) {
 }
 
 Event.prototype.isValid = function isValid() {
-    if (_.isUndefined(this.title) || _.isEmpty(this.title)) {
-        return false;
-    }
+    var hasNoTitle = _.isUndefined(this.title) || _.isEmpty(this.title);
+    var hasNoLocal = _.isUndefined(this.local) || _.isEmpty(this.local)
+    var hasNoInstKey = _.isUndefined(this.institution_key);
 
-    if (_.isUndefined(this.local) || _.isEmpty(this.local)) {
-        return false;
-    }
-
-    if (_.isUndefined(this.institution_key)) {
-        return false;
-    }
-
-    return true;
+    return !(hasNoTitle || hasNoLocal || hasNoInstKey);
 };
 
 Event.prototype.convertDate = function(){

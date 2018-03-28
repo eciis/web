@@ -65,37 +65,42 @@
             <div layout="column">
               <md-input-container style="margin-bottom: 0">
                 <label>Nome do evento</label>
-                <input ng-model="controller.event.title" required/>
+                <input ng-model="controller.event.title" required ng-disabled="controller.isEventOutdated()"/>
               </md-input-container>
               <div layout="row" layout-align="space-between center">
                   <md-input-container style="margin: 0" flex="45">
                       <input mdc-datetime-picker="" short-time="false" date="true" time="true" type="text" format="DD-MM-YYYY HH:mm"
-                      placeholder="Data inicial" ng-model="controller.event.start_time" class=" md-input" today-text="Hoje" min-date="controller.now"
-                      max-date="controller.event.end_time" cancel-text="Cancelar" ng-change="controller.createInitDate()" required/>
+                        placeholder="Data inicial" ng-model="controller.event.start_time" class="md-input" today-text="Hoje" min-date="controller.now"
+                        max-date="controller.event.end_time" cancel-text="Cancelar" ng-change="controller.createInitDate()" required
+                        ng-disabled="controller.isEventOutdated()"/>
                   </md-input-container>
                   <md-input-container style="margin: 0" flex="45">
-                      <input mdc-datetime-picker="" ng-change="controller.changeDate('endTime')" date="true" time="true" type="text"today-text="Hoje"
-                      placeholder="Data final" class=" md-input" format="DD-MM-YYYY HH:mm" max-date="null"
-                      ng-model="controller.event.end_time" cancel-text="Cancelar" min-date="controller.start_time" ng-disabled="!controller.event.start_time" required>
+                      <input mdc-datetime-picker="" ng-change="controller.changeDate('endTime')" date="true" time="true"
+                        type="text" today-text="Hoje" placeholder="Data final" class="md-input" format="DD-MM-YYYY HH:mm"
+                        min-date="controller.startTime" max-date="null"
+                        ng-model="controller.event.end_time" cancel-text="Cancelar" 
+                        ng-disabled="!controller.event.start_time || controller.isEventOutdated()" required>
                       <div ng-messages>
-                        <div ng-show="!controller.event.start_time" style="opacity: 0.9; margin-top: 2px; font-size: 0.8em;">
-                          Primeiro defina a data inicial
+                        <div ng-show="!controller.event.start_time"
+                            style="opacity: 0.9; margin-top: 2px; font-size: 0.8em;">
+                            Primeiro defina a data inicial
                         </div>
                       </div>
                   </md-input-container>
               </div>
               <md-input-container style="margin: 0">
                   <label>Site oficial</label>
-                  <input type="url" ng-model="controller.event.official_site"/>
+                  <input type="url" ng-model="controller.event.official_site" ng-disabled="controller.isEventOutdated()"/>
               </md-input-container>
               <div layout="row" layout-align="space-between">
                 <md-input-container style="margin: 0;" flex="45">
                       <label>Nome do Local </label>
-                      <input ng-model="controller.event.local" required/>
+                      <input ng-model="controller.event.local" required ng-disabled="controller.isEventOutdated()"/>
                   </md-input-container>
                   <md-input-container style="margin: 0" flex="45">
                       <label>Pais</label>
-                      <md-select ng-model="controller.event.address.country" ng-change="controller.setAnotherCountry()">
+                      <md-select ng-model="controller.event.address.country" ng-change="controller.setAnotherCountry()" 
+                        ng-disabled="controller.isEventOutdated()">
                           <md-option ng-repeat="country in controller.countries"
                             ng-value="country.nome_pais">{{country.nome_pais}}</md-option>
                       </md-select>
@@ -104,24 +109,24 @@
               <div layout="row" ng-class="controller.isAnotherCountry? 'address-another-country': ''" layout-align="space-between">
                   <md-input-container style="margin: 0" flex="45" ng-if="controller.isAnotherCountry">
                       <label>Estado</label>
-                      <input type="text" name="state" ng-model="controller.event.address.federal_state">
+                      <input type="text" name="state" ng-model="controller.event.address.federal_state" ng-disabled="controller.isEventOutdated()">
                   </md-input-container>
                   <md-input-container style="margin: 0" flex="45" ng-if="!controller.isAnotherCountry">
                       <label>Estado</label>
                       <md-select name="state" ng-model="controller.selectedFederalState" ng-change="controller.getCitiesByState()"
-                        ng-disabled="!controller.event.address.country" required/>
+                        ng-disabled="!controller.event.address.country" required ng-disabled="controller.isEventOutdated()"/>
                         <md-option ng-repeat="federal_state in controller.federalStates"
                           ng-value="federal_state">{{federal_state.sigla}}</md-option>
                       </md-select>
                   </md-input-container>
                   <md-input-container style="margin: 0" flex="45" ng-if="controller.isAnotherCountry">
                       <label>Cidade</label>
-                      <input type="text" name="city" ng-model="controller.event.address.city">
+                      <input type="text" name="city" ng-model="controller.event.address.city" ng-disabled="controller.isEventOutdated()">
                   </md-input-container>
                   <md-input-container style="margin: 0" flex="45" ng-if="!controller.isAnotherCountry">
                       <label>Cidade</label>
-                      <md-select ng-model="controller.event.address.city"  ng-disabled="!controller.selectedFederalState"
-                        required/>
+                      <md-select ng-model="controller.event.address.city" required
+                        ng-disabled="!controller.selectedFederalState || controller.isEventOutdated()"/>
                         <md-option ng-repeat="city in controller.cities" ng-value="city">{{city}}</md-option>
                       </md-select>
                       <div ng-messages>
@@ -135,11 +140,13 @@
               <div layout="row" layout-align="space-between">
                   <md-input-container flex="65">
                       <label>Rua</label>
-                      <input ng-required="!controller.isAnotherCountry" ng-model="controller.event.address.street"/>
+                      <input ng-required="!controller.isAnotherCountry" ng-model="controller.event.address.street" 
+                        ng-disabled="controller.isEventOutdated()"/>
                   </md-input-container>
                   <md-input-container flex="30">
                       <label>Numero</label>
-                      <input ng-required="!controller.isAnotherCountry" ng-model="controller.event.address.number"/>
+                      <input ng-required="!controller.isAnotherCountry" ng-model="controller.event.address.number"
+                        ng-disabled="controller.isEventOutdated()"/>
                   </md-input-container>
               </div>
             </div>

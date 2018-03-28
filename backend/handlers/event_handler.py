@@ -60,14 +60,16 @@ class EventHandler(BaseHandler):
     @is_event_author
     def patch(self, user, key):
         """Handler PATCH Requests."""
-        data = self.request.body
+        patch = self.request.body
 
         event = ndb.Key(urlsafe=key).get()
+        event.verify_patch(patch)
 
         """Apply patch."""
-        JsonPatch.load(data, event)
+        JsonPatch.load(patch, event)
 
-        event.isValid()
+        is_patch = True
+        event.isValid(is_patch)
 
         """Update event."""
         event.put()

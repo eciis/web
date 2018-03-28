@@ -288,5 +288,33 @@
               expect(user.institution_profiles).toEqual([]);
             });
         });
+
+        describe('goToDifferentInstitution', function () {
+          it('should change current institution', function () {
+            var user = new User({
+              institutions: [inst, other_inst],
+              current_institution: inst
+            });
+            
+            expect(user.current_institution).toBe(inst);
+
+            user.goToDifferentInstitution(inst.key);
+
+            expect(user.current_institution).toBe(other_inst);
+          });
+
+          it('should not change the current institution', function() {
+            var user = new User({
+              institutions: [inst],
+              current_institution: inst
+            });
+
+            expect(user.current_institution).toBe(inst);
+
+            user.goToDifferentInstitution(inst.key);
+
+            expect(user.current_institution).toBe(inst);
+          });
+        });
    });
 }));

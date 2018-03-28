@@ -9,27 +9,34 @@
         </md-button>
     </section>
   </md-toolbar>
-  <md-dialog-content class="md-dialog-content" layout-gt-sm="column" layout-padding>
-    <div>
-      <md-list flex>
-        <md-list-item class="md-3-line">
-          <img ng-src="{{ requestCtrl.parent.photo_url }}" class="md-avatar" alt="{{requestCtrl.parent.name}}" />
-          <div class="md-list-item-text" layout="column">
-            <h3><b>{{ requestCtrl.parent.name }}</b> - {{ requestCtrl.parent.email }}</h3>
-            <h4>{{ requestCtrl.parent.phone_number }} | {{ requestCtrl.getFullAddress(requestCtrl.parent) }}</h4>
-            <p>{{ requestCtrl.parent.description }}</p>
-          </div>
-        </md-list-item>
-      </md-list>
-    </div>
-  </md-dialog-content>
-  <md-dialog-actions layout="row" layout-align="end center" layout-wrap>
-    <md-button ng-click="requestCtrl.rejectRequest($event)" class="md-primary">
-      Não Confirmar
-    </md-button>
-    <md-button ng-click="requestCtrl.acceptRequest()"
-        class="md-warn md-raised md-hue-2">
-      Confirmar
-    </md-button>
-  </md-dialog-actions>
+  <div ng-if="requestCtrl.isValid">
+    <md-dialog-content class="md-dialog-content" layout-gt-sm="column" layout-padding>
+      <div>
+        <md-list flex>
+          <md-list-item class="md-3-line">
+            <img ng-src="{{ requestCtrl.parent.photo_url }}" class="md-avatar" alt="{{requestCtrl.parent.name}}" />
+            <div class="md-list-item-text" layout="column">
+              <h3><b>{{ requestCtrl.parent.name }}</b> - {{ requestCtrl.parent.email }}</h3>
+              <h4>{{ requestCtrl.parent.phone_number }} | {{ requestCtrl.getFullAddress(requestCtrl.parent) }}</h4>
+              <p>{{ requestCtrl.parent.description }}</p>
+            </div>
+          </md-list-item>
+        </md-list>
+      </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row" layout-align="end center" layout-wrap>
+      <md-button ng-click="requestCtrl.rejectRequest($event)" class="md-primary">
+        Não Confirmar
+      </md-button>
+      <md-button ng-click="requestCtrl.acceptRequest()"
+          class="md-warn md-raised md-hue-2">
+        Confirmar
+      </md-button>
+    </md-dialog-actions>
+  </div>
+  <div ng-if="!requestCtrl.isValid">
+    <md-dialog-content class="md-dialog-content" layout-gt-sm="column" layout-padding>
+      <b>Esse convite já foi processado.</b>
+    </md-dialog-content>
+  </div>
 </md-dialog>

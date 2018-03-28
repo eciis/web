@@ -24,11 +24,14 @@
         }
 
         function deletePost(post) {
-            var post = _.find(timelineCtrl.posts, {'key': postKey});
+            var post = new Post(post);
             if (!post.hasActivity()) {
                 _.remove(timelineCtrl.posts, function (currentPost) {
-                    return currentPost.key === postKey;
+                    return currentPost.key === post.key;
                 });
+            } else {
+                var postIndex = _.findIndex(timelineCtrl.posts, {'key': post.key});
+                timelineCtrl.posts[postIndex] = post;
             }
         }
 

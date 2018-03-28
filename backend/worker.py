@@ -165,7 +165,7 @@ class PostNotificationHandler(BaseHandler):
                     subscriber,
                     sender_key,
                     entity_type,
-                    post,
+                    post_key,
                     current_institution
                 )
 

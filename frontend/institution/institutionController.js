@@ -369,6 +369,14 @@
                 instPage.scrollTop >= 160 ? leftMenu.classList.add('floating-menu') : leftMenu.classList.remove('floating-menu');
             });
         }
+
+        institutionCtrl.getResponsiveWidth = function getResponsiveWidth() {
+            var leftMenu = document.getElementById("leftMenu");
+            var showCustomGtSmWidth = screen.width <= 1120;
+            var isFloating = leftMenu.classList.contains('floating-menu');
+
+            return isFloating && showCustomGtSmWidth ? 'custom-max-width' : '';
+        };
         
         (function main(){
             loadStateView();

@@ -1103,3 +1103,7 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
     margin-bottom: 20px;
     box-shadow: 0px 0px 20px grey;
 }
+
+.custom-max-width {
+    max-width: 90%;
+}

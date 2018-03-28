@@ -6,10 +6,11 @@ from models.user import User
 from models.institution import Institution
 from models.event import Event
 from handlers.event_handler import EventHandler
-
 from mock import patch
+
 import datetime
 import json
+import mocks
 
 
 class EventHandlerTest(TestBaseHandler):
@@ -26,7 +27,26 @@ class EventHandlerTest(TestBaseHandler):
             [("/api/events/(.*)", EventHandler)
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
-        initModels(cls)
+        
+        """Init the models."""
+        # new User user
+        cls.user = mocks.create_user('user@gmail.com')
+        # new User user
+        cls.second_user = mocks.create_user('usersd@gmail.com')
+        # new Institution institution
+        cls.institution = mocks.create_institution()
+        cls.institution.members = [cls.user.key]
+        cls.institution.followers = [cls.user.key]
+        cls.institution.admin = cls.user.key
+        cls.institution.put()
+
+        """ Update User."""
+        cls.user.add_institution(cls.institution.key)
+        cls.user.follows = [cls.institution.key]
+        cls.user.put()
+
+        # Events
+        cls.event = mocks.create_event(cls.user, cls.institution)
 
     @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
     def test_delete(self, verify_token):
@@ -132,51 +152,41 @@ class EventHandlerTest(TestBaseHandler):
         self.assertEqual(self.event.end_time.isoformat(),
                          '2018-07-25T12:30:15')
 
+    @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
+    def test_patch_on_event_outdated(self, verify_token):
+        """Test change the event basic data when it is outdated."""
+        self.event.start_time = '2000-07-14T12:30:15'
+        self.event.end_time = '2000-07-15T12:30:15'
+        self.event.put()
+
+        forbidden_props = ["title", "official_site", "address", "local"]
+
+        for prop in forbidden_props:
+            patch = [{"op": "replace", "path": "/"+prop, "value": 'other_value'}]
+            with self.assertRaises(Exception):
+                self.testapp.patch("/api/events/" +
+                                self.event.key.urlsafe(),
+                                json.dumps(patch))
+        
+        allowed_props = ['photo_url', 'video_url', 'useful_links', 
+                        'programation', 'text']
+        
+        for prop in allowed_props:
+            value = "other_value"
+            if prop == 'video_url' or prop == 'useful_links': 
+                value =["link"]
+                
+            patch = [{"op": "replace", "path": "/"+prop, "value": value}]
+            self.testapp.patch("/api/events/" +
+                            self.event.key.urlsafe(),
+                            json.dumps(patch))
+
+            self.event = self.event.key.get()
+            self.assertEquals(
+                getattr(self.event, prop), value,
+                "The event "+ prop + " should be 'other_value'")
+
+
     def tearDown(cls):
         """Deactivate the test."""
         cls.test.deactivate()
-
-
-def initModels(cls):
-    """Init the models."""
-    # new User user
-    cls.user = User()
-    cls.user.name = 'user name'
-    cls.user.photo_url = 'urlphoto'
-    cls.user.cpf = '089.675.908-90'
-    cls.user.email = ['user@gmail.com']
-    cls.user.put()
-    # new User user
-    cls.second_user = User()
-    cls.second_user.name = 'second'
-    cls.second_user.photo_url = 'urlphoto'
-    cls.second_user.cpf = '089.675.908-09'
-    cls.second_user.email = ['usersd@gmail.com']
-    cls.second_user.put()
-    # new Institution CERTBIO
-    cls.certbio = Institution()
-    cls.certbio.name = 'CERTBIO'
-    cls.certbio.photo_url = 'urlphoto'
-    cls.certbio.members = [cls.user.key]
-    cls.certbio.followers = [cls.user.key]
-    cls.certbio.admin = cls.user.key
-    cls.certbio.put()
-
-    """ Update User."""
-    cls.user.add_institution(cls.certbio.key)
-    cls.user.follows = [cls.certbio.key]
-    cls.user.put()
-
-    # Events
-    cls.event = Event()
-    cls.event.title = "New Event"
-    cls.event.author_key = cls.user.key
-    cls.event.author_name = cls.user.name
-    cls.event.author_photo = cls.user.photo_url
-    cls.event.institution_key = cls.certbio.key
-    cls.event.institution_name = cls.certbio.name
-    cls.event.institution_image = cls.certbio.photo_url
-    cls.event.start_time = datetime.datetime.now()
-    cls.event.end_time = datetime.datetime.now()
-    cls.event.local = "Event location"
-    cls.event.put()

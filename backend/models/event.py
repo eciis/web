@@ -96,7 +96,7 @@ class Event(ndb.Model):
         patch_props = [p['path'][INDEX_AFTER_SLASH:] for p in json.loads(patch)]
 
         for p in patch_props:
-            p = "adress" if "address" in p else p
+            p = "address" if "address" in p else p
             if has_ended and p in forbidden_props:
                 raise FieldException("The event basic data can not be changed after it has ended")
     

@@ -19,7 +19,7 @@ class InviteUserAdm(InviteUser):
         
         Utils._assert(
             invitee == institution.admin,
-            "The invitee is already admin of this institution", 
+            "The invitee is already admin of this institution!", 
             NotAuthorizedException
         )
         

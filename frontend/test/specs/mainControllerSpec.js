@@ -111,7 +111,6 @@
         });
         it('Should change active institution', function() {
             spyOn(mainCtrl.user, 'changeInstitution');
-
             var user_inst = {
                 name: 'user_inst',
                 key: 'veqw56eqw7r89',
@@ -122,15 +121,21 @@
                     'status': 'sent'
                 }]
             };
-
             user_inst.institutions = [otherInstitution, institution];
+            spyOn(mainCtrl, 'getPendingTasks');
+            spyOn(authService, 'getCurrentUser').and.callFake(function () {
+                return new User(user_inst);
+            });
+            
             mainCtrl.user = new User(user_inst);
-
+    
             expect(mainCtrl.user.current_institution).toBe(otherInstitution);
 
-            mainCtrl.user.changeInstitution(institution);
+            mainCtrl.changeInstitution({'institution_key': institution.key});
 
             expect(mainCtrl.user.current_institution).toBe(institution);
+            expect(authService.getCurrentUser).toHaveBeenCalled();
+            expect(mainCtrl.getPendingTasks).toHaveBeenCalled();
         });
         it('Should call state.go() in function goTo()', function(){
             spyOn(state, 'go');

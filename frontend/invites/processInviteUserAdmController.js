@@ -17,11 +17,7 @@
         processCtrl.accept = function accept() {
             InviteService.acceptInviteUserAdm(processCtrl.invite.key).then(function success() {
                 processCtrl.current_user.institutions_admin.push(processCtrl.invite.institution_key);
-                let institution = processCtrl.current_user.institutions.reduce(
-                    (inst_found, institution) => (institution.key === processCtrl.invite.institution_key) ? institution : inst_found, 
-                    {}
-                );
-                institution.admin = processCtrl.current_user.key;
+                set_inst_admin(processCtrl.current_user.institutions);
                 AuthService.save();
                 processCtrl.typeOfDialog = processCtrl.VIEW_INVITE_INVITEE;
                 processCtrl.isAccepting = true;
@@ -73,6 +69,20 @@
                     MessageService.showToast('Convite já processado!');
                 }
             });
+        }
+
+        /**
+         * This method iterates through the user list that is accepting the invitation 
+         * to become an administrator and picks up the institution in which it will be 
+         * the new administrator and switches the administrator key to the user key.
+         * @param {*} user_institutions - Institutions list of new admin 
+         */
+        function set_inst_admin(user_institutions) {
+            let institution = user_institutions.reduce(
+                (instFound, institution) => (institution.key === processCtrl.invite.institution_key) ? institution : instFound, 
+                {}
+            );
+            institution.admin = processCtrl.current_user.key;
         }
 
         (function main() {

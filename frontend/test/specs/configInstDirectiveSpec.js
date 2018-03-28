@@ -26,7 +26,7 @@ describe('Test ConfigInstDirective', function() {
             actuation_area: "government agencies",
             phone_number: "phone",
             cnpj: "cnpj",
-            address: address,
+            address: new Address(address),
             leader: "leader name",
             institutional_email: "email@institutional.com",
             description: "teste"

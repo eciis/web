@@ -41,7 +41,7 @@
         }
 
         function loadAddress() {
-            configInstCtrl.newInstitution.address = configInstCtrl.newInstitution.address || {};
+            configInstCtrl.newInstitution.address = new Address(configInstCtrl.newInstitution.address);
             configInstCtrl.address = configInstCtrl.newInstitution.address;
             loadCountry();
             loadStateAndCities();
@@ -360,18 +360,15 @@
 
         configInstCtrl.isValidAddress =  function isValidAddress(){       
             var valid = true;
-            var address = configInstCtrl.address;    
-            if(address && address.country === "Brasil"){     
+            var address = configInstCtrl.address;
+            if(address && address.country === "Brasil"){    
                 _.forEach(address, function(value, key) {
                     var isNotNumber =  key !== "number";
-                    var isValid =  !value || _.isEmpty(value); 
-                    if(isNotNumber && isValid) {
-                        valid = false;        
-                    }     
+                    (isNotNumber && _.isEmpty(value)) ? valid = false : '';
                 });       
             }     
             return valid;     
-         }     
+         };     
 
         function isCurrentStepValid(currentStep) {
             var isValid = true;

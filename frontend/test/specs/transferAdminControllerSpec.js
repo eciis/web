@@ -13,7 +13,8 @@
     var otherUser = {
         name: 'other',
         email: ['other@email.com'],
-        state: 'active'
+        state: 'active',
+        key: 'eioruwiour83748932749'
     };
 
     var institution = {
@@ -85,7 +86,8 @@
             spyOn(messageService, 'showToast').and.callFake(function() {});
         });
 
-        it('Should must send the invitation.', function() {
+        it('Should not send the invitation.', function() {
+
             let data = {
                 institution_key: institution.key,
                 admin_key: institution.admin.key,
@@ -99,6 +101,26 @@
             invite.status = 'sent';
 
             transferAdminCtrl.selectMember(user);
+            transferAdminCtrl.confirm();
+
+            expect(messageService.showToast).toHaveBeenCalledWith("Você já é administrador da instituição, selecione outro membro!");
+        });
+
+        it('Should must send the invitation.', function() {
+
+            let data = {
+                institution_key: institution.key,
+                admin_key: institution.admin.key,
+                type_of_invite: 'USER_ADM',
+                sender_name: institution.admin.name,
+                invitee_key: otherUser.key,
+                invitee: otherUser.email[0]
+            };
+
+            let invite = new Invite(data);
+            invite.status = 'sent';
+
+            transferAdminCtrl.selectMember(otherUser);
             transferAdminCtrl.confirm();
 
             expect(inviteService.sendInviteUserAdm).toHaveBeenCalledWith(invite);

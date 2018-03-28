@@ -25,6 +25,7 @@
             current_institution: {key: "institutuion_key"},
             email: ['user@email.com'],
             institutions_admin: [],
+            institutions: [{key: "institutuion_key"}],
             state: 'active',
             key: '3242343rdsf324s'
         };
@@ -77,6 +78,7 @@
             user = JSON.parse(window.localStorage.userInfo);
 
             expect(user.institutions_admin).toEqual([institution.key]);
+            expect(user.institutions[0].admin).toEqual(user.key);
             expect(processInviteUserAdmCtrl.typeOfDialog).toEqual('VIEW_ACCEPTED_INVITATION_INVITEE');
             expect(processInviteUserAdmCtrl.isAccepting).toBeTruthy();
             expect(inviteService.acceptInviteUserAdm).toHaveBeenCalledWith(invite.key);

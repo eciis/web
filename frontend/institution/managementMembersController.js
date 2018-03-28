@@ -525,24 +525,28 @@
 
         transferAdminCtrl.confirm = function confirm() {
             if (transferAdminCtrl.selectedMember) {
-                let data = {
-                    institution_key: institution.key,
-                    admin_key: institution.admin.key,
-                    type_of_invite: 'USER_ADM',
-                    sender_name: institution.admin.name,
-                    invitee_key: transferAdminCtrl.selectedMember.key,
-                    invitee: transferAdminCtrl.selectedMember.email[0]
-                };
+                if (transferAdminCtrl.selectedMember.key !== institution.admin.key) {
+                    let data = {
+                        institution_key: institution.key,
+                        admin_key: institution.admin.key,
+                        type_of_invite: 'USER_ADM',
+                        sender_name: institution.admin.name,
+                        invitee_key: transferAdminCtrl.selectedMember.key,
+                        invitee: transferAdminCtrl.selectedMember.email[0]
+                    };
 
-                let invite = new Invite(data);
+                    let invite = new Invite(data);
 
-                InviteService.sendInviteUserAdm(invite).then(function success(response) {
-                    invite.status = 'sent';
-                    $mdDialog.hide(invite);
-                    MessageService.showToast("Convite enviado com sucesso!");
-                }, function error(response) {
-                    MessageService.showToast(response.data);
-                });
+                    InviteService.sendInviteUserAdm(invite).then(function success(response) {
+                        invite.status = 'sent';
+                        $mdDialog.hide(invite);
+                        MessageService.showToast("Convite enviado com sucesso!");
+                    }, function error(response) {
+                        MessageService.showToast(response.data);
+                    });
+                } else {
+                    MessageService.showToast('Você já é administrador da instituição, selecione outro membro!');
+                }
             } else {
                 MessageService.showToast('Selecione um memebro!');
             }

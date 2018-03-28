@@ -56,8 +56,8 @@ Post.prototype.remove = function remove(userName) {
 
 
 Post.prototype.hasActivity = function hasActivity() {
-    var hasNoComments = this.number_of_comments === 0;
-    var hasNoLikes = this.number_of_likes === 0;
+    var hasComments = this.number_of_comments > 0;
+    var hasLikes = this.number_of_likes > 0;
 
-    return !hasNoComments || !hasNoLikes;
+    return hasComments || hasLikes;
 };

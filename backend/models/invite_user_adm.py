@@ -18,6 +18,12 @@ class InviteUserAdm(InviteUser):
             NotAuthorizedException)
         
         Utils._assert(
+            invitee == institution.admin,
+            "The invitee is already admin of this institution", 
+            NotAuthorizedException
+        )
+        
+        Utils._assert(
             self.sender_key != institution.admin, 
             "Sender is not admin of this institution!", 
             NotAuthorizedException

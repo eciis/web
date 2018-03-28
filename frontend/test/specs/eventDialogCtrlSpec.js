@@ -136,28 +136,25 @@
       });
 
       it('should call eventService.editEvent', function() {
-        spyOn(controller, 'saveImage').and.returnValue(deferred.promise);
-        spyOn(eventService, 'editEvent').and.returnValue(deferred.promise);
-
-        deferred.resolve();
-        controller.isEditing = true;
+        spyOn(eventService, 'editEvent').and.callFake(function() {
+          return {
+            then: function(callback) {
+              return callback();
+            }
+          };
+        });
         controller.observer = jsonpatch.observe(controller.event);
+        controller.isEditing = true;
         controller.save();
-
-        console.log("===========================================");
-        expect(controller.saveImage).toHaveBeenCalled();
         expect(eventService.editEvent).toHaveBeenCalled();
       });
 
-      fit('should call eventService.createEvent', function() {
-          spyOn(controller, 'saveImage').and.returnValue(Promise.resolve());
-          spyOn(eventService, 'createEvent').and.returnValue(Promise.resolve({data: controller.event}));
-          
-          scope.$apply();
-          controller.isEditing = false;
-          controller.save();
-          expect(eventService.createEvent).toHaveBeenCalled();
-          httpBackend.flush();
+      it('should call eventService.createEvent', function() {
+        spyOn(eventService, 'createEvent').and.returnValue(Promise.resolve());
+        var event = new Event(controller.event, controller.user.current_institution.key);
+        controller.isEditing = false;
+        controller.save();
+        expect(eventService.createEvent).toHaveBeenCalledWith(event);
       });
 
       describe('MessageService.showToast()', function(){
@@ -310,6 +307,18 @@
           expect(controller.steps).toEqual([false, false, true]);
         });
       }); 
+
+      describe('isEventOutDate', function() {
+        it('should return true', function() {
+          controller.event.end_time.setFullYear(2000);
+          expect(controller.isEventOutdated()).toBe(true);
+        });
+
+        it('should return false', function() {
+          controller.event.end_time.setFullYear(3100);
+          expect(controller.isEventOutdated()).toBe(false);
+        });
+      });
     });
   });
 }));

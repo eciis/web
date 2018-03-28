@@ -109,14 +109,8 @@
         };
 
         dialogCtrl.save = function save() {
-            var saveImgPromise = dialogCtrl.saveImage();
-            saveImgPromise.then(function success() {
-                console.log("success");
-                console.log(dialogCtrl.isEditing);
-                dialogCtrl.isEditing ? updateEvent() : create();
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
-            });
+            var callback = dialogCtrl.isEditing ? updateEvent : create;
+            var saveImgPromise = saveImage(callback);
         };
 
         dialogCtrl.removeUrl = function(url, urlList) {
@@ -143,26 +137,23 @@
             dialogCtrl.startTime = dialogCtrl.event.start_time && new Date(dialogCtrl.event.start_time);
         };
 
-        dialogCtrl.saveImage = function saveImage() {
-            var defer = $q.defer();
+        function saveImage(callback) {
             if (dialogCtrl.photoBase64Data) {
                 dialogCtrl.loading = true;
                 ImageService.saveImage(dialogCtrl.photoBase64Data)
                 .then(function success(data) {
                     dialogCtrl.loading = false;
                     dialogCtrl.event.photo_url = data.url;
-                    defer.resolve();
+                    callback();
                 }, function error(response) {
-                    defer.reject(response);
+                    MessageService.showToast(response.data.msg);
                 });
             } else {
-               defer.resolve();
+               callback();
             }
-            return defer.promise;
         }
 
         function updateEvent() {
-            console.log("updateEvent");
             addLinks(dialogCtrl.event);
             var event = new Event(dialogCtrl.event, dialogCtrl.user.current_institution.key);
             if(event.isValid()) {
@@ -171,7 +162,6 @@
                 var formatedPatch = formatPatch(generatePatch(patch, event));
                 EventService.editEvent(dialogCtrl.event.key, formatedPatch)
                 .then(function success() {
-                    console.log("editEvent");
                     $mdDialog.hide(event);
                     MessageService.showToast('Evento editado com sucesso.');
                 }, function error(response) {

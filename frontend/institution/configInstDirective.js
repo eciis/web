@@ -41,7 +41,7 @@
         }
 
         function loadAddress() {
-            configInstCtrl.newInstitution.address = configInstCtrl.newInstitution.address || {};
+            configInstCtrl.newInstitution.address = new Address(configInstCtrl.newInstitution.address);
             configInstCtrl.address = configInstCtrl.newInstitution.address;
             loadCountry();
             loadStateAndCities();
@@ -361,17 +361,14 @@
         configInstCtrl.isValidAddress =  function isValidAddress(){       
             var valid = true;
             var address = configInstCtrl.address;
-            var fields = ['city', 'country', 'federal_state', 'neighbourhood', 'street', 'cep'];    
-            if(address && address.country === "Brasil"){     
-                _.forEach(fields, function(field) {
-                    let value = _.get(address, field);
-                    if(!value || _.isEmpty(value)) {
-                        valid = false;        
-                    }     
+            if(address && address.country === "Brasil"){    
+                _.forEach(address, function(value, key) {
+                    var isNotNumber =  key !== "number";
+                    (isNotNumber && _.isEmpty(value)) ? valid = false : '';
                 });       
             }     
             return valid;     
-         }     
+         };     
 
         function isCurrentStepValid(currentStep) {
             var isValid = true;

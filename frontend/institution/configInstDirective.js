@@ -336,7 +336,8 @@
                     fields: [
                     configInstCtrl.newInstitution.name,
                     configInstCtrl.newInstitution.actuation_area,
-                    configInstCtrl.newInstitution.legal_nature
+                    configInstCtrl.newInstitution.legal_nature,
+                    configInstCtrl.newInstitution.institutional_email
                     ]
                 },
                 2: {

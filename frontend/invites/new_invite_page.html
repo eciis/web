@@ -1,5 +1,5 @@
-<md-content flex md-colors="{background: 'teal-500'}" style="overflow:hidden">
-  <div layout="column" layout-align="center center" layout-fill flex>
+<md-content flex md-colors="{background: 'teal-500'}">
+  <div layout="column" layout-align="center center">
     <div layout="row" layout-xs="column" layout-align="center center">
       <div flex-sm="60" flex-gt-sm="40" layout-align="center center">
         <load-circle ng-show="newInviteCtrl.loading"></load-circle>
@@ -41,21 +41,20 @@
                     </div>
 
                     <!-- USER INFORMATION -->
-                    <div layout="column" layout-align="center" ng-if="newInviteCtrl.isUserInfoImcomplete()">
+                    <div layout="column" ng-if="newInviteCtrl.isUserInfoImcomplete()">
                       <md-input-container ng-if="newInviteCtrl.checkUserName()">
                         <label>Seu Nome</label>
                       <input ng-model="newInviteCtrl.user_name" name="nome" required>
                       </md-input-container>
-
-                      <md-input-container style="margin-bottom: 0">
+                      <md-input-container style="margin-top: -15px;">
                         <label>Email institucional</label>
                         <input ng-model="newInviteCtrl.email" type="email" name="email">
                       </md-input-container>
-                      <md-input-container>
+                      <md-input-container style="margin-top: -15px;">
                         <label>Cargo institucional</label>
                         <input name="cargo" ng-model="newInviteCtrl.office" required>
                       </md-input-container>
-                      <div layout="row">
+                      <div layout="row" style="margin-top: -12px;">
                         <md-input-container flex="70">
                           <label>Telefone institucional</label>
                           <input ng-pattern="newInviteCtrl.phoneRegex" ng-model="newInviteCtrl.phone"

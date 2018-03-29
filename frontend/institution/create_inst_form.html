@@ -163,12 +163,19 @@
                                             <b>{{configInstCtrl.suggestedName}} </b>
                                     </md-list-item>
                                     <md-input-container class="md-block" flex-gt-sm flex-sm>
-                                    <label>Nome completo da instituição</label>
-                                    <input type="text" name="fullName" required md-maxlength="90"
-                                        ng-model="configInstCtrl.newInstitution.name">
-                                    <div ng-messages='secondStep.fullName.$error'>
-                                        <div ng-message="required">Este campo é obrigatório!</div>
-                                    </div>
+                                        <label>Nome completo da instituição</label>
+                                        <input type="text" name="fullName" required md-maxlength="90"
+                                            ng-model="configInstCtrl.newInstitution.name">
+                                        <div ng-messages='secondStep.fullName.$error'>
+                                            <div ng-message="required">Este campo é obrigatório!</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container class="md-block" flex-gt-sm flex-sm style="margin-top: -20px;">
+                                        <label>Email institucional</label>
+                                        <input type="email" name="instEmail" ng-model="configInstCtrl.newInstitution.institutional_email">
+                                        <div ng-messages="secondStep.instEmail.$error">
+                                            <div ng-message="email">O email deve ser válido!</div>
+                                        </div>
                                     </md-input-container>
                                     <md-input-container style="margin-top: -20px;" class="md-block" flex-gt-sm flex-sm>
                                     <label>Sigla</label>

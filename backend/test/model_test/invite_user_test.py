@@ -9,7 +9,7 @@ from models.user import User
 from custom_exceptions.fieldException import FieldException
 
 
-class InviteInstitutionTest(TestBase):
+class InviteUserTest(TestBase):
     """Test invite model."""
 
     @classmethod
@@ -46,7 +46,7 @@ class InviteInstitutionTest(TestBase):
         """Test make method."""
         REQUIRED_PROPERTIES = ['name', 'address', 'description',
                                'key', 'photo_url', 'email',
-                               'phone_number']
+                               'phone_number', 'institutional_email']
 
         maked_invite = self.invite_user.make()
 

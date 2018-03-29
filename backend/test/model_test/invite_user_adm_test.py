@@ -231,7 +231,7 @@ class InviteUserAdmTest(TestBase):
 
         REQUIRED_PROPERTIES = ['name', 'address', 'description',
                                'key', 'photo_url', 'email',
-                               'phone_number']
+                               'phone_number', 'institutional_email']
 
         maked_invite = created_invite.make()
 

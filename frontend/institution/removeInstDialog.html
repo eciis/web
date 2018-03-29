@@ -18,7 +18,7 @@
                 <a ui-sref="app.institution({institutionKey: '{{removeInstCtrl.institution.key}}'})" target="_blank">
                     <b md-colors="{color: 'default-grey-900'}">{{removeInstCtrl.institution.name}}</b>
                 </a>
-                <span>{{removeInstCtrl.institution.email}}</span>
+                <span ng-if="removeInstCtrl.institution.institutional_email">{{removeInstCtrl.institution.institutional_email}}</span>
             </div>
         </div>
         <div ng-if="!removeInstCtrl.thereIsNoChild()">

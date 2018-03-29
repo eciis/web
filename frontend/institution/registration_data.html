@@ -117,11 +117,16 @@
 		            <div layout="row" layout-xs="column" 
 		            	layout-align-gt-xs="space-between center" style="margin-top: -3%">
 		            	<div layout="column">
-				            <h5 style="margin-bottom: 0">Email</h5>
+				            <h5 style="margin-bottom: 0">Email institucional</h5>
 		            		 <p style="margin-top: 0" md-colors="{color: 'grey-600'}">
-		            		 	{{institutionCtrl.institution.email ? 
-		            			institutionCtrl.institution.email : "Não informado"}}</p>
-		            	</div>
+		            		 	{{institutionCtrl.institution.institutional_email ? 
+		            			institutionCtrl.institution.institutional_email : "Não informado"}}</p>
+						</div>
+						<div layout="column">
+							<h5 style="margin-bottom: 0">Email do administrador</h5>
+							<p style="margin-top: 0" md-colors="{color: 'grey-600'}">
+								{{institutionCtrl.institution.email ? institutionCtrl.institution.email : "Não informado"}}</p>
+						</div>
 		            	<div layout="column">
 				            <h5 style="margin-bottom: 0">Telefone</h5>
 				             <p style="margin-top: 0" md-colors="{color: 'grey-600'}">

@@ -103,8 +103,8 @@ class Invite(PolyModel):
     def make(self):
         """Create personalized json of invite."""
         REQUIRED_PROPERTIES = ['name', 'address', 'description',
-                               'key', 'photo_url', 'email',
-                               'phone_number']
+                               'key', 'photo_url', 'institutional_email',
+                               'phone_number', 'email']
         institution_admin = self.institution_key.get()
         institution_admin = institution_admin.make(['name'])
         institution = self.institution_key.get()

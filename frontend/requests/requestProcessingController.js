@@ -17,6 +17,7 @@
 
         requestController.parent = null;
         requestController.children = null;
+        requestController.isSentRequest = true;
 
         requestController.acceptRequest = function acceptRequest() {
             resolveRequest().then(function success() {
@@ -101,6 +102,7 @@
         function loadRequest(){
             RequestInvitationService.getRequest(requestController.requestKey).then(function success(response) {
                 requestController.request = new Invite(response);
+                requestController.isSentRequest = requestController.request.status === 'sent';
                 if (requestController.request.status === 'sent' && requestController.isInstRequest()) {
                     loadInstitution(requestController.request.institution_requested_key);
                 } else if (requestController.request.status === 'sent' && !requestController.isInstRequest(requestController.request)) {

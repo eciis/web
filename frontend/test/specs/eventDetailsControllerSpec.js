@@ -137,4 +137,34 @@
             expect(eventCtrl.getVideoUrl(eventCtrl.event.video_url.url)).toEqual('https://www.youtube.com/embed/123456789')
         });
     });
+
+    describe('endInTheSameDay()', function() {
+        it('should return true', function() {
+            var startTime = new Date('2018-03-03');
+            var endTime = new Date('2018-03-03');
+            event.start_time = startTime;
+            event.end_time = endTime;
+            eventCtrl.event = event;
+            var result = eventCtrl.endInTheSameDay();
+            expect(result).toBeTruthy();
+        });
+
+        it('should return false', function() {
+            var startTime = new Date('2018-01-13');
+            var endTime = new Date('2018-01-14');
+            event.start_time = startTime;
+            event.end_time = endTime;
+            eventCtrl.event = event;
+            var result = eventCtrl.endInTheSameDay();
+            expect(result).toBeFalsy();
+
+            var startTime = new Date('2018-01-13');
+            var endTime = new Date('2018-02-13');
+            event.start_time = startTime;
+            event.end_time = endTime;
+            eventCtrl.event = event;
+            var result = eventCtrl.endInTheSameDay();
+            expect(result).toBeFalsy();
+        });
+    });
 }));

@@ -434,16 +434,29 @@
                 .filter(invite => invite.type_of_invite === "INSTITUTION" && invite.status === "sent"));
         }
 
-        (function main(){
-            if (institutionKey) {
+        function isRequest() {
+            return configInstCtrl.user.state !== "active" && !hasPendingInstInvite();
+        }
+
+        function loadRequestState() {
+            configInstCtrl.isSubmission = true;
+            configInstCtrl.newInstitution.admin = {};
+            loadAddress();
+        }
+
+        configInstCtrl.initController = function initController() {
+            if (configInstCtrl.institutionKey) {
                 loadInstitution();
-            } else if(configInstCtrl.user.state !== "active" && !hasPendingInstInvite()) {
-                configInstCtrl.isSubmission = true;
-                configInstCtrl.newInstitution.admin = {};
-                loadAddress();
+            } else if(isRequest()) {
+                loadRequestState();
             } else {
                 $state.go('signin');
             }
+        };
+
+        (function main(){
+            configInstCtrl.institutionKey = institutionKey;
+            configInstCtrl.initController();
         })();
     });
 

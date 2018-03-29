@@ -429,10 +429,15 @@
             configInstCtrl.newInstitution.photo_url = configInstCtrl.newInstitution.photo_url || defaultPhotoUrl;
         }
 
+        function hasPendingInstInvite() {
+            return !_.isEmpty(configInstCtrl.user.invites
+                .filter(invite => invite.type_of_invite === "INSTITUTION" && invite.status === "sent"));
+        }
+
         (function main(){
             if (institutionKey) {
                 loadInstitution();
-            } else if(_.isUndefined(institutionKey) && _.isEmpty(configInstCtrl.user.institutions)) {
+            } else if(configInstCtrl.user.state !== "active" && !hasPendingInstInvite()) {
                 configInstCtrl.isSubmission = true;
                 configInstCtrl.newInstitution.admin = {};
                 loadAddress();

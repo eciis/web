@@ -14,7 +14,7 @@
         eventCtrl.user = AuthService.getCurrentUser();
         eventCtrl.isLoadingEvents = true;
         eventCtrl.showImage = true;
-
+        
         eventCtrl.share = function share(ev, event) {
             $mdDialog.show({
                 controller: "SharePostController",
@@ -123,11 +123,18 @@
                 return Utils.limitString(eventCtrl.event.official_site, 80);
         };
 
+        eventCtrl.endInTheSameDay = function endInTheSameDay() {
+            if (eventCtrl.event) {
+                const startDay = new Date(eventCtrl.event.start_time).getDay();
+                const endDay = new Date(eventCtrl.event.end_time).getDay();
+                return startDay === endDay && !eventCtrl.endInOtherMonth();
+            }
+        };
+
         function isInstitutionAdmin(event) {
             return _.includes(_.map(eventCtrl.user.institutions_admin, Utils.getKeyFromUrl),
                 Utils.getKeyFromUrl(event.institution_key));
         }
-
     });
     
     app.directive("eventDetails", function () {

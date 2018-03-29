@@ -432,10 +432,12 @@
         (function main(){
             if (institutionKey) {
                 loadInstitution();
-            } else {
+            } else if(_.isUndefined(institutionKey) && _.isEmpty(configInstCtrl.user.institutions)) {
                 configInstCtrl.isSubmission = true;
                 configInstCtrl.newInstitution.admin = {};
                 loadAddress();
+            } else {
+                $state.go('signin');
             }
         })();
     });

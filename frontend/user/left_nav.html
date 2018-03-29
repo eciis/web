@@ -26,7 +26,7 @@
                               class="md-icon-button" ng-click="$mdMenu.open(ev)">
                             <md-icon md-colors="{color: 'grey-50'}">arrow_drop_down</md-icon>
                           </md-button>
-                          <md-menu-content width="4">
+                          <md-menu-content width="4" class="custom-scrollbar">
                             <md-menu-item ng-repeat="profile in homeCtrl.user.institution_profiles">
                               <md-button ng-click="mainCtrl.changeInstitution(profile)">
                                 <md-icon md-colors="{color: profile.color+'-900'}">brightness_1</md-icon>

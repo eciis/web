@@ -76,6 +76,8 @@
 
         AuthService.login(first_user);
 
+        spyOn(Utils, 'setScrollListener').and.callFake(function() {});
+
         createCtrl = function() {
             return $controller('InstitutionController',
                 {

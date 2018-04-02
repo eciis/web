@@ -29,7 +29,8 @@
             "Error! Sender is not admin of this institution!": "Você não é o administrador dessa instituição.",
             "Error! An invitation is already being processed for this institution!": "Um convite desse mesmo tipo já está sendo processado para essa instituição.",
             "Error! The sender is already a member": "O usuário já é um membro.",
-            "Error! The sender is already invited": "O usuário já foi convidado para ser membro dessa instituição."
+            "Error! The sender is already invited": "O usuário já foi convidado para ser membro dessa instituição.",
+            "Error! User is not allowed to send invites": "O usuário não tem permissão para enviar convites"
         };
 
         service.showToast = function showToast(message) {

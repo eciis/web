@@ -336,7 +336,8 @@
                     fields: [
                     configInstCtrl.newInstitution.name,
                     configInstCtrl.newInstitution.actuation_area,
-                    configInstCtrl.newInstitution.legal_nature
+                    configInstCtrl.newInstitution.legal_nature,
+                    configInstCtrl.newInstitution.institutional_email
                     ]
                 },
                 2: {
@@ -429,14 +430,34 @@
             configInstCtrl.newInstitution.photo_url = configInstCtrl.newInstitution.photo_url || defaultPhotoUrl;
         }
 
-        (function main(){
-            if (institutionKey) {
+        function hasPendingInstInvite() {
+            return !_.isEmpty(configInstCtrl.user.invites
+                .filter(invite => invite.type_of_invite === "INSTITUTION" && invite.status === "sent"));
+        }
+
+        function isRequest() {
+            return configInstCtrl.user.state !== "active" && !hasPendingInstInvite();
+        }
+
+        function loadRequestState() {
+            configInstCtrl.isSubmission = true;
+            configInstCtrl.newInstitution.admin = {};
+            loadAddress();
+        }
+
+        configInstCtrl.initController = function initController() {
+            if (configInstCtrl.institutionKey) {
                 loadInstitution();
+            } else if(isRequest()) {
+                loadRequestState();
             } else {
-                configInstCtrl.isSubmission = true;
-                configInstCtrl.newInstitution.admin = {};
-                loadAddress();
+                $state.go('signin');
             }
+        };
+
+        (function main(){
+            configInstCtrl.institutionKey = institutionKey;
+            configInstCtrl.initController();
         })();
     });
 

@@ -16,7 +16,9 @@
                                 alt="{{acceptInviteCtrl.invite.institution.name}}" />
                             <div class="md-list-item-text" layout="column">
                                 <h3><b>{{ acceptInviteCtrl.invite.institution.name }}</b></h3>
-                                <p>{{ acceptInviteCtrl.invite.institution.email }}</p>
+                                <p>
+                                    {{ acceptInviteCtrl.invite.institution.institutional_email? acceptInviteCtrl.invite.institution.institutional_email : acceptInviteCtrl.invite.institution.email }}
+                                </p>
                                 <p>Convidado por : {{ acceptInviteCtrl.invite.admin_name }}</p>
                             </div>
                         </md-list-item>

@@ -13,7 +13,7 @@
                     <img title="{{processCtrl.invite.institution.name}}" ng-src="{{processCtrl.invite.institution.photo_url || '/app/images/institution.png'}}" class="md-avatar" style="margin: 0 15px 0 -15px; width: 60px; height: 60px;"/>
                     <div layout="column" layout-align="center start">
                         <b style="font-size: 15px;">{{ processCtrl.invite.institution.name }}</b>
-                        <span style="font-size: 15px;">{{ processCtrl.invite.institution.email }}</span>
+                        <span style="font-size: 15px;" ng-if="processCtrl.invite.institution.institutional_email">{{ processCtrl.invite.institution.institutional_email }}</span>
                     </div>
                 </md-list-item>
             </md-list>
@@ -42,7 +42,7 @@
                     <img title="{{processCtrl.invite.institution.name}}" ng-src="{{processCtrl.invite.institution.photo_url || '/app/images/institution.png'}}" class="md-avatar" style="margin: 0 15px 0 -15px; width: 60px; height: 60px;"/>
                     <div layout="column" layout-align="center start">
                         <b style="font-size: 15px;">{{ processCtrl.invite.institution.name }}</b>
-                        <span style="font-size: 15px;">{{ processCtrl.invite.institution.email }}</span>
+                        <span style="font-size: 15px;" ng-if="processCtrl.invite.institution.institutional_email">{{ processCtrl.invite.institution.institutional_email }}</span>
                     </div>
                 </md-list-item>
             </md-list>

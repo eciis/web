@@ -67,7 +67,7 @@ class InviteTest(TestBase):
         """Test make method."""
         REQUIRED_PROPERTIES = ['name', 'address', 'description',
                                'key', 'photo_url', 'email',
-                               'phone_number']
+                               'phone_number', 'institutional_email']
 
         expected_maked_invite = {
             'admin_name': self.admin.name,

@@ -224,7 +224,7 @@
             <md-input-container class="md-block" flex-gt-xs>
                 <label>Email Institucional</label>
                 <input type="email" name="institutionalEmail"
-                ng-model="configInstCtrl.newInstitution.institutional_email">
+                ng-model="configInstCtrl.newInstitution.institutional_email" required>
                 <div ng-messages="instForm.institutionalEmail.$error">
                     <div ng-message="email">O email deve ser válido!</div>
                 </div>

@@ -1,5 +1,5 @@
 <md-content flex md-colors="{background: 'teal-500'}">
-  <div layout="column" layout-align="center center" layout-fill flex>
+  <div layout="column" layout-align="center center">
     <div layout="row" layout-xs="column" layout-align="center center">
       <div flex-sm="60" flex-gt-sm="40" layout-align="center center">
         <load-circle ng-show="newInviteCtrl.loading"></load-circle>
@@ -16,13 +16,15 @@
                       <img ng-src="{{ newInviteCtrl.institution.photo_url }}" class="md-avatar" alt="{{newInviteCtrl.institution.name}}" />
                       <div class="md-list-item-text" layout="column">
                         <h3><b>{{ newInviteCtrl.institution.name }}</b></h3>
-                        <p>{{ newInviteCtrl.institution.email }}</p>
+                        <p ng-if="newInviteCtrl.institution.institutional_email">{{ newInviteCtrl.institution.institutional_email }}</p>
                         <p>Convidado por : {{ newInviteCtrl.invite.admin_name }}</p>
                       </div>
                     </md-list-item>
                   </md-list>
                   <div layout="column" layout-align="center">
-                    <p class="small-text increase-distance md-title green-text">{{newInviteCtrl.isInviteUser() ? 'PREENCHA O FORMULÁRIO PARA SE TORNAR UM MEMBRO:' : 'PREENCHA O FORMULÁRIO PARA CADASTRAR A INSTITUIÇÃO:'}}</p>
+                    <p class="small-text increase-distance md-title green-text">
+                      {{newInviteCtrl.isInviteUser() ? 'PREENCHA O FORMULÁRIO PARA SE TORNAR UM MEMBRO:' : 'PREENCHA O FORMULÁRIO PARA CADASTRAR A INSTITUIÇÃO:'}}
+                    </p>
 
                     <!-- INVITED INSTITUTION -->
                     <div ng-if="!newInviteCtrl.isInviteUser()">
@@ -39,21 +41,20 @@
                     </div>
 
                     <!-- USER INFORMATION -->
-                    <div layout="column" layout-align="center" ng-if="newInviteCtrl.isUserInfoImcomplete()">
+                    <div layout="column" ng-if="newInviteCtrl.isUserInfoImcomplete()">
                       <md-input-container ng-if="newInviteCtrl.checkUserName()">
                         <label>Seu Nome</label>
                       <input ng-model="newInviteCtrl.user_name" name="nome" required>
                       </md-input-container>
-
-                      <md-input-container style="margin-bottom: 0">
+                      <md-input-container style="margin-top: -15px;">
                         <label>Email institucional</label>
                         <input ng-model="newInviteCtrl.email" type="email" name="email">
                       </md-input-container>
-                      <md-input-container>
+                      <md-input-container style="margin-top: -15px;">
                         <label>Cargo institucional</label>
                         <input name="cargo" ng-model="newInviteCtrl.office" required>
                       </md-input-container>
-                      <div layout="row">
+                      <div layout="row" style="margin-top: -12px;">
                         <md-input-container flex="70">
                           <label>Telefone institucional</label>
                           <input ng-pattern="newInviteCtrl.phoneRegex" ng-model="newInviteCtrl.phone"
@@ -69,8 +70,13 @@
                   </div>
               </div>
               <md-card-actions layout="row" layout-align="end center">
-                <md-button ng-if="!newInviteCtrl.acceptedInvite" ng-click="newInviteCtrl.rejectInvite($event)" md-colors="{background: 'teal-500'}">Cancelar</md-button>
-                <md-button ng-if="!newInviteCtrl.acceptedInvite" type="submit" md-colors="{background: 'teal-500'}">{{newInviteCtrl.isInviteUser() ? 'Enviar' : 'Próximo'}}</md-button>
+                <md-button ng-if="!newInviteCtrl.acceptedInvite" ng-click="newInviteCtrl.rejectInvite($event)"
+                  md-colors="{background: 'teal-500'}">
+                  Cancelar
+                </md-button>
+                <md-button ng-if="!newInviteCtrl.acceptedInvite" type="submit" md-colors="{background: 'teal-500'}">
+                  {{newInviteCtrl.isInviteUser() ? 'Enviar' : 'Próximo'}}
+                </md-button>
                 <div ng-if="newInviteCtrl.acceptedInvite" flex="100" layout="row" layout-align="center center">
                   <md-progress-circular  class="md-hue-2" md-diameter="30px"></md-progress-circular>
                 </div>

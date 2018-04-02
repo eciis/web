@@ -320,7 +320,9 @@ class User(ndb.Model):
         """
         self.institutions = []
         self.follows = []
-
+        self.permissions = {}
+        self.put()
+        
     def _post_put_hook(self, future):
         """This method is called after each User.put()."""
         search_user = SearchUser()

@@ -4,6 +4,7 @@ from ..test_base import TestBase
 
 from models.user import User
 
+from .. import mocks
 
 class UserTest(TestBase):
     """Test the user model class."""
@@ -17,7 +18,64 @@ class UserTest(TestBase):
             probability=1)
         cls.test.init_datastore_v3_stub(consistency_policy=cls.policy)
         cls.test.init_memcache_stub()
-        initModels(cls)
+
+        # create user
+        cls.user = mocks.create_user('user@gmail.com')
+        cls.user.change_state('active')
+        # create institution
+        cls.institution = mocks.create_institution('Inst')
+        cls.institution.admin = cls.user.key
+        cls.institution.follow(cls.user.key)
+        cls.institution.add_member(cls.user)
+        cls.institution.change_state('active')
+        # create other institution
+        cls.other_inst = mocks.create_institution('Other_inst')
+        # update user
+        cls.user.add_institution_admin(cls.institution.key)
+        cls.user.follow(cls.institution.key)
+
+    def tearDown(cls):
+        """Deactivate the test."""
+        cls.test.deactivate()
+
+    def test_follow(self):
+        self.assertEqual(len(self.user.follows), 1,
+                          "User should follow only one institution.")
+        self.user.follow(self.other_inst.key)
+        self.assertEqual(len(self.user.follows), 2,
+                           "User should follow two institutions after follow other_inst.")
+
+    def test_unfollow(self):
+        self.user.follow(self.other_inst.key)
+        self.assertEqual(len(self.user.follows), 2,
+                           "User should follow two institutions after follow other_inst.")
+        self.user.unfollow(self.other_inst.key)
+        self.assertEqual(len(self.user.follows), 1,
+                            "User should follow only one institution after unfollow other_inst.")
+
+    def test_add_institution(self):
+        self.assertTrue(self.other_inst.key not in self.user.institutions,
+                            "User should not be a member of other_inst.")
+        self.user.add_institution(self.other_inst.key)
+        self.assertTrue(self.user.permissions["publish_post"][self.other_inst.key.urlsafe()],
+                            "User should has permission to publish post.")
+        self.assertTrue(self.user.permissions["publish_survey"][self.other_inst.key.urlsafe()],
+                            "User should has permission to publish survey.")
+
+    def test_remove_institution(self):
+        self.user.add_institution(self.other_inst.key)
+        self.user.follow(self.other_inst.key)
+        self.assertTrue(self.other_inst.key in self.user.institutions,
+                            "User should be a member of other_inst.")
+        self.assertTrue(self.user.permissions["publish_post"][self.other_inst.key.urlsafe()],
+                            "User should has permission to publish post.")
+        self.assertTrue(self.user.permissions["publish_survey"][self.other_inst.key.urlsafe()],
+                            "User should has permission to publish survey.")
+        self.user.remove_institution(self.other_inst.key)
+        self.assertFalse(self.user.has_permission("publish_post", self.other_inst.key.urlsafe()),
+                            "User should not has permission to publish post.")
+        self.assertFalse(self.user.has_permission("publish_survey", self.other_inst.key.urlsafe()),
+                            "User should not has permission to publish survey.")
 
     def test_add_permission(self):
         self.assertEquals(len(self.user.permissions), 0,
@@ -90,18 +148,3 @@ class UserTest(TestBase):
             "User is not allowed to do this operation",
             exception_message,
             "User is not allowed to do this operation")
-
-
-def initModels(cls):
-    """Init the models."""
-    # new User
-    cls.user = User()
-    cls.user.name = 'User'
-    cls.user.cpf = '089.675.908-90'
-    cls.user.email = ['user@gmail.com']
-    cls.user.institutions = []
-    cls.user.follows = []
-    cls.user.institutions_admin = []
-    cls.user.notifications = []
-    cls.user.posts = []
-    cls.user.permissions = {}

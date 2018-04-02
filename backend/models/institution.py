@@ -92,16 +92,16 @@ class Institution(ndb.Model):
 
     cover_photo = ndb.StringProperty()
 
-    def follow(self, user):
+    def follow(self, user_key):
         """Add one user in collection of followers."""
-        if user not in self.followers:
-            self.followers.append(user)
+        if user_key not in self.followers:
+            self.followers.append(user_key)
             self.put()
 
-    def unfollow(self, user):
+    def unfollow(self, user_key):
         """Remove one user in collection of followers."""
-        if user in self.followers and user not in self.members:
-            self.followers.remove(user)
+        if user_key in self.followers and user_key not in self.members:
+            self.followers.remove(user_key)
             self.put()
 
     def add_member(self, member):

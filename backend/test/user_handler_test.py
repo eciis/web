@@ -8,10 +8,6 @@ from mock import patch
 import mocks
 import json
 
-
-
-USER_EMAIL = 'user@gmail.com'
-OTHER_USER_EMAIL = 'other_user@gmail.com'
 USER_URI = '/api/user'
 
 class UserHandlerTest(TestBaseHandler):
@@ -30,20 +26,19 @@ class UserHandlerTest(TestBaseHandler):
         
         """Init models"""
         # create user
-        cls.user = mocks.create_user(USER_EMAIL)
-        cls.user.state = 'active'
-        cls.user.put()
+        cls.user = mocks.create_user()
+        cls.user.change_state('active')
         # create user
-        cls.other_user = mocks.create_user(OTHER_USER_EMAIL)
-        cls.other_user.state = 'active'
-        cls.other_user.put()
+        cls.other_user = mocks.create_user()
+        cls.other_user.change_state('active')
         # create institution
         cls.institution = mocks.create_institution()
         cls.institution.admin = cls.user.key
-        cls.institution.followers = [cls.user.key, cls.other_user.key]
-        cls.institution.members = [cls.user.key, cls.other_user.key]
-        cls.institution.state = 'active'
-        cls.institution.put()
+        cls.institution.follow(cls.user.key)
+        cls.institution.follow(cls.other_user.key)
+        cls.institution.add_member(cls.user)
+        cls.institution.add_member(cls.other_user)
+        cls.institution.change_state('active')
         # update user
         cls.user.add_institution_admin(cls.institution.key)
         # update other_user
@@ -62,11 +57,12 @@ class UserHandlerTest(TestBaseHandler):
         """Deactivate the test."""
         cls.test.deactivate()
 
-    @patch('utils.verify_token', return_value={'email': USER_EMAIL})
+    @patch('utils.verify_token')
     def test_get(self, verify_token):
         """Test the user_handler's get method."""
-        user = self.test_app.get(USER_URI).json
-
+        verify_token._mock_return_value = {'email': self.user.email[0]}
+        response = self.test_app.get(USER_URI)
+        user = response.json
         self.assertEquals(
             user['name'], self.user.name, 
             "The user name is different from the expected one"
@@ -82,15 +78,16 @@ class UserHandlerTest(TestBaseHandler):
             "The user email is different from the expected one"
         )
         
-        inst_admin_url = 'http://localhost:80/api/key/' + self.institution.key.urlsafe()
+        inst_admin_url = 'http://%s/api/key/%s' % (response.request.host, self.institution.key.urlsafe())
         self.assertEquals(
             user['institutions_admin'], [inst_admin_url], 
             "The institutions_admin is different from the expected one"
         )
 
-    @patch('utils.verify_token', return_value={'email': OTHER_USER_EMAIL})
+    @patch('utils.verify_token')
     def test_delete(self, verify_token):
         """Test the user_handler's delete method."""
+        verify_token._mock_return_value = {'email': self.other_user.email[0]}
         # check the user properties before delete it
         self.assertEquals(self.other_user.state, "active", "The user state should be 'active'")
         self.assertEquals(self.other_user.institutions, [self.institution.key], 
@@ -128,8 +125,9 @@ class UserHandlerTest(TestBaseHandler):
         self.assertEquals(self.other_user.institution_profiles, [], "User permissions should be empty")
 
 
-    @patch('utils.verify_token', return_value={'email': OTHER_USER_EMAIL})
+    @patch('utils.verify_token')
     def test_patch(self, verify_token):
+        verify_token._mock_return_value = {'email': self.other_user.email[0]}
         """Test the user_handler's patch method."""
         new_values = {
             "name": "other_name",

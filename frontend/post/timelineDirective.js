@@ -5,23 +5,10 @@
 
     app.controller('TimelineController', function(AuthService, MessageService, NotificationService, $rootScope) {
         var timelineCtrl = this;
-        var content = document.getElementById("content");
 
         var DELETED_POST_EVENT = 'DELETED_POST';
 
         timelineCtrl.user = AuthService.getCurrentUser();
-        timelineCtrl.isLoadingPosts = false;
-
-        function loadMorePosts() {
-            timelineCtrl.isLoadingPosts = true;
-            var promise = timelineCtrl.loadMorePosts();
-
-            promise.then(function success() {
-                timelineCtrl.isLoadingPosts = false;
-            });
-
-            return promise;
-        }
 
         function deletePost(post) {
             var post = new Post(post);
@@ -42,8 +29,6 @@
         }
 
         eventListener();
-
-        Utils.setScrollListener(content, loadMorePosts);
     });
 
     app.directive("postTimeline", function() {

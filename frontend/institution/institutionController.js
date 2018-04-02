@@ -6,6 +6,7 @@
     app.controller("InstitutionController", function InstitutionController($state, InstitutionService,
             InviteService, AuthService, MessageService, $sce, $mdDialog, PdfService, $rootScope, $window, ProfileService, $q, CropImageService, ImageService) {
         var institutionCtrl = this;
+        var content = document.getElementById("instPage");
         var morePosts = true;
         var actualPage = 0;
 
@@ -92,6 +93,7 @@
         };
 
         institutionCtrl.loadMorePosts();
+        Utils.setScrollListener(content, institutionCtrl.loadMorePosts);
         loadInstitution();
 
         institutionCtrl.isAdmin = function isAdmin() {

@@ -12,7 +12,7 @@ from custom_exceptions.fieldException import FieldException
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from utils import json_response
 from utils import Utils
-from utils import makeUser
+from utils import make_user
 from util.json_patch import JsonPatch
 
 
@@ -97,4 +97,4 @@ class InviteHandler(BaseHandler):
         user.put()
         invite.send_response_notification(user.current_institution, user.key, 'ACCEPT')
         
-        self.response.write(json.dumps(makeUser(user, self.request)))
+        self.response.write(json.dumps(make_user(user, self.request)))

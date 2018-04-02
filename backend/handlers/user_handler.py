@@ -8,6 +8,7 @@ from utils import Utils
 from utils import login_required
 from utils import create_user
 from utils import json_response
+from utils import make_user
 from models.user import InstitutionProfile
 
 from util.json_patch import JsonPatch

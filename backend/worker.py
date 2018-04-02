@@ -33,7 +33,7 @@ def should_remove(user, institution_key, current_inst_key):
     
     return is_not_admin or is_current_inst
 
-def filter_permissions_to_remove(user, permissions, institution_key):
+def filter_permissions_to_remove(user, permissions, institution_key, should_remove):
     """
     This method filters the permissions passed as a parameter and 
     returns a dictionary of filtered permissions that must be removed 
@@ -67,6 +67,12 @@ def is_admin_of_parent_inst(user, institution_parent_key):
         return is_admin_of_parent_inst(user, parent_inst.parent_institution.urlsafe())
     else:
         return False
+
+
+def is_not_admin(user, institution_key, *args):
+    if user.is_admin(ndb.Key(urlsafe=institution_key)):
+        return False
+    return True
 
 
 class BaseHandler(webapp2.RequestHandler):
@@ -130,6 +136,18 @@ class SendEmailHandler(BaseHandler):
 class RemoveInstitutionHandler(BaseHandler):
     """Handler that resolves tasks relationated with remove an institution."""
 
+    def remove_permissions(self, remove_hierarchy, institution):
+        admin = institution.admin.get()
+        if remove_hierarchy == "true":
+            permissions = institution.get_all_hierarchy_admin_permissions()
+            for permission, institutions in permissions.items():
+                admin.remove_permissions(permission, institutions)
+            for child in institution.children_institutions:
+                self.remove_permissions(remove_hierarchy, child)
+        else:
+            for permission in permissions.DEFAULT_ADMIN_PERMISSIONS:
+                admin.remove_permissions(permission, institution.key.urlsafe())
+
     def post(self):
         """Remove the institution from users's list."""
         # Retrieving the params
@@ -137,7 +155,7 @@ class RemoveInstitutionHandler(BaseHandler):
         remove_hierarchy = self.request.get('remove_hierarchy')
         # Retrieving the institution
         institution = ndb.Key(urlsafe=institution).get()
-
+        self.remove_permissions(remove_hierarchy, institution)
         institution.remove_institution_from_users(remove_hierarchy)
 
 
@@ -235,9 +253,14 @@ class AddAdminPermissionsInInstitutionHierarchy(BaseHandler):
             parent_institution = institution.parent_institution.get()
             admin_parent = parent_institution.admin.get()
             
-            for permission in admin.permissions:
-                for institution_key in admin.permissions[permission]:
-                    admin_parent.add_permission(permission, institution_key)
+            for permission in permissions.DEFAULT_ADMIN_PERMISSIONS:
+                admin_parent.add_permission(permission, institution_key)
+                def add_permission_to_children(parent, user):
+                    for child in parent.children_institutions:
+                        user.add_permission(permission, child.urlsafe())
+                        add_permission_to_children(child, user)
+                add_permission_to_children(institution, admin_parent)
+                    
 
             self.addAdminPermissions(parent_institution.key.urlsafe())
 
@@ -248,28 +271,16 @@ class AddAdminPermissionsInInstitutionHierarchy(BaseHandler):
 
 class RemoveAdminPermissionsInInstitutionHierarchy(BaseHandler):
 
-    def removeAdminPermissions(self, institution_key, permissions):
-        institution = ndb.Key(urlsafe=institution_key).get()
-        admin = institution.admin.get()
-        permissions_keys = permissions.keys()
-
-        for permission in permissions_keys:
-            institution_keys = permissions[permission].keys()
-            for institution_key in institution_keys:
-                if ndb.Key(urlsafe=institution_key) not in admin.institutions:
-                    admin.remove_permission(permission, institution_key)
-
-        if institution.parent_institution:
-            self.removeAdminPermissions(institution.parent_institution.urlsafe(), permissions)
+    def removeAdminPermissions(self, user, permissions):
+        for permission, institution_keys in permissions.items():
+            user.remove_permissions(permission, institution_keys)
 
     def post(self):
         institution_key = self.request.get('institution_key')
         institution = ndb.Key(urlsafe=institution_key).get()
-        admin = institution.admin.get()
-        
-        if institution.parent_institution:
-            permissions = admin.permissions
-            self.removeAdminPermissions(institution_key, permissions)
+        user = ndb.Key(urlsafe=self.request.get('user')).get()
+        permissions = filter_permissions_to_remove(user, institution.get_all_hierarchy_admin_permissions(), institution.key, is_not_admin)
+        self.removeAdminPermissions(user, permissions)
 
 class AddPostInInstitution(BaseHandler):
     
@@ -345,7 +356,7 @@ class TransferAdminPermissionsHandler(BaseHandler):
             self.add_permissions(new_admin, permissions)
             
             if (not institution.parent_institution) or (not is_admin_of_parent_inst(admin, institution.parent_institution.urlsafe())):
-                permissions_filtered = filter_permissions_to_remove(admin, permissions, institution_key)
+                permissions_filtered = filter_permissions_to_remove(admin, permissions, institution_key, should_remove)
                 self.remove_permissions(admin, permissions_filtered)
 
             new_admin.put()

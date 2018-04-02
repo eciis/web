@@ -21,6 +21,8 @@ class UserTimelineHandler(BaseHandler):
     @login_required
     def get(self, user):
         """Handler of get posts."""
+        print user.permissions
+        print "::::::::::::>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>."
         page = to_int(
             self.request.get('page', Utils.DEFAULT_PAGINATION_OFFSET),
             QueryException,

@@ -104,10 +104,10 @@
             var promise;
             if (invite.type_of_invite === INSTITUTION_PARENT) {
                 invite.type_of_invite = REQUEST_PARENT;
-                promise = RequestInvitationService.sendRequestToParentInst(invite, institution_requested_key);
+                promise = RequestInvitationService.sendRequestToParentInst(invite, invite.institution_key);
             } else {
                 invite.type_of_invite = REQUEST_CHILDREN;
-                promise = RequestInvitationService.sendRequestToChildrenInst(invite, institution_requested_key);
+                promise = RequestInvitationService.sendRequestToChildrenInst(invite, invite.institution_key);
             }
             promise.then(function success() {
                 MessageService.showToast('Convite enviado com sucesso!');

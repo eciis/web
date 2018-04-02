@@ -190,7 +190,9 @@ class InstitutionHandler(BaseHandler):
 
         Utils._assert(not type(institution) is Institution,
                       "Key is not an institution", EntityException)
-
+        """TODO: Move this call to a queue
+        @author: Raoni Smaneoto 02/04/2018
+        """
         institution.remove_institution(remove_hierarchy, user)
 
         params = {
@@ -198,7 +200,6 @@ class InstitutionHandler(BaseHandler):
             'remove_hierarchy': remove_hierarchy
         }
 
-        enqueue_task('remove-admin-permissions', params)
         enqueue_task('remove-inst', params)
 
         email_params = {

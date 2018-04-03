@@ -1079,21 +1079,14 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
     position: fixed;
     top: 4.6em;
     z-index: 2;
+    width: 100%;
 }
 
 .floating-menu {
     position: fixed;
     z-index: 2;
-    margin-top: -10.8em;
+    top: 9em;
 }
-
-@-moz-document url-prefix() { 
-    .floating-menu {
-        position: fixed;
-        z-index: 2;
-        margin-top: -11.8em;
-    }
-  }
 
 .inst-card-cover {
     height: 145px;
@@ -1102,8 +1095,4 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
     background-size:cover; 
     margin-bottom: 20px;
     box-shadow: 0px 0px 20px grey;
-}
-
-.custom-max-width {
-    max-width: 90%;
 }

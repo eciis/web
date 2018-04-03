@@ -341,12 +341,18 @@ class TransferAdminPermissionsHandler(BaseHandler):
         @ndb.transactional(xg=True, retries=10)
         def save_changes(admin, new_admin, institution):
             permissions = institution.get_all_hierarchy_admin_permissions()
+            permissions = institution.get_super_user_admin_permissions(permissions)
             institution.set_admin(new_admin.key)
             self.add_permissions(new_admin, permissions)
             
             if (not institution.parent_institution) or (not is_admin_of_parent_inst(admin, institution.parent_institution.urlsafe())):
                 permissions_filtered = filter_permissions_to_remove(admin, permissions, institution_key)
                 self.remove_permissions(admin, permissions_filtered)
+
+            if(institution.name == 'Complexo Industrial da Saude'):
+                permissions_super_user = ["analyze_request_inst", "send_invite_inst"]
+                for permission in permissions_super_user:
+                    admin.remove_permission(permission, institution.key.urlsafe())
 
             new_admin.put()
             admin.put()

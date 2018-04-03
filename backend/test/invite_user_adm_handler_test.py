@@ -11,17 +11,13 @@ from models.invite_user_adm import InviteUserAdm
 from handlers.invite_user_adm_handler import InviteUserAdmHandler
 from worker import TransferAdminPermissionsHandler
 import permissions
-
+from test_base_handler import hasAdminPermissions
 from mock import patch
 
 def addAdminPermission(user, institution_key):
     user.add_permissions(permissions.DEFAULT_ADMIN_PERMISSIONS, institution_key)
 
-def hasAdminPermissions(user, institution_key):
-    for permission in permissions.DEFAULT_ADMIN_PERMISSIONS:
-        if not user.has_permission(permission, institution_key):
-            return False
-    return True
+
 
 class InviteUserAdmHandlerTest(TestBaseHandler):
     """Invite User Adm Handler Test."""

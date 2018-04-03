@@ -316,9 +316,11 @@ class InstitutionHandlerTest(TestBaseHandler):
         second_user = second_user.key.get()
         third_user = third_user.key.get()
         
-        self.assertTrue(third_inst.key.urlsafe() not in first_user.permissions['publish_post'])
-        self.assertTrue(third_inst.key.urlsafe() not in second_user.permissions['publish_post'])
-        self.assertTrue(third_inst.key.urlsafe() in third_user.permissions['publish_post'])
+        self.assertTrue(third_inst.key.urlsafe() not in first_user.permissions['remove_inst'])
+        self.assertTrue(third_inst.key.urlsafe()
+                        not in second_user.permissions['remove_inst'])
+        self.assertTrue(third_inst.key.urlsafe()
+                        in third_user.permissions['remove_inst'])
 
     @patch('utils.verify_token', return_value={'email': 'user@example.com'})
     def test_get(self, verify_token):

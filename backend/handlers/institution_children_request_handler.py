@@ -40,7 +40,7 @@ class InstitutionChildrenRequestHandler(BaseHandler):
         parent_institution.put()
 
         admin_of_parent_inst = parent_institution.admin.get()
-        admin_of_parent_inst.add_permissions(["remove_link", "remove_inst"], institution_children.key.urlsafe())
+        admin_of_parent_inst.add_permissions(["remove_link", "remove_inst"], institution_children.key.urlsafe()) #remove it
 
         user.add_permission("remove_link", parent_institution.key.urlsafe())
 

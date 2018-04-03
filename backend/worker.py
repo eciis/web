@@ -143,7 +143,7 @@ class RemoveInstitutionHandler(BaseHandler):
             for permission, institutions in permissions.items():
                 admin.remove_permissions(permission, institutions)
             for child in institution.children_institutions:
-                self.remove_permissions(remove_hierarchy, child)
+                self.remove_permissions(remove_hierarchy, child.get())
         else:
             for permission in permissions.DEFAULT_ADMIN_PERMISSIONS:
                 admin.remove_permissions(permission, institution.key.urlsafe())
@@ -242,27 +242,32 @@ class NotifyFollowersHandler(BaseHandler):
                     current_institution
                 )
 
+def get_all_parent_admins(child_institution, admins=[]):
+    parent_institution = child_institution.parent_institution
+    if parent_institution:
+        parent_institution = parent_institution.get()
+        admin = parent_institution.admin
+        admins.append(admin.get())
+        get_all_parent_admins(parent_institution, admins)
+    return admins
+
+
+def add_permission_to_children(parent, admins, permission):
+    for child in parent.children_institutions:
+        for admin in admins:
+            admin.add_permission(permission, child.urlsafe())
+            add_permission_to_children(child, admins, permission)
 
 class AddAdminPermissionsInInstitutionHierarchy(BaseHandler):
 
     def addAdminPermissions(self, institution_key):
         institution = ndb.Key(urlsafe=institution_key).get()
-        admin = institution.admin.get()
-
-        if institution.parent_institution:
-            parent_institution = institution.parent_institution.get()
-            admin_parent = parent_institution.admin.get()
+        admins = get_all_parent_admins(institution)
             
-            for permission in permissions.DEFAULT_ADMIN_PERMISSIONS:
-                admin_parent.add_permission(permission, institution_key)
-                def add_permission_to_children(parent, user):
-                    for child in parent.children_institutions:
-                        user.add_permission(permission, child.urlsafe())
-                        add_permission_to_children(child, user)
-                add_permission_to_children(institution, admin_parent)
-                    
-
-            self.addAdminPermissions(parent_institution.key.urlsafe())
+        for permission in permissions.DEFAULT_ADMIN_PERMISSIONS:
+            for admin in admins:
+                admin.add_permission(permission, institution_key)
+            add_permission_to_children(institution, admins, permission)
 
     def post(self):
         institution_key = self.request.get('institution_key')

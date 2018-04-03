@@ -11,7 +11,7 @@ from models.institution import Address
 from models.request_institution_children import RequestInstitutionChildren
 from handlers.institution_children_request_handler import InstitutionChildrenRequestHandler
 from worker import AddAdminPermissionsInInstitutionHierarchy
-
+from test_base_handler import hasAdminPermissions
 from mock import patch
 
 CURRENT_INSTITUTION = {'name': 'currentInstitution'}
@@ -171,7 +171,6 @@ class InstitutionChildrenRequestHandlerTest(TestBaseHandler):
         first_inst.children_institutions.append(second_inst.key)
         second_inst.children_institutions.append(third_inst.key)
 
-        third_user.add_permission('publish_post', third_inst.key.urlsafe())
         third_user.add_permission('answer_link_inst_request', third_inst.key.urlsafe())
 
         first_inst.put()
@@ -192,8 +191,9 @@ class InstitutionChildrenRequestHandlerTest(TestBaseHandler):
         verify_token._mock_return_value = {'email': third_user.email[0]}
         enqueue_task.side_effect = self.enqueue_task
 
-        self.assertTrue(third_inst.key.urlsafe() not in first_user.permissions.get('publish_post', {}))
-        self.assertTrue(third_inst.key.urlsafe() not in second_user.permissions.get('publish_post', {}))
+        self.assertFalse(hasAdminPermissions(first_user, third_inst.key.urlsafe()))
+        self.assertFalse(hasAdminPermissions(
+            second_user, third_inst.key.urlsafe()))
 
         self.testapp.put(
             "/api/requests/%s/institution_children" % request.key.urlsafe(),
@@ -204,6 +204,7 @@ class InstitutionChildrenRequestHandlerTest(TestBaseHandler):
         second_user = second_user.key.get()
         third_user = third_user.key.get()
 
-        self.assertTrue(third_inst.key.urlsafe() in first_user.permissions['publish_post'])
-        self.assertTrue(third_inst.key.urlsafe() in second_user.permissions['publish_post'])
-        self.assertTrue(third_inst.key.urlsafe() in third_user.permissions['publish_post'])
+        self.assertTrue(hasAdminPermissions(
+            first_user, third_inst.key.urlsafe()))
+        self.assertTrue(hasAdminPermissions(
+            second_user, third_inst.key.urlsafe()))

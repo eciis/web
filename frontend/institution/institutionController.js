@@ -8,7 +8,7 @@
         var institutionCtrl = this;
         var morePosts = true;
         var actualPage = 0;
-
+        
         institutionCtrl.institution = null;
         institutionCtrl.posts = [];
         institutionCtrl.isUserFollower = false;
@@ -21,13 +21,14 @@
         institutionCtrl.instActuationArea = "";
         institutionCtrl.isLoadingData = true;
         institutionCtrl.isLoadingCover = false;
-
+        
         var patch;
         var observer;
-
+                
         var currentInstitutionKey = $state.params.institutionKey;
         institutionCtrl.user = AuthService.getCurrentUser();
         institutionCtrl.addPost = institutionCtrl.user.current_institution.key === currentInstitutionKey;
+        const DEFAULT_INST_PHOTO = '/app/images/institution.png';
 
         function loadInstitution() {
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
@@ -61,10 +62,6 @@
         function setPortifolioURL(url) {
             institutionCtrl.portfolioUrl = url;
         }
-
-        institutionCtrl.limitString = function limitString(string, limit){
-            return Utils.limitString(string, limit);
-        };
 
         institutionCtrl.loadMorePosts = function loadMorePosts() {
             var deferred = $q.defer();
@@ -351,23 +348,28 @@
 
         function changeCoverOnScroll() {
             var instPage = document.getElementById("instPage");
-            var bigCover = document.getElementById("bigCover");
-            var leftMenu = document.getElementById("leftMenu");
-            var floatingCoverGtLg = document.getElementById("floatingCoverGtLg");
-            var floatingCoverLg = document.getElementById("floatingCoverLg");
-            var floatingCoverMd = document.getElementById("floatingCoverMd");
-            var floatingCoverXs = document.getElementById("floatingCoverXs");
-            
+            var instName = document.getElementById("instName");
+ 
             instPage && instPage.addEventListener('scroll', function() {
-                var rate = instPage.scrollTop / 145;
-                bigCover.style.opacity = 1 - rate;
-                floatingCoverGtLg.style.opacity = rate;
-                floatingCoverLg.style.opacity = rate;
-                floatingCoverMd.style.opacity = rate;
-                floatingCoverXs.style.opacity = rate;
-    
-                instPage.scrollTop >= 160 ? leftMenu.classList.add('floating-menu') : leftMenu.classList.remove('floating-menu');
+                const FULL = 1;
+                const NONE = 0;
+                var isOverInstName = instPage.scrollTop > instName.offsetTop;
+                var opacity = isOverInstName ? FULL : NONE;
+                setElementsOpacity(opacity);
+                changeLeftMenuClass(isOverInstName);
             });
+        }
+        
+        function changeLeftMenuClass(isToFloat) {
+            var leftMenu = document.getElementById("leftMenu");
+            isToFloat ? leftMenu.classList.add('floating-menu') : leftMenu.classList.remove('floating-menu');
+        }
+
+        function setElementsOpacity(opacity) {
+            document.getElementById("floatingCoverGtLg").style.opacity = opacity;
+            document.getElementById("floatingCoverLg").style.opacity = opacity;
+            document.getElementById("floatingCoverMd").style.opacity = opacity;
+            document.getElementById("floatingCoverXs").style.opacity = opacity;
         }
 
         institutionCtrl.getResponsiveWidth = function getResponsiveWidth() {
@@ -378,6 +380,14 @@
             return isFloating && showCustomGtSmWidth ? 'custom-max-width' : '';
         };
         
+        institutionCtrl.getPhoto = function getPhoto() {
+            return institutionCtrl.institution && institutionCtrl.institution.photo_url || DEFAULT_INST_PHOTO;
+        };
+
+        institutionCtrl.getLimitedName = function getLimitedName(limit) {
+            return institutionCtrl.institution && Utils.limitString(institutionCtrl.institution.name, limit);
+        };
+
         (function main(){
             loadStateView();
             changeCoverOnScroll();

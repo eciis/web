@@ -6,7 +6,7 @@
     app.controller("InstitutionController", function InstitutionController($state, InstitutionService,
             InviteService, AuthService, MessageService, $sce, $mdDialog, PdfService, $rootScope, $window, ProfileService, $q, CropImageService, ImageService) {
         var institutionCtrl = this;
-        var content = document.getElementById("instPage");
+        var content = document.getElementById("instPage") || {};
         var morePosts = true;
         var actualPage = 0;
 

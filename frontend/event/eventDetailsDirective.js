@@ -58,7 +58,7 @@
             }
         };
 
-        eventCtrl.canDelete = function canDelete(event) {
+        eventCtrl.canChange = function canChange(event) {
             return eventCtrl.isEventAuthor(event) || isInstitutionAdmin(event);
         };
 
@@ -132,6 +132,8 @@
         };
 
         function isInstitutionAdmin(event) {
+            console.log(_.includes(_.map(eventCtrl.user.institutions_admin, Utils.getKeyFromUrl),
+            Utils.getKeyFromUrl(event.institution_key)));
             return _.includes(_.map(eventCtrl.user.institutions_admin, Utils.getKeyFromUrl),
                 Utils.getKeyFromUrl(event.institution_key));
         }

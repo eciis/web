@@ -49,7 +49,7 @@ class EventHandlerTest(TestBaseHandler):
         cls.event = mocks.create_event(cls.user, cls.institution)
 
     @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
-    def test_delete_author(self, verify_token):
+    def test_delete_by_author(self, verify_token):
         """Test the event_handler's delete method when user is author."""
         # Call the delete method
         self.testapp.delete("/api/events/%s" %
@@ -72,7 +72,7 @@ class EventHandlerTest(TestBaseHandler):
                                 self.event.key.urlsafe())
 
     @patch('utils.verify_token', return_value={'email': 'usersd@gmail.com'})
-    def test_delete_admin(self, verify_token):
+    def test_delete_by_admin(self, verify_token):
         """Test the event_handler's delete method when user is admin."""
         # Call the delete method and assert that it raises an exception,
         # because the user doesn't have the permission yet.

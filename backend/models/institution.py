@@ -247,6 +247,7 @@ class Institution(ndb.Model):
     
     def set_admin(self, user_key):
         self.admin = user_key
+        self.email = user_key.get().email[0]
         self.put()
 
     @ndb.transactional(xg=True)

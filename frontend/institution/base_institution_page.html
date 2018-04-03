@@ -1,20 +1,20 @@
 <!-- FLOATING COVER -->
 <div>
     <div id="floatingCoverXs" class="floating-cover" md-colors="{background: 'teal-500'}" layout="row"
-        style="top: 4em;" hide show-xs show-sm>
-        <img class="inst-img" style="margin-left: 1em; margin-top: -0.5em;" alt="Foto do Perfil" ng-src="{{ institutionCtrl.getPhoto() }}">
+        style="top: 4.1em;" hide show-xs show-sm layout-align="start center">
+        <img class="inst-img" style="margin-left: 1em;" alt="Foto do Perfil" ng-src="{{ institutionCtrl.getPhoto() }}">
         <p class="md-title" style="font-size:0.8em; margin-left: 1em;"> {{ institutionCtrl.getLimitedName(100) }} </p>
     </div>
-    <div id="floatingCoverMd" class="floating-cover" md-colors="{background: 'teal-500'}" layout="row" hide show-md>
-        <img class="inst-img" style="margin-left: 1em; margin-top: -0.5em;" alt="Foto do Perfil" ng-src="{{ institutionCtrl.getPhoto() }}">
-        <p class="md-title" style="font-size:0.8em; margin-left: 1em; margin-top: 0.6em;">{{ institutionCtrl.getLimitedName(100) }}</p>
+    <div id="floatingCoverMd" class="floating-cover" md-colors="{background: 'teal-500'}" layout="row" hide show-md layout-align="start center">
+        <img class="inst-img" style="margin-left: 1em;" alt="Foto do Perfil" ng-src="{{ institutionCtrl.getPhoto() }}">
+        <p class="md-title" style="font-size:0.8em; margin-left: 1em;">{{ institutionCtrl.getLimitedName(100) }}</p>
     </div>
     <div id="floatingCoverLg" class="floating-cover" md-colors="{background: 'teal-500'}" layout="row" hide show-lg>
         <img class="inst-img" style="margin-left: 5em; margin-top: -0.5em;" alt="Foto do Perfil" ng-src="{{ institutionCtrl.getPhoto() }}">
         <p class="md-title" style="margin-left: 1em; margin-top: 0.6em;">{{ institutionCtrl.getLimitedName(200) }}</p>
     </div>
     <div id="floatingCoverGtLg" class="floating-cover" md-colors="{background: 'teal-500'}" layout="row" hide show-gt-lg>
-        <img class="inst-img" style="margin-left: 5em; margin-top: -0.5em;" alt="Foto do Perfil" ng-src="{{ institutionCtrl.getPhoto() }}">
+        <img class="inst-img" style="margin-left: 18em; margin-top: -0.5em;" alt="Foto do Perfil" ng-src="{{ institutionCtrl.getPhoto() }}">
         <p class="md-title" style="margin-left: 1em; margin-top: 0.6em;">{{ institutionCtrl.getLimitedName(200) }}</p>
     </div>
 </div>
@@ -56,12 +56,12 @@
                 </div>
             </div>
 
-            <div layout="row" flex="70" style="margin-top: 1em;">
+            <div layout="row" flex="70" style="margin-top: 1.25em;">
                 <!-- LEFT MENU -->
                 <div flex="25" hide show-gt-sm>
                     <div id="leftMenu" class="container" layout="row">
                         <div flex  layout="row">
-                            <md-sidenav ng-class="getResponsiveWidth()" class="md-sidenav-left" md-component-id="leftNav" md-whiteframe="4" layout="row"
+                            <md-sidenav class="md-sidenav-left" md-component-id="leftNav" md-whiteframe="4" layout="row"
                                 md-is-locked-open="$mdMedia('gt-sm')" flex="100">
                                 <md-content class="custom-scrollbar" layout="column" hide show-gt-sm
                                     md-colors="{background: 'grey-100'}" flex>    

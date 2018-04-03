@@ -349,22 +349,16 @@
         function changeCoverOnScroll() {
             var instPage = document.getElementById("instPage");
             var instName = document.getElementById("instName");
+            const FULL = 1, NONE = 0;
  
             instPage && instPage.addEventListener('scroll', function() {
-                const FULL = 1;
-                const NONE = 0;
                 var isOverInstName = instPage.scrollTop > instName.offsetTop;
                 var opacity = isOverInstName ? FULL : NONE;
                 setElementsOpacity(opacity);
-                changeLeftMenuClass(isOverInstName);
+                changeLeftMenuStyle(isOverInstName);
             });
         }
         
-        function changeLeftMenuClass(isToFloat) {
-            var leftMenu = document.getElementById("leftMenu");
-            isToFloat ? leftMenu.classList.add('floating-menu') : leftMenu.classList.remove('floating-menu');
-        }
-
         function setElementsOpacity(opacity) {
             document.getElementById("floatingCoverGtLg").style.opacity = opacity;
             document.getElementById("floatingCoverLg").style.opacity = opacity;
@@ -372,13 +366,26 @@
             document.getElementById("floatingCoverXs").style.opacity = opacity;
         }
 
-        institutionCtrl.getResponsiveWidth = function getResponsiveWidth() {
+        function changeLeftMenuStyle(isToFloat) {
+            const DEFAULT_WIDTH = '100%';
+            const MEDIUM_WIDTH = 960, LARGE_WIDTH = 1280, EXTRA_LARGE_WIDTH = 1920; 
             var leftMenu = document.getElementById("leftMenu");
-            var showCustomGtSmWidth = screen.width <= 1120;
-            var isFloating = leftMenu.classList.contains('floating-menu');
+            var isMd = screen.width >= MEDIUM_WIDTH && screen.width < LARGE_WIDTH;
+            var isLg = screen.width >= LARGE_WIDTH && screen.width < EXTRA_LARGE_WIDTH;
+            var isGtLg = screen.width >= EXTRA_LARGE_WIDTH;
+            var width = DEFAULT_WIDTH;
 
-            return isFloating && showCustomGtSmWidth ? 'custom-max-width' : '';
-        };
+            if(isToFloat) {
+                if(isMd) width = '25%';
+                if(isLg) width = '22.5%';
+                if(isGtLg) width = '17.5%';
+                leftMenu.classList.add('floating-menu')
+            } else {
+                leftMenu.classList.remove('floating-menu');
+            }
+
+            leftMenu.style.width = width;
+        }
         
         institutionCtrl.getPhoto = function getPhoto() {
             return institutionCtrl.institution && institutionCtrl.institution.photo_url || DEFAULT_INST_PHOTO;

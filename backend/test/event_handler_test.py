@@ -49,8 +49,8 @@ class EventHandlerTest(TestBaseHandler):
         cls.event = mocks.create_event(cls.user, cls.institution)
 
     @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
-    def test_delete(self, verify_token):
-        """Test the event_handler's delete method."""
+    def test_delete_author(self, verify_token):
+        """Test the event_handler's delete method when user is author."""
         # Call the delete method
         self.testapp.delete("/api/events/%s" %
                             self.event.key.urlsafe())
@@ -70,6 +70,30 @@ class EventHandlerTest(TestBaseHandler):
         with self.assertRaises(Exception):
             self.testapp.delete("/api/events/%s" %
                                 self.event.key.urlsafe())
+
+    @patch('utils.verify_token', return_value={'email': 'usersd@gmail.com'})
+    def test_delete_admin(self, verify_token):
+        """Test the event_handler's delete method when user is admin."""
+        # Call the delete method and assert that it raises an exception,
+        # because the user doesn't have the permission yet.
+        with self.assertRaises(Exception):
+            self.testapp.delete("/api/events/%s" %
+                                self.event.key.urlsafe())
+        
+        #Add permission
+        self.second_user.add_permissions(["remove_posts"], self.event.institution_key.urlsafe())
+
+        # Call the delete method
+        self.testapp.delete("/api/events/%s" %
+                            self.event.key.urlsafe())
+        # Refresh event
+        self.event = self.event.key.get()
+        # Verify if after delete the state of event is deleted
+        self.assertEqual(self.event.state, "deleted",
+                         "The state expected was deleted.")
+        # Verify if after delete the last_modified
+        self.assertEqual(self.event.last_modified_by, self.second_user.key,
+                         "The last_modified_by expected was user.")
 
     @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
     def test_patch(self, verify_token):

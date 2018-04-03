@@ -41,9 +41,11 @@ class InstitutionTimelineHandler(BaseHandler):
             queryPosts)
 
         array = [post.make(self.request.host) for post in queryPosts]
+        visible_posts = [post for post in array
+                             if not Post.is_hidden(post)]
 
         data = {
-            'posts': array,
+            'posts': visible_posts,
             'next': more
         }
 

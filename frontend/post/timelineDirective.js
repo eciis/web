@@ -12,6 +12,13 @@
         timelineCtrl.user = AuthService.getCurrentUser();
         timelineCtrl.isLoadingPosts = false;
 
+        timelineCtrl.hasActivityPosts = function hasActivityPosts() {
+            return timelineCtrl.posts.reduce((foundActivity, post) => {
+                post = new Post(post);
+                return (!post.isDeleted() || post.hasActivity()) ? true : foundActivity;
+            }, false);
+        };
+
         function loadMorePosts() {
             timelineCtrl.isLoadingPosts = true;
             var promise = timelineCtrl.loadMorePosts();

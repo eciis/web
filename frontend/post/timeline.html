@@ -1,6 +1,6 @@
 <!-- TIMELINE -->
 <div flex>
-  <md-card ng-if="timelineCtrl.posts.length == 0">
+  <md-card ng-if="timelineCtrl.posts.length == 0 || !timelineCtrl.hasActivityPosts()">
     <md-content layout-align="center center" layout="column">
       <h4>Esta instituição ainda não possui publicações.</h4>
     </md-content>

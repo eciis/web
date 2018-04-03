@@ -29,7 +29,7 @@ class InstitutionTimelineHandlerTest(TestBaseHandler):
 
     # TODO: fix this test because not work after add fiel 'description' in search_institution.py
     # Author: Tiago Pereira - 22/12/2017
-'''  @patch('utils.verify_token', return_value=USER)
+    @patch('utils.verify_token', return_value=USER)
     def test_get(self, verify_token):
         """Test the institution_timeline_handler get method."""
         user = mocks.create_user(USER['email'])
@@ -37,18 +37,20 @@ class InstitutionTimelineHandlerTest(TestBaseHandler):
         institution.address = mocks.create_address()
         user.add_institution(institution.key)
         institution.add_member(user)
-        post = {
-            'title': "Novo edital da instituição",
-            'text': "At vero eos et accusamus et iusto",
-            'institution': institution.key.urlsafe()
+        post = {'post': {
+                'title': "Novo edital da instituição",
+                'text': "At vero eos et accusamus et iusto",
+                'institution': institution.key.urlsafe()
+            }
         }
-        post_aux = {
-            'title': "Post Auxiliar",
-            'text': "At vero eos et accusamus et iusto",
-            'institution': institution.key.urlsafe()
+        post_aux = {'post': {
+                'title': "Post Auxiliar",
+                'text': "At vero eos et accusamus et iusto",
+                'institution': institution.key.urlsafe()
+            }
         }
-        self.testapp.post_json("/api/posts", post)
-        self.testapp.post_json("/api/posts", post_aux)
+        self.testapp.post_json("/api/posts", post, headers={'institution-authorization': institution.key.urlsafe()})
+        self.testapp.post_json("/api/posts", post_aux, headers={'institution-authorization': institution.key.urlsafe()})
 
         # Call the get method
         posts = self.testapp.get("/api/institutions/%s/timeline?page=0&&limit=2" %
@@ -99,4 +101,4 @@ class InstitutionTimelineHandlerTest(TestBaseHandler):
         self.assertEqual(post_last["text"], "At vero eos et accusamus et iusto",
                          "The text is not the expected one")
         self.assertEqual(post_last["state"], 'published',
-                         "The state of post should be published") '''
+                         "The state of post should be published")

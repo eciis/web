@@ -76,11 +76,13 @@ class EventHandlerTest(TestBaseHandler):
         """Test the event_handler's delete method when user is admin."""
         # Call the delete method and assert that it raises an exception,
         # because the user doesn't have the permission yet.
-        with self.assertRaises(Exception):
+        with self.assertRaises(Exception) as raises_context:
             self.testapp.delete("/api/events/%s" %
                                 self.event.key.urlsafe())
+        message = self.get_message_exception(str(raises_context.exception))
+        self.assertEquals(message, "Error! The user can not remove this event")
         
-        #Add permission
+        #Add permission of admin
         self.second_user.add_permissions(["remove_posts"], self.event.institution_key.urlsafe())
 
         # Call the delete method

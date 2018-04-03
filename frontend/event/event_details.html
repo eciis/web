@@ -33,13 +33,13 @@
       </md-card-content>
       <md-card-content ng-if="eventDetailsCtrl.isEventPage" hide-xs>
         <md-card-actions layout="row">
-          <md-menu md-offset="-165 45" ng-if="eventDetailsCtrl.isEventAuthor(eventDetailsCtrl.event)">
+          <md-menu md-offset="-165 45" ng-if="eventDetailsCtrl.canChange(eventDetailsCtrl.event)">
             <md-button class="md-icon-button" title="Opções" hide-xs
             style="margin-top: 25px;" ng-click="$mdMenu.open(ev)">
               <md-icon style="color: white;">more_vert</md-icon>
             </md-button>
             <md-menu-content>
-              <md-menu-item>
+              <md-menu-item ng-if="eventCtrl.canEdit(eventDetailsCtrl.event)">
                 <md-button ng-click="eventDetailsCtrl.editEvent($event, eventDetailsCtrl.event)">
                   <md-icon>edit</md-icon>
                   Editar evento

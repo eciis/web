@@ -58,7 +58,7 @@
             }
         };
 
-        eventCtrl.canDelete = function canDelete(event) {
+        eventCtrl.canChange = function canChange(event) {
             return eventCtrl.isEventAuthor(event) || isInstitutionAdmin(event);
         };
 

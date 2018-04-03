@@ -132,8 +132,6 @@
         };
 
         function isInstitutionAdmin(event) {
-            console.log(_.includes(_.map(eventCtrl.user.institutions_admin, Utils.getKeyFromUrl),
-            Utils.getKeyFromUrl(event.institution_key)));
             return _.includes(_.map(eventCtrl.user.institutions_admin, Utils.getKeyFromUrl),
                 Utils.getKeyFromUrl(event.institution_key));
         }

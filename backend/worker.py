@@ -349,7 +349,7 @@ class TransferAdminPermissionsHandler(BaseHandler):
                 permissions_filtered = filter_permissions_to_remove(admin, permissions, institution_key)
                 self.remove_permissions(admin, permissions_filtered)
 
-            if(institution.name == 'Complexo Industrial da Saude'):
+            if(institution.name == 'Departamento do Complexo Industrial e Inovacao em Saude'):
                 permissions_super_user = ["analyze_request_inst", "send_invite_inst"]
                 for permission in permissions_super_user:
                     admin.remove_permission(permission, institution.key.urlsafe())

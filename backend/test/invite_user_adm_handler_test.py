@@ -374,7 +374,7 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         new_admin = mocks.create_user()
 
         institution = mocks.create_institution()
-        institution.name = "Complexo Industrial da Saude"
+        institution.name = "Departamento do Complexo Industrial e Inovacao em Saude"
         institution.set_admin(admin.key)
         institution.add_member(admin)
         institution.add_member(new_admin)

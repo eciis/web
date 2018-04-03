@@ -345,7 +345,7 @@ class Institution(ndb.Model):
         if not permissions:
             permissions = {}
 
-        if self.name == 'Complexo Industrial da Saude':
+        if self.name == 'Departamento do Complexo Industrial e Inovacao em Saude':
             institution_key = self.key.urlsafe()
             for permission in DEFAULT_SUPER_USER_PERMISSIONS:
                 if permission in permissions:

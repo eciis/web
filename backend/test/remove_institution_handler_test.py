@@ -33,6 +33,7 @@ class RemoveInstitutionHandlerTest(TestBaseHandler):
         admin.add_institution(institution.key)
         admin.follows = [institution.key]
         institution.members = [admin.key, common_user.key]
+        institution.admin = admin.key
         institution.put()
         common_user.add_institution(institution.key)
         common_user.follows = [institution.key]

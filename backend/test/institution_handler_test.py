@@ -8,7 +8,9 @@ from models.institution import Institution
 from handlers.institution_handler import InstitutionHandler
 from worker import AddAdminPermissionsInInstitutionHierarchy
 from worker import RemoveAdminPermissionsInInstitutionHierarchy
-
+from worker import RemoveInstitutionHandler
+import permissions
+from test_base_handler import hasAdminPermissions
 from mock import patch
 import mocks
 
@@ -27,7 +29,9 @@ class InstitutionHandlerTest(TestBaseHandler):
             [("/api/institutions/(.*)/invites/(.*)", InstitutionHandler),
              ("/api/institutions/(.*)", InstitutionHandler),
              ("/api/queue/add-admin-permissions", AddAdminPermissionsInInstitutionHierarchy),
-             ('/api/queue/remove-admin-permissions', RemoveAdminPermissionsInInstitutionHierarchy)
+             ('/api/queue/remove-admin-permissions', RemoveAdminPermissionsInInstitutionHierarchy),
+             ('/api/queue/remove-inst',
+              RemoveInstitutionHandler)
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
         
@@ -103,7 +107,7 @@ class InstitutionHandlerTest(TestBaseHandler):
 
     def enqueue_task(self, handler_selector, params):
         """Method of mock enqueue tasks."""
-        if handler_selector == 'add-admin-permissions' or handler_selector == 'remove-admin-permissions':
+        if handler_selector == 'add-admin-permissions' or handler_selector == 'remove-admin-permissions' or handler_selector == 'remove-inst':
             self.testapp.post('/api/queue/' + handler_selector, params=params)
 
     @patch('utils.verify_token', return_value={'email': 'user@example.com'})
@@ -249,9 +253,8 @@ class InstitutionHandlerTest(TestBaseHandler):
         second_user = second_user.key.get()
         third_user = third_user.key.get()
 
-        self.assertTrue(third_inst.key.urlsafe() in first_user.permissions['publish_post'])
-        self.assertTrue(third_inst.key.urlsafe() in second_user.permissions['publish_post'])
-        self.assertTrue(third_inst.key.urlsafe() in third_user.permissions['publish_post'])
+        self.assertTrue(hasAdminPermissions(third_user, third_inst.key.urlsafe()))
+        self.assertTrue(hasAdminPermissions(second_user, third_inst.key.urlsafe()))
         
 
     @patch('handlers.institution_handler.enqueue_task')
@@ -281,10 +284,11 @@ class InstitutionHandlerTest(TestBaseHandler):
         second_inst.children_institutions.append(third_inst.key)
 
         second_user.add_permission('remove_inst', second_inst.key.urlsafe())
-        first_user.add_permission('publish_post', third_inst.key.urlsafe())
-        second_user.add_permission('publish_post', third_inst.key.urlsafe())
-        third_user.add_permission('publish_post', third_inst.key.urlsafe())
-
+        second_user.add_permissions(
+            permissions.DEFAULT_ADMIN_PERMISSIONS, second_inst.key.urlsafe())
+        second_user.add_permissions(
+            permissions.DEFAULT_ADMIN_PERMISSIONS, third_inst.key.urlsafe())
+        
         first_inst.put()
         second_inst.put()
         third_inst.put()
@@ -292,6 +296,10 @@ class InstitutionHandlerTest(TestBaseHandler):
         first_user.put()
         second_user.put()
         third_user.put()
+
+        self.assertTrue(hasAdminPermissions(second_user, second_inst.key.urlsafe()))
+        self.assertTrue(hasAdminPermissions(
+            second_user, third_inst.key.urlsafe()))
 
         verify_token._mock_return_value = {'email': second_user.email[0]}
         enqueue_task.side_effect = self.enqueue_task
@@ -312,15 +320,15 @@ class InstitutionHandlerTest(TestBaseHandler):
             headers=self.headers
         )
         
-        first_user = first_user.key.get()
         second_user = second_user.key.get()
         third_user = third_user.key.get()
         
-        self.assertTrue(third_inst.key.urlsafe() not in first_user.permissions['remove_inst'])
-        self.assertTrue(third_inst.key.urlsafe()
-                        not in second_user.permissions['remove_inst'])
-        self.assertTrue(third_inst.key.urlsafe()
-                        in third_user.permissions['remove_inst'])
+        self.assertFalse(hasAdminPermissions(
+            second_user, second_inst.key.urlsafe()))
+        self.assertFalse(hasAdminPermissions(
+            second_user, third_inst.key.urlsafe()))
+        self.assertFalse(hasAdminPermissions(
+            third_user, third_inst.key.urlsafe()))
 
     @patch('utils.verify_token', return_value={'email': 'user@example.com'})
     def test_get(self, verify_token):

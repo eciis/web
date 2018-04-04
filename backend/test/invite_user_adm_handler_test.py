@@ -410,7 +410,6 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         verify_token._mock_return_value = {'email': new_admin.email[0]}
         invite = mocks.create_invite(admin, second_inst.key, 'USER_ADM', new_admin.key.urlsafe())
 
-        # Permissions of admin before transferring administration
         self.assertTrue(
             has_admin_permissions(admin, institution.key.urlsafe()),
             'Admin must have admin permissions for this institution!'
@@ -427,11 +426,9 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
             has_admin_permissions(admin, third_inst.key.urlsafe()),
             'Admin must have admin user permissions for third_inst institution!'
         )
-
-        # Permissions of new_admin before transferring administration
         self.assertFalse(
             has_admin_permissions(new_admin, institution.key.urlsafe()),
-            'Admin must have admin permissions for this institution!'
+            'Admin must have not admin permissions for this institution!'
         )
         self.assertFalse(
             has_admin_permissions(new_admin, second_inst.key.urlsafe()),
@@ -455,7 +452,6 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         new_admin = new_admin.key.get()
         invite = invite.key.get()
 
-        # Admin permissions after transferring administration
         self.assertTrue(
             has_admin_permissions(admin, institution.key.urlsafe()),
             'admin must have super user permissions for this institution!'
@@ -472,8 +468,6 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
             has_admin_permissions(admin, third_inst.key.urlsafe()),
             'Admin must have super user permissions for third_inst institution!'    
         )
-
-        # New_admin permissions after transfering administration
         self.assertTrue(
             has_admin_permissions(new_admin, second_inst.key.urlsafe()),
             'new_admin must have admin user permissions for second_inst institution!'
@@ -547,19 +541,19 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
 
         self.assertFalse(
             has_admin_permissions(admin, institution.key.urlsafe()),
-            'admin must have super user permissions for this institution!'
+            'admin must have super not user permissions for this institution!'
         )
         self.assertFalse(
             has_super_user_permissions(admin, institution.key.urlsafe()),
-            'admin must have super user permissions for this institution!'
+            'admin must have not super user permissions for this institution!'
         )
         self.assertTrue(
             has_admin_permissions(new_admin, institution.key.urlsafe()),
-            'Admin must have super user permissions for second_inst institution!'
+            'new_admin must have super user permissions for second_inst institution!'
         )
         self.assertTrue(
             has_super_user_permissions(new_admin, institution.key.urlsafe()),
-            'Admin must have super user permissions for second_inst institution!'
+            'new_admin must have super user permissions for second_inst institution!'
         )
 
     @patch('utils.verify_token', return_value={'email': 'usr_test@test.com'})

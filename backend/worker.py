@@ -1,7 +1,6 @@
 """Send notifications handler."""
 import webapp2
 import json
-import permissions
 from firebase import send_notification
 from google.appengine.api import mail
 import logging
@@ -14,6 +13,7 @@ from utils import json_response
 from service_messages import send_message_notification
 from service_messages import send_message_email
 from jinja2 import Environment, FileSystemLoader
+from permissions import DEFAULT_SUPER_USER_PERMISSIONS
 
 
 def should_remove(user, institution_key, current_inst_key):
@@ -353,8 +353,7 @@ class TransferAdminPermissionsHandler(BaseHandler):
             @author: Maiana Brito 04/04/2018
             """
             if(institution.name == 'Departamento do Complexo Industrial e Inovacao em Saude'):
-                permissions_super_user = ["analyze_request_inst", "send_invite_inst"]
-                for permission in permissions_super_user:
+                for permission in DEFAULT_SUPER_USER_PERMISSIONS:
                     admin.remove_permission(permission, institution.key.urlsafe())
 
             new_admin.put()

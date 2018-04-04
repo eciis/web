@@ -362,6 +362,134 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
             third_inst.admin,
             'New_admin must be the administrator of the institution!'
         )
+    @patch('models.invite_user_adm.InviteUserAdm.send_notification')
+    @patch('handlers.invite_user_adm_handler.enqueue_task')
+    @patch('utils.verify_token', return_value={'email': 'usr_test@test.com'})
+    def test_put_invite_with_super_user_admin_of_parent_inst(self, verify_token, enqueue_task, send_notification):
+        """Test put invite with user super user and is admin of parent institution."""
+        enqueue_task.side_effect = self.enqueue_task
+
+        admin = mocks.create_user()
+        new_admin = mocks.create_user()
+
+        institution = mocks.create_institution()
+        second_inst = mocks.create_institution()
+        second_inst.name = "Departamento do Complexo Industrial e Inovacao em Saude"
+        third_inst = mocks.create_institution()
+
+        institution.set_admin(admin.key)
+        institution.add_member(admin)
+        institution.children_institutions = [second_inst.key]
+
+        # Departamento do Complexo Industrial e Inovacao em Saude
+        # Admin of this institution is Super User
+        second_inst.set_admin(admin.key)
+        second_inst.add_member(new_admin)
+        second_inst.parent_institution = institution.key
+        second_inst.children_institutions = [third_inst.key]
+
+        third_inst.set_admin(admin.key)
+        third_inst.add_member(admin)
+        third_inst.add_member(new_admin)
+        third_inst.parent_institution = second_inst.key
+
+        admin.add_institution_admin(institution.key)
+        admin.add_institution_admin(second_inst.key)
+        admin.add_institution_admin(third_inst.key)
+        add_admin_permission(admin, institution.key.urlsafe())
+        add_admin_permission(admin, second_inst.key.urlsafe())
+        add_super_user_permission(admin, second_inst.key.urlsafe())
+        add_admin_permission(admin, third_inst.key.urlsafe())
+
+        institution.put()
+        second_inst.put()
+        third_inst.put()
+        admin.put()
+        new_admin.put()
+    
+        verify_token._mock_return_value = {'email': new_admin.email[0]}
+        invite = mocks.create_invite(admin, second_inst.key, 'USER_ADM', new_admin.key.urlsafe())
+
+        # Permissions of admin before transferring administration
+        self.assertTrue(
+            has_admin_permissions(admin, institution.key.urlsafe()),
+            'Admin must have admin permissions for this institution!'
+        )
+        self.assertTrue(
+            has_admin_permissions(admin, second_inst.key.urlsafe()),
+            'Admin must have admin user permissions for second_inst institution!'
+        )
+        self.assertTrue(
+            has_super_user_permissions(admin, second_inst.key.urlsafe()),
+            'Admin must have super user permissions for second_inst institution!'
+        )
+        self.assertTrue(
+            has_admin_permissions(admin, third_inst.key.urlsafe()),
+            'Admin must have admin user permissions for third_inst institution!'
+        )
+
+        # Permissions of new_admin before transferring administration
+        self.assertFalse(
+            has_admin_permissions(new_admin, institution.key.urlsafe()),
+            'Admin must have admin permissions for this institution!'
+        )
+        self.assertFalse(
+            has_admin_permissions(new_admin, second_inst.key.urlsafe()),
+            'Admin must have not admin user permissions for second_inst institution!'
+        )
+        self.assertFalse(
+            has_super_user_permissions(new_admin, second_inst.key.urlsafe()),
+            'Admin must have not super user permissions for second_inst institution!'
+        )
+        self.assertFalse(
+            has_admin_permissions(new_admin, third_inst.key.urlsafe()),
+            'Admin must have not admin user permissions for third_inst institution!'
+        )
+
+        self.testapp.put('/api/invites/%s/institution_adm' %(invite.key.urlsafe()))
+
+        institution = institution.key.get()
+        second_inst = second_inst.key.get()
+        third_inst = third_inst.key.get()
+        admin = admin.key.get()
+        new_admin = new_admin.key.get()
+        invite = invite.key.get()
+
+        # Admin permissions after transferring administration
+        self.assertTrue(
+            has_admin_permissions(admin, institution.key.urlsafe()),
+            'admin must have super user permissions for this institution!'
+        )
+        self.assertTrue(
+            has_admin_permissions(admin, second_inst.key.urlsafe()),
+            'Admin must have super user permissions for second_inst institution!'
+        )
+        self.assertFalse(
+            has_super_user_permissions(admin, second_inst.key.urlsafe()),
+            "Admin shouldn't have super user permissions for second_inst institution!"
+        )
+        self.assertTrue(
+            has_admin_permissions(admin, third_inst.key.urlsafe()),
+            'Admin must have super user permissions for third_inst institution!'    
+        )
+
+        # New_admin permissions after transfering administration
+        self.assertTrue(
+            has_admin_permissions(new_admin, second_inst.key.urlsafe()),
+            'new_admin must have admin user permissions for second_inst institution!'
+        )
+        self.assertTrue(
+            has_super_user_permissions(new_admin, second_inst.key.urlsafe()),
+            'new_admin must have super user permissions for second_inst institution!'
+        )
+        self.assertFalse(
+            has_admin_permissions(new_admin, institution.key.urlsafe()),
+            'new_admin should not have super user permissions for this institution!'
+        )
+        self.assertTrue(
+            has_admin_permissions(new_admin, third_inst.key.urlsafe()),
+            'New_admin must have admin user permissions for third_inst institution!'
+        )
     
     @patch('models.invite_user_adm.InviteUserAdm.send_notification')
     @patch('handlers.invite_user_adm_handler.enqueue_task')

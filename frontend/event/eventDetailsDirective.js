@@ -59,8 +59,7 @@
         };
 
         eventCtrl.canChange = function canChange(event) {
-            if(event)
-                return eventCtrl.isEventAuthor(event) || isInstitutionAdmin(event);
+            return event && eventCtrl.isEventAuthor(event) || isInstitutionAdmin(event);
         };
 
         eventCtrl.canEdit = function canEdit(event) {

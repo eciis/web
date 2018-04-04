@@ -59,7 +59,7 @@
         };
 
         eventCtrl.canChange = function canChange(event) {
-            return eventCtrl.isEventAuthor(event) || isInstitutionAdmin(event);
+            return event && eventCtrl.isEventAuthor(event) || isInstitutionAdmin(event);
         };
 
         eventCtrl.canEdit = function canEdit(event) {
@@ -132,8 +132,9 @@
         };
 
         function isInstitutionAdmin(event) {
-            return _.includes(_.map(eventCtrl.user.institutions_admin, Utils.getKeyFromUrl),
-                Utils.getKeyFromUrl(event.institution_key));
+            if(event.institution_key)
+                return _.includes(_.map(eventCtrl.user.institutions_admin, Utils.getKeyFromUrl),
+                    Utils.getKeyFromUrl(event.institution_key));
         }
     });
     

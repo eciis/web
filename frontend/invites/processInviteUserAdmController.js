@@ -18,6 +18,7 @@
             InviteService.acceptInviteUserAdm(processCtrl.invite.key).then(function success() {
                 processCtrl.current_user.institutions_admin.push(processCtrl.invite.institution_key);
                 set_inst_admin(processCtrl.current_user.institutions);
+                set_super_user(processCtrl.invite);
                 AuthService.save();
                 processCtrl.typeOfDialog = processCtrl.VIEW_INVITE_INVITEE;
                 processCtrl.isAccepting = true;
@@ -60,7 +61,7 @@
                         _.remove(processCtrl.current_user.institutions_admin, function(url) {
                             return getKey(url) === invite.institution_key;
                         });
-
+                        remove_super_user(invite);
                         AuthService.save();
                     }
 
@@ -83,6 +84,37 @@
                 {}
             );
             institution.admin = processCtrl.current_user.key;
+        }
+
+        /**
+         * This method add super user permissions when the transferring administration is 
+         * send by 'Departamento do Complexo Industrial e Inovacao em Saude'
+         */
+        function set_super_user(invite) {
+            /** TODO: Change how to check if is the super user.
+             *  @author: Maiana Brito - 04/04/2018
+             */
+            if(invite.institution.name === 'Departamento do Complexo Industrial e Inovacao em Saude'){
+                let permission_inst = _.set({}, invite.institution.key, true);
+                processCtrl.current_user.permissions['analyze_request_inst'] = permission_inst;
+                processCtrl.current_user.permissions['send_invite_inst'] = permission_inst;
+            }
+        }
+
+        function remove_super_user(invite){
+            /** TODO: Change how to check if is the super user.
+             *  @author: Maiana Brito - 04/04/2018
+             */
+            if(invite.institution.name === 'Departamento do Complexo Industrial e Inovacao em Saude'){
+                let permission_analyze = processCtrl.current_user.hasPermission('analyze_request_inst', invite.institution.key);
+                let permission_send = processCtrl.current_user.hasPermission('send_invite_inst', invite.institution.key);
+                if(permission_analyze && permission_send){
+                    delete processCtrl.current_user.permissions['analyze_request_inst']
+                    delete processCtrl.current_user.permissions['send_invite_inst']
+                }
+            }
+
+
         }
 
         (function main() {

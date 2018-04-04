@@ -333,7 +333,7 @@ class Institution(ndb.Model):
     def get_super_user_admin_permissions(self, permissions=None):
         """
         This method get all super user permissions.
-        The type permmission is only possible when the institution is
+        The type permission is only possible when the institution is
         'Departamento do Complexo Industrial e Inovacao em Saude'
         When result, returns a dict containing
         the admin permissions of super user.

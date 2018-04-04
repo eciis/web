@@ -8,7 +8,8 @@
     var institution = {
         key: "institutuion_key",
         admin: user,
-        members: [user]
+        members: [user],
+        name: 'institution'
     };
 
     var processInviteUserAdmCtrl, messageService, inviteService, mdDialog, authService, controller;
@@ -33,7 +34,8 @@
         invite = {
             status: 'sent',
             key: '437829dshsjka',
-            institution_key: institution.key
+            institution_key: institution.key,
+            institution : institution
         };
 
         AuthService.login(user);
@@ -153,6 +155,7 @@
                 status: 'accepted',
                 key: '437829dshsjka',
                 institution_key: institution.key,
+                institution: institution,
                 status: 'accepted'
             };
 

@@ -27,8 +27,6 @@ class InstitutionTimelineHandlerTest(TestBaseHandler):
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
 
-    # TODO: fix this test because not work after add fiel 'description' in search_institution.py
-    # Author: Tiago Pereira - 22/12/2017
     @patch('utils.verify_token', return_value=USER)
     def test_get(self, verify_token):
         """Test the institution_timeline_handler get method."""
@@ -55,6 +53,74 @@ class InstitutionTimelineHandlerTest(TestBaseHandler):
         # Call the get method
         posts = self.testapp.get("/api/institutions/%s/timeline?page=0&&limit=2" %
                                  institution.key.urlsafe())
+        # Update the objects
+        post_top = (posts.json['posts'])[0]
+        key_post_top = ndb.Key(urlsafe=post_top['key'])
+        post_top_obj = key_post_top.get()
+        post_last = (posts.json['posts'])[1]
+        key_post_last = ndb.Key(urlsafe=post_last['key'])
+        post_last_obj = key_post_last.get()
+
+        # Verify if the posts was published and your informations
+        self.assertEqual(post_top_obj.title, 'Post Auxiliar',
+                         "The title is not the expected one")
+        self.assertEqual(post_top_obj.text, "At vero eos et accusamus et iusto",
+                         "The text is not the expected one")
+        self.assertEqual(post_top_obj.state, 'published',
+                         "The state of post should be published")
+        self.assertEqual(post_last_obj.title, 'Novo edital da instituição',
+                         "The title is not the expected one")
+        self.assertEqual(post_last_obj.text, "At vero eos et accusamus et iusto",
+                         "The text is not the expected one")
+        self.assertEqual(post_last_obj.state, 'published',
+                         "The state of post should be published")
+
+        # Call the delete method for a post that has activity
+        post_last_obj.like(user.key)
+        self.testapp.delete("/api/posts/%s" % post_last_obj.key.urlsafe())
+
+        # Call the get method
+        posts = self.testapp.get("/api/institutions/%s/timeline?page=0&&limit=2" %
+                                 institution.key.urlsafe())
+
+        # Update the objects
+        post_top = (posts.json['posts'])[0]
+        post_last = (posts.json['posts'])[1]
+
+        # Verify if the post was deleted and your informations
+        self.assertEqual(post_top["title"], None,
+                         "The title expected was null")
+        self.assertEqual(post_top["text"], None,
+                         "The text expected was null")
+        self.assertEqual(post_top["state"], 'deleted',
+                         "The state of post should be deleted")
+        self.assertEqual(post_last["title"], "Post Auxiliar",
+                         "The title is not the expected one")
+        self.assertEqual(post_last["text"], "At vero eos et accusamus et iusto",
+                         "The text is not the expected one")
+        self.assertEqual(post_last["state"], 'published',
+                         "The state of post should be published")
+    
+    @patch('utils.verify_token', return_value=USER)
+    def test_get_with_deleted_post(self, verify_token):
+        """Test the institution_timeline_handler get method whit deleted post."""
+        user = mocks.create_user()
+        institution = mocks.create_institution()
+        #institution.address = mocks.create_address()
+        user.add_institution(institution.key)
+        del institution.address.federal_state
+        import pdb
+        pdb.set_trace()
+        institution.add_member(user)
+        
+        post = mocks.create_post(user.key, institution.key)
+        ohter_post = mocks.create_post(user.key, institution.key)
+
+        # Call the get method
+        posts = self.testapp.get("/api/institutions/%s/timeline?page=0&&limit=2" %
+                                 institution.key.urlsafe())
+        
+        import json
         # Update the objects
         post_top = (posts.json['posts'])[0]
         key_post_top = ndb.Key(urlsafe=post_top['key'])

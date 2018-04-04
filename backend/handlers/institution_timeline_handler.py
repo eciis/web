@@ -40,8 +40,8 @@ class InstitutionTimelineHandler(BaseHandler):
             limit,
             queryPosts)
 
-        array = [post.make(self.request.host) for post in queryPosts]
-        visible_posts = [post for post in array
+        formated_posts = [post.make(self.request.host) for post in queryPosts]
+        visible_posts = [post for post in formated_posts
                              if not Post.is_hidden(post)]
 
         data = {

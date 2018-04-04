@@ -11,12 +11,14 @@ def institution_has_changes(fields, entity):
         to make in entity's document.
         """
         if not isinstance(entity, Address):
-            for field in fields:
-                if not hasattr(entity, field.name):
-                    entity = entity.address
+            address = entity.address
 
-                if field.value != getattr(entity, field.name):
+            for field in fields:
+                if hasattr(entity, field.name) and field.value != getattr(entity, field.name):
                     return True
+                elif hasattr(address, field.name) and field.value != getattr(address, field.name):
+                    return True
+                    
         return False
 
 

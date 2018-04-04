@@ -10,15 +10,14 @@ def institution_has_changes(fields, entity):
         """It returns True when there is a change
         to make in entity's document.
         """
-        if not isinstance(entity, Address):
-            address = entity.address
+        address = entity.address
 
-            for field in fields:
-                if hasattr(entity, field.name) and field.value != getattr(entity, field.name):
-                    return True
-                elif hasattr(address, field.name) and field.value != getattr(address, field.name):
-                    return True
-                    
+        for field in fields:
+            if hasattr(entity, field.name) and field.value != getattr(entity, field.name):
+                return True
+            elif hasattr(address, field.name) and field.value != getattr(address, field.name):
+                return True
+
         return False
 
 

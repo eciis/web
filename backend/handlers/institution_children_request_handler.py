@@ -39,11 +39,6 @@ class InstitutionChildrenRequestHandler(BaseHandler):
         parent_institution.children_institutions.append(request.institution_requested_key)
         parent_institution.put()
 
-        """ admin_of_parent_inst = parent_institution.admin.get()
-        admin_of_parent_inst.add_permissions(["remove_link", "remove_inst"], institution_children.key.urlsafe()) #remove it """
-
-        """ user.add_permission("remove_link", parent_institution.key.urlsafe()) """
-
         request.send_response_notification(user.current_institution, user.key, 'ACCEPT')
 
         enqueue_task('add-admin-permissions', {'institution_key': institution_children.key.urlsafe()})

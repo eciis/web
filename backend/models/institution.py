@@ -335,8 +335,7 @@ class Institution(ndb.Model):
         This method get all super user permissions.
         The type permission is only possible when the institution is
         'Departamento do Complexo Industrial e Inovacao em Saude'
-        When result, returns a dict containing
-        the admin permissions of super user.
+        Returns a dict containing the super user permissions.
 
         Arguments:
         permissions(Optional) -- Dict of previous permissions added for add more permissons. 

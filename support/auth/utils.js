@@ -1,21 +1,6 @@
 "use strict";
 
 var Utils = {
-    clone: function clone(obj) {
-        var copy;
-    
-        if (null == obj || "object" != typeof obj) return obj;
-    
-        if (obj instanceof Object) {
-            copy = {};
-            for (var attr in obj) {
-                if (obj.hasOwnProperty(attr)) copy[attr] = clone(obj[attr]);
-            }
-            return copy;
-        }
-    
-        throw new Error("Unable to copy obj! Its type isn't supported.");
-    },
     addHttpsToUrl :  function addHttpsToUrl(text, urls) {
         if(urls) {
             var http = "http://";

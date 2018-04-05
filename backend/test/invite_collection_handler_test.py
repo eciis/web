@@ -42,30 +42,28 @@ class InviteCollectionHandlerTest(TestBaseHandler):
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
 
-    """TODO: Uncomment test below when the hierarchical invitations can be available
-    @author: Mayza Nunes 11/01/2018
-    """
-    """
     @patch('utils.verify_token', return_value=ADMIN)
     def test_post_invite_institution(self, verify_token):
         admin = mocks.create_user(ADMIN['email'])
-        institution = mocks.create_institution()		 
+        institution = mocks.create_institution()	 
         admin.institutions_admin = [institution.key]
         institution.admin = admin.key
+        institution.add_member(admin)
+        admin.add_institution(institution.key)
         admin.add_permission("invite_members",institution.key.urlsafe())
         admin.put()
         institution.put()
-
-        invite = self.testapp.post_json("/api/invites", {
+        
+        invite = self.testapp.post_json("/api/invites", {'data': {
             'invitee': 'ana@gmail.com',
             'admin_key': admin.key.urlsafe(),
             'type_of_invite': 'INSTITUTION_PARENT',
             'suggestion_institution_name': 'New Institution',
-            'institution_key': institution.key.urlsafe()})
+            'institution_key': institution.key.urlsafe()}}, headers={'Institution-Authorization': institution.key.urlsafe()})
 
         # Retrieve the entities
         invite = json.loads(invite._app_iter[0])
-        key_invite = ndb.Key(urlsafe=invite['key'])
+        key_invite = ndb.Key(urlsafe=invite['invites'][0]['key'])
         invite_obj = key_invite.get()
 
         # Check data of invite
@@ -92,11 +90,11 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         institution.put()
 
         with self.assertRaises(Exception) as raises_context:
-            self.testapp.post_json("/api/invites", {
+            self.testapp.post_json("/api/invites", {'data': {
                 'invitee': 'ana@gmail.com',
                 'admin_key': admin.key.urlsafe(),
                 'institution_key': institution.key.urlsafe(),
-                'type_of_invite': 'INSTITUTION_PARENT'})
+                'type_of_invite': 'INSTITUTION_PARENT'}})
 
         message_exception = self.get_message_exception(str(raises_context.exception))
         self.assertEqual(
@@ -112,19 +110,22 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         institution = mocks.create_institution()		 
         admin.institutions_admin = [institution.key]
         institution.admin = admin.key
+        institution.add_member(admin)
+        admin.add_institution(institution.key)
         admin.add_permission("invite_members",institution.key.urlsafe())
         admin.put()
         institution.put()
 
-        invite = self.testapp.post_json("/api/invites", {
+        invite = self.testapp.post_json("/api/invites", {'data': {
             'invitee': 'user1@gmail.com',
             'admin_key': admin.key.urlsafe(),
             'type_of_invite': 'INSTITUTION_PARENT',
             'suggestion_institution_name': 'Institution Parent',
-            'institution_key': institution.key.urlsafe()})
+            'institution_key': institution.key.urlsafe()}}, 
+            headers={'Institution-Authorization': institution.key.urlsafe()})
         # Retrieve the entities
         invite = json.loads(invite._app_iter[0])
-        key_invite = ndb.Key(urlsafe=invite['key'])
+        key_invite = ndb.Key(urlsafe=invite['invites'][0]['key'])
         invite_obj = key_invite.get()
         stub_institution = invite_obj.stub_institution_key
         stub_institution_obj = stub_institution.get()
@@ -158,7 +159,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
                          "The parent institution of stub\
                          was stub")
 
-    """
+   
     @patch('handlers.invite_collection_handler.enqueue_task')
     @patch('utils.verify_token', return_value=ADMIN)
     def test_post_invite_user(self, verify_token, enqueue_task):

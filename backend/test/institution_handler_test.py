@@ -490,6 +490,90 @@ class InstitutionHandlerTest(TestBaseHandler):
             )
         self.first_inst = self.first_inst.key.get()
         self.assertTrue(self.first_inst.state == "active")
+    
+    @patch('handlers.institution_handler.enqueue_task')
+    @patch('utils.verify_token', return_value={'email': 'user@example.com'})
+    def test_remove_admin_permission(self, verify_token, enqueue_task):
+        """Test remove admin permissions in institution hierarchy."""
+        first_user = mocks.create_user()
+        second_user = mocks.create_user()
+        third_user = mocks.create_user()
+
+        first_inst = mocks.create_institution()
+        second_inst = mocks.create_institution()
+        third_inst = mocks.create_institution()
+        fourth_inst = mocks.create_institution()
+
+        first_inst.admin = first_user.key
+        second_inst.admin = second_user.key
+        third_inst.admin = third_user.key
+        fourth_inst.admin = first_user.key
+
+        first_user.institutions_admin.append(first_inst.key)
+        first_user.institutions_admin.append(fourth_inst.key)
+        second_user.institutions_admin.append(second_inst.key)
+        third_user.institutions_admin.append(third_inst.key)
+
+        second_inst.parent_institution = first_inst.key
+        third_inst.parent_institution = second_inst.key
+        fourth_inst.parent_institution = third_inst.key
+
+        first_inst.children_institutions.append(second_inst.key)
+        second_inst.children_institutions.append(third_inst.key)
+        third_inst.children_institutions.append(fourth_inst.key)
+
+        first_user.add_permissions(
+            permissions.DEFAULT_ADMIN_PERMISSIONS, first_inst.key.urlsafe())
+        first_user.add_permissions(
+            permissions.DEFAULT_ADMIN_PERMISSIONS, second_inst.key.urlsafe())
+        first_user.add_permissions(
+            permissions.DEFAULT_ADMIN_PERMISSIONS, third_inst.key.urlsafe())
+        first_user.add_permissions(
+            permissions.DEFAULT_ADMIN_PERMISSIONS, fourth_inst.key.urlsafe())
+
+        first_inst.put()
+        second_inst.put()
+        third_inst.put()
+        fourth_inst.put()
+
+        first_user.put()
+        second_user.put()
+        third_user.put()
+
+        self.assertTrue(hasAdminPermissions(
+            first_user, first_inst.key.urlsafe()))
+        self.assertTrue(hasAdminPermissions(
+            first_user, second_inst.key.urlsafe()))
+        self.assertTrue(hasAdminPermissions(
+            first_user, third_inst.key.urlsafe()))
+        self.assertTrue(hasAdminPermissions(
+            first_user, fourth_inst.key.urlsafe()))
+
+        verify_token._mock_return_value = {'email': first_user.email[0]}
+        enqueue_task.side_effect = self.enqueue_task
+
+        first_user.institutions.append(first_inst.key)
+        first_user.follows.append(first_inst.key)
+        first_user.put()
+        # update headers
+        self.headers['Institution-Authorization'] = first_inst.key.urlsafe()
+
+        self.testapp.delete(
+            "/api/institutions/%s?removeHierarchy=false"
+            % first_inst.key.urlsafe(),
+            headers=self.headers
+        )
+
+        first_user = first_user.key.get()
+
+        self.assertFalse(hasAdminPermissions(
+            first_user, first_inst.key.urlsafe()))
+        self.assertFalse(hasAdminPermissions(
+            first_user, third_inst.key.urlsafe()))
+        self.assertFalse(hasAdminPermissions(
+            first_user, second_inst.key.urlsafe()))
+        self.assertTrue(hasAdminPermissions(
+            first_user, fourth_inst.key.urlsafe()))
 
     def tearDown(cls):
         """Deactivate the test."""

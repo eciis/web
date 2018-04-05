@@ -185,8 +185,12 @@ class RemoveInstitutionHandler(BaseHandler):
         institution = self.request.get('institution_key')
         remove_hierarchy = self.request.get('remove_hierarchy')
         institution = ndb.Key(urlsafe=institution).get()
-        self.remove_permissions(remove_hierarchy, institution)
-        institution.remove_institution_from_users(remove_hierarchy)
+
+        @ndb.transactional(xg=True, retries=10)
+        def apply_remove_operation(remove_hierarchy, institution):
+            self.remove_permissions(remove_hierarchy, institution)
+            institution.remove_institution_from_users(remove_hierarchy)
+        apply_remove_operation(remove_hierarchy, institution)
 
 
 class PostNotificationHandler(BaseHandler):
@@ -303,8 +307,13 @@ class RemoveAdminPermissionsInInstitutionHierarchy(BaseHandler):
         institution_key = self.request.get('institution_key')
         institution = ndb.Key(urlsafe=institution_key).get()
         user = ndb.Key(urlsafe=self.request.get('user')).get()
-        permissions = filter_permissions_to_remove(user, institution.get_all_hierarchy_admin_permissions(), institution.key, is_not_admin)
-        self.removeAdminPermissions(user, permissions)
+
+        @ndb.transactional(xg=True, retries=10)
+        def apply_remove_operation(user, institution, should_remove):
+            permissions = filter_permissions_to_remove(
+                user, institution.get_all_hierarchy_admin_permissions(), institution.key, should_remove)
+            self.removeAdminPermissions(user, permissions)
+        apply_remove_operation(user, institution, is_not_admin)
 
 class AddPostInInstitution(BaseHandler):
     

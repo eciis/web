@@ -18,6 +18,8 @@
         configProfileCtrl.photo_url = configProfileCtrl.newUser.photo_url;
         configProfileCtrl.loadingSubmission = false;
 
+        const CAN_EDIT = ['name', 'cpf', 'photo_url', 'uploaded_images'];
+
         var HAS_ONLY_ONE_INSTITUTION_MSG = "Esta é a única instituição ao qual você é vinculado." +
             " Ao remover o vínculo você não poderá mais acessar o sistema," +
             " exceto por meio de novo convite. Deseja remover?";
@@ -72,11 +74,18 @@
             }
         };
 
+        function filter_patch(patch) {
+            return patch.filter((operation) => {
+                var atomicPath = operation.path.split('/')[1];
+                return CAN_EDIT.includes(atomicPath);
+            });
+        }
+
         function saveUser() {
             var deffered = $q.defer();
             if (configProfileCtrl.newUser.isValid()) {
                 updateUser();
-                var patch = jsonpatch.generate(observer);
+                var patch = filter_patch(jsonpatch.generate(observer));
                 UserService.save(patch).then(function success() {
                     AuthService.save();
                     configProfileCtrl.loadingSubmission = false;

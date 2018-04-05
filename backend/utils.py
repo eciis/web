@@ -173,6 +173,10 @@ def get_health_ministry():
     query = Institution.query(Institution.name == "Ministério da Saúde", Institution.acronym == "MS")
     return query.get()
 
+"""TODO: Refactor this function to get the DECIIS Institution, making a get for 
+    the institution with that field trusted is equal to true.
+    And certificate that DECIIS is the unique institution trusted in system.
+    @author: Mayza Nunes 05/04/2018"""
 def get_deciis():
     """Get health ministry institution."""
     query = Institution.query(Institution.name == "Departamento do Complexo Industrial e Inovação em Saúde", Institution.acronym == "DECIIS")

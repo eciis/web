@@ -154,8 +154,8 @@ def create_user(name, email):
     user.email = email
     user.name = name
     user.photo_url = "app/images/avatar.png"
-    health_ministry = get_health_ministry().get()
-    deciis = get_deciis().get()
+    health_ministry = get_health_ministry()
+    deciis = get_deciis()
     """"TODO: All users have to follow MS and DECIIS
         Think of a better way to do it
         @author: Mayza Nunes 24/01/2018
@@ -171,12 +171,16 @@ def create_user(name, email):
 def get_health_ministry():
     """Get health ministry institution."""
     query = Institution.query(Institution.name == "Ministério da Saúde", Institution.acronym == "MS")
-    return query
+    return query.get()
 
+"""TODO: Refactor this function to get the DECIIS Institution, making a get for 
+    the institution with that field trusted is equal to true.
+    And certificate that DECIIS is the unique institution trusted in system.
+    @author: Mayza Nunes 05/04/2018"""
 def get_deciis():
     """Get health ministry institution."""
     query = Institution.query(Institution.name == "Departamento do Complexo Industrial e Inovação em Saúde", Institution.acronym == "DECIIS")
-    return query
+    return query.get()
 
 def json_response(method):
     """Add content type header to the response."""
@@ -189,26 +193,6 @@ def json_response(method):
         self.response.headers['APP_VERSION'] = APP_VERSION
         method(self, *args)
     return response
-
-
-def get_super_institution():
-    """Return Super Institution of system."""
-    # TODO: Currently, The Super Institution is 'CIS' but will change to 'Ministério da Saúde',
-    # should modify how to verify it.
-    # @author: Maiana Brito
-    return Institution.query().filter(Institution.name == "Complexo Industrial da Saude").get()
-
-
-def getSuperUsers():
-    """Get users of institutions trusted that has permission to analize resquests for new institutions."""
-    userswithpermission = []
-    institutionsTrusted = Institution.query(Institution.trusted == True)
-    for institution in institutionsTrusted:
-        for userKey in institution.members:
-            user = userKey.get()
-            if user.has_permission('analyze_request_inst', institution.key.urlsafe()):
-                userswithpermission.append(user)
-    return userswithpermission
 
 
 def offset_pagination(page, number_fetchs, query):

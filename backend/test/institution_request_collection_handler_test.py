@@ -32,7 +32,8 @@ class InstitutionRequestCollectionHandlerTest(TestBaseHandler):
         self.other_user = mocks.create_user()
         self.address = mocks.create_address()
         self.new_inst = mocks.create_institution()
-        self.new_inst.name = "Complexo Industrial da Saude"
+        self.new_inst.name = "Departamento do Complexo Industrial e Inovação em Saúde"
+        self.new_inst.acronym = "DECIIS"
         self.new_inst.address = self.address
         self.new_inst.put()
 
@@ -80,7 +81,7 @@ class InstitutionRequestCollectionHandlerTest(TestBaseHandler):
 
         self.assertEqual(
             request['requested_inst_name'],
-            "Complexo Industrial da Saude",
+            "Departamento do Complexo Industrial e Inovação em Saúde",
             "Expected institution_requested be new inst")
 
         send_invite.assert_called_with('localhost:80', None)

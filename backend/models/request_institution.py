@@ -5,7 +5,7 @@ from invite import Invite
 from request import Request
 from google.appengine.ext import ndb
 from utils import getSuperUsers
-from utils import get_super_institution
+from utils import get_deciis
 from custom_exceptions.fieldException import FieldException
 
 
@@ -23,7 +23,7 @@ class RequestInstitution(Request):
         request = RequestInstitution()
         request.sender_key = ndb.Key(urlsafe=data.get('sender_key'))
         request = Invite.create(data, request)
-        request.institution_requested_key = get_super_institution().key
+        request.institution_requested_key = get_deciis().key
         request.isValid()
         return request
 
@@ -58,22 +58,27 @@ class RequestInstitution(Request):
 
         Equipe da Plataforma CIS """ % (host, request_key)
 
-        super_users = getSuperUsers()
-
-        for super_user in super_users:
-            super(RequestInstitution, self).send_email(host, super_user.email, body)
+        """
+            The super user is the admin of 
+            'Departamento do Complexo Industrial e Inovação em Saúde".
+        """
+        super_user = get_deciis().admin.get()
+        super(RequestInstitution, self).send_email(host, super_user.email, body)
 
     def send_notification(self, current_institution):
         """Method of send notification of request intitution."""
         entity_type = 'REQUEST_INSTITUTION'
-        super_users = getSuperUsers()
 
-        for super_user in super_users:
-            super(RequestInstitution, self).send_notification(
-                current_institution=current_institution, 
-                receiver_key=super_user.key,
-                entity_type=entity_type
-            )
+        """
+            The super user is the admin of 
+            'Departamento do Complexo Industrial e Inovação em Saúde".
+        """
+        super_user = get_deciis().admin.get()
+        super(RequestInstitution, self).send_notification(
+            current_institution=current_institution, 
+            receiver_key=super_user.key,
+            entity_type=entity_type
+        )
 
     def make(self):
         """Create json of request to institution."""

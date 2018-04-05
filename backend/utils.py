@@ -191,26 +191,6 @@ def json_response(method):
     return response
 
 
-def get_super_institution():
-    """Return Super Institution of system."""
-    # TODO: Currently, The Super Institution is 'Departamento do Complexo Industrial e Inovação em Saúde'
-    # but should modify how to verify it.
-    # @author: Maiana Brito
-    return Institution.query().filter(Institution.name == "Departamento do Complexo Industrial e Inovação em Saúde").get()
-
-
-def getSuperUsers():
-    """Get users of institutions trusted that has permission to analize resquests for new institutions."""
-    userswithpermission = []
-    institutionsTrusted = Institution.query(Institution.trusted == True)
-    for institution in institutionsTrusted:
-        for userKey in institution.members:
-            user = userKey.get()
-            if user.has_permission('analyze_request_inst', institution.key.urlsafe()):
-                userswithpermission.append(user)
-    return userswithpermission
-
-
 def offset_pagination(page, number_fetchs, query):
     """Modify query for get entities using offset pagination."""
     offset = page * number_fetchs

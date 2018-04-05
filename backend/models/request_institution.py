@@ -4,7 +4,6 @@
 from invite import Invite
 from request import Request
 from google.appengine.ext import ndb
-from utils import getSuperUsers
 from utils import get_deciis
 from custom_exceptions.fieldException import FieldException
 

@@ -33,6 +33,7 @@ class InstitutionRequestCollectionHandlerTest(TestBaseHandler):
         self.address = mocks.create_address()
         self.new_inst = mocks.create_institution()
         self.new_inst.name = "Departamento do Complexo Industrial e Inovação em Saúde"
+        self.new_inst.acronym = "DECIIS"
         self.new_inst.address = self.address
         self.new_inst.put()
 

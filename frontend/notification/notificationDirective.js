@@ -199,7 +199,7 @@
         };
 
         notificationCtrl.goTo = function goTo(notification) {
-            if(notification.entity_type !== 'INSTITUTION') {
+            if(notification.entity_type !== 'INSTITUTION' && notification.status !== "READ") {
                 var state = type_data[notification.entity_type].state;
                 $state.go(state, {key: notification.entity.key});
             }

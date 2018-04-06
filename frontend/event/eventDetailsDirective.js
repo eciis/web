@@ -45,7 +45,7 @@
             let promise = EventService.deleteEvent(event);
             promise.then(function success() {
                 MessageService.showToast('Evento removido com sucesso!');
-                $state.go('app.user.events');
+                eventCtrl.event.state = "deleted";
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
@@ -131,6 +131,10 @@
                 return startDay === endDay && !eventCtrl.endInOtherMonth();
             }
         };
+
+        eventCtrl.isDeleted = () => {
+            return eventCtrl.event ? eventCtrl.event.state === 'deleted' : true;
+        }
 
         function isInstitutionAdmin(event) {
             if(event.institution_key)

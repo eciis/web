@@ -313,5 +313,13 @@
                 expect(institutionService.update).toHaveBeenCalled();
             });
         });
+        describe('goToEvents', function() {
+            it('should call state.go with the right params', function(){
+                spyOn(state, 'go');
+                institutionCtrl.posts = posts;
+                institutionCtrl.goToEvents(first_institution.key);
+                expect(state.go).toHaveBeenCalledWith('app.institution.events', {institutionKey: first_institution.key, posts: institutionCtrl.posts});
+            });
+        });
     });
 }));

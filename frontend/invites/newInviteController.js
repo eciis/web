@@ -67,7 +67,7 @@
                     newInviteCtrl.user.changeInstitution(newInviteCtrl.institution);
                     AuthService.save();
                     $state.go("app.user.home");
-                    showAlert(event);
+                    _.isEmpty(newInviteCtrl.user.invites) && showAlert(event);
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
                 });

@@ -1,52 +1,47 @@
-<md-dialog>
-  <md-toolbar style="background-color: #00695C" layout="row">
-    <div class="md-toolbar-tools">
-      <h1 class="md-toolbar-tools">Confirmar Cadastro</h1>
-    </div>
-    <section layout="column" layout-align="center center">
-        <md-button class="md-icon-button" ng-click="requestCtrl.cancelDialog()">
-            <md-icon>close</md-icon>
-        </md-button>
-    </section>
-  </md-toolbar>
-  <div ng-if="requestCtrl.isSent">
-    <md-dialog-content class="md-dialog-content" layout-gt-sm="column" layout-padding>
-      <div>
-        <md-list flex>
-          <md-list-item class="md-3-line">
-            <img ng-src="{{ requestCtrl.parent.photo_url }}" class="md-avatar" alt="{{requestCtrl.parent.name}}" />
-            <div class="md-list-item-text" layout="column">
-              <h3><b>{{ requestCtrl.parent.name }}</b> - {{ requestCtrl.parent.email }}</h3>
-              <h4>{{ requestCtrl.parent.phone_number }}</h4>
-              <p><b>Descrição: </b>{{ requestCtrl.parent.description }}</p>
-              <span>
-                <b>Endereço:</b>
-                </br>
-                  &nbsp;&nbsp; {{requestCtrl.parent.address.street ? requestCtrl.parent.address.street + ', ' : ''}}
-                  {{requestCtrl.parent.address.street && requestCtrl.parent.address.number ? requestCtrl.parent.address.number : requestCtrl.parent.address.street ? 'S/N' : ''}}
-                </br>
-                  &nbsp;&nbsp; {{requestCtrl.parent.address.city ? requestCtrl.parent.address.city : ''}}
-                  {{requestCtrl.parent.address.federal_state ? ', ' + requestCtrl.parent.address.federal_state + ' - ': ''}}
-                  {{requestCtrl.parent.address.country ? requestCtrl.parent.address.country : ''}}
-              </span>
-            </div>
-          </md-list-item>
-        </md-list>
+<md-dialog flex-gt-sm="45" flex-sm="80" flex-xs="100">
+  <md-dialog-content class="md-dialog-content" layout-gt-sm="column"
+    ng-if="requestCtrl.isSent" layout-padding>
+    <h4 style="margin: 0;">Confirmar Cadastro</h4>
+    <p style="margin: 0;">Um usuário solicitou criar a seguinte instituição. Clique em confirmar para aceitar ou cancelar para recusar a instituição na plataforma.</p>
+    <div layout="column">
+      <div layout="row" md-colors="{background: 'default-grey-200'}" layout-margin style="margin: 0 0 8px 0;">
+        <div>
+          <img style="width: 75px; height: 75px; border-radius: 50%;" ng-src="{{requestCtrl.parent.photo_url || 'app/images/institution.png'}}"
+            alt="{{requestCtrl.parent.name}}"></img>
+        </div>
+        <div layout="column" layout-align="center start">
+          <b>{{ requestCtrl.parent.name }}</b>
+          <span>{{ requestCtrl.parent.email }}</span>
+          <b>Descrição:</b>
+          <span>&nbsp;&nbsp; {{ requestCtrl.parent.description }}</span>
+          <b>Endereço:</b>
+          <span ng-if="requestCtrl.isAnotherCountry()">
+              &nbsp;&nbsp; {{ requestCtrl.parent.address.country }}
+          </span>
+          <span ng-if="!requestCtrl.isAnotherCountry()">
+            &nbsp;&nbsp; {{requestCtrl.parent.address.street + ', ' + requestCtrl.parent.address.number}}
+            </br>
+            &nbsp;&nbsp; {{requestCtrl.parent.address.city + ', ' + requestCtrl.parent.address.federal_state + ' - ' + requestCtrl.parent.address.country}}
+          </span>
+        </div>
       </div>
-    </md-dialog-content>
-    <md-dialog-actions layout="row" layout-align="end center" layout-wrap>
-      <md-button ng-click="requestCtrl.rejectRequest($event)" class="md-primary">
-        Não Confirmar
-      </md-button>
-      <md-button ng-click="requestCtrl.acceptRequest()"
-          class="md-warn md-raised md-hue-2">
-        Confirmar
-      </md-button>
-    </md-dialog-actions>
+    </div>
+  </md-dialog-content>
+  <div ng-if="!requestCtrl.isSent" style="padding: 15px 0 0 40px">
+      <b>Você já resolveu esta solicitação.</b>
   </div>
-  <div ng-if="!requestCtrl.isSent">
-    <md-dialog-content class="md-dialog-content" layout-gt-sm="column" layout-padding>
-      <b>Esse convite já foi processado.</b>
-    </md-dialog-content>
-  </div>
+  <md-dialog-actions layout="row" layout-align="end center" layout-wrap>
+    <md-button ng-click="requestCtrl.rejectRequest($event)" class="md-primary"
+      md-colors="{color: 'default-teal-500'}" ng-if="requestCtrl.isSent">
+      Cancelar
+    </md-button>
+    <md-button ng-click="requestCtrl.acceptRequest()" class="md-primary"
+      md-colors="{color: 'default-teal-500'}" ng-if="requestCtrl.isSent">
+      Confirmar
+    </md-button>
+    <md-button ng-click="requestCtrl.hideDialog()" class="md-primary"
+      md-colors="{color: 'default-teal-500'}" ng-if="!requestCtrl.isSent">
+        OK
+    </md-button>
+  </md-dialog-actions>
 </md-dialog>

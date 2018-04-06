@@ -186,7 +186,7 @@
 
         institutionCtrl.goToEvents = function goToEvents(institutionKey) {
             institutionCtrl.stateView = "events";
-            $state.go('app.institution.events', {institutionKey: institutionKey});
+            $state.go('app.institution.events', {institutionKey: institutionKey, posts: institutionCtrl.posts});
         };
 
         institutionCtrl.goToHome = function goToHome() {

@@ -462,11 +462,11 @@
         });
     });
 
-    app.run(function jsonPatchUnobserveInterceptor(JsonPatchObserverRecorder, $transitions) {
+    app.run(function jsonPatchUnobserveInterceptor(JsonPatchObserverRecorderService, $transitions) {
         $transitions.onSuccess({
             to: () => true
         }, function () {
-            JsonPatchObserverRecorder.unobserveAll();
+            JsonPatchObserverRecorderService.unobserveAll();
         });
     });
 })();

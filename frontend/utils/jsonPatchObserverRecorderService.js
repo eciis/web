@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.service('JsonPatchObserverRecorder', function() {
+    app.service('JsonPatchObserverRecorderService', function() {
         let service = this;
         let observers = [];
 

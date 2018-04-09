@@ -72,9 +72,7 @@ def is_admin_of_parent_inst(user, institution_parent_key):
 def is_not_admin(user, institution_key, *args):
     """This function acts as a should_remove function of filter_permissions_to_remove 
     when the worker removes the admin permissions."""
-    if user.is_admin(ndb.Key(urlsafe=institution_key)):
-        return False
-    return True
+    return not user.is_admin(ndb.Key(urlsafe=institution_key))
 
 
 def get_all_parent_admins(child_institution, admins=[]):
@@ -99,6 +97,24 @@ def add_permission_to_children(parent, admins, permission):
         for admin in admins:
             admin.add_permission(permission, child.urlsafe())
             add_permission_to_children(child.get(), admins, permission)
+
+
+def remove_permissions(remove_hierarchy, institution):
+        """This function has two possibilities of flow depending on the remove_hierarchy's value.
+        If it's true, the function removes all the admins' permissions in the hierarchy,
+        otherwise it removes only the first institution's admin permissions in the hierarchy."""
+        admin = institution.admin.get()
+        current_permissions = institution.get_all_hierarchy_admin_permissions()
+        if remove_hierarchy == "true":
+            for permission, institutions in current_permissions.items():
+                admin.remove_permissions(permission, institutions)
+            for child in institution.children_institutions:
+                remove_permissions(remove_hierarchy, child.get())
+        else:
+            current_permissions = filter_permissions_to_remove(
+                admin, current_permissions, institution.key, is_not_admin)
+            for permission, institution_keys in current_permissions.items():
+                admin.remove_permissions(permission, institution_keys)
 
 
 class BaseHandler(webapp2.RequestHandler):
@@ -158,26 +174,8 @@ class SendEmailHandler(BaseHandler):
                        body="",
                        html=template.render(html_content))
 
-
 class RemoveInstitutionHandler(BaseHandler):
     """Handler that resolves tasks relationated with remove an institution."""
-
-    def remove_permissions(self, remove_hierarchy, institution):
-        """This function has two possibilities of flow depending on the remove_hierarchy's value.
-        If it's true, the function removes all the admins' permissions in the hierarchy,
-        otherwise it removes only the first institution's admin permissions in the hierarchy.""" 
-        admin = institution.admin.get()
-        current_permissions = institution.get_all_hierarchy_admin_permissions()
-        if remove_hierarchy == "true":
-            for permission, institutions in current_permissions.items():
-                admin.remove_permissions(permission, institutions)
-            for child in institution.children_institutions:
-                self.remove_permissions(remove_hierarchy, child.get())
-        else:
-            current_permissions = filter_permissions_to_remove(
-                admin, current_permissions, institution.key, is_not_admin)
-            for permission, institution_keys in current_permissions.items():
-                admin.remove_permissions(permission, institution_keys)
 
     def post(self):
         """Remove the permissions relationed to the institution and its hierarchy, if remove_hierarchy is true, 
@@ -188,7 +186,7 @@ class RemoveInstitutionHandler(BaseHandler):
 
         @ndb.transactional(xg=True, retries=10)
         def apply_remove_operation(remove_hierarchy, institution):
-            self.remove_permissions(remove_hierarchy, institution)
+            remove_permissions(remove_hierarchy, institution)
             institution.remove_institution_from_users(remove_hierarchy)
         apply_remove_operation(remove_hierarchy, institution)
 

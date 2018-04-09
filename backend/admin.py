@@ -319,7 +319,7 @@ class ResetHandler(BaseHandler):
         deciis = createInstitution(data_deciis, admin)
         deciis.trusted = True
         
-        for user in [mayza, maiana, luiz, raoni, ruan, tiago, other_admin]:
+        for user in [mayza, maiana, luiz, raoni, ruan, tiago, admin, other_admin]:
             user.follow(deciis.key)
             user.follow(ms.key)
             deciis.follow(user.key)
@@ -356,6 +356,7 @@ class ResetHandler(BaseHandler):
             'description': 'Ensaio Químico - Determinação de Material Volátil por Gravimetria e Ensaio Biológico - Ensaio de Citotoxicidade',
             'photo_url': 'https://pbs.twimg.com/profile_images/1782760873/Logo_do_site_400x400.jpg',
             'email': 'certbio@ufcg.edu.br',
+            'institutional_email':'certbio@ufcg.edu.br',
             'phone_number': '83 3322-4455',
             'state': 'active',
             'leader': 'User'
@@ -392,6 +393,7 @@ class ResetHandler(BaseHandler):
             'actuation_area': 'COLLEGE',
             'description': """The mission of the Software Practices Laboratory (SPLab) is to promote the development of the state-of-the-art in the theory and practice of Software Engineering.""",
             'email': 'splab@ufcg.edu.br',
+            'institutional_email':'splab@ufcg.edu.br',
             'phone_number': '83 3322-7865',
             'state': 'active',
             'leader': 'User'
@@ -405,7 +407,7 @@ class ResetHandler(BaseHandler):
             create_profile(user, splab)
 
         for user in [maiana, luiz,
-                     raoni, ruan, tiago, admin]:
+                     raoni, ruan, tiago, other_admin]:
             splab.follow(user.key)
             user.follow(splab.key)
 
@@ -431,6 +433,7 @@ class ResetHandler(BaseHandler):
             'description': 'The mission of the e-CIIS is to promote the development of the state-of-the-art in the theory and practice of Software Engineering.',
             'photo_url': 'http://www.paho.org/bra/images/stories/BRA01A/logobireme.jpg',
             'email': 'eciis@ufcg.edu.br',
+            'institutional_email':'eciis@ufcg.edu.br',
             'phone_number': '83 3322-7865',
             'state': 'active',
             'leader': 'User'

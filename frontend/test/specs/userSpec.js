@@ -315,6 +315,18 @@
 
             expect(user.current_institution).toBe(inst);
           });
+
+          it('should go to a non child institution', function() {
+            var test_inst = {name: 'TEST'};
+            var user = new User({
+              institutions: [inst, other_inst, test_inst],
+              current_institution: inst
+            });
+
+            user.goToDifferentInstitution(inst.key, "true");
+
+            expect(user.current_institution).toBe(test_inst);
+          });
         });
    });
 }));

@@ -163,13 +163,16 @@ User.prototype.updateInstProfile = function updateInstProfile(institution) {
     this.institution_profiles[index].institution.photo_url = institution.photo_url;
 };
 
-User.prototype.goToDifferentInstitution = function goToDifferentInstitution(previousKey) {
+User.prototype.goToDifferentInstitution = function goToDifferentInstitution(previousKey, removeHierarchy) {
     var user = this;
     _.forEach(this.institutions, function(institution) {
         if(institution.key !== previousKey) {
-            user.current_institution = institution;
-            changeProfileColor(user, institution);
-            window.localStorage.userInfo = JSON.stringify(this);
+            const institutionHasBeenDeleted = removeHierarchy === "true" && institution.parent_institution === previousKey;
+            if (!(institutionHasBeenDeleted)) {
+                user.current_institution = institution;
+                changeProfileColor(user, institution);
+                window.localStorage.userInfo = JSON.stringify(this);
+            }
         }
     });
 };

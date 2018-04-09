@@ -10,6 +10,7 @@ from models.post import Post
 from models.invite_user import InviteUser
 from models.invite_user_adm import InviteUserAdm
 from utils import json_response
+from utils import get_super_institution
 from service_messages import send_message_notification
 from service_messages import send_message_email
 from jinja2 import Environment, FileSystemLoader
@@ -349,10 +350,7 @@ class TransferAdminPermissionsHandler(BaseHandler):
                 permissions_filtered = filter_permissions_to_remove(admin, permissions, institution_key)
                 self.remove_permissions(admin, permissions_filtered)
             
-            """"TODO: Change how to check if user is super user.
-            @author: Maiana Brito 04/04/2018
-            """
-            if(institution.name == 'Departamento do Complexo Industrial e Inovacao em Saude'):
+            if(institution.key == get_super_institution().key):
                 for permission in DEFAULT_SUPER_USER_PERMISSIONS:
                     admin.remove_permission(permission, institution.key.urlsafe())
 

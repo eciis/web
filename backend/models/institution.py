@@ -6,6 +6,7 @@ from search_module.search_institution import SearchInstitution
 from models.address import Address
 from permissions import DEFAULT_ADMIN_PERMISSIONS
 from permissions import DEFAULT_SUPER_USER_PERMISSIONS
+from utils import get_super_institution
 
 
 def get_actuation_area(data):
@@ -333,8 +334,7 @@ class Institution(ndb.Model):
     def get_super_user_admin_permissions(self, permissions=None):
         """
         This method get all super user permissions.
-        The type permission is only possible when the institution is
-        'Departamento do Complexo Industrial e Inovacao em Saude'
+        The type permission is only possible when the institution is super institution.
         Returns a dict containing the super user permissions.
 
         Arguments:
@@ -345,7 +345,7 @@ class Institution(ndb.Model):
         if not permissions:
             permissions = {}
 
-        if self.name == 'Departamento do Complexo Industrial e Inovacao em Saude':
+        if self.key == get_super_institution().key:
             institution_key = self.key.urlsafe()
             for permission in DEFAULT_SUPER_USER_PERMISSIONS:
                 if permission in permissions:

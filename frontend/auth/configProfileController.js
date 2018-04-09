@@ -4,7 +4,7 @@
     var app = angular.module("app");
 
     app.controller("ConfigProfileController", function ConfigProfileController($state, InstitutionService,
-        CropImageService, AuthService, UserService, ImageService, $rootScope, $mdToast, $q, MessageService, $mdDialog) {
+        CropImageService, AuthService, UserService, ImageService, $rootScope, $mdToast, $q, MessageService, $mdDialog, JsonPatchObserverRecorder) {
 
         var configProfileCtrl = this;
 
@@ -74,18 +74,11 @@
             }
         };
 
-        function filter_patch(patch) {
-            return patch.filter((operation) => {
-                var atomicPath = operation.path.split('/')[1];
-                return CAN_EDIT.includes(atomicPath);
-            });
-        }
-
         function saveUser() {
             var deffered = $q.defer();
             if (configProfileCtrl.newUser.isValid()) {
                 updateUser();
-                var patch = filter_patch(jsonpatch.generate(observer));
+                var patch = JsonPatchObserverRecorder.generate(observer);
                 UserService.save(patch).then(function success() {
                     AuthService.save();
                     configProfileCtrl.loadingSubmission = false;
@@ -219,7 +212,7 @@
         }
         
         (function main() {
-            observer = jsonpatch.observe(configProfileCtrl.user);
+            observer = JsonPatchObserverRecorder.register(configProfileCtrl.user);
 
             if (configProfileCtrl.user.name === 'Unknown') {
                 delete configProfileCtrl.user.name;
@@ -230,7 +223,7 @@
 
 
     app.controller("EditProfileController", function EditProfileController(institution, ProfileService,
-        AuthService, $mdDialog, MessageService) {
+        AuthService, $mdDialog, MessageService, JsonPatchObserverRecorder) {
         var editProfileCtrl = this;
         editProfileCtrl.phoneRegex = "[0-9]{2}[\\s][0-9]{4,5}[-][0-9]{4,5}";
         editProfileCtrl.user = AuthService.getCurrentUser();
@@ -240,7 +233,7 @@
 
         editProfileCtrl.edit = function edit() {
             if (isValidProfile()) {
-                var patch = jsonpatch.generate(profileObserver);
+                var patch = JsonPatchObserverRecorder.generate(profileObserver);
                 if (!_.isEmpty(patch)) {
                     ProfileService.editProfile(patch).then(function success() {
                         MessageService.showToast('Perfil editado com sucesso');
@@ -270,7 +263,7 @@
                 .filter(profile => profile.institution_key === editProfileCtrl.institution.key)
                 .reduce(profile => profile);
             oldProfile = _.clone(editProfileCtrl.profile);
-            profileObserver = jsonpatch.observe(editProfileCtrl.user);
+            profileObserver = JsonPatchObserverRecorder.register(editProfileCtrl.user);
         })();
     });
 })();

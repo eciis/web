@@ -461,4 +461,12 @@
             $state.go("new_invite", {key: inviteKey});
         });
     });
+
+    app.run(function jsonPatchUnobserveInterceptor(JsonPatchObserverRecorder, $transitions) {
+        $transitions.onSuccess({
+            to: () => true
+        }, function () {
+            JsonPatchObserverRecorder.unobserveAll();
+        });
+    });
 })();

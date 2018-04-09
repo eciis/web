@@ -154,6 +154,7 @@
         }
 
         function updateEvent() {
+            dialogCtrl.event.address.number = String(dialogCtrl.event.address.number);
             addLinks(dialogCtrl.event);
             var event = new Event(dialogCtrl.event, dialogCtrl.user.current_institution.key);
             if(event.isValid()) {
@@ -278,7 +279,7 @@
             if(address && address.country === "Brasil"){     
                 _.forEach(attributes, function(attr) {     
                     var value = _.get(dialogCtrl.event.address, attr);
-                    if(! value || _.isUndefined(value) || _.isEmpty(value)) {
+                    if(! value || _.isUndefined(value) || (_.isString(value) && _.isEmpty(value))) {
                         valid = false;
                     }   
                 });       
@@ -381,6 +382,7 @@
         }
 
         function create() {
+            dialogCtrl.event.address.number = String(dialogCtrl.event.address.number);
             var event = new Event(dialogCtrl.event, dialogCtrl.user.current_institution.key);
             addLinks(event);
             if (event.isValid()) {

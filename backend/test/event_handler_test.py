@@ -211,7 +211,31 @@ class EventHandlerTest(TestBaseHandler):
             self.assertEquals(
                 getattr(self.event, prop), value,
                 "The event "+ prop + " should be 'other_value'")
+    
+    @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
+    def test_get_a_deleted_event(self, verify_token):
+        self.event.state = 'deleted'
+        self.event.put()
 
+        with self.assertRaises(Exception) as ex:
+            self.testapp.get('/api/events/%s' %self.event.key.urlsafe())
+
+        exception_message = self.get_message_exception(ex.exception.message)
+        self.assertTrue(exception_message == 'Error! The event has been deleted.')
+    
+    @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
+    def test_patch_a_deleted_event(self, verify_token):
+        self.event.state = 'deleted'
+        self.event.put()
+
+        with self.assertRaises(Exception) as ex:
+            patch = [{"op": "replace", "path": "/title", "value": 'other_value'}]
+            self.testapp.patch('/api/events/%s' % self.event.key.urlsafe(), json.dumps(patch))
+
+        exception_message = self.get_message_exception(ex.exception.message)
+        self.assertTrue(exception_message ==
+                        'Error! The event has been deleted.')
+        
 
     def tearDown(cls):
         """Deactivate the test."""

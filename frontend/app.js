@@ -149,6 +149,9 @@
                         templateUrl: "app/institution/institution_events.html",
                         controller: "EventController as eventCtrl"
                     }
+                },
+                params: {
+                    posts: undefined
                 }
             })
             .state("app.institution.members", {

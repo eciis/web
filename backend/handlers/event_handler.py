@@ -36,6 +36,9 @@ class EventHandler(BaseHandler):
         event_key = ndb.Key(urlsafe=url_string)
         event = event_key.get()
 
+        Utils._assert(event.state == 'deleted', 
+            "The event has been deleted.", NotAuthorizedException)
+
         assert type(event) is Event, "Key is not an Event"
         event_json = Event.make(event)
 
@@ -69,6 +72,10 @@ class EventHandler(BaseHandler):
         patch = self.request.body
 
         event = ndb.Key(urlsafe=key).get()
+
+        Utils._assert(event.state == 'deleted',
+                      "The event has been deleted.", NotAuthorizedException)
+
         event.verify_patch(patch)
 
         """Apply patch."""

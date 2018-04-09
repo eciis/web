@@ -52,7 +52,13 @@
         };
 
         requestController.getSizeGtSmDialog = function getSizeGtSmDialog() {
-            return requestController.request.status === 'sent' ? '45' : '25';
+            if(requestController.request)
+                return requestController.request.status === 'sent' ? '45' : '25';
+        };
+
+        requestController.isAnotherCountry = function isAnotherCountry() {
+            if(requestController.parent)
+                return requestController.parent.address.country !== 'Brasil';
         };
 
         function loadInstitution(institutionKey) {

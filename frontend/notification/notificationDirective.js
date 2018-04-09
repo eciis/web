@@ -199,7 +199,8 @@
         };
 
         notificationCtrl.goTo = function goTo(notification) {
-            if(notification.entity_type !== 'INSTITUTION') {
+            const isAReadInviteNotification = notification.status === "READ" && notification.entity_type === "INVITE";
+            if(notification.entity_type !== 'INSTITUTION' && !isAReadInviteNotification) {
                 var state = type_data[notification.entity_type].state;
                 $state.go(state, {key: notification.entity.key});
             }
@@ -261,7 +262,7 @@
         }
 
         function refreshUserInstitutions (notification) {
-            notificationCtrl.user.goToDifferentInstitution(notification.entity.key);
+            notificationCtrl.user.goToDifferentInstitution(notification.entity.key, notification.entity.remove_hierarchy);
             UserService.load().then(function success(response) {
                 notificationCtrl.user.institutions = response.institutions;
                 notificationCtrl.user.follows = response.follows;

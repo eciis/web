@@ -209,6 +209,7 @@ class NotifyFollowersHandler(BaseHandler):
         entity_type = self.request.get('entity_type')
         entity_key = self.request.get('entity_key')
         current_institution = ndb.Key(urlsafe=self.request.get('current_institution'))
+        entity = self.request.get('entity') if self.request.get('entity') else None
         
         inst_key = self.request.get('institution_key')
         institution = ndb.Key(urlsafe=inst_key).get()
@@ -222,7 +223,8 @@ class NotifyFollowersHandler(BaseHandler):
                     sender_key,
                     entity_type,
                     entity_key or inst_key,
-                    current_institution
+                    current_institution,
+                    entity=entity
                 )
 
 

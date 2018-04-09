@@ -18,8 +18,6 @@
         configProfileCtrl.photo_url = configProfileCtrl.newUser.photo_url;
         configProfileCtrl.loadingSubmission = false;
 
-        const CAN_EDIT = ['name', 'cpf', 'photo_url', 'uploaded_images'];
-
         var HAS_ONLY_ONE_INSTITUTION_MSG = "Esta é a única instituição ao qual você é vinculado." +
             " Ao remover o vínculo você não poderá mais acessar o sistema," +
             " exceto por meio de novo convite. Deseja remover?";

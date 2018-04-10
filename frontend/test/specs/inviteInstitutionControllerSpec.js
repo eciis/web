@@ -167,61 +167,6 @@
             });
         });
 
-        describe('acceptRequest()', function() {
-            it('should call accept request', function(done) {
-                spyOn(mdDialog, 'show').and.callFake(function() {
-                    return {
-                        then: function(callback) {
-                            return callback();
-                        }
-                    };
-                });
-                spyOn(requestInvitationService, 'acceptRequestInst').and.callFake(function() {
-                    return {
-                        then: function(callback) {
-                            return callback();
-                        }
-                    };
-                });
-                spyOn(instService, 'getInstitution').and.callFake(function() {
-                    return {
-                        then: function(callback) {
-                            return callback({data: institution, msg: 'success'});
-                        }
-                    };
-                });
-                var promise = inviteinstitutionCtrl.acceptRequest(request);
-                promise.then(function() {
-                    expect(requestInvitationService.acceptRequestInst).toHaveBeenCalledWith(request.key);
-                    done();
-                });
-            });
-        });
-
-        describe('rejectRequest()', function() {
-            it('should call reject parent request', function(done) {
-                spyOn(mdDialog, 'show').and.callFake(function() {
-                    return {
-                        then: function(callback) {
-                            return callback();
-                        }
-                    };
-                });
-                spyOn(requestInvitationService, 'rejectRequestInst').and.callFake(function() {
-                    return {
-                        then: function(callback) {
-                            return callback();
-                        }
-                    };
-                });
-                var promise = inviteinstitutionCtrl.rejectRequest("$event", request);
-                promise.then(function() {
-                    expect(requestInvitationService.rejectRequestInst).toHaveBeenCalledWith(request.key);
-                    done();
-                });
-            });
-        });
-
         describe('resendInvite()', function () {
             it('should resend the invite', function () {
                 spyOn(mdDialog, 'confirm').and.callThrough();

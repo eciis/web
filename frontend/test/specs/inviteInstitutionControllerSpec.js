@@ -192,5 +192,22 @@
                 expect(inviteService.resendInvite).toHaveBeenCalled();
             });
         });
+
+        describe('showPendingRequestDialog', function () {
+            it('should call show()', function () {
+                spyOn(mdDialog, 'show').and.callFake(function () {
+                    return {
+                        then: function (callback) {
+                            return callback();
+                        }
+                    };
+                });
+                inviteinstitutionCtrl.sent_requests = [request];
+                inviteinstitutionCtrl.showPendingRequestDialog('$event', request);
+                expect(mdDialog.show).toHaveBeenCalled();
+                expect(request.status).toBe('accepted');
+                expect(inviteinstitutionCtrl.sent_requests).toEqual([]);
+            });
+        });
     });
 }));

@@ -14,7 +14,7 @@ import permissions
 
 from mock import patch
 
-def add_permission(user, institution_key, type_permission):
+def add_permissions(user, institution_key, type_permission):
     user.add_permissions(type_permission, institution_key)
 
 def has_permissions(user, institution_key, type_permission):
@@ -55,7 +55,7 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         institution.add_member(new_admin)
 
         admin.add_institution_admin(institution.key)
-        add_permission(admin, institution.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS)
+        add_permissions(admin, institution.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS)
 
         institution.put()
         admin.put()
@@ -67,12 +67,12 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         self.assertTrue(
             has_permissions(admin, institution.key.urlsafe(),
                  permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'Admin must have super user permissions for this institution!'
+            'Admin must have admin permissions for this institution!'
         )
         self.assertFalse(
             has_permissions(new_admin, institution.key.urlsafe(),
                  permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'new_admin should not have super user permissions for this institution!'
+            'new_admin should not have admin permissions for this institution!'
         )
         self.assertEquals(
             admin.key, 
@@ -90,12 +90,12 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         self.assertFalse(
             has_permissions(admin, institution.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'Admin should not have super user permissions for this institution!'    
+            'Admin should not have admin permissions for this institution!'    
         )
         self.assertTrue(
             has_permissions(new_admin, institution.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'New_admin must have super user permissions for this institution!'
+            'New_admin must have admin permissions for this institution!'
         )
         self.assertEquals(
             new_admin.key, 
@@ -140,13 +140,13 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         admin.add_institution_admin(institution.key)
         admin.add_institution_admin(third_inst.key)
         other_admin.add_institution_admin(second_inst.key)
-        add_permission(admin, institution.key.urlsafe(),
+        add_permissions(admin, institution.key.urlsafe(),
              permissions.DEFAULT_ADMIN_PERMISSIONS)
-        add_permission(admin, second_inst.key.urlsafe(),
+        add_permissions(admin, second_inst.key.urlsafe(),
              permissions.DEFAULT_ADMIN_PERMISSIONS)
-        add_permission(admin, third_inst.key.urlsafe(),
+        add_permissions(admin, third_inst.key.urlsafe(),
              permissions.DEFAULT_ADMIN_PERMISSIONS)
-        add_permission(other_admin, second_inst.key.urlsafe(),
+        add_permissions(other_admin, second_inst.key.urlsafe(),
              permissions.DEFAULT_ADMIN_PERMISSIONS)
 
         institution.put()
@@ -162,37 +162,37 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         self.assertTrue(
             has_permissions(admin, institution.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'Admin must have super user permissions for this institution!'
+            'Admin must have user permissions for this institution!'
         )
         self.assertTrue(
             has_permissions(admin, second_inst.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'Admin must have super user permissions for second_inst institution!'
+            'Admin must have user permissions for second_inst institution!'
         )
         self.assertTrue(
             has_permissions(admin, third_inst.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'Admin must have super user permissions for third_inst institution!'
+            'Admin must have user permissions for third_inst institution!'
         )
         self.assertTrue(
             has_permissions(other_admin, second_inst.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'other_admin must have super user permissions for second_inst institution!'    
+            'other_admin must have user permissions for second_inst institution!'    
         )
         self.assertFalse(
             has_permissions(new_admin, institution.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'new_admin should not have super user permissions for this institution!'
+            'new_admin should not have user permissions for this institution!'
         )
         self.assertFalse(
             has_permissions(new_admin, second_inst.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'new_admin should not have super user permissions for the second_inst institution!'
+            'new_admin should not have user permissions for the second_inst institution!'
         )
         self.assertFalse(
             has_permissions(new_admin, third_inst.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'new_admin should not have super user permissions for the third_inst institution!'
+            'new_admin should not have user permissions for the third_inst institution!'
         )
         self.assertEquals(
             admin.key, 
@@ -213,37 +213,37 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         self.assertFalse(
             has_permissions(admin, institution.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'admin should not have super user permissions for this institution!'
+            'admin should not have admin permissions for this institution!'
         )
         self.assertFalse(
             has_permissions(admin, second_inst.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'admin should not have super user permissions for the third_inst institution!'
+            'admin should not have admin permissions for the third_inst institution!'
         )
         self.assertTrue(
             has_permissions(admin, third_inst.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'Admin must have super user permissions for third_inst institution!'    
+            'Admin must have admin permissions for third_inst institution!'    
         )
         self.assertTrue(
             has_permissions(other_admin, second_inst.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'other_admin must have super user permissions for second_inst institution!'
+            'other_admin must have admin permissions for second_inst institution!'
         )
         self.assertTrue(
             has_permissions(new_admin, institution.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'new_admin must have super user permissions for this institution!'
+            'new_admin must have admin permissions for this institution!'
         )
         self.assertTrue(
             has_permissions(new_admin, second_inst.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'New_admin must have super user permissions for second_inst institution!'
+            'New_admin must have admin permissions for second_inst institution!'
         )
         self.assertTrue(
             has_permissions(new_admin, third_inst.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'New_admin must have super user permissions for third_inst institution!'
+            'New_admin must have admin permissions for third_inst institution!'
         )
         self.assertEquals(
             new_admin.key, 
@@ -283,13 +283,13 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         admin.add_institution_admin(institution.key)
         admin.add_institution_admin(third_inst.key)
         other_admin.add_institution_admin(second_inst.key)
-        add_permission(admin, institution.key.urlsafe(), 
+        add_permissions(admin, institution.key.urlsafe(), 
             permissions.DEFAULT_ADMIN_PERMISSIONS)
-        add_permission(admin, second_inst.key.urlsafe(),
+        add_permissions(admin, second_inst.key.urlsafe(),
             permissions.DEFAULT_ADMIN_PERMISSIONS)
-        add_permission(admin, third_inst.key.urlsafe(),
+        add_permissions(admin, third_inst.key.urlsafe(),
             permissions.DEFAULT_ADMIN_PERMISSIONS)
-        add_permission(other_admin, second_inst.key.urlsafe(),
+        add_permissions(other_admin, second_inst.key.urlsafe(),
             permissions.DEFAULT_ADMIN_PERMISSIONS)
 
         institution.put()
@@ -305,37 +305,37 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         self.assertTrue(
             has_permissions(admin, institution.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'Admin must have super user permissions for this institution!'
+            'Admin must have admin permissions for this institution!'
         )
         self.assertTrue(
             has_permissions(admin, second_inst.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'Admin must have super user permissions for second_inst institution!'
+            'Admin must have admin permissions for second_inst institution!'
         )
         self.assertTrue(
             has_permissions(admin, third_inst.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'Admin must have super user permissions for third_inst institution!'
+            'Admin must have admin permissions for third_inst institution!'
         )
         self.assertTrue(
             has_permissions(other_admin, second_inst.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'other_admin must have super user permissions for second_inst institution!'    
+            'other_admin must have admin permissions for second_inst institution!'    
         )
         self.assertFalse(
             has_permissions(new_admin, institution.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'new_admin should not have super user permissions for this institution!'
+            'new_admin should not have admin permissions for this institution!'
         )
         self.assertFalse(
             has_permissions(new_admin, second_inst.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'new_admin should not have super user permissions for the second_inst institution!'
+            'new_admin should not have admin permissions for the second_inst institution!'
         )
         self.assertFalse(
             has_permissions(new_admin, third_inst.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'new_admin should not have super user permissions for the third_inst institution!'
+            'new_admin should not have admin permissions for the third_inst institution!'
         )
         self.assertEquals(
             admin.key, 
@@ -356,37 +356,37 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         self.assertTrue(
             has_permissions(admin, institution.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'admin must have super user permissions for this institution!'
+            'admin must have admin permissions for this institution!'
         )
         self.assertTrue(
             has_permissions(admin, second_inst.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'Admin must have super user permissions for second_inst institution!'
+            'Admin must have admin permissions for second_inst institution!'
         )
         self.assertTrue(
             has_permissions(admin, third_inst.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'Admin must have super user permissions for third_inst institution!'    
+            'Admin must have admin permissions for third_inst institution!'    
         )
         self.assertTrue(
             has_permissions(other_admin, second_inst.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'other_admin must have super user permissions for second_inst institution!'
+            'other_admin must have admin permissions for second_inst institution!'
         )
         self.assertFalse(
             has_permissions(new_admin, institution.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'new_admin should not have super user permissions for this institution!'
+            'new_admin should not have admin permissions for this institution!'
         )
         self.assertFalse(
             has_permissions(new_admin, second_inst.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'new_admin should not have super user permissions for the second_inst institution!'
+            'new_admin should not have admin permissions for the second_inst institution!'
         )
         self.assertTrue(
             has_permissions(new_admin, third_inst.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'New_admin must have super user permissions for third_inst institution!'
+            'New_admin must have admin permissions for third_inst institution!'
         )
         self.assertEquals(
             new_admin.key, 
@@ -429,13 +429,13 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         admin.add_institution_admin(institution.key)
         admin.add_institution_admin(second_inst.key)
         admin.add_institution_admin(third_inst.key)
-        add_permission(admin, institution.key.urlsafe(),
+        add_permissions(admin, institution.key.urlsafe(),
             permissions.DEFAULT_ADMIN_PERMISSIONS)
-        add_permission(admin, second_inst.key.urlsafe(),
+        add_permissions(admin, second_inst.key.urlsafe(),
             permissions.DEFAULT_ADMIN_PERMISSIONS)
-        add_permission(admin, second_inst.key.urlsafe(),
+        add_permissions(admin, second_inst.key.urlsafe(),
             permissions.DEFAULT_SUPER_USER_PERMISSIONS)
-        add_permission(admin, third_inst.key.urlsafe(),
+        add_permissions(admin, third_inst.key.urlsafe(),
             permissions.DEFAULT_ADMIN_PERMISSIONS)
 
         institution.put()
@@ -500,22 +500,22 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         self.assertTrue(
             has_permissions(admin, institution.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'admin must have super user permissions for this institution!'
+            'admin must have admin permissions for this institution!'
         )
         self.assertTrue(
             has_permissions(admin, second_inst.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'Admin must have super user permissions for second_inst institution!'
+            'Admin must have admin permissions for second_inst institution!'
         )
         self.assertFalse(
             has_permissions(admin, second_inst.key.urlsafe(),
                 permissions.DEFAULT_SUPER_USER_PERMISSIONS),
-            "Admin shouldn't have super user permissions for second_inst institution!"
+            "Admin shouldn't have admin permissions for second_inst institution!"
         )
         self.assertTrue(
             has_permissions(admin, third_inst.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'Admin must have super user permissions for third_inst institution!'    
+            'Admin must have admin permissions for third_inst institution!'    
         )
         self.assertTrue(
             has_permissions(new_admin, second_inst.key.urlsafe(),
@@ -530,7 +530,7 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         self.assertFalse(
             has_permissions(new_admin, institution.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'new_admin should not have super user permissions for this institution!'
+            'new_admin should not have admin permissions for this institution!'
         )
         self.assertTrue(
             has_permissions(new_admin, third_inst.key.urlsafe(),
@@ -559,9 +559,9 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         admin.add_institution(institution.key)        
         admin.add_institution_admin(institution.key)
         
-        add_permission(admin, institution.key.urlsafe(),
+        add_permissions(admin, institution.key.urlsafe(),
             permissions.DEFAULT_ADMIN_PERMISSIONS)
-        add_permission(admin, institution.key.urlsafe(),
+        add_permissions(admin, institution.key.urlsafe(),
             permissions.DEFAULT_SUPER_USER_PERMISSIONS)
 
         institution.put()
@@ -612,7 +612,7 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         self.assertTrue(
             has_permissions(new_admin, institution.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'new_admin must have super user permissions for second_inst institution!'
+            'new_admin must have admin permissions for second_inst institution!'
         )
         self.assertTrue(
             has_permissions(new_admin, institution.key.urlsafe(),
@@ -632,7 +632,7 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         institution.add_member(new_admin)
 
         admin.add_institution_admin(institution.key)
-        add_permission(admin, institution.key.urlsafe(),
+        add_permissions(admin, institution.key.urlsafe(),
             permissions.DEFAULT_ADMIN_PERMISSIONS)
 
         institution.put()
@@ -645,12 +645,12 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         self.assertTrue(
             has_permissions(admin, institution.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'Admin must have super user permissions for this institution!'
+            'Admin must have admin permissions for this institution!'
         )
         self.assertFalse(
             has_permissions(new_admin, institution.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'New_admin should not have super user permissions for this institution!'
+            'New_admin should not have admin permissions for this institution!'
         )
         self.assertEquals(
             admin.key, 
@@ -668,12 +668,12 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         self.assertTrue(
             has_permissions(admin, institution.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'Admin must have super user permissions for this institution!'
+            'Admin must have admin permissions for this institution!'
         )
         self.assertFalse(
             has_permissions(new_admin, institution.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'New_admin should not have super user permissions for this institution!'
+            'New_admin should not have admin permissions for this institution!'
         )
         self.assertEquals(
             admin.key, 
@@ -706,12 +706,12 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         self.assertTrue(
             has_permissions(admin, institution.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'Admin must have super user permissions for this institution!'
+            'Admin must have admin permissions for this institution!'
         )
         self.assertFalse(
             has_permissions(new_admin, institution.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'New_admin should not have super user permissions for this institution!'
+            'New_admin should not have admin permissions for this institution!'
         )
         self.assertEquals(
             admin.key, 
@@ -743,7 +743,7 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         institution.add_member(new_admin)
 
         admin.add_institution_admin(institution.key)
-        add_permission(admin, institution.key.urlsafe(),
+        add_permissions(admin, institution.key.urlsafe(),
             permissions.DEFAULT_ADMIN_PERMISSIONS)
 
         institution.put()
@@ -755,12 +755,12 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         self.assertTrue(
             has_permissions(admin, institution.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'Admin must have super user permissions for this institution!'
+            'Admin must have admin permissions for this institution!'
         )
         self.assertFalse(
             has_permissions(new_admin, institution.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'New_admin should not have super user permissions for this institution!'    
+            'New_admin should not have admin permissions for this institution!'    
         )
         self.assertEquals(
             admin.key, 
@@ -779,12 +779,12 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         self.assertTrue(
             has_permissions(admin, institution.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS), 
-            'Admin must have super user permissions for this institution!'
+            'Admin must have admin permissions for this institution!'
         )
         self.assertFalse(
             has_permissions(new_admin, institution.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'New_admin should not have super user permissions for this institution!'
+            'New_admin should not have admin permissions for this institution!'
         )
         self.assertEquals(
             admin.key, 
@@ -817,7 +817,7 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         institution.add_member(new_admin)
 
         admin.add_institution_admin(institution.key)
-        add_permission(admin, institution.key.urlsafe(),
+        add_permissions(admin, institution.key.urlsafe(),
             permissions.DEFAULT_ADMIN_PERMISSIONS)
 
         institution.put()
@@ -828,12 +828,12 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         self.assertTrue(
             has_permissions(admin, institution.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS), 
-            'Admin must have super user permissions for this institution!'
+            'Admin must have admin permissions for this institution!'
         )
         self.assertFalse(
             has_permissions(new_admin, institution.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'New_admin should not have super user permissions for this institution!'
+            'New_admin should not have admin permissions for this institution!'
         )
         self.assertEquals(
             admin.key, 
@@ -851,12 +851,12 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         self.assertTrue(
             has_permissions(admin, institution.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'Admin must have super user permissions for this institution!'
+            'Admin must have admin permissions for this institution!'
         )
         self.assertFalse(
             has_permissions(new_admin, institution.key.urlsafe(),
                 permissions.DEFAULT_ADMIN_PERMISSIONS),
-            'New_admin should not have super user permissions for this institution!'
+            'New_admin should not have admin permissions for this institution!'
         )
         self.assertEquals(
             admin.key, 

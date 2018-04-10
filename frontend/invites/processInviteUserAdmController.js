@@ -100,16 +100,16 @@
 
         /**
          * This method remove super user permissions when the transferring 
-         * administration is send by the super institution.
+         * administration is sent by the super institution.
          */
         function removeSuperUserPermission(){
             if(processCtrl.invite.institution.trusted){
-                let permission_analyze = processCtrl.current_user.hasPermission('analyze_request_inst', 
+                let analyzeRequestPermission = processCtrl.current_user.hasPermission('analyze_request_inst', 
                     processCtrl.invite.institution.key);
-                let permission_send = processCtrl.current_user.hasPermission('send_invite_inst', 
+                let sendInvitePermission = processCtrl.current_user.hasPermission('send_invite_inst', 
                     processCtrl.invite.institution.key);
                 let isOldAdmin = processCtrl.typeOfDialog === processCtrl.VIEW_INVITE_SENDER;
-                if(permission_analyze && permission_send && isOldAdmin){
+                if(analyzeRequestPermission && sendInvitePermission && isOldAdmin){
                     delete processCtrl.current_user.permissions['analyze_request_inst']
                     delete processCtrl.current_user.permissions['send_invite_inst']
                 }

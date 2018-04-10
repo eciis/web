@@ -190,22 +190,6 @@ def json_response(method):
         method(self, *args)
     return response
 
-def get_super_institution():
-    """Return Super Institution of system."""
-    query = Institution.query(Institution.trusted == True)
-    return query.get()
-
-def get_super_users():
-    """Get users of institutions trusted that has permission to analize resquests for new institutions."""
-    userswithpermission = []
-    institutionsTrusted = Institution.query(Institution.trusted == True)
-    for institution in institutionsTrusted:
-        for userKey in institution.members:
-            user = userKey.get()
-            if user.has_permission('analyze_request_inst', institution.key.urlsafe()):
-                userswithpermission.append(user)
-    return userswithpermission
-
 def offset_pagination(page, number_fetchs, query):
     """Modify query for get entities using offset pagination."""
     offset = page * number_fetchs

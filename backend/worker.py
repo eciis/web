@@ -10,7 +10,6 @@ from models.post import Post
 from models.invite_user import InviteUser
 from models.invite_user_adm import InviteUserAdm
 from utils import json_response
-from utils import get_super_institution
 from service_messages import send_message_notification
 from service_messages import send_message_email
 from jinja2 import Environment, FileSystemLoader

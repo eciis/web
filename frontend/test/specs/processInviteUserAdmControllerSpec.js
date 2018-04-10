@@ -59,6 +59,37 @@
         });
     }));
 
+    describe('Test view accept invite', function() {
+        
+        beforeEach(function() {
+            processInviteUserAdmCtrl.invite.institution.trusted = true;
+            let permission_inst = _.set({}, processInviteUserAdmCtrl.invite.institution.key, true);
+            processInviteUserAdmCtrl.current_user.permissions['analyze_request_inst'] = permission_inst;
+            processInviteUserAdmCtrl.current_user.permissions['send_invite_inst'] = permission_inst;
+
+            processInviteUserAdmCtrl.invite.status= "accepted";
+
+            processInviteUserAdmCtrl = controller('ProcessInviteUserAdmController', {
+                key: invite.key,
+                typeOfDialog: 'VIEW_ACCEPTED_INVITATION_SENDER',
+                InviteService: inviteService,
+                MessageService: messageService,
+                AuthService: authService,
+                $mdDialog: mdDialog
+            });
+        });
+
+        it('Should remove super user permissions of old admin', function() {
+            expect(processInviteUserAdmCtrl.current_user.hasPermission('analyze_request_inst', 
+                processInviteUserAdmCtrl.invite.institution.key)).toBeFalsy();
+            expect(processInviteUserAdmCtrl.current_user.hasPermission('send_invite_inst', 
+                processInviteUserAdmCtrl.invite.institution.key)).toBeFalsy();
+
+        });
+
+    });
+
+
     describe('Test accept()', function() {
         
         beforeEach(function() {

@@ -96,7 +96,7 @@
         }
 
         eventCtrl.isEventAuthor = function isEventAuthor(event) {
-            if (event) return Utils.getKeyFromUrl(event.author_key) === eventCtrl.user.key;
+            return event && (event.author_key === eventCtrl.user.key);
         };
 
         eventCtrl.goToEvent = function goToEvent(event) {

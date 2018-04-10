@@ -428,6 +428,8 @@
                     $state.go("app.user.home");
                 }
                 MessageService.showToast("Instituição removida com sucesso.");
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
             });
         };
 

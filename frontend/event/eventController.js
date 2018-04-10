@@ -109,6 +109,7 @@
         };
 
         dialogCtrl.save = function save() {
+            addLinks();
             var callback = dialogCtrl.isEditing ? updateEvent : create;
             var saveImgPromise = saveImage(callback);
         };
@@ -154,7 +155,6 @@
         }
 
         function updateEvent() {
-            addLinks(dialogCtrl.event);
             var event = new Event(dialogCtrl.event, dialogCtrl.user.current_institution.key);
             if(event.isValid()) {
                 dialogCtrl.loading = true;
@@ -271,14 +271,14 @@
             }
         };
 
-        dialogCtrl.isValidAddress = function isValidAddress(){
+        dialogCtrl.isValidAddress = function isValidAddress() {
             var valid = true;
             var address = dialogCtrl.event.address;
-            var attributes = ["street", "number", "country", "federal_state", "city"];
+            var attributes = ["street", "country", "federal_state", "city"];
             if(address && address.country === "Brasil"){     
                 _.forEach(attributes, function(attr) {     
                     var value = _.get(dialogCtrl.event.address, attr);
-                    if(! value || _.isUndefined(value) || _.isEmpty(value)) {
+                    if(! value || _.isUndefined(value) ||  _.isEmpty(value)) {
                         valid = false;
                     }   
                 });       
@@ -382,7 +382,6 @@
 
         function create() {
             var event = new Event(dialogCtrl.event, dialogCtrl.user.current_institution.key);
-            addLinks(event);
             if (event.isValid()) {
                 dialogCtrl.loading = true;
                 EventService.createEvent(event).then(function success(response) {
@@ -400,11 +399,11 @@
             }
         }
 
-        function addLinks(event) {
+        function addLinks() {
             let videoUrls = dialogCtrl.videoUrls.filter(videoUrl => videoUrl.url !== '');
             let usefulLinks = dialogCtrl.usefulLinks.filter(usefulLink => usefulLink.url !== '');
-            event.video_url = videoUrls;
-            event.useful_links = usefulLinks;
+            dialogCtrl.event.video_url = videoUrls;
+            dialogCtrl.event.useful_links = usefulLinks;
         };
 
         function getCountries() {

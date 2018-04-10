@@ -80,6 +80,7 @@ class InstitutionRequestHandler(BaseHandler):
         self.response.write(json.dumps(request.make()))
 
     @login_required
+    @json_response
     def delete(self, user, request_key):
         """Change request status from 'sent' to 'rejected'."""
         request_key = ndb.Key(urlsafe=request_key)

@@ -90,7 +90,7 @@
             <div flex >
               <md-list class="md-dense" flex>
                 <md-list-item class="md-3-line" ng-repeat="request in inviteInstCtrl.sent_requests"
-                ng-click="inviteInstCtrl.showProcessingRequestDialog(request)">
+                ng-click="inviteInstCtrl.showPendingRequestDialog($event, request)">
                   <md-icon class="md-avatar-icon" 
                   md-colors="{background: 'light-green-500', color: 'grey-50'}">account_balance</md-icon>
                   <div class="md-list-item-text" layout="column">
@@ -98,10 +98,6 @@
                     <h3>Requisitado por: {{ request.sender_name }}</h3>
                     <p>Email do requisitante: {{ request.sender[0] }}</p>
                   </div>
-                  <md-icon class="md-secondary md-hue-3" title="Rejeitar" 
-                      ng-click="inviteInstCtrl.rejectRequest($event, request)">close</md-icon>
-                  <md-icon class="md-secondary" title="Aceitar" 
-                      ng-click="inviteInstCtrl.acceptRequest(request)" style="margin-left: 30%">send</md-icon>
                 </md-list-item>
               </md-list>
             </div>

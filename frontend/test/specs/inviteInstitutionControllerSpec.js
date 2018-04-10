@@ -167,61 +167,6 @@
             });
         });
 
-        describe('acceptRequest()', function() {
-            it('should call accept request', function(done) {
-                spyOn(mdDialog, 'show').and.callFake(function() {
-                    return {
-                        then: function(callback) {
-                            return callback();
-                        }
-                    };
-                });
-                spyOn(requestInvitationService, 'acceptRequestInst').and.callFake(function() {
-                    return {
-                        then: function(callback) {
-                            return callback();
-                        }
-                    };
-                });
-                spyOn(instService, 'getInstitution').and.callFake(function() {
-                    return {
-                        then: function(callback) {
-                            return callback({data: institution, msg: 'success'});
-                        }
-                    };
-                });
-                var promise = inviteinstitutionCtrl.acceptRequest(request);
-                promise.then(function() {
-                    expect(requestInvitationService.acceptRequestInst).toHaveBeenCalledWith(request.key);
-                    done();
-                });
-            });
-        });
-
-        describe('rejectRequest()', function() {
-            it('should call reject parent request', function(done) {
-                spyOn(mdDialog, 'show').and.callFake(function() {
-                    return {
-                        then: function(callback) {
-                            return callback();
-                        }
-                    };
-                });
-                spyOn(requestInvitationService, 'rejectRequestInst').and.callFake(function() {
-                    return {
-                        then: function(callback) {
-                            return callback();
-                        }
-                    };
-                });
-                var promise = inviteinstitutionCtrl.rejectRequest("$event", request);
-                promise.then(function() {
-                    expect(requestInvitationService.rejectRequestInst).toHaveBeenCalledWith(request.key);
-                    done();
-                });
-            });
-        });
-
         describe('resendInvite()', function () {
             it('should resend the invite', function () {
                 spyOn(mdDialog, 'confirm').and.callThrough();
@@ -245,6 +190,23 @@
                 expect(mdDialog.confirm).toHaveBeenCalled();
                 expect(mdDialog.show).toHaveBeenCalled();
                 expect(inviteService.resendInvite).toHaveBeenCalled();
+            });
+        });
+
+        describe('showPendingRequestDialog', function () {
+            it('should call show()', function () {
+                spyOn(mdDialog, 'show').and.callFake(function () {
+                    return {
+                        then: function (callback) {
+                            return callback();
+                        }
+                    };
+                });
+                inviteinstitutionCtrl.sent_requests = [request];
+                inviteinstitutionCtrl.showPendingRequestDialog('$event', request);
+                expect(mdDialog.show).toHaveBeenCalled();
+                expect(request.status).toBe('accepted');
+                expect(inviteinstitutionCtrl.sent_requests).toEqual([]);
             });
         });
     });

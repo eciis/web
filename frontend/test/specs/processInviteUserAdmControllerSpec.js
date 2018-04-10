@@ -28,7 +28,8 @@
             institutions_admin: [],
             institutions: [{key: "institutuion_key"}],
             state: 'active',
-            key: '3242343rdsf324s'
+            key: '3242343rdsf324s',
+            permissions: []
         };
 
         invite = {
@@ -81,6 +82,54 @@
 
             expect(user.institutions_admin).toEqual([institution.key]);
             expect(user.institutions[0].admin).toEqual(user.key);
+            expect(processInviteUserAdmCtrl.typeOfDialog).toEqual('VIEW_ACCEPTED_INVITATION_INVITEE');
+            expect(processInviteUserAdmCtrl.isAccepting).toBeTruthy();
+            expect(inviteService.acceptInviteUserAdm).toHaveBeenCalledWith(invite.key);
+            expect(messageService.showToast).toHaveBeenCalledWith('Convite aceito com sucesso!');
+        });
+
+        it('Should add super user permissions of old admin', function() {
+            expect(processInviteUserAdmCtrl.typeOfDialog).toEqual('ACCEPT_INVITATION');
+            expect(processInviteUserAdmCtrl.isAccepting).toBeFalsy();
+            expect(processInviteUserAdmCtrl.current_user.hasPermission('analyze_request_inst', 
+                processInviteUserAdmCtrl.invite.institution.key)).toBeFalsy();
+            expect(processInviteUserAdmCtrl.current_user.hasPermission('send_invite_inst', 
+                processInviteUserAdmCtrl.invite.institution.key)).toBeFalsy();
+            
+            processInviteUserAdmCtrl.invite.institution.trusted = true;
+            processInviteUserAdmCtrl.accept();
+            user = JSON.parse(window.localStorage.userInfo);
+
+            expect(user.institutions_admin).toEqual([institution.key]);
+            expect(user.institutions[0].admin).toEqual(user.key);
+            expect(processInviteUserAdmCtrl.current_user.hasPermission('analyze_request_inst', 
+                processInviteUserAdmCtrl.invite.institution.key)).toBeTruthy();
+            expect(processInviteUserAdmCtrl.current_user.hasPermission('send_invite_inst', 
+                processInviteUserAdmCtrl.invite.institution.key)).toBeTruthy();
+            expect(processInviteUserAdmCtrl.typeOfDialog).toEqual('VIEW_ACCEPTED_INVITATION_INVITEE');
+            expect(processInviteUserAdmCtrl.isAccepting).toBeTruthy();
+            expect(inviteService.acceptInviteUserAdm).toHaveBeenCalledWith(invite.key);
+            expect(messageService.showToast).toHaveBeenCalledWith('Convite aceito com sucesso!');
+        });
+
+        it('Should not add super user permissions of old admin', function() {
+            expect(processInviteUserAdmCtrl.typeOfDialog).toEqual('ACCEPT_INVITATION');
+            expect(processInviteUserAdmCtrl.isAccepting).toBeFalsy();
+            expect(processInviteUserAdmCtrl.current_user.hasPermission('analyze_request_inst', 
+                processInviteUserAdmCtrl.invite.institution.key)).toBeFalsy();
+            expect(processInviteUserAdmCtrl.current_user.hasPermission('send_invite_inst', 
+                processInviteUserAdmCtrl.invite.institution.key)).toBeFalsy();
+            
+            processInviteUserAdmCtrl.invite.institution.trusted = false;
+            processInviteUserAdmCtrl.accept();
+            user = JSON.parse(window.localStorage.userInfo);
+
+            expect(user.institutions_admin).toEqual([institution.key]);
+            expect(user.institutions[0].admin).toEqual(user.key);
+            expect(processInviteUserAdmCtrl.current_user.hasPermission('analyze_request_inst', 
+                processInviteUserAdmCtrl.invite.institution.key)).toBeFalsy();
+            expect(processInviteUserAdmCtrl.current_user.hasPermission('send_invite_inst', 
+                processInviteUserAdmCtrl.invite.institution.key)).toBeFalsy();
             expect(processInviteUserAdmCtrl.typeOfDialog).toEqual('VIEW_ACCEPTED_INVITATION_INVITEE');
             expect(processInviteUserAdmCtrl.isAccepting).toBeTruthy();
             expect(inviteService.acceptInviteUserAdm).toHaveBeenCalledWith(invite.key);

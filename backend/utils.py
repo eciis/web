@@ -196,12 +196,10 @@ def json_response(method):
 
 def get_super_institution():
     """Return Super Institution of system."""
-    # TODO: Change how to check if is super institution.
-    # @author: Maiana Brito
-    return Institution.query().filter(Institution.name == "Departamento do Complexo Industrial e Inovação em Saúde").get()
+    query = Institution.query(Institution.trusted == True)
+    return query.get()
 
-
-def getSuperUsers():
+def get_super_users():
     """Get users of institutions trusted that has permission to analize resquests for new institutions."""
     userswithpermission = []
     institutionsTrusted = Institution.query(Institution.trusted == True)

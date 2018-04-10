@@ -6,7 +6,6 @@ from search_module.search_institution import SearchInstitution
 from models.address import Address
 from permissions import DEFAULT_ADMIN_PERMISSIONS
 from permissions import DEFAULT_SUPER_USER_PERMISSIONS
-from utils import get_super_institution
 
 
 def get_actuation_area(data):
@@ -345,7 +344,7 @@ class Institution(ndb.Model):
         if not permissions:
             permissions = {}
 
-        if self.key == get_super_institution().key:
+        if self.trusted:
             institution_key = self.key.urlsafe()
             for permission in DEFAULT_SUPER_USER_PERMISSIONS:
                 if permission in permissions:

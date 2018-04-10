@@ -352,7 +352,7 @@ class TransferAdminPermissionsHandler(BaseHandler):
                 permissions_filtered = filter_permissions_to_remove(admin, permissions, institution_key)
                 self.remove_permissions(admin, permissions_filtered)
             
-            if(institution.key == get_super_institution().key):
+            if(institution.trusted):
                 for permission in DEFAULT_SUPER_USER_PERMISSIONS:
                     admin.remove_permission(permission, institution.key.urlsafe())
 

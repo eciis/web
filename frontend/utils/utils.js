@@ -35,6 +35,12 @@ var Utils = {
             }
         return key;
     },
+    // isSuperInstitution : function isSuperInstitution(institution) {
+        
+    // },
+    // isSuperUser : function isSuperUser(user) {
+       
+    // },
     recognizeUrl : function recognizeUrl(text) {
         var URL_PATTERN = /(((www.)|(http(s)?:\/\/))[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
         var REPLACE_URL = "<a href=\'$1\' target='_blank'>$1</a>";

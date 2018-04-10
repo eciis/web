@@ -2,10 +2,10 @@
     <div flex layout-fill flex-gt-md="100" layout="column" layout-align="center">
         <div layout="column" layout-xs="column" layout-margin layout-align="center center">
             <div flex>
-                <div layout="row" flex>
+                <div layout="row" flex ng-if="!configInstCtrl.getStep(4)">
                     <md-card layout="row" flex layout-margin>
                         <div flex>
-                            <md-content ng-if="!configInstCtrl.getStep(4)" class="hide-scrollbar" layout="row">
+                            <md-content class="hide-scrollbar" layout="row">
                                 <div layout="row" layout-align="center center" layout-margin>
                                     <span class="green-circle" style="color: #FFFFFF; width: 25px; height: 25px;">
                                         <span layout="row" layout-align="center">

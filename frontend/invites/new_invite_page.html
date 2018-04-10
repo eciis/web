@@ -41,7 +41,7 @@
                     </div>
 
                     <!-- USER INFORMATION -->
-                    <div layout="column" ng-if="newInviteCtrl.isUserInfoImcomplete()">
+                    <div layout="column" ng-if="newInviteCtrl.isUserInfoImcomplete()" style="margin-top:7px;">
                       <md-input-container ng-if="newInviteCtrl.checkUserName()">
                         <label>Seu Nome</label>
                       <input ng-model="newInviteCtrl.user_name" name="nome" required>

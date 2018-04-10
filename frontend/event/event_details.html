@@ -39,7 +39,7 @@
               <md-icon style="color: white;">more_vert</md-icon>
             </md-button>
             <md-menu-content>
-              <md-menu-item ng-if="eventCtrl.canEdit(eventDetailsCtrl.event)">
+              <md-menu-item ng-if="eventDetailsCtrl.canEdit(eventDetailsCtrl.event)">
                 <md-button ng-click="eventDetailsCtrl.editEvent($event, eventDetailsCtrl.event)">
                   <md-icon>edit</md-icon>
                   Editar evento

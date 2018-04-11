@@ -52,14 +52,13 @@ var Utils = {
         config.url = config.url.replace(restApiRegex, restApiUrl + '/api/$1');
     },
     getIndexesOf : function getIndexesOf(substring, string) {
-        if (substring.length == 0) {
-            return [];
-        }
-        var startIndex = 0, index, indexes = [];
-
-        while((index = string.indexOf(substring, startIndex)) > -1) {
-            indexes.push(index);
-            startIndex = index + substring.length;
+        var indexes = [];
+        if (substring.length !== 0) {
+            var startIndex = 0, index;
+            while((index = string.indexOf(substring, startIndex)) > -1) {
+                indexes.push(index);
+                startIndex = index + substring.length;
+            }
         }
         return indexes;
     },

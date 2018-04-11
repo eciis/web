@@ -86,6 +86,7 @@
 
         it('Should remove event of events', function () {
             httpBackend.expect('DELETE', EVENTS_URI + '/' + event.key).respond();
+            eventCtrl.event = other_event;
             eventCtrl.confirmDeleteEvent("$event", other_event);
             httpBackend.flush();
 

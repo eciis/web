@@ -49,8 +49,8 @@ class EventHandlerTest(TestBaseHandler):
         cls.event = mocks.create_event(cls.user, cls.institution)
 
     @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
-    def test_delete(self, verify_token):
-        """Test the event_handler's delete method."""
+    def test_delete_by_author(self, verify_token):
+        """Test the event_handler's delete method when user is author."""
         # Call the delete method
         self.testapp.delete("/api/events/%s" %
                             self.event.key.urlsafe())
@@ -70,6 +70,32 @@ class EventHandlerTest(TestBaseHandler):
         with self.assertRaises(Exception):
             self.testapp.delete("/api/events/%s" %
                                 self.event.key.urlsafe())
+
+    @patch('utils.verify_token', return_value={'email': 'usersd@gmail.com'})
+    def test_delete_by_admin(self, verify_token):
+        """Test the event_handler's delete method when user is admin."""
+        # Call the delete method and assert that it raises an exception,
+        # because the user doesn't have the permission yet.
+        with self.assertRaises(Exception) as raises_context:
+            self.testapp.delete("/api/events/%s" %
+                                self.event.key.urlsafe())
+        message = self.get_message_exception(str(raises_context.exception))
+        self.assertEquals(message, "Error! The user can not remove this event")
+        
+        #Add permission of admin
+        self.second_user.add_permissions(["remove_posts"], self.event.institution_key.urlsafe())
+
+        # Call the delete method
+        self.testapp.delete("/api/events/%s" %
+                            self.event.key.urlsafe())
+        # Refresh event
+        self.event = self.event.key.get()
+        # Verify if after delete the state of event is deleted
+        self.assertEqual(self.event.state, "deleted",
+                         "The state expected was deleted.")
+        # Verify if after delete the last_modified
+        self.assertEqual(self.event.last_modified_by, self.second_user.key,
+                         "The last_modified_by expected was user.")
 
     @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
     def test_patch(self, verify_token):
@@ -185,7 +211,31 @@ class EventHandlerTest(TestBaseHandler):
             self.assertEquals(
                 getattr(self.event, prop), value,
                 "The event "+ prop + " should be 'other_value'")
+    
+    @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
+    def test_get_a_deleted_event(self, verify_token):
+        self.event.state = 'deleted'
+        self.event.put()
 
+        with self.assertRaises(Exception) as ex:
+            self.testapp.get('/api/events/%s' %self.event.key.urlsafe())
+
+        exception_message = self.get_message_exception(ex.exception.message)
+        self.assertTrue(exception_message == 'Error! The event has been deleted.')
+    
+    @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
+    def test_patch_a_deleted_event(self, verify_token):
+        self.event.state = 'deleted'
+        self.event.put()
+
+        with self.assertRaises(Exception) as ex:
+            patch = [{"op": "replace", "path": "/title", "value": 'other_value'}]
+            self.testapp.patch('/api/events/%s' % self.event.key.urlsafe(), json.dumps(patch))
+
+        exception_message = self.get_message_exception(ex.exception.message)
+        self.assertTrue(exception_message ==
+                        'Error! The event has been deleted.')
+        
 
     def tearDown(cls):
         """Deactivate the test."""

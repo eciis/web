@@ -6,7 +6,6 @@ from utils import Utils
 from google.appengine.ext import ndb
 from utils import login_required
 from utils import json_response
-from utils import getSuperUsers
 from handlers.base_handler import BaseHandler
 from custom_exceptions.entityException import EntityException
 from service_messages import send_message_notification

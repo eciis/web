@@ -3,7 +3,7 @@
     var app = angular.module("app");
     app.controller("ConfigInstController", function ConfigInstController(AuthService, InstitutionService, CropImageService,$state,
             $mdToast, $mdDialog, $http, InviteService, ImageService, $rootScope, MessageService, PdfService, $q, $window,
-            RequestInvitationService, brCidadesEstados) {
+            RequestInvitationService, brCidadesEstados, ObserverRecorderService) {
 
         var configInstCtrl = this;
         var institutionKey = $state.params.institutionKey;
@@ -247,7 +247,7 @@
         }
 
         function patchIntitution() {
-            var patch = jsonpatch.generate(observer);
+            var patch = ObserverRecorderService.generate(observer);
             InstitutionService.update(institutionKey, patch).then(
                 function success() {
                     if(configInstCtrl.newInstitution)
@@ -415,7 +415,7 @@
                 configInstCtrl.newInstitution = response.data;
                 configInstCtrl.suggestedName = configInstCtrl.newInstitution.name;
                 currentPortfoliourl = configInstCtrl.newInstitution.portfolio_url;
-                observer = jsonpatch.observe(configInstCtrl.newInstitution);
+                observer = ObserverRecorderService.register(configInstCtrl.newInstitution);
                 loadAddress(); 
                 setDefaultPhotoUrl();
                 configInstCtrl.loading = false;
@@ -430,14 +430,34 @@
             configInstCtrl.newInstitution.photo_url = configInstCtrl.newInstitution.photo_url || defaultPhotoUrl;
         }
 
-        (function main(){
-            if (institutionKey) {
+        function hasPendingInstInvite() {
+            return !_.isEmpty(configInstCtrl.user.invites
+                .filter(invite => invite.type_of_invite === "INSTITUTION" && invite.status === "sent"));
+        }
+
+        function isRequest() {
+            return configInstCtrl.user.state !== "active" && !hasPendingInstInvite();
+        }
+
+        function loadRequestState() {
+            configInstCtrl.isSubmission = true;
+            configInstCtrl.newInstitution.admin = {};
+            loadAddress();
+        }
+
+        configInstCtrl.initController = function initController() {
+            if (configInstCtrl.institutionKey) {
                 loadInstitution();
+            } else if(isRequest()) {
+                loadRequestState();
             } else {
-                configInstCtrl.isSubmission = true;
-                configInstCtrl.newInstitution.admin = {};
-                loadAddress();
+                $state.go('signin');
             }
+        };
+
+        (function main(){
+            configInstCtrl.institutionKey = institutionKey;
+            configInstCtrl.initController();
         })();
     });
 

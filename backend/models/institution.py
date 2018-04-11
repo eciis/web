@@ -5,6 +5,7 @@ from google.appengine.ext import ndb
 from search_module.search_institution import SearchInstitution
 from models.address import Address
 from permissions import DEFAULT_ADMIN_PERMISSIONS
+from permissions import DEFAULT_SUPER_USER_PERMISSIONS
 
 
 def get_actuation_area(data):
@@ -92,16 +93,16 @@ class Institution(ndb.Model):
 
     cover_photo = ndb.StringProperty()
 
-    def follow(self, user):
+    def follow(self, user_key):
         """Add one user in collection of followers."""
-        if user not in self.followers:
-            self.followers.append(user)
+        if user_key not in self.followers:
+            self.followers.append(user_key)
             self.put()
 
-    def unfollow(self, user):
+    def unfollow(self, user_key):
         """Remove one user in collection of followers."""
-        if user in self.followers and user not in self.members:
-            self.followers.remove(user)
+        if user_key in self.followers and user_key not in self.members:
+            self.followers.remove(user_key)
             self.put()
 
     def add_member(self, member):
@@ -247,6 +248,7 @@ class Institution(ndb.Model):
     
     def set_admin(self, user_key):
         self.admin = user_key
+        self.email = user_key.get().email[0]
         self.put()
 
     @ndb.transactional(xg=True)
@@ -326,4 +328,25 @@ class Institution(ndb.Model):
             children = children.get()
             children.get_all_hierarchy_admin_permissions(permissions)
         
+        return permissions
+
+    def get_super_user_admin_permissions(self, permissions=None):
+        """
+        This method get all super user permissions.
+        The type permission is only possible when the institution is super institution.
+        Returns a dict containing the super user permissions.
+
+        Arguments:
+        permissions(Optional) -- Dict of previous permissions added for add more permissons. 
+        If not passed, creates new dict of permissions
+        """
+
+        if not permissions:
+            permissions = {}
+
+        if self.trusted:
+            institution_key = self.key.urlsafe()
+            for permission in DEFAULT_SUPER_USER_PERMISSIONS:
+                permissions.update({permission: {institution_key: True}})
+            
         return permissions

@@ -45,7 +45,7 @@
             let promise = EventService.deleteEvent(event);
             promise.then(function success() {
                 MessageService.showToast('Evento removido com sucesso!');
-                $state.go('app.user.events');
+                eventCtrl.event.state = "deleted";
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
@@ -58,8 +58,9 @@
             }
         };
 
-        eventCtrl.canDelete = function canDelete(event) {
-            return eventCtrl.isEventAuthor(event) || isInstitutionAdmin(event);
+        eventCtrl.canChange = function canChange(event) {
+            if(event)
+                return eventCtrl.isEventAuthor(event) || isInstitutionAdmin(event);
         };
 
         eventCtrl.canEdit = function canEdit(event) {
@@ -95,7 +96,7 @@
         }
 
         eventCtrl.isEventAuthor = function isEventAuthor(event) {
-            if (event) return Utils.getKeyFromUrl(event.author_key) === eventCtrl.user.key;
+            return event && (event.author_key === eventCtrl.user.key);
         };
 
         eventCtrl.goToEvent = function goToEvent(event) {
@@ -131,9 +132,14 @@
             }
         };
 
+        eventCtrl.isDeleted = () => {
+            return eventCtrl.event ? eventCtrl.event.state === 'deleted' : true;
+        }
+
         function isInstitutionAdmin(event) {
-            return _.includes(_.map(eventCtrl.user.institutions_admin, Utils.getKeyFromUrl),
-                Utils.getKeyFromUrl(event.institution_key));
+            if(event.institution_key)
+                return _.includes(_.map(eventCtrl.user.institutions_admin, Utils.getKeyFromUrl),
+                    Utils.getKeyFromUrl(event.institution_key));
         }
     });
     

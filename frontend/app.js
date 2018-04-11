@@ -149,6 +149,9 @@
                         templateUrl: "app/institution/institution_events.html",
                         controller: "EventController as eventCtrl"
                     }
+                },
+                params: {
+                    posts: undefined
                 }
             })
             .state("app.institution.members", {
@@ -456,6 +459,14 @@
             var pendingInvite = AuthService.getCurrentUser().getPendingInvitation();
             var inviteKey = pendingInvite.key;
             $state.go("new_invite", {key: inviteKey});
+        });
+    });
+
+    app.run(function jsonPatchUnobserveInterceptor(ObserverRecorderService, $transitions) {
+        $transitions.onSuccess({
+            to: () => true
+        }, function () {
+            ObserverRecorderService.unobserveAll();
         });
     });
 })();

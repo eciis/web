@@ -24,7 +24,6 @@
                             'number_votes': 0,
                             'voters': []
                             };
-        var observer;
         var timelineContent = document.getElementById('content');
         var MAXIMUM_PDF_SIZE = 5242880; // 5Mb in bytes
 
@@ -373,7 +372,6 @@
         (function main() {
             if($scope.isEditing) {
                 postCtrl.createEditedPost($scope.originalPost);
-                observer = jsonpatch.observe(postCtrl.post);
             }
             postCtrl.typePost = 'Common';
         })();

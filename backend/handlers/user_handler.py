@@ -8,6 +8,7 @@ from utils import Utils
 from utils import login_required
 from utils import create_user
 from utils import json_response
+from utils import make_user
 from models.user import InstitutionProfile
 
 from util.json_patch import JsonPatch
@@ -32,29 +33,6 @@ def get_invites(user_email):
 def define_entity(dictionary):
     """Method of return entity class for create object in JasonPacth."""
     return InstitutionProfile
-
-
-def make_user(user, request):
-    """TODO: Move this method to User when utils.py is refactored.
-
-    @author Andre L Abrantes - 20-06-2017
-    """
-    user_json = Utils.toJson(user, host=request.host)
-    user_json['logout'] = 'http://%s/logout?redirect=%s' %\
-        (request.host, request.path)
-    user_json['institutions'] = []
-    for institution in user.institutions:
-        user_json['institutions'].append(
-            Utils.toJson(institution.get())
-        )
-    user_json['follows'] = [institution_key.get().make(
-        ['name','acronym', 'photo_url', 'key', 'parent_institution'])
-        for institution_key in user.follows
-        if institution_key.get().state != 'inactive']
-    user_json['institution_profiles'] = [profile.make()
-        for profile in user.institution_profiles]
-    return user_json
-
 
 def remove_user_from_institutions(user):
     """Remove user from all your institutions."""

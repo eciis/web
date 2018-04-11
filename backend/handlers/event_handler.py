@@ -36,6 +36,9 @@ class EventHandler(BaseHandler):
         event_key = ndb.Key(urlsafe=url_string)
         event = event_key.get()
 
+        Utils._assert(event.state == 'deleted', 
+            "The event has been deleted.", NotAuthorizedException)
+
         assert type(event) is Event, "Key is not an Event"
         event_json = Event.make(event)
 
@@ -45,11 +48,17 @@ class EventHandler(BaseHandler):
 
     @json_response
     @login_required
-    @is_event_author
     def delete(self, user, key):
         """Change event state from 'published' to 'deleted'."""
         event_key = ndb.Key(urlsafe=key)
         event = event_key.get()
+
+        is_admin = user.has_permission("remove_posts", event.institution_key.urlsafe())
+        is_author = user.key == event.author_key
+        
+        Utils._assert(not is_admin and not is_author,
+                      "The user can not remove this event", NotAuthorizedException)
+
         event.state = 'deleted'
         event.last_modified_by = user.key
         event.last_modified_by_name = user.name
@@ -63,6 +72,10 @@ class EventHandler(BaseHandler):
         patch = self.request.body
 
         event = ndb.Key(urlsafe=key).get()
+
+        Utils._assert(event.state == 'deleted',
+                      "The event has been deleted.", NotAuthorizedException)
+
         event.verify_patch(patch)
 
         """Apply patch."""

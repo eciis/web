@@ -162,6 +162,7 @@ class User(ndb.Model):
                 self.institutions_admin.remove(institution)
             self.institutions.remove(institution)
             self.remove_permission('publish_post', institution.urlsafe())
+            self.remove_permission('publish_survey', institution.urlsafe())
             self.remove_profile(institution.urlsafe())
             self.follows.remove(institution)
             if len(self.institutions) == 0:
@@ -320,7 +321,9 @@ class User(ndb.Model):
         """
         self.institutions = []
         self.follows = []
-
+        self.permissions = {}
+        self.put()
+        
     def _post_put_hook(self, future):
         """This method is called after each User.put()."""
         search_user = SearchUser()

@@ -14,7 +14,7 @@
               {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'DD'}}</h1>
           </div>
             <md-divider style="border: 1px; border-style: solid; color: #03b3a1;"></md-divider>
-          <div layout="row" md-colors="{background: 'default-grey-200'}" style="padding: 0 10px 0 10px">
+          <div layout="row" md-colors="{background: 'default-grey-200'}" layout-align="center center">
             <h3 md-colors="{color:'default-teal-400'}" ng-if="eventDetailsCtrl.endInOtherMonth()">
               {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'MMM' | uppercase}}
               | {{eventDetailsCtrl.event.end_time | amUtc | amLocal | amDateFormat:'MMM' | uppercase}}
@@ -27,19 +27,19 @@
       </md-card-content>
       <md-card-content flex-gt-xs layout="column">
           <a href class="md-title hyperlink" ng-click="eventDetailsCtrl.goToEvent(eventDetailsCtrl.event)">
-              <span style="color: white;">{{ eventDetailsCtrl.event.title | uppercase}}</span>
+            <span style="color: white;">{{ eventDetailsCtrl.event.title | uppercase}}</span>
           </a>
           <span style="color: white; margin-top: auto;">Organizado por {{eventDetailsCtrl.event.institution_name}}</span>
       </md-card-content>
       <md-card-content ng-if="eventDetailsCtrl.isEventPage" hide-xs>
         <md-card-actions layout="row">
-          <md-menu md-offset="-165 45" ng-if="eventDetailsCtrl.isEventAuthor(eventDetailsCtrl.event)">
+          <md-menu md-offset="-165 45" ng-if="eventDetailsCtrl.canChange(eventDetailsCtrl.event)">
             <md-button class="md-icon-button" title="Opções" hide-xs
             style="margin-top: 25px;" ng-click="$mdMenu.open(ev)">
               <md-icon style="color: white;">more_vert</md-icon>
             </md-button>
             <md-menu-content>
-              <md-menu-item>
+              <md-menu-item ng-if="eventDetailsCtrl.canEdit(eventDetailsCtrl.event)">
                 <md-button ng-click="eventDetailsCtrl.editEvent($event, eventDetailsCtrl.event)">
                   <md-icon>edit</md-icon>
                   Editar evento

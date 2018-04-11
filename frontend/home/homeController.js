@@ -245,7 +245,7 @@
         };
 
         function loadProfile(){
-            colorPickerCtrl.newUser =  Utils.clone(colorPickerCtrl.user);
+            colorPickerCtrl.newUser =  _.cloneDeep(colorPickerCtrl.user);
 
             colorPickerCtrl.newProfile = _.find(colorPickerCtrl.newUser.institution_profiles, function (profile) {
                 return profile.institution_key === colorPickerCtrl.newUser.current_institution.key;

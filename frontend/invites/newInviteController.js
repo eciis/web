@@ -4,7 +4,7 @@
    var app = angular.module('app');
 
    app.controller('NewInviteController', function NewInviteController(InstitutionService, AuthService, UserService, InviteService, $mdToast,
-    $mdDialog, MessageService, $state) {
+    $mdDialog, MessageService, ObserverRecorderService, $state) {
         var newInviteCtrl = this;
 
         newInviteCtrl.institution = null;
@@ -50,7 +50,7 @@
             newInviteCtrl.user.addProfile(profile);
             newInviteCtrl.user.name = getCurrentName();
             AuthService.save();
-            var patch = jsonpatch.generate(observer);
+            var patch = ObserverRecorderService.generate(observer);
             return patch;
         };
 
@@ -67,7 +67,7 @@
                     newInviteCtrl.user.changeInstitution(newInviteCtrl.institution);
                     AuthService.save();
                     $state.go("app.user.home");
-                    showAlert(event);
+                    _.isEmpty(newInviteCtrl.user.invites) && showAlert(event);
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
                 });
@@ -156,8 +156,7 @@
         }
 
         function loadInvite(){
-            observer = jsonpatch.observe(newInviteCtrl.user);
-            jsonpatch.unobserve(newInviteCtrl.user.current_institution, observer);
+            observer = ObserverRecorderService.register(newInviteCtrl.user);
             newInviteCtrl.checkUserName();
             InviteService.getInvite(newInviteCtrl.inviteKey).then(function success(response) {
                 newInviteCtrl.invite = new Invite(response.data);

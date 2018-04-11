@@ -64,7 +64,7 @@ class InstitutionFollowersHandler(BaseHandler):
         Utils._assert(institution.name == 'Ministério da Saúde',
                       "The institution can not be unfollowed", NotAuthorizedException)
 
-        Utils._assert(institution.name == 'Departamento do Complexo Industrial e Inovação em Saúde',
+        Utils._assert(institution.trusted,
                       "The institution can not be unfollowed", NotAuthorizedException)
 
         if(not type(institution) is Institution):

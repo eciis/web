@@ -8,7 +8,8 @@
     var institution = {
         key: "institutuion_key",
         admin: user,
-        members: [user]
+        members: [user],
+        name: 'institution'
     };
 
     var processInviteUserAdmCtrl, messageService, inviteService, mdDialog, authService, controller;
@@ -27,13 +28,15 @@
             institutions_admin: [],
             institutions: [{key: "institutuion_key"}],
             state: 'active',
-            key: '3242343rdsf324s'
+            key: '3242343rdsf324s',
+            permissions: []
         };
 
         invite = {
             status: 'sent',
             key: '437829dshsjka',
-            institution_key: institution.key
+            institution_key: institution.key,
+            institution : institution
         };
 
         AuthService.login(user);
@@ -55,6 +58,37 @@
             $mdDialog: mdDialog
         });
     }));
+
+    describe('Test view accept invite', function() {
+        
+        beforeEach(function() {
+            processInviteUserAdmCtrl.invite.institution.trusted = true;
+            let permission_inst = _.set({}, processInviteUserAdmCtrl.invite.institution.key, true);
+            processInviteUserAdmCtrl.current_user.permissions['analyze_request_inst'] = permission_inst;
+            processInviteUserAdmCtrl.current_user.permissions['send_invite_inst'] = permission_inst;
+
+            processInviteUserAdmCtrl.invite.status= "accepted";
+
+            processInviteUserAdmCtrl = controller('ProcessInviteUserAdmController', {
+                key: invite.key,
+                typeOfDialog: 'VIEW_ACCEPTED_INVITATION_SENDER',
+                InviteService: inviteService,
+                MessageService: messageService,
+                AuthService: authService,
+                $mdDialog: mdDialog
+            });
+        });
+
+        it('Should remove super user permissions of old admin', function() {
+            expect(processInviteUserAdmCtrl.current_user.hasPermission('analyze_request_inst', 
+                processInviteUserAdmCtrl.invite.institution.key)).toBeFalsy();
+            expect(processInviteUserAdmCtrl.current_user.hasPermission('send_invite_inst', 
+                processInviteUserAdmCtrl.invite.institution.key)).toBeFalsy();
+
+        });
+
+    });
+
 
     describe('Test accept()', function() {
         
@@ -79,6 +113,54 @@
 
             expect(user.institutions_admin).toEqual([institution.key]);
             expect(user.institutions[0].admin).toEqual(user.key);
+            expect(processInviteUserAdmCtrl.typeOfDialog).toEqual('VIEW_ACCEPTED_INVITATION_INVITEE');
+            expect(processInviteUserAdmCtrl.isAccepting).toBeTruthy();
+            expect(inviteService.acceptInviteUserAdm).toHaveBeenCalledWith(invite.key);
+            expect(messageService.showToast).toHaveBeenCalledWith('Convite aceito com sucesso!');
+        });
+
+        it('Should add super user permissions of old admin', function() {
+            expect(processInviteUserAdmCtrl.typeOfDialog).toEqual('ACCEPT_INVITATION');
+            expect(processInviteUserAdmCtrl.isAccepting).toBeFalsy();
+            expect(processInviteUserAdmCtrl.current_user.hasPermission('analyze_request_inst', 
+                processInviteUserAdmCtrl.invite.institution.key)).toBeFalsy();
+            expect(processInviteUserAdmCtrl.current_user.hasPermission('send_invite_inst', 
+                processInviteUserAdmCtrl.invite.institution.key)).toBeFalsy();
+            
+            processInviteUserAdmCtrl.invite.institution.trusted = true;
+            processInviteUserAdmCtrl.accept();
+            user = JSON.parse(window.localStorage.userInfo);
+
+            expect(user.institutions_admin).toEqual([institution.key]);
+            expect(user.institutions[0].admin).toEqual(user.key);
+            expect(processInviteUserAdmCtrl.current_user.hasPermission('analyze_request_inst', 
+                processInviteUserAdmCtrl.invite.institution.key)).toBeTruthy();
+            expect(processInviteUserAdmCtrl.current_user.hasPermission('send_invite_inst', 
+                processInviteUserAdmCtrl.invite.institution.key)).toBeTruthy();
+            expect(processInviteUserAdmCtrl.typeOfDialog).toEqual('VIEW_ACCEPTED_INVITATION_INVITEE');
+            expect(processInviteUserAdmCtrl.isAccepting).toBeTruthy();
+            expect(inviteService.acceptInviteUserAdm).toHaveBeenCalledWith(invite.key);
+            expect(messageService.showToast).toHaveBeenCalledWith('Convite aceito com sucesso!');
+        });
+
+        it('Should not add super user permissions of old admin', function() {
+            expect(processInviteUserAdmCtrl.typeOfDialog).toEqual('ACCEPT_INVITATION');
+            expect(processInviteUserAdmCtrl.isAccepting).toBeFalsy();
+            expect(processInviteUserAdmCtrl.current_user.hasPermission('analyze_request_inst', 
+                processInviteUserAdmCtrl.invite.institution.key)).toBeFalsy();
+            expect(processInviteUserAdmCtrl.current_user.hasPermission('send_invite_inst', 
+                processInviteUserAdmCtrl.invite.institution.key)).toBeFalsy();
+            
+            processInviteUserAdmCtrl.invite.institution.trusted = false;
+            processInviteUserAdmCtrl.accept();
+            user = JSON.parse(window.localStorage.userInfo);
+
+            expect(user.institutions_admin).toEqual([institution.key]);
+            expect(user.institutions[0].admin).toEqual(user.key);
+            expect(processInviteUserAdmCtrl.current_user.hasPermission('analyze_request_inst', 
+                processInviteUserAdmCtrl.invite.institution.key)).toBeFalsy();
+            expect(processInviteUserAdmCtrl.current_user.hasPermission('send_invite_inst', 
+                processInviteUserAdmCtrl.invite.institution.key)).toBeFalsy();
             expect(processInviteUserAdmCtrl.typeOfDialog).toEqual('VIEW_ACCEPTED_INVITATION_INVITEE');
             expect(processInviteUserAdmCtrl.isAccepting).toBeTruthy();
             expect(inviteService.acceptInviteUserAdm).toHaveBeenCalledWith(invite.key);
@@ -153,6 +235,7 @@
                 status: 'accepted',
                 key: '437829dshsjka',
                 institution_key: institution.key,
+                institution: institution,
                 status: 'accepted'
             };
 

@@ -63,7 +63,7 @@ describe('Test ConfigInstDirective', function() {
 
     var invite = {'invitee': 'user@email.com',
             'suggestion_institution_name': "Suggested Name",
-            'type_of_invite': "institution",
+            'type_of_invite': "INSTITUTION",
             'status': 'sent',
             key: 'invite-key'
     };
@@ -77,7 +77,8 @@ describe('Test ConfigInstDirective', function() {
         follows: institutions,
         institution_profiles: [],
         email: ['test@test.com'],
-        invites: [invite]
+        invites: [invite],
+        state: 'active'
     };
 
     beforeEach(module('app'));
@@ -123,6 +124,46 @@ describe('Test ConfigInstDirective', function() {
     afterEach(function() {
         httpBackend.verifyNoOutstandingExpectation();
         httpBackend.verifyNoOutstandingRequest();
+    });
+
+    describe('initController()', function() {
+
+        it('isSubmission should be false when the institutionKey exists', function() {
+            editInstCtrl.institutionKey = institution.key;
+            spyOn(institutionService, 'getInstitution').and.callFake(function() {
+                return {
+                    then: function(callback) {
+                        return callback({data: {name: 'inst', portfolio_url: 'url'}});
+                    }
+                };
+            });
+
+            editInstCtrl.initController();
+            expect(editInstCtrl.isSubmission).toBeFalsy();
+        });
+
+        it('isSubmission should be true when institutionKey not exists, user is inactive and no has invites', function() {
+            editInstCtrl.institutionKey = undefined;
+            editInstCtrl.user.state = 'pending';
+            editInstCtrl.user.invites = [];
+            editInstCtrl.initController();
+            expect(editInstCtrl.isSubmission).toBeTruthy();
+        });
+
+        it('shoul call state.go when user has pending institution invites', function() {
+            spyOn(state, 'go');
+            editInstCtrl.institutionKey = undefined;
+            editInstCtrl.user.state = 'pending';
+            editInstCtrl.user.invites = [invite];
+            editInstCtrl.initController();
+            expect(state.go).toHaveBeenCalledWith('signin');
+        });
+
+        afterEach(function() {
+            editInstCtrl.institutionKey = institution.key;
+            editInstCtrl.user.state = 'active';
+            editInstCtrl.user.invites = [invite];
+        });
     });
 
     describe('addImage()', function() {

@@ -6,7 +6,7 @@ from google.appengine.ext import ndb
 from utils import login_required
 from utils import json_response
 from utils import Utils
-from utils import makeUser
+from utils import make_user
 from service_entities import enqueue_task
 from handlers.base_handler import BaseHandler
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
@@ -40,7 +40,7 @@ class InviteUserAdmHandler(BaseHandler):
             user.add_institution_admin(institution.key)
             actual_admin.remove_institution_admin(institution.key)
             invite.change_status('accepted')
-        
+            
             enqueue_task(
                 'transfer-admin-permissions', 
                 {
@@ -49,9 +49,8 @@ class InviteUserAdmHandler(BaseHandler):
                 }
             )
             invite.send_response_notification(current_institution=institution.key, action='ACCEPT')
-        
         save_changes(user, actual_admin, invite, institution)
-        self.response.write(json.dumps(makeUser(user, self.request)))
+        self.response.write(json.dumps(make_user(user, self.request)))
 
     @json_response
     @login_required

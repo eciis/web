@@ -213,10 +213,17 @@ class InstitutionHandler(BaseHandler):
         email_sender = RemoveInstitutionEmailSender(**email_params)
         email_sender.send_email()
 
+        notification_entity = {
+            'key': institution_key,
+            'institution_name': institution.name,
+            'remove_hierarchy': remove_hierarchy
+        }
+
         notification_params = {
             "sender_key": user.key.urlsafe(),
             "entity_type": "DELETED_INSTITUTION",
             "institution_key": institution_key,
-            "current_institution": user.current_institution.urlsafe()
+            "current_institution": user.current_institution.urlsafe(),
+            "entity": json.dumps(notification_entity)
         }
         enqueue_task('notify-followers', notification_params)

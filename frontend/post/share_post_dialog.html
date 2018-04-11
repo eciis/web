@@ -1,29 +1,25 @@
 <md-dialog flex-gt-md="40" layout="row" style="max-height: 90%;">
   <div flex>
     <md-card flex>
-      <md-card-header>
-        <md-card-avatar>
-          <img ng-src="{{ sharePostCtrl.user.current_institution.photo_url }}" class="md-user-avatar" />
-        </md-card-avatar>
-        <md-card-header-text>
-          <span class="md-title">{{ sharePostCtrl.user.current_institution.name }}</span>
-          <span class="md-subhead">por {{ sharePostCtrl.user.name }}</span>
-        </md-card-header-text>
-        <md-button class="md-icon-button" ng-click="sharePostCtrl.cancelDialog()">
+      <div layout="row" layout-padding>
+        <img style="width: 40px; height: 40px; border-radius: 50%;" ng-src="{{ sharePostCtrl.user.current_institution.photo_url }}" class="md-user-avatar" />
+        <div layout="column">
+          <b>{{ sharePostCtrl.user.current_institution.name }}</b>
+          <span>por {{ sharePostCtrl.user.name }}</span>
+        </div>
+        <md-button class="md-icon-button" style="padding: 0; width: 70px;" ng-click="sharePostCtrl.cancelDialog()">
           <md-icon>close</md-icon>
         </md-button>
-      </md-card-header>
+      </div>
       <md-card-content flex>
         <md-card md-colors="{background: 'default-grey-100'}" flex class="custom-scrollbar share-post">
-          <md-card-header>
-            <md-card-avatar>
-              <img ng-src="{{ sharePostCtrl.post.institution_image }}" class="md-user-avatar" />
-            </md-card-avatar>
-            <md-card-header-text>
-              <span class="md-title">{{ sharePostCtrl.post.institution_name }}</span>
-              <span class="md-subhead">por {{ sharePostCtrl.post.author }}</span>
-            </md-card-header-text>
-          </md-card-header>
+          <div layout="row">
+            <img style="width: 40px; height: 40px; border-radius: 50%;" ng-src="{{ sharePostCtrl.post.institution_image }}" />
+            <div layout="column">
+              <b>{{ sharePostCtrl.post.institution_name }}</b>
+              <span>por {{ sharePostCtrl.post.author }}</span>
+            </div>
+          </div>
           <md-card-content layout-margin>
             <div class="image-view" ng-if="sharePostCtrl.showImage() && !sharePostCtrl.isEvent()">
               <img class="md-card-image" style="border-radius: 3%;" ng-src="{{ sharePostCtrl.post.photo_url }}" />

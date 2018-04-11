@@ -8,7 +8,7 @@
 
         var postDetailsCtrl = this;
 
-        var LIMIT_POST_CHARACTERS = 1000;
+        var LIMIT_POST_CHARACTERS = 2000;
 
         postDetailsCtrl.showComments = false;
         postDetailsCtrl.savingComment = false;

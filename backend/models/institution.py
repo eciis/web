@@ -347,9 +347,6 @@ class Institution(ndb.Model):
         if self.trusted:
             institution_key = self.key.urlsafe()
             for permission in DEFAULT_SUPER_USER_PERMISSIONS:
-                if permission in permissions:
-                    permissions[permission].update({institution_key: True})
-                else:
-                    permissions.update({permission: {institution_key: True}})
+                permissions.update({permission: {institution_key: True}})
             
         return permissions

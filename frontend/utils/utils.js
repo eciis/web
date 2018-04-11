@@ -64,15 +64,17 @@ var Utils = {
         return indexes;
     },
     limitString : function limitString(string, limit) {
-        var undefinedIndex = -1;
-        var endIndexesOfLast = this.getIndexesOf("</a>", string);
-        var indexOfLastAboveLimit = endIndexesOfLast.findIndex((index) => index >= limit);
-        if(indexOfLastAboveLimit !== undefinedIndex) {
-            var shiftToCloseTag = 4;
-            limit = endIndexesOfLast[indexOfLastAboveLimit] + shiftToCloseTag;
+        if(string) {
+            var undefinedIndex = -1;
+            var endIndexesOfLast = this.getIndexesOf("</a>", string);
+            var indexOfLastAboveLimit = endIndexesOfLast.findIndex((index) => index >= limit);
+            if(indexOfLastAboveLimit !== undefinedIndex) {
+                var shiftToCloseTag = 4;
+                limit = endIndexesOfLast[indexOfLastAboveLimit] + shiftToCloseTag;
+            }
+            return string && string.length > limit ?
+                string.substring(0, limit+1) + "..." : string;
         }
-        return string && string.length > limit ?
-            string.substring(0, limit+1) + "..." : string;
     },
 
     generateLink : function generateLink(url){

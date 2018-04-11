@@ -51,10 +51,29 @@ var Utils = {
 
         config.url = config.url.replace(restApiRegex, restApiUrl + '/api/$1');
     },
+    getIndexesOf : function getIndexesOf(substring, string) {
+        if (substring.length == 0) {
+            return [];
+        }
+        var startIndex = 0, index, indexes = [];
 
-    limitString : function limitString(string, limit){
-            return string && string.length > limit ?  
-                string.substring(0, limit+1) + "..." : string;
+        while((index = string.indexOf(substring, startIndex)) > -1) {
+            indexes.push(index);
+            startIndex = index + substring.length;
+        }
+        return indexes;
+    },
+    limitString : function limitString(string, limit) {
+        var undefinedIndex = -1;
+        var initIndexesOfLastUrl = this.getIndexesOf("<a href=", string);
+        var endIndexesOfLast = this.getIndexesOf("</a>", string);
+        var indexOfLastAboveLimit = endIndexesOfLast.findIndex((index) => index >= limit);
+        if(indexOfLastAboveLimit !== undefinedIndex) {
+            var shiftToCloseTag = 4;
+            limit = endIndexesOfLast[indexOfLastAboveLimit] + shiftToCloseTag;
+        }
+        return string && string.length > limit ?
+            string.substring(0, limit+1) + "..." : string;
     },
 
     generateLink : function generateLink(url){

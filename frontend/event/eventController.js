@@ -89,7 +89,7 @@
     });
 
     app.controller('EventDialogController', function EventDialogController(MessageService, brCidadesEstados,
-            ImageService, AuthService, EventService, $state, $rootScope, $mdDialog, $http, $q) {
+            ImageService, AuthService, EventService, $state, $rootScope, $mdDialog, $http, $q, ObserverRecorderService) {
         var dialogCtrl = this;
 
         dialogCtrl.loading = false;
@@ -158,7 +158,7 @@
             var event = new Event(dialogCtrl.event, dialogCtrl.user.current_institution.key);
             if(event.isValid()) {
                 dialogCtrl.loading = true;
-                var patch = jsonpatch.generate(dialogCtrl.observer);
+                var patch = ObserverRecorderService.generate(dialogCtrl.observer);
                 var formatedPatch = formatPatch(generatePatch(patch, event));
                 EventService.editEvent(dialogCtrl.event.key, formatedPatch)
                 .then(function success() {
@@ -413,7 +413,7 @@
         }
 
         function initPatchObserver() {
-            dialogCtrl.observer = jsonpatch.observe(dialogCtrl.event);
+            dialogCtrl.observer = ObserverRecorderService.register(dialogCtrl.event);
         }
 
         function loadEventDates() {

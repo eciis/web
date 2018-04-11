@@ -3,7 +3,7 @@
     var app = angular.module("app");
     app.controller("ConfigInstController", function ConfigInstController(AuthService, InstitutionService, CropImageService,$state,
             $mdToast, $mdDialog, $http, InviteService, ImageService, $rootScope, MessageService, PdfService, $q, $window,
-            RequestInvitationService, brCidadesEstados) {
+            RequestInvitationService, brCidadesEstados, ObserverRecorderService) {
 
         var configInstCtrl = this;
         var institutionKey = $state.params.institutionKey;
@@ -247,7 +247,7 @@
         }
 
         function patchIntitution() {
-            var patch = jsonpatch.generate(observer);
+            var patch = ObserverRecorderService.generate(observer);
             InstitutionService.update(institutionKey, patch).then(
                 function success() {
                     if(configInstCtrl.newInstitution)
@@ -415,7 +415,7 @@
                 configInstCtrl.newInstitution = response.data;
                 configInstCtrl.suggestedName = configInstCtrl.newInstitution.name;
                 currentPortfoliourl = configInstCtrl.newInstitution.portfolio_url;
-                observer = jsonpatch.observe(configInstCtrl.newInstitution);
+                observer = ObserverRecorderService.register(configInstCtrl.newInstitution);
                 loadAddress(); 
                 setDefaultPhotoUrl();
                 configInstCtrl.loading = false;

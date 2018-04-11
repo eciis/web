@@ -5,7 +5,8 @@
     var app = angular.module("app");
 
     app.controller("PostController", function PostController($mdDialog, PostService, AuthService,
-            $mdToast, $rootScope, ImageService, MessageService, $q, $scope, $state, PdfService, SubmitFormListenerService) {
+            $mdToast, $rootScope, ImageService, MessageService, $q, $scope, $state, PdfService, SubmitFormListenerService,
+            ObserverRecorderService) {
         var postCtrl = this;
 
         postCtrl.post = {};
@@ -373,7 +374,7 @@
         (function main() {
             if($scope.isEditing) {
                 postCtrl.createEditedPost($scope.originalPost);
-                observer = jsonpatch.observe(postCtrl.post);
+                observer = ObserverRecorderService.register(postCtrl.post);
             }
             postCtrl.typePost = 'Common';
         })();

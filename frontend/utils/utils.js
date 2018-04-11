@@ -65,7 +65,6 @@ var Utils = {
     },
     limitString : function limitString(string, limit) {
         var undefinedIndex = -1;
-        var initIndexesOfLastUrl = this.getIndexesOf("<a href=", string);
         var endIndexesOfLast = this.getIndexesOf("</a>", string);
         var indexOfLastAboveLimit = endIndexesOfLast.findIndex((index) => index >= limit);
         if(indexOfLastAboveLimit !== undefinedIndex) {

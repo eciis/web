@@ -5,8 +5,7 @@
     var app = angular.module("app");
 
     app.controller("PostController", function PostController($mdDialog, PostService, AuthService,
-            $mdToast, $rootScope, ImageService, MessageService, $q, $scope, $state, PdfService, SubmitFormListenerService,
-            ObserverRecorderService) {
+            $mdToast, $rootScope, ImageService, MessageService, $q, $scope, $state, PdfService, SubmitFormListenerService) {
         var postCtrl = this;
 
         postCtrl.post = {};
@@ -25,7 +24,6 @@
                             'number_votes': 0,
                             'voters': []
                             };
-        var observer;
         var timelineContent = document.getElementById('content');
         var MAXIMUM_PDF_SIZE = 5242880; // 5Mb in bytes
 
@@ -374,7 +372,6 @@
         (function main() {
             if($scope.isEditing) {
                 postCtrl.createEditedPost($scope.originalPost);
-                observer = ObserverRecorderService.register(postCtrl.post);
             }
             postCtrl.typePost = 'Common';
         })();

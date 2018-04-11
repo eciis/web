@@ -72,7 +72,7 @@ var Utils = {
                 var shiftToCloseTag = 4;
                 limit = endIndexesOfLast[indexOfLastAboveLimit] + shiftToCloseTag;
             }
-            return string && string.length > limit ?
+            return string.length > limit ?
                 string.substring(0, limit+1) + "..." : string;
         }
     },

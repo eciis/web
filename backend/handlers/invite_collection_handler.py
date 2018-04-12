@@ -36,17 +36,11 @@ class InviteCollectionHandler(BaseHandler):
         body = json.loads(self.request.body)
         data = body['data']
         host = self.request.host
-        invite = data['invite_body']
+        invite = data['invite_body'] if data.get('invite_body') is not None else data
         type_of_invite = invite.get('type_of_invite')
 
         Utils._assert(type_of_invite == 'INSTITUTION',
                       "invitation type not allowed", NotAuthorizedException)
-
-        """TODO: Remove the assert bellow when the hierarchical invitations can be available
-        @author: Mayza Nunes 11/01/2018
-        """
-        Utils._assert(type_of_invite != 'USER' and type_of_invite != 'USER_ADM',
-                        "Hierarchical invitations is not available in this version", NotAuthorizedException)
 
         institution = ndb.Key(urlsafe=invite['institution_key']).get()
         can_invite_inst = user.has_permission(

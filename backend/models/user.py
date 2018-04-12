@@ -343,3 +343,6 @@ class User(ndb.Model):
         """Verify if the institution is part of the
         institutions list that the user belongs."""
         return institution_key in self.institutions
+
+    def is_admin(self, institution_key):
+        return institution_key in self.institutions_admin

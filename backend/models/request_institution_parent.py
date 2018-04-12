@@ -38,7 +38,7 @@ class RequestInstitutionParent(Request):
         admin = self.institution_requested_key.get().admin
         super(RequestInstitutionParent, self).send_notification(
             current_institution=current_institution, 
-            receiver_key=admin.key, 
+            receiver_key=admin, 
             entity_type=entity_type
         )
 

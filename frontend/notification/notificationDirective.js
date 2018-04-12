@@ -5,7 +5,7 @@
     var app = angular.module("app");
 
     app.controller("NotificationController", function NotificationController(NotificationService, AuthService, $state,
-        $mdDialog, InstitutionService, UserService, RequestInvitationService, $q, MessageService) {
+        $mdDialog, InstitutionService, UserService, RequestInvitationService, MessageService) {
         var notificationCtrl = this;
 
         notificationCtrl.user = AuthService.getCurrentUser();
@@ -129,12 +129,10 @@
                     return selectDialog(properties, notification, event);
                 },
                 properties: {
-                     templateUrl: "app/requests/request_institution_processing.html",
-                     controller: "RequestInstitutionProcessingController",
-                     controllerAs: "requestCtrl",
-                     locals: {
-                         key: ""
-                     }
+                    templateUrl: "app/requests/request_institution_processing.html",
+                    controller: "RequestInstitutionProcessingController",
+                    controllerAs: "requestCtrl",
+                    locals: {}
                 }
             },
             "SHARED_EVENT": {
@@ -241,11 +239,11 @@
 
         function selectDialog(dialogProperties, notification, event) {
             var isStateProcessRequest = type_data[notification.entity_type].state == 'process_request';
-            dialogProperties.locals.key = notification.entity.key;
             
             if(isStateProcessRequest) {
-                loadInvite(notification.entity.key).then(
-                    function success(request) {
+                loadRequest(notification.entity.key, notification.entity_type).then(
+                    function success(response) {
+                        var request = new Invite(response);
                         dialogProperties.locals.request = request;
                         var isRequestResolved = request.status == 'rejected' || request.status == 'accepted';
                         isRequestResolved ? showResolvedRequestDialog(event) : showDialog(dialogProperties, event);
@@ -258,22 +256,18 @@
             }
         }
 
-        function loadInvite(invitekey) {
-            var deferred = $q.defer();
-            RequestInvitationService.getRequest(invitekey).then(
-                function success(response) {
-                    var invite = new Invite(response);
-                    deferred.resolve(invite);
-                }, function error(response) {
-                    deferred.reject(response);
-                }
-            );
-            return deferred.promise;
+        function loadRequest(invitekey, entityType) {
+            switch(entityType) {
+                case 'REQUEST_USER':
+                    return RequestInvitationService.getRequest(invitekey);
+                case 'REQUEST_INSTITUTION':
+                    return RequestInvitationService.getRequestInst(invitekey);
+            } 
         }
 
         notificationCtrl.showNotifications = function showNotifications($mdMenu, $event) {
-            (notificationCtrl.notifications.length === 0) ? notificationCtrl.seeAll() : 
-                $mdMenu.open($event);
+            var hasUnreadNotifications = notificationCtrl.notifications.length > 0;
+            hasUnreadNotifications ? $mdMenu.open($event) : notificationCtrl.seeAll();
         };
 
         notificationCtrl.format = function format(notification) {

@@ -4,19 +4,17 @@
     var app = angular.module('app');
 
     app.controller('RequestInstitutionProcessingController', function RequestProcessingController(AuthService, RequestInvitationService,
-        MessageService, InstitutionService, key, $state, $mdDialog) {
+        MessageService, InstitutionService, request, $state, $mdDialog) {
         var requestController = this;
 
         requestController.institution = null;
-        requestController.requestKey = key;
-
         requestController.user = AuthService.getCurrentUser();
 
         requestController.parent = null;
         requestController.isSent = false;
 
         requestController.acceptRequest = function acceptRequest() {
-            RequestInvitationService.acceptRequestInst(requestController.request.key).then(function success() {
+            RequestInvitationService.acceptRequestInst(request.key).then(function success() {
                 MessageService.showToast("Solicitação aceita!");
                 requestController.hideDialog();
             }, function error(response) {
@@ -28,7 +26,7 @@
             var promise = RequestInvitationService.showRejectDialog(event);
 
             promise.then(function() {
-                RequestInvitationService.rejectRequestInst(requestController.request.key).then(function success() {
+                RequestInvitationService.rejectRequestInst(request.key).then(function success() {
                     MessageService.showToast("Solicitação rejeitada!");
                     requestController.hideDialog();
                 });
@@ -52,8 +50,7 @@
         };
 
         requestController.getSizeGtSmDialog = function getSizeGtSmDialog() {
-            if(requestController.request)
-                return requestController.request.status === 'sent' ? '45' : '25';
+            return request.status === 'sent' ? '45' : '25';
         };
 
         requestController.isAnotherCountry = function isAnotherCountry() {
@@ -73,23 +70,11 @@
         function formatPositions() {
             requestController.parent = requestController.institution;
         }
-
-        function loadRequest(){
-            RequestInvitationService.getRequestInst(requestController.requestKey).then(function success(response) {
-                requestController.request = new Invite(response);
-                if (requestController.request.status === 'sent') {
-                    loadInstitution(requestController.request.institution_key);
-                }
-                isRequestSent();
-            });
-        }
-
-        function isRequestSent() {
-            requestController.isSent = requestController.request.status === 'sent';
-        }
-
+        
         (function main () {
-            loadRequest();
+            if (request.status === 'sent') {
+                loadInstitution(request.institution_key);
+            }
         })();
     });
 })();

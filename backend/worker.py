@@ -1,7 +1,6 @@
 """Send notifications handler."""
 import webapp2
 import json
-import permissions
 from firebase import send_notification
 from google.appengine.api import mail
 import logging
@@ -14,6 +13,7 @@ from utils import json_response
 from service_messages import send_message_notification
 from service_messages import send_message_email
 from jinja2 import Environment, FileSystemLoader
+from permissions import DEFAULT_SUPER_USER_PERMISSIONS
 
 
 def should_remove(user, institution_key, current_inst_key):
@@ -343,12 +343,17 @@ class TransferAdminPermissionsHandler(BaseHandler):
         @ndb.transactional(xg=True, retries=10)
         def save_changes(admin, new_admin, institution):
             permissions = institution.get_all_hierarchy_admin_permissions()
+            permissions = institution.get_super_user_admin_permissions(permissions)
             institution.set_admin(new_admin.key)
             self.add_permissions(new_admin, permissions)
             
             if (not institution.parent_institution) or (not is_admin_of_parent_inst(admin, institution.parent_institution.urlsafe())):
                 permissions_filtered = filter_permissions_to_remove(admin, permissions, institution_key)
                 self.remove_permissions(admin, permissions_filtered)
+            
+            if(institution.trusted):
+                for permission in DEFAULT_SUPER_USER_PERMISSIONS:
+                    admin.remove_permission(permission, institution.key.urlsafe())
 
             new_admin.put()
             admin.put()

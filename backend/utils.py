@@ -190,7 +190,6 @@ def json_response(method):
         method(self, *args)
     return response
 
-
 def offset_pagination(page, number_fetchs, query):
     """Modify query for get entities using offset pagination."""
     offset = page * number_fetchs

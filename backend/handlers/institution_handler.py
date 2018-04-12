@@ -59,7 +59,11 @@ def childrenToJson(obj):
 def parentToJson(obj):
     """Return json with parent institution."""
     if(obj.parent_institution):
-        return Institution.make(obj.parent_institution.get(), ['name', 'key', 'state', 'invite'])
+        parent_institution = obj.parent_institution.get()
+        institution_parent_json = Institution.make(parent_institution, [
+                                                   'name', 'key', 'state', 'invite'])
+        institution_parent_json['children_institutions'] = childrenToJson(parent_institution)
+        return institution_parent_json
 
 
 def adminToJson(admin):

@@ -356,7 +356,9 @@
         };
 
         inviteInstHierCtrl.linkParentStatus = function linkParentStatus() {
-            return inviteInstHierCtrl.institution.parent_institution ? "confirmado" : "não confirmado";
+            const parentInstitution = inviteInstHierCtrl.institution.parent_institution;
+            const institutionKey = inviteInstHierCtrl.institution.key;
+            return _.find(parentInstitution.children_institutions, inst => inst.key === institutionKey ) ? "confirmado" : "não confirmado";
         };
 
         inviteInstHierCtrl.linkChildrenStatus = function linkChildrenStatus(institution) {

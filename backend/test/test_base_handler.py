@@ -25,8 +25,8 @@ class TestBaseHandler(TestBase):
         return self.dict["msg"]
     
 
-def hasAdminPermissions(user, institution_key):
-    for permission in permissions.DEFAULT_ADMIN_PERMISSIONS:
+def has_permissions(user, institution_key, type_permission):
+    for permission in type_permission:
         if not user.has_permission(permission, institution_key):
             return False
     return True

@@ -10,7 +10,7 @@ from worker import AddAdminPermissionsInInstitutionHierarchy
 from worker import RemoveAdminPermissionsInInstitutionHierarchy
 from worker import RemoveInstitutionHandler
 import permissions
-from test_base_handler import hasAdminPermissions
+from test_base_handler import has_permissions
 from mock import patch
 import mocks
 
@@ -253,8 +253,9 @@ class InstitutionHandlerTest(TestBaseHandler):
         second_user = second_user.key.get()
         third_user = third_user.key.get()
 
-        self.assertTrue(hasAdminPermissions(third_user, third_inst.key.urlsafe()))
-        self.assertTrue(hasAdminPermissions(second_user, third_inst.key.urlsafe()))
+        self.assertTrue(has_permissions(third_user, third_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
+        self.assertTrue(has_permissions(
+            second_user, third_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
         
 
     @patch('handlers.institution_handler.enqueue_task')
@@ -297,9 +298,10 @@ class InstitutionHandlerTest(TestBaseHandler):
         second_user.put()
         third_user.put()
 
-        self.assertTrue(hasAdminPermissions(second_user, second_inst.key.urlsafe()))
-        self.assertTrue(hasAdminPermissions(
-            second_user, third_inst.key.urlsafe()))
+        self.assertTrue(has_permissions(
+            second_user, second_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
+        self.assertTrue(has_permissions(
+            second_user, third_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
 
         verify_token._mock_return_value = {'email': second_user.email[0]}
         enqueue_task.side_effect = self.enqueue_task
@@ -323,12 +325,12 @@ class InstitutionHandlerTest(TestBaseHandler):
         second_user = second_user.key.get()
         third_user = third_user.key.get()
         
-        self.assertFalse(hasAdminPermissions(
-            second_user, second_inst.key.urlsafe()))
-        self.assertFalse(hasAdminPermissions(
-            second_user, third_inst.key.urlsafe()))
-        self.assertFalse(hasAdminPermissions(
-            third_user, third_inst.key.urlsafe()))
+        self.assertFalse(has_permissions(
+            second_user, second_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
+        self.assertFalse(has_permissions(
+            second_user, third_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
+        self.assertFalse(has_permissions(
+            third_user, third_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
 
     @patch('utils.verify_token', return_value={'email': 'user@example.com'})
     def test_get(self, verify_token):
@@ -540,14 +542,14 @@ class InstitutionHandlerTest(TestBaseHandler):
         second_user.put()
         third_user.put()
 
-        self.assertTrue(hasAdminPermissions(
-            first_user, first_inst.key.urlsafe()))
-        self.assertTrue(hasAdminPermissions(
-            first_user, second_inst.key.urlsafe()))
-        self.assertTrue(hasAdminPermissions(
-            first_user, third_inst.key.urlsafe()))
-        self.assertTrue(hasAdminPermissions(
-            first_user, fourth_inst.key.urlsafe()))
+        self.assertTrue(has_permissions(
+            first_user, first_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
+        self.assertTrue(has_permissions(
+            first_user, second_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
+        self.assertTrue(has_permissions(
+            first_user, third_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
+        self.assertTrue(has_permissions(
+            first_user, fourth_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
 
         verify_token._mock_return_value = {'email': first_user.email[0]}
         enqueue_task.side_effect = self.enqueue_task
@@ -566,14 +568,14 @@ class InstitutionHandlerTest(TestBaseHandler):
 
         first_user = first_user.key.get()
 
-        self.assertFalse(hasAdminPermissions(
-            first_user, first_inst.key.urlsafe()))
-        self.assertFalse(hasAdminPermissions(
-            first_user, third_inst.key.urlsafe()))
-        self.assertFalse(hasAdminPermissions(
-            first_user, second_inst.key.urlsafe()))
-        self.assertTrue(hasAdminPermissions(
-            first_user, fourth_inst.key.urlsafe()))
+        self.assertFalse(has_permissions(
+            first_user, first_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
+        self.assertFalse(has_permissions(
+            first_user, third_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
+        self.assertFalse(has_permissions(
+            first_user, second_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
+        self.assertTrue(has_permissions(
+            first_user, fourth_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
 
     def tearDown(cls):
         """Deactivate the test."""

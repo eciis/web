@@ -14,6 +14,7 @@ from service_messages import send_message_notification
 from service_messages import send_message_email
 from jinja2 import Environment, FileSystemLoader
 from permissions import DEFAULT_SUPER_USER_PERMISSIONS
+from permissions import DEFAULT_ADMIN_PERMISSIONS
 
 
 def should_remove(user, institution_key, current_inst_key):
@@ -285,7 +286,7 @@ class AddAdminPermissionsInInstitutionHierarchy(BaseHandler):
         institution = ndb.Key(urlsafe=institution_key).get()
         admins = get_all_parent_admins(institution)
             
-        for permission in permissions.DEFAULT_ADMIN_PERMISSIONS:
+        for permission in DEFAULT_ADMIN_PERMISSIONS:
             for admin in admins:
                 admin.add_permission(permission, institution_key)
             add_permission_to_children(institution, admins, permission)

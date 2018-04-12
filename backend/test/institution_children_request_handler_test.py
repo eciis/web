@@ -11,7 +11,8 @@ from models.institution import Address
 from models.request_institution_children import RequestInstitutionChildren
 from handlers.institution_children_request_handler import InstitutionChildrenRequestHandler
 from worker import AddAdminPermissionsInInstitutionHierarchy
-from test_base_handler import hasAdminPermissions
+from test_base_handler import has_permissions
+import permissions
 from mock import patch
 
 CURRENT_INSTITUTION = {'name': 'currentInstitution'}
@@ -191,9 +192,9 @@ class InstitutionChildrenRequestHandlerTest(TestBaseHandler):
         verify_token._mock_return_value = {'email': third_user.email[0]}
         enqueue_task.side_effect = self.enqueue_task
 
-        self.assertFalse(hasAdminPermissions(first_user, third_inst.key.urlsafe()))
-        self.assertFalse(hasAdminPermissions(
-            second_user, third_inst.key.urlsafe()))
+        self.assertFalse(has_permissions(first_user, third_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
+        self.assertFalse(has_permissions(
+            second_user, third_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
 
         self.testapp.put(
             "/api/requests/%s/institution_children" % request.key.urlsafe(),
@@ -204,7 +205,7 @@ class InstitutionChildrenRequestHandlerTest(TestBaseHandler):
         second_user = second_user.key.get()
         third_user = third_user.key.get()
 
-        self.assertTrue(hasAdminPermissions(
-            first_user, third_inst.key.urlsafe()))
-        self.assertTrue(hasAdminPermissions(
-            second_user, third_inst.key.urlsafe()))
+        self.assertTrue(has_permissions(
+            first_user, third_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
+        self.assertTrue(has_permissions(
+            second_user, third_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))

@@ -8,7 +8,7 @@ from worker import RemoveAdminPermissionsInInstitutionHierarchy
 from mock import patch
 import mocks
 import permissions
-from test_base_handler import hasAdminPermissions
+from test_base_handler import has_permissions
 
 ADMIN = {'email': 'user1@gmail.com'}
 USER = {'email': 'otheruser@ccc.ufcg.edu.br'}
@@ -147,8 +147,8 @@ class InstitutionHierarchyHandlerTest(TestBaseHandler):
         second_user.put()
         third_user.put()
 
-        self.assertTrue(hasAdminPermissions(
-            second_user, third_inst.key.urlsafe()))
+        self.assertTrue(has_permissions(
+            second_user, third_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
 
         enqueue_task.side_effect = self.enqueue_task
         verify_token._mock_return_value = {'email': third_user.email[0]}
@@ -158,7 +158,8 @@ class InstitutionHierarchyHandlerTest(TestBaseHandler):
         
         second_user = second_user.key.get()
         
-        self.assertFalse(hasAdminPermissions(second_user, third_inst.key.urlsafe()))
+        self.assertFalse(has_permissions(
+            second_user, third_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
 
     def tearDown(cls):
         """Deactivate the test."""

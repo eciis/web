@@ -4,9 +4,9 @@
       <div layout="row" layout-padding>
         <img style="width: 40px; height: 40px; border-radius: 50%;" ng-src="{{ sharePostCtrl.user.current_institution.photo_url }}" class="md-user-avatar" />
         <div layout="row" layout-align="space-between" flex>
-          <div layout="column">
-            <b>{{ sharePostCtrl.user.current_institution.name }}</b>
-            <span>por {{ sharePostCtrl.user.name }}</span>
+          <div layout="column" flex>
+            <b class="small-text-share-post">{{ sharePostCtrl.user.current_institution.name }}</b>
+            <span class="small-text-share-post">por {{ sharePostCtrl.user.name }}</span>
           </div>
           <md-button class="md-icon-button" style="padding: 0;" ng-click="sharePostCtrl.cancelDialog()">
             <md-icon>close</md-icon>
@@ -14,12 +14,12 @@
         </div>
       </div>
       <md-card-content flex>
-        <md-card md-colors="{background: 'default-grey-100'}" layout="column" flex class="custom-scrollbar share-post">
+        <md-card layout-padding md-colors="{background: 'default-grey-100'}" layout="column" flex class="custom-scrollbar share-post">
           <div layout="row" flex>
-            <img style="width: 40px; height: 40px; border-radius: 50%;" ng-src="{{ sharePostCtrl.post.institution_image }}" />
-            <div layout="column">
-              <b>{{ sharePostCtrl.post.institution_name }}</b>
-              <span>por {{ sharePostCtrl.post.author }}</span>
+            <img style="width: 40px; height: 40px; border-radius: 50%; margin-right: 8px;" ng-src="{{ sharePostCtrl.post.institution_image }}" />
+            <div layout="column" flex>
+              <b class="small-text-share-post">{{ sharePostCtrl.post.institution_name }}</b>
+              <span class="small-text-share-post">por {{ sharePostCtrl.post.author }}</span>
             </div>
           </div>
           <md-card-content layout-margin flex>
@@ -27,7 +27,7 @@
               <img class="md-card-image" style="border-radius: 3%; max-width: 100%; height: 100%;" ng-src="{{ sharePostCtrl.post.photo_url }}" />
             </div>
             <span ng-if="!sharePostCtrl.isSurvey() && !sharePostCtrl.isEvent()" class="md-text">
-              <b>{{ sharePostCtrl.post.title }}</b>
+              <b ng-bind-html="sharePostCtrl.postToURL(sharePostCtrl.post.title)"></b>
             </span>
           </br>
             <event-details ng-if="sharePostCtrl.isEvent()" event="sharePostCtrl.post" is-event-page=false></event-details>

@@ -26,7 +26,6 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
         """Test that user member try unfollow the institution."""
         user = mocks.create_user(USER['email'])
         institution = mocks.create_institution()
-        institution.address = mocks.create_address()
         user.follow(institution.key)
         user.add_institution(institution.key)
         institution.followers = [user.key]
@@ -56,7 +55,6 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
         """Test that user member try unfollow the health ministry institution."""
         user = mocks.create_user(USER['email'])
         institution = mocks.create_institution()
-        institution.address = mocks.create_address()
         user.follow(institution.key)
         user.add_institution(institution.key)
         institution.followers = [user.key]
@@ -80,15 +78,11 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
             "Expected exception message must be equal to Error! The institution can not be unfollowed")
 
         
-
-    # TODO: fix this test because not work after add fiel 'description' in search_institution.py
-    # Author: Tiago Pereira - 22/12/2017
-'''  @patch('utils.verify_token', return_value=USER)
+    @patch('utils.verify_token', return_value=USER)
     def test_delete(self, verify_token):
         """Test the institution_follower_handler delete method."""
         user = mocks.create_user(USER['email'])
         institution = mocks.create_institution()
-        institution.address = mocks.create_address()
         user.follow(institution.key)
         institution.follow(user.key)
         # Assert that the user follows the institution
@@ -115,7 +109,6 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
         """Test the institution_follower_handler post method."""
         user = mocks.create_user(USER['email'])
         institution = mocks.create_institution()
-        institution.address = mocks.create_address()
         institution.put()
         self.assertEquals(len(institution.followers), 0,
                           "The institution shouldn't have any follower")
@@ -147,4 +140,4 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
         self.assertEquals(len(institution.followers), 1,
                           "The institution should have a follower")
         self.assertEquals(len(user.follows), 1,
-                          "The user should follow institution") '''
+                          "The user should follow institution")

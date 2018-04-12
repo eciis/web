@@ -5,7 +5,7 @@
     var app = angular.module("app");
 
     app.controller("NotificationController", function NotificationController(NotificationService, AuthService, $state,
-        $mdDialog, InstitutionService, UserService) {
+        $mdDialog, InstitutionService, UserService, RequestInvitationService, $q, MessageService) {
         var notificationCtrl = this;
 
         notificationCtrl.user = AuthService.getCurrentUser();
@@ -63,44 +63,42 @@
                 state: "app.post"
             },
             "REQUEST_USER": {
-               icon: "person_add",
-               state: "process_request",
-               action: function (properties, notification, event) {
-                    return showDialog(properties, notification, event);
+                icon: "person_add",
+                state: "process_request",
+                action: function (properties, notification, event) {
+                    return selectDialog(properties, notification, event);
                 },
-               properties: {
+                properties: {
                     templateUrl: "app/requests/request_processing.html",
                     controller: "RequestProcessingController",
                     controllerAs: "requestCtrl",
-                    locals: {
-                        key: ""
-                    }
-               }
+                    locals: {}
+                }
             },
             "REQUEST_INSTITUTION_CHILDREN": {
                 icon: "account_balance",
                 state: "process_request",
                 action: function (properties, notification, event) {
-                    return showDialog(properties, notification, event);
+                    return selectDialog(properties, notification, event);
                 },
                 properties: {
-                     templateUrl: "app/requests/request_processing.html",
-                     controller: "RequestProcessingController",
-                     controllerAs: "requestCtrl",
-                     locals: {}
+                    templateUrl: "app/requests/request_processing.html",
+                    controller: "RequestProcessingController",
+                    controllerAs: "requestCtrl",
+                    locals: {}
                 }
             },
             "REQUEST_INSTITUTION_PARENT": {
                 icon: "account_balance",
                 state: "process_request",
                 action: function (properties, notification, event) {
-                    return showDialog(properties, notification, event);
+                    return selectDialog(properties, notification, event);
                 },
                 properties: {
-                     templateUrl: "app/requests/request_processing.html",
-                     controller: "RequestProcessingController",
-                     controllerAs: "requestCtrl",
-                     locals: {}
+                    templateUrl: "app/requests/request_processing.html",
+                    controller: "RequestProcessingController",
+                    controllerAs: "requestCtrl",
+                    locals: {}
                 }
             },
             "ACCEPT_INSTITUTION_LINK": {
@@ -128,7 +126,7 @@
                 icon: "account_balance",
                 state: "process_request",
                 action: function (properties, notification, event) {
-                    return showDialog(properties, notification, event);
+                    return selectDialog(properties, notification, event);
                 },
                 properties: {
                      templateUrl: "app/requests/request_institution_processing.html",
@@ -153,7 +151,7 @@
             "USER_ADM": {
                 icon: "account_balance",
                 action: function(properties, notification, event) {
-                    return showDialog(properties, notification, event);
+                    return selectDialog(properties, notification, event);
                 },
                 properties: {
                     templateUrl: "app/invites/process_invite_user_adm.html",
@@ -167,7 +165,7 @@
             "ACCEPT_INVITE_USER_ADM": {
                 icon: "account_balance",
                 action: function(properties, notification, event) {
-                    return showDialog(properties, notification, event);
+                    return selectDialog(properties, notification, event);
                 },
                 properties: {
                     templateUrl: "app/invites/process_invite_user_adm.html",
@@ -218,12 +216,11 @@
             notificationCtrl.markAsRead(notification);
         };
 
-        function showDialog(dialogProperties, notification, event) {
-            dialogProperties.locals.key = notification.entity.key;
+        function showDialog(dialogProperties, event) {
             $mdDialog.show({
                 controller: dialogProperties.controller,
                 controllerAs: dialogProperties.controllerAs,
-                templateUrl: dialogProperties.templateUrl ,
+                templateUrl: dialogProperties.templateUrl,
                 parent: angular.element(document.body),
                 targetEvent: event,
                 clickOutsideToClose:true,
@@ -231,6 +228,47 @@
                 openFrom: '#fab-new-post',
                 closeTo: angular.element(document.querySelector('#fab-new-post'))
             });
+        }
+
+        function showResolvedRequestDialog(event) {
+            $mdDialog.show({
+                templateUrl: "app/requests/resolved_request_dialog.html",
+                parent: angular.element(document.body),
+                targetEvent: event,
+                clickOutsideToClose:true
+            });
+        }
+
+        function selectDialog(dialogProperties, notification, event) {
+            var isStateProcessRequest = type_data[notification.entity_type].state == 'process_request';
+            dialogProperties.locals.key = notification.entity.key;
+            
+            if(isStateProcessRequest) {
+                loadInvite(notification.entity.key).then(
+                    function success(request) {
+                        dialogProperties.locals.request = request;
+                        var isRequestResolved = request.status == 'rejected' || request.status == 'accepted';
+                        isRequestResolved ? showResolvedRequestDialog(event) : showDialog(dialogProperties, event);
+                    }, function error(response) {
+                        MessageService.showToast(response.data.msg);
+                    }
+                );
+            } else {
+                showDialog(dialogProperties, event);
+            }
+        }
+
+        function loadInvite(invitekey) {
+            var deferred = $q.defer();
+            RequestInvitationService.getRequest(invitekey).then(
+                function success(response) {
+                    var invite = new Invite(response);
+                    deferred.resolve(invite);
+                }, function error(response) {
+                    deferred.reject(response);
+                }
+            );
+            return deferred.promise;
         }
 
         notificationCtrl.showNotifications = function showNotifications($mdMenu, $event) {

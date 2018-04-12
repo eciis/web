@@ -4,11 +4,11 @@
     var app = angular.module('app');
 
     app.controller('RequestProcessingController', function RequestProcessingController(AuthService, RequestInvitationService,
-        MessageService, InstitutionService, key, $state, $mdDialog) {
+        MessageService, InstitutionService, request, $state, $mdDialog) {
         var requestController = this;
 
         requestController.institution = null;
-        requestController.requestKey = key;
+        requestController.request = request;
 
         var REQUEST_PARENT = "REQUEST_INSTITUTION_PARENT";
         var REQUEST_CHILDREN = "REQUEST_INSTITUTION_CHILDREN";
@@ -17,7 +17,6 @@
 
         requestController.parent = null;
         requestController.children = null;
-        requestController.isSentRequest = true;
 
         requestController.acceptRequest = function acceptRequest() {
             resolveRequest().then(function success() {
@@ -65,7 +64,7 @@
             } else if (requestController.request.type_of_invite === REQUEST_CHILDREN) {
                 return RequestInvitationService.rejectInstChildrenRequest(requestController.request.key);
             } else {
-                return RequestInvitationService.rejectRequest(requestController.requestKey);
+                return RequestInvitationService.rejectRequest(request.key);
             }
         }
 
@@ -77,7 +76,8 @@
             return requestController.request && requestController.request.status === 'sent' ? '45' : '25';
         };
 
-        function loadInstitution(institutionKey) {
+        function loadInstitution() {
+            var institutionKey = requestController.isInstRequest() ? request.institution_requested_key : request.institution_key;
             InstitutionService.getInstitution(institutionKey).then(function success(response) {
                 requestController.institution = response.data;
                 formatPositions();
@@ -99,20 +99,6 @@
             }
         }
 
-        function loadRequest(){
-            RequestInvitationService.getRequest(requestController.requestKey).then(function success(response) {
-                requestController.request = new Invite(response);
-                requestController.isSentRequest = requestController.request.status === 'sent';
-                if (requestController.request.status === 'sent' && requestController.isInstRequest()) {
-                    loadInstitution(requestController.request.institution_requested_key);
-                } else if (requestController.request.status === 'sent' && !requestController.isInstRequest(requestController.request)) {
-                    loadInstitution(requestController.request.institution_key);
-                }
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
-            });
-        }
-
         requestController.showMessage = function() {
             var message;
             if(requestController.request && requestController.request.type_of_invite === REQUEST_CHILDREN) {
@@ -126,12 +112,9 @@
         };
 
         requestController.isInstRequest = function() {
-            if(requestController.request) {
-                var isParentRequest = requestController.request.type_of_invite === REQUEST_PARENT;
-                var isChildrenRequest = requestController.request.type_of_invite === REQUEST_CHILDREN;
-                return isParentRequest || isChildrenRequest;
-            }
-            return false;
+            var isParentRequest = request.type_of_invite === REQUEST_PARENT;
+            var isChildrenRequest = request.type_of_invite === REQUEST_CHILDREN;
+            return isParentRequest || isChildrenRequest;
         };
 
         requestController.goToInstitution = function goToInstitution(institutionKey) {
@@ -145,7 +128,8 @@
         }
 
         (function main () {
-            loadRequest();
+            var isRequestSent = request.status === 'sent';
+            if(isRequestSent) loadInstitution();
         })();
     });
 })();

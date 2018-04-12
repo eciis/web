@@ -256,6 +256,7 @@ class Post(PolyModel):
     @ndb.transactional(retries=10)
     def add_comment(self, comment):
         """Add a comment to the post."""
+        self = self.key.get()
         self.comments[comment.id] = Utils.toJson(comment)
         self.put()
 
@@ -315,7 +316,6 @@ class Post(PolyModel):
             user.like_post(post.key)
         return post
     
-    @ndb.transactional(retries=10, xg=True)
     def dislike(self, author_key):
         """Decrease one 'like' in post."""
         like = self.get_like(author_key)

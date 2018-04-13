@@ -58,22 +58,6 @@ class InstitutionParentRequestCollectionHandlerTest(TestBaseHandler):
             'currentInstitution': {'name': 'currentInstitution'}
         }
 
-        with self.assertRaises(Exception) as ex:
-            self.testapp.post_json(
-                "/api/institutions/" + institution.key.urlsafe() + "/requests/institution_parent",
-                body)
-
-        exception_message = self.get_message_exception(ex.exception.message)
-        self.assertEqual(
-            "Error! Hierarchical requests is not available in this version",
-            exception_message,
-            "Expected error message is Error! Hierarchical requests is not available in this version")
-
-        """TODO: Uncomment test below when the hierarchical requests can be available
-        @author: Mayza Nunes 11/01/2018
-        """
-        """
-
         request = self.testapp.post_json(
             "/api/institutions/" + institution.key.urlsafe() + "/requests/institution_parent",
             data)
@@ -97,6 +81,43 @@ class InstitutionParentRequestCollectionHandlerTest(TestBaseHandler):
         self.assertEqual(
             institution.parent_institution, inst_requested.key,
             "The parent institution of inst test must be update to inst_requested")
+    
+    @patch('utils.verify_token', return_value=ADMIN)
+    def test_post_with_wrong_institution(self, verify_token):
+        """Test post with wrong institution."""
+        admin = mocks.create_user(ADMIN['email'])
+        institution = mocks.create_institution()
+        admin.add_institution_admin(institution.key)
+        institution.set_admin(admin.key)
+        admin.add_permission("send_link_inst_request",
+                             institution.key.urlsafe())
+        admin.put()
+        institution.put()
+        inst_requested = mocks.create_institution()
+        admin_requested = mocks.create_user(USER['email'])
+        admin.institutions_admin = [inst_requested.key]
+        admin_requested.put()
+        inst_requested.set_admin(admin_requested.key)
+        inst_requested.put()
+        data = {
+            'sender_key': admin.key.urlsafe(),
+            'is_request': True,
+            'admin_key': admin_requested.key.urlsafe(),
+            'institution_key': institution.key.urlsafe(),
+            'institution_requested_key': inst_requested.key.urlsafe(),
+            'type_of_invite': 'REQUEST_INSTITUTION_PARENT'
+        }
+
+        with self.assertRaises(Exception) as ex:
+            self.testapp.post_json(
+                "/api/institutions/" + inst_requested.key.urlsafe() + "/requests/institution_parent",
+                data)
+
+        exception_message = self.get_message_exception(ex.exception.message)
+        self.assertEqual(
+            "Error! User is not allowed to send request",
+            exception_message,
+            "Expected error message is Error! User is not allowed to send request")
 
     @patch('utils.verify_token', return_value=USER)
     def test_post_user_not_admin(self, verify_token):
@@ -134,4 +155,3 @@ class InstitutionParentRequestCollectionHandlerTest(TestBaseHandler):
             "Error! User is not allowed to send request",
             exception_message,
             "Expected error message is Error! User is not allowed to send request")
-"""

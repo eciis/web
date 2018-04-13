@@ -45,7 +45,7 @@ class InviteUserTest(TestBase):
     def test_make(self):
         """Test make method."""
         REQUIRED_PROPERTIES = ['name', 'address', 'description',
-                               'key', 'photo_url', 'email',
+                               'key', 'photo_url', 'email', 'trusted',
                                'phone_number', 'institutional_email']
 
         maked_invite = self.invite_user.make()

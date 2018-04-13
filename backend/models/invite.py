@@ -73,9 +73,11 @@ class Invite(PolyModel):
         self.send_email(host)
         self.send_notification(current_institution)
 
-    def send_email(self, host, receiver_email, body):
+    def send_email(self, host, receiver_email=None, body=None):
         """Method of send email of invite user."""
         subject = get_string('INVITE_EMAIL_SUBJECT')
+        receiver_email = receiver_email or self.invitee
+        body = body or """Você recebeu um convite da plataforma CIS. """
         email_sender = EmailSender(**{
             'receiver': receiver_email, 
             'subject': subject, 
@@ -104,7 +106,7 @@ class Invite(PolyModel):
         """Create personalized json of invite."""
         REQUIRED_PROPERTIES = ['name', 'address', 'description',
                                'key', 'photo_url', 'institutional_email',
-                               'phone_number', 'email']
+                               'phone_number', 'email', 'trusted']
         institution_admin = self.institution_key.get()
         institution_admin = institution_admin.make(['name'])
         institution = self.institution_key.get()

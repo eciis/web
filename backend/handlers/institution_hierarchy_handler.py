@@ -30,17 +30,17 @@ class InstitutionHierarchyHandler(BaseHandler):
 
         This handler remove the link between two institutions. 
         If the parameter isParent is true, it means that the removal 
-        request was made from a daughter institution, otherwise 
-        the request was made by a parent institution.
+        request has been made from a child institution, otherwise 
+        the request has been made by a parent institution.
         """
 
         user.check_permission('remove_link',
                               "User is not allowed to remove link between institutions",
-                              institution_link)
+                              institution_key)
 
         is_parent = self.request.get('isParent')
         # If isParent is true, this attribute 
-        # holds the reference of the children intitution.
+        # holds the reference of the child intitution.
         institution = ndb.Key(urlsafe=institution_key).get()
         # If isParent is true, this attribute 
         # holds the reference of the parent intitution.
@@ -55,20 +55,17 @@ class InstitutionHierarchyHandler(BaseHandler):
         Utils._assert(institution_link.state == 'inactive',
                       "The institution has been deleted", NotAuthorizedException)
 
-        admin = institution_link.admin.get()
-        
-        if is_parent == "true":
-            admin.remove_permission("remove_inst", institution.key.urlsafe())
-            enqueue_task('remove-admin-permissions', {'institution_key': institution.key.urlsafe()})
-        else:
-            enqueue_task('remove-admin-permissions', {'institution_key': institution_link.key.urlsafe()})
-
         institution.remove_link(institution_link, is_parent)
-        user.remove_permission('remove_link', institution_link.key.urlsafe())
+        admin = institution_link.admin
+
+        if is_parent == "true":
+            enqueue_task('remove-admin-permissions', {'institution_key': institution.key.urlsafe(), 'user': admin.urlsafe()})
+        else:
+            enqueue_task('remove-admin-permissions', {'institution_key': institution_link.key.urlsafe(), 'user': user.key.urlsafe()})
         
         entity_type = 'INSTITUTION'
         send_message_notification(
-            admin.key.urlsafe(),
+            admin.urlsafe(),
             user.key.urlsafe(),
             entity_type,
             institution_link.key.urlsafe(),

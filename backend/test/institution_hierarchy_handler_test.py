@@ -7,6 +7,8 @@ from worker import AddAdminPermissionsInInstitutionHierarchy
 from worker import RemoveAdminPermissionsInInstitutionHierarchy
 from mock import patch
 import mocks
+import permissions
+from test_base_handler import has_permissions
 
 ADMIN = {'email': 'user1@gmail.com'}
 USER = {'email': 'otheruser@ccc.ufcg.edu.br'}
@@ -49,8 +51,8 @@ class InstitutionHierarchyHandlerTest(TestBaseHandler):
         institution.put()
         otherinst.put()
         admin.add_institution(institution.key)
-        admin.add_permissions(["remove_inst", "remove_link"], otherinst.key.urlsafe())
-        otheruser.add_permission("remove_link", institution.key.urlsafe())
+        admin.add_permission("remove_link", institution.key.urlsafe())
+        admin.put()
         self.assertTrue(otherinst.key in institution.children_institutions)
         self.assertTrue(otherinst.parent_institution == institution.key)
         # Call the delete method
@@ -90,9 +92,8 @@ class InstitutionHierarchyHandlerTest(TestBaseHandler):
         otherinst.admin = otheruser.key
         institution.put()
         otherinst.put()
-        admin.add_permissions(["remove_inst", "remove_link"], otherinst.key.urlsafe())
         otheruser.add_institution(otherinst.key)
-        otheruser.add_permission("remove_link", institution.key.urlsafe())
+        otheruser.add_permission("remove_link", otherinst.key.urlsafe())
         self.assertTrue(otherinst.key in institution.children_institutions)
         self.assertTrue(otherinst.parent_institution == institution.key)
         # Call the delete method
@@ -121,40 +122,33 @@ class InstitutionHierarchyHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': 'user@example.com'})
     def test_remove_admin_permission_in_institution_hierarchy(self, verify_token, enqueue_task):
         """Test remove admin permissions in institution hierarchy."""
-        first_user = mocks.create_user()
         second_user = mocks.create_user()
         third_user = mocks.create_user()
 
-        first_inst = mocks.create_institution()
         second_inst = mocks.create_institution()
         third_inst = mocks.create_institution()
 
-        first_inst.admin = first_user.key
         second_inst.admin = second_user.key
         third_inst.admin = third_user.key
 
-        first_user.institutions_admin.append(first_inst.key)
         second_user.institutions_admin.append(second_inst.key)
         third_user.institutions_admin.append(third_inst.key)
 
-        second_inst.parent_institution = first_inst.key
         third_inst.parent_institution = second_inst.key
 
-        first_inst.children_institutions.append(second_inst.key)
         second_inst.children_institutions.append(third_inst.key)
 
-        third_user.add_permission('remove_link', second_inst.key.urlsafe())
-        first_user.add_permission('publish_post', third_inst.key.urlsafe())
-        second_user.add_permission('publish_post', third_inst.key.urlsafe())
-        third_user.add_permission('publish_post', third_inst.key.urlsafe())
-
-        first_inst.put()
+        third_user.add_permission('remove_link', third_inst.key.urlsafe())
+        second_user.add_permissions(permissions.DEFAULT_ADMIN_PERMISSIONS, third_inst.key.urlsafe())
+       
         second_inst.put()
         third_inst.put()
 
-        first_user.put()
         second_user.put()
         third_user.put()
+
+        self.assertTrue(has_permissions(
+            second_user, third_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
 
         enqueue_task.side_effect = self.enqueue_task
         verify_token._mock_return_value = {'email': third_user.email[0]}
@@ -162,14 +156,10 @@ class InstitutionHierarchyHandlerTest(TestBaseHandler):
         self.testapp.delete("/api/institutions/%s/hierarchy/%s?isParent=true" %
             (third_inst.key.urlsafe(), second_inst.key.urlsafe()))
         
-        first_user = first_user.key.get()
         second_user = second_user.key.get()
-        third_user = third_user.key.get()
         
-        self.assertTrue(third_inst.key.urlsafe() not in first_user.permissions['publish_post'])
-        self.assertTrue(third_inst.key.urlsafe() not in second_user.permissions['publish_post'])
-        self.assertTrue(third_inst.key.urlsafe() in third_user.permissions['publish_post'])
-
+        self.assertFalse(has_permissions(
+            second_user, third_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
 
     def tearDown(cls):
         """Deactivate the test."""

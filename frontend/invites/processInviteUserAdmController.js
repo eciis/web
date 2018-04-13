@@ -17,7 +17,8 @@
         processCtrl.accept = function accept() {
             InviteService.acceptInviteUserAdm(processCtrl.invite.key).then(function success() {
                 processCtrl.current_user.institutions_admin.push(processCtrl.invite.institution_key);
-                set_inst_admin(processCtrl.current_user.institutions);
+                setInstAdmin(processCtrl.current_user.institutions);
+                setToSuperUser(processCtrl.invite);
                 AuthService.save();
                 processCtrl.typeOfDialog = processCtrl.VIEW_INVITE_INVITEE;
                 processCtrl.isAccepting = true;
@@ -60,7 +61,7 @@
                         _.remove(processCtrl.current_user.institutions_admin, function(url) {
                             return getKey(url) === invite.institution_key;
                         });
-
+                        removeSuperUserPermission();
                         AuthService.save();
                     }
 
@@ -77,12 +78,42 @@
          * the new administrator and switches the administrator key to the user key.
          * @param {*} user_institutions - Institutions list of new admin 
          */
-        function set_inst_admin(user_institutions) {
+        function setInstAdmin(user_institutions) {
             let institution = user_institutions.reduce(
                 (instFound, institution) => (institution.key === processCtrl.invite.institution_key) ? institution : instFound, 
                 {}
             );
             institution.admin = processCtrl.current_user.key;
+        }
+
+        /**
+         * This method add super user permissions when the transferring 
+         * administration is send by the super institution.
+         */
+        function setToSuperUser(invite) {
+            if(invite.institution.trusted){
+                let permission_inst = _.set({}, invite.institution.key, true);
+                processCtrl.current_user.permissions['analyze_request_inst'] = permission_inst;
+                processCtrl.current_user.permissions['send_invite_inst'] = permission_inst;
+            }
+        }
+
+        /**
+         * This method remove super user permissions when the transferring 
+         * administration is sent by the super institution.
+         */
+        function removeSuperUserPermission(){
+            if(processCtrl.invite.institution.trusted){
+                let analyzeRequestPermission = processCtrl.current_user.hasPermission('analyze_request_inst', 
+                    processCtrl.invite.institution.key);
+                let sendInvitePermission = processCtrl.current_user.hasPermission('send_invite_inst', 
+                    processCtrl.invite.institution.key);
+                let isOldAdmin = processCtrl.typeOfDialog === processCtrl.VIEW_INVITE_SENDER;
+                if(analyzeRequestPermission && sendInvitePermission && isOldAdmin){
+                    delete processCtrl.current_user.permissions['analyze_request_inst']
+                    delete processCtrl.current_user.permissions['send_invite_inst']
+                }
+            }
         }
 
         (function main() {

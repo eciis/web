@@ -104,10 +104,10 @@
             var promise;
             if (invite.type_of_invite === INSTITUTION_PARENT) {
                 invite.type_of_invite = REQUEST_PARENT;
-                promise = RequestInvitationService.sendRequestToParentInst(invite, institution_requested_key);
+                promise = RequestInvitationService.sendRequestToParentInst(invite, invite.institution_key);
             } else {
                 invite.type_of_invite = REQUEST_CHILDREN;
-                promise = RequestInvitationService.sendRequestToChildrenInst(invite, institution_requested_key);
+                promise = RequestInvitationService.sendRequestToChildrenInst(invite, invite.institution_key);
             }
             promise.then(function success() {
                 MessageService.showToast('Convite enviado com sucesso!');
@@ -356,7 +356,9 @@
         };
 
         inviteInstHierCtrl.linkParentStatus = function linkParentStatus() {
-            return inviteInstHierCtrl.institution.parent_institution ? "confirmado" : "não confirmado";
+            const parentInstitution = inviteInstHierCtrl.institution.parent_institution;
+            const institutionKey = inviteInstHierCtrl.institution.key;
+            return _.find(parentInstitution.children_institutions, inst => inst.key === institutionKey ) ? "confirmado" : "não confirmado";
         };
 
         inviteInstHierCtrl.linkChildrenStatus = function linkChildrenStatus(institution) {

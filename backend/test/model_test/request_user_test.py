@@ -92,9 +92,7 @@ class RequestUserTest(TestBase):
             str(ex.exception),
             'Expected message is The sender is already invited')
 
-    # TODO: fix this test because not work after add fiel 'description' in search_institution.py
-    # Author: Tiago Pereira - 22/12/2017
-'''     def test_make(self):
+    def test_make(self):
         """Test method make."""
         admin_user = mocks.create_user('adminuser@test.com')
         other_user = mocks.create_user('otheruser@test.com')
@@ -116,6 +114,10 @@ class RequestUserTest(TestBase):
         request = RequestUser.create(data)
         request.put()
 
+        REQUIRED_PROPERTIES = ['name', 'address', 'description',
+                               'key', 'photo_url', 'institutional_email',
+                               'phone_number', 'email', 'trusted']
+
         make = {
             'status': 'sent',
             'institution_admin': {
@@ -124,15 +126,12 @@ class RequestUserTest(TestBase):
             'sender': other_user.email,
             'admin_name': admin_user.name,
             'key': request.key.urlsafe(),
-            'institution': {
-                'name': 'inst test',
-                'key': inst_test.key.urlsafe(),
-                'address': dict(inst_test.address)
-            },
+            'institution': inst_test.make(REQUIRED_PROPERTIES),
             'type_of_invite': 'REQUEST_USER',
             'institution_key': inst_test.key.urlsafe(),
             'office': 'teacher',
             'sender_name': 'other_user',
+            'sender_key': other_user.key.urlsafe(),
             'institutional_email': 'otheruser@inst_test.com'
         }
 
@@ -142,6 +141,7 @@ class RequestUserTest(TestBase):
                 make_institution = make[key]
                 request_institution = request_make[key]
                 for inst_key in make_institution.keys():
+
                     self.assertEqual(
                         str(make_institution[inst_key]).encode('utf-8'),
                         str(request_institution[inst_key]).encode('utf-8'),
@@ -152,4 +152,4 @@ class RequestUserTest(TestBase):
                     str(make[key]).encode('utf-8'),
                     str(request_make[key]).encode('utf-8'),
                     "The make object must be equal to variable make"
-                ) '''
+                )

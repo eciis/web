@@ -40,7 +40,7 @@ class InviteUserAdmHandler(BaseHandler):
             user.add_institution_admin(institution.key)
             actual_admin.remove_institution_admin(institution.key)
             invite.change_status('accepted')
-        
+            
             enqueue_task(
                 'transfer-admin-permissions', 
                 {
@@ -49,7 +49,6 @@ class InviteUserAdmHandler(BaseHandler):
                 }
             )
             invite.send_response_notification(current_institution=institution.key, action='ACCEPT')
-        
         save_changes(user, actual_admin, invite, institution)
         self.response.write(json.dumps(make_user(user, self.request)))
 

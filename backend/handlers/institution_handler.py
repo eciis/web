@@ -59,7 +59,11 @@ def childrenToJson(obj):
 def parentToJson(obj):
     """Return json with parent institution."""
     if(obj.parent_institution):
-        return Institution.make(obj.parent_institution.get(), ['name', 'key', 'state', 'invite'])
+        parent_institution = obj.parent_institution.get()
+        institution_parent_json = Institution.make(parent_institution, [
+                                                   'name', 'key', 'state', 'invite'])
+        institution_parent_json['children_institutions'] = childrenToJson(parent_institution)
+        return institution_parent_json
 
 
 def adminToJson(admin):
@@ -190,7 +194,9 @@ class InstitutionHandler(BaseHandler):
 
         Utils._assert(not type(institution) is Institution,
                       "Key is not an institution", EntityException)
-
+        """TODO: Move this call to a queue
+        @author: Raoni Smaneoto 02/04/2018
+        """
         institution.remove_institution(remove_hierarchy, user)
 
         params = {
@@ -198,7 +204,6 @@ class InstitutionHandler(BaseHandler):
             'remove_hierarchy': remove_hierarchy
         }
 
-        enqueue_task('remove-admin-permissions', params)
         enqueue_task('remove-inst', params)
 
         email_params = {

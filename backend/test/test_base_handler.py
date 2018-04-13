@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Imports."""
 from test_base import TestBase
-
+import permissions
 
 class TestBaseHandler(TestBase):
     """SuperClass of the handler's tests."""
@@ -23,3 +23,10 @@ class TestBaseHandler(TestBase):
         self.list_args = exception.split("\n")
         self.dict = eval(self.list_args[1])
         return self.dict["msg"]
+    
+
+def has_permissions(user, institution_key, type_permission):
+    for permission in type_permission:
+        if not user.has_permission(permission, institution_key):
+            return False
+    return True

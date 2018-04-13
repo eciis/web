@@ -97,13 +97,14 @@ class PostCollectionHandler(BaseHandler):
             enqueue_task('post-notification', params)
         elif post.shared_event:
             shared_event = post.shared_event.get()
-            send_message_notification(
-                shared_event.author_key.urlsafe(),
-                user.key.urlsafe(),
-                'SHARED_EVENT',
-                post.key.urlsafe(),
-                user.current_institution
-            )
+            if shared_event.author_key != user.key.urlsafe():
+                send_message_notification(
+                    shared_event.author_key.urlsafe(),
+                    user.key.urlsafe(),
+                    'SHARED_EVENT',
+                    post.key.urlsafe(),
+                    user.current_institution
+                )
 
 
         self.response.write(json.dumps(post.make(self.request.host)))

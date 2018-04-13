@@ -733,7 +733,7 @@
         MessageService, $state) {
         var shareCtrl = this;
 
-        var LIMIT_POST_CHARACTERS = 200;
+        var LIMIT_POST_CHARACTERS = 15;
         var URL_PATTERN = /(((www.)|(http(s)?:\/\/))[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
         var REPLACE_URL = "<a href=\'$1\' target='_blank'>$1</a>";
         

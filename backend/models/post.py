@@ -267,7 +267,6 @@ class Post(PolyModel):
 
     def reply_comment(self, reply, comment_id):
         comment = self.get_comment(comment_id)
-        print "------------------", comment_id
         Utils._assert(
             not comment, "This comment has been deleted.", EntityException)
         replies = comment.get('replies')

@@ -101,6 +101,19 @@
                     locals: {}
                 }
             },
+            "REQUEST_INSTITUTION": {
+                icon: "account_balance",
+                state: "process_request",
+                action: function (properties, notification, event) {
+                    return selectDialog(properties, notification, event);
+                },
+                properties: {
+                    templateUrl: "app/requests/request_institution_processing.html",
+                    controller: "RequestProcessingController",
+                    controllerAs: "requestCtrl",
+                    locals: {}
+                }
+            },
             "ACCEPT_INSTITUTION_LINK": {
                 icon: "account_balance",
             },
@@ -121,19 +134,6 @@
             },
             "REJECT_INVITE_INSTITUTION": {
                 icon: "account_balance"
-            },
-            "REQUEST_INSTITUTION": {
-                icon: "account_balance",
-                state: "process_request",
-                action: function (properties, notification, event) {
-                    return selectDialog(properties, notification, event);
-                },
-                properties: {
-                    templateUrl: "app/requests/request_institution_processing.html",
-                    controller: "RequestInstitutionProcessingController",
-                    controllerAs: "requestCtrl",
-                    locals: {}
-                }
             },
             "SHARED_EVENT": {
                 icon: "share",

@@ -40,7 +40,6 @@ class PostCommentHandler(BaseHandler):
 
     @json_response
     @login_required
-    @ndb.transactional(xg=True)
     def post(self, user, post_key):
         """Handle Post Comments requests."""
         body = json.loads(self.request.body)

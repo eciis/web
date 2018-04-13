@@ -10,14 +10,14 @@
             <div class="container">
               <div class="row">
                   <div class="card hovercard" 
-                      md-colors="{background: homeCtrl.user.current_institution.color+'-800'}">
+                      md-colors="{background: homeCtrl.user.getProfileColor() +'-800'}">
                     <div class="cardheader">
                       <div class="avatar">
                         <img style="background-color: white;" alt="Foto do Perfil" ng-src="{{ homeCtrl.user.photo_url }}">
                       </div>
                     </div>
                     <div class="info" 
-                        md-colors="{background: homeCtrl.user.current_institution.color+'-600'}">
+                        md-colors="{background: homeCtrl.user.getProfileColor() +'-600'}">
                       <div class="desc">
                         <div class="md-title">{{ homeCtrl.user.name }}</div>
                         <span>{{ homeCtrl.user.current_institution.name }}</span>

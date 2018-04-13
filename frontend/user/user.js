@@ -17,7 +17,6 @@ User.prototype.changeInstitution = function changeInstitution(institution) {
     if (this.institutions && this.institutions.length > 0) {
         institution = institution || this.institutions[0];
         this.current_institution = _.find(this.institutions, {'key': institution.key});
-        changeProfileColor(this, institution);
         window.localStorage.userInfo = JSON.stringify(this);
     }
 };
@@ -170,20 +169,19 @@ User.prototype.goToDifferentInstitution = function goToDifferentInstitution(prev
             const institutionHasBeenDeleted = removeHierarchy === "true" && institution.parent_institution === previousKey;
             if (!(institutionHasBeenDeleted)) {
                 user.current_institution = institution;
-                changeProfileColor(user, institution);
                 window.localStorage.userInfo = JSON.stringify(this);
             }
         }
     });
 };
 
-function changeProfileColor(user, institution) {
-    var profile = _.find(user.institution_profiles, {
-        'institution_key': institution.key
-    });
-    const color = profile ? profile.color : 'grey';
-    user.current_institution.color = color;
-}
+User.prototype.getProfileColor = function getProfileColor() {
+    const instKey = this.current_institution.key;
+    return this.institution_profiles.reduce(
+        (color, profile) => (profile.institution_key === instKey) ? profile.color : color, 
+        'grey'
+    );
+};
 
 function updateFollowInstitution(follows, institution) {
     var index = _.findIndex(follows, ['key', institution.key]);

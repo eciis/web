@@ -6,7 +6,6 @@
     var colorPickerCtrl, scope, httpBackend, mdDialog, http, profileService, rootScope;
 
     var institution = {
-        'color' : 'red',
         'email' : 'institution@gmail.com',
         'key': '123456',
         'institution_key' : '123456'
@@ -71,7 +70,7 @@
             httpBackend.expect('PATCH', '/api/user').respond(200);
             var promise = colorPickerCtrl.saveColor();
             promise.should.be.fulfilled.then(function() {
-                expect(colorPickerCtrl.user.current_institution.color).toBe('blue');
+                expect(colorPickerCtrl.user.getProfileColor()).toBe('blue');
                 expect(colorPickerCtrl.user.institution_profiles).toHaveBeenCalled(change);
             }).should.notify(done);
             httpBackend.flush();

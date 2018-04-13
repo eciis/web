@@ -263,21 +263,16 @@ class User(ndb.Model):
             del self.permissions[permission_type][entity_key]
             self.put()
     
-    def remove_permissions(self, permission_type, list_entity_keys):
+    def remove_permissions(self, list_permissions, entity_key):
         """
         Remove permissions to the user permissions list.
 
         Arguments:
-        permission_type -- Type of permission to be removed
-        list_entity_keys -- Keys of entities to be removed of permissions
+        list_permissions -- permissions list to be removed
+        entity_keys -- ndb urlsafe of the object binded to the permission
         """
-        if permission_type not in self.permissions:
-            return
-
-        for entity_key in list_entity_keys:
-            if self.permissions.get(permission_type, {}).get(entity_key):
-                del self.permissions[permission_type][entity_key]
-        self.put()
+        for permission in list_permissions:
+            self.remove_permission(permission, entity_key)
     
     def remove_institution_admin(self, institution_key):
         """Remove a institution admin to user."""

@@ -118,7 +118,6 @@ class Institution(ndb.Model):
                 raise Exception("Admin can not be removed")
             member.remove_institution(self.key)
             self.members.remove(member.key)
-            print ">>>>>>>>>>>>>>>>>>>>>>>>>>> chamou aqui"
             self.put()
 
     def add_post(self, post):

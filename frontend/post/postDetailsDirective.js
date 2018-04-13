@@ -9,6 +9,7 @@
         var postDetailsCtrl = this;
 
         var LIMIT_POST_CHARACTERS = 1000;
+        const REMOVE_POST_PERMISSION = 'remove_posts';
 
         postDetailsCtrl.showComments = false;
         postDetailsCtrl.savingComment = false;
@@ -17,7 +18,7 @@
 
         var URL_POST = '/posts/';
         postDetailsCtrl.user = AuthService.getCurrentUser();
-
+        
         postDetailsCtrl.deletePost = function deletePost(ev) {
             var confirm = $mdDialog.confirm()
                 .clickOutsideToClose(true)
@@ -144,7 +145,10 @@
         };
 
         postDetailsCtrl.showButtonDelete = function showButtonDelete() {
-            return postDetailsCtrl.isAuthorized() &&
+            console.log(postDetailsCtrl.user.permissions);
+            const hasPermission = postDetailsCtrl.user.hasPermission(REMOVE_POST_PERMISSION, postDetailsCtrl.post.institution_key);
+            const hasPermissionOrIsAuthor =  hasPermission || postDetailsCtrl.isPostAuthor();
+            return  hasPermissionOrIsAuthor &&
                 !postDetailsCtrl.isDeleted(postDetailsCtrl.post);
         };
 
@@ -419,7 +423,7 @@
         };
 
         postDetailsCtrl.isPostAuthor = function isPostAuthor() {
-            return postDetailsCtrl.post.author_key == postDetailsCtrl.user.key;
+            return postDetailsCtrl.post.author_key === postDetailsCtrl.user.key;
         };
 
         postDetailsCtrl.isPostEmpty = function  isPostEmpty() {

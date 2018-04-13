@@ -505,4 +505,45 @@
             expect(result.background).toEqual('grey');
         })
     });
+
+    describe('showButtonDelete', function () {
+        it('should return true', function () {
+            let post = new Post({author_key: user.key});
+            postDetailsCtrl.user.permissions = {};
+            postDetailsCtrl.post = post;
+            let returnedValue = postDetailsCtrl.showButtonDelete();
+            expect(returnedValue).toBeTruthy();
+
+            var institution_key = institutions[0].key;
+            postDetailsCtrl.post.author_key = 'oaksd-oKOKOPDkoa';
+            postDetailsCtrl.post.key = 'aoskdopa-KAPODKPOpo';
+            postDetailsCtrl.post.institution_key = institution_key;
+            postDetailsCtrl.user.permissions.remove_posts = {};
+            postDetailsCtrl.user.permissions.remove_posts[institution_key] = true;
+            returnedValue = postDetailsCtrl.showButtonDelete();
+            expect(returnedValue).toBeTruthy();
+        });
+
+        it("should return false", function () {
+            let post = new Post({ author_key: user.key, state: 'deleted' });
+            postDetailsCtrl.user.permissions = {};
+            postDetailsCtrl.post = post;
+            let returnedValue = postDetailsCtrl.showButtonDelete();
+            expect(returnedValue).toBeFalsy();
+
+            var institution_key = institutions[0].key;
+            postDetailsCtrl.post.author_key = 'oaksd-oKOKOPDkoa';
+            postDetailsCtrl.post.key = 'aoskdopa-KAPODKPOpo';
+            postDetailsCtrl.post.institution_key = institution_key;
+            postDetailsCtrl.user.permissions.remove_posts = {};
+            postDetailsCtrl.user.permissions.remove_posts[institution_key] = true;
+            returnedValue = postDetailsCtrl.showButtonDelete();
+            expect(returnedValue).toBeFalsy();
+
+            post = new Post({institution_key: institution_key, author_key: 'oaksdpoka-KOPEkPO'});
+            postDetailsCtrl.user.permissions = {}
+            returnedValue = postDetailsCtrl.showButtonDelete();
+            expect(returnedValue).toBeFalsy();
+        });
+    });
 }));

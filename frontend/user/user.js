@@ -177,6 +177,14 @@ User.prototype.goToDifferentInstitution = function goToDifferentInstitution(prev
     });
 };
 
+User.prototype.getProfileColor = function getProfileColor() {
+    const instKey = this.current_institution.key;
+    return this.institution_profiles.reduce(
+        (color, profile) => (profile.institution_key === instKey) ? profile.color : color, 
+        'grey'
+    );
+};
+
 function changeProfileColor(user, institution) {
     var profile = _.find(user.institution_profiles, {
         'institution_key': institution.key

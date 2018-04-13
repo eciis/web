@@ -36,6 +36,8 @@ class LikeCommentHandlerTest(TestBaseHandler):
         cls.comment = mocks.create_comment(cls.institution.key.urlsafe(), cls.third_user)
         # add comment to post
         cls.post.add_comment(cls.comment)
+        cls.post = cls.post.key.get()
+        
         # creating uri
         cls.uri = '/api/posts/%s/comments/%s/likes' % (cls.post.key.urlsafe(), cls.comment.id)
 

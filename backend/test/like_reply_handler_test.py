@@ -159,6 +159,7 @@ def init(cls):
     # add comment to post
     cls.post.add_comment(cls.comment)
     # add reply to comment
+    cls.post = cls.post.key.get()
     cls.post.reply_comment(cls.reply, cls.comment.id)
     cls.post.put()
 

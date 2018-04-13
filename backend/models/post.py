@@ -256,9 +256,9 @@ class Post(PolyModel):
     @ndb.transactional(retries=10)
     def add_comment(self, comment):
         """Add a comment to the post."""
-        self = self.key.get()
-        self.comments[comment.id] = Utils.toJson(comment)
-        self.put()
+        post = self.key.get()
+        post.comments[comment.id] = Utils.toJson(comment)
+        post.put()
 
     def remove_comment(self, comment):
         """Remove a commet from post."""
@@ -267,6 +267,7 @@ class Post(PolyModel):
 
     def reply_comment(self, reply, comment_id):
         comment = self.get_comment(comment_id)
+        print "------------------", comment_id
         Utils._assert(
             not comment, "This comment has been deleted.", EntityException)
         replies = comment.get('replies')

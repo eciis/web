@@ -108,14 +108,17 @@ def remove_permissions(remove_hierarchy, institution):
         current_permissions = institution.get_all_hierarchy_admin_permissions()
         if remove_hierarchy == "true":
             for permission, institutions in current_permissions.items():
-                admin.remove_permissions(permission, institutions)
+                for inst in institutions:
+                    admin.remove_permission(permission, inst)
+
             for child in institution.children_institutions:
                 remove_permissions(remove_hierarchy, child.get())
         else:
             current_permissions = filter_permissions_to_remove(
                 admin, current_permissions, institution.key, is_not_admin)
             for permission, institution_keys in current_permissions.items():
-                admin.remove_permissions(permission, institution_keys)
+                for institution_key in institution_keys:
+                    admin.remove_permission(permission, institution_key)
 
 
 class BaseHandler(webapp2.RequestHandler):
@@ -181,9 +184,9 @@ class RemoveInstitutionHandler(BaseHandler):
     def post(self):
         """Remove the permissions relationed to the institution and its hierarchy, if remove_hierarchy is true, 
         and remove the institution from users's list.""" 
-        institution = self.request.get('institution_key')
+        institution_key = self.request.get('institution_key')
         remove_hierarchy = self.request.get('remove_hierarchy')
-        institution = ndb.Key(urlsafe=institution).get()
+        institution = ndb.Key(urlsafe=institution_key).get()
 
         @ndb.transactional(xg=True, retries=10)
         def apply_remove_operation(remove_hierarchy, institution):
@@ -301,7 +304,8 @@ class RemoveAdminPermissionsInInstitutionHierarchy(BaseHandler):
     def removeAdminPermissions(self, user, permissions):
         """Iterate over the permissions and remove them for each set of institutions keys."""
         for permission, institution_keys in permissions.items():
-            user.remove_permissions(permission, institution_keys)
+            for institution_key in institution_keys:
+                user.remove_permission(permission, institution_key)
 
     def post(self):
         """Get the permissions and provide them to the remove function."""
@@ -366,7 +370,8 @@ class TransferAdminPermissionsHandler(BaseHandler):
         permissions -- Permissions to remove
         """
         for permission, instition_keys in permissions.items():
-            user.remove_permissions(permission, instition_keys)
+            for instition_key in instition_keys:
+                user.remove_permission(permission, instition_key)
 
 
     def post(self):

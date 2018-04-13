@@ -55,6 +55,7 @@ class ReplyCommentHandlerTest(TestBaseHandler):
         cls.reply = mocks.create_comment(cls.institution.key.urlsafe(), cls.third_user)
         # add comment to post
         cls.user_post.add_comment(cls.other_user_comment)
+        cls.user_post = cls.user_post.key.get()
         cls.user_post.put()
 
 

@@ -212,6 +212,14 @@
             });
         };
 
+        homeCtrl.getProfileColor = function getProfileColor() {
+            const instKey = homeCtrl.user.current_institution.key;
+            const color = homeCtrl.user.institution_profiles.reduce(
+                (color, profile) => (profile.institution_key === instKey) ? profile.color : color, 'grey');
+            
+            return color;
+        };
+
         (function main() {
             NotificationService.watchPostNotification(homeCtrl.user.key, homeCtrl.setRefreshTimelineButton);
             loadEvents();
@@ -230,7 +238,7 @@
             var promise = ProfileService.editProfile(diff);
             promise.then(function success() {
                 MessageService.showToast('Cor salva com sucesso');
-                colorPickerCtrl.user.current_institution.color = colorPickerCtrl.newProfile.color;
+                //colorPickerCtrl.user.current_institution.color = colorPickerCtrl.newProfile.color;
                 colorPickerCtrl.user.institution_profiles = colorPickerCtrl.newUser.institution_profiles;
                 $mdDialog.cancel();
                 AuthService.save();

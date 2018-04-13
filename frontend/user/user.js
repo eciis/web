@@ -17,7 +17,7 @@ User.prototype.changeInstitution = function changeInstitution(institution) {
     if (this.institutions && this.institutions.length > 0) {
         institution = institution || this.institutions[0];
         this.current_institution = _.find(this.institutions, {'key': institution.key});
-        changeProfileColor(this, institution);
+        //changeProfileColor(this, institution);
         window.localStorage.userInfo = JSON.stringify(this);
     }
 };
@@ -170,7 +170,7 @@ User.prototype.goToDifferentInstitution = function goToDifferentInstitution(prev
             const institutionHasBeenDeleted = removeHierarchy === "true" && institution.parent_institution === previousKey;
             if (!(institutionHasBeenDeleted)) {
                 user.current_institution = institution;
-                changeProfileColor(user, institution);
+                //changeProfileColor(user, institution);
                 window.localStorage.userInfo = JSON.stringify(this);
             }
         }

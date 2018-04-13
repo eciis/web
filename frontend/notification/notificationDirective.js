@@ -21,13 +21,17 @@
             "DELETE_MEMBER": {
                 icon: "clear",
                 action: function (properties, notification, event) {
-                    return refreshUserInstitutions(notification);
+                    if (notification.status !== 'READ') {
+                        return refreshUserInstitutions(notification);
+                    }
                 }
             },
             "DELETED_INSTITUTION": {
                 icon: "clear",
                 action: function (properties, notification, event) {
-                    return refreshUserInstitutions(notification);
+                    if (notification.status !== 'READ') {
+                        return refreshUserInstitutions(notification);
+                    }
                 }
             },
             "POST": {

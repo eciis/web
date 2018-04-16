@@ -26,5 +26,5 @@ class InviteInstitutionParent(InviteInstitution):
 
     def send_response_notification(self, current_institution, invitee_key, action):
         """Define the entity type of notification when the invite is accepted or rejected."""
-        entity_type = 'ACCEPT_INSTITUTION_LINK' if action == 'ACCEPT' else 'REJECT_INSTITUTION_LINK'
+        entity_type = 'ACCEPT_INVITE_HIERARCHY' if action == 'ACCEPT' else 'REJECT_INSTITUTION_LINK'
         self.send_response(current_institution, invitee_key, entity_type)

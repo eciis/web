@@ -184,7 +184,10 @@
             },
             "REJECT_INVITE_USER_ADM": {
                 icon: "account_balance"
-            }
+            },
+            "ACCEPT_INVITE_HIERARCHY": {
+                icon: "account_balance",
+            },
         };
 
         notificationCtrl.markAsRead = function markAsRead(notification) {

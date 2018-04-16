@@ -67,6 +67,20 @@
             }, function error() {});
         };
 
+        manageMemberCtrl.openAcceptRequestDialog = function openAcceptRequestDialog(requestKey) {
+            $mdDialog.show({
+                controller: "RequestProcessingController",
+                controllerAs: "requestCtrl",
+                templateUrl: "app/requests/request_processing.html" ,
+                parent: angular.element(document.body),
+                targetEvent: event,
+                clickOutsideToClose:true,
+                locals: {key: requestKey},
+                openFrom: '#fab-new-post',
+                closeTo: angular.element(document.querySelector('#fab-new-post'))
+            });
+        };
+
         manageMemberCtrl.removeMember = function removeMember(member_obj) {
             _.remove(manageMemberCtrl.members, function(member) {
                 return member.key === member_obj.key;

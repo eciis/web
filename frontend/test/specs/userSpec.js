@@ -201,7 +201,7 @@
 
         describe('removeInstitution', function() {
 
-          it('should remove the institution from user.institutions and user.follows',
+          it('should remove the institution from user.institutions',
             function() {
               userData = {
                 name: 'Tiago Pereira',
@@ -213,11 +213,11 @@
               };
               user = createUser();
               user.removeInstitution(inst.key);
-              expect(user.follows).toEqual([]);
+              expect(user.follows).toEqual([inst]);
               expect(user.institutions).toEqual([]);
           });
 
-          it('should remove the institution from user.institutions, user.follows and institutions_admin',
+          it('should remove the institution from user.institutions and institutions_admin',
             function () {
               userData = {
                 name: 'Tiago Pereira',
@@ -230,7 +230,7 @@
               };
               user = createUser();
               user.removeInstitution(inst.key);
-              expect(user.follows).toEqual([]);
+              expect(user.follows).toEqual([inst]);
               expect(user.institutions).toEqual([]);
               expect(user.institutions_admin).toEqual([]);
             });

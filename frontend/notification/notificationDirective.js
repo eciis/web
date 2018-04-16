@@ -214,7 +214,7 @@
             notificationCtrl.markAsRead(notification);
         };
 
-        function showDialog(dialogProperties, event) {
+        function showPendingReqDialog(dialogProperties, event) {
             $mdDialog.show({
                 controller: dialogProperties.controller,
                 controllerAs: dialogProperties.controllerAs,
@@ -228,7 +228,7 @@
             });
         }
 
-        function showResolvedRequestDialog(event) {
+        function showResolvedReqDialog(event) {
             $mdDialog.show({
                 templateUrl: "app/requests/resolved_request_dialog.html",
                 parent: angular.element(document.body),
@@ -245,14 +245,14 @@
                     function success(response) {
                         var request = new Invite(response);
                         dialogProperties.locals.request = request;
-                        var isRequestResolved = request.status == 'rejected' || request.status == 'accepted';
-                        isRequestResolved ? showResolvedRequestDialog(event) : showDialog(dialogProperties, event);
+                        var isRequestResolved = request.isStatusOn('rejected') || request.isStatusOn('accepted');
+                        isRequestResolved ? showResolvedReqDialog(event) : showPendingReqDialog(dialogProperties, event);
                     }, function error(response) {
                         MessageService.showToast(response.data.msg);
                     }
                 );
             } else {
-                showDialog(dialogProperties, event);
+                showPendingReqDialog(dialogProperties, event);
             }
         }
 

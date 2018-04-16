@@ -113,6 +113,9 @@
             "ACCEPTED_LINK": {
                 icon: "link"
             },
+            "REJECTED_LINK": {
+                icon: "close"
+            },
             "REJECT_INSTITUTION_LINK": {
                 icon: "account_balance",
             },

@@ -107,7 +107,6 @@ class RequestHandler(BaseHandler):
 
         request.change_status('rejected')
 
-        
         sender_user = request.sender_key.get()
         sender_user.remove_profile(institution_key)
 
@@ -116,3 +115,14 @@ class RequestHandler(BaseHandler):
 
         host = self.request.host
         request.send_response_email(host, "REJECT")
+
+        entity_type = 'REJECTED_LINK'
+        send_message_notification(
+            request.sender_key.urlsafe(),
+            user.key.urlsafe(),
+            entity_type,
+            institution_key,
+            user.current_institution
+        )
+
+        self.response.write(json.dumps(makeUser(sender_user, self.request)))

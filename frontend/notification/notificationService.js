@@ -36,7 +36,7 @@
             'REJECT_INVITE_USER': messageCreator('Rejeitou o convite para ser membro de ', SINGLE_INST),
             'ACCEPT_INVITE_USER': messageCreator('Aceitou o convite para ser membro de ', SINGLE_INST),
             'REJECT_INVITE_INSTITUTION': messageCreator('Rejeitou o seu convite para ser administrador', NO_INST),
-            'ACCEPT_INVITE_INSTITUTION': messageCreator('Aceitou o seu convite e criou ', SINGLE_INST),
+            'ACCEPT_INVITE_INSTITUTION': messageCreator('Aceitou o seu convite para ser administrador', NO_INST),
             'DELETE_MEMBER': messageCreator('Removeu você de ', SINGLE_INST),
             'ACCEPTED_LINK': messageCreator('Aceitou sua solicitação de vínculo com ', SINGLE_INST),
             'SHARED_EVENT': messageCreator('Compartilhou um evento de ', SINGLE_INST),
@@ -44,7 +44,8 @@
             'REPLY_COMMENT': messageCreator('Respondeu um comentário seu'),
             'USER_ADM': messageCreator('Indicou você para ser administrador da instituição ', SINGLE_INST),
             'ACCEPT_INVITE_USER_ADM': messageCreator('Aceitou seu convite para ser administrador de ', SINGLE_INST),
-            'REJECT_INVITE_USER_ADM': messageCreator('Rejeitou seu convite para ser administrador de ', SINGLE_INST)
+            'REJECT_INVITE_USER_ADM': messageCreator('Rejeitou seu convite para ser administrador de ', SINGLE_INST),
+            'ACCEPT_INVITE_HIERARCHY': messageCreator('Aceitou seu convite e estabeleceu vínculo entre ', DOUBLE_INST)
         };
 
         var POST_NOTIFICATION = 'POST';

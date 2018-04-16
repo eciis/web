@@ -1,4 +1,4 @@
-<md-dialog aria-label="instituições">
+<md-dialog aria-label="instituições" flex-xs="100" flex-sm="70" flex-gt-sm="50">
 
     <div>
         <md-dialog-content class="md-dialog-content" layout="column">
@@ -30,9 +30,9 @@
             </md-radio-group>
         </md-dialog-content>
 
-        <md-dialog-actions layout="row" layout-align="center center">
-            <md-button class="md-warn" ng-click="suggestInstCtrl.cancel()" layout-align="center">Cancelar</md-button>
-            <md-button class="md-warn md-raised" ng-click="suggestInstCtrl.checkAndSendInvite()">Enviar</md-button>
+        <md-dialog-actions layout="row" layout-align="end center">
+            <md-button md-colors="{background: 'default-teal-500'}" ng-click="suggestInstCtrl.cancel()" layout-align="center">Cancelar</md-button>
+            <md-button md-colors="{background: 'default-teal-500'}" ng-click="suggestInstCtrl.checkAndSendInvite()">Enviar</md-button>
         </md-dialog-actions>
     </div>
 

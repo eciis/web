@@ -238,6 +238,8 @@
                         changeTimelineToStart();
                         $mdDialog.hide();
                         postCtrl.loadingPost = false;
+                        const postAuthorPermissions = ["edit_post", "remove_post"];
+                        postCtrl.user.addPermissions(postAuthorPermissions, response.data.key);
                     }, function error(response) {
                         AuthService.reload().then(function success() {
                             $mdDialog.hide();

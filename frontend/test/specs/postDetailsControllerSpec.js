@@ -508,11 +508,10 @@
 
     describe('showButtonDelete', function () {
         it('should return true', function () {
-            let post = new Post({author_key: user.key});
+            let post = new Post({author_key: user.key, key: 'oakspo-OAKSDPO'});
             postDetailsCtrl.user.permissions = {};
             postDetailsCtrl.post = post;
-            let returnedValue = postDetailsCtrl.showButtonDelete();
-            expect(returnedValue).toBeTruthy();
+            let returnedValue;
 
             var institution_key = institutions[0].key;
             postDetailsCtrl.post.author_key = 'oaksd-oKOKOPDkoa';
@@ -520,6 +519,12 @@
             postDetailsCtrl.post.institution_key = institution_key;
             postDetailsCtrl.user.permissions.remove_posts = {};
             postDetailsCtrl.user.permissions.remove_posts[institution_key] = true;
+            returnedValue = postDetailsCtrl.showButtonDelete();
+            expect(returnedValue).toBeTruthy();
+
+            postDetailsCtrl.user.permissions.remove_posts = {};
+            postDetailsCtrl.user.permissions.remove_post = {};
+            postDetailsCtrl.user.permissions.remove_post[post.key] = true;
             returnedValue = postDetailsCtrl.showButtonDelete();
             expect(returnedValue).toBeTruthy();
         });

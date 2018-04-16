@@ -328,5 +328,20 @@
             expect(user.current_institution).toBe(test_inst);
           });
         });
+
+        describe('addPermissions', function () {
+          it('should add the permissions', function () {
+            var user = new User({permissions: {}});
+
+            expect(user.permissions).toEqual({});
+
+            user.addPermissions(['edit_post'], 'key-1');
+            
+            expect(user.permissions).toEqual({'edit_post': {'key-1': true}});
+
+            user.addPermissions(['remove_post'], 'key-1');
+            expect(user.permissions).toEqual({ 'remove_post': { 'key-1': true }, 'edit_post': {'key-1': true} });
+          });
+        });
    });
 }));

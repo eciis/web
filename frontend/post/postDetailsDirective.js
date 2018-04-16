@@ -9,7 +9,8 @@
         var postDetailsCtrl = this;
 
         var LIMIT_POST_CHARACTERS = 1000;
-        const REMOVE_POST_PERMISSION = 'remove_posts';
+        const REMOVE_POST_BY_INST_PERMISSION = 'remove_posts';
+        const REMOVE_POST_BY_POST_PERMISSION = 'remove_post';
 
         postDetailsCtrl.showComments = false;
         postDetailsCtrl.savingComment = false;
@@ -145,11 +146,10 @@
         };
 
         postDetailsCtrl.showButtonDelete = function showButtonDelete() {
-            console.log(postDetailsCtrl.user.permissions);
-            const hasPermission = postDetailsCtrl.user.hasPermission(REMOVE_POST_PERMISSION, postDetailsCtrl.post.institution_key);
-            const hasPermissionOrIsAuthor =  hasPermission || postDetailsCtrl.isPostAuthor();
-            return  hasPermissionOrIsAuthor &&
-                !postDetailsCtrl.isDeleted(postDetailsCtrl.post);
+            const hasInstitutionPermission = postDetailsCtrl.user.hasPermission(REMOVE_POST_BY_INST_PERMISSION, postDetailsCtrl.post.institution_key);
+            const hasPostPermission = postDetailsCtrl.user.hasPermission(REMOVE_POST_BY_POST_PERMISSION, postDetailsCtrl.post.key);
+            const hasPermission = hasInstitutionPermission || hasPostPermission;
+            return hasPermission && !postDetailsCtrl.isDeleted(postDetailsCtrl.post);
         };
 
         postDetailsCtrl.showActivityButtons = function showActivityButtons() {

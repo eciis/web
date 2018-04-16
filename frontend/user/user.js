@@ -156,6 +156,16 @@ User.prototype.hasPermission = function hasPermission(permissionType, entityKey)
     return false;
 };
 
+User.prototype.addPermissions = function addPermissions(permissionsList, entityKey) {
+    _.each(permissionsList, (permission) => {
+        if(!this.permissions[permission]) {
+            this.permissions[permission] = {};
+        }
+        this.permissions[permission][entityKey] = true
+    });
+    window.localStorage.userInfo = JSON.stringify(this);
+};
+
 User.prototype.updateInstProfile = function updateInstProfile(institution) {
     const index = _.findIndex(this.institution_profiles, ['institution_key', institution.key]);
     this.institution_profiles[index].institution.name = institution.name;

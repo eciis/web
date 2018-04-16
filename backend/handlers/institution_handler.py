@@ -162,7 +162,6 @@ class InstitutionHandler(BaseHandler):
         user.add_permissions(permissions.DEFAULT_ADMIN_PERMISSIONS, institution.key.urlsafe())
         user.put()
 
-        invite = ndb.Key(urlsafe=inviteKey).get()
         invite.send_response_notification(user.current_institution, user.key, 'ACCEPT')
 
         enqueue_task('add-admin-permissions', {'institution_key': institution_key})

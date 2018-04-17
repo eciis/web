@@ -247,7 +247,7 @@
         });
 
         it('should remove parent link', function () {
-            inviteInstHierarchieCtrl.removeLink(otherInst, true);
+            inviteInstHierarchieCtrl.removeLink("event", otherInst, true);
             expect(mdDialog.confirm).toHaveBeenCalled();
             expect(mdDialog.show).toHaveBeenCalled();
             expect(instService.removeLink).toHaveBeenCalled();
@@ -258,7 +258,7 @@
         it('should remove child link', function() {
             inviteInstHierarchieCtrl.institution.children_institutions = [otherInst];
             expect(inviteInstHierarchieCtrl.institution.children_institutions).toEqual([otherInst]);
-            inviteInstHierarchieCtrl.removeLink(otherInst, false);
+            inviteInstHierarchieCtrl.removeLink("event", otherInst, false);
             expect(mdDialog.confirm).toHaveBeenCalled();
             expect(mdDialog.show).toHaveBeenCalled();
             expect(instService.removeLink).toHaveBeenCalled();

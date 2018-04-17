@@ -112,8 +112,8 @@ class RequestUser(Invite):
         """Method sends response notification to sender request."""
         super(RequestUser, self).send_notification(
             institution_key,
-            user.key.urlsafe(),
-            self.sender_key.urlsafe(),
+            user.key,
+            self.sender_key,
             entity_type,
             institution_key.urlsafe()
         )

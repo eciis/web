@@ -75,7 +75,7 @@
         }
 
         requestController.hideDialog = function hideDialog() {
-            $mdDialog.hide(requestController.request);
+            $mdDialog.hide(requestController.request.key);
         };
 
         requestController.getSizeGtSmDialog = function getSizeGtSmDialog() {

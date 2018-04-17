@@ -67,7 +67,7 @@
             }, function error() {});
         };
 
-        manageMemberCtrl.openAcceptRequestDialog = function openAcceptRequestDialog(requestKey) {
+        manageMemberCtrl.openAcceptRequestDialog = function openAcceptRequestDialog(requestKey, event) {
             $mdDialog.show({
                 controller: "RequestProcessingController",
                 controllerAs: "requestCtrl",
@@ -78,18 +78,12 @@
                 locals: {key: requestKey},
                 openFrom: '#fab-new-post',
                 closeTo: angular.element(document.querySelector('#fab-new-post'))
-            }).then(function success(processedRequest) {
-                const request = manageMemberCtrl.requests.reduce(
-                    (found, request) => (request.key === processedRequest.key) ? request : found, 
-                    {}
+            }).then(function success(requestKey) {
+                manageMemberCtrl.requests = manageMemberCtrl.requests.filter(
+                    request => (request.key === requestKey) ? false : true
                 );
-                request.status = processedRequest.status;
             }, function error() {
             });
-        };
-
-        manageMemberCtrl.isSentRequest = function isSentRequest(request) {
-            return request.status === 'sent';
         };
 
         manageMemberCtrl.removeMember = function removeMember(member_obj) {

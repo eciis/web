@@ -4,7 +4,6 @@ from invite import Invite
 from google.appengine.ext import ndb
 from custom_exceptions.fieldException import FieldException
 from models.institution import Institution
-from service_messages import send_message_notification
 
 
 class RequestUser(Invite):

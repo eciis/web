@@ -114,7 +114,7 @@ class EventHandlerTest(TestBaseHandler):
                                 {"op": "replace", "path": "/end_time",
                                  "value": '2018-07-25T12:30:15'}
                                 ])
-
+        self.user.add_permission('edit_post', self.event.key.urlsafe())
         self.testapp.patch("/api/events/" +
                            self.event.key.urlsafe(),
                            json_edit)
@@ -166,6 +166,7 @@ class EventHandlerTest(TestBaseHandler):
             {"op": "replace", "path": "/end_time",
                 "value": '2018-07-25T12:30:15'}
         ])
+        self.user.add_permission('edit_post', self.event.key.urlsafe())
 
         self.testapp.patch("/api/events/" +
                            self.event.key.urlsafe(),
@@ -186,6 +187,7 @@ class EventHandlerTest(TestBaseHandler):
         self.event.start_time = '2000-07-14T12:30:15'
         self.event.end_time = '2000-07-15T12:30:15'
         self.event.put()
+        self.user.add_permission('edit_post', self.event.key.urlsafe())
 
         forbidden_props = ["title", "official_site", "address", "local"]
 
@@ -229,6 +231,7 @@ class EventHandlerTest(TestBaseHandler):
     def test_patch_a_deleted_event(self, verify_token):
         self.event.state = 'deleted'
         self.event.put()
+        self.user.add_permission('edit_post', self.event.key.urlsafe())
 
         with self.assertRaises(Exception) as ex:
             patch = [{"op": "replace", "path": "/title", "value": 'other_value'}]
@@ -258,6 +261,16 @@ class EventHandlerTest(TestBaseHandler):
         self.event = self.event.key.get()
         self.assertTrue(self.event.state == 'deleted')
 
+    @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
+    def test_patch_without_permission(self, verify_token):
+        with self.assertRaises(Exception) as ex:
+            patch = [{"op": "replace", "path": "/title", "value": 'other_value'}]
+            self.testapp.patch('/api/events/%s' %
+                               self.event.key.urlsafe(), json.dumps(patch))
+
+        exception_message = self.get_message_exception(ex.exception.message)
+        self.assertTrue(exception_message ==
+                        'Error! The user can not edit this event')
         
 
     def tearDown(cls):

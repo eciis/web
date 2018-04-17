@@ -67,6 +67,25 @@
             }, function error() {});
         };
 
+        manageMemberCtrl.openAcceptRequestDialog = function openAcceptRequestDialog(requestKey, event) {
+            $mdDialog.show({
+                controller: "RequestProcessingController",
+                controllerAs: "requestCtrl",
+                templateUrl: "app/requests/request_processing.html" ,
+                parent: angular.element(document.body),
+                targetEvent: event,
+                clickOutsideToClose:true,
+                locals: {key: requestKey},
+                openFrom: '#fab-new-post',
+                closeTo: angular.element(document.querySelector('#fab-new-post'))
+            }).then(function success(requestKey) {
+                manageMemberCtrl.requests = manageMemberCtrl.requests.filter(
+                    request => request.key !== requestKey
+                );
+            }, function error() {
+            });
+        };
+
         manageMemberCtrl.removeMember = function removeMember(member_obj) {
             _.remove(manageMemberCtrl.members, function(member) {
                 return member.key === member_obj.key;
@@ -116,49 +135,6 @@
                 inviteToAdd.key = invites.reduce((acum, invite) => (invite.email === email) ? invite.key : acum, "");
                 manageMemberCtrl.sent_invitations.push(_.clone(inviteToAdd));
             });
-        }
-
-        manageMemberCtrl.acceptRequest = function acceptRequest(request) {
-            var promise = RequestInvitationService.acceptRequest(request.key);
-
-            promise.then(function success(response) {
-                manageMemberCtrl.members.push(response);
-                request.status = 'accepted';
-                _.remove(manageMemberCtrl.requests, function (each) {
-                    return each.key === request.key;
-                });
-                MessageService.showToast("Pedido aceito!");
-            });
-            return promise;
-        };
-
-        manageMemberCtrl.rejectRequest = function rejectInvite(request, event){
-                var promise = RequestInvitationService.showRejectDialog(event);
-                promise.then(function() {
-                    deleteRequest(request);
-                }, function() {
-                    MessageService.showToast('Rejeição de pedido cancelada!');
-                });
-                return promise;
-        };
-
-        function deleteRequest(request) {
-            var promise = RequestInvitationService.rejectRequest(request.key);
-            promise.then(function success() {
-                removeRejectedRequest(request);
-                MessageService.showToast("O pedido foi rejeitado!");
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
-            });
-            return promise;
-        }
-
-        function removeRejectedRequest(request) {
-            request.status = 'rejected';
-            manageMemberCtrl.requests = manageMemberCtrl.requests.filter(function(req) {
-                return req.key !== request.key;
-            });
-            manageMemberCtrl.showRequests = manageMemberCtrl.requests.length > 0;
         }
 
         manageMemberCtrl.clearInvite = function clearInvite() {

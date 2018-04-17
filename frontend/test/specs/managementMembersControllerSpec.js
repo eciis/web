@@ -281,21 +281,6 @@
             });
         });
 
-        describe('acceptRequest', function() {
-            it('should remove the request from the array', function() {
-                spyOn(requestInvitationService, 'acceptRequest').and.callFake(function () {
-                    return {
-                        then: function (callback) {
-                            return callback();
-                        }
-                    };
-                });
-                manageMemberCtrl.acceptRequest(request);
-                expect(request.status).toEqual('accepted');
-                expect(manageMemberCtrl.requests).toEqual([]);
-            })
-        });
-
         describe('disableTransferAdminButton', function() {
 
             it('Should return true if invitation sent', function() {
@@ -318,6 +303,24 @@
                 manageMemberCtrl.sent_invitations_adm = [invite];
                 expect(manageMemberCtrl.disableTransferAdminButton()).toBeFalsy();
             });
+        });
+    
+        describe('openAcceptRequestDialog', function() {
+            beforeEach(function() {
+                spyOn(mdDialog, 'show').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            callback(request.key);
+                        }
+                    };
+                });
+            });
+
+            it('Should remove request', function() {
+                expect(manageMemberCtrl.requests).toEqual([request]);
+                manageMemberCtrl.openAcceptRequestDialog(request, 'event');
+                expect(manageMemberCtrl.requests).toEqual([]);
+            });  
         });
     });
 }));

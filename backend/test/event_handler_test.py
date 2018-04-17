@@ -51,6 +51,8 @@ class EventHandlerTest(TestBaseHandler):
     @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
     def test_delete_by_author(self, verify_token):
         """Test the event_handler's delete method when user is author."""
+        self.user.add_permissions(
+            ['edit_post', 'remove_post'], self.event.key.urlsafe())
         # Call the delete method
         self.testapp.delete("/api/events/%s" %
                             self.event.key.urlsafe())
@@ -235,6 +237,27 @@ class EventHandlerTest(TestBaseHandler):
         exception_message = self.get_message_exception(ex.exception.message)
         self.assertTrue(exception_message ==
                         'Error! The event has been deleted.')
+    
+    @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
+    def test_permissions_in_delete(self, verify_token):
+        """Test the permissions in delete."""
+        with self.assertRaises(Exception) as ex:
+            self.testapp.delete("/api/events/%s" %
+                                self.event.key.urlsafe())
+        exception_message = self.get_message_exception(ex.exception.message)
+
+        self.assertTrue(exception_message ==
+                        "Error! The user can not remove this event")
+
+        self.event = self.event.key.get()
+        self.assertTrue(self.event.state != 'deleted')
+
+        self.user.add_permissions(['edit_post', 'remove_post'], self.event.key.urlsafe())
+        self.testapp.delete("/api/events/%s" %self.event.key.urlsafe())
+        
+        self.event = self.event.key.get()
+        self.assertTrue(self.event.state == 'deleted')
+
         
 
     def tearDown(cls):

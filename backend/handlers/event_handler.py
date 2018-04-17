@@ -54,7 +54,7 @@ class EventHandler(BaseHandler):
         event = event_key.get()
 
         is_admin = user.has_permission("remove_posts", event.institution_key.urlsafe())
-        is_author = user.key == event.author_key
+        is_author = user.has_permission("remove_post", event.key.urlsafe())
         
         Utils._assert(not is_admin and not is_author,
                       "The user can not remove this event", NotAuthorizedException)

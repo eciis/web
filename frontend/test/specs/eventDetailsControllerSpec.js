@@ -168,4 +168,56 @@
             expect(result).toBeFalsy();
         });
     });
+
+    describe('canChange()', function() {
+        
+        it('should return true', function () {
+            let institution = { key: 'opkaspdapos-OPKSDOAKO' };
+            event.key = 'okaspoda-AOPKOSPFKDOP';
+            event.institution_key = institution.key;
+            eventCtrl.user.permissions = {};
+            eventCtrl.user.permissions['remove_post'] = {};
+            eventCtrl.user.permissions['remove_post'][event.key] = true;
+
+            let returnedValue = eventCtrl.canChange(event);
+            expect(returnedValue).toBeTruthy();
+
+            eventCtrl.user.permissions = {};
+            eventCtrl.user.permissions['remove_posts'] = {};
+            eventCtrl.user.permissions['remove_posts'][event.institution_key] = true;
+
+            returnedValue = eventCtrl.canChange(event);
+            expect(returnedValue).toBeTruthy();
+        });
+        
+        it('should return false', function() {
+            let institution = { key: 'opkaspdapos-OPKSDOAKO' };
+            event.key = 'okaspoda-AOPKOSPFKDOP';
+            event.institution_key = institution.key;
+            eventCtrl.user.permissions = {};
+            let returnedValue = eventCtrl.canChange(event);
+            expect(returnedValue).toBeFalsy();
+        });
+    });
+
+    describe('canEdit()', function () {
+
+        it('should return true', function() {
+            event.key = 'opaksdpo-SIKFSPA';
+            eventCtrl.user.permissions = {};
+            eventCtrl.user.permissions['edit_post'] = {};
+            eventCtrl.user.permissions['edit_post'][event.key] = true;
+
+            let returnedValue = eventCtrl.canEdit(event);
+            expect(returnedValue).toBeTruthy();
+        });
+
+        it('should return false', function() {
+            event.key = 'opaksdpo-SIKFSPA';
+            eventCtrl.user.permissions = {};
+
+            let returnedValue = eventCtrl.canEdit(event);
+            expect(returnedValue).toBeFalsy();
+        });
+    });
 }));

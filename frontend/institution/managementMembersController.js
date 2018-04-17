@@ -80,7 +80,7 @@
                 closeTo: angular.element(document.querySelector('#fab-new-post'))
             }).then(function success(requestKey) {
                 manageMemberCtrl.requests = manageMemberCtrl.requests.filter(
-                    request => (request.key === requestKey) ? false : true
+                    request => request.key !== requestKey
                 );
             }, function error() {
             });

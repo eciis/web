@@ -271,6 +271,10 @@
                     return RequestInvitationService.getRequest(invitekey);
                 case 'REQUEST_INSTITUTION':
                     return RequestInvitationService.getRequestInst(invitekey);
+                case 'REQUEST_INSTITUTION_CHILDREN':
+                    return RequestInvitationService.getInstChildrenRequest(invitekey);
+                case 'REQUEST_INSTITUTION_PARENT':
+                    return RequestInvitationService.getInstParentRequest(invitekey);
             } 
         }
 

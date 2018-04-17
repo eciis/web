@@ -20,7 +20,11 @@
               <div class="info" 
               md-colors="{background: institutionCtrl.user.getProfileColor()+'-600'}">
                 <div class="desc">
-                  <div class="md-title">{{ institutionCtrl.institution.name }}</div>
+                  <div class="md-title">
+                    <a style="color: #FFFFFF" href ng-click="institutionCtrl.goToInstitution(institutionCtrl.institution.key)">
+                      {{ institutionCtrl.institution.name }}
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>

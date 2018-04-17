@@ -388,6 +388,7 @@
                     $mdDialog.hide();
                     dialogCtrl.events.push(response.data);
                     MessageService.showToast('Evento criado com sucesso!');
+                    dialogCtrl.user.addPermissions(['edit_post', 'remove_post'], response.data.key);
                 }, function error(response) {
                     dialogCtrl.loading = false;
                     dialogCtrl.blockReturnButton = false;

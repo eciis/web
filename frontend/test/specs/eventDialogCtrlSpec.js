@@ -128,11 +128,18 @@
     describe('save()', function() {
 
       it('should eventService.createEvent be called', function() {
-        spyOn(eventService, 'createEvent').and.returnValue(deferred.promise);
-        deferred.resolve(event);
+        spyOn(eventService, 'createEvent').and.callFake(function () {
+          return {
+            then: function (callback) {
+              return callback({data: {key: 'oaksp-OAKDSOP'}});
+            }
+          };
+        });
+        spyOn(controller.user, 'addPermissions');
+        controller.user.permissions = {};
         controller.save();
-        scope.$apply();
         expect(eventService.createEvent).toHaveBeenCalledWith(event_convert_date);
+        expect(controller.user.addPermissions).toHaveBeenCalled();
       });
 
       it('should call eventService.editEvent', function() {

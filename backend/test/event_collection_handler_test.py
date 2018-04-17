@@ -55,6 +55,9 @@ class EventCollectionHandlerTest(TestBaseHandler):
         self.assertEqual(event_obj.text,
                          'testing new event',
                          "The post's text is not the expected one")
+        self.assertTrue(self.user.has_permission('remove_post', event_obj.key.urlsafe()))
+        self.assertTrue(self.user.has_permission(
+            'edit_post', event_obj.key.urlsafe()))
 
         # Check if raise exception when the end time of event is before the start time
         with self.assertRaises(Exception) as raises_context:

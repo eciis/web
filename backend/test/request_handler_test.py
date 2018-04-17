@@ -74,9 +74,8 @@ class RequestHandlerTest(TestBaseHandler):
             'REQUEST_USER',
             "expected type_of_invite must be equal to  REQUEST_USER")
 
-    @mock.patch('handlers.request_handler.send_message_notification')
     @patch('utils.verify_token', return_value=ADMIN)
-    def test_put(self, verify_token, mock_method):
+    def test_put(self, verify_token):
         """Test method put of RequestHandler."""
         admin = mocks.create_user(ADMIN['email'])
         institution = mocks.create_institution()		 
@@ -101,8 +100,6 @@ class RequestHandlerTest(TestBaseHandler):
 
         self.testapp.put('/api/requests/' + request.key.urlsafe() + '/user')
         
-        self.assertTrue(mock_method.called)
-
         user = otheruser.key.get()
         institution = institution.key.get()
 

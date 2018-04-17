@@ -77,15 +77,7 @@ class RequestHandler(BaseHandler):
 
         host = self.request.host
         request.send_response_email(host, "ACCEPT")
-
-        entity_type = 'ACCEPTED_LINK'
-        send_message_notification(
-            request.sender_key.urlsafe(),
-            user.key.urlsafe(),
-            entity_type,
-            institution.key.urlsafe(),
-            user.current_institution
-        )
+        request.send_response_notification(user, institution.key, 'ACCEPTED_LINK')
 
         self.response.write(json.dumps(makeUser(sender, self.request)))
 
@@ -115,14 +107,6 @@ class RequestHandler(BaseHandler):
 
         host = self.request.host
         request.send_response_email(host, "REJECT")
-
-        entity_type = 'REJECTED_LINK'
-        send_message_notification(
-            request.sender_key.urlsafe(),
-            user.key.urlsafe(),
-            entity_type,
-            institution_key,
-            user.current_institution
-        )
+        request.send_response_notification(user, request.institution_requested_key, 'REJECTED_LINK')
 
         self.response.write(json.dumps(makeUser(sender_user, self.request)))

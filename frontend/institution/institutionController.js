@@ -505,11 +505,11 @@
 
         function loadInstitution() {
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
-                instLinksCtrl.parentInstitution = response.data.parent_institution;
-                instLinksCtrl.childrenInstitutions = response.data.children_institutions;
+                var parentInstitution = response.data.parent_institution;
+                instLinksCtrl.parentInstitution = parentInstitution && parentInstitution.state === "active" ? parentInstitution : {};
+                instLinksCtrl.childrenInstitutions = response.data.children_institutions.filter(inst => inst.state === "active");
                 instLinksCtrl.isLoadingInsts = false;
             }, function error(response) {
-                $state.go("app.user.home");
                 instLinksCtrl.isLoadingInsts = true;
                 MessageService.showToast(response.data.msg);
             });

@@ -321,5 +321,12 @@
                 expect(state.go).toHaveBeenCalledWith('app.institution.events', {institutionKey: first_institution.key, posts: institutionCtrl.posts});
             });
         });
+        describe('goToLinks()', function() {
+            it('should call state.go', function() {
+                spyOn(state, 'go');
+                institutionCtrl.goToLinks(first_institution.key);
+                expect(state.go).toHaveBeenCalledWith('app.institution.institutional_links', {institutionKey: first_institution.key});
+            });
+        });
     });
 }));

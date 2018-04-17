@@ -6,27 +6,30 @@
 
     var INSTITUTIONS_URI = "/api/institutions/";
 
-    var parent_institution_test = {
+    var parentInstitutionTest = {
         name: 'parentInst',
         key: 'parentKey',
+        state: 'active'
     };
 
-    var children_institutions_test = [
+    var childrenInstitutionsTest = [
         {
             name: 'childrenInst1',
-            key: 'chldKey1'
+            key: 'chldKey1',
+            state: 'active'
         },
         {
             name: 'childrenInst2',
-            key: 'chldKey2'
+            key: 'chldKey2',
+            state: 'active'
         }
     ];
 
     var institution = {
         acronym: 'institution',
         key: '987654321',
-        parent_institution: parent_institution_test,
-        children_institutions: children_institutions_test
+        parent_institution: parentInstitutionTest,
+        children_institutions: childrenInstitutionsTest
     };
 
     beforeEach(module('app'));
@@ -39,10 +42,6 @@
         institutionService = InstitutionService;
 
         httpBackend.expect('GET', INSTITUTIONS_URI + institution.key).respond(institution);
-        httpBackend.when('GET', 'institution/institution_page.html').respond(200);
-        httpBackend.when('GET', 'institution/removeInstDialog.html').respond(200);
-        httpBackend.when('GET', "main/main.html").respond(200);
-        httpBackend.when('GET', "home/home.html").respond(200);
 
         createCtrl = function() {
             return $controller('InstitutionLinksController',
@@ -69,54 +68,60 @@
         });
 
         it('Should has parent institution', function() {
-            expect(instLinksCtrl.parentInstitution).toEqual(parent_institution_test);
+            expect(instLinksCtrl.parentInstitution).toEqual(parentInstitutionTest);
         });
 
         it('Should has two children institutions', function() {
             expect(instLinksCtrl.childrenInstitutions.length).toEqual(2);
         });
-
     });
 
     describe('InstitutionLinksController functions', function() {
 
-        it('goToInst() should call window.open', function() {
-            spyOn(window, 'open');
-            instLinksCtrl.goToInst(parent_institution_test.key);
-            expect(window.open).toHaveBeenCalledWith('/institution/' + parent_institution_test.key + '/home', '_blank');
+        describe('goToInst()', function() {
+
+            it('should call window.open', function() {
+                spyOn(window, 'open');
+                instLinksCtrl.goToInst(parentInstitutionTest.key);
+                expect(window.open).toHaveBeenCalledWith('/institution/' + parentInstitutionTest.key + '/home', '_blank');
+            });
         });
 
-        it('hasInstitutions() should return true if has parent institution or has children institution', function() {
-            expect(instLinksCtrl.hasInstitutions()).toBeTruthy();
+        describe('hasInstitutions()', function() {
+
+            it('should return true if has parent institution or has children institution', function() {
+                expect(instLinksCtrl.hasInstitutions()).toBeTruthy();
+            });
+
+            it('should return false if no has parent institution and no has children institutions', function() {
+                instLinksCtrl.parentInstitution = {};
+                instLinksCtrl.childrenInstitutions = [];
+                expect(instLinksCtrl.hasInstitutions()).toBeFalsy();
+            });
         });
 
-        it('hasInstitutions() should return false if no has parent institution and no has children institutions', function() {
-            instLinksCtrl.parentInstitution = {};
-            instLinksCtrl.childrenInstitutions = [];
-            expect(instLinksCtrl.hasInstitutions()).toBeFalsy();
+        describe('hasParentInst()', function() {
+
+            it('should return true if has parent institution', function() {
+                expect(instLinksCtrl.hasParentInst()).toBeTruthy();
+            });
+
+            it('should return false if not has parent institution', function() {
+                instLinksCtrl.parentInstitution = {};
+                expect(instLinksCtrl.hasParentInst()).toBeFalsy();
+            });
         });
 
-        it('hasParentInst() should return true if has parent institution', function() {
-            expect(instLinksCtrl.hasParentInst()).toBeTruthy();
-        });
+        describe('hasChildrenInst()', function() {
 
-        it('hasParentInst() should return false if not has parent institution', function() {
-            instLinksCtrl.parentInstitution = {};
-            expect(instLinksCtrl.hasParentInst()).toBeFalsy();
-        });
+            it('hasChildrenInst() should return true if has at least one children institution', function() {
+                expect(instLinksCtrl.hasChildrenInst()).toBeTruthy();
+            });
 
-        it('hasChildrenInst() should return true if has at least one children institution', function() {
-            expect(instLinksCtrl.hasChildrenInst()).toBeTruthy();
-        });
-
-        it('hasChildrenInst() should return false if not has at least one children institution', function() {
-            instLinksCtrl.childrenInstitutions = [];
-            expect(instLinksCtrl.hasChildrenInst()).toBeFalsy();
-        });
-
-        afterEach(function() {
-            instLinksCtrl.parent_institution = parent_institution_test;
-            instLinksCtrl.children_institutions = children_institutions_test;
+            it('hasChildrenInst() should return false if not has at least one children institution', function() {
+                instLinksCtrl.childrenInstitutions = [];
+                expect(instLinksCtrl.hasChildrenInst()).toBeFalsy();
+            });
         });
     });
 }));

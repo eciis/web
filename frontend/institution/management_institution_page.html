@@ -55,6 +55,12 @@
                     <b>Remover Instituição</b>
                   </md-button>
                 </md-menu-item>
+                <md-menu-item>
+                  <md-button ng-click="institutionCtrl.goToHome()" ng-class="institutionCtrl.getSelectedItemClass('remove_inst')">
+                    <md-icon>arrow_back</md-icon>
+                    <b>Voltar</b>
+                  </md-button>
+                </md-menu-item>
               </md-menu-content>
             </div>
         </div>

@@ -38,7 +38,7 @@
   <md-dialog-actions ng-if="!requestCtrl.isRejecting" layout="row" layout-align="end center" layout-wrap>
     <md-button ng-click="requestCtrl.rejectRequest($event)" class="md-primary" 
       md-colors="{color: 'default-teal-500'}" ng-if="requestCtrl.isSentRequest">
-      Cancelar
+      Rejeitar
     </md-button>
     <md-button ng-click="requestCtrl.acceptRequest()" class="md-primary"
       md-colors="{color: 'default-teal-500'}" ng-if="requestCtrl.isSentRequest">
@@ -51,7 +51,8 @@
   </md-dialog-actions>
 
   <md-card-content ng-if="requestCtrl.isRejecting" class="md-dialog-content">
-    Deseja rejeitar o convite?
+    <h4 style="margin: 0;">Rejeitar Vínculo</h4>
+    <p>Tem certeza que deseja rejeitar?</p>
   </md-card-content>
   <md-dialog-actions ng-if="requestCtrl.isRejecting" layout="row" layout-align="end center" layout-wrap>
     <md-button class="md-primary" ng-click="requestCtrl.cancelReject()"

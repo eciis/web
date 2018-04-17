@@ -42,19 +42,6 @@
 
         requestController.rejectRequest = function rejectInvite(event){
             requestController.isRejecting = true;
-            /*var promise = RequestInvitationService.showRejectDialog(event);
-
-            promise.then(function() {
-                deleteRequest().then(function success() {
-                    MessageService.showToast("Solicitação rejeitada!");
-                    requestController.hideDialog();
-                }, function error(response) {
-                    MessageService.showToast(response.data.msg);
-                });
-            }, function() {
-                MessageService.showToast('Cancelado');
-            });
-            return promise;*/
         };
 
         requestController.confirmReject = function confirmReject() {
@@ -92,7 +79,7 @@
         };
 
         requestController.getSizeGtSmDialog = function getSizeGtSmDialog() {
-            return requestController.request && requestController.request.status === 'sent' ? '45' : '25';
+            return requestController.request && (requestController.request.status === 'sent' && !requestController.isRejecting) ? '45' : '25';
         };
 
         function loadInstitution(institutionKey) {

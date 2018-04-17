@@ -79,7 +79,6 @@
                 openFrom: '#fab-new-post',
                 closeTo: angular.element(document.querySelector('#fab-new-post'))
             }).then(function success(processedRequest) {
-                console.log(processedRequest);
                 const request = manageMemberCtrl.requests.reduce(
                     (found, request) => (request.key === processedRequest.key) ? request : found, 
                     {}

@@ -11,6 +11,7 @@
         var LIMIT_POST_CHARACTERS = 1000;
         const REMOVE_POST_BY_INST_PERMISSION = 'remove_posts';
         const REMOVE_POST_BY_POST_PERMISSION = 'remove_post';
+        const EDIT_POST_PERMISSION = 'edit_post';
 
         postDetailsCtrl.showComments = false;
         postDetailsCtrl.savingComment = false;
@@ -167,7 +168,8 @@
         };
 
         postDetailsCtrl.showButtonEdit = function showButtonEdit() {
-            return postDetailsCtrl.isPostAuthor() && !postDetailsCtrl.isDeleted(postDetailsCtrl.post) &&
+            const hasPermission = postDetailsCtrl.user.hasPermission(EDIT_POST_PERMISSION, postDetailsCtrl.post.key);
+            return hasPermission && !postDetailsCtrl.isDeleted(postDetailsCtrl.post) &&
                     !postDetailsCtrl.postHasActivity() && !postDetailsCtrl.isShared() && !postDetailsCtrl.showSurvey();
         };
 

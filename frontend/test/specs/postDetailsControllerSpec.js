@@ -551,4 +551,43 @@
             expect(returnedValue).toBeFalsy();
         });
     });
+
+    describe('showButtonEdit', function () {
+        it('should return true', function () {
+            let post = new Post({key: 'akposdko-OADKAOP', state:'published', number_of_comments: 0, number_of_likes: 0});
+            postDetailsCtrl.post = post;
+            postDetailsCtrl.user.permissions = {};
+            postDetailsCtrl.user.permissions['edit_post'] = {};
+            postDetailsCtrl.user.permissions['edit_post'][post.key] = true;
+
+            let returnedValue = postDetailsCtrl.showButtonEdit();
+            expect(returnedValue).toBeTruthy();
+        });
+
+        it('should return false', function() {
+            let post = new Post({key: 'akposdko-OADKAOP', state:'deleted', number_of_comments: 0, number_of_likes: 0});
+            postDetailsCtrl.post = post;
+            postDetailsCtrl.user.permissions = {};
+            postDetailsCtrl.user.permissions['edit_post'] = {};
+            postDetailsCtrl.user.permissions['edit_post'][post.key] = true;
+
+            let returnedValue = postDetailsCtrl.showButtonEdit();
+            expect(returnedValue).toBeFalsy();
+
+            postDetailsCtrl.post.state = 'published';
+            postDetailsCtrl.post.number_of_comments = 2;
+            returnedValue = postDetailsCtrl.showButtonEdit();
+            expect(returnedValue).toBeFalsy();
+
+            postDetailsCtrl.post.number_of_comments = 0;
+            postDetailsCtrl.post.number_of_likes = 2;
+            returnedValue = postDetailsCtrl.showButtonEdit();
+            expect(returnedValue).toBeFalsy();
+
+            postDetailsCtrl.post.number_of_likes = 0;
+            postDetailsCtrl.user.permissions = {};
+            returnedValue = postDetailsCtrl.showButtonEdit();
+            expect(returnedValue).toBeFalsy();
+        });
+    });
 }));

@@ -110,12 +110,12 @@ class RequestUser(Invite):
     """
     def send_response_notification(self, user, institution_key, entity_type):
         """Method sends response notification to sender request."""
-        send_message_notification(
-            self.sender_key.urlsafe(),
+        super(RequestUser, self).send_notification(
+            institution_key,
             user.key.urlsafe(),
+            self.sender_key.urlsafe(),
             entity_type,
-            institution_key.urlsafe(),
-            institution_key
+            institution_key.urlsafe()
         )
 
     def make(self):

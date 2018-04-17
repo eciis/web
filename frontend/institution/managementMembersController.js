@@ -78,7 +78,19 @@
                 locals: {key: requestKey},
                 openFrom: '#fab-new-post',
                 closeTo: angular.element(document.querySelector('#fab-new-post'))
+            }).then(function success(processedRequest) {
+                console.log(processedRequest);
+                const request = manageMemberCtrl.requests.reduce(
+                    (found, request) => (request.key === processedRequest.key) ? request : found, 
+                    {}
+                );
+                request.status = processedRequest.status;
+            }, function error() {
             });
+        };
+
+        manageMemberCtrl.isSentRequest = function isSentRequest(request) {
+            return request.status === 'sent';
         };
 
         manageMemberCtrl.removeMember = function removeMember(member_obj) {

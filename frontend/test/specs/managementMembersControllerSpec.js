@@ -304,5 +304,23 @@
                 expect(manageMemberCtrl.disableTransferAdminButton()).toBeFalsy();
             });
         });
+    
+        describe('openAcceptRequestDialog', function() {
+            beforeEach(function() {
+                spyOn(mdDialog, 'show').and.callFake(function() {
+                    return {
+                        then: function(callback) {
+                            callback(request.key);
+                        }
+                    };
+                });
+            });
+
+            it('Should remove request', function() {
+                expect(manageMemberCtrl.requests).toEqual([request]);
+                manageMemberCtrl.openAcceptRequestDialog(request, 'event');
+                expect(manageMemberCtrl.requests).toEqual([]);
+            });  
+        });
     });
 }));

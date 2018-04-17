@@ -1,4 +1,4 @@
-<div flex layout="row" layout-align="center">
+<div layout="row" layout-align="center">
     <md-card flex="95">
         <md-toolbar md-colors="{background: 'teal-500'}" layout="row">
             <div class="md-toolbar-tools">
@@ -17,15 +17,15 @@
                     </md-input-container>
                 </form>
             </div>
-            <md-content class="custom-scrollbar">
-                <md-list style="padding: 10px;">
+            <md-content class="custom-scrollbar" flex>
+                <md-list style="padding: 10px;" flex>
                     <md-list-item title="{{notificationCtrl.format(notification)}}" class="md-3-line" md-colors="{background: 'grey-200'}" style="margin-bottom: 5px; padding: 3 0 3 0;"
                         ng-repeat="notification in notificationCtrl.allNotifications | orderBy:'-timestamp' | filter: notificationCtrl.keyword" 
-                        ng-click="notificationCtrl.action(notification, $event)">
+                        ng-click="notificationCtrl.action(notification, $event)" flex-xs>
                             <img ng-src="{{notification.from.photo_url}}" class="md-avatar" style="width: 60px; height: 60px;"/>
                             <div class="md-list-item-text" layout="column">
-                                <p><b style="font-size: 18px;">{{ notificationCtrl.limitString(notification.from.name, 85) }}</b></p>
-                                <p><b style="font-size: 15px; color: #009688;">{{ notificationCtrl.limitString(notification.from.institution_name, 85) }}</b></p>
+                                <p><b style="font-size: 18px;">{{ notification.from.name }}</b></p>
+                                <p><b style="font-size: 15px; color: #009688;">{{ notification.from.institution_name }}</b></p>
                                 <div layout="row">
                                     <div class="notification-icon-bg" hide show-gt-xs>
                                         <md-icon class="notification-icon">{{notificationCtrl.getIcon(notification.entity_type)}}</md-icon>
@@ -33,12 +33,15 @@
                                     <div class="notification-icon-bg" hide show-xs style="margin-top: 1em;">
                                         <md-icon class="notification-icon">{{notificationCtrl.getIcon(notification.entity_type)}}</md-icon>
                                     </div>
-                                    <div style="max-height: 3em; margin-left: 4px; margin-top: 10px">
+                                    <div style="max-height: 6em; margin-left: 4px; margin-top: 4px">
                                         <p style="font-size: 11px;">
-                                            <b>
-                                                {{ notificationCtrl.limitString(notificationCtrl.format(notification), 95) }} - 
+                                            <p style="font-size: 10px;">
                                                 {{ notification.timestamp | amUtc | amLocal | amCalendar:referenceTime:formats }}
-                                            </b>
+                                                </br>
+                                                <b style="font-size: 11px; margin-top: -10px;">
+                                                        {{ notificationCtrl.format(notification) }}
+                                                </b>
+                                            </p>
                                         </p>
                                     </div>
                                 </div>

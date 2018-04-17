@@ -1,0 +1,54 @@
+<div layout="row" flex layout-align="center">
+	<load-circle flex add-layout-fill="true" ng-if="instLinksCtrl.isLoadingInsts"></load-circle>
+    <div ng-if="!instLinksCtrl.isLoadingInsts" flex flex-md="95" layout="row" layout-align="space-around"
+            md-colors="{background: 'grey-50'}">
+          <!-- CONTENT -->
+        <div class="custom-scrollbar" flex="90">
+			<md-card>
+				<md-toolbar md-colors="{background: 'teal-500'}" layout="row">
+					<div class="md-toolbar-tools" flex layout="row" layout-align="center center">
+						<md-icon>account_balance </md-icon>
+						<h5 style="font-weight:normal; margin-left: 2%">         
+						VÍNCULOS INSTITUCIONAIS
+						</h5>
+						<span flex md-truncate></span>
+					</div>
+				</md-toolbar>
+				<md-card-content ng-if="instLinksCtrl.hasInstitutions()">
+                    <div ng-if="instLinksCtrl.hasParentInst()">
+                        <h3 style="margin-top: 0.5em">INSTITUIÇÃO SUPERIOR</h3>
+                        <div layout="row" style="margin-top: 1%; margin-bottom: 3%" 
+                            md-colors="{background: 'grey-300'}" ng-click="instLinksCtrl.goToInst(instLinksCtrl.parentInstitution.key)">  
+                            <img title="{{instLinksCtrl.parentInstitution.name}}" ng-src="{{instLinksCtrl.parentInstitution.photo_url}}" class="md-avatar"
+                            style="width: 60px; height: 60px; margin-right: 2%; border-radius: 50%;"/>
+                            <div layout="column" layout-align="center" 
+                                ng-click="instLinksCtrl.goToInst(instLinksCtrl.parentInstitution.key)">
+                                <b>{{ instLinksCtrl.parentInstitution.name }}</b>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="instLinksCtrl.hasChildrenInst()">
+                        <h3>INSTITUIÇÕES SUBORDINADAS</h3>
+                        <md-content flex style="max-height: 210px;" class="custom-scrollbar">
+                            <md-list flex>
+                                <md-list-item class="list-item-dense" md-colors="{background: 'grey-300'}"
+                                ng-repeat="institution in instLinksCtrl.childrenInstitutions | filter: instLinksCtrl.currentInstitution" 
+                                ng-click="instLinksCtrl.goToInst(institution.key)" flex-xs>
+                                <img title="{{institution.name}}" ng-src="{{institution.photo_url}}" class="md-avatar" 
+                                    style="margin: 0 15px 0 -15px; width: 60px; height: 60px;"/>
+                                <div layout="column" 
+                                    ng-click="instLinksCtrl.goToInst(institution.key)">
+                                    <b>{{ institution.name }}</b>
+                                </div>
+                                </md-list-item>
+                            </md-list>
+                        </md-content>
+                    </div>
+                </md-card-content>
+                <md-card-content ng-if="!instLinksCtrl.hasInstitutions()">
+                    <h3 style="text-align: center;">Esta instituição não possui nenhum vínculo institucional</h3>
+                </md-card-content>
+			</md-card>
+        </div>
+    </div>
+</div>

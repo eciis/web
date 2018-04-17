@@ -172,6 +172,15 @@
                     }
                 }
             })
+            .state("app.institution.institutional_links", {
+                url: "/institution/:institutionKey/institutional_links",
+                views: {
+                    institution_content: {
+                        templateUrl: "app/institution/institutional_links.html",
+                        controller: "InstitutionLinksController as instLinksCtrl"
+                    }
+                }
+            })
             .state("app.post", {
                 url: "/posts/:key",
                 views: {

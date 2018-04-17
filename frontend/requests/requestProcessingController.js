@@ -40,9 +40,9 @@
             }
         }
 
-        requestController.rejectRequest = function rejectInvite(event){
+        requestController.rejectRequest = function rejectRequest(event){
             var promise = RequestInvitationService.showRejectDialog(event);
-
+            
             promise.then(function() {
                 deleteRequest().then(function success() {
                     MessageService.showToast("Solicitação rejeitada!");
@@ -53,7 +53,6 @@
             }, function() {
                 MessageService.showToast('Cancelado');
             });
-            return promise;
         };
 
         function deleteRequest() {
@@ -83,7 +82,7 @@
         };
 
         function loadInstitution() {
-            var institutionKey = requestController.isHierarchyRequest() ? request.institution_requested_key : request.institution_key;
+            var institutionKey = isHierarchyRequest() ? request.institution_requested_key : request.institution_key;
             InstitutionService.getInstitution(institutionKey).then(function success(response) {
                 requestController.institution = response.data;
                 formatPositions();
@@ -92,7 +91,7 @@
             });
         }
 
-        requestController.isHierarchyRequest = function isHierarchyRequest() {
+        function isHierarchyRequest() {
             var isParentRequest = request.type_of_invite === REQUEST_PARENT;
             var isChildrenRequest = request.type_of_invite === REQUEST_CHILDREN;
             return isParentRequest || isChildrenRequest;
@@ -128,8 +127,7 @@
         }
 
         (function main () {
-            var isRequestSent = request.status === 'sent';
-            if(isRequestSent) loadInstitution();
+            if(request.status == 'sent') loadInstitution();
         })();
     });
 })();

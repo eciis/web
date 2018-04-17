@@ -1,10 +1,10 @@
 <md-dialog>
-    <div style="padding: 15px 0 0 40px">
-        <b>Você já resolveu esta solicitação.</b>
-    </div>
+    <md-dialog-content class="md-dialog-content" style="margin-bottom: -2em;">
+        <h3>Esta solicitação já foi resolvida</h3>
+    </md-dialog-content>
     <md-dialog-actions layout="row" layout-align="end center" layout-wrap>
-        <md-button class="md-primary" md-colors="{color: 'default-teal-500'}">
-            OK
+        <md-button class="md-primary" md-colors="{color: 'default-teal-500'}"
+            ng-click="ctrl.hide()"> Confirmar
         </md-button>
     </md-dialog-actions>
 </md-dialog>

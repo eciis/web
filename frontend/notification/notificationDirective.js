@@ -229,8 +229,17 @@
         }
 
         function showResolvedReqDialog(event) {
+            function ResolvedRequesCtrl($mdDialog) {
+                var controll = this;
+                controll.hide = function hide() {
+                    $mdDialog.hide();
+                };
+            }
+
             $mdDialog.show({
                 templateUrl: "app/requests/resolved_request_dialog.html",
+                controller: ResolvedRequesCtrl,
+                controllerAs: 'ctrl',
                 parent: angular.element(document.body),
                 targetEvent: event,
                 clickOutsideToClose:true

@@ -17,11 +17,13 @@
         requestController.institution = null;
         requestController.parent = null;
         requestController.children = null;
+        requestController.isRejecting = false;
 
         requestController.acceptRequest = function acceptRequest() {
             resolveRequest().then(function success() {
                 MessageService.showToast("Solicitação aceita!");
-                $mdDialog.hide();
+                request.status = 'accepted';
+                requestController.hideDialog();
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
@@ -41,18 +43,22 @@
         }
 
         requestController.rejectRequest = function rejectRequest(event){
-            var promise = RequestInvitationService.showRejectDialog(event);
-            
-            promise.then(function() {
-                deleteRequest().then(function success() {
-                    MessageService.showToast("Solicitação rejeitada!");
-                    $mdDialog.hide();
-                }, function error(response) {
-                    MessageService.showToast(response.data.msg);
-                });
-            }, function() {
-                MessageService.showToast('Cancelado');
+            requestController.isRejecting = true;
+        };
+
+        requestController.confirmReject = function confirmReject() {
+            deleteRequest().then(function success() {
+                request.status = 'rejected';
+                requestController.hideDialog();
+                MessageService.showToast("Solicitação rejeitada!");
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
             });
+        };
+
+        requestController.cancelReject = function cancelReject() {
+            $mdDialog.cancel();
+            MessageService.showToast('Cancelado');
         };
 
         function deleteRequest() {
@@ -73,8 +79,12 @@
             return instObj.getFullAddress();
         };
 
+        requestController.hideDialog = function hideDialog() {
+            $mdDialog.hide(request.key);
+        };
+
         requestController.getSizeGtSmDialog = function getSizeGtSmDialog() {
-            return request && request.status === 'sent' ? '45' : '25';
+            return request && (request.status === 'sent' && !requestController.isRejecting) ? '45' : '25';
         };
 
         requestController.isAnotherCountry = function isAnotherCountry() {

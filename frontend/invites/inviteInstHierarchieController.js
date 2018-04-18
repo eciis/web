@@ -37,7 +37,6 @@
             inviteInstHierCtrl.invite.institution_key = institutionKey;
             inviteInstHierCtrl.invite.admin_key = inviteInstHierCtrl.user.key;
             invite = new Invite(inviteInstHierCtrl.invite);
-
             if (!invite.isValid()) {
                 MessageService.showToast('Convite inválido!');
             } else if(inviteInstHierCtrl.hasParent && invite.type_of_invite === INSTITUTION_PARENT) {
@@ -358,7 +357,7 @@
         inviteInstHierCtrl.linkParentStatus = function linkParentStatus() {
             const parentInstitution = inviteInstHierCtrl.institution.parent_institution;
             const institutionKey = inviteInstHierCtrl.institution.key;
-            return _.find(parentInstitution.children_institutions, inst => inst.key === institutionKey ) ? "confirmado" : "não confirmado";
+            return parentInstitution && _.find(parentInstitution.children_institutions, inst => inst.key === institutionKey ) ? "confirmado" : "não confirmado";
         };
 
         inviteInstHierCtrl.linkChildrenStatus = function linkChildrenStatus(institution) {

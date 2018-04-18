@@ -76,6 +76,10 @@ class LikeHandler(BaseHandler):
 
             enqueue_task('post-notification', params)
 
+    """TODO:  Create dislike_comment method and replace 
+            ndb.transactional to internal scopes.
+        @author: Maiana Brito 12/04/2018
+    """
     @json_response
     @login_required
     @ndb.transactional(xg=True)
@@ -98,7 +102,7 @@ class LikeHandler(BaseHandler):
             Utils._assert(user.key.urlsafe() not in likes,
                       "User hasn't liked this comment.", LikeException)
             likes.remove(user.key.urlsafe())
-            post.put();
+            post.put()
         else:
             Utils._assert(not user.is_liked_post(post.key),
                       "User hasn't liked this publication.", LikeException)

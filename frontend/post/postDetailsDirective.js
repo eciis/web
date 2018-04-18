@@ -9,6 +9,9 @@
         var postDetailsCtrl = this;
 
         var LIMIT_POST_CHARACTERS = 1000;
+        const REMOVE_POST_BY_INST_PERMISSION = 'remove_posts';
+        const REMOVE_POST_BY_POST_PERMISSION = 'remove_post';
+        const EDIT_POST_PERMISSION = 'edit_post';
 
         postDetailsCtrl.showComments = false;
         postDetailsCtrl.savingComment = false;
@@ -17,7 +20,7 @@
 
         var URL_POST = '/posts/';
         postDetailsCtrl.user = AuthService.getCurrentUser();
-
+        
         postDetailsCtrl.deletePost = function deletePost(ev) {
             var confirm = $mdDialog.confirm()
                 .clickOutsideToClose(true)
@@ -144,8 +147,10 @@
         };
 
         postDetailsCtrl.showButtonDelete = function showButtonDelete() {
-            return postDetailsCtrl.isAuthorized() &&
-                !postDetailsCtrl.isDeleted(postDetailsCtrl.post);
+            const hasInstitutionPermission = postDetailsCtrl.user.hasPermission(REMOVE_POST_BY_INST_PERMISSION, postDetailsCtrl.post.institution_key);
+            const hasPostPermission = postDetailsCtrl.user.hasPermission(REMOVE_POST_BY_POST_PERMISSION, postDetailsCtrl.post.key);
+            const hasPermission = hasInstitutionPermission || hasPostPermission;
+            return hasPermission && !postDetailsCtrl.isDeleted(postDetailsCtrl.post);
         };
 
         postDetailsCtrl.showActivityButtons = function showActivityButtons() {
@@ -163,7 +168,8 @@
         };
 
         postDetailsCtrl.showButtonEdit = function showButtonEdit() {
-            return postDetailsCtrl.isPostAuthor() && !postDetailsCtrl.isDeleted(postDetailsCtrl.post) &&
+            const hasPermission = postDetailsCtrl.user.hasPermission(EDIT_POST_PERMISSION, postDetailsCtrl.post.key);
+            return hasPermission && !postDetailsCtrl.isDeleted(postDetailsCtrl.post) &&
                     !postDetailsCtrl.postHasActivity() && !postDetailsCtrl.isShared() && !postDetailsCtrl.showSurvey();
         };
 
@@ -277,8 +283,8 @@
                 postDetailsCtrl.post.number_of_likes += 1;
                 postDetailsCtrl.savingLike = false;
                 postDetailsCtrl.getLikes(postDetailsCtrl.post);
-            }, function error() {
-                MessageService.showToast("O usuário já fez essa ação na publicação.");
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
                 $state.go("app.user.home");
                 postDetailsCtrl.savingLike = false;
             });
@@ -293,8 +299,8 @@
                 postDetailsCtrl.post.number_of_likes -= 1;
                 postDetailsCtrl.savingLike = false;
                 postDetailsCtrl.getLikes(postDetailsCtrl.post);
-            }, function error() {
-                MessageService.showToast("O usuário já fez essa ação na publicação.");
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
                 $state.go("app.user.home");
                 postDetailsCtrl.savingLike = false;
             });
@@ -419,7 +425,7 @@
         };
 
         postDetailsCtrl.isPostAuthor = function isPostAuthor() {
-            return postDetailsCtrl.post.author_key == postDetailsCtrl.user.key;
+            return postDetailsCtrl.post.author_key === postDetailsCtrl.user.key;
         };
 
         postDetailsCtrl.isPostEmpty = function  isPostEmpty() {
@@ -538,7 +544,7 @@
                         commentCtrl.saving = false;
                     }, function error(response) {
                         $state.go("app.user.home");
-                        MessageService.showToast("O usuário já fez essa ação nesse comentário.");
+                        MessageService.showToast(response.data.msg);
                         commentCtrl.saving = false;
                     }
                 );

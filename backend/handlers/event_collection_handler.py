@@ -54,5 +54,7 @@ class EventCollectionHandler(BaseHandler):
 
         event = Event.create(data, user, institution)
         event.put()
+        user.add_permissions(['remove_post', 'edit_post'], event.key.urlsafe())
+        user.put()
 
         self.response.write(json.dumps(Utils.toJson(Event.make(event), host=self.request.host)))

@@ -227,7 +227,7 @@
       <md-card-content ng-show="manageMemberCtrl.showRequests"
           style="overflow: auto; max-height: 270px;" class="custom-scrollbar">
         <md-list flex>
-          <md-list-item ng-repeat="request in manageMemberCtrl.requests" ng-click="null" class="md-3-line">
+          <md-list-item ng-repeat="request in manageMemberCtrl.requests" ng-click="manageMemberCtrl.openAcceptRequestDialog(request.key, $event)" class="md-3-line">
             <md-icon class="md-avatar-icon"
             md-colors="{background: 'light-green-500', color: 'grey-50'}">account_box</md-icon>
             <div class="md-list-item-text" layout="column">
@@ -235,8 +235,6 @@
               <h4>Cargo atual: {{ request.office}}</h4>
               <p>Email institucional: {{ request.institutional_email}}</p>
             </div>
-            <md-icon class="md-secondary md-hue-3" title="Rejeitar" ng-click="manageMemberCtrl.rejectRequest(request, $event)">close</md-icon>
-            <md-icon class="md-secondary" title="Aceitar membro" ng-click="manageMemberCtrl.acceptRequest(request)">send</md-icon>
           </md-list-item>
         </md-list>
       </md-card-content>

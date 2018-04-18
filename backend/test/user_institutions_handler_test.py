@@ -39,10 +39,10 @@ class UserInstitutionsHandlerTest(TestBaseHandler):
 
         # Assert the expected conditions
         self.assertTrue(self.second_user.key not in self.institution.members)
-        self.assertTrue(self.second_user.key not in self.institution.followers)
+        self.assertTrue(self.second_user.key in self.institution.followers)
         self.assertTrue(
             self.institution.key not in self.second_user.institutions)
-        self.assertTrue(self.institution.key not in self.second_user.follows)
+        self.assertTrue(self.institution.key in self.second_user.follows)
 
         # Assert that send_email has been called
         send_email.assert_called()

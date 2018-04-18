@@ -7,7 +7,8 @@
     var user = {
         name: 'name',
         current_institution: {key: "institutuion_key"},
-        state: 'active'
+        state: 'active',
+        permissions: {}
     };
     var option_empty = {'text': '',
                         'number_votes': 0,
@@ -48,7 +49,7 @@
             $scope: scope
         });
 
-        postCtrl.user = user;
+        postCtrl.user = new User(user);
         postCtrl.posts = [];
 
         post = {
@@ -56,7 +57,8 @@
             text: 'text',
             institution: {},
             photo_url: null,
-            pdf_files: []
+            pdf_files: [],
+            key: 'kapsod-OPASKDOPA'
         };
 
         httpBackend.when('GET', 'main/main.html').respond(200);
@@ -118,33 +120,32 @@
     });
 
     describe('createPost()', function() {
+        beforeEach(function() {
+            spyOn(postService, 'createPost').and.callFake(function () {
+                return {
+                    then: function (callback) {
+                        return callback({ data: {key: post.key }});
+                    }
+                };
+            });
+        });
+
         it('should create a post', function() {
-            spyOn(postService, 'createPost').and.returnValue(deffered.promise);
-            spyOn(postCtrl, 'clearPost');
-            spyOn(mdDialog, 'hide');
+            spyOn(postCtrl.user, 'addPermissions');
             postCtrl.post = post;
             var newPost = new Post(postCtrl.post, postCtrl.user.current_institution.key);
+            spyOn(postCtrl, 'clearPost');
+            spyOn(mdDialog, 'hide');
             deffered.resolve(newPost);
             postCtrl.createPost([]);
             scope.$apply();
             expect(postService.createPost).toHaveBeenCalledWith(newPost);
             expect(postCtrl.clearPost).toHaveBeenCalled();
             expect(mdDialog.hide).toHaveBeenCalled();
-        });
-
-        it('should occur an error when creating a post', function() {
-            spyOn(postService, 'createPost').and.returnValue(deffered.promise);
-            spyOn(mdDialog, 'hide');
-            postCtrl.post = post;
-            deffered.reject({status: 400, data: {msg: 'Erro'}});
-            postCtrl.createPost();
-            rootScope.$apply();
-            expect(postService.createPost).toHaveBeenCalled();
-            expect(mdDialog.hide).toHaveBeenCalled();
+            expect(postCtrl.user.addPermissions).toHaveBeenCalledWith(['edit_post', 'remove_post'], postCtrl.post.key);
         });
 
         it('should not create a post when it is invalid', function() {
-            spyOn(postService, 'createPost');
             postCtrl.post = {};
             postCtrl.createPost();
             expect(postService.createPost).not.toHaveBeenCalled();
@@ -175,10 +176,17 @@
                     }
                 };
             });
+
+            spyOn(postService, 'createPost').and.callFake(function () {
+                return {
+                    then: function (callback) {
+                        return callback({ data: { key: 'akpsodka-OKSDOPAK' } });
+                    }
+                };
+            });
         });
 
         it(' Should add new image in post', function() {
-            spyOn(postService, 'createPost').and.returnValue(deffered.promise);
             spyOn(postCtrl, 'clearPost');
             spyOn(mdDialog, 'hide');
 
@@ -191,6 +199,7 @@
             postCtrl.createPost([]);
             scope.$apply();
 
+            expect(postService.createPost).toHaveBeenCalled();
             expect(imageService.compress).toHaveBeenCalled();
             expect(imageService.readFile).toHaveBeenCalled();
             expect(postCtrl.clearPost).toHaveBeenCalled();

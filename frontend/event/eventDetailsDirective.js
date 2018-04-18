@@ -59,12 +59,15 @@
         };
 
         eventCtrl.canChange = function canChange(event) {
-            if(event)
-                return eventCtrl.isEventAuthor(event) || isInstitutionAdmin(event);
+            if(event) {
+                const hasInstitutionPermission = eventCtrl.user.hasPermission('remove_posts', event.institution_key);
+                const hasEventPermission = eventCtrl.user.hasPermission('remove_post', event.key);
+                return hasInstitutionPermission || hasEventPermission;
+            }
         };
 
         eventCtrl.canEdit = function canEdit(event) {
-            return eventCtrl.isEventAuthor(event);
+            return eventCtrl.user.hasPermission('edit_post', event.key);
         };
 
         eventCtrl.editEvent = function editEvent(ev, event) {

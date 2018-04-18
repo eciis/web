@@ -11,16 +11,20 @@
         <div class="container">
           <div class="row">
             <div class="card hovercard" 
-            md-colors="{background: institutionCtrl.user.current_institution.color+'-800'}">
+            md-colors="{background: institutionCtrl.user.getProfileColor()+'-800'}">
               <div class="cardheader">
                 <div class="avatar">
-                  <img alt="Foto da Instituição" ng-src="{{ institutionCtrl.institution.photo_url || '/app/images/institution.png' }}">
+                  <img ng-click="institutionCtrl.goToInstitution(institutionCtrl.institution.key)" alt="Foto da Instituição" ng-src="{{ institutionCtrl.institution.photo_url || '/app/images/institution.png' }}">
                 </div>
               </div>
               <div class="info" 
-              md-colors="{background: institutionCtrl.user.current_institution.color+'-600'}">
+              md-colors="{background: institutionCtrl.user.getProfileColor()+'-600'}">
                 <div class="desc">
-                  <div class="md-title">{{ institutionCtrl.institution.name }}</div>
+                  <div class="md-title">
+                    <a style="color: #FFFFFF" href ng-click="institutionCtrl.goToInstitution(institutionCtrl.institution.key)">
+                      {{ institutionCtrl.institution.name }}
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -53,6 +57,12 @@
                     ng-class="institutionCtrl.getSelectedItemClass('remove_inst')">
                     <md-icon>delete</md-icon>
                     <b>Remover Instituição</b>
+                  </md-button>
+                </md-menu-item>
+                <md-menu-item>
+                  <md-button ng-click="institutionCtrl.goToHome()" ng-class="institutionCtrl.getSelectedItemClass('remove_inst')">
+                    <md-icon>arrow_back</md-icon>
+                    <b>Voltar</b>
                   </md-button>
                 </md-menu-item>
               </md-menu-content>

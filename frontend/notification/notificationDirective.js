@@ -21,13 +21,17 @@
             "DELETE_MEMBER": {
                 icon: "clear",
                 action: function (properties, notification, event) {
-                    return refreshUserInstitutions(notification);
+                    if (notification.status !== 'READ') {
+                        return refreshUserInstitutions(notification);
+                    }
                 }
             },
             "DELETED_INSTITUTION": {
                 icon: "clear",
                 action: function (properties, notification, event) {
-                    return refreshUserInstitutions(notification);
+                    if (notification.status !== 'READ') {
+                        return refreshUserInstitutions(notification);
+                    }
                 }
             },
             "POST": {
@@ -176,7 +180,10 @@
             },
             "REJECT_INVITE_USER_ADM": {
                 icon: "account_balance"
-            }
+            },
+            "ACCEPT_INVITE_HIERARCHY": {
+                icon: "account_balance",
+            },
         };
 
         notificationCtrl.markAsRead = function markAsRead(notification) {

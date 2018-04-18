@@ -23,7 +23,6 @@
         homeCtrl.stateView = "";
 
         homeCtrl.user = AuthService.getCurrentUser();
-
         function loadStateView(){
             homeCtrl.stateView = $state.current.name.split(".")[2];
         }
@@ -230,7 +229,6 @@
             var promise = ProfileService.editProfile(diff);
             promise.then(function success() {
                 MessageService.showToast('Cor salva com sucesso');
-                colorPickerCtrl.user.current_institution.color = colorPickerCtrl.newProfile.color;
                 colorPickerCtrl.user.institution_profiles = colorPickerCtrl.newUser.institution_profiles;
                 $mdDialog.cancel();
                 AuthService.save();

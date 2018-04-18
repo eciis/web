@@ -192,7 +192,7 @@ class Institution(ndb.Model):
         return institution
 
     @ndb.transactional(xg=True)
-    def remove_institution(self, remove_hierarchy, user):
+    def remove_institution(self, remove_hierarchy, user=None):
         """Remove an institution.
 
         Keyword arguments:
@@ -201,7 +201,12 @@ class Institution(ndb.Model):
         user -- the admin of the institution.
         """
         self.state = "inactive"
-        user.remove_institution(self.key)
+        if user:
+            user.remove_institution(self.key)
+        self.put()
+    
+    @ndb.transactional(xg=True)
+    def handle_hierarchy_removal(self, remove_hierarchy, user=None):
         # Remove the hierarchy
         if remove_hierarchy == "true":
             self.remove_institution_hierarchy(remove_hierarchy, user)
@@ -211,7 +216,6 @@ class Institution(ndb.Model):
         # Change the children's pointers if there is no parent
         else:
             self.set_parent_for_none()
-        self.put()
 
     def remove_link(self, institution_link, is_parent):
         """Remove the connection between self and institution_link."""
@@ -226,6 +230,7 @@ class Institution(ndb.Model):
         for child in self.children_institutions:
             child = child.get()
             child.remove_institution(remove_hierarchy, user)
+            child.handle_hierarchy_removal(remove_hierarchy, user)
 
     def remove_parent_connection(self):
         """Change parent connection when remove an institution."""

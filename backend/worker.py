@@ -187,7 +187,7 @@ class RemoveInstitutionHandler(BaseHandler):
         institution_key = self.request.get('institution_key')
         remove_hierarchy = self.request.get('remove_hierarchy')
         institution = ndb.Key(urlsafe=institution_key).get()
-
+        institution.handle_hierarchy_removal(remove_hierarchy)
         @ndb.transactional(xg=True, retries=10)
         def apply_remove_operation(remove_hierarchy, institution):
             remove_permissions(remove_hierarchy, institution)

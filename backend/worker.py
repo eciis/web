@@ -219,7 +219,7 @@ class PostNotificationHandler(BaseHandler):
                     subscriber,
                     sender_key,
                     entity_type,
-                    post_key,
+                    shared_entity_key or post_key,
                     current_institution
                 )
 

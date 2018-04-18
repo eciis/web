@@ -208,10 +208,9 @@ class PostCollectionHandlerTest(TestBaseHandler):
                 {
                     'receiver_key': self.post.author.urlsafe(),
                     'sender_key': self.user.key.urlsafe(),
-                    'entity_key': key_post.urlsafe(),
+                    'entity_key': self.post.key.urlsafe(),
                     'entity_type': 'SHARED_POST',
                     'current_institution': self.institution.key.urlsafe(),
-                    'shared_entity_key': self.post.key.urlsafe()
                 }
             )
         ]

@@ -360,7 +360,7 @@
         };
 
         function getEmails(loadedEmails) {
-            if(!_.isUndefined(loadedEmails) && loadedEmails.length > 0) return loadedEmails;
+            if(loadedEmails && loadedEmails.length > 0) return loadedEmails;
             var emails = [];
             _.each(manageMemberCtrl.emails, function (email) {
                 if (!_.isEmpty(email.email)) {

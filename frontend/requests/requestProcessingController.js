@@ -84,7 +84,7 @@
         };
 
         requestController.getSizeGtSmDialog = function getSizeGtSmDialog() {
-            return request && (request.status === 'sent' && !requestController.isRejecting) ? '45' : '25';
+            return request.status === 'sent' && !requestController.isRejecting ? '45' : '25';
         };
 
         requestController.isAnotherCountry = function isAnotherCountry() {

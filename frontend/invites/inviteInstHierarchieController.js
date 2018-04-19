@@ -216,7 +216,7 @@
             inviteInstHierCtrl.requested_invites.push(invite);
         };
 
-        inviteInstHierCtrl.removeLink = function removeLink(institution, isParent) {
+        inviteInstHierCtrl.removeLink = function removeLink(institution, isParent, event) {
             var confirm = $mdDialog.confirm({onComplete: designOptions})
                 .clickOutsideToClose(true)
                 .title('Confirmar Remoção')

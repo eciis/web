@@ -142,7 +142,7 @@
         </md-toolbar>
         <md-card-content ng-if="inviteInstHierCtrl.showRequestInvites">
           <md-list class="md-dense" flex>
-              <md-list-item class="md-3-line" ng-repeat="request in inviteInstHierCtrl.requested_invites" ng-if="request.status === 'sent'" ng-click="inviteInstHierCtrl.goToRequestedInst(request)">
+              <md-list-item class="md-3-line" ng-repeat="request in inviteInstHierCtrl.requested_invites" ng-if="inviteInstHierCtrl.isReqSentToCurrentInst(request)" ng-click="inviteInstHierCtrl.goToRequestedInst(request)">
                 <md-icon class="md-avatar-icon" md-colors="{background: 'light-green-500', color: 'grey-50'}">account_balance</md-icon>  
                 <div class="md-list-item-text" layout="column">
                   <div layout="column">

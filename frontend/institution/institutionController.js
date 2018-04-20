@@ -503,8 +503,21 @@
             return !_.isEmpty(instLinksCtrl.childrenInstitutions);
         };
 
+        instLinksCtrl.parentStatus = function parentStatus() {
+            const parentInstitution = instLinksCtrl.parentInstitution;
+            const childrenInstitutionsOfParent = parentInstitution.children_institutions
+            const institutionKey = instLinksCtrl.institution.key;
+            return instLinksCtrl.parentInstitution && _.find(childrenInstitutionsOfParent, inst => inst.key === institutionKey ) ?
+                "confirmado" : "não confirmado";
+        };
+
+        instLinksCtrl.childStatus = function childStatus(institution) {
+            return institution.parent_institution ? "confirmado" : "não confirmado";
+        };
+
         function loadInstitution() {
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
+                instLinksCtrl.institution = response.data;
                 var parentInstitution = response.data.parent_institution;
                 instLinksCtrl.parentInstitution = parentInstitution && parentInstitution.state === "active" ? parentInstitution : {};
                 instLinksCtrl.childrenInstitutions = response.data.children_institutions.filter(inst => inst.state === "active");

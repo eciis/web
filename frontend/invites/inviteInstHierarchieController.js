@@ -367,8 +367,9 @@
                 angular.element($cancelButton).addClass('md-primary');
         }
 
-        inviteInstHierCtrl.canRemoveInst = function canRemoveInst(institution_key) {
-            return inviteInstHierCtrl.user.permissions.remove_inst[institution_key];
+        inviteInstHierCtrl.canRemoveInst = function canRemoveInst(institution) {
+            var hasChildrenLink = institution.parent_institution === inviteInstHierCtrl.institution.key;
+            return inviteInstHierCtrl.user.permissions.remove_inst[institution.key] && hasChildrenLink;
         };
 
         inviteInstHierCtrl.linkParentStatus = function linkParentStatus() {

@@ -110,6 +110,7 @@ class InstitutionHandler(BaseHandler):
                               institution_key)
 
         data = self.request.body
+        print data
         institution = ndb.Key(urlsafe=institution_key).get()
 
         Utils._assert(institution.state == 'inactive',
@@ -193,14 +194,13 @@ class InstitutionHandler(BaseHandler):
 
         Utils._assert(not type(institution) is Institution,
                       "Key is not an institution", EntityException)
-        """TODO: Move this call to a queue
-        @author: Raoni Smaneoto 02/04/2018
-        """
+
         institution.remove_institution(remove_hierarchy, user)
 
         params = {
             'institution_key': institution_key,
-            'remove_hierarchy': remove_hierarchy
+            'remove_hierarchy': remove_hierarchy,
+            'user_key': user.key.urlsafe() 
         }
 
         enqueue_task('remove-inst', params)

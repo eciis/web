@@ -192,7 +192,7 @@ class Institution(ndb.Model):
         return institution
 
     @ndb.transactional(xg=True)
-    def remove_institution(self, remove_hierarchy, user=None):
+    def remove_institution(self, remove_hierarchy, user):
         """Remove an institution.
 
         Keyword arguments:
@@ -200,13 +200,16 @@ class Institution(ndb.Model):
         will be removed
         user -- the admin of the institution.
         """
-        self.state = "inactive"
-        if user:
+        has_permission = user.has_permission('remove_inst', self.key.urlsafe(
+        )) or user.has_permission('remove_insts', self.key.urlsafe())
+        
+        if(has_permission):
+            self.state = "inactive"
             user.remove_institution(self.key)
-        self.put()
+            self.put()
     
     @ndb.transactional(xg=True)
-    def handle_hierarchy_removal(self, remove_hierarchy, user=None):
+    def handle_hierarchy_removal(self, remove_hierarchy, user):
         # Remove the hierarchy
         if remove_hierarchy == "true":
             self.remove_institution_hierarchy(remove_hierarchy, user)
@@ -261,13 +264,14 @@ class Institution(ndb.Model):
 
         This method allows this procedure to be done in a queue.
         """
-        for member in self.members:
-            member = member.get()
-            member.remove_institution(self.key)
-        if remove_hierarchy == "true":
-            for child in self.children_institutions:
-                child = child.get()
-                child.remove_institution_from_users(remove_hierarchy)
+        if self.state == 'inactive':
+            for member in self.members:
+                member = member.get()
+                member.remove_institution(self.key)
+            if remove_hierarchy == "true":
+                for child in self.children_institutions:
+                    child = child.get()
+                    child.remove_institution_from_users(remove_hierarchy)
 
     def change_state(self, state):
         """Change the institution state."""

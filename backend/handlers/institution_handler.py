@@ -110,7 +110,6 @@ class InstitutionHandler(BaseHandler):
                               institution_key)
 
         data = self.request.body
-        print data
         institution = ndb.Key(urlsafe=institution_key).get()
 
         Utils._assert(institution.state == 'inactive',

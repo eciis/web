@@ -202,7 +202,7 @@ class Institution(ndb.Model):
         """
         has_permission = user.has_permission('remove_inst', self.key.urlsafe(
         )) or user.has_permission('remove_insts', self.key.urlsafe())
-        
+
         if(has_permission):
             self.state = "inactive"
             user.remove_institution(self.key)
@@ -210,6 +210,15 @@ class Institution(ndb.Model):
     
     @ndb.transactional(xg=True)
     def handle_hierarchy_removal(self, remove_hierarchy, user):
+        """This method allows this procedure to be done in a queue.
+        It handles the hierarchy removal once it is called by every child
+        institution.
+
+        Keyword arguments:
+        remove_hierarchy -- works as a flag that indicates the institution's hierarchy removal
+        user -- the user who started the institution's removal process. So, it may not be the admin
+        of self.
+        """
         # Remove the hierarchy
         if remove_hierarchy == "true":
             self.remove_institution_hierarchy(remove_hierarchy, user)
@@ -260,7 +269,7 @@ class Institution(ndb.Model):
 
     @ndb.transactional(xg=True)
     def remove_institution_from_users(self, remove_hierarchy):
-        """Remove institution from members/followers list.
+        """Remove institution from members/followers list when an institution is deleted.
 
         This method allows this procedure to be done in a queue.
         """

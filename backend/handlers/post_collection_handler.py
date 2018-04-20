@@ -96,7 +96,7 @@ class PostCollectionHandler(BaseHandler):
             enqueue_task('post-notification', params)
         elif post.shared_event:
             shared_event = post.shared_event.get()
-            if shared_event.author_key != user.key.urlsafe():
+            if shared_event.author_key != user.key:
                 send_message_notification(
                     shared_event.author_key.urlsafe(),
                     user.key.urlsafe(),

@@ -196,7 +196,7 @@
                                             institution_key: '987654321',
                                             admin_key: '12345'});
                 manageMemberCtrl.emails = [{'email' : "testuser@example.com"}];
-                expect(manageMemberCtrl.isValidAllEmails()).toBe(false);
+                expect(manageMemberCtrl.isValidAllEmails(["testuser@example.com"])).toBe(false);
             });
 
             it('should be false when the invitee was already member', function() {
@@ -205,7 +205,7 @@
                                             admin_key: '12345'});
 
                  manageMemberCtrl.emails = [{'email' :"member@gmail.com"}];
-                expect(manageMemberCtrl.isValidAllEmails()).toBe(false);
+                expect(manageMemberCtrl.isValidAllEmails(["member@gmail.com"])).toBe(false);
             });
 
             it('should be false when the email was written more then one times', function() {
@@ -214,7 +214,7 @@
                                             admin_key: '12345'});
 
                 manageMemberCtrl.emails = [{'email': "new@gmail.com"}, {'email': "new@gmail.com"}];
-                expect(manageMemberCtrl.isValidAllEmails()).toBe(false);
+                expect(manageMemberCtrl.isValidAllEmails(["new@gmail.com", "new@gmail.com"])).toBe(false);
             });
 
             it('should be false when the invitee requested an invitation', function() {
@@ -223,7 +223,7 @@
                                             admin_key: '12345'});
 
                  manageMemberCtrl.emails = [{'email': 'request@gmail.com'}];
-                expect(manageMemberCtrl.isValidAllEmails()).toBe(false);
+                expect(manageMemberCtrl.isValidAllEmails(['request@gmail.com'])).toBe(false);
             });
 
            it('should be true', function() {
@@ -232,7 +232,7 @@
                                             admin_key: '12345'});
 
                  manageMemberCtrl.emails = [{'email': 'email@gmail.com'}];
-                expect(manageMemberCtrl.isValidAllEmails()).toBe(true);
+                expect(manageMemberCtrl.isValidAllEmails(['email@gmail.com'])).toBe(true);
             });
         });
 

@@ -223,6 +223,43 @@
         });
     });
 
+    describe('canRemoveInst', function() {
+        it('should be true', function() {
+            var children_institution = {
+                key: 'key-1234',
+                state: 'active',
+                parent_institution: institution.key
+            };
+            user.permissions['remove_inst'] = _.set({}, children_institution.key, true);
+            institution.children_institutions = [children_institution.key] 
+            
+            expect(inviteInstHierarchieCtrl.canRemoveInst(children_institution)).toBeTruthy();
+        });
+
+        it("should be false, because don't have parent inst", function() {
+            var children_institution = {
+                key: 'key-1234',
+                state: 'active'
+            };
+            user.permissions['remove_inst'] = _.set({}, children_institution.key, true);
+            institution.children_institutions = [] 
+            
+            expect(inviteInstHierarchieCtrl.canRemoveInst(children_institution)).toBeFalsy();
+        });
+
+        it('should be false, because the user dont have permission', function() {
+            var children_institution = {
+                key: 'key-1234',
+                state: 'active',
+                parent_institution: institution.key
+            };
+            user.permissions.remove_inst[children_institution.key] = false;
+            institution.children_institutions = [children_institution.key] 
+            
+            expect(inviteInstHierarchieCtrl.canRemoveInst(children_institution)).toBeFalsy();
+        });
+    });
+
     describe('removeLink()', function () {
         var otherInst;
 

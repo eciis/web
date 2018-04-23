@@ -88,10 +88,9 @@ class PostCollectionHandler(BaseHandler):
             params = {
                 'receiver_key': shared_post.author.urlsafe(),
                 'sender_key': user.key.urlsafe(),
-                'entity_key': post.key.urlsafe(),
+                'entity_key': shared_post.key.urlsafe(),
                 'entity_type': entity_type,
                 'current_institution': user.current_institution.urlsafe(),
-                'shared_entity_key': shared_post.key.urlsafe()
             }
 
             enqueue_task('post-notification', params)

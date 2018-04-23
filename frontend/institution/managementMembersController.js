@@ -110,7 +110,7 @@
                 emails: emails
             }
             
-            if (manageMemberCtrl.isValidAllEmails() && manageMemberCtrl.isUserInviteValid(invite)) {
+            if (manageMemberCtrl.isValidAllEmails(emails) && manageMemberCtrl.isUserInviteValid(invite)) {
                 manageMemberCtrl.isLoadingInvite = true;
                 var promise = InviteService.sendInvite(requestBody);
                 promise.then(function success(response) {
@@ -277,10 +277,13 @@
             return _.uniq(emailsNotMembersAndNotInvited);
         }
 
-        manageMemberCtrl.isValidAllEmails = function isValidAllEmails() {
-            var emails = manageMemberCtrl.emails.map(email => email.email);
+        manageMemberCtrl.isValidAllEmails = function isValidAllEmails(emails) {
+            if(_.size(emails) === 0 ){
+                MessageService.showToast("Insira pelo menos um email.");
+                return false;
+            }
+    
             var correctArray = manageMemberCtrl.removePendingAndMembersEmails(emails);
-
             if(!_.isEqual(correctArray, emails)){
                 MessageService.showToast("E-mails selecionados já foram convidados, " +
                                 "requisitaram ser membro ou pertencem a algum" +

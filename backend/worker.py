@@ -205,11 +205,8 @@ class PostNotificationHandler(BaseHandler):
         post_key = self.request.get('entity_key')
         entity_type = self.request.get('entity_type')
         current_institution = ndb.Key(urlsafe=self.request.get('current_institution'))
-        shared_entity_key = self.request.get('shared_entity_key')
         post = ndb.Key(urlsafe=post_key).get()
-        subscribers = [
-            subscriber.urlsafe() for subscriber in ndb.Key(urlsafe=shared_entity_key).get().subscribers] if shared_entity_key else [
-            subscriber.urlsafe() for subscriber in post.subscribers]
+        subscribers =  [subscriber.urlsafe() for subscriber in post.subscribers]
 
         user_is_author = post_author_key == sender_key
         for subscriber in subscribers:

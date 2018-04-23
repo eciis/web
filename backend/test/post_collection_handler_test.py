@@ -224,7 +224,7 @@ class PostCollectionHandlerTest(TestBaseHandler):
     def test_post_shared_event(self, verify_token, send_message_notification, enqueue_task):
         """Test the post_collection_handler's post method in case that post is shared_event."""
         # create an event
-        event = mocks.create_event(self.user, self.institution)
+        event = mocks.create_event(self.other_user, self.institution)
         event.text = "Description of new Event"
         event.put()
         # Make the request and assign the answer to post
@@ -258,8 +258,8 @@ class PostCollectionHandlerTest(TestBaseHandler):
                          self.institution.key.urlsafe(),
                          "The post's institution expected is %s" % self.institution.key.urlsafe())
         self.assertEqual(shared_event_obj['author_key'],
-                         self.user.key.urlsafe(),
-                         "The post's institution expected is %s" % self.user.key.urlsafe())
+                         self.other_user.key.urlsafe(),
+                         "The post's institution expected is %s" % self.other_user.key.urlsafe())
         self.assertEqual(shared_event_obj['text'],
                          event.text,
                          "The post's text expected is %s" % event.text)

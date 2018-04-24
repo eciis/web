@@ -9,10 +9,16 @@ class Request(Invite):
 
     @staticmethod
     def isLinked(institution_key, institution_requested):
-        isParent = institution_key == institution_requested.parent_institution
-        isChildren = institution_key in institution_requested.children_institutions
+        institution = institution_key.get()
+        is_parent_from_top_down_perspective = institution_requested.key in institution.children_institutions
+        is_parent_from_bottom_up_perspective = institution_key == institution_requested.parent_institution
+        is_parent = is_parent_from_top_down_perspective and is_parent_from_bottom_up_perspective
 
-        return isParent or isChildren
+        is_child_from_bottom_up_perspective = institution.parent_institution == institution_requested.key
+        is_child_from_top_down_perspective = institution_key in institution_requested.children_institutions
+        is_children = is_child_from_bottom_up_perspective and is_child_from_top_down_perspective
+        
+        return is_parent or is_children
 
     @staticmethod
     def isRequested(sender_inst_key, institution_requested_key):
@@ -32,7 +38,7 @@ class Request(Invite):
         if not institution_requested:
             raise FieldException("The request require institution_requested")
         if Request.isLinked(institution_key, institution_requested):
-            raise FieldException("The institutions is already a linked")
+            raise FieldException("The institutions has already been connected.")
         if Request.isRequested(institution_key, institution_requested.key):
             raise FieldException("The sender is already invited")
 

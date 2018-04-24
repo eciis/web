@@ -102,7 +102,7 @@ class InstitutionHandlerTest(TestBaseHandler):
             'data': None
         }
         # create headers
-        cls.headers = {'Institution-Authorization': cls.first_inst.key.urlsafe()};
+        cls.headers = {'Institution-Authorization': cls.first_inst.key.urlsafe()}
     
 
     def enqueue_task(self, handler_selector, params):
@@ -412,14 +412,13 @@ class InstitutionHandlerTest(TestBaseHandler):
         self.assertTrue(self.first_inst.key not in self.user.institutions_admin)
         self.assertTrue(self.first_inst.key not in self.user.institutions)
 
+    @patch('handlers.institution_handler.enqueue_task')
     @patch('utils.verify_token', return_value={'email': 'user@example.com'})
-    @patch('service_entities.enqueue_task')
     def test_delete_with_remove_hierarchy(self, verify_token, mock_method):
         """Test delete removing hierarchy."""
         # Setting up the remove hierarchy test
         self.second_inst.state = "active"
         self.second_inst.admin = self.user.key
-        self.second_inst.children_institutions = [self.third_inst.key]
         self.second_inst.put()
         self.third_inst.state = "active"
         self.third_inst.put()
@@ -427,8 +426,9 @@ class InstitutionHandlerTest(TestBaseHandler):
         self.user.institutions.append(self.second_inst.key)
         self.user.follows = [self.third_inst.key, self.second_inst.key]
         self.user.institutions_admin.append(self.second_inst.key)
-        self.user.add_permission("publish_post", self.third_inst.key.urlsafe())
-        self.user.add_permissions(["publish_post", "remove_inst"], self.second_inst.key.urlsafe())
+        self.user.add_permissions(
+            ["publish_post", "remove_inst", "remove_insts"], self.second_inst.key.urlsafe())
+        self.user.add_permission("remove_inst", self.third_inst.key.urlsafe())
         self.user.put()
         self.other_user.institutions_admin.append(self.third_inst.key)
         self.other_user.institutions.append(self.third_inst.key)
@@ -437,11 +437,15 @@ class InstitutionHandlerTest(TestBaseHandler):
         self.other_user.add_permission("publish_post", self.third_inst.key.urlsafe())
         self.other_user.add_permission("publish_post", self.second_inst.key.urlsafe())
         self.other_user.put()
+        
+        verify_token._mock_return_value = {'email': self.user.email[0]}
+        mock_method.side_effect = self.enqueue_task
         # Call the delete method
         self.testapp.delete(
             "/api/institutions/%s?removeHierarchy=true"
             % self.second_inst.key.urlsafe(),
-            headers=self.headers
+            headers={
+                'Institution-Authorization': self.second_inst.key.urlsafe()}
         )
         # Assert that remove_institutions_from_users has been called
         self.assertTrue(mock_method.called)

@@ -5,11 +5,16 @@ describe('Test Institution Model:', function() {
 
     var data, institution;
 
-    var stub = {
-        name: 'StubName',
+    var invite = {
+        inviteKey: 'inviteKey',
+        suggestion_institution_name: 'Stub Institution'
+    };
+
+    var testInst = new Institution({
+        name: 'Test Institution',
         state: 'active',
-        key: 'stubKey',
-    }
+        key: 'testInstKey'
+    }, {});
 
     beforeEach(function() {
         data = {
@@ -27,109 +32,160 @@ describe('Test Institution Model:', function() {
             legal_nature: 'Public',
             actuation_area: 'Laboratory',
             description: 'institutionDescription',
+            sent_invitations: [],
             parent_institution: null,
             children_institutions: [],
-            key: ''
+            key: 'instKey'
         };
+
+        institution = new Institution(data, {});
     });
 
     describe('isValidAddress()', function() {
         it('should be invalid because of empty street', function() {
-            data.address.street = "";
-            institution = new Institution(data, {});
+            institution.address.street = "";
             expect(institution.isValidAddress()).toBeFalsy();
         });
 
         it('should be invalid because of undefined street', function() {
-            data.address.street = undefined;
-            institution = new Institution(data, {});
+            institution.address.street = undefined;
             expect(institution.isValidAddress()).toBeFalsy();
         });
 
         it('should be invalid because of empty neighbourhood', function() {
-            data.address.neighbourhood = "";
-            institution = new Institution(data, {});
+            institution.address.neighbourhood = "";
             expect(institution.isValidAddress()).toBeFalsy();
         });
 
         it('should be invalid because of undefined neighbourhood', function() {
-            data.address.neighbourhood = undefined;
-            institution = new Institution(data, {});
+            institution.address.neighbourhood = undefined;
             expect(institution.isValidAddress()).toBeFalsy();
+        });
+
+        it('should be invalid because of empty city', function() {
+            institution.address.city = "";
+            expect(institution.isValidAddress()).toBeFalsy();
+        });
+
+        it('should be invalid because of undefined city', function() {
+            institution.address.city = undefined;
+            expect(institution.isValidAddress()).toBeFalsy();
+        });
+
+        it('should be invalid because of empty federal_state', function() {
+            institution.address.federal_state = "";
+            expect(institution.isValidAddress()).toBeFalsy();
+        });
+
+        it('should be invalid because of undefined federal_state', function() {
+            institution.address.federal_state = undefined;
+            expect(institution.isValidAddress()).toBeFalsy();
+        });
+
+        it('should be valid if address is correct', function() {
+            expect(institution.isValidAddress()).toBeTruthy();
+        })
+
+        it('should be valid if country is different of Brasil', function() {
+            institution.address.country = "Germany";
+            expect(institution.isValidAddress()).toBeTruthy();
         });
         
     });
 
     describe('isValid()', function() {
         it('should be invalid because of empty name', function() {
-            data.name = "";
-            institution = new Institution(data, {});
+            institution.name = "";
             expect(institution.isValid()).toBeFalsy();
         });
 
         it('should be invalid because of undefined name', function() {
-            data.name = undefined;
-            institution = new Institution(data, {});
+            institution.name = undefined;
             expect(institution.isValid()).toBeFalsy();
         });
 
         it('should be invalid because of empty legal_nature', function() {
-            data.legal_nature = "";
-            institution = new Institution(data, {});
+            institution.legal_nature = "";
             expect(institution.isValid()).toBeFalsy();
         });
 
         it('should be invalid because of undefined legal_nature', function() {
-            data.legal_nature = undefined;
-            institution = new Institution(data, {});
+            institution.legal_nature = undefined;
             expect(institution.isValid()).toBeFalsy();
         });
 
         it('should be invalid because of empty actuation_area', function() {
-            data.actuation_area = "";
-            institution = new Institution(data, {});
+            institution.actuation_area = "";
             expect(institution.isValid()).toBeFalsy();
         });
 
         it('should be invalid because of undefined actuation_area', function() {
-            data.actuation_area = undefined;
-            institution = new Institution(data, {});
+            institution.actuation_area = undefined;
             expect(institution.isValid()).toBeFalsy();
         });
 
         it('should be invalid because of empty leader', function() {
-            data.leader = "";
-            institution = new Institution(data, {});
+            institution.leader = "";
             expect(institution.isValid()).toBeFalsy();
         });
 
         it('should be invalid because of undefined leader', function() {
-            data.leader = undefined;
-            institution = new Institution(data, {});
+            institution.leader = undefined;
             expect(institution.isValid()).toBeFalsy();
         });
 
         it('should be invalid because of empty description', function() {
-            data.description = "";
-            institution = new Institution(data, {});
+            institution.description = "";
             expect(institution.isValid()).toBeFalsy();
         });
 
         it('should be invalid because of undefined description', function() {
-            data.description = undefined;
-            institution = new Institution(data, {});
+            institution.description = undefined;
             expect(institution.isValid()).toBeFalsy();
         });
 
         it('should be invalid because of invalid address', function() {
-            data.address.street = undefined;
-            institution = new Institution(data, {});
+            institution.address.street = undefined;
             expect(institution.isValid()).toBeFalsy();
         });
 
         it('should be valid', function() {
-            institution = new Institution(data, {});
             expect(institution.isValid()).toBeTruthy();
+        });
+    });
+
+    describe('addInvite()', function() {
+
+        it('should increase sent_invitations list of institution in +1', function() {
+            expect(institution.sent_invitations.length).toEqual(0);
+            institution.addInvite(invite);
+            expect(institution.sent_invitations.length).toEqual(1);
+        });
+    });
+
+    describe('createStub()', function() {
+
+        it('should returns a stub institution with pending state', function() {
+            var stub = new Institution({name: 'Stub Institution', state: 'pending'}, {});
+            expect(institution.createStub(invite)).toEqual(stub);
+        });
+    });
+
+    describe('addParentInst()', function() {
+
+        it('should set the parent_institution of null to an institution', function() {
+            expect(institution.parent_institution).toEqual(null);
+            institution.addParentInst(testInst);
+            expect(institution.parent_institution).toEqual(testInst);
+        });
+    });
+
+    describe('addChildrenInst()', function() {
+
+        it('should increse children_institutions list of institution in +1', function() {
+            expect(institution.children_institutions.length).toEqual(0);
+            institution.addChildrenInst(testInst);
+            expect(institution.children_institutions.length).toEqual(1);
         });
     });
 });

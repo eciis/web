@@ -84,12 +84,12 @@
                 institution_requested.parent_institution.key === suggestInstCtrl.institution.key);
             const isParent = isParentFromTopDownPerspective && isParentForBottomUpPerspective;
 
-            const isChildrenFromTopDownPerspective = _.includes(_.map(institution_requested.children_institutions, getKeyFromInst), suggestInstCtrl.institution.key);
-            const isChildrenFromBottomUpPerspective = (suggestInstCtrl.institution.parent_institution !== null &&
+            const isChildFromTopDownPerspective = _.includes(_.map(institution_requested.children_institutions, getKeyFromInst), suggestInstCtrl.institution.key);
+            const isChildFromBottomUpPerspective = (suggestInstCtrl.institution.parent_institution !== null &&
                 suggestInstCtrl.institution.parent_institution.key === suggestInstCtrl.chosen_institution);
-            const isChildren = isChildrenFromBottomUpPerspective && isChildrenFromTopDownPerspective;
-            
-            if (isParent || isChildren) {
+            const isChild = isChildrenFromBottomUpPerspective && isChildrenFromTopDownPerspective;
+
+            if (isParent || isChild) {
                 MessageService.showToast('As instituições já estão conectadas');
                 return true;
             }

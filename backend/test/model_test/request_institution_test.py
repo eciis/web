@@ -75,7 +75,7 @@ class RequestInstitutionParentTest(TestBase):
             'The sender is already invited')
 
     def test_create_request_for_institution_linked(self):
-        """Test cretae invalid request."""
+        """Test create invalid request."""
         with self.assertRaises(FieldException) as ex:
             data = {
                 'sender_key': self.other_user.key.urlsafe(),
@@ -89,9 +89,9 @@ class RequestInstitutionParentTest(TestBase):
             RequestInstitutionParent.create(data)
 
         self.assertEqual(
-            'The institutions is already a linked',
+            'The institutions has already been connected.',
             str(ex.exception),
-            'Expected message is The institutions is already a linked')
+            'Expected message is The institutions has already been connected')
 
     def test_make_request_parent_institution(self):
         """Test method make por parent institution request."""

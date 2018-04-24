@@ -408,45 +408,6 @@
         })();
     });
 
-    app.controller("RemoveInstController", function RemoveInstController($mdDialog, institution, 
-        InstitutionService, $state, AuthService, loadStateView, MessageService) {
-        var removeInstCtrl = this;
-
-        removeInstCtrl.institution = institution;
-        removeInstCtrl.user = AuthService.getCurrentUser();
-        removeInstCtrl.loadStateView = loadStateView;
-
-        removeInstCtrl.closeDialog = function () {
-            $mdDialog.cancel();
-            removeInstCtrl.loadStateView();
-        };
-
-        removeInstCtrl.removeInst = function removeInst() {
-            InstitutionService.removeInstitution(institution.key, removeInstCtrl.removeHierarchy).then(function success() {
-                removeInstCtrl.user.removeProfile(institution.key, removeInstCtrl.removeHierarchy);
-                removeInstCtrl.user.removeInstitution(institution.key, removeInstCtrl.removeHierarchy);
-                AuthService.save();
-                removeInstCtrl.closeDialog();
-                if (_.isEmpty(removeInstCtrl.user.institutions)) {
-                    AuthService.logout();
-                } else {
-                    $state.go("app.user.home");
-                }
-                MessageService.showToast("Instituição removida com sucesso.");
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
-            });
-        };
-
-        removeInstCtrl.hasOneInstitution = function hasOneInstitution() {
-            return _.size(removeInstCtrl.user.institutions) === 1;
-        };
-
-        removeInstCtrl.thereIsNoChild = function thereIsNoChild() {
-            return _.isEmpty(institution.children_institutions);
-        }
-    });
-
     app.controller("FollowersInstController", function InstitutionController($state, InstitutionService,
             MessageService, ProfileService){
 
@@ -473,48 +434,5 @@
 
         getFollowers();
 
-    });
-
-    app.controller("InstitutionLinksController", function InstitutionLinksController($state, InstitutionService, MessageService) {
-
-        var instLinksCtrl = this;
-        var currentInstitutionKey = $state.params.institutionKey;
-
-        instLinksCtrl.isLoadingInsts = true;
-        instLinksCtrl.currentInstitution = "";
-        instLinksCtrl.parentInstitution = {};
-        instLinksCtrl.childrenInstitutions = [];
-
-        instLinksCtrl.goToInst = function goToInst(institutionKey) {
-            const url = $state.href('app.institution.timeline', {institutionKey: institutionKey});
-            window.open(url, '_blank');
-        };
-
-        instLinksCtrl.hasInstitutions = function hasInstitutions() {
-            return !instLinksCtrl.isLoadingInsts
-                && (instLinksCtrl.hasParentInst() || instLinksCtrl.hasChildrenInst());
-        };
-
-        instLinksCtrl.hasParentInst = function hasParentInst() {
-            return !_.isEmpty(instLinksCtrl.parentInstitution);
-        };
-
-        instLinksCtrl.hasChildrenInst = function hasChildrenInst() {
-            return !_.isEmpty(instLinksCtrl.childrenInstitutions);
-        };
-
-        function loadInstitution() {
-            InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
-                var parentInstitution = response.data.parent_institution;
-                instLinksCtrl.parentInstitution = parentInstitution && parentInstitution.state === "active" ? parentInstitution : {};
-                instLinksCtrl.childrenInstitutions = response.data.children_institutions.filter(inst => inst.state === "active");
-                instLinksCtrl.isLoadingInsts = false;
-            }, function error(response) {
-                instLinksCtrl.isLoadingInsts = true;
-                MessageService.showToast(response.data.msg);
-            });
-        }
-
-        loadInstitution();
     });
 })();

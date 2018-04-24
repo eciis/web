@@ -186,6 +186,7 @@
                     }
                 };
             });
+            inviteInstHierarchieCtrl.institution.children_institutions = [];
             inviteInstHierarchieCtrl.requested_invites = [];
             inviteInstHierarchieCtrl.sendRequestToExistingInst(invite, institution.key);
             expect(inviteInstHierarchieCtrl.showChildrenHierarchie).toBeTruthy();
@@ -491,13 +492,15 @@
         });
 
         it('should return a request', function () {
-            inviteInstHierarchieCtrl.requested_invites = [{status: 'accepted'}, {status: 'rejected'}, {status: 'sent', key: '123456'}];
+            inviteInstHierarchieCtrl.requested_invites = [{status: 'accepted', institution_requested_key: institution.key},
+                {status: 'rejected', institution_requested_key: institution.key}, {status: 'sent', key: '123456', institution_requested_key: institution.key}];
             var returnedValue = inviteInstHierarchieCtrl.hasRequested();
-            expect(returnedValue).toEqual({ status: 'sent', key: '123456' });
+            expect(returnedValue).toEqual({ status: 'sent', key: '123456', institution_requested_key: institution.key });
 
-            inviteInstHierarchieCtrl.requested_invites = [{ status: 'accepted' }, { status: 'sent', key: '1234' }, { status: 'sent', key: '123456' }];
+            inviteInstHierarchieCtrl.requested_invites = [{ status: 'accepted', institution_requested_key: institution.key },
+                { status: 'sent', key: '1234', institution_requested_key: institution.key }, { status: 'sent', key: '123456' }];
             returnedValue = inviteInstHierarchieCtrl.hasRequested();
-            expect(returnedValue).toEqual({ status: 'sent', key: '1234' });
+            expect(returnedValue).toEqual({ status: 'sent', key: '1234', institution_requested_key: institution.key });
         })
     });
 

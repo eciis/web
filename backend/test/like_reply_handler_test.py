@@ -161,7 +161,6 @@ def init(cls):
     # add reply to comment
     cls.post = cls.post.key.get()
     cls.post.reply_comment(cls.reply, cls.comment.id)
-    cls.post.put()
 
     cls.uri = '/api/posts/%s/comments/%s/replies/%s/likes' % (
             cls.post.key.urlsafe(), cls.comment.id, cls.reply.id

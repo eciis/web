@@ -265,12 +265,14 @@ class Post(PolyModel):
         del self.comments[comment.get('id')]
         self.put()
 
+    @ndb.transactional(retries=10)
     def reply_comment(self, reply, comment_id):
         comment = self.get_comment(comment_id)
         Utils._assert(
             not comment, "This comment has been deleted.", EntityException)
         replies = comment.get('replies')
         replies[reply.id] = Utils.toJson(reply)
+        self.put()
 
     def get_like(self, author_key):
         """Get a like by author key."""

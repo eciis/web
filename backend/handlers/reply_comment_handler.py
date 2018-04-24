@@ -55,7 +55,6 @@ class ReplyCommentHandler(BaseHandler):
 
         reply = Comment.create(reply_data, user)
         post.reply_comment(reply, comment_id)
-        post.put()
 
         entity_type = 'COMMENT'
 

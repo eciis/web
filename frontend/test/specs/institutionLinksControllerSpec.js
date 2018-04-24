@@ -9,19 +9,22 @@
     var parentInstitutionTest = {
         name: 'parentInst',
         key: 'parentKey',
-        state: 'active'
+        state: 'active',
+        children_institutions: [{key: '987654321'}]
     };
 
     var childrenInstitutionsTest = [
         {
             name: 'childrenInst1',
             key: 'chldKey1',
-            state: 'active'
+            state: 'active',
+            parent_institution: parentInstitutionTest
         },
         {
             name: 'childrenInst2',
             key: 'chldKey2',
-            state: 'active'
+            state: 'active',
+            parent_institution: null
         }
     ];
 
@@ -121,6 +124,27 @@
             it('hasChildrenInst() should return false if not has at least one children institution', function() {
                 instLinksCtrl.childrenInstitutions = [];
                 expect(instLinksCtrl.hasChildrenInst()).toBeFalsy();
+            });
+        });
+
+        describe('parentStatus()', function() {
+            it('should return the string "confirmado" when the status of link is confirmed', function() {
+                expect(instLinksCtrl.parentStatus()).toEqual('confirmado');
+            });
+
+            it('should return the string "não confirmado" when the status of link is not confirmed', function() {
+                instLinksCtrl.parentInstitution.children_institutions = [];
+                expect(instLinksCtrl.parentStatus()).toEqual('não confirmado');
+            });
+        });
+
+        describe('childStatus()', function() {
+            it('should return the string "confirmado" when the status of link is confirmed', function() {
+                expect(instLinksCtrl.childStatus(childrenInstitutionsTest[0])).toEqual('confirmado');
+            });
+
+            it('should return the string "não confirmado" when the status of link is not confirmed', function() {
+                expect(instLinksCtrl.childStatus(childrenInstitutionsTest[1])).toEqual('não confirmado');
             });
         });
     });

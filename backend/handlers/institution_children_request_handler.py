@@ -35,10 +35,6 @@ class InstitutionChildrenRequestHandler(BaseHandler):
         institution_children.parent_institution = request.institution_key
         institution_children.put()
 
-        parent_institution = request.institution_key.get()
-        parent_institution.children_institutions.append(request.institution_requested_key)
-        parent_institution.put()
-
         request.send_response_notification(request.institution_requested_key, user.key, 'ACCEPT')
 
         enqueue_task('add-admin-permissions', {'institution_key': institution_children.key.urlsafe()})

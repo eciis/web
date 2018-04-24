@@ -25,10 +25,17 @@
                 MessageService.showToast("Solicitação aceita!");
                 requestController.request.status = 'accepted';
                 requestController.hideDialog();
+                refreshUser();
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
         };
+
+        function refreshUser() {
+            UserService.load().then(function success(response) {
+                requestController.user.permissions = response.permissions
+                AuthService.save();
+            });
 
         function resolveRequest() {
             if (requestController.request.type_of_invite === REQUEST_PARENT) {

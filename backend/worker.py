@@ -47,8 +47,8 @@ def filter_permissions_to_remove(user, permissions, institution_key, should_remo
     """
     permissions_filtered = {}
     for permission, institutions in permissions.items():
-            instition_keys = [inst for inst in institutions if should_remove(user, inst, institution_key)]
-            permissions_filtered[permission] = instition_keys
+            institution_keys = [inst for inst in institutions if should_remove(user, inst, institution_key)]
+            permissions_filtered[permission] = institution_keys
     return  permissions_filtered
 
 def is_admin_of_parent_inst(user, institution_parent_key):
@@ -105,7 +105,7 @@ def remove_permissions(remove_hierarchy, institution):
         If it's true, the function removes all the admins' permissions in the hierarchy,
         otherwise it removes only the first institution's admin permissions in the hierarchy."""
         admin = institution.admin.get()
-        current_permissions = institution.get_all_hierarchy_admin_permissions()
+        current_permissions = institution.get_hierarchy_admin_permissions()
         if remove_hierarchy == "true":
             for permission, institutions in current_permissions.items():
                 for inst in institutions:
@@ -309,11 +309,14 @@ class RemoveAdminPermissionsInInstitutionHierarchy(BaseHandler):
         institution_key = self.request.get('institution_key')
         institution = ndb.Key(urlsafe=institution_key).get()
         user = ndb.Key(urlsafe=self.request.get('user')).get()
+        
 
         @ndb.transactional(xg=True, retries=10)
         def apply_remove_operation(user, institution, should_remove):
+            permissions = institution.get_hierarchy_admin_permissions(get_all=False, admin_key=user.key)
             permissions = filter_permissions_to_remove(
-                user, institution.get_all_hierarchy_admin_permissions(), institution.key, should_remove)
+                user, permissions, institution.key, should_remove
+            )
             self.removeAdminPermissions(user, permissions)
         apply_remove_operation(user, institution, is_not_admin)
 
@@ -343,31 +346,39 @@ class SendInviteHandler(BaseHandler):
 class TransferAdminPermissionsHandler(BaseHandler):
     """Handler of transfer admin permissions."""
 
-    def add_permissions(self, user, permissions):
+    def add_permissions(self, user, institution):
         """
         This method adds new permissions in user with the permissions passed in parameter.
 
         Arguments:
         user -- user to add permissions
-        permissions -- Dict of all the permissions to be added.
+        institution -- institution from which 
+        all hierarchical permissions are going to be get
         """
+        permissions = institution.get_hierarchy_admin_permissions()
+        permissions = institution.get_super_user_admin_permissions(permissions)
         for permission in permissions:
             if permission in user.permissions:
                 user.permissions[permission].update(permissions[permission])
             else:
                 user.permissions.update({permission: permissions[permission]})
     
-    def remove_permissions(self, user, permissions):
+    def remove_permissions(self, user, institution):
         """    
         This method removes the permissions of the user according to the permissions 
         dictionary passed as parameter.
         
         Arguments:
         user -- User to remove permissions
-        permissions -- Permissions to remove
+        institution -- institution from which
+        all hierarchical permissions are going to be get
         """
-        for permission, instition_keys in permissions.items():
-            for instition_key in instition_keys:
+        permissions = institution.get_hierarchy_admin_permissions(get_all=False, admin_key=user.key)
+        permissions = institution.get_super_user_admin_permissions(permissions)
+        permissions_filtered = filter_permissions_to_remove(user, permissions, institution.key, should_remove)
+        
+        for permission, institution_keys in permissions_filtered.items():
+            for instition_key in institution_keys:
                 user.remove_permission(permission, instition_key)
 
 
@@ -387,14 +398,11 @@ class TransferAdminPermissionsHandler(BaseHandler):
         
         @ndb.transactional(xg=True, retries=10)
         def save_changes(admin, new_admin, institution):
-            permissions = institution.get_all_hierarchy_admin_permissions()
-            permissions = institution.get_super_user_admin_permissions(permissions)
             institution.set_admin(new_admin.key)
-            self.add_permissions(new_admin, permissions)
+            self.add_permissions(new_admin, institution)
             
             if (not institution.parent_institution) or (not is_admin_of_parent_inst(admin, institution.parent_institution.urlsafe())):
-                permissions_filtered = filter_permissions_to_remove(admin, permissions, institution_key, should_remove)
-                self.remove_permissions(admin, permissions_filtered)
+                self.remove_permissions(admin, institution)
             
             if(institution.trusted):
                 for permission in DEFAULT_SUPER_USER_PERMISSIONS:

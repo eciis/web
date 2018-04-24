@@ -301,7 +301,7 @@ class Institution(ndb.Model):
         """Check if is active."""
         return self.state == "active"
     
-    def get_all_hierarchy_admin_permissions(self, permissions=None):
+    def get_hierarchy_admin_permissions(self, get_all=True, admin_key=None, permissions=None):
         """
         This method get all hierarchy admin permissions of
         institution. When result, returns a dict containing
@@ -309,7 +309,10 @@ class Institution(ndb.Model):
         to the child hierarchy.
 
         Arguments:
-        permissions(Optional) -- Dict of previous permissions added for add more permissons. 
+        get_all (Optional)-- If false, get all permissions from institutions 
+        admin_key (Optional) -- admin that requested to unlink the institutions
+        hierarchically above the first child with the same admin
+        permissions (Optional) -- Dict of previous permissions added for add more permissons. 
         If not passed, creates new dict of permissions
         """
         if not permissions:
@@ -323,9 +326,12 @@ class Institution(ndb.Model):
             else:
                 permissions.update({permission: {institution_key: True}})
 
-        for children in self.children_institutions:
-            children = children.get()
-            children.get_all_hierarchy_admin_permissions(permissions)
+        for child_key in self.children_institutions:
+            child = child_key.get()
+            adm_is_child_adm = child.admin == admin_key
+            get_next_permissions = get_all or not adm_is_child_adm
+            if get_next_permissions:
+                child.get_hierarchy_admin_permissions(get_all, admin_key, permissions)
         
         return permissions
 

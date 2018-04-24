@@ -122,7 +122,28 @@ class LikePostHandlerTest(TestBaseHandler):
         # post is 2
         self.assertEqual(self.post.get_number_of_likes(), 2,
                          "The number of likes expected was 2, but was %d"
-                         % self.post.get_number_of_likes())        
+                         % self.post.get_number_of_likes())
+
+    @patch('utils.verify_token', return_value={'email': 'otheruser@example.com'})
+    def test_post_deleted_post(self, verify_token):
+        institution = mocks.create_institution()
+        user = mocks.create_user()
+        institution.add_member(user)
+        user.add_institution(institution.key)
+        post = mocks.create_post(user.key, institution.key)
+
+        post.delete(user)
+
+        with self.assertRaises(Exception) as raises_context:
+            self.testapp.post('/api/posts/%s/likes' % post.key.urlsafe(),
+            headers={'institution-authorization': self.institution.key.urlsafe()})
+        
+        exception_message = self.get_message_exception(str(raises_context.exception))
+        self.assertEqual(
+            exception_message, 
+            'Error! This post has been deleted',
+            'Expected message of exception must be equal to Error! This post has been deleted'
+        )
 
     @patch('utils.verify_token', return_value={'email': 'otheruser@example.com'})
     def test_delete(self, verify_token):

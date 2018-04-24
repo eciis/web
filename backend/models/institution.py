@@ -200,8 +200,25 @@ class Institution(ndb.Model):
         will be removed
         user -- the admin of the institution.
         """
-        self.state = "inactive"
-        user.remove_institution(self.key)
+        has_permission = user.has_permission('remove_inst', self.key.urlsafe(
+        )) or user.has_permission('remove_insts', self.key.urlsafe())
+
+        if(has_permission):
+            self.state = "inactive"
+            user.remove_institution(self.key)
+            self.put()
+    
+    @ndb.transactional(xg=True)
+    def handle_hierarchy_removal(self, remove_hierarchy, user):
+        """This method allows this procedure to be done in a queue.
+        It handles the hierarchy removal once it is called by every child
+        institution.
+
+        Keyword arguments:
+        remove_hierarchy -- works as a flag that indicates the institution's hierarchy removal
+        user -- the user who started the institution's removal process. So, it may not be the admin
+        of self.
+        """
         # Remove the hierarchy
         if remove_hierarchy == "true":
             self.remove_institution_hierarchy(remove_hierarchy, user)
@@ -211,7 +228,6 @@ class Institution(ndb.Model):
         # Change the children's pointers if there is no parent
         else:
             self.set_parent_for_none()
-        self.put()
 
     def remove_link(self, institution_link, is_parent):
         """Remove the connection between self and institution_link."""
@@ -226,6 +242,7 @@ class Institution(ndb.Model):
         for child in self.children_institutions:
             child = child.get()
             child.remove_institution(remove_hierarchy, user)
+            child.handle_hierarchy_removal(remove_hierarchy, user)
 
     def remove_parent_connection(self):
         """Change parent connection when remove an institution."""
@@ -252,17 +269,18 @@ class Institution(ndb.Model):
 
     @ndb.transactional(xg=True)
     def remove_institution_from_users(self, remove_hierarchy):
-        """Remove institution from members/followers list.
+        """Remove institution from members/followers list when an institution is deleted.
 
         This method allows this procedure to be done in a queue.
         """
-        for member in self.members:
-            member = member.get()
-            member.remove_institution(self.key)
-        if remove_hierarchy == "true":
-            for child in self.children_institutions:
-                child = child.get()
-                child.remove_institution_from_users(remove_hierarchy)
+        if self.state == 'inactive':
+            for member in self.members:
+                member = member.get()
+                member.remove_institution(self.key)
+            if remove_hierarchy == "true":
+                for child in self.children_institutions:
+                    child = child.get()
+                    child.remove_institution_from_users(remove_hierarchy)
 
     def change_state(self, state):
         """Change the institution state."""

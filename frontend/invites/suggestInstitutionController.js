@@ -79,13 +79,17 @@
         }
 
         function isLinked(institution_requested) {
-            var isParent = _.includes(_.map(suggestInstCtrl.institution.children_institutions, getKeyFromInst), suggestInstCtrl.chosen_institution);
-            var isChildren = (suggestInstCtrl.institution.parent_institution !== null &&
-                    suggestInstCtrl.institution.parent_institution.key === suggestInstCtrl.chosen_institution);
-            var selfIsParent = (institution_requested.parent_institution !== null &&
-                    institution_requested.parent_institution.key === suggestInstCtrl.institution.key);
-            var selfIsChildren = _.includes(_.map(institution_requested.children_institutions, getKeyFromInst), suggestInstCtrl.institution.key);
-            if (isParent || isChildren || selfIsParent || selfIsChildren) {
+            const isParentFromTopDownPerspective = _.includes(_.map(suggestInstCtrl.institution.children_institutions, getKeyFromInst), suggestInstCtrl.chosen_institution);
+            const isParentForBottomUpPerspective = (institution_requested.parent_institution !== null &&
+                institution_requested.parent_institution.key === suggestInstCtrl.institution.key);
+            const isParent = isParentFromTopDownPerspective && isParentForBottomUpPerspective;
+
+            const isChildFromTopDownPerspective = _.includes(_.map(institution_requested.children_institutions, getKeyFromInst), suggestInstCtrl.institution.key);
+            const isChildFromBottomUpPerspective = (suggestInstCtrl.institution.parent_institution !== null &&
+                suggestInstCtrl.institution.parent_institution.key === suggestInstCtrl.chosen_institution);
+            const isChild = isChildFromBottomUpPerspective && isChildFromTopDownPerspective;
+
+            if (isParent || isChild) {
                 MessageService.showToast('As instituições já estão conectadas');
                 return true;
             }

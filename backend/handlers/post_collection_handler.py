@@ -88,16 +88,15 @@ class PostCollectionHandler(BaseHandler):
             params = {
                 'receiver_key': shared_post.author.urlsafe(),
                 'sender_key': user.key.urlsafe(),
-                'entity_key': post.key.urlsafe(),
+                'entity_key': shared_post.key.urlsafe(),
                 'entity_type': entity_type,
                 'current_institution': user.current_institution.urlsafe(),
-                'shared_entity_key': shared_post.key.urlsafe()
             }
 
             enqueue_task('post-notification', params)
         elif post.shared_event:
             shared_event = post.shared_event.get()
-            if shared_event.author_key != user.key.urlsafe():
+            if shared_event.author_key != user.key:
                 send_message_notification(
                     shared_event.author_key.urlsafe(),
                     user.key.urlsafe(),

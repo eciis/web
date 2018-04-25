@@ -85,7 +85,7 @@ class Invite(PolyModel):
         })
         email_sender.send_email()
 
-    def send_notification(self, current_institution, sender_key=None, receiver_key=None, entity_type=None):
+    def send_notification(self, current_institution, sender_key=None, receiver_key=None, entity_type=None, entity_key=None):
         """Method of send notification to invitee."""
         sender_key = sender_key or self.sender_key
         if not receiver_key:
@@ -94,11 +94,12 @@ class Invite(PolyModel):
         
         if receiver_key:
             entity_type = entity_type or 'INVITE'
+            entity_key = entity_key or self.key.urlsafe()
             send_message_notification(
                 receiver_key.urlsafe(),
                 sender_key.urlsafe(),
                 entity_type,
-                self.key.urlsafe(),
+                entity_key,
                 current_institution
             )
 

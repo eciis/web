@@ -82,11 +82,10 @@ def get_all_parent_admins(child_institution, admins=[]):
     The admins' list starts empty and as passed by reference is the same over the recursion's stack.
     child_institution is used to get the parent and so on go up in the hierarchy.
     """
+    admins.append(child_institution.admin.get())
     parent_institution = child_institution.parent_institution
     if parent_institution:
         parent_institution = parent_institution.get()
-        admin = parent_institution.admin
-        admins.append(admin.get())
         get_all_parent_admins(parent_institution, admins)
     return admins
 
@@ -187,12 +186,14 @@ class RemoveInstitutionHandler(BaseHandler):
         institution_key = self.request.get('institution_key')
         remove_hierarchy = self.request.get('remove_hierarchy')
         institution = ndb.Key(urlsafe=institution_key).get()
+        user = ndb.Key(urlsafe=self.request.get('user_key')).get()
 
         @ndb.transactional(xg=True, retries=10)
-        def apply_remove_operation(remove_hierarchy, institution):
-            remove_permissions(remove_hierarchy, institution)
+        def apply_remove_operation(remove_hierarchy, institution, user):
+            institution.handle_hierarchy_removal(remove_hierarchy, user)
             institution.remove_institution_from_users(remove_hierarchy)
-        apply_remove_operation(remove_hierarchy, institution)
+            remove_permissions(remove_hierarchy, institution)
+        apply_remove_operation(remove_hierarchy, institution, user)
 
 
 class PostNotificationHandler(BaseHandler):
@@ -205,11 +206,8 @@ class PostNotificationHandler(BaseHandler):
         post_key = self.request.get('entity_key')
         entity_type = self.request.get('entity_type')
         current_institution = ndb.Key(urlsafe=self.request.get('current_institution'))
-        shared_entity_key = self.request.get('shared_entity_key')
         post = ndb.Key(urlsafe=post_key).get()
-        subscribers = [
-            subscriber.urlsafe() for subscriber in ndb.Key(urlsafe=shared_entity_key).get().subscribers] if shared_entity_key else [
-            subscriber.urlsafe() for subscriber in post.subscribers]
+        subscribers =  [subscriber.urlsafe() for subscriber in post.subscribers]
 
         user_is_author = post_author_key == sender_key
         for subscriber in subscribers:

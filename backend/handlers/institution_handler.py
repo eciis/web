@@ -51,7 +51,7 @@ def isUserInvited(method):
 
 def childrenToJson(obj):
     """Return the array with json from institution that are obj children."""
-    json = [Institution.make(institution.get(), ['name', 'key', 'state', 'invite', 'parent_institution'])
+    json = [Institution.make(institution.get(), ['name', 'photo_url', 'key', 'state', 'invite', 'parent_institution'])
             for institution in obj.children_institutions]
     return json
 
@@ -61,7 +61,7 @@ def parentToJson(obj):
     if(obj.parent_institution):
         parent_institution = obj.parent_institution.get()
         institution_parent_json = Institution.make(parent_institution, [
-                                                   'name', 'key', 'state', 'invite'])
+                                                   'name', 'key', 'state', 'invite', 'photo_url'])
         institution_parent_json['children_institutions'] = childrenToJson(parent_institution)
         return institution_parent_json
 
@@ -193,14 +193,13 @@ class InstitutionHandler(BaseHandler):
 
         Utils._assert(not type(institution) is Institution,
                       "Key is not an institution", EntityException)
-        """TODO: Move this call to a queue
-        @author: Raoni Smaneoto 02/04/2018
-        """
+
         institution.remove_institution(remove_hierarchy, user)
 
         params = {
             'institution_key': institution_key,
-            'remove_hierarchy': remove_hierarchy
+            'remove_hierarchy': remove_hierarchy,
+            'user_key': user.key.urlsafe() 
         }
 
         enqueue_task('remove-inst', params)

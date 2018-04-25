@@ -186,6 +186,7 @@
                     }
                 };
             });
+            inviteInstHierarchieCtrl.institution.children_institutions = [];
             inviteInstHierarchieCtrl.requested_invites = [];
             inviteInstHierarchieCtrl.sendRequestToExistingInst(invite, institution.key);
             expect(inviteInstHierarchieCtrl.showChildrenHierarchie).toBeTruthy();
@@ -223,6 +224,43 @@
         });
     });
 
+    describe('canRemoveInst', function() {
+        it('should be true', function() {
+            var children_institution = {
+                key: 'key-1234',
+                state: 'active',
+                parent_institution: institution.key
+            };
+            user.permissions['remove_inst'] = _.set({}, children_institution.key, true);
+            institution.children_institutions = [children_institution.key] 
+            
+            expect(inviteInstHierarchieCtrl.canRemoveInst(children_institution)).toBeTruthy();
+        });
+
+        it("should be false, because don't have parent inst", function() {
+            var children_institution = {
+                key: 'key-1234',
+                state: 'active'
+            };
+            user.permissions['remove_inst'] = _.set({}, children_institution.key, true);
+            institution.children_institutions = [] 
+            
+            expect(inviteInstHierarchieCtrl.canRemoveInst(children_institution)).toBeFalsy();
+        });
+
+        it('should be false, because the user dont have permission', function() {
+            var children_institution = {
+                key: 'key-1234',
+                state: 'active',
+                parent_institution: institution.key
+            };
+            user.permissions.remove_inst[children_institution.key] = false;
+            institution.children_institutions = [children_institution.key] 
+            
+            expect(inviteInstHierarchieCtrl.canRemoveInst(children_institution)).toBeFalsy();
+        });
+    });
+
     describe('removeLink()', function () {
         var otherInst;
 
@@ -247,7 +285,7 @@
         });
 
         it('should remove parent link', function () {
-            inviteInstHierarchieCtrl.removeLink(otherInst, true);
+            inviteInstHierarchieCtrl.removeLink("event", otherInst, true);
             expect(mdDialog.confirm).toHaveBeenCalled();
             expect(mdDialog.show).toHaveBeenCalled();
             expect(instService.removeLink).toHaveBeenCalled();
@@ -258,7 +296,7 @@
         it('should remove child link', function() {
             inviteInstHierarchieCtrl.institution.children_institutions = [otherInst];
             expect(inviteInstHierarchieCtrl.institution.children_institutions).toEqual([otherInst]);
-            inviteInstHierarchieCtrl.removeLink(otherInst, false);
+            inviteInstHierarchieCtrl.removeLink("event", otherInst, false);
             expect(mdDialog.confirm).toHaveBeenCalled();
             expect(mdDialog.show).toHaveBeenCalled();
             expect(instService.removeLink).toHaveBeenCalled();
@@ -454,13 +492,15 @@
         });
 
         it('should return a request', function () {
-            inviteInstHierarchieCtrl.requested_invites = [{status: 'accepted'}, {status: 'rejected'}, {status: 'sent', key: '123456'}];
+            inviteInstHierarchieCtrl.requested_invites = [{status: 'accepted', institution_requested_key: institution.key},
+                {status: 'rejected', institution_requested_key: institution.key}, {status: 'sent', key: '123456', institution_requested_key: institution.key}];
             var returnedValue = inviteInstHierarchieCtrl.hasRequested();
-            expect(returnedValue).toEqual({ status: 'sent', key: '123456' });
+            expect(returnedValue).toEqual({ status: 'sent', key: '123456', institution_requested_key: institution.key });
 
-            inviteInstHierarchieCtrl.requested_invites = [{ status: 'accepted' }, { status: 'sent', key: '1234' }, { status: 'sent', key: '123456' }];
+            inviteInstHierarchieCtrl.requested_invites = [{ status: 'accepted', institution_requested_key: institution.key },
+                { status: 'sent', key: '1234', institution_requested_key: institution.key }, { status: 'sent', key: '123456' }];
             returnedValue = inviteInstHierarchieCtrl.hasRequested();
-            expect(returnedValue).toEqual({ status: 'sent', key: '1234' });
+            expect(returnedValue).toEqual({ status: 'sent', key: '1234', institution_requested_key: institution.key });
         })
     });
 

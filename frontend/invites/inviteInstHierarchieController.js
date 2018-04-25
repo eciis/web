@@ -110,11 +110,12 @@
             }
             promise.then(function success() {
                 MessageService.showToast('Convite enviado com sucesso!');
+                addInviteToRequests(invite);
                 if (invite.type_of_invite === REQUEST_PARENT) {
-                    addInstitution(institution_requested_key);
+                    addParentInstitution(institution_requested_key);
                     inviteInstHierCtrl.showParentHierarchie = true;
                 } else {
-                    addInviteToChildrenRequests(invite);
+                    addChildrenInstitution(institution_requested_key);
                     inviteInstHierCtrl.showChildrenHierarchie = true;
                 }
                 deferred.resolve();
@@ -125,17 +126,28 @@
         };
 
         /*
-        * For the institution that is sending the request, 'REQUEST_INSTITUTION_PARENT'
-        * means that it wants to have requested institution as a parent
-        * @param type_of_invite - can be REQUEST_INSTITUTION_PARENT or REQUEST_INSTITUTION_CHILDREN
+        * Add a stub link between institution that's who invited (child) and the institution that's been invitee (parent).
         * @param institution_requested_key - key of institution that receiving the request
         * @return - promise
         */
-        function addInstitution(institution_requested_key) {
+        function addParentInstitution(institution_requested_key) {
             var promise = InstitutionService.getInstitution(institution_requested_key);
             promise.then(function(response) {
                 inviteInstHierCtrl.institution.addParentInst(response.data);
                 inviteInstHierCtrl.hasParent = true;
+            });
+            return promise;
+        }
+
+        /*
+        * Add a stub link between institution that's who invited (parent) and the institution that's been invitee (child).
+        * @param institution_requested_key - key of institution that receiving the request
+        * @return - promise
+        */
+        function addChildrenInstitution(institution_requested_key) {
+            var promise = InstitutionService.getInstitution(institution_requested_key);
+            promise.then(function(response) {
+                inviteInstHierCtrl.institution.addChildrenInst(response.data);
             });
             return promise;
         }
@@ -211,7 +223,7 @@
             });
         }
 
-        function addInviteToChildrenRequests(invite) {
+        function addInviteToRequests(invite) {
             invite.status = 'sent';
             inviteInstHierCtrl.requested_invites.push(invite);
         };
@@ -284,6 +296,10 @@
             return institutionKey === request.institution_key;
         };
 
+        inviteInstHierCtrl.isReqSentToCurrentInst = function isReqSentToCurrentInst(request) {
+            return request.status === 'sent' && institutionKey === request.institution_requested_key;
+        }
+
         inviteInstHierCtrl.goToRequestedInst = function goToRequestedInst(request) {
             var inst_key = inviteInstHierCtrl.isReqSentByCurrentInst(request) ? request.institution_requested_key : request.institution_key;
             inviteInstHierCtrl.goToInst(inst_key);
@@ -338,7 +354,8 @@
         };
 
         inviteInstHierCtrl.hasRequested = function hasRequested() {
-            return _.find(inviteInstHierCtrl.requested_invites, request => request.status === 'sent');
+            return _.find(inviteInstHierCtrl.requested_invites,
+                request => request.status === 'sent' && request.institution_requested_key === institutionKey);
         };
 
         function designOptions() {
@@ -350,8 +367,9 @@
                 angular.element($cancelButton).addClass('md-primary');
         }
 
-        inviteInstHierCtrl.canRemoveInst = function canRemoveInst(institution_key) {
-            return inviteInstHierCtrl.user.permissions.remove_inst[institution_key];
+        inviteInstHierCtrl.canRemoveInst = function canRemoveInst(institution) {
+            var hasChildrenLink = institution.parent_institution === inviteInstHierCtrl.institution.key;
+            return inviteInstHierCtrl.user.permissions.remove_inst[institution.key] && hasChildrenLink;
         };
 
         inviteInstHierCtrl.linkParentStatus = function linkParentStatus() {

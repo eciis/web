@@ -115,10 +115,10 @@
                 </div>
               </div>
               <div ng-if="inviteInstHierCtrl.isActive(institution)" layout="row">
-                <md-button ng-click="inviteInstHierCtrl.removeLink(institution, false)">
+                <md-button ng-click="inviteInstHierCtrl.removeLink(event, institution, false)">
                   <md-icon md-colors="{color: 'red-700'}" title="Remover conexão">link</md-icon>
                 </md-button>
-                <md-button ng-if="inviteInstHierCtrl.canRemoveInst(institution.key)" ng-click="inviteInstHierCtrl.removeChild(institution)">
+                <md-button ng-if="inviteInstHierCtrl.canRemoveInst(institution)" ng-click="inviteInstHierCtrl.removeChild(institution)">
                   <md-icon md-colors="{color: 'red-700'}" title="Remover institutição">delete</md-icon>
                 </md-button>
               </div>
@@ -142,7 +142,7 @@
         </md-toolbar>
         <md-card-content ng-if="inviteInstHierCtrl.showRequestInvites">
           <md-list class="md-dense" flex>
-              <md-list-item class="md-3-line" ng-repeat="request in inviteInstHierCtrl.requested_invites" ng-if="request.status === 'sent'" ng-click="inviteInstHierCtrl.goToRequestedInst(request)">
+              <md-list-item class="md-3-line" ng-repeat="request in inviteInstHierCtrl.requested_invites" ng-if="inviteInstHierCtrl.isReqSentToCurrentInst(request)" ng-click="inviteInstHierCtrl.goToRequestedInst(request)">
                 <md-icon class="md-avatar-icon" md-colors="{background: 'light-green-500', color: 'grey-50'}">account_balance</md-icon>  
                 <div class="md-list-item-text" layout="column">
                   <div layout="column">

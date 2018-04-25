@@ -101,6 +101,22 @@ class RequestUser(Invite):
             entity_type=entity_type
         )
 
+    """ 
+    The sender, in this case, is the user who is asking to be an institution's members.
+    The user is who answered the request.
+    The institution_key to which the sender requested to be member.
+    Entity_type can be REJECTED_LINK or ACCEPTED_LINK.
+    """
+    def send_response_notification(self, user, institution_key, entity_type):
+        """Method sends response notification to sender request."""
+        super(RequestUser, self).send_notification(
+            institution_key,
+            user.key,
+            self.sender_key,
+            entity_type,
+            institution_key.urlsafe()
+        )
+
     def make(self):
         """Create json of invite to user."""
         invite_user_json = super(RequestUser, self).make()

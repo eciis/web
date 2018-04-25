@@ -94,11 +94,6 @@ class InstitutionChildrenRequestHandlerTest(TestBaseHandler):
 
         # update inst_test
         self.inst_test = self.inst_test.key.get()
-        
-        self.assertEqual(
-            self.inst_test.children_institutions[0], institution.key,
-            "The institution inst_test must have institution as child"
-        )
 
         self.assertTrue(
             mock_method.assert_called,

@@ -510,6 +510,7 @@ class InstitutionHandlerTest(TestBaseHandler):
         third_inst = mocks.create_institution()
         fourth_inst = mocks.create_institution()
 
+        first_inst.add_member(first_user)
         first_inst.set_admin(first_user.key)
         second_inst.admin = second_user.key
         third_inst.admin = third_user.key

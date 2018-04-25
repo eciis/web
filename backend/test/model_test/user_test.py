@@ -31,6 +31,7 @@ class UserTest(TestBase):
         # create other institution
         cls.other_inst = mocks.create_institution('Other_inst')
         # update user
+        cls.user.institutions.append(cls.institution.key)
         cls.user.add_institution_admin(cls.institution.key)
         cls.user.follow(cls.institution.key)
 

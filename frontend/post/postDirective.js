@@ -304,7 +304,7 @@
                             MessageService.showToast(response.data.msg);
                         });
                     }, function error() {
-                        MessageService.showToast("Esse post não pode ser editado pois já possue atividade");
+                        MessageService.showToast("Esse post não pode ser editado pois já possui atividade");
                     });
                 } else {
                     MessageService.showToast('Edição inválida!');

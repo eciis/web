@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller('RequestProcessingController', function RequestProcessingController(AuthService, RequestInvitationService,
-        MessageService, InstitutionService, key, $state, $mdDialog) {
+        MessageService, InstitutionService, UserService, key, $state, $mdDialog) {
         var requestController = this;
 
         requestController.institution = null;
@@ -33,9 +33,10 @@
 
         function refreshUser() {
             UserService.load().then(function success(response) {
-                requestController.user.permissions = response.permissions
+                requestController.user.permissions = response.permissions;
                 AuthService.save();
             });
+        }
 
         function resolveRequest() {
             if (requestController.request.type_of_invite === REQUEST_PARENT) {

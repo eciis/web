@@ -283,7 +283,7 @@
                 notificationCtrl.user.institutions = response.institutions;
                 notificationCtrl.user.follows = response.follows;
                 notificationCtrl.user.institution_profiles = response.institution_profiles;
-                notificationCtrl.user.permissions = response.permissions
+                notificationCtrl.user.permissions = response.permissions;
                 AuthService.save();
             });
         }

@@ -171,19 +171,6 @@ User.prototype.updateInstProfile = function updateInstProfile(institution) {
     this.institution_profiles[index].institution.photo_url = institution.photo_url;
 };
 
-User.prototype.goToDifferentInstitution = function goToDifferentInstitution(previousKey, removeHierarchy) {
-    var user = this;
-    _.forEach(this.institutions, function(institution) {
-        if(institution.key !== previousKey) {
-            const institutionHasBeenDeleted = removeHierarchy === "true" && institution.parent_institution === previousKey;
-            if (!(institutionHasBeenDeleted)) {
-                user.current_institution = institution;
-                window.localStorage.userInfo = JSON.stringify(this);
-            }
-        }
-    });
-};
-
 User.prototype.getProfileColor = function getProfileColor() {
     const instKey = this.current_institution.key;
     return this.institution_profiles.reduce(

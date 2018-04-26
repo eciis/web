@@ -40,7 +40,6 @@ class ReplyCommentHandler(BaseHandler):
 
     @json_response
     @login_required
-    @ndb.transactional(xg=True)
     def post(self, user, post_key, comment_id):
         """Handle Post Comments requests."""
         data = json.loads(self.request.body)
@@ -55,7 +54,6 @@ class ReplyCommentHandler(BaseHandler):
 
         reply = Comment.create(reply_data, user)
         post.reply_comment(reply, comment_id)
-        post.put()
 
         entity_type = 'COMMENT'
 

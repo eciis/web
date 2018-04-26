@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Send notifications handler."""
 import webapp2
 import json
@@ -15,6 +16,7 @@ from service_messages import send_message_email
 from jinja2 import Environment, FileSystemLoader
 from permissions import DEFAULT_SUPER_USER_PERMISSIONS
 from permissions import DEFAULT_ADMIN_PERMISSIONS
+from send_email_hierarchy.remove_institution_email_sender import RemoveInstitutionEmailSender
 
 
 def should_remove(user, institution_key, current_inst_key):
@@ -120,6 +122,45 @@ def remove_permissions(remove_hierarchy, institution):
                     admin.remove_permission(permission, institution_key)
 
 
+def notify_institution_removal(institution, remove_hierarchy, user):
+    """This method has two possibilities of flow depending on
+    the remove_hierarchy's value.
+    If it's true, the method send email and notification to all
+    the hierarchy. Otherwise it send just to the first institution.
+    
+    Params:
+    institution -- the current institution in the hierarchy whose admin
+    will receive an email and a notification.
+    remove_hierarchy -- string that works as a flag informing if the hierarchy.
+    has been removed or not.
+    user -- the user who made the request to remove the institution.
+    """
+    email_params = {
+        "body": """Lamentamos informar que a instituição %s foi removida
+            pelo usuário %s """ % (institution.name, user.name),
+        "subject": "Remoção de instituição",
+        "inst_key": institution.key.urlsafe()
+    }
+    email_sender = RemoveInstitutionEmailSender(**email_params)
+    email_sender.send_email()
+
+    user_has_to_receive_notification = institution.admin != user.key
+
+    if user_has_to_receive_notification:
+        send_message_notification(
+            institution.admin.urlsafe(),
+            user.key.urlsafe(),
+            'DELETED_INSTITUTION',
+            institution.key.urlsafe()
+        )
+
+    if remove_hierarchy == "true":
+        for child_key in institution.children_institutions:
+            child = child_key.get()
+            if child.state == "inactive":
+                notify_institution_removal(child, remove_hierarchy, user)
+
+
 class BaseHandler(webapp2.RequestHandler):
     """Base Handler."""
 
@@ -193,6 +234,7 @@ class RemoveInstitutionHandler(BaseHandler):
             institution.handle_hierarchy_removal(remove_hierarchy, user)
             institution.remove_institution_from_users(remove_hierarchy)
             remove_permissions(remove_hierarchy, institution)
+            notify_institution_removal(institution, remove_hierarchy, user)
         apply_remove_operation(remove_hierarchy, institution, user)
 
 

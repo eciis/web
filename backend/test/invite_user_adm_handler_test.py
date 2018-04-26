@@ -45,10 +45,11 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         new_admin = mocks.create_user()
 
         institution = mocks.create_institution()
-        institution.set_admin(admin.key)
         institution.add_member(admin)
+        institution.set_admin(admin.key)
         institution.add_member(new_admin)
 
+        admin.institutions.append(institution.key)
         admin.add_institution_admin(institution.key)
         add_permissions(admin, institution.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS)
 
@@ -118,22 +119,25 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         second_inst = mocks.create_institution()
         third_inst = mocks.create_institution()
 
-        institution.set_admin(admin.key)
         institution.add_member(admin)
+        institution.set_admin(admin.key)
         institution.add_member(new_admin)
         institution.children_institutions = [second_inst.key]
 
-        second_inst.set_admin(other_admin.key)
         second_inst.add_member(other_admin)
+        second_inst.set_admin(other_admin.key)
         second_inst.parent_institution = institution.key
         second_inst.children_institutions = [third_inst.key]
 
-        third_inst.set_admin(admin.key)
         third_inst.add_member(admin)
+        third_inst.set_admin(admin.key)
         third_inst.parent_institution = second_inst.key
 
+        admin.institutions.append(institution.key)
+        admin.institutions.append(third_inst.key)
         admin.add_institution_admin(institution.key)
         admin.add_institution_admin(third_inst.key)
+        other_admin.institutions.append(second_inst.key)
         other_admin.add_institution_admin(second_inst.key)
         add_permissions(admin, institution.key.urlsafe(),
              permissions.DEFAULT_ADMIN_PERMISSIONS)
@@ -261,22 +265,25 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         second_inst = mocks.create_institution()
         third_inst = mocks.create_institution()
 
-        institution.set_admin(admin.key)
         institution.add_member(admin)
+        institution.set_admin(admin.key)
         institution.children_institutions = [second_inst.key]
 
-        second_inst.set_admin(other_admin.key)
         second_inst.add_member(other_admin)
+        second_inst.set_admin(other_admin.key)
         second_inst.parent_institution = institution.key
         second_inst.children_institutions = [third_inst.key]
 
-        third_inst.set_admin(admin.key)
         third_inst.add_member(admin)
+        third_inst.set_admin(admin.key)
         third_inst.add_member(new_admin)
         third_inst.parent_institution = second_inst.key
 
+        admin.institutions.append(institution.key)
+        admin.institutions.append(third_inst.key)
         admin.add_institution_admin(institution.key)
         admin.add_institution_admin(third_inst.key)
+        other_admin.institutions.append(second_inst.key)
         other_admin.add_institution_admin(second_inst.key)
         add_permissions(admin, institution.key.urlsafe(), 
             permissions.DEFAULT_ADMIN_PERMISSIONS)
@@ -405,22 +412,26 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         second_inst.trusted = True
         third_inst = mocks.create_institution()
 
-        institution.set_admin(admin.key)
         institution.add_member(admin)
+        institution.set_admin(admin.key)
         institution.children_institutions = [second_inst.key]
 
         # Departamento do Complexo Industrial e Inovacao em Saude
         # Admin of this institution is Super User
+        second_inst.add_member(admin)
         second_inst.set_admin(admin.key)
         second_inst.add_member(new_admin)
         second_inst.parent_institution = institution.key
         second_inst.children_institutions = [third_inst.key]
 
-        third_inst.set_admin(admin.key)
         third_inst.add_member(admin)
+        third_inst.set_admin(admin.key)
         third_inst.add_member(new_admin)
         third_inst.parent_institution = second_inst.key
 
+        admin.institutions.append(institution.key)
+        admin.institutions.append(second_inst.key)
+        admin.institutions.append(third_inst.key)
         admin.add_institution_admin(institution.key)
         admin.add_institution_admin(second_inst.key)
         admin.add_institution_admin(third_inst.key)
@@ -546,12 +557,12 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         institution = mocks.create_institution()
         institution.name = "Departamento do Complexo Industrial e Inovacao em Saude"
         institution.trusted = True
-        institution.set_admin(admin.key)
         institution.add_member(admin)
+        institution.set_admin(admin.key)
         institution.add_member(new_admin)
 
-        new_admin.add_institution(institution.key)
-        admin.add_institution(institution.key)        
+        new_admin.institutions.append(institution.key)
+        admin.institutions.append(institution.key)
         admin.add_institution_admin(institution.key)
         
         add_permissions(admin, institution.key.urlsafe(),
@@ -622,10 +633,11 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         new_admin = mocks.create_user()
 
         institution = mocks.create_institution()
-        institution.set_admin(admin.key)
         institution.add_member(admin)
+        institution.set_admin(admin.key)
         institution.add_member(new_admin)
 
+        admin.institutions.append(institution.key)
         admin.add_institution_admin(institution.key)
         add_permissions(admin, institution.key.urlsafe(),
             permissions.DEFAULT_ADMIN_PERMISSIONS)
@@ -733,10 +745,11 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         new_admin = mocks.create_user()
 
         institution = mocks.create_institution()
-        institution.set_admin(admin.key)
         institution.add_member(admin)
+        institution.set_admin(admin.key)
         institution.add_member(new_admin)
 
+        admin.institutions.append(institution.key)
         admin.add_institution_admin(institution.key)
         add_permissions(admin, institution.key.urlsafe(),
             permissions.DEFAULT_ADMIN_PERMISSIONS)
@@ -807,10 +820,11 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         new_admin = mocks.create_user()
 
         institution = mocks.create_institution()
-        institution.set_admin(admin.key)
         institution.add_member(admin)
+        institution.set_admin(admin.key)
         institution.add_member(new_admin)
 
+        admin.institutions.append(institution.key)
         admin.add_institution_admin(institution.key)
         add_permissions(admin, institution.key.urlsafe(),
             permissions.DEFAULT_ADMIN_PERMISSIONS)

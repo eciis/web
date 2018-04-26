@@ -87,7 +87,7 @@
             const isChildFromTopDownPerspective = _.includes(_.map(institution_requested.children_institutions, getKeyFromInst), suggestInstCtrl.institution.key);
             const isChildFromBottomUpPerspective = (suggestInstCtrl.institution.parent_institution !== null &&
                 suggestInstCtrl.institution.parent_institution.key === suggestInstCtrl.chosen_institution);
-            const isChild = isChildrenFromBottomUpPerspective && isChildrenFromTopDownPerspective;
+            const isChild = isChildFromBottomUpPerspective && isChildFromTopDownPerspective;
 
             if (isParent || isChild) {
                 MessageService.showToast('As instituições já estão conectadas');

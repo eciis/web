@@ -22,7 +22,7 @@
                 icon: "clear",
                 action: function (properties, notification, event) {
                     if (notification.status !== 'READ') {
-                        return refreshUser(notification, true);
+                        return refreshUser(notification);
                     }
                 }
             },
@@ -30,7 +30,7 @@
                 icon: "clear",
                 action: function (properties, notification, event) {
                     if (notification.status !== 'READ') {
-                        return refreshUser(notification, true);
+                        return refreshUser(notification);
                     }
                 }
             },

@@ -263,9 +263,10 @@ class Institution(ndb.Model):
             child.put()
     
     def set_admin(self, user_key):
-        self.admin = user_key
-        self.email = user_key.get().email[0]
-        self.put()
+        if self.has_member(user_key):
+            self.admin = user_key
+            self.email = user_key.get().email[0]
+            self.put()
 
     @ndb.transactional(xg=True)
     def remove_institution_from_users(self, remove_hierarchy):

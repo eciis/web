@@ -40,6 +40,7 @@ class UserHandlerTest(TestBaseHandler):
         cls.institution.add_member(cls.other_user)
         cls.institution.change_state('active')
         # update user
+        cls.user.institutions.append(cls.institution.key)
         cls.user.add_institution_admin(cls.institution.key)
         # update other_user
         cls.other_user.add_institution(cls.institution.key)

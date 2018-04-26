@@ -347,6 +347,12 @@ class Post(PolyModel):
         if user.key in self.subscribers and self.author != user.key:
             self.subscribers.remove(user.key)
 
+    def create_notification_message(self):
+        """ Create message that will be use in notification. 
+        """
+        pass
+
+
     @staticmethod
     def is_hidden(post):
         """Check if the post is deleted and has no activity."""

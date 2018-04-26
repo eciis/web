@@ -22,7 +22,7 @@
                 icon: "clear",
                 action: function (properties, notification, event) {
                     if (notification.status !== 'READ') {
-                        return refreshUser(notification, true);
+                        return refreshUser(notification);
                     }
                 }
             },
@@ -30,7 +30,7 @@
                 icon: "clear",
                 action: function (properties, notification, event) {
                     if (notification.status !== 'READ') {
-                        return refreshUser(notification, true);
+                        return refreshUser(notification);
                     }
                 }
             },
@@ -276,9 +276,7 @@
             $state.go('app.user.notifications');
         }
 
-        function refreshUser(notification, change_institution=false) {
-            if (change_institution)
-                notificationCtrl.user.goToDifferentInstitution(notification.entity.key, notification.entity.remove_hierarchy);
+        function refreshUser(notification) {
             UserService.load().then(function success(response) {
                 notificationCtrl.user.institutions = response.institutions;
                 notificationCtrl.user.follows = response.follows;

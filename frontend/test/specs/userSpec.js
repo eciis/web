@@ -289,46 +289,6 @@
             });
         });
 
-        describe('goToDifferentInstitution', function () {
-          it('should change current institution', function () {
-            var user = new User({
-              institutions: [inst, other_inst],
-              current_institution: inst
-            });
-            
-            expect(user.current_institution).toBe(inst);
-
-            user.goToDifferentInstitution(inst.key);
-
-            expect(user.current_institution).toBe(other_inst);
-          });
-
-          it('should not change the current institution', function() {
-            var user = new User({
-              institutions: [inst],
-              current_institution: inst
-            });
-
-            expect(user.current_institution).toBe(inst);
-
-            user.goToDifferentInstitution(inst.key);
-
-            expect(user.current_institution).toBe(inst);
-          });
-
-          it('should go to a non child institution', function() {
-            var test_inst = {name: 'TEST'};
-            var user = new User({
-              institutions: [inst, other_inst, test_inst],
-              current_institution: inst
-            });
-
-            user.goToDifferentInstitution(inst.key, "true");
-
-            expect(user.current_institution).toBe(test_inst);
-          });
-        });
-
         describe('addPermissions', function () {
           it('should add the permissions', function () {
             var user = new User({permissions: {}});

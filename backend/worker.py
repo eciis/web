@@ -202,23 +202,23 @@ class PostNotificationHandler(BaseHandler):
     def post(self):
         """Handle post requests."""
         post_author_key = self.request.get('receiver_key')
-        sender_key = self.request.get('sender_key')
+        sender_url_key = self.request.get('sender_key')
         post_key = self.request.get('entity_key')
         entity_type = self.request.get('entity_type')
-        current_institution = ndb.Key(urlsafe=self.request.get('current_institution'))
+        current_institution_key = ndb.Key(urlsafe=self.request.get('current_institution'))
         post = ndb.Key(urlsafe=post_key).get()
+        message = post.create_notification_message(ndb.Key(urlsafe=sender_url_key), current_institution_key)
         subscribers =  [subscriber.urlsafe() for subscriber in post.subscribers]
 
-        user_is_author = post_author_key == sender_key
+        user_is_author = post_author_key == sender_url_key
         for subscriber in subscribers:
-            subscriber_is_sender = subscriber == sender_key
+            subscriber_is_sender = subscriber == sender_url_key
             if not (user_is_author and subscriber_is_sender) and not subscriber_is_sender:
                 send_message_notification(
-                    subscriber,
-                    sender_key,
-                    entity_type,
-                    post_key,
-                    current_institution
+                    receiver_key=subscriber,
+                    entity_type=entity_type,
+                    entity_key=post_key,
+                    message=message
                 )
 
 class EmailMembersHandler(BaseHandler):
@@ -259,9 +259,11 @@ class NotifyFollowersHandler(BaseHandler):
         sender_key = self.request.get('sender_key')
         entity_type = self.request.get('entity_type')
         entity_key = self.request.get('entity_key')
-        current_institution = ndb.Key(urlsafe=self.request.get('current_institution'))
+        current_institution_key = ndb.Key(urlsafe=self.request.get('current_institution'))
         entity = self.request.get('entity') if self.request.get('entity') else None
-        
+        obj =  ndb.Key(urlsafe=entity_key).get()
+        message = obj.create_notification_message(ndb.Key(urlsafe=sender_key), current_institution_key)
+
         inst_key = self.request.get('institution_key')
         institution = ndb.Key(urlsafe=inst_key).get()
 
@@ -270,11 +272,10 @@ class NotifyFollowersHandler(BaseHandler):
             is_active = follower.state == "active"
             if is_active and follower.key.urlsafe() != sender_key:
                 send_message_notification(
-                    follower.key.urlsafe(),
-                    sender_key,
-                    entity_type,
-                    entity_key or inst_key,
-                    current_institution,
+                    receiver_key=follower.key.urlsafe(),
+                    entity_type=entity_type,
+                    entity_key=entity_key or inst_key,
+                    message=message,
                     entity=entity
                 )
 

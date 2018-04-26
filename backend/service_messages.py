@@ -11,23 +11,33 @@ from google.appengine.api import taskqueue
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-def create_message(sender_key, current_institution):
-    """Create a message based on user current institution."""
-    sender = ndb.Key(urlsafe=sender_key).get()
+def create_message(sender_key, current_institution_key=None, receiver_institution_key=None, sender_institution_key=None):
+    """Create a message of notification.
+    
+        Keyword arguments:
+        sender_key -- the user key of who is sending the notification
+        current_institution_key -- the institution the user was logged in when the notification was sent
+        receiver_institution_key -- the institution that will receive the notification
+        sender_institution_key -- the institution that the user made the action.
+    """
+    sender = sender_key.get()
     name = sender.name if sender.name != "Unknown" else sender.email[0]
-    if current_institution and current_institution is not type(None):
-        institution_name = current_institution.get().name 
-    else:
-        institution_name = ""
+
     message = {
         'from': {
             'name': name.encode('utf8'),
             'photo_url': sender.photo_url,
-            'institution_name': institution_name
+            'institution_name': sender_institution_key and sender_institution_key.get().name
+        },
+        'to': {
+            'institution_name': receiver_institution_key and receiver_institution_key.get().name
+        },
+        'current_institution': {
+            'name': current_institution_key and current_institution_key.get().name
         }
     }
-    return json.dumps(message)
 
+    return json.dumps(message)
 
 def create_entity(entity_key):
     """Create a short entity with only key and name."""
@@ -55,19 +65,16 @@ def create_entity(entity_key):
     return json.dumps(entity)
 
 
-def send_message_notification(receiver_key, sender_key, entity_type, entity_key, current_institution=None, entity=None):
+def send_message_notification(receiver_key, entity_type, entity_key, message, entity=None):
     """Method of send notification.
 
     Keyword arguments:
     receiver_key -- key of user that will receive notification.
-    sender_key -- the user key of who is sending the notification
-    messagem -- message of notification.
+    message -- message of notification.
     entity_type -- type of notification.
     entity_key -- entity key of type invite.
-    current_institution -- the institution the user was logged in when the notification was sent
     entity -- this parameter is useful when it's necessary to send the full entity to the notification for consistency reasons in the frontend
     """
-    message = create_message(sender_key, current_institution)
     entity = entity or create_entity(entity_key)
     taskqueue.add(
         url='/api/queue/send-notification',

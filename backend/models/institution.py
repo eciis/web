@@ -6,6 +6,7 @@ from search_module.search_institution import SearchInstitution
 from models.address import Address
 from permissions import DEFAULT_ADMIN_PERMISSIONS
 from permissions import DEFAULT_SUPER_USER_PERMISSIONS
+from service_messages import create_message
 
 
 def get_actuation_area(data):
@@ -367,3 +368,13 @@ class Institution(ndb.Model):
                 permissions.update({permission: {institution_key: True}})
             
         return permissions
+
+    def create_notification_message(self, user_key, current_institution_key, receiver_institution_key=None):
+        """ Create message that will be used in notification. 
+        """
+        return create_message(
+            sender_key= user_key,
+            current_institution_key=current_institution_key,
+            receiver_institution_key=receiver_institution_key,
+            sender_institution_key=current_institution_key
+        )

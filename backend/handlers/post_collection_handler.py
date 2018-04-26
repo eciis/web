@@ -104,6 +104,5 @@ class PostCollectionHandler(BaseHandler):
                     post.key.urlsafe(),
                     user.current_institution
                 )
-
-
+        
         self.response.write(json.dumps(post.make(self.request.host)))

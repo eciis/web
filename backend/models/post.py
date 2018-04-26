@@ -7,6 +7,7 @@ from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from custom_exceptions.entityException import EntityException
 from models.event import Event
 from utils import Utils
+from service_messages import create_message
 
 import datetime
 
@@ -347,10 +348,14 @@ class Post(PolyModel):
         if user.key in self.subscribers and self.author != user.key:
             self.subscribers.remove(user.key)
 
-    def create_notification_message(self):
-        """ Create message that will be use in notification. 
+    def create_notification_message(self, user_key, current_institution_key):
+        """ Create message that will be used in notification. 
         """
-        pass
+        return create_message(
+            sender_key= user_key,
+            current_institution_key=current_institution_key,
+            sender_institution_key=current_institution_key
+        )
 
 
     @staticmethod

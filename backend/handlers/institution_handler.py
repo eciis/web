@@ -224,6 +224,7 @@ class InstitutionHandler(BaseHandler):
         notification_params = {
             "sender_key": user.key.urlsafe(),
             "entity_type": "DELETED_INSTITUTION",
+            "entity_key": institution_key,
             "institution_key": institution_key,
             "current_institution": user.current_institution.urlsafe(),
             "entity": json.dumps(notification_entity)

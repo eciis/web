@@ -349,7 +349,8 @@ class TransferAdminPermissionsHandler(BaseHandler):
 
     def add_permissions(self, user, institution):
         """
-        This method adds new permissions in user with the permissions passed in parameter.
+        This method adds to user the permissions retrieved from the institution 
+        hierarchy, started at the institution passed as parameter.
 
         Arguments:
         user -- user to add permissions
@@ -366,8 +367,8 @@ class TransferAdminPermissionsHandler(BaseHandler):
     
     def remove_permissions(self, user, institution):
         """    
-        This method removes the permissions of the user according to the permissions 
-        dictionary passed as parameter.
+        This method removes from user the permissions retrieved from the institution 
+        hierarchy, started at the institution passed as parameter.
         
         Arguments:
         user -- User to remove permissions

@@ -327,7 +327,7 @@ class Institution(ndb.Model):
         to the child hierarchy.
 
         Arguments:
-        get_all (Optional)-- If false, get all permissions from institutions 
+        get_all (Optional)-- If true, get all permissions from institutions 
         admin_key (Optional) -- admin that requested to unlink the institutions
         hierarchically above the first child with the same admin
         permissions (Optional) -- Dict of previous permissions added for add more permissons. 

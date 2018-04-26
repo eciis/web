@@ -22,7 +22,7 @@
                 icon: "clear",
                 action: function (properties, notification, event) {
                     if (notification.status !== 'READ') {
-                        return refreshUserInstitutions(notification);
+                        return refreshUser(notification, true);
                     }
                 }
             },
@@ -30,7 +30,7 @@
                 icon: "clear",
                 action: function (properties, notification, event) {
                     if (notification.status !== 'READ') {
-                        return refreshUserInstitutions(notification);
+                        return refreshUser(notification, true);
                     }
                 }
             },
@@ -109,6 +109,11 @@
             },
             "ACCEPT_INSTITUTION_LINK": {
                 icon: "account_balance",
+                action: function (properties, notification, event) {
+                    if (notification.status !== 'READ') {
+                        return refreshUser(notification);
+                    }
+                }
             },
             "ACCEPTED_LINK": {
                 icon: "link"
@@ -271,11 +276,12 @@
             $state.go('app.user.notifications');
         }
 
-        function refreshUserInstitutions (notification) {
+        function refreshUser(notification) {
             UserService.load().then(function success(response) {
                 notificationCtrl.user.institutions = response.institutions;
                 notificationCtrl.user.follows = response.follows;
                 notificationCtrl.user.institution_profiles = response.institution_profiles;
+                notificationCtrl.user.permissions = response.permissions;
                 AuthService.save();
             });
         }

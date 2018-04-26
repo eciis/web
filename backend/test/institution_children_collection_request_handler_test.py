@@ -84,6 +84,8 @@ class InstitutionChildrenRequestCollectionHandlerTest(TestBaseHandler):
         """Test post with wrong institution."""
         admin = mocks.create_user(ADMIN['email'])
         institution = mocks.create_institution()
+        institution.add_member(admin)
+        admin.add_institution(institution.key)
         admin.add_institution_admin(institution.key)
         admin.add_institution(institution.key)
         institution.set_admin(admin.key)
@@ -93,6 +95,8 @@ class InstitutionChildrenRequestCollectionHandlerTest(TestBaseHandler):
         institution.put()
         inst_requested = mocks.create_institution()
         admin_requested = mocks.create_user(USER['email'])
+        inst_requested.add_member(admin_requested)
+        admin.add_institution(inst_requested.key)
         admin.add_institution_admin(inst_requested.key)
         admin.add_institution(inst_requested.key)
         admin_requested.put()

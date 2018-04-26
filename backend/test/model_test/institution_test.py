@@ -26,6 +26,7 @@ class InstitutionTest(TestBase):
         cls.admin = mocks.create_user()
         cls.user = mocks.create_user()
         cls.institution = mocks.create_institution()
+        cls.institution.add_member(cls.admin)
         cls.institution.set_admin(cls.admin.key)
 
     def tearDown(cls):
@@ -64,7 +65,7 @@ class InstitutionTest(TestBase):
         # case in which the user is a member
         self.institution.add_member(self.user)
         self.institution.follow(self.user.key)
-        self.assertEquals(self.institution.members, [self.user.key],
+        self.assertEquals(self.institution.members, [self.user.key,  self.admin.key],
             "Institution members should have user key"
         )
         self.assertEquals(self.institution.followers, [self.user.key],
@@ -99,8 +100,9 @@ class InstitutionTest(TestBase):
 
         def generate_child_to_parent(parent, child_admin=None):
             # create child and parent invite
-            admin = child_admin if child_admin else mocks.create_user()
+            admin = mocks.create_user() if child_admin is None else child_admin
             child = mocks.create_institution()
+            child.add_member(admin)
             child.set_admin(admin.key)
             admin.add_permissions(DEFAULT_ADMIN_PERMISSIONS, child.key.urlsafe())
             data = {
@@ -112,6 +114,7 @@ class InstitutionTest(TestBase):
             parent_invite = RequestInstitutionParent.create(data)
             # link child_a to institution
             Institution.create_parent_connection(parent, parent_invite)
+            child.put()
             return child
 
         # Case 1: Get all permission and the admin has just one institution
@@ -128,6 +131,7 @@ class InstitutionTest(TestBase):
         # Institution(admin) -> child_a(other_admin) -> x
         child_a = generate_child_to_parent(self.institution)
         self.institution = self.institution.key.get()
+        expected_permissions = generate_permissions(self.institution.key.urlsafe(), {})
         expected_permissions = generate_permissions(child_a.key.urlsafe(), expected_permissions)
         actual_permissions = self.institution.get_hierarchy_admin_permissions()
         # verifies inst admin also have permissions to child_a
@@ -139,8 +143,11 @@ class InstitutionTest(TestBase):
         # one child that he is not admin  
         # Institution(admin) -> child_a(other_admin) -> child_b(admin) -> child_c(other_admin) -> x
         child_b = generate_child_to_parent(child_a, self.admin)
+        import pdb
         child_c = generate_child_to_parent(child_b, child_a.admin.get())
         self.institution = self.institution.key.get()
+        expected_permissions = generate_permissions(self.institution.key.urlsafe(), {})
+        expected_permissions = generate_permissions(child_a.key.urlsafe(), expected_permissions)
         expected_permissions = generate_permissions(child_b.key.urlsafe(), expected_permissions)
         expected_permissions = generate_permissions(child_c.key.urlsafe(), expected_permissions)
         actual_permissions = self.institution.get_hierarchy_admin_permissions()
@@ -149,6 +156,7 @@ class InstitutionTest(TestBase):
             "The admin does not have the expected permissions"
         )    
 
+        # pdb.set_trace()
         # Case 4: Get all the hierarchy permissions, except the ones from the part of the hierarchy
         # where the highest child admin is the same as the institution admin
         # Institution(admin) -> child_a(other_admin) -> child_b(admin) -> child_c(other_admin) -> x
@@ -162,15 +170,3 @@ class InstitutionTest(TestBase):
         self.assertEquals(actual_permissions, expected_permissions,
             "The admin does not have the expected permissions"
         )
-
-        
-
-
-
-        
-
-
-
-
-        
-        

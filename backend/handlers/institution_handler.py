@@ -17,7 +17,7 @@ from models.institution import Institution
 from util.json_patch import JsonPatch
 from service_entities import enqueue_task
 
-from handlers.base_handler import BaseHandler
+from . import BaseHandler
 
 __all__ = ['InstitutionHandler']
 

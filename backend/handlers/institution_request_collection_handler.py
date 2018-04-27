@@ -6,7 +6,7 @@ from utils import login_required
 from utils import json_response
 from utils import Utils
 from custom_exceptions.entityException import EntityException
-from handlers.base_handler import BaseHandler
+from . import BaseHandler
 from models.institution import Institution
 from models.institution import Address
 from models.factory_invites import InviteFactory

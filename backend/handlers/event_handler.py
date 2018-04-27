@@ -9,7 +9,7 @@ from utils import login_required
 from utils import NotAuthorizedException
 from utils import json_response
 from util.json_patch import JsonPatch
-from handlers.base_handler import BaseHandler
+from . import BaseHandler
 
 __all__ = ['EventHandler']
 

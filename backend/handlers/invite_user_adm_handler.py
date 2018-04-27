@@ -8,7 +8,7 @@ from utils import json_response
 from utils import Utils
 from utils import make_user
 from service_entities import enqueue_task
-from handlers.base_handler import BaseHandler
+from . import BaseHandler
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
 __all__ = ['InviteUserAdmHandler']

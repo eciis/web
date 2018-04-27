@@ -11,7 +11,7 @@ from custom_exceptions.queryException import QueryException
 
 from models.institution import Institution
 
-from handlers.base_handler import BaseHandler
+from . import BaseHandler
 
 __all__ = ['InstitutionCollectionHandler']
 

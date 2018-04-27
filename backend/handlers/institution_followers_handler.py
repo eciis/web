@@ -12,7 +12,7 @@ from models.institution import Institution
 
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
-from handlers.base_handler import BaseHandler
+from . import BaseHandler
 
 __all__ = ['InstitutionFollowersHandler']
 

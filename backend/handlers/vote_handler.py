@@ -4,7 +4,7 @@
 from google.appengine.ext import ndb
 from utils import login_required
 from utils import json_response
-from handlers.base_handler import BaseHandler
+from . import BaseHandler
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from utils import Utils
 import json

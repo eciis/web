@@ -2,7 +2,7 @@
 """Institution Events Handler."""
 
 
-from handlers.base_handler import BaseHandler
+from . import BaseHandler
 from google.appengine.ext import ndb
 
 import json

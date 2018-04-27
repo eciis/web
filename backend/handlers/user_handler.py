@@ -13,7 +13,7 @@ from models.user import InstitutionProfile
 
 from util.json_patch import JsonPatch
 
-from handlers.base_handler import BaseHandler
+from . import BaseHandler
 
 from google.appengine.ext import ndb
 

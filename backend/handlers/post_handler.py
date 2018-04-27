@@ -13,7 +13,7 @@ from models.survey_post import SurveyPost
 from models.post import Like
 from service_messages import send_message_notification
 
-from handlers.base_handler import BaseHandler
+from . import BaseHandler
 
 __all__ = ['PostHandler']
 

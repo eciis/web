@@ -349,7 +349,11 @@ class Post(PolyModel):
             self.subscribers.remove(user.key)
 
     def create_notification_message(self, user_key, current_institution_key):
-        """ Create message that will be used in notification. 
+        """ Create message that will be used in notification.
+            user_key -- The user key that made the action.
+            current_institution -- The institution that user was in the moment that made the action.
+            sender_institution_key -- The institution that should be made the action, in the posts 
+                notifications the sender institution is the same that current institution. 
         """
         return create_message(
             sender_key= user_key,

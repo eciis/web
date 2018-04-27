@@ -249,7 +249,7 @@ class PostNotificationHandler(BaseHandler):
         entity_type = self.request.get('entity_type')
         current_institution_key = ndb.Key(urlsafe=self.request.get('current_institution'))
         post = ndb.Key(urlsafe=post_key).get()
-        message = post.create_notification_message(ndb.Key(urlsafe=sender_url_key), current_institution_key)
+        notification_message = post.create_notification_message(ndb.Key(urlsafe=sender_url_key), current_institution_key)
         subscribers =  [subscriber.urlsafe() for subscriber in post.subscribers]
 
         user_is_author = post_author_key == sender_url_key
@@ -260,7 +260,7 @@ class PostNotificationHandler(BaseHandler):
                     receiver_key=subscriber,
                     entity_type=entity_type,
                     entity_key=post_key,
-                    message=message
+                    message=notification_message
                 )
 
 class EmailMembersHandler(BaseHandler):
@@ -307,7 +307,7 @@ class NotifyFollowersHandler(BaseHandler):
         institution = ndb.Key(urlsafe=inst_key).get()
         
         obj =  ndb.Key(urlsafe=entity_key).get() if(entity_key) else institution
-        message = obj.create_notification_message(ndb.Key(urlsafe=sender_key), current_institution_key)
+        notification_message = obj.create_notification_message(ndb.Key(urlsafe=sender_key), current_institution_key)
 
         for follower_key in institution.followers:
             follower = follower_key.get()
@@ -317,7 +317,7 @@ class NotifyFollowersHandler(BaseHandler):
                     receiver_key=follower.key.urlsafe(),
                     entity_type=entity_type,
                     entity_key=entity_key or inst_key,
-                    message=message,
+                    message=notification_message,
                     entity=entity
                 )
 

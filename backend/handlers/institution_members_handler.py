@@ -38,7 +38,6 @@ class InstitutionMembersHandler(BaseHandler):
                               url_string)
 
         institution = institution_key.get()
-
         data = self.request.get('removeMember')
         member = ndb.Key(urlsafe=data)
         member = member.get()
@@ -46,13 +45,12 @@ class InstitutionMembersHandler(BaseHandler):
         institution.remove_member(member)
 
         if member.state != 'inactive':
-            entity_type = 'DELETE_MEMBER'
+            notification_message = institution.create_notification_message(user.key, user.current_institution)
             send_message_notification(
-                member.key.urlsafe(),
-                user.key.urlsafe(),
-                entity_type,
-                institution.key.urlsafe(),
-                user.current_institution
+                receiver_key=member.key.urlsafe(),
+                entity_type='DELETE_MEMBER',
+                entity_key=institution.key.urlsafe(),
+                message=notification_message
             )
 
         subject = "Remoção de vínculo"

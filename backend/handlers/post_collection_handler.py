@@ -97,12 +97,12 @@ class PostCollectionHandler(BaseHandler):
         elif post.shared_event:
             shared_event = post.shared_event.get()
             if shared_event.author_key != user.key:
-                message = post.create_notification_message(user.key, user.current_institution)
+                notification_message = post.create_notification_message(user.key, user.current_institution)
                 send_message_notification(
                     receiver_key=shared_event.author_key.urlsafe(),
                     entity_type='SHARED_EVENT',
                     entity_key=post.key.urlsafe(),
-                    message=message
+                    message=notification_message
                 )
         
         self.response.write(json.dumps(post.make(self.request.host)))

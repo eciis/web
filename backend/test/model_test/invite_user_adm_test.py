@@ -30,8 +30,9 @@ class InviteUserAdmTest(TestBase):
         admin = mocks.create_user()
         new_admin = mocks.create_user()
 
-        institution.set_admin(admin.key)
         institution.add_member(admin)
+        admin.institutions.append(institution.key)
+        institution.set_admin(admin.key)
         institution.add_member(new_admin)
         admin.add_institution_admin(institution.key)
 
@@ -71,8 +72,9 @@ class InviteUserAdmTest(TestBase):
         admin = mocks.create_user()
         new_admin = mocks.create_user()
 
-        institution.set_admin(admin.key)
         institution.add_member(admin)
+        admin.institutions.append(institution.key)
+        institution.set_admin(admin.key)
         admin.add_institution_admin(institution.key)
 
         institution.put()
@@ -104,8 +106,9 @@ class InviteUserAdmTest(TestBase):
         admin = mocks.create_user()
         new_admin = mocks.create_user()
 
-        institution.set_admin(admin.key)
         institution.add_member(admin)
+        admin.institutions.append(institution.key)
+        institution.set_admin(admin.key)
         institution.add_member(new_admin)
         admin.add_institution_admin(institution.key)
 
@@ -141,8 +144,9 @@ class InviteUserAdmTest(TestBase):
         admin = mocks.create_user()
         new_admin = mocks.create_user()
 
-        institution.set_admin(admin.key)
         institution.add_member(admin)
+        admin.institutions.append(institution.key)
+        institution.set_admin(admin.key)
         institution.add_member(new_admin)
         admin.add_institution_admin(institution.key)
 
@@ -174,8 +178,9 @@ class InviteUserAdmTest(TestBase):
         institution = mocks.create_institution()
         admin = mocks.create_user()
 
-        institution.set_admin(admin.key)
         institution.add_member(admin)
+        admin.institutions.append(institution.key)
+        institution.set_admin(admin.key)
         admin.add_institution_admin(institution.key)
 
         institution.put()
@@ -208,8 +213,9 @@ class InviteUserAdmTest(TestBase):
         admin = mocks.create_user()
         new_admin = mocks.create_user()
 
-        institution.set_admin(admin.key)
         institution.add_member(admin)
+        admin.institutions.append(institution.key)
+        institution.set_admin(admin.key)
         institution.add_member(new_admin)
         admin.add_institution_admin(institution.key)
 

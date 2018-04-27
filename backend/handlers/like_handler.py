@@ -58,12 +58,12 @@ class LikeHandler(BaseHandler):
             user_is_the_author = comment['author_key'] == user.key.urlsafe()
             if not user_is_the_author:
                 receiver_key = comment['author_key']
+                message = post.create_notification_message(user.key, user.current_institution)
                 send_message_notification(
-                    receiver_key,
-                    user.key.urlsafe(), 
-                    entity_type, 
-                    post_key,
-                    user.current_institution
+                    receiver_key=receiver_key,
+                    entity_type=entity_type, 
+                    entity_key=post_key,
+                    message=message
                 ) 
         else: 
             post = post.like(user.key)

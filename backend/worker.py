@@ -303,11 +303,11 @@ class NotifyFollowersHandler(BaseHandler):
         entity_key = self.request.get('entity_key')
         current_institution_key = ndb.Key(urlsafe=self.request.get('current_institution'))
         entity = self.request.get('entity') if self.request.get('entity') else None
-        obj =  ndb.Key(urlsafe=entity_key).get()
-        message = obj.create_notification_message(ndb.Key(urlsafe=sender_key), current_institution_key)
-
         inst_key = self.request.get('institution_key')
         institution = ndb.Key(urlsafe=inst_key).get()
+        
+        obj =  ndb.Key(urlsafe=entity_key).get() if(entity_key) else institution
+        message = obj.create_notification_message(ndb.Key(urlsafe=sender_key), current_institution_key)
 
         for follower_key in institution.followers:
             follower = follower_key.get()

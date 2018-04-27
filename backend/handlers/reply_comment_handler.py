@@ -55,7 +55,7 @@ class ReplyCommentHandler(BaseHandler):
         reply = Comment.create(reply_data, user)
         post.reply_comment(reply, comment_id)
 
-        message_notification = post.create_notification_message(user.key, user.current_institution)
+        notification_message = post.create_notification_message(user.key, user.current_institution)
         entity_type = 'COMMENT'
 
         if (post.author != user.key):
@@ -63,7 +63,7 @@ class ReplyCommentHandler(BaseHandler):
                 receiver_key=post.author.urlsafe(),
                 entity_type=entity_type,
                 entity_key=post.key.urlsafe(),
-                message=message_notification
+                message=notification_message
             )
 
         comment = post.get_comment(comment_id)
@@ -74,7 +74,7 @@ class ReplyCommentHandler(BaseHandler):
                 receiver_key=comment.get('author_key'),
                 entity_type=entity_type,
                 entity_key=post.key.urlsafe(),
-                message=message_notification
+                message=notification_message
             )
 
         self.response.write(json.dumps(Utils.toJson(reply)))

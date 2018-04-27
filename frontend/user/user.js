@@ -54,6 +54,10 @@ User.prototype.isAdmin = function isAdmin(keyInstitution) {
     return managed_institution;
 };
 
+User.prototype.isAdminOfCurrentInst = function isAdminOfCurrentInst() {
+    return this.institutions_admin.map(getKey).includes(this.current_institution.key);
+};
+
 User.prototype.isMember = function isMember(institutionKey){
     return _.includes(_.map(this.institutions, getKeyObj), institutionKey);
 };

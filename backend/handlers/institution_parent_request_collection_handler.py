@@ -13,6 +13,8 @@ from models.request_institution_parent import RequestInstitutionParent
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
 
+__all__ = ['InstitutionParentRequestCollectionHandler']
+
 class InstitutionParentRequestCollectionHandler(BaseHandler):
     """Institution Parent Collectcion Request Handler."""
 

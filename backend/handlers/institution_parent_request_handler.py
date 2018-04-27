@@ -8,6 +8,7 @@ from handlers.base_handler import BaseHandler
 from service_entities import enqueue_task
 from google.appengine.ext import ndb
 
+__all__ = ['InstitutionParentRequestHandler']
 
 class InstitutionParentRequestHandler(BaseHandler):
     """Institution Parent Request Handler."""

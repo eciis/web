@@ -11,6 +11,7 @@ from service_entities import enqueue_task
 from handlers.base_handler import BaseHandler
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
+__all__ = ['InviteUserAdmHandler']
 
 class InviteUserAdmHandler(BaseHandler):
     """Invite User Admin Handler."""

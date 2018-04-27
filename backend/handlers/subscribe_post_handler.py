@@ -10,6 +10,7 @@ from handlers.base_handler import BaseHandler
 
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
+__all__ = ['SubscribePostHandler']
 
 class SubscribePostHandler(BaseHandler):
     """Subscribe Post Handler."""

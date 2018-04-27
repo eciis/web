@@ -13,6 +13,7 @@ from models.institution import Institution
 
 from handlers.base_handler import BaseHandler
 
+__all__ = ['InstitutionCollectionHandler']
 
 class InstitutionCollectionHandler(BaseHandler):
     """Institution Collection Handler."""

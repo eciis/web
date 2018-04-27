@@ -3,7 +3,7 @@
 
 import webapp2
 
-from handlers.institution_handler import InstitutionHandler
+from handlers import InstitutionHandler
 from handlers.institution_members_handler import InstitutionMembersHandler
 from handlers.institution_followers_handler import InstitutionFollowersHandler
 from handlers.institution_collection_handler import InstitutionCollectionHandler
@@ -29,7 +29,6 @@ from handlers.invite_handler import InviteHandler
 from handlers.invite_institution_handler import InviteInstitutionHandler
 from handlers.event_handler import EventHandler
 from handlers.event_collection_handler import EventCollectionHandler
-from handlers.redirect_handler import AppRedirectHandler
 from handlers.user_request_collection_handler import UserRequestCollectionHandler
 from handlers.institution_parent_request_collection_handler import InstitutionParentRequestCollectionHandler
 from handlers.institution_children_request_collection_handler import InstitutionChildrenRequestCollectionHandler

@@ -10,6 +10,8 @@ from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from handlers.base_handler import BaseHandler
 from models.factory_invites import InviteFactory
 
+__all__ = ['InviteInstitutionHandler']
+
 class InviteInstitutionHandler(BaseHandler):
     """Invite Institution Handler."""
 

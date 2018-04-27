@@ -9,6 +9,7 @@ from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from handlers.base_handler import BaseHandler
 from google.appengine.ext import ndb
 
+__all__ = ['ResendInviteHandler']
 
 class ResendInviteHandler(BaseHandler):
     """Resend Invite Handler."""

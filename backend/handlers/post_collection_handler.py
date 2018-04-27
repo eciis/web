@@ -15,6 +15,7 @@ from service_entities import enqueue_task
 
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
+__all__ = ['PostCollectionHandler']
 
 def get_permission(data):
         """Return permission according to the type of data."""

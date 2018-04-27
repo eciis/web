@@ -11,6 +11,7 @@ from utils import json_response
 
 from handlers.base_handler import BaseHandler
 
+__all__ = ['GetKeyHandler']
 
 class GetKeyHandler(BaseHandler):
     """Handle generic key requests."""

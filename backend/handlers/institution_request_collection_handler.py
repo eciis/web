@@ -12,6 +12,7 @@ from models.institution import Address
 from models.factory_invites import InviteFactory
 from models.request_institution import RequestInstitution
 
+__all__ = ['InstitutionRequestCollectionHandler']
 
 def createInstitution(user, data):
     """Cretate a new institution stub."""

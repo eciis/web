@@ -15,6 +15,7 @@ from custom_exceptions.entityException import EntityException
 from handlers.base_handler import BaseHandler
 from models.post import Comment
 
+__all__ = ['ReplyCommentHandler']
 
 def check_permission(user, institution, post, comment):
     """Check the user permission to delete comment."""

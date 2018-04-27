@@ -13,6 +13,7 @@ from custom_exceptions.queryException import QueryException
 from handlers.base_handler import BaseHandler
 from models.post import Post
 
+__all__ = ['UserTimelineHandler']
 
 class UserTimelineHandler(BaseHandler):
     """Get posts of all institutions that the user follow."""

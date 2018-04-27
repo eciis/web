@@ -17,6 +17,7 @@ import json
 
 from handlers.base_handler import BaseHandler
 
+__all__ = ['InstitutionHierarchyHandler']
 
 class InstitutionHierarchyHandler(BaseHandler):
     """Institution Hierarchy Handler."""

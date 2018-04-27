@@ -5,6 +5,7 @@ from google.appengine.api import users
 
 from handlers.base_handler import BaseHandler
 
+__all__ = ['LoginHandler', 'LogoutHandler']
 
 class LoginHandler(BaseHandler):
     """Login Handler."""

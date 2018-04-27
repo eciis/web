@@ -11,6 +11,7 @@ from utils import json_response
 from util.json_patch import JsonPatch
 from handlers.base_handler import BaseHandler
 
+__all__ = ['EventHandler']
 
 class EventHandler(BaseHandler):
     """Event Handler."""

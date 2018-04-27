@@ -12,6 +12,7 @@ from send_email_hierarchy.remove_member_email_sender import RemoveMemberEmailSen
 
 from handlers.base_handler import BaseHandler
 
+__all__ = ['InstitutionMembersHandler']
 
 class InstitutionMembersHandler(BaseHandler):
     """Get members of specific institution."""

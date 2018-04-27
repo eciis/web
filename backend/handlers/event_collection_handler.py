@@ -15,6 +15,7 @@ from utils import query_paginated
 from utils import to_int
 from custom_exceptions.queryException import QueryException
 
+__all__ = ['EventCollectionHandler']
 
 class EventCollectionHandler(BaseHandler):
     """Event  Collection Handler."""

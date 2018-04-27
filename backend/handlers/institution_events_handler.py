@@ -14,6 +14,7 @@ from utils import query_paginated
 from utils import to_int
 from custom_exceptions.queryException import QueryException
 
+__all__ = ['InstitutionEventsHandler']
 
 class InstitutionEventsHandler(BaseHandler):
     """Institution Events Handler."""

@@ -13,6 +13,7 @@ from service_entities import enqueue_task
 from service_messages import send_message_notification
 from utils import Utils
 
+__all__ = ['LikeHandler']
 
 class LikeException(Exception):
     """Like Exception."""

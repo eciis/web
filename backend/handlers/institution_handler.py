@@ -19,6 +19,7 @@ from service_entities import enqueue_task
 
 from handlers.base_handler import BaseHandler
 
+__all__ = ['InstitutionHandler']
 
 def getSentInvitations(institution_key):
     """Query that return list of invites for this user."""

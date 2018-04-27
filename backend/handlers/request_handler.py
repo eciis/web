@@ -10,6 +10,7 @@ from handlers.base_handler import BaseHandler
 from custom_exceptions.entityException import EntityException
 from service_messages import send_message_notification
 
+__all__ = ['RequestHandler']
 
 def makeUser(user, request):
     """Method of make user."""

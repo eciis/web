@@ -15,7 +15,7 @@ from utils import Utils
 from utils import make_user
 from util.json_patch import JsonPatch
 
-
+__all__ = ['InviteHandler']
 
 def define_entity(dictionary):
     """Method of return instance of InstitutionProfile for using in jsonPacth."""

@@ -15,6 +15,7 @@ from service_messages import send_message_notification
 
 from handlers.base_handler import BaseHandler
 
+__all__ = ['PostHandler']
 
 def is_post_author(method):
     """Check if the user is the author of the post."""

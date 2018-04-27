@@ -12,6 +12,7 @@ from handlers.base_handler import BaseHandler
 from models.factory_invites import InviteFactory
 from models.request_institution_children import RequestInstitutionChildren
 
+__all__ = ['InstitutionChildrenRequestCollectionHandler']
 
 class InstitutionChildrenRequestCollectionHandler(BaseHandler):
     """Request Handler."""

@@ -13,6 +13,7 @@ from models.factory_invites import InviteFactory
 from service_entities import enqueue_task
 from google.appengine.ext import ndb
 
+__all__ = ['InviteCollectionHandler']
 
 class InviteCollectionHandler(BaseHandler):
     """Invite Collection Handler."""

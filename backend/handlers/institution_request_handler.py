@@ -6,11 +6,12 @@ import permissions
 
 from utils import login_required
 from utils import json_response
-from handlers.base_handler import BaseHandler
+from . import BaseHandler
 from google.appengine.ext import ndb
 from utils import Utils
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
+__all__ = ['InstitutionRequestHandler']
 
 def check_permission(user, operation, institution_key):
     user.check_permission(

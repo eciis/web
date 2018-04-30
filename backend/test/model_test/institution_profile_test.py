@@ -2,7 +2,7 @@
 
 from ..test_base import TestBase
 
-from models.user import InstitutionProfile
+from models import InstitutionProfile
 from .. import mocks
 
 class InstitutionProfileTest(TestBase):

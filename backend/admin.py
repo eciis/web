@@ -9,8 +9,8 @@ import permissions
 
 from utils import Utils
 
-from models.user import User
-from models.user import InstitutionProfile
+from models import User
+from models import InstitutionProfile
 from models.institution import Institution
 from models.institution import Address
 from models.post import Post

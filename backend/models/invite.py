@@ -5,7 +5,7 @@ from google.appengine.ext.ndb.polymodel import PolyModel
 from service_messages import send_message_notification
 from send_email_hierarchy.email_sender import EmailSender
 from util.strings_pt_br import get_string
-from models.user import User       
+from models import User       
 
 
 class Invite(PolyModel):

@@ -4,7 +4,7 @@ from ..test_base import TestBase
 
 from models.invite import Invite
 from models.institution import Institution
-from models.user import User
+from models import User
 
 
 class InviteTest(TestBase):

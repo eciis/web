@@ -7,7 +7,7 @@ from models.request_institution_children import RequestInstitutionChildren
 from models.institution import Institution
 from models.institution import Address
 from custom_exceptions.fieldException import FieldException
-from models.user import User
+from models import User
 
 
 class RequestInstitutionParentTest(TestBase):

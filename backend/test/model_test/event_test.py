@@ -3,7 +3,7 @@
 
 from ..test_base import TestBase
 from models.institution import Institution
-from models.user import User
+from models import User
 from models.event import Event
 from .. import mocks
 

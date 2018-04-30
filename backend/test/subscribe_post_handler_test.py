@@ -3,7 +3,7 @@
 
 from test_base_handler import TestBaseHandler
 from models.post import Post
-from models.user import User
+from models import User
 from models.institution import Institution
 from handlers.subscribe_post_handler import SubscribePostHandler
 from mock import patch

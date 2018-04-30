@@ -2,7 +2,7 @@
 """Institution Events handler test."""
 
 from test_base_handler import TestBaseHandler
-from models.user import User
+from models import User
 from models.institution import Institution
 from models.event import Event
 from handlers.institution_events_handler import InstitutionEventsHandler

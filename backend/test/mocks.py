@@ -3,7 +3,7 @@
 import datetime
 import sys
 
-from models.user import User
+from models import User
 from models.institution import Institution
 from models.institution import Address
 from models.post import Post

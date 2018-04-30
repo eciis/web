@@ -3,10 +3,9 @@ from search_module.search_user import SearchUser
 from google.appengine.ext import ndb
 from custom_exceptions.fieldException import FieldException
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
-
-
 import random
 
+__all__ = ['InstitutionProfile', 'User']
 
 def pick_color():
     colors = [

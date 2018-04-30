@@ -2,7 +2,7 @@
 from invite import Invite
 from models.institution import Institution
 from custom_exceptions.fieldException import FieldException
-from models.user import User
+from models import User
 from send_email_hierarchy.invite_institution_email_sender import InviteInstitutionEmailSender
 from util.strings_pt_br import get_string
 

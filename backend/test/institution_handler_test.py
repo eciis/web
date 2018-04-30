@@ -3,7 +3,7 @@
 import operator
 from test_base_handler import TestBaseHandler
 from models.invite_institution import InviteInstitution
-from models.user import User
+from models import User
 from models.institution import Institution
 from handlers.institution_handler import InstitutionHandler
 from worker import AddAdminPermissionsInInstitutionHierarchy

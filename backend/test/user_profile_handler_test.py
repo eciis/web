@@ -4,8 +4,8 @@
 from test_base_handler import TestBaseHandler
 from handlers.user_profile_handler import UserProfileHandler
 
-from models.user import User
-from models.user import InstitutionProfile
+from models import User
+from models import InstitutionProfile
 from models.institution import Institution
 
 import json

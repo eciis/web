@@ -2,7 +2,7 @@
 """Like Post handler test."""
 from test_base_handler import TestBaseHandler
 from models.survey_post import SurveyPost
-from models.user import User
+from models import User
 from models.institution import Institution
 from handlers.vote_handler import VoteHandler
 import datetime

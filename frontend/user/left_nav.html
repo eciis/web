@@ -80,7 +80,7 @@
                 </md-menu-content>
               </div>
   
-              <div class="row" ng-if="homeCtrl.user.isAdmin(homeCtrl.user.current_institution.key)">
+              <div class="row" ng-if="homeCtrl.user.isAdminOfCurrentInst()">
                 <span class="menu-section-title">INSTITUIÇÃO</span>
                 <md-divider style="margin-top: 10px"></md-divider>
                 <md-menu-content width="4" md-colors="{background: 'grey-100'}">

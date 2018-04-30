@@ -70,9 +70,9 @@ class InstitutionRequestHandler(BaseHandler):
         sender.create_and_add_profile(data_profile)
         sender.add_permissions(permissions.DEFAULT_ADMIN_PERMISSIONS, institution.key.urlsafe())
 
-        institution.admin = sender.key
-        institution.members.append(sender.key)
-        institution.followers.append(sender.key)
+        institution.follow(sender.key)
+        institution.add_member(sender)
+        institution.set_admin(sender.key)
         institution.put()
 
         host = self.request.host

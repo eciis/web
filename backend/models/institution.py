@@ -174,20 +174,18 @@ class Institution(ndb.Model):
 
     @ndb.transactional(xg=True)
     def createInstitutionWithStub(self, user, institution):
-        institution.admin = user.key
-        institution.members.append(user.key)
-        institution.followers.append(user.key)
-        institution.state = 'active'
+        institution.follow(user.key)
+        institution.add_member(user)
+        institution.set_admin(user.key)
+        institution.change_state('active')
         if (institution.photo_url is None):
             institution.photo_url = "app/images/institution.png"
-        institution.put()
+            institution.put()
 
         user.add_institution(institution.key)
-
-        user.institutions_admin.append(institution.key)
-        user.state = "active"
-        user.follows.append(institution.key)
-        user.put()
+        user.add_institution_admin(institution.key)
+        user.change_state("active")
+        user.follow(institution.key)
 
         return institution
 

@@ -142,10 +142,10 @@ class User(ndb.Model):
         user = query.get()
         return user
 
-    def follow(self, institution):
+    def follow(self, institution_key):
         """Add one institution in collection of follows."""
-        if institution not in self.follows:
-            self.follows.append(institution)
+        if institution_key not in self.follows:
+            self.follows.append(institution_key)
             self.put()
 
     def unfollow(self, institution):

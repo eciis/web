@@ -327,7 +327,7 @@ class AddAdminPermissionsInInstitutionHierarchy(BaseHandler):
         """Add admins' permissions, to the first institution and its children,
         to all admins, going up in the hierarchy."""
         institution = ndb.Key(urlsafe=institution_key).get()
-        admins = get_all_parent_admins(institution)
+        admins = get_all_parent_admins(institution, [])
             
         for permission in DEFAULT_ADMIN_PERMISSIONS:
             for admin in admins:

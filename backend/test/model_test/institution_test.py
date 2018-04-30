@@ -65,28 +65,16 @@ class InstitutionTest(TestBase):
         # case in which the user is a member
         self.institution.add_member(self.user)
         self.institution.follow(self.user.key)
-        self.assertEquals(self.institution.members, [self.user.key,  self.admin.key],
-            "Institution members should have user key"
+        self.assertTrue(self.user.key in self.institution.members,
+            "User should be an institution member"
         )
-        self.assertEquals(self.institution.followers, [self.user.key],
+        self.assertTrue(self.user.key in self.institution.followers,
             "Institution followers should have user key"
         )
         self.institution.unfollow(self.user.key)
-        self.assertEquals(self.institution.followers, [self.user.key],
+        self.assertTrue(self.user.key in self.institution.followers,
             "The user should not have been removed from followers"
         )
-    
-    def test_add_member(self):
-        pass
-
-    def test_remove_member(self):
-        pass
-
-    def test_add_post(self):
-        pass
-
-    def test_add_invite(self):
-        pass
 
     def test_get_hierarchy_admin_permissions(self):
         

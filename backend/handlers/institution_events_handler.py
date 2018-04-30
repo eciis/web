@@ -7,7 +7,7 @@ from google.appengine.ext import ndb
 
 import json
 from utils import Utils
-from models.event import Event
+from models import Event
 from utils import login_required
 from utils import json_response
 from utils import query_paginated

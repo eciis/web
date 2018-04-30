@@ -5,6 +5,7 @@ from google.appengine.ext import ndb
 from custom_exceptions.fieldException import FieldException
 from models import Address
 
+__all__ = ['Event']
 
 class Event(ndb.Model):
     """Model of a event."""

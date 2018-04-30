@@ -4,7 +4,7 @@
 from test_base_handler import TestBaseHandler
 from models import User
 from models import Institution
-from models.event import Event
+from models import Event
 from handlers.institution_events_handler import InstitutionEventsHandler
 from google.appengine.ext import ndb
 import json

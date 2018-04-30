@@ -8,7 +8,7 @@ from models import Institution
 from models import Address
 from models.post import Post
 from models.post import Comment
-from models.event import Event
+from models import Event
 from models.factory_invites import InviteFactory
 
 

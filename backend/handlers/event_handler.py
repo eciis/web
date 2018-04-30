@@ -3,7 +3,7 @@
 import json
 from google.appengine.ext import ndb
 
-from models.event import Event
+from models import Event
 from utils import Utils
 from utils import login_required
 from utils import NotAuthorizedException

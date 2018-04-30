@@ -366,3 +366,16 @@ class Institution(ndb.Model):
                 permissions.update({permission: {institution_key: True}})
             
         return permissions
+
+    """TODO: Test this method.
+    
+    Author: Raoni Smaneoto, 30/04/2018.
+    """
+    def verify_connection(self, institution_to_verify):
+        """This method checks if the link between self and institution_to_verify
+        is confirmed."""
+        #Means that self is institution_to_verify's parent
+        parent_link = institution_to_verify.parent_institution == self.key and institution_to_verify.key in self.children_institutions
+        #Means that institution_to_verify is self's parent
+        child_link = self.parent_institution == institution_to_verify.key and self.key in institution_to_verify.children_institutions
+        return child_link or parent_link

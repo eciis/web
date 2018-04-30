@@ -3,7 +3,7 @@ import datetime
 import json
 from google.appengine.ext import ndb
 from custom_exceptions.fieldException import FieldException
-from models.address import Address
+from models import Address
 
 
 class Event(ndb.Model):

@@ -4,8 +4,8 @@
 import json
 from test_base_handler import TestBaseHandler
 from models import User
-from models.institution import Institution
-from models.institution import Address
+from models import Institution
+from models import Address
 from models.request_institution import RequestInstitution
 from handlers.institution_request_handler import InstitutionRequestHandler
 import permissions

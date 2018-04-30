@@ -8,7 +8,7 @@ from utils import login_required
 from utils import Utils
 from utils import json_response
 
-from models.institution import Institution
+from models import Institution
 
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 

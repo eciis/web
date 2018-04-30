@@ -1,6 +1,6 @@
 """Invite institution model."""
 from invite import Invite
-from models.institution import Institution
+from models import Institution
 from custom_exceptions.fieldException import FieldException
 from models import User
 from send_email_hierarchy.invite_institution_email_sender import InviteInstitutionEmailSender

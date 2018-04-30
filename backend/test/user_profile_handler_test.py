@@ -6,7 +6,7 @@ from handlers.user_profile_handler import UserProfileHandler
 
 from models import User
 from models import InstitutionProfile
-from models.institution import Institution
+from models import Institution
 
 import json
 

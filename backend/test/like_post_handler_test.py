@@ -4,7 +4,7 @@ import json
 from test_base_handler import TestBaseHandler
 from models.post import Post
 from models import User
-from models.institution import Institution
+from models import Institution
 from handlers.like_handler import LikeHandler
 
 import mocks

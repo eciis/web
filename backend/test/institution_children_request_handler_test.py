@@ -6,8 +6,8 @@ import mocks
 
 from test_base_handler import TestBaseHandler
 from models import User
-from models.institution import Institution
-from models.institution import Address
+from models import Institution
+from models import Address
 from models.request_institution_children import RequestInstitutionChildren
 from handlers.institution_children_request_handler import InstitutionChildrenRequestHandler
 from worker import AddAdminPermissionsInInstitutionHierarchy

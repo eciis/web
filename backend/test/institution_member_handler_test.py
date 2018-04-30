@@ -5,7 +5,7 @@ import mocks
 
 from test_base_handler import TestBaseHandler
 from models import User
-from models.institution import Institution
+from models import Institution
 from handlers.institution_members_handler import InstitutionMembersHandler
 from mock import patch
 

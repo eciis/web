@@ -6,7 +6,7 @@ import datetime
 import mocks
 from test_base_handler import TestBaseHandler
 from models import User
-from models.institution import Institution
+from models import Institution
 from models.post import Post
 from models.event import Event
 from handlers.post_collection_handler import PostCollectionHandler

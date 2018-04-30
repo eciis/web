@@ -3,7 +3,7 @@
 
 from google.appengine.api import search
 from search_document import SearchDocument
-from models.address import Address
+from models import Address
 
 
 def institution_has_changes(fields, entity):

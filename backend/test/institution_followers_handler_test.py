@@ -3,7 +3,7 @@
 
 from test_base_handler import TestBaseHandler
 from models import User
-from models.institution import Institution
+from models import Institution
 from handlers.institution_followers_handler import InstitutionFollowersHandler
 from mock import patch
 from utils import Utils

@@ -11,8 +11,8 @@ from utils import Utils
 
 from models import User
 from models import InstitutionProfile
-from models.institution import Institution
-from models.institution import Address
+from models import Institution
+from models import Address
 from models.post import Post
 from models.post import Comment
 from models.invite import Invite

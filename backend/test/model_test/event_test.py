@@ -2,7 +2,7 @@
 """Event model's test."""
 
 from ..test_base import TestBase
-from models.institution import Institution
+from models import Institution
 from models import User
 from models.event import Event
 from .. import mocks

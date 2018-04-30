@@ -4,7 +4,7 @@
 from .. import mocks
 from ..test_base import TestBase
 
-from models.institution import Institution
+from models import Institution
 from models.invite_user_adm import InviteUserAdm
 from models import User
 

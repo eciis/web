@@ -3,7 +3,7 @@
 from test_base_handler import TestBaseHandler
 from models.survey_post import SurveyPost
 from models import User
-from models.institution import Institution
+from models import Institution
 from handlers.vote_handler import VoteHandler
 import datetime
 

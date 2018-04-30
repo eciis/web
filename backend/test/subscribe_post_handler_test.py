@@ -4,7 +4,7 @@
 from test_base_handler import TestBaseHandler
 from models.post import Post
 from models import User
-from models.institution import Institution
+from models import Institution
 from handlers.subscribe_post_handler import SubscribePostHandler
 from mock import patch
 

@@ -4,8 +4,8 @@ import datetime
 import sys
 
 from models import User
-from models.institution import Institution
-from models.institution import Address
+from models import Institution
+from models import Address
 from models.post import Post
 from models.post import Comment
 from models.event import Event

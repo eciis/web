@@ -1,5 +1,7 @@
 from google.appengine.ext import ndb
 
+__all__ = ['Address']
+
 class Address(ndb.Model):
     """Address model."""
 

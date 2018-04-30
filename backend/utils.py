@@ -10,7 +10,7 @@ from app_version import APP_VERSION
 from google.appengine.ext import ndb
 
 from models import User
-from models.institution import Institution
+from models import Institution
 
 from oauth2client import client
 from oauth2client.crypt import AppIdentityError

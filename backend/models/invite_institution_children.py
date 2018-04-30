@@ -1,6 +1,6 @@
 """Invite institution children model."""
 from invite_institution import InviteInstitution
-from models.institution import Institution
+from models import Institution
 
 
 class InviteInstitutionChildren(InviteInstitution):

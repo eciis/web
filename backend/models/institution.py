@@ -3,11 +3,13 @@
 from google.appengine.ext import ndb
 
 from search_module.search_institution import SearchInstitution
-from models.address import Address
+from models import Address
 from permissions import DEFAULT_ADMIN_PERMISSIONS
 from permissions import DEFAULT_SUPER_USER_PERMISSIONS
 
+__all__ = ['Institution']
 
+# Method not used, remove
 def get_actuation_area(data):
     """Get the institution actuation area."""
     if data.get('actuation_area') == 'other':

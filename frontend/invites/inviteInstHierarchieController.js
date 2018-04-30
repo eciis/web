@@ -26,6 +26,7 @@
         inviteInstHierCtrl.showRequestInvites = false;
         inviteInstHierCtrl.existing_institutions = [];
         inviteInstHierCtrl.requested_invites = [];
+        inviteInstHierCtrl.isLoadingSubmission = false;
 
         inviteInstHierCtrl.toggleElement = function toggleElement(flagName) {
             inviteInstHierCtrl[flagName] = !inviteInstHierCtrl[flagName];
@@ -81,6 +82,7 @@
         };
 
         inviteInstHierCtrl.sendInstInvite = function sendInstInvite(invite) {
+            inviteInstHierCtrl.isLoadingSubmission = true;
             var deferred = $q.defer();
             var promise = InviteService.sendInvite(invite);
             promise.then(function success() {
@@ -89,9 +91,11 @@
                     invite.type_of_invite === INSTITUTION_PARENT ?
                         inviteInstHierCtrl.showParentHierarchie = true : inviteInstHierCtrl.showChildrenHierarchie = true;
                     deferred.resolve();
+                    inviteInstHierCtrl.isLoadingSubmission = false;
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
                     deferred.reject();
+                    inviteInstHierCtrl.isLoadingSubmission = false;
                 });
             return deferred.promise;
         };

@@ -12,9 +12,10 @@ from service_messages import send_message_notification
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from custom_exceptions.entityException import EntityException
 
-from handlers.base_handler import BaseHandler
+from . import BaseHandler
 from models.post import Comment
 
+__all__ = ['ReplyCommentHandler']
 
 def check_permission(user, institution, post, comment):
     """Check the user permission to delete comment."""

@@ -9,8 +9,9 @@ from utils import Utils
 from utils import json_response
 from send_email_hierarchy.leave_institution_email_sender import LeaveInstitutionEmailSender
 
-from handlers.base_handler import BaseHandler
+from . import BaseHandler
 
+__all__ = ['UserInstitutionsHandler']
 
 class UserInstitutionsHandler(BaseHandler):
     """Handle user's operations relationed to a specific institution."""

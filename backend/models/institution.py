@@ -138,7 +138,7 @@ class Institution(ndb.Model):
         self.put()
 
         institution_children = invite.institution_key.get()
-        institution_children.parent_institution = institution.key
+        institution_children.parent_institution = self.key
         institution_children.put()
 
     @ndb.transactional(xg=True)
@@ -148,7 +148,7 @@ class Institution(ndb.Model):
         self.put()
 
         parent_institution = invite.institution_key.get()
-        parent_institution.children_institutions.append(institution.key)
+        parent_institution.children_institutions.append(self.key)
         parent_institution.put()
 
     @staticmethod

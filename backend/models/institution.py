@@ -131,31 +131,25 @@ class Institution(ndb.Model):
         self.invite = invite.key
         self.put()
 
-    @staticmethod
     @ndb.transactional(xg=True)
-    def create_parent_connection(institution, invite):
+    def create_parent_connection(self, invite):
         """Make connections between parent and daughter institution."""
-        institution.children_institutions = [invite.institution_key]
-        institution.put()
+        self.children_institutions = [invite.institution_key]
+        self.put()
 
         institution_children = invite.institution_key.get()
         institution_children.parent_institution = institution.key
         institution_children.put()
 
-        return institution
-
-    @staticmethod
     @ndb.transactional(xg=True)
-    def create_children_connection(institution, invite):
+    def create_children_connection(self, invite):
         """Make connections between daughter and parent institution."""
-        institution.parent_institution = invite.institution_key
-        institution.put()
+        self.parent_institution = invite.institution_key
+        self.put()
 
         parent_institution = invite.institution_key.get()
         parent_institution.children_institutions.append(institution.key)
         parent_institution.put()
-
-        return institution
 
     @staticmethod
     @ndb.transactional(xg=True)

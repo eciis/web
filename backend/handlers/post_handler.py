@@ -62,11 +62,10 @@ class PostHandler(BaseHandler):
         obj_key = ndb.Key(urlsafe=key)
         post = obj_key.get()
 
-        is_admin = user.has_permission("remove_posts", post.institution.urlsafe())
-        is_author = user.has_permission("remove_post", key)
-        
-        Utils._assert(not is_admin and not is_author,
-                      "The user can not remove this post", NotAuthorizedException)
+        exception_msg = "The user can not remove this post"
+
+        user.check_permission("remove_posts", exception_msg, post.institution.urlsafe())
+        user.check_permission("remove_post", exception_msg, key)
 
         post.delete(user)
 

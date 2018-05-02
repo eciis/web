@@ -44,10 +44,16 @@ class InviteCollectionHandler(BaseHandler):
                       "invitation type not allowed", NotAuthorizedException)
 
         institution = ndb.Key(urlsafe=invite['institution_key']).get()
-        can_invite_inst = user.has_permission(
-            "send_link_inst_invite", institution.key.urlsafe())
-        can_invite_members = user.has_permission(
-            "invite_members", institution.key.urlsafe())
+
+        can_not_send_invites_msg = "User is not allowed to send invites"
+
+        user.check_permission(
+            "send_link_inst_invite", can_not_send_invites_msg,
+            institution.key.urlsafe())
+
+        user.check_permission(
+            "invite_members", can_not_send_invites_msg,
+            institution.key.urlsafe())
 
         Utils._assert(not can_invite_inst and not can_invite_members,
                         "User is not allowed to send invites", NotAuthorizedException)

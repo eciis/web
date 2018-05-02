@@ -9,8 +9,9 @@ from utils import Utils
 from utils import login_required
 from utils import json_response
 
-from handlers.base_handler import BaseHandler
+from . import BaseHandler
 
+__all__ = ['GetKeyHandler']
 
 class GetKeyHandler(BaseHandler):
     """Handle generic key requests."""

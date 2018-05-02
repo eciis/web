@@ -402,6 +402,10 @@
             return institutionCtrl.institution && Utils.limitString(institutionCtrl.institution.name, limit);
         };
 
+        institutionCtrl.canManageInst = function canManageInst() {
+            return institutionCtrl.user.isAdmin(currentInstitutionKey) ? true : $state.go('app.user.home');
+        };
+
         (function main(){
             loadStateView();
             changeCoverOnScroll();

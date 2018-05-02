@@ -131,31 +131,25 @@ class Institution(ndb.Model):
         self.invite = invite.key
         self.put()
 
-    @staticmethod
     @ndb.transactional(xg=True)
-    def create_parent_connection(institution, invite):
-        """Make connections between parent and child institution."""
-        institution.children_institutions.append(invite.institution_key)
-        institution.put()
+    def create_parent_connection(self, invite):
+        """Make connections between parent and daughter institution."""
+        self.children_institutions.append(invite.institution_key)
+        self.put()
 
         institution_children = invite.institution_key.get()
-        institution_children.parent_institution = institution.key
+        institution_children.parent_institution = self.key
         institution_children.put()
 
-        return institution
-
-    @staticmethod
     @ndb.transactional(xg=True)
-    def create_children_connection(institution, invite):
-        """Make connections between child and parent institution."""
-        institution.parent_institution = invite.institution_key
-        institution.put()
+    def create_children_connection(self, invite):
+        """Make connections between daughter and parent institution."""
+        self.parent_institution = invite.institution_key
+        self.put()
 
         parent_institution = invite.institution_key.get()
-        parent_institution.children_institutions.append(institution.key)
+        parent_institution.children_institutions.append(self.key)
         parent_institution.put()
-
-        return institution
 
     @staticmethod
     @ndb.transactional(xg=True)
@@ -174,20 +168,18 @@ class Institution(ndb.Model):
 
     @ndb.transactional(xg=True)
     def createInstitutionWithStub(self, user, institution):
-        institution.admin = user.key
-        institution.members.append(user.key)
-        institution.followers.append(user.key)
-        institution.state = 'active'
+        institution.follow(user.key)
+        institution.add_member(user)
+        institution.set_admin(user.key)
+        institution.change_state('active')
         if (institution.photo_url is None):
             institution.photo_url = "app/images/institution.png"
-        institution.put()
+            institution.put()
 
         user.add_institution(institution.key)
-
-        user.institutions_admin.append(institution.key)
-        user.state = "active"
-        user.follows.append(institution.key)
-        user.put()
+        user.add_institution_admin(institution.key)
+        user.change_state("active")
+        user.follow(institution.key)
 
         return institution
 
@@ -374,3 +366,16 @@ class Institution(ndb.Model):
                 permissions.update({permission: {institution_key: True}})
             
         return permissions
+
+    """TODO: Test this method.
+    
+    Author: Raoni Smaneoto, 30/04/2018.
+    """
+    def verify_connection(self, institution_to_verify):
+        """This method checks if the link between self and institution_to_verify
+        is confirmed."""
+        #Means that self is institution_to_verify's parent
+        parent_link = institution_to_verify.parent_institution == self.key and institution_to_verify.key in self.children_institutions
+        #Means that institution_to_verify is self's parent
+        child_link = self.parent_institution == institution_to_verify.key and self.key in institution_to_verify.children_institutions
+        return child_link or parent_link

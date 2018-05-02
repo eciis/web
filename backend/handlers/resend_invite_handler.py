@@ -6,9 +6,10 @@ from utils import login_required
 from utils import json_response
 from utils import Utils
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
-from handlers.base_handler import BaseHandler
+from . import BaseHandler
 from google.appengine.ext import ndb
 
+__all__ = ['ResendInviteHandler']
 
 class ResendInviteHandler(BaseHandler):
     """Resend Invite Handler."""

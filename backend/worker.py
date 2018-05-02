@@ -95,10 +95,12 @@ def get_all_parent_admins(child_institution, admins=[]):
 def add_permission_to_children(parent, admins, permission):
     """It goes down in the hierarchy using the parent institution
     and add permission for each of the admin inside of the admins list."""
-    for child in parent.children_institutions:
-        for admin in admins:
-            admin.add_permission(permission, child.urlsafe())
-            add_permission_to_children(child.get(), admins, permission)
+    for child_key in parent.children_institutions:
+        child = child_key.get()
+        if(child.verify_connection(parent)):
+            for admin in admins:
+                admin.add_permission(permission, child_key.urlsafe())
+            add_permission_to_children(child, admins, permission)
 
 
 def remove_permissions(remove_hierarchy, institution):
@@ -327,7 +329,7 @@ class AddAdminPermissionsInInstitutionHierarchy(BaseHandler):
         """Add admins' permissions, to the first institution and its children,
         to all admins, going up in the hierarchy."""
         institution = ndb.Key(urlsafe=institution_key).get()
-        admins = get_all_parent_admins(institution)
+        admins = get_all_parent_admins(institution, [])
             
         for permission in DEFAULT_ADMIN_PERMISSIONS:
             for admin in admins:

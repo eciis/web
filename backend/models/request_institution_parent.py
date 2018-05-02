@@ -47,8 +47,9 @@ class RequestInstitutionParent(Request):
             message=notification_message
         )
 
-    def send_response_notification(self, current_institution, invitee_key, entity_type):
+    def send_response_notification(self, current_institution, invitee_key, action):
         """Send notification to sender of invite when invite is accepted or rejected."""
+        entity_type = 'ACCEPT_INSTITUTION_LINK' if action == 'ACCEPT' else 'REJECT_INSTITUTION_LINK'
         notification_message = self.create_notification_message(user_key=invitee_key, 
             current_institution_key=current_institution, receiver_institution_key=self.institution_key, 
             sender_institution_key=self.institution_requested_key)

@@ -37,7 +37,7 @@ class InstitutionParentRequestHandler(BaseHandler):
 
         institution_children = request.institution_key.get()
         
-        request.send_response_notification(user.current_institution, user.key, 'ACCEPT_INSTITUTION_LINK')
+        request.send_response_notification(user.current_institution, user.key, 'ACCEPT')
 
         enqueue_task('add-admin-permissions', {'institution_key': institution_children.key.urlsafe()})
 
@@ -55,4 +55,4 @@ class InstitutionParentRequestHandler(BaseHandler):
         request.put()
 
         # PASSAR LOGO O TIPO DA NOTIF
-        request.send_response_notification(user.current_institution, user.key, 'REJECT_INSTITUTION_LINK')
+        request.send_response_notification(user.current_institution, user.key, 'REJECT')

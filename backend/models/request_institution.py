@@ -73,7 +73,8 @@ class RequestInstitution(Request):
             'Departamento do Complexo Industrial e Inovação em Saúde".
         """
         super_user = get_deciis().admin.get()
-        notification_message = self.create_notification_message(user_key=self.sender_key, receiver_institution_key=self.institution_requested_key)
+        notification_message = self.create_notification_message(user_key=self.sender_key, 
+        receiver_institution_key=self.institution_requested_key)
         super(RequestInstitution, self).send_notification(
             current_institution=current_institution, 
             receiver_key=super_user.key,

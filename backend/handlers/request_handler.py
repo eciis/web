@@ -77,7 +77,7 @@ class RequestHandler(BaseHandler):
 
         host = self.request.host
         request.send_response_email(host, "ACCEPT")
-        request.send_response_notification(user, institution.key, 'ACCEPTED_LINK')
+        request.send_response_notification(user, user.current_institution, 'ACCEPT')
 
         self.response.write(json.dumps(makeUser(sender, self.request)))
 
@@ -107,6 +107,6 @@ class RequestHandler(BaseHandler):
 
         host = self.request.host
         request.send_response_email(host, "REJECT")
-        request.send_response_notification(user, request.institution_requested_key, 'REJECTED_LINK')
+        request.send_response_notification(user, user.current_institution, 'REJECT')
 
         self.response.write(json.dumps(makeUser(sender_user, self.request)))

@@ -58,7 +58,7 @@ class Request(Invite):
         return request_inst_json
 
     def create_notification_message(self, user_key, current_institution_key=None, 
-            receiver_institution_key=None, sender_institution_key=None):
+            sender_institution_key=None, receiver_institution_key=None):
         """ Create message that will be used in notification. 
             user_key -- The user key that made the action.
             current_institution -- The institution that user was in the moment that made the action,
@@ -70,6 +70,6 @@ class Request(Invite):
         return create_message(
             sender_key=user_key,
             current_institution_key=current_institution_key,
+            sender_institution_key= sender_institution_key or current_institution_key,
             receiver_institution_key=receiver_institution_key,
-            sender_institution_key= sender_institution_key or current_institution_key
         )

@@ -109,7 +109,6 @@ class Invite(PolyModel):
         if not receiver_key:
             active_invitee = User.get_active_user(self.invitee)
             receiver_key = active_invitee and active_invitee.key
-        
         if receiver_key:
             entity_type = entity_type or 'INVITE'
             entity_key = entity_key or self.key.urlsafe()

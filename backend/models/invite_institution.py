@@ -64,13 +64,14 @@ class InviteInstitution(Invite):
         entity_type = 'ACCEPT_INVITE_INSTITUTION' if action == 'ACCEPT' else 'REJECT_INVITE_INSTITUTION'
         self.send_response(current_institution, invitee_key, entity_type)
 
-    def send_response(self, current_institution, invitee_key, entity_type):
+    def send_response(self, current_institution, invitee_key, entity_type, message=None):
         """Send notification to sender of invite when invite is accepted or rejected."""
         self.send_notification(
             current_institution=current_institution, 
             sender_key=invitee_key, 
             receiver_key=self.sender_key or self.admin_key,
-            entity_type=entity_type
+            entity_type=entity_type,
+            message=message
         )
 
     def make(self):

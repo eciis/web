@@ -53,8 +53,8 @@
 
         service.formatMessage = function formatMessage(notification) {
             var entity_type = notification.entity_type;
-            var mainInst = notification.entity.institution_name;
-            var otherInst = notification.from.institution_name;
+            var mainInst = notification.from.institution_name;
+            var otherInst = notification.to.institution_name;
             var message = assembleMessage(entity_type, mainInst, otherInst);
             return message;
         };
@@ -126,7 +126,7 @@
                     case DOUBLE_INST: 
                         return message + `${mainInst} e ${otherInst}`; 
                     case SINGLE_INST:
-                        return message + mainInst; 
+                        return message + (mainInst || otherInst); 
                     default:
                         return message;
                 }

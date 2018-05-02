@@ -30,7 +30,7 @@ def create_message(sender_key, current_institution_key=None, receiver_institutio
             'institution_name': sender_institution_key and sender_institution_key.get().name
         },
         'to': {
-            'institution_name': receiver_institution_key and receiver_institution_key.get().name
+            'institution_name': (receiver_institution_key and receiver_institution_key.get().name) or ''
         },
         'current_institution': {
             'name': current_institution_key and current_institution_key.get().name
@@ -40,27 +40,9 @@ def create_message(sender_key, current_institution_key=None, receiver_institutio
     return json.dumps(message)
 
 def create_entity(entity_key):
-    """Create a short entity with only key and name."""
-    entity_obj = ndb.Key(urlsafe=entity_key).get()
-    class_name = entity_obj.__class__.__name__
-    is_post = class_name == 'Post'
-    is_institution = class_name == 'Institution'
-    is_invite = 'Invite' in class_name
-    is_request = 'Request' in class_name
-    name = ''
-
-    if is_post:
-        institution = entity_obj.institution.get()
-        name = institution.name
-    elif is_institution:
-        name = entity_obj.name
-    elif is_invite or is_request:
-        institution = entity_obj.institution_key.get()
-        name = institution.name
-    
+    """Create a short entity with only key and name."""    
     entity = {
-        "key": entity_key,
-        "institution_name": name
+        "key": entity_key
     }
     return json.dumps(entity)
 

@@ -55,7 +55,11 @@ class ReplyCommentHandler(BaseHandler):
         reply = Comment.create(reply_data, user)
         post.reply_comment(reply, comment_id)
 
-        notification_message = post.create_notification_message(user.key, user.current_institution)
+        notification_message = post.create_notification_message(
+            user_key=user.key,
+            current_institution_key=user.current_institution,
+            sender_institution_key=post.institution
+        )
         entity_type = 'COMMENT'
 
         if (post.author != user.key):

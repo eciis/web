@@ -348,17 +348,17 @@ class Post(PolyModel):
         if user.key in self.subscribers and self.author != user.key:
             self.subscribers.remove(user.key)
 
-    def create_notification_message(self, user_key, current_institution_key):
+    def create_notification_message(self, user_key, current_institution_key, sender_institution_key=None):
         """ Create message that will be used in notification.
             user_key -- The user key that made the action.
             current_institution -- The institution that user was in the moment that made the action.
-            sender_institution_key -- The institution that should be made the action, in the posts 
-                notifications the sender institution is the same that current institution. 
+            sender_institution_key -- The institution by which the post was created,
+                if didn't define the sender institution  should be the current institution. 
         """
         return create_message(
             sender_key= user_key,
             current_institution_key=current_institution_key,
-            sender_institution_key=current_institution_key
+            sender_institution_key=sender_institution_key or current_institution_key
         )
 
 

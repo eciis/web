@@ -55,7 +55,8 @@ def send_message_notification(receiver_key, entity_type, entity_key, message, en
     message -- message of notification.
     entity_type -- type of notification.
     entity_key -- entity key of type invite.
-    entity -- this parameter is useful when it's necessary to send the full entity to the notification for consistency reasons in the frontend
+    entity -- this parameter is useful when it's necessary 
+        to send the full entity to the notification for consistency reasons in the frontend
     """
     entity = entity or create_entity(entity_key)
     taskqueue.add(

@@ -70,7 +70,11 @@ class PostHandler(BaseHandler):
         post.delete(user)
 
         if(is_admin and not is_author):
-            notification_message = post.create_notification_message(user.key, user.current_institution)
+            notification_message = post.create_notification_message(
+                user_key=user.key,
+                current_institution_key=user.current_institution,
+                sender_institution_key=post.institution
+            )
             send_message_notification(
                 receiver_key=post.author.urlsafe(), 
                 entity_type='DELETED_POST',

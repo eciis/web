@@ -64,10 +64,12 @@ class InstitutionHierarchyHandler(BaseHandler):
             enqueue_task('remove-admin-permissions', {'institution_key': institution_link.key.urlsafe(), 'user': user.key.urlsafe()})
         
         entity_type = 'INSTITUTION'
+
+        notification_message = institution.create_notification_message(user_key=user.key, current_institution_key=user.current_institution, 
+            receiver_institution_key=institution_link.key, sender_institution_key=institution.key)
         send_message_notification(
-            admin.urlsafe(),
-            user.key.urlsafe(),
-            entity_type,
-            institution_link.key.urlsafe(),
-            user.current_institution
+            receiver_key=admin.urlsafe(),
+            entity_type=entity_type,
+            entity_key=institution_link.key.urlsafe(),
+            message=notification_message
         )

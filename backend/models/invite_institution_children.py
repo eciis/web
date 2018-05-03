@@ -28,7 +28,7 @@ class InviteInstitutionChildren(InviteInstitution):
         """Define the entity type of notification when the invite is accepted or rejected."""
         entity_type = 'ACCEPT_INVITE_HIERARCHY' if action == 'ACCEPT' else 'REJECT_INSTITUTION_LINK'
         notification_message = self.create_notification_message(invitee_key, 
-            current_institution_key=current_institution, sender_institution_key=self.receiver_institution_key, 
+            current_institution_key=current_institution, sender_institution_key=self.stub_institution_key, 
             receiver_institution_key=self.institution_key)
     
         self.send_response(current_institution, invitee_key, entity_type, message=notification_message)

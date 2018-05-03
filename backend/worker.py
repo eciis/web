@@ -124,7 +124,7 @@ def remove_permissions(remove_hierarchy, institution):
                     admin.remove_permission(permission, institution_key)
 
 
-def notify_institution_removal(institution, remove_hierarchy, user):
+def notify_institution_removal(institution, remove_hierarchy, user, current_institution_key=None):
     """This method has two possibilities of flow depending on
     the remove_hierarchy's value.
     If it's true, the method send email and notification to all
@@ -149,18 +149,24 @@ def notify_institution_removal(institution, remove_hierarchy, user):
     user_has_to_receive_notification = institution.admin != user.key
 
     if user_has_to_receive_notification:
+        notification_message = institution.create_notification_message(
+            user_key=user.key,
+            current_institution_key=current_institution_key,
+            sender_institution_key=institution.key
+
+        )
         send_message_notification(
-            institution.admin.urlsafe(),
-            user.key.urlsafe(),
-            'DELETED_INSTITUTION',
-            institution.key.urlsafe()
+            receiver_key=institution.admin.urlsafe(),
+            entity_type='DELETED_INSTITUTION',
+            entity_key=institution.key.urlsafe(),
+            message=notification_message
         )
 
     if remove_hierarchy == "true":
         for child_key in institution.children_institutions:
             child = child_key.get()
             if child.state == "inactive":
-                notify_institution_removal(child, remove_hierarchy, user)
+                notify_institution_removal(child, remove_hierarchy, user, current_institution_key)
 
 
 class BaseHandler(webapp2.RequestHandler):
@@ -229,6 +235,7 @@ class RemoveInstitutionHandler(BaseHandler):
         institution_key = self.request.get('institution_key')
         remove_hierarchy = self.request.get('remove_hierarchy')
         institution = ndb.Key(urlsafe=institution_key).get()
+        current_institution = self.request.get('current_institution') and ndb.Key(urlsafe=self.request.get('current_institution'))
         user = ndb.Key(urlsafe=self.request.get('user_key')).get()
 
         @ndb.transactional(xg=True, retries=10)
@@ -236,7 +243,8 @@ class RemoveInstitutionHandler(BaseHandler):
             institution.handle_hierarchy_removal(remove_hierarchy, user)
             institution.remove_institution_from_users(remove_hierarchy)
             remove_permissions(remove_hierarchy, institution)
-            notify_institution_removal(institution, remove_hierarchy, user)
+            notify_institution_removal(institution, remove_hierarchy, user, current_institution_key=current_institution)
+            
         apply_remove_operation(remove_hierarchy, institution, user)
 
 

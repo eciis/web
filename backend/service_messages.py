@@ -27,7 +27,7 @@ def create_message(sender_key, current_institution_key=None, receiver_institutio
         'from': {
             'name': name.encode('utf8'),
             'photo_url': sender.photo_url,
-            'institution_name': sender_institution_key and sender_institution_key.get().name
+            'institution_name': (sender_institution_key and sender_institution_key.get().name) or ''
         },
         'to': {
             'institution_name': (receiver_institution_key and receiver_institution_key.get().name) or ''

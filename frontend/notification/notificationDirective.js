@@ -5,7 +5,7 @@
     var app = angular.module("app");
 
     app.controller("NotificationController", function NotificationController(NotificationService, AuthService, $state,
-        $mdDialog, InstitutionService, UserService, RequestInvitationService, MessageService, InviteService) {
+        $mdDialog, InstitutionService, UserService, RequestInvitationService, MessageService) {
         var notificationCtrl = this;
 
         notificationCtrl.user = AuthService.getCurrentUser();
@@ -291,10 +291,6 @@
                     return RequestInvitationService.getInstChildrenRequest(invitekey);
                 case 'REQUEST_INSTITUTION_PARENT':
                     return RequestInvitationService.getInstParentRequest(invitekey);
-                case 'USER_ADM':
-                    return InviteService.getInvite(invitekey);
-                default:
-                    console.log(entityType, invitekey);
             } 
         }
 

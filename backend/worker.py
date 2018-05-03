@@ -115,7 +115,9 @@ def remove_permissions(remove_hierarchy, institution):
                     admin.remove_permission(permission, inst)
 
             for child in institution.children_institutions:
-                remove_permissions(remove_hierarchy, child.get())
+                child = child.get()
+                if(child.verify_connection(institution)):
+                    remove_permissions(remove_hierarchy, child)
         else:
             current_permissions = filter_permissions_to_remove(
                 admin, current_permissions, institution.key, is_not_admin)
@@ -233,10 +235,12 @@ class RemoveInstitutionHandler(BaseHandler):
 
         @ndb.transactional(xg=True, retries=10)
         def apply_remove_operation(remove_hierarchy, institution, user):
-            institution.handle_hierarchy_removal(remove_hierarchy, user)
+            callback_method = institution.handle_hierarchy_removal(remove_hierarchy, user)
             institution.remove_institution_from_users(remove_hierarchy)
             remove_permissions(remove_hierarchy, institution)
             notify_institution_removal(institution, remove_hierarchy, user)
+            if callback_method:
+                callback_method()
         apply_remove_operation(remove_hierarchy, institution, user)
 
 

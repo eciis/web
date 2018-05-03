@@ -211,15 +211,17 @@ class Institution(ndb.Model):
         user -- the user who started the institution's removal process. So, it may not be the admin
         of self.
         """
+        returned_callback_method = False
         # Remove the hierarchy
         if remove_hierarchy == "true":
             self.remove_institution_hierarchy(remove_hierarchy, user)
         # Change the parent's and children's pointers
         elif self.parent_institution:
-            self.remove_parent_connection()
+            returned_callback_method = self.remove_parent_connection
         # Change the children's pointers if there is no parent
         else:
-            self.set_parent_for_none()
+            returned_callback_method = self.set_parent_for_none
+        return returned_callback_method
 
     def remove_link(self, institution_link, is_parent):
         """Remove the connection between self and institution_link."""
@@ -233,8 +235,9 @@ class Institution(ndb.Model):
         """Remove institution's hierarchy."""
         for child in self.children_institutions:
             child = child.get()
-            child.remove_institution(remove_hierarchy, user)
-            child.handle_hierarchy_removal(remove_hierarchy, user)
+            if(self.verify_connection(child)):
+                child.remove_institution(remove_hierarchy, user)
+                child.handle_hierarchy_removal(remove_hierarchy, user)
 
     def remove_parent_connection(self):
         """Change parent connection when remove an institution."""
@@ -341,7 +344,9 @@ class Institution(ndb.Model):
             child = child_key.get()
             adm_is_child_adm = child.admin == admin_key
             get_next_permissions = get_all or not adm_is_child_adm
-            if get_next_permissions:
+            #The child permissions should only be added if the link is confirmed.
+            link_confirmed = child.verify_connection(self)
+            if get_next_permissions and link_confirmed:
                 child.get_hierarchy_admin_permissions(get_all, admin_key, permissions)
         
         return permissions

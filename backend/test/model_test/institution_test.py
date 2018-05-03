@@ -131,7 +131,6 @@ class InstitutionTest(TestBase):
         # one child that he is not admin  
         # Institution(admin) -> child_a(other_admin) -> child_b(admin) -> child_c(other_admin) -> x
         child_b = generate_child_to_parent(child_a, self.admin)
-        import pdb
         child_c = generate_child_to_parent(child_b, child_a.admin.get())
         self.institution = self.institution.key.get()
         expected_permissions = generate_permissions(self.institution.key.urlsafe(), {})
@@ -144,7 +143,6 @@ class InstitutionTest(TestBase):
             "The admin does not have the expected permissions"
         )    
 
-        # pdb.set_trace()
         # Case 4: Get all the hierarchy permissions, except the ones from the part of the hierarchy
         # where the highest child admin is the same as the institution admin
         # Institution(admin) -> child_a(other_admin) -> child_b(admin) -> child_c(other_admin) -> x

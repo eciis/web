@@ -6,9 +6,10 @@ from utils import login_required
 from utils import json_response
 from utils import Utils
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
-from handlers.base_handler import BaseHandler
+from . import BaseHandler
 from google.appengine.ext import ndb
 
+__all__ = ['ResendInviteHandler']
 
 class ResendInviteHandler(BaseHandler):
     """Resend Invite Handler."""
@@ -24,11 +25,9 @@ class ResendInviteHandler(BaseHandler):
         Utils._assert(invite.status != 'sent',
                       "The invite has already been used", NotAuthorizedException)
 
-        can_invite_members = user.has_permission(
-            "invite_members", invite.institution_key.urlsafe())
-
-        Utils._assert(not can_invite_members,
-            "User is not allowed to send invites", NotAuthorizedException)
+        user.check_permission("invite_members",
+                "User is not allowed to send invites",
+                invite.institution_key.urlsafe())
 
         institution = invite.institution_key.get()
         Utils._assert(institution.state == 'inactive',

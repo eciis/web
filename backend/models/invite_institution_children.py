@@ -1,7 +1,5 @@
 """Invite institution children model."""
 from invite_institution import InviteInstitution
-from models.institution import Institution
-
 
 class InviteInstitutionChildren(InviteInstitution):
     """Model of invite institution children."""
@@ -16,7 +14,7 @@ class InviteInstitutionChildren(InviteInstitution):
 
     def create_conection_institution(self, institution):
         """Method of creating connection between invitation and institution children."""
-        Institution.create_children_connection(institution, self)
+        institution.create_children_connection(self)
 
     def make(self):
         """Create json of invite to children institution."""

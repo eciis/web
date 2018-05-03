@@ -15,8 +15,9 @@ from service_messages import send_message_notification
 from service_entities import enqueue_task
 import json
 
-from handlers.base_handler import BaseHandler
+from . import BaseHandler
 
+__all__ = ['InstitutionHierarchyHandler']
 
 class InstitutionHierarchyHandler(BaseHandler):
     """Institution Hierarchy Handler."""

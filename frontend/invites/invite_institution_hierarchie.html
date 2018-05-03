@@ -35,7 +35,9 @@
           </md-radio-group>
           <section layout="row" layout="column" layout-align="end center" layout-wrap>
             <md-button md-colors="{color: 'teal-700'}" ng-click="inviteInstHierCtrl.cancelInvite()">Cancelar</md-button>
-            <md-button md-colors="{color: 'teal-700'}" ng-click="inviteInstHierCtrl.checkInstInvite($event)">Enviar Convite</md-button>
+            <md-button md-colors="{color: 'teal-700'}" ng-click="inviteInstHierCtrl.checkInstInvite($event)" ng-disabled="inviteInstHierCtrl.isLoadingSubmission">
+              Enviar Convite
+            </md-button>
           </section>
         </div>
       </md-card-content>
@@ -73,7 +75,7 @@
               </div>
             </div>
             <div ng-if="inviteInstHierCtrl.isActive(inviteInstHierCtrl.institution.parent_institution)">
-              <md-button ng-click="inviteInstHierCtrl.removeLink(event, inviteInstHierCtrl.institution.parent_institution, true)">
+              <md-button ng-click="inviteInstHierCtrl.removeLink(inviteInstHierCtrl.institution.parent_institution, true, $event)">
                 <md-icon md-colors="{color: 'red-700'}" title="Remover conexão">link</md-icon>
               </md-button>
             </div>

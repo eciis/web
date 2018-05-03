@@ -13,8 +13,9 @@ from models.survey_post import SurveyPost
 from models.post import Like
 from service_messages import send_message_notification
 
-from handlers.base_handler import BaseHandler
+from . import BaseHandler
 
+__all__ = ['PostHandler']
 
 def is_post_author(method):
     """Check if the user is the author of the post."""
@@ -63,7 +64,7 @@ class PostHandler(BaseHandler):
 
         is_admin = user.has_permission("remove_posts", post.institution.urlsafe())
         is_author = user.has_permission("remove_post", key)
-        
+
         Utils._assert(not is_admin and not is_author,
                       "The user can not remove this post", NotAuthorizedException)
 

@@ -6,11 +6,12 @@ import permissions
 
 from utils import login_required
 from utils import json_response
-from handlers.base_handler import BaseHandler
+from . import BaseHandler
 from google.appengine.ext import ndb
 from utils import Utils
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
+__all__ = ['InstitutionRequestHandler']
 
 def check_permission(user, operation, institution_key):
     user.check_permission(
@@ -69,9 +70,9 @@ class InstitutionRequestHandler(BaseHandler):
         sender.create_and_add_profile(data_profile)
         sender.add_permissions(permissions.DEFAULT_ADMIN_PERMISSIONS, institution.key.urlsafe())
 
-        institution.admin = sender.key
-        institution.members.append(sender.key)
-        institution.followers.append(sender.key)
+        institution.follow(sender.key)
+        institution.add_member(sender)
+        institution.set_admin(sender.key)
         institution.put()
 
         host = self.request.host

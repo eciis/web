@@ -10,8 +10,9 @@ from utils import json_response
 from service_messages import send_message_notification
 from send_email_hierarchy.remove_member_email_sender import RemoveMemberEmailSender
 
-from handlers.base_handler import BaseHandler
+from . import BaseHandler
 
+__all__ = ['InstitutionMembersHandler']
 
 class InstitutionMembersHandler(BaseHandler):
     """Get members of specific institution."""

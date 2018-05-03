@@ -64,7 +64,7 @@ class PostHandler(BaseHandler):
 
         is_admin = user.has_permission("remove_posts", post.institution.urlsafe())
         is_author = user.has_permission("remove_post", key)
-        
+
         Utils._assert(not is_admin and not is_author,
                       "The user can not remove this post", NotAuthorizedException)
 

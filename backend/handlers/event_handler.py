@@ -42,7 +42,7 @@ class EventHandler(BaseHandler):
 
         is_admin = user.has_permission("remove_posts", event.institution_key.urlsafe())
         is_author = user.has_permission("remove_post", event.key.urlsafe())
-        
+
         Utils._assert(not is_admin and not is_author,
                       "The user can not remove this event", NotAuthorizedException)
 
@@ -59,8 +59,9 @@ class EventHandler(BaseHandler):
 
         event = ndb.Key(urlsafe=key).get()
 
-        Utils._assert(not user.has_permission('edit_post', key), 
-            "The user can not edit this event", NotAuthorizedException)
+        user.check_permission('edit_post',
+            "The user can not edit this event",
+            key)
 
         Utils._assert(event.state == 'deleted',
                       "The event has been deleted.", NotAuthorizedException)

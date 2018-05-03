@@ -86,7 +86,6 @@ class LikeHandler(BaseHandler):
     """
     @json_response
     @login_required
-    @ndb.transactional(xg=True)
     def delete(self, user, post_key, comment_id=None, reply_id=None):
         """Handle DELETE Requests."""
         """This method is only meant to dislike in post."""
@@ -105,10 +104,18 @@ class LikeHandler(BaseHandler):
 
             Utils._assert(user.key.urlsafe() not in likes,
                       "User hasn't liked this comment.", LikeException)
-            likes.remove(user.key.urlsafe())
-            post.put()
+
+            @ndb.transactional(retries=10, xg=True)
+            def remove_like(likes, user, post):
+                likes.remove(user.key.urlsafe())
+                post.put()
+            remove_like(likes, user, post)
         else:
             Utils._assert(not user.is_liked_post(post.key),
                       "User hasn't liked this publication.", LikeException)
-            user.dislike_post(post.key)
-            post.dislike(user.key)
+
+            @ndb.transactional(retries=10, xg=True)
+            def remove_like(user, post):
+                user.dislike_post(post.key)
+                post.dislike(user.key)
+            remove_like(user, post)

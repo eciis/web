@@ -232,13 +232,13 @@
             inviteInstHierCtrl.requested_invites.push(invite);
         };
 
-        inviteInstHierCtrl.removeLink = function removeLink($event, institution, isParent) {
+        inviteInstHierCtrl.removeLink = function removeLink(institution, isParent, event) {
             var confirm = $mdDialog.confirm({onComplete: designOptions})
                 .clickOutsideToClose(true)
                 .title('Confirmar Remoção')
                 .textContent('Confirmar a remoção dessa conexão?')
                 .ariaLabel('Confirmar Remoção')
-                .targetEvent($event)
+                .targetEvent(event)
                 .ok('Sim')
                 .cancel('Não');
 

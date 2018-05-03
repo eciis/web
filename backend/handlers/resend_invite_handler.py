@@ -25,11 +25,9 @@ class ResendInviteHandler(BaseHandler):
         Utils._assert(invite.status != 'sent',
                       "The invite has already been used", NotAuthorizedException)
 
-        can_invite_members = user.has_permission(
-            "invite_members", invite.institution_key.urlsafe())
-
-        Utils._assert(not can_invite_members,
-            "User is not allowed to send invites", NotAuthorizedException)
+        user.check_permission("invite_members",
+                "User is not allowed to send invites",
+                invite.institution_key.urlsafe())
 
         institution = invite.institution_key.get()
         Utils._assert(institution.state == 'inactive',

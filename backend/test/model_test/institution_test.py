@@ -101,8 +101,8 @@ class InstitutionTest(TestBase):
             }
             parent_invite = RequestInstitutionParent.create(data)
             # link child_a to institution
-            Institution.create_parent_connection(parent, parent_invite)
-            child.put()
+            parent.create_parent_connection(parent_invite)
+            child = child.key.get()
             return child
 
         # Case 1: Get all permission and the admin has just one institution

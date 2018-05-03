@@ -92,15 +92,14 @@ class Invite(PolyModel):
             user_key -- The user key that made the action.
             current_institution -- The institution that user was in the moment that made the action,
                  in case that user is inactive he didn't have institution.
-            sender_institution_key -- The institution that should be made the action,
-                 when wasn't specified will be the current_institution.
+            sender_institution_key -- The institution that should be made the action.
             receiver_institution -- The institution to which the notification is directed. 
         """
         return create_message(
             sender_key=user_key,
             current_institution_key=current_institution_key,
-            sender_institution_key= sender_institution_key or current_institution_key,
-            receiver_institution_key=receiver_institution_key,
+            sender_institution_key= sender_institution_key or self.institution_key,
+            receiver_institution_key=receiver_institution_key or self.institution_requested_key,
         )
 
     def send_notification(self, current_institution, sender_key=None, receiver_key=None, entity_type=None, entity_key=None, message=None):

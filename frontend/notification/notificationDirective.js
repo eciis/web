@@ -5,7 +5,7 @@
     var app = angular.module("app");
 
     app.controller("NotificationController", function NotificationController(NotificationService, AuthService, $state,
-        $mdDialog, InstitutionService, UserService, RequestInvitationService, MessageService) {
+        $mdDialog, InstitutionService, UserService, RequestInvitationService, MessageService, InviteService) {
         var notificationCtrl = this;
 
         notificationCtrl.user = AuthService.getCurrentUser();
@@ -276,6 +276,7 @@
                     }
                 );
             } else {
+                dialogProperties.locals.key = notification.entity.key;
                 showPendingReqDialog(dialogProperties, event);
             }
         }
@@ -290,6 +291,10 @@
                     return RequestInvitationService.getInstChildrenRequest(invitekey);
                 case 'REQUEST_INSTITUTION_PARENT':
                     return RequestInvitationService.getInstParentRequest(invitekey);
+                case 'USER_ADM':
+                    return InviteService.getInvite(invitekey);
+                default:
+                    console.log(entityType, invitekey);
             } 
         }
 

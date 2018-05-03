@@ -139,6 +139,7 @@ class InviteHandlerTest(TestBaseHandler):
         send_notification.assert_called_with(
             current_institution=None, # The first invite the user doesn't have current_institution 
             sender_key=self.other_user.key,
+            message=None,
             receiver_key=self.user_admin.key,
             entity_type='REJECT_INVITE_INSTITUTION'
         )
@@ -178,8 +179,23 @@ class InviteHandlerTest(TestBaseHandler):
             'active',
             "Expected state should be equal to active")
 
+        message = {
+            "from": {
+                'name': self.other_user.name.encode('utf8'),
+                'photo_url': self.other_user.photo_url,
+                'institution_name': self.invite.institution_key.get().name
+            },
+            "to": {
+                'institution_name': ''
+            },
+            "current_institution": {
+                'name': None
+            }
+        }
+
         send_notification.assert_called_with(
             current_institution=None, # The first invite the user doesn't have current_institution 
+            message=json.dumps(message),
             sender_key=self.other_user.key, 
             receiver_key=self.user_admin.key,
             entity_type="ACCEPT_INVITE_USER"

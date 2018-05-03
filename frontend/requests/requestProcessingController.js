@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller('RequestProcessingController', function RequestProcessingController(AuthService, RequestInvitationService,
-        MessageService, InstitutionService, request, $state, $mdDialog) {
+        MessageService, InstitutionService, UserService, request, $state, $mdDialog) {
         var requestController = this;
 
         var REQUEST_PARENT = "REQUEST_INSTITUTION_PARENT";
@@ -24,10 +24,18 @@
                 MessageService.showToast("Solicitação aceita!");
                 request.status = 'accepted';
                 requestController.hideDialog();
+                refreshUser();
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
         };
+
+        function refreshUser() {
+            UserService.load().then(function success(response) {
+                requestController.user.permissions = response.permissions;
+                AuthService.save();
+            });
+        }
 
         function resolveRequest() {
             switch(request.type_of_invite) {

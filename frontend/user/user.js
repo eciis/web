@@ -54,6 +54,10 @@ User.prototype.isAdmin = function isAdmin(keyInstitution) {
     return managed_institution;
 };
 
+User.prototype.isAdminOfCurrentInst = function isAdminOfCurrentInst() {
+    return this.institutions_admin.map(getKey).includes(this.current_institution.key);
+};
+
 User.prototype.isMember = function isMember(institutionKey){
     return _.includes(_.map(this.institutions, getKeyObj), institutionKey);
 };
@@ -169,19 +173,6 @@ User.prototype.updateInstProfile = function updateInstProfile(institution) {
     const index = _.findIndex(this.institution_profiles, ['institution_key', institution.key]);
     this.institution_profiles[index].institution.name = institution.name;
     this.institution_profiles[index].institution.photo_url = institution.photo_url;
-};
-
-User.prototype.goToDifferentInstitution = function goToDifferentInstitution(previousKey, removeHierarchy) {
-    var user = this;
-    _.forEach(this.institutions, function(institution) {
-        if(institution.key !== previousKey) {
-            const institutionHasBeenDeleted = removeHierarchy === "true" && institution.parent_institution === previousKey;
-            if (!(institutionHasBeenDeleted)) {
-                user.current_institution = institution;
-                window.localStorage.userInfo = JSON.stringify(this);
-            }
-        }
-    });
 };
 
 User.prototype.getProfileColor = function getProfileColor() {

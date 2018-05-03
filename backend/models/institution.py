@@ -131,31 +131,25 @@ class Institution(ndb.Model):
         self.invite = invite.key
         self.put()
 
-    @staticmethod
     @ndb.transactional(xg=True)
-    def create_parent_connection(institution, invite):
+    def create_parent_connection(self, invite):
         """Make connections between parent and daughter institution."""
-        institution.children_institutions = [invite.institution_key]
-        institution.put()
+        self.children_institutions = [invite.institution_key]
+        self.put()
 
         institution_children = invite.institution_key.get()
-        institution_children.parent_institution = institution.key
+        institution_children.parent_institution = self.key
         institution_children.put()
 
-        return institution
-
-    @staticmethod
     @ndb.transactional(xg=True)
-    def create_children_connection(institution, invite):
+    def create_children_connection(self, invite):
         """Make connections between daughter and parent institution."""
-        institution.parent_institution = invite.institution_key
-        institution.put()
+        self.parent_institution = invite.institution_key
+        self.put()
 
         parent_institution = invite.institution_key.get()
-        parent_institution.children_institutions.append(institution.key)
+        parent_institution.children_institutions.append(self.key)
         parent_institution.put()
-
-        return institution
 
     @staticmethod
     @ndb.transactional(xg=True)
@@ -174,20 +168,18 @@ class Institution(ndb.Model):
 
     @ndb.transactional(xg=True)
     def createInstitutionWithStub(self, user, institution):
-        institution.admin = user.key
-        institution.members.append(user.key)
-        institution.followers.append(user.key)
-        institution.state = 'active'
+        institution.follow(user.key)
+        institution.add_member(user)
+        institution.set_admin(user.key)
+        institution.change_state('active')
         if (institution.photo_url is None):
             institution.photo_url = "app/images/institution.png"
-        institution.put()
+            institution.put()
 
         user.add_institution(institution.key)
-
-        user.institutions_admin.append(institution.key)
-        user.state = "active"
-        user.follows.append(institution.key)
-        user.put()
+        user.add_institution_admin(institution.key)
+        user.change_state("active")
+        user.follow(institution.key)
 
         return institution
 
@@ -263,9 +255,10 @@ class Institution(ndb.Model):
             child.put()
     
     def set_admin(self, user_key):
-        self.admin = user_key
-        self.email = user_key.get().email[0]
-        self.put()
+        if self.has_member(user_key):
+            self.admin = user_key
+            self.email = user_key.get().email[0]
+            self.put()
 
     @ndb.transactional(xg=True)
     def remove_institution_from_users(self, remove_hierarchy):
@@ -319,7 +312,7 @@ class Institution(ndb.Model):
         """Check if is active."""
         return self.state == "active"
     
-    def get_all_hierarchy_admin_permissions(self, permissions=None):
+    def get_hierarchy_admin_permissions(self, get_all=True, admin_key=None, permissions=None):
         """
         This method get all hierarchy admin permissions of
         institution. When result, returns a dict containing
@@ -327,7 +320,10 @@ class Institution(ndb.Model):
         to the child hierarchy.
 
         Arguments:
-        permissions(Optional) -- Dict of previous permissions added for add more permissons. 
+        get_all (Optional)-- If true, get all permissions from institutions 
+        admin_key (Optional) -- admin that requested to unlink the institutions
+        hierarchically above the first child with the same admin
+        permissions (Optional) -- Dict of previous permissions added for add more permissons. 
         If not passed, creates new dict of permissions
         """
         if not permissions:
@@ -341,9 +337,12 @@ class Institution(ndb.Model):
             else:
                 permissions.update({permission: {institution_key: True}})
 
-        for children in self.children_institutions:
-            children = children.get()
-            children.get_all_hierarchy_admin_permissions(permissions)
+        for child_key in self.children_institutions:
+            child = child_key.get()
+            adm_is_child_adm = child.admin == admin_key
+            get_next_permissions = get_all or not adm_is_child_adm
+            if get_next_permissions:
+                child.get_hierarchy_admin_permissions(get_all, admin_key, permissions)
         
         return permissions
 
@@ -367,3 +366,16 @@ class Institution(ndb.Model):
                 permissions.update({permission: {institution_key: True}})
             
         return permissions
+
+    """TODO: Test this method.
+    
+    Author: Raoni Smaneoto, 30/04/2018.
+    """
+    def verify_connection(self, institution_to_verify):
+        """This method checks if the link between self and institution_to_verify
+        is confirmed."""
+        #Means that self is institution_to_verify's parent
+        parent_link = institution_to_verify.parent_institution == self.key and institution_to_verify.key in self.children_institutions
+        #Means that institution_to_verify is self's parent
+        child_link = self.parent_institution == institution_to_verify.key and self.key in institution_to_verify.children_institutions
+        return child_link or parent_link

@@ -2,6 +2,7 @@
 
 (describe('Test RequestProcessingController', function() {
     var INSTITUTIONS_URI = "/api/institutions";
+    var USER_URI = "/api/user";
     var INST_KEY = "inst-key";
     var REQUEST_PARENT = "REQUEST_INSTITUTION_PARENT";
     var REQUEST_CHILDREN = "REQUEST_INSTITUTION_CHILDREN";
@@ -9,8 +10,9 @@
     var REQUEST_USER = "REQUEST_USER";
 
     var requestInvitationService, institutionService, requestCtrl, scope, httpBackend, deferred, createCtrl;
+    var authService, userService, messageService, request;
 
-    var request = {
+    var newRequest = {
         key: 'request-key',
         type_of_invite: null,
         institution_requested_key: INST_KEY,
@@ -21,7 +23,8 @@
 
     var user = {
         key: 'user-key',
-        state: 'active'
+        state: 'active',
+        permissions: []
     };
 
     var institution = {
@@ -36,6 +39,13 @@
         key: INST_KEY
     };
 
+    var permissions = [
+        {'update_inst': {
+            'inst-key': true
+            }
+        }
+    ];
+
     function callFake() {
         return {
             then: function(calback) {
@@ -45,25 +55,35 @@
     }
 
     beforeEach(module('app'));
-    beforeEach(inject(function($controller, $rootScope, $httpBackend, AuthService, RequestInvitationService, InstitutionService, $q) {
+
+    beforeEach(inject(function($controller, $rootScope, $httpBackend, AuthService,
+         RequestInvitationService, InstitutionService, UserService, MessageService, $q) {
+        
         requestInvitationService = RequestInvitationService;
         institutionService = InstitutionService;
+        userService = UserService;
+        messageService = MessageService;
         httpBackend = $httpBackend;
+        authService = AuthService;
         scope = $rootScope.$new();
         deferred = $q.defer();
         AuthService.login(user);
+        request = Object.assign({}, newRequest);
+
         httpBackend.when('GET', INSTITUTIONS_URI + "/" + INST_KEY).respond(institution);
+        httpBackend.when('GET', USER_URI).respond(permissions);
+        
+        requestCtrl = $controller('RequestProcessingController', {
+            scope: scope,
+            RequestInvitationService: requestInvitationService,
+            InstitutionService: institutionService,
+            AuthService: authService,
+            UserService: UserService,
+            MessageService: messageService,
+            request: request
+        });
 
-        createCtrl = function() {
-            return $controller('RequestProcessingController', {
-                scope: scope,
-                requestInvitationService: requestInvitationService,
-                institutionService: institutionService,
-                request: request
-            });
-        }
-
-        requestCtrl = createCtrl();
+        httpBackend.flush();
     }));
 
     afterEach(function() {
@@ -71,8 +91,16 @@
       httpBackend.verifyNoOutstandingRequest();
     });
 
-    fdescribe('acceptRequest()', function() {
-      
+    describe('acceptRequest()', function() {
+
+        beforeEach(function() {
+            expect(request.status).toEqual('sent');
+        })
+
+        afterEach(function() {
+            expect(request.status).toEqual('accepted');
+        })
+
         it('Should accept user request', function() {
             request.type_of_invite = REQUEST_USER;
             spyOn(requestInvitationService, 'acceptRequest').and.callFake(callFake);
@@ -102,26 +130,72 @@
         });
     });
 
+    describe('Test loadUser on acceptRequest()', function() {
+        beforeEach(function() {
+            spyOn(userService, 'load').and.callFake(function() {
+                return {
+                    then: function(callback) {
+                        callback({permissions: permissions});
+                    }
+                };
+            }); 
+
+            spyOn(requestInvitationService, 'acceptRequest').and.callFake(function(){
+                return {
+                    then: function(callback) {
+                        callback();
+                    }
+                };
+            });
+
+            spyOn(requestInvitationService, 'getRequest').and.callFake(callFake);
+            spyOn(messageService, 'showToast').and.callFake(callFake);  
+            spyOn(requestCtrl, 'hideDialog').and.callFake(function() {});
+        });
+
+        it('Should accept request and refresh user permissions', function() {
+            expect(authService.getCurrentUser().permissions).toEqual([]);
+            expect(request.status).toEqual('sent');
+
+            requestCtrl.acceptRequest();
+
+            expect(authService.getCurrentUser().permissions).toEqual(permissions);
+            expect(messageService.showToast).toHaveBeenCalledWith("Solicitação aceita!");
+            expect(request.status).toEqual('accepted');
+        });
+    });
+
     describe('rejectRequest()', function() {
 
-        beforeEach(function() {
-            spyOn(requestInvitationService, 'showRejectDialog').and.returnValue(deferred.promise);
-            deferred.resolve();
+        it('should set isRejecting to true', function() {
+            expect(requestCtrl.isRejecting).toBe(false);
+            requestCtrl.rejectRequest();
+            expect(requestCtrl.isRejecting).toBe(true);
         });
+    });
+
+    describe('confirmReject()', function() {
+        
+        beforeEach(function() {
+            expect(request.status).toEqual('sent');
+        })
+
+        afterEach(function() {
+            expect(request.status).toEqual('rejected');
+        })
 
         it('Should reject user request', function() {
             request.type_of_invite = REQUEST_USER;
             spyOn(requestInvitationService, 'rejectRequest').and.callFake(callFake);
-            requestCtrl.rejectRequest();
+            requestCtrl.confirmReject();
             scope.$apply();
-            expect(requestInvitationService.showRejectDialog).toHaveBeenCalled();
             expect(requestInvitationService.rejectRequest).toHaveBeenCalledWith(request.key);
         });
 
         it('Should reject institution request', function() {
             request.type_of_invite = REQUEST_INSTITUTION;
             spyOn(requestInvitationService, 'rejectRequestInst').and.callFake(callFake);
-            requestCtrl.rejectRequest();
+            requestCtrl.confirmReject();
             scope.$apply();
             expect(requestInvitationService.rejectRequestInst).toHaveBeenCalledWith(request.key);
         });
@@ -129,7 +203,7 @@
         it('Should reject children institution request', function() {
             request.type_of_invite = REQUEST_CHILDREN;
             spyOn(requestInvitationService, 'rejectInstChildrenRequest').and.callFake(callFake);
-            requestCtrl.rejectRequest();
+            requestCtrl.confirmReject();
             scope.$apply();
             expect(requestInvitationService.rejectInstChildrenRequest).toHaveBeenCalledWith(request.key);
         });
@@ -137,7 +211,7 @@
         it('Should reject parent institution request', function() {
             request.type_of_invite = REQUEST_PARENT;
             spyOn(requestInvitationService, 'rejectInstParentRequest').and.callFake(callFake);
-            requestCtrl.rejectRequest();
+            requestCtrl.confirmReject();
             scope.$apply();
             expect(requestInvitationService.rejectInstParentRequest).toHaveBeenCalledWith(request.key);
         });

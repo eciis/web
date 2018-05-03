@@ -8,10 +8,11 @@ from utils import json_response
 from utils import Utils
 from custom_exceptions.entityException import EntityException
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
-from handlers.base_handler import BaseHandler
+from . import BaseHandler
 from models.factory_invites import InviteFactory
 from models.request_institution_children import RequestInstitutionChildren
 
+__all__ = ['InstitutionChildrenRequestCollectionHandler']
 
 class InstitutionChildrenRequestCollectionHandler(BaseHandler):
     """Request Handler."""

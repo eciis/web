@@ -11,9 +11,10 @@ from utils import Utils
 from utils import to_int
 from custom_exceptions.queryException import QueryException
 
-from handlers.base_handler import BaseHandler
+from . import BaseHandler
 from models.post import Post
 
+__all__ = ['InstitutionTimelineHandler']
 
 class InstitutionTimelineHandler(BaseHandler):
     """Get posts of specific institution."""

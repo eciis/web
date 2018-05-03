@@ -296,7 +296,7 @@
         it('should remove child link', function() {
             inviteInstHierarchieCtrl.institution.children_institutions = [otherInst];
             expect(inviteInstHierarchieCtrl.institution.children_institutions).toEqual([otherInst]);
-            inviteInstHierarchieCtrl.removeLink("event", otherInst, false);
+            inviteInstHierarchieCtrl.removeLink(otherInst, false, "event");
             expect(mdDialog.confirm).toHaveBeenCalled();
             expect(mdDialog.show).toHaveBeenCalled();
             expect(instService.removeLink).toHaveBeenCalled();

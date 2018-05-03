@@ -23,12 +23,18 @@ class ServiceMessageTest(TestBaseHandler):
         sender.put()
         institution = mocks.create_institution()
         current_institution = institution.key
-        message = service_messages.create_message(sender.key.urlsafe(), current_institution)
+        message = service_messages.create_message(sender.key, current_institution)
         expected_message = {
             'from': {
                 'name': sender.name.encode('utf8'),
                 'photo_url': sender.photo_url,
-                'institution_name': institution.name
+                'institution_name': ''
+            },
+            'to': {
+                'institution_name': ''
+            },
+            'current_institution': {
+                'name': institution.name
             }
         }
 
@@ -44,8 +50,7 @@ class ServiceMessageTest(TestBaseHandler):
         institution = mocks.create_institution()
         entity = service_messages.create_entity(institution.key.urlsafe())
         expected_entity = {
-            "key": institution.key.urlsafe(),
-            "institution_name": institution.name
+            "key": institution.key.urlsafe()
         }
 
         self.assertEquals(
@@ -61,8 +66,7 @@ class ServiceMessageTest(TestBaseHandler):
         post = mocks.create_post(author.key, institution.key)
         entity = service_messages.create_entity(post.key.urlsafe())
         expected_entity = {
-            "key": post.key.urlsafe(),
-            "institution_name": institution.name
+            "key": post.key.urlsafe()
         }
 
         self.assertEquals(
@@ -72,10 +76,9 @@ class ServiceMessageTest(TestBaseHandler):
         )
 
 
-    @mock.patch('service_messages.create_message')
     @mock.patch('service_messages.create_entity')
     @mock.patch('service_messages.taskqueue.add')
-    def test_send_message_notification(self, taskqueue_add, create_entity, create_message):
+    def test_send_message_notification(self, taskqueue_add, create_entity):
         """Test send_message_notification method."""
         sender = mocks.create_user()
         sender.photo_url = "photo-url"
@@ -85,19 +88,25 @@ class ServiceMessageTest(TestBaseHandler):
         current_institution = { "name": institution.name }
         post = mocks.create_post(receiver.key, institution.key)
         entity_type = "LIKE_POST"
+        expected_message = {
+            'from': {
+                'name': sender.name.encode('utf8'),
+                'photo_url': sender.photo_url,
+                'institution_name': institution.name
+            },
+            'to': {
+                'institution_name': ''
+            },
+            'current_institution': current_institution
+        }
 
         service_messages.send_message_notification(
-            receiver.key.urlsafe(),
-            sender.key.urlsafe(),
-            entity_type,
-            post.key.urlsafe(),
-            current_institution
+            receiver_key=receiver.key.urlsafe(),
+            entity_type=entity_type,
+            entity_key=post.key.urlsafe(),
+            message=expected_message
         )
 
-        self.assertTrue(
-            create_message.called,
-            "Should have called the create_message method"
-        )
         self.assertTrue(
             create_entity.called,
             "Should have called the create_entity method"

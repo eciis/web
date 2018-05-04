@@ -379,3 +379,16 @@ class Institution(ndb.Model):
         #Means that institution_to_verify is self's parent
         child_link = self.parent_institution == institution_to_verify.key and self.key in institution_to_verify.children_institutions
         return child_link or parent_link
+
+
+    @staticmethod
+    def has_connection_between(institution_key, superior_inst_key):
+
+        def has_connection(parent_key):
+            if not parent_key:
+                return False
+
+            connection_found = parent_key == superior_inst_key
+            return connection_found or has_connection(parent_key.get().parent_institution)
+
+        return has_connection(institution_key.get().parent_institution)

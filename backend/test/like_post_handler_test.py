@@ -93,7 +93,8 @@ class LikePostHandlerTest(TestBaseHandler):
             'sender_key': self.other_user.key.urlsafe(),
             'entity_key': self.post.key.urlsafe(),
             'entity_type': 'LIKE_POST',
-            'current_institution': self.institution.key.urlsafe()
+            'current_institution': self.institution.key.urlsafe(),
+            'sender_institution_key': self.post.institution.urlsafe()
         }
 
         enqueue_task.assert_called_with('post-notification', params)

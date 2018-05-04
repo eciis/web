@@ -372,7 +372,7 @@ class RemoveAdminPermissionsInInstitutionHierarchy(BaseHandler):
                 get_all=False, admin_key=parent_admin.key)
             for current_admin in parent_admins:
                 if current_admin.key != child_admin_key:
-                    current_permissions = permissions = filter_permissions_to_remove(
+                    current_permissions = filter_permissions_to_remove(
                         current_admin, permissions, institution.key, should_remove
                     )
                     self.removeAdminPermissions(

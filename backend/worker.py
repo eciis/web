@@ -354,15 +354,19 @@ class RemoveAdminPermissionsInInstitutionHierarchy(BaseHandler):
         institution_key = self.request.get('institution_key')
         institution = ndb.Key(urlsafe=institution_key).get()
         user = ndb.Key(urlsafe=self.request.get('user')).get()
-        
+        current_admin = institution.admin
 
         @ndb.transactional(xg=True, retries=10)
         def apply_remove_operation(user, institution, should_remove):
-            permissions = institution.get_hierarchy_admin_permissions(get_all=False, admin_key=user.key)
+            admins = get_all_parent_admins(institution.parent_institution.get(), [])
+            permissions = institution.get_hierarchy_admin_permissions(
+                get_all=False, admin_key=user.key)
             permissions = filter_permissions_to_remove(
                 user, permissions, institution.key, should_remove
             )
-            self.removeAdminPermissions(user, permissions)
+            for admin in admins:
+                if admin != current_admin:
+                    self.removeAdminPermissions(admin, permissions)
         apply_remove_operation(user, institution, is_not_admin)
 
 class AddPostInInstitution(BaseHandler):

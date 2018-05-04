@@ -206,21 +206,34 @@ class Institution(ndb.Model):
         """This method allows this procedure to be done in a queue.
         It handles the hierarchy removal once it is called by every child
         institution.
+        There are three possibilities of flow. The first one happens when
+        remove_hierarchy is true and what it does is to call a method that will
+        iterate over the children and can remove the current child. Later, this method
+        is called from there to handle the child's hierarchy removal. The second and
+        the third one happen when remove_hierarchy is false. The second happens when
+        self has a parent_institution. Inside of this condition, a returned_method is
+        set to remove_parent_connection. In the third possibility of flow, the returned_method
+        is set to set_parent_for_none. With this approach the queue can act in the hierarchy
+        like it hasn't been touched yet, when remove_hierarchy is false, and once the queue
+        has done what it should have done it calls the returned_method to finish the removal
+        process.
 
         Keyword arguments:
         remove_hierarchy -- works as a flag that indicates the institution's hierarchy removal
         user -- the user who started the institution's removal process. So, it may not be the admin
         of self.
         """
+        returned_method = None
         # Remove the hierarchy
         if remove_hierarchy == "true":
             self.remove_institution_hierarchy(remove_hierarchy, user)
         # Change the parent's and children's pointers
         elif self.parent_institution:
-            self.remove_parent_connection()
+            returned_method = self.remove_parent_connection
         # Change the children's pointers if there is no parent
         else:
-            self.set_parent_for_none()
+            returned_method = self.set_parent_for_none
+        return returned_method
 
     def remove_link(self, institution_link, is_parent):
         """Remove the connection between self and institution_link."""
@@ -234,8 +247,9 @@ class Institution(ndb.Model):
         """Remove institution's hierarchy."""
         for child in self.children_institutions:
             child = child.get()
-            child.remove_institution(remove_hierarchy, user)
-            child.handle_hierarchy_removal(remove_hierarchy, user)
+            if self.verify_connection(child):
+                child.remove_institution(remove_hierarchy, user)
+                child.handle_hierarchy_removal(remove_hierarchy, user)
 
     def remove_parent_connection(self):
         """Change parent connection when remove an institution."""
@@ -342,7 +356,9 @@ class Institution(ndb.Model):
             child = child_key.get()
             adm_is_child_adm = child.admin == admin_key
             get_next_permissions = get_all or not adm_is_child_adm
-            if get_next_permissions:
+            #The child permissions should only be added if the link is confirmed.
+            link_confirmed = child.verify_connection(self)
+            if get_next_permissions and link_confirmed:
                 child.get_hierarchy_admin_permissions(get_all, admin_key, permissions)
         
         return permissions

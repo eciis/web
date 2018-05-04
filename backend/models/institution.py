@@ -187,7 +187,7 @@ class Institution(ndb.Model):
     def remove_institution(self, remove_hierarchy, user):
         """Remove an institution.
 
-        Keyword arguments:
+        Params:
         remove_hierarchy -- string the represents if the institution's hiearchy
         will be removed
         user -- the admin of the institution.
@@ -206,7 +206,7 @@ class Institution(ndb.Model):
         It handles the hierarchy removal once it is called by every child
         institution.
 
-        Keyword arguments:
+        Params:
         remove_hierarchy -- works as a flag that indicates the institution's hierarchy removal
         user -- the user who started the institution's removal process. So, it may not be the admin
         of self.
@@ -319,7 +319,7 @@ class Institution(ndb.Model):
         the admin permissions of all institutions belonging 
         to the child hierarchy.
 
-        Arguments:
+        Params:
         get_all (Optional)-- If true, get all permissions from institutions 
         admin_key (Optional) -- admin that requested to unlink the institutions
         hierarchically above the first child with the same admin
@@ -352,7 +352,7 @@ class Institution(ndb.Model):
         The type permission is only possible when the institution is super institution.
         Returns a dict containing the super user permissions.
 
-        Arguments:
+        Params:
         permissions(Optional) -- Dict of previous permissions added for add more permissons. 
         If not passed, creates new dict of permissions
         """
@@ -382,13 +382,21 @@ class Institution(ndb.Model):
 
 
     @staticmethod
-    def has_connection_between(institution_key, superior_inst_key):
+    def has_connection_between(possible_child_key, possible_parent_key):
+        """
+        It makes a bottom-up verification to check if these institutions are connected.
 
+        Params:
+        possible_child_key -- key of institution that is belived 
+            to be the child, if the connection exists
+        possible_parent_key -- key of institution that is belived 
+            to be the parent, if the connection exists
+        """
         def has_connection(parent_key):
             if not parent_key:
                 return False
 
-            connection_found = parent_key == superior_inst_key
+            connection_found = parent_key == possible_parent_key
             return connection_found or has_connection(parent_key.get().parent_institution)
 
-        return has_connection(institution_key.get().parent_institution)
+        return has_connection(possible_child_key.get().parent_institution)

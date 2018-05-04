@@ -8,6 +8,25 @@ from permissions import DEFAULT_ADMIN_PERMISSIONS
 
 from .. import mocks
 
+def generate_child_to_parent(parent, child_admin=None):
+    # create child and parent invite
+    admin = mocks.create_user() if child_admin is None else child_admin
+    child = mocks.create_institution()
+    child.add_member(admin)
+    child.set_admin(admin.key)
+    admin.add_permissions(DEFAULT_ADMIN_PERMISSIONS, child.key.urlsafe())
+    data = {
+        'sender_key': admin.key.urlsafe(),
+        'institution_requested_key': parent.key.urlsafe(),
+        'admin_key': admin.key.urlsafe(),
+        'institution_key': child.key.urlsafe()
+    }
+    parent_invite = RequestInstitutionParent.create(data)
+    # link child_a to institution
+    Institution.create_parent_connection(parent, parent_invite)
+    #  update child
+    child = child.key.get()
+    return child
 
 class InstitutionTest(TestBase):
     """Test the institution model."""
@@ -86,25 +105,6 @@ class InstitutionTest(TestBase):
                     permissions.update({permission: {institution_key_url: True}})
             return permissions
 
-        def generate_child_to_parent(parent, child_admin=None):
-            # create child and parent invite
-            admin = mocks.create_user() if child_admin is None else child_admin
-            child = mocks.create_institution()
-            child.add_member(admin)
-            child.set_admin(admin.key)
-            admin.add_permissions(DEFAULT_ADMIN_PERMISSIONS, child.key.urlsafe())
-            data = {
-                'sender_key': admin.key.urlsafe(),
-                'institution_requested_key': parent.key.urlsafe(),
-                'admin_key': admin.key.urlsafe(),
-                'institution_key': child.key.urlsafe()
-            }
-            parent_invite = RequestInstitutionParent.create(data)
-            # link child_a to institution
-            Institution.create_parent_connection(parent, parent_invite)
-            child.put()
-            return child
-
         # Case 1: Get all permission and the admin has just one institution
         # Institution(admin) -> x
         expected_permissions = generate_permissions(self.institution.key.urlsafe(), {})
@@ -156,3 +156,66 @@ class InstitutionTest(TestBase):
         self.assertEquals(actual_permissions, expected_permissions,
             "The admin does not have the expected permissions"
         )
+
+    def test_has_connection_between(self):
+        #  create hierarchy
+        # institution -> child_a -> child_b -> child_c
+        child_a = generate_child_to_parent(self.institution)
+        child_b = generate_child_to_parent(child_a)
+        child_c = generate_child_to_parent(child_b)
+        independent_instituion = mocks.create_institution()
+
+        # update institution
+        self.institution = self.institution.key.get() 
+
+        # verifies the hierarchy
+        self.assertEquals(
+            self.institution.parent_institution, None,
+            "institution should not have a parent"
+        )
+        self.assertEquals(
+            child_a.parent_institution, self.institution.key,
+            "institution should be parent of child_a"
+        )
+        self.assertEquals(
+            child_b.parent_institution, child_a.key,
+            "child_a should be parent of child_b"
+        )
+        self.assertEquals(
+            child_c.parent_institution, child_b.key,
+            "child_b should be parent of child_c"
+        )
+        self.assertEquals(
+            independent_instituion.parent_institution, None,
+            "independent_institution should not have a parent"
+        )
+        self.assertEquals(
+            independent_instituion.children_institutions, [],
+            "independent_institution should not have children"
+        )
+
+        # verifies the connections
+        # Case 1: institutions directly connected
+        self.assertTrue(
+            Institution.has_connection_between(child_a.key, self.institution.key),
+            "The connection between child_a and institution should be true"
+        )
+        # Case 2: institutions indirectly connected
+        self.assertTrue(
+            Institution.has_connection_between(child_b.key, self.institution.key),
+            "The connection between child_b and institution should be true"
+        )
+        self.assertTrue(
+            Institution.has_connection_between(child_c.key, self.institution.key),
+            "The connection between child_c and institution should be true"
+        )
+        # Case 3: institutions disconnected
+        self.assertFalse(
+            Institution.has_connection_between(independent_instituion.key, self.institution.key),
+            "The connection between independent_instituion and institution should be false"
+        )
+        self.assertFalse(
+            Institution.has_connection_between(self.institution.key, independent_instituion.key),
+            "The connection between institution and independent_instituion should be false"
+        )
+

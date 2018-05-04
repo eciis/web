@@ -631,6 +631,9 @@ class InstitutionHandlerTest(TestBaseHandler):
         second_user.put()
         third_user.put()
 
+        # Hierarchy
+        #   first_inst -> second_inst -> third_inst -> fourth_inst
+        #   (first_user)  (second_user)   (first_user)  (third_user)
         self.assertTrue(has_permissions(
             first_user, first_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
         self.assertTrue(has_permissions(
@@ -710,6 +713,9 @@ class InstitutionHandlerTest(TestBaseHandler):
         second_user.put()
         third_user.put()
 
+        # Hierarchy
+        #   first_inst -> second_inst -> third_inst
+        #   (first_user)  (second_user)   (third_user)
         self.assertTrue(has_permissions(
             second_user, third_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
 
@@ -775,6 +781,9 @@ class InstitutionHandlerTest(TestBaseHandler):
         first_user.put()
         second_user.put()
 
+        # Hierarchy
+        #   first_inst -> second_inst -> third_inst
+        #   (first_user)  (second_user)   (second_user)
         self.assertTrue(has_permissions(
             second_user, third_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
 

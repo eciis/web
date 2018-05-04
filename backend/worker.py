@@ -235,12 +235,12 @@ class RemoveInstitutionHandler(BaseHandler):
 
         @ndb.transactional(xg=True, retries=10)
         def apply_remove_operation(remove_hierarchy, institution, user):
-            callback_method = institution.handle_hierarchy_removal(remove_hierarchy, user)
+            returned_method = institution.handle_hierarchy_removal(remove_hierarchy, user)
             institution.remove_institution_from_users(remove_hierarchy)
             remove_permissions(remove_hierarchy, institution)
             notify_institution_removal(institution, remove_hierarchy, user)
-            if callback_method:
-                callback_method()
+            if returned_method:
+                returned_method()
         apply_remove_operation(remove_hierarchy, institution, user)
 
 

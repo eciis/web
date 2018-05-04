@@ -8,6 +8,7 @@ from worker import RemoveAdminPermissionsInInstitutionHierarchy
 from mock import patch
 import mocks
 import permissions
+import json
 from test_base_handler import has_permissions
 
 ADMIN = {'email': 'user1@gmail.com'}
@@ -68,13 +69,27 @@ class InstitutionHierarchyHandlerTest(TestBaseHandler):
         self.assertTrue(
             otherinst.key not in institution.children_institutions)
         self.assertTrue(otherinst.parent_institution == institution.key)
+
+        message = {
+            "from": {
+                "photo_url": admin.photo_url,
+                "name": admin.name,
+                "institution_name": institution.name
+            },
+            "to": {
+                "institution_name": otherinst.name
+            },
+            "current_institution": {
+                "name": institution.name
+            }
+        }
+
         # assert the notification was sent
         send_message_notification.assert_called_with(
-            otheruser.key.urlsafe(),
-            admin.key.urlsafe(),
-            "INSTITUTION",
-            otherinst.key.urlsafe(),
-            institution.key
+            receiver_key=otheruser.key.urlsafe(),
+            entity_type="INSTITUTION",
+            entity_key=otherinst.key.urlsafe(),
+            message=json.dumps(message)
         )
 
     @patch('handlers.institution_hierarchy_handler.send_message_notification')
@@ -109,13 +124,27 @@ class InstitutionHierarchyHandlerTest(TestBaseHandler):
         self.assertTrue(
             otherinst.key in institution.children_institutions)
         self.assertTrue(otherinst.parent_institution is None)
+
+        message = {
+            "from": {
+                "photo_url": otheruser.photo_url,
+                "name": otheruser.name,
+                "institution_name": otherinst.name
+            },
+            "to": {
+                "institution_name": institution.name
+            },
+            "current_institution": {
+                "name": otherinst.name
+            }
+        }
+
         # assert the notification was sent
         send_message_notification.assert_called_with(
-            admin.key.urlsafe(),
-            otheruser.key.urlsafe(),
-            "INSTITUTION",
-            institution.key.urlsafe(),
-            otherinst.key
+            receiver_key=admin.key.urlsafe(),
+            entity_type="INSTITUTION",
+            entity_key=institution.key.urlsafe(),
+            message=json.dumps(message)
         )
 
     @patch('handlers.institution_hierarchy_handler.enqueue_task')

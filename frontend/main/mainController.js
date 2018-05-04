@@ -86,21 +86,21 @@
             AuthService.logout();
         };
 
-        mainCtrl.goToManageMembers = function goToManageMembers(){
+        mainCtrl.goToManageMembers = function goToManageMembers(instKey){
             $state.go('app.manage_institution.members', {
-                institutionKey: mainCtrl.user.current_institution.key
+                institutionKey: instKey || mainCtrl.user.current_institution.key
             });
         };
 
-        mainCtrl.goToManageInstitutions = function goToManageInstitutions(){
+        mainCtrl.goToManageInstitutions = function goToManageInstitutions(instKey){
             $state.go('app.manage_institution.invite_inst', {
-                institutionKey: mainCtrl.user.current_institution.key
+                institutionKey: instKey || mainCtrl.user.current_institution.key
             });
         };
 
-        mainCtrl.goToEditInfo = function goToEditInfo(){
+        mainCtrl.goToEditInfo = function goToEditInfo(instKey){
             $state.go('app.manage_institution.edit_info', {
-                institutionKey: mainCtrl.user.current_institution.key
+                institutionKey: instKey || mainCtrl.user.current_institution.key
             });
         };
 

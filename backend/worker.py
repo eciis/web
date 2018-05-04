@@ -358,7 +358,7 @@ class RemoveAdminPermissionsInInstitutionHierarchy(BaseHandler):
         parent_institution = ndb.Key(urlsafe=parent_institution_key).get()
 
         parent_admin = parent_institution.admin.get()
-        child_admin = institution.admin
+        child_admin_key = institution.admin
 
         @ndb.transactional(xg=True, retries=10)
         def apply_remove_operation(parent_admin, institution, should_remove):
@@ -367,12 +367,16 @@ class RemoveAdminPermissionsInInstitutionHierarchy(BaseHandler):
             the admins that have to lose it, based in a condition that checks if 
             the current_admin is different of the current_admin.  
             """
-            admins = get_all_parent_admins(parent_institution, [])
+            parent_admins = get_all_parent_admins(parent_institution, [])
             permissions = institution.get_hierarchy_admin_permissions(
                 get_all=False, admin_key=parent_admin.key)
-            for current_admin in admins:
-                if current_admin.key != child_admin:
-                    self.removeAdminPermissions(current_admin, permissions)
+            for current_admin in parent_admins:
+                if current_admin.key != child_admin_key:
+                    current_permissions = permissions = filter_permissions_to_remove(
+                        current_admin, permissions, institution.key, should_remove
+                    )
+                    self.removeAdminPermissions(
+                        current_admin, current_permissions)
         apply_remove_operation(parent_admin, institution, is_not_admin)
 
 class AddPostInInstitution(BaseHandler):

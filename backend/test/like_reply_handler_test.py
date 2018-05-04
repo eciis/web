@@ -63,13 +63,27 @@ class LikeReplyHandlerTest(TestBaseHandler):
             len(likes), 1,
             "This reply should have one like."
         )
+
+        message = {
+            "from": {
+                "photo_url": self.user.photo_url,
+                "name": self.user.name,
+                "institution_name": self.post.institution.get().name
+            },
+            "to": {
+                "institution_name": ""
+            },
+            "current_institution": {
+                "name": None 
+            }
+        }
+
         # assert the notification was sent
         send_message_notification.assert_called_with(
-            self.other_user.key.urlsafe(),
-            self.user.key.urlsafe(),
-            "LIKE_COMMENT",
-            self.post.key.urlsafe(),
-            None
+            receiver_key=self.other_user.key.urlsafe(),
+            entity_type="LIKE_COMMENT",
+            entity_key=self.post.key.urlsafe(),
+            message=json.dumps(message)
         )
 
         # Call the post method again

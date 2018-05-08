@@ -276,6 +276,7 @@
                     }
                 );
             } else {
+                dialogProperties.locals.key = notification.entity.key;
                 showPendingReqDialog(dialogProperties, event);
             }
         }

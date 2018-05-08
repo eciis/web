@@ -8,25 +8,6 @@ from permissions import DEFAULT_ADMIN_PERMISSIONS
 
 from .. import mocks
 
-def generate_child_to_parent(parent, child_admin=None):
-    # create child and parent invite
-    admin = mocks.create_user() if child_admin is None else child_admin
-    child = mocks.create_institution()
-    child.add_member(admin)
-    child.set_admin(admin.key)
-    admin.add_permissions(DEFAULT_ADMIN_PERMISSIONS, child.key.urlsafe())
-    data = {
-        'sender_key': admin.key.urlsafe(),
-        'institution_requested_key': parent.key.urlsafe(),
-        'admin_key': admin.key.urlsafe(),
-        'institution_key': child.key.urlsafe()
-    }
-    parent_invite = RequestInstitutionParent.create(data)
-    # link child_a to institution
-    Institution.create_parent_connection(parent, parent_invite)
-    #  update child
-    child = child.key.get()
-    return child
 
 class InstitutionTest(TestBase):
     """Test the institution model."""
@@ -117,7 +98,7 @@ class InstitutionTest(TestBase):
         # Case 2: Get all permission and the admin has one institution and 
         # one child that he is not admin  
         # Institution(admin) -> child_a(other_admin) -> x
-        child_a = generate_child_to_parent(self.institution)
+        child_a = mocks.generate_child_to_parent(self.institution)
         self.institution = self.institution.key.get()
         expected_permissions = generate_permissions(self.institution.key.urlsafe(), {})
         expected_permissions = generate_permissions(child_a.key.urlsafe(), expected_permissions)
@@ -130,8 +111,8 @@ class InstitutionTest(TestBase):
         # Case 3: Get all permission and the admin has one institution and 
         # one child that he is not admin  
         # Institution(admin) -> child_a(other_admin) -> child_b(admin) -> child_c(other_admin) -> x
-        child_b = generate_child_to_parent(child_a, self.admin)
-        child_c = generate_child_to_parent(child_b, child_a.admin.get())
+        child_b = mocks.generate_child_to_parent(child_a, self.admin)
+        child_c = mocks.generate_child_to_parent(child_b, child_a.admin.get())
         self.institution = self.institution.key.get()
         expected_permissions = generate_permissions(self.institution.key.urlsafe(), {})
         expected_permissions = generate_permissions(child_a.key.urlsafe(), expected_permissions)
@@ -160,9 +141,9 @@ class InstitutionTest(TestBase):
     def test_has_connection_between(self):
         #  create hierarchy
         # institution -> child_a -> child_b -> child_c
-        child_a = generate_child_to_parent(self.institution)
-        child_b = generate_child_to_parent(child_a)
-        child_c = generate_child_to_parent(child_b)
+        child_a = mocks.generate_child_to_parent(self.institution)
+        child_b = mocks.generate_child_to_parent(child_a)
+        child_c = mocks.generate_child_to_parent(child_b)
         independent_instituion = mocks.create_institution()
 
         # update institution

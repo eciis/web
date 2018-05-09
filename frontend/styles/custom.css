@@ -1101,3 +1101,15 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
     white-space: nowrap; 
     width: 100%;
 }
+
+.inst-info-title {
+    color: #009688;
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+.inst-info-text {
+    color: #757575;
+    font-size: 14px;
+    margin-top: 3px;
+}

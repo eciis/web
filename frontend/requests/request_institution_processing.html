@@ -1,35 +1,47 @@
 <div layout-padding layout="column" flex-gt-sm="40" flex-xs="90" flex-sm="60">
-  <div div layout="row" layout-align="start center">
-    <div layout="column" flex="100">
-      <md-dialog>
-        <md-dialog-content class="md-dialog-content" layout-gt-sm="column" layout-padding ng-if="!requestCtrl.isRejecting">
-          <h4 style="margin: 0;">Informações institucionais</h4>
-          <div layout="column">
-            <div layout="row" layout-margin style="margin: 0 0 8px 0;">
-              <div layout="column" layout-align="center start">
-                <b style="color: #009688">Nome</b>
-                <p style="color: #757575">{{ requestCtrl.parent.name }}</p>
-                <div ng-if="requestCtrl.parent.acronym" >
-                    <b style="color:#009688">Sigla</b>
-                    <p style="color: #757575">{{requestCtrl.parent.acronym}}</p>
-                </div>
-                <b style="color:#009688">Área de atuação</b>
-                <p style="color: #757575">{{requestCtrl.instActuationArea}}</p>
-                <b style="color: #009688">Responsável</b>
-                <p style="color: #757575">{{ requestCtrl.parent.leader }}</p>
-                <b style="color: #009688">Email</b>
-                <p style="color: #757575">{{ requestCtrl.parent.email }}</p>
-                <b style="color:#009688">Natureza jurídica</b>
-                <p style="color: #757575">{{requestCtrl.instLegalNature}}</p>
-                <div ng-if="requestCtrl.parent.cnpj">
-                    <b style="color:#009688">CNPJ</b>
-                    <p style="color: #757575">{{requestCtrl.parent.cnpj}}</p>
-                </div>
-                <b style="color:#009688">País</b>
-                <p style="color: #757575">{{requestCtrl.parent.address.country}}</p>
+  <div layout="row" layout-align="start center" style="padding: 0;">
+    <div layout="column" flex="100" layout-padding style="padding: 0;">
+      <md-dialog style="max-width: 100%;">
+        <md-dialog-content class="custom-scrollbar" layout-padding ng-if="!requestCtrl.isRejecting">
+            <div layout="row" layout-align="center center">
+                <div layout="column" flex="100">
+                  <h4 style="margin: 0;">Informações institucionais</h4>
+                  <b class="inst-info-title">Nome</b>
+                  <b class="inst-info-text">{{ requestCtrl.parent.name }}</b>
+                  <div layout="row">
+                    <div layout="column">
+                      <b class="inst-info-title">Área de atuação</b>
+                      <b class="inst-info-text">{{requestCtrl.instActuationArea}}</b>
+                      <b class="inst-info-title">Responsável</b>
+                      <b class="inst-info-text">{{ requestCtrl.parent.leader }}</b>
+                      <b class="inst-info-title">País</b>
+                      <b class="inst-info-text">{{requestCtrl.parent.address.country}}</b>
+                      <div layout="column" ng-if="!requestCtrl.isAnotherCountry()">
+                          <b class="inst-info-title">Cidade</b>
+                          <b class="inst-info-text">{{requestCtrl.parent.address.city}}</b>
+                          <b class="inst-info-title">Rua</b>
+                          <b class="inst-info-text">{{requestCtrl.parent.address.street}}</b>
+                        </div>
+                    </div>
+                    <div layout="column" style="margin-left: 100px;">
+                        <b class="inst-info-title">Natureza jurídica</b>
+                        <b class="inst-info-text">{{requestCtrl.instLegalNature}}</b>
+                        <b class="inst-info-title">Email</b>
+                        <b class="inst-info-text">{{ requestCtrl.parent.email }}</b>
+                        <div layout="column" ng-if="!requestCtrl.isAnotherCountry()">
+                          <b class="inst-info-title">Estado</b>
+                          <b class="inst-info-text">{{requestCtrl.parent.address.federal_state}}</b>
+                          <b class="inst-info-title">Bairro</b>
+                          <b class="inst-info-text">{{requestCtrl.parent.address.neighbourhood}}</b>
+                          <b class="inst-info-title">Número</b>
+                          <b class="inst-info-text">{{requestCtrl.parent.address.number}}</b>
+                        </div>
+                    </div>
+                  </div>
+                  <b class="inst-info-title">Descrição</b>
+                  <b class="inst-info-text">{{requestCtrl.parent.description}}</b>
               </div>
             </div>
-          </div>
         </md-dialog-content>
         <md-dialog-actions style="border:0px" layout="row" ng-if="!requestCtrl.isRejecting">
           <md-button ng-click="requestCtrl.rejectRequest($event)" class="md-raised" md-colors="{background: 'default-teal-500'}">

@@ -87,7 +87,7 @@ class ServiceMessageTest(TestBaseHandler):
         institution = mocks.create_institution()
         current_institution = { "name": institution.name }
         post = mocks.create_post(receiver.key, institution.key)
-        entity_type = "LIKE_POST"
+        notification_type = "LIKE_POST"
         expected_message = {
             'from': {
                 'name': sender.name.encode('utf8'),
@@ -102,7 +102,7 @@ class ServiceMessageTest(TestBaseHandler):
 
         service_messages.send_message_notification(
             receiver_key=receiver.key.urlsafe(),
-            notification_type=entity_type,
+            notification_type=notification_type,
             entity_key=post.key.urlsafe(),
             message=expected_message
         )

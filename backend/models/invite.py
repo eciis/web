@@ -102,19 +102,19 @@ class Invite(PolyModel):
             receiver_institution_key=receiver_institution_key or self.institution_requested_key,
         )
 
-    def send_notification(self, current_institution, sender_key=None, receiver_key=None, entity_type=None, entity_key=None, message=None):
+    def send_notification(self, current_institution, sender_key=None, receiver_key=None, notification_type=None, entity_key=None, message=None):
         """Method of send notification to invitee."""
         sender_key = sender_key or self.sender_key
         if not receiver_key:
             active_invitee = User.get_active_user(self.invitee)
             receiver_key = active_invitee and active_invitee.key
         if receiver_key:
-            entity_type = entity_type or 'INVITE'
+            notification_type = notification_type or 'INVITE'
             entity_key = entity_key or self.key.urlsafe()
             notification_message = message or self.create_notification_message(sender_key, current_institution)
             send_message_notification(
                 receiver_key=receiver_key.urlsafe(),
-                notification_type=entity_type,
+                notification_type=notification_type,
                 entity_key=entity_key,
                 message=notification_message
             )

@@ -106,7 +106,7 @@ class InstitutionParentRequestHandlerTest(TestBaseHandler):
         send_notification.assert_called_with(
             current_institution=self.inst_requested.key, 
             receiver_key=self.user_admin.key,
-            entity_type='ACCEPT_INSTITUTION_LINK',
+            notification_type='ACCEPT_INSTITUTION_LINK',
             message=json.dumps(message)
         )
 
@@ -164,7 +164,7 @@ class InstitutionParentRequestHandlerTest(TestBaseHandler):
         send_notification.assert_called_with(
             current_institution=self.inst_requested.key, 
             receiver_key=self.user_admin.key,
-            entity_type='REJECT_INSTITUTION_LINK',
+            notification_type='REJECT_INSTITUTION_LINK',
             message=json.dumps(message)
         )
 

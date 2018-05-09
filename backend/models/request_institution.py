@@ -66,7 +66,7 @@ class RequestInstitution(Request):
 
     def send_notification(self, current_institution):
         """Method of send notification of request intitution."""
-        entity_type = 'REQUEST_INSTITUTION'
+        notification_type = 'REQUEST_INSTITUTION'
 
         """
             The super user is the admin of 
@@ -78,7 +78,7 @@ class RequestInstitution(Request):
         super(RequestInstitution, self).send_notification(
             current_institution=current_institution, 
             receiver_key=super_user.key,
-            entity_type=entity_type,
+            notification_type=notification_type,
             message=notification_message
         )
 

@@ -141,7 +141,7 @@ class InviteHandlerTest(TestBaseHandler):
             sender_key=self.other_user.key,
             message=None,
             receiver_key=self.user_admin.key,
-            entity_type='REJECT_INVITE_INSTITUTION'
+            notification_type='REJECT_INVITE_INSTITUTION'
         )
 
     @patch.object(Invite, 'send_notification')
@@ -198,7 +198,7 @@ class InviteHandlerTest(TestBaseHandler):
             message=json.dumps(message),
             sender_key=self.other_user.key, 
             receiver_key=self.user_admin.key,
-            entity_type="ACCEPT_INVITE_USER"
+            notification_type="ACCEPT_INVITE_USER"
         )
 
     @patch.object(Invite, 'send_notification')

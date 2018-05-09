@@ -94,7 +94,7 @@ class RequestUser(Request):
     """
     def send_notification(self, current_institution):
         """Method of send notification of invite user."""
-        entity_type = 'REQUEST_USER'
+        notification_type = 'REQUEST_USER'
         notification_message= self.create_notification_message(user_key=self.sender_key,
             current_institution_key=current_institution, 
             receiver_institution_key=self.institution_requested_key)
@@ -102,7 +102,7 @@ class RequestUser(Request):
         super(RequestUser, self).send_notification(
             current_institution=current_institution,
             receiver_key=self.admin_key,
-            entity_type=entity_type,
+            notification_type=notification_type,
             entity_key=self.key.urlsafe(),
             message=notification_message
         )
@@ -115,7 +115,7 @@ class RequestUser(Request):
     """
     def send_response_notification(self, user, current_institution, action):
         """Method sends response notification to sender request."""
-        entity_type = 'ACCEPTED_LINK' if action == 'ACCEPT' else 'REJECTED_LINK'
+        notification_type = 'ACCEPTED_LINK' if action == 'ACCEPT' else 'REJECTED_LINK'
         notification_message= self.create_notification_message(user_key=user.key,
             current_institution_key=current_institution,
             sender_institution_key=self.institution_requested_key)
@@ -123,7 +123,7 @@ class RequestUser(Request):
         super(RequestUser, self).send_notification(
             current_institution=current_institution,
             receiver_key=self.sender_key,
-            entity_type=entity_type,
+            notification_type=notification_type,
             entity_key=current_institution.urlsafe(),
             message=notification_message
         )

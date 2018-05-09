@@ -368,15 +368,12 @@ class RemoveAdminPermissionsInInstitutionHierarchy(BaseHandler):
             the current_admin is different of the current_admin.  
             """
             parent_admins = get_all_parent_admins(parent_institution, [])
-            permissions = institution.get_hierarchy_admin_permissions(
-                get_all=False, admin_key=parent_admin.key)
             for current_admin in parent_admins:
                 if current_admin.key != child_admin_key:
-                    current_permissions = filter_permissions_to_remove(
-                        current_admin, permissions, institution.key, should_remove
-                    )
+                    permissions = institution.get_hierarchy_admin_permissions(
+                        get_all=False, admin_key=current_admin.key)
                     self.removeAdminPermissions(
-                        current_admin, current_permissions)
+                        current_admin, permissions)
         apply_remove_operation(parent_admin, institution, is_not_admin)
 
 class AddPostInInstitution(BaseHandler):

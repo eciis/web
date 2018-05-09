@@ -359,17 +359,28 @@ class RemoveAdminPermissionsInInstitutionHierarchy(BaseHandler):
         """Get the permissions and provide them to the remove function."""
         institution_key = self.request.get('institution_key')
         institution = ndb.Key(urlsafe=institution_key).get()
-        user = ndb.Key(urlsafe=self.request.get('user')).get()
-        
+
+        parent_institution_key = self.request.get('parent_key')
+        parent_institution = ndb.Key(urlsafe=parent_institution_key).get()
+
+        parent_admin = parent_institution.admin.get()
+        child_admin_key = institution.admin
 
         @ndb.transactional(xg=True, retries=10)
-        def apply_remove_operation(user, institution, should_remove):
-            permissions = institution.get_hierarchy_admin_permissions(get_all=False, admin_key=user.key)
-            permissions = filter_permissions_to_remove(
-                user, permissions, institution.key, should_remove
-            )
-            self.removeAdminPermissions(user, permissions)
-        apply_remove_operation(user, institution, is_not_admin)
+        def apply_remove_operation(parent_admin, institution, should_remove, child_admin_key):
+            """This method is responsible for getting the permissions involved
+            in the link and go up in the hierarchy removing the permissions from
+            the admins that have to lose it, based in a condition that checks if 
+            the current_admin is different of the child_admin.  
+            """
+            parent_admins = get_all_parent_admins(parent_institution, [])
+            for current_admin in parent_admins:
+                if current_admin.key != child_admin_key:
+                    permissions = institution.get_hierarchy_admin_permissions(
+                        get_all=False, admin_key=current_admin.key)
+                    self.removeAdminPermissions(
+                        current_admin, permissions)
+        apply_remove_operation(parent_admin, institution, is_not_admin, child_admin_key)
 
 class AddPostInInstitution(BaseHandler):
     

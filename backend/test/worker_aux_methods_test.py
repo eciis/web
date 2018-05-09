@@ -9,15 +9,7 @@ from worker import get_all_parent_admins
 
 class WorkerAuxMethodsTest(TestBaseHandler):
     """Test Remove admin permission in institution hierarchy."""
-
-    @classmethod
-    def setUp(cls):
-        """Provide the base for the tests."""
-        super(WorkerAuxMethodsTest, cls).setUp()
-        app = cls.webapp2.WSGIApplication(
-             [], debug=True)
-        cls.testapp = cls.webtest.TestApp(app)
-
+    
     def get_all_parent_admins(self):
         """Test get_all_parent_admins method."""
         first_user = mocks.create_user()

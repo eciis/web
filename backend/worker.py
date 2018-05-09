@@ -88,7 +88,9 @@ def get_all_parent_admins(child_institution, admins=[]):
     parent_institution = child_institution.parent_institution
     if parent_institution:
         parent_institution = parent_institution.get()
-        get_all_parent_admins(parent_institution, admins)
+        link_confirmed = child_institution.verify_connection(parent_institution)
+        if link_confirmed:
+            get_all_parent_admins(parent_institution, admins)
     return admins
 
 

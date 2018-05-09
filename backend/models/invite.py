@@ -91,14 +91,14 @@ class Invite(PolyModel):
         """ Create message that will be used in notification. 
             user_key -- The user key that made the action.
             current_institution_key -- The institution that user was in the moment that made the action,
-                 in case that user is inactive he didn't have institution.
-            sender_institution_key -- The institution that should be made the action.
+                 in case that user is inactive he didn't have current institution.
+            sender_institution_key -- The institution in which action should be taken.
             receiver_institution -- The institution to which the notification is directed. 
         """
         return create_message(
             sender_key=user_key,
             current_institution_key=current_institution_key,
-            sender_institution_key= sender_institution_key or self.institution_key,
+            sender_institution_key=sender_institution_key or self.institution_key,
             receiver_institution_key=receiver_institution_key or self.institution_requested_key,
         )
 

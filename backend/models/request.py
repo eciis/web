@@ -2,7 +2,6 @@
 """Request Model."""
 from models.invite import Invite
 from custom_exceptions.fieldException import FieldException
-from service_messages import create_message
 
 
 class Request(Invite):

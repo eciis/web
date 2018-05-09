@@ -53,8 +53,8 @@
 
         service.formatMessage = function formatMessage(notification) {
             var entity_type = notification.entity_type;
-            var mainInst = notification.from.institution_name;
-            var otherInst = notification.to.institution_name;
+            var mainInst = notification.entity.institution_name || notification.from.institution_name;
+            var otherInst = (notification.to && notification.to.institution_name) || notification.from.institution_name;
             var message = assembleMessage(entity_type, mainInst, otherInst);
             return message;
         };

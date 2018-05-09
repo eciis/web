@@ -12,8 +12,6 @@
                     <div layout="column">
                       <b class="inst-info-title">Área de atuação</b>
                       <b class="inst-info-text">{{requestCtrl.instActuationArea}}</b>
-                      <b class="inst-info-title">Responsável</b>
-                      <b class="inst-info-text">{{ requestCtrl.parent.leader }}</b>
                       <b class="inst-info-title">País</b>
                       <b class="inst-info-text">{{requestCtrl.parent.address.country}}</b>
                       <div layout="column" ng-if="!requestCtrl.isAnotherCountry()">
@@ -26,8 +24,6 @@
                     <div layout="column" style="margin-left: 100px;">
                         <b class="inst-info-title">Natureza jurídica</b>
                         <b class="inst-info-text">{{requestCtrl.instLegalNature}}</b>
-                        <b class="inst-info-title">Email</b>
-                        <b class="inst-info-text">{{ requestCtrl.parent.email }}</b>
                         <div layout="column" ng-if="!requestCtrl.isAnotherCountry()">
                           <b class="inst-info-title">Estado</b>
                           <b class="inst-info-text">{{requestCtrl.parent.address.federal_state}}</b>
@@ -38,6 +34,10 @@
                         </div>
                     </div>
                   </div>
+                  <b class="inst-info-title">Responsável</b>
+                  <b class="inst-info-text">{{ requestCtrl.parent.leader }}</b>
+                  <b class="inst-info-title">Email</b>
+                  <b class="inst-info-text">{{ requestCtrl.parent.email }}</b>
                   <b class="inst-info-title">Descrição</b>
                   <b class="inst-info-text">{{requestCtrl.parent.description}}</b>
               </div>

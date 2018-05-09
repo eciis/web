@@ -302,7 +302,7 @@ class PostCollectionHandlerTest(TestBaseHandler):
         # assert the notifiction was sent to the institution followers
         send_message_notification.assert_called_with(
             receiver_key=event.author_key.urlsafe(),
-            entity_type="SHARED_EVENT",
+            notification_type="SHARED_EVENT",
             entity_key=key_post.urlsafe(),
             message=json.dumps(message)
         )

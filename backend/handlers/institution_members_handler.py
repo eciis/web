@@ -49,7 +49,7 @@ class InstitutionMembersHandler(BaseHandler):
             notification_message = institution.create_notification_message(user.key, user.current_institution)
             send_message_notification(
                 receiver_key=member.key.urlsafe(),
-                entity_type='DELETE_MEMBER',
+                notification_type='DELETE_MEMBER',
                 entity_key=institution.key.urlsafe(),
                 message=notification_message
             )

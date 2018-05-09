@@ -61,23 +61,23 @@ class ReplyCommentHandler(BaseHandler):
             current_institution_key=user.current_institution,
             sender_institution_key=post.institution
         )
-        entity_type = 'COMMENT'
+        notification_type = 'COMMENT'
 
         if (post.author != user.key):
             send_message_notification(
                 receiver_key=post.author.urlsafe(),
-                entity_type=entity_type,
+                notification_type=notification_type,
                 entity_key=post.key.urlsafe(),
                 message=notification_message
             )
 
         comment = post.get_comment(comment_id)
-        entity_type = "REPLY_COMMENT"
+        notification_type = "REPLY_COMMENT"
 
         if (comment.get('author_key') != user.key.urlsafe()):
             send_message_notification(
                 receiver_key=comment.get('author_key'),
-                entity_type=entity_type,
+                notification_type=notification_type,
                 entity_key=post.key.urlsafe(),
                 message=notification_message
             )

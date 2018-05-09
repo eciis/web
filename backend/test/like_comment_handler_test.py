@@ -98,7 +98,7 @@ class LikeCommentHandlerTest(TestBaseHandler):
         # assert the notification was sent
         send_message_notification.assert_called_with(
             receiver_key=self.third_user.key.urlsafe(),
-            entity_type="LIKE_COMMENT",
+            notification_type="LIKE_COMMENT",
             entity_key=self.post.key.urlsafe(),
             message=json.dumps(message)
         )

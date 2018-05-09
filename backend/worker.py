@@ -159,7 +159,7 @@ def notify_institution_removal(institution, remove_hierarchy, user, current_inst
         )
         send_message_notification(
             receiver_key=institution.admin.urlsafe(),
-            entity_type='DELETED_INSTITUTION',
+            notification_type='DELETED_INSTITUTION',
             entity_key=institution.key.urlsafe(),
             message=notification_message
         )
@@ -278,7 +278,7 @@ class PostNotificationHandler(BaseHandler):
             if not (user_is_author and subscriber_is_sender) and not subscriber_is_sender:
                 send_message_notification(
                     receiver_key=subscriber,
-                    entity_type=entity_type,
+                    notification_type=entity_type,
                     entity_key=post_key,
                     message=notification_message
                 )
@@ -335,7 +335,7 @@ class NotifyFollowersHandler(BaseHandler):
             if is_active and follower.key.urlsafe() != sender_key:
                 send_message_notification(
                     receiver_key=follower.key.urlsafe(),
-                    entity_type=entity_type,
+                    notification_type=entity_type,
                     entity_key=entity_key or inst_key,
                     message=notification_message,
                     entity=entity

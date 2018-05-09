@@ -106,7 +106,7 @@ class PostCollectionHandler(BaseHandler):
                     )
                 send_message_notification(
                     receiver_key=shared_event.author_key.urlsafe(),
-                    entity_type='SHARED_EVENT',
+                    notification_type='SHARED_EVENT',
                     entity_key=post.key.urlsafe(),
                     message=notification_message
                 )

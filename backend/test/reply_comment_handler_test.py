@@ -109,7 +109,7 @@ class ReplyCommentHandlerTest(TestBaseHandler):
             # args used to send the notification to the post author
             call(
                 receiver_key=self.user.key.urlsafe(),
-                entity_type="COMMENT",
+                notification_type="COMMENT",
                 entity_key=self.user_post.key.urlsafe(),
                 message=json.dumps(message)
             ),
@@ -117,7 +117,7 @@ class ReplyCommentHandlerTest(TestBaseHandler):
             # from the comment that was replyed
             call(
                 receiver_key=self.other_user.key.urlsafe(),
-                entity_type="REPLY_COMMENT",
+                notification_type="REPLY_COMMENT",
                 entity_key=self.user_post.key.urlsafe(),
                 message=json.dumps(message)
             )

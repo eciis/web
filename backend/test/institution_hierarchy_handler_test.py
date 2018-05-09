@@ -87,7 +87,7 @@ class InstitutionHierarchyHandlerTest(TestBaseHandler):
         # assert the notification was sent
         send_message_notification.assert_called_with(
             receiver_key=otheruser.key.urlsafe(),
-            entity_type="INSTITUTION",
+            notification_type="INSTITUTION",
             entity_key=otherinst.key.urlsafe(),
             message=json.dumps(message)
         )
@@ -142,7 +142,7 @@ class InstitutionHierarchyHandlerTest(TestBaseHandler):
         # assert the notification was sent
         send_message_notification.assert_called_with(
             receiver_key=admin.key.urlsafe(),
-            entity_type="INSTITUTION",
+            notification_type="INSTITUTION",
             entity_key=institution.key.urlsafe(),
             message=json.dumps(message)
         )

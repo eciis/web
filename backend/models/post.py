@@ -353,7 +353,7 @@ class Post(PolyModel):
             user_key -- The user key that made the action.
             current_institution_key -- The institution that user was in the moment that made the action.
             sender_institution_key -- The institution by which the post was created,
-                if didn't define the sender institution  should be the current institution. 
+                if it hasn't been defined yet, the sender institution should be the current institution. 
         """
         return create_message(
             sender_key= user_key,

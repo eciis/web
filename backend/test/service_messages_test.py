@@ -102,7 +102,7 @@ class ServiceMessageTest(TestBaseHandler):
 
         service_messages.send_message_notification(
             receiver_key=receiver.key.urlsafe(),
-            entity_type=entity_type,
+            notification_type=entity_type,
             entity_key=post.key.urlsafe(),
             message=expected_message
         )

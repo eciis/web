@@ -92,7 +92,7 @@ class InstitutionMemberHandlerTest(TestBaseHandler):
         # Assert send_message_notification has been called
         send_message_notification.assert_called_with(
             receiver_key=self.second_user.key.urlsafe(),
-            entity_type="DELETE_MEMBER",
+            notification_type="DELETE_MEMBER",
             entity_key=self.institution.key.urlsafe(),
             message=json.dumps(message)
         )

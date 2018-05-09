@@ -78,7 +78,7 @@ class PostHandler(BaseHandler):
             )
             send_message_notification(
                 receiver_key=post.author.urlsafe(), 
-                entity_type='DELETED_POST',
+                notification_type='DELETED_POST',
                 entity_key=post.key.urlsafe(),
                 message=notification_message, 
                 entity=json.dumps(post.make(self.request.host))

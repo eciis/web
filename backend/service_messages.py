@@ -15,7 +15,7 @@ def create_message(sender_key, current_institution_key=None, receiver_institutio
     """Create a message of notification.
     
         Keyword arguments:
-        sender_key -- the user key of who is sending the notification
+        sender_key -- the key of the user who is sending the notification
         current_institution_key -- the institution the user was logged in when the notification was sent
         receiver_institution_key -- the institution that will receive the notification
         sender_institution_key -- the institution that the user made the action.
@@ -47,13 +47,13 @@ def create_entity(entity_key):
     return json.dumps(entity)
 
 
-def send_message_notification(receiver_key, entity_type, entity_key, message, entity=None):
+def send_message_notification(receiver_key, notification_type, entity_key, message, entity=None):
     """Method of send notification.
 
     Keyword arguments:
     receiver_key -- key of user that will receive notification.
     message -- message of notification.
-    entity_type -- type of notification.
+    notification_type -- type of notification.
     entity_key -- entity key of type invite.
     entity -- this parameter is useful when it's necessary 
         to send the full entity to the notification for consistency reasons in the frontend
@@ -66,7 +66,7 @@ def send_message_notification(receiver_key, entity_type, entity_key, message, en
         params={
             'receiver_key': receiver_key,
             'message': message,
-            'entity_type': entity_type,
+            'entity_type': notification_type,
             'entity': entity
         }
     )

@@ -114,7 +114,7 @@ class Invite(PolyModel):
             notification_message = message or self.create_notification_message(sender_key, current_institution)
             send_message_notification(
                 receiver_key=receiver_key.urlsafe(),
-                entity_type=entity_type,
+                notification_type=entity_type,
                 entity_key=entity_key,
                 message=notification_message
             )

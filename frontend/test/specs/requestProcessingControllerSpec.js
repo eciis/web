@@ -9,6 +9,18 @@
     var REQUEST_INSTITUTION = "REQUEST_INSTITUTION";
     var REQUEST_USER = "REQUEST_USER";
 
+    var legal_nature = {
+        "private for-profit":"Privada com fins lucrativos",
+        "private non-profit":"Privada sem fins lucrativos",
+        "public":"Pública"
+    };
+    var area = {
+        "OFFICIAL_BANK": "Banco Oficial",
+        "COMMISSION": "Comissão",
+        "COUNCIL": "Conselho",
+        "PRIVATE_COMPANY": "Empresa Privada",
+    };
+
     var requestInvitationService, institutionService, requestCtrl, scope, httpBackend, deferred, createCtrl;
     var authService, userService, messageService, request;
 
@@ -70,6 +82,8 @@
         AuthService.login(user);
         request = Object.assign({}, newRequest);
 
+        httpBackend.when('GET', 'app/institution/actuation_area.json').respond(area);
+        httpBackend.when('GET', 'app/institution/legal_nature.json').respond(legal_nature);
         httpBackend.when('GET', INSTITUTIONS_URI + "/" + INST_KEY).respond(institution);
         httpBackend.when('GET', USER_URI).respond(permissions);
         

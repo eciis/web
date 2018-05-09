@@ -71,9 +71,13 @@
             InstitutionService.getInstitution(suggestInstCtrl.chosen_institution).then(function(response) {
                 if (!(isLinked(response.data) || isSelf() || isPedingRequest() || isInvited())) {
                     invite.requested_inst_name = response.data.name;
-                    inviteController.sendRequestToExistingInst(invite, suggestInstCtrl.chosen_institution).then(function() {
-                        suggestInstCtrl.cancel();
-                    });
+                    inviteController.sendRequestToExistingInst(invite, suggestInstCtrl.chosen_institution).then(
+                        function success() {
+                            suggestInstCtrl.cancel();
+                        }, function error() {
+                            $mdDialog.cancel();
+                        }
+                    );
                 }
             });
         }

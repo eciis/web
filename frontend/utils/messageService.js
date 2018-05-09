@@ -32,7 +32,8 @@
             "Error! The sender is already invited": "O usuário já foi convidado para ser membro dessa instituição.",
             "Error! User is not allowed to send invites": "O usuário não tem permissão para enviar convites",
             "Error! The event has been deleted.": "Esse evento foi removido",
-            "Error! User is not allowed to remove institution": "O usuário não tem permissão para remover essa instituição."
+            "Error! User is not allowed to remove institution": "O usuário não tem permissão para remover essa instituição.",
+            "Error! Circular hierarchy not allowed": "Não é permitido criar dependencia circular entre instituições"
         };
 
         service.showToast = function showToast(message) {

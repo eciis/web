@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
-"""Remove admin permissions Hierarchy Handler test."""
+"""WorkerAuxMethodsTest."""
 
-from test_base_handler import TestBaseHandler
+from test_base import TestBase
 import permissions
 import mocks
 from worker import get_all_parent_admins
 
 
-class WorkerAuxMethodsTest(TestBaseHandler):
-    """Test Remove admin permission in institution hierarchy."""
+class WorkerAuxMethodsTest(TestBase):
+    """Test worker aux methods."""
     
     def get_all_parent_admins(self):
         """Test get_all_parent_admins method."""

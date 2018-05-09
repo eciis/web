@@ -8,6 +8,7 @@ from utils import json_response
 from utils import Utils
 from custom_exceptions.entityException import EntityException
 from . import BaseHandler
+from models.institution import Institution
 from models.factory_invites import InviteFactory
 from models.request_institution_parent import RequestInstitutionParent
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
@@ -54,12 +55,23 @@ class InstitutionParentRequestCollectionHandler(BaseHandler):
             EntityException
         )
 
+        child_key = data.get('institution_key')
+        child_key = ndb.Key(urlsafe=child_key)
+        requested_inst_key = data.get('institution_requested_key')
+        requested_inst_key = ndb.Key(urlsafe=requested_inst_key)
+
+        Utils._assert(
+            Institution.has_connection_between(requested_inst_key, child_key),
+            "Circular hierarchy not allowed",
+            EntityException
+        )
+
         request = InviteFactory.create(data, type_of_invite)
         request.put()
 
-        institution_children = request.institution_key.get()
-        institution_children.parent_institution = request.institution_requested_key
-        institution_children.put()
+        child_institution = child_key.get()
+        child_institution.parent_institution = requested_inst_key
+        child_institution.put()
 
         request.send_invite(host, user.current_institution)
 

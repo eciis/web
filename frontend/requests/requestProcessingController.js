@@ -104,6 +104,8 @@
             InstitutionService.getInstitution(institutionKey).then(function success(response) {
                 requestController.institution = response.data;
                 formatPositions();
+                getLegalNature();
+                getActuationArea();
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
@@ -142,6 +144,20 @@
             var currentUrl = window.location.href;
             currentUrl = currentUrl.split('#');
             return currentUrl[0] + $state.href('app.institution.timeline', {institutionKey: institutionKey});
+        }
+
+        function getLegalNature() {
+            InstitutionService.getLegalNatures().then(function success(response) {
+                requestController.instLegalNature = _.get(response.data,
+                    requestController.parent.legal_nature);
+            });
+        }
+
+        function getActuationArea() {
+            InstitutionService.getActuationAreas().then(function success(response) {
+                requestController.instActuationArea = _.get(response.data,
+                    requestController.parent.actuation_area);
+            });
         }
 
         (function main () {

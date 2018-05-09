@@ -55,5 +55,4 @@ class InstitutionParentRequestHandler(BaseHandler):
         request.change_status('rejected')
         request.put()
 
-        # PASSAR LOGO O TIPO DA NOTIF
         request.send_response_notification(user.current_institution, user.key, 'REJECT')

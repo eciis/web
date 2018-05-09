@@ -351,7 +351,7 @@ class Post(PolyModel):
     def create_notification_message(self, user_key, current_institution_key, sender_institution_key=None):
         """ Create message that will be used in notification.
             user_key -- The user key that made the action.
-            current_institution -- The institution that user was in the moment that made the action.
+            current_institution_key -- The institution that user was in the moment that made the action.
             sender_institution_key -- The institution by which the post was created,
                 if didn't define the sender institution  should be the current institution. 
         """

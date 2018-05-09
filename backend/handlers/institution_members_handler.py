@@ -39,8 +39,8 @@ class InstitutionMembersHandler(BaseHandler):
                               url_string)
 
         institution = institution_key.get()
-        data = self.request.get('removeMember')
-        member = ndb.Key(urlsafe=data)
+        member_key = self.request.get('removeMember')
+        member = ndb.Key(urlsafe=member_key)
         member = member.get()
 
         institution.remove_member(member)

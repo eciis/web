@@ -389,7 +389,7 @@ class Institution(ndb.Model):
         """ Create message that will be used in notification. 
             user_key -- The user key that made the action.
             current_institution -- The institution that user was in the moment that made the action.
-            sender_institution_key -- The institution that should be made the action,
+            sender_institution_key -- The institution in which action should be taken,
                  when wasn't specified will be the current_institution.
             receiver_institution -- The institution to which the notification is directed. 
         """

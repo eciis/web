@@ -111,7 +111,7 @@ class RequestUser(Request):
     The sender, in this case, is the user who is asking to be an institution's members.
     The user is who answered the request.
     The institution_key to which the sender requested to be member.
-    Action can be REJECTED_LINK or ACCEPTED_LINK.
+    Action can be REJECTED or ACCEPTED.
     """
     def send_response_notification(self, user, current_institution, action):
         """Method sends response notification to sender request."""

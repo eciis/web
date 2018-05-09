@@ -40,7 +40,7 @@ def create_message(sender_key, current_institution_key=None, receiver_institutio
     return json.dumps(message)
 
 def create_entity(entity_key):
-    """Create a short entity with only key and name."""    
+    """Create a short entity with only key."""    
     entity = {
         "key": entity_key
     }

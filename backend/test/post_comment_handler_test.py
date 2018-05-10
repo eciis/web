@@ -8,8 +8,8 @@ from test_base_handler import TestBaseHandler
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from handlers.post_comment_handler import PostCommentHandler
 from handlers.post_comment_handler import check_permission
-from models.user import User
-from models.institution import Institution
+from models import User
+from models import Institution
 from models.post import Post
 
 from mock import patch
@@ -84,7 +84,8 @@ class PostCommentHandlerTest(TestBaseHandler):
             'sender_key': self.other_user.key.urlsafe(),
             'entity_key': self.user_post.key.urlsafe(),
             'entity_type': 'COMMENT',
-            'current_institution': self.institution.key.urlsafe()
+            'current_institution': self.institution.key.urlsafe(),
+            'sender_institution_key': self.user_post.institution.urlsafe()
         }
         enqueue_task.assert_called_with('post-notification', params)
 

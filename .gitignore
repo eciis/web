@@ -541,3 +541,4 @@ backend/google_appengine
 backend/Pipfile
 
 .env_cleaned
+.vscode/settings.json

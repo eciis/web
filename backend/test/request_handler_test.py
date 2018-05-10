@@ -3,9 +3,9 @@
 
 import json
 from test_base_handler import TestBaseHandler
-from models.user import User
-from models.institution import Institution
-from models.institution import Address
+from models import User
+from models import Institution
+from models import Address
 from models.request_user import RequestUser
 from handlers.request_handler import RequestHandler
 import mocks
@@ -98,7 +98,7 @@ class RequestHandlerTest(TestBaseHandler):
         request = RequestUser.create(data)
         request.put()
 
-        self.testapp.put('/api/requests/' + request.key.urlsafe() + '/user')
+        self.testapp.put('/api/requests/' + request.key.urlsafe() + '/user', headers={'Institution-Authorization': institution.key.urlsafe()})
         
         user = otheruser.key.get()
         institution = institution.key.get()
@@ -146,7 +146,7 @@ class RequestHandlerTest(TestBaseHandler):
         }
         request = RequestUser.create(data)
         request.put()
-        self.testapp.put('/api/requests/' + request.key.urlsafe() + '/user')
+        self.testapp.put('/api/requests/' + request.key.urlsafe() + '/user', headers={'Institution-Authorization': institution.key.urlsafe()})
         with self.assertRaises(Exception) as ex:
             self.testapp.put('/api/requests/' + request.key.urlsafe() + '/user')
 
@@ -219,7 +219,7 @@ class RequestHandlerTest(TestBaseHandler):
             1, 'The other_user should have only one profile')
 
         self.testapp.delete('/api/requests/' +
-                            request.key.urlsafe() + '/user')
+                            request.key.urlsafe() + '/user', headers={'Institution-Authorization': institution.key.urlsafe()})
 
         # update request and other_user
         self.request = request.key.get()

@@ -9,7 +9,7 @@ from utils import login_required
 from utils import json_response
 from custom_exceptions.queryException import QueryException
 
-from models.institution import Institution
+from models import Institution
 
 from . import BaseHandler
 

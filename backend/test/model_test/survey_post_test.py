@@ -3,8 +3,8 @@
 from ..test_base import TestBase
 
 from models.survey_post import SurveyPost
-from models.user import User
-from models.institution import Institution
+from models import User
+from models import Institution
 import datetime
 
 

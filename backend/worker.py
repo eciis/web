@@ -6,7 +6,7 @@ from firebase import send_notification
 from google.appengine.api import mail
 import logging
 from google.appengine.ext import ndb
-from models.institution import Institution
+from models import Institution
 from models.post import Post
 from models.invite_user import InviteUser
 from models.invite_user_adm import InviteUserAdm
@@ -88,7 +88,9 @@ def get_all_parent_admins(child_institution, admins=[]):
     parent_institution = child_institution.parent_institution
     if parent_institution:
         parent_institution = parent_institution.get()
-        get_all_parent_admins(parent_institution, admins)
+        link_confirmed = child_institution.verify_connection(parent_institution)
+        if link_confirmed:
+            get_all_parent_admins(parent_institution, admins)
     return admins
 
 
@@ -126,7 +128,7 @@ def remove_permissions(remove_hierarchy, institution):
                     admin.remove_permission(permission, institution_key)
 
 
-def notify_institution_removal(institution, remove_hierarchy, user):
+def notify_institution_removal(institution, remove_hierarchy, user, current_institution_key=None):
     """This method has two possibilities of flow depending on
     the remove_hierarchy's value.
     If it's true, the method send email and notification to all
@@ -151,18 +153,24 @@ def notify_institution_removal(institution, remove_hierarchy, user):
     user_has_to_receive_notification = institution.admin != user.key
 
     if user_has_to_receive_notification:
+        notification_message = institution.create_notification_message(
+            user_key=user.key,
+            current_institution_key=current_institution_key,
+            sender_institution_key=institution.key
+
+        )
         send_message_notification(
-            institution.admin.urlsafe(),
-            user.key.urlsafe(),
-            'DELETED_INSTITUTION',
-            institution.key.urlsafe()
+            receiver_key=institution.admin.urlsafe(),
+            notification_type='DELETED_INSTITUTION',
+            entity_key=institution.key.urlsafe(),
+            message=notification_message
         )
 
     if remove_hierarchy == "true":
         for child_key in institution.children_institutions:
             child = child_key.get()
             if child.state == "inactive":
-                notify_institution_removal(child, remove_hierarchy, user)
+                notify_institution_removal(child, remove_hierarchy, user, current_institution_key)
 
 
 class BaseHandler(webapp2.RequestHandler):
@@ -191,13 +199,13 @@ class SendNotificationHandler(BaseHandler):
         """Method of create new task for send notification."""
         receiver_key = self.request.get("receiver_key")
         message = json.loads(self.request.get("message"))
-        entity_type = self.request.get("entity_type")
+        notification_type = self.request.get("notification_type")
         entity = json.loads(self.request.get("entity"))
 
         send_notification(
             receiver_key,
             message,
-            entity_type,
+            notification_type,
             entity
         )
 
@@ -231,6 +239,7 @@ class RemoveInstitutionHandler(BaseHandler):
         institution_key = self.request.get('institution_key')
         remove_hierarchy = self.request.get('remove_hierarchy')
         institution = ndb.Key(urlsafe=institution_key).get()
+        current_institution = self.request.get('current_institution') and ndb.Key(urlsafe=self.request.get('current_institution'))
         user = ndb.Key(urlsafe=self.request.get('user_key')).get()
 
         @ndb.transactional(xg=True, retries=10)
@@ -238,7 +247,8 @@ class RemoveInstitutionHandler(BaseHandler):
             returned_method = institution.handle_hierarchy_removal(remove_hierarchy, user)
             institution.remove_institution_from_users(remove_hierarchy)
             remove_permissions(remove_hierarchy, institution)
-            notify_institution_removal(institution, remove_hierarchy, user)
+            notify_institution_removal(institution, remove_hierarchy, user, current_institution_key=current_institution)
+            
             if returned_method:
                 returned_method()
         apply_remove_operation(remove_hierarchy, institution, user)
@@ -250,23 +260,29 @@ class PostNotificationHandler(BaseHandler):
     def post(self):
         """Handle post requests."""
         post_author_key = self.request.get('receiver_key')
-        sender_key = self.request.get('sender_key')
+        sender_url_key = self.request.get('sender_key')
         post_key = self.request.get('entity_key')
         entity_type = self.request.get('entity_type')
-        current_institution = ndb.Key(urlsafe=self.request.get('current_institution'))
+        current_institution_key = ndb.Key(urlsafe=self.request.get('current_institution'))
+        sender_inst_key = self.request.get('sender_institution_key') and ndb.Key(urlsafe=self.request.get('sender_institution_key'))
         post = ndb.Key(urlsafe=post_key).get()
+
+        notification_message = post.create_notification_message(
+            ndb.Key(urlsafe=sender_url_key),
+            current_institution_key,
+            sender_inst_key
+        )
         subscribers =  [subscriber.urlsafe() for subscriber in post.subscribers]
 
-        user_is_author = post_author_key == sender_key
+        user_is_author = post_author_key == sender_url_key
         for subscriber in subscribers:
-            subscriber_is_sender = subscriber == sender_key
+            subscriber_is_sender = subscriber == sender_url_key
             if not (user_is_author and subscriber_is_sender) and not subscriber_is_sender:
                 send_message_notification(
-                    subscriber,
-                    sender_key,
-                    entity_type,
-                    post_key,
-                    current_institution
+                    receiver_key=subscriber,
+                    notification_type=entity_type,
+                    entity_key=post_key,
+                    message=notification_message
                 )
 
 class EmailMembersHandler(BaseHandler):
@@ -307,22 +323,23 @@ class NotifyFollowersHandler(BaseHandler):
         sender_key = self.request.get('sender_key')
         entity_type = self.request.get('entity_type')
         entity_key = self.request.get('entity_key')
-        current_institution = ndb.Key(urlsafe=self.request.get('current_institution'))
+        current_institution_key = ndb.Key(urlsafe=self.request.get('current_institution'))
         entity = self.request.get('entity') if self.request.get('entity') else None
-        
         inst_key = self.request.get('institution_key')
         institution = ndb.Key(urlsafe=inst_key).get()
+        
+        obj = ndb.Key(urlsafe=entity_key).get() if(entity_key) else institution
+        notification_message = obj.create_notification_message(ndb.Key(urlsafe=sender_key), current_institution_key)
 
         for follower_key in institution.followers:
             follower = follower_key.get()
             is_active = follower.state == "active"
             if is_active and follower.key.urlsafe() != sender_key:
                 send_message_notification(
-                    follower.key.urlsafe(),
-                    sender_key,
-                    entity_type,
-                    entity_key or inst_key,
-                    current_institution,
+                    receiver_key=follower.key.urlsafe(),
+                    notification_type=entity_type,
+                    entity_key=entity_key or inst_key,
+                    message=notification_message,
                     entity=entity
                 )
 
@@ -357,17 +374,28 @@ class RemoveAdminPermissionsInInstitutionHierarchy(BaseHandler):
         """Get the permissions and provide them to the remove function."""
         institution_key = self.request.get('institution_key')
         institution = ndb.Key(urlsafe=institution_key).get()
-        user = ndb.Key(urlsafe=self.request.get('user')).get()
-        
+
+        parent_institution_key = self.request.get('parent_key')
+        parent_institution = ndb.Key(urlsafe=parent_institution_key).get()
+
+        parent_admin = parent_institution.admin.get()
+        child_admin_key = institution.admin
 
         @ndb.transactional(xg=True, retries=10)
-        def apply_remove_operation(user, institution, should_remove):
-            permissions = institution.get_hierarchy_admin_permissions(get_all=False, admin_key=user.key)
-            permissions = filter_permissions_to_remove(
-                user, permissions, institution.key, should_remove
-            )
-            self.removeAdminPermissions(user, permissions)
-        apply_remove_operation(user, institution, is_not_admin)
+        def apply_remove_operation(parent_admin, institution, should_remove, child_admin_key):
+            """This method is responsible for getting the permissions involved
+            in the link and go up in the hierarchy removing the permissions from
+            the admins that have to lose it, based in a condition that checks if 
+            the current_admin is different of the child_admin.  
+            """
+            parent_admins = get_all_parent_admins(parent_institution, [])
+            for current_admin in parent_admins:
+                if current_admin.key != child_admin_key:
+                    permissions = institution.get_hierarchy_admin_permissions(
+                        get_all=False, admin_key=current_admin.key)
+                    self.removeAdminPermissions(
+                        current_admin, permissions)
+        apply_remove_operation(parent_admin, institution, is_not_admin, child_admin_key)
 
 class AddPostInInstitution(BaseHandler):
     

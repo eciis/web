@@ -5,10 +5,10 @@ import json
 import datetime
 import mocks
 from test_base_handler import TestBaseHandler
-from models.user import User
-from models.institution import Institution
+from models import User
+from models import Institution
 from models.post import Post
-from models.event import Event
+from models import Event
 from handlers.post_collection_handler import PostCollectionHandler
 from google.appengine.ext import ndb
 from mock import patch, call
@@ -211,6 +211,7 @@ class PostCollectionHandlerTest(TestBaseHandler):
                     'entity_key': self.post.key.urlsafe(),
                     'entity_type': 'SHARED_POST',
                     'current_institution': self.institution.key.urlsafe(),
+                    'sender_institution_key': self.post.institution.urlsafe()
                 }
             )
         ]
@@ -284,13 +285,26 @@ class PostCollectionHandlerTest(TestBaseHandler):
             )
         ]
 
+        message = {
+            "from": {
+                "photo_url": self.user.photo_url,
+                "name": self.user.name,
+                "institution_name": event.institution_key.get().name
+            },
+            "to": {
+                "institution_name": ""
+            },
+            "current_institution": {
+                "name": self.institution.name
+            }
+        }
+
         # assert the notifiction was sent to the institution followers
         send_message_notification.assert_called_with(
-            event.author_key.urlsafe(),
-            self.user.key.urlsafe(),
-            "SHARED_EVENT",
-            key_post.urlsafe(),
-            self.institution.key
+            receiver_key=event.author_key.urlsafe(),
+            notification_type="SHARED_EVENT",
+            entity_key=key_post.urlsafe(),
+            message=json.dumps(message)
         )
         # assert that add post to institution was sent to the queue        
         enqueue_task.assert_has_calls(calls)

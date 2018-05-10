@@ -13,7 +13,7 @@ from utils import json_response
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from custom_exceptions.entityException import EntityException
 
-from models.institution import Institution
+from models import Institution
 from util.json_patch import JsonPatch
 from service_entities import enqueue_task
 
@@ -199,7 +199,8 @@ class InstitutionHandler(BaseHandler):
         params = {
             'institution_key': institution_key,
             'remove_hierarchy': remove_hierarchy,
-            'user_key': user.key.urlsafe() 
+            'user_key': user.key.urlsafe(),
+            'current_institution': user.current_institution.urlsafe()
         }
 
         enqueue_task('remove-inst', params)

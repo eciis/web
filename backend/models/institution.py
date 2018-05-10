@@ -3,17 +3,12 @@
 from google.appengine.ext import ndb
 
 from search_module.search_institution import SearchInstitution
-from models.address import Address
+from models import Address
 from permissions import DEFAULT_ADMIN_PERMISSIONS
 from permissions import DEFAULT_SUPER_USER_PERMISSIONS
+from service_messages import create_message
 
-
-def get_actuation_area(data):
-    """Get the institution actuation area."""
-    if data.get('actuation_area') == 'other':
-        return data.get('other_area')
-    return data.get('actuation_area')
-
+__all__ = ['Institution']
 
 class Institution(ndb.Model):
     """Model of Institution."""
@@ -187,7 +182,7 @@ class Institution(ndb.Model):
     def remove_institution(self, remove_hierarchy, user):
         """Remove an institution.
 
-        Keyword arguments:
+        Params:
         remove_hierarchy -- string the represents if the institution's hiearchy
         will be removed
         user -- the admin of the institution.
@@ -217,7 +212,7 @@ class Institution(ndb.Model):
         has done what it should have done it calls the returned_method to finish the removal
         process.
 
-        Keyword arguments:
+        Params:
         remove_hierarchy -- works as a flag that indicates the institution's hierarchy removal
         user -- the user who started the institution's removal process. So, it may not be the admin
         of self.
@@ -333,7 +328,7 @@ class Institution(ndb.Model):
         the admin permissions of all institutions belonging 
         to the child hierarchy.
 
-        Arguments:
+        Params:
         get_all (Optional)-- If true, get all permissions from institutions 
         admin_key (Optional) -- admin that requested to unlink the institutions
         hierarchically above the first child with the same admin
@@ -368,7 +363,7 @@ class Institution(ndb.Model):
         The type permission is only possible when the institution is super institution.
         Returns a dict containing the super user permissions.
 
-        Arguments:
+        Params:
         permissions(Optional) -- Dict of previous permissions added for add more permissons. 
         If not passed, creates new dict of permissions
         """
@@ -383,6 +378,22 @@ class Institution(ndb.Model):
             
         return permissions
 
+    def create_notification_message(self, user_key, current_institution_key, 
+            receiver_institution_key=None, sender_institution_key=None):
+        """ Create message that will be used in notification. 
+            user_key -- The user key that made the action.
+            current_institution -- The institution that user was in the moment that made the action.
+            sender_institution_key -- The institution in which action should be taken,
+                when it is not specified it will be the current_institution.
+            receiver_institution -- The institution to which the notification is directed. 
+        """
+        return create_message(
+            sender_key= user_key,
+            current_institution_key=current_institution_key,
+            receiver_institution_key=receiver_institution_key,
+            sender_institution_key= sender_institution_key or current_institution_key
+        )
+
     """TODO: Test this method.
     
     Author: Raoni Smaneoto, 30/04/2018.
@@ -395,3 +406,24 @@ class Institution(ndb.Model):
         #Means that institution_to_verify is self's parent
         child_link = self.parent_institution == institution_to_verify.key and self.key in institution_to_verify.children_institutions
         return child_link or parent_link
+
+
+    @staticmethod
+    def has_connection_between(possible_child_key, possible_parent_key):
+        """
+        It makes a bottom-up verification to check if these institutions are connected.
+
+        Params:
+        possible_child_key -- key of institution that is belived 
+            to be the child, if the connection exists
+        possible_parent_key -- key of institution that is belived 
+            to be the parent, if the connection exists
+        """
+        def has_connection(parent_key):
+            if not parent_key:
+                return False
+
+            connection_found = parent_key == possible_parent_key
+            return connection_found or has_connection(parent_key.get().parent_institution)
+
+        return has_connection(possible_child_key.get().parent_institution)

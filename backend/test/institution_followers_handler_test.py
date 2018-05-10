@@ -2,8 +2,8 @@
 """Institution Followers handler test."""
 
 from test_base_handler import TestBaseHandler
-from models.user import User
-from models.institution import Institution
+from models import User
+from models import Institution
 from handlers.institution_followers_handler import InstitutionFollowersHandler
 from mock import patch
 from utils import Utils

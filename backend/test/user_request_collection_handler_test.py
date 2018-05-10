@@ -4,9 +4,9 @@ import json
 import mocks
 
 from test_base_handler import TestBaseHandler
-from models.user import User
-from models.institution import Institution
-from models.institution import Address
+from models import User
+from models import Institution
+from models import Address
 from models.invite import Invite
 from handlers.user_request_collection_handler import UserRequestCollectionHandler
 

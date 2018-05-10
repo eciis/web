@@ -2,7 +2,7 @@
 
 from ..test_base import TestBase
 
-from models.institution import Institution
+from models import Institution
 from models.request_institution_parent import RequestInstitutionParent
 from permissions import DEFAULT_ADMIN_PERMISSIONS
 

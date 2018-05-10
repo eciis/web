@@ -9,7 +9,7 @@ from utils import Utils
 from custom_exceptions.entityException import EntityException
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from . import BaseHandler
-from models.institution import Institution
+from models import Institution
 from models.factory_invites import InviteFactory
 from models.request_institution_children import RequestInstitutionChildren
 

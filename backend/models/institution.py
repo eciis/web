@@ -3,18 +3,12 @@
 from google.appengine.ext import ndb
 
 from search_module.search_institution import SearchInstitution
-from models.address import Address
+from models import Address
 from permissions import DEFAULT_ADMIN_PERMISSIONS
 from permissions import DEFAULT_SUPER_USER_PERMISSIONS
 from service_messages import create_message
 
-
-def get_actuation_area(data):
-    """Get the institution actuation area."""
-    if data.get('actuation_area') == 'other':
-        return data.get('other_area')
-    return data.get('actuation_area')
-
+__all__ = ['Institution']
 
 class Institution(ndb.Model):
     """Model of Institution."""

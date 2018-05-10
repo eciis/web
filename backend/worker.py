@@ -6,7 +6,7 @@ from firebase import send_notification
 from google.appengine.api import mail
 import logging
 from google.appengine.ext import ndb
-from models.institution import Institution
+from models import Institution
 from models.post import Post
 from models.invite_user import InviteUser
 from models.invite_user_adm import InviteUserAdm

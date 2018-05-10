@@ -66,7 +66,7 @@ def send_message_notification(receiver_key, notification_type, entity_key, messa
         params={
             'receiver_key': receiver_key,
             'message': message,
-            'entity_type': notification_type,
+            'notification_type': notification_type,
             'entity': entity
         }
     )

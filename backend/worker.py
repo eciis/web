@@ -199,13 +199,13 @@ class SendNotificationHandler(BaseHandler):
         """Method of create new task for send notification."""
         receiver_key = self.request.get("receiver_key")
         message = json.loads(self.request.get("message"))
-        entity_type = self.request.get("entity_type")
+        notification_type = self.request.get("notification_type")
         entity = json.loads(self.request.get("entity"))
 
         send_notification(
             receiver_key,
             message,
-            entity_type,
+            notification_type,
             entity
         )
 

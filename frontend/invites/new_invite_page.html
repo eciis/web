@@ -1,9 +1,9 @@
 <md-content layout-fill layout="row" layout-align="center center" md-colors="{background: 'teal-500'}">
   <div layout="column" layout-align="center center">
     <div layout="row" layout-xs="column" layout-align="center center">
-      <div flex-sm="60" flex-gt-sm="40" layout-align="center center">
+      <div layout="row" flex-sm="60" flex-gt-sm="40" layout-align="center center">
         <load-circle ng-show="newInviteCtrl.loading"></load-circle>
-        <md-card ng-show="!newInviteCtrl.loading">
+        <md-card ng-if="true" ng-show="!newInviteCtrl.loading">
           <md-card-content style="background-color:#FFFFFF;" layout="column" layout-align="center">
             <div align="center">
               <img src="app/images/logowithname.png" aria-label="e-CIS Logo" style="width: 50%;">
@@ -83,6 +83,21 @@
               </md-card-actions>
             </form>
           </md-card-content>
+        </md-card>
+        <md-card ng-if="false" flex-xs="80" flex-sm="70" flex-gt-sm="50" style="margin: 0">
+          <md-card-content style="background-color:#FFFFFF;" layout="column" layout-align="center center">
+              <div align="center">
+                <img src="app/images/logowithname.png" aria-label="e-CIS Logo" style="width: 50%;">
+              </div>
+              <div>
+                <p>Este convite já foi processado!</p>
+              </div>
+          </md-card-content>
+          <md-card-actions layout="row" layout-align="end center">
+            <md-button  md-colors="{background: 'teal-500'}">
+              VOLTAR
+            </md-button>
+          </md-card-actions>
         </md-card>
       </div>
     </div>

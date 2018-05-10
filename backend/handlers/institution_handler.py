@@ -199,7 +199,8 @@ class InstitutionHandler(BaseHandler):
         params = {
             'institution_key': institution_key,
             'remove_hierarchy': remove_hierarchy,
-            'user_key': user.key.urlsafe() 
+            'user_key': user.key.urlsafe(),
+            'current_institution': user.current_institution.urlsafe()
         }
 
         enqueue_task('remove-inst', params)

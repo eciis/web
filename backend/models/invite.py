@@ -3,6 +3,7 @@
 from google.appengine.ext import ndb
 from google.appengine.ext.ndb.polymodel import PolyModel
 from service_messages import send_message_notification
+from service_messages import create_message
 from send_email_hierarchy.email_sender import EmailSender
 from util.strings_pt_br import get_string
 from models.user import User       
@@ -85,22 +86,37 @@ class Invite(PolyModel):
         })
         email_sender.send_email()
 
-    def send_notification(self, current_institution, sender_key=None, receiver_key=None, entity_type=None, entity_key=None):
+    def create_notification_message(self, user_key, current_institution_key=None, 
+            sender_institution_key=None, receiver_institution_key=None):
+        """ Create message that will be used in notification. 
+            user_key -- The user key that made the action.
+            current_institution_key -- The institution that user was in the moment that made the action,
+                 in case that user is inactive he didn't have current institution.
+            sender_institution_key -- The institution in which action should be taken.
+            receiver_institution -- The institution to which the notification is directed. 
+        """
+        return create_message(
+            sender_key=user_key,
+            current_institution_key=current_institution_key,
+            sender_institution_key=sender_institution_key or self.institution_key,
+            receiver_institution_key=receiver_institution_key or self.institution_requested_key,
+        )
+
+    def send_notification(self, current_institution, sender_key=None, receiver_key=None, notification_type=None, entity_key=None, message=None):
         """Method of send notification to invitee."""
         sender_key = sender_key or self.sender_key
         if not receiver_key:
             active_invitee = User.get_active_user(self.invitee)
             receiver_key = active_invitee and active_invitee.key
-        
         if receiver_key:
-            entity_type = entity_type or 'INVITE'
+            notification_type = notification_type or 'INVITE'
             entity_key = entity_key or self.key.urlsafe()
+            notification_message = message or self.create_notification_message(sender_key, current_institution)
             send_message_notification(
-                receiver_key.urlsafe(),
-                sender_key.urlsafe(),
-                entity_type,
-                entity_key,
-                current_institution
+                receiver_key=receiver_key.urlsafe(),
+                notification_type=notification_type,
+                entity_key=entity_key,
+                message=notification_message
             )
 
     def make(self):

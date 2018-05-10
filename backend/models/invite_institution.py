@@ -61,16 +61,17 @@ class InviteInstitution(Invite):
 
     def send_response_notification(self, current_institution, invitee_key, action):
         """Define the entity type of notification when the invite is accepted or rejected."""
-        entity_type = 'ACCEPT_INVITE_INSTITUTION' if action == 'ACCEPT' else 'REJECT_INVITE_INSTITUTION'
-        self.send_response(current_institution, invitee_key, entity_type)
+        notification_type = 'ACCEPT_INVITE_INSTITUTION' if action == 'ACCEPT' else 'REJECT_INVITE_INSTITUTION'
+        self.send_response(current_institution, invitee_key, notification_type)
 
-    def send_response(self, current_institution, invitee_key, entity_type):
+    def send_response(self, current_institution, invitee_key, notification_type, message=None):
         """Send notification to sender of invite when invite is accepted or rejected."""
         self.send_notification(
             current_institution=current_institution, 
             sender_key=invitee_key, 
             receiver_key=self.sender_key or self.admin_key,
-            entity_type=entity_type
+            notification_type=notification_type,
+            message=message
         )
 
     def make(self):

@@ -91,23 +91,35 @@ class ReplyCommentHandlerTest(TestBaseHandler):
             "Expected size of comment's list should be one"
         )
 
+        message = {
+            "from": {
+                "photo_url": self.third_user.photo_url,
+                "name": self.third_user.name,
+                "institution_name": self.user_post.institution.get().name
+            },
+            "to": {
+                "institution_name": ""
+            },
+            "current_institution": {
+                "name": self.institution.name
+            }
+        }
+
         calls = [
             # args used to send the notification to the post author
             call(
-                self.user.key.urlsafe(),
-                self.third_user.key.urlsafe(),
-                "COMMENT",
-                self.user_post.key.urlsafe(),
-                self.institution.key
+                receiver_key=self.user.key.urlsafe(),
+                notification_type="COMMENT",
+                entity_key=self.user_post.key.urlsafe(),
+                message=json.dumps(message)
             ),
             # args used to send the notification to the author 
             # from the comment that was replyed
             call(
-                self.other_user.key.urlsafe(),
-                self.third_user.key.urlsafe(),
-                "REPLY_COMMENT",
-                self.user_post.key.urlsafe(),
-                self.institution.key
+                receiver_key=self.other_user.key.urlsafe(),
+                notification_type="REPLY_COMMENT",
+                entity_key=self.user_post.key.urlsafe(),
+                message=json.dumps(message)
             )
         ]
         send_message_notification.assert_has_calls(calls)

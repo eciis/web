@@ -80,7 +80,7 @@ class PostCollectionHandler(BaseHandler):
             'institution_key': post.institution.urlsafe(),
             'current_institution': user.current_institution.urlsafe()
         }
-
+  
         enqueue_task('notify-followers', params)
 
         if(post.shared_post):
@@ -92,19 +92,23 @@ class PostCollectionHandler(BaseHandler):
                 'entity_key': shared_post.key.urlsafe(),
                 'entity_type': entity_type,
                 'current_institution': user.current_institution.urlsafe(),
+                'sender_institution_key': shared_post.institution.urlsafe()
             }
 
             enqueue_task('post-notification', params)
         elif post.shared_event:
             shared_event = post.shared_event.get()
             if shared_event.author_key != user.key:
+                notification_message = post.create_notification_message(
+                    user_key=user.key,
+                    current_institution_key=user.current_institution,
+                    sender_institution_key=shared_event.institution_key
+                    )
                 send_message_notification(
-                    shared_event.author_key.urlsafe(),
-                    user.key.urlsafe(),
-                    'SHARED_EVENT',
-                    post.key.urlsafe(),
-                    user.current_institution
+                    receiver_key=shared_event.author_key.urlsafe(),
+                    notification_type='SHARED_EVENT',
+                    entity_key=post.key.urlsafe(),
+                    message=notification_message
                 )
-
-
+        
         self.response.write(json.dumps(post.make(self.request.host)))

@@ -2,6 +2,7 @@
 """Institution member handler test."""
 
 import mocks
+import json
 
 from test_base_handler import TestBaseHandler
 from models.user import User
@@ -74,13 +75,26 @@ class InstitutionMemberHandlerTest(TestBaseHandler):
             headers=self.headers
         )
 
+        message = {
+            "from": {
+                "photo_url": self.user.photo_url,
+                "name": self.user.name,
+                "institution_name": self.institution.name
+            },
+            "to": {
+                "institution_name": ""
+            },
+            "current_institution": {
+                "name": self.institution.name
+            }
+        }
+
         # Assert send_message_notification has been called
         send_message_notification.assert_called_with(
-            self.second_user.key.urlsafe(),
-            self.user.key.urlsafe(),
-            "DELETE_MEMBER",
-            self.institution.key.urlsafe(),
-            self.institution.key
+            receiver_key=self.second_user.key.urlsafe(),
+            notification_type="DELETE_MEMBER",
+            entity_key=self.institution.key.urlsafe(),
+            message=json.dumps(message)
         )
         # Assert that send_email has been called
         send_email.assert_called()

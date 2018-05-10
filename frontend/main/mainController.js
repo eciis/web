@@ -11,8 +11,9 @@
         mainCtrl.search_keyword = "";
         mainCtrl.user = AuthService.getCurrentUser();
 
-        mainCtrl.pending_manager_member = 0;
-        mainCtrl.pending_inst_invitations = 0;
+        mainCtrl.pendingManagerMember = 0;
+        mainCtrl.pendingInstInvitations = 0;
+        mainCtrl.pendingInstLinksInvitations = 0;
 
         mainCtrl.APP_VERSION = Config.APP_VERSION;
 
@@ -114,24 +115,28 @@
         };
 
         function increaseInstInvitationsNumber(response) {
-            mainCtrl.pending_inst_invitations += response.length;
+            mainCtrl.pendingInstInvitations += response.length;
+        }
+
+        function increaseInstLinksInvitationsNumber(response) {
+            mainCtrl.pendingInstLinksInvitations += response.length;
         }
 
         mainCtrl.getPendingTasks = function getPendingTasks() {
-            mainCtrl.pending_manager_member = 0;
-            mainCtrl.pending_inst_invitations = 0;
+            mainCtrl.pendingManagerMember = 0;
+            mainCtrl.pendingInstInvitations = 0;
 
             RequestInvitationService.getRequests(mainCtrl.user.current_institution.key).then(
                 function success(response) {
-                    mainCtrl.pending_manager_member = response.length;
+                    mainCtrl.pendingManagerMember = response.length;
                 }, function error() {}
             );
 
             RequestInvitationService.getParentRequests(mainCtrl.user.current_institution.key).then(
-                increaseInstInvitationsNumber, function error() {}
+                increaseInstLinksInvitationsNumber, function error() {}
             );
             RequestInvitationService.getChildrenRequests(mainCtrl.user.current_institution.key).then(
-                increaseInstInvitationsNumber, function error() {}
+                increaseInstLinksInvitationsNumber, function error() {}
             );
 
             if(mainCtrl.isSuperUser()) {

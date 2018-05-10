@@ -71,7 +71,7 @@
                   <md-menu-item ng-if="mainCtrl.isSuperUser()">
                     <md-button ng-click="homeCtrl.goInvite()"
                       ng-class="homeCtrl.getSelectedItemClass('invite_inst')">
-                      <md-icon ng-class="mainCtrl.pending_inst_invitations? 'notification-badge': ''"
+                      <md-icon ng-class="mainCtrl.pendingInstInvitations? 'notification-badge': ''"
                         data-badge>
                         mail_outline</md-icon>
                       <b>Convites</b>
@@ -92,7 +92,7 @@
                   </md-menu-item>
                   <md-menu-item>
                     <md-button  ng-click="mainCtrl.goToManageMembers()">
-                      <md-icon ng-class="mainCtrl.pending_manager_member? 'notification-badge': ''"
+                      <md-icon ng-class="mainCtrl.pendingManagerMember? 'notification-badge': ''"
                         data-badge>account_circle</md-icon>
                       <b>Gerenciar Membros</b>
                   </md-menu-item>

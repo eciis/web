@@ -121,7 +121,7 @@
             _.forEach(suggestInstCtrl.institution.sent_invitations, function(invite) {
                 if ((invite.type_of_invite === "REQUEST_INSTITUTION_PARENT" || invite.type_of_invite === "REQUEST_INSTITUTION_CHILDREN") &&
                     invite.institution_requested_key === suggestInstCtrl.chosen_institution && invite.status === "sent") {
-                    MessageService.showToast('Esta instituição já foi convidada e seu convite está pendente');
+                    MessageService.showToast('Esta instituição já foi convidada, mas seu convite está pendente');
                     result = true;
                 }
             });

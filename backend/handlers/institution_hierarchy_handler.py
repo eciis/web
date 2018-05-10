@@ -65,7 +65,7 @@ class InstitutionHierarchyHandler(BaseHandler):
         else:
             enqueue_task('remove-admin-permissions', {'institution_key': institution_link.key.urlsafe(), 'parent_key': institution.key.urlsafe()})
         
-        notification_type = 'INSTITUTION'
+        notification_type = 'REMOVE_INSTITUTION_LINK'
 
         notification_message = institution.create_notification_message(user_key=user.key, current_institution_key=user.current_institution, 
             receiver_institution_key=institution_link.key, sender_institution_key=institution.key)

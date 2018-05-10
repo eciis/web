@@ -22,7 +22,7 @@
             'SURVEY_POST': messageCreator('Publicou uma nova enquete de ', SINGLE_INST),
             'SHARED_POST': messageCreator('Compartilhou um post de ', SINGLE_INST),
             'INVITE': messageCreator('Te enviou um novo convite via ', SINGLE_INST),
-            'INSTITUTION': messageCreator('Removeu a conexão entre ', DOUBLE_INST),
+            'REMOVE_INSTITUTION_LINK': messageCreator('Removeu a conexão entre ', DOUBLE_INST),
             'DELETED_INSTITUTION': messageCreator('Removeu ', SINGLE_INST),
             'REQUEST_USER': messageCreator('Solicitou ser membro de ', SINGLE_INST),
             'REQUEST_INSTITUTION_PARENT': messageCreator('Solicitou um novo vínculo entre ', DOUBLE_INST),

@@ -12,9 +12,10 @@ from service_entities import enqueue_task
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from custom_exceptions.entityException import EntityException
 
-from handlers.base_handler import BaseHandler
+from . import BaseHandler
 from models.post import Comment
 
+__all__ = ['PostCommentHandler']
 
 def check_permission(user, institution, post, comment):
     """Check the user permission to delete comment."""
@@ -60,7 +61,8 @@ class PostCommentHandler(BaseHandler):
                 'sender_key': user.key.urlsafe(),
                 'entity_key': post.key.urlsafe(),
                 'entity_type': entity_type,
-                'current_institution': user.current_institution.urlsafe()
+                'current_institution': user.current_institution.urlsafe(),
+                'sender_institution_key': post.institution.urlsafe()
             }
             enqueue_task('post-notification', params)
 

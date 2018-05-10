@@ -5,8 +5,8 @@ from google.appengine.ext import ndb
 import json
 
 from utils import login_required
-from handlers.base_handler import BaseHandler
-from models import InstitutionProfile
+from . import BaseHandler
+from models.user import InstitutionProfile
 from models.invite import Invite
 from custom_exceptions.fieldException import FieldException
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
@@ -15,7 +15,7 @@ from utils import Utils
 from utils import make_user
 from util.json_patch import JsonPatch
 
-
+__all__ = ['InviteHandler']
 
 def define_entity(dictionary):
     """Method of return instance of InstitutionProfile for using in jsonPacth."""

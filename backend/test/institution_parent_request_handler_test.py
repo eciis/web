@@ -70,7 +70,7 @@ class InstitutionParentRequestHandlerTest(TestBaseHandler):
     @patch.object(Invite, 'send_notification')
     @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_put(self, verify_token, send_notification):
-        """Test method post of InstitutionParentRequestHandler."""
+        """Test method put of InstitutionParentRequestHandler."""
         request = self.testapp.put_json(
             "/api/requests/%s/institution_parent" % self.request.key.urlsafe(),
             headers={'institution-authorization': self.inst_requested.key.urlsafe()}
@@ -88,12 +88,26 @@ class InstitutionParentRequestHandlerTest(TestBaseHandler):
             institution.children_institutions[0], self.inst_test.key,
             "The children institution of inst test must be update to inst_requested")
         
+        message = {
+            "from": {
+                "photo_url": self.other_user.photo_url,
+                "name": self.other_user.name,
+                "institution_name": self.request.institution_requested_key.get().name
+            },
+            "to": {
+                "institution_name": self.request.institution_key.get().name
+            },
+            "current_institution": {
+                "name": institution.name
+            }
+        }
+
         # Assert the notification was sent
         send_notification.assert_called_with(
             current_institution=self.inst_requested.key, 
-            sender_key=self.other_user.key, 
             receiver_key=self.user_admin.key,
-            entity_type='ACCEPT_INSTITUTION_LINK'
+            notification_type='ACCEPT_INSTITUTION_LINK',
+            message=json.dumps(message)
         )
 
     @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
@@ -114,7 +128,7 @@ class InstitutionParentRequestHandlerTest(TestBaseHandler):
     @patch.object(Invite, 'send_notification')
     @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_delete(self, verify_token, send_notification):
-        """Test method post of InstitutionChildrenRequestHandler."""
+        """Test method delete of InstitutionParentRequestHandler."""
         self.testapp.delete(
             "/api/requests/%s/institution_parent" % self.request.key.urlsafe(),
             headers={'institution-authorization': self.inst_requested.key.urlsafe()}
@@ -132,12 +146,26 @@ class InstitutionParentRequestHandlerTest(TestBaseHandler):
             institution.children_institutions, [],
             "The list of children institution of inst requested is empty")
 
+        message = {
+            "from": {
+                "photo_url": self.other_user.photo_url,
+                "name": self.other_user.name,
+                "institution_name": self.request.institution_requested_key.get().name
+            },
+            "to": {
+                "institution_name": self.request.institution_key.get().name
+            },
+            "current_institution": {
+                "name": institution.name
+            }
+        }
+
         # assert notfication was sent
         send_notification.assert_called_with(
             current_institution=self.inst_requested.key, 
-            sender_key=self.other_user.key, 
             receiver_key=self.user_admin.key,
-            entity_type='REJECT_INSTITUTION_LINK'
+            notification_type='REJECT_INSTITUTION_LINK',
+            message=json.dumps(message)
         )
 
     @patch('handlers.institution_parent_request_handler.enqueue_task')

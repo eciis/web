@@ -5,7 +5,7 @@ import json
 from google.appengine.ext import ndb
 from utils import login_required
 from utils import json_response
-from handlers.base_handler import BaseHandler
+from . import BaseHandler
 from models.post import Like
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from custom_exceptions.entityException import EntityException
@@ -13,6 +13,7 @@ from service_entities import enqueue_task
 from service_messages import send_message_notification
 from utils import Utils
 
+__all__ = ['LikeHandler']
 
 class LikeException(Exception):
     """Like Exception."""
@@ -54,16 +55,20 @@ class LikeHandler(BaseHandler):
         if comment_id:            
             comment = post.like_comment(user, comment_id, reply_id)
 
-            entity_type = 'LIKE_COMMENT'
+            notification_type = 'LIKE_COMMENT'
             user_is_the_author = comment['author_key'] == user.key.urlsafe()
             if not user_is_the_author:
                 receiver_key = comment['author_key']
+                notification_message = post.create_notification_message(
+                    user_key=user.key,
+                    current_institution_key=user.current_institution, 
+                    sender_institution_key=post.institution
+                )
                 send_message_notification(
-                    receiver_key,
-                    user.key.urlsafe(), 
-                    entity_type, 
-                    post_key,
-                    user.current_institution
+                    receiver_key=receiver_key,
+                    notification_type=notification_type, 
+                    entity_key=post_key,
+                    message=notification_message
                 ) 
         else: 
             post = post.like(user.key)
@@ -74,7 +79,8 @@ class LikeHandler(BaseHandler):
                     'sender_key': user.key.urlsafe(),
                     'entity_key': post.key.urlsafe(),
                     'entity_type': entity_type,
-                    'current_institution': user.current_institution.urlsafe()
+                    'current_institution': user.current_institution.urlsafe(),
+                    'sender_institution_key': post.institution.urlsafe()
                 }
 
             enqueue_task('post-notification', params)
@@ -85,7 +91,6 @@ class LikeHandler(BaseHandler):
     """
     @json_response
     @login_required
-    @ndb.transactional(xg=True)
     def delete(self, user, post_key, comment_id=None, reply_id=None):
         """Handle DELETE Requests."""
         """This method is only meant to dislike in post."""
@@ -104,10 +109,18 @@ class LikeHandler(BaseHandler):
 
             Utils._assert(user.key.urlsafe() not in likes,
                       "User hasn't liked this comment.", LikeException)
-            likes.remove(user.key.urlsafe())
-            post.put()
+
+            @ndb.transactional(retries=10, xg=True)
+            def remove_like(likes, user, post):
+                likes.remove(user.key.urlsafe())
+                post.put()
+            remove_like(likes, user, post)
         else:
             Utils._assert(not user.is_liked_post(post.key),
                       "User hasn't liked this publication.", LikeException)
-            user.dislike_post(post.key)
-            post.dislike(user.key)
+
+            @ndb.transactional(retries=10, xg=True)
+            def remove_like(user, post):
+                user.dislike_post(post.key)
+                post.dislike(user.key)
+            remove_like(user, post)

@@ -107,7 +107,7 @@
                                             <md-button  ng-class="institutionCtrl.getSelectedItemClass('registration_data')"
                                                 ng-click="institutionCtrl.goToRegistrationData(institutionCtrl.institution.key)">
                                                 <md-icon>assignment</md-icon>
-                                                    <b>Dados cadastrais</b>
+                                                    <b>Dados Cadastrais</b>
                                             </md-button>
                                         </md-menu-item>
                                         <md-menu-item>
@@ -128,7 +128,7 @@
                                             <md-button ng-class="institutionCtrl.getSelectedItemClass('institutional_links')"
                                                 ng-click="institutionCtrl.goToLinks(institutionCtrl.institution.key)">
                                                 <md-icon>account_balance</md-icon>
-                                                <b>Vínculos institucionais</b>
+                                                <b>Vínculos Institucionais</b>
                                             </md-button>
                                         </md-menu-item>
                                         <md-menu-item ng-if="institutionCtrl.portfolioUrl">
@@ -145,6 +145,34 @@
                                                 <b>Eventos</b>
                                             </md-button>
                                         </md-menu-item>
+                                        <div class="row" ng-if="institutionCtrl.user.isAdmin(institutionCtrl.institution.key)">
+                                            <div layout-padding>
+                                                <span class="menu-section-title">ADMINISTRAÇÃO</span>
+                                                <md-divider style="margin-top: 10px"></md-divider>
+                                            </div>
+                                            <md-menu-item>
+                                                <md-button
+                                                    ng-click="mainCtrl.goToEditInfo(institutionCtrl.institution.key)">
+                                                    <md-icon>edit</md-icon>
+                                                    <b>Editar Informações</b>
+                                                </md-button>
+                                            </md-menu-item>
+                                            <md-menu-item >
+                                                <md-button
+                                                    ng-click="mainCtrl.goToManageMembers(institutionCtrl.institution.key)">
+                                                    <md-icon>people</md-icon>
+                                                    <b>Gerenciar Membros</b>
+                                                </md-button>
+                                            </md-menu-item>
+                                            <md-menu-item>
+                                                <md-button
+                                                    ng-click="mainCtrl.goToManageInstitutions(institutionCtrl.institution.key)">
+                                                    <md-icon>account_balance</md-icon>
+                                                    <b>Vínculos Institucionais</b>
+                                                </md-button>
+                                            </md-menu-item>
+                                        </div>
+                                        <md-divider style="margin-top: 10px"></md-divider>
                                         <md-menu-item>
                                             <md-button ng-click="institutionCtrl.goToHome()">
                                                 <md-icon>arrow_back</md-icon>

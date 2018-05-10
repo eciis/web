@@ -34,22 +34,32 @@ class RequestInstitutionChildren(Request):
 
     def send_notification(self, current_institution):
         """Method of send notification of request institution children."""
-        entity_type = 'REQUEST_INSTITUTION_CHILDREN'
+        notification_type = 'REQUEST_INSTITUTION_CHILDREN'
         admin = self.institution_requested_key.get().admin
+        notification_message = self.create_notification_message(user_key=self.sender_key, 
+            current_institution_key=current_institution, sender_institution_key=self.institution_key,
+            receiver_institution_key=self.institution_requested_key)
+
         super(RequestInstitutionChildren, self).send_notification(
             current_institution=current_institution, 
             receiver_key=admin, 
-            entity_type=entity_type
+            notification_type=notification_type,
+            message=notification_message
         )
 
     def send_response_notification(self, current_institution, invitee_key, action):
         """Send notification to sender of invite when invite is accepted or rejected."""
-        entity_type = 'ACCEPT_INSTITUTION_LINK' if action == 'ACCEPT' else 'REJECT_INSTITUTION_LINK'
+        notification_type = 'ACCEPT_INSTITUTION_LINK' if action == 'ACCEPT' else 'REJECT_INSTITUTION_LINK'
+        notification_message = self.create_notification_message(user_key=invitee_key, 
+            current_institution_key=current_institution, receiver_institution_key=self.institution_key, 
+            sender_institution_key=self.institution_requested_key)
+
         super(RequestInstitutionChildren, self).send_notification(
             current_institution=current_institution, 
             sender_key=invitee_key, 
             receiver_key=self.sender_key or self.admin_key,
-            entity_type=entity_type
+            notification_type=notification_type,
+            message=notification_message
         )
 
     def make(self):

@@ -7,9 +7,10 @@ from utils import json_response
 from utils import Utils
 from models.request_user import RequestUser
 from custom_exceptions.entityException import EntityException
-from handlers.base_handler import BaseHandler
+from . import BaseHandler
 from models.factory_invites import InviteFactory
 
+__all__ = ['UserRequestCollectionHandler']
 
 class UserRequestCollectionHandler(BaseHandler):
     """User Request Collection Handler."""

@@ -102,13 +102,13 @@
         inviteInstCtrl.showPendingRequestDialog = function showPendingRequestDialog(event, request) {
             $mdDialog.show({
                 templateUrl: "app/requests/request_institution_processing.html",
-                controller: "RequestInstitutionProcessingController",
+                controller: "RequestProcessingController",
                 controllerAs: "requestCtrl",
                 parent: angular.element(document.body),
                 targetEvent: event,
                 clickOutsideToClose:true,
                 locals: {
-                    "key": request.key
+                    "request": request
                 },
                 openFrom: '#fab-new-post',
                 closeTo: angular.element(document.querySelector('#fab-new-post'))

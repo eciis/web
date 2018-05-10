@@ -2,7 +2,7 @@
 """Institution Events Handler."""
 
 
-from handlers.base_handler import BaseHandler
+from . import BaseHandler
 from google.appengine.ext import ndb
 
 import json
@@ -14,6 +14,7 @@ from utils import query_paginated
 from utils import to_int
 from custom_exceptions.queryException import QueryException
 
+__all__ = ['InstitutionEventsHandler']
 
 class InstitutionEventsHandler(BaseHandler):
     """Institution Events Handler."""

@@ -75,7 +75,7 @@
               </div>
             </div>
             <div ng-if="inviteInstHierCtrl.isActive(inviteInstHierCtrl.institution.parent_institution)">
-              <md-button ng-click="inviteInstHierCtrl.removeLink(event, inviteInstHierCtrl.institution.parent_institution, true)">
+              <md-button ng-click="inviteInstHierCtrl.removeLink(inviteInstHierCtrl.institution.parent_institution, true, $event)">
                 <md-icon md-colors="{color: 'red-700'}" title="Remover conexão">link</md-icon>
               </md-button>
             </div>
@@ -117,7 +117,7 @@
                 </div>
               </div>
               <div ng-if="inviteInstHierCtrl.isActive(institution)" layout="row">
-                <md-button ng-click="inviteInstHierCtrl.removeLink(event, institution, false)">
+                <md-button ng-click="inviteInstHierCtrl.removeLink(institution, false, event)">
                   <md-icon md-colors="{color: 'red-700'}" title="Remover conexão">link</md-icon>
                 </md-button>
                 <md-button ng-if="inviteInstHierCtrl.canRemoveInst(institution)" ng-click="inviteInstHierCtrl.removeChild(institution)">

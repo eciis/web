@@ -7,7 +7,7 @@ from utils import Utils
 from utils import login_required
 from utils import json_response
 
-from handlers.base_handler import BaseHandler
+from . import BaseHandler
 from models.post import Post
 from models.factory_post import PostFactory
 from service_messages import send_message_notification
@@ -15,6 +15,7 @@ from service_entities import enqueue_task
 
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
+__all__ = ['PostCollectionHandler']
 
 def get_permission(data):
         """Return permission according to the type of data."""
@@ -79,7 +80,7 @@ class PostCollectionHandler(BaseHandler):
             'institution_key': post.institution.urlsafe(),
             'current_institution': user.current_institution.urlsafe()
         }
-
+  
         enqueue_task('notify-followers', params)
 
         if(post.shared_post):
@@ -91,19 +92,23 @@ class PostCollectionHandler(BaseHandler):
                 'entity_key': shared_post.key.urlsafe(),
                 'entity_type': entity_type,
                 'current_institution': user.current_institution.urlsafe(),
+                'sender_institution_key': shared_post.institution.urlsafe()
             }
 
             enqueue_task('post-notification', params)
         elif post.shared_event:
             shared_event = post.shared_event.get()
             if shared_event.author_key != user.key:
+                notification_message = post.create_notification_message(
+                    user_key=user.key,
+                    current_institution_key=user.current_institution,
+                    sender_institution_key=shared_event.institution_key
+                    )
                 send_message_notification(
-                    shared_event.author_key.urlsafe(),
-                    user.key.urlsafe(),
-                    'SHARED_EVENT',
-                    post.key.urlsafe(),
-                    user.current_institution
+                    receiver_key=shared_event.author_key.urlsafe(),
+                    notification_type='SHARED_EVENT',
+                    entity_key=post.key.urlsafe(),
+                    message=notification_message
                 )
-
-
+        
         self.response.write(json.dumps(post.make(self.request.host)))

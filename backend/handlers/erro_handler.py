@@ -5,8 +5,9 @@ import json
 
 from utils import json_response
 
-from handlers.base_handler import BaseHandler
+from . import BaseHandler
 
+__all__ = ['ErroHandler']
 
 class ErroHandler(BaseHandler):
     """Error Handler."""

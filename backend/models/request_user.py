@@ -3,10 +3,11 @@
 from invite import Invite
 from google.appengine.ext import ndb
 from custom_exceptions.fieldException import FieldException
-from models import Institution
+from models.institution import Institution
+from models.request import Request
 
 
-class RequestUser(Invite):
+class RequestUser(Request):
     """Model of request user."""
 
     @staticmethod
@@ -93,28 +94,38 @@ class RequestUser(Invite):
     """
     def send_notification(self, current_institution):
         """Method of send notification of invite user."""
-        entity_type = 'REQUEST_USER'
+        notification_type = 'REQUEST_USER'
+        notification_message= self.create_notification_message(user_key=self.sender_key,
+            current_institution_key=current_institution, 
+            receiver_institution_key=self.institution_requested_key)
+
         super(RequestUser, self).send_notification(
-            current_institution=current_institution, 
-            sender_key=self.sender_key,
+            current_institution=current_institution,
             receiver_key=self.admin_key,
-            entity_type=entity_type
+            notification_type=notification_type,
+            entity_key=self.key.urlsafe(),
+            message=notification_message
         )
 
     """ 
     The sender, in this case, is the user who is asking to be an institution's members.
     The user is who answered the request.
     The institution_key to which the sender requested to be member.
-    Entity_type can be REJECTED_LINK or ACCEPTED_LINK.
+    Action can be REJECTED or ACCEPTED.
     """
-    def send_response_notification(self, user, institution_key, entity_type):
+    def send_response_notification(self, user, current_institution, action):
         """Method sends response notification to sender request."""
+        notification_type = 'ACCEPTED_LINK' if action == 'ACCEPT' else 'REJECTED_LINK'
+        notification_message= self.create_notification_message(user_key=user.key,
+            current_institution_key=current_institution,
+            sender_institution_key=self.institution_requested_key)
+
         super(RequestUser, self).send_notification(
-            institution_key,
-            user.key,
-            self.sender_key,
-            entity_type,
-            institution_key.urlsafe()
+            current_institution=current_institution,
+            receiver_key=self.sender_key,
+            notification_type=notification_type,
+            entity_key=current_institution.urlsafe(),
+            message=notification_message
         )
 
     def make(self):

@@ -13,8 +13,9 @@ from models.survey_post import SurveyPost
 from models.post import Like
 from service_messages import send_message_notification
 
-from handlers.base_handler import BaseHandler
+from . import BaseHandler
 
+__all__ = ['PostHandler']
 
 def is_post_author(method):
     """Check if the user is the author of the post."""
@@ -63,15 +64,25 @@ class PostHandler(BaseHandler):
 
         is_admin = user.has_permission("remove_posts", post.institution.urlsafe())
         is_author = user.has_permission("remove_post", key)
-        
+
         Utils._assert(not is_admin and not is_author,
                       "The user can not remove this post", NotAuthorizedException)
 
         post.delete(user)
 
         if(is_admin and not is_author):
-            send_message_notification(post.author.urlsafe(), user.key.urlsafe(), 
-                'DELETED_POST', post.key.urlsafe(), user.current_institution, entity=json.dumps(post.make(self.request.host)))
+            notification_message = post.create_notification_message(
+                user_key=user.key,
+                current_institution_key=user.current_institution,
+                sender_institution_key=post.institution
+            )
+            send_message_notification(
+                receiver_key=post.author.urlsafe(), 
+                notification_type='DELETED_POST',
+                entity_key=post.key.urlsafe(),
+                message=notification_message, 
+                entity=json.dumps(post.make(self.request.host))
+            )
 
     @json_response
     @login_required

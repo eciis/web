@@ -5,9 +5,11 @@ from utils import login_required
 from utils import json_response
 import json
 
-from handlers.base_handler import BaseHandler
+from . import BaseHandler
 from search_module.search_user import SearchUser
 from search_module.search_institution import SearchInstitution
+
+__all__ = ['SearchHandler']
 
 SEARCH_TYPES = {
     'institution': SearchInstitution,

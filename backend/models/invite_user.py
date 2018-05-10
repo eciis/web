@@ -34,12 +34,18 @@ class InviteUser(Invite):
 
     def send_response_notification(self, current_institution, invitee_key, action):
         """Send notification to sender of invite when invite is accepted or rejected."""
-        entity_type = "ACCEPT_INVITE_USER" if action == 'ACCEPT' else "REJECT_INVITE_USER"
+        notification_type = "ACCEPT_INVITE_USER" if action == 'ACCEPT' else "REJECT_INVITE_USER"
+        notification_message =  self.create_notification_message(
+            user_key=invitee_key,
+            current_institution_key=current_institution,
+            sender_institution_key=self.institution_key
+        )
         self.send_notification(
             current_institution=current_institution, 
             sender_key=invitee_key, 
             receiver_key=self.sender_key or self.admin_key,
-            entity_type=entity_type
+            notification_type=notification_type,
+            message=notification_message
         )
 
     def make(self):

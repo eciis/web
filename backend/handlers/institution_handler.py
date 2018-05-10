@@ -17,8 +17,9 @@ from models import Institution
 from util.json_patch import JsonPatch
 from service_entities import enqueue_task
 
-from handlers.base_handler import BaseHandler
+from . import BaseHandler
 
+__all__ = ['InstitutionHandler']
 
 def getSentInvitations(institution_key):
     """Query that return list of invites for this user."""
@@ -198,7 +199,8 @@ class InstitutionHandler(BaseHandler):
         params = {
             'institution_key': institution_key,
             'remove_hierarchy': remove_hierarchy,
-            'user_key': user.key.urlsafe() 
+            'user_key': user.key.urlsafe(),
+            'current_institution': user.current_institution.urlsafe()
         }
 
         enqueue_task('remove-inst', params)

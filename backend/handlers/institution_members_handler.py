@@ -10,8 +10,9 @@ from utils import json_response
 from service_messages import send_message_notification
 from send_email_hierarchy.remove_member_email_sender import RemoveMemberEmailSender
 
-from handlers.base_handler import BaseHandler
+from . import BaseHandler
 
+__all__ = ['InstitutionMembersHandler']
 
 class InstitutionMembersHandler(BaseHandler):
     """Get members of specific institution."""
@@ -38,21 +39,19 @@ class InstitutionMembersHandler(BaseHandler):
                               url_string)
 
         institution = institution_key.get()
-
-        data = self.request.get('removeMember')
-        member = ndb.Key(urlsafe=data)
+        member_key = self.request.get('removeMember')
+        member = ndb.Key(urlsafe=member_key)
         member = member.get()
 
         institution.remove_member(member)
 
         if member.state != 'inactive':
-            entity_type = 'DELETE_MEMBER'
+            notification_message = institution.create_notification_message(user.key, user.current_institution)
             send_message_notification(
-                member.key.urlsafe(),
-                user.key.urlsafe(),
-                entity_type,
-                institution.key.urlsafe(),
-                user.current_institution
+                receiver_key=member.key.urlsafe(),
+                notification_type='DELETE_MEMBER',
+                entity_key=institution.key.urlsafe(),
+                message=notification_message
             )
 
         subject = "Remoção de vínculo"

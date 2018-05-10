@@ -7,12 +7,13 @@ from utils import login_required
 from utils import json_response
 from utils import Utils
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
-from handlers.base_handler import BaseHandler
+from . import BaseHandler
 from models.invite_institution import InviteInstitution
 from models.factory_invites import InviteFactory
 from service_entities import enqueue_task
 from google.appengine.ext import ndb
 
+__all__ = ['InviteCollectionHandler']
 
 class InviteCollectionHandler(BaseHandler):
     """Invite Collection Handler."""

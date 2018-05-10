@@ -8,9 +8,10 @@ from utils import json_response
 from utils import Utils
 from utils import make_user
 from service_entities import enqueue_task
-from handlers.base_handler import BaseHandler
+from . import BaseHandler
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
+__all__ = ['InviteUserAdmHandler']
 
 class InviteUserAdmHandler(BaseHandler):
     """Invite User Admin Handler."""
@@ -48,7 +49,7 @@ class InviteUserAdmHandler(BaseHandler):
                     'user_key': user.key.urlsafe()
                 }
             )
-            invite.send_response_notification(current_institution=institution.key, action='ACCEPT')
+            invite.send_response_notification(current_institution=user.current_institution, action='ACCEPT')
         save_changes(user, actual_admin, invite, institution)
         self.response.write(json.dumps(make_user(user, self.request)))
 
@@ -58,4 +59,4 @@ class InviteUserAdmHandler(BaseHandler):
         invite = ndb.Key(urlsafe=invite_key).get()
         invite.change_status('rejected')
         invite.put()
-        invite.send_response_notification(current_institution=invite.institution_key, action='REJECT')
+        invite.send_response_notification(current_institution=user.current_institution, action='REJECT')

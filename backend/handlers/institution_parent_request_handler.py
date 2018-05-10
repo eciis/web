@@ -4,10 +4,11 @@
 import json
 from utils import login_required
 from utils import json_response
-from handlers.base_handler import BaseHandler
+from . import BaseHandler
 from service_entities import enqueue_task
 from google.appengine.ext import ndb
 
+__all__ = ['InstitutionParentRequestHandler']
 
 class InstitutionParentRequestHandler(BaseHandler):
     """Institution Parent Request Handler."""
@@ -37,7 +38,7 @@ class InstitutionParentRequestHandler(BaseHandler):
 
         institution_children = request.institution_key.get()
         
-        request.send_response_notification(request.institution_requested_key, user.key, 'ACCEPT')
+        request.send_response_notification(user.current_institution, user.key, 'ACCEPT')
 
         enqueue_task('add-admin-permissions', {'institution_key': institution_children.key.urlsafe()})
 
@@ -54,4 +55,4 @@ class InstitutionParentRequestHandler(BaseHandler):
         request.change_status('rejected')
         request.put()
 
-        request.send_response_notification(request.institution_requested_key, user.key, 'REJECT')
+        request.send_response_notification(user.current_institution, user.key, 'REJECT')

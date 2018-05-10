@@ -13,6 +13,7 @@
 
         mainCtrl.pending_manager_member = 0;
         mainCtrl.pending_inst_invitations = 0;
+        mainCtrl.pendingInstLinksInvitations = 0;
 
         mainCtrl.APP_VERSION = Config.APP_VERSION;
 
@@ -117,6 +118,10 @@
             mainCtrl.pending_inst_invitations += response.length;
         }
 
+        function increaseInstLinksInvitationsNumber(response) {
+            mainCtrl.pendingInstLinksInvitations += response.length;
+        }
+
         mainCtrl.getPendingTasks = function getPendingTasks() {
             mainCtrl.pending_manager_member = 0;
             mainCtrl.pending_inst_invitations = 0;
@@ -128,10 +133,10 @@
             );
 
             RequestInvitationService.getParentRequests(mainCtrl.user.current_institution.key).then(
-                increaseInstInvitationsNumber, function error() {}
+                increaseInstLinksInvitationsNumber, function error() {}
             );
             RequestInvitationService.getChildrenRequests(mainCtrl.user.current_institution.key).then(
-                increaseInstInvitationsNumber, function error() {}
+                increaseInstLinksInvitationsNumber, function error() {}
             );
 
             if(mainCtrl.isSuperUser()) {

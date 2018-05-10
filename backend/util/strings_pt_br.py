@@ -3,7 +3,8 @@
 
 
 STRINGS = {
-    'INVITE_EMAIL_SUBJECT': """Convite plataforma CIS"""
+    'INVITE_EMAIL_SUBJECT': """Convite plataforma CIS""",
+    'REQUEST_EMAIL_SUBJECT': """Solicitação de participação plataforma CIS"""
 }
 
 

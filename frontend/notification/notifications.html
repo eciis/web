@@ -17,6 +17,8 @@
             <img ng-src="{{notification.from.photo_url}}" class="md-avatar" style="width: 60px; height: 60px;"/>
             <div class="md-list-item-text" layout="column" >
               <p><b style="font-size: 18px;">{{ notificationCtrl.limitString(notification.from.name, 28) }}</b></p>
+              <!-- notification.current_institution belongs to the new notification architecture. 
+                  notification.from belongs to old architecture. DATE: 10/05/2018 -->
               <p><b style="font-size: 15px; color: #009688;">{{ notificationCtrl.limitString(notification.current_institution.name, 32) || notificationCtrl.limitString(notification.from.institution_name, 32)}}</b></p>
               <div layout="row">
                 <div class="notification-icon-bg">

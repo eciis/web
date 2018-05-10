@@ -19,9 +19,9 @@
             </div>
             <md-content class="custom-scrollbar" flex>
                 <md-list style="padding: 10px;" flex>
-                    <md-list-item title="{{notificationCtrl.format(notification)}}" class="md-3-line" md-colors="{background: 'grey-200'}" style="margin-bottom: 5px; padding: 3 0 3 0;"
+                    <md-list-item title="{{notificationCtrl.format(notification)}}" class="md-3-line" style="margin-bottom: 5px; padding: 3 0 3 0;"
                         ng-repeat="notification in notificationCtrl.allNotifications | orderBy:'-timestamp' | filter: notificationCtrl.keyword" 
-                        ng-click="notificationCtrl.action(notification, $event)" flex-xs>
+                        ng-click="notificationCtrl.action(notification, $event)" flex-xs ng-class="notification.status === 'READ'? '': 'unread-notification'">
                             <img ng-src="{{notification.from.photo_url}}" class="md-avatar" style="width: 60px; height: 60px;"/>
                             <div class="md-list-item-text" layout="column">
                                 <p><b style="font-size: 18px;">{{ notification.from.name }}</b></p>

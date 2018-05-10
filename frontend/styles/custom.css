@@ -1113,3 +1113,7 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
     font-size: 14px;
     margin-top: 3px;
 }
+
+.unread-notification {
+    background: #E0E0E0;
+}

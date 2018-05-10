@@ -10,14 +10,6 @@ from service_messages import create_message
 
 __all__ = ['Institution']
 
-# Method not used, remove
-def get_actuation_area(data):
-    """Get the institution actuation area."""
-    if data.get('actuation_area') == 'other':
-        return data.get('other_area')
-    return data.get('actuation_area')
-
-
 class Institution(ndb.Model):
     """Model of Institution."""
 

@@ -1,6 +1,7 @@
 """Invite institution parent model."""
 from invite_institution import InviteInstitution
 
+__all__ = ['InviteInstitutionParent']
 
 class InviteInstitutionParent(InviteInstitution):
     """Model of invite institution parent."""

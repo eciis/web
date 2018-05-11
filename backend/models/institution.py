@@ -394,10 +394,6 @@ class Institution(ndb.Model):
             sender_institution_key= sender_institution_key or current_institution_key
         )
 
-    """TODO: Test this method.
-    
-    Author: Raoni Smaneoto, 30/04/2018.
-    """
     def verify_connection(self, institution_to_verify):
         """This method checks if the link between self and institution_to_verify
         is confirmed."""

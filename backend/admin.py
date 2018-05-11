@@ -254,7 +254,7 @@ class ResetHandler(BaseHandler):
         admin.name = 'Administrador da Plataforma Virtual CIS'
         admin.cpf = '000.000.000-01'
         admin.email = [
-            'testeeciis@gmail.com',
+            'deciis@saude.gov.br',
             'plataformavirtualcis@gmail.com'
         ]
         admin.photo_url = "app/images/avatar.png"
@@ -309,9 +309,9 @@ class ResetHandler(BaseHandler):
             'actuation_area': 'GOVERNMENT_AGENCIES',
             'description': 'Departamento do Complexo Industrial e Inovação em Saúde',
             'photo_url': 'http://www.plataformacis.org/images/logo.png',
-            'email': 'testeeciis@gmail.com',
+            'email': 'deciis@saude.gov.br',
             'state': 'active',
-            'institutional_email': 'testeeciis@gmail.com',
+            'institutional_email':'deciis@saude.gov.br',
             'leader':' Ministro Ricardo Barros'
         }
 

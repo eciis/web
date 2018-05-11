@@ -27,15 +27,25 @@ class RequestInstitution(Request):
         request.isValid()
         return request
 
-    def send_response_email(self):
+    def send_response_email(self, operation, host=None):
         """Method to send email of sender institution when invite is accepted or rejected."""
-        subject = """Instituição aceita na Plataforma Virtual CIS."""
-        email_sender = AcceptedInstitutionEmailSender(**{
-            'receiver': self.sender_key.get().email,
-            'subject': subject,
-            'institution_key': self.institution_key.urlsafe(),
-        })
-        email_sender.send_email()
+        if operation == "ACCEPT":
+            subject = """Instituição aceita na Plataforma Virtual CIS."""
+            email_sender = AcceptedInstitutionEmailSender(**{
+                'receiver': self.sender_key.get().email[0],
+                'subject': subject,
+                'institution_key': self.institution_key.urlsafe(),
+            })
+            email_sender.send_email()
+        else:
+            rejectMessage = """Olá,
+            Lamentamos informar mas o seu pedido não foi aceito.
+            Sugerimos que fale com o seu superior para que seja enviado um convite.
+            Equipe da Plataforma CIS"""
+
+            sender_email = self.sender_key.get().email[0]
+            super(RequestInstitution, self).send_email(
+                host, sender_email, rejectMessage)
 
     def send_email(self, host, body=None):
         """Method of send email of request institution link."""

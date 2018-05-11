@@ -75,8 +75,7 @@ class InstitutionRequestHandler(BaseHandler):
         institution.set_admin(sender.key)
         institution.put()
 
-        host = self.request.host
-        request.send_response_email(host, "ACCEPT")
+        request.send_response_email()
 
         self.response.write(json.dumps(request.make()))
 

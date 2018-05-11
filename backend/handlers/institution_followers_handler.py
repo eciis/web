@@ -25,7 +25,7 @@ class InstitutionFollowersHandler(BaseHandler):
         """Get followers of specific institution."""
         institution_key = ndb.Key(urlsafe=url_string)
         institution = institution_key.get()
-        
+
         array = [member.get() for member in institution.followers]
         # TODO: This process is unnecessary,
         # need to optimized

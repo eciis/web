@@ -189,16 +189,12 @@ describe('Test Institution Model:', function() {
         });
 
         it('should not add the same institution again', function() {
-            testInst.name = "original";
             institution.addChildInst(testInst);
             expect(institution.children_institutions.length).toEqual(1);
-            expect(institution.children_institutions[0].name).toEqual("original");
             
             var sameInst = Object.assign({}, testInst);
-            sameInst.name = "replaced";
             institution.addChildInst(sameInst);
             expect(institution.children_institutions.length).toEqual(1);
-            expect(institution.children_institutions[0].name).toEqual("replaced");
         });
     });
 });

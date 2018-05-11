@@ -2,9 +2,9 @@
 """Event model's test."""
 
 from ..test_base import TestBase
-from models.institution import Institution
-from models.user import User
-from models.event import Event
+from models import Institution
+from models import User
+from models import Event
 from .. import mocks
 
 from custom_exceptions.fieldException import FieldException

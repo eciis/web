@@ -42,7 +42,7 @@ class Request(Invite):
             raise FieldException("The institutions has already been connected.")
         if Request.isRequested(institution_key, institution_requested.key):
             raise FieldException("The requested institution has already been invited")
-
+    
     def make(self):
         """Create json of request to institution."""
         request_inst_json = super(Request, self).make()

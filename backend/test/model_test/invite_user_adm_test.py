@@ -4,9 +4,9 @@
 from .. import mocks
 from ..test_base import TestBase
 
-from models.institution import Institution
+from models import Institution
 from models.invite_user_adm import InviteUserAdm
-from models.user import User
+from models import User
 
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 

@@ -2,7 +2,7 @@
 
 from ..test_base import TestBase
 
-from models.user import User
+from models import User
 
 from .. import mocks
 

@@ -22,7 +22,7 @@
             'SURVEY_POST': messageCreator('Publicou uma nova enquete de ', SINGLE_INST),
             'SHARED_POST': messageCreator('Compartilhou um post de ', SINGLE_INST),
             'INVITE': messageCreator('Te enviou um novo convite via ', SINGLE_INST),
-            'INSTITUTION': messageCreator('Removeu a conexão entre ', DOUBLE_INST),
+            'REMOVE_INSTITUTION_LINK': messageCreator('Removeu a conexão entre ', DOUBLE_INST),
             'DELETED_INSTITUTION': messageCreator('Removeu ', SINGLE_INST),
             'REQUEST_USER': messageCreator('Solicitou ser membro de ', SINGLE_INST),
             'REQUEST_INSTITUTION_PARENT': messageCreator('Solicitou um novo vínculo entre ', DOUBLE_INST),
@@ -42,7 +42,6 @@
             'REJECTED_LINK': messageCreator('Rejeitou sua solicitação de vínculo com ', SINGLE_INST),
             'SHARED_EVENT': messageCreator('Compartilhou um evento de ', SINGLE_INST),
             'DELETED_POST': messageCreator('Deletou o seu post em ', SINGLE_INST),
-            'REPLY_COMMENT': messageCreator('Respondeu um comentário seu'),
             'USER_ADM': messageCreator('Indicou você para ser administrador da instituição ', SINGLE_INST),
             'ACCEPT_INVITE_USER_ADM': messageCreator('Aceitou seu convite para ser administrador de ', SINGLE_INST),
             'REJECT_INVITE_USER_ADM': messageCreator('Rejeitou seu convite para ser administrador de ', SINGLE_INST),
@@ -54,8 +53,13 @@
 
         service.formatMessage = function formatMessage(notification) {
             var entity_type = notification.entity_type;
-            var mainInst = notification.entity.institution_name;
-            var otherInst = notification.from.institution_name;
+            var mainInst = notification.entity.institution_name || notification.from.institution_name;
+            /**
+             * notification.to belongs to the new notification architecture.
+             * notification.from belongs to old architecture.
+             * DATE: 10/05/2018
+             */
+            var otherInst = (notification.to && notification.to.institution_name) || notification.from.institution_name;
             var message = assembleMessage(entity_type, mainInst, otherInst);
             return message;
         };
@@ -127,7 +131,7 @@
                     case DOUBLE_INST: 
                         return message + `${mainInst} e ${otherInst}`; 
                     case SINGLE_INST:
-                        return message + mainInst; 
+                        return message + (mainInst || otherInst); 
                     default:
                         return message;
                 }

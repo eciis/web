@@ -2,9 +2,9 @@
 """Event handler test."""
 
 from test_base_handler import TestBaseHandler
-from models.user import User
-from models.institution import Institution
-from models.event import Event
+from models import User
+from models import Institution
+from models import Event
 from handlers.event_handler import EventHandler
 from mock import patch
 

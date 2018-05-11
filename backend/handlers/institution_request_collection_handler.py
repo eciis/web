@@ -7,8 +7,8 @@ from utils import json_response
 from utils import Utils
 from custom_exceptions.entityException import EntityException
 from . import BaseHandler
-from models.institution import Institution
-from models.institution import Address
+from models import Institution
+from models import Address
 from models.factory_invites import InviteFactory
 from models.request_institution import RequestInstitution
 

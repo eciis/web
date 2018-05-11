@@ -3,12 +3,12 @@
 import datetime
 import sys
 
-from models.user import User
-from models.institution import Institution
-from models.institution import Address
+from models import User
+from models import Institution
+from models import Address
 from models.post import Post
 from models.post import Comment
-from models.event import Event
+from models import Event
 from models.factory_invites import InviteFactory
 from permissions import DEFAULT_ADMIN_PERMISSIONS
 from models.request_institution_parent import RequestInstitutionParent

@@ -8,16 +8,12 @@
         var newInviteCtrl = this;
 
         newInviteCtrl.institution = null;
-
         newInviteCtrl.inviteKey = $state.params.key;
-
         newInviteCtrl.acceptedInvite = false;
-
         newInviteCtrl.user = AuthService.getCurrentUser();
-
         newInviteCtrl.phoneRegex = "[0-9]{2}[\\s][0-9]{4,5}[-][0-9]{4,5}";
-
         newInviteCtrl.loading = true;
+        newInviteCtrl.isAlreadyProcessed = false;
 
         var observer;
 
@@ -80,6 +76,10 @@
                 institutionKey: institutionKey,
                 inviteKey: newInviteCtrl.inviteKey
             });
+        };
+
+        newInviteCtrl.goToHome = function goToHome() {
+            $state.go("app.user.home");
         };
 
         newInviteCtrl.isInviteUser = function isInviteUser(){
@@ -164,8 +164,7 @@
                     institutionKey = (newInviteCtrl.invite.type_of_invite === "USER") ? newInviteCtrl.invite.institution_key : newInviteCtrl.invite.stub_institution.key;
                     newInviteCtrl.institution = newInviteCtrl.invite.institution;
                 } else {
-                    $state.go("app.user.home");
-                    MessageService.showToast("Você já utilizou este convite.");
+                    newInviteCtrl.isAlreadyProcessed = true;
                 }
                 newInviteCtrl.loading = false;
             }, function error(response) {

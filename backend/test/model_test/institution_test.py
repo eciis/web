@@ -2,7 +2,7 @@
 
 from ..test_base import TestBase
 
-from models.institution import Institution
+from models import Institution
 from models.request_institution_parent import RequestInstitutionParent
 from permissions import DEFAULT_ADMIN_PERMISSIONS
 
@@ -200,3 +200,29 @@ class InstitutionTest(TestBase):
             "The connection between institution and independent_instituion should be false"
         )
 
+    def test_verify_connection(self):
+        """Test verify_connection method."""
+        child_inst = mocks.create_institution()
+        parent_inst = mocks.create_institution()
+
+        #There is no link
+        self.assertFalse(child_inst.verify_connection(parent_inst))
+        self.assertFalse(parent_inst.verify_connection(child_inst))
+        
+        child_inst.parent_institution = parent_inst.key
+
+        #Just the child is linked to the parent
+        self.assertFalse(child_inst.verify_connection(parent_inst))
+        self.assertFalse(parent_inst.verify_connection(child_inst))
+
+        parent_inst.children_institutions.append(child_inst.key)
+        
+        #There is link in two directions
+        self.assertTrue(child_inst.verify_connection(parent_inst))
+        self.assertTrue(parent_inst.verify_connection(child_inst))
+
+        child_inst.parent_institution = None
+
+        #Just the parent is linked to the child
+        self.assertFalse(child_inst.verify_connection(parent_inst))
+        self.assertFalse(parent_inst.verify_connection(child_inst))

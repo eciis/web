@@ -4,9 +4,9 @@
 import json
 from search_module.search_institution import SearchInstitution
 from test_base_handler import TestBaseHandler
-from models.user import User
-from models.institution import Institution
-from models.institution import Address
+from models import User
+from models import Institution
+from models import Address
 from models.invite_user import InviteUser
 from models.invite_institution import InviteInstitution
 from handlers.resend_invite_handler import ResendInviteHandler

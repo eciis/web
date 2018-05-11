@@ -135,7 +135,7 @@ class InstitutionTest(TestBase):
         self.institution.add_post(post)
 
         self.assertTrue(post.key in self.institution.posts,
-            "The post shoul be in the institution posts")
+            "The post should be in the institution posts")
 
     def test_create_parent_connection(self):
         child_inst = mocks.create_institution()

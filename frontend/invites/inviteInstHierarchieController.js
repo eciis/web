@@ -336,7 +336,6 @@
                 inviteInstHierCtrl.institution.addParentInst(stub);
                 inviteInstHierCtrl.hasParent = true;
             } else {
-                console.log(stub);
                 inviteInstHierCtrl.institution.addChildInst(stub);
             }
             inviteInstHierCtrl.showSendInvite = false;

@@ -182,10 +182,23 @@ describe('Test Institution Model:', function() {
 
     describe('addChildInst()', function() {
 
-        it('should increse children_institutions list of institution in +1', function() {
+        it('should increse children_institutions list of institution in one', function() {
             expect(institution.children_institutions.length).toEqual(0);
             institution.addChildInst(testInst);
             expect(institution.children_institutions.length).toEqual(1);
+        });
+
+        it('should not add the same institution again', function() {
+            testInst.name = "original";
+            institution.addChildInst(testInst);
+            expect(institution.children_institutions.length).toEqual(1);
+            expect(institution.children_institutions[0].name).toEqual("original");
+            
+            var sameInst = Object.assign({}, testInst);
+            sameInst.name = "replaced";
+            institution.addChildInst(sameInst);
+            expect(institution.children_institutions.length).toEqual(1);
+            expect(institution.children_institutions[0].name).toEqual("replaced");
         });
     });
 });

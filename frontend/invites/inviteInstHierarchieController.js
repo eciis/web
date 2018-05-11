@@ -155,7 +155,7 @@
         function addChildrenInstitution(institution_requested_key) {
             var promise = InstitutionService.getInstitution(institution_requested_key);
             promise.then(function(response) {
-                inviteInstHierCtrl.institution.addChildrenInst(response.data);
+                inviteInstHierCtrl.institution.addChildInst(response.data);
             });
             return promise;
         }
@@ -171,7 +171,7 @@
             var promise = InstitutionService.getInstitution(sending_inst_key);
             promise.then(function(response) {
                if (type_of_invite === REQUEST_PARENT) {
-                    inviteInstHierCtrl.institution.addChildrenInst(response.data);
+                    inviteInstHierCtrl.institution.addChildInst(response.data);
                } else {
                     inviteInstHierCtrl.institution.addParentInst(response.data);
                     inviteInstHierCtrl.hasParent = true;
@@ -336,7 +336,8 @@
                 inviteInstHierCtrl.institution.addParentInst(stub);
                 inviteInstHierCtrl.hasParent = true;
             } else {
-                inviteInstHierCtrl.institution.addChildrenInst(stub);
+                console.log(stub);
+                inviteInstHierCtrl.institution.addChildInst(stub);
             }
             inviteInstHierCtrl.showSendInvite = false;
         }

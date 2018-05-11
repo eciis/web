@@ -180,11 +180,11 @@ describe('Test Institution Model:', function() {
         });
     });
 
-    describe('addChildrenInst()', function() {
+    describe('addChildInst()', function() {
 
         it('should increse children_institutions list of institution in +1', function() {
             expect(institution.children_institutions.length).toEqual(0);
-            institution.addChildrenInst(testInst);
+            institution.addChildInst(testInst);
             expect(institution.children_institutions.length).toEqual(1);
         });
     });

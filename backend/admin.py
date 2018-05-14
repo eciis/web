@@ -254,7 +254,6 @@ class ResetHandler(BaseHandler):
         admin.name = 'Administrador da Plataforma Virtual CIS'
         admin.cpf = '000.000.000-01'
         admin.email = [
-            'testeeciis@gmail.com',
             'deciis@saude.gov.br',
             'plataformavirtualcis@gmail.com'
         ]

@@ -1,54 +1,69 @@
-<md-dialog flex-gt-sm="45" flex-sm="80" flex-xs="100">
-  <md-dialog-content class="md-dialog-content" layout-gt-sm="column" layout-padding ng-if="!requestCtrl.isRejecting">
-    <h4 style="margin: 0;">Confirmar Cadastro</h4>
-    <p style="margin: 0;">Um usuário solicitou criar a seguinte instituição. Clique em confirmar para aceitar ou cancelar para recusar a instituição na plataforma.</p>
-    <div layout="column">
-      <div layout="row" md-colors="{background: 'default-grey-200'}" layout-margin style="margin: 0 0 8px 0;">
-        <div>
-          <img style="width: 75px; height: 75px; border-radius: 50%;" ng-src="{{requestCtrl.parent.photo_url || 'app/images/institution.png'}}"
-            alt="{{requestCtrl.parent.name}}"></img>
-        </div>
-        <div layout="column" layout-align="center start">
-          <b>{{ requestCtrl.parent.name }}</b>
-          <span>{{ requestCtrl.parent.email }}</span>
-          <b>Descrição:</b>
-          <span>&nbsp;&nbsp; {{ requestCtrl.parent.description }}</span>
-          <b>Endereço:</b>
-          <span ng-if="requestCtrl.isAnotherCountry()">
-              &nbsp;&nbsp; {{ requestCtrl.parent.address.country }}
-          </span>
-          <span ng-if="!requestCtrl.isAnotherCountry()">
-            &nbsp;&nbsp; {{requestCtrl.parent.address.street + ', ' + requestCtrl.parent.address.number}}
-            </br>
-            &nbsp;&nbsp; {{requestCtrl.parent.address.city + ', ' + requestCtrl.parent.address.federal_state + ' - ' + requestCtrl.parent.address.country}}
-          </span>
-        </div>
-      </div>
+<div layout-padding layout="column" flex-gt-sm="40" flex-xs="90" flex-sm="60">
+  <div layout="row" layout-align="start center" style="padding: 0;">
+    <div layout="column" flex="100" layout-padding style="padding: 0;">
+      <md-dialog style="max-width: 100%;">
+        <md-dialog-content class="custom-scrollbar" layout-padding ng-if="!requestCtrl.isRejecting">
+            <div layout="row" layout-align="center center">
+                <div layout="column" flex="100">
+                  <h4 style="margin: 0;">Informações institucionais</h4>
+                  <b class="inst-info-title">Nome</b>
+                  <b class="inst-info-text">{{ requestCtrl.parent.name }}</b>
+                  <div layout="row">
+                    <div layout="column">
+                      <b class="inst-info-title">Área de atuação</b>
+                      <b class="inst-info-text">{{requestCtrl.instActuationArea}}</b>
+                      <b class="inst-info-title">País</b>
+                      <b class="inst-info-text">{{requestCtrl.parent.address.country}}</b>
+                      <div layout="column" ng-if="!requestCtrl.isAnotherCountry()">
+                          <b class="inst-info-title">Cidade</b>
+                          <b class="inst-info-text">{{requestCtrl.parent.address.city}}</b>
+                          <b class="inst-info-title">Rua</b>
+                          <b class="inst-info-text">{{requestCtrl.parent.address.street}}</b>
+                        </div>
+                    </div>
+                    <div layout="column" style="margin-left: 100px;">
+                        <b class="inst-info-title">Natureza jurídica</b>
+                        <b class="inst-info-text">{{requestCtrl.instLegalNature}}</b>
+                        <div layout="column" ng-if="!requestCtrl.isAnotherCountry()">
+                          <b class="inst-info-title">Estado</b>
+                          <b class="inst-info-text">{{requestCtrl.parent.address.federal_state}}</b>
+                          <b class="inst-info-title">Bairro</b>
+                          <b class="inst-info-text">{{requestCtrl.parent.address.neighbourhood}}</b>
+                          <b class="inst-info-title">Número</b>
+                          <b class="inst-info-text">{{requestCtrl.parent.address.number}}</b>
+                        </div>
+                    </div>
+                  </div>
+                  <b class="inst-info-title">Responsável</b>
+                  <b class="inst-info-text">{{ requestCtrl.parent.leader }}</b>
+                  <b class="inst-info-title">Email</b>
+                  <b class="inst-info-text">{{ requestCtrl.parent.email }}</b>
+                  <b class="inst-info-title">Descrição</b>
+                  <b class="inst-info-text">{{requestCtrl.parent.description}}</b>
+              </div>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions style="border:0px" layout="row" ng-if="!requestCtrl.isRejecting">
+          <md-button ng-click="requestCtrl.rejectRequest($event)" class="md-raised" md-colors="{background: 'default-teal-500'}">
+            <span style="color: white;">RECUSAR</span>
+          </md-button>
+          <md-button ng-click="requestCtrl.acceptRequest()" class="md-raised" md-colors="{background: 'default-teal-500'}">
+            <span style="color: white;">APROVAR</span>
+          </md-button>
+        </md-dialog-actions>
+        <md-card-content ng-if="requestCtrl.isRejecting" class="md-dialog-content">
+            <h4 style="margin: 0;">Rejeitar Instituição</h4>
+            <p>Tem certeza que deseja rejeitar?</p>
+          </md-card-content>
+          <md-dialog-actions ng-if="requestCtrl.isRejecting" layout="row" layout-align="end center" layout-wrap>
+            <md-button ng-click="requestCtrl.cancelReject()" class="md-raised" md-colors="{background: 'default-teal-500'}">
+              <span style="color: white;">CANCELAR</span>
+            </md-button>
+            <md-button ng-click="requestCtrl.confirmReject()" class="md-raised" md-colors="{background: 'default-teal-500'}">
+              <span style="color: white;">CONFIRMAR</span>
+            </md-button>
+          </md-dialog-actions>
+      </md-dialog>
     </div>
-  </md-dialog-content>
-  <md-dialog-actions layout="row" layout-align="end center" layout-wrap ng-if="!requestCtrl.isRejecting">
-    <md-button ng-click="requestCtrl.rejectRequest($event)" class="md-primary"
-      md-colors="{color: 'default-teal-500'}">
-      Rejeitar
-    </md-button>
-    <md-button ng-click="requestCtrl.acceptRequest()" class="md-primary"
-      md-colors="{color: 'default-teal-500'}">
-      Confirmar
-    </md-button>
-  </md-dialog-actions>
-
-  <md-card-content ng-if="requestCtrl.isRejecting" class="md-dialog-content">
-      <h4 style="margin: 0;">Rejeitar Instituição</h4>
-      <p>Tem certeza que deseja rejeitar?</p>
-    </md-card-content>
-    <md-dialog-actions ng-if="requestCtrl.isRejecting" layout="row" layout-align="end center" layout-wrap>
-      <md-button class="md-primary" ng-click="requestCtrl.cancelReject()"
-        md-colors="{color: 'default-teal-500'}">
-        Cancelar
-      </md-button>
-      <md-button class="md-primary" ng-click="requestCtrl.confirmReject()"
-        md-colors="{color: 'default-teal-500'}">
-        Confirmar
-      </md-button>
-    </md-dialog-actions>
-</md-dialog>
+  </div>
+</div>

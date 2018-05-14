@@ -224,7 +224,7 @@
             configInstCtrl.user.addProfile(createProfile(institution));
             configInstCtrl.user.changeInstitution(institution);
             configInstCtrl.user.state = 'active';
-            configInstCtrl.user.name = getCurrentName();
+            configInstCtrl.user.name = $state.params.senderName;
             AuthService.save();
         }
 
@@ -242,9 +242,7 @@
             };
         }
 
-        function getCurrentName() {
-            return configInstCtrl.user_name ? configInstCtrl.user_name : configInstCtrl.user.name;
-        }
+        
 
         function patchIntitution() {
             var patch = ObserverRecorderService.generate(observer);

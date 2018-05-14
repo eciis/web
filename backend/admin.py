@@ -9,14 +9,14 @@ import permissions
 
 from utils import Utils
 
-from models.user import User
-from models.user import InstitutionProfile
-from models.institution import Institution
-from models.institution import Address
+from models import User
+from models import InstitutionProfile
+from models import Institution
+from models import Address
 from models.post import Post
 from models.post import Comment
 from models.invite import Invite
-from models.event import Event
+from models import Event
 from utils import NotAuthorizedException
 from google.appengine.ext import ndb
 from google.appengine.api import search

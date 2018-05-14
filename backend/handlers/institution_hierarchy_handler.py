@@ -9,7 +9,7 @@ from utils import json_response
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from custom_exceptions.entityException import EntityException
 
-from models.institution import Institution
+from models import Institution
 
 from service_messages import send_message_notification
 from service_entities import enqueue_task
@@ -60,15 +60,18 @@ class InstitutionHierarchyHandler(BaseHandler):
         admin = institution_link.admin
 
         if is_parent == "true":
-            enqueue_task('remove-admin-permissions', {'institution_key': institution.key.urlsafe(), 'user': admin.urlsafe()})
+            enqueue_task('remove-admin-permissions', {
+                         'institution_key': institution.key.urlsafe(), 'parent_key': institution_link.key.urlsafe()})
         else:
-            enqueue_task('remove-admin-permissions', {'institution_key': institution_link.key.urlsafe(), 'user': user.key.urlsafe()})
+            enqueue_task('remove-admin-permissions', {'institution_key': institution_link.key.urlsafe(), 'parent_key': institution.key.urlsafe()})
         
-        entity_type = 'INSTITUTION'
+        notification_type = 'REMOVE_INSTITUTION_LINK'
+
+        notification_message = institution.create_notification_message(user_key=user.key, current_institution_key=user.current_institution, 
+            receiver_institution_key=institution_link.key, sender_institution_key=institution.key)
         send_message_notification(
-            admin.urlsafe(),
-            user.key.urlsafe(),
-            entity_type,
-            institution_link.key.urlsafe(),
-            user.current_institution
+            receiver_key=admin.urlsafe(),
+            notification_type=notification_type,
+            entity_key=institution_link.key.urlsafe(),
+            message=notification_message
         )

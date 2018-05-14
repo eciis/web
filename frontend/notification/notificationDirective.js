@@ -50,9 +50,8 @@
                 icon: "people",
                 state: "new_invite"
             },
-            "INSTITUTION": {
-                icon: "account_balance",
-                state: "app.post"
+            "REMOVE_INSTITUTION_LINK": {
+                icon: "account_balance"
             },
             "REPLY_COMMENT": {
                 icon: "reply",
@@ -210,11 +209,8 @@
         };
 
         notificationCtrl.goTo = function goTo(notification) {
-            const isAReadInviteNotification = notification.status === "READ" && notification.entity_type === "INVITE";
-            if(notification.entity_type !== 'INSTITUTION' && !isAReadInviteNotification) {
-                var state = type_data[notification.entity_type].state;
-                $state.go(state, {key: notification.entity.key});
-            }
+            var state = type_data[notification.entity_type].state;
+            $state.go(state, {key: notification.entity.key});
         };
 
         notificationCtrl.action = function action(notification, event) {

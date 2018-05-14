@@ -71,9 +71,13 @@
             InstitutionService.getInstitution(suggestInstCtrl.chosen_institution).then(function(response) {
                 if (!(isLinked(response.data) || isSelf() || isPedingRequest() || isInvited())) {
                     invite.requested_inst_name = response.data.name;
-                    inviteController.sendRequestToExistingInst(invite, suggestInstCtrl.chosen_institution).then(function() {
-                        suggestInstCtrl.cancel();
-                    });
+                    inviteController.sendRequestToExistingInst(invite, suggestInstCtrl.chosen_institution).then(
+                        function success() {
+                            suggestInstCtrl.cancel();
+                        }, function error() {
+                            $mdDialog.cancel();
+                        }
+                    );
                 }
             });
         }
@@ -117,7 +121,7 @@
             _.forEach(suggestInstCtrl.institution.sent_invitations, function(invite) {
                 if ((invite.type_of_invite === "REQUEST_INSTITUTION_PARENT" || invite.type_of_invite === "REQUEST_INSTITUTION_CHILDREN") &&
                     invite.institution_requested_key === suggestInstCtrl.chosen_institution && invite.status === "sent") {
-                    MessageService.showToast('Esta instituição já foi convidada e seu convite está pendente');
+                    MessageService.showToast('Esta instituição já foi convidada, mas seu convite está pendente');
                     result = true;
                 }
             });

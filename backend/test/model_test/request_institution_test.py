@@ -4,10 +4,10 @@
 from ..test_base import TestBase
 from models.request_institution_parent import RequestInstitutionParent
 from models.request_institution_children import RequestInstitutionChildren
-from models.institution import Institution
-from models.institution import Address
+from models import Institution
+from models import Address
 from custom_exceptions.fieldException import FieldException
-from models.user import User
+from models import User
 
 
 class RequestInstitutionParentTest(TestBase):
@@ -70,9 +70,9 @@ class RequestInstitutionParentTest(TestBase):
             RequestInstitutionParent.create(data)
 
         self.assertEqual(
-            'The sender is already invited',
+            'The requested institution has already been invited',
             str(ex.exception),
-            'The sender is already invited')
+            'The exception message is not equal to the expected one')
 
     def test_create_request_for_institution_linked(self):
         """Test create invalid request."""

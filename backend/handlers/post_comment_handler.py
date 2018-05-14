@@ -61,7 +61,8 @@ class PostCommentHandler(BaseHandler):
                 'sender_key': user.key.urlsafe(),
                 'entity_key': post.key.urlsafe(),
                 'entity_type': entity_type,
-                'current_institution': user.current_institution.urlsafe()
+                'current_institution': user.current_institution.urlsafe(),
+                'sender_institution_key': post.institution.urlsafe()
             }
             enqueue_task('post-notification', params)
 

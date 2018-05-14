@@ -104,15 +104,8 @@
             invite.institution_requested_key = institution_requested_key;
             invite.sender_key = inviteInstHierCtrl.user.key;
             var deferred = $q.defer();
-            var promise;
-            if (invite.type_of_invite === INSTITUTION_PARENT) {
-                invite.type_of_invite = REQUEST_PARENT;
-                promise = RequestInvitationService.sendRequestToParentInst(invite, invite.institution_key);
-            } else {
-                invite.type_of_invite = REQUEST_CHILDREN;
-                promise = RequestInvitationService.sendRequestToChildrenInst(invite, invite.institution_key);
-            }
-            promise.then(function success() {
+            
+            sendRequest(invite).then(function success() {
                 MessageService.showToast('Convite enviado com sucesso!');
                 addInviteToRequests(invite);
                 if (invite.type_of_invite === REQUEST_PARENT) {
@@ -126,8 +119,19 @@
             }, function error() {
                 deferred.reject();
             });
+            
             return deferred.promise;
         };
+
+        function sendRequest(invite) {
+            if (invite.type_of_invite === INSTITUTION_PARENT) {
+                invite.type_of_invite = REQUEST_PARENT;
+                return RequestInvitationService.sendRequestToParentInst(invite, invite.institution_key);
+            } else {
+                invite.type_of_invite = REQUEST_CHILDREN;
+                return RequestInvitationService.sendRequestToChildrenInst(invite, invite.institution_key);
+            }
+        }
 
         /*
         * Add a stub link between institution that's who invited (child) and the institution that's been invitee (parent).
@@ -151,7 +155,7 @@
         function addChildrenInstitution(institution_requested_key) {
             var promise = InstitutionService.getInstitution(institution_requested_key);
             promise.then(function(response) {
-                inviteInstHierCtrl.institution.addChildrenInst(response.data);
+                inviteInstHierCtrl.institution.addChildInst(response.data);
             });
             return promise;
         }
@@ -167,7 +171,7 @@
             var promise = InstitutionService.getInstitution(sending_inst_key);
             promise.then(function(response) {
                if (type_of_invite === REQUEST_PARENT) {
-                    inviteInstHierCtrl.institution.addChildrenInst(response.data);
+                    inviteInstHierCtrl.institution.addChildInst(response.data);
                } else {
                     inviteInstHierCtrl.institution.addParentInst(response.data);
                     inviteInstHierCtrl.hasParent = true;
@@ -332,7 +336,7 @@
                 inviteInstHierCtrl.institution.addParentInst(stub);
                 inviteInstHierCtrl.hasParent = true;
             } else {
-                inviteInstHierCtrl.institution.addChildrenInst(stub);
+                inviteInstHierCtrl.institution.addChildInst(stub);
             }
             inviteInstHierCtrl.showSendInvite = false;
         }

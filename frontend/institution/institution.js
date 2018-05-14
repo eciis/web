@@ -48,8 +48,14 @@ Institution.prototype.addParentInst = function addParentInst(institution){
     this.parent_institution = institution;
 };
 
-Institution.prototype.addChildrenInst = function addChildrenInst(institution){
-    this.children_institutions.push(institution);
+Institution.prototype.addChildInst = function addChildInst(institution){
+    const INVALID_INDEX = -1;
+    const childIndex = this.children_institutions.reduce((childIndex, inst, index) => {
+        return inst.key === institution.key ? index : childIndex;
+    }, INVALID_INDEX);
+    const childIsNew = childIndex == INVALID_INDEX;
+
+    childIsNew ? this.children_institutions.push(institution) : null;
 };
 
 Institution.prototype.getFullAddress = function getFullAddress() {

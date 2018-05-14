@@ -3,13 +3,15 @@
 import datetime
 import sys
 
-from models.user import User
-from models.institution import Institution
-from models.institution import Address
+from models import User
+from models import Institution
+from models import Address
 from models.post import Post
 from models.post import Comment
-from models.event import Event
+from models import Event
 from models.factory_invites import InviteFactory
+from permissions import DEFAULT_ADMIN_PERMISSIONS
+from models.request_institution_parent import RequestInstitutionParent
 
 
 def getHash(obj):
@@ -104,7 +106,8 @@ def create_invite(admin, institution_key, type_of_invite, invitee_key=None):
     data = {
         'invitee': str(admin.email),
         'admin_key': admin.key.urlsafe(),
-        'institution_key': institution_key.urlsafe()
+        'institution_key': institution_key.urlsafe(),
+        'suggestion_institution_name': 'inst_test'
     }
 
     if invitee_key:
@@ -115,3 +118,23 @@ def create_invite(admin, institution_key, type_of_invite, invitee_key=None):
     invite.sender_name = invite_hash
     invite.put()
     return invite
+
+def generate_child_to_parent(parent, child_admin=None):
+    """Create a child for the parent."""
+    admin = create_user() if child_admin is None else child_admin
+    child = create_institution()
+    child.add_member(admin)
+    child.set_admin(admin.key)
+    admin.add_permissions(DEFAULT_ADMIN_PERMISSIONS, child.key.urlsafe())
+    data = {
+        'sender_key': admin.key.urlsafe(),
+        'institution_requested_key': parent.key.urlsafe(),
+        'admin_key': admin.key.urlsafe(),
+        'institution_key': child.key.urlsafe()
+    }
+    parent_invite = RequestInstitutionParent.create(data)
+    # link child_a to institution
+    Institution.create_parent_connection(parent, parent_invite)
+    #  update child
+    child = child.key.get()
+    return child

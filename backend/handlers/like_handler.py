@@ -55,16 +55,20 @@ class LikeHandler(BaseHandler):
         if comment_id:            
             comment = post.like_comment(user, comment_id, reply_id)
 
-            entity_type = 'LIKE_COMMENT'
+            notification_type = 'LIKE_COMMENT'
             user_is_the_author = comment['author_key'] == user.key.urlsafe()
             if not user_is_the_author:
                 receiver_key = comment['author_key']
+                notification_message = post.create_notification_message(
+                    user_key=user.key,
+                    current_institution_key=user.current_institution, 
+                    sender_institution_key=post.institution
+                )
                 send_message_notification(
-                    receiver_key,
-                    user.key.urlsafe(), 
-                    entity_type, 
-                    post_key,
-                    user.current_institution
+                    receiver_key=receiver_key,
+                    notification_type=notification_type, 
+                    entity_key=post_key,
+                    message=notification_message
                 ) 
         else: 
             post = post.like(user.key)
@@ -75,7 +79,8 @@ class LikeHandler(BaseHandler):
                     'sender_key': user.key.urlsafe(),
                     'entity_key': post.key.urlsafe(),
                     'entity_type': entity_type,
-                    'current_institution': user.current_institution.urlsafe()
+                    'current_institution': user.current_institution.urlsafe(),
+                    'sender_institution_key': post.institution.urlsafe()
                 }
 
             enqueue_task('post-notification', params)

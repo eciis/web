@@ -227,7 +227,7 @@
       <md-card-content ng-show="manageMemberCtrl.showRequests"
           style="overflow: auto; max-height: 270px;" class="custom-scrollbar">
         <md-list flex>
-          <md-list-item ng-repeat="request in manageMemberCtrl.requests" ng-click="manageMemberCtrl.openAcceptRequestDialog(request.key, $event)" class="md-3-line">
+          <md-list-item ng-repeat="request in manageMemberCtrl.requests" ng-click="manageMemberCtrl.openAcceptRequestDialog(request, $event)" class="md-3-line">
             <md-icon class="md-avatar-icon"
             md-colors="{background: 'light-green-500', color: 'grey-50'}">account_box</md-icon>
             <div class="md-list-item-text" layout="column">

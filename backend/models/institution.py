@@ -136,7 +136,6 @@ class Institution(ndb.Model):
     def create_parent_connection(self, invite):
         """Make connections between parent and daughter institution."""
         self.add_child(invite.institution_key)
-        self.put()
 
         institution_children = invite.institution_key.get()
         institution_children.parent_institution = self.key

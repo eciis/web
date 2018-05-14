@@ -5,6 +5,7 @@ from .institution import *
 from .event import *
 from .invite_institution_children import *
 from .invite_institution_parent import *
+from .invite_institution import *
 
 __all__ = []
 
@@ -14,3 +15,4 @@ __all__ += address.__all__
 __all__ += event.__all__
 __all__ += invite_institution_children.__all__
 __all__ += invite_institution_parent.__all__
+__all__ += invite_institution.__all__

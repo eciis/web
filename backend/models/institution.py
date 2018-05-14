@@ -117,9 +117,8 @@ class Institution(ndb.Model):
 
     def add_post(self, post):
         """Add a new post to the institution list of posts."""
-        institution = self.key.get()
-        institution.posts.append(post.key)
-        institution.put()
+        self.posts.append(post.key)
+        self.put()
 
     def addInvite(self, invite):
         """Add invite in institution."""

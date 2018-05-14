@@ -28,6 +28,8 @@ class InstitutionTest(TestBase):
         cls.institution = mocks.create_institution()
         cls.institution.add_member(cls.admin)
         cls.institution.set_admin(cls.admin.key)
+        cls.admin.add_institution(cls.institution.key)
+        cls.admin.add_institution_admin(cls.institution.key)
 
     def tearDown(cls):
         """Deactivate the test."""
@@ -75,6 +77,149 @@ class InstitutionTest(TestBase):
         self.assertTrue(self.user.key in self.institution.followers,
             "The user should not have been removed from followers"
         )
+
+    def test_add_member(self):
+        # verify if user is not a member of the institution
+        self.assertTrue(self.user.key not in self.institution.members,
+            "The user should not be a member of the institution")
+
+        # adding member into the institution
+        self.institution.add_member(self.user)
+
+        # verify if user is a member of the institution
+        self.assertTrue(self.user.key in self.institution.members,
+            "The user should be a member of the institution")
+
+        # verify the length of institution members list
+        self.assertTrue(len(self.institution.members) == 2,
+            "Should has two members into the institution")
+
+        # adding a existing member into the institution
+        self.institution.add_member(self.user)
+
+        # verify the length of institution members list again
+        self.assertTrue(len(self.institution.members) == 2,
+            "Should still has two members into the institution")
+
+    def test_remove_member(self):
+        # test remove the admin of institution
+        with self.assertRaises(Exception) as ex:
+            self.institution.remove_member(self.admin)
+
+        message = str(ex.exception)
+        self.assertEqual(
+            message,
+            'Admin can not be removed',
+            "Expected message must be equal to 'Admin can not be removed'")
+
+        # add a member into the institution
+        self.institution.add_member(self.user)
+
+        # verify if user is a member of the institution
+        self.assertTrue(self.user.key in self.institution.members,
+            "The user should be a member of the institution")
+
+        # remove member
+        self.institution.remove_member(self.user)
+
+        # verify if user is not a member of institution
+        self.assertTrue(self.user.key not in self.institution.members,
+            "The user should not be a member of the institution")
+
+    def test_add_post(self):
+        post = mocks.create_post(self.admin.key, self.institution.key)
+
+        self.assertTrue(post.key not in self.institution.posts,
+            "The post should not be in the institutions posts")
+
+        self.institution.add_post(post)
+
+        self.assertTrue(post.key in self.institution.posts,
+            "The post should be in the institution posts")
+
+    def test_create_parent_connection(self):
+        child_inst = mocks.create_institution()
+        invite = mocks.create_invite(self.user, child_inst.key, 'INSTITUTION')
+
+        self.assertTrue(child_inst.key not in self.institution.children_institutions,
+            "Institution should not has a children institution")
+
+        self.assertTrue(child_inst.parent_institution is None,
+            "child_inst should not has parent institution")
+
+        self.institution.create_parent_connection(invite)
+
+        self.assertTrue(child_inst.key in self.institution.children_institutions,
+            "Institution should has a children institution")
+
+    def test_create_children_connection(self):
+        parent_inst = mocks.create_institution()
+        invite = mocks.create_invite(self.user, parent_inst.key, 'INSTITUTION')
+
+        self.assertTrue(self.institution.key not in parent_inst.children_institutions,
+            "parent_inst should not be has a children institution")
+
+        self.assertTrue(self.institution.parent_institution is None,
+            "institution should not has parent institution")
+
+        self.institution.create_children_connection(invite)
+
+        self.assertEqual(self.institution.parent_institution, parent_inst.key,
+            "Institution should has a children institution")
+
+    def test_remove_institution(self):
+        self.admin.add_permission('remove_inst', self.institution.key.urlsafe())
+        self.institution.change_state('active')
+
+        self.assertEqual(self.institution.state, 'active',
+            "The state of institution should be active")
+
+        self.institution.remove_institution('false', self.admin)
+
+        self.assertEqual(self.institution.state, 'inactive',
+            "The state of institution should be inactive")
+
+
+    def test_remove_link(self):
+        # case 1: remove parent
+        parent_inst = mocks.create_institution()
+        invite = mocks.create_invite(self.user, parent_inst.key, 'INSTITUTION')
+
+        self.assertTrue(self.institution.key not in parent_inst.children_institutions,
+            "parent_inst should not be has a children institution")
+
+        self.assertTrue(self.institution.parent_institution is None,
+            "institution should not has parent institution")
+
+        self.institution.create_children_connection(invite)
+
+        self.assertEqual(self.institution.parent_institution, parent_inst.key,
+            "Institution should has a children institution")
+
+        self.institution.remove_link(parent_inst, "true")
+
+        self.assertTrue(self.institution.parent_institution is None,
+            "institution should not has parent institution")
+
+        # case 2: remove children
+        child_inst = mocks.create_institution()
+        invite = mocks.create_invite(self.user, child_inst.key, 'INSTITUTION')
+
+        self.assertTrue(child_inst.key not in self.institution.children_institutions,
+            "Institution should not has a children institution")
+
+        self.assertTrue(child_inst.parent_institution is None,
+            "child_inst should not has parent institution")
+
+        self.institution.create_parent_connection(invite)
+
+        self.assertTrue(child_inst.key in self.institution.children_institutions,
+            "Institution should has a children institution")
+
+        self.institution.remove_link(child_inst, "false")
+
+        self.assertTrue(child_inst.key not in self.institution.children_institutions,
+            "Institution should not has a children institution")
 
     def test_get_hierarchy_admin_permissions(self):
         

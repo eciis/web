@@ -7,6 +7,7 @@ from models import Institution
 from send_email_hierarchy.invite_user_email_sender import InviteUserEmailSender
 from util.strings_pt_br import get_string
 
+__all__ = ['InviteUser']
 
 class InviteUser(Invite):
     """Model of invite user."""

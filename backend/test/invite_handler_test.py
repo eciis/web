@@ -6,7 +6,7 @@ import mocks
 
 from test_base_handler import TestBaseHandler
 from search_module.search_institution import SearchInstitution
-from models.invite_user import InviteUser
+from models import InviteUser
 from models.invite import Invite
 from models import InviteInstitution
 from handlers.invite_handler import InviteHandler

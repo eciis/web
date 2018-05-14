@@ -1,5 +1,5 @@
 """Factory of invites."""
-from models.invite_user import InviteUser
+from . import InviteUser
 from models.invite_user_adm import InviteUserAdm
 from . import InviteInstitution
 from . import InviteInstitutionParent

@@ -6,7 +6,7 @@ from custom_exceptions.fieldException import FieldException
 from models import Institution
 from models.request import Request
 from send_email_hierarchy.request_user_email_sender import RequestUserEmailSender
-from util.strings_pt_br import get_string
+from util.strings_pt_br import get_subject
 
 
 

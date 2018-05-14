@@ -9,7 +9,7 @@ SUBJECT_TRANSLATION = {
 }
 
 
-def get_subject(type_of_email, *kwargs):
+def get_subject(type_of_subject, *kwargs):
     """This method returns the pt-br translated subject
-    that matches with the type_of_email."""
-    return SUBJECT_TRANSLATION[type_of_string] % kwargs
+    that matches with its type."""
+    return SUBJECT_TRANSLATION[type_of_subject] % kwargs

@@ -143,8 +143,8 @@ def notify_institution_removal(institution, remove_hierarchy, user, current_inst
     user -- the user who made the request to remove the institution.
     """
     subject = get_subject('INSTITUION_REMOVAL')
-    body = """Lamentamos informar que a instituição %s foi removida pelo usuário %s """
-         % (institution.name, user.name)
+    body = """Lamentamos informar que a instituição %s foi
+     removida pelo usuário %s """ % (institution.name, user.name)
     email_params = {
         "body": body,
         "subject": subject,

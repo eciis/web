@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 """Request Model."""
-from models.invite import Invite
+from . import Invite
 from custom_exceptions.fieldException import FieldException
 
+__all__ = ['Request']
 
 class Request(Invite):
     """Model of Request."""

@@ -2,7 +2,7 @@
 """Post handler test."""
 import operator
 from test_base_handler import TestBaseHandler
-from models.invite_institution import InviteInstitution
+from models import InviteInstitution
 from models import User
 from models import Institution
 from handlers.institution_handler import InstitutionHandler

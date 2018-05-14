@@ -2,7 +2,6 @@
 import sys
 import json
 from google.appengine.api import taskqueue
-from utils import Utils
 reload(sys)
 sys.setdefaultencoding('utf8')
 

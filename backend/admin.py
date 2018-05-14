@@ -15,7 +15,7 @@ from models import Institution
 from models import Address
 from models.post import Post
 from models.post import Comment
-from models.invite import Invite
+from models import Invite
 from models import Event
 from utils import NotAuthorizedException
 from google.appengine.ext import ndb

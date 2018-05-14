@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 """Request institution link model."""
 
-from invite import Invite
-from request import Request
+from . import Invite
+from . import Request
 from google.appengine.ext import ndb
 
+__all__ = ['RequestInstitutionChildren']
 
 class RequestInstitutionChildren(Request):
     """Model of request children institution."""

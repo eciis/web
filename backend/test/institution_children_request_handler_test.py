@@ -8,7 +8,7 @@ from test_base_handler import TestBaseHandler
 from models import User
 from models import Institution
 from models import Address
-from models.request_institution_children import RequestInstitutionChildren
+from models import RequestInstitutionChildren
 from handlers.institution_children_request_handler import InstitutionChildrenRequestHandler
 from worker import AddAdminPermissionsInInstitutionHierarchy
 from test_base_handler import has_permissions

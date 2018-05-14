@@ -7,7 +7,7 @@ import permissions
 from google.appengine.ext import ndb
 
 from utils import Utils
-from models.invite import Invite
+from models import Invite
 from utils import login_required
 from utils import json_response
 from custom_exceptions.notAuthorizedException import NotAuthorizedException

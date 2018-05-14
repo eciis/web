@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 """Request user model."""
-from invite import Invite
+from . import Invite
 from google.appengine.ext import ndb
 from custom_exceptions.fieldException import FieldException
-from models import Institution
-from models.request import Request
+from . import Institution
+from . import Request
 from send_email_hierarchy.request_user_email_sender import RequestUserEmailSender
 from util.strings_pt_br import get_subject
 
 
+__all__ = ['RequestUser']
 
 class RequestUser(Request):
     """Model of request user."""
@@ -58,7 +59,7 @@ class RequestUser(Request):
 
     def send_email(self, host, body=None):
         """Method of send email of invite user."""
-        subject = get_string('REQUEST_EMAIL_SUBJECT')
+        subject = get_subject('REQUEST_EMAIL_SUBJECT')
         institution_requested = self.institution_requested_key.get()
         email_sender = RequestUserEmailSender(**{
             'receiver': self.admin_key.get().email[0],

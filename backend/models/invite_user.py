@@ -5,7 +5,7 @@ from custom_exceptions.fieldException import FieldException
 from . import User
 from . import Institution
 from send_email_hierarchy.invite_user_email_sender import InviteUserEmailSender
-from util.strings_pt_br import get_string
+from util.strings_pt_br import get_subject
 
 __all__ = ['InviteUser']
 
@@ -23,7 +23,7 @@ class InviteUser(Invite):
 
     def send_email(self, host, body=None):
         """Method of send email of invite user."""
-        subject = get_string('INVITE_EMAIL_SUBJECT')
+        subject = get_subject('INVITE')
         email_sender = InviteUserEmailSender(**{
             'receiver': self.invitee,
             'invite_key': self.key.urlsafe(),

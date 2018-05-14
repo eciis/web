@@ -58,7 +58,7 @@ class RequestUser(Request):
 
     def send_email(self, host, body=None):
         """Method of send email of invite user."""
-        subject = get_string('REQUEST_EMAIL_SUBJECT')
+        subject = get_subject('REQUEST_USER')
         institution_requested = self.institution_requested_key.get()
         email_sender = RequestUserEmailSender(**{
             'receiver': self.admin_key.get().email[0],
@@ -74,24 +74,21 @@ class RequestUser(Request):
 
     def send_response_email(self, host, operation):
         """Method to send email of sender user when invite is accepted or rejected."""
-        institution_name = self.institution_key.get().name
-        rejectMessage = """Olá,
-        Lamentamos informar mas o seu pedido não foi aceito pela instituição %s.
-        Sugerimos que fale com o seu superior para que seja enviado um convite.
-
-        Equipe da Plataforma CIS""" % (institution_name)
-
-        acceptMessage = """Olá,
-        Você foi aceito na plataforma como membro da instituição
-        %s, seja bem vindo a Plataforma CIS.
-        Realize seu login no link abaixo:
-        http://frontend.plataformacis.org/signin
-
-        Equipe da Plataforma CIS""" % institution_name
-
-        sender_email = self.sender_key.get().email[0]
-        body = acceptMessage if operation == "ACCEPT" else rejectMessage
-        super(RequestUser, self).send_email(host, sender_email, body)
+        html = 'accepted_request_user_email.html' if operation == 'ACCEPT' else 'rejected_request_user_email.html'
+        subject = get_subject('RESPONSE_REQUEST_USER')
+        institution_requested = self.institution_requested_key.get()
+        email_sender = RequestUserEmailSender(**{
+            'receiver': self.sender_key.get().email[0],
+            'subject': subject,
+            'user_name': self.sender_name,
+            'user_email': self.sender_key.get().email[0],
+            'request_key': self.key.urlsafe(),
+            'institution_requested_name': institution_requested.name,
+            'institution_requested_email': institution_requested.email,
+            'institution_requested_key': institution_requested.key.urlsafe(),
+            'html': html
+        })
+        email_sender.send_email()
 
     """ 
     The sender, in this case, is the user who is asking to be an institution's members.

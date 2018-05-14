@@ -5,6 +5,7 @@ from . import Invite
 from . import Request
 from google.appengine.ext import ndb
 
+__all__ = ['RequestInstitutionChildren']
 
 class RequestInstitutionChildren(Request):
     """Model of request children institution."""

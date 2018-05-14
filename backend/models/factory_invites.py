@@ -5,7 +5,7 @@ from . import InviteInstitution
 from . import InviteInstitutionParent
 from . import InviteInstitutionChildren
 from . import RequestInstitutionParent
-from models.request_institution_children import RequestInstitutionChildren
+from . import RequestInstitutionChildren
 from models.request_institution import RequestInstitution
 from . import RequestUser
 

@@ -65,7 +65,8 @@ class RequestUser(Invite):
             'user_email': self.sender_key.get().email[0],
             'request_key': self.key.urlsafe(),
             'institution_requested_name': institution_requested.name,
-            'institution_requested_email': institution_requested.email
+            'institution_requested_email': institution_requested.email,
+            'institution_requested_key': institution_requested.key.urlsafe()
         })
         email_sender.send_email()
 

@@ -13,18 +13,11 @@ from .request_user import *
 from .request_institution_parent import *
 from .request_institution_children import *
 
-__all__ = []
 
-__all__ += user.__all__
-__all__ += institution.__all__
-__all__ += address.__all__
-__all__ += event.__all__
-__all__ += invite.__all__
-__all__ += invite_institution.__all__
-__all__ += invite_institution_children.__all__
-__all__ += invite_institution_parent.__all__
-__all__ += invite_user.__all__
-__all__ += request.__all__
-__all__ += request_user.__all__
-__all__ += request_institution_parent.__all__
-__all__ += request_institution_children.__all__
+models = [
+    user, address, institution, event, invite, invite_institution, 
+    invite_institution_children, invite_institution_parent, invite_user, 
+    request, request_user, request_institution_parent, request_institution_children
+]
+
+__all__ = [prop for model in models for prop in model.__all__]

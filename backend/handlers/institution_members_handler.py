@@ -7,6 +7,7 @@ import json
 from utils import login_required
 from utils import Utils
 from utils import json_response
+from util.strings_pt_br import get_subject
 from service_messages import send_message_notification
 from send_email_hierarchy.remove_member_email_sender import RemoveMemberEmailSender
 
@@ -54,7 +55,7 @@ class InstitutionMembersHandler(BaseHandler):
                 message=notification_message
             )
 
-        subject = "Remoção de vínculo"
+        subject = get_subject('LINK_REMOVAL')
         message = """Lamentamos informar que seu vínculo com a instituição %s
         foi removido pelo administrador %s
         """ % (institution.name, user.name)

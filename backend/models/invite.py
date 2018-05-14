@@ -5,7 +5,7 @@ from google.appengine.ext.ndb.polymodel import PolyModel
 from service_messages import send_message_notification
 from service_messages import create_message
 from send_email_hierarchy.email_sender import EmailSender
-from util.strings_pt_br import get_string
+from util.strings_pt_br import get_subject
 from models import User       
 
 
@@ -76,7 +76,7 @@ class Invite(PolyModel):
 
     def send_email(self, host, receiver_email=None, body=None):
         """Method of send email of invite user."""
-        subject = get_string('INVITE_EMAIL_SUBJECT')
+        subject = get_subject('INVITE')
         receiver_email = receiver_email or self.invitee
         body = body or """Você recebeu um convite da plataforma CIS. """
         email_sender = EmailSender(**{

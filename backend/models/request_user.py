@@ -6,6 +6,7 @@ from custom_exceptions.fieldException import FieldException
 from . import Institution
 from . import Request
 
+__all__ = ['RequestUser']
 
 class RequestUser(Request):
     """Model of request user."""

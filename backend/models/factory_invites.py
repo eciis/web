@@ -7,7 +7,7 @@ from . import InviteInstitutionChildren
 from models.request_institution_parent import RequestInstitutionParent
 from models.request_institution_children import RequestInstitutionChildren
 from models.request_institution import RequestInstitution
-from models.request_user import RequestUser
+from . import RequestUser
 
 
 class InviteFactory:

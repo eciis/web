@@ -1,9 +1,9 @@
 """Invite user model."""
-from invite import Invite
+from . import Invite
 from google.appengine.ext import ndb
 from custom_exceptions.fieldException import FieldException
-from models import User
-from models import Institution
+from . import User
+from . import Institution
 from send_email_hierarchy.invite_user_email_sender import InviteUserEmailSender
 from util.strings_pt_br import get_string
 

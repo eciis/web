@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """Request user model."""
-from invite import Invite
+from . import Invite
 from google.appengine.ext import ndb
 from custom_exceptions.fieldException import FieldException
-from models import Institution
+from . import Institution
 from models.request import Request
 
 

@@ -1,5 +1,5 @@
 """Invite institution model."""
-from invite import Invite
+from . import Invite
 from . import Institution
 from custom_exceptions.fieldException import FieldException
 from . import User

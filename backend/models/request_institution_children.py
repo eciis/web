@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Request institution link model."""
 
-from invite import Invite
+from . import Invite
 from request import Request
 from google.appengine.ext import ndb
 

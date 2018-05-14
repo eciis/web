@@ -2,7 +2,7 @@
 
 from ..test_base import TestBase
 
-from models.invite import Invite
+from models import Invite
 from models import Institution
 from models import InviteInstitution
 from models import User

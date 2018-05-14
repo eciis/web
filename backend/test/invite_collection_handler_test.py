@@ -6,7 +6,7 @@ import mocks
 
 from test_base_handler import TestBaseHandler
 from google.appengine.ext import ndb
-from models.invite import Invite
+from models import Invite
 from handlers.invite_collection_handler import InviteCollectionHandler
 
 from mock import patch

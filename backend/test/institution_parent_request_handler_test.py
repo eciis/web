@@ -5,7 +5,7 @@ import json
 import mocks
 
 from test_base_handler import TestBaseHandler
-from models.invite import Invite
+from models import Invite
 from models import Address
 from models.request_institution_parent import RequestInstitutionParent
 from handlers.institution_parent_request_handler import InstitutionParentRequestHandler

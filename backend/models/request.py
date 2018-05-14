@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Request Model."""
-from models.invite import Invite
+from models import Invite
 from custom_exceptions.fieldException import FieldException
 
 

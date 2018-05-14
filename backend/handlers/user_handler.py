@@ -3,7 +3,7 @@
 
 import json
 
-from models.invite import Invite
+from models import Invite
 from utils import Utils
 from utils import login_required
 from utils import create_user

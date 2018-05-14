@@ -6,8 +6,10 @@ from service_messages import send_message_notification
 from service_messages import create_message
 from send_email_hierarchy.email_sender import EmailSender
 from util.strings_pt_br import get_string
-from models import User       
+from . import User       
 
+
+__all__ = ['Invite']
 
 class Invite(PolyModel):
     """Model of Invite."""

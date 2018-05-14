@@ -4,7 +4,7 @@ from . import Invite
 from google.appengine.ext import ndb
 from custom_exceptions.fieldException import FieldException
 from . import Institution
-from models.request import Request
+from . import Request
 
 
 class RequestUser(Request):

@@ -2,7 +2,7 @@
 """Request institution Model."""
 
 from . import Invite
-from request import Request
+from . import Request
 from google.appengine.ext import ndb
 from utils import get_deciis
 from custom_exceptions.fieldException import FieldException

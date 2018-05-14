@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 """This file encapsulates all the system's pt-br strings."""
 
-
 SUBJECT_TRANSLATION = {
     'INVITE': 'Convite plataforma CIS',
     'LINK_REMOVAL': 'Remoção de vínculo',
     'INSTITUION_REMOVAL': 'Remoção de instituição',
+    'REQUEST_EMAIL_SUBJECT': """Solicitação de participação plataforma CIS"""
 }
 
 

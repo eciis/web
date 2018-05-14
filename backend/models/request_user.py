@@ -5,6 +5,9 @@ from google.appengine.ext import ndb
 from custom_exceptions.fieldException import FieldException
 from models import Institution
 from models.request import Request
+from send_email_hierarchy.request_user_email_sender import RequestUserEmailSender
+from util.strings_pt_br import get_subject
+
 
 
 class RequestUser(Request):
@@ -55,17 +58,19 @@ class RequestUser(Request):
 
     def send_email(self, host, body=None):
         """Method of send email of invite user."""
-        institution_key = self.institution_key.urlsafe()
-        invite_key = self.key.urlsafe()
-        admin_email = self.admin_key.get().email[0]
-
-        # TODO Set this message
-        body = body or """Oi:
-        Voce tem um novo convite. Acesse:
-        http://%s/institution/%s/%s/new_invite/USER
-
-        Equipe da Plataforma CIS """ % (host, institution_key, invite_key)
-        super(RequestUser, self).send_email(host, admin_email, body)
+        subject = get_string('REQUEST_EMAIL_SUBJECT')
+        institution_requested = self.institution_requested_key.get()
+        email_sender = RequestUserEmailSender(**{
+            'receiver': self.admin_key.get().email[0],
+            'subject': subject,
+            'user_name': self.sender_name,
+            'user_email': self.sender_key.get().email[0],
+            'request_key': self.key.urlsafe(),
+            'institution_requested_name': institution_requested.name,
+            'institution_requested_email': institution_requested.email,
+            'institution_requested_key': institution_requested.key.urlsafe()
+        })
+        email_sender.send_email()
 
     def send_response_email(self, host, operation):
         """Method to send email of sender user when invite is accepted or rejected."""

@@ -59,7 +59,7 @@ class RequestUser(Request):
 
     def send_email(self, host, body=None):
         """Method of send email of invite user."""
-        subject = get_string('REQUEST_EMAIL_SUBJECT')
+        subject = get_subject('REQUEST_EMAIL_SUBJECT')
         institution_requested = self.institution_requested_key.get()
         email_sender = RequestUserEmailSender(**{
             'receiver': self.admin_key.get().email[0],

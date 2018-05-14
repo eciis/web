@@ -4,7 +4,7 @@ from models.invite_user_adm import InviteUserAdm
 from . import InviteInstitution
 from . import InviteInstitutionParent
 from . import InviteInstitutionChildren
-from models.request_institution_parent import RequestInstitutionParent
+from . import RequestInstitutionParent
 from models.request_institution_children import RequestInstitutionChildren
 from models.request_institution import RequestInstitution
 from . import RequestUser

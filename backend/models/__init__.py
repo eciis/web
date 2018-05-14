@@ -10,6 +10,7 @@ from .invite_institution_parent import *
 from .invite_user import *
 from .request import *
 from .request_user import *
+from .request_institution_parent import *
 
 __all__ = []
 
@@ -24,3 +25,4 @@ __all__ += invite_institution_parent.__all__
 __all__ += invite_user.__all__
 __all__ += request.__all__
 __all__ += request_user.__all__
+__all__ += request_institution_parent.__all__

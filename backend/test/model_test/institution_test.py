@@ -3,7 +3,7 @@
 from ..test_base import TestBase
 
 from models import Institution
-from models.request_institution_parent import RequestInstitutionParent
+from models import RequestInstitutionParent
 from permissions import DEFAULT_ADMIN_PERMISSIONS
 
 from .. import mocks

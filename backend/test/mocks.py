@@ -11,7 +11,7 @@ from models.post import Comment
 from models import Event
 from models.factory_invites import InviteFactory
 from permissions import DEFAULT_ADMIN_PERMISSIONS
-from models.request_institution_parent import RequestInstitutionParent
+from models import RequestInstitutionParent
 
 
 def getHash(obj):

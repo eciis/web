@@ -2,7 +2,7 @@
 """Tests of model request institution parent."""
 
 from ..test_base import TestBase
-from models.request_institution_parent import RequestInstitutionParent
+from models import RequestInstitutionParent
 from models.request_institution_children import RequestInstitutionChildren
 from models import Institution
 from models import Address

@@ -10,7 +10,7 @@ from custom_exceptions.entityException import EntityException
 from . import BaseHandler
 from models import Institution
 from models.factory_invites import InviteFactory
-from models.request_institution_parent import RequestInstitutionParent
+from models import RequestInstitutionParent
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
 

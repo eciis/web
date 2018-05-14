@@ -8,6 +8,7 @@ from utils import login_required
 from utils import Utils
 from utils import json_response
 from send_email_hierarchy.leave_institution_email_sender import LeaveInstitutionEmailSender
+from util.strings_pt_br import get_subject 
 
 from . import BaseHandler
 
@@ -33,7 +34,7 @@ class UserInstitutionsHandler(BaseHandler):
 
         institution.remove_member(user)
 
-        subject = "Remoção de vínculo"
+        subject = get_subject('LINK_REMOVAL')
         message = """Lamentamos informar que %s removeu o 
         vínculo com sua institutição %s
         """ % (user.name, institution.name)

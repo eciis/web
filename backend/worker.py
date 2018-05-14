@@ -11,6 +11,7 @@ from models.post import Post
 from models.invite_user import InviteUser
 from models.invite_user_adm import InviteUserAdm
 from utils import json_response
+from util.strings_pt_br import get_subject
 from service_messages import send_message_notification
 from service_messages import send_message_email
 from jinja2 import Environment, FileSystemLoader
@@ -141,10 +142,12 @@ def notify_institution_removal(institution, remove_hierarchy, user, current_inst
     has been removed or not.
     user -- the user who made the request to remove the institution.
     """
+    subject = get_subject('INSTITUION_REMOVAL')
+    body = """Lamentamos informar que a instituição %s foi
+     removida pelo usuário %s """ % (institution.name, user.name)
     email_params = {
-        "body": """Lamentamos informar que a instituição %s foi removida
-            pelo usuário %s """ % (institution.name, user.name),
-        "subject": "Remoção de instituição",
+        "body": body,
+        "subject": subject,
         "inst_key": institution.key.urlsafe()
     }
     email_sender = RemoveInstitutionEmailSender(**email_params)

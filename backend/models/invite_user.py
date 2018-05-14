@@ -22,7 +22,7 @@ class InviteUser(Invite):
 
     def send_email(self, host, body=None):
         """Method of send email of invite user."""
-        subject = get_subject('INVITE_EMAIL_SUBJECT')
+        subject = get_subject('INVITE')
         email_sender = InviteUserEmailSender(**{
             'receiver': self.invitee,
             'invite_key': self.key.urlsafe(),

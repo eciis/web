@@ -76,7 +76,7 @@ class Invite(PolyModel):
 
     def send_email(self, host, receiver_email=None, body=None):
         """Method of send email of invite user."""
-        subject = get_subject('INVITE_EMAIL_SUBJECT')
+        subject = get_subject('INVITE')
         receiver_email = receiver_email or self.invitee
         body = body or """Você recebeu um convite da plataforma CIS. """
         email_sender = EmailSender(**{

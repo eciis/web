@@ -48,7 +48,7 @@ class InviteInstitution(Invite):
 
     def send_email(self, host, body=None):
         """Method of send email of invite institution."""
-        subject = get_subject('INVITE_EMAIL_SUBJECT')
+        subject = get_subject('INVITE')
         email_sender = InviteInstitutionEmailSender(**{
             'receiver': self.invitee,
             'subject': subject,

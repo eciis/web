@@ -2,12 +2,12 @@
 """This file encapsulates all the system's pt-br strings."""
 
 
-STRINGS = {
+SUBJECT_TRANSLATION = {
     'INVITE_EMAIL_SUBJECT': """Convite plataforma CIS"""
 }
 
 
-def get_string(type_of_string, *kwargs):
-    """This method returns the pt-br string
+def get_subject(type_of_string, *kwargs):
+    """This method returns the pt-br translated subject
     that matches with the type_of_email."""
-    return STRINGS[type_of_string] % kwargs
+    return SUBJECT_TRANSLATION[type_of_string] % kwargs

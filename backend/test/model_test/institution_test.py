@@ -35,6 +35,29 @@ class InstitutionTest(TestBase):
         """Deactivate the test."""
         cls.test.deactivate()
 
+    def test_add_child(self):
+        
+        self.assertEquals(
+            self.institution.children_institutions, [],
+            "Instituion should not have children"
+        )
+
+        new_inst = mocks.create_institution();
+        self.institution.add_child(new_inst.key)
+        self.institution = self.institution.key.get()
+
+        self.assertEquals(
+            self.institution.children_institutions, [new_inst.key],
+            "Instituion should have new_inst as child"
+        )
+
+        self.institution.add_child(new_inst.key)
+        
+        self.assertEquals(
+            self.institution.children_institutions, [new_inst.key],
+            "Instituion should have repeated children"
+        )    
+        
     
     def test_follow(self):
         # case in which the user is not a follower

@@ -70,9 +70,9 @@ class RequestInstitutionParentTest(TestBase):
             RequestInstitutionParent.create(data)
 
         self.assertEqual(
-            'The sender is already invited',
+            'The requested institution has already been invited',
             str(ex.exception),
-            'The sender is already invited')
+            'The exception message is not equal to the expected one')
 
     def test_create_request_for_institution_linked(self):
         """Test create invalid request."""

@@ -68,8 +68,7 @@ class InstitutionChildrenRequestCollectionHandler(BaseHandler):
         request.put()
 
         institution_parent = parent_key.get()
-        institution_parent.children_institutions.append(requested_inst_key)
-        institution_parent.put()
+        institution_parent.add_child(requested_inst_key)
 
         request.send_invite(host, user.current_institution)
 

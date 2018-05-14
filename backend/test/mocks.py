@@ -106,7 +106,8 @@ def create_invite(admin, institution_key, type_of_invite, invitee_key=None):
     data = {
         'invitee': str(admin.email),
         'admin_key': admin.key.urlsafe(),
-        'institution_key': institution_key.urlsafe()
+        'institution_key': institution_key.urlsafe(),
+        'suggestion_institution_name': 'inst_test'
     }
 
     if invitee_key:

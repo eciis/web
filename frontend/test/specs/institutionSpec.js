@@ -180,11 +180,20 @@ describe('Test Institution Model:', function() {
         });
     });
 
-    describe('addChildrenInst()', function() {
+    describe('addChildInst()', function() {
 
-        it('should increse children_institutions list of institution in +1', function() {
+        it('should increse children_institutions list of institution in one', function() {
             expect(institution.children_institutions.length).toEqual(0);
-            institution.addChildrenInst(testInst);
+            institution.addChildInst(testInst);
+            expect(institution.children_institutions.length).toEqual(1);
+        });
+
+        it('should not add the same institution again', function() {
+            institution.addChildInst(testInst);
+            expect(institution.children_institutions.length).toEqual(1);
+            
+            var sameInst = Object.assign({}, testInst);
+            institution.addChildInst(sameInst);
             expect(institution.children_institutions.length).toEqual(1);
         });
     });

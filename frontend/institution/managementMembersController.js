@@ -67,7 +67,7 @@
             }, function error() {});
         };
 
-        manageMemberCtrl.openAcceptRequestDialog = function openAcceptRequestDialog(requestKey, event) {
+        manageMemberCtrl.openAcceptRequestDialog = function openAcceptRequestDialog(request, event) {
             $mdDialog.show({
                 controller: "RequestProcessingController",
                 controllerAs: "requestCtrl",
@@ -75,7 +75,7 @@
                 parent: angular.element(document.body),
                 targetEvent: event,
                 clickOutsideToClose:true,
-                locals: {key: requestKey},
+                locals: {'request': request},
                 openFrom: '#fab-new-post',
                 closeTo: angular.element(document.querySelector('#fab-new-post'))
             }).then(function success(requestKey) {

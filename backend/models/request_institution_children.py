@@ -5,6 +5,7 @@ from invite import Invite
 from request import Request
 from google.appengine.ext import ndb
 from send_email_hierarchy.request_link_email_sender import RequestLinkEmailSender
+from util.strings_pt_br import get_subject
 
 
 class RequestInstitutionChildren(Request):
@@ -25,7 +26,7 @@ class RequestInstitutionChildren(Request):
         parent_institution = self.institution_key.get()
         child_institution = self.institution_requested_key.get()
 
-        subject = """Novo convite de vínculo na Plataforma Virtual CIS."""
+        subject = get_subject('REQUEST_LINK_EMAIL_SUBJECT')
         email_sender = RequestLinkEmailSender(**{
             'receiver': child_institution.admin.get().email[0],
             'subject': subject,

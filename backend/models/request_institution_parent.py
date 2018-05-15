@@ -27,7 +27,7 @@ class RequestInstitutionParent(Request):
 
         subject = """Novo convite de vínculo na Plataforma Virtual CIS."""
         email_sender = RequestLinkEmailSender(**{
-            'receiver': self.admin_key.get().email[0],
+            'receiver': parent_institution.admin.get().email[0],
             'subject': subject,
             'institution_parent_name': parent_institution.name,
             'institution_parent_email': parent_institution.institutional_email,

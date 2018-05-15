@@ -131,6 +131,11 @@ class Institution(ndb.Model):
             self.children_institutions.append(child_key)
             self.put()
 
+    def set_parent(self, parent_key):
+        """Set a new parent."""
+        self.parent_institution = parent_key
+        self.put()
+
     @ndb.transactional(xg=True)
     def create_parent_connection(self, invite):
         """Make connections between parent and daughter institution."""

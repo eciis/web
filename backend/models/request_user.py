@@ -60,13 +60,15 @@ class RequestUser(Request):
         """Method of send email of invite user."""
         subject = get_subject('REQUEST_USER')
         institution_requested = self.institution_requested_key.get()
+        admin = self.admin_key.get()
         email_sender = RequestUserEmailSender(**{
-            'receiver': self.admin_key.get().email[0],
+            'receiver': admin.email[0],
             'subject': subject,
             'user_name': self.sender_name,
             'user_email': self.sender_key.get().email[0],
             'request_key': self.key.urlsafe(),
             'institution_requested_name': institution_requested.name,
+            'institution_requested_admin': admin.name,
             'institution_requested_email': institution_requested.email,
             'institution_requested_key': institution_requested.key.urlsafe()
         })
@@ -84,6 +86,7 @@ class RequestUser(Request):
             'user_email': self.sender_key.get().email[0],
             'request_key': self.key.urlsafe(),
             'institution_requested_name': institution_requested.name,
+            'institution_requested_admin': self.admin_key.get().name,
             'institution_requested_email': institution_requested.email,
             'institution_requested_key': institution_requested.key.urlsafe(),
             'html': html

@@ -3,7 +3,6 @@
 
 from google.appengine.api import search
 from search_document import SearchDocument
-from models import Address
 
 
 def institution_has_changes(fields, entity):
@@ -134,7 +133,6 @@ class SearchInstitution(SearchDocument):
                 fields_values.append(field_value)
 
         fields_values_string = " OR ".join(fields_values) if fields_values else ""
-
         return fields_values_string
     
     def updateDocument(self, entity, has_changes=institution_has_changes):

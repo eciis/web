@@ -8,7 +8,7 @@ import logging
 from google.appengine.ext import ndb
 from models import Institution
 from models.post import Post
-from models.invite_user import InviteUser
+from models import InviteUser
 from models.invite_user_adm import InviteUserAdm
 from utils import json_response
 from util.strings_pt_br import get_subject

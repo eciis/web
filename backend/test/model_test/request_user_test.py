@@ -2,7 +2,7 @@
 """Tests of model request user."""
 
 from ..test_base import TestBase
-from models.request_user import RequestUser
+from models import RequestUser
 from custom_exceptions.fieldException import FieldException
 from .. import mocks
 

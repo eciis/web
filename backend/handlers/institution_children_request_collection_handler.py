@@ -11,7 +11,7 @@ from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from . import BaseHandler
 from models import Institution
 from models.factory_invites import InviteFactory
-from models.request_institution_children import RequestInstitutionChildren
+from models import RequestInstitutionChildren
 
 __all__ = ['InstitutionChildrenRequestCollectionHandler']
 

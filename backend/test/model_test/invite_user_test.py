@@ -3,7 +3,7 @@
 from ..test_base import TestBase
 
 from models import Institution
-from models.invite_user import InviteUser
+from models import InviteUser
 from models import User
 
 from custom_exceptions.fieldException import FieldException

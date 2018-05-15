@@ -7,7 +7,7 @@ from test_base_handler import TestBaseHandler
 from models import User
 from models import Institution
 from models import Address
-from models.invite import Invite
+from models import Invite
 from handlers.user_request_collection_handler import UserRequestCollectionHandler
 
 from mock import patch

@@ -5,7 +5,7 @@ from google.appengine.ext import ndb
 from utils import login_required
 from utils import json_response
 from utils import Utils
-from models.request_user import RequestUser
+from models import RequestUser
 from custom_exceptions.entityException import EntityException
 from . import BaseHandler
 from models.factory_invites import InviteFactory

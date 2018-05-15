@@ -1,13 +1,13 @@
 """Factory of invites."""
-from models.invite_user import InviteUser
+from . import InviteUser
 from models.invite_user_adm import InviteUserAdm
-from models.invite_institution import InviteInstitution
-from models.invite_institution_parent import InviteInstitutionParent
-from models.invite_institution_children import InviteInstitutionChildren
-from models.request_institution_parent import RequestInstitutionParent
-from models.request_institution_children import RequestInstitutionChildren
+from . import InviteInstitution
+from . import InviteInstitutionParent
+from . import InviteInstitutionChildren
+from . import RequestInstitutionParent
+from . import RequestInstitutionChildren
 from models.request_institution import RequestInstitution
-from models.request_user import RequestUser
+from . import RequestUser
 
 
 class InviteFactory:

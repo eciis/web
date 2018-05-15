@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 """Request user model."""
-from invite import Invite
+from . import Invite
 from google.appengine.ext import ndb
 from custom_exceptions.fieldException import FieldException
-from models import Institution
-from models.request import Request
+from . import Institution
+from . import Request
 from send_email_hierarchy.request_user_email_sender import RequestUserEmailSender
 from util.strings_pt_br import get_subject
 
 
+__all__ = ['RequestUser']
 
 class RequestUser(Request):
     """Model of request user."""

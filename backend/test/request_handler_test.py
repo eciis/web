@@ -6,7 +6,7 @@ from test_base_handler import TestBaseHandler
 from models import User
 from models import Institution
 from models import Address
-from models.request_user import RequestUser
+from models import RequestUser
 from handlers.request_handler import RequestHandler
 import mocks
 

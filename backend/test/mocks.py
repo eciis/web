@@ -11,7 +11,7 @@ from models.post import Comment
 from models import Event
 from models.factory_invites import InviteFactory
 from permissions import DEFAULT_ADMIN_PERMISSIONS
-from models.request_institution_parent import RequestInstitutionParent
+from models import RequestInstitutionParent
 
 
 def getHash(obj):
@@ -56,6 +56,7 @@ def create_institution(name=None):
     institution.name = name or "Inst %s" % inst_hash
     institution.address = create_address()
     institution.description = "description"
+    institution.institutional_email = "%s@email.com" %inst_hash
     institution.put()
     return institution
 

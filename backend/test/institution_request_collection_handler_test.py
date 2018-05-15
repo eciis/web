@@ -4,7 +4,7 @@
 import json
 from test_base_handler import TestBaseHandler
 from handlers.institution_request_collection_handler import InstitutionRequestCollectionHandler
-from models.invite import Invite
+from models import Invite
 
 from mock import patch
 import mocks

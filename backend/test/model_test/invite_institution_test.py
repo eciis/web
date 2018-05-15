@@ -2,9 +2,9 @@
 
 from ..test_base import TestBase
 
-from models.invite import Invite
+from models import Invite
 from models import Institution
-from models.invite_institution import InviteInstitution
+from models import InviteInstitution
 from models import User
 
 from custom_exceptions.fieldException import FieldException

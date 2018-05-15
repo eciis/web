@@ -6,8 +6,8 @@ import json
 
 from utils import login_required
 from . import BaseHandler
-from models.user import InstitutionProfile
-from models.invite import Invite
+from models import InstitutionProfile
+from models import Invite
 from custom_exceptions.fieldException import FieldException
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from utils import json_response

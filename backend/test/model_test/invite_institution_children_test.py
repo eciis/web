@@ -3,7 +3,6 @@
 from ..test_base import TestBase
 
 from models import Institution
-from models import User
 from .. import mocks
 from models import InviteInstitutionChildren
 

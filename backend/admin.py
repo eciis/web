@@ -254,7 +254,6 @@ class ResetHandler(BaseHandler):
         admin.name = 'Administrador da Plataforma Virtual CIS'
         admin.cpf = '000.000.000-01'
         admin.email = [
-            'testeeciis@gmail.com',
             'deciis@saude.gov.br',
             'plataformavirtualcis@gmail.com'
         ]
@@ -295,7 +294,7 @@ class ResetHandler(BaseHandler):
             'actuation_area': 'GOVERNMENT_AGENCIES',
             'description': 'Ministério da Saúde',
             'photo_url': 'https://i1.wp.com/notta.news/wp-content/uploads/2017/08/tbg_20170713080909_62787.jpg?w=1024',
-            'email': 'testeeciis@gmail.com',
+            'email': 'deciis@saude.gov.br',
             'phone_number': '61 3315-2425',
             'state': 'active',
             'institutional_email':'sic@saude.gov.br',

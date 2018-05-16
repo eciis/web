@@ -27,7 +27,7 @@ class RequestInstitutionChildren(Request):
         parent_institution = self.institution_key.get()
         child_institution = self.institution_requested_key.get()
 
-        subject = get_subject('REQUEST_LINK_EMAIL_SUBJECT')
+        subject = get_subject('REQUEST_LINK')
         email_sender = RequestLinkEmailSender(**{
             'receiver': child_institution.admin.get().email[0],
             'subject': subject,

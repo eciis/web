@@ -39,23 +39,27 @@ class RequestInstitutionChildren(Request):
         })
         email_sender.send_email()
 
-    def send_response_email(self, operation, host=None):
+    def send_response_email(self, operation):
         parent_institution = self.institution_key.get()
         child_institution = self.institution_requested_key.get()
         if operation == "ACCEPT":
-            pass
+            html = 'accept_institution_link_email.html'
+            type_subject = 'LINK_CONFIRM' 
         else:
-            subject = get_subject('REJECT_LINK_EMAIL')
-            email_sender = RequestLinkEmailSender(**{
-                'receiver': parent_institution.admin.get().email[0],
-                'subject': subject,
-                'institution_parent_name': parent_institution.name,
-                'institution_parent_email': parent_institution.institutional_email,
-                'institution_child_name': child_institution.name,
-                'institution_child_email': child_institution.institutional_email,
-                'institution_requested_key': child_institution.key.urlsafe(),
-                'html': 'reject_institutional_link.html'
-            })
+            html = 'reject_institutional_link.html'
+            type_subject = 'REJECT_LINK_EMAIL'
+
+        subject = get_subject(type_subject)
+        email_sender = RequestLinkEmailSender(**{
+            'receiver': parent_institution.admin.get().email[0],
+            'subject': subject,
+            'institution_parent_name': parent_institution.name,
+            'institution_parent_email': parent_institution.institutional_email,
+            'institution_child_name': child_institution.name,
+            'institution_child_email': child_institution.institutional_email,
+            'institution_requested_key': child_institution.key.urlsafe(),
+            'html': html
+        })
         email_sender.send_email()
 
     def send_notification(self, current_institution):

@@ -16,6 +16,8 @@ class RequestLinkEmailSender(EmailSender):
         """
         super(RequestLinkEmailSender, self).__init__(**kwargs)
         self.html = 'request_link_email.html'
+        if 'html' in kwargs:
+            self.html = kwargs['html']
         self.institution_parent_name = self.crop_name(
             kwargs['institution_parent_name'], MAXIMUM_INSTITUTION_NAME)
         self.institution_parent_email = self.crop_name(

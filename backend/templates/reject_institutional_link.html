@@ -8,6 +8,7 @@
 
     <title></title>
 </head>
+
 <body style="margin:0; padding:0;">
     <table width="100%" border="0" cellpadding="0" cellspacing="0" align="center">
         <tr align="center">
@@ -31,16 +32,18 @@
                                 <div style="background-color: #009688; height: 65%;" align="center">
                                     <div style="height: 25%; background-color: #004D40;">
                                         <div style="width: 275px; height: 395px; margin-top: 10px; border: 1px solid #E1E1E1;  background: #fff;
-                                        border-radius: 5px; display: inline-block; position: relative;" align="center">
+                                        border-radius: 5px; display: inline-block; position: relative; padding-bottom: 50px;" align="center">
                                             <div style="height: 35%; background-color: #EEEEEE; border-top-left-radius: 10px; border-top-right-radius: 10px;">
-                                                <img src="https://firebasestorage.googleapis.com/v0/b/eciis-splab.appspot.com/o/admin_email%2FAsset_01_email.png?alt=media&token=8c9df98d-f75d-493f-a232-133e94da6fea"
-                                                    style="width: 100px; margin-top: 35px;" />
+                                                <img src="https://firebasestorage.googleapis.com/v0/b/eciis-splab.appspot.com/o/admin_email%2FAsset%207logo.png?alt=media&token=16461842-da00-4d7d-9dd8-621915951af7"
+                                                    style="width: 110px; margin-top: 35px;" />
                                             </div>
                                             <div style="background-color: white; font-size: 15px;">
-                                                <b>SUA SOLICITAÇÃO DE VÍNCULO NÃO FOI APROVADA</b>
-                                                <hr width="80%;" />
-                                                <p style="color: gray">A SEGUINTE INSTITUIÇÃO NÃO APROVOU O SEU CONVITE:</p>
-                                                <div style="background-color: #E0E0E0; width: 90%; height: 45px; margin-top: 8px; margin-bottom: 5px;">
+                                                <div style="color: #009688; font-family: Arial; margin-top: 10px; font-size: 20px;">
+                                                    <b>SUA SOLICITAÇÃO DE VÍNCULO NÃO FOI APROVADA</b>
+                                                </div>
+                                                <hr width="80%;" style="opacity: 0.5; margin-top: 12px;"/>
+                                                <p style="color: gray">A SEGUINTE INSTITUIÇÃO NÃO APROVOU SEU CONVITE:</p>
+                                                <div style="background-color: #E0E0E0; width: 90%; height: 45px; margin-top: 20px; margin-bottom: 5px;">
                                                     <div>
                                                         <div>
                                                             <img align="left" src="https://firebasestorage.googleapis.com/v0/b/eciis-splab.appspot.com/o/admin_email%2F2.png?alt=media&token=e19cea6d-ff42-44cb-ae55-4caa4230785b"
@@ -49,45 +52,40 @@
                                                         </div>
                                                         <div align="left" valign="middle" style="margin-left: 50px; padding-top: 4px;">
                                                             <div style="height: 11px;">
-                                                                <b style="font-size: 12px; color: black;">{{institution_parent}}</b>
+                                                                <b style="font-size: 12px; color: black;">{{institution_parent_name}}</b>
                                                             </div>
                                                             <div style="height: 10px; margin-top: 2px;">
-                                                                <span style="font-size: 9px; color: black;">{{institution_parent.email}}</span>
-                                                            </div>
-                                                            <div style="height: 10px; margin-top: 2px;">
-                                                                <span style="font-size: 9px; color: black;">Convidado por: {{institution_requested_email}}</span>
+                                                                <span style="font-size: 9px; color: black;">{{institution_parent_email}}</span>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div style="background-color: #E0E0E0; width: 90%; height: 45px; margin-top: 10px; ">
+                                                <div style="background-color: #E0E0E0; width: 90%; height: 45px; margin-top: 5px; ">
                                                     <div>
                                                         <div style="float: left; background-color: #009688; width: 5px; height: 45px;">
                                                         </div>
                                                         <div>
                                                             <img align="left" src="https://firebasestorage.googleapis.com/v0/b/eciis-splab.appspot.com/o/admin_email%2Favatar.png?alt=media&token=c7ea2239-f178-424c-87be-16124c9f5933"
-                                                                style="height: 35px; width: 35px; margin-top: 5px; margin-left: 5px;" />
+                                                                style="height: 35px; width: 35px; margin-top: 5px; margin-left: 5px;"
+                                                            />
                                                         </div>
-                                                        <div align="left" valign="middle" style="padding-top: 4px; margin-left: 50px;">
+                                                        <div align="left" valign="middle" style="padding-top: 4px; margin-left: 55px;">
                                                             <div style="height: 11px;">
-                                                                <b style="font-size: 12px; word-break: break-all">{{institution_children}}</b>
+                                                                <b style="font-size: 12px; word-break: break-all">{{institution_child_name}}</b>
                                                             </div>
                                                             <div style="height: 10px; ">
-                                                                <span style="font-size: 9px; color: black;">{{user_email}}</span>
-                                                            </div>
-                                                            <div style="height: 10px; margin-top: 2px;">
-                                                                <span style="font-size: 9px; color: black;">Convidado por: {{institution_requested_email}}</span>
+                                                                <span style="font-size: 9px; color: black;">{{institution_child_email}}</span>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div style="margin-top: 8px;">
-                                                    <button style="background-color: #009688; width: 90%; height: 25px; border: none;" title="Ou copie e cole o link abaixo no seu navegador">
-                                                        <a href="http://frontend.plataformacis.org/institution/{{institution_requested_key}}/managementMembers" style="text-decoration: none;">
-                                                            <span style="text-align: center; font-size: 8px; color: #FFFFFF">GERENCIAR VÍNCULOS</span>
-                                                        </a>
-                                                    </button>    
-                                                </div>
+                                                <a href="http://frontend.plataformacis.org/institution/{{institution_requested_key}}/inviteInstitution" style="text-decoration: none;">
+                                                    <div style="margin-top: 20px;">
+                                                        <button style="background-color: #009688; width: 90%; height: 25px; border: none;">
+                                                            <span style="text-align: center; font-size: 8px; color: #FFFFFF;">GERENCIAR VÍNCULOS</span>
+                                                        </button>
+                                                    </div>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
@@ -97,13 +95,13 @@
                     </tr>
                 </table>
 
-                <table width="100%" border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: -5px;">
+                <table width="100%" border="0" cellpadding="0" cellspacing="0" align="center" style="padding-top: 45px; margin-bottom: 10px;">
                     <tr align="center">
                         <td>
                             <img src="https://firebasestorage.googleapis.com/v0/b/eciis-splab.appspot.com/o/admin_email%2FLOGo.png?alt=media&token=fbb74261-4b24-42aa-b67f-be36577c48df"
-                                style="width: 50px; height: 50px;"/>
+                                style="width: 50px; height: 50px;" />
                             <img src="https://firebasestorage.googleapis.com/v0/b/eciis-splab.appspot.com/o/admin_email%2FAsset_09LOGO.png?alt=media&token=a33e8fc2-95d4-4b74-ae95-c6f50514645e"
-                                style="width: 150px; padding-bottom: 10px;"> 
+                                style="width: 150px; padding-bottom: 10px;">
                         </td>
                     </tr>
                 </table>

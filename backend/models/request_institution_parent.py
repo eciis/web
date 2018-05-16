@@ -5,6 +5,7 @@ from . import Invite
 from . import Request
 from send_email_hierarchy.accept_institution_link_email_sender import AcceptInstitutionLinkEmailSender
 from google.appengine.ext import ndb
+from send_email_hierarchy.request_link_email_sender import RequestLinkEmailSender
 from util.strings_pt_br import get_subject
 
 __all__ = ['RequestInstitutionParent']
@@ -24,16 +25,20 @@ class RequestInstitutionParent(Request):
 
     def send_email(self, host, body=None):
         """Method of send email of request institution link."""
-        request_key = self.key.urlsafe()
-        requested_email = self.admin_key.get().email[0]
+        parent_institution = self.institution_requested_key.get()
+        child_institution = self.institution_key.get()
 
-        # TODO Set this message
-        body = body or """Olá
-        Sua instituição recebeu um novo pedido. Acesse:
-        http://%s/requests/%s/institution_parent para analisar o mesmo.
-
-        Equipe da Plataforma CIS """ % (host, request_key)
-        super(RequestInstitutionParent, self).send_email(host, requested_email, body)
+        subject = get_subject('REQUEST_LINK_EMAIL_SUBJECT')
+        email_sender = RequestLinkEmailSender(**{
+            'receiver': parent_institution.admin.get().email[0],
+            'subject': subject,
+            'institution_parent_name': parent_institution.name,
+            'institution_parent_email': parent_institution.institutional_email,
+            'institution_child_name': child_institution.name,
+            'institution_child_email': child_institution.institutional_email,
+            'institution_requested_key': parent_institution.key.urlsafe()
+        })
+        email_sender.send_email()
 
     def send_notification(self, current_institution):
         """Method of send notification of request institution parent."""

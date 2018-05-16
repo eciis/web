@@ -56,6 +56,7 @@ def create_institution(name=None):
     institution.name = name or "Inst %s" % inst_hash
     institution.address = create_address()
     institution.description = "description"
+    institution.institutional_email = "%s@email.com" %inst_hash
     institution.put()
     return institution
 

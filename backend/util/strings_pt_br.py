@@ -6,7 +6,8 @@ SUBJECT_TRANSLATION = {
     'LINK_REMOVAL': 'Remoção de vínculo',
     'INSTITUION_REMOVAL': 'Remoção de instituição',
     'REQUEST_EMAIL_SUBJECT': """Solicitação de participação plataforma CIS""",
-    'LINK_CONFIRM': 'Confirmação de vínculo'
+    'LINK_CONFIRM': 'Confirmação de vínculo',
+    'REQUEST_LINK_EMAIL_SUBJECT': """Novo convite de vínculo na Plataforma Virtual CIS."""
 }
 
 

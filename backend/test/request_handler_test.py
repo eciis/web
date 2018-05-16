@@ -78,7 +78,7 @@ class RequestHandlerTest(TestBaseHandler):
     def test_put(self, verify_token):
         """Test method put of RequestHandler."""
         admin = mocks.create_user(ADMIN['email'])
-        institution = mocks.create_institution()		 
+        institution = mocks.create_institution()	 
         institution.admin = admin.key
         institution.photo_url = 'tst.jpg'
         institution.put()

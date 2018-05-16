@@ -39,6 +39,6 @@ class EmailSender(object):
 
     def crop_name(self, name, size):
         """Crop the name if it is bigger than the maximum size."""
-        name = (name[:(size-3)] + '...') if len(
+        name = (name[:(size-3)] + '...') if name and len(
             name) > size else name
         return name

@@ -1,10 +1,26 @@
+# -*- coding: utf-8 -*-
 """Tests of model request institution children."""
 
 from ..test_base import TestBase
 from models import RequestInstitutionChildren
+from models import Invite
 from custom_exceptions.fieldException import FieldException
-
+from mock import patch
 from .. import mocks
+
+
+def generate_request(admin, institution, requested_institution):
+    data = {
+        'sender_key': admin.key.urlsafe(),
+        'is_request': True,
+        'admin_key': admin.key.urlsafe(),
+        'institution_key': institution.key.urlsafe(),
+        'institution_requested_key': requested_institution.key.urlsafe()
+    }
+
+    request = RequestInstitutionChildren.create(data)
+    request.put()
+    return request
 
 
 class RequestInstitutionChildrenTest(TestBase):
@@ -25,20 +41,16 @@ class RequestInstitutionChildrenTest(TestBase):
         cls.other_user = mocks.create_user()
         cls.institution = mocks.create_institution()
         cls.requested_institution = mocks.create_institution()
+        cls.requested_institution.add_member(cls.other_user)
+        cls.requested_institution.set_admin(cls.other_user.key)
 
 
     def test_create(self):
         """Test create new request."""
-        data = {
-            'sender_key': self.admin.key.urlsafe(),
-            'is_request': True,
-            'admin_key': self.admin.key.urlsafe(),
-            'institution_key': self.institution.key.urlsafe(),
-            'institution_requested_key': self.requested_institution.key.urlsafe()
-        }
-
-        request = RequestInstitutionChildren.create(data)
-        request.put()
+        request = generate_request(
+            self.admin, self.institution, 
+            self.requested_institution
+        )
 
         self.assertEqual(
             request.admin_key,
@@ -90,17 +102,11 @@ class RequestInstitutionChildrenTest(TestBase):
         self.institution.add_child(self.requested_institution.key)
         self.requested_institution.set_parent(self.institution.key)
 
-        data = {
-            'sender_key': self.other_user.key.urlsafe(),
-            'is_request': True,
-            'admin_key': self.admin.key.urlsafe(),
-            'institution_key': self.institution.key.urlsafe(),
-            'institution_requested_key': self.requested_institution.key.urlsafe(),
-            'type_of_invite': 'REQUEST_INSTITUTION_PARENT'
-        }
-
         with self.assertRaises(FieldException) as ex:
-            RequestInstitutionChildren.create(data)
+            generate_request(
+                self.admin, self.institution, 
+                self.requested_institution
+            )
 
         self.assertEqual(
             'The institutions has already been connected.',
@@ -153,3 +159,87 @@ class RequestInstitutionChildrenTest(TestBase):
                 actual = str(maked_request[dict_key]).encode('utf-8')
 
             self.assertEqual(actual, expected, "%s is not equal to %s" % (actual, expected))
+
+
+    @patch.object(Invite, 'send_notification')
+    @patch.object(Invite, 'create_notification_message', return_value='mocked_message')
+    def test_send_notification(self, create_notification_message, send_notification):
+        """Test send notification."""
+        request = generate_request(
+            self.admin, self.institution, 
+            self.requested_institution
+        )
+
+        request.send_notification(self.institution.key)
+        
+        create_notification_message.assert_called_with(
+            user_key=self.admin.key, 
+            current_institution_key=self.institution.key,
+            sender_institution_key=self.institution.key,
+            receiver_institution_key=self.requested_institution.key
+        )
+
+        send_notification.assert_called_with(
+            current_institution=self.institution.key, 
+            receiver_key=self.requested_institution.admin, 
+            notification_type='REQUEST_INSTITUTION_CHILDREN',
+            message='mocked_message'
+        )
+
+
+    @patch.object(Invite, 'send_notification')
+    @patch.object(Invite, 'create_notification_message', return_value='mocked_message')
+    def test_send_response_notification(self, create_notification_message, send_notification):
+        """Test send response notification."""
+        request = generate_request(
+            self.admin, self.institution, 
+            self.requested_institution
+        )
+
+        for action in ['ACCEPT', 'REJECT']:
+            request.send_response_notification(
+                current_institution=self.requested_institution.key, 
+                invitee_key=self.requested_institution.admin,
+                action=action
+            )
+            
+            create_notification_message.assert_called_with(
+                user_key=self.requested_institution.admin, 
+                current_institution_key=self.requested_institution.key,
+                sender_institution_key=self.requested_institution.key,
+                receiver_institution_key=self.institution.key
+            )
+
+            notification_type = 'ACCEPT_INSTITUTION_LINK' if action == 'ACCEPT' else 'REJECT_INSTITUTION_LINK'
+            send_notification.assert_called_with(
+                current_institution=self.requested_institution.key, 
+                sender_key=self.requested_institution.admin, 
+                receiver_key=self.admin.key, 
+                notification_type=notification_type,
+                message='mocked_message'
+            )
+
+
+    @patch.object(Invite, 'send_email')
+    def test_send_email(self, send_email):
+        """Test send email."""
+        request = generate_request(
+            self.admin, self.institution, 
+            self.requested_institution
+        )
+        
+        host = 'somehost'
+        request_link = "http://%s/requests/%s/institution_children" % (host, request.key.urlsafe())
+        body = """Olá
+        Sua instituição recebeu um novo pedido. Acesse:
+        %s para analisar o mesmo.
+
+        Equipe da Plataforma CIS """ % request_link
+        
+        request.send_email(host)
+
+        send_email.assert_called_with(
+           host,
+           self.admin.email[0],
+           body
+        )

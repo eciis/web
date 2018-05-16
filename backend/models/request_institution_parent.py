@@ -3,7 +3,9 @@
 
 from . import Invite
 from . import Request
+from send_email_hierarchy.accept_institution_link_email_sender import AcceptInstitutionLinkEmailSender
 from google.appengine.ext import ndb
+from util.strings_pt_br import get_subject
 
 __all__ = ['RequestInstitutionParent']
 
@@ -61,6 +63,25 @@ class RequestInstitutionParent(Request):
             notification_type=notification_type,
             message=notification_message
         )
+    
+    def send_response_email(self, action):
+        if action == 'ACCEPT':
+            subject = get_subject('LINK_CONFIRM')
+            institution = self.institution_key.get()
+            institution_requested = self.institution_requested_key.get()
+
+            email_sender = AcceptInstitutionLinkEmailSender(**{
+                'receiver': self.sender_key.get().email[0],
+                'request_key': self.key.urlsafe(),
+                'subject': subject,
+                'institution_name': institution.name,
+                'institution_email': institution.email,
+                'institution_requested_key': self.institution_requested_key.urlsafe(),
+                'institution_requested_name': institution_requested.name,
+                'institution_requested_email': institution_requested.email
+            })
+
+            email_sender.send_email()
 
     def make(self):
         """Create json of request to parent institution."""

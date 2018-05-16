@@ -13,8 +13,8 @@ class AcceptInstitutionLinkEmailSender(EmailSender):
         """
         super(AcceptInstitutionLinkEmailSender, self).__init__(**kwargs)
         self.html = 'accept_institution_link_email.html'
-        self.institution_name = self.crop_name(kwargs['user_name'], MAXIMUM_INSTITUTION_NAME)
-        self.institution_email = self.crop_name(kwargs['user_email'], MAXIMUM_INSTITUTION_NAME)
+        self.institution_name = self.crop_name(kwargs['institution_name'], MAXIMUM_INSTITUTION_NAME)
+        self.institution_email = self.crop_name(kwargs['institution_email'], MAXIMUM_INSTITUTION_NAME)
         self.request_key = kwargs['request_key']
         self.institution_requested_name = self.crop_name(kwargs['institution_requested_name'], MAXIMUM_INSTITUTION_NAME)
         self.institution_requested_email = self.crop_name(kwargs['institution_requested_email'], MAXIMUM_INSTITUTION_NAME)

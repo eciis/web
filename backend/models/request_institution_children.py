@@ -42,8 +42,12 @@ class RequestInstitutionChildren(Request):
     def send_response_email(self, operation):
         parent_institution = self.institution_key.get()
         child_institution = self.institution_requested_key.get()
-        html = 'accept_institution_link_email.html' if operation == "ACCEPT" else 'reject_institutional_link.html'
-        type_subject = 'LINK_CONFIRM' if operation == "ACCEPT" else 'REJECT_LINK_EMAIL'
+        if operation == "ACCEPT":
+            html = 'accept_institution_link_email.html'
+            type_subject = 'LINK_CONFIRM' 
+        else:
+            html = 'reject_institutional_link.html'
+            type_subject = 'REJECT_LINK_EMAIL'
 
         subject = get_subject(type_subject)
         email_sender = RequestLinkEmailSender(**{

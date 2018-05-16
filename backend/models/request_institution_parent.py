@@ -39,6 +39,25 @@ class RequestInstitutionParent(Request):
         })
         email_sender.send_email()
 
+    def send_response_email(self, operation, host=None):
+        parent_institution = self.institution_requested_key.get()
+        child_institution = self.institution_key.get()
+        if operation == "ACCEPT":
+            pass
+        else:
+            subject = get_subject('REJECT_LINK_EMAIL')
+            email_sender = RequestLinkEmailSender(**{
+                'receiver': child_institution.admin.get().email[0],
+                'subject': subject,
+                'institution_parent_name': parent_institution.name,
+                'institution_parent_email': parent_institution.institutional_email,
+                'institution_child_name': child_institution.name,
+                'institution_child_email': child_institution.institutional_email,
+                'institution_requested_key': parent_institution.key.urlsafe(),
+                'html': 'reject_institutional_link.html'
+            })
+        email_sender.send_email()
+
     def send_notification(self, current_institution):
         """Method of send notification of request institution parent."""
         notification_type = 'REQUEST_INSTITUTION_PARENT'

@@ -56,3 +56,4 @@ class InstitutionParentRequestHandler(BaseHandler):
         request.put()
 
         request.send_response_notification(user.current_institution, user.key, 'REJECT')
+        request.send_response_email('REJECT')

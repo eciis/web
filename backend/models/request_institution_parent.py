@@ -3,7 +3,6 @@
 
 from . import Invite
 from . import Request
-from send_email_hierarchy.accept_institution_link_email_sender import AcceptInstitutionLinkEmailSender
 from google.appengine.ext import ndb
 from send_email_hierarchy.request_link_email_sender import RequestLinkEmailSender
 from util.strings_pt_br import get_subject
@@ -40,23 +39,23 @@ class RequestInstitutionParent(Request):
         })
         email_sender.send_email()
 
-    def send_response_email(self, operation, host=None):
+    def send_response_email(self, operation):
         parent_institution = self.institution_requested_key.get()
         child_institution = self.institution_key.get()
-        if operation == "ACCEPT":
-            pass
-        else:
-            subject = get_subject('REJECT_LINK_EMAIL')
-            email_sender = RequestLinkEmailSender(**{
-                'receiver': child_institution.admin.get().email[0],
-                'subject': subject,
-                'institution_parent_name': parent_institution.name,
-                'institution_parent_email': parent_institution.institutional_email,
-                'institution_child_name': child_institution.name,
-                'institution_child_email': child_institution.institutional_email,
-                'institution_requested_key': parent_institution.key.urlsafe(),
-                'html': 'reject_institutional_link.html'
-            })
+        html = 'accept_institution_link_email.html' if operation == "ACCEPT" else 'reject_institutional_link.html'
+        type_subject = 'LINK_CONFIRM' if operation == "ACCEPT" else 'REJECT_LINK_EMAIL'
+        
+        subject = get_subject(type_subject)
+        email_sender = RequestLinkEmailSender(**{
+            'receiver': child_institution.admin.get().email[0],
+            'subject': subject,
+            'institution_parent_name': parent_institution.name,
+            'institution_parent_email': parent_institution.institutional_email,
+            'institution_child_name': child_institution.name,
+            'institution_child_email': child_institution.institutional_email,
+            'institution_requested_key': parent_institution.key.urlsafe(),
+            'html': html
+        })
         email_sender.send_email()
 
     def send_notification(self, current_institution):
@@ -87,25 +86,6 @@ class RequestInstitutionParent(Request):
             notification_type=notification_type,
             message=notification_message
         )
-    
-    def send_response_email(self, action):
-        if action == 'ACCEPT':
-            subject = get_subject('LINK_CONFIRM')
-            institution = self.institution_key.get()
-            institution_requested = self.institution_requested_key.get()
-
-            email_sender = AcceptInstitutionLinkEmailSender(**{
-                'receiver': self.sender_key.get().email[0],
-                'request_key': self.key.urlsafe(),
-                'subject': subject,
-                'institution_name': institution.name,
-                'institution_email': institution.email,
-                'institution_requested_key': self.institution_requested_key.urlsafe(),
-                'institution_requested_name': institution_requested.name,
-                'institution_requested_email': institution_requested.email
-            })
-
-            email_sender.send_email()
 
     def make(self):
         """Create json of request to parent institution."""

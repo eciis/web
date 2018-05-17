@@ -40,7 +40,6 @@
                 getActuationArea();
                 getLegalNature();
                 institutionCtrl.isLoadingData = false;
-                
             }, function error(response) {
                 $state.go("app.user.home");
                 institutionCtrl.isLoadingData = true; 
@@ -404,6 +403,10 @@
 
         institutionCtrl.canManageInst = function canManageInst() {
             return institutionCtrl.user.isAdmin(currentInstitutionKey) ? true : $state.go('app.user.home');
+        };
+
+        institutionCtrl.limitString = function limitString(string, size) {
+            return Utils.limitString(string, size);
         };
 
         (function main(){

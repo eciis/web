@@ -60,7 +60,7 @@ class RequestInstitution(Request):
             'Departamento do Complexo Industrial e Inovação em Saúde".
         """
         super_user = get_deciis().admin.get()
-        super(RequestInstitution, self).send_email(host, 'raoni.smaneoto@ccc.ufcg.edu.br', body)
+        super(RequestInstitution, self).send_email(host, super_user, body)
 
     def send_notification(self, current_institution):
         """Method of send notification of request intitution."""

@@ -2,20 +2,22 @@
 """Tests of model request institution children."""
 
 from ..test_base import TestBase
-from models import RequestInstitutionChildren
-from models import Invite
+from models import RequestInstitutionChildren, Invite
 from custom_exceptions.fieldException import FieldException
 from mock import patch
 from .. import mocks
 
 
-def generate_request(admin, institution, requested_institution):
+def generate_request(sender, institution, requested_institution, admin=None):
+    """create and save a request."""
+    admin_key = admin.key.urlsafe() if admin else sender.key.urlsafe()
     data = {
-        'sender_key': admin.key.urlsafe(),
+        'sender_key': sender.key.urlsafe(),
         'is_request': True,
-        'admin_key': admin.key.urlsafe(),
+        'admin_key': admin_key,
         'institution_key': institution.key.urlsafe(),
-        'institution_requested_key': requested_institution.key.urlsafe()
+        'institution_requested_key': requested_institution.key.urlsafe(),
+        'type_of_invite': 'REQUEST_INSTITUTION_CHILDREN'
     }
 
     request = RequestInstitutionChildren.create(data)
@@ -74,22 +76,17 @@ class RequestInstitutionChildrenTest(TestBase):
 
     def test_create_for_invited_institution(self):
         """Test create a request for an institution already invited."""
-        data = {
-            'sender_key': self.other_user.key.urlsafe(),
-            'is_request': True,
-            'admin_key': self.admin.key.urlsafe(),
-            'institution_key': self.institution.key.urlsafe(),
-            'institution_requested_key': self.requested_institution.key.urlsafe(),
-            'type_of_invite': 'REQUEST_INSTITUTION_PARENT'
-        }
-
-        # creates and saves the request
-        request = RequestInstitutionChildren.create(data)
-        request.put()
+        generate_request(
+            self.other_user, self.institution, 
+            self.requested_institution
+        )
 
         # try to create the same request
         with self.assertRaises(FieldException) as ex:
-            RequestInstitutionChildren.create(data)
+            generate_request(
+                self.other_user, self.institution, 
+                self.requested_institution
+            )
 
         self.assertEqual(
             'The requested institution has already been invited',
@@ -116,17 +113,10 @@ class RequestInstitutionChildrenTest(TestBase):
 
     def test_make(self):
         """Test method make for children institution request."""
-        data = {
-            'sender_key': self.other_user.key.urlsafe(),
-            'is_request': True,
-            'admin_key': self.admin.key.urlsafe(),
-            'institution_key': self.institution.key.urlsafe(),
-            'institution_requested_key': self.requested_institution.key.urlsafe(),
-            'type_of_invite': 'REQUEST_INSTITUTION_CHILDREN'
-        }
-
-        request = RequestInstitutionChildren.create(data)
-        request.put()
+        request = generate_request(
+            self.other_user, self.institution, 
+            self.requested_institution, self.admin
+        )
 
         expected_maked_request = {
             'status': 'sent',

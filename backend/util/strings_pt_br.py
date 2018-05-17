@@ -8,7 +8,8 @@ SUBJECT_TRANSLATION = {
     'REQUEST_USER': 'Solicitação de participação plataforma CIS',
     'RESPONSE_REQUEST_USER': 'Resposta à sua solicitação de participação da plataforma CIS',
     'REQUEST_LINK': 'Novo convite de vínculo na Plataforma Virtual CIS.',
-    'REJECT_LINK_EMAIL': """Seu vínculo não foi aprovado."""
+    'REJECT_LINK_EMAIL': """Seu vínculo não foi aprovado.""",
+    'REMOVED_LINK_EMAIL': 'Vínculo removido na Plataforma Virtual CIS.'
 }
 
 

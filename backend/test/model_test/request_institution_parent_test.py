@@ -4,6 +4,7 @@
 from ..test_base import TestBase
 from models import RequestInstitutionParent, User, Invite
 from custom_exceptions.fieldException import FieldException
+from send_email_hierarchy.email_sender import EmailSender
 from mock import patch
 from .. import mocks
 
@@ -41,17 +42,21 @@ class RequestInstitutionParentTest(TestBase):
         """Initialize the models."""
         cls.admin = mocks.create_user()
         cls.other_user = mocks.create_user()
+        
         cls.institution = mocks.create_institution()
-        cls.requested_institution = mocks.create_institution()
-        cls.requested_institution.add_member(cls.other_user)
-        cls.requested_institution.set_admin(cls.other_user.key)
+        cls.institution.add_member(cls.admin)
+        cls.institution.set_admin(cls.admin.key)
+
+        cls.other_institution = mocks.create_institution()
+        cls.other_institution.add_member(cls.other_user)
+        cls.other_institution.set_admin(cls.other_user.key)
 
 
     def test_create(self):
         """Test create new request."""
         request = generate_request(
             self.admin, self.institution, 
-            self.requested_institution
+            self.other_institution
         )
 
         self.assertEqual(
@@ -70,7 +75,7 @@ class RequestInstitutionParentTest(TestBase):
 
         self.assertEqual(
             request.institution_requested_key,
-            self.requested_institution.key,
+            self.other_institution.key,
             'The institution requested key should be equal to the expected one')
 
     
@@ -78,14 +83,14 @@ class RequestInstitutionParentTest(TestBase):
         """Test create a request for an institution already invited."""
         generate_request(
             self.admin, self.institution, 
-            self.requested_institution
+            self.other_institution
         )
 
         # try to create the same request
         with self.assertRaises(FieldException) as ex:
             generate_request(
                 self.admin, self.institution, 
-                self.requested_institution
+                self.other_institution
             )
 
         self.assertEqual(
@@ -96,13 +101,13 @@ class RequestInstitutionParentTest(TestBase):
 
     def test_create_request_for_institution_linked(self):
         """Test create request for a linked institution."""
-        self.requested_institution.add_child(self.institution.key)
-        self.institution.set_parent(self.requested_institution.key)
+        self.other_institution.add_child(self.institution.key)
+        self.institution.set_parent(self.other_institution.key)
 
         with self.assertRaises(FieldException) as ex:
             generate_request(
                 self.other_user, self.institution,
-                self.requested_institution, self.admin
+                self.other_institution, self.admin
             )
 
         self.assertEqual(
@@ -115,7 +120,7 @@ class RequestInstitutionParentTest(TestBase):
         """Test method make for parent institution request."""
         request = generate_request(
             self.other_user, self.institution,
-            self.requested_institution, self.admin
+            self.other_institution, self.admin
         )
 
         expected_maked_request = {
@@ -124,7 +129,7 @@ class RequestInstitutionParentTest(TestBase):
                 'name': self.institution.name
             },
             'sender': self.other_user.email,
-            'institution_requested_key': self.requested_institution.key.urlsafe(),
+            'institution_requested_key': self.other_institution.key.urlsafe(),
             'admin_name': self.admin.name,
             'key': request.key.urlsafe(),
             'type_of_invite': 'REQUEST_INSTITUTION_PARENT',
@@ -157,7 +162,7 @@ class RequestInstitutionParentTest(TestBase):
         """Test send notification."""
         request = generate_request(
             self.admin, self.institution, 
-            self.requested_institution
+            self.other_institution
         )
 
         request.send_notification(self.institution.key)
@@ -166,12 +171,12 @@ class RequestInstitutionParentTest(TestBase):
             user_key=self.admin.key, 
             current_institution_key=self.institution.key,
             sender_institution_key=self.institution.key,
-            receiver_institution_key=self.requested_institution.key
+            receiver_institution_key=self.other_institution.key
         )
 
         send_notification.assert_called_with(
             current_institution=self.institution.key, 
-            receiver_key=self.requested_institution.admin, 
+            receiver_key=self.other_institution.admin, 
             notification_type='REQUEST_INSTITUTION_PARENT',
             message='mocked_message'
         )
@@ -183,52 +188,75 @@ class RequestInstitutionParentTest(TestBase):
         """Test send response notification."""
         request = generate_request(
             self.admin, self.institution, 
-            self.requested_institution
+            self.other_institution
         )
 
         for action in ['ACCEPT', 'REJECT']:
             request.send_response_notification(
-                current_institution=self.requested_institution.key, 
-                invitee_key=self.requested_institution.admin,
+                current_institution=self.other_institution.key, 
+                invitee_key=self.other_institution.admin,
                 action=action
             )
             
             create_notification_message.assert_called_with(
-                user_key=self.requested_institution.admin, 
-                current_institution_key=self.requested_institution.key,
-                sender_institution_key=self.requested_institution.key,
+                user_key=self.other_institution.admin, 
+                current_institution_key=self.other_institution.key,
+                sender_institution_key=self.other_institution.key,
                 receiver_institution_key=self.institution.key
             )
 
             notification_type = 'ACCEPT_INSTITUTION_LINK' if action == 'ACCEPT' else 'REJECT_INSTITUTION_LINK'
             send_notification.assert_called_with(
-                current_institution=self.requested_institution.key, 
+                current_institution=self.other_institution.key, 
                 receiver_key=self.admin.key, 
                 notification_type=notification_type,
                 message='mocked_message'
             )
+    
 
-
-    @patch.object(Invite, 'send_email')
+    @patch.object(EmailSender, 'send_email')
     def test_send_email(self, send_email):
         """Test send email."""
         request = generate_request(
+            self.admin, self.institution,
+            self.other_institution
+        )
+
+        parent_institution = self.other_institution
+        child_institution = self.institution
+
+        email_json = {
+            'institution_parent_name': parent_institution.name,
+            'institution_parent_email': parent_institution.institutional_email,
+            'institution_child_name': child_institution.name,
+            'institution_child_email': child_institution.institutional_email,
+            'institution_requested_key': parent_institution.key.urlsafe()
+        }
+
+        request.send_email(host='somehost')
+        send_email.assert_called_with(email_json)
+
+
+    @patch.object(EmailSender, 'send_email')
+    def test_send_response_email(self, send_email):
+        """Test send response email."""
+        request = generate_request(
             self.admin, self.institution, 
-            self.requested_institution
+            self.other_institution
         )
-        
-        host = 'somehost'
-        request_link = "http://%s/requests/%s/institution_parent" % (host, request.key.urlsafe())
-        body = """Olá
-        Sua instituição recebeu um novo pedido. Acesse:
-        %s para analisar o mesmo.
 
-        Equipe da Plataforma CIS """ % request_link
-        
-        request.send_email(host)
+        parent_institution = self.other_institution
+        child_institution = self.institution
 
-        send_email.assert_called_with(
-           host,
-           self.admin.email[0],
-           body
-        )
+        for operation in ["ACCEPT", "REJECT"]:
+
+            email_json = {
+                'institution_parent_name': parent_institution.name,
+                'institution_parent_email': parent_institution.institutional_email,
+                'institution_child_name': child_institution.name,
+                'institution_child_email': child_institution.institutional_email,
+                'institution_requested_key': parent_institution.key.urlsafe()
+            }
+
+            request.send_response_email(operation)
+            send_email.assert_called_with(email_json)

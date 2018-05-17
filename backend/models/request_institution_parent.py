@@ -22,7 +22,7 @@ class RequestInstitutionParent(Request):
         request.isValid()
         return request
 
-    def send_email(self, host, body=None):
+    def send_email(self, host):
         """Method of send email of request institution link."""
         parent_institution = self.institution_requested_key.get()
         child_institution = self.institution_key.get()

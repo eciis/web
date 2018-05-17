@@ -9,9 +9,6 @@ from app_version import APP_VERSION
 
 from google.appengine.ext import ndb
 
-from models import User
-from models import Institution
-
 from oauth2client import client
 from oauth2client.crypt import AppIdentityError
 
@@ -97,40 +94,6 @@ def verify_token(request):
         except (ValueError, AppIdentityError) as error:
             logging.exception(str(error))
             return None
-
-def follow_inst(user,inst):
-    user.follow(inst.key)
-    inst.follow(user.key)
-
-def create_user(name, email):
-    """Create user."""
-    user = User()
-    user.email = email
-    user.name = name
-    user.photo_url = "app/images/avatar.png"
-    health_ministry = get_health_ministry()
-    deciis = get_deciis()
-    """"TODO: All users have to follow MS and DECIIS
-        Think of a better way to do it
-        @author: Mayza Nunes 24/01/2018
-    """
-    if health_ministry is not None:
-        follow_inst(user, health_ministry)
-    if deciis is not None:
-        follow_inst(user, deciis)
-    user.put()
-    
-    return user
-
-def get_health_ministry():
-    """Get health ministry institution."""
-    query = Institution.query(Institution.name == "Ministério da Saúde", Institution.acronym == "MS")
-    return query.get()
-
-def get_deciis():
-    """Get health ministry institution."""
-    query = Institution.query(Institution.trusted == True)
-    return query.get()
 
 def json_response(method):
     """Add content type header to the response."""

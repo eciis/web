@@ -3,9 +3,15 @@ from search_module.search_user import SearchUser
 from google.appengine.ext import ndb
 from custom_exceptions.fieldException import FieldException
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
+from util.provider_institutions import get_deciis
+from util.provider_institutions import get_health_ministry
 import random
 
 __all__ = ['InstitutionProfile', 'User']
+
+def follow_inst(user,inst):
+    user.follow(inst.key)
+    inst.follow(user.key)
 
 def pick_color():
     colors = [
@@ -180,6 +186,27 @@ class User(ndb.Model):
         self.institution_profiles.append(user_profile)
 
         self.put()
+    
+    @staticmethod
+    def create(name, email):
+        """Create user."""
+        user = User()
+        user.email = email
+        user.name = name
+        user.photo_url = "app/images/avatar.png"
+        health_ministry = get_health_ministry()
+        deciis = get_deciis()
+        """"TODO: All users have to follow MS and DECIIS
+            Think of a better way to do it
+            @author: Mayza Nunes 24/01/2018
+        """
+        if health_ministry is not None:
+            follow_inst(user, health_ministry)
+        if deciis is not None:
+            follow_inst(user, deciis)
+        user.put()
+        
+        return user
 
     def add_post(self, post):
         user = self.key.get()

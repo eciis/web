@@ -6,7 +6,7 @@ import json
 from models import Invite
 from utils import Utils
 from util.login_service import login_required
-from utils import create_user
+from models import User
 from utils import json_response
 from utils import make_user
 from models import InstitutionProfile
@@ -55,7 +55,7 @@ class UserHandler(BaseHandler):
             Author: Ruan Eloy - 18/09/17
         """
         if not user.key:
-            user = create_user(user.name, user.email)
+            user = User.create(user.name, user.email)
 
         user_json = make_user(user, self.request)
         user_json['invites'] = get_invites(user.email)

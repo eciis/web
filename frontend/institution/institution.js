@@ -51,7 +51,7 @@ Institution.prototype.addParentInst = function addParentInst(institution){
 Institution.prototype.addChildInst = function addChildInst(institution){
     const INVALID_INDEX = -1;
     const childIndex = this.children_institutions.reduce((childIndex, inst, index) => {
-        return inst.key === institution.key ? index : childIndex;
+        return inst.key && inst.key === institution.key ? index : childIndex;
     }, INVALID_INDEX);
     const childIsNew = childIndex == INVALID_INDEX;
 

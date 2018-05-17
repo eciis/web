@@ -9,6 +9,17 @@ from util.strings_pt_br import get_subject
 
 __all__ = ['RequestInstitutionChildren']
 
+
+def get_html(operation):
+    accept_html = 'accept_institution_link_email.html'
+    reject_html = 'reject_institutional_link.html'
+    return accept_html if operation == 'ACCEPT' else reject_html
+
+def get_subject_type(operation):
+    accept_type = 'LINK_CONFIRM'
+    reject_type = 'REJECT_LINK_EMAIL'
+    return accept_type if operation == 'ACCEPT' else reject_type
+
 class RequestInstitutionChildren(Request):
     """Model of request children institution."""
 
@@ -22,7 +33,7 @@ class RequestInstitutionChildren(Request):
         request.isValid()
         return request
 
-    def send_email(self, host, body=None):
+    def send_email(self, host):
         """Method of send email of request institution link."""
         parent_institution = self.institution_key.get()
         child_institution = self.institution_requested_key.get()
@@ -37,19 +48,16 @@ class RequestInstitutionChildren(Request):
             'institution_child_email': child_institution.institutional_email,
             'institution_requested_key': child_institution.key.urlsafe()
         })
+
         email_sender.send_email()
 
     def send_response_email(self, operation):
         parent_institution = self.institution_key.get()
         child_institution = self.institution_requested_key.get()
-        if operation == "ACCEPT":
-            html = 'accept_institution_link_email.html'
-            type_subject = 'LINK_CONFIRM' 
-        else:
-            html = 'reject_institutional_link.html'
-            type_subject = 'REJECT_LINK_EMAIL'
+        html = get_html(operation)
+        subject_type = get_subject_type(operation)
+        subject = get_subject(subject_type)
 
-        subject = get_subject(type_subject)
         email_sender = RequestLinkEmailSender(**{
             'receiver': parent_institution.admin.get().email[0],
             'subject': subject,

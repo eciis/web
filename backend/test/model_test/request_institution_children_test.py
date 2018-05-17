@@ -2,8 +2,11 @@
 """Tests of model request institution children."""
 
 from ..test_base import TestBase
-from models import RequestInstitutionChildren, Invite
 from custom_exceptions.fieldException import FieldException
+from models import RequestInstitutionChildren, Invite
+from models.request_institution_children import get_html, get_subject_type
+from send_email_hierarchy.email_sender import EmailSender
+from util.strings_pt_br import get_subject
 from mock import patch
 from .. import mocks
 
@@ -41,7 +44,11 @@ class RequestInstitutionChildrenTest(TestBase):
         """Initialize models"""
         cls.admin = mocks.create_user()
         cls.other_user = mocks.create_user()
+        
         cls.institution = mocks.create_institution()
+        cls.institution.add_member(cls.admin)
+        cls.institution.set_admin(cls.admin.key)
+
         cls.requested_institution = mocks.create_institution()
         cls.requested_institution.add_member(cls.other_user)
         cls.requested_institution.set_admin(cls.other_user.key)
@@ -210,26 +217,43 @@ class RequestInstitutionChildrenTest(TestBase):
             )
 
 
-    @patch.object(Invite, 'send_email')
+    @patch.object(EmailSender, 'send_email')
     def test_send_email(self, send_email):
         """Test send email."""
         request = generate_request(
             self.admin, self.institution, 
             self.requested_institution
         )
-        
-        host = 'somehost'
-        request_link = "http://%s/requests/%s/institution_children" % (host, request.key.urlsafe())
-        body = """Olá
-        Sua instituição recebeu um novo pedido. Acesse:
-        %s para analisar o mesmo.
 
-        Equipe da Plataforma CIS """ % request_link
-        
-        request.send_email(host)
+        email_json = {
+            'institution_parent_name': self.institution.name,
+            'institution_parent_email': self.institution.institutional_email,
+            'institution_child_name': self.requested_institution.name,
+            'institution_child_email': self.requested_institution.institutional_email,
+            'institution_requested_key': self.requested_institution.key.urlsafe()
+        }
 
-        send_email.assert_called_with(
-           host,
-           self.admin.email[0],
-           body
+        request.send_email(host='somehost')
+        send_email.assert_called_with(email_json)
+
+
+    @patch.object(EmailSender, 'send_email')
+    def test_send_response_email(self, send_email):
+        """Test send response email."""
+        request = generate_request(
+            self.admin, self.institution, 
+            self.requested_institution
         )
+
+        for operation in ["ACCEPT", "REJECT"]:
+
+            email_json = {
+                'institution_parent_name': self.institution.name,
+                'institution_parent_email': self.institution.institutional_email,
+                'institution_child_name': self.requested_institution.name,
+                'institution_child_email': self.requested_institution.institutional_email,
+                'institution_requested_key': self.requested_institution.key.urlsafe()
+            }
+
+            request.send_response_email(operation)
+            send_email.assert_called_with(email_json)

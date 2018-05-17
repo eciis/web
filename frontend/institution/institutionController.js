@@ -34,13 +34,14 @@
         function loadInstitution() {
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
                 institutionCtrl.institution = new Institution(response.data);
+                console.log(response.data);
                 checkIfUserIsFollower();
                 institutionCtrl.checkIfUserIsMember();
                 getPortfolioUrl();
                 getActuationArea();
                 getLegalNature();
                 institutionCtrl.isLoadingData = false;
-                
+                console.log(institutionCtrl.institution);
             }, function error(response) {
                 $state.go("app.user.home");
                 institutionCtrl.isLoadingData = true; 
@@ -404,6 +405,10 @@
 
         institutionCtrl.canManageInst = function canManageInst() {
             return institutionCtrl.user.isAdmin(currentInstitutionKey) ? true : $state.go('app.user.home');
+        };
+
+        institutionCtrl.limitString = function limitString(string, size) {
+            return Utils.limitString(string, size);
         };
 
         (function main(){

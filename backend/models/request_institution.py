@@ -49,21 +49,18 @@ class RequestInstitution(Request):
 
     def send_email(self, host, body=None):
         """Method of send email of request institution link."""
-        request_key = self.key.urlsafe()
-
-        # TODO Set this message
         body = body or """Olá
-        Sua instituição recebeu um novo pedido. Acesse:
-        http://%s/requests/%s/institution_children para analisar o mesmo.
+        A instituição %s deseja se cadastrar na Plataforma. Acesse:
+        http://frontend.plataformacis.org/inviteInstitution para analisar a solicitação.
 
-        Equipe da Plataforma CIS """ % (host, request_key)
+        Equipe da Plataforma CIS """ % self.institution_key.get().name
 
         """
             The super user is the admin of 
             'Departamento do Complexo Industrial e Inovação em Saúde".
         """
         super_user = get_deciis().admin.get()
-        super(RequestInstitution, self).send_email(host, super_user.email, body)
+        super(RequestInstitution, self).send_email(host, 'raoni.smaneoto@ccc.ufcg.edu.br', body)
 
     def send_notification(self, current_institution):
         """Method of send notification of request intitution."""

@@ -51,9 +51,9 @@ class RequestInstitution(Request):
         """Method of send email of request institution link."""
         body = body or """Olá
         A instituição %s deseja se cadastrar na Plataforma. Acesse:
-        http://frontend.plataformacis.org/inviteInstitution para analisar a solicitação.
+        http://frontend.plataformacis.org/
 
-        Equipe da Plataforma CIS """ % self.institution_key.get().name
+        Equipe da Plataforma CIS. """ % self.institution_key.get().name
 
         """
             The super user is the admin of 

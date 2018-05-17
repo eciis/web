@@ -37,6 +37,7 @@ class InstitutionChildrenRequestHandler(BaseHandler):
         institution_children.put()
 
         request.send_response_notification(user.current_institution, user.key, 'ACCEPT')
+        request.send_response_email('ACCEPT')
 
         enqueue_task('add-admin-permissions', {'institution_key': institution_children.key.urlsafe()})
 
@@ -54,4 +55,5 @@ class InstitutionChildrenRequestHandler(BaseHandler):
         request.put()
 
         request.send_response_notification(user.current_institution, user.key, 'REJECT')
+        request.send_response_email('REJECT')
         

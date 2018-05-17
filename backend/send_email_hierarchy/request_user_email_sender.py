@@ -15,10 +15,12 @@ class RequestUserEmailSender(EmailSender):
         crop_institution_name is called to make sure that the names don't exceed the maximum allowed size.
         """
         super(RequestUserEmailSender, self).__init__(**kwargs)
-        self.html = 'request_user_email.html'
+        self.html = kwargs['html'] if 'html' in kwargs else 'request_user_email.html'
         self.user_name = self.crop_name(kwargs['user_name'], MAXIMUM_USER_NAME)
         self.user_email = self.crop_name(kwargs['user_email'], MAXIMUM_USER_NAME)
+        self.office = self.crop_name(kwargs['office'], MAXIMUM_USER_NAME)
         self.request_key = kwargs['request_key']
+        self.institution_requested_admin = self.crop_name(kwargs['institution_requested_admin'], MAXIMUM_USER_NAME)
         self.institution_requested_name = self.crop_name(kwargs['institution_requested_name'], MAXIMUM_INSTITUTION_NAME)
         self.institution_requested_email = self.crop_name(kwargs['institution_requested_email'], MAXIMUM_INSTITUTION_NAME)
         self.institution_requested_key = kwargs['institution_requested_key']
@@ -32,6 +34,8 @@ class RequestUserEmailSender(EmailSender):
             'user_name': self.user_name,
             'user_email': self.user_email,
             'request_key': self.request_key,
+            'office': self.office,
+            'institution_requested_admin': self.institution_requested_admin,
             'institution_requested_name': self.institution_requested_name,
             'institution_requested_email': self.institution_requested_email,
             'institution_requested_key': self.institution_requested_key

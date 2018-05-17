@@ -58,7 +58,7 @@ class InstitutionMemberHandlerTest(TestBaseHandler):
 
     @patch('handlers.institution_members_handler.send_message_notification')
     @patch('handlers.institution_members_handler.RemoveMemberEmailSender.send_email')
-    @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@gmail.com'})
     def test_delete_with_notification(self, verify_token, send_email, send_message_notification):
         """Test if a notification is sent when the member is deleted."""
         # Set up the second_user
@@ -101,7 +101,7 @@ class InstitutionMemberHandlerTest(TestBaseHandler):
 
     @patch('handlers.institution_members_handler.send_message_notification')
     @patch('handlers.institution_members_handler.RemoveMemberEmailSender.send_email')
-    @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@gmail.com'})
     def test_delete_with_email(self, verify_token, send_email, send_message_notification):
         """Test delete a member that belongs to only one institution."""
         # new user
@@ -125,7 +125,7 @@ class InstitutionMemberHandlerTest(TestBaseHandler):
         # Assert that send_email has been called
         send_email.assert_called()
 
-    @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@gmail.com'})
     def test_delete(self, verify_token):
         """Test delete method with an user that is not admin"""
         # Assert the initial conditions
@@ -180,7 +180,7 @@ class InstitutionMemberHandlerTest(TestBaseHandler):
         self.assertTrue(self.institution.key in self.user.institutions,
                         "Institution shouldn't be in institutions of second_user")
 
-    @patch('utils.verify_token', return_value={'email': 'second_user@gmail.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'second_user@gmail.com'})
     def test_delete_not_admin(self, verify_token):
         """Test delete method with user not admin"""
         # Assert the initial conditions

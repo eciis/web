@@ -4,7 +4,7 @@
 from google.appengine.ext import ndb
 import json
 
-from utils import login_required
+from util.login_service import login_required
 from . import BaseHandler
 from models import InstitutionProfile
 from models import Invite

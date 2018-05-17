@@ -48,7 +48,7 @@ class EventHandlerTest(TestBaseHandler):
         # Events
         cls.event = mocks.create_event(cls.user, cls.institution)
 
-    @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@gmail.com'})
     def test_delete_by_author(self, verify_token):
         """Test the event_handler's delete method when user is author."""
         self.user.add_permissions(
@@ -73,7 +73,7 @@ class EventHandlerTest(TestBaseHandler):
             self.testapp.delete("/api/events/%s" %
                                 self.event.key.urlsafe())
 
-    @patch('utils.verify_token', return_value={'email': 'usersd@gmail.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'usersd@gmail.com'})
     def test_delete_by_admin(self, verify_token):
         """Test the event_handler's delete method when user is admin."""
         # Call the delete method and assert that it raises an exception,
@@ -99,7 +99,7 @@ class EventHandlerTest(TestBaseHandler):
         self.assertEqual(self.event.last_modified_by, self.second_user.key,
                          "The last_modified_by expected was user.")
 
-    @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@gmail.com'})
     def test_patch(self, verify_token):
         """Test the post_handler's patch method."""
         # Call the patch method and assert that it works
@@ -157,7 +157,7 @@ class EventHandlerTest(TestBaseHandler):
                                       "value": "New Local"}]
                                     )
 
-    @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@gmail.com'})
     def test_pacth_datetime(self, verify_token):
         """Test pacth datetimes in event handler."""
         json_edit = json.dumps([
@@ -181,7 +181,7 @@ class EventHandlerTest(TestBaseHandler):
         self.assertEqual(self.event.end_time.isoformat(),
                          '2018-07-25T12:30:15')
 
-    @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@gmail.com'})
     def test_patch_on_event_outdated(self, verify_token):
         """Test change the event basic data when it is outdated."""
         self.event.start_time = '2000-07-14T12:30:15'
@@ -216,7 +216,7 @@ class EventHandlerTest(TestBaseHandler):
                 getattr(self.event, prop), value,
                 "The event "+ prop + " should be 'other_value'")
     
-    @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@gmail.com'})
     def test_get_a_deleted_event(self, verify_token):
         self.event.state = 'deleted'
         self.event.put()
@@ -227,7 +227,7 @@ class EventHandlerTest(TestBaseHandler):
         exception_message = self.get_message_exception(ex.exception.message)
         self.assertTrue(exception_message == 'Error! The event has been deleted.')
     
-    @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@gmail.com'})
     def test_patch_a_deleted_event(self, verify_token):
         self.event.state = 'deleted'
         self.event.put()
@@ -241,7 +241,7 @@ class EventHandlerTest(TestBaseHandler):
         self.assertTrue(exception_message ==
                         'Error! The event has been deleted.')
     
-    @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@gmail.com'})
     def test_permissions_in_delete(self, verify_token):
         """Test the permissions in delete."""
         with self.assertRaises(Exception) as ex:
@@ -261,7 +261,7 @@ class EventHandlerTest(TestBaseHandler):
         self.event = self.event.key.get()
         self.assertTrue(self.event.state == 'deleted')
 
-    @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@gmail.com'})
     def test_patch_without_permission(self, verify_token):
         with self.assertRaises(Exception) as ex:
             patch = [{"op": "replace", "path": "/title", "value": 'other_value'}]

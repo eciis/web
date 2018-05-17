@@ -37,7 +37,7 @@ class InstitutionHierarchyHandlerTest(TestBaseHandler):
             self.testapp.post('/api/queue/' + handler_selector, params=params)
 
     @patch('handlers.institution_hierarchy_handler.send_message_notification')
-    @patch('utils.verify_token', return_value=ADMIN)
+    @patch('util.login_service.verify_token', return_value=ADMIN)
     def test_delete_child_connection(self, verify_token, send_message_notification):
         """Test delete method with isParent=false."""
         # Assert the initial conditions
@@ -93,7 +93,7 @@ class InstitutionHierarchyHandlerTest(TestBaseHandler):
         )
 
     @patch('handlers.institution_hierarchy_handler.send_message_notification')
-    @patch('utils.verify_token', return_value=USER)
+    @patch('util.login_service.verify_token', return_value=USER)
     def test_delete_parent_connection(self, verify_token, send_message_notification):
         """Test delete method with isParent=true."""
         # Assert the initial conditions
@@ -148,7 +148,7 @@ class InstitutionHierarchyHandlerTest(TestBaseHandler):
         )
 
     @patch('handlers.institution_hierarchy_handler.enqueue_task')
-    @patch('utils.verify_token', return_value={'email': 'user@example.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@example.com'})
     def test_remove_admin_permission_in_institution_hierarchy(self, verify_token, enqueue_task):
         """Test remove admin permissions in institution hierarchy."""
         second_user = mocks.create_user()

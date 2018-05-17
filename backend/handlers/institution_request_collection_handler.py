@@ -2,7 +2,7 @@
 """Institution Collection Request Handler."""
 
 import json
-from utils import login_required
+from util.login_service import login_required
 from utils import json_response
 from utils import Utils
 from custom_exceptions.entityException import EntityException

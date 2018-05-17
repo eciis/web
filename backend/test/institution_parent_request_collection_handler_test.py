@@ -28,7 +28,7 @@ class InstitutionParentRequestCollectionHandlerTest(TestBaseHandler):
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
 
-    @patch('utils.verify_token', return_value=ADMIN)
+    @patch('util.login_service.verify_token', return_value=ADMIN)
     def test_post(self, verify_token):
         """Test method post of InstitutionParentRequestCollectionHandler."""
         admin = mocks.create_user(ADMIN['email'])
@@ -82,7 +82,7 @@ class InstitutionParentRequestCollectionHandlerTest(TestBaseHandler):
             institution.parent_institution, inst_requested.key,
             "The parent institution of inst test must be update to inst_requested")
     
-    @patch('utils.verify_token', return_value=ADMIN)
+    @patch('util.login_service.verify_token', return_value=ADMIN)
     def test_post_with_wrong_institution(self, verify_token):
         """Test post with wrong institution."""
         admin = mocks.create_user(ADMIN['email'])
@@ -122,7 +122,7 @@ class InstitutionParentRequestCollectionHandlerTest(TestBaseHandler):
             exception_message,
             "Expected error message is Error! User is not allowed to send request")
 
-    @patch('utils.verify_token', return_value=USER)
+    @patch('util.login_service.verify_token', return_value=USER)
     def test_post_user_not_admin(self, verify_token):
         #Test post request with user is not admin.
         admin = mocks.create_user(ADMIN['email'])
@@ -160,7 +160,7 @@ class InstitutionParentRequestCollectionHandlerTest(TestBaseHandler):
             "Expected error message is Error! User is not allowed to send request")
 
 
-    @patch('utils.verify_token', return_value=USER)
+    @patch('util.login_service.verify_token', return_value=USER)
     def test_post_circular_hierarchy(self, verify_token):
         """
         Test post request when the user tries to create

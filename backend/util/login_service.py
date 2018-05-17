@@ -1,6 +1,6 @@
 
 import json
-from goolge.appengine.ext import ndb
+from google.appengine.ext import ndb
 from utils import verify_token
 from models import User
 

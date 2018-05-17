@@ -8,7 +8,6 @@ from utils import Utils
 from util.login_service import login_required
 from models import User
 from utils import json_response
-from utils import make_user
 from models import InstitutionProfile
 
 from util.json_patch import JsonPatch
@@ -57,7 +56,7 @@ class UserHandler(BaseHandler):
         if not user.key:
             user = User.create(user.name, user.email)
 
-        user_json = make_user(user, self.request)
+        user_json = user.make(self.request)
         user_json['invites'] = get_invites(user.email)
 
         self.response.write(json.dumps(user_json))
@@ -93,4 +92,4 @@ class UserHandler(BaseHandler):
         """Update user."""
         user.put()
 
-        self.response.write(json.dumps(make_user(user, self.request)))
+        self.response.write(json.dumps(user.make(self.request)))

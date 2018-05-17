@@ -5,6 +5,7 @@ from custom_exceptions.fieldException import FieldException
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from util.provider_institutions import get_deciis
 from util.provider_institutions import get_health_ministry
+from utils import Utils
 import random
 
 __all__ = ['InstitutionProfile', 'User']
@@ -366,3 +367,20 @@ class User(ndb.Model):
 
     def is_admin(self, institution_key):
         return institution_key in self.institutions_admin
+
+    def make(self, request):
+        user_json = Utils.toJson(self, host=request.host)
+        user_json['logout'] = 'http://%s/logout?redirect=%s' %\
+            (request.host, request.path)
+        user_json['institutions'] = []
+        for institution in self.institutions:
+            user_json['institutions'].append(
+                Utils.toJson(institution.get())
+            )
+        user_json['follows'] = [institution_key.get().make(
+            ['name','acronym', 'photo_url', 'key', 'parent_institution'])
+            for institution_key in self.follows
+            if institution_key.get().state != 'inactive']
+        user_json['institution_profiles'] = [profile.make()
+            for profile in self.institution_profiles]
+        return user_json

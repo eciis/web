@@ -6,7 +6,6 @@ from google.appengine.ext import ndb
 from util.login_service import login_required
 from utils import json_response
 from utils import Utils
-from utils import make_user
 from service_entities import enqueue_task
 from . import BaseHandler
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
@@ -51,7 +50,7 @@ class InviteUserAdmHandler(BaseHandler):
             )
             invite.send_response_notification(current_institution=user.current_institution, action='ACCEPT')
         save_changes(user, actual_admin, invite, institution)
-        self.response.write(json.dumps(make_user(user, self.request)))
+        self.response.write(json.dumps(user.make(self.request)))
 
     @json_response
     @login_required

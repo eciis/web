@@ -34,14 +34,12 @@
         function loadInstitution() {
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
                 institutionCtrl.institution = new Institution(response.data);
-                console.log(response.data);
                 checkIfUserIsFollower();
                 institutionCtrl.checkIfUserIsMember();
                 getPortfolioUrl();
                 getActuationArea();
                 getLegalNature();
                 institutionCtrl.isLoadingData = false;
-                console.log(institutionCtrl.institution);
             }, function error(response) {
                 $state.go("app.user.home");
                 institutionCtrl.isLoadingData = true; 

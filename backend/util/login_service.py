@@ -1,4 +1,6 @@
 
+"""Service to manage user authentication."""
+
 import json
 from google.appengine.ext import ndb
 from utils import verify_token

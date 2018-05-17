@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+"""Service to get the super institutions."""
+
 from models import Institution
 
 

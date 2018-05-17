@@ -31,7 +31,7 @@ class RequestHandlerTest(TestBaseHandler):
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
 
-    @patch('utils.verify_token', return_value=ADMIN)
+    @patch('util.login_service.verify_token', return_value=ADMIN)
     def test_get(self, verify_token):
         """Test method get of RequestHandler."""
         admin = mocks.create_user(ADMIN['email'])
@@ -74,7 +74,7 @@ class RequestHandlerTest(TestBaseHandler):
             'REQUEST_USER',
             "expected type_of_invite must be equal to  REQUEST_USER")
 
-    @patch('utils.verify_token', return_value=ADMIN)
+    @patch('util.login_service.verify_token', return_value=ADMIN)
     def test_put(self, verify_token):
         """Test method put of RequestHandler."""
         admin = mocks.create_user(ADMIN['email'])
@@ -124,7 +124,7 @@ class RequestHandlerTest(TestBaseHandler):
             user.key in institution.followers,
             "key of user must be in institution followers")
 
-    @patch('utils.verify_token', return_value=ADMIN)
+    @patch('util.login_service.verify_token', return_value=ADMIN)
     def test_put_request_accepted(self, verify_token):
         """Test put request accepted."""
         admin = mocks.create_user(ADMIN['email'])
@@ -157,7 +157,7 @@ class RequestHandlerTest(TestBaseHandler):
             exception_message,
             "Expected error message is Error! this request has already been processed")
 
-    @patch('utils.verify_token', return_value=USER)
+    @patch('util.login_service.verify_token', return_value=USER)
     def test_put_user_not_admin(self, verify_token):
         """Test put request with user is not admin."""
         admin = mocks.create_user(ADMIN['email'])
@@ -186,7 +186,7 @@ class RequestHandlerTest(TestBaseHandler):
             exception_message,
             "Expected error message is Error! User is not allowed to accept user request")
 
-    @patch('utils.verify_token', return_value=ADMIN)
+    @patch('util.login_service.verify_token', return_value=ADMIN)
     def test_delete(self, verify_token):
         """Test method delete of RequestHandler."""
         admin = mocks.create_user(ADMIN['email'])
@@ -230,7 +230,7 @@ class RequestHandlerTest(TestBaseHandler):
             len(self.other_user.institution_profiles),
             0, 'The other_user should have no profile')
 
-    @patch('utils.verify_token', return_value=USER)
+    @patch('util.login_service.verify_token', return_value=USER)
     def test_delete_user_not_admin(self, verify_token):
         """Test delete request with user is not admin."""
         admin = mocks.create_user(ADMIN['email'])

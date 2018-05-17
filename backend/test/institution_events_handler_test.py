@@ -26,7 +26,7 @@ class InstitutionEventsHandlerTest(TestBaseHandler):
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
 
-    @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@gmail.com'})
     def test_get_one_event(self, verify_token):
         """Test the institution_events_handler's get method."""
 
@@ -54,7 +54,7 @@ class InstitutionEventsHandlerTest(TestBaseHandler):
         self.assertEqual(event_obj.institution_key, institution.key,
                          "The institutions must be the same")
 
-    @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@gmail.com'})
     def test_get_events_from_a_passed_begin(self, verify_token):
         """Test the institution_events_handler's get method."""
 
@@ -78,7 +78,7 @@ class InstitutionEventsHandlerTest(TestBaseHandler):
         self.assertTrue(third_event.key.urlsafe() in keys)
         self.assertTrue(len(keys) == 1)
 
-    @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@gmail.com'})
     def test_get_many_events(self, verify_token):
         """Test the institution_events_handler's get method."""
 

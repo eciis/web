@@ -110,7 +110,7 @@ class InstitutionHandlerTest(TestBaseHandler):
         if handler_selector == 'add-admin-permissions' or handler_selector == 'remove-admin-permissions' or handler_selector == 'remove-inst':
             self.testapp.post('/api/queue/' + handler_selector, params=params)
 
-    @patch('utils.verify_token', return_value={'email': 'user@example.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@example.com'})
     def test_patch(self, verify_token):
         """Test the post_handler's patch method."""
         # Call the patch method and assert that  it raises an exception
@@ -143,7 +143,7 @@ class InstitutionHandlerTest(TestBaseHandler):
             "Expected exception message must be equal to " +
             "Error! User is not allowed to edit institution")
 
-    @patch('utils.verify_token', return_value={'email': 'other_user@example.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'other_user@example.com'})
     def test_post(self, verify_token):
         """Test the post_handler's post method."""
         # Call the patch method and assert that  it raises an exception
@@ -198,7 +198,7 @@ class InstitutionHandlerTest(TestBaseHandler):
             "Error! User is not invitee to create this Institution")
     
     @patch('handlers.institution_handler.enqueue_task')
-    @patch('utils.verify_token', return_value={'email': 'user@example.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@example.com'})
     def test_add_admin_permission_in_institution_hierarchy(self, verify_token, enqueue_task):
         """Test add admin permissions in institution hierarchy."""
         first_user = mocks.create_user()
@@ -259,7 +259,7 @@ class InstitutionHandlerTest(TestBaseHandler):
         
 
     @patch('handlers.institution_handler.enqueue_task')
-    @patch('utils.verify_token', return_value={'email': 'user@example.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@example.com'})
     def test_remove_admin_permission_in_institution_hierarchy(self, verify_token, enqueue_task):
         """Test remove admin permissions in institution hierarchy."""
         first_user = mocks.create_user()
@@ -332,7 +332,7 @@ class InstitutionHandlerTest(TestBaseHandler):
         self.assertFalse(has_permissions(
             third_user, third_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
 
-    @patch('utils.verify_token', return_value={'email': 'user@example.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@example.com'})
     def test_get(self, verify_token):
         """Test the get method."""
         # Call the get method
@@ -360,7 +360,7 @@ class InstitutionHandlerTest(TestBaseHandler):
         self.assertEqual(admin_first_inst["key"], self.user.key.urlsafe(),
                          "The key of admin should be equal to key of obj user")
 
-    @patch('utils.verify_token', return_value={'email': 'user@example.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@example.com'})
     def test_get_without_admin(self, verify_token):
         """Test the get method."""
         # Call the get method
@@ -382,7 +382,7 @@ class InstitutionHandlerTest(TestBaseHandler):
         self.assertEqual(admin_second_inst, None,
                          "The admin should be None")
 
-    @patch('utils.verify_token', return_value={'email': 'user@example.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@example.com'})
     def test_delete_without_remove_hierarchy(self, verify_token):
         """Test delete method."""
         # Set the cerbio's state to active
@@ -413,7 +413,7 @@ class InstitutionHandlerTest(TestBaseHandler):
         self.assertTrue(self.first_inst.key not in self.user.institutions)
 
     @patch('handlers.institution_handler.enqueue_task')
-    @patch('utils.verify_token', return_value={'email': 'user@example.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@example.com'})
     def test_delete_with_remove_hierarchy(self, verify_token, mock_method):
         """Test delete removing hierarchy."""
         # Setting up the remove hierarchy test
@@ -462,7 +462,7 @@ class InstitutionHandlerTest(TestBaseHandler):
         self.assertTrue(self.second_inst.key not in self.user.institutions)
         self.assertTrue(self.third_inst.key not in self.user.institutions)
 
-    @patch('utils.verify_token', return_value={'email': 'user@example.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@example.com'})
     def test_delete_child_institution(self, verify_token):
         """Test delete child institution."""
         self.user.institutions_admin.append(self.second_inst.key)
@@ -481,7 +481,7 @@ class InstitutionHandlerTest(TestBaseHandler):
         self.third_inst = self.third_inst.key.get()
         self.assertTrue(self.third_inst.state == "inactive")
 
-    @patch('utils.verify_token', return_value={'email': 'other_user@example.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'other_user@example.com'})
     def test_delete_child_institution_without_admin(self, verify_token):
         """Test delete child institution."""
         self.other_user.institutions.append(self.third_inst.key)
@@ -498,7 +498,7 @@ class InstitutionHandlerTest(TestBaseHandler):
         self.assertTrue(self.first_inst.state == "active")
     
     @patch('handlers.institution_handler.enqueue_task')
-    @patch('utils.verify_token', return_value={'email': 'user@example.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@example.com'})
     def test_remove_admin_permission(self, verify_token, enqueue_task):
         """Test remove admin permissions in institution hierarchy."""
         first_user = mocks.create_user()
@@ -583,7 +583,7 @@ class InstitutionHandlerTest(TestBaseHandler):
             first_user, fourth_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
     
     @patch('handlers.institution_handler.enqueue_task')
-    @patch('utils.verify_token', return_value={'email': 'user@example.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@example.com'})
     def test_delete_hierarchy_with_a_one_direction_link(self, verify_token, enqueue_task):
         """Test remove admin permissions in institution hierarchy."""
         first_user = mocks.create_user()
@@ -674,7 +674,7 @@ class InstitutionHandlerTest(TestBaseHandler):
             permissions.DEFAULT_ADMIN_PERMISSIONS))
     
     @patch('handlers.institution_handler.enqueue_task')
-    @patch('utils.verify_token', return_value={'email': 'user@example.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@example.com'})
     def test_remove_admin_permission_in_a_middle_institution(self, verify_token, enqueue_task):
         """Test remove admin permissions in institution hierarchy."""
         first_user = mocks.create_user()
@@ -744,7 +744,7 @@ class InstitutionHandlerTest(TestBaseHandler):
         self.assertFalse(third_inst.state == 'inactive')
     
     @patch('handlers.institution_handler.enqueue_task')
-    @patch('utils.verify_token', return_value={'email': 'user@example.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@example.com'})
     def test_remove_admin_permission_in_a_middle_institution_with_two_administered_institutions(self, verify_token, enqueue_task):
         """Test remove admin permissions in institution hierarchy."""
         first_user = mocks.create_user()

@@ -3,7 +3,7 @@
 
 from google.appengine.ext import ndb
 from utils import Utils
-from utils import login_required
+from util.login_service import login_required
 from utils import json_response
 
 from . import BaseHandler

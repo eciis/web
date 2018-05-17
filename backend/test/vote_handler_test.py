@@ -25,7 +25,7 @@ class VoteHandlerTest(TestBaseHandler):
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
-    @patch('utils.verify_token')
+    @patch('util.login_service.verify_token')
     def test_post(self, verify_token):
         """Test the vote_handler's post method."""
         verify_token.return_value = {'email': 'user@example.com'}

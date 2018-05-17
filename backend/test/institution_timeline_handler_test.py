@@ -25,7 +25,7 @@ class InstitutionTimelineHandlerTest(TestBaseHandler):
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
 
-    @patch('utils.verify_token')
+    @patch('util.login_service.verify_token')
     def test_get(self, verify_token):
         """Test the institution_timeline_handler get method."""
         user = mocks.create_user()
@@ -87,7 +87,7 @@ class InstitutionTimelineHandlerTest(TestBaseHandler):
             "The maked post should be equal to the expected one"
         )
 
-    @patch('utils.verify_token')
+    @patch('util.login_service.verify_token')
     def test_get_with_deleted_post(self, verify_token):
         """Test the institution_timeline_handler get method with deleted post."""
         user = mocks.create_user()

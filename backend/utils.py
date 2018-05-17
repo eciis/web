@@ -9,9 +9,6 @@ from app_version import APP_VERSION
 
 from google.appengine.ext import ndb
 
-from models import User
-from models import Institution
-
 from oauth2client import client
 from oauth2client.crypt import AppIdentityError
 
@@ -98,83 +95,6 @@ def verify_token(request):
             logging.exception(str(error))
             return None
 
-def setup_current_institution(user, request):
-    """
-    Current institution is used by the backend to specify which
-    institution the user is logged. The HTTP header Institution-Authorization,
-    if exist, comes with the institution key that provides the direct
-    access to the resource. Once the header exists, it creates a user
-    property 'current_institution' with a ndb.Key to be used during 
-    the transaction.
-    """
-    try:
-        institution_header = request.headers['Institution-Authorization']
-        institution_key = ndb.Key(urlsafe=institution_header)
-        user.current_institution = institution_key
-    except KeyError as error:
-        user.current_institution = None
-
-
-def login_required(method):
-    """Handle required login."""
-    def login(self, *args):
-        credential = verify_token(self.request)
-        if not credential:
-            self.response.write(json.dumps({
-                'msg': 'Auth needed',
-                'login_url': 'http://%s/#/signin' % self.request.host
-            }))
-            self.response.set_status(401)
-            return
-
-        user_name = credential.get('name', 'Unknown')
-        user_email = credential.get('email', 'Unknown')
-        user = User.get_by_email(user_email)
-
-        if user is None:
-            user = User()
-            user.name = user_name
-            user.email = [user_email]
-
-        setup_current_institution(user, self.request)
-
-        method(self, user, *args)
-    return login
-
-def follow_inst(user,inst):
-    user.follow(inst.key)
-    inst.follow(user.key)
-
-def create_user(name, email):
-    """Create user."""
-    user = User()
-    user.email = email
-    user.name = name
-    user.photo_url = "app/images/avatar.png"
-    health_ministry = get_health_ministry()
-    deciis = get_deciis()
-    """"TODO: All users have to follow MS and DECIIS
-        Think of a better way to do it
-        @author: Mayza Nunes 24/01/2018
-    """
-    if health_ministry is not None:
-        follow_inst(user, health_ministry)
-    if deciis is not None:
-        follow_inst(user, deciis)
-    user.put()
-    
-    return user
-
-def get_health_ministry():
-    """Get health ministry institution."""
-    query = Institution.query(Institution.name == "Ministério da Saúde", Institution.acronym == "MS")
-    return query.get()
-
-def get_deciis():
-    """Get health ministry institution."""
-    query = Institution.query(Institution.trusted == True)
-    return query.get()
-
 def json_response(method):
     """Add content type header to the response."""
     def response(self, *args):
@@ -236,20 +156,3 @@ def to_int(value, exception, message_exception):
         raise exception(message_exception)
 
     return value
-
-def make_user(user, request):
-    user_json = Utils.toJson(user, host=request.host)
-    user_json['logout'] = 'http://%s/logout?redirect=%s' %\
-        (request.host, request.path)
-    user_json['institutions'] = []
-    for institution in user.institutions:
-        user_json['institutions'].append(
-            Utils.toJson(institution.get())
-        )
-    user_json['follows'] = [institution_key.get().make(
-        ['name','acronym', 'photo_url', 'key', 'parent_institution'])
-        for institution_key in user.follows
-        if institution_key.get().state != 'inactive']
-    user_json['institution_profiles'] = [profile.make()
-        for profile in user.institution_profiles]
-    return user_json

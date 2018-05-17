@@ -66,7 +66,7 @@ class PostCollectionHandlerTest(TestBaseHandler):
 
 
     @patch('handlers.post_collection_handler.enqueue_task')
-    @patch('utils.verify_token', return_value={'email': 'user@email.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@email.com'})
     def test_post(self, verify_token, enqueue_task):
         """Test the post_collection_handler's post method."""
 
@@ -149,7 +149,7 @@ class PostCollectionHandlerTest(TestBaseHandler):
         )
 
     @patch('handlers.post_collection_handler.enqueue_task')
-    @patch('utils.verify_token', return_value={'email': 'user@email.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@email.com'})
     def test_post_sharing(self, verify_token, enqueue_task):
         """Test the post_collection_handler's post method."""
         # Make the request and assign the answer to post
@@ -221,7 +221,7 @@ class PostCollectionHandlerTest(TestBaseHandler):
 
     @patch('handlers.post_collection_handler.enqueue_task')
     @patch('handlers.post_collection_handler.send_message_notification')
-    @patch('utils.verify_token', return_value={'email': 'user@email.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@email.com'})
     def test_post_shared_event(self, verify_token, send_message_notification, enqueue_task):
         """Test the post_collection_handler's post method in case that post is shared_event."""
         # create an event
@@ -311,7 +311,7 @@ class PostCollectionHandlerTest(TestBaseHandler):
     
     @patch('handlers.post_collection_handler.enqueue_task')
     @patch('handlers.post_collection_handler.send_message_notification')
-    @patch('utils.verify_token', return_value={'email': 'user@email.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@email.com'})
     def test_post_survey(self, verify_token, send_message_notification, enqueue_task):
         """Test post method."""
         # Survey post

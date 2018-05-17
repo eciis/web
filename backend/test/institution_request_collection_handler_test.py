@@ -25,7 +25,7 @@ class InstitutionRequestCollectionHandlerTest(TestBaseHandler):
         cls.testapp = cls.webtest.TestApp(app)
 
     @patch.object(Invite, 'send_invite')
-    @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_post(self, verify_token, send_invite):
         """Test handler post."""
         # Initialize objects

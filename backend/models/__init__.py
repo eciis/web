@@ -1,7 +1,7 @@
 """Initialize models module."""
-from .user import *
 from .address import *
 from .institution import *
+from .user import *
 from .event import *
 from .invite import *
 from .invite_institution import *

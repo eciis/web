@@ -36,7 +36,7 @@ class LikePostHandlerTest(TestBaseHandler):
         cls.post = mocks.create_post(cls.user.key, cls.institution.key)
 
 
-    @patch('utils.verify_token', return_value={'email': 'otheruser@example.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'otheruser@example.com'})
     def test_get(self, verify_token):
         """Test method get of LikeHandler."""
         uri = '/api/posts/%s/likes' % self.post.key.urlsafe()
@@ -71,7 +71,7 @@ class LikePostHandlerTest(TestBaseHandler):
         self.assertIn(self.other_user.name, authors)
 
     @patch('handlers.like_handler.enqueue_task')
-    @patch('utils.verify_token', return_value={'email': 'otheruser@example.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'otheruser@example.com'})
     def test_post(self, verify_token, enqueue_task):
         """Test the like_handler's post method when a post is liked."""
         uri = '/api/posts/%s/likes' % self.post.key.urlsafe()
@@ -125,7 +125,7 @@ class LikePostHandlerTest(TestBaseHandler):
                          "The number of likes expected was 2, but was %d"
                          % self.post.get_number_of_likes())
 
-    @patch('utils.verify_token', return_value={'email': 'otheruser@example.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'otheruser@example.com'})
     def test_post_deleted_post(self, verify_token):
         institution = mocks.create_institution()
         user = mocks.create_user()
@@ -146,7 +146,7 @@ class LikePostHandlerTest(TestBaseHandler):
             'Expected message of exception must be equal to Error! This post has been deleted'
         )
 
-    @patch('utils.verify_token', return_value={'email': 'otheruser@example.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'otheruser@example.com'})
     def test_delete(self, verify_token):
         """Test the like_post_handler's delete method."""
         uri = '/api/posts/%s/likes' % self.post.key.urlsafe()

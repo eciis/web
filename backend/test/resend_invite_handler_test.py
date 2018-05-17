@@ -32,7 +32,7 @@ class ResendInviteHandlerTest(TestBaseHandler):
 
     @mock.patch('models.invite_user.InviteUser.send_email')
     @mock.patch('models.invite_user.InviteUser.send_notification')
-    @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@gmail.com'})
     def test_post(self, verify_token, mock_method, second_mock_method):
         """Test post."""
         user = mocks.create_user("user@gmail.com")

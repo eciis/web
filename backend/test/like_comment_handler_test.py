@@ -41,7 +41,7 @@ class LikeCommentHandlerTest(TestBaseHandler):
         # creating uri
         cls.uri = '/api/posts/%s/comments/%s/likes' % (cls.post.key.urlsafe(), cls.comment.id)
 
-    @patch('utils.verify_token', return_value={'email': 'otheruser@example.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'otheruser@example.com'})
     def test_get(self, verify_token):
         """Test the like_comment_handler's get method."""
         # like the comment
@@ -60,7 +60,7 @@ class LikeCommentHandlerTest(TestBaseHandler):
         )
 
     @patch('handlers.like_handler.send_message_notification')
-    @patch('utils.verify_token', return_value={'email': 'user@example.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@example.com'})
     def test_post(self, verify_token, send_message_notification):
         """Test post method when the user likes a comment."""
         # assert the comment has no likes
@@ -120,7 +120,7 @@ class LikeCommentHandlerTest(TestBaseHandler):
             "The number of likes should be 1, but it was %d" % len(comment['likes'])
         )
         
-    @patch('utils.verify_token', return_value={'email': 'otheruser@example.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'otheruser@example.com'})
     def test_delete(self, verify_token):
         """Test the like_comment_handler's delete method."""
         # like the comment

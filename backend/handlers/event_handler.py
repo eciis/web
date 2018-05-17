@@ -5,7 +5,7 @@ from google.appengine.ext import ndb
 
 from models import Event
 from utils import Utils
-from utils import login_required
+from util.login_service import login_required
 from utils import NotAuthorizedException
 from utils import json_response
 from util.json_patch import JsonPatch

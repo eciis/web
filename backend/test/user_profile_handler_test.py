@@ -29,7 +29,7 @@ class UserProfileHandlerTest(TestBaseHandler):
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
-    @patch('utils.verify_token', return_value={'email': 'raoni.smaneoto@ccc.ufcg.edu.br'})
+    @patch('util.login_service.verify_token', return_value={'email': 'raoni.smaneoto@ccc.ufcg.edu.br'})
     def test_get(self, verify_token):
         """Test the get method."""
         result = self.testapp.get(

@@ -22,7 +22,7 @@ class SubscribePostHandlerTest(TestBaseHandler):
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
-    @patch('utils.verify_token', return_value={'email': 'test@example.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'test@example.com'})
     def test_post(self, verify_token):
         """Test the SubscribePostHandler's post method."""
         # Check the initial conditions
@@ -38,7 +38,7 @@ class SubscribePostHandlerTest(TestBaseHandler):
         # Check the final conditions
         self.assertTrue(self.user.key in self.post.subscribers)
 
-    @patch('utils.verify_token', return_value={'email': 'test@example.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'test@example.com'})
     def test_delete(self, verify_token):
         """Test the SubscribePostHandler's delete method."""
         # Check the initial conditions
@@ -57,7 +57,7 @@ class SubscribePostHandlerTest(TestBaseHandler):
         # Check the final conditions
         self.assertFalse(self.user.key in self.post.subscribers)
 
-    @patch('utils.verify_token', return_value={'email': 'second@example.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'second@example.com'})
     def test_delete_with_author(self, verify_token):
         """Test the SubscribePostHandler's delete method with the author."""
         # Check the initial conditions

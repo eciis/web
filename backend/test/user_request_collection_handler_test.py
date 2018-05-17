@@ -49,7 +49,7 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
         cls.headers = {"Institution-Authorization": cls.other_inst.key.urlsafe()}
 
     @patch.object(Invite, "send_invite")
-    @patch('utils.verify_token', return_value={'email': 'other_user@test.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'other_user@test.com'})
     def test_post(self, verify_token, send_invite):
         """Test method post of UserRequestCollectionHandlerTest."""
         data = {
@@ -93,7 +93,7 @@ class UserRequestCollectionHandlerTest(TestBaseHandler):
         send_invite.assert_called_with('localhost:80', self.other_inst.key)
 
     @patch.object(Invite, "send_invite")
-    @patch('utils.verify_token', return_value={'email': 'other_user@test.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'other_user@test.com'})
     def test_post_invalid_request_type(self, verify_token, send_invite):
         """Test if an exception is thrown by passing an invalid request."""
         data = {

@@ -27,7 +27,7 @@ class UserTimelineHandlerTest(TestBaseHandler):
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
-    @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@gmail.com'})
     def test_get(self, verify_token):
         """Test the user_timeline_handler get method."""
         # Added a post in datastore

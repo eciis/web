@@ -57,7 +57,7 @@ class PostCommentHandlerTest(TestBaseHandler):
         }
 
     @patch('handlers.post_comment_handler.enqueue_task')
-    @patch('utils.verify_token', return_value={'email': OTHER_USER_EMAIL})
+    @patch('util.login_service.verify_token', return_value={'email': OTHER_USER_EMAIL})
     def test_post(self, verify_token, enqueue_task):
         """Other_user's comment on user's post."""
         # Verify size of list
@@ -116,7 +116,7 @@ class PostCommentHandlerTest(TestBaseHandler):
 
 
     @patch('handlers.post_comment_handler.enqueue_task')
-    @patch('utils.verify_token', return_value={'email': USER_EMAIL})
+    @patch('util.login_service.verify_token', return_value={'email': USER_EMAIL})
     def test_post_ownerpost(self, verify_token, enqueue_task):
         """Owner user comments on its own Post."""
         # Verify size of list
@@ -140,7 +140,7 @@ class PostCommentHandlerTest(TestBaseHandler):
         # assert the notification was not sent
         enqueue_task.assert_not_called()
 
-    @patch('utils.verify_token', return_value={'email': OTHER_USER_EMAIL})
+    @patch('util.login_service.verify_token', return_value={'email': OTHER_USER_EMAIL})
     def test_delete(self, verify_token):
         """User can delete your comment in Post."""
         # Added comment
@@ -166,7 +166,7 @@ class PostCommentHandlerTest(TestBaseHandler):
         self.assertEquals(len(self.user_post.comments), 0,
                           "Expected size of comment's list should be zero")
 
-    @patch('utils.verify_token', return_value={'email': OTHER_USER_EMAIL})
+    @patch('util.login_service.verify_token', return_value={'email': OTHER_USER_EMAIL})
     def test_delete_in_deleted_post(self, verify_token):
         """User can not delete comment in deleted Post."""
         # Added comment
@@ -197,7 +197,7 @@ class PostCommentHandlerTest(TestBaseHandler):
         self.assertEquals(len(self.user_post.comments), 1,
                           "Expected size of comment's list should be one")
 
-    @patch('utils.verify_token', return_value={'email': USER_EMAIL})
+    @patch('util.login_service.verify_token', return_value={'email': USER_EMAIL})
     def test_delete_simpleuser(self, verify_token):
         """An simple user can't delete comments by other users in Post."""
         # Added comment of user
@@ -228,7 +228,7 @@ class PostCommentHandlerTest(TestBaseHandler):
         self.assertEquals(len(self.user_post.comments), 1,
                           "Expected size of comment's list should be one")
 
-    @patch('utils.verify_token', return_value={'email': OTHER_USER_EMAIL})
+    @patch('util.login_service.verify_token', return_value={'email': OTHER_USER_EMAIL})
     def test_delete_ownerpost(self, verify_token):
         """Owner user can delete comment from other user in Post."""
         # Added comment user other_user
@@ -255,7 +255,7 @@ class PostCommentHandlerTest(TestBaseHandler):
         self.assertEquals(len(self.user_post.comments), 0,
                           "Expected size of comment's list should be zero")
 
-    @patch('utils.verify_token', return_value={'email': USER_EMAIL})
+    @patch('util.login_service.verify_token', return_value={'email': USER_EMAIL})
     def test_check_permission(self, verify_token):
         """Test method check_permission in post_comment_handler."""
         # Added comment

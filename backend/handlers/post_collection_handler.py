@@ -8,7 +8,7 @@ from util.login_service import login_required
 from utils import json_response
 
 from . import BaseHandler
-from models.post import Post
+from models import Post
 from models.factory_post import PostFactory
 from service_messages import send_message_notification
 from service_entities import enqueue_task

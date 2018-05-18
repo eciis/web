@@ -1,5 +1,5 @@
 """Factory of posts."""
-from models.post import Post
+from models import Post
 from models.survey_post import SurveyPost
 
 

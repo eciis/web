@@ -7,7 +7,7 @@ from google.appengine.api import mail
 import logging
 from google.appengine.ext import ndb
 from models import Institution
-from models.post import Post
+from models import Post
 from models import InviteUser
 from models import InviteUserAdm
 from utils import json_response

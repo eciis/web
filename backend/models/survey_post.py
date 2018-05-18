@@ -1,5 +1,5 @@
 """Survey Post Model."""
-from models.post import Post
+from models import Post
 from google.appengine.ext import ndb
 from utils import Utils
 import datetime

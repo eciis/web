@@ -2,10 +2,10 @@
 """Post handler test."""
 
 from test_base_handler import TestBaseHandler
-from models.post import Post
+from models import Post
 from models import User
 from models import Institution
-from models.post import Comment
+from models import Comment
 from handlers.post_handler import PostHandler
 import mocks
 from mock import patch

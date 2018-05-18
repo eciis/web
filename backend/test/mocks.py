@@ -6,8 +6,8 @@ import sys
 from models import User
 from models import Institution
 from models import Address
-from models.post import Post
-from models.post import Comment
+from models import Post
+from models import Comment
 from models import Event
 from models import InviteFactory
 from permissions import DEFAULT_ADMIN_PERMISSIONS

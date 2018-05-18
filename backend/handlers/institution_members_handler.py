@@ -10,6 +10,7 @@ from utils import json_response
 from util.strings_pt_br import get_subject
 from service_messages import send_message_notification
 from send_email_hierarchy.remove_member_email_sender import RemoveMemberEmailSender
+from send_email_hierarchy.inactive_member_email_sender import InactiveUserEmailSender
 
 from . import BaseHandler
 
@@ -55,24 +56,38 @@ class InstitutionMembersHandler(BaseHandler):
                 message=notification_message
             )
 
-        subject = get_subject('LINK_REMOVAL')
-        message = """Lamentamos informar que seu vínculo com a instituição %s
-        foi removido pelo administrador %s
-        """ % (institution.name, user.name)
+            subject = get_subject('LINK_REMOVAL')
+            message = """Lamentamos informar que seu vínculo com a instituição %s
+            foi removido pelo administrador %s
+            """ % (institution.name, user.name)
 
-        justification = self.request.get('justification')
+            justification = self.request.get('justification')
 
-        if justification:
-            message = message + """pelo seguinte motivo:
-            '%s'
-            """ % (justification)
+            if justification:
+                message = message + """pelo seguinte motivo:
+                '%s'
+                """ % (justification)
 
-        body = message + """
-        Equipe da Plataforma CIS
-        """
-        email_sender = RemoveMemberEmailSender(**{
-            'receiver': member.email,
-            'subject': subject,
-            'body': body
-        })
-        email_sender.send_email()
+            body = message + """
+            Equipe da Plataforma CIS
+            """
+            email_sender = RemoveMemberEmailSender(**{
+                'receiver': member.email,
+                'subject': subject,
+                'body': body
+            })
+            email_sender.send_email()
+
+        else:
+            admin = institution.admin.get()
+            admin_name = admin.name
+            email_sender = InactiveUserEmailSender(**{
+                'subject': get_subject('REMOVED_USER'),
+                'receiver': member.email[0],
+                'user_name': member.name,
+                'user_email': member.email,
+                'institution_admin': admin_name,
+                'institution_name': institution.name,
+                'institution_email': institution.email,
+            })
+            email_sender.send_email()

@@ -10,7 +10,7 @@ from custom_exceptions.entityException import EntityException
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from . import BaseHandler
 from models import Institution
-from models.factory_invites import InviteFactory
+from models import InviteFactory
 from models import RequestInstitutionChildren
 
 __all__ = ['InstitutionChildrenRequestCollectionHandler']

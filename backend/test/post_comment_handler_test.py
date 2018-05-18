@@ -10,7 +10,7 @@ from handlers.post_comment_handler import PostCommentHandler
 from handlers.post_comment_handler import check_permission
 from models import User
 from models import Institution
-from models.post import Post
+from models import Post
 
 from mock import patch
 

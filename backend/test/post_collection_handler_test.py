@@ -7,7 +7,7 @@ import mocks
 from test_base_handler import TestBaseHandler
 from models import User
 from models import Institution
-from models.post import Post
+from models import Post
 from models import Event
 from handlers.post_collection_handler import PostCollectionHandler
 from google.appengine.ext import ndb

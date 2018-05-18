@@ -9,6 +9,8 @@ from custom_exceptions.fieldException import FieldException
 from send_email_hierarchy.accepted_institution_email_sender import AcceptedInstitutionEmailSender
 
 
+__all__ = ['RequestInstitution']
+
 class RequestInstitution(Request):
     """Request Institution Model."""
 

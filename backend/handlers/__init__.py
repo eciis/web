@@ -39,43 +39,22 @@ from .user_request_collection_handler import *
 from .user_timeline_handler import *
 from .vote_handler import *
 
-__all__ = []
+handlers = [
+    base_handler, erro_handler, event_collection_handler, event_handler,
+    get_key_handler, institution_children_request_collection_handler,
+    institution_children_request_handler, institution_collection_handler,
+    institution_events_handler, institution_followers_handler,
+    institution_handler, institution_hierarchy_handler,
+    institution_members_handler, institution_parent_request_collection_handler,
+    institution_parent_request_handler, institution_request_collection_handler,
+    institution_request_handler, institution_timeline_handler,
+    invite_collection_handler, invite_handler, invite_institution_handler,
+    invite_user_adm_handler, like_handler, login_logout_handler,
+    post_collection_handler, post_comment_handler, post_handler,
+    reply_comment_handler, request_handler, resend_invite_handler,
+    search_handler, subscribe_post_handler, user_handler,
+    user_institutions_handler, user_profile_handler,
+    user_request_collection_handler, user_timeline_handler, vote_handler
+]
 
-__all__ += base_handler.__all__
-__all__ += erro_handler.__all__
-__all__ += event_collection_handler.__all__
-__all__ += event_handler.__all__
-__all__ += get_key_handler.__all__
-__all__ += institution_children_request_collection_handler.__all__
-__all__ += institution_children_request_handler.__all__
-__all__ += institution_collection_handler.__all__
-__all__ += institution_events_handler.__all__
-__all__ += institution_followers_handler.__all__
-__all__ += institution_handler.__all__
-__all__ += institution_hierarchy_handler.__all__
-__all__ += institution_members_handler.__all__
-__all__ += institution_parent_request_collection_handler.__all__
-__all__ += institution_parent_request_handler.__all__
-__all__ += institution_request_collection_handler.__all__
-__all__ += institution_request_handler.__all__
-__all__ += institution_timeline_handler.__all__
-__all__ += invite_collection_handler.__all__
-__all__ += invite_handler.__all__
-__all__ += invite_institution_handler.__all__
-__all__ += invite_user_adm_handler.__all__
-__all__ += like_handler.__all__
-__all__ += login_logout_handler.__all__
-__all__ += post_collection_handler.__all__
-__all__ += post_comment_handler.__all__
-__all__ += post_handler.__all__
-__all__ += reply_comment_handler.__all__
-__all__ += request_handler.__all__
-__all__ += resend_invite_handler.__all__
-__all__ += search_handler.__all__
-__all__ += subscribe_post_handler.__all__
-__all__ += user_handler.__all__
-__all__ += user_institutions_handler.__all__
-__all__ += user_profile_handler.__all__
-__all__ += user_request_collection_handler.__all__
-__all__ += user_timeline_handler.__all__
-__all__ += vote_handler.__all__
+__all__ = [prop for handler in handlers for prop in handler.__all__]

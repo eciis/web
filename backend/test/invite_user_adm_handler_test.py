@@ -7,8 +7,8 @@ import mocks
 
 from test_base_handler import TestBaseHandler
 from google.appengine.ext import ndb
-from models.invite_user_adm import InviteUserAdm
-from handlers.invite_user_adm_handler import InviteUserAdmHandler
+from models import InviteUserAdm
+from handlers import InviteUserAdmHandler
 from worker import TransferAdminPermissionsHandler
 import permissions
 from test_base_handler import has_permissions

@@ -8,7 +8,7 @@ from utils import Utils
 from models import RequestUser
 from custom_exceptions.entityException import EntityException
 from . import BaseHandler
-from models.factory_invites import InviteFactory
+from models import InviteFactory
 
 __all__ = ['UserRequestCollectionHandler']
 

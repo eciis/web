@@ -12,7 +12,7 @@ from utils import to_int
 from custom_exceptions.queryException import QueryException
 
 from . import BaseHandler
-from models.post import Post
+from models import Post
 
 __all__ = ['InstitutionTimelineHandler']
 

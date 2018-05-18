@@ -7,9 +7,9 @@ from google.appengine.api import mail
 import logging
 from google.appengine.ext import ndb
 from models import Institution
-from models.post import Post
+from models import Post
 from models import InviteUser
-from models.invite_user_adm import InviteUserAdm
+from models import InviteUserAdm
 from utils import json_response
 from util.strings_pt_br import get_subject
 from service_messages import send_message_notification

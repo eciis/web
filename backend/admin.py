@@ -13,8 +13,8 @@ from models import User
 from models import InstitutionProfile
 from models import Institution
 from models import Address
-from models.post import Post
-from models.post import Comment
+from models import Post
+from models import Comment
 from models import Invite
 from models import Event
 from utils import NotAuthorizedException

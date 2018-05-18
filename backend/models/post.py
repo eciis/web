@@ -11,6 +11,8 @@ from service_messages import create_message
 
 import datetime
 
+__all__ = ['Comment','Like','Post']
+
 
 def getCommentsUri(post, host):
     """Create uri to access post comments."""

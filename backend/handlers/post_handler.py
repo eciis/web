@@ -8,9 +8,9 @@ from util.login_service import login_required
 from utils import NotAuthorizedException
 from utils import json_response
 from util.json_patch import JsonPatch
-from models.post import Post
-from models.survey_post import SurveyPost
-from models.post import Like
+from models import Post
+from models import SurveyPost
+from models import Like
 from service_messages import send_message_notification
 
 from . import BaseHandler

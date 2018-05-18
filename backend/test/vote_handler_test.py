@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Like Post handler test."""
 from test_base_handler import TestBaseHandler
-from models.survey_post import SurveyPost
+from models import SurveyPost
 from models import User
 from models import Institution
 from handlers.vote_handler import VoteHandler

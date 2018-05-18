@@ -1,14 +1,15 @@
 """Factory of invites."""
 from . import InviteUser
-from models.invite_user_adm import InviteUserAdm
+from . import InviteUserAdm
 from . import InviteInstitution
 from . import InviteInstitutionParent
 from . import InviteInstitutionChildren
 from . import RequestInstitutionParent
 from . import RequestInstitutionChildren
-from models.request_institution import RequestInstitution
+from . import RequestInstitution
 from . import RequestUser
 
+__all__ = ['InviteFactory']
 
 class InviteFactory:
     """Class of create invites."""

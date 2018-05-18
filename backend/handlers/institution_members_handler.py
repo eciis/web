@@ -56,23 +56,17 @@ class InstitutionMembersHandler(BaseHandler):
             )
 
         subject = get_subject('LINK_REMOVAL')
-        message = """Lamentamos informar que seu vínculo com a instituição %s
-        foi removido pelo administrador %s
-        """ % (institution.name, user.name)
-
         justification = self.request.get('justification')
 
-        if justification:
-            message = message + """pelo seguinte motivo:
-            '%s'
-            """ % (justification)
-
-        body = message + """
-        Equipe da Plataforma CIS
-        """
         email_sender = RemoveMemberEmailSender(**{
             'receiver': member.email,
             'subject': subject,
-            'body': body
+            'user_name': member.name,
+            'user_email': member.email[0],
+            'justification': justification,
+            'institution_name': institution.name,
+            'institution_admin': institution.admin.get().name,
+            'institution_email': institution.email,
+            'institution_key': institution.key.urlsafe()
         })
         email_sender.send_email()

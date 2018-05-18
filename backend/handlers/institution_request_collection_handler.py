@@ -9,7 +9,7 @@ from custom_exceptions.entityException import EntityException
 from . import BaseHandler
 from models import Institution
 from models import Address
-from models.factory_invites import InviteFactory
+from models import InviteFactory
 from models import RequestInstitution
 
 __all__ = ['InstitutionRequestCollectionHandler']

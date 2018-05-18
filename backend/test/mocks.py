@@ -9,7 +9,7 @@ from models import Address
 from models.post import Post
 from models.post import Comment
 from models import Event
-from models.factory_invites import InviteFactory
+from models import InviteFactory
 from permissions import DEFAULT_ADMIN_PERMISSIONS
 from models import RequestInstitutionParent
 

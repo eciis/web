@@ -9,6 +9,7 @@ from . import RequestInstitutionChildren
 from . import RequestInstitution
 from . import RequestUser
 
+__all__ = ['InviteFactory']
 
 class InviteFactory:
     """Class of create invites."""

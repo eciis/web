@@ -8,7 +8,7 @@ from utils import json_response
 from utils import Utils
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from . import BaseHandler
-from models.factory_invites import InviteFactory
+from models import InviteFactory
 
 __all__ = ['InviteInstitutionHandler']
 

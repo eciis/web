@@ -20,7 +20,8 @@ class InactiveUserEmailSender(EmailSender):
         self.user_email = self.crop_name(kwargs['user_email'], MAXIMUM_USER_NAME)
         self.institution_admin = self.crop_name(kwargs['institution_admin'], MAXIMUM_USER_NAME)
         self.institution_name = self.crop_name(kwargs['institution_name'], MAXIMUM_INSTITUTION_NAME)
-        self.institution_email = self.crop_name(kwargs['institution_email'], MAXIMUM_INSTITUTION_NAME)
+        self.institution_email = self.crop_name(kwargs['institution_email'], MAXIMUM_INSTITUTION_NAME),
+        self.justification = kwargs['justification']
 
     def send_email(self):
         """It enqueue a sending email task with the json that will fill the entity's html.
@@ -33,5 +34,6 @@ class InactiveUserEmailSender(EmailSender):
             'institution_admin': self.institution_admin,
             'institution_name': self.institution_name,
             'institution_email': self.institution_email,
+            'justification': self.justification
         }
         super(InactiveUserEmailSender, self).send_email(email_json)

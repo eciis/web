@@ -47,6 +47,8 @@ class InstitutionMembersHandler(BaseHandler):
 
         institution.remove_member(member)
 
+        justification = self.request.get('justification')
+
         if member.state != 'inactive':
             notification_message = institution.create_notification_message(user.key, user.current_institution)
             send_message_notification(
@@ -60,8 +62,6 @@ class InstitutionMembersHandler(BaseHandler):
             message = """Lamentamos informar que seu vínculo com a instituição %s
             foi removido pelo administrador %s
             """ % (institution.name, user.name)
-
-            justification = self.request.get('justification')
 
             if justification:
                 message = message + """pelo seguinte motivo:
@@ -89,5 +89,6 @@ class InstitutionMembersHandler(BaseHandler):
                 'institution_admin': admin_name,
                 'institution_name': institution.name,
                 'institution_email': institution.email,
+                'justification': justification if justification else "Não informado."
             })
             email_sender.send_email()

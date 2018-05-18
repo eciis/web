@@ -100,7 +100,7 @@ class InstitutionMemberHandlerTest(TestBaseHandler):
         send_email.assert_called()
 
     @patch('handlers.institution_members_handler.send_message_notification')
-    @patch('handlers.institution_members_handler.RemoveMemberEmailSender.send_email')
+    @patch('handlers.institution_members_handler.InactiveUserEmailSender.send_email')
     @patch('util.login_service.verify_token', return_value={'email': 'user@gmail.com'})
     def test_delete_with_email(self, verify_token, send_email, send_message_notification):
         """Test delete a member that belongs to only one institution."""

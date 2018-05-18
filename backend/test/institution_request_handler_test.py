@@ -6,8 +6,8 @@ from test_base_handler import TestBaseHandler
 from models import User
 from models import Institution
 from models import Address
-from models.request_institution import RequestInstitution
-from handlers.institution_request_handler import InstitutionRequestHandler
+from models import RequestInstitution
+from handlers import InstitutionRequestHandler
 import permissions
 import mocks
 from mock import patch

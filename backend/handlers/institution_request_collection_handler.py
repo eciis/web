@@ -10,7 +10,7 @@ from . import BaseHandler
 from models import Institution
 from models import Address
 from models.factory_invites import InviteFactory
-from models.request_institution import RequestInstitution
+from models import RequestInstitution
 
 __all__ = ['InstitutionRequestCollectionHandler']
 

@@ -55,11 +55,11 @@ class InstitutionMembersHandler(BaseHandler):
                 message=notification_message
             )
 
-        subject = get_subject('LINK_REMOVAL')
         justification = self.request.get('justification')
+        subject = get_subject('LINK_REMOVAL') if member.state != 'inactive' else get_subject('INACTIVE_USER')
 
         email_sender = RemoveMemberEmailSender(**{
-            'receiver': member.email,
+            'receiver': member.email[0],
             'subject': subject,
             'user_name': member.name,
             'user_email': member.email[0],
@@ -67,6 +67,7 @@ class InstitutionMembersHandler(BaseHandler):
             'institution_name': institution.name,
             'institution_admin': institution.admin.get().name,
             'institution_email': institution.email,
-            'institution_key': institution.key.urlsafe()
+            'institution_key': institution.key.urlsafe(),
+            'html': 'remove_member_email.html' if member.state != 'inactive' else 'inactive_user_email.html'
         })
         email_sender.send_email()

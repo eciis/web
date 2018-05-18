@@ -14,7 +14,7 @@ class RemoveMemberEmailSender(EmailSender):
         crop_institution_name is called to make sure that the names don't exceed the maximum allowed size.
         """
         super(RemoveMemberEmailSender, self).__init__(**kwargs)
-        self.html = 'remove_member_email.html'
+        self.html = kwargs['html']
         self.user_name = self.crop_name(kwargs['user_name'], MAXIMUM_USER_NAME)
         self.user_email = self.crop_name(kwargs['user_email'], MAXIMUM_USER_NAME)
         self.justification = kwargs['justification'] if 'justification' in kwargs else ''

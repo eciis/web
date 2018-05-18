@@ -8,7 +8,7 @@
 
     <title></title>
 </head>
-<body style="margin:0; padding:0;">
+<body style="margin:0; padding:0; height: 910px;">
     <table width="100%" border="0" cellpadding="0" cellspacing="0" align="center">
         <tr align="center">
             <td align="center">
@@ -26,20 +26,28 @@
                 <table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0" align="center">
                     <tr>
                         <td>
-                            <div style="height: 490px;">
-                                <div style="background-color: #009688; height: 65%;" align="center">
-                                    <div style="height: 25%; background-color: #004D40;">
-                                        <div style="width: 275px; height: 460px; margin-top: 10px; border: 1px solid #E1E1E1;  background: #fff;
-                                        border-radius: 5px; display: inline-block; position: relative;" align="center">
+                            <div>
+                                <div style="background-color: #009688; height: 300px;" align="center">
+                                    <div style="height: 100px; background-color: #004D40;">
+                                        <div style="width: 275px; margin-top: 10px; border: 1px solid #E1E1E1;  background: #fff;
+                                        border-radius: 5px; display: inline-block;" align="center">
                                             <div style="height: 40%; background-color: #EEEEEE; border-top-left-radius: 10px; border-top-right-radius: 10px;">
-                                                <img src="https://firebasestorage.googleapis.com/v0/b/eciis-splab.appspot.com/o/admin_email%2FAsset%203logo.png?alt=media&token=a92e7619-130f-4dbf-8c65-2f91261074c3"
-                                                    style="width: 100px; margin-top: 50px;" />
+                                                <img src="https://firebasestorage.googleapis.com/v0/b/eciis-splab.appspot.com/o/admin_email%2FAsset%209logo.png?alt=media&token=c7d9da3a-c984-4747-bc47-29a307cee415"
+                                                    style="width: 100px; margin-top: 50px; margin-bottom: 20px;" />
                                             </div>
                                             <div style="background-color: white; font-size: 15px;">
                                                 <div style="color: #004D40; margin-top: 10px; padding: 0px 10px 0px 10px;">
                                                     <b>O ADMINISTRADOR DA INSTITUIÇÃO REMOVEU SEU VÍNCULO</b>
                                                 </div>
                                                 <hr width="80%;" />
+                                                <div style="margin-top: 10px; padding: 0px 10px 0px 10px; word-wrap:break-word">
+                                                    Justificativa do administrador: 
+                                                    <p>
+                                                        {%- if justification|length > 0 -%} {{justification}}{% endif %}
+                                                        {%- if justification|length == 0 -%} Não foi informada.{% endif %}
+                                                    </p>
+                                                    
+                                                </div>
                                                 <div style="background-color: #E0E0E0; width: 90%; height: 50px; margin-top: 15px; margin-bottom: 5px;">
                                                     <div>
                                                         <div>
@@ -49,13 +57,13 @@
                                                         </div>
                                                         <div align="left" valign="middle" style="margin-left: 50px; padding-top: 4px;">
                                                             <div style="height: 11px;">
-                                                                <b style="font-size: 12px; color: black;">{{institution_requested_name}}</b>
+                                                                <b style="font-size: 12px; color: black;">{{institution_name}}</b>
                                                             </div>
                                                             <div style="height: 10px; margin-top: 2px;">
-                                                                <span style="font-size: 9px; color: black;">{{institution_requested_email}}</span>
+                                                                <span style="font-size: 9px; color: black;">{{institution_email}}</span>
                                                             </div>
                                                             <div style="height: 10px; margin-top: 2px;">
-                                                                <span style="font-size: 9px; color: black;">Administrada por: {{institution_requested_admin}}</span>
+                                                                <span style="font-size: 9px; color: black;">Administrada por: {{institution_admin}}</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -75,14 +83,11 @@
                                                             <div style="height: 10px; ">
                                                                 <span style="font-size: 9px; color: black;">{{user_email}}</span>
                                                             </div>
-                                                            <div style="height: 10px; ">
-                                                                <span style="font-size: 9px; color: black;">Cargo: {{office}}</span>
-                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div style="margin-top: 15px;">
-                                                    <a href="http://frontend.plataformacis.org/" style="text-decoration: none;">
+                                                <div style="margin-top: 15px; margin-bottom: 15px;">
+                                                    <a href="http://frontend.plataformacis.org/institution/{{institution_requested_key}}" style="text-decoration: none;">
                                                         <button style="background-color: #009688; width: 90%; height: 25px; border: none;">                                                         
                                                             <span style="text-align: center; font-size: 8px; color: #FFFFFF">ACESSAR A PLATAFORMA</span>
                                                         </button>    
@@ -90,89 +95,55 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <table width="100%" border="0" cellpadding="0" cellspacing="0" align="center" style="margin-top: 15px;margin-bottom: 5px;">
+                                            <tr align="center">
+                                                <td>
+                                                    <img src="https://firebasestorage.googleapis.com/v0/b/eciis-splab.appspot.com/o/admin_email%2FLOGo.png?alt=media&token=fbb74261-4b24-42aa-b67f-be36577c48df"
+                                                        style="width: 50px; height: 50px;"/>
+                                                    <img src="https://firebasestorage.googleapis.com/v0/b/eciis-splab.appspot.com/o/admin_email%2FAsset_09LOGO.png?alt=media&token=a33e8fc2-95d4-4b74-ae95-c6f50514645e"
+                                                        style="width: 150px; padding-bottom: 10px;"> 
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <table width="100%" border="0" cellpadding="0" cellspacing="0" align="center">
+                                            <tr align="center">
+                                                <td style="width: 100%;">
+                                                    <div style="width: 100%; height: 160px; border-top: 1px solid #E0E0E0; border-bottom: 1px solid #E1E1E1; background: #fff;
+                                                    border-radius: 0px;
+                                                    display: inline-block;" align="center">
+                                                        <div style="height: 50%; background-color: white;">
+                                                            <div>
+                                                                <img src="https://firebasestorage.googleapis.com/v0/b/eciis-splab.appspot.com/o/admin_email%2Fufcg.png?alt=media&token=6edbaf3e-3c46-4e8a-8101-80d432d1ab6f"
+                                                                    style="width: 100px; margin-top: 5px;" />
+                                                                <img src="https://firebasestorage.googleapis.com/v0/b/eciis-splab.appspot.com/o/admin_email%2Fcis.png?alt=media&token=ccab7007-97b0-462b-a1d0-38b5da58a2ad"
+                                                                    style="width: 100px; margin-top: 5px; margin-left: 20px;" />
+                                                            </div>
+                                                            <div>
+                                                                <img src="https://firebasestorage.googleapis.com/v0/b/eciis-splab.appspot.com/o/admin_email%2Fopasoms.png?alt=media&token=a71b5c27-a317-417e-aa6e-3c744ed0e602"
+                                                                    style="width: 220px; margin-top: 5px;" />
+                                                            </div>
+                                                            <div>
+                                                                <img src="https://firebasestorage.googleapis.com/v0/b/eciis-splab.appspot.com/o/admin_email%2Fbr.png?alt=media&token=22012e23-60ad-4e63-969c-76e9000343f3"
+                                                                    style="width: 150px; margin-top: 10px;" />
+                                                            </div>
+                                                            <div style="margin-top: 23px; font-size: 10px;">
+                                                                <span align="center" style="word-break: break-all; color: black;">
+                                                                    Copyright © 2017 Plataforma CIS - Ministério da Saúde.
+                                                                </span>
+                                                            </div>
+                                                            <div>
+                                                                <span style="font-size: 10px; color: black;">
+                                                                    Todos os direitos reservados.
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div style="height: 50%; background-color: white;">
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
                                     </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-
-                <table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0" align="center" style="padding-bottom: 10px;">
-                    <tr align="center">
-                        <td>
-                            <div style="width: 275px; height: 440px; border: 1px solid #E1E1E1; background: #fff;
-                            border-radius: 5px; display: inline-block; position: relative;" align="center">
-                                <div style="color: #00796B; margin-top: 10px; font-size: 20px; padding: 10px 15px 0px 15px;">
-                                    <b>CONHEÇA A PLATAFORMA</b>
-                                </div>
-                                <div>
-                                    <img src="https://firebasestorage.googleapis.com/v0/b/eciis-splab.appspot.com/o/admin_email%2FLOGo.png?alt=media&token=fbb74261-4b24-42aa-b67f-be36577c48df"
-                                        style="width: 100px; margin-top: 10px;" />
-                                </div>
-                                <div style="height: 248px;">
-                                    <p style="font-size: 25px; text-align: center; color: #BDBDBD; width: 95%;">
-                                        <b>Plataforma Virtual do Complexo Indústrial da Saúde</b>
-                                    </p>
-                                    <p style="font-size: 12px; color: black; margin-left: 2px; margin-right: 2px; margin-top: -5px;">A Plataforma Virtual do Complexo Industrial da Saúde (CIS) é uma ferramenta criada
-                                        para favorecer a interlocução, articulação, discussão, proposições de medidas e ações
-                                        sobre o Complexo Industrial da Saúde (CIS).</p>
-                                    <div style="margin-top: 8px;">
-                                        <a href="https://plataformacis.org/" style="text-decoration: none;">
-                                            <button style="background-color: #009688; width: 90%; height: 25px; border: none; margin-bottom: 5px;">
-                                                    <span style="text-align: center; font-size: 8px; color: #FFFFFF">CONFIRA AS FUNCIONALIDADES</span>
-                                            </button>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-
-                <table width="100%" border="0" cellpadding="0" cellspacing="0" align="center" style="margin-bottom: 5px;">
-                    <tr align="center">
-                        <td>
-                            <img src="https://firebasestorage.googleapis.com/v0/b/eciis-splab.appspot.com/o/admin_email%2FLOGo.png?alt=media&token=fbb74261-4b24-42aa-b67f-be36577c48df"
-                                style="width: 50px; height: 50px;"/>
-                            <img src="https://firebasestorage.googleapis.com/v0/b/eciis-splab.appspot.com/o/admin_email%2FAsset_09LOGO.png?alt=media&token=a33e8fc2-95d4-4b74-ae95-c6f50514645e"
-                                style="width: 150px; padding-bottom: 10px;"> 
-                        </td>
-                    </tr>
-                </table>
-
-                <table width="100%" border="0" cellpadding="0" cellspacing="0" align="center">
-                    <tr align="center">
-                        <td style="width: 100%;">
-                            <div style="width: 100%; height: 160px; position: relative; border-top: 1px solid #E0E0E0; border-bottom: 1px solid #E1E1E1; background: #fff;
-                            border-radius: 0px;
-                            display: inline-block; position: relative;" align="center">
-                                <div style="height: 50%; background-color: white;">
-                                    <div>
-                                        <img src="https://firebasestorage.googleapis.com/v0/b/eciis-splab.appspot.com/o/admin_email%2Fufcg.png?alt=media&token=6edbaf3e-3c46-4e8a-8101-80d432d1ab6f"
-                                            style="width: 100px; margin-top: 5px;" />
-                                        <img src="https://firebasestorage.googleapis.com/v0/b/eciis-splab.appspot.com/o/admin_email%2Fcis.png?alt=media&token=ccab7007-97b0-462b-a1d0-38b5da58a2ad"
-                                            style="width: 100px; margin-top: 5px; margin-left: 20px;" />
-                                    </div>
-                                    <div>
-                                        <img src="https://firebasestorage.googleapis.com/v0/b/eciis-splab.appspot.com/o/admin_email%2Fopasoms.png?alt=media&token=a71b5c27-a317-417e-aa6e-3c744ed0e602"
-                                            style="width: 220px; margin-top: 5px;" />
-                                    </div>
-                                    <div>
-                                        <img src="https://firebasestorage.googleapis.com/v0/b/eciis-splab.appspot.com/o/admin_email%2Fbr.png?alt=media&token=22012e23-60ad-4e63-969c-76e9000343f3"
-                                            style="width: 150px; margin-top: 10px;" />
-                                    </div>
-                                    <div style="margin-top: 23px; font-size: 10px;">
-                                        <span align="center" style="word-break: break-all; color: black;">
-                                            Copyright © 2017 Plataforma CIS - Ministério da Saúde.
-                                        </span>
-                                    </div>
-                                    <div>
-                                        <span style="font-size: 10px; color: black;">
-                                            Todos os direitos reservados.
-                                        </span>
-                                    </div>
-                                </div>
-                                <div style="height: 50%; background-color: white;">
                                 </div>
                             </div>
                         </td>

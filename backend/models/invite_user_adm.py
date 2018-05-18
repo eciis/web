@@ -4,6 +4,7 @@ from invite_user import InviteUser
 from utils import Utils
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 
+__all__ = ['InviteUserAdm']
 
 class InviteUserAdm(InviteUser):
     """Model of Invite User Admin."""

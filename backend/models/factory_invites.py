@@ -1,6 +1,6 @@
 """Factory of invites."""
 from . import InviteUser
-from models.invite_user_adm import InviteUserAdm
+from . import InviteUserAdm
 from . import InviteInstitution
 from . import InviteInstitutionParent
 from . import InviteInstitutionChildren

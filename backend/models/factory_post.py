@@ -2,6 +2,7 @@
 from . import Post
 from . import SurveyPost
 
+__all__ = ['PostFactory']
 
 class PostFactory:
     """Class of create post."""

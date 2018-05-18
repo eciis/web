@@ -47,8 +47,6 @@ class InstitutionMembersHandler(BaseHandler):
 
         institution.remove_member(member)
 
-        justification = self.request.get('justification')
-
         if member.state != 'inactive':
             notification_message = institution.create_notification_message(user.key, user.current_institution)
             send_message_notification(
@@ -57,38 +55,21 @@ class InstitutionMembersHandler(BaseHandler):
                 entity_key=institution.key.urlsafe(),
                 message=notification_message
             )
+            get_subject('REMOVED_USER')
 
-            subject = get_subject('LINK_REMOVAL')
-            message = """Lamentamos informar que seu vínculo com a instituição %s
-            foi removido pelo administrador %s
-            """ % (institution.name, user.name)
+        justification = self.request.get('justification')
+        subject = get_subject('LINK_REMOVAL') if member.state != 'inactive' else get_subject('INACTIVE_USER')
 
-            if justification:
-                message = message + """pelo seguinte motivo:
-                '%s'
-                """ % (justification)
-
-            body = message + """
-            Equipe da Plataforma CIS
-            """
-            email_sender = RemoveMemberEmailSender(**{
-                'receiver': member.email,
-                'subject': subject,
-                'body': body
-            })
-            email_sender.send_email()
-
-        else:
-            admin = institution.admin.get()
-            admin_name = admin.name
-            email_sender = InactiveUserEmailSender(**{
-                'subject': get_subject('REMOVED_USER'),
-                'receiver': member.email[0],
-                'user_name': member.name,
-                'user_email': member.email[0],
-                'institution_admin': admin_name,
-                'institution_name': institution.name,
-                'institution_email': institution.email,
-                'justification': justification if justification else "Não informado."
-            })
-            email_sender.send_email()
+        email_sender = RemoveMemberEmailSender(**{
+            'receiver': member.email[0],
+            'subject': subject,
+            'user_name': member.name,
+            'user_email': member.email[0],
+            'justification': justification,
+            'institution_name': institution.name,
+            'institution_admin': institution.admin.get().name,
+            'institution_email': institution.email,
+            'institution_key': institution.key.urlsafe(),
+            'html': 'remove_member_email.html' if member.state != 'inactive' else 'inactive_user_email.html'
+        })
+        email_sender.send_email()

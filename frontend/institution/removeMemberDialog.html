@@ -18,7 +18,7 @@
       <form name="saveForm" style="margin: 2em 0 -1em 0">
         <b>Motivo da remoção <b style="font-size: 10px;">(Opcional)</b></b>
         <md-input-container class="md-block">
-          <textarea placeholder="Escreva aqui" name="message" 
+          <textarea placeholder="Escreva aqui" name="message" maxlength="140" md-maxlength="140"
             ng-model="removeMemberCtrl.justification" style="border-color: #004D40;">
           </textarea>
         </md-input-container>

@@ -10,7 +10,6 @@ from utils import json_response
 from util.strings_pt_br import get_subject
 from service_messages import send_message_notification
 from send_email_hierarchy.remove_member_email_sender import RemoveMemberEmailSender
-from send_email_hierarchy.inactive_member_email_sender import InactiveUserEmailSender
 
 from . import BaseHandler
 
@@ -55,7 +54,6 @@ class InstitutionMembersHandler(BaseHandler):
                 entity_key=institution.key.urlsafe(),
                 message=notification_message
             )
-            get_subject('REMOVED_USER')
 
         justification = self.request.get('justification')
         subject = get_subject('LINK_REMOVAL') if member.state != 'inactive' else get_subject('INACTIVE_USER')

@@ -4,6 +4,7 @@ from google.appengine.ext import ndb
 from utils import Utils
 import datetime
 
+__all__ = ['SurveyPost']
 
 class SurveyPost(Post):
     """Model of survey post."""

@@ -1,6 +1,6 @@
 """Factory of posts."""
-from models import Post
-from models.survey_post import SurveyPost
+from . import Post
+from . import SurveyPost
 
 
 class PostFactory:

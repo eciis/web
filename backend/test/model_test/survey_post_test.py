@@ -2,7 +2,7 @@
 
 from ..test_base import TestBase
 
-from models.survey_post import SurveyPost
+from models import SurveyPost
 from models import User
 from models import Institution
 import datetime

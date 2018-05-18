@@ -9,7 +9,7 @@ from utils import NotAuthorizedException
 from utils import json_response
 from util.json_patch import JsonPatch
 from models import Post
-from models.survey_post import SurveyPost
+from models import SurveyPost
 from models import Like
 from service_messages import send_message_notification
 

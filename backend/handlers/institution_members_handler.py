@@ -85,7 +85,7 @@ class InstitutionMembersHandler(BaseHandler):
                 'subject': get_subject('REMOVED_USER'),
                 'receiver': member.email[0],
                 'user_name': member.name,
-                'user_email': member.email,
+                'user_email': member.email[0],
                 'institution_admin': admin_name,
                 'institution_name': institution.name,
                 'institution_email': institution.email,

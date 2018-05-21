@@ -11,7 +11,8 @@ SUBJECT_TRANSLATION = {
     'REQUEST_LINK': 'Novo convite de vínculo na Plataforma Virtual CIS.',
     'REJECT_LINK_EMAIL': "Seu vínculo não foi aprovado.",
     'REMOVED_LINK_EMAIL': 'Vínculo removido na Plataforma Virtual CIS.',
-    'INACTIVE_USER': "Você foi removido da Plataforma Virtual CIS."
+    'INACTIVE_USER': "Você foi removido da Plataforma Virtual CIS.",
+    'TRANSFER_ADM_EMAIL': 'Você foi indicado para ser administrador de uma instituição na plataforma virtual CIS.'
 }
 
 

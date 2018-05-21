@@ -17,7 +17,7 @@ from service_messages import send_message_email
 from jinja2 import Environment, FileSystemLoader
 from permissions import DEFAULT_SUPER_USER_PERMISSIONS
 from permissions import DEFAULT_ADMIN_PERMISSIONS
-from send_email_hierarchy.remove_institution_email_sender import RemoveInstitutionEmailSender
+from send_email_hierarchy import RemoveInstitutionEmailSender
 
 
 def should_remove(user, institution_key, current_inst_key):

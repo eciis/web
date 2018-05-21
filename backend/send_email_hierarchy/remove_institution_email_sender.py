@@ -4,6 +4,7 @@ from . import EmailSender
 import json
 from google.appengine.api import taskqueue
 
+__all__ = ['RemoveInstitutionEmailSender']
 
 class RemoveInstitutionEmailSender(EmailSender):
 

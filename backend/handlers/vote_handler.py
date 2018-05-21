@@ -2,7 +2,7 @@
 """Vote Handler."""
 
 from google.appengine.ext import ndb
-from util.login_service import login_required
+from util import login_required
 from utils import json_response
 from . import BaseHandler
 from custom_exceptions.notAuthorizedException import NotAuthorizedException

@@ -5,7 +5,7 @@ import json
 
 from models import Invite
 from utils import Utils
-from util.login_service import login_required
+from util import login_required
 from models import User
 from utils import json_response
 from models import InstitutionProfile

@@ -123,37 +123,30 @@ class RequestInstitutionParentTest(TestBase):
             self.other_institution, self.admin
         )
 
-        expected_maked_request = {
+        institution_props = ['name', 'description', 'key', 'institutional_email', 
+                      'email', 'trusted', 'phone_number', 'address', 'photo_url']
+
+        expected_made_request = {
             'status': 'sent',
-            'institution_admin': {
-                'name': self.institution.name
-            },
             'sender': self.other_user.email,
+            'sender_name':  self.other_user.name, 
+            'sender_key':  self.other_user.key.urlsafe(),
+            'requested_inst_name': self.other_institution.name,
             'institution_requested_key': self.other_institution.key.urlsafe(),
             'admin_name': self.admin.name,
             'key': request.key.urlsafe(),
             'type_of_invite': 'REQUEST_INSTITUTION_PARENT',
             'institution_key': self.institution.key.urlsafe(),
-            'institution': {
-                'name': self.institution.name,
-                'key': self.institution.key.urlsafe(),
-                'address': self.institution.address
+            'institution_admin': {
+                'name': self.institution.name
             },
+            'institution': self.institution.make(institution_props)
         }
 
-        maked_request = request.make()
-        for dict_key in expected_maked_request.keys():
-            expected, actual = None, None
-            if dict_key == "institution":
-                dict_institution = expected_maked_request[dict_key]
-                request_institution = maked_request[dict_key]
-                actual = str(request_institution['key']).encode('utf-8')
-                expected = str(dict_institution['key']).encode('utf-8')
-            else:
-                expected = str(expected_maked_request[dict_key]).encode('utf-8')
-                actual = str(maked_request[dict_key]).encode('utf-8')
-
-            self.assertEqual(actual, expected, "%s is not equal to %s" % (actual, expected))
+        made_request = request.make()
+                   
+        self.assertEquals(made_request, expected_made_request,
+        "The made request is not equal to the expected one")
 
 
     @patch.object(Invite, 'send_notification')
@@ -248,15 +241,14 @@ class RequestInstitutionParentTest(TestBase):
         parent_institution = self.other_institution
         child_institution = self.institution
 
+        email_json = {
+            'institution_parent_name': parent_institution.name,
+            'institution_parent_email': parent_institution.institutional_email,
+            'institution_child_name': child_institution.name,
+            'institution_child_email': child_institution.institutional_email,
+            'institution_requested_key': parent_institution.key.urlsafe()
+        }
+
         for operation in ["ACCEPT", "REJECT"]:
-
-            email_json = {
-                'institution_parent_name': parent_institution.name,
-                'institution_parent_email': parent_institution.institutional_email,
-                'institution_child_name': child_institution.name,
-                'institution_child_email': child_institution.institutional_email,
-                'institution_requested_key': parent_institution.key.urlsafe()
-            }
-
             request.send_response_email(operation)
             send_email.assert_called_with(email_json)

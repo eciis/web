@@ -1,6 +1,6 @@
 """Request an institution to make a connection with another one."""
 
-from email_sender import EmailSender
+from . import EmailSender
 
 MAXIMUM_INSTITUTION_NAME = 29
 

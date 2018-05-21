@@ -1,6 +1,6 @@
 """Accepted institution email sender model."""
 
-from email_sender import EmailSender
+from . import EmailSender
 
 
 class AcceptedInstitutionEmailSender(EmailSender):

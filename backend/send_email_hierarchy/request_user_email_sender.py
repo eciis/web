@@ -1,6 +1,6 @@
 """Request user to be member email sender model."""
 
-from email_sender import EmailSender
+from . import EmailSender
 
 MAXIMUM_INSTITUTION_NAME = 29
 MAXIMUM_USER_NAME = 26

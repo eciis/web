@@ -1,6 +1,6 @@
 """Remove institution email sender model."""
 
-from email_sender import EmailSender
+from . import EmailSender
 import json
 from google.appengine.api import taskqueue
 

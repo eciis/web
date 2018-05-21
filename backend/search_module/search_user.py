@@ -4,6 +4,7 @@
 from google.appengine.api import search
 from . import SearchDocument
 
+__all__ = ['SearchUser']
 
 class SearchUser(SearchDocument):
     """Search user's model."""

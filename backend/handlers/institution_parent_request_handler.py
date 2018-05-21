@@ -58,5 +58,11 @@ class InstitutionParentRequestHandler(BaseHandler):
         request.change_status('rejected')
         request.put()
 
+        parent_institution = request.institution_requested_key.get()
+
+        if request.institution_key in parent_institution.children_institutions:
+            parent_institution.children_institutions.remove(request.institution_key)
+            parent_institution.put()
+
         request.send_response_notification(user.current_institution, user.key, 'REJECT')
         request.send_response_email('REJECT')

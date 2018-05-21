@@ -2,6 +2,8 @@
 
 from . import EmailSender
 
+__all__ = ['RequestUserEmailSender']
+
 MAXIMUM_INSTITUTION_NAME = 29
 MAXIMUM_USER_NAME = 26
 

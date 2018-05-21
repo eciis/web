@@ -5,7 +5,7 @@ from google.appengine.ext import ndb
 from custom_exceptions.fieldException import FieldException
 from . import Institution
 from . import Request
-from send_email_hierarchy.request_user_email_sender import RequestUserEmailSender
+from send_email_hierarchy import RequestUserEmailSender
 from util.strings_pt_br import get_subject
 
 

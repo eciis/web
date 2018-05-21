@@ -7,7 +7,7 @@ import json
 
 from . import BaseHandler
 from search_module.search_user import SearchUser
-from search_module.search_institution import SearchInstitution
+from search_module import SearchInstitution
 
 __all__ = ['SearchHandler']
 

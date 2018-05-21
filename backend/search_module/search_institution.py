@@ -4,6 +4,7 @@
 from google.appengine.api import search
 from . import SearchDocument
 
+__all__ = ['SearchInstitution']
 
 def institution_has_changes(fields, entity):
         """It returns True when there is a change

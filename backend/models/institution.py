@@ -2,7 +2,7 @@
 
 from google.appengine.ext import ndb
 
-from search_module.search_institution import SearchInstitution
+from search_module import SearchInstitution
 from models import Address
 from permissions import DEFAULT_ADMIN_PERMISSIONS
 from permissions import DEFAULT_SUPER_USER_PERMISSIONS

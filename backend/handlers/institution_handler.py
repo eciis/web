@@ -14,7 +14,7 @@ from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from custom_exceptions.entityException import EntityException
 
 from models import Institution
-from util.json_patch import JsonPatch
+from util import JsonPatch
 from service_entities import enqueue_task
 
 from . import BaseHandler

@@ -10,7 +10,7 @@ from models import User
 from utils import json_response
 from models import InstitutionProfile
 
-from util.json_patch import JsonPatch
+from util import JsonPatch
 
 from . import BaseHandler
 

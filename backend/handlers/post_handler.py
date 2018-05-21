@@ -7,7 +7,7 @@ from utils import Utils
 from util.login_service import login_required
 from utils import NotAuthorizedException
 from utils import json_response
-from util.json_patch import JsonPatch
+from util import JsonPatch
 from models import Post
 from models import SurveyPost
 from models import Like

@@ -3,8 +3,8 @@
 
 import unittest
 
-from json_patch import JsonPatch
-from json_patch import PatchException
+from . import JsonPatch
+from . import PatchException
 
 
 def create_json_patch(operation, path, value=None):

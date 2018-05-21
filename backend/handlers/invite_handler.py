@@ -12,7 +12,7 @@ from custom_exceptions.fieldException import FieldException
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from utils import json_response
 from utils import Utils
-from util.json_patch import JsonPatch
+from util import JsonPatch
 
 __all__ = ['InviteHandler']
 

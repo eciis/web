@@ -9,7 +9,7 @@ from utils import Utils
 from utils import json_response
 from util.strings_pt_br import get_subject
 from service_messages import send_message_notification
-from send_email_hierarchy.remove_member_email_sender import RemoveMemberEmailSender
+from send_email_hierarchy import RemoveMemberEmailSender
 
 from . import BaseHandler
 

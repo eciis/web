@@ -2,7 +2,7 @@
 """Search User."""
 
 from google.appengine.api import search
-from search_document import SearchDocument
+from . import SearchDocument
 
 
 class SearchUser(SearchDocument):

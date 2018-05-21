@@ -2,7 +2,7 @@
 """Search Institution."""
 
 from google.appengine.api import search
-from search_document import SearchDocument
+from . import SearchDocument
 
 
 def institution_has_changes(fields, entity):

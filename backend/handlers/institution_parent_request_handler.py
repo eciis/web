@@ -33,11 +33,13 @@ class InstitutionParentRequestHandler(BaseHandler):
         request.put()
 
         parent_institution = request.institution_requested_key.get()
-        parent_institution.children_institutions.append(request.institution_key)
-        parent_institution.put()
+
+        if request.institution_key not in parent_institution.children_institutions:
+            parent_institution.children_institutions.append(request.institution_key)
+            parent_institution.put()
 
         institution_children = request.institution_key.get()
-        
+
         request.send_response_notification(user.current_institution, user.key, 'ACCEPT')
         request.send_response_email('ACCEPT')
 

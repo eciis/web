@@ -8,7 +8,7 @@ from util.login_service import login_required
 from utils import json_response
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from custom_exceptions.entityException import EntityException
-from send_email_hierarchy.request_link_email_sender import RequestLinkEmailSender
+from send_email_hierarchy import RequestLinkEmailSender
 
 from models import Institution
 

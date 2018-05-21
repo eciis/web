@@ -2,6 +2,8 @@
 
 from . import EmailSender
 
+__all__ = ['RequestLinkEmailSender']
+
 MAXIMUM_INSTITUTION_NAME = 29
 
 

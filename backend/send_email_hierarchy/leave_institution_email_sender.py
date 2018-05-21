@@ -2,6 +2,7 @@
 
 from . import EmailSender
 
+__all__ = ['LeaveInstitutionEmailSender']
 
 class LeaveInstitutionEmailSender(EmailSender):
 

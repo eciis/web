@@ -2,8 +2,9 @@
 """Search User."""
 
 from google.appengine.api import search
-from search_document import SearchDocument
+from . import SearchDocument
 
+__all__ = ['SearchUser']
 
 class SearchUser(SearchDocument):
     """Search user's model."""

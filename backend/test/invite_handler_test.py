@@ -5,7 +5,7 @@ import json
 import mocks
 
 from test_base_handler import TestBaseHandler
-from search_module.search_institution import SearchInstitution
+from search_module import SearchInstitution
 from models import InviteUser
 from models import Invite
 from models import InviteInstitution

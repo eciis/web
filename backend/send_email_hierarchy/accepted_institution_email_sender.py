@@ -2,6 +2,7 @@
 
 from . import EmailSender
 
+__all__ = ['AcceptedInstitutionEmailSender']
 
 class AcceptedInstitutionEmailSender(EmailSender):
     """Entity responsible for send accepted institution email."""

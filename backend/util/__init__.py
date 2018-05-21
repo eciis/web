@@ -1,8 +1,9 @@
 """Initialize util modules."""
 
 from .json_patch import *
+from .strings_pt_br import *
 
 
-util_modules = [json_patch]
+util_modules = [json_patch, strings_pt_br]
 
 __all__ = [prop for util_module in util_modules for prop in util_module.__all__]

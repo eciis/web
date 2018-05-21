@@ -8,7 +8,7 @@ from util.login_service import login_required
 from utils import Utils
 from utils import json_response
 from send_email_hierarchy import LeaveInstitutionEmailSender
-from util.strings_pt_br import get_subject 
+from util import get_subject 
 
 from . import BaseHandler
 

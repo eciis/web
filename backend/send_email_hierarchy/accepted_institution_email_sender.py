@@ -1,7 +1,8 @@
 """Accepted institution email sender model."""
 
-from email_sender import EmailSender
+from . import EmailSender
 
+__all__ = ['AcceptedInstitutionEmailSender']
 
 class AcceptedInstitutionEmailSender(EmailSender):
     """Entity responsible for send accepted institution email."""

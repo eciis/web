@@ -5,6 +5,7 @@ from google.appengine.api import taskqueue
 reload(sys)
 sys.setdefaultencoding('utf8')
 
+__all__ = ['EmailSender']
 
 class EmailSender(object):
 

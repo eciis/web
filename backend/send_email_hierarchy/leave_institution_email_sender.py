@@ -1,7 +1,8 @@
 """Leave institution email sender model."""
 
-from email_sender import EmailSender
+from . import EmailSender
 
+__all__ = ['LeaveInstitutionEmailSender']
 
 class LeaveInstitutionEmailSender(EmailSender):
 

@@ -58,7 +58,7 @@ class UserHandlerTest(TestBaseHandler):
         """Deactivate the test."""
         cls.test.deactivate()
 
-    @patch('utils.verify_token')
+    @patch('util.login_service.verify_token')
     def test_get(self, verify_token):
         """Test the user_handler's get method."""
         verify_token._mock_return_value = {'email': self.user.email[0]}
@@ -85,7 +85,7 @@ class UserHandlerTest(TestBaseHandler):
             "The institutions_admin is different from the expected one"
         )
 
-    @patch('utils.verify_token')
+    @patch('util.login_service.verify_token')
     def test_delete(self, verify_token):
         """Test the user_handler's delete method."""
         verify_token._mock_return_value = {'email': self.other_user.email[0]}
@@ -126,7 +126,7 @@ class UserHandlerTest(TestBaseHandler):
         self.assertEquals(self.other_user.institution_profiles, [], "User permissions should be empty")
 
 
-    @patch('utils.verify_token')
+    @patch('util.login_service.verify_token')
     def test_patch(self, verify_token):
         verify_token._mock_return_value = {'email': self.other_user.email[0]}
         """Test the user_handler's patch method."""

@@ -2,8 +2,11 @@
 from google.appengine.ext import ndb
 from invite_user import InviteUser
 from utils import Utils
-from custom_exceptions.notAuthorizedException import NotAuthorizedException
+from custom_exceptions import NotAuthorizedException
+from send_email_hierarchy import TransferAdminEmailSender
+from util.strings_pt_br import get_subject
 
+__all__ = ['InviteUserAdm']
 
 class InviteUserAdm(InviteUser):
     """Model of Invite User Admin."""
@@ -77,7 +80,16 @@ class InviteUserAdm(InviteUser):
         )
     
     def send_email(self, host):
-        pass
+        institution = self.institution_key.get()
+        subject = get_subject('TRANSFER_ADM_EMAIL')
+        email_sender = TransferAdminEmailSender(**{
+            'receiver': self.invitee,
+            'subject': subject,
+            'institution_name': institution.name,
+            'institution_email': institution.institutional_email,
+            'adm_name': self.sender_name
+        })
+        email_sender.send_email()
 
     def make(self):
         make = super(InviteUserAdm, self).make()

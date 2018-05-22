@@ -7,8 +7,8 @@ import mocks
 
 from test_base_handler import TestBaseHandler
 from google.appengine.ext import ndb
-from models.invite_user_adm import InviteUserAdm
-from handlers.invite_user_adm_handler import InviteUserAdmHandler
+from models import InviteUserAdm
+from handlers import InviteUserAdmHandler
 from worker import TransferAdminPermissionsHandler
 import permissions
 from test_base_handler import has_permissions
@@ -36,7 +36,7 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
 
     @patch('models.invite_user_adm.InviteUserAdm.send_notification')
     @patch('handlers.invite_user_adm_handler.enqueue_task')
-    @patch('utils.verify_token', return_value={'email': 'usr_test@test.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'usr_test@test.com'})
     def test_put(self, verify_token, enqueue_task, send_notification):
         """Test put method  in inviteUserAdmHandler."""
         enqueue_task.side_effect = self.enqueue_task
@@ -106,7 +106,7 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
     
     @patch('models.invite_user_adm.InviteUserAdm.send_notification')
     @patch('handlers.invite_user_adm_handler.enqueue_task')
-    @patch('utils.verify_token', return_value={'email': 'usr_test@test.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'usr_test@test.com'})
     def test_put_invite_in_hierarchy(self, verify_token, enqueue_task, send_notification):
         """Test put invite in hierarchy."""
         enqueue_task.side_effect = self.enqueue_task
@@ -252,7 +252,7 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
     
     @patch('models.invite_user_adm.InviteUserAdm.send_notification')
     @patch('handlers.invite_user_adm_handler.enqueue_task')
-    @patch('utils.verify_token', return_value={'email': 'usr_test@test.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'usr_test@test.com'})
     def test_put_invite_with_user_admin_of_parent_inst(self, verify_token, enqueue_task, send_notification):
         """Test put invite with user is admin of parent institution."""
         enqueue_task.side_effect = self.enqueue_task
@@ -398,7 +398,7 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
 
     @patch('models.invite_user_adm.InviteUserAdm.send_notification')
     @patch('handlers.invite_user_adm_handler.enqueue_task')
-    @patch('utils.verify_token', return_value={'email': 'usr_test@test.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'usr_test@test.com'})
     def test_put_invite_with_super_user_admin_of_parent_inst(self, verify_token, enqueue_task, send_notification):
         """Test put invite with user super user and is admin of parent institution."""
         enqueue_task.side_effect = self.enqueue_task
@@ -546,7 +546,7 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
     
     @patch('models.invite_user_adm.InviteUserAdm.send_notification')
     @patch('handlers.invite_user_adm_handler.enqueue_task')
-    @patch('utils.verify_token', return_value={'email': 'usr_test@test.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'usr_test@test.com'})
     def test_put_invite_super_user(self, verify_token, enqueue_task, send_notification):
         """Test put invite with user is super admin."""
         enqueue_task.side_effect = self.enqueue_task
@@ -626,7 +626,7 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
             'new_admin must have super user permissions for second_inst institution!'
         )
 
-    @patch('utils.verify_token', return_value={'email': 'usr_test@test.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'usr_test@test.com'})
     def test_put_accepted_and_rejected_invite(self, verify_token):
         """Test put accepted and rejected invite."""
         admin = mocks.create_user()
@@ -738,7 +738,7 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
             'Expected message of exception must be equal to Error! This invitation has already been processed'
         )
 
-    @patch('utils.verify_token', return_value={'email': 'usr_test@test.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'usr_test@test.com'})
     def test_put_invite_not_allowed(self, verify_token):
         """Test put invite not allowed."""
         admin = mocks.create_user()
@@ -813,7 +813,7 @@ class InviteUserAdmHandlerTest(TestBaseHandler):
         )
 
     @patch('models.invite_user_adm.InviteUserAdm.send_notification')
-    @patch('utils.verify_token', return_value={'email': 'usr_test@test.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'usr_test@test.com'})
     def test_delete(self, verify_token, send_notification):
         """Test reject invite."""
         admin = mocks.create_user()

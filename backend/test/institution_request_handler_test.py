@@ -6,8 +6,8 @@ from test_base_handler import TestBaseHandler
 from models import User
 from models import Institution
 from models import Address
-from models.request_institution import RequestInstitution
-from handlers.institution_request_handler import InstitutionRequestHandler
+from models import RequestInstitution
+from handlers import InstitutionRequestHandler
 import permissions
 import mocks
 from mock import patch
@@ -28,7 +28,7 @@ class InstitutionRequestHandlerTest(TestBaseHandler):
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
-    @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'useradmin@test.com'})
     def test_get(self, verify_token):
         """Test handler get."""
         response = self.testapp.get('/api/requests/' + self.request.key.urlsafe() + '/institution')
@@ -39,7 +39,7 @@ class InstitutionRequestHandlerTest(TestBaseHandler):
             self.request.make(),
             "Expected make must be equal to make of request")
 
-    @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_get_fail(self, verify_token):
         """Test fail get."""
         with self.assertRaises(Exception) as ex:
@@ -51,7 +51,7 @@ class InstitutionRequestHandlerTest(TestBaseHandler):
             'Error! User is not allowed to get requests',
             "Expected message must be equal to Error! User is not allowed to get requests")
 
-    @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'useradmin@test.com'})
     def test_put(self, verify_token):
         """Test handler put."""
         self.testapp.put('/api/requests/' + self.request.key.urlsafe() + '/institution')
@@ -96,7 +96,7 @@ class InstitutionRequestHandlerTest(TestBaseHandler):
         for permission in permissions.DEFAULT_ADMIN_PERMISSIONS:
             self.assertTrue(permission in user.permissions)
 
-    @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'useradmin@test.com'})
     def teste_delete(self, verify_token):
         """Test handler delete."""
         self.testapp.delete('/api/requests/' + self.request.key.urlsafe() + '/institution')
@@ -107,7 +107,7 @@ class InstitutionRequestHandlerTest(TestBaseHandler):
             'inactive',
             "Expected state must be equal to inactive")
     
-    @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'useradmin@test.com'})
     def test_delete_with_an_accepted_request(self, verify_token):
         """Test delete with an accepted request."""
         self.request.status = "accepted"
@@ -130,7 +130,7 @@ class InstitutionRequestHandlerTest(TestBaseHandler):
             "Expected exception message must be equal to %s" % expected_message
         )
     
-    @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'useradmin@test.com'})
     def test_delete_with_a_rejected_request(self, verify_token):
         """Test delete with a rejected request."""
         self.request.status = "rejected"
@@ -153,7 +153,7 @@ class InstitutionRequestHandlerTest(TestBaseHandler):
             "Expected exception message must be equal to %s" % expected_message
         )
 
-    @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'useradmin@test.com'})
     def test_put_with_a_rejected_request(self, verify_token):
         """Test delete with a rejected request."""
         self.request.status = "rejected"
@@ -180,7 +180,7 @@ class InstitutionRequestHandlerTest(TestBaseHandler):
         for permission in permissions.DEFAULT_ADMIN_PERMISSIONS:
             self.assertTrue(permission not in user.permissions)
     
-    @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'useradmin@test.com'})
     def test_put_with_an_accepted_request(self, verify_token):
         """Test delete with an accepted request."""
         self.request.status = "accepted"

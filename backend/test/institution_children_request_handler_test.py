@@ -69,7 +69,7 @@ class InstitutionChildrenRequestHandlerTest(TestBaseHandler):
 
 
     @patch('service_messages.send_message_notification')
-    @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_put(self, verify_token, mock_method):
         """Test method post of InstitutionChildrenRequestHandler."""
         request = self.testapp.put_json(
@@ -100,7 +100,7 @@ class InstitutionChildrenRequestHandlerTest(TestBaseHandler):
             "Should call the send_message_notification"
         )
 
-    @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'useradmin@test.com'})
     def test_put_user_not_admin(self, verify_token):
         """Test put request with user is not admin."""
         with self.assertRaises(Exception) as ex:
@@ -116,7 +116,7 @@ class InstitutionChildrenRequestHandlerTest(TestBaseHandler):
             "Expected error message is Error! User is not allowed to accept link between institutions")
 
     @patch('service_messages.send_message_notification')
-    @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_delete(self, verify_token, mock_method):
         """Test method post of InstitutionChildrenRequestHandler."""
         self.testapp.delete(
@@ -140,7 +140,7 @@ class InstitutionChildrenRequestHandlerTest(TestBaseHandler):
                         "Should call the send_message_notification")
 
     @patch('handlers.institution_children_request_handler.enqueue_task')
-    @patch('utils.verify_token', return_value={'email': 'user@example.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@example.com'})
     def test_add_admin_permission_in_institution_hierarchy(self, verify_token, enqueue_task):
         """Test add admin permissions in institution hierarchy."""
         first_user = mocks.create_user()

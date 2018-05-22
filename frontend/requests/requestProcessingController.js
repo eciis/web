@@ -51,6 +51,7 @@
         }
 
         requestController.rejectRequest = function rejectRequest(event){
+            requestController.warnPaternityExistence = false;
             requestController.isRejecting = true;
         };
 
@@ -106,6 +107,7 @@
                 formatPositions();
                 getLegalNature();
                 getActuationArea();
+                selectDialogFlow();
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
             });
@@ -140,6 +142,20 @@
             window.open(makeUrl(institutionKey), '_blank');
         };
 
+        requestController.confirmLinkRemoval = function confirmLinkRemoval() {
+            const isParent = true;
+            const institutionKey = requestController.children.key;
+            const institutionLinkKey = requestController.children.parent_institution.key;
+
+            InstitutionService.removeLink(institutionKey, institutionLinkKey, isParent).then(function success(data) {
+                MessageService.showToast('Vínculo removido.');
+                requestController.warnPaternityExistence = false;
+                delete requestController.children.parent_institution;
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
+            });
+        };
+
         function makeUrl(institutionKey){
             var currentUrl = window.location.href;
             currentUrl = currentUrl.split('#');
@@ -158,6 +174,14 @@
                 requestController.instActuationArea = _.get(response.data,
                     requestController.parent.actuation_area);
             });
+        }
+
+        function selectDialogFlow() {
+            const isChildrenRequest = request.type_of_invite === REQUEST_CHILDREN;
+            const hasParent = requestController.children.parent_institution;
+            if (isChildrenRequest && hasParent) {
+                requestController.warnPaternityExistence = true;
+            }
         }
 
         (function main () {

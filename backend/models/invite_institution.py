@@ -1,10 +1,10 @@
 """Invite institution model."""
 from . import Invite
 from . import Institution
-from custom_exceptions.fieldException import FieldException
+from custom_exceptions import FieldException
 from . import User
-from send_email_hierarchy.invite_institution_email_sender import InviteInstitutionEmailSender
-from util.strings_pt_br import get_subject
+from send_email_hierarchy import InviteInstitutionEmailSender
+from util import get_subject
 
 __all__ = ['InviteInstitution']
 

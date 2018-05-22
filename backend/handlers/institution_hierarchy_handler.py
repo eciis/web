@@ -4,15 +4,17 @@
 from google.appengine.ext import ndb
 
 from utils import Utils
-from utils import login_required
+from util import login_required
 from utils import json_response
-from custom_exceptions.notAuthorizedException import NotAuthorizedException
-from custom_exceptions.entityException import EntityException
+from custom_exceptions import NotAuthorizedException
+from custom_exceptions import EntityException
+from send_email_hierarchy import RequestLinkEmailSender
 
 from models import Institution
 
 from service_messages import send_message_notification
 from service_entities import enqueue_task
+from util import get_subject
 import json
 
 from . import BaseHandler
@@ -62,8 +64,32 @@ class InstitutionHierarchyHandler(BaseHandler):
         if is_parent == "true":
             enqueue_task('remove-admin-permissions', {
                          'institution_key': institution.key.urlsafe(), 'parent_key': institution_link.key.urlsafe()})
+
+            email_sender = RequestLinkEmailSender(**{
+                'institution_parent_name': institution_link.name,
+                'institution_parent_email': institution_link.institutional_email,
+                'institution_requested_key': institution_link.key.urlsafe(),
+                'institution_child_name': institution.name,
+                'institution_child_email': institution.institutional_email,
+                'subject': get_subject('REMOVED_LINK_EMAIL'),
+                'receiver': admin.get().email[0],
+                'html': 'removed_institutional_link.html'
+            })
+            email_sender.send_email()
         else:
             enqueue_task('remove-admin-permissions', {'institution_key': institution_link.key.urlsafe(), 'parent_key': institution.key.urlsafe()})
+
+            email_sender = RequestLinkEmailSender(**{
+                'institution_parent_name': institution.name,
+                'institution_parent_email': institution.institutional_email,
+                'institution_requested_key': institution_link.key.urlsafe(),
+                'institution_child_name': institution_link.name,
+                'institution_child_email': institution_link.institutional_email,
+                'subject': get_subject('REMOVED_LINK_EMAIL'),
+                'receiver': admin.get().email[0],
+                'html': 'removed_institutional_link.html'
+            })
+            email_sender.send_email()
         
         notification_type = 'REMOVE_INSTITUTION_LINK'
 

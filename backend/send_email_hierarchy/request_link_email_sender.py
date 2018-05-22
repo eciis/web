@@ -1,6 +1,8 @@
 """Request an institution to make a connection with another one."""
 
-from email_sender import EmailSender
+from . import EmailSender
+
+__all__ = ['RequestLinkEmailSender']
 
 MAXIMUM_INSTITUTION_NAME = 29
 

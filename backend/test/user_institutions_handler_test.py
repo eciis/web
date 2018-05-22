@@ -22,7 +22,7 @@ class UserInstitutionsHandlerTest(TestBaseHandler):
         initModels(cls)
 
     @patch('handlers.user_institutions_handler.LeaveInstitutionEmailSender.send_email')
-    @patch('utils.verify_token', return_value={'email': 'second_user@gmail.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'second_user@gmail.com'})
     def test_delete(self, verify_token, send_email):
         """Test delete."""
         # Assert the initial conditions

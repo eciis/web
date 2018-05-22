@@ -26,7 +26,7 @@ class EventCollectionHandlerTest(TestBaseHandler):
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
-    @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@gmail.com'})
     def test_post(self, verify_token):
         """Test the calendar_handler's post event method."""
 
@@ -99,7 +99,7 @@ class EventCollectionHandlerTest(TestBaseHandler):
             "Excpected exception message must be equal to " +
             "Error! The end time must be after the current time")
 
-    @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@gmail.com'})
     def test_get(self, verify_token):
         """Test the calendar_handler's post event method."""
 

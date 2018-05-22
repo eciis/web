@@ -183,6 +183,10 @@
         surveyCtrl.getOption = function getOption(optionText) {
             return surveyCtrl.isdialog ? Utils.limitString(optionText, MAX_DIALOG_CHAR_QUANTITY) : Utils.limitString(optionText, MAX_CHAR_QUANTITY);
         };
+
+        surveyCtrl.limitString = function limitString(string, maxSize) {
+            return Utils.limitString(string, maxSize);
+        };
     });
 
     app.directive("surveyDetails", function() {

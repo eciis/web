@@ -5,10 +5,10 @@ import json
 import mocks
 
 from test_base_handler import TestBaseHandler
-from models.post import Post
+from models import Post
 from models import User
 from models import Institution
-from models.post import Comment
+from models import Comment
 from handlers.reply_comment_handler import ReplyCommentHandler
 
 from mock import patch, call
@@ -60,7 +60,7 @@ class ReplyCommentHandlerTest(TestBaseHandler):
 
 
     @patch('handlers.reply_comment_handler.send_message_notification')
-    @patch('utils.verify_token', return_value={'email': THIRD_USER_EMAIL})
+    @patch('util.login_service.verify_token', return_value={'email': THIRD_USER_EMAIL})
     def test_post(self, verify_token, send_message_notification):
         """Reply a comment of post"""
         # Verify size of list
@@ -125,7 +125,7 @@ class ReplyCommentHandlerTest(TestBaseHandler):
         send_message_notification.assert_has_calls(calls)
     
     @patch('handlers.reply_comment_handler.send_message_notification')
-    @patch('utils.verify_token', return_value={'email': THIRD_USER_EMAIL})
+    @patch('util.login_service.verify_token', return_value={'email': THIRD_USER_EMAIL})
     def test_post_method_on_deleted_post(self, verify_token, send_message_notification):
         """Test post a comment when the post is deleted."""
         body = {
@@ -163,7 +163,7 @@ class ReplyCommentHandlerTest(TestBaseHandler):
         # assert no notification was sent
         send_message_notification.assert_not_called()
 
-    @patch('utils.verify_token', return_value={'email': USER_EMAIL})
+    @patch('util.login_service.verify_token', return_value={'email': USER_EMAIL})
     def test_delete(self, verify_token):
         """Delete a reply of a comment"""
         # Verify if before the delete the post's state is published

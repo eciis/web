@@ -22,7 +22,7 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
 
-    @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@gmail.com'})
     def test_get(self, verify_token):
         """Test http get method."""
         result = self.testapp.get("/api/institutions/%s/followers"
@@ -31,7 +31,7 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
         self.assertTrue(Utils.toJson(self.user) in result.json)
         self.assertTrue(Utils.toJson(self.second_user) in result.json)
 
-    @patch('utils.verify_token', return_value={'email': 'second_user@ccc.ufcg.edu.br'})
+    @patch('util.login_service.verify_token', return_value={'email': 'second_user@ccc.ufcg.edu.br'})
     def test_post(self, verify_token):
         """Test post method."""
         """Assert the initials conditions"""
@@ -50,7 +50,7 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
             self.second_user.key in self.other_institution.followers)
         self.assertTrue(self.other_institution.key in self.second_user.follows)
 
-    @patch('utils.verify_token', return_value={'email': 'second_user@ccc.ufcg.edu.br'})
+    @patch('util.login_service.verify_token', return_value={'email': 'second_user@ccc.ufcg.edu.br'})
     def test_post_with_inactive_institution(self, verify_token):
         """Test post method with an inactive institution."""
         # Set up the test
@@ -64,7 +64,7 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
         self.assertTrue(exception_message ==
                         "Error! The institution has been deleted")
 
-    @patch('utils.verify_token', return_value={'email': 'second_user@ccc.ufcg.edu.br'})
+    @patch('util.login_service.verify_token', return_value={'email': 'second_user@ccc.ufcg.edu.br'})
     def test_delete(self, verify_token):
         """Test delete method."""
         # Assert initials conditions
@@ -80,7 +80,7 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
         self.assertTrue(self.second_user.key not in self.institution.followers)
         self.assertTrue(self.institution.key not in self.second_user.follows)
 
-    @patch('utils.verify_token', return_value={'email': 'user@gmail.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@gmail.com'})
     def test_delete_with_a_member(self, verify_token):
         """Test delete when the user is a member
 

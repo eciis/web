@@ -5,15 +5,15 @@ import json
 
 from google.appengine.ext import ndb
 
-from utils import login_required
+from util import login_required
 from utils import json_response
 from utils import Utils
 from service_messages import send_message_notification
-from custom_exceptions.notAuthorizedException import NotAuthorizedException
-from custom_exceptions.entityException import EntityException
+from custom_exceptions import NotAuthorizedException
+from custom_exceptions import EntityException
 
 from . import BaseHandler
-from models.post import Comment
+from models import Comment
 
 __all__ = ['ReplyCommentHandler']
 

@@ -21,7 +21,7 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
 
-    @patch('utils.verify_token', return_value=USER)
+    @patch('util.login_service.verify_token', return_value=USER)
     def teste_delete_usermember(self, verify_token):
         """Test that user member try unfollow the institution."""
         user = mocks.create_user(USER['email'])
@@ -50,7 +50,7 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
         self.assertEquals(len(institution.followers), 1,
                           "The institution should have a follower")
     
-    @patch('utils.verify_token', return_value=USER)
+    @patch('util.login_service.verify_token', return_value=USER)
     def teste_delete_usermember_health_ministry(self, verify_token):
         """Test that user member try unfollow the health ministry institution."""
         user = mocks.create_user(USER['email'])
@@ -78,7 +78,7 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
             "Expected exception message must be equal to Error! The institution can not be unfollowed")
 
         
-    @patch('utils.verify_token', return_value=USER)
+    @patch('util.login_service.verify_token', return_value=USER)
     def test_delete(self, verify_token):
         """Test the institution_follower_handler delete method."""
         user = mocks.create_user(USER['email'])
@@ -104,7 +104,7 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
         self.assertEquals(len(institution.followers), 0,
                           "The institution shouldn't have any follower")
 
-    @patch('utils.verify_token', return_value=USER)
+    @patch('util.login_service.verify_token', return_value=USER)
     def test_post(self, verify_token):
         """Test the institution_follower_handler post method."""
         user = mocks.create_user(USER['email'])

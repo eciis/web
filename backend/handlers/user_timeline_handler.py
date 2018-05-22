@@ -3,15 +3,15 @@
 
 import json
 
-from utils import login_required
+from util import login_required
 from utils import json_response
 from utils import offset_pagination
 from utils import to_int
 from utils import Utils
-from custom_exceptions.queryException import QueryException
+from custom_exceptions import QueryException
 
 from . import BaseHandler
-from models.post import Post
+from models import Post
 
 __all__ = ['UserTimelineHandler']
 

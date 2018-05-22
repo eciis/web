@@ -20,7 +20,7 @@ class SearchHandlerTest(TestBaseHandler):
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
 
-    @patch('utils.verify_token', return_value=USER)
+    @patch('util.login_service.verify_token', return_value=USER)
     def test_get_institution(self, verify_token):
         """Test the search_handler's get method."""
         splab = mocks.create_institution()
@@ -75,7 +75,7 @@ class SearchHandlerTest(TestBaseHandler):
             % ('Ensaio quimico', 'active'))
         self.assertTrue('CERTBIO' in institutions)
 
-    @patch('utils.verify_token', return_value=USER)
+    @patch('util.login_service.verify_token', return_value=USER)
     def test_get_user(self, verify_token):
         """Test the search_handler's get method with type=user."""
         user = mocks.create_user(USER['email'])

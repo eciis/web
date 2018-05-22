@@ -5,7 +5,7 @@ import json
 import mocks
 
 from test_base_handler import TestBaseHandler
-from search_module.search_institution import SearchInstitution
+from search_module import SearchInstitution
 from models import InviteUser
 from models import Invite
 from models import InviteInstitution
@@ -55,7 +55,7 @@ class InviteHandlerTest(TestBaseHandler):
         cls.invite.put()
 
 
-    @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_get(self, verify_token):
         """Test method get of InviteHandler."""
         response = self.testapp.get('/api/invites/' +
@@ -68,7 +68,7 @@ class InviteHandlerTest(TestBaseHandler):
             "Expected invite should be equal to make")
 
     @patch.object(Invite, 'send_notification')
-    @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_delete(self, verify_token, send_notification):
         """Test method delete of InviteHandler."""
         # create innvite institution
@@ -145,7 +145,7 @@ class InviteHandlerTest(TestBaseHandler):
         )
 
     @patch.object(Invite, 'send_notification')
-    @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_patch(self, verify_token, send_notification):
         """Test method patch of InviteHandler."""
         profile = '{"email": "otheruser@test.com", "office": "Developer", "institution_key": "%s"}' % self.inst_test.key.urlsafe()
@@ -202,7 +202,7 @@ class InviteHandlerTest(TestBaseHandler):
         )
 
     @patch.object(Invite, 'send_notification')
-    @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_patch_fail(self, verify_token, send_notification):
         """Test patch fail in InviteHandler because the profile has not office."""
         profile = '{"email": "otheruser@test.com"}'
@@ -224,7 +224,7 @@ class InviteHandlerTest(TestBaseHandler):
         # assert the notification was not sent
         send_notification.assert_not_called()
     
-    @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_patch_with_inst_inactive(self, verify_token):
         """Test a patch invite_user when the user is already a member."""
         self.inst_test.state = "inactive"
@@ -247,7 +247,7 @@ class InviteHandlerTest(TestBaseHandler):
             "Expected exception message must be equal to %s" %expected_message
         )
     
-    @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_patch_with_a_user_that_is_already_a_member(self, verify_token):
         """Test a patch invite_user when the user is already a member."""
         self.inst_test.add_member(self.other_user)
@@ -270,7 +270,7 @@ class InviteHandlerTest(TestBaseHandler):
             "Expected exception message must be equal to %s" %expected_message
         )
 
-    @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_patch_with_an_accepted_invite(self, verify_token):
         """Test patch with an accepted invite."""
         self.invite.status = "accepted"
@@ -293,7 +293,7 @@ class InviteHandlerTest(TestBaseHandler):
             "Expected exception message must be equal to %s" % expected_message
         )
     
-    @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_patch_with_a_rejected_invite(self, verify_token):
         """Test patch with a rejected invite."""
         self.invite.status = "rejected"
@@ -316,7 +316,7 @@ class InviteHandlerTest(TestBaseHandler):
             "Expected exception message must be equal to %s" % expected_message
         )
     
-    @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_delete_with_a_rejected_invite(self, verify_token):
         """Test delete with a rejected invite."""
         self.invite.status = "rejected"
@@ -339,7 +339,7 @@ class InviteHandlerTest(TestBaseHandler):
             "Expected exception message must be equal to %s" % expected_message
         )
     
-    @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_delete_with_an_accepted_invite(self, verify_token):
         """Test delete with an accepted invite."""
         self.invite.status = "accepted"

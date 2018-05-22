@@ -5,10 +5,10 @@ from google.appengine.ext import ndb
 
 from models import Event
 from utils import Utils
-from utils import login_required
+from util import login_required
 from utils import NotAuthorizedException
 from utils import json_response
-from util.json_patch import JsonPatch
+from util import JsonPatch
 from . import BaseHandler
 
 __all__ = ['EventHandler']

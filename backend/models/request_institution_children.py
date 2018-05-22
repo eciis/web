@@ -4,8 +4,8 @@
 from . import Invite
 from . import Request
 from google.appengine.ext import ndb
-from send_email_hierarchy.request_link_email_sender import RequestLinkEmailSender
-from util.strings_pt_br import get_subject
+from send_email_hierarchy import RequestLinkEmailSender
+from util import get_subject
 
 __all__ = ['RequestInstitutionChildren']
 

@@ -2,10 +2,10 @@
 """Post handler test."""
 
 from test_base_handler import TestBaseHandler
-from models.post import Post
+from models import Post
 from models import User
 from models import Institution
-from models.post import Comment
+from models import Comment
 from handlers.post_handler import PostHandler
 import mocks
 from mock import patch
@@ -29,7 +29,7 @@ class PostHandlerTest(TestBaseHandler):
         cls.first_user.put()
         initModels(cls)
 
-    @patch('utils.verify_token', return_value={'email': 'first_user@gmail.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'first_user@gmail.com'})
     def test_delete(self, verify_token):
         """Test the post_handler's delete method."""
         # test delete post when the post has a comment
@@ -79,7 +79,7 @@ class PostHandlerTest(TestBaseHandler):
         self.assertEqual(self.second_user_post.state, 'deleted',
                          "After delete the post state should be 'deleted'")
 
-    @patch('utils.verify_token', return_value={'email': 'first_user@gmail.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'first_user@gmail.com'})
     def test_patch(self, verify_token):
         """Test the post_handler's patch method."""
 
@@ -169,7 +169,7 @@ class PostHandlerTest(TestBaseHandler):
             expected_alert + raises_context_message)
     
     @patch('handlers.post_handler.send_message_notification')
-    @patch('utils.verify_token', return_value={'email': 'first_user@gmail.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'first_user@gmail.com'})
     def test_delete_with_admin(self, verify_token, mock_method):
         """Test delete a post with admin."""
         self.first_user.add_permission(
@@ -187,7 +187,7 @@ class PostHandlerTest(TestBaseHandler):
         
         mock_method.assert_called()
 
-    @patch('utils.verify_token', return_value={'email': 'second_user@ccc.ufcg.edu.br'})
+    @patch('util.login_service.verify_token', return_value={'email': 'second_user@ccc.ufcg.edu.br'})
     def test_delete_without_admin(self, verify_token):
         """Test delete a post with admin."""
         self.assertEqual(self.first_user_post.state, 'published',

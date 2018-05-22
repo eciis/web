@@ -1,7 +1,8 @@
 """Factory of posts."""
-from models.post import Post
-from models.survey_post import SurveyPost
+from . import Post
+from . import SurveyPost
 
+__all__ = ['PostFactory']
 
 class PostFactory:
     """Class of create post."""

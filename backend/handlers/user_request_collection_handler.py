@@ -2,13 +2,13 @@
 """User Request Collection Handler."""
 import json
 from google.appengine.ext import ndb
-from utils import login_required
+from util import login_required
 from utils import json_response
 from utils import Utils
 from models import RequestUser
-from custom_exceptions.entityException import EntityException
+from custom_exceptions import EntityException
 from . import BaseHandler
-from models.factory_invites import InviteFactory
+from models import InviteFactory
 
 __all__ = ['UserRequestCollectionHandler']
 

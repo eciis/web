@@ -23,7 +23,7 @@ class InstitutionCollectionHandlerTest(TestBaseHandler):
         cls.testapp = cls.webtest.TestApp(app)
 
 
-    @patch('utils.verify_token', return_value={'email': 'user@example.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@example.com'})
     def test_get(self, verify_token):
         """Test the get method."""
         # create models

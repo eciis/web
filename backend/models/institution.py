@@ -1,14 +1,15 @@
+# -*- coding: utf-8 -*-
 """Institution Model."""
 
 from google.appengine.ext import ndb
 
-from search_module.search_institution import SearchInstitution
+from search_module import SearchInstitution
 from models import Address
 from permissions import DEFAULT_ADMIN_PERMISSIONS
 from permissions import DEFAULT_SUPER_USER_PERMISSIONS
 from service_messages import create_message
 
-__all__ = ['Institution']
+__all__ = ['Institution', 'get_health_ministry', 'get_deciis']
 
 class Institution(ndb.Model):
     """Model of Institution."""
@@ -431,3 +432,14 @@ class Institution(ndb.Model):
             return connection_found or has_connection(parent_key.get().parent_institution)
 
         return has_connection(possible_child_key.get().parent_institution)
+
+
+def get_health_ministry():
+    """Get health ministry institution."""
+    query = Institution.query(Institution.name == "Ministério da Saúde", Institution.acronym == "MS")
+    return query.get()
+
+def get_deciis():
+    """Get health ministry institution."""
+    query = Institution.query(Institution.trusted == True)
+    return query.get()

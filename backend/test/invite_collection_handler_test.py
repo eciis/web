@@ -55,7 +55,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         cls.otherinst.add_member(cls.otheruser)
 
 
-    @patch('utils.verify_token', return_value=ADMIN)
+    @patch('util.login_service.verify_token', return_value=ADMIN)
     def test_post_invite_institution(self, verify_token):
 
         invite = self.testapp.post_json("/api/invites", {'data': {
@@ -82,7 +82,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
                           invite expected was New Institution")
 
     
-    @patch('utils.verify_token', return_value=ADMIN)
+    @patch('util.login_service.verify_token', return_value=ADMIN)
     def test_post_invite_institution_without_suggestion_name(self, verify_token):
         # Check if raise exception when the invite is for
         # institution and not specify the suggestion institution name.
@@ -101,7 +101,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
             "Expected exception message must be equal to " +
             "Error! The invite for institution have to specify the suggestion institution name")
 
-    @patch('utils.verify_token', return_value=ADMIN)
+    @patch('util.login_service.verify_token', return_value=ADMIN)
     def test_post_invite_institution_parent(self, verify_token):
         #Test the invite_collection_handler's post method in case to parent institution.
 
@@ -151,7 +151,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
 
    
     @patch('handlers.invite_collection_handler.enqueue_task')
-    @patch('utils.verify_token', return_value=ADMIN)
+    @patch('util.login_service.verify_token', return_value=ADMIN)
     def test_post_invite_user(self, verify_token, enqueue_task):
 
         body = create_body(['ana@gmail.com'], self.admin, self.institution)
@@ -171,7 +171,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         self.assertTrue(invite['key'])
 
     @patch('handlers.invite_collection_handler.enqueue_task')
-    @patch('utils.verify_token', return_value=ADMIN)
+    @patch('util.login_service.verify_token', return_value=ADMIN)
     def test_post_invite_user_member_of_other_institution(self, verify_token, enqueue_task):
 
         body = create_body([USER['email']], self.admin, self.institution)
@@ -190,7 +190,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         enqueue_task.assert_called()
 
     @patch.object(Invite, 'send_invite')
-    @patch('utils.verify_token', return_value=USER)
+    @patch('util.login_service.verify_token', return_value=USER)
     def test_post_invite_without_admin(self, verify_token, send_invite):
         """ Check if raise exception when the admin_key is not admistrator."""
         body = create_body(['ana@gmail.com'], self.admin, self.institution)
@@ -208,7 +208,7 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         send_invite.assert_not_called()
     
     @patch('handlers.invite_collection_handler.enqueue_task')
-    @patch('utils.verify_token', return_value=ADMIN)
+    @patch('util.login_service.verify_token', return_value=ADMIN)
     def test_post_many_invites_at_once(self, verify_token, enqueue_task):
 
         body = create_body(

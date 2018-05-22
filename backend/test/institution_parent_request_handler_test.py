@@ -68,7 +68,7 @@ class InstitutionParentRequestHandlerTest(TestBaseHandler):
             self.testapp.post('/api/queue/' + handler_selector, params=params)
 
     @patch.object(Invite, 'send_notification')
-    @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_put(self, verify_token, send_notification):
         """Test method put of InstitutionParentRequestHandler."""
         request = self.testapp.put_json(
@@ -110,7 +110,7 @@ class InstitutionParentRequestHandlerTest(TestBaseHandler):
             message=json.dumps(message)
         )
 
-    @patch('utils.verify_token', return_value={'email': 'useradmin@test.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'useradmin@test.com'})
     def test_put_user_not_admin(self, verify_token):
         """Test put request with user is not admin."""
         with self.assertRaises(Exception) as ex:
@@ -126,7 +126,7 @@ class InstitutionParentRequestHandlerTest(TestBaseHandler):
             "Expected error message is %s but was %s" % (expected_message, exception_message))
 
     @patch.object(Invite, 'send_notification')
-    @patch('utils.verify_token', return_value={'email': 'otheruser@test.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_delete(self, verify_token, send_notification):
         """Test method delete of InstitutionParentRequestHandler."""
         self.testapp.delete(
@@ -169,7 +169,7 @@ class InstitutionParentRequestHandlerTest(TestBaseHandler):
         )
 
     @patch('handlers.institution_parent_request_handler.enqueue_task')
-    @patch('utils.verify_token', return_value={'email': 'user@example.com'})
+    @patch('util.login_service.verify_token', return_value={'email': 'user@example.com'})
     def test_add_admin_permission_in_institution_hierarchy(self, verify_token, enqueue_task):
         """Test add admin permissions in institution hierarchy."""
         first_user = mocks.create_user()

@@ -4,10 +4,12 @@
 from . import Invite
 from . import Request
 from google.appengine.ext import ndb
-from utils import get_deciis
-from custom_exceptions.fieldException import FieldException
-from send_email_hierarchy.accepted_institution_email_sender import AcceptedInstitutionEmailSender
+from . import get_deciis
+from custom_exceptions import FieldException
+from send_email_hierarchy import AcceptedInstitutionEmailSender
 
+
+__all__ = ['RequestInstitution']
 
 class RequestInstitution(Request):
     """Request Institution Model."""
@@ -49,14 +51,11 @@ class RequestInstitution(Request):
 
     def send_email(self, host, body=None):
         """Method of send email of request institution link."""
-        request_key = self.key.urlsafe()
-
-        # TODO Set this message
         body = body or """Olá
-        Sua instituição recebeu um novo pedido. Acesse:
-        http://%s/requests/%s/institution_children para analisar o mesmo.
+        A instituição %s deseja se cadastrar na Plataforma. Acesse:
+        http://frontend.plataformacis.org/
 
-        Equipe da Plataforma CIS """ % (host, request_key)
+        Equipe da Plataforma CIS. """ % self.institution_key.get().name
 
         """
             The super user is the admin of 

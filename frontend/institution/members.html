@@ -20,8 +20,7 @@
 						md-colors="{background: 'grey-300'}" ng-click="membersCtrl.showUserProfile(membersCtrl.institution.admin.key, $event)">  
 						<img title="{{membersCtrl.institution.admin.name}}" ng-src="{{membersCtrl.institution.admin.photo_url}}" class="md-avatar"
 						style="width: 60px; height: 60px; margin-right: 2%; border-radius: 50%;"/>
-						<div layout="column" layout-align="center" 
-							ng-click="membersCtrl.showUserProfile(membersCtrl.institution.admin.key, $event)">
+						<div layout="column" layout-align="center">
 							<b>{{ membersCtrl.institution.admin.name }}</b>
 							<span>{{ membersCtrl.institution.admin.email[0]}}</span>
 						</div>

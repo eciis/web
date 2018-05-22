@@ -71,6 +71,12 @@ class InstitutionChildrenRequestHandlerTest(TestBaseHandler):
     @patch('service_messages.send_message_notification')
     @patch('util.login_service.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_put(self, verify_token, mock_method):
+
+        # Adding parent before the request to ensure overwrite the parent
+        other_inst = mocks.create_institution()
+        institution = self.inst_requested.key.get()
+        institution.set_parent(other_inst.key)
+
         """Test method post of InstitutionChildrenRequestHandler."""
         request = self.testapp.put_json(
             "/api/requests/%s/institution_children" % self.request.key.urlsafe(),
@@ -119,6 +125,11 @@ class InstitutionChildrenRequestHandlerTest(TestBaseHandler):
     @patch('util.login_service.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_delete(self, verify_token, mock_method):
         """Test method post of InstitutionChildrenRequestHandler."""
+
+        # Adding parent before request to ensure that parent link with the institution that which invited is removed.
+        institution = self.inst_requested.key.get()
+        institution.set_parent(self.inst_test.key)
+
         self.testapp.delete(
             "/api/requests/%s/institution_children" % self.request.key.urlsafe(),
             headers={"institution-authorization": self.inst_requested.key.urlsafe()}

@@ -30,7 +30,6 @@ class InstitutionChildrenRequestHandler(BaseHandler):
                               'User is not allowed to accept link between institutions',
                               request.institution_requested_key.urlsafe())
         request.change_status('accepted')
-        request.put()
 
         institution_children = request.institution_requested_key.get()
         institution_children.set_parent(request.institution_key)
@@ -51,7 +50,6 @@ class InstitutionChildrenRequestHandler(BaseHandler):
                               'User is not allowed to reject link between institutions',
                               request.institution_requested_key.urlsafe())
         request.change_status('rejected')
-        request.put()
 
         institution_children = request.institution_requested_key.get()
 

@@ -116,6 +116,49 @@ class RequestInstitutionParentTest(TestBase):
             'Expected message is The institutions has already been connected')
 
 
+    def test_create_request_for_institution_with_child(self):
+        """Test create request for an institution
+        that has the request one as a child."""
+        self.other_institution.add_child(self.institution.key)
+
+        try:
+            generate_request(
+                self.admin, self.institution, 
+                self.other_institution
+            )
+        except Exception:
+            self.fail("It should create a request for an institution with no parent.")
+
+    
+    def test_create_request_for_instituion_with_not_confirmed_parent(self):
+        """Test create request for an institution that has a different parent."""
+        other_parent = mocks.create_institution()
+        self.institution.set_parent(other_parent.key)
+
+        try:
+            generate_request(
+                self.admin, self.institution, 
+                self.other_institution
+            )
+        except Exception:
+            self.fail("It should create a request for other_institution.")
+
+    
+    def test_create_request_for_instituion_with_confirmed_parent(self):
+        """Test create request for an institution that has a different parent."""
+        other_parent = mocks.create_institution()
+        other_parent.add_child(self.institution.key)
+        self.institution.set_parent(other_parent.key)
+
+        try:
+            generate_request(
+                self.admin, self.institution, 
+                self.other_institution
+            )
+        except Exception:
+            self.fail("It should create a request for other_institution.")
+
+
     def test_make(self):
         """Test method make for parent institution request."""
         request = generate_request(

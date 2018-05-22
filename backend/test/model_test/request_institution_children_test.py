@@ -116,6 +116,20 @@ class RequestInstitutionChildrenTest(TestBase):
             'Expected message is The institutions has already been connected')
 
 
+    def test_create_request_for_instituion_with_not_confirmed_parent(self):
+        """Test create request for an institution with no parent."""
+        other_parent = mocks.create_institution()
+        other_parent.add_child(self.other_institution.key)
+
+        try:
+            generate_request(
+                self.admin, self.institution, 
+                self.other_institution
+            )
+        except FieldException:
+            self.fail("It should create a request for an institution with no parent.")
+
+
     def test_make(self):
         """Test method make for children institution request."""
         request = generate_request(

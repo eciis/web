@@ -81,9 +81,15 @@
             ng-click="manageMemberCtrl.showUserProfile(manageMemberCtrl.institution.admin.key, $event)" flex-xs>
             <img title="{{manageMemberCtrl.institution.admin.name}}" ng-src="{{manageMemberCtrl.institution.admin.photo_url || '/app/images/avatar.png'}}" 
               class="md-avatar" style="margin: 0 15px 0 -15px; width: 60px; height: 60px;"/>
-            <div layout="column">
-               <b style="position: relative; margin-top: 20px; font-size: 15px;">{{ manageMemberCtrl.institution.admin.name }}</b>
-               <span style="position: relative; bottom: 20px; font-size: 15px;">{{ manageMemberCtrl.institution.admin.email[0]}}</span>
+            <div class="md-list-item-text" layout="column" style="margin-top: 12px;">
+              <b style="position: relative; font-size: 15px;">
+                <span style="line-height: 1.0;">
+                  {{ manageMemberCtrl.institution.admin.name }}
+                </span>
+              </b>
+              <span style="position: relative; font-size: 15px; margin-top: -10px;">
+                {{ manageMemberCtrl.institution.admin.email[0] }}
+              </span>
             </div>
             <div layout="row" layout-align="end center" flex>
               <p class="status-invite-adm" style="line-height: 21px; padding: 5px;" md-colors="{color: 'teal-500'}">
@@ -99,9 +105,15 @@
               <div layout="row" layout-align="start center"  flex>
                 <img title="{{manageMemberCtrl.institution.admin.name}}" ng-src="{{manageMemberCtrl.getMemberPhotoUrl(invite.invitee_key)}}" 
                   class="md-avatar" style="margin: 0 15px 0 px; width: 60px; height: 60px;"/>
-                <div layout="column">
-                  <b style="position: relative; margin-top: 20px; font-size: 15px;">{{ manageMemberCtrl.getMemberName(invite.invitee_key) }}</b>
-                  <span style="position: relative; bottom: 20px; font-size: 15px;">{{ invite.invitee }}</span>
+                <div layout="column" style="margin-top: 12px;">
+                  <b style="position: relative; font-size: 15px;">
+                    <span style="line-height: 1.0;">
+                      {{ manageMemberCtrl.getMemberName(invite.invitee_key) }}
+                    </span>
+                  </b>
+                  <span style="position: relative; margin-top: -10px; font-size: 15px;">
+                    {{ invite.invitee }}
+                  </span>
                 </div>
                 <div layout="row" layout-align="end center" flex>
                   <p class="status-invite-adm" style="margin-right: -6px; line-height: 21px; padding: 5px;"

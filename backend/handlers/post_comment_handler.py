@@ -10,7 +10,7 @@ from utils import json_response
 from utils import Utils
 from service_entities import enqueue_task
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
-from custom_exceptions.entityException import EntityException
+from custom_exceptions import EntityException
 
 from . import BaseHandler
 from models import Comment

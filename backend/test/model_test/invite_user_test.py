@@ -6,7 +6,7 @@ from models import Institution
 from models import InviteUser
 from models import User
 
-from custom_exceptions.fieldException import FieldException
+from custom_exceptions import FieldException
 
 
 class InviteUserTest(TestBase):

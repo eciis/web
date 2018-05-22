@@ -2,7 +2,7 @@
 """Institution Children Request Handler."""
 
 import json
-from util.login_service import login_required
+from util import login_required
 from utils import json_response
 from . import BaseHandler
 from service_entities import enqueue_task
@@ -33,8 +33,7 @@ class InstitutionChildrenRequestHandler(BaseHandler):
         request.put()
 
         institution_children = request.institution_requested_key.get()
-        institution_children.parent_institution = request.institution_key
-        institution_children.put()
+        institution_children.set_parent(request.institution_key)
 
         request.send_response_notification(user.current_institution, user.key, 'ACCEPT')
         request.send_response_email('ACCEPT')

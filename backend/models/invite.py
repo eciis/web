@@ -6,7 +6,7 @@ from service_messages import send_message_notification
 from service_messages import create_message
 from send_email_hierarchy import EmailSender
 from . import User       
-from util.strings_pt_br import get_subject      
+from util import get_subject      
 
 
 __all__ = ['Invite']

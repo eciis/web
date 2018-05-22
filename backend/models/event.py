@@ -2,7 +2,7 @@
 import datetime
 import json
 from google.appengine.ext import ndb
-from custom_exceptions.fieldException import FieldException
+from custom_exceptions import FieldException
 from models import Address
 
 __all__ = ['Event']

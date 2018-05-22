@@ -4,8 +4,8 @@
 from . import Invite
 from . import Request
 from google.appengine.ext import ndb
-from util.provider_institutions import get_deciis
-from custom_exceptions.fieldException import FieldException
+from . import get_deciis
+from custom_exceptions import FieldException
 from send_email_hierarchy import AcceptedInstitutionEmailSender
 
 

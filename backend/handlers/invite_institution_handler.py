@@ -3,10 +3,10 @@
 
 import json
 
-from util.login_service import login_required
+from util import login_required
 from utils import json_response
 from utils import Utils
-from custom_exceptions.notAuthorizedException import NotAuthorizedException
+from custom_exceptions import NotAuthorizedException
 from . import BaseHandler
 from models import InviteFactory
 

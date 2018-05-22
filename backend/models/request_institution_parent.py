@@ -5,7 +5,7 @@ from . import Invite
 from . import Request
 from google.appengine.ext import ndb
 from send_email_hierarchy import RequestLinkEmailSender
-from util.strings_pt_br import get_subject
+from util import get_subject
 
 __all__ = ['RequestInstitutionParent']
 
@@ -22,7 +22,7 @@ class RequestInstitutionParent(Request):
         request.isValid()
         return request
 
-    def send_email(self, host, body=None):
+    def send_email(self, host):
         """Method of send email of request institution link."""
         parent_institution = self.institution_requested_key.get()
         child_institution = self.institution_key.get()
@@ -85,7 +85,7 @@ class RequestInstitutionParent(Request):
             sender_institution_key=self.institution_requested_key)
         
         super(RequestInstitutionParent, self).send_notification(
-            current_institution=current_institution, 
+            current_institution=current_institution,
             receiver_key=self.sender_key or self.admin_key,
             notification_type=notification_type,
             message=notification_message

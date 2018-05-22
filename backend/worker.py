@@ -11,7 +11,7 @@ from models import Post
 from models import InviteUser
 from models import InviteUserAdm
 from utils import json_response
-from util.strings_pt_br import get_subject
+from util import get_subject
 from service_messages import send_message_notification
 from service_messages import send_message_email
 from jinja2 import Environment, FileSystemLoader

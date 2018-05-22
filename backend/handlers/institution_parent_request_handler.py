@@ -33,10 +33,7 @@ class InstitutionParentRequestHandler(BaseHandler):
         request.put()
 
         parent_institution = request.institution_requested_key.get()
-
-        if request.institution_key not in parent_institution.children_institutions:
-            parent_institution.children_institutions.append(request.institution_key)
-            parent_institution.put()
+        parent_institution.add_child(request.institution_key)
 
         institution_children = request.institution_key.get()
 
@@ -59,10 +56,7 @@ class InstitutionParentRequestHandler(BaseHandler):
         request.put()
 
         parent_institution = request.institution_requested_key.get()
-
-        if request.institution_key in parent_institution.children_institutions:
-            parent_institution.children_institutions.remove(request.institution_key)
-            parent_institution.put()
+        parent_institution.remove_child(request.institution_key)
 
         request.send_response_notification(user.current_institution, user.key, 'REJECT')
         request.send_response_email('REJECT')

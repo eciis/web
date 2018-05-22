@@ -131,6 +131,11 @@ class Institution(ndb.Model):
             self.children_institutions.append(child_key)
             self.put()
 
+    def remove_child(self, child_key):
+        if child_key in self.children_institutions:
+            self.children_institutions.remove(child_key)
+            self.put()
+
     @ndb.transactional(xg=True)
     def create_parent_connection(self, invite):
         """Make connections between parent and daughter institution."""

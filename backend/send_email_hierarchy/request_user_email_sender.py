@@ -6,7 +6,7 @@ MAXIMUM_INSTITUTION_NAME = 29
 MAXIMUM_USER_NAME = 26
 
 class RequestUserEmailSender(EmailSender):
-    """Entity responsible for send invite institution's email."""
+    """Entity responsible for request user's email."""
 
     def __init__(self, **kwargs):
         """The class constructor.

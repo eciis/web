@@ -7,7 +7,8 @@ from google.appengine.ext import ndb
 from util.provider_institutions import get_deciis
 from custom_exceptions.fieldException import FieldException
 from send_email_hierarchy.accepted_institution_email_sender import AcceptedInstitutionEmailSender
-
+from send_email_hierarchy.request_institution_email_sender import RequestInstitutionEmailSender
+from util.strings_pt_br import get_subject
 
 __all__ = ['RequestInstitution']
 
@@ -51,18 +52,21 @@ class RequestInstitution(Request):
 
     def send_email(self, host, body=None):
         """Method of send email of request institution link."""
-        body = body or """Olá
-        A instituição %s deseja se cadastrar na Plataforma. Acesse:
-        http://frontend.plataformacis.org/
-
-        Equipe da Plataforma CIS. """ % self.institution_key.get().name
-
-        """
-            The super user is the admin of 
-            'Departamento do Complexo Industrial e Inovação em Saúde".
-        """
-        super_user = get_deciis().admin.get()
-        super(RequestInstitution, self).send_email(host, super_user.email, body)
+        subject = get_subject('REQUEST_INSTITUTION')
+        admin = get_deciis().admin.get()
+        institution = self.institution_key.get()
+        institution_requested = self.institution_requested_key.urlsafe()
+        email_sender = RequestInstitutionEmailSender(**{
+            'html': 'request_institution_email.html',
+            'receiver': admin.email[0],
+            'subject': subject,
+            'user_name': self.sender_name,
+            'user_email': self.sender_key.get().email[0],
+            'description': institution.description,
+            'institution_name': institution.name,
+            'institution_requested_key': institution_requested
+        })
+        email_sender.send_email()
 
     def send_notification(self, current_institution):
         """Method of send notification of request intitution."""

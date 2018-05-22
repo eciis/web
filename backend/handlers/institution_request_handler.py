@@ -9,7 +9,7 @@ from utils import json_response
 from . import BaseHandler
 from google.appengine.ext import ndb
 from utils import Utils
-from custom_exceptions.notAuthorizedException import NotAuthorizedException
+from custom_exceptions import NotAuthorizedException
 
 __all__ = ['InstitutionRequestHandler']
 

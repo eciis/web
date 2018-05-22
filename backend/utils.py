@@ -12,7 +12,7 @@ from google.appengine.ext import ndb
 from oauth2client import client
 from oauth2client.crypt import AppIdentityError
 
-from custom_exceptions.notAuthorizedException import NotAuthorizedException
+from custom_exceptions import NotAuthorizedException
 from custom_exceptions.queryException import QueryException
 
 

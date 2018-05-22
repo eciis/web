@@ -10,7 +10,7 @@ from utils import Utils
 from models import Invite
 from util import login_required
 from utils import json_response
-from custom_exceptions.notAuthorizedException import NotAuthorizedException
+from custom_exceptions import NotAuthorizedException
 from custom_exceptions import EntityException
 
 from models import Institution

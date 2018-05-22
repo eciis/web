@@ -9,7 +9,7 @@ from . import BaseHandler
 from models import InstitutionProfile
 from models import Invite
 from custom_exceptions import FieldException
-from custom_exceptions.notAuthorizedException import NotAuthorizedException
+from custom_exceptions import NotAuthorizedException
 from utils import json_response
 from utils import Utils
 from util import JsonPatch

@@ -9,7 +9,7 @@ from util import login_required
 from utils import json_response
 from utils import Utils
 from service_messages import send_message_notification
-from custom_exceptions.notAuthorizedException import NotAuthorizedException
+from custom_exceptions import NotAuthorizedException
 from custom_exceptions import EntityException
 
 from . import BaseHandler

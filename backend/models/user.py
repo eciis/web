@@ -1,7 +1,7 @@
 """User Model."""
 from search_module import SearchUser
 from google.appengine.ext import ndb
-from custom_exceptions.fieldException import FieldException
+from custom_exceptions import FieldException
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from . import get_deciis
 from . import get_health_ministry

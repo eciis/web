@@ -342,6 +342,10 @@
             return alreadySended;
         };
 
+        manageMemberCtrl.limitString = function limitString(string, maxSize) {
+            return Utils.limitString(string, maxSize)
+        };
+
         function getMemberByKey(key) {
             return manageMemberCtrl.members.reduce((foundMember, member) => (member.key === key) ? member : foundMember, {});
         }

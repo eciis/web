@@ -4,7 +4,7 @@ from . import Institution
 from custom_exceptions.fieldException import FieldException
 from . import User
 from send_email_hierarchy import InviteInstitutionEmailSender
-from util.strings_pt_br import get_subject
+from util import get_subject
 
 __all__ = ['InviteInstitution']
 

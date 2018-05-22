@@ -4,7 +4,7 @@
 from google.appengine.ext import ndb
 
 from utils import Utils
-from util.login_service import login_required
+from util import login_required
 from utils import json_response
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from custom_exceptions.entityException import EntityException
@@ -14,7 +14,7 @@ from models import Institution
 
 from service_messages import send_message_notification
 from service_entities import enqueue_task
-from util.strings_pt_br import get_subject
+from util import get_subject
 import json
 
 from . import BaseHandler

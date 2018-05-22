@@ -4,7 +4,7 @@
 from google.appengine.ext import ndb
 import json
 
-from util.login_service import login_required
+from util import login_required
 from . import BaseHandler
 from models import InstitutionProfile
 from models import Invite
@@ -12,7 +12,7 @@ from custom_exceptions.fieldException import FieldException
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
 from utils import json_response
 from utils import Utils
-from util.json_patch import JsonPatch
+from util import JsonPatch
 
 __all__ = ['InviteHandler']
 

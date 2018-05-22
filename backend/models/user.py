@@ -3,8 +3,8 @@ from search_module import SearchUser
 from google.appengine.ext import ndb
 from custom_exceptions.fieldException import FieldException
 from custom_exceptions.notAuthorizedException import NotAuthorizedException
-from util.provider_institutions import get_deciis
-from util.provider_institutions import get_health_ministry
+from . import get_deciis
+from . import get_health_ministry
 from utils import Utils
 import random
 

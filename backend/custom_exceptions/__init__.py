@@ -3,7 +3,8 @@
 from .entityException import *
 from .fieldException import *
 from .notAuthorizedException import *
+from .queryException import *
 
-exceptions = [entityException, fieldException, notAuthorizedException]
+exceptions = [entityException, fieldException, notAuthorizedException, queryException]
 
 __all__ = [prop for exception in exceptions for prop in exception.__all__]

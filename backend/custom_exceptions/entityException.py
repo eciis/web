@@ -1,5 +1,6 @@
 """Entity Exception."""
 
+__all__ = ['EntityException']
 
 class EntityException(Exception):
     """Entity Exception."""

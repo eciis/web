@@ -1,10 +1,10 @@
 <md-card style="margin: 0px;">
   <md-content class="custom-scrollbar">
 	<md-list style="max-height: 150px">
-  	  <md-list-item ng-repeat="voter in ctrl.option.voters" ng-click="null">
+  	  <md-list-item class="md-2-line" ng-repeat="voter in ctrl.option.voters" ng-click="null">
 	    <img ng-src="{{voter.photo_url}}" class="md-avatar" />
 	    <div class="md-list-item-text" layout="column">
-	      <p>{{ voter.name }}</p>
+	      <p>{{ ctrl.limitString(voter.name, 50) }}</p>
 	    </div>
   	  </md-list-item>
 	</md-list>

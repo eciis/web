@@ -6,7 +6,7 @@ from models import RequestInstitutionParent
 from models import RequestInstitutionChildren
 from models import Institution
 from models import Address
-from custom_exceptions.fieldException import FieldException
+from custom_exceptions import FieldException
 from models import User
 
 

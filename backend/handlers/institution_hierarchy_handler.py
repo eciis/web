@@ -6,8 +6,8 @@ from google.appengine.ext import ndb
 from utils import Utils
 from util import login_required
 from utils import json_response
-from custom_exceptions.notAuthorizedException import NotAuthorizedException
-from custom_exceptions.entityException import EntityException
+from custom_exceptions import NotAuthorizedException
+from custom_exceptions import EntityException
 from send_email_hierarchy import RequestLinkEmailSender
 
 from models import Institution

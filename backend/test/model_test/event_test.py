@@ -7,7 +7,7 @@ from models import User
 from models import Event
 from .. import mocks
 
-from custom_exceptions.fieldException import FieldException
+from custom_exceptions import FieldException
 
 import datetime
 import json

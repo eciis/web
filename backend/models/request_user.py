@@ -2,7 +2,7 @@
 """Request user model."""
 from . import Invite
 from google.appengine.ext import ndb
-from custom_exceptions.fieldException import FieldException
+from custom_exceptions import FieldException
 from . import Institution
 from . import Request
 from send_email_hierarchy import RequestUserEmailSender

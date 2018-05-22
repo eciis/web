@@ -7,7 +7,7 @@ from google.appengine.ext import ndb
 from util import login_required
 from utils import json_response
 from . import BaseHandler
-from custom_exceptions.entityException import EntityException
+from custom_exceptions import EntityException
 
 __all__ = ['RequestHandler']
 

@@ -8,7 +8,7 @@ from utils import json_response
 
 from . import BaseHandler
 
-from custom_exceptions.notAuthorizedException import NotAuthorizedException
+from custom_exceptions import NotAuthorizedException
 
 __all__ = ['SubscribePostHandler']
 

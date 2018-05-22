@@ -12,7 +12,7 @@ from util import login_required
 from utils import json_response
 from utils import query_paginated
 from utils import to_int
-from custom_exceptions.queryException import QueryException
+from custom_exceptions import QueryException
 
 __all__ = ['InstitutionEventsHandler']
 

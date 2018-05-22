@@ -5,7 +5,7 @@ import json
 from util import login_required
 from utils import json_response
 from utils import Utils
-from custom_exceptions.entityException import EntityException
+from custom_exceptions import EntityException
 from . import BaseHandler
 from models import Institution
 from models import Address

@@ -1,5 +1,6 @@
 """Not Authorized Exception."""
 
+__all__ = ['NotAuthorizedException']
 
 class NotAuthorizedException(Exception):
     """Not Authorized Exception."""

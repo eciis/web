@@ -13,7 +13,7 @@ from utils import json_response
 from utils import NotAuthorizedException
 from utils import query_paginated
 from utils import to_int
-from custom_exceptions.queryException import QueryException
+from custom_exceptions import QueryException
 
 __all__ = ['EventCollectionHandler']
 

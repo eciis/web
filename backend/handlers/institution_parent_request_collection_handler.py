@@ -6,12 +6,12 @@ import json
 from util import login_required
 from utils import json_response
 from utils import Utils
-from custom_exceptions.entityException import EntityException
+from custom_exceptions import EntityException
 from . import BaseHandler
 from models import Institution
 from models import InviteFactory
 from models import RequestInstitutionParent
-from custom_exceptions.notAuthorizedException import NotAuthorizedException
+from custom_exceptions import NotAuthorizedException
 
 
 __all__ = ['InstitutionParentRequestCollectionHandler']

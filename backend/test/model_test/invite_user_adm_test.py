@@ -8,7 +8,7 @@ from models import Institution
 from models import InviteUserAdm
 from models import User
 
-from custom_exceptions.notAuthorizedException import NotAuthorizedException
+from custom_exceptions import NotAuthorizedException
 
 
 class InviteUserAdmTest(TestBase):

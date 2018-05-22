@@ -2,7 +2,7 @@
 from google.appengine.ext import ndb
 from invite_user import InviteUser
 from utils import Utils
-from custom_exceptions.notAuthorizedException import NotAuthorizedException
+from custom_exceptions import NotAuthorizedException
 from send_email_hierarchy import TransferAdminEmailSender
 from util.strings_pt_br import get_subject
 

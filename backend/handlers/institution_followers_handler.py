@@ -10,7 +10,7 @@ from utils import json_response
 
 from models import Institution
 
-from custom_exceptions.notAuthorizedException import NotAuthorizedException
+from custom_exceptions import NotAuthorizedException
 
 from . import BaseHandler
 

@@ -1,5 +1,7 @@
 """Field Exception."""
 
+__all__ = ['FieldException']
+
 class FieldException(Exception):
     """Field Exception."""
 

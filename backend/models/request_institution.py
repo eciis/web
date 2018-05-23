@@ -4,9 +4,8 @@
 from . import Invite
 from . import Request
 from google.appengine.ext import ndb
-from custom_exceptions.fieldException import FieldException
 from send_email_hierarchy import RequestInstitutionEmailSender
-from util.strings_pt_br import get_subject
+from util import get_subject
 from . import get_deciis
 from custom_exceptions import FieldException
 
@@ -43,13 +42,14 @@ class RequestInstitution(Request):
 
         institution = self.institution_key.get()
         institution_requested = self.institution_requested_key.urlsafe()
+        user = self.sender_key.get()
         email_sender = RequestInstitutionEmailSender(**{
-            'receiver': self.sender_key.get().email[0],
+            'receiver': user.email[0],
             'subject': subject,
             'institution_key': institution.key.urlsafe(),
             'html': html,
-            'user_name': self.sender_name,
-            'user_email': self.sender_key.get().email[0],
+            'user_name': user.name,
+            'user_email': user.email[0],
             'description': institution.description,
             'institution_name': institution.name,
             'institution_requested_key': institution_requested

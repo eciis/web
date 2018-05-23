@@ -1,6 +1,8 @@
 """Request to create institution email sender model."""
 
-from email_sender import EmailSender
+from . import EmailSender
+
+__all__ = ['RequestInstitutionEmailSender']
 
 MAXIMUM_INSTITUTION_NAME = 29
 MAXIMUM_USER_NAME = 26

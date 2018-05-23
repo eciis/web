@@ -5,11 +5,10 @@ from . import Invite
 from . import Request
 from google.appengine.ext import ndb
 from custom_exceptions.fieldException import FieldException
-from send_email_hierarchy.request_institution_email_sender import RequestInstitutionEmailSender
+from send_email_hierarchy import RequestInstitutionEmailSender
 from util.strings_pt_br import get_subject
 from . import get_deciis
 from custom_exceptions import FieldException
-from send_email_hierarchy import AcceptedInstitutionEmailSender
 
 
 __all__ = ['RequestInstitution']

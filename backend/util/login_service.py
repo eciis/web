@@ -6,6 +6,7 @@ from google.appengine.ext import ndb
 from utils import verify_token
 from models import User
 
+__all__ = ['login_required']
 
 def setup_current_institution(user, request):
     """

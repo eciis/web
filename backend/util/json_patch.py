@@ -1,6 +1,7 @@
 """Module of interpretation jsonPatch."""
 import json
 
+__all__ = ['JsonPatch', 'PatchException']
 
 class PatchException(Exception):
     """Exception of interpretation patch."""

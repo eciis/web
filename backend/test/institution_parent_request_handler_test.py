@@ -71,6 +71,11 @@ class InstitutionParentRequestHandlerTest(TestBaseHandler):
     @patch('util.login_service.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_put(self, verify_token, send_notification):
         """Test method put of InstitutionParentRequestHandler."""
+
+        # Adding child before the request to ensure that not add repeated child
+        institution = self.inst_requested.key.get()
+        institution.add_child(self.inst_test.key)
+
         request = self.testapp.put_json(
             "/api/requests/%s/institution_parent" % self.request.key.urlsafe(),
             headers={'institution-authorization': self.inst_requested.key.urlsafe()}
@@ -78,14 +83,13 @@ class InstitutionParentRequestHandlerTest(TestBaseHandler):
 
         request = json.loads(request._app_iter[0])
 
-        institution = self.inst_requested.key.get()
 
         self.assertEqual(
             request['status'],
             'accepted',
             'Expected status from request must be accepted')
         self.assertEqual(
-            institution.children_institutions[0], self.inst_test.key,
+            institution.children_institutions, [self.inst_test.key],
             "The children institution of inst test must be update to inst_requested")
         
         message = {
@@ -129,6 +133,11 @@ class InstitutionParentRequestHandlerTest(TestBaseHandler):
     @patch('util.login_service.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_delete(self, verify_token, send_notification):
         """Test method delete of InstitutionParentRequestHandler."""
+
+        # Adding child before the request to ensure that the existing link with the institution that which invited is removed.
+        institution = self.inst_requested.key.get()
+        institution.add_child(self.inst_test.key)
+
         self.testapp.delete(
             "/api/requests/%s/institution_parent" % self.request.key.urlsafe(),
             headers={'institution-authorization': self.inst_requested.key.urlsafe()}

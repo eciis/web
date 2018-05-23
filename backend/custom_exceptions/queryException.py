@@ -1,5 +1,6 @@
 """Query Exception."""
 
+__all__ = ['QueryException']
 
 class QueryException(Exception):
     """Entity Exception."""

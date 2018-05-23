@@ -2,7 +2,7 @@
 """Resend Invite Handler Test."""
 
 import json
-from search_module.search_institution import SearchInstitution
+from search_module import SearchInstitution
 from test_base_handler import TestBaseHandler
 from models import User
 from models import Institution

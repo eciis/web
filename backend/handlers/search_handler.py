@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 """Search Handler."""
 
-from util.login_service import login_required
+from util import login_required
 from utils import json_response
 import json
 
 from . import BaseHandler
-from search_module.search_user import SearchUser
-from search_module.search_institution import SearchInstitution
+from search_module import SearchUser
+from search_module import SearchInstitution
 
 __all__ = ['SearchHandler']
 

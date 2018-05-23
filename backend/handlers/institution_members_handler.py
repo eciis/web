@@ -4,12 +4,12 @@
 from google.appengine.ext import ndb
 import json
 
-from util.login_service import login_required
+from util import login_required
 from utils import Utils
 from utils import json_response
-from util.strings_pt_br import get_subject
+from util import get_subject
 from service_messages import send_message_notification
-from send_email_hierarchy.remove_member_email_sender import RemoveMemberEmailSender
+from send_email_hierarchy import RemoveMemberEmailSender
 
 from . import BaseHandler
 

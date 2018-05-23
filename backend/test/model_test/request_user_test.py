@@ -3,7 +3,7 @@
 
 from ..test_base import TestBase
 from models import RequestUser
-from custom_exceptions.fieldException import FieldException
+from custom_exceptions import FieldException
 from .. import mocks
 
 

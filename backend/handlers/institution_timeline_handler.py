@@ -4,12 +4,12 @@
 from google.appengine.ext import ndb
 import json
 
-from util.login_service import login_required
+from util import login_required
 from utils import json_response
 from utils import offset_pagination
 from utils import Utils
 from utils import to_int
-from custom_exceptions.queryException import QueryException
+from custom_exceptions import QueryException
 
 from . import BaseHandler
 from models import Post

@@ -2,9 +2,9 @@
 """Post Model."""
 from google.appengine.ext import ndb
 from google.appengine.ext.ndb.polymodel import PolyModel
-from custom_exceptions.fieldException import FieldException
-from custom_exceptions.notAuthorizedException import NotAuthorizedException
-from custom_exceptions.entityException import EntityException
+from custom_exceptions import FieldException
+from custom_exceptions import NotAuthorizedException
+from custom_exceptions import EntityException
 from models import Event
 from utils import Utils
 from service_messages import create_message

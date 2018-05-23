@@ -4,7 +4,7 @@
 from google.appengine.ext import ndb
 import json
 from utils import Utils
-from util.login_service import login_required
+from util import login_required
 from utils import json_response
 
 from . import BaseHandler
@@ -13,7 +13,7 @@ from models import PostFactory
 from service_messages import send_message_notification
 from service_entities import enqueue_task
 
-from custom_exceptions.notAuthorizedException import NotAuthorizedException
+from custom_exceptions import NotAuthorizedException
 
 __all__ = ['PostCollectionHandler']
 

@@ -5,9 +5,9 @@ import json
 from utils import Utils
 from utils import offset_pagination
 from utils import to_int
-from util.login_service import login_required
+from util import login_required
 from utils import json_response
-from custom_exceptions.queryException import QueryException
+from custom_exceptions import QueryException
 
 from models import Institution
 

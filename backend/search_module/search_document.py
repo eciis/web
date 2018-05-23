@@ -6,6 +6,7 @@ from google.appengine.api import search
 
 import logging
 
+__all__ = ['SearchDocument']
 
 def has_changes(fields, entity):
     """It returns True when there is a change

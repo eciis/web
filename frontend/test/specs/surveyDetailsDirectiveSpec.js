@@ -148,4 +148,13 @@
             expect(surveyCtrl.timeHasBeenExpired()).toBeFalsy();
         });
     });
+
+    describe('limitString()', function () {
+        it('should call limitString', function () {
+            spyOn(Utils, 'limitString').and.callThrough();
+            const result = surveyCtrl.limitString('Test string', 5);
+            expect(_.size(result)).toEqual(9);
+            expect(Utils.limitString).toHaveBeenCalled();
+        });
+    });
 }));

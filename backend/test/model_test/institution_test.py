@@ -42,7 +42,7 @@ class InstitutionTest(TestBase):
             "Instituion should not have children"
         )
 
-        new_inst = mocks.create_institution();
+        new_inst = mocks.create_institution()
         self.institution.add_child(new_inst.key)
         self.institution = self.institution.key.get()
 
@@ -55,10 +55,27 @@ class InstitutionTest(TestBase):
         
         self.assertEquals(
             self.institution.children_institutions, [new_inst.key],
-            "Instituion should have repeated children"
+            "Institution should not have repeated children"
         )    
         
-    
+    def test_remove_child(self):
+
+        new_inst = mocks.create_institution()
+        self.institution.add_child(new_inst.key)
+        self.institution = self.institution.key.get()
+
+        self.assertEquals(
+            self.institution.children_institutions, [new_inst.key],
+            "Instituion should have new_inst as child"
+        )
+
+        self.institution.remove_child(new_inst.key)
+
+        self.assertEquals(
+            self.institution.children_institutions, [],
+            "Instituion should not have children"
+        )
+
     def test_follow(self):
         # case in which the user is not a follower
         self.assertEquals(self.institution.followers, [],

@@ -5,7 +5,7 @@ import json
 import mocks
 
 from test_base_handler import TestBaseHandler
-from custom_exceptions.notAuthorizedException import NotAuthorizedException
+from custom_exceptions import NotAuthorizedException
 from handlers.post_comment_handler import PostCommentHandler
 from handlers.post_comment_handler import check_permission
 from models import User

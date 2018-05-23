@@ -60,6 +60,13 @@ class InstitutionParentRequestCollectionHandler(BaseHandler):
         requested_inst_key = data.get('institution_requested_key')
         requested_inst_key = ndb.Key(urlsafe=requested_inst_key)
 
+        child_institution = child_key.get()
+        Utils._assert(
+            child_institution.parent_institution != None,
+            "The institution's already have a parent",
+            NotAuthorizedException
+        )
+
         Utils._assert(
             Institution.has_connection_between(requested_inst_key, child_key),
             "Circular hierarchy not allowed",
@@ -69,7 +76,6 @@ class InstitutionParentRequestCollectionHandler(BaseHandler):
         request = InviteFactory.create(data, type_of_invite)
         request.put()
 
-        child_institution = child_key.get()
         child_institution.parent_institution = requested_inst_key
         child_institution.put()
 

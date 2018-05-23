@@ -6,6 +6,8 @@
     app.service('SubmitFormListenerService', function($transitions, MessageService, $state) {
         var service = this;
 
+        var listeners = {};
+
         service.addListener = function addListener(obj, formElement, scope) {
             var modified = false;
             var objectEquality = true;
@@ -25,16 +27,24 @@
                             'Deseja sair sem salvar as alterações?');
                     
                     promisse.then(function success() {
-                        transitionListener();
+                        service.unobserve(obj);
                         $state.go(targetState._identifier, targetState._params);
                     }, function error() {
                     });
                 } else {
-                    transitionListener();
+                    service.unobserve(obj);
                 }
             });
 
-            formElement.onsubmit = () => {transitionListener();};
+            listeners[obj] = transitionListener;
+
+            formElement.onsubmit = () => {service.unobserve(obj);};
+        };
+
+        service.unobserve = function unobserve(obj){
+            let transitionListener = listeners[obj];
+            transitionListener();
+            delete listeners[obj];
         };
     });
 })();

@@ -6,7 +6,6 @@ from . import Request
 from google.appengine.ext import ndb
 from util.provider_institutions import get_deciis
 from custom_exceptions.fieldException import FieldException
-from send_email_hierarchy.accepted_institution_email_sender import AcceptedInstitutionEmailSender
 from send_email_hierarchy.request_institution_email_sender import RequestInstitutionEmailSender
 from util.strings_pt_br import get_subject
 
@@ -33,22 +32,27 @@ class RequestInstitution(Request):
     def send_response_email(self, operation, host=None):
         """Method to send email of sender institution when invite is accepted or rejected."""
         if operation == "ACCEPT":
-            subject = """Instituição aceita na Plataforma Virtual CIS."""
-            email_sender = AcceptedInstitutionEmailSender(**{
-                'receiver': self.sender_key.get().email[0],
-                'subject': subject,
-                'institution_key': self.institution_key.urlsafe(),
-            })
-            email_sender.send_email()
+            subject = get_subject('ACCEPTED_REQUEST_INSTITUTION')
+            html = 'accepted_institution_request_email.html'
+            
         else:
-            rejectMessage = """Olá,
-            Lamentamos informar mas o seu pedido não foi aceito.
-            Sugerimos que fale com o seu superior para que seja enviado um convite.
-            Equipe da Plataforma CIS"""
+            subject = get_subject('REJECTED_REQUEST_INSTITUTION')
+            html = 'rejected_institution_request_email.html'
 
-            sender_email = self.sender_key.get().email[0]
-            super(RequestInstitution, self).send_email(
-                host, sender_email, rejectMessage)
+        institution = self.institution_key.get()
+        institution_requested = self.institution_requested_key.urlsafe()
+        email_sender = RequestInstitutionEmailSender(**{
+            'receiver': self.sender_key.get().email[0],
+            'subject': subject,
+            'institution_key': institution.key.urlsafe(),
+            'html': html,
+            'user_name': self.sender_name,
+            'user_email': self.sender_key.get().email[0],
+            'description': institution.description,
+            'institution_name': institution.name,
+            'institution_requested_key': institution_requested
+        })
+        email_sender.send_email()
 
     def send_email(self, host, body=None):
         """Method of send email of request institution link."""
@@ -64,6 +68,7 @@ class RequestInstitution(Request):
             'user_email': self.sender_key.get().email[0],
             'description': institution.description,
             'institution_name': institution.name,
+            'institution_key': self.institution_key.urlsafe(),
             'institution_requested_key': institution_requested
         })
         email_sender.send_email()

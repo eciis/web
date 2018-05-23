@@ -21,6 +21,7 @@ class RequestInstitutionEmailSender(EmailSender):
         self.user_email = self.crop_name(kwargs['user_email'], MAXIMUM_USER_NAME)
         self.description = self.crop_name(kwargs['description'], MAXIMUM_DESCRIPTION)
         self.institution_name = self.crop_name(kwargs['institution_name'], MAXIMUM_INSTITUTION_NAME)
+        self.institution_key = kwargs['institution_key']
         self.institution_requested_key = kwargs['institution_requested_key']
 
     def send_email(self):
@@ -33,6 +34,7 @@ class RequestInstitutionEmailSender(EmailSender):
             'user_email': self.user_email,
             'description': self.description,
             'institution_name': self.institution_name,
+            'institution_key': self.institution_key,
             'institution_requested_key': self.institution_requested_key
         }
         super(RequestInstitutionEmailSender, self).send_email(email_json)

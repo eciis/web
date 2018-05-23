@@ -43,8 +43,11 @@
 
         service.unobserve = function unobserve(obj){
             let transitionListener = listeners[obj];
-            transitionListener();
-            delete listeners[obj];
+
+            if (transitionListener) {
+                transitionListener();
+                delete listeners[obj];
+            }
         };
     });
 })();

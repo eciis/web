@@ -4,7 +4,8 @@
 
     var app = angular.module('app');
 
-    app.controller('SurveyDirectiveController', function(PostService, AuthService, MessageService, $scope, $mdDialog, $state) {
+    app.controller('SurveyDirectiveController', function(PostService, AuthService, MessageService, $scope, $mdDialog, $state,
+        SubmitFormListenerService) {
 
         var surveyCtrl = this;
         surveyCtrl.options = $scope.options;
@@ -70,6 +71,7 @@
                     MessageService.showToast('Postado com sucesso!');
                     surveyCtrl.callback();
                     $mdDialog.hide();
+                    unobserveNewPost();
                 }, function error(response) {
                     AuthService.reload().then(function success() {
                         $mdDialog.hide();
@@ -89,6 +91,7 @@
             surveyCtrl.options.push(angular.copy(option_empty));
             surveyCtrl.options.push(angular.copy(option_empty));
             surveyCtrl.multipleChoice = false;
+            unobserveNewPost();
             $mdDialog.hide();
         };
 
@@ -97,6 +100,9 @@
             return surveyCtrl.post.title && !notEnoughOptions && surveyCtrl.post.deadline;
         };
 
+        function unobserveNewPost() {
+            SubmitFormListenerService.unobserve("postCtrl.post");
+        }
     });
 
     app.directive("surveyDirective", function() {

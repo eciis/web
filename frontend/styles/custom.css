@@ -1118,7 +1118,7 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
     background: #E0E0E0;
 }
 
-.analise-request-button {
+.md-list-right-button {
     border: solid; 
     height: 35px; 
     width: 148px;

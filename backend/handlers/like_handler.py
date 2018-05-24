@@ -85,10 +85,6 @@ class LikeHandler(BaseHandler):
 
             enqueue_task('post-notification', params)
 
-    """TODO:  Create dislike_comment method and replace 
-            ndb.transactional to internal scopes.
-        @author: Maiana Brito 12/04/2018
-    """
     @json_response
     @login_required
     def delete(self, user, post_key, comment_id=None, reply_id=None):

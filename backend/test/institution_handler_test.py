@@ -144,11 +144,11 @@ class InstitutionHandlerTest(TestBaseHandler):
             "Error! User is not allowed to edit institution")
 
     @patch('util.login_service.verify_token', return_value={'email': 'other_user@example.com'})
-    def test_post(self, verify_token):
-        """Test the post_handler's post method."""
+    def test_put(self, verify_token):
+        """Test the put method."""
         # Call the patch method and assert that  it raises an exception
         self.body['data'] = {'sender_name': 'user name updated'}
-        self.testapp.post_json("/api/institutions/%s/invites/%s" % 
+        self.testapp.put_json("/api/institutions/%s/invites/%s" %
             (self.stub.key.urlsafe(), self.invite.key.urlsafe()), self.body,
             headers={'institution-authorization': self.third_inst.key.urlsafe()})
 
@@ -185,7 +185,7 @@ class InstitutionHandlerTest(TestBaseHandler):
         # Check if raise Exception when the user who send patch is not the
         # invitee
         with self.assertRaises(Exception) as raises_context:
-            self.testapp.post_json(
+            self.testapp.put_json(
                 "/api/institutions/%s/invites/%s" % (self.stub.key.urlsafe(), self.invite.key.urlsafe()),
                 [{"op": "replace", "path": "/name", "value": "Nova Inst update"}]
             )
@@ -246,7 +246,7 @@ class InstitutionHandlerTest(TestBaseHandler):
         self.assertEqual(third_user.permissions, {})
 
         self.body['data'] = {'sender_name': 'user name updated'}
-        self.testapp.post_json("/api/institutions/%s/invites/%s"
+        self.testapp.put_json("/api/institutions/%s/invites/%s"
                           % (third_inst.key.urlsafe(), invite.key.urlsafe()), self.body)
 
         first_user = first_user.key.get()

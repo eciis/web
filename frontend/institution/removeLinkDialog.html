@@ -1,0 +1,74 @@
+<md-dialog flex-sm="80" flex-xs="100" flex-gt-sm="50">
+    <md-dialog-content class="md-dialog-content" layout-gt-sm="column" style="padding: 1.5em;">
+        <h3>Confirmar remoção de vínculo existente</h3>
+        <p>
+            Para aceitar o vínculo e tornar <b>{{ removeLinkCtrl.child.name }}</b> uma subornadinada de <b>{{ removeLinkCtrl.parent.name }}</b>
+            é necessário que o vínculo com <b>{{ removeLinkCtrl.child.parent_institution.name }}</b> seja desfeito.
+        </p>
+        <h4>Vínculo Atual</h4>
+        <div layout="column">
+            <div layout="row" md-colors="{background: 'default-grey-200'}" layout-margin style="margin: 0 0 8px 0;">
+            <div>
+                <img style="width: 75px; height: 75px; border-radius: 50%;" ng-src="{{removeLinkCtrl.child.parent_institution.photo_url || 'app/images/institution.png'}}"
+                alt="{{removeLinkCtrl.child.parent_institution.name}}"></img>
+            </div>
+            <div layout="column" layout-align="center start">
+                <b>{{ removeLinkCtrl.child.parent_institution.name }}</b>
+            </div>
+            </div>
+            <div layout="row">
+            <div flex="5" layout="row" layout-align="center">
+                <div style="width: 8px;" md-colors="{background: 'default-teal-500'}"></div>
+            </div>
+            <div layout="row" md-colors="{background: 'default-grey-200'}" layout-margin flex="95" style="margin: 0;">
+                <div>
+                <img style="width: 75px; height: 75px; border-radius: 50%;" ng-src="{{ removeLinkCtrl.child.photo_url || 'app/images/avatar.png'}}"
+                    alt="{{ removeLinkCtrl.child.name }}"></img>
+                </div>
+                <div layout="column" layout-align="center start">
+                <b>{{ removeLinkCtrl.child.name || removeLinkCtrl.child.sender_name}}</b>
+                <span>{{ removeLinkCtrl.child.institutional_email }}</span>
+                <span>{{ removeLinkCtrl.child.office }}</span>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <h4>Vínculo Futuro</h4>
+        <div layout="column">
+            <div layout="row" md-colors="{background: 'default-grey-200'}" layout-margin style="margin: 0 0 8px 0;">
+            <div>
+                <img style="width: 75px; height: 75px; border-radius: 50%;" ng-src="{{removeLinkCtrl.parent.photo_url || 'app/images/institution.png'}}"
+                alt="{{removeLinkCtrl.parent.name}}"></img>
+            </div>
+            <div layout="column" layout-align="center start">
+                <b>{{ removeLinkCtrl.parent.name }}</b>
+            </div>
+            </div>
+            <div layout="row">
+            <div flex="5" layout="row" layout-align="center">
+                <div style="width: 8px;" md-colors="{background: 'default-teal-500'}"></div>
+            </div>
+            <div layout="row" md-colors="{background: 'default-grey-200'}" layout-margin flex="95" style="margin: 0;">
+                <div>
+                <img style="width: 75px; height: 75px; border-radius: 50%;" ng-src="{{ removeLinkCtrl.child.photo_url || 'app/images/avatar.png'}}"
+                    alt="{{ removeLinkCtrl.child.name }}"></img>
+                </div>
+                <div layout="column" layout-align="center start">
+                <b>{{ removeLinkCtrl.child.name || removeLinkCtrl.child.sender_name}}</b>
+                <span>{{ removeLinkCtrl.child.institutional_email }}</span>
+                <span>{{ removeLinkCtrl.child.office }}</span>
+                </div>
+            </div>
+            </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row" layout-align="end center" layout-wrap>
+        <md-button class="md-primary" ng-click="removeLinkCtrl.rejectRequest()" md-colors="{color: 'default-teal-500'}">
+            Cancelar
+        </md-button>
+        <md-button class="md-primary" ng-click="removeLinkCtrl.confirmLinkRemoval()" md-colors="{color: 'default-teal-500'}">
+            Confirmar
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

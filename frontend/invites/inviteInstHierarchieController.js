@@ -269,36 +269,52 @@
             });
         }
 
-        inviteInstHierCtrl.acceptRequest = function acceptRequest(request, type_of_invite, event) {
-            var promise = MessageService.showConfirmationDialog(event, 'Aceitar Solicitação', isOvewritingParent(type_of_invite));
-            promise.then(function() {
-                var accept = type_of_invite === REQUEST_PARENT ?
-                    RequestInvitationService.acceptInstParentRequest(request.key) : RequestInvitationService.acceptInstChildrenRequest(request.key);
-                accept.then(function success() {
-                    addAcceptedInstitution(type_of_invite, request.institution_key);
-                    request.status = 'accepted';
-                    MessageService.showToast('Solicitação aceita com sucesso');
-                });
-            }, function() {
-                MessageService.showToast('Cancelado');
-            });
-            return promise;
-        };
+        // inviteInstHierCtrl.acceptRequest = function acceptRequest(request, event) {
+        //     var promise = MessageService.showConfirmationDialog(event, 'Aceitar Solicitação', getTextContent(request.type_of_invite));
+        //     promise.then(function() {
+        //         var accept = acceptRequestInstitution(request);
+        //         accept.then(function success() {
+        //             addAcceptedInstitution(request.type_of_invite, request.institution_key);
+        //             request.status = 'accepted';
+        //             MessageService.showToast('Solicitação aceita com sucesso');
+        //         });
+        //     }, function() {
+        //         MessageService.showToast('Cancelado');
+        //     });
+        //     return promise;
+        // };
 
-        inviteInstHierCtrl.rejectRequest = function rejectRequest(request, type_of_invite, event) {
-            var promise = MessageService.showConfirmationDialog(event, 'Rejeitar Solicitação', 'Confirmar rejeição da solicitação?');
-            promise.then(function() {
-                var reject = type_of_invite === REQUEST_PARENT ?
-                    RequestInvitationService.rejectInstParentRequest(request.key) : RequestInvitationService.rejectInstChildrenRequest(request.key);
-                reject.then(function success() {
-                    request.status = 'rejected';
-                    MessageService.showToast('Solicitação rejeitada com sucesso');
-                });
-            }, function() {
-                MessageService.showToast('Cancelado');
-            });
-            return promise;
-        };
+        // function acceptRequestInstitution(request) {
+        //     switch(request.type_of_invite) {
+        //         case REQUEST_PARENT:
+        //             return RequestInvitationService.acceptInstParentRequest(request.key);
+        //         case REQUEST_CHILDREN:
+        //             return RequestInvitationService.acceptInstChildrenRequest(request.key);
+        //     }
+        // }
+
+        // inviteInstHierCtrl.rejectRequest = function rejectRequest(request, event) {
+        //     var promise = MessageService.showConfirmationDialog(event, 'Rejeitar Solicitação', 'Confirmar rejeição da solicitação?');
+        //     promise.then(function() {
+        //         var reject = rejectRequestInstitution(request);
+        //         reject.then(function success() {
+        //             request.status = 'rejected';
+        //             MessageService.showToast('Solicitação rejeitada com sucesso');
+        //         });
+        //     }, function() {
+        //         MessageService.showToast('Cancelado');
+        //     });
+        //     return promise;
+        // };
+
+        // function rejectRequestInstitution(request) {
+        //     switch(request.type_of_invite) {
+        //         case REQUEST_PARENT:
+        //             return RequestInvitationService.rejectInstParentRequest(request.key);
+        //         case REQUEST_CHILDREN:
+        //             return RequestInvitationService.rejectInstChildrenRequest(request.key);
+        //     }
+        // }
 
         inviteInstHierCtrl.isReqSentByCurrentInst = function isReqSentByCurrentInst(request) {
             return institutionKey === request.institution_key;
@@ -309,24 +325,14 @@
         }
 
         inviteInstHierCtrl.goToRequestedInst = function goToRequestedInst(request) {
-            var inst_key = inviteInstHierCtrl.isReqSentByCurrentInst(request) ? request.institution_requested_key : request.institution_key;
-            inviteInstHierCtrl.goToInst(inst_key);
+            var instKey = inviteInstHierCtrl.isReqSentByCurrentInst(request) ? request.institution_requested_key : request.institution_key;
+            inviteInstHierCtrl.goToInst(instKey);
         };
 
         inviteInstHierCtrl.getReqInstName = function getReqInstName(request) {
             var inst_name = inviteInstHierCtrl.isReqSentByCurrentInst(request) ? request.requested_inst_name : request.institution_admin.name;
             return inst_name;
         };
-
-        function isOvewritingParent(type_of_invite) {
-            var message;
-            if (inviteInstHierCtrl.institution.parent_institution && type_of_invite === REQUEST_CHILDREN) {
-                message = 'Atenção: sua instituição já possui uma superior, deseja substituir?';
-            } else {
-                message = 'Confirmar aceitação de solicitação?';
-            }
-            return message;
-        }
 
         function addInvite(invite) {
             inviteInstHierCtrl.invite = {};
@@ -389,6 +395,31 @@
         inviteInstHierCtrl.linkChildrenStatus = function linkChildrenStatus(institution) {
             return institution.parent_institution ? "confirmado" : "não confirmado";
         };
+
+        inviteInstHierCtrl.analyseRequest = function analyseRequest(event, request) {
+            let institution = inviteInstHierCtrl.institution;
+            let hasToRemoveLink = request.type_of_invite === REQUEST_CHILDREN && inviteInstHierCtrl.hasParent;
+            
+            hasToRemoveLink ? removeLinkDialog(event, institution, request) : showRequestDialog(event, request);
+        };
+
+        function removeLinkDialog(event, child, request) {
+            $mdDialog.show({
+                controller: 'RemoveLinkController',
+                controllerAs: 'removeLinkCtrl',
+                templateUrl: 'app/institution/removeLinkDialog.html',
+                targetEvent: event,
+                locals: {
+                    child: child,
+                    parent: request.institution,
+                    request: request
+                }
+            });
+        }
+
+        function showRequestDialog(event, request) {
+
+        }
 
         inviteInstHierCtrl.removeChild = function removeChild(institution, ev) {
             $mdDialog.show({

@@ -125,14 +125,13 @@ class InstitutionHandler(BaseHandler):
     @json_response
     @login_required
     @isUserInvited
-    def post(self, user, institution_key, inviteKey):
+    def put(self, user, institution_key, inviteKey):
         """
-        Handler POST Requests.
+        Handle PUT Requests.
         
-        This handler terminates the configuration of the institution 
-        from the created stub, marks the invite received as accepted and 
-        adds the permissions of administered in the higher institutions 
-        if the institution created has a parent institution.
+        This method end up the institution's configurations 
+        from its previously created stub. Besides, it marks the invite received as accepted and 
+        adds the permissions to the parent admins if the institution created has a parent institution.
         """
         body = json.loads(self.request.body)
         data = body['data']

@@ -18,7 +18,10 @@ class UserRequestCollectionHandler(BaseHandler):
     @json_response
     @login_required
     def get(self, user, institution_key):
-        """Get invites for new institutions make by Plataform."""
+        """Get all requests which type is user and
+        the institution_key is equals to the institution_key
+        received as param. Only the sent requests.
+        """
         queryRequests = RequestUser.query(
             RequestUser.institution_key == ndb.Key(urlsafe=institution_key),
             RequestUser.status == 'sent'

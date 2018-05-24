@@ -3,3 +3,5 @@ queue:
   rate: 1/s
 - name: notifications
   rate: 1/s
+- name: emails
+  rate: 1/s

@@ -19,10 +19,10 @@
             return deferred.promise;
         };
 
-        service.sendInvite = function sendInvite(invite) {
+        service.sendInvite = function sendInvite(invite_body) {
             var deferred = $q.defer();
             $http.post(INVITES_URI, {
-                data: invite
+                data: {invite_body}
             }).then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {

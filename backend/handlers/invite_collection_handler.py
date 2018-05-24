@@ -37,7 +37,7 @@ class InviteCollectionHandler(BaseHandler):
         body = json.loads(self.request.body)
         data = body['data']
         host = self.request.host
-        invite = data['invite_body'] if data.get('invite_body') is not None else data
+        invite = data['invite_body']
         type_of_invite = invite.get('type_of_invite')
 
         Utils._assert(type_of_invite == 'INSTITUTION',

@@ -145,7 +145,7 @@ class InstitutionHandlerTest(TestBaseHandler):
 
     @patch('util.login_service.verify_token', return_value={'email': 'other_user@example.com'})
     def test_put(self, verify_token):
-        """Test the post_handler's post method."""
+        """Test the put method."""
         # Call the patch method and assert that  it raises an exception
         self.body['data'] = {'sender_name': 'user name updated'}
         self.testapp.put_json("/api/institutions/%s/invites/%s" %

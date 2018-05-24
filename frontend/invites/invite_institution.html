@@ -95,11 +95,11 @@
                   md-colors="{background: 'light-green-500', color: 'grey-50'}">account_balance</md-icon>
                   <div class="md-list-item-text" layout="column">
                     <h3>Instituição: {{ request.institution_name }}</h3>
-                    <h3>Requisitado por: {{ request.sender_name }}</h3>
+                    <h4>Requisitado por: {{ request.sender_name }}</h4>
                     <p>Email do requisitante: {{ request.sender[0] }}</p>
                   </div>
                   <div layout="row" layout-align="end center" flex hide show-gt-xs>
-                    <p class="status-invite-adm" style="line-height: 21px; padding: 5px;" md-colors="{color: 'teal-500'}">
+                    <p class="analise-request-button" md-colors="{color: 'teal-500'}">
                       ANALISAR
                     </p>
                   </div>

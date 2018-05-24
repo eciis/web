@@ -129,3 +129,33 @@ class RequestInstitutionTest(TestBase):
 
         request.send_email(host='somehost')
         send_email.assert_called_with(email_json)
+
+    def test_make(self):
+        """Test make."""
+        request = generate_request(
+            self.other_user, self.inst_test,
+            self.deciis, self.user_admin
+        )
+
+        inst_properties = ['name', 'description', 'key', 'institutional_email',
+                      'email', 'trusted', 'phone_number', 'address', 'photo_url']
+
+        expected_json = {
+            'status': 'sent',
+            'institution_admin': {'name': self.inst_test.name },
+            'sender': self.other_user.email,
+            'sender_name': self.other_user.name,
+            'sender_key': self.other_user.key.urlsafe(),
+            'institution_name': self.inst_test.name,
+            'requested_inst_name': self.deciis.name,
+            'admin_name': self.user_admin.name,
+            'key': request.key.urlsafe(),
+            'institution': self.inst_test.make(inst_properties),
+            'type_of_invite': 'REQUEST_INSTITUTION',
+            'institution_key': self.inst_test.key.urlsafe()
+        }
+
+        made_request = request.make()
+
+        self.assertEquals(made_request, expected_json,
+            "The made request should be equal to the expected_json")

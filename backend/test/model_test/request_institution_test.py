@@ -1,16 +1,32 @@
 # -*- coding: utf-8 -*-
-"""Tests of model request institution parent."""
+"""Tests of model request institution."""
 
 from ..test_base import TestBase
-from models import RequestInstitutionParent
-from models import RequestInstitutionChildren
 from models import RequestInstitution
 from custom_exceptions import FieldException
 from .. import mocks
+from send_email_hierarchy.email_sender import EmailSender
+from models import Invite
+from mock import patch
 
+def generate_request(sender, institution, requested_institution, admin=None):
+    """create and save a request."""
+    admin_key = admin.key.urlsafe() if admin else sender.key.urlsafe()
+    data = {
+        'sender_key': sender.key.urlsafe(),
+        'is_request': True,
+        'admin_key': admin_key,
+        'institution_key': institution.key.urlsafe(),
+        'institution_requested_key': requested_institution.key.urlsafe(),
+        'type_of_invite': 'REQUEST_INSTITUTION'
+    }
 
-class RequestInstitutionParentTest(TestBase):
-    """Class request institution parent tests."""
+    request = RequestInstitution.create(data)
+    request.put()
+    return request
+
+class RequestInstitutionTest(TestBase):
+    """Class request institution tests."""
 
     @classmethod
     def setUp(cls):
@@ -27,42 +43,89 @@ class RequestInstitutionParentTest(TestBase):
         cls.user_admin = mocks.create_user('useradmin@test.com')
         # Other user
         cls.other_user = mocks.create_user('otheruser@test.com')
-        # new institution address
-        cls.address = mocks.create_address()
         # new Institution inst test
         cls.inst_test = mocks.create_institution('inst test')
-        cls.inst_test.members = [cls.user_admin.key]
-        cls.inst_test.followers = [cls.user_admin.key]
-        cls.inst_test.admin = cls.user_admin.key
-        cls.inst_test.address = cls.address
-        cls.inst_test.put()
-        # new Institution inst requested to be parent of inst test
-        cls.inst_requested = mocks.create_institution('inst requested')
-        cls.inst_requested.members = [cls.user_admin.key]
-        cls.inst_requested.followers = [cls.user_admin.key]
-        cls.inst_requested.admin = cls.user_admin.key
-        cls.inst_requested.address = cls.address
-        cls.inst_requested.put()
-        # Update institutions admin from User admin
-        cls.user_admin.institutions_admin = [cls.inst_test.key]
-        cls.user_admin.put()
+        cls.inst_test.add_member(cls.other_user)
+        cls.inst_test.set_admin(cls.other_user.key)
+        cls.other_user.add_institution(cls.inst_test.key)
+        cls.other_user.add_institution_admin(cls.inst_test.key)
         # Mocking deciis because some methods of request_institution require a deciis key
         cls.deciis = mocks.create_institution('DECIIS')
         cls.deciis.trusted = True
-        cls.deciis.put()
-
+        cls.deciis.add_member(cls.user_admin)
+        cls.deciis.set_admin(cls.user_admin.key)
+        cls.user_admin.add_institution(cls.deciis.key)
+        cls.user_admin.add_institution_admin(cls.deciis.key)
 
     def test_is_valid(self):
         """Test if the request is valid."""
-        data = {
-            'sender_key': self.other_user.key.urlsafe(),
-            'is_request': True,
-            'admin_key': self.user_admin.key.urlsafe(),
-            'institution_key': self.inst_test.key.urlsafe(),
-            'institution_requested_key': self.inst_requested.key.urlsafe(),
-            'type_of_invite': 'REQUEST_INSTITUTION'
-        }
-
-        request = RequestInstitution.create(data)
+        request = generate_request(
+            self.other_user, self.inst_test,
+            self.deciis, self.user_admin
+        )
 
         self.assertTrue(request.isValid, 'Request should be valid')
+
+    @patch.object(Invite, 'send_notification')
+    @patch.object(Invite, 'create_notification_message', return_value='mocked_message')
+    def test_send_notification(self, create_notification_message, send_notification):
+        """Test send notification."""
+        request = generate_request(
+            self.other_user, self.inst_test,
+            self.deciis, self.user_admin
+        )
+
+        request.send_notification(self.inst_test.key)
+
+        create_notification_message.assert_called_with(
+            user_key=self.other_user.key,
+            receiver_institution_key=self.deciis.key
+        )
+
+        send_notification.assert_called_with(
+            current_institution=self.inst_test.key,
+            receiver_key=self.user_admin.key,
+            notification_type='REQUEST_INSTITUTION',
+            message='mocked_message'
+        )
+
+    @patch.object(EmailSender, 'send_email')
+    def test_send_response_email(self, send_email):
+        """Test send response email."""
+        request = generate_request(
+            self.other_user, self.inst_test,
+            self.deciis, self.user_admin
+        )
+
+        email_json = {
+            'institution_key': self.inst_test.key.urlsafe(),
+            'user_name': self.other_user.name,
+            'user_email': self.other_user.email[0],
+            'description': self.inst_test.description,
+            'institution_name': self.inst_test.name,
+            'institution_requested_key': self.deciis.key.urlsafe()
+        }
+
+        for operation in ["ACCEPT", "REJECT"]:
+            request.send_response_email(operation)
+            send_email.assert_called_with(email_json)
+
+    @patch.object(EmailSender, 'send_email')
+    def test_send_email(self, send_email):
+        """Test send email."""
+        request = generate_request(
+            self.other_user, self.inst_test,
+            self.deciis, self.user_admin
+        )
+
+        email_json = {
+            'user_name': self.other_user.name,
+            'user_email': self.other_user.email[0],
+            'description': self.inst_test.description,
+            'institution_name': self.inst_test.name,
+            'institution_key': self.inst_test.key.urlsafe(),
+            'institution_requested_key': self.deciis.key.urlsafe()
+        }
+
+        request.send_email(host='somehost')
+        send_email.assert_called_with(email_json)

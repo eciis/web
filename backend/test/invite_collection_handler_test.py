@@ -105,12 +105,12 @@ class InviteCollectionHandlerTest(TestBaseHandler):
     def test_post_invite_institution_parent(self, verify_token):
         #Test the invite_collection_handler's post method in case to parent institution.
 
-        invite = self.testapp.post_json("/api/invites", {'data': {
+        invite = self.testapp.post_json("/api/invites", {'data': { 'invite_body': {
             'invitee': 'user1@gmail.com',
             'admin_key': self.admin.key.urlsafe(),
             'type_of_invite': 'INSTITUTION_PARENT',
             'suggestion_institution_name': 'Institution Parent',
-            'institution_key': self.institution.key.urlsafe()}},
+            'institution_key': self.institution.key.urlsafe()}}},
             headers={'Institution-Authorization': self.institution.key.urlsafe()})
 
         # Retrieve the entities

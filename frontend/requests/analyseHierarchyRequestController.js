@@ -3,28 +3,28 @@
 (function() {
     const app = angular.module('app');
 
-    app.controller('RemoveLinkController', function RemoveLinkController(child, parent, request, RequestInvitationService,
+    app.controller('AnalyseHierarchyRequestController', function AnalyseHierarchyRequestController(child, parent, request, RequestInvitationService,
          InstitutionService, MessageService, $q, $mdDialog) {
-        const removeLinkCtrl = this;
+        const analyseHierReqCtrl = this;
 
         const REQUEST_PARENT = "REQUEST_INSTITUTION_PARENT";
         const REQUEST_CHILDREN = "REQUEST_INSTITUTION_CHILDREN";
 
-        removeLinkCtrl.parent = parent;
-        removeLinkCtrl.child = child;
+        analyseHierReqCtrl.parent = parent;
+        analyseHierReqCtrl.child = child;
+        analyseHierReqCtrl.hasToRemoveLink = child.parent_institution !== null;
 
-        removeLinkCtrl.confirmLinkRemoval = function confirmLinkRemoval() {
+        function confirmLinkRemoval() {
             const isParent = true;
 
             InstitutionService.removeLink(child.key, parent.key, isParent).then(
                 function success(data) {
                     acceptRequest();
-                    MessageService.showToast('Vínculo removido.');
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
                 }
             );
-        };
+        }
 
         function acceptRequest() {
             acceptRequestInstitution().then(function success() {
@@ -36,7 +36,7 @@
             });
         }
 
-        removeLinkCtrl.rejectRequest = function rejectRequest(event) {
+        analyseHierReqCtrl.rejectRequest = function rejectRequest(event) {
             var promise = MessageService.showConfirmationDialog(event, 'Rejeitar Solicitação', 'Confirmar rejeição da solicitação?');
             promise.then(function confirm() {
                 rejectRequestInstitution().then(
@@ -53,6 +53,9 @@
             return promise;
         };
 
+        analyseHierReqCtrl.confirmRequest = function confirmRequest() {
+            analyseHierReqCtrl.hasToRemoveLink ? confirmLinkRemoval() : acceptRequest();
+        };
 
         function acceptRequestInstitution() {
             switch(request.type_of_invite) {
@@ -70,16 +73,6 @@
                 case REQUEST_CHILDREN:
                     return RequestInvitationService.rejectInstChildrenRequest(request.key);
             }
-        }
-
-        function getTextContent(type_of_invite) {
-            let childHasParent = inviteInstHierCtrl.hasParent && type_of_invite === REQUEST_CHILDREN;
-            if(childHasParent) {
-                message = 'Atenção: sua instituição já possui uma superior, deseja substituir?';
-            } else {
-                message = 'Confirmar aceitação de solicitação?';
-            }
-            return message;
         }
     });
 })();

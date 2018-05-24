@@ -4,7 +4,8 @@
     var app = angular.module('app');
 
     app.controller("InviteInstHierarchieController", function InviteInstHierarchieController(
-        InviteService,$mdToast, $mdDialog, $state, AuthService, InstitutionService, MessageService, RequestInvitationService, $q) {
+        InviteService,$mdToast, $mdDialog, $state, AuthService, InstitutionService,
+        MessageService, RequestInvitationService, $q, RequestService) {
 
         var inviteInstHierCtrl = this;
         var institutionKey = $state.params.institutionKey;
@@ -269,53 +270,6 @@
             });
         }
 
-        // inviteInstHierCtrl.acceptRequest = function acceptRequest(request, event) {
-        //     var promise = MessageService.showConfirmationDialog(event, 'Aceitar Solicitação', getTextContent(request.type_of_invite));
-        //     promise.then(function() {
-        //         var accept = acceptRequestInstitution(request);
-        //         accept.then(function success() {
-        //             addAcceptedInstitution(request.type_of_invite, request.institution_key);
-        //             request.status = 'accepted';
-        //             MessageService.showToast('Solicitação aceita com sucesso');
-        //         });
-        //     }, function() {
-        //         MessageService.showToast('Cancelado');
-        //     });
-        //     return promise;
-        // };
-
-        // function acceptRequestInstitution(request) {
-        //     switch(request.type_of_invite) {
-        //         case REQUEST_PARENT:
-        //             return RequestInvitationService.acceptInstParentRequest(request.key);
-        //         case REQUEST_CHILDREN:
-        //             return RequestInvitationService.acceptInstChildrenRequest(request.key);
-        //     }
-        // }
-
-        // inviteInstHierCtrl.rejectRequest = function rejectRequest(request, event) {
-        //     var promise = MessageService.showConfirmationDialog(event, 'Rejeitar Solicitação', 'Confirmar rejeição da solicitação?');
-        //     promise.then(function() {
-        //         var reject = rejectRequestInstitution(request);
-        //         reject.then(function success() {
-        //             request.status = 'rejected';
-        //             MessageService.showToast('Solicitação rejeitada com sucesso');
-        //         });
-        //     }, function() {
-        //         MessageService.showToast('Cancelado');
-        //     });
-        //     return promise;
-        // };
-
-        // function rejectRequestInstitution(request) {
-        //     switch(request.type_of_invite) {
-        //         case REQUEST_PARENT:
-        //             return RequestInvitationService.rejectInstParentRequest(request.key);
-        //         case REQUEST_CHILDREN:
-        //             return RequestInvitationService.rejectInstChildrenRequest(request.key);
-        //     }
-        // }
-
         inviteInstHierCtrl.isReqSentByCurrentInst = function isReqSentByCurrentInst(request) {
             return institutionKey === request.institution_key;
         };
@@ -397,29 +351,8 @@
         };
 
         inviteInstHierCtrl.analyseRequest = function analyseRequest(event, request) {
-            let institution = inviteInstHierCtrl.institution;
-            let hasToRemoveLink = request.type_of_invite === REQUEST_CHILDREN && inviteInstHierCtrl.hasParent;
-            
-            hasToRemoveLink ? removeLinkDialog(event, institution, request) : showRequestDialog(event, request);
+            RequestService.analyseReqDialog(event, inviteInstHierCtrl.institution, request);
         };
-
-        function removeLinkDialog(event, child, request) {
-            $mdDialog.show({
-                controller: 'RemoveLinkController',
-                controllerAs: 'removeLinkCtrl',
-                templateUrl: 'app/institution/removeLinkDialog.html',
-                targetEvent: event,
-                locals: {
-                    child: child,
-                    parent: request.institution,
-                    request: request
-                }
-            });
-        }
-
-        function showRequestDialog(event, request) {
-
-        }
 
         inviteInstHierCtrl.removeChild = function removeChild(institution, ev) {
             $mdDialog.show({

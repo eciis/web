@@ -1,7 +1,7 @@
 """Initialize send email hierarchy modules."""
 
 from .email_sender import *
-from .accepted_institution_email_sender import *
+from .request_institution_email_sender import *
 from .invite_institution_email_sender import *
 from .invite_user_email_sender import *
 from .leave_institution_email_sender import *
@@ -13,7 +13,7 @@ from .transfer_admin_email_sender import *
 
 
 email_modules = [
-    email_sender, accepted_institution_email_sender, invite_institution_email_sender,
+    email_sender, request_institution_email_sender, invite_institution_email_sender,
     invite_user_email_sender, leave_institution_email_sender,
     remove_institution_email_sender, remove_member_email_sender,
     request_link_email_sender, request_user_email_sender, transfer_admin_email_sender

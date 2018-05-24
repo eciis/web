@@ -234,3 +234,41 @@ class InstitutionParentRequestCollectionHandlerTest(TestBaseHandler):
         self.assertEqual(
             expected_message, exception_message,
             "The expected error message is not equal to the exception one")
+
+    @patch('util.login_service.verify_token', return_value=ADMIN)
+    def test_post_with_a_institution_that_has_a_parent(self, verify_token):
+        """Test method post of InstitutionParentRequestCollectionHandler."""
+        admin = mocks.create_user(ADMIN['email'])
+        institution = mocks.create_institution()
+        admin.institutions_admin = [institution.key]
+        institution.admin = admin.key
+        admin.add_permission("send_link_inst_request",
+                             institution.key.urlsafe())
+        admin.put()
+        inst_requested = mocks.create_institution()
+        admin_requested = mocks.create_user(ADMIN['email'])
+        admin.institutions_admin = [inst_requested.key]
+        admin_requested.put()
+        inst_requested.admin = admin_requested.key
+        inst_requested.put()
+        institution.parent_institution = inst_requested.key
+        institution.put()
+
+        data = {
+            'sender_key': admin.key.urlsafe(),
+            'is_request': True,
+            'admin_key': admin_requested.key.urlsafe(),
+            'institution_key': institution.key.urlsafe(),
+            'institution_requested_key': inst_requested.key.urlsafe(),
+            'type_of_invite': 'REQUEST_INSTITUTION_PARENT'
+        }
+
+        with self.assertRaises(Exception) as ex:
+            self.testapp.post_json(
+                "/api/institutions/" + institution.key.urlsafe() + "/requests/institution_parent",
+                data
+            )
+
+        exception_message = self.get_message_exception(ex.exception.message)
+        
+        self.assertTrue(exception_message == "Error! The institution's already have a parent")

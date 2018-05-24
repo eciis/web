@@ -4,9 +4,10 @@
 from . import Invite
 from . import Request
 from google.appengine.ext import ndb
+from send_email_hierarchy import RequestInstitutionEmailSender
+from util import get_subject
 from . import get_deciis
 from custom_exceptions import FieldException
-from send_email_hierarchy import AcceptedInstitutionEmailSender
 
 
 __all__ = ['RequestInstitution']
@@ -32,37 +33,47 @@ class RequestInstitution(Request):
     def send_response_email(self, operation, host=None):
         """Method to send email of sender institution when invite is accepted or rejected."""
         if operation == "ACCEPT":
-            subject = """Instituição aceita na Plataforma Virtual CIS."""
-            email_sender = AcceptedInstitutionEmailSender(**{
-                'receiver': self.sender_key.get().email[0],
-                'subject': subject,
-                'institution_key': self.institution_key.urlsafe(),
-            })
-            email_sender.send_email()
+            subject = get_subject('ACCEPTED_REQUEST_INSTITUTION')
+            html = 'accepted_institution_request_email.html'
+            
         else:
-            rejectMessage = """Olá,
-            Lamentamos informar mas o seu pedido não foi aceito.
-            Sugerimos que fale com o seu superior para que seja enviado um convite.
-            Equipe da Plataforma CIS"""
+            subject = get_subject('REJECTED_REQUEST_INSTITUTION')
+            html = 'rejected_institution_request_email.html'
 
-            sender_email = self.sender_key.get().email[0]
-            super(RequestInstitution, self).send_email(
-                host, sender_email, rejectMessage)
+        institution = self.institution_key.get()
+        institution_requested = self.institution_requested_key.urlsafe()
+        user = self.sender_key.get()
+        email_sender = RequestInstitutionEmailSender(**{
+            'receiver': user.email[0],
+            'subject': subject,
+            'institution_key': institution.key.urlsafe(),
+            'html': html,
+            'user_name': user.name,
+            'user_email': user.email[0],
+            'description': institution.description,
+            'institution_name': institution.name,
+            'institution_requested_key': institution_requested
+        })
+        email_sender.send_email()
 
     def send_email(self, host, body=None):
         """Method of send email of request institution link."""
-        body = body or """Olá
-        A instituição %s deseja se cadastrar na Plataforma. Acesse:
-        http://frontend.plataformacis.org/
-
-        Equipe da Plataforma CIS. """ % self.institution_key.get().name
-
-        """
-            The super user is the admin of 
-            'Departamento do Complexo Industrial e Inovação em Saúde".
-        """
-        super_user = get_deciis().admin.get()
-        super(RequestInstitution, self).send_email(host, super_user.email, body)
+        subject = get_subject('REQUEST_INSTITUTION')
+        admin = get_deciis().admin.get()
+        institution = self.institution_key.get()
+        institution_requested = self.institution_requested_key.urlsafe()
+        email_sender = RequestInstitutionEmailSender(**{
+            'html': 'request_institution_email.html',
+            'receiver': admin.email[0],
+            'subject': subject,
+            'user_name': self.sender_name,
+            'user_email': self.sender_key.get().email[0],
+            'description': institution.description,
+            'institution_name': institution.name,
+            'institution_key': self.institution_key.urlsafe(),
+            'institution_requested_key': institution_requested
+        })
+        email_sender.send_email()
 
     def send_notification(self, current_institution):
         """Method of send notification of request intitution."""

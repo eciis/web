@@ -4,9 +4,11 @@
 import json
 from util import login_required
 from utils import json_response
+from utils import Utils
 from . import BaseHandler
 from service_entities import enqueue_task
 from google.appengine.ext import ndb
+from custom_exceptions import NotAuthorizedException
 
 __all__ = ['InstitutionChildrenRequestHandler']
 
@@ -29,12 +31,17 @@ class InstitutionChildrenRequestHandler(BaseHandler):
         user.check_permission('answer_link_inst_request',
                               'User is not allowed to accept link between institutions',
                               request.institution_requested_key.urlsafe())
+        
+        Utils._assert(
+            request.institution_requested_key.get().parent_institution != None,
+            "The institution's already have a parent",
+            NotAuthorizedException
+        )
+
         request.change_status('accepted')
-        request.put()
 
         institution_children = request.institution_requested_key.get()
-        institution_children.parent_institution = request.institution_key
-        institution_children.put()
+        institution_children.set_parent(request.institution_key)
 
         request.send_response_notification(user.current_institution, user.key, 'ACCEPT')
         request.send_response_email('ACCEPT')
@@ -52,7 +59,11 @@ class InstitutionChildrenRequestHandler(BaseHandler):
                               'User is not allowed to reject link between institutions',
                               request.institution_requested_key.urlsafe())
         request.change_status('rejected')
-        request.put()
+
+        institution_children = request.institution_requested_key.get()
+
+        if institution_children.parent_institution == request.institution_key:
+            institution_children.set_parent(None)
 
         request.send_response_notification(user.current_institution, user.key, 'REJECT')
         request.send_response_email('REJECT')

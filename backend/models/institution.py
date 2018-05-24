@@ -132,6 +132,11 @@ class Institution(ndb.Model):
             self.children_institutions.append(child_key)
             self.put()
 
+    def remove_child(self, child_key):
+        if child_key in self.children_institutions:
+            self.children_institutions.remove(child_key)
+            self.put()
+
     def set_parent(self, parent_key):
         """Set a new parent."""
         self.parent_institution = parent_key

@@ -68,4 +68,29 @@
 
         expect(messageService.showConfirmationDialog).not.toHaveBeenCalled();
     });
+
+    it('Should unobserve object', function() {
+        var element = {};
+        scope.$apply();
+        submitFormListenerService.addListener('vm.tst', element, scope);
+        scope.$apply("vm.tst={name: 'tst'}");
+        scope.$apply("vm.tst.name = 'test'");
+        scope.$apply(function() {
+            state.go('app.user.home');
+        });
+
+        expect(messageService.showConfirmationDialog).toHaveBeenCalledWith(
+            'event', 
+            '', 
+            'Deseja sair sem salvar as alterações?');
+        expect(messageService.showConfirmationDialog.calls.count()).toEqual(1);
+        
+        submitFormListenerService.unobserve("vm.tst");
+
+        scope.$apply(function() {
+            state.go('app.user.home');
+        });
+
+        expect(messageService.showConfirmationDialog.calls.count()).toEqual(1);
+    });
 }));

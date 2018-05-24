@@ -393,7 +393,7 @@
         };
 
         inviteInstHierCtrl.linkChildrenStatus = function linkChildrenStatus(institution) {
-            return institution.parent_institution ? "confirmado" : "não confirmado";
+            return institution.parent_institution && institution.parent_institution === inviteInstHierCtrl.institution.key ? "confirmado" : "não confirmado";
         };
 
         inviteInstHierCtrl.analyseRequest = function analyseRequest(event, request) {

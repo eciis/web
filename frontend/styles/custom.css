@@ -1117,3 +1117,15 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
 .unread-notification {
     background: #E0E0E0;
 }
+
+.hollow-button {
+    border: solid; 
+    height: 35px; 
+    width: 148px;
+    text-align: center; 
+    border-color: rgb(0, 150, 136); 
+    border-radius: 3px;
+    font-weight: bold;
+    line-height: 21px; 
+    padding: 5px;
+}

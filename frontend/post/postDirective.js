@@ -320,6 +320,7 @@
 
         postCtrl.cancelDialog = function() {
             postCtrl.clearPost();
+            SubmitFormListenerService.unobserve("postCtrl.post");
             $mdDialog.hide();
         };
 

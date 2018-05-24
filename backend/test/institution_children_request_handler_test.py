@@ -71,6 +71,8 @@ class InstitutionChildrenRequestHandlerTest(TestBaseHandler):
     @patch('service_messages.send_message_notification')
     @patch('util.login_service.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_put(self, verify_token, mock_method):
+        institution = self.inst_requested.key.get()
+
         """Test method post of InstitutionChildrenRequestHandler."""
         request = self.testapp.put_json(
             "/api/requests/%s/institution_children" % self.request.key.urlsafe(),
@@ -119,6 +121,11 @@ class InstitutionChildrenRequestHandlerTest(TestBaseHandler):
     @patch('util.login_service.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_delete(self, verify_token, mock_method):
         """Test method post of InstitutionChildrenRequestHandler."""
+
+        # Adding parent before request to ensure that parent link with the institution that which invited is removed.
+        institution = self.inst_requested.key.get()
+        institution.set_parent(self.inst_test.key)
+
         self.testapp.delete(
             "/api/requests/%s/institution_children" % self.request.key.urlsafe(),
             headers={"institution-authorization": self.inst_requested.key.urlsafe()}
@@ -204,3 +211,20 @@ class InstitutionChildrenRequestHandlerTest(TestBaseHandler):
             first_user, third_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
         self.assertTrue(has_permissions(
             second_user, third_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
+    
+    @patch('util.login_service.verify_token', return_value={'email': 'otheruser@test.com'})
+    def test_put_when_the_institution_has_a_parent(self, verify_token):
+        institution = self.inst_requested.key.get()
+        parent_inst = mocks.create_institution()
+        institution.parent_institution = parent_inst.key
+        institution.put()
+
+        with self.assertRaises(Exception) as ex:
+            self.testapp.put_json(
+                "/api/requests/%s/institution_children" % self.request.key.urlsafe(),
+                headers={"institution-authorization": self.inst_requested.key.urlsafe()}
+            )
+
+        exception_message = self.get_message_exception(ex.exception.message)
+
+        self.assertTrue(exception_message == "Error! The institution's already have a parent")

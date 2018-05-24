@@ -83,7 +83,7 @@ class PostHandlerTest(TestBaseHandler):
     def test_patch(self, verify_token):
         """Test the post_handler's patch method."""
 
-        exception_message = "User is not allowed to edit this post"
+        exception_message = "Error! User is not allowed to edit this post"
         expected_alert = "Expected: " + exception_message + ". But got: "
 
         # Call the patch method and assert that  it raises an exception
@@ -145,6 +145,7 @@ class PostHandlerTest(TestBaseHandler):
                                         "value": "testando"}]
                                     )
 
+        exception_message = "Error! The user can not update this post"
         raises_context_message = self.get_message_exception(str(raises_context.exception))
         self.assertEqual(
             raises_context_message,

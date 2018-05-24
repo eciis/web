@@ -86,27 +86,22 @@ class PostHandler(BaseHandler):
 
     @json_response
     @login_required
-    def patch(self, user, url_string):
+    def patch(self, user, post_urlsafe):
         """Handler PATCH Requests."""
         data = self.request.body
 
-        try:
-            post = ndb.Key(urlsafe=url_string).get()
+        post = ndb.Key(urlsafe=post_urlsafe).get()
 
-            Utils._assert(post.has_activity(),
-                          "The user can not update this post",
-                          NotAuthorizedException)
+        Utils._assert(post.has_activity(),
+                        "The user can not update this post",
+                        NotAuthorizedException)
 
-            user.check_permission("edit_post",
-                                  "User is not allowed to edit this post",
-                                  url_string)
+        user.check_permission("edit_post",
+                                "User is not allowed to edit this post",
+                                post_urlsafe)
 
-            """Apply patch."""
-            JsonPatch.load(data, post)
+        """Apply patch."""
+        JsonPatch.load(data, post)
 
-            """Update post."""
-            post.put()
-        except Exception as error:
-            self.response.set_status(Utils.FORBIDDEN)
-            self.response.write(Utils.getJSONError(
-                Utils.FORBIDDEN, error.message))
+        """Update post."""
+        post.put()

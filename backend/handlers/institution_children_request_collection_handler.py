@@ -53,8 +53,7 @@ class InstitutionChildrenRequestCollectionHandler(BaseHandler):
             EntityException
         )
 
-        parent_key = data.get('institution_key')
-        parent_key = ndb.Key(urlsafe=parent_key)
+        parent_key = ndb.Key(urlsafe=institution_key)
         requested_inst_key = data.get('institution_requested_key')
         requested_inst_key = ndb.Key(urlsafe=requested_inst_key)
         

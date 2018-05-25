@@ -4,6 +4,8 @@
 import json
 from util import login_required
 from utils import json_response
+from utils import Utils
+from custom_exceptions import NotAuthorizedException
 from . import BaseHandler
 from service_entities import enqueue_task
 from google.appengine.ext import ndb
@@ -18,6 +20,11 @@ class InstitutionParentRequestHandler(BaseHandler):
     def get(self, user, request_key):
         """Handler GET Requests."""
         request = ndb.Key(urlsafe=request_key).get()
+        has_permission = user.has_permission('answer_link_inst_request', request.institution_requested_key.urlsafe())
+        Utils._assert(not has_permission,
+                      'User is not allowed to acess request link.',
+                      NotAuthorizedException)
+        
         self.response.write(json.dumps(request.make()))
 
     @login_required

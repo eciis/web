@@ -21,9 +21,14 @@ class InstitutionParentRequestCollectionHandler(BaseHandler):
 
     @json_response
     @login_required
-    def get(self, user, institution_key):
-        """Get requests for parent links."""
-        inst_key_obj = ndb.Key(urlsafe=institution_key)
+    def get(self, user, institution_urlsafe):
+        """Handle GET requests.
+        This method returns all the RequestInstitutionParent
+        that the institution, whose key's representation is
+        institution_urlsafe, is involved either as a child or
+        as a parent. 
+        """
+        inst_key_obj = ndb.Key(urlsafe=institution_urlsafe)
         queryRequests = RequestInstitutionParent.query(
             ndb.OR(RequestInstitutionParent.institution_requested_key == inst_key_obj,
                    RequestInstitutionParent.institution_key == inst_key_obj),
@@ -36,12 +41,18 @@ class InstitutionParentRequestCollectionHandler(BaseHandler):
 
     @login_required
     @json_response
-    def post(self, user, institution_key):
-        """Handler of post requests."""
+    def post(self, user, institution_urlsafe):
+        """Handle POST requests.
+        It sends a request to the requested_institution
+        to be parent of child_inst, whose key representation
+        is institution_urlsafe. It can only be done if the user
+        has permission to send the request, if the child_institution
+        has no parent and if the two institutions are not linked yet.
+        """
         user.check_permission(
             'send_link_inst_request',
             'User is not allowed to send request',
-            institution_key)
+            institution_urlsafe)
 
         data = json.loads(self.request.body)
         host = self.request.host
@@ -55,8 +66,7 @@ class InstitutionParentRequestCollectionHandler(BaseHandler):
             EntityException
         )
 
-        child_key = data.get('institution_key')
-        child_key = ndb.Key(urlsafe=child_key)
+        child_key = ndb.Key(urlsafe=institution_urlsafe)
         requested_inst_key = data.get('institution_requested_key')
         requested_inst_key = ndb.Key(urlsafe=requested_inst_key)
 
@@ -74,11 +84,18 @@ class InstitutionParentRequestCollectionHandler(BaseHandler):
         )
 
         request = InviteFactory.create(data, type_of_invite)
-        request.put()
 
-        child_institution.parent_institution = requested_inst_key
-        child_institution.put()
+        @ndb.transactional(retries=10, xg=True)
+        def main_operations(request, requested_inst_key, child_institution, user, host):
+            request.put()
 
-        request.send_invite(host, user.current_institution)
+            child_institution.parent_institution = requested_inst_key
+            child_institution.put()
+
+            request.send_invite(host, user.current_institution)
+
+            return request
+
+        request = main_operations(request, requested_inst_key, child_institution, user, host)
 
         self.response.write(json.dumps(request.make()))

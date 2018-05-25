@@ -102,7 +102,7 @@
         };
 
         requestController.getChildrenInstEmail = function getChildrenInstEmail(size) {
-            return Utils.limitString(requestController.children.institutional_email, size);
+            return Utils.limitString(requestController.children.institutional_email + 'dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd', size);
         };	
 
         requestController.isAnotherCountry = function isAnotherCountry() {

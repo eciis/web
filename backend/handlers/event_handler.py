@@ -19,7 +19,10 @@ class EventHandler(BaseHandler):
     @json_response
     @login_required
     def get(self, user, event_urlsafe):
-        """Handle GET Requests."""
+        """Handle GET Requests.
+        Get specific event, whose key is event_urlsafe,
+        if it is not deleted. 
+        """
         event_key = ndb.Key(urlsafe=event_urlsafe)
         event = event_key.get()
 

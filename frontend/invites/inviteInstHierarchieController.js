@@ -84,7 +84,8 @@
         inviteInstHierCtrl.sendInstInvite = function sendInstInvite(invite) {
             inviteInstHierCtrl.isLoadingSubmission = true;
             var deferred = $q.defer();
-            var promise = InviteService.sendInvite(invite);
+            var invite_body = {invite_body: invite}
+            var promise = InviteService.sendInvite(invite_body);
             promise.then(function success() {
                     MessageService.showToast('Convite enviado com sucesso!');
                     addInvite(invite);

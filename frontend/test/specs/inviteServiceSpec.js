@@ -35,7 +35,7 @@
             var result;
             service.sendInvite(inviteUser).then(function(data){
                 result = data;
-                body['data'] = {invite_body:inviteUser};
+                body['data'] = inviteUser;
                 expect($http.post).toHaveBeenCalledWith(INVITES_URI, body);
                 expect(result.data).toEqual(inviteUser);
                 done();
@@ -50,7 +50,7 @@
             service.sendInvite(inviteInstitution).then(function(data){
                 result = data;
                 body['data'] = inviteInstitution;
-                expect($http.post).toHaveBeenCalledWith(INVITES_URI, {data: {invite_body: inviteInstitution}});
+                expect($http.post).toHaveBeenCalledWith(INVITES_URI, {data: inviteInstitution});
                 expect(result.data).toEqual(inviteInstitution);
                 done();
             });

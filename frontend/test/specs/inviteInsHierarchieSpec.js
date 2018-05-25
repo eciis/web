@@ -168,7 +168,7 @@
                 var promise = inviteInstCtrl.sendInstInvite(invite);
                 promise.then(function() {
 
-                    expect(inviteService.sendInvite).toHaveBeenCalledWith(invite);
+                    expect(inviteService.sendInvite).toHaveBeenCalledWith({invite_body: invite});
 
                     // Verifying That Data Is Correctly Updated
                     expect(inviteInstCtrl.invite).toEqual({});
@@ -205,7 +205,7 @@
 
                 var promise = inviteInstCtrl.sendInstInvite(inviteChildren);
                 promise.then(function() {
-                    expect(inviteService.sendInvite).toHaveBeenCalledWith(inviteChildren);
+                    expect(inviteService.sendInvite).toHaveBeenCalledWith({invite_body: inviteChildren});
 
                     // Verifying That Data Is Correctly Updated
                     expect(inviteInstCtrl.invite).toEqual({});

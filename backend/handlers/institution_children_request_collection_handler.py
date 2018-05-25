@@ -35,7 +35,8 @@ class InstitutionChildrenRequestCollectionHandler(BaseHandler):
     @login_required
     @json_response
     def post(self, user, institution_urlsafe):
-        """Handler of post requests."""
+        """Handler of post requests. This method is called when an
+        institution requests to be parent of other institution."""
         user.check_permission(
             'send_link_inst_request',
             'User is not allowed to send request', 

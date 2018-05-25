@@ -33,9 +33,9 @@
             spyOn($http, 'post').and.callThrough();
             httpBackend.expect('POST', INVITES_URI).respond(inviteUser);
             var result;
-            service.sendInvite(inviteUser).then(function(data){
+            service.sendInvite({invite_body: inviteUser}).then(function(data){
                 result = data;
-                body['data'] = {invite_body:inviteUser};
+                body['data'] = {invite_body: inviteUser};
                 expect($http.post).toHaveBeenCalledWith(INVITES_URI, body);
                 expect(result.data).toEqual(inviteUser);
                 done();
@@ -47,10 +47,10 @@
             spyOn($http, 'post').and.callThrough();
             httpBackend.expect('POST', INVITES_URI).respond(inviteInstitution);
             var result;
-            service.sendInvite(inviteInstitution).then(function(data){
+            service.sendInvite({invite_body: inviteInstitution}).then(function(data){
                 result = data;
-                body['data'] = inviteInstitution;
-                expect($http.post).toHaveBeenCalledWith(INVITES_URI, {data: {invite_body: inviteInstitution}});
+                body['data'] = {invite_body: inviteInstitution};
+                expect($http.post).toHaveBeenCalledWith(INVITES_URI, body);
                 expect(result.data).toEqual(inviteInstitution);
                 done();
             });

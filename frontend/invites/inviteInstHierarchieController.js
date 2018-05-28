@@ -5,7 +5,7 @@
 
     app.controller("InviteInstHierarchieController", function InviteInstHierarchieController(
         InviteService,$mdToast, $mdDialog, $state, AuthService, InstitutionService,
-        MessageService, RequestInvitationService, $q, RequestService) {
+        MessageService, RequestInvitationService, $q) {
 
         var inviteInstHierCtrl = this;
         var institutionKey = $state.params.institutionKey;
@@ -351,8 +351,20 @@
         };
 
         inviteInstHierCtrl.analyseRequest = function analyseRequest(event, request) {
-            RequestService.analyseReqDialog(event, inviteInstHierCtrl.institution, request);
+            RequestInvitationService
+                .analyseReqDialog(event, inviteInstHierCtrl.institution, request)
+                .then(function accepted() {
+                    var parent = new Institution(request.institution);
+                    linkInstitutions(parent, inviteInstHierCtrl.institution);
+                }, function rejected() {
+                    console.log('rejected');
+                });
         };
+
+        function linkInstitutions(parent, child) {
+            parent.addChildInst(child);
+            child.addParentInst(parent);
+        }
 
         inviteInstHierCtrl.removeChild = function removeChild(institution, ev) {
             $mdDialog.show({

@@ -147,7 +147,7 @@
               <md-list-item class="md-3-line" ng-repeat="request in inviteInstHierCtrl.requested_invites" 
                 ng-if="inviteInstHierCtrl.isReqSentToCurrentInst(request)" ng-click="inviteInstHierCtrl.analyseRequest(event, request)">
                 <md-icon class="md-avatar-icon" md-colors="{background: 'light-green-500', color: 'grey-50'}">account_balance</md-icon>  
-                <div class="md-list-item-text" layout="row" layout-align="space-between">
+                <div class="md-list-item-text" layout="row">
                   <div layout="column">
                     <a href class="md-title hyperlink" style="margin-top: 7px" ng-click="inviteInstHierCtrl.goToRequestedInst(request)">
                       {{ inviteInstHierCtrl.getReqInstName(request) }}

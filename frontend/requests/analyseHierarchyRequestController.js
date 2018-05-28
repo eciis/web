@@ -14,9 +14,24 @@
         analyseHierReqCtrl.child = child;
         analyseHierReqCtrl.hasToRemoveLink = child.parent_institution !== null;
 
+        analyseHierReqCtrl.confirmRequest = function confirmRequest() {
+            analyseHierReqCtrl.hasToRemoveLink ? confirmLinkRemoval() : acceptRequest();
+        };
+
+        analyseHierReqCtrl.rejectRequest = function rejectRequest(event) {
+            rejectRequestInstitution().then(
+                function success() {
+                    request.status = 'rejected';
+                    $mdDialog.cancel();
+                    MessageService.showToast('Solicitação rejeitada com sucesso');
+                }, function error(response) {
+                    MessageService.showToast(response.data.msg);
+                }
+            );
+        };
+
         function confirmLinkRemoval() {
             const isParent = true;
-
             InstitutionService.removeLink(child.key, parent.key, isParent).then(
                 function success(data) {
                     acceptRequest();
@@ -29,33 +44,12 @@
         function acceptRequest() {
             acceptRequestInstitution().then(function success() {
                 request.status = 'accepted';
-                $mdDialog.cancel();
+                $mdDialog.hide();
                 MessageService.showToast('Solicitação aceita com sucesso');
             }, function error(response) {
                 MessageService.showToast(response.data.msg);   
             });
         }
-
-        analyseHierReqCtrl.rejectRequest = function rejectRequest(event) {
-            var promise = MessageService.showConfirmationDialog(event, 'Rejeitar Solicitação', 'Confirmar rejeição da solicitação?');
-            promise.then(function confirm() {
-                rejectRequestInstitution().then(
-                    function success() {
-                        request.status = 'rejected';
-                        MessageService.showToast('Solicitação rejeitada com sucesso');
-                    }, function error(response) {
-                        MessageService.showToast(response.data.msg);
-                    }
-                );
-            }, function cancel() {
-                MessageService.showToast('Cancelado');
-            });
-            return promise;
-        };
-
-        analyseHierReqCtrl.confirmRequest = function confirmRequest() {
-            analyseHierReqCtrl.hasToRemoveLink ? confirmLinkRemoval() : acceptRequest();
-        };
 
         function acceptRequestInstitution() {
             switch(request.type_of_invite) {

@@ -24,6 +24,7 @@ class InviteUserCollectionHandler(BaseHandler):
         invite = data['invite_body']
         type_of_invite = invite.get('type_of_invite')
 
+        # This pattern checks whether the invitation type is USER or USER_ADM
         invite_pattern = re.compile('^USER(_ADM$|$)')
         Utils._assert(
             not invite_pattern.match(type_of_invite),

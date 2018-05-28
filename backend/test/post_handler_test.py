@@ -2,10 +2,6 @@
 """Post handler test."""
 
 from test_base_handler import TestBaseHandler
-from models import Post
-from models import User
-from models import Institution
-from models import Comment
 from handlers.post_handler import PostHandler
 import mocks
 from mock import patch
@@ -25,9 +21,39 @@ class PostHandlerTest(TestBaseHandler):
             [("/api/posts/(.*)", PostHandler),
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
+
+        # first user
         cls.first_user = mocks.create_user('first_user@gmail.com')
-        cls.first_user.put()
-        initModels(cls)
+
+        # second user
+        cls.second_user = mocks.create_user('second_user@ccc.ufcg.edu.br')
+
+        # institution
+        cls.institution = mocks.create_institution('institution')
+        cls.institution.add_member(cls.first_user)
+        cls.institution.add_member(cls.second_user)
+        cls.institution.follow(cls.first_user.key)
+        cls.institution.follow(cls.second_user.key)
+        cls.institution.set_admin(cls.first_user.key)
+        cls.first_user.add_institution(cls.institution.key)
+        cls.first_user.add_institution_admin(cls.institution.key)
+
+        # POST of first_user To Institution
+        cls.first_user_post = mocks.create_post(cls.first_user.key, cls.institution.key)
+
+        # POST of first_user To institution
+        cls.first_user_other_post = mocks.create_post(cls.first_user.key, cls.institution.key)
+
+        # Post of second_user
+        cls.second_user_post = mocks.create_post(cls.second_user.key, cls.institution.key)
+
+        # update institution's posts
+        cls.institution.posts = [cls.second_user_post.key, cls.first_user_post.key,
+                                cls.first_user_other_post.key]
+        cls.institution.put()
+
+        # comment
+        cls.second_user_comment = mocks.create_comment(cls.institution.key.urlsafe(), cls.second_user)
 
     @patch('util.login_service.verify_token', return_value={'email': 'first_user@gmail.com'})
     def test_delete(self, verify_token):

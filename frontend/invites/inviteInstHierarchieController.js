@@ -356,8 +356,6 @@
                 .then(function accepted() {
                     var parent = new Institution(request.institution);
                     linkInstitutions(parent, inviteInstHierCtrl.institution);
-                }, function rejected() {
-                    console.log('rejected');
                 });
         };
 

@@ -9,11 +9,24 @@ from utils import Utils
 from custom_exceptions import NotAuthorizedException
 from . import BaseHandler
 from models import InviteFactory
+from models import InviteInstitution
 
-__all__ = ['InviteInstitutionHandler']
+__all__ = ['InviteInstitutionCollectionHandler']
 
-class InviteInstitutionHandler(BaseHandler):
-    """Invite Institution Handler."""
+class InviteInstitutionCollectionHandler(BaseHandler):
+    """Invite Institution Collection Handler."""
+
+    @json_response
+    @login_required
+    def get(self, user):
+        """Get all invite whose type is institution."""
+        invites = []
+
+        queryInvites = InviteInstitution.query()
+
+        invites = [invite.make() for invite in queryInvites]
+
+        self.response.write(json.dumps(invites))
 
     @json_response
     @login_required

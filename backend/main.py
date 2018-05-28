@@ -26,7 +26,7 @@ from handlers import ReplyCommentHandler
 from handlers import InviteCollectionHandler
 from handlers import SearchHandler
 from handlers import InviteHandler
-from handlers import InviteInstitutionHandler
+from handlers import InviteInstitutionCollectionHandler
 from handlers import EventHandler
 from handlers import EventCollectionHandler
 from handlers import UserRequestCollectionHandler
@@ -49,7 +49,7 @@ webapp2.WSGIApplication.allowed_methods = frozenset(methods)
 app = webapp2.WSGIApplication([
     ("/api/requests/(.*)/user", RequestHandler),
     ("/api/invites", InviteCollectionHandler), 
-    ("/api/invites/institution", InviteInstitutionHandler),
+    ("/api/invites/institution", InviteInstitutionCollectionHandler),
     ("/api/invites/(.*)/resend", ResendInviteHandler),
     ("/api/invites/(.*)/institution_adm", InviteUserAdmHandler),
     ("/api/invites/(.*)", InviteHandler),

@@ -105,5 +105,17 @@
             });
             return deffered.promise;
         };
+
+        service.sendInviteHierarchy = function sendInviteHierarchy(invite) {
+            var deferred = $q.defer();
+            HttpService.post(INVITES_URI + '/institution_hierarchy', {
+                data: invite
+            }).then(function success(response) {
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+            return deferred.promise;
+        };
     });
 })();

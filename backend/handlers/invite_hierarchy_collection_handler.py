@@ -24,7 +24,7 @@ class InviteHierachyCollectionHandler(BaseHandler):
         invite = data['invite_body']
         type_of_invite = invite.get('type_of_invite')
 
-        invite_pattern = re.compile('^INVITE.*(CHILDREN|PARENT)$')
+        invite_pattern = re.compile('^INSTITUTION_(CHILDREN|PARENT)$')
         Utils._assert(
             not invite_pattern.match(type_of_invite),
             "invitation type not allowed", 
@@ -48,7 +48,7 @@ class InviteHierachyCollectionHandler(BaseHandler):
             'current_institution': user.current_institution.urlsafe()
         })
 
-        self.respose.write(json.dumps({'msg': 'The invite are being processed.', 'invite' : invite}))
+        self.response.write(json.dumps({'msg': 'The invite are being processed.', 'invite' : invite.make()}))
 
 
 @ndb.transactional(xg=True)

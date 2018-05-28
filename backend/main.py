@@ -51,7 +51,7 @@ app = webapp2.WSGIApplication([
     ("/api/requests/(.*)/user", RequestHandler),
     ("/api/invites", InviteCollectionHandler), 
     ("/api/invites/institution", InviteInstitutionHandler),
-    ("/api/invite/institution_hierarchy", InviteHierachyCollectionHandler),
+    ("/api/invites/institution_hierarchy", InviteHierachyCollectionHandler),
     ("/api/invites/(.*)/resend", ResendInviteHandler),
     ("/api/invites/(.*)/institution_adm", InviteUserAdmHandler),
     ("/api/invites/(.*)", InviteHandler),

@@ -74,7 +74,7 @@
 
     describe('Test confirm()', function() {
         beforeEach(function() {
-            spyOn(inviteService, 'sendInviteUserAdm').and.callFake(function() {
+            spyOn(inviteService, 'sendInviteUser').and.callFake(function() {
                 return {
                     then: function(calback) {
                         calback();
@@ -123,14 +123,14 @@
             transferAdminCtrl.selectMember(otherUser);
             transferAdminCtrl.confirm();
 
-            expect(inviteService.sendInviteUserAdm).toHaveBeenCalledWith(invite);
+            expect(inviteService.sendInviteUser).toHaveBeenCalledWith(invite);
             expect(mdDialog.hide).toHaveBeenCalledWith(invite);
             expect(messageService.showToast).toHaveBeenCalledWith("Convite enviado com sucesso!");
         });
 
         it('Should not be sent if there is no member selected.', function() {
             transferAdminCtrl.confirm();
-            expect(inviteService.sendInviteUserAdm).not.toHaveBeenCalled();
+            expect(inviteService.sendInviteUser).not.toHaveBeenCalled();
             expect(mdDialog.hide).not.toHaveBeenCalled();
             expect(messageService.showToast).toHaveBeenCalledWith("Selecione um memebro!");
         });

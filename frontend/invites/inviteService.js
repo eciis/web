@@ -31,18 +31,6 @@
             return deferred.promise;
         };
 
-        service.sendInviteUserAdm = function sendInviteUserAdm(invite) {
-            var deferred = $q.defer();
-            $http.post(INVITES_URI, {
-                data: {invite_body: invite}
-            }).then(function success(response) {
-                deferred.resolve(response);
-            }, function error(response) {
-                deferred.reject(response);
-            });
-
-            return deferred.promise;
-        };
 
         service.acceptInviteUserAdm = function acceptInviteUserAdm(inviteKey) {
             return HttpService.put(INVITES_URI + '/' + inviteKey + '/institution_adm');
@@ -109,6 +97,18 @@
         service.sendInviteHierarchy = function sendInviteHierarchy(invite) {
             var deferred = $q.defer();
             HttpService.post(INVITES_URI + '/institution_hierarchy', {
+                data: invite
+            }).then(function success(response) {
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+            return deferred.promise;
+        };
+
+        service.sendInviteUser = function sendInvite(invite) {
+            var deferred = $q.defer();
+            $http.post(INVITES_URI + '/user', {
                 data: invite
             }).then(function success(response) {
                 deferred.resolve(response);

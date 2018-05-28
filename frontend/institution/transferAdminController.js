@@ -43,7 +43,7 @@
 
                     let invite = new Invite(data);
 
-                    InviteService.sendInviteUserAdm(invite).then(function success(response) {
+                    InviteService.sendInviteUser({invite_body: invite}).then(function success(response) {
                         invite.status = 'sent';
                         $mdDialog.hide(invite);
                         MessageService.showToast("Convite enviado com sucesso!");

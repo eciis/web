@@ -24,7 +24,7 @@ class InviteUserCollectionHandler(BaseHandler):
         invite = data['invite_body']
         type_of_invite = invite.get('type_of_invite')
 
-        invite_pattern = re.compile('USER(_ADM$|$)')
+        invite_pattern = re.compile('^USER(_ADM$|$)')
         Utils._assert(
             not invite_pattern.match(type_of_invite),
             "invitation type not allowed", 
@@ -63,8 +63,6 @@ class InviteUserCollectionHandler(BaseHandler):
             {'msg': 'The invites are being processed.', 'invites' : invites}))
 
 
-
-@ndb.transactional(xg=True)
 def createInvite(data):
     """Create an invite."""
     invite = InviteFactory.create(data, data['type_of_invite'])

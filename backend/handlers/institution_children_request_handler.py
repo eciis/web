@@ -20,7 +20,9 @@ class InstitutionChildrenRequestHandler(BaseHandler):
     def get(self, user, request_key):
         """Handler GET Requests."""
         request = ndb.Key(urlsafe=request_key).get()
-        has_permission = user.has_permission('answer_link_inst_request', request.institution_requested_key.urlsafe())
+        has_inst_permission = user.has_permission('answer_link_inst_request', request.institution_key.urlsafe())
+        has_inst_request_permission = user.has_permission('answer_link_inst_request', request.institution_requested_key.urlsafe())
+        has_permission = has_inst_request_permission or has_inst_permission
         Utils._assert(not has_permission,
                       'User is not allowed to acess request link.',
                       NotAuthorizedException)

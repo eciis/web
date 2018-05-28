@@ -31,7 +31,15 @@ class InviteInstitutionCollectionHandler(BaseHandler):
     @json_response
     @login_required
     def post(self, user):
-        """Handle POST Requests."""
+        """Handle POST Requests.
+        
+        Creates a stub_institution, an institution with
+        a pending state. It is made from the invite's data
+        and can be accepted later.
+        It is allowed only if the institution that sent the invite
+        is not inactive and if the user has permission to send this
+        kind of invite.
+        """
         body = json.loads(self.request.body)
         data = body['data']
         host = self.request.host
@@ -53,8 +61,7 @@ class InviteInstitutionCollectionHandler(BaseHandler):
                       "The institution has been deleted", NotAuthorizedException)
 
         invite.put()
-        if(invite.stub_institution_key):
-            invite.stub_institution_key.get().addInvite(invite)
+        invite.stub_institution_key.get().addInvite(invite)
 
         invite.send_invite(host, user.current_institution)
 

@@ -20,7 +20,13 @@ class InviteCollectionHandler(BaseHandler):
     @json_response
     @login_required
     def post(self, user):
-        """Handle POST Requests."""
+        """Handle POST Requests.
+        
+        This method create invite for:
+        New institution's members;
+        New institution's admin;
+        New institution to be added in the hierarchy.
+        """
         body = json.loads(self.request.body)
         data = body['data']
         host = self.request.host

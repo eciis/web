@@ -38,6 +38,7 @@ from .user_profile_handler import *
 from .user_request_collection_handler import *
 from .user_timeline_handler import *
 from .vote_handler import *
+from .invite_hierarchy_collection_handler import *
 
 handlers = [
     base_handler, erro_handler, event_collection_handler, event_handler,
@@ -54,7 +55,8 @@ handlers = [
     reply_comment_handler, request_handler, resend_invite_handler,
     search_handler, subscribe_post_handler, user_handler,
     user_institutions_handler, user_profile_handler,
-    user_request_collection_handler, user_timeline_handler, vote_handler
+    user_request_collection_handler, user_timeline_handler, vote_handler,
+    invite_hierarchy_collection_handler
 ]
 
 __all__ = [prop for handler in handlers for prop in handler.__all__]

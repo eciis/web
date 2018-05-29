@@ -63,5 +63,8 @@ def createInvite(data):
     """Create an invite."""
     invite = InviteFactory.create(data, data['type_of_invite'])
     invite.put()
+
+    if(invite.stub_institution_key):
+        invite.stub_institution_key.get().addInvite(invite)
     
     return invite

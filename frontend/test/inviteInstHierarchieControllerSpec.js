@@ -168,7 +168,7 @@
 
     describe('sendInstInvite', function () {
         beforeEach(function() {
-            spyOn(inviteService, 'sendInvite').and.callFake(function () {
+            spyOn(inviteService, 'sendInviteHierarchy').and.callFake(function () {
                 return {
                     then: function (callback) {
                         return callback();
@@ -177,12 +177,12 @@
             });
         });
 
-        it('should call sendInvite', function() {
+        it('should call sendInviteHierarchy', function() {
             spyOn(messageService, 'showToast');
             inviteInstHierarchieCtrl.institution.sent_invitations = [];
             inviteInstHierarchieCtrl.sendInstInvite(invite);
             expect(inviteInstHierarchieCtrl.showParentHierarchie).toBeTruthy();
-            expect(inviteService.sendInvite).toHaveBeenCalled();
+            expect(inviteService.sendInviteHierarchy).toHaveBeenCalled();
             expect(messageService.showToast).toHaveBeenCalled();
         });
     });
@@ -579,7 +579,7 @@
             invite = new Invite({ invitee: "user@gmail.com", suggestion_institution_name: "New Institution", key: '123', type_of_invite: "INSTITUTION_PARENT" }, 
             'institution', institution.key);
 
-            spyOn(inviteService, 'sendInvite').and.callFake(function() {return {
+            spyOn(inviteService, 'sendInviteHierarchy').and.callFake(function() {return {
                     then: function(callback) {
                         return callback();
                     }
@@ -587,7 +587,7 @@
             });
         });
 
-        it('should call inviteService.sendInvite()', function(done) {
+        it('should call inviteService.sendInviteHierarchy()', function(done) {
             inviteInstHierarchieCtrl.invite = {
                 invitee: "parent@gmail.com",
                 suggestion_institution_name : "Institution Parent",
@@ -599,7 +599,7 @@
             var promise = inviteInstHierarchieCtrl.sendInstInvite(invite);
             promise.then(function() {
 
-                expect(inviteService.sendInvite).toHaveBeenCalledWith({invite_body: invite});
+                expect(inviteService.sendInviteHierarchy).toHaveBeenCalledWith({invite_body: invite});
 
                 // Verifying That Data Is Correctly Updated
                 expect(inviteInstHierarchieCtrl.invite).toEqual({});
@@ -625,7 +625,7 @@
                 state: 'active'
             };   
 
-            spyOn(inviteService, 'sendInvite').and.callFake(function() {return {
+            spyOn(inviteService, 'sendInviteHierarchy').and.callFake(function() {return {
                     then: function(callback) {
                         return callback();
                     }
@@ -633,7 +633,7 @@
             });
         });
 
-        it('should call inviteService.sendInvite()', function(done) {
+        it('should call inviteService.sendInviteHierarchy()', function(done) {
             inviteInstHierarchieCtrl.invite = {
                 invitee: "children@gmail.com",
                 suggestion_institution_name : "Children Institution",
@@ -645,7 +645,7 @@
 
             var promise = inviteInstHierarchieCtrl.sendInstInvite(inviteChildren);
             promise.then(function() {
-                expect(inviteService.sendInvite).toHaveBeenCalledWith({invite_body: inviteChildren});
+                expect(inviteService.sendInviteHierarchy).toHaveBeenCalledWith({invite_body: inviteChildren});
 
                 // Verifying That Data Is Correctly Updated
                 expect(inviteInstHierarchieCtrl.invite).toEqual({});

@@ -123,7 +123,7 @@
             transferAdminCtrl.selectMember(otherUser);
             transferAdminCtrl.confirm();
 
-            expect(inviteService.sendInviteUser).toHaveBeenCalledWith(invite);
+            expect(inviteService.sendInviteUser).toHaveBeenCalledWith({invite_body: invite});
             expect(mdDialog.hide).toHaveBeenCalledWith(invite);
             expect(messageService.showToast).toHaveBeenCalledWith("Convite enviado com sucesso!");
         });

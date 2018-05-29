@@ -108,7 +108,7 @@
 
         service.sendInviteUser = function sendInvite(invite) {
             var deferred = $q.defer();
-            $http.post(INVITES_URI + '/user', {
+            HttpService.post(INVITES_URI + '/user', {
                 data: invite
             }).then(function success(response) {
                 deferred.resolve(response);

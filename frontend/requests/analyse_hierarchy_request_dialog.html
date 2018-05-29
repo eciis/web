@@ -18,7 +18,8 @@
                 </div>
                 <div layout="column" layout-align="center start">
                     <b>{{ analyseHierReqCtrl.child.parent_institution.name }}</b>
-                </div>
+                    <span>{{ analyseHierReqCtrl.child.institutional_email }}</span>
+            </div>
                 </div>
                 <div layout="row">
                 <div flex="5" layout="row" layout-align="center">
@@ -49,6 +50,7 @@
             </div>
             <div layout="column" layout-align="center start">
                 <b>{{ analyseHierReqCtrl.parent.name }}</b>
+                <span>{{ analyseHierReqCtrl.parent.institutional_email }}</span>
             </div>
             </div>
             <div layout="row">
@@ -71,7 +73,7 @@
     </md-dialog-content>
     <md-dialog-actions layout="row" layout-align="end center" layout-wrap>
         <md-button class="md-primary" ng-click="analyseHierReqCtrl.rejectRequest()" 
-            md-colors="{color: 'default-teal-500'}"> Cancelar </md-button>
+            md-colors="{color: 'default-teal-500'}"> Rejeitar </md-button>
         <md-button class="md-primary" ng-click="analyseHierReqCtrl.confirmRequest()"
             md-colors="{color: 'default-teal-500'}"> Confirmar </md-button>
     </md-dialog-actions>

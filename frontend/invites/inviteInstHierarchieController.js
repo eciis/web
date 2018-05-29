@@ -358,6 +358,7 @@
             RequestInvitationService
                 .analyseReqDialog(event, inviteInstHierCtrl.institution, request)
                 .then(function accepted() {
+                    // TODO verify if it is a request parent or children
                     var parent = new Institution(request.institution);
                     linkInstitutions(parent, inviteInstHierCtrl.institution);
                     inviteInstHierCtrl.showParentHierarchie = true;

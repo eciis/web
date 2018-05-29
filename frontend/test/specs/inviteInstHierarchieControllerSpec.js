@@ -335,6 +335,32 @@
         });
     });
 
+    describe('analyseRequest', function () {
+        beforeEach(function() {
+            var parent = {
+                key: 'parent-key',
+                name: 'Parent',
+                'children_institutions': [] 
+            };
+            
+            var request = {
+                institution: parent,
+                'type_of_invite': 'REQUEST_INSTITUTION_CHILDREN'
+            };
+
+            inviteInstHierarchieCtrl.institution = {
+                key: 'child-key',
+                name: 'Child',
+                'parent_institution': null
+            };
+        })
+        
+        it('should accept requests and link institutions', function() {
+        
+
+        });
+    });
+
     describe('isReqSentByCurrentInst()', function() {        
         it('should return true', function() {
             let request = {institution_key: institution.key};

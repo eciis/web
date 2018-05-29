@@ -3,16 +3,31 @@
 (function() {
     const app = angular.module('app');
 
-    app.controller('AnalyseHierarchyRequestController', function AnalyseHierarchyRequestController(child, parent, request, RequestInvitationService,
+    app.controller('AnalyseHierarchyRequestController', function AnalyseHierarchyRequestController(requestedInstitution, request, RequestInvitationService,
          InstitutionService, MessageService, $q, $mdDialog) {
         const analyseHierReqCtrl = this;
 
         const REQUEST_PARENT = "REQUEST_INSTITUTION_PARENT";
         const REQUEST_CHILDREN = "REQUEST_INSTITUTION_CHILDREN";
 
-        analyseHierReqCtrl.parent = parent;
-        analyseHierReqCtrl.child = child;
-        analyseHierReqCtrl.hasToRemoveLink = child.parent_institution !== null;
+        
+        (function loadInstitutions() {
+            var parent, child;
+
+            switch(request.type_of_invite){
+                case REQUEST_PARENT:
+                    parent = requestedInstitution;
+                    child = request.institution;    
+                    break;
+                case REQUEST_CHILDREN:
+                    parent = request.institution;
+                    child = requestedInstitution;
+                    analyseHierReqCtrl.hasToRemoveLink = child.parent_institution !== null;
+            }
+
+            analyseHierReqCtrl.parent = parent;
+            analyseHierReqCtrl.child = child;
+        })();
 
         analyseHierReqCtrl.confirmRequest = function confirmRequest() {
             analyseHierReqCtrl.hasToRemoveLink ? confirmLinkRemoval() : acceptRequest();

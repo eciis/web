@@ -22,7 +22,7 @@ class InviteCollectionHandler(BaseHandler):
     def post(self, user):
         """Handle POST Requests.
         
-        This method create invite for:
+        This method creates invite for:
         New institution's members;
         New institution's admin;
         New institution to be added in the hierarchy.

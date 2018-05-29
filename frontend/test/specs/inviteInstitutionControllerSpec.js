@@ -50,7 +50,7 @@
 
         AuthService.login(user);
 
-        httpBackend.expect('GET', '/api/invites').respond([]);
+        httpBackend.expect('GET', '/api/invites/institution').respond([]);
         httpBackend.expect('GET', '/api/institutions/requests/institution/987654321').respond([]);
         httpBackend.when('GET', 'institution/institution_page.html').respond(200);
         httpBackend.when('GET', "main/main.html").respond(200);

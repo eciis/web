@@ -88,15 +88,15 @@
             var deferred = $q.defer();
             var promise = InviteService.sendInvite({invite_body: invite});
             promise.then(function success() {
-                    MessageService.showToast('Convite enviado com sucesso!');
                     addInvite(invite);
-                    if(typeOfInvite === INSTITUTION_PARENT) {
+                    if(invite.type_of_invite === INSTITUTION_PARENT) {
                         inviteInstHierCtrl.showParentHierarchie = true;
                     } else {
                         inviteInstHierCtrl.showChildrenHierarchie = true;
                     }
                     deferred.resolve();
                     inviteInstHierCtrl.isLoadingSubmission = false;
+                    MessageService.showToast('Convite enviado com sucesso!');
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
                     deferred.reject();

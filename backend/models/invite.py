@@ -14,6 +14,10 @@ __all__ = ['Invite']
 class Invite(PolyModel):
     """Model of Invite."""
 
+    INST_PROPS_TO_MAKE = ['name', 'address', 'description',
+                        'key', 'photo_url', 'institutional_email',
+                        'phone_number', 'email', 'trusted', 'state']
+
     # Email of the invitee.
     invitee = ndb.StringProperty()
 
@@ -123,13 +127,10 @@ class Invite(PolyModel):
 
     def make(self):
         """Create personalized json of invite."""
-        REQUIRED_PROPERTIES = ['name', 'address', 'description',
-                               'key', 'photo_url', 'institutional_email',
-                               'phone_number', 'email', 'trusted', 'state']
         institution_admin = self.institution_key.get()
         institution_admin = institution_admin.make(['name'])
         institution = self.institution_key.get()
-        institution = institution.make(REQUIRED_PROPERTIES)
+        institution = institution.make(Invite.INST_PROPS_TO_MAKE)
         return {
             'admin_name': self.admin_key.get().name,
             'sender_name': self.sender_name,

@@ -404,6 +404,10 @@
             });
         };
 
+        inviteInstHierCtrl.limitString = function limitString(string, size) {
+          return Utils.limitString(string, size);
+        };
+
         loadInstitution();
     });
 })();

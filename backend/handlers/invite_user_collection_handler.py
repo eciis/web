@@ -49,6 +49,16 @@ class InviteUserCollectionHandler(BaseHandler):
         invites = []
         @ndb.transactional(xg=True, retries=10)
         def process_invites(emails, invite, current_institution_key):
+            """
+            This method creates and sends an invitation 
+            to be a member of the institution to all incoming 
+            emails per parameter.
+
+            Params:
+            emails -- Emails of the users to be invited.
+            invite -- Data of the invitation to be created.
+            current_institution_key -- Institution in which the administrator was when he sent the invitation.
+            """
             invites_keys = []
             for email in emails:
                 invite['invitee'] = email

@@ -43,7 +43,7 @@
             inviteService: InviteService,
         });
 
-        httpBackend.expect('GET', '/api/invites').respond([]);
+        httpBackend.expect('GET', '/api/invites/institution').respond([]);
         httpBackend.expect('GET', '/api/institutions/requests/institution/1239').respond([]);
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', "error/user_inactive.html").respond(200);

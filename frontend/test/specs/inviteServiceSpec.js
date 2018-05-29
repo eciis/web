@@ -59,7 +59,7 @@
 
         it('Test getSentInstitutionInvitations in success case', function(done) {
             spyOn($http, 'get').and.callThrough();
-            httpBackend.expect('GET', INVITES_URI).respond(invites);
+            httpBackend.expect('GET', INVITES_URI + "/institution").respond(invites);
             var result;
             service.getSentInstitutionInvitations().then(function(data){
                 result = data;

@@ -96,6 +96,15 @@
             return request.status === 'sent' && !requestController.isRejecting ? '45' : '25';
         };
 
+        requestController.getChildrenInstName = function getChildrenInstName(size) {
+            return Utils.limitString(requestController.children.name ||
+                requestController.children.sender_name, size);
+        };
+
+        requestController.getChildrenInstEmail = function getChildrenInstEmail(size) {
+            return Utils.limitString(requestController.children.institutional_email, size);
+        };	
+
         requestController.isAnotherCountry = function isAnotherCountry() {
             return requestController.parent && requestController.parent.address.country !== 'Brasil';
         };

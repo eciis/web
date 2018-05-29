@@ -8,7 +8,6 @@ from utils import json_response
 from utils import Utils
 from custom_exceptions import NotAuthorizedException
 from . import BaseHandler
-from models import InviteInstitution
 from models import InviteFactory
 from service_entities import enqueue_task
 from google.appengine.ext import ndb
@@ -20,20 +19,14 @@ class InviteCollectionHandler(BaseHandler):
 
     @json_response
     @login_required
-    def get(self, user):
-        """Get invites for new institutions make by Plataform."""
-        invites = []
-
-        queryInvites = InviteInstitution.query()
-
-        invites = [invite.make() for invite in queryInvites]
-
-        self.response.write(json.dumps(invites))
-
-    @json_response
-    @login_required
     def post(self, user):
-        """Handle POST Requests."""
+        """Handle POST Requests.
+        
+        This method creates invite for:
+        New institution's members;
+        New institution's admin;
+        New institution to be added in the hierarchy.
+        """
         body = json.loads(self.request.body)
         data = body['data']
         host = self.request.host

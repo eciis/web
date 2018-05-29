@@ -69,6 +69,12 @@ def create_post(author_key, institution_key):
     post_hash = getHash(post)
     post.title = "title %s" % post_hash
     post.text = "text %s" % post_hash
+    post.last_modified_by = author_key
+    post.put()
+    # update permissions
+    author = author_key.get()
+    author.add_permissions(["edit_post", "remove_post"], post.key.urlsafe())
+    author.put()
     post.put()
     return post
 

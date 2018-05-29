@@ -7,21 +7,21 @@ from models import Institution
 from models import Address
 from models import User
 from models import Invite
-from handlers.invite_institution_handler import InviteInstitutionHandler
-
+from handlers.invite_institution_collection_handler import InviteInstitutionCollectionHandler
 from mock import patch
+from models.invite_institution import InviteInstitution
 
 host = 'localhost:80'
 
-class InviteInstitutionHandlerTest(TestBaseHandler):
+class InviteInstitutionCollectionHandlerTest(TestBaseHandler):
     """Invite Institution handler test."""
 
     @classmethod
     def setUp(cls):
         """Provide the base for the tests."""
-        super(InviteInstitutionHandlerTest, cls).setUp()
+        super(InviteInstitutionCollectionHandlerTest, cls).setUp()
         app = cls.webapp2.WSGIApplication(
-            [("/api/invites/institution", InviteInstitutionHandler),
+            [("/api/invites/institution", InviteInstitutionCollectionHandler),
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
 
@@ -121,4 +121,28 @@ class InviteInstitutionHandlerTest(TestBaseHandler):
             "Expected exception message must be equal to 'Error! The institution has been deleted'") 
         
         # assert the invite was not sent to the invitee
-        send_invite.assert_not_called() 
+        send_invite.assert_not_called()
+
+    @patch('util.login_service.verify_token', return_value={'email': 'first_user@gmail.com'})
+    def test_get(self, verify_token):
+        """Test post invite institution fail."""
+        invites = self.testapp.get("/api/invites/institution").json
+        self.assertTrue(len(invites) == 0)
+
+        #Creating some invites
+        self.body['data']['type_of_invite'] = 'INSTITUTION'
+        self.testapp.post_json("/api/invites/institution", self.body)
+
+        invites = self.testapp.get("/api/invites/institution").json
+        self.assertTrue(len(invites) == 1)
+
+        self.testapp.post_json("/api/invites/institution", self.body)
+
+        invites = self.testapp.get("/api/invites/institution").json
+        self.assertTrue(len(invites) == 2)
+
+
+        
+
+
+        

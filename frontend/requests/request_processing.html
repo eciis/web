@@ -26,8 +26,10 @@
                   alt="{{ requestCtrl.children.name }}"></img>
               </div>
               <div layout="column" layout-align="center start">
-                <b>{{ requestCtrl.children.name || requestCtrl.children.sender_name}}</b>
-                <span>{{ requestCtrl.children.institutional_email }}</span>
+                <b hide-gt-xs> {{ requestCtrl.getChildrenInstName(25)}}</b>
+                <b hide-xs>{{ requestCtrl.getChildrenInstName(60)}}</b>
+                <span hide-gt-xs>{{ requestCtrl.getChildrenInstEmail(20) }}</span>
+                <span hide-xs>{{ requestCtrl.getChildrenInstEmail(50) }}</span>
                 <span>{{ requestCtrl.children.office }}</span>
               </div>
           </div>
@@ -44,7 +46,7 @@
       </md-button>
     </md-dialog-actions>
 
-    <md-card-content ng-if="requestCtrl.isRejecting" class="md-dialog-content">
+    <md-card-content ng-if="requestCtrl.isRejecting" class="md-dialog-content" layout-gt-sm="column" layout-padding>
       <h4 style="margin: 0;">Rejeitar Vínculo</h4>
       <p>Tem certeza que deseja rejeitar?</p>
     </md-card-content>

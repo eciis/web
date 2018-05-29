@@ -73,8 +73,8 @@ class Invite(PolyModel):
 
     def send_invite(self, host, current_institution=None):
         """Send invite."""
-        self.send_email(host)
         self.send_notification(current_institution)
+        self.send_email(host)
 
     def send_email(self, host, receiver_email=None, body=None):
         """Method of send email of invite user."""

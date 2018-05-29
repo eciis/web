@@ -58,12 +58,12 @@ class InviteCollectionHandlerTest(TestBaseHandler):
     @patch('util.login_service.verify_token', return_value=ADMIN)
     def test_post_invite_institution(self, verify_token):
 
-        invite = self.testapp.post_json("/api/invites", {'data': {
+        invite = self.testapp.post_json("/api/invites", {'data': { 'invite_body': {
             'invitee': 'ana@gmail.com',
             'admin_key': self.admin.key.urlsafe(),
             'type_of_invite': 'INSTITUTION_PARENT',
             'suggestion_institution_name': 'New Institution',
-            'institution_key': self.institution.key.urlsafe()}},
+            'institution_key': self.institution.key.urlsafe()}}},
             headers={'Institution-Authorization': self.institution.key.urlsafe()})
 
         # Retrieve the entities
@@ -88,11 +88,11 @@ class InviteCollectionHandlerTest(TestBaseHandler):
         # institution and not specify the suggestion institution name.
 
         with self.assertRaises(Exception) as raises_context:
-            self.testapp.post_json("/api/invites", {'data': {
+            self.testapp.post_json("/api/invites", {'data': { 'invite_body': {
                 'invitee': 'ana@gmail.com',
                 'admin_key': self.admin.key.urlsafe(),
                 'institution_key': self.institution.key.urlsafe(),
-                'type_of_invite': 'INSTITUTION_PARENT'}})
+                'type_of_invite': 'INSTITUTION_PARENT'}}})
 
         message_exception = self.get_message_exception(str(raises_context.exception))
         self.assertEqual(
@@ -105,12 +105,12 @@ class InviteCollectionHandlerTest(TestBaseHandler):
     def test_post_invite_institution_parent(self, verify_token):
         #Test the invite_collection_handler's post method in case to parent institution.
 
-        invite = self.testapp.post_json("/api/invites", {'data': {
+        invite = self.testapp.post_json("/api/invites", {'data': { 'invite_body': {
             'invitee': 'user1@gmail.com',
             'admin_key': self.admin.key.urlsafe(),
             'type_of_invite': 'INSTITUTION_PARENT',
             'suggestion_institution_name': 'Institution Parent',
-            'institution_key': self.institution.key.urlsafe()}},
+            'institution_key': self.institution.key.urlsafe()}}},
             headers={'Institution-Authorization': self.institution.key.urlsafe()})
 
         # Retrieve the entities

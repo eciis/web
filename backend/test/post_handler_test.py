@@ -2,13 +2,10 @@
 """Post handler test."""
 
 from test_base_handler import TestBaseHandler
-from models import Post
-from models import User
-from models import Institution
-from models import Comment
 from handlers.post_handler import PostHandler
 import mocks
 from mock import patch
+import json
 
 
 class PostHandlerTest(TestBaseHandler):
@@ -25,9 +22,47 @@ class PostHandlerTest(TestBaseHandler):
             [("/api/posts/(.*)", PostHandler),
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
+
+        # first user
         cls.first_user = mocks.create_user('first_user@gmail.com')
-        cls.first_user.put()
-        initModels(cls)
+        # second user
+        cls.second_user = mocks.create_user('second_user@ccc.ufcg.edu.br')
+        # institution
+        cls.institution = mocks.create_institution('institution')
+        cls.institution.add_member(cls.first_user)
+        cls.institution.add_member(cls.second_user)
+        cls.institution.follow(cls.first_user.key)
+        cls.institution.follow(cls.second_user.key)
+        cls.institution.set_admin(cls.first_user.key)
+        cls.first_user.add_institution(cls.institution.key)
+        cls.first_user.add_institution_admin(cls.institution.key)
+        # POST of first_user To Institution
+        cls.first_user_post = mocks.create_post(cls.first_user.key, cls.institution.key)
+        # POST of first_user To institution
+        cls.first_user_other_post = mocks.create_post(cls.first_user.key, cls.institution.key)
+        # Post of second_user
+        cls.second_user_post = mocks.create_post(cls.second_user.key, cls.institution.key)
+        # update institution's posts
+        cls.institution.posts = [cls.second_user_post.key, cls.first_user_post.key,
+                                cls.first_user_other_post.key]
+        cls.institution.put()
+        # comment
+        cls.second_user_comment = mocks.create_comment(cls.institution.key.urlsafe(), cls.second_user)
+
+    @patch('util.login_service.verify_token', return_value={'email': 'first_user@gmail.com'})
+    def test_get(self, verify_token):
+        """Test the post_handler's get method."""
+        # Call the get method
+        response = self.testapp.get("/api/posts/%s" % self.second_user_post.key.urlsafe())
+        host = response.request.host
+        result = json.loads(response.body)
+
+        post_json = self.second_user_post.make(host)
+
+        for attr in post_json:
+            if attr is not None:
+                self.assertEqual(result[attr], post_json[attr],
+                'should be equal')
 
     @patch('util.login_service.verify_token', return_value={'email': 'first_user@gmail.com'})
     def test_delete(self, verify_token):
@@ -83,7 +118,7 @@ class PostHandlerTest(TestBaseHandler):
     def test_patch(self, verify_token):
         """Test the post_handler's patch method."""
 
-        exception_message = "User is not allowed to edit this post"
+        exception_message = "Error! User is not allowed to edit this post"
         expected_alert = "Expected: " + exception_message + ". But got: "
 
         # Call the patch method and assert that  it raises an exception
@@ -145,6 +180,7 @@ class PostHandlerTest(TestBaseHandler):
                                         "value": "testando"}]
                                     )
 
+        exception_message = "Error! The user can not update this post"
         raises_context_message = self.get_message_exception(str(raises_context.exception))
         self.assertEqual(
             raises_context_message,
@@ -202,61 +238,7 @@ class PostHandlerTest(TestBaseHandler):
                          "The post's state must be published")
         message = self.get_message_exception(str(raises_context.exception))
         self.assertEquals(message, "Error! The user can not remove this post")
-        
-
 
     def tearDown(cls):
         """Deactivate the test."""
         cls.test.deactivate()
-
-
-def initModels(cls):
-    """Init the models."""
-    # new User second_user
-    cls.second_user = User()
-    cls.second_user.name = 'second_user'
-    cls.second_user.email = ['second_user@ccc.ufcg.edu.br']
-    cls.second_user.photo_url = '/img.jpg'
-    cls.second_user.liked_posts = []
-    cls.second_user.put()
-
-    # new Institution
-    cls.institution = Institution()
-    cls.institution.name = 'institution'
-    cls.institution.members = [cls.first_user.key, cls.second_user.key]
-    cls.institution.followers = [cls.first_user.key, cls.second_user.key]
-    cls.institution.admin = cls.first_user.key
-    cls.institution.put()
-    cls.first_user.institutions_admin.append(cls.institution.key)
-
-    # POST of first_user To Institution
-    cls.first_user_post = Post()
-    cls.first_user_post.author = cls.first_user.key
-    cls.first_user_post.institution = cls.institution.key
-    cls.first_user_post.put()
-    cls.first_user.add_permissions(["edit_post", "remove_post"], cls.first_user_post.key.urlsafe())
-
-    # POST of first_user To institution
-    cls.first_user_other_post = Post()
-    cls.first_user_other_post.author = cls.first_user.key
-    cls.first_user_other_post.institution = cls.institution.key
-    cls.first_user_other_post.put()
-    cls.first_user.add_permissions(["edit_post", "remove_post"], cls.first_user_other_post.key.urlsafe())
-
-    # Post of second_user
-    cls.second_user_post = Post()
-    cls.second_user_post.author = cls.second_user.key
-    cls.second_user_post.institution = cls.institution.key
-    cls.second_user_post.put()
-    cls.second_user.add_permissions(["edit_post", "remove_post"], cls.second_user_post.key.urlsafe())
-
-    # update institution's posts
-    cls.institution.posts = [cls.second_user_post.key, cls.first_user_post.key,
-                             cls.first_user_other_post.key]
-    cls.institution.put()
-
-    # comment
-    data_comment = {"text": "hello",
-                    "institution_key": cls.institution.key.urlsafe()}
-    cls.second_user_comment = Comment.create(data_comment, cls.second_user)
-    cls.second_user_comment.put()

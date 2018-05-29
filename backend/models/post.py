@@ -344,11 +344,13 @@ class Post(PolyModel):
         """Add a subscriber."""
         if user.state == 'active':
             self.subscribers.append(user.key)
+            self.put()
 
     def remove_subscriber(self, user):
         """Remove a subscriber."""
         if user.key in self.subscribers and self.author != user.key:
             self.subscribers.remove(user.key)
+            self.put()
 
     def create_notification_message(self, user_key, current_institution_key, sender_institution_key=None):
         """ Create message that will be used in notification.

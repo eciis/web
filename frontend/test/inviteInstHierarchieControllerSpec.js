@@ -5,9 +5,22 @@
             inviteService, inviteInstHierarchieCtrl, createCtrl, messageService;
 
     var institution = {
+        name: 'institution',
         key: 'kaopsdkoas-IAKSDOoksHo',
+        sent_invitations: [],
+        children_institutions: [],
         state: 'active'
     };
+
+    var otherInst = {
+        name: 'other',
+        key: 'djlakjdks-sdshdjshda',
+        sent_invitations: [],
+        children_institutions: [],
+        state: 'active'
+    }
+
+    var childrenStub = new Institution({name: "Children Institution", state : "pending"});
 
     var user = {
         name: 'user',
@@ -23,6 +36,9 @@
     };
 
     var invite = new Invite({ invitee: "user@gmail.com", suggestion_institution_name: "New Institution", key: '123', type_of_invite: "INSTITUTION_PARENT" }, 
+        'institution', institution.key);
+
+    var inviteChildren = new Invite({ invitee: "user@gmail.com", suggestion_institution_name: "Children Institution", key: '123', type_of_invite: "INSTITUTION_CHILDREN" }, 
         'institution', institution.key);
 
     beforeEach(module('app'));
@@ -88,6 +104,18 @@
         expect(instService.getInstitution).toHaveBeenCalled();
     }));
 
+    describe('InviteInstHierarchieController properties', function() {
+
+        it('should exist a user with name user', function() {
+            expect(inviteInstHierarchieCtrl.user.name).toEqual(user.name);
+        });
+
+        it('should be equal to institution', function() {
+            expect(inviteInstHierarchieCtrl.institution.name).toEqual(institution.name);
+            expect(inviteInstHierarchieCtrl.institution.key).toEqual(institution.key);
+        });
+    });
+
     describe('checkInstInvite', function() {
         beforeEach(function() {
             spyOn(messageService, 'showToast');
@@ -139,7 +167,7 @@
     });
 
     describe('sendInstInvite', function () {
-        it('should call sendInvite', function() {
+        beforeEach(function() {
             spyOn(inviteService, 'sendInvite').and.callFake(function () {
                 return {
                     then: function (callback) {
@@ -147,13 +175,16 @@
                     }
                 };
             });
+        });
+
+        it('should call sendInvite', function() {
             spyOn(messageService, 'showToast');
             inviteInstHierarchieCtrl.institution.sent_invitations = [];
             inviteInstHierarchieCtrl.sendInstInvite(invite);
             expect(inviteInstHierarchieCtrl.showParentHierarchie).toBeTruthy();
             expect(inviteService.sendInvite).toHaveBeenCalled();
             expect(messageService.showToast).toHaveBeenCalled();
-        })
+        });
     });
 
     describe('showDialog()', function() {
@@ -539,6 +570,92 @@
             expect(inviteInstHierarchieCtrl.institution.parent_institution).toEqual(secondInst);
             returnedValue = inviteInstHierarchieCtrl.linkParentStatus();
             expect(returnedValue).toEqual('não confirmado');
+        });
+    });
+
+    describe('sendInstInvite() to parent institution', function() {
+        beforeEach(function() {
+
+            invite = new Invite({ invitee: "user@gmail.com", suggestion_institution_name: "New Institution", key: '123', type_of_invite: "INSTITUTION_PARENT" }, 
+            'institution', institution.key);
+
+            spyOn(inviteService, 'sendInvite').and.callFake(function() {return {
+                    then: function(callback) {
+                        return callback();
+                    }
+                };
+            });
+        });
+
+        it('should call inviteService.sendInvite()', function(done) {
+            inviteInstHierarchieCtrl.invite = {
+                invitee: "parent@gmail.com",
+                suggestion_institution_name : "Institution Parent",
+                type_of_invite : "INSTITUTION_PARENT"};
+
+            // Change current institution
+            inviteInstHierarchieCtrl.user.current_institution = otherInst;
+
+            var promise = inviteInstHierarchieCtrl.sendInstInvite(invite);
+            promise.then(function() {
+
+                expect(inviteService.sendInvite).toHaveBeenCalledWith({invite_body: invite});
+
+                // Verifying That Data Is Correctly Updated
+                expect(inviteInstHierarchieCtrl.invite).toEqual({});
+                expect(inviteInstHierarchieCtrl.institution.key).toEqual(institution.key);
+                expect(inviteInstHierarchieCtrl.institution.sent_invitations).toEqual([invite]);
+                expect(inviteInstHierarchieCtrl.institution.parent_institution.name).toEqual(
+                    invite.suggestion_institution_name);
+                expect(inviteInstHierarchieCtrl.hasParent).toEqual(true);
+
+                done();
+            });
+            scope.$apply();
+        });
+    });
+
+    describe('sendInstInvite() to children Institution', function() {
+        beforeEach(function() {
+            institution = {
+                name: 'institution',
+                key: 'kaopsdkoas-IAKSDOoksHo',
+                sent_invitations: [],
+                children_institutions: [],
+                state: 'active'
+            };   
+
+            spyOn(inviteService, 'sendInvite').and.callFake(function() {return {
+                    then: function(callback) {
+                        return callback();
+                    }
+                };
+            });
+        });
+
+        it('should call inviteService.sendInvite()', function(done) {
+            inviteInstHierarchieCtrl.invite = {
+                invitee: "children@gmail.com",
+                suggestion_institution_name : "Children Institution",
+                type_of_invite : "INSTITUTION_CHILDREN"};
+
+            inviteInstHierarchieCtrl.institution = new Institution(institution);
+            // Change current institution
+            inviteInstHierarchieCtrl.user.current_institution = otherInst;
+
+            var promise = inviteInstHierarchieCtrl.sendInstInvite(inviteChildren);
+            promise.then(function() {
+                expect(inviteService.sendInvite).toHaveBeenCalledWith({invite_body: inviteChildren});
+
+                // Verifying That Data Is Correctly Updated
+                expect(inviteInstHierarchieCtrl.invite).toEqual({});
+                expect(inviteInstHierarchieCtrl.institution.key).toEqual(institution.key);
+                expect(inviteInstHierarchieCtrl.institution.sent_invitations).toEqual([inviteChildren]);
+                expect(inviteInstHierarchieCtrl.institution.children_institutions).toContain(childrenStub);
+
+                done();
+            });
+            scope.$apply();
         });
     });
 }));

@@ -29,7 +29,7 @@ class EmailSender(object):
         taskqueue.add(
             url='/api/queue/send-email',
             target='worker',
-            queue_name='notifications',
+            queue_name='emails',
             params={
                 'invitee': self.receiver,
                 'subject': self.subject,

@@ -117,7 +117,7 @@
         service.save = function save(data, institutionKey, inviteKey) {
             var body = {data: data};
             var deffered = $q.defer();
-            $http.post(INSTITUTIONS_URI + "/" + institutionKey + "/invites/" + inviteKey, body).then(function success(info) {
+            $http.put(INSTITUTIONS_URI + "/" + institutionKey + "/invites/" + inviteKey, body).then(function success(info) {
                 deffered.resolve(info.data);
             }, function error(data) {
                 deffered.reject(data);

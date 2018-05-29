@@ -19,13 +19,13 @@ __all__ = ['PostHandler']
 
 def is_post_author(method):
     """Check if the user is the author of the post."""
-    def check_authorization(self, user, url_string, *args):
-        obj_key = ndb.Key(urlsafe=url_string)
+    def check_authorization(self, user, post_urlsafe, *args):
+        obj_key = ndb.Key(urlsafe=post_urlsafe)
         post = obj_key.get()
         Utils._assert(post.author != user.key,
                       'User is not allowed to edit this post',
                       NotAuthorizedException)
-        method(self, user, url_string, *args)
+        method(self, user, post_urlsafe, *args)
     return check_authorization
 
 
@@ -39,13 +39,11 @@ class PostHandler(BaseHandler):
 
     @json_response
     @login_required
-    def get(self, user, url_string):
+    def get(self, user, post_urlsafe):
         """Handle GET Requests."""
-        """Handle GET Requests."""
-        post_key = ndb.Key(urlsafe=url_string)
+        post_key = ndb.Key(urlsafe=post_urlsafe)
         post = post_key.get()
 
-        assert type(post) in (Post, SurveyPost), "Key is not an Post"
         post_json = post.make(self.request.host)
         post_json['data_comments'] = post.comments
         post_json['data_likes'] = getLikes(post, self.request.host)
@@ -56,14 +54,14 @@ class PostHandler(BaseHandler):
 
     @json_response
     @login_required
-    def delete(self, user, key):
+    def delete(self, user, post_urlsafe):
         """Handle DELETE Requests."""
         """Get the post from the datastore."""
-        obj_key = ndb.Key(urlsafe=key)
+        obj_key = ndb.Key(urlsafe=post_urlsafe)
         post = obj_key.get()
 
         is_admin = user.has_permission("remove_posts", post.institution.urlsafe())
-        is_author = user.has_permission("remove_post", key)
+        is_author = user.has_permission("remove_post", post_urlsafe)
 
         Utils._assert(not is_admin and not is_author,
                       "The user can not remove this post", NotAuthorizedException)
@@ -86,27 +84,22 @@ class PostHandler(BaseHandler):
 
     @json_response
     @login_required
-    def patch(self, user, url_string):
+    def patch(self, user, post_urlsafe):
         """Handler PATCH Requests."""
         data = self.request.body
 
-        try:
-            post = ndb.Key(urlsafe=url_string).get()
+        post = ndb.Key(urlsafe=post_urlsafe).get()
 
-            Utils._assert(post.has_activity(),
-                          "The user can not update this post",
-                          NotAuthorizedException)
+        Utils._assert(post.has_activity(),
+                        "The user can not update this post",
+                        NotAuthorizedException)
 
-            user.check_permission("edit_post",
-                                  "User is not allowed to edit this post",
-                                  url_string)
+        user.check_permission("edit_post",
+                                "User is not allowed to edit this post",
+                                post_urlsafe)
 
-            """Apply patch."""
-            JsonPatch.load(data, post)
+        """Apply patch."""
+        JsonPatch.load(data, post)
 
-            """Update post."""
-            post.put()
-        except Exception as error:
-            self.response.set_status(Utils.FORBIDDEN)
-            self.response.write(Utils.getJSONError(
-                Utils.FORBIDDEN, error.message))
+        """Update post."""
+        post.put()

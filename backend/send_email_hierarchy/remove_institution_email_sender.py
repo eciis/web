@@ -18,7 +18,7 @@ class RemoveInstitutionEmailSender(EmailSender):
         taskqueue.add(
             url='/api/queue/email-members',
             target='worker',
-            queue_name='notifications',
+            queue_name='emails',
             params={
                 'institution_key': self.institution_key,
                 'subject': self.subject,

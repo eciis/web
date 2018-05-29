@@ -20,9 +20,9 @@ class InstitutionChildrenRequestCollectionHandler(BaseHandler):
 
     @json_response
     @login_required
-    def get(self, user, institution_key):
+    def get(self, user, institution_urlsafe):
         """Get requests for children links."""
-        inst_key_obj = ndb.Key(urlsafe=institution_key)
+        inst_key_obj = ndb.Key(urlsafe=institution_urlsafe)
         queryRequests = RequestInstitutionChildren.query(
             ndb.OR(RequestInstitutionChildren.institution_requested_key == inst_key_obj, RequestInstitutionChildren.institution_key == inst_key_obj),
             RequestInstitutionChildren.status == 'sent'
@@ -34,12 +34,13 @@ class InstitutionChildrenRequestCollectionHandler(BaseHandler):
 
     @login_required
     @json_response
-    def post(self, user, institution_key):
-        """Handler of post requests."""
+    def post(self, user, institution_urlsafe):
+        """Handler of post requests. This method is called when an
+        institution requests to be parent of other institution."""
         user.check_permission(
             'send_link_inst_request',
             'User is not allowed to send request', 
-            institution_key)
+            institution_urlsafe)
 
         data = json.loads(self.request.body)
         host = self.request.host
@@ -53,8 +54,7 @@ class InstitutionChildrenRequestCollectionHandler(BaseHandler):
             EntityException
         )
 
-        parent_key = data.get('institution_key')
-        parent_key = ndb.Key(urlsafe=parent_key)
+        parent_key = ndb.Key(urlsafe=institution_urlsafe)
         requested_inst_key = data.get('institution_requested_key')
         requested_inst_key = ndb.Key(urlsafe=requested_inst_key)
         

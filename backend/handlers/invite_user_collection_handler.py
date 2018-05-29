@@ -1,4 +1,5 @@
-"""."""
+# -*- coding: utf-8 -*-
+"""Invite User Collection Handler."""
 
 import re
 import json
@@ -18,6 +19,12 @@ class InviteUserCollectionHandler(BaseHandler):
     @login_required
     @json_response
     def post(self, user):
+        """Handle POST invites.
+        
+        This method creates contives for: 
+        new institution administrators and 
+        new members of the institution.
+        """
         body = json.loads(self.request.body)
         data = body['data']
         host = self.request.host

@@ -1,4 +1,5 @@
-"""."""
+# -*- coding: utf-8 -*-
+"""Invite Hierarchy Collection Handler."""
 
 import re
 import json
@@ -18,6 +19,11 @@ class InviteHierachyCollectionHandler(BaseHandler):
     @login_required
     @json_response
     def post(self, user):
+        """Handler POST invites.
+        
+        This method creates contives for:
+        New institution to be added in the hierarchy.
+        """
         body = json.loads(self.request.body)
         data = body['data']
         host = self.request.host

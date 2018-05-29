@@ -1129,3 +1129,10 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
     line-height: 21px; 
     padding: 5px;
 }
+
+.shared-post-with-image {
+    height: 20vh;
+}
+.shared-post-header {
+    height: 15vh;
+}

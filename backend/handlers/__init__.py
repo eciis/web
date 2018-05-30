@@ -18,7 +18,6 @@ from .institution_parent_request_handler import *
 from .institution_request_collection_handler import *
 from .institution_request_handler import *
 from .institution_timeline_handler import *
-from .invite_collection_handler import *
 from .invite_handler import *
 from .invite_institution_collection_handler import *
 from .invite_user_adm_handler import *
@@ -50,7 +49,7 @@ handlers = [
     institution_members_handler, institution_parent_request_collection_handler,
     institution_parent_request_handler, institution_request_collection_handler,
     institution_request_handler, institution_timeline_handler,
-    invite_collection_handler, invite_handler, invite_institution_collection_handler,
+    invite_handler, invite_institution_collection_handler,
     invite_user_adm_handler, like_handler, login_logout_handler,
     post_collection_handler, post_comment_handler, post_handler,
     reply_comment_handler, request_handler, resend_invite_handler,

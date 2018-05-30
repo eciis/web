@@ -1,9 +1,9 @@
-<md-content layout-fill layout="row" layout-align="center center" md-colors="{background: 'teal-500'}">
+<md-content layout="row" layout-fill layout-align="center center" md-colors="{background: 'teal-500'}">
   <div layout="column" layout-align="center center">
-    <div layout="row" layout-xs="column" layout-align="center center">
-      <div layout="row" flex-sm="60" flex-gt-sm="40" layout-align="center center" style="max-height: none; margin-top: 50px;">
+    <div layout="row" layout-align="center center">
+      <div layout="row" flex-xs="20" flex-sm="60" flex-gt-sm="40" layout-align="center start">
         <load-circle ng-show="newInviteCtrl.loading"></load-circle>
-        <md-card ng-if="!newInviteCtrl.isAlreadyProcessed" ng-show="!newInviteCtrl.loading">
+        <md-card ng-if="!newInviteCtrl.isAlreadyProcessed" ng-show="!newInviteCtrl.loading" class="new-invite-page-card">
           <md-card-content style="background-color:#FFFFFF;" layout="column" layout-align="center">
             <div align="center">
               <img src="app/images/logowithname.png" aria-label="e-CIS Logo" style="width: 50%;">

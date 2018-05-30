@@ -154,6 +154,10 @@
         margin: 0;
         margin-top: 1.5em;
     }
+
+    .new-invite-page-card {
+      max-width: 350px;
+    }
 }
 
 .green-background{

@@ -2,6 +2,7 @@
 """Invite User Collection handler test."""
 
 import mocks
+import json
 from permissions import DEFAULT_ADMIN_PERMISSIONS
 from test_base_handler import TestBaseHandler
 from google.appengine.ext import ndb
@@ -40,7 +41,8 @@ class InviteUserCollectionHandlerTest(TestBaseHandler):
         cls.testapp = cls.webtest.TestApp(app)
     
     @patch('util.login_service.verify_token')
-    def test_post_invite_user(self, verify_token):
+    @patch('handlers.invite_user_collection_handler.enqueue_task')
+    def test_post_invite_user(self, enqueue_task, verify_token):
         """."""
 
         admin = mocks.create_user()
@@ -57,13 +59,13 @@ class InviteUserCollectionHandlerTest(TestBaseHandler):
         invite_body = create_body([other_user.email[0]], admin, institution, 'USER')
 
         verify_token._mock_return_value = {'email': admin.email[0]}
-        invite = self.testapp.post_json(
+        response = self.testapp.post_json(
             '/api/invites/user', 
             invite_body, 
             headers={'institution-authorization': institution.key.urlsafe()}
         )
 
-        invite = invite.json
+        invite = response.json
         invite = ndb.Key(urlsafe=invite['invites'][0]['key']).get()
 
         REQUIRED_PROPERTIES = ['name', 'address', 'description',
@@ -84,9 +86,19 @@ class InviteUserCollectionHandlerTest(TestBaseHandler):
 
         self.assertEqual(expected_make, invite.make())
 
+        enqueue_task.assert_called_with(
+            'send-invite',
+            {
+                'invites_keys': json.dumps([invite.key.urlsafe()]), 
+                'host': response.request.host,
+                'current_institution': institution.key.urlsafe()
+            }
+        )
+
 
     @patch('util.login_service.verify_token')
-    def test_post_invite_user_adm(self, verify_token):
+    @patch('handlers.invite_user_collection_handler.enqueue_task')
+    def test_post_invite_user_adm(self, enqueue_task, verify_token):
         """."""
 
         admin = mocks.create_user()
@@ -106,13 +118,13 @@ class InviteUserCollectionHandlerTest(TestBaseHandler):
         invite_body['data']['invite_body']['invitee_key'] = other_user.key.urlsafe()
 
         verify_token._mock_return_value = {'email': admin.email[0]}
-        invite = self.testapp.post_json(
+        response = self.testapp.post_json(
             '/api/invites/user', 
             invite_body, 
             headers={'institution-authorization': institution.key.urlsafe()}
         )
 
-        invite = invite.json
+        invite = response.json
         invite = ndb.Key(urlsafe=invite['invites'][0]['key']).get()
 
         REQUIRED_PROPERTIES = ['name', 'address', 'description',
@@ -134,3 +146,76 @@ class InviteUserCollectionHandlerTest(TestBaseHandler):
         }
 
         self.assertEqual(expected_make, invite.make())
+
+        enqueue_task.assert_called_with(
+            'send-invite',
+            {
+                'invites_keys': json.dumps([invite.key.urlsafe()]), 
+                'host': response.request.host,
+                'current_institution': institution.key.urlsafe()
+            }
+        )
+
+    @patch('util.login_service.verify_token')
+    def test_post_invalid_invite_type(self, verify_token):
+        """."""
+        admin = mocks.create_user()
+        other_user = mocks.create_user()
+        institution = mocks.create_institution()
+
+        institution.add_member(admin)
+        institution.set_admin(admin.key)
+
+        admin.add_permissions(DEFAULT_ADMIN_PERMISSIONS, institution.key.urlsafe())
+        admin.put()
+        institution.put()
+
+        invite_body = create_body([other_user.email[0]], admin, institution, 'USER')
+        invite_body['data']['invite_body']['type_of_invite'] = 'INSTITUION_CHILDREN'
+
+        verify_token._mock_return_value = {'email': admin.email[0]}
+        with self.assertRaises(Exception) as raises_context:
+            self.testapp.post_json(
+                '/api/invites/user', 
+                invite_body, 
+                headers={'institution-authorization': institution.key.urlsafe()}
+            )
+
+        message = self.get_message_exception(str(raises_context.exception))
+
+        self.assertEqual(
+            message,
+            'Error! invitation type not allowed',
+            "Expected error message is Error! invitation type not allowed"
+        )
+
+    @patch('util.login_service.verify_token')
+    def test_post_invite_user_not_admin(self, verify_token):
+        """."""
+        admin = mocks.create_user()
+        other_user = mocks.create_user()
+        institution = mocks.create_institution()
+
+        institution.add_member(admin)
+        institution.set_admin(admin.key)
+
+        admin.put()
+        institution.put()
+
+        invite_body = create_body([other_user.email[0]], admin, institution, 'USER')
+
+        verify_token._mock_return_value = {'email': admin.email[0]}
+        with self.assertRaises(Exception) as raises_context:
+            self.testapp.post_json(
+                '/api/invites/user', 
+                invite_body, 
+                headers={'institution-authorization': institution.key.urlsafe()}
+            )
+
+        message = self.get_message_exception(str(raises_context.exception))
+
+        self.assertEqual(
+            message,
+            'Error! User is not allowed to send invites',
+            "Expected error message is Error! User is not allowed to send invites"
+        )

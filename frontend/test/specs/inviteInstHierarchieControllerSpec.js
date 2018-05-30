@@ -2,7 +2,7 @@
 
 (describe('Test InviteInstHierarchieController', function () {
         var httpBackend, scope, state, mdDialog, instService, requestInvitationService, 
-            inviteService, inviteInstHierarchieCtrl, createCtrl, messageService;
+            inviteService, inviteInstHierarchieCtrl, createCtrl, messageService, q;
 
     var institution = {
         name: 'institution',
@@ -44,7 +44,7 @@
     beforeEach(module('app'));
 
     beforeEach(inject(function ($controller, $httpBackend, $rootScope, $state, $mdDialog, 
-        AuthService, InstitutionService, RequestInvitationService, InviteService, MessageService) {
+        AuthService, InstitutionService, RequestInvitationService, InviteService, MessageService, $q) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
@@ -53,6 +53,7 @@
         requestInvitationService = RequestInvitationService;
         inviteService = InviteService;
         messageService = MessageService;
+        q = $q;
 
         AuthService.login(user);
 
@@ -336,28 +337,38 @@
     });
 
     describe('analyseRequest', function () {
+        var instRequested, instRequester, request;
         beforeEach(function() {
-            var parent = {
-                key: 'parent-key',
-                name: 'Parent',
-                'children_institutions': [] 
-            };
-            
-            var request = {
-                institution: parent,
-                'type_of_invite': 'REQUEST_INSTITUTION_CHILDREN'
+            instRequester = {
+                key: 'requester-key',
+                name: 'Requester',
+                parent_institution: null,
+                children_institutions: []
             };
 
-            inviteInstHierarchieCtrl.institution = {
-                key: 'child-key',
-                name: 'Child',
-                'parent_institution': null
+            instRequested = {
+                key: 'requested-key',
+                name: 'Requested',
+                parent_institution: null,
+                children_institutions: []
+            };            
+            
+            inviteInstHierarchieCtrl.institution = instRequested;
+
+            request = {
+                institution: instRequester,
+                type_of_invite: 'REQUEST_INSTITUTION_CHILDREN'
             };
         })
         
-        it('should accept requests and link institutions', function() {
-        
-
+        fit('should accept a request children and link institutions', function() {
+            var deferred = q.defer();
+            spyOn(requestInvitationService, 'analyseReqDialog').and.callThrough();
+            deferred.resolve();
+            scope.$apply();
+            inviteInstHierarchieCtrl.analyseRequest(event, request);
+            expect(requestInvitationService.analyseReqDialog).toHaveBeenCalledWith(event, instRequested, request);
+            // expect(instRequested.parent_institution).toBe(instRequester);
         });
     });
 

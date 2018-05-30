@@ -12,9 +12,9 @@ from utils import Utils
 from models import InviteFactory
 from service_entities import enqueue_task
 
-__all__ = ['InviteHierachyCollectionHandler']
+__all__ = ['InviteHierarchyCollectionHandler']
 
-class InviteHierachyCollectionHandler(BaseHandler):
+class InviteHierarchyCollectionHandler(BaseHandler):
     
     @login_required
     @json_response

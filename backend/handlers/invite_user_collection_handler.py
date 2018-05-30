@@ -69,7 +69,7 @@ class InviteUserCollectionHandler(BaseHandler):
             enqueue_task('send-invite', {'invites_keys': json.dumps(invites_keys), 'host': host,
                                          'current_institution': current_institution_key.urlsafe()})
 
-        if data.get('emails', None):
+        if type_of_invite == 'USER':
             process_invites(data['emails'], invite, user.current_institution)
         else:
             invite = createInvite(invite)

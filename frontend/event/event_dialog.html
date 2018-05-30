@@ -1,6 +1,6 @@
-<div layout-padding layout="column" flex-gt-sm="40" flex-xs="90" flex-sm="60">
+<div layout-fill layout="column" flex-gt-sm="40" flex-xs="90" flex-sm="60">
   <div style="padding:0;">
-    <md-card style="max-width: 100%; margin:0;">
+    <md-card style="max-width: 100%; margin:0 0 20 0;">
       <md-card-content style="padding: 8px;">
         <div layout="row" layout-align="space-between center" class="hide-scrollbar" style="overflow-y: auto;">
           <div layout="row" layout-align="center center">
@@ -35,7 +35,7 @@
           </div>
         </div>
       </md-card-content>
-    </md-dialog>
+    </md-card>
   </div>
   <div layout="row" layout-align="start center" style="padding: 0;">
     <div flex="0" ng-if="controller.getStep(2) || controller.getStep(3)">
@@ -44,8 +44,8 @@
             <md-icon >keyboard_arrow_left</md-icon>
         </md-button>
     </div>
-    <div layout="column" flex="100" layout-padding style="padding: 0;">
-      <md-dialog style="max-width: 100%;">
+    <div layout="column" flex="100" layout-padding style="padding: 0;" layout-fill>
+      <md-dialog style="max-width: 100%; margin:0; overflow-y:auto;" class="hide-scrollbar">
         <form name="createEvent" ng-submit="controller.nextStepOrSave()">
           <md-dialog-content class="custom-scrollbar" layout-padding ng-if="controller.getStep(1)">
             <div md-colors="{background: 'default-teal-500'}" layout="column" layout-align="center center" layout-padding
@@ -171,10 +171,10 @@
           </md-dialog-content>
           <md-dialog-content ng-if="controller.getStep(3)" layout-padding class="custom-scrollbar">
             <div layout="row" layout-align="center center">
-              <div flex="95" layout="column">
+              <div flex="100" layout="column">
                 <div layout-margin>
                   <p class="md-subheader">Vídeos</p>
-                  <div class="custom-scrollbar" style="max-height: 25%; overflow-y:auto; margin: 8px 0 8px 0;">
+                  <div class="custom-scrollbar" style="max-height: 80%; overflow-y:auto; margin: 8px 0 8px 0;">
                     <div ng-repeat="videoUrl in controller.videoUrls" layout="column">
                       <md-input-container class="md-block" style="height: 25px;">
                         <label>Link do Youtube</label>
@@ -194,7 +194,7 @@
                 </div>
                 <div layout-margin>
                   <p class="md-subheader">Links úteis</p>
-                  <div class="custom-scrollbar" style="max-height: 25%; overflow-y:auto; margin: 8px 0 8px 0;">
+                  <div class="custom-scrollbar" style="max-height: 80%; overflow-y:auto; margin: 8px 0 8px 0;">
                     <div ng-repeat="usefulLink in controller.usefulLinks" layout="column">
                       <md-input-container class="md-block" style="height: 25px;">
                         <label>Link</label>

@@ -1,31 +1,29 @@
 # -*- coding: utf-8 -*-
-"""Invite Collection Handler."""
+"""Invite User Collection Handler."""
 
+import re
 import json
-
+from google.appengine.ext import ndb
+from . import BaseHandler
 from util import login_required
 from utils import json_response
 from utils import Utils
 from custom_exceptions import NotAuthorizedException
-from . import BaseHandler
 from models import InviteFactory
 from service_entities import enqueue_task
-from google.appengine.ext import ndb
 
-__all__ = ['InviteCollectionHandler']
+__all__ = ['InviteUserCollectionHandler']
 
-class InviteCollectionHandler(BaseHandler):
-    """Invite Collection Handler."""
-
-    @json_response
+class InviteUserCollectionHandler(BaseHandler):
+    
     @login_required
+    @json_response
     def post(self, user):
-        """Handle POST Requests.
+        """Handle POST invites.
         
-        This method creates invite for:
-        New institution's members;
-        New institution's admin;
-        New institution to be added in the hierarchy.
+        This method creates invites for: 
+        new institution administrators 
+        and new members of the institution.
         """
         body = json.loads(self.request.body)
         data = body['data']
@@ -33,24 +31,34 @@ class InviteCollectionHandler(BaseHandler):
         invite = data['invite_body']
         type_of_invite = invite.get('type_of_invite')
 
-        Utils._assert(type_of_invite == 'INSTITUTION',
-                      "invitation type not allowed", NotAuthorizedException)
+        # This pattern checks whether the invitation type is USER or USER_ADM
+        invite_pattern = re.compile('^USER(_ADM$|$)')
+        Utils._assert(
+            not invite_pattern.match(type_of_invite),
+            "invitation type not allowed", 
+            NotAuthorizedException
+        )
 
         institution = ndb.Key(urlsafe=invite['institution_key']).get()
-        can_invite_inst = user.has_permission(
-            "send_link_inst_invite", institution.key.urlsafe())
         can_invite_members = user.has_permission(
             "invite_members", institution.key.urlsafe())
 
-        Utils._assert(not can_invite_inst and not can_invite_members,
+        Utils._assert(not can_invite_members,
                         "User is not allowed to send invites", NotAuthorizedException)
-
-        Utils._assert(institution.state == 'inactive',
-                        "The institution has been deleted", NotAuthorizedException)
 
         invites = []
         @ndb.transactional(xg=True, retries=10)
         def process_invites(emails, invite, current_institution_key):
+            """
+            This method creates and sends an invitation 
+            to be a member of the institution to all incoming 
+            emails per parameter.
+
+            Params:
+            emails -- Emails of the users to be invited.
+            invite -- Data of the invitation to be created.
+            current_institution_key -- Institution in which the administrator was when he sent the invitation.
+            """
             invites_keys = []
             for email in emails:
                 invite['invitee'] = email
@@ -61,6 +69,7 @@ class InviteCollectionHandler(BaseHandler):
             enqueue_task('send-invite', {'invites_keys': json.dumps(invites_keys), 'host': host,
                                          'current_institution': current_institution_key.urlsafe()})
 
+        # If the invitation was USER type, more than one invitation can be sent at the same time.
         if type_of_invite == 'USER':
             process_invites(data['emails'], invite, user.current_institution)
         else:
@@ -72,12 +81,10 @@ class InviteCollectionHandler(BaseHandler):
         self.response.write(json.dumps(
             {'msg': 'The invites are being processed.', 'invites' : invites}))
 
+
 def createInvite(data):
     """Create an invite."""
     invite = InviteFactory.create(data, data['type_of_invite'])
     invite.put()
-
-    if(invite.stub_institution_key):
-        invite.stub_institution_key.get().addInvite(invite)
     
     return invite

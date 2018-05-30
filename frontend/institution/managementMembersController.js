@@ -112,7 +112,7 @@
             
             if (manageMemberCtrl.isValidAllEmails(emails) && manageMemberCtrl.isUserInviteValid(invite)) {
                 manageMemberCtrl.isLoadingInvite = true;
-                var promise = InviteService.sendInvite(requestBody);
+                var promise = InviteService.sendInviteUser(requestBody);
                 promise.then(function success(response) {
                     refreshSentInvitations(requestBody.emails, response.data.invites);
                     manageMemberCtrl.clearInvite(); 

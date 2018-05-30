@@ -10,10 +10,10 @@
         var inviteInstHierCtrl = this;
         var institutionKey = $state.params.institutionKey;
         var invite;
-        var INSTITUTION_PARENT = "INSTITUTION_PARENT";
-        var INSTITUTION_CHILDREN = "INSTITUTION_CHILDREN";
         var ACTIVE = "active";
         var INSTITUTION_STATE = "active,pending";
+        var INSTITUTION_PARENT = "INSTITUTION_PARENT";
+        var INSTITUTION_CHILDREN = "INSTITUTION_CHILDREN";
         var REQUEST_PARENT = "REQUEST_INSTITUTION_PARENT";
         var REQUEST_CHILDREN = "REQUEST_INSTITUTION_CHILDREN";
 
@@ -358,13 +358,27 @@
             RequestInvitationService
                 .analyseReqDialog(event, inviteInstHierCtrl.institution, request)
                 .then(function accepted() {
-                    // TODO verify if it is a request parent or children
-                    var parent = new Institution(request.institution);
-                    linkInstitutions(parent, inviteInstHierCtrl.institution);
+                    addInstitutionToHierarchy(request);
+                });
+            };
+            
+        function addInstitutionToHierarchy(request) {
+            var parent, child;
+
+            switch(request.type_of_invite) {
+                case(REQUEST_PARENT):
+                    child = new Institution(request.institution);
+                    parent = inviteInstHierCtrl.institution;
+                    inviteInstHierCtrl.showChildrenHierarchie = true;                    
+                    break;
+                case(REQUEST_CHILDREN):
+                    child = inviteInstHierCtrl.institution;
+                    parent = new Institution(request.institution);
                     inviteInstHierCtrl.showParentHierarchie = true;
                     inviteInstHierCtrl.hasParent = true;
-                });
-        };
+            }
+            linkInstitutions(parent, child);
+        }
 
         function linkInstitutions(parent, child) {
             parent.addChildInst(child);

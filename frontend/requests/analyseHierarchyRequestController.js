@@ -9,11 +9,10 @@
 
         const REQUEST_PARENT = "REQUEST_INSTITUTION_PARENT";
         const REQUEST_CHILDREN = "REQUEST_INSTITUTION_CHILDREN";
+        var parent, child;
 
         
         (function loadInstitutions() {
-            var parent, child;
-
             switch(request.type_of_invite){
                 case REQUEST_PARENT:
                     parent = requestedInstitution;

@@ -22,8 +22,8 @@ class InviteUserCollectionHandler(BaseHandler):
         """Handle POST invites.
         
         This method creates invites for: 
-        new institution administrators and 
-        new members of the institution.
+        new institution administrators 
+        and new members of the institution.
         """
         body = json.loads(self.request.body)
         data = body['data']

@@ -3,6 +3,7 @@ from search_module import SearchUser
 from google.appengine.ext import ndb
 from custom_exceptions import FieldException
 from custom_exceptions import NotAuthorizedException
+from service_messages import create_message
 from . import get_deciis
 from . import get_health_ministry
 from utils import Utils
@@ -384,3 +385,19 @@ class User(ndb.Model):
         user_json['institution_profiles'] = [profile.make()
             for profile in self.institution_profiles]
         return user_json
+
+    def create_notification_message(self, user_key, current_institution_key, 
+            receiver_institution_key=None, sender_institution_key=None):
+        """ Create message that will be used in notification. 
+            user_key -- The user key that made the action.
+            current_institution -- The institution that user was in the moment that made the action.
+            sender_institution_key -- The institution in which action should be taken,
+                when it is not specified it will be the current_institution.
+            receiver_institution -- The institution to which the notification is directed. 
+        """
+        return create_message(
+            sender_key= user_key,
+            current_institution_key=current_institution_key,
+            receiver_institution_key=receiver_institution_key,
+            sender_institution_key= sender_institution_key or current_institution_key
+        )

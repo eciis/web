@@ -26,6 +26,9 @@
                     }
                 }
             },
+            "LEFT_INSTITUTION": {
+                icon: "clear"
+            },
             "DELETED_INSTITUTION": {
                 icon: "clear",
                 action: function (properties, notification, event) {

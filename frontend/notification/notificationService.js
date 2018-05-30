@@ -38,6 +38,7 @@
             'REJECT_INVITE_INSTITUTION': messageCreator('Rejeitou o seu convite para ser administrador', NO_INST),
             'ACCEPT_INVITE_INSTITUTION': messageCreator('Aceitou o seu convite para ser administrador', NO_INST),
             'DELETE_MEMBER': messageCreator('Removeu você de ', SINGLE_INST),
+            'LEFT_INSTITUTION': messageCreator('O usuário removeu o vínculo de membro com ', SINGLE_INST),
             'ACCEPTED_LINK': messageCreator('Aceitou sua solicitação de vínculo com ', SINGLE_INST),
             'REJECTED_LINK': messageCreator('Rejeitou sua solicitação de vínculo com ', SINGLE_INST),
             'SHARED_EVENT': messageCreator('Compartilhou um evento de ', SINGLE_INST),

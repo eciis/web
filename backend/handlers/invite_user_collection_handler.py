@@ -69,6 +69,7 @@ class InviteUserCollectionHandler(BaseHandler):
             enqueue_task('send-invite', {'invites_keys': json.dumps(invites_keys), 'host': host,
                                          'current_institution': current_institution_key.urlsafe()})
 
+        # If the invitation was USER type, more than one invitation can be sent at the same time.
         if type_of_invite == 'USER':
             process_invites(data['emails'], invite, user.current_institution)
         else:

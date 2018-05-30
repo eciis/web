@@ -42,7 +42,7 @@ class InviteUserCollectionHandlerTest(TestBaseHandler):
     @patch('util.login_service.verify_token')
     @patch('handlers.invite_user_collection_handler.enqueue_task')
     def test_post_invite_user(self, enqueue_task, verify_token):
-        """."""
+        """Test post invite user."""
 
         admin = mocks.create_user()
         other_user = mocks.create_user()
@@ -98,7 +98,7 @@ class InviteUserCollectionHandlerTest(TestBaseHandler):
     @patch('util.login_service.verify_token')
     @patch('handlers.invite_user_collection_handler.enqueue_task')
     def test_post_invite_user_adm(self, enqueue_task, verify_token):
-        """."""
+        """Test post invite user adm."""
 
         admin = mocks.create_user()
         other_user = mocks.create_user()
@@ -157,7 +157,7 @@ class InviteUserCollectionHandlerTest(TestBaseHandler):
 
     @patch('util.login_service.verify_token')
     def test_post_invalid_invite_type(self, verify_token):
-        """."""
+        """Test post invalid invite type."""
         admin = mocks.create_user()
         other_user = mocks.create_user()
         institution = mocks.create_institution()
@@ -190,7 +190,7 @@ class InviteUserCollectionHandlerTest(TestBaseHandler):
 
     @patch('util.login_service.verify_token')
     def test_post_invite_user_not_admin(self, verify_token):
-        """."""
+        """Test post invite user not admin."""
         admin = mocks.create_user()
         other_user = mocks.create_user()
         institution = mocks.create_institution()

@@ -21,7 +21,7 @@ class InviteHierarchyCollectionHandler(BaseHandler):
     def post(self, user):
         """Handler POST invites.
         
-        This method creates contives for:
+        This method creates invites for:
         New institution to be added in the hierarchy.
         """
         body = json.loads(self.request.body)

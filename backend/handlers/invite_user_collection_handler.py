@@ -21,7 +21,7 @@ class InviteUserCollectionHandler(BaseHandler):
     def post(self, user):
         """Handle POST invites.
         
-        This method creates contives for: 
+        This method creates invites for: 
         new institution administrators and 
         new members of the institution.
         """

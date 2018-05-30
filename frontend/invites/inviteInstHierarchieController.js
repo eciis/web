@@ -377,7 +377,9 @@
 
         inviteInstHierCtrl.canRemoveInst = function canRemoveInst(institution) {
             var hasChildrenLink = institution.parent_institution === inviteInstHierCtrl.institution.key;
-            return inviteInstHierCtrl.user.permissions.remove_inst[institution.key] && hasChildrenLink;
+            var removeInstPermission = inviteInstHierCtrl.user.permissions.remove_inst;
+            return removeInstPermission
+                && removeInstPermission[institution.key] && hasChildrenLink;
         };
 
         inviteInstHierCtrl.linkParentStatus = function linkParentStatus() {
@@ -402,6 +404,10 @@
                     child: institution
                 }
             });
+        };
+
+        inviteInstHierCtrl.limitString = function limitString(string, size) {
+          return Utils.limitString(string, size);
         };
 
         loadInstitution();

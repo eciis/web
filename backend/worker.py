@@ -13,7 +13,6 @@ from models import InviteUserAdm
 from utils import json_response
 from util import get_subject
 from service_messages import send_message_notification
-from service_messages import send_message_email
 from jinja2 import Environment, FileSystemLoader
 from permissions import DEFAULT_SUPER_USER_PERMISSIONS
 from permissions import DEFAULT_ADMIN_PERMISSIONS

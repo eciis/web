@@ -115,12 +115,3 @@ class ServiceMessageTest(TestBaseHandler):
             taskqueue_add.called,
             "Should have called the add method from taskqueue"
         )
-
-    @mock.patch('service_messages.taskqueue.add')
-    def test_send_message_email(self, taskqueue_add):
-        """Test send_message_email method."""
-        service_messages.send_message_email("invitee", "body", "subject")
-        self.assertTrue(
-            taskqueue_add.called,
-            "Should have called the add method from taskqueue"
-        )

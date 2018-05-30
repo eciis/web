@@ -658,4 +658,12 @@
             scope.$apply();
         });
     });
+
+    describe("limitString()", function () {
+        it('should call limitString', function () {
+           spyOn(Utils, 'limitString');
+           const string = inviteInstHierarchieCtrl.limitString("Testing string", 5);
+           expect(Utils.limitString).toHaveBeenCalled();
+        });
+    });
 }));

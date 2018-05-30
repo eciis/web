@@ -241,3 +241,23 @@ class InstitutionParentRequestHandlerTest(TestBaseHandler):
             first_user, third_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
         self.assertTrue(has_permissions(
             second_user, third_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
+
+    @patch('util.login_service.verify_token', return_value={'email': 'otheruser@test.com'})
+    def test_get(self, verify_token):
+        request = self.testapp.get(
+                    "/api/requests/%s/institution_parent" % self.request.key.urlsafe(),
+                    headers={"institution-authorization": self.inst_requested.key.urlsafe()}
+                )
+        self.assertEqual(request.json['key'], self.request.key.urlsafe())
+
+    @patch('util.login_service.verify_token', return_value={'email': 'user@example.com'})
+    def test_get_when_user_is_not_allowed(self, verify_token):
+        with self.assertRaises(Exception) as ex:
+            self.testapp.get(
+                    "/api/requests/%s/institution_parent" % self.request.key.urlsafe(),
+                    headers={"institution-authorization": self.inst_requested.key.urlsafe()}
+                )
+        exception_message = self.get_message_exception(ex.exception.message)
+
+        self.assertTrue(exception_message == "Error! User is not allowed to acess request link.")
+

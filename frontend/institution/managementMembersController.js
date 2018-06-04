@@ -113,13 +113,13 @@
             if (manageMemberCtrl.isValidAllEmails(emails) && manageMemberCtrl.isUserInviteValid(invite)) {
                 manageMemberCtrl.isLoadingInvite = true;
                 var promise = InviteService.sendInviteUser(requestBody);
-                promise.then(function success(response) {
-                    refreshSentInvitations(requestBody.emails, response.invites);
+                promise.then(function success(response_data) {
+                    refreshSentInvitations(requestBody.emails, response_data.invites);
                     manageMemberCtrl.clearInvite(); 
                     manageMemberCtrl.showInvites = true; 
                     manageMemberCtrl.showSendInvite = false;
                     manageMemberCtrl.isLoadingInvite = false;
-                    MessageService.showToast(response.msg);
+                    MessageService.showToast(response_data.msg);
                 }, function error(response) {
                     manageMemberCtrl.isLoadingInvite = false;
                     MessageService.showToast(response.msg);

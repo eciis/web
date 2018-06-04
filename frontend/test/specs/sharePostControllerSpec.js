@@ -138,7 +138,7 @@
 
             expect(postService.createPost).toHaveBeenCalledWith(response);
             expect(mdDialog.hide).toHaveBeenCalled();
-            expect(shareCtrl.user.addPermissions).toHaveBeenCalledWith(['edit_post', 'remove_post'], newPost.key)
+            expect(shareCtrl.user.addPermissions).toHaveBeenCalledWith(['remove_post'], newPost.key)
         });
 
         it('Should call postService.createPost, in case that share post', function() {
@@ -162,7 +162,7 @@
 
             expect(postService.createPost).toHaveBeenCalledWith(response_post);
             expect(mdDialog.hide).toHaveBeenCalled();
-            expect(shareCtrl.user.addPermissions).toHaveBeenCalledWith(['edit_post', 'remove_post'], newPost.key)
+            expect(shareCtrl.user.addPermissions).toHaveBeenCalledWith(['remove_post'], newPost.key)
         });
     });
 

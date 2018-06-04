@@ -63,7 +63,8 @@
                 var dialog = MessageService.showConfirmationDialog(ev,
                     'Confirmar voto', 'Seu voto será permanente. Deseja confirmar?');
                 dialog.then(function() {
-                    surveyCtrl.voteService().then(function () {
+                    surveyCtrl.voteService().then(function (response) {
+                        surveyCtrl.post = response.data
                         syncSharedPosts();
                         surveyCtrl.reloadPost();
                     });

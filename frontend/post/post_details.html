@@ -133,7 +133,7 @@
         <iframe ng-src="{{ postDetailsCtrl.getVideoUrl(postDetailsCtrl.post.shared_post) }}"></iframe>
       </div>
       <p></p>
-      <a ng-if="!postDetailsCtrl.post.shared_post.type_survey"
+      <a ng-if="!postDetailsCtrl.isSharedSurvey()"
       href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post.shared_post)">
         <span>{{ postDetailsCtrl.post.shared_post.title }}</span>
       </a>
@@ -146,8 +146,9 @@
           <md-icon>more_horiz</md-icon>
         </a>
       </div>
-      <pdf-view ng-if="postDetailsCtrl.showSharedPostText()" pdf-files='postDetailsCtrl.post.shared_post.pdf_files' is-editing="false"></pdf-view>
-      <survey-details ng-if="postDetailsCtrl.post.shared_post.type_survey" 
+      <pdf-view ng-if="postDetailsCtrl.showSharedPostText()" 
+        pdf-files='postDetailsCtrl.post.shared_post.pdf_files' is-editing="false"></pdf-view>
+      <survey-details ng-if="postDetailsCtrl.isSharedSurvey()" 
         post="postDetailsCtrl.post.shared_post" posts="postDetailsCtrl.posts" 
         user="postDetailsCtrl.user" isdialog="false"></survey-details>
     </md-card-content>

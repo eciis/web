@@ -122,7 +122,7 @@
                     MessageService.showToast(response.msg);
                 }, function error(response) {
                     manageMemberCtrl.isLoadingInvite = false;
-                    MessageService.showToast(response.data.msg);
+                    MessageService.showToast(response.msg);
                 });
                 return promise;
             }

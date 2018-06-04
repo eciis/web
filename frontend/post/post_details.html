@@ -149,7 +149,7 @@
       <pdf-view ng-if="postDetailsCtrl.showSharedPostText()" pdf-files='postDetailsCtrl.post.shared_post.pdf_files' is-editing="false"></pdf-view>
       <survey-details ng-if="postDetailsCtrl.post.shared_post.type_survey" 
         post="postDetailsCtrl.post.shared_post" posts="postDetailsCtrl.posts" 
-        user="postDetailsCtrl.user" isdialog="false"></survey-details>
+        user="postDetailsCtrl.user" reload-post="postDetailsCtrl.reloadPost" isdialog="false"></survey-details>
     </md-card-content>
   </md-card>
 

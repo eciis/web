@@ -15,7 +15,7 @@
         q = $q;
     }));
 
-    fdescribe('Test analyseReqDialog', function () {
+    describe('Test analyseReqDialog', function () {
         var requestedInstitution, request, event, promiseData;
 
         beforeEach(function () {

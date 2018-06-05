@@ -71,11 +71,11 @@
             return HttpService.get(REQUEST_URI + request_key + "/institution_parent");
         };
 
-        service.acceptInstParentRequest = function acceptRequest(request_key) {
+        service.acceptInstParentRequest = function acceptInstParentRequest(request_key) {
             return HttpService.put(REQUEST_URI + request_key + "/institution_parent");
         };
 
-        service.rejectInstParentRequest = function rejectRequest(request_key) {
+        service.rejectInstParentRequest = function rejectInstParentRequest(request_key) {
             return HttpService.delete(REQUEST_URI + request_key + "/institution_parent");
         };
 
@@ -83,11 +83,11 @@
             return HttpService.get(REQUEST_URI + request_key + "/institution_children");
         };
 
-        service.acceptInstChildrenRequest = function acceptRequest(request_key) {
+        service.acceptInstChildrenRequest = function acceptInstChildrenRequest(request_key) {
             return HttpService.put(REQUEST_URI + request_key + "/institution_children");
         };
 
-        service.rejectInstChildrenRequest = function rejectRequest(request_key) {
+        service.rejectInstChildrenRequest = function rejectInstChildrenRequest(request_key) {
             return HttpService.delete(REQUEST_URI + request_key + "/institution_children");
         };
 

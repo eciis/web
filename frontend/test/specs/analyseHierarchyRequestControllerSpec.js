@@ -2,102 +2,184 @@
 
 (describe("AnalyseHierarchyRequestControllerSpec", function() {
 
+    const REQUEST_PARENT = "REQUEST_INSTITUTION_PARENT";
+    const REQUEST_CHILDREN = "REQUEST_INSTITUTION_CHILDREN";
+
+    var requestInvitationService, institutionService, messageService, mdDialog,
+        analyseHierReqCtrl, scope, createCtrl, request, requestedInstitution, fakeCallback;
+
     beforeEach(module('app'));
 
-    beforeEach(function() {
+    beforeEach(inject(function(RequestInvitationService, InstitutionService, MessageService, $mdDialog,
+        $rootScope, $controller) {
 
+        requestInvitationService = RequestInvitationService;
+        institutionService = InstitutionService;
+        messageService = MessageService;
+        mdDialog = $mdDialog;
+        scope = $rootScope.$new();
+                
+        var instRequesting = new Institution({
+            key: 'instRequestingKey',
+            name: 'instRequesting',
+            parent_institution: null,
+            children_institutions: []
+        });
 
-        // describe('acceptRequest()', function() {
-        //     var request;
-        //     beforeEach(function() {
-        //         spyOn(messageService, 'showConfirmationDialog').and.callFake(function () {
-        //             return {
-        //                 then: function (callback) {
-        //                     return callback();
-        //                 }
-        //             };
-        //         });
-    
-        //         request = {key: 'aosdkopa-ORAOPdaAOSKFP'};
-        //     });
-    
-        //     it('should call acceptInstParentRequest', function() {
-        //         spyOn(requestInvitationService, 'acceptInstParentRequest').and.callFake(function () {
-        //             return {
-        //                 then: function (callback) {
-        //                     return callback();
-        //                 }
-        //             };
-        //         });
-        //         inviteInstHierarchieCtrl.institution.children_institutions = [];
-        //         inviteInstHierarchieCtrl.acceptRequest(request, 'REQUEST_INSTITUTION_PARENT', '$event');
-        //         expect(messageService.showConfirmationDialog).toHaveBeenCalled();
-        //         expect(requestInvitationService.acceptInstParentRequest).toHaveBeenCalled();
-        //         expect(request.status).toEqual('accepted');
-        //         expect(inviteInstHierarchieCtrl.institution.children_institutions.length).toEqual(1);
-        //     });
-    
-        //     it('should call acceptInstChildrenRequest', function() {
-        //         spyOn(requestInvitationService, 'acceptInstChildrenRequest').and.callFake(function () {
-        //             return {
-        //                 then: function (callback) {
-        //                     return callback();
-        //                 }
-        //             };
-        //         });
-        //         inviteInstHierarchieCtrl.institution.children_institutions = [];
-        //         inviteInstHierarchieCtrl.acceptRequest(request, 'REQUEST_INSTITUTION_CHILDREN', '$event');
-        //         expect(messageService.showConfirmationDialog).toHaveBeenCalled();
-        //         expect(requestInvitationService.acceptInstChildrenRequest).toHaveBeenCalled();
-        //         expect(request.status).toEqual('accepted');
-        //         expect(inviteInstHierarchieCtrl.institution.parent_institution).toEqual(institution);
-        //     });
-        // });
+        request = {
+            institution: instRequesting,
+            key: 'requestKey',
+            status: 'sent'
+        };
 
+        requestedInstitution = new Institution({
+            key: 'requestedInstitutionkey',
+            name: 'requestedInstitution',
+            parent_institution: null,
+            children_institutions: []
+        });
+        
+        createCtrl = function (request) {
+            return $controller('AnalyseHierarchyRequestController', {
+                scope: scope,
+                RequestInvitationService: requestInvitationService,
+                InstitutionService: InstitutionService,
+                MessageService: MessageService,
+                requestedInstitution: requestedInstitution,
+                request: request
+            });
+        }
 
-        // describe('rejectRequest()', function() {
-        //     var request;
-        //     beforeEach(function () {
-        //         spyOn(messageService, 'showConfirmationDialog').and.callFake(function () {
-        //             return {
-        //                 then: function (callback) {
-        //                     return callback();
-        //                 }
-        //             };
-        //         });
-    
-        //         request = { key: 'aosdkopa-ORAOPdaAOSKFP' };
-        //     });
-    
-        //     it('should call rejectInstParentRequest', function () {
-        //         spyOn(requestInvitationService, 'rejectInstParentRequest').and.callFake(function () {
-        //             return {
-        //                 then: function (callback) {
-        //                     return callback();
-        //                 }
-        //             };
-        //         });
-        //         inviteInstHierarchieCtrl.institution.children_institutions = [];
-        //         inviteInstHierarchieCtrl.rejectRequest(request, 'REQUEST_INSTITUTION_PARENT', '$event');
-        //         expect(messageService.showConfirmationDialog).toHaveBeenCalled();
-        //         expect(requestInvitationService.rejectInstParentRequest).toHaveBeenCalled();
-        //         expect(request.status).toEqual('rejected');
-        //     });
-    
-        //     it('should call rejectInstChildrenRequest', function () {
-        //         spyOn(requestInvitationService, 'rejectInstChildrenRequest').and.callFake(function () {
-        //             return {
-        //                 then: function (callback) {
-        //                     return callback();
-        //                 }
-        //             };
-        //         });
-        //         inviteInstHierarchieCtrl.institution.children_institutions = [];
-        //         inviteInstHierarchieCtrl.rejectRequest(request, 'REQUEST_INSTITUTION_CHILDREN', '$event');
-        //         expect(messageService.showConfirmationDialog).toHaveBeenCalled();
-        //         expect(requestInvitationService.rejectInstChildrenRequest).toHaveBeenCalled();
-        //         expect(request.status).toEqual('rejected');
-        //     });
-        // });
+        fakeCallback = function (param) {
+            return {
+                then: function (callback) {
+                    return callback(param);
+                }
+            };
+        };
+    }));
+
+    describe('Analyse request institution parent', function() {
+
+        beforeEach(function () {
+            request.type_of_invite = REQUEST_PARENT;
+            analyseHierReqCtrl = createCtrl(request);
+            spyOn(requestInvitationService, 'acceptInstParentRequest').and.callFake(fakeCallback);
+            spyOn(requestInvitationService, 'rejectInstParentRequest').and.callFake(fakeCallback);
+            spyOn(messageService, 'showToast');
+        });
+        
+        describe('Test loadInstitutions', function () {
+            it('should set parent and child', function() {
+                expect(analyseHierReqCtrl.parent).toBe(requestedInstitution);
+                expect(analyseHierReqCtrl.child).toBe(request.institution);
+                expect(analyseHierReqCtrl.hasToRemoveLink).toBeFalsy();
+            });
+        });
+        
+        describe('Test confirmRequest', function () {
+            it('should accept the parent request', function () {
+                spyOn(mdDialog, 'hide');
+                analyseHierReqCtrl.confirmRequest();
+                expect(requestInvitationService.acceptInstParentRequest).toHaveBeenCalledWith(request.key);
+                expect(request.status).toEqual('accepted');
+                expect(mdDialog.hide).toHaveBeenCalled();
+                expect(messageService.showToast).toHaveBeenCalledWith('Solicitação aceita com sucesso');
+            });
+        });
+
+        describe('Test rejectRequest', function () {
+            it('should reject the parent request', function () {
+                spyOn(mdDialog, 'cancel');
+                analyseHierReqCtrl.rejectRequest();
+                expect(requestInvitationService.rejectInstParentRequest).toHaveBeenCalledWith(request.key);
+                expect(request.status).toEqual('rejected');
+                expect(mdDialog.cancel).toHaveBeenCalled();
+                expect(messageService.showToast).toHaveBeenCalledWith('Solicitação rejeitada com sucesso');
+            });
+        });
     });
+
+    describe('Analyse request institution child', function() {
+
+        beforeEach(function () {
+            request.type_of_invite = REQUEST_CHILDREN;
+            analyseHierReqCtrl = createCtrl(request);
+            spyOn(requestInvitationService, 'acceptInstChildrenRequest').and.callFake(fakeCallback);
+            spyOn(requestInvitationService, 'rejectInstChildrenRequest').and.callFake(fakeCallback);
+            spyOn(messageService, 'showToast');
+        });
+
+        describe('Test loadInstitutions', function () {
+            it('should set parent and child', function() {
+                expect(analyseHierReqCtrl.parent).toBe(request.institution);
+                expect(analyseHierReqCtrl.child).toBe(requestedInstitution);
+            });
+        });
+
+        describe('Test rejectRequest', function () {  // It is the same test for both scenarios
+            it('should reject the parent request', function () {
+                spyOn(mdDialog, 'cancel');
+                analyseHierReqCtrl.rejectRequest();
+                expect(requestInvitationService.rejectInstChildrenRequest).toHaveBeenCalledWith(request.key);
+                expect(request.status).toEqual('rejected');
+                expect(mdDialog.cancel).toHaveBeenCalled();
+                expect(messageService.showToast).toHaveBeenCalledWith('Solicitação rejeitada com sucesso');
+            });
+        });
+
+        describe('When the child does not have a parent', function () {
+            
+            describe('Test hasToRemoveLink', function () {
+                it('should be falsy', function() {
+                    expect(analyseHierReqCtrl.hasToRemoveLink).toBeFalsy();
+                });
+            });
+            
+            describe('Test confirmRequest', function () {
+                it('should accept the child request', function () {
+                    spyOn(mdDialog, 'hide');
+                    analyseHierReqCtrl.confirmRequest();
+                    expect(requestInvitationService.acceptInstChildrenRequest).toHaveBeenCalledWith(request.key);
+                    expect(request.status).toEqual('accepted');
+                    expect(mdDialog.hide).toHaveBeenCalled();
+                    expect(messageService.showToast).toHaveBeenCalledWith('Solicitação aceita com sucesso');
+                });
+            });
+        });
+
+        describe('When the child has a parent', function () {
+            var previousParent;
+
+            beforeEach(function () {
+                previousParent = new Institution({key: 'previousParentKey'});
+                requestedInstitution.parent_institution = previousParent;
+                analyseHierReqCtrl = createCtrl(request);
+                spyOn(institutionService, 'removeLink').and.callFake(fakeCallback);
+                spyOn(mdDialog, 'hide');
+            });
+
+            describe('Test hasToRemoveLink', function () {
+                it('should be truthy', function() {
+                    expect(analyseHierReqCtrl.hasToRemoveLink).toBeTruthy();
+                });
+            });
+            
+            describe('Test confirmRequest', function () {
+                it('should accept the child request', function () {
+                    analyseHierReqCtrl.confirmRequest();
+                    const isParent = true;
+                    expect(institutionService.removeLink).toHaveBeenCalledWith(
+                        analyseHierReqCtrl.child.key,
+                        analyseHierReqCtrl.parent.key,
+                        isParent
+                    );
+                    expect(requestInvitationService.acceptInstChildrenRequest).toHaveBeenCalledWith(request.key);
+                    expect(request.status).toEqual('accepted');
+                    expect(mdDialog.hide).toHaveBeenCalled();
+                    expect(messageService.showToast).toHaveBeenCalledWith('Solicitação aceita com sucesso');
+                });
+            });
+        });
+    });  
 }));

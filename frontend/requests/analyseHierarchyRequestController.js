@@ -3,8 +3,8 @@
 (function() {
     const app = angular.module('app');
 
-    app.controller('AnalyseHierarchyRequestController', function AnalyseHierarchyRequestController(requestedInstitution, request, RequestInvitationService,
-         InstitutionService, MessageService, $q, $mdDialog) {
+    app.controller('AnalyseHierarchyRequestController', function AnalyseHierarchyRequestController(requestedInstitution, request,
+         RequestInvitationService, InstitutionService, MessageService, $mdDialog) {
         const analyseHierReqCtrl = this;
 
         const REQUEST_PARENT = "REQUEST_INSTITUTION_PARENT";

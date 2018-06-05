@@ -72,7 +72,7 @@
         shareCtrl.goTo = function goTo() {
             shareCtrl.cancelDialog();
             if (shareCtrl.isEvent()) {
-                $state.go('app.user.event', { eventKey: shareCtrl.post.key });
+                $state.go('app.user.event', { eventKey: shareCtrl.post.key, posts: shareCtrl.posts });
             }
             $state.go('app.post', { postKey: shareCtrl.post.key });
         };

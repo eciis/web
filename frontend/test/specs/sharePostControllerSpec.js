@@ -99,7 +99,7 @@
             shareCtrl.post = event;
             spyOn(state, 'go').and.callThrough();
             shareCtrl.goTo();
-            expect(state.go).toHaveBeenCalledWith('app.user.event', Object({eventKey: shareCtrl.post.key}));
+            expect(state.go).toHaveBeenCalledWith('app.user.event', Object({ eventKey: shareCtrl.post.key, posts: shareCtrl.posts}));
         });
     });
 

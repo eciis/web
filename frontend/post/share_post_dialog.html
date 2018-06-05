@@ -30,7 +30,7 @@
               <b ng-bind-html="sharePostCtrl.postToURL(sharePostCtrl.post.title)"></b>
             </span>
           </br>
-            <event-details ng-if="sharePostCtrl.isEvent()" event="sharePostCtrl.post" is-event-page=false></event-details>
+            <event-details ng-if="sharePostCtrl.isEvent()" event="sharePostCtrl.post" is-event-page=false posts="sharePostCtrl.posts"></event-details>
             <span class="md-subhead" ng-if="!sharePostCtrl.isEvent() && sharePostCtrl.post.text" ng-bind-html="sharePostCtrl.postToURL(sharePostCtrl.post.text)"></span>
             <pdf-view ng-if="sharePostCtrl.showPdfFiles()" pdf-files='sharePostCtrl.post.pdf_files' is-editing="false"></pdf-view>
             <survey-details ng-if="sharePostCtrl.isSurvey()" post="sharePostCtrl.post" posts="sharePostCtrl.posts" user="sharePostCtrl.user"

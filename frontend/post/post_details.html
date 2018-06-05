@@ -99,7 +99,7 @@
       <span>por {{postDetailsCtrl.post.shared_event.last_modified_by}} {{postDetailsCtrl.post.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats }}.</span>
     </div>
   </div>
-  <event-details ng-if="postDetailsCtrl.showSharedEvent()" event="postDetailsCtrl.post.shared_event" is-event-page=false></event-details>
+  <event-details ng-if="postDetailsCtrl.showSharedEvent()" event="postDetailsCtrl.post.shared_event" is-event-page=false posts="postDetailsCtrl.posts"></event-details>
 
   <!-- BODY SHARED POST -->
   <md-card md-colors="{background: 'default-grey-100'}" ng-if="postDetailsCtrl.showSharedPost()">

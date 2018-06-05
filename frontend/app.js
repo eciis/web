@@ -216,6 +216,9 @@
                         templateUrl: "app/event/event_page.html",
                         controller: "EventPageController as eventCtrl",
                     }
+                },
+                params: {
+                    posts: undefined
                 }
             })
             .state("app.manage_institution.edit_info", {

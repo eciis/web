@@ -363,17 +363,19 @@
             };
             
         function addInstitutionToHierarchy(request) {
+            request.institution = new Institution(request.institution);
+            inviteInstHierCtrl.institution = new Institution(inviteInstHierCtrl.institution);
             var parent, child;
 
             switch(request.type_of_invite) {
                 case(REQUEST_PARENT):
-                    child = new Institution(request.institution);
+                    child = request.institution;
                     parent = inviteInstHierCtrl.institution;
                     inviteInstHierCtrl.showChildrenHierarchie = true;                    
                     break;
                 case(REQUEST_CHILDREN):
                     child = inviteInstHierCtrl.institution;
-                    parent = new Institution(request.institution);
+                    parent = request.institution;
                     inviteInstHierCtrl.showParentHierarchie = true;
                     inviteInstHierCtrl.hasParent = true;
             }

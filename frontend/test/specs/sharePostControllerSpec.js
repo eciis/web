@@ -15,14 +15,14 @@
                            'end_time': new Date()
                           }, institutions[1].institution_key);
 
-    var user = {
+    var user = new User({
         name: 'user',
         institutions: institutions,
         follows: institutions,
         institutions_admin: institutions[0],
         current_institution: institutions[0],
         state: 'active'
-    };
+    });
 
     user.current_institution = institutions[0];
 
@@ -35,7 +35,7 @@
                         institutions[1].institution_key);
 
     // Post of Splab by user
-    var newPost = new Post( {}, user.current_institution.key);
+    var newPost = new Post( {key: 'kaopdkso-SODPKAOP'}, user.current_institution.key);
 
     beforeEach(module('app'));
 
@@ -118,37 +118,51 @@
     describe('share()', function() {
 
         it('Should call postService.createPost, in case that share event', function() {
+            spyOn(shareCtrl.user, 'addPermissions');
+            spyOn(postService, 'createPost').and.callFake(function () {
+                return {
+                    then: function (callback) {
+                        return callback({data: newPost});
+                    }
+                };
+            });
             shareCtrl.post = event;
             var response = new Post( {}, user.current_institution.key);
             response.shared_event = event.key;
             response.pdf_files = [];
-
-            spyOn(postService, 'createPost').and.returnValue(deffered.promise);
+            
             spyOn(mdDialog, 'hide');
-            deffered.resolve(newPost);
 
             shareCtrl.share();
             scope.$apply();
 
             expect(postService.createPost).toHaveBeenCalledWith(response);
             expect(mdDialog.hide).toHaveBeenCalled();
+            expect(shareCtrl.user.addPermissions).toHaveBeenCalledWith(['remove_post'], newPost.key)
         });
 
         it('Should call postService.createPost, in case that share post', function() {
+            spyOn(shareCtrl.user, 'addPermissions');
+            spyOn(postService, 'createPost').and.callFake(function () {
+                return {
+                    then: function (callback) {
+                        return callback({data: newPost});
+                    }
+                };
+            });
             shareCtrl.post = post;
             var response_post = new Post( {}, user.current_institution.key);
             response_post.shared_post = post.key;
             response_post.pdf_files = [];
 
-            spyOn(postService, 'createPost').and.returnValue(deffered.promise);
             spyOn(mdDialog, 'hide');
-            deffered.resolve(newPost);
 
             shareCtrl.share();
             scope.$apply();
 
             expect(postService.createPost).toHaveBeenCalledWith(response_post);
             expect(mdDialog.hide).toHaveBeenCalled();
+            expect(shareCtrl.user.addPermissions).toHaveBeenCalledWith(['remove_post'], newPost.key)
         });
     });
 

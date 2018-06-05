@@ -48,6 +48,8 @@
                 MessageService.showToast('Compartilhado com sucesso!');
                 $mdDialog.hide();
                 shareCtrl.addPostTimeline(response.data);
+                const postAuthorPermissions = ["remove_post"];
+                shareCtrl.user.addPermissions(postAuthorPermissions, response.data.key);
             }, function error(response) {
                 $mdDialog.hide();
                 MessageService.showToast(response.data.msg);

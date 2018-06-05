@@ -122,7 +122,7 @@ class SurveyPostTest(TestBase):
             self.data_multiple, self.user.key, self.institution.key)
         survey_multiple.put()
         options_selected = [self.options[0], self.options[1]]
-        survey_multiple.vote(self.user.key, options_selected)
+        survey_multiple.vote({'key': self.user.key.urlsafe() }, options_selected)
 
         # Update data
         survey = survey_multiple.key.get()
@@ -130,7 +130,7 @@ class SurveyPostTest(TestBase):
         option_two = survey.options[1]
 
         self.assertEquals(
-            self.user.key.urlsafe() in option_one["voters"], True,
+            {'key': self.user.key.urlsafe()} in option_one["voters"], True,
             "It should be True"
         )
         self.assertEquals(
@@ -138,7 +138,7 @@ class SurveyPostTest(TestBase):
             "It should be 1"
         )
         self.assertEquals(
-            self.user.key.urlsafe() in option_two["voters"], True,
+            {'key': self.user.key.urlsafe()} in option_two["voters"], True,
             "It should be True"
         )
         self.assertEquals(

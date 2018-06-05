@@ -7,7 +7,9 @@ from permissions import DEFAULT_ADMIN_PERMISSIONS
 from test_base_handler import TestBaseHandler
 from google.appengine.ext import ndb
 from handlers import InviteUserCollectionHandler
+from models import Invite
 from mock import patch
+
 
 
 def create_body(invitee_emails, admin, institution, type_of_invite):
@@ -67,10 +69,6 @@ class InviteUserCollectionHandlerTest(TestBaseHandler):
         invite = response.json
         invite = ndb.Key(urlsafe=invite['invites'][0]['key']).get()
 
-        REQUIRED_PROPERTIES = ['name', 'address', 'description',
-                               'key', 'photo_url', 'institutional_email',
-                               'phone_number', 'email', 'trusted']
-
         expected_make = {
             'invitee': other_user.email[0],
             'institution_key': institution.key.urlsafe(),
@@ -80,7 +78,7 @@ class InviteUserCollectionHandlerTest(TestBaseHandler):
             'key': invite.key.urlsafe(),
             'status': 'sent',
             'institution_admin': institution.make(['name']),
-            'institution': institution.make(REQUIRED_PROPERTIES)
+            'institution': institution.make(Invite.INST_PROPS_TO_MAKE)
         }
 
         self.assertEqual(expected_make, invite.make())
@@ -126,10 +124,6 @@ class InviteUserCollectionHandlerTest(TestBaseHandler):
         invite = response.json
         invite = ndb.Key(urlsafe=invite['invites'][0]['key']).get()
 
-        REQUIRED_PROPERTIES = ['name', 'address', 'description',
-                               'key', 'photo_url', 'institutional_email',
-                               'phone_number', 'email', 'trusted']
-
         expected_make = {
             'invitee': other_user.email[0],
             'invitee_key': other_user.key.urlsafe(),
@@ -141,7 +135,7 @@ class InviteUserCollectionHandlerTest(TestBaseHandler):
             'key': invite.key.urlsafe(),
             'status': 'sent',
             'institution_admin': institution.make(['name']),
-            'institution': institution.make(REQUIRED_PROPERTIES)
+            'institution': institution.make(Invite.INST_PROPS_TO_MAKE)
         }
 
         self.assertEqual(expected_make, invite.make())

@@ -245,6 +245,9 @@
                         templateUrl: "app/invites/new_invite_page.html",
                         controller: "NewInviteController as newInviteCtrl"
                     }
+                },
+                params: {
+                    inviteType: undefined
                 }
             })
             .state("process_request", {

@@ -1,36 +1,34 @@
 # -*- coding: utf-8 -*-
-"""Invite Handler Test."""
+"""Invite User Handler Test."""
 
 import json
 import mocks
 
 from test_base_handler import TestBaseHandler
-from search_module import SearchInstitution
 from models import InviteUser
 from models import Invite
-from models import InviteInstitution
-from handlers.invite_handler import InviteHandler
+from handlers.invite_user_handler import InviteUserHandler
 from mock import patch
 
 CURRENT_INSTITUTION = {'name': 'currentInstitution'}
 CURRENT_INST_STRING = json.dumps(CURRENT_INSTITUTION)
 
-class InviteHandlerTest(TestBaseHandler):
-    """Invite Handler Test."""
+class InviteUserHandlerTest(TestBaseHandler):
+    """Invite User Handler Test."""
 
     INVITE_URI = "/api/invites/(.*)"
 
     @classmethod
     def setUp(cls):
         """Provide the base for the tests."""
-        super(InviteHandlerTest, cls).setUp()
+        super(InviteUserHandlerTest, cls).setUp()
 
         methods = set(cls.webapp2.WSGIApplication.allowed_methods)
         methods.add('PATCH')
         cls.webapp2.WSGIApplication.allowed_methods = frozenset(methods)
 
         app = cls.webapp2.WSGIApplication(
-            [(InviteHandlerTest.INVITE_URI, InviteHandler),
+            [(InviteUserHandlerTest.INVITE_URI, InviteUserHandler),
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
         
@@ -57,7 +55,7 @@ class InviteHandlerTest(TestBaseHandler):
 
     @patch('util.login_service.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_get(self, verify_token):
-        """Test method get of InviteHandler."""
+        """Test method get of InviteUserHandler."""
         response = self.testapp.get('/api/invites/' +
                                     self.invite.key.urlsafe())
         invite = json.loads(response._app_iter[0])
@@ -70,84 +68,22 @@ class InviteHandlerTest(TestBaseHandler):
     @patch.object(Invite, 'send_notification')
     @patch('util.login_service.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_delete(self, verify_token, send_notification):
-        """Test method delete of InviteHandler."""
-        # create innvite institution
-        self.data['suggestion_institution_name'] = 'new Institution'
-        self.data['type_of_invite'] = 'INSTITUTION'
-        invite_institution = InviteInstitution.create(self.data)
-        invite_institution.admin_key = self.user_admin.key
-        invite_institution.put()
-        # get stub institution
-        stub_institution = invite_institution.stub_institution_key.get()
-        search_institution = SearchInstitution()
-        stub_inst_document = search_institution.getDocuments(
-            stub_institution.name,
-            'pending'
-        )
-        searched_inst = stub_inst_document[0]
+        """Test method delete of InviteUserHandler."""
+        invite_user = InviteUser.create(self.data)
+        invite_user.put()
 
-        self.assertEqual(
-            stub_institution.state,
-            'pending', 'The stub institution state should be pending'
-        )
+        self.testapp.delete('/api/invites/%s' %invite_user.key.urlsafe())
 
-        self.assertEqual(
-            searched_inst.get('name'),
-            stub_institution.name,
-            "The searched institution should have \
-            the same name as the stub institution"
-        )
+        invite_user = invite_user.key.get()
+        self.assertTrue(invite_user.status == "rejected")
 
-        self.assertEqual(
-            searched_inst.get('state'),
-            'pending', "The searched institution state should be pending"
-        )
-
-        self.testapp.delete('/api/invites/%s' % invite_institution.key.urlsafe())
-
-        # update invite_institution, stub_institution and stub_inst_document
-        invite_institution = invite_institution.key.get()
-        stub_institution = invite_institution.stub_institution_key.get()
-        stub_inst_document = search_institution.getDocuments(
-            stub_institution.name,
-            'inactive'
-        )
-        searched_inst = stub_inst_document[0]
-
-        self.assertEqual(
-            invite_institution.status,
-            'rejected',
-            "Expected status should be equal to rejected")
-
-        self.assertEqual(
-            stub_institution.state,
-            'inactive', 'The stub institution state should be inactive'
-        )
-
-        self.assertEqual(
-            searched_inst.get('name'),
-            stub_institution.name,
-            "The searched institution should have \
-            the same name as the stub institution"
-        )
-
-        self.assertEqual(
-            searched_inst.get('state'),
-            'inactive', "The searched institution state should be inactive"
-        )
         # assert the notification was sent
-        send_notification.assert_called_with(
-            current_institution=None, # The first invite the user doesn't have current_institution 
-            sender_key=self.other_user.key,
-            message=None,
-            receiver_key=self.user_admin.key,
-            notification_type='REJECT_INVITE_INSTITUTION'
-        )
+        send_notification.assert_called()
 
     @patch.object(Invite, 'send_notification')
     @patch('util.login_service.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_patch(self, verify_token, send_notification):
-        """Test method patch of InviteHandler."""
+        """Test method patch of InviteUserHandler."""
         profile = '{"email": "otheruser@test.com", "office": "Developer", "institution_key": "%s"}' % self.inst_test.key.urlsafe()
         json_patch = '[{"op": "add", "path": "/institution_profiles/-", "value": ' + profile + '}]'
         self.testapp.patch(
@@ -204,7 +140,7 @@ class InviteHandlerTest(TestBaseHandler):
     @patch.object(Invite, 'send_notification')
     @patch('util.login_service.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_patch_fail(self, verify_token, send_notification):
-        """Test patch fail in InviteHandler because the profile has not office."""
+        """Test patch fail in InviteUserHandler because the profile has not office."""
         profile = '{"email": "otheruser@test.com"}'
         json_patch = '[{"op": "add", "path": "/institution_profiles/-", "value": ' + profile + '}]'
 

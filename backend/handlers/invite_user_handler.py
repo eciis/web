@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Invite Handler."""
+"""Invite User Handler."""
 
 from google.appengine.ext import ndb
 import json
@@ -14,7 +14,7 @@ from utils import json_response
 from utils import Utils
 from util import JsonPatch
 
-__all__ = ['InviteHandler']
+__all__ = ['InviteUserHandler']
 
 def define_entity(dictionary):
     """Method of return instance of InstitutionProfile for using in jsonPacth."""
@@ -26,13 +26,13 @@ def check_if_user_is_member(user, institution):
     return institution.has_member(user.key) and user.is_member(institution.key)
 
 
-class InviteHandler(BaseHandler):
-    """Invite Handler."""
+class InviteUserHandler(BaseHandler):
+    """Invite User Handler."""
 
     @json_response
-    def get(self, key):
-        """Get invite of key passed."""
-        invite_key = ndb.Key(urlsafe=key)
+    def get(self, invite_urlsafe):
+        """Get the invite whose key is invite_urlsafe."""
+        invite_key = ndb.Key(urlsafe=invite_urlsafe)
         invite = Invite.get_by_id(invite_key.id())
         invite = invite.make()
 
@@ -40,9 +40,12 @@ class InviteHandler(BaseHandler):
 
     @json_response
     @login_required
-    def delete(self, user, key):
-        """Change invite status from 'sent' to 'rejected'."""
-        invite_key = ndb.Key(urlsafe=key)
+    def delete(self, user, invite_urlsafe):
+        """Change invite status from 'sent' to 'rejected'.
+        This method is called when a user reject an invite
+        to be member of an institution.        
+        """
+        invite_key = ndb.Key(urlsafe=invite_urlsafe)
         invite = invite_key.get()
 
         Utils._assert(invite.status != 'sent',
@@ -53,15 +56,14 @@ class InviteHandler(BaseHandler):
         invite.put()
         invite.send_response_notification(user.current_institution, user.key, 'REJECT')
 
-        if invite.stub_institution_key:
-            stub_institution = invite.stub_institution_key.get()
-            stub_institution.change_state('inactive')
-
     @json_response
     @login_required
     @ndb.transactional(xg=True)
     def patch(self, user, invite_key):
-        """Handler PATCH Requests."""
+        """Handle PATCH Requests.
+        This method is called when an user accept
+        the invite to be a member of an institution.
+        """
         data = self.request.body
         invite = ndb.Key(urlsafe=invite_key).get()
 

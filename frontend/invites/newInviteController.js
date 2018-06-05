@@ -9,6 +9,7 @@
 
         newInviteCtrl.institution = null;
         newInviteCtrl.inviteKey = $state.params.key;
+        newInviteCtrl.inviteType = $state.params.inviteType;
         newInviteCtrl.acceptedInvite = false;
         newInviteCtrl.user = AuthService.getCurrentUser();
         newInviteCtrl.phoneRegex = "[0-9]{2}[\\s][0-9]{4,5}[-][0-9]{4,5}";
@@ -53,7 +54,7 @@
         newInviteCtrl.addInstitution =  function addInstitution(event) {
             var patch = newInviteCtrl.saveInstProfile();
 
-            var promise = InviteService.acceptInvite(patch, newInviteCtrl.inviteKey);
+            var promise = InviteService.acceptUserInvite(patch, newInviteCtrl.inviteKey);
                 promise.then(function success(userSaved) {
                     newInviteCtrl.user.removeInvite(newInviteCtrl.inviteKey);
                     newInviteCtrl.user.institutions = userSaved.institutions;
@@ -124,7 +125,8 @@
         };
 
         newInviteCtrl.deleteInvite = function deleteInvite() {
-            var promise = InviteService.deleteInvite(newInviteCtrl.inviteKey);
+            const inviteFunction = getInviteFunction("delete");
+            var promise = inviteFunction(newInviteCtrl.inviteKey);
             promise.then(function success() {
                 newInviteCtrl.user.removeInvite(newInviteCtrl.inviteKey);
                 AuthService.save();
@@ -158,7 +160,8 @@
         function loadInvite(){
             observer = ObserverRecorderService.register(newInviteCtrl.user);
             newInviteCtrl.checkUserName();
-            InviteService.getInvite(newInviteCtrl.inviteKey).then(function success(response) {
+            const inviteFunction = getInviteFunction("get");
+            inviteFunction(newInviteCtrl.inviteKey).then(function success(response) {
                 newInviteCtrl.invite = new Invite(response.data);
                 if(newInviteCtrl.invite.status === 'sent') {
                     institutionKey = (newInviteCtrl.invite.type_of_invite === "USER") ? newInviteCtrl.invite.institution_key : newInviteCtrl.invite.stub_institution.key;
@@ -171,6 +174,17 @@
                 MessageService.showToast(response.data.msg);
                 newInviteCtrl.loading = true;
             });
+        }
+
+        function getInviteFunction(method) {
+            const inviteUser = newInviteCtrl.inviteType === "USER";
+            
+            const methods = {
+                get: inviteUser ? InviteService.getUserInvite : InviteService.getInstitutionInvite,
+                delete: inviteUser ? InviteService.deleteUserInvite : InviteService.deleteInstitutionInvite
+            }
+
+            return methods[method]; 
         }
 
         function isValidProfile() {

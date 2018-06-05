@@ -78,7 +78,7 @@
         };
 
         homeCtrl.goToEvent = function goToEvent(event) {
-            $state.go('app.user.event', {eventKey: event.key});
+            $state.go('app.user.event', {eventKey: event.key, posts: homeCtrl.posts});
         };
 
         homeCtrl.newPost = function newPost(event) {

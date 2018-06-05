@@ -23,7 +23,6 @@ from handlers import GetKeyHandler
 from handlers import PostCommentHandler
 from handlers import SubscribePostHandler
 from handlers import ReplyCommentHandler
-from handlers import InviteCollectionHandler
 from handlers import SearchHandler
 from handlers import InviteHandler
 from handlers import InviteInstitutionCollectionHandler
@@ -41,6 +40,8 @@ from handlers import RequestHandler
 from handlers import InstitutionEventsHandler
 from handlers import ResendInviteHandler
 from handlers import InviteUserAdmHandler
+from handlers import InviteHierarchyCollectionHandler
+from handlers import InviteUserCollectionHandler
 
 methods = set(webapp2.WSGIApplication.allowed_methods)
 methods.add('PATCH')
@@ -48,7 +49,8 @@ webapp2.WSGIApplication.allowed_methods = frozenset(methods)
 
 app = webapp2.WSGIApplication([
     ("/api/requests/(.*)/user", RequestHandler),
-    ("/api/invites", InviteCollectionHandler), 
+    ("/api/invites/institution_hierarchy", InviteHierarchyCollectionHandler),
+    ("/api/invites/user", InviteUserCollectionHandler),
     ("/api/invites/institution", InviteInstitutionCollectionHandler),
     ("/api/invites/(.*)/resend", ResendInviteHandler),
     ("/api/invites/(.*)/institution_adm", InviteUserAdmHandler),

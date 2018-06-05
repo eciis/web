@@ -86,7 +86,7 @@
         inviteInstHierCtrl.sendInstInvite = function sendInstInvite(invite) {
             inviteInstHierCtrl.isLoadingSubmission = true;
             var deferred = $q.defer();
-            var promise = InviteService.sendInvite({invite_body: invite});
+            var promise = InviteService.sendInviteHierarchy({invite_body: invite});
             promise.then(function success() {
                     addInvite(invite);
                     if(invite.type_of_invite === INSTITUTION_PARENT) {
@@ -341,7 +341,9 @@
 
         inviteInstHierCtrl.canRemoveInst = function canRemoveInst(institution) {
             var hasChildrenLink = institution.parent_institution === inviteInstHierCtrl.institution.key;
-            return inviteInstHierCtrl.user.permissions.remove_inst[institution.key] && hasChildrenLink;
+            var removeInstPermission = inviteInstHierCtrl.user.permissions.remove_inst;
+            return removeInstPermission
+                && removeInstPermission[institution.key] && hasChildrenLink;
         };
 
         inviteInstHierCtrl.linkParentStatus = function linkParentStatus() {
@@ -399,6 +401,10 @@
                     child: institution
                 }
             });
+        };
+
+        inviteInstHierCtrl.limitString = function limitString(string, size) {
+          return Utils.limitString(string, size);
         };
 
         loadInstitution();

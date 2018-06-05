@@ -18,7 +18,6 @@ from .institution_parent_request_handler import *
 from .institution_request_collection_handler import *
 from .institution_request_handler import *
 from .institution_timeline_handler import *
-from .invite_collection_handler import *
 from .invite_handler import *
 from .invite_institution_collection_handler import *
 from .invite_user_adm_handler import *
@@ -38,6 +37,8 @@ from .user_profile_handler import *
 from .user_request_collection_handler import *
 from .user_timeline_handler import *
 from .vote_handler import *
+from .invite_hierarchy_collection_handler import *
+from .invite_user_collection_handler import *
 
 handlers = [
     base_handler, erro_handler, event_collection_handler, event_handler,
@@ -48,13 +49,14 @@ handlers = [
     institution_members_handler, institution_parent_request_collection_handler,
     institution_parent_request_handler, institution_request_collection_handler,
     institution_request_handler, institution_timeline_handler,
-    invite_collection_handler, invite_handler, invite_institution_collection_handler,
+    invite_handler, invite_institution_collection_handler,
     invite_user_adm_handler, like_handler, login_logout_handler,
     post_collection_handler, post_comment_handler, post_handler,
     reply_comment_handler, request_handler, resend_invite_handler,
     search_handler, subscribe_post_handler, user_handler,
     user_institutions_handler, user_profile_handler,
-    user_request_collection_handler, user_timeline_handler, vote_handler
+    user_request_collection_handler, user_timeline_handler, vote_handler,
+    invite_hierarchy_collection_handler, invite_user_collection_handler
 ]
 
 __all__ = [prop for handler in handlers for prop in handler.__all__]

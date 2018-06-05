@@ -8,6 +8,7 @@ from util import login_required
 from utils import Utils
 from utils import json_response
 from send_email_hierarchy import LeaveInstitutionEmailSender
+from service_messages import send_message_notification
 from util import get_subject 
 
 from . import BaseHandler
@@ -50,3 +51,11 @@ class UserInstitutionsHandler(BaseHandler):
             'body': body
         })
         email_sender.send_email()
+
+        notification_message = user.create_notification_message(user.key, user.current_institution, sender_institution_key=institution.key)
+        send_message_notification(
+            receiver_key=admin.key.urlsafe(),
+            notification_type='LEFT_INSTITUTION',
+            entity_key=institution.key.urlsafe(),
+            message=notification_message
+        )

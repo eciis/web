@@ -21,7 +21,9 @@
         eventCtrl.share = function share(event) {
             var post = new Post({}, eventCtrl.user.current_institution.key);
             post.shared_event = event.key;
-            PostService.createPost(post).then(function success() {
+            PostService.createPost(post).then(function success(response) {
+                if(eventCtrl.posts)
+                    eventCtrl.posts.push(response.data);
                 MessageService.showToast('Evento compartilhado com sucesso!');
             }, function error(response) {
                 MessageService.showToast(response.data.msg);
@@ -74,6 +76,7 @@
 
         (function main() {
             loadEvent($state.params.eventKey);
+            eventCtrl.posts = $state.params.posts;
         })();
     });
 })();

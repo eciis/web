@@ -97,12 +97,16 @@
         };
 
         requestController.getChildrenInstName = function getChildrenInstName(size) {
-            return Utils.limitString(requestController.children.name ||
-                requestController.children.sender_name, size);
+            const returnValue = requestController.children ? 
+              Utils.limitString(requestController.children.name ||
+              requestController.children.sender_name, size) : "";
+            return returnValue;
         };
 
         requestController.getChildrenInstEmail = function getChildrenInstEmail(size) {
-            return Utils.limitString(requestController.children.institutional_email, size);
+            const returnValue = requestController.children ? 
+              Utils.limitString(requestController.children.institutional_email, size) : "";
+            return returnValue;
         };	
 
         requestController.isAnotherCountry = function isAnotherCountry() {

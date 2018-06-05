@@ -18,8 +18,14 @@ class InstitutionChildrenRequestHandler(BaseHandler):
     @login_required
     @json_response
     def get(self, user, request_key):
-        """Handler GET Requests."""
+        """Handler GET Requests.. 
+            Return the request send to user requestting link with institution that he/she administers."""
         request = ndb.Key(urlsafe=request_key).get()
+        has_permission = user.has_permission('answer_link_inst_request', request.institution_requested_key.urlsafe())
+        Utils._assert(not has_permission,
+                      'User is not allowed to acess request link.',
+                      NotAuthorizedException)
+
         self.response.write(json.dumps(request.make()))
 
     @login_required

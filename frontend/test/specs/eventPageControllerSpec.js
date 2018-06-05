@@ -69,7 +69,7 @@
       mdDialog = $mdDialog;
       AuthService.login(user);
       state = $state;
-
+      state.params.posts = [];
       state.params.eventKey = event_convert_date.key;
       eventCtrl = $controller('EventPageController', {
             scope: scope,
@@ -77,7 +77,8 @@
             eventService: eventService,
             postService : postService,
             messageService : messageService,
-            mdDialog: mdDialog
+            mdDialog: mdDialog,
+            state: state
         });
 
       httpBackend.when('GET', EVENT_URI).respond(event_convert_date);
@@ -95,11 +96,16 @@
   describe('share()', function() {
 
     it('should eventService.createPost be called', function() {
-      spyOn(postService, 'createPost').and.returnValue(deffered.promise);
-      deffered.resolve(post);
+      spyOn(postService, 'createPost').and.callFake(function () {
+        return {
+          then: function (callback) {
+            return callback({data: {}});
+          }
+        };
+      });
       eventCtrl.share(event);
-      scope.$apply();
       expect(postService.createPost).toHaveBeenCalledWith(post);
+      expect(eventCtrl.posts).toEqual([{}]);
     });
   });
 

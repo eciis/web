@@ -99,7 +99,7 @@
       <span>por {{postDetailsCtrl.post.shared_event.last_modified_by}} {{postDetailsCtrl.post.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats }}.</span>
     </div>
   </div>
-  <event-details ng-if="postDetailsCtrl.showSharedEvent()" event="postDetailsCtrl.post.shared_event" is-event-page=false></event-details>
+  <event-details ng-if="postDetailsCtrl.showSharedEvent()" event="postDetailsCtrl.post.shared_event" is-event-page=false posts="postDetailsCtrl.posts"></event-details>
 
   <!-- BODY SHARED POST -->
   <md-card md-colors="{background: 'default-grey-100'}" ng-if="postDetailsCtrl.showSharedPost()">
@@ -149,7 +149,7 @@
       <pdf-view ng-if="postDetailsCtrl.showSharedPostText()" pdf-files='postDetailsCtrl.post.shared_post.pdf_files' is-editing="false"></pdf-view>
       <survey-details ng-if="postDetailsCtrl.post.shared_post.type_survey" 
         post="postDetailsCtrl.post.shared_post" posts="postDetailsCtrl.posts" 
-        user="postDetailsCtrl.user" isdialog="false"></survey-details>
+        user="postDetailsCtrl.user" reload-post="postDetailsCtrl.reloadPost" isdialog="false"></survey-details>
     </md-card-content>
   </md-card>
 

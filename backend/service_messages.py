@@ -70,22 +70,4 @@ def send_message_notification(receiver_key, notification_type, entity_key, messa
             'entity': entity
         }
     )
-
-
-def send_message_email(invitee, body, subject):
-    """Method of send email.
-
-    Keywords arguments:
-    invitee -- guest email.
-    body -- message to be sent.
-    """
-    taskqueue.add(
-        url='/api/queue/send-email',
-        target='worker',
-        queue_name='notifications',
-        params={
-            'invitee': invitee,
-            'subject': subject,
-            'body': body
-        }
-    )
+    

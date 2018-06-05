@@ -15,7 +15,7 @@
       </div>
       <md-card-content flex>
         <md-card layout-padding md-colors="{background: 'default-grey-100'}" layout="column" flex class="custom-scrollbar share-post">
-          <div layout="row" flex>
+          <div layout="row" flex ng-class="sharePostCtrl.showImage() && sharePostCtrl.isEvent() ? 'shared-post-with-image' : 'shared-post-header'">
             <img style="width: 40px; height: 40px; border-radius: 50%; margin-right: 8px;" ng-src="{{ sharePostCtrl.post.institution_image }}" />
             <div layout="column" flex>
               <b class="small-text-share-post">{{ sharePostCtrl.post.institution_name }}</b>
@@ -30,7 +30,7 @@
               <b ng-bind-html="sharePostCtrl.postToURL(sharePostCtrl.post.title)"></b>
             </span>
           </br>
-            <event-details ng-if="sharePostCtrl.isEvent()" event="sharePostCtrl.post" is-event-page=false></event-details>
+            <event-details ng-if="sharePostCtrl.isEvent()" event="sharePostCtrl.post" is-event-page=false posts="sharePostCtrl.posts"></event-details>
             <span class="md-subhead" ng-if="!sharePostCtrl.isEvent() && sharePostCtrl.post.text" ng-bind-html="sharePostCtrl.postToURL(sharePostCtrl.post.text)"></span>
             <pdf-view ng-if="sharePostCtrl.showPdfFiles()" pdf-files='sharePostCtrl.post.pdf_files' is-editing="false"></pdf-view>
             <survey-details ng-if="sharePostCtrl.isSurvey()" post="sharePostCtrl.post" posts="sharePostCtrl.posts" user="sharePostCtrl.user"

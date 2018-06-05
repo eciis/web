@@ -25,7 +25,7 @@
                 clickOutsideToClose: true,
                 locals: {
                     user: eventCtrl.user,
-                    posts: [],
+                    posts: eventCtrl.posts || [],
                     post: event,
                     addPost: true
                 }
@@ -100,7 +100,7 @@
         };
 
         eventCtrl.goToEvent = function goToEvent(event) {
-            $state.go('app.user.event', { eventKey: event.key });
+            $state.go('app.user.event', { eventKey: event.key, posts: eventCtrl.posts });
         };
 
         eventCtrl.endInOtherMonth = function endInOtherMonth() {
@@ -153,6 +153,7 @@
             bindToController: {
                 event: '=',
                 isEventPage: '=',
+                posts: '='
             }
         };
     });

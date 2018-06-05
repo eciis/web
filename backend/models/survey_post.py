@@ -21,6 +21,8 @@ class SurveyPost(Post):
     # Date and time limit that survey will receive answers
     deadline = ndb.DateTimeProperty()
 
+    voters = ndb.KeyProperty(kind="User", repeated=True)
+
     @staticmethod
     def create(data, author_key, institution_key):
         """Create a post and check required fields."""
@@ -51,11 +53,13 @@ class SurveyPost(Post):
     @ndb.transactional(retries=10)
     def vote(self, author, all_options_selected):
         """Added all votes of user from survey post."""
+        author_key = ndb.Key(urlsafe=author['key'])
         for option in all_options_selected:
             if(self.is_vote_valid(author, option, len(all_options_selected))):
                 survey = self.key.get()
+                if author_key not in survey.voters:
+                    survey.voters.append(author_key)
                 option = survey.options[option["id"]]
-
                 option["number_votes"] += 1
                 option["voters"].append(author)
                 survey.number_votes += 1
@@ -70,5 +74,6 @@ class SurveyPost(Post):
         ) if post.deadline else ''
         post_dict["type_survey"] = post.type_survey
         post_dict["options"] = post.options if post.options else []
+        post_dict["voters"] = [voter.urlsafe() for voter in post.voters]
 
         return post_dict

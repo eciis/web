@@ -134,14 +134,13 @@
 
         describe('sendUserInvite()', function() {
             beforeEach(function() {
-                spyOn(inviteService, 'sendInvite').and.callFake(function() {
+                spyOn(inviteService, 'sendInviteUser').and.callFake(function() {
                     return {
                         then: function(callback) {
                             return callback(
-                                { data: { 
-                                          'msg': 'Os convites estão sendo processados.'.clone,
-                                          'invites': [{ 'email': "teste@gmail.com", 'key': '123' }]
-                                        }
+                                {  
+                                    'msg': 'Os convites estão sendo processados.'.clone,
+                                    'invites': [{ 'email': "teste@gmail.com", 'key': '123' }]
                                 }
                             );
                         }
@@ -149,7 +148,7 @@
                 });
             });
 
-            it('should call inviteService.sendInvite()', function(done) {
+            it('should call inviteService.sendInviteUser()', function(done) {
                 manageMemberCtrl.invite = {
                     type_of_invite: 'USER',
                     institution_key: '987654321',
@@ -168,7 +167,7 @@
                 promise.then(function() {
                     var expectedInvite = _.clone(newInvite);
                     expectedInvite.invitee = "teste@gmail.com";
-                    expect(inviteService.sendInvite).toHaveBeenCalledWith(requestBody);
+                    expect(inviteService.sendInviteUser).toHaveBeenCalledWith(requestBody);
                     expect(manageMemberCtrl.invite).toEqual({});
                     expect(manageMemberCtrl.sent_invitations).toContain(invite);
                     expect(manageMemberCtrl.sent_invitations).toContain(expectedInvite);

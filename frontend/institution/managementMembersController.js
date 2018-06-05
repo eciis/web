@@ -108,21 +108,21 @@
             var requestBody = {
                 invite_body: invite,
                 emails: emails
-            }
+            };
             
             if (manageMemberCtrl.isValidAllEmails(emails) && manageMemberCtrl.isUserInviteValid(invite)) {
                 manageMemberCtrl.isLoadingInvite = true;
-                var promise = InviteService.sendInvite(requestBody);
-                promise.then(function success(response) {
-                    refreshSentInvitations(requestBody.emails, response.data.invites);
+                var promise = InviteService.sendInviteUser(requestBody);
+                promise.then(function success(responseData) {
+                    refreshSentInvitations(requestBody.emails, responseData.invites);
                     manageMemberCtrl.clearInvite(); 
                     manageMemberCtrl.showInvites = true; 
                     manageMemberCtrl.showSendInvite = false;
                     manageMemberCtrl.isLoadingInvite = false;
-                    MessageService.showToast(response.data.msg);
+                    MessageService.showToast(responseData.msg);
                 }, function error(response) {
                     manageMemberCtrl.isLoadingInvite = false;
-                    MessageService.showToast(response.data.msg);
+                    MessageService.showToast(response.msg);
                 });
                 return promise;
             }

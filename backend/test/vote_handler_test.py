@@ -51,13 +51,28 @@ class VoteHandlerTest(TestBaseHandler):
                                    [self.user_post.options[0]])
         # Verify if message exception
         exc = self.get_message_exception(exc.exception.message)
-        self.assertEquals(exc, "Error! The user already voted for this option")
+        self.assertEquals(exc, "Error! You've already voted in this survey")
         # Refresh user_post
         self.user_post = self.user_post.key.get()
         self.assertEqual(self.user_post.number_votes, 1,
                          "The number of votes expected was 1")
         self.assertEqual(option['number_votes'], 1,
                          "The number of votes expected was 1")
+
+    @patch('util.login_service.verify_token')
+    def test_invalid_post(self, verify_token):
+        """Test the vote_handler's post method."""
+        verify_token.return_value = {'email': 'user@example.com'}
+        self.user_post.voters.append(self.user.key)
+        self.user_post.put()
+
+        with self.assertRaises(Exception) as ex:
+            self.testapp.post_json(self.VOTE_URI % self.user_post.key.urlsafe(),
+                                [self.user_post.options[0]])
+
+        message = self.get_message_exception(ex.exception.message)
+
+        self.assertEqual(message, "Error! You've already voted in this survey")
 
     def tearDown(cls):
         """Deactivate the test."""

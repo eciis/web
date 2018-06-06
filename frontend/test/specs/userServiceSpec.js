@@ -6,7 +6,7 @@
         var USER_URI = "/api/user";
 
         var user = {
-            name: 'User Test',
+            name: 'User',
             key: '12345',
             state: 'active',
             profile: {

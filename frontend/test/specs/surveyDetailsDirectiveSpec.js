@@ -107,8 +107,8 @@
         });
 
         it('should added vote in option', function(done) {
-            promise.should.be.fulfilled.then(function() {
-                expect(surveyService.vote).toHaveBeenCalledWith(survey, surveyCtrl.optionsSelected);
+            promise.should.be.fulfilled.then(function() {                
+                expect(surveyService.vote).toHaveBeenCalledWith(surveyCtrl.post, surveyCtrl.optionsSelected);
                 expect(surveyCtrl.post.options[0].number_votes).toEqual(1);
                 expect(surveyCtrl.post.options[0].voters[0].key).toContain(surveyCtrl.user.key);
             }).should.notify(done);

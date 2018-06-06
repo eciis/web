@@ -22,17 +22,17 @@
               <span class="small-text-share-post">por {{ sharePostCtrl.post.author }}</span>
             </div>
           </div>
-          <md-card-content layout-margin>
+          <md-card-content layout-margin style="margin: 0; padding: 0;">
             <div ng-if="sharePostCtrl.showImage() && !sharePostCtrl.isEvent()" style="height: 13vh;">
               <img class="md-card-image" style="border-radius: 3%; max-width: 100%; height: 100%;" ng-src="{{ sharePostCtrl.post.photo_url }}" />
             </div>
-            <span ng-if="!sharePostCtrl.isSurvey() && !sharePostCtrl.isEvent()" class="md-text">
+            <p ng-if="!sharePostCtrl.isSurvey() && !sharePostCtrl.isEvent()" class="md-text">
               <b ng-bind-html="sharePostCtrl.postToURL(sharePostCtrl.post.title)"></b>
-            </span>
+            </p>
             <event-details ng-if="sharePostCtrl.isEvent()" event="sharePostCtrl.post" is-event-page=false></event-details>
-            <span class="md-subhead" ng-if="!sharePostCtrl.isEvent() && sharePostCtrl.post.text" ng-bind-html="sharePostCtrl.postToURL(sharePostCtrl.post.text)"></span>
+            <p class="md-subhead" ng-if="!sharePostCtrl.isEvent() && sharePostCtrl.post.text" ng-bind-html="sharePostCtrl.postToURL(sharePostCtrl.post.text)"></p>
             <pdf-view ng-if="sharePostCtrl.showPdfFiles()" pdf-files='sharePostCtrl.post.pdf_files' is-editing="false"></pdf-view>
-            <survey-details layout="column" ng-if="sharePostCtrl.isSurvey()" post="sharePostCtrl.post" posts="sharePostCtrl.posts" user="sharePostCtrl.user"
+            <survey-details style="margin: 0;" layout="column" ng-if="sharePostCtrl.isSurvey()" post="sharePostCtrl.post" posts="sharePostCtrl.posts" user="sharePostCtrl.user"
               isdialog="true" is-post-page="false" hide-xs show-gt-xs></survey-details>
           </md-card-content>
         </md-card>

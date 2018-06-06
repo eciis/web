@@ -7,7 +7,6 @@ import json
 from util import login_required
 from . import BaseHandler
 from models import InstitutionProfile
-from models import Invite
 from custom_exceptions import FieldException
 from custom_exceptions import NotAuthorizedException
 from utils import json_response
@@ -30,15 +29,6 @@ class InviteUserHandler(BaseHandler):
     """Invite User Handler."""
 
     @json_response
-    def get(self, invite_urlsafe):
-        """Get the invite whose key is invite_urlsafe."""
-        invite_key = ndb.Key(urlsafe=invite_urlsafe)
-        invite = Invite.get_by_id(invite_key.id())
-        invite = invite.make()
-
-        self.response.write(json.dumps(invite))
-
-    @json_response
     @login_required
     def delete(self, user, invite_urlsafe):
         """Change invite status from 'sent' to 'rejected'.
@@ -59,13 +49,13 @@ class InviteUserHandler(BaseHandler):
     @json_response
     @login_required
     @ndb.transactional(xg=True)
-    def patch(self, user, invite_key):
+    def patch(self, user, invite_urlsafe):
         """Handle PATCH Requests.
         This method is called when an user accept
         the invite to be a member of an institution.
         """
         data = self.request.body
-        invite = ndb.Key(urlsafe=invite_key).get()
+        invite = ndb.Key(urlsafe=invite_urlsafe).get()
 
         Utils._assert(invite.status != 'sent', 
             "This invitation has already been processed", 

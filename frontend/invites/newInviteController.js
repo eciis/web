@@ -9,7 +9,6 @@
 
         newInviteCtrl.institution = null;
         newInviteCtrl.inviteKey = $state.params.key;
-        newInviteCtrl.inviteType = $state.params.inviteType;
         newInviteCtrl.acceptedInvite = false;
         newInviteCtrl.user = AuthService.getCurrentUser();
         newInviteCtrl.phoneRegex = "[0-9]{2}[\\s][0-9]{4,5}[-][0-9]{4,5}";
@@ -125,7 +124,7 @@
         };
 
         newInviteCtrl.deleteInvite = function deleteInvite() {
-            const inviteFunction = getInviteFunction("delete");
+            const inviteFunction = getInviteFunction();
             var promise = inviteFunction(newInviteCtrl.inviteKey);
             promise.then(function success() {
                 newInviteCtrl.user.removeInvite(newInviteCtrl.inviteKey);
@@ -160,8 +159,7 @@
         function loadInvite(){
             observer = ObserverRecorderService.register(newInviteCtrl.user);
             newInviteCtrl.checkUserName();
-            const inviteFunction = getInviteFunction("get");
-            inviteFunction(newInviteCtrl.inviteKey).then(function success(response) {
+            InviteService.getInvite(newInviteCtrl.inviteKey).then(function success(response) {
                 newInviteCtrl.invite = new Invite(response.data);
                 if(newInviteCtrl.invite.status === 'sent') {
                     institutionKey = (newInviteCtrl.invite.type_of_invite === "USER") ? newInviteCtrl.invite.institution_key : newInviteCtrl.invite.stub_institution.key;
@@ -176,15 +174,9 @@
             });
         }
 
-        function getInviteFunction(method) {
-            const inviteUser = newInviteCtrl.inviteType === "USER";
-            
-            const methods = {
-                get: inviteUser ? InviteService.getUserInvite : InviteService.getInstitutionInvite,
-                delete: inviteUser ? InviteService.deleteUserInvite : InviteService.deleteInstitutionInvite
-            }
-
-            return methods[method]; 
+        function getInviteFunction() {
+            const inviteUser = newInviteCtrl.invite.type_of_invite === "USER";
+            return inviteUser ? InviteService.deleteUserInvite : InviteService.deleteInstitutionInvite; 
         }
 
         function isValidProfile() {

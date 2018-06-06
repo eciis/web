@@ -6,7 +6,6 @@ import json
 
 from util import login_required
 from . import BaseHandler
-from models import Invite
 from custom_exceptions import NotAuthorizedException
 from utils import json_response
 from utils import Utils 
@@ -16,15 +15,6 @@ __all__ = ['InviteInstitutionHandler']
 
 class InviteInstitutionHandler(BaseHandler):
     """Invite Institution Handler."""
-
-    @json_response
-    def get(self, invite_urlsafe):
-        """Get invite whose key is invite_urlsafe."""
-        invite_key = ndb.Key(urlsafe=invite_urlsafe)
-        invite = Invite.get_by_id(invite_key.id())
-        invite = invite.make()
-
-        self.response.write(json.dumps(invite))
 
     @json_response
     @login_required

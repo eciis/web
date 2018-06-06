@@ -24,7 +24,7 @@
 
         controller.signin = function signin() {
             if (AuthService.isLoggedIn()) {
-                $state.go("new_invite", {key: invite_id, inviteType: controller.invite.type_of_invite});
+                $state.go("new_invite", {key: invite_id});
             } else {
                 $state.go('signin');
             }
@@ -39,7 +39,7 @@
         };
         
         (function main() {
-            InviteService.getUserInvite(invite_id).then(function(response) {
+            InviteService.getInvite(invite_id).then(function(response) {
                 controller.invite = response.data;
                 if (controller.invite.status === "accepted") {
                     $state.go("signin");

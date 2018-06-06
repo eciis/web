@@ -16,7 +16,7 @@ CURRENT_INST_STRING = json.dumps(CURRENT_INSTITUTION)
 class InviteUserHandlerTest(TestBaseHandler):
     """Invite User Handler Test."""
 
-    INVITE_URI = "/api/invites/(.*)"
+    INVITE_USER_URI = "/api/invites/user/(.*)"
 
     @classmethod
     def setUp(cls):
@@ -28,7 +28,7 @@ class InviteUserHandlerTest(TestBaseHandler):
         cls.webapp2.WSGIApplication.allowed_methods = frozenset(methods)
 
         app = cls.webapp2.WSGIApplication(
-            [(InviteUserHandlerTest.INVITE_URI, InviteUserHandler),
+            [(InviteUserHandlerTest.INVITE_USER_URI, InviteUserHandler),
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
         
@@ -52,19 +52,6 @@ class InviteUserHandlerTest(TestBaseHandler):
         cls.invite = InviteUser.create(cls.data)
         cls.invite.put()
 
-
-    @patch('util.login_service.verify_token', return_value={'email': 'otheruser@test.com'})
-    def test_get(self, verify_token):
-        """Test method get of InviteUserHandler."""
-        response = self.testapp.get('/api/invites/' +
-                                    self.invite.key.urlsafe())
-        invite = json.loads(response._app_iter[0])
-
-        self.assertEqual(
-            invite,
-            self.invite.make(),
-            "Expected invite should be equal to make")
-
     @patch.object(Invite, 'send_notification')
     @patch('util.login_service.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_delete(self, verify_token, send_notification):
@@ -72,7 +59,7 @@ class InviteUserHandlerTest(TestBaseHandler):
         invite_user = InviteUser.create(self.data)
         invite_user.put()
 
-        self.testapp.delete('/api/invites/%s' %invite_user.key.urlsafe())
+        self.testapp.delete('/api/invites/user/%s' %invite_user.key.urlsafe())
 
         invite_user = invite_user.key.get()
         self.assertTrue(invite_user.status == "rejected")
@@ -87,7 +74,7 @@ class InviteUserHandlerTest(TestBaseHandler):
         profile = '{"email": "otheruser@test.com", "office": "Developer", "institution_key": "%s"}' % self.inst_test.key.urlsafe()
         json_patch = '[{"op": "add", "path": "/institution_profiles/-", "value": ' + profile + '}]'
         self.testapp.patch(
-            '/api/invites/%s'
+            '/api/invites/user/%s'
             % self.invite.key.urlsafe(),
             json_patch
         )
@@ -146,7 +133,7 @@ class InviteUserHandlerTest(TestBaseHandler):
 
         with self.assertRaises(Exception) as ex:
             self.testapp.patch(
-                '/api/invites/%s'% self.invite.key.urlsafe(),
+                '/api/invites/user/%s'% self.invite.key.urlsafe(),
                 json_patch
             )
 
@@ -168,7 +155,7 @@ class InviteUserHandlerTest(TestBaseHandler):
 
         with self.assertRaises(Exception) as raises_context:
             self.testapp.patch(
-                '/api/invites/%s'
+                '/api/invites/user/%s'
                 % self.invite.key.urlsafe()
             )
 
@@ -191,7 +178,7 @@ class InviteUserHandlerTest(TestBaseHandler):
 
         with self.assertRaises(Exception) as raises_context:
             self.testapp.patch(
-                '/api/invites/%s'
+                '/api/invites/user/%s'
                 % self.invite.key.urlsafe()
             )
 
@@ -214,7 +201,7 @@ class InviteUserHandlerTest(TestBaseHandler):
 
         with self.assertRaises(Exception) as raises_context:
             self.testapp.patch(
-                '/api/invites/%s'
+                '/api/invites/user/%s'
                 % self.invite.key.urlsafe()
             )
 
@@ -237,7 +224,7 @@ class InviteUserHandlerTest(TestBaseHandler):
 
         with self.assertRaises(Exception) as raises_context:
             self.testapp.patch(
-                '/api/invites/%s'
+                '/api/invites/user/%s'
                 % self.invite.key.urlsafe()
             )
 
@@ -260,7 +247,7 @@ class InviteUserHandlerTest(TestBaseHandler):
 
         with self.assertRaises(Exception) as raises_context:
             self.testapp.delete(
-                '/api/invites/%s'
+                '/api/invites/user/%s'
                 % self.invite.key.urlsafe()
             )
 
@@ -283,7 +270,7 @@ class InviteUserHandlerTest(TestBaseHandler):
 
         with self.assertRaises(Exception) as raises_context:
             self.testapp.delete(
-                '/api/invites/%s'
+                '/api/invites/user/%s'
                 % self.invite.key.urlsafe()
             )
 

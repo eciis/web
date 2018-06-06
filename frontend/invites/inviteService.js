@@ -8,25 +8,13 @@
 
         var INVITES_URI = "/api/invites";
     
-        service.getUserInvite = function(inviteKey) {
+        service.getInvite = function(inviteKey) {
             var deferred = $q.defer();
-            $http.get(INVITES_URI + '/user/' + inviteKey).then(function success(response) {
+            $http.get(INVITES_URI + '/' + inviteKey).then(function success(response) {
                 deferred.resolve(response);
             }, function error(response) {
                 deferred.reject(response);
             });
-
-            return deferred.promise;
-        };
-
-        service.getInstitutionInvite = function (inviteKey) {
-            var deferred = $q.defer();
-            $http.get(INVITES_URI + '/institution/' + inviteKey).then(function success(response) {
-                deferred.resolve(response);
-            }, function error(response) {
-                deferred.reject(response);
-            });
-
             return deferred.promise;
         };
 

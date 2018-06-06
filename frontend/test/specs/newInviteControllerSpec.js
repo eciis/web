@@ -101,7 +101,7 @@
 
             beforeEach(function() {
 
-                spyOn(inviteService, 'deleteInvite').and.callFake(function() {
+                spyOn(inviteService, 'deleteUserInvite').and.callFake(function() {
                     return {
                         then: function(callback) {
                             return callback();
@@ -109,7 +109,15 @@
                     };
                 });
 
-                spyOn(inviteService, 'acceptInvite').and.callFake(function() {
+                spyOn(inviteService, 'deleteInstitutionInvite').and.callFake(function () {
+                    return {
+                        then: function (callback) {
+                            return callback();
+                        }
+                    };
+                });
+
+                spyOn(inviteService, 'acceptUserInvite').and.callFake(function() {
                     return {
                         then: function(callback) {
                             return callback(otherUser);
@@ -169,7 +177,7 @@
 
             var promise;
             beforeEach(function() {
-                spyOn(inviteService, 'deleteInvite').and.callFake(function() {
+                spyOn(inviteService, 'deleteUserInvite').and.callFake(function() {
                     return {
                         then: function(callback) {
                             return callback();
@@ -201,9 +209,9 @@
                 });
             });
 
-            it('should call inviteService.deleteInvite()', function(done) {
+            it('should call inviteService.deleteUserInvite()', function(done) {
                 promise.then(function() {
-                    expect(inviteService.deleteInvite).toHaveBeenCalledWith(invite.key);
+                    expect(inviteService.deleteUserInvite).toHaveBeenCalledWith(invite.key);
                     done();
                 });
             });
@@ -234,8 +242,8 @@
         });
 
         describe('deleteInvite', function () {
-            it('should call deleteInvite', function (done) {
-                spyOn(inviteService, 'deleteInvite').and.callFake(function () {
+            it('should call deleteUserInvite', function (done) {
+                spyOn(inviteService, 'deleteUserInvite').and.callFake(function () {
                     return {
                         then: function (callback) {
                             return callback();
@@ -253,7 +261,30 @@
                     expect(authService.save).toHaveBeenCalled();
                     done();
                 });
-                expect(inviteService.deleteInvite).toHaveBeenCalled();
+                expect(inviteService.deleteUserInvite).toHaveBeenCalled();
+            });
+
+            it('should call deleteInstitutionInvite', function (done) {
+                spyOn(inviteService, 'deleteInstitutionInvite').and.callFake(function () {
+                    return {
+                        then: function (callback) {
+                            return callback();
+                        }
+                    };
+                });
+                spyOn(authService, 'save');
+                newInviteCtrl.invite.type_of_invite = "INSTITUTION";
+                newInviteCtrl.institution = otherInstitution;
+                newInviteCtrl.user = new User(otherUser);
+                spyOn(newInviteCtrl.user, 'removeInvite');
+                newInviteCtrl.office = "developer";
+                var promise = newInviteCtrl.deleteInvite();
+                promise.then(function success() {
+                    expect(newInviteCtrl.user.removeInvite).toHaveBeenCalled();
+                    expect(authService.save).toHaveBeenCalled();
+                    done();
+                });
+                expect(inviteService.deleteInstitutionInvite).toHaveBeenCalled();
             });
         });
     });

@@ -47,7 +47,7 @@
          * was already processed.
          */
         function getInvite() {
-            InviteService.getUserInvite(key).then(function success(response) {
+            InviteService.getInvite(key).then(function success(response) {
                 let invite = new Invite(response.data);
 
                 if (invite.status === 'sent' || typeOfDialog === processCtrl.VIEW_INVITE_SENDER) {

@@ -79,7 +79,7 @@
             spyOn(surveyCtrl, 'voteService').and.callFake(function() {
                 return {
                     then: function(callback) {
-                        return callback();
+                        return callback(survey);
                     }
                 }
             });
@@ -102,13 +102,13 @@
             surveyCtrl.optionsSelected = [options[0]];
             spyOn(surveyCtrl.posts, 'map');
             httpBackend.expect('POST', "/api/surveyposts/" + surveyCtrl.post.key + '/votes').
-                respond(surveyCtrl.optionsSelected);
+                respond(surveyCtrl.post);
             promise = surveyCtrl.voteService();
         });
 
         it('should added vote in option', function(done) {
-            promise.should.be.fulfilled.then(function() {
-                expect(surveyService.vote).toHaveBeenCalledWith(surveyCtrl.post, surveyCtrl.optionsSelected);
+            promise.should.be.fulfilled.then(function() {                
+                expect(surveyService.vote).toHaveBeenCalledWith(survey, surveyCtrl.optionsSelected);
                 expect(surveyCtrl.post.options[0].number_votes).toEqual(1);
                 expect(surveyCtrl.post.options[0].voters[0].key).toContain(surveyCtrl.user.key);
             }).should.notify(done);

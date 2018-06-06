@@ -345,7 +345,7 @@
 
         postDetailsCtrl.reloadPost = function reloadPost() {
             var type_survey = postDetailsCtrl.post.type_survey;
-            postDetailsCtrl.post.type_survey = false;
+            postDetailsCtrl.post.type_survey = '';
             var promise = PostService.getPost(postDetailsCtrl.post.key);
             promise.then(function success(response) {
                 response.data_comments = Object.values(response.data_comments);

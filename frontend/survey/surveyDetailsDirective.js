@@ -63,9 +63,9 @@
                 var dialog = MessageService.showConfirmationDialog(ev,
                     'Confirmar voto', 'Seu voto será permanente. Deseja confirmar?');
                 dialog.then(function() {
-                    surveyCtrl.voteService().then(function () {
-                        syncSharedPosts();
+                    surveyCtrl.voteService().then(function () {                        
                         surveyCtrl.reloadPost();
+                        syncSharedPosts();
                     });
                 }, function() {
                     MessageService.showToast('Cancelado');
@@ -95,7 +95,8 @@
 
         surveyCtrl.voteService = function(){
             var promise = SurveyService.vote(surveyCtrl.post, surveyCtrl.optionsSelected);
-            promise.then(function sucess(){
+            promise.then(function sucess(response){
+                surveyCtrl.post = response.data;
                 addVote(surveyCtrl.optionsSelected);
                 MessageService.showToast('Voto computado');
             }, function error(response) {
@@ -132,6 +133,7 @@
                              'photo_url': surveyCtrl.user.photo_url,
                              'key': Utils.getKeyFromUrl(surveyCtrl.user.key) };
                 option.voters.push(voter);
+                surveyCtrl.post.options[option.id] = option;
             });
         }
 

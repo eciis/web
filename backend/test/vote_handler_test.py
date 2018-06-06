@@ -102,6 +102,7 @@ def initModels(cls):
     cls.user_post.title = 'Survey with Multiple choice'
     cls.user_post.text = 'Description of survey'
     cls.user_post.number_votes = 0
+    cls.user_post.last_modified_by = cls.user.key
     cls.user_post.deadline = datetime.datetime(2020, 07, 25, 12, 30, 15)
     cls.user_post.options = [{'id': 0,
                               'text': 'first option',

@@ -15,7 +15,7 @@
       </div>
       <md-card-content flex>
         <md-card layout-padding md-colors="{background: 'default-grey-100'}" layout="column" flex class="custom-scrollbar share-post">
-          <div layout="row">
+          <div layout="row" style="display: -webkit-box;">
             <img style="width: 40px; height: 40px; border-radius: 50%; margin-right: 8px; display: inline-flex;" ng-src="{{ sharePostCtrl.post.institution_image }}" />
             <div layout="column" flex>
               <b class="small-text-share-post">{{ sharePostCtrl.post.institution_name }}</b>
@@ -29,12 +29,11 @@
             <span ng-if="!sharePostCtrl.isSurvey() && !sharePostCtrl.isEvent()" class="md-text">
               <b ng-bind-html="sharePostCtrl.postToURL(sharePostCtrl.post.title)"></b>
             </span>
-          </br>
             <event-details ng-if="sharePostCtrl.isEvent()" event="sharePostCtrl.post" is-event-page=false></event-details>
             <span class="md-subhead" ng-if="!sharePostCtrl.isEvent() && sharePostCtrl.post.text" ng-bind-html="sharePostCtrl.postToURL(sharePostCtrl.post.text)"></span>
             <pdf-view ng-if="sharePostCtrl.showPdfFiles()" pdf-files='sharePostCtrl.post.pdf_files' is-editing="false"></pdf-view>
-            <survey-details style="display: flex;" layout="column" ng-if="sharePostCtrl.isSurvey()" post="sharePostCtrl.post" posts="sharePostCtrl.posts" user="sharePostCtrl.user"
-              isdialog="true" is-post-page="false" hide show-gt-xs></survey-details>
+            <survey-details layout="column" ng-if="sharePostCtrl.isSurvey()" post="sharePostCtrl.post" posts="sharePostCtrl.posts" user="sharePostCtrl.user"
+              isdialog="true" is-post-page="false" hide-xs show-gt-xs></survey-details>
           </md-card-content>
         </md-card>
       </md-card-content>

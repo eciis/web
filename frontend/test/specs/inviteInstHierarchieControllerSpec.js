@@ -1,9 +1,12 @@
 'use strict';
 
 (describe('Test InviteInstHierarchieController', function () {
-        var httpBackend, scope, state, mdDialog, instService, requestInvitationService, 
-            inviteService, inviteInstHierarchieCtrl, createCtrl, messageService;
+    const REQUEST_INSTITUTION_CHILDREN = 'REQUEST_INSTITUTION_CHILDREN';
+    const REQUEST_INSTITUTION_PARENT = 'REQUEST_INSTITUTION_PARENT';
 
+    var httpBackend, scope, state, mdDialog, instService, requestInvitationService, 
+        inviteService, inviteInstHierarchieCtrl, createCtrl, messageService, q;
+    
     var institution = {
         name: 'institution',
         key: 'kaopsdkoas-IAKSDOoksHo',
@@ -44,7 +47,7 @@
     beforeEach(module('app'));
 
     beforeEach(inject(function ($controller, $httpBackend, $rootScope, $state, $mdDialog, 
-        AuthService, InstitutionService, RequestInvitationService, InviteService, MessageService) {
+        AuthService, InstitutionService, RequestInvitationService, InviteService, MessageService, $q) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
@@ -53,6 +56,7 @@
         requestInvitationService = RequestInvitationService;
         inviteService = InviteService;
         messageService = MessageService;
+        q = $q;
 
         AuthService.login(user);
 
@@ -335,95 +339,56 @@
         });
     });
 
-    describe('acceptRequest()', function() {
-        var request;
+    describe('analyseRequest', function () {
+        var instRequested, instRequesting, request;
+       
         beforeEach(function() {
-            spyOn(messageService, 'showConfirmationDialog').and.callFake(function () {
+            instRequesting = new Institution({
+                key: 'requester-key',
+                name: 'Requester',
+                parent_institution: null,
+                children_institutions: []
+            });
+
+            instRequested = new Institution({
+                key: 'requested-key',
+                name: 'Requested',
+                parent_institution: null,
+                children_institutions: []
+            });            
+            
+            inviteInstHierarchieCtrl.institution = instRequested;
+
+            request = {
+                institution: instRequesting,
+                type_of_invite: REQUEST_INSTITUTION_CHILDREN
+            };
+
+            spyOn(requestInvitationService, 'analyseReqDialog').and.callFake(function () {
                 return {
                     then: function (callback) {
                         return callback();
                     }
                 };
             });
-
-            request = {key: 'aosdkopa-ORAOPdaAOSKFP'};
+        })
+        
+        it('should accept a request children and link institutions', function() {
+            inviteInstHierarchieCtrl.analyseRequest(event, request);
+            expect(requestInvitationService.analyseReqDialog).toHaveBeenCalledWith(event, instRequested, request);
+            expect(inviteInstHierarchieCtrl.hasParent).toBeTruthy()
+            expect(inviteInstHierarchieCtrl.showParentHierarchie).toBeTruthy();
+            expect(inviteInstHierarchieCtrl.institution.parent_institution).toBe(request.institution);
+            expect(request.institution.children_institutions[0]).toBe(inviteInstHierarchieCtrl.institution);
         });
 
-        it('should call acceptInstParentRequest', function() {
-            spyOn(requestInvitationService, 'acceptInstParentRequest').and.callFake(function () {
-                return {
-                    then: function (callback) {
-                        return callback();
-                    }
-                };
-            });
-            inviteInstHierarchieCtrl.institution.children_institutions = [];
-            inviteInstHierarchieCtrl.acceptRequest(request, 'REQUEST_INSTITUTION_PARENT', '$event');
-            expect(messageService.showConfirmationDialog).toHaveBeenCalled();
-            expect(requestInvitationService.acceptInstParentRequest).toHaveBeenCalled();
-            expect(request.status).toEqual('accepted');
-            expect(inviteInstHierarchieCtrl.institution.children_institutions.length).toEqual(1);
-        });
-
-        it('should call acceptInstChildrenRequest', function() {
-            spyOn(requestInvitationService, 'acceptInstChildrenRequest').and.callFake(function () {
-                return {
-                    then: function (callback) {
-                        return callback();
-                    }
-                };
-            });
-            inviteInstHierarchieCtrl.institution.children_institutions = [];
-            inviteInstHierarchieCtrl.acceptRequest(request, 'REQUEST_INSTITUTION_CHILDREN', '$event');
-            expect(messageService.showConfirmationDialog).toHaveBeenCalled();
-            expect(requestInvitationService.acceptInstChildrenRequest).toHaveBeenCalled();
-            expect(request.status).toEqual('accepted');
-            expect(inviteInstHierarchieCtrl.institution.parent_institution).toEqual(institution);
-        });
-    });
-
-    describe('rejectRequest()', function() {
-        var request;
-        beforeEach(function () {
-            spyOn(messageService, 'showConfirmationDialog').and.callFake(function () {
-                return {
-                    then: function (callback) {
-                        return callback();
-                    }
-                };
-            });
-
-            request = { key: 'aosdkopa-ORAOPdaAOSKFP' };
-        });
-
-        it('should call rejectInstParentRequest', function () {
-            spyOn(requestInvitationService, 'rejectInstParentRequest').and.callFake(function () {
-                return {
-                    then: function (callback) {
-                        return callback();
-                    }
-                };
-            });
-            inviteInstHierarchieCtrl.institution.children_institutions = [];
-            inviteInstHierarchieCtrl.rejectRequest(request, 'REQUEST_INSTITUTION_PARENT', '$event');
-            expect(messageService.showConfirmationDialog).toHaveBeenCalled();
-            expect(requestInvitationService.rejectInstParentRequest).toHaveBeenCalled();
-            expect(request.status).toEqual('rejected');
-        });
-
-        it('should call rejectInstChildrenRequest', function () {
-            spyOn(requestInvitationService, 'rejectInstChildrenRequest').and.callFake(function () {
-                return {
-                    then: function (callback) {
-                        return callback();
-                    }
-                };
-            });
-            inviteInstHierarchieCtrl.institution.children_institutions = [];
-            inviteInstHierarchieCtrl.rejectRequest(request, 'REQUEST_INSTITUTION_CHILDREN', '$event');
-            expect(messageService.showConfirmationDialog).toHaveBeenCalled();
-            expect(requestInvitationService.rejectInstChildrenRequest).toHaveBeenCalled();
-            expect(request.status).toEqual('rejected');
+        it('should accept a request parent and link institutions', function() {
+            request.type_of_invite = REQUEST_INSTITUTION_PARENT;
+            inviteInstHierarchieCtrl.analyseRequest(event, request);
+            expect(requestInvitationService.analyseReqDialog).toHaveBeenCalledWith(event, instRequested, request);
+            expect(inviteInstHierarchieCtrl.showChildrenHierarchie).toBeTruthy()
+            expect(request.institution.parent_institution).toBe(inviteInstHierarchieCtrl.institution);
+            expect(inviteInstHierarchieCtrl.institution.children_institutions[0]).toBe(request.institution);
         });
     });
 
@@ -487,7 +452,7 @@
         });
 
         it('should return Solicitação para ser uma instituição subordinada (Aguardando confirmação)', function() {
-            let request = { institution_key: institution.key, type_of_invite: 'REQUEST_INSTITUTION_CHILDREN'};
+            let request = { institution_key: institution.key, type_of_invite: REQUEST_INSTITUTION_CHILDREN};
             const returnedValue = inviteInstHierarchieCtrl.showMessage(request);
             expect(returnedValue).toEqual('Solicitação para ser uma instituição subordinada (Aguardando confirmação)');
         });
@@ -499,13 +464,13 @@
         });
 
         it('should return Solicitação para ser a instituição superior', function () {
-            let request = { institution_key: 'poadka-DKopskl', type_of_invite: 'REQUEST_INSTITUTION_CHILDREN' };
+            let request = { institution_key: 'poadka-DKopskl', type_of_invite: REQUEST_INSTITUTION_CHILDREN };
             const returnedValue = inviteInstHierarchieCtrl.showMessage(request);
             expect(returnedValue).toEqual('Solicitação para ser a instituição superior');
         });
 
         it('should return Solicitação para ser uma instituição subordinada', function () {
-            let request = { institution_key: 'poadka-DKopskl', type_of_invite: 'REQUEST_INSTITUTION_PARENT' };
+            let request = { institution_key: 'poadka-DKopskl', type_of_invite: REQUEST_INSTITUTION_PARENT };
             const returnedValue = inviteInstHierarchieCtrl.showMessage(request);
             expect(returnedValue).toEqual('Solicitação para ser uma instituição subordinada');
         });

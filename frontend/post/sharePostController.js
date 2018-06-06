@@ -48,6 +48,8 @@
                 MessageService.showToast('Compartilhado com sucesso!');
                 $mdDialog.hide();
                 shareCtrl.addPostTimeline(response.data);
+                const postAuthorPermissions = ["remove_post"];
+                shareCtrl.user.addPermissions(postAuthorPermissions, response.data.key);
             }, function error(response) {
                 $mdDialog.hide();
                 MessageService.showToast(response.data.msg);
@@ -70,7 +72,7 @@
         shareCtrl.goTo = function goTo() {
             shareCtrl.cancelDialog();
             if (shareCtrl.isEvent()) {
-                $state.go('app.user.event', { eventKey: shareCtrl.post.key });
+                $state.go('app.user.event', { eventKey: shareCtrl.post.key, posts: shareCtrl.posts });
             }
             $state.go('app.post', { postKey: shareCtrl.post.key });
         };

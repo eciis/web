@@ -78,10 +78,7 @@ class InviteInstitutionParentTest(TestBase):
         invite = InviteInstitutionParent.create(data)
         invite.put()
 
-        REQUIRED_PROPERTIES = ['name', 'address', 'description',
-                               'key', 'photo_url', 'institutional_email',
-                               'phone_number', 'email', 'trusted']
-        institution = child_inst.make(REQUIRED_PROPERTIES)
+        institution = child_inst.make(InviteInstitutionParent.INST_PROPS_TO_MAKE)
         expected_json = {
             'admin_name': invite.admin_key.get().name,
             'sender_name': invite.sender_name,

@@ -65,17 +65,13 @@ class InviteTest(TestBase):
 
     def test_make(self):
         """Test make method."""
-        REQUIRED_PROPERTIES = ['name', 'address', 'description',
-                               'key', 'photo_url', 'email', 'trusted',
-                               'phone_number', 'institutional_email']
-
         expected_maked_invite = {
             'admin_name': self.admin.name,
             'sender_name': self.invite.sender_name,
             'key': self.invite.key.urlsafe(),
             'status': self.invite.status,
             'institution_admin': self.institution.make(["name"]),
-            'institution': self.institution.make(REQUIRED_PROPERTIES)
+            'institution': self.institution.make(Invite.INST_PROPS_TO_MAKE)
         }
 
         maked_invite = self.invite.make()

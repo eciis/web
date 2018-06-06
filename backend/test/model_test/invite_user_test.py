@@ -44,10 +44,6 @@ class InviteUserTest(TestBase):
 
     def test_make(self):
         """Test make method."""
-        REQUIRED_PROPERTIES = ['name', 'address', 'description',
-                               'key', 'photo_url', 'email', 'trusted',
-                               'phone_number', 'institutional_email']
-
         maked_invite = self.invite_user.make()
 
         expected_maked_invite = {
@@ -57,7 +53,7 @@ class InviteUserTest(TestBase):
             "key": self.invite_user.key.urlsafe(),
             "status": self.invite_user.status,
             "institution_admin": {"name": self.institution.name},
-            "institution": self.institution.make(REQUIRED_PROPERTIES),
+            "institution": self.institution.make(InviteUser.INST_PROPS_TO_MAKE),
             "institution_key": self.institution.key.urlsafe(),
             "type_of_invite": "USER"
         }

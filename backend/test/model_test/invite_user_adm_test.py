@@ -235,10 +235,6 @@ class InviteUserAdmTest(TestBase):
         created_invite = InviteUserAdm.create(data)
         created_invite.put()
 
-        REQUIRED_PROPERTIES = ['name', 'address', 'description',
-                               'key', 'photo_url', 'email',
-                               'phone_number', 'institutional_email', 'trusted']
-
         maked_invite = created_invite.make()
 
         expected_maked_invite = {
@@ -248,7 +244,7 @@ class InviteUserAdmTest(TestBase):
             "key": created_invite.key.urlsafe(),
             "status": created_invite.status,
             "institution_admin": {"name": institution.name},
-            "institution": institution.make(REQUIRED_PROPERTIES),
+            "institution": institution.make(InviteUserAdm.INST_PROPS_TO_MAKE),
             "institution_key": institution.key.urlsafe(),
             "invitee_key": new_admin.key.urlsafe(),
             "invitee_name": new_admin.name,

@@ -137,9 +137,6 @@ class RequestInstitutionTest(TestBase):
             self.deciis, self.user_admin
         )
 
-        inst_properties = ['name', 'description', 'key', 'institutional_email',
-                      'email', 'trusted', 'phone_number', 'address', 'photo_url']
-
         expected_json = {
             'status': 'sent',
             'institution_admin': {'name': self.inst_test.name },
@@ -150,7 +147,7 @@ class RequestInstitutionTest(TestBase):
             'requested_inst_name': self.deciis.name,
             'admin_name': self.user_admin.name,
             'key': request.key.urlsafe(),
-            'institution': self.inst_test.make(inst_properties),
+            'institution': self.inst_test.make(RequestInstitution.INST_PROPS_TO_MAKE),
             'type_of_invite': 'REQUEST_INSTITUTION',
             'institution_key': self.inst_test.key.urlsafe()
         }

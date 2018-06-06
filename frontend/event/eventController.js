@@ -85,6 +85,7 @@
         (function main() {
             eventCtrl.institutionKey = $state.params.institutionKey;
             eventCtrl.loadMoreEvents();
+            eventCtrl.posts = $state.params.posts;
         })();
     });
 })();

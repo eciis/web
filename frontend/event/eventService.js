@@ -30,7 +30,7 @@
             return deferred.promise;
         };
 
-        service.getInstEvents = function getEvents(page, institution_key) {
+        service.getInstEvents = function getInstEvents(page, institution_key) {
             var deferred = $q.defer();
             $http.get(INST_URI + institution_key + '/events?page=' + page + "&limit=" + LIMIT).then(function success(response) {
                 deferred.resolve(response);

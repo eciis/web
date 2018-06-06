@@ -99,6 +99,8 @@
                 surveyCtrl.post = response.data;
                 addVote(surveyCtrl.optionsSelected);
                 MessageService.showToast('Voto computado');
+            }, function error(response) {
+                MessageService.showToast(response.data.msg);
             });
             return promise;
         };

@@ -166,9 +166,6 @@ class RequestInstitutionParentTest(TestBase):
             self.other_institution, self.admin
         )
 
-        institution_props = ['name', 'description', 'key', 'institutional_email', 
-                      'email', 'trusted', 'phone_number', 'address', 'photo_url']
-
         expected_made_request = {
             'status': 'sent',
             'sender': self.other_user.email,
@@ -183,7 +180,7 @@ class RequestInstitutionParentTest(TestBase):
             'institution_admin': {
                 'name': self.institution.name
             },
-            'institution': self.institution.make(institution_props)
+            'institution': self.institution.make(RequestInstitutionParent.INST_PROPS_TO_MAKE)
         }
 
         made_request = request.make()

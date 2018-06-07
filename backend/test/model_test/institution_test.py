@@ -391,23 +391,31 @@ class InstitutionTest(TestBase):
         parent_inst = mocks.create_institution()
 
         #There is no link
-        self.assertFalse(child_inst.verify_connection(parent_inst))
+        self.assertFalse(child_inst.verify_connection(parent_inst, 'PARENT'))
+        self.assertFalse(parent_inst.verify_connection(child_inst, 'CHILDREN'))
         self.assertFalse(parent_inst.verify_connection(child_inst))
+        self.assertFalse(child_inst.verify_connection(parent_inst))
         
         child_inst.parent_institution = parent_inst.key
 
         #Just the child is linked to the parent
-        self.assertFalse(child_inst.verify_connection(parent_inst))
+        self.assertFalse(child_inst.verify_connection(parent_inst, 'PARENT'))
+        self.assertFalse(parent_inst.verify_connection(child_inst, 'CHILDREN'))
         self.assertFalse(parent_inst.verify_connection(child_inst))
+        self.assertFalse(child_inst.verify_connection(parent_inst))
 
         parent_inst.children_institutions.append(child_inst.key)
         
         #There is link in two directions
-        self.assertTrue(child_inst.verify_connection(parent_inst))
+        self.assertTrue(child_inst.verify_connection(parent_inst, 'PARENT'))
+        self.assertTrue(parent_inst.verify_connection(child_inst, 'CHILDREN'))
         self.assertTrue(parent_inst.verify_connection(child_inst))
+        self.assertTrue(child_inst.verify_connection(parent_inst))
 
         child_inst.parent_institution = None
 
         #Just the parent is linked to the child
-        self.assertFalse(child_inst.verify_connection(parent_inst))
+        self.assertFalse(child_inst.verify_connection(parent_inst, 'PARENT'))
+        self.assertFalse(parent_inst.verify_connection(child_inst, 'CHILDREN'))
         self.assertFalse(parent_inst.verify_connection(child_inst))
+        self.assertFalse(child_inst.verify_connection(parent_inst))

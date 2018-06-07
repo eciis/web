@@ -1,7 +1,7 @@
 'use strict';
 
 (describe('Test NotificationService', function () {
-    var service, http;
+    var service, authService;
 
     var notification_to = {
         'entity_type' : 'REQUEST_INSTITUTION',
@@ -63,13 +63,20 @@
 
     beforeEach(module('app'));
 
+    beforeEach(inject(function(AuthService) {
+        authService = AuthService;
+        spyOn(AuthService, '$onLogout');
+    }));
+
     beforeEach(inject(function(NotificationService, $firebaseArray) {
         service = NotificationService;
         var ref = firebase.database().ref();
-        var notificationsRef = ref.child("notifications/sasasa");
+        var notificationsRef = ref.child("notifications/key");
         service.firebaseArrayNotifications = $firebaseArray(notificationsRef)
         service.firebaseArrayNotifications.push(notification_from_to);
         service.firebaseArrayNotifications.push(notification_from);
+
+        expect(authService.$onLogout).toHaveBeenCalled();
     }));
 
     describe('Test markAsRead', function(){
@@ -88,10 +95,11 @@
 
         describe('Test watchPostNotification', function(){
             it('Should call function of array notification.', function() {
+                spyOn(service.firebaseArrayNotifications, '$watch');
                 service.watchNotifications(user_key, []);
                 expect(service.firebaseArrayNotifications.$loaded).toHaveBeenCalled();
+                expect(service.firebaseArrayNotifications.$watch).toHaveBeenCalled();
             });
-
         });
     });
 
@@ -102,8 +110,10 @@
 
         describe('Test watchPostNotification', function(){
             it('Should call function of array notification.', function() {
-                service.watchPostNotification(user_key, fakeCallback);
+                spyOn(service.firebaseArrayNotifications, '$watch');
+                service.watchPostNotification(user_key);
                 expect(service.firebaseArrayNotifications.$loaded).toHaveBeenCalled();
+                expect(service.firebaseArrayNotifications.$watch).toHaveBeenCalled();
             });
 
         });

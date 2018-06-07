@@ -399,15 +399,6 @@ class RemoveAdminPermissionsInInstitutionHierarchy(BaseHandler):
                         current_admin, permissions)
         apply_remove_operation(parent_admin, institution, is_not_admin, child_admin_key)
 
-class AddPostInInstitution(BaseHandler):
-    
-    def post(self):
-        institution_key = self.request.get('institution_key')
-        institution = ndb.Key(urlsafe=institution_key).get()
-        created_post_key = self.request.get('created_post_key')
-        created_post = ndb.Key(urlsafe=created_post_key).get()
-
-        institution.add_post(created_post)
 
 class SendInviteHandler(BaseHandler):
 
@@ -504,7 +495,6 @@ app = webapp2.WSGIApplication([
     ('/api/queue/notify-followers', NotifyFollowersHandler),
     ('/api/queue/add-admin-permissions', AddAdminPermissionsInInstitutionHierarchy),
     ('/api/queue/remove-admin-permissions', RemoveAdminPermissionsInInstitutionHierarchy),
-    ('/api/queue/add-post-institution', AddPostInInstitution),
     ('/api/queue/send-invite', SendInviteHandler),
     ('/api/queue/transfer-admin-permissions', TransferAdminPermissionsHandler)
 ], debug=True)

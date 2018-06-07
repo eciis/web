@@ -60,12 +60,7 @@ class PostCollectionHandler(BaseHandler):
             created_post = PostFactory.create(post_data, user.key, institution.key)
             user.add_post(created_post)
 
-            params = {
-                'institution_key': institution.key.urlsafe(),
-                'created_post_key': created_post.key.urlsafe()
-            }
-
-            enqueue_task('add-post-institution', params)
+            institution.add_post(created_post)
 
             return created_post
 

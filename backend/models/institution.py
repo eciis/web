@@ -414,11 +414,14 @@ class Institution(ndb.Model):
 
     def verify_connection(self, institution_to_verify, verification_type='OTHERWISE'):
         """This method checks if the link between self and institution_to_verify
-        is confirmed."""
-        #Means that self is institution_to_verify's parent
-        #parent_link = institution_to_verify.parent_institution == self.key and institution_to_verify.key in self.children_institutions
-        #Means that institution_to_verify is self's parent
-        #child_link = self.parent_institution == institution_to_verify.key and self.key in institution_to_verify.children_institutions
+        is confirmed.
+        
+        Arguments:
+        institution_to_verify -- Institution to verify connection
+        verification_type -- Verification type to be performed. 
+            If the type is PARENT, it checks if the institution being checked is parent, 
+            if CHILDREN checks if it is a child, otherwise it checks both cases.
+        """
         
         switch = {
             'PARENT': lambda child, parent: verify_inst_connection(child, parent),

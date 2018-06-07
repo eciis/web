@@ -40,7 +40,7 @@ class InviteUserHandler(BaseHandler):
 
         invite_class_name = invite.__class__.__name__
         Utils._assert(invite_class_name != 'InviteUser',
-                      "The invite's type is not the expected one",
+                      "The invite's type is %s, but InviteUser is the expected one" %invite_class_name,
                       NotAuthorizedException)
 
         Utils._assert(invite.status != 'sent',
@@ -64,7 +64,7 @@ class InviteUserHandler(BaseHandler):
 
         invite_class_name = invite.__class__.__name__
         Utils._assert(invite_class_name != 'InviteUser',
-                      "The invite's type is not the expected one",
+                      "The invite's type is %s, but InviteUser is the expected one" % invite_class_name,
                       NotAuthorizedException)
 
         Utils._assert(invite.status != 'sent', 

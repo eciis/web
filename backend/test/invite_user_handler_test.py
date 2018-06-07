@@ -308,7 +308,8 @@ class InviteUserHandlerTest(TestBaseHandler):
         message_exception = self.get_message_exception(
             str(raises_context.exception))
 
-        expected_message = "Error! The invite's type is not the expected one"
+        invite_class_name = self.invite.__class__.__name__
+        expected_message = "Error! The invite's type is %s, but InviteUser is the expected one" % invite_class_name
 
         self.assertEqual(
             message_exception,
@@ -338,7 +339,8 @@ class InviteUserHandlerTest(TestBaseHandler):
         message_exception = self.get_message_exception(
             str(raises_context.exception))
 
-        expected_message = "Error! The invite's type is not the expected one"
+        invite_class_name = self.invite.__class__.__name__
+        expected_message = "Error! The invite's type is %s, but InviteUser is the expected one" %invite_class_name
 
         self.assertEqual(
             message_exception,

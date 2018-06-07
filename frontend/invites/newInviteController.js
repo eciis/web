@@ -53,7 +53,7 @@
         newInviteCtrl.addInstitution =  function addInstitution(event) {
             var patch = newInviteCtrl.saveInstProfile();
 
-            var promise = InviteService.acceptInvite(patch, newInviteCtrl.inviteKey);
+            var promise = InviteService.acceptUserInvite(patch, newInviteCtrl.inviteKey);
                 promise.then(function success(userSaved) {
                     newInviteCtrl.user.removeInvite(newInviteCtrl.inviteKey);
                     newInviteCtrl.user.institutions = userSaved.institutions;
@@ -124,7 +124,8 @@
         };
 
         newInviteCtrl.deleteInvite = function deleteInvite() {
-            var promise = InviteService.deleteInvite(newInviteCtrl.inviteKey);
+            const inviteFunction = getInviteFunction();
+            var promise = inviteFunction(newInviteCtrl.inviteKey);
             promise.then(function success() {
                 newInviteCtrl.user.removeInvite(newInviteCtrl.inviteKey);
                 AuthService.save();
@@ -171,6 +172,11 @@
                 MessageService.showToast(response.data.msg);
                 newInviteCtrl.loading = true;
             });
+        }
+
+        function getInviteFunction() {
+            const inviteUser = newInviteCtrl.invite.type_of_invite === "USER";
+            return inviteUser ? InviteService.deleteUserInvite : InviteService.deleteInstitutionInvite; 
         }
 
         function isValidProfile() {

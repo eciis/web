@@ -15,7 +15,6 @@
             }, function error(response) {
                 deferred.reject(response);
             });
-
             return deferred.promise;
         };
 
@@ -62,9 +61,9 @@
             return deferred.promise;
         };
 
-        service.deleteInvite = function deleteInvite(inviteKey) {
+        service.deleteUserInvite = function deleteUserInvite(inviteKey) {
             var deferred = $q.defer();
-            var url = `${INVITES_URI}/${inviteKey}`;
+            var url = `${INVITES_URI}/user/${inviteKey}`;
             $http.delete(url).then(function sucess(response) {
                 deferred.resolve(response);
             }, function error(response) {
@@ -72,6 +71,18 @@
             });
             return deferred.promise;
         };
+
+        service.deleteInstitutionInvite = function deleteInstitutionInvite(inviteKey) {
+            var deferred = $q.defer();
+            var url = `${INVITES_URI}/institution/${inviteKey}`;
+            $http.delete(url).then(function sucess(response) {
+                deferred.resolve(response);
+            }, function error(response) {
+                deferred.reject(response);
+            });
+            return deferred.promise;
+        };
+        
 
         service.getSentInstitutionInvitations = function getSentInstitutionInvitations() {
             var deferred = $q.defer();
@@ -83,9 +94,9 @@
             return deferred.promise;
         };
 
-        service.acceptInvite = function acceptInvite(patch, invite_key) {
+        service.acceptUserInvite = function acceptUserInvite(patch, invite_key) {
             var deffered = $q.defer();
-            var url = `${INVITES_URI}/${invite_key}`;
+            var url = `${INVITES_URI}/user/${invite_key}`;
             $http.patch(url, patch).then(function success(info) {
                 deffered.resolve(info.data);
             }, function error(data) {

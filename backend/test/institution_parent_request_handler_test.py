@@ -148,31 +148,45 @@ class InstitutionParentRequestHandlerTest(TestBaseHandler):
         request.put()
 
         self.assertTrue(has_permissions(
-            admin, 
-            institution.key.urlsafe(), 
-            permissions.DEFAULT_ADMIN_PERMISSIONS
-        ))
+                admin, 
+                institution.key.urlsafe(), 
+                permissions.DEFAULT_ADMIN_PERMISSIONS
+            ),
+            "Admin must have administrator permissions for this institution"
+        )
 
         self.assertFalse(has_permissions(
-            admin, 
-            other_institution.key.urlsafe(), 
-            permissions.DEFAULT_ADMIN_PERMISSIONS
-        ))
+                admin, 
+                other_institution.key.urlsafe(), 
+                permissions.DEFAULT_ADMIN_PERMISSIONS
+            ),
+            "Admin should not have administrator permissions for this institution"
+        )
 
         self.assertFalse(has_permissions(
-            other_admin, 
-            institution.key.urlsafe(), 
-            permissions.DEFAULT_ADMIN_PERMISSIONS
-        ))
+                other_admin, 
+                institution.key.urlsafe(), 
+                permissions.DEFAULT_ADMIN_PERMISSIONS
+            ),
+            "Other_admin should not have administrator permissions for this institution"
+        )
 
         self.assertTrue(has_permissions(
-            other_admin, 
-            other_institution.key.urlsafe(), 
-            permissions.DEFAULT_ADMIN_PERMISSIONS
-        ))
+                other_admin, 
+                other_institution.key.urlsafe(), 
+                permissions.DEFAULT_ADMIN_PERMISSIONS
+            ),
+            "Other_admin must have administrator permissions for this institution"
+        )
 
-        self.assertFalse(other_institution.verify_connection(institution, 'PARENT'))
-        self.assertFalse(other_institution.verify_connection(institution, 'CHILDREN'))
+        self.assertFalse(
+            other_institution.verify_connection(institution, 'PARENT'),
+            "other_institution should not have confirmed parent link with institution"
+        )
+        self.assertFalse(
+            other_institution.verify_connection(institution, 'CHILDREN'),
+            "other_institution should not have confirmed children link with institution"
+        )
 
         verify_token._mock_return_value = {'email': admin.email[0]}
         enqueue_task.side_effect = self.enqueue_task
@@ -187,31 +201,45 @@ class InstitutionParentRequestHandlerTest(TestBaseHandler):
         other_institution = other_institution.key.get()
 
         self.assertTrue(has_permissions(
-            admin, 
-            institution.key.urlsafe(), 
-            permissions.DEFAULT_ADMIN_PERMISSIONS
-        ))
+                admin, 
+                institution.key.urlsafe(), 
+                permissions.DEFAULT_ADMIN_PERMISSIONS
+            ),
+            "Admin must have administrator permissions for this institution"
+        )
 
         self.assertTrue(has_permissions(
-            admin, 
-            other_institution.key.urlsafe(), 
-            permissions.DEFAULT_ADMIN_PERMISSIONS
-        ))
+                admin, 
+                other_institution.key.urlsafe(), 
+                permissions.DEFAULT_ADMIN_PERMISSIONS
+            ),
+            "Admin must have administrator permissions for this institution"
+        )
 
         self.assertFalse(has_permissions(
-            other_admin, 
-            institution.key.urlsafe(), 
-            permissions.DEFAULT_ADMIN_PERMISSIONS
-        ))
+                other_admin, 
+                institution.key.urlsafe(), 
+                permissions.DEFAULT_ADMIN_PERMISSIONS
+            ),
+            "Other_admin should not have administrator permissions for this institution"
+        )
 
         self.assertTrue(has_permissions(
-            other_admin, 
-            other_institution.key.urlsafe(), 
-            permissions.DEFAULT_ADMIN_PERMISSIONS
-        ))
+                other_admin, 
+                other_institution.key.urlsafe(), 
+                permissions.DEFAULT_ADMIN_PERMISSIONS
+            ),
+            "Other_admin must have administrator permissions for this institution"
+        )
 
-        self.assertTrue(other_institution.verify_connection(institution, 'PARENT'))
-        self.assertFalse(other_institution.verify_connection(institution, 'CHILDREN'))
+        self.assertTrue(
+            other_institution.verify_connection(institution, 'PARENT'),
+            "other_institution should have confirmed parent link with institution"
+        )
+        self.assertFalse(
+            other_institution.verify_connection(institution, 'CHILDREN'),
+            "other_institution should not have confirmed children link with institution"    
+        )
 
 
 

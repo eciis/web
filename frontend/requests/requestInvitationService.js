@@ -99,14 +99,13 @@
             return promise;
         };
 
-        service.analyseReqDialog = function analyseReqDialog(event, requestedInstitution, request) {
+        service.analyseReqDialog = function analyseReqDialog(event, request) {
             var promise = $mdDialog.show({
                 controller: 'AnalyseHierarchyRequestController',
                 controllerAs: 'analyseHierReqCtrl',
                 templateUrl: 'app/requests/analyse_hierarchy_request_dialog.html',
                 targetEvent: event,
                 locals: {
-                    requestedInstitution: requestedInstitution,
                     request: request
                 }
             });

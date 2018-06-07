@@ -131,13 +131,16 @@ class Invite(PolyModel):
         institution_admin = institution_admin.make(['name'])
         institution = self.institution_key.get()
         institution = institution.make(Invite.INST_PROPS_TO_MAKE)
+        requested_institution = self.institution_requested_key.get()
+        requested_institution = requested_institution.make(Invite.INST_PROPS_TO_MAKE)
         return {
             'admin_name': self.admin_key.get().name,
             'sender_name': self.sender_name,
             'key': self.key.urlsafe(),
             'status': self.status,
             'institution_admin': institution_admin,
-            'institution': institution
+            'institution': institution,
+            'requested_institution': requested_institution
         }
 
     def change_status(self, status):

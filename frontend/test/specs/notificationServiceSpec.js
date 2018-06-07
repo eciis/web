@@ -81,7 +81,7 @@
         });
     });
 
-    describe('Test watchPostNotification', function(){
+    describe('Test watchNotifications', function(){
         beforeEach(function(){
             spyOn(service.firebaseArrayNotifications, '$loaded').and.callFake(fakeCallback);
         });

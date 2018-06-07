@@ -369,7 +369,7 @@ class Institution(ndb.Model):
             adm_is_child_adm = child.admin == admin_key
             get_next_permissions = get_all or not adm_is_child_adm
             #The child permissions should only be added if the link is confirmed.
-            link_confirmed = child.verify_connection(self)
+            link_confirmed = child.verify_connection(self, 'PARENT')
             if get_next_permissions and link_confirmed:
                 child.get_hierarchy_admin_permissions(get_all, admin_key, permissions)
         
@@ -412,7 +412,7 @@ class Institution(ndb.Model):
             sender_institution_key= sender_institution_key or current_institution_key
         )
 
-    def verify_connection(self, institution_to_verify, verification_type=None):
+    def verify_connection(self, institution_to_verify, verification_type='OTHERWISE'):
         """This method checks if the link between self and institution_to_verify
         is confirmed."""
         #Means that self is institution_to_verify's parent

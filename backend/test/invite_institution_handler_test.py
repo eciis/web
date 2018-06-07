@@ -25,10 +25,6 @@ class InviteInstitutionHandlerTest(TestBaseHandler):
         """Provide the base for the tests."""
         super(InviteInstitutionHandlerTest, cls).setUp()
 
-        methods = set(cls.webapp2.WSGIApplication.allowed_methods)
-        methods.add('PATCH')
-        cls.webapp2.WSGIApplication.allowed_methods = frozenset(methods)
-
         app = cls.webapp2.WSGIApplication(
             [(InviteInstitutionHandlerTest.INVITE_INSTITUTION_URI, InviteInstitutionHandler),
              ], debug=True)

@@ -185,7 +185,6 @@
         };
 
         service.$onLogout = function $onLogout(callback) {
-            console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>");
             onLogoutListeners.push(callback);
         };
 

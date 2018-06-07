@@ -59,7 +59,7 @@ handlers = [
     user_institutions_handler, user_profile_handler,
     user_request_collection_handler, user_timeline_handler, vote_handler,
     invite_hierarchy_collection_handler, invite_user_collection_handler,
-    invite_institution_handler, invite_handler
+    invite_institution_handler, invite_user_handler
 ]
 
 __all__ = [prop for handler in handlers for prop in handler.__all__]

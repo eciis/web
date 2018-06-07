@@ -9,6 +9,7 @@ from models import InviteUser
 from models import Invite
 from handlers.invite_user_handler import InviteUserHandler
 from mock import patch
+from models import InviteInstitution
 
 CURRENT_INSTITUTION = {'name': 'currentInstitution'}
 CURRENT_INST_STRING = json.dumps(CURRENT_INSTITUTION)
@@ -278,6 +279,66 @@ class InviteUserHandlerTest(TestBaseHandler):
             str(raises_context.exception))
 
         expected_message = "Error! This invitation has already been processed"
+
+        self.assertEqual(
+            message_exception,
+            expected_message,
+            "Expected exception message must be equal to %s" % expected_message
+        )
+    
+    @patch('util.login_service.verify_token', return_value={'email': 'otheruser@test.com'})
+    def test_delete_with_a_wrong_invite(self, verify_token):
+        """Test delete with a wrong invite."""
+        data = {
+            'invitee': 'otheruser@test.com',
+            'admin_key': self.user_admin.key.urlsafe(),
+            'institution_key': self.inst_test.key.urlsafe(),
+            'suggestion_institution_name': 'test',
+            'type_of_invite': 'INSTITUTION'
+        }
+        self.invite = InviteInstitution.create(data)
+        self.invite.put()
+
+        with self.assertRaises(Exception) as raises_context:
+            self.testapp.delete(
+                '/api/invites/user/%s'
+                % self.invite.key.urlsafe()
+            )
+
+        message_exception = self.get_message_exception(
+            str(raises_context.exception))
+
+        expected_message = "Error! The invite's type is not the expected one"
+
+        self.assertEqual(
+            message_exception,
+            expected_message,
+            "Expected exception message must be equal to %s" % expected_message
+        )
+    
+    @patch('util.login_service.verify_token', return_value={'email': 'otheruser@test.com'})
+    def test_patch_with_a_wrong_invite(self, verify_token):
+        """Test patch with a wrong invite."""
+        data = {
+            'invitee': 'otheruser@test.com',
+            'admin_key': self.user_admin.key.urlsafe(),
+            'institution_key': self.inst_test.key.urlsafe(),
+            'suggestion_institution_name': 'test',
+            'type_of_invite': 'INSTITUTION'
+        }
+        self.invite = InviteInstitution.create(data)
+        self.invite.put()
+
+        with self.assertRaises(Exception) as raises_context:
+            self.testapp.patch(
+                '/api/invites/user/%s'
+                % self.invite.key.urlsafe()
+            )
+
+        message_exception = self.get_message_exception(
+            str(raises_context.exception))
+
+        expected_message = "Error! The invite's type is not the expected one"
 
         self.assertEqual(
             message_exception,

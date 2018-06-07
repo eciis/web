@@ -38,6 +38,11 @@ class InviteUserHandler(BaseHandler):
         invite_key = ndb.Key(urlsafe=invite_urlsafe)
         invite = invite_key.get()
 
+        invite_class_name = invite.__class__.__name__
+        Utils._assert(invite_class_name != 'InviteUser',
+                      "The invite's type is not the expected one",
+                      NotAuthorizedException)
+
         Utils._assert(invite.status != 'sent',
                       "This invitation has already been processed",
                       NotAuthorizedException)
@@ -56,6 +61,11 @@ class InviteUserHandler(BaseHandler):
         """
         data = self.request.body
         invite = ndb.Key(urlsafe=invite_urlsafe).get()
+
+        invite_class_name = invite.__class__.__name__
+        Utils._assert(invite_class_name != 'InviteUser',
+                      "The invite's type is not the expected one",
+                      NotAuthorizedException)
 
         Utils._assert(invite.status != 'sent', 
             "This invitation has already been processed", 

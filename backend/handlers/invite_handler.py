@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Invite User Handler."""
+"""Invite Handler."""
 
 from google.appengine.ext import ndb
 import json

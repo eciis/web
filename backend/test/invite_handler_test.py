@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Invite User Handler Test."""
+"""Invite Handler Test."""
 
 import json
 import mocks
@@ -7,7 +7,7 @@ import mocks
 from test_base_handler import TestBaseHandler
 from models import InviteUser
 from models import Invite
-from handlers.invite_handler import InviteHandler
+from handlers import InviteHandler
 from mock import patch
 
 CURRENT_INSTITUTION = {'name': 'currentInstitution'}
@@ -15,7 +15,7 @@ CURRENT_INST_STRING = json.dumps(CURRENT_INSTITUTION)
 
 
 class InviteHandlerTest(TestBaseHandler):
-    """Invite User Handler Test."""
+    """Invite Handler Test."""
 
     INVITE_URI = "/api/invites/(.*)"
 
@@ -55,7 +55,7 @@ class InviteHandlerTest(TestBaseHandler):
 
     @patch('util.login_service.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_get(self, verify_token):
-        """Test method get of InviteUserHandler."""
+        """Test method get of InviteHandler."""
         response = self.testapp.get('/api/invites/' +
                                     self.invite.key.urlsafe())
         invite = json.loads(response._app_iter[0])

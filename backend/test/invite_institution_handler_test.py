@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Invite User Handler Test."""
+"""Invite Institution Handler Test."""
 
 import json
 import mocks
@@ -9,13 +9,14 @@ from models import InviteInstitution
 from models import Invite
 from handlers import InviteInstitutionHandler
 from mock import patch
+from models import InviteUser
 
 CURRENT_INSTITUTION = {'name': 'currentInstitution'}
 CURRENT_INST_STRING = json.dumps(CURRENT_INSTITUTION)
 
 
 class InviteInstitutionHandlerTest(TestBaseHandler):
-    """Invite User Handler Test."""
+    """Invite Institution Handler Test."""
 
     INVITE_INSTITUTION_URI = "/api/invites/institution/(.*)"
 
@@ -48,7 +49,6 @@ class InviteInstitutionHandlerTest(TestBaseHandler):
             'invitee': 'otheruser@test.com',
             'admin_key': cls.user_admin.key.urlsafe(),
             'institution_key': cls.inst_test.key.urlsafe(),
-            'type_of_invite': 'USER',
             'suggestion_institution_name': 'test'
         }
         cls.invite = InviteInstitution.create(cls.data)
@@ -57,7 +57,7 @@ class InviteInstitutionHandlerTest(TestBaseHandler):
     @patch.object(Invite, 'send_notification')
     @patch('util.login_service.verify_token', return_value={'email': 'otheruser@test.com'})
     def test_delete(self, verify_token, send_notification):
-        """Test method delete of InviteUserHandler."""
+        """Test method delete of InviteInstitutionHandler."""
         invite_institution = InviteInstitution.create(self.data)
         invite_institution.put()
 
@@ -109,6 +109,36 @@ class InviteInstitutionHandlerTest(TestBaseHandler):
             str(raises_context.exception))
 
         expected_message = "Error! This invitation has already been processed"
+        print message_exception
+        self.assertEqual(
+            message_exception,
+            expected_message,
+            "Expected exception message must be equal to %s" % expected_message
+        )
+
+    @patch('util.login_service.verify_token', return_value={'email': 'otheruser@test.com'})
+    def test_delete_with_a_wrong_invite(self, verify_token):
+        """Test delete with a wrong invite."""
+        data = {
+            'invitee': 'otheruser@test.com',
+            'admin_key': self.user_admin.key.urlsafe(),
+            'institution_key': self.inst_test.key.urlsafe(),
+            'suggestion_institution_name': 'test',
+            'type_of_invite': 'INSTITUTION'
+        }
+        self.invite = InviteUser.create(data)
+        self.invite.put()
+
+        with self.assertRaises(Exception) as raises_context:
+            self.testapp.delete(
+                '/api/invites/institution/%s'
+                % self.invite.key.urlsafe()
+            )
+
+        message_exception = self.get_message_exception(
+            str(raises_context.exception))
+
+        expected_message = "Error! The invite's type is not the expected one"
 
         self.assertEqual(
             message_exception,

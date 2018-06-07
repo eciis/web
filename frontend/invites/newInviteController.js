@@ -159,19 +159,21 @@
         function loadInvite(){
             observer = ObserverRecorderService.register(newInviteCtrl.user);
             newInviteCtrl.checkUserName();
-            InviteService.getInvite(newInviteCtrl.inviteKey).then(function success(response) {
-                newInviteCtrl.invite = new Invite(response.data);
-                if(newInviteCtrl.invite.status === 'sent') {
-                    institutionKey = (newInviteCtrl.invite.type_of_invite === "USER") ? newInviteCtrl.invite.institution_key : newInviteCtrl.invite.stub_institution.key;
-                    newInviteCtrl.institution = newInviteCtrl.invite.institution;
-                } else {
-                    newInviteCtrl.isAlreadyProcessed = true;
+            InviteService.getInvite(newInviteCtrl.inviteKey).then(
+                function success(data) {
+                    newInviteCtrl.invite = new Invite(data);
+                    if(newInviteCtrl.invite.status === 'sent') {
+                        institutionKey = (newInviteCtrl.invite.type_of_invite === "USER") ? newInviteCtrl.invite.institution_key : newInviteCtrl.invite.stub_institution.key;
+                        newInviteCtrl.institution = newInviteCtrl.invite.institution;
+                    } else {
+                        newInviteCtrl.isAlreadyProcessed = true;
+                    }
+                    newInviteCtrl.loading = false;
+                }, function error(response) {
+                    MessageService.showToast(response.data.msg);
+                    newInviteCtrl.loading = true;
                 }
-                newInviteCtrl.loading = false;
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
-                newInviteCtrl.loading = true;
-            });
+            );
         }
 
         function getInviteFunction() {

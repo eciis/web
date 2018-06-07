@@ -7,7 +7,7 @@
             InviteService, $stateParams, $state, AuthService) {
         var controller = this;
 
-        var invite_id = $stateParams.id;
+        var inviteId = $stateParams.id;
 
         controller.invite = {};
 
@@ -24,7 +24,7 @@
 
         controller.signin = function signin() {
             if (AuthService.isLoggedIn()) {
-                $state.go("new_invite", {key: invite_id});
+                $state.go("new_invite", {key: inviteId});
             } else {
                 $state.go('signin');
             }
@@ -39,12 +39,14 @@
         };
         
         (function main() {
-            InviteService.getInvite(invite_id).then(function(response) {
-                controller.invite = response.data;
-                if (controller.invite.status === "accepted") {
-                    $state.go("signin");
+            InviteService.getInvite(inviteId).then(
+                function(data) {
+                    controller.invite = new Invite(data);
+                    if (controller.invite.status === "accepted") {
+                        $state.go("signin");
+                    }
                 }
-            });
+            );
         })();
     });
 })();

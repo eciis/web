@@ -9,13 +9,7 @@
         var INVITES_URI = "/api/invites";
     
         service.getInvite = function(inviteKey) {
-            var deferred = $q.defer();
-            $http.get(INVITES_URI + '/' + inviteKey).then(function success(response) {
-                deferred.resolve(response);
-            }, function error(response) {
-                deferred.reject(response);
-            });
-            return deferred.promise;
+            return HttpService.get(INVITES_URI + '/' + inviteKey);
         };
 
         service.sendInvite = function sendInvite(invite) {

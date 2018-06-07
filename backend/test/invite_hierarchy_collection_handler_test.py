@@ -8,6 +8,7 @@ from test_base_handler import TestBaseHandler
 from google.appengine.ext import ndb
 from handlers import InviteHierarchyCollectionHandler
 from mock import patch
+from models import Invite
 
 
 
@@ -64,11 +65,6 @@ class InviteHierachyCollectionHandlerTest(TestBaseHandler):
 
         invite = ndb.Key(urlsafe=response.json['invite']['key']).get()
 
-
-        REQUIRED_PROPERTIES = ['name', 'address', 'description',
-                               'key', 'photo_url', 'institutional_email',
-                               'phone_number', 'email', 'trusted']
-
         expected_make = {
             'invitee': other_user.email[0],
             'type_of_invite': "INSTITUTION_CHILDREN",
@@ -77,7 +73,7 @@ class InviteHierachyCollectionHandlerTest(TestBaseHandler):
             'key': invite.key.urlsafe(),
             'status': 'sent',
             'institution_admin': institution.make(['name']),
-            'institution': institution.make(REQUIRED_PROPERTIES),
+            'institution': institution.make(Invite.INST_PROPS_TO_MAKE),
             'suggestion_institution_name': 'new_inst',
             'stub_institution': invite.stub_institution_key.get().make(['name', 'key', 'state'])
         }
@@ -110,11 +106,6 @@ class InviteHierachyCollectionHandlerTest(TestBaseHandler):
 
         invite = ndb.Key(urlsafe=response.json['invite']['key']).get()
 
-
-        REQUIRED_PROPERTIES = ['name', 'address', 'description',
-                               'key', 'photo_url', 'institutional_email',
-                               'phone_number', 'email', 'trusted']
-
         expected_make = {
             'invitee': other_user.email[0],
             'type_of_invite': "INSTITUTION_PARENT",
@@ -123,7 +114,7 @@ class InviteHierachyCollectionHandlerTest(TestBaseHandler):
             'key': invite.key.urlsafe(),
             'status': 'sent',
             'institution_admin': institution.make(['name']),
-            'institution': institution.make(REQUIRED_PROPERTIES),
+            'institution': institution.make(Invite.INST_PROPS_TO_MAKE),
             'suggestion_institution_name': 'new_inst',
             'stub_institution': invite.stub_institution_key.get().make(['name', 'key', 'state'])
         }

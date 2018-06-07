@@ -4,14 +4,16 @@
     var app = angular.module('app');
 
     app.controller("InviteInstHierarchieController", function InviteInstHierarchieController(
-        InviteService,$mdToast, $mdDialog, $state, AuthService, InstitutionService, MessageService, RequestInvitationService, $q) {
+        InviteService,$mdToast, $mdDialog, $state, AuthService, InstitutionService,
+        MessageService, RequestInvitationService, $q) {
 
         var inviteInstHierCtrl = this;
         var institutionKey = $state.params.institutionKey;
         var invite;
-        var INSTITUTION_PARENT = "INSTITUTION_PARENT";
         var ACTIVE = "active";
         var INSTITUTION_STATE = "active,pending";
+        var INSTITUTION_PARENT = "INSTITUTION_PARENT";
+        var INSTITUTION_CHILDREN = "INSTITUTION_CHILDREN";
         var REQUEST_PARENT = "REQUEST_INSTITUTION_PARENT";
         var REQUEST_CHILDREN = "REQUEST_INSTITUTION_CHILDREN";
 
@@ -86,12 +88,15 @@
             var deferred = $q.defer();
             var promise = InviteService.sendInviteHierarchy({invite_body: invite});
             promise.then(function success() {
-                    MessageService.showToast('Convite enviado com sucesso!');
                     addInvite(invite);
-                    invite.type_of_invite === INSTITUTION_PARENT ?
-                        inviteInstHierCtrl.showParentHierarchie = true : inviteInstHierCtrl.showChildrenHierarchie = true;
+                    if(invite.type_of_invite === INSTITUTION_PARENT) {
+                        inviteInstHierCtrl.showParentHierarchie = true;
+                    } else {
+                        inviteInstHierCtrl.showChildrenHierarchie = true;
+                    }
                     deferred.resolve();
                     inviteInstHierCtrl.isLoadingSubmission = false;
+                    MessageService.showToast('Convite enviado com sucesso!');
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
                     deferred.reject();
@@ -100,8 +105,8 @@
             return deferred.promise;
         };
 
-        inviteInstHierCtrl.sendRequestToExistingInst = function sendRequestToExistingInst(invite, institution_requested_key) {
-            invite.institution_requested_key = institution_requested_key;
+        inviteInstHierCtrl.sendRequestToExistingInst = function sendRequestToExistingInst(invite, institutionRequestedKey) {
+            invite.institution_requested_key = institutionRequestedKey;
             invite.sender_key = inviteInstHierCtrl.user.key;
             var deferred = $q.defer();
             
@@ -109,10 +114,10 @@
                 MessageService.showToast('Convite enviado com sucesso!');
                 addInviteToRequests(invite);
                 if (invite.type_of_invite === REQUEST_PARENT) {
-                    addParentInstitution(institution_requested_key);
+                    addParentInstitution(institutionRequestedKey);
                     inviteInstHierCtrl.showParentHierarchie = true;
                 } else {
-                    addChildrenInstitution(institution_requested_key);
+                    addChildrenInstitution(institutionRequestedKey);
                     inviteInstHierCtrl.showChildrenHierarchie = true;
                 }
                 deferred.resolve();
@@ -135,11 +140,11 @@
 
         /*
         * Add a stub link between institution that's who invited (child) and the institution that's been invitee (parent).
-        * @param institution_requested_key - key of institution that receiving the request
+        * @param institutionRequestedKey - key of institution that receiving the request
         * @return - promise
         */
-        function addParentInstitution(institution_requested_key) {
-            var promise = InstitutionService.getInstitution(institution_requested_key);
+        function addParentInstitution(institutionRequestedKey) {
+            var promise = InstitutionService.getInstitution(institutionRequestedKey);
             promise.then(function(response) {
                 inviteInstHierCtrl.institution.addParentInst(response.data);
                 inviteInstHierCtrl.hasParent = true;
@@ -149,11 +154,11 @@
 
         /*
         * Add a stub link between institution that's who invited (parent) and the institution that's been invitee (child).
-        * @param institution_requested_key - key of institution that receiving the request
+        * @param institutionRequestedKey - key of institution that receiving the request
         * @return - promise
         */
-        function addChildrenInstitution(institution_requested_key) {
-            var promise = InstitutionService.getInstitution(institution_requested_key);
+        function addChildrenInstitution(institutionRequestedKey) {
+            var promise = InstitutionService.getInstitution(institutionRequestedKey);
             promise.then(function(response) {
                 inviteInstHierCtrl.institution.addChildInst(response.data);
             });
@@ -269,37 +274,6 @@
             });
         }
 
-        inviteInstHierCtrl.acceptRequest = function acceptRequest(request, type_of_invite, event) {
-            var promise = MessageService.showConfirmationDialog(event, 'Aceitar Solicitação', isOvewritingParent(type_of_invite));
-            promise.then(function() {
-                var accept = type_of_invite === REQUEST_PARENT ?
-                    RequestInvitationService.acceptInstParentRequest(request.key) : RequestInvitationService.acceptInstChildrenRequest(request.key);
-                accept.then(function success() {
-                    addAcceptedInstitution(type_of_invite, request.institution_key);
-                    request.status = 'accepted';
-                    MessageService.showToast('Solicitação aceita com sucesso');
-                });
-            }, function() {
-                MessageService.showToast('Cancelado');
-            });
-            return promise;
-        };
-
-        inviteInstHierCtrl.rejectRequest = function rejectRequest(request, type_of_invite, event) {
-            var promise = MessageService.showConfirmationDialog(event, 'Rejeitar Solicitação', 'Confirmar rejeição da solicitação?');
-            promise.then(function() {
-                var reject = type_of_invite === REQUEST_PARENT ?
-                    RequestInvitationService.rejectInstParentRequest(request.key) : RequestInvitationService.rejectInstChildrenRequest(request.key);
-                reject.then(function success() {
-                    request.status = 'rejected';
-                    MessageService.showToast('Solicitação rejeitada com sucesso');
-                });
-            }, function() {
-                MessageService.showToast('Cancelado');
-            });
-            return promise;
-        };
-
         inviteInstHierCtrl.isReqSentByCurrentInst = function isReqSentByCurrentInst(request) {
             return institutionKey === request.institution_key;
         };
@@ -309,24 +283,14 @@
         }
 
         inviteInstHierCtrl.goToRequestedInst = function goToRequestedInst(request) {
-            var inst_key = inviteInstHierCtrl.isReqSentByCurrentInst(request) ? request.institution_requested_key : request.institution_key;
-            inviteInstHierCtrl.goToInst(inst_key);
+            var instKey = inviteInstHierCtrl.isReqSentByCurrentInst(request) ? request.institution_requested_key : request.institution_key;
+            inviteInstHierCtrl.goToInst(instKey);
         };
 
         inviteInstHierCtrl.getReqInstName = function getReqInstName(request) {
             var inst_name = inviteInstHierCtrl.isReqSentByCurrentInst(request) ? request.requested_inst_name : request.institution_admin.name;
             return inst_name;
         };
-
-        function isOvewritingParent(type_of_invite) {
-            var message;
-            if (inviteInstHierCtrl.institution.parent_institution && type_of_invite === REQUEST_CHILDREN) {
-                message = 'Atenção: sua instituição já possui uma superior, deseja substituir?';
-            } else {
-                message = 'Confirmar aceitação de solicitação?';
-            }
-            return message;
-        }
 
         function addInvite(invite) {
             inviteInstHierCtrl.invite = {};
@@ -391,6 +355,39 @@
         inviteInstHierCtrl.linkChildrenStatus = function linkChildrenStatus(institution) {
             return institution.parent_institution && institution.parent_institution === inviteInstHierCtrl.institution.key ? "confirmado" : "não confirmado";
         };
+
+        inviteInstHierCtrl.analyseRequest = function analyseRequest(event, request) {
+            RequestInvitationService
+                .analyseReqDialog(event, inviteInstHierCtrl.institution, request)
+                .then(function accepted() {
+                    addInstitutionToHierarchy(request);
+                });
+            };
+            
+        function addInstitutionToHierarchy(request) {
+            request.institution = new Institution(request.institution);
+            inviteInstHierCtrl.institution = new Institution(inviteInstHierCtrl.institution);
+            var parent, child;
+
+            switch(request.type_of_invite) {
+                case(REQUEST_PARENT):
+                    child = request.institution;
+                    parent = inviteInstHierCtrl.institution;
+                    inviteInstHierCtrl.showChildrenHierarchie = true;                    
+                    break;
+                case(REQUEST_CHILDREN):
+                    child = inviteInstHierCtrl.institution;
+                    parent = request.institution;
+                    inviteInstHierCtrl.showParentHierarchie = true;
+                    inviteInstHierCtrl.hasParent = true;
+            }
+            linkInstitutions(parent, child);
+        }
+
+        function linkInstitutions(parent, child) {
+            parent.addChildInst(child);
+            child.addParentInst(parent);
+        }
 
         inviteInstHierCtrl.removeChild = function removeChild(institution, ev) {
             $mdDialog.show({

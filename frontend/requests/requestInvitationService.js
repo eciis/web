@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.service("RequestInvitationService", function RequestInvitationService(MessageService, HttpService) {
+    app.service("RequestInvitationService", function RequestInvitationService(MessageService, HttpService, $mdDialog) {
         var service = this;
         var INST_REQUEST_URI = "/api/institutions/";
         var REQUEST_URI = "/api/requests/";
@@ -71,11 +71,11 @@
             return HttpService.get(REQUEST_URI + request_key + "/institution_parent");
         };
 
-        service.acceptInstParentRequest = function acceptRequest(request_key) {
+        service.acceptInstParentRequest = function acceptInstParentRequest(request_key) {
             return HttpService.put(REQUEST_URI + request_key + "/institution_parent");
         };
 
-        service.rejectInstParentRequest = function rejectRequest(request_key) {
+        service.rejectInstParentRequest = function rejectInstParentRequest(request_key) {
             return HttpService.delete(REQUEST_URI + request_key + "/institution_parent");
         };
 
@@ -83,11 +83,11 @@
             return HttpService.get(REQUEST_URI + request_key + "/institution_children");
         };
 
-        service.acceptInstChildrenRequest = function acceptRequest(request_key) {
+        service.acceptInstChildrenRequest = function acceptInstChildrenRequest(request_key) {
             return HttpService.put(REQUEST_URI + request_key + "/institution_children");
         };
 
-        service.rejectInstChildrenRequest = function rejectRequest(request_key) {
+        service.rejectInstChildrenRequest = function rejectInstChildrenRequest(request_key) {
             return HttpService.delete(REQUEST_URI + request_key + "/institution_children");
         };
 
@@ -96,6 +96,20 @@
             var textContent = "Ao rejeitar o pedido, o pedido será removido e não poderá ser aceito posteriormente." +
                         " Deseja rejeitar?";
             var promise = MessageService.showConfirmationDialog(event, title, textContent);
+            return promise;
+        };
+
+        service.analyseReqDialog = function analyseReqDialog(event, requestedInstitution, request) {
+            var promise = $mdDialog.show({
+                controller: 'AnalyseHierarchyRequestController',
+                controllerAs: 'analyseHierReqCtrl',
+                templateUrl: 'app/requests/analyse_hierarchy_request_dialog.html',
+                targetEvent: event,
+                locals: {
+                    requestedInstitution: requestedInstitution,
+                    request: request
+                }
+            });
             return promise;
         };
     });

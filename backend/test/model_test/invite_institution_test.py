@@ -53,10 +53,6 @@ class InviteInstitutionTest(TestBase):
 
     def test_make(self):
         """Test make method."""
-        REQUIRED_PROPERTIES = ['name', 'address', 'description',
-                               'key', 'photo_url', 'email', 'trusted',
-                               'phone_number', 'institutional_email']
-
         invite_institution = InviteInstitution.create(self.data)
         invite_institution.put()
         stub_institution = invite_institution.stub_institution_key.get()
@@ -69,7 +65,7 @@ class InviteInstitutionTest(TestBase):
             'key': invite_institution.key.urlsafe(),
             'status': self.invite.status,
             'institution_admin': self.institution.make(["name"]),
-            'institution': self.institution.make(REQUIRED_PROPERTIES),
+            'institution': self.institution.make(InviteInstitution.INST_PROPS_TO_MAKE),
             'invitee': self.user.email[0],
             'suggestion_institution_name': 'new Institution',
             'stub_institution': stub_institution.make([

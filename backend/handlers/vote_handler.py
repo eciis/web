@@ -35,3 +35,5 @@ class VoteHandler(BaseHandler):
                      'key': user.key.urlsafe()}
 
         survey.vote(user_dict, options_selected)
+        self.response.write(json.dumps(survey.make(self.request.host)))
+

@@ -114,10 +114,6 @@ class RequestUserTest(TestBase):
         request = RequestUser.create(data)
         request.put()
 
-        REQUIRED_PROPERTIES = ['name', 'address', 'description',
-                               'key', 'photo_url', 'institutional_email',
-                               'phone_number', 'email', 'trusted']
-
         make = {
             'status': 'sent',
             'institution_admin': {
@@ -126,7 +122,7 @@ class RequestUserTest(TestBase):
             'sender': other_user.email,
             'admin_name': admin_user.name,
             'key': request.key.urlsafe(),
-            'institution': inst_test.make(REQUIRED_PROPERTIES),
+            'institution': inst_test.make(RequestUser.INST_PROPS_TO_MAKE),
             'type_of_invite': 'REQUEST_USER',
             'institution_key': inst_test.key.urlsafe(),
             'office': 'teacher',

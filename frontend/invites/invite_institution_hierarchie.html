@@ -186,23 +186,19 @@
         </md-toolbar>
         <md-card-content ng-if="inviteInstHierCtrl.showRequestInvites">
           <md-list class="md-dense" flex>
-              <md-list-item class="md-3-line" ng-repeat="request in inviteInstHierCtrl.requested_invites" ng-if="inviteInstHierCtrl.isReqSentToCurrentInst(request)" ng-click="inviteInstHierCtrl.goToRequestedInst(request)">
+              <md-list-item class="md-3-line" ng-repeat="request in inviteInstHierCtrl.requested_invites" 
+                ng-if="inviteInstHierCtrl.isReqSentToCurrentInst(request)" ng-click="inviteInstHierCtrl.analyseRequest(event, request)">
                 <md-icon class="md-avatar-icon" md-colors="{background: 'light-green-500', color: 'grey-50'}">account_balance</md-icon>  
-                <div class="md-list-item-text" layout="column">
+                <div class="md-list-item-text" layout="row">
                   <div layout="column">
                     <a href class="md-title hyperlink" style="margin-top: 7px" ng-click="inviteInstHierCtrl.goToRequestedInst(request)">
-                    {{ inviteInstHierCtrl.getReqInstName(request) }}
+                      {{ inviteInstHierCtrl.getReqInstName(request) }}
                     </a>
                     <h3 style="color: red">{{inviteInstHierCtrl.showMessage(request)}}</h3>
                   </div>
                 </div>
-                <div ng-hide="inviteInstHierCtrl.isReqSentByCurrentInst(request)">
-                    <md-button class="md-icon-button" ng-click="inviteInstHierCtrl.rejectRequest(request, request.type_of_invite, $event)" title="Rejeitar">
-                      <md-icon style="color: red">clear</md-icon>
-                    </md-button>
-                    <md-button class="md-icon-button" ng-click="inviteInstHierCtrl.acceptRequest(request, request.type_of_invite, $event)" title="Aceitar">
-                      <md-icon style="color: green">check</md-icon>
-                    </md-button>
+                <div flex layout-align="end center" hide show-gt-xs>
+                  <p class="hollow-button" md-colors="{color: 'teal-500'}">ANALISAR</p>
                 </div>
               </md-list-item>
             </md-list>

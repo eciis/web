@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller('ProcessInviteUserAdmController', function ProcessInviteUserAdmController(key, typeOfDialog, InviteService, MessageService, AuthService, $mdDialog) {
+    app.controller('ProcessInviteUserAdmController', function ProcessInviteUserAdmController(request, typeOfDialog, InviteService, MessageService, AuthService, $mdDialog) {
         var processCtrl = this;
 
         processCtrl.VIEW_INVITE_SENDER = 'VIEW_ACCEPTED_INVITATION_SENDER';
@@ -46,30 +46,28 @@
          * who sent the invitation that is accessing, shows a message indicating that the invitation 
          * was already processed.
          */
-        function getInvite() {
-            InviteService.getInvite(key).then(function success(response) {
-                let invite = new Invite(response.data);
+        function loadInvite() {
+            let invite = request;
 
-                if (invite.status === 'sent' || typeOfDialog === processCtrl.VIEW_INVITE_SENDER) {
-                    processCtrl.invite = invite;
+            if (invite.status === 'sent' || typeOfDialog === processCtrl.VIEW_INVITE_SENDER) {
+                processCtrl.invite = invite;
 
-                    /**
-                     * Will enter this condition when the dialog type is 'accepted' 
-                     * (when the user is sending the invitation).
-                     */
-                    if(typeOfDialog === processCtrl.VIEW_INVITE_SENDER) {
-                        _.remove(processCtrl.current_user.institutions_admin, function(url) {
-                            return getKey(url) === invite.institution_key;
-                        });
-                        removeSuperUserPermission();
-                        AuthService.save();
-                    }
-
-                } else {
-                    processCtrl.close();
-                    MessageService.showToast('Convite já processado!');
+                /**
+                 * Will enter this condition when the dialog type is 'accepted' 
+                 * (when the user is sending the invitation).
+                 */
+                if(typeOfDialog === processCtrl.VIEW_INVITE_SENDER) {
+                    _.remove(processCtrl.current_user.institutions_admin, function(url) {
+                        return getKey(url) === invite.institution_key;
+                    });
+                    removeSuperUserPermission();
+                    AuthService.save();
                 }
-            });
+
+            } else {
+                processCtrl.close();
+                MessageService.showToast('Convite já processado!');
+            }
         }
 
         /**
@@ -117,7 +115,7 @@
         }
 
         (function main() {
-            getInvite();
+            loadInvite();
         })();
     });
 })();

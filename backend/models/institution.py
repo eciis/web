@@ -11,6 +11,10 @@ from service_messages import create_message
 
 __all__ = ['Institution', 'get_health_ministry', 'get_deciis']
 
+def verify_inst_connection(child_inst, parent_inst):
+    return child_inst.parent_institution == parent_inst.key and child_inst.key in parent_inst.children_institutions
+
+
 class Institution(ndb.Model):
     """Model of Institution."""
 
@@ -255,7 +259,7 @@ class Institution(ndb.Model):
         """Remove institution's hierarchy."""
         for child in self.children_institutions:
             child = child.get()
-            if self.verify_connection(child):
+            if self.verify_connection(child, 'CHILDREN'):
                 child.remove_institution(remove_hierarchy, user)
                 child.handle_hierarchy_removal(remove_hierarchy, user)
 
@@ -408,14 +412,21 @@ class Institution(ndb.Model):
             sender_institution_key= sender_institution_key or current_institution_key
         )
 
-    def verify_connection(self, institution_to_verify):
+    def verify_connection(self, institution_to_verify, verification_type=None):
         """This method checks if the link between self and institution_to_verify
         is confirmed."""
         #Means that self is institution_to_verify's parent
-        parent_link = institution_to_verify.parent_institution == self.key and institution_to_verify.key in self.children_institutions
+        #parent_link = institution_to_verify.parent_institution == self.key and institution_to_verify.key in self.children_institutions
         #Means that institution_to_verify is self's parent
-        child_link = self.parent_institution == institution_to_verify.key and self.key in institution_to_verify.children_institutions
-        return child_link or parent_link
+        #child_link = self.parent_institution == institution_to_verify.key and self.key in institution_to_verify.children_institutions
+        
+        switch = {
+            'PARENT': lambda child, parent: verify_inst_connection(child, parent),
+            'CHILDREN': lambda child, parent: verify_inst_connection(parent, child),
+            'OTHERWISE': lambda child, parent: verify_inst_connection(parent, child) or verify_inst_connection(child, parent) 
+        } 
+
+        return switch.get(verification_type, switch['OTHERWISE'])(self, institution_to_verify)
 
 
     @staticmethod

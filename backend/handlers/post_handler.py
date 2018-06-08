@@ -17,18 +17,6 @@ from . import BaseHandler
 
 __all__ = ['PostHandler']
 
-def is_post_author(method):
-    """Check if the user is the author of the post."""
-    def check_authorization(self, user, post_urlsafe, *args):
-        obj_key = ndb.Key(urlsafe=post_urlsafe)
-        post = obj_key.get()
-        Utils._assert(post.author != user.key,
-                      'User is not allowed to edit this post',
-                      NotAuthorizedException)
-        method(self, user, post_urlsafe, *args)
-    return check_authorization
-
-
 def getLikes(post, host):
     likes = [Like.make(like, host) for like in post.likes]
     return likes
@@ -90,13 +78,9 @@ class PostHandler(BaseHandler):
 
         post = ndb.Key(urlsafe=post_urlsafe).get()
 
-        Utils._assert(post.has_activity(),
+        Utils._assert(not post.can_edit(user),
                         "The user can not update this post",
                         NotAuthorizedException)
-
-        user.check_permission("edit_post",
-                                "User is not allowed to edit this post",
-                                post_urlsafe)
 
         """Apply patch."""
         JsonPatch.load(data, post)

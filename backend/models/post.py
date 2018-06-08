@@ -339,6 +339,14 @@ class Post(PolyModel):
         has_comments = len(self.comments) > 0
         has_likes = len(self.likes) > 0
         return has_comments or has_likes
+    
+    def can_edit(self, user):
+        """Check if the post can be edit by the user."""
+        is_published = self.state == 'published'
+        is_inst_active = self.institution.get().state == 'active'
+        user_has_permission = user.has_permission("edit_post",
+                                self.key.urlsafe())        
+        return not has_activity and is_published and is_inst_active and user_has_permission
 
     def add_subscriber(self, user):
         """Add a subscriber."""

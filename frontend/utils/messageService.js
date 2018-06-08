@@ -35,7 +35,8 @@
             "Error! User is not allowed to remove institution": "O usuário não tem permissão para remover essa instituição.",
             "Error! Circular hierarchy not allowed": "Não é permitido criar dependencia circular entre instituições.",
             "Error! The requested institution has already been invited": "Esta instituição já foi convidada, mas seu convite está pendente",
-            "Error! You've already voted in this survey": "Você já votou nessa enquete"
+            "Error! You've already voted in this survey": "Você já votou nessa enquete",
+            "Error! The user can not update this post": "O usuário não pode editar o post"
         };
 
         service.showToast = function showToast(message) {

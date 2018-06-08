@@ -3,20 +3,14 @@
 (function() {
     var app = angular.module("app");
 
-    app.service('CommentService', function CommentService($http, $q, AuthService) {
+    app.service('CommentService', function CommentService(HttpService, $q, AuthService) {
         var service = this;
 
         var POST_URI = '/api/posts/';
         service.user = AuthService.getCurrentUser();
 
         service.getComments = function getComments(commentUri) {
-            var deferred = $q.defer();
-            $http.get(commentUri).then(function success(response) {
-                deferred.resolve(response);
-            }, function error(response) {
-                deferred.reject(response);
-            });
-            return deferred.promise;
+            return HttpService.get(commentUri);
         };
 
         service.createComment = function createComment(postKey, text, institutionKey) {
@@ -30,26 +24,11 @@
                     name: service.user.current_institution.name
                 }
             };
-            $http.post(POST_URI + postKey + '/comments', body).then(
-                function success(response) {
-                    deferred.resolve(response);
-                }, function error(response) {
-                    deferred.reject(response);
-                }
-            );
-            return deferred.promise;
+            return HttpService.post(POST_URI + postKey + '/comments', body);
         };
 
         service.deleteComment = function deleteComment(postKey, commentId) {
-            var deferred = $q.defer();
-            $http.delete(POST_URI + postKey + '/comments/' + commentId).then(
-                function success(response) {
-                    deferred.resolve(response);
-                }, function error(response) {
-                    deferred.reject(response);
-                }
-            );
-            return deferred.promise;
+            return HttpService.delete(POST_URI + postKey + '/comments/' + commentId);
         };
 
         service.replyComment = function createComment(postKey, text, institutionKey, commentId) {
@@ -63,26 +42,11 @@
                     name: service.user.current_institution.name
                 }
             };
-            $http.post(POST_URI + postKey + '/comments/' + commentId + '/replies' , body).then(
-                function success(response) {
-                    deferred.resolve(response);
-                }, function error(response) {
-                    deferred.reject(response);
-                }
-            );
-            return deferred.promise;
+            return HttpService.post(POST_URI + postKey + '/comments/' + commentId + '/replies' , body);
         };
 
         service.deleteReply = function deleteReply(postKey, commentId, replyId) {
-            var deferred = $q.defer();
-            $http.delete(POST_URI + postKey + '/comments/' + commentId + '/replies/' + replyId).then(
-                function success(response) {
-                    deferred.resolve(response);
-                }, function error(response) {
-                    deferred.reject(response);
-                }
-            );
-            return deferred.promise;
+            return HttpService.delete(POST_URI + postKey + '/comments/' + commentId + '/replies/' + replyId);
         };
 
         service.like = function like(postKey, commentId, replyId) {
@@ -94,27 +58,12 @@
                     name: currentInstitutionName
                 }
             };            
-            $http.post(URI, body).then(
-                function success(response) {
-                    deferred.resolve(response);
-                }, function error(response) {
-                    deferred.reject(response);
-                }
-            );
-            return deferred.promise;
+            return HttpService.post(URI, body);
         };
 
         service.dislike = function like(postKey, commentId, replyId) {
-            var deferred = $q.defer();
             var URI = createLikeCommentURI(postKey, commentId, replyId);
-            $http.delete(URI).then(
-                function success(response) {
-                    deferred.resolve(response);
-                }, function error(response) {
-                    deferred.reject(response);
-                }
-            );
-            return deferred.promise;
+            HttpService.delete(URI);
         };
 
         function createLikeCommentURI(postKey, commentId, replyId) {

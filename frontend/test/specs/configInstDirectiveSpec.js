@@ -114,7 +114,7 @@ describe('Test ConfigInstDirective', function() {
                     authService: authService,
                     institutionService: institutionService,
                     imageService: imageService
-                });
+            });
         };
 
         editInstCtrl = createCtrl();
@@ -133,7 +133,7 @@ describe('Test ConfigInstDirective', function() {
             spyOn(institutionService, 'getInstitution').and.callFake(function() {
                 return {
                     then: function(callback) {
-                        return callback({data: {name: 'inst', portfolio_url: 'url'}});
+                        return callback({name: 'inst', portfolio_url: 'url'});
                     }
                 };
             });

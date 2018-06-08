@@ -126,7 +126,7 @@
                     return {
                         then: function (callback) {
                             return callback(
-                                {data: [splab, inst, instToTest]}
+                                [splab, inst, instToTest]
                             );
                         }
                     };

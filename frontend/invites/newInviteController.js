@@ -64,8 +64,6 @@
                     AuthService.save();
                     $state.go("app.user.home");
                     _.isEmpty(newInviteCtrl.user.invites) && showAlert(event);
-                }, function error(response) {
-                    MessageService.showToast(response.data.msg);
                 });
             return promise;
         };
@@ -134,8 +132,6 @@
                 } else {
                     $state.go("app.user.home");
                 }
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
             });
             return promise;
         }
@@ -160,7 +156,7 @@
             observer = ObserverRecorderService.register(newInviteCtrl.user);
             newInviteCtrl.checkUserName();
             InviteService.getInvite(newInviteCtrl.inviteKey).then(function success(response) {
-                newInviteCtrl.invite = new Invite(response.data);
+                newInviteCtrl.invite = new Invite(response);
                 if(newInviteCtrl.invite.status === 'sent') {
                     institutionKey = (newInviteCtrl.invite.type_of_invite === "USER") ? newInviteCtrl.invite.institution_key : newInviteCtrl.invite.stub_institution.key;
                     newInviteCtrl.institution = newInviteCtrl.invite.institution;
@@ -168,8 +164,7 @@
                     newInviteCtrl.isAlreadyProcessed = true;
                 }
                 newInviteCtrl.loading = false;
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
+            }, function error() {
                 newInviteCtrl.loading = true;
             });
         }

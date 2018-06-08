@@ -48,7 +48,7 @@
          */
         function getInvite() {
             InviteService.getInvite(key).then(function success(response) {
-                let invite = new Invite(response.data);
+                let invite = new Invite(response);
 
                 if (invite.status === 'sent' || typeOfDialog === processCtrl.VIEW_INVITE_SENDER) {
                     processCtrl.invite = invite;

@@ -230,7 +230,7 @@
                 spyOn(institutionService, 'getNextPosts').and.callFake(function() {
                     return {
                         then: function(callback) {
-                            callback({data: {posts: posts, next: false}});
+                            callback({posts: posts, next: false});
                         }
                     };
                 });

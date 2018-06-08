@@ -43,8 +43,6 @@
                 MessageService.showToast("Seguindo "+ institutionCardCtrl.institution.name);
                 institutionCardCtrl.user.follow(institutionCardCtrl.institution);
                 AuthService.save();
-            }, function error() {
-                MessageService.showToast('Não foi possível seguir a instituição.');
             });
             return promise;
         };
@@ -58,8 +56,6 @@
                     institutionCardCtrl.user.unfollow(institutionCardCtrl.institution);
                     AuthService.save();
                     MessageService.showToast("Deixou de seguir "+institutionCardCtrl.institution.name);
-                }, function error() {
-                    MessageService.showToast('Erro ao deixar de seguir instituição.');
                 });
                 return promise;
             }

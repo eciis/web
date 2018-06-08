@@ -67,15 +67,14 @@
                 var survey = createSurvey();
                 var promise = PostService.createPost(survey).then(function success(response) {
                     surveyCtrl.resetSurvey();
-                    surveyCtrl.posts.push(new Post(response.data));
+                    surveyCtrl.posts.push(new Post(response));
                     MessageService.showToast('Postado com sucesso!');
                     surveyCtrl.callback();
                     $mdDialog.hide();
                     unobserveNewPost();
-                }, function error(response) {
+                }, function error() {
                     AuthService.reload().then(function success() {
                         $mdDialog.hide();
-                        MessageService.showToast(response.data.msg);
                         $state.go("app.user.home");
                     });
                 });

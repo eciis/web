@@ -11,14 +11,14 @@
 
         beforeEach(module('app'));
 
-        beforeEach(inject(function($httpBackend, InstitutionService, _$http_) {
-            httpBackend = $httpBackend;
-            $http = _$http_;
-            service = InstitutionService;
-            httpBackend.when('GET', 'main/main.html').respond(200);
-            httpBackend.when('GET', 'home/home.html').respond(200);
-            httpBackend.when('GET', 'error/error.html').respond(200);
-        }));
+    beforeEach(inject(function ($httpBackend, InstitutionService, HttpService) {
+        httpBackend = $httpBackend;
+        $http = HttpService;
+        service = InstitutionService;
+        httpBackend.when('GET', 'main/main.html').respond(200);
+        httpBackend.when('GET', 'home/home.html').respond(200);
+        httpBackend.when('GET', 'error/error.html').respond(200);
+    }));
 
         it('Test getInstitutions in success case', function() {
             spyOn($http, 'get').and.callThrough();

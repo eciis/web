@@ -233,17 +233,16 @@
                     postCtrl.loadingPost = true;
                     PostService.createPost(post).then(function success(response) {
                         postCtrl.clearPost();
-                        posts.push(new Post(response.data));
+                        posts.push(new Post(response));
                         MessageService.showToast('Postado com sucesso!');
                         changeTimelineToStart();
                         $mdDialog.hide();
                         postCtrl.loadingPost = false;
                         const postAuthorPermissions = ["edit_post", "remove_post"];
-                        postCtrl.user.addPermissions(postAuthorPermissions, response.data.key);
-                    }, function error(response) {
+                        postCtrl.user.addPermissions(postAuthorPermissions, response.key);
+                    }, function error() {
                         AuthService.reload().then(function success() {
                             $mdDialog.hide();
-                            MessageService.showToast(response.data.msg);
                             postCtrl.loadingPost = false;
                             $state.go("app.user.home");
                         });
@@ -303,8 +302,6 @@
                             $mdDialog.cancel();
                             MessageService.showToast(response.data.msg);
                         });
-                    }, function error() {
-                        MessageService.showToast("Esse post não pode ser editado pois já possui atividade");
                     });
                 } else {
                     MessageService.showToast('Edição inválida!');

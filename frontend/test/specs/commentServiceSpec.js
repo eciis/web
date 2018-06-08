@@ -14,8 +14,8 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($http, $httpBackend, $q, $rootScope, CommentService, AuthService) {
-        http = $http;
+    beforeEach(inject(function (HttpService, $httpBackend, $q, $rootScope, CommentService, AuthService) {
+        http = HttpService;
         httpBackend = $httpBackend;
         deferred = $q.defer();
         scope = $rootScope.$new();
@@ -45,6 +45,7 @@
                     error = response;
                 }
             );
+            httpBackend.flush();
         });
 
         it('should call http.get()', function() {
@@ -272,6 +273,7 @@
                 done();
             });
             deferred.resolve();
+            scope.$apply()
             httpBackend.flush();
         });
 
@@ -283,6 +285,7 @@
                 done();
             });
             deferred.resolve();
+            scope.$apply();
             httpBackend.flush();
         });
     });

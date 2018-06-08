@@ -63,7 +63,7 @@
 
         service.dislike = function like(postKey, commentId, replyId) {
             var URI = createLikeCommentURI(postKey, commentId, replyId);
-            HttpService.delete(URI);
+            return HttpService.delete(URI);
         };
 
         function createLikeCommentURI(postKey, commentId, replyId) {

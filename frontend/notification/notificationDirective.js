@@ -270,10 +270,7 @@
                         dialogProperties.locals.request = request;
                         var isRequestResolved = request.isStatusOn('rejected') || request.isStatusOn('accepted');
                         isRequestResolved ? showResolvedReqDialog(event) : showPendingReqDialog(dialogProperties, event);
-                    }, function error(response) {
-                        MessageService.showToast(response.data.msg);
-                    }
-                );
+                    });
             } else {
                 dialogProperties.locals.key = notification.entity.key;
                 showPendingReqDialog(dialogProperties, event);

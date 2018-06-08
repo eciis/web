@@ -39,7 +39,7 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $http, $mdDialog, $q,
+    beforeEach(inject(function ($controller, $httpBackend, HttpService, $mdDialog, $q,
             PostService, AuthService, $rootScope, $state) {
         scope = $rootScope.$new();
         httpBackend = $httpBackend;
@@ -122,7 +122,7 @@
             spyOn(postService, 'createPost').and.callFake(function () {
                 return {
                     then: function (callback) {
-                        return callback({data: newPost});
+                        return callback(newPost);
                     }
                 };
             });
@@ -146,7 +146,7 @@
             spyOn(postService, 'createPost').and.callFake(function () {
                 return {
                     then: function (callback) {
-                        return callback({data: newPost});
+                        return callback(newPost);
                     }
                 };
             });

@@ -33,17 +33,16 @@
 
         function loadInstitution() {
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
-                institutionCtrl.institution = new Institution(response.data);
+                institutionCtrl.institution = new Institution(response);
                 checkIfUserIsFollower();
                 institutionCtrl.checkIfUserIsMember();
                 getPortfolioUrl();
                 getActuationArea();
                 getLegalNature();
                 institutionCtrl.isLoadingData = false;
-            }, function error(response) {
+            }, function error() {
                 $state.go("app.user.home");
                 institutionCtrl.isLoadingData = true; 
-                MessageService.showToast(response.data.msg);
             });
         }
 
@@ -69,16 +68,16 @@
             if (morePosts) {
                 InstitutionService.getNextPosts(currentInstitutionKey, actualPage).then(function success(response) {
                     actualPage += 1;
-                    morePosts = response.data.next;
+                    morePosts = response.next;
 
-                    _.forEach(response.data.posts, function(post) {
+                    _.forEach(response.posts, function(post) {
                         institutionCtrl.posts.push(post);
                     });
 
                     institutionCtrl.isLoadingPosts = false;
                     deferred.resolve();
                 }, function error(response) {
-                    MessageService.showToast(response.data.msg);
+                    MessageService.showToast(response.msg);
                     deferred.reject();
                 });
             } else {
@@ -106,8 +105,6 @@
                 institutionCtrl.isUserFollower = true;
                 AuthService.save();
                 MessageService.showToast("Seguindo "+ institutionCtrl.institution.name);
-            }, function error() {
-                MessageService.showToast('Não foi possível seguir a instituição.');
             });
             return promise;
         };
@@ -123,8 +120,6 @@
                     institutionCtrl.user.unfollow(institutionCtrl.institution);
                     institutionCtrl.isUserFollower = false;
                     AuthService.save();
-                }, function error() {
-                    MessageService.showToast('Erro ao deixar de seguir instituição.');
                 });
                 return promise;
             }
@@ -242,14 +237,14 @@
 
         function getLegalNature() {
             InstitutionService.getLegalNatures().then(function success(response) {
-                institutionCtrl.instLegalNature = _.get(response.data, 
+                institutionCtrl.instLegalNature = _.get(response, 
                     institutionCtrl.institution.legal_nature);
             });
         }
 
         function getActuationArea() {
             InstitutionService.getActuationAreas().then(function success(response) {
-                institutionCtrl.instActuationArea = _.get(response.data, 
+                institutionCtrl.instActuationArea = _.get(response, 
                    institutionCtrl.institution.actuation_area);
             });
         }
@@ -312,8 +307,6 @@
             InstitutionService.update(institutionCtrl.institution.key, patch).then(function success(response) {
                 institutionCtrl.institution = response;
                 institutionCtrl.isLoadingCover = false;
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
             });
         }
 
@@ -427,10 +420,9 @@
 
         function getFollowers() {
             InstitutionService.getFollowers(currentInstitutionKey).then(function success(response) {
-                followersCtrl.followers = response.data;
+                followersCtrl.followers = response;
                 followersCtrl.isLoadingFollowers = false;
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
+            }, function error() {
                 followersCtrl.isLoadingFollowers = true;
             });
         }

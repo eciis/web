@@ -156,16 +156,15 @@
         function loadPosts(deferred) {
             PostService.getNextPosts(actualPage).then(function success(response) {
                 actualPage += 1;
-                morePosts = response.data.next;
+                morePosts = response.next;
 
-                _.forEach(response.data.posts, function(post) {
+                _.forEach(response.posts, function(post) {
                     homeCtrl.posts.push(post);
                 });
 
                 homeCtrl.isLoadingPosts = false;
                 deferred.resolve();
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
+            }, function error() {
                 deferred.reject();
             });
         }
@@ -177,11 +176,10 @@
         function loadEvents() {
             var page = 0;
             EventService.getEvents(page).then(function success(response) {
-                homeCtrl.events = activeEvents(response.data.events);
+                homeCtrl.events = activeEvents(response.events);
                 homeCtrl.events = _.take(homeCtrl.events, LIMITE_EVENTS);
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
-                    $state.go("app.user.home");
+            }, function error() {
+                $state.go("app.user.home");
             });
         }
 

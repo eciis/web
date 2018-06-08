@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.service("RequestInvitationService", function RequestInvitationService(MessageService, HttpService, $mdDialog) {
+    app.service("RequestInvitationService", function RequestInvitationService(MessageService, HttpService) {
         var service = this;
         var INST_REQUEST_URI = "/api/institutions/";
         var REQUEST_URI = "/api/requests/";
@@ -89,27 +89,6 @@
 
         service.rejectInstChildrenRequest = function rejectInstChildrenRequest(request_key) {
             return HttpService.delete(REQUEST_URI + request_key + "/institution_children");
-        };
-
-        service.showRejectDialog = function showRejectDialog(event) {
-            var title = 'Rejeitar pedido';
-            var textContent = "Ao rejeitar o pedido, o pedido será removido e não poderá ser aceito posteriormente." +
-                        " Deseja rejeitar?";
-            var promise = MessageService.showConfirmationDialog(event, title, textContent);
-            return promise;
-        };
-
-        service.analyseReqDialog = function analyseReqDialog(event, request) {
-            var promise = $mdDialog.show({
-                controller: 'AnalyseHierarchyRequestController',
-                controllerAs: 'analyseHierReqCtrl',
-                templateUrl: 'app/requests/analyse_hierarchy_request_dialog.html',
-                targetEvent: event,
-                locals: {
-                    request: request
-                }
-            });
-            return promise;
         };
     });
 })();

@@ -15,7 +15,7 @@
         q = $q;
     }));
 
-    describe('Test analyseReqDialog', function () {
+    describe('Test showHierarchyDialog', function () {
         var requestedInstitution, request, event, promiseData;
 
         beforeEach(function () {
@@ -27,7 +27,7 @@
         });
         
         it('should show a dialog with the expected properties', function () {
-            var promise = service.analyseReqDialog(event, requestedInstitution, request);
+            var promise = service.showHierarchyDialog(event, requestedInstitution, request);
             var dialogData = {
                 controller: 'AnalyseHierarchyRequestController',
                 controllerAs: 'analyseHierReqCtrl',

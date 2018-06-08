@@ -364,7 +364,7 @@
                 type_of_invite: REQUEST_INSTITUTION_CHILDREN
             };
 
-            spyOn(requestInvitationService, 'analyseReqDialog').and.callFake(function () {
+            spyOn(requestInvitationService, 'showHierarchyDialog').and.callFake(function () {
                 return {
                     then: function (callback) {
                         return callback();
@@ -375,7 +375,7 @@
         
         it('should accept a request children and link institutions', function() {
             inviteInstHierarchieCtrl.analyseRequest(event, request);
-            expect(requestInvitationService.analyseReqDialog).toHaveBeenCalledWith(event, instRequested, request);
+            expect(requestInvitationService.showHierarchyDialog).toHaveBeenCalledWith(event, instRequested, request);
             expect(inviteInstHierarchieCtrl.hasParent).toBeTruthy()
             expect(inviteInstHierarchieCtrl.showParentHierarchie).toBeTruthy();
             expect(inviteInstHierarchieCtrl.institution.parent_institution).toBe(request.institution);
@@ -385,7 +385,7 @@
         it('should accept a request parent and link institutions', function() {
             request.type_of_invite = REQUEST_INSTITUTION_PARENT;
             inviteInstHierarchieCtrl.analyseRequest(event, request);
-            expect(requestInvitationService.analyseReqDialog).toHaveBeenCalledWith(event, instRequested, request);
+            expect(requestInvitationService.showHierarchyDialog).toHaveBeenCalledWith(event, instRequested, request);
             expect(inviteInstHierarchieCtrl.showChildrenHierarchie).toBeTruthy()
             expect(request.institution.parent_institution).toBe(inviteInstHierarchieCtrl.institution);
             expect(inviteInstHierarchieCtrl.institution.children_institutions[0]).toBe(request.institution);

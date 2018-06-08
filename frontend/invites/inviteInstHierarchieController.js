@@ -358,7 +358,7 @@
 
         inviteInstHierCtrl.analyseRequest = function analyseRequest(event, request) {
             RequestInvitationService
-                .analyseReqDialog(event, request)
+                .showHierarchyDialog(request, event)
                 .then(function accepted() {
                     addInstitutionToHierarchy(request);
                 });

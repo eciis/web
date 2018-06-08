@@ -345,8 +345,9 @@ class Post(PolyModel):
         is_published = self.state == 'published'
         is_inst_active = self.institution.get().state == 'active'
         user_has_permission = user.has_permission("edit_post",
-                                self.key.urlsafe())        
-        return not has_activity and is_published and is_inst_active and user_has_permission
+                                self.key.urlsafe())
+                                
+        return (not self.has_activity()) and is_published and is_inst_active and user_has_permission
 
     def add_subscriber(self, user):
         """Add a subscriber."""

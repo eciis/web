@@ -29,6 +29,7 @@ class PostHandlerTest(TestBaseHandler):
         cls.second_user = mocks.create_user('second_user@ccc.ufcg.edu.br')
         # institution
         cls.institution = mocks.create_institution('institution')
+        cls.institution.state = 'active'
         cls.institution.add_member(cls.first_user)
         cls.institution.add_member(cls.second_user)
         cls.institution.follow(cls.first_user.key)
@@ -118,7 +119,7 @@ class PostHandlerTest(TestBaseHandler):
     def test_patch(self, verify_token):
         """Test the post_handler's patch method."""
 
-        exception_message = "Error! User is not allowed to edit this post"
+        exception_message = "Error! The user can not update this post"
         expected_alert = "Expected: " + exception_message + ". But got: "
 
         # Call the patch method and assert that  it raises an exception

@@ -36,7 +36,7 @@
             "Error! Circular hierarchy not allowed": "Não é permitido criar dependencia circular entre instituições.",
             "Error! The requested institution has already been invited": "Esta instituição já foi convidada, mas seu convite está pendente",
             "Error! You've already voted in this survey": "Você já votou nessa enquete",
-            "Error! The user can not update this post": "O usuário não pode editar o post"
+            "Error! The user can not update this post": "O usuário não pode editar o post."
         };
 
         service.showToast = function showToast(message) {

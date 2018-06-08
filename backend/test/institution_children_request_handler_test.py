@@ -101,6 +101,133 @@ class InstitutionChildrenRequestHandlerTest(TestBaseHandler):
             mock_method.assert_called,
             "Should call the send_message_notification"
         )
+    
+    @patch('handlers.institution_children_request_handler.enqueue_task')
+    @patch('util.login_service.verify_token')
+    def test_put_invite_with_not_confirmed_link(self, verify_token, enqueue_task):
+        """Test put invite with not confirmed children link."""
+        institution = mocks.create_institution()
+        other_institution = mocks.create_institution()
+        admin = mocks.create_user()
+        other_admin = mocks.create_user()
+
+        institution.add_member(admin)
+        other_institution.add_member(other_admin)
+        institution.set_admin(admin.key)
+        other_institution.set_admin(other_admin.key)
+        other_institution.add_child(institution.key)
+        other_institution.parent_institution = institution.key
+
+        admin.add_institution_admin(institution)
+        other_admin.add_institution_admin(other_institution)
+        admin.add_permissions(permissions.DEFAULT_ADMIN_PERMISSIONS, institution.key.urlsafe())
+        other_admin.add_permissions(permissions.DEFAULT_ADMIN_PERMISSIONS, other_institution.key.urlsafe())
+
+        institution.put()
+        other_institution.put()
+        admin.put()
+        other_admin.put()
+
+        request = RequestInstitutionChildren()
+        request.sender_key = other_admin.key
+        request.admin_key = other_admin.key
+        request.institution_requested_key = institution.key
+        request.institution_key = other_institution.key
+        request.put()
+
+        self.assertTrue(has_permissions(
+                admin, 
+                institution.key.urlsafe(), 
+                permissions.DEFAULT_ADMIN_PERMISSIONS
+            ),
+            "Admin must have administrator permissions for this institution"
+        )
+
+        self.assertFalse(has_permissions(
+                admin, 
+                other_institution.key.urlsafe(), 
+                permissions.DEFAULT_ADMIN_PERMISSIONS
+            ),
+            "Admin should not have administrator permissions for this institution"
+        )
+
+        self.assertFalse(has_permissions(
+                other_admin, 
+                institution.key.urlsafe(), 
+                permissions.DEFAULT_ADMIN_PERMISSIONS
+            ),
+            "Other_admin should not have administrator permissions for this institution"
+        )
+
+        self.assertTrue(has_permissions(
+                other_admin, 
+                other_institution.key.urlsafe(), 
+                permissions.DEFAULT_ADMIN_PERMISSIONS
+            ),
+            "Other_admin must have administrator permissions for this institution"
+        )
+
+        self.assertFalse(
+            other_institution.verify_connection(institution, 'PARENT'),
+            "other_institution should not have confirmed parent link with institution"    
+        )
+        self.assertFalse(
+            other_institution.verify_connection(institution, 'CHILDREN'),
+            "other_institution should not have confirmed children link with institution"
+        )
+
+        verify_token._mock_return_value = {'email': admin.email[0]}
+        enqueue_task.side_effect = self.enqueue_task
+
+        self.testapp.put(
+            "/api/requests/%s/institution_children" % request.key.urlsafe(),
+            headers={'institution-authorization': institution.key.urlsafe()})
+        
+        admin = admin.key.get()
+        other_admin = other_admin.key.get()
+        institution = institution.key.get()
+        other_institution = other_institution.key.get()
+
+        self.assertTrue(has_permissions(
+                admin, 
+                institution.key.urlsafe(), 
+                permissions.DEFAULT_ADMIN_PERMISSIONS
+            ),
+            "Admin must have administrator permissions for this institution"
+        )
+
+        self.assertFalse(has_permissions(
+                admin, 
+                other_institution.key.urlsafe(), 
+                permissions.DEFAULT_ADMIN_PERMISSIONS
+            ),
+            "Admin should not have administrator permissions for this institution"
+        )
+
+        self.assertTrue(has_permissions(
+                other_admin, 
+                institution.key.urlsafe(), 
+                permissions.DEFAULT_ADMIN_PERMISSIONS
+            ),
+            "Other_admin must have administrator permissions for this institution"
+        )
+
+        self.assertTrue(has_permissions(
+                other_admin, 
+                other_institution.key.urlsafe(), 
+                permissions.DEFAULT_ADMIN_PERMISSIONS
+            ),
+            "Other_admin must have administrator permissions for this institution"
+        )
+
+        self.assertFalse(
+            other_institution.verify_connection(institution, 'PARENT'),
+            "other_institution should not have confirmed children link with institution"
+        )
+        self.assertTrue(
+            other_institution.verify_connection(institution, 'CHILDREN'),
+            "other_institution should have confirmed children link with institution"
+        )
 
     @patch('util.login_service.verify_token', return_value={'email': 'useradmin@test.com'})
     def test_put_user_not_admin(self, verify_token):

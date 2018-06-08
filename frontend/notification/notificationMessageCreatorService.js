@@ -1,7 +1,7 @@
 'use strict';
 
 (function() {
-    var app = angula.module('app');
+    var app = angular.module('app');
 
     app.service("NotificationMessageCreatorService", function() {
         var service = this;

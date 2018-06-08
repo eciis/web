@@ -32,19 +32,21 @@
         }
 
         function selectDialogToShow(dialogProperties, request, event) {
+            var isRequestResolved = request.isStatusOn('rejected') || request.isStatusOn('accepted');
+            if(isRequestResolved) {
+                showResolvedReqDialog(event);
+                return;
+            }
+
             switch(request.type_of_invite) {
-                case("REQUEST_INSTITUTION_PARENT" || "REQUEST_INSTITUTION_CHILDREN"):
+                case "REQUEST_INSTITUTION_PARENT":
+                case "REQUEST_INSTITUTION_CHILDREN":
                     service.showHierarchyDialog(request, event)
                     break;
                 default:
-                    showDefaultDialog(dialogProperties, request, event);
+                    dialogProperties.locals.request = request;
+                    showPendingReqDialog(dialogProperties, event);
             }
-        }
-
-        function showDefaultDialog(dialogProperties, request, event) {
-            dialogProperties.locals.request = request;
-            var isRequestResolved = request.isStatusOn('rejected') || request.isStatusOn('accepted');
-            isRequestResolved ? showResolvedReqDialog(event) : showPendingReqDialog(dialogProperties, event);
         }
 
         function showResolvedReqDialog(event) {
@@ -93,6 +95,5 @@
                     return InviteService.getInvite(invitekey);
             } 
         }
-
     });
 })();

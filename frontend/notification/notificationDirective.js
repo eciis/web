@@ -85,24 +85,14 @@
                 action: function (properties, notification, event) {
                     return showRequestDialog(properties, notification, event);
                 },
-                properties: {
-                    templateUrl: "app/requests/request_processing.html",
-                    controller: "RequestProcessingController",
-                    controllerAs: "requestCtrl",
-                    locals: {}
-                }
+                properties: {}
             },
             "REQUEST_INSTITUTION_PARENT": {
                 icon: "account_balance",
                 action: function (properties, notification, event) {
                     return showRequestDialog(properties, notification, event);
                 },
-                properties: {
-                    templateUrl: "app/requests/request_processing.html",
-                    controller: "RequestProcessingController",
-                    controllerAs: "requestCtrl",
-                    locals: {}
-                }
+                properties: {}
             },
             "REQUEST_INSTITUTION": {
                 icon: "account_balance",

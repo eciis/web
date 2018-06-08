@@ -52,11 +52,15 @@ class Request(Invite):
         request_inst_json['institution_key'] = self.institution_key.urlsafe()
         request_inst_json['sender_key'] = self.sender_key.urlsafe()
         if self.institution_requested_key:
-            requested_institution = self.institution_requested_key.get()
-            requested_institution = requested_institution.make(Request.INST_PROPS_TO_MAKE)
+            requested_inst = self.institution_requested_key.get()
+            requested_inst_parent = requested_inst.parent_institution.get()
+            requested_inst = requested_inst.make(Request.INST_PROPS_TO_MAKE)
+            requested_inst_parent = requested_inst_parent.make(Request.INST_PROPS_TO_MAKE)
+
             # TODO remove the use of requested_inst_name
             # author: Ruan Eloy - 07/08/18
-            request_inst_json['requested_inst_name'] = requested_institution['name']
-            request_inst_json['requested_institution'] = requested_institution
+            request_inst_json['requested_inst_name'] = requested_inst['name']
+            request_inst_json['requested_institution'] = requested_inst
+            request_inst_json['requested_institution']['parent_institution'] = requested_inst_parent
 
         return request_inst_json

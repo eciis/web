@@ -39,6 +39,10 @@
             return surveyCtrl.post.title;
         };
 
+        surveyCtrl.isSmallScreen = function() {
+            return screen.width < 600;
+        };
+
         /* This method add ids in each option and remove the options that are empty.*/
         function modifyOptions(){
             let id = 0;

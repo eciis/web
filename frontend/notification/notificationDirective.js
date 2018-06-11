@@ -213,7 +213,11 @@
 
         notificationCtrl.goTo = function goTo(notification) {
             var state = type_data[notification.entity_type].state;
-            $state.go(state, {key: notification.entity.key});
+            if(state) {
+                $state.go(state, {key: notification.entity.key});
+            } else {
+                notificationCtrl.seeAll();
+            }
         };
 
         notificationCtrl.action = function action(notification, event) {
@@ -316,7 +320,7 @@
 
         notificationCtrl.seeAll = function seeAll() {
             $state.go('app.user.notifications');
-        }
+        };
 
         function refreshUser(notification) {
             UserService.load().then(function success(response) {

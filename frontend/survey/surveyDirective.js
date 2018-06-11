@@ -39,6 +39,10 @@
             return surveyCtrl.post.title;
         };
 
+        surveyCtrl.isSmallScreen = function() {
+            return screen.width < 600;
+        };
+
         /* This method add ids in each option and remove the options that are empty.*/
         function modifyOptions(){
             let id = 0;
@@ -70,6 +74,8 @@
                     surveyCtrl.posts.push(new Post(response));
                     MessageService.showToast('Postado com sucesso!');
                     surveyCtrl.callback();
+                    const postAuthorPermissions = ["remove_post"];
+                    surveyCtrl.user.addPermissions(postAuthorPermissions, response.data.key);
                     $mdDialog.hide();
                     unobserveNewPost();
                 }, function error() {

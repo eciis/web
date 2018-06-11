@@ -116,10 +116,9 @@ class PostHandlerTest(TestBaseHandler):
                          "After delete the post state should be 'deleted'")
 
     @patch('util.login_service.verify_token', return_value={'email': 'first_user@gmail.com'})
-    def test_patch(self, verify_token):
-        """Test the post_handler's patch method."""
-
-        exception_message = "Error! The user can not update this post"
+    def test_patch_unauthorized(self, verify_token):
+        """ Test the post_handle's patch method in case that user is not authorized."""
+        exception_message = "Error! User is not allowed to edit this post"
         expected_alert = "Expected: " + exception_message + ". But got: "
 
         # Call the patch method and assert that  it raises an exception
@@ -135,15 +134,7 @@ class PostHandlerTest(TestBaseHandler):
             raises_context_message,
             exception_message,
             expected_alert + raises_context_message)
-
-        # Call the patch method and assert that it works
-        self.testapp.patch_json("/api/posts/%s"
-                                % self.first_user_post.key.urlsafe(),
-                                [{"op": "replace", "path": "/text",
-                                    "value": "testando"}]
-                                )
-        self.first_user_post = self.first_user_post.key.get()
-        self.assertEqual(self.first_user_post.text, "testando")
+        
         # Pretend a new authentication
         verify_token.return_value = {'email': 'second_user@ccc.ufcg.edu.br'}
 
@@ -169,7 +160,20 @@ class PostHandlerTest(TestBaseHandler):
             exception_message,
             expected_alert + raises_context_message)
 
-        exception_message = "The user can not update this post"
+    @patch('util.login_service.verify_token', return_value={'email': 'first_user@gmail.com'})
+    def test_patch(self, verify_token):
+        """Test the post_handler's patch method when user can't edit the post."""
+        exception_message = "Error! The user can not update this post"
+        expected_alert = "Expected: " + exception_message + ". But got: "
+        # Call the patch method and assert that it works
+        self.testapp.patch_json("/api/posts/%s"
+                                % self.first_user_post.key.urlsafe(),
+                                [{"op": "replace", "path": "/text",
+                                    "value": "testando"}]
+                                )
+        self.first_user_post = self.first_user_post.key.get()
+        self.assertEqual(self.first_user_post.text, "testando")
+        
         # test the case when the post has a like, so it can not be updated
         self.first_user_post.like(self.second_user.key)
         self.first_user_post = self.first_user_post.key.get()
@@ -181,7 +185,6 @@ class PostHandlerTest(TestBaseHandler):
                                         "value": "testando"}]
                                     )
 
-        exception_message = "Error! The user can not update this post"
         raises_context_message = self.get_message_exception(str(raises_context.exception))
         self.assertEqual(
             raises_context_message,
@@ -195,6 +198,40 @@ class PostHandlerTest(TestBaseHandler):
         with self.assertRaises(Exception) as raises_context:
             self.testapp.patch_json("/api/posts/%s"
                                     % self.first_user_post.key.urlsafe(),
+                                    [{"op": "replace", "path": "/text",
+                                        "value": "testando"}]
+                                    )
+
+        #test case when institution of the post is inactive
+        #this post doesn't have any activity
+        self.institution.state = "inactive"
+        self.institution.put()
+        self.assertFalse(self.first_user_other_post.has_activity())
+        
+        with self.assertRaises(Exception) as raises_context:
+            self.testapp.patch_json("/api/posts/%s"
+                                    % self.first_user_other_post.key.urlsafe(),
+                                    [{"op": "replace", "path": "/text",
+                                        "value": "testando"}]
+                                    )
+
+        raises_context_message = self.get_message_exception(str(raises_context.exception))
+        self.assertEqual(
+            raises_context_message,
+            exception_message,
+            expected_alert + raises_context_message)
+
+        #test case when the post was deleted
+        #this post doesn't have any activity
+        self.institution.state = "active"
+        self.institution.put()
+        self.first_user_other_post.state = "deleted"
+        self.first_user_other_post.put()
+        self.assertFalse(self.first_user_other_post.has_activity())
+
+        with self.assertRaises(Exception) as raises_context:
+            self.testapp.patch_json("/api/posts/%s"
+                                    % self.first_user_other_post.key.urlsafe(),
                                     [{"op": "replace", "path": "/text",
                                         "value": "testando"}]
                                     )

@@ -74,6 +74,8 @@
                     surveyCtrl.posts.push(new Post(response.data));
                     MessageService.showToast('Postado com sucesso!');
                     surveyCtrl.callback();
+                    const postAuthorPermissions = ["remove_post"];
+                    surveyCtrl.user.addPermissions(postAuthorPermissions, response.data.key);
                     $mdDialog.hide();
                     unobserveNewPost();
                 }, function error(response) {

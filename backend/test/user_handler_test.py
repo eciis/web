@@ -39,11 +39,21 @@ class UserHandlerTest(TestBaseHandler):
         cls.institution.add_member(cls.user)
         cls.institution.add_member(cls.other_user)
         cls.institution.change_state('active')
+        # create other institution
+        cls.other_institution = mocks.create_institution()
+        cls.other_institution.admin = cls.other_user.key
+        cls.other_institution.follow(cls.user.key)
+        cls.other_institution.follow(cls.other_user.key)
+        cls.other_institution.add_member(cls.user)
+        cls.other_institution.add_member(cls.other_user)
+        cls.other_institution.change_state('active')
         # update user
         cls.user.institutions.append(cls.institution.key)
         cls.user.add_institution_admin(cls.institution.key)
         # update other_user
+        cls.other_user.add_institution(cls.other_institution.key)
         cls.other_user.add_institution(cls.institution.key)
+        cls.other_user.follow(cls.other_institution.key)
         cls.other_user.follow(cls.institution.key)
         inst_profile_data = {
             "office": "Member",
@@ -91,9 +101,9 @@ class UserHandlerTest(TestBaseHandler):
         verify_token._mock_return_value = {'email': self.other_user.email[0]}
         # check the user properties before delete it
         self.assertEquals(self.other_user.state, "active", "The user state should be 'active'")
-        self.assertEquals(self.other_user.institutions, [self.institution.key], 
+        self.assertEquals(self.other_user.institutions, [self.other_institution.key, self.institution.key], 
             "The institution key should be in user institutions")
-        self.assertEquals(self.other_user.follows, [self.institution.key], 
+        self.assertEquals(self.other_user.follows, [self.other_institution.key, self.institution.key], 
             "The institution key should be in user follows")
         self.assertTrue(self.other_user.institution_profiles != [],
             "The user institution profiles should not be empty")

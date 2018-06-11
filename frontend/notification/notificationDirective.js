@@ -20,7 +20,7 @@
             },
             "DELETE_MEMBER": {
                 icon: "clear",
-                action: function (properties, notification, event) {
+                action: function (notification, event, properties) {
                     if (notification.status !== 'READ') {
                         return refreshUser(notification);
                     }
@@ -31,7 +31,7 @@
             },
             "DELETED_INSTITUTION": {
                 icon: "clear",
-                action: function (properties, notification, event) {
+                action: function (notification, event, properties) {
                     if (notification.status !== 'READ') {
                         return refreshUser(notification);
                     }
@@ -70,8 +70,8 @@
             },
             "REQUEST_USER": {
                 icon: "person_add",
-                action: function (properties, notification, event) {
-                    return showRequestDialog(properties, notification, event);
+                action: function (notification, event, properties) {
+                    return showRequestDialog(notification, event, properties);
                 },
                 properties: {
                     templateUrl: "app/requests/request_processing.html",
@@ -82,22 +82,20 @@
             },
             "REQUEST_INSTITUTION_CHILDREN": {
                 icon: "account_balance",
-                action: function (properties, notification, event) {
-                    return showRequestDialog(properties, notification, event);
-                },
-                properties: {}
+                action: function (notification, event, properties) {
+                    return showRequestDialog(notification, event, properties);
+                }
             },
             "REQUEST_INSTITUTION_PARENT": {
                 icon: "account_balance",
-                action: function (properties, notification, event) {
-                    return showRequestDialog(properties, notification, event);
-                },
-                properties: {}
+                action: function (notification, event, properties) {
+                    return showRequestDialog(notification, event, properties);
+                }
             },
             "REQUEST_INSTITUTION": {
                 icon: "account_balance",
-                action: function (properties, notification, event) {
-                    return showRequestDialog(properties, notification, event);
+                action: function (notification, event, properties) {
+                    return showRequestDialog(notification, event, properties);
                 },
                 properties: {
                     templateUrl: "app/requests/request_institution_processing.html",
@@ -108,7 +106,7 @@
             },
             "ACCEPT_INSTITUTION_LINK": {
                 icon: "account_balance",
-                action: function (properties, notification, event) {
+                action: function (notification, event, properties) {
                     if (notification.status !== 'READ') {
                         return refreshUser(notification);
                     }
@@ -148,8 +146,8 @@
             },
             "USER_ADM": {
                 icon: "account_balance",
-                action: function(properties, notification, event) {
-                    return showRequestDialog(properties, notification, event);
+                action: function (notification, event, properties) {
+                    return showRequestDialog(notification, event, properties);
                 },
                 properties: {
                     templateUrl: "app/invites/process_invite_user_adm.html",
@@ -162,8 +160,8 @@
             },
             "ACCEPT_INVITE_USER_ADM": {
                 icon: "account_balance",
-                action: function(properties, notification, event) {
-                    return showRequestDialog(properties, notification, event);
+                action: function (notification, event, properties) {
+                    return showRequestDialog(notification, event, properties);
                 },
                 properties: {
                     templateUrl: "app/invites/process_invite_user_adm.html",
@@ -203,10 +201,10 @@
         };
 
         notificationCtrl.action = function action(notification, event) {
-            var notificationProperties = type_data[notification.entity_type].properties;
-            var  notificationAction = type_data[notification.entity_type].action;
-            if (notificationAction){
-                notificationAction(notificationProperties, notification, event);
+            var properties = type_data[notification.entity_type].properties;
+            var action = type_data[notification.entity_type].action;
+            if (action){
+                action(notification, event, properties);
             } else {
                 notificationCtrl.goTo(notification);
             }
@@ -252,8 +250,8 @@
             });
         }
 
-        function showRequestDialog(properties, notification, event) {
-            RequestDialogService.showRequestDialog(properties, notification, event);
+        function showRequestDialog(notification, event, properties) {
+            RequestDialogService.showRequestDialog(notification, event, properties);
         }
 
         (function main() {

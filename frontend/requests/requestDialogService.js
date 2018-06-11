@@ -20,19 +20,20 @@
             return promise;
         };
 
-        service.showRequestDialog = function showRequestDialog(dialogProperties, notification, event) {
+        service.showRequestDialog = function showRequestDialog(notification, event, dialogProperties) {
             getRequest(notification.entity.key, notification.entity_type).then(
                 function success(data) {
                     var request = new Invite(data);
-                    selectDialogToShow(dialogProperties, request, event);
+                    selectDialogToShow(request, event, dialogProperties);
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
                 }
             );
         }
 
-        function selectDialogToShow(dialogProperties, request, event) {
+        function selectDialogToShow(request, event, dialogProperties) {
             var isRequestResolved = request.isStatusOn('rejected') || request.isStatusOn('accepted');
+            
             if(isRequestResolved) {
                 showResolvedReqDialog(event);
                 return;

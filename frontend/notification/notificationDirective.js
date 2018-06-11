@@ -323,7 +323,7 @@
 
         notificationCtrl.seeAll = function seeAll() {
             $state.go('app.user.notifications');
-        }
+        };
 
         function refreshUser(notification) {
             UserService.load().then(function success(response) {

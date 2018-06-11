@@ -93,15 +93,10 @@ class PostCollectionHandlerTest(TestBaseHandler):
         self.assertEqual(post_obj.text,
                          'testing new post',
                          "The post's text is not the expected one")
+        self.assertTrue(key_post in self.institution.posts,
+                        "The post is not in user.posts")
 
         calls = [
-            call(
-                "add-post-institution",
-                {
-                    'institution_key': self.institution.key.urlsafe(),
-                    'created_post_key': post.get('key')
-                }
-            ),
             call(
                 'notify-followers',
                 {
@@ -184,15 +179,10 @@ class PostCollectionHandlerTest(TestBaseHandler):
         self.assertEqual(shared_post_obj['text'],
                          self.post.text,
                          "The post's text expected is '%s'" % self.post.text)
+        self.assertTrue(key_post in self.institution.posts,
+                        "The post is not in user.posts")
         
         calls = [
-            call(
-                "add-post-institution",
-                {
-                    'institution_key': self.institution.key.urlsafe(),
-                    'created_post_key': key_post.urlsafe()
-                }
-            ),
             call(
                 'notify-followers',
                 {
@@ -249,6 +239,8 @@ class PostCollectionHandlerTest(TestBaseHandler):
         # Check if the post's attributes are the expected
         self.assertEqual(post_obj.institution, self.institution.key,
                          "The post's institution is not the expected one")
+        self.assertTrue(key_post in self.institution.posts,
+                        "The post is not in user.posts")
 
         shared_event_obj = post['shared_event']
 
@@ -266,13 +258,6 @@ class PostCollectionHandlerTest(TestBaseHandler):
                          "The post's text expected is %s" % event.text)
 
         calls = [
-            call(
-                "add-post-institution",
-                {
-                    'institution_key': self.institution.key.urlsafe(),
-                    'created_post_key': post_obj.key.urlsafe()
-                }
-            ),
             call(
                 'notify-followers',
                 {
@@ -362,15 +347,10 @@ class PostCollectionHandlerTest(TestBaseHandler):
                          "The post's type is 'multiple_choice'")
         self.assertEqual(survey_obj.state, 'published',
                          "The post's state is 'published'")
+        self.assertTrue(key_survey in self.institution.posts,
+                        "The post is not in user.posts")
 
         calls = [
-            call(
-                "add-post-institution",
-                {
-                    'institution_key': self.institution.key.urlsafe(),
-                    'created_post_key': survey_obj.key.urlsafe()
-                }
-            ),
             call(
                 'notify-followers',
                 {

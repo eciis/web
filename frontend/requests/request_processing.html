@@ -2,8 +2,8 @@
     <md-dialog-content ng-if="!requestCtrl.isRejecting" class="md-dialog-content" layout-gt-sm="column" layout-padding>
       <h4 style="margin: 0;">Confirmar Vínculo</h4>
       <p style="margin: 0;">
-        Um usuário da plataforma solicitou vincular-se a uma das instituições que você administra.
-        Clique em confirmar para aceitar ou cancelar para recusar vinculo.
+        {{requestCtrl.isRequestUser() ? "Um usuário da plataforma" : "Uma instituição"}} solicitou vincular-se a uma das instituições que você administra.
+         Clique em confirmar para aceitar ou rejeitar para recusar vinculo.
       </p>
       <div layout="column">
         <div layout="row" md-colors="{background: 'default-grey-200'}" layout-margin style="margin: 0 0 8px 0;">

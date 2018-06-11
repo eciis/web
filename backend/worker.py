@@ -88,7 +88,7 @@ def get_all_parent_admins(child_institution, admins=[]):
     parent_institution = child_institution.parent_institution
     if parent_institution:
         parent_institution = parent_institution.get()
-        link_confirmed = child_institution.verify_connection(parent_institution)
+        link_confirmed = child_institution.verify_connection(parent_institution, 'PARENT')
         if link_confirmed:
             get_all_parent_admins(parent_institution, admins)
     return admins
@@ -99,7 +99,7 @@ def add_permission_to_children(parent, admins, permission):
     and add permission for each of the admin inside of the admins list."""
     for child_key in parent.children_institutions:
         child = child_key.get()
-        if(child.verify_connection(parent)):
+        if(child.verify_connection(parent, 'PARENT')):
             for admin in admins:
                 admin.add_permission(permission, child_key.urlsafe())
             add_permission_to_children(child, admins, permission)
@@ -118,7 +118,7 @@ def remove_permissions(remove_hierarchy, institution):
 
             for child in institution.children_institutions:
                 child = child.get()
-                if(child.verify_connection(institution)):
+                if(child.verify_connection(institution, 'PARENT')):
                     remove_permissions(remove_hierarchy, child)
         else:
             current_permissions = filter_permissions_to_remove(
@@ -399,15 +399,6 @@ class RemoveAdminPermissionsInInstitutionHierarchy(BaseHandler):
                         current_admin, permissions)
         apply_remove_operation(parent_admin, institution, is_not_admin, child_admin_key)
 
-class AddPostInInstitution(BaseHandler):
-    
-    def post(self):
-        institution_key = self.request.get('institution_key')
-        institution = ndb.Key(urlsafe=institution_key).get()
-        created_post_key = self.request.get('created_post_key')
-        created_post = ndb.Key(urlsafe=created_post_key).get()
-
-        institution.add_post(created_post)
 
 class SendInviteHandler(BaseHandler):
 
@@ -504,7 +495,6 @@ app = webapp2.WSGIApplication([
     ('/api/queue/notify-followers', NotifyFollowersHandler),
     ('/api/queue/add-admin-permissions', AddAdminPermissionsInInstitutionHierarchy),
     ('/api/queue/remove-admin-permissions', RemoveAdminPermissionsInInstitutionHierarchy),
-    ('/api/queue/add-post-institution', AddPostInInstitution),
     ('/api/queue/send-invite', SendInviteHandler),
     ('/api/queue/transfer-admin-permissions', TransferAdminPermissionsHandler)
 ], debug=True)

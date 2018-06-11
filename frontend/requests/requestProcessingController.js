@@ -166,6 +166,10 @@
             });
         };
 
+        requestController.isRequestUser = function isRequestUser() {
+            return request.type_of_invite == REQUEST_USER;
+        };
+
         function makeUrl(institutionKey){
             var currentUrl = window.location.href;
             currentUrl = currentUrl.split('#');

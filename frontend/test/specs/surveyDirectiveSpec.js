@@ -7,7 +7,8 @@
     var user = {
         name: 'name',
         current_institution: {key: "institutuion_key"},
-        state: 'active'
+        state: 'active',
+        permissions: {}
     };
     var option_empty = {'text': '',
                         'number_votes': 0,
@@ -26,7 +27,8 @@
     var survey = { 'title' : 'The Survey',
                     'type_survey' : 'multiple_choice',
                     'deadline': new Date(),
-                    'options': options
+                    'options': options,
+                    'key': 'Akpaosakdsa-snmnzxxjkha3232xaz'
                     };
 
     beforeEach(inject(function($controller, $httpBackend, $http, $q, $mdDialog,
@@ -48,7 +50,7 @@
             $scope: scope
         });
 
-        surveyCtrl.user = user;
+        surveyCtrl.user = new User(user);
         surveyCtrl.posts = [];
         surveyCtrl.post = survey;
         surveyCtrl.options = options;
@@ -72,16 +74,22 @@
             surveyCtrl.post = survey;
             surveyCtrl.options = options;
             surveyCtrl.multipleChoice = true;
+            surveyCtrl.callback = function() {};
 
             var survey_obj = new Post(surveyCtrl.post, surveyCtrl.user.current_institution.key);
+            var date = survey_obj.deadline.toISOString();
+            survey_obj.deadline = _.split(date, '.')[0];
             var promise = surveyCtrl.save([]);
             httpBackend.expect('POST', "/api/posts").respond(survey_obj);
 
-            promise.should.be.fulfilled.then(function() {
+            promise.then(function() {
+                var user_saved = JSON.parse(window.localStorage.userInfo);
                 expect(postService.createPost).toHaveBeenCalledWith(survey_obj);
                 expect(surveyCtrl.resetSurvey).toHaveBeenCalled();
                 expect(mdDialog.hide).toHaveBeenCalled();
-            }).should.notify(done);
+                expect(user_saved.permissions).toEqual({'remove_post': {'Akpaosakdsa-snmnzxxjkha3232xaz': true}});
+                done();
+            });
             httpBackend.flush();
             scope.$apply();
         });

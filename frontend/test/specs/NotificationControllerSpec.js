@@ -123,4 +123,32 @@
             expect(notCtrl.seeAll).not.toHaveBeenCalled();
         });
     });
+
+    describe('goTo()', function() {
+
+        it('should call state.go if notification has a state', function() {
+            spyOn(state, 'go');
+
+            var notificationWithState = {
+                entity_type: 'COMMENT',
+                entity: {
+                    key: '12345'
+                }
+            };
+
+            notCtrl.goTo(notificationWithState);
+            expect(state.go).toHaveBeenCalledWith('app.post', {key: notificationWithState.entity.key});
+        });
+
+        it('should call notCtrl.seeAll when notification no has a state', function() {
+            spyOn(notCtrl, 'seeAll');
+
+            var notificationWithoutState = {
+                entity_type: 'REMOVE_INSTITUTION_LINK'
+            };
+
+            notCtrl.goTo(notificationWithoutState);
+            expect(notCtrl.seeAll).toHaveBeenCalled();
+        });
+    });
 }));

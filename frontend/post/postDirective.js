@@ -303,8 +303,8 @@
                             $mdDialog.cancel();
                             MessageService.showToast(response.data.msg);
                         });
-                    }, function error() {
-                        MessageService.showToast("Esse post não pode ser editado pois já possui atividade");
+                    }, function error(response) {
+                        MessageService.showToast(response.data.msg);
                     });
                 } else {
                     MessageService.showToast('Edição inválida!');

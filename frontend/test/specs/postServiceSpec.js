@@ -41,9 +41,9 @@
 
         beforeEach(module('app'));
 
-        beforeEach(inject(function($httpBackend, PostService, _$http_, $rootScope, AuthService) {
+        beforeEach(inject(function($httpBackend, PostService, HttpService, $rootScope, AuthService) {
             httpBackend = $httpBackend;
-            $http = _$http_;
+            $http = HttpService;
             scope = $rootScope.$new();
             service = PostService;
             httpBackend.when('GET', 'main/main.html').respond(200);
@@ -67,7 +67,7 @@
             });
             httpBackend.flush();
             expect($http.get).toHaveBeenCalled();
-            expect(result.data).toEqual(posts);
+            expect(result).toEqual(posts);
         });
 
         it('Test createPost in success case', function() {
@@ -85,7 +85,7 @@
                 }
             }
             expect($http.post).toHaveBeenCalledWith(POSTS_URI, body);
-            expect(result.data).toEqual(posts[0]);
+            expect(result).toEqual(posts[0]);
         });
 
         it('Test likePost in success case', function() {
@@ -125,18 +125,19 @@
             });
             httpBackend.flush();
             expect($http.get).toHaveBeenCalled();
-            expect(result.data).toEqual([like]);
+            expect(result).toEqual([like]);
         });
 
         it('Test save()', function() {
             spyOn($http, 'patch').and.callThrough();
             httpBackend.when('PATCH', POSTS_URI + '/' + posts[0].key)
-                                    .respond(200, {status: 200, msg: "success"});
+                                    .respond(200, {status: 200, msg: "success", data: {msg: ""}});
             var patch = [{op: 'remove', path: 'propertie/1', value: 'test patch'}];
             var result;
-            service.save(posts[0], patch).catch(function(data) {
+            service.save(posts[0].key, patch).then(function(data) {
                 result = data;
-            });
+            }); 
+            httpBackend.flush();
             expect($http.patch).toHaveBeenCalled();
         });
 }));

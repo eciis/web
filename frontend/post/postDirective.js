@@ -300,7 +300,6 @@
                             $mdDialog.hide(postCtrl.post);
                         }, function error(response) {
                             $mdDialog.cancel();
-                            MessageService.showToast(response.data.msg);
                         });
                     });
                 } else {

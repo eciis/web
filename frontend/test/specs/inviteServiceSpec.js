@@ -13,9 +13,9 @@
 
         beforeEach(module('app'));
 
-        beforeEach(inject(function($httpBackend, InviteService, _$http_) {
+        beforeEach(inject(function ($httpBackend, InviteService, HttpService) {
             httpBackend = $httpBackend;
-            $http = _$http_;
+            $http = HttpService;
             service = InviteService;
             service.user = {
                 name: 'user',
@@ -37,7 +37,7 @@
                 result = data;
                 body['data'] = {invite_body: inviteUser};
                 expect($http.post).toHaveBeenCalledWith(INVITES_URI, body);
-                expect(result.data).toEqual(inviteUser);
+                expect(result).toEqual(inviteUser);
                 done();
             });
             httpBackend.flush();
@@ -51,7 +51,7 @@
                 result = data;
                 body['data'] = {invite_body: inviteInstitution};
                 expect($http.post).toHaveBeenCalledWith(INVITES_URI, body);
-                expect(result.data).toEqual(inviteInstitution);
+                expect(result).toEqual(inviteInstitution);
                 done();
             });
             httpBackend.flush();
@@ -64,7 +64,7 @@
             service.getSentInstitutionInvitations().then(function(data){
                 result = data;
                 expect($http.get).toHaveBeenCalled();
-                expect(result.data).toEqual(invites);
+                expect(result).toEqual(invites);
                 done();
             });
             httpBackend.flush();

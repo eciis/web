@@ -83,7 +83,7 @@ class PostHandler(BaseHandler):
         post = ndb.Key(urlsafe=post_urlsafe).get()
 
         Utils._assert(not post.can_edit(),
-                        "The user can not update this post",
+                        "This post cannot be updated",
                         NotAuthorizedException)
 
         """Apply patch."""

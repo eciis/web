@@ -163,7 +163,7 @@ class PostHandlerTest(TestBaseHandler):
     @patch('util.login_service.verify_token', return_value={'email': 'first_user@gmail.com'})
     def test_patch(self, verify_token):
         """Test the post_handler's patch method when user can't edit the post."""
-        exception_message = "Error! The user can not update this post"
+        exception_message = "Error! This post cannot be updated"
         expected_alert = "Expected: " + exception_message + ". But got: "
         # Call the patch method and assert that it works
         self.testapp.patch_json("/api/posts/%s"

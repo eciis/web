@@ -40,7 +40,6 @@ def remove_user_from_institutions(user):
         institution_key = user.institutions[i]
         institution = institution_key.get()
         institution.remove_member(user)
-        institution.unfollow(user.key)
 
 
 class UserHandler(BaseHandler):

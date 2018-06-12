@@ -126,18 +126,18 @@ class UserHandlerTest(TestBaseHandler):
         # assert institution has no longer the deleted user
         self.assertTrue(self.other_user.key not in self.institution.members, 
             "The user key should not be in institution members") 
-        self.assertTrue(self.other_user.key not in self.institution.followers, 
-            "The user key should not be in institution followers") 
+        self.assertTrue(self.other_user.key in self.institution.followers, 
+            "The user key should be in institution followers") 
         # assert other_institution has no longer the deleted user
         self.assertTrue(self.other_user.key not in self.other_institution.members, 
             "The user key should not be in institution members") 
-        self.assertTrue(self.other_user.key not in self.other_institution.followers, 
-            "The user key should not be in institution followers") 
+        self.assertTrue(self.other_user.key in self.other_institution.followers, 
+            "The user key should be in institution followers") 
 
         # assert user has no longer institutions and permissions
         self.assertEquals(self.other_user.state, "inactive", "The user state should be 'inactive'")
         self.assertEquals(self.other_user.institutions, [], "User institutions should be empty")
-        self.assertEquals(self.other_user.follows, [self.institution.key], "User institutions should not be empty")
+        self.assertEquals(self.other_user.follows, [self.other_institution.key, self.institution.key], "User institutions should not be empty")
         self.assertEquals(self.other_user.permissions, {}, "User permissions should be empty")
         self.assertEquals(self.other_user.institution_profiles, [], "User permissions should be empty")
 

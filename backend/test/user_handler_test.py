@@ -137,7 +137,7 @@ class UserHandlerTest(TestBaseHandler):
         # assert user has no longer institutions and permissions
         self.assertEquals(self.other_user.state, "inactive", "The user state should be 'inactive'")
         self.assertEquals(self.other_user.institutions, [], "User institutions should be empty")
-        self.assertEquals(self.other_user.follows, [self.other_institution.key, self.institution.key], "User institutions should not be empty")
+        self.assertEquals(self.other_user.follows, [self.other_institution.key, self.institution.key], "Institutions followed by user should not be empty")
         self.assertEquals(self.other_user.permissions, {}, "User permissions should be empty")
         self.assertEquals(self.other_user.institution_profiles, [], "User permissions should be empty")
 

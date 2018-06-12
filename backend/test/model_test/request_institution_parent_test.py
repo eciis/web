@@ -180,7 +180,8 @@ class RequestInstitutionParentTest(TestBase):
             'institution_admin': {
                 'name': self.institution.name
             },
-            'institution': self.institution.make(RequestInstitutionParent.INST_PROPS_TO_MAKE)
+            'institution': self.institution.make(RequestInstitutionParent.INST_PROPS_TO_MAKE),
+            'requested_institution': self.other_institution.make(RequestInstitutionParent.INST_PROPS_TO_MAKE)
         }
 
         made_request = request.make()

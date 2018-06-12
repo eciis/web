@@ -121,11 +121,17 @@ class UserHandlerTest(TestBaseHandler):
         # update user and institution
         self.other_user = self.other_user.key.get()
         self.institution = self.institution.key.get()
+        self.other_institution = self.other_institution.key.get()
         
         # assert institution has no longer the deleted user
         self.assertTrue(self.other_user.key not in self.institution.members, 
             "The user key should not be in institution members") 
         self.assertTrue(self.other_user.key not in self.institution.followers, 
+            "The user key should not be in institution followers") 
+        # assert other_institution has no longer the deleted user
+        self.assertTrue(self.other_user.key not in self.other_institution.members, 
+            "The user key should not be in institution members") 
+        self.assertTrue(self.other_user.key not in self.other_institution.followers, 
             "The user key should not be in institution followers") 
 
         # assert user has no longer institutions and permissions

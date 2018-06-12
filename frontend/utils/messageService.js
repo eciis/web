@@ -37,7 +37,8 @@
             "Error! The requested institution has already been invited": "Esta instituição já foi convidada, mas seu convite está pendente",
             "Error! You've already voted in this survey": "Você já votou nessa enquete",
             "Error! User is not allowed to edit this post": "O usuário não tem permissão para editar essa publicação.",
-            "Error! This post cannot be updated": "A publicação não pode ser editada."
+            "Error! This post cannot be updated": "A publicação não pode ser editada.",
+            "Error! You don't have permission to publish post.": "Você não tem permissão para publicar post nesta instituição"
         };
 
         service.showToast = function showToast(message) {

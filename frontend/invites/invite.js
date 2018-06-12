@@ -17,5 +17,13 @@ Invite.prototype.isValid = function isValid() {
 };
 
 Invite.prototype.isStatusOn = function isStatusOn(value) {
-    return this.status == value;
-}
+    return this.status === value;
+};
+
+Invite.prototype.setStatus = function (status) {
+    this.status = status;
+};
+
+Invite.prototype.setType = function (typeOfInvite) {
+    this.type_of_invite = typeOfInvite;
+};

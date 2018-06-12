@@ -30,12 +30,12 @@
                 }
             );
         }
-
+        
         function selectDialogToShow(request, event, dialogProperties) {
             var isRequestResolved = request.isStatusOn('rejected') || request.isStatusOn('accepted');
             
             if(isRequestResolved) {
-                showResolvedReqDialog(event);
+                service.showResolvedReqDialog(event);
                 return;
             }
 
@@ -46,11 +46,11 @@
                     break;
                 default:
                     dialogProperties.locals.request = request;
-                    showPendingReqDialog(dialogProperties, event);
+                    service.showPendingReqDialog(dialogProperties, event);
             }
         }
 
-        function showResolvedReqDialog(event) {
+        service.showResolvedReqDialog = function (event) {
             function ResolvedRequesCtrl($mdDialog) {
                 var controll = this;
                 controll.hide = function hide() {
@@ -68,7 +68,7 @@
             });
         }
 
-        function showPendingReqDialog(dialogProperties, event) {
+        service.showPendingReqDialog = function (dialogProperties, event) {
             $mdDialog.show({
                 controller: dialogProperties.controller,
                 controllerAs: dialogProperties.controllerAs,
@@ -92,7 +92,8 @@
                     return RequestInvitationService.getInstChildrenRequest(invitekey);
                 case 'REQUEST_INSTITUTION_PARENT':
                     return RequestInvitationService.getInstParentRequest(invitekey);
-                case 'USER_ADM' || "ACCEPT_INVITE_USER_ADM":
+                case 'USER_ADM':
+                case 'ACCEPT_INVITE_USER_ADM':
                     return InviteService.getInvite(invitekey);
             } 
         }

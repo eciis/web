@@ -36,7 +36,8 @@ def define_entity(dictionary):
 
 def remove_user_from_institutions(user):
     """Remove user from all your institutions."""
-    for institution_key in user.institutions:
+    for i in range(len(user.institutions) -1, -1, -1):
+        institution_key = user.institutions[i]
         institution = institution_key.get()
         institution.remove_member(user)
 

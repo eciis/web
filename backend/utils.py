@@ -159,6 +159,17 @@ def to_int(value, exception, message_exception):
     return value
 
 def text_normalize(text):
-    normal_form = normalize('NFKD', unicode(text)).encode('ascii', 'ignore')
-    escape_characters = normal_form.encode('unicode-escape')
-    return escape_characters
+    """
+    This method removes all accents and special characters from the passed text 
+    using the NFKD normalization of unicode coding (For more information on this 
+    normalization go to: https://unicode.org/reports/tr15/). This normalization 
+    maps all characters to their similar in normal formal unicode. After 
+    normalization, treat all escape characters so they are considered normal 
+    characters in the text.
+
+    Arguments:
+    text -- Text to normilize
+    """
+    normal_form_text = normalize('NFKD', unicode(text)).encode('ascii', 'ignore')
+    text_ignoring_escape_chars = normal_form_text.encode('unicode-escape')
+    return text_ignoring_escape_chars

@@ -152,4 +152,8 @@
             expect(mainCtrl.isAdmin(mainCtrl.user.current_institution.key)).toBe(true);
         });
     });
+
+    describe('Main Controller listenners', function(){
+
+    });
 }));

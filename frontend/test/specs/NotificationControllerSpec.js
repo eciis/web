@@ -123,4 +123,36 @@
             expect(notCtrl.seeAll).not.toHaveBeenCalled();
         });
     });
+
+    describe('goTo()', function() {
+
+        it('should call state.go if notification has a state', function() {
+            spyOn(state, 'go');
+
+            var COMMENT_STATE = 'app.post';
+
+            var notificationWithState = {
+                entity_type: 'COMMENT',
+                entity: {
+                    key: '12345'
+                }
+            };
+            // When this function is called the informations of notification has in own controller in the variable 'type_data'
+            // and the type 'COMMENT' has a state to 'app.post'
+            notCtrl.goTo(notificationWithState);
+            expect(state.go).toHaveBeenCalledWith(COMMENT_STATE, {key: notificationWithState.entity.key});
+        });
+
+        it('should call notCtrl.seeAll when notification no has a state', function() {
+            spyOn(notCtrl, 'seeAll');
+
+            var notificationWithoutState = {
+                entity_type: 'REMOVE_INSTITUTION_LINK'
+            };
+            // When this function is called the informations of notification has in own controller in the variable 'type_data'
+            // and the type 'REMOVE_INSTITUTION_LINK' no has a state to go
+            notCtrl.goTo(notificationWithoutState);
+            expect(notCtrl.seeAll).toHaveBeenCalled();
+        });
+    });
 }));

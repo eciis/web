@@ -342,7 +342,6 @@ class User(ndb.Model):
         to remove all his institutions.
         """
         self.institutions = []
-        self.follows = []
         self.permissions = {}
         self.put()
         

@@ -8,6 +8,7 @@ import logging
 from app_version import APP_VERSION
 
 from google.appengine.ext import ndb
+from unicodedata import normalize
 
 from oauth2client import client
 from oauth2client.crypt import AppIdentityError
@@ -156,3 +157,8 @@ def to_int(value, exception, message_exception):
         raise exception(message_exception)
 
     return value
+
+def text_normalize(text):
+    normal_form = normalize('NFKD', unicode(text)).encode('ascii', 'ignore')
+    escape_characters = normal_form.encode('unicode-escape')
+    return escape_characters

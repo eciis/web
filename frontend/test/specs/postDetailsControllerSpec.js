@@ -45,7 +45,7 @@
     var POSTS_URI = "/api/posts";
 
 
-    beforeEach(inject(function($controller, $httpBackend, $http, $mdDialog,
+    beforeEach(inject(function($controller, $httpBackend, HttpService, $mdDialog,
             PostService, AuthService, $mdToast, $rootScope, CommentService, $state) {
         scope = $rootScope.$new();
         rootscope = $rootScope;
@@ -54,7 +54,7 @@
         mdDialog = $mdDialog;
         postService = PostService;
         mdToast = $mdToast;
-        http = $http;
+        http = HttpService;
         state = $state;
         commentService = CommentService;
         commentService.user = user;

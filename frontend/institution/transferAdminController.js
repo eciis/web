@@ -43,12 +43,10 @@
 
                     let invite = new Invite(data);
 
-                    InviteService.sendInviteUser({invite_body: invite}).then(function success(response) {
+                    InviteService.sendInviteUser({invite_body: invite}).then(function success() {
                         invite.status = 'sent';
                         $mdDialog.hide(invite);
                         MessageService.showToast("Convite enviado com sucesso!");
-                    }, function error(response) {
-                        MessageService.showToast(response.data);
                     });
                 } else {
                     MessageService.showToast('Você já é administrador da instituição, selecione outro membro!');

@@ -29,7 +29,7 @@
                     'options' : options
                     };
 
-    beforeEach(inject(function($controller, $httpBackend, $http, $q, $mdDialog,
+    beforeEach(inject(function($controller, $httpBackend, HttpService, $q, $mdDialog,
             PostService, AuthService, $mdToast, $rootScope, ImageService) {
         imageService = ImageService;
         scope = $rootScope.$new();
@@ -39,7 +39,7 @@
         mdDialog = $mdDialog;
         postService = PostService;
         mdToast = $mdToast;
-        http = $http;
+        http = HttpService;
         AuthService.login(user);
 
         postCtrl = $controller('PostController', {
@@ -124,7 +124,7 @@
             spyOn(postService, 'createPost').and.callFake(function () {
                 return {
                     then: function (callback) {
-                        return callback({ data: {key: post.key }});
+                        return callback({key: post.key });
                     }
                 };
             });

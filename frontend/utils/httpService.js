@@ -10,6 +10,7 @@
         var GET = 'GET';
         var PUT = 'PUT';
         var DELETE = 'DELETE';
+        var PATCH = 'PATCH';
 
         service.get = function getMethod(url) {
             return request(GET, url);
@@ -25,6 +26,10 @@
 
         service.delete = function deleteMethod(url) {
             return request(DELETE, url);
+        };
+
+        service.patch = function patchMethod(url, data) {
+            return request(PATCH, url, data);
         };
 
         function request(method, url, data) {

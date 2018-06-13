@@ -28,9 +28,9 @@
 
         beforeEach(module('app'));
 
-        beforeEach(inject(function($httpBackend, UserService, _$http_, $rootScope) {
+        beforeEach(inject(function($httpBackend, UserService, HttpService, $rootScope) {
             httpBackend = $httpBackend;
-            $http = _$http_;
+            $http = HttpService;
             scope = $rootScope.$new();
             service = UserService;
             httpBackend.when('GET', 'main/main.html').respond(200);

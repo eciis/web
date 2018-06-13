@@ -151,13 +151,12 @@
 
         function loadInstitution() {
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
-                manageMemberCtrl.institution = response.data;
+                manageMemberCtrl.institution = response;
                 getMembers();
-                getSentInvitations(response.data.sent_invitations);
+                getSentInvitations(response.sent_invitations);
                 getRequests();
-            }, function error(response) {
+            }, function error() {
                 $state.go('app.institution.timeline', {institutionKey: currentInstitutionKey});
-                MessageService.showToast(response.data.msg);
             });
         }
 
@@ -169,12 +168,11 @@
 
         function getMembers() {
             InstitutionService.getMembers(currentInstitutionKey).then(function success(response) {
-                manageMemberCtrl.members = response.data;
+                manageMemberCtrl.members = response;
                 getAdmin();
                 manageMemberCtrl.isLoadingMembers = false;
-            }, function error(response) {
+            }, function error() {
                 manageMemberCtrl.isLoadingMembers = true;
-                MessageService.showToast(response.data.msg);
             });
         }
 
@@ -243,8 +241,6 @@
             promise.then(function () {
                 InviteService.resendInvite(inviteKey).then(function success() {
                     MessageService.showToast("Convite reenviado com sucesso.");
-                }, function error(response) {
-                    MessageService.showToast(response.data.msg);
                 });
             }, function () {
                 MessageService.showToast('Cancelado.');
@@ -400,8 +396,6 @@
                 InstitutionService.removeMember(currentInstitutionKey, member_obj, removeMemberCtrl.justification).then(function success() {
                     manageMemberCtrl.removeMember(member_obj);
                     $mdDialog.cancel();
-                }, function error(response) {
-                    MessageService.showToast(response.data.msg);
                 });
             };
             

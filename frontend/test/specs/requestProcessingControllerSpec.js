@@ -309,7 +309,7 @@
             spyOn(institutionService, 'getInstitution').and.callFake(function () {
                 return {
                     then: function (callback) {
-                        callback({ data: requested_institution });
+                        callback(requested_institution);
                     }
                 };
             });

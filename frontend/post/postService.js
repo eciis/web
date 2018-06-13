@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.service("PostService", function PostService(HttpService, $q, AuthService) {
+    app.service("PostService", function PostService(HttpService, AuthService) {
         var service = this;
         var POSTS_URI = "/api/posts";
         var LIMIT = 10;
@@ -15,14 +15,11 @@
         };
 
         service.getNextPosts = function getNextPosts(page) {
-            var deferred = $q.defer();
-            HttpService.get("/api/user/timeline?page=" + page + "&limit=" + LIMIT).then(function success(response) {
+            var promise = HttpService.get("/api/user/timeline?page=" + page + "&limit=" + LIMIT);
+            promise.then(function success(response) {
                 service.posts = response;
-                deferred.resolve(response);
-            }, function error(response) {
-                deferred.reject(response);
             });
-            return deferred.promise;
+            return promise;
         };
 
         service.createPost = function createPost(post) {

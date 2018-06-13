@@ -5,7 +5,7 @@
     var app = angular.module("app");
 
     app.controller("NotificationController", function NotificationController(NotificationService, AuthService, $state,
-        $mdDialog, InstitutionService, UserService, RequestInvitationService, MessageService) {
+        $mdDialog, RequestInvitationService, MessageService) {
         var notificationCtrl = this;
 
         notificationCtrl.user = AuthService.getCurrentUser();
@@ -19,23 +19,13 @@
                 state: "app.post"
             },
             "DELETE_MEMBER": {
-                icon: "clear",
-                action: function (properties, notification, event) {
-                    if (notification.status !== 'READ') {
-                        return refreshUser(notification);
-                    }
-                }
+                icon: "clear"
             },
             "LEFT_INSTITUTION": {
                 icon: "clear"
             },
             "DELETED_INSTITUTION": {
-                icon: "clear",
-                action: function (properties, notification, event) {
-                    if (notification.status !== 'READ') {
-                        return refreshUser(notification);
-                    }
-                }
+                icon: "clear"
             },
             "POST": {
                 icon: "inbox",
@@ -121,12 +111,7 @@
                 }
             },
             "ACCEPT_INSTITUTION_LINK": {
-                icon: "account_balance",
-                action: function (properties, notification, event) {
-                    if (notification.status !== 'READ') {
-                        return refreshUser(notification);
-                    }
-                }
+                icon: "account_balance"
             },
             "ACCEPTED_LINK": {
                 icon: "link"
@@ -324,16 +309,6 @@
         notificationCtrl.seeAll = function seeAll() {
             $state.go('app.user.notifications');
         };
-
-        function refreshUser(notification) {
-            UserService.load().then(function success(response) {
-                notificationCtrl.user.institutions = response.institutions;
-                notificationCtrl.user.follows = response.follows;
-                notificationCtrl.user.institution_profiles = response.institution_profiles;
-                notificationCtrl.user.permissions = response.permissions;
-                AuthService.save();
-            });
-        }
 
         (function main() {
             NotificationService.watchNotifications(notificationCtrl.user.key, notificationCtrl.notifications);

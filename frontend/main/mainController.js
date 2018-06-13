@@ -2,9 +2,9 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("MainController", function MainController($mdSidenav, $mdDialog, $mdToast, $state,
-            AuthService, $rootScope, $q, RequestInvitationService,
-            InviteService, $mdMenu, $window) {
+    app.controller("MainController", function MainController($mdSidenav, $state, AuthService,
+                    RequestInvitationService, UserService, EventListenerService,
+                    $mdMenu, $window) {
         var mainCtrl = this;
         var url_report = "http://support.plataformacis.org/report";
 
@@ -16,6 +16,8 @@
         mainCtrl.pendingInstLinksInvitations = 0;
 
         mainCtrl.APP_VERSION = Config.APP_VERSION;
+
+        var EVENTS_TO_UPDATE_USER = ["DELETED_INSTITUTION", "DELETE_MEMBER", "ACCEPT_INSTITUTION_LINK"];
 
         mainCtrl.search = function search() {
             if(mainCtrl.search_keyword) {
@@ -154,11 +156,36 @@
             return AuthService.emailVerified();
         };
 
+        function updateCurrentInst(){
+            var existCurrent = _.find(mainCtrl.user.institutions, function(inst){
+                                    return inst.key === mainCtrl.user.current_institution.key
+                                });
+            if(!existCurrent){
+                mainCtrl.user.current_institution = mainCtrl.user.institutions[0];
+            }  
+        };
+
+        function updateUser() {
+            UserService.load().then(function success(response) {
+                mainCtrl.user.institutions = response.institutions;
+                mainCtrl.user.follows = response.follows;
+                mainCtrl.user.institution_profiles = response.institution_profiles;
+                mainCtrl.user.permissions = response.permissions;
+                updateCurrentInst();
+                AuthService.save();
+            });
+        }
+
+
         mainCtrl.refreshUser = function refreshUser() {
             AuthService.reload();
             $state.reload();
             $window.location.reload();
         };
+
+        function eventListener() {
+            EventListenerService.multipleEventsListener(EVENTS_TO_UPDATE_USER, updateUser);
+        }
 
         (function main() {
             if (mainCtrl.user.name === 'Unknown') {
@@ -166,6 +193,7 @@
             }
 
             mainCtrl.getPendingTasks();
+            eventListener();
         })();
     });
 })();

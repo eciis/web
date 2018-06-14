@@ -30,7 +30,7 @@ class ResendInviteHandler(BaseHandler):
                 invite.institution_key.urlsafe())
 
         institution = invite.institution_key.get()
-        Utils._assert(institution.state == 'inactive',
-                        "The institution has been deleted", NotAuthorizedException)
+        Utils._assert(not institution.is_active(),
+                      "This institution is not active", NotAuthorizedException)
 
         invite.send_invite(host, user.current_institution)

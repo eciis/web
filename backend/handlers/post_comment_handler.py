@@ -77,8 +77,8 @@ class PostCommentHandler(BaseHandler):
         post = ndb.Key(urlsafe=post_key).get()
         institution = post.institution.get()
         
-        Utils._assert(institution.state == 'inactive',
-                      "The institution has been deleted", NotAuthorizedException)
+        Utils._assert(not institution.is_active(),
+                      "This institution is not active", NotAuthorizedException)
         Utils._assert(post.state == 'deleted',
                       "Can not delete comment in deleted post", NotAuthorizedException)
         

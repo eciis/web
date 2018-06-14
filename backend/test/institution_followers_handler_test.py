@@ -62,7 +62,7 @@ class InstitutionFollowersHandlerTest(TestBaseHandler):
                               self.other_institution.key.urlsafe())
         exception_message = self.get_message_exception(ex.exception.message)
         self.assertTrue(exception_message ==
-                        "Error! The institution has been deleted")
+                        "Error! This institution is not active")
 
     @patch('util.login_service.verify_token', return_value={'email': 'second_user@ccc.ufcg.edu.br'})
     def test_delete(self, verify_token):

@@ -93,6 +93,7 @@ def initModels(cls):
     cls.institution.members = [cls.user.key]
     cls.institution.followers = [cls.user.key]
     cls.institution.admin = cls.user.key
+    cls.institution.state = 'active'
     cls.institution.put()
     # Survey post of User To SPLAB
     cls.user_post = SurveyPost()

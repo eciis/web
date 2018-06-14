@@ -31,18 +31,14 @@ class InstitutionCollectionHandlerTest(TestBaseHandler):
         user = mocks.create_user('user@example.com')
         # new Institution FIRST INST
         first_inst = mocks.create_institution('FIRST INST')
-        first_inst.state = "active"
         first_inst.put()
-        # new Institution SECOND INST with pending state default 
-        second_inst = mocks.create_institution('SECOND INST')
         # new Institution THIRD INST
         third_inst = mocks.create_institution('THIRD INST')
-        third_inst.state = "active"
         third_inst.put()
 
         # Call the get method
         all_institutions = self.testapp.get("/api/institutions?page=0&&limit=2").json
-        
+
         self.assertEqual(len(all_institutions), 2,
                          "The length of all institutions list should be 2")
 

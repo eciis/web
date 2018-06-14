@@ -5,7 +5,7 @@
 
     app.controller("InviteInstHierarchieController", function InviteInstHierarchieController(
         InviteService,$mdToast, $mdDialog, $state, AuthService, InstitutionService,
-        MessageService, RequestInvitationService, $q) {
+        MessageService, RequestInvitationService, RequestDialogService, $q) {
 
         var inviteInstHierCtrl = this;
         var institutionKey = $state.params.institutionKey;
@@ -355,8 +355,8 @@
         };
 
         inviteInstHierCtrl.analyseRequest = function analyseRequest(event, request) {
-            RequestInvitationService
-                .analyseReqDialog(event, inviteInstHierCtrl.institution, request)
+            RequestDialogService
+                .showHierarchyDialog(request, event)
                 .then(function accepted() {
                     addInstitutionToHierarchy(request);
                 });

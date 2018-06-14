@@ -46,7 +46,10 @@ class PostCommentHandler(BaseHandler):
         body = json.loads(self.request.body)
         comment_data = body['commentData']
         post = ndb.Key(urlsafe=post_key).get()
+        institution = post.institution.get()
 
+        Utils._assert(not institution.is_active(),
+            "This institution is not active", EntityException)
         Utils._assert(post.state == 'deleted',
                       "This post has been deleted", EntityException)
 
@@ -54,17 +57,15 @@ class PostCommentHandler(BaseHandler):
         post.add_comment(comment)
         entity_type = 'COMMENT'
 
-        user_is_the_post_author = post.author == user.key
-        if(not user_is_the_post_author):
-            params = {
-                'receiver_key': post.author.urlsafe(),
-                'sender_key': user.key.urlsafe(),
-                'entity_key': post.key.urlsafe(),
-                'entity_type': entity_type,
-                'current_institution': user.current_institution.urlsafe(),
-                'sender_institution_key': post.institution.urlsafe()
-            }
-            enqueue_task('post-notification', params)
+        params = {
+            'receiver_key': post.author.urlsafe(),
+            'sender_key': user.key.urlsafe(),
+            'entity_key': post.key.urlsafe(),
+            'entity_type': entity_type,
+            'current_institution': user.current_institution.urlsafe(),
+            'sender_institution_key': post.institution.urlsafe()
+        }
+        enqueue_task('post-notification', params)
 
         self.response.write(json.dumps(Utils.toJson(comment)))
 
@@ -76,8 +77,8 @@ class PostCommentHandler(BaseHandler):
         post = ndb.Key(urlsafe=post_key).get()
         institution = post.institution.get()
         
-        Utils._assert(institution.state == 'inactive',
-                      "The institution has been deleted", NotAuthorizedException)
+        Utils._assert(not institution.is_active(),
+                      "This institution is not active", NotAuthorizedException)
         Utils._assert(post.state == 'deleted',
                       "Can not delete comment in deleted post", NotAuthorizedException)
         

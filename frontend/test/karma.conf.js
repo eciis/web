@@ -32,7 +32,8 @@ module.exports = function (config) {
         "bower_components/ngMask/dist/ngMask.js",
         '../*.js',
         '../*/*.js',
-        'specs/*.js'
+        'specs/*.js',
+        'specs/**/*.js',
     ],
 
 
@@ -88,6 +89,11 @@ module.exports = function (config) {
 
     // Concurrency level
     // how many browser should be started simultaneous
-    concurrency: Infinity
+    concurrency: Infinity,
+
+    // if true, it shows console logs
+    client: {
+      captureConsole: false
+    }
   })
 }

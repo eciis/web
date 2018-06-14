@@ -3,25 +3,25 @@
 (function() {
     const app = angular.module('app');
 
-    app.controller('AnalyseHierarchyRequestController', function AnalyseHierarchyRequestController(requestedInstitution, request,
+    app.controller('AnalyseHierarchyRequestController', function AnalyseHierarchyRequestController(request,
          RequestInvitationService, InstitutionService, MessageService, $mdDialog) {
         const analyseHierReqCtrl = this;
-
+    
         const REQUEST_PARENT = "REQUEST_INSTITUTION_PARENT";
         const REQUEST_CHILDREN = "REQUEST_INSTITUTION_CHILDREN";
         var parent, child;
 
         
-        (function loadInstitutions() {
+        (function loadInstitutions() { 
             switch(request.type_of_invite){
                 case REQUEST_PARENT:
-                    parent = requestedInstitution;
+                    parent = request.requested_institution;
                     child = request.institution;    
                     break;
                 case REQUEST_CHILDREN:
                     parent = request.institution;
-                    child = requestedInstitution;
-                    analyseHierReqCtrl.hasToRemoveLink = child.parent_institution !== null;
+                    child = request.requested_institution;
+                    analyseHierReqCtrl.hasToRemoveLink = child.parent_institution;
             }
 
             analyseHierReqCtrl.parent = parent;

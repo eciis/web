@@ -139,6 +139,7 @@ def initModels(cls):
     cls.certbio.members = [cls.user.key]
     cls.certbio.followers = [cls.user.key]
     cls.certbio.admin = cls.user.key
+    cls.certbio.state = "active"
     cls.certbio.put()
 
     """ Update User."""

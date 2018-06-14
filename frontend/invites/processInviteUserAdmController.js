@@ -3,7 +3,8 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller('ProcessInviteUserAdmController', function ProcessInviteUserAdmController(key, typeOfDialog, InviteService, MessageService, AuthService, $mdDialog) {
+    app.controller('ProcessInviteUserAdmController', function ProcessInviteUserAdmController(request, typeOfDialog, InviteService,
+        MessageService, AuthService, $mdDialog) {
         var processCtrl = this;
 
         processCtrl.VIEW_INVITE_SENDER = 'VIEW_ACCEPTED_INVITATION_SENDER';
@@ -38,38 +39,31 @@
         };
 
         /**
-         * This method takes the invitation from the server and verifies that the status is sent, 
-         * if yes it releases the dialog so that the user can accept or reject the invitation, if not, 
-         * verifies if who is trying to access the invitation is the user who sent it, using the variable 
-         * typeOfDialog. If it is verified that who is accessing is the user who sent the invitation, 
-         * it removes the key from the institution in which he was an administrator, if is not the user 
-         * who sent the invitation that is accessing, shows a message indicating that the invitation 
-         * was already processed.
+         * This method loads the invitation received by the controller and verifies if its status is 'sent'. 
+         * If so, it shows the dialog to accept or reject the invitation, if not, it verifies if who is trying
+         * to access the invitation is the user who sent it, using the variable typeOfDialog.
+         * If that is the case, it removes the key from the institution in which he was an administrator,
+         * if it is not the user who sent the invitation that is accessing, shows a message indicating 
+         * that the invitation was already processed.
          */
-        function getInvite() {
-            InviteService.getInvite(key).then(function success(response) {
-                let invite = new Invite(response);
+        function loadInvite() {
+            let invite = new Invite(request);
 
-                if (invite.status === 'sent' || typeOfDialog === processCtrl.VIEW_INVITE_SENDER) {
-                    processCtrl.invite = invite;
+            if (invite.isStatusOn('sent') || typeOfDialog === processCtrl.VIEW_INVITE_SENDER) {
+                processCtrl.invite = invite;
 
-                    /**
-                     * Will enter this condition when the dialog type is 'accepted' 
-                     * (when the user is sending the invitation).
-                     */
-                    if(typeOfDialog === processCtrl.VIEW_INVITE_SENDER) {
-                        _.remove(processCtrl.current_user.institutions_admin, function(url) {
-                            return getKey(url) === invite.institution_key;
-                        });
-                        removeSuperUserPermission();
-                        AuthService.save();
-                    }
-
-                } else {
-                    processCtrl.close();
-                    MessageService.showToast('Convite já processado!');
+                /**
+                 * Will enter this condition when the dialog type is 'accepted' 
+                 * (when the user is sending the invitation).
+                 */
+                if(typeOfDialog === processCtrl.VIEW_INVITE_SENDER) {
+                    _.remove(processCtrl.current_user.institutions_admin, function(url) {
+                        return getKey(url) === invite.institution_key;
+                    });
+                    removeSuperUserPermission();
+                    AuthService.save();
                 }
-            });
+            }
         }
 
         /**
@@ -117,7 +111,7 @@
         }
 
         (function main() {
-            getInvite();
+            loadInvite();
         })();
     });
 })();

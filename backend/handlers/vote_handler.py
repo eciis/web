@@ -24,8 +24,8 @@ class VoteHandler(BaseHandler):
         options_selected = json.loads(self.request.body)
 
         institution = survey.institution.get()
-        Utils._assert(institution.state == 'inactive',
-                      "The institution has been deleted", NotAuthorizedException)
+        Utils._assert(not institution.is_active(),
+                      "This institution is not active", NotAuthorizedException)
 
         Utils._assert(user.key in survey.voters,
                       "You've already voted in this survey", NotAuthorizedException)

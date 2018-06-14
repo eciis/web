@@ -163,7 +163,7 @@ class InviteUserHandlerTest(TestBaseHandler):
         message_exception = self.get_message_exception(
             str(raises_context.exception))
         
-        expected_message = "Error! The institution is not active."
+        expected_message = "Error! This institution is not active."
 
         self.assertEqual(
             message_exception,

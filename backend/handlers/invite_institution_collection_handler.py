@@ -57,8 +57,8 @@ class InviteInstitutionCollectionHandler(BaseHandler):
             institution.key.urlsafe()
         )
 
-        Utils._assert(institution.state == 'inactive',
-                      "The institution has been deleted", NotAuthorizedException)
+        Utils._assert(not institution.is_active(),
+                      "This institution is not active", NotAuthorizedException)
 
         invite.put()
         invite.stub_institution_key.get().addInvite(invite)

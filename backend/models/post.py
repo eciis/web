@@ -62,8 +62,8 @@ class Comment(ndb.Model):
             raise FieldException("Institution can not be empty")
 
         institution = ndb.Key(urlsafe=data['institution_key']).get()
-        Utils._assert(institution.state == 'inactive',
-                      "The institution has been deleted",
+        Utils._assert(not institution.is_active(),
+                      "This institution is not active",
                       NotAuthorizedException)
         comment = Comment()
         comment.text = data['text']

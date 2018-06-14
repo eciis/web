@@ -117,8 +117,8 @@ class InviteInstitutionCollectionHandlerTest(TestBaseHandler):
         message = self.get_message_exception(ex.exception.message)
         self.assertEqual(
             message,
-            "Error! The institution has been deleted",
-            "Expected exception message must be equal to 'Error! The institution has been deleted'") 
+            "Error! This institution is not active",
+            "Expected exception message must be equal to 'Error! This institution is not active'")
         
         # assert the invite was not sent to the invitee
         send_invite.assert_not_called()

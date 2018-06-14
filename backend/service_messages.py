@@ -55,6 +55,9 @@ def create_system_message(receiver_institution_key=None):
         'to': {
             'institution_name': (receiver_institution_key and receiver_institution_key.get().name) or ''
         },
+        'current_institution': {
+            'name': receiver_institution_key and receiver_institution_key.get().name
+        }
     }
 
     return json.dumps(message)

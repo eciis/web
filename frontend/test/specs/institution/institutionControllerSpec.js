@@ -1,6 +1,6 @@
 'use strict';
 
-(fdescribe('Test InstitutionController', function() {
+(describe('Test InstitutionController', function() {
 
     var institutionCtrl, httpBackend, scope, institutionService, createCtrl, state, mdDialog, cropImageService, imageService;
 

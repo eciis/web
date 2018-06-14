@@ -38,8 +38,8 @@
                 }
             },
             "FINISHED_PROCESS": {
-                icon: "clear",
-                action: function (properties, notification, event) {
+                icon: "check_circle_outline",
+                action: function (notification, event, properties) {
                     if (notification.status !== 'READ') {
                         return refreshUser(notification);
                     }

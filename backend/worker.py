@@ -13,6 +13,7 @@ from models import InviteUserAdm
 from utils import json_response
 from util import get_subject
 from service_messages import send_message_notification
+from service_messages import create_system_message
 from jinja2 import Environment, FileSystemLoader
 from permissions import DEFAULT_SUPER_USER_PERMISSIONS
 from permissions import DEFAULT_ADMIN_PERMISSIONS
@@ -434,16 +435,11 @@ class TransferAdminPermissionsHandler(BaseHandler):
             else:
                 user.permissions.update({permission: permissions[permission]})
 
-        notification_message = institution.create_notification_message(
-            user.key,
-            institution.key
-        )
-
         send_message_notification(
             receiver_key=user.key.urlsafe(),
             notification_type='FINISHED_PROCESS',
             entity_key=institution.key.urlsafe(),
-            message=notification_message
+            message=create_system_message(institution.key)
         )
     
     def remove_permissions(self, user, institution):

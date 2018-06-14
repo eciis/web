@@ -440,7 +440,6 @@ class TransferAdminPermissionsHandler(BaseHandler):
             notification_type='FINISHED_PROCESS',
             entity_key=institution.key.urlsafe(),
             message=create_system_message(institution.key),
-            entity=json.dumps({'institution_name': institution.name})
         )
     
     def remove_permissions(self, user, institution):

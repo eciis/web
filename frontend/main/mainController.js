@@ -160,7 +160,7 @@
             });
         }
 
-        function eventListener() {
+        function notificationListener() {
             NotificationListenerService.multipleEventsListener(UserService.NOTIFICATIONS_TO_UPDATE_USER,
                                                          mainCtrl.updateUser);
         }
@@ -176,7 +176,7 @@
                 $state.go("app.user.config_profile");
             }
 
-            eventListener();
+            notificationListener();
             mainCtrl.getPendingTasks();
         })();
     });

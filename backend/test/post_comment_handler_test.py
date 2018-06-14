@@ -43,6 +43,7 @@ class PostCommentHandlerTest(TestBaseHandler):
         cls.institution.members = [cls.user.key]
         cls.institution.followers = [cls.user.key]
         cls.institution.admin = cls.user.key
+        cls.institution.state = "active"
         cls.institution.put()
         cls.user.add_institution(cls.institution.key)
         cls.other_user.add_institution(cls.institution.key)
@@ -270,3 +271,35 @@ class PostCommentHandlerTest(TestBaseHandler):
         # When other_user try delete comment from user.
         with self.assertRaises(NotAuthorizedException):
             check_permission(self.other_user, self.institution, self.user_post, self.body)
+    
+    @patch('handlers.post_comment_handler.enqueue_task')
+    @patch('util.login_service.verify_token', return_value={'email': OTHER_USER_EMAIL})
+    def test_post_with_an_inactive_institution(self, verify_token, enqueue_task):
+        """Test post with an inactive institution."""
+        # Verify size of list
+        self.assertEquals(len(self.user_post.comments), 0,
+                          "Expected size of comment's list should be zero")
+        self.institution.state = 'inactive'
+        self.institution.put()
+
+        # Call the post method
+        with self.assertRaises(Exception) as ex:
+            self.testapp.post_json(
+                URL_POST_COMMENT % self.user_post.key.urlsafe(),
+                self.body,
+                headers={'institution-authorization': self.institution.key.urlsafe()}
+            )
+
+        raises_context_message = self.get_message_exception(
+            ex.exception.message)
+
+        self.assertTrue(raises_context_message == "Error! This institution is not active")
+
+        # Update post
+        self.user_post = self.user_post.key.get()
+
+        # Verify size of list
+        self.assertEquals(len(self.user_post.comments), 0,
+                          "Expected size of comment's list is 0")
+
+        enqueue_task.assert_not_called()

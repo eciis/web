@@ -46,7 +46,10 @@ class PostCommentHandler(BaseHandler):
         body = json.loads(self.request.body)
         comment_data = body['commentData']
         post = ndb.Key(urlsafe=post_key).get()
+        institution = post.institution.get()
 
+        Utils._assert(not institution.is_active(),
+            "This institution is not active", EntityException)
         Utils._assert(post.state == 'deleted',
                       "This post has been deleted", EntityException)
 

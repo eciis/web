@@ -49,7 +49,6 @@
         }
 
         requestController.rejectRequest = function rejectRequest(event){
-            requestController.warnPaternityExistence = false;
             requestController.isRejecting = true;
         };
 
@@ -116,7 +115,6 @@
                 formatPositions();
                 getLegalNature();
                 getActuationArea();
-                selectDialogFlow();
             });
         }
 
@@ -156,7 +154,6 @@
 
             InstitutionService.removeLink(institutionKey, institutionLinkKey, isParent).then(function success() {
                 MessageService.showToast('Vínculo removido.');
-                requestController.warnPaternityExistence = false;
                 delete requestController.children.parent_institution;
             });
         };
@@ -183,14 +180,6 @@
                 requestController.instActuationArea = _.get(response,
                     requestController.parent.actuation_area);
             });
-        }
-
-        function selectDialogFlow() {
-            const isChildrenRequest = request.type_of_invite === REQUEST_CHILDREN;
-            const hasParent = requestController.children.parent_institution;
-            if (isChildrenRequest && hasParent) {
-                requestController.warnPaternityExistence = true;
-            }
         }
 
         (function main () {

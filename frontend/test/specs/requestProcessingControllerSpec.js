@@ -185,7 +185,6 @@
             expect(requestCtrl.isRejecting).toBe(false);
             requestCtrl.rejectRequest();
             expect(requestCtrl.isRejecting).toBe(true);
-            expect(requestCtrl.warnPaternityExistence).toBeFalsy();
         });
     });
 
@@ -290,86 +289,6 @@
 
             expect(messageService.showToast).toHaveBeenCalled();
             expect(requestCtrl.children.parent_institution).toEqual(undefined);
-            expect(requestCtrl.warnPaternityExistence).toBeFalsy();
         });
-    });
-
-    describe('selectDialogFlow effect', function() {
-        let institution, requested_institution, request;
-        beforeEach(() => {
-            institution = {
-                key: 'oaksdopkasp-OPKAODSKAOP'
-            };
-
-            requested_institution = {
-                key: 'aopksdposadp-DPSKGODSKPO',
-                parent_institution: { key: 'poaksdpoa-oaoAKDOPSAKDop' }
-            };
-
-            spyOn(institutionService, 'getInstitution').and.callFake(function () {
-                return {
-                    then: function (callback) {
-                        callback(requested_institution);
-                    }
-                };
-            });
-
-            request = {
-                key: 'request-key',
-                type_of_invite: null,
-                institution_requested_key: requested_institution.key,
-                institution_key: institution.key,
-                type_of_invite: REQUEST_CHILDREN,
-                status: 'sent',
-                institution: institution
-            };
-
-        });
-
-        it('should set warnPaternityExistence', inject(function ($controller) {
-            requestCtrl = $controller('RequestProcessingController', {
-                scope: scope,
-                RequestInvitationService: requestInvitationService,
-                InstitutionService: institutionService,
-                AuthService: authService,
-                UserService: userService,
-                MessageService: messageService,
-                request: request
-            });
-
-            httpBackend.flush();
-            expect(requestCtrl.warnPaternityExistence).toBeTruthy();
-        }));
-
-        it('should not set warnPaternityExistence', inject(function ($controller) {
-            request.type_of_invite = REQUEST_USER;
-            requestCtrl = $controller('RequestProcessingController', {
-                scope: scope,
-                RequestInvitationService: requestInvitationService,
-                InstitutionService: institutionService,
-                AuthService: authService,
-                UserService: userService,
-                MessageService: messageService,
-                request: request
-            });
-
-            httpBackend.flush();
-            expect(requestCtrl.warnPaternityExistence).toBe(undefined);
-
-            request.type_of_invite = REQUEST_CHILDREN;
-            delete requested_institution.parent_institution;
-            requestCtrl = $controller('RequestProcessingController', {
-                scope: scope,
-                RequestInvitationService: requestInvitationService,
-                InstitutionService: institutionService,
-                AuthService: authService,
-                UserService: userService,
-                MessageService: messageService,
-                request: request
-            });
-
-            httpBackend.flush();
-            expect(requestCtrl.warnPaternityExistence).toBe(undefined);
-        }));
     });
 }));

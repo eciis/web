@@ -1,13 +1,18 @@
 <md-dialog flex-sm="80" flex-xs="100" flex-gt-sm="50">
-    <md-dialog-content class="md-dialog-content" layout-gt-sm="column" style="padding: 1.5em;">
-        <h3 ng-if="!analyseHierReqCtrl.hasToRemoveLink">
-            Confirmar vínculo
-        </h3>
+    <md-dialog-content class="md-dialog-content" layout-gt-sm="column" style="padding: 1em;">
+        <div ng-if="!analyseHierReqCtrl.hasToRemoveLink">
+            <h3> Confirmar vínculo </h3>
+            <p>
+                Para aceitar o vínculo e tornar <b>{{ analyseHierReqCtrl.child.name }}</b> uma subornadinada de
+                <b>{{ analyseHierReqCtrl.parent.name }}</b>, clique em Confirmar. Caso queira rejeitar, clique em cancelar.
+            </p>
+        </div>
         <div ng-if="analyseHierReqCtrl.hasToRemoveLink">
             <h3>Confirmar remoção de vínculo existente</h3>
             <p>
                 Para aceitar o vínculo e tornar <b>{{ analyseHierReqCtrl.child.name }}</b> uma subornadinada de <b>{{ analyseHierReqCtrl.parent.name }}</b>
-                é necessário que o vínculo com <b>{{ analyseHierReqCtrl.child.parent_institution.name }}</b> seja desfeito.
+                é necessário que o vínculo com <b>{{ analyseHierReqCtrl.child.parent_institution.name }}</b> seja desfeito. Clique em Confirmar,
+                para prosseguir, ou em Cancelar, para rejeitar o pedido. 
             </p>
             <h4>Vínculo Atual</h4>
             <div layout="column">
@@ -73,7 +78,7 @@
     </md-dialog-content>
     <md-dialog-actions layout="row" layout-align="end center" layout-wrap>
         <md-button class="md-primary" ng-click="analyseHierReqCtrl.rejectRequest()" 
-            md-colors="{color: 'default-teal-500'}"> Rejeitar </md-button>
+            md-colors="{color: 'default-teal-500'}"> Cancelar </md-button>
         <md-button class="md-primary" ng-click="analyseHierReqCtrl.confirmRequest()"
             md-colors="{color: 'default-teal-500'}"> Confirmar </md-button>
     </md-dialog-actions>

@@ -71,7 +71,7 @@
             $mdDialog.show({
                 controller: "RequestProcessingController",
                 controllerAs: "requestCtrl",
-                templateUrl: "app/requests/request_processing.html" ,
+                templateUrl: "app/requests/request_user_dialog.html" ,
                 parent: angular.element(document.body),
                 targetEvent: event,
                 clickOutsideToClose:true,

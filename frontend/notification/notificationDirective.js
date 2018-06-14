@@ -37,6 +37,14 @@
                     }
                 }
             },
+            "TRANSFER_ADM_PERMISSIONS": {
+                icon: "check_circle_outline",
+                action: function (notification, event, properties) {
+                    if (notification.status !== 'READ') {
+                        return refreshUser(notification);
+                    }
+                }
+            },
             "POST": {
                 icon: "inbox",
                 state: "app.post"

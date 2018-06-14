@@ -44,13 +44,13 @@
         spyOn(InviteService, 'getInvite').and.callFake(function() {
             return {
                 then: function(callback) {
-                    callback({data: invite});
+                    callback(invite);
                 }
             };
         });
 
         processInviteUserAdmCtrl = $controller('ProcessInviteUserAdmController', {
-            key: invite.key,
+            request: invite,
             typeOfDialog: 'ACCEPT_INVITATION',
             InviteService: inviteService,
             MessageService: messageService,
@@ -70,7 +70,7 @@
             processInviteUserAdmCtrl.invite.status= "accepted";
 
             processInviteUserAdmCtrl = controller('ProcessInviteUserAdmController', {
-                key: invite.key,
+                request: invite,
                 typeOfDialog: 'VIEW_ACCEPTED_INVITATION_SENDER',
                 InviteService: inviteService,
                 MessageService: messageService,
@@ -205,40 +205,8 @@
     });
 
     describe('Test processed invite', function() {
-        beforeEach(function() {
-            spyOn(messageService, 'showToast').and.callFake(function(){});
-            spyOn(mdDialog, 'hide').and.callFake(function(){});
-        });
-
-        it('Should return a message that the invitation has already been processed', function() {
-            invite = {
-                status: 'accepted',
-                key: '437829dshsjka',
-                institution_key: institution.key
-            };
-
-            controller('ProcessInviteUserAdmController', {
-                key: invite.key,
-                typeOfDialog: 'accept',
-                InviteService: inviteService,
-                MessageService: messageService,
-                AuthService: authService,
-                $mdDialog: mdDialog
-            });
-
-            expect(messageService.showToast).toHaveBeenCalledWith('Convite já processado!');
-            expect(mdDialog.hide).toHaveBeenCalled();
-        });
 
         it('Should remove the institution from the list of institutions that user administer.', function() {
-            invite = {
-                status: 'accepted',
-                key: '437829dshsjka',
-                institution_key: institution.key,
-                institution: institution,
-                status: 'accepted'
-            };
-
             user.institutions_admin = [institution.key];
             authService.login(user);
             user = JSON.parse(window.localStorage.userInfo);
@@ -246,7 +214,7 @@
             expect(user.institutions_admin).toEqual([institution.key]);
 
             controller('ProcessInviteUserAdmController', {
-                key: invite.key,
+                request: invite,
                 typeOfDialog: 'VIEW_ACCEPTED_INVITATION_SENDER',
                 InviteService: inviteService,
                 MessageService: messageService,

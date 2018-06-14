@@ -52,16 +52,15 @@
         function loadInstitutions(deferred) {
             InstitutionService.getNextInstitutions(actualPage).then(function success(response) {
                 actualPage += 1;
-                moreInstitutions = response.data.next;
+                moreInstitutions = response.next;
 
-                _.forEach(response.data.institutions, function(institution) {
+                _.forEach(response.institutions, function(institution) {
                     allInstitutionsCtrl.institutions.push(institution);
                 });
 
                 allInstitutionsCtrl.isLoadingInstitutions = false;
                 deferred.resolve();
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
+            }, function error() {
                 deferred.reject();
             });
         }

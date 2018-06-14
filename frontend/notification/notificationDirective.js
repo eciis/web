@@ -5,7 +5,11 @@
     var app = angular.module("app");
 
     app.controller("NotificationController", function NotificationController(NotificationService, AuthService, $state,
+<<<<<<< HEAD
         $mdDialog, RequestInvitationService, MessageService) {
+=======
+        UserService, RequestDialogService) {
+>>>>>>> master
         var notificationCtrl = this;
 
         notificationCtrl.user = AuthService.getCurrentUser();
@@ -60,12 +64,11 @@
             },
             "REQUEST_USER": {
                 icon: "person_add",
-                state: "process_request",
-                action: function (properties, notification, event) {
-                    return selectDialog(properties, notification, event);
+                action: function (notification, event, properties) {
+                    return showRequestDialog(notification, event, properties);
                 },
                 properties: {
-                    templateUrl: "app/requests/request_processing.html",
+                    templateUrl: "app/requests/request_user_dialog.html",
                     controller: "RequestProcessingController",
                     controllerAs: "requestCtrl",
                     locals: {}
@@ -73,35 +76,20 @@
             },
             "REQUEST_INSTITUTION_CHILDREN": {
                 icon: "account_balance",
-                state: "process_request",
-                action: function (properties, notification, event) {
-                    return selectDialog(properties, notification, event);
-                },
-                properties: {
-                    templateUrl: "app/requests/request_processing.html",
-                    controller: "RequestProcessingController",
-                    controllerAs: "requestCtrl",
-                    locals: {}
+                action: function (notification, event, properties) {
+                    return showRequestDialog(notification, event, properties);
                 }
             },
             "REQUEST_INSTITUTION_PARENT": {
                 icon: "account_balance",
-                state: "process_request",
-                action: function (properties, notification, event) {
-                    return selectDialog(properties, notification, event);
-                },
-                properties: {
-                    templateUrl: "app/requests/request_processing.html",
-                    controller: "RequestProcessingController",
-                    controllerAs: "requestCtrl",
-                    locals: {}
+                action: function (notification, event, properties) {
+                    return showRequestDialog(notification, event, properties);
                 }
             },
             "REQUEST_INSTITUTION": {
                 icon: "account_balance",
-                state: "process_request",
-                action: function (properties, notification, event) {
-                    return selectDialog(properties, notification, event);
+                action: function (notification, event, properties) {
+                    return showRequestDialog(notification, event, properties);
                 },
                 properties: {
                     templateUrl: "app/requests/request_institution_processing.html",
@@ -147,8 +135,8 @@
             },
             "USER_ADM": {
                 icon: "account_balance",
-                action: function(properties, notification, event) {
-                    return selectDialog(properties, notification, event);
+                action: function (notification, event, properties) {
+                    return showRequestDialog(notification, event, properties);
                 },
                 properties: {
                     templateUrl: "app/invites/process_invite_user_adm.html",
@@ -161,8 +149,8 @@
             },
             "ACCEPT_INVITE_USER_ADM": {
                 icon: "account_balance",
-                action: function(properties, notification, event) {
-                    return selectDialog(properties, notification, event);
+                action: function (notification, event, properties) {
+                    return showRequestDialog(notification, event, properties);
                 },
                 properties: {
                     templateUrl: "app/invites/process_invite_user_adm.html",
@@ -206,81 +194,16 @@
         };
 
         notificationCtrl.action = function action(notification, event) {
-            var notificationProperties = type_data[notification.entity_type].properties;
-            var  notificationAction = type_data[notification.entity_type].action;
-            if (notificationAction){
-                notificationAction(notificationProperties, notification, event);
+            var properties = type_data[notification.entity_type].properties;
+            var action = type_data[notification.entity_type].action;
+            if (action){
+                action(notification, event, properties);
             } else {
                 notificationCtrl.goTo(notification);
             }
 
             notificationCtrl.markAsRead(notification);
         };
-
-        function showPendingReqDialog(dialogProperties, event) {
-            $mdDialog.show({
-                controller: dialogProperties.controller,
-                controllerAs: dialogProperties.controllerAs,
-                templateUrl: dialogProperties.templateUrl,
-                parent: angular.element(document.body),
-                targetEvent: event,
-                clickOutsideToClose:true,
-                locals: dialogProperties.locals,
-                openFrom: '#fab-new-post',
-                closeTo: angular.element(document.querySelector('#fab-new-post'))
-            });
-        }
-
-        function showResolvedReqDialog(event) {
-            function ResolvedRequesCtrl($mdDialog) {
-                var controll = this;
-                controll.hide = function hide() {
-                    $mdDialog.hide();
-                };
-            }
-
-            $mdDialog.show({
-                templateUrl: "app/requests/resolved_request_dialog.html",
-                controller: ResolvedRequesCtrl,
-                controllerAs: 'ctrl',
-                parent: angular.element(document.body),
-                targetEvent: event,
-                clickOutsideToClose:true
-            });
-        }
-
-        function selectDialog(dialogProperties, notification, event) {
-            var isStateProcessRequest = type_data[notification.entity_type].state == 'process_request';
-            
-            if(isStateProcessRequest) {
-                loadRequest(notification.entity.key, notification.entity_type).then(
-                    function success(response) {
-                        var request = new Invite(response);
-                        dialogProperties.locals.request = request;
-                        var isRequestResolved = request.isStatusOn('rejected') || request.isStatusOn('accepted');
-                        isRequestResolved ? showResolvedReqDialog(event) : showPendingReqDialog(dialogProperties, event);
-                    }, function error(response) {
-                        MessageService.showToast(response.data.msg);
-                    }
-                );
-            } else {
-                dialogProperties.locals.key = notification.entity.key;
-                showPendingReqDialog(dialogProperties, event);
-            }
-        }
-
-        function loadRequest(invitekey, entityType) {
-            switch(entityType) {
-                case 'REQUEST_USER':
-                    return RequestInvitationService.getRequest(invitekey);
-                case 'REQUEST_INSTITUTION':
-                    return RequestInvitationService.getRequestInst(invitekey);
-                case 'REQUEST_INSTITUTION_CHILDREN':
-                    return RequestInvitationService.getInstChildrenRequest(invitekey);
-                case 'REQUEST_INSTITUTION_PARENT':
-                    return RequestInvitationService.getInstParentRequest(invitekey);
-            } 
-        }
 
         notificationCtrl.showNotifications = function showNotifications($mdMenu, $event) {
             var hasUnreadNotifications = notificationCtrl.notifications.length > 0;
@@ -310,6 +233,10 @@
             $state.go('app.user.notifications');
         };
 
+        function showRequestDialog(notification, event, properties) {
+            RequestDialogService.showRequestDialog(notification, event, properties);
+        }
+        
         (function main() {
             NotificationService.watchNotifications(notificationCtrl.user.key, notificationCtrl.notifications);
             notificationCtrl.allNotifications = NotificationService.getAllNotifications();

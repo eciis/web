@@ -19,8 +19,6 @@
                     ProfileService.editProfile(patch).then(function success() {
                         MessageService.showToast('Perfil editado com sucesso');
                         AuthService.save();
-                    }, function error(response) {
-                        MessageService.showToast(response.data.msg);
                     });
                 }
                 $mdDialog.hide();

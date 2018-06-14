@@ -8,6 +8,7 @@ import logging
 from app_version import APP_VERSION
 
 from google.appengine.ext import ndb
+from unicodedata import normalize
 
 from oauth2client import client
 from oauth2client.crypt import AppIdentityError
@@ -156,3 +157,19 @@ def to_int(value, exception, message_exception):
         raise exception(message_exception)
 
     return value
+
+def text_normalize(text):
+    """
+    This method removes all accents and special characters from the passed text 
+    using the NFKD normalization of unicode coding (For more information on this 
+    normalization go to: https://unicode.org/reports/tr15/). This normalization 
+    maps all characters to their similar in normal formal unicode. After 
+    normalization, treat all escape characters so they are considered normal 
+    characters in the text.
+
+    Arguments:
+    text -- Text to normilize
+    """
+    normal_form_text = normalize('NFKD', unicode(text)).encode('ascii', 'ignore')
+    text_ignoring_escape_chars = normal_form_text.encode('unicode-escape')
+    return text_ignoring_escape_chars

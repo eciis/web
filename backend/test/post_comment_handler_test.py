@@ -127,7 +127,8 @@ class PostCommentHandlerTest(TestBaseHandler):
         self.body['commentData'] = self.other_comment
         self.testapp.post_json(
             URL_POST_COMMENT % self.user_post.key.urlsafe(),
-            self.body
+            self.body,
+            headers={'institution-authorization': self.institution.key.urlsafe()}
         )
 
         # Update post
@@ -138,7 +139,7 @@ class PostCommentHandlerTest(TestBaseHandler):
                           "Expected size of comment's list should be one")
 
         # assert the notification was not sent
-        enqueue_task.assert_not_called()
+        enqueue_task.assert_called()
 
     @patch('util.login_service.verify_token', return_value={'email': OTHER_USER_EMAIL})
     def test_delete(self, verify_token):
@@ -203,7 +204,8 @@ class PostCommentHandlerTest(TestBaseHandler):
         # Added comment of user
         self.response = self.testapp.post_json(
             URL_POST_COMMENT % self.user_post.key.urlsafe(),
-            self.body
+            self.body,
+            headers={'institution-authorization': self.institution.key.urlsafe()}
         ).json
         # ID of comment
         self.id_comment = self.response["id"]
@@ -261,7 +263,8 @@ class PostCommentHandlerTest(TestBaseHandler):
         # Added comment
         self.response = self.testapp.post_json(
             URL_POST_COMMENT % self.user_post.key.urlsafe(),
-            self.body
+            self.body,
+            headers={'institution-authorization': self.institution.key.urlsafe()}
         ).json
 
         # When other_user try delete comment from user.

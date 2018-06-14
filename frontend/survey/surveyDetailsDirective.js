@@ -96,11 +96,9 @@
         surveyCtrl.voteService = function(){
             var promise = SurveyService.vote(surveyCtrl.post, surveyCtrl.optionsSelected);
             promise.then(function sucess(response){
-                surveyCtrl.post = response.data;
+                surveyCtrl.post = response;
                 addVote(surveyCtrl.optionsSelected);
                 MessageService.showToast('Voto computado');
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
             });
             return promise;
         };

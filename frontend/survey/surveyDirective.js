@@ -71,18 +71,17 @@
                 var survey = createSurvey();
                 var promise = PostService.createPost(survey).then(function success(response) {
                     surveyCtrl.resetSurvey();
-                    surveyCtrl.posts.push(new Post(response.data));
+                    surveyCtrl.posts.push(new Post(response));
                     MessageService.showToast('Postado com sucesso!');
                     surveyCtrl.callback();
                     const postAuthorPermissions = ["remove_post"];
-                    surveyCtrl.user.addPermissions(postAuthorPermissions, response.data.key);
+                    surveyCtrl.user.addPermissions(postAuthorPermissions, response.key);
                     $mdDialog.hide();
                     unobserveNewPost();
                 }, function error(response) {
                     UserService.load().then(function success(responseUser) {
                         surveyCtrl.user = responseUser;
                         $mdDialog.hide();
-                        MessageService.showToast(response.data.msg);
                         $state.go("app.user.home");
                     });
                 });

@@ -11,8 +11,8 @@
     const REQUEST_URI = "/api/requests/";
     const INVITES_URI = "/api/invites/";
 
-    var requestInvitationService, inviteService, mdDialog, messageService,
-    service, request, event, notification, dialogProperties, fakeCallback,
+    var requestInvitationService, inviteService, mdDialog,
+    service, request, event, notification, dialogProperties,
     httpBackend;
 
     beforeEach(module('app'));
@@ -41,16 +41,6 @@
         notification = {
             entity_type: '',
             entity: request,
-        };
-
-        fakeCallback = function (param) {
-            return function () {
-                return {
-                    then: function (callback) {
-                        return callback(param);
-                    }
-                };
-            };
         };
     }));
 

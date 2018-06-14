@@ -247,15 +247,6 @@
                     }
                 }
             })
-            .state("process_request", {
-                url: "/:key/process_request",
-                views: {
-                    main: {
-                        templateUrl: "app/requests/request_processing.html",
-                        controller: "RequestProcessingController as requestCtrl"
-                    }
-                }
-            })
             .state("signin", {
                 url: "/signin",
                 views: {

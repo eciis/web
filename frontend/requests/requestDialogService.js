@@ -29,7 +29,7 @@
                     MessageService.showToast(response.data.msg);
                 }
             );
-        }
+        };
         
         function selectDialogToShow(request, event, dialogProperties) {
             var isRequestResolved = request.isStatusOn('rejected') || request.isStatusOn('accepted');
@@ -66,7 +66,7 @@
                 targetEvent: event,
                 clickOutsideToClose:true
             });
-        }
+        };
 
         service.showPendingReqDialog = function (dialogProperties, event) {
             $mdDialog.show({
@@ -80,7 +80,7 @@
                 openFrom: '#fab-new-post',
                 closeTo: angular.element(document.querySelector('#fab-new-post'))
             });
-        }
+        };
 
         function getRequest(invitekey, entityType) {
             switch(entityType) {

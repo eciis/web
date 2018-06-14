@@ -359,7 +359,7 @@
                 .showHierarchyDialog(request, event)
                 .then(function accepted() {
                     addInstitutionToHierarchy(request);
-                }, function rejected(response) {});
+                });
             };
             
         function addInstitutionToHierarchy(request) {

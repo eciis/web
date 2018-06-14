@@ -185,7 +185,6 @@
             expect(requestCtrl.isRejecting).toBe(false);
             requestCtrl.rejectRequest();
             expect(requestCtrl.isRejecting).toBe(true);
-            expect(requestCtrl.warnPaternityExistence).toBeFalsy();
         });
     });
 
@@ -290,7 +289,6 @@
 
             expect(messageService.showToast).toHaveBeenCalled();
             expect(requestCtrl.children.parent_institution).toEqual(undefined);
-            expect(requestCtrl.warnPaternityExistence).toBeFalsy();
         });
     });
 }));

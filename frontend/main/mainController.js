@@ -2,9 +2,8 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("MainController", function MainController($mdSidenav, $state, AuthService,
-                    RequestInvitationService, UserService, EventListenerService,
-                    $mdMenu, $window) {
+    app.controller("MainController", function MainController($mdSidenav, EventListenerService, $state,
+            AuthService, RequestInvitationService, $mdMenu, $window, UserService) {
         var mainCtrl = this;
         var url_report = "http://support.plataformacis.org/report";
 
@@ -16,7 +15,6 @@
         mainCtrl.pendingInstLinksInvitations = 0;
 
         mainCtrl.APP_VERSION = Config.APP_VERSION;
-
         var EVENTS_TO_UPDATE_USER = ["DELETED_INSTITUTION", "DELETE_MEMBER", "ACCEPT_INSTITUTION_LINK"];
 
         mainCtrl.search = function search() {
@@ -157,15 +155,15 @@
         };
 
         function updateCurrentInst(){
-            var existCurrent = _.find(mainCtrl.user.institutions, function(inst){
-                                    return inst.key === mainCtrl.user.current_institution.key
-                                });
+           var existCurrent = _.find(mainCtrl.user.institutions, function(inst){
+                                        return inst.key === mainCtrl.user.current_institution.key
+                                    });
             if(!existCurrent){
                 mainCtrl.user.current_institution = mainCtrl.user.institutions[0];
             }  
         };
 
-        function updateUser() {
+        mainCtrl.updateUser = function updateUser() {
             UserService.load().then(function success(response) {
                 mainCtrl.user.institutions = response.institutions;
                 mainCtrl.user.follows = response.follows;
@@ -176,6 +174,9 @@
             });
         }
 
+        function eventListener() {
+           EventListenerService.multipleEventsListener(EVENTS_TO_UPDATE_USER, mainCtrl.updateUser);
+        }
 
         mainCtrl.refreshUser = function refreshUser() {
             AuthService.reload();
@@ -183,17 +184,13 @@
             $window.location.reload();
         };
 
-        function eventListener() {
-            EventListenerService.multipleEventsListener(EVENTS_TO_UPDATE_USER, updateUser);
-        }
-
         (function main() {
             if (mainCtrl.user.name === 'Unknown') {
                 $state.go("app.user.config_profile");
             }
 
-            mainCtrl.getPendingTasks();
             eventListener();
+            mainCtrl.getPendingTasks();
         })();
     });
 })();

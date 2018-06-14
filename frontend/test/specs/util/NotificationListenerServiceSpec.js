@@ -1,6 +1,6 @@
 'use strict';
 
-(describe('Test EventListenerService', function() {
+(describe('Test NotificationListenerService', function() {
     var service, rootScope;
 
     var callback = function (){};

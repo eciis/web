@@ -37,6 +37,14 @@
                     }
                 }
             },
+            "FINISHED_PROCESS": {
+                icon: "clear",
+                action: function (properties, notification, event) {
+                    if (notification.status !== 'READ') {
+                        return refreshUser(notification);
+                    }
+                }
+            },
             "POST": {
                 icon: "inbox",
                 state: "app.post"

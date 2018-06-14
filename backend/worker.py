@@ -433,6 +433,18 @@ class TransferAdminPermissionsHandler(BaseHandler):
                 user.permissions[permission].update(permissions[permission])
             else:
                 user.permissions.update({permission: permissions[permission]})
+
+        notification_message = institution.create_notification_message(
+            user.key,
+            institution.key
+        )
+
+        send_message_notification(
+            receiver_key=user.key.urlsafe(),
+            notification_type='FINISHED_PROCESS',
+            entity_key=institution.key.urlsafe(),
+            message=notification_message
+        )
     
     def remove_permissions(self, user, institution):
         """    

@@ -8,6 +8,8 @@
 
         var USER_URI = "/api/user";
 
+        service.NOTIFICATIONS_TO_UPDATE_USER = ["DELETED_INSTITUTION", "DELETE_MEMBER", "ACCEPT_INSTITUTION_LINK"];
+
         service.deleteAccount = function deleteAccount() {
             var deffered = $q.defer();
             $http.delete(USER_URI).then(function success(info) {

@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.service('EventListenerService', function($rootScope) {
+    app.service('NotificationListenerService', function($rootScope) {
         let service = this;
 
         service.eventListener = function eventListener(event, callback){
@@ -13,9 +13,9 @@
         };
 
         service.multipleEventsListener = function eventListener(events, callback){
-            _.forEach(events, event => {
-                service.eventListener(event, callback)
+            events.forEach(event => {
+                service.eventListener(event, callback);
             });
         };
     });
-})();
+})(); 

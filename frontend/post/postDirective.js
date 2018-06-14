@@ -4,7 +4,7 @@
 
     var app = angular.module("app");
 
-    app.controller("PostController", function PostController($mdDialog, PostService, AuthService,
+    app.controller("PostController", function PostController($mdDialog, PostService, AuthService, UserService,
             $mdToast, $rootScope, ImageService, MessageService, $q, $scope, $state, PdfService, SubmitFormListenerService) {
         var postCtrl = this;
 
@@ -241,7 +241,8 @@
                         const postAuthorPermissions = ["edit_post", "remove_post"];
                         postCtrl.user.addPermissions(postAuthorPermissions, response.data.key);
                     }, function error(response) {
-                        AuthService.reload().then(function success() {
+                        UserService.load().then(function success(responseUser) {
+                            postCtrl.user = responseUser;
                             $mdDialog.hide();
                             MessageService.showToast(response.data.msg);
                             postCtrl.loadingPost = false;

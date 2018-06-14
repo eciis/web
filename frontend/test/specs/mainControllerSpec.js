@@ -2,7 +2,7 @@
 
 (describe('Test MainController', function() {
     var mainCtrl, httpBackend, scope, createCtrl, state;
-    var userService, authService, requestInvitationService, eventListenerService;
+    var userService, authService, requestInvitationService, notificationListenerService;
     var user = {
         name: 'user',
         key: 'user-key',
@@ -40,14 +40,14 @@
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $httpBackend, $rootScope, $state, AuthService,
-                                UserService, RequestInvitationService, EventListenerService) {
+                                UserService, RequestInvitationService, NotificationListenerService) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
         userService = UserService;
         authService = AuthService;
         requestInvitationService = RequestInvitationService;
-        eventListenerService = EventListenerService;
+        notificationListenerService = NotificationListenerService;
 
         var callFake = function() {
             return {
@@ -106,10 +106,10 @@
         });
 
         it("should create observer", function() {
-            spyOn(eventListenerService, 'multipleEventsListener');
+            spyOn(notificationListenerService, 'multipleEventsListener');
 
             mainCtrl = createCtrl();
-            expect(eventListenerService.multipleEventsListener).toHaveBeenCalledWith(EVENTS_TO_UPDATE_USER, mainCtrl.updateUser);
+            expect(notificationListenerService.multipleEventsListener).toHaveBeenCalledWith(EVENTS_TO_UPDATE_USER, mainCtrl.updateUser);
         });
     });
 

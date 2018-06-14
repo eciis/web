@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.service("EventService", function EventService($http, $q) {
+    app.service("EventService", function EventService(HttpService, $q) {
         var service = this;
 
         var EVENT_URI = "/api/events";
@@ -11,63 +11,27 @@
         var LIMIT = "5";
 
         service.createEvent = function createEvent(event) {
-            var deferred = $q.defer();
-            $http.post(EVENT_URI, event).then(function success(response) {
-                deferred.resolve(response);
-            }, function error(response) {
-                deferred.reject(response);
-            });
-            return deferred.promise;
+            return HttpService.post(EVENT_URI, event);
         };
 
         service.getEvents = function getEvents(page) {
-            var deferred = $q.defer();
-            $http.get(EVENT_URI + '?page=' + page + "&limit=" + LIMIT).then(function success(response) {
-                deferred.resolve(response);
-            }, function error(response) {
-                deferred.reject(response);
-            });
-            return deferred.promise;
+            return HttpService.get(EVENT_URI + '?page=' + page + "&limit=" + LIMIT);
         };
 
         service.getInstEvents = function getInstEvents(page, institution_key) {
-            var deferred = $q.defer();
-            $http.get(INST_URI + institution_key + '/events?page=' + page + "&limit=" + LIMIT).then(function success(response) {
-                deferred.resolve(response);
-            }, function error(response) {
-                deferred.reject(response);
-            });
-            return deferred.promise;
+            return HttpService.get(INST_URI + institution_key + '/events?page=' + page + "&limit=" + LIMIT);
         };
 
         service.deleteEvent = function deleteEvent(event) {
-            var deferred = $q.defer();
-            $http.delete(EVENT_URI + '/' + event.key).then(function success(response) {
-                deferred.resolve(response);
-            }, function error(response) {
-                deferred.reject(response);
-            });
-            return deferred.promise;
+            return HttpService.delete(EVENT_URI + '/' + event.key);
         };
 
         service.getEvent = function getEvent(eventKey) {
-            var deferred = $q.defer();
-            $http.get(EVENT_URI + '/' + eventKey).then(function success(response) {
-                deferred.resolve(response);
-            }, function error(response) {
-                deferred.reject(response);
-            });
-            return deferred.promise;
+            return HttpService.get(EVENT_URI + '/' + eventKey);
         };
 
         service.editEvent = function editEvent(eventKey, patch) {
-            var deferred = $q.defer();
-            $http.patch(EVENT_URI + '/' + eventKey, patch).then(function success(response) {
-                deferred.resolve(response);
-            }, function error(response) {
-                deferred.reject(response);
-            });
-            return deferred.promise;
+            return HttpService.patch(EVENT_URI + '/' + eventKey, patch);
         };
     });
 })();

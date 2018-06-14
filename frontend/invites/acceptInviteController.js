@@ -39,14 +39,12 @@
         };
         
         (function main() {
-            InviteService.getInvite(inviteId).then(
-                function(data) {
-                    controller.invite = new Invite(data);
-                    if (controller.invite.status === "accepted") {
-                        $state.go("signin");
-                    }
+            InviteService.getInvite(invite_id).then(function(response) {
+                controller.invite = new Invite(response);
+                if (controller.invite.status === "accepted") {
+                    $state.go("signin");
                 }
-            );
+            });
         })();
     });
 })();

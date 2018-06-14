@@ -25,8 +25,6 @@
                 request.status = 'accepted';
                 requestController.hideDialog();
                 refreshUser();
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
             });
         };
 
@@ -59,8 +57,6 @@
                 request.status = 'rejected';
                 requestController.hideDialog();
                 MessageService.showToast("Solicitação rejeitada!");
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
             });
         };
 
@@ -115,12 +111,10 @@
         function loadInstitution() {
             var institutionKey = isHierarchyRequest() ? request.institution_requested_key : request.institution_key;
             InstitutionService.getInstitution(institutionKey).then(function success(response) {
-                requestController.institution = response.data;
+                requestController.institution = response;
                 formatPositions();
                 getLegalNature();
                 getActuationArea();
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
             });
         }
 
@@ -158,11 +152,9 @@
             const institutionKey = requestController.children.key;
             const institutionLinkKey = requestController.children.parent_institution.key;
 
-            InstitutionService.removeLink(institutionKey, institutionLinkKey, isParent).then(function success(data) {
+            InstitutionService.removeLink(institutionKey, institutionLinkKey, isParent).then(function success() {
                 MessageService.showToast('Vínculo removido.');
                 delete requestController.children.parent_institution;
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
             });
         };
 
@@ -178,14 +170,14 @@
 
         function getLegalNature() {
             InstitutionService.getLegalNatures().then(function success(response) {
-                requestController.instLegalNature = _.get(response.data,
+                requestController.instLegalNature = _.get(response,
                     requestController.parent.legal_nature);
             });
         }
 
         function getActuationArea() {
             InstitutionService.getActuationAreas().then(function success(response) {
-                requestController.instActuationArea = _.get(response.data,
+                requestController.instActuationArea = _.get(response,
                     requestController.parent.actuation_area);
             });
         }

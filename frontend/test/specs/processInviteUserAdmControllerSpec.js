@@ -44,7 +44,7 @@
         spyOn(InviteService, 'getInvite').and.callFake(function() {
             return {
                 then: function(callback) {
-                    callback({data: invite});
+                    callback(invite);
                 }
             };
         });

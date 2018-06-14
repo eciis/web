@@ -5,7 +5,7 @@
 
     var USER_URI = '/api/user';
 
-    app.service("ProfileService", function UserService($mdDialog, $http, $q, AuthService) {
+    app.service("ProfileService", function UserService($mdDialog, HttpService, $q, AuthService) {
         var service = this;
 
         service.showProfile  = function showProfile(userKey, ev) {
@@ -24,13 +24,7 @@
 
         service.editProfile = function editProfile(data) {
             data = JSON.parse(angular.toJson(data));
-            var deffered = $q.defer();
-            $http.patch(USER_URI, data).then(function success(info) {
-                deffered.resolve(info);
-            }, function error(info) {
-                deffered.reject(info);
-            });
-            return deffered.promise;
+            return HttpService.patch(USER_URI, data);
         };
 
     });

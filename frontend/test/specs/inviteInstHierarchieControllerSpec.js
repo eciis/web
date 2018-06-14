@@ -83,7 +83,7 @@
         spyOn(instService, 'getInstitution').and.callFake(function () {
             return {
                 then: function (callback) {
-                    return callback({ data: institution });
+                    return callback(institution);
                 }
             };
         });
@@ -144,7 +144,7 @@
             spyOn(instService, 'searchInstitutions').and.callFake(function () {
                 return {
                     then: function (callback) {
-                        return callback({data: {}});
+                        return callback({});
                     }
                 };
             });

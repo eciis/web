@@ -150,8 +150,6 @@
             var promise = UserService.deleteInstitution(institution_key);
             promise.then(function success() {
                 removeConection(institution_key);
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
             });
             return promise;
         }
@@ -203,8 +201,6 @@
             var promise = UserService.deleteAccount();
             promise.then(function success() {
                 AuthService.logout();
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
             });
             return promise;
         }

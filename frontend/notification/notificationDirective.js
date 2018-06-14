@@ -5,7 +5,7 @@
     var app = angular.module("app");
 
     app.controller("NotificationController", function NotificationController(NotificationService, AuthService, $state,
-        $mdDialog, InstitutionService, UserService, RequestDialogService, MessageService) {
+        UserService, RequestDialogService) {
         var notificationCtrl = this;
 
         notificationCtrl.user = AuthService.getCurrentUser();
@@ -244,7 +244,7 @@
             $state.go('app.user.notifications');
         };
 
-        function refreshUser(notification) {
+        function refreshUser() {
             UserService.load().then(function success(response) {
                 notificationCtrl.user.institutions = response.institutions;
                 notificationCtrl.user.follows = response.follows;

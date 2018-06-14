@@ -3,6 +3,7 @@
 
 from google.appengine.api import search
 from . import SearchDocument
+from utils import text_normalize
 
 __all__ = ['SearchInstitution']
 
@@ -19,7 +20,6 @@ def institution_has_changes(fields, entity):
                 return True
 
         return False
-
 
 class SearchInstitution(SearchDocument):
     """Search institution's model."""
@@ -134,7 +134,7 @@ class SearchInstitution(SearchDocument):
                 fields_values.append(field_value)
 
         fields_values_string = " OR ".join(fields_values) if fields_values else ""
-        return fields_values_string
+        return text_normalize(fields_values_string)
     
     def updateDocument(self, entity, has_changes=institution_has_changes):
         """Update a Document.

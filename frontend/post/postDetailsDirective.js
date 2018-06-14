@@ -40,8 +40,6 @@
                     });
                     postDetailsCtrl.posts.push(postDetailsCtrl.post);
                     MessageService.showToast('Post excluído com sucesso');
-                }, function error(response) {
-                    MessageService.showToast(response.data.msg);
                 });
             }, function() {
                 MessageService.showToast('Cancelado');
@@ -233,8 +231,6 @@
             PostService.addSubscriber(postDetailsCtrl.post.key).then(function success() {
                 MessageService.showToast('Esse post foi marcado como de seu interesse.');
                 postDetailsCtrl.post.subscribers.push(postDetailsCtrl.user.key);
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
             });
         };
 
@@ -245,7 +241,6 @@
                     return userKey === postDetailsCtrl.user.key;
                 });
             }, function error(response) {
-                MessageService.showToast(response.data.msg);
                 $state.go($state.current);
             });
         };
@@ -284,7 +279,6 @@
                 postDetailsCtrl.savingLike = false;
                 postDetailsCtrl.getLikes(postDetailsCtrl.post);
             }, function error(response) {
-                MessageService.showToast(response.data.msg);
                 $state.go("app.user.home");
                 postDetailsCtrl.savingLike = false;
             });
@@ -300,7 +294,6 @@
                 postDetailsCtrl.savingLike = false;
                 postDetailsCtrl.getLikes(postDetailsCtrl.post);
             }, function error(response) {
-                MessageService.showToast(response.data.msg);
                 $state.go("app.user.home");
                 postDetailsCtrl.savingLike = false;
             });
@@ -354,7 +347,6 @@
             }, function error(response) {
                 postDetailsCtrl.post.type_survey = type_survey;
                 postDetailsCtrl.isLoadingComments = true;
-                MessageService.showToast(response.data.msg);
             }); 
             return promise;
         }
@@ -362,12 +354,11 @@
         postDetailsCtrl.loadComments = function refreshComments() {
             var promise  =  CommentService.getComments(postDetailsCtrl.post.comments);
             promise.then(function success(response) {
-                postDetailsCtrl.post.data_comments = _.values(response.data);
+                postDetailsCtrl.post.data_comments = _.values(response);
                 postDetailsCtrl.post.number_of_comments = _.size(postDetailsCtrl.post.data_comments);
                 postDetailsCtrl.isLoadingComments = false;
             }, function error(response) {
                 postDetailsCtrl.isLoadingComments = true;
-                MessageService.showToast(response.data.msg);
             });
             return promise;
         };
@@ -386,10 +377,8 @@
             if(postDetailsCtrl.isPostPage) {
                 var promise = PostService.getLikes(likesUri);
                 promise.then(function success(response) {
-                    postDetailsCtrl.post.data_likes = response.data;
+                    postDetailsCtrl.post.data_likes = response;
                     postDetailsCtrl.post.number_of_likes = _.size(postDetailsCtrl.post.data_likes);
-                }, function error(response) {
-                    MessageService.showToast(response.data.msg);
                 });
                 return promise;
             }else{
@@ -412,10 +401,9 @@
                 promise = CommentService.createComment(postDetailsCtrl.post.key, newComment, institutionKey);
                 promise.then(function success(response) {
                     postDetailsCtrl.newComment = '';
-                    addComment(postDetailsCtrl.post, response.data);
+                    addComment(postDetailsCtrl.post, response);
                     postDetailsCtrl.savingComment = false;
                 }, function error(response) {
-                    MessageService.showToast(response.data.msg);
                     $state.go("app.user.home");
                 });
             } else {

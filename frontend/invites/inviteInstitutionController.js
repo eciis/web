@@ -48,7 +48,7 @@
                 var suggestionInstName = inviteInstCtrl.invite.suggestion_institution_name;
                 promise = InstitutionService.searchInstitutions(suggestionInstName, INSTITUTION_STATE, 'institution');
                 promise.then(function success(response) {
-                    inviteInstCtrl.showDialogOrSendInvite(response.data, ev);
+                    inviteInstCtrl.showDialogOrSendInvite(response, ev);
                 });
                 return promise;
             }
@@ -88,13 +88,11 @@
                     inviteInstCtrl.invite = {};
                     invite.status = 'sent';
                     invite.sender_name = inviteInstCtrl.user.name;
-                    invite.key = response.data.key;
+                    invite.key = response.key;
                     inviteInstCtrl.sent_invitations.push(invite);
                     inviteInstCtrl.showInvites = true;
                     inviteInstCtrl.showSendInvites = false;
                     MessageService.showToast('Convite enviado com sucesso!');
-                }, function error(response) {
-                    MessageService.showToast(response.data.msg);
                 });
             return promise;
         };
@@ -136,8 +134,6 @@
             promise.then(function () {
                 InviteService.resendInvite(inviteKey).then(function success() {
                     MessageService.showToast("Convite reenviado com sucesso.");
-                }, function error(response) {
-                    MessageService.showToast(response.data.msg);
                 });
             }, function () {
                 MessageService.showToast('Cancelado.');
@@ -161,20 +157,18 @@
             RequestInvitationService.getRequestsInst(institution_key).then(function success(requests) {
                 var isSentRequest = createRequestSelector('sent', 'REQUEST_INSTITUTION');
                 inviteInstCtrl.sent_requests = requests.filter(isSentRequest);
-            }, function error(response) {
+            }, function error() {
                 $state.go("app.user.home");
-                MessageService.showToast(response.data.msg);
             });
         }
         
         function loadSentInvitations() {
             InviteService.getSentInstitutionInvitations().then(function success(response) {
-                var requests = response.data;
+                var requests = response;
                 getSentInvitations(requests);
                 getAcceptedInvitations(requests);
-            }, function error(response) {
+            }, function error() {
                 $state.go("app.user.home");
-                MessageService.showToast(response.data.msg);
             });
         }
         

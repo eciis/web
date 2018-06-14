@@ -38,21 +38,15 @@
                     request.status = 'rejected';
                     $mdDialog.cancel();
                     MessageService.showToast('Solicitação rejeitada com sucesso');
-                }, function error(response) {
-                    MessageService.showToast(response.data.msg);
-                }
-            );
+                });
         };
 
         function confirmLinkRemoval() {
             const isParent = true;
             InstitutionService.removeLink(child.key, parent.key, isParent).then(
-                function success(data) {
+                function success() {
                     acceptRequest();
-                }, function error(response) {
-                    MessageService.showToast(response.data.msg);
-                }
-            );
+                });
         }
 
         function acceptRequest() {
@@ -60,8 +54,6 @@
                 request.status = 'accepted';
                 $mdDialog.hide();
                 MessageService.showToast('Solicitação aceita com sucesso');
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);   
             });
         }
 

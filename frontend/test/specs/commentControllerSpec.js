@@ -30,12 +30,12 @@
                 state: 'published'
         }];
 
-    beforeEach(inject(function($controller, $httpBackend, $http, $mdDialog,
+    beforeEach(inject(function ($controller, $httpBackend, HttpService, $mdDialog,
             AuthService, $rootScope, CommentService) {
         scope = $rootScope.$new();
         httpBackend = $httpBackend;
         mdDialog = $mdDialog;
-        http = $http;
+        http = HttpService;
         commentService = CommentService;
 
         httpBackend.when('GET', 'main/main.html').respond(200);

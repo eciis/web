@@ -15,8 +15,6 @@
                 colorPickerCtrl.user.institution_profiles = colorPickerCtrl.newUser.institution_profiles;
                 $mdDialog.cancel();
                 AuthService.save();
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
             });
             return promise;
         };

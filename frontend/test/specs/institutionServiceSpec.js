@@ -11,14 +11,14 @@
 
         beforeEach(module('app'));
 
-        beforeEach(inject(function($httpBackend, InstitutionService, _$http_) {
-            httpBackend = $httpBackend;
-            $http = _$http_;
-            service = InstitutionService;
-            httpBackend.when('GET', 'main/main.html').respond(200);
-            httpBackend.when('GET', 'home/home.html').respond(200);
-            httpBackend.when('GET', 'error/error.html').respond(200);
-        }));
+    beforeEach(inject(function ($httpBackend, InstitutionService, HttpService) {
+        httpBackend = $httpBackend;
+        $http = HttpService;
+        service = InstitutionService;
+        httpBackend.when('GET', 'main/main.html').respond(200);
+        httpBackend.when('GET', 'home/home.html').respond(200);
+        httpBackend.when('GET', 'error/error.html').respond(200);
+    }));
 
         it('Test getInstitutions in success case', function() {
             spyOn($http, 'get').and.callThrough();
@@ -29,7 +29,7 @@
             });
             httpBackend.flush();
             expect($http.get).toHaveBeenCalled();
-            expect(result.data).toEqual(institutions);
+            expect(result).toEqual(institutions);
         });
 
         it('Test follow', function() {
@@ -57,7 +57,7 @@
             });
             httpBackend.flush();
             expect($http.get).toHaveBeenCalled();
-            expect(result.data).toEqual(raoni);
+            expect(result).toEqual(raoni);
         });
 
         it('Test getFollowers in success case', function() {
@@ -69,7 +69,7 @@
             });
             httpBackend.flush();
             expect($http.get).toHaveBeenCalled();
-            expect(result.data).toEqual(raoni);
+            expect(result).toEqual(raoni);
         });
 
         it('Test getInstitution in success case', function() {
@@ -81,7 +81,7 @@
             });
             httpBackend.flush();
             expect($http.get).toHaveBeenCalled();
-            expect(result.data).toEqual(institutions[0]);
+            expect(result).toEqual(institutions[0]);
         });
 
         it('Test searchInstitution', function() {
@@ -94,7 +94,7 @@
             });
             httpBackend.flush();
             expect($http.get).toHaveBeenCalled();
-            expect(result.data).toEqual(documents);
+            expect(result).toEqual(documents);
         });
 
         it('Should call http.delete()', function() {

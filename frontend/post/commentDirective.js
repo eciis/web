@@ -30,9 +30,8 @@
                             });
                         }
                         commentCtrl.saving = false;
-                    }, function error(response) {
+                    }, function error() {
                         $state.go("app.user.home");
-                        MessageService.showToast(response.data.msg);
                         commentCtrl.saving = false;
                     }
                 );
@@ -46,9 +45,8 @@
                             commentCtrl.comment.likes.push(commentCtrl.user.key);
                         }
                         commentCtrl.saving = false;
-                    }, function error(response) {
+                    }, function error() {
                         $state.go("app.user.home");
-                        MessageService.showToast(response.data.msg);
                         commentCtrl.saving = false;
                     }
                 );
@@ -97,15 +95,14 @@
                 );
 
                 promise.then(function success(response) {
-                    var data = response.data;
+                    var data = response;
                     commentCtrl.comment.replies[data.id] = data;
 
                     commentCtrl.newReply = null;
                     commentCtrl.saving = false;
-                }, function error(error) {
+                }, function error() {
                     commentCtrl.newReply = null;
                     commentCtrl.saving = false;
-                    MessageService.showToast(error.data.msg);
                 });
             }
         };
@@ -115,10 +112,7 @@
                 function success() {
                     delete commentCtrl.comment.replies[reply.id];
                     MessageService.showToast('Comentário excluído com sucesso');
-                }, function error(response) {
-                    MessageService.showToast(response.data.msg);
-                }
-            );
+                });
         };
 
         commentCtrl.deleteComment = function deleteComment() {
@@ -128,10 +122,7 @@
                         .filter(comment => comment.id !== commentCtrl.comment.id);
                     commentCtrl.post.number_of_comments--;
                     MessageService.showToast('Comentário excluído com sucesso');
-                }, function error(response) {
-                    MessageService.showToast(response.data.msg);
-                }
-            );
+                });
         };
 
         commentCtrl.confirmCommentDeletion = function confirmCommentDeletion(event, reply) {

@@ -26,12 +26,6 @@
             children_institutions: []
         });
 
-        request = {
-            institution: instRequesting,
-            key: 'requestKey',
-            status: 'sent'
-        };
-
         requestedInstitution = new Institution({
             key: 'requestedInstitutionkey',
             name: 'requestedInstitution',
@@ -39,13 +33,19 @@
             children_institutions: []
         });
         
+        request = {
+            institution: instRequesting,
+            requested_institution: requestedInstitution,
+            key: 'requestKey',
+            status: 'sent'
+        };
+
         createCtrl = function (request) {
             return $controller('AnalyseHierarchyRequestController', {
                 scope: scope,
                 RequestInvitationService: requestInvitationService,
                 InstitutionService: InstitutionService,
                 MessageService: MessageService,
-                requestedInstitution: requestedInstitution,
                 request: request
             });
         }

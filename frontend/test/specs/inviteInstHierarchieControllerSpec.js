@@ -5,7 +5,7 @@
     const REQUEST_INSTITUTION_PARENT = 'REQUEST_INSTITUTION_PARENT';
 
     var httpBackend, scope, state, mdDialog, instService, requestInvitationService, 
-        inviteService, inviteInstHierarchieCtrl, createCtrl, messageService, q;
+        inviteService, inviteInstHierarchieCtrl, createCtrl, messageService, q, requestDialogService;
     
     var institution = {
         name: 'institution',
@@ -46,7 +46,7 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function ($controller, $httpBackend, $rootScope, $state, $mdDialog, 
+    beforeEach(inject(function ($controller, $httpBackend, $rootScope, $state, $mdDialog, RequestDialogService,
         AuthService, InstitutionService, RequestInvitationService, InviteService, MessageService, $q) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
@@ -56,6 +56,7 @@
         requestInvitationService = RequestInvitationService;
         inviteService = InviteService;
         messageService = MessageService;
+        requestDialogService = RequestDialogService;
         q = $q;
 
         AuthService.login(user);
@@ -73,7 +74,8 @@
                     scope: scope,
                     RequestInvitationService: RequestInvitationService,
                     InviteService: InviteService,
-                    InstitutionService: InstitutionService
+                    InstitutionService: InstitutionService,
+                    RequestDialogService: RequestDialogService
                 });
         };
 
@@ -81,7 +83,7 @@
         spyOn(instService, 'getInstitution').and.callFake(function () {
             return {
                 then: function (callback) {
-                    return callback({ data: institution });
+                    return callback(institution);
                 }
             };
         });
@@ -142,7 +144,7 @@
             spyOn(instService, 'searchInstitutions').and.callFake(function () {
                 return {
                     then: function (callback) {
-                        return callback({data: {}});
+                        return callback({});
                     }
                 };
             });
@@ -361,10 +363,11 @@
 
             request = {
                 institution: instRequesting,
+                requested_institution: instRequested,
                 type_of_invite: REQUEST_INSTITUTION_CHILDREN
             };
 
-            spyOn(requestInvitationService, 'analyseReqDialog').and.callFake(function () {
+            spyOn(requestDialogService, 'showHierarchyDialog').and.callFake(function () {
                 return {
                     then: function (callback) {
                         return callback();
@@ -375,7 +378,7 @@
         
         it('should accept a request children and link institutions', function() {
             inviteInstHierarchieCtrl.analyseRequest(event, request);
-            expect(requestInvitationService.analyseReqDialog).toHaveBeenCalledWith(event, instRequested, request);
+            expect(requestDialogService.showHierarchyDialog).toHaveBeenCalledWith(request, event);
             expect(inviteInstHierarchieCtrl.hasParent).toBeTruthy()
             expect(inviteInstHierarchieCtrl.showParentHierarchie).toBeTruthy();
             expect(inviteInstHierarchieCtrl.institution.parent_institution).toBe(request.institution);
@@ -385,7 +388,7 @@
         it('should accept a request parent and link institutions', function() {
             request.type_of_invite = REQUEST_INSTITUTION_PARENT;
             inviteInstHierarchieCtrl.analyseRequest(event, request);
-            expect(requestInvitationService.analyseReqDialog).toHaveBeenCalledWith(event, instRequested, request);
+            expect(requestDialogService.showHierarchyDialog).toHaveBeenCalledWith(request, event);
             expect(inviteInstHierarchieCtrl.showChildrenHierarchie).toBeTruthy()
             expect(request.institution.parent_institution).toBe(inviteInstHierarchieCtrl.institution);
             expect(inviteInstHierarchieCtrl.institution.children_institutions[0]).toBe(request.institution);

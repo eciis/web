@@ -47,12 +47,11 @@
             PostService.createPost(shareCtrl.newPost).then(function success(response) {
                 MessageService.showToast('Compartilhado com sucesso!');
                 $mdDialog.hide();
-                shareCtrl.addPostTimeline(response.data);
+                shareCtrl.addPostTimeline(response);
                 const postAuthorPermissions = ["remove_post"];
-                shareCtrl.user.addPermissions(postAuthorPermissions, response.data.key);
-            }, function error(response) {
+                shareCtrl.user.addPermissions(postAuthorPermissions, response.key);
+            }, function error() {
                 $mdDialog.hide();
-                MessageService.showToast(response.data.msg);
             });
         };
 

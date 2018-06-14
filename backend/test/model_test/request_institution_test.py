@@ -149,7 +149,8 @@ class RequestInstitutionTest(TestBase):
             'key': request.key.urlsafe(),
             'institution': self.inst_test.make(RequestInstitution.INST_PROPS_TO_MAKE),
             'type_of_invite': 'REQUEST_INSTITUTION',
-            'institution_key': self.inst_test.key.urlsafe()
+            'institution_key': self.inst_test.key.urlsafe(),
+            'requested_institution': self.deciis.make(Invite.INST_PROPS_TO_MAKE)
         }
 
         made_request = request.make()

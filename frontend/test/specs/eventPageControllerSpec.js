@@ -99,7 +99,7 @@
       spyOn(postService, 'createPost').and.callFake(function () {
         return {
           then: function (callback) {
-            return callback({data: {}});
+            return callback({});
           }
         };
       });

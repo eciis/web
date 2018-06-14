@@ -197,10 +197,7 @@
                     function success(institutionSaved) {
                         updateUser($state.params.inviteKey, institutionSaved);
                         patchIntitution();
-                    },
-                    function error(response) {
-                        MessageService.showToast(response.data.msg);
-                });
+                    });
             } else {
                 patchIntitution();
             }
@@ -250,10 +247,7 @@
                 function success() {
                     if(configInstCtrl.newInstitution)
                         updateUserInstitutions(configInstCtrl.newInstitution);
-                },
-                function error(response) {
-                    MessageService.showToast(response.data.msg);
-            });
+                });
         }
 
         function saveRequestInst() {
@@ -392,33 +386,32 @@
 
         function getLegalNatures() {
             InstitutionService.getLegalNatures().then(function success(response) {
-                configInstCtrl.legalNatures = response.data;
+                configInstCtrl.legalNatures = response;
             });
         }
 
         function getActuationAreas() {
             InstitutionService.getActuationAreas().then(function success(response) {
-                configInstCtrl.actuationArea = response.data;
+                configInstCtrl.actuationArea = response;
             });
         }
 
         function getCountries() {
             $http.get('app/institution/countries.json').then(function success(response) {
-                configInstCtrl.countries = response.data;
+                configInstCtrl.countries = response;
             });
         }
 
         function loadInstitution() {
             InstitutionService.getInstitution(institutionKey).then(function success(response) {
-                configInstCtrl.newInstitution = response.data;
+                configInstCtrl.newInstitution = response;
                 configInstCtrl.suggestedName = configInstCtrl.newInstitution.name;
                 currentPortfoliourl = configInstCtrl.newInstitution.portfolio_url;
                 observer = ObserverRecorderService.register(configInstCtrl.newInstitution);
                 loadAddress(); 
                 setDefaultPhotoUrl();
                 configInstCtrl.loading = false;
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
+            }, function error() {
                 configInstCtrl.loading = true;
             });
         }

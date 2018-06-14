@@ -21,13 +21,13 @@
         'current_institution' : institution
     };
    
-    beforeEach(inject(function($controller, $httpBackend, $http, $mdDialog,
+    beforeEach(inject(function ($controller, $httpBackend, HttpService, $mdDialog,
             AuthService, $rootScope, ProfileService) {
         scope = $rootScope.$new();
         httpBackend = $httpBackend;
         rootScope = $rootScope;
         mdDialog = $mdDialog;
-        http = $http;
+        http = HttpService;
         profileService = ProfileService;
 
         colorPickerCtrl = $controller('ColorPickerController', {

@@ -23,11 +23,8 @@
             var valueOrKeyword = value ? value : (searchCtrl.search_keyword || "");
             var promise = InstitutionService.searchInstitutions(valueOrKeyword, "active", type);
             promise.then(function success(response) {
-                searchCtrl.institutions = response.data;
-
+                searchCtrl.institutions = response;
                 searchCtrl.loading = true;
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
             });
             return promise;
         };
@@ -49,7 +46,7 @@
         searchCtrl.goToInstitution = function goToInstitution(institutionId) {
             if (institutionId) {
                 InstitutionService.getInstitution(institutionId).then(function success(response) {
-                    $state.go('app.institution.timeline', { institutionKey: response.data.key });
+                    $state.go('app.institution.timeline', { institutionKey: response.key });
                 });
             }
         };

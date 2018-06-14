@@ -1,6 +1,6 @@
 'use strict';
 
-(describe('Test InstitutionService', function () {
+(describe('Test SurveyService', function () {
         var httpBackend, service, $http;
         var SURVEY_URI = "/api/surveyposts/";
         var user = {name: 'User', key: 12345};
@@ -23,9 +23,9 @@
 
         beforeEach(module('app'));
 
-        beforeEach(inject(function($httpBackend, SurveyService, _$http_) {
+    beforeEach(inject(function ($httpBackend, SurveyService, HttpService) {
             httpBackend = $httpBackend;
-            $http = _$http_;
+            $http = HttpService;
             service = SurveyService;
             httpBackend.when('GET', 'main/main.html').respond(200);
             httpBackend.when('GET', 'home/home.html').respond(200);

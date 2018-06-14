@@ -42,9 +42,9 @@
 
         beforeEach(module('app'));
 
-        beforeEach(inject(function($httpBackend, EventService, _$http_, $rootScope) {
+        beforeEach(inject(function($httpBackend, EventService, HttpService, $rootScope) {
             httpBackend = $httpBackend;
-            $http = _$http_;
+            $http = HttpService;
             scope = $rootScope.$new();
             service = EventService;
             httpBackend.when('GET', 'main/main.html').respond(200);
@@ -74,7 +74,7 @@
                 });
                 httpBackend.flush();
                 expect($http.post).toHaveBeenCalledWith(EVENT_URI, event);
-                expect(result.data).toEqual(event);
+                expect(result).toEqual(event);
             });
     
             it('getEvent()', function() {
@@ -86,7 +86,7 @@
                 });
                 httpBackend.flush();
                 expect($http.get).toHaveBeenCalledWith(EVENT_URI + '/' + event.key);
-                expect(result.data).toEqual(event);
+                expect(result).toEqual(event);
             });
     
             it('getEvents()', function() {
@@ -98,7 +98,7 @@
                 });
                 httpBackend.flush();
                 expect($http.get).toHaveBeenCalledWith(EVENT_URI + '?page=' + page + "&limit=" + LIMIT);
-                expect(result.data).toEqual(events);
+                expect(result).toEqual(events);
             });
     
             it('getInstEvents()', function() {
@@ -110,7 +110,7 @@
                 });
                 httpBackend.flush();
                 expect($http.get).toHaveBeenCalledWith(INST_URI + institution.key + '/events?page=' + page + "&limit=" + LIMIT);
-                expect(result.data).toEqual(events);
+                expect(result).toEqual(events);
             });
     
             it('deleteEvent()', function() {

@@ -36,16 +36,15 @@
         function loadEvents(deferred, getEvents) {
             getEvents(actualPage, eventCtrl.institutionKey).then(function success(response) {
                 actualPage += 1;
-                moreEvents = response.data.next;
+                moreEvents = response.next;
 
-                _.forEach(response.data.events, function(event) {
+                _.forEach(response.events, function(event) {
                     eventCtrl.events.push(event);
                 });
 
                 eventCtrl.isLoadingEvents = false;
                 deferred.resolve();
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
+            }, function error() {
                 deferred.reject();
                 $state.go("app.user.home");
             });

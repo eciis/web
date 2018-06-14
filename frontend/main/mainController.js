@@ -155,7 +155,10 @@
 
         mainCtrl.updateUser = function updateUser() {
             UserService.load().then(function success(response) {
-                mainCtrl.user = response;
+                mainCtrl.user.institutions = response.institutions;
+                mainCtrl.user.follows = response.follows;	
+                mainCtrl.user.institution_profiles = response.institution_profiles;	
+                mainCtrl.user.permissions = response.permissions;
                 AuthService.save();
             });
         }

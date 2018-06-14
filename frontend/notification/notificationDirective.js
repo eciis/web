@@ -4,12 +4,7 @@
 
     var app = angular.module("app");
 
-    app.controller("NotificationController", function NotificationController(NotificationService, AuthService, $state,
-<<<<<<< HEAD
-        $mdDialog, RequestInvitationService, MessageService) {
-=======
-        UserService, RequestDialogService) {
->>>>>>> master
+    app.controller("NotificationController", function NotificationController(NotificationService, AuthService, $state, RequestDialogService) {
         var notificationCtrl = this;
 
         notificationCtrl.user = AuthService.getCurrentUser();
@@ -236,7 +231,7 @@
         function showRequestDialog(notification, event, properties) {
             RequestDialogService.showRequestDialog(notification, event, properties);
         }
-        
+
         (function main() {
             NotificationService.watchNotifications(notificationCtrl.user.key, notificationCtrl.notifications);
             notificationCtrl.allNotifications = NotificationService.getAllNotifications();

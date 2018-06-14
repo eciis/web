@@ -43,7 +43,7 @@
             'ACCEPT_INVITE_USER_ADM': messageCreator('Aceitou seu convite para ser administrador de ', SINGLE_INST),
             'REJECT_INVITE_USER_ADM': messageCreator('Rejeitou seu convite para ser administrador de ', SINGLE_INST),
             'ACCEPT_INVITE_HIERARCHY': messageCreator('Aceitou seu convite e estabeleceu vínculo entre ', DOUBLE_INST),
-            'FINISHED_PROCESS': messageCreator('Você agora possui permissões para administrar ', SINGLE_INST)
+            'TRANSFER_ADM_PERMISSIONS': messageCreator('Você agora possui permissões para administrar ', SINGLE_INST)
         };
 
 

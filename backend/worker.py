@@ -437,7 +437,7 @@ class TransferAdminPermissionsHandler(BaseHandler):
 
         send_message_notification(
             receiver_key=user.key.urlsafe(),
-            notification_type='FINISHED_PROCESS',
+            notification_type='TRANSFER_ADM_PERMISSIONS',
             entity_key=institution.key.urlsafe(),
             message=create_system_message(institution.key),
         )

@@ -37,7 +37,7 @@
                     }
                 }
             },
-            "FINISHED_PROCESS": {
+            "TRANSFER_ADM_PERMISSIONS": {
                 icon: "check_circle_outline",
                 action: function (notification, event, properties) {
                     if (notification.status !== 'READ') {

@@ -42,7 +42,7 @@
             switch(request.type_of_invite) {
                 case "REQUEST_INSTITUTION_PARENT":
                 case "REQUEST_INSTITUTION_CHILDREN":
-                    service.showHierarchyDialog(request, event)
+                    service.showHierarchyDialog(request, event);
                     break;
                 default:
                     dialogProperties.locals.request = request;

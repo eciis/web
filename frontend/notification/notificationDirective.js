@@ -74,7 +74,7 @@
                     return showRequestDialog(notification, event, properties);
                 },
                 properties: {
-                    templateUrl: "app/requests/request_processing.html",
+                    templateUrl: "app/requests/request_user_dialog.html",
                     controller: "RequestProcessingController",
                     controllerAs: "requestCtrl",
                     locals: {}

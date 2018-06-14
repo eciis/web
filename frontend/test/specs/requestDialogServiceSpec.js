@@ -18,13 +18,12 @@
     beforeEach(module('app'));
 
     beforeEach(inject(function (RequestInvitationService, InviteService, $mdDialog,
-        MessageService, RequestDialogService, $httpBackend) {
+        RequestDialogService, $httpBackend) {
         
         service = RequestDialogService;
         requestInvitationService = RequestInvitationService;
         inviteService = InviteService;
         mdDialog = $mdDialog;
-        messageService = MessageService;
         httpBackend = $httpBackend;
         event = {};
 

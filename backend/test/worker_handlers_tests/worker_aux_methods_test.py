@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """WorkerAuxMethodsTest."""
 
-from test_base import TestBase
+from ..test_base import TestBase
 import permissions
-import mocks
+from .. import mocks
 from worker import get_all_parent_admins
 
 

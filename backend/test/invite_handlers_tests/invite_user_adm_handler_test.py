@@ -3,15 +3,15 @@
 
 
 import json
-import mocks
+from .. import mocks
 
-from test_base_handler import TestBaseHandler
+from ..test_base_handler import TestBaseHandler
 from google.appengine.ext import ndb
 from models import InviteUserAdm
 from handlers import InviteUserAdmHandler
 from worker import TransferAdminPermissionsHandler
 import permissions
-from test_base_handler import has_permissions
+from ..test_base_handler import has_permissions
 from mock import patch
 
 def add_permissions(user, institution_key, type_permission):

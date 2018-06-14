@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 """Like Post handler test."""
 import json
-from test_base_handler import TestBaseHandler
+from ..test_base_handler import TestBaseHandler
 from models import Post
 from models import User
 from models import Institution
 from handlers.like_handler import LikeHandler
 
-import mocks
+from .. import mocks
 from mock import patch
 
 

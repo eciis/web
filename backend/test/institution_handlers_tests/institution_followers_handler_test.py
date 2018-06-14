@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Institution Followers handler test."""
 
-from test_base_handler import TestBaseHandler
+from ..test_base_handler import TestBaseHandler
 from models import User
 from models import Institution
 from handlers.institution_followers_handler import InstitutionFollowersHandler

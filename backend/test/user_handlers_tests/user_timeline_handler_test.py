@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """User Timeline handler test."""
 
-from test_base_handler import TestBaseHandler
+from ..test_base_handler import TestBaseHandler
 from models import User
 from models import Institution
 from handlers.post_handler import PostHandler

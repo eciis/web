@@ -2,12 +2,12 @@
 """Institution Parent Collection request handler test."""
 
 import json
-from test_base_handler import TestBaseHandler
+from ..test_base_handler import TestBaseHandler
 from models import User
 from models import Institution
 from models import Address
 from handlers.institution_parent_request_collection_handler import InstitutionParentRequestCollectionHandler
-import mocks
+from .. import mocks
 
 from mock import patch
 

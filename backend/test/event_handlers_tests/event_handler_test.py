@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Event handler test."""
 
-from test_base_handler import TestBaseHandler
+from ..test_base_handler import TestBaseHandler
 from models import User
 from models import Institution
 from models import Event
@@ -10,7 +10,7 @@ from mock import patch
 
 import datetime
 import json
-import mocks
+from .. import mocks
 
 
 class EventHandlerTest(TestBaseHandler):

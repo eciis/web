@@ -2,16 +2,16 @@
 """Institution Parent request handler test."""
 
 import json
-import mocks
+from .. import mocks
 
-from test_base_handler import TestBaseHandler
+from ..test_base_handler import TestBaseHandler
 from models import Invite
 from models import Address
 from models import RequestInstitutionParent
 from handlers.institution_parent_request_handler import InstitutionParentRequestHandler
 from worker import AddAdminPermissionsInInstitutionHierarchy
 from mock import patch
-from test_base_handler import has_permissions
+from ..test_base_handler import has_permissions
 import permissions
 
 

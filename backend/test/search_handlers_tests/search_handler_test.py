@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 """Search handler test."""
 
-from test_base_handler import TestBaseHandler
+from ..test_base_handler import TestBaseHandler
 from handlers.search_handler import SearchHandler
 from mock import patch
-import mocks
+from .. import mocks
 
 USER = {'email': 'test@example.com'}
 

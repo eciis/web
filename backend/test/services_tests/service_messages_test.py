@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """Service message test."""
 
-from test_base_handler import TestBaseHandler
+from ..test_base_handler import TestBaseHandler
 import service_messages
-import mocks
+from .. import mocks
 import mock
 import json
 

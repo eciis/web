@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """Post handler test."""
 
-from test_base_handler import TestBaseHandler
+from ..test_base_handler import TestBaseHandler
 from handlers.post_handler import PostHandler
-import mocks
+from .. import mocks
 from mock import patch
 import json
 

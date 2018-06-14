@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 """Remove admin permissions Hierarchy Handler test."""
 
-from test_base_handler import TestBaseHandler, has_permissions
+from ..test_base_handler import TestBaseHandler, has_permissions
 from worker import RemoveAdminPermissionsInInstitutionHierarchy
 import permissions
-import mocks
+from .. import mocks
 
 REMOVE_ADMIN_PERMISSIONS_URI = '/api/queue/remove-admin-permissions'
 

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """Like Comment handler test."""
 import json
-import mocks
+from .. import mocks
 
-from test_base_handler import TestBaseHandler
+from ..test_base_handler import TestBaseHandler
 from handlers.like_handler import LikeHandler
 
 from mock import patch

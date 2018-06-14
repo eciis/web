@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Subscribe post handler test."""
 
-from test_base_handler import TestBaseHandler
+from ..test_base_handler import TestBaseHandler
 from models import Post
 from models import User
 from models import Institution

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """Institution follower handler test."""
-from test_base_handler import TestBaseHandler
+from ..test_base_handler import TestBaseHandler
 from handlers.institution_followers_handler import InstitutionFollowersHandler
-import mocks
+from .. import mocks
 
 from mock import patch
 

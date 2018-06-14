@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """User request handler collection test."""
 import json
-import mocks
+from .. import mocks
 
-from test_base_handler import TestBaseHandler
+from ..test_base_handler import TestBaseHandler
 from models import User
 from models import Institution
 from models import Address

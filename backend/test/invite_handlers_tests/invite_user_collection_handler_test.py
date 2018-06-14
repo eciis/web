@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 """Invite User Collection handler test."""
 
-import mocks
+from .. import mocks
 import json
 from permissions import DEFAULT_ADMIN_PERMISSIONS
-from test_base_handler import TestBaseHandler
+from ..test_base_handler import TestBaseHandler
 from google.appengine.ext import ndb
 from handlers import InviteUserCollectionHandler
 from models import Invite

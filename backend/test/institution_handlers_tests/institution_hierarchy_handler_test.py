@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 """Institution hierarchy handler test."""
 
-from test_base_handler import TestBaseHandler
+from ..test_base_handler import TestBaseHandler
 from handlers.institution_hierarchy_handler import InstitutionHierarchyHandler
 from worker import AddAdminPermissionsInInstitutionHierarchy
 from worker import RemoveAdminPermissionsInInstitutionHierarchy
 from mock import patch
-import mocks
+from .. import mocks
 import permissions
 import json
-from test_base_handler import has_permissions
+from ..test_base_handler import has_permissions
 
 ADMIN = {'email': 'user1@gmail.com'}
 USER = {'email': 'otheruser@ccc.ufcg.edu.br'}

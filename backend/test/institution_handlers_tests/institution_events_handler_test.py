@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Institution Events handler test."""
 
-from test_base_handler import TestBaseHandler
+from ..test_base_handler import TestBaseHandler
 from models import User
 from models import Institution
 from models import Event
@@ -9,7 +9,7 @@ from handlers.institution_events_handler import InstitutionEventsHandler
 from google.appengine.ext import ndb
 import json
 import datetime
-import mocks
+from .. import mocks
 
 from mock import patch
 

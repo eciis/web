@@ -1,8 +1,8 @@
 """Invite Institution Handler Test."""
 
-import mocks
+from .. import mocks
 
-from test_base_handler import TestBaseHandler
+from ..test_base_handler import TestBaseHandler
 from models import Institution
 from models import Address
 from models import User

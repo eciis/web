@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """User profile handler test."""
 
-from test_base_handler import TestBaseHandler
+from ..test_base_handler import TestBaseHandler
 from handlers.user_profile_handler import UserProfileHandler
 
 from models import User

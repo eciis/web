@@ -2,9 +2,9 @@
 """Invite Handler Test."""
 
 import json
-import mocks
+from .. import mocks
 
-from test_base_handler import TestBaseHandler
+from ..test_base_handler import TestBaseHandler
 from models import InviteUser
 from models import Invite
 from handlers import InviteHandler

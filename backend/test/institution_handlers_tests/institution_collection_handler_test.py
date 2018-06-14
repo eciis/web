@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 """Institution collection handler test."""
-from test_base_handler import TestBaseHandler
+from ..test_base_handler import TestBaseHandler
 from handlers.institution_collection_handler import InstitutionCollectionHandler
 
 from mock import patch
-import mocks
+from .. import mocks
 
 
 class InstitutionCollectionHandlerTest(TestBaseHandler):

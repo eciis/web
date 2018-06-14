@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """User institutions handler test."""
 
-import mocks
+from .. import mocks
 
-from test_base_handler import TestBaseHandler
+from ..test_base_handler import TestBaseHandler
 from handlers.user_institutions_handler import UserInstitutionsHandler
 from mock import patch
 

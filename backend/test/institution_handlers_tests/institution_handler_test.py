@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Post handler test."""
 import operator
-from test_base_handler import TestBaseHandler
+from ..test_base_handler import TestBaseHandler
 from models import InviteInstitution
 from models import User
 from models import Institution
@@ -10,9 +10,9 @@ from worker import AddAdminPermissionsInInstitutionHierarchy
 from worker import RemoveAdminPermissionsInInstitutionHierarchy
 from worker import RemoveInstitutionHandler
 import permissions
-from test_base_handler import has_permissions
+from ..test_base_handler import has_permissions
 from mock import patch
-import mocks
+from .. import mocks
 
 
 class InstitutionHandlerTest(TestBaseHandler):

@@ -1,11 +1,11 @@
 # coding: utf-8
 """User Handler test."""
 
-from test_base_handler import TestBaseHandler
+from ..test_base_handler import TestBaseHandler
 from handlers.user_handler import UserHandler
 from mock import patch
 
-import mocks
+from .. import mocks
 import json
 
 USER_URI = '/api/user'

@@ -3,8 +3,8 @@
 
 import json
 import datetime
-import mocks
-from test_base_handler import TestBaseHandler
+from .. import mocks
+from ..test_base_handler import TestBaseHandler
 from models import User
 from models import Institution
 from models import Post

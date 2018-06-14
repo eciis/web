@@ -2,9 +2,9 @@
 """Post Comment handler test."""
 
 import json
-import mocks
+from .. import mocks
 
-from test_base_handler import TestBaseHandler
+from ..test_base_handler import TestBaseHandler
 from custom_exceptions import NotAuthorizedException
 from handlers.post_comment_handler import PostCommentHandler
 from handlers.post_comment_handler import check_permission

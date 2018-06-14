@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 """Institution member handler test."""
 
-import mocks
+from .. import mocks
 import json
 
-from test_base_handler import TestBaseHandler
+from ..test_base_handler import TestBaseHandler
 from models import User
 from models import Institution
 from handlers.institution_members_handler import InstitutionMembersHandler

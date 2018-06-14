@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Like Post handler test."""
-from test_base_handler import TestBaseHandler
+from ..test_base_handler import TestBaseHandler
 from models import SurveyPost
 from models import User
 from models import Institution

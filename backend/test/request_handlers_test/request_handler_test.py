@@ -2,13 +2,13 @@
 """Request Handler Test."""
 
 import json
-from test_base_handler import TestBaseHandler
+from ..test_base_handler import TestBaseHandler
 from models import User
 from models import Institution
 from models import Address
 from models import RequestUser
 from handlers.request_handler import RequestHandler
-import mocks
+from .. import mocks
 
 from mock import patch
 import mock

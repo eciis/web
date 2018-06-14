@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 """Remove Institution Handler test."""
 
-from test_base_handler import TestBaseHandler
+from ..test_base_handler import TestBaseHandler
 from worker import RemoveInstitutionHandler
-import mocks
+from .. import mocks
 from permissions import DEFAULT_ADMIN_PERMISSIONS
-from test_base_handler import has_permissions
+from ..test_base_handler import has_permissions
 
 
 class RemoveInstitutionHandlerTest(TestBaseHandler):

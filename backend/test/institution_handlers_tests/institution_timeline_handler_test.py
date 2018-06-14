@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 """Institution Timeline handler test."""
 
-from test_base_handler import TestBaseHandler
+from ..test_base_handler import TestBaseHandler
 from handlers.post_handler import PostHandler
 from handlers.post_collection_handler import PostCollectionHandler
 from handlers.institution_timeline_handler import InstitutionTimelineHandler
 from google.appengine.ext import ndb
-import mocks
+from .. import mocks
 
 from mock import patch
 

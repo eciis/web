@@ -3,14 +3,14 @@
 
 import json
 from search_module import SearchInstitution
-from test_base_handler import TestBaseHandler
+from ..test_base_handler import TestBaseHandler
 from models import User
 from models import Institution
 from models import Address
 from models import InviteUser
 from models import InviteInstitution
 from handlers.resend_invite_handler import ResendInviteHandler
-import mocks
+from .. import mocks
 
 import mock
 from mock import patch

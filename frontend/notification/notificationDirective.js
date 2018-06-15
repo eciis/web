@@ -28,12 +28,7 @@
                 icon: "clear"
             },
             "TRANSFER_ADM_PERMISSIONS": {
-                icon: "check_circle_outline",
-                action: function (notification, event, properties) {
-                    if (notification.status !== 'READ') {
-                        return refreshUser(notification);
-                    }
-                }
+                icon: "check_circle_outline"
             },
             "POST": {
                 icon: "inbox",

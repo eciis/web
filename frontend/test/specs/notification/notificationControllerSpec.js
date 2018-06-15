@@ -5,7 +5,8 @@
     var notCtrl, httpBackend, scope, createCtrl, state, notificationService
     var authService, notificationListenerService, userService, http;
 
-    var EVENTS_TO_UPDATE_USER = ["DELETED_INSTITUTION", "DELETE_MEMBER", "ACCEPT_INSTITUTION_LINK"];
+    var EVENTS_TO_UPDATE_USER = ["DELETED_INSTITUTION", "DELETE_MEMBER",
+                                "ACCEPT_INSTITUTION_LINK", "TRANSFER_ADM_PERMISSIONS"];
     
     var institution = {
         name: 'institution',

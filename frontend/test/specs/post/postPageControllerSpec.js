@@ -9,17 +9,6 @@
         { name: 'e-CIS', key: '456879' }
     ];
 
-    var user = new User({
-        name: 'user',
-        institutions: institutions,
-        follows: institutions,
-        institutions_admin: institutions[0],
-        current_institution: institutions[0],
-        state: 'active'
-    });
-
-    user.current_institution = institutions[0];
-
     var post = new Post({
         'title': 'Shared Post',
         'text': 'This post will be shared',

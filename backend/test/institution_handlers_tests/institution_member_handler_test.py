@@ -102,7 +102,7 @@ class InstitutionMemberHandlerTest(TestBaseHandler):
     @patch('handlers.institution_members_handler.send_message_notification')
     @patch('handlers.institution_members_handler.RemoveMemberEmailSender.send_email')
     @patch('util.login_service.verify_token', return_value={'email': 'user@gmail.com'})
-    def test_delete_with_email(self, verify_token, send_email, send_message_notification):
+    def test_delete_member_with_one_institution(self, verify_token, send_email, send_message_notification):
         """Test delete a member that belongs to only one institution."""
         # new user
         third_user = mocks.create_user()
@@ -120,7 +120,7 @@ class InstitutionMemberHandlerTest(TestBaseHandler):
         )
 
         # assert send_message_notification was not called
-        send_message_notification.assert_not_called()
+        send_message_notification.assert_called()
 
         # Assert that send_email has been called
         send_email.assert_called()

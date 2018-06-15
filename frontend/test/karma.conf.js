@@ -32,7 +32,6 @@ module.exports = function (config) {
         "bower_components/ngMask/dist/ngMask.js",
         '../*.js',
         '../*/*.js',
-        'specs/*.js',
         'specs/**/*.js',
     ],
 

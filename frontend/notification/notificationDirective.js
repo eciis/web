@@ -27,6 +27,14 @@
             "DELETED_INSTITUTION": {
                 icon: "clear"
             },
+            "TRANSFER_ADM_PERMISSIONS": {
+                icon: "check_circle_outline",
+                action: function (notification, event, properties) {
+                    if (notification.status !== 'READ') {
+                        return refreshUser(notification);
+                    }
+                }
+            },
             "POST": {
                 icon: "inbox",
                 state: "app.post"
@@ -163,6 +171,9 @@
             "ACCEPT_INVITE_HIERARCHY": {
                 icon: "account_balance",
             },
+            "DELETED_USER": {
+                icon: "clear"
+            }
         };
 
         notificationCtrl.markAsRead = function markAsRead(notification) {

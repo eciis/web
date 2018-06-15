@@ -53,10 +53,10 @@ class InstitutionHierarchyHandler(BaseHandler):
                       "Key is not an institution", EntityException)
         Utils._assert(not type(institution_link) is Institution,
                       "Key is not an institution", EntityException)
-        Utils._assert(institution.state == 'inactive',
-                      "The institution has been deleted", NotAuthorizedException)
-        Utils._assert(institution_link.state == 'inactive',
-                      "The institution has been deleted", NotAuthorizedException)
+        Utils._assert(not institution.is_active(),
+                      "This institution is not active", NotAuthorizedException)
+        Utils._assert(not institution_link.is_active(),
+                      "This institution is not active", NotAuthorizedException)
 
         institution.remove_link(institution_link, is_parent)
         admin = institution_link.admin

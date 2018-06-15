@@ -48,8 +48,8 @@ class ReplyCommentHandler(BaseHandler):
         post = ndb.Key(urlsafe=post_key).get()
         institution = post.institution.get()
 
-        Utils._assert(institution.state == 'inactive',
-                      "The institution has been deleted", NotAuthorizedException)
+        Utils._assert(not institution.is_active(),
+                      "This institution is not active", NotAuthorizedException)
         Utils._assert(post.state == 'deleted',
                       "This post has been deleted", EntityException)
 
@@ -92,8 +92,8 @@ class ReplyCommentHandler(BaseHandler):
         post = ndb.Key(urlsafe=post_key).get()
         institution = post.institution.get()
         
-        Utils._assert(institution.state == 'inactive',
-                      "The institution has been deleted", NotAuthorizedException)
+        Utils._assert(not institution.is_active(),
+                      "This institution is not active", NotAuthorizedException)
         
         comment = post.get_comment(comment_id)
         replies = comment.get('replies')

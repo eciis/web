@@ -42,8 +42,8 @@ class InstitutionFollowersHandler(BaseHandler):
         institution_key = ndb.Key(urlsafe=url_string)
         institution = institution_key.get()
 
-        Utils._assert(institution.state == 'inactive',
-                      "The institution has been deleted", NotAuthorizedException)
+        Utils._assert(not institution.is_active(),
+                      "This institution is not active", NotAuthorizedException)
 
         if(not type(institution) is Institution):
             raise Exception("Key is not an Institution")
@@ -59,8 +59,8 @@ class InstitutionFollowersHandler(BaseHandler):
         institution_key = ndb.Key(urlsafe=url_string)
         institution = institution_key.get()
 
-        Utils._assert(institution.state == 'inactive',
-                      "The institution has been deleted", NotAuthorizedException)
+        Utils._assert(not institution.is_active(),
+                      "This institution is not active", NotAuthorizedException)
         
         Utils._assert(institution.name == 'Ministério da Saúde',
                       "The institution can not be unfollowed", NotAuthorizedException)

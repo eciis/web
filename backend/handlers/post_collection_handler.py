@@ -45,8 +45,8 @@ class PostCollectionHandler(BaseHandler):
 
         institution = ndb.Key(urlsafe=institution_key).get()
 
-        Utils._assert(institution.state == 'inactive',
-                      "The institution has been deleted",
+        Utils._assert(not institution.is_active(),
+                      "This institution is not active",
                       NotAuthorizedException)
 
         permission = get_permission(post_data)

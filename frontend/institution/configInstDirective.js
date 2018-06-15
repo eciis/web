@@ -398,7 +398,7 @@
 
         function getCountries() {
             $http.get('app/institution/countries.json').then(function success(response) {
-                configInstCtrl.countries = response;
+                configInstCtrl.countries = response.data;
             });
         }
 

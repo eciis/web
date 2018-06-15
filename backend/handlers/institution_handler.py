@@ -84,7 +84,7 @@ class InstitutionHandler(BaseHandler):
         """Handle GET Requests."""
         obj_key = ndb.Key(urlsafe=url_string)
         obj = obj_key.get()
-        Utils._assert(not obj.is_active(),
+        Utils._assert(obj == "inactive",
                       "This institution is not active", NotAuthorizedException)
         assert type(obj) is Institution, "Key is not an Institution"
         institution_json = Utils.toJson(obj, host=self.request.host)

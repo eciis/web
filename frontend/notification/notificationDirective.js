@@ -186,6 +186,9 @@
             "ACCEPT_INVITE_HIERARCHY": {
                 icon: "account_balance",
             },
+            "DELETED_USER": {
+                icon: "clear"
+            }
         };
 
         notificationCtrl.markAsRead = function markAsRead(notification) {

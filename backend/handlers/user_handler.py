@@ -9,7 +9,7 @@ from util import login_required
 from models import User
 from utils import json_response
 from models import InstitutionProfile
-
+from service_messages import send_message_notification
 from util import JsonPatch
 
 from . import BaseHandler
@@ -47,12 +47,12 @@ def notify_admins(user):
         admin_key = institution_key.get().admin
         notification_message = user.create_notification_message(
             user.key, institution_key)
-            send_message_notification(
-                receiver_key=admin_key.urlsafe(),
-                notification_type='DELETED_USER',
-                entity_key=institution_key.urlsafe(),
-                message=notification_message
-            )
+        send_message_notification(
+            receiver_key=admin_key.urlsafe(),
+            notification_type='DELETED_USER',
+            entity_key=institution_key.urlsafe(),
+            message=notification_message
+        )
 
 
 class UserHandler(BaseHandler):

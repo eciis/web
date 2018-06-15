@@ -41,6 +41,19 @@ def remove_user_from_institutions(user):
         institution = institution_key.get()
         institution.remove_member(user)
 
+def notify_admins(user):
+    """Notify the admins about the user removal."""
+    for institution_key in user.institutions:
+        admin_key = institution_key.get().admin
+        notification_message = user.create_notification_message(
+            user.key, institution_key)
+            send_message_notification(
+                receiver_key=admin_key.urlsafe(),
+                notification_type='DELETED_USER',
+                entity_key=institution_key.urlsafe(),
+                message=notification_message
+            )
+
 
 class UserHandler(BaseHandler):
     """User Handler."""
@@ -71,6 +84,7 @@ class UserHandler(BaseHandler):
         """
         user.state = 'inactive'
 
+        notify_admins(user)
         remove_user_from_institutions(user)
         user.disable_account()
 

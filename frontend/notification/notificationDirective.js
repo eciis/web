@@ -5,7 +5,7 @@
     var app = angular.module("app");
 
     app.controller("NotificationController", function NotificationController(NotificationService, AuthService, $state,
-        UserService, RequestDialogService) {
+        RequestDialogService, UserService, NotificationListenerService) {
         var notificationCtrl = this;
 
         notificationCtrl.user = AuthService.getCurrentUser();
@@ -19,31 +19,16 @@
                 state: "app.post"
             },
             "DELETE_MEMBER": {
-                icon: "clear",
-                action: function (notification, event, properties) {
-                    if (notification.status !== 'READ') {
-                        return refreshUser(notification);
-                    }
-                }
+                icon: "clear"
             },
             "LEFT_INSTITUTION": {
                 icon: "clear"
             },
             "DELETED_INSTITUTION": {
-                icon: "clear",
-                action: function (notification, event, properties) {
-                    if (notification.status !== 'READ') {
-                        return refreshUser(notification);
-                    }
-                }
+                icon: "clear"
             },
             "TRANSFER_ADM_PERMISSIONS": {
-                icon: "check_circle_outline",
-                action: function (notification, event, properties) {
-                    if (notification.status !== 'READ') {
-                        return refreshUser(notification);
-                    }
-                }
+                icon: "check_circle_outline"
             },
             "POST": {
                 icon: "inbox",
@@ -113,12 +98,7 @@
                 }
             },
             "ACCEPT_INSTITUTION_LINK": {
-                icon: "account_balance",
-                action: function (notification, event, properties) {
-                    if (notification.status !== 'READ') {
-                        return refreshUser(notification);
-                    }
-                }
+                icon: "account_balance"
             },
             "ACCEPTED_LINK": {
                 icon: "link"
@@ -255,23 +235,29 @@
             $state.go('app.user.notifications');
         };
 
-        function refreshUser() {
+        function showRequestDialog(notification, event, properties) {
+            RequestDialogService.showRequestDialog(notification, event, properties);
+        }
+
+        notificationCtrl.refreshUser = function refreshUser() {
             UserService.load().then(function success(response) {
                 notificationCtrl.user.institutions = response.institutions;
-                notificationCtrl.user.follows = response.follows;
-                notificationCtrl.user.institution_profiles = response.institution_profiles;
+                notificationCtrl.user.follows = response.follows;	
+                notificationCtrl.user.institution_profiles = response.institution_profiles;	
                 notificationCtrl.user.permissions = response.permissions;
                 AuthService.save();
             });
-        }
+        };
 
-        function showRequestDialog(notification, event, properties) {
-            RequestDialogService.showRequestDialog(notification, event, properties);
+        function notificationListener() {
+            NotificationListenerService.multipleEventsListener(UserService.NOTIFICATIONS_TO_UPDATE_USER,
+                notificationCtrl.refreshUser);
         }
 
         (function main() {
             NotificationService.watchNotifications(notificationCtrl.user.key, notificationCtrl.notifications);
             notificationCtrl.allNotifications = NotificationService.getAllNotifications();
+            notificationListener();
         })();
     });
 

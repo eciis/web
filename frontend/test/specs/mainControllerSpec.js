@@ -2,7 +2,7 @@
 
 (describe('Test MainController', function() {
     var mainCtrl, httpBackend, scope, createCtrl, state;
-    var userService, authService, requestInvitationService, notificationListenerService;
+    var authService, requestInvitationService, notificationListenerService;
     var user = {
         name: 'user',
         key: 'user-key',
@@ -28,8 +28,6 @@
         key: '1239'
     };
 
-    var EVENTS_TO_UPDATE_USER = ["DELETED_INSTITUTION", "DELETE_MEMBER", "ACCEPT_INSTITUTION_LINK"];
-
     var institutionKey = institution.key;
 
     user.institutions = [institution, otherInstitution];
@@ -40,11 +38,10 @@
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $httpBackend, $rootScope, $state, AuthService,
-                                UserService, RequestInvitationService, NotificationListenerService) {
+                RequestInvitationService, NotificationListenerService) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
-        userService = UserService;
         authService = AuthService;
         requestInvitationService = RequestInvitationService;
         notificationListenerService = NotificationListenerService;
@@ -104,13 +101,6 @@
 
             expect(state.go).toHaveBeenCalledWith('app.user.config_profile');
         });
-
-        it("should create observer", function() {
-            spyOn(notificationListenerService, 'multipleEventsListener');
-
-            mainCtrl = createCtrl();
-            expect(notificationListenerService.multipleEventsListener).toHaveBeenCalledWith(EVENTS_TO_UPDATE_USER, mainCtrl.updateUser);
-        });
     });
 
     describe('MainController functions', function() {
@@ -161,44 +151,6 @@
 
         it('User should not be admin of your current institution', function(){
             expect(mainCtrl.isAdmin(mainCtrl.user.current_institution.key)).toBe(true);
-        });
-    });
-
-    describe('Main Controller listenners', function(){
-        it("Should call userService load when event 'DELETED_INSTITUTION' was create.", function(){
-            spyOn(userService, 'load').and.callThrough();
-            spyOn(mainCtrl, 'updateUser').and.callThrough();
-
-            scope.$emit("DELETED_INSTITUTION", {});
-            expect(userService.load).toHaveBeenCalled();
-            expect(mainCtrl.updateUser).not.toHaveBeenCalled();
-        });
-
-        it("Should call userService load when event 'DELETE_MEMBER' was create.", function(){
-            spyOn(userService, 'load').and.callThrough();
-            spyOn(mainCtrl, 'updateUser').and.callThrough();
-
-            scope.$emit("DELETE_MEMBER", {});
-            expect(userService.load).toHaveBeenCalled();
-            expect(mainCtrl.updateUser).not.toHaveBeenCalled();
-        });
-
-        it("Should call userService load when event 'ACCEPT_INSTITUTION_LINK' was create.", function(){
-            spyOn(userService, 'load').and.callThrough();
-            spyOn(mainCtrl, 'updateUser').and.callThrough();
-
-            scope.$emit("ACCEPT_INSTITUTION_LINK", {});
-            expect(userService.load).toHaveBeenCalled();
-            expect(mainCtrl.updateUser).not.toHaveBeenCalled();
-        });
-
-        it("Should NOT call userService load when event 'EVENT' was create.", function(){
-            spyOn(userService, 'load').and.callThrough();
-            spyOn(mainCtrl, 'updateUser').and.callThrough();
-
-            scope.$emit("EVENT", {});
-            expect(userService.load).not.toHaveBeenCalled();
-            expect(mainCtrl.updateUser).not.toHaveBeenCalled();
         });
     });
 }));

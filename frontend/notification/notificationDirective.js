@@ -4,7 +4,8 @@
 
     var app = angular.module("app");
 
-    app.controller("NotificationController", function NotificationController(NotificationService, AuthService, $state, RequestDialogService) {
+    app.controller("NotificationController", function NotificationController(NotificationService, AuthService, $state,
+        RequestDialogService, UserService, NotificationListenerService) {
         var notificationCtrl = this;
 
         notificationCtrl.user = AuthService.getCurrentUser();
@@ -232,9 +233,25 @@
             RequestDialogService.showRequestDialog(notification, event, properties);
         }
 
+        notificationCtrl.refreshUser = function refreshUser() {
+            UserService.load().then(function success(response) {
+                notificationCtrl.user.institutions = response.institutions;
+                notificationCtrl.user.follows = response.follows;	
+                notificationCtrl.user.institution_profiles = response.institution_profiles;	
+                notificationCtrl.user.permissions = response.permissions;
+                AuthService.save();
+            });
+        };
+
+        function notificationListener() {
+            NotificationListenerService.multipleEventsListener(UserService.NOTIFICATIONS_TO_UPDATE_USER,
+                notificationCtrl.refreshUser);
+        }
+
         (function main() {
             NotificationService.watchNotifications(notificationCtrl.user.key, notificationCtrl.notifications);
             notificationCtrl.allNotifications = NotificationService.getAllNotifications();
+            notificationListener();
         })();
     });
 

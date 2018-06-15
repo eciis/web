@@ -240,9 +240,8 @@
                         postCtrl.loadingPost = false;
                         const postAuthorPermissions = ["edit_post", "remove_post"];
                         postCtrl.user.addPermissions(postAuthorPermissions, response.key);
-                    }, function error(response) {
-                        UserService.load().then(function success(responseUser) {
-                            postCtrl.user = responseUser;
+                    }, function error() {
+                        AuthService.reload().then(function success() {
                             $mdDialog.hide();
                             postCtrl.loadingPost = false;
                             $state.go("app.user.home");

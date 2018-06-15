@@ -4,8 +4,8 @@
 
     var app = angular.module('app');
 
-    app.controller('SurveyDirectiveController', function(PostService, AuthService, MessageService, UserService,
-                                                             $scope, $mdDialog, $state, SubmitFormListenerService) {
+    app.controller('SurveyDirectiveController', function(PostService, AuthService, MessageService, 
+                    $scope, $mdDialog, $state, SubmitFormListenerService) {
 
         var surveyCtrl = this;
         surveyCtrl.options = $scope.options;
@@ -78,9 +78,8 @@
                     surveyCtrl.user.addPermissions(postAuthorPermissions, response.key);
                     $mdDialog.hide();
                     unobserveNewPost();
-                }, function error(response) {
-                    UserService.load().then(function success(responseUser) {
-                        surveyCtrl.user = responseUser;
+                }, function error() {
+                    AuthService.reload().then(function success(responseUser) {
                         $mdDialog.hide();
                         $state.go("app.user.home");
                     });

@@ -2,7 +2,10 @@
 
 (describe('Test NotificationController', function() {
 
-    var notCtrl, httpBackend, scope, createCtrl, mdDialog, state, notificationService, http, authService;
+    var notCtrl, httpBackend, scope, createCtrl, state, notificationService
+    var authService, notificationListenerService, userService, http;
+
+    var EVENTS_TO_UPDATE_USER = ["DELETED_INSTITUTION", "DELETE_MEMBER", "ACCEPT_INSTITUTION_LINK"];
     
     var institution = {
         name: 'institution',
@@ -43,15 +46,15 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, NotificationService,
-            $mdDialog, $state, AuthService, $http) {
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, NotificationService,
+            $state, AuthService, NotificationListenerService, UserService) {
         httpBackend = $httpBackend;
-        http = $http;
         scope = $rootScope.$new();
-        mdDialog = $mdDialog;
         state = $state;
+        userService = UserService;
         authService = AuthService;
         notificationService = NotificationService;
+        notificationListenerService = NotificationListenerService;
         httpBackend.when('GET', 'app/user/user_inactive.html').respond(200);
         
         authService.login(user);
@@ -83,6 +86,13 @@
             expect(notificationService.watchNotifications).toHaveBeenCalledWith(user.key, notCtrl.notifications);
             //The user don't have any notifications
             expect(_.isEmpty(notCtrl.notifications)).toBe(true);
+        });
+
+        it("should create observer", function() {
+            spyOn(notificationListenerService, 'multipleEventsListener');
+
+            notCtrl = createCtrl();
+            expect(notificationListenerService.multipleEventsListener).toHaveBeenCalledWith(EVENTS_TO_UPDATE_USER, notCtrl.refreshUser);
         });
     });
 
@@ -153,6 +163,44 @@
             // and the type 'REMOVE_INSTITUTION_LINK' no has a state to go
             notCtrl.goTo(notificationWithoutState);
             expect(notCtrl.seeAll).toHaveBeenCalled();
+        });
+    });
+
+    describe('Main Controller listenners', function(){
+        it("Should call userService load when event 'DELETED_INSTITUTION' was create.", function(){
+            spyOn(userService, 'load').and.callThrough();
+            spyOn(notCtrl, 'refreshUser').and.callThrough();
+
+            scope.$emit("DELETED_INSTITUTION", {});
+            expect(userService.load).toHaveBeenCalled();
+            expect(notCtrl.refreshUser).not.toHaveBeenCalled();
+        });
+
+        it("Should call userService load when event 'DELETE_MEMBER' was create.", function(){
+            spyOn(userService, 'load').and.callThrough();
+            spyOn(notCtrl, 'refreshUser').and.callThrough();
+
+            scope.$emit("DELETE_MEMBER", {});
+            expect(userService.load).toHaveBeenCalled();
+            expect(notCtrl.refreshUser).not.toHaveBeenCalled();
+        });
+
+        it("Should call userService load when event 'ACCEPT_INSTITUTION_LINK' was create.", function(){
+            spyOn(userService, 'load').and.callThrough();
+            spyOn(notCtrl, 'refreshUser').and.callThrough();
+
+            scope.$emit("ACCEPT_INSTITUTION_LINK", {});
+            expect(userService.load).toHaveBeenCalled();
+            expect(notCtrl.refreshUser).not.toHaveBeenCalled();
+        });
+
+        it("Should NOT call userService load when event 'EVENT' was create.", function(){
+            spyOn(userService, 'load').and.callThrough();
+            spyOn(notCtrl, 'refreshUser').and.callThrough();
+
+            scope.$emit("EVENT", {});
+            expect(userService.load).not.toHaveBeenCalled();
+            expect(notCtrl.refreshUser).not.toHaveBeenCalled();
         });
     });
 }));

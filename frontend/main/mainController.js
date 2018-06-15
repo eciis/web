@@ -2,8 +2,8 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("MainController", function MainController($mdSidenav, NotificationListenerService, $state,
-            AuthService, RequestInvitationService, $mdMenu, $window, UserService) {
+    app.controller("MainController", function MainController($mdSidenav, $state, AuthService,
+            RequestInvitationService, $mdMenu, $window) {
         var mainCtrl = this;
         var url_report = "http://support.plataformacis.org/report";
 
@@ -153,21 +153,6 @@
             return AuthService.emailVerified();
         };
 
-        mainCtrl.updateUser = function updateUser() {
-            UserService.load().then(function success(response) {
-                mainCtrl.user.institutions = response.institutions;
-                mainCtrl.user.follows = response.follows;	
-                mainCtrl.user.institution_profiles = response.institution_profiles;	
-                mainCtrl.user.permissions = response.permissions;
-                AuthService.save();
-            });
-        }
-
-        function notificationListener() {
-            NotificationListenerService.multipleEventsListener(UserService.NOTIFICATIONS_TO_UPDATE_USER,
-                                                         mainCtrl.updateUser);
-        }
-
         mainCtrl.refreshUser = function refreshUser() {
             AuthService.reload();
             $state.reload();
@@ -179,7 +164,6 @@
                 $state.go("app.user.config_profile");
             }
 
-            notificationListener();
             mainCtrl.getPendingTasks();
         })();
     });

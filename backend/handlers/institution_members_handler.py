@@ -45,15 +45,14 @@ class InstitutionMembersHandler(BaseHandler):
         member = member.get()
 
         institution.remove_member(member)
-
-        if member.state != 'inactive':
-            notification_message = institution.create_notification_message(user.key, user.current_institution)
-            send_message_notification(
-                receiver_key=member.key.urlsafe(),
-                notification_type='DELETE_MEMBER',
-                entity_key=institution.key.urlsafe(),
-                message=notification_message
-            )
+        
+        notification_message = institution.create_notification_message(user.key, user.current_institution)
+        send_message_notification(
+            receiver_key=member.key.urlsafe(),
+            notification_type='DELETE_MEMBER',
+            entity_key=institution.key.urlsafe(),
+            message=notification_message
+        )
 
         justification = self.request.get('justification')
         subject = get_subject('LINK_REMOVAL') if member.state != 'inactive' else get_subject('INACTIVE_USER')

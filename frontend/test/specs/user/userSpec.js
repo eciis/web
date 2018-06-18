@@ -45,7 +45,8 @@
         email: 'tiago.pereira@ccc.ufcg.edu.br',
         institutions: [inst],
         follows: [inst],
-        invites: [inviteUser, inviteInstitution]
+        invites: [inviteUser, inviteInstitution],
+        institutions_requested: []
    };
 
    beforeEach(inject(function() {
@@ -301,6 +302,17 @@
 
             user.addPermissions(['remove_post'], 'key-1');
             expect(user.permissions).toEqual({ 'remove_post': { 'key-1': true }, 'edit_post': {'key-1': true} });
+          });
+        });
+
+        describe('isInstitutionRequested', function() {
+          it('Should return false if the key of the institution are not in institutions_requested list', function() {
+            expect(user.isInstitutionRequested(other_inst_info.key)).toBeFalsy();
+          });
+
+          it('Should return true if the key of the institution are in institutions_requested list', function() {
+            user.institutions_requested.push(other_inst_info.key);
+            expect(user.isInstitutionRequested(other_inst_info.key)).toBeTruthy();
           });
         });
    });

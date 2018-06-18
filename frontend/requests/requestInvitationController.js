@@ -28,6 +28,7 @@
             var request = new Invite(dataInvite);
             var promise = RequestInvitationService.sendRequest(request, requestInvCtrl.institutionSelect.key);
             promise.then(function success() {
+                requestInvCtrl.currentUser.institutions_requested.push(requestInvCtrl.institutionSelect.key);
                 $mdDialog.hide();
                 MessageService.showToast("Pedido enviado com sucesso!");
             }, function error() {

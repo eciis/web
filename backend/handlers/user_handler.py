@@ -29,6 +29,16 @@ def get_invites(user_email):
 
     return invites
 
+def get_requests(user_key):
+    """Query to return the list of requests that this user sent to institutions."""
+    institutions_requested = []
+
+    queryRequests = Invite.query(Invite.sender_key == user_key,
+                                    Invite.status == 'sent')
+
+    institutions_requested = [invite.institution_key if invite.institution_key.get().state == "active" else '' for invite in queryRequests]
+
+    return institutions_requested
 
 def define_entity(dictionary):
     """Method of return entity class for create object in JasonPacth."""
@@ -71,6 +81,7 @@ class UserHandler(BaseHandler):
 
         user_json = user.make(self.request)
         user_json['invites'] = get_invites(user.email)
+        user_json['institutions_requested'] = get_requests(user.key)
 
         self.response.write(json.dumps(user_json))
 

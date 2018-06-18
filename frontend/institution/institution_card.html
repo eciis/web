@@ -26,11 +26,11 @@
                     </md-button>
                 </md-menu-item>
                 <md-menu-item ng-if="!institutionCardCtrl.isUserMember()">
-                    <md-button ng-disabled="institutionCardCtrl.disableRequestButton(institutionCardCtrl.institution.key)"
+                    <md-button ng-disabled="institutionCardCtrl.user.isInstitutionRequested(institutionCardCtrl.institution.key)"
                         ng-click="institutionCardCtrl.requestInvitation(event)">
                         <md-icon>flag</md-icon>
-                            <span ng-if="!institutionCardCtrl.disableRequestButton(institutionCardCtrl.institution.key)">Solicitar vínculo</span>
-                            <span ng-if="institutionCardCtrl.disableRequestButton(institutionCardCtrl.institution.key)">Vínculo pendente</span>
+                            <span ng-if="!institutionCardCtrl.user.isInstitutionRequested(institutionCardCtrl.institution.key)">Solicitar vínculo</span>
+                            <span ng-if="institutionCardCtrl.user.isInstitutionRequested(institutionCardCtrl.institution.key)">Vínculo pendente</span>
                     </md-button>
                 </md-menu-item>
             </md-menu-content>

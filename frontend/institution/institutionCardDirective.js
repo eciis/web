@@ -66,10 +66,6 @@
             return institutionKey && institutionCardCtrl.user.isMember(institutionKey);
         };
 
-        institutionCardCtrl.disableRequestButton = function disableRequestButton(institutionKey) {
-            return institutionCardCtrl.user.institutions_requested.includes(institutionKey);
-        };
-
         institutionCardCtrl.requestInvitation = function requestInvitation(event) {
             $mdDialog.show({
                 controller: "RequestInvitationController",

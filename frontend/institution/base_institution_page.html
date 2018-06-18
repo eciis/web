@@ -85,11 +85,11 @@
                                     <div layout="row">
                                         <md-button flex class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-500'}"
                                         ng-if="!institutionCtrl.isMember" style="text-align: left; margin: 8px;"
-                                        ng-disabled="institutionCtrl.disableRequestButton()"
+                                        ng-disabled="institutionCtrl.user.isInstitutionRequested(institutionCtrl.institution.key)"
                                         ng-click="institutionCtrl.requestInvitation($event)">
                                             <md-icon>add_to_photos</md-icon>
-                                            <span ng-if="!institutionCtrl.disableRequestButton()">Solicitar vínculo</span>
-                                            <span ng-if="institutionCtrl.disableRequestButton()">Vínculo pendente</span>
+                                            <span ng-if="!institutionCtrl.user.isInstitutionRequested(institutionCtrl.institution.key)">Solicitar vínculo</span>
+                                            <span ng-if="institutionCtrl.user.isInstitutionRequested(institutionCtrl.institution.key)">Vínculo pendente</span>
                                         </md-button>
                                     </div>
                                     <!-- Menu -->

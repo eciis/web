@@ -29,6 +29,7 @@
             var promise = RequestInvitationService.sendRequest(request, requestInvCtrl.institutionSelect.key);
             promise.then(function success() {
                 requestInvCtrl.currentUser.institutions_requested.push(requestInvCtrl.institutionSelect.key);
+                AuthService.save();
                 $mdDialog.hide();
                 MessageService.showToast("Pedido enviado com sucesso!");
             }, function error() {

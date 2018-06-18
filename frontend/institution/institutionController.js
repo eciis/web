@@ -253,10 +253,6 @@
             return information ? information : "Não informado";
         };
 
-        institutionCtrl.disableRequestButton = function disableRequestButton() {
-            return institutionCtrl.user.institutions_requested.includes(currentInstitutionKey);
-        };
-
         institutionCtrl.requestInvitation = function requestInvitation(event) {
             $mdDialog.show({
                 controller: "RequestInvitationController",

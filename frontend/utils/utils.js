@@ -1,21 +1,7 @@
 "use strict";
 
 var Utils = {
-    clone: function clone(obj) {
-        var copy;
-    
-        if (null == obj || "object" != typeof obj) return obj;
-    
-        if (obj instanceof Object) {
-            copy = {};
-            for (var attr in obj) {
-                if (obj.hasOwnProperty(attr)) copy[attr] = clone(obj[attr]);
-            }
-            return copy;
-        }
-    
-        throw new Error("Unable to copy obj! Its type isn't supported.");
-    },
+
     addHttpsToUrl :  function addHttpsToUrl(text, urls) {
         if(urls) {
             var http = "http://";
@@ -27,6 +13,7 @@ var Utils = {
         }
         return text;
     },
+
     getKeyFromUrl : function getKeyFromUrl(url) {
         var key = url;
         if(url.indexOf("/api/key/") != -1) {
@@ -35,6 +22,7 @@ var Utils = {
             }
         return key;
     },
+
     recognizeUrl : function recognizeUrl(text) {
         var URL_PATTERN = /(((www.)|(http(s)?:\/\/))[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
         var REPLACE_URL = "<a href=\'$1\' target='_blank'>$1</a>";
@@ -44,6 +32,7 @@ var Utils = {
         text = text.replace(URL_PATTERN, REPLACE_URL);
         return text;
     },
+
     updateBackendUrl : function updateBackendUrl(config) {
         var restApiUrl = Config.BACKEND_URL;
 
@@ -51,6 +40,7 @@ var Utils = {
 
         config.url = config.url.replace(restApiRegex, restApiUrl + '/api/$1');
     },
+
     getIndexesOf : function getIndexesOf(substring, string) {
         var indexes = [];
         if (substring.length !== 0) {
@@ -62,8 +52,9 @@ var Utils = {
         }
         return indexes;
     },
+
     limitString : function limitString(string, limit) {
-        if(string) {
+        if(string && string.length > limit) {
             var undefinedIndex = -1;
             var endIndexesOfLast = this.getIndexesOf("</a>", string);
             var indexOfLastAboveLimit = endIndexesOfLast.findIndex((index) => index >= limit);
@@ -71,8 +62,9 @@ var Utils = {
                 var shiftToCloseTag = 4;
                 limit = endIndexesOfLast[indexOfLastAboveLimit] + shiftToCloseTag;
             }
-            return string.length > limit ?
-                string.substring(0, limit+1) + "..." : string;
+            return string.substring(0, limit+1) + "...";
+        } else {
+            return string;
         }
     },
 
@@ -88,7 +80,7 @@ var Utils = {
             var maxHeight = content.scrollHeight;
             var proportion = screenPosition/maxHeight;
             var scrollRatio = 0.75;
-
+        
             if (proportion >= scrollRatio && !alreadyRequested) {
                 alreadyRequested = true;
 
@@ -123,10 +115,11 @@ var Utils = {
     /**
      * This function return a boolean to indicate if a string has a word
      * bigger that screen width proportion.
-     * @param {string} string the string that will be analized.
+     * @param {string} string that will be analized.
+     * @param {number} screen width (optional).
      * @returns {boolean} True if string has a word bigger to the screen width proportion. False in otherwise.
      */
-    isLargerThanTheScreen: function isLargerThanTheScreen(string) {
+    isLargerThanTheScreen: function isLargerThanTheScreen(string, screenWidth) {
         var words = string.split(" ");
         var greatestWordLength = words
             .reduce((acumulator, word) => {
@@ -146,7 +139,7 @@ var Utils = {
         var maxLengthWordToExtraLargeScreen = 63;
         var maxLengthWordToGtExtraLargeScreen = 59;
 
-        var screenWidth = screen.width;
+        var screenWidth = screenWidth || screen.width;
 
         var supportSmallScreen = screenWidth <= smallScreen && greatestWordLength >= maxLengthWordToSmallScreen;
         var supportMediumScreen = screenWidth > smallScreen && screenWidth <= mediumScreen && greatestWordLength >= maxLengthToMediumScreen;

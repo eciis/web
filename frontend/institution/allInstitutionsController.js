@@ -45,7 +45,7 @@
             InstitutionService.getNextInstitutions(actualPage).then(function success(response) {
                 actualPage += 1;
                 moreInstitutions = response.next;
-
+                
                 _.forEach(response.institutions, function(institution) {
                     allInstitutionsCtrl.institutions.push(institution);
                 });

@@ -198,7 +198,7 @@
         }
 
        function redirectFromError() {
-           newInviteCtrl.user.isInactive() ? $state.go("signin") : $state.go("app.user.home");
+           newInviteCtrl.user.isInactive() ? $state.go("user_inactive") : $state.go("app.user.home");
        }
 
         loadInvite();

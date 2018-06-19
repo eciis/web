@@ -163,18 +163,30 @@
                     done();
                 });
             });
+        });
+
+        describe("addInstitution error flow", function () {
+            beforeEach(() => {
+                spyOn(state, 'go');
+                spyOn(inviteService, 'acceptUserInvite').and.callFake(function () {
+                    return {
+                        then: function (success, error) {
+                            return error();
+                        }
+                    };
+                });
+            });
 
             it('should go to app.home', function () {
-                httpBackend.when('PATCH', "/api/invites/user/(.*)").respond(500);
                 newInviteCtrl.addInstitution('$event');
                 expect(state.go).toHaveBeenCalledWith("app.user.home");
             });
 
-            it('should go to signin', function () {
-                httpBackend.when('PATCH', "/api/invites/user/(.*)").respond(500);
-                authService.logout();
+            it('should go to user_inactive', function () {
+                spyOn(newInviteCtrl.user, 'isInactive').and.returnValue(true);
                 newInviteCtrl.addInstitution('$event');
-                expect(state.go).toHaveBeenCalledWith("signin");
+                expect(state.go).toHaveBeenCalledWith("user_inactive");
+                expect(newInviteCtrl.user.isInactive).toHaveBeenCalled();
             });
         });
 

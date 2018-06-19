@@ -64,6 +64,8 @@
                     AuthService.save();
                     $state.go("app.user.home");
                     _.isEmpty(newInviteCtrl.user.invites) && showAlert(event);
+                }, function error() {
+                    redirectFromError();
                 });
             return promise;
         };
@@ -194,6 +196,10 @@
             });
             return userIsMember;
         }
+
+       function redirectFromError() {
+           newInviteCtrl.user.isInactive() ? $state.go("user_inactive") : $state.go("app.user.home");
+       }
 
         loadInvite();
    });

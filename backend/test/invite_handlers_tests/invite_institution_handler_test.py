@@ -105,38 +105,6 @@ class InviteInstitutionHandlerTest(TestBaseHandler):
             str(raises_context.exception))
 
         expected_message = "Error! This invitation has already been processed"
-        print message_exception
-        self.assertEqual(
-            message_exception,
-            expected_message,
-            "Expected exception message must be equal to %s" % expected_message
-        )
-
-    @patch('util.login_service.verify_token', return_value={'email': 'otheruser@test.com'})
-    def test_delete_with_a_wrong_invite(self, verify_token):
-        """Test delete with a wrong invite."""
-        data = {
-            'invitee': 'otheruser@test.com',
-            'admin_key': self.user_admin.key.urlsafe(),
-            'institution_key': self.inst_test.key.urlsafe(),
-            'suggestion_institution_name': 'test',
-            'type_of_invite': 'INSTITUTION'
-        }
-        self.invite = InviteUser.create(data)
-        self.invite.put()
-
-        with self.assertRaises(Exception) as raises_context:
-            self.testapp.delete(
-                '/api/invites/institution/%s'
-                % self.invite.key.urlsafe()
-            )
-
-        message_exception = self.get_message_exception(
-            str(raises_context.exception))
-
-        invite_class_name = self.invite.__class__.__name__
-        expected_message = "Error! The invite's type is %s, but InviteInstitution is the expected one" %invite_class_name
-
         self.assertEqual(
             message_exception,
             expected_message,

@@ -16,7 +16,6 @@
             return HttpService.post(INVITES_URI, { data: invite });
         };
 
-
         service.acceptInviteUserAdm = function acceptInviteUserAdm(inviteKey) {
             return HttpService.put(INVITES_URI + '/' + inviteKey + '/institution_adm');
         };
@@ -43,7 +42,6 @@
             return HttpService.delete(url);
         };
         
-
         service.getSentInstitutionInvitations = function getSentInstitutionInvitations() {
             return HttpService.get(INVITES_URI + '/institution');
         };

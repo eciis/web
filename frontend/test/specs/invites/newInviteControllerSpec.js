@@ -163,6 +163,19 @@
                     done();
                 });
             });
+
+            it('should go to app.home', function () {
+                httpBackend.when('PATCH', "/api/invites/user/(.*)").respond(500);
+                newInviteCtrl.addInstitution('$event');
+                expect(state.go).toHaveBeenCalledWith("app.user.home");
+            });
+
+            it('should go to signin', function () {
+                httpBackend.when('PATCH', "/api/invites/user/(.*)").respond(500);
+                authService.logout();
+                newInviteCtrl.addInstitution('$event');
+                expect(state.go).toHaveBeenCalledWith("signin");
+            });
         });
 
         describe('goToInstForm()', function() {

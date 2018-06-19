@@ -39,7 +39,7 @@
         };
         
         (function main() {
-            InviteService.getInvite(invite_id).then(function(response) {
+            InviteService.getInvite(inviteId).then(function(response) {
                 controller.invite = new Invite(response);
                 if (controller.invite.status === "accepted") {
                     $state.go("signin");

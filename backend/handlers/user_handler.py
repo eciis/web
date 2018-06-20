@@ -3,7 +3,7 @@
 
 import json
 
-from models import Invite
+from models import Invite, RequestUser
 from utils import Utils
 from util import login_required
 from models import User
@@ -32,11 +32,8 @@ def get_invites(user_email):
 def get_requests(user_key):
     """Query to return the list of requests that this user sent to institutions."""
     institutions_requested = []
-
-    queryRequests = Invite.query(Invite.sender_key == user_key,
-                                    Invite.status == 'sent')
-
-    institutions_requested = [invite.institution_key if invite.institution_key.get().state == "active" else '' for invite in queryRequests]
+    queryRequests = RequestUser.query(RequestUser.sender_key == user_key, RequestUser.status == 'sent')
+    institutions_requested = [request.institution_key.urlsafe() if request.institution_key.get().state == "active" else '' for request in queryRequests]
 
     return institutions_requested
 

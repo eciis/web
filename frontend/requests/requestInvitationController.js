@@ -35,6 +35,7 @@
             }, function error() {
                 requestInvCtrl.cancelDialog();
             });
+            return promise;
         };
 
         requestInvCtrl.verifyAndSendRequest = function verifyAndSendRequest() {

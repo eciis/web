@@ -33,7 +33,7 @@ def get_requests(user_key):
     """Query to return the list of requests that this user sent to institutions."""
     institutions_requested = []
     queryRequests = RequestUser.query(RequestUser.sender_key == user_key, RequestUser.status == 'sent')
-    institutions_requested = [request.institution_key.urlsafe() if request.institution_key.get().state == "active" else '' for request in queryRequests]
+    institutions_requested = [request.institution_key.urlsafe() for request in queryRequests]
 
     return institutions_requested
 

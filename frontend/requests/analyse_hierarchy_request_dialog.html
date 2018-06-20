@@ -1,5 +1,6 @@
 <md-dialog flex-sm="80" flex-xs="100" flex-gt-sm="50">
-    <md-dialog-content class="md-dialog-content" layout-gt-sm="column" style="padding: 1em;">
+    <md-dialog-content class="md-dialog-content" layout-gt-sm="column" style="padding: 1em;"
+    ng-if="analyseHierReqCtrl.typeOfDialog === analyseHierReqCtrl.PENDING_REQUEST">
         <div ng-if="!analyseHierReqCtrl.hasToRemoveLink">
             <h3> Confirmar vínculo </h3>
             <p>
@@ -76,10 +77,30 @@
             </div>
         </div>
     </md-dialog-content>
-    <md-dialog-actions layout="row" layout-align="end center" layout-wrap>
+    <md-dialog-actions ng-if="analyseHierReqCtrl.typeOfDialog === analyseHierReqCtrl.PENDING_REQUEST"
+        layout="row" layout-align="end center" layout-wrap>
         <md-button class="md-primary" ng-click="analyseHierReqCtrl.rejectRequest()" 
             md-colors="{color: 'default-teal-500'}"> Cancelar </md-button>
         <md-button class="md-primary" ng-click="analyseHierReqCtrl.confirmRequest()"
             md-colors="{color: 'default-teal-500'}"> Confirmar </md-button>
+    </md-dialog-actions>
+
+    <!-- ACCEPTED -->
+    <md-dialog-content layout="row" layout-align="center center" 
+        ng-if="analyseHierReqCtrl.typeOfDialog === analyseHierReqCtrl.VIEW_REQUESTED_INST">
+        <div layout="column" flex="90">
+            <h3>Vínculo confirmado</h3>
+            <div layout="row" layout-align="center center">
+                <div style="margin-right: 16px;">
+                    <img title="{{analyseHierReqCtrl.invite.institution.name}}" ng-src="{{analyseHierReqCtrlanalyseHierReqCtrl.invite.institution.photo_url || '/app/images/institution.png'}}" class="md-avatar" style="width: 80px; height: 80px; max-width: 100px;"/>
+                </div>
+                <span>Estamos processando suas permissões. Em breve você receberá uma notificação e ficará habilitado para administrar a instituição na Plataforma CIS.</span>
+            </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions ng-if="processCtrl.typeOfDialog === processCtrl.VIEW_REQUESTED_INST">
+        <md-button class="md-raised" md-colors="{color: 'default-teal-500'}" ng-click="analyseHierReqCtrl.close()">
+            FECHAR
+        </md-button>
     </md-dialog-actions>
 </md-dialog>

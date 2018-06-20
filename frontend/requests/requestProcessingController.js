@@ -7,8 +7,6 @@
         MessageService, InstitutionService, UserService, request, $state, $mdDialog) {
         var requestController = this;
 
-        var REQUEST_PARENT = "REQUEST_INSTITUTION_PARENT";
-        var REQUEST_CHILDREN = "REQUEST_INSTITUTION_CHILDREN";
         var REQUEST_INSTITUTION = "REQUEST_INSTITUTION";
         var REQUEST_USER = "REQUEST_USER";
         
@@ -37,10 +35,6 @@
 
         function resolveRequest() {
             switch(request.type_of_invite) {
-                case REQUEST_PARENT:
-                    return RequestInvitationService.acceptInstParentRequest(request.key);
-                case REQUEST_CHILDREN:
-                    return RequestInvitationService.acceptInstChildrenRequest(request.key);
                 case REQUEST_INSTITUTION:
                     return RequestInvitationService.acceptRequestInst(request.key);
                 case REQUEST_USER:
@@ -67,10 +61,6 @@
 
         function deleteRequest() {
             switch(request.type_of_invite) {
-                case REQUEST_PARENT:
-                    return RequestInvitationService.rejectInstParentRequest(request.key);
-                case REQUEST_CHILDREN:
-                    return RequestInvitationService.rejectInstChildrenRequest(request.key);
                 case REQUEST_INSTITUTION:
                     return RequestInvitationService.rejectRequestInst(request.key);
                 case REQUEST_USER:
@@ -109,7 +99,7 @@
         };
 
         function loadInstitution() {
-            var institutionKey = isHierarchyRequest() ? request.institution_requested_key : request.institution_key;
+            var institutionKey = request.institution_key;
             InstitutionService.getInstitution(institutionKey).then(function success(response) {
                 requestController.institution = response;
                 formatPositions();
@@ -118,22 +108,8 @@
             });
         }
 
-        function isHierarchyRequest() {
-            var isParentRequest = request.type_of_invite === REQUEST_PARENT;
-            var isChildrenRequest = request.type_of_invite === REQUEST_CHILDREN;
-            return isParentRequest || isChildrenRequest;
-        };
-
         function formatPositions() {
             switch(request.type_of_invite) {
-                case REQUEST_PARENT:
-                    requestController.parent = requestController.institution;
-                    requestController.children = request.institution;
-                    break;
-                case REQUEST_CHILDREN:
-                    requestController.children = requestController.institution;
-                    requestController.parent = request.institution;
-                    break;
                 case REQUEST_INSTITUTION:
                     requestController.parent = requestController.institution;
                     break;

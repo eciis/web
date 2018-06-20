@@ -45,6 +45,12 @@
         state = $state;
         AuthService.login(user);
 
+        $httpBackend.expect('GET', '/api/events?page=0&limit=5').respond({
+            events: [
+                event
+            ], next: false
+        });
+
 
         spyOn(Utils, 'setScrollListener').and.callFake(function () {
             return {

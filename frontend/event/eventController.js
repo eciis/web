@@ -2,8 +2,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("EventController", function EventController(MessageService, EventService,
-            $state, $mdDialog, AuthService, $q) {
+    app.controller("EventController", function EventController(EventService, $state, $mdDialog, AuthService, $q) {
         var eventCtrl = this;
         var content = document.getElementById("content");
 
@@ -45,6 +44,7 @@
                 eventCtrl.isLoadingEvents = false;
                 deferred.resolve();
             }, function error() {
+                console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
                 deferred.reject();
                 $state.go("app.user.home");
             });

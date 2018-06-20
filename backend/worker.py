@@ -360,6 +360,13 @@ class AddAdminPermissionsInInstitutionHierarchy(BaseHandler):
                 admin.add_permission(permission, institution_key)
             add_permission_to_children(institution, admins, permission)
 
+        send_message_notification(
+            receiver_key=institution.parent_institution.get().admin.urlsafe(),
+            notification_type='ADD_ADM_PERMISSIONS',
+            entity_key=institution.key.urlsafe(),
+            message=create_system_message(institution.key),
+        )
+
     def post(self):
         institution_key = self.request.get('institution_key')
         self.addAdminPermissions(institution_key)

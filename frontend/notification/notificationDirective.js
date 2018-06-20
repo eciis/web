@@ -168,6 +168,9 @@
             },
             "DELETED_USER": {
                 icon: "clear"
+            },
+            "ADD_ADM_PERMISSIONS": {
+                icon: "check_circle_outline"
             }
         };
 

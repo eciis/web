@@ -2,10 +2,11 @@
 
 (describe('Test EventController', function () {
 
-    var eventCtrl, scope, httpBackend, rootScope, deffered;
+    var eventCtrl, scope, httpBackend, rootScope;
     var createCtrl, eventService, messageService, mdDialog, state;
 
-    var institution = { name: 'Splab', key: '098745' };
+    var institution = { name: 'Institution', key: '098745' };
+    var other_institution = { name: 'Ohter Institution', key: '75368' };
 
     var date = new Date('2017-12-14');
     var date_next_month = new Date('2018-01-14');
@@ -19,38 +20,54 @@
         key: '123'
     };
 
-    var EVENT_URI = "/api/events";
-
-    // Event of institution by User
     var event = {
         'title': 'Title',
         'text': 'Text',
         'local': 'Local',
         'photo_url': null,
         'start_time': date,
-        'end_time': date_next_month
+        'end_time': date_next_month,
+        'institution_key': institution.key
     };
+
+    var other_event = {
+        'title': 'Title',
+        'text': 'Text',
+        'local': 'Local',
+        'photo_url': null,
+        'start_time': date,
+        'end_time': date_next_month,
+        'institution_key': other_institution.key
+    };
+
+    var requestEvent = {
+        events: [ event, other_event ],
+        next: false
+    };
+
+    var requestEventInst = {
+        events: [ event ],
+        next: false
+    };
+
+    var GET_EVENTS_URI = '/api/events?page=0&limit=5';
+    var GET_EVENTS_INST_URI = '/api/institutions/'+institution.key+'/events?page=0&limit=5';
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function ($controller, $httpBackend, $q, AuthService,
+    beforeEach(inject(function ($controller, $httpBackend, AuthService,
         $rootScope, EventService, MessageService, $mdDialog, $state) {
         scope = $rootScope.$new();
         httpBackend = $httpBackend;
         rootScope = $rootScope;
-        deffered = $q.defer();
         eventService = EventService;
         messageService = MessageService;
         mdDialog = $mdDialog;
         state = $state;
         AuthService.login(user);
 
-        $httpBackend.expect('GET', '/api/events?page=0&limit=5').respond({
-            events: [
-                event
-            ], next: false
-        });
-
+        $httpBackend.expect('GET', GET_EVENTS_URI).respond(requestEvent);
+        $httpBackend.expect('GET', GET_EVENTS_INST_URI).respond(requestEventInst);
 
         spyOn(Utils, 'setScrollListener').and.callFake(function () {
             return {
@@ -91,7 +108,7 @@
             spyOn(eventService, 'getEvents').and.callFake(function () {
                 return {
                     then: function (callback) {
-                        return callback();
+                        return callback(requestEvent);
                     }
                 };
             });
@@ -99,39 +116,37 @@
             spyOn(eventService, 'getInstEvents').and.callFake(function () {
                 return {
                     then: function (callback) {
-                        return callback();
+                        return callback(requestEventInst);
                     }
                 };
             });
-
-            // then: function(callback) {
-            //     callback({
-            //     'events': [event],
-            //     'next': false
-            //    });
-            // }
         });
 
         it('should call getEvents', function(done) {
-            httpBackend.when('/api/events?page=0&limit=5').respond(200);
-            // httpBackend.expect('GET', 'GET', '/api/events?page=0&limit=5').respond(event);
-            // httpBackend.expect('GET', '/api/events?page=0&limit=5').respond(200);
-
+            expect(eventCtrl.events.length).toBe(0);
             var promise = eventCtrl.loadMoreEvents();
             promise.should.be.fulfilled.then(function() {
-                expect(eventCtrl.events).toBe(1);
+                expect(eventCtrl.events.length).toBe(2);
+                expect(eventCtrl.events[0].institution_key).toBe(institution.key);
+                expect(eventCtrl.events[1].institution_key).toBe(other_institution.key)
             }).should.notify(done);
             scope.$apply();
 
             expect(eventService.getEvents).toHaveBeenCalledWith(0, undefined);
-            //expect(eventCtrl.events).toBe(1);
         });
 
-        it('should call getInstEvent because the controller has institutionKey', function() {
+        it('should call getInstEvent because the controller has institutionKey', function(done) {
             eventCtrl.institutionKey = institution.key
+            expect(eventCtrl.events.length).toBe(0);
             eventCtrl.loadMoreEvents();
+            var promise = eventCtrl.loadMoreEvents();
+            promise.should.be.fulfilled.then(function() {
+                expect(eventCtrl.events.length).toBe(1);
+                expect(eventCtrl.events[0].institution_key).toBe(institution.key);
+            }).should.notify(done);
+            scope.$apply();
+
             expect(eventService.getInstEvents).toHaveBeenCalledWith(0, institution.key);
-            //expect(eventCtrl.events).toBe(1);
         });
     });
 

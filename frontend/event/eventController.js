@@ -44,7 +44,6 @@
                 eventCtrl.isLoadingEvents = false;
                 deferred.resolve();
             }, function error() {
-                console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
                 deferred.reject();
                 $state.go("app.user.home");
             });

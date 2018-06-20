@@ -107,7 +107,7 @@
                 promise = requestInvCtrl.sendRequest();
             });
 
-            it('Should add a key institution key in user.institutions_requested', function(done) {
+            it('Should add a key of the institution in user.institutions_requested', function(done) {
                 promise.then(function() {
                     expect(requestInvCtrl.currentUser.institutions_requested.push).toHaveBeenCalledWith(certbio.key);
                     done();

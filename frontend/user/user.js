@@ -183,6 +183,10 @@ User.prototype.getProfileColor = function getProfileColor() {
     );
 };
 
+User.prototype.isInstitutionRequested = function isInstitutionRequested(institutionKey) {
+    return this.institutions_requested.includes(institutionKey);
+};
+
 function updateFollowInstitution(follows, institution) {
     var index = _.findIndex(follows, ['key', institution.key]);
     follows[index].acronym = institution.acronym;

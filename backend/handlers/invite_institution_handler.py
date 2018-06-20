@@ -27,11 +27,6 @@ class InviteInstitutionHandler(BaseHandler):
         invite_key = ndb.Key(urlsafe=invite_urlsafe)
         invite = invite_key.get()
 
-        invite_class_name = invite.__class__.__name__
-        Utils._assert(invite_class_name != 'InviteInstitution',
-                      "The invite's type is %s, but InviteInstitution is the expected one" %invite_class_name,
-                      NotAuthorizedException)
-
         Utils._assert(invite.status != 'sent',
                       "This invitation has already been processed",
                       NotAuthorizedException)

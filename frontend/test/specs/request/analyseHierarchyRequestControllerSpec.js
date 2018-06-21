@@ -79,12 +79,9 @@
         
         describe('Test confirmRequest', function () {
             it('should accept the parent request', function () {
-                spyOn(mdDialog, 'hide');
                 analyseHierReqCtrl.confirmRequest();
                 expect(requestInvitationService.acceptInstParentRequest).toHaveBeenCalledWith(request.key);
                 expect(request.status).toEqual('accepted');
-                expect(mdDialog.hide).toHaveBeenCalled();
-                expect(messageService.showToast).toHaveBeenCalledWith('Solicitação aceita com sucesso');
             });
         });
 
@@ -96,6 +93,19 @@
                 expect(request.status).toEqual('rejected');
                 expect(mdDialog.cancel).toHaveBeenCalled();
                 expect(messageService.showToast).toHaveBeenCalledWith('Solicitação rejeitada com sucesso');
+            });
+        });
+
+        describe('Test close', function() {
+            it('Should call mdDialog.hide', function() {
+                spyOn(mdDialog, 'hide');
+                analyseHierReqCtrl.close();
+                expect(mdDialog.hide).toHaveBeenCalled();
+            });
+
+            it('Should call MessageService.showToast', function() {
+                analyseHierReqCtrl.close();
+                expect(messageService.showToast).toHaveBeenCalledWith('Solicitação aceita com sucesso');
             });
         });
     });

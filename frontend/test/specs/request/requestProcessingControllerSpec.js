@@ -19,7 +19,7 @@
         "PRIVATE_COMPANY": "Empresa Privada",
     };
 
-    var requestInvitationService, institutionService, requestCtrl, scope, httpBackend, deferred, createCtrl;
+    var requestInvitationService, institutionService, requestCtrl, scope, httpBackend;
     var authService, userService, messageService, request;
 
     var newRequest = {
@@ -67,7 +67,7 @@
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $rootScope, $httpBackend, AuthService,
-         RequestInvitationService, InstitutionService, UserService, MessageService, $q) {
+         RequestInvitationService, InstitutionService, UserService, MessageService) {
         
         requestInvitationService = RequestInvitationService;
         institutionService = InstitutionService;
@@ -76,7 +76,6 @@
         httpBackend = $httpBackend;
         authService = AuthService;
         scope = $rootScope.$new();
-        deferred = $q.defer();
         AuthService.login(user);
         request = Object.assign({}, newRequest);
 

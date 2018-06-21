@@ -3,8 +3,8 @@
 (function () {
     var app = angular.module('app');
 
-    app.controller("RequestInvitationController", function RequestInvitationController($mdDialog, $q, MessageService, InstitutionService,
-        AuthService, RequestInvitationService, $state) {
+    app.controller("RequestInvitationController", function RequestInvitationController($mdDialog, MessageService,
+        AuthService, RequestInvitationService) {
         var requestInvCtrl = this;
 
         requestInvCtrl.institutionSelect = {};

@@ -21,8 +21,6 @@
         */
         var onLogoutListeners = [];
 
-        var REFRESH_USER_EVENT = 'ACCEPTED_LINK';
-
         var versionAvailable = false;
 
         Object.defineProperty(service, 'user', {
@@ -192,12 +190,6 @@
             if (userInfo) return userInfo.emailVerified;
             return false;
         };
-
-        function eventListener() {
-            $rootScope.$on(REFRESH_USER_EVENT, function (event) {
-                service.reload();
-            })
-        }
         
         /**
         * Execute each function stored to be thriggered when user logout
@@ -244,6 +236,5 @@
         }
 
         init();
-        eventListener();
     });
 })();

@@ -43,7 +43,8 @@
 
         function confirmLinkRemoval() {
             const isParent = true;
-            InstitutionService.removeLink(child.key, parent.key, isParent).then(
+            const currentParentKey = child.parent_institution.key;
+            InstitutionService.removeLink(child.key, currentParentKey, isParent).then(
                 function success() {
                     acceptRequest();
                 });

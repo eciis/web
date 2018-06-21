@@ -171,7 +171,7 @@
                     const isParent = true;
                     expect(institutionService.removeLink).toHaveBeenCalledWith(
                         analyseHierReqCtrl.child.key,
-                        analyseHierReqCtrl.parent.key,
+                        analyseHierReqCtrl.child.parent_institution.key,
                         isParent
                     );
                     expect(requestInvitationService.acceptInstChildrenRequest).toHaveBeenCalledWith(request.key);

@@ -15,28 +15,6 @@ def follow_inst(user,inst):
     user.follow(inst.key)
     inst.follow(user.key)
 
-def pick_color():
-    colors = [
-        'red',
-        'pink',
-        'purple',
-        'deep-purple',
-        'indigo',
-        'blue',
-        'light-blue',
-        'cyan',
-        'teal',
-        'green',
-        'light-green',
-        'lime',
-        'orange',
-        'deep-orange',
-        'brown',
-        'grey',
-        'blue-grey'
-    ]
-    return colors[random.randint(0,16)]
-
 
 class InstitutionProfile(ndb.Model):
     """Model of InstitutionProfile."""
@@ -61,7 +39,7 @@ class InstitutionProfile(ndb.Model):
             'photo_url': institution.photo_url
         }
 
-        profile['color'] = self.color or pick_color()
+        profile['color'] = self.color or 'teal'
         profile['institution_key'] = self.institution_key
         return profile
 

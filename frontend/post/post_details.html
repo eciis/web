@@ -134,9 +134,9 @@
         <iframe ng-src="{{ postDetailsCtrl.getVideoUrl(postDetailsCtrl.post.shared_post) }}"></iframe>
       </div>
       <p></p>
-      <a ng-if="!postDetailsCtrl.isSharedSurvey()"
-      href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post.shared_post)">
-        <span>{{ postDetailsCtrl.post.shared_post.title }}</span>
+      <a ng-if="!postDetailsCtrl.isSharedSurvey()" href class="md-title hyperlink" 
+        ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post.shared_post)">
+        <span class="md-headline">{{ postDetailsCtrl.post.shared_post.title }}</span>
       </a>
       <p class="text" ng-if="postDetailsCtrl.showSharedPostText()"
         ng-bind-html="postDetailsCtrl.postToURL(postDetailsCtrl.post.shared_post).text" ></p>

@@ -30,7 +30,7 @@
                 }
             );
         };
-        
+
         function selectDialogToShow(request, event, dialogProperties) {
             var isRequestResolved = request.isStatusOn('rejected') || request.isStatusOn('accepted');
             

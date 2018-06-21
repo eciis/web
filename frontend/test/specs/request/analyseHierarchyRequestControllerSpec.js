@@ -79,12 +79,9 @@
         
         describe('Test confirmRequest', function () {
             it('should accept the parent request', function () {
-                spyOn(mdDialog, 'hide');
                 analyseHierReqCtrl.confirmRequest();
                 expect(requestInvitationService.acceptInstParentRequest).toHaveBeenCalledWith(request.key);
                 expect(request.status).toEqual('accepted');
-                expect(mdDialog.hide).toHaveBeenCalled();
-                expect(messageService.showToast).toHaveBeenCalledWith('Solicitação aceita com sucesso');
             });
         });
 
@@ -181,5 +178,49 @@
                 });
             });
         });
-    });  
+    });
+
+    describe('Test close', function() {
+
+        beforeEach(function() {
+            request.type_of_invite = REQUEST_CHILDREN;
+            analyseHierReqCtrl = createCtrl(request);
+        });
+
+        it('Should call mdDialog.hide', function() {
+            spyOn(mdDialog, 'hide');
+            analyseHierReqCtrl.close();
+            expect(mdDialog.hide).toHaveBeenCalled();
+        });
+
+        it('Should call MessageService.showToast', function() {
+            spyOn(messageService, 'showToast');
+            analyseHierReqCtrl.close();
+            expect(messageService.showToast).toHaveBeenCalledWith('Solicitação aceita com sucesso');
+        });
+    });
+
+    describe('Test showProcessingMessage', function() {
+
+        it('Should return true if the invite is accepted and is REQUEST_PARENT type', function() {
+            request.status = 'accepted';
+            request.type_of_invite = REQUEST_PARENT;
+            analyseHierReqCtrl = createCtrl(request);
+            expect(analyseHierReqCtrl.showProcessingMessage()).toBeTruthy();
+        });
+
+        it('Should return false if the invite is not accepted', function() {
+            request.status = 'rejected';
+            request.type_of_invite = REQUEST_PARENT;
+            analyseHierReqCtrl = createCtrl(request);
+            expect(analyseHierReqCtrl.showProcessingMessage()).toBeFalsy();
+        });
+
+        it('Should return false if the type_of_invite is not REQUEST_PARENT', function() {
+            request.status = 'accepted';
+            request.type_of_invite = REQUEST_CHILDREN;
+            analyseHierReqCtrl = createCtrl(request);
+            expect(analyseHierReqCtrl.showProcessingMessage()).toBeFalsy();
+        });
+    });
 }));

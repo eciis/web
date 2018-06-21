@@ -31,7 +31,7 @@
     };
 
     var other_event = {
-        'title': 'Title',
+        'title': 'Other event',
         'text': 'Text',
         'local': 'Local',
         'photo_url': null,
@@ -42,12 +42,12 @@
 
     var requestEvent = {
         events: [ event, other_event ],
-        next: false
+        next: true
     };
 
     var requestEventInst = {
         events: [ event ],
-        next: false
+        next: true
     };
 
     var GET_EVENTS_URI = '/api/events?page=0&limit=5';
@@ -66,8 +66,9 @@
         state = $state;
         AuthService.login(user);
 
-        $httpBackend.expect('GET', GET_EVENTS_URI).respond(requestEvent);
-        $httpBackend.expect('GET', GET_EVENTS_INST_URI).respond(requestEventInst);
+        httpBackend.when('GET', GET_EVENTS_URI).respond(requestEvent);
+        httpBackend.when('GET', GET_EVENTS_INST_URI).respond(requestEventInst);
+        
 
         spyOn(Utils, 'setScrollListener').and.callFake(function () {
             return {
@@ -91,17 +92,10 @@
         eventCtrl = createCtrl();
         eventCtrl.showImage = true;
         eventCtrl.events = [];
+        $httpBackend.flush()
     }));
 
-    describe('main()', function() {
-
-        it('should call functions', function() {
-            eventCtrl = createCtrl();
-            expect(eventCtrl.posts.length).toBe(0);
-        });
-    });
-
-    describe('loadMoreEvents()', function() {
+    describe('main() without definy institution_key', function() {
 
         beforeEach(function () {
 
@@ -112,7 +106,22 @@
                     }
                 };
             });
+        });
 
+        it("Should call loadMoreEvents", function() {
+            eventCtrl = createCtrl();
+            expect(eventService.getEvents).toHaveBeenCalledWith(0, undefined);
+
+            expect(eventCtrl.events).toEqual([event, other_event]);
+            expect(eventCtrl.posts).toEqual([]);
+        });
+    });
+
+    describe('main() definy institution_key', function() {
+
+        beforeEach(function () {
+
+            state.params.institutionKey = institution.key;
             spyOn(eventService, 'getInstEvents').and.callFake(function () {
                 return {
                     then: function (callback) {
@@ -122,31 +131,15 @@
             });
         });
 
-        it('should call getEvents', function(done) {
-            expect(eventCtrl.events.length).toBe(0);
-            var promise = eventCtrl.loadMoreEvents();
-            promise.should.be.fulfilled.then(function() {
-                expect(eventCtrl.events.length).toBe(2);
-                expect(eventCtrl.events[0].institution_key).toBe(institution.key);
-                expect(eventCtrl.events[1].institution_key).toBe(other_institution.key)
-            }).should.notify(done);
-            scope.$apply();
-
-            expect(eventService.getEvents).toHaveBeenCalledWith(0, undefined);
-        });
-
-        it('should call getInstEvent because the controller has institutionKey', function(done) {
-            eventCtrl.institutionKey = institution.key
-            expect(eventCtrl.events.length).toBe(0);
-            eventCtrl.loadMoreEvents();
-            var promise = eventCtrl.loadMoreEvents();
-            promise.should.be.fulfilled.then(function() {
-                expect(eventCtrl.events.length).toBe(1);
-                expect(eventCtrl.events[0].institution_key).toBe(institution.key);
-            }).should.notify(done);
-            scope.$apply();
-
+         it('should call getEvents', function() {
+            eventCtrl = createCtrl();
             expect(eventService.getInstEvents).toHaveBeenCalledWith(0, institution.key);
+
+            // should only have one event because of the institution's events.
+            expect(eventCtrl.events.length).toBe(1);
+            expect(eventCtrl.events).toEqual([event]);
+            expect(eventCtrl.posts).toEqual([]);
+            
         });
     });
 
